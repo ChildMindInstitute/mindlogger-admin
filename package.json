@@ -22,7 +22,7 @@
     "@sentry/browser": "^5.19.0",
     "@sentry/integrations": "^5.19.0",
     "applet-schema-builder": "^0.3.33",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-loader": "^7.1.5",
     "crypto": "^1.0.1",
     "d3": "5",
