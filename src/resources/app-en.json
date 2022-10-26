@@ -1,0 +1,10 @@
+{
+  "en": "English",
+  "fr": "French",
+  "login": "Login",
+  "submit": "Submit",
+  "password": "Password",
+  "resetPassword": "Reset Password",
+  "forgotPassword": "Forgot Password",
+  "resetEmailSent": "Reset email has been sent"
+}
