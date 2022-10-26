@@ -1,7 +1,12 @@
-import React from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from 'src/styles/theme';
 
 function App() {
-  return <div className="App">App component</div>;
+  return (
+    <ThemeProvider theme={theme}>
+      <div className="App">App component</div>
+    </ThemeProvider>
+  );
 }
 
 export default App;
