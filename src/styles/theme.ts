@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { notoSansMedium, notoSansRegular, notoSansSemiBold } from 'styles/typography';
+import { typography } from 'styles/typography';
 import { variables } from 'styles/variables';
 
 declare module '@mui/material/Button' {
@@ -19,9 +19,7 @@ const theme = createTheme({
   },
   components: {
     MuiCssBaseline: {
-      styleOverrides: {
-        '@font-face': [notoSansRegular, notoSansMedium, notoSansSemiBold],
-      },
+      styleOverrides: typography,
     },
     MuiButton: {
       variants: [
