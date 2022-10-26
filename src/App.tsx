@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@mui/material/styles';
-import theme from 'src/styles/theme';
+import theme from 'styles/theme';
 
 function App() {
   return (

@@ -1,10 +1,6 @@
 import { createTheme } from '@mui/material/styles';
-import {
-  notoSansMedium,
-  notoSansRegular,
-  notoSansSemiBold,
-} from 'src/styles/typography';
-import { variables } from 'src/styles/variables';
+import { notoSansMedium, notoSansRegular, notoSansSemiBold } from 'styles/typography';
+import { variables } from 'styles/variables';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {

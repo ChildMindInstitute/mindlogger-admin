@@ -1,6 +1,6 @@
-import NotoSansRegular from 'src/assets/fonts/NotoSans-Regular.ttf';
-import NotoSansMedium from 'src/assets/fonts/NotoSans-Medium.ttf';
-import NotoSansSemiBold from 'src/assets/fonts/NotoSans-SemiBold.ttf';
+import NotoSansRegular from 'assets/fonts/NotoSans-Regular.ttf';
+import NotoSansMedium from 'assets/fonts/NotoSans-Medium.ttf';
+import NotoSansSemiBold from 'assets/fonts/NotoSans-SemiBold.ttf';
 
 export const notoSansRegular = {
   fontFamily: 'NotoSans',
