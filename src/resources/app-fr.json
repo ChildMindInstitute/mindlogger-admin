@@ -1,0 +1,10 @@
+{
+  "en": "Anglais",
+  "fr": "Français",
+  "login": "Connexion",
+  "submit": "Soumettre",
+  "password": "Mot de passe",
+  "resetPassword": "Réinitialiser le mot de passe",
+  "forgotPassword": "Mot de passe oublié",
+  "resetEmailSent": "L'e-mail de réinitialisation a été envoyé"
+}
