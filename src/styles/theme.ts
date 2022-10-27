@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material/styles';
+
 import { typography } from 'styles/typography';
 import { variables } from 'styles/variables';
 
