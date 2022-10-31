@@ -13,7 +13,7 @@ export const palette = {
   shadesBG: '#DEE3EB',
   shades20: '#F6F6F6',
   shades5: '#FDFCFF',
-  shades0: '#FDFCFF',
+  shades0: '#FFFFFF',
   shades100_alfa50: 'rgba(0, 0, 0, 0.5)',
   shades100_alfa87: 'rgba(0, 0, 0, 0.87)',
 

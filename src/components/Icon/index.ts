@@ -22,6 +22,7 @@ import { Folder } from './Folder';
 import { FolderShared } from './FolderShared';
 import { FolderSharedOutlined } from './FolderSharedOutlined';
 import { Group } from './Group';
+import { HeaderLogo } from './HeaderLogo';
 import { HelpOutline } from './HelpOutline';
 import { Home } from './Home';
 import { Info } from './Info';
@@ -72,6 +73,7 @@ export const Icon = {
   FolderShared,
   FolderSharedOutlined,
   Group,
+  HeaderLogo,
   HelpOutline,
   Home,
   Info,

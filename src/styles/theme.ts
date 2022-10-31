@@ -99,6 +99,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          transition: 'all 0.3s',
+        },
+      },
+    },
     MuiInputLabel: {
       styleOverrides: {
         root: {
@@ -111,13 +118,23 @@ const theme = createTheme({
           '&.Mui-focused': {
             color: variables.palette.primary50,
           },
+          '&.Mui-error': {
+            color: variables.palette.semantic.error,
+          },
         },
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
+          borderRadius: 5,
+
           '&:hover': {
+            '&.Mui-error': {
+              '.MuiOutlinedInput-notchedOutline': {
+                borderColor: variables.palette.semantic.error,
+              },
+            },
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary60,
             },
@@ -130,6 +147,7 @@ const theme = createTheme({
         root: {
           borderRadius: 4,
           padding: 0,
+          borderWidth: '0.0625rem',
           borderColor: variables.palette.shades40,
           color: variables.palette.shades100_alfa87,
 
