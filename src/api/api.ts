@@ -1,4 +1,4 @@
-import { httpClient } from './httpClient';
+import { httpClient, authHttpClient } from './httpClient';
 
 import {
   SignIn,
@@ -9,9 +9,9 @@ import {
   AccountUserList,
 } from './api.types';
 
-export const signIn = ({ user, password }: SignIn, signal?: AbortSignal) =>
+export const signIn = ({ email, password }: SignIn, signal?: AbortSignal) =>
   httpClient.get('user/authentication', {
-    headers: { 'Girder-Authorization': `Basic ${window.btoa(`${user}:${password}`)}` },
+    headers: { 'Girder-Authorization': `Basic ${window.btoa(`${email}:${password}`)}` },
     signal,
   });
 
@@ -40,25 +40,26 @@ export const resetPassword = ({ body }: ResetPassword, signal?: AbortSignal) =>
     signal,
   });
 
-export const getUserDetails = (signal?: AbortSignal) => httpClient.get('/user/me', { signal });
+export const getUserDetails = (signal?: AbortSignal) => authHttpClient.get('/user/me', { signal });
 
-export const getAccounts = (signal?: AbortSignal) => httpClient.get('/user/accounts', { signal });
+export const getAccounts = (signal?: AbortSignal) =>
+  authHttpClient.get('/user/accounts', { signal });
 
 export const switchAccount = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
-  httpClient.put('/user/switchAccount', {
+  authHttpClient.put('/user/switchAccount', {
     params: {
       accountId,
     },
     signal,
   });
 
-export const getThemes = (signal?: AbortSignal) => httpClient.get('/theme', { signal });
+export const getThemes = (signal?: AbortSignal) => authHttpClient.get('/theme', { signal });
 
 export const getAccountUserList = (
   { appletId, role, MRN, pagination, sort }: AccountUserList,
   signal?: AbortSignal,
 ) =>
-  httpClient.get('/account/users', {
+  authHttpClient.get('/account/users', {
     params: {
       appletId,
       role,
@@ -70,4 +71,4 @@ export const getAccountUserList = (
   });
 
 export const getLibraryCategories = (signal?: AbortSignal) =>
-  httpClient.get('/library/categories', { signal });
+  authHttpClient.get('/library/categories', { signal });
