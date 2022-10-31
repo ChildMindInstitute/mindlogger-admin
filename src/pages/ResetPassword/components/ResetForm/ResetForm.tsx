@@ -4,21 +4,27 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController } from 'components/FormComponents/InputController';
+
 import {
   StyledForm,
   StyledResetPasswordHeader,
   StyledResetPasswordSubheader,
   StyledController,
   StyledButton,
+  StyledBackWrapper,
   StyledBack,
-} from './styles';
-import { resetSchema } from './schema';
+} from './ResetForm.styles';
+import { resetSchema } from './ResetForm.schema';
 
 export interface ResetData {
   email: string;
 }
 
-const ResetForm = ({ setEmail }: { setEmail: React.Dispatch<React.SetStateAction<string>> }) => {
+export const ResetForm = ({
+  setEmail,
+}: {
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm<ResetData>({
@@ -27,7 +33,7 @@ const ResetForm = ({ setEmail }: { setEmail: React.Dispatch<React.SetStateAction
 
   const onSubmit = (data: ResetData) => {
     // TODO: make the http request
-    // if succuss
+    // if success
     setEmail(data.email);
   };
 
@@ -43,9 +49,9 @@ const ResetForm = ({ setEmail }: { setEmail: React.Dispatch<React.SetStateAction
       <StyledButton variant="contained" type="submit">
         {t('sendResetLink')}
       </StyledButton>
-      <StyledBack onClick={() => navigate('/auth')}>{t('backToLogin')}</StyledBack>
+      <StyledBackWrapper>
+        <StyledBack onClick={() => navigate('/auth')}>{t('backToLogin')}</StyledBack>
+      </StyledBackWrapper>
     </StyledForm>
   );
 };
-
-export default ResetForm;

@@ -1,26 +1,26 @@
 import { styled } from '@mui/system';
-import Button from '@mui/material/Button';
+import { Button, Box, Typography } from '@mui/material';
 
 import { variables } from 'styles/variables';
 
-export const StyledLogin = styled('div')`
+export const StyledLogin = styled(Box)`
   width: 100%;
   background-color: ${variables.palette.shadesBG};
 `;
 
-export const StyledContainerWrapper = styled('div')`
+export const StyledContainerWrapper = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 `;
 
-export const StyledContainer = styled('div')`
+export const StyledContainer = styled(Box)`
   width: 23.5rem;
   margin: 1.5rem 0;
 `;
 
-export const StyledWelcome = styled('p')`
+export const StyledWelcome = styled(Typography)`
   font-size: 1.125rem;
   font-weight: 500;
   color: ${variables.palette.primary50};
@@ -29,14 +29,14 @@ export const StyledWelcome = styled('p')`
   text-align: center;
 `;
 
-export const StyledLoginHeader = styled('p')`
+export const StyledLoginHeader = styled(Typography)`
   font-size: 1.125rem;
   font-weight: 500;
   line-height: 1.56rem;
   margin: 0;
 `;
 
-export const StyledLoginSubheader = styled('p')`
+export const StyledLoginSubheader = styled(Typography)`
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1rem;
@@ -50,7 +50,7 @@ export const StyledForm = styled('form')`
   border-radius: 1.25rem;
 `;
 
-export const StyledController = styled('div')`
+export const StyledController = styled(Box)`
   margin-bottom: 2.25rem;
 `;
 
@@ -58,7 +58,9 @@ export const StyledButton = styled(Button)`
   width: 100%;
 `;
 
-export const StyledForgotPasswordLink = styled('p')`
+export const StyledForgotPasswordLink = styled(Button)`
+  height: auto;
+  padding: 0;
   width: fit-content;
   margin: 1.5rem 0;
   color: ${variables.palette.primary50};
@@ -67,4 +69,8 @@ export const StyledForgotPasswordLink = styled('p')`
   line-height: 1rem;
   text-decoration: underline;
   cursor: pointer;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;

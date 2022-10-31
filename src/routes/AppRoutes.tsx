@@ -1,8 +1,9 @@
-import AuthLayout from 'components/AuthLayout';
-import SignUp from 'pages/SignUp';
-import Login from 'pages/Login';
-import ResetPassword from 'pages/ResetPassword';
 import { Navigate, Route, Routes } from 'react-router-dom';
+
+import { Login } from 'pages/Login';
+import { ResetPassword } from 'pages/ResetPassword';
+import { AuthLayout } from 'components/AuthLayout';
+import { SignUp } from 'pages/SignUp';
 
 export const AppRoutes = () => (
   <>

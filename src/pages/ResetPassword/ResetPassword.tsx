@@ -1,10 +1,15 @@
 import { useState } from 'react';
 
-import Confirmation from './components/Confirmation';
-import ResetForm from './components/ResetForm';
-import { StyledResetPassword, StyledContainerWrapper, StyledContainer } from './styles';
+import { Confirmation } from './components/Confirmation';
+import { ResetForm } from './components/ResetForm';
 
-const ResetPassword = () => {
+import {
+  StyledResetPassword,
+  StyledContainerWrapper,
+  StyledContainer,
+} from './ResetPassword.styles';
+
+export const ResetPassword = () => {
   const [email, setEmail] = useState('');
 
   return (
@@ -17,5 +22,3 @@ const ResetPassword = () => {
     </StyledResetPassword>
   );
 };
-
-export default ResetPassword;

@@ -1,10 +1,9 @@
 import { styled } from '@mui/system';
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
+import { Box, Select, FormControl } from '@mui/material';
 
 import { variables } from 'styles/variables';
 
-export const StyledAuthHeader = styled('div')`
+export const StyledAuthHeader = styled(Box)`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   position: sticky;

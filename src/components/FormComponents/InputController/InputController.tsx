@@ -1,11 +1,7 @@
-import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { Controller, FieldValues, UseControllerProps } from 'react-hook-form';
+import TextField from '@mui/material/TextField';
+import { Controller, FieldValues } from 'react-hook-form';
 
-type FormInputProps = {
-  name: string;
-} & TextFieldProps;
-
-export type InputControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;
+import { InputControllerProps } from './InputController.props';
 
 export const InputController = <T extends FieldValues>({
   name,

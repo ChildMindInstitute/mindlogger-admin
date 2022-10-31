@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController } from 'components/FormComponents/InputController';
+
 import {
   StyledLogin,
   StyledContainerWrapper,
@@ -15,15 +16,11 @@ import {
   StyledController,
   StyledButton,
   StyledForgotPasswordLink,
-} from './styles';
-import { loginSchema } from './schema';
+} from './Login.styles';
+import { loginSchema } from './Login.schema';
+import { LoginData } from './Login.interface';
 
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-const Login = () => {
+export const Login = () => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm<LoginData>({
@@ -70,5 +67,3 @@ const Login = () => {
     </StyledLogin>
   );
 };
-
-export default Login;

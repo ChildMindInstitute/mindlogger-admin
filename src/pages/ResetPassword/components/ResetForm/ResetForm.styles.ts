@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import Button from '@mui/material/Button';
+import { Button, Box, Typography } from '@mui/material';
 
 import { variables } from 'styles/variables';
 
@@ -10,21 +10,21 @@ export const StyledForm = styled('form')`
   border-radius: 1.25rem;
 `;
 
-export const StyledResetPasswordHeader = styled('p')`
+export const StyledResetPasswordHeader = styled(Typography)`
   font-size: 1.125rem;
   font-weight: 500;
   line-height: 1.56rem;
   margin: 0;
 `;
 
-export const StyledResetPasswordSubheader = styled('p')`
+export const StyledResetPasswordSubheader = styled(Typography)`
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1rem;
   margin: 0.5rem 0 1.5rem;
 `;
 
-export const StyledController = styled('div')`
+export const StyledController = styled(Box)`
   margin-bottom: 2.625rem;
 `;
 
@@ -32,7 +32,14 @@ export const StyledButton = styled(Button)`
   width: 100%;
 `;
 
-export const StyledBack = styled('p')`
+export const StyledBackWrapper = styled(Box)`
+  text-align: center;
+  margin: 1.5rem 0 0;
+`;
+
+export const StyledBack = styled(Button)`
+  height: auto;
+  padding: 0;
   color: ${variables.palette.primary50};
   text-align: center;
   font-size: 0.75rem;
@@ -40,5 +47,8 @@ export const StyledBack = styled('p')`
   line-height: 1rem;
   text-decoration: underline;
   cursor: pointer;
-  margin: 1.5rem 0 0;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;

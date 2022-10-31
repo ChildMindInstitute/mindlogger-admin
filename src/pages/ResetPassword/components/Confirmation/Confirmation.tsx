@@ -8,9 +8,9 @@ import {
   StyledSubheader,
   StyledInfo,
   StyledLink,
-} from './styles';
+} from './Confirmation.styles';
 
-const Confirmation = ({ email }: { email: string }) => {
+export const Confirmation = ({ email }: { email: string }) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
 
@@ -23,7 +23,8 @@ const Confirmation = ({ email }: { email: string }) => {
         {email}
       </StyledSubheader>
       <StyledInfo>
-        {t('didntReceiveEmail')} <StyledLink>{t('here')}</StyledLink>
+        {/*TODO: Add link with information about restoring password*/}
+        {t('didntReceiveEmail')} <StyledLink href="#">{t('here')}</StyledLink>
       </StyledInfo>
       <Button variant="contained" type="button" onClick={() => navigate('/auth')}>
         {t('backToLogin')}
@@ -31,5 +32,3 @@ const Confirmation = ({ email }: { email: string }) => {
     </StyledConfirmation>
   );
 };
-
-export default Confirmation;

@@ -2,10 +2,11 @@ import { useTranslation } from 'react-i18next';
 import MenuItem from '@mui/material/MenuItem';
 import { SelectChangeEvent } from '@mui/material/Select';
 
-import { HeaderLogo } from 'components/Icon/HeaderLogo';
-import { StyledAuthHeader, StyledFormControl, StyledSelect } from './styles';
+import { Icon } from 'components/Icon';
 
-const AuthHeader = () => {
+import { StyledAuthHeader, StyledFormControl, StyledSelect } from './AuthHeader.styles';
+
+export const AuthHeader = () => {
   const { i18n } = useTranslation('app');
 
   const handleChange = (event: SelectChangeEvent<unknown>) => {
@@ -14,7 +15,7 @@ const AuthHeader = () => {
 
   return (
     <StyledAuthHeader>
-      <HeaderLogo />
+      <Icon.HeaderLogo />
       <StyledFormControl size="small">
         <StyledSelect value={i18n.language} onChange={handleChange}>
           <MenuItem value={'en'}>EN</MenuItem>
@@ -24,5 +25,3 @@ const AuthHeader = () => {
     </StyledAuthHeader>
   );
 };
-
-export default AuthHeader;

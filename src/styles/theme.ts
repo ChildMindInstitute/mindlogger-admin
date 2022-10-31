@@ -99,6 +99,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          transition: 'all 0.3s',
+        },
+      },
+    },
     MuiInputLabel: {
       styleOverrides: {
         root: {

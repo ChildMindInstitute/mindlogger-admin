@@ -4,7 +4,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController } from 'components/FormComponents/InputController';
-import CheckboxController from 'components/FormComponents/CheckboxController';
+import { CheckboxController } from 'components/FormComponents/CheckboxController';
+
 import {
   StyledSignUp,
   StyledContainerWrapper,
@@ -15,19 +16,13 @@ import {
   StyledLabel,
   StyledLink,
   StyledButton,
+  StyledBackWrapper,
   StyledBack,
-} from './styles';
-import { signUpSchema } from './schema';
+} from './SignUp.styles';
+import { signUpSchema } from './SignUp.schema';
+import { SignUpData } from './SignUp.interface';
 
-export interface SignUpData {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  termsOfService: boolean;
-}
-
-const SignUp = () => {
+export const SignUp = () => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm<SignUpData>({
@@ -81,7 +76,9 @@ const SignUp = () => {
                 label={
                   <StyledLabel>
                     {t('agreement')}
-                    <StyledLink>{t('termsOfService')}</StyledLink>
+                    <StyledLink href="https://mindlogger.org/terms" target="_blank">
+                      {t('termsOfService')}
+                    </StyledLink>
                   </StyledLabel>
                 }
               />
@@ -89,12 +86,12 @@ const SignUp = () => {
             <StyledButton variant="contained" type="submit">
               {t('createAccount')}
             </StyledButton>
-            <StyledBack onClick={() => navigate('/auth')}>{t('backToLogin')}</StyledBack>
+            <StyledBackWrapper>
+              <StyledBack onClick={() => navigate('/auth')}>{t('backToLogin')}</StyledBack>
+            </StyledBackWrapper>
           </StyledForm>
         </StyledContainer>
       </StyledContainerWrapper>
     </StyledSignUp>
   );
 };
-
-export default SignUp;
