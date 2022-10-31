@@ -7,9 +7,9 @@ import { signIn, SignIn } from 'api';
 
 export const login = createAsyncThunk(
   'mindlogger_login',
-  async ({ user, password }: SignIn, { rejectWithValue, signal }) => {
+  async ({ email, password }: SignIn, { rejectWithValue, signal }) => {
     try {
-      return await signIn({ user, password }, signal);
+      return await signIn({ email, password }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

@@ -2,17 +2,17 @@ import { SerializedError } from '@reduxjs/toolkit';
 
 export type MetaStatus = 'idle' | 'loading' | 'success' | 'error';
 
-export interface MetaSchema {
+export type MetaSchema = {
   requestId: string;
   status: MetaStatus;
   error?: SerializedError;
-}
+};
 
-export interface BaseSchema<DataType = unknown> extends MetaSchema {
+export type BaseSchema<DataType = unknown> = MetaSchema & {
   data: DataType;
-}
+};
 
-export interface ApiError {
+export type ApiError = {
   message: string;
   type: string;
-}
+};

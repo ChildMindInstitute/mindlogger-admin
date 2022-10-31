@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { SignIn } from 'api';
+import { useAppDispatch } from 'redux/store';
+import { auth } from 'redux/modules';
 import { InputController } from 'components/FormComponents/InputController';
 
 import {
@@ -18,18 +21,22 @@ import {
   StyledForgotPasswordLink,
 } from './Login.styles';
 import { loginSchema } from './Login.schema';
-import { LoginData } from './Login.interface';
 
 export const Login = () => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { handleSubmit, control } = useForm<LoginData>({
+  const { handleSubmit, control } = useForm<SignIn>({
     resolver: yupResolver(loginSchema()),
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = (data: LoginData) => {
-    console.log('data', data);
+  const onSubmit = async (data: SignIn) => {
+    const result = await dispatch(auth.thunk.login(data));
+
+    if (auth.thunk.login.fulfilled.match(result)) {
+      console.log('log in result: ', result);
+    }
   };
 
   return (

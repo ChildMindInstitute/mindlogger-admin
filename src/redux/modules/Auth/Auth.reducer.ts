@@ -19,6 +19,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
     ) {
       state.authentication.requestId = initialState.authentication.requestId;
       state.authentication.status = 'success';
+      state.authentication.error ? (state.authentication.error = undefined) : null;
       state.authentication.data = action.payload.data;
     }
   });

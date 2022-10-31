@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -15,16 +16,9 @@ import {
   StyledBack,
 } from './ResetForm.styles';
 import { resetSchema } from './ResetForm.schema';
+import { ResetData } from './ResetForm.types';
 
-export interface ResetData {
-  email: string;
-}
-
-export const ResetForm = ({
-  setEmail,
-}: {
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-}) => {
+export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<string>> }) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm<ResetData>({
