@@ -5,33 +5,27 @@ import { state as initialState } from './Auth.state';
 import { login } from './Auth.thunk';
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): void => {
-  builder.addCase(login.pending, (state, action) => {
-    if (state.authentication.status !== 'loading') {
-      state.authentication.requestId = action.meta.requestId;
-      state.authentication.status = 'loading';
+  builder.addCase(login.pending, ({ authentication }, action) => {
+    if (authentication.status !== 'loading') {
+      authentication.requestId = action.meta.requestId;
+      authentication.status = 'loading';
     }
   });
 
-  builder.addCase(login.fulfilled, (state, action) => {
-    if (
-      state.authentication.status === 'loading' &&
-      state.authentication.requestId === action.meta.requestId
-    ) {
-      state.authentication.requestId = initialState.authentication.requestId;
-      state.authentication.status = 'success';
-      state.authentication.error ? (state.authentication.error = undefined) : null;
-      state.authentication.data = action.payload.data;
+  builder.addCase(login.fulfilled, ({ authentication }, action) => {
+    if (authentication.status === 'loading' && authentication.requestId === action.meta.requestId) {
+      authentication.requestId = initialState.authentication.requestId;
+      authentication.status = 'success';
+      authentication.error ? (authentication.error = undefined) : null;
+      authentication.data = action.payload.data;
     }
   });
 
-  builder.addCase(login.rejected, (state, action) => {
-    if (
-      state.authentication.status === 'loading' &&
-      state.authentication.requestId === action.meta.requestId
-    ) {
-      state.authentication.requestId = initialState.authentication.requestId;
-      state.authentication.status = 'error';
-      state.authentication.error = action.error;
+  builder.addCase(login.rejected, ({ authentication }, action) => {
+    if (authentication.status === 'loading' && authentication.requestId === action.meta.requestId) {
+      authentication.requestId = initialState.authentication.requestId;
+      authentication.status = 'error';
+      authentication.error = action.error;
     }
   });
 };
