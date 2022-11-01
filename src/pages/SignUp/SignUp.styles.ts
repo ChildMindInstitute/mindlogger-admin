@@ -1,7 +1,9 @@
 import { styled } from '@mui/system';
-import { Button, Box, Typography, Link } from '@mui/material';
+import { Button, Box, Link } from '@mui/material';
 
 import { variables } from 'styles/variables';
+
+import { StyledLargeTitle, StyledSmallText } from 'styles/StyledComponents/Typography';
 
 export const StyledSignUp = styled('div')`
   width: 100%;
@@ -20,10 +22,7 @@ export const StyledContainer = styled(Box)`
   margin: 1.5rem 0;
 `;
 
-export const StyledSignUpHeader = styled(Typography)`
-  font-size: 1.125rem;
-  font-weight: 500;
-  line-height: 1.56rem;
+export const StyledSignUpHeader = styled(StyledLargeTitle)`
   margin: 0 0 1.5rem;
 `;
 
@@ -37,10 +36,7 @@ export const StyledController = styled(Box)`
   margin-bottom: 2.25rem;
 `;
 
-export const StyledLabel = styled(Typography)`
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
+export const StyledLabel = styled(StyledSmallText)`
   margin: 0;
 `;
 

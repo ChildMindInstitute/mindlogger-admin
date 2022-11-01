@@ -1,7 +1,9 @@
 import { styled } from '@mui/system';
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Box } from '@mui/material';
 
 import { variables } from 'styles/variables';
+
+import { StyledLargeTitle, StyledSmallText } from 'styles/StyledComponents/Typography';
 
 export const StyledLogin = styled(Box)`
   width: 100%;
@@ -20,26 +22,18 @@ export const StyledContainer = styled(Box)`
   margin: 1.5rem 0;
 `;
 
-export const StyledWelcome = styled(Typography)`
-  font-size: 1.125rem;
-  font-weight: 500;
+export const StyledWelcome = styled(StyledLargeTitle)`
   color: ${variables.palette.primary50};
   margin: 0;
   padding: 0 3rem;
   text-align: center;
 `;
 
-export const StyledLoginHeader = styled(Typography)`
-  font-size: 1.125rem;
-  font-weight: 500;
-  line-height: 1.56rem;
+export const StyledLoginHeader = styled(StyledLargeTitle)`
   margin: 0;
 `;
 
-export const StyledLoginSubheader = styled(Typography)`
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
+export const StyledLoginSubheader = styled(StyledSmallText)`
   margin: 0.5rem 0 1.5rem;
 `;
 
