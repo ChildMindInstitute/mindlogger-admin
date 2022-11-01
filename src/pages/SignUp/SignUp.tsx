@@ -20,7 +20,7 @@ import {
   StyledBack,
 } from './SignUp.styles';
 import { signUpSchema } from './SignUp.schema';
-import { SignUpData } from './SignUp.interface';
+import { SignUpData } from './SignUp.types';
 
 export const SignUp = () => {
   const { t } = useTranslation('app');

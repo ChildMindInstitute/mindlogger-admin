@@ -1,2 +1,2 @@
 export * from './SignUp';
-export * from './SignUp.interface';
+export * from './SignUp.types';

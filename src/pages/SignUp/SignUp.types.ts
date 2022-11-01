@@ -1,7 +1,7 @@
-export interface SignUpData {
+export type SignUpData = {
   email: string;
   firstName: string;
   lastName: string;
   password: string;
   termsOfService: boolean;
-}
+};

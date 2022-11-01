@@ -96,7 +96,10 @@
       "prefer-double"
     ],
     "@typescript-eslint/no-unused-vars": [
-      "warn"
+      "warn",
+      {
+        "ignoreRestSiblings": true
+      }
     ],
     "@typescript-eslint/no-non-null-assertion": "off"
   }
