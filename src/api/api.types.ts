@@ -7,7 +7,7 @@ export type SignInWithToken = {
   token: string;
 };
 
-export type SignUp = {
+export type SignUpArgs = {
   body: {
     email: string;
     firstName: string;
@@ -17,10 +17,7 @@ export type SignUp = {
 };
 
 export type ResetPassword = {
-  body: {
-    email: string;
-    lang: string;
-  };
+  email: string;
 };
 
 export type SwitchAccount = {

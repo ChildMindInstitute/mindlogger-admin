@@ -14,7 +14,7 @@ export type User = {
   public: boolean;
   size: number;
   status: string;
-  _accessLevel: string;
+  _accessLevel: number;
   _id: string;
   _modelType: string;
 };
@@ -22,7 +22,8 @@ export type User = {
 export type Account = {
   accountId: string;
   accountName: string;
-  applets: {
+  isDefaultName: boolean;
+  applets?: {
     coordinator: string[];
     editor: string[];
     manager: string[];
@@ -30,22 +31,22 @@ export type Account = {
     reviewer: string[];
     user: string[];
   };
-  isDefaultName: boolean;
 };
 
 export type AuthToken = {
   expires: string;
-  scope: string[];
   token: string;
+  scope?: string[];
 };
 
 export type AuthData = {
   account: Account;
   authToken: AuthToken;
   user: User;
-  message: string;
+  message?: string;
 };
 
 export type AuthSchema = {
   authentication: BaseSchema<AuthData | null>;
+  isAuthorized: boolean;
 };

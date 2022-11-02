@@ -7,4 +7,5 @@ export const state: AuthSchema = {
     ...base.state,
     data: null,
   },
+  isAuthorized: false,
 };

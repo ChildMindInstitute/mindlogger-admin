@@ -4,25 +4,22 @@ import { useAppSelector } from 'redux/store';
 
 import * as thunk from './Auth.thunk';
 import { state as initialState } from './Auth.state';
-import { extraReducers } from './Auth.reducer';
-import { AuthData } from './Auth.schema';
+import { reducers, extraReducers } from './Auth.reducer';
+import { AuthSchema } from './Auth.schema';
 
 export * from './Auth.schema';
 
+const slice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers,
+  extraReducers,
+});
+
 export const auth = {
   thunk,
-  slice: createSlice({
-    name: 'auth',
-    initialState,
-    reducers: {},
-    extraReducers,
-  }),
-  useData: (): AuthData =>
-    useAppSelector(
-      ({
-        auth: {
-          authentication: { data },
-        },
-      }) => data,
-    ),
+  slice,
+  actions: slice.actions,
+  useAuthorized: (): AuthSchema['isAuthorized'] =>
+    useAppSelector(({ auth: { isAuthorized } }) => isAuthorized),
 };

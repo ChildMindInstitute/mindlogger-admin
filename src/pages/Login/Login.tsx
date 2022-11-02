@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 
 import { SignIn } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'redux/modules';
+import { auth, ErrorResponse } from 'redux/modules';
 import { InputController } from 'components/FormComponents/InputController';
+import { StyledErrorText } from 'styles/StyledComponents/ErrorText';
 
 import {
   StyledLogin,
@@ -31,11 +34,19 @@ export const Login = () => {
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = async (data: SignIn) => {
-    const result = await dispatch(auth.thunk.login(data));
+  const [errorMessage, setErrorMessage] = useState('');
 
-    if (auth.thunk.login.fulfilled.match(result)) {
-      console.log('log in result: ', result);
+  const onSubmit = async (data: SignIn) => {
+    const result = await dispatch(auth.thunk.signIn(data));
+
+    if (auth.thunk.signIn.fulfilled.match(result)) {
+      setErrorMessage('');
+    } else if (auth.thunk.signIn.rejected.match(result)) {
+      const errorObj = result.payload as AxiosError;
+      const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
+      if (errorData) {
+        setErrorMessage(errorData.message);
+      }
     }
   };
 
@@ -59,6 +70,7 @@ export const Login = () => {
                 type="password"
               />
             </StyledController>
+            {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
             <StyledButton variant="contained" type="submit">
               {t('login')}
             </StyledButton>
