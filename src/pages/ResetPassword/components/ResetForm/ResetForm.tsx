@@ -30,9 +30,9 @@ export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<stri
   });
 
   const onSubmit = async ({ email }: ResetPassword) => {
-    const result = await dispatch(auth.thunk.resetPwd({ email }));
+    const result = await dispatch(auth.thunk.resetPassword({ email }));
 
-    if (auth.thunk.resetPwd.fulfilled.match(result)) {
+    if (auth.thunk.resetPassword.fulfilled.match(result)) {
       setEmail(email);
     }
   };
