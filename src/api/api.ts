@@ -3,15 +3,20 @@ import { httpClient, authHttpClient } from './httpClient';
 import {
   SignIn,
   SignInWithToken,
-  SignUp,
+  SignUpArgs,
   ResetPassword,
   SwitchAccount,
   AccountUserList,
 } from './api.types';
 
+const lang = sessionStorage.getItem('lang') || 'en';
+
 export const signIn = ({ email, password }: SignIn, signal?: AbortSignal) =>
   httpClient.get('user/authentication', {
     headers: { 'Girder-Authorization': `Basic ${window.btoa(`${email}:${password}`)}` },
+    params: {
+      lang,
+    },
     signal,
   });
 
@@ -20,25 +25,35 @@ export const signInWithToken = ({ token }: SignInWithToken, signal?: AbortSignal
     headers: {
       'Girder-Token': token,
     },
-    signal,
-  });
-
-export const signUp = ({ body }: SignUp, signal?: AbortSignal) =>
-  httpClient.post('/user', {
     params: {
-      ...body,
-      admin: true,
+      lang,
     },
     signal,
   });
 
-export const resetPassword = ({ body }: ResetPassword, signal?: AbortSignal) =>
-  httpClient.put('/user/password/temporary', {
-    params: {
-      ...body,
+export const signUp = ({ body }: SignUpArgs, signal?: AbortSignal) =>
+  httpClient.post(
+    '/user',
+    { signal },
+    {
+      params: {
+        ...body,
+        admin: true,
+      },
     },
-    signal,
-  });
+  );
+
+export const resetPassword = ({ email }: ResetPassword, signal?: AbortSignal) =>
+  httpClient.put(
+    '/user/password/temporary',
+    { signal },
+    {
+      params: {
+        email,
+        lang,
+      },
+    },
+  );
 
 export const getUserDetails = (signal?: AbortSignal) => authHttpClient.get('/user/me', { signal });
 
@@ -46,12 +61,15 @@ export const getAccounts = (signal?: AbortSignal) =>
   authHttpClient.get('/user/accounts', { signal });
 
 export const switchAccount = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
-  authHttpClient.put('/user/switchAccount', {
-    params: {
-      accountId,
+  authHttpClient.put(
+    '/user/switchAccount',
+    { signal },
+    {
+      params: {
+        accountId,
+      },
     },
-    signal,
-  });
+  );
 
 export const getThemes = (signal?: AbortSignal) => authHttpClient.get('/theme', { signal });
 

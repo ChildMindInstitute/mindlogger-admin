@@ -5,6 +5,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController } from 'components/FormComponents/InputController';
+import { ResetPassword } from 'api';
+import { useAppDispatch } from 'redux/store';
+import { auth } from 'redux/modules';
 
 import {
   StyledForm,
@@ -16,19 +19,22 @@ import {
   StyledBack,
 } from './ResetForm.styles';
 import { resetSchema } from './ResetForm.schema';
-import { ResetData } from './ResetForm.types';
 
 export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<string>> }) => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { handleSubmit, control } = useForm<ResetData>({
+  const { handleSubmit, control } = useForm<ResetPassword>({
     resolver: yupResolver(resetSchema()),
+    defaultValues: { email: '' },
   });
 
-  const onSubmit = (data: ResetData) => {
-    // TODO: make the http request
-    // if success
-    setEmail(data.email);
+  const onSubmit = async ({ email }: ResetPassword) => {
+    const result = await dispatch(auth.thunk.resetPwd({ email }));
+
+    if (auth.thunk.resetPwd.fulfilled.match(result)) {
+      setEmail(email);
+    }
   };
 
   return (

@@ -1,23 +1,31 @@
-import { Provider } from 'react-redux';
+import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
+import { useAppDispatch } from 'redux/store';
+import { auth } from 'redux/modules';
 import theme from 'styles/theme';
 import { AppRoutes } from 'routes/AppRoutes';
 
-import { store } from 'redux/store';
-
 function App() {
+  const dispatch = useAppDispatch();
+  const token = sessionStorage.getItem('accessToken');
+  const isAuthorized = auth.useAuthorized();
+
+  useEffect(() => {
+    if (token) {
+      dispatch(auth.thunk.loginWithToken({ token }));
+    }
+  }, [token, dispatch]);
+
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </ThemeProvider>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <AppRoutes isAuthorized={isAuthorized} />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

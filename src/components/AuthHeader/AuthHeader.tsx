@@ -9,8 +9,9 @@ import { StyledAuthHeader, StyledFormControl, StyledSelect } from './AuthHeader.
 export const AuthHeader = () => {
   const { i18n } = useTranslation('app');
 
-  const handleChange = (event: SelectChangeEvent<unknown>) => {
-    i18n.changeLanguage(event.target.value as string);
+  const handleChange = async ({ target: { value } }: SelectChangeEvent<unknown>) => {
+    await i18n.changeLanguage(value as string);
+    sessionStorage.setItem('lang', value as string);
   };
 
   return (

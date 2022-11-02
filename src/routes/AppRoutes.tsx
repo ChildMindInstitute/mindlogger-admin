@@ -4,16 +4,54 @@ import { Login } from 'pages/Login';
 import { ResetPassword } from 'pages/ResetPassword';
 import { AuthLayout } from 'components/AuthLayout';
 import { SignUp } from 'pages/SignUp';
+import { Dashboard } from 'pages/Dashboard';
 
-export const AppRoutes = () => (
+import { PrivateRoute } from './PrivateRoute';
+
+export const AppRoutes = ({ isAuthorized = false }) => (
   <>
     <Routes>
-      {/* TODO: fix when new routes come out */}
-      <Route path="/" element={<Navigate to="/auth" replace />} />
+      <Route
+        path="/"
+        element={
+          <PrivateRoute condition={isAuthorized}>
+            <Navigate to="/dashboard" replace />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <PrivateRoute condition={isAuthorized}>
+            <Dashboard />
+          </PrivateRoute>
+        }
+      />
       <Route path="/auth" element={<AuthLayout />}>
-        <Route path="/auth" element={<Login />} />
-        <Route path="/auth/signup" element={<SignUp />} />
-        <Route path="/auth/reset-password" element={<ResetPassword />} />
+        <Route
+          path="/auth"
+          element={
+            <PrivateRoute condition={!isAuthorized} redirectPath="/">
+              <Login />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/auth/signup"
+          element={
+            <PrivateRoute condition={!isAuthorized} redirectPath="/">
+              <SignUp />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/auth/reset-password"
+          element={
+            <PrivateRoute condition={!isAuthorized} redirectPath="/">
+              <ResetPassword />
+            </PrivateRoute>
+          }
+        />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

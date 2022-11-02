@@ -1,11 +1,16 @@
-import { SerializedError } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 
 export type MetaStatus = 'idle' | 'loading' | 'success' | 'error';
+
+export type ErrorResponse = {
+  message: string;
+  type: string;
+};
 
 export type MetaSchema = {
   requestId: string;
   status: MetaStatus;
-  error?: SerializedError;
+  error?: AxiosError<ErrorResponse>;
 };
 
 export type BaseSchema<DataType = unknown> = MetaSchema & {
