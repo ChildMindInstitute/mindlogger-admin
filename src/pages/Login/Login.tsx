@@ -37,11 +37,11 @@ export const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = async (data: SignIn) => {
-    const result = await dispatch(auth.thunk.login(data));
+    const result = await dispatch(auth.thunk.signIn(data));
 
-    if (auth.thunk.login.fulfilled.match(result)) {
+    if (auth.thunk.signIn.fulfilled.match(result)) {
       setErrorMessage('');
-    } else if (auth.thunk.login.rejected.match(result)) {
+    } else if (auth.thunk.signIn.rejected.match(result)) {
       const errorObj = result.payload as AxiosError;
       const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
       if (errorData) {

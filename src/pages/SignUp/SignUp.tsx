@@ -47,11 +47,11 @@ export const SignUp = () => {
 
   const onSubmit = async (data: SignUpData) => {
     const { termsOfService, ...args } = data;
-    const result = await dispatch(auth.thunk.signup({ body: args }));
+    const result = await dispatch(auth.thunk.signUp({ body: args }));
 
-    if (auth.thunk.signup.fulfilled.match(result)) {
+    if (auth.thunk.signUp.fulfilled.match(result)) {
       setErrorMessage('');
-    } else if (auth.thunk.signup.rejected.match(result)) {
+    } else if (auth.thunk.signUp.rejected.match(result)) {
       const errorObj = result.payload as AxiosError;
       const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
       if (errorData) {

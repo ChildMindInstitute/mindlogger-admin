@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import { AuthSchema } from './Auth.schema';
-import { login, loginWithToken, signup } from './Auth.thunk';
+import { signIn, signInWithToken, signUp } from './Auth.thunk';
 import {
   createAuthFulfilledData,
   createAuthPendingData,
@@ -19,40 +19,40 @@ export const reducers = {
 };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): void => {
-  builder.addCase(login.pending, ({ authentication }, action) => {
+  builder.addCase(signIn.pending, ({ authentication }, action) => {
     createAuthPendingData(authentication, action.meta.requestId);
   });
 
-  builder.addCase(login.fulfilled, (state, action) => {
+  builder.addCase(signIn.fulfilled, (state, action) => {
     createAuthFulfilledData(state, action.meta.requestId, action.payload.data);
   });
 
-  builder.addCase(login.rejected, (state, action) => {
+  builder.addCase(signIn.rejected, (state, action) => {
     createAuthRejectedData(state, action.meta.requestId, action.payload as AxiosError);
   });
 
-  builder.addCase(loginWithToken.pending, ({ authentication }, action) => {
+  builder.addCase(signInWithToken.pending, ({ authentication }, action) => {
     createAuthPendingData(authentication, action.meta.requestId);
   });
 
-  builder.addCase(loginWithToken.fulfilled, (state, action) => {
+  builder.addCase(signInWithToken.fulfilled, (state, action) => {
     createAuthFulfilledData(state, action.meta.requestId, action.payload.data);
   });
 
-  builder.addCase(loginWithToken.rejected, (state, action) => {
+  builder.addCase(signInWithToken.rejected, (state, action) => {
     createAuthRejectedData(state, action.meta.requestId, action.payload as AxiosError);
   });
 
-  builder.addCase(signup.pending, ({ authentication }, action) => {
+  builder.addCase(signUp.pending, ({ authentication }, action) => {
     createAuthPendingData(authentication, action.meta.requestId);
   });
 
-  builder.addCase(signup.fulfilled, (state, action) => {
+  builder.addCase(signUp.fulfilled, (state, action) => {
     const { account, authToken, ...user } = action.payload.data;
     createAuthFulfilledData(state, action.meta.requestId, { account, authToken, user });
   });
 
-  builder.addCase(signup.rejected, (state, action) => {
+  builder.addCase(signUp.rejected, (state, action) => {
     createAuthRejectedData(state, action.meta.requestId, action.payload as AxiosError);
   });
 };
