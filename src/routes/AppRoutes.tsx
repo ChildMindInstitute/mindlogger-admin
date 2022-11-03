@@ -1,15 +1,13 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Login } from 'pages/Login';
-import { ResetPassword } from 'pages/ResetPassword';
 import { AuthLayout } from 'components/AuthLayout';
-import { SignUp } from 'pages/SignUp';
 import { Dashboard } from 'pages/Dashboard';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 
 import { PrivateRoute } from './PrivateRoute';
+import { authRoutes } from './routesList';
 
 export const AppRoutes = () => {
   const dispatch = useAppDispatch();
@@ -42,30 +40,17 @@ export const AppRoutes = () => {
           }
         />
         <Route path="/auth" element={<AuthLayout />}>
-          <Route
-            path="/auth"
-            element={
-              <PrivateRoute condition={!isAuthorized} redirectPath="/">
-                <Login />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/auth/signup"
-            element={
-              <PrivateRoute condition={!isAuthorized} redirectPath="/">
-                <SignUp />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/auth/reset-password"
-            element={
-              <PrivateRoute condition={!isAuthorized} redirectPath="/">
-                <ResetPassword />
-              </PrivateRoute>
-            }
-          />
+          {authRoutes.map(({ path, Component }) => (
+            <Route
+              key={path}
+              path={path}
+              element={
+                <PrivateRoute condition={!isAuthorized} redirectPath="/">
+                  <Component />
+                </PrivateRoute>
+              }
+            />
+          ))}
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

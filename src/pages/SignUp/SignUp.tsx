@@ -9,7 +9,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth, ErrorResponse } from 'redux/modules';
 import { InputController } from 'components/FormComponents/InputController';
 import { CheckboxController } from 'components/FormComponents/CheckboxController';
-import { StyledErrorText } from 'styles/StyledComponents/ErrorText';
+import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 
 import {
   StyledSignUp,

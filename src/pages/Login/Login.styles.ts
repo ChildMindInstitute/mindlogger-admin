@@ -3,7 +3,7 @@ import { Button, Box } from '@mui/material';
 
 import { variables } from 'styles/variables';
 
-import { StyledLargeTitle, StyledSmallText } from 'styles/StyledComponents/Typography';
+import { StyledLargeTitle, StyledSmallText } from 'styles/styledComponents/Typography';
 
 export const StyledLogin = styled(Box)`
   width: 100%;

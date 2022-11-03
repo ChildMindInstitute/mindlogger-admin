@@ -9,7 +9,7 @@ import { SignIn } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { auth, ErrorResponse } from 'redux/modules';
 import { InputController } from 'components/FormComponents/InputController';
-import { StyledErrorText } from 'styles/StyledComponents/ErrorText';
+import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 
 import {
   StyledLogin,
