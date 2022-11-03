@@ -25,7 +25,7 @@ export const StyledSmallTitle = styled(Typography)`
   font-size: 0.625rem;
   font-weight: 400;
   line-height: 0.875rem;
-  color: ${variables.palette.primary50};
+  color: ${({ color }: StyledProps) => color || variables.palette.primary50};
 `;
 
 export const StyledSmallText = styled(Typography)`
