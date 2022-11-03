@@ -1,5 +1,4 @@
-import { httpClient, authHttpClient } from './httpClient';
-
+import { apiClient, apiClientWithLang, authApiClient } from './api.client';
 import {
   SignIn,
   SignInWithToken,
@@ -9,30 +8,22 @@ import {
   AccountUserList,
 } from './api.types';
 
-const lang = sessionStorage.getItem('lang') || 'en';
-
 export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
-  httpClient.get('user/authentication', {
+  apiClientWithLang.get('user/authentication', {
     headers: { 'Girder-Authorization': `Basic ${window.btoa(`${email}:${password}`)}` },
-    params: {
-      lang,
-    },
     signal,
   });
 
 export const signInWithTokenApi = ({ token }: SignInWithToken, signal?: AbortSignal) =>
-  httpClient.get('/user/authentication', {
+  apiClientWithLang.get('/user/authentication', {
     headers: {
       'Girder-Token': token,
-    },
-    params: {
-      lang,
     },
     signal,
   });
 
 export const signUpApi = ({ body }: SignUpArgs, signal?: AbortSignal) =>
-  httpClient.post(
+  apiClient.post(
     '/user',
     { signal },
     {
@@ -44,25 +35,24 @@ export const signUpApi = ({ body }: SignUpArgs, signal?: AbortSignal) =>
   );
 
 export const resetPasswordApi = ({ email }: ResetPassword, signal?: AbortSignal) =>
-  httpClient.put(
+  apiClientWithLang.put(
     '/user/password/temporary',
     { signal },
     {
       params: {
         email,
-        lang,
       },
     },
   );
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
-  authHttpClient.get('/user/me', { signal });
+  authApiClient.get('/user/me', { signal });
 
 export const getAccountsApi = (signal?: AbortSignal) =>
-  authHttpClient.get('/user/accounts', { signal });
+  authApiClient.get('/user/accounts', { signal });
 
 export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
-  authHttpClient.put(
+  authApiClient.put(
     '/user/switchAccount',
     { signal },
     {
@@ -72,13 +62,13 @@ export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSig
     },
   );
 
-export const getThemesApi = (signal?: AbortSignal) => authHttpClient.get('/theme', { signal });
+export const getThemesApi = (signal?: AbortSignal) => authApiClient.get('/theme', { signal });
 
 export const getAccountUserListApi = (
   { appletId, role, MRN, pagination, sort }: AccountUserList,
   signal?: AbortSignal,
 ) =>
-  authHttpClient.get('/account/users', {
+  authApiClient.get('/account/users', {
     params: {
       appletId,
       role,
@@ -90,4 +80,4 @@ export const getAccountUserListApi = (
   });
 
 export const getLibraryCategoriesApi = (signal?: AbortSignal) =>
-  authHttpClient.get('/library/categories', { signal });
+  authApiClient.get('/library/categories', { signal });

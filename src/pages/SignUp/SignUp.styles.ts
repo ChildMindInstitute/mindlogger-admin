@@ -5,7 +5,7 @@ import { variables } from 'styles/variables';
 
 import { StyledLargeTitle, StyledSmallText } from 'styles/styledComponents/Typography';
 
-export const StyledSignUp = styled('div')`
+export const StyledSignUp = styled(Box)`
   width: 100%;
   background-color: ${variables.palette.shadesBG};
 `;
@@ -51,7 +51,7 @@ export const StyledLink = styled(Link)`
 
 export const StyledButton = styled(Button)`
   width: 100%;
-  margin: 1.5rem 0;
+  margin-bottom: 1.5rem;
 `;
 
 export const StyledBackWrapper = styled(Box)`

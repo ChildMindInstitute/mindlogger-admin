@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import MenuItem from '@mui/material/MenuItem';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -8,11 +9,18 @@ import { StyledAuthHeader, StyledFormControl, StyledSelect } from './AuthHeader.
 
 export const AuthHeader = () => {
   const { i18n } = useTranslation('app');
+  const langFromStorage = sessionStorage.getItem('lang');
 
   const handleChange = async ({ target: { value } }: SelectChangeEvent<unknown>) => {
     await i18n.changeLanguage(value as string);
     sessionStorage.setItem('lang', value as string);
   };
+
+  useEffect(() => {
+    if (langFromStorage) {
+      (async () => i18n.changeLanguage(langFromStorage))();
+    }
+  }, [langFromStorage, i18n]);
 
   return (
     <StyledAuthHeader>

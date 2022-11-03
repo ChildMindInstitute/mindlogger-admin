@@ -15,10 +15,10 @@ export const AppRoutes = () => {
   const isAuthorized = auth.useAuthorized();
 
   useEffect(() => {
-    if (token) {
+    if (!isAuthorized && token) {
       dispatch(auth.thunk.signInWithToken({ token }));
     }
-  }, [token, dispatch]);
+  }, [isAuthorized, token, dispatch]);
 
   return (
     <>
