@@ -3,7 +3,7 @@ import { Button, Box, Link } from '@mui/material';
 
 import { variables } from 'styles/variables';
 
-import { StyledLargeTitle, StyledSmallText } from 'styles/StyledComponents/Typography';
+import { StyledLargeTitle, StyledSmallText } from 'styles/styledComponents/Typography';
 
 export const StyledSignUp = styled('div')`
   width: 100%;

@@ -7,7 +7,7 @@ import {
   StyledLargeTitle,
   StyledSmallText,
   StyledSmallTitle,
-} from 'styles/StyledComponents/Typography';
+} from 'styles/styledComponents/Typography';
 
 export const StyledConfirmation = styled(Box)`
   text-align: center;
