@@ -11,6 +11,7 @@ import { InputController } from 'components/FormComponents/InputController';
 import { CheckboxController } from 'components/FormComponents/CheckboxController';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 
+import { AdvancedSettings } from './AdvancedSettings';
 import {
   StyledSignUp,
   StyledContainerWrapper,
@@ -56,6 +57,8 @@ export const SignUp = () => {
       const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
       if (errorData) {
         setErrorMessage(errorData.message);
+      } else {
+        setErrorMessage(errorObj.message);
       }
     }
   };
@@ -90,6 +93,7 @@ export const SignUp = () => {
               />
             </StyledController>
             {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
+            <AdvancedSettings />
             <StyledController>
               <CheckboxController
                 name="termsOfService"

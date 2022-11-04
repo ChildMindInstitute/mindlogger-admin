@@ -46,6 +46,8 @@ export const Login = () => {
       const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
       if (errorData) {
         setErrorMessage(errorData.message);
+      } else {
+        setErrorMessage(errorObj.message);
       }
     }
   };
