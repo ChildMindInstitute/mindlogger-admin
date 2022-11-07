@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
 
+import { page } from 'resources';
+
 import {
   StyledConfirmation,
   StyledHeader,
@@ -26,7 +28,7 @@ export const Confirmation = ({ email }: { email: string }) => {
         {/*TODO: Add link with information about restoring password*/}
         {t('didntReceiveEmail')} <StyledLink href="#">{t('here')}</StyledLink>
       </StyledInfo>
-      <Button variant="contained" type="button" onClick={() => navigate('/auth')}>
+      <Button variant="contained" type="button" onClick={() => navigate(page.login)}>
         {t('backToLogin')}
       </Button>
     </StyledConfirmation>

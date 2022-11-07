@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 
 import { SignIn } from 'api';
+import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
 import { auth, ErrorResponse } from 'redux/modules';
 import { InputController } from 'components/FormComponents/InputController';
@@ -37,11 +38,12 @@ export const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = async (data: SignIn) => {
-    const result = await dispatch(auth.thunk.signIn(data));
+    const { signIn } = auth.thunk;
+    const result = await dispatch(signIn(data));
 
-    if (auth.thunk.signIn.fulfilled.match(result)) {
+    if (signIn.fulfilled.match(result)) {
       setErrorMessage('');
-    } else if (auth.thunk.signIn.rejected.match(result)) {
+    } else if (signIn.rejected.match(result)) {
       const errorObj = result.payload as AxiosError;
       const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
       if (errorData) {
@@ -76,10 +78,10 @@ export const Login = () => {
             <StyledButton variant="contained" type="submit">
               {t('login')}
             </StyledButton>
-            <StyledForgotPasswordLink onClick={() => navigate('/auth/reset-password')}>
+            <StyledForgotPasswordLink onClick={() => navigate(page.passwordReset)}>
               {t('forgotPassword')}
             </StyledForgotPasswordLink>
-            <StyledButton variant="outlined" onClick={() => navigate('/auth/signup')}>
+            <StyledButton variant="outlined" onClick={() => navigate(page.signUp)}>
               {t('createAccount')}
             </StyledButton>
           </StyledForm>

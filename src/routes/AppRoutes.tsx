@@ -5,6 +5,7 @@ import { AuthLayout } from 'components/AuthLayout';
 import { Dashboard } from 'pages/Dashboard';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
+import { page } from 'resources';
 
 import { PrivateRoute } from './PrivateRoute';
 import { authRoutes } from './routesList';
@@ -24,15 +25,7 @@ export const AppRoutes = () => {
     <>
       <Routes>
         <Route
-          path="/"
-          element={
-            <PrivateRoute condition={isAuthorized}>
-              <Navigate to="/dashboard" replace />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
+          path={page.dashboard}
           element={
             <PrivateRoute condition={isAuthorized}>
               <Dashboard />

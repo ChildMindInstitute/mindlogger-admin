@@ -7,6 +7,7 @@ import { AxiosError } from 'axios';
 
 import { useAppDispatch } from 'redux/store';
 import { auth, ErrorResponse } from 'redux/modules';
+import { page } from 'resources';
 import { InputController } from 'components/FormComponents/InputController';
 import { CheckboxController } from 'components/FormComponents/CheckboxController';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
@@ -47,12 +48,13 @@ export const SignUp = () => {
   const termsOfService = watch('termsOfService');
 
   const onSubmit = async (data: SignUpData) => {
+    const { signUp } = auth.thunk;
     const { termsOfService, ...args } = data;
-    const result = await dispatch(auth.thunk.signUp({ body: args }));
+    const result = await dispatch(signUp({ body: args }));
 
-    if (auth.thunk.signUp.fulfilled.match(result)) {
+    if (signUp.fulfilled.match(result)) {
       setErrorMessage('');
-    } else if (auth.thunk.signUp.rejected.match(result)) {
+    } else if (signUp.rejected.match(result)) {
       const errorObj = result.payload as AxiosError;
       const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
       if (errorData) {
@@ -112,7 +114,7 @@ export const SignUp = () => {
               {t('createAccount')}
             </StyledButton>
             <StyledBackWrapper>
-              <StyledBack onClick={() => navigate('/auth')}>{t('backToLogin')}</StyledBack>
+              <StyledBack onClick={() => navigate(page.login)}>{t('backToLogin')}</StyledBack>
             </StyledBackWrapper>
           </StyledForm>
         </StyledContainer>
