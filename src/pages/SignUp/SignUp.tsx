@@ -29,7 +29,7 @@ import {
 import { signUpSchema } from './SignUp.schema';
 import { SignUpData } from './SignUp.types';
 
-export const SignUp = () => {
+export const SignUp = ({ onSubmitForTest }: { onSubmitForTest?: () => void }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -48,6 +48,10 @@ export const SignUp = () => {
   const termsOfService = watch('termsOfService');
 
   const onSubmit = async (data: SignUpData) => {
+    if (onSubmitForTest) {
+      onSubmitForTest();
+    }
+
     const { signUp } = auth.thunk;
     const { termsOfService, ...args } = data;
     const result = await dispatch(signUp({ body: args }));
@@ -110,7 +114,12 @@ export const SignUp = () => {
                 }
               />
             </StyledController>
-            <StyledButton variant="contained" type="submit" disabled={!termsOfService}>
+            <StyledButton
+              variant="contained"
+              type="submit"
+              disabled={!termsOfService}
+              data-testid="submit-btn"
+            >
               {t('createAccount')}
             </StyledButton>
             <StyledBackWrapper>
