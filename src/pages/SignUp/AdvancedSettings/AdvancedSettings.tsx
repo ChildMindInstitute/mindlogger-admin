@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputLabel, MenuItem, SelectChangeEvent } from '@mui/material';
+import { FilterOptionsState, TextField } from '@mui/material';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 
-import { BACKEND_SERVERS, getBaseUrl } from 'api';
+import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
 import { Icon } from 'components/Icon';
 import { StyledSmallTitle } from 'styles/styledComponents/Typography';
 import { variables } from 'styles/variables';
@@ -10,18 +11,40 @@ import { variables } from 'styles/variables';
 import {
   StyledAdvancedSettings,
   StyledFormControl,
-  StyledSelect,
+  StyledMenuItem,
   StyledSettingsButton,
 } from './AdvancedSettings.styles';
 
+const filter = createFilterOptions<ServerUrlOption>();
+
 export const AdvancedSettings = () => {
   const { t } = useTranslation('app');
-  const [selectValue, setSelectValue] = useState(getBaseUrl());
+  const [selectValue, setSelectValue] = useState<string | ServerUrlOption>(getBaseUrl());
   const [showSettings, setShowSettings] = useState(false);
 
-  const handleServerChange = ({ target: { value } }: SelectChangeEvent<unknown>) => {
-    setSelectValue(value as string);
-    sessionStorage.setItem('apiUrl', value as string);
+  const handleServerChange = (e: React.SyntheticEvent, selectedValue: string | ServerUrlOption) => {
+    if (typeof selectedValue === 'string') {
+      sessionStorage.setItem('apiUrl', selectedValue);
+    } else {
+      sessionStorage.setItem('apiUrl', selectedValue.value);
+    }
+    setSelectValue(selectedValue);
+  };
+
+  const handleFilterOptions = (
+    options: ServerUrlOption[],
+    params: FilterOptionsState<ServerUrlOption>,
+  ) => {
+    const filtered = filter(options, params);
+    const { inputValue } = params;
+    const isExisting = options.some((option) => inputValue === option.value);
+    if (inputValue !== '' && !isExisting) {
+      filtered.push({
+        value: inputValue,
+        name: `${inputValue}`,
+      });
+    }
+    return filtered;
   };
 
   return (
@@ -44,19 +67,21 @@ export const AdvancedSettings = () => {
             {t('serverThatHoldAppletConfiguration')}
           </StyledSmallTitle>
           <StyledFormControl fullWidth>
-            <InputLabel id="select-label">{t('serverUrl')}</InputLabel>
-            <StyledSelect
-              labelId="select-label"
-              label={t('serverUrl')}
+            <Autocomplete
               value={selectValue}
               onChange={handleServerChange}
-            >
-              {BACKEND_SERVERS.map((server, index) => (
-                <MenuItem key={index} value={server.value}>
-                  {server.name}
-                </MenuItem>
-              ))}
-            </StyledSelect>
+              filterOptions={handleFilterOptions}
+              selectOnFocus
+              disableClearable
+              clearOnBlur
+              options={BACKEND_SERVERS}
+              getOptionLabel={(option) => (typeof option === 'string' ? option : option.name)}
+              renderOption={(props, option) => (
+                <StyledMenuItem {...props}>{option.name}</StyledMenuItem>
+              )}
+              renderInput={(params) => <TextField {...params} label={t('serverUrl')} />}
+              freeSolo
+            />
           </StyledFormControl>
         </>
       )}
