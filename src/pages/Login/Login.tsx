@@ -26,7 +26,7 @@ import {
 } from './Login.styles';
 import { loginSchema } from './Login.schema';
 
-export const Login = () => {
+export const Login = ({ onSubmitForTest }: { onSubmitForTest?: () => void }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -38,6 +38,10 @@ export const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = async (data: SignIn) => {
+    if (onSubmitForTest) {
+      onSubmitForTest();
+    }
+
     const { signIn } = auth.thunk;
     const result = await dispatch(signIn(data));
 
@@ -75,7 +79,7 @@ export const Login = () => {
               />
             </StyledController>
             {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-            <StyledButton variant="contained" type="submit">
+            <StyledButton variant="contained" type="submit" data-testid="submit-btn">
               {t('login')}
             </StyledButton>
             <StyledForgotPasswordLink onClick={() => navigate(page.passwordReset)}>
