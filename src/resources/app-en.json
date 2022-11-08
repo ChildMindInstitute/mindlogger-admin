@@ -26,5 +26,6 @@
   "submit": "Submit",
   "advancedSettings": "Advanced Settings",
   "serverThatHoldAppletConfiguration": "Server that will hold your applet configuration settings and all the data you collect",
-  "serverUrl": "Server URL"
+  "serverUrl": "Server URL",
+  "passwordMinLength": "Password must be at least 8 characters"
 }

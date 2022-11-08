@@ -31,3 +31,8 @@ export const BACKEND_SERVERS: ServerUrlOption[] = [
     value: 'https://api-new.mindlogger.org/api/v1',
   },
 ];
+
+export const LANGUAGES: { en: string; fr: string } = {
+  en: 'en_US',
+  fr: 'fr_FR',
+};

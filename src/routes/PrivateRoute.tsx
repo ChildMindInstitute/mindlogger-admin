@@ -1,5 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
+import { page } from 'resources';
+
 type PrivateRouteDefinition = {
   condition: boolean;
   redirectPath?: string;
@@ -8,6 +10,6 @@ type PrivateRouteDefinition = {
 
 export const PrivateRoute = ({
   condition,
-  redirectPath = '/auth',
+  redirectPath = page.login,
   children,
 }: PrivateRouteDefinition) => (condition ? children : <Navigate to={redirectPath} />);

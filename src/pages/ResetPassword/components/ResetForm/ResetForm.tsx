@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { InputController } from 'components/FormComponents/InputController';
 import { ResetPassword } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
+import { page } from 'resources';
+import { InputController } from 'components/FormComponents/InputController';
 
 import {
   StyledForm,
@@ -30,9 +31,10 @@ export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<stri
   });
 
   const onSubmit = async ({ email }: ResetPassword) => {
-    const result = await dispatch(auth.thunk.resetPassword({ email }));
+    const { resetPassword } = auth.thunk;
+    const result = await dispatch(resetPassword({ email }));
 
-    if (auth.thunk.resetPassword.fulfilled.match(result)) {
+    if (resetPassword.fulfilled.match(result)) {
       setEmail(email);
     }
   };
@@ -50,7 +52,7 @@ export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<stri
         {t('sendResetLink')}
       </StyledButton>
       <StyledBackWrapper>
-        <StyledBack onClick={() => navigate('/auth')}>{t('backToLogin')}</StyledBack>
+        <StyledBack onClick={() => navigate(page.login)}>{t('backToLogin')}</StyledBack>
       </StyledBackWrapper>
     </StyledForm>
   );
