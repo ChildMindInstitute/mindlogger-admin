@@ -1,3 +1,7 @@
+export type ServerUrlOption = {
+  name: string;
+  value: string;
+};
 export type SignIn = { email: string; password: string };
 
 export type SignInWithToken = { token: string };

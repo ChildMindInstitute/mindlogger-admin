@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FilterOptionsState, TextField } from '@mui/material';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import { FilterOptionsState, TextField, Autocomplete, createFilterOptions } from '@mui/material';
 
 import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
 import { Icon } from 'components/Icon';
@@ -23,11 +22,10 @@ export const AdvancedSettings = () => {
   const [showSettings, setShowSettings] = useState(false);
 
   const handleServerChange = (e: React.SyntheticEvent, selectedValue: string | ServerUrlOption) => {
-    if (typeof selectedValue === 'string') {
-      sessionStorage.setItem('apiUrl', selectedValue);
-    } else {
-      sessionStorage.setItem('apiUrl', selectedValue.value);
-    }
+    sessionStorage.setItem(
+      'apiUrl',
+      typeof selectedValue === 'string' ? selectedValue : selectedValue.value,
+    );
     setSelectValue(selectedValue);
   };
 
