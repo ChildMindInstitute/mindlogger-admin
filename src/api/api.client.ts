@@ -1,12 +1,18 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { getBaseUrl } from './api.func';
+import {
+  getBaseUrl,
+  getRequestFullLangData,
+  getRequestLangData,
+  getRequestTokenData,
+} from './api.utils';
 
 export const authApiClient = axios.create();
 export const apiClient = axios.create();
 export const apiClientWithLang = axios.create();
+export const authApiClientWithFullLang = axios.create();
 
-[apiClient, apiClientWithLang].forEach((client) =>
+[apiClient, apiClientWithLang, authApiClient, authApiClientWithFullLang].forEach((client) =>
   client.interceptors.request.use((config: AxiosRequestConfig) => {
     config.baseURL = getBaseUrl();
 
@@ -15,20 +21,20 @@ export const apiClientWithLang = axios.create();
 );
 
 apiClientWithLang.interceptors.request.use((config: AxiosRequestConfig) => {
-  if (!config.params) {
-    config.params = {};
-  }
-  config.params.lang = sessionStorage.getItem('lang') || 'en';
+  getRequestLangData(config);
 
   return config;
 });
 
 authApiClient.interceptors.request.use((config: AxiosRequestConfig) => {
-  if (!config.headers) {
-    config.headers = {};
-  }
-  config.baseURL = getBaseUrl();
-  config.headers['Girder-Token'] = sessionStorage.getItem('accessToken');
+  getRequestTokenData(config);
+
+  return config;
+});
+
+authApiClientWithFullLang.interceptors.request.use((config: AxiosRequestConfig) => {
+  getRequestTokenData(config);
+  getRequestFullLangData(config);
 
   return config;
 });

@@ -13,3 +13,5 @@ export const resources: Resource = {
     app: appFr,
   },
 };
+
+export { default as page } from './pages.json';
