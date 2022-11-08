@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FilterOptionsState, TextField, Autocomplete, createFilterOptions } from '@mui/material';
+import { FilterOptionsState, TextField, Autocomplete } from '@mui/material';
 
 import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
 import { Icon } from 'components/Icon';
@@ -13,8 +13,6 @@ import {
   StyledMenuItem,
   StyledSettingsButton,
 } from './AdvancedSettings.styles';
-
-const filter = createFilterOptions<ServerUrlOption>();
 
 export const AdvancedSettings = () => {
   const { t } = useTranslation('app');
@@ -33,8 +31,8 @@ export const AdvancedSettings = () => {
     options: ServerUrlOption[],
     params: FilterOptionsState<ServerUrlOption>,
   ) => {
-    const filtered = filter(options, params);
     const { inputValue } = params;
+    const filtered = options.filter((option) => option.name.includes(inputValue));
     const isExisting = options.some((option) => inputValue === option.value);
     if (inputValue !== '' && !isExisting) {
       filtered.push({
