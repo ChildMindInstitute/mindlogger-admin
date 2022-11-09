@@ -18,6 +18,10 @@ export const StyledAuthHeader = styled(Box)`
   }
 `;
 
+export const StyledHeaderLogo = styled(Box)`
+  text-align: center;
+`;
+
 export const StyledFormControl = styled(FormControl)`
   display: flex;
   width: 100%;

@@ -5,7 +5,12 @@ import { SelectChangeEvent } from '@mui/material/Select';
 
 import { Icon } from 'components/Icon';
 
-import { StyledAuthHeader, StyledFormControl, StyledSelect } from './AuthHeader.styles';
+import {
+  StyledAuthHeader,
+  StyledHeaderLogo,
+  StyledFormControl,
+  StyledSelect,
+} from './AuthHeader.styles';
 
 export const AuthHeader = () => {
   const { i18n } = useTranslation('app');
@@ -24,7 +29,9 @@ export const AuthHeader = () => {
 
   return (
     <StyledAuthHeader>
-      <Icon.HeaderLogo />
+      <StyledHeaderLogo>
+        <Icon.HeaderLogo />
+      </StyledHeaderLogo>
       <StyledFormControl size="small">
         <StyledSelect value={i18n.language} onChange={handleChange}>
           <MenuItem value={'en'}>EN</MenuItem>
