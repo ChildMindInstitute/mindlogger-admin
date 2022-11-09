@@ -2,7 +2,7 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { inputAcceptsValue } from 'tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'utils/renderComponentForEachTest';
-import { Login } from './';
+import { Login } from './Login';
 
 const submitForm = (username: string, password: string) => {
   fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: username } });
