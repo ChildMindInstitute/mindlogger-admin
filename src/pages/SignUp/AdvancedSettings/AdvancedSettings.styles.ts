@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { Button, Box, Select, FormControl } from '@mui/material';
+import { Button, Box, FormControl, MenuItem } from '@mui/material';
 
 import { variables } from 'styles/variables';
 
@@ -12,8 +12,8 @@ export const StyledFormControl = styled(FormControl)`
   margin-top: 1rem;
 `;
 
-export const StyledSelect = styled(Select)`
-  width: 100%;
+export const StyledMenuItem = styled(MenuItem)`
+  white-space: normal;
 `;
 
 export const StyledSettingsButton = styled(Button)`
