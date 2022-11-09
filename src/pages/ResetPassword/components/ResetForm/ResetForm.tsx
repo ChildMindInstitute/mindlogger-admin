@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -20,8 +19,9 @@ import {
   StyledBack,
 } from './ResetForm.styles';
 import { resetSchema } from './ResetForm.schema';
+import { ResetFormProps } from './ResetForm.types';
 
-export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<string>> }) => {
+export const ResetForm = ({ setEmail, onSubmitForTest }: ResetFormProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -31,10 +31,13 @@ export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<stri
   });
 
   const onSubmit = async ({ email }: ResetPassword) => {
+    if (onSubmitForTest) {
+      onSubmitForTest();
+    }
     const { resetPassword } = auth.thunk;
     const result = await dispatch(resetPassword({ email }));
 
-    if (resetPassword.fulfilled.match(result)) {
+    if (resetPassword.fulfilled.match(result) && setEmail) {
       setEmail(email);
     }
   };
@@ -48,7 +51,7 @@ export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<stri
       <StyledController>
         <InputController fullWidth name="email" control={control} label={t('email')} />
       </StyledController>
-      <StyledButton variant="contained" type="submit">
+      <StyledButton variant="contained" type="submit" data-testid="submit-btn">
         {t('sendResetLink')}
       </StyledButton>
       <StyledBackWrapper>
