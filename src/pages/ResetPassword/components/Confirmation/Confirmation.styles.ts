@@ -14,7 +14,7 @@ export const StyledConfirmation = styled(Box)`
   margin-top: 2rem;
   padding: 1.5rem;
   background: ${variables.palette.shades0};
-  border-radius: 1.25rem;
+  border-radius: ${variables.borderRadius.lg};
 `;
 
 export const StyledHeader = styled(StyledLargeTitle)`

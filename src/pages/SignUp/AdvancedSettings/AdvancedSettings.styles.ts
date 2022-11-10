@@ -22,10 +22,10 @@ export const StyledSettingsButton = styled(Button)`
   height: auto;
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
-  letter-spacing: 0.4px;
+  font-size: ${variables.font.size.sm};
+  font-weight: ${variables.font.weight.regular};
+  line-height: ${variables.lineHeight.sm};
+  letter-spacing: ${variables.letterSpacing.lg};
   color: ${variables.palette.shades100};
 
   .MuiTouchRipple-root {

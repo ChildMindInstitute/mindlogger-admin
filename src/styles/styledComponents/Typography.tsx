@@ -3,35 +3,56 @@ import { Typography } from '@mui/material';
 
 import { variables } from 'styles/variables';
 
-interface StyledProps {
+type FontWeight = keyof typeof variables.font.weight;
+type LetterSpacing = keyof typeof variables.letterSpacing;
+
+type StyledProps = {
   withDecoration?: boolean;
   color?: string;
-}
+  fontWeight?: FontWeight;
+  letterSpacing?: LetterSpacing;
+};
 
 export const StyledLargeTitle = styled(Typography)`
-  font-size: 1.125rem;
-  font-weight: 500;
-  line-height: 1.533rem;
+  font-size: ${variables.font.size.xl};
+  line-height: ${variables.lineHeight.xl};
+  font-weight: ${({ fontWeight }: StyledProps) =>
+    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.medium};
+  letter-spacing: ${variables.letterSpacing.sm};
+  color: ${({ color }: StyledProps) => color || variables.palette.shades100};
+`;
+
+export const StyledBody = styled(Typography)`
+  line-height: ${variables.lineHeight.lg};
+  letter-spacing: ${variables.letterSpacing.md};
+  color: ${({ color }: StyledProps) => color || variables.palette.shades100_alfa87};
 `;
 
 export const StyledMediumTitle = styled(Typography)`
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.1875rem;
+  font-size: ${variables.font.size.md};
+  line-height: ${variables.lineHeight.md};
+  font-weight: ${({ fontWeight }: StyledProps) =>
+    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.medium};
   color: ${({ color }: StyledProps) => color || variables.palette.shades100};
-`;
-
-export const StyledSmallTitle = styled(Typography)`
-  font-size: 0.625rem;
-  font-weight: 400;
-  line-height: 0.875rem;
-  color: ${({ color }: StyledProps) => color || variables.palette.primary50};
+  letter-spacing: ${({ letterSpacing }: StyledProps) =>
+    letterSpacing ? variables.letterSpacing[letterSpacing] : variables.letterSpacing.sm};
 `;
 
 export const StyledSmallText = styled(Typography)`
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
+  font-size: ${variables.font.size.sm};
+  line-height: ${variables.lineHeight.sm};
+  font-weight: ${({ fontWeight }: StyledProps) =>
+    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.shades100};
   text-decoration: ${({ withDecoration }: StyledProps) => (withDecoration ? 'underline' : 'none')};
+  letter-spacing: ${({ letterSpacing }: StyledProps) =>
+    letterSpacing ? variables.letterSpacing[letterSpacing] : variables.letterSpacing.xl};
+`;
+
+export const StyledSmallTitle = styled(Typography)`
+  font-size: ${variables.font.size.xs};
+  font-weight: ${variables.font.weight.regular};
+  line-height: ${variables.lineHeight.xs};
+  color: ${({ color }: StyledProps) => color || variables.palette.shades100};
+  letter-spacing: ${variables.letterSpacing.xl};
 `;

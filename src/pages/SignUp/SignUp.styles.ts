@@ -29,7 +29,7 @@ export const StyledSignUpHeader = styled(StyledLargeTitle)`
 export const StyledForm = styled('form')`
   padding: 1.5rem;
   background-color: ${variables.palette.shades0};
-  border-radius: 1.25rem;
+  border-radius: ${variables.borderRadius.lg};
 `;
 
 export const StyledController = styled(Box)`
@@ -63,9 +63,9 @@ export const StyledBack = styled(Button)`
   padding: 0;
   color: ${variables.palette.primary50};
   text-align: center;
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
+  font-size: ${variables.font.size.sm};
+  font-weight: ${variables.font.weight.regular};
+  line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
   cursor: pointer;
 

@@ -24,13 +24,8 @@ export const StyledContainer = styled(Box)`
 
 export const StyledWelcome = styled(StyledLargeTitle)`
   color: ${variables.palette.primary50};
-  margin: 0;
   padding: 0 3rem;
   text-align: center;
-`;
-
-export const StyledLoginHeader = styled(StyledLargeTitle)`
-  margin: 0;
 `;
 
 export const StyledLoginSubheader = styled(StyledSmallText)`
@@ -41,7 +36,7 @@ export const StyledForm = styled('form')`
   margin-top: 2rem;
   padding: 1.5rem;
   background: ${variables.palette.shades0};
-  border-radius: 1.25rem;
+  border-radius: ${variables.borderRadius.lg};
 `;
 
 export const StyledController = styled(Box)`
@@ -58,9 +53,9 @@ export const StyledForgotPasswordLink = styled(Button)`
   width: fit-content;
   margin: 1.5rem 0;
   color: ${variables.palette.primary50};
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
+  font-size: ${variables.font.size.sm};
+  font-weight: ${variables.font.weight.regular};
+  line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
   cursor: pointer;
 

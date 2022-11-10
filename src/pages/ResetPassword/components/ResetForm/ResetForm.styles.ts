@@ -7,20 +7,13 @@ export const StyledForm = styled('form')`
   margin-top: 2rem;
   padding: 1.5rem;
   background: ${variables.palette.shades0};
-  border-radius: 1.25rem;
-`;
-
-export const StyledResetPasswordHeader = styled(Typography)`
-  font-size: 1.125rem;
-  font-weight: 500;
-  line-height: 1.56rem;
-  margin: 0;
+  border-radius: ${variables.borderRadius.lg};
 `;
 
 export const StyledResetPasswordSubheader = styled(Typography)`
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
+  font-size: ${variables.font.size.sm};
+  font-weight: ${variables.font.weight.regular};
+  line-height: ${variables.lineHeight.sm};
   margin: 0.5rem 0 1.5rem;
 `;
 
@@ -42,9 +35,9 @@ export const StyledBack = styled(Button)`
   padding: 0;
   color: ${variables.palette.primary50};
   text-align: center;
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
+  font-size: ${variables.font.size.sm};
+  font-weight: ${variables.font.weight.regular};
+  line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
   cursor: pointer;
 

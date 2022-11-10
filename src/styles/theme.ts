@@ -15,7 +15,7 @@ const theme = createTheme({
     fontFamily: 'NotoSans',
     htmlFontSize: 16,
     button: {
-      fontSize: '0.875rem',
+      fontSize: variables.font.size.md,
     },
   },
   components: {
@@ -29,7 +29,7 @@ const theme = createTheme({
           style: {
             color: variables.palette.shades0,
             backgroundColor: variables.palette.primary50,
-            borderRadius: 100,
+            borderRadius: variables.borderRadius.xl,
 
             '&:hover': {
               backgroundColor: variables.palette.primary60,
@@ -44,10 +44,10 @@ const theme = createTheme({
           props: { variant: 'roundedOutlined' },
           style: {
             color: variables.palette.primary50,
-            borderWidth: '0.0625rem',
+            borderWidth: variables.borderWidth.md,
             borderStyle: 'solid',
             borderColor: variables.palette.shades80,
-            borderRadius: 100,
+            borderRadius: variables.borderRadius.xl,
 
             '&:hover': {
               backgroundColor: variables.palette.primary95,
@@ -62,15 +62,16 @@ const theme = createTheme({
       ],
       styleOverrides: {
         root: {
-          fontWeight: 600,
-          lineHeight: 1.25,
+          fontWeight: variables.font.weight.semiBold,
+          lineHeight: variables.lineHeight.md,
           paddingLeft: '1.5rem',
           paddingRight: '1.5rem',
           paddingBottom: '0.625rem',
           paddingTop: '0.625rem',
-          borderRadius: 5,
+          borderRadius: variables.borderRadius.sm,
           textTransform: 'none',
           height: 40,
+          letterSpacing: variables.letterSpacing.sm,
 
           '&.MuiButton-contained': {
             '&:hover': {
@@ -83,16 +84,17 @@ const theme = createTheme({
             },
           },
           '&.MuiButton-outlined': {
+            borderColor: variables.palette.primary50,
+
             '&:hover': {
               backgroundColor: variables.palette.primary95,
-              borderWidth: '0.0625rem',
-              borderColor: variables.palette.primary50,
+              borderWidth: variables.borderWidth.md,
             },
 
             '&.Mui-disabled': {
               color: variables.palette.shades100_alfa50,
               backgroundColor: 'transparent',
-              borderWidth: '0.0625rem',
+              borderWidth: variables.borderWidth.md,
               borderColor: variables.palette.shades40,
             },
           },
@@ -110,7 +112,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: variables.palette.shades100_alfa50,
-          fontSize: '1rem',
+          fontSize: variables.font.size.lg,
 
           '&.MuiFormLabel-filled': {
             color: variables.palette.shades100,
@@ -127,7 +129,7 @@ const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: 5,
+          borderRadius: variables.borderRadius.sm,
 
           '&:hover': {
             '&.Mui-error': {
@@ -145,18 +147,15 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          borderRadius: 4,
+          borderRadius: variables.borderRadius.xs,
           padding: 0,
-          borderWidth: '0.0625rem',
+          borderWidth: variables.borderWidth.md,
           borderColor: variables.palette.shades40,
           color: variables.palette.shades100_alfa87,
 
           input: {
-            paddingLeft: '1rem',
-            paddingRight: '1rem',
-            paddingBottom: '1rem',
-            paddingTop: '1rem',
-            fontSize: '1rem',
+            padding: '1rem',
+            fontSize: variables.font.size.lg,
           },
 
           '&:hover': {
@@ -166,7 +165,7 @@ const theme = createTheme({
           },
 
           '.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderWidth: '0.0625rem',
+            borderWidth: variables.borderWidth.lg,
             borderColor: variables.palette.primary50,
           },
         },
