@@ -1,9 +1,10 @@
-import React from 'react';
+import { lazy } from 'react';
+
 import { page } from 'resources';
 
-const Login = React.lazy(() => import('pages/Login'));
-const ResetPassword = React.lazy(() => import('pages/ResetPassword'));
-const SignUp = React.lazy(() => import('pages/SignUp'));
+const Login = lazy(() => import('pages/Login'));
+const ResetPassword = lazy(() => import('pages/ResetPassword'));
+const SignUp = lazy(() => import('pages/SignUp'));
 
 export const authRoutes = [
   {
