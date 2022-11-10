@@ -11,16 +11,24 @@ declare module '@mui/material/Button' {
 }
 
 const theme = createTheme({
+  spacing: 10,
   typography: {
     fontFamily: 'NotoSans',
-    htmlFontSize: 16,
+    htmlFontSize: 10,
     button: {
       fontSize: variables.font.size.md,
     },
   },
   components: {
     MuiCssBaseline: {
-      styleOverrides: typography,
+      styleOverrides: () => ({
+        typography,
+        html: {
+          fontSize: '62.5%',
+          height: '100%',
+          overflowY: 'hidden',
+        },
+      }),
     },
     MuiButton: {
       variants: [
@@ -64,10 +72,7 @@ const theme = createTheme({
         root: {
           fontWeight: variables.font.weight.semiBold,
           lineHeight: variables.lineHeight.md,
-          paddingLeft: '1.5rem',
-          paddingRight: '1.5rem',
-          paddingBottom: '0.625rem',
-          paddingTop: '0.625rem',
+          padding: '1rem 2.4rem',
           borderRadius: variables.borderRadius.sm,
           textTransform: 'none',
           height: 40,
@@ -154,7 +159,7 @@ const theme = createTheme({
           color: variables.palette.shades100_alfa87,
 
           input: {
-            padding: '1rem',
+            padding: '1.6rem',
             fontSize: variables.font.size.lg,
           },
 

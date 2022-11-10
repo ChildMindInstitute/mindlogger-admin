@@ -1,15 +1,16 @@
 import { styled } from '@mui/system';
 import { Button, Box, FormControl, MenuItem } from '@mui/material';
 
+import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 export const StyledAdvancedSettings = styled(Box)`
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: ${theme.spacing(0.8)};
 `;
 
 export const StyledFormControl = styled(FormControl)`
-  margin-top: 1rem;
+  margin-top: ${theme.spacing(1.6)};
 `;
 
 export const StyledMenuItem = styled(MenuItem)`

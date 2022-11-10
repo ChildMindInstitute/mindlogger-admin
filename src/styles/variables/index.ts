@@ -5,28 +5,28 @@ export const variables = {
   palette,
   font,
   lineHeight: {
-    xl: '1.56rem', //25px
-    lg: '1.375rem', //22px
-    md: '1.25rem', //20px
-    sm: '1rem', //16px
-    xs: '0.875rem', //14px
+    xl: '2.5rem', //25px
+    lg: '2.2rem', //22px
+    md: '2rem', //20px
+    sm: '1.6rem', //16px
+    xs: '1.4rem', //14px
   },
   letterSpacing: {
-    xl: '0.03125rem', //0.5px
-    lg: '0.025rem', //0.4px
-    md: '0.009375rem', //0.15px
-    sm: '0.00625rem', //0.1px
+    xl: '0.05rem', //0.5px
+    lg: '0.04rem', //0.4px
+    md: '0.015rem', //0.15px
+    sm: '0.01rem', //0.1px
   },
   borderRadius: {
     half: '50%',
-    xl: '6.25rem', //100px
-    lg: '1.25rem', //20px
-    md: '0.5rem', //8px
-    sm: '0.3125rem', //5px
-    xs: '0.25rem', //4px
+    xl: '10rem', //100px
+    lg: '2rem', //20px
+    md: '0.8rem', //8px
+    sm: '0.5rem', //5px
+    xs: '0.4rem', //4px
   },
   borderWidth: {
-    lg: '0.125rem', //2px
-    md: '0.0625rem', //1px
+    lg: '0.2rem', //2px
+    md: '0.1rem', //1px
   },
 };

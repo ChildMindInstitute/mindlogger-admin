@@ -1,10 +1,10 @@
 export const font = {
   size: {
-    xl: '1.125rem', //18px
-    lg: '1rem', //16px
-    md: '0.875rem', //14px
-    sm: '0.75rem', //12px
-    xs: '0.625rem', //10px
+    xl: '1.8rem', //18px
+    lg: '1.6rem', //16px
+    md: '1.4rem', //14px
+    sm: '1.2rem', //12px
+    xs: '1rem', //10px
   },
   weight: {
     semiBold: 600,
