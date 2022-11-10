@@ -1,6 +1,7 @@
 import { styled } from '@mui/system';
 import { Button, Box, Link } from '@mui/material';
 
+import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 import { StyledLargeTitle, StyledSmallText } from 'styles/styledComponents/Typography';
@@ -18,22 +19,22 @@ export const StyledContainerWrapper = styled(Box)`
 `;
 
 export const StyledContainer = styled(Box)`
-  width: 23.5rem;
-  margin: 1.5rem 0;
+  width: 37.6rem;
+  margin: ${theme.spacing(2.4, 0)};
 `;
 
 export const StyledSignUpHeader = styled(StyledLargeTitle)`
-  margin: 0 0 1.5rem;
+  margin: ${theme.spacing(0, 0, 2.4)};
 `;
 
 export const StyledForm = styled('form')`
-  padding: 1.5rem;
+  padding: ${theme.spacing(2.4)};
   background-color: ${variables.palette.shades0};
-  border-radius: 1.25rem;
+  border-radius: ${variables.borderRadius.lg};
 `;
 
 export const StyledController = styled(Box)`
-  margin-bottom: 2.25rem;
+  margin-bottom: ${theme.spacing(3.6)};
 `;
 
 export const StyledLabel = styled(StyledSmallText)`
@@ -51,7 +52,7 @@ export const StyledLink = styled(Link)`
 
 export const StyledButton = styled(Button)`
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: ${theme.spacing(2.4)};
 `;
 
 export const StyledBackWrapper = styled(Box)`
@@ -63,9 +64,9 @@ export const StyledBack = styled(Button)`
   padding: 0;
   color: ${variables.palette.primary50};
   text-align: center;
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
+  font-size: ${variables.font.size.sm};
+  font-weight: ${variables.font.weight.regular};
+  line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
   cursor: pointer;
 

@@ -1,14 +1,15 @@
 import { styled } from '@mui/system';
 import { Box, Link } from '@mui/material';
 
+import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 export const StyledFooter = styled(Box)`
   text-align: center;
-  font-size: 0.75rem;
-  line-height: 1rem;
+  font-size: ${variables.font.size.sm};
+  line-height: ${variables.lineHeight.sm};
   background-color: ${variables.palette.primary50};
-  padding: 1.25rem 0;
+  padding: ${theme.spacing(2, 0)};
 `;
 
 export const StyledLink = styled(Link)`
@@ -22,5 +23,5 @@ export const StyledLink = styled(Link)`
 
 export const StyledText = styled(Box)`
   color: ${variables.palette.shades0};
-  margin: 0 1.5rem;
+  margin: ${theme.spacing(0, 2.4)};
 `;

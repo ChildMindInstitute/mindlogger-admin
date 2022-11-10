@@ -1,6 +1,7 @@
 import { styled } from '@mui/system';
 import { Box, Select, FormControl } from '@mui/material';
 
+import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 export const StyledAuthHeader = styled(Box)`
@@ -9,7 +10,7 @@ export const StyledAuthHeader = styled(Box)`
   position: sticky;
   top: 0;
   background-color: ${variables.palette.primary50};
-  padding: 0.625rem 1.5rem;
+  padding: ${theme.spacing(1, 2.4)};
   z-index: 2;
 
   &:before,
@@ -30,11 +31,11 @@ export const StyledFormControl = styled(FormControl)`
 
 export const StyledSelect = styled(Select)(() => ({
   fontWeight: 600,
-  fontSize: '0.875rem',
-  color: `${variables.palette.shades0}`,
-  border: `0.0625rem solid ${variables.palette.shades0}`,
+  fontSize: variables.font.size.md,
+  color: variables.palette.shades0,
+  border: `${variables.borderWidth.md} solid ${variables.palette.shades0}`,
 
   '.MuiSelect-icon': {
-    color: `${variables.palette.shades0}`,
+    color: variables.palette.shades0,
   },
 }));
