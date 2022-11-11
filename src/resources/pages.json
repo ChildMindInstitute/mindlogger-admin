@@ -2,5 +2,7 @@
   "login": "/auth",
   "signUp": "/auth/signup",
   "passwordReset": "/auth/reset-password",
-  "dashboard": "/"
+  "dashboard": "/",
+  "builder": "/builder",
+  "library": "/library"
 }
