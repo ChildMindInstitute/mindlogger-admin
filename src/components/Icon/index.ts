@@ -26,6 +26,7 @@ import { HeaderLogo } from './HeaderLogo';
 import { HelpOutline } from './HelpOutline';
 import { Home } from './Home';
 import { Info } from './Info';
+import { Library } from './Library';
 import { Manager } from './Manager';
 import { NavigateBefore } from './NavigateBefore';
 import { NavigateNext } from './NavigateNext';
@@ -47,6 +48,7 @@ import { VisibilityOff } from './VisibilityOff';
 import { VisibilityOn } from './VisibilityOn';
 import { Widgets } from './Widgets';
 import { WidgetsOutlined } from './WidgetsOutlined';
+import { Workspace } from './Workspace';
 
 export const Icon = {
   Account,
@@ -77,6 +79,7 @@ export const Icon = {
   HelpOutline,
   Home,
   Info,
+  Library,
   Manager,
   NavigateBefore,
   NavigateNext,
@@ -98,4 +101,5 @@ export const Icon = {
   VisibilityOn,
   Widgets,
   WidgetsOutlined,
+  Workspace,
 };

@@ -7,6 +7,8 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { page } from 'resources';
 
+import { BaseLayout } from 'layouts/BaseLayout';
+
 import { PrivateRoute } from './PrivateRoute';
 import { authRoutes } from './routesList';
 
@@ -28,7 +30,9 @@ export const AppRoutes = () => {
           path={page.dashboard}
           element={
             <PrivateRoute condition={isAuthorized}>
-              <Dashboard />
+              <BaseLayout>
+                <Dashboard />
+              </BaseLayout>
             </PrivateRoute>
           }
         />
