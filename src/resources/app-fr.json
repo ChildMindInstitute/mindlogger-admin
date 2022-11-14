@@ -38,6 +38,8 @@
   "terms": "Terms",
   "about": "About",
   "searchApplets": "Recherche d'applets",
+  "myAccount": "Mon compte",
+  "logOut": "Se déconnecter",
   "dashboardTabsLabel": "Applets",
   "dashboardTabsLabel2": "Gestionnaires",
   "dashboardTabsLabel3": "Répondants"

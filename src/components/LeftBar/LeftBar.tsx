@@ -4,6 +4,7 @@ import { List } from '@mui/material';
 import { Icon } from 'components/Icon';
 import { StyledSmallText } from 'styles/styledComponents/Typography';
 import { variables } from 'styles/variables';
+import { page } from 'resources';
 
 import { links } from './links';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
@@ -11,7 +12,7 @@ import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styl
 export const LeftBar = () => (
   <StyledDrawer variant="permanent" anchor="left" classes={{ paper: 'drawer-paper' }}>
     <StyledDrawerLogo>
-      <NavLink to="/">
+      <NavLink to={page.dashboard}>
         <Icon.Workspace />
       </NavLink>
     </StyledDrawerLogo>

@@ -25,7 +25,7 @@ export const StyledLargeTitle = styled(Typography)`
 export const StyledBody = styled(Typography)`
   line-height: ${variables.lineHeight.lg};
   letter-spacing: ${variables.letterSpacing.md};
-  color: ${({ color }: StyledProps) => color || variables.palette.shades100_alfa87};
+  color: ${({ color }: StyledProps) => color || variables.palette.shades100};
 `;
 
 export const StyledMediumTitle = styled(Typography)`

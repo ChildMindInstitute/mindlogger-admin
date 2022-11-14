@@ -17,7 +17,6 @@ export const palette = {
   shades5: '#fdfcff',
   shades0: '#fff',
   shades100_alfa50: 'rgba(0, 0, 0, 0.5)',
-  shades100_alfa87: 'rgba(0, 0, 0, 0.87)',
 
   semantic: {
     error: '#ee3918',

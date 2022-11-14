@@ -8,7 +8,7 @@ export const StyledForm = styled('form')`
   margin-top: ${theme.spacing(3.2)};
   padding: ${theme.spacing(2.4)};
   background: ${variables.palette.shades0};
-  border-radius: ${variables.borderRadius.lg};
+  border-radius: ${variables.borderRadius.xl};
   border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
 `;
 

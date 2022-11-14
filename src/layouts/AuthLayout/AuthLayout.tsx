@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 import { Icon } from 'components/Icon';
-import { Footer } from 'components/Footer';
+import { Footer } from 'layouts/Footer';
 
 import { StyledAuthLayout, StyledHeader, StyledOutlet } from './AuthLayout.styles';
 

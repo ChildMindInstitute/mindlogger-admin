@@ -28,8 +28,10 @@ import { HeaderLogo } from './HeaderLogo';
 import { HelpOutline } from './HelpOutline';
 import { Home } from './Home';
 import { Info } from './Info';
+import { LogOut } from './LogOut';
 import { Library } from './Library';
 import { Manager } from './Manager';
+import { MoreHorizontal } from './MoreHorizontal';
 import { NavigateBefore } from './NavigateBefore';
 import { NavigateNext } from './NavigateNext';
 import { Notifications } from './Notifications';
@@ -86,7 +88,9 @@ export const Icon = {
   Home,
   Info,
   Library,
+  LogOut,
   Manager,
+  MoreHorizontal,
   NavigateBefore,
   NavigateNext,
   Notifications,
