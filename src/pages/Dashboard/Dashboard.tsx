@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material';
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
 import { auth, breadcrumbs } from 'redux/modules';
+import { Tabs } from 'components/Tabs';
 
 export const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ export const Dashboard = () => {
       <Typography variant="h2" gutterBottom>
         Dashboard
       </Typography>
+      <Tabs />
     </Box>
   );
 };

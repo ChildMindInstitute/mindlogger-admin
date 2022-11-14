@@ -29,5 +29,8 @@
   "serverUrl": "Server URL",
   "passwordMinLength": "Password must be at least 8 characters",
   "myAccount": "My account",
-  "logOut": "Log out"
+  "logOut": "Log out",
+  "dashboardTabsLabel": "Applets",
+  "dashboardTabsLabel2": "Managers",
+  "dashboardTabsLabel3": "Respondents"
 }

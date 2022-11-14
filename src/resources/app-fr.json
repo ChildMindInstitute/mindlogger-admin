@@ -29,5 +29,8 @@
   "serverUrl": "URL du serveur",
   "passwordMinLength": "Le mot de passe doit être au moins de 8 caractères",
   "myAccount": "Mon compte",
-  "logOut": "Se déconnecter"
+  "logOut": "Se déconnecter",
+  "dashboardTabsLabel": "Applets",
+  "dashboardTabsLabel2": "Gestionnaires",
+  "dashboardTabsLabel3": "Répondants"
 }
