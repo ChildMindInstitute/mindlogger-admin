@@ -4,17 +4,14 @@ import { Box, Link } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
-import {
-  StyledLargeTitle,
-  StyledSmallText,
-  StyledSmallTitle,
-} from 'styles/styledComponents/Typography';
+import { StyledLargeTitle, StyledSmallText } from 'styles/styledComponents/Typography';
 
 export const StyledConfirmation = styled(Box)`
   text-align: center;
   margin-top: ${theme.spacing(3.2)};
   padding: ${theme.spacing(2.4)};
   background: ${variables.palette.shades0};
+  border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
   border-radius: ${variables.borderRadius.lg};
 `;
 
@@ -26,7 +23,7 @@ export const StyledSubheader = styled(StyledSmallText)`
   margin: ${theme.spacing(0, 0, 1.2)};
 `;
 
-export const StyledInfo = styled(StyledSmallTitle)`
+export const StyledInfo = styled(StyledSmallText)`
   margin: ${theme.spacing(0, 0, 2.4)};
 `;
 

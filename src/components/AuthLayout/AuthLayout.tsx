@@ -1,13 +1,15 @@
 import { Outlet } from 'react-router-dom';
 
-import { AuthHeader } from 'components/AuthHeader';
+import { Icon } from 'components/Icon';
 import { Footer } from 'components/Footer';
 
-import { StyledAuthLayout, StyledOutlet } from './AuthLayout.styles';
+import { StyledAuthLayout, StyledHeader, StyledOutlet } from './AuthLayout.styles';
 
 export const AuthLayout = () => (
   <StyledAuthLayout>
-    <AuthHeader />
+    <StyledHeader>
+      <Icon.HeaderLogo />
+    </StyledHeader>
     <StyledOutlet>
       <Outlet />
     </StyledOutlet>

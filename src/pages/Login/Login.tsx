@@ -79,12 +79,12 @@ export const Login = ({ onSubmitForTest }: { onSubmitForTest?: () => void }) => 
               />
             </StyledController>
             {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-            <StyledButton variant="contained" type="submit" data-testid="submit-btn">
-              {t('login')}
-            </StyledButton>
             <StyledForgotPasswordLink onClick={() => navigate(page.passwordReset)}>
               {t('forgotPassword')}
             </StyledForgotPasswordLink>
+            <StyledButton variant="contained" type="submit" data-testid="submit-btn">
+              {t('login')}
+            </StyledButton>
             <StyledButton variant="outlined" onClick={() => navigate(page.signUp)}>
               {t('createAccount')}
             </StyledButton>

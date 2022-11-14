@@ -9,8 +9,8 @@ export const palette = {
 
   shades100: '#000',
   shades95: '#1a1c1e',
-  shades70: '#DEE3EB',
   shades80: '#526070',
+  shades70: '#DEE3EB',
   shades40: '#e4e4e4',
   shadesBG: '#fcfcff',
   shades20: '#f6f6f6',
