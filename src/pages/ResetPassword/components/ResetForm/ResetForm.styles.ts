@@ -9,6 +9,14 @@ export const StyledForm = styled('form')`
   padding: ${theme.spacing(2.4)};
   background: ${variables.palette.shades0};
   border-radius: ${variables.borderRadius.xl};
+  border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
+`;
+
+export const StyledResetPasswordHeader = styled(Typography)`
+  font-size: ${variables.font.size.xl};
+  font-weight: ${variables.font.weight.medium};
+  line-height: ${variables.lineHeight.xl};
+  margin: 0;
 `;
 
 export const StyledResetPasswordSubheader = styled(Typography)`

@@ -30,6 +30,46 @@ const theme = createTheme({
         },
       }),
     },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          background: 'rgba(28, 27, 31, 0.16)', // TODO fix when designers update colors
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: 28,
+          boxShadow: 'none',
+        },
+      },
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          fontSize: variables.font.size.xxl,
+          fontWeight: variables.font.weight.medium,
+          padding: '3.6rem 2.4rem',
+        },
+      },
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          padding: '2.4rem',
+        },
+      },
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          '&.Mui-selected': {
+            backgroundColor: variables.palette.primary95,
+          },
+        },
+      },
+    },
     MuiButton: {
       variants: [
         {
@@ -178,6 +218,9 @@ const theme = createTheme({
     },
   },
   palette: {
+    background: {
+      default: variables.palette.shadesBG,
+    },
     primary: {
       main: variables.palette.primary50,
     },

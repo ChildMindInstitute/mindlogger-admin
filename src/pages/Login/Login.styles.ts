@@ -8,7 +8,6 @@ import { StyledLargeTitle, StyledSmallText } from 'styles/styledComponents/Typog
 
 export const StyledLogin = styled(Box)`
   width: 100%;
-  background-color: ${variables.palette.shadesBG};
 `;
 
 export const StyledContainerWrapper = styled(Box)`
@@ -37,22 +36,24 @@ export const StyledForm = styled('form')`
   margin-top: ${theme.spacing(3.2)};
   padding: ${theme.spacing(2.4)};
   background: ${variables.palette.shades0};
+  border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
   border-radius: ${variables.borderRadius.xl};
 `;
 
 export const StyledController = styled(Box)`
-  margin-bottom: ${theme.spacing(3.6)};
+  margin-bottom: ${theme.spacing(2)};
 `;
 
 export const StyledButton = styled(Button)`
   width: 100%;
+  margin-top: ${theme.spacing(2.4)};
 `;
 
 export const StyledForgotPasswordLink = styled(Button)`
   height: auto;
   padding: 0;
   width: fit-content;
-  margin: ${theme.spacing(2.4, 0)};
+  margin: ${theme.spacing(1.2, 0, 0.8)};
   color: ${variables.palette.primary50};
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};

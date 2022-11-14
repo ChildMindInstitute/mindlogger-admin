@@ -8,7 +8,6 @@ import { StyledLargeTitle, StyledSmallText } from 'styles/styledComponents/Typog
 
 export const StyledSignUp = styled(Box)`
   width: 100%;
-  background-color: ${variables.palette.shadesBG};
 `;
 
 export const StyledContainerWrapper = styled(Box)`
@@ -30,6 +29,7 @@ export const StyledSignUpHeader = styled(StyledLargeTitle)`
 export const StyledForm = styled('form')`
   padding: ${theme.spacing(2.4)};
   background-color: ${variables.palette.shades0};
+  border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
   border-radius: ${variables.borderRadius.xl};
 `;
 

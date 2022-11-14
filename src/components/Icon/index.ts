@@ -22,6 +22,7 @@ import { EmailOutline } from './EmailOutline';
 import { Folder } from './Folder';
 import { FolderShared } from './FolderShared';
 import { FolderSharedOutlined } from './FolderSharedOutlined';
+import { France } from './France';
 import { Group } from './Group';
 import { HeaderLogo } from './HeaderLogo';
 import { HelpOutline } from './HelpOutline';
@@ -42,11 +43,13 @@ import { Reports } from './Reports';
 import { Respondent } from './Respondent';
 import { Reviewer } from './Reviewer';
 import { Search } from './Search';
+import { Selected } from './Selected';
 import { Settings } from './Settings';
 import { SettingsOutlined } from './SettingsOutlined';
 import { Share } from './Share';
 import { SquareEditOutline } from './SquareEditOutline';
 import { TransferOwnership } from './TransferOwnership';
+import { US } from './US';
 import { VisibilityOff } from './VisibilityOff';
 import { VisibilityOn } from './VisibilityOn';
 import { Widgets } from './Widgets';
@@ -78,6 +81,7 @@ export const Icon = {
   Folder,
   FolderShared,
   FolderSharedOutlined,
+  France,
   Group,
   HeaderLogo,
   HelpOutline,
@@ -98,11 +102,13 @@ export const Icon = {
   Respondent,
   Reviewer,
   Search,
+  Selected,
   Settings,
   SettingsOutlined,
   Share,
   SquareEditOutline,
   TransferOwnership,
+  US,
   VisibilityOff,
   VisibilityOn,
   Widgets,
