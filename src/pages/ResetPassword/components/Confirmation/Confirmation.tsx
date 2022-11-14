@@ -26,7 +26,9 @@ export const Confirmation = ({ email }: { email: string }) => {
       </StyledSubheader>
       <StyledInfo>
         {/*TODO: Add link with information about restoring password*/}
-        {t('didntReceiveEmail')} <StyledLink href="#">{t('here')}</StyledLink>
+        {t('ifYouDontReceiveEmail')}
+        <StyledLink href="#">{t('here')}</StyledLink>
+        {t('forMoreOptions')}
       </StyledInfo>
       <Button variant="contained" type="button" onClick={() => navigate(page.login)}>
         {t('backToLogin')}

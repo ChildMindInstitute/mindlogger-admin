@@ -1,15 +1,16 @@
 import { styled } from '@mui/system';
 import { Button, Box, FormControl, MenuItem } from '@mui/material';
 
+import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 export const StyledAdvancedSettings = styled(Box)`
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: ${theme.spacing(0.8)};
 `;
 
 export const StyledFormControl = styled(FormControl)`
-  margin-top: 1rem;
+  margin-top: ${theme.spacing(1.6)};
 `;
 
 export const StyledMenuItem = styled(MenuItem)`
@@ -22,10 +23,10 @@ export const StyledSettingsButton = styled(Button)`
   height: auto;
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
-  letter-spacing: 0.4px;
+  font-size: ${variables.font.size.sm};
+  font-weight: ${variables.font.weight.regular};
+  line-height: ${variables.lineHeight.sm};
+  letter-spacing: ${variables.letterSpacing.lg};
   color: ${variables.palette.shades100};
 
   .MuiTouchRipple-root {
