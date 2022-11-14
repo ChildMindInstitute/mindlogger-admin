@@ -8,11 +8,12 @@ export const loginSchema = () => {
   const emailRequired = t('emailRequired');
   const incorrectEmail = t('incorrectEmail');
   const passwordRequired = t('passwordRequired');
+  const passwordMinLength = t('passwordMinLength');
 
   return yup
     .object({
       email: yup.string().required(emailRequired).email(incorrectEmail),
-      password: yup.string().required(passwordRequired),
+      password: yup.string().min(8, passwordMinLength).required(passwordRequired),
     })
     .required();
 };

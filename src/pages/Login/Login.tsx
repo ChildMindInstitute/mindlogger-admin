@@ -6,17 +6,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 
 import { SignIn } from 'api';
+import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
 import { auth, ErrorResponse } from 'redux/modules';
 import { InputController } from 'components/FormComponents/InputController';
-import { StyledErrorText } from 'styles/StyledComponents/ErrorText';
+import { StyledErrorText } from 'styles/styledComponents/ErrorText';
+import { StyledLargeTitle } from 'styles/styledComponents/Typography';
 
 import {
   StyledLogin,
   StyledContainerWrapper,
   StyledContainer,
   StyledWelcome,
-  StyledLoginHeader,
   StyledLoginSubheader,
   StyledForm,
   StyledController,
@@ -25,7 +26,7 @@ import {
 } from './Login.styles';
 import { loginSchema } from './Login.schema';
 
-export const Login = () => {
+export const Login = ({ onSubmitForTest }: { onSubmitForTest?: () => void }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -37,15 +38,22 @@ export const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = async (data: SignIn) => {
-    const result = await dispatch(auth.thunk.signIn(data));
+    if (onSubmitForTest) {
+      onSubmitForTest();
+    }
 
-    if (auth.thunk.signIn.fulfilled.match(result)) {
+    const { signIn } = auth.thunk;
+    const result = await dispatch(signIn(data));
+
+    if (signIn.fulfilled.match(result)) {
       setErrorMessage('');
-    } else if (auth.thunk.signIn.rejected.match(result)) {
+    } else if (signIn.rejected.match(result)) {
       const errorObj = result.payload as AxiosError;
       const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
       if (errorData) {
         setErrorMessage(errorData.message);
+      } else {
+        setErrorMessage(errorObj.message);
       }
     }
   };
@@ -56,7 +64,7 @@ export const Login = () => {
         <StyledContainer>
           <StyledWelcome>{t('welcome')}</StyledWelcome>
           <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-            <StyledLoginHeader>{t('login')}</StyledLoginHeader>
+            <StyledLargeTitle>{t('login')}</StyledLargeTitle>
             <StyledLoginSubheader>{t('logIntoAccount')}</StyledLoginSubheader>
             <StyledController>
               <InputController fullWidth name="email" control={control} label={t('email')} />
@@ -71,13 +79,13 @@ export const Login = () => {
               />
             </StyledController>
             {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-            <StyledButton variant="contained" type="submit">
-              {t('login')}
-            </StyledButton>
-            <StyledForgotPasswordLink onClick={() => navigate('/auth/reset-password')}>
+            <StyledForgotPasswordLink onClick={() => navigate(page.passwordReset)}>
               {t('forgotPassword')}
             </StyledForgotPasswordLink>
-            <StyledButton variant="outlined" onClick={() => navigate('/auth/signup')}>
+            <StyledButton variant="contained" type="submit" data-testid="submit-btn">
+              {t('login')}
+            </StyledButton>
+            <StyledButton variant="outlined" onClick={() => navigate(page.signUp)}>
               {t('createAccount')}
             </StyledButton>
           </StyledForm>

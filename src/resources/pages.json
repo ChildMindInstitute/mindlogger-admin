@@ -1,0 +1,8 @@
+{
+  "login": "/auth",
+  "signUp": "/auth/signup",
+  "passwordReset": "/auth/reset-password",
+  "dashboard": "/",
+  "builder": "/builder",
+  "library": "/library"
+}

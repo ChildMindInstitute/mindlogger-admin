@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Login } from 'pages/Login';
-import { ResetPassword } from 'pages/ResetPassword';
 import { AuthLayout } from 'components/AuthLayout';
-import { SignUp } from 'pages/SignUp';
 import { Dashboard } from 'pages/Dashboard';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
+import { page } from 'resources';
+
+import { BaseLayout } from 'layouts/BaseLayout';
 
 import { PrivateRoute } from './PrivateRoute';
+import { authRoutes } from './routesList';
 
 export const AppRoutes = () => {
   const dispatch = useAppDispatch();
@@ -17,55 +18,36 @@ export const AppRoutes = () => {
   const isAuthorized = auth.useAuthorized();
 
   useEffect(() => {
-    if (token) {
+    if (!isAuthorized && token) {
       dispatch(auth.thunk.signInWithToken({ token }));
     }
-  }, [token, dispatch]);
+  }, [isAuthorized, token, dispatch]);
 
   return (
     <>
       <Routes>
         <Route
-          path="/"
+          path={page.dashboard}
           element={
             <PrivateRoute condition={isAuthorized}>
-              <Navigate to="/dashboard" replace />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute condition={isAuthorized}>
-              <Dashboard />
+              <BaseLayout>
+                <Dashboard />
+              </BaseLayout>
             </PrivateRoute>
           }
         />
         <Route path="/auth" element={<AuthLayout />}>
-          <Route
-            path="/auth"
-            element={
-              <PrivateRoute condition={!isAuthorized} redirectPath="/">
-                <Login />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/auth/signup"
-            element={
-              <PrivateRoute condition={!isAuthorized} redirectPath="/">
-                <SignUp />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/auth/reset-password"
-            element={
-              <PrivateRoute condition={!isAuthorized} redirectPath="/">
-                <ResetPassword />
-              </PrivateRoute>
-            }
-          />
+          {authRoutes.map(({ path, Component }) => (
+            <Route
+              key={path}
+              path={path}
+              element={
+                <PrivateRoute condition={!isAuthorized} redirectPath="/">
+                  <Component />
+                </PrivateRoute>
+              }
+            />
+          ))}
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

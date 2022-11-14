@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
@@ -12,9 +13,11 @@ function App() {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <Suspense fallback={<>Loading...</>}>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </Suspense>
       </ThemeProvider>
     </Provider>
   );

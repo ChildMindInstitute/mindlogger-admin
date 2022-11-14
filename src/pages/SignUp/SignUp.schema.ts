@@ -10,13 +10,14 @@ export const signUpSchema = () => {
   const firstNameRequired = t('firstNameRequired');
   const lastNameRequired = t('lastNameRequired');
   const passwordRequired = t('passwordRequired');
+  const passwordMinLength = t('passwordMinLength');
 
   return yup
     .object({
       email: yup.string().required(emailRequired).email(incorrectEmail),
       firstName: yup.string().required(firstNameRequired),
       lastName: yup.string().required(lastNameRequired),
-      password: yup.string().required(passwordRequired),
+      password: yup.string().min(8, passwordMinLength).required(passwordRequired),
     })
     .required();
 };

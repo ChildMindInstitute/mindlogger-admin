@@ -7,10 +7,12 @@ import { AxiosError } from 'axios';
 
 import { useAppDispatch } from 'redux/store';
 import { auth, ErrorResponse } from 'redux/modules';
+import { page } from 'resources';
 import { InputController } from 'components/FormComponents/InputController';
 import { CheckboxController } from 'components/FormComponents/CheckboxController';
-import { StyledErrorText } from 'styles/StyledComponents/ErrorText';
+import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 
+import { AdvancedSettings } from './AdvancedSettings';
 import {
   StyledSignUp,
   StyledContainerWrapper,
@@ -27,7 +29,7 @@ import {
 import { signUpSchema } from './SignUp.schema';
 import { SignUpData } from './SignUp.types';
 
-export const SignUp = () => {
+export const SignUp = ({ onSubmitForTest }: { onSubmitForTest?: () => void }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -46,16 +48,23 @@ export const SignUp = () => {
   const termsOfService = watch('termsOfService');
 
   const onSubmit = async (data: SignUpData) => {
-    const { termsOfService, ...args } = data;
-    const result = await dispatch(auth.thunk.signUp({ body: args }));
+    if (onSubmitForTest) {
+      onSubmitForTest();
+    }
 
-    if (auth.thunk.signUp.fulfilled.match(result)) {
+    const { signUp } = auth.thunk;
+    const { termsOfService, ...args } = data;
+    const result = await dispatch(signUp({ body: args }));
+
+    if (signUp.fulfilled.match(result)) {
       setErrorMessage('');
-    } else if (auth.thunk.signUp.rejected.match(result)) {
+    } else if (signUp.rejected.match(result)) {
       const errorObj = result.payload as AxiosError;
       const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
       if (errorData) {
         setErrorMessage(errorData.message);
+      } else {
+        setErrorMessage(errorObj.message);
       }
     }
   };
@@ -90,6 +99,7 @@ export const SignUp = () => {
               />
             </StyledController>
             {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
+            <AdvancedSettings />
             <StyledController>
               <CheckboxController
                 name="termsOfService"
@@ -104,11 +114,16 @@ export const SignUp = () => {
                 }
               />
             </StyledController>
-            <StyledButton variant="contained" type="submit" disabled={!termsOfService}>
+            <StyledButton
+              variant="contained"
+              type="submit"
+              disabled={!termsOfService}
+              data-testid="submit-btn"
+            >
               {t('createAccount')}
             </StyledButton>
             <StyledBackWrapper>
-              <StyledBack onClick={() => navigate('/auth')}>{t('backToLogin')}</StyledBack>
+              <StyledBack onClick={() => navigate(page.login)}>{t('backToLogin')}</StyledBack>
             </StyledBackWrapper>
           </StyledForm>
         </StyledContainer>

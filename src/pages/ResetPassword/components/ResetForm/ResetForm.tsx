@@ -1,17 +1,17 @@
-import { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { InputController } from 'components/FormComponents/InputController';
 import { ResetPassword } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
+import { page } from 'resources';
+import { InputController } from 'components/FormComponents/InputController';
+import { StyledLargeTitle } from 'styles/styledComponents/Typography';
 
 import {
   StyledForm,
-  StyledResetPasswordHeader,
   StyledResetPasswordSubheader,
   StyledController,
   StyledButton,
@@ -19,8 +19,9 @@ import {
   StyledBack,
 } from './ResetForm.styles';
 import { resetSchema } from './ResetForm.schema';
+import { ResetFormProps } from './ResetForm.types';
 
-export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<string>> }) => {
+export const ResetForm = ({ setEmail, onSubmitForTest }: ResetFormProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -30,27 +31,31 @@ export const ResetForm = ({ setEmail }: { setEmail: Dispatch<SetStateAction<stri
   });
 
   const onSubmit = async ({ email }: ResetPassword) => {
-    const result = await dispatch(auth.thunk.resetPassword({ email }));
+    if (onSubmitForTest) {
+      onSubmitForTest();
+    }
+    const { resetPassword } = auth.thunk;
+    const result = await dispatch(resetPassword({ email }));
 
-    if (auth.thunk.resetPassword.fulfilled.match(result)) {
+    if (resetPassword.fulfilled.match(result) && setEmail) {
       setEmail(email);
     }
   };
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-      <StyledResetPasswordHeader>{t('resetPassword')}</StyledResetPasswordHeader>
+      <StyledLargeTitle>{t('resetPassword')}</StyledLargeTitle>
       <StyledResetPasswordSubheader>
         {t('enterEmailAssociatedWithAccount')}
       </StyledResetPasswordSubheader>
       <StyledController>
         <InputController fullWidth name="email" control={control} label={t('email')} />
       </StyledController>
-      <StyledButton variant="contained" type="submit">
+      <StyledButton variant="contained" type="submit" data-testid="submit-btn">
         {t('sendResetLink')}
       </StyledButton>
       <StyledBackWrapper>
-        <StyledBack onClick={() => navigate('/auth')}>{t('backToLogin')}</StyledBack>
+        <StyledBack onClick={() => navigate(page.login)}>{t('backToLogin')}</StyledBack>
       </StyledBackWrapper>
     </StyledForm>
   );

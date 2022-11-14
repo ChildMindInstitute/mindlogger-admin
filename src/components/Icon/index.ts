@@ -2,6 +2,7 @@ import { Account } from './Account';
 import { AdminPanel } from './AdminPanel';
 import { AlarmOn } from './AlarmOn';
 import { AllOut } from './AllOut';
+import { Applets } from './Applets';
 import { BarChart } from './BarChart';
 import { Builder } from './Builder';
 import { CalendarMonth } from './CalendarMonth';
@@ -21,11 +22,13 @@ import { EmailOutline } from './EmailOutline';
 import { Folder } from './Folder';
 import { FolderShared } from './FolderShared';
 import { FolderSharedOutlined } from './FolderSharedOutlined';
+import { France } from './France';
 import { Group } from './Group';
 import { HeaderLogo } from './HeaderLogo';
 import { HelpOutline } from './HelpOutline';
 import { Home } from './Home';
 import { Info } from './Info';
+import { Library } from './Library';
 import { Manager } from './Manager';
 import { NavigateBefore } from './NavigateBefore';
 import { NavigateNext } from './NavigateNext';
@@ -38,21 +41,25 @@ import { Reports } from './Reports';
 import { Respondent } from './Respondent';
 import { Reviewer } from './Reviewer';
 import { Search } from './Search';
+import { Selected } from './Selected';
 import { Settings } from './Settings';
 import { SettingsOutlined } from './SettingsOutlined';
 import { Share } from './Share';
 import { SquareEditOutline } from './SquareEditOutline';
 import { TransferOwnership } from './TransferOwnership';
+import { US } from './US';
 import { VisibilityOff } from './VisibilityOff';
 import { VisibilityOn } from './VisibilityOn';
 import { Widgets } from './Widgets';
 import { WidgetsOutlined } from './WidgetsOutlined';
+import { Workspace } from './Workspace';
 
 export const Icon = {
   Account,
   AdminPanel,
   AlarmOn,
   AllOut,
+  Applets,
   BarChart,
   Builder,
   CalendarMonth,
@@ -72,11 +79,13 @@ export const Icon = {
   Folder,
   FolderShared,
   FolderSharedOutlined,
+  France,
   Group,
   HeaderLogo,
   HelpOutline,
   Home,
   Info,
+  Library,
   Manager,
   NavigateBefore,
   NavigateNext,
@@ -89,13 +98,16 @@ export const Icon = {
   Respondent,
   Reviewer,
   Search,
+  Selected,
   Settings,
   SettingsOutlined,
   Share,
   SquareEditOutline,
   TransferOwnership,
+  US,
   VisibilityOff,
   VisibilityOn,
   Widgets,
   WidgetsOutlined,
+  Workspace,
 };

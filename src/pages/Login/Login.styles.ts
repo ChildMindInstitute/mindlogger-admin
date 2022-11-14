@@ -1,13 +1,13 @@
 import { styled } from '@mui/system';
 import { Button, Box } from '@mui/material';
 
+import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
-import { StyledLargeTitle, StyledSmallText } from 'styles/StyledComponents/Typography';
+import { StyledLargeTitle, StyledSmallText } from 'styles/styledComponents/Typography';
 
 export const StyledLogin = styled(Box)`
   width: 100%;
-  background-color: ${variables.palette.shadesBG};
 `;
 
 export const StyledContainerWrapper = styled(Box)`
@@ -18,49 +18,46 @@ export const StyledContainerWrapper = styled(Box)`
 `;
 
 export const StyledContainer = styled(Box)`
-  width: 23.5rem;
-  margin: 1.5rem 0;
+  width: 37.6rem;
+  margin: ${theme.spacing(2.4, 0)};
 `;
 
 export const StyledWelcome = styled(StyledLargeTitle)`
   color: ${variables.palette.primary50};
-  margin: 0;
-  padding: 0 3rem;
+  padding: ${theme.spacing(0, 4.8)};
   text-align: center;
 `;
 
-export const StyledLoginHeader = styled(StyledLargeTitle)`
-  margin: 0;
-`;
-
 export const StyledLoginSubheader = styled(StyledSmallText)`
-  margin: 0.5rem 0 1.5rem;
+  margin: ${theme.spacing(0.8, 0, 2.4)};
 `;
 
 export const StyledForm = styled('form')`
-  margin-top: 2rem;
-  padding: 1.5rem;
+  margin-top: ${theme.spacing(3.2)};
+  padding: ${theme.spacing(2.4)};
   background: ${variables.palette.shades0};
-  border-radius: 1.25rem;
+  border-radius: ${variables.borderRadius.lg};
+  border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
 `;
 
 export const StyledController = styled(Box)`
-  margin-bottom: 2.25rem;
+  margin-bottom: ${theme.spacing(2)};
 `;
 
 export const StyledButton = styled(Button)`
   width: 100%;
+  margin-top: ${theme.spacing(2.4)};
 `;
 
 export const StyledForgotPasswordLink = styled(Button)`
   height: auto;
   padding: 0;
   width: fit-content;
-  margin: 1.5rem 0;
+  margin: ${theme.spacing(1.2, 0, 0.8)};
   color: ${variables.palette.primary50};
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1rem;
+  font-size: ${variables.font.size.sm};
+  font-weight: ${variables.font.weight.regular};
+  line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
   cursor: pointer;
 
