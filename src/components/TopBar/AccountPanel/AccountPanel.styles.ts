@@ -1,20 +1,19 @@
 import { styled } from '@mui/system';
-import { Box, Button } from '@mui/material';
+import { Drawer, Box, Button } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
-export const StyledAccountPanel = styled(Box)`
-  height: 100vh;
-  width: 40rem;
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding: ${theme.spacing(1.6)};
-  background-color: ${variables.palette.primary95};
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+export const StyledAccountDrawer = styled(Drawer)`
+  .MuiPaper-root {
+    height: 100%;
+    width: 40rem;
+    padding: ${theme.spacing(1.6)};
+    background-color: ${variables.palette.primary95};
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 `;
 
 export const StyledHeader = styled(Box)`

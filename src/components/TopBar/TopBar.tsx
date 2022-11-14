@@ -16,7 +16,7 @@ import {
 } from './TopBar.styles';
 
 export const TopBar = (): JSX.Element => {
-  const [showAccPanel, setShowAccPanel] = useState(false);
+  const [showAccDrawer, setShowAccDrawer] = useState(false);
   const breadcrumbsData = breadcrumbs.useData();
 
   return (
@@ -28,11 +28,13 @@ export const TopBar = (): JSX.Element => {
             <Icon.MoreHorizontal color={variables.palette.primary50} />
           </StyledMoreBtn>
         </StyledLeftBox>
-        <StyledAvatarBtn onClick={() => setShowAccPanel((prevState) => !prevState)} variant="text">
+        <StyledAvatarBtn onClick={() => setShowAccDrawer((prevState) => !prevState)} variant="text">
           <StyledImage src={avatarSrc} alt="Avatar" />
         </StyledAvatarBtn>
       </StyledTopBar>
-      {showAccPanel && <AccountPanel setShowPanel={setShowAccPanel} />}
+      {showAccDrawer && (
+        <AccountPanel setShowDrawer={setShowAccDrawer} showDrawer={showAccDrawer} />
+      )}
     </>
   );
 };

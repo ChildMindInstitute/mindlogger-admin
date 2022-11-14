@@ -4,10 +4,12 @@ import { Drawer, ListItem, Box } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
+import { LEFT_BAR_WIDTH } from './LeftBar.const';
+
 export const StyledDrawer = styled(Drawer)`
   .drawer-paper {
     background-color: ${variables.palette.primary95};
-    min-width: 8.8rem;
+    width: ${LEFT_BAR_WIDTH};
     border-right: none;
   }
 `;

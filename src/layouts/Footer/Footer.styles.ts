@@ -4,11 +4,13 @@ import { Box, Link } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
+import { FOOTER_HEIGHT } from './Footer.const';
+
 export const StyledFooter = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 4.8rem;
+  height: ${FOOTER_HEIGHT};
   font-size: ${variables.font.size.sm};
   line-height: ${variables.lineHeight.sm};
   padding: ${theme.spacing(2, 0)};

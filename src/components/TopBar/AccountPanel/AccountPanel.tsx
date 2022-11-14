@@ -8,7 +8,7 @@ import avatarSrc from 'assets/images/avatar.png';
 import { variables } from 'styles/variables';
 
 import {
-  StyledAccountPanel,
+  StyledAccountDrawer,
   StyledHeader,
   StyledHideBtn,
   StyledHeaderInfo,
@@ -20,7 +20,7 @@ import {
 } from './AccountPanel.styles';
 import { AccountPanelProps } from './AccountPanel.types';
 
-export const AccountPanel = ({ setShowPanel }: AccountPanelProps): JSX.Element => {
+export const AccountPanel = ({ setShowDrawer, showDrawer }: AccountPanelProps): JSX.Element => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const userData = auth.useUserData();
@@ -30,9 +30,9 @@ export const AccountPanel = ({ setShowPanel }: AccountPanelProps): JSX.Element =
   };
 
   return (
-    <StyledAccountPanel>
+    <StyledAccountDrawer anchor="right" open={showDrawer}>
       <StyledHeader>
-        <StyledHideBtn onClick={() => setShowPanel(false)}>
+        <StyledHideBtn onClick={() => setShowDrawer(false)}>
           <Icon.NavigateNext color={variables.palette.shades80} />
         </StyledHideBtn>
         <StyledHeaderRight>
@@ -54,6 +54,6 @@ export const AccountPanel = ({ setShowPanel }: AccountPanelProps): JSX.Element =
           {t('logOut')}
         </StyledLogOutBtn>
       </StyledFooter>
-    </StyledAccountPanel>
+    </StyledAccountDrawer>
   );
 };

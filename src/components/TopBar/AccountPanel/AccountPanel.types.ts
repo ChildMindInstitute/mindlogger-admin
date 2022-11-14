@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
 export type AccountPanelProps = {
-  setShowPanel: Dispatch<SetStateAction<boolean>>;
+  showDrawer: boolean;
+  setShowDrawer: Dispatch<SetStateAction<boolean>>;
 };
