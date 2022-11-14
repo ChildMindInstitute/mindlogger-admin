@@ -19,29 +19,27 @@ export const Breadcrumbs = (): JSX.Element => {
 
   return (
     <MuiBreadcrumbs>
-      {breadcrumbsData && breadcrumbsData.length > 0 && (
-        <MuiBreadcrumbs>
-          {breadcrumbsData.map((crumb, index) => {
-            const last = index === breadcrumbsData.length - 1;
+      {breadcrumbsData &&
+        breadcrumbsData.length > 0 &&
+        breadcrumbsData.map((crumb, index) => {
+          const last = index === breadcrumbsData.length - 1;
 
-            return last ? (
-              <StyledBox key={index}>
-                <StyledAvatarWrapper>{getBreadcrumbAvatar(index)}</StyledAvatarWrapper>
-                <StyledMediumTitle fontWeight="semiBold" letterSpacing="xl">
-                  {crumb.label}
-                </StyledMediumTitle>
-              </StyledBox>
-            ) : (
-              <StyledLink key={index} to={crumb.navPath}>
-                <StyledAvatarWrapper>{getBreadcrumbAvatar(index)}</StyledAvatarWrapper>
-                <StyledMediumTitle fontWeight="regular" color={variables.palette.shades80}>
-                  {crumb.label}
-                </StyledMediumTitle>
-              </StyledLink>
-            );
-          })}
-        </MuiBreadcrumbs>
-      )}
+          return last ? (
+            <StyledBox key={index}>
+              <StyledAvatarWrapper>{getBreadcrumbAvatar(index)}</StyledAvatarWrapper>
+              <StyledMediumTitle fontWeight="semiBold" letterSpacing="xl">
+                {crumb.label}
+              </StyledMediumTitle>
+            </StyledBox>
+          ) : (
+            <StyledLink key={index} to={crumb.navPath}>
+              <StyledAvatarWrapper>{getBreadcrumbAvatar(index)}</StyledAvatarWrapper>
+              <StyledMediumTitle fontWeight="regular" color={variables.palette.shades80}>
+                {crumb.label}
+              </StyledMediumTitle>
+            </StyledLink>
+          );
+        })}
     </MuiBreadcrumbs>
   );
 };
