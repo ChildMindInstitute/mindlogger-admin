@@ -1,9 +1,11 @@
 import { SVGProps } from 'react';
 
+import { variables } from 'styles/variables';
+
 export const Manager = ({
   width = 24,
   height = 24,
-  color = '#000',
+  color = variables.palette.shades80,
 }: SVGProps<SVGElement>): JSX.Element => (
   <svg
     width={width}

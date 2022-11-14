@@ -20,7 +20,7 @@ export const LeftBar = () => (
         <StyledDrawerItem key={text}>
           <NavLink to={link} className={({ isActive }) => (isActive ? 'active-link' : undefined)}>
             {icon}
-            <StyledSmallText color={variables.palette.gray80}> {text}</StyledSmallText>
+            <StyledSmallText color={variables.palette.shades80}> {text}</StyledSmallText>
           </NavLink>
         </StyledDrawerItem>
       ))}
