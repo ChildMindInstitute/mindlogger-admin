@@ -28,7 +28,7 @@ export const StyledAvatar = styled(Box)`
 export const StyledLink = styled(Link)`
   ${commonCenterStyles};
   padding: ${theme.spacing(0.8, 0.4)};
-  transition: all 0.3s;
+  transition: background-color 0.3s;
   border-radius: ${variables.borderRadius.lg};
 
   &:hover {
