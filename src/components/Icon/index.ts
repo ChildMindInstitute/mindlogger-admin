@@ -2,6 +2,7 @@ import { Account } from './Account';
 import { AdminPanel } from './AdminPanel';
 import { AlarmOn } from './AlarmOn';
 import { AllOut } from './AllOut';
+import { Applets } from './Applets';
 import { BarChart } from './BarChart';
 import { Builder } from './Builder';
 import { CalendarMonth } from './CalendarMonth';
@@ -55,6 +56,7 @@ export const Icon = {
   AdminPanel,
   AlarmOn,
   AllOut,
+  Applets,
   BarChart,
   Builder,
   CalendarMonth,

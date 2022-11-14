@@ -3,6 +3,8 @@ import { Box, Button, Typography } from '@mui/material';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 
+import { Tabs } from 'components/Tabs';
+
 export const Dashboard = () => {
   const dispatch = useAppDispatch();
   const handleLogout = () => {
@@ -14,6 +16,7 @@ export const Dashboard = () => {
       <Typography variant="h2" gutterBottom>
         Dashboard
       </Typography>
+      <Tabs />
       <Button variant="contained" onClick={handleLogout}>
         Logout
       </Button>
