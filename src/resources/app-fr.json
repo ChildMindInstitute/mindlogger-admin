@@ -37,6 +37,8 @@
   "privacy": "Privacy",
   "terms": "Terms",
   "about": "About",
+  "myAccount": "Mon compte",
+  "logOut": "Se déconnecter",
   "dashboardTabsLabel": "Applets",
   "dashboardTabsLabel2": "Gestionnaires",
   "dashboardTabsLabel3": "Répondants"

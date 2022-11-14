@@ -1,25 +1,32 @@
-import { Box, Button, Typography } from '@mui/material';
+import { useEffect } from 'react';
 
+import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'redux/modules';
-
+import { auth, breadcrumbs } from 'redux/modules';
 import { Tabs } from 'components/Tabs';
+
+import { StyledDashboard } from './Dashboard.styles';
 
 export const Dashboard = () => {
   const dispatch = useAppDispatch();
-  const handleLogout = () => {
-    dispatch(auth.actions.resetAuthorization());
-  };
+  const userData = auth.useUserData();
+
+  useEffect(() => {
+    if (userData) {
+      dispatch(
+        breadcrumbs.actions.setBreadcrumbs([
+          {
+            label: `${userData.firstName} ${userData.lastName}'s Mindlogger`,
+            navPath: page.dashboard,
+          },
+        ]),
+      );
+    }
+  }, [dispatch, userData]);
 
   return (
-    <Box style={{ padding: '1rem', textAlign: 'center' }}>
-      <Typography variant="h2" gutterBottom>
-        Dashboard
-      </Typography>
+    <StyledDashboard>
       <Tabs />
-      <Button variant="contained" onClick={handleLogout}>
-        Logout
-      </Button>
-    </Box>
+    </StyledDashboard>
   );
 };

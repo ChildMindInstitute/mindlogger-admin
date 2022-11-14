@@ -37,6 +37,8 @@
   "privacy": "Privacy",
   "terms": "Terms",
   "about": "About",
+  "myAccount": "My account",
+  "logOut": "Log out",
   "dashboardTabsLabel": "Applets",
   "dashboardTabsLabel2": "Managers",
   "dashboardTabsLabel3": "Respondents"

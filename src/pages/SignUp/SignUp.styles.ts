@@ -30,7 +30,7 @@ export const StyledForm = styled('form')`
   padding: ${theme.spacing(2.4)};
   background-color: ${variables.palette.shades0};
   border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
-  border-radius: ${variables.borderRadius.lg};
+  border-radius: ${variables.borderRadius.xl};
 `;
 
 export const StyledController = styled(Box)`
