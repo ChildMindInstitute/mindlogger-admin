@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { AuthLayout } from 'components/AuthLayout';
+import { AuthLayout } from 'layouts/AuthLayout';
 import { Dashboard } from 'pages/Dashboard';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';

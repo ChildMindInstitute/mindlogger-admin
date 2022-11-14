@@ -27,5 +27,7 @@
   "advancedSettings": "Advanced Settings",
   "serverThatHoldAppletConfiguration": "Server that will hold your applet configuration settings and all the data you collect",
   "serverUrl": "Server URL",
-  "passwordMinLength": "Password must be at least 8 characters"
+  "passwordMinLength": "Password must be at least 8 characters",
+  "myAccount": "My account",
+  "logOut": "Log out"
 }

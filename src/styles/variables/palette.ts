@@ -9,16 +9,14 @@ export const palette = {
 
   shades100: '#000',
   shades95: '#1a1c1e',
-  shades80: '#9fadbf',
+  shades80: '#526070',
+  shades70: '#dee3eb',
   shades40: '#e4e4e4',
   shadesBG: '#fcfcff',
   shades20: '#f6f6f6',
   shades5: '#fdfcff',
   shades0: '#fff',
   shades100_alfa50: 'rgba(0, 0, 0, 0.5)',
-  shades100_alfa87: 'rgba(0, 0, 0, 0.87)',
-
-  gray80: '#526070',
 
   semantic: {
     error: '#ee3918',

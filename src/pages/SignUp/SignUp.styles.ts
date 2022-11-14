@@ -30,7 +30,7 @@ export const StyledSignUpHeader = styled(StyledLargeTitle)`
 export const StyledForm = styled('form')`
   padding: ${theme.spacing(2.4)};
   background-color: ${variables.palette.shades0};
-  border-radius: ${variables.borderRadius.lg};
+  border-radius: ${variables.borderRadius.xl};
 `;
 
 export const StyledController = styled(Box)`

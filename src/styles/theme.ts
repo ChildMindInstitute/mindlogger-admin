@@ -37,7 +37,7 @@ const theme = createTheme({
           style: {
             color: variables.palette.shades0,
             backgroundColor: variables.palette.primary50,
-            borderRadius: variables.borderRadius.xl,
+            borderRadius: variables.borderRadius.xxl,
 
             '&:hover': {
               backgroundColor: variables.palette.primary60,
@@ -55,7 +55,7 @@ const theme = createTheme({
             borderWidth: variables.borderWidth.md,
             borderStyle: 'solid',
             borderColor: variables.palette.shades80,
-            borderRadius: variables.borderRadius.xl,
+            borderRadius: variables.borderRadius.xxl,
 
             '&:hover': {
               backgroundColor: variables.palette.primary95,
@@ -156,7 +156,7 @@ const theme = createTheme({
           padding: 0,
           borderWidth: variables.borderWidth.md,
           borderColor: variables.palette.shades40,
-          color: variables.palette.shades100_alfa87,
+          color: variables.palette.shades100,
 
           input: {
             padding: '1.6rem',

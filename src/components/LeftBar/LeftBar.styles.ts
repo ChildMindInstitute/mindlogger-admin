@@ -31,7 +31,7 @@ export const StyledDrawerItem = styled(ListItem)`
     width: 5.6rem;
     height: 3.2rem;
     background: ${variables.palette.primary80};
-    border-radius: ${variables.borderRadius.xl};
+    border-radius: ${variables.borderRadius.xxl};
     left: 50%;
     top: 0;
     transform: translateX(-50%);
