@@ -14,18 +14,18 @@ export const StyledFooter = styled(Box)`
   font-size: ${variables.font.size.sm};
   line-height: ${variables.lineHeight.sm};
   padding: ${theme.spacing(2, 0)};
-  border-top: ${variables.borderWidth.md} solid ${variables.palette.shades70};
+  border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   margin: ${theme.spacing(0, 4.4)};
 `;
 
 export const StyledText = styled(Box)`
-  color: ${variables.palette.shades80};
+  color: ${variables.palette.on_surface_variant};
   margin: ${theme.spacing(0, 2.4)};
 `;
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
-  color: ${variables.palette.shades80};
+  color: ${variables.palette.on_surface_variant};
   margin: ${theme.spacing(0, 1.2)};
   cursor: pointer;
 
@@ -36,7 +36,7 @@ export const StyledLink = styled(Link)`
 
 export const StyledUnderlineLink = styled(StyledLink)`
   text-decoration: underline;
-  color: ${variables.palette.shades80};
+  color: ${variables.palette.on_surface_variant};
   margin: ${theme.spacing(0, 0.4)};
 
   &:hover {

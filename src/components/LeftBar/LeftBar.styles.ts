@@ -8,7 +8,7 @@ import { LEFT_BAR_WIDTH } from './LeftBar.const';
 
 export const StyledDrawer = styled(Drawer)`
   .drawer-paper {
-    background-color: ${variables.palette.primary95};
+    background-color: ${variables.palette.surface1};
     width: ${LEFT_BAR_WIDTH};
     border-right: none;
   }
@@ -32,7 +32,7 @@ export const StyledDrawerItem = styled(ListItem)`
     position: absolute;
     width: 5.6rem;
     height: 3.2rem;
-    background: ${variables.palette.primary80};
+    background: ${variables.palette.primary_container};
     border-radius: ${variables.borderRadius.xxl};
     left: 50%;
     top: 0;

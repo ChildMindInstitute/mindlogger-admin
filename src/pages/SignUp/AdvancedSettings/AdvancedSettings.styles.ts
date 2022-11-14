@@ -26,8 +26,8 @@ export const StyledSettingsButton = styled(Button)`
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
   line-height: ${variables.lineHeight.sm};
-  letter-spacing: ${variables.letterSpacing.lg};
-  color: ${variables.palette.shades100};
+  letter-spacing: ${variables.letterSpacing.xl};
+  color: ${variables.palette.black};
 
   .MuiTouchRipple-root {
     display: none;

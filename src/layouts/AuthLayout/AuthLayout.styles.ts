@@ -18,7 +18,7 @@ export const StyledHeader = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${variables.palette.primary50};
+  background-color: ${variables.palette.primary};
   padding: ${theme.spacing(1, 2.4)};
   z-index: 2;
 `;

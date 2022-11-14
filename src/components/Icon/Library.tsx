@@ -5,7 +5,7 @@ import { variables } from 'styles/variables';
 export const Library = ({
   width = 24,
   height = 24,
-  color = variables.palette.shades80,
+  color = variables.palette.on_surface_variant,
 }: SVGProps<SVGElement>): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
