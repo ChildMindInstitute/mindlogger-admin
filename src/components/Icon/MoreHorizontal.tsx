@@ -5,7 +5,7 @@ import { variables } from 'styles/variables';
 export const MoreHorizontal = ({
   width = 24,
   height = 24,
-  color = variables.palette.shades100,
+  color = variables.palette.black,
 }: SVGProps<SVGElement>): JSX.Element => (
   <svg
     width={width}

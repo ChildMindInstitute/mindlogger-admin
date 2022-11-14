@@ -5,7 +5,7 @@ import { variables } from 'styles/variables';
 export const Dashboard = ({
   width = 24,
   height = 24,
-  color = variables.palette.shades95,
+  color = variables.palette.on_surface,
 }: SVGProps<SVGElement>): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

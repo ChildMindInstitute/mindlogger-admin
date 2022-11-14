@@ -2,7 +2,7 @@ import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 
 import { Icon } from 'components/Icon';
 import { variables } from 'styles/variables';
-import { StyledMediumTitle } from 'styles/styledComponents/Typography';
+import { StyledTitleSmall } from 'styles/styledComponents/Typography';
 import { breadcrumbs } from 'redux/modules';
 
 import { StyledAvatarWrapper, StyledAvatar, StyledLink, StyledBox } from './Breadcrumbs.styles';
@@ -27,16 +27,16 @@ export const Breadcrumbs = (): JSX.Element => {
           return last ? (
             <StyledBox key={index}>
               <StyledAvatarWrapper>{getBreadcrumbAvatar(index)}</StyledAvatarWrapper>
-              <StyledMediumTitle fontWeight="semiBold" letterSpacing="xl">
+              <StyledTitleSmall fontWeight="semiBold" letterSpacing="xl">
                 {crumb.label}
-              </StyledMediumTitle>
+              </StyledTitleSmall>
             </StyledBox>
           ) : (
             <StyledLink key={index} to={crumb.navPath}>
               <StyledAvatarWrapper>{getBreadcrumbAvatar(index)}</StyledAvatarWrapper>
-              <StyledMediumTitle fontWeight="regular" color={variables.palette.shades80}>
+              <StyledTitleSmall fontWeight="regular" color={variables.palette.on_surface_variant}>
                 {crumb.label}
-              </StyledMediumTitle>
+              </StyledTitleSmall>
             </StyledLink>
           );
         })}

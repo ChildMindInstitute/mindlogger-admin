@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { Icon } from 'components/Icon';
-import { StyledMediumTitle } from 'styles/styledComponents/Typography';
+import { StyledTitleSmall } from 'styles/styledComponents/Typography';
 import avatarSrc from 'assets/images/avatar.png';
 import { variables } from 'styles/variables';
 
@@ -33,16 +33,16 @@ export const AccountPanel = ({ setShowDrawer, showDrawer }: AccountPanelProps): 
     <StyledAccountDrawer anchor="right" open={showDrawer}>
       <StyledHeader>
         <StyledHideBtn onClick={() => setShowDrawer(false)}>
-          <Icon.NavigateNext color={variables.palette.shades80} />
+          <Icon.NavigateNext color={variables.palette.on_surface_variant} />
         </StyledHideBtn>
         <StyledHeaderRight>
           <StyledHeaderInfo>
-            <StyledMediumTitle color={variables.palette.shades80}>
+            <StyledTitleSmall color={variables.palette.on_surface_variant}>
               {t('myAccount')}
-            </StyledMediumTitle>
-            <StyledMediumTitle color={variables.palette.shades80}>
+            </StyledTitleSmall>
+            <StyledTitleSmall color={variables.palette.on_surface_variant}>
               {userData.email}
-            </StyledMediumTitle>
+            </StyledTitleSmall>
           </StyledHeaderInfo>
           <StyledAvatarWrapper>
             <StyledImage src={avatarSrc} alt="Avatar" />

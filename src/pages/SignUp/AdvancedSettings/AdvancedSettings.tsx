@@ -4,7 +4,7 @@ import { FilterOptionsState, TextField, Autocomplete } from '@mui/material';
 
 import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
 import { Icon } from 'components/Icon';
-import { StyledSmallTitle } from 'styles/styledComponents/Typography';
+import { StyledLabelSmall } from 'styles/styledComponents/Typography';
 import { variables } from 'styles/variables';
 
 import {
@@ -49,9 +49,9 @@ export const AdvancedSettings = () => {
         onClick={() => setShowSettings((prevState) => !prevState)}
         endIcon={
           showSettings ? (
-            <Icon.DropdownUp color={variables.palette.primary50} />
+            <Icon.DropdownUp color={variables.palette.primary} />
           ) : (
-            <Icon.Dropdown color={variables.palette.primary50} />
+            <Icon.Dropdown color={variables.palette.primary} />
           )
         }
       >
@@ -59,9 +59,9 @@ export const AdvancedSettings = () => {
       </StyledSettingsButton>
       {showSettings && (
         <>
-          <StyledSmallTitle color={variables.palette.shades100_alfa50}>
+          <StyledLabelSmall color={variables.palette.outline}>
             {t('serverThatHoldAppletConfiguration')}
-          </StyledSmallTitle>
+          </StyledLabelSmall>
           <StyledFormControl fullWidth>
             <Autocomplete
               value={selectValue}

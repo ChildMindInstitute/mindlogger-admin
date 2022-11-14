@@ -5,7 +5,7 @@ import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 
 export const StyledPanel = styled(Box)`
-  background: ${variables.palette.shadesBG};
+  background: ${variables.palette.surface};
   padding: ${theme.spacing(2.4, 2.4, 3.5)};
-  border-top: ${variables.borderWidth.md} solid ${variables.palette.shades70};
+  border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
 `;

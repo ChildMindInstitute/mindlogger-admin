@@ -7,16 +7,9 @@ import { variables } from 'styles/variables';
 export const StyledForm = styled('form')`
   margin-top: ${theme.spacing(3.2)};
   padding: ${theme.spacing(2.4)};
-  background: ${variables.palette.shades0};
+  background: ${variables.palette.white};
   border-radius: ${variables.borderRadius.xl};
-  border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
-`;
-
-export const StyledResetPasswordHeader = styled(Typography)`
-  font-size: ${variables.font.size.xl};
-  font-weight: ${variables.font.weight.medium};
-  line-height: ${variables.lineHeight.xl};
-  margin: 0;
+  border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
 `;
 
 export const StyledResetPasswordSubheader = styled(Typography)`
@@ -42,7 +35,7 @@ export const StyledBackWrapper = styled(Box)`
 export const StyledBack = styled(Button)`
   height: auto;
   padding: 0;
-  color: ${variables.palette.primary50};
+  color: ${variables.palette.primary};
   text-align: center;
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
