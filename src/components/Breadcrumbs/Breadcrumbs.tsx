@@ -3,11 +3,12 @@ import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 import { Icon } from 'components/Icon';
 import { variables } from 'styles/variables';
 import { StyledMediumTitle } from 'styles/styledComponents/Typography';
+import { breadcrumbs } from 'redux/modules';
 
-import { BreadcrumbsProps } from './Breadcrumbs.types';
 import { StyledAvatarWrapper, StyledAvatar, StyledLink, StyledBox } from './Breadcrumbs.styles';
 
-export const Breadcrumbs = ({ breadcrumbs }: BreadcrumbsProps): JSX.Element => {
+export const Breadcrumbs = (): JSX.Element => {
+  const breadcrumbsData = breadcrumbs.useData();
   const getBreadcrumbAvatar = (index: number) => {
     if (index === 0) {
       return <Icon.Workspace width="3.2rem" height="3.2rem" />;
@@ -18,10 +19,10 @@ export const Breadcrumbs = ({ breadcrumbs }: BreadcrumbsProps): JSX.Element => {
 
   return (
     <MuiBreadcrumbs>
-      {breadcrumbs.length > 0 && (
+      {breadcrumbsData && breadcrumbsData.length > 0 && (
         <MuiBreadcrumbs>
-          {breadcrumbs.map((crumb, index) => {
-            const last = index === breadcrumbs.length - 1;
+          {breadcrumbsData.map((crumb, index) => {
+            const last = index === breadcrumbsData.length - 1;
 
             return last ? (
               <StyledBox key={index}>

@@ -4,7 +4,6 @@ import { Icon } from 'components/Icon';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { variables } from 'styles/variables';
 import avatarSrc from 'assets/images/avatar.png';
-import { breadcrumbs } from 'redux/modules';
 
 import { AccountPanel } from './AccountPanel';
 import {
@@ -17,13 +16,12 @@ import {
 
 export const TopBar = (): JSX.Element => {
   const [showAccDrawer, setShowAccDrawer] = useState(false);
-  const breadcrumbsData = breadcrumbs.useData();
 
   return (
     <>
       <StyledTopBar>
         <StyledLeftBox>
-          {breadcrumbsData && <Breadcrumbs breadcrumbs={breadcrumbsData} />}
+          <Breadcrumbs />
           <StyledMoreBtn variant="text">
             <Icon.MoreHorizontal color={variables.palette.primary50} />
           </StyledMoreBtn>
