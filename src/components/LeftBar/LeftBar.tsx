@@ -22,7 +22,6 @@ export const LeftBar = () => (
           <NavLink to={link} className={({ isActive }) => (isActive ? 'active-link' : undefined)}>
             {icon}
             <StyledLabelMedium color={variables.palette.on_surface_variant}>
-              {' '}
               {text}
             </StyledLabelMedium>
           </NavLink>

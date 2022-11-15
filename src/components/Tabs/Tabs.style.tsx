@@ -12,10 +12,14 @@ export const StyledTabs = styled(Tabs)`
     min-height: 6.4rem;
   }
 
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
+
   .MuiButtonBase-root.Mui-selected {
     color: ${variables.palette.on_surface};
 
-    svg path {
+    svg {
       fill: ${variables.palette.primary};
     }
   }
