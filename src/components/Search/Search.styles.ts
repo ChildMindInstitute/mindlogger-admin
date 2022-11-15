@@ -12,13 +12,13 @@ export const StyledTextField = styled(OutlinedInput)`
     padding: 0;
 
     ::placeholder {
-      color: ${variables.palette.shades100_alfa50};
+      color: ${variables.palette.outline};
       opacity: 1;
     }
   }
 
   .MuiOutlinedInput-notchedOutline {
-    border: ${variables.borderWidth.md} solid ${variables.palette.shades40};
+    border: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
     border-radius: 2.2rem;
   }
 `;

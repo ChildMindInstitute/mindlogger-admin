@@ -1,8 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { List } from '@mui/material';
 
-import { Icon } from 'components/Icon';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
+import { Svg } from 'components/Svg';
 import { variables } from 'styles/variables';
 import { page } from 'resources';
 
@@ -13,7 +13,7 @@ export const LeftBar = () => (
   <StyledDrawer variant="permanent" anchor="left" classes={{ paper: 'drawer-paper' }}>
     <StyledDrawerLogo>
       <NavLink to={page.dashboard}>
-        <Icon.Workspace />
+        <Svg id="workspace" width={44} height={44} />
       </NavLink>
     </StyledDrawerLogo>
     <List>

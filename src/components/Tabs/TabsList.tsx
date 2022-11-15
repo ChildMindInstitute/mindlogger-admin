@@ -1,11 +1,11 @@
 import i18n from 'i18n';
 
-import { Icon } from 'components/Icon';
+import { Svg } from 'components/Svg';
 
 const { t } = i18n;
 
 export const TabsList = [
-  { label: t('dashboardTabsLabel'), icon: <Icon.Applets />, content: 'content 1' },
-  { label: t('dashboardTabsLabel2'), icon: <Icon.Manager />, content: 'content 2' },
-  { label: t('dashboardTabsLabel3'), icon: <Icon.Respondent />, content: 'content 3' },
+  { label: t('dashboardTabsLabel'), icon: <Svg id="applets" />, content: 'content 1' },
+  { label: t('dashboardTabsLabel2'), icon: <Svg id="manager" />, content: 'content 2' },
+  { label: t('dashboardTabsLabel3'), icon: <Svg id="respondent" />, content: 'content 3' },
 ];

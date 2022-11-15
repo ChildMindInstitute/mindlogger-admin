@@ -1,6 +1,6 @@
 import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 
-import { Icon } from 'components/Icon';
+import { Svg } from 'components/Svg';
 import { variables } from 'styles/variables';
 import { StyledTitleSmall } from 'styles/styledComponents/Typography';
 import { breadcrumbs } from 'redux/modules';
@@ -11,7 +11,7 @@ export const Breadcrumbs = (): JSX.Element => {
   const breadcrumbsData = breadcrumbs.useData();
   const getBreadcrumbAvatar = (index: number) => {
     if (index === 0) {
-      return <Icon.Workspace width="3.2rem" height="3.2rem" />;
+      return <Svg id="workspace" width="3.2rem" height="3.2rem" />;
     }
 
     return <StyledAvatar />;
