@@ -1,8 +1,6 @@
 import { ChangeEvent } from 'react';
 
-import { Icon } from 'components/Icon';
-import { variables } from 'styles/variables';
-
+import { Svg } from 'components/Svg';
 import { StyledTextField, StyledIcon } from './Search.styles';
 
 export const Search = ({ placeholder }: { placeholder: string }) => {
@@ -16,7 +14,7 @@ export const Search = ({ placeholder }: { placeholder: string }) => {
       onChange={handleSearch}
       startAdornment={
         <StyledIcon>
-          <Icon.Search color={variables.palette.shades100_alfa50} />
+          <Svg id="search" />
         </StyledIcon>
       }
     />

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
-import { Icon } from 'components/Icon';
+import { Svg } from 'components/Svg';
 import { variables } from 'styles/variables';
 import { StyledHeadline, StyledTitleSmall } from 'styles/styledComponents/Typography';
 
@@ -51,7 +51,7 @@ export const SelectLanguage = ({
             </StyledItemContent>
             {selectedLanguage.value === lang.value && (
               <StyledSelect>
-                <Icon.Selected color={variables.palette.primary} />
+                <Svg id="selected" />
               </StyledSelect>
             )}
           </StyledListItemButton>

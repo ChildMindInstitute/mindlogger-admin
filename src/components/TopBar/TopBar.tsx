@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-import { Icon } from 'components/Icon';
+import { Svg } from 'components/Svg';
 import { Breadcrumbs } from 'components/Breadcrumbs';
-import { variables } from 'styles/variables';
 import avatarSrc from 'assets/images/avatar.png';
 
 import { AccountPanel } from './AccountPanel';
@@ -23,7 +22,7 @@ export const TopBar = (): JSX.Element => {
         <StyledLeftBox>
           <Breadcrumbs />
           <StyledMoreBtn variant="text">
-            <Icon.MoreHorizontal color={variables.palette.primary} />
+            <Svg id="more-horizontal" />
           </StyledMoreBtn>
         </StyledLeftBox>
         <StyledAvatarBtn onClick={() => setShowAccDrawer((prevState) => !prevState)} variant="text">

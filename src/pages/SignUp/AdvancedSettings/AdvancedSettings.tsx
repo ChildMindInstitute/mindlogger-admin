@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { FilterOptionsState, TextField, Autocomplete } from '@mui/material';
 
 import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
-import { Icon } from 'components/Icon';
 import { StyledLabelSmall } from 'styles/styledComponents/Typography';
+import { Svg } from 'components/Svg';
 import { variables } from 'styles/variables';
 
 import {
@@ -47,13 +47,7 @@ export const AdvancedSettings = () => {
     <StyledAdvancedSettings>
       <StyledSettingsButton
         onClick={() => setShowSettings((prevState) => !prevState)}
-        endIcon={
-          showSettings ? (
-            <Icon.DropdownUp color={variables.palette.primary} />
-          ) : (
-            <Icon.Dropdown color={variables.palette.primary} />
-          )
-        }
+        endIcon={showSettings ? <Svg id="dropdown-up" /> : <Svg id="dropdown" />}
       >
         {t('advancedSettings')}
       </StyledSettingsButton>

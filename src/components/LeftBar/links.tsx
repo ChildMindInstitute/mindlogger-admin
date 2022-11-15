@@ -1,20 +1,20 @@
 import { page } from 'resources';
 
-import { Icon } from 'components/Icon';
+import { Svg } from 'components/Svg';
 
 export const links = [
   {
-    icon: <Icon.Dashboard />,
+    icon: <Svg id="dashboard" />,
     link: page.dashboard,
     text: 'Dashboard',
   },
   {
-    icon: <Icon.Builder />,
+    icon: <Svg id="builder" />,
     link: page.builder,
     text: 'Builder',
   },
   {
-    icon: <Icon.Library />,
+    icon: <Svg id="library" />,
     link: page.library,
     text: 'Library',
   },
