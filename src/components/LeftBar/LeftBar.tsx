@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { List } from '@mui/material';
 
 import { Icon } from 'components/Icon';
-import { StyledSmallText } from 'styles/styledComponents/Typography';
+import { StyledLabelMedium } from 'styles/styledComponents/Typography';
 import { variables } from 'styles/variables';
 import { page } from 'resources';
 
@@ -21,7 +21,10 @@ export const LeftBar = () => (
         <StyledDrawerItem key={text}>
           <NavLink to={link} className={({ isActive }) => (isActive ? 'active-link' : undefined)}>
             {icon}
-            <StyledSmallText color={variables.palette.shades80}> {text}</StyledSmallText>
+            <StyledLabelMedium color={variables.palette.on_surface_variant}>
+              {' '}
+              {text}
+            </StyledLabelMedium>
           </NavLink>
         </StyledDrawerItem>
       ))}

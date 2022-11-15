@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { page } from 'resources';
 import { InputController } from 'components/FormComponents/InputController';
-import { StyledLargeTitle } from 'styles/styledComponents/Typography';
+import { StyledHeadline } from 'styles/styledComponents/Typography';
 
 import {
   StyledForm,
@@ -44,7 +44,7 @@ export const ResetForm = ({ setEmail, onSubmitForTest }: ResetFormProps) => {
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-      <StyledLargeTitle>{t('resetPassword')}</StyledLargeTitle>
+      <StyledHeadline>{t('resetPassword')}</StyledHeadline>
       <StyledResetPasswordSubheader>
         {t('enterEmailAssociatedWithAccount')}
       </StyledResetPasswordSubheader>

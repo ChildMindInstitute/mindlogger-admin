@@ -5,15 +5,16 @@ export const variables = {
   palette,
   font,
   lineHeight: {
-    xl: '2.5rem', //25px
-    lg: '2.2rem', //22px
+    xl: '3.2rem', //32px
+    lg: '2.4rem', //24px
     md: '2rem', //20px
     sm: '1.6rem', //16px
     xs: '1.4rem', //14px
   },
   letterSpacing: {
-    xl: '0.05rem', //0.5px
-    lg: '0.04rem', //0.4px
+    xxl: '0.05rem', //0.5px
+    xl: '0.04rem', //0.4px
+    lg: '0.025rem', //0.25px
     md: '0.015rem', //0.15px
     sm: '0.01rem', //0.1px
   },

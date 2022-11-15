@@ -22,7 +22,7 @@ export const StyledAvatar = styled(Box)`
   width: 3.2rem;
   height: 3.2rem;
   border-radius: ${variables.borderRadius.half};
-  background-color: ${variables.palette.primary80};
+  background-color: ${variables.palette.primary_container};
 `;
 
 export const StyledLink = styled(Link)`
@@ -35,7 +35,7 @@ export const StyledLink = styled(Link)`
     background-color: ${variables.palette.primary50_alfa5};
 
     p {
-      color: ${variables.palette.primary50};
+      color: ${variables.palette.primary};
     }
   }
 `;

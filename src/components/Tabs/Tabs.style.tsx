@@ -6,17 +6,17 @@ import theme from 'styles/theme';
 
 export const StyledTabs = styled(Tabs)`
   .MuiTab-root {
-    color: ${variables.palette.shades80};
+    color: ${variables.palette.on_surface_variant};
     text-transform: inherit;
     padding: ${theme.spacing(0.8, 2.6, 0.7)};
     min-height: 6.4rem;
   }
 
   .MuiButtonBase-root.Mui-selected {
-    color: ${variables.palette.shades95};
+    color: ${variables.palette.on_surface};
 
     svg path {
-      fill: ${variables.palette.primary50};
+      fill: ${variables.palette.primary};
     }
   }
 
@@ -30,7 +30,7 @@ export const StyledTabs = styled(Tabs)`
       max-width: 4.5rem;
       width: 100%;
       border-radius: 10rem 10rem 0 0;
-      background-color: ${variables.palette.primary50};
+      background-color: ${variables.palette.primary};
     }
   }
 `;

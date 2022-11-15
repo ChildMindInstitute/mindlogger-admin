@@ -23,7 +23,7 @@ export const TopBar = (): JSX.Element => {
         <StyledLeftBox>
           <Breadcrumbs />
           <StyledMoreBtn variant="text">
-            <Icon.MoreHorizontal color={variables.palette.primary50} />
+            <Icon.MoreHorizontal color={variables.palette.primary} />
           </StyledMoreBtn>
         </StyledLeftBox>
         <StyledAvatarBtn onClick={() => setShowAccDrawer((prevState) => !prevState)} variant="text">

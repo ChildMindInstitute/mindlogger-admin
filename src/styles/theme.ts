@@ -33,7 +33,7 @@ const theme = createTheme({
     MuiBackdrop: {
       styleOverrides: {
         root: {
-          background: 'rgba(28, 27, 31, 0.16)', // TODO fix when designers update colors
+          background: 'rgba(0, 0, 0, 0.33)',
         },
       },
     },
@@ -48,7 +48,7 @@ const theme = createTheme({
     MuiDialogTitle: {
       styleOverrides: {
         root: {
-          fontSize: variables.font.size.xxl,
+          fontSize: variables.font.size.xl,
           fontWeight: variables.font.weight.medium,
           padding: '3.6rem 2.4rem',
         },
@@ -65,7 +65,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '&.Mui-selected': {
-            backgroundColor: variables.palette.primary95,
+            backgroundColor: variables.palette.surface1,
           },
         },
       },
@@ -75,35 +75,35 @@ const theme = createTheme({
         {
           props: { variant: 'roundedContained' },
           style: {
-            color: variables.palette.shades0,
-            backgroundColor: variables.palette.primary50,
+            color: variables.palette.white,
+            backgroundColor: variables.palette.primary,
             borderRadius: variables.borderRadius.xxl,
 
             '&:hover': {
-              backgroundColor: variables.palette.primary60,
+              backgroundColor: variables.palette.primary50,
             },
             '&.Mui-disabled': {
-              color: variables.palette.shades100_alfa50,
-              backgroundColor: variables.palette.shades40,
+              color: variables.palette.outline,
+              backgroundColor: variables.palette.outline_variant,
             },
           },
         },
         {
           props: { variant: 'roundedOutlined' },
           style: {
-            color: variables.palette.primary50,
+            color: variables.palette.primary,
             borderWidth: variables.borderWidth.md,
             borderStyle: 'solid',
-            borderColor: variables.palette.shades80,
+            borderColor: variables.palette.on_surface_variant,
             borderRadius: variables.borderRadius.xxl,
 
             '&:hover': {
-              backgroundColor: variables.palette.primary95,
-              borderColor: variables.palette.primary50,
+              backgroundColor: variables.palette.surface1,
+              borderColor: variables.palette.primary,
             },
             '&.Mui-disabled': {
-              color: variables.palette.shades100_alfa50,
-              borderColor: variables.palette.shades40,
+              color: variables.palette.outline,
+              borderColor: variables.palette.outline_variant,
             },
           },
         },
@@ -120,27 +120,27 @@ const theme = createTheme({
 
           '&.MuiButton-contained': {
             '&:hover': {
-              backgroundColor: variables.palette.primary60,
+              backgroundColor: variables.palette.primary50,
             },
 
             '&.Mui-disabled': {
-              color: variables.palette.shades100_alfa50,
-              backgroundColor: variables.palette.shades40,
+              color: variables.palette.outline,
+              backgroundColor: variables.palette.outline_variant,
             },
           },
           '&.MuiButton-outlined': {
-            borderColor: variables.palette.primary50,
+            borderColor: variables.palette.primary,
 
             '&:hover': {
-              backgroundColor: variables.palette.primary95,
+              backgroundColor: variables.palette.surface1,
               borderWidth: variables.borderWidth.md,
             },
 
             '&.Mui-disabled': {
-              color: variables.palette.shades100_alfa50,
+              color: variables.palette.outline,
               backgroundColor: 'transparent',
               borderWidth: variables.borderWidth.md,
-              borderColor: variables.palette.shades40,
+              borderColor: variables.palette.outline_variant,
             },
           },
         },
@@ -156,14 +156,14 @@ const theme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          color: variables.palette.shades100_alfa50,
+          color: variables.palette.outline,
           fontSize: variables.font.size.lg,
 
           '&.MuiFormLabel-filled': {
-            color: variables.palette.shades100,
+            color: variables.palette.black,
           },
           '&.Mui-focused': {
-            color: variables.palette.primary50,
+            color: variables.palette.primary,
           },
           '&.Mui-error': {
             color: variables.palette.semantic.error,
@@ -183,7 +183,7 @@ const theme = createTheme({
               },
             },
             '.MuiOutlinedInput-notchedOutline': {
-              borderColor: variables.palette.primary60,
+              borderColor: variables.palette.primary50,
             },
           },
         },
@@ -195,8 +195,8 @@ const theme = createTheme({
           borderRadius: variables.borderRadius.xs,
           padding: 0,
           borderWidth: variables.borderWidth.md,
-          borderColor: variables.palette.shades40,
-          color: variables.palette.shades100,
+          borderColor: variables.palette.outline_variant,
+          color: variables.palette.black,
 
           input: {
             padding: '1.6rem',
@@ -205,13 +205,13 @@ const theme = createTheme({
 
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
-              borderColor: variables.palette.primary60,
+              borderColor: variables.palette.primary50,
             },
           },
 
           '.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderWidth: variables.borderWidth.lg,
-            borderColor: variables.palette.primary50,
+            borderColor: variables.palette.primary,
           },
         },
       },
@@ -219,10 +219,10 @@ const theme = createTheme({
   },
   palette: {
     background: {
-      default: variables.palette.shadesBG,
+      default: variables.palette.surface,
     },
     primary: {
-      main: variables.palette.primary50,
+      main: variables.palette.primary,
     },
     error: {
       main: variables.palette.semantic.error,

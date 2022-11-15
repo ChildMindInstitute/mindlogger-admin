@@ -1,26 +1,25 @@
 /* eslint-disable camelcase */
 export const palette = {
-  primary50: '#00629d',
-  primary60: '#146fa5',
-  primary80: '#cee5ff',
-  primary95: '#ebf3f8',
-  primary50_alfa16: 'rgba(0, 98, 157, 0.16)',
+  primary: '#0067a0',
+  primary50: '#207cbb',
+  primary_container: '#cee5ff',
+  surface1: '#eff4fa',
+
+  on_surface: '#1a1c1e',
+  on_surface_variant: '#42474e',
+  outline: '#72777f',
+  outline_variant: '#cac4d0',
+  surface_variant: '#dee3eb',
+  surface: '#fcfcff',
+
   primary50_alfa5: 'rgba(0, 98, 157, 0.05)',
 
-  shades100: '#000',
-  shades95: '#1a1c1e',
-  shades80: '#526070',
-  shades70: '#dee3eb',
-  shades40: '#e4e4e4',
-  shadesBG: '#fcfcff',
-  shades20: '#f6f6f6',
-  shades5: '#fdfcff',
-  shades0: '#fff',
-  shades100_alfa50: 'rgba(0, 0, 0, 0.5)',
+  black: '#000',
+  white: '#fff',
 
   semantic: {
-    error: '#ee3918',
-    good: '#fec432',
-    strong: '#56b157',
+    error: '#ba1a1a',
+    yellow: '#fec432',
+    green: '#56b157',
   },
 };

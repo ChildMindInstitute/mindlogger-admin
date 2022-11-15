@@ -4,7 +4,7 @@ import { Box, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
 import { Icon } from 'components/Icon';
 import { variables } from 'styles/variables';
-import { StyledLargeTitle, StyledMediumTitle } from 'styles/styledComponents/Typography';
+import { StyledHeadline, StyledTitleSmall } from 'styles/styledComponents/Typography';
 
 import { SelectLanguageProps } from './SelectLanguage.types';
 import {
@@ -40,15 +40,18 @@ export const SelectLanguage = ({
             <StyledItemContent>
               <Box>{lang.component}</Box>
               <StyledBox>
-                <StyledLargeTitle fontWeight={'regular'}>{lang.label}</StyledLargeTitle>
-                <StyledMediumTitle fontWeight={'regular'} color={variables.palette.shades80}>
+                <StyledHeadline fontWeight={'regular'}>{lang.label}</StyledHeadline>
+                <StyledTitleSmall
+                  fontWeight={'regular'}
+                  color={variables.palette.on_surface_variant}
+                >
                   {lang.type}
-                </StyledMediumTitle>
+                </StyledTitleSmall>
               </StyledBox>
             </StyledItemContent>
             {selectedLanguage.value === lang.value && (
               <StyledSelect>
-                <Icon.Selected color={variables.palette.primary50} />
+                <Icon.Selected color={variables.palette.primary} />
               </StyledSelect>
             )}
           </StyledListItemButton>
