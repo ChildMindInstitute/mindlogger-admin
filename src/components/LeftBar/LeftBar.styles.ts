@@ -25,6 +25,16 @@ export const StyledDrawerItem = styled(ListItem)`
     position: relative;
     text-align: center;
     padding-top: ${theme.spacing(0.45)};
+
+    svg {
+      fill: ${variables.palette.on_surface_variant};
+    }
+  }
+
+  .active-link {
+    svg {
+      fill: ${variables.palette.on_surface};
+    }
   }
 
   .active-link:before {

@@ -2,34 +2,28 @@ import { variables } from 'styles/variables';
 
 export const svgSprite = (): string => `
 <svg>
-  <symbol viewBox="0 0 24 24" fill="none" id="svg-builder">
+  <symbol viewBox="0 0 24 24" id="svg-builder">
     <path d="M17 11H20C21.11 11 22 10.1 22 9V5C22 3.89 21.1 3 20 3H17C15.89 3 15 3.9 15
     5V6H9.01V5C9.01 3.89 8.11 3 7.01 3H4C2.9 3 2 3.9 2 5V9C2 10.11 2.9 11 4 11H7C8.11 11 9 10.1 9
     9V8H11V15.01C11 16.66 12.34 18 13.99 18H15V19C15 20.11 15.9 21 17 21H20C21.11 21 22 20.1 22
     19V15C22 13.89 21.1 13 20 13H17C15.89 13 15 13.9 15 15V16H13.99C13.45 16 13 15.55 13
-    15.01V8H15V9C15 10.1 15.9 11 17 11Z" fill=${
-      variables.palette.on_surface_variant || 'currentColor'
-    } />
+    15.01V8H15V9C15 10.1 15.9 11 17 11Z" />
   </symbol>
 
-  <symbol viewBox="0 0 24 24" fill="none" id="svg-dashboard">
+  <symbol viewBox="0 0 24 24" id="svg-dashboard">
     <path d="M5 11H9C10.1 11 11 10.1 11 9V5C11 3.9 10.1 3 9 3H5C3.9 3 3 3.9 3 5V9C3 10.1 3.9 11 5
-    11Z" fill=${
-      variables.palette.on_surface_variant || 'currentColor'
-    } /> <path d="M5 21H9C10.1 21 11 20.1 11
+    11Z" /> <path d="M5 21H9C10.1 21 11 20.1 11
     19V15C11 13.9 10.1 13 9 13H5C3.9 13 3 13.9 3 15V19C3 20.1 3.9 21 5 21Z"
-    fill=${
-      variables.palette.on_surface_variant || 'currentColor'
-    } /> <path d="M13 5V9C13 10.1 13.9 11 15
+     />
+    <path d="M13 5V9C13 10.1 13.9 11 15
     11H19C20.1 11 21 10.1 21 9V5C21 3.9 20.1 3 19 3H15C13.9 3 13 3.9 13 5Z"
-    fill=${
-      variables.palette.on_surface_variant || 'currentColor'
-    } /> <path d="M15 21H19C20.1 21 21 20.1 21
+     /> 
+    <path d="M15 21H19C20.1 21 21 20.1 21
     19V15C21 13.9 20.1 13 19 13H15C13.9 13 13 13.9 13 15V19C13 20.1 13.9 21 15 21Z"
-    fill=${variables.palette.on_surface_variant || 'currentColor'} />
+     />
   </symbol>
 
-  <symbol viewBox="0 0 24 24" fill="none" id="svg-library">
+  <symbol viewBox="0 0 24 24" id="svg-library">
     <path fillRule="evenodd" clipRule="evenodd" d="M10.7236 20C11.8236 20 12.7236 19.1 12.7236
     18V6C12.7236 4.9 11.8236 4 10.7236 4C9.62363 4 8.72363 4.9 8.72363 6V18C8.72363 19.1 9.62363 20
     10.7236 20ZM19.7942 19.7274C20.8567 19.4427 21.4931 18.3404 21.2084 17.2779L18.1026
@@ -37,7 +31,7 @@ export const svgSprite = (): string => `
     6.72208L17.3447 18.3132C17.6294 19.3757 18.7317 20.0121 19.7942 19.7274ZM4.72363 20C5.82363 20
     6.72363 19.1 6.72363 18V6.00552C6.72363 4.90552 5.82363 4.00552 4.72363 4.00552C3.62363 4.00552
     2.72363 4.90552 2.72363 6.00552V18C2.72363 19.1 3.62363 20 4.72363 20Z"
-    fill=${variables.palette.on_surface_variant || 'currentColor'} />
+    />
   </symbol>
 
   <symbol
@@ -155,29 +149,29 @@ export const svgSprite = (): string => `
     fill=${variables.palette.primary50 || 'currentColor'} />
   </symbol>
 
-  <symbol viewBox="0 0 24 24" fill="none" id="svg-applets">
+  <symbol viewBox="0 0 24 24" id="svg-applets">
     <path d="M12.34 13.655V21.655H20.34V13.655H12.34ZM2.34 21.655H10.34V13.655H2.34V21.655ZM2.34
     3.65497V11.655H10.34V3.65497H2.34ZM16 2.34497L10.34 7.99497L16 13.655L21.66 7.99497L16 2.34497Z"
-    fill=${variables.palette.on_surface_variant || 'currentColor'} />
+     />
   </symbol>
 
-  <symbol viewBox="0 0 24 24" fill="none" id="svg-respondent">
+  <symbol viewBox="0 0 24 24" id="svg-respondent">
     <path d="M20 2H4C3.46957 2 2.96086 2.21071 2.58579 2.58579C2.21071 2.96086 2 3.46957 2 4V16C2
     16.5304 2.21071 17.0391 2.58579 17.4142C2.96086 17.7893 3.46957 18 4 18H8L12 22L16 18H20C20.5304
     18 21.0391 17.7893 21.4142 17.4142C21.7893 17.0391 22 16.5304 22 16V4C22 3.46957 21.7893 2.96086
     21.4142 2.58579C21.0391 2.21071 20.5304 2 20 2ZM12 4.3C13.5 4.3 14.7 5.5 14.7 7C14.7 8.5 13.5
     9.7 12 9.7C10.5 9.7 9.3 8.5 9.3 7C9.3 5.5 10.5 4.3 12 4.3ZM18 15H6V14.1C6 12.1 10 11 12 11C14 11
-    18 12.1 18 14.1V15Z" fill=${variables.palette.on_surface_variant || 'currentColor'} />
+    18 12.1 18 14.1V15Z" />
   </symbol>
 
-  <symbol viewBox="0 0 24 24" fill="none" id="svg-manager">
+  <symbol viewBox="0 0 24 24" id="svg-manager">
     <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1ZM12 5C12.7956 5
     13.5587 5.31607 14.1213 5.87868C14.6839 6.44129 15 7.20435 15 8C15 8.79565 14.6839 9.55871
     14.1213 10.1213C13.5587 10.6839 12.7956 11 12 11C11.2044 11 10.4413 10.6839 9.87868
     10.1213C9.31607 9.55871 9 8.79565 9 8C9 7.20435 9.31607 6.44129 9.87868 5.87868C10.4413 5.31607
     11.2044 5 12 5ZM17.13 17C15.92 18.85 14.11 20.24 12 20.92C9.89 20.24 8.08 18.85 6.87 17C6.53
     16.5 6.24 16 6 15.47C6 13.82 8.71 12.47 12 12.47C15.29 12.47 18 13.79 18 15.47C17.76 16 17.47
-    16.5 17.13 17Z" fill=${variables.palette.on_surface_variant || 'currentColor'} />
+    16.5 17.13 17Z" />
   </symbol>
 
   <symbol viewBox="0 0 24 24" fill="none" id="svg-more-horizontal">
