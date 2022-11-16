@@ -30,18 +30,16 @@ const theme = createTheme({
         },
       }),
     },
-    MuiBackdrop: {
-      styleOverrides: {
-        root: {
-          background: 'rgba(0, 0, 0, 0.33)',
-        },
-      },
-    },
     MuiDialog: {
       styleOverrides: {
         paper: {
           borderRadius: 28,
           boxShadow: 'none',
+        },
+        root: {
+          '.MuiBackdrop-root': {
+            backgroundColor: 'rgba(0, 0, 0, 0.33)',
+          },
         },
       },
     },
@@ -66,6 +64,110 @@ const theme = createTheme({
         root: {
           '&.Mui-selected': {
             backgroundColor: variables.palette.surface1,
+          },
+        },
+      },
+    },
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          borderCollapse: 'unset',
+          borderWidth: variables.borderWidth.md,
+          borderStyle: 'solid',
+          borderColor: variables.palette.surface_variant,
+          borderRadius: variables.borderRadius.md,
+        },
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          '.MuiTableCell-head ~ .MuiTableCell-head': {
+            borderLeftWidth: variables.borderWidth.md,
+            borderLeftStyle: 'solid',
+            borderLeftColor: variables.palette.surface_variant,
+          },
+          '.MuiTableCell-body ~ .MuiTableCell-body': {
+            borderLeftWidth: variables.borderWidth.md,
+            borderLeftStyle: 'solid',
+            borderLeftColor: 'transparent',
+          },
+        },
+      },
+    },
+    MuiTableBody: {
+      styleOverrides: {
+        root: {
+          '.MuiTableRow-root:hover': {
+            backgroundColor: variables.palette.surface1,
+            cursor: 'pointer',
+          },
+          '.MuiTableRow-root:last-child': {
+            '.MuiTableCell-body': {
+              borderBottom: 'none',
+            },
+          },
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          height: '4.8rem',
+          padding: '0 1.2rem',
+          fontSize: variables.font.size.sm,
+          lineHeight: variables.lineHeight.sm,
+          fontWeight: variables.font.weight.medium,
+          color: variables.palette.on_surface,
+          borderBottomWidth: variables.borderWidth.md,
+          borderBottomStyle: 'solid',
+          borderBottomColor: variables.palette.surface_variant,
+        },
+        head: {
+          fontWeight: variables.font.weight.semiBold,
+          color: variables.palette.black,
+        },
+      },
+    },
+    MuiTablePagination: {
+      styleOverrides: {
+        spacer: {
+          flex: 'none',
+        },
+      },
+    },
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          '&.MuiTablePagination-toolbar': {
+            padding: 0,
+            color: variables.palette.on_surface,
+            marginTop: '2.4rem',
+
+            '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': {
+              fontWeight: variables.font.weight.semiBold,
+              fontSize: variables.font.size.md,
+              lineHeight: variables.lineHeight.md,
+            },
+
+            '.MuiInputBase-root': {
+              borderWidth: variables.borderWidth.md,
+              borderStyle: 'solid',
+              borderColor: variables.palette.outline_variant,
+              borderRadius: variables.borderRadius.md,
+              margin: '0 1rem',
+            },
+
+            '.MuiTablePagination-select': {
+              padding: '0.7rem 1rem',
+              marginRight: '0.5rem',
+              '&:focus': {
+                backgroundColor: 'transparent',
+              },
+            },
+            '.MuiTablePagination-actions': {
+              marginLeft: '1rem',
+            },
           },
         },
       },
