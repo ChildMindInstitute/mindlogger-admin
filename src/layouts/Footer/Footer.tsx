@@ -18,6 +18,7 @@ const year = new Date().getFullYear();
 
 export const Footer = () => {
   const { t } = useTranslation('app');
+
   return (
     <Box>
       <StyledFooter>
