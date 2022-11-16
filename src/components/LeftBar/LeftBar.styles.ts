@@ -1,17 +1,14 @@
 import { styled } from '@mui/system';
-import { Drawer, ListItem, Box } from '@mui/material';
+import { ListItem, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
-import { LEFT_BAR_WIDTH } from './LeftBar.const';
-
-export const StyledDrawer = styled(Drawer)`
-  .drawer-paper {
-    background-color: ${variables.palette.surface1};
-    width: ${LEFT_BAR_WIDTH};
-    border-right: none;
-  }
+export const StyledDrawer = styled(Box)`
+  background-color: ${variables.palette.surface1};
+  padding: ${theme.spacing(0, 0.9)};
+  border-right: none;
+  min-width: 8.8rem;
 `;
 
 export const StyledDrawerItem = styled(ListItem)`
@@ -34,6 +31,8 @@ export const StyledDrawerItem = styled(ListItem)`
   .active-link {
     svg {
       fill: ${variables.palette.on_surface};
+      position: relative;
+      z-index: 2;
     }
   }
 
@@ -47,7 +46,6 @@ export const StyledDrawerItem = styled(ListItem)`
     left: 50%;
     top: 0;
     transform: translateX(-50%);
-    z-index: -1;
   }
 `;
 

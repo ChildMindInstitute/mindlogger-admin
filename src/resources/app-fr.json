@@ -40,6 +40,9 @@
   "searchApplets": "Recherche d'applets",
   "myAccount": "Mon compte",
   "logOut": "Se déconnecter",
+  "dashboard": "Tableau de bord",
+  "builder": "Constructeur",
+  "library": "Bibliothèque",
   "dashboardTabsLabel": "Applets",
   "dashboardTabsLabel2": "Gestionnaires",
   "dashboardTabsLabel3": "Répondants"

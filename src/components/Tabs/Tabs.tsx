@@ -1,11 +1,13 @@
 import { useState, SyntheticEvent } from 'react';
 import Tab from '@mui/material/Tab';
+import { useTranslation } from 'react-i18next';
 
 import { TabPanel } from './TabPanel';
 import { StyledTabs } from './Tabs.style';
-import { TabsList } from './TabsList';
+import { tabs } from './Tabs.const';
 
 export const Tabs = () => {
+  const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(0);
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
@@ -20,11 +22,11 @@ export const Tabs = () => {
         TabIndicatorProps={{ children: <span /> }}
         centered
       >
-        {TabsList.map(({ icon, label }) => (
-          <Tab key={label} icon={icon} label={label} />
+        {tabs.map(({ icon, labelKey }) => (
+          <Tab key={labelKey} icon={icon} label={t(labelKey)} />
         ))}
       </StyledTabs>
-      {TabsList.map(({ content }, i) => (
+      {tabs.map(({ content }, i) => (
         <TabPanel key={i} value={tabIndex} index={i}>
           {content}
         </TabPanel>

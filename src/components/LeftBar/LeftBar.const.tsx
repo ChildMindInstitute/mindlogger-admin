@@ -6,16 +6,16 @@ export const links = [
   {
     icon: <Svg id="dashboard" />,
     link: page.dashboard,
-    text: 'Dashboard',
+    labelKey: 'dashboard',
   },
   {
     icon: <Svg id="builder" />,
     link: page.builder,
-    text: 'Builder',
+    labelKey: 'builder',
   },
   {
     icon: <Svg id="library" />,
     link: page.library,
-    text: 'Library',
+    labelKey: 'library',
   },
 ];
