@@ -2,10 +2,10 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
-import { Icon } from 'components/Icon';
 import { StyledTitleSmall } from 'styles/styledComponents/Typography';
 import avatarSrc from 'assets/images/avatar.png';
 import { variables } from 'styles/variables';
+import { Svg } from 'components/Svg';
 
 import {
   StyledAccountDrawer,
@@ -33,7 +33,7 @@ export const AccountPanel = ({ setShowDrawer, showDrawer }: AccountPanelProps): 
     <StyledAccountDrawer anchor="right" open={showDrawer}>
       <StyledHeader>
         <StyledHideBtn onClick={() => setShowDrawer(false)}>
-          <Icon.NavigateNext color={variables.palette.on_surface_variant} />
+          <Svg id="navigate-next" />
         </StyledHideBtn>
         <StyledHeaderRight>
           <StyledHeaderInfo>
@@ -50,7 +50,7 @@ export const AccountPanel = ({ setShowDrawer, showDrawer }: AccountPanelProps): 
         </StyledHeaderRight>
       </StyledHeader>
       <StyledFooter>
-        <StyledLogOutBtn variant="text" startIcon={<Icon.LogOut />} onClick={handleLogout}>
+        <StyledLogOutBtn variant="text" startIcon={<Svg id="logout" />} onClick={handleLogout}>
           {t('logOut')}
         </StyledLogOutBtn>
       </StyledFooter>
