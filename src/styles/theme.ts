@@ -151,7 +151,7 @@ const theme = createTheme({
             },
 
             '.MuiInputBase-root': {
-              borderLWidth: variables.borderWidth.md,
+              borderWidth: variables.borderWidth.md,
               borderStyle: 'solid',
               borderColor: variables.palette.outline_variant,
               borderRadius: variables.borderRadius.md,
