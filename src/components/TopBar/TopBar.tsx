@@ -5,7 +5,6 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import avatarSrc from 'assets/images/avatar.png';
 import { useAppDispatch } from 'redux/store';
 import { account, auth } from 'redux/modules';
-
 import { variables } from 'styles/variables';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
 
