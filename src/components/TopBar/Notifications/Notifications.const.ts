@@ -1,0 +1,1 @@
+export const NOTIFICATIONS_HEADER_HEIGHT = '5.6rem';

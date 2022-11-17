@@ -31,9 +31,23 @@ export const StyledAvatarBtn = styled(Button)`
   height: 3rem;
   width: 3rem;
   min-width: unset;
+  position: relative;
 `;
 
 export const StyledImage = styled('img')`
   width: 2.4rem;
   height: 2.4rem;
+`;
+
+export const StyledQuantity = styled(Box)`
+  position: absolute;
+  top: -0.1rem;
+  right: -0.1rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${variables.palette.semantic.error};
 `;

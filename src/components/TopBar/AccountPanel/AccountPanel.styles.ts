@@ -4,6 +4,8 @@ import { Drawer, Box, Button } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
+import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from './AccountPanel.const';
+
 export const StyledAccountDrawer = styled(Drawer)`
   .MuiPaper-root {
     height: 100%;
@@ -17,6 +19,7 @@ export const StyledAccountDrawer = styled(Drawer)`
 `;
 
 export const StyledHeader = styled(Box)`
+  height: ${ACCOUNT_HEADER_HEIGHT};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -46,6 +49,7 @@ export const StyledAvatarWrapper = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 export const StyledImage = styled('img')`
@@ -54,6 +58,7 @@ export const StyledImage = styled('img')`
 `;
 
 export const StyledFooter = styled(Box)`
+  height: ${ACCOUNT_FOOTER_HEIGHT};
   margin: ${theme.spacing(0, 1.6)};
   padding: ${theme.spacing(2.7, 0, 0.8)};
   border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
@@ -64,4 +69,18 @@ export const StyledLogOutBtn = styled(Button)`
   border-radius: ${variables.borderRadius.lg};
   height: auto;
   color: ${variables.palette.on_surface_variant};
+`;
+
+export const StyledQuantity = styled(Box)`
+  position: absolute;
+  top: -0.2rem;
+  right: -0.2rem;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 100%;
+  border: ${variables.borderWidth.lg} solid ${variables.palette.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${variables.palette.semantic.error};
 `;

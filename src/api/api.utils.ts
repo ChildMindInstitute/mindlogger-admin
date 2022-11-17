@@ -20,7 +20,7 @@ export const getRequestLangData = (config: AxiosRequestConfig) => {
 
 export const getRequestFullLangData = (config: AxiosRequestConfig) => {
   if (!config.params) config.params = {};
-  const lang = (sessionStorage.getItem('lang') || 'en') as 'en' | 'fr';
+  const lang = (sessionStorage.getItem('lang') || 'en') as keyof typeof LANGUAGES;
 
   config.params.lang = LANGUAGES[lang] as string;
 };

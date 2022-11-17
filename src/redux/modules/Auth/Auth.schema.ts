@@ -19,7 +19,7 @@ export type User = {
   _modelType: string;
 };
 
-export type Account = {
+export type AccountData = {
   accountId: string;
   accountName: string;
   isDefaultName: boolean;
@@ -40,7 +40,7 @@ export type AuthToken = {
 };
 
 export type AuthData = {
-  account: Account;
+  account: AccountData;
   authToken: AuthToken;
   user: User;
   message?: string;
