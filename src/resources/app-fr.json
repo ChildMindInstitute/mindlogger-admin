@@ -45,5 +45,7 @@
   "library": "Bibliothèque",
   "dashboardTabsLabel": "Applets",
   "dashboardTabsLabel2": "Gestionnaires",
-  "dashboardTabsLabel3": "Répondants"
+  "dashboardTabsLabel3": "Répondants",
+  "alerts": "Alertes",
+  "unread": "non lu"
 }

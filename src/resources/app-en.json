@@ -45,5 +45,7 @@
   "library": "Library",
   "dashboardTabsLabel": "Applets",
   "dashboardTabsLabel2": "Managers",
-  "dashboardTabsLabel3": "Respondents"
+  "dashboardTabsLabel3": "Respondents",
+  "alerts": "Alerts",
+  "unread": "Unread"
 }

@@ -5,7 +5,7 @@ import { useAppSelector } from 'redux/store';
 import * as thunk from './Auth.thunk';
 import { state as initialState } from './Auth.state';
 import { reducers, extraReducers } from './Auth.reducer';
-import { AuthSchema, User } from './Auth.schema';
+import { AuthSchema } from './Auth.schema';
 
 export * from './Auth.schema';
 
@@ -22,14 +22,12 @@ export const auth = {
   actions: slice.actions,
   useAuthorized: (): AuthSchema['isAuthorized'] =>
     useAppSelector(({ auth: { isAuthorized } }) => isAuthorized),
-  useUserData: (): User =>
+  useData: (): AuthSchema['authentication']['data'] =>
     useAppSelector(
       ({
         auth: {
-          authentication: {
-            data: { user },
-          },
+          authentication: { data },
         },
-      }) => user,
+      }) => data,
     ),
 };

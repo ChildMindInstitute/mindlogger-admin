@@ -3,6 +3,7 @@ import { Button, Box, Typography } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledForm = styled('form')`
   margin-top: ${theme.spacing(3.2)};
@@ -32,16 +33,13 @@ export const StyledBackWrapper = styled(Box)`
   margin: ${theme.spacing(2.4, 0, 0)};
 `;
 
-export const StyledBack = styled(Button)`
-  height: auto;
-  padding: 0;
+export const StyledBack = styled(StyledClearedButton)`
   color: ${variables.palette.primary};
   text-align: center;
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
   line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
-  cursor: pointer;
 
   &:hover {
     background-color: transparent;
