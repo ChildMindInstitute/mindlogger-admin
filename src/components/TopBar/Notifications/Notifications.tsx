@@ -6,7 +6,7 @@ import { Svg } from 'components/Svg';
 import { variables } from 'styles/variables';
 import { StyledLabelLarge } from 'styles/styledComponents/Typography';
 import { account } from 'redux/modules';
-import { useTimeAgo } from 'utils/hooks';
+import { useTimeAgo } from 'hooks';
 
 import { Notification, NotificationProps } from './Notification';
 import {
@@ -67,33 +67,15 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
             {t('unread')}
           </StyledLabelLarge>
           <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>
-            {showList ? (
-              <Svg id="navigate-up" width="12" height="8" />
-            ) : (
-              <Svg id="navigate-down" width="12" height="8" />
-            )}
+            <Svg id={showList ? 'navigate-up' : 'navigate-down'} width="12" height="8" />
           </StyledCollapseBtn>
         </StyledHeaderRight>
       </StyledHeader>
       {showList && notifications && (
         <StyledList>
-          {notifications.map((item) => {
-            const { accountId, alertId, label, title, message, timeAgo, imageSrc, viewed } = item;
-
-            return (
-              <Notification
-                key={alertId}
-                accountId={accountId}
-                alertId={alertId}
-                label={label}
-                title={title}
-                message={message}
-                timeAgo={timeAgo}
-                imageSrc={imageSrc}
-                viewed={viewed}
-              />
-            );
-          })}
+          {notifications.map((item) => (
+            <Notification key={item.alertId} {...item} />
+          ))}
         </StyledList>
       )}
     </Box>

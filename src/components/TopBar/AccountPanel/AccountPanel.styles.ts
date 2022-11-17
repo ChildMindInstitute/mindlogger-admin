@@ -3,6 +3,7 @@ import { Drawer, Box, Button } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { StyledQuantityCircle } from 'styles/styledComponents/QuontityCircle';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from './AccountPanel.const';
 
@@ -28,12 +29,6 @@ export const StyledHeader = styled(Box)`
 export const StyledHeaderInfo = styled(Box)`
   text-align: right;
   margin-right: ${theme.spacing(1.2)};
-`;
-
-export const StyledHideBtn = styled(Button)`
-  padding: 0;
-  height: auto;
-  min-width: unset;
 `;
 
 export const StyledHeaderRight = styled(Box)`
@@ -71,16 +66,10 @@ export const StyledLogOutBtn = styled(Button)`
   color: ${variables.palette.on_surface_variant};
 `;
 
-export const StyledQuantity = styled(Box)`
-  position: absolute;
+export const StyledQuantity = styled(StyledQuantityCircle)`
   top: -0.2rem;
   right: -0.2rem;
   width: 2.1rem;
   height: 2.1rem;
-  border-radius: 100%;
   border: ${variables.borderWidth.lg} solid ${variables.palette.white};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${variables.palette.semantic.error};
 `;

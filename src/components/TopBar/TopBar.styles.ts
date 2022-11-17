@@ -1,8 +1,11 @@
 import { styled } from '@mui/system';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { StyledQuantityCircle } from 'styles/styledComponents/QuontityCircle';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+
 import { TOP_BAR_HEIGHT } from './TopBar.const';
 
 export const StyledTopBar = styled(Box)`
@@ -18,19 +21,14 @@ export const StyledLeftBox = styled(Box)`
   align-items: center;
 `;
 
-export const StyledMoreBtn = styled(Button)`
+export const StyledMoreBtn = styled(StyledClearedButton)`
   margin-left: ${theme.spacing(0.7)};
-  padding: 0;
-  height: auto;
-  min-width: unset;
 `;
 
-export const StyledAvatarBtn = styled(Button)`
-  padding: 0;
+export const StyledAvatarBtn = styled(StyledClearedButton)`
   border-radius: ${variables.borderRadius.half};
   height: 3rem;
   width: 3rem;
-  min-width: unset;
   position: relative;
 `;
 
@@ -39,15 +37,9 @@ export const StyledImage = styled('img')`
   height: 2.4rem;
 `;
 
-export const StyledQuantity = styled(Box)`
-  position: absolute;
+export const StyledQuantity = styled(StyledQuantityCircle)`
   top: -0.1rem;
   right: -0.1rem;
   width: 1.6rem;
   height: 1.6rem;
-  border-radius: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${variables.palette.semantic.error};
 `;

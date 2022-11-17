@@ -320,18 +320,21 @@ export const svgSprite = (): string => `
       fill=${variables.palette.outline || 'currentColor'}
     />
   </symbol>
+  
   <symbol viewBox="0 0 16 20" fill="none" id="svg-notifications">
     <path 
       d="M8 19.75C9.1 19.75 10 18.85 10 17.75H6C6 18.85 6.89 19.75 8 19.75ZM14 13.75V8.75C14 5.68 12.36 3.11 9.5 2.43V1.75C9.5 0.92 8.83 0.25 8 0.25C7.17 0.25 6.5 0.92 6.5 1.75V2.43C3.63 3.11 2 5.67 2 8.75V13.75L0 15.75V16.75H16V15.75L14 13.75Z"
       fill=${variables.palette.on_surface_variant || 'currentColor'}
     />
   </symbol>
+  
   <symbol viewBox="0 0 12 8" fill="none" id="svg-navigate-down">
      <path 
        d="M1.41 0.294987L0 1.70499L6 7.70499L12 1.70499L10.59 0.294987L6 4.87499L1.41 0.294987Z" 
        fill=${variables.palette.on_surface_variant || 'currentColor'}
      />
   </symbol>
+  
   <symbol viewBox="0 0 12 8" fill="none" id="svg-navigate-up">
      <path 
        d="M10.59 7.70501L12 6.29501L6 0.295013L0 6.29501L1.41 7.70501L6 3.12501L10.59 7.70501Z" 

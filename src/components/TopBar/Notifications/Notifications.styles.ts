@@ -1,7 +1,8 @@
 import { styled } from '@mui/system';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from '../AccountPanel/AccountPanel.const';
 import { NOTIFICATIONS_HEADER_HEIGHT } from './Notifications.const';
@@ -30,12 +31,9 @@ export const StyledIconWrapper = styled(Box)`
   margin-right: ${theme.spacing(0.8)};
 `;
 
-export const StyledCollapseBtn = styled(Button)`
+export const StyledCollapseBtn = styled(StyledClearedButton)`
   display: flex;
   align-items: center;
-  padding: 0;
-  height: auto;
-  min-width: unset;
   margin-left: ${theme.spacing(1.4)};
 `;
 

@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { StyledLabelSmall, StyledTitleSmall } from 'styles/styledComponents/Typography';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import avatarSrc from 'assets/images/avatar.png';
 import { variables } from 'styles/variables';
 import { Svg } from 'components/Svg';
@@ -12,7 +13,6 @@ import { Notifications } from '../Notifications';
 import {
   StyledAccountDrawer,
   StyledHeader,
-  StyledHideBtn,
   StyledHeaderInfo,
   StyledImage,
   StyledAvatarWrapper,
@@ -40,9 +40,9 @@ export const AccountPanel = ({
     <StyledAccountDrawer anchor="right" open={showDrawer}>
       <Box>
         <StyledHeader>
-          <StyledHideBtn onClick={() => setShowDrawer(false)}>
+          <StyledClearedButton onClick={() => setShowDrawer(false)}>
             <Svg id="navigate-next" />
-          </StyledHideBtn>
+          </StyledClearedButton>
           <StyledHeaderRight>
             <StyledHeaderInfo>
               <StyledTitleSmall color={variables.palette.on_surface_variant}>

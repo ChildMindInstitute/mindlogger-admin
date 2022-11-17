@@ -3,8 +3,8 @@ import { Button, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-
 import { StyledHeadline, StyledLabelMedium } from 'styles/styledComponents/Typography';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledLogin = styled(Box)`
   width: 100%;
@@ -49,9 +49,7 @@ export const StyledButton = styled(Button)`
   margin-top: ${theme.spacing(2.4)};
 `;
 
-export const StyledForgotPasswordLink = styled(Button)`
-  height: auto;
-  padding: 0;
+export const StyledForgotPasswordLink = styled(StyledClearedButton)`
   width: fit-content;
   margin: ${theme.spacing(1.2, 0, 0.8)};
   color: ${variables.palette.primary};
@@ -59,7 +57,6 @@ export const StyledForgotPasswordLink = styled(Button)`
   font-weight: ${variables.font.weight.regular};
   line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
-  cursor: pointer;
 
   &:hover {
     background-color: transparent;
