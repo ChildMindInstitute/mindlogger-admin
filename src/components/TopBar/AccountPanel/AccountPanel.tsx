@@ -45,9 +45,13 @@ export const AccountPanel = ({
           </StyledClearedButton>
           <StyledHeaderRight>
             <StyledHeaderInfo>
-              <StyledTitleSmall color={variables.palette.on_surface_variant}>
-                {t('myAccount')}
-              </StyledTitleSmall>
+              {authData && (
+                <StyledTitleSmall color={variables.palette.on_surface_variant}>
+                  {`${authData.user.firstName}${
+                    authData.user.lastName ? ` ${authData.user.lastName}` : ''
+                  }`}
+                </StyledTitleSmall>
+              )}
               {authData && (
                 <StyledTitleSmall color={variables.palette.on_surface_variant}>
                   {authData.user.email}

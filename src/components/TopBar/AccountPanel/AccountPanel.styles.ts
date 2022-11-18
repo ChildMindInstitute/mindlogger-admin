@@ -29,6 +29,8 @@ export const StyledHeader = styled(Box)`
 export const StyledHeaderInfo = styled(Box)`
   text-align: right;
   margin-right: ${theme.spacing(1.2)};
+  overflow: hidden;
+  max-width: 28.5rem;
 `;
 
 export const StyledHeaderRight = styled(Box)`
