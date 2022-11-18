@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
-import { HeadCell, Row } from 'components/Table/Table.types';
 import TimeAgo from 'javascript-time-ago';
+
+import { HeadCell, Row } from 'components/Table/Table.types';
 
 export const headCells: HeadCell[] = [
   {
