@@ -12,6 +12,17 @@ export const StyledAuthLayout = styled(Box)`
   overflow: auto;
 `;
 
+export const StyledSpinner = styled(Box)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255 255 255 / 50%);
+  z-index: 3;
+`;
+
 export const StyledHeader = styled(Box)`
   position: sticky;
   top: 0;

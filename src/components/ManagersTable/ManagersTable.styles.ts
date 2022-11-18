@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 
-export const AppletsTableHeader = styled(Box)`
+export const ManagersTableHeader = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;

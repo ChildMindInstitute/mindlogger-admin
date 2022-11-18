@@ -20,6 +20,14 @@ export const auth = {
   thunk,
   slice,
   actions: slice.actions,
+  useStatus: (): AuthSchema['authentication']['status'] =>
+    useAppSelector(
+      ({
+        auth: {
+          authentication: { status },
+        },
+      }) => status,
+    ),
   useAuthorized: (): AuthSchema['isAuthorized'] =>
     useAppSelector(({ auth: { isAuthorized } }) => isAuthorized),
   useData: (): AuthSchema['authentication']['data'] =>

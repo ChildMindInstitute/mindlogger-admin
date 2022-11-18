@@ -48,7 +48,7 @@ const theme = createTheme({
         root: {
           fontSize: variables.font.size.xl,
           fontWeight: variables.font.weight.medium,
-          padding: '3.6rem 2.4rem',
+          padding: '6.4rem 2.4rem 2.8rem',
         },
       },
     },
@@ -63,7 +63,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '&.Mui-selected': {
-            backgroundColor: variables.palette.surface1,
+            backgroundColor: variables.palette.secondary_container,
           },
         },
       },
@@ -185,8 +185,8 @@ const theme = createTheme({
               backgroundColor: variables.palette.primary50,
             },
             '&.Mui-disabled': {
-              color: variables.palette.outline,
-              backgroundColor: variables.palette.outline_variant,
+              color: variables.palette.on_surface_variant,
+              backgroundColor: variables.palette.surface_variant,
             },
           },
         },
@@ -226,8 +226,8 @@ const theme = createTheme({
             },
 
             '&.Mui-disabled': {
-              color: variables.palette.outline,
-              backgroundColor: variables.palette.outline_variant,
+              color: variables.palette.on_surface_variant,
+              backgroundColor: variables.palette.surface_variant,
             },
           },
           '&.MuiButton-outlined': {

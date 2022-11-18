@@ -1,4 +1,6 @@
 import { Button } from '@mui/material';
+import TimeAgo from 'javascript-time-ago';
+
 import { HeadCell, Row } from 'components/Table/Table.types';
 
 export const headCells: HeadCell[] = [
@@ -18,15 +20,15 @@ export const headCells: HeadCell[] = [
   },
 ];
 
-export const rowsCells: Row[] = [
+export const getRowsCells = (timeAgo: TimeAgo): Row[] => [
   {
     appletName: {
       content: () => 'Applet Name 1',
       value: 'Applet Name 1',
     },
     lastEdited: {
-      content: () => new Date().toUTCString(),
-      value: new Date().toUTCString(),
+      content: () => timeAgo.format(new Date(2022, 8, 21, 14, 32), 'round'),
+      value: new Date(2022, 8, 21, 14, 32).getTime(),
     },
     actions: {
       content: () => <Button onClick={() => console.log('click')}>Action</Button>,
@@ -39,8 +41,8 @@ export const rowsCells: Row[] = [
       value: 'Applet Name 2',
     },
     lastEdited: {
-      content: () => new Date(2022, 11, 10).toUTCString(),
-      value: new Date(2022, 11, 10).toUTCString(),
+      content: () => timeAgo.format(new Date(2022, 10, 10, 10, 18), 'round'),
+      value: new Date(2022, 10, 10, 10, 18).getTime(),
     },
     actions: {
       content: () => <Button onClick={() => console.log('click')}>Action</Button>,

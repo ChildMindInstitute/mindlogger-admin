@@ -21,11 +21,12 @@ export const StyledResetPasswordSubheader = styled(Typography)`
 `;
 
 export const StyledController = styled(Box)`
-  margin-bottom: ${theme.spacing(4.2)};
+  margin-bottom: ${theme.spacing(2)};
 `;
 
 export const StyledButton = styled(Button)`
   width: 100%;
+  margin-top: ${theme.spacing(2.2)};
 `;
 
 export const StyledBackWrapper = styled(Box)`

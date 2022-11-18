@@ -1,14 +1,17 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
+import { AxiosError } from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { ResetPassword } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'redux/modules';
+import { auth, ErrorResponse } from 'redux/modules';
 import { page } from 'resources';
 import { InputController } from 'components/FormComponents/InputController';
 import { StyledHeadline } from 'styles/styledComponents/Typography';
+import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 
 import {
   StyledForm,
@@ -30,6 +33,8 @@ export const ResetForm = ({ setEmail, onSubmitForTest }: ResetFormProps) => {
     defaultValues: { email: '' },
   });
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const onSubmit = async ({ email }: ResetPassword) => {
     if (onSubmitForTest) {
       onSubmitForTest();
@@ -39,6 +44,14 @@ export const ResetForm = ({ setEmail, onSubmitForTest }: ResetFormProps) => {
 
     if (resetPassword.fulfilled.match(result) && setEmail) {
       setEmail(email);
+    } else if (resetPassword.rejected.match(result)) {
+      const errorObj = result.payload as AxiosError;
+      const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
+      if (errorData) {
+        setErrorMessage(errorData.message);
+      } else {
+        setErrorMessage(errorObj.message);
+      }
     }
   };
 
@@ -51,6 +64,7 @@ export const ResetForm = ({ setEmail, onSubmitForTest }: ResetFormProps) => {
       <StyledController>
         <InputController fullWidth name="email" control={control} label={t('email')} />
       </StyledController>
+      {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
       <StyledButton variant="contained" type="submit" data-testid="submit-btn">
         {t('sendResetLink')}
       </StyledButton>

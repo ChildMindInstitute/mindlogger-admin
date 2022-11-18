@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   TableContainer,
   Table as MuiTable,
@@ -18,6 +19,7 @@ import { Head } from 'components/Table/Head';
 import { Order, Row, TableProps } from './Table.types';
 
 export const Table = ({ columns, rows, options, orderBy: orderByProp }: TableProps) => {
+  const { t } = useTranslation('app');
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
@@ -88,7 +90,7 @@ export const Table = ({ columns, rows, options, orderBy: orderByProp }: TablePro
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage={options?.labelRowsPerPage || DEFAULT_LABEL_ROWS_PER_PAGE}
+        labelRowsPerPage={t(DEFAULT_LABEL_ROWS_PER_PAGE)}
       />
     </>
   );

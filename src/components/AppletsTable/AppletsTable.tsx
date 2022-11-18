@@ -1,13 +1,21 @@
 import { useState } from 'react';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
+import { Button } from '@mui/material';
 
+import { Svg } from 'components/Svg';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
-import { headCells, rowsCells } from 'components/AppletsTable/mock';
+import { headCells, getRowsCells } from 'components/AppletsTable/mock';
+import { useTimeAgo } from 'hooks';
 
 import { AppletsTableHeader, StyledButtons } from './AppletsTable.styles';
 
 export const AppletsTable = (): JSX.Element => {
+  const { t } = useTranslation('app');
+  const timeAgo = useTimeAgo();
+
+  const rowsCells = getRowsCells(timeAgo);
+
   const [rows, setRows] = useState(rowsCells);
 
   const handleSearch = (value: string) => {
@@ -21,15 +29,13 @@ export const AppletsTable = (): JSX.Element => {
     <>
       <AppletsTableHeader>
         <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
-        <StyledButtons></StyledButtons>
+        <StyledButtons>
+          <Button variant="roundedOutlined" startIcon={<Svg width={12} height={12} id="plus" />}>
+            {t('addApplet')}
+          </Button>
+        </StyledButtons>
       </AppletsTableHeader>
-
-      <Table
-        columns={headCells}
-        rows={rows}
-        orderBy={'appletName'}
-        options={{ labelRowsPerPage: 'Applets' }}
-      />
+      <Table columns={headCells} rows={rows} orderBy={'appletName'} />
     </>
   );
 };

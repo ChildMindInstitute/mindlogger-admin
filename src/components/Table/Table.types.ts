@@ -17,7 +17,6 @@ export type RowContent = Cell & {
 };
 
 export type TableOptions = {
-  labelRowsPerPage?: string;
   rowsPerPage?: number;
 };
 
