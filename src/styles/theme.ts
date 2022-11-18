@@ -48,7 +48,7 @@ const theme = createTheme({
         root: {
           fontSize: variables.font.size.xl,
           fontWeight: variables.font.weight.medium,
-          padding: '6.4rem 2.4rem 2.8rem;m',
+          padding: '6.4rem 2.4rem 2.8rem',
         },
       },
     },

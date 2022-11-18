@@ -19,7 +19,7 @@ export const StyledSpinner = styled(Box)`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgb(255 255 255 / 50%); // TODO temporary color
+  background-color: rgb(255 255 255 / 50%);
   z-index: 3;
 `;
 
