@@ -3,8 +3,8 @@ import { Button, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-
-import { StyledLargeTitle, StyledSmallText } from 'styles/styledComponents/Typography';
+import { StyledHeadline, StyledLabelMedium } from 'styles/styledComponents/Typography';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledLogin = styled(Box)`
   width: 100%;
@@ -22,21 +22,21 @@ export const StyledContainer = styled(Box)`
   margin: ${theme.spacing(2.4, 0)};
 `;
 
-export const StyledWelcome = styled(StyledLargeTitle)`
-  color: ${variables.palette.primary50};
+export const StyledWelcome = styled(StyledHeadline)`
+  color: ${variables.palette.primary};
   padding: ${theme.spacing(0, 4.8)};
   text-align: center;
 `;
 
-export const StyledLoginSubheader = styled(StyledSmallText)`
+export const StyledLoginSubheader = styled(StyledLabelMedium)`
   margin: ${theme.spacing(0.8, 0, 2.4)};
 `;
 
 export const StyledForm = styled('form')`
   margin-top: ${theme.spacing(3.2)};
   padding: ${theme.spacing(2.4)};
-  background: ${variables.palette.shades0};
-  border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
+  background: ${variables.palette.white};
+  border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   border-radius: ${variables.borderRadius.xl};
 `;
 
@@ -49,17 +49,14 @@ export const StyledButton = styled(Button)`
   margin-top: ${theme.spacing(2.4)};
 `;
 
-export const StyledForgotPasswordLink = styled(Button)`
-  height: auto;
-  padding: 0;
+export const StyledForgotPasswordLink = styled(StyledClearedButton)`
   width: fit-content;
   margin: ${theme.spacing(1.2, 0, 0.8)};
-  color: ${variables.palette.primary50};
+  color: ${variables.palette.primary};
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
   line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
-  cursor: pointer;
 
   &:hover {
     background-color: transparent;

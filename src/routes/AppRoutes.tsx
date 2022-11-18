@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { AuthLayout } from 'layouts/AuthLayout';
@@ -13,9 +13,18 @@ import { PrivateRoute } from './PrivateRoute';
 import { authRoutes } from './routesList';
 
 export const AppRoutes = () => {
-  const dispatch = useAppDispatch();
   const token = sessionStorage.getItem('accessToken');
+
+  const [loaded, setLoaded] = useState(!token);
+  const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
+  const status = auth.useStatus();
+
+  useEffect(() => {
+    if (status === 'error' || status === 'success') {
+      setLoaded(true);
+    }
+  }, [status]);
 
   useEffect(() => {
     if (!isAuthorized && token) {
@@ -25,32 +34,34 @@ export const AppRoutes = () => {
 
   return (
     <>
-      <Routes>
-        <Route
-          path={page.dashboard}
-          element={
-            <PrivateRoute condition={isAuthorized}>
-              <BaseLayout>
-                <Dashboard />
-              </BaseLayout>
-            </PrivateRoute>
-          }
-        />
-        <Route path="/auth" element={<AuthLayout />}>
-          {authRoutes.map(({ path, Component }) => (
-            <Route
-              key={path}
-              path={path}
-              element={
-                <PrivateRoute condition={!isAuthorized} redirectPath="/">
-                  <Component />
-                </PrivateRoute>
-              }
-            />
-          ))}
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      {loaded && (
+        <Routes>
+          <Route
+            path={page.dashboard}
+            element={
+              <PrivateRoute condition={isAuthorized}>
+                <BaseLayout>
+                  <Dashboard />
+                </BaseLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route path="/auth" element={<AuthLayout />}>
+            {authRoutes.map(({ path, Component }) => (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <PrivateRoute condition={!isAuthorized} redirectPath="/">
+                    <Component />
+                  </PrivateRoute>
+                }
+              />
+            ))}
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      )}
     </>
   );
 };

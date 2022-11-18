@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { Box, DialogTitle } from '@mui/material';
 
-import { Icon } from 'components/Icon';
+import { Svg } from 'components/Svg';
 import { variables } from 'styles/variables';
-import { StyledLargeTitle, StyledMediumTitle } from 'styles/styledComponents/Typography';
+import { StyledTitleMedium, StyledTitleSmall } from 'styles/styledComponents/Typography';
 
 import { SelectLanguageProps } from './SelectLanguage.types';
 import {
+  StyledDialog,
+  StyledCloseButton,
   StyledList,
   StyledListItemButton,
   StyledItemContent,
   StyledBox,
   StyledSelect,
-  StyledCancelButton,
+  StyledDialogActions,
   StyledOkButton,
 } from './SelectLanguage.styles';
 
@@ -28,8 +30,13 @@ export const SelectLanguage = ({
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage);
 
   return (
-    <Dialog onClose={() => onClose()} open={open}>
-      <DialogTitle>{t('chooseLanguageAndRegion')}</DialogTitle>
+    <StyledDialog onClose={() => onClose()} open={open}>
+      <DialogTitle>
+        {t('chooseLanguage')}
+        <StyledCloseButton onClick={() => onClose()}>
+          <Svg width={14} height={14} id="cross" />
+        </StyledCloseButton>
+      </DialogTitle>
       <StyledList>
         {languages.map((lang) => (
           <StyledListItemButton
@@ -40,24 +47,26 @@ export const SelectLanguage = ({
             <StyledItemContent>
               <Box>{lang.component}</Box>
               <StyledBox>
-                <StyledLargeTitle fontWeight={'regular'}>{lang.label}</StyledLargeTitle>
-                <StyledMediumTitle fontWeight={'regular'} color={variables.palette.shades80}>
+                <StyledTitleMedium fontWeight={'regular'}>{lang.label}</StyledTitleMedium>
+                <StyledTitleSmall
+                  fontWeight={'regular'}
+                  color={variables.palette.on_surface_variant}
+                >
                   {lang.type}
-                </StyledMediumTitle>
+                </StyledTitleSmall>
               </StyledBox>
             </StyledItemContent>
             {selectedLanguage.value === lang.value && (
               <StyledSelect>
-                <Icon.Selected color={variables.palette.primary50} />
+                <Svg id="selected" />
               </StyledSelect>
             )}
           </StyledListItemButton>
         ))}
       </StyledList>
-      <DialogActions>
-        <StyledCancelButton onClick={() => onClose()}>{t('cancel')}</StyledCancelButton>
+      <StyledDialogActions>
         <StyledOkButton onClick={() => onClose(selectedLanguage)}>{t('ok')}</StyledOkButton>
-      </DialogActions>
-    </Dialog>
+      </StyledDialogActions>
+    </StyledDialog>
   );
 };

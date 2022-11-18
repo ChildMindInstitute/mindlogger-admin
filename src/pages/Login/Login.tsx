@@ -11,7 +11,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth, ErrorResponse } from 'redux/modules';
 import { InputController } from 'components/FormComponents/InputController';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
-import { StyledLargeTitle } from 'styles/styledComponents/Typography';
+import { StyledHeadline } from 'styles/styledComponents/Typography';
 
 import {
   StyledLogin,
@@ -64,7 +64,7 @@ export const Login = ({ onSubmitForTest }: { onSubmitForTest?: () => void }) => 
         <StyledContainer>
           <StyledWelcome>{t('welcome')}</StyledWelcome>
           <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-            <StyledLargeTitle>{t('login')}</StyledLargeTitle>
+            <StyledHeadline>{t('login')}</StyledHeadline>
             <StyledLoginSubheader>{t('logIntoAccount')}</StyledLoginSubheader>
             <StyledController>
               <InputController fullWidth name="email" control={control} label={t('email')} />

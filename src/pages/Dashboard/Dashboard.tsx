@@ -9,20 +9,21 @@ import { StyledDashboard } from './Dashboard.styles';
 
 export const Dashboard = () => {
   const dispatch = useAppDispatch();
-  const userData = auth.useUserData();
+  const authData = auth.useData();
 
   useEffect(() => {
-    if (userData) {
+    if (authData) {
+      const { firstName, lastName } = authData.user;
       dispatch(
         breadcrumbs.actions.setBreadcrumbs([
           {
-            label: `${userData.firstName} ${userData.lastName}'s Mindlogger`,
+            label: `${firstName}${lastName ? ` ${lastName}` : ''}'s Dashboard`,
             navPath: page.dashboard,
           },
         ]),
       );
     }
-  }, [dispatch, userData]);
+  }, [dispatch, authData]);
 
   return (
     <StyledDashboard>

@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { variables } from 'styles/variables';
-import { Icon } from 'components/Icon';
+import { Svg } from 'components/Svg';
 import { SelectLanguage } from 'components/Popups/SelectLanguage';
-import { StyledSmallText } from 'styles/styledComponents/Typography';
+import { StyledLabelMedium } from 'styles/styledComponents/Typography';
 
 import { LanguageItem, Languages } from './Language.types';
 import { StyledLanguage, StyledFlag } from './Language.styles';
@@ -15,13 +15,13 @@ export const languages: LanguageItem[] = [
     value: Languages.EN,
     label: 'English',
     type: 'United States',
-    component: <Icon.US />,
+    component: <Svg id="us" width={32} height={24} />,
   },
   {
     value: Languages.FR,
     label: 'Français',
     type: 'France',
-    component: <Icon.France />,
+    component: <Svg id="france" width={32} height={24} />,
   },
 ];
 
@@ -54,9 +54,9 @@ export const Language = () => {
       <Box onClick={() => setOpen(true)}>
         <StyledLanguage>
           <StyledFlag>{currentLanguage.component}</StyledFlag>
-          <StyledSmallText color={variables.palette.shades80}>
+          <StyledLabelMedium color={variables.palette.on_surface_variant}>
             {currentLanguage.label}
-          </StyledSmallText>
+          </StyledLabelMedium>
         </StyledLanguage>
       </Box>
       {open && (

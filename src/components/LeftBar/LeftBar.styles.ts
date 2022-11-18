@@ -1,17 +1,14 @@
 import { styled } from '@mui/system';
-import { Drawer, ListItem, Box } from '@mui/material';
+import { ListItem, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
-import { LEFT_BAR_WIDTH } from './LeftBar.const';
-
-export const StyledDrawer = styled(Drawer)`
-  .drawer-paper {
-    background-color: ${variables.palette.primary95};
-    width: ${LEFT_BAR_WIDTH};
-    border-right: none;
-  }
+export const StyledDrawer = styled(Box)`
+  background-color: ${variables.palette.surface1};
+  padding: ${theme.spacing(0, 0.9)};
+  border-right: none;
+  min-width: 8.8rem;
 `;
 
 export const StyledDrawerItem = styled(ListItem)`
@@ -25,6 +22,18 @@ export const StyledDrawerItem = styled(ListItem)`
     position: relative;
     text-align: center;
     padding-top: ${theme.spacing(0.45)};
+
+    svg {
+      fill: ${variables.palette.on_surface_variant};
+    }
+  }
+
+  .active-link {
+    svg {
+      fill: ${variables.palette.on_surface};
+      position: relative;
+      z-index: 2;
+    }
   }
 
   .active-link:before {
@@ -32,12 +41,11 @@ export const StyledDrawerItem = styled(ListItem)`
     position: absolute;
     width: 5.6rem;
     height: 3.2rem;
-    background: ${variables.palette.primary80};
+    background: ${variables.palette.primary_container};
     border-radius: ${variables.borderRadius.xxl};
     left: 50%;
     top: 0;
     transform: translateX(-50%);
-    z-index: -1;
   }
 `;
 

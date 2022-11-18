@@ -1,8 +1,9 @@
 import { styled } from '@mui/system';
-import { Button, Box, FormControl, MenuItem } from '@mui/material';
+import { Box, FormControl, MenuItem } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledAdvancedSettings = styled(Box)`
   width: 100%;
@@ -17,17 +18,15 @@ export const StyledMenuItem = styled(MenuItem)`
   white-space: normal;
 `;
 
-export const StyledSettingsButton = styled(Button)`
+export const StyledSettingsButton = styled(StyledClearedButton)`
   width: 100%;
-  padding: 0;
-  height: auto;
   display: flex;
   justify-content: space-between;
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
   line-height: ${variables.lineHeight.sm};
-  letter-spacing: ${variables.letterSpacing.lg};
-  color: ${variables.palette.shades100};
+  letter-spacing: ${variables.letterSpacing.xl};
+  color: ${variables.palette.black};
 
   .MuiTouchRipple-root {
     display: none;

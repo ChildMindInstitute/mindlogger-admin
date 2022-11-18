@@ -3,20 +3,14 @@ import { Button, Box, Typography } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledForm = styled('form')`
   margin-top: ${theme.spacing(3.2)};
   padding: ${theme.spacing(2.4)};
-  background: ${variables.palette.shades0};
+  background: ${variables.palette.white};
   border-radius: ${variables.borderRadius.xl};
-  border: ${variables.borderWidth.md} solid ${variables.palette.shades70};
-`;
-
-export const StyledResetPasswordHeader = styled(Typography)`
-  font-size: ${variables.font.size.xl};
-  font-weight: ${variables.font.weight.medium};
-  line-height: ${variables.lineHeight.xl};
-  margin: 0;
+  border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
 `;
 
 export const StyledResetPasswordSubheader = styled(Typography)`
@@ -27,11 +21,12 @@ export const StyledResetPasswordSubheader = styled(Typography)`
 `;
 
 export const StyledController = styled(Box)`
-  margin-bottom: ${theme.spacing(4.2)};
+  margin-bottom: ${theme.spacing(2)};
 `;
 
 export const StyledButton = styled(Button)`
   width: 100%;
+  margin-top: ${theme.spacing(2.2)};
 `;
 
 export const StyledBackWrapper = styled(Box)`
@@ -39,16 +34,13 @@ export const StyledBackWrapper = styled(Box)`
   margin: ${theme.spacing(2.4, 0, 0)};
 `;
 
-export const StyledBack = styled(Button)`
-  height: auto;
-  padding: 0;
-  color: ${variables.palette.primary50};
+export const StyledBack = styled(StyledClearedButton)`
+  color: ${variables.palette.primary};
   text-align: center;
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
   line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
-  cursor: pointer;
 
   &:hover {
     background-color: transparent;
