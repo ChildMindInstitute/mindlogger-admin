@@ -3,7 +3,7 @@ import { Drawer, Box, Button } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledQuantityCircle } from 'styles/styledComponents/QuontityCircle';
+import { StyledQuantityCircle } from 'styles/styledComponents/QuantityCircle';
 import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from './AccountPanel.const';

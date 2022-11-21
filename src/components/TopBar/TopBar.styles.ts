@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledQuantityCircle } from 'styles/styledComponents/QuontityCircle';
+import { StyledQuantityCircle } from 'styles/styledComponents/QuantityCircle';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 import { TOP_BAR_HEIGHT } from './TopBar.const';
