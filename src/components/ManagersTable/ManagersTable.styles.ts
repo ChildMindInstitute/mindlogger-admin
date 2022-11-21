@@ -9,9 +9,3 @@ export const ManagersTableHeader = styled(Box)`
   align-items: center;
   margin-bottom: ${theme.spacing(2.4)};
 `;
-
-export const StyledButtons = styled(Box)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;

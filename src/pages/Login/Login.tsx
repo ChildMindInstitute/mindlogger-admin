@@ -14,9 +14,6 @@ import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import { StyledHeadline } from 'styles/styledComponents/Typography';
 
 import {
-  StyledLogin,
-  StyledContainerWrapper,
-  StyledContainer,
   StyledWelcome,
   StyledLoginSubheader,
   StyledForm,
@@ -59,38 +56,34 @@ export const Login = ({ onSubmitForTest }: { onSubmitForTest?: () => void }) => 
   };
 
   return (
-    <StyledLogin>
-      <StyledContainerWrapper>
-        <StyledContainer>
-          <StyledWelcome>{t('welcome')}</StyledWelcome>
-          <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-            <StyledHeadline>{t('login')}</StyledHeadline>
-            <StyledLoginSubheader>{t('logIntoAccount')}</StyledLoginSubheader>
-            <StyledController>
-              <InputController fullWidth name="email" control={control} label={t('email')} />
-            </StyledController>
-            <StyledController>
-              <InputController
-                fullWidth
-                name="password"
-                control={control}
-                label={t('password')}
-                type="password"
-              />
-            </StyledController>
-            {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-            <StyledForgotPasswordLink onClick={() => navigate(page.passwordReset)}>
-              {t('forgotPassword')}
-            </StyledForgotPasswordLink>
-            <StyledButton variant="contained" type="submit" data-testid="submit-btn">
-              {t('login')}
-            </StyledButton>
-            <StyledButton variant="outlined" onClick={() => navigate(page.signUp)}>
-              {t('createAccount')}
-            </StyledButton>
-          </StyledForm>
-        </StyledContainer>
-      </StyledContainerWrapper>
-    </StyledLogin>
+    <>
+      <StyledWelcome>{t('welcome')}</StyledWelcome>
+      <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
+        <StyledHeadline>{t('login')}</StyledHeadline>
+        <StyledLoginSubheader>{t('logIntoAccount')}</StyledLoginSubheader>
+        <StyledController>
+          <InputController fullWidth name="email" control={control} label={t('email')} />
+        </StyledController>
+        <StyledController>
+          <InputController
+            fullWidth
+            name="password"
+            control={control}
+            label={t('password')}
+            type="password"
+          />
+        </StyledController>
+        {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
+        <StyledForgotPasswordLink onClick={() => navigate(page.passwordReset)}>
+          {t('forgotPassword')}
+        </StyledForgotPasswordLink>
+        <StyledButton variant="contained" type="submit" data-testid="submit-btn">
+          {t('login')}
+        </StyledButton>
+        <StyledButton variant="outlined" onClick={() => navigate(page.signUp)}>
+          {t('createAccount')}
+        </StyledButton>
+      </StyledForm>
+    </>
   );
 };

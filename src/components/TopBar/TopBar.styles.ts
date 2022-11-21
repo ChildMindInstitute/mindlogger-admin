@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledQuantityCircle } from 'styles/styledComponents/QuontityCircle';
+import { StyledQuantityCircle } from 'styles/styledComponents/QuantityCircle';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 import { TOP_BAR_HEIGHT } from './TopBar.const';
@@ -14,11 +14,6 @@ export const StyledTopBar = styled(Box)`
   justify-content: space-between;
   align-items: center;
   padding: ${theme.spacing(1.8, 2.4)};
-`;
-
-export const StyledLeftBox = styled(Box)`
-  display: flex;
-  align-items: center;
 `;
 
 export const StyledMoreBtn = styled(StyledClearedButton)`
