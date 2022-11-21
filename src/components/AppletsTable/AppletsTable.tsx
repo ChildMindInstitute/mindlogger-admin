@@ -3,26 +3,41 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { Svg } from 'components/Svg';
+import { account } from 'redux/modules';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
-import { headCells, getRowsCells } from 'components/AppletsTable/mock';
 import { useTimeAgo } from 'hooks';
 
+import { headCells } from './AppletsTable.const';
 import { AppletsTableHeader, StyledButtons } from './AppletsTable.styles';
 
 export const AppletsTable = (): JSX.Element => {
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
+  const accData = account.useData();
+  const [searchValue, setSearchValue] = useState('');
 
-  const rowsCells = getRowsCells(timeAgo);
+  const formattedApplets = accData?.account?.applets?.map(({ displayName, updated }) => {
+    const lastEdited = timeAgo.format(new Date(updated));
 
-  const [rows, setRows] = useState(rowsCells);
+    return {
+      appletName: {
+        content: () => displayName,
+        value: displayName,
+      },
+      lastEdited: {
+        content: () => lastEdited,
+        value: lastEdited,
+      },
+      actions: {
+        content: () => '',
+        value: '',
+      },
+    };
+  });
 
   const handleSearch = (value: string) => {
-    const filteredRows = [...rowsCells].filter((row) =>
-      row.appletName?.value?.toString().toLowerCase().includes(value.toLowerCase()),
-    );
-    setRows(filteredRows);
+    setSearchValue(value);
   };
 
   return (
@@ -35,7 +50,13 @@ export const AppletsTable = (): JSX.Element => {
           </Button>
         </StyledButtons>
       </AppletsTableHeader>
-      <Table columns={headCells} rows={rows} orderBy={'appletName'} />
+      <Table
+        columns={headCells}
+        rows={formattedApplets?.filter(({ appletName }) =>
+          appletName?.value.toString().toLowerCase().includes(searchValue.toLowerCase()),
+        )}
+        orderBy={'appletName'}
+      />
     </>
   );
 };

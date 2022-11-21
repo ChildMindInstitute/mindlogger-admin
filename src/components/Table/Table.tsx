@@ -32,6 +32,7 @@ export const Table = ({ columns, rows, options, orderBy: orderByProp }: TablePro
     if (b[orderBy].value > a[orderBy].value) {
       return 1;
     }
+
     return 0;
   }
 
@@ -68,7 +69,7 @@ export const Table = ({ columns, rows, options, orderBy: orderByProp }: TablePro
           />
           <TableBody>
             {rows
-              .sort(getComparator(order, orderBy))
+              ?.sort(getComparator(order, orderBy))
               ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow key={uniqueId('row_')}>
@@ -85,7 +86,7 @@ export const Table = ({ columns, rows, options, orderBy: orderByProp }: TablePro
       <TablePagination
         rowsPerPageOptions={DEFAULT_ROWS_PER_PAGE_OPTIONS}
         component="div"
-        count={rows.length}
+        count={rows?.length || 0}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

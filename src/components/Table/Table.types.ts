@@ -12,7 +12,7 @@ export type HeadCell = Cell & {
 };
 
 export type RowContent = Cell & {
-  content: () => React.ReactNode;
+  content: () => React.ReactNode | string;
   value: string | number;
 };
 
@@ -26,7 +26,7 @@ export type Row = {
 
 export type TableProps = {
   columns: HeadCell[];
-  rows: Row[];
+  rows: Row[] | undefined;
   options?: TableOptions;
   orderBy: string;
 };
