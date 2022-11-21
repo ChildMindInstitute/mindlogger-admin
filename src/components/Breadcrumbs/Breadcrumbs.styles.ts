@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
 const commonCenterStyles = `
   display: flex;
@@ -11,11 +12,8 @@ const commonCenterStyles = `
   text-decoration: none;
 `;
 
-export const StyledAvatarWrapper = styled(Box)`
+export const StyledAvatarWrapper = styled(StyledFlexAllCenter)`
   margin-right: ${theme.spacing(0.8)};
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 export const StyledAvatar = styled(Box)`

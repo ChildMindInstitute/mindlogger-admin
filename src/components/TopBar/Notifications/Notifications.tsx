@@ -7,12 +7,12 @@ import { variables } from 'styles/variables';
 import { StyledLabelLarge } from 'styles/styledComponents/Typography';
 import { account } from 'redux/modules';
 import { useTimeAgo } from 'hooks';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { Notification, NotificationProps } from './Notification';
 import {
   StyledHeader,
   StyledHeaderLeft,
-  StyledHeaderRight,
   StyledIconWrapper,
   StyledCollapseBtn,
   StyledList,
@@ -61,7 +61,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
             {t('alerts')}
           </StyledLabelLarge>
         </StyledHeaderLeft>
-        <StyledHeaderRight>
+        <StyledFlexTopCenter>
           <StyledLabelLarge color={variables.palette.semantic.error} fontWeight="semiBold">
             {`${alertsQuantity} `}
             {t('unread')}
@@ -69,7 +69,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>
             <Svg id={showList ? 'navigate-up' : 'navigate-down'} width="12" height="8" />
           </StyledCollapseBtn>
-        </StyledHeaderRight>
+        </StyledFlexTopCenter>
       </StyledHeader>
       {showList && notifications && (
         <StyledList>

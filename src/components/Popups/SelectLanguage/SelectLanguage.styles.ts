@@ -4,6 +4,7 @@ import { Box, Button, Dialog, DialogActions, List, ListItemButton } from '@mui/m
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 export const StyledDialog = styled(Dialog)`
   .MuiPaper-root {
@@ -34,9 +35,7 @@ export const StyledBox = styled(Box)`
   padding: ${theme.spacing(0, 2)};
 `;
 
-export const StyledItemContent = styled(Box)`
-  display: flex;
-  align-items: center;
+export const StyledItemContent = styled(StyledFlexTopCenter)`
   flex: 1;
 `;
 

@@ -7,11 +7,11 @@ import { useAppDispatch } from 'redux/store';
 import { account, auth } from 'redux/modules';
 import { variables } from 'styles/variables';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { AccountPanel } from './AccountPanel';
 import {
   StyledTopBar,
-  StyledLeftBox,
   StyledMoreBtn,
   StyledAvatarBtn,
   StyledImage,
@@ -42,12 +42,12 @@ export const TopBar = (): JSX.Element => {
   return (
     <>
       <StyledTopBar>
-        <StyledLeftBox>
+        <StyledFlexTopCenter>
           <Breadcrumbs />
           <StyledMoreBtn variant="text">
             <Svg id="more-horizontal" />
           </StyledMoreBtn>
-        </StyledLeftBox>
+        </StyledFlexTopCenter>
         <StyledAvatarBtn onClick={() => setShowAccDrawer((prevState) => !prevState)} variant="text">
           <StyledImage src={avatarSrc} alt="Avatar" />
           {alertsQuantity > 0 && (

@@ -16,11 +16,6 @@ export const StyledTopBar = styled(Box)`
   padding: ${theme.spacing(1.8, 2.4)};
 `;
 
-export const StyledLeftBox = styled(Box)`
-  display: flex;
-  align-items: center;
-`;
-
 export const StyledMoreBtn = styled(StyledClearedButton)`
   margin-left: ${theme.spacing(0.7)};
 `;

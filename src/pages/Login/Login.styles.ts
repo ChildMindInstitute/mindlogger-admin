@@ -6,22 +6,6 @@ import { variables } from 'styles/variables';
 import { StyledHeadline, StyledLabelMedium } from 'styles/styledComponents/Typography';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
-export const StyledLogin = styled(Box)`
-  width: 100%;
-`;
-
-export const StyledContainerWrapper = styled(Box)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-
-export const StyledContainer = styled(Box)`
-  width: 37.6rem;
-  margin: ${theme.spacing(2.4, 0)};
-`;
-
 export const StyledWelcome = styled(StyledHeadline)`
   color: ${variables.palette.primary};
   padding: ${theme.spacing(0, 4.8)};

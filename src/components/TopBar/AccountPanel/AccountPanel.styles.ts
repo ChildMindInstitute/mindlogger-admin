@@ -4,6 +4,7 @@ import { Drawer, Box, Button } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledQuantityCircle } from 'styles/styledComponents/QuontityCircle';
+import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from './AccountPanel.const';
 
@@ -33,19 +34,11 @@ export const StyledHeaderInfo = styled(Box)`
   max-width: 28.5rem;
 `;
 
-export const StyledHeaderRight = styled(Box)`
-  display: flex;
-  align-items: center;
-`;
-
-export const StyledAvatarWrapper = styled(Box)`
+export const StyledAvatarWrapper = styled(StyledFlexAllCenter)`
   border-radius: ${variables.borderRadius.half};
   background-color: ${variables.palette.outline_variant};
   height: 4rem;
   width: 4rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
 `;
 

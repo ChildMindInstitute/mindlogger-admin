@@ -7,9 +7,10 @@ import { account } from 'redux/modules';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
+import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
 import { headCells } from './AppletsTable.const';
-import { AppletsTableHeader, StyledButtons } from './AppletsTable.styles';
+import { AppletsTableHeader } from './AppletsTable.styles';
 
 export const AppletsTable = (): JSX.Element => {
   const { t } = useTranslation('app');
@@ -44,11 +45,11 @@ export const AppletsTable = (): JSX.Element => {
     <>
       <AppletsTableHeader>
         <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
-        <StyledButtons>
+        <StyledFlexAllCenter>
           <Button variant="roundedOutlined" startIcon={<Svg width={12} height={12} id="plus" />}>
             {t('addApplet')}
           </Button>
-        </StyledButtons>
+        </StyledFlexAllCenter>
       </AppletsTableHeader>
       <Table
         columns={headCells}

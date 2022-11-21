@@ -3,31 +3,21 @@ import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from '../AccountPanel/AccountPanel.const';
 import { NOTIFICATIONS_HEADER_HEIGHT } from './Notifications.const';
 
-export const StyledHeader = styled(Box)`
-  display: flex;
-  align-items: center;
+export const StyledHeader = styled(StyledFlexTopCenter)`
   justify-content: space-between;
   height: ${NOTIFICATIONS_HEADER_HEIGHT};
 `;
 
-export const StyledHeaderLeft = styled(Box)`
-  display: flex;
-  align-items: center;
+export const StyledHeaderLeft = styled(StyledFlexTopCenter)`
   margin-right: ${theme.spacing(1)};
 `;
 
-export const StyledHeaderRight = styled(Box)`
-  display: flex;
-  align-items: center;
-`;
-
-export const StyledIconWrapper = styled(Box)`
-  display: flex;
-  align-items: center;
+export const StyledIconWrapper = styled(StyledFlexTopCenter)`
   margin-right: ${theme.spacing(0.8)};
 `;
 

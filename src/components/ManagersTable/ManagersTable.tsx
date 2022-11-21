@@ -7,8 +7,9 @@ import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { headCells, getRowsCells } from 'components/ManagersTable/mock';
 import { useTimeAgo } from 'hooks';
+import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
-import { ManagersTableHeader, StyledButtons } from './ManagersTable.styles';
+import { ManagersTableHeader } from './ManagersTable.styles';
 
 export const ManagersTable = (): JSX.Element => {
   const { t } = useTranslation('app');
@@ -26,14 +27,14 @@ export const ManagersTable = (): JSX.Element => {
     <>
       <ManagersTableHeader>
         <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
-        <StyledButtons>
+        <StyledFlexAllCenter>
           <Button
             variant="roundedOutlined"
             startIcon={<Svg width={14} height={14} id="settings" />}
           >
             {t('dataRetentionSettings')}
           </Button>
-        </StyledButtons>
+        </StyledFlexAllCenter>
       </ManagersTableHeader>
       <Table columns={headCells} rows={rows} orderBy={'updated'} />
     </>
