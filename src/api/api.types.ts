@@ -25,10 +25,12 @@ export type UserId = { userId: string };
 
 export type FolderId = { folderId: string };
 
+export type UserRoles = 'reviewer' | 'editor' | 'user' | 'coordinator' | 'manager';
+
 export type AccountUserList = Partial<AppletId> & {
-  role?: string;
-  MRN?: string;
+  role: UserRoles;
   pagination?: { allow: boolean };
+  MRN?: string;
   sort?: { allow: boolean };
 };
 

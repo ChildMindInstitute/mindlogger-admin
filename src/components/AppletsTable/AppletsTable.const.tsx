@@ -1,4 +1,4 @@
-import { HeadCell } from 'components/Table/Table.types';
+import { HeadCell } from 'components/Table';
 
 export const headCells: HeadCell[] = [
   {

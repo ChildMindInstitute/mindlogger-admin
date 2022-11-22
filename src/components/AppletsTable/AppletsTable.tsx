@@ -7,6 +7,7 @@ import { account } from 'redux/modules';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
+import { filterRows } from 'utils/filterRows';
 import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
 import { headCells } from './AppletsTable.const';
@@ -53,9 +54,7 @@ export const AppletsTable = (): JSX.Element => {
       </AppletsTableHeader>
       <Table
         columns={headCells}
-        rows={formattedApplets?.filter(({ appletName }) =>
-          appletName?.value.toString().toLowerCase().includes(searchValue.toLowerCase()),
-        )}
+        rows={formattedApplets?.filter(({ appletName }) => filterRows(appletName, searchValue))}
         orderBy={'appletName'}
       />
     </>
