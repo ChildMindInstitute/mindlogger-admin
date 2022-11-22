@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
@@ -6,7 +6,7 @@ import { Svg } from 'components/Svg';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
-import { users } from 'redux/modules';
+import { Users, users } from 'redux/modules';
 import { Row } from 'components/Table';
 import { filterRows } from 'utils/functions';
 import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
@@ -17,10 +17,38 @@ import { headCells } from './ManagersTable.const';
 export const ManagersTable = (): JSX.Element => {
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
-  const managerData = users.useManagerData();
+  const managersData = users.useManagerData();
 
-  const [rows, setRows] = useState<Row[]>([]);
   const [searchValue, setSearchValue] = useState('');
+
+  const rows = Object.values(managersData?.items[0] as Users)?.map(
+    ({ email, firstName, lastName, updated }) => {
+      const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
+
+      return {
+        firstName: {
+          content: () => firstName,
+          value: firstName,
+        },
+        lastName: {
+          content: () => lastName,
+          value: lastName,
+        },
+        email: {
+          content: () => email,
+          value: email,
+        },
+        updated: {
+          content: () => lastEdited,
+          value: lastEdited,
+        },
+        actions: {
+          content: () => '',
+          value: '',
+        },
+      };
+    },
+  );
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
@@ -33,41 +61,6 @@ export const ManagersTable = (): JSX.Element => {
         filterRows(lastName, searchValue) ||
         filterRows(email, searchValue),
     );
-
-  useEffect(() => {
-    if (managerData) {
-      const formattedManagersArr = Object.values(managerData.items[0])?.map(
-        ({ email, firstName, lastName, updated }) => {
-          const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
-
-          return {
-            firstName: {
-              content: () => firstName,
-              value: firstName,
-            },
-            lastName: {
-              content: () => lastName,
-              value: lastName,
-            },
-            email: {
-              content: () => email,
-              value: email,
-            },
-            updated: {
-              content: () => lastEdited,
-              value: lastEdited,
-            },
-            actions: {
-              content: () => '',
-              value: '',
-            },
-          };
-        },
-      );
-
-      setRows(formattedManagersArr);
-    }
-  }, [managerData, timeAgo]);
 
   return (
     <>
