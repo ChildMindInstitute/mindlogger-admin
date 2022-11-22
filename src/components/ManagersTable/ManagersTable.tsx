@@ -8,7 +8,7 @@ import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
 import { Users, users } from 'redux/modules';
 import { Row } from 'components/Table';
-import { filterRows } from 'utils/functions';
+import { filterRows } from 'utils/filterRows';
 import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
 import { ManagersTableHeader } from './ManagersTable.styles';

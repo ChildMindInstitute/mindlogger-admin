@@ -7,7 +7,7 @@ import { account } from 'redux/modules';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
-import { filterRows } from 'utils/functions';
+import { filterRows } from 'utils/filterRows';
 import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
 import { headCells } from './AppletsTable.const';
