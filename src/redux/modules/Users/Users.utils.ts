@@ -2,15 +2,14 @@ import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse, AxiosError } from 'axios';
 
 import { ErrorResponse } from 'redux/modules';
-import { UserRoles } from 'api';
 
-import { UsersSchema } from './Users.schema';
+import { UsersSchema, Roles } from './Users.schema';
 import { state as initialState } from './Users.state';
 
 export const createUsersPendingData = (
   builder: ActionReducerMapBuilder<UsersSchema>,
   thunk: AsyncThunk<AxiosResponse, void, Record<string, never>>,
-  role: UserRoles,
+  role: Roles,
 ) =>
   builder.addCase(thunk.pending, (state, action) => {
     if (state[role].status !== 'loading') {
@@ -22,7 +21,7 @@ export const createUsersPendingData = (
 export const createUsersFulfilledData = (
   builder: ActionReducerMapBuilder<UsersSchema>,
   thunk: AsyncThunk<AxiosResponse, void, Record<string, never>>,
-  role: UserRoles,
+  role: Roles,
 ) =>
   builder.addCase(thunk.fulfilled, (state, action) => {
     if (state[role].status === 'loading' && state[role].requestId === action.meta.requestId) {
@@ -35,7 +34,7 @@ export const createUsersFulfilledData = (
 export const createUsersRejectedData = (
   builder: ActionReducerMapBuilder<UsersSchema>,
   thunk: AsyncThunk<AxiosResponse, void, Record<string, never>>,
-  role: UserRoles,
+  role: Roles,
 ) =>
   builder.addCase(thunk.rejected, (state, action) => {
     if (state[role].status === 'loading' && state[role].requestId === action.meta.requestId) {

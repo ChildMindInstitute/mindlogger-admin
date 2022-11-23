@@ -1,23 +1,41 @@
 import { BaseSchema } from 'redux/modules/Base';
 
-export type UserData = {
-  _id: string;
-  email: string;
+export type Roles = 'manager' | 'user';
+
+type CommonUserData = {
   fake: string;
-  firstName: string;
   hasIndividualEvent: boolean;
   identifiers: string;
-  lastName: string;
   nickName: string;
   pinned: boolean;
   refreshRequest: string | null;
   roles: string[];
   updated: string | null;
   viewable: boolean;
+  _id: string;
+};
+
+export type ManagerData = CommonUserData & {
+  email: string;
+  firstName: string;
+  lastName: string;
+};
+
+export type UserData = CommonUserData & {
+  MRN: string;
+};
+
+export type Managers = {
+  [id: string]: ManagerData;
 };
 
 export type Users = {
   [id: string]: UserData;
+};
+
+export type ManagersItems = {
+  items: Managers[];
+  total: number;
 };
 
 export type UsersItems = {
@@ -26,9 +44,6 @@ export type UsersItems = {
 };
 
 export type UsersSchema = {
-  manager: BaseSchema<UsersItems | null>;
-  reviewer: BaseSchema<UsersItems | null>;
-  editor: BaseSchema<UsersItems | null>;
+  manager: BaseSchema<ManagersItems | null>;
   user: BaseSchema<UsersItems | null>;
-  coordinator: BaseSchema<UsersItems | null>;
 };

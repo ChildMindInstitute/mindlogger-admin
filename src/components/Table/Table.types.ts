@@ -14,6 +14,7 @@ export type HeadCell = Cell & {
 export type RowContent = Cell & {
   content: () => React.ReactNode | string;
   value: string | number;
+  onClick?: () => void;
 };
 
 export type TableOptions = {
