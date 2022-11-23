@@ -9,8 +9,5 @@ const initialStateData = {
 
 export const state: UsersSchema = {
   manager: initialStateData,
-  reviewer: initialStateData,
-  editor: initialStateData,
   user: initialStateData,
-  coordinator: initialStateData,
 };

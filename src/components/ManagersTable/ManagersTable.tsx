@@ -6,7 +6,7 @@ import { Svg } from 'components/Svg';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
-import { Users, users } from 'redux/modules';
+import { ManagerData, users } from 'redux/modules';
 import { Row } from 'components/Table';
 import { filterRows } from 'utils/filterRows';
 import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
@@ -18,37 +18,38 @@ export const ManagersTable = (): JSX.Element => {
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
   const managersData = users.useManagerData();
-
   const [searchValue, setSearchValue] = useState('');
 
-  const rows = Object.values(managersData?.items[0] as Users)?.map(
-    ({ email, firstName, lastName, updated }) => {
-      const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
+  const managersArr = managersData?.items
+    .map((item) => Object.values(item))
+    .reduce((acc: ManagerData[], currentValue) => acc.concat(currentValue[0]), []);
 
-      return {
-        firstName: {
-          content: () => firstName,
-          value: firstName,
-        },
-        lastName: {
-          content: () => lastName,
-          value: lastName,
-        },
-        email: {
-          content: () => email,
-          value: email,
-        },
-        updated: {
-          content: () => lastEdited,
-          value: lastEdited,
-        },
-        actions: {
-          content: () => '',
-          value: '',
-        },
-      };
-    },
-  );
+  const rows = managersArr?.map(({ email, firstName, lastName, updated }) => {
+    const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
+
+    return {
+      firstName: {
+        content: () => firstName,
+        value: firstName,
+      },
+      lastName: {
+        content: () => lastName,
+        value: lastName,
+      },
+      email: {
+        content: () => email,
+        value: email,
+      },
+      updated: {
+        content: () => lastEdited,
+        value: lastEdited,
+      },
+      actions: {
+        content: () => '',
+        value: '',
+      },
+    };
+  });
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
@@ -75,7 +76,7 @@ export const ManagersTable = (): JSX.Element => {
           </Button>
         </StyledFlexAllCenter>
       </ManagersTableHeader>
-      <Table columns={headCells} rows={handleFilterRows(rows)} orderBy={'updated'} />
+      <Table columns={headCells} rows={handleFilterRows(rows as Row[])} orderBy={'updated'} />
     </>
   );
 };

@@ -353,5 +353,16 @@ export const svgSprite = (): string => `
        fill=${variables.palette.on_surface_variant || 'currentColor'}
      />
   </symbol>
+  
+  <symbol viewBox="0 0 12 16" fill="none" id="svg-pin">
+    <path fillRule="evenodd" clipRule="evenodd" 
+          d="M9 5.75V2H9.75C10.1625 2 10.5 1.6625 10.5 1.25C10.5 0.8375 10.1625 0.5 9.75 0.5H2.25C1.8375 0.5 1.5 0.8375 1.5 1.25C1.5 1.6625 1.8375 2 2.25 2H3V5.75C3 6.995 1.995 8 0.75 8V9.5H5.2275V14.75L5.9775 15.5L6.7275 14.75V9.5H11.25V8C10.005 8 9 6.995 9 5.75Z" 
+          fill=${variables.palette.primary} />
+  </symbol>
+  
+  <symbol viewBox="0 0 12 16" fill="none" id="svg-pin-outlined">
+    <path d="M7.5 2V5.75C7.5 6.59 7.7775 7.37 8.25 8H3.75C4.2375 7.355 4.5 6.575 4.5 5.75V2H7.5ZM9.75 0.5H2.25C1.8375 0.5 1.5 0.8375 1.5 1.25C1.5 1.6625 1.8375 2 2.25 2H3V5.75C3 6.995 1.995 8 0.75 8V9.5H5.2275V14.75L5.9775 15.5L6.7275 14.75V9.5H11.25V8C10.005 8 9 6.995 9 5.75V2H9.75C10.1625 2 10.5 1.6625 10.5 1.25C10.5 0.8375 10.1625 0.5 9.75 0.5Z"
+          fill=${variables.palette.surface_variant} />
+  </symbol>
 </svg>
 `;

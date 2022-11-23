@@ -27,4 +27,12 @@ export const users = {
         },
       }) => data,
     ),
+  useUserData: (): UsersSchema['user']['data'] =>
+    useAppSelector(
+      ({
+        users: {
+          user: { data },
+        },
+      }) => data,
+    ),
 };

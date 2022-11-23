@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEvent, ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   TableContainer,
@@ -42,7 +42,7 @@ export const Table = ({ columns, rows, options, orderBy: orderByProp }: TablePro
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
+  const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -52,7 +52,7 @@ export const Table = ({ columns, rows, options, orderBy: orderByProp }: TablePro
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -74,7 +74,12 @@ export const Table = ({ columns, rows, options, orderBy: orderByProp }: TablePro
               .map((row) => (
                 <TableRow key={uniqueId('row_')} data-testid="table-row">
                   {Object.keys(row)?.map((key) => (
-                    <TableCell scope="row" key={key} align={row[key].align}>
+                    <TableCell
+                      onClick={row[key].onClick}
+                      scope="row"
+                      key={key}
+                      align={row[key].align}
+                    >
                       {row[key].content()}
                     </TableCell>
                   ))}
