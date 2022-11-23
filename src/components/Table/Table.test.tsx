@@ -1,0 +1,34 @@
+import { screen } from '@testing-library/react';
+
+import { renderComponentForEachTest } from 'utils/renderComponentForEachTest';
+
+import { Table } from './Table';
+
+const columns = [
+  {
+    id: 'appletName',
+    label: 'Applet Name',
+    enableSort: true,
+  },
+];
+
+const rows = [
+  {
+    appletName: {
+      content: () => 'test',
+      value: 'test',
+    },
+  },
+];
+
+describe('Table component tests', () => {
+  renderComponentForEachTest(<Table columns={columns} rows={rows} orderBy={'appletName'} />);
+
+  test('Table should render rows', async () => {
+    const table = await screen.findByRole('table');
+    const rows = await screen.findAllByTestId('table-row');
+
+    expect(table).toBeInTheDocument();
+    expect(rows.length).toBe(1);
+  });
+});
