@@ -72,7 +72,7 @@ export const Table = ({ columns, rows, options, orderBy: orderByProp }: TablePro
               ?.sort(getComparator(order, orderBy))
               ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
-                <TableRow key={uniqueId('row_')}>
+                <TableRow key={uniqueId('row_')} data-testid="table-row">
                   {Object.keys(row)?.map((key) => (
                     <TableCell scope="row" key={key} align={row[key].align}>
                       {row[key].content()}
