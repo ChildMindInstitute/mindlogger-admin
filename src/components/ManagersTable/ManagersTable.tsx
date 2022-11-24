@@ -22,7 +22,7 @@ export const ManagersTable = (): JSX.Element => {
 
   const managersArr = managersData?.items
     .map((item) => Object.values(item))
-    .reduce((acc: ManagerData[], currentValue) => acc.concat(currentValue[0]), []);
+    .reduce((acc: ManagerData[], currentValue) => acc.concat(currentValue), []);
 
   const rows = managersArr?.map(({ email, firstName, lastName, updated }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
