@@ -32,7 +32,7 @@ export const RespondentsTable = (): JSX.Element => {
 
   const usersArr = usersData?.items
     .map((item) => Object.values(item))
-    .reduce((acc: UserData[], currentValue) => acc.concat(currentValue[0]), []);
+    .reduce((acc: UserData[], currentValue) => acc.concat(currentValue), []);
 
   const rows = usersArr?.map(({ pinned, MRN, nickName, updated, _id: profileId }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
