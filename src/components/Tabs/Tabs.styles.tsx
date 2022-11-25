@@ -3,8 +3,11 @@ import Tabs from '@mui/material/Tabs';
 
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
+import { TABS_HEIGHT } from 'utils/constants';
 
 export const StyledTabs = styled(Tabs)`
+  height: ${TABS_HEIGHT};
+
   .MuiTab-root {
     color: ${variables.palette.on_surface_variant};
     text-transform: inherit;

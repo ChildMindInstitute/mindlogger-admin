@@ -2,10 +2,9 @@ import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
-export const StyledLanguage = styled(Box)`
-  display: flex;
-  align-items: center;
+export const StyledLanguage = styled(StyledFlexTopCenter)`
   margin: ${theme.spacing(0, 2.4)};
   cursor: pointer;
 `;

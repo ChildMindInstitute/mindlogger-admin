@@ -14,19 +14,15 @@ export type HeadCell = Cell & {
 export type RowContent = Cell & {
   content: () => React.ReactNode | string;
   value: string | number;
-};
-
-export type TableOptions = {
-  rowsPerPage?: number;
+  onClick?: () => void;
 };
 
 export type Row = {
   [name: string]: RowContent;
 };
-
 export type TableProps = {
+  tableHeight?: string;
   columns: HeadCell[];
   rows: Row[] | undefined;
-  options?: TableOptions;
   orderBy: string;
 };

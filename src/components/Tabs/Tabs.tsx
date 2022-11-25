@@ -3,7 +3,7 @@ import Tab from '@mui/material/Tab';
 import { useTranslation } from 'react-i18next';
 
 import { TabPanel } from './TabPanel';
-import { StyledTabs } from './Tabs.style';
+import { StyledTabs } from './Tabs.styles';
 import { tabs } from './Tabs.const';
 
 export const Tabs = () => {
@@ -22,8 +22,8 @@ export const Tabs = () => {
         TabIndicatorProps={{ children: <span /> }}
         centered
       >
-        {tabs.map(({ icon, labelKey }) => (
-          <Tab key={labelKey} icon={icon} label={t(labelKey)} />
+        {tabs.map(({ icon, activeIcon, labelKey }, index) => (
+          <Tab key={labelKey} icon={tabIndex === index ? activeIcon : icon} label={t(labelKey)} />
         ))}
       </StyledTabs>
       {tabs.map(({ content }, i) => (

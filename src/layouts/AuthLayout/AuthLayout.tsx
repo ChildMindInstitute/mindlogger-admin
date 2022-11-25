@@ -5,7 +5,14 @@ import { Svg } from 'components/Svg';
 import { Footer } from 'layouts/Footer';
 import { auth } from 'redux/modules';
 
-import { StyledAuthLayout, StyledHeader, StyledOutlet, StyledSpinner } from './AuthLayout.styles';
+import {
+  StyledAuthLayout,
+  StyledAuthWrapper,
+  StyledAuthWrapperInner,
+  StyledHeader,
+  StyledOutlet,
+  StyledSpinner,
+} from './AuthLayout.styles';
 
 export const AuthLayout = () => {
   const status = auth.useStatus();
@@ -21,7 +28,11 @@ export const AuthLayout = () => {
         <Svg id="header-logo" width={224} height={44} />
       </StyledHeader>
       <StyledOutlet>
-        <Outlet />
+        <StyledAuthWrapper>
+          <StyledAuthWrapperInner>
+            <Outlet />
+          </StyledAuthWrapperInner>
+        </StyledAuthWrapper>
       </StyledOutlet>
       <Footer />
     </StyledAuthLayout>

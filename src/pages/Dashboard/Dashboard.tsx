@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
-import { auth, breadcrumbs } from 'redux/modules';
+import { auth, breadcrumbs, users } from 'redux/modules';
 import { Tabs } from 'components/Tabs';
 
 import { StyledDashboard } from './Dashboard.styles';
@@ -24,6 +24,11 @@ export const Dashboard = () => {
       );
     }
   }, [dispatch, authData]);
+
+  useEffect(() => {
+    dispatch(users.thunk.getManagersList());
+    dispatch(users.thunk.getUsersList());
+  }, [dispatch]);
 
   return (
     <StyledDashboard>
