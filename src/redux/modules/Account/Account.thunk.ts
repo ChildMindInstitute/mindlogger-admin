@@ -41,14 +41,12 @@ export const getAppletsForFolders = createAsyncThunk(
       account.folders.map(async (folder) => await dispatch(getAppletsForFolder({ folder }))),
     );
 
-    const result = [
+    return [
       ...foldersData
         .filter((folder) => folder.status === 'fulfilled')
         .map((folder) => (folder as PromiseFulfilledResult<any>).value.payload),
       ...account.applets,
     ];
-
-    return result;
   },
 );
 
