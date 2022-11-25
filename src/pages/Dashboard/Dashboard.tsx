@@ -4,8 +4,9 @@ import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
 import { auth, account, breadcrumbs, users } from 'redux/modules';
 import { Tabs } from 'components/Tabs';
+import { StyledBody } from 'styles/styledComponents/Body';
 
-import { StyledDashboard } from './Dashboard.styles';
+import { dashboardTabs } from './Dashboard.const';
 
 export const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -32,14 +33,9 @@ export const Dashboard = () => {
     }
   }, [dispatch, accountData?.account.folders]);
 
-  useEffect(() => {
-    dispatch(users.thunk.getManagersList());
-    dispatch(users.thunk.getUsersList());
-  }, [dispatch]);
-
   return (
-    <StyledDashboard>
-      <Tabs />
-    </StyledDashboard>
+    <StyledBody>
+      <Tabs tabs={dashboardTabs} />
+    </StyledBody>
   );
 };

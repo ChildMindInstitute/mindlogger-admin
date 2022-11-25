@@ -7,13 +7,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { store } from 'redux/store';
 import theme from 'styles/theme';
 import { AppRoutes } from 'routes/AppRoutes';
+import { Spinner } from 'components/Spinner';
 
 function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Suspense fallback={<>Loading...</>}>
+        <Suspense fallback={<Spinner />}>
           <BrowserRouter>
             <AppRoutes />
           </BrowserRouter>

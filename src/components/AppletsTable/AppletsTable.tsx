@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
@@ -11,6 +12,7 @@ import { headCells } from './AppletsTable.const';
 import { StyledButtons, AppletsTableHeader } from './AppletsTable.styles';
 
 export const AppletsTable = (): JSX.Element => {
+  const navigate = useNavigate();
   const { t } = useTranslation('app');
 
   const currentFoldersApplets = account.useFoldersApplets();
