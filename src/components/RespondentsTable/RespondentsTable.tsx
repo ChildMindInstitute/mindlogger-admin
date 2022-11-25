@@ -99,12 +99,12 @@ export const RespondentsTable = (): JSX.Element => {
 
   return (
     <>
-      <RespondentsTableHeader>
+      <RespondentsTableHeader hasButton={!!id}>
         {id && (
           <StyledLeftBox>
             <StyledButton
               variant="roundedOutlined"
-              startIcon={<Svg width={14} height={14} id="respondent" />}
+              startIcon={<Svg width={14} height={14} id="respondent-outlined" />}
             >
               {t('addRespondent')}
             </StyledButton>

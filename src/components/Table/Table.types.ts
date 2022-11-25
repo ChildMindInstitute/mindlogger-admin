@@ -9,6 +9,7 @@ export type RowContent = Cell & {
 export type Row = {
   [name: string]: RowContent;
 };
+
 export type TableProps = {
   tableHeight?: string;
   columns: HeadCell[];

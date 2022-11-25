@@ -8,7 +8,8 @@ import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 export const RespondentsTableHeader = styled(Box)`
   margin-bottom: ${theme.spacing(2.4)};
   display: flex;
-  justify-content: space-between;
+  justify-content: ${({ hasButton }: { hasButton: boolean }) =>
+    hasButton ? 'space-between' : 'center'};
 `;
 
 export const StyledButton = styled(Button)`

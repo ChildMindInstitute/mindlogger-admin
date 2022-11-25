@@ -25,12 +25,18 @@ export const Applet = (): JSX.Element => {
       ? [
           {
             labelKey: 'appletTabsLabel',
-            icon: <Svg id="respondent" />,
+            icon: <Svg id="respondent-outlined" />,
+            activeIcon: <Svg id="respondent-filled" />,
             content: <RespondentsTable />,
           },
         ]
       : []),
-    { labelKey: 'appletTabsLabel2', icon: <Svg id="manager" />, content: <ManagersTable /> },
+    {
+      labelKey: 'appletTabsLabel2',
+      icon: <Svg id="manager-outlined" />,
+      activeIcon: <Svg id="manager-filled" />,
+      content: <ManagersTable />,
+    },
   ];
 
   useEffect(() => {

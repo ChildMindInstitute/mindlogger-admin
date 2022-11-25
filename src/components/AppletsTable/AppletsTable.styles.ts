@@ -14,6 +14,8 @@ export const AppletsTableHeader = styled(Box)`
 `;
 
 export const StyledButtons = styled(StyledFlexTopCenter)`
+  margin-right: ${theme.spacing(1)};
+
   svg {
     fill: ${variables.palette.primary};
   }
