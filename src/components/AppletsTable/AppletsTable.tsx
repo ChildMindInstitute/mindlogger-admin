@@ -8,7 +8,7 @@ import { Search } from 'components/Search';
 
 import { Table } from './Table';
 import { headCells } from './AppletsTable.const';
-import { AppletsTableHeader, StyledButtons } from './AppletsTable.styles';
+import { StyledButtons, AppletsTableHeader } from './AppletsTable.styles';
 
 export const AppletsTable = (): JSX.Element => {
   const { t } = useTranslation('app');
