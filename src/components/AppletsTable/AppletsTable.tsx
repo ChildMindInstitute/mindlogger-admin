@@ -1,5 +1,4 @@
 import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
@@ -13,38 +12,15 @@ import { headCells } from './AppletsTable.const';
 import { StyledButtons, AppletsTableHeader } from './AppletsTable.styles';
 
 export const AppletsTable = (): JSX.Element => {
-  // const navigate = useNavigate();
   const { t } = useTranslation('app');
   const accData = account.useData();
   const [searchValue, setSearchValue] = useState('');
 
   const formattedRows: Row[] = [...(accData?.account?.applets || [])];
-  // const handleAppletClick = (id: string) => navigate(`/${id}`);
 
   const addFolder = () => {
     console.log('Add folder');
   };
-
-  // const formattedApplets = accData?.account?.applets?.map(({ id, displayName, updated }) => {
-  //   const lastEdited = timeAgo.format(new Date(updated));
-  //
-  //   return {
-  //     appletName: {
-  //       content: () => displayName,
-  //       value: displayName,
-  //       onClick: () => handleAppletClick(id),
-  //     },
-  //     lastEdited: {
-  //       content: () => lastEdited,
-  //       value: lastEdited,
-  //       onClick: () => handleAppletClick(id),
-  //     },
-  //     actions: {
-  //       content: () => '',
-  //       value: '',
-  //     },
-  //   };
-  // });
 
   const handleSearch = (value: string) => {
     setSearchValue(value);

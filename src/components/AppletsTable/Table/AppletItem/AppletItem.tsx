@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
 import { Row } from 'components/AppletsTable/Table/Table.types';
@@ -9,11 +10,16 @@ import { variables } from 'styles/variables';
 import { StyledAppletName } from './AppletItem.styles';
 
 export const AppletItem = ({ item }: { item: Row }) => {
+  const navigate = useNavigate();
   const timeAgo = useTimeAgo();
+
+  const handleAppletClick = (id: string | undefined) => {
+    if (id) navigate(`/${id}`);
+  };
 
   return (
     <TableRow>
-      <TableCell width="30%">
+      <TableCell width="30%" onClick={() => handleAppletClick(item.id)}>
         <StyledAppletName>
           <AppletImage image={item.image} appletName={item.name} />
           <StyledBodyMedium color={variables.palette.on_surface} fontWeight={'medium'}>
@@ -21,7 +27,7 @@ export const AppletItem = ({ item }: { item: Row }) => {
           </StyledBodyMedium>
         </StyledAppletName>
       </TableCell>
-      <TableCell width="15%">
+      <TableCell width="15%" onClick={() => handleAppletClick(item.id)}>
         {item.updated ? timeAgo.format(new Date(item.updated)) : ''}
       </TableCell>
       <TableCell align="right">...</TableCell>
