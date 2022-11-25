@@ -5,8 +5,7 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledQuantityCircle } from 'styles/styledComponents/QuantityCircle';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-
-import { TOP_BAR_HEIGHT } from './TopBar.const';
+import { TOP_BAR_HEIGHT } from 'utils/constants';
 
 export const StyledTopBar = styled(Box)`
   height: ${TOP_BAR_HEIGHT};

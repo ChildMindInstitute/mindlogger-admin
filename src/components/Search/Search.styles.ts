@@ -7,6 +7,8 @@ import { variables } from 'styles/variables';
 export const StyledTextField = styled(OutlinedInput)`
   height: 4rem;
   width: 49.8rem;
+  background-color: ${variables.palette.surface1};
+  border-radius: 2.2rem;
 
   .MuiOutlinedInput-input {
     padding: 0;
@@ -18,12 +20,11 @@ export const StyledTextField = styled(OutlinedInput)`
   }
 
   .MuiOutlinedInput-notchedOutline {
-    border: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
-    border-radius: 2.2rem;
+    border: none;
   }
 `;
 
 export const StyledIcon = styled(Box)`
   display: flex;
-  margin-right: ${theme.spacing(2)};
+  margin-right: ${theme.spacing(1)};
 `;

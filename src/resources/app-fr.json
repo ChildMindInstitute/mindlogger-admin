@@ -46,9 +46,8 @@
   "dashboardTabsLabel": "Applets",
   "dashboardTabsLabel2": "Gestionnaires",
   "dashboardTabsLabel3": "Répondants",
-  "show": "Afficher",
   "addApplet": "Ajouter une applet",
-  "dataRetentionSettings": "Paramètres de conservation des données",
   "alerts": "Alertes",
-  "unread": "non lu"
+  "unread": "non lu",
+  "addFolder": "Ajouter le dossier"
 }
