@@ -127,9 +127,9 @@ export const getAccountUserListApi = (
     params: {
       appletId,
       role,
-      MRN,
-      pagination,
-      sort,
+      MRN: MRN || '',
+      pagination: pagination || JSON.stringify({ allow: false }),
+      sort: sort || JSON.stringify({ allow: false }),
     },
     signal,
   });

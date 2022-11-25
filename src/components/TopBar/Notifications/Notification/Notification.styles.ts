@@ -4,6 +4,7 @@ import { Box, Button } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledLabelSmall } from 'styles/styledComponents/Typography';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 const commonImgStyles = `
   width: 4rem;
@@ -27,9 +28,7 @@ export const StyledNotification = styled(Button)`
   }
 `;
 
-export const StyledLeftSection = styled(Box)`
-  display: flex;
-  align-items: center;
+export const StyledLeftSection = styled(StyledFlexTopCenter)`
   margin-right: ${theme.spacing(2.1)};
 `;
 

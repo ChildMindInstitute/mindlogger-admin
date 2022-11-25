@@ -8,6 +8,7 @@ import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import avatarSrc from 'assets/images/avatar.png';
 import { variables } from 'styles/variables';
 import { Svg } from 'components/Svg';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { Notifications } from '../Notifications';
 import {
@@ -16,7 +17,6 @@ import {
   StyledHeaderInfo,
   StyledImage,
   StyledAvatarWrapper,
-  StyledHeaderRight,
   StyledFooter,
   StyledLogOutBtn,
   StyledQuantity,
@@ -43,7 +43,7 @@ export const AccountPanel = ({
           <StyledClearedButton onClick={() => setShowDrawer(false)}>
             <Svg id="navigate-next" />
           </StyledClearedButton>
-          <StyledHeaderRight>
+          <StyledFlexTopCenter>
             <StyledHeaderInfo>
               {authData && (
                 <StyledTitleSmall color={variables.palette.on_surface_variant}>
@@ -68,7 +68,7 @@ export const AccountPanel = ({
                 </StyledQuantity>
               )}
             </StyledAvatarWrapper>
-          </StyledHeaderRight>
+          </StyledFlexTopCenter>
         </StyledHeader>
         {alertsQuantity > 0 && <Notifications alertsQuantity={alertsQuantity} />}
       </Box>

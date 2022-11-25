@@ -73,6 +73,35 @@ export type SwitchAccountData = {
   authToken: AuthToken;
 };
 
+export type FoldersApplets = {
+  depth?: number;
+  id?: string;
+  isExpanded?: boolean;
+  isRenaming?: boolean;
+  isFolder?: boolean;
+  isNew?: boolean;
+  isVisible?: boolean;
+  items?: FoldersApplets[];
+  name?: string;
+  description?: string;
+  displayName?: string;
+  editing?: boolean;
+  encryption?: {
+    appletPrime: number[];
+    appletPublicKey: number[];
+    base: number[];
+  };
+  hasUrl?: boolean;
+  image?: string;
+  largeApplet?: boolean;
+  published?: boolean;
+  roles?: string[];
+  themeId?: string;
+  updated?: string;
+  welcomeApplet?: boolean;
+};
+
 export type AccountSchema = {
   switchAccount: BaseSchema<SwitchAccountData | null>;
+  accountFoldersApplets: BaseSchema<FoldersApplets[] | null>;
 };

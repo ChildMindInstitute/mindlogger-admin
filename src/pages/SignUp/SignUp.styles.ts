@@ -4,24 +4,7 @@ import { Button, Box, Link } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-
 import { StyledHeadline, StyledLabelMedium } from 'styles/styledComponents/Typography';
-
-export const StyledSignUp = styled(Box)`
-  width: 100%;
-`;
-
-export const StyledContainerWrapper = styled(Box)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-
-export const StyledContainer = styled(Box)`
-  width: 37.6rem;
-  margin: ${theme.spacing(2.4, 0)};
-`;
 
 export const StyledSignUpHeader = styled(StyledHeadline)`
   margin: ${theme.spacing(0, 0, 2.4)};

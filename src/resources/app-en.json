@@ -46,9 +46,8 @@
   "dashboardTabsLabel": "Applets",
   "dashboardTabsLabel2": "Managers",
   "dashboardTabsLabel3": "Respondents",
-  "show": "Show",
   "addApplet": "Add Applet",
-  "dataRetentionSettings": "Data Retention Settings",
   "alerts": "Alerts",
-  "unread": "Unread"
+  "unread": "Unread",
+  "addFolder": "Add Folder"
 }

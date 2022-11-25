@@ -1,7 +1,15 @@
 import { TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
+import { StyledTableCell } from 'components/Table/Head/Head.styles';
+
 import { HeadProps } from './Head.types';
 
-export const Head = ({ headCells, order, orderBy, onRequestSort }: HeadProps): JSX.Element => {
+export const Head = ({
+  tableHeader,
+  headCells,
+  order,
+  orderBy,
+  onRequestSort,
+}: HeadProps): JSX.Element => {
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
@@ -9,8 +17,11 @@ export const Head = ({ headCells, order, orderBy, onRequestSort }: HeadProps): J
   return (
     <TableHead>
       <TableRow>
+        <TableCell colSpan={headCells.length}>{tableHeader}</TableCell>
+      </TableRow>
+      <TableRow>
         {headCells.map(({ id, label, align, enableSort, width }) => (
-          <TableCell
+          <StyledTableCell
             key={id}
             width={width}
             align={align}
@@ -27,7 +38,7 @@ export const Head = ({ headCells, order, orderBy, onRequestSort }: HeadProps): J
             ) : (
               <>{label}</>
             )}
-          </TableCell>
+          </StyledTableCell>
         ))}
       </TableRow>
     </TableHead>

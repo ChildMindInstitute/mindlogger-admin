@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
-import { auth, breadcrumbs } from 'redux/modules';
+import { auth, account, breadcrumbs, users } from 'redux/modules';
 import { Tabs } from 'components/Tabs';
 
 import { StyledDashboard } from './Dashboard.styles';
@@ -10,6 +10,7 @@ import { StyledDashboard } from './Dashboard.styles';
 export const Dashboard = () => {
   const dispatch = useAppDispatch();
   const authData = auth.useData();
+  const accountData = account.useData();
 
   useEffect(() => {
     if (authData) {
@@ -24,6 +25,17 @@ export const Dashboard = () => {
       );
     }
   }, [dispatch, authData]);
+
+  useEffect(() => {
+    if (accountData?.account.folders.length) {
+      dispatch(account.thunk.getAppletsForFolders({ account: accountData?.account }));
+    }
+  }, [dispatch, accountData?.account.folders]);
+
+  useEffect(() => {
+    dispatch(users.thunk.getManagersList());
+    dispatch(users.thunk.getUsersList());
+  }, [dispatch]);
 
   return (
     <StyledDashboard>
