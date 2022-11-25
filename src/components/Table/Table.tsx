@@ -4,9 +4,10 @@ import uniqueId from 'lodash.uniqueid';
 
 import { DEFAULT_ROWS_PER_PAGE } from 'components/Table/Table.const';
 import { Head } from 'components/Table/Head';
+import { Order } from 'types/table';
 
 import { StyledTableContainer, StyledTableCellContent } from 'components/Table/Table.styles';
-import { Order, Row, TableProps } from './Table.types';
+import { Row, TableProps } from './Table.types';
 
 export const Table = ({
   columns,

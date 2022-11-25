@@ -3,9 +3,10 @@ import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { DEFAULT_ROWS_PER_PAGE } from 'components/Table/Table.const';
 import { Head } from 'components/Table/Head';
+import { Order } from 'types/table';
 
 import { StyledTableContainer, StyledCellItem, StyledTableCellContent } from './Table.styles';
-import { Order, Row, TableProps } from './Table.types';
+import { Row, TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
 

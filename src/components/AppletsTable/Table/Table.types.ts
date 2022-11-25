@@ -1,15 +1,4 @@
-export type Order = 'asc' | 'desc';
-
-export type Cell = {
-  align?: 'center' | 'inherit' | 'justify' | 'left' | 'right';
-  width?: string;
-};
-
-export type HeadCell = Cell & {
-  id: string;
-  label: string;
-  enableSort?: boolean;
-};
+import { HeadCell } from 'types/table';
 
 export type Row = {
   // main properties for folder and applet

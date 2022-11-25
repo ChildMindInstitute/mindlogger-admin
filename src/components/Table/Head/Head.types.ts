@@ -1,4 +1,4 @@
-import { HeadCell, Order } from '../Table.types';
+import { HeadCell, Order } from 'types/table';
 
 export type HeadProps = {
   tableHeader: JSX.Element;
