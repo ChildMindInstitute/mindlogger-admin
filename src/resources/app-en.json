@@ -52,7 +52,7 @@
   "appletTabsLabel2": "Managers",
   "show": "Show",
   "addApplet": "Add Applet",
-  "dataRetentionSettings": "Data Retention Settings",
   "alerts": "Alerts",
-  "unread": "Unread"
+  "unread": "Unread",
+  "addFolder": "Add Folder"
 }

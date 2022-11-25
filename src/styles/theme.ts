@@ -68,7 +68,7 @@ const theme = createTheme({
         },
       },
     },
-    MuiTable: {
+    MuiTableContainer: {
       styleOverrides: {
         root: {
           borderCollapse: 'unset',
@@ -82,10 +82,10 @@ const theme = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: {
-          '.MuiTableCell-head ~ .MuiTableCell-head': {
-            borderLeftWidth: variables.borderWidth.md,
-            borderLeftStyle: 'solid',
-            borderLeftColor: variables.palette.surface_variant,
+          '.MuiTableCell-head': {
+            borderLeft: 'none',
+            color: variables.palette.on_surface_variant,
+            fontWeight: variables.font.weight.medium,
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
             borderLeftWidth: variables.borderWidth.md,
@@ -125,7 +125,11 @@ const theme = createTheme({
         },
         head: {
           fontWeight: variables.font.weight.semiBold,
-          color: variables.palette.black,
+          color: variables.palette.on_surface_variant,
+
+          '.MuiTableSortLabel-root.Mui-active': {
+            color: variables.palette.on_surface_variant,
+          },
         },
       },
     },
@@ -141,31 +145,18 @@ const theme = createTheme({
         root: {
           '&.MuiTablePagination-toolbar': {
             padding: 0,
-            color: variables.palette.on_surface,
-            marginTop: '2.4rem',
+            color: variables.palette.on_surface_variant,
 
             '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': {
-              fontWeight: variables.font.weight.semiBold,
+              fontWeight: variables.font.weight.regular,
               fontSize: variables.font.size.md,
               lineHeight: variables.lineHeight.md,
             },
-
             '.MuiInputBase-root': {
-              borderWidth: variables.borderWidth.md,
-              borderStyle: 'solid',
-              borderColor: variables.palette.outline_variant,
-              borderRadius: variables.borderRadius.md,
-              margin: '0 1rem',
-            },
-
-            '.MuiTablePagination-select': {
-              padding: '0.7rem 1rem',
-              marginRight: '0.5rem',
-              '&:focus': {
-                backgroundColor: 'transparent',
-              },
+              display: 'none',
             },
             '.MuiTablePagination-actions': {
+              color: variables.palette.on_surface_variant,
               marginLeft: '1rem',
             },
           },
