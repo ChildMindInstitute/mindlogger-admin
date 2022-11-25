@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { TabPanel } from './TabPanel';
 import { StyledTabs } from './Tabs.style';
-import { tabs } from './Tabs.const';
+import { TabsProps } from './Tabs.types';
 
-export const Tabs = () => {
+export const Tabs = ({ tabs }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(0);
 

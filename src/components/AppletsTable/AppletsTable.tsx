@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
@@ -14,22 +15,27 @@ import { headCells } from './AppletsTable.const';
 import { AppletsTableHeader } from './AppletsTable.styles';
 
 export const AppletsTable = (): JSX.Element => {
+  const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
   const accData = account.useData();
   const [searchValue, setSearchValue] = useState('');
 
-  const formattedApplets = accData?.account?.applets?.map(({ displayName, updated }) => {
+  const handleAppletClick = (id: string) => navigate(`/${id}`);
+
+  const formattedApplets = accData?.account?.applets?.map(({ id, displayName, updated }) => {
     const lastEdited = timeAgo.format(new Date(updated));
 
     return {
       appletName: {
         content: () => displayName,
         value: displayName,
+        onClick: () => handleAppletClick(id),
       },
       lastEdited: {
         content: () => lastEdited,
         value: lastEdited,
+        onClick: () => handleAppletClick(id),
       },
       actions: {
         content: () => '',

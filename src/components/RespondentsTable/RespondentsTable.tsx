@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Svg } from 'components/Svg';
 import { Search } from 'components/Search';
@@ -9,14 +10,19 @@ import { UserData, users } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Row } from 'components/Table';
 import { filterRows } from 'utils/filterRows';
-import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
-import { RespondentsTableHeader } from './RespondentsTable.styles';
+import {
+  RespondentsTableHeader,
+  StyledButton,
+  StyledLeftBox,
+  StyledRightBox,
+} from './RespondentsTable.styles';
 import { headCells } from './RespondentsTable.const';
 
 export const RespondentsTable = (): JSX.Element => {
-  const dispatch = useAppDispatch();
+  const { id } = useParams();
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
   const timeAgo = useTimeAgo();
   const usersData = users.useUserData();
   const [searchValue, setSearchValue] = useState('');
@@ -30,9 +36,23 @@ export const RespondentsTable = (): JSX.Element => {
     }
   };
 
-  const usersArr = usersData?.items
-    .map((item) => Object.values(item))
-    .reduce((acc: UserData[], currentValue) => acc.concat(currentValue), []);
+  const usersArr = id
+    ? usersData?.items.reduce((acc: UserData[] | null, currentValue) => {
+        if (currentValue[id] && acc) {
+          return acc.concat(currentValue[id]);
+        }
+
+        return null;
+      }, [])
+    : usersData?.items
+        .map((item) => Object.values(item))
+        .reduce((acc: UserData[] | null, currentValue) => {
+          if (currentValue && acc) {
+            return acc.concat(currentValue);
+          }
+
+          return null;
+        }, []);
 
   const rows = usersArr?.map(({ pinned, MRN, nickName, updated, _id: profileId }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
@@ -80,9 +100,18 @@ export const RespondentsTable = (): JSX.Element => {
   return (
     <>
       <RespondentsTableHeader>
-        <StyledFlexAllCenter>
-          <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
-        </StyledFlexAllCenter>
+        {id && (
+          <StyledLeftBox>
+            <StyledButton
+              variant="roundedOutlined"
+              startIcon={<Svg width={14} height={14} id="respondent" />}
+            >
+              {t('addRespondent')}
+            </StyledButton>
+          </StyledLeftBox>
+        )}
+        <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
+        {id && <StyledRightBox />}
       </RespondentsTableHeader>
       <Table columns={headCells} rows={handleFilterRows(rows as Row[])} orderBy={'updated'} />
     </>

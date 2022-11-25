@@ -35,4 +35,20 @@ export const users = {
         },
       }) => data,
     ),
+  useUserMetaStatus: (): UsersSchema['user']['status'] =>
+    useAppSelector(
+      ({
+        users: {
+          user: { status },
+        },
+      }) => status,
+    ),
+  useManagerMetaStatus: (): UsersSchema['manager']['status'] =>
+    useAppSelector(
+      ({
+        users: {
+          user: { status },
+        },
+      }) => status,
+    ),
 };
