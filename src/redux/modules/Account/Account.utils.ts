@@ -1,4 +1,11 @@
-import { AppletResponse, Folder, LoadedFolder, LoadedFolderApplet } from 'redux/modules';
+import { Draft } from '@reduxjs/toolkit';
+import {
+  AppletResponse,
+  BaseSchema,
+  Folder,
+  LoadedFolder,
+  LoadedFolderApplet,
+} from 'redux/modules';
 
 const removeDuplicateApplets = (loadedFolder: LoadedFolder) => {
   const hash: { [key: string]: LoadedFolderApplet } = {};
@@ -49,4 +56,11 @@ export const setAppletsInFolder = ({
   }
 
   return loadedFolder;
+};
+
+export const createAccountPendingData = (accountData: Draft<BaseSchema>, requestId: string) => {
+  if (accountData.status !== 'loading') {
+    accountData.requestId = requestId;
+    accountData.status = 'loading';
+  }
 };

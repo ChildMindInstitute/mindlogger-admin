@@ -6,13 +6,11 @@ import { ErrorResponse } from 'redux/modules/Base';
 import { AccountSchema } from './Account.schema';
 import { getAppletsForFolders, switchAccount } from './Account.thunk';
 import { state as initialState } from './Account.state';
+import { createAccountPendingData } from './Account.utils';
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AccountSchema>): void => {
   builder.addCase(switchAccount.pending, ({ switchAccount }, action) => {
-    if (switchAccount.status !== 'loading') {
-      switchAccount.requestId = action.meta.requestId;
-      switchAccount.status = 'loading';
-    }
+    createAccountPendingData(switchAccount, action.meta.requestId);
   });
 
   builder.addCase(switchAccount.fulfilled, ({ switchAccount }, action) => {
@@ -33,10 +31,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AccountSchema>): 
   });
 
   builder.addCase(getAppletsForFolders.pending, ({ accountFoldersApplets }, action) => {
-    if (accountFoldersApplets.status !== 'loading') {
-      accountFoldersApplets.requestId = action.meta.requestId;
-      accountFoldersApplets.status = 'loading';
-    }
+    createAccountPendingData(accountFoldersApplets, action.meta.requestId);
   });
 
   builder.addCase(getAppletsForFolders.fulfilled, ({ accountFoldersApplets }, action) => {
