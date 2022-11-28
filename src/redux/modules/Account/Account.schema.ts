@@ -73,6 +73,84 @@ export type SwitchAccountData = {
   authToken: AuthToken;
 };
 
+export type FoldersApplets = {
+  depth?: number;
+  id?: string;
+  isExpanded?: boolean;
+  isRenaming?: boolean;
+  isFolder?: boolean;
+  isNew?: boolean;
+  isVisible?: boolean;
+  items?: FoldersApplets[];
+  name?: string;
+  description?: string;
+  displayName?: string;
+  editing?: boolean;
+  encryption?: {
+    appletPrime: number[];
+    appletPublicKey: number[];
+    base: number[];
+  };
+  hasUrl?: boolean;
+  image?: string;
+  largeApplet?: boolean;
+  published?: boolean;
+  roles?: string[];
+  themeId?: string;
+  updated?: string;
+  welcomeApplet?: boolean;
+};
+
+export type AppletResponse = {
+  accountId: string;
+  activities: {
+    [key: string]: string;
+  };
+  activityFlows: Record<string, string>;
+  applet: {
+    description: string;
+    displayName: string;
+    editing: boolean;
+    encryption: {
+      appletPrime: number[];
+      appletPublicKey: number[];
+      base: number[];
+    };
+    image: string;
+    largeApplet: boolean;
+    themeId: string;
+    url: string;
+    version: string;
+    _id: string;
+  };
+  encryption?: {
+    appletPrime: number[];
+    appletPublicKey: number[];
+    base: number[];
+  };
+  hasUrl: boolean;
+  id?: string;
+  name?: string;
+  published: boolean;
+  roles: string[];
+  updated: string;
+};
+
+export type LoadedFolderApplet = AppletResponse &
+  Partial<{
+    isFolder: boolean;
+    isChild: boolean;
+    isExpanded: boolean;
+  }>;
+
+export type LoadedFolder = Folder &
+  Partial<AppletResponse> & {
+    isFolder: boolean;
+    isExpanded?: boolean;
+    items: LoadedFolderApplet[];
+  };
+
 export type AccountSchema = {
   switchAccount: BaseSchema<SwitchAccountData | null>;
+  accountFoldersApplets: BaseSchema<FoldersApplets[] | null>;
 };

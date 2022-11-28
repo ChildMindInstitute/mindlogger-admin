@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { TableCell, TableRow, TextField } from '@mui/material';
 
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import { Row } from 'components/AppletsTable/Table/Table.types';
 import { Svg } from 'components/Svg';
 import { variables } from 'styles/variables';
+import { FoldersApplets } from 'redux/modules';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { StyledFolderIcon } from './FolderItem.styles';
 
-export const FolderItem = ({ item }: { item: Row }) => {
+export const FolderItem = ({ item }: { item: FoldersApplets }) => {
   const [row, setRow] = useState(item);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

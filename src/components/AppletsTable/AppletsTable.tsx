@@ -3,20 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
 import { Svg } from 'components/Svg';
-import { account } from 'redux/modules';
+import { account, FoldersApplets } from 'redux/modules';
 import { Search } from 'components/Search';
 
 import { Table } from './Table';
-import { Row } from './Table/Table.types';
 import { headCells } from './AppletsTable.const';
 import { StyledButtons, AppletsTableHeader } from './AppletsTable.styles';
 
 export const AppletsTable = (): JSX.Element => {
   const { t } = useTranslation('app');
-  const accData = account.useData();
+
+  const currentFoldersApplets = account.useFoldersApplets();
+
   const [searchValue, setSearchValue] = useState('');
 
-  const formattedRows: Row[] = [...(accData?.account?.applets || [])];
+  const formattedRows: FoldersApplets[] = [...(currentFoldersApplets || [])];
 
   const addFolder = () => {
     console.log('Add folder');
@@ -26,7 +27,10 @@ export const AppletsTable = (): JSX.Element => {
     setSearchValue(value);
   };
 
-  const filterRows = (row: Row) => {
+  const filterRows = (row: FoldersApplets) => {
+    if (!searchValue) {
+      return row;
+    }
     if (!row?.isFolder && row?.name?.toLowerCase().includes(searchValue?.toLowerCase())) {
       return row;
     } else {

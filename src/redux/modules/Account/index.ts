@@ -27,4 +27,12 @@ export const account = {
         },
       }) => data,
     ),
+  useFoldersApplets: (): AccountSchema['accountFoldersApplets']['data'] =>
+    useAppSelector(
+      ({
+        account: {
+          accountFoldersApplets: { data },
+        },
+      }) => data,
+    ),
 };

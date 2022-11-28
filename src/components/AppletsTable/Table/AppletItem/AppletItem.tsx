@@ -1,14 +1,14 @@
 import { TableCell, TableRow } from '@mui/material';
 
-import { Row } from 'components/AppletsTable/Table/Table.types';
 import { AppletImage } from 'components/AppletsTable/Table/AppletImage';
 import { useTimeAgo } from 'hooks';
+import { FoldersApplets } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { variables } from 'styles/variables';
 
 import { StyledAppletName } from './AppletItem.styles';
 
-export const AppletItem = ({ item }: { item: Row }) => {
+export const AppletItem = ({ item }: { item: FoldersApplets }) => {
   const timeAgo = useTimeAgo();
 
   return (

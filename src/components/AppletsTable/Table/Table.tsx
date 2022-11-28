@@ -3,10 +3,11 @@ import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { DEFAULT_ROWS_PER_PAGE } from 'components/Table/Table.const';
 import { Head } from 'components/Table/Head';
+import { FoldersApplets } from 'redux/modules';
 import { Order } from 'types/table';
 
 import { StyledTableContainer, StyledCellItem, StyledTableCellContent } from './Table.styles';
-import { Row, TableProps } from './Table.types';
+import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
 
@@ -15,18 +16,21 @@ export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: Ta
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
 
-  function descendingComparator(a: Row, b: Row, orderBy: string) {
-    if (b[orderBy as keyof Row]! < a[orderBy as keyof Row]!) {
+  function descendingComparator(a: FoldersApplets, b: FoldersApplets, orderBy: string) {
+    if (b[orderBy as keyof FoldersApplets]! < a[orderBy as keyof FoldersApplets]!) {
       return -1;
     }
-    if (b[orderBy as keyof Row]! > a[orderBy as keyof Row]!) {
+    if (b[orderBy as keyof FoldersApplets]! > a[orderBy as keyof FoldersApplets]!) {
       return 1;
     }
 
     return 0;
   }
 
-  function getComparator(order: Order, orderBy: string): (a: Row, b: Row) => number {
+  function getComparator(
+    order: Order,
+    orderBy: string,
+  ): (a: FoldersApplets, b: FoldersApplets) => number {
     return order === 'desc'
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
