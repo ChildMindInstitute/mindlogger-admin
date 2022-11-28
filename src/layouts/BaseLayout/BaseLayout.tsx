@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import { LeftBar } from 'components/LeftBar';
 import { TopBar } from 'components/TopBar';

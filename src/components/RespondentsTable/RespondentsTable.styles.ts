@@ -20,10 +20,10 @@ export const StyledButton = styled(Button)`
 
 export const StyledLeftBox = styled(StyledFlexTopCenter)`
   margin-right: ${theme.spacing(1)};
-  flex: 0 0 calc(100% / 4);
+  flex: 0 0 25%;
 `;
 
 export const StyledRightBox = styled(Box)`
   margin-left: ${theme.spacing(1)};
-  flex: 0 0 calc(100% / 4);
+  flex: 0 0 25%;
 `;

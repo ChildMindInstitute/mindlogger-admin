@@ -6,7 +6,7 @@ import { Svg } from 'components/Svg';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
-import { UserData, users } from 'redux/modules';
+import { users } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Row } from 'components/Table';
 import { filterRows } from 'utils/filterRows';
@@ -18,6 +18,7 @@ import {
   StyledRightBox,
 } from './RespondentsTable.styles';
 import { headCells } from './RespondentsTable.const';
+import { prepareAllUsersData, prepareAppletUsersData } from './RespondentsTable.utils';
 
 export const RespondentsTable = (): JSX.Element => {
   const { id } = useParams();
@@ -37,22 +38,8 @@ export const RespondentsTable = (): JSX.Element => {
   };
 
   const usersArr = id
-    ? usersData?.items.reduce((acc: UserData[] | null, currentValue) => {
-        if (currentValue[id] && acc) {
-          return acc.concat(currentValue[id]);
-        }
-
-        return null;
-      }, [])
-    : usersData?.items
-        .map((item) => Object.values(item))
-        .reduce((acc: UserData[] | null, currentValue) => {
-          if (currentValue && acc) {
-            return acc.concat(currentValue);
-          }
-
-          return null;
-        }, []);
+    ? prepareAppletUsersData(id, usersData?.items)
+    : prepareAllUsersData(usersData?.items);
 
   const rows = usersArr?.map(({ pinned, MRN, nickName, updated, _id: profileId }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
