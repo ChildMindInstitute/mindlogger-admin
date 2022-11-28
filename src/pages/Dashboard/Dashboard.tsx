@@ -27,10 +27,10 @@ export const Dashboard = () => {
   }, [dispatch, authData]);
 
   useEffect(() => {
-    if (accountData?.account.folders.length) {
+    if (accountData?.account) {
       dispatch(account.thunk.getAppletsForFolders({ account: accountData?.account }));
     }
-  }, [dispatch, accountData?.account.folders]);
+  }, [dispatch, accountData?.account]);
 
   useEffect(() => {
     dispatch(users.thunk.getManagersList());

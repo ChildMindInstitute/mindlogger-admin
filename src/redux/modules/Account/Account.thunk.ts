@@ -37,16 +37,19 @@ export const updateAlertStatus = createAsyncThunk(
 export const getAppletsForFolders = createAsyncThunk(
   'account/getAppletsInFolders',
   async ({ account }: { account: Account }, { dispatch }) => {
-    const foldersData = await Promise.allSettled(
-      account.folders.map(async (folder) => await dispatch(getAppletsForFolder({ folder }))),
-    );
+    let foldersData = [];
 
-    return [
-      ...foldersData
+    if (account.folders.length) {
+      foldersData = (
+        await Promise.allSettled(
+          account.folders.map(async (folder) => await dispatch(getAppletsForFolder({ folder }))),
+        )
+      )
         .filter((folder) => folder.status === 'fulfilled')
-        .map((folder) => (folder as PromiseFulfilledResult<any>).value.payload),
-      ...account.applets,
-    ];
+        .map((folder) => (folder as PromiseFulfilledResult<any>).value.payload);
+    }
+
+    return [...foldersData, ...account.applets];
   },
 );
 
