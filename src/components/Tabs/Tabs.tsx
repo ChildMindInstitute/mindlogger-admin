@@ -3,10 +3,8 @@ import Tab from '@mui/material/Tab';
 import { useTranslation } from 'react-i18next';
 
 import { TabPanel } from './TabPanel';
-import { StyledTabs } from './Tabs.style';
-import { TabsProps } from './Tabs.types';
 import { StyledTabs } from './Tabs.styles';
-import { tabs } from './Tabs.const';
+import { TabsProps } from './Tabs.types';
 
 export const Tabs = ({ tabs }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
