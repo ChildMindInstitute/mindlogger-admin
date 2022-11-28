@@ -3,6 +3,7 @@
   "signUp": "/auth/signup",
   "passwordReset": "/auth/reset-password",
   "dashboard": "/",
+  "applet": "/:id",
   "builder": "/builder",
   "library": "/library"
 }

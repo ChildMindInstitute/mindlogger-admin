@@ -8,7 +8,10 @@ type CommonUserData = {
   identifiers: string;
   nickName: string;
   pinned: boolean;
-  refreshRequest: string | null;
+  refreshRequest: {
+    requestDate: string;
+    userPublicKey: string[];
+  } | null;
   roles: string[];
   updated: string | null;
   viewable: boolean;

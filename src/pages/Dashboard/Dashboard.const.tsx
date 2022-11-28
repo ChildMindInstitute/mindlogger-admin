@@ -3,7 +3,7 @@ import { ManagersTable } from 'components/ManagersTable';
 import { RespondentsTable } from 'components/RespondentsTable';
 import { Svg } from 'components/Svg';
 
-export const tabs = [
+export const dashboardTabs = [
   {
     labelKey: 'dashboardTabsLabel',
     icon: <Svg id="applet-outlined" />,

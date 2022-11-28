@@ -22,7 +22,10 @@ export type Profile = {
   lastName: string;
   nickName: string;
   pinned: false;
-  refreshRequest: string | null;
+  refreshRequest: {
+    requestDate: string;
+    userPublicKey: string[];
+  } | null;
   roles: string[];
   updated: string;
   viewable: boolean;
