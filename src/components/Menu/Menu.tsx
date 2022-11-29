@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-
 import { ListItemIcon, MenuItem } from '@mui/material';
+
 import { Svg } from 'components/Svg';
 import { StyledTitleSmall } from 'styles/styledComponents/Typography';
 
