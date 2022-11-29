@@ -1,34 +1,28 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
-import { ManagerData, users } from 'redux/modules';
+import { users } from 'redux/modules';
 import { Row } from 'components/Table';
 import { filterRows } from 'utils/filterRows';
-import { FOOTER_HEIGHT, SEARCH_HEIGHT, TABS_HEIGHT, TOP_BAR_HEIGHT } from 'utils/constants';
 
 import { ManagersTableHeader } from './ManagersTable.styles';
 import { headCells } from './ManagersTable.const';
-
-const tableHeight = `calc(100vh - ${TOP_BAR_HEIGHT} - ${FOOTER_HEIGHT} - ${TABS_HEIGHT} - ${SEARCH_HEIGHT} - 6.4rem)`;
+import { prepareManagersData, tableHeight } from './ManagersTable.utils';
 
 export const ManagersTable = (): JSX.Element => {
+  const { id } = useParams();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
   const managersData = users.useManagerData();
   const [searchValue, setSearchValue] = useState('');
 
-  const managersArr = managersData?.items
-    .map((item) => Object.values(item))
-    .reduce((acc: ManagerData[] | null, currentValue) => {
-      if (currentValue && acc) {
-        return acc.concat(currentValue);
-      }
-
-      return null;
-    }, []);
+  const managersArr = id
+    ? prepareManagersData(managersData?.items, id)
+    : prepareManagersData(managersData?.items);
 
   const rows = managersArr?.map(({ email, firstName, lastName, updated }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';

@@ -37,7 +37,7 @@ export const AccountPanel = ({
   };
 
   return (
-    <StyledAccountDrawer anchor="right" open={showDrawer}>
+    <StyledAccountDrawer anchor="right" open={showDrawer} hideBackdrop>
       <Box>
         <StyledHeader>
           <StyledClearedButton onClick={() => setShowDrawer(false)}>

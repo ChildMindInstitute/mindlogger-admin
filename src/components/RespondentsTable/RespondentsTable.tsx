@@ -18,7 +18,7 @@ import {
   StyledRightBox,
 } from './RespondentsTable.styles';
 import { headCells } from './RespondentsTable.const';
-import { prepareAllUsersData, prepareAppletUsersData } from './RespondentsTable.utils';
+import { prepareUsersData } from './RespondentsTable.utils';
 
 export const RespondentsTable = (): JSX.Element => {
   const { id } = useParams();
@@ -37,9 +37,7 @@ export const RespondentsTable = (): JSX.Element => {
     }
   };
 
-  const usersArr = id
-    ? prepareAppletUsersData(id, usersData?.items)
-    : prepareAllUsersData(usersData?.items);
+  const usersArr = id ? prepareUsersData(usersData?.items, id) : prepareUsersData(usersData?.items);
 
   const rows = usersArr?.map(({ pinned, MRN, nickName, updated, _id: profileId }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';

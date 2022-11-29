@@ -11,11 +11,13 @@ import { RespondentsTable } from 'components/RespondentsTable';
 import { ManagersTable } from 'components/ManagersTable';
 import { Spinner } from 'components/Spinner';
 
+import { getAppletName } from './Applet.utils';
+
 export const Applet = (): JSX.Element => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const authData = auth.useData();
-  const accData = account.useData();
+  const appletsFoldersData = account.useFoldersApplets();
   const usersData = users.useUserData();
   const userMetaStatus = users.useUserMetaStatus();
   const managerMetaStatus = users.useManagerMetaStatus();
@@ -40,10 +42,9 @@ export const Applet = (): JSX.Element => {
   ];
 
   useEffect(() => {
-    if (authData && accData) {
+    if (authData && appletsFoldersData) {
       const { firstName, lastName } = authData.user;
-      const { applets } = accData.account;
-      const appletName = applets.find((applet) => applet.id === id)?.name;
+      const appletName = getAppletName(appletsFoldersData, id);
 
       dispatch(
         breadcrumbs.actions.setBreadcrumbs([
@@ -52,15 +53,13 @@ export const Applet = (): JSX.Element => {
             navPath: page.dashboard,
           },
           {
-            // TODO: get the applet name from the folder when the corresponding
-            //  getAppletsInFolderApi endpoint is connected to redux-store
             label: appletName || '',
             navPath: page.applet,
           },
         ]),
       );
     }
-  }, [dispatch, authData, accData]);
+  }, [dispatch, authData, appletsFoldersData, id]);
 
   return (
     <StyledBody>
