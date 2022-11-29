@@ -5,13 +5,14 @@ import { useParams } from 'react-router-dom';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
-import { users } from 'redux/modules';
+import { ManagerData, users } from 'redux/modules';
 import { Row } from 'components/Table';
 import { filterRows } from 'utils/filterRows';
+import { prepareUsersData } from 'utils/prepareUsersData';
 
 import { ManagersTableHeader } from './ManagersTable.styles';
 import { headCells } from './ManagersTable.const';
-import { prepareManagersData, tableHeight } from './ManagersTable.utils';
+import { tableHeight } from './ManagersTable.utils';
 
 export const ManagersTable = (): JSX.Element => {
   const { id } = useParams();
@@ -20,9 +21,9 @@ export const ManagersTable = (): JSX.Element => {
   const managersData = users.useManagerData();
   const [searchValue, setSearchValue] = useState('');
 
-  const managersArr = id
-    ? prepareManagersData(managersData?.items, id)
-    : prepareManagersData(managersData?.items);
+  const managersArr = (
+    id ? prepareUsersData(managersData?.items, id) : prepareUsersData(managersData?.items)
+  ) as ManagerData[];
 
   const rows = managersArr?.map(({ email, firstName, lastName, updated }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
