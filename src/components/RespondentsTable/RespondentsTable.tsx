@@ -6,10 +6,11 @@ import { Svg } from 'components/Svg';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { useTimeAgo } from 'hooks';
-import { users } from 'redux/modules';
+import { users, UserData } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Row } from 'components/Table';
 import { filterRows } from 'utils/filterRows';
+import { prepareUsersData } from 'utils/prepareUsersData';
 
 import {
   RespondentsTableHeader,
@@ -18,7 +19,6 @@ import {
   StyledRightBox,
 } from './RespondentsTable.styles';
 import { headCells } from './RespondentsTable.const';
-import { prepareAllUsersData, prepareAppletUsersData } from './RespondentsTable.utils';
 
 export const RespondentsTable = (): JSX.Element => {
   const { id } = useParams();
@@ -37,9 +37,9 @@ export const RespondentsTable = (): JSX.Element => {
     }
   };
 
-  const usersArr = id
-    ? prepareAppletUsersData(id, usersData?.items)
-    : prepareAllUsersData(usersData?.items);
+  const usersArr = (
+    id ? prepareUsersData(usersData?.items, id) : prepareUsersData(usersData?.items)
+  ) as UserData[];
 
   const rows = usersArr?.map(({ pinned, MRN, nickName, updated, _id: profileId }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';

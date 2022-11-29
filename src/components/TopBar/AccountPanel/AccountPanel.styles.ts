@@ -4,7 +4,7 @@ import { Drawer, Box, Button } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledQuantityCircle } from 'styles/styledComponents/QuantityCircle';
-import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
+import { StyledFlexAllCenter, StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from './AccountPanel.const';
 
@@ -17,14 +17,14 @@ export const StyledAccountDrawer = styled(Drawer)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    box-shadow: unset;
+    border-left: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   }
 `;
 
-export const StyledHeader = styled(Box)`
+export const StyledHeader = styled(StyledFlexTopCenter)`
   height: ${ACCOUNT_HEADER_HEIGHT};
-  display: flex;
   justify-content: space-between;
-  align-items: center;
 `;
 
 export const StyledHeaderInfo = styled(Box)`
