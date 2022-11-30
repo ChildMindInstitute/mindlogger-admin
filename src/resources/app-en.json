@@ -50,9 +50,22 @@
   "dashboardTabsLabel3": "Respondents",
   "appletTabsLabel": "Respondents",
   "appletTabsLabel2": "Managers",
+  "appletTabsLabel3": "More",
   "show": "Show",
   "addApplet": "Add Applet",
   "alerts": "Alerts",
   "unread": "Unread",
-  "addFolder": "Add Folder"
+  "addFolder": "Add Folder",
+  "resetForm": "Reset Form",
+  "addUser": "Add User",
+  "nickname": "Nickname",
+  "role": "Role",
+  "secretUserId": "Secret User ID",
+  "language": "Language",
+  "user": "user",
+  "manager": "manager",
+  "coordinator": "coordinator",
+  "editor": "editor",
+  "reviewer": "reviewer",
+  "secretUserIdRequired": "Secret User ID is required"
 }

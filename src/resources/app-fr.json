@@ -50,9 +50,22 @@
   "dashboardTabsLabel3": "Répondants",
   "appletTabsLabel": "Répondants",
   "appletTabsLabel2": "Gestionnaires",
+  "appletTabsLabel3": "Suite",
   "show": "Afficher",
   "addApplet": "Ajouter une applet",
   "alerts": "Alertes",
   "unread": "non lu",
-  "addFolder": "Ajouter le dossier"
+  "addFolder": "Ajouter le dossier",
+  "resetForm": "Formulaire de réinitialisation",
+  "addUser": "Ajouter un utilisateur",
+  "nickname": "Surnom",
+  "role": "Rôle",
+  "secretUserId": "ID utilisateur secret",
+  "language": "Langue",
+  "user": "utilisateur",
+  "manager": "gestionnaire",
+  "coordinator": "coordinateur",
+  "editor": "éditeur",
+  "reviewer": "évaluateur",
+  "secretUserIdRequired": "Un identifiant d'utilisateur secret est requis"
 }

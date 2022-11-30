@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { InputControllerProps } from './InputController.props';
+import { InputControllerProps } from './InputController.types';
 
 export const InputController = <T extends FieldValues>({
   name,
