@@ -1,7 +1,7 @@
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { InputControllerProps } from './CheckboxController.props';
+import { InputControllerProps } from './CheckboxController.types';
 
 export const CheckboxController = <T extends FieldValues>({
   name,

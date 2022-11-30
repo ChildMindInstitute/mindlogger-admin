@@ -1,2 +1,2 @@
 export * from './InputController';
-export * from './InputController.props';
+export * from './InputController.types';

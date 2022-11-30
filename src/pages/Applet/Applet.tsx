@@ -10,6 +10,7 @@ import { Svg } from 'components/Svg';
 import { RespondentsTable } from 'components/RespondentsTable';
 import { ManagersTable } from 'components/ManagersTable';
 import { Spinner } from 'components/Spinner';
+import { More } from 'components/More';
 
 export const Applet = (): JSX.Element => {
   const { id } = useParams();
@@ -36,6 +37,12 @@ export const Applet = (): JSX.Element => {
       icon: <Svg id="manager-outlined" />,
       activeIcon: <Svg id="manager-filled" />,
       content: <ManagersTable />,
+    },
+    {
+      labelKey: 'appletTabsLabel3',
+      icon: <Svg id="dots" />,
+      activeIcon: <Svg id="dots-filled" />,
+      content: <More />,
     },
   ];
 
