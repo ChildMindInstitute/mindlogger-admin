@@ -6,7 +6,7 @@ import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { Svg } from 'components/Svg';
 import { Row } from 'components/Table';
-import { users, UserData, breadcrumbs, Breadcrumb } from 'redux/modules';
+import { users, UserData, breadcrumbs } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
@@ -86,14 +86,16 @@ export const RespondentsTable = (): JSX.Element => {
     );
 
   useEffect(() => {
-    if (id && baseBreadcrumbs && baseBreadcrumbs.length > 0) {
-      const respondentsCrumb: Breadcrumb[] = [
-        {
-          icon: <Svg id="respondent-outlined" width="13.5" height="15" />,
-          label: t('respondents'),
-        },
-      ];
-      dispatch(breadcrumbs.actions.setBreadcrumbs([...baseBreadcrumbs, ...respondentsCrumb]));
+    if (id && baseBreadcrumbs?.length > 0) {
+      dispatch(
+        breadcrumbs.actions.setBreadcrumbs([
+          ...baseBreadcrumbs,
+          {
+            icon: <Svg id="respondent-outlined" width="13.5" height="15" />,
+            label: t('respondents'),
+          },
+        ]),
+      );
     }
   }, [baseBreadcrumbs]);
 

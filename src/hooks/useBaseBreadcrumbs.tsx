@@ -14,31 +14,26 @@ export const useBaseBreadcrumbs = () => {
   const [baseBreadcrumbs, setBaseBreadcrumbs] = useState<Breadcrumb[]>([]);
 
   useEffect(() => {
-    let authCrumbs: Breadcrumb[] = [];
-    let appletCrumbs: Breadcrumb[] = [];
+    const newBreadcrumbs: Breadcrumb[] = [];
 
     if (authData) {
       const { firstName, lastName } = authData.user;
-      authCrumbs = [
-        {
-          icon: <Svg id="home" width="14" height="16" />,
-          label: `${firstName}${lastName ? ` ${lastName}` : ''}'s Dashboard`,
-          navPath: page.dashboard,
-        },
-      ];
+      newBreadcrumbs.push({
+        icon: <Svg id="home" width="14" height="16" />,
+        label: `${firstName}${lastName ? ` ${lastName}` : ''}'s Dashboard`,
+        navPath: page.dashboard,
+      });
     }
     if (id && appletsFoldersData) {
       const { name, image } = getAppletData(appletsFoldersData, id);
-      appletCrumbs = [
-        {
-          icon: image || '',
-          label: name || '',
-          navPath: `/${id}`,
-        },
-      ];
+      newBreadcrumbs.push({
+        icon: image || '',
+        label: name || '',
+        navPath: `/${id}`,
+      });
     }
 
-    setBaseBreadcrumbs([...authCrumbs, ...appletCrumbs]);
+    setBaseBreadcrumbs(newBreadcrumbs);
   }, [authData, appletsFoldersData, id]);
 
   return baseBreadcrumbs;

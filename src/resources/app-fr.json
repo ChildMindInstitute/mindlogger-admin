@@ -66,5 +66,6 @@
   "coordinator": "coordinateur",
   "editor": "éditeur",
   "reviewer": "évaluateur",
+  "takeMeToTheResponseData": "Emmenez-moi aux données de réponse",
   "secretUserIdRequired": "Un identifiant d'utilisateur secret est requis"
 }

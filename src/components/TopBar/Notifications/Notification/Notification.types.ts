@@ -1,4 +1,8 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export type NotificationProps = {
+  currentId: string;
+  setCurrentId: Dispatch<SetStateAction<string>>;
   accountId: string;
   alertId: string;
   label: string;
