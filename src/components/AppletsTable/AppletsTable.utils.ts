@@ -29,9 +29,9 @@ export const sortRows = (
   const result = rows.filter((row) => !row.parentId).sort(compareFunction);
   const folders = rows.filter((row) => row.isFolder);
   folders.forEach((folder) => {
-    const childs = rows.filter((row) => folder.id === row.parentId).sort(compareFunction);
+    const children = rows.filter((row) => folder.id === row.parentId).sort(compareFunction);
     const index = result.findIndex((row) => row.id === folder.id);
-    insert(index + 1, result, childs);
+    insert(index + 1, result, children);
   });
   return result;
 };
