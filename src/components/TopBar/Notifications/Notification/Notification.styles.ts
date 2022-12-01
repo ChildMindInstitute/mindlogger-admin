@@ -3,7 +3,11 @@ import { Box, Button } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledLabelSmall } from 'styles/styledComponents/Typography';
+import {
+  StyledLabelMedium,
+  StyledBodyMedium,
+  StyledTitleMedium,
+} from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 const commonImgStyles = `
@@ -20,22 +24,26 @@ export const StyledNotification = styled(Button)`
   border-radius: ${variables.borderRadius.lg};
   text-align: left;
   display: flex;
-  align-items: unset;
+  flex-wrap: wrap;
   position: relative;
+  background-color: ${({ active }: { active: boolean }) =>
+    active ? variables.palette.secondary_container : 'transparent'};
 
   &:hover {
-    background-color: transparent;
+    background-color: rgba(26, 28, 30, 0.08);
   }
+`;
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: ${variables.borderWidth.md};
-    border-bottom: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-  }
+export const StyledTopSection = styled(Box)`
+  display: flex;
+`;
+
+export const StyledTitle = styled(StyledTitleMedium)`
+  margin-top: ${theme.spacing(0.4)};
+`;
+
+export const StyledMessage = styled(StyledBodyMedium)`
+  margin-top: ${theme.spacing(0.4)};
 `;
 
 export const StyledLeftSection = styled(StyledFlexTopCenter)`
@@ -85,6 +93,18 @@ export const StyledInfoCircle = styled(Box)`
   align-self: flex-end;
 `;
 
-export const StyledTimeAgo = styled(StyledLabelSmall)`
-  white-space: nowrap;
+export const StyledBottomSection = styled(Box)`
+  flex: 0 0 100%;
+  display: flex;
+  flex-direction: column;
+  padding-left: ${theme.spacing(3.8)};
+`;
+
+export const StyledBtn = styled(Button)`
+  margin-top: ${theme.spacing(1.2)};
+`;
+
+export const StyledTimeAgo = styled(StyledLabelMedium)`
+  padding-left: ${theme.spacing(1.6)};
+  margin-top: ${theme.spacing(0.8)};
 `;

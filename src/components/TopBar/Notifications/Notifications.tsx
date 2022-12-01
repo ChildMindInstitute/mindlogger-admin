@@ -25,7 +25,10 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
   const accData = account.useData();
   const appletsFoldersData = account.useFoldersApplets();
   const [showList, setShowList] = useState(true);
-  const [notifications, setNotifications] = useState<NotificationProps[] | null>(null);
+  const [notifications, setNotifications] = useState<
+    Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null
+  >(null);
+  const [currentId, setCurrentId] = useState('');
 
   const timeAgo = useTimeAgo();
 
@@ -64,7 +67,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           </StyledLabelLarge>
         </StyledHeaderLeft>
         <StyledFlexTopCenter>
-          <StyledLabelLarge color={variables.palette.semantic.error} fontWeight="semiBold">
+          <StyledLabelLarge color={variables.palette.on_surface_variant} fontWeight="semiBold">
             {`${alertsQuantity} `}
             {t('unread')}
           </StyledLabelLarge>
@@ -76,7 +79,12 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
       {showList && notifications && (
         <StyledList>
           {notifications.map((item) => (
-            <Notification key={item.alertId} {...item} />
+            <Notification
+              key={item.alertId}
+              currentId={currentId}
+              setCurrentId={setCurrentId}
+              {...item}
+            />
           ))}
         </StyledList>
       )}

@@ -6,7 +6,7 @@ import { Search } from 'components/Search';
 import { Table } from 'components/Table';
 import { Svg } from 'components/Svg';
 import { Row } from 'components/Table';
-import { Breadcrumb, breadcrumbs, ManagerData, users } from 'redux/modules';
+import { breadcrumbs, ManagerData, users } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
@@ -70,13 +70,15 @@ export const ManagersTable = (): JSX.Element => {
 
   useEffect(() => {
     if (id && baseBreadcrumbs && baseBreadcrumbs.length > 0) {
-      const managersCrumb: Breadcrumb[] = [
-        {
-          icon: <Svg id="manager-outlined" width="15" height="15" />,
-          label: t('managers'),
-        },
-      ];
-      dispatch(breadcrumbs.actions.setBreadcrumbs([...baseBreadcrumbs, ...managersCrumb]));
+      dispatch(
+        breadcrumbs.actions.setBreadcrumbs([
+          ...baseBreadcrumbs,
+          {
+            icon: <Svg id="manager-outlined" width="15" height="15" />,
+            label: t('managers'),
+          },
+        ]),
+      );
     }
   }, [baseBreadcrumbs]);
 

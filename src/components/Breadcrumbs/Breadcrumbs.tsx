@@ -17,10 +17,11 @@ export const Breadcrumbs = (): JSX.Element => {
   const breadcrumbsData = breadcrumbs.useData();
 
   const getBreadcrumbIcon = (icon: string | JSX.Element, label: string) => {
+    let resultIcon = icon;
     if (typeof icon === 'string') {
       icon
-        ? (icon = <StyledIconImg src={icon} alt="Icon" />)
-        : (icon = (
+        ? (resultIcon = <StyledIconImg src={icon} alt="Icon" />)
+        : (resultIcon = (
             <StyledPlaceholder>
               <StyledLabelSmall color={variables.palette.on_surface}>
                 {label.substring(0, 1).toUpperCase()}
@@ -29,7 +30,7 @@ export const Breadcrumbs = (): JSX.Element => {
           ));
     }
 
-    return <StyledIconWrapper>{icon}</StyledIconWrapper>;
+    return <StyledIconWrapper>{resultIcon}</StyledIconWrapper>;
   };
 
   return (

@@ -65,5 +65,6 @@
   "coordinator": "coordinator",
   "editor": "editor",
   "reviewer": "reviewer",
+  "takeMeToTheResponseData": "Take me to the response data",
   "secretUserIdRequired": "Secret User ID is required"
 }
