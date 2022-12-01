@@ -20,7 +20,7 @@ export const variables = {
   },
   borderRadius: {
     half: '50%',
-    xxl: '10rem  ', //100px
+    xxl: '10rem', //100px
     xl: '2rem', //20px
     lg: '1.2rem', //12px
     md: '0.8rem', //8px

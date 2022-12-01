@@ -1,11 +1,12 @@
 import { FolderApplet } from 'redux/modules';
 
-export const getAppletName = (data: FolderApplet[] | null, id?: string): string | undefined => {
+export const getAppletData = (data: FolderApplet[] | null, id?: string) => {
   const appletsFoldersArr = data?.reduce((acc: FolderApplet[], current: FolderApplet) => {
     acc = current.items ? acc.concat(current.items) : acc.concat(current);
 
     return acc;
   }, []);
+  const currentApplet = appletsFoldersArr?.find((applet) => applet.id === id);
 
-  return appletsFoldersArr?.find((applet) => applet.id === id)?.name;
+  return { name: currentApplet?.name, image: currentApplet?.image };
 };

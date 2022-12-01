@@ -45,11 +45,9 @@
   "dashboard": "Dashboard",
   "builder": "Builder",
   "library": "Library",
-  "dashboardTabsLabel": "Applets",
-  "dashboardTabsLabel2": "Managers",
-  "dashboardTabsLabel3": "Respondents",
-  "appletTabsLabel": "Respondents",
-  "appletTabsLabel2": "Managers",
+  "applets": "Applets",
+  "managers": "Managers",
+  "respondents": "Respondents",
   "appletTabsLabel3": "More",
   "show": "Show",
   "addApplet": "Add Applet",
@@ -68,5 +66,6 @@
   "coordinator": "coordinator",
   "editor": "editor",
   "reviewer": "reviewer",
+  "takeMeToTheResponseData": "Take me to the response data",
   "secretUserIdRequired": "Secret User ID is required"
 }

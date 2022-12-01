@@ -1,22 +1,15 @@
 import { useEffect, useState } from 'react';
 
-import { Svg } from 'components/Svg';
 import { Breadcrumbs } from 'components/Breadcrumbs';
-import avatarSrc from 'assets/images/avatar.png';
 import { useAppDispatch } from 'redux/store';
 import { account, auth } from 'redux/modules';
 import { variables } from 'styles/variables';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import avatarSrc from 'assets/images/avatar.png';
 
 import { AccountPanel } from './AccountPanel';
-import {
-  StyledTopBar,
-  StyledMoreBtn,
-  StyledAvatarBtn,
-  StyledImage,
-  StyledQuantity,
-} from './TopBar.styles';
+import { StyledTopBar, StyledAvatarBtn, StyledImage, StyledQuantity } from './TopBar.styles';
 
 export const TopBar = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -44,9 +37,6 @@ export const TopBar = (): JSX.Element => {
       <StyledTopBar>
         <StyledFlexTopCenter>
           <Breadcrumbs />
-          <StyledMoreBtn variant="text">
-            <Svg id="more-horizontal" />
-          </StyledMoreBtn>
         </StyledFlexTopCenter>
         <StyledAvatarBtn onClick={() => setShowAccDrawer((prevState) => !prevState)} variant="text">
           <StyledImage src={avatarSrc} alt="Avatar" />
