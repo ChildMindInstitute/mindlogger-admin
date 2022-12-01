@@ -93,7 +93,7 @@ export const Notification = ({
         {isActive && (
           <StyledBtn
             variant="contained"
-            startIcon={<Svg width="22" height="22" id="data-outlined" />}
+            startIcon={<Svg width="16.5" height="16.5" id="data-outlined" />}
             onClick={handleToResponseDataClick}
           >
             {t('takeMeToTheResponseData')}

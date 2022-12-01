@@ -107,7 +107,7 @@ export const AppletsTable = (): JSX.Element => {
       <AppletsTableHeader>
         <StyledButtons>
           <Button
-            variant="roundedOutlined"
+            variant="outlined"
             startIcon={<Svg width={18} height={18} id="applet-outlined" />}
           >
             {t('addApplet')}

@@ -105,7 +105,7 @@ export const RespondentsTable = (): JSX.Element => {
         {id && (
           <StyledLeftBox>
             <StyledButton
-              variant="roundedOutlined"
+              variant="outlined"
               startIcon={<Svg width={14} height={14} id="respondent-outlined" />}
             >
               {t('addRespondent')}
