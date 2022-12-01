@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TableCell, TableRow, TextField } from '@mui/material';
 
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Svg } from 'components/Svg';
 import { variables } from 'styles/variables';
-import { FolderApplet } from 'redux/modules';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
+import { FolderItemProps } from './FolderItem.types';
 import { StyledFolderIcon, StyledCountApplets, StyledFolderName } from './FolderItem.styles';
 
-export const FolderItem = ({
-  item,
-  onRowClick,
-}: {
-  item: FolderApplet;
-  onRowClick: (row: FolderApplet) => void;
-}) => {
+export const FolderItem = ({ item, onRowClick }: FolderItemProps) => {
+  const { t } = useTranslation('app');
+
   const [row, setRow] = useState(item);
   useEffect(() => setRow(item), [item]);
 
@@ -44,7 +41,9 @@ export const FolderItem = ({
                 <StyledBodyMedium color={variables.palette.on_surface} fontWeight={'medium'}>
                   {row.name}
                 </StyledBodyMedium>
-                <StyledCountApplets> ({item?.items?.length} applets)</StyledCountApplets>
+                <StyledCountApplets>
+                  ({item?.items?.length} {t('applets')})
+                </StyledCountApplets>
               </StyledFolderName>
             </>
           )}

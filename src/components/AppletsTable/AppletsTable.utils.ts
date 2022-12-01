@@ -33,5 +33,6 @@ export const sortRows = (
     const index = result.findIndex((row) => row.id === folder.id);
     insert(index + 1, result, children);
   });
+
   return result;
 };

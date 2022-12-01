@@ -59,6 +59,7 @@ export const AppletsTable = (): JSX.Element => {
       if (row.parentId === rowClicked.id) {
         return { ...row, isVisible: !rowClicked.isExpanded };
       }
+
       return row;
     });
 
