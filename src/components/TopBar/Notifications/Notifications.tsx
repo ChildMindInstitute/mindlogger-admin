@@ -3,10 +3,11 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
-import { variables } from 'styles/variables';
-import { StyledLabelLarge } from 'styles/styledComponents/Typography';
 import { account } from 'redux/modules';
 import { useTimeAgo } from 'hooks';
+import { getAppletData } from 'utils/getAppletData';
+import { variables } from 'styles/variables';
+import { StyledLabelLarge } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { Notification, NotificationProps } from './Notification';
@@ -22,6 +23,7 @@ import { NotificationsProps } from './Notifications.types';
 export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const accData = account.useData();
+  const appletsFoldersData = account.useFoldersApplets();
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<NotificationProps[] | null>(null);
 
@@ -30,17 +32,17 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
   useEffect(() => {
     if (accData) {
       const accAlerts = accData.account.alerts.list.map((alert) => {
-        const { applets, alerts } = accData.account;
-        const applet = applets.find((applet) => applet.id === alert.appletId);
+        const { alerts } = accData.account;
         const { firstName, lastName = '' } = alerts.profiles[alert.profileId];
+        const { name, image } = getAppletData(appletsFoldersData, alert.appletId);
 
         return {
           accountId: accData.account.accountId,
           alertId: alert.id,
-          label: applet?.displayName || '',
+          label: name || '',
           title: `${firstName} ${lastName}`,
           message: alert.alertMessage,
-          imageSrc: applet?.image || null,
+          imageSrc: image || null,
           timeAgo: timeAgo.format(new Date(alert.created), 'round'),
           viewed: alert.viewed,
         };
@@ -48,14 +50,14 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
 
       setNotifications(accAlerts);
     }
-  }, [accData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [accData, appletsFoldersData]);
 
   return (
     <Box>
       <StyledHeader>
         <StyledHeaderLeft>
           <StyledIconWrapper>
-            <Svg id="notifications" width="16" height="20" />
+            <Svg id="alert" width="16" height="20" />
           </StyledIconWrapper>
           <StyledLabelLarge color={variables.palette.on_surface_variant} fontWeight="semiBold">
             {t('alerts')}

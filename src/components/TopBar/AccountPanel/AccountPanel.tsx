@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
+import { Svg } from 'components/Svg';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
-import { StyledLabelSmall, StyledTitleSmall } from 'styles/styledComponents/Typography';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import avatarSrc from 'assets/images/avatar.png';
 import { variables } from 'styles/variables';
-import { Svg } from 'components/Svg';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledLabelSmall, StyledTitleSmall } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { Notifications } from '../Notifications';
@@ -20,6 +20,7 @@ import {
   StyledFooter,
   StyledLogOutBtn,
   StyledQuantity,
+  StyledCloseWrapper,
 } from './AccountPanel.styles';
 import { AccountPanelProps } from './AccountPanel.types';
 
@@ -32,32 +33,13 @@ export const AccountPanel = ({
   const dispatch = useAppDispatch();
   const authData = auth.useData();
 
-  const handleLogout = () => {
-    dispatch(auth.actions.resetAuthorization());
-  };
+  const handleLogout = () => dispatch(auth.actions.resetAuthorization());
 
   return (
     <StyledAccountDrawer anchor="right" open={showDrawer} hideBackdrop>
       <Box>
         <StyledHeader>
-          <StyledClearedButton onClick={() => setShowDrawer(false)}>
-            <Svg id="navigate-next" />
-          </StyledClearedButton>
           <StyledFlexTopCenter>
-            <StyledHeaderInfo>
-              {authData && (
-                <StyledTitleSmall color={variables.palette.on_surface_variant}>
-                  {`${authData.user.firstName}${
-                    authData.user.lastName ? ` ${authData.user.lastName}` : ''
-                  }`}
-                </StyledTitleSmall>
-              )}
-              {authData && (
-                <StyledTitleSmall color={variables.palette.on_surface_variant}>
-                  {authData.user.email}
-                </StyledTitleSmall>
-              )}
-            </StyledHeaderInfo>
             <StyledAvatarWrapper>
               <StyledImage src={avatarSrc} alt="Avatar" />
               {alertsQuantity > 0 && (
@@ -68,12 +50,31 @@ export const AccountPanel = ({
                 </StyledQuantity>
               )}
             </StyledAvatarWrapper>
+            <StyledHeaderInfo>
+              <StyledTitleSmall color={variables.palette.on_surface_variant}>
+                {t('myAccount')}
+              </StyledTitleSmall>
+              {authData && (
+                <StyledLabelSmall color={variables.palette.on_surface_variant}>
+                  {authData.user.email}
+                </StyledLabelSmall>
+              )}
+            </StyledHeaderInfo>
           </StyledFlexTopCenter>
+          <StyledCloseWrapper>
+            <StyledClearedButton onClick={() => setShowDrawer(false)}>
+              <Svg id="close" />
+            </StyledClearedButton>
+          </StyledCloseWrapper>
         </StyledHeader>
         {alertsQuantity > 0 && <Notifications alertsQuantity={alertsQuantity} />}
       </Box>
       <StyledFooter>
-        <StyledLogOutBtn variant="text" startIcon={<Svg id="logout" />} onClick={handleLogout}>
+        <StyledLogOutBtn
+          variant="text"
+          startIcon={<Svg id="logout" width="16" height="20" />}
+          onClick={handleLogout}
+        >
           {t('logOut')}
         </StyledLogOutBtn>
       </StyledFooter>
