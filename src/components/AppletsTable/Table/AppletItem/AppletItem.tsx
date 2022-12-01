@@ -3,7 +3,7 @@ import { TableCell, TableRow } from '@mui/material';
 
 import { Svg } from 'components/Svg';
 import { useTimeAgo } from 'hooks';
-import { FoldersApplets } from 'redux/modules';
+import { FolderApplet } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { variables } from 'styles/variables';
 
@@ -16,7 +16,7 @@ import {
 } from './AppletItem.styles';
 import { actions } from './AppletItem.const';
 
-export const AppletItem = ({ item }: { item: FoldersApplets }) => {
+export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
 
@@ -27,7 +27,7 @@ export const AppletItem = ({ item }: { item: FoldersApplets }) => {
   return (
     <TableRow>
       <TableCell width="30%" onClick={() => handleAppletClick(item.id)}>
-        <StyledAppletName>
+        <StyledAppletName applet={item}>
           <AppletImage image={item.image} appletName={item.name} />
           <StyledBodyMedium color={variables.palette.on_surface} fontWeight={'medium'}>
             {item.name}

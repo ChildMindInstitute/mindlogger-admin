@@ -76,7 +76,7 @@ export type SwitchAccountData = {
   authToken: AuthToken;
 };
 
-export type FoldersApplets = {
+export type FolderApplet = {
   depth?: number;
   id?: string;
   isExpanded?: boolean;
@@ -84,7 +84,7 @@ export type FoldersApplets = {
   isFolder?: boolean;
   isNew?: boolean;
   isVisible?: boolean;
-  items?: FoldersApplets[];
+  items?: FolderApplet[];
   name?: string;
   description?: string;
   displayName?: string;
@@ -97,6 +97,7 @@ export type FoldersApplets = {
   hasUrl?: boolean;
   image?: string;
   largeApplet?: boolean;
+  parentId?: string;
   published?: boolean;
   roles?: string[];
   themeId?: string;
@@ -155,5 +156,5 @@ export type LoadedFolder = Folder &
 
 export type AccountSchema = {
   switchAccount: BaseSchema<SwitchAccountData | null>;
-  accountFoldersApplets: BaseSchema<FoldersApplets[] | null>;
+  accountFoldersApplets: BaseSchema<FolderApplet[] | null>;
 };

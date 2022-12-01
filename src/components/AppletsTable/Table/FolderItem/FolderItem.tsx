@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TableCell, TableRow, TextField } from '@mui/material';
 
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Svg } from 'components/Svg';
 import { variables } from 'styles/variables';
-import { FoldersApplets } from 'redux/modules';
+import { FolderApplet } from 'redux/modules';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
-import { StyledFolderIcon } from './FolderItem.styles';
+import { StyledFolderIcon, StyledCountApplets, StyledFolderName } from './FolderItem.styles';
 
-export const FolderItem = ({ item }: { item: FoldersApplets }) => {
+export const FolderItem = ({
+  item,
+  onRowClick,
+}: {
+  item: FolderApplet;
+  onRowClick: (row: FolderApplet) => void;
+}) => {
   const [row, setRow] = useState(item);
+  useEffect(() => setRow(item), [item]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRow({ ...item, name: event.target.value });
@@ -23,7 +30,7 @@ export const FolderItem = ({ item }: { item: FoldersApplets }) => {
   };
 
   return (
-    <TableRow>
+    <TableRow onClick={() => onRowClick(row)}>
       <TableCell width="30%">
         <StyledFlexTopCenter>
           {row?.isRenaming ? (
@@ -33,15 +40,18 @@ export const FolderItem = ({ item }: { item: FoldersApplets }) => {
               <StyledFolderIcon>
                 <Svg id="folder" />
               </StyledFolderIcon>
-              <StyledBodyMedium color={variables.palette.on_surface} fontWeight={'medium'}>
-                {row.name}
-              </StyledBodyMedium>
+              <StyledFolderName>
+                <StyledBodyMedium color={variables.palette.on_surface} fontWeight={'medium'}>
+                  {row.name}
+                </StyledBodyMedium>
+                <StyledCountApplets> ({item?.items?.length} applets)</StyledCountApplets>
+              </StyledFolderName>
             </>
           )}
         </StyledFlexTopCenter>
       </TableCell>
       <TableCell width="15%"></TableCell>
-      <TableCell align="right">...</TableCell>
+      <TableCell align="right"></TableCell>
     </TableRow>
   );
 };

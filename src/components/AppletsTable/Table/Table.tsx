@@ -1,40 +1,33 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { DEFAULT_ROWS_PER_PAGE } from 'components/Table/Table.const';
 import { Head } from 'components/Table/Head';
-import { FoldersApplets } from 'redux/modules';
 import { Order } from 'types/table';
+import { getComparator, sortRows } from 'components/AppletsTable/AppletsTable.utils';
 
 import { StyledTableContainer, StyledCellItem, StyledTableCellContent } from './Table.styles';
 import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
 
-export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: TableProps) => {
+export const Table = ({
+  columns,
+  rows,
+  orderBy: orderByProp,
+  headerContent,
+  onRowClick,
+}: TableProps) => {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
 
-  function descendingComparator(a: FoldersApplets, b: FoldersApplets, orderBy: string) {
-    if (b[orderBy as keyof FoldersApplets]! < a[orderBy as keyof FoldersApplets]!) {
-      return -1;
+  const sortedRows = useMemo(() => {
+    if (!rows?.length) {
+      return [];
     }
-    if (b[orderBy as keyof FoldersApplets]! > a[orderBy as keyof FoldersApplets]!) {
-      return 1;
-    }
-
-    return 0;
-  }
-
-  function getComparator(
-    order: Order,
-    orderBy: string,
-  ): (a: FoldersApplets, b: FoldersApplets) => number {
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
+    return sortRows(rows, getComparator(order, orderBy));
+  }, [order, orderBy, rows?.length]);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -75,15 +68,14 @@ export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: Ta
             tableHeader={tableHeader}
           />
           <TableBody>
-            {rows
-              ?.sort(getComparator(order, orderBy))
+            {sortedRows
               ?.slice(
                 page * DEFAULT_ROWS_PER_PAGE,
                 page * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
               )
               .map((row) =>
                 row?.isFolder ? (
-                  <FolderItem key={row.id} item={row} />
+                  <FolderItem onRowClick={onRowClick} key={row.id} item={row} />
                 ) : (
                   <AppletItem key={row.id} item={row} />
                 ),

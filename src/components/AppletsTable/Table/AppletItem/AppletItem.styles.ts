@@ -1,4 +1,5 @@
 import { Box, Button, styled, TableCell } from '@mui/material';
+import { FolderApplet } from 'redux/modules';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
@@ -6,6 +7,8 @@ import { variables } from 'styles/variables';
 export const StyledAppletName = styled(Box)`
   display: flex;
   align-items: center;
+  margin-left: ${({ applet }: { applet: FolderApplet }) =>
+    applet?.depth ? `${applet.depth * 4.4}rem` : 0};
 `;
 
 export const StyledRightCell = styled(TableCell)`
