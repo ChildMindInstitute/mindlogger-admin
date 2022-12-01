@@ -7,7 +7,7 @@ import { account, FolderApplet } from 'redux/modules';
 import { Search } from 'components/Search';
 
 import { Table } from './Table';
-import { headCells } from './AppletsTable.const';
+import { getHeadCells } from './AppletsTable.const';
 import { StyledButtons, AppletsTableHeader } from './AppletsTable.styles';
 
 export const AppletsTable = (): JSX.Element => {
@@ -116,9 +116,9 @@ export const AppletsTable = (): JSX.Element => {
         <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
       </AppletsTableHeader>
       <Table
-        onRowClick={handleRowClick}
-        columns={headCells}
+        columns={getHeadCells(t)}
         rows={flattenItems?.filter(filterRows)}
+        onRowClick={handleRowClick}
         orderBy={'name'}
         headerContent={headerContent}
       />

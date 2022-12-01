@@ -13,7 +13,7 @@ import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
 
 import { ManagersTableHeader } from './ManagersTable.styles';
-import { headCells } from './ManagersTable.const';
+import { getHeadCells } from './ManagersTable.const';
 import { tableHeight } from './ManagersTable.utils';
 
 export const ManagersTable = (): JSX.Element => {
@@ -89,7 +89,7 @@ export const ManagersTable = (): JSX.Element => {
       </ManagersTableHeader>
       <Table
         tableHeight={tableHeight}
-        columns={headCells}
+        columns={getHeadCells(t)}
         rows={handleFilterRows(rows as Row[])}
         orderBy={'updated'}
       />

@@ -51,7 +51,6 @@
   "appletTabsLabel3": "More",
   "show": "Show",
   "addApplet": "Add Applet",
-  "applets": "Applets",
   "alerts": "Alerts",
   "unread": "Unread",
   "addFolder": "Add Folder",
@@ -66,6 +65,10 @@
   "coordinator": "coordinator",
   "editor": "editor",
   "reviewer": "reviewer",
-  "takeMeToTheResponseData": "Take me to the response data",
-  "secretUserIdRequired": "Secret User ID is required"
+  "secretUserIdRequired": "Secret User ID is required",
+  "appletName": "Applet Name",
+  "lastEdit": "Last Edit",
+  "updated": "Updated",
+  "actions": "Actions",
+  "takeMeToTheResponseData": "Take me to the response data"
 }
