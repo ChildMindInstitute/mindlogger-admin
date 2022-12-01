@@ -18,7 +18,7 @@ import {
   StyledLeftBox,
   StyledRightBox,
 } from './RespondentsTable.styles';
-import { headCells } from './RespondentsTable.const';
+import { getHeadCells } from './RespondentsTable.const';
 
 export const RespondentsTable = (): JSX.Element => {
   const { id } = useParams();
@@ -100,7 +100,7 @@ export const RespondentsTable = (): JSX.Element => {
         <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
         {id && <StyledRightBox />}
       </RespondentsTableHeader>
-      <Table columns={headCells} rows={handleFilterRows(rows as Row[])} orderBy={'updated'} />
+      <Table columns={getHeadCells(t)} rows={handleFilterRows(rows as Row[])} orderBy={'updated'} />
     </>
   );
 };
