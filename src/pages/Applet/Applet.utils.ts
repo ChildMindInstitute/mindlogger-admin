@@ -1,7 +1,7 @@
-import { FoldersApplets } from 'redux/modules';
+import { FolderApplet } from 'redux/modules';
 
-export const getAppletName = (data: FoldersApplets[] | null, id?: string): string | undefined => {
-  const appletsFoldersArr = data?.reduce((acc: FoldersApplets[], current: FoldersApplets) => {
+export const getAppletName = (data: FolderApplet[] | null, id?: string): string | undefined => {
+  const appletsFoldersArr = data?.reduce((acc: FolderApplet[], current: FolderApplet) => {
     acc = current.items ? acc.concat(current.items) : acc.concat(current);
 
     return acc;
