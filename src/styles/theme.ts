@@ -28,6 +28,13 @@ const theme = createTheme({
           height: '100%',
           overflowY: 'hidden',
         },
+        '*::-webkit-scrollbar': {
+          width: '0.8rem',
+        },
+        '*::-webkit-scrollbar-thumb': {
+          backgroundColor: variables.palette.outline,
+          borderRadius: variables.borderRadius.xxl,
+        },
       }),
     },
     MuiDialog: {

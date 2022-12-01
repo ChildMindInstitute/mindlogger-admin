@@ -6,6 +6,8 @@ import { state as initialState } from './Breadcrumbs.state';
 import { reducers } from './Breadcrumbs.reducer';
 import { BreadcrumbsSchema } from './Breadcrumbs.schema';
 
+export * from './Breadcrumbs.schema';
+
 const slice = createSlice({
   name: 'breadcrumbs',
   initialState,

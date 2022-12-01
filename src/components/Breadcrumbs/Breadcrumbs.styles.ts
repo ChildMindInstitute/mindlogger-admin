@@ -12,14 +12,22 @@ const commonCenterStyles = `
   text-decoration: none;
 `;
 
-export const StyledAvatarWrapper = styled(StyledFlexAllCenter)`
-  margin-right: ${theme.spacing(0.8)};
+const commonImgStyles = `
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: ${variables.borderRadius.xs};
 `;
 
-export const StyledAvatar = styled(Box)`
-  width: 3.2rem;
-  height: 3.2rem;
-  border-radius: ${variables.borderRadius.half};
+export const StyledIconWrapper = styled(StyledFlexAllCenter)`
+  margin-right: ${theme.spacing(0.625)};
+`;
+
+export const StyledIconImg = styled('img')`
+  ${commonImgStyles};
+`;
+
+export const StyledPlaceholder = styled(StyledFlexAllCenter)`
+  ${commonImgStyles};
   background-color: ${variables.palette.primary_container};
 `;
 

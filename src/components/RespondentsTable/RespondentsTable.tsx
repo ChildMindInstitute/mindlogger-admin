@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Svg } from 'components/Svg';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
-import { useTimeAgo } from 'hooks';
-import { users, UserData } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
+import { Svg } from 'components/Svg';
 import { Row } from 'components/Table';
+import { users, UserData, breadcrumbs, Breadcrumb } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
 
@@ -24,8 +24,9 @@ export const RespondentsTable = (): JSX.Element => {
   const { id } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const timeAgo = useTimeAgo();
   const usersData = users.useUserData();
+  const timeAgo = useTimeAgo();
+  const baseBreadcrumbs = useBaseBreadcrumbs();
   const [searchValue, setSearchValue] = useState('');
 
   const handlePinClick = async (profileId: string, newState: boolean) => {
@@ -83,6 +84,18 @@ export const RespondentsTable = (): JSX.Element => {
       ({ secretId, nickname }) =>
         filterRows(secretId, searchValue) || filterRows(nickname, searchValue),
     );
+
+  useEffect(() => {
+    if (id && baseBreadcrumbs && baseBreadcrumbs.length > 0) {
+      const respondentsCrumb: Breadcrumb[] = [
+        {
+          icon: <Svg id="respondent-outlined" width="13.5" height="15" />,
+          label: t('respondents'),
+        },
+      ];
+      dispatch(breadcrumbs.actions.setBreadcrumbs([...baseBreadcrumbs, ...respondentsCrumb]));
+    }
+  }, [baseBreadcrumbs]);
 
   return (
     <>

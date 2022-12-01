@@ -5,19 +5,19 @@ import { Svg } from 'components/Svg';
 
 export const dashboardTabs = [
   {
-    labelKey: 'dashboardTabsLabel',
+    labelKey: 'applets',
     icon: <Svg id="applet-outlined" />,
     activeIcon: <Svg id="applet-filled" />,
     content: <AppletsTable />,
   },
   {
-    labelKey: 'dashboardTabsLabel2',
+    labelKey: 'managers',
     icon: <Svg id="manager-outlined" />,
     activeIcon: <Svg id="manager-filled" />,
     content: <ManagersTable />,
   },
   {
-    labelKey: 'dashboardTabsLabel3',
+    labelKey: 'respondents',
     icon: <Svg id="respondent-outlined" />,
     activeIcon: <Svg id="respondent-filled" />,
     content: <RespondentsTable />,

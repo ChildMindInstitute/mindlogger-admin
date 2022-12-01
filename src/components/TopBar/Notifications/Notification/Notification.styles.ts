@@ -17,14 +17,24 @@ export const StyledNotification = styled(Button)`
   height: fit-content;
   padding: ${theme.spacing(1.2, 1.6)};
   margin-bottom: ${theme.spacing(1)};
-  border-radius: unset;
-  border-bottom: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  border-radius: ${variables.borderRadius.lg};
   text-align: left;
   display: flex;
   align-items: unset;
+  position: relative;
 
   &:hover {
     background-color: transparent;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: ${variables.borderWidth.md};
+    border-bottom: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   }
 `;
 
@@ -46,8 +56,8 @@ export const StyledLogo = styled('img')`
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 100%;
-  border: ${variables.borderWidth.lg} solid ${variables.palette.surface_variant};
-  background-color: ${variables.palette.surface_variant};
+  border: ${variables.borderWidth.lg} solid ${variables.palette.surface1};
+  background-color: ${variables.palette.surface1};
   position: absolute;
   bottom: -0.75rem;
   right: -0.75rem;
@@ -56,12 +66,12 @@ export const StyledLogo = styled('img')`
 export const StyledInfo = styled(Box)`
   display: flex;
   flex-direction: column;
-  width: 20.4rem;
+  width: 19.4rem;
   margin-right: ${theme.spacing(2.1)};
 `;
 
 export const StyledRightSection = styled(Box)`
-  width: 5.7rem;
+  width: 6.7rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
