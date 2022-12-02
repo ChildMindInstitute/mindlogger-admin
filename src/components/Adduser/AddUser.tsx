@@ -61,6 +61,7 @@ export const AddUser = () => {
         };
 
         await getAppletInvitationApi({ appletId: id, options });
+        // To do add fetch rows
         setErrorMessage('');
         resetForm();
       }
@@ -107,7 +108,7 @@ export const AddUser = () => {
                 {...commonProps}
                 name={Fields.role}
                 options={roles}
-                label={t(Fields.role)}
+                label={t('role')}
                 customChange={updateFields}
               />
             </Grid>
