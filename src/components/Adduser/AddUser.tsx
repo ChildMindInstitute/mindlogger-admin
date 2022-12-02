@@ -16,8 +16,8 @@ import { users, auth, account } from 'redux/modules';
 
 import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUser.styles';
 import { fields, defaultValues, roles, langs, Roles, Fields } from './AddUser.const';
-import { AddUserSchema } from './Adduser.schema';
-import { FormValues } from './Adduser.types';
+import { AddUserSchema } from './AddUser.schema';
+import { FormValues } from './AddUser.types';
 
 export const AddUser = () => {
   const { id } = useParams();
