@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
-import { users } from 'redux/modules';
+import { Row } from 'components/Table';
 import { useAppDispatch } from 'redux/store';
-import { Row, Table } from 'components/Table';
-import { getHeadCells } from './InvitationsTable.const';
-import { StyledTitle } from './Invitationstable.styles';
-import { Invitation } from './InvitationsTable.types';
+import { users } from 'redux/modules';
 
-export const InvitationsTable = () => {
-  const { t } = useTranslation('app');
+import { AddUserForm } from './AddUserForm';
+import { InvitationsTable } from './InvitationsTable';
+import { Invitation } from './AddUser.types';
+
+export const AddUser = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -58,8 +57,8 @@ export const InvitationsTable = () => {
 
   return (
     <>
-      <StyledTitle>{t('pendingInvitations')}</StyledTitle>
-      <Table columns={getHeadCells(t)} rows={rows} orderBy={'created'} />
+      <AddUserForm />
+      <InvitationsTable rows={rows} />
     </>
   );
 };

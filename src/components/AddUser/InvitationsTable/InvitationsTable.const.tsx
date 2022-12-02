@@ -20,7 +20,7 @@ export const getHeadCells = (t: TFunction): HeadCell[] => [
   },
   {
     id: 'role',
-    label: t('Role'),
+    label: t('role'),
     enableSort: true,
   },
   {
