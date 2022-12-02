@@ -2,8 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { Tabs } from 'components/Tabs';
 import { Svg } from 'components/Svg';
-import { RespondentsTable } from 'components/RespondentsTable';
-import { ManagersTable } from 'components/ManagersTable';
+import { RespondentsTable, ManagersTable } from 'components/Tables';
 import { Spinner } from 'components/Spinner';
 import { More } from 'components/More';
 import { users } from 'redux/modules';

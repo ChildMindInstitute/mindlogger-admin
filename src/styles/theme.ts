@@ -21,6 +21,9 @@ const theme = createTheme({
           height: '100%',
           overflowY: 'hidden',
         },
+        body: {
+          color: variables.palette.on_surface,
+        },
         '*::-webkit-scrollbar': {
           width: '0.8rem',
         },
@@ -177,7 +180,7 @@ const theme = createTheme({
           '&.MuiButton-contained': {
             '&:hover': {
               backgroundColor: variables.palette.primary50,
-              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15)',
+              boxShadow: variables.boxShadow.light1,
             },
 
             '&:focus': {

@@ -327,17 +327,15 @@ export const svgSprite = (): string => `
           fill=${variables.palette.on_surface_variant} />
   </symbol>
   
-  <symbol viewBox="0 0 12 8" fill="none" id="svg-navigate-down">
+  <symbol viewBox="0 0 12 8" id="svg-navigate-down">
      <path 
        d="M1.41 0.294987L0 1.70499L6 7.70499L12 1.70499L10.59 0.294987L6 4.87499L1.41 0.294987Z" 
-       fill=${variables.palette.on_surface_variant || 'currentColor'}
      />
   </symbol>
   
-  <symbol viewBox="0 0 12 8" fill="none" id="svg-navigate-up">
+  <symbol viewBox="0 0 12 8" id="svg-navigate-up">
      <path 
        d="M10.59 7.70501L12 6.29501L6 0.295013L0 6.29501L1.41 7.70501L6 3.12501L10.59 7.70501Z" 
-       fill=${variables.palette.on_surface_variant || 'currentColor'}
      />
   </symbol>
   

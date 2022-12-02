@@ -68,7 +68,8 @@ export const StyledBodyLarge = styled(Typography)`
   font-weight: ${({ fontWeight }: StyledProps) =>
     fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
-  letter-spacing: ${variables.letterSpacing.md};
+  letter-spacing: ${({ letterSpacing }: StyledProps) =>
+    letterSpacing ? variables.letterSpacing[letterSpacing] : variables.letterSpacing.md};
 `;
 
 export const StyledBodyMedium = styled(Typography)`

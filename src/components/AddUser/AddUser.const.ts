@@ -1,4 +1,4 @@
-import { Field } from './Adduser.types';
+import { Field } from './AddUser.types';
 
 export const roles = [
   {

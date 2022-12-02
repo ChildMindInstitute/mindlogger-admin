@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Search } from 'components/Search';
-import { Table } from 'components/Table';
+import { Table, Row } from 'components/Tables';
 import { Svg } from 'components/Svg';
-import { Row } from 'components/Table';
 import { users, UserData, breadcrumbs } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';

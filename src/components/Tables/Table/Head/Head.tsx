@@ -1,6 +1,6 @@
 import { TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
-import { StyledTableCell } from 'components/Table/Head/Head.styles';
 
+import { StyledTableCell } from './Head.styles';
 import { HeadProps } from './Head.types';
 
 export const Head = ({

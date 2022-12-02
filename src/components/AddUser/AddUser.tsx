@@ -8,8 +8,8 @@ import { SelectController } from 'components/FormComponents/SelectController';
 
 import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUser.styles';
 import { fields } from './AddUser.const';
-import { AddUserSchema } from './Adduser.schema';
-import { FormValues } from './Adduser.types';
+import { AddUserSchema } from './AddUser.schema';
+import { FormValues } from './AddUser.types';
 
 export const AddUser = () => {
   const { t } = useTranslation('app');

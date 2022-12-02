@@ -2,11 +2,10 @@ import { useState, MouseEvent, ChangeEvent } from 'react';
 import { Table as MuiTable, TableBody, TablePagination, TableRow, TableCell } from '@mui/material';
 import uniqueId from 'lodash.uniqueid';
 
-import { DEFAULT_ROWS_PER_PAGE } from 'components/Table/Table.const';
-import { Head } from 'components/Table/Head';
+import { DEFAULT_ROWS_PER_PAGE, Head } from 'components/Tables';
 import { Order } from 'types/table';
 
-import { StyledTableContainer, StyledTableCellContent } from 'components/Table/Table.styles';
+import { StyledTableContainer, StyledTableCellContent } from './Table.styles';
 import { Row, TableProps } from './Table.types';
 
 export const Table = ({
