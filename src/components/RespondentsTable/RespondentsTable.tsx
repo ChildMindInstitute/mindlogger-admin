@@ -10,16 +10,13 @@ import { useAppDispatch } from 'redux/store';
 import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { Actions } from 'components/Actions';
 
 import {
   RespondentsTableHeader,
-  StyledActionButton,
-  StyledActions,
   StyledButton,
   StyledLeftBox,
   StyledRightBox,
-  StyledSvg,
 } from './RespondentsTable.styles';
 import { actions, getHeadCells } from './RespondentsTable.const';
 
@@ -31,7 +28,6 @@ export const RespondentsTable = (): JSX.Element => {
   const timeAgo = useTimeAgo();
   const baseBreadcrumbs = useBaseBreadcrumbs();
   const [searchValue, setSearchValue] = useState('');
-  const [showActions, setShowActions] = useState(false);
 
   const handlePinClick = async (profileId: string, newState: boolean) => {
     const { updatePin, getUsersList } = users.thunk;
@@ -74,26 +70,7 @@ export const RespondentsTable = (): JSX.Element => {
         value: lastEdited,
       },
       actions: {
-        content: () => (
-          <StyledFlexTopCenter>
-            <StyledSvg
-              id="dots"
-              width={18}
-              height={4}
-              onMouseEnter={() => setShowActions(true)}
-              onMouseLeave={() => setShowActions(false)}
-            />
-            {showActions && (
-              <StyledActions>
-                {actions.map(({ icon, action }, i) => (
-                  <StyledActionButton key={i} onClick={() => action(user)}>
-                    {icon}
-                  </StyledActionButton>
-                ))}
-              </StyledActions>
-            )}
-          </StyledFlexTopCenter>
-        ),
+        content: () => <Actions items={actions} context={user} />,
         value: '',
         width: '330',
       },
