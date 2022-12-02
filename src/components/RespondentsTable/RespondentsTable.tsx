@@ -3,22 +3,25 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Search } from 'components/Search';
-import { Table } from 'components/Table';
 import { Svg } from 'components/Svg';
-import { Row } from 'components/Table';
+import { Row, Table } from 'components/Table';
 import { users, UserData, breadcrumbs } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
 
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import {
   RespondentsTableHeader,
+  StyledActionButton,
+  StyledActions,
   StyledButton,
   StyledLeftBox,
   StyledRightBox,
+  StyledSvg,
 } from './RespondentsTable.styles';
-import { getHeadCells } from './RespondentsTable.const';
+import { actions, getHeadCells } from './RespondentsTable.const';
 
 export const RespondentsTable = (): JSX.Element => {
   const { id } = useParams();
@@ -28,6 +31,7 @@ export const RespondentsTable = (): JSX.Element => {
   const timeAgo = useTimeAgo();
   const baseBreadcrumbs = useBaseBreadcrumbs();
   const [searchValue, setSearchValue] = useState('');
+  const [showActions, setShowActions] = useState(false);
 
   const handlePinClick = async (profileId: string, newState: boolean) => {
     const { updatePin, getUsersList } = users.thunk;
@@ -42,7 +46,8 @@ export const RespondentsTable = (): JSX.Element => {
     id ? prepareUsersData(usersData?.items, id) : prepareUsersData(usersData?.items)
   ) as UserData[];
 
-  const rows = usersArr?.map(({ pinned, MRN, nickName, updated, _id: profileId }) => {
+  const rows = usersArr?.map((user) => {
+    const { pinned, MRN, nickName, updated, _id: profileId } = user;
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
 
     return {
@@ -69,8 +74,28 @@ export const RespondentsTable = (): JSX.Element => {
         value: lastEdited,
       },
       actions: {
-        content: () => '',
+        content: () => (
+          <StyledFlexTopCenter>
+            <StyledSvg
+              id="dots"
+              width={18}
+              height={4}
+              onMouseEnter={() => setShowActions(true)}
+              onMouseLeave={() => setShowActions(false)}
+            />
+            {showActions && (
+              <StyledActions>
+                {actions.map(({ icon, action }, i) => (
+                  <StyledActionButton key={i} onClick={() => action(user)}>
+                    {icon}
+                  </StyledActionButton>
+                ))}
+              </StyledActions>
+            )}
+          </StyledFlexTopCenter>
+        ),
         value: '',
+        width: '330',
       },
     };
   });

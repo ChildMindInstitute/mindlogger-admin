@@ -90,6 +90,7 @@ export const Table = ({
                       scope="row"
                       key={key}
                       align={row[key].align}
+                      width={row[key].width}
                     >
                       {row[key].content()}
                     </TableCell>
