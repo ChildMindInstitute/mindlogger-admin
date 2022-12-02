@@ -3,11 +3,13 @@ import { Option } from 'components/FormComponents/SelectController/SelectControl
 export type FormValues = {
   firstName: string;
   lastName: string;
-  nickname: string;
+  nickName: string;
   email: string;
-  secretUserId: string;
+  MRN: string;
+  accountName: string;
   role: string;
-  language: string;
+  lang: string;
+  users: string[];
 };
 
 export type Field = { name: keyof FormValues; options?: Option[] };
