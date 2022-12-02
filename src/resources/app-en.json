@@ -70,5 +70,8 @@
   "lastEdit": "Last Edit",
   "updated": "Updated",
   "actions": "Actions",
-  "takeMeToTheResponseData": "Take me to the response data"
+  "takeMeToTheResponseData": "Take me to the response data",
+  "pendingInvitations": "Pending Invitations",
+  "invitationLink": "Invitation Link",
+  "dateTimeInvited": "Date & Time Invited"
 }
