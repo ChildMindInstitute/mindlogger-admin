@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { ListItemIcon, MenuItem } from '@mui/material';
 
+import { variables } from 'styles/variables';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 
 import { StyledMenu } from './Menu.styles';
 import { MenuProps } from './Menu.types';
-import { variables } from '../../styles/variables';
 
 export const Menu = ({ anchorEl, onClose, menuItems, context }: MenuProps): JSX.Element => {
   const { t } = useTranslation('app');
