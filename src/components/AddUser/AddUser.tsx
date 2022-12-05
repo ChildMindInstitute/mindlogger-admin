@@ -5,8 +5,8 @@ import { format } from 'date-fns';
 import { Row } from 'components/Table';
 import { useAppDispatch } from 'redux/store';
 import { users } from 'redux/modules';
-
 import { getErrorMessage } from 'utils/getErrorMessage';
+
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
 import { Invitation } from './AddUser.types';
