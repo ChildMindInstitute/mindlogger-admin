@@ -61,7 +61,7 @@ export const AddUser = () => {
         };
 
         await getAppletInvitationApi({ appletId: id, options });
-        // To do add fetch rows
+        // TO DO add fetch rows
         setErrorMessage('');
         resetForm();
       }
