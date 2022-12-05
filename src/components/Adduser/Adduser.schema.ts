@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import i18n from 'i18n';
 
-export const AdduserSchema = () => {
+export const AddUserSchema = () => {
   const { t } = i18n;
   const emailRequired = t('emailRequired');
   const incorrectEmail = t('incorrectEmail');
