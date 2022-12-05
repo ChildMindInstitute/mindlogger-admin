@@ -2,8 +2,14 @@ import { Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { Svg } from 'components/Svg';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+
+export const StyledActionsWrapper = styled(StyledFlexTopCenter)`
+  width: 100%;
+  height: 100%;
+`;
 
 export const StyledSvg = styled(Svg)`
   margin-right: ${theme.spacing(1)};
