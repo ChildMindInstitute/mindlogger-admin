@@ -8,13 +8,13 @@ import { SelectController } from 'components/FormComponents/SelectController';
 
 import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUser.styles';
 import { fields } from './AddUser.const';
-import { AddUserSchema } from './AddUser.schema';
-import { FormValues } from './AddUser.types';
+import { AdduserSchema } from './Adduser.schema';
+import { FormValues } from './Adduser.types';
 
 export const AddUser = () => {
   const { t } = useTranslation('app');
   const { handleSubmit, control } = useForm<FormValues>({
-    resolver: yupResolver(AddUserSchema()),
+    resolver: yupResolver(AdduserSchema()),
     defaultValues: {
       firstName: '',
       lastName: '',
