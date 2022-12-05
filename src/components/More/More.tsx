@@ -1,4 +1,4 @@
-import { AddUser } from 'components/Adduser';
+import { AddUser } from 'components/AddUserForm';
 
 export const More = () => (
   <>

@@ -9,15 +9,15 @@ import { InputController } from 'components/FormComponents/InputController';
 import { SelectController } from 'components/FormComponents/SelectController';
 import { TagsInputController } from 'components/FormComponents/TagsInputController';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
-import { getAppletInvitationApi } from 'api';
+import { getAppletInvitationApi, setAccountNameApi } from 'api';
 import { getErrorMessage } from 'utils/getErrorMessage';
 import { prepareUsersData } from 'utils/prepareUsersData';
 import { users, auth, account } from 'redux/modules';
 
-import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUser.styles';
-import { fields, defaultValues, roles, langs, Roles, Fields } from './AddUser.const';
-import { AddUserSchema } from './AddUser.schema';
-import { FormValues } from './AddUser.types';
+import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUserForm.styles';
+import { fields, defaultValues, roles, langs, Roles, Fields } from './AddUserForm.const';
+import { AddUserSchema } from './AddUserForm.schema';
+import { FormValues } from './AddUserForm.types';
 
 export const AddUser = () => {
   const { id } = useParams();
@@ -62,6 +62,9 @@ export const AddUser = () => {
 
         await getAppletInvitationApi({ appletId: id, options });
         // TO DO add fetch rows
+        if (options.role !== Roles.user && options.accountName) {
+          await setAccountNameApi({ accountName: options.accountName });
+        }
         setErrorMessage('');
         resetForm();
       }
