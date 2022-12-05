@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
-import { Svg } from 'components/Svg';
 
+import { Svg } from 'components/Svg';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
