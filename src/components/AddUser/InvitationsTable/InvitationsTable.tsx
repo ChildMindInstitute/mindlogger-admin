@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Row, Table } from 'components/Table';
+import { Row, Table } from 'components/Tables';
 
 import { getHeadCells } from './InvitationsTable.const';
 import { StyledTitle } from './Invitationstable.styles';
