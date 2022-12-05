@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
-import { Row } from 'components/Table';
+import { Row } from 'components/Tables';
 import { useAppDispatch } from 'redux/store';
 import { users } from 'redux/modules';
 import { getErrorMessage } from 'utils/getErrorMessage';
