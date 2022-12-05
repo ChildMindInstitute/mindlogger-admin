@@ -41,7 +41,7 @@ export const AddUser = () => {
               value: role,
             },
             invitationLink: {
-              content: () => `${process.env.VUE_APP_WEB_URI || ''}/invitation/${_id}`, //todo
+              content: () => `${process.env.VUE_APP_WEB_URI || ''}/invitation/${_id}`, // TODO: Remove '' after configuring environments
               value: _id,
             },
             dateTimeInvited: {
