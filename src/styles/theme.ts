@@ -3,13 +3,6 @@ import { createTheme } from '@mui/material/styles';
 import { typography } from 'styles/typography';
 import { variables } from 'styles/variables';
 
-declare module '@mui/material/Button' {
-  interface ButtonPropsVariantOverrides {
-    roundedOutlined: true;
-    roundedContained: true;
-  }
-}
-
 const theme = createTheme({
   spacing: 10,
   typography: {
@@ -27,6 +20,13 @@ const theme = createTheme({
           fontSize: '62.5%',
           height: '100%',
           overflowY: 'hidden',
+        },
+        '*::-webkit-scrollbar': {
+          width: '0.8rem',
+        },
+        '*::-webkit-scrollbar-thumb': {
+          backgroundColor: variables.palette.outline,
+          borderRadius: variables.borderRadius.xxl,
         },
       }),
     },
@@ -164,55 +164,23 @@ const theme = createTheme({
       },
     },
     MuiButton: {
-      variants: [
-        {
-          props: { variant: 'roundedContained' },
-          style: {
-            color: variables.palette.white,
-            backgroundColor: variables.palette.primary,
-            borderRadius: variables.borderRadius.xxl,
-
-            '&:hover': {
-              backgroundColor: variables.palette.primary50,
-            },
-            '&.Mui-disabled': {
-              color: variables.palette.on_surface_variant,
-              backgroundColor: variables.palette.surface_variant,
-            },
-          },
-        },
-        {
-          props: { variant: 'roundedOutlined' },
-          style: {
-            color: variables.palette.primary,
-            borderWidth: variables.borderWidth.md,
-            borderStyle: 'solid',
-            borderColor: variables.palette.on_surface_variant,
-            borderRadius: variables.borderRadius.xxl,
-
-            '&:hover': {
-              backgroundColor: variables.palette.surface1,
-              borderColor: variables.palette.primary,
-            },
-            '&.Mui-disabled': {
-              color: variables.palette.outline,
-              borderColor: variables.palette.outline_variant,
-            },
-          },
-        },
-      ],
       styleOverrides: {
         root: {
-          fontWeight: variables.font.weight.semiBold,
+          fontWeight: variables.font.weight.medium,
           lineHeight: variables.lineHeight.md,
-          padding: '1rem 2.4rem',
-          borderRadius: variables.borderRadius.sm,
+          padding: '1rem 1.6rem',
+          borderRadius: variables.borderRadius.xxl,
           textTransform: 'none',
           height: 40,
           letterSpacing: variables.letterSpacing.sm,
 
           '&.MuiButton-contained': {
             '&:hover': {
+              backgroundColor: variables.palette.primary50,
+              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15)',
+            },
+
+            '&:focus': {
               backgroundColor: variables.palette.primary50,
             },
 
@@ -222,10 +190,16 @@ const theme = createTheme({
             },
           },
           '&.MuiButton-outlined': {
-            borderColor: variables.palette.primary,
+            borderColor: variables.palette.outline,
 
             '&:hover': {
               backgroundColor: variables.palette.surface1,
+              borderWidth: variables.borderWidth.md,
+            },
+
+            '&:focus': {
+              backgroundColor: variables.palette.surface1,
+              borderColor: variables.palette.primary,
               borderWidth: variables.borderWidth.md,
             },
 

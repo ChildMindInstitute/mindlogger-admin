@@ -3,7 +3,11 @@ import { Box, Button } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledLabelSmall } from 'styles/styledComponents/Typography';
+import {
+  StyledLabelMedium,
+  StyledBodyMedium,
+  StyledTitleMedium,
+} from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 const commonImgStyles = `
@@ -17,15 +21,29 @@ export const StyledNotification = styled(Button)`
   height: fit-content;
   padding: ${theme.spacing(1.2, 1.6)};
   margin-bottom: ${theme.spacing(1)};
-  border-radius: unset;
-  border-bottom: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  border-radius: ${variables.borderRadius.lg};
   text-align: left;
   display: flex;
-  align-items: unset;
+  flex-wrap: wrap;
+  position: relative;
+  background-color: ${({ active }: { active: boolean }) =>
+    active ? variables.palette.secondary_container : 'transparent'};
 
   &:hover {
-    background-color: transparent;
+    background-color: rgba(26, 28, 30, 0.08);
   }
+`;
+
+export const StyledTopSection = styled(Box)`
+  display: flex;
+`;
+
+export const StyledTitle = styled(StyledTitleMedium)`
+  margin-top: ${theme.spacing(0.4)};
+`;
+
+export const StyledMessage = styled(StyledBodyMedium)`
+  margin-top: ${theme.spacing(0.4)};
 `;
 
 export const StyledLeftSection = styled(StyledFlexTopCenter)`
@@ -46,8 +64,8 @@ export const StyledLogo = styled('img')`
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 100%;
-  border: ${variables.borderWidth.lg} solid ${variables.palette.surface_variant};
-  background-color: ${variables.palette.surface_variant};
+  border: ${variables.borderWidth.lg} solid ${variables.palette.surface1};
+  background-color: ${variables.palette.surface1};
   position: absolute;
   bottom: -0.75rem;
   right: -0.75rem;
@@ -56,12 +74,12 @@ export const StyledLogo = styled('img')`
 export const StyledInfo = styled(Box)`
   display: flex;
   flex-direction: column;
-  width: 20.4rem;
+  width: 19.4rem;
   margin-right: ${theme.spacing(2.1)};
 `;
 
 export const StyledRightSection = styled(Box)`
-  width: 5.7rem;
+  width: 6.7rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -75,6 +93,18 @@ export const StyledInfoCircle = styled(Box)`
   align-self: flex-end;
 `;
 
-export const StyledTimeAgo = styled(StyledLabelSmall)`
-  white-space: nowrap;
+export const StyledBottomSection = styled(Box)`
+  flex: 0 0 100%;
+  display: flex;
+  flex-direction: column;
+  padding-left: ${theme.spacing(3.8)};
+`;
+
+export const StyledBtn = styled(Button)`
+  margin-top: ${theme.spacing(1.2)};
+`;
+
+export const StyledTimeAgo = styled(StyledLabelMedium)`
+  padding-left: ${theme.spacing(1.6)};
+  margin-top: ${theme.spacing(0.8)};
 `;

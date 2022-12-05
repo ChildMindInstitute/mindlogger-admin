@@ -9,6 +9,7 @@ import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from '../AccountPanel/Ac
 import { NOTIFICATIONS_HEADER_HEIGHT } from './Notifications.const';
 
 export const StyledHeader = styled(StyledFlexTopCenter)`
+  padding: ${theme.spacing(0, 1.6)};
   justify-content: space-between;
   height: ${NOTIFICATIONS_HEADER_HEIGHT};
 `;
@@ -18,7 +19,7 @@ export const StyledHeaderLeft = styled(StyledFlexTopCenter)`
 `;
 
 export const StyledIconWrapper = styled(StyledFlexTopCenter)`
-  margin-right: ${theme.spacing(0.8)};
+  margin-right: ${theme.spacing(1.6)};
 `;
 
 export const StyledCollapseBtn = styled(StyledClearedButton)`

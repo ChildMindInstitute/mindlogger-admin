@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Svg } from 'components/Svg';
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
-import { useTimeAgo } from 'hooks';
-import { users } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
+import { Svg } from 'components/Svg';
 import { Row } from 'components/Table';
+import { users, UserData, breadcrumbs } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
+import { prepareUsersData } from 'utils/prepareUsersData';
 
 import {
   RespondentsTableHeader,
@@ -17,15 +18,15 @@ import {
   StyledLeftBox,
   StyledRightBox,
 } from './RespondentsTable.styles';
-import { headCells } from './RespondentsTable.const';
-import { prepareAllUsersData, prepareAppletUsersData } from './RespondentsTable.utils';
+import { getHeadCells } from './RespondentsTable.const';
 
 export const RespondentsTable = (): JSX.Element => {
   const { id } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const timeAgo = useTimeAgo();
   const usersData = users.useUserData();
+  const timeAgo = useTimeAgo();
+  const baseBreadcrumbs = useBaseBreadcrumbs();
   const [searchValue, setSearchValue] = useState('');
 
   const handlePinClick = async (profileId: string, newState: boolean) => {
@@ -37,9 +38,9 @@ export const RespondentsTable = (): JSX.Element => {
     }
   };
 
-  const usersArr = id
-    ? prepareAppletUsersData(id, usersData?.items)
-    : prepareAllUsersData(usersData?.items);
+  const usersArr = (
+    id ? prepareUsersData(usersData?.items, id) : prepareUsersData(usersData?.items)
+  ) as UserData[];
 
   const rows = usersArr?.map(({ pinned, MRN, nickName, updated, _id: profileId }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
@@ -84,13 +85,27 @@ export const RespondentsTable = (): JSX.Element => {
         filterRows(secretId, searchValue) || filterRows(nickname, searchValue),
     );
 
+  useEffect(() => {
+    if (id && baseBreadcrumbs?.length > 0) {
+      dispatch(
+        breadcrumbs.actions.setBreadcrumbs([
+          ...baseBreadcrumbs,
+          {
+            icon: <Svg id="respondent-outlined" width="13.5" height="15" />,
+            label: t('respondents'),
+          },
+        ]),
+      );
+    }
+  }, [baseBreadcrumbs]);
+
   return (
     <>
       <RespondentsTableHeader hasButton={!!id}>
         {id && (
           <StyledLeftBox>
             <StyledButton
-              variant="roundedOutlined"
+              variant="outlined"
               startIcon={<Svg width={14} height={14} id="respondent-outlined" />}
             >
               {t('addRespondent')}
@@ -100,7 +115,7 @@ export const RespondentsTable = (): JSX.Element => {
         <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
         {id && <StyledRightBox />}
       </RespondentsTableHeader>
-      <Table columns={headCells} rows={handleFilterRows(rows as Row[])} orderBy={'updated'} />
+      <Table columns={getHeadCells(t)} rows={handleFilterRows(rows as Row[])} orderBy={'updated'} />
     </>
   );
 };

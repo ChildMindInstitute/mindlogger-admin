@@ -1,34 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Search } from 'components/Search';
 import { Table } from 'components/Table';
-import { useTimeAgo } from 'hooks';
-import { ManagerData, users } from 'redux/modules';
+import { Svg } from 'components/Svg';
 import { Row } from 'components/Table';
+import { breadcrumbs, ManagerData, users } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
-import { FOOTER_HEIGHT, SEARCH_HEIGHT, TABS_HEIGHT, TOP_BAR_HEIGHT } from 'utils/constants';
+import { prepareUsersData } from 'utils/prepareUsersData';
 
 import { ManagersTableHeader } from './ManagersTable.styles';
-import { headCells } from './ManagersTable.const';
-
-const tableHeight = `calc(100vh - ${TOP_BAR_HEIGHT} - ${FOOTER_HEIGHT} - ${TABS_HEIGHT} - ${SEARCH_HEIGHT} - 6.4rem)`;
+import { getHeadCells } from './ManagersTable.const';
+import { tableHeight } from './ManagersTable.utils';
 
 export const ManagersTable = (): JSX.Element => {
+  const { id } = useParams();
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
   const timeAgo = useTimeAgo();
   const managersData = users.useManagerData();
+  const baseBreadcrumbs = useBaseBreadcrumbs();
   const [searchValue, setSearchValue] = useState('');
 
-  const managersArr = managersData?.items
-    .map((item) => Object.values(item))
-    .reduce((acc: ManagerData[] | null, currentValue) => {
-      if (currentValue && acc) {
-        return acc.concat(currentValue);
-      }
-
-      return null;
-    }, []);
+  const managersArr = (
+    id ? prepareUsersData(managersData?.items, id) : prepareUsersData(managersData?.items)
+  ) as ManagerData[];
 
   const rows = managersArr?.map(({ email, firstName, lastName, updated }) => {
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
@@ -69,6 +68,20 @@ export const ManagersTable = (): JSX.Element => {
         filterRows(email, searchValue),
     );
 
+  useEffect(() => {
+    if (id && baseBreadcrumbs && baseBreadcrumbs.length > 0) {
+      dispatch(
+        breadcrumbs.actions.setBreadcrumbs([
+          ...baseBreadcrumbs,
+          {
+            icon: <Svg id="manager-outlined" width="15" height="15" />,
+            label: t('managers'),
+          },
+        ]),
+      );
+    }
+  }, [baseBreadcrumbs]);
+
   return (
     <>
       <ManagersTableHeader>
@@ -76,7 +89,7 @@ export const ManagersTable = (): JSX.Element => {
       </ManagersTableHeader>
       <Table
         tableHeight={tableHeight}
-        columns={headCells}
+        columns={getHeadCells(t)}
         rows={handleFilterRows(rows as Row[])}
         orderBy={'updated'}
       />

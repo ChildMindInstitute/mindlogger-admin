@@ -1,21 +1,22 @@
+import { TFunction } from 'i18next';
 import { HeadCell } from 'types/table';
 
-export const headCells: HeadCell[] = [
+export const getHeadCells = (t: TFunction): HeadCell[] => [
   {
     id: 'name',
-    label: 'Applet Name',
+    label: t('appletName'),
     enableSort: true,
     width: '30%',
   },
   {
     id: 'updated',
-    label: 'Last Edited',
+    label: t('lastEdit'),
     enableSort: true,
     width: '15%',
   },
   {
     id: 'actions',
-    label: 'Actions',
+    label: t('actions'),
     align: 'right',
   },
 ];

@@ -1,24 +1,40 @@
 import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 
 import { Svg } from 'components/Svg';
-import { variables } from 'styles/variables';
-import { StyledTitleSmall } from 'styles/styledComponents/Typography';
 import { breadcrumbs } from 'redux/modules';
+import { StyledLabelSmall, StyledTitleSmall } from 'styles/styledComponents/Typography';
+import { variables } from 'styles/variables';
 
-import { StyledAvatarWrapper, StyledAvatar, StyledLink, StyledBox } from './Breadcrumbs.styles';
+import {
+  StyledLink,
+  StyledBox,
+  StyledIconWrapper,
+  StyledIconImg,
+  StyledPlaceholder,
+} from './Breadcrumbs.styles';
 
 export const Breadcrumbs = (): JSX.Element => {
   const breadcrumbsData = breadcrumbs.useData();
-  const getBreadcrumbAvatar = (index: number) => {
-    if (index === 0) {
-      return <Svg id="workspace" width="3.2rem" height="3.2rem" />;
+
+  const getBreadcrumbIcon = (icon: string | JSX.Element, label: string) => {
+    let resultIcon = icon;
+    if (typeof icon === 'string') {
+      icon
+        ? (resultIcon = <StyledIconImg src={icon} alt="Icon" />)
+        : (resultIcon = (
+            <StyledPlaceholder>
+              <StyledLabelSmall color={variables.palette.on_surface}>
+                {label.substring(0, 1).toUpperCase()}
+              </StyledLabelSmall>
+            </StyledPlaceholder>
+          ));
     }
 
-    return <StyledAvatar />;
+    return <StyledIconWrapper>{resultIcon}</StyledIconWrapper>;
   };
 
   return (
-    <MuiBreadcrumbs>
+    <MuiBreadcrumbs separator={<Svg id="separator" width="8" height="12" />}>
       {breadcrumbsData &&
         breadcrumbsData.length > 0 &&
         breadcrumbsData.map((crumb, index) => {
@@ -26,14 +42,14 @@ export const Breadcrumbs = (): JSX.Element => {
 
           return last ? (
             <StyledBox key={index}>
-              <StyledAvatarWrapper>{getBreadcrumbAvatar(index)}</StyledAvatarWrapper>
+              {getBreadcrumbIcon(crumb.icon, crumb.label)}
               <StyledTitleSmall fontWeight="semiBold" letterSpacing="xl">
                 {crumb.label}
               </StyledTitleSmall>
             </StyledBox>
           ) : (
-            <StyledLink key={index} to={crumb.navPath}>
-              <StyledAvatarWrapper>{getBreadcrumbAvatar(index)}</StyledAvatarWrapper>
+            <StyledLink key={index} to={crumb.navPath ? crumb.navPath : ''}>
+              {getBreadcrumbIcon(crumb.icon, crumb.label)}
               <StyledTitleSmall fontWeight="regular" color={variables.palette.on_surface_variant}>
                 {crumb.label}
               </StyledTitleSmall>
