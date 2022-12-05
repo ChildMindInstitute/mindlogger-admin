@@ -19,7 +19,7 @@ import { setAccountName } from 'redux/modules/Auth/Auth.thunk';
 import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUserForm.styles';
 import { Fields, fields, defaultValues, Roles, langs, roles } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
-import { AddUserFormProps, FormValues } from './AdduserForm.types';
+import { AddUserFormProps, FormValues } from './AddUserForm.types';
 
 export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const { id } = useParams();

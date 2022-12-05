@@ -1,4 +1,4 @@
-import { Field } from './AdduserForm.types';
+import { Field } from './AddUserForm.types';
 
 export const Roles = {
   user: 'user',
