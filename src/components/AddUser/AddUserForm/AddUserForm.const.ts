@@ -1,61 +1,82 @@
-import { Field } from './AdduserForm.types';
+import { Field } from './AddUserForm.types';
+
+export const Roles = {
+  user: 'user',
+  manager: 'manager',
+  coordinator: 'coordinator',
+  editor: 'editor',
+  reviewer: 'reviewer',
+} as const;
+
+export const Langs = {
+  fr: 'fr',
+  en: 'en',
+} as const;
+
+export const Fields = {
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  MRN: 'MRN',
+  nickName: 'nickName',
+  accountName: 'accountName',
+  role: 'role',
+  users: 'users',
+  lang: 'lang',
+} as const;
 
 export const roles = [
   {
-    labelKey: 'user',
-    value: 'user',
+    labelKey: Roles.user,
+    value: Roles.user,
   },
   {
-    labelKey: 'manager',
-    value: 'manager',
+    labelKey: Roles.manager,
+    value: Roles.manager,
   },
   {
-    labelKey: 'coordinator',
-    value: 'coordinator',
+    labelKey: Roles.coordinator,
+    value: Roles.coordinator,
   },
   {
-    labelKey: 'editor',
-    value: 'editor',
+    labelKey: Roles.editor,
+    value: Roles.editor,
   },
   {
-    labelKey: 'reviewer',
-    value: 'reviewer',
+    labelKey: Roles.reviewer,
+    value: Roles.reviewer,
   },
 ];
 
 export const langs = [
   {
-    labelKey: 'fr',
-    value: 'fr',
+    labelKey: Langs.fr,
+    value: Langs.fr,
   },
   {
-    labelKey: 'en',
-    value: 'en',
+    labelKey: Langs.en,
+    value: Langs.en,
   },
 ];
 
 export const fields: Field[] = [
   {
-    name: 'firstName',
+    name: Fields.firstName,
   },
   {
-    name: 'lastName',
+    name: Fields.lastName,
   },
   {
-    name: 'nickname',
-  },
-  {
-    name: 'email',
-  },
-  {
-    name: 'role',
-    options: roles,
-  },
-  {
-    name: 'secretUserId',
-  },
-  {
-    name: 'language',
-    options: langs,
+    name: Fields.email,
   },
 ];
+
+export const defaultValues = {
+  firstName: '',
+  lastName: '',
+  nickName: '',
+  email: '',
+  MRN: '',
+  role: Roles.user,
+  lang: Langs.en,
+};

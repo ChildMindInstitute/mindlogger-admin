@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { Row } from 'components/Table';
 import { useAppDispatch } from 'redux/store';
 import { users } from 'redux/modules';
+import { getErrorMessage } from 'utils/getErrorMessage';
 
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
@@ -16,48 +17,56 @@ export const AddUser = () => {
 
   const [rows, setRows] = useState<Row[]>([]);
 
-  useEffect(() => {
-    const { getInvitations } = users.thunk;
-    (async () => {
-      const result = await dispatch(getInvitations({ id: id as string }));
+  const getInvitationsHandler = async () => {
+    try {
+      if (id) {
+        const { getInvitations } = users.thunk;
+        const result = await dispatch(getInvitations({ id }));
 
-      if (getInvitations.fulfilled.match(result)) {
-        const rows = result.payload.data.map(
-          ({ MRN, firstName, lastName, role, created, _id }: Invitation) => ({
-            secretUserId: {
-              content: () => MRN,
-              value: MRN,
-            },
-            firstName: {
-              content: () => firstName,
-              value: firstName,
-            },
-            lastName: {
-              content: () => lastName,
-              value: lastName,
-            },
-            role: {
-              content: () => role,
-              value: role,
-            },
-            invitationLink: {
-              content: () => `${process.env.APP_WEB_URI || ''}/invitation/${_id}`, // TODO: Implement web environments
-              value: _id,
-            },
-            dateTimeInvited: {
-              content: () => format(new Date(created), 'yyyy-MM-dd HH:mm:ss'),
-              value: created,
-            },
-          }),
-        );
-        setRows(rows);
+        if (getInvitations.fulfilled.match(result)) {
+          const rows = result.payload.data.map(
+            ({ MRN, firstName, lastName, role, created, _id }: Invitation) => ({
+              secretUserId: {
+                content: () => MRN,
+                value: MRN,
+              },
+              firstName: {
+                content: () => firstName,
+                value: firstName,
+              },
+              lastName: {
+                content: () => lastName,
+                value: lastName,
+              },
+              role: {
+                content: () => role,
+                value: role,
+              },
+              invitationLink: {
+                content: () => `${process.env.APP_WEB_URI || ''}/invitation/${_id}`, // TODO: Implement web environments
+                value: _id,
+              },
+              dateTimeInvited: {
+                content: () => format(new Date(created), 'yyyy-MM-dd HH:mm:ss'),
+                value: created,
+              },
+            }),
+          );
+          setRows(rows);
+        }
       }
-    })();
+    } catch (e) {
+      return getErrorMessage(e);
+    }
+  };
+
+  useEffect(() => {
+    getInvitationsHandler();
   }, [dispatch, id]);
 
   return (
     <>
-      <AddUserForm />
+      <AddUserForm getInvitationsHandler={getInvitationsHandler} />
       <InvitationsTable rows={rows} />
     </>
   );

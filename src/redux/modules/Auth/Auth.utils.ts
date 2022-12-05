@@ -42,3 +42,19 @@ export const createAuthRejectedData = (
     state.isAuthorized = false;
   }
 };
+
+export const setAccountNameFulfilledData = (
+  state: Draft<AuthSchema>,
+  requestId: string,
+  accountName: string,
+) => {
+  const { authentication } = state;
+  if (authentication.status === 'loading' && authentication.requestId === requestId) {
+    authentication.requestId = initialState.authentication.requestId;
+    authentication.status = 'success';
+    authentication.error ? (authentication.error = undefined) : null;
+    if (authentication.data) {
+      authentication.data.account.accountName = accountName;
+    }
+  }
+};
