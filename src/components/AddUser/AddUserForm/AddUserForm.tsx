@@ -124,7 +124,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
                 <TagsInputController
                   {...commonProps}
                   name={Fields.users}
-                  // TO DO fix types
+                  // TODO fix types
                   options={prepareUsersData(usersData?.items)?.map((el: any) => el?.MRN)}
                   label={t('userList')}
                 />
