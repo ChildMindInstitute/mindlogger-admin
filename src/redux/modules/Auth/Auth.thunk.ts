@@ -12,6 +12,8 @@ import {
   SignUpArgs,
   resetPasswordApi,
   ResetPassword,
+  SetAccount,
+  setAccountNameApi,
 } from 'api';
 
 export const signIn = createAsyncThunk(
@@ -62,6 +64,19 @@ export const resetPassword = createAsyncThunk(
   async ({ email }: ResetPassword, { rejectWithValue, signal }) => {
     try {
       return await resetPasswordApi({ email }, signal);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const setAccountName = createAsyncThunk(
+  'mindlogger_set_accountName',
+  async ({ accountName }: SetAccount, { rejectWithValue, signal }) => {
+    try {
+      await setAccountNameApi({ accountName }, signal);
+
+      return { accountName };
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

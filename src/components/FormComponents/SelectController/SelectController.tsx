@@ -8,6 +8,7 @@ export const SelectController = <T extends FieldValues>({
   name,
   control,
   options,
+  customChange,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -17,7 +18,15 @@ export const SelectController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => (
-        <TextField {...props} select onChange={onChange} value={value}>
+        <TextField
+          {...props}
+          select
+          onChange={(e) => {
+            customChange && customChange(e);
+            onChange(e);
+          }}
+          value={value}
+        >
           {options?.map(({ labelKey, value }) => (
             <MenuItem key={value} value={value}>
               {t(labelKey)}

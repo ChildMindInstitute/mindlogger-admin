@@ -1,19 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
-import { Svg } from 'components/Svg';
 import { useTimeAgo } from 'hooks';
 import { FolderApplet } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { variables } from 'styles/variables';
+import { Actions } from 'components/Actions';
 
 import { AppletImage } from '../AppletImage';
-import {
-  StyledActionButton,
-  StyledActions,
-  StyledAppletName,
-  StyledRightCell,
-} from './AppletItem.styles';
+import { StyledAppletName } from './AppletItem.styles';
 import { actions } from './AppletItem.const';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
@@ -37,16 +32,9 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
       <TableCell width="15%" onClick={() => handleAppletClick(item.id)}>
         {item.updated ? timeAgo.format(new Date(item.updated)) : ''}
       </TableCell>
-      <StyledRightCell align="right">
-        <Svg id="dots" width={18} height={4} />
-        <StyledActions className="cell-actions">
-          {actions.map(({ icon, action }, i) => (
-            <StyledActionButton key={i} onClick={() => action(item)}>
-              {icon}
-            </StyledActionButton>
-          ))}
-        </StyledActions>
-      </StyledRightCell>
+      <TableCell>
+        <Actions items={actions} context={item} />
+      </TableCell>
     </TableRow>
   );
 };

@@ -10,6 +10,7 @@ import { useAppDispatch } from 'redux/store';
 import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
+import { Actions } from 'components/Actions';
 
 import {
   RespondentsTableHeader,
@@ -17,7 +18,7 @@ import {
   StyledLeftBox,
   StyledRightBox,
 } from './RespondentsTable.styles';
-import { getHeadCells } from './RespondentsTable.const';
+import { actions, getHeadCells } from './RespondentsTable.const';
 
 export const RespondentsTable = (): JSX.Element => {
   const { id } = useParams();
@@ -41,7 +42,8 @@ export const RespondentsTable = (): JSX.Element => {
     id ? prepareUsersData(usersData?.items, id) : prepareUsersData(usersData?.items)
   ) as UserData[];
 
-  const rows = usersArr?.map(({ pinned, MRN, nickName, updated, _id: profileId }) => {
+  const rows = usersArr?.map((user) => {
+    const { pinned, MRN, nickName, updated, _id: profileId } = user;
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
 
     return {
@@ -68,8 +70,9 @@ export const RespondentsTable = (): JSX.Element => {
         value: lastEdited,
       },
       actions: {
-        content: () => '',
+        content: () => <Actions items={actions} context={user} />,
         value: '',
+        width: '330',
       },
     };
   });
