@@ -70,6 +70,8 @@
   "lastEdit": "Dernière modification",
   "updated": "Mise à jour",
   "actions": "Actions",
+  "new": "Nouvelle",
+  "fromLibrary": "De la bibliothèque",
   "takeMeToTheResponseData": "Emmenez-moi aux données de réponse",
   "pendingInvitations": "Invitations en attente",
   "invitationLink": "Lien vers l'invitation",

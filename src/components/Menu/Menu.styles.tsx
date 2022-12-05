@@ -1,24 +1,27 @@
 import { Menu } from '@mui/material';
 import { styled } from '@mui/system';
 
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-import { StyledLabelMedium } from 'styles/styledComponents/Typography';
 import { variables } from 'styles/variables';
+import theme from 'styles/theme';
 
 export const StyledMenu = styled(Menu)`
   .MuiPaper-root {
-    border: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
-    border-radius: ${variables.borderRadius.md};
-    box-shadow: unset;
+    background-color: ${variables.palette.surface2};
+    border-radius: ${variables.borderRadius.lg};
+    box-shadow: ${variables.boxShadow.light2};
+    margin-top: ${theme.spacing(0.4)};
+    padding: ${theme.spacing(0, 0.4)};
   }
-`;
 
-export const StyledDotsBtn = styled(StyledClearedButton)`
-  position: absolute;
-  top: 1.6rem;
-  right: 1.6rem;
-`;
+  .MuiMenuItem-root {
+    border-radius: ${variables.borderRadius.xxs};
 
-export const StyledTitle = styled(StyledLabelMedium)`
-  padding: 0.6rem 1.6rem;
+    &:hover {
+      background-color: ${variables.palette.surface_variant};
+    }
+
+    svg {
+      fill: ${variables.palette.on_surface_variant};
+    }
+  }
 `;

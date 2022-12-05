@@ -5,6 +5,7 @@ export const palette = {
   primary_container: '#cee5ff',
   secondary_container: '#d5e4f7',
   surface1: '#eff4fa',
+  surface2: '#e8f0f7',
   surface3: '#e0ebf4',
 
   on_surface: '#1a1c1e',

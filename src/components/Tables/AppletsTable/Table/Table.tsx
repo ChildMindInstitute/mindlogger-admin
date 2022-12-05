@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
-import { DEFAULT_ROWS_PER_PAGE } from 'components/Table/Table.const';
-import { Head } from 'components/Table/Head';
+import { DEFAULT_ROWS_PER_PAGE, Head } from 'components/Tables';
 import { Order } from 'types/table';
-import { getComparator, sortRows } from 'components/AppletsTable/AppletsTable.utils';
+import { getComparator, sortRows } from '../AppletsTable.utils';
 
 import { StyledTableContainer, StyledCellItem, StyledTableCellContent } from './Table.styles';
 import { TableProps } from './Table.types';
