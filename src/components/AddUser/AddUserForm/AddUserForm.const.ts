@@ -1,4 +1,4 @@
-import { Field } from './Adduser.types';
+import { Field } from './AdduserForm.types';
 
 export const roles = [
   {

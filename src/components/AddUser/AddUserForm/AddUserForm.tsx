@@ -6,12 +6,12 @@ import Grid from '@mui/material/Grid';
 import { InputController } from 'components/FormComponents/InputController';
 import { SelectController } from 'components/FormComponents/SelectController';
 
-import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUser.styles';
-import { fields } from './AddUser.const';
-import { AddUserSchema } from './Adduser.schema';
-import { FormValues } from './Adduser.types';
+import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUserForm.styles';
+import { fields } from './AddUserForm.const';
+import { AddUserSchema } from './AddUserForm.schema';
+import { FormValues } from './AdduserForm.types';
 
-export const AddUser = () => {
+export const AddUserForm = () => {
   const { t } = useTranslation('app');
   const { handleSubmit, control } = useForm<FormValues>({
     resolver: yupResolver(AddUserSchema()),

@@ -4,7 +4,7 @@ import { Tabs } from 'components/Tabs';
 import { Svg } from 'components/Svg';
 import { RespondentsTable, ManagersTable } from 'components/Tables';
 import { Spinner } from 'components/Spinner';
-import { More } from 'components/More';
+import { More } from 'pages/Applet/More';
 import { users } from 'redux/modules';
 import { StyledBody } from 'styles/styledComponents/Body';
 

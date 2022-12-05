@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
 
-import { getAccountUserListApi, updatePinApi, UpdatePin } from 'api';
+import { getAccountUserListApi, updatePinApi, UpdatePin, getInvitationsApi } from 'api';
 
 export const getManagersList = createAsyncThunk(
   'users/getManagersList',
@@ -32,6 +32,17 @@ export const updatePin = createAsyncThunk(
   async ({ profileId, newState }: UpdatePin, { rejectWithValue, signal }) => {
     try {
       return await updatePinApi({ profileId, newState }, signal);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const getInvitations = createAsyncThunk(
+  'users/getInvitations',
+  async ({ id }: { id: string }, { rejectWithValue, signal }) => {
+    try {
+      return await getInvitationsApi({ appletId: id }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }
