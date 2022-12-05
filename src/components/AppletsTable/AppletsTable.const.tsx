@@ -17,6 +17,5 @@ export const getHeadCells = (t: TFunction): HeadCell[] => [
   {
     id: 'actions',
     label: t('actions'),
-    align: 'right',
   },
 ];
