@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { ListItemIcon, MenuItem } from '@mui/material';
 
-import { Svg } from 'components/Svg';
-import { StyledTitleSmall } from 'styles/styledComponents/Typography';
+import { variables } from 'styles/variables';
+import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 
-import { StyledDotsBtn, StyledMenu, StyledTitle } from './Menu.styles';
+import { StyledMenu } from './Menu.styles';
 import { MenuProps } from './Menu.types';
 
-export const Menu = ({ title, anchorEl, onClose, menuItems, context }: MenuProps): JSX.Element => {
+export const Menu = ({ anchorEl, onClose, menuItems, context }: MenuProps): JSX.Element => {
   const { t } = useTranslation('app');
   const open = Boolean(anchorEl);
 
@@ -17,7 +17,7 @@ export const Menu = ({ title, anchorEl, onClose, menuItems, context }: MenuProps
       open={open}
       onClose={onClose}
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'left',
       }}
       transformOrigin={{
@@ -25,14 +25,12 @@ export const Menu = ({ title, anchorEl, onClose, menuItems, context }: MenuProps
         horizontal: 'left',
       }}
     >
-      <StyledDotsBtn variant="text" onClick={onClose}>
-        <Svg id="dots" width={14} height={4} />
-      </StyledDotsBtn>
-      {title && <StyledTitle>{title}</StyledTitle>}
       {menuItems.map(({ icon, title, action }, i) => (
         <MenuItem key={i} onClick={() => action(context)}>
           {icon && <ListItemIcon>{icon}</ListItemIcon>}
-          <StyledTitleSmall>{t(title)}</StyledTitleSmall>
+          <StyledBodyLarge color={variables.palette.on_surface} letterSpacing="xxl">
+            {t(title)}
+          </StyledBodyLarge>
         </MenuItem>
       ))}
     </StyledMenu>

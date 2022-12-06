@@ -182,13 +182,11 @@ export type PrepareApplet = AppletId & {
 export type AppletInvitationData = AppletId & {
   options: {
     role: string;
-    profile: {
-      firstName: string;
-      lastName: string;
-      nickName: string;
-      email: string;
-      mrn: string;
-    };
+    firstName: string;
+    lastName: string;
+    nickName: string;
+    email: string;
+    MRN: string;
     accountName: string;
     users: string[];
   };

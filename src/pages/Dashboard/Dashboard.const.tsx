@@ -1,6 +1,4 @@
-import { AppletsTable } from 'components/AppletsTable';
-import { ManagersTable } from 'components/ManagersTable';
-import { RespondentsTable } from 'components/RespondentsTable';
+import { AppletsTable, ManagersTable, RespondentsTable } from 'components/Tables';
 import { Svg } from 'components/Svg';
 
 export const dashboardTabs = [

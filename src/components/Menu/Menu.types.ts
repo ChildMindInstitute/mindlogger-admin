@@ -5,7 +5,6 @@ type MenuItem = {
 };
 
 export type MenuProps = {
-  title?: string;
   anchorEl: null | HTMLElement;
   onClose: () => void;
   menuItems: MenuItem[];

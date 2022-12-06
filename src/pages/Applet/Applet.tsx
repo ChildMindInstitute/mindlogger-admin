@@ -2,10 +2,9 @@ import { useParams } from 'react-router-dom';
 
 import { Tabs } from 'components/Tabs';
 import { Svg } from 'components/Svg';
-import { RespondentsTable } from 'components/RespondentsTable';
-import { ManagersTable } from 'components/ManagersTable';
+import { RespondentsTable, ManagersTable } from 'components/Tables';
 import { Spinner } from 'components/Spinner';
-import { More } from 'components/More';
+import { More } from 'pages/Applet/More';
 import { users } from 'redux/modules';
 import { StyledBody } from 'styles/styledComponents/Body';
 
