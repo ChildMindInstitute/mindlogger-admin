@@ -1,4 +1,4 @@
-import { Box, Button, OutlinedInput, styled, TableCell } from '@mui/material';
+import { styled, TableCell } from '@mui/material';
 
 import { StyledFlexAllCenter, StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledLabelSmall } from 'styles/styledComponents/Typography';
@@ -10,8 +10,6 @@ export const StyledFolderIcon = styled(StyledFlexAllCenter)`
   width: 3.2rem;
   margin-right: ${theme.spacing(1.2)};
 `;
-
-export const StyledTextField = styled(OutlinedInput)``;
 
 export const StyledFolderName = styled(StyledFlexTopCenter)`
   flex-wrap: wrap;
@@ -29,36 +27,5 @@ export const StyledCell = styled(TableCell)`
     .cell-actions {
       display: flex;
     }
-  }
-`;
-
-export const StyledActions = styled(Box)`
-  display: none;
-  align-items: center;
-  position: absolute;
-  top: 50%;
-  left: 5rem;
-  transform: translateY(-50%);
-`;
-
-export const StyledActionButton = styled(Button)`
-  width: 4rem;
-  height: 4rem;
-  min-width: 4rem;
-  padding: 0;
-  border-radius: ${variables.borderRadius.half};
-  margin-right: ${theme.spacing(1)};
-
-  &:hover {
-    background: ${variables.palette.secondary_container};
-
-    svg {
-      fill: ${variables.palette.primary};
-    }
-  }
-
-  svg {
-    fill: ${({ disabled }: { disabled: boolean }) =>
-      disabled ? variables.palette.surface_variant : variables.palette.on_surface_variant};
   }
 `;

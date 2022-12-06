@@ -2,8 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { Account, ApiError, Folder, FolderApplet, FoldersSchema } from 'redux/modules';
-
 import { getAppletsInFolderApi, saveFolderApi, deleteFolderApi, updateFolderApi } from 'api';
+
 import { deleteFolderById, setAppletsInFolder, updateFolders } from './Folders.utils';
 
 export const getAppletsForFolders = createAsyncThunk(
@@ -30,6 +30,7 @@ export const getAppletsForFolder = createAsyncThunk(
   async ({ folder }: { folder: Folder }, { rejectWithValue, signal }) => {
     try {
       const folderData = await getAppletsInFolderApi({ folderId: folder.id }, signal);
+
       return setAppletsInFolder({ folder, appletsInFolder: folderData.data });
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
@@ -46,6 +47,7 @@ export const saveFolder = createAsyncThunk(
         signal,
       );
       const { folders } = getState() as { folders: FoldersSchema };
+
       return updateFolders(
         folders,
         {
@@ -70,6 +72,7 @@ export const updateFolder = createAsyncThunk(
         signal,
       );
       const { folders } = getState() as { folders: FoldersSchema };
+
       return updateFolders(folders, { ...folder, isRenaming: false });
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);

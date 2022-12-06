@@ -1,4 +1,7 @@
+import { Draft } from '@reduxjs/toolkit';
+
 import {
+  BaseSchema,
   AppletResponse,
   Folder,
   FolderApplet,
@@ -85,20 +88,20 @@ export const setAppletsInFolder = ({
   return loadedFolder;
 };
 
-export const updateFolders = (folders: FoldersSchema, folder: FolderApplet, updatedId?: string) => {
-  const flattenFoldersApplets = [...folders.flattenFoldersApplets];
-  const folderIndex = flattenFoldersApplets.findIndex(
-    (flattenFolder) => flattenFolder.id === folder.id,
-  );
-  flattenFoldersApplets.splice(folderIndex, 1, { ...folder, id: updatedId || folder.id });
+export const updateFolders = (folders: FoldersSchema, folder: FolderApplet, updatedId?: string) =>
+  folders.flattenFoldersApplets.map((folderApplet) => {
+    if (folderApplet.id === folder.id) {
+      return { ...folder, id: updatedId || folder.id };
+    }
+    return folderApplet;
+  });
 
-  return flattenFoldersApplets;
-};
+export const deleteFolderById = (folders: FoldersSchema, folderId: string) =>
+  folders.flattenFoldersApplets.filter((folderApplet) => folderApplet.id !== folderId);
 
-export const deleteFolderById = (folders: FoldersSchema, folderId: string) => {
-  const flattenFoldersApplets = [...folders.flattenFoldersApplets];
-  const folderIndex = flattenFoldersApplets.findIndex((folder) => folder.id === folderId);
-  flattenFoldersApplets.splice(folderIndex, 1);
-
-  return flattenFoldersApplets;
+export const createFoldersPendingData = (foldersData: Draft<BaseSchema>, requestId: string) => {
+  if (foldersData.status !== 'loading') {
+    foldersData.requestId = requestId;
+    foldersData.status = 'loading';
+  }
 };

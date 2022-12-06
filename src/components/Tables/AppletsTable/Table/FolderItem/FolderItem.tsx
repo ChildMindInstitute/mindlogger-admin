@@ -1,6 +1,6 @@
 import { useEffect, useState, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputAdornment, TableCell, TableRow } from '@mui/material';
+import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
 import { folders } from 'redux/modules';
@@ -8,16 +8,14 @@ import { Svg } from 'components/Svg';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { variables } from 'styles/variables';
+import { Actions } from 'components/Actions';
 
 import { FolderItemProps } from './FolderItem.types';
 import {
   StyledFolderIcon,
-  StyledTextField,
   StyledCountApplets,
   StyledFolderName,
   StyledCell,
-  StyledActions,
-  StyledActionButton,
 } from './FolderItem.styles';
 import { getActions } from './FolderItem.const';
 
@@ -37,8 +35,6 @@ export const FolderItem = ({ item, onFolderClick }: FolderItemProps) => {
     }
     dispatch(folders.thunk.deleteFolder({ folderId: folder.id }));
   };
-
-  const actions = getActions(folder, onRenameFolder, onDeleteFolder);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFolder((row) => ({ ...row, name: event.target.value }));
@@ -70,7 +66,7 @@ export const FolderItem = ({ item, onFolderClick }: FolderItemProps) => {
           </StyledFolderIcon>
           <StyledFolderName>
             {folder?.isRenaming ? (
-              <StyledTextField
+              <OutlinedInput
                 value={folder.name}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
@@ -97,16 +93,7 @@ export const FolderItem = ({ item, onFolderClick }: FolderItemProps) => {
       </TableCell>
       <TableCell width="20%"></TableCell>
       <StyledCell>
-        <>
-          <Svg id="dots" width={18} height={4} />
-          <StyledActions className="cell-actions">
-            {actions.map(({ icon, disabled = false, action }, i) => (
-              <StyledActionButton disabled={disabled} key={i} onClick={() => action(item)}>
-                {icon}
-              </StyledActionButton>
-            ))}
-          </StyledActions>
-        </>
+        <Actions items={getActions(folder, onRenameFolder, onDeleteFolder)} context={item} />
       </StyledCell>
     </TableRow>
   );
