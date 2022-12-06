@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TableCell, TableRow, TextField } from '@mui/material';
 
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Svg } from 'components/Svg';
-import { variables } from 'styles/variables';
+import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { FolderItemProps } from './FolderItem.types';
@@ -16,11 +15,11 @@ export const FolderItem = ({ item, onRowClick }: FolderItemProps) => {
   const [row, setRow] = useState(item);
   useEffect(() => setRow(item), [item]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setRow({ ...item, name: event.target.value });
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       setRow({ ...row, isRenaming: false }); // TODO request
     }
@@ -38,9 +37,7 @@ export const FolderItem = ({ item, onRowClick }: FolderItemProps) => {
                 <Svg id="folder" />
               </StyledFolderIcon>
               <StyledFolderName>
-                <StyledBodyMedium color={variables.palette.on_surface} fontWeight={'medium'}>
-                  {row.name}
-                </StyledBodyMedium>
+                <StyledBodyMedium fontWeight={'medium'}>{row.name}</StyledBodyMedium>
                 <StyledCountApplets>
                   ({item?.items?.length} {t('applets')})
                 </StyledCountApplets>

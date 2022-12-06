@@ -1,4 +1,4 @@
-import { Option } from 'components/FormComponents/SelectController/SelectController.types';
+import { Option } from 'components/FormComponents';
 
 export type FormValues = {
   firstName: string;

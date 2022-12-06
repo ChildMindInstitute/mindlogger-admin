@@ -72,8 +72,10 @@
   "actions": "Actions",
   "new": "Nouvelle",
   "fromLibrary": "De la bibliothèque",
-  "takeMeToTheResponseData": "Emmenez-moi aux données de réponse",
+  "takeMeToTheResponseData": "Amenez-moi aux données de la réponse",
   "pendingInvitations": "Invitations en attente",
   "invitationLink": "Lien vers l'invitation",
+  "enterAppletPassword": "Entrez le mot de passe de l'applet",
+  "enterAppletPasswordHint": "Min. 8 caractères avec au moins une majuscule, un chiffre, une lettre minuscule et un caractère spécial.",
   "dateTimeInvited": "Date et heure de l'invitation"
 }

@@ -75,5 +75,7 @@
   "takeMeToTheResponseData": "Take me to the response data",
   "pendingInvitations": "Pending Invitations",
   "invitationLink": "Invitation Link",
+  "enterAppletPassword": "Enter applet password",
+  "enterAppletPasswordHint": "Min. 8 characters with at least on capital letter, a number, lowercase letter and a special character.",
   "dateTimeInvited": "Date & Time Invited"
 }

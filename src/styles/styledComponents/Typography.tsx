@@ -77,6 +77,6 @@ export const StyledBodyMedium = styled(Typography)`
   line-height: ${variables.lineHeight.md};
   font-weight: ${({ fontWeight }: StyledProps) =>
     fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
-  color: ${({ color }: StyledProps) => color || variables.palette.black};
+  color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
   letter-spacing: ${variables.letterSpacing.lg};
 `;
