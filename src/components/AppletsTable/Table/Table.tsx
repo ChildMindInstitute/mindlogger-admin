@@ -16,9 +16,9 @@ export const Table = ({
   rows,
   orderBy: orderByProp,
   headerContent,
-  onRowClick,
+  onFolderClick,
 }: TableProps) => {
-  const [order, setOrder] = useState<Order>('asc');
+  const [order, setOrder] = useState<Order>('desc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
 
@@ -27,7 +27,7 @@ export const Table = ({
       return [];
     }
     return sortRows(rows, getComparator(order, orderBy));
-  }, [order, orderBy, rows?.length]);
+  }, [order, orderBy, rows]);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -75,7 +75,7 @@ export const Table = ({
               )
               .map((row) =>
                 row?.isFolder ? (
-                  <FolderItem onRowClick={onRowClick} key={row.id} item={row} />
+                  <FolderItem onFolderClick={onFolderClick} key={row.id} item={row} />
                 ) : (
                   <AppletItem key={row.id} item={row} />
                 ),

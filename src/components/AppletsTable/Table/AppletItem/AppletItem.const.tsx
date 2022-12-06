@@ -3,31 +3,31 @@ import { FolderApplet } from 'redux/modules';
 
 export const actions = [
   {
-    icon: <Svg id="users" width={22} height={17} />,
+    icon: <Svg id="users" width={24} height={24} />,
     action: (item: FolderApplet) => item,
   },
   {
-    icon: <Svg id="calendar" width={20} height={22} />,
+    icon: <Svg id="calendar" width={24} height={24} />,
     action: (item: FolderApplet) => item,
   },
   {
-    icon: <Svg id="widget" width={18} height={18} />,
+    icon: <Svg id="widget" width={24} height={24} />,
     action: (item: FolderApplet) => item,
   },
   {
-    icon: <Svg id="duplicate" width={18} height={20} />,
+    icon: <Svg id="duplicate" width={24} height={24} />,
     action: (item: FolderApplet) => item,
   },
   {
-    icon: <Svg id="trash" width={18} height={20} />,
+    icon: <Svg id="trash" width={24} height={24} />,
     action: (item: FolderApplet) => item,
   },
   {
-    icon: <Svg id="switch-account" width={22} height={17} />,
+    icon: <Svg id="switch-account" width={24} height={24} />,
     action: (item: FolderApplet) => item,
   },
   {
-    icon: <Svg id="share" width={20} height={20} />,
+    icon: <Svg id="share" width={24} height={24} />,
     action: (item: FolderApplet) => item,
   },
 ];

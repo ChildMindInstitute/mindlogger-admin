@@ -12,7 +12,7 @@ import {
   StyledActionButton,
   StyledActions,
   StyledAppletName,
-  StyledRightCell,
+  StyledCell,
 } from './AppletItem.styles';
 import { actions } from './AppletItem.const';
 
@@ -34,10 +34,10 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           </StyledBodyMedium>
         </StyledAppletName>
       </TableCell>
-      <TableCell width="15%" onClick={() => handleAppletClick(item.id)}>
+      <TableCell width="20%" onClick={() => handleAppletClick(item.id)}>
         {item.updated ? timeAgo.format(new Date(item.updated)) : ''}
       </TableCell>
-      <StyledRightCell align="right">
+      <StyledCell>
         <Svg id="dots" width={18} height={4} />
         <StyledActions className="cell-actions">
           {actions.map(({ icon, action }, i) => (
@@ -46,7 +46,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
             </StyledActionButton>
           ))}
         </StyledActions>
-      </StyledRightCell>
+      </StyledCell>
     </TableRow>
   );
 };

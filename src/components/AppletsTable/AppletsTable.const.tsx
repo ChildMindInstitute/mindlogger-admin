@@ -12,11 +12,10 @@ export const getHeadCells = (t: TFunction): HeadCell[] => [
     id: 'updated',
     label: t('lastEdit'),
     enableSort: true,
-    width: '15%',
+    width: '20%',
   },
   {
     id: 'actions',
     label: t('actions'),
-    align: 'right',
   },
 ];

@@ -2,62 +2,36 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
+import { useAppDispatch } from 'redux/store';
 import { Svg } from 'components/Svg';
-import { account, FolderApplet } from 'redux/modules';
+import { auth, FolderApplet, folders } from 'redux/modules';
 import { Search } from 'components/Search';
 
 import { Table } from './Table';
 import { getHeadCells } from './AppletsTable.const';
 import { StyledButtons, AppletsTableHeader } from './AppletsTable.styles';
+import { generateNewFolderName } from './AppletsTable.utils';
 
 export const AppletsTable = (): JSX.Element => {
   const { t } = useTranslation('app');
-  const currentFoldersApplets: FolderApplet[] | null = account.useFoldersApplets();
+  const dispatch = useAppDispatch();
+  const foldersApplets: FolderApplet[] | null = folders.useFlattenFoldersApplets();
+  const authData = auth.useData();
 
   const [searchValue, setSearchValue] = useState('');
   const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
 
-  const flattenFoldersApplets = (item: FolderApplet): FolderApplet[] => {
-    const folderApplet = { ...item };
-    folderApplet.isNew = false;
-    if (!folderApplet.depth) {
-      folderApplet.depth = 0;
-    }
-    folderApplet.isVisible = folderApplet.depth <= 0;
-    if (!folderApplet.isFolder) {
-      return [folderApplet];
-    }
-    folderApplet.isExpanded = false;
-    if (!folderApplet.items) {
-      return [folderApplet];
-    }
-    folderApplet.items = folderApplet.items
-      .map((_item) =>
-        flattenFoldersApplets({
-          ..._item,
-          parentId: folderApplet.id,
-          depth: (folderApplet.depth || 0) + 1,
-        }),
-      )
-      .flat();
-
-    return [folderApplet, ...folderApplet.items];
-  };
-
   useEffect(() => {
-    const flattenItems: FolderApplet[] = (currentFoldersApplets || [])
-      .map((folderApplet) => flattenFoldersApplets(folderApplet))
-      .flat();
-    setFlattenItems(flattenItems);
-  }, [currentFoldersApplets]);
+    setFlattenItems(foldersApplets);
+  }, [foldersApplets]);
 
-  const handleRowClick = (rowClicked: FolderApplet) => {
+  const handleFolderClick = (folderClicked: FolderApplet) => {
     const flattenUpdated = flattenItems.map((row) => {
-      if (row.id === rowClicked.id) {
-        return { ...row, isExpanded: !rowClicked.isExpanded };
+      if (row.id === folderClicked.id) {
+        return { ...row, isExpanded: !folderClicked.isExpanded };
       }
-      if (row.parentId === rowClicked.id) {
-        return { ...row, isVisible: !rowClicked.isExpanded };
+      if (row.parentId === folderClicked.id) {
+        return { ...row, isVisible: !folderClicked.isExpanded };
       }
 
       return row;
@@ -67,7 +41,22 @@ export const AppletsTable = (): JSX.Element => {
   };
 
   const addFolder = () => {
-    console.log('Add folder');
+    const newFolderName = generateNewFolderName(foldersApplets, t);
+    const folder = {
+      id: (Math.random() + Math.random()).toString(),
+      name: newFolderName,
+      isFolder: true,
+      description: '',
+      isExpanded: false,
+      items: [],
+      roles: [],
+      isNew: true,
+      isRenaming: true,
+      isVisible: true,
+      depth: 0,
+      parentId: authData?.user?.['_id'] || '',
+    };
+    dispatch(folders.actions.createNewFolder(folder));
   };
 
   const handleSearch = (value: string) => {
@@ -118,8 +107,8 @@ export const AppletsTable = (): JSX.Element => {
       <Table
         columns={getHeadCells(t)}
         rows={flattenItems?.filter(filterRows)}
-        onRowClick={handleRowClick}
-        orderBy={'name'}
+        onFolderClick={handleFolderClick}
+        orderBy={'updated'}
         headerContent={headerContent}
       />
     </>

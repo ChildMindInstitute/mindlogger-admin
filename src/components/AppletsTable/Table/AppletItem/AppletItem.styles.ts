@@ -11,7 +11,7 @@ export const StyledAppletName = styled(Box)`
     applet?.depth ? `${applet.depth * 4.4}rem` : 0};
 `;
 
-export const StyledRightCell = styled(TableCell)`
+export const StyledCell = styled(TableCell)`
   position: relative;
 
   &:hover {
@@ -26,7 +26,7 @@ export const StyledActions = styled(Box)`
   align-items: center;
   position: absolute;
   top: 50%;
-  right: 4rem;
+  left: 5rem;
   transform: translateY(-50%);
 `;
 
