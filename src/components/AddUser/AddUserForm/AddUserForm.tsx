@@ -14,8 +14,8 @@ import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import { getAppletInvitationApi } from 'api';
 import { getErrorMessage } from 'utils/getErrorMessage';
 import { prepareUsersData } from 'utils/prepareUsersData';
-
 import { setAccountName } from 'redux/modules/Auth/Auth.thunk';
+
 import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUserForm.styles';
 import { Fields, fields, defaultValues, Roles, langs, roles } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
@@ -79,22 +79,23 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
 
   const updateFields = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = e.target;
+    const { nickName, MRN, accountName, users } = Fields;
 
     if (value === Roles.user) {
-      register(Fields.nickName, { value: '' });
-      register(Fields.MRN, { value: '' });
-      unregister(Fields.accountName);
-      unregister(Fields.users);
+      register(nickName, { value: '' });
+      register(MRN, { value: '' });
+      unregister(accountName);
+      unregister(users);
     } else {
-      unregister(Fields.nickName);
-      unregister(Fields.MRN);
+      unregister(nickName);
+      unregister(MRN);
       if (value === Roles.reviewer) {
-        register(Fields.users, { value: [] });
+        register(users, { value: [] });
       } else {
-        unregister(Fields.users);
+        unregister(users);
       }
       if (accountNameShowed) {
-        register(Fields.accountName, { value: '' });
+        register(accountName, { value: '' });
       }
     }
   };
@@ -115,7 +116,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
                 {...commonProps}
                 name={Fields.role}
                 options={roles}
-                label={t(Fields.role)}
+                label={t('role')}
                 customChange={updateFields}
               />
             </Grid>

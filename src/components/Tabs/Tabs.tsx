@@ -26,8 +26,13 @@ export const Tabs = ({ tabs }: TabsProps): JSX.Element => {
           <Tab key={labelKey} icon={tabIndex === index ? activeIcon : icon} label={t(labelKey)} />
         ))}
       </StyledTabs>
-      {tabs.map(({ content }, i) => (
-        <TabPanel key={i} value={tabIndex} index={i}>
+      {tabs.map(({ content, labelKey }, i) => (
+        <TabPanel
+          key={i}
+          value={tabIndex}
+          index={i}
+          isMinHeightAuto={labelKey === 'appletTabsLabel3'}
+        >
           {content}
         </TabPanel>
       ))}
