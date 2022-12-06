@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
+import { EnterAppletPwd, AppletPwd } from 'components/Popups';
 import { account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import logoSrc from 'assets/images/logo.png';
@@ -41,6 +43,7 @@ export const Notification = ({
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const isActive = currentId === alertId;
+  const [modalActive, setModalActive] = useState(false);
 
   const handleNotificationClick = async () => {
     const { updateAlertStatus } = account.thunk;
@@ -52,60 +55,72 @@ export const Notification = ({
     }
   };
 
-  const handleToResponseDataClick = () => console.log('Take me to the response data click');
+  // TODO: Implement submit applet password
+  const handleToResponseDataClick = () => setModalActive(true);
+  const handleModalSubmit = ({ password }: AppletPwd) => {
+    console.log('applet password', password);
+    setModalActive(false);
+  };
 
   return (
-    <StyledNotification active={isActive} variant="text" onClick={handleNotificationClick}>
-      <StyledTopSection>
-        <StyledLeftSection>
-          <StyledImageWrapper>
-            {imageSrc && <StyledImage src={imageSrc} alt={label} />}
-            <StyledLogo src={logoSrc} alt={label} />
-          </StyledImageWrapper>
-        </StyledLeftSection>
-        <StyledInfo>
-          <StyledLabelMedium
+    <>
+      <StyledNotification active={isActive} variant="text" onClick={handleNotificationClick}>
+        <StyledTopSection>
+          <StyledLeftSection>
+            <StyledImageWrapper>
+              {imageSrc && <StyledImage src={imageSrc} alt={label} />}
+              <StyledLogo src={logoSrc} alt={label} />
+            </StyledImageWrapper>
+          </StyledLeftSection>
+          <StyledInfo>
+            <StyledLabelMedium
+              fontWeight={isActive ? 'medium' : 'semiBold'}
+              color={variables.palette.on_surface_variant}
+            >
+              {label}
+            </StyledLabelMedium>
+            <StyledTitle
+              fontWeight={isActive ? 'medium' : 'semiBold'}
+              color={
+                isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
+              }
+            >
+              {title}
+            </StyledTitle>
+            <StyledMessage
+              fontWeight={isActive ? 'regular' : 'medium'}
+              color={
+                isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
+              }
+            >
+              {message}
+            </StyledMessage>
+          </StyledInfo>
+          <StyledRightSection>{!viewed ? <StyledInfoCircle /> : <Box />}</StyledRightSection>
+        </StyledTopSection>
+        <StyledBottomSection>
+          {isActive && (
+            <StyledBtn
+              variant="contained"
+              startIcon={<Svg width="16.5" height="16.5" id="data-outlined" />}
+              onClick={handleToResponseDataClick}
+            >
+              {t('takeMeToTheResponseData')}
+            </StyledBtn>
+          )}
+          <StyledTimeAgo
             fontWeight={isActive ? 'medium' : 'semiBold'}
-            color={variables.palette.on_surface_variant}
+            color={viewed ? variables.palette.on_surface_variant : variables.palette.semantic.error}
           >
-            {label}
-          </StyledLabelMedium>
-          <StyledTitle
-            fontWeight={isActive ? 'medium' : 'semiBold'}
-            color={
-              isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
-            }
-          >
-            {title}
-          </StyledTitle>
-          <StyledMessage
-            fontWeight={isActive ? 'regular' : 'medium'}
-            color={
-              isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
-            }
-          >
-            {message}
-          </StyledMessage>
-        </StyledInfo>
-        <StyledRightSection>{!viewed ? <StyledInfoCircle /> : <Box />}</StyledRightSection>
-      </StyledTopSection>
-      <StyledBottomSection>
-        {isActive && (
-          <StyledBtn
-            variant="contained"
-            startIcon={<Svg width="16.5" height="16.5" id="data-outlined" />}
-            onClick={handleToResponseDataClick}
-          >
-            {t('takeMeToTheResponseData')}
-          </StyledBtn>
-        )}
-        <StyledTimeAgo
-          fontWeight={isActive ? 'medium' : 'semiBold'}
-          color={viewed ? variables.palette.on_surface_variant : variables.palette.semantic.error}
-        >
-          {timeAgo}
-        </StyledTimeAgo>
-      </StyledBottomSection>
-    </StyledNotification>
+            {timeAgo}
+          </StyledTimeAgo>
+        </StyledBottomSection>
+      </StyledNotification>
+      <EnterAppletPwd
+        open={modalActive}
+        onClose={() => setModalActive(false)}
+        onSubmit={handleModalSubmit}
+      />
+    </>
   );
 };

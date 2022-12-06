@@ -7,9 +7,7 @@ import Grid from '@mui/material/Grid';
 
 import { users, auth, account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { InputController } from 'components/FormComponents/InputController';
-import { SelectController } from 'components/FormComponents/SelectController';
-import { TagsInputController } from 'components/FormComponents/TagsInputController';
+import { InputController, SelectController, TagsInputController } from 'components/FormComponents';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import { getAppletInvitationApi } from 'api';
 import { getErrorMessage } from 'utils/getErrorMessage';
@@ -124,7 +122,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
                 <TagsInputController
                   {...commonProps}
                   name={Fields.users}
-                  // TODO fix types
+                  // TODO: fix types
                   options={prepareUsersData(usersData?.items)?.map((el: any) => el?.MRN)}
                   label={t('userList')}
                 />

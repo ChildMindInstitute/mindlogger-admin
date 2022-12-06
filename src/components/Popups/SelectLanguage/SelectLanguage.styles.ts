@@ -1,25 +1,9 @@
 import { styled } from '@mui/system';
-import { Box, Button, Dialog, DialogActions, List, ListItemButton } from '@mui/material';
+import { Box, List, ListItemButton } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-
-export const StyledDialog = styled(Dialog)`
-  .MuiPaper-root {
-    background-color: ${variables.palette.surface3};
-    width: 43.4rem;
-  }
-`;
-
-export const StyledCloseButton = styled(StyledClearedButton)`
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  border-radius: ${variables.borderRadius.half};
-  padding: 1.5rem;
-`;
 
 export const StyledList = styled(List)`
   padding: ${theme.spacing(0.4, 2.4)};
@@ -28,7 +12,7 @@ export const StyledList = styled(List)`
 export const StyledListItemButton = styled(ListItemButton)`
   display: flex;
   padding: ${theme.spacing(1.4, 2)};
-  border-radius: ${variables.borderRadius.lg};
+  border-radius: ${variables.borderRadius.xs};
 `;
 
 export const StyledBox = styled(Box)`
@@ -42,12 +26,4 @@ export const StyledItemContent = styled(StyledFlexTopCenter)`
 export const StyledSelect = styled(Box)`
   text-align: center;
   width: 2.4rem;
-`;
-
-export const StyledDialogActions = styled(DialogActions)`
-  justify-content: center;
-`;
-
-export const StyledOkButton = styled(Button)`
-  font-weight: ${variables.font.weight.semiBold};
 `;

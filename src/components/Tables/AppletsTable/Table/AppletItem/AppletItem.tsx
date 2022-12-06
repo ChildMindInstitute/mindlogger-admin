@@ -4,7 +4,6 @@ import { TableCell, TableRow } from '@mui/material';
 import { useTimeAgo } from 'hooks';
 import { FolderApplet } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import { variables } from 'styles/variables';
 import { Actions } from 'components/Actions';
 
 import { AppletImage } from '../AppletImage';
@@ -24,9 +23,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
       <TableCell width="30%" onClick={() => handleAppletClick(item.id)}>
         <StyledAppletName applet={item}>
           <AppletImage image={item.image} appletName={item.name} />
-          <StyledBodyMedium color={variables.palette.on_surface} fontWeight={'medium'}>
-            {item.name}
-          </StyledBodyMedium>
+          <StyledBodyMedium fontWeight={'medium'}>{item.name}</StyledBodyMedium>
         </StyledAppletName>
       </TableCell>
       <TableCell width="20%" onClick={() => handleAppletClick(item.id)}>

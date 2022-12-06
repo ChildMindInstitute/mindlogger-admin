@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputAdornment, TableCell, TableRow } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
 import { folders } from 'redux/modules';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Svg } from 'components/Svg';
-import { variables } from 'styles/variables';
+import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { variables } from 'styles/variables';
 
 import { FolderItemProps } from './FolderItem.types';
 import {
@@ -44,7 +44,7 @@ export const FolderItem = ({ item, onFolderClick }: FolderItemProps) => {
     setFolder((row) => ({ ...row, name: event.target.value }));
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (!folder.isNew) {
         dispatch(folders.thunk.updateFolder(folder));

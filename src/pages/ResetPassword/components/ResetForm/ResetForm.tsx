@@ -9,7 +9,7 @@ import { ResetPassword } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { auth, ErrorResponse } from 'redux/modules';
 import { page } from 'resources';
-import { InputController } from 'components/FormComponents/InputController';
+import { InputController } from 'components/FormComponents';
 import { StyledHeadline } from 'styles/styledComponents/Typography';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 

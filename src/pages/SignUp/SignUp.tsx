@@ -8,8 +8,7 @@ import { AxiosError } from 'axios';
 import { useAppDispatch } from 'redux/store';
 import { auth, ErrorResponse } from 'redux/modules';
 import { page } from 'resources';
-import { InputController } from 'components/FormComponents/InputController';
-import { CheckboxController } from 'components/FormComponents/CheckboxController';
+import { InputController, CheckboxController } from 'components/FormComponents';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 
 import { AdvancedSettings } from './AdvancedSettings';
