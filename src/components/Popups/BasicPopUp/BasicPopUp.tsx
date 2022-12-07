@@ -1,8 +1,8 @@
 import Modal from '@mui/material/Modal';
 
-import { BasicProps } from './Basic.types';
+import { BasicPopUpProps } from './BasicPopUp.types';
 
-export const Basic = ({ children, handleClose, open }: BasicProps) => (
+export const BasicPopUp = ({ children, handleClose, open }: BasicPopUpProps) => (
   <Modal
     open={open}
     onClose={handleClose}

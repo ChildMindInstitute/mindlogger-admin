@@ -1,9 +1,9 @@
-export type IinviteLink = {
+export type InviteLink = {
   requireLogin: boolean;
   inviteId: string;
 };
 
 export type LinkGeneratorProps = {
-  setInviteLink: (val: IinviteLink | null) => void;
-  inviteLink: IinviteLink;
+  setInviteLink: (val: InviteLink | null) => void;
+  inviteLink: InviteLink;
 };

@@ -1,24 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { getAppletPublicLinkApi } from 'api';
 import { getErrorMessage } from 'utils/getErrorMessage';
 
 import { StyledTitle } from '../AddUser.styles';
 import { LinkForm } from './LinkForm';
-import { IinviteLink } from './LinkGenerator.types';
+import { InviteLink } from './LinkGenerator.types';
 import { LinkModal } from './LinkModal';
+import { StyledWrapper } from './LinkGenerator.styles';
 
 export const LinkGenerator = () => {
+  const { t } = useTranslation('app');
   const { id } = useParams();
-  const [inviteLink, setInviteLink] = useState<IinviteLink | null>(null);
+  const [inviteLink, setInviteLink] = useState<InviteLink | null>(null);
 
   useEffect(() => {
     (async () => {
       if (id) {
         try {
           const { data } = await getAppletPublicLinkApi({ appletId: id });
-          setInviteLink(data);
+          data?.inviteId && setInviteLink(data);
         } catch (e) {
           getErrorMessage(e);
         }
@@ -27,13 +30,13 @@ export const LinkGenerator = () => {
   }, []);
 
   return (
-    <>
-      <StyledTitle>Public Link</StyledTitle>
+    <StyledWrapper>
+      <StyledTitle>{t('publicLink')}</StyledTitle>
       {inviteLink ? (
         <LinkForm inviteLink={inviteLink} setInviteLink={setInviteLink} />
       ) : (
         <LinkModal setInviteLink={setInviteLink} />
       )}
-    </>
+    </StyledWrapper>
   );
 };

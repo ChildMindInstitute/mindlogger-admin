@@ -75,5 +75,12 @@
   "takeMeToTheResponseData": "Take me to the response data",
   "pendingInvitations": "Pending Invitations",
   "invitationLink": "Invitation Link",
-  "dateTimeInvited": "Date & Time Invited"
+  "dateTimeInvited": "Date & Time Invited",
+  "publicLink": "Public Link",
+  "generateLink": "Generate Link",
+  "requireToCreateAccount": "Do you want to require user to create account?",
+  "deleteInviteLink": "Delete invite link",
+  "deleteLinkToNoAllow": "Delete this link no longer allow anyone to access url",
+  "shareWithLogin": "Share the following link to invite anyone to this study.",
+  "shareWithNoLogin": "Share the following link for users to take assessment without account."
 }

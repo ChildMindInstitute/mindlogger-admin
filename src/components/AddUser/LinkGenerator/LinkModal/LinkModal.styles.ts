@@ -1,16 +1,18 @@
 import { Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
+import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 export const StyledButton = styled(Button)`
-  background: ${variables.palette.primary};
+  background-color: ${variables.palette.primary};
   color: ${variables.palette.white};
 `;
 
 export const StyledModalBtn = styled(Button)`
-  background: transparent;
+  background-color: transparent;
   color: ${variables.palette.primary};
+  text-transform: upperCase;
 `;
 
 export const StyledModalWrapper = styled(Box)`
@@ -19,10 +21,10 @@ export const StyledModalWrapper = styled(Box)`
   left: 50%;
   transform: translate(-50%, -50%);
   background: ${variables.palette.white};
-  padding: 16px 16px 8px;
+  padding: ${theme.spacing(1.6, 1.6, 0.8)};
   min-width: 70rem;
 `;
 
 export const StyledModalText = styled(Box)`
-  padding: 20px 0;
+  padding: ${theme.spacing(2, 0)};
 `;

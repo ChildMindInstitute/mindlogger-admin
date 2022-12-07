@@ -1,15 +1,20 @@
 import { useParams } from 'react-router-dom';
-import TextField from '@mui/material/TextField';
-import { Box } from '@mui/system';
+import { useTranslation } from 'react-i18next';
 
 import { deleteAppletPublicLinkApi } from 'api';
 import { getErrorMessage } from 'utils/getErrorMessage';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { StyledBodyMedium } from 'styles/styledComponents/Typography';
+import { Svg } from 'components/Svg';
 
-import { StyledButton } from './LinkForm.styles';
+import { StyledButton, StyledInput } from './LinkForm.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';
+import { formatLink } from '../LinkGenerator.utils';
 
 export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
   const { id } = useParams();
+  const { t } = useTranslation('app');
+  const publicLink = formatLink(inviteLink?.inviteId) || '';
 
   const deleteAppletPublicLink = async () => {
     try {
@@ -22,26 +27,33 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
     }
   };
 
+  const copyPublicLink = () => {
+    navigator.clipboard.writeText(publicLink);
+  };
+
   return (
     <>
-      {inviteLink?.requireLogin ? (
-        <div>Share the following link to invite anyone to this study.</div>
-      ) : (
-        <div>Share the following link for users to take assessment without account.</div>
-      )}
-      <TextField
-        label=""
-        defaultValue={inviteLink?.inviteId || ''}
-        InputProps={{
-          readOnly: true,
-        }}
-      />
-      <Box sx={{ display: 'flex' }}>
-        <StyledButton variant="outlined" onClick={deleteAppletPublicLink}>
-          Delete invite link
+      <StyledBodyMedium>
+        {inviteLink?.requireLogin ? t('shareWithLogin') : t('shareWithNoLogin')}
+      </StyledBodyMedium>
+      <StyledFlexTopCenter>
+        <StyledInput
+          label=""
+          defaultValue={publicLink}
+          InputProps={{
+            readOnly: true,
+          }}
+        />
+        <StyledButton variant="outlined" onClick={copyPublicLink}>
+          <Svg id="duplicate" />
         </StyledButton>
-        <div>Delete this link no longer allow anyone to access url</div>
-      </Box>
+      </StyledFlexTopCenter>
+      <StyledFlexTopCenter>
+        <StyledButton variant="outlined" onClick={deleteAppletPublicLink}>
+          {t('deleteInviteLink')}
+        </StyledButton>
+        <StyledBodyMedium>{t('deleteLinkToNoAllow')}</StyledBodyMedium>
+      </StyledFlexTopCenter>
     </>
   );
 };
