@@ -70,6 +70,8 @@
   "lastEdit": "Last Edit",
   "updated": "Updated",
   "actions": "Actions",
+  "empty": "Empty",
+  "newFolder": "New Folder",
   "new": "New",
   "fromLibrary": "From Library",
   "takeMeToTheResponseData": "Take me to the response data",

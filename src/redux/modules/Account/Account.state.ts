@@ -9,5 +9,4 @@ const initialStateData = {
 
 export const state: AccountSchema = {
   switchAccount: initialStateData,
-  accountFoldersApplets: initialStateData,
 };

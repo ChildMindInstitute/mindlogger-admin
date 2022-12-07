@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { LeftBar } from 'components/LeftBar';
 import { TopBar } from 'components/TopBar';
 import { Footer } from 'layouts/Footer';
-import { account, users } from 'redux/modules';
+import { account, users, folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
@@ -20,7 +20,7 @@ export const BaseLayout = (): JSX.Element => {
 
   useEffect(() => {
     if (accountData?.account) {
-      dispatch(account.thunk.getAppletsForFolders({ account: accountData?.account }));
+      dispatch(folders.thunk.getAppletsForFolders({ account: accountData?.account }));
     }
   }, [dispatch, accountData?.account]);
 
