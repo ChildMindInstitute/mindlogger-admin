@@ -36,6 +36,7 @@ export const StyledActionButton = styled(Button)`
   }
 
   svg {
-    fill: ${variables.palette.on_surface_variant};
+    fill: ${({ disabled }: { disabled: boolean }) =>
+      disabled ? variables.palette.surface_variant : variables.palette.on_surface_variant};
   }
 `;

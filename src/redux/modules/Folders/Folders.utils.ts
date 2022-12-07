@@ -1,11 +1,41 @@
 import { Draft } from '@reduxjs/toolkit';
+
 import {
-  AppletResponse,
   BaseSchema,
+  AppletResponse,
   Folder,
+  FolderApplet,
+  FoldersSchema,
   LoadedFolder,
   LoadedFolderApplet,
 } from 'redux/modules';
+
+export const flatFoldersApplets = (item: FolderApplet): FolderApplet[] => {
+  const folderApplet = { ...item };
+  folderApplet.isNew = false;
+  if (!folderApplet.depth) {
+    folderApplet.depth = 0;
+  }
+  folderApplet.isVisible = folderApplet.depth <= 0;
+  if (!folderApplet.isFolder) {
+    return [folderApplet];
+  }
+  folderApplet.isExpanded = false;
+  if (!folderApplet.items) {
+    return [folderApplet];
+  }
+  folderApplet.items = folderApplet.items
+    .map((_item) =>
+      flatFoldersApplets({
+        ..._item,
+        parentId: folderApplet.id,
+        depth: (folderApplet.depth || 0) + 1,
+      }),
+    )
+    .flat();
+
+  return [folderApplet, ...folderApplet.items];
+};
 
 const removeDuplicateApplets = (loadedFolder: LoadedFolder) => {
   const hash: { [key: string]: LoadedFolderApplet } = {};
@@ -58,9 +88,20 @@ export const setAppletsInFolder = ({
   return loadedFolder;
 };
 
-export const createAccountPendingData = (accountData: Draft<BaseSchema>, requestId: string) => {
-  if (accountData.status !== 'loading') {
-    accountData.requestId = requestId;
-    accountData.status = 'loading';
+export const updateFolders = (folders: FoldersSchema, folder: FolderApplet, updatedId?: string) =>
+  folders.flattenFoldersApplets.map((folderApplet) => {
+    if (folderApplet.id === folder.id) {
+      return { ...folder, id: updatedId || folder.id };
+    }
+    return folderApplet;
+  });
+
+export const deleteFolderById = (folders: FoldersSchema, folderId: string) =>
+  folders.flattenFoldersApplets.filter((folderApplet) => folderApplet.id !== folderId);
+
+export const createFoldersPendingData = (foldersData: Draft<BaseSchema>, requestId: string) => {
+  if (foldersData.status !== 'loading') {
+    foldersData.requestId = requestId;
+    foldersData.status = 'loading';
   }
 };

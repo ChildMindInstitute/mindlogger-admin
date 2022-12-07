@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { styled, TableCell } from '@mui/material';
 
 import { StyledFlexAllCenter, StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledLabelSmall } from 'styles/styledComponents/Typography';
@@ -18,4 +18,14 @@ export const StyledFolderName = styled(StyledFlexTopCenter)`
 export const StyledCountApplets = styled(StyledLabelSmall)`
   color: ${variables.palette.outline};
   margin-left: ${theme.spacing(0.4)};
+`;
+
+export const StyledCell = styled(TableCell)`
+  position: relative;
+
+  &:hover {
+    .cell-actions {
+      display: flex;
+    }
+  }
 `;

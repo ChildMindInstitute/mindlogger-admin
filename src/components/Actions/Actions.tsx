@@ -18,8 +18,8 @@ export const Actions = ({ items, context }: { items: Action[]; context: any }) =
     >
       {showActions ? (
         <StyledActions>
-          {items.map(({ icon, action }, i) => (
-            <StyledActionButton key={i} onClick={() => action(context)}>
+          {items.map(({ icon, disabled = false, action }, i) => (
+            <StyledActionButton disabled={disabled} key={i} onClick={() => action(context)}>
               {icon}
             </StyledActionButton>
           ))}

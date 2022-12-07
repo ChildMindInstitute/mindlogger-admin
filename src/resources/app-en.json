@@ -70,17 +70,21 @@
   "lastEdit": "Last Edit",
   "updated": "Updated",
   "actions": "Actions",
+  "empty": "Empty",
+  "newFolder": "New Folder",
   "new": "New",
   "fromLibrary": "From Library",
   "takeMeToTheResponseData": "Take me to the response data",
   "pendingInvitations": "Pending Invitations",
   "invitationLink": "Invitation Link",
-  "dateTimeInvited": "Date & Time Invited",
   "publicLink": "Public Link",
   "generateLink": "Generate Link",
   "requireToCreateAccount": "Do you want to require user to create account?",
   "deleteInviteLink": "Delete invite link",
   "deleteLinkToNoAllow": "Delete this link no longer allow anyone to access url",
   "shareWithLogin": "Share the following link to invite anyone to this study.",
-  "shareWithNoLogin": "Share the following link for users to take assessment without account."
+  "shareWithNoLogin": "Share the following link for users to take assessment without account.",
+  "enterAppletPassword": "Enter applet password",
+  "enterAppletPasswordHint": "Min. 8 characters with at least on capital letter, a number, lowercase letter and a special character.",
+  "dateTimeInvited": "Date & Time Invited"
 }

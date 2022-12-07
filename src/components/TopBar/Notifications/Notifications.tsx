@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
-import { account } from 'redux/modules';
+import { account, folders } from 'redux/modules';
 import { useTimeAgo } from 'hooks';
 import { getAppletData } from 'utils/getAppletData';
 import { variables } from 'styles/variables';
@@ -23,7 +23,7 @@ import { NotificationsProps } from './Notifications.types';
 export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const accData = account.useData();
-  const appletsFoldersData = account.useFoldersApplets();
+  const appletsFoldersData = folders.useFoldersApplets();
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
     Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null

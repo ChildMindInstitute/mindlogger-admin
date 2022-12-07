@@ -1,22 +1,19 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, DialogTitle } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { Svg } from 'components/Svg';
+import { Modal } from 'components/Popups';
 import { variables } from 'styles/variables';
 import { StyledTitleMedium, StyledTitleSmall } from 'styles/styledComponents/Typography';
 
 import { SelectLanguageProps } from './SelectLanguage.types';
 import {
-  StyledDialog,
-  StyledCloseButton,
   StyledList,
   StyledListItemButton,
   StyledItemContent,
   StyledBox,
   StyledSelect,
-  StyledDialogActions,
-  StyledOkButton,
 } from './SelectLanguage.styles';
 
 export const SelectLanguage = ({
@@ -30,13 +27,14 @@ export const SelectLanguage = ({
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage);
 
   return (
-    <StyledDialog onClose={() => onClose()} open={open}>
-      <DialogTitle>
-        {t('chooseLanguage')}
-        <StyledCloseButton onClick={() => onClose()}>
-          <Svg width={14} height={14} id="cross" />
-        </StyledCloseButton>
-      </DialogTitle>
+    <Modal
+      open={open}
+      onClose={() => onClose()}
+      onSubmit={() => onClose(selectedLanguage)}
+      title={t('chooseLanguage')}
+      titleAlign="center"
+      buttonText={t('ok')}
+    >
       <StyledList>
         {languages.map((lang) => (
           <StyledListItemButton
@@ -64,9 +62,6 @@ export const SelectLanguage = ({
           </StyledListItemButton>
         ))}
       </StyledList>
-      <StyledDialogActions>
-        <StyledOkButton onClick={() => onClose(selectedLanguage)}>{t('ok')}</StyledOkButton>
-      </StyledDialogActions>
-    </StyledDialog>
+    </Modal>
   );
 };
