@@ -3,7 +3,8 @@ import { Button, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledTitleMedium } from 'styles/styledComponents/Typography';
+
+import { StyledTitle as AddUserTitle } from '../AddUser.styles';
 
 export const StyledRow = styled(Box)`
   display: flex;
@@ -21,7 +22,6 @@ export const StyledResetButton = styled(StyledButton)`
   margin-left: ${theme.spacing(1.2)};
 `;
 
-export const StyledTitle = styled(StyledTitleMedium)`
-  margin-bottom: ${theme.spacing(1.6)};
-  font-weight: ${variables.font.weight.semiBold};
+export const StyledTitle = styled(AddUserTitle)`
+  margin-top: 0;
 `;

@@ -13,7 +13,6 @@ import { prepareUsersData } from 'utils/prepareUsersData';
 
 import { ManagersTableHeader } from './ManagersTable.styles';
 import { getHeadCells } from './ManagersTable.const';
-import { tableHeight } from './ManagersTable.utils';
 
 export const ManagersTable = (): JSX.Element => {
   const { id } = useParams();
@@ -86,12 +85,7 @@ export const ManagersTable = (): JSX.Element => {
       <ManagersTableHeader>
         <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
       </ManagersTableHeader>
-      <Table
-        tableHeight={tableHeight}
-        columns={getHeadCells(t)}
-        rows={handleFilterRows(rows as Row[])}
-        orderBy={'updated'}
-      />
+      <Table columns={getHeadCells(t)} rows={handleFilterRows(rows as Row[])} orderBy={'updated'} />
     </>
   );
 };

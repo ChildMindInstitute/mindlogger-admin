@@ -31,8 +31,8 @@ export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
           />
         ))}
       </StyledTabs>
-      {tabs.map(({ content }, i) => (
-        <TabPanel key={i} value={activeTab || tabIndex} index={i}>
+      {tabs.map(({ content, isMinHeightAuto }, i) => (
+        <TabPanel key={i} value={activeTab || tabIndex} index={i} isMinHeightAuto={isMinHeightAuto}>
           {content}
         </TabPanel>
       ))}

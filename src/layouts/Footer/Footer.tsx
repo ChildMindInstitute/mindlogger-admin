@@ -20,29 +20,27 @@ export const Footer = () => {
   const { t } = useTranslation('app');
 
   return (
-    <Box>
-      <StyledFooter>
-        <Box>
-          <StyledText>
-            {version} &#169; {year}
-            <StyledUnderlineLink target="_blank" href="https://childmind.org">
-              Child Mind Institute
-            </StyledUnderlineLink>
-            &#183;
-            <StyledUnderlineLink target="_blank" href="https://matter.childmind.org">
-              MATTER Lab
-            </StyledUnderlineLink>
-          </StyledText>
-        </Box>
-        <StyledBox>
-          <StyledLink>{t('privacy')}</StyledLink>
-          <StyledLink target="_blank" href="https://mindlogger.org/terms">
-            {t('terms')}
-          </StyledLink>
-          <StyledLink> {t('about')}</StyledLink>
-          <Language />
-        </StyledBox>
-      </StyledFooter>
-    </Box>
+    <StyledFooter>
+      <Box>
+        <StyledText>
+          {version} &#169; {year}
+          <StyledUnderlineLink target="_blank" href="https://childmind.org">
+            Child Mind Institute
+          </StyledUnderlineLink>
+          &#183;
+          <StyledUnderlineLink target="_blank" href="https://matter.childmind.org">
+            MATTER Lab
+          </StyledUnderlineLink>
+        </StyledText>
+      </Box>
+      <StyledBox>
+        <StyledLink>{t('privacy')}</StyledLink>
+        <StyledLink target="_blank" href="https://mindlogger.org/terms">
+          {t('terms')}
+        </StyledLink>
+        <StyledLink> {t('about')}</StyledLink>
+        <Language />
+      </StyledBox>
+    </StyledFooter>
   );
 };

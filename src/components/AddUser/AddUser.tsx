@@ -14,6 +14,7 @@ import { appletPages } from 'utils/constants';
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
 import { Invitation } from './AddUser.types';
+import { LinkGenerator } from './LinkGenerator';
 
 export const AddUser = () => {
   const { id } = useParams();
@@ -91,6 +92,7 @@ export const AddUser = () => {
     <>
       <AddUserForm getInvitationsHandler={getInvitationsHandler} />
       <InvitationsTable rows={rows} />
+      <LinkGenerator />
     </>
   );
 };
