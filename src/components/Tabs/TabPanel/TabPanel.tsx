@@ -1,5 +1,3 @@
-import Box from '@mui/material/Box';
-
 import { StyledPanel } from './TabPanel.style';
 import { TabPanelProps } from './TabPanel.types';
 
@@ -11,6 +9,6 @@ export const TabPanel = ({ children, value, index, ...other }: TabPanelProps) =>
     aria-labelledby={`simple-tab-${index}`}
     {...other}
   >
-    {value === index && <Box>{children}</Box>}
+    {value === index && children}
   </StyledPanel>
 );

@@ -36,6 +36,7 @@ export const Applet = (): JSX.Element => {
       icon: <Svg id="dots" />,
       activeIcon: <Svg id="dots-filled" />,
       content: <More />,
+      isMinHeightAuto: true,
     },
   ];
 
