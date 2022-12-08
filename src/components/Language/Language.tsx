@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { variables } from 'styles/variables';
+import { SelectLanguage } from 'components/Popups';
 import { Svg } from 'components/Svg';
-import { SelectLanguage } from 'components/Popups/SelectLanguage';
+import { variables } from 'styles/variables';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
 
 import { LanguageItem, Languages } from './Language.types';
@@ -26,10 +26,9 @@ export const languages: LanguageItem[] = [
 ];
 
 export const Language = () => {
+  const { i18n } = useTranslation('app');
   const langFromStorage = sessionStorage.getItem('lang') || Languages.EN;
   const language = languages.find((lang) => lang.value === langFromStorage) as LanguageItem;
-
-  const { i18n } = useTranslation('app');
 
   const [currentLanguage, setCurrentLanguage] = useState(language);
   const [open, setOpen] = useState(false);

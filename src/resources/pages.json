@@ -4,6 +4,11 @@
   "passwordReset": "/auth/reset-password",
   "dashboard": "/",
   "applet": "/:id",
+  "appletRespondents": "/:id/respondents",
+  "appletManagers": "/:id/managers",
+  "appletSchedule": "/:id/schedule",
+  "appletMore": "/:id/more",
+  "appletAddUser": "/:id/more/add-user",
   "builder": "/builder",
   "library": "/library"
 }

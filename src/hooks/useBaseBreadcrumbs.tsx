@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Svg } from 'components/Svg';
-import { auth, account, Breadcrumb } from 'redux/modules';
+import { auth, folders, Breadcrumb } from 'redux/modules';
 import { page } from 'resources';
 import { getAppletData } from 'utils/getAppletData';
 
 export const useBaseBreadcrumbs = () => {
   const { id } = useParams();
   const authData = auth.useData();
-  const appletsFoldersData = account.useFoldersApplets();
+  const appletsFoldersData = folders.useFoldersApplets();
 
   const [baseBreadcrumbs, setBaseBreadcrumbs] = useState<Breadcrumb[]>([]);
 
@@ -29,7 +29,7 @@ export const useBaseBreadcrumbs = () => {
       newBreadcrumbs.push({
         icon: image || '',
         label: name || '',
-        navPath: `/${id}`,
+        disabledLink: true,
       });
     }
 

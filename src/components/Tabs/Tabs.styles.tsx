@@ -7,12 +7,14 @@ import { TABS_HEIGHT } from 'utils/constants';
 
 export const StyledTabs = styled(Tabs)`
   height: ${TABS_HEIGHT};
+  flex-shrink: 0;
 
   .MuiTab-root {
     color: ${variables.palette.on_surface_variant};
     text-transform: inherit;
     padding: ${theme.spacing(0.8, 2.6, 0.7)};
-    min-height: 6.4rem;
+    justify-content: space-between;
+    min-height: ${TABS_HEIGHT};
   }
 
   svg {

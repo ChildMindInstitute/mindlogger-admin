@@ -28,8 +28,14 @@ export const dashboardRoutes = [
     path: page.dashboard,
     Component: Dashboard,
   },
-  {
-    path: page.applet,
+  ...[
+    page.appletRespondents,
+    page.appletManagers,
+    page.appletSchedule,
+    page.appletMore,
+    page.appletAddUser,
+  ].map((path) => ({
+    path,
     Component: Applet,
-  },
+  })),
 ];

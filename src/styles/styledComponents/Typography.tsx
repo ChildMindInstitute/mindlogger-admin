@@ -68,7 +68,8 @@ export const StyledBodyLarge = styled(Typography)`
   font-weight: ${({ fontWeight }: StyledProps) =>
     fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
-  letter-spacing: ${variables.letterSpacing.md};
+  letter-spacing: ${({ letterSpacing }: StyledProps) =>
+    letterSpacing ? variables.letterSpacing[letterSpacing] : variables.letterSpacing.md};
 `;
 
 export const StyledBodyMedium = styled(Typography)`
@@ -76,6 +77,15 @@ export const StyledBodyMedium = styled(Typography)`
   line-height: ${variables.lineHeight.md};
   font-weight: ${({ fontWeight }: StyledProps) =>
     fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
-  color: ${({ color }: StyledProps) => color || variables.palette.black};
+  color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
   letter-spacing: ${variables.letterSpacing.lg};
+`;
+
+export const StyledBodySmall = styled(Typography)`
+  font-size: ${variables.font.size.sm};
+  line-height: ${variables.lineHeight.sm};
+  font-weight: ${({ fontWeight }: StyledProps) =>
+    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
+  color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
+  letter-spacing: ${variables.letterSpacing.xl};
 `;

@@ -14,6 +14,8 @@ export const StyledFooter = styled(Box)`
   line-height: ${variables.lineHeight.sm};
   padding: ${theme.spacing(2, 0)};
   border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  background-color: ${variables.palette.surface};
+  z-index: 1;
 `;
 
 export const StyledText = styled(Box)`

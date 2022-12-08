@@ -5,6 +5,7 @@ export const palette = {
   primary_container: '#cee5ff',
   secondary_container: '#d5e4f7',
   surface1: '#eff4fa',
+  surface2: '#e8f0f7',
   surface3: '#e0ebf4',
 
   on_surface: '#1a1c1e',
@@ -16,6 +17,8 @@ export const palette = {
   on_secondary_container: '#0e1d2a',
 
   primary50_alfa5: 'rgba(0, 98, 157, 0.05)',
+  on_surface_variant_alfa8: 'rgba(66, 71, 78, 0.08)',
+  on_surface_variant_alfa12: 'rgba(66, 71, 78, 0.12)',
 
   black: '#000',
   white: '#fff',
