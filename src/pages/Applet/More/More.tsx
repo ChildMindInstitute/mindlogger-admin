@@ -26,7 +26,7 @@ export const More = () => {
   };
 
   useEffect(() => {
-    if (id && baseBreadcrumbs && baseBreadcrumbs.length > 0) {
+    if (id && baseBreadcrumbs?.length > 0) {
       dispatch(
         breadcrumbs.actions.setBreadcrumbs([
           ...baseBreadcrumbs,

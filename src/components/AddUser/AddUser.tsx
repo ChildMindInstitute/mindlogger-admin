@@ -70,7 +70,7 @@ export const AddUser = () => {
   useEffect(() => {
     getInvitationsHandler();
 
-    if (id && baseBreadcrumbs && baseBreadcrumbs.length > 0) {
+    if (id && baseBreadcrumbs?.length > 0) {
       dispatch(
         breadcrumbs.actions.setBreadcrumbs([
           ...baseBreadcrumbs,
