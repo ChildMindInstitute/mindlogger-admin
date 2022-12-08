@@ -17,7 +17,7 @@ export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
   return (
     <>
       <StyledTabs
-        value={activeTab ? activeTab : tabIndex}
+        value={activeTab || tabIndex}
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}
         centered
@@ -32,7 +32,7 @@ export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
         ))}
       </StyledTabs>
       {tabs.map(({ content }, i) => (
-        <TabPanel key={i} value={activeTab ? activeTab : tabIndex} index={i}>
+        <TabPanel key={i} value={activeTab || tabIndex} index={i}>
           {content}
         </TabPanel>
       ))}

@@ -56,7 +56,7 @@ export const Breadcrumbs = (): JSX.Element => {
               )}
             </StyledBox>
           ) : (
-            <StyledLink key={index} to={navPath ? navPath : ''}>
+            <StyledLink key={index} to={navPath || ''}>
               {getBreadcrumbIcon(icon, label)}
               <StyledBodySmall color={variables.palette.on_surface_variant}>
                 {label}

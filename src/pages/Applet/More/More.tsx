@@ -40,7 +40,7 @@ export const More = () => {
 
   useEffect(() => {
     const { pathname } = location;
-    pathname.includes(appletPages.addUser) ? setActiveAddUser(true) : setActiveAddUser(false);
+    setActiveAddUser(pathname.includes(appletPages.addUser));
   }, [location]);
 
   return !activeAddUser ? (
