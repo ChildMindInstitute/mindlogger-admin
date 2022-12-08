@@ -2,7 +2,11 @@ import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 
 import { Svg } from 'components/Svg';
 import { breadcrumbs } from 'redux/modules';
-import { StyledLabelSmall, StyledTitleSmall } from 'styles/styledComponents/Typography';
+import {
+  StyledLabelSmall,
+  StyledLabelMedium,
+  StyledBodySmall,
+} from 'styles/styledComponents/Typography';
 import { variables } from 'styles/variables';
 
 import {
@@ -37,22 +41,26 @@ export const Breadcrumbs = (): JSX.Element => {
     <MuiBreadcrumbs separator={<Svg id="separator" width="8" height="12" />}>
       {breadcrumbsData &&
         breadcrumbsData.length > 0 &&
-        breadcrumbsData.map((crumb, index) => {
+        breadcrumbsData.map(({ icon, label, navPath, disabledLink }, index) => {
           const last = index === breadcrumbsData.length - 1;
 
-          return last ? (
+          return last || disabledLink ? (
             <StyledBox key={index}>
-              {getBreadcrumbIcon(crumb.icon, crumb.label)}
-              <StyledTitleSmall fontWeight="semiBold" letterSpacing="xl">
-                {crumb.label}
-              </StyledTitleSmall>
+              {getBreadcrumbIcon(icon, label)}
+              {disabledLink ? (
+                <StyledBodySmall color={variables.palette.on_surface_variant}>
+                  {label}
+                </StyledBodySmall>
+              ) : (
+                <StyledLabelMedium color={variables.palette.on_surface}>{label}</StyledLabelMedium>
+              )}
             </StyledBox>
           ) : (
-            <StyledLink key={index} to={crumb.navPath ? crumb.navPath : ''}>
-              {getBreadcrumbIcon(crumb.icon, crumb.label)}
-              <StyledTitleSmall fontWeight="regular" color={variables.palette.on_surface_variant}>
-                {crumb.label}
-              </StyledTitleSmall>
+            <StyledLink key={index} to={navPath || ''}>
+              {getBreadcrumbIcon(icon, label)}
+              <StyledBodySmall color={variables.palette.on_surface_variant}>
+                {label}
+              </StyledBodySmall>
             </StyledLink>
           );
         })}

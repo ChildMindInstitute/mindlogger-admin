@@ -5,6 +5,7 @@ import { useTimeAgo } from 'hooks';
 import { FolderApplet } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Actions } from 'components/Actions';
+import { appletPages } from 'utils/constants';
 
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName } from './AppletItem.styles';
@@ -15,7 +16,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const timeAgo = useTimeAgo();
 
   const handleAppletClick = (id: string | undefined) => {
-    if (id) navigate(`/${id}`);
+    if (id) navigate(`/${id}/${appletPages.respondents}`);
   };
 
   return (

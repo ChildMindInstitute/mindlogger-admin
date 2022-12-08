@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 
 import { Row } from 'components/Tables';
+import { Svg } from 'components/Svg';
 import { useAppDispatch } from 'redux/store';
-import { users } from 'redux/modules';
+import { breadcrumbs, users } from 'redux/modules';
 import { getErrorMessage } from 'utils/getErrorMessage';
+import { useBaseBreadcrumbs } from 'hooks';
+import { appletPages } from 'utils/constants';
 
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
@@ -14,7 +18,9 @@ import { LinkGenerator } from './LinkGenerator';
 
 export const AddUser = () => {
   const { id } = useParams();
+  const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+  const baseBreadcrumbs = useBaseBreadcrumbs();
 
   const [rows, setRows] = useState<Row[]>([]);
 
@@ -63,7 +69,24 @@ export const AddUser = () => {
 
   useEffect(() => {
     getInvitationsHandler();
-  }, [dispatch, id]);
+
+    if (id && baseBreadcrumbs?.length > 0) {
+      dispatch(
+        breadcrumbs.actions.setBreadcrumbs([
+          ...baseBreadcrumbs,
+          {
+            icon: <Svg id="dots-filled" width="15" height="15" />,
+            label: t('more'),
+            navPath: `/${id}/${appletPages.more}`,
+          },
+          {
+            icon: <Svg id="users-outlined" width="15" height="15" />,
+            label: t('addUser'),
+          },
+        ]),
+      );
+    }
+  }, [baseBreadcrumbs, dispatch, id, t]);
 
   return (
     <>

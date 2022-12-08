@@ -29,7 +29,7 @@ export const useBaseBreadcrumbs = () => {
       newBreadcrumbs.push({
         icon: image || '',
         label: name || '',
-        navPath: `/${id}`,
+        disabledLink: true,
       });
     }
 

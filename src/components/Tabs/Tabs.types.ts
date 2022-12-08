@@ -3,7 +3,8 @@ type Tab = {
   icon: JSX.Element;
   activeIcon: JSX.Element;
   content: JSX.Element;
+  onClick?: () => void;
   isMinHeightAuto?: boolean;
 };
 
-export type TabsProps = { tabs: Tab[] };
+export type TabsProps = { tabs: Tab[]; activeTab?: number };

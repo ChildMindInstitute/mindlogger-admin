@@ -13,6 +13,7 @@ export const StyledTabs = styled(Tabs)`
     color: ${variables.palette.on_surface_variant};
     text-transform: inherit;
     padding: ${theme.spacing(0.8, 2.6, 0.7)};
+    justify-content: space-between;
     min-height: ${TABS_HEIGHT};
   }
 

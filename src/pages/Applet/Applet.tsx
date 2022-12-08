@@ -1,52 +1,44 @@
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { Tabs } from 'components/Tabs';
-import { Svg } from 'components/Svg';
-import { RespondentsTable, ManagersTable } from 'components/Tables';
 import { Spinner } from 'components/Spinner';
-import { More } from 'pages/Applet/More';
 import { users } from 'redux/modules';
 import { StyledBody } from 'styles/styledComponents/Body';
+import { appletPages } from 'utils/constants';
+
+import { useAppletTabs } from './Applet.hooks';
 
 export const Applet = (): JSX.Element => {
-  const { id } = useParams();
-  const usersData = users.useUserData();
+  const location = useLocation();
   const userMetaStatus = users.useUserMetaStatus();
   const managerMetaStatus = users.useManagerMetaStatus();
+  const isLoading =
+    userMetaStatus === 'loading' ||
+    userMetaStatus === 'idle' ||
+    managerMetaStatus === 'loading' ||
+    managerMetaStatus === 'idle';
+  const [activeTab, setActiveTab] = useState<undefined | number>(undefined);
+  const { respondents, managers, more, schedule } = appletPages;
 
-  const appletTabs = [
-    ...(id && usersData?.items.some((user) => user[id])
-      ? [
-          {
-            labelKey: 'respondents',
-            icon: <Svg id="respondent-outlined" />,
-            activeIcon: <Svg id="respondent-filled" />,
-            content: <RespondentsTable />,
-          },
-        ]
-      : []),
-    {
-      labelKey: 'managers',
-      icon: <Svg id="manager-outlined" />,
-      activeIcon: <Svg id="manager-filled" />,
-      content: <ManagersTable />,
-    },
-    {
-      labelKey: 'appletTabsLabel3',
-      icon: <Svg id="dots" />,
-      activeIcon: <Svg id="dots-filled" />,
-      content: <More />,
-      isMinHeightAuto: true,
-    },
-  ];
+  const appletTabs = useAppletTabs();
+
+  useEffect(() => {
+    const { pathname } = location;
+    if (pathname.includes(respondents)) {
+      setActiveTab(0);
+    } else if (pathname.includes(managers)) {
+      setActiveTab(1);
+    } else if (location.pathname.includes(schedule)) {
+      setActiveTab(2);
+    } else if (location.pathname.includes(more)) {
+      setActiveTab(3);
+    }
+  }, [location]);
 
   return (
     <StyledBody>
-      {userMetaStatus === 'loading' || managerMetaStatus === 'loading' ? (
-        <Spinner />
-      ) : (
-        <Tabs tabs={appletTabs} />
-      )}
+      {isLoading ? <Spinner /> : <Tabs tabs={appletTabs} activeTab={activeTab} />}
     </StyledBody>
   );
 };

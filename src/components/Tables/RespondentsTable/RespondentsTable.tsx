@@ -99,7 +99,7 @@ export const RespondentsTable = (): JSX.Element => {
         ]),
       );
     }
-  }, [baseBreadcrumbs]);
+  }, [baseBreadcrumbs, id, dispatch, t]);
 
   return (
     <>
