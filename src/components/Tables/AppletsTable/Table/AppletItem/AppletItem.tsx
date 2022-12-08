@@ -27,7 +27,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           <StyledBodyMedium fontWeight={'medium'}>{item.name}</StyledBodyMedium>
         </StyledAppletName>
       </TableCell>
-      <TableCell width="15%" onClick={() => handleAppletClick(item.id)}>
+      <TableCell width="20%" onClick={() => handleAppletClick(item.id)}>
         {item.updated ? timeAgo.format(new Date(item.updated)) : ''}
       </TableCell>
       <TableCell>
