@@ -38,7 +38,7 @@ export const StyledLink = styled(Link)`
   border-radius: ${variables.borderRadius.lg};
 
   &:hover {
-    background-color: rgba(66, 71, 78, 0.08);
+    background-color: ${variables.palette.on_surface_variant_alfa8};
   }
 `;
 
