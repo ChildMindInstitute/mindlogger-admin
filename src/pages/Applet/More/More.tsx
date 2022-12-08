@@ -1,7 +1,53 @@
-import { AddUser } from 'components/AddUser';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Button } from '@mui/material';
 
-export const More = () => (
-  <>
+import { Svg } from 'components/Svg';
+import { AddUser } from 'components/AddUser';
+import { useAppDispatch } from 'redux/store';
+import { breadcrumbs } from 'redux/modules';
+import { useBaseBreadcrumbs } from 'hooks';
+import { appletPages } from 'utils/constants';
+
+export const More = () => {
+  const { id } = useParams();
+  const history = useNavigate();
+  const location = useLocation();
+  const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
+  const baseBreadcrumbs = useBaseBreadcrumbs();
+  const [activeAddUser, setActiveAddUser] = useState(false);
+
+  const handleAddUserClick = () => {
+    setActiveAddUser(true);
+    history(`/${id}/${appletPages.addUser}`);
+  };
+
+  useEffect(() => {
+    if (id && baseBreadcrumbs && baseBreadcrumbs.length > 0) {
+      dispatch(
+        breadcrumbs.actions.setBreadcrumbs([
+          ...baseBreadcrumbs,
+          {
+            icon: <Svg id="dots-filled" width="15" height="15" />,
+            label: t('more'),
+          },
+        ]),
+      );
+    }
+  }, [baseBreadcrumbs, id, dispatch, t, location]);
+
+  useEffect(() => {
+    const { pathname } = location;
+    pathname.includes(appletPages.addUser) ? setActiveAddUser(true) : setActiveAddUser(false);
+  }, [location]);
+
+  return !activeAddUser ? (
+    <Button variant="contained" onClick={handleAddUserClick}>
+      Add Users
+    </Button>
+  ) : (
     <AddUser />
-  </>
-);
+  );
+};

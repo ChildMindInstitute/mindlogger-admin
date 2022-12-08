@@ -79,7 +79,7 @@ export const ManagersTable = (): JSX.Element => {
         ]),
       );
     }
-  }, [baseBreadcrumbs]);
+  }, [baseBreadcrumbs, id, dispatch, t]);
 
   return (
     <>

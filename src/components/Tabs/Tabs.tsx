@@ -6,7 +6,7 @@ import { TabPanel } from './TabPanel';
 import { StyledTabs } from './Tabs.styles';
 import { TabsProps } from './Tabs.types';
 
-export const Tabs = ({ tabs }: TabsProps): JSX.Element => {
+export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -17,17 +17,22 @@ export const Tabs = ({ tabs }: TabsProps): JSX.Element => {
   return (
     <>
       <StyledTabs
-        value={tabIndex}
+        value={activeTab ? activeTab : tabIndex}
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}
         centered
       >
-        {tabs.map(({ icon, activeIcon, labelKey }, index) => (
-          <Tab key={labelKey} icon={tabIndex === index ? activeIcon : icon} label={t(labelKey)} />
+        {tabs.map(({ icon, activeIcon, labelKey, onClick }, index) => (
+          <Tab
+            key={labelKey}
+            icon={tabIndex === index ? activeIcon : icon}
+            label={t(labelKey)}
+            onClick={onClick}
+          />
         ))}
       </StyledTabs>
       {tabs.map(({ content }, i) => (
-        <TabPanel key={i} value={tabIndex} index={i}>
+        <TabPanel key={i} value={activeTab ? activeTab : tabIndex} index={i}>
           {content}
         </TabPanel>
       ))}

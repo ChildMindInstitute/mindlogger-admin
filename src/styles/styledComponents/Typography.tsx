@@ -80,3 +80,12 @@ export const StyledBodyMedium = styled(Typography)`
   color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
   letter-spacing: ${variables.letterSpacing.lg};
 `;
+
+export const StyledBodySmall = styled(Typography)`
+  font-size: ${variables.font.size.sm};
+  line-height: ${variables.lineHeight.sm};
+  font-weight: ${({ fontWeight }: StyledProps) =>
+    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
+  color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
+  letter-spacing: ${variables.letterSpacing.xl};
+`;

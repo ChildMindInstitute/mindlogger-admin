@@ -33,19 +33,16 @@ export const StyledPlaceholder = styled(StyledFlexAllCenter)`
 
 export const StyledLink = styled(Link)`
   ${commonCenterStyles};
-  padding: ${theme.spacing(0.8, 0.4)};
+  padding: ${theme.spacing(0.8)};
   transition: background-color 0.3s;
   border-radius: ${variables.borderRadius.lg};
 
   &:hover {
-    background-color: ${variables.palette.primary50_alfa5};
-
-    p {
-      color: ${variables.palette.primary};
-    }
+    background-color: rgba(66, 71, 78, 0.08);
   }
 `;
 
 export const StyledBox = styled(Box)`
-  ${commonCenterStyles}
+  ${commonCenterStyles};
+  padding: ${theme.spacing(0.8)};
 `;
