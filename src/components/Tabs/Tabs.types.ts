@@ -8,3 +8,8 @@ type Tab = {
 };
 
 export type TabsProps = { tabs: Tab[]; activeTab?: number };
+
+export type RenderTabs = {
+  header: JSX.Element[];
+  content: JSX.Element[];
+};

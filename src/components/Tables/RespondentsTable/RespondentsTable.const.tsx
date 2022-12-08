@@ -1,4 +1,4 @@
-import { TFunction } from 'i18next';
+import { t, TFunction } from 'i18next';
 
 import { Svg } from 'components/Svg';
 import { UserData } from 'redux/modules';
@@ -36,21 +36,26 @@ export const actions = [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
     action: (item: UserData) => item,
+    toolTipTitle: t('viewCalendar'),
   },
   {
     icon: <Svg id="data" width={22} height={22} />,
     action: (item: UserData) => item,
+    toolTipTitle: t('viewData'),
   },
   {
     icon: <Svg id="export" width={18} height={20} />,
     action: (item: UserData) => item,
+    toolTipTitle: t('exportData'),
   },
   {
     icon: <Svg id="edit-access" width={21} height={19} />,
     action: (item: UserData) => item,
+    toolTipTitle: t('editAccess'),
   },
   {
     icon: <Svg id="edit-user" width={21} height={22} />,
     action: (item: UserData) => item,
+    toolTipTitle: t('editUser'),
   },
 ];
