@@ -77,7 +77,6 @@
   "takeMeToTheResponseData": "Amenez-moi aux données de la réponse",
   "pendingInvitations": "Invitations en attente",
   "invitationLink": "Lien vers l'invitation",
-  "dateTimeInvited": "Date et heure de l'invitation",
   "publicLink": "Lien public",
   "generateLink": "Générer un lien",
   "requireToCreateAccount": "Voulez-vous demander à l'utilisateur de créer un compte?",
@@ -86,4 +85,6 @@
   "shareWithLogin": "Partagez le lien suivant pour inviter quiconque à cette étude.",
   "shareWithNoLogin": "Partagez le lien suivant pour que les utilisateurs puissent passer une évaluation sans compte",
   "enterAppletPassword": "Entrez le mot de passe de l'applet",
-  "enterAppletPasswordHint": "Min. 8 caractères avec au moins une majuscule, un chiffre, une lettre minuscule et un caractère spécial."
+  "enterAppletPasswordHint": "Min. 8 caractères avec au moins une majuscule, un chiffre, une lettre minuscule et un caractère spécial.",
+  "dateTimeInvited": "Date et heure de l'invitation"
+}

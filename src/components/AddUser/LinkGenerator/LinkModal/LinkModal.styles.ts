@@ -12,7 +12,7 @@ export const StyledButton = styled(Button)`
 export const StyledModalBtn = styled(Button)`
   background-color: transparent;
   color: ${variables.palette.primary};
-  text-transform: upperCase;
+  text-transform: uppercase;
 `;
 
 export const StyledModalWrapper = styled(Box)`

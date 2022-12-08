@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
+import { SelectLanguage } from 'components/Popups';
 import { Svg } from 'components/Svg';
-import { SelectLanguage } from 'components/Popups/SelectLanguage';
 import { variables } from 'styles/variables';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
 
