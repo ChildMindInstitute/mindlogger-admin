@@ -87,5 +87,17 @@
   "shareWithNoLogin": "Partagez le lien suivant pour que les utilisateurs puissent passer une évaluation sans compte",
   "enterAppletPassword": "Entrez le mot de passe de l'applet",
   "enterAppletPasswordHint": "Min. 8 caractères avec au moins une majuscule, un chiffre, une lettre minuscule et un caractère spécial.",
-  "dateTimeInvited": "Date et heure de l'invitation"
+  "dateTimeInvited": "Date et heure de l'invitation",
+  "viewData": "Voir les données",
+  "exportData": "Exporter des données",
+  "editAccess": "Accès à l'édition",
+  "editUser": "Modifier l'utilisateur",
+  "viewCalendar": "Afficher le calendrier individuel",
+  "viewUsers": "Voir les utilisateurs",
+  "viewGeneralCalendar": "Voir le calendrier général",
+  "editAnApplet": "Modifier une applet",
+  "duplicateApplet": "Dupliquer l'applet",
+  "deleteApplet": "Supprimer l'applet",
+  "transferOwnership": "Transférer la propriété",
+  "shareWithTheLibrary": "Partager avec la bibliothèque"
 }

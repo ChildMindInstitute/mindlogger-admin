@@ -87,5 +87,17 @@
   "shareWithNoLogin": "Share the following link for users to take assessment without account.",
   "enterAppletPassword": "Enter applet password",
   "enterAppletPasswordHint": "Min. 8 characters with at least on capital letter, a number, lowercase letter and a special character.",
-  "dateTimeInvited": "Date & Time Invited"
+  "dateTimeInvited": "Date & Time Invited",
+  "viewData": "View Data",
+  "exportData": "Export Data",
+  "editAccess": "Edit Access",
+  "editUser": "Edit User",
+  "viewCalendar": "View Individual Calendar",
+  "viewUsers": "View Users",
+  "viewGeneralCalendar": "View General Calendar",
+  "editAnApplet": "Edit an Applet",
+  "duplicateApplet": "Duplicate Applet",
+  "deleteApplet": "Delete Applet",
+  "transferOwnership": "Transfer Ownership",
+  "shareWithTheLibrary": "Share with the library"
 }

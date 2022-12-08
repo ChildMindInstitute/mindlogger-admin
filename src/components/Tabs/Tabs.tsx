@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TabPanel } from './TabPanel';
 import { StyledTabs } from './Tabs.styles';
-import { TabsProps } from './Tabs.types';
+import { RenderTabs, TabsProps } from './Tabs.types';
 
 export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
@@ -14,6 +14,32 @@ export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
     setTabIndex(newValue);
   };
 
+  const { content, header } = tabs.reduce(
+    (acc: RenderTabs, { icon, activeIcon, labelKey, onClick, content, isMinHeightAuto }, index) => {
+      acc.header.push(
+        <Tab
+          key={labelKey}
+          icon={tabIndex === index ? activeIcon : icon}
+          label={t(labelKey)}
+          onClick={onClick}
+        />,
+      );
+      acc.content.push(
+        <TabPanel
+          key={index}
+          value={activeTab || tabIndex}
+          index={index}
+          isMinHeightAuto={isMinHeightAuto}
+        >
+          {content}
+        </TabPanel>,
+      );
+
+      return acc;
+    },
+    { header: [], content: [] },
+  );
+
   return (
     <>
       <StyledTabs
@@ -22,20 +48,9 @@ export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
         TabIndicatorProps={{ children: <span /> }}
         centered
       >
-        {tabs.map(({ icon, activeIcon, labelKey, onClick }, index) => (
-          <Tab
-            key={labelKey}
-            icon={tabIndex === index ? activeIcon : icon}
-            label={t(labelKey)}
-            onClick={onClick}
-          />
-        ))}
+        {header}
       </StyledTabs>
-      {tabs.map(({ content, isMinHeightAuto }, i) => (
-        <TabPanel key={i} value={activeTab || tabIndex} index={i} isMinHeightAuto={isMinHeightAuto}>
-          {content}
-        </TabPanel>
-      ))}
+      {content}
     </>
   );
 };

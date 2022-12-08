@@ -48,12 +48,7 @@ export const RespondentsTable = (): JSX.Element => {
 
     return {
       pin: {
-        content: () =>
-          pinned ? (
-            <Svg width={12} height={16} id="pin" />
-          ) : (
-            <Svg width={12} height={16} id="pin-outlined" />
-          ),
+        content: () => <Svg width={12} height={16} id={pinned ? 'pin' : 'pin-outlined'} />,
         value: '',
         onClick: () => handlePinClick(profileId, !pinned),
       },
