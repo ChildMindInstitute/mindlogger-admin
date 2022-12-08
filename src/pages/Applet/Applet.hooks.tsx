@@ -39,6 +39,7 @@ export const useAppletTabs = () => {
       activeIcon: <Svg id="dots-filled" />,
       content: <More />,
       onClick: () => history(`/${id}/${more}`),
+      isMinHeightAuto: true,
     },
   ];
 };

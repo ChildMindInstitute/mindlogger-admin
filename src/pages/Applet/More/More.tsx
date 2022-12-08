@@ -9,6 +9,7 @@ import { useAppDispatch } from 'redux/store';
 import { breadcrumbs } from 'redux/modules';
 import { useBaseBreadcrumbs } from 'hooks';
 import { appletPages } from 'utils/constants';
+import { Box } from '@mui/system';
 
 export const More = () => {
   const { id } = useParams();
@@ -44,9 +45,11 @@ export const More = () => {
   }, [location]);
 
   return !activeAddUser ? (
-    <Button variant="contained" onClick={handleAddUserClick}>
-      Add Users
-    </Button>
+    <Box>
+      <Button variant="contained" onClick={handleAddUserClick}>
+        Add Users
+      </Button>
+    </Box>
   ) : (
     <AddUser />
   );
