@@ -2,7 +2,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { Account, ApiError, Folder, FolderApplet, FoldersSchema } from 'redux/modules';
-import { getAppletsInFolderApi, saveFolderApi, deleteFolderApi, updateFolderApi } from 'api';
+import {
+  getAppletsInFolderApi,
+  saveFolderApi,
+  deleteFolderApi,
+  updateFolderApi,
+  togglePinApi,
+} from 'api';
 
 import { deleteFolderById, setAppletsInFolder, updateFolders } from './Folders.utils';
 
@@ -88,6 +94,24 @@ export const deleteFolder = createAsyncThunk(
       const { folders } = getState() as { folders: FoldersSchema };
 
       return deleteFolderById(folders, folderId);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const togglePin = createAsyncThunk(
+  'folders/togglePin',
+  async (applet: FolderApplet, { getState, rejectWithValue, signal }) => {
+    try {
+      const pinState = !applet?.pinOrder;
+      await togglePinApi(
+        { applet: { id: applet.id, parentId: applet.parentId! }, isPinned: pinState },
+        signal,
+      );
+      const { folders } = getState() as { folders: FoldersSchema };
+
+      return updateFolders(folders, { ...applet, pinOrder: pinState ? 1 : 0 });
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

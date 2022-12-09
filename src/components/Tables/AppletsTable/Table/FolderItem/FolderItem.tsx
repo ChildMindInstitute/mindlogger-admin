@@ -19,14 +19,14 @@ import {
 } from './FolderItem.styles';
 import { getActions } from './FolderItem.const';
 
-export const FolderItem = ({ item, onFolderClick }: FolderItemProps) => {
+export const FolderItem = ({ item }: FolderItemProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
 
   const [folder, setFolder] = useState(item);
 
   const onRenameFolder = () => {
-    setFolder((row) => ({ ...row, isRenaming: true }));
+    setFolder((folder) => ({ ...folder, isRenaming: true }));
   };
 
   const onDeleteFolder = () => {
@@ -37,7 +37,7 @@ export const FolderItem = ({ item, onFolderClick }: FolderItemProps) => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFolder((row) => ({ ...row, name: event.target.value }));
+    setFolder((folder) => ({ ...folder, name: event.target.value }));
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -52,7 +52,7 @@ export const FolderItem = ({ item, onFolderClick }: FolderItemProps) => {
 
   const handleFolderClick = () => {
     if (!folder?.items?.length) return;
-    onFolderClick(folder);
+    dispatch(folders.actions.expandFolder(folder));
   };
 
   useEffect(() => setFolder(item), [item]);

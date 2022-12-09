@@ -6,5 +6,4 @@ export type TableProps = {
   rows: FolderApplet[] | undefined;
   orderBy: string;
   headerContent: JSX.Element;
-  onFolderClick: (row: FolderApplet) => void;
 };

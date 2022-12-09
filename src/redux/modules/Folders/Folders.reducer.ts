@@ -4,11 +4,29 @@ import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 import { ErrorResponse } from 'redux/modules/Base';
 
 import { FolderApplet, FoldersSchema } from './Folders.schema';
-import { deleteFolder, getAppletsForFolders, saveFolder, updateFolder } from './Folders.thunk';
+import {
+  deleteFolder,
+  getAppletsForFolders,
+  saveFolder,
+  togglePin,
+  updateFolder,
+} from './Folders.thunk';
 import { state as initialState } from './Folders.state';
 import { createFoldersPendingData, flatFoldersApplets } from './Folders.utils';
 
 export const reducers = {
+  expandFolder: (state: FoldersSchema, action: PayloadAction<FolderApplet>): void => {
+    state.flattenFoldersApplets = state.flattenFoldersApplets.map((item) => {
+      if (item.id === action.payload.id) {
+        return { ...item, isExpanded: !action.payload.isExpanded };
+      }
+      if (item.parentId === action.payload.id) {
+        return { ...item, isVisible: !action.payload.isExpanded };
+      }
+
+      return item;
+    });
+  },
   createNewFolder: (state: FoldersSchema, action: PayloadAction<FolderApplet>): void => {
     state.flattenFoldersApplets = [action.payload, ...state.flattenFoldersApplets];
   },
@@ -78,6 +96,20 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
   });
 
   builder.addCase(updateFolder.fulfilled, (state, action) => {
+    const { foldersApplets } = state;
+    if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
+      foldersApplets.requestId = initialState.foldersApplets.requestId;
+      foldersApplets.status = 'success';
+      state.flattenFoldersApplets = action.payload;
+    }
+  });
+
+  builder.addCase(togglePin.pending, (state, action) => {
+    const { foldersApplets } = state;
+    createFoldersPendingData(foldersApplets, action.meta.requestId);
+  });
+
+  builder.addCase(togglePin.fulfilled, (state, action) => {
     const { foldersApplets } = state;
     if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
       foldersApplets.requestId = initialState.foldersApplets.requestId;

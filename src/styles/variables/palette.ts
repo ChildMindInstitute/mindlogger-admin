@@ -15,9 +15,10 @@ export const palette = {
   surface_variant: '#dee3eb',
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
-  on_surface_variant_alfa8: 'rgba(66, 71, 78, 0.08)',
 
   primary50_alfa5: 'rgba(0, 98, 157, 0.05)',
+  on_surface_variant_alfa8: 'rgba(66, 71, 78, 0.08)',
+  on_surface_variant_alfa12: 'rgba(66, 71, 78, 0.12)',
 
   black: '#000',
   white: '#fff',

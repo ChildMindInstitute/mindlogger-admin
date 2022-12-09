@@ -1,7 +1,8 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { Svg } from 'components/Svg';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
@@ -19,11 +20,10 @@ export const StyledActions = styled(Box)`
   display: flex;
 `;
 
-export const StyledActionButton = styled(Button)`
+export const StyledActionButton = styled(StyledClearedButton)`
   width: 4rem;
   height: 4rem;
   min-width: 4rem;
-  padding: 0;
   border-radius: ${variables.borderRadius.half};
   margin-right: ${theme.spacing(1)};
 

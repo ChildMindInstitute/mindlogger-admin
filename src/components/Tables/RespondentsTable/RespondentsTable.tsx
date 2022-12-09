@@ -11,6 +11,7 @@ import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
 import { Actions } from 'components/Actions';
+import { Pin } from 'components/Pin';
 
 import {
   RespondentsTableHeader,
@@ -48,7 +49,7 @@ export const RespondentsTable = (): JSX.Element => {
 
     return {
       pin: {
-        content: () => <Svg width={12} height={16} id={pinned ? 'pin' : 'pin-outlined'} />,
+        content: () => <Pin isPinned={pinned} />,
         value: '',
         onClick: () => handlePinClick(profileId, !pinned),
       },

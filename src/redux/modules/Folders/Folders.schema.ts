@@ -23,6 +23,7 @@ export type FolderApplet = {
   image?: string;
   largeApplet?: boolean;
   parentId?: string;
+  pinOrder?: number;
   published?: boolean;
   roles?: string[];
   themeId?: string;

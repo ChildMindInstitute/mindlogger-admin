@@ -10,13 +10,7 @@ import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
 
-export const Table = ({
-  columns,
-  rows,
-  orderBy: orderByProp,
-  headerContent,
-  onFolderClick,
-}: TableProps) => {
+export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: TableProps) => {
   const [order, setOrder] = useState<Order>('desc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
@@ -74,7 +68,7 @@ export const Table = ({
               )
               .map((row) =>
                 row?.isFolder ? (
-                  <FolderItem onFolderClick={onFolderClick} key={row.id} item={row} />
+                  <FolderItem key={row.id} item={row} />
                 ) : (
                   <AppletItem key={row.id} item={row} />
                 ),

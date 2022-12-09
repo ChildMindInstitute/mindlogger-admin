@@ -28,21 +28,6 @@ export const AppletsTable = (): JSX.Element => {
     setFlattenItems(foldersApplets);
   }, [foldersApplets]);
 
-  const handleFolderClick = (folderClicked: FolderApplet) => {
-    const flattenUpdated = flattenItems.map((row) => {
-      if (row.id === folderClicked.id) {
-        return { ...row, isExpanded: !folderClicked.isExpanded };
-      }
-      if (row.parentId === folderClicked.id) {
-        return { ...row, isVisible: !folderClicked.isExpanded };
-      }
-
-      return row;
-    });
-
-    setFlattenItems(flattenUpdated);
-  };
-
   const addFolder = () => {
     const newFolderName = generateNewFolderName(foldersApplets, t);
     const folder = {
@@ -123,7 +108,6 @@ export const AppletsTable = (): JSX.Element => {
       <Table
         columns={getHeadCells(t)}
         rows={flattenItems?.filter(filterRows)}
-        onFolderClick={handleFolderClick}
         orderBy={'updated'}
         headerContent={headerContent}
       />

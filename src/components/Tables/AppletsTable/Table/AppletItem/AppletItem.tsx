@@ -2,16 +2,19 @@ import { useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
 import { useTimeAgo } from 'hooks';
-import { FolderApplet } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { FolderApplet, folders } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Actions } from 'components/Actions';
 import { appletPages } from 'utils/constants';
+import { Pin } from 'components/Pin';
 
 import { AppletImage } from '../AppletImage';
-import { StyledAppletName } from './AppletItem.styles';
+import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actions } from './AppletItem.const';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
 
@@ -23,6 +26,17 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
     <TableRow>
       <TableCell width="30%" onClick={() => handleAppletClick(item.id)}>
         <StyledAppletName applet={item}>
+          {item.parentId && (
+            <StyledPinContainer>
+              <Pin
+                isPinned={!!item?.pinOrder}
+                onClick={(e) => {
+                  dispatch(folders.thunk.togglePin(item));
+                  e.stopPropagation();
+                }}
+              />
+            </StyledPinContainer>
+          )}
           <AppletImage image={item.image} appletName={item.name} />
           <StyledBodyMedium fontWeight={'medium'}>{item.name}</StyledBodyMedium>
         </StyledAppletName>

@@ -16,6 +16,19 @@ const descendingComparator = (a: FolderApplet, b: FolderApplet, orderBy: string)
   return 0;
 };
 
+const comparePinned = (a: FolderApplet, b: FolderApplet) => {
+  if (a.pinOrder && b.pinOrder) {
+    return 0;
+  }
+  if (a.pinOrder) {
+    return -1;
+  }
+  if (b.pinOrder) {
+    return 1;
+  }
+  return 0;
+};
+
 export const getComparator = (
   order: Order,
   orderBy: string,
@@ -35,9 +48,10 @@ export const sortRows = (
     .sort(compareFunction);
   const folders = rows.filter(({ isFolder }) => isFolder);
   folders.forEach((folder) => {
-    const children = rows.filter(({ parentId }) => folder.id === parentId).sort(compareFunction);
+    const children = rows.filter(({ parentId }) => folder.id === parentId);
+    const sortedChildren = children.sort(compareFunction).sort(comparePinned);
     const index = result.findIndex(({ id }) => id === folder.id);
-    insert(index + 1, result, children);
+    insert(index + 1, result, sortedChildren);
   });
 
   return result;
