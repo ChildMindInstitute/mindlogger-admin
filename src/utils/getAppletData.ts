@@ -8,5 +8,9 @@ export const getAppletData = (data: FolderApplet[] | null, id?: string) => {
   }, []);
   const currentApplet = appletsFoldersArr?.find((applet) => applet.id === id);
 
-  return { name: currentApplet?.name, image: currentApplet?.image };
+  return {
+    name: currentApplet?.name,
+    image: currentApplet?.image,
+    encryption: currentApplet?.encryption,
+  };
 };

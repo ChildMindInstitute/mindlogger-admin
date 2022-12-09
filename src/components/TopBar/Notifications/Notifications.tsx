@@ -7,7 +7,7 @@ import { account, folders } from 'redux/modules';
 import { useTimeAgo } from 'hooks';
 import { getAppletData } from 'utils/getAppletData';
 import { variables } from 'styles/variables';
-import { StyledLabelLarge } from 'styles/styledComponents/Typography';
+import { StyledLabelLarge, StyledTitleSmall } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { Notification, NotificationProps } from './Notification';
@@ -17,6 +17,7 @@ import {
   StyledIconWrapper,
   StyledCollapseBtn,
   StyledList,
+  StyledCentered,
 } from './Notifications.styles';
 import { NotificationsProps } from './Notifications.types';
 
@@ -37,7 +38,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
       const accAlerts = accData.account.alerts.list.map((alert) => {
         const { alerts } = accData.account;
         const { firstName, lastName = '' } = alerts.profiles[alert.profileId];
-        const { name, image } = getAppletData(appletsFoldersData, alert.appletId);
+        const { name, image, encryption } = getAppletData(appletsFoldersData, alert.appletId);
 
         return {
           accountId: accData.account.accountId,
@@ -48,6 +49,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           imageSrc: image || null,
           timeAgo: timeAgo.format(new Date(alert.created), 'round'),
           viewed: alert.viewed,
+          encryption,
         };
       });
 
@@ -62,23 +64,27 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           <StyledIconWrapper>
             <Svg id="alert" width="16" height="20" />
           </StyledIconWrapper>
-          <StyledLabelLarge color={variables.palette.on_surface_variant} fontWeight="semiBold">
-            {t('alerts')}
-          </StyledLabelLarge>
+          <StyledLabelLarge fontWeight="semiBold">{t('alerts')}</StyledLabelLarge>
         </StyledHeaderLeft>
         <StyledFlexTopCenter>
-          <StyledLabelLarge color={variables.palette.on_surface_variant} fontWeight="semiBold">
-            {`${alertsQuantity} `}
-            {t('unread')}
-          </StyledLabelLarge>
+          {alertsQuantity > 0 && (
+            <StyledLabelLarge fontWeight="semiBold" color={variables.palette.semantic.error}>
+              {`${alertsQuantity} ${t('unread')}`}
+            </StyledLabelLarge>
+          )}
           <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>
             <Svg id={showList ? 'navigate-up' : 'navigate-down'} width="12" height="8" />
           </StyledCollapseBtn>
         </StyledFlexTopCenter>
       </StyledHeader>
-      {showList && notifications && (
+      {showList && (
         <StyledList>
-          {notifications.map((item) => (
+          {alertsQuantity === 0 && (
+            <StyledCentered>
+              <StyledTitleSmall>{t('noAlerts')}</StyledTitleSmall>
+            </StyledCentered>
+          )}
+          {notifications?.map((item) => (
             <Notification
               key={item.alertId}
               currentId={currentId}

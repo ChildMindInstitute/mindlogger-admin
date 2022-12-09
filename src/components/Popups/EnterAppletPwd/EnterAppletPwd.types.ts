@@ -1,7 +1,8 @@
-export type AppletPwd = { password: string };
+export type AppletPwd = { appletPassword: string };
 
 export type EnterAppletPwdProps = {
   open: boolean;
   onClose: () => void;
-  onSubmit: ({ password }: AppletPwd) => void;
+  onSubmit: ({ appletPassword }: AppletPwd) => void;
+  errorText?: string;
 };

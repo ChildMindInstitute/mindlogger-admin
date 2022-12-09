@@ -40,3 +40,7 @@ export const StyledList = styled(Box)`
   );
   overflow-y: auto;
 `;
+
+export const StyledCentered = styled(Box)`
+  text-align: center;
+`;

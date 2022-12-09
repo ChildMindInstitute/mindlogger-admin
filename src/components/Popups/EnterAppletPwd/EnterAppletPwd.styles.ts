@@ -27,4 +27,5 @@ export const StyledInputWrapper = styled(Box)`
 export const StyledHint = styled(StyledBodyMedium)`
   padding: ${theme.spacing(0.4, 1.6)};
   line-height: ${variables.lineHeight.sm};
+  color: ${({ isError }: { isError?: boolean }) => isError && variables.palette.semantic.error};
 `;

@@ -1,6 +1,12 @@
 import { Folder } from 'redux/modules';
 import { BaseSchema } from 'redux/modules/Base';
 
+export type Encryption = {
+  appletPrime: number[];
+  appletPublicKey: number[];
+  base: number[];
+};
+
 export type FolderApplet = {
   depth?: number;
   id: string;
@@ -14,11 +20,7 @@ export type FolderApplet = {
   description?: string;
   displayName?: string;
   editing?: boolean;
-  encryption?: {
-    appletPrime: number[];
-    appletPublicKey: number[];
-    base: number[];
-  };
+  encryption?: Encryption;
   hasUrl?: boolean;
   image?: string;
   largeApplet?: boolean;

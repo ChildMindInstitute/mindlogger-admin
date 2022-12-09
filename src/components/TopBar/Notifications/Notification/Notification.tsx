@@ -9,6 +9,7 @@ import { useAppDispatch } from 'redux/store';
 import logoSrc from 'assets/images/logo.png';
 import { variables } from 'styles/variables';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
+import { getAppletEncryptionInfo } from 'utils/encryption';
 
 import {
   StyledNotification,
@@ -39,11 +40,13 @@ export const Notification = ({
   imageSrc,
   timeAgo,
   viewed,
+  encryption,
 }: NotificationProps): JSX.Element => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const isActive = currentId === alertId;
   const [modalActive, setModalActive] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const handleNotificationClick = async () => {
     const { updateAlertStatus } = account.thunk;
@@ -55,11 +58,27 @@ export const Notification = ({
     }
   };
 
-  // TODO: Implement submit applet password
   const handleToResponseDataClick = () => setModalActive(true);
-  const handleModalSubmit = ({ password }: AppletPwd) => {
-    console.log('applet password', password);
-    setModalActive(false);
+  const handleModalSubmit = ({ appletPassword }: AppletPwd) => {
+    const encryptionInfo = getAppletEncryptionInfo({
+      appletPassword,
+      accountId,
+      prime: encryption?.appletPrime || [],
+      baseNumber: encryption?.base || [],
+    });
+
+    if (
+      encryptionInfo
+        .getPublicKey()
+        .equals(Buffer.from(encryption?.appletPublicKey as unknown as WithImplicitCoercion<string>))
+    ) {
+      setModalActive(false);
+      setErrorText('');
+      // TODO: Implement save user entered the correct password for the chosen applet
+      //  and navigate to the chosen applet data
+    } else {
+      setErrorText(t('incorrectAppletPassword') as string);
+    }
   };
 
   return (
@@ -120,6 +139,7 @@ export const Notification = ({
         open={modalActive}
         onClose={() => setModalActive(false)}
         onSubmit={handleModalSubmit}
+        errorText={errorText}
       />
     </>
   );
