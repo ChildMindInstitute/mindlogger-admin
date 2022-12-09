@@ -67,10 +67,11 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           <StyledLabelLarge fontWeight="semiBold">{t('alerts')}</StyledLabelLarge>
         </StyledHeaderLeft>
         <StyledFlexTopCenter>
-          <StyledLabelLarge fontWeight="semiBold" color={variables.palette.semantic.error}>
-            {`${alertsQuantity || ''} `}
-            {alertsQuantity > 0 && t('unread')}
-          </StyledLabelLarge>
+          {alertsQuantity > 0 && (
+            <StyledLabelLarge fontWeight="semiBold" color={variables.palette.semantic.error}>
+              {`${alertsQuantity} ${t('unread')}`}
+            </StyledLabelLarge>
+          )}
           <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>
             <Svg id={showList ? 'navigate-up' : 'navigate-down'} width="12" height="8" />
           </StyledCollapseBtn>
@@ -83,15 +84,14 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
               <StyledTitleSmall>{t('noAlerts')}</StyledTitleSmall>
             </StyledCentered>
           )}
-          {notifications &&
-            notifications.map((item) => (
-              <Notification
-                key={item.alertId}
-                currentId={currentId}
-                setCurrentId={setCurrentId}
-                {...item}
-              />
-            ))}
+          {notifications?.map((item) => (
+            <Notification
+              key={item.alertId}
+              currentId={currentId}
+              setCurrentId={setCurrentId}
+              {...item}
+            />
+          ))}
         </StyledList>
       )}
     </Box>
