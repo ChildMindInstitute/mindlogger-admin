@@ -99,5 +99,7 @@
   "duplicateApplet": "Duplicate Applet",
   "deleteApplet": "Delete Applet",
   "transferOwnership": "Transfer Ownership",
-  "shareWithTheLibrary": "Share with the library"
+  "shareWithTheLibrary": "Share with the library",
+  "incorrectAppletPassword": "Incorrect applet password",
+  "noAlerts": "No Alerts"
 }

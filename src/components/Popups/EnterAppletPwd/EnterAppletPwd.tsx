@@ -10,15 +10,15 @@ import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { EnterAppletPwdProps, AppletPwd } from './EnterAppletPwd.types';
 import { StyledInputWrapper, StyledHint } from './EnterAppletPwd.styles';
 
-export const EnterAppletPwd = ({ open, onClose, onSubmit }: EnterAppletPwdProps) => {
+export const EnterAppletPwd = ({ open, onClose, onSubmit, errorText }: EnterAppletPwdProps) => {
   const { t } = useTranslation('app');
   const [showPwd, setShowPwd] = useState(false);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
   const { handleSubmit, control, watch } = useForm<AppletPwd>({
-    defaultValues: { password: '' },
+    defaultValues: { appletPassword: '' },
   });
 
-  const password = watch('password');
+  const password = watch('appletPassword');
   const handleTestPwd = (pwdValue: string): boolean => {
     const appletPwdPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[`~!@#$%^&*])(?=.{8,})/;
 
@@ -39,7 +39,7 @@ export const EnterAppletPwd = ({ open, onClose, onSubmit }: EnterAppletPwdProps)
       <StyledInputWrapper>
         <InputController
           fullWidth
-          name="password"
+          name="appletPassword"
           control={control}
           label={t('password')}
           type={showPwd ? 'text' : 'password'}
@@ -54,7 +54,7 @@ export const EnterAppletPwd = ({ open, onClose, onSubmit }: EnterAppletPwdProps)
             ),
           }}
         />
-        <StyledHint>{t('enterAppletPasswordHint')}</StyledHint>
+        <StyledHint isError={!!errorText}>{errorText || t('enterAppletPasswordHint')}</StyledHint>
       </StyledInputWrapper>
     </Modal>
   );

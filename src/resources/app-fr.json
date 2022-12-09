@@ -99,5 +99,7 @@
   "duplicateApplet": "Dupliquer l'applet",
   "deleteApplet": "Supprimer l'applet",
   "transferOwnership": "Transférer la propriété",
-  "shareWithTheLibrary": "Partager avec la bibliothèque"
+  "shareWithTheLibrary": "Partager avec la bibliothèque",
+  "incorrectAppletPassword": "Mot de passe de l'applet incorrect",
+  "noAlerts": "Pas d'alertes"
 }

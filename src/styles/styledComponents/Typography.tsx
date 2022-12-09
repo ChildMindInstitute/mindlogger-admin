@@ -35,7 +35,7 @@ export const StyledTitleSmall = styled(Typography)`
   line-height: ${variables.lineHeight.md};
   font-weight: ${({ fontWeight }: StyledProps) =>
     fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.medium};
-  color: ${({ color }: StyledProps) => color || variables.palette.black};
+  color: ${({ color }: StyledProps) => color || variables.palette.on_surface_variant};
   letter-spacing: ${variables.letterSpacing.sm};
 `;
 

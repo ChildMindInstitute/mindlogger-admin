@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { Encryption } from 'redux/modules';
+
 export type NotificationProps = {
   currentId: string;
   setCurrentId: Dispatch<SetStateAction<string>>;
@@ -11,4 +13,5 @@ export type NotificationProps = {
   timeAgo: string;
   viewed: boolean;
   imageSrc: string | null;
+  encryption?: Encryption;
 };

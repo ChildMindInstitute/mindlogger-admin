@@ -51,9 +51,7 @@ export const AccountPanel = ({
               )}
             </StyledAvatarWrapper>
             <StyledHeaderInfo>
-              <StyledTitleSmall color={variables.palette.on_surface_variant}>
-                {t('myAccount')}
-              </StyledTitleSmall>
+              <StyledTitleSmall>{t('myAccount')}</StyledTitleSmall>
               {authData && (
                 <StyledLabelSmall color={variables.palette.on_surface_variant}>
                   {authData.user.email}
@@ -67,7 +65,7 @@ export const AccountPanel = ({
             </StyledClearedButton>
           </StyledCloseWrapper>
         </StyledHeader>
-        {alertsQuantity > 0 && <Notifications alertsQuantity={alertsQuantity} />}
+        <Notifications alertsQuantity={alertsQuantity} />
       </Box>
       <StyledFooter>
         <StyledLogOutBtn
