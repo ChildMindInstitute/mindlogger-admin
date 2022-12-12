@@ -18,13 +18,12 @@ export const LinkGenerator = () => {
 
   useEffect(() => {
     (async () => {
-      if (id) {
-        try {
-          const { data } = await getAppletPublicLinkApi({ appletId: id });
-          data?.inviteId && setInviteLink(data);
-        } catch (e) {
-          getErrorMessage(e);
-        }
+      try {
+        const { data } = await getAppletPublicLinkApi({ appletId: id || '' });
+
+        data?.inviteId && setInviteLink(data);
+      } catch (e) {
+        getErrorMessage(e);
       }
     })();
   }, []);

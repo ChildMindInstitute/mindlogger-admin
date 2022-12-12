@@ -27,14 +27,12 @@ export const LinkModal = ({ setInviteLink }: Pick<LinkGeneratorProps, 'setInvite
 
   const postAppletLink = async (requireLogin: boolean) => {
     try {
-      if (id) {
-        const { data } = await postAppletPublicLinkApi({
-          appletId: id,
-          requireLogin,
-        });
-        data && setInviteLink(data);
-        handleModalClose();
-      }
+      const { data } = await postAppletPublicLinkApi({
+        appletId: id || '',
+        requireLogin,
+      });
+      data && setInviteLink(data);
+      handleModalClose();
     } catch (e) {
       getErrorMessage(e);
     }
@@ -42,14 +40,23 @@ export const LinkModal = ({ setInviteLink }: Pick<LinkGeneratorProps, 'setInvite
 
   return (
     <>
-      <StyledButton onClick={handleModalOpen}>{t('generateLink')}</StyledButton>
+      <StyledButton onClick={handleModalOpen} data-testid="generate-btn">
+        {t('generateLink')}
+      </StyledButton>
       <BasicPopUp open={modalShowed} handleClose={handleModalClose}>
-        <StyledModalWrapper>
+        <StyledModalWrapper data-testid="modal">
           <StyledHeadline>{t('publicLink')}</StyledHeadline>
           <StyledModalText>{t('requireToCreateAccount')}</StyledModalText>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <StyledModalBtn onClick={() => postAppletLink(true)}>{t('yes')}</StyledModalBtn>
-            <StyledModalBtn onClick={() => postAppletLink(false)}>{t('no')}</StyledModalBtn>
+            <StyledModalBtn onClick={() => postAppletLink(true)} data-testid="generate-with-login">
+              {t('yes')}
+            </StyledModalBtn>
+            <StyledModalBtn
+              onClick={() => postAppletLink(false)}
+              data-testid="generate-without-login"
+            >
+              {t('no')}
+            </StyledModalBtn>
             <StyledModalBtn onClick={handleModalClose}>{t('cancel')}</StyledModalBtn>
           </Box>
         </StyledModalWrapper>

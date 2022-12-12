@@ -5,5 +5,5 @@ export type InviteLink = {
 
 export type LinkGeneratorProps = {
   setInviteLink: (val: InviteLink | null) => void;
-  inviteLink: InviteLink;
+  inviteLink: InviteLink | null;
 };
