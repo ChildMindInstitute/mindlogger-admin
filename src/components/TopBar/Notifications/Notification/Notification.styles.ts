@@ -9,6 +9,7 @@ import {
   StyledTitleMedium,
 } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 const commonImgStyles = `
   width: 4rem;
@@ -16,21 +17,19 @@ const commonImgStyles = `
   border-radius: 100%;
 `;
 
-export const StyledNotification = styled(Button)`
-  width: 100%;
-  height: fit-content;
-  padding: ${theme.spacing(1.2, 1.6)};
-  margin-bottom: ${theme.spacing(1)};
-  border-radius: ${variables.borderRadius.lg};
-  text-align: left;
+export const StyledNotification = styled(Box, shouldForwardProp)`
+  padding: ${theme.spacing(1.6)};
   display: flex;
   flex-wrap: wrap;
   position: relative;
+  cursor: pointer;
+  border-bottom: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  transition: background-color 0.3s;
   background-color: ${({ active }: { active: boolean }) =>
     active ? variables.palette.secondary_container : 'transparent'};
 
   &:hover {
-    background-color: rgba(26, 28, 30, 0.08);
+    background-color: ${variables.palette.on_surface_alfa8};
   }
 `;
 
@@ -42,8 +41,13 @@ export const StyledTitle = styled(StyledTitleMedium)`
   margin-top: ${theme.spacing(0.4)};
 `;
 
-export const StyledMessage = styled(StyledBodyMedium)`
+export const StyledMessage = styled(StyledBodyMedium, shouldForwardProp)`
   margin-top: ${theme.spacing(0.4)};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: ${({ isActive }: { isActive: boolean }) => (isActive ? '4' : '2')};
+  -webkit-box-orient: vertical;
 `;
 
 export const StyledLeftSection = styled(StyledFlexTopCenter)`
@@ -74,20 +78,19 @@ export const StyledLogo = styled('img')`
 export const StyledInfo = styled(Box)`
   display: flex;
   flex-direction: column;
-  width: 19.4rem;
+  width: 27rem;
   margin-right: ${theme.spacing(2.1)};
 `;
 
 export const StyledRightSection = styled(Box)`
-  width: 6.7rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `;
 
 export const StyledInfoCircle = styled(Box)`
-  width: 0.6rem;
-  height: 0.6rem;
+  width: 1rem;
+  height: 1rem;
   border-radius: 100%;
   background-color: ${variables.palette.semantic.error};
   align-self: flex-end;
@@ -105,6 +108,6 @@ export const StyledBtn = styled(Button)`
 `;
 
 export const StyledTimeAgo = styled(StyledLabelMedium)`
-  padding-left: ${theme.spacing(1.6)};
+  padding-left: ${theme.spacing(2.4)};
   margin-top: ${theme.spacing(0.8)};
 `;

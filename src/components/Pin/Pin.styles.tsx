@@ -2,8 +2,9 @@ import { Button } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { variables } from 'styles/variables';
+import { shouldForwardProp } from 'utils/shouldForwardProp';
 
-export const StyledPinButton = styled(Button)`
+export const StyledPinButton = styled(Button, shouldForwardProp)`
   width: 4rem;
   height: 4rem;
   min-width: 4rem;

@@ -14,6 +14,14 @@ type StyledProps = {
 };
 
 export const StyledHeadline = styled(Typography)`
+  font-size: ${variables.font.size.xxl};
+  line-height: ${variables.lineHeight.xxl};
+  font-weight: ${({ fontWeight }: StyledProps) =>
+    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
+  color: ${({ color }: StyledProps) => color || variables.palette.black};
+`;
+
+export const StyledTitleLarge = styled(Typography)`
   font-size: ${variables.font.size.xl};
   line-height: ${variables.lineHeight.xl};
   font-weight: ${({ fontWeight }: StyledProps) =>

@@ -10,7 +10,7 @@ import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from '../AccountPanel/Ac
 import { NOTIFICATIONS_HEADER_HEIGHT } from './Notifications.const';
 
 export const StyledHeader = styled(StyledFlexTopCenter)`
-  padding: ${theme.spacing(0, 1.6)};
+  padding: ${theme.spacing(0, 2)};
   justify-content: space-between;
   height: ${NOTIFICATIONS_HEADER_HEIGHT};
 `;

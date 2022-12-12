@@ -50,7 +50,7 @@ export const Notification = ({
 
   const handleNotificationClick = async () => {
     const { updateAlertStatus } = account.thunk;
-    setCurrentId(alertId);
+    setCurrentId(isActive ? '' : alertId);
     const result = await dispatch(updateAlertStatus({ alertId }));
 
     if (updateAlertStatus.fulfilled.match(result)) {
@@ -83,7 +83,7 @@ export const Notification = ({
 
   return (
     <>
-      <StyledNotification active={isActive} variant="text" onClick={handleNotificationClick}>
+      <StyledNotification active={isActive} onClick={handleNotificationClick}>
         <StyledTopSection>
           <StyledLeftSection>
             <StyledImageWrapper>
@@ -111,6 +111,7 @@ export const Notification = ({
               color={
                 isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
               }
+              isActive={isActive}
             >
               {message}
             </StyledMessage>

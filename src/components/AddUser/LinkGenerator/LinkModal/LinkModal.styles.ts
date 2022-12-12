@@ -4,14 +4,7 @@ import { styled } from '@mui/system';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
-export const StyledButton = styled(Button)`
-  background-color: ${variables.palette.primary};
-  color: ${variables.palette.white};
-`;
-
 export const StyledModalBtn = styled(Button)`
-  background-color: transparent;
-  color: ${variables.palette.primary};
   text-transform: uppercase;
 `;
 

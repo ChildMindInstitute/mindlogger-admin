@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
+import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledInputWrapper = styled(Box)`
   padding: ${theme.spacing(0, 2.4)};
@@ -24,7 +25,7 @@ export const StyledInputWrapper = styled(Box)`
   }
 `;
 
-export const StyledHint = styled(StyledBodyMedium)`
+export const StyledHint = styled(StyledBodyMedium, shouldForwardProp)`
   padding: ${theme.spacing(0.4, 1.6)};
   line-height: ${variables.lineHeight.sm};
   color: ${({ isError }: { isError?: boolean }) => isError && variables.palette.semantic.error};

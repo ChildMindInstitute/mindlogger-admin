@@ -5,7 +5,8 @@ export const variables = {
   palette,
   font,
   lineHeight: {
-    xl: '3.2rem', //32px
+    xxl: '3.2rem', //32px
+    xl: '2.8rem', //28px
     lg: '2.4rem', //24px
     md: '2rem', //20px
     sm: '1.6rem', //16px

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box } from '@mui/system';
+import { Box, Button } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -8,12 +8,7 @@ import { postAppletPublicLinkApi } from 'api';
 import { getErrorMessage } from 'utils/getErrorMessage';
 import { StyledHeadline } from 'styles/styledComponents/Typography';
 
-import {
-  StyledButton,
-  StyledModalBtn,
-  StyledModalWrapper,
-  StyledModalText,
-} from './LinkModal.styles';
+import { StyledModalBtn, StyledModalWrapper, StyledModalText } from './LinkModal.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';
 
 export const LinkModal = ({ setInviteLink }: Pick<LinkGeneratorProps, 'setInviteLink'>) => {
@@ -40,24 +35,31 @@ export const LinkModal = ({ setInviteLink }: Pick<LinkGeneratorProps, 'setInvite
 
   return (
     <>
-      <StyledButton onClick={handleModalOpen} data-testid="generate-btn">
+      <Button variant="contained" onClick={handleModalOpen} data-testid="generate-btn">
         {t('generateLink')}
-      </StyledButton>
+      </Button>
       <BasicPopUp open={modalShowed} handleClose={handleModalClose}>
         <StyledModalWrapper data-testid="modal">
           <StyledHeadline>{t('publicLink')}</StyledHeadline>
           <StyledModalText>{t('requireToCreateAccount')}</StyledModalText>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <StyledModalBtn onClick={() => postAppletLink(true)} data-testid="generate-with-login">
+            <StyledModalBtn
+              variant="text"
+              onClick={() => postAppletLink(true)}
+              data-testid="generate-with-login"
+            >
               {t('yes')}
             </StyledModalBtn>
             <StyledModalBtn
+              variant="text"
               onClick={() => postAppletLink(false)}
               data-testid="generate-without-login"
             >
               {t('no')}
             </StyledModalBtn>
-            <StyledModalBtn onClick={handleModalClose}>{t('cancel')}</StyledModalBtn>
+            <StyledModalBtn variant="text" onClick={handleModalClose}>
+              {t('cancel')}
+            </StyledModalBtn>
           </Box>
         </StyledModalWrapper>
       </BasicPopUp>
