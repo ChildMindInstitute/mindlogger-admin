@@ -39,31 +39,27 @@ export const Breadcrumbs = (): JSX.Element => {
 
   return (
     <MuiBreadcrumbs separator={<Svg id="separator" width="8" height="12" />}>
-      {breadcrumbsData &&
-        breadcrumbsData.length > 0 &&
-        breadcrumbsData.map(({ icon, label, navPath, disabledLink }, index) => {
-          const last = index === breadcrumbsData.length - 1;
+      {breadcrumbsData?.map(({ icon, label, navPath, disabledLink }, index) => {
+        const last = index === breadcrumbsData.length - 1;
 
-          return last || disabledLink ? (
-            <StyledBox key={index}>
-              {getBreadcrumbIcon(icon, label)}
-              {disabledLink ? (
-                <StyledBodySmall color={variables.palette.on_surface_variant}>
-                  {label}
-                </StyledBodySmall>
-              ) : (
-                <StyledLabelMedium color={variables.palette.on_surface}>{label}</StyledLabelMedium>
-              )}
-            </StyledBox>
-          ) : (
-            <StyledLink key={index} to={navPath || ''}>
-              {getBreadcrumbIcon(icon, label)}
+        return last || disabledLink ? (
+          <StyledBox key={index}>
+            {getBreadcrumbIcon(icon, label)}
+            {disabledLink ? (
               <StyledBodySmall color={variables.palette.on_surface_variant}>
                 {label}
               </StyledBodySmall>
-            </StyledLink>
-          );
-        })}
+            ) : (
+              <StyledLabelMedium color={variables.palette.on_surface}>{label}</StyledLabelMedium>
+            )}
+          </StyledBox>
+        ) : (
+          <StyledLink key={index} to={navPath || ''}>
+            {getBreadcrumbIcon(icon, label)}
+            <StyledBodySmall color={variables.palette.on_surface_variant}>{label}</StyledBodySmall>
+          </StyledLink>
+        );
+      })}
     </MuiBreadcrumbs>
   );
 };

@@ -25,7 +25,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   builder.addCase(signIn.fulfilled, (state, action) => {
-    createAuthFulfilledData(state, action.meta.requestId, action.payload.data);
+    createAuthFulfilledData(state, action.meta.requestId, action.payload?.data);
   });
 
   builder.addCase(signIn.rejected, (state, action) => {

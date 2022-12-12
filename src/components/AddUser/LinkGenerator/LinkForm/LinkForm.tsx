@@ -43,6 +43,7 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
           InputProps={{
             readOnly: true,
           }}
+          data-testid="generated-input"
         />
         <StyledButton variant="outlined" onClick={copyPublicLink}>
           <Svg id="duplicate" />
