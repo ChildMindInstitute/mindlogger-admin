@@ -8,9 +8,9 @@ import {
   StyledSvg,
   StyledActionsWrapper,
 } from './Actions.styles';
-import { Action } from './Actions.types';
+import { ActionsProps } from './Actions.types';
 
-export const Actions = ({ items, context }: { items: Action[]; context: any }) => {
+export const Actions = ({ items, context }: ActionsProps) => {
   const [showActions, setShowActions] = useState(false);
 
   return (

@@ -8,7 +8,7 @@ import { postAppletPublicLinkApi } from 'api';
 import { getErrorMessage } from 'utils/getErrorMessage';
 import { StyledHeadline } from 'styles/styledComponents/Typography';
 
-import { StyledModalBtn, StyledModalWrapper, StyledModalText } from './LinkModal.styles';
+import { StyledModalBtn, StyledModalText, StyledModalWrapper } from 'styles/styledComponents/Modal';
 import { LinkGeneratorProps } from '../LinkGenerator.types';
 
 export const LinkModal = ({ setInviteLink }: Pick<LinkGeneratorProps, 'setInviteLink'>) => {

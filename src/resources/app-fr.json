@@ -101,5 +101,6 @@
   "transferOwnership": "Transférer la propriété",
   "shareWithTheLibrary": "Partager avec la bibliothèque",
   "incorrectAppletPassword": "Mot de passe de l'applet incorrect",
-  "noAlerts": "Pas d'alertes"
+  "noAlerts": "Pas d'alertes",
+  "confirmDeleteApplet": "Êtes-vous sûr de vouloir supprimer cette applet?"
 }
