@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Search } from 'components/Search';
 import { Table, Row } from 'components/Tables';
 import { Svg } from 'components/Svg';
-import { breadcrumbs, ManagerData, users } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
-import { useTimeAgo, useBaseBreadcrumbs } from 'hooks';
+import { ManagerData, users } from 'redux/modules';
+import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
 
@@ -17,11 +16,20 @@ import { getHeadCells } from './ManagersTable.const';
 export const ManagersTable = (): JSX.Element => {
   const { id } = useParams();
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
   const timeAgo = useTimeAgo();
   const managersData = users.useManagerData();
-  const baseBreadcrumbs = useBaseBreadcrumbs();
   const [searchValue, setSearchValue] = useState('');
+
+  useBreadcrumbs(
+    id
+      ? [
+          {
+            icon: <Svg id="manager-outlined" width="15" height="15" />,
+            label: t('managers'),
+          },
+        ]
+      : undefined,
+  );
 
   const managersArr = (
     id ? prepareUsersData(managersData?.items, id) : prepareUsersData(managersData?.items)
@@ -65,20 +73,6 @@ export const ManagersTable = (): JSX.Element => {
         filterRows(lastName, searchValue) ||
         filterRows(email, searchValue),
     );
-
-  useEffect(() => {
-    if (id && baseBreadcrumbs && baseBreadcrumbs.length > 0) {
-      dispatch(
-        breadcrumbs.actions.setBreadcrumbs([
-          ...baseBreadcrumbs,
-          {
-            icon: <Svg id="manager-outlined" width="15" height="15" />,
-            label: t('managers'),
-          },
-        ]),
-      );
-    }
-  }, [baseBreadcrumbs, id, dispatch, t]);
 
   return (
     <>

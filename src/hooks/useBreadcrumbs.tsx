@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { Svg } from 'components/Svg';
-import { auth, folders, Breadcrumb } from 'redux/modules';
+import { auth, folders, Breadcrumb, breadcrumbs } from 'redux/modules';
 import { page } from 'resources';
 import { getAppletData } from 'utils/getAppletData';
+import { useAppDispatch } from 'redux/store';
 
-export const useBaseBreadcrumbs = () => {
+export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { id } = useParams();
+  const dispatch = useAppDispatch();
+  const location = useLocation();
   const authData = auth.useData();
   const appletsFoldersData = folders.useFoldersApplets();
 
-  const [baseBreadcrumbs, setBaseBreadcrumbs] = useState<Breadcrumb[]>([]);
+  const [crumbs, setCrumbs] = useState<Breadcrumb[]>([]);
 
   useEffect(() => {
     const newBreadcrumbs: Breadcrumb[] = [];
@@ -33,8 +36,12 @@ export const useBaseBreadcrumbs = () => {
       });
     }
 
-    setBaseBreadcrumbs(newBreadcrumbs);
+    setCrumbs([...newBreadcrumbs, ...(restCrumbs || [])]);
   }, [authData, appletsFoldersData, id]);
 
-  return baseBreadcrumbs;
+  useEffect(() => {
+    if (crumbs?.length > 0) {
+      dispatch(breadcrumbs.actions.setBreadcrumbs(crumbs));
+    }
+  }, [crumbs, dispatch, location]);
 };
