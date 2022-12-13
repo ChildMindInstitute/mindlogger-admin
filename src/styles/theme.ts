@@ -3,6 +3,15 @@ import { createTheme } from '@mui/material/styles';
 import { typography } from 'styles/typography';
 import { variables } from 'styles/variables';
 
+const commonFocusStyles = Object.assign(
+  {},
+  ...['&:focus', '&:active', '&:visited'].map((item) => ({
+    [item]: {
+      backgroundColor: variables.palette.primary_alfa12,
+    },
+  })),
+);
+
 const theme = createTheme({
   spacing: 10,
   typography: {
@@ -49,7 +58,7 @@ const theme = createTheme({
     MuiDialogTitle: {
       styleOverrides: {
         root: {
-          fontSize: variables.font.size.xl,
+          fontSize: variables.font.size.xxl,
           fontWeight: variables.font.weight.medium,
           padding: '6.4rem 2.4rem 2.8rem',
         },
@@ -149,7 +158,6 @@ const theme = createTheme({
           '&.MuiTablePagination-toolbar': {
             padding: 0,
             color: variables.palette.on_surface_variant,
-
             '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': {
               fontWeight: variables.font.weight.regular,
               fontSize: variables.font.size.md,
@@ -176,41 +184,46 @@ const theme = createTheme({
           textTransform: 'none',
           height: 40,
           letterSpacing: variables.letterSpacing.sm,
-
+          boxShadow: 'unset',
           '&.MuiButton-contained': {
             '&:hover': {
-              backgroundColor: variables.palette.primary50,
-              boxShadow: variables.boxShadow.light1,
+              backgroundColor: variables.palette.contained_btn_hover,
+              boxShadow: 'unset',
             },
-
-            '&:focus': {
-              backgroundColor: variables.palette.primary50,
-            },
-
+            ...Object.assign(
+              {},
+              ...['&:focus', '&:active', '&:visited'].map((item) => ({
+                [item]: {
+                  backgroundColor: variables.palette.contained_btn_focus,
+                  boxShadow: 'unset',
+                },
+              })),
+            ),
             '&.Mui-disabled': {
-              color: variables.palette.on_surface_variant,
-              backgroundColor: variables.palette.surface_variant,
+              color: variables.palette.contained_btn_disabled_text,
+              backgroundColor: variables.palette.on_surface_alfa12,
             },
           },
           '&.MuiButton-outlined': {
             borderColor: variables.palette.outline,
-
             '&:hover': {
-              backgroundColor: variables.palette.surface1,
-              borderWidth: variables.borderWidth.md,
+              backgroundColor: variables.palette.primary_alfa8,
             },
-
-            '&:focus': {
-              backgroundColor: variables.palette.surface1,
-              borderColor: variables.palette.primary,
-              borderWidth: variables.borderWidth.md,
-            },
-
+            ...commonFocusStyles,
             '&.Mui-disabled': {
-              color: variables.palette.outline,
+              color: variables.palette.on_surface_alfa38,
               backgroundColor: 'transparent',
-              borderWidth: variables.borderWidth.md,
-              borderColor: variables.palette.outline_variant,
+              borderColor: variables.palette.on_surface_alfa12,
+            },
+          },
+          '&.MuiButton-text': {
+            '&:hover': {
+              backgroundColor: variables.palette.primary_alfa8,
+            },
+            ...commonFocusStyles,
+            '&.Mui-disabled': {
+              color: variables.palette.on_surface_alfa38,
+              backgroundColor: 'transparent',
             },
           },
         },
@@ -219,7 +232,7 @@ const theme = createTheme({
     MuiLink: {
       styleOverrides: {
         root: {
-          transition: 'all 0.3s',
+          transition: variables.transitions.all,
         },
       },
     },
@@ -228,7 +241,6 @@ const theme = createTheme({
         root: {
           color: variables.palette.outline,
           fontSize: variables.font.size.lg,
-
           '&.MuiFormLabel-filled': {
             color: variables.palette.black,
           },
@@ -245,7 +257,6 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: variables.borderRadius.sm,
-
           '&:hover': {
             '&.Mui-error': {
               '.MuiOutlinedInput-notchedOutline': {
@@ -272,16 +283,36 @@ const theme = createTheme({
             padding: '1.6rem',
             fontSize: variables.font.size.lg,
           },
-
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary50,
             },
           },
-
           '.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderWidth: variables.borderWidth.lg,
             borderColor: variables.palette.primary,
+          },
+        },
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        root: {
+          '.MuiPaper-root': {
+            backgroundColor: variables.palette.surface2,
+            borderRadius: variables.borderRadius.lg,
+            boxShadow: variables.boxShadow.light2,
+            marginTop: '0.4rem',
+            padding: '0 0.4rem',
+          },
+          '.MuiMenuItem-root': {
+            borderRadius: variables.borderRadius.xxs,
+            '&:hover': {
+              backgroundColor: variables.palette.secondary_container,
+            },
+          },
+          '.MuiMenuItem-root.Mui-selected': {
+            backgroundColor: variables.palette.surface_variant,
           },
         },
       },
@@ -299,5 +330,4 @@ const theme = createTheme({
     },
   },
 });
-
 export default theme;

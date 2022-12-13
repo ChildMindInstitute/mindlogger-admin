@@ -28,7 +28,7 @@ export const Modal = ({
     </StyledDialogTitle>
     {children}
     <StyledDialogActions>
-      <StyledOkButton disabled={disabledSubmit} onClick={onSubmit}>
+      <StyledOkButton variant="text" disabled={disabledSubmit} onClick={onSubmit}>
         {buttonText}
       </StyledOkButton>
     </StyledDialogActions>

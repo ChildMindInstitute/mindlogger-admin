@@ -1,6 +1,7 @@
 export const font = {
   size: {
-    xl: '2.4rem', //24px
+    xxl: '2.4rem', //24px
+    xl: '2.2rem', //22px
     lg: '1.6rem', //16px
     md: '1.4rem', //14px
     sm: '1.2rem', //12px

@@ -9,16 +9,17 @@ import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from './AccountPanel.const';
 
 export const StyledAccountDrawer = styled(Drawer)`
+  left: auto;
+
   .MuiPaper-root {
     height: 100%;
     width: 40rem;
-    padding: ${theme.spacing(1.6)};
-    background-color: ${variables.palette.surface1};
+    padding: ${theme.spacing(1.6, 0)};
+    background-color: ${variables.palette.surface2};
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     box-shadow: unset;
-    border-left: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   }
 `;
 
@@ -34,7 +35,7 @@ export const StyledHeaderInfo = styled(Box)`
   overflow: hidden;
   max-width: 27.5rem;
 
-  p:first-child {
+  p:first-of-type {
     margin-bottom: ${theme.spacing(0.2)};
   }
 `;

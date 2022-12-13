@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import { Svg } from 'components/Svg';
 import { Modal } from 'components/Popups';
 import { StyledTitleMedium, StyledTitleSmall } from 'styles/styledComponents/Typography';
+import { variables } from 'styles/variables';
 
 import { SelectLanguageProps } from './SelectLanguage.types';
 import {
@@ -44,7 +45,12 @@ export const SelectLanguage = ({
             <StyledItemContent>
               <Box>{lang.component}</Box>
               <StyledBox>
-                <StyledTitleMedium fontWeight={'regular'}>{lang.label}</StyledTitleMedium>
+                <StyledTitleMedium
+                  fontWeight={'regular'}
+                  color={variables.palette.on_secondary_container}
+                >
+                  {lang.label}
+                </StyledTitleMedium>
                 <StyledTitleSmall fontWeight={'regular'}>{lang.type}</StyledTitleSmall>
               </StyledBox>
             </StyledItemContent>

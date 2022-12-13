@@ -4,8 +4,9 @@ import { Box, Button } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { shouldForwardProp } from 'utils/shouldForwardProp';
 
-export const RespondentsTableHeader = styled(Box)`
+export const RespondentsTableHeader = styled(Box, shouldForwardProp)`
   margin-bottom: ${theme.spacing(2.4)};
   display: flex;
   justify-content: ${({ hasButton }: { hasButton: boolean }) =>

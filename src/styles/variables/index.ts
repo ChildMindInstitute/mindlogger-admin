@@ -5,7 +5,8 @@ export const variables = {
   palette,
   font,
   lineHeight: {
-    xl: '3.2rem', //32px
+    xxl: '3.2rem', //32px
+    xl: '2.8rem', //28px
     lg: '2.4rem', //24px
     md: '2rem', //20px
     sm: '1.6rem', //16px
@@ -43,5 +44,9 @@ export const variables = {
     dark3: '0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3)',
     dark4: '0 6px 10px 4px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.3)',
     dark5: '0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px rgba(0, 0, 0, 0.3)',
+  },
+  transitions: {
+    all: 'all 0.3s',
+    bgColor: 'background-color 0.3s',
   },
 };

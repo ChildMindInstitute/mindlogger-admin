@@ -16,9 +16,17 @@ export const palette = {
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
 
+  primary_alfa8: 'rgba(0, 103, 160, 0.08)',
+  primary_alfa12: 'rgba(0, 103, 160, 0.12)',
   primary50_alfa5: 'rgba(0, 98, 157, 0.05)',
+  on_surface_alfa8: 'rgba(26, 28, 30, 0.08)',
+  on_surface_alfa12: 'rgba(26, 28, 30, 0.12)',
+  on_surface_alfa38: 'rgba(26, 28, 30, 0.38)',
   on_surface_variant_alfa8: 'rgba(66, 71, 78, 0.08)',
   on_surface_variant_alfa12: 'rgba(66, 71, 78, 0.12)',
+  contained_btn_hover: '#1473a8',
+  contained_btn_focus: '#1f79ab',
+  contained_btn_disabled_text: '#979799',
 
   black: '#000',
   white: '#fff',
