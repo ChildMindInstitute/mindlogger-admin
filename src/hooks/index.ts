@@ -1,3 +1,3 @@
 export * from './useTimeAgo';
-export * from './useBaseBreadcrumbs';
+export * from './useBreadcrumbs';
 export * from './useDnd';
