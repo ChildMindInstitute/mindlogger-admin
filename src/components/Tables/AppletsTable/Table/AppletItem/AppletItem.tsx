@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, DragEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
@@ -26,7 +26,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
     if (id) navigate(`/${id}/${appletPages.respondents}`);
   };
 
-  const onDragStart = (event: React.DragEvent<HTMLTableRowElement>) => {
+  const onDragStart = (event: DragEvent<HTMLTableRowElement>) => {
     event.persist();
     event.dataTransfer.setData('text/plain', item.id);
   };
