@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
-import { useTimeAgo } from 'hooks';
+import { useDnd, useTimeAgo } from 'hooks';
 import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
@@ -17,13 +17,27 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
+  const { isDragOver, onDragEnter, onDragLeave, onDragOver, onDrop } = useDnd();
 
   const handleAppletClick = (id: string | undefined) => {
     if (id) navigate(`/${id}/${appletPages.respondents}`);
   };
 
+  const onDragStart = (event: React.DragEvent<HTMLTableRowElement>) => {
+    event.persist();
+    event.dataTransfer.setData('text/plain', item.id);
+  };
+
   return (
-    <TableRow>
+    <TableRow
+      className={isDragOver ? 'dragged-over' : ''}
+      draggable
+      onDragStart={onDragStart}
+      onDragLeave={onDragLeave}
+      onDragEnter={onDragEnter}
+      onDragOver={onDragOver}
+      onDrop={(e) => onDrop(e, item)}
+    >
       <TableCell width="30%" onClick={() => handleAppletClick(item.id)}>
         <StyledAppletName applet={item}>
           {item.parentId && (

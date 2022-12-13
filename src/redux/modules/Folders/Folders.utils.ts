@@ -99,6 +99,51 @@ export const updateFolders = (folders: FoldersSchema, folder: FolderApplet, upda
 export const deleteFolderById = (folders: FoldersSchema, folderId: string) =>
   folders.flattenFoldersApplets.filter((folderApplet) => folderApplet.id !== folderId);
 
+export const addAppletToFolder = (
+  folders: FolderApplet[],
+  folder: FolderApplet,
+  applet: FolderApplet,
+) =>
+  folders.map((folderApplet) => {
+    if (folderApplet.id === applet.id) {
+      return {
+        ...folderApplet,
+        parentId: folder.id,
+        depth: 1,
+        isVisible: folder.isExpanded,
+      };
+    }
+    if (folderApplet.id === folder.id) {
+      const folderItems = [...(folderApplet.items || []), applet];
+      return {
+        ...folderApplet,
+        items: folderItems,
+      };
+    }
+    return folderApplet;
+  });
+
+export const removeAppletFromFolder = (folders: FoldersSchema, applet: FolderApplet) =>
+  folders.flattenFoldersApplets.map((folderApplet) => {
+    if (folderApplet.id === applet.id) {
+      return {
+        ...folderApplet,
+        parentId: undefined,
+        depth: 0,
+        isVisible: true,
+      };
+    }
+    if (folderApplet.id === applet.parentId) {
+      const folderItems = [...(folderApplet.items || [])].filter((item) => item.id !== applet.id);
+      return {
+        ...folderApplet,
+        isExpanded: folderItems.length ? folderApplet.isExpanded : false,
+        items: folderItems,
+      };
+    }
+    return folderApplet;
+  });
+
 export const createFoldersPendingData = (foldersData: Draft<BaseSchema>, requestId: string) => {
   if (foldersData.status !== 'loading') {
     foldersData.requestId = requestId;

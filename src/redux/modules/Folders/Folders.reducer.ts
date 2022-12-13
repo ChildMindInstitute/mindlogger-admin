@@ -5,8 +5,11 @@ import { ErrorResponse } from 'redux/modules/Base';
 
 import { FolderApplet, FoldersSchema } from './Folders.schema';
 import {
+  addAppletToFolder,
+  changeFolder,
   deleteFolder,
   getAppletsForFolders,
+  removeAppletFromFolder,
   saveFolder,
   togglePin,
   updateFolder,
@@ -110,6 +113,48 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
   });
 
   builder.addCase(togglePin.fulfilled, (state, action) => {
+    const { foldersApplets } = state;
+    if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
+      foldersApplets.requestId = initialState.foldersApplets.requestId;
+      foldersApplets.status = 'success';
+      state.flattenFoldersApplets = action.payload;
+    }
+  });
+
+  builder.addCase(addAppletToFolder.pending, (state, action) => {
+    const { foldersApplets } = state;
+    createFoldersPendingData(foldersApplets, action.meta.requestId);
+  });
+
+  builder.addCase(addAppletToFolder.fulfilled, (state, action) => {
+    const { foldersApplets } = state;
+    if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
+      foldersApplets.requestId = initialState.foldersApplets.requestId;
+      foldersApplets.status = 'success';
+      state.flattenFoldersApplets = action.payload;
+    }
+  });
+
+  builder.addCase(changeFolder.pending, (state, action) => {
+    const { foldersApplets } = state;
+    createFoldersPendingData(foldersApplets, action.meta.requestId);
+  });
+
+  builder.addCase(changeFolder.fulfilled, (state, action) => {
+    const { foldersApplets } = state;
+    if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
+      foldersApplets.requestId = initialState.foldersApplets.requestId;
+      foldersApplets.status = 'success';
+      state.flattenFoldersApplets = action.payload;
+    }
+  });
+
+  builder.addCase(removeAppletFromFolder.pending, (state, action) => {
+    const { foldersApplets } = state;
+    createFoldersPendingData(foldersApplets, action.meta.requestId);
+  });
+
+  builder.addCase(removeAppletFromFolder.fulfilled, (state, action) => {
     const { foldersApplets } = state;
     if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
       foldersApplets.requestId = initialState.foldersApplets.requestId;

@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
+import { FolderApplet } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, Head } from 'components/Tables';
 import { Order } from 'types/table';
 import { getComparator, sortRows } from '../AppletsTable.utils';
@@ -50,32 +51,28 @@ export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: Ta
   );
 
   return (
-    <>
-      <StyledTableContainer>
-        <MuiTable stickyHeader>
-          <Head
-            headCells={columns}
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}
-            tableHeader={tableHeader}
-          />
-          <TableBody>
-            {sortedRows
-              ?.slice(
-                page * DEFAULT_ROWS_PER_PAGE,
-                page * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
-              )
-              .map((row) =>
-                row?.isFolder ? (
-                  <FolderItem key={row.id} item={row} />
-                ) : (
-                  <AppletItem key={row.id} item={row} />
-                ),
-              )}
-          </TableBody>
-        </MuiTable>
-      </StyledTableContainer>
-    </>
+    <StyledTableContainer>
+      <MuiTable stickyHeader>
+        <Head
+          headCells={columns}
+          order={order}
+          orderBy={orderBy}
+          onRequestSort={handleRequestSort}
+          tableHeader={tableHeader}
+        />
+        <TableBody>
+          {sortedRows
+            ?.slice(
+              page * DEFAULT_ROWS_PER_PAGE,
+              page * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
+            )
+            .map((row: FolderApplet) => (
+              <React.Fragment key={row.id}>
+                {row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />}
+              </React.Fragment>
+            ))}
+        </TableBody>
+      </MuiTable>
+    </StyledTableContainer>
   );
 };
