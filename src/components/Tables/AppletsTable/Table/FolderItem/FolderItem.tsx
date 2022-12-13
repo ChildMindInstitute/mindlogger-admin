@@ -2,7 +2,7 @@ import { useEffect, useState, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/material';
 
-import { useDnd } from 'hooks';
+import { useAppletsDnd } from 'hooks';
 import { useAppDispatch } from 'redux/store';
 import { folders } from 'redux/modules';
 import { Svg } from 'components/Svg';
@@ -23,7 +23,7 @@ import { getActions } from './FolderItem.const';
 export const FolderItem = ({ item }: FolderItemProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const { isDragOver, onDragEnter, onDragLeave, onDragOver, onDrop } = useDnd();
+  const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
 
   const [folder, setFolder] = useState(item);
 
@@ -63,7 +63,6 @@ export const FolderItem = ({ item }: FolderItemProps) => {
     <TableRow
       className={isDragOver ? 'dragged-over' : ''}
       onDragLeave={onDragLeave}
-      onDragEnter={onDragEnter}
       onDragOver={onDragOver}
       onDrop={(e) => onDrop(e, item)}
     >

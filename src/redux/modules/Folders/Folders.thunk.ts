@@ -18,6 +18,7 @@ import {
   updateFolders,
   addAppletToFolder as addAppletToFolderUtil,
   removeAppletFromFolder as removeAppletFromFolderUtil,
+  changeFolder as changeFolderUtil,
 } from './Folders.utils';
 
 export const getAppletsForFolders = createAsyncThunk(
@@ -151,14 +152,14 @@ export const changeFolder = createAsyncThunk(
       applet,
       newFolder,
     }: { previousFolder: FolderApplet; applet: FolderApplet; newFolder: FolderApplet },
-    { dispatch, rejectWithValue },
+    { getState, rejectWithValue, signal },
   ) => {
     try {
-      const folders = (
-        await dispatch(removeAppletFromFolder({ folderId: previousFolder.id, applet }))
-      ).payload as FolderApplet[];
+      await removeAppletApi({ folderId: previousFolder.id, appletId: applet.id }, signal);
+      await addAppletToFolderApi({ folderId: newFolder.id, appletId: applet.id }, signal);
+      const { folders } = getState() as { folders: FoldersSchema };
 
-      return addAppletToFolderUtil(folders, newFolder, applet);
+      return changeFolderUtil(folders, previousFolder.id, applet, newFolder);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

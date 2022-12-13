@@ -94,10 +94,8 @@ const theme = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: {
-          '&&:last-child .MuiTableCell-body': {
-            borderBottomWidth: variables.borderWidth.md,
-            borderBottomStyle: 'solid',
-            borderBottomColor: 'transparent',
+          '&:last-child .MuiTableCell-body': {
+            borderBottom: `${variables.borderWidth.md} solid transparent`,
           },
           '.MuiTableCell-head': {
             borderLeft: 'none',
@@ -105,9 +103,7 @@ const theme = createTheme({
             fontWeight: variables.font.weight.medium,
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
-            borderLeftWidth: variables.borderWidth.md,
-            borderLeftStyle: 'solid',
-            borderLeftColor: 'transparent',
+            borderLeft: `${variables.borderWidth.md} solid transparent}`,
           },
         },
       },

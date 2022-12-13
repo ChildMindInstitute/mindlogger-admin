@@ -29,5 +29,6 @@ export const attachUrl = (origin: string, resource: string) => {
   if (origin.endsWith('/')) {
     return origin + resource;
   }
+
   return `${origin}/${resource}`;
 };

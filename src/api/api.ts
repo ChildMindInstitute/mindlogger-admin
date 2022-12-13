@@ -285,6 +285,7 @@ export const deleteUserFromRoleApi = (
 ) => {
   const data = new FormData();
   data.append('userId', userId);
+
   return authApiClient.delete(`/group/${groupId}/member`, { data, signal });
 };
 

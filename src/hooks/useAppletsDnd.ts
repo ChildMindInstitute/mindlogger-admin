@@ -3,16 +3,11 @@ import { useState } from 'react';
 import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders } from 'redux/modules';
 
-export const useDnd = () => {
+export const useAppletsDnd = () => {
   const dispatch = useAppDispatch();
 
   const foldersApplets: FolderApplet[] | null = folders.useFlattenFoldersApplets();
   const [isDragOver, setIsDragOver] = useState(false);
-
-  const onDragEnter = (event: React.DragEvent<HTMLTableRowElement>) => {
-    event.preventDefault();
-    setIsDragOver(true);
-  };
 
   const onDragLeave = (event: React.DragEvent<HTMLTableRowElement>) => {
     event.persist();
@@ -26,9 +21,7 @@ export const useDnd = () => {
   };
 
   const onDrop = (event: React.DragEvent<HTMLTableRowElement>, droppedItem: FolderApplet) => {
-    event.persist();
-    event.preventDefault();
-    setIsDragOver(false);
+    onDragLeave(event);
 
     const draggedId = event.dataTransfer.getData('text');
     const draggedItem = foldersApplets?.filter((folderApplet) => folderApplet.id === draggedId)[0];
@@ -70,5 +63,5 @@ export const useDnd = () => {
     );
   };
 
-  return { isDragOver, onDragEnter, onDragLeave, onDragOver, onDrop };
+  return { isDragOver, onDragLeave, onDragOver, onDrop };
 };

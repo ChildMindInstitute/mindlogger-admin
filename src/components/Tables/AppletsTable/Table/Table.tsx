@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { Fragment, useMemo, useState } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { FolderApplet } from 'redux/modules';
@@ -20,6 +20,7 @@ export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: Ta
     if (!rows?.length) {
       return [];
     }
+
     return sortRows(rows, getComparator(order, orderBy));
   }, [order, orderBy, rows]);
 
@@ -67,9 +68,9 @@ export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: Ta
               page * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
             )
             .map((row: FolderApplet) => (
-              <React.Fragment key={row.id}>
+              <Fragment key={row.id}>
                 {row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />}
-              </React.Fragment>
+              </Fragment>
             ))}
         </TableBody>
       </MuiTable>

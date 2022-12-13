@@ -3,27 +3,24 @@ import { Box, styled, TableContainer } from '@mui/material';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { variables } from 'styles/variables';
 
-const draggedBorder = `0.3rem solid ${variables.palette.primary}`;
-const draggedBorderRadius = '0.4rem 0.4rem';
-
 export const StyledTableContainer = styled(TableContainer)`
   display: flex;
   flex-direction: column;
 
-  .MuiTableRow-root.dragged-over {
+  && .MuiTableRow-root.dragged-over {
     .MuiTableCell-body {
-      border-top: ${draggedBorder};
-      border-bottom: ${draggedBorder};
+      border-top: ${variables.borderWidth.lg} solid ${variables.palette.primary};
+      border-bottom: ${variables.borderWidth.lg} solid ${variables.palette.primary};
     }
     .MuiTableCell-body:first-of-type {
-      border-left: ${draggedBorder};
-      border-top-left-radius: ${draggedBorderRadius};
-      border-bottom-left-radius: ${draggedBorderRadius};
+      border-left: ${variables.borderWidth.lg} solid ${variables.palette.primary};
+      border-top-left-radius: ${variables.borderRadius.xs} ${variables.borderRadius.xs};
+      border-bottom-left-radius: ${variables.borderRadius.xs} ${variables.borderRadius.xs};
     }
     .MuiTableCell-body:last-of-type {
-      border-right: ${draggedBorder};
-      border-top-right-radius: ${draggedBorderRadius};
-      border-bottom-right-radius: ${draggedBorderRadius};
+      border-right: ${variables.borderWidth.lg} solid ${variables.palette.primary};
+      border-top-right-radius: ${variables.borderRadius.xs} ${variables.borderRadius.xs};
+      border-bottom-right-radius: ${variables.borderRadius.xs} ${variables.borderRadius.xs};
     }
   }
 `;

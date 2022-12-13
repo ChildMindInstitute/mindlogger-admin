@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
-import { useDnd, useTimeAgo } from 'hooks';
+import { useAppletsDnd, useTimeAgo } from 'hooks';
 import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
@@ -17,7 +17,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
-  const { isDragOver, onDragEnter, onDragLeave, onDragOver, onDrop } = useDnd();
+  const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
 
   const handleAppletClick = (id: string | undefined) => {
     if (id) navigate(`/${id}/${appletPages.respondents}`);
@@ -34,7 +34,6 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
       draggable
       onDragStart={onDragStart}
       onDragLeave={onDragLeave}
-      onDragEnter={onDragEnter}
       onDragOver={onDragOver}
       onDrop={(e) => onDrop(e, item)}
     >
