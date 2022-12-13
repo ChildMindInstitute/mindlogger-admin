@@ -40,7 +40,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   }, [authData, appletsFoldersData, id]);
 
   useEffect(() => {
-    if (crumbs?.length > 0) {
+    if (crumbs?.length) {
       dispatch(breadcrumbs.actions.setBreadcrumbs(crumbs));
     }
   }, [crumbs, dispatch, location]);
