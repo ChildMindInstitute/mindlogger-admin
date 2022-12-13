@@ -20,16 +20,12 @@ export const ManagersTable = (): JSX.Element => {
   const managersData = users.useManagerData();
   const [searchValue, setSearchValue] = useState('');
 
-  useBreadcrumbs(
-    id
-      ? [
-          {
-            icon: <Svg id="manager-outlined" width="15" height="15" />,
-            label: t('managers'),
-          },
-        ]
-      : undefined,
-  );
+  useBreadcrumbs([
+    {
+      icon: <Svg id="manager-outlined" width="15" height="15" />,
+      label: t('managers'),
+    },
+  ]);
 
   const managersArr = (
     id ? prepareUsersData(managersData?.items, id) : prepareUsersData(managersData?.items)

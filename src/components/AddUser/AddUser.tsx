@@ -22,21 +22,17 @@ export const AddUser = () => {
   const dispatch = useAppDispatch();
   const [rows, setRows] = useState<Row[]>([]);
 
-  useBreadcrumbs(
-    id
-      ? [
-          {
-            icon: <Svg id="dots-filled" width="15" height="15" />,
-            label: t('more'),
-            navPath: `/${id}/${appletPages.more}`,
-          },
-          {
-            icon: <Svg id="users-outlined" width="15" height="15" />,
-            label: t('addUser'),
-          },
-        ]
-      : undefined,
-  );
+  useBreadcrumbs([
+    {
+      icon: <Svg id="dots-filled" width="15" height="15" />,
+      label: t('more'),
+      navPath: `/${id}/${appletPages.more}`,
+    },
+    {
+      icon: <Svg id="users-outlined" width="15" height="15" />,
+      label: t('addUser'),
+    },
+  ]);
 
   const getInvitationsHandler = async () => {
     try {

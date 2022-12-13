@@ -16,16 +16,12 @@ export const More = () => {
   const { t } = useTranslation('app');
   const [activeAddUser, setActiveAddUser] = useState(false);
 
-  useBreadcrumbs(
-    id
-      ? [
-          {
-            icon: <Svg id="dots-filled" width="15" height="15" />,
-            label: t('more'),
-          },
-        ]
-      : undefined,
-  );
+  useBreadcrumbs([
+    {
+      icon: <Svg id="dots-filled" width="15" height="15" />,
+      label: t('more'),
+    },
+  ]);
 
   const handleAddUserClick = () => {
     setActiveAddUser(true);

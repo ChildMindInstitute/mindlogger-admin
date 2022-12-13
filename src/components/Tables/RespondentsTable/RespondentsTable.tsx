@@ -29,16 +29,12 @@ export const RespondentsTable = (): JSX.Element => {
   const timeAgo = useTimeAgo();
   const [searchValue, setSearchValue] = useState('');
 
-  useBreadcrumbs(
-    id
-      ? [
-          {
-            icon: <Svg id="respondent-outlined" width="13.5" height="15" />,
-            label: t('respondents'),
-          },
-        ]
-      : undefined,
-  );
+  useBreadcrumbs([
+    {
+      icon: <Svg id="respondent-outlined" width="13.5" height="15" />,
+      label: t('respondents'),
+    },
+  ]);
 
   const handlePinClick = async (profileId: string, newState: boolean) => {
     const { updatePin, getUsersList } = users.thunk;
