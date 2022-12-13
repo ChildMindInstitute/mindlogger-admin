@@ -9,6 +9,8 @@ import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from './AccountPanel.const';
 
 export const StyledAccountDrawer = styled(Drawer)`
+  left: auto;
+
   .MuiPaper-root {
     height: 100%;
     width: 40rem;
@@ -18,7 +20,6 @@ export const StyledAccountDrawer = styled(Drawer)`
     flex-direction: column;
     justify-content: space-between;
     box-shadow: unset;
-    border-left: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   }
 `;
 
