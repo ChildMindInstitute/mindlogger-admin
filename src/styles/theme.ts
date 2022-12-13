@@ -232,7 +232,7 @@ const theme = createTheme({
     MuiLink: {
       styleOverrides: {
         root: {
-          transition: 'all 0.3s',
+          transition: variables.transitions.all,
         },
       },
     },

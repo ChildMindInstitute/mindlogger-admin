@@ -34,7 +34,7 @@ export const StyledPlaceholder = styled(StyledFlexAllCenter)`
 export const StyledLink = styled(Link)`
   ${commonCenterStyles};
   padding: ${theme.spacing(0.8)};
-  transition: background-color 0.3s;
+  transition: ${variables.transitions.bgColor};
   border-radius: ${variables.borderRadius.lg};
 
   &:hover {

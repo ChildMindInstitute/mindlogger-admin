@@ -24,7 +24,7 @@ export const StyledNotification = styled(Box, shouldForwardProp)`
   position: relative;
   cursor: pointer;
   border-bottom: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-  transition: background-color 0.3s;
+  transition: ${variables.transitions.bgColor};
   background-color: ${({ active }: { active: boolean }) =>
     active ? variables.palette.secondary_container : 'transparent'};
 
