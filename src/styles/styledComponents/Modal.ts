@@ -1,12 +1,8 @@
-import { Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
+import { Box, Button } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-
-export const StyledModalBtn = styled(Button)`
-  text-transform: uppercase;
-`;
 
 export const StyledModalWrapper = styled(Box)`
   position: absolute;
@@ -20,4 +16,8 @@ export const StyledModalWrapper = styled(Box)`
 
 export const StyledModalText = styled(Box)`
   padding: ${theme.spacing(2, 0)};
+`;
+
+export const StyledModalBtn = styled(Button)`
+  text-transform: uppercase;
 `;

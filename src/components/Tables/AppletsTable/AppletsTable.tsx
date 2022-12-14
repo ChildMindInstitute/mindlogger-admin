@@ -8,7 +8,7 @@ import { auth, FolderApplet, folders } from 'redux/modules';
 import { Search } from 'components/Search';
 import { Menu } from 'components/Menu';
 
-import { Table } from './Table';
+import { Table } from './Table/Table';
 import { getHeadCells, getMenuItems } from './AppletsTable.const';
 import { StyledButtons, AppletsTableHeader } from './AppletsTable.styles';
 import { generateNewFolderName } from './AppletsTable.utils';

@@ -20,7 +20,7 @@ export const BaseLayout = (): JSX.Element => {
 
   useEffect(() => {
     if (accountData?.account) {
-      dispatch(folders.thunk.getAppletsForFolders({ account: accountData?.account }));
+      dispatch(folders.thunk.getAppletsForFolders({ account: accountData.account }));
     }
   }, [dispatch, accountData?.account]);
 
