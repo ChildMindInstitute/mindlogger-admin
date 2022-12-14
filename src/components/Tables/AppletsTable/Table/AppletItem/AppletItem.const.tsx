@@ -3,7 +3,9 @@ import { t } from 'i18next';
 import { Svg } from 'components/Svg';
 import { FolderApplet } from 'redux/modules';
 
-export const actionsRender = ({ deleteAction }: any) => [
+import { ActionsRender } from './AppletItem.types';
+
+export const actionsRender = ({ deleteAction }: ActionsRender) => [
   {
     icon: <Svg id="users" />,
     action: (item: FolderApplet) => item,

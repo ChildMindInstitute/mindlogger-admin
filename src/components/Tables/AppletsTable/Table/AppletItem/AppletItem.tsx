@@ -7,7 +7,7 @@ import { Box } from '@mui/system';
 import { useAppletsDnd, useTimeAgo } from 'hooks';
 import { useAsync } from 'hooks/useAsync';
 import { useAppDispatch } from 'redux/store';
-import { FolderApplet, folders, account } from 'redux/modules';
+import { account, FolderApplet, folders } from 'redux/modules';
 import { StyledBodyMedium, StyledHeadline } from 'styles/styledComponents/Typography';
 import { StyledModalBtn, StyledModalText, StyledModalWrapper } from 'styles/styledComponents/Modal';
 import { Actions } from 'components/Actions';
