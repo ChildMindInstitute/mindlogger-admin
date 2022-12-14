@@ -8,9 +8,18 @@ import {
   deleteFolderApi,
   updateFolderApi,
   togglePinApi,
+  addAppletToFolderApi,
+  removeAppletApi,
 } from 'api';
 
-import { deleteFolderById, setAppletsInFolder, updateFolders } from './Folders.utils';
+import {
+  deleteFolderById,
+  setAppletsInFolder,
+  updateFolders,
+  addAppletToFolder as addAppletToFolderUtil,
+  removeAppletFromFolder as removeAppletFromFolderUtil,
+  changeFolder as changeFolderUtil,
+} from './Folders.utils';
 
 export const getAppletsForFolders = createAsyncThunk(
   'folders/getAppletsInFolders',
@@ -112,6 +121,65 @@ export const togglePin = createAsyncThunk(
       const { folders } = getState() as { folders: FoldersSchema };
 
       return updateFolders(folders, { ...applet, pinOrder: pinState ? 1 : 0 });
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const addAppletToFolder = createAsyncThunk(
+  'folders/addAppletToFolder',
+  async (
+    { folder, applet }: { folder: FolderApplet; applet: FolderApplet },
+    { getState, rejectWithValue, signal },
+  ) => {
+    try {
+      await addAppletToFolderApi({ folderId: folder.id, appletId: applet.id }, signal);
+      const { folders } = getState() as { folders: FoldersSchema };
+
+      return addAppletToFolderUtil(folders.flattenFoldersApplets, folder, applet);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const changeFolder = createAsyncThunk(
+  'folders/changeFolder',
+  async (
+    {
+      previousFolder,
+      applet,
+      newFolder,
+    }: { previousFolder: FolderApplet; applet: FolderApplet; newFolder: FolderApplet },
+    { getState, rejectWithValue, signal },
+  ) => {
+    try {
+      await removeAppletApi({ folderId: previousFolder.id, appletId: applet.id }, signal);
+      await addAppletToFolderApi({ folderId: newFolder.id, appletId: applet.id }, signal);
+      const { folders } = getState() as { folders: FoldersSchema };
+
+      return changeFolderUtil(folders, previousFolder.id, applet, newFolder);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const removeAppletFromFolder = createAsyncThunk(
+  'folders/removeAppletFromFolder',
+  async (
+    { applet, folderId }: { applet: FolderApplet; folderId?: string },
+    { getState, rejectWithValue, signal },
+  ) => {
+    try {
+      await removeAppletApi(
+        { folderId: folderId || applet.parentId!, appletId: applet.id },
+        signal,
+      );
+      const { folders } = getState() as { folders: FoldersSchema };
+
+      return removeAppletFromFolderUtil(folders, applet);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

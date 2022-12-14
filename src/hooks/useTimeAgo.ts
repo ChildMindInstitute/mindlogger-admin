@@ -10,5 +10,6 @@ TimeAgo.addLocale(fr);
 
 export const useTimeAgo = () => {
   const { i18n } = useTranslation('app');
+
   return new TimeAgo(LANGUAGES[i18n.language as keyof typeof LANGUAGES].replace('_', '-'));
 };

@@ -5,14 +5,21 @@ import { ErrorResponse } from 'redux/modules/Base';
 
 import { FolderApplet, FoldersSchema } from './Folders.schema';
 import {
+  addAppletToFolder,
+  changeFolder,
   deleteFolder,
   getAppletsForFolders,
+  removeAppletFromFolder,
   saveFolder,
   togglePin,
   updateFolder,
 } from './Folders.thunk';
 import { state as initialState } from './Folders.state';
-import { createFoldersPendingData, flatFoldersApplets } from './Folders.utils';
+import {
+  createFoldersPendingData,
+  flatFoldersApplets,
+  updateFlattenFoldersApplets,
+} from './Folders.utils';
 
 export const reducers = {
   expandFolder: (state: FoldersSchema, action: PayloadAction<FolderApplet>): void => {
@@ -68,12 +75,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
   });
 
   builder.addCase(saveFolder.fulfilled, (state, action) => {
-    const { foldersApplets } = state;
-    if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
-      foldersApplets.requestId = initialState.foldersApplets.requestId;
-      foldersApplets.status = 'success';
-      state.flattenFoldersApplets = action.payload;
-    }
+    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
   });
 
   builder.addCase(deleteFolder.pending, (state, action) => {
@@ -82,12 +84,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
   });
 
   builder.addCase(deleteFolder.fulfilled, (state, action) => {
-    const { foldersApplets } = state;
-    if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
-      foldersApplets.requestId = initialState.foldersApplets.requestId;
-      foldersApplets.status = 'success';
-      state.flattenFoldersApplets = action.payload;
-    }
+    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
   });
 
   builder.addCase(updateFolder.pending, (state, action) => {
@@ -96,12 +93,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
   });
 
   builder.addCase(updateFolder.fulfilled, (state, action) => {
-    const { foldersApplets } = state;
-    if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
-      foldersApplets.requestId = initialState.foldersApplets.requestId;
-      foldersApplets.status = 'success';
-      state.flattenFoldersApplets = action.payload;
-    }
+    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
   });
 
   builder.addCase(togglePin.pending, (state, action) => {
@@ -110,11 +102,33 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
   });
 
   builder.addCase(togglePin.fulfilled, (state, action) => {
+    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+  });
+
+  builder.addCase(addAppletToFolder.pending, (state, action) => {
     const { foldersApplets } = state;
-    if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
-      foldersApplets.requestId = initialState.foldersApplets.requestId;
-      foldersApplets.status = 'success';
-      state.flattenFoldersApplets = action.payload;
-    }
+    createFoldersPendingData(foldersApplets, action.meta.requestId);
+  });
+
+  builder.addCase(addAppletToFolder.fulfilled, (state, action) => {
+    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+  });
+
+  builder.addCase(removeAppletFromFolder.pending, (state, action) => {
+    const { foldersApplets } = state;
+    createFoldersPendingData(foldersApplets, action.meta.requestId);
+  });
+
+  builder.addCase(removeAppletFromFolder.fulfilled, (state, action) => {
+    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+  });
+
+  builder.addCase(changeFolder.pending, (state, action) => {
+    const { foldersApplets } = state;
+    createFoldersPendingData(foldersApplets, action.meta.requestId);
+  });
+
+  builder.addCase(changeFolder.fulfilled, (state, action) => {
+    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
   });
 };

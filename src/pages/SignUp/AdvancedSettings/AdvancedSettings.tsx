@@ -40,6 +40,7 @@ export const AdvancedSettings = () => {
         name: `${inputValue}`,
       });
     }
+
     return filtered;
   };
 

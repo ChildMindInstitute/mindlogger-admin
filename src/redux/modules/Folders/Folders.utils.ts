@@ -9,6 +9,7 @@ import {
   LoadedFolder,
   LoadedFolderApplet,
 } from 'redux/modules';
+import { state as initialState } from './Folders.state';
 
 export const flatFoldersApplets = (item: FolderApplet): FolderApplet[] => {
   const folderApplet = { ...item };
@@ -93,15 +94,113 @@ export const updateFolders = (folders: FoldersSchema, folder: FolderApplet, upda
     if (folderApplet.id === folder.id) {
       return { ...folder, id: updatedId || folder.id };
     }
+
     return folderApplet;
   });
 
 export const deleteFolderById = (folders: FoldersSchema, folderId: string) =>
   folders.flattenFoldersApplets.filter((folderApplet) => folderApplet.id !== folderId);
 
+export const addAppletToFolder = (
+  folders: FolderApplet[],
+  folder: FolderApplet,
+  applet: FolderApplet,
+) =>
+  folders.map((folderApplet) => {
+    if (folderApplet.id === applet.id) {
+      return {
+        ...folderApplet,
+        parentId: folder.id,
+        depth: 1,
+        isVisible: folder.isExpanded,
+      };
+    }
+    if (folderApplet.id === folder.id) {
+      const items = folderApplet?.items || [];
+
+      return {
+        ...folderApplet,
+        items: [...items, applet],
+      };
+    }
+
+    return folderApplet;
+  });
+
+export const removeAppletFromFolder = (folders: FoldersSchema, applet: FolderApplet) =>
+  folders.flattenFoldersApplets.map((folderApplet) => {
+    if (folderApplet.id === applet.id) {
+      return {
+        ...applet,
+        parentId: undefined,
+        depth: 0,
+        isVisible: true,
+      };
+    }
+    if (folderApplet.id === applet.parentId) {
+      const items = (folderApplet?.items || []).filter((item) => item.id !== applet.id);
+
+      return {
+        ...folderApplet,
+        isExpanded: items.length ? folderApplet.isExpanded : false,
+        items,
+      };
+    }
+
+    return folderApplet;
+  });
+
+export const changeFolder = (
+  folders: FoldersSchema,
+  previousFolderId: string,
+  applet: FolderApplet,
+  newFolder: FolderApplet,
+) =>
+  folders.flattenFoldersApplets.map((folderApplet) => {
+    if (folderApplet.id === applet.id) {
+      return {
+        ...applet,
+        parentId: newFolder.id,
+        depth: 1,
+        isVisible: newFolder.isExpanded,
+      };
+    }
+    const items = folderApplet?.items || [];
+    if (folderApplet.id === previousFolderId) {
+      const filteredItems = items.filter((item) => item.id !== applet.id);
+
+      return {
+        ...folderApplet,
+        isExpanded: filteredItems.length ? folderApplet.isExpanded : false,
+        items: filteredItems,
+      };
+    }
+    if (folderApplet.id === newFolder.id) {
+      return {
+        ...folderApplet,
+        items: [...items, applet],
+      };
+    }
+
+    return folderApplet;
+  });
+
 export const createFoldersPendingData = (foldersData: Draft<BaseSchema>, requestId: string) => {
   if (foldersData.status !== 'loading') {
     foldersData.requestId = requestId;
     foldersData.status = 'loading';
+  }
+};
+
+export const updateFlattenFoldersApplets = (
+  state: Draft<FoldersSchema>,
+  requestId: string,
+  payload: FolderApplet[],
+) => {
+  const { foldersApplets } = state;
+  if (foldersApplets.status === 'loading' && foldersApplets.requestId === requestId) {
+    foldersApplets.requestId = initialState.foldersApplets.requestId;
+    foldersApplets.status = 'success';
+    state.flattenFoldersApplets = payload;
   }
 };

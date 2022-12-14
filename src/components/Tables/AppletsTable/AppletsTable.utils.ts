@@ -26,6 +26,7 @@ const comparePinned = (a: FolderApplet, b: FolderApplet) => {
   if (b.pinOrder) {
     return 1;
   }
+
   return 0;
 };
 
@@ -85,6 +86,7 @@ export const generateNewFolderName = (foldersApplets: FolderApplet[], t: TFuncti
     if (a[0] < b[0]) {
       return 1;
     }
+
     return 0;
   })[0];
 

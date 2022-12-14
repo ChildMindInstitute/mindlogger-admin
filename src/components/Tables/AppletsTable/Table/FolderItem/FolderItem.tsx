@@ -2,6 +2,7 @@ import { useEffect, useState, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/material';
 
+import { useAppletsDnd } from 'hooks';
 import { useAppDispatch } from 'redux/store';
 import { folders } from 'redux/modules';
 import { Svg } from 'components/Svg';
@@ -22,6 +23,7 @@ import { getActions } from './FolderItem.const';
 export const FolderItem = ({ item }: FolderItemProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+  const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
 
   const [folder, setFolder] = useState(item);
 
@@ -58,7 +60,12 @@ export const FolderItem = ({ item }: FolderItemProps) => {
   useEffect(() => setFolder(item), [item]);
 
   return (
-    <TableRow>
+    <TableRow
+      className={isDragOver ? 'dragged-over' : ''}
+      onDragLeave={onDragLeave}
+      onDragOver={onDragOver}
+      onDrop={(e) => onDrop(e, item)}
+    >
       <TableCell width="30%" onClick={() => (!folder?.isRenaming ? handleFolderClick() : null)}>
         <StyledFlexTopCenter>
           <StyledFolderIcon>
