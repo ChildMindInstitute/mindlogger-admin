@@ -1,19 +1,13 @@
-import { AxiosError } from 'axios';
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import { ErrorResponse } from 'redux/modules/Base';
+import { createPendingData, createRejectedData } from 'redux/store/utils';
 
 import { AccountSchema } from './Account.schema';
 import { switchAccount } from './Account.thunk';
 import { state as initialState } from './Account.state';
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AccountSchema>): void => {
-  builder.addCase(switchAccount.pending, ({ switchAccount }, action) => {
-    if (switchAccount.status !== 'loading') {
-      switchAccount.requestId = action.meta.requestId;
-      switchAccount.status = 'loading';
-    }
-  });
+  createPendingData(builder, switchAccount, 'switchAccount');
 
   builder.addCase(switchAccount.fulfilled, ({ switchAccount }, action) => {
     if (switchAccount.status === 'loading' && switchAccount.requestId === action.meta.requestId) {
@@ -23,12 +17,5 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AccountSchema>): 
     }
   });
 
-  builder.addCase(switchAccount.rejected, ({ switchAccount }, action) => {
-    if (switchAccount.status === 'loading' && switchAccount.requestId === action.meta.requestId) {
-      const error = action.payload as AxiosError;
-      switchAccount.requestId = initialState.switchAccount.requestId;
-      switchAccount.status = 'error';
-      switchAccount.error = error.response?.data as AxiosError<ErrorResponse>;
-    }
-  });
+  createRejectedData(builder, switchAccount, 'switchAccount');
 };

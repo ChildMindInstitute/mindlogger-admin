@@ -1,17 +1,10 @@
 import { Draft } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { BaseSchema, ErrorResponse } from 'redux/modules';
+import { ErrorResponse } from 'redux/modules';
 
 import { AuthData, AuthSchema } from './Auth.schema';
 import { state as initialState } from './Auth.state';
-
-export const createAuthPendingData = (authentication: Draft<BaseSchema>, requestId: string) => {
-  if (authentication.status !== 'loading') {
-    authentication.requestId = requestId;
-    authentication.status = 'loading';
-  }
-};
 
 export const createAuthFulfilledData = (
   state: Draft<AuthSchema>,

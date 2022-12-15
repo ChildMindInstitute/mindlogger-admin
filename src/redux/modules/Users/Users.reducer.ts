@@ -1,19 +1,16 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
+import { createFulfilledData, createPendingData, createRejectedData } from 'redux/store/utils';
+
 import { UsersSchema } from './Users.schema';
 import { getManagersList, getUsersList } from './Users.thunk';
-import {
-  createUsersFulfilledData,
-  createUsersPendingData,
-  createUsersRejectedData,
-} from './Users.utils';
 
 export const extraReducers = (builder: ActionReducerMapBuilder<UsersSchema>): void => {
-  createUsersPendingData(builder, getManagersList, 'manager');
-  createUsersFulfilledData(builder, getManagersList, 'manager');
-  createUsersRejectedData(builder, getManagersList, 'manager');
+  createPendingData(builder, getManagersList, 'manager');
+  createFulfilledData(builder, getManagersList, 'manager');
+  createRejectedData(builder, getManagersList, 'manager');
 
-  createUsersPendingData(builder, getUsersList, 'user');
-  createUsersFulfilledData(builder, getUsersList, 'user');
-  createUsersRejectedData(builder, getUsersList, 'user');
+  createPendingData(builder, getUsersList, 'user');
+  createFulfilledData(builder, getUsersList, 'user');
+  createRejectedData(builder, getUsersList, 'user');
 };

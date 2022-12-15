@@ -2,7 +2,7 @@ import { useEffect, useState, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/material';
 
-import { useAppletsDnd } from 'hooks';
+import { useAppletsDnd } from 'hooks/';
 import { useAppDispatch } from 'redux/store';
 import { folders } from 'redux/modules';
 import { Svg } from 'components/Svg';

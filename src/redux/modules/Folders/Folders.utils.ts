@@ -1,7 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
 import {
-  BaseSchema,
   AppletResponse,
   Folder,
   FolderApplet,
@@ -9,6 +8,7 @@ import {
   LoadedFolder,
   LoadedFolderApplet,
 } from 'redux/modules';
+
 import { state as initialState } from './Folders.state';
 
 export const flatFoldersApplets = (item: FolderApplet): FolderApplet[] => {
@@ -184,13 +184,6 @@ export const changeFolder = (
 
     return folderApplet;
   });
-
-export const createFoldersPendingData = (foldersData: Draft<BaseSchema>, requestId: string) => {
-  if (foldersData.status !== 'loading') {
-    foldersData.requestId = requestId;
-    foldersData.status = 'loading';
-  }
-};
 
 export const updateFlattenFoldersApplets = (
   state: Draft<FoldersSchema>,
