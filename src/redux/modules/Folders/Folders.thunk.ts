@@ -10,6 +10,7 @@ import {
   togglePinApi,
   addAppletToFolderApi,
   removeAppletApi,
+  transferOwnershipApi,
 } from 'api';
 
 import {
@@ -180,6 +181,17 @@ export const removeAppletFromFolder = createAsyncThunk(
       const { folders } = getState() as { folders: FoldersSchema };
 
       return removeAppletFromFolderUtil(folders, applet);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const transferOwnership = createAsyncThunk(
+  'folders/transferOwnership',
+  async ({ appletId, email }: { appletId: string; email: string }, { rejectWithValue, signal }) => {
+    try {
+      return await transferOwnershipApi({ appletId, email }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

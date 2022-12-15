@@ -102,5 +102,8 @@
   "shareWithTheLibrary": "Share with the library",
   "incorrectAppletPassword": "Incorrect applet password",
   "noAlerts": "No Alerts",
-  "confirmDeleteApplet": "Are you sure that you want to delete this applet?"
+  "confirmDeleteApplet": "Are you sure that you want to delete this applet?",
+  "transferAppletOwnership": "Transfer Applet Ownership",
+  "transferOwnershipConfirmation": "Are you sure you want to transfer ownership of the {{appletName}} to another user? This will only transfer the applet and no user data will be transferred.",
+  "ownerEmail": "Owner email"
 }

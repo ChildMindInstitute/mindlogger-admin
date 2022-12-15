@@ -9,18 +9,21 @@ import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Actions } from 'components/Actions';
 import { Pin } from 'components/Pin';
 import { appletPages } from 'utils/constants';
+import { DeletePopup } from 'components/Popups//DeletePopup';
+import { TransferOwnershipPopup } from 'components/Popups/TransferOwnershipPopup';
+import { ActionsRender } from 'components/Tables/AppletsTable/Table/AppletItem/AppletItem.types';
 
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actionsRender } from './AppletItem.const';
-import { DeletePopUp } from './DeletePopUp';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [deletePopupVisible, setDeletePopupVisible] = useState(false);
+  const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
 
   const handleAppletClick = (id: string | undefined) => {
     if (id) navigate(`/${id}/${appletPages.respondents}`);
@@ -31,8 +34,9 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
     event.dataTransfer.setData('text/plain', item.id);
   };
 
-  const actions = {
-    deleteAction: () => setDeleteModalVisible(true),
+  const actions: ActionsRender = {
+    deleteAction: () => setDeletePopupVisible(true),
+    transferOwnership: () => setTransferOwnershipPopupVisible(true),
   };
 
   return (
@@ -69,11 +73,20 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           <Actions items={actionsRender(actions)} context={item} />
         </TableCell>
       </TableRow>
-      <DeletePopUp
-        deleteModalVisible={deleteModalVisible}
-        setDeleteModalVisible={setDeleteModalVisible}
-        item={item}
-      />
+      {deletePopupVisible && (
+        <DeletePopup
+          deletePopupVisible={deletePopupVisible}
+          setDeletePopupVisible={setDeletePopupVisible}
+          item={item}
+        />
+      )}
+      {transferOwnershipPopupVisible && (
+        <TransferOwnershipPopup
+          transferOwnershipPopupVisible={transferOwnershipPopupVisible}
+          setTransferOwnershipPopupVisible={setTransferOwnershipPopupVisible}
+          item={item}
+        />
+      )}
     </>
   );
 };
