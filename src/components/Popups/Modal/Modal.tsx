@@ -18,8 +18,9 @@ export const Modal = ({
   children,
   titleAlign = 'left',
   disabledSubmit = false,
+  width,
 }: ModalProps) => (
-  <StyledDialog onClose={onClose} open={open}>
+  <StyledDialog width={width} onClose={onClose} open={open}>
     <StyledDialogTitle align={titleAlign}>
       {title}
       <StyledCloseButton onClick={() => onClose()}>

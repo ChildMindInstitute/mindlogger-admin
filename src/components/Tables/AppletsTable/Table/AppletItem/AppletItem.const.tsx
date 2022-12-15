@@ -5,7 +5,7 @@ import { FolderApplet } from 'redux/modules';
 
 import { ActionsRender } from './AppletItem.types';
 
-export const actionsRender = ({ deleteAction }: ActionsRender) => [
+export const actionsRender = ({ deleteAction, shareAppletAction }: ActionsRender) => [
   {
     icon: <Svg id="users" />,
     action: (item: FolderApplet) => item,
@@ -38,7 +38,7 @@ export const actionsRender = ({ deleteAction }: ActionsRender) => [
   },
   {
     icon: <Svg id="share" />,
-    action: (item: FolderApplet) => item,
+    action: shareAppletAction,
     toolTipTitle: t('shareWithTheLibrary'),
   },
 ];

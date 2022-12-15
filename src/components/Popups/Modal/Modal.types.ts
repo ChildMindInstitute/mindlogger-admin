@@ -9,4 +9,5 @@ export type ModalProps = {
   onSubmit: ((e?: BaseSyntheticEvent | undefined) => Promise<void>) | ((value?: unknown) => void);
   titleAlign?: 'left' | 'right' | 'center';
   disabledSubmit?: boolean;
+  width?: string;
 };

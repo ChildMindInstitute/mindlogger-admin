@@ -8,7 +8,7 @@ import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 export const StyledDialog = styled(Dialog)`
   .MuiPaper-root {
     background-color: ${variables.palette.surface3};
-    width: 43.4rem;
+    width: ${({ width }: { width?: string }) => (width ? `${width}rem` : '43.4rem')};
   }
 `;
 

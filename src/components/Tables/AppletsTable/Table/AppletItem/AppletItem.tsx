@@ -14,6 +14,7 @@ import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actionsRender } from './AppletItem.const';
 import { DeletePopUp } from './DeletePopUp';
+import { ShareApplet, ShareAppletData } from './ShareApplet';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
@@ -21,6 +22,10 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const timeAgo = useTimeAgo();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [shareModalVisible, setShareModalVisible] = useState(false);
+
+  const handleShareModalClose = () => setShareModalVisible(false);
+  const handleShareModalSubmit = (data: ShareAppletData) => console.log('share data', data);
 
   const handleAppletClick = (id: string | undefined) => {
     if (id) navigate(`/${id}/${appletPages.respondents}`);
@@ -33,6 +38,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
 
   const actions = {
     deleteAction: () => setDeleteModalVisible(true),
+    shareAppletAction: () => setShareModalVisible(true),
   };
 
   return (
@@ -73,6 +79,12 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         deleteModalVisible={deleteModalVisible}
         setDeleteModalVisible={setDeleteModalVisible}
         item={item}
+      />
+      <ShareApplet
+        open={shareModalVisible}
+        onClose={handleShareModalClose}
+        onSubmit={handleShareModalSubmit}
+        appletName={item.name}
       />
     </>
   );
