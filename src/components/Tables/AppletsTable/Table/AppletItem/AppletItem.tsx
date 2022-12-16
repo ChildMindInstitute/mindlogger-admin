@@ -9,12 +9,13 @@ import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Actions } from 'components/Actions';
 import { Pin } from 'components/Pin';
 import { appletPages } from 'utils/constants';
-import { ActionsRender } from 'components/Tables/AppletsTable/Table/AppletItem/AppletItem.types';
 
 import { AppletImage } from '../AppletImage';
-import { DeletePopup, TransferOwnershipPopup } from '../Popups';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actionsRender } from './AppletItem.const';
+import { DeletePopup } from './DeletePopup';
+import { DuplicatePopups } from './DuplicatePopups';
+import { TransferOwnershipPopup } from './TransferOwnershipPopup';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
@@ -22,6 +23,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const timeAgo = useTimeAgo();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
   const [deletePopupVisible, setDeletePopupVisible] = useState(false);
+  const [duplicatePopupsVisible, setDuplicatePopupsVisible] = useState(false);
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
 
   const handleAppletClick = (id: string | undefined) => {
@@ -33,8 +35,9 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
     event.dataTransfer.setData('text/plain', item.id);
   };
 
-  const actions: ActionsRender = {
+  const actions = {
     deleteAction: () => setDeletePopupVisible(true),
+    duplicateAction: () => setDuplicatePopupsVisible(true),
     transferOwnership: () => setTransferOwnershipPopupVisible(true),
   };
 
@@ -72,6 +75,13 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           <Actions items={actionsRender(actions)} context={item} />
         </TableCell>
       </TableRow>
+      {duplicatePopupsVisible && (
+        <DuplicatePopups
+          setDuplicatePopupsVisible={setDuplicatePopupsVisible}
+          duplicatePopupsVisible={duplicatePopupsVisible}
+          item={item}
+        />
+      )}
       {deletePopupVisible && (
         <DeletePopup
           deletePopupVisible={deletePopupVisible}

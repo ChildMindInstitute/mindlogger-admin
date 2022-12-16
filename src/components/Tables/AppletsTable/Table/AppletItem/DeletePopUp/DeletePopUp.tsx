@@ -6,9 +6,9 @@ import { folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
 import { isError } from 'utils/errors';
+import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 
 import { DeletePopupProps } from './DeletePopup.types';
-import { StyledConfirmation } from './DeletePopup.styles';
 
 export const DeletePopup = ({ deletePopupVisible, onClose, item }: DeletePopupProps) => {
   const { t } = useTranslation('app');
@@ -31,7 +31,7 @@ export const DeletePopup = ({ deletePopupVisible, onClose, item }: DeletePopupPr
       title={t('deleteApplet')}
       buttonText={t('ok')}
     >
-      <StyledConfirmation>{t('confirmDeleteApplet')}</StyledConfirmation>
+      <StyledModalWrapper>{t('confirmDeleteApplet')}</StyledModalWrapper>
     </Modal>
   );
 };
