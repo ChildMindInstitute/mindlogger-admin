@@ -1,5 +1,7 @@
 import { InviteLink } from 'components/AddUser/LinkGenerator/LinkGenerator.types';
 
+//TODO change base url
+
 export const formatLink = ({ requireLogin, inviteId }: InviteLink) =>
   requireLogin
     ? `web-staging.mindlogger.org/join/${inviteId}`
