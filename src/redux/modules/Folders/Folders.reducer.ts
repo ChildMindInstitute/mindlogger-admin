@@ -74,8 +74,6 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
     }
   });
 
-  // // // // // // // // // // // // // // // // // // // // // // // // // // // //
-
   builder.addCase(saveFolder.pending, (state, action) => {
     createFlattenFoldersAppletsPendingData(state, action.meta.requestId);
   });
