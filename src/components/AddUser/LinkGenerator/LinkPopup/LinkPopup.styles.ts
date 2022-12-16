@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
+import { Button, DialogTitle, Dialog, DialogActions, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
@@ -16,6 +16,10 @@ export const StyledDialogTitle = styled(DialogTitle)`
   padding: ${theme.spacing(4.8, 2.4, 3.4)};
 `;
 
+export const StyledContent = styled(Box)`
+  padding: ${theme.spacing(0.4, 2.4)};
+`;
+
 export const StyledCloseButton = styled(StyledClearedButton)`
   position: absolute;
   top: 1.5rem;
@@ -28,6 +32,6 @@ export const StyledDialogActions = styled(DialogActions)`
   justify-content: center;
 `;
 
-export const StyledOkButton = styled(Button)`
+export const StyledButton = styled(Button)`
   font-weight: ${variables.font.weight.semiBold};
 `;

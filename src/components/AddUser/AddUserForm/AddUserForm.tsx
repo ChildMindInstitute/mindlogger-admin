@@ -10,7 +10,7 @@ import { useAppDispatch } from 'redux/store';
 import { InputController, SelectController, TagsInputController } from 'components/FormComponents';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import { getAppletInvitationApi } from 'api';
-import { getErrorMessage } from 'utils/getErrorMessage';
+import { getErrorMessage } from 'utils/errors';
 import { prepareUsersData } from 'utils/prepareUsersData';
 import { setAccountName } from 'redux/modules/Auth/Auth.thunk';
 

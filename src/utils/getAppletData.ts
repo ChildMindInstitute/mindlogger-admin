@@ -1,7 +1,7 @@
 import { FolderApplet } from 'redux/modules';
 
-export const getAppletData = (data: FolderApplet[] | null, id?: string) => {
-  const appletsFoldersArr = data?.reduce((acc: FolderApplet[], current: FolderApplet) => {
+export const getAppletData = (data: FolderApplet[], id?: string) => {
+  const appletsFoldersArr = data.reduce((acc: FolderApplet[], current: FolderApplet) => {
     acc = current.items ? acc.concat(current.items) : acc.concat(current);
 
     return acc;

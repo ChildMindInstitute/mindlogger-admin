@@ -37,14 +37,14 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
     if (accData) {
       const accAlerts = accData.account.alerts.list.map((alert) => {
         const { alerts } = accData.account;
-        const { firstName, lastName = '' } = alerts.profiles[alert.profileId];
+        const { firstName, lastName = '', nickName } = alerts.profiles[alert.profileId];
         const { name, image, encryption } = getAppletData(appletsFoldersData, alert.appletId);
 
         return {
           accountId: accData.account.accountId,
           alertId: alert.id,
           label: name || '',
-          title: `${firstName} ${lastName}`,
+          title: firstName || lastName ? `${firstName} ${lastName}` : nickName,
           message: alert.alertMessage,
           imageSrc: image || null,
           timeAgo: timeAgo.format(new Date(alert.created), 'round'),
