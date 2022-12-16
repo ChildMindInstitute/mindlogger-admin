@@ -107,5 +107,8 @@
   "transferOwnershipConfirmation": "Êtes-vous sûr de vouloir transférer la propriété de {{appletName}} à un autre utilisateur ? Cela ne fera que transférer l'applet et aucune donnée utilisateur ne sera transférée.",
   "ownerEmail": "E-mail du propriétaire",
   "yes": "Oui",
-  "no": "Non"
+  "no": "Non",
+  "edit": "Modifier",
+  "delete": "Effacer",
+  "deleteFolderWarning": "Impossible de supprimer un dossier contenant des applets. Supprimez les applets du dossier avant de les supprimer."
 }

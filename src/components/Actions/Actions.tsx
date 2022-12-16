@@ -22,9 +22,11 @@ export const Actions = ({ items, context }: ActionsProps) => {
         <StyledActions>
           {items.map(({ icon, disabled = false, action, toolTipTitle }, i) => (
             <ToolTip key={i} toolTipTitle={toolTipTitle}>
-              <StyledActionButton disabled={disabled} onClick={() => action(context)}>
-                {icon}
-              </StyledActionButton>
+              <span>
+                <StyledActionButton disabled={disabled} onClick={() => action(context)}>
+                  {icon}
+                </StyledActionButton>
+              </span>
             </ToolTip>
           ))}
         </StyledActions>
