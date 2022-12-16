@@ -1,1 +1,1 @@
-export * from './DeletePopUp';
+export * from './DeletePopup';

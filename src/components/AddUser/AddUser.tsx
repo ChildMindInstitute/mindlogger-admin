@@ -7,7 +7,7 @@ import { Row } from 'components/Tables';
 import { Svg } from 'components/Svg';
 import { useAppDispatch } from 'redux/store';
 import { users } from 'redux/modules';
-import { getErrorMessage } from 'utils/getErrorMessage';
+import { getErrorMessage } from 'utils/errors';
 import { useBreadcrumbs } from 'hooks';
 import { appletPages } from 'utils/constants';
 

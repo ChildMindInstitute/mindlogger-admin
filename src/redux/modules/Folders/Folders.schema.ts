@@ -83,6 +83,6 @@ export type LoadedFolder = Folder &
   };
 
 export type FoldersSchema = {
-  foldersApplets: BaseSchema<FolderApplet[] | null>;
-  flattenFoldersApplets: FolderApplet[];
+  foldersApplets: BaseSchema<FolderApplet[]>;
+  flattenFoldersApplets: BaseSchema<FolderApplet[]>;
 };

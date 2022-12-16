@@ -107,5 +107,10 @@
   "appletDuplication": "Applet Duplication",
   "successDuplication": "The applet is being duplicated. We will send you an email in 10 min or less when it has been successfully duplicated.",
   "nameRequired": "Name is required",
-  "enterAppletName": "Enter Applet Name"
+  "enterAppletName": "Enter Applet Name",
+  "transferAppletOwnership": "Transfer Applet Ownership",
+  "transferOwnershipConfirmation": "Are you sure you want to transfer ownership of the {{appletName}} to another user? This will only transfer the applet and no user data will be transferred.",
+  "ownerEmail": "Owner email",
+  "yes": "Yes",
+  "no": "No"
 }

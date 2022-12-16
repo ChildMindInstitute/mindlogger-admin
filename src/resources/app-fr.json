@@ -107,5 +107,10 @@
   "appletDuplication": "Applet Duplication",
   "successDuplication": "L'applet est en cours de duplication. Nous vous enverrons un e-mail dans 10 minutes ou moins lorsqu'il aura été dupliqué avec succès.",
   "nameRequired": "Le nom est requis",
-  "enterAppletName": "Entrez le nom de l'applet"
+  "enterAppletName": "Entrez le nom de l'applet",
+  "transferAppletOwnership": "Transférer la propriété de l'applet",
+  "transferOwnershipConfirmation": "Êtes-vous sûr de vouloir transférer la propriété de {{appletName}} à un autre utilisateur ? Cela ne fera que transférer l'applet et aucune donnée utilisateur ne sera transférée.",
+  "ownerEmail": "E-mail du propriétaire",
+  "yes": "Oui",
+  "no": "Non"
 }

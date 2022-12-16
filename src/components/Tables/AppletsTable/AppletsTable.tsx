@@ -16,7 +16,7 @@ import { generateNewFolderName } from './AppletsTable.utils';
 export const AppletsTable = (): JSX.Element => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const foldersApplets: FolderApplet[] | null = folders.useFlattenFoldersApplets();
+  const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
   const authData = auth.useData();
 
   const [searchValue, setSearchValue] = useState('');

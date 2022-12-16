@@ -1,51 +1,38 @@
-import { Box } from '@mui/system';
 import { useTranslation } from 'react-i18next';
 
-import { BasicPopUp } from 'components/Popups/BasicPopUp';
-import { StyledHeadline } from 'styles/styledComponents/Typography';
-import { StyledModalBtn, StyledModalText, StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { Modal } from 'components/Popups';
 import { useAsync } from 'hooks/useAsync';
 import { account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
-import { isError } from 'utils/isError';
+import { isError } from 'utils/errors';
+import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 
-import { DeletePopUpProps } from './DeletePopUp.types';
+import { DeletePopupProps } from './DeletePopup.types';
 
-export const DeletePopUp = ({
-  deleteModalVisible,
-  setDeleteModalVisible,
-  item,
-}: DeletePopUpProps) => {
+export const DeletePopup = ({ deletePopupVisible, onClose, item }: DeletePopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const accountData = account.useData();
   const { execute } = useAsync(() => deleteAppletApi({ appletId: item.id || '' }));
 
-  const deleteModalClose = () => setDeleteModalVisible(false);
-
   const handleDeleteApplet = async () => {
     const result = await execute();
     if (!isError(result)) {
       dispatch(account.thunk.switchAccount({ accountId: accountData?.account.accountId || '' }));
-      deleteModalClose();
+      onClose();
     }
   };
 
   return (
-    <BasicPopUp open={deleteModalVisible} handleClose={deleteModalClose}>
-      <StyledModalWrapper>
-        <StyledHeadline>{t('deleteApplet')}</StyledHeadline>
-        <StyledModalText>{t('confirmDeleteApplet')}</StyledModalText>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <StyledModalBtn variant="text" onClick={handleDeleteApplet}>
-            {t('yes')}
-          </StyledModalBtn>
-          <StyledModalBtn variant="text" onClick={deleteModalClose}>
-            {t('no')}
-          </StyledModalBtn>
-        </Box>
-      </StyledModalWrapper>
-    </BasicPopUp>
+    <Modal
+      open={deletePopupVisible}
+      onClose={onClose}
+      onSubmit={handleDeleteApplet}
+      title={t('deleteApplet')}
+      buttonText={t('ok')}
+    >
+      <StyledModalWrapper>{t('confirmDeleteApplet')}</StyledModalWrapper>
+    </Modal>
   );
 };

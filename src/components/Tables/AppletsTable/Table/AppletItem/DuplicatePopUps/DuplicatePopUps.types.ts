@@ -1,7 +1,7 @@
 import { FolderApplet } from 'redux/modules';
 
-export type DuplicatePopUpsProps = {
-  duplicateModalsVisible: boolean;
-  setDuplicateModalsVisible: (val: boolean) => void;
+export type DuplicatePopupsProps = {
+  duplicatePopupVisible: boolean;
+  setDuplicatePopupVisible: (val: boolean) => void;
   item: FolderApplet;
 };
