@@ -112,5 +112,8 @@
   "transferOwnershipConfirmation": "Are you sure you want to transfer ownership of the {{appletName}} to another user? This will only transfer the applet and no user data will be transferred.",
   "ownerEmail": "Owner email",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "edit": "Edit",
+  "delete": "Delete",
+  "deleteFolderWarning": "Cannot delete a folder that contains applets. Remove applets from folder before deleting."
 }
