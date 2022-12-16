@@ -16,14 +16,15 @@ import {
 } from './Folders.thunk';
 import { state as initialState } from './Folders.state';
 import {
-  createFoldersPendingData,
+  createFlattenFoldersAppletsPendingData,
+  createFlattenFoldersAppletsFulfilledData,
+  createFlattenFoldersAppletsRejectedData,
   flatFoldersApplets,
-  updateFlattenFoldersApplets,
 } from './Folders.utils';
 
 export const reducers = {
   expandFolder: (state: FoldersSchema, action: PayloadAction<FolderApplet>): void => {
-    state.flattenFoldersApplets = state.flattenFoldersApplets.map((item) => {
+    state.flattenFoldersApplets.data = state.flattenFoldersApplets.data.map((item) => {
       if (item.id === action.payload.id) {
         return { ...item, isExpanded: !action.payload.isExpanded };
       }
@@ -35,10 +36,10 @@ export const reducers = {
     });
   },
   createNewFolder: (state: FoldersSchema, action: PayloadAction<FolderApplet>): void => {
-    state.flattenFoldersApplets = [action.payload, ...state.flattenFoldersApplets];
+    state.flattenFoldersApplets.data = [action.payload, ...state.flattenFoldersApplets.data];
   },
   deleteNewFolder: (state: FoldersSchema, action: PayloadAction<{ folderId: string }>): void => {
-    state.flattenFoldersApplets = state.flattenFoldersApplets.filter(
+    state.flattenFoldersApplets.data = state.flattenFoldersApplets.data.filter(
       (folderApplet) => folderApplet.id !== action.payload.folderId,
     );
   },
@@ -46,7 +47,10 @@ export const reducers = {
 
 export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): void => {
   builder.addCase(getAppletsForFolders.pending, ({ foldersApplets }, action) => {
-    createFoldersPendingData(foldersApplets, action.meta.requestId);
+    if (foldersApplets.status !== 'loading') {
+      foldersApplets.requestId = action.meta.requestId;
+      foldersApplets.status = 'loading';
+    }
   });
 
   builder.addCase(getAppletsForFolders.fulfilled, (state, action) => {
@@ -55,7 +59,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
       foldersApplets.requestId = initialState.foldersApplets.requestId;
       foldersApplets.status = 'success';
       foldersApplets.data = action.payload;
-      state.flattenFoldersApplets = action.payload
+      state.flattenFoldersApplets.data = action.payload
         .map((folderApplet) => flatFoldersApplets(folderApplet))
         .flat();
     }
@@ -70,65 +74,77 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
     }
   });
 
-  builder.addCase(saveFolder.pending, ({ foldersApplets }, action) => {
-    createFoldersPendingData(foldersApplets, action.meta.requestId);
+  // // // // // // // // // // // // // // // // // // // // // // // // // // // //
+
+  builder.addCase(saveFolder.pending, (state, action) => {
+    createFlattenFoldersAppletsPendingData(state, action.meta.requestId);
   });
 
   builder.addCase(saveFolder.fulfilled, (state, action) => {
-    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+    createFlattenFoldersAppletsFulfilledData(state, action.meta.requestId, action.payload);
+  });
+
+  builder.addCase(saveFolder.rejected, (state, action) => {
+    createFlattenFoldersAppletsRejectedData(
+      state,
+      action.meta.requestId,
+      action.payload as AxiosError,
+    );
   });
 
   builder.addCase(deleteFolder.pending, (state, action) => {
-    const { foldersApplets } = state;
-    createFoldersPendingData(foldersApplets, action.meta.requestId);
+    createFlattenFoldersAppletsPendingData(state, action.meta.requestId);
   });
 
   builder.addCase(deleteFolder.fulfilled, (state, action) => {
-    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+    createFlattenFoldersAppletsFulfilledData(state, action.meta.requestId, action.payload);
   });
 
   builder.addCase(updateFolder.pending, (state, action) => {
-    const { foldersApplets } = state;
-    createFoldersPendingData(foldersApplets, action.meta.requestId);
+    createFlattenFoldersAppletsPendingData(state, action.meta.requestId);
   });
 
   builder.addCase(updateFolder.fulfilled, (state, action) => {
-    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+    createFlattenFoldersAppletsFulfilledData(state, action.meta.requestId, action.payload);
+  });
+
+  builder.addCase(updateFolder.rejected, (state, action) => {
+    createFlattenFoldersAppletsRejectedData(
+      state,
+      action.meta.requestId,
+      action.payload as AxiosError,
+    );
   });
 
   builder.addCase(togglePin.pending, (state, action) => {
-    const { foldersApplets } = state;
-    createFoldersPendingData(foldersApplets, action.meta.requestId);
+    createFlattenFoldersAppletsPendingData(state, action.meta.requestId);
   });
 
   builder.addCase(togglePin.fulfilled, (state, action) => {
-    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+    createFlattenFoldersAppletsFulfilledData(state, action.meta.requestId, action.payload);
   });
 
   builder.addCase(addAppletToFolder.pending, (state, action) => {
-    const { foldersApplets } = state;
-    createFoldersPendingData(foldersApplets, action.meta.requestId);
+    createFlattenFoldersAppletsPendingData(state, action.meta.requestId);
   });
 
   builder.addCase(addAppletToFolder.fulfilled, (state, action) => {
-    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+    createFlattenFoldersAppletsFulfilledData(state, action.meta.requestId, action.payload);
   });
 
   builder.addCase(removeAppletFromFolder.pending, (state, action) => {
-    const { foldersApplets } = state;
-    createFoldersPendingData(foldersApplets, action.meta.requestId);
+    createFlattenFoldersAppletsPendingData(state, action.meta.requestId);
   });
 
   builder.addCase(removeAppletFromFolder.fulfilled, (state, action) => {
-    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+    createFlattenFoldersAppletsFulfilledData(state, action.meta.requestId, action.payload);
   });
 
   builder.addCase(changeFolder.pending, (state, action) => {
-    const { foldersApplets } = state;
-    createFoldersPendingData(foldersApplets, action.meta.requestId);
+    createFlattenFoldersAppletsPendingData(state, action.meta.requestId);
   });
 
   builder.addCase(changeFolder.fulfilled, (state, action) => {
-    updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+    createFlattenFoldersAppletsFulfilledData(state, action.meta.requestId, action.payload);
   });
 };

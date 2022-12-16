@@ -83,13 +83,13 @@ export const updateFolder = createAsyncThunk(
   'folders/updateFolder',
   async (folder: FolderApplet, { getState, rejectWithValue, signal }) => {
     try {
-      await updateFolderApi(
+      const response = await updateFolderApi(
         { folder: { name: folder.name!, parentId: folder.parentId! }, folderId: folder.id },
         signal,
       );
       const { folders } = getState() as { folders: FoldersSchema };
 
-      return updateFolders(folders, { ...folder, isRenaming: false });
+      return updateFolders(folders, { ...folder, name: response.data.name, isRenaming: false });
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }
@@ -138,7 +138,7 @@ export const addAppletToFolder = createAsyncThunk(
       await addAppletToFolderApi({ folderId: folder.id, appletId: applet.id }, signal);
       const { folders } = getState() as { folders: FoldersSchema };
 
-      return addAppletToFolderUtil(folders.flattenFoldersApplets, folder, applet);
+      return addAppletToFolderUtil(folders.flattenFoldersApplets.data, folder, applet);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

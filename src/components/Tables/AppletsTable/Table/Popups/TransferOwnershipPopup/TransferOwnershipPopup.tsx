@@ -1,14 +1,13 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { AxiosError } from 'axios';
 
+import { getErrorMessage, isError } from 'utils/getErrorMessage';
+import { transferOwnershipApi } from 'api';
+import { useAsync } from 'hooks/useAsync';
 import { InputController } from 'components/FormComponents';
 import { Modal } from 'components/Popups';
-import { folders, ErrorResponse } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
 
 import { TransferOwnershipPopupProps, TransferOwnership } from './TransferOwnershipPopup.types';
 import {
@@ -20,42 +19,34 @@ import {
 
 export const TransferOwnershipPopup = ({
   transferOwnershipPopupVisible,
-  setTransferOwnershipPopupVisible,
+  onClose,
   item,
 }: TransferOwnershipPopupProps) => {
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
-  const { handleSubmit, control } = useForm<TransferOwnership>({
+  const { getValues, handleSubmit, control } = useForm<TransferOwnership>({
     resolver: yupResolver(
       yup.object({
-        email: yup.string().email(t('incorrectEmail')!),
+        email: yup.string().required(t('emailRequired')!).email(t('incorrectEmail')!),
       }),
     ),
     defaultValues: { email: '' },
   });
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleTransferOwnership = async ({ email }: TransferOwnership) => {
-    const { transferOwnership } = folders.thunk;
-    const result = await dispatch(transferOwnership({ appletId: item.id, email }));
+  const { execute, error } = useAsync(() =>
+    transferOwnershipApi({ appletId: 'item.id', email: getValues().email }),
+  );
 
-    if (transferOwnership.fulfilled.match(result)) {
-      setTransferOwnershipPopupVisible(false);
-    } else if (transferOwnership.rejected.match(result)) {
-      const errorObj = result.payload as AxiosError;
-      const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
-      if (errorData) {
-        setErrorMessage(errorData.message);
-      } else {
-        setErrorMessage(errorObj.message);
-      }
+  const handleTransferOwnership = async () => {
+    const result = await execute();
+    if (!isError(result)) {
+      onClose();
     }
   };
 
   return (
     <Modal
       open={transferOwnershipPopupVisible}
-      onClose={() => setTransferOwnershipPopupVisible(false)}
+      onClose={onClose}
       onSubmit={handleSubmit(handleTransferOwnership)}
       title={t('transferAppletOwnership')}
       buttonText={t('ok')}
@@ -67,7 +58,7 @@ export const TransferOwnershipPopup = ({
         <StyledInputWrapper>
           <InputController fullWidth name="email" control={control} label={t('ownerEmail')} />
         </StyledInputWrapper>
-        {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
+        {error && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
       </StyledForm>
     </Modal>
   );

@@ -9,11 +9,10 @@ import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Actions } from 'components/Actions';
 import { Pin } from 'components/Pin';
 import { appletPages } from 'utils/constants';
-import { DeletePopup } from 'components/Popups//DeletePopup';
-import { TransferOwnershipPopup } from 'components/Popups/TransferOwnershipPopup';
 import { ActionsRender } from 'components/Tables/AppletsTable/Table/AppletItem/AppletItem.types';
 
 import { AppletImage } from '../AppletImage';
+import { DeletePopup, TransferOwnershipPopup } from '../Popups';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actionsRender } from './AppletItem.const';
 
@@ -76,14 +75,14 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
       {deletePopupVisible && (
         <DeletePopup
           deletePopupVisible={deletePopupVisible}
-          setDeletePopupVisible={setDeletePopupVisible}
+          onClose={() => setDeletePopupVisible(false)}
           item={item}
         />
       )}
       {transferOwnershipPopupVisible && (
         <TransferOwnershipPopup
           transferOwnershipPopupVisible={transferOwnershipPopupVisible}
-          setTransferOwnershipPopupVisible={setTransferOwnershipPopupVisible}
+          onClose={() => setTransferOwnershipPopupVisible(false)}
           item={item}
         />
       )}

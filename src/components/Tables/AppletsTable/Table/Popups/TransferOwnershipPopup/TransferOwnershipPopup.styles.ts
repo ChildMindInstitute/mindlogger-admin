@@ -1,4 +1,5 @@
 import { Box, styled } from '@mui/material';
+
 import { StyledLabelMedium, StyledTitleMedium } from 'styles/styledComponents/Typography';
 
 import theme from 'styles/theme';

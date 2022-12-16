@@ -5,34 +5,29 @@ import { useAsync } from 'hooks/useAsync';
 import { account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
+import { isError } from 'utils/getErrorMessage';
 
 import { DeletePopupProps } from './DeletePopup.types';
 import { StyledConfirmation } from './DeletePopup.styles';
 
-export const DeletePopup = ({
-  deletePopupVisible,
-  setDeletePopupVisible,
-  item,
-}: DeletePopupProps) => {
+export const DeletePopup = ({ deletePopupVisible, onClose, item }: DeletePopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const accountData = account.useData();
-  const { execute, error } = useAsync(() => deleteAppletApi({ appletId: item.id || '' }));
-
-  const deletePopupClose = () => setDeletePopupVisible(false);
+  const { execute } = useAsync(() => deleteAppletApi({ appletId: item.id || '' }));
 
   const handleDeleteApplet = async () => {
-    await execute();
-
-    !error &&
+    const result = await execute();
+    if (!isError(result)) {
       dispatch(account.thunk.switchAccount({ accountId: accountData?.account.accountId || '' }));
-    deletePopupClose();
+      onClose();
+    }
   };
 
   return (
     <Modal
       open={deletePopupVisible}
-      onClose={deletePopupClose}
+      onClose={onClose}
       onSubmit={handleDeleteApplet}
       title={t('deleteApplet')}
       buttonText={t('ok')}

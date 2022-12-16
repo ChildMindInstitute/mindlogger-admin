@@ -16,9 +16,13 @@ export const useAsync = (
     return asyncFunction()
       .then((response) => {
         setValue(response);
+
+        return response;
       })
       .catch((error) => {
         setError(error);
+
+        return error;
       });
   }, [asyncFunction]);
 

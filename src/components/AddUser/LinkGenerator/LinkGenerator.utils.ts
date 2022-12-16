@@ -1,2 +1,6 @@
-export const formatLink = (inviteId: string | undefined) =>
-  `web-staging.mindlogger.org/applet/public/${inviteId}`; //TODO change base url
+import { InviteLink } from 'components/AddUser/LinkGenerator/LinkGenerator.types';
+
+export const formatLink = ({ requireLogin, inviteId }: InviteLink) =>
+  requireLogin
+    ? `web-staging.mindlogger.org/join/${inviteId}`
+    : `web-staging.mindlogger.org/applet/public/${inviteId}`;

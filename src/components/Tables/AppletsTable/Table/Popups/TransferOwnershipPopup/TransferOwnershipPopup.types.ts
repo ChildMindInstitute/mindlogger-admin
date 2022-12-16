@@ -4,6 +4,6 @@ export type TransferOwnership = { email: string };
 
 export type TransferOwnershipPopupProps = {
   transferOwnershipPopupVisible: boolean;
-  setTransferOwnershipPopupVisible: (value: boolean) => void;
+  onClose: () => void;
   item: FolderApplet;
 };

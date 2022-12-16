@@ -1,13 +1,14 @@
 import { Draft } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 
 import {
-  BaseSchema,
   AppletResponse,
   Folder,
   FolderApplet,
   FoldersSchema,
   LoadedFolder,
   LoadedFolderApplet,
+  ErrorResponse,
 } from 'redux/modules';
 import { state as initialState } from './Folders.state';
 
@@ -90,7 +91,7 @@ export const setAppletsInFolder = ({
 };
 
 export const updateFolders = (folders: FoldersSchema, folder: FolderApplet, updatedId?: string) =>
-  folders.flattenFoldersApplets.map((folderApplet) => {
+  folders.flattenFoldersApplets.data.map((folderApplet) => {
     if (folderApplet.id === folder.id) {
       return { ...folder, id: updatedId || folder.id };
     }
@@ -99,7 +100,7 @@ export const updateFolders = (folders: FoldersSchema, folder: FolderApplet, upda
   });
 
 export const deleteFolderById = (folders: FoldersSchema, folderId: string) =>
-  folders.flattenFoldersApplets.filter((folderApplet) => folderApplet.id !== folderId);
+  folders.flattenFoldersApplets.data.filter((folderApplet) => folderApplet.id !== folderId);
 
 export const addAppletToFolder = (
   folders: FolderApplet[],
@@ -128,7 +129,7 @@ export const addAppletToFolder = (
   });
 
 export const removeAppletFromFolder = (folders: FoldersSchema, applet: FolderApplet) =>
-  folders.flattenFoldersApplets.map((folderApplet) => {
+  folders.flattenFoldersApplets.data.map((folderApplet) => {
     if (folderApplet.id === applet.id) {
       return {
         ...applet,
@@ -156,7 +157,7 @@ export const changeFolder = (
   applet: FolderApplet,
   newFolder: FolderApplet,
 ) =>
-  folders.flattenFoldersApplets.map((folderApplet) => {
+  folders.flattenFoldersApplets.data.map((folderApplet) => {
     if (folderApplet.id === applet.id) {
       return {
         ...applet,
@@ -185,22 +186,40 @@ export const changeFolder = (
     return folderApplet;
   });
 
-export const createFoldersPendingData = (foldersData: Draft<BaseSchema>, requestId: string) => {
-  if (foldersData.status !== 'loading') {
-    foldersData.requestId = requestId;
-    foldersData.status = 'loading';
+export const createFlattenFoldersAppletsPendingData = (
+  state: Draft<FoldersSchema>,
+  requestId: string,
+) => {
+  const { flattenFoldersApplets } = state;
+  if (flattenFoldersApplets.status !== 'loading') {
+    flattenFoldersApplets.requestId = requestId;
+    flattenFoldersApplets.status = 'loading';
   }
 };
 
-export const updateFlattenFoldersApplets = (
+export const createFlattenFoldersAppletsFulfilledData = (
   state: Draft<FoldersSchema>,
   requestId: string,
   payload: FolderApplet[],
 ) => {
-  const { foldersApplets } = state;
-  if (foldersApplets.status === 'loading' && foldersApplets.requestId === requestId) {
-    foldersApplets.requestId = initialState.foldersApplets.requestId;
-    foldersApplets.status = 'success';
-    state.flattenFoldersApplets = payload;
+  const { flattenFoldersApplets } = state;
+  if (flattenFoldersApplets.status === 'loading' && flattenFoldersApplets.requestId === requestId) {
+    flattenFoldersApplets.requestId = initialState.flattenFoldersApplets.requestId;
+    flattenFoldersApplets.status = 'success';
+    state.flattenFoldersApplets.data = payload;
+  }
+};
+
+export const createFlattenFoldersAppletsRejectedData = (
+  state: Draft<FoldersSchema>,
+  requestId: string,
+  error: AxiosError,
+) => {
+  const { flattenFoldersApplets } = state;
+  if (flattenFoldersApplets.status === 'loading' && flattenFoldersApplets.requestId === requestId) {
+    flattenFoldersApplets.requestId = initialState.flattenFoldersApplets.requestId;
+    flattenFoldersApplets.status = 'error';
+    flattenFoldersApplets.error = error.response?.data as AxiosError<ErrorResponse>;
+    flattenFoldersApplets.data ? flattenFoldersApplets.data : null;
   }
 };

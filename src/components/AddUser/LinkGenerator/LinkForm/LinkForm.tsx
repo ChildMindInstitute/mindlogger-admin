@@ -14,7 +14,7 @@ import { formatLink } from '../LinkGenerator.utils';
 export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
   const { id } = useParams();
   const { t } = useTranslation('app');
-  const publicLink = formatLink(inviteLink?.inviteId) || '';
+  const publicLink = inviteLink ? formatLink(inviteLink) : '';
 
   const deleteAppletPublicLink = async () => {
     try {

@@ -6,7 +6,7 @@ import { FolderApplet, folders } from 'redux/modules';
 export const useAppletsDnd = () => {
   const dispatch = useAppDispatch();
 
-  const foldersApplets: FolderApplet[] | null = folders.useFlattenFoldersApplets();
+  const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
   const [isDragOver, setIsDragOver] = useState(false);
 
   const onDragLeave = (event: React.DragEvent<HTMLTableRowElement>) => {

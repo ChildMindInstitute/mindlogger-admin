@@ -105,5 +105,7 @@
   "confirmDeleteApplet": "Êtes-vous sûr de vouloir supprimer cette applet?",
   "transferAppletOwnership": "Transférer la propriété de l'applet",
   "transferOwnershipConfirmation": "Êtes-vous sûr de vouloir transférer la propriété de {{appletName}} à un autre utilisateur ? Cela ne fera que transférer l'applet et aucune donnée utilisateur ne sera transférée.",
-  "ownerEmail": "E-mail du propriétaire"
+  "ownerEmail": "E-mail du propriétaire",
+  "yes": "Oui",
+  "no": "Non"
 }
