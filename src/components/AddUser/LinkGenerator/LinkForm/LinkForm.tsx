@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { deleteAppletPublicLinkApi } from 'api';
-import { getErrorMessage } from 'utils/getErrorMessage';
+import { getErrorMessage } from 'utils/errors';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Svg } from 'components/Svg';

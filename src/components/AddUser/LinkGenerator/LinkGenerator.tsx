@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { getAppletPublicLinkApi } from 'api';
-import { getErrorMessage } from 'utils/getErrorMessage';
+import { getErrorMessage } from 'utils/errors';
 
 import { StyledTitle } from '../AddUser.styles';
 import { LinkForm } from './LinkForm';

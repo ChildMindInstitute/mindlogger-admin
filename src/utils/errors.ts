@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const isError = (error: unknown): error is Error => error instanceof Error;
 
-export function getErrorMessage(error: unknown) {
+export const getErrorMessage = (error: unknown) => {
   if (isError(error)) {
     if (axios.isAxiosError(error) && error.response?.data.message) {
       return error.response?.data.message;
@@ -12,4 +12,4 @@ export function getErrorMessage(error: unknown) {
   }
 
   return String(error);
-}
+};

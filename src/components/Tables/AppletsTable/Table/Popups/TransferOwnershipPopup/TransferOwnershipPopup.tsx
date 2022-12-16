@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import { getErrorMessage, isError } from 'utils/getErrorMessage';
+import { getErrorMessage, isError } from 'utils/errors';
 import { transferOwnershipApi } from 'api';
 import { useAsync } from 'hooks/useAsync';
 import { InputController } from 'components/FormComponents';
@@ -33,7 +33,7 @@ export const TransferOwnershipPopup = ({
   });
 
   const { execute, error } = useAsync(() =>
-    transferOwnershipApi({ appletId: 'item.id', email: getValues().email }),
+    transferOwnershipApi({ appletId: item.id, email: getValues().email }),
   );
 
   const handleTransferOwnership = async () => {

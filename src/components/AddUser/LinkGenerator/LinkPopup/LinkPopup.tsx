@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { postAppletPublicLinkApi } from 'api';
-import { getErrorMessage } from 'utils/getErrorMessage';
+import { getErrorMessage } from 'utils/errors';
 import { Svg } from 'components/Svg';
 
 import {

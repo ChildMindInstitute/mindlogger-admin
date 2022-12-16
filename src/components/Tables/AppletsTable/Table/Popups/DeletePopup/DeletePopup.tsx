@@ -5,7 +5,7 @@ import { useAsync } from 'hooks/useAsync';
 import { account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
-import { isError } from 'utils/getErrorMessage';
+import { isError } from 'utils/errors';
 
 import { DeletePopupProps } from './DeletePopup.types';
 import { StyledConfirmation } from './DeletePopup.styles';
