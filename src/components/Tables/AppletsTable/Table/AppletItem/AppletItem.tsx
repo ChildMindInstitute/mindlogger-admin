@@ -23,7 +23,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const timeAgo = useTimeAgo();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
   const [deletePopupVisible, setDeletePopupVisible] = useState(false);
-  const [duplicatePopupVisible, setDuplicatePopupVisible] = useState(false);
+  const [duplicatePopupsVisible, setDuplicatePopupsVisible] = useState(false);
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
 
   const handleAppletClick = (id: string | undefined) => {
@@ -37,7 +37,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
 
   const actions = {
     deleteAction: () => setDeletePopupVisible(true),
-    duplicateAction: () => setDuplicatePopupVisible(true),
+    duplicateAction: () => setDuplicatePopupsVisible(true),
     transferOwnership: () => setTransferOwnershipPopupVisible(true),
   };
 
@@ -75,10 +75,10 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           <Actions items={actionsRender(actions)} context={item} />
         </TableCell>
       </TableRow>
-      {duplicatePopupVisible && (
+      {duplicatePopupsVisible && (
         <DuplicatePopups
-          setDuplicatePopupVisible={setDuplicatePopupVisible}
-          duplicatePopupVisible={duplicatePopupVisible}
+          setDuplicatePopupsVisible={setDuplicatePopupsVisible}
+          duplicatePopupsVisible={duplicatePopupsVisible}
           item={item}
         />
       )}

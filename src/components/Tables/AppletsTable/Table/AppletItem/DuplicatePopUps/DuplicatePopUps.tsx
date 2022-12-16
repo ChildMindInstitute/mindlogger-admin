@@ -18,8 +18,8 @@ import { getErrorMessage } from 'utils/errors';
 import { DuplicatePopupsProps } from './DuplicatePopups.types';
 
 export const DuplicatePopups = ({
-  duplicatePopupVisible,
-  setDuplicatePopupVisible,
+  duplicatePopupsVisible,
+  setDuplicatePopupsVisible,
   item,
 }: DuplicatePopupsProps) => {
   const { t } = useTranslation('app');
@@ -42,17 +42,17 @@ export const DuplicatePopups = ({
 
   const nameModalClose = () => {
     setNameModalVisible(false);
-    setDuplicatePopupVisible(false);
+    setDuplicatePopupsVisible(false);
   };
 
   const successModalClose = () => {
     setSuccessModalVisible(false);
-    setDuplicatePopupVisible(false);
+    setDuplicatePopupsVisible(false);
   };
 
   const passwordModalClose = () => {
     setPasswordModalVisible(false);
-    setDuplicatePopupVisible(false);
+    setDuplicatePopupsVisible(false);
   };
 
   const handleDuplicate = async ({ appletPassword }: { appletPassword: string }) => {
@@ -97,11 +97,11 @@ export const DuplicatePopups = ({
   };
 
   useEffect(() => {
-    if (duplicatePopupVisible) {
+    if (duplicatePopupsVisible) {
       setNameModalVisible(true);
       execute().then(({ data }) => data && setValue('name', data));
     }
-  }, [duplicatePopupVisible]);
+  }, [duplicatePopupsVisible]);
 
   return (
     <>
