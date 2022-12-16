@@ -38,9 +38,9 @@ export const reducers = {
   createNewFolder: (state: FoldersSchema, action: PayloadAction<FolderApplet>): void => {
     state.flattenFoldersApplets.data = [action.payload, ...state.flattenFoldersApplets.data];
   },
-  deleteNewFolder: (state: FoldersSchema, action: PayloadAction<{ folderId: string }>): void => {
+  deleteFolderApplet: (state: FoldersSchema, action: PayloadAction<{ id: string }>): void => {
     state.flattenFoldersApplets.data = state.flattenFoldersApplets.data.filter(
-      (folderApplet) => folderApplet.id !== action.payload.folderId,
+      (folderApplet) => folderApplet.id !== action.payload.id,
     );
   },
 };

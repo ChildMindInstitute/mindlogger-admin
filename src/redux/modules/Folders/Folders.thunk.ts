@@ -10,7 +10,6 @@ import {
   togglePinApi,
   addAppletToFolderApi,
   removeAppletApi,
-  transferOwnershipApi,
 } from 'api';
 
 import {

@@ -34,8 +34,9 @@ export const FolderItem = ({ item }: FolderItemProps) => {
   };
 
   const onDeleteFolder = () => {
+    if (folder.items?.length) return;
     if (folder.isNew) {
-      return dispatch(folders.actions.deleteNewFolder({ folderId: folder.id }));
+      return dispatch(folders.actions.deleteFolderApplet({ id: folder.id }));
     }
     dispatch(folders.thunk.deleteFolder({ folderId: folder.id }));
   };
