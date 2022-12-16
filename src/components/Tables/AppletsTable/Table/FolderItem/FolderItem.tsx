@@ -70,7 +70,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
     const isNameExist = foldersApplets.find(
       (folderApplet) => folderApplet.isFolder && folderApplet.name === folder.name?.trim(),
     );
-    const name = !isNameExist && folder.name?.trim() ? folder.name?.trim() : item.name;
+    const name = (!isNameExist && folder.name?.trim()) || item.name;
     const updatedFolder = { ...folder, name };
     const { updateFolder, saveFolder } = folders.thunk;
     if (!folder.isNew) {
@@ -112,7 +112,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
                         handleClearClick();
                       }}
                     >
-                      <Svg width={24} height={24} id="cross" />
+                      <Svg id="cross" />
                     </StyledCloseButton>
                   </InputAdornment>
                 }

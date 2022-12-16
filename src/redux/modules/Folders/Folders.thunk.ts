@@ -186,14 +186,3 @@ export const removeAppletFromFolder = createAsyncThunk(
     }
   },
 );
-
-export const transferOwnership = createAsyncThunk(
-  'folders/transferOwnership',
-  async ({ appletId, email }: { appletId: string; email: string }, { rejectWithValue, signal }) => {
-    try {
-      return await transferOwnershipApi({ appletId, email }, signal);
-    } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
-    }
-  },
-);

@@ -37,7 +37,7 @@ export const LinkPopup = ({ open, onClose, setInviteLink }: LinkPopupProps) => {
       <StyledDialogTitle align="left">
         {t('publicLink')}
         <StyledCloseButton onClick={onClose}>
-          <Svg width={24} height={24} id="cross" />
+          <Svg id="cross" />
         </StyledCloseButton>
       </StyledDialogTitle>
 
