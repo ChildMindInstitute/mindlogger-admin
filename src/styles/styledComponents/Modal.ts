@@ -21,3 +21,7 @@ export const StyledModalText = styled(Box)`
 export const StyledModalBtn = styled(Button)`
   text-transform: uppercase;
 `;
+
+export const StyledInputWrapper = styled(Box)`
+  margin: ${theme.spacing(2, 0)};
+`;

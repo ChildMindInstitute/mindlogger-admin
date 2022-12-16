@@ -14,6 +14,7 @@ import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actionsRender } from './AppletItem.const';
 import { DeletePopUp } from './DeletePopUp';
+import { DuplicatePopUps } from './DuplicatePopUps';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
@@ -21,6 +22,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const timeAgo = useTimeAgo();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [duplicateModalsVisible, setDuplicateModalsVisible] = useState(false);
 
   const handleAppletClick = (id: string | undefined) => {
     if (id) navigate(`/${id}/${appletPages.respondents}`);
@@ -33,6 +35,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
 
   const actions = {
     deleteAction: () => setDeleteModalVisible(true),
+    duplicateAction: () => setDuplicateModalsVisible(true),
   };
 
   return (
@@ -69,11 +72,20 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           <Actions items={actionsRender(actions)} context={item} />
         </TableCell>
       </TableRow>
-      <DeletePopUp
-        deleteModalVisible={deleteModalVisible}
-        setDeleteModalVisible={setDeleteModalVisible}
-        item={item}
-      />
+      {deleteModalVisible && (
+        <DeletePopUp
+          deleteModalVisible={deleteModalVisible}
+          setDeleteModalVisible={setDeleteModalVisible}
+          item={item}
+        />
+      )}
+      {duplicateModalsVisible && (
+        <DuplicatePopUps
+          setDuplicateModalsVisible={setDuplicateModalsVisible}
+          duplicateModalsVisible={duplicateModalsVisible}
+          item={item}
+        />
+      )}
     </>
   );
 };

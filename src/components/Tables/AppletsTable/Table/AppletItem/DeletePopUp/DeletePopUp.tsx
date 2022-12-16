@@ -8,6 +8,7 @@ import { useAsync } from 'hooks/useAsync';
 import { account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
+import { isError } from 'utils/isError';
 
 import { DeletePopUpProps } from './DeletePopUp.types';
 
@@ -19,16 +20,16 @@ export const DeletePopUp = ({
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const accountData = account.useData();
-  const { execute, error } = useAsync(() => deleteAppletApi({ appletId: item.id || '' }));
+  const { execute } = useAsync(() => deleteAppletApi({ appletId: item.id || '' }));
 
   const deleteModalClose = () => setDeleteModalVisible(false);
 
   const handleDeleteApplet = async () => {
-    await execute();
-
-    !error &&
+    const result = await execute();
+    if (!isError(result)) {
       dispatch(account.thunk.switchAccount({ accountId: accountData?.account.accountId || '' }));
-    deleteModalClose();
+      deleteModalClose();
+    }
   };
 
   return (

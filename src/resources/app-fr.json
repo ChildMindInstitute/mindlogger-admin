@@ -102,5 +102,10 @@
   "shareWithTheLibrary": "Partager avec la bibliothèque",
   "incorrectAppletPassword": "Mot de passe de l'applet incorrect",
   "noAlerts": "Pas d'alertes",
-  "confirmDeleteApplet": "Êtes-vous sûr de vouloir supprimer cette applet?"
+  "confirmDeleteApplet": "Êtes-vous sûr de vouloir supprimer cette applet?",
+  "dissmiss": "Rejeter",
+  "appletDuplication": "Applet Duplication",
+  "successDuplication": "L'applet est en cours de duplication. Nous vous enverrons un e-mail dans 10 minutes ou moins lorsqu'il aura été dupliqué avec succès.",
+  "nameRequired": "Le nom est requis",
+  "enterAppletName": "Entrez le nom de l'applet"
 }

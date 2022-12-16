@@ -102,5 +102,10 @@
   "shareWithTheLibrary": "Share with the library",
   "incorrectAppletPassword": "Incorrect applet password",
   "noAlerts": "No Alerts",
-  "confirmDeleteApplet": "Are you sure that you want to delete this applet?"
+  "confirmDeleteApplet": "Are you sure that you want to delete this applet?",
+  "dissmiss": "Dissmiss",
+  "appletDuplication": "Applet Duplication",
+  "successDuplication": "The applet is being duplicated. We will send you an email in 10 min or less when it has been successfully duplicated.",
+  "nameRequired": "Name is required",
+  "enterAppletName": "Enter Applet Name"
 }
