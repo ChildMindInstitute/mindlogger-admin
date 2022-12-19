@@ -15,9 +15,9 @@ import { duplicateAppletApi, validateAppletNameApi } from 'api';
 import { getAppletEncryptionInfo } from 'utils/encryption';
 import { getErrorMessage } from 'utils/errors';
 
-import { DuplicatePopupsProps } from './DuplicatePopUps.types';
+import { DuplicatePopupsProps } from './DuplicatePopups.types';
 
-export const DuplicatePopUps = ({
+export const DuplicatePopups = ({
   duplicatePopupsVisible,
   setDuplicatePopupsVisible,
   item,

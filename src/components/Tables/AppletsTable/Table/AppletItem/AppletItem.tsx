@@ -14,7 +14,7 @@ import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actionsRender } from './AppletItem.const';
 import { DeletePopup } from './DeletePopup';
-import { DuplicatePopUps } from './DuplicatePopups';
+import { DuplicatePopups } from './DuplicatePopups';
 import { TransferOwnershipPopup } from './TransferOwnershipPopup';
 import { ShareApplet } from './ShareApplet';
 
@@ -23,7 +23,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
-  const [shareModalVisible, setShareModalVisible] = useState(false);
+  const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [deletePopupVisible, setDeletePopupVisible] = useState(false);
   const [duplicatePopupsVisible, setDuplicatePopupsVisible] = useState(false);
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
@@ -43,7 +43,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
     deleteAction: () => setDeletePopupVisible(true),
     duplicateAction: () => setDuplicatePopupsVisible(true),
     transferOwnership: () => setTransferOwnershipPopupVisible(true),
-    shareAppletAction: () => setShareModalVisible(true),
+    shareAppletAction: () => setSharePopupVisible(true),
   };
 
   return (
@@ -81,7 +81,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         </TableCell>
       </TableRow>
       {duplicatePopupsVisible && (
-        <DuplicatePopUps
+        <DuplicatePopups
           setDuplicatePopupsVisible={setDuplicatePopupsVisible}
           duplicatePopupsVisible={duplicatePopupsVisible}
           item={item}
@@ -101,10 +101,10 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           item={item}
         />
       )}
-      {shareModalVisible && (
+      {sharePopupVisible && (
         <ShareApplet
-          shareModalVisible={shareModalVisible}
-          setShareModalVisible={setShareModalVisible}
+          sharePopupVisible={sharePopupVisible}
+          setSharePopupVisible={setSharePopupVisible}
           applet={item}
         />
       )}

@@ -43,11 +43,13 @@ export const SuccessShared = ({
               ))}
             </StyledChipsWrapper>
           )}
-          {activitiesQuantity && activitiesQuantity > 0 && (
+          {activitiesQuantity ? (
             <StyledTitleSmall
               sx={{ marginTop: theme.spacing(1.6) }}
               fontWeight="semiBold"
             >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleSmall>
+          ) : (
+            ''
           )}
         </StyledAppletContent>
       </StyledApplet>

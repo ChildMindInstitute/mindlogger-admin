@@ -46,24 +46,18 @@ export const reducers = {
     state: FoldersSchema,
     action: PayloadAction<{ appletId: string; published?: boolean; appletName?: string }>,
   ): void => {
-    const appletToUpdate = state.flattenFoldersApplets.data.find(
-      (applet) => applet.id === action.payload.appletId,
-    );
-    const updatedApplet = {
-      ...appletToUpdate,
-      published: action.payload.published,
-      name: action.payload.appletName || appletToUpdate?.name,
-      updated: new Date().toLocaleString(),
-    };
-    if (updatedApplet?.id) {
-      state.flattenFoldersApplets.data = [
-        ...state.flattenFoldersApplets.data.filter((item) => item.isFolder),
-        updatedApplet,
-        ...state.flattenFoldersApplets.data.filter(
-          (applet) => !applet.isFolder && applet.id !== action.payload.appletId,
-        ),
-      ] as FolderApplet[];
-    }
+    state.flattenFoldersApplets.data = state.flattenFoldersApplets.data.map((item) => {
+      if (item.id === action.payload.appletId) {
+        return {
+          ...item,
+          published: action.payload.published,
+          name: action.payload.appletName || item.name,
+          updated: new Date().toLocaleString(),
+        };
+      }
+
+      return item;
+    });
   },
 };
 

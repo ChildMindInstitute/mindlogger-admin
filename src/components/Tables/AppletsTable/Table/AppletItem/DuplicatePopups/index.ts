@@ -1,1 +1,1 @@
-export * from './DuplicatePopUps';
+export * from './DuplicatePopups';

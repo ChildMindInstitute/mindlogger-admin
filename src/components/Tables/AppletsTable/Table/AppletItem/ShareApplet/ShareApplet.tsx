@@ -27,8 +27,8 @@ import { getErrorComponent } from './ShareApplet.utils';
 import { SuccessShared } from './SuccessShared';
 
 export const ShareApplet = ({
-  shareModalVisible,
-  setShareModalVisible,
+  sharePopupVisible,
+  setSharePopupVisible,
   applet,
 }: ShareAppletProps) => {
   const { t } = useTranslation('app');
@@ -88,7 +88,7 @@ export const ShareApplet = ({
     }),
   );
 
-  const handleModalClose = () => setShareModalVisible(false);
+  const handleModalClose = () => setSharePopupVisible(false);
   const handleShareApplet = async () => {
     const checkResult = await handleCheckName();
     if (checkResult.status === 200) {
@@ -130,7 +130,7 @@ export const ShareApplet = ({
       setRemovedFromLibrary(true);
       setSecondBtnVisible(false);
       setMainBtnText(t('ok'));
-      setTitle(t('appletIsRemovedFromLibrary', { appletName: applet.name }) || '');
+      setTitle(t('appletIsRemovedFromLibrary'));
 
       dispatch(
         folders.actions.updateAppletData({
@@ -167,7 +167,7 @@ export const ShareApplet = ({
   };
 
   const handleAddKeyword = (value: string) => {
-    if (value.length > 0) {
+    if (value.length) {
       setValue('keyword', '');
       setKeywords((prevState) => {
         if (prevState?.some((item) => item === value)) {
@@ -204,19 +204,19 @@ export const ShareApplet = ({
         }
       })();
 
-      setTitle(t('updateSharedApplet') || '');
+      setTitle(t('updateSharedApplet'));
       setMainBtnText(t('stopSharing'));
       setSecondBtnVisible(true);
     }
 
     if (appletShared) {
-      setTitle(t('appletIsSharedWithLibrary') || '');
+      setTitle(t('appletIsSharedWithLibrary'));
       setSecondBtnVisible(false);
       setMainBtnText(t('ok'));
     }
 
     if (appletUpdated) {
-      setTitle(t('appletIsUpdatedSuccessfully') || '');
+      setTitle(t('appletIsUpdatedSuccessfully'));
       setSecondBtnVisible(false);
       setMainBtnText(t('ok'));
     }
@@ -231,7 +231,8 @@ export const ShareApplet = ({
           name="appletName"
           error={showNameTakenError}
           control={control}
-          label={`${t('appletName')}*`}
+          label={t('appletName')}
+          required
           value={applet?.name}
         />
         {showNameTakenError && (
@@ -308,7 +309,7 @@ export const ShareApplet = ({
 
   return (
     <Modal
-      open={shareModalVisible}
+      open={sharePopupVisible}
       onClose={handleModalClose}
       onSubmit={mainBtnSubmit}
       title={title || ''}

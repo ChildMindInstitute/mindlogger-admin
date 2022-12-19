@@ -10,7 +10,7 @@ export type ShareAppletData = {
 };
 
 export type ShareAppletProps = {
-  shareModalVisible: boolean;
-  setShareModalVisible: Dispatch<SetStateAction<boolean>>;
+  sharePopupVisible: boolean;
+  setSharePopupVisible: Dispatch<SetStateAction<boolean>>;
   applet: FolderApplet;
 };
