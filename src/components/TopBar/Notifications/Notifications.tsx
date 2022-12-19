@@ -24,7 +24,7 @@ import { NotificationsProps } from './Notifications.types';
 export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const accData = account.useData();
-  const appletsFoldersData = folders.useFoldersApplets();
+  const appletsFoldersData = folders.useFlattenFoldersApplets();
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
     Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null

@@ -6,6 +6,8 @@ import { FolderApplet } from 'redux/modules';
 import { ActionsRender } from './AppletItem.types';
 
 export const actionsRender = ({
+  viewUsers,
+  viewCalendar,
   deleteAction,
   transferOwnership,
   duplicateAction,
@@ -13,12 +15,12 @@ export const actionsRender = ({
 }: ActionsRender) => [
   {
     icon: <Svg id="users" />,
-    action: (item: FolderApplet) => item,
+    action: viewUsers,
     toolTipTitle: t('viewUsers'),
   },
   {
     icon: <Svg id="calendar" />,
-    action: (item: FolderApplet) => item,
+    action: viewCalendar,
     toolTipTitle: t('viewGeneralCalendar'),
   },
   {

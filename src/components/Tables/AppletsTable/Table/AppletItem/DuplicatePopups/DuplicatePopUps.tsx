@@ -15,9 +15,9 @@ import { duplicateAppletApi, validateAppletNameApi } from 'api';
 import { getAppletEncryptionInfo } from 'utils/encryption';
 import { getErrorMessage } from 'utils/errors';
 
-import { DuplicatePopupsProps } from './DuplicatePopups.types';
+import { DuplicatePopupsProps } from './DuplicatePopUps.types';
 
-export const DuplicatePopups = ({
+export const DuplicatePopUps = ({
   duplicatePopupsVisible,
   setDuplicatePopupsVisible,
   item,
@@ -129,7 +129,7 @@ export const DuplicatePopups = ({
         onClose={successModalClose}
         title={t('appletDuplication')}
         onSubmit={successModalClose}
-        buttonText={t('dissmiss')}
+        buttonText={t('dismiss')}
       >
         <StyledModalWrapper>{t('successDuplication')}</StyledModalWrapper>
       </Modal>

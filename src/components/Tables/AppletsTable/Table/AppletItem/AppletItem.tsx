@@ -14,7 +14,7 @@ import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actionsRender } from './AppletItem.const';
 import { DeletePopup } from './DeletePopup';
-import { DuplicatePopups } from './DuplicatePopups';
+import { DuplicatePopUps } from './DuplicatePopups';
 import { TransferOwnershipPopup } from './TransferOwnershipPopup';
 import { ShareApplet } from './ShareApplet';
 
@@ -38,6 +38,8 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   };
 
   const actions = {
+    viewUsers: () => navigate(`/${item.id}/${appletPages.respondents}`),
+    viewCalendar: () => navigate(`/${item.id}/${appletPages.schedule}`),
     deleteAction: () => setDeletePopupVisible(true),
     duplicateAction: () => setDuplicatePopupsVisible(true),
     transferOwnership: () => setTransferOwnershipPopupVisible(true),
@@ -79,7 +81,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         </TableCell>
       </TableRow>
       {duplicatePopupsVisible && (
-        <DuplicatePopups
+        <DuplicatePopUps
           setDuplicatePopupsVisible={setDuplicatePopupsVisible}
           duplicatePopupsVisible={duplicatePopupsVisible}
           item={item}
