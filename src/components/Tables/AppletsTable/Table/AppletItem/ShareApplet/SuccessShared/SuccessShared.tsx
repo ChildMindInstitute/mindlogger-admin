@@ -1,10 +1,15 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
 import { Chip } from 'components/Chip';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
-import { StyledLabelLarge, StyledTitleSmall } from 'styles/styledComponents/Typography';
+import {
+  StyledBodyMedium,
+  StyledLabelLarge,
+  StyledTitleSmall,
+} from 'styles/styledComponents/Typography';
 import { StyledChipsWrapper } from 'styles/styledComponents/chipsWrapper';
 
 import { SuccessSharedProps } from './SuccessShared.types';
@@ -27,7 +32,11 @@ export const SuccessShared = ({
   img,
 }: SuccessSharedProps) => {
   const { t } = useTranslation('app');
-  const handleCopyAppletLink = () => navigator.clipboard.writeText(appletLink);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const handleCopyAppletLink = async () => {
+    await navigator.clipboard.writeText(appletLink);
+    setLinkCopied(true);
+  };
 
   return (
     <StyledSuccessShared>
@@ -60,6 +69,11 @@ export const SuccessShared = ({
       >
         {t('appletLink')}
       </StyledLinkBtn>
+      {linkCopied && (
+        <StyledBodyMedium sx={{ margin: theme.spacing(0.25, 0, 0, 1.5) }}>
+          {t('linkSuccessfullyCopied')}
+        </StyledBodyMedium>
+      )}
     </StyledSuccessShared>
   );
 };
