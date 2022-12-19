@@ -82,7 +82,18 @@ export type LoadedFolder = Folder &
     items: LoadedFolderApplet[];
   };
 
+export type AppletSearchTerms = {
+  categoryId: string | null;
+  keywords: string[] | null;
+  subCategoryId: string | null;
+};
+
+export type AppletsSearchTerms = {
+  [id: string]: AppletSearchTerms;
+};
+
 export type FoldersSchema = {
   foldersApplets: BaseSchema<FolderApplet[] | null>;
   flattenFoldersApplets: FolderApplet[];
+  appletsSearchTerms: BaseSchema<AppletsSearchTerms | null>;
 };

@@ -1,3 +1,7 @@
+import { Dispatch, SetStateAction } from 'react';
+
+import { FolderApplet } from 'redux/modules';
+
 export type ShareAppletData = {
   appletName: string;
   keywords: string[];
@@ -6,9 +10,7 @@ export type ShareAppletData = {
 };
 
 export type ShareAppletProps = {
-  open: boolean;
-  onClose: () => void;
-  onSubmit: ({ appletName, keywords, checked }: ShareAppletData) => void;
-  appletName?: string;
-  errorText?: string;
+  shareModalVisible: boolean;
+  setShareModalVisible: Dispatch<SetStateAction<boolean>>;
+  applet: FolderApplet;
 };

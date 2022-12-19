@@ -248,7 +248,7 @@ export type TogglePin = { applet: { parentId: string; id: string }; isPinned: bo
 
 export type UpdateAlertStatus = { alertId: string };
 
-export type PublishApplet = AppletId & { publish: boolean };
+export type PublishApplet = AppletId & { publish?: boolean };
 
 export type UpdateAppletSearchTerms = AppletId & { params: { keywords: string } };
 

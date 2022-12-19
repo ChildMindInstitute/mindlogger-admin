@@ -13,6 +13,7 @@ import {
   saveFolder,
   togglePin,
   updateFolder,
+  getAppletSearchTerms,
 } from './Folders.thunk';
 import { state as initialState } from './Folders.state';
 import {
@@ -41,6 +42,29 @@ export const reducers = {
     state.flattenFoldersApplets = state.flattenFoldersApplets.filter(
       (folderApplet) => folderApplet.id !== action.payload.folderId,
     );
+  },
+  updateAppletData: (
+    state: FoldersSchema,
+    action: PayloadAction<{ appletId: string; published?: boolean; appletName?: string }>,
+  ): void => {
+    const appletToUpdate = state.flattenFoldersApplets.find(
+      (applet) => applet.id === action.payload.appletId,
+    );
+    const updatedApplet = {
+      ...appletToUpdate,
+      published: action.payload.published,
+      name: action.payload.appletName || appletToUpdate?.name,
+      updated: new Date().toLocaleString(),
+    };
+    if (updatedApplet?.id) {
+      state.flattenFoldersApplets = [
+        ...state.flattenFoldersApplets.filter((item) => item.isFolder),
+        updatedApplet,
+        ...state.flattenFoldersApplets.filter(
+          (applet) => !applet.isFolder && applet.id !== action.payload.appletId,
+        ),
+      ] as FolderApplet[];
+    }
   },
 };
 
@@ -130,5 +154,35 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
 
   builder.addCase(changeFolder.fulfilled, (state, action) => {
     updateFlattenFoldersApplets(state, action.meta.requestId, action.payload);
+  });
+  builder.addCase(getAppletSearchTerms.pending, ({ appletsSearchTerms }, action) => {
+    if (appletsSearchTerms.status !== 'loading') {
+      appletsSearchTerms.requestId = action.meta.requestId;
+      appletsSearchTerms.status = 'loading';
+    }
+  });
+  builder.addCase(getAppletSearchTerms.fulfilled, ({ appletsSearchTerms }, action) => {
+    if (
+      appletsSearchTerms.status === 'loading' &&
+      appletsSearchTerms.requestId === action.meta.requestId
+    ) {
+      appletsSearchTerms.requestId = initialState.appletsSearchTerms.requestId;
+      appletsSearchTerms.status = 'success';
+      appletsSearchTerms.data = {
+        ...appletsSearchTerms.data,
+        [action.meta.arg.appletId]: action.payload.data,
+      };
+    }
+  });
+  builder.addCase(getAppletSearchTerms.rejected, ({ appletsSearchTerms }, action) => {
+    if (
+      appletsSearchTerms.status === 'loading' &&
+      appletsSearchTerms.requestId === action.meta.requestId
+    ) {
+      const error = action.payload as AxiosError;
+      appletsSearchTerms.requestId = initialState.appletsSearchTerms.requestId;
+      appletsSearchTerms.status = 'error';
+      appletsSearchTerms.error = error.response?.data as AxiosError<ErrorResponse>;
+    }
   });
 };

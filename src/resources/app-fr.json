@@ -107,8 +107,14 @@
   "keywords": "Mots clés",
   "agreementAppletAvailability": "J'accepte que le contenu de cette applet soit disponible pour que d'autres utilisateurs de MindLogger puissent l'utiliser dans leurs propres applets. Seul le contenu de l'applet est partagé. Aucune information utilisateur n'est partagée.",
   "share": "Partager",
-  "appletSuccessfullyAdded": "L'applet {applet} a été ajoutée avec succès à la bibliothèque.",
-  "copyLinkToShare": "Copiez le lien pour le partager avec d'autres",
-  "doNotShare": "Ne partage pas",
-  "appletNameAlreadyTaken": "Ce nom d'applet est déjà pris dans la bibliothèque. Veuillez renommer l'applet pour la partager. <br>Remarque : Cela modifiera le nom de l'applet pour vos utilisateurs."
+  "appletIsSharedWithLibrary": "Applet is shared with the Library successfully",
+  "appletLink": "Lien applet",
+  "stopSharing": "Arrêter de partager",
+  "appletNameAlreadyTaken": "Ce nom d'applet est déjà pris dans la bibliothèque. Veuillez renommer l'applet pour la partager. <br>Remarque : Cela modifiera le nom de l'applet pour vos utilisateurs.",
+  "appletNameRequired": "Le nom de l'applet est requis",
+  "updateSharedApplet": "Mettre à jour l'applet partagée",
+  "updateInTheLibrary": "Update in the Library",
+  "appletIsRemovedFromLibrary": "L'applet est supprimée de la bibliothèque",
+  "appletIsUpdatedSuccessfully": "L'applet est mis à jour avec succès",
+  "activities": "Activités"
 }

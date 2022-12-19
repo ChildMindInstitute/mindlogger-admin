@@ -10,4 +10,5 @@ const initialStateData = {
 export const state: FoldersSchema = {
   foldersApplets: initialStateData,
   flattenFoldersApplets: [],
+  appletsSearchTerms: initialStateData,
 };

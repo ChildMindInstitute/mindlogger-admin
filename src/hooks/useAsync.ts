@@ -6,8 +6,8 @@ import { ApiError } from 'redux/modules';
 export const useAsync = (
   asyncFunction: () => Promise<AxiosResponse<unknown, AxiosError<ApiError>>>,
 ) => {
-  const [value, setValue] = useState<unknown>(null);
-  const [error, setError] = useState(null);
+  const [value, setValue] = useState<AxiosResponse<unknown> | null>(null);
+  const [error, setError] = useState<AxiosError<ApiError> | null>(null);
 
   const execute = useCallback(() => {
     setValue(null);
@@ -16,9 +16,13 @@ export const useAsync = (
     return asyncFunction()
       .then((response) => {
         setValue(response);
+
+        return response;
       })
       .catch((error) => {
         setError(error);
+
+        return error.response;
       });
   }, [asyncFunction]);
 

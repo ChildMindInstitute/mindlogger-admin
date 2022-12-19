@@ -3,9 +3,10 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { Svg } from 'components/Svg';
 import { Chip } from 'components/Chip';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledChipsWrapper } from 'styles/styledComponents/chipsWrapper';
 
 import { TagsInputControllerProps } from './TagsController.types';
-import { StyledTextField, StyledChipsWrapper } from './TagsController.styles';
+import { StyledTextField } from './TagsController.styles';
 
 export const TagsController = <T extends FieldValues>({
   name,

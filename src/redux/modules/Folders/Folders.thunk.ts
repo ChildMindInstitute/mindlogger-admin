@@ -10,6 +10,8 @@ import {
   togglePinApi,
   addAppletToFolderApi,
   removeAppletApi,
+  getAppletSearchTermsApi,
+  AppletId,
 } from 'api';
 
 import {
@@ -180,6 +182,17 @@ export const removeAppletFromFolder = createAsyncThunk(
       const { folders } = getState() as { folders: FoldersSchema };
 
       return removeAppletFromFolderUtil(folders, applet);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const getAppletSearchTerms = createAsyncThunk(
+  'folders/getAppletSearchTerms',
+  async ({ appletId }: AppletId, { rejectWithValue, signal }) => {
+    try {
+      return getAppletSearchTermsApi({ appletId }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

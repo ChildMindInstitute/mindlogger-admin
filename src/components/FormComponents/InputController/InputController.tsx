@@ -6,6 +6,7 @@ import { InputControllerProps } from './InputController.types';
 export const InputController = <T extends FieldValues>({
   name,
   control,
+  error: providedError,
   ...textFieldProps
 }: InputControllerProps<T>) => (
   <Controller
@@ -16,7 +17,7 @@ export const InputController = <T extends FieldValues>({
         {...textFieldProps}
         onChange={onChange}
         value={value}
-        error={!!error}
+        error={!!error || providedError}
         helperText={error ? error.message : null}
       />
     )}

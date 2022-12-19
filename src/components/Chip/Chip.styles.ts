@@ -9,15 +9,15 @@ export const StyledChip = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${variables.palette.contained_btn_focus};
   border-radius: ${variables.borderRadius.xxl};
   margin: ${theme.spacing(0.8, 0.8, 0, 0)};
+  border: solid ${variables.borderWidth.md} ${variables.palette.outline};
 `;
 
 export const StyledRemoveBtn = styled(StyledClearedButton)`
   margin-left: ${theme.spacing(0.7)};
 
   svg {
-    fill: ${variables.palette.white};
+    fill: ${variables.palette.primary};
   }
 `;
