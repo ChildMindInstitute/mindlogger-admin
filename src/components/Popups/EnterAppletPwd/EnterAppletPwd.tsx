@@ -43,6 +43,7 @@ export const EnterAppletPwd = ({ open, onClose, onSubmit, errorText }: EnterAppl
           control={control}
           label={t('password')}
           type={showPwd ? 'text' : 'password'}
+          autoComplete="new-password"
           InputProps={{
             endAdornment: (
               <StyledClearedButton

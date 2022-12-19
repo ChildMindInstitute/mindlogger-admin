@@ -28,6 +28,12 @@ export const folders = {
         },
       }) => data,
     ),
-  useFlattenFoldersApplets: (): FoldersSchema['flattenFoldersApplets'] =>
-    useAppSelector(({ folders: { flattenFoldersApplets } }) => flattenFoldersApplets),
+  useFlattenFoldersApplets: (): FoldersSchema['flattenFoldersApplets']['data'] =>
+    useAppSelector(
+      ({
+        folders: {
+          flattenFoldersApplets: { data },
+        },
+      }) => data,
+    ),
 };

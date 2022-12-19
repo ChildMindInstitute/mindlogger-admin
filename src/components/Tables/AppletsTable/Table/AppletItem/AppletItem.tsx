@@ -13,7 +13,9 @@ import { appletPages } from 'utils/constants';
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actionsRender } from './AppletItem.const';
-import { DeletePopUp } from './DeletePopUp';
+import { DeletePopup } from './DeletePopup';
+import { DuplicatePopups } from './DuplicatePopups';
+import { TransferOwnershipPopup } from './TransferOwnershipPopup';
 import { ShareApplet } from './ShareApplet';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
@@ -21,8 +23,10 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [shareModalVisible, setShareModalVisible] = useState(false);
+  const [deletePopupVisible, setDeletePopupVisible] = useState(false);
+  const [duplicatePopupsVisible, setDuplicatePopupsVisible] = useState(false);
+  const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
 
   const handleAppletClick = (id: string | undefined) => {
     if (id) navigate(`/${id}/${appletPages.respondents}`);
@@ -34,7 +38,9 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   };
 
   const actions = {
-    deleteAction: () => setDeleteModalVisible(true),
+    deleteAction: () => setDeletePopupVisible(true),
+    duplicateAction: () => setDuplicatePopupsVisible(true),
+    transferOwnership: () => setTransferOwnershipPopupVisible(true),
     shareAppletAction: () => setShareModalVisible(true),
   };
 
@@ -72,11 +78,27 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           <Actions items={actionsRender(actions)} context={item} />
         </TableCell>
       </TableRow>
-      <DeletePopUp
-        deleteModalVisible={deleteModalVisible}
-        setDeleteModalVisible={setDeleteModalVisible}
-        item={item}
-      />
+      {duplicatePopupsVisible && (
+        <DuplicatePopups
+          setDuplicatePopupsVisible={setDuplicatePopupsVisible}
+          duplicatePopupsVisible={duplicatePopupsVisible}
+          item={item}
+        />
+      )}
+      {deletePopupVisible && (
+        <DeletePopup
+          deletePopupVisible={deletePopupVisible}
+          onClose={() => setDeletePopupVisible(false)}
+          item={item}
+        />
+      )}
+      {transferOwnershipPopupVisible && (
+        <TransferOwnershipPopup
+          transferOwnershipPopupVisible={transferOwnershipPopupVisible}
+          onClose={() => setTransferOwnershipPopupVisible(false)}
+          item={item}
+        />
+      )}
       {shareModalVisible && (
         <ShareApplet
           shareModalVisible={shareModalVisible}

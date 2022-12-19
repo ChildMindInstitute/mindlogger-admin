@@ -5,7 +5,12 @@ import { FolderApplet } from 'redux/modules';
 
 import { ActionsRender } from './AppletItem.types';
 
-export const actionsRender = ({ deleteAction, shareAppletAction }: ActionsRender) => [
+export const actionsRender = ({
+  deleteAction,
+  transferOwnership,
+  duplicateAction,
+  shareAppletAction,
+}: ActionsRender) => [
   {
     icon: <Svg id="users" />,
     action: (item: FolderApplet) => item,
@@ -23,7 +28,7 @@ export const actionsRender = ({ deleteAction, shareAppletAction }: ActionsRender
   },
   {
     icon: <Svg id="duplicate" />,
-    action: (item: FolderApplet) => item,
+    action: duplicateAction,
     toolTipTitle: t('duplicateApplet'),
   },
   {
@@ -33,7 +38,7 @@ export const actionsRender = ({ deleteAction, shareAppletAction }: ActionsRender
   },
   {
     icon: <Svg id="switch-account" />,
-    action: (item: FolderApplet) => item,
+    action: transferOwnership,
     toolTipTitle: t('transferOwnership'),
   },
   {

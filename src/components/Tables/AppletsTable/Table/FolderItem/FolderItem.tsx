@@ -4,7 +4,7 @@ import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/materia
 
 import { useAppletsDnd } from 'hooks';
 import { useAppDispatch } from 'redux/store';
-import { folders } from 'redux/modules';
+import { FolderApplet, folders } from 'redux/modules';
 import { Svg } from 'components/Svg';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
@@ -17,6 +17,7 @@ import {
   StyledCountApplets,
   StyledFolderName,
   StyledCell,
+  StyledCloseButton,
 } from './FolderItem.styles';
 import { getActions } from './FolderItem.const';
 
@@ -24,37 +25,60 @@ export const FolderItem = ({ item }: FolderItemProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
+  const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
 
   const [folder, setFolder] = useState(item);
 
-  const onRenameFolder = () => {
+  const handleRenameFolder = () => {
     setFolder((folder) => ({ ...folder, isRenaming: true }));
   };
 
   const onDeleteFolder = () => {
+    if (folder.items?.length) return;
     if (folder.isNew) {
-      return dispatch(folders.actions.deleteNewFolder({ folderId: folder.id }));
+      return dispatch(folders.actions.deleteFolderApplet({ id: folder.id }));
     }
     dispatch(folders.thunk.deleteFolder({ folderId: folder.id }));
+  };
+
+  const handleFolderClick = () => {
+    if (!folder?.items?.length) return;
+    dispatch(folders.actions.expandFolder(folder));
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFolder((folder) => ({ ...folder, name: event.target.value }));
   };
 
+  const handleClearClick = () => {
+    setFolder((folder) => ({ ...folder, name: '' }));
+  };
+
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      if (!folder.isNew) {
-        dispatch(folders.thunk.updateFolder(folder));
-      } else {
-        dispatch(folders.thunk.saveFolder(folder));
-      }
+      saveFolder();
     }
   };
 
-  const handleFolderClick = () => {
-    if (!folder?.items?.length) return;
-    dispatch(folders.actions.expandFolder(folder));
+  const handleBlur = () => {
+    saveFolder();
+  };
+
+  const saveFolder = () => {
+    if (!folder.isNew && folder.name === item.name) {
+      return setFolder((folder) => ({ ...folder, isRenaming: false }));
+    }
+    const isNameExist = foldersApplets.find(
+      (folderApplet) => folderApplet.isFolder && folderApplet.name === folder.name?.trim(),
+    );
+    const name = (!isNameExist && folder.name?.trim()) || item.name;
+    const updatedFolder = { ...folder, name };
+    const { updateFolder, saveFolder } = folders.thunk;
+    if (!folder.isNew) {
+      dispatch(updateFolder(updatedFolder));
+    } else {
+      dispatch(saveFolder(updatedFolder));
+    }
   };
 
   useEffect(() => setFolder(item), [item]);
@@ -74,12 +98,23 @@ export const FolderItem = ({ item }: FolderItemProps) => {
           <StyledFolderName>
             {folder?.isRenaming ? (
               <OutlinedInput
+                autoFocus
+                error={!folder.name}
+                placeholder={t('newFolder')}
                 value={folder.name}
+                onBlur={handleBlur}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 endAdornment={
                   <InputAdornment position="end">
-                    <Svg id="cancel-rounded" />
+                    <StyledCloseButton
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleClearClick();
+                      }}
+                    >
+                      <Svg id="cross" />
+                    </StyledCloseButton>
                   </InputAdornment>
                 }
               />
@@ -100,7 +135,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       </TableCell>
       <TableCell width="20%"></TableCell>
       <StyledCell>
-        <Actions items={getActions(folder, onRenameFolder, onDeleteFolder)} context={item} />
+        <Actions items={getActions(folder, handleRenameFolder, onDeleteFolder)} context={item} />
       </StyledCell>
     </TableRow>
   );

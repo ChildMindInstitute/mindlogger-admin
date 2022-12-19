@@ -93,7 +93,7 @@ export type AppletsSearchTerms = {
 };
 
 export type FoldersSchema = {
-  foldersApplets: BaseSchema<FolderApplet[] | null>;
-  flattenFoldersApplets: FolderApplet[];
+  foldersApplets: BaseSchema<FolderApplet[]>;
+  flattenFoldersApplets: BaseSchema<FolderApplet[]>;
   appletsSearchTerms: BaseSchema<AppletsSearchTerms | null>;
 };

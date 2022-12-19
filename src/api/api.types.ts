@@ -198,7 +198,7 @@ export type DuplicateApplet = AppletId & {
   options: {
     name: string;
   };
-  data: string;
+  data: FormData;
 };
 
 export type ReplaceResponseData = AppletId & {
