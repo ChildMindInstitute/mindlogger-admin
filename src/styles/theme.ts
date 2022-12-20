@@ -230,6 +230,36 @@ const theme = createTheme({
         },
       },
     },
+    MuiToggleButtonGroup: {
+      styleOverrides: {
+        root: {
+          '.MuiToggleButton-root': {
+            color: variables.palette.on_secondary_container,
+            fontSize: variables.font.size.md,
+            fontWeight: variables.font.weight.medium,
+            lineHeight: variables.lineHeight.md,
+            borderRadius: variables.borderRadius.xxl,
+            borderColor: variables.palette.outline,
+            textTransform: 'none',
+            height: 40,
+            padding: '1rem',
+
+            '&:hover': {
+              backgroundColor: variables.palette.on_secondary_container_alfa8,
+            },
+
+            '&.MuiToggleButtonGroup-grouped:not(:first-of-type)': {
+              borderLeftColor: variables.palette.outline,
+            },
+
+            '&.Mui-selected': {
+              backgroundColor: variables.palette.secondary_container,
+              color: variables.palette.on_secondary_container,
+            },
+          },
+        },
+      },
+    },
     MuiLink: {
       styleOverrides: {
         root: {

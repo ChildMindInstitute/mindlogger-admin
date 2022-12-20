@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ToolTip } from 'components/ToolTip';
+import { Tooltip } from 'components/Tooltip';
 
 import {
   StyledActions,
@@ -21,13 +21,13 @@ export const Actions = ({ items, context }: ActionsProps) => {
       {showActions ? (
         <StyledActions>
           {items.map(({ icon, disabled = false, action, toolTipTitle }, i) => (
-            <ToolTip key={i} toolTipTitle={toolTipTitle}>
+            <Tooltip key={i} tooltipTitle={toolTipTitle}>
               <span>
                 <StyledActionButton disabled={disabled} onClick={() => action(context)}>
                   {icon}
                 </StyledActionButton>
               </span>
-            </ToolTip>
+            </Tooltip>
           ))}
         </StyledActions>
       ) : (
