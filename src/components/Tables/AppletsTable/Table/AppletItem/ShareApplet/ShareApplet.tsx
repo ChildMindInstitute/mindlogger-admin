@@ -193,6 +193,8 @@ export const ShareApplet = ({
   const hasError =
     checkNameError || changeNameError || publishError || getLibraryUrlError || updateTermsError;
 
+  hasError && setIsLoading(false);
+
   useEffect(() => {
     if (applet.published && !removedFromLibrary) {
       (async () => {
