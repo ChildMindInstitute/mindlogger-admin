@@ -99,7 +99,7 @@ export const DuplicatePopups = ({
   useEffect(() => {
     if (duplicatePopupsVisible) {
       setNameModalVisible(true);
-      execute().then(({ data }) => data && setValue('name', data));
+      execute().then(({ data }) => data && setValue('name', data as string));
     }
   }, [duplicatePopupsVisible]);
 

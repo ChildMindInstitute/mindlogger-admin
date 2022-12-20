@@ -22,7 +22,7 @@ export const useAsync = (
       .catch((error) => {
         setError(error);
 
-        return error.response;
+        throw error.response;
       });
   }, [asyncFunction]);
 

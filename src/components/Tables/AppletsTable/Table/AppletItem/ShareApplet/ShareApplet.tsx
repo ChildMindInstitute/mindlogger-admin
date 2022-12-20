@@ -18,12 +18,12 @@ import { Spinner } from 'components/Spinner';
 import { InputController, CheckboxController, TagsController } from 'components/FormComponents';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
+import { getErrorMessage } from 'utils/errors';
 
 import { ShareAppletProps, ShareAppletData } from './ShareApplet.types';
 import { StyledInputWrapper } from './ShareApplet.styles';
 import { shareAppletDefaultValues } from './ShareApplet.const';
 import { ShareAppletSchema } from './ShareApplet.schema';
-import { getErrorComponent } from './ShareApplet.utils';
 import { SuccessShared } from './SuccessShared';
 
 export const ShareApplet = ({
@@ -43,45 +43,47 @@ export const ShareApplet = ({
   const [removedFromLibrary, setRemovedFromLibrary] = useState(false);
   const [mainBtnText, setMainBtnText] = useState(t('share'));
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { handleSubmit, control, watch, setValue, getValues } = useForm<ShareAppletData>({
     resolver: yupResolver(ShareAppletSchema()),
     defaultValues: { ...shareAppletDefaultValues, appletName: applet?.name },
   });
   const checked = watch('checked');
-  const { execute: handleCheckName, error: checkNameError } = useAsync(() =>
+
+  const { execute: handleCheckName } = useAsync(() =>
     checkAppletNameInLibraryApi({
       appletId: applet.id || '',
       appletName: getValues().appletName || '',
     }),
   );
-  const { execute: handleChangeName, error: changeNameError } = useAsync(() =>
+  const { execute: handleChangeName } = useAsync(() =>
     changeAppletNameApi({
       appletId: applet.id || '',
       appletName: getValues().appletName || '',
     }),
   );
 
-  const { execute: handlePublishApplet, error: publishError } = useAsync(() =>
+  const { execute: handlePublishApplet } = useAsync(() =>
     publishAppletToLibraryApi({
       appletId: applet.id || '',
     }),
   );
 
-  const { execute: handleStopPublishApplet, error: publishStopError } = useAsync(() =>
+  const { execute: handleStopPublishApplet } = useAsync(() =>
     publishAppletToLibraryApi({
       appletId: applet.id || '',
       publish: false,
     }),
   );
 
-  const { execute: getAppletLibUrl, error: getLibraryUrlError } = useAsync(() =>
+  const { execute: getAppletLibUrl } = useAsync(() =>
     getAppletLibraryUrlApi({
       appletId: applet.id || '',
     }),
   );
 
-  const { execute: handleUpdateSearchTerms, error: updateTermsError } = useAsync(() =>
+  const { execute: handleUpdateSearchTerms } = useAsync(() =>
     updateAppletSearchTermsApi({
       appletId: applet.id || '',
       params: { keywords: JSON.stringify(keywords) },
@@ -89,44 +91,41 @@ export const ShareApplet = ({
   );
 
   const handleModalClose = () => setSharePopupVisible(false);
+
   const handleShareApplet = async () => {
-    const checkResult = await handleCheckName();
-    if (checkResult.status === 200) {
+    try {
+      const checkResult = await handleCheckName();
       setShowNameTakenError(!checkResult.data);
 
       if (checkResult.data) {
         setIsLoading(true);
-        const changeNameResult = await handleChangeName();
+        await handleChangeName();
+        await handlePublishApplet();
+        const libraryUrlResult = await getAppletLibUrl();
+        await handleUpdateSearchTerms();
 
-        if (changeNameResult.status === 200) {
-          const publishResult = await handlePublishApplet();
+        setLibraryUrl(libraryUrlResult.data as string);
+        setIsLoading(false);
+        setAppletShared(true);
 
-          if (publishResult.status === 200) {
-            const libraryUrlResult = await getAppletLibUrl();
-            const updateTermsResult = await handleUpdateSearchTerms();
-
-            if (libraryUrlResult.status === 200 && updateTermsResult.status === 200) {
-              setLibraryUrl(libraryUrlResult.data || '');
-              setIsLoading(false);
-              setAppletShared(true);
-
-              dispatch(
-                folders.actions.updateAppletData({
-                  appletId: applet.id,
-                  published: true,
-                  appletName: getValues().appletName,
-                }),
-              );
-            }
-          }
-        }
+        dispatch(
+          folders.actions.updateAppletData({
+            appletId: applet.id,
+            published: true,
+            appletName: getValues().appletName,
+          }),
+        );
       }
+    } catch (e) {
+      setErrorMessage(getErrorMessage(e));
+      setIsLoading(false);
     }
   };
 
   const handleStopSharing = async () => {
-    const publishStopResult = await handleStopPublishApplet();
-    if (publishStopResult.status === 200) {
+    try {
+      await handleStopPublishApplet();
+
       setRemovedFromLibrary(true);
       setSecondBtnVisible(false);
       setMainBtnText(t('ok'));
@@ -138,22 +137,20 @@ export const ShareApplet = ({
           published: false,
         }),
       );
+    } catch (e) {
+      setErrorMessage(getErrorMessage(e));
     }
   };
 
   const handleUpdateSharedApplet = async () => {
-    setIsLoading(true);
-    const changeNameResult = await handleChangeName();
-    const updateTermsResult = await handleUpdateSearchTerms();
-    const libraryUrlResult = await getAppletLibUrl();
+    try {
+      setIsLoading(true);
+      await handleChangeName();
+      await handleUpdateSearchTerms();
+      const libraryUrlResult = await getAppletLibUrl();
 
-    if (
-      changeNameResult.status === 200 &&
-      updateTermsResult.status === 200 &&
-      libraryUrlResult.status === 200
-    ) {
       setIsLoading(false);
-      setLibraryUrl(libraryUrlResult.data || '');
+      setLibraryUrl(libraryUrlResult.data as string);
       setAppletUpdated(true);
 
       dispatch(
@@ -163,6 +160,9 @@ export const ShareApplet = ({
           published: true,
         }),
       );
+    } catch (e) {
+      setErrorMessage(getErrorMessage(e));
+      setIsLoading(false);
     }
   };
 
@@ -189,11 +189,6 @@ export const ShareApplet = ({
       return res;
     });
   };
-
-  const hasError =
-    checkNameError || changeNameError || publishError || getLibraryUrlError || updateTermsError;
-
-  hasError && setIsLoading(false);
 
   useEffect(() => {
     if (applet.published && !removedFromLibrary) {
@@ -227,51 +222,48 @@ export const ShareApplet = ({
   let modalComponent: JSX.Element | null = (
     <>
       {isLoading && <Spinner />}
-      <StyledInputWrapper>
-        <InputController
-          fullWidth
-          name="appletName"
-          error={showNameTakenError}
-          control={control}
-          label={t('appletName')}
-          required
-          value={applet?.name}
-        />
-        {showNameTakenError && (
-          <StyledErrorText
-            marginTop={0.5}
-            dangerouslySetInnerHTML={{ __html: t('appletNameAlreadyTaken') }}
-          />
-        )}
-      </StyledInputWrapper>
-      <StyledInputWrapper>
-        <TagsController
-          fullWidth
-          name="keyword"
-          control={control}
-          label={t('keywords')}
-          tags={keywords}
-          onAddTagClick={handleAddKeyword}
-          onRemoveTagClick={handleRemoveKeyword}
-        />
-      </StyledInputWrapper>
-      <StyledInputWrapper>
-        <CheckboxController
-          name="checked"
-          control={control}
-          label={<StyledBodyMedium>{t('agreementAppletAvailability') || ''}</StyledBodyMedium>}
-        />
-      </StyledInputWrapper>
-      {hasError && (
+      <form>
         <StyledInputWrapper>
-          {checkNameError && getErrorComponent(checkNameError)}
-          {changeNameError && getErrorComponent(changeNameError)}
-          {publishError && getErrorComponent(publishError)}
-          {getLibraryUrlError && getErrorComponent(getLibraryUrlError)}
-          {updateTermsError && getErrorComponent(updateTermsError)}
-          {publishStopError && getErrorComponent(publishStopError)}
+          <InputController
+            fullWidth
+            name="appletName"
+            error={showNameTakenError}
+            control={control}
+            label={t('appletName')}
+            required
+            value={applet?.name}
+          />
+          {showNameTakenError && (
+            <StyledErrorText
+              marginTop={0.5}
+              dangerouslySetInnerHTML={{ __html: t('appletNameAlreadyTaken') }}
+            />
+          )}
         </StyledInputWrapper>
-      )}
+        <StyledInputWrapper>
+          <TagsController
+            fullWidth
+            name="keyword"
+            control={control}
+            label={t('keywords')}
+            tags={keywords}
+            onAddTagClick={handleAddKeyword}
+            onRemoveTagClick={handleRemoveKeyword}
+          />
+        </StyledInputWrapper>
+        <StyledInputWrapper>
+          <CheckboxController
+            name="checked"
+            control={control}
+            label={<StyledBodyMedium>{t('agreementAppletAvailability') || ''}</StyledBodyMedium>}
+          />
+        </StyledInputWrapper>
+        {errorMessage && (
+          <StyledInputWrapper>
+            <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>{' '}
+          </StyledInputWrapper>
+        )}
+      </form>
     </>
   );
 
