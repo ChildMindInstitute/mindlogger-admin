@@ -6,7 +6,7 @@ import {
   StyledDialogTitle,
   StyledCloseButton,
   StyledDialogActions,
-  StyledOkButton,
+  StyledButton,
 } from './Modal.styles';
 
 export const Modal = ({
@@ -18,8 +18,13 @@ export const Modal = ({
   children,
   titleAlign = 'left',
   disabledSubmit = false,
+  width,
+  hasSecondBtn = false,
+  secondBtnText,
+  onSecondBtnSubmit,
+  disabledSecondBtn,
 }: ModalProps) => (
-  <StyledDialog onClose={onClose} open={open}>
+  <StyledDialog width={width} onClose={onClose} open={open}>
     <StyledDialogTitle align={titleAlign}>
       {title}
       <StyledCloseButton onClick={() => onClose()}>
@@ -27,10 +32,15 @@ export const Modal = ({
       </StyledCloseButton>
     </StyledDialogTitle>
     {children}
-    <StyledDialogActions>
-      <StyledOkButton variant="text" disabled={disabledSubmit} onClick={onSubmit}>
+    <StyledDialogActions hasSecondBtn={hasSecondBtn}>
+      <StyledButton variant="text" disabled={disabledSubmit} onClick={onSubmit}>
         {buttonText}
-      </StyledOkButton>
+      </StyledButton>
+      {hasSecondBtn && (
+        <StyledButton variant="text" disabled={disabledSecondBtn} onClick={onSecondBtnSubmit}>
+          {secondBtnText}
+        </StyledButton>
+      )}
     </StyledDialogActions>
   </StyledDialog>
 );

@@ -99,7 +99,7 @@ export const DuplicatePopups = ({
   useEffect(() => {
     if (duplicatePopupsVisible) {
       setNameModalVisible(true);
-      execute().then(({ data }) => data && setValue('name', data));
+      execute().then(({ data }) => data && setValue('name', data as string));
     }
   }, [duplicatePopupsVisible]);
 
@@ -129,7 +129,7 @@ export const DuplicatePopups = ({
         onClose={successModalClose}
         title={t('appletDuplication')}
         onSubmit={successModalClose}
-        buttonText={t('dissmiss')}
+        buttonText={t('dismiss')}
       >
         <StyledModalWrapper>{t('successDuplication')}</StyledModalWrapper>
       </Modal>

@@ -23,6 +23,7 @@ export const variables = {
     half: '50%',
     xxl: '10rem', //100px
     xl: '2rem', //20px
+    lg2: '1.6rem', //16px
     lg: '1.2rem', //12px
     md: '0.8rem', //8px
     sm: '0.5rem', //5px

@@ -76,4 +76,8 @@ export const StyledQuantity = styled(StyledQuantityCircle)`
   padding: ${theme.spacing(0.3)};
 `;
 
-export const StyledCloseWrapper = styled(Box)``;
+export const StyledCloseWrapper = styled(Box)`
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
+`;

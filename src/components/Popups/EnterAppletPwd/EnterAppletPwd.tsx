@@ -36,27 +36,29 @@ export const EnterAppletPwd = ({ open, onClose, onSubmit, errorText }: EnterAppl
       buttonText={t('submit')}
       disabledSubmit={disabledSubmit}
     >
-      <StyledInputWrapper>
-        <InputController
-          fullWidth
-          name="appletPassword"
-          control={control}
-          label={t('password')}
-          type={showPwd ? 'text' : 'password'}
-          autoComplete="new-password"
-          InputProps={{
-            endAdornment: (
-              <StyledClearedButton
-                aria-label="toggle password visibility"
-                onClick={() => setShowPwd((prevState) => !prevState)}
-              >
-                {showPwd ? <Svg id="visibility-off" /> : <Svg id="visibility-on" />}
-              </StyledClearedButton>
-            ),
-          }}
-        />
-        <StyledHint isError={!!errorText}>{errorText || t('enterAppletPasswordHint')}</StyledHint>
-      </StyledInputWrapper>
+      <form>
+        <StyledInputWrapper>
+          <InputController
+            fullWidth
+            name="appletPassword"
+            control={control}
+            label={t('password')}
+            type={showPwd ? 'text' : 'password'}
+            autoComplete="new-password"
+            InputProps={{
+              endAdornment: (
+                <StyledClearedButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPwd((prevState) => !prevState)}
+                >
+                  {showPwd ? <Svg id="visibility-off" /> : <Svg id="visibility-on" />}
+                </StyledClearedButton>
+              ),
+            }}
+          />
+          <StyledHint isError={!!errorText}>{errorText || t('enterAppletPasswordHint')}</StyledHint>
+        </StyledInputWrapper>
+      </form>
     </Modal>
   );
 };
