@@ -6,18 +6,21 @@ import { FolderApplet } from 'redux/modules';
 import { ActionsRender } from './AppletItem.types';
 
 export const actionsRender = ({
+  viewUsers,
+  viewCalendar,
   deleteAction,
   transferOwnership,
   duplicateAction,
+  shareAppletAction,
 }: ActionsRender) => [
   {
     icon: <Svg id="users" />,
-    action: (item: FolderApplet) => item,
+    action: viewUsers,
     toolTipTitle: t('viewUsers'),
   },
   {
     icon: <Svg id="calendar" />,
-    action: (item: FolderApplet) => item,
+    action: viewCalendar,
     toolTipTitle: t('viewGeneralCalendar'),
   },
   {
@@ -42,7 +45,7 @@ export const actionsRender = ({
   },
   {
     icon: <Svg id="share" />,
-    action: (item: FolderApplet) => item,
+    action: shareAppletAction,
     toolTipTitle: t('shareWithTheLibrary'),
   },
 ];

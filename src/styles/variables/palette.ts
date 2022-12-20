@@ -7,6 +7,7 @@ export const palette = {
   surface1: '#eff4fa',
   surface2: '#e8f0f7',
   surface3: '#e0ebf4',
+  surface5: '#d9e7f1',
 
   on_surface: '#1a1c1e',
   on_surface_variant: '#42474e',

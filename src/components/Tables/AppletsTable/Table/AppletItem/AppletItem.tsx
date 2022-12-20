@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, DragEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
@@ -16,12 +16,14 @@ import { actionsRender } from './AppletItem.const';
 import { DeletePopup } from './DeletePopup';
 import { DuplicatePopups } from './DuplicatePopups';
 import { TransferOwnershipPopup } from './TransferOwnershipPopup';
+import { ShareApplet } from './ShareApplet';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
+  const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [deletePopupVisible, setDeletePopupVisible] = useState(false);
   const [duplicatePopupsVisible, setDuplicatePopupsVisible] = useState(false);
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
@@ -30,15 +32,18 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
     if (id) navigate(`/${id}/${appletPages.respondents}`);
   };
 
-  const onDragStart = (event: React.DragEvent<HTMLTableRowElement>) => {
+  const onDragStart = (event: DragEvent<HTMLTableRowElement>) => {
     event.persist();
     event.dataTransfer.setData('text/plain', item.id);
   };
 
   const actions = {
+    viewUsers: () => navigate(`/${item.id}/${appletPages.respondents}`),
+    viewCalendar: () => navigate(`/${item.id}/${appletPages.schedule}`),
     deleteAction: () => setDeletePopupVisible(true),
     duplicateAction: () => setDuplicatePopupsVisible(true),
     transferOwnership: () => setTransferOwnershipPopupVisible(true),
+    shareAppletAction: () => setSharePopupVisible(true),
   };
 
   return (
@@ -94,6 +99,13 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           transferOwnershipPopupVisible={transferOwnershipPopupVisible}
           onClose={() => setTransferOwnershipPopupVisible(false)}
           item={item}
+        />
+      )}
+      {sharePopupVisible && (
+        <ShareApplet
+          sharePopupVisible={sharePopupVisible}
+          setSharePopupVisible={setSharePopupVisible}
+          applet={item}
         />
       )}
     </>

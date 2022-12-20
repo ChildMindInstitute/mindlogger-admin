@@ -186,40 +186,40 @@ export const changeFolder = (
     return folderApplet;
   });
 
-export const createFlattenFoldersAppletsPendingData = (
+export const createPendingData = (
   state: Draft<FoldersSchema>,
+  property: keyof FoldersSchema,
   requestId: string,
 ) => {
-  const { flattenFoldersApplets } = state;
-  if (flattenFoldersApplets.status !== 'loading') {
-    flattenFoldersApplets.requestId = requestId;
-    flattenFoldersApplets.status = 'loading';
+  if (state[property].status !== 'loading') {
+    state[property].requestId = requestId;
+    state[property].status = 'loading';
   }
 };
 
-export const createFlattenFoldersAppletsFulfilledData = (
+export const createFulfilledData = (
   state: Draft<FoldersSchema>,
+  property: keyof FoldersSchema,
   requestId: string,
   payload: FolderApplet[],
 ) => {
-  const { flattenFoldersApplets } = state;
-  if (flattenFoldersApplets.status === 'loading' && flattenFoldersApplets.requestId === requestId) {
-    flattenFoldersApplets.requestId = initialState.flattenFoldersApplets.requestId;
-    flattenFoldersApplets.status = 'success';
-    state.flattenFoldersApplets.data = payload;
+  if (state[property].status === 'loading' && state[property].requestId === requestId) {
+    state[property].requestId = initialState[property].requestId;
+    state[property].status = 'success';
+    state[property].data = payload;
   }
 };
 
-export const createFlattenFoldersAppletsRejectedData = (
+export const createRejectedData = (
   state: Draft<FoldersSchema>,
+  property: keyof FoldersSchema,
   requestId: string,
   error: AxiosError,
 ) => {
-  const { flattenFoldersApplets } = state;
-  if (flattenFoldersApplets.status === 'loading' && flattenFoldersApplets.requestId === requestId) {
-    flattenFoldersApplets.requestId = initialState.flattenFoldersApplets.requestId;
-    flattenFoldersApplets.status = 'error';
-    flattenFoldersApplets.error = error.response?.data as AxiosError<ErrorResponse>;
-    flattenFoldersApplets.data ? flattenFoldersApplets.data : null;
+  if (state[property].status === 'loading' && state[property].requestId === requestId) {
+    state[property].requestId = initialState[property].requestId;
+    state[property].status = 'error';
+    state[property].error = error.response?.data as AxiosError<ErrorResponse>;
+    state[property].data ? state[property].data : null;
   }
 };

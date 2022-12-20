@@ -4,11 +4,12 @@ import { Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledDialog = styled(Dialog)`
   .MuiPaper-root {
     background-color: ${variables.palette.surface3};
-    width: 43.4rem;
+    width: ${({ width }: { width?: string }) => (width ? `${width}rem` : '43.4rem')};
   }
 `;
 
@@ -24,10 +25,11 @@ export const StyledCloseButton = styled(StyledClearedButton)`
   padding: 0.8rem;
 `;
 
-export const StyledDialogActions = styled(DialogActions)`
-  justify-content: center;
+export const StyledDialogActions = styled(DialogActions, shouldForwardProp)`
+  justify-content: ${({ hasSecondBtn }: { hasSecondBtn: boolean }) =>
+    hasSecondBtn ? 'space-around' : 'center'};
 `;
 
-export const StyledOkButton = styled(Button)`
+export const StyledButton = styled(Button)`
   font-weight: ${variables.font.weight.semiBold};
 `;
