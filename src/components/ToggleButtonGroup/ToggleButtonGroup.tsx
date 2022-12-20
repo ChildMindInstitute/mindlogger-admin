@@ -15,12 +15,12 @@ export const ToggleButtonGroup = ({
   };
 
   return (
-    <MuiToggleButtonGroup value={activeButton} exclusive onChange={handleChange}>
+    <MuiToggleButtonGroup fullWidth value={activeButton} exclusive onChange={handleChange}>
       {toggleButtons.map(({ value, label }) => (
         <ToggleButton key={value} value={value}>
           {activeButton === value && (
             <StyledIcon>
-              <Svg id="check" width={18} height={18} />
+              <Svg id="check" width={24} height={24} />
             </StyledIcon>
           )}
           {label}
