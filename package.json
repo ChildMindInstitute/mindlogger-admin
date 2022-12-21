@@ -24,6 +24,7 @@
     "javascript-time-ago": "^2.5.9",
     "lodash.uniqueid": "^4.0.1",
     "react": "^18.2.0",
+    "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.38.0",
     "react-i18next": "^12.0.0",
@@ -62,6 +63,7 @@
   },
   "devDependencies": {
     "@types/lodash.uniqueid": "^4.0.7",
+    "@types/react-datepicker": "^4.8.0",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
     "eslint": "^8.26.0",
