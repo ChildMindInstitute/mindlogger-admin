@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { AuthLayout } from 'layouts/AuthLayout';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { page } from 'resources';
-
 import { BaseLayout } from 'layouts/BaseLayout';
 
 import { PrivateRoute } from './PrivateRoute';
-import { authRoutes, dashboardRoutes } from './routesList';
+import { appletRoutes, authRoutes } from './routes.const';
+
+const Dashboard = lazy(() => import('pages/Dashboard'));
+const Applet = lazy(() => import('pages/Applet'));
 
 export const AppRoutes = () => {
   const token = sessionStorage.getItem('accessToken');
@@ -35,18 +37,28 @@ export const AppRoutes = () => {
     <>
       {loaded && (
         <Routes>
-          <Route path={page.dashboard} element={<BaseLayout />}>
-            {dashboardRoutes.map(({ path, Component }) => (
-              <Route
-                key={path}
-                path={path}
-                element={
-                  <PrivateRoute condition={isAuthorized}>
-                    <Component />
-                  </PrivateRoute>
-                }
-              />
-            ))}
+          <Route element={<BaseLayout />}>
+            <Route
+              path={page.dashboard}
+              element={
+                <PrivateRoute condition={isAuthorized}>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route element={<Applet />}>
+              {appletRoutes.map(({ path, Component }) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={
+                    <PrivateRoute condition={isAuthorized}>
+                      <Component />
+                    </PrivateRoute>
+                  }
+                />
+              ))}
+            </Route>
           </Route>
           <Route path={page.login} element={<AuthLayout />}>
             {authRoutes.map(({ path, Component }) => (
