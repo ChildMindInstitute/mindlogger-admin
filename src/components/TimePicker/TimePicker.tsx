@@ -1,27 +1,37 @@
 import { TextField } from '@mui/material';
-import { useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { StyledTimePickerWrapper } from './TimePicker.styles';
+import { Svg } from 'components/Svg';
 
-export const TimePicker = () => {
-  const [time, setTime] = useState<Date | null | undefined>();
+import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';
+import { TimePickerProps } from './TimePicker.types';
 
-  return (
-    <StyledTimePickerWrapper>
-      <ReactDatePicker
-        className="date-picker"
-        selected={time}
-        onChange={(date: Date) => setTime(date)}
-        showTimeSelect
-        showTimeSelectOnly
-        timeIntervals={15}
-        showPopperArrow={false}
-        dateFormat="HH:mm"
-        timeFormat="HH:mm"
-        customInput={<TextField variant="outlined" label="From" />}
-      />
-    </StyledTimePickerWrapper>
-  );
-};
+export const TimePicker = ({ value, setValue, timeIntervals = 15, label }: TimePickerProps) => (
+  <StyledTimePickerWrapper>
+    <ReactDatePicker
+      className="date-picker"
+      selected={value}
+      onChange={(date: Date) => setValue(date)}
+      showTimeSelect
+      showTimeSelectOnly
+      timeIntervals={timeIntervals}
+      showPopperArrow={false}
+      dateFormat="HH:mm"
+      timeFormat="HH:mm"
+      customInput={
+        <TextField
+          variant="outlined"
+          label={label}
+          InputProps={{
+            endAdornment: (
+              <StyledIcon>
+                <Svg id="clock" />
+              </StyledIcon>
+            ),
+          }}
+        />
+      }
+    />
+  </StyledTimePickerWrapper>
+);
