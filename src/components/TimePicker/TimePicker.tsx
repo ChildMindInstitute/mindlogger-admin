@@ -1,6 +1,5 @@
 import { TextField } from '@mui/material';
 import ReactDatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.min.css';
 
 import { Svg } from 'components/Svg';
 
