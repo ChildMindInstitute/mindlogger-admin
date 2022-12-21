@@ -2,11 +2,11 @@ import { useState, SyntheticEvent } from 'react';
 import Tab from '@mui/material/Tab';
 import { useTranslation } from 'react-i18next';
 
-import { TabPanel } from './TabPanel';
-import { StyledTabs } from './Tabs.styles';
-import { RenderTabs, TabsProps } from './Tabs.types';
+import { TabPanel } from '../TabPanel';
+import { StyledTabs } from '../Tabs.styles';
+import { RenderTabs, TabsProps } from '../Tabs.types';
 
-export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
+export const DefaultTabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(0);
 
