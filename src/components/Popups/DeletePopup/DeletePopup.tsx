@@ -1,26 +1,38 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Modal } from 'components/Popups';
 import { useAsync } from 'hooks/useAsync';
-import { folders } from 'redux/modules';
+import { folders, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
-import { isError } from 'utils/errors';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { page } from 'resources';
 
-import { DeletePopupProps } from './DeletePopup.types';
-
-export const DeletePopup = ({ deletePopupVisible, onClose, item }: DeletePopupProps) => {
+export const DeletePopup = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const { execute } = useAsync(() => deleteAppletApi({ appletId: item.id || '' }));
+  const history = useNavigate();
+  const { deletePopupVisible, appletId } = popups.useData();
+
+  const onClose = () => {
+    dispatch(
+      popups.actions.setPopupVisible({
+        appletId: '',
+        key: 'deletePopupVisible',
+        value: false,
+      }),
+    );
+  };
+
+  const { execute } = useAsync(deleteAppletApi, () => {
+    dispatch(folders.actions.deleteFolderApplet({ id: appletId }));
+    onClose();
+    history(page.dashboard);
+  });
 
   const handleDeleteApplet = async () => {
-    const result = await execute();
-    if (!isError(result)) {
-      dispatch(folders.actions.deleteFolderApplet({ id: item.id }));
-      onClose();
-    }
+    await execute({ appletId });
   };
 
   return (

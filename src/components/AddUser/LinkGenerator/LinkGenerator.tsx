@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { getAppletPublicLinkApi } from 'api';
-import { getErrorMessage } from 'utils/errors';
+import { useAsync } from 'hooks/useAsync';
 
 import { StyledTitle } from '../AddUser.styles';
 import { LinkForm } from './LinkForm';
@@ -18,15 +18,12 @@ export const LinkGenerator = () => {
   const [inviteLink, setInviteLink] = useState<InviteLink | null>(null);
   const [linkPopupVisible, setLinkPopupVisible] = useState(false);
 
+  const { execute } = useAsync(getAppletPublicLinkApi, (res) => {
+    res?.data?.inviteId && setInviteLink(res.data);
+  });
+
   useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await getAppletPublicLinkApi({ appletId: id || '' });
-        data?.inviteId && setInviteLink(data);
-      } catch (e) {
-        getErrorMessage(e);
-      }
-    })();
+    execute({ appletId: id || '' });
   }, []);
 
   return (
