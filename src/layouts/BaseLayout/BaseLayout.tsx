@@ -4,7 +4,8 @@ import { Outlet } from 'react-router-dom';
 import { LeftBar } from 'components/LeftBar';
 import { TopBar } from 'components/TopBar';
 import { Footer } from 'layouts/Footer';
-import { account, users, folders } from 'redux/modules';
+import { DuplicatePopups, DeletePopup, TransferOwnershipPopup } from 'components/Popups';
+import { account, users, folders, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
@@ -12,6 +13,8 @@ import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 export const BaseLayout = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const accountData = account.useData();
+  const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible } =
+    popups.useData();
 
   useEffect(() => {
     dispatch(users.thunk.getManagersList());
@@ -32,6 +35,9 @@ export const BaseLayout = (): JSX.Element => {
         <Outlet />
         <Footer />
       </StyledCol>
+      {duplicatePopupsVisible && <DuplicatePopups />}
+      {deletePopupVisible && <DeletePopup />}
+      {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
     </StyledBaseLayout>
   );
 };

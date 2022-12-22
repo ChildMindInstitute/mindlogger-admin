@@ -12,7 +12,6 @@ import {
 } from 'api';
 import { folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { useAsync } from 'hooks/useAsync';
 import { Modal } from 'components/Popups';
 import { Spinner } from 'components/Spinner';
 import { InputController, CheckboxController, TagsController } from 'components/FormComponents';
@@ -51,60 +50,34 @@ export const ShareApplet = ({
   });
   const checked = watch('checked');
 
-  const { execute: handleCheckName } = useAsync(() =>
-    checkAppletNameInLibraryApi({
-      appletId: applet.id || '',
-      appletName: getValues().appletName || '',
-    }),
-  );
-  const { execute: handleChangeName } = useAsync(() =>
-    changeAppletNameApi({
-      appletId: applet.id || '',
-      appletName: getValues().appletName || '',
-    }),
-  );
-
-  const { execute: handlePublishApplet } = useAsync(() =>
-    publishAppletToLibraryApi({
-      appletId: applet.id || '',
-    }),
-  );
-
-  const { execute: handleStopPublishApplet } = useAsync(() =>
-    publishAppletToLibraryApi({
-      appletId: applet.id || '',
-      publish: false,
-    }),
-  );
-
-  const { execute: getAppletLibUrl } = useAsync(() =>
-    getAppletLibraryUrlApi({
-      appletId: applet.id || '',
-    }),
-  );
-
-  const { execute: handleUpdateSearchTerms } = useAsync(() =>
-    updateAppletSearchTermsApi({
-      appletId: applet.id || '',
-      params: { keywords: JSON.stringify(keywords) },
-    }),
-  );
-
   const handleModalClose = () => setSharePopupVisible(false);
 
   const handleShareApplet = async () => {
     try {
-      const checkResult = await handleCheckName();
-      setShowNameTakenError(!checkResult.data);
+      const checkResult = await checkAppletNameInLibraryApi({
+        appletId: applet.id || '',
+        appletName: getValues().appletName || '',
+      });
+      setShowNameTakenError(!checkResult?.data);
 
-      if (checkResult.data) {
+      if (checkResult?.data) {
         setIsLoading(true);
-        await handleChangeName();
-        await handlePublishApplet();
-        const libraryUrlResult = await getAppletLibUrl();
-        await handleUpdateSearchTerms();
+        await checkAppletNameInLibraryApi({
+          appletId: applet.id || '',
+          appletName: getValues().appletName || '',
+        });
+        await publishAppletToLibraryApi({
+          appletId: applet.id || '',
+        });
+        const libraryUrlResult = await getAppletLibraryUrlApi({
+          appletId: applet.id || '',
+        });
+        await updateAppletSearchTermsApi({
+          appletId: applet.id || '',
+          params: { keywords: JSON.stringify(keywords) },
+        });
 
-        setLibraryUrl(libraryUrlResult.data as string);
+        setLibraryUrl(libraryUrlResult?.data as string);
         setIsLoading(false);
         setAppletShared(true);
 
@@ -124,7 +97,10 @@ export const ShareApplet = ({
 
   const handleStopSharing = async () => {
     try {
-      await handleStopPublishApplet();
+      await publishAppletToLibraryApi({
+        appletId: applet.id || '',
+        publish: false,
+      });
 
       setRemovedFromLibrary(true);
       setSecondBtnVisible(false);
@@ -145,12 +121,20 @@ export const ShareApplet = ({
   const handleUpdateSharedApplet = async () => {
     try {
       setIsLoading(true);
-      await handleChangeName();
-      await handleUpdateSearchTerms();
-      const libraryUrlResult = await getAppletLibUrl();
+      await changeAppletNameApi({
+        appletId: applet.id || '',
+        appletName: getValues().appletName || '',
+      });
+      await updateAppletSearchTermsApi({
+        appletId: applet.id || '',
+        params: { keywords: JSON.stringify(keywords) },
+      });
+      const libraryUrlResult = await getAppletLibraryUrlApi({
+        appletId: applet.id || '',
+      });
 
       setIsLoading(false);
-      setLibraryUrl(libraryUrlResult.data as string);
+      setLibraryUrl(libraryUrlResult?.data as string);
       setAppletUpdated(true);
 
       dispatch(

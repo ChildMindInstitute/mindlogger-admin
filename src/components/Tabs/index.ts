@@ -1,2 +1,2 @@
-export * from './DefaultTabs/';
-export * from './LinkedTabs/';
+export * from './DefaultTabs';
+export * from './LinkedTabs';

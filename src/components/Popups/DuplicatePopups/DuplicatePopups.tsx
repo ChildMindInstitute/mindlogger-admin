@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -9,27 +10,24 @@ import { InputController } from 'components/FormComponents';
 import { EnterAppletPwd } from 'components/Popups';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import { useAsync } from 'hooks/useAsync';
-import { account } from 'redux/modules';
+import { account, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { duplicateAppletApi, validateAppletNameApi } from 'api';
 import { getAppletEncryptionInfo } from 'utils/encryption';
 import { getErrorMessage } from 'utils/errors';
+import { page } from 'resources';
 
-import { DuplicatePopupsProps } from './DuplicatePopups.types';
-
-export const DuplicatePopups = ({
-  duplicatePopupsVisible,
-  setDuplicatePopupsVisible,
-  item,
-}: DuplicatePopupsProps) => {
+export const DuplicatePopups = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+  const history = useNavigate();
   const accountData = account.useData();
+  const { duplicatePopupsVisible, appletId } = popups.useData();
+  const currentApplet = accountData?.account?.applets?.find((el) => el.id === appletId);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [nameModalVisible, setNameModalVisible] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const { execute } = useAsync(() => validateAppletNameApi({ name: item.name || '' }));
 
   const { handleSubmit, control, setValue, getValues } = useForm({
     resolver: yupResolver(
@@ -40,19 +38,34 @@ export const DuplicatePopups = ({
     defaultValues: { name: '' },
   });
 
+  const { execute } = useAsync(
+    validateAppletNameApi,
+    (res) => res?.data && setValue('name', res.data as string),
+  );
+
+  const duplicatePopupsClose = () =>
+    dispatch(
+      popups.actions.setPopupVisible({
+        appletId: '',
+        key: 'duplicatePopupsVisible',
+        value: false,
+      }),
+    );
+
   const nameModalClose = () => {
     setNameModalVisible(false);
-    setDuplicatePopupsVisible(false);
+    duplicatePopupsClose();
   };
 
   const successModalClose = () => {
     setSuccessModalVisible(false);
-    setDuplicatePopupsVisible(false);
+    duplicatePopupsClose();
+    history(page.dashboard);
   };
 
   const passwordModalClose = () => {
     setPasswordModalVisible(false);
-    setDuplicatePopupsVisible(false);
+    duplicatePopupsClose();
   };
 
   const handleDuplicate = async ({ appletPassword }: { appletPassword: string }) => {
@@ -73,7 +86,7 @@ export const DuplicatePopups = ({
       );
 
       await duplicateAppletApi({
-        appletId: item?.id || '',
+        appletId,
         options: {
           name: getValues().name || '',
         },
@@ -99,7 +112,7 @@ export const DuplicatePopups = ({
   useEffect(() => {
     if (duplicatePopupsVisible) {
       setNameModalVisible(true);
-      execute().then(({ data }) => data && setValue('name', data as string));
+      execute({ name: currentApplet?.name || '' });
     }
   }, [duplicatePopupsVisible]);
 

@@ -3,11 +3,14 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
 import { appletPages } from 'utils/constants';
+import { useAppDispatch } from 'redux/store';
+import { popups } from 'redux/modules';
 
 export const useNavigationItems = () => {
   const { t } = useTranslation('app');
   const { id } = useParams();
   const history = useNavigate();
+  const dispatch = useAppDispatch();
 
   return [
     {
@@ -28,17 +31,38 @@ export const useNavigationItems = () => {
     {
       icon: <Svg id="duplicate" />,
       label: t('duplicateApplet'),
-      action: () => null,
+      action: () =>
+        dispatch(
+          popups.actions.setPopupVisible({
+            appletId: id || '',
+            key: 'duplicatePopupsVisible',
+            value: true,
+          }),
+        ),
     },
     {
       icon: <Svg id="trash" />,
       label: t('deleteApplet'),
-      action: () => null,
+      action: () =>
+        dispatch(
+          popups.actions.setPopupVisible({
+            appletId: id || '',
+            key: 'deletePopupVisible',
+            value: true,
+          }),
+        ),
     },
     {
       icon: <Svg id="transfer-ownership" />,
       label: t('transferOwnership'),
-      action: () => null,
+      action: () =>
+        dispatch(
+          popups.actions.setPopupVisible({
+            appletId: id || '',
+            key: 'transferOwnershipPopupVisible',
+            value: true,
+          }),
+        ),
     },
     {
       icon: <Svg id="retain-data" />,

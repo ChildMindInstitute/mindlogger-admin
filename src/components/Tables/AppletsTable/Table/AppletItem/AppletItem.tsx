@@ -4,7 +4,7 @@ import { TableCell, TableRow } from '@mui/material';
 
 import { useAppletsDnd, useTimeAgo } from 'hooks';
 import { useAppDispatch } from 'redux/store';
-import { FolderApplet, folders } from 'redux/modules';
+import { FolderApplet, folders, popups } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Actions } from 'components/Actions';
 import { Pin } from 'components/Pin';
@@ -13,9 +13,6 @@ import { appletPages } from 'utils/constants';
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { actionsRender } from './AppletItem.const';
-import { DeletePopup } from './DeletePopup';
-import { DuplicatePopups } from './DuplicatePopups';
-import { TransferOwnershipPopup } from './TransferOwnershipPopup';
 import { ShareApplet } from './ShareApplet';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
@@ -24,9 +21,6 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const timeAgo = useTimeAgo();
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
-  const [deletePopupVisible, setDeletePopupVisible] = useState(false);
-  const [duplicatePopupsVisible, setDuplicatePopupsVisible] = useState(false);
-  const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
 
   const handleAppletClick = (id: string | undefined) => {
     if (id) navigate(`/${id}/${appletPages.respondents}`);
@@ -40,9 +34,30 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const actions = {
     viewUsers: () => navigate(`/${item.id}/${appletPages.respondents}`),
     viewCalendar: () => navigate(`/${item.id}/${appletPages.schedule}`),
-    deleteAction: () => setDeletePopupVisible(true),
-    duplicateAction: () => setDuplicatePopupsVisible(true),
-    transferOwnership: () => setTransferOwnershipPopupVisible(true),
+    deleteAction: () =>
+      dispatch(
+        popups.actions.setPopupVisible({
+          appletId: item.id,
+          key: 'deletePopupVisible',
+          value: true,
+        }),
+      ),
+    duplicateAction: () =>
+      dispatch(
+        popups.actions.setPopupVisible({
+          appletId: item.id,
+          key: 'duplicatePopupsVisible',
+          value: true,
+        }),
+      ),
+    transferOwnership: () =>
+      dispatch(
+        popups.actions.setPopupVisible({
+          appletId: item.id,
+          key: 'transferOwnershipPopupVisible',
+          value: true,
+        }),
+      ),
     shareAppletAction: () => setSharePopupVisible(true),
   };
 
@@ -80,27 +95,6 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           <Actions items={actionsRender(actions)} context={item} />
         </TableCell>
       </TableRow>
-      {duplicatePopupsVisible && (
-        <DuplicatePopups
-          setDuplicatePopupsVisible={setDuplicatePopupsVisible}
-          duplicatePopupsVisible={duplicatePopupsVisible}
-          item={item}
-        />
-      )}
-      {deletePopupVisible && (
-        <DeletePopup
-          deletePopupVisible={deletePopupVisible}
-          onClose={() => setDeletePopupVisible(false)}
-          item={item}
-        />
-      )}
-      {transferOwnershipPopupVisible && (
-        <TransferOwnershipPopup
-          transferOwnershipPopupVisible={transferOwnershipPopupVisible}
-          onClose={() => setTransferOwnershipPopupVisible(false)}
-          item={item}
-        />
-      )}
       {sharePopupVisible && (
         <ShareApplet
           sharePopupVisible={sharePopupVisible}
