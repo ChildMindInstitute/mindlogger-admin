@@ -11,6 +11,7 @@ export const StyledPanel = styled(Box, shouldForwardProp)`
   border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   display: ${({ hidden }) => (hidden ? 'none' : 'flex')};
   flex-direction: column;
+  flex-grow: 1;
   min-height: ${({ isMinHeightAuto }: { isMinHeightAuto?: boolean }) =>
     isMinHeightAuto ? 'auto' : 0};
 `;

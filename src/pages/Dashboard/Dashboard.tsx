@@ -1,4 +1,4 @@
-import { Tabs } from 'components/Tabs';
+import { DefaultTabs as Tabs } from 'components/Tabs';
 import { UiType } from 'components/Tabs/Tabs.types';
 import { useBreadcrumbs } from 'hooks';
 import { StyledBody } from 'styles/styledComponents/Body';

@@ -130,5 +130,8 @@
   "appletIsRemovedFromLibrary": "L'applet est supprimée de la bibliothèque",
   "appletIsUpdatedSuccessfully": "L'applet est mis à jour avec succès",
   "linkSuccessfullyCopied": "Lien copié avec succès",
-  "activities": "Activités"
+  "activities": "Activités",
+  "retainData": "Conserver les Données",
+  "editApplet": "Modifier Applett",
+  "addUsers": "Ajouter des Utilisateurs"
 }

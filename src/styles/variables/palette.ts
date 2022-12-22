@@ -24,6 +24,7 @@ export const palette = {
   on_surface_alfa12: 'rgba(26, 28, 30, 0.12)',
   on_surface_alfa38: 'rgba(26, 28, 30, 0.38)',
   on_surface_variant_alfa8: 'rgba(66, 71, 78, 0.08)',
+  on_surface_variant_alfa8_2: 'rgba(222, 227, 235, 0.08)',
   on_surface_variant_alfa12: 'rgba(66, 71, 78, 0.12)',
   on_secondary_container_alfa8: 'rgba(14, 29, 42, 0.08)',
   contained_btn_hover: '#1473a8',
