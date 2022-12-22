@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { TabPanel } from './TabPanel';
 import { StyledTabs } from './Tabs.styles';
-import { RenderTabs, TabsProps } from './Tabs.types';
+import { RenderTabs, TabsProps, UiType } from './Tabs.types';
 
-export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
+export const Tabs = ({ uiType = UiType.primary, tabs, activeTab }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -15,16 +15,20 @@ export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
   };
 
   const { content, header } = tabs.reduce(
-    (acc: RenderTabs, { icon, activeIcon, labelKey, onClick, content, isMinHeightAuto }, index) => {
-      acc.header.push(
+    (
+      tabs: RenderTabs,
+      { icon, activeIcon, labelKey, onClick, content, isMinHeightAuto },
+      index,
+    ) => {
+      tabs.header.push(
         <Tab
           key={labelKey}
-          icon={tabIndex === index ? activeIcon : icon}
+          icon={icon && tabIndex === index ? activeIcon : icon || undefined}
           label={t(labelKey)}
           onClick={onClick}
         />,
       );
-      acc.content.push(
+      tabs.content.push(
         <TabPanel
           key={index}
           value={activeTab || tabIndex}
@@ -35,7 +39,7 @@ export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
         </TabPanel>,
       );
 
-      return acc;
+      return tabs;
     },
     { header: [], content: [] },
   );
@@ -43,6 +47,7 @@ export const Tabs = ({ tabs, activeTab }: TabsProps): JSX.Element => {
   return (
     <>
       <StyledTabs
+        uiType={uiType}
         value={activeTab || tabIndex}
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}

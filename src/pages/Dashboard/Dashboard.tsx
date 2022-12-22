@@ -1,4 +1,5 @@
 import { Tabs } from 'components/Tabs';
+import { UiType } from 'components/Tabs/Tabs.types';
 import { useBreadcrumbs } from 'hooks';
 import { StyledBody } from 'styles/styledComponents/Body';
 
@@ -9,7 +10,7 @@ export const Dashboard = () => {
 
   return (
     <StyledBody>
-      <Tabs tabs={dashboardTabs} />
+      <Tabs uiType={UiType.secondary} tabs={dashboardTabs} />
     </StyledBody>
   );
 };

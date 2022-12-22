@@ -1,13 +1,18 @@
 type Tab = {
   labelKey: string;
-  icon: JSX.Element;
-  activeIcon: JSX.Element;
+  icon?: JSX.Element;
+  activeIcon?: JSX.Element;
   content: JSX.Element;
   onClick?: () => void;
   isMinHeightAuto?: boolean;
 };
 
-export type TabsProps = { tabs: Tab[]; activeTab?: number };
+export enum UiType {
+  primary = 'primary',
+  secondary = 'secondary',
+}
+
+export type TabsProps = { uiType?: UiType; tabs: Tab[]; activeTab?: number };
 
 export type RenderTabs = {
   header: JSX.Element[];
