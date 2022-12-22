@@ -23,7 +23,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     padding: ${({ uiType }: { uiType: UiType }) =>
       uiType === UiType.primary ? theme.spacing(0.8, 2.6, 0.7) : theme.spacing(1.4, 2.2)};
     justify-content: space-between;
-    height: ${({ uiType }: { uiType: UiType }) =>
+    min-height: ${({ uiType }: { uiType: UiType }) =>
       uiType === UiType.primary ? TABS_HEIGHT : '4.8rem'};
   }
 
