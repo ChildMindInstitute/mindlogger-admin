@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
-import { appletPages } from 'utils/constants';
+import { APPLET_PAGES } from 'utils/constants';
 import { useAppDispatch } from 'redux/store';
 import { popups } from 'redux/modules';
 
@@ -16,7 +16,7 @@ export const useNavigationItems = () => {
     {
       icon: <Svg id="users" />,
       label: t('addUsers'),
-      action: () => history(`/${id}/${appletPages.addUser}`),
+      action: () => history(`/${id}/${APPLET_PAGES.addUser}`),
     },
     {
       icon: <Svg id="edit-applet" />,

@@ -49,5 +49,6 @@ export const variables = {
   transitions: {
     all: 'all 0.3s',
     bgColor: 'background-color 0.3s',
+    border: 'border 0.15s',
   },
 };
