@@ -53,8 +53,8 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
     } else {
       const datesArr = getDatesStringsArray(value);
       if (date) {
-        const startDate = variant === 'start' ? getStringFromDate(date) : datesArr?.[0];
-        const endDate = variant === 'end' ? getStringFromDate(date) : datesArr?.[1];
+        const startDate = variant === DateVariant.start ? getStringFromDate(date) : datesArr?.[0];
+        const endDate = variant === DateVariant.end ? getStringFromDate(date) : datesArr?.[1];
 
         setValue(`${startDate || DATE_PLACEHOLDER} - ${endDate || DATE_PLACEHOLDER}`);
       }
@@ -68,7 +68,7 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
       let selectedDate = new Date();
       const datesArr = value !== '' && getDatesStringsArray(value);
       if (datesArr) {
-        const index = variant === 'start' ? 0 : 1;
+        const index = variant === DateVariant.start ? 0 : 1;
         selectedDate =
           datesArr[index] !== DATE_PLACEHOLDER ? getDateFromString(datesArr[index]) : new Date();
       }
@@ -93,8 +93,8 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
       inline
       formatWeekDay={(nameOfDay) => nameOfDay.slice(0, 1)}
       renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
-      minDate={variant === 'end' ? getMinMaxDate(MinMaxDate.min) : undefined}
-      maxDate={variant === 'start' ? getMinMaxDate(MinMaxDate.max) : undefined}
+      minDate={variant === DateVariant.end ? getMinMaxDate(MinMaxDate.min) : undefined}
+      maxDate={variant === DateVariant.start ? getMinMaxDate(MinMaxDate.max) : undefined}
     />
   );
 
