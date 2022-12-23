@@ -144,7 +144,14 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
               </StyledBodyLarge>
             </StyledCollapseBtn>
             {showFirstCalendar && getDayPickerCalendar('start')}
-            <StyledCollapseBtn onClick={handleShowSecondClick}>
+            <StyledCollapseBtn
+              sx={{
+                backgroundColor: showSecondCalendar
+                  ? variables.palette.surface_variant
+                  : 'transparent',
+              }}
+              onClick={handleShowSecondClick}
+            >
               <StyledBodyLarge fontWeight="regular" color={variables.palette.on_surface}>
                 {t('selectEndingDate')}
               </StyledBodyLarge>
