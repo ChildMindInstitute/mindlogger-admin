@@ -14,16 +14,16 @@ import {
   StyledPopover,
   StyledTextField,
 } from './DatePicker.styles';
-import { DateVariant, DatePickerProps, UiType, MinMaxDate } from './DatePicker.types';
+import { DatePickerProps, DateVariant, MinMaxDate, UiType } from './DatePicker.types';
 import { DatePickerHeader } from './DatePickerHeader';
-import { getDatesStringsArray, getStringFromDate, getDateFromString } from './DatePicker.utils';
-import { datePlaceholder } from './DatePicker.const';
+import { getDateFromString, getDatesStringsArray, getStringFromDate } from './DatePicker.utils';
+import { DATE_PLACEHOLDER } from './DatePicker.const';
 
 export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePickerProps) => {
   const { t } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [showFirstCalendar, setShowFirstCalendar] = useState(true);
-  const [showSecondCalendar, setShowSecondCalendar] = useState(false);
+  const [firstCalendarVisible, setFirstCalendarVisible] = useState(true);
+  const [secondCalendarVisible, setSecondCalendarVisible] = useState(false);
 
   const open = Boolean(anchorEl);
   const id = open ? 'date-picker-popover' : undefined;
@@ -38,25 +38,25 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
   };
 
   const handleShowFirstClick = () => {
-    setShowFirstCalendar((prevState) => !prevState);
-    setShowSecondCalendar(false);
+    setFirstCalendarVisible((prevState) => !prevState);
+    setSecondCalendarVisible(false);
   };
 
   const handleShowSecondClick = () => {
-    setShowFirstCalendar(false);
-    setShowSecondCalendar((prevState) => !prevState);
+    setFirstCalendarVisible(false);
+    setSecondCalendarVisible((prevState) => !prevState);
   };
 
   const handleDateChange = (date: Date | null, variant?: DateVariant) => {
     if (uiType === UiType.oneDate) {
       setValue(date ? getStringFromDate(date) : '');
     } else {
-      const valueArr = getDatesStringsArray(value);
+      const datesArr = getDatesStringsArray(value);
       if (date) {
-        const startDate = variant === 'start' ? getStringFromDate(date) : valueArr?.[0];
-        const endDate = variant === 'end' ? getStringFromDate(date) : valueArr?.[1];
+        const startDate = variant === 'start' ? getStringFromDate(date) : datesArr?.[0];
+        const endDate = variant === 'end' ? getStringFromDate(date) : datesArr?.[1];
 
-        setValue(`${startDate || datePlaceholder} - ${endDate || datePlaceholder}`);
+        setValue(`${startDate || DATE_PLACEHOLDER} - ${endDate || DATE_PLACEHOLDER}`);
       }
     }
   };
@@ -65,26 +65,24 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
     if (uiType === UiType.oneDate) {
       return value ? getDateFromString(value) : new Date();
     } else {
-      let resultVal = new Date();
-      const valueArr = value !== '' && getDatesStringsArray(value);
-      if (valueArr) {
-        if (variant === 'start') {
-          resultVal = valueArr[0] !== datePlaceholder ? getDateFromString(valueArr[0]) : new Date();
-        } else {
-          resultVal = valueArr[1] !== datePlaceholder ? getDateFromString(valueArr[1]) : new Date();
-        }
+      let selectedDate = new Date();
+      const datesArr = value !== '' && getDatesStringsArray(value);
+      if (datesArr) {
+        const index = variant === 'start' ? 0 : 1;
+        selectedDate =
+          datesArr[index] !== DATE_PLACEHOLDER ? getDateFromString(datesArr[index]) : new Date();
       }
 
-      return resultVal;
+      return selectedDate;
     }
   };
 
   const getMinMaxDate = (type: MinMaxDate) => {
-    const valueArr = value !== '' && getDatesStringsArray(value);
-    if (valueArr) {
-      const dateToUse = type === 'min' ? valueArr[0] : valueArr[1];
+    const datesArr = value !== '' && getDatesStringsArray(value);
+    if (datesArr) {
+      const dateToUse = type === MinMaxDate.min ? datesArr[0] : datesArr[1];
 
-      return dateToUse !== datePlaceholder ? getDateFromString(dateToUse) : undefined;
+      return dateToUse !== DATE_PLACEHOLDER ? getDateFromString(dateToUse) : undefined;
     }
   };
 
@@ -95,8 +93,8 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
       inline
       formatWeekDay={(nameOfDay) => nameOfDay.slice(0, 1)}
       renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
-      minDate={variant === 'end' ? getMinMaxDate('min') : undefined}
-      maxDate={variant === 'start' ? getMinMaxDate('max') : undefined}
+      minDate={variant === 'end' ? getMinMaxDate(MinMaxDate.min) : undefined}
+      maxDate={variant === 'start' ? getMinMaxDate(MinMaxDate.max) : undefined}
     />
   );
 
@@ -133,7 +131,7 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
           <>
             <StyledCollapseBtn
               sx={{
-                backgroundColor: showFirstCalendar
+                backgroundColor: firstCalendarVisible
                   ? variables.palette.surface_variant
                   : 'transparent',
               }}
@@ -143,10 +141,10 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
                 {t('selectStartingDate')}
               </StyledBodyLarge>
             </StyledCollapseBtn>
-            {showFirstCalendar && getDayPickerCalendar('start')}
+            {firstCalendarVisible && getDayPickerCalendar(DateVariant.start)}
             <StyledCollapseBtn
               sx={{
-                backgroundColor: showSecondCalendar
+                backgroundColor: secondCalendarVisible
                   ? variables.palette.surface_variant
                   : 'transparent',
               }}
@@ -156,7 +154,7 @@ export const DatePicker = ({ value, setValue, uiType = UiType.oneDate }: DatePic
                 {t('selectEndingDate')}
               </StyledBodyLarge>
             </StyledCollapseBtn>
-            {showSecondCalendar && getDayPickerCalendar('end')}
+            {secondCalendarVisible && getDayPickerCalendar(DateVariant.end)}
           </>
         )}
         <StyledButtons>

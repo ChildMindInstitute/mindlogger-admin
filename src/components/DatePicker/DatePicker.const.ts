@@ -1,1 +1,1 @@
-export const datePlaceholder = 'DDMMYYYY';
+export const DATE_PLACEHOLDER = 'DDMMYYYY';

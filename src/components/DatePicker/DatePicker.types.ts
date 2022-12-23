@@ -1,6 +1,12 @@
-export type DateVariant = 'start' | 'end';
+export enum DateVariant {
+  start = 'start',
+  end = 'end',
+}
 
-export type MinMaxDate = 'min' | 'max';
+export enum MinMaxDate {
+  min = 'min',
+  max = 'max',
+}
 
 export enum UiType {
   oneDate = 'oneDate',
