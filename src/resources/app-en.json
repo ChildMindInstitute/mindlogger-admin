@@ -150,5 +150,13 @@
   "selectStartingDate": "Select starting date",
   "selectEndingDate": "Select ending date",
   "date": "Date",
-  "startingEndingDate": "Starting/Ending date"
+  "startingEndingDate": "Starting/Ending date",
+  "oneTimeCompletion": "One-Time completion",
+  "activity*": "Activity*",
+  "save": "Save",
+  "scheduledAccess": "Scheduled access",
+  "alwaysAvailable": "Always available",
+  "availability": "Availability",
+  "timers": "Timers",
+  "notifications": "Notifications"
 }
