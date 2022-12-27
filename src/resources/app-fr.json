@@ -158,5 +158,20 @@
   "alwaysAvailable": "Always available",
   "availability": "Availability",
   "timers": "Timers",
-  "notifications": "Notifications"
+  "notifications": "Notifications",
+  "setTheLimit": "Fixer une limite de temps",
+  "sendNotifications": "Envoyer des notifications",
+  "addNotification": "Ajouter une notification",
+  "sendReminder": "Envoyer un rappel",
+  "addReminder": "Ajouter un rappel",
+  "fixed": "Fixé",
+  "random": "Aléatoire",
+  "at": "À",
+  "from": "De",
+  "to": "À",
+  "sendNotificationAtFixedTime": "Envoyer une notification à une heure fixe",
+  "sendNotificationAtRandomTime": "Envoyer une notification à un moment aléatoire dans un intervalle de temps",
+  "activityIncomplete": "Activité incomplète",
+  "reminderTime": "Heure de rappel",
+  "numberOfConsecutiveDays": "Nombre de jours consécutifs pendant lesquels l'utilisateur n'a pas terminé l'activité"
 }

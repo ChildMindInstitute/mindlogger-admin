@@ -32,6 +32,7 @@ export const CreateActivityPopup = ({ onClose, open }: CreateActivityPopupProps)
       onSubmit={() => null}
       title="Create Activity Schedule"
       buttonText={t('save')}
+      width="60"
     >
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <StyledModalWrapper>

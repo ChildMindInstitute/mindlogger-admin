@@ -1,0 +1,31 @@
+import { Box, Button } from '@mui/material';
+import { styled } from '@mui/system';
+
+import { Svg } from 'components/Svg';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import theme from 'styles/theme';
+import { variables } from 'styles/variables';
+
+export const StyledRow = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  margin-top: ${theme.spacing(2.4)};
+
+  &:last-of-type {
+    margin-top: ${theme.spacing(3.4)};
+  }
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
+`;
+
+export const StyledAddBtn = styled(Button)`
+  width: 20rem;
+  margin: ${theme.spacing(0.25, 0)};
+
+  svg {
+    fill: ${variables.palette.primary};
+  }
+`;

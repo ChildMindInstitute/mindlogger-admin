@@ -1,4 +1,5 @@
 import { Availability } from './Availability';
+import { NotificationsTab } from './NotificationsTab';
 import { ControlType } from './CreateActivityPopup.types';
 
 export const tabs = (control: ControlType) => [
@@ -12,6 +13,6 @@ export const tabs = (control: ControlType) => [
   },
   {
     labelKey: 'notifications',
-    content: <>3</>,
+    content: <NotificationsTab control={control} />,
   },
 ];

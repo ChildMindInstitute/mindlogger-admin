@@ -158,5 +158,20 @@
   "alwaysAvailable": "Always available",
   "availability": "Availability",
   "timers": "Timers",
-  "notifications": "Notifications"
+  "notifications": "Notifications",
+  "setTheLimit": "Set time limit",
+  "sendNotifications": "Send Notifications",
+  "addNotification": "Add Notification",
+  "sendReminder": "Send Reminder",
+  "addReminder": "Add Reminder",
+  "fixed": "Fixed",
+  "random": "Random",
+  "at": "At",
+  "from": "From",
+  "to": "To",
+  "sendNotificationAtFixedTime": "Send notification at a fixed time",
+  "sendNotificationAtRandomTime": "Send notification at a random time within a time interval",
+  "activityIncomplete": "Activity incomplete",
+  "reminderTime": "Reminder time",
+  "numberOfConsecutiveDays": "Number of consecutive days the user does not complete the activity"
 }
