@@ -133,5 +133,13 @@
   "activities": "Activités",
   "retainData": "Conserver les Données",
   "editApplet": "Modifier l'applet",
-  "addUsers": "Ajouter des Utilisateurs"
+  "addUsers": "Ajouter des Utilisateurs",
+  "oneTimeCompletion": "One-Time completion",
+  "activity*": "Activity*",
+  "save": "Save",
+  "scheduledAccess": "Scheduled access",
+  "alwaysAvailable": "Always available",
+  "availability": "Availability",
+  "timers": "Timers",
+  "notifications": "Notifications"
 }
