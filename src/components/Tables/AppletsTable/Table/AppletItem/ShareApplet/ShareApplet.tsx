@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   checkAppletNameInLibraryApi,
-  changeAppletNameApi,
   publishAppletToLibraryApi,
   getAppletLibraryUrlApi,
   updateAppletSearchTermsApi,
@@ -33,13 +32,10 @@ export const ShareApplet = ({
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const [title, setTitle] = useState(t('shareTheAppletWithTheLibrary'));
-  const [secondBtnVisible, setSecondBtnVisible] = useState(false);
   const [showNameTakenError, setShowNameTakenError] = useState(false);
   const [appletShared, setAppletShared] = useState(false);
-  const [appletUpdated, setAppletUpdated] = useState(false);
   const [libraryUrl, setLibraryUrl] = useState('');
   const [keywords, setKeywords] = useState<string[]>([]);
-  const [removedFromLibrary, setRemovedFromLibrary] = useState(false);
   const [mainBtnText, setMainBtnText] = useState(t('share'));
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -62,19 +58,15 @@ export const ShareApplet = ({
 
       if (checkResult?.data) {
         setIsLoading(true);
-        await checkAppletNameInLibraryApi({
-          appletId: applet.id || '',
-          appletName: getValues().appletName || '',
-        });
         await publishAppletToLibraryApi({
-          appletId: applet.id || '',
-        });
-        const libraryUrlResult = await getAppletLibraryUrlApi({
           appletId: applet.id || '',
         });
         await updateAppletSearchTermsApi({
           appletId: applet.id || '',
           params: { keywords: JSON.stringify(keywords) },
+        });
+        const libraryUrlResult = await getAppletLibraryUrlApi({
+          appletId: applet.id || '',
         });
 
         setLibraryUrl(libraryUrlResult?.data as string);
@@ -89,61 +81,6 @@ export const ShareApplet = ({
           }),
         );
       }
-    } catch (e) {
-      setErrorMessage(getErrorMessage(e));
-      setIsLoading(false);
-    }
-  };
-
-  const handleStopSharing = async () => {
-    try {
-      await publishAppletToLibraryApi({
-        appletId: applet.id || '',
-        publish: false,
-      });
-
-      setRemovedFromLibrary(true);
-      setSecondBtnVisible(false);
-      setMainBtnText(t('ok'));
-      setTitle(t('appletIsRemovedFromLibrary'));
-
-      dispatch(
-        folders.actions.updateAppletData({
-          appletId: applet.id,
-          published: false,
-        }),
-      );
-    } catch (e) {
-      setErrorMessage(getErrorMessage(e));
-    }
-  };
-
-  const handleUpdateSharedApplet = async () => {
-    try {
-      setIsLoading(true);
-      await changeAppletNameApi({
-        appletId: applet.id || '',
-        appletName: getValues().appletName || '',
-      });
-      await updateAppletSearchTermsApi({
-        appletId: applet.id || '',
-        params: { keywords: JSON.stringify(keywords) },
-      });
-      const libraryUrlResult = await getAppletLibraryUrlApi({
-        appletId: applet.id || '',
-      });
-
-      setIsLoading(false);
-      setLibraryUrl(libraryUrlResult?.data as string);
-      setAppletUpdated(true);
-
-      dispatch(
-        folders.actions.updateAppletData({
-          appletId: applet.id,
-          appletName: getValues().appletName,
-          published: true,
-        }),
-      );
     } catch (e) {
       setErrorMessage(getErrorMessage(e));
       setIsLoading(false);
@@ -175,33 +112,11 @@ export const ShareApplet = ({
   };
 
   useEffect(() => {
-    if (applet.published && !removedFromLibrary) {
-      (async () => {
-        const { getAppletSearchTerms } = folders.thunk;
-        const result = await dispatch(getAppletSearchTerms({ appletId: applet.id }));
-
-        if (getAppletSearchTerms.fulfilled.match(result)) {
-          setKeywords(result.payload.data.keywords);
-        }
-      })();
-
-      setTitle(t('updateSharedApplet'));
-      setMainBtnText(t('stopSharing'));
-      setSecondBtnVisible(true);
-    }
-
     if (appletShared) {
       setTitle(t('appletIsSharedWithLibrary'));
-      setSecondBtnVisible(false);
       setMainBtnText(t('ok'));
     }
-
-    if (appletUpdated) {
-      setTitle(t('appletIsUpdatedSuccessfully'));
-      setSecondBtnVisible(false);
-      setMainBtnText(t('ok'));
-    }
-  }, [applet, appletShared, appletUpdated, removedFromLibrary, dispatch, t]);
+  }, [appletShared, t]);
 
   let modalComponent: JSX.Element | null = (
     <>
@@ -244,7 +159,7 @@ export const ShareApplet = ({
         </StyledInputWrapper>
         {errorMessage && (
           <StyledInputWrapper>
-            <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>{' '}
+            <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>
           </StyledInputWrapper>
         )}
       </form>
@@ -267,22 +182,6 @@ export const ShareApplet = ({
       />
     );
     mainBtnSubmit = handleModalClose;
-  } else if (removedFromLibrary) {
-    modalComponent = null;
-    mainBtnSubmit = handleModalClose;
-  } else if (secondBtnVisible) {
-    mainBtnSubmit = handleSubmit(handleStopSharing);
-  } else if (appletUpdated) {
-    modalComponent = (
-      <SuccessShared
-        title={getValues().appletName || applet.name || ''}
-        text={applet.description || ''}
-        keywords={keywords}
-        appletLink={libraryUrl}
-        img={applet.image || ''}
-      />
-    );
-    mainBtnSubmit = handleModalClose;
   }
 
   return (
@@ -294,10 +193,6 @@ export const ShareApplet = ({
       buttonText={mainBtnText || ''}
       disabledSubmit={!checked}
       width="60"
-      hasSecondBtn={secondBtnVisible}
-      secondBtnText={t('updateInTheLibrary')}
-      onSecondBtnSubmit={handleSubmit(handleUpdateSharedApplet)}
-      disabledSecondBtn={!checked}
     >
       {modalComponent}
     </Modal>

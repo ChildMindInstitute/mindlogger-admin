@@ -8,7 +8,7 @@ import { FolderApplet, folders, popups } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Actions } from 'components/Actions';
 import { Pin } from 'components/Pin';
-import { appletPages } from 'utils/constants';
+import { APPLET_PAGES } from 'utils/constants';
 
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
@@ -23,7 +23,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
 
   const handleAppletClick = (id: string | undefined) => {
-    if (id) navigate(`/${id}/${appletPages.respondents}`);
+    if (id) navigate(`/${id}/${APPLET_PAGES.respondents}`);
   };
 
   const onDragStart = (event: DragEvent<HTMLTableRowElement>) => {
@@ -32,8 +32,8 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   };
 
   const actions = {
-    viewUsers: () => navigate(`/${item.id}/${appletPages.respondents}`),
-    viewCalendar: () => navigate(`/${item.id}/${appletPages.schedule}`),
+    viewUsers: () => navigate(`/${item.id}/${APPLET_PAGES.respondents}`),
+    viewCalendar: () => navigate(`/${item.id}/${APPLET_PAGES.schedule}`),
     deleteAction: () =>
       dispatch(
         popups.actions.setPopupVisible({
