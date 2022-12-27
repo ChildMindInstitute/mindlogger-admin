@@ -20,7 +20,7 @@ export const ToggleButtonGroup = ({
         <ToggleButton key={value} value={value}>
           {activeButton === value && (
             <StyledIcon>
-              <Svg id="check" width={24} height={24} />
+              <Svg id="check" />
             </StyledIcon>
           )}
           {label}

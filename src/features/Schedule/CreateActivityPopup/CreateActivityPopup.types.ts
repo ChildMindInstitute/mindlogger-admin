@@ -1,5 +1,3 @@
-import { Control } from 'react-hook-form/dist/types';
-
 export type CreateActivityPopupProps = {
   open: boolean;
   onClose: () => void;
@@ -7,8 +5,11 @@ export type CreateActivityPopupProps = {
 
 export type FormValues = {
   activity: string;
-  availability: string;
+  availability: boolean;
+  completion: boolean;
   oneTimeCompletion: boolean;
+  timeout: {
+    access: boolean;
+    allow: boolean;
+  };
 };
-
-export type ControlType = Control<FormValues>;

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import { SelectController } from 'components/FormComponents';
 import { Modal } from 'components/Popups';
@@ -12,8 +12,15 @@ import { tabs } from './CreateActivityPopup.const';
 
 export const CreateActivityPopup = ({ onClose, open }: CreateActivityPopupProps) => {
   const { t } = useTranslation('app');
-  const { handleSubmit, control } = useForm<FormValues>({
-    defaultValues: { activity: '', availability: 'Always available' },
+  const methods = useForm<FormValues>({
+    defaultValues: {
+      activity: '',
+      availability: true,
+      completion: false,
+      timeout: {
+        access: false,
+      },
+    },
     mode: 'onChange',
   });
 
@@ -34,18 +41,14 @@ export const CreateActivityPopup = ({ onClose, open }: CreateActivityPopupProps)
       buttonText={t('save')}
       width="60"
     >
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <StyledModalWrapper>
-          <SelectController
-            fullWidth
-            name="activity"
-            options={options}
-            label={t('activity*')}
-            control={control}
-          />
-        </StyledModalWrapper>
-        <Tabs tabs={tabs(control)} uiType={UiType.secondary} />
-      </form>
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+          <StyledModalWrapper>
+            <SelectController fullWidth name="activity" options={options} label={t('activity*')} />
+          </StyledModalWrapper>
+          <Tabs tabs={tabs} uiType={UiType.secondary} />
+        </form>
+      </FormProvider>
     </Modal>
   );
 };
