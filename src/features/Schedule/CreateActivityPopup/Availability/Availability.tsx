@@ -10,48 +10,64 @@ import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { options, togglebuttons } from './Availability.const';
+import { defaultValues } from '../CreateActivityPopup.const';
 import { ConnectForm } from '../context';
 
 export const Availability = () => {
   const { t } = useTranslation('app');
 
   const [activeButton, setActiveButton] = useState('');
-  const [time, setTime] = useState<Date | undefined | null>(new Date());
   const [date, setDate] = useState('');
 
   return (
     <ConnectForm>
-      {({ control }) => (
-        <>
-          <SelectController
-            name="availability"
-            fullWidth
-            options={options}
-            label=""
-            control={control}
-          />
-          <CheckboxController
-            name="completion"
-            control={control}
-            label={<StyledBodyMedium>{t('oneTimeCompletion')}</StyledBodyMedium>}
-          />
-          <ToggleButtonGroup
-            toggleButtons={togglebuttons}
-            activeButton={activeButton}
-            setActiveButton={setActiveButton}
-          />
-          <StyledFlexTopCenter>
-            <TimePicker value={time} setValue={setTime} label="From" />
-            <TimePicker value={time} setValue={setTime} label="To" />
-          </StyledFlexTopCenter>
-          <CheckboxController
-            name="timeout.access"
-            control={control}
-            label={<StyledBodyMedium>Allow access before “From” time</StyledBodyMedium>}
-          />
-          <DatePicker value={date} setValue={setDate} uiType={UiType.startEndingDate} />
-        </>
-      )}
+      {({ control, watch, reset }) => {
+        const availability = watch('availability');
+
+        return (
+          <>
+            <SelectController
+              name="availability"
+              fullWidth
+              options={options}
+              label=""
+              control={control}
+              customChange={(e) =>
+                reset({
+                  ...defaultValues,
+                  availability: e.target.value,
+                  activity: 'To-Be Mood',
+                })
+              }
+            />
+            {availability ? (
+              <CheckboxController
+                name="completion"
+                control={control}
+                label={<StyledBodyMedium>{t('oneTimeCompletion')}</StyledBodyMedium>}
+              />
+            ) : (
+              <>
+                <ToggleButtonGroup
+                  toggleButtons={togglebuttons}
+                  activeButton={activeButton}
+                  setActiveButton={setActiveButton}
+                />
+                <StyledFlexTopCenter>
+                  <TimePicker name="from" control={control} label="From" />
+                  <TimePicker name="to" control={control} label="To" />
+                </StyledFlexTopCenter>
+                <CheckboxController
+                  name="timeout.access"
+                  control={control}
+                  label={<StyledBodyMedium>Allow access before “From” time</StyledBodyMedium>}
+                />
+                <DatePicker value={date} setValue={setDate} uiType={UiType.startEndingDate} />
+              </>
+            )}
+          </>
+        );
+      }}
     </ConnectForm>
   );
 };

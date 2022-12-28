@@ -8,26 +8,19 @@ import { UiType } from 'components/Tabs/Tabs.types';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 
 import { CreateActivityPopupProps, FormValues } from './CreateActivityPopup.types';
-import { tabs } from './CreateActivityPopup.const';
+import { tabs, defaultValues } from './CreateActivityPopup.const';
 
 export const CreateActivityPopup = ({ onClose, open }: CreateActivityPopupProps) => {
   const { t } = useTranslation('app');
   const methods = useForm<FormValues>({
-    defaultValues: {
-      activity: '',
-      availability: true,
-      completion: false,
-      timeout: {
-        access: false,
-      },
-    },
+    defaultValues,
     mode: 'onChange',
   });
 
   const onSubmit = () => null;
   const options = [
     {
-      value: '',
+      value: 'To-Be Mood',
       labelKey: 'To-Be Mood',
     },
   ];

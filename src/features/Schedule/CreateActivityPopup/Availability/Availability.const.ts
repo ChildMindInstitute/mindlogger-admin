@@ -1,10 +1,10 @@
 export const options = [
   {
-    value: 'Always available',
+    value: true,
     labelKey: 'alwaysAvailable',
   },
   {
-    value: 'Scheduled access',
+    value: false,
     labelKey: 'scheduledAccess',
   },
 ];

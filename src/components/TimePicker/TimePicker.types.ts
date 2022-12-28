@@ -1,6 +1,9 @@
-export type TimePickerProps = {
-  value: Date | undefined | null;
-  setValue: (value: Date | undefined | null) => void;
+import { FieldValues, UseControllerProps } from 'react-hook-form';
+import { TextFieldProps } from '@mui/material/TextField';
+
+type TimePicker = {
+  name: string;
   timeIntervals?: number;
-  label: string;
-};
+} & TextFieldProps;
+
+export type TimePickerProps<T extends FieldValues> = TimePicker & UseControllerProps<T>;

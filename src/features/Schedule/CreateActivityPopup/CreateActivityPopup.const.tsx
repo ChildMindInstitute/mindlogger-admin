@@ -14,3 +14,14 @@ export const tabs = [
     content: <>3</>,
   },
 ];
+
+export const defaultValues = {
+  activity: '',
+  availability: true,
+  completion: false,
+  from: '',
+  to: '',
+  timeout: {
+    access: false,
+  },
+};
