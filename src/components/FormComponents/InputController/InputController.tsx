@@ -21,9 +21,9 @@ export const InputController = <T extends FieldValues>({
     name={name}
     control={control}
     render={({ field: { onChange, value }, fieldState: { error } }) => {
-      const handleAddNumber = () => onChange(value + 1);
+      const handleAddNumber = () => onChange(+value + 1);
       const handleDistractNumber = () => {
-        value > 1 && onChange(value - 1);
+        +value > 1 && onChange(+value - 1);
       };
 
       return (
@@ -31,7 +31,7 @@ export const InputController = <T extends FieldValues>({
           <StyledTextField
             {...textFieldProps}
             onChange={onChange}
-            value={value}
+            value={textFieldProps.type === 'number' && value < 1 ? 1 : value}
             error={!!error || providedError}
             helperText={error ? error.message : null}
             InputProps={
