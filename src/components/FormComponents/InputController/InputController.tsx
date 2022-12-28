@@ -3,6 +3,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { Svg } from 'components/Svg';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
+import { Tooltip, TooltipUiType } from 'components/Tooltip';
 
 import { InputControllerProps } from './InputController.types';
 import { StyledTextField, StyledUpDown, StyledAdornment } from './InputController.styles';
@@ -13,6 +14,7 @@ export const InputController = <T extends FieldValues>({
   error: providedError,
   endTextAdornmentSingular,
   endTextAdornmentPlural,
+  tooltip,
   ...textFieldProps
 }: InputControllerProps<T>) => (
   <Controller
@@ -25,7 +27,7 @@ export const InputController = <T extends FieldValues>({
       };
 
       return (
-        <>
+        <Tooltip uiType={TooltipUiType.secondary} tooltipTitle={tooltip}>
           <StyledTextField
             {...textFieldProps}
             onChange={onChange}
@@ -56,7 +58,7 @@ export const InputController = <T extends FieldValues>({
                 : undefined
             }
           />
-        </>
+        </Tooltip>
       );
     }}
   />

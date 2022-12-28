@@ -37,6 +37,7 @@ export const Reminder = ({ reminderTime }: { reminderTime: Date | null }) => {
           InputProps={{ inputProps: { min: 1 } }}
           endTextAdornmentSingular={t('day')}
           endTextAdornmentPlural={t('days')}
+          tooltip={t('numberOfConsecutiveDays')}
         />
       </StyledInputWrapper>
       <TimePicker
