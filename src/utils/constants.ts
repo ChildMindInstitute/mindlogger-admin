@@ -7,8 +7,8 @@ export const APPLET_PAGES = {
   respondents: 'respondents',
   managers: 'managers',
   schedule: 'schedule',
-  more: 'more',
-  addUser: 'more/add-user',
+  settings: 'settings',
+  addUser: 'add-user',
 };
 
 export const DAY_FORMAT = 'dd MMM yyyy';

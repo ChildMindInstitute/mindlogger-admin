@@ -8,7 +8,7 @@ const Login = lazy(() => import('pages/Login'));
 const ResetPassword = lazy(() => import('pages/ResetPassword'));
 const SignUp = lazy(() => import('pages/SignUp'));
 const AddUser = lazy(() => import('components/AddUser'));
-const More = lazy(() => import('pages/Applet/More'));
+const AppletSettings = lazy(() => import('components/AppletSettings'));
 
 export const authRoutes = [
   {
@@ -39,8 +39,8 @@ export const appletRoutes = [
     Component: Schedule,
   },
   {
-    path: page.appletMore,
-    Component: More,
+    path: page.appletSettings,
+    Component: AppletSettings,
   },
   {
     path: page.appletAddUser,

@@ -50,7 +50,7 @@
   "respondents": "Répondants",
   "managers": "Gestionnaires",
   "more": "Suite",
-  "schedule": "Calendrier",
+  "generalSchedule": "Calendrier",
   "show": "Voir",
   "addApplet": "Ajouter un Applet",
   "alerts": "Alertes",
@@ -150,5 +150,16 @@
   "selectStartingDate": "Sélectionnez la date de début",
   "selectEndingDate": "Sélectionnez la date de fin",
   "date": "Date",
-  "startingEndingDate": "Date de début/fin"
+  "startingEndingDate": "Date de début/fin",
+  "appletSettings": "Applet Settings",
+  "usersAndData": "Users and Data",
+  "appletContent": "Applet Content",
+  "reports": "Reports",
+  "sharing": "Sharing",
+  "transferDelete": "Transfer/Delete",
+  "dataRetention": "Data retention",
+  "downloadSchema": "Download Schema",
+  "versionHistory": "Version History",
+  "reportConfiguration": "Report configuration",
+  "shareToLibrary": "Share to Library"
 }

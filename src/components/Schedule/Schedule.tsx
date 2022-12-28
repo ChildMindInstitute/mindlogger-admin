@@ -9,7 +9,7 @@ export const Schedule = (): JSX.Element => {
   useBreadcrumbs([
     {
       icon: <Svg id="schedule-outlined" width="14" height="14" />,
-      label: t('schedule'),
+      label: t('generalSchedule'),
     },
   ]);
 
