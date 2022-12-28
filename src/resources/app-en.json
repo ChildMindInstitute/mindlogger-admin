@@ -50,7 +50,7 @@
   "managers": "Managers",
   "respondents": "Respondents",
   "more": "More",
-  "schedule": "Schedule",
+  "generalSchedule": " General Schedule",
   "show": "Show",
   "addApplet": "Add Applet",
   "alerts": "Alerts",
@@ -150,5 +150,16 @@
   "selectStartingDate": "Select starting date",
   "selectEndingDate": "Select ending date",
   "date": "Date",
-  "startingEndingDate": "Starting/Ending date"
+  "startingEndingDate": "Starting/Ending date",
+  "appletSettings": "Applet Settings",
+  "usersAndData": "Users and Data",
+  "appletContent": "Applet Content",
+  "reports": "Reports",
+  "sharing": "Sharing",
+  "transferDelete": "Transfer/Delete",
+  "dataRetention": "Data retention",
+  "downloadSchema": "Download Schema",
+  "versionHistory": "Version History",
+  "reportConfiguration": "Report configuration",
+  "shareToLibrary": "Share to Library"
 }
