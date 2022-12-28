@@ -9,14 +9,14 @@ import { DatePicker, UiType } from 'components/DatePicker';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
-import { options, togglebuttons } from './Availability.const';
+import { options, repeatsButtons } from './Availability.const';
 import { defaultValues } from '../CreateActivityPopup.const';
 import { ConnectForm } from '../context';
 
 export const Availability = () => {
   const { t } = useTranslation('app');
 
-  const [activeButton, setActiveButton] = useState('');
+  const [activeRepeat, setActiveRepeat] = useState('');
   const [date, setDate] = useState('');
 
   return (
@@ -49,9 +49,9 @@ export const Availability = () => {
             ) : (
               <>
                 <ToggleButtonGroup
-                  toggleButtons={togglebuttons}
-                  activeButton={activeButton}
-                  setActiveButton={setActiveButton}
+                  toggleButtons={repeatsButtons}
+                  activeButton={activeRepeat}
+                  setActiveButton={setActiveRepeat}
                 />
                 <StyledFlexTopCenter>
                   <TimePicker name="from" control={control} label="From" />
@@ -62,7 +62,11 @@ export const Availability = () => {
                   control={control}
                   label={<StyledBodyMedium>Allow access before “From” time</StyledBodyMedium>}
                 />
-                <DatePicker value={date} setValue={setDate} uiType={UiType.startEndingDate} />
+                <DatePicker
+                  value={date}
+                  setValue={setDate}
+                  uiType={activeRepeat !== 'once' ? UiType.startEndingDate : UiType.oneDate}
+                />
               </>
             )}
           </>

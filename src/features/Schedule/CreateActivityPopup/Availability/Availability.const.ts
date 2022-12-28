@@ -9,7 +9,7 @@ export const options = [
   },
 ];
 
-export const togglebuttons = [
+export const repeatsButtons = [
   {
     value: 'once',
     label: 'Once',
