@@ -1,9 +1,6 @@
 import { Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
-import { Svg } from 'components/Svg';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 

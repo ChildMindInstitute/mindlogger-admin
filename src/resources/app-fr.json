@@ -135,13 +135,6 @@
   "retainData": "Conserver les Données",
   "editApplet": "Modifier l'applet",
   "addUsers": "Ajouter des Utilisateurs",
-  "oneTimeCompletion": "One-Time completion",
-  "activity*": "Activity*",
-  "save": "Save",
-  "scheduledAccess": "Scheduled access",
-  "alwaysAvailable": "Always available",
-  "availability": "Availability",
-  "timers": "Timers",
   "notifications": "Notifications",
   "jan": "janv",
   "feb": "févr",
@@ -166,7 +159,6 @@
   "alwaysAvailable": "Always available",
   "availability": "Availability",
   "timers": "Timers",
-  "notifications": "Notifications",
   "setTheLimit": "Fixer une limite de temps",
   "sendNotifications": "Envoyer des notifications",
   "addNotification": "Ajouter une notification",
@@ -181,5 +173,8 @@
   "sendNotificationAtRandomTime": "Envoyer une notification à un moment aléatoire dans un intervalle de temps",
   "activityIncomplete": "Activité incomplète",
   "reminderTime": "Heure de rappel",
-  "numberOfConsecutiveDays": "Nombre de jours consécutifs pendant lesquels l'utilisateur n'a pas terminé l'activité"
+  "numberOfConsecutiveDays": "Nombre de jours consécutifs pendant lesquels l'utilisateur n'a pas terminé l'activité",
+  "notification": "Notification",
+  "day": "journée",
+  "days": "jours"
 }

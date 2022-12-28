@@ -6,8 +6,14 @@ import { Svg } from 'components/Svg';
 import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';
 import { TimePickerProps } from './TimePicker.types';
 
-export const TimePicker = ({ value, setValue, timeIntervals = 15, label }: TimePickerProps) => (
-  <StyledTimePickerWrapper>
+export const TimePicker = ({
+  value,
+  setValue,
+  timeIntervals = 15,
+  label,
+  width,
+}: TimePickerProps) => (
+  <StyledTimePickerWrapper width={width}>
     <ReactDatePicker
       className="date-picker"
       selected={value}

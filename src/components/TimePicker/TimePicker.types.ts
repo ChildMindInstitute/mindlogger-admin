@@ -3,4 +3,5 @@ export type TimePickerProps = {
   setValue: (value: Date | undefined | null) => void;
   timeIntervals?: number;
   label: string;
+  width?: number;
 };

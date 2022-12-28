@@ -1,5 +1,9 @@
-import { ControlType } from '../../CreateActivityPopup.types';
+import { SendNotification } from '../../CreateActivityPopup.types';
 
-export type AvailabilityProps = {
-  control: ControlType;
-};
+export enum NotificationTimeType {
+  timeAt = 'timeAt',
+  timeFrom = 'timeFrom',
+  timeTo = 'timeTo',
+}
+
+export type NotificationProps = SendNotification & { index: number };

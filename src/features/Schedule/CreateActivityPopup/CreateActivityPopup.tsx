@@ -20,6 +20,10 @@ export const CreateActivityPopup = ({ onClose, open }: CreateActivityPopupProps)
       timeout: {
         access: false,
       },
+      notifications: {
+        sendNotifications: null,
+        sendReminder: null,
+      },
     },
     mode: 'onChange',
   });
@@ -42,7 +46,7 @@ export const CreateActivityPopup = ({ onClose, open }: CreateActivityPopupProps)
       width="60"
     >
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+        <form onSubmit={methods.handleSubmit(onSubmit)} noValidate autoComplete="off">
           <StyledModalWrapper>
             <SelectController fullWidth name="activity" options={options} label={t('activity*')} />
           </StyledModalWrapper>

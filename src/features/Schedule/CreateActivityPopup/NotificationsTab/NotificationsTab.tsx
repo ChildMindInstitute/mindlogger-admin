@@ -1,20 +1,48 @@
-import { Button } from '@mui/material';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
 import theme from 'styles/theme';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { SelectController } from 'components/FormComponents';
-import { CheckboxController } from 'components/FormComponents';
 import { StyledBodyMedium, StyledTitleMedium } from 'styles/styledComponents/Typography';
 
-// import { options } from './Notification.utils';
-import { AvailabilityProps } from './NotificationsTab.types';
 import { StyledRow, StyledAddBtn } from './NotificationsTab.styles';
 import { Notification } from './Notification';
+import { FormValues, SendNotification, SendNotificationType } from '../CreateActivityPopup.types';
+import { Reminder } from './Reminder';
 
-export const NotificationsTab = ({ control }: AvailabilityProps) => {
+export const NotificationsTab = () => {
   const { t } = useTranslation('app');
+  const { setValue, watch } = useFormContext<FormValues>();
+  const notifications = watch('notifications');
+  const { sendNotifications, sendReminder } = notifications;
+
+  const handleAddNotification = () => {
+    const newNotifications = {
+      ...notifications,
+      sendNotifications: [
+        ...(sendNotifications || []),
+        {
+          type: SendNotificationType.fixed,
+          timeAt: null,
+        },
+      ],
+    };
+
+    setValue('notifications', newNotifications);
+  };
+
+  const handleAddReminder = () => {
+    const newNotifications = {
+      ...notifications,
+      sendReminder: {
+        activityIncomplete: 1,
+        reminderTime: null,
+      },
+    };
+
+    setValue('notifications', newNotifications);
+  };
 
   return (
     <>
@@ -26,10 +54,16 @@ export const NotificationsTab = ({ control }: AvailabilityProps) => {
             {t('sendNotifications')}
           </StyledTitleMedium>
         </StyledFlexTopCenter>
-        <StyledAddBtn variant="text" startIcon={<Svg width="18" height="18" id="add" />}>
+        {sendNotifications?.map((item: SendNotification, index: number) => (
+          <Notification key={index} index={index} {...item} />
+        ))}
+        <StyledAddBtn
+          variant="text"
+          startIcon={<Svg width="18" height="18" id="add" />}
+          onClick={handleAddNotification}
+        >
           {t('addNotification')}
         </StyledAddBtn>
-        <Notification control={control} />
       </StyledRow>
       <StyledRow>
         <StyledFlexTopCenter>
@@ -38,9 +72,16 @@ export const NotificationsTab = ({ control }: AvailabilityProps) => {
             {t('sendReminder')}
           </StyledTitleMedium>
         </StyledFlexTopCenter>
-        <StyledAddBtn variant="text" startIcon={<Svg width="18" height="18" id="add" />}>
-          {t('addReminder')}
-        </StyledAddBtn>
+        {sendReminder && <Reminder {...sendReminder} />}
+        {!sendReminder && (
+          <StyledAddBtn
+            variant="text"
+            startIcon={<Svg width="18" height="18" id="add" />}
+            onClick={handleAddReminder}
+          >
+            {t('addReminder')}
+          </StyledAddBtn>
+        )}
       </StyledRow>
     </>
   );
