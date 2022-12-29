@@ -5,7 +5,7 @@ import { APPLET_PAGES } from 'utils/constants';
 
 export const useAppletTabs = () => {
   const { id } = useParams();
-  const { respondents, managers, more, schedule } = APPLET_PAGES;
+  const { respondents, managers, addUser, settings, schedule } = APPLET_PAGES;
 
   return [
     {
@@ -21,17 +21,23 @@ export const useAppletTabs = () => {
       path: `/${id}/${managers}`,
     },
     {
-      labelKey: 'schedule',
+      labelKey: 'addUsers',
+      icon: <Svg id="add-users-outlined" />,
+      activeIcon: <Svg id="add-users-filled" />,
+      isMinHeightAuto: true,
+      path: `/${id}/${addUser}`,
+    },
+    {
+      labelKey: 'generalSchedule',
       icon: <Svg id="schedule-outlined" />,
       activeIcon: <Svg id="schedule-filled" />,
       path: `/${id}/${schedule}`,
     },
     {
-      labelKey: 'more',
-      icon: <Svg id="dots" />,
-      activeIcon: <Svg id="dots-filled" />,
-      isMinHeightAuto: true,
-      path: `/${id}/${more}`,
+      labelKey: 'appletSettings',
+      icon: <Svg id="settings" />,
+      activeIcon: <Svg id="settings" />,
+      path: `/${id}/${settings}`,
     },
   ];
 };

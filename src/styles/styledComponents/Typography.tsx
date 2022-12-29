@@ -13,6 +13,14 @@ type StyledProps = {
   letterSpacing?: LetterSpacing;
 };
 
+export const StyledHeadlineLarge = styled(Typography)`
+  font-size: ${variables.font.size.xxxl};
+  line-height: ${variables.lineHeight.xxxl};
+  font-weight: ${({ fontWeight }: StyledProps) =>
+    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
+  color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
+`;
+
 export const StyledHeadline = styled(Typography)`
   font-size: ${variables.font.size.xxl};
   line-height: ${variables.lineHeight.xxl};

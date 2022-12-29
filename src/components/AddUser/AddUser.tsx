@@ -9,7 +9,6 @@ import { useAppDispatch } from 'redux/store';
 import { users } from 'redux/modules';
 import { getErrorMessage } from 'utils/errors';
 import { useBreadcrumbs } from 'hooks';
-import { APPLET_PAGES } from 'utils/constants';
 
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
@@ -23,11 +22,6 @@ export const AddUser = () => {
   const [rows, setRows] = useState<Row[]>([]);
 
   useBreadcrumbs([
-    {
-      icon: <Svg id="dots-filled" width="15" height="15" />,
-      label: t('more'),
-      navPath: `/${id}/${APPLET_PAGES.more}`,
-    },
     {
       icon: <Svg id="users-outlined" width="15" height="15" />,
       label: t('addUser'),

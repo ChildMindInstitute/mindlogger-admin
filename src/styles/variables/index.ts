@@ -5,6 +5,7 @@ export const variables = {
   palette,
   font,
   lineHeight: {
+    xxxl: '4rem', //40px
     xxl: '3.2rem', //32px
     xl: '2.8rem', //28px
     lg: '2.4rem', //24px
@@ -48,6 +49,7 @@ export const variables = {
   },
   transitions: {
     all: 'all 0.3s',
+    allLong: 'all 1s',
     bgColor: 'background-color 0.3s',
     border: 'border 0.15s',
   },

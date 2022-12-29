@@ -7,8 +7,8 @@
   "appletRespondents": "/:id/respondents",
   "appletManagers": "/:id/managers",
   "appletSchedule": "/:id/schedule",
-  "appletMore": "/:id/more",
-  "appletAddUser": "/:id/more/add-user",
+  "appletSettings": "/:id/settings",
+  "appletAddUser": "/:id/add-user",
   "builder": "/builder",
   "library": "/library"
 }
