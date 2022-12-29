@@ -136,7 +136,7 @@
   "editApplet": "Edit Applet",
   "addUsers": "Add Users",
   "oneTimeCompletion": "One-Time completion",
-  "requireActivity": "Activity*",
+  "activity": "Activity",
   "save": "Save",
   "scheduledAccess": "Scheduled access",
   "alwaysAvailable": "Always available",
