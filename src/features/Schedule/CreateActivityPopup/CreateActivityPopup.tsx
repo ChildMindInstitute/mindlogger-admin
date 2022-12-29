@@ -37,7 +37,7 @@ export const CreateActivityPopup = ({ onClose, open }: CreateActivityPopupProps)
               fullWidth
               name="activity"
               options={activities}
-              label={t('activity*')}
+              label={t('requireActivity')}
             />
           </StyledModalWrapper>
           <Tabs tabs={tabs} uiType={UiType.secondary} />

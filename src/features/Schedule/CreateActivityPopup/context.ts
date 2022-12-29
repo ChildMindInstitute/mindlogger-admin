@@ -1,6 +1,4 @@
-import { useFormContext } from 'react-hook-form';
-import { FieldValues } from 'react-hook-form/dist/types/fields';
-import { UseFormReturn } from 'react-hook-form/dist/types/form';
+import { useFormContext, FieldValues, UseFormReturn } from 'react-hook-form';
 
 export const ConnectForm = ({
   children,

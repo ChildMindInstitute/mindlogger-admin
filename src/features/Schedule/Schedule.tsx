@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { Svg } from 'components/Svg';
 import { useBreadcrumbs } from 'hooks';
-import { useState } from 'react';
+
 import { CreateActivityPopup } from './CreateActivityPopup';
 
 export const Schedule = () => {
