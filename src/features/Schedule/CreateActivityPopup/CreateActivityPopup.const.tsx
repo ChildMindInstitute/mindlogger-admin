@@ -8,10 +8,32 @@ export const tabs = [
   },
   {
     labelKey: 'timers',
-    content: <>2</>,
+    content: <>timers</>,
   },
   {
     labelKey: 'notifications',
     content: <NotificationsTab />,
   },
 ];
+
+export const activities = [
+  {
+    value: 'a',
+    labelKey: 'A',
+  },
+];
+
+export const defaultValues = {
+  activity: activities[0].value,
+  availability: true,
+  completion: false,
+  from: '',
+  to: '',
+  date: '',
+  startEndingDate: '',
+  timeout: {
+    access: false,
+  },
+  notifications: [],
+  reminder: null,
+};

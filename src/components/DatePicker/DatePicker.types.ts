@@ -1,3 +1,6 @@
+import { FieldValues, UseControllerProps } from 'react-hook-form';
+import { TextFieldProps } from '@mui/material/TextField';
+
 export enum DateVariant {
   start = 'start',
   end = 'end',
@@ -13,8 +16,9 @@ export enum UiType {
   startEndingDate = 'startEndingDate',
 }
 
-export type DatePickerProps = {
-  value: string;
-  setValue: (value: string) => void;
+type DatePicker = {
+  name: string;
   uiType?: UiType;
-};
+} & TextFieldProps;
+
+export type DatePickerProps<T extends FieldValues> = DatePicker & UseControllerProps<T>;

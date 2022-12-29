@@ -3,7 +3,7 @@ import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
 
 export type Option = {
-  value: string;
+  value: string | boolean;
   labelKey: string;
 };
 

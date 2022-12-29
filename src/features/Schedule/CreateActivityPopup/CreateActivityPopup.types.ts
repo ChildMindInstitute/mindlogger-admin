@@ -22,12 +22,11 @@ export type FormValues = {
   availability: boolean;
   completion: boolean;
   oneTimeCompletion: boolean;
+  notifications: SendNotification[] | null;
+  reminder: SendReminder | null;
+  date: string;
+  startEndingDate: string;
   timeout: {
     access: boolean;
-    allow: boolean;
-  };
-  notifications: {
-    sendNotifications: SendNotification[] | null;
-    sendReminder: SendReminder | null;
   };
 };

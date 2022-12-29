@@ -50,7 +50,7 @@
   "managers": "Managers",
   "respondents": "Respondents",
   "more": "More",
-  "schedule": "Schedule",
+  "generalSchedule": " General Schedule",
   "show": "Show",
   "addApplet": "Add Applet",
   "alerts": "Alerts",
@@ -135,7 +135,28 @@
   "retainData": "Retain Data",
   "editApplet": "Edit Applet",
   "addUsers": "Add Users",
+<<<<<<< HEAD
   "notifications": "Notifications",
+=======
+  "oneTimeCompletion": "One-Time completion",
+  "activity": "Activity",
+  "save": "Save",
+  "scheduledAccess": "Scheduled access",
+  "alwaysAvailable": "Always available",
+  "availability": "Availability",
+  "timers": "Timers",
+  "notifications": "Notifications",
+  "usersCanAccessActivity": "Users can access this activity:",
+  "from": "From",
+  "to": "To",
+  "allowAccessBeforeTime": "Allow access before “From” time",
+  "once": "Once",
+  "daily": "Daily",
+  "weekly": "Weekly",
+  "weekdays": "Weekdays",
+  "monthly": "Monthly",
+  "createActivitySchedule": "Create Activity Schedule",
+>>>>>>> develop
   "jan": "Jan",
   "feb": "Feb",
   "mar": "Mar",
@@ -152,6 +173,7 @@
   "selectEndingDate": "Select ending date",
   "date": "Date",
   "startingEndingDate": "Starting/Ending date",
+<<<<<<< HEAD
   "oneTimeCompletion": "One-Time completion",
   "activity*": "Activity*",
   "save": "Save",
@@ -177,4 +199,17 @@
   "notification": "Notification",
   "day": "day",
   "days": "days"
+=======
+  "appletSettings": "Applet Settings",
+  "usersAndData": "Users and Data",
+  "appletContent": "Applet Content",
+  "reports": "Reports",
+  "sharing": "Sharing",
+  "transferDelete": "Transfer/Delete",
+  "dataRetention": "Data retention",
+  "downloadSchema": "Download Schema",
+  "versionHistory": "Version History",
+  "reportConfiguration": "Report configuration",
+  "shareToLibrary": "Share to Library"
+>>>>>>> develop
 }

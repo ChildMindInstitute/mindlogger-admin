@@ -28,7 +28,7 @@ export const SelectController = <T extends FieldValues>({
           value={value}
         >
           {options?.map(({ labelKey, value }) => (
-            <MenuItem key={value} value={value}>
+            <MenuItem key={labelKey} value={value as string}>
               {t(labelKey)}
             </MenuItem>
           ))}
