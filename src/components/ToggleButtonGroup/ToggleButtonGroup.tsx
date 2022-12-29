@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ToggleButton, ToggleButtonGroup as MuiToggleButtonGroup } from '@mui/material';
 
 import { Svg } from 'components/Svg';
@@ -9,8 +10,12 @@ export const ToggleButtonGroup = ({
   toggleButtons,
   activeButton,
   setActiveButton,
+  customChange,
 }: ToggleButtonGroupProps) => {
+  const { t } = useTranslation('app');
+
   const handleChange = (event: React.MouseEvent<HTMLElement>, selected: string) => {
+    customChange && customChange(selected);
     setActiveButton(selected);
   };
 
@@ -20,10 +25,10 @@ export const ToggleButtonGroup = ({
         <ToggleButton key={value} value={value}>
           {activeButton === value && (
             <StyledIcon>
-              <Svg id="check" width={24} height={24} />
+              <Svg id="check" />
             </StyledIcon>
           )}
-          {label}
+          {t(label)}
         </ToggleButton>
       ))}
     </MuiToggleButtonGroup>

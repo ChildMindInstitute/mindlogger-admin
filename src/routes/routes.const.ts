@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 import { page } from 'resources';
 import { ManagersTable, RespondentsTable } from 'components/Tables';
-import { Schedule } from 'components/Schedule';
+import { Schedule } from 'features/Schedule';
 
 const Login = lazy(() => import('pages/Login'));
 const ResetPassword = lazy(() => import('pages/ResetPassword'));

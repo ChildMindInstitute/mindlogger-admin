@@ -79,7 +79,7 @@ export const StyledPopover = styled(Popover)`
 `;
 
 export const StyledTextField = styled(TextField)`
-  min-width: 40rem;
+  min-width: 20rem;
 
   .MuiInputBase-root {
     padding-right: ${theme.spacing(0.5)};
