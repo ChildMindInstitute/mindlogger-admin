@@ -1,72 +1,95 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SelectController } from 'components/FormComponents';
 import { CheckboxController } from 'components/FormComponents';
-import { ToggleButtonGroup } from 'components/ToggleButtonGroup';
-import { TimePicker } from 'components/TimePicker';
-import { DatePicker, UiType } from 'components/DatePicker';
+import { TimePicker, DatePicker, UiType, ToggleButtonGroup } from 'components';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
-import { options, repeatsButtons } from './Availability.const';
+import { availabilityOptions, repeatsButtons, Repeats } from './Availability.const';
 import { defaultValues } from '../CreateActivityPopup.const';
 import { ConnectForm } from '../context';
+import { StyledButtonsTitle, StyledTimeWrapper, StyledWrapper } from './Availability.styles';
 
 export const Availability = () => {
   const { t } = useTranslation('app');
-
-  const [activeRepeat, setActiveRepeat] = useState('');
-  const [date, setDate] = useState('');
+  const [activeRepeat, setActiveRepeat] = useState<string>(Repeats.once);
 
   return (
     <ConnectForm>
-      {({ control, watch, reset }) => {
+      {({ control, watch, reset, getValues, register, unregister }) => {
         const availability = watch('availability');
+
+        const updateDateFieled = (val: string) => {
+          if (val !== Repeats.once) {
+            unregister('date');
+            register('startEndingDate', { value: '' });
+          } else {
+            unregister('startEndingDate');
+            register('date', { value: '' });
+          }
+        };
+
+        const availabilityOnChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+          reset({
+            ...defaultValues,
+            availability: e.target.value,
+            activity: getValues('activity'),
+          });
+        };
 
         return (
           <>
             <SelectController
               name="availability"
               fullWidth
-              options={options}
+              options={availabilityOptions}
               label=""
               control={control}
-              customChange={(e) =>
-                reset({
-                  ...defaultValues,
-                  availability: e.target.value,
-                  activity: 'To-Be Mood',
-                })
-              }
+              customChange={availabilityOnChange}
             />
             {availability ? (
-              <CheckboxController
-                name="completion"
-                control={control}
-                label={<StyledBodyMedium>{t('oneTimeCompletion')}</StyledBodyMedium>}
-              />
+              <StyledWrapper>
+                <CheckboxController
+                  name="completion"
+                  control={control}
+                  label={<StyledBodyMedium>{t('oneTimeCompletion')}</StyledBodyMedium>}
+                />
+              </StyledWrapper>
             ) : (
               <>
-                <ToggleButtonGroup
-                  toggleButtons={repeatsButtons}
-                  activeButton={activeRepeat}
-                  setActiveButton={setActiveRepeat}
-                />
+                <StyledWrapper>
+                  <StyledButtonsTitle>{t('usersCanAccessActivity')}</StyledButtonsTitle>
+                  <ToggleButtonGroup
+                    toggleButtons={repeatsButtons}
+                    activeButton={activeRepeat}
+                    setActiveButton={setActiveRepeat}
+                    customChange={updateDateFieled}
+                  />
+                </StyledWrapper>
                 <StyledFlexTopCenter>
-                  <TimePicker name="from" control={control} label="From" />
-                  <TimePicker name="to" control={control} label="To" />
+                  <StyledTimeWrapper>
+                    <TimePicker name="from" control={control} label={t('from')} />
+                  </StyledTimeWrapper>
+                  <TimePicker name="to" control={control} label={t('to')} />
                 </StyledFlexTopCenter>
-                <CheckboxController
-                  name="timeout.access"
-                  control={control}
-                  label={<StyledBodyMedium>Allow access before “From” time</StyledBodyMedium>}
-                />
-                <DatePicker
-                  value={date}
-                  setValue={setDate}
-                  uiType={activeRepeat !== 'once' ? UiType.startEndingDate : UiType.oneDate}
-                />
+                <StyledWrapper>
+                  <CheckboxController
+                    name="timeout.access"
+                    control={control}
+                    label={<StyledBodyMedium>{t('allowAccessBeforeTime')}</StyledBodyMedium>}
+                  />
+                </StyledWrapper>
+                {activeRepeat !== Repeats.once ? (
+                  <DatePicker
+                    name="startEndingDate"
+                    control={control}
+                    uiType={UiType.startEndingDate}
+                  />
+                ) : (
+                  <DatePicker name="date" control={control} uiType={UiType.oneDate} />
+                )}
               </>
             )}
           </>

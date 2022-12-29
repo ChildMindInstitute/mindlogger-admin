@@ -1,4 +1,4 @@
-export const options = [
+export const availabilityOptions = [
   {
     value: true,
     labelKey: 'alwaysAvailable',
@@ -9,25 +9,33 @@ export const options = [
   },
 ];
 
+export const enum Repeats {
+  once = 'once',
+  daily = 'daily',
+  weekly = 'weekly',
+  weekdays = 'weekdays',
+  monthly = 'monthly',
+}
+
 export const repeatsButtons = [
   {
-    value: 'once',
+    value: Repeats.once,
     label: 'Once',
   },
   {
-    value: 'Daily',
+    value: Repeats.daily,
     label: 'Daily',
   },
   {
-    value: 'Weekly',
+    value: Repeats.weekly,
     label: 'Weekly',
   },
   {
-    value: 'Weekdays',
+    value: Repeats.weekdays,
     label: 'Weekdays',
   },
   {
-    value: 'Monthly',
+    value: Repeats.monthly,
     label: 'Monthly',
   },
 ];

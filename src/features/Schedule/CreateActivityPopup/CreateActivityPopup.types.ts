@@ -8,8 +8,9 @@ export type FormValues = {
   availability: boolean;
   completion: boolean;
   oneTimeCompletion: boolean;
+  date: string;
+  startEndingDate: string;
   timeout: {
     access: boolean;
-    allow: boolean;
   };
 };
