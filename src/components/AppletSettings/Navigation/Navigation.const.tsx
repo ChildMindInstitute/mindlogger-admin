@@ -1,4 +1,7 @@
 import { Svg } from 'components/Svg';
+import { EditApplet } from 'features/EditApplet';
+import { ExportData } from 'features/ExportData';
+import { DeleteApplet } from 'features/DeleteApplet';
 
 export const navigationItems = [
   {
@@ -7,7 +10,7 @@ export const navigationItems = [
       {
         icon: <Svg id="export" />,
         label: 'exportData',
-        component: <>exportData</>,
+        component: <ExportData />,
       },
       {
         icon: <Svg id="data-retention" />,
@@ -22,7 +25,7 @@ export const navigationItems = [
       {
         icon: <Svg id="edit-applet" />,
         label: 'editApplet',
-        component: <>editApplet</>,
+        component: <EditApplet />,
       },
       {
         icon: <Svg id="schema" />,
@@ -67,7 +70,7 @@ export const navigationItems = [
       {
         icon: <Svg id="trash" />,
         label: 'deleteApplet',
-        component: <>deleteApplet</>,
+        component: <DeleteApplet />,
       },
     ],
   },

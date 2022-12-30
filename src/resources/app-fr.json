@@ -103,7 +103,7 @@
   "shareWithTheLibrary": "Partager avec la bibliothèque",
   "incorrectAppletPassword": "Mot de passe de l'applet incorrect",
   "noAlerts": "Pas d'alertes",
-  "confirmDeleteApplet": "Êtes-vous sûr de vouloir supprimer cette applet?",
+  "confirmDeleteApplet": "Êtes-vous sûr de vouloir supprimer cette applet ? Vous ne pourrez pas le restaurer.",
   "dismiss": "Rejeter",
   "appletDuplication": "Duplication de l'applet",
   "successDuplication": "L'applet est en cours de duplication. Nous vous enverrons un e-mail dans 10 minutes ou moins lorsque la duplication sera achevée.",
@@ -179,5 +179,10 @@
   "downloadSchema": "Download Schema",
   "versionHistory": "Version History",
   "reportConfiguration": "Report configuration",
-  "shareToLibrary": "Share to Library"
+  "shareToLibrary": "Share to Library",
+  "exportDescription": "Toutes les données téléchargées par les utilisateurs seront exportées.",
+  "download": "Télécharger",
+  "editDescription": "Add, modify, or remove contents of the applet using the Builder.",
+  "editAppletInBuilder": "Modifier l'applet dans Builder",
+  "deleteDescription": "Une fois l'applet supprimée, vous ne pourrez plus la restaurer."
 }
