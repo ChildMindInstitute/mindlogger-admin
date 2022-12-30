@@ -32,6 +32,7 @@ export const SuccessShared = ({
   img,
 }: SuccessSharedProps) => {
   const { t } = useTranslation('app');
+
   const [linkCopied, setLinkCopied] = useState(false);
   const handleCopyAppletLink = async () => {
     await navigator.clipboard.writeText(appletLink);

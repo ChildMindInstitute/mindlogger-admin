@@ -7,7 +7,7 @@ import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledContainer = styled(Box, shouldForwardProp)`
-  padding: ${theme.spacing(2.4, 2.4, 0)};
+  padding: ${theme.spacing(4.8, 2.4, 0, 6.8)};
   display: flex;
   flex-direction: column;
   height: 100%;
