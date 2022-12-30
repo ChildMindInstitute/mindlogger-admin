@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
@@ -8,40 +8,29 @@ import { StyledBodyMedium, StyledTitleMedium } from 'styles/styledComponents/Typ
 
 import { StyledRow, StyledAddBtn } from './NotificationsTab.styles';
 import { Notification } from './Notification';
-import { FormValues, SendNotification, SendNotificationType } from '../CreateActivityPopup.types';
+import { FormValues } from '../CreateActivityPopup.types';
 import { Reminder } from './Reminder';
 
 export const NotificationsTab = () => {
   const { t } = useTranslation('app');
-  const { setValue, watch } = useFormContext<FormValues>();
-  const notifications = watch('notifications');
-  const { sendNotifications, sendReminder } = notifications;
+  const { setValue, control, getValues, watch } = useFormContext<FormValues>();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'notifications',
+  });
+  const reminder = watch('reminder');
 
   const handleAddNotification = () => {
-    const newNotifications = {
-      ...notifications,
-      sendNotifications: [
-        ...(sendNotifications || []),
-        {
-          type: SendNotificationType.fixed,
-          timeAt: null,
-        },
-      ],
-    };
-
-    setValue('notifications', newNotifications);
+    append({
+      at: null,
+    });
   };
 
   const handleAddReminder = () => {
-    const newNotifications = {
-      ...notifications,
-      sendReminder: {
-        activityIncomplete: 1,
-        reminderTime: null,
-      },
-    };
-
-    setValue('notifications', newNotifications);
+    setValue('reminder', {
+      activityIncomplete: 1,
+      reminderTime: null,
+    });
   };
 
   return (
@@ -54,8 +43,8 @@ export const NotificationsTab = () => {
             {t('sendNotifications')}
           </StyledTitleMedium>
         </StyledFlexTopCenter>
-        {sendNotifications?.map((item: SendNotification, index: number) => (
-          <Notification key={index} index={index} {...item} />
+        {fields?.map((item, index) => (
+          <Notification key={item.id} index={index} remove={remove} />
         ))}
         <StyledAddBtn
           variant="text"
@@ -72,8 +61,9 @@ export const NotificationsTab = () => {
             {t('sendReminder')}
           </StyledTitleMedium>
         </StyledFlexTopCenter>
-        {sendReminder && <Reminder {...sendReminder} />}
-        {!sendReminder && (
+        {reminder?.activityIncomplete ? (
+          <Reminder />
+        ) : (
           <StyledAddBtn
             variant="text"
             startIcon={<Svg width="18" height="18" id="add" />}

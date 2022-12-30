@@ -8,13 +8,13 @@ import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';
 import { TimePickerProps } from './TimePicker.types';
 
 export const TimePicker = <T extends FieldValues>({
-  control,
+  //control,
   timeIntervals = 15,
   label,
   name,
 }: TimePickerProps<T>) => (
   <Controller
-    control={control}
+    //  control={control}
     name={name}
     render={({ field: { onChange, value } }) => (
       <StyledTimePickerWrapper>

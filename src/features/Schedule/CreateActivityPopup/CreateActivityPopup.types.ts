@@ -3,27 +3,26 @@ export type CreateActivityPopupProps = {
   onClose: () => void;
 };
 
-export enum SendNotificationType {
+export enum NotificationType {
   fixed = 'fixed',
   random = 'random',
 }
 
-export type SendNotification = {
-  type: SendNotificationType;
-  timeAt?: Date | null;
-  timeFrom?: Date | null;
-  timeTo?: Date | null;
+export type Notification = {
+  at?: Date | null;
+  from?: Date | null;
+  to?: Date | null;
 };
 
-export type SendReminder = { activityIncomplete: number; reminderTime: Date | null };
+export type Reminder = { activityIncomplete: number; reminderTime: Date | null };
 
 export type FormValues = {
   activity: string;
   availability: boolean;
   completion: boolean;
   oneTimeCompletion: boolean;
-  notifications: SendNotification[] | null;
-  reminder: SendReminder | null;
+  notifications: Notification[] | null;
+  reminder: Reminder | null;
   date: string;
   startEndingDate: string;
   timeout: {

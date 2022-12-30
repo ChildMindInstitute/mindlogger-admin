@@ -1,9 +1,3 @@
-import { SendNotification } from '../../CreateActivityPopup.types';
+import { Notification } from '../../CreateActivityPopup.types';
 
-export enum NotificationTimeType {
-  timeAt = 'timeAt',
-  timeFrom = 'timeFrom',
-  timeTo = 'timeTo',
-}
-
-export type NotificationProps = SendNotification & { index: number };
+export type NotificationProps = Notification & { index: number };

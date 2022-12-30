@@ -135,9 +135,6 @@
   "retainData": "Retain Data",
   "editApplet": "Edit Applet",
   "addUsers": "Add Users",
-<<<<<<< HEAD
-  "notifications": "Notifications",
-=======
   "oneTimeCompletion": "One-Time completion",
   "activity": "Activity",
   "save": "Save",
@@ -156,7 +153,6 @@
   "weekdays": "Weekdays",
   "monthly": "Monthly",
   "createActivitySchedule": "Create Activity Schedule",
->>>>>>> develop
   "jan": "Jan",
   "feb": "Feb",
   "mar": "Mar",
@@ -173,14 +169,7 @@
   "selectEndingDate": "Select ending date",
   "date": "Date",
   "startingEndingDate": "Starting/Ending date",
-<<<<<<< HEAD
-  "oneTimeCompletion": "One-Time completion",
   "activity*": "Activity*",
-  "save": "Save",
-  "scheduledAccess": "Scheduled access",
-  "alwaysAvailable": "Always available",
-  "availability": "Availability",
-  "timers": "Timers",
   "setTheLimit": "Set time limit",
   "sendNotifications": "Send Notifications",
   "addNotification": "Add Notification",
@@ -189,8 +178,6 @@
   "fixed": "Fixed",
   "random": "Random",
   "at": "At",
-  "from": "From",
-  "to": "To",
   "sendNotificationAtFixedTime": "Send notification at a fixed time",
   "sendNotificationAtRandomTime": "Send notification at a random time within a time interval",
   "activityIncomplete": "Activity incomplete",
@@ -198,8 +185,7 @@
   "numberOfConsecutiveDays": "Number of consecutive days the user does not complete the activity",
   "notification": "Notification",
   "day": "day",
-  "days": "days"
-=======
+  "days": "days",
   "appletSettings": "Applet Settings",
   "usersAndData": "Users and Data",
   "appletContent": "Applet Content",
@@ -211,5 +197,4 @@
   "versionHistory": "Version History",
   "reportConfiguration": "Report configuration",
   "shareToLibrary": "Share to Library"
->>>>>>> develop
 }

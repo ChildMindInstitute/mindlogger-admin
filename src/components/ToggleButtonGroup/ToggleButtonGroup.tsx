@@ -29,7 +29,7 @@ export const ToggleButtonGroup = ({
               <Svg id="check" />
             </StyledIcon>
           )}
-          <Tooltip uiType={TooltipUiType.secondary} tooltipTitle={tooltip}>
+          <Tooltip uiType={TooltipUiType.secondary} tooltipTitle={t(tooltip || '')}>
             <span> {t(label)}</span>
           </Tooltip>
         </ToggleButton>
