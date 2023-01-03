@@ -11,6 +11,7 @@ export const StyledContainer = styled(Box)`
   display: flex;
   flex-direction: column;
   flex: 1 1 30%;
+  min-width: max-content;
   height: 100%;
   overflow-y: auto;
 `;
