@@ -5,7 +5,7 @@ import { useAppSelector } from 'redux/store';
 import * as thunk from './Folders.thunk';
 import { state as initialState } from './Folders.state';
 import { reducers, extraReducers } from './Folders.reducer';
-import { FoldersSchema } from './Folders.schema';
+import { FolderApplet, FoldersSchema } from './Folders.schema';
 
 export * from './Folders.schema';
 
@@ -35,5 +35,13 @@ export const folders = {
           flattenFoldersApplets: { data },
         },
       }) => data,
+    ),
+  useApplet: (id: string): FolderApplet =>
+    useAppSelector(
+      ({
+        folders: {
+          flattenFoldersApplets: { data },
+        },
+      }) => data.find((applet: FolderApplet) => applet.id === id),
     ),
 };

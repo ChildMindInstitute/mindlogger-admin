@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,32 +11,32 @@ import {
 } from 'api';
 import { folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { Modal } from 'components/Popups';
 import { Spinner } from 'components/Spinner';
 import { InputController, CheckboxController, TagsController } from 'components/FormComponents';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { getErrorMessage } from 'utils/errors';
 
-import { ShareAppletProps, ShareAppletData } from './ShareApplet.types';
-import { StyledInputWrapper } from './ShareApplet.styles';
 import { shareAppletDefaultValues } from './ShareApplet.const';
 import { ShareAppletSchema } from './ShareApplet.schema';
+import { ShareAppletData, ShareAppletProps } from './ShareApplet.types';
+import { StyledInputWrapper } from './ShareApplet.styles';
 import { SuccessShared } from './SuccessShared';
 
 export const ShareApplet = ({
-  sharePopupVisible,
-  setSharePopupVisible,
   applet,
+  onAppletShared,
+  onDisableSubmit,
+  isSubmitted,
+  showSuccess = true,
 }: ShareAppletProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const [title, setTitle] = useState(t('shareTheAppletWithTheLibrary'));
-  const [showNameTakenError, setShowNameTakenError] = useState(false);
+
   const [appletShared, setAppletShared] = useState(false);
+  const [showNameTakenError, setShowNameTakenError] = useState(false);
   const [libraryUrl, setLibraryUrl] = useState('');
   const [keywords, setKeywords] = useState<string[]>([]);
-  const [mainBtnText, setMainBtnText] = useState(t('share'));
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -44,11 +44,14 @@ export const ShareApplet = ({
     resolver: yupResolver(ShareAppletSchema()),
     defaultValues: { ...shareAppletDefaultValues, appletName: applet?.name },
   });
+
   const checked = watch('checked');
 
-  const handleModalClose = () => setSharePopupVisible(false);
+  useEffect(() => {
+    onDisableSubmit(!checked);
+  }, [checked]);
 
-  const handleShareApplet = async () => {
+  const handleShareApplet = useCallback(async () => {
     try {
       const checkResult = await checkAppletNameInLibraryApi({
         appletId: applet.id || '',
@@ -71,11 +74,12 @@ export const ShareApplet = ({
 
         setLibraryUrl(libraryUrlResult?.data as string);
         setIsLoading(false);
+        onAppletShared && onAppletShared({ keywords, libraryUrl });
         setAppletShared(true);
 
         dispatch(
           folders.actions.updateAppletData({
-            appletId: applet.id,
+            appletId: applet.id || '',
             published: true,
             appletName: getValues().appletName,
           }),
@@ -85,7 +89,13 @@ export const ShareApplet = ({
       setErrorMessage(getErrorMessage(e));
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isSubmitted && !appletShared) {
+      handleSubmit(handleShareApplet)();
+    }
+  }, [isSubmitted, appletShared]);
 
   const handleAddKeyword = (value: string) => {
     if (value.length) {
@@ -110,13 +120,6 @@ export const ShareApplet = ({
       return res;
     });
   };
-
-  useEffect(() => {
-    if (appletShared) {
-      setTitle(t('appletIsSharedWithLibrary'));
-      setMainBtnText(t('ok'));
-    }
-  }, [appletShared, t]);
 
   let modalComponent: JSX.Element | null = (
     <>
@@ -166,10 +169,7 @@ export const ShareApplet = ({
     </>
   );
 
-  let mainBtnSubmit: ((e?: BaseSyntheticEvent | undefined) => Promise<void>) | (() => void) =
-    handleSubmit(handleShareApplet);
-
-  if (appletShared) {
+  if (appletShared && showSuccess) {
     modalComponent = (
       <SuccessShared
         title={getValues().appletName || applet.name || ''}
@@ -181,20 +181,7 @@ export const ShareApplet = ({
         img={applet.image || ''}
       />
     );
-    mainBtnSubmit = handleModalClose;
   }
 
-  return (
-    <Modal
-      open={sharePopupVisible}
-      onClose={handleModalClose}
-      onSubmit={mainBtnSubmit}
-      title={title || ''}
-      buttonText={mainBtnText || ''}
-      disabledSubmit={!checked}
-      width="60"
-    >
-      {modalComponent}
-    </Modal>
-  );
+  return modalComponent;
 };

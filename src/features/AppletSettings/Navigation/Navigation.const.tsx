@@ -1,5 +1,7 @@
 import { Svg } from 'components/Svg';
 
+import { ShareAppletSetting } from '../ShareAppletSetting';
+
 export const navigationItems = [
   {
     label: 'usersAndData',
@@ -52,7 +54,7 @@ export const navigationItems = [
       {
         icon: <Svg id="share" />,
         label: 'shareToLibrary',
-        component: <>shareToLibrary</>,
+        component: <ShareAppletSetting />,
       },
     ],
   },
