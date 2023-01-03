@@ -49,7 +49,7 @@ export const SuccessShared = ({
           {keywords.length > 0 && (
             <StyledChipsWrapper sx={{ marginTop: theme.spacing(0.8) }}>
               {keywords.map((word, i) => (
-                <Chip key={i} title={word} />
+                <Chip color="secondary" key={i} title={word} />
               ))}
             </StyledChipsWrapper>
           )}

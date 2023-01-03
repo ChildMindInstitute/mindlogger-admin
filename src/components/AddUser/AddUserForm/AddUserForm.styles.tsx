@@ -11,7 +11,7 @@ export const StyledRow = styled(Box)`
 `;
 
 export const StyledButton = styled(Button)`
-  border-radius: ${variables.borderRadius.xxl};
+  border-radius: ${variables.borderRadius.xxxl};
   margin-top: ${theme.spacing(2.4)};
   box-shadow: none;
 `;
