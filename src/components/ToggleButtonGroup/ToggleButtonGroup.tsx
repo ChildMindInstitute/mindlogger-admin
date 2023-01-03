@@ -15,9 +15,11 @@ export const ToggleButtonGroup = ({
 }: ToggleButtonGroupProps) => {
   const { t } = useTranslation('app');
 
-  const handleChange = (event: React.MouseEvent<HTMLElement>, selected: string) => {
-    customChange && customChange(selected);
-    setActiveButton(selected);
+  const handleChange = (e: React.MouseEvent<HTMLElement>, selected: string) => {
+    if (selected) {
+      customChange && customChange(selected);
+      setActiveButton(selected);
+    }
   };
 
   return (

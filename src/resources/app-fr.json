@@ -196,5 +196,6 @@
   "downloadSchema": "Download Schema",
   "versionHistory": "Version History",
   "reportConfiguration": "Report configuration",
-  "shareToLibrary": "Share to Library"
+  "shareToLibrary": "Share to Library",
+  "reminder": "Rappel"
 }

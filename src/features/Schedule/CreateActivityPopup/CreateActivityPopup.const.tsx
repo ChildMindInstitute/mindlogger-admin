@@ -1,10 +1,10 @@
-import { Availability } from './Availability';
+import { AvailabilityTab } from './AvailabilityTab';
 import { NotificationsTab } from './NotificationsTab';
 
 export const tabs = [
   {
     labelKey: 'availability',
-    content: <Availability />,
+    content: <AvailabilityTab />,
   },
   {
     labelKey: 'timers',

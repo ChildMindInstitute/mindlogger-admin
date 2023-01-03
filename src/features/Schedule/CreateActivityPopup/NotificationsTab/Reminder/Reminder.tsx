@@ -1,40 +1,50 @@
 import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 
-import { TimePicker, Svg } from 'components';
+import { TimePicker } from 'components';
 import { InputController } from 'components/FormComponents';
-
-import { Box } from '@mui/material';
 import { StyledLabelLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+
 import { StyledReminder, StyledInputWrapper } from './Reminder.styles';
-import { StyledLogo } from '../Notification/Notification.styles';
+import { Header } from '../Header';
+import { FormValues } from '../../CreateActivityPopup.types';
+import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 
 export const Reminder = () => {
   const { t } = useTranslation('app');
+  const { setValue, control } = useFormContext<FormValues>();
+
+  const handleARemoveReminder = () => {
+    setValue('reminder', null);
+  };
 
   return (
-    <>
-      <Box>
-        <StyledLogo>
-          <Svg id="mind-logger-logo" />
-          <StyledLabelLarge sx={{ marginLeft: theme.spacing(1) }}>MindLogger</StyledLabelLarge>
-        </StyledLogo>
-      </Box>
+    <StyledNotificationWrapper>
+      <StyledLabelLarge sx={{ margin: theme.spacing(1.2, 0, 0, 1.1) }}>
+        {t('reminder')}
+      </StyledLabelLarge>
       <StyledReminder>
-        <StyledInputWrapper>
-          <InputController
-            label={t('activityIncomplete')}
-            type="number"
-            name="reminder.activityIncomplete"
-            //control={control}
-            InputProps={{ inputProps: { min: 1 } }}
-            endTextAdornmentSingular={t('day')}
-            endTextAdornmentPlural={t('days')}
-            tooltip={t('numberOfConsecutiveDays')}
-          />
-        </StyledInputWrapper>
-        <TimePicker name="reminder.reminderTime" label={t('reminderTime')} width={26} />
+        <Header onClickHandler={handleARemoveReminder} />
+        <StyledFlexTopCenter>
+          <StyledInputWrapper>
+            <InputController
+              label={t('activityIncomplete')}
+              type="number"
+              name="reminder.activityIncomplete"
+              control={control}
+              InputProps={{ inputProps: { min: 1 } }}
+              endTextAdornmentSingular={t('day')}
+              endTextAdornmentPlural={t('days')}
+              tooltip={t('numberOfConsecutiveDays')}
+            />
+          </StyledInputWrapper>
+          <StyledColInner>
+            <TimePicker name="reminder.reminderTime" label={t('reminderTime')} />
+          </StyledColInner>
+        </StyledFlexTopCenter>
       </StyledReminder>
-    </>
+    </StyledNotificationWrapper>
   );
 };

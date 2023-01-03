@@ -1,61 +1,70 @@
-import { Box } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 
-import { ToggleButtonGroup, Svg, TimePicker } from 'components';
+import { ToggleButtonGroup, TimePicker } from 'components';
 import theme from 'styles/theme';
 import { StyledLabelLarge } from 'styles/styledComponents/Typography';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
-import { useState } from 'react';
-import { NotificationType } from '../../CreateActivityPopup.types';
-import {
-  StyledClose,
-  StyledLogo,
-  StyledNotification,
-  StyledTimePickerContainer,
-} from './Notification.styles';
+import { FormValues, NotificationType } from '../../CreateActivityPopup.types';
+import { StyledNotification, StyledCol, StyledleftCol } from './Notification.styles';
+import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { notificationTimeToggles } from './Notification.const';
+import { Header } from '../Header';
+import { NotificationProps } from './Notification.types';
 
-//import { NotificationProps, NotificationTimeType } from './Notification.types';
-
-export const Notification = ({ index, remove }: any) => {
+export const Notification = ({ index, remove }: NotificationProps) => {
   const { t } = useTranslation('app');
+  const { setValue } = useFormContext<FormValues>();
   const [activeType, setActivetype] = useState<string>(NotificationType.fixed);
 
   const handleRemoveNotification = () => {
     remove(index);
   };
 
+  const updateTime = () => {
+    setValue(`notifications.${index}`, {
+      at: null,
+      from: null,
+      to: null,
+    });
+  };
+
   return (
-    <>
-      <StyledLabelLarge sx={{ margin: theme.spacing(1.2, 0) }}>{`${t('notification')} ${
-        index + 1
-      }`}</StyledLabelLarge>
+    <StyledNotificationWrapper>
+      <StyledLabelLarge sx={{ margin: theme.spacing(0, 0, 1.2, 1.1) }}>
+        {t('notification')} {index + 1}
+      </StyledLabelLarge>
       <StyledNotification>
-        <Box>
-          <StyledLogo>
-            <Svg id="mind-logger-logo" />
-            <StyledLabelLarge sx={{ marginLeft: theme.spacing(1) }}>MindLogger</StyledLabelLarge>
-          </StyledLogo>
-          <ToggleButtonGroup
-            toggleButtons={notificationTimeToggles}
-            activeButton={activeType}
-            setActiveButton={setActivetype}
-          />
-        </Box>
-        <StyledTimePickerContainer>
-          {activeType === NotificationType.fixed ? (
-            <TimePicker name={`notifications.${index}.at`} label={t('at')} width={13} />
-          ) : (
-            <>
-              <TimePicker name={`notifications.${index}.from`} label={t('from')} width={13} />
-              <TimePicker name={`notifications.${index}.to`} label={t('to')} width={13} />
-            </>
-          )}
-        </StyledTimePickerContainer>
-        <StyledClose onClick={handleRemoveNotification}>
-          <Svg id="cross" />
-        </StyledClose>
+        <Header onClickHandler={handleRemoveNotification} />
+        <StyledFlexTopCenter>
+          <StyledleftCol>
+            <ToggleButtonGroup
+              toggleButtons={notificationTimeToggles}
+              activeButton={activeType}
+              setActiveButton={setActivetype}
+              customChange={updateTime}
+            />
+          </StyledleftCol>
+          <StyledCol sx={{ marginLeft: theme.spacing(2.4) }}>
+            {activeType === NotificationType.fixed ? (
+              <StyledColInner>
+                <TimePicker name={`notifications.${index}.at`} label={t('at')} />
+              </StyledColInner>
+            ) : (
+              <>
+                <StyledColInner>
+                  <TimePicker name={`notifications.${index}.from`} label={t('from')} />
+                </StyledColInner>
+                <StyledColInner sx={{ marginLeft: theme.spacing(2.4) }}>
+                  <TimePicker name={`notifications.${index}.to`} label={t('to')} />
+                </StyledColInner>
+              </>
+            )}
+          </StyledCol>
+        </StyledFlexTopCenter>
       </StyledNotification>
-    </>
+    </StyledNotificationWrapper>
   );
 };

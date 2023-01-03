@@ -19,7 +19,7 @@ export const CreateActivityPopup = ({ onClose, open }: CreateActivityPopupProps)
     mode: 'onChange',
   });
 
-  const onSubmit = (values: any) => console.log(methods.getValues());
+  const onSubmit = () => onClose();
 
   return (
     <Modal
