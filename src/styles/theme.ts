@@ -39,7 +39,7 @@ const theme = createTheme({
         },
         '*::-webkit-scrollbar-thumb': {
           backgroundColor: variables.palette.outline,
-          borderRadius: variables.borderRadius.xxl,
+          borderRadius: variables.borderRadius.xxxl,
         },
       }),
     },
@@ -182,7 +182,7 @@ const theme = createTheme({
           fontWeight: variables.font.weight.medium,
           lineHeight: variables.lineHeight.md,
           padding: '1rem 1.6rem',
-          borderRadius: variables.borderRadius.xxl,
+          borderRadius: variables.borderRadius.xxxl,
           textTransform: 'none',
           height: 40,
           letterSpacing: variables.letterSpacing.sm,
@@ -231,6 +231,37 @@ const theme = createTheme({
         },
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          color: variables.palette.on_surface_variant,
+          padding: '0.6rem 1.2rem',
+          borderRadius: variables.borderRadius.md,
+          fontSize: variables.font.size.md,
+          fontWeight: variables.font.weight.regular,
+          lineHeight: variables.lineHeight.md,
+          '&.MuiChip-colorPrimary': {
+            border: 'none',
+            backgroundColor: variables.palette.secondary_container,
+          },
+          '&.MuiChip-colorSecondary': {
+            borderWidth: variables.borderWidth.md,
+            border: `${variables.borderWidth.md} solid ${variables.palette.outline}`,
+            borderColor: variables.palette.outline,
+            backgroundColor: 'transparent',
+            '&:hover': {
+              backgroundColor: variables.palette.on_surface_variant_alfa8,
+            },
+          },
+          '.MuiChip-label': {
+            padding: 0,
+          },
+          '.MuiChip-deleteIcon': {
+            margin: '0 0 0 0.8rem',
+          },
+        },
+      },
+    },
     MuiToggleButtonGroup: {
       styleOverrides: {
         root: {
@@ -239,7 +270,7 @@ const theme = createTheme({
             fontSize: variables.font.size.md,
             fontWeight: variables.font.weight.medium,
             lineHeight: variables.lineHeight.md,
-            borderRadius: variables.borderRadius.xxl,
+            borderRadius: variables.borderRadius.xxxl,
             borderColor: variables.palette.outline,
             textTransform: 'none',
             height: 40,

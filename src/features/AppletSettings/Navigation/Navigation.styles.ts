@@ -75,7 +75,7 @@ export const StyledSetting = styled(Box, shouldForwardProp)`
     height: 5.6rem;
     padding: ${theme.spacing(0, 1.8)};
     margin: ${theme.spacing(0.2, 0, 0, 1.6)};
-    border-radius: ${variables.borderRadius.xxl};
+    border-radius: ${variables.borderRadius.xxxl};
 
     svg {
       margin-right: ${theme.spacing(1.6)};
