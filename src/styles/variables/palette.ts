@@ -16,6 +16,7 @@ export const palette = {
   surface_variant: '#dee3eb',
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
+  inverse_surface: '#2f3033',
 
   primary_alfa8: 'rgba(0, 103, 160, 0.08)',
   primary_alfa12: 'rgba(0, 103, 160, 0.12)',

@@ -1,7 +1,12 @@
-import { Tooltip as MuiTooltip } from '@mui/material';
+import { TooltipProps, TooltipUiType } from './Tooltip.types';
+import { StyledTooltip } from './Tooltip.styles';
 
-import { TooltipProps } from './Tooltip.types';
-
-export const Tooltip = ({ tooltipTitle = '', children }: TooltipProps) => (
-  <MuiTooltip title={tooltipTitle}>{children}</MuiTooltip>
+export const Tooltip = ({
+  tooltipTitle = '',
+  uiType = TooltipUiType.primary,
+  children,
+}: TooltipProps) => (
+  <StyledTooltip className={uiType} title={tooltipTitle}>
+    {children}
+  </StyledTooltip>
 );
