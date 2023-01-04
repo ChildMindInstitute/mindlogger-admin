@@ -10,11 +10,6 @@ export const StyledTextField = styled(TextField)`
   }
 `;
 
-export const StyledAdornment = styled(Box)`
-  display: flex;
-  align-items: center;
-`;
-
 export const StyledUpDown = styled(Box)`
   display: flex;
   flex-direction: column;

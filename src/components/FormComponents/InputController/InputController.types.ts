@@ -3,8 +3,7 @@ import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 type FormInputProps = {
   name: string;
-  endTextAdornmentSingular?: string;
-  endTextAdornmentPlural?: string;
+  textAdornment?: string;
   tooltip?: string;
 } & TextFieldProps;
 

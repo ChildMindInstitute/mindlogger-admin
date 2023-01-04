@@ -35,8 +35,7 @@ export const Reminder = () => {
               name="reminder.activityIncomplete"
               control={control}
               InputProps={{ inputProps: { min: 1 } }}
-              endTextAdornmentSingular={t('day')}
-              endTextAdornmentPlural={t('days')}
+              textAdornment="day"
               tooltip={t('numberOfConsecutiveDays')}
             />
           </StyledInputWrapper>

@@ -42,7 +42,6 @@ export const AvailabilityTab = () => {
         name="availability"
         fullWidth
         options={availabilityOptions}
-        label=""
         control={control}
         customChange={availabilityOnChange}
       />
