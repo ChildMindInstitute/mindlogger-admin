@@ -30,4 +30,6 @@ export type FormValues = {
   timeout: {
     access: boolean;
   };
+  timerDuration: string;
+  idleTime: string;
 };

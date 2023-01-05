@@ -1,9 +1,8 @@
 import { Outlet } from 'react-router-dom';
 
-import { Svg } from 'components/Svg';
 import { Footer } from 'layouts/Footer';
 import { auth } from 'redux/modules';
-import { Spinner } from 'components/Spinner';
+import { Spinner, Svg } from 'components';
 
 import {
   StyledAuthLayout,
