@@ -6,10 +6,11 @@ import { useAppDispatch } from 'redux/store';
 import { DeletePopup } from 'components/Popups';
 import { Svg } from 'components/Svg';
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
+
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
-} from 'styles/styledComponents/AppletSettings';
+} from '../AppletSettings.styles';
 
 export const DeleteAppletSetting = () => {
   const { t } = useTranslation('app');

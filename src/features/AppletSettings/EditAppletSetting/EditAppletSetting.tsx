@@ -2,10 +2,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
+
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
-} from 'styles/styledComponents/AppletSettings';
+} from '../AppletSettings.styles';
 
 export const EditAppletSetting = () => {
   const { t } = useTranslation('app');

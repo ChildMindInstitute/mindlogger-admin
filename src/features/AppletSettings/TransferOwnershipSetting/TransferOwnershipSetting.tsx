@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 import { folders } from 'redux/modules';
 import { TransferOwnership } from 'features/TransferOwnership';
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
-import { StyledAppletSettingsButton } from 'styles/styledComponents/AppletSettings';
 import { SuccessTransferOwnershipPopup } from 'components/Popups';
 
+import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
 
 export const TransferOwnershipSetting = () => {
