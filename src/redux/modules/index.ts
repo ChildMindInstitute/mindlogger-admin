@@ -1,4 +1,5 @@
 export * from './Account';
+export * from './Applet';
 export * from './Auth';
 export * from './Base';
 export * from './Breadcrumbs';

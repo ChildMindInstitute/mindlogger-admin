@@ -196,5 +196,12 @@
   "versionHistory": "Version History",
   "reportConfiguration": "Report configuration",
   "shareToLibrary": "Share to Library",
-  "reminder": "Reminder"
+  "reminder": "Reminder",
+  "selectDataRetention": "Select period the User data will be stored:",
+  "indefinitely": "Indefinitely",
+  "days": "Days",
+  "weeks": "Weeks",
+  "months": "Months",
+  "years": "Years",
+  "periodRequired": "Period is required"
 }
