@@ -7,7 +7,11 @@ import { auth } from 'redux/modules';
 import avatarSrc from 'assets/images/avatar.png';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-import { StyledLabelSmall, StyledTitleSmall } from 'styles/styledComponents/Typography';
+import {
+  StyledLabelBoldSmall,
+  StyledLabelSmall,
+  StyledTitleSmall,
+} from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { Notifications } from '../Notifications';
@@ -44,9 +48,9 @@ export const AccountPanel = ({
               <StyledImage src={avatarSrc} alt="Avatar" />
               {alertsQuantity > 0 && (
                 <StyledQuantity>
-                  <StyledLabelSmall fontWeight="semiBold" color={variables.palette.white}>
+                  <StyledLabelBoldSmall color={variables.palette.white}>
                     {alertsQuantity}
-                  </StyledLabelSmall>
+                  </StyledLabelBoldSmall>
                 </StyledQuantity>
               )}
             </StyledAvatarWrapper>

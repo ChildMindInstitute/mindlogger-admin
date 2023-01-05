@@ -9,8 +9,7 @@ export const font = {
     xs: '1.1rem', //11px
   },
   weight: {
-    semiBold: 600,
-    medium: 500,
+    bold: 700,
     regular: 400,
   },
 };

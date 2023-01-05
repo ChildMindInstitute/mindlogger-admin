@@ -45,13 +45,10 @@ export const SelectLanguage = ({
             <StyledItemContent>
               <Box>{lang.component}</Box>
               <StyledBox>
-                <StyledTitleMedium
-                  fontWeight={'regular'}
-                  color={variables.palette.on_secondary_container}
-                >
+                <StyledTitleMedium color={variables.palette.on_secondary_container}>
                   {lang.label}
                 </StyledTitleMedium>
-                <StyledTitleSmall fontWeight={'regular'}>{lang.type}</StyledTitleSmall>
+                <StyledTitleSmall>{lang.type}</StyledTitleSmall>
               </StyledBox>
             </StyledItemContent>
             {selectedLanguage.value === lang.value && (

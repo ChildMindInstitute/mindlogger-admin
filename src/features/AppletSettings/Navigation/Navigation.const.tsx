@@ -3,6 +3,7 @@ import { EditApplet } from 'features/EditApplet';
 import { ExportData } from 'features/ExportData';
 import { DeleteApplet } from 'features/DeleteApplet';
 
+import { DataRetention } from '../DataRetentionSetting/DataRetention';
 import { ShareAppletSetting } from '../ShareAppletSetting';
 
 export const navigationItems = [
@@ -17,7 +18,7 @@ export const navigationItems = [
       {
         icon: <Svg id="data-retention" />,
         label: 'dataRetention',
-        component: <>dataRetention</>,
+        component: <DataRetention />,
       },
     ],
   },

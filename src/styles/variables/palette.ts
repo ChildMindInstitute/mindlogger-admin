@@ -16,6 +16,7 @@ export const palette = {
   surface_variant: '#dee3eb',
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
+  inverse_surface: '#2f3033',
 
   primary_alfa8: 'rgba(0, 103, 160, 0.08)',
   primary_alfa12: 'rgba(0, 103, 160, 0.12)',
@@ -27,6 +28,7 @@ export const palette = {
   on_surface_variant_alfa8_2: 'rgba(222, 227, 235, 0.08)',
   on_surface_variant_alfa12: 'rgba(66, 71, 78, 0.12)',
   on_secondary_container_alfa8: 'rgba(14, 29, 42, 0.08)',
+  on_secondary_container_alfa12: 'rgba(14, 29, 42, 0.12)',
   contained_btn_hover: '#1473a8',
   contained_btn_focus: '#1f79ab',
   contained_btn_disabled_text: '#979799',

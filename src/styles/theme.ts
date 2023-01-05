@@ -16,7 +16,7 @@ const commonFocusStyles = Object.assign(
 const theme = createTheme({
   spacing: 10,
   typography: {
-    fontFamily: 'NotoSans',
+    fontFamily: 'Atkinson',
     htmlFontSize: 10,
     button: {
       fontSize: variables.font.size.md,
@@ -39,7 +39,7 @@ const theme = createTheme({
         },
         '*::-webkit-scrollbar-thumb': {
           backgroundColor: variables.palette.outline,
-          borderRadius: variables.borderRadius.xxl,
+          borderRadius: variables.borderRadius.xxxl,
         },
       }),
     },
@@ -60,7 +60,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: variables.font.size.xxl,
-          fontWeight: variables.font.weight.medium,
+          fontWeight: variables.font.weight.regular,
           padding: '6.4rem 2.4rem 2.8rem',
         },
       },
@@ -101,7 +101,7 @@ const theme = createTheme({
           '.MuiTableCell-head': {
             borderLeft: 'none',
             color: variables.palette.on_surface_variant,
-            fontWeight: variables.font.weight.medium,
+            fontWeight: variables.font.weight.regular,
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
             borderLeft: `${variables.borderWidth.md} solid transparent}`,
@@ -131,14 +131,14 @@ const theme = createTheme({
           padding: '0 1.2rem',
           fontSize: variables.font.size.sm,
           lineHeight: variables.lineHeight.sm,
-          fontWeight: variables.font.weight.medium,
+          fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface,
           borderBottomWidth: variables.borderWidth.md,
           borderBottomStyle: 'solid',
           borderBottomColor: variables.palette.surface_variant,
         },
         head: {
-          fontWeight: variables.font.weight.semiBold,
+          fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface_variant,
 
           '.MuiTableSortLabel-root.Mui-active': {
@@ -179,10 +179,10 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          fontWeight: variables.font.weight.medium,
+          fontWeight: variables.font.weight.bold,
           lineHeight: variables.lineHeight.md,
           padding: '1rem 1.6rem',
-          borderRadius: variables.borderRadius.xxl,
+          borderRadius: variables.borderRadius.xxxl,
           textTransform: 'none',
           height: 40,
           letterSpacing: variables.letterSpacing.sm,
@@ -231,15 +231,46 @@ const theme = createTheme({
         },
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          color: variables.palette.on_surface_variant,
+          padding: '0.6rem 1.2rem',
+          borderRadius: variables.borderRadius.md,
+          fontSize: variables.font.size.md,
+          fontWeight: variables.font.weight.regular,
+          lineHeight: variables.lineHeight.md,
+          '&.MuiChip-colorPrimary': {
+            border: 'none',
+            backgroundColor: variables.palette.secondary_container,
+          },
+          '&.MuiChip-colorSecondary': {
+            borderWidth: variables.borderWidth.md,
+            border: `${variables.borderWidth.md} solid ${variables.palette.outline}`,
+            borderColor: variables.palette.outline,
+            backgroundColor: 'transparent',
+            '&:hover': {
+              backgroundColor: variables.palette.on_surface_variant_alfa8,
+            },
+          },
+          '.MuiChip-label': {
+            padding: 0,
+          },
+          '.MuiChip-deleteIcon': {
+            margin: '0 0 0 0.8rem',
+          },
+        },
+      },
+    },
     MuiToggleButtonGroup: {
       styleOverrides: {
         root: {
           '.MuiToggleButton-root': {
             color: variables.palette.on_secondary_container,
             fontSize: variables.font.size.md,
-            fontWeight: variables.font.weight.medium,
+            fontWeight: variables.font.weight.regular,
             lineHeight: variables.lineHeight.md,
-            borderRadius: variables.borderRadius.xxl,
+            borderRadius: variables.borderRadius.xxxl,
             borderColor: variables.palette.outline,
             textTransform: 'none',
             height: 40,

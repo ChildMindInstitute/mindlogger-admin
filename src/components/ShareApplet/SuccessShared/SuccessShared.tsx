@@ -8,7 +8,7 @@ import theme from 'styles/theme';
 import {
   StyledBodyMedium,
   StyledLabelLarge,
-  StyledTitleSmall,
+  StyledTitleBoldSmall,
 } from 'styles/styledComponents/Typography';
 import { StyledChipsWrapper } from 'styles/styledComponents/ChipsWrapper';
 
@@ -49,15 +49,14 @@ export const SuccessShared = ({
           {keywords.length > 0 && (
             <StyledChipsWrapper sx={{ marginTop: theme.spacing(0.8) }}>
               {keywords.map((word, i) => (
-                <Chip key={i} title={word} />
+                <Chip color="secondary" key={i} title={word} />
               ))}
             </StyledChipsWrapper>
           )}
           {activitiesQuantity ? (
-            <StyledTitleSmall
+            <StyledTitleBoldSmall
               sx={{ marginTop: theme.spacing(1.6) }}
-              fontWeight="semiBold"
-            >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleSmall>
+            >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleBoldSmall>
           ) : (
             ''
           )}

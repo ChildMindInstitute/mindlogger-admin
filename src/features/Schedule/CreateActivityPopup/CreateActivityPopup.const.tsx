@@ -1,9 +1,10 @@
-import { Availability } from './Availability';
+import { AvailabilityTab } from './AvailabilityTab';
+import { NotificationsTab } from './NotificationsTab';
 
 export const tabs = [
   {
     labelKey: 'availability',
-    content: <Availability />,
+    content: <AvailabilityTab />,
   },
   {
     labelKey: 'timers',
@@ -11,7 +12,7 @@ export const tabs = [
   },
   {
     labelKey: 'notifications',
-    content: <>notifications</>,
+    content: <NotificationsTab />,
   },
 ];
 
@@ -33,4 +34,6 @@ export const defaultValues = {
   timeout: {
     access: false,
   },
+  notifications: [],
+  reminder: null,
 };

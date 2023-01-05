@@ -41,7 +41,12 @@ export const TagsController = <T extends FieldValues>({
         {tags?.length > 0 && (
           <StyledChipsWrapper>
             {tags.map((tag, index) => (
-              <Chip key={index} title={tag} onRemove={() => onRemoveTagClick(index)} />
+              <Chip
+                color="secondary"
+                key={index}
+                title={tag}
+                onRemove={() => onRemoveTagClick(index)}
+              />
             ))}
           </StyledChipsWrapper>
         )}

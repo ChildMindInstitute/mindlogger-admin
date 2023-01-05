@@ -1,17 +1,23 @@
 import { Svg } from 'components/Svg';
-import { StyledLabelLarge } from 'styles/styledComponents/Typography';
-import { variables } from 'styles/variables';
 
-import { ChipProps } from './Chip.types';
-import { StyledChip, StyledRemoveBtn } from './Chip.styles';
+import { ChipProps, ChipShape } from './Chip.types';
+import { StyledChip, StyledClearedButton } from './Chip.styles';
 
-export const Chip = ({ title, onRemove }: ChipProps) => (
-  <StyledChip>
-    <StyledLabelLarge color={variables.palette.primary}>{title}</StyledLabelLarge>
-    {onRemove && (
-      <StyledRemoveBtn onClick={onRemove}>
+export const Chip = ({
+  title,
+  color = 'primary',
+  shape = ChipShape.rectangular,
+  onRemove,
+}: ChipProps) => (
+  <StyledChip
+    shape={shape}
+    color={color}
+    deleteIcon={
+      <StyledClearedButton>
         <Svg id="close" width={18} height={18} />
-      </StyledRemoveBtn>
-    )}
-  </StyledChip>
+      </StyledClearedButton>
+    }
+    label={title}
+    onDelete={onRemove}
+  />
 );
