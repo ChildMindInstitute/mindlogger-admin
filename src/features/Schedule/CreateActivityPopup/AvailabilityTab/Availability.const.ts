@@ -20,22 +20,22 @@ export const enum Repeats {
 export const repeatsButtons = [
   {
     value: Repeats.once,
-    label: 'Once',
+    label: 'once',
   },
   {
     value: Repeats.daily,
-    label: 'Daily',
+    label: 'daily',
   },
   {
     value: Repeats.weekly,
-    label: 'Weekly',
+    label: 'weekly',
   },
   {
     value: Repeats.weekdays,
-    label: 'Weekdays',
+    label: 'weekdays',
   },
   {
     value: Repeats.monthly,
-    label: 'Monthly',
+    label: 'monthly',
   },
 ];

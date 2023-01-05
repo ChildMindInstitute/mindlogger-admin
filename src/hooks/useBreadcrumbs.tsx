@@ -3,9 +3,9 @@ import { useLocation, useParams } from 'react-router-dom';
 
 import { Svg } from 'components/Svg';
 import { auth, folders, Breadcrumb, breadcrumbs } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getAppletData } from 'utils/getAppletData';
-import { useAppDispatch } from 'redux/store';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { id } = useParams();

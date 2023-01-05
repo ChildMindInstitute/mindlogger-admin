@@ -3,7 +3,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { Svg } from 'components/Svg';
 import { Chip } from 'components/Chip';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-import { StyledChipsWrapper } from 'styles/styledComponents/chipsWrapper';
+import { StyledFlexWrap } from 'styles/styledComponents/Flex';
 
 import { TagsInputControllerProps } from './TagsController.types';
 import { StyledTextField } from './TagsController.styles';
@@ -39,7 +39,7 @@ export const TagsController = <T extends FieldValues>({
           }}
         />
         {tags?.length > 0 && (
-          <StyledChipsWrapper>
+          <StyledFlexWrap>
             {tags.map((tag, index) => (
               <Chip
                 color="secondary"
@@ -48,7 +48,7 @@ export const TagsController = <T extends FieldValues>({
                 onRemove={() => onRemoveTagClick(index)}
               />
             ))}
-          </StyledChipsWrapper>
+          </StyledFlexWrap>
         )}
       </>
     )}

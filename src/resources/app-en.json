@@ -196,5 +196,11 @@
   "versionHistory": "Version History",
   "reportConfiguration": "Report configuration",
   "shareToLibrary": "Share to Library",
-  "reminder": "Reminder"
+  "reminder": "Reminder",
+  "duration": "Duration",
+  "timeToCompleteActivity": "Time to complete the activity:",
+  "maximumTimeAwayFromActivity": "Maximum time away from the activity before it is automatically submitted:",
+  "noTimeLimit": "No time limit",
+  "timer": "Timer",
+  "idleTime": "Idle time"
 }

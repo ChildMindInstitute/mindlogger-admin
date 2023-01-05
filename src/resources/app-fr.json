@@ -196,5 +196,11 @@
   "versionHistory": "Version History",
   "reportConfiguration": "Report configuration",
   "shareToLibrary": "Share to Library",
-  "reminder": "Rappel"
+  "reminder": "Rappel",
+  "duration": "Duration",
+  "TimeToCompleteActivity": "Temps pour terminer l'activité:",
+  "maximumTimeAwayFromActivity": "Durée maximale d'absence de l'activité avant qu'elle ne soit automatiquement soumise:",
+  "noTimeLimit": "Pas de limite de temps",
+  "timer": "Minuteur",
+  "idleTime": "Temps d'inactivité"
 }
