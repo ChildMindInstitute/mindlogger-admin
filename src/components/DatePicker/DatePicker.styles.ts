@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { blendColorsNormal } from 'utils/colors';
 
 export const StyledPopover = styled(Popover)`
   margin-top: ${theme.spacing(0.4)};
@@ -52,15 +53,21 @@ export const StyledPopover = styled(Popover)`
       transition: ${variables.transitions.bgColor};
 
       &:hover {
+        border-radius: ${variables.borderRadius.half};
         background-color: ${variables.palette.on_surface_alfa8};
       }
     }
 
     &__day--selected {
+      border-radius: ${variables.borderRadius.half};
       background-color: ${variables.palette.primary};
 
       &:hover {
-        background-color: ${variables.palette.primary};
+        border-radius: ${variables.borderRadius.half};
+        background-color: ${blendColorsNormal(
+          variables.palette.primary,
+          variables.palette.light_alfa8,
+        )};
       }
     }
 

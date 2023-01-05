@@ -215,5 +215,6 @@
   "months": "Mois",
   "years": "Années",
   "indefinitely": "Indéfiniment",
-  "periodRequired": "Period is required"
+  "periodRequired": "Period is required",
+  "schedule": "Calendrier"
 }

@@ -25,6 +25,10 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     justify-content: space-between;
     min-height: ${({ uiType }: { uiType: UiType }) =>
       uiType === UiType.primary ? TABS_HEIGHT : '4.8rem'};
+
+    &:hover {
+      background-color: ${variables.palette.on_surface_variant_alfa8};
+    }
   }
 
   svg {
@@ -36,6 +40,10 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
       uiType === UiType.primary ? variables.palette.on_surface : variables.palette.primary};
     font-weight: ${variables.font.weight.regular};
     color: ${variables.palette.primary};
+
+    &:hover {
+      background-color: ${variables.palette.primary_alfa8};
+    }
 
     svg {
       fill: ${variables.palette.primary};
@@ -49,7 +57,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     background-color: transparent;
 
     span {
-      max-width: 4.5rem;
+      max-width: 100%;
       width: 100%;
       border-radius: 10rem 10rem 0 0;
       background-color: ${variables.palette.primary};
