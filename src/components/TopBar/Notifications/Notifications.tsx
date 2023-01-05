@@ -7,7 +7,7 @@ import { account, folders } from 'redux/modules';
 import { useTimeAgo } from 'hooks';
 import { getAppletData } from 'utils/getAppletData';
 import { variables } from 'styles/variables';
-import { StyledLabelLarge, StyledTitleSmall } from 'styles/styledComponents/Typography';
+import { StyledLabelBoldLarge, StyledTitleSmall } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { Notification, NotificationProps } from './Notification';
@@ -64,13 +64,13 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           <StyledIconWrapper>
             <Svg id="alert" width="16" height="20" />
           </StyledIconWrapper>
-          <StyledLabelLarge fontWeight="semiBold">{t('alerts')}</StyledLabelLarge>
+          <StyledLabelBoldLarge>{t('alerts')}</StyledLabelBoldLarge>
         </StyledHeaderLeft>
         <StyledFlexTopCenter>
           {alertsQuantity > 0 && (
-            <StyledLabelLarge fontWeight="semiBold" color={variables.palette.semantic.error}>
+            <StyledLabelBoldLarge color={variables.palette.semantic.error}>
               {`${alertsQuantity} ${t('unread')}`}
-            </StyledLabelLarge>
+            </StyledLabelBoldLarge>
           )}
           <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>
             <Svg id={showList ? 'navigate-up' : 'navigate-down'} width="12" height="8" />

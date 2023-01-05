@@ -95,7 +95,7 @@ export const StyledSetting = styled(Box, shouldForwardProp)`
     background-color: ${variables.palette.secondary_container};
 
     p {
-      font-weight: ${variables.font.weight.semiBold};
+      font-weight: ${variables.font.weight.bold};
       color: ${variables.palette.on_secondary_container};
     }
     :hover {

@@ -120,7 +120,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
               />
             ) : (
               <>
-                <StyledBodyMedium color={variables.palette.on_surface} fontWeight={'medium'}>
+                <StyledBodyMedium color={variables.palette.on_surface}>
                   {folder.name}
                 </StyledBodyMedium>
                 <StyledCountApplets>
