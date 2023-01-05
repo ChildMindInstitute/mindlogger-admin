@@ -93,13 +93,13 @@ export const Notification = ({
           </StyledLeftSection>
           <StyledInfo>
             <StyledLabelMedium
-              fontWeight={isActive ? 'medium' : 'semiBold'}
+              fontWeight={isActive ? 'regular' : 'bold'}
               color={variables.palette.on_surface_variant}
             >
               {label}
             </StyledLabelMedium>
             <StyledTitle
-              fontWeight={isActive ? 'medium' : 'semiBold'}
+              fontWeight={isActive ? 'regular' : 'bold'}
               color={
                 isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
               }
@@ -107,7 +107,7 @@ export const Notification = ({
               {title}
             </StyledTitle>
             <StyledMessage
-              fontWeight={isActive ? 'regular' : 'medium'}
+              fontWeight={isActive ? 'regular' : 'bold'}
               color={
                 isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
               }
@@ -129,7 +129,7 @@ export const Notification = ({
             </StyledBtn>
           )}
           <StyledTimeAgo
-            fontWeight={isActive ? 'medium' : 'semiBold'}
+            fontWeight={isActive ? 'regular' : 'bold'}
             color={viewed ? variables.palette.on_surface_variant : variables.palette.semantic.error}
           >
             {timeAgo}

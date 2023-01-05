@@ -16,7 +16,7 @@ const commonFocusStyles = Object.assign(
 const theme = createTheme({
   spacing: 10,
   typography: {
-    fontFamily: 'NotoSans',
+    fontFamily: 'Atkinson',
     htmlFontSize: 10,
     button: {
       fontSize: variables.font.size.md,
@@ -60,7 +60,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: variables.font.size.xxl,
-          fontWeight: variables.font.weight.medium,
+          fontWeight: variables.font.weight.regular,
           padding: '6.4rem 2.4rem 2.8rem',
         },
       },
@@ -101,7 +101,7 @@ const theme = createTheme({
           '.MuiTableCell-head': {
             borderLeft: 'none',
             color: variables.palette.on_surface_variant,
-            fontWeight: variables.font.weight.medium,
+            fontWeight: variables.font.weight.regular,
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
             borderLeft: `${variables.borderWidth.md} solid transparent}`,
@@ -131,14 +131,14 @@ const theme = createTheme({
           padding: '0 1.2rem',
           fontSize: variables.font.size.sm,
           lineHeight: variables.lineHeight.sm,
-          fontWeight: variables.font.weight.medium,
+          fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface,
           borderBottomWidth: variables.borderWidth.md,
           borderBottomStyle: 'solid',
           borderBottomColor: variables.palette.surface_variant,
         },
         head: {
-          fontWeight: variables.font.weight.semiBold,
+          fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface_variant,
 
           '.MuiTableSortLabel-root.Mui-active': {
@@ -179,7 +179,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          fontWeight: variables.font.weight.medium,
+          fontWeight: variables.font.weight.bold,
           lineHeight: variables.lineHeight.md,
           padding: '1rem 1.6rem',
           borderRadius: variables.borderRadius.xxxl,
@@ -268,7 +268,7 @@ const theme = createTheme({
           '.MuiToggleButton-root': {
             color: variables.palette.on_secondary_container,
             fontSize: variables.font.size.md,
-            fontWeight: variables.font.weight.medium,
+            fontWeight: variables.font.weight.regular,
             lineHeight: variables.lineHeight.md,
             borderRadius: variables.borderRadius.xxxl,
             borderColor: variables.palette.outline,
