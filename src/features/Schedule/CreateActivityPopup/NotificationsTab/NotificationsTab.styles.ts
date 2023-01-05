@@ -5,17 +5,7 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 export const StyledRow = styled(Box)`
-  display: flex;
-  flex-direction: column;
   margin-top: ${theme.spacing(2.4)};
-
-  &:last-of-type {
-    margin-top: ${theme.spacing(3.4)};
-  }
-
-  svg {
-    fill: ${variables.palette.on_surface_variant};
-  }
 `;
 
 export const StyledAddBtn = styled(Button)`

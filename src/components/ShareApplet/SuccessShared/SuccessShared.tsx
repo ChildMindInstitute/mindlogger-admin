@@ -10,7 +10,7 @@ import {
   StyledLabelLarge,
   StyledTitleBoldSmall,
 } from 'styles/styledComponents/Typography';
-import { StyledChipsWrapper } from 'styles/styledComponents/ChipsWrapper';
+import { StyledFlexWrap } from 'styles/styledComponents/Flex';
 
 import { SuccessSharedProps } from './SuccessShared.types';
 import {
@@ -32,8 +32,8 @@ export const SuccessShared = ({
   img,
 }: SuccessSharedProps) => {
   const { t } = useTranslation('app');
-
   const [linkCopied, setLinkCopied] = useState(false);
+
   const handleCopyAppletLink = async () => {
     await navigator.clipboard.writeText(appletLink);
     setLinkCopied(true);
@@ -46,20 +46,18 @@ export const SuccessShared = ({
         <StyledAppletContent>
           <StyledLabelLarge>{title}</StyledLabelLarge>
           <StyledText color={variables.palette.on_surface_variant}>{text}</StyledText>
-          {keywords.length > 0 && (
-            <StyledChipsWrapper sx={{ marginTop: theme.spacing(0.8) }}>
+          {keywords?.length > 0 && (
+            <StyledFlexWrap sx={{ marginTop: theme.spacing(0.8) }}>
               {keywords.map((word, i) => (
                 <Chip color="secondary" key={i} title={word} />
               ))}
-            </StyledChipsWrapper>
+            </StyledFlexWrap>
           )}
           {activitiesQuantity ? (
             <StyledTitleBoldSmall
               sx={{ marginTop: theme.spacing(1.6) }}
             >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleBoldSmall>
-          ) : (
-            ''
-          )}
+          ) : null}
         </StyledAppletContent>
       </StyledApplet>
       <StyledLinkBtn

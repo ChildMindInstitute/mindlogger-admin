@@ -8,6 +8,10 @@ export const StyledTimePickerWrapper = styled(Box)`
   position: relative;
   width: ${({ width }: { width?: number | undefined }) => (width ? `${width}rem` : '100%')};
 
+  .MuiTextField-root {
+    width: 100%;
+  }
+
   .react-datepicker-popper[data-placement^='bottom'] {
     padding-top: ${theme.spacing(0.2)};
   }

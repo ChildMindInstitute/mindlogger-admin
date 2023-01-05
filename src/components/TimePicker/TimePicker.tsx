@@ -10,6 +10,7 @@ import { TimePickerProps } from './TimePicker.types';
 export const TimePicker = <T extends FieldValues>({
   control,
   timeIntervals = 15,
+  format = 'HH:mm',
   label,
   name,
 }: TimePickerProps<T>) => (
@@ -26,8 +27,8 @@ export const TimePicker = <T extends FieldValues>({
           showTimeSelectOnly
           timeIntervals={timeIntervals}
           showPopperArrow={false}
-          dateFormat="HH:mm"
-          timeFormat="HH:mm"
+          dateFormat={format}
+          timeFormat={format}
           customInput={
             <TextField
               variant="outlined"

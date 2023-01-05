@@ -1,4 +1,4 @@
-import { InviteLink } from 'components/AddUser/LinkGenerator/LinkGenerator.types';
+import { InviteLink } from './LinkGenerator.types';
 
 //TODO change base url
 

@@ -7,7 +7,7 @@ import { Schedule } from 'features/Schedule';
 const Login = lazy(() => import('pages/Login'));
 const ResetPassword = lazy(() => import('pages/ResetPassword'));
 const SignUp = lazy(() => import('pages/SignUp'));
-const AddUser = lazy(() => import('components/AddUser'));
+const AddUser = lazy(() => import('features/AddUser'));
 const AppletSettings = lazy(() => import('features/AppletSettings'));
 
 export const authRoutes = [
