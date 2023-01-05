@@ -6,9 +6,11 @@ import { auth, folders, Breadcrumb, breadcrumbs } from 'redux/modules';
 import { page } from 'resources';
 import { getAppletData } from 'utils/getAppletData';
 import { useAppDispatch } from 'redux/store';
+import { useTranslation } from 'react-i18next';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { id } = useParams();
+  const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const location = useLocation();
   const authData = auth.useData();
@@ -37,7 +39,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
 
     setCrumbs([...newBreadcrumbs, ...(id && restCrumbs ? restCrumbs : [])]);
-  }, [authData, appletsFoldersData, id]);
+  }, [t, authData, appletsFoldersData, id]);
 
   useEffect(() => {
     if (crumbs?.length) {

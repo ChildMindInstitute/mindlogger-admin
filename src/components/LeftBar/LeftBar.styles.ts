@@ -3,6 +3,7 @@ import { ListItem, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { blendColorsNormal } from 'utils/colors';
 
 export const StyledDrawer = styled(Box)`
   background-color: ${variables.palette.surface1};
@@ -15,6 +16,15 @@ export const StyledDrawerItem = styled(ListItem)`
   padding: 0;
   margin-bottom: ${theme.spacing(2.8)};
   justify-content: center;
+
+  &:hover {
+    .active-link:before {
+      background: ${blendColorsNormal(
+        variables.palette.primary_container,
+        variables.palette.on_primary_container_alfa8,
+      )};
+    }
+  }
 
   a {
     text-decoration: none;

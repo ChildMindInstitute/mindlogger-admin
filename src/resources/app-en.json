@@ -208,5 +208,6 @@
   "weeks": "Weeks",
   "months": "Months",
   "years": "Years",
-  "periodRequired": "Period is required"
+  "periodRequired": "Period is required",
+  "schedule": "Schedule"
 }

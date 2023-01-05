@@ -1,0 +1,30 @@
+import { normal } from 'color-blend';
+
+export const convertColorToRGBA = (color: string) => {
+  const div = document.createElement('div');
+  div.style.backgroundColor = color;
+  document.body.appendChild(div);
+  let rgba = getComputedStyle(div).getPropertyValue('background-color');
+  div.remove();
+
+  if (rgba.indexOf('rgba') === -1) {
+    rgba = rgba.replace(')', ', 1)');
+  }
+
+  const [r, g, b, a] = (rgba.match(/[.\d]+/g) as RegExpMatchArray).map((color) => +color);
+
+  return {
+    r,
+    g,
+    b,
+    a,
+  };
+};
+
+export const blendColorsNormal = (mainColor: string, overlayColor: string) => {
+  const mainColorRGBA = convertColorToRGBA(mainColor);
+  const overlayColorRGBA = convertColorToRGBA(overlayColor);
+  const { r, g, b, a } = normal(mainColorRGBA, overlayColorRGBA);
+
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+};

@@ -3,6 +3,7 @@ import 'react-datepicker/dist/react-datepicker.min.css';
 
 import { typography } from 'styles/typography';
 import { variables } from 'styles/variables';
+import { blendColorsNormal } from 'utils/colors';
 
 const commonFocusStyles = Object.assign(
   {},
@@ -189,7 +190,10 @@ const theme = createTheme({
           boxShadow: 'unset',
           '&.MuiButton-contained': {
             '&:hover': {
-              backgroundColor: variables.palette.contained_btn_hover,
+              backgroundColor: blendColorsNormal(
+                variables.palette.primary,
+                variables.palette.light_alfa8,
+              ),
               boxShadow: 'unset',
             },
             ...Object.assign(
@@ -243,6 +247,12 @@ const theme = createTheme({
           '&.MuiChip-colorPrimary': {
             border: 'none',
             backgroundColor: variables.palette.secondary_container,
+            '&:hover': {
+              backgroundColor: blendColorsNormal(
+                variables.palette.secondary_container,
+                variables.palette.on_secondary_container_alfa8,
+              ),
+            },
           },
           '&.MuiChip-colorSecondary': {
             borderWidth: variables.borderWidth.md,
@@ -287,6 +297,13 @@ const theme = createTheme({
             '&.Mui-selected': {
               backgroundColor: variables.palette.secondary_container,
               color: variables.palette.on_secondary_container,
+
+              '&:hover': {
+                backgroundColor: blendColorsNormal(
+                  variables.palette.secondary_container,
+                  variables.palette.on_secondary_container_alfa8,
+                ),
+              },
             },
           },
         },
@@ -376,6 +393,12 @@ const theme = createTheme({
           },
           '.MuiMenuItem-root.Mui-selected': {
             backgroundColor: variables.palette.surface_variant,
+            '&:hover': {
+              backgroundColor: blendColorsNormal(
+                variables.palette.surface_variant,
+                variables.palette.on_surface_alfa8,
+              ),
+            },
           },
         },
       },
