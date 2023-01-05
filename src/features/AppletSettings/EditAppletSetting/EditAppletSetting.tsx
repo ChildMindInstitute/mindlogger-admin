@@ -7,7 +7,7 @@ import {
   StyledAppletSettingsDescription,
 } from 'styles/styledComponents/AppletSettings';
 
-export const EditApplet = () => {
+export const EditAppletSetting = () => {
   const { t } = useTranslation('app');
 
   return (

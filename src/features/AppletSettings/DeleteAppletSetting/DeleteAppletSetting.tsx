@@ -11,7 +11,7 @@ import {
   StyledAppletSettingsDescription,
 } from 'styles/styledComponents/AppletSettings';
 
-export const DeleteApplet = () => {
+export const DeleteAppletSetting = () => {
   const { t } = useTranslation('app');
   const { id } = useParams();
   const dispatch = useAppDispatch();
