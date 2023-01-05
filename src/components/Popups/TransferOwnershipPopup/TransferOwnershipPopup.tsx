@@ -15,7 +15,7 @@ export const TransferOwnershipPopup = () => {
   const applet = accountData?.account?.applets?.find((el) => el.id === appletId);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [appletTransfered, setAppletTransfered] = useState(false);
+  const [emailTransfered, setEmailTransfered] = useState('');
 
   const onClose = () => {
     dispatch(
@@ -28,8 +28,8 @@ export const TransferOwnershipPopup = () => {
   };
 
   useEffect(() => {
-    appletTransfered && onClose();
-  }, [appletTransfered]);
+    emailTransfered && onClose();
+  }, [emailTransfered]);
 
   const handleSubmit = () => {
     setIsSubmitted(true);
@@ -45,10 +45,10 @@ export const TransferOwnershipPopup = () => {
     >
       <StyledModalWrapper>
         <TransferOwnership
-          applet={applet}
+          applet={applet!}
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
-          setAppletTransfered={setAppletTransfered}
+          setEmailTransfered={setEmailTransfered}
         />
       </StyledModalWrapper>
     </Modal>

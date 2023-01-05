@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,13 +12,14 @@ import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 
 import { StyledInputWrapper } from './TransferOwnership.styles';
+import { TransferOwnershipProps } from './TransferOwnership.types';
 
 export const TransferOwnership = ({
   applet,
   isSubmitted,
   setIsSubmitted,
   setEmailTransfered,
-}: any) => {
+}: TransferOwnershipProps) => {
   const { t } = useTranslation('app');
   const { getValues, handleSubmit, control } = useForm<{ email: string }>({
     resolver: yupResolver(
