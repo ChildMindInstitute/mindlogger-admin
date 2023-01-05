@@ -32,7 +32,6 @@ export const SuccessShared = ({
   img,
 }: SuccessSharedProps) => {
   const { t } = useTranslation('app');
-
   const [linkCopied, setLinkCopied] = useState(false);
 
   const handleCopyAppletLink = async () => {
@@ -54,11 +53,11 @@ export const SuccessShared = ({
               ))}
             </StyledFlexWrap>
           )}
-          {activitiesQuantity && (
+          {activitiesQuantity ? (
             <StyledTitleBoldSmall
               sx={{ marginTop: theme.spacing(1.6) }}
             >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleBoldSmall>
-          )}
+          ) : null}
         </StyledAppletContent>
       </StyledApplet>
       <StyledLinkBtn
