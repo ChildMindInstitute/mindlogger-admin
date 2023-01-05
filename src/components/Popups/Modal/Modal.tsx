@@ -20,6 +20,7 @@ export const Modal = ({
   disabledSubmit = false,
   width,
   hasSecondBtn = false,
+  secondBtnColor = 'primary',
   secondBtnText,
   onSecondBtnSubmit,
   disabledSecondBtn,
@@ -37,7 +38,12 @@ export const Modal = ({
         {buttonText}
       </StyledButton>
       {hasSecondBtn && (
-        <StyledButton variant="text" disabled={disabledSecondBtn} onClick={onSecondBtnSubmit}>
+        <StyledButton
+          variant="text"
+          disabled={disabledSecondBtn}
+          onClick={onSecondBtnSubmit}
+          color={secondBtnColor}
+        >
           {secondBtnText}
         </StyledButton>
       )}

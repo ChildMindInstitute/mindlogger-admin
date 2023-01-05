@@ -1,3 +1,5 @@
+import { OverridableStringUnion } from '@mui/types';
+import { ButtonPropsColorOverrides } from '@mui/material';
 import { BaseSyntheticEvent } from 'react';
 
 type BtnSubmit =
@@ -16,6 +18,10 @@ export type ModalProps = {
   disabledSubmit?: boolean;
   width?: string;
   hasSecondBtn?: boolean;
+  secondBtnColor?: OverridableStringUnion<
+    'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
+    ButtonPropsColorOverrides
+  >;
   secondBtnText?: string;
   onSecondBtnSubmit?: BtnSubmit;
   disabledSecondBtn?: boolean;

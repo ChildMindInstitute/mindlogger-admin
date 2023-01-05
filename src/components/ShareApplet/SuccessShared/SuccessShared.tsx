@@ -10,7 +10,7 @@ import {
   StyledLabelLarge,
   StyledTitleBoldSmall,
 } from 'styles/styledComponents/Typography';
-import { StyledChipsWrapper } from 'styles/styledComponents/chipsWrapper';
+import { StyledChipsWrapper } from 'styles/styledComponents/ChipsWrapper';
 
 import { SuccessSharedProps } from './SuccessShared.types';
 import {

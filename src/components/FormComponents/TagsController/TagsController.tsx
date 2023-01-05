@@ -3,7 +3,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { Svg } from 'components/Svg';
 import { Chip } from 'components/Chip';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-import { StyledChipsWrapper } from 'styles/styledComponents/chipsWrapper';
+import { StyledChipsWrapper } from 'styles/styledComponents/ChipsWrapper';
 
 import { TagsInputControllerProps } from './TagsController.types';
 import { StyledTextField } from './TagsController.styles';
