@@ -1,8 +1,7 @@
 import { Svg } from 'components/Svg';
-import { EditApplet } from 'features/AppletSettings/EditAppletSetting';
-import { ExportData } from 'features/AppletSettings/ExportDataSetting';
-import { DeleteApplet } from 'features/AppletSettings/DeleteAppletSetting';
-
+import { EditAppletSetting } from '../EditAppletSetting';
+import { ExportDataSetting } from '../ExportDataSetting';
+import { DeleteAppletSetting } from '../DeleteAppletSetting';
 import { DataRetention } from '../DataRetentionSetting/DataRetention';
 import { ShareAppletSetting } from '../ShareAppletSetting';
 
@@ -13,7 +12,7 @@ export const navigationItems = [
       {
         icon: <Svg id="export" />,
         label: 'exportData',
-        component: <ExportData />,
+        component: <ExportDataSetting />,
       },
       {
         icon: <Svg id="data-retention" />,
@@ -28,7 +27,7 @@ export const navigationItems = [
       {
         icon: <Svg id="edit-applet" />,
         label: 'editApplet',
-        component: <EditApplet />,
+        component: <EditAppletSetting />,
       },
       {
         icon: <Svg id="schema" />,
@@ -73,7 +72,7 @@ export const navigationItems = [
       {
         icon: <Svg id="trash" />,
         label: 'deleteApplet',
-        component: <DeleteApplet />,
+        component: <DeleteAppletSetting />,
       },
     ],
   },

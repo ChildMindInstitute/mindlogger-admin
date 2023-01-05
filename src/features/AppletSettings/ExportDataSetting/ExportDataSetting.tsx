@@ -8,10 +8,11 @@ import { Svg } from 'components/Svg';
 import { account, folders } from 'redux/modules';
 import { getAppletEncryptionInfo } from 'utils/encryption';
 import { getAppletData } from 'utils/getAppletData';
+
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
-} from 'styles/styledComponents/AppletSettings';
+} from '../AppletSettings.styles';
 
 export const ExportDataSetting = () => {
   const { t } = useTranslation('app');
