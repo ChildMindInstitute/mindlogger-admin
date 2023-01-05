@@ -13,7 +13,7 @@ import {
   StyledAppletSettingsDescription,
 } from 'styles/styledComponents/AppletSettings';
 
-export const ExportData = () => {
+export const ExportDataSetting = () => {
   const { t } = useTranslation('app');
   const { id } = useParams();
   const accData = account.useData();

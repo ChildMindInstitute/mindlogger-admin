@@ -66,7 +66,7 @@ export const StyledLogOutBtn = styled(Button)`
   border-radius: ${variables.borderRadius.lg};
   height: auto;
   color: ${variables.palette.on_surface_variant};
-  font-weight: ${variables.font.weight.medium};
+  font-weight: ${variables.font.weight.bold};
 `;
 
 export const StyledQuantity = styled(StyledQuantityCircle)`

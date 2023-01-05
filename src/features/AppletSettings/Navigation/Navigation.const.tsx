@@ -1,8 +1,9 @@
 import { Svg } from 'components/Svg';
-import { EditApplet } from 'features/EditApplet';
-import { ExportData } from 'features/ExportData';
-import { DeleteApplet } from 'features/DeleteApplet';
+import { EditApplet } from 'features/AppletSettings/EditAppletSetting';
+import { ExportData } from 'features/AppletSettings/ExportDataSetting';
+import { DeleteApplet } from 'features/AppletSettings/DeleteAppletSetting';
 
+import { DataRetention } from '../DataRetentionSetting/DataRetention';
 import { ShareAppletSetting } from '../ShareAppletSetting';
 import { TransferOwnershipSetting } from '../TransferOwnershipSetting';
 
@@ -18,7 +19,7 @@ export const navigationItems = [
       {
         icon: <Svg id="data-retention" />,
         label: 'dataRetention',
-        component: <>dataRetention</>,
+        component: <DataRetention />,
       },
     ],
   },

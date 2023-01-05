@@ -3,7 +3,7 @@ import { ReactDatePickerCustomHeaderProps } from 'react-datepicker';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
-import { StyledLabelLarge } from 'styles/styledComponents/Typography';
+import { StyledLabelBoldLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
 
 import { UiType } from '../DatePicker.types';
@@ -47,7 +47,7 @@ export const DatePickerHeader = ({
         <StyledIconBtn onClick={decreaseYear}>
           <Svg id="navigate-left" />
         </StyledIconBtn>
-        <StyledLabelLarge fontWeight="semiBold">{String(date.getFullYear())}</StyledLabelLarge>
+        <StyledLabelBoldLarge>{String(date.getFullYear())}</StyledLabelBoldLarge>
         <StyledIconBtn onClick={increaseYear}>
           <Svg id="navigate-right" />
         </StyledIconBtn>

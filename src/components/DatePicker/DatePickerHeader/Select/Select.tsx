@@ -1,6 +1,6 @@
 import { MenuItem, Select as MuiSelect } from '@mui/material';
 
-import { StyledLabelLarge } from 'styles/styledComponents/Typography';
+import { StyledLabelBoldLarge } from 'styles/styledComponents/Typography';
 
 import { SelectProps } from './Select.types';
 import { StyledFormControl } from './Select.styles';
@@ -10,7 +10,7 @@ export const Select = ({ value, changeValue, options }: SelectProps) => (
     <MuiSelect value={value} onChange={changeValue}>
       {options.map((value) => (
         <MenuItem key={value} value={value}>
-          <StyledLabelLarge fontWeight="semiBold">{value}</StyledLabelLarge>
+          <StyledLabelBoldLarge>{value}</StyledLabelBoldLarge>
         </MenuItem>
       ))}
     </MuiSelect>

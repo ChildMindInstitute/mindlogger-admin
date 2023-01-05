@@ -4,7 +4,7 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { useAppDispatch } from 'redux/store';
 import { account, auth } from 'redux/modules';
 import { variables } from 'styles/variables';
-import { StyledLabelMedium } from 'styles/styledComponents/Typography';
+import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import avatarSrc from 'assets/images/avatar.png';
 
@@ -42,9 +42,9 @@ export const TopBar = (): JSX.Element => {
           <StyledImage src={avatarSrc} alt="Avatar" />
           {alertsQuantity > 0 && (
             <StyledQuantity>
-              <StyledLabelMedium fontWeight="semiBold" color={variables.palette.white}>
+              <StyledLabelBoldMedium color={variables.palette.white}>
                 {alertsQuantity}
-              </StyledLabelMedium>
+              </StyledLabelBoldMedium>
             </StyledQuantity>
           )}
         </StyledAvatarBtn>

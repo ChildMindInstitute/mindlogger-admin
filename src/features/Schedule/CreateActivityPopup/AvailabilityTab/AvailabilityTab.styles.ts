@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 export const StyledWrapper = styled(Box)`
   margin: ${theme.spacing(2.4, 0)};
@@ -13,5 +14,9 @@ export const StyledButtonsTitle = styled(StyledBodyMedium)`
 `;
 
 export const StyledTimeWrapper = styled(Box)`
-  margin-right: ${theme.spacing(2.4)};
+  flex: 1;
+`;
+
+export const StyledTimeRow = styled(StyledFlexTopCenter)`
+  justify-content: space-between;
 `;

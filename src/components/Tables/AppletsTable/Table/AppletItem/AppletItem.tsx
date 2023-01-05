@@ -85,7 +85,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
               </StyledPinContainer>
             )}
             <AppletImage image={item.image} appletName={item.name} />
-            <StyledBodyMedium fontWeight={'medium'}>{item.name}</StyledBodyMedium>
+            <StyledBodyMedium>{item.name}</StyledBodyMedium>
           </StyledAppletName>
         </TableCell>
         <TableCell width="20%" onClick={() => handleAppletClick(item.id)}>
