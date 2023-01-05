@@ -4,6 +4,7 @@ import { ExportData } from 'features/ExportData';
 import { DeleteApplet } from 'features/DeleteApplet';
 
 import { ShareAppletSetting } from '../ShareAppletSetting';
+import { TransferOwnershipSetting } from '../TransferOwnershipSetting';
 
 export const navigationItems = [
   {
@@ -67,7 +68,7 @@ export const navigationItems = [
       {
         icon: <Svg id="transfer-ownership" />,
         label: 'transferOwnership',
-        component: <>transferOwnership</>,
+        component: <TransferOwnershipSetting />,
       },
       {
         icon: <Svg id="trash" />,

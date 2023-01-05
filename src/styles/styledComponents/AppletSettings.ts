@@ -3,9 +3,9 @@ import { Button } from '@mui/material';
 
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
+import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 
-export const StyledAppletSettingsDescription = styled(StyledBodyMedium)`
+export const StyledAppletSettingsDescription = styled(StyledBodyLarge)`
   margin: ${theme.spacing(4.8, 0, 2.4)};
 `;
 
