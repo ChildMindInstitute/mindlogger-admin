@@ -1,9 +1,11 @@
 import { Svg } from 'components/Svg';
+
 import { EditAppletSetting } from '../EditAppletSetting';
 import { ExportDataSetting } from '../ExportDataSetting';
 import { DeleteAppletSetting } from '../DeleteAppletSetting';
 import { DataRetention } from '../DataRetentionSetting/DataRetention';
 import { ShareAppletSetting } from '../ShareAppletSetting';
+import { TransferOwnershipSetting } from '../TransferOwnershipSetting';
 
 export const navigationItems = [
   {
@@ -67,7 +69,7 @@ export const navigationItems = [
       {
         icon: <Svg id="transfer-ownership" />,
         label: 'transferOwnership',
-        component: <>transferOwnership</>,
+        component: <TransferOwnershipSetting />,
       },
       {
         icon: <Svg id="trash" />,

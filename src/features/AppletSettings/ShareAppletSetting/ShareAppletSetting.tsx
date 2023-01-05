@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { folders } from 'redux/modules';
 import { Svg } from 'components/Svg';
 import { ShareApplet } from 'components/ShareApplet';
-import { SuccessSharePopup } from 'components/Popups/SucessSharePopup';
+import { SuccessSharePopup } from 'components/Popups';
 
 import { StyledButton, StyledContainer } from './ShareAppletSetting.styles';
 import { StyledHeadline } from '../AppletSettings.styles';
