@@ -34,8 +34,8 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
   .MuiButtonBase-root.Mui-selected {
     color: ${({ uiType }: { uiType: UiType }) =>
       uiType === UiType.primary ? variables.palette.on_surface : variables.palette.primary};
-    font-weight: ${({ uiType }: { uiType: UiType }) =>
-      uiType === UiType.primary ? variables.font.weight.medium : variables.font.weight.semiBold};
+    font-weight: ${variables.font.weight.regular};
+    color: ${variables.palette.primary};
 
     svg {
       fill: ${variables.palette.primary};

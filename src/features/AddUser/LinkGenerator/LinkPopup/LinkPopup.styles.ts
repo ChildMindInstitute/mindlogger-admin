@@ -33,5 +33,5 @@ export const StyledDialogActions = styled(DialogActions)`
 `;
 
 export const StyledButton = styled(Button)`
-  font-weight: ${variables.font.weight.semiBold};
+  font-weight: ${variables.font.weight.bold};
 `;

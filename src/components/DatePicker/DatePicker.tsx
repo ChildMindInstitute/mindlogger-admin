@@ -153,7 +153,7 @@ export const DatePicker = <T extends FieldValues>({
                     }}
                     onClick={handleShowFirstClick}
                   >
-                    <StyledBodyLarge fontWeight="regular" color={variables.palette.on_surface}>
+                    <StyledBodyLarge color={variables.palette.on_surface}>
                       {t('selectStartingDate')}
                     </StyledBodyLarge>
                   </StyledCollapseBtn>
@@ -166,7 +166,7 @@ export const DatePicker = <T extends FieldValues>({
                     }}
                     onClick={handleShowSecondClick}
                   >
-                    <StyledBodyLarge fontWeight="regular" color={variables.palette.on_surface}>
+                    <StyledBodyLarge color={variables.palette.on_surface}>
                       {t('selectEndingDate')}
                     </StyledBodyLarge>
                   </StyledCollapseBtn>

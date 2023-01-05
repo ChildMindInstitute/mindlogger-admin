@@ -8,7 +8,7 @@ import theme from 'styles/theme';
 import {
   StyledBodyMedium,
   StyledLabelLarge,
-  StyledTitleSmall,
+  StyledTitleBoldSmall,
 } from 'styles/styledComponents/Typography';
 import { StyledFlexWrap } from 'styles/styledComponents/Flex';
 
@@ -55,10 +55,9 @@ export const SuccessShared = ({
             </StyledFlexWrap>
           )}
           {activitiesQuantity && (
-            <StyledTitleSmall
+            <StyledTitleBoldSmall
               sx={{ marginTop: theme.spacing(1.6) }}
-              fontWeight="semiBold"
-            >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleSmall>
+            >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleBoldSmall>
           )}
         </StyledAppletContent>
       </StyledApplet>

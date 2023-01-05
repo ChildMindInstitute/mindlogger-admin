@@ -20,7 +20,7 @@ export const StyledPopover = styled(Popover)`
     font-size: ${variables.font.size.sm};
     line-height: ${variables.lineHeight.sm};
     letter-spacing: ${variables.letterSpacing.xl};
-    font-family: 'NotoSans', helvetica, arial, sans-serif;
+    font-family: 'Atkinson', helvetica, arial, sans-serif;
     background-color: transparent;
     border: none;
     border-radius: unset;

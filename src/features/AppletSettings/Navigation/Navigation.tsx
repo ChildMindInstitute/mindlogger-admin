@@ -21,7 +21,7 @@ export const Navigation = ({ selectedSetting, handleSettingClick }: NavigationPr
       <StyledHeadline>{t('appletSettings')}</StyledHeadline>
       {navigationItems.map(({ label, items }) => (
         <StyledSettingsGroup key={label} isCompact={!!selectedSetting}>
-          <StyledTitleSmall fontWeight="regular">{t(label)}</StyledTitleSmall>
+          <StyledTitleSmall>{t(label)}</StyledTitleSmall>
           <StyledSettings isCompact={!!selectedSetting}>
             {items.map(({ icon, label, component }) => (
               <StyledSetting

@@ -39,9 +39,13 @@ export const DeletePopup = () => {
     <Modal
       open={deletePopupVisible}
       onClose={onClose}
-      onSubmit={handleDeleteApplet}
+      onSubmit={onClose}
       title={t('deleteApplet')}
-      buttonText={t('ok')}
+      buttonText={t('cancel')}
+      hasSecondBtn
+      secondBtnColor="error"
+      secondBtnText={t('delete')}
+      onSecondBtnSubmit={handleDeleteApplet}
     >
       <StyledModalWrapper>{t('confirmDeleteApplet')}</StyledModalWrapper>
     </Modal>
