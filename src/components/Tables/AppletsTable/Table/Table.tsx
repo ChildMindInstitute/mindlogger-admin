@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo, useState } from 'react';
+import { Fragment, useMemo, useState, MouseEvent } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { FolderApplet } from 'redux/modules';
@@ -24,7 +24,7 @@ export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: Ta
     return sortRows(rows, getComparator(order, orderBy));
   }, [order, orderBy, rows]);
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
+  const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);

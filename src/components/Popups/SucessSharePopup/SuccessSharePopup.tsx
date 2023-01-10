@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SuccessShared } from 'components/ShareApplet/SuccessShared';
 
-import { Modal } from '../Modal';
+import { Modal } from 'components/Popups';
 import { SuccessSharePopupProps } from './SuccessSharePopup.types';
 
 export const SuccessSharePopup = ({

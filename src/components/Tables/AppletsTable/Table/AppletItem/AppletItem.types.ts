@@ -1,4 +1,4 @@
-export type ActionsRender = {
+export type Actions = {
   viewUsers: () => void;
   viewCalendar: () => void;
   deleteAction: () => void;

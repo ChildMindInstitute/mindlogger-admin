@@ -2,16 +2,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Search } from 'components/Search';
 import { Table, Row } from 'components/Tables';
-import { Svg } from 'components/Svg';
+import { Actions, Pin, Svg, Search } from 'components';
 import { users, UserData } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
-import { Actions } from 'components/Actions';
-import { Pin } from 'components/Pin';
 
 import {
   RespondentsTableHeader,
@@ -21,7 +18,7 @@ import {
 } from './RespondentsTable.styles';
 import { actions, getHeadCells } from './RespondentsTable.const';
 
-export const RespondentsTable = (): JSX.Element => {
+export const RespondentsTable = () => {
   const { id } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
@@ -105,7 +102,7 @@ export const RespondentsTable = (): JSX.Element => {
         <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
         {id && <StyledRightBox />}
       </RespondentsTableHeader>
-      <Table columns={getHeadCells(t)} rows={handleFilterRows(rows as Row[])} orderBy={'updated'} />
+      <Table columns={getHeadCells()} rows={handleFilterRows(rows)} orderBy="updated" />
     </>
   );
 };

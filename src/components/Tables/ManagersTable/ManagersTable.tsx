@@ -2,23 +2,24 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Search } from 'components/Search';
 import { Table, Row } from 'components/Tables';
-import { Svg } from 'components/Svg';
+import { Svg, Actions, Search } from 'components';
 import { ManagerData, users } from 'redux/modules';
 import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
 
+import { EditAccessPopup } from 'components/Popups/EditAccessPopup';
 import { ManagersTableHeader } from './ManagersTable.styles';
-import { getHeadCells } from './ManagersTable.const';
+import { getActions, getHeadCells } from './ManagersTable.const';
 
-export const ManagersTable = (): JSX.Element => {
+export const ManagersTable = () => {
   const { id } = useParams();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
   const managersData = users.useManagerData();
   const [searchValue, setSearchValue] = useState('');
+  const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
 
   useBreadcrumbs([
     {
@@ -26,6 +27,10 @@ export const ManagersTable = (): JSX.Element => {
       label: t('managers'),
     },
   ]);
+
+  const actions = {
+    editAccessAction: () => setEditAccessPopupVisible(true),
+  };
 
   const managersArr = (
     id ? prepareUsersData(managersData?.items, id) : prepareUsersData(managersData?.items)
@@ -52,8 +57,9 @@ export const ManagersTable = (): JSX.Element => {
         value: lastEdited,
       },
       actions: {
-        content: () => '',
+        content: (item: Row) => <Actions items={getActions(actions)} context={item} />,
         value: '',
+        width: '20%',
       },
     };
   });
@@ -75,7 +81,13 @@ export const ManagersTable = (): JSX.Element => {
       <ManagersTableHeader>
         <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
       </ManagersTableHeader>
-      <Table columns={getHeadCells(t)} rows={handleFilterRows(rows as Row[])} orderBy={'updated'} />
+      <Table columns={getHeadCells()} rows={handleFilterRows(rows)} orderBy="updated" />
+      {editAccessPopupVisible && (
+        <EditAccessPopup
+          editAccessPopupVisible={editAccessPopupVisible}
+          onClose={() => setEditAccessPopupVisible(false)}
+        />
+      )}
     </>
   );
 };
