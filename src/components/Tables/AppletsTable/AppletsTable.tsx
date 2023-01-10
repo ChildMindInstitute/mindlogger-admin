@@ -99,12 +99,12 @@ export const AppletsTable = () => {
         <Menu
           anchorEl={anchorEl}
           onClose={handleMenuClose}
-          menuItems={getMenuItems(t, handleMenuClose)}
+          menuItems={getMenuItems(handleMenuClose)}
         />
         <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
       </AppletsTableHeader>
       <Table
-        columns={getHeadCells(t)}
+        columns={getHeadCells()}
         rows={flattenItems?.filter(filterRows)}
         orderBy="updated"
         headerContent={headerContent}

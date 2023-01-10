@@ -102,7 +102,7 @@ export const RespondentsTable = () => {
         <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
         {id && <StyledRightBox />}
       </RespondentsTableHeader>
-      <Table columns={getHeadCells(t)} rows={handleFilterRows(rows)} orderBy="updated" />
+      <Table columns={getHeadCells()} rows={handleFilterRows(rows)} orderBy="updated" />
     </>
   );
 };

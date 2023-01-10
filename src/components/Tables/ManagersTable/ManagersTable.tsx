@@ -81,7 +81,7 @@ export const ManagersTable = () => {
       <ManagersTableHeader>
         <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
       </ManagersTableHeader>
-      <Table columns={getHeadCells(t)} rows={handleFilterRows(rows)} orderBy="updated" />
+      <Table columns={getHeadCells()} rows={handleFilterRows(rows)} orderBy="updated" />
       {editAccessPopupVisible && (
         <EditAccessPopup
           editAccessPopupVisible={editAccessPopupVisible}

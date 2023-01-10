@@ -1,8 +1,8 @@
-import { TFunction } from 'i18next';
+import { t } from 'i18next';
 
 import { HeadCell } from 'types/table';
 
-export const getHeadCells = (t: TFunction): HeadCell[] => [
+export const getHeadCells = (): HeadCell[] => [
   {
     id: 'secretUserId',
     label: t('secretUserId'),

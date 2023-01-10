@@ -1,10 +1,10 @@
-import { t, TFunction } from 'i18next';
+import { t } from 'i18next';
 
 import { Svg } from 'components/Svg';
 import { UserData } from 'redux/modules';
 import { HeadCell } from 'types/table';
 
-export const getHeadCells = (t: TFunction): HeadCell[] => [
+export const getHeadCells = (): HeadCell[] => [
   {
     id: 'pin',
     label: '',

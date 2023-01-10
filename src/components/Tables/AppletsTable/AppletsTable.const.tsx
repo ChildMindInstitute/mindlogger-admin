@@ -1,9 +1,9 @@
-import { TFunction } from 'i18next';
+import { t } from 'i18next';
 
 import { Svg } from 'components/Svg';
 import { HeadCell } from 'types/table';
 
-export const getHeadCells = (t: TFunction): HeadCell[] => [
+export const getHeadCells = (): HeadCell[] => [
   {
     id: 'name',
     label: t('appletName'),
@@ -22,7 +22,7 @@ export const getHeadCells = (t: TFunction): HeadCell[] => [
   },
 ];
 
-export const getMenuItems = (t: TFunction, handleMenuClose: () => void) => [
+export const getMenuItems = (handleMenuClose: () => void) => [
   {
     icon: <Svg id="builder" />,
     title: t('new'),
