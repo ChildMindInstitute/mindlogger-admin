@@ -6,7 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - [Typescript](https://www.typescriptlang.org/) - TypeScript is JavaScript with syntax for types
 - [React](https://reactjs.org/) - A JavaScript library for building user interfaces
-- [Redux Toolkit](https://redux-toolkit.js.org/) - Global state manager for front end applications
+- [Redux Toolkit](https://redux-toolkit.js.org/) - Global state manager for JavaScript applications
 - [Material UI](https://mui.com/) - Library of React UI components
 - [Axios](https://axios-http.com/) - Promise-based HTTP Client for node.js and the browser
 - [React-app-rewired](https://github.com/timarney/react-app-rewired/) - Set up create-react-app webpack config without using "eject"
