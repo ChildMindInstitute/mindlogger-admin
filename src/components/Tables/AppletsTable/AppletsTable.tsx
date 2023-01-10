@@ -3,17 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
-import { Svg } from 'components/Svg';
 import { auth, FolderApplet, folders } from 'redux/modules';
-import { Search } from 'components/Search';
-import { Menu } from 'components/Menu';
+import { Menu, Search, Svg } from 'components';
 
 import { Table } from './Table/Table';
 import { getHeadCells, getMenuItems } from './AppletsTable.const';
 import { StyledButtons, AppletsTableHeader } from './AppletsTable.styles';
 import { generateNewFolderName } from './AppletsTable.utils';
 
-export const AppletsTable = (): JSX.Element => {
+export const AppletsTable = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
@@ -108,7 +106,7 @@ export const AppletsTable = (): JSX.Element => {
       <Table
         columns={getHeadCells(t)}
         rows={flattenItems?.filter(filterRows)}
-        orderBy={'updated'}
+        orderBy="updated"
         headerContent={headerContent}
       />
     </>

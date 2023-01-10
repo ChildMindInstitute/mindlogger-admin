@@ -11,7 +11,7 @@ export const InvitationsTable = ({ rows }: { rows: Row[] }) => {
   return (
     <>
       <StyledTitle>{t('pendingInvitations')}</StyledTitle>
-      <Table columns={getHeadCells(t)} rows={rows} orderBy={'dateTimeInvited'} />
+      <Table columns={getHeadCells(t)} rows={rows} orderBy="dateTimeInvited" />
     </>
   );
 };

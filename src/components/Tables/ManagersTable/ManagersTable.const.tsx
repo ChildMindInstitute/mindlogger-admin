@@ -1,5 +1,9 @@
-import { TFunction } from 'i18next';
+import { t, TFunction } from 'i18next';
+
+import { Svg } from 'components/Svg';
 import { HeadCell } from 'types/table';
+
+import { Actions } from './ManagersTable.types';
 
 export const getHeadCells = (t: TFunction): HeadCell[] => [
   {
@@ -25,5 +29,13 @@ export const getHeadCells = (t: TFunction): HeadCell[] => [
   {
     id: 'actions',
     label: t('actions'),
+  },
+];
+
+export const getActions = ({ editAccessAction }: Actions) => [
+  {
+    icon: <Svg id="edit-user" />,
+    action: editAccessAction,
+    toolTipTitle: t('editAccess'),
   },
 ];

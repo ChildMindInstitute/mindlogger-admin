@@ -3,16 +3,16 @@ import { t } from 'i18next';
 import { Svg } from 'components/Svg';
 import { FolderApplet } from 'redux/modules';
 
-import { ActionsRender } from './AppletItem.types';
+import { Actions } from './AppletItem.types';
 
-export const actionsRender = ({
+export const getActions = ({
   viewUsers,
   viewCalendar,
   deleteAction,
   transferOwnership,
   duplicateAction,
   shareAppletAction,
-}: ActionsRender) => [
+}: Actions) => [
   {
     icon: <Svg id="users" />,
     action: viewUsers,

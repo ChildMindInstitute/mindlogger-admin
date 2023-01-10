@@ -1,8 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
-import { Footer } from 'layouts/Footer';
 import { auth } from 'redux/modules';
-import { Spinner, Svg } from 'components';
+import { Spinner, Svg, Footer } from 'components';
 
 import {
   StyledAuthLayout,
@@ -12,7 +11,7 @@ import {
   StyledOutlet,
 } from './AuthLayout.styles';
 
-export const AuthLayout = (): JSX.Element => {
+export const AuthLayout = () => {
   const status = auth.useStatus();
 
   return (

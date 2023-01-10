@@ -67,38 +67,36 @@ export const Table = ({
   );
 
   return (
-    <>
-      <StyledTableContainer height={tableHeight}>
-        <MuiTable stickyHeader>
-          <Head
-            headCells={columns}
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}
-            tableHeader={tableHeader}
-          />
-          <TableBody>
-            {rows
-              ?.sort(getComparator(order, orderBy))
-              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow key={uniqueId('row_')} data-testid="table-row">
-                  {Object.keys(row)?.map((key) => (
-                    <TableCell
-                      onClick={row[key].onClick}
-                      scope="row"
-                      key={key}
-                      align={row[key].align}
-                      width={row[key].width}
-                    >
-                      {row[key].content()}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-          </TableBody>
-        </MuiTable>
-      </StyledTableContainer>
-    </>
+    <StyledTableContainer height={tableHeight}>
+      <MuiTable stickyHeader>
+        <Head
+          headCells={columns}
+          order={order}
+          orderBy={orderBy}
+          onRequestSort={handleRequestSort}
+          tableHeader={tableHeader}
+        />
+        <TableBody>
+          {rows
+            ?.sort(getComparator(order, orderBy))
+            ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row) => (
+              <TableRow key={uniqueId('row_')} data-testid="table-row">
+                {Object.keys(row)?.map((key) => (
+                  <TableCell
+                    onClick={row[key].onClick}
+                    scope="row"
+                    key={key}
+                    align={row[key].align}
+                    width={row[key].width}
+                  >
+                    {row[key].content(row)}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+        </TableBody>
+      </MuiTable>
+    </StyledTableContainer>
   );
 };
