@@ -15,11 +15,11 @@ import { useAsync } from 'hooks';
 import { revokeAppletUserApi } from 'api';
 import theme from 'styles/theme';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { StyledImg, StyledImgPlaceholder } from 'styles/styledComponents/Image';
 
 import { Modal } from '../Modal';
 import { buttonTextByStep, getHeadCells } from './RemoveAccessPopup.const';
 import { RemoveAccessPopupProps } from './RemoveAccessPopupProps.types';
-import { StyledImg, StyledImgPlaceholder } from './RemoveAccessPopup.styles';
 
 export const RemoveAccessPopup = ({
   removeAccessPopupVisible,
@@ -72,7 +72,7 @@ export const RemoveAccessPopup = ({
       setSelectedApplets(appletsIds);
     } else if (step === 2) {
       selectedApplets.forEach(async (appletId: string) => {
-        await execute({ appletId, profileId: user['_id'], deleteResponse: true });
+        await execute({ appletId, profileId: user['_id'], deleteResponse: false });
       });
     } else if (step === 3) {
       onClose();

@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next';
+
 import { HeadCell } from 'types/table';
 
 export const getHeadCells = (t: TFunction): HeadCell[] => [
