@@ -12,11 +12,11 @@ const commonImgStyles = `
   border-radius: ${variables.borderRadius.xxs};
 `;
 
-export const SmallAppletImg = styled('img', shouldForwardProp)`
+export const StyledSmallAppletImg = styled('img', shouldForwardProp)`
   ${commonImgStyles};
 `;
 
-export const SmallAppletImgPlaceholder = styled(Box)`
+export const StyledSmallAppletImgPlaceholder = styled(Box)`
   ${commonImgStyles};
   background-color: ${variables.palette.primary_container};
 `;
