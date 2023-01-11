@@ -12,6 +12,7 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
     & .MuiTableCell-root {
       background-color: transparent;
     }
+    
     & .MuiTableBody-root .MuiTableRow-root:hover {
       background-color: transparent;
     }

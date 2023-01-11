@@ -1,8 +1,7 @@
-import { TFunction } from 'i18next';
-
+import { t } from 'i18next';
 import { HeadCell } from 'types/table';
 
-export const getHeadCells = (t: TFunction): HeadCell[] => [
+export const headCells: HeadCell[] = [
   {
     id: 'name',
     label: t('appletName'),
@@ -15,7 +14,7 @@ export const getHeadCells = (t: TFunction): HeadCell[] => [
 ];
 
 export const buttonTextByStep = {
-  1: 'removeAccess',
-  2: 'remove',
-  3: 'ok',
+  0: 'removeAccess',
+  1: 'remove',
+  2: 'ok',
 };

@@ -5,3 +5,5 @@ export type RemoveAccessPopupProps = {
   onClose: () => void;
   user: ManagerData & { appletIds: string[] };
 };
+
+export type Steps = 0 | 1 | 2;

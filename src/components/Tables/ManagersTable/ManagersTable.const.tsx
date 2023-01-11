@@ -36,8 +36,8 @@ export const getActions = (
   isOwner: boolean,
   id: string | undefined,
   { removeAccessAction, editAccessAction }: Actions,
-) => [
-  ...(isOwner || id
+) =>
+  isOwner || id
     ? []
     : [
         {
@@ -50,5 +50,4 @@ export const getActions = (
           action: editAccessAction,
           tooltipTitle: t('removeAccess'),
         },
-      ]),
-];
+      ];

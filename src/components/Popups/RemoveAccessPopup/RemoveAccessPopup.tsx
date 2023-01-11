@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -21,8 +21,8 @@ import {
 } from 'styles/styledComponents/AppletImage';
 
 import { Modal } from '../Modal';
-import { buttonTextByStep, getHeadCells } from './RemoveAccessPopup.const';
-import { RemoveAccessPopupProps } from './RemoveAccessPopupProps.types';
+import { buttonTextByStep, headCells } from './RemoveAccessPopup.const';
+import { RemoveAccessPopupProps, Steps } from './RemoveAccessPopupProps.types';
 
 export const RemoveAccessPopup = ({
   removeAccessPopupVisible,
@@ -33,14 +33,14 @@ export const RemoveAccessPopup = ({
   const { firstName, lastName, email } = user;
   const applets = user.appletIds.map((id: string) => folders.useApplet(id));
   const [buttonText, setButtonText] = useState('removeAccess');
-  const [step, setStep] = useState<keyof typeof screenByStep>(1);
+  const [step, setStep] = useState<Steps>(0);
   const [selectedApplets, setSelectedApplets] = useState<string[]>([]);
-  const { control, getValues } = useForm({});
+  const defaultValues = applets.reduce((values, { id }) => ({ ...values, [id]: false }), {}) as {
+    [key: string]: boolean;
+  };
+  const { control, getValues } = useForm({ defaultValues });
 
-  const getAppletName = useCallback(
-    (id: string) => applets.find((applet) => applet.id === id)?.name || '',
-    [applets],
-  );
+  const getAppletName = (id: string) => applets.find((applet) => applet.id === id)?.name || '';
 
   const rows = applets?.map((applet: FolderApplet) => ({
     name: {
@@ -57,9 +57,7 @@ export const RemoveAccessPopup = ({
       value: applet.name || '',
     },
     actions: {
-      content: () => (
-        <CheckboxController control={control} name={applet.id} label={<></>} defaultValue={''} />
-      ),
+      content: () => <CheckboxController control={control} name={applet.id} label={<></>} />,
       value: applet.id,
       width: '200',
     },
@@ -68,22 +66,23 @@ export const RemoveAccessPopup = ({
   const { execute } = useAsync(revokeAppletUserApi);
 
   const onSubmit = () => {
-    if (step === 1) {
-      const appletsIds = Object.entries(getValues())
-        .filter((entry) => entry[1])
-        .map(([key]) => key);
+    if (step === 0) {
+      const appletsIds = Object.entries(getValues()).reduce(
+        (values, ids) => [...values, ...(ids[1] ? [ids[0]] : [])] as string[],
+        [] as string[],
+      );
       setSelectedApplets(appletsIds);
-    } else if (step === 2) {
+    } else if (step === 1) {
       selectedApplets.forEach(async (appletId: string) => {
         await execute({ appletId, profileId: user['_id'], deleteResponse: false });
       });
-    } else if (step === 3) {
+    } else if (step === 2) {
       onClose();
 
       return;
     }
 
-    setStep((prevState) => ++prevState as keyof typeof screenByStep);
+    setStep((prevState) => ++prevState as Steps);
   };
 
   useEffect(() => setButtonText(buttonTextByStep[step]), [step]);
@@ -96,97 +95,101 @@ export const RemoveAccessPopup = ({
     </>
   );
 
-  const screenByStep = {
-    1: (
-      <form noValidate>
-        <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
+  const getFirstScreen = () => (
+    <form noValidate>
+      <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
+        <b>
+          {firstName} {lastName} ({email})
+        </b>
+        {t('userHasAccess')}
+      </StyledBodyLarge>
+      <Table columns={headCells} rows={rows} orderBy="name" uiType={UiType.secondary} />
+    </form>
+  );
+
+  const getSecondScreen = () => {
+    const appletName = getAppletName(selectedApplets[0]);
+
+    return (
+      <StyledBodyLarge>
+        <Trans i18nKey="confirmRemoveAccess">
+          Are you sure that you want to remove the access for the
           <b>
-            {firstName} {lastName} ({email})
+            <>
+              {{ firstName }} {{ lastName }}
+            </>
+          </b>{' '}
+          the
+          <b>
+            <>{{ appletName }}</>
           </b>
-          {t('userHasAccess')}
-        </StyledBodyLarge>
-        <Table columns={getHeadCells(t)} rows={rows} orderBy="name" uiType={UiType.secondary} />
-      </form>
-    ),
-    2:
-      selectedApplets.length === 1 ? (
-        (() => {
-          const appletName = getAppletName(selectedApplets[0]);
-
-          return (
-            <StyledBodyLarge>
-              <Trans i18nKey="confirmRemoveAccess">
-                Are you sure that you want to remove the access for the
-                <b>
-                  <>
-                    {{ firstName }} {{ lastName }}
-                  </>
-                </b>{' '}
-                the
-                <b>
-                  <>{{ appletName }}</>
-                </b>
-                ?
-              </Trans>
-            </StyledBodyLarge>
-          );
-        })()
-      ) : (
-        <>
-          <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
-            <Trans i18nKey="confirmMultipleRemoveAccess">
-              Are you sure that you want to remove the access for the
-              <b>
-                <>
-                  {{ firstName }} {{ lastName }} ({{ email }})
-                </>
-              </b>
-              to the list of Applets below?
-            </Trans>
-          </StyledBodyLarge>
-          {listOfSelectedApplets}
-        </>
-      ),
-    3:
-      selectedApplets.length === 1 ? (
-        (() => {
-          const appletName = getAppletName(selectedApplets[0]);
-
-          return (
-            <StyledBodyLarge>
-              <Trans i18nKey="removeAccessSuccess">
-                Access for{' '}
-                <b>
-                  <>
-                    {{ firstName }} {{ lastName }} ({{ email }})
-                  </>
-                </b>
-                to the{' '}
-                <b>
-                  <>{{ appletName }}</>
-                </b>{' '}
-                has been removed successfully.
-              </Trans>
-            </StyledBodyLarge>
-          );
-        })()
-      ) : (
-        <>
-          <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
-            <Trans i18nKey="multipleRemoveAccessSuccess">
-              Access for{' '}
-              <b>
-                <>
-                  {{ firstName }} {{ lastName }} ({{ email }})
-                </>
-              </b>
-              to the list of Applets below has been removed successfully.
-            </Trans>
-          </StyledBodyLarge>
-          {listOfSelectedApplets}
-        </>
-      ),
+          ?
+        </Trans>
+      </StyledBodyLarge>
+    );
   };
+
+  const getSecondMultipleScreen = () => (
+    <>
+      <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
+        <Trans i18nKey="confirmMultipleRemoveAccess">
+          Are you sure that you want to remove the access for the
+          <b>
+            <>
+              {{ firstName }} {{ lastName }} ({{ email }})
+            </>
+          </b>
+          to the list of Applets below?
+        </Trans>
+      </StyledBodyLarge>
+      {listOfSelectedApplets}
+    </>
+  );
+
+  const getThirdScreen = () => {
+    const appletName = getAppletName(selectedApplets[0]);
+
+    return (
+      <StyledBodyLarge>
+        <Trans i18nKey="removeAccessSuccess">
+          Access for{' '}
+          <b>
+            <>
+              {{ firstName }} {{ lastName }} ({{ email }})
+            </>
+          </b>
+          to the{' '}
+          <b>
+            <>{{ appletName }}</>
+          </b>{' '}
+          has been removed successfully.
+        </Trans>
+      </StyledBodyLarge>
+    );
+  };
+
+  const getThirdMultipleScreen = () => (
+    <>
+      <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
+        <Trans i18nKey="multipleRemoveAccessSuccess">
+          Access for{' '}
+          <b>
+            <>
+              {{ firstName }} {{ lastName }} ({{ email }})
+            </>
+          </b>
+          to the list of Applets below has been removed successfully.
+        </Trans>
+      </StyledBodyLarge>
+      {listOfSelectedApplets}
+    </>
+  );
+
+  const screenByStep = [
+    getFirstScreen(),
+    selectedApplets.length === 1 ? getSecondScreen() : getSecondMultipleScreen(),
+    selectedApplets.length === 1 ? getThirdScreen() : getThirdMultipleScreen(),
+  ];
 
   return (
     <Modal
@@ -195,9 +198,9 @@ export const RemoveAccessPopup = ({
       onSubmit={onSubmit}
       title={t('removeAccess')}
       width="52.4"
-      hasSecondBtn={step === 2}
+      hasSecondBtn={step === 1}
       secondBtnText={t('back')}
-      onSecondBtnSubmit={() => setStep((prevState) => --prevState as keyof typeof screenByStep)}
+      onSecondBtnSubmit={() => setStep((prevState) => --prevState as Steps)}
       buttonText={t(buttonText)}
     >
       <StyledModalWrapper>{screenByStep[step]}</StyledModalWrapper>
