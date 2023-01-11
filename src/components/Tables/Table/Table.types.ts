@@ -1,7 +1,7 @@
 import { Cell, HeadCell } from 'types/table';
 
 export type RowContent = Cell & {
-  content: () => React.ReactNode | string;
+  content: (item: Row) => React.ReactNode | string;
   value: string | number | boolean;
   onClick?: () => void;
 };

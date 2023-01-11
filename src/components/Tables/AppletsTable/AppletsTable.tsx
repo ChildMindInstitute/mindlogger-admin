@@ -4,7 +4,6 @@ import { Box, Button } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
 import { auth, FolderApplet, folders } from 'redux/modules';
-import { SelectRespondentsPopup } from 'components/Popups';
 import { Menu, Search, Svg } from 'components';
 
 import { Table } from './Table/Table';
@@ -17,8 +16,6 @@ export const AppletsTable = () => {
   const dispatch = useAppDispatch();
   const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
   const authData = auth.useData();
-
-  const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
 
   const [searchValue, setSearchValue] = useState('');
   const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
@@ -86,14 +83,6 @@ export const AppletsTable = () => {
 
   return (
     <>
-      <Button onClick={() => setSelectRespondentsPopupVisible(true)}>Open Popup</Button>
-      {selectRespondentsPopupVisible && (
-        <SelectRespondentsPopup
-          selectRespondentsPopupVisible={selectRespondentsPopupVisible}
-          setSelectRespondentsPopupVisible={setSelectRespondentsPopupVisible}
-        />
-      )}
-
       <AppletsTableHeader>
         <StyledButtons>
           <Button
