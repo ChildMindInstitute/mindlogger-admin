@@ -8,8 +8,9 @@ import { ManagerData, users } from 'redux/modules';
 import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareUsersData } from 'utils/prepareUsersData';
-
 import { EditAccessPopup } from 'components/Popups/EditAccessPopup';
+import { RemoveAccessPopup } from 'components/Popups';
+
 import { ManagersTableHeader } from './ManagersTable.styles';
 import { getActions, getHeadCells } from './ManagersTable.const';
 
@@ -20,6 +21,10 @@ export const ManagersTable = () => {
   const managersData = users.useManagerData();
   const [searchValue, setSearchValue] = useState('');
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
+  const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
+  const [selectedManager, setSelectedManager] = useState<
+    (ManagerData & { appletIds: string[] }) | null
+  >(null);
 
   useBreadcrumbs([
     {
@@ -29,6 +34,10 @@ export const ManagersTable = () => {
   ]);
 
   const actions = {
+    removeAccessAction: (user: ManagerData & { appletIds: string[] }) => {
+      setSelectedManager(user);
+      setRemoveAccessPopupVisible(true);
+    },
     editAccessAction: () => setEditAccessPopupVisible(true),
   };
 
@@ -36,7 +45,9 @@ export const ManagersTable = () => {
     id ? prepareUsersData(managersData?.items, id) : prepareUsersData(managersData?.items)
   ) as ManagerData[];
 
-  const rows = managersArr?.map(({ email, firstName, lastName, updated }) => {
+  const rows = managersArr?.map((user) => {
+    const { email, firstName, lastName, updated, roles } = user;
+    const isOwner = roles.includes('owner');
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
 
     return {
@@ -57,7 +68,7 @@ export const ManagersTable = () => {
         value: lastEdited,
       },
       actions: {
-        content: (item: Row) => <Actions items={getActions(actions)} context={item} />,
+        content: () => <Actions items={getActions(isOwner, id, actions)} context={user} />,
         value: '',
         width: '20%',
       },
@@ -82,6 +93,13 @@ export const ManagersTable = () => {
         <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
       </ManagersTableHeader>
       <Table columns={getHeadCells()} rows={handleFilterRows(rows)} orderBy="updated" />
+      {removeAccessPopupVisible && selectedManager && (
+        <RemoveAccessPopup
+          removeAccessPopupVisible={removeAccessPopupVisible}
+          onClose={() => setRemoveAccessPopupVisible(false)}
+          user={selectedManager}
+        />
+      )}
       {editAccessPopupVisible && (
         <EditAccessPopup
           editAccessPopupVisible={editAccessPopupVisible}

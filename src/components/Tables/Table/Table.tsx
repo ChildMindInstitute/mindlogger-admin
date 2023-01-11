@@ -6,13 +6,14 @@ import { DEFAULT_ROWS_PER_PAGE, Head } from 'components/Tables';
 import { Order } from 'types/table';
 
 import { StyledTableContainer, StyledTableCellContent } from './Table.styles';
-import { Row, TableProps } from './Table.types';
+import { Row, TableProps, UiType } from './Table.types';
 
 export const Table = ({
   columns,
   rows,
   orderBy: orderByProp,
   tableHeight = 'auto',
+  uiType = UiType.primary,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
@@ -67,14 +68,14 @@ export const Table = ({
   );
 
   return (
-    <StyledTableContainer height={tableHeight}>
-      <MuiTable stickyHeader>
+    <StyledTableContainer height={tableHeight} uiType={uiType}>
+      <MuiTable stickyHeader={uiType === UiType.primary}>
         <Head
           headCells={columns}
           order={order}
           orderBy={orderBy}
           onRequestSort={handleRequestSort}
-          tableHeader={tableHeader}
+          tableHeader={uiType === UiType.primary ? tableHeader : null}
         />
         <TableBody>
           {rows

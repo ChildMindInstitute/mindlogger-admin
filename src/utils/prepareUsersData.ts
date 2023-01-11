@@ -14,7 +14,13 @@ export const prepareUsersData = <T extends Array<Record<string, unknown>>>(
       }, [])
     : items &&
       items
-        .map((item: Record<string, unknown> | null) => item && Object.values(item)[0])
+        .map(
+          (item: Record<string, unknown> | null) =>
+            item && {
+              appletIds: Object.keys(item),
+              ...(Object.values(item)[0] as Record<string, unknown>),
+            },
+        )
         .reduce((acc: Result, currentValue) => {
           if (currentValue && acc) {
             return acc.concat(currentValue);
