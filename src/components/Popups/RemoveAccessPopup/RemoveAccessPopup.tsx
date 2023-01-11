@@ -113,13 +113,13 @@ export const RemoveAccessPopup = ({
           return (
             <StyledBodyLarge>
               <Trans i18nKey="confirmRemoveAccess">
-                Are you sure that you want to remove the access for the{' '}
+                Are you sure that you want to remove the access for the
                 <b>
                   <>
                     {{ firstName }} {{ lastName }}
                   </>
                 </b>{' '}
-                the{' '}
+                the
                 <b>
                   <>{{ appletName }}</>
                 </b>
@@ -132,12 +132,12 @@ export const RemoveAccessPopup = ({
         <>
           <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
             <Trans i18nKey="confirmMultipleRemoveAccess">
-              Are you sure that you want to remove the access for the{' '}
+              Are you sure that you want to remove the access for the
               <b>
                 <>
                   {{ firstName }} {{ lastName }} ({{ email }})
                 </>
-              </b>{' '}
+              </b>
               to the list of Applets below?
             </Trans>
           </StyledBodyLarge>
@@ -146,17 +146,27 @@ export const RemoveAccessPopup = ({
       ),
     3:
       selectedApplets.length === 1 ? (
-        <StyledBodyLarge>
-          <Trans i18nKey="removeAccessSuccess">
-            Access for{' '}
-            <b>
-              <>
-                {{ firstName }} {{ lastName }} ({{ email }})
-              </>
-            </b>{' '}
-            to the list of Applets below has been removed successfully.
-          </Trans>
-        </StyledBodyLarge>
+        (() => {
+          const appletName = getAppletName(selectedApplets[0]);
+
+          return (
+            <StyledBodyLarge>
+              <Trans i18nKey="removeAccessSuccess">
+                Access for{' '}
+                <b>
+                  <>
+                    {{ firstName }} {{ lastName }} ({{ email }})
+                  </>
+                </b>
+                to the{' '}
+                <b>
+                  <>{{ appletName }}</>
+                </b>{' '}
+                has been removed successfully.
+              </Trans>
+            </StyledBodyLarge>
+          );
+        })()
       ) : (
         <>
           <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
@@ -166,7 +176,7 @@ export const RemoveAccessPopup = ({
                 <>
                   {{ firstName }} {{ lastName }} ({{ email }})
                 </>
-              </b>{' '}
+              </b>
               to the list of Applets below has been removed successfully.
             </Trans>
           </StyledBodyLarge>
