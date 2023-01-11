@@ -15,7 +15,7 @@ import { useAsync } from 'hooks';
 import { revokeAppletUserApi } from 'api';
 import theme from 'styles/theme';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { StyledImg, StyledImgPlaceholder } from 'styles/styledComponents/Image';
+import { SmallAppletImg, SmallAppletImgPlaceholder } from 'styles/styledComponents/AppletImage';
 
 import { Modal } from '../Modal';
 import { buttonTextByStep, getHeadCells } from './RemoveAccessPopup.const';
@@ -44,9 +44,9 @@ export const RemoveAccessPopup = ({
       content: () => (
         <StyledFlexTopCenter>
           {applet.image ? (
-            <StyledImg src={applet.image} alt="Applet image" />
+            <SmallAppletImg src={applet.image} alt="Applet image" />
           ) : (
-            <StyledImgPlaceholder />
+            <SmallAppletImgPlaceholder />
           )}
           <StyledLabelLarge>{applet.name}</StyledLabelLarge>
         </StyledFlexTopCenter>
