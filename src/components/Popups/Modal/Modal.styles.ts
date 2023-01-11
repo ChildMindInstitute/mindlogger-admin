@@ -5,7 +5,8 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
-import { ActionsAlign } from 'components/Popups/Modal/Modal.types';
+
+import { ActionsAlign } from './Modal.types';
 
 export const StyledDialog = styled(Dialog)`
   .MuiPaper-root {

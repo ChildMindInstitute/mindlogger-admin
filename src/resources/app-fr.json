@@ -218,7 +218,7 @@
   "periodRequired": "Period is required",
   "schedule": "Calendrier",
   "selectRespondents": "Sélectionnez les répondants",
-  "selectRespondentsDescription": "Donnez à <b>{{reviewerName}} ({{reviewerEmail}})</b> l'accès pour examiner les données dans le <b>{{appletName}}</b> pour les répondants suivants:",
+  "selectRespondentsDescription": "Donnez à <1>{{name}} ({{email}})</1> l'accès pour examiner les données dans le <1>{{appletName}}</1> pour les répondants suivants:",
   "searchAcross": "Rechercher dans:",
   "all": "Tout",
   "selected": "Choisi",

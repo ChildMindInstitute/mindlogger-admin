@@ -1,6 +1,6 @@
 import { Box, styled, TextField } from '@mui/material';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 
+import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
@@ -23,6 +23,7 @@ export const StyledTextField = styled(TextField)`
       background-color: ${variables.palette.primary_alfa12};
     }
   }
+
   .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input {
     padding: ${theme.spacing(1, 0)};
   }
