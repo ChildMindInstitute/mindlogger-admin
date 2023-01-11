@@ -13,6 +13,8 @@ export const Table = ({
   rows,
   orderBy: orderByProp,
   tableHeight = 'auto',
+  headBackground,
+  hidePagination,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
@@ -76,6 +78,8 @@ export const Table = ({
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
             tableHeader={tableHeader}
+            hidePagination={hidePagination}
+            headBackground={headBackground}
           />
           <TableBody>
             {rows

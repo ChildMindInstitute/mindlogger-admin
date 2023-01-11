@@ -1,4 +1,5 @@
 import { Svg } from 'components/Svg';
+import theme from 'styles/theme';
 
 import { ModalProps } from './Modal.types';
 import {
@@ -17,6 +18,7 @@ export const Modal = ({
   buttonText,
   children,
   titleAlign = 'left',
+  actionsAlign = 'center',
   disabledSubmit = false,
   width,
   hasSecondBtn = false,
@@ -33,7 +35,7 @@ export const Modal = ({
       </StyledCloseButton>
     </StyledDialogTitle>
     {children}
-    <StyledDialogActions hasSecondBtn={hasSecondBtn}>
+    <StyledDialogActions actionsAlign={actionsAlign}>
       <StyledButton variant="text" disabled={disabledSubmit} onClick={onSubmit}>
         {buttonText}
       </StyledButton>
@@ -43,6 +45,7 @@ export const Modal = ({
           disabled={disabledSecondBtn}
           onClick={onSecondBtnSubmit}
           color={secondBtnColor}
+          sx={{ marginLeft: theme.spacing(1.6) }}
         >
           {secondBtnText}
         </StyledButton>

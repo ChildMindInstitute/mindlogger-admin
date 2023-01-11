@@ -216,5 +216,11 @@
   "years": "Années",
   "indefinitely": "Indéfiniment",
   "periodRequired": "Period is required",
-  "schedule": "Calendrier"
+  "schedule": "Calendrier",
+  "selectRespondents": "Sélectionnez les répondants",
+  "selectRespondentsDescription": "Donnez à <b>{{reviewerName}} ({{reviewerEmail}})</b> l'accès pour examiner les données dans le <b>{{appletName}}</b> pour les répondants suivants:",
+  "searchAcross": "Rechercher dans:",
+  "all": "Tout",
+  "selected": "Choisi",
+  "unselected": "Désélectionné "
 }

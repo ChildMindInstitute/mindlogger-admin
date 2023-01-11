@@ -216,5 +216,11 @@
   "months": "Months",
   "years": "Years",
   "periodRequired": "Period is required",
-  "schedule": "Schedule"
+  "schedule": "Schedule",
+  "selectRespondents": "Select Respondents",
+  "selectRespondentsDescription": "Give <b>{{reviewerName}} ({{reviewerEmail}})</b> access to review the Data in the <b>{{appletName}}</b> for the following Respondents:",
+  "searchAcross": "Search Across:",
+  "all": "All",
+  "selected": "Selected",
+  "unselected": "Unselected"
 }

@@ -1,6 +1,6 @@
-import { TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
+import { TableRow, TableCell, TableSortLabel } from '@mui/material';
 
-import { StyledTableCell } from './Head.styles';
+import { StyledTableCell, StyledTableHead } from './Head.styles';
 import { HeadProps } from './Head.types';
 
 export const Head = ({
@@ -8,20 +8,25 @@ export const Head = ({
   headCells,
   order,
   orderBy,
+  hidePagination,
   onRequestSort,
+  headBackground,
 }: HeadProps): JSX.Element => {
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
   return (
-    <TableHead>
-      <TableRow>
-        <TableCell colSpan={headCells.length}>{tableHeader}</TableCell>
-      </TableRow>
+    <StyledTableHead headBackground={headBackground}>
+      {!hidePagination && (
+        <TableRow>
+          <TableCell colSpan={headCells.length}>{tableHeader}</TableCell>
+        </TableRow>
+      )}
       <TableRow>
         {headCells.map(({ id, label, align, enableSort, width }) => (
           <StyledTableCell
+            hidePagination={hidePagination}
             key={id}
             width={width}
             align={align}
@@ -41,6 +46,6 @@ export const Head = ({
           </StyledTableCell>
         ))}
       </TableRow>
-    </TableHead>
+    </StyledTableHead>
   );
 };

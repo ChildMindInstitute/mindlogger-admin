@@ -2,7 +2,7 @@ import { Cell, HeadCell } from 'types/table';
 
 export type RowContent = Cell & {
   content: () => React.ReactNode | string;
-  value: string | number;
+  value: string | number | boolean;
   onClick?: () => void;
 };
 
@@ -15,4 +15,6 @@ export type TableProps = {
   columns: HeadCell[];
   rows: Row[] | undefined;
   orderBy: string;
+  headBackground?: string;
+  hidePagination?: boolean;
 };

@@ -7,6 +7,8 @@ type BtnSubmit =
   | ((value?: unknown) => void)
   | (() => void);
 
+export type ActionsAlign = 'center' | 'space-around' | 'end';
+
 export type ModalProps = {
   open: boolean;
   title: string;
@@ -15,8 +17,10 @@ export type ModalProps = {
   onClose: () => void;
   onSubmit: BtnSubmit;
   titleAlign?: 'left' | 'right' | 'center';
+  actionsAlign?: ActionsAlign;
   disabledSubmit?: boolean;
   width?: string;
+  height?: string;
   hasSecondBtn?: boolean;
   secondBtnColor?: OverridableStringUnion<
     'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',

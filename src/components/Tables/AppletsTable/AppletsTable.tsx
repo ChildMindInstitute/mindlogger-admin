@@ -7,6 +7,7 @@ import { Svg } from 'components/Svg';
 import { auth, FolderApplet, folders } from 'redux/modules';
 import { Search } from 'components/Search';
 import { Menu } from 'components/Menu';
+import { SelectRespondentsPopup } from 'components/Popups';
 
 import { Table } from './Table/Table';
 import { getHeadCells, getMenuItems } from './AppletsTable.const';
@@ -18,6 +19,8 @@ export const AppletsTable = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
   const authData = auth.useData();
+
+  const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
 
   const [searchValue, setSearchValue] = useState('');
   const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
@@ -85,6 +88,14 @@ export const AppletsTable = (): JSX.Element => {
 
   return (
     <>
+      <Button onClick={() => setSelectRespondentsPopupVisible(true)}>Open Popup</Button>
+      {selectRespondentsPopupVisible && (
+        <SelectRespondentsPopup
+          selectRespondentsPopupVisible={selectRespondentsPopupVisible}
+          setSelectRespondentsPopupVisible={setSelectRespondentsPopupVisible}
+        />
+      )}
+
       <AppletsTableHeader>
         <StyledButtons>
           <Button

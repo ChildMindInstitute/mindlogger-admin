@@ -5,6 +5,7 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
+import { ActionsAlign } from 'components/Popups/Modal/Modal.types';
 
 export const StyledDialog = styled(Dialog)`
   .MuiPaper-root {
@@ -27,10 +28,10 @@ export const StyledCloseButton = styled(StyledClearedButton)`
 `;
 
 export const StyledDialogActions = styled(DialogActions, shouldForwardProp)`
-  justify-content: ${({ hasSecondBtn }: { hasSecondBtn: boolean }) =>
-    hasSecondBtn ? 'space-around' : 'center'};
+  justify-content: ${({ actionsAlign }: { actionsAlign: ActionsAlign }) => actionsAlign};
 `;
 
 export const StyledButton = styled(Button)`
   font-weight: ${variables.font.weight.bold};
+  padding: ${theme.spacing(1.4, 3.4)};
 `;

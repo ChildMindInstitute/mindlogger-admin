@@ -6,4 +6,6 @@ export type HeadProps = {
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   order: Order;
   orderBy?: string;
+  headBackground?: string;
+  hidePagination?: boolean;
 };
