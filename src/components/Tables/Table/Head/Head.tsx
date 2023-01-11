@@ -16,9 +16,11 @@ export const Head = ({
 
   return (
     <TableHead>
-      <TableRow>
-        <TableCell colSpan={headCells.length}>{tableHeader}</TableCell>
-      </TableRow>
+      {tableHeader && (
+        <TableRow>
+          <TableCell colSpan={headCells.length}>{tableHeader}</TableCell>
+        </TableRow>
+      )}
       <TableRow>
         {headCells.map(({ id, label, align, enableSort, width }) => (
           <StyledTableCell

@@ -1,9 +1,11 @@
 import { styled } from '@mui/system';
 import { Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
 
+import { ActionsAlign } from 'components/Popups/Modal';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { FontWeight } from 'styles/styledComponents/Typography';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledDialog = styled(Dialog)`
@@ -27,10 +29,11 @@ export const StyledCloseButton = styled(StyledClearedButton)`
 `;
 
 export const StyledDialogActions = styled(DialogActions, shouldForwardProp)`
-  justify-content: ${({ hasSecondBtn }: { hasSecondBtn: boolean }) =>
-    hasSecondBtn ? 'space-around' : 'center'};
+  justify-content: ${({ actionsAlign }: { actionsAlign: ActionsAlign }) => actionsAlign};
 `;
 
-export const StyledButton = styled(Button)`
-  font-weight: ${variables.font.weight.bold};
+export const StyledButton = styled(Button, shouldForwardProp)`
+  font-weight: ${({ fontWeight }: { fontWeight?: FontWeight }) =>
+    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.bold};
+  padding: ${theme.spacing(1.4, 3.4)};
 `;

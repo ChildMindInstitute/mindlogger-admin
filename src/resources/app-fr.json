@@ -216,5 +216,9 @@
   "years": "Années",
   "indefinitely": "Indéfiniment",
   "periodRequired": "Period is required",
-  "schedule": "Calendrier"
+  "schedule": "Calendrier",
+  "back": "Dos",
+  "individualScheduleSetup": "Configuration individuelle du calendrier",
+  "pleaseSelectAppletToSchedule": "Veuillez sélectionner l'applet à programmer pour le répondant: ",
+  "respondentIsAMemberOfTheDefaultSchedule": "<b>Le répondant</b> {{secretUserId}} est membre de l'horaire par défaut dans {{appletName}} l'applet. Do you want to set an Individual schedule for this Respondent?"
 }

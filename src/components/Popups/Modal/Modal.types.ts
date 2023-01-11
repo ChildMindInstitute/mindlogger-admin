@@ -7,6 +7,8 @@ type BtnSubmit =
   | ((value?: unknown) => void)
   | (() => void);
 
+export type ActionsAlign = 'center' | 'space-around' | 'end';
+
 export type ModalProps = {
   open: boolean;
   title: string;
@@ -15,6 +17,7 @@ export type ModalProps = {
   onClose: () => void;
   onSubmit: BtnSubmit;
   titleAlign?: 'left' | 'right' | 'center';
+  actionsAlign?: ActionsAlign;
   disabledSubmit?: boolean;
   width?: string;
   hasSecondBtn?: boolean;

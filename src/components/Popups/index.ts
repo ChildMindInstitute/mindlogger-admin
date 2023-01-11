@@ -6,3 +6,4 @@ export * from './DuplicatePopups';
 export * from './TransferOwnershipPopup';
 export * from './SuccessTransferOwnershipPopup';
 export * from './SucessSharePopup';
+export * from './ScheduleSetupPopup';

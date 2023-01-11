@@ -14,10 +14,33 @@ export const prepareUsersData = <T extends Array<Record<string, unknown>>>(
       }, [])
     : items &&
       items
-        .map((item: Record<string, unknown> | null) => item && Object.values(item)[0])
+        .map((item: Record<string, unknown> | null) => item && Object.values(item))
         .reduce((acc: Result, currentValue) => {
           if (currentValue && acc) {
-            return acc.concat(currentValue);
+            return acc.concat(
+              currentValue.reduce((acc, item, index, array) => {
+                if (index === 0) {
+                  acc = item;
+                } else {
+                  const currVal = item as Record<string, unknown>;
+                  const prevVal = array[index - 1] as Record<string, unknown>;
+                  const accumulator = acc as Record<string, unknown>;
+                  acc = {
+                    ...(acc as object),
+                    MRN:
+                      currVal.MRN !== prevVal.MRN
+                        ? `${accumulator.MRN}, ${currVal.MRN}`
+                        : accumulator.MRN,
+                    nickName:
+                      currVal.MRN !== prevVal.MRN
+                        ? `${accumulator.nickName}, ${currVal.nickName}`
+                        : accumulator.nickName,
+                  };
+                }
+
+                return acc;
+              }, {}),
+            );
           }
 
           return null;
