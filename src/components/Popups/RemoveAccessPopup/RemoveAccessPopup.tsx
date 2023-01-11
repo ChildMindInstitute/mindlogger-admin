@@ -5,15 +5,21 @@ import { Trans, useTranslation } from 'react-i18next';
 import { FolderApplet, folders } from 'redux/modules';
 import { CheckboxController } from 'components/FormComponents';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
-import { StyledBodyLarge, StyledTitleBoldMedium } from 'styles/styledComponents/Typography';
+import {
+  StyledBodyLarge,
+  StyledLabelLarge,
+  StyledTitleBoldMedium,
+} from 'styles/styledComponents/Typography';
 import { Table, UiType } from 'components/Tables';
 import { useAsync } from 'hooks';
 import { revokeAppletUserApi } from 'api';
 import theme from 'styles/theme';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 import { Modal } from '../Modal';
 import { buttonTextByStep, getHeadCells } from './RemoveAccessPopup.const';
 import { RemoveAccessPopupProps } from './RemoveAccessPopupProps.types';
+import { StyledImg, StyledImgPlaceholder } from './RemoveAccessPopup.styles';
 
 export const RemoveAccessPopup = ({
   removeAccessPopupVisible,
@@ -35,7 +41,16 @@ export const RemoveAccessPopup = ({
 
   const rows = applets?.map((applet: FolderApplet) => ({
     name: {
-      content: () => applet.name,
+      content: () => (
+        <StyledFlexTopCenter>
+          {applet.image ? (
+            <StyledImg src={applet.image} alt="Applet image" />
+          ) : (
+            <StyledImgPlaceholder />
+          )}
+          <StyledLabelLarge>{applet.name}</StyledLabelLarge>
+        </StyledFlexTopCenter>
+      ),
       value: applet.name || '',
     },
     actions: {
