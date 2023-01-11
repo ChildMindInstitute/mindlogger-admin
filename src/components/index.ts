@@ -2,6 +2,7 @@ export * from './Actions';
 export * from './Breadcrumbs';
 export * from './Chip';
 export * from './DatePicker';
+export * from './Footer';
 export * from './Language';
 export * from './LeftBar';
 export * from './Menu';

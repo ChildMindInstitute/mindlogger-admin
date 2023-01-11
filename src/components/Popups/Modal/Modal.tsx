@@ -30,7 +30,7 @@ export const Modal = ({
   <StyledDialog width={width} onClose={onClose} open={open}>
     <StyledDialogTitle align={titleAlign}>
       {title}
-      <StyledCloseButton onClick={() => onClose()}>
+      <StyledCloseButton onClick={onClose}>
         <Svg id="cross" />
       </StyledCloseButton>
     </StyledDialogTitle>

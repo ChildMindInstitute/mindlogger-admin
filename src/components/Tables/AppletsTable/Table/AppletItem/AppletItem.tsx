@@ -6,14 +6,13 @@ import { useAppletsDnd, useTimeAgo } from 'hooks';
 import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders, popups } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import { Actions } from 'components/Actions';
-import { Pin } from 'components/Pin';
+import { Pin, Actions } from 'components';
 import { ShareAppletPopup } from 'components/Popups/ShareAppletPopup';
 import { APPLET_PAGES } from 'utils/constants';
 
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
-import { actionsRender } from './AppletItem.const';
+import { getActions } from './AppletItem.const';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
@@ -92,7 +91,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           {item.updated ? timeAgo.format(new Date(item.updated)) : ''}
         </TableCell>
         <TableCell>
-          <Actions items={actionsRender(actions)} context={item} />
+          <Actions items={getActions(actions)} context={item} />
         </TableCell>
       </TableRow>
       {sharePopupVisible && (

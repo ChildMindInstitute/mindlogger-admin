@@ -39,7 +39,7 @@ export const ShareAppletPopup = ({
   return (
     <Modal
       open={sharePopupVisible}
-      onClose={() => setSharePopupVisible(false)}
+      onClose={handleModalClose}
       onSubmit={handleSubmit}
       title={title || ''}
       buttonText={btnText || ''}

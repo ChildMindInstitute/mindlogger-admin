@@ -41,7 +41,7 @@ export const Notification = ({
   timeAgo,
   viewed,
   encryption,
-}: NotificationProps): JSX.Element => {
+}: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const isActive = currentId === alertId;

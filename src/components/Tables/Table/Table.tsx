@@ -95,7 +95,7 @@ export const Table = ({
                       align={row[key].align}
                       width={row[key].width}
                     >
-                      {row[key].content()}
+                      {row[key].content(row)}
                     </TableCell>
                   ))}
                 </TableRow>

@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
-
 import { Box } from '@mui/material';
 
-import { Language } from 'components/Language';
+import { Language } from 'components';
 import packageJson from '../../../package.json';
 
 import {

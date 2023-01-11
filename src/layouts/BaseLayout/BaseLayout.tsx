@@ -1,15 +1,14 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { Footer } from 'layouts/Footer';
-import { LeftBar, TopBar } from 'components';
+import { LeftBar, TopBar, Footer } from 'components';
 import { DuplicatePopups, DeletePopup, TransferOwnershipPopup } from 'components/Popups';
 import { account, users, folders, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 
-export const BaseLayout = (): JSX.Element => {
+export const BaseLayout = () => {
   const dispatch = useAppDispatch();
   const accountData = account.useData();
   const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible } =
