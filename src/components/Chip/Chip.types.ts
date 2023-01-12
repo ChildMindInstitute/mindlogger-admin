@@ -10,7 +10,3 @@ export type ChipProps = {
   shape?: ChipShape;
   icon?: React.ReactElement | undefined;
 };
-
-export type StyledChipProps = {
-  shape?: ChipShape;
-};
