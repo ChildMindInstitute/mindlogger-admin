@@ -66,20 +66,24 @@ export const RemoveAccessPopup = ({
   const { execute } = useAsync(revokeAppletUserApi);
 
   const onSubmit = () => {
-    if (step === 0) {
-      const appletsIds = Object.entries(getValues()).reduce(
-        (values, ids) => [...values, ...(ids[1] ? [ids[0]] : [])] as string[],
-        [] as string[],
-      );
-      setSelectedApplets(appletsIds);
-    } else if (step === 1) {
-      selectedApplets.forEach(async (appletId: string) => {
-        await execute({ appletId, profileId: user['_id'], deleteResponse: false });
-      });
-    } else if (step === 2) {
-      onClose();
+    switch (step) {
+      case 0:
+        setSelectedApplets(
+          Object.entries(getValues()).reduce(
+            (values, ids) => [...values, ...(ids[1] ? [ids[0]] : [])] as string[],
+            [] as string[],
+          ),
+        );
+        break;
+      case 1:
+        selectedApplets.forEach(async (appletId: string) => {
+          await execute({ appletId, profileId: user['_id'], deleteResponse: false });
+        });
+        break;
+      case 2:
+        onClose();
 
-      return;
+        return;
     }
 
     setStep((prevState) => ++prevState as Steps);
