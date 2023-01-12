@@ -1,3 +1,4 @@
+import { UiType } from 'components/Tables/Table/Table.types';
 import { HeadCell, Order } from 'types/table';
 
 export type HeadProps = {
@@ -6,6 +7,5 @@ export type HeadProps = {
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   order: Order;
   orderBy?: string;
-  headBackground?: string;
-  hidePagination?: boolean;
+  uiType?: UiType;
 };

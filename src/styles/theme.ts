@@ -137,7 +137,7 @@ const theme = createTheme({
           lineHeight: variables.lineHeight.sm,
           fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface,
-          backgroundColor: 'transparent',
+          backgroundColor: variables.palette.surface,
           borderBottomWidth: variables.borderWidth.md,
           borderBottomStyle: 'solid',
           borderBottomColor: variables.palette.surface_variant,

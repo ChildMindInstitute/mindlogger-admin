@@ -10,7 +10,7 @@ export const Head = ({
   order,
   orderBy,
   onRequestSort,
-  uiType,
+  uiType = UiType.primary,
 }: HeadProps): JSX.Element => {
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);

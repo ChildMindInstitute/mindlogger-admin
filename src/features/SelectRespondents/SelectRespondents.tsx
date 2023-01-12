@@ -4,10 +4,9 @@ import { useForm } from 'react-hook-form';
 
 import { CheckboxController } from 'components/FormComponents';
 import { Search } from 'components/Search';
-import { Row, Table } from 'components/Tables';
+import { Row, Table, UiType } from 'components/Tables';
 import { filterRows } from 'utils/filterRows';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import { variables } from 'styles/variables';
 
 import { SelectRespondentsProps } from './SelectRespondents.types';
 import { StyledFilterContainer, StyledSelectContainer } from './SelectRespondents.styles';
@@ -124,8 +123,7 @@ export const SelectRespondents = ({
           columns={getHeadCells(handleSelectAllClick, selectAllChecked)}
           rows={tableRows}
           orderBy={'nickname'}
-          hidePagination
-          headBackground={variables.palette.surface3}
+          uiType={UiType.secondary}
         />
       </form>
     </>
