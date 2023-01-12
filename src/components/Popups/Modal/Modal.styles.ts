@@ -1,7 +1,6 @@
 import { styled } from '@mui/system';
 import { Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
 
-import { ActionsAlign } from 'components/Popups/Modal';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
