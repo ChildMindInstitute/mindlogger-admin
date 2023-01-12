@@ -33,6 +33,8 @@ export const ScheduleSetupPopup = ({
     navigate(`/${chosenAppletData?.appletId}/${APPLET_PAGES.schedule}`);
   };
 
+  const showSecondScreen = chosenAppletData && !chosenAppletData.hasIndividualSchedule;
+
   useEffect(() => {
     if (chosenAppletData?.hasIndividualSchedule) {
       handlePopupSubmit();
@@ -45,15 +47,15 @@ export const ScheduleSetupPopup = ({
       onClose={handlePopupClose}
       onSubmit={handleBackClick}
       title={t('individualScheduleSetup')}
-      buttonText={chosenAppletData ? t('back') : ''}
-      hasSecondBtn={!!chosenAppletData}
+      buttonText={showSecondScreen ? t('back') : ''}
+      hasSecondBtn={Boolean(showSecondScreen)}
       secondBtnText={t('yes')}
       onSecondBtnSubmit={handlePopupSubmit}
       actionsAlign="end"
       width="66"
     >
       <StyledModalWrapper>
-        {chosenAppletData && !chosenAppletData.hasIndividualSchedule ? (
+        {showSecondScreen ? (
           <StyledBodyLarge
             sx={{ marginTop: theme.spacing(-1) }}
             dangerouslySetInnerHTML={{
