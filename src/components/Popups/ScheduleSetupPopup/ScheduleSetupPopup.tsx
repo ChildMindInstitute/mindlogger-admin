@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Trans } from 'react-i18next';
 
 import { Modal } from 'components/Popups';
 import { Table, UiType } from 'components/Tables';
@@ -21,6 +22,9 @@ export const ScheduleSetupPopup = ({
 }: ScheduleSetupPopupProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
+  const showSecondScreen = chosenAppletData && !chosenAppletData.hasIndividualSchedule;
+  const appletName = chosenAppletData?.appletName || '';
+  const secretUserId = chosenAppletData?.secretUserId || '';
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
@@ -32,8 +36,6 @@ export const ScheduleSetupPopup = ({
     setPopupVisible(false);
     navigate(`/${chosenAppletData?.appletId}/${APPLET_PAGES.schedule}`);
   };
-
-  const showSecondScreen = chosenAppletData && !chosenAppletData.hasIndividualSchedule;
 
   useEffect(() => {
     if (chosenAppletData?.hasIndividualSchedule) {
@@ -56,15 +58,16 @@ export const ScheduleSetupPopup = ({
     >
       <StyledModalWrapper>
         {showSecondScreen ? (
-          <StyledBodyLarge
-            sx={{ marginTop: theme.spacing(-1) }}
-            dangerouslySetInnerHTML={{
-              __html: t('respondentIsAMemberOfTheDefaultSchedule', {
-                secretUserId: chosenAppletData.secretUserId,
-                appletName: chosenAppletData.appletName,
-              }),
-            }}
-          />
+          <StyledBodyLarge sx={{ marginTop: theme.spacing(-1) }}>
+            <Trans i18nKey="respondentIsAMemberOfTheDefaultSchedule">
+              <strong>Respondent </strong>
+              <strong>
+                <>{{ secretUserId }}</>
+              </strong>
+              is a member of the Default Schedule within the {{ appletName }} applet. Do you want to
+              set an Individual schedule for this Respondent?
+            </Trans>
+          </StyledBodyLarge>
         ) : (
           <>
             <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
