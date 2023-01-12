@@ -12,3 +12,11 @@ export const APPLET_PAGES = {
 };
 
 export const DAY_FORMAT = 'dd MMM yyyy';
+
+export const Roles = {
+  user: 'user',
+  manager: 'manager',
+  coordinator: 'coordinator',
+  editor: 'editor',
+  reviewer: 'reviewer',
+} as const;

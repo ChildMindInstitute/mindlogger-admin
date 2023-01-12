@@ -217,6 +217,8 @@
   "indefinitely": "Indéfiniment",
   "periodRequired": "Period is required",
   "schedule": "Calendrier",
+  "clickHere": "Cliquez ici",
+  "addRole": "Ajouter un rôle",
   "selectRespondents": "Sélectionnez les répondants",
   "selectRespondentsDescription": "Donnez à <1>{{name}} ({{email}})</1> l'accès pour examiner les données dans le <1>{{appletName}}</1> pour les répondants suivants:",
   "searchAcross": "Rechercher dans:",

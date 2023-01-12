@@ -1,12 +1,6 @@
-import { Field } from './AddUserForm.types';
+import { Roles } from 'consts';
 
-export const Roles = {
-  user: 'user',
-  manager: 'manager',
-  coordinator: 'coordinator',
-  editor: 'editor',
-  reviewer: 'reviewer',
-} as const;
+import { Field } from './AddUserForm.types';
 
 export const Langs = {
   fr: 'fr',

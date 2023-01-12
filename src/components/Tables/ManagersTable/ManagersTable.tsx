@@ -13,6 +13,7 @@ import { RemoveAccessPopup } from 'components/Popups';
 
 import { ManagersTableHeader } from './ManagersTable.styles';
 import { getActions, getHeadCells } from './ManagersTable.const';
+import { User } from './ManagersTable.types';
 
 export const ManagersTable = () => {
   const { id } = useParams();
@@ -22,9 +23,7 @@ export const ManagersTable = () => {
   const [searchValue, setSearchValue] = useState('');
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
-  const [selectedManager, setSelectedManager] = useState<
-    (ManagerData & { appletIds: string[] }) | null
-  >(null);
+  const [selectedManager, setSelectedManager] = useState<User | null>(null);
 
   useBreadcrumbs([
     {
@@ -34,11 +33,14 @@ export const ManagersTable = () => {
   ]);
 
   const actions = {
-    removeAccessAction: (user: ManagerData & { appletIds: string[] }) => {
+    removeAccessAction: (user: User) => {
       setSelectedManager(user);
       setRemoveAccessPopupVisible(true);
     },
-    editAccessAction: () => setEditAccessPopupVisible(true),
+    editAccessAction: (user: User) => {
+      setSelectedManager(user);
+      setEditAccessPopupVisible(true);
+    },
   };
 
   const managersArr = (
@@ -100,10 +102,11 @@ export const ManagersTable = () => {
           user={selectedManager}
         />
       )}
-      {editAccessPopupVisible && (
+      {editAccessPopupVisible && selectedManager && (
         <EditAccessPopup
           editAccessPopupVisible={editAccessPopupVisible}
           onClose={() => setEditAccessPopupVisible(false)}
+          user={selectedManager}
         />
       )}
     </>

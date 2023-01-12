@@ -8,7 +8,7 @@ import { Table, UiType } from 'components/Tables';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
-import { APPLET_PAGES } from 'utils/constants';
+import { APPLET_PAGES } from 'consts';
 
 import { ScheduleSetupPopupProps } from './ScheduleSetupPopup.types';
 import { headCells } from './ScheduleSetupPopup.const';

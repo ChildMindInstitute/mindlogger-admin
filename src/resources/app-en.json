@@ -217,6 +217,8 @@
   "years": "Years",
   "periodRequired": "Period is required",
   "schedule": "Schedule",
+  "clickHere": "Click here",
+  "addRole": "Add Role",
   "selectRespondents": "Select Respondents",
   "selectRespondentsDescription": "Give <1>{{name}} ({{email}})</1> access to review the Data in the <1>{{appletName}}</1> for the following Respondents:",
   "searchAcross": "Search Across:",
