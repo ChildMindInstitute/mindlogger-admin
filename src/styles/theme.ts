@@ -114,7 +114,10 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '.MuiTableRow-root:hover': {
-            backgroundColor: variables.palette.surface1,
+            backgroundColor: blendColorsNormal(
+              'transparent',
+              variables.palette.on_surface_variant_alfa12,
+            ),
             cursor: 'pointer',
           },
           '.MuiTableRow-root:last-child': {
@@ -134,6 +137,7 @@ const theme = createTheme({
           lineHeight: variables.lineHeight.sm,
           fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface,
+          backgroundColor: variables.palette.surface,
           borderBottomWidth: variables.borderWidth.md,
           borderBottomStyle: 'solid',
           borderBottomColor: variables.palette.surface_variant,
@@ -387,6 +391,7 @@ const theme = createTheme({
           },
           '.MuiMenuItem-root': {
             borderRadius: variables.borderRadius.xxs,
+            padding: '1.6rem',
             '&:hover': {
               backgroundColor: variables.palette.secondary_container,
             },

@@ -69,13 +69,14 @@ export const Table = ({
 
   return (
     <StyledTableContainer height={tableHeight} uiType={uiType}>
-      <MuiTable stickyHeader={uiType === UiType.primary}>
+      <MuiTable stickyHeader>
         <Head
           headCells={columns}
           order={order}
           orderBy={orderBy}
           onRequestSort={handleRequestSort}
-          tableHeader={uiType === UiType.primary ? tableHeader : null}
+          tableHeader={tableHeader}
+          uiType={uiType}
         />
         <TableBody>
           {rows
