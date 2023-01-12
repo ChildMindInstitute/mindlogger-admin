@@ -5,6 +5,7 @@ import { StyledChip, StyledClearedButton } from './Chip.styles';
 
 export const Chip = ({
   title,
+  icon,
   color = 'primary',
   shape = ChipShape.rectangular,
   onRemove,
@@ -18,6 +19,7 @@ export const Chip = ({
       </StyledClearedButton>
     }
     label={title}
+    icon={icon || undefined}
     onDelete={onRemove}
   />
 );

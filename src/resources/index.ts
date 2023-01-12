@@ -15,3 +15,5 @@ export const resources: Resource = {
 };
 
 export { default as page } from './pages.json';
+
+export * from './roles';

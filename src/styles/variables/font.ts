@@ -10,6 +10,7 @@ export const font = {
   },
   weight: {
     bold: 700,
+    medium: 500,
     regular: 400,
   },
 };

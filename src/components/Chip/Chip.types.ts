@@ -4,8 +4,13 @@ export enum ChipShape {
 }
 
 export type ChipProps = {
-  title: string;
+  title: string | JSX.Element;
   onRemove?: () => void;
   color?: 'primary' | 'secondary';
+  shape?: ChipShape;
+  icon?: React.ReactElement | undefined;
+};
+
+export type StyledChipProps = {
   shape?: ChipShape;
 };

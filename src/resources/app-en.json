@@ -216,5 +216,7 @@
   "months": "Months",
   "years": "Years",
   "periodRequired": "Period is required",
-  "schedule": "Schedule"
+  "schedule": "Schedule",
+  "clickHere": "Click here",
+  "addRole": "Add Role"
 }

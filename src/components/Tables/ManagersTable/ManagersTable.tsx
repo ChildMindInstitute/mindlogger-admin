@@ -29,7 +29,9 @@ export const ManagersTable = () => {
   ]);
 
   const actions = {
-    editAccessAction: () => setEditAccessPopupVisible(true),
+    editAccessAction: () => {
+      setEditAccessPopupVisible(true);
+    },
   };
 
   const managersArr = (
