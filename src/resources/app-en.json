@@ -236,6 +236,5 @@
   "serverStatusNotConfigured": "Server Status: not configured",
   "configureServerURL": "For Security reasons, you must configure the Server URL (IP Address) and Publick Encryption Key to generate and email reports. Additional instructions are available at the link.",
   "respondent": "Respondent",
-  "appletDescription": "Applet Description",
-  "enterRespondentEmail": "Enter the emails of the respondents"
+  "appletDescription": "Applet Description"
 }

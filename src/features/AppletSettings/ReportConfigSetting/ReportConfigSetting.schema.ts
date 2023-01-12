@@ -3,7 +3,7 @@ import * as yup from 'yup';
 
 export const reportConfigSchema = () => {
   const { t } = i18n;
-  const emailRequired = t('enterRespondentEmail');
+  const emailRequired = t('enterRespondentsEmail');
 
   return yup
     .object({
