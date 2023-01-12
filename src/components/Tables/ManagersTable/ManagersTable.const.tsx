@@ -32,10 +32,22 @@ export const getHeadCells = (): HeadCell[] => [
   },
 ];
 
-export const getActions = ({ editAccessAction }: Actions) => [
-  {
-    icon: <Svg id="edit-user" />,
-    action: editAccessAction,
-    toolTipTitle: t('editAccess'),
-  },
-];
+export const getActions = (
+  isOwner: boolean,
+  id: string | undefined,
+  { removeAccessAction, editAccessAction }: Actions,
+) =>
+  isOwner || id
+    ? []
+    : [
+        {
+          icon: <Svg id="remove-access" />,
+          action: removeAccessAction,
+          tooltipTitle: t('removeAccess'),
+        },
+        {
+          icon: <Svg id="edit-user" />,
+          action: editAccessAction,
+          tooltipTitle: t('removeAccess'),
+        },
+      ];
