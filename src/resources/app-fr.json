@@ -217,6 +217,17 @@
   "indefinitely": "Indéfiniment",
   "periodRequired": "Period is required",
   "schedule": "Calendrier",
+  "clickHere": "Cliquez ici",
+  "addRole": "Ajouter un rôle",
+  "selectRespondents": "Sélectionnez les répondants",
+  "selectRespondentsDescription": "Donnez à <1>{{name}} ({{email}})</1> l'accès pour examiner les données dans le <1>{{appletName}}</1> pour les répondants suivants:",
+  "searchAcross": "Rechercher dans:",
+  "all": "Tout",
+  "selected": "Choisi",
+  "unselected": "Désélectionné ",
   "remove": "Retirer",
-  "back": "Retour"
+  "back": "Retour",
+  "individualScheduleSetup": "Configuration individuelle du calendrier",
+  "pleaseSelectAppletToSchedule": "Veuillez sélectionner l'applet à programmer pour le répondant: ",
+  "respondentIsAMemberOfTheDefaultSchedule": "<1>Le répondant {{secretUserId}}</1> est membre de l'horaire par défaut dans {{appletName}} l'applet. Do you want to set an Individual schedule for this Respondent?"
 }

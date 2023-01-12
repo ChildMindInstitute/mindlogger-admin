@@ -8,7 +8,7 @@ import { FolderApplet, folders, popups } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Pin, Actions } from 'components';
 import { ShareAppletPopup } from 'components/Popups/ShareAppletPopup';
-import { APPLET_PAGES } from 'utils/constants';
+import { APPLET_PAGES } from 'consts';
 
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';

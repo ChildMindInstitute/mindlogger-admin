@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 
 import { Svg } from 'components/Svg';
-import { APPLET_PAGES } from 'utils/constants';
+import { APPLET_PAGES } from 'consts';
 
 export const useAppletTabs = () => {
   const { id } = useParams();

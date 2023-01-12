@@ -7,7 +7,7 @@ import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 import { StyledMenu } from './Menu.styles';
 import { MenuProps } from './Menu.types';
 
-export const Menu = ({ anchorEl, onClose, menuItems, context }: MenuProps): JSX.Element => {
+export const Menu = ({ anchorEl, onClose, menuItems }: MenuProps) => {
   const { t } = useTranslation('app');
   const open = Boolean(anchorEl);
 
@@ -26,7 +26,7 @@ export const Menu = ({ anchorEl, onClose, menuItems, context }: MenuProps): JSX.
       }}
     >
       {menuItems.map(({ icon, title, action }, i) => (
-        <MenuItem key={i} onClick={() => action(context)}>
+        <MenuItem key={i} onClick={() => action(title)}>
           {icon && <ListItemIcon>{icon}</ListItemIcon>}
           <StyledBodyLarge color={variables.palette.on_surface} letterSpacing="xxl">
             {t(title)}

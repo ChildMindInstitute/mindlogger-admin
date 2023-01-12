@@ -43,6 +43,7 @@ export const DeletePopup = () => {
       title={t('deleteApplet')}
       buttonText={t('cancel')}
       hasSecondBtn
+      actionsAlign="end"
       secondBtnColor="error"
       secondBtnText={t('delete')}
       onSecondBtnSubmit={handleDeleteApplet}

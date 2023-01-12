@@ -28,6 +28,7 @@ export const palette = {
   on_primary_container_alfa8: 'rgba(0, 29, 50, 0.08)',
   on_secondary_container_alfa8: 'rgba(14, 29, 42, 0.08)',
   on_secondary_container_alfa12: 'rgba(14, 29, 42, 0.12)',
+  outline_alfa8: 'rgba(114, 119, 127, 0.08)',
   contained_btn_focus: '#1f79ab',
   contained_btn_disabled_text: '#979799',
   light_alfa8: 'rgba(255, 255, 255, 0.08)',

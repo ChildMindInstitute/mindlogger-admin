@@ -1,4 +1,5 @@
 export * from './Actions';
+export * from './ButtonWithMenu';
 export * from './Breadcrumbs';
 export * from './Chip';
 export * from './DatePicker';

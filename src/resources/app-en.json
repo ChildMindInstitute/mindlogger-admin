@@ -217,6 +217,14 @@
   "years": "Years",
   "periodRequired": "Period is required",
   "schedule": "Schedule",
+  "clickHere": "Click here",
+  "addRole": "Add Role",
+  "selectRespondents": "Select Respondents",
+  "selectRespondentsDescription": "Give <1>{{name}} ({{email}})</1> access to review the Data in the <1>{{appletName}}</1> for the following Respondents:",
+  "searchAcross": "Search Across:",
+  "all": "All",
+  "selected": "Selected",
+  "unselected": "Unselected",
   "removeAccess": "Remove Access",
   "remove": "Remove",
   "back": "Back",
@@ -236,5 +244,8 @@
   "serverStatusNotConfigured": "Server Status: not configured",
   "configureServerURL": "For Security reasons, you must configure the Server URL (IP Address) and Publick Encryption Key to generate and email reports. Additional instructions are available at the link.",
   "recipient": "Recipient",
-  "appletDescription": "Applet Description"
+  "appletDescription": "Applet Description",
+  "individualScheduleSetup": "Individual Schedule Setup",
+  "pleaseSelectAppletToSchedule": "Please select applet to schedule for the Respondent: ",
+  "respondentIsAMemberOfTheDefaultSchedule": "<1>Respondent {{secretUserId}}</1> is a member of the Default Schedule within the {{appletName}} applet. Do you want to set an Individual schedule for this Respondent?"
 }

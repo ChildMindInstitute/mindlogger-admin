@@ -3,7 +3,6 @@ import { styled } from '@mui/system';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 const commonImgStyles = `
   width: 3.2rem;
@@ -12,7 +11,7 @@ const commonImgStyles = `
   border-radius: ${variables.borderRadius.xxs};
 `;
 
-export const StyledSmallAppletImg = styled('img', shouldForwardProp)`
+export const StyledSmallAppletImg = styled('img')`
   ${commonImgStyles};
 `;
 

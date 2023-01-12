@@ -1,10 +1,10 @@
-import { useEffect, useState, MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
 import { auth, FolderApplet, folders } from 'redux/modules';
-import { Menu, Search, Svg } from 'components';
+import { ButtonWithMenu, Search, Svg } from 'components';
 
 import { Table } from './Table/Table';
 import { getHeadCells, getMenuItems } from './AppletsTable.const';
@@ -20,7 +20,6 @@ export const AppletsTable = () => {
   const [searchValue, setSearchValue] = useState('');
   const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const openMenu = Boolean(anchorEl);
 
   useEffect(() => {
     setFlattenItems(foldersApplets);
@@ -77,30 +76,19 @@ export const AppletsTable = () => {
     </Box>
   );
 
-  const handleAddAppletClick = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
-
-  const handleMenuClose = () => setAnchorEl(null);
-
   return (
     <>
       <AppletsTableHeader>
         <StyledButtons>
-          <Button
+          <ButtonWithMenu
             variant="outlined"
-            aria-haspopup="true"
-            aria-expanded={openMenu ? 'true' : undefined}
+            label={t('addApplet')}
+            anchorEl={anchorEl}
+            setAnchorEl={setAnchorEl}
+            menuItems={getMenuItems(() => setAnchorEl(null))}
             startIcon={<Svg width="18" height="18" id="applet-outlined" />}
-            endIcon={<Svg id={openMenu ? 'navigate-up' : 'navigate-down'} width="9" height="9" />}
-            onClick={handleAddAppletClick}
-          >
-            {t('addApplet')}
-          </Button>
+          />
         </StyledButtons>
-        <Menu
-          anchorEl={anchorEl}
-          onClose={handleMenuClose}
-          menuItems={getMenuItems(handleMenuClose)}
-        />
         <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
       </AppletsTableHeader>
       <Table
