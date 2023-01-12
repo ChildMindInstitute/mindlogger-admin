@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import { ChipShape } from 'components/Chip/Chip.types';
 import { ButtonWithMenu, Chip } from 'components';
-import { StyledBodyMediumMedium } from 'styles/styledComponents/Typography';
+import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import theme from 'styles/theme';
-import { Roles } from 'resources';
+import { Roles } from 'consts';
 
-import { StyledApplet, StyledRow, StyledBtn, StyledLabel } from './Applet.styles';
+import { StyledApplet, StyledRow, StyledBtn, StyledLabel, StyledImg } from './Applet.styles';
 import { getMenuItems } from './Applet.const';
 import { AppletProps } from './Applet.types';
 import { getRoleIcon } from '../EditAccessPopup.utils';
@@ -45,10 +45,8 @@ export const Applet = ({ title, img, roles, index, setApplets, applets }: Applet
     <StyledApplet>
       <StyledRow>
         <StyledFlexTopCenter>
-          {img && <img src={img} alt={title} />}
-          <StyledBodyMediumMedium sx={{ marginLeft: theme.spacing(1.2) }}>
-            {title}
-          </StyledBodyMediumMedium>
+          {img && <StyledImg src={img} alt={title} />}
+          <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>{title}</StyledBodyMedium>
         </StyledFlexTopCenter>
         <ButtonWithMenu
           anchorEl={anchorEl}

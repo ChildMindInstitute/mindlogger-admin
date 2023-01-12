@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { SEARCH_HEIGHT } from 'utils/constants';
+import { SEARCH_HEIGHT } from 'consts';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 export const AppletsTableHeader = styled(Box)`

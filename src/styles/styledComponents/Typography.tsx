@@ -112,10 +112,6 @@ export const StyledBodyMedium = styled(Typography)`
   letter-spacing: ${variables.letterSpacing.lg};
 `;
 
-export const StyledBodyMediumMedium = styled(StyledBodyMedium)`
-  font-weight: ${variables.font.weight.medium};
-`;
-
 export const StyledBodySmall = styled(Typography)`
   font-size: ${variables.font.size.sm};
   line-height: ${variables.lineHeight.sm};

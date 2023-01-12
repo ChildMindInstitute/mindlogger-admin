@@ -1,5 +1,5 @@
 import { Svg } from 'components/Svg';
-import { Roles } from 'resources';
+import { Roles } from 'consts';
 
 export const getRoleIcon = (role: string) => {
   switch (role) {

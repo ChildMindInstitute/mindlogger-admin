@@ -29,3 +29,7 @@ export const StyledBtn = styled(Link)`
 export const StyledLabel = styled(Box)`
   text-transform: capitalize;
 `;
+
+export const StyledImg = styled('img')`
+  max-width: 4rem;
+`;

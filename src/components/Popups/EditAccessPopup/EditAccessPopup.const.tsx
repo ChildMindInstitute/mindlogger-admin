@@ -1,5 +1,5 @@
 import logoSrc from 'assets/images/logo.png';
-import { Roles } from 'resources';
+import { Roles } from 'consts';
 
 import { getRoleIcon } from './EditAccessPopup.utils';
 

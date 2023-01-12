@@ -13,7 +13,7 @@ import { getAppletInvitationApi } from 'api';
 import { getErrorMessage } from 'utils/errors';
 import { prepareUsersData } from 'utils/prepareUsersData';
 import { setAccountName } from 'redux/modules/Auth/Auth.thunk';
-import { Roles } from 'resources';
+import { Roles } from 'consts';
 
 import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUserForm.styles';
 import { Fields, fields, defaultValues, langs, roles } from './AddUserForm.const';

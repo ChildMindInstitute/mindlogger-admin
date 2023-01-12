@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { DAY_FORMAT } from 'utils/constants';
+import { DAY_FORMAT } from 'consts';
 
 export const getDatesStringsArray = (value: string) =>
   value?.split('-').map((element) => element.trim());

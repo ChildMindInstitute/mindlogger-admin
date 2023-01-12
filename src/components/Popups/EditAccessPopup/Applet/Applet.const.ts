@@ -1,29 +1,27 @@
 import { MenuItem } from 'components/Menu/Menu.types';
-import { Roles } from 'resources';
+import { Roles } from 'consts';
 
-export const getMenuItems = (addRole: (title: string) => void): MenuItem[] => [
-  {
-    title: Roles.editor,
-    action: (title?: string) => {
-      title && addRole(title);
+export const getMenuItems = (addRole: (title: string) => void): MenuItem[] => {
+  const action = (title?: string) => {
+    title && addRole(title);
+  };
+
+  return [
+    {
+      title: Roles.editor,
+      action,
     },
-  },
-  {
-    title: Roles.reviewer,
-    action: (title?: string) => {
-      title && addRole(title);
+    {
+      title: Roles.reviewer,
+      action,
     },
-  },
-  {
-    title: Roles.coordinator,
-    action: (title?: string) => {
-      title && addRole(title);
+    {
+      title: Roles.coordinator,
+      action,
     },
-  },
-  {
-    title: Roles.manager,
-    action: (title?: string) => {
-      title && addRole(title);
+    {
+      title: Roles.manager,
+      action,
     },
-  },
-];
+  ];
+};

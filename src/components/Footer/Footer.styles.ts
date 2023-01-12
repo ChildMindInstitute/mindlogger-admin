@@ -3,7 +3,7 @@ import { Box, Link } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { FOOTER_HEIGHT } from 'utils/constants';
+import { FOOTER_HEIGHT } from 'consts';
 
 export const StyledFooter = styled(Box)`
   display: flex;

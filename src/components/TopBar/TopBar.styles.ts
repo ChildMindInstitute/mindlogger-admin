@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import { TOP_BAR_HEIGHT } from 'utils/constants';
+import { TOP_BAR_HEIGHT } from 'consts';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledQuantityCircle } from 'styles/styledComponents/QuantityCircle';

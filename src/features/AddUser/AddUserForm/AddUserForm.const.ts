@@ -1,4 +1,4 @@
-import { Roles } from 'resources';
+import { Roles } from 'consts';
 
 import { Field } from './AddUserForm.types';
 
