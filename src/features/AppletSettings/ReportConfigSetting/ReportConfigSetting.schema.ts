@@ -3,11 +3,12 @@ import * as yup from 'yup';
 
 export const reportConfigSchema = () => {
   const { t } = i18n;
-  const emailRequired = t('enterRespondentsEmail');
+  const emailRequired = t('enterRecipientsEmails');
 
   return yup
     .object({
-      email: yup.string().required(emailRequired),
+      email: yup.string(),
+      emails: yup.array().required(emailRequired),
       respondentId: yup.string(),
       caseId: yup.string(),
       subject: yup.string().required(),

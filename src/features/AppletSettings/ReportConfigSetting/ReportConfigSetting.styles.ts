@@ -24,4 +24,7 @@ export const StyledButton = styled(StyledClearedButton)`
   width: 20rem;
   color: ${variables.palette.on_surface};
   margin: ${theme.spacing(2.4, 0)};
+  svg {
+    fill: ${variables.palette.on_surface};
+  }
 `;
