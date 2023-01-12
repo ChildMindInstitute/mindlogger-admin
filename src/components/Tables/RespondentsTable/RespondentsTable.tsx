@@ -8,7 +8,7 @@ import { users, UserData, folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
-import { prepareUsersData } from 'utils/prepareUsersData';
+import { prepareRespondentsData } from 'utils/prepareUsersData';
 import { ScheduleSetupPopup } from 'components/Popups';
 
 import {
@@ -57,7 +57,7 @@ export const RespondentsTable = () => {
   };
 
   const usersArr = (
-    id ? prepareUsersData(usersData?.items, id) : prepareUsersData(usersData?.items)
+    id ? prepareRespondentsData(usersData?.items, id) : prepareRespondentsData(usersData?.items)
   ) as UserData[];
 
   const rows = usersArr?.map((user, index) => {
