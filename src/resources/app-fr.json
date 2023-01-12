@@ -222,5 +222,7 @@
   "searchAcross": "Rechercher dans:",
   "all": "Tout",
   "selected": "Choisi",
-  "unselected": "Désélectionné "
+  "unselected": "Désélectionné ",
+  "remove": "Retirer",
+  "back": "Retour"
 }
