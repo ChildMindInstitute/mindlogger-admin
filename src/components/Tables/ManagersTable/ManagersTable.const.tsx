@@ -37,7 +37,7 @@ export const getActions = (
   id: string | undefined,
   { removeAccessAction, editAccessAction }: Actions,
 ) =>
-  !isOwner || id
+  isOwner || id
     ? []
     : [
         {
