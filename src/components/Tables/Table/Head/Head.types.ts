@@ -1,5 +1,6 @@
-import { UiType } from 'components/Tables/Table/Table.types';
 import { HeadCell, Order } from 'types/table';
+
+import { UiType } from '../Table.types';
 
 export type HeadProps = {
   tableHeader: JSX.Element | null;

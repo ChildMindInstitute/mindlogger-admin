@@ -1,6 +1,6 @@
 import { TableRow, TableCell, TableSortLabel } from '@mui/material';
-import { UiType } from 'components/Tables/Table/Table.types';
 
+import { UiType } from '../Table.types';
 import { StyledTableCell, StyledTableHead } from './Head.styles';
 import { HeadProps } from './Head.types';
 

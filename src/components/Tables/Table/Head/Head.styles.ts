@@ -1,8 +1,9 @@
 import { styled, TableHead, TableCell } from '@mui/material';
-import { UiType } from 'components/Tables/Table/Table.types';
-import { variables } from 'styles/variables';
 
+import { variables } from 'styles/variables';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
+
+import { UiType } from '../Table.types';
 
 const HEAD_ROW_HEIGHT = '5.3rem';
 
