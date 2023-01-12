@@ -1,9 +1,12 @@
 import { HeadCell, Order } from 'types/table';
 
+import { UiType } from '../Table.types';
+
 export type HeadProps = {
   tableHeader: JSX.Element | null;
   headCells: HeadCell[];
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   order: Order;
   orderBy?: string;
+  uiType?: UiType;
 };
