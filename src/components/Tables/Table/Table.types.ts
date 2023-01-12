@@ -1,7 +1,9 @@
+import { ReactNode } from 'react';
+
 import { Cell, HeadCell } from 'types/table';
 
 export type RowContent = Cell & {
-  content: (item: Row) => React.ReactNode | string;
+  content: (item: Row) => ReactNode | string;
   value: string | number | boolean;
   onClick?: () => void;
 };
@@ -16,9 +18,9 @@ export enum UiType {
 }
 
 export type TableProps = {
-  tableHeight?: string;
   columns: HeadCell[];
   rows: Row[] | undefined;
   orderBy: string;
+  tableHeight?: string;
   uiType?: UiType;
 };

@@ -36,9 +36,16 @@ export const Modal = ({
     </StyledDialogTitle>
     {children}
     <StyledDialogActions actionsAlign={actionsAlign}>
-      <StyledButton variant="text" disabled={disabledSubmit} onClick={onSubmit}>
-        {buttonText}
-      </StyledButton>
+      {buttonText && (
+        <StyledButton
+          fontWeight={hasSecondBtn ? 'regular' : 'bold'}
+          variant="text"
+          disabled={disabledSubmit}
+          onClick={onSubmit}
+        >
+          {buttonText}
+        </StyledButton>
+      )}
       {hasSecondBtn && (
         <StyledButton
           variant="text"

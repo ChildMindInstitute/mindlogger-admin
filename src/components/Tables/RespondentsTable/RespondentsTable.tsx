@@ -4,11 +4,12 @@ import { useParams } from 'react-router-dom';
 
 import { Table, Row } from 'components/Tables';
 import { Actions, Pin, Svg, Search } from 'components';
-import { users, UserData } from 'redux/modules';
+import { users, UserData, folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
-import { prepareUsersData } from 'utils/prepareUsersData';
+import { prepareRespondentsData } from 'utils/prepareUsersData';
+import { ScheduleSetupPopup } from 'components/Popups';
 
 import {
   RespondentsTableHeader,
@@ -16,15 +17,21 @@ import {
   StyledLeftBox,
   StyledRightBox,
 } from './RespondentsTable.styles';
-import { actions, getHeadCells } from './RespondentsTable.const';
+import { getActions, getAppletsSmallTableRows } from './RespondentsTable.utils';
+import { headCells } from './RespondentsTable.const';
+import { ChosenAppletData } from './RespondentsTable.types';
 
 export const RespondentsTable = () => {
   const { id } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const usersData = users.useUserData();
+  const appletsData = folders.useFlattenFoldersApplets();
   const timeAgo = useTimeAgo();
   const [searchValue, setSearchValue] = useState('');
+  const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
+  const [respondentsDataIndex, setRespondentsDataIndex] = useState(0);
+  const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
   useBreadcrumbs([
     {
@@ -32,6 +39,13 @@ export const RespondentsTable = () => {
       label: t('respondents'),
     },
   ]);
+
+  const actions = {
+    scheduleSetupAction: (index: number) => {
+      setRespondentsDataIndex(index);
+      setScheduleSetupPopupVisible(true);
+    },
+  };
 
   const handlePinClick = async (profileId: string, newState: boolean) => {
     const { updatePin, getUsersList } = users.thunk;
@@ -43,10 +57,10 @@ export const RespondentsTable = () => {
   };
 
   const usersArr = (
-    id ? prepareUsersData(usersData?.items, id) : prepareUsersData(usersData?.items)
+    id ? prepareRespondentsData(usersData?.items, id) : prepareRespondentsData(usersData?.items)
   ) as UserData[];
 
-  const rows = usersArr?.map((user) => {
+  const rows = usersArr?.map((user, index) => {
     const { pinned, MRN, nickName, updated, _id: profileId } = user;
     const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
 
@@ -69,7 +83,7 @@ export const RespondentsTable = () => {
         value: lastEdited,
       },
       actions: {
-        content: () => <Actions items={actions} context={user} />,
+        content: () => <Actions items={getActions(actions)} context={index} />,
         value: '',
         width: '330',
       },
@@ -85,6 +99,12 @@ export const RespondentsTable = () => {
       ({ secretId, nickname }) =>
         filterRows(secretId, searchValue) || filterRows(nickname, searchValue),
     );
+
+  const appletsSmallTableRows = getAppletsSmallTableRows(
+    usersData?.items[respondentsDataIndex],
+    appletsData,
+    setChosenAppletData,
+  );
 
   return (
     <>
@@ -102,7 +122,16 @@ export const RespondentsTable = () => {
         <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
         {id && <StyledRightBox />}
       </RespondentsTableHeader>
-      <Table columns={getHeadCells()} rows={handleFilterRows(rows)} orderBy="updated" />
+      <Table columns={headCells} rows={handleFilterRows(rows)} orderBy="updated" />
+      {scheduleSetupPopupVisible && (
+        <ScheduleSetupPopup
+          popupVisible={scheduleSetupPopupVisible}
+          setPopupVisible={setScheduleSetupPopupVisible}
+          tableRows={appletsSmallTableRows}
+          chosenAppletData={chosenAppletData}
+          setChosenAppletData={setChosenAppletData}
+        />
+      )}
     </>
   );
 };
