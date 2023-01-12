@@ -2,7 +2,7 @@ import { Cell, HeadCell } from 'types/table';
 
 export type RowContent = Cell & {
   content: (item: Row) => React.ReactNode | string;
-  value: string | number;
+  value: string | number | boolean;
   onClick?: () => void;
 };
 

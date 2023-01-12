@@ -1,3 +1,5 @@
+import { DefaultTFuncReturn } from 'i18next';
+
 export type Order = 'asc' | 'desc';
 
 export type Cell = {
@@ -7,6 +9,6 @@ export type Cell = {
 
 export type HeadCell = Cell & {
   id: string;
-  label: string;
+  label: string | DefaultTFuncReturn | JSX.Element;
   enableSort?: boolean;
 };
