@@ -20,9 +20,8 @@ export const Applet = ({ title, img, roles, index, setApplets, applets }: Applet
 
   const updateRolesHandler = (callback: (currentApplet: AppletType) => void) => {
     const newApplets = [...applets];
-    let currentApplet = newApplets[index];
-    currentApplet = { ...currentApplet };
-    callback(currentApplet);
+    newApplets[index] = { ...newApplets[index] };
+    callback(newApplets[index]);
     setApplets(newApplets);
   };
 

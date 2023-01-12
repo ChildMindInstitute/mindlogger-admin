@@ -1,6 +1,9 @@
+import { User } from 'components/Tables/ManagersTable/ManagersTable.types';
+
 export type EditAccessPopupProps = {
   onClose: () => void;
   editAccessPopupVisible: boolean;
+  user: User;
 };
 
 export type Role = {

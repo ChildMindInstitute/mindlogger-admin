@@ -1,3 +1,8 @@
+import { ManagerData } from 'redux/modules';
+
+export type User = ManagerData & { appletIds: string[] };
+
 export type Actions = {
-  editAccessAction: () => void;
+  removeAccessAction: (user: User) => void;
+  editAccessAction: (user: User) => void;
 };

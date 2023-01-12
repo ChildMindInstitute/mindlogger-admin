@@ -218,5 +218,7 @@
   "periodRequired": "Period is required",
   "schedule": "Calendrier",
   "clickHere": "Cliquez ici",
-  "addRole": "Ajouter un rôle"
+  "addRole": "Ajouter un rôle",
+  "remove": "Retirer",
+  "back": "Retour"
 }

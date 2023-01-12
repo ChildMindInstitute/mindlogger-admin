@@ -11,8 +11,13 @@ import { EditAccessPopupProps, Applet as AppletType } from './EditAccessPopup.ty
 import { applets as mockedApplets } from './EditAccessPopup.const';
 import { StyledApplets } from './EditAccessPopup.styles';
 
-export const EditAccessPopup = ({ onClose, editAccessPopupVisible }: EditAccessPopupProps) => {
+export const EditAccessPopup = ({
+  onClose,
+  editAccessPopupVisible,
+  user,
+}: EditAccessPopupProps) => {
   const { t } = useTranslation('app');
+  const { firstName, lastName, email } = user;
   const [applets, setApplets] = useState<AppletType[]>(mockedApplets);
 
   return (
@@ -27,7 +32,10 @@ export const EditAccessPopup = ({ onClose, editAccessPopupVisible }: EditAccessP
       <>
         <StyledModalWrapper>
           <StyledBodyLarge sx={{ margin: theme.spacing(-1.8, 0, 1.2) }}>
-            John Doe (jdoe@mail.com) has access to the following list of Applets:
+            <strong>
+              {firstName} {lastName} ({email}){' '}
+            </strong>
+            {t('userHasAccess')}
           </StyledBodyLarge>
         </StyledModalWrapper>
         <StyledApplets>
