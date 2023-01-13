@@ -2,7 +2,7 @@ import { t } from 'i18next';
 
 import { HeadCell } from 'types/table';
 
-export const headCells: HeadCell[] = [
+export const getHeadCells = (): HeadCell[] => [
   {
     id: 'appletName',
     label: t('appletName'),
