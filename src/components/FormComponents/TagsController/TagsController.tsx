@@ -5,7 +5,7 @@ import { Chip } from 'components/Chip';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { StyledFlexWrap } from 'styles/styledComponents/Flex';
 
-import { TagsInputControllerProps } from './TagsController.types';
+import { TagsInputControllerProps, UiType } from './TagsController.types';
 import { StyledTextField } from './TagsController.styles';
 
 export const TagsController = <T extends FieldValues>({
@@ -14,43 +14,44 @@ export const TagsController = <T extends FieldValues>({
   tags,
   onAddTagClick,
   onRemoveTagClick,
+  uiType = UiType.primary,
   ...props
-}: TagsInputControllerProps<T>) => (
-  <Controller
-    name={name}
-    control={control}
-    render={({ field: { onChange, value } }) => (
-      <>
-        <StyledTextField
-          {...props}
-          onChange={onChange}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              onAddTagClick(value);
-            }
-          }}
-          value={value}
-          InputProps={{
-            endAdornment: (
-              <StyledClearedButton onClick={() => onAddTagClick(value)}>
-                <Svg id="check" />
-              </StyledClearedButton>
-            ),
-          }}
-        />
-        {tags?.length > 0 && (
-          <StyledFlexWrap>
-            {tags.map((tag, index) => (
-              <Chip
-                color="secondary"
-                key={index}
-                title={tag}
-                onRemove={() => onRemoveTagClick(index)}
-              />
-            ))}
-          </StyledFlexWrap>
-        )}
-      </>
-    )}
-  />
-);
+}: TagsInputControllerProps<T>) => {
+  const chips = tags?.length > 0 && (
+    <>
+      {tags.map((tag, index) => (
+        <Chip color="secondary" key={index} title={tag} onRemove={() => onRemoveTagClick(index)} />
+      ))}
+    </>
+  );
+
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field: { onChange, value } }) => (
+        <>
+          <StyledTextField
+            {...props}
+            onChange={onChange}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onAddTagClick(value);
+              }
+            }}
+            value={value}
+            InputProps={{
+              startAdornment: uiType === UiType.secondary && chips,
+              endAdornment: (
+                <StyledClearedButton onClick={() => onAddTagClick(value)}>
+                  <Svg id="check" />
+                </StyledClearedButton>
+              ),
+            }}
+          />
+          {uiType === UiType.primary && <StyledFlexWrap>{chips}</StyledFlexWrap>}
+        </>
+      )}
+    />
+  );
+};

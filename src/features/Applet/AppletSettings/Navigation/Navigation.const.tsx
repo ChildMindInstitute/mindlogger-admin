@@ -4,6 +4,7 @@ import { EditAppletSetting } from '../EditAppletSetting';
 import { ExportDataSetting } from '../ExportDataSetting';
 import { DeleteAppletSetting } from '../DeleteAppletSetting';
 import { DataRetention } from '../DataRetentionSetting/DataRetention';
+import { ReportConfigSetting } from '../ReportConfigSetting';
 import { ShareAppletSetting } from '../ShareAppletSetting';
 import { TransferOwnershipSetting } from '../TransferOwnershipSetting';
 
@@ -49,7 +50,7 @@ export const navigationItems = [
       {
         icon: <Svg id="report-configuration" />,
         label: 'reportConfiguration',
-        component: <>reportConfiguration</>,
+        component: <ReportConfigSetting />,
       },
     ],
   },
