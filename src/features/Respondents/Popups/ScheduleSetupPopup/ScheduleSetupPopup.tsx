@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 
-import { Table, UiType, Modal } from 'components';
+import { Modal } from 'components';
+import { AppletsSmallTable } from 'features/Respondents/AppletsSmallTable';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
 import { APPLET_PAGES } from 'consts';
 
 import { ScheduleSetupPopupProps } from './ScheduleSetupPopup.types';
-import { headCells } from './ScheduleSetupPopup.const';
 
 export const ScheduleSetupPopup = ({
   popupVisible,
@@ -72,12 +72,7 @@ export const ScheduleSetupPopup = ({
             <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
               {t('pleaseSelectAppletToSchedule')}
             </StyledBodyLarge>
-            <Table
-              columns={headCells}
-              rows={tableRows}
-              orderBy="appletName"
-              uiType={UiType.secondary}
-            />
+            <AppletsSmallTable tableRows={tableRows} />
           </>
         )}
       </StyledModalWrapper>

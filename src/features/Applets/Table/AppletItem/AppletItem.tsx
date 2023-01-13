@@ -7,7 +7,7 @@ import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders, popups } from 'redux/modules';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Pin, Actions } from 'components';
-import { ShareAppletPopup } from 'features/Applet/Popups';
+import { ShareAppletPopup } from 'features/Applets/Popups';
 import { APPLET_PAGES } from 'consts';
 
 import { AppletImage } from '../AppletImage';
