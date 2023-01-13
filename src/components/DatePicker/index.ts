@@ -1,2 +1,2 @@
 export * from './DatePicker';
-export { UiType } from './DatePicker.types';
+export { UiType as DatePickerUiType } from './DatePicker.types';

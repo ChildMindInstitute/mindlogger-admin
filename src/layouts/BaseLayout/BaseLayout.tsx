@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { LeftBar, TopBar, Footer } from 'components';
-import { DuplicatePopups, DeletePopup, TransferOwnershipPopup } from 'components/Popups';
+import { DuplicatePopups, DeletePopup, TransferOwnershipPopup } from 'features/Applet/Popups';
 import { account, users, folders, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 

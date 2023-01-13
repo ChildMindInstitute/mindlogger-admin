@@ -1,14 +1,15 @@
 import { lazy } from 'react';
 
+import { Managers } from 'features/Managers';
+import { Respondents } from 'features/Respondents';
+import { Schedule } from 'features/Applet/Schedule';
 import { page } from 'resources';
-import { ManagersTable, RespondentsTable } from 'components/Tables';
-import { Schedule } from 'features/Schedule';
 
 const Login = lazy(() => import('pages/Login'));
 const ResetPassword = lazy(() => import('pages/ResetPassword'));
 const SignUp = lazy(() => import('pages/SignUp'));
-const AddUser = lazy(() => import('features/AddUser'));
-const AppletSettings = lazy(() => import('features/AppletSettings'));
+const AddUser = lazy(() => import('features/Applet/AddUser'));
+const AppletSettings = lazy(() => import('features/Applet/AppletSettings'));
 
 export const authRoutes = [
   {
@@ -28,11 +29,11 @@ export const authRoutes = [
 export const appletRoutes = [
   {
     path: page.appletRespondents,
-    Component: RespondentsTable,
+    Component: Respondents,
   },
   {
     path: page.appletManagers,
-    Component: ManagersTable,
+    Component: Managers,
   },
   {
     path: page.appletSchedule,

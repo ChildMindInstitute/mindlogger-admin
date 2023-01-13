@@ -9,19 +9,17 @@ import theme from 'styles/theme';
 import { AppRoutes } from 'routes/AppRoutes';
 import { Spinner } from 'components/Spinner';
 
-function App() {
-  return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Suspense fallback={<Spinner />}>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </Suspense>
-      </ThemeProvider>
-    </Provider>
-  );
-}
+const App = () => (
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Suspense fallback={<Spinner />}>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </Suspense>
+    </ThemeProvider>
+  </Provider>
+);
 
 export default App;
