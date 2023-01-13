@@ -11,6 +11,7 @@ export const StyledContainer = styled(Box, shouldForwardProp)`
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-y: auto;
   width: ${({ isOpen }: { isOpen: boolean }) => (isOpen ? '100%' : 0)};
   transition: ${variables.transitions.allLong};
   position: relative;
