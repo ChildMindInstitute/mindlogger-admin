@@ -30,40 +30,30 @@ export const ReportConfigSetting = () => {
   const { t } = useTranslation();
   const isServerConfigured = false; // TODO: add server configured functionality when the back-end is ready
   const [isSettingsOpen, setSettingsOpen] = useState(false);
-  const [emails, setEmails] = useState<string[]>([]);
   const {
     handleSubmit,
     control,
     setValue,
     formState: { isValid },
+    watch,
   } = useForm<FormValues>({
     resolver: yupResolver(reportConfigSchema()),
     defaultValues,
     mode: 'onChange',
   });
+  const emails = watch('emails');
 
   const handleAddEmail = (value: string) => {
     if (value.length) {
       setValue('email', '');
-      setEmails((prevState) => {
-        if (prevState?.some((item) => item === value)) {
-          return prevState;
-        }
-        const emails = prevState?.concat(value);
-        setValue('emails', emails);
-
-        return emails;
-      });
+      if (!emails.some((item) => item === value)) {
+        setValue('emails', [...emails, value]);
+      }
     }
   };
 
   const handleRemoveEmail = (index: number) => {
-    setEmails((prevState) => {
-      const emails = prevState?.filter((_, i) => i !== index) as string[];
-      setValue('emails', emails);
-
-      return emails;
-    });
+    setValue('emails', emails.filter((_, i) => i !== index) as string[]);
   };
 
   const onSubmit = (values: FormValues) => {
@@ -93,7 +83,6 @@ export const ReportConfigSetting = () => {
           name="email"
           control={control}
           label={t('recipient')}
-          placeholder={t('recipient')}
           tags={emails}
           onAddTagClick={handleAddEmail}
           onRemoveTagClick={handleRemoveEmail}
@@ -155,14 +144,12 @@ export const ReportConfigSetting = () => {
                   control={control}
                   name="serverURL"
                   label={t('serverUrl')}
-                  placeholder={t('serverUrl')}
                   sx={{ marginTop: theme.spacing(2.4) }}
                 />
                 <InputController
                   control={control}
                   name="appletDescription"
                   label={t('appletDescription')}
-                  placeholder={t('appletDescription')}
                   sx={{ marginTop: theme.spacing(2.4), minHeight: '16rem' }}
                   multiline
                   rows={4}
