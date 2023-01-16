@@ -2,8 +2,8 @@ import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AppletPassword, AppletPasswordRef } from 'features/Applet/AppletPassword';
-
 import { Modal } from 'components';
+
 import { EnterAppletPasswordProps } from './EnterAppletPasswordPopup.types';
 import { StyledAppletPasswordContainer } from './EnterAppletPasswordPopup.styles';
 
