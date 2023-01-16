@@ -30,8 +30,8 @@ export const Respondents = () => {
   const [searchValue, setSearchValue] = useState('');
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
-  const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
+  const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
   useBreadcrumbs([
@@ -135,8 +135,16 @@ export const Respondents = () => {
         hasIndividualSchedule,
       };
       setChosenAppletData(chosenAppletData);
+    } else {
+      setChosenAppletData(null);
     }
-  }, [usersData, respondentsDataIndex, appletsData]);
+  }, [
+    appletsData,
+    chosenRespondentsItems,
+    scheduleSetupPopupVisible,
+    dataExportPopupVisible,
+    viewDataPopupVisible,
+  ]);
 
   return (
     <>

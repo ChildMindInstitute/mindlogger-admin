@@ -1,14 +1,18 @@
-import { useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
 import { AppletsSmallTable } from 'features/Respondents/AppletsSmallTable';
+import { AppletPassword, AppletPasswordRef } from 'features/Applet/AppletPassword';
+import theme from 'styles/theme';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
-import theme from 'styles/theme';
-import { AppletPassword } from 'features/Applet/AppletPassword';
+import { StyledErrorText } from 'styles/styledComponents/ErrorText';
+import { getUsersDataApi } from 'api';
+import { useAsync } from 'hooks';
 
 import { ScheduleSetupPopupProps } from './DataExportPopup.types';
+import { StyledLinearProgress } from './DataExportPopup.styles';
 
 export const DataExportPopup = ({
   popupVisible,
@@ -18,48 +22,89 @@ export const DataExportPopup = ({
   setChosenAppletData,
 }: ScheduleSetupPopupProps) => {
   const { t } = useTranslation('app');
-  const showSecondScreen = !!chosenAppletData;
   const [disabledSubmit, setDisabledSubmit] = useState(true);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [dataIsExporting, setDataIsExporting] = useState(false);
+  const appletPasswordRef = useRef() as RefObject<AppletPasswordRef>;
+  const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting;
+
+  // TODO: shift to the new API when it is ready,
+  //  and prepare data export CSVs with new API data
+  const { execute, error } = useAsync(getUsersDataApi, (res) => {
+    if (res?.data) {
+      setDataIsExporting(false);
+      setPopupVisible(false);
+      setChosenAppletData(null);
+    }
+  });
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
     setPopupVisible(false);
   };
   const handleModalSubmit = () => {
-    setIsSubmitted(true);
-    console.log('enter applet pwd on data export submit');
-    // setPopupVisible(false);
+    if (appletPasswordRef?.current) {
+      appletPasswordRef.current.submitForm();
+    }
   };
 
-  const handleAppletPwdSubmit = () => console.log('submit');
+  const handleDataExportSubmit = async () => {
+    setDataIsExporting(true);
+    await execute({ appletId: chosenAppletData?.appletId || '' });
+  };
+
+  useEffect(() => {
+    if (error) {
+      setDataIsExporting(false);
+    }
+  }, [error]);
+
+  let modalContent = (
+    <>
+      <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+        {t('pleaseSelectAppletToExportRespondentsData')}
+      </StyledBodyLarge>
+      <AppletsSmallTable tableRows={tableRows} />
+    </>
+  );
+
+  if (showEnterPwdScreen) {
+    modalContent = (
+      <AppletPassword
+        ref={appletPasswordRef}
+        appletId={chosenAppletData.appletId}
+        setDisabledSubmit={setDisabledSubmit}
+        submitCallback={handleDataExportSubmit}
+      />
+    );
+  }
+
+  if (dataIsExporting) {
+    modalContent = (
+      <>
+        <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+          {t('pleaseWaitForRespondentDataDownload')}
+        </StyledBodyLarge>
+        <StyledLinearProgress />
+      </>
+    );
+  }
 
   return (
     <Modal
       open={popupVisible}
       onClose={handlePopupClose}
       onSubmit={handleModalSubmit}
-      title={showSecondScreen ? t('enterAppletPassword') : t('dataExport')}
-      buttonText={showSecondScreen ? t('submit') : ''}
+      title={showEnterPwdScreen ? t('enterAppletPassword') : t('dataExport')}
+      buttonText={showEnterPwdScreen ? t('submit') : ''}
       disabledSubmit={disabledSubmit}
       width="66"
     >
       <StyledModalWrapper>
-        {showSecondScreen ? (
-          <AppletPassword
-            appletId={chosenAppletData.appletId}
-            setDisabledSubmit={setDisabledSubmit}
-            isSubmitted={isSubmitted}
-            setIsSubmitted={setIsSubmitted}
-            submitCallback={handleAppletPwdSubmit}
-          />
-        ) : (
-          <>
-            <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-              {t('pleaseSelectAppletToExportRespondentsData')}
-            </StyledBodyLarge>
-            <AppletsSmallTable tableRows={tableRows} />
-          </>
+        {modalContent}
+        {error && (
+          <StyledErrorText marginTop={1}>
+            {error.response?.data?.message || error.message}
+          </StyledErrorText>
         )}
       </StyledModalWrapper>
     </Modal>
