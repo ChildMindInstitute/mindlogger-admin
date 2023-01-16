@@ -13,10 +13,9 @@ import { account, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { duplicateAppletApi, validateAppletNameApi } from 'api';
 import { getAppletEncryptionInfo } from 'utils/encryption';
-import { getErrorMessage } from 'utils/errors';
 import { page } from 'resources';
 
-import { EnterAppletPwd } from '../EnterAppletPwd';
+import { EnterAppletPasswordPopup } from '../EnterAppletPasswordPopup';
 
 export const DuplicatePopups = () => {
   const { t } = useTranslation('app');
@@ -28,7 +27,6 @@ export const DuplicatePopups = () => {
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [nameModalVisible, setNameModalVisible] = useState(false);
-  const [errorText, setErrorText] = useState('');
 
   const { handleSubmit, control, setValue, getValues } = useForm({
     resolver: yupResolver(
@@ -69,40 +67,36 @@ export const DuplicatePopups = () => {
     duplicatePopupsClose();
   };
 
-  const handleDuplicate = async ({ appletPassword }: { appletPassword: string }) => {
-    try {
-      setErrorText('');
-      const encryptionInfo = getAppletEncryptionInfo({
-        appletPassword,
-        accountId: accountData?.account.accountId || '',
-      });
-      const formData = new FormData();
-      formData.set(
-        'encryption',
-        JSON.stringify({
-          appletPublicKey: Array.from(encryptionInfo.getPublicKey()),
-          appletPrime: Array.from(encryptionInfo.getPrime()),
-          base: Array.from(encryptionInfo.getGenerator()),
-        }),
-      );
+  const submitCallback = async ({ appletPassword }: { appletPassword: string }) => {
+    const encryptionInfo = getAppletEncryptionInfo({
+      appletPassword,
+      accountId: accountData?.account.accountId || '',
+    });
+    const formData = new FormData();
+    formData.set(
+      'encryption',
+      JSON.stringify({
+        appletPublicKey: Array.from(encryptionInfo.getPublicKey()),
+        appletPrime: Array.from(encryptionInfo.getPrime()),
+        base: Array.from(encryptionInfo.getGenerator()),
+      }),
+    );
 
-      await duplicateAppletApi({
-        appletId,
-        options: {
-          name: getValues().name || '',
-        },
-        data: formData,
-      });
-      // TODO rewrite after back changes
-      setTimeout(() => {
-        dispatch(account.thunk.switchAccount({ accountId: accountData?.account.accountId || '' }));
-      }, 4000);
+    await duplicateAppletApi({
+      appletId,
+      options: {
+        name: getValues().name || '',
+      },
+      data: formData,
+    });
+    // TODO rewrite after back changes
+    setTimeout(() => {
+      dispatch(account.thunk.switchAccount({ accountId: accountData?.account.accountId || '' }));
+    }, 4000);
 
-      setPasswordModalVisible(false);
-      setSuccessModalVisible(true);
-    } catch (e) {
-      setErrorText(getErrorMessage(e));
-    }
+    setPasswordModalVisible(false);
+    duplicatePopupsClose();
+    setSuccessModalVisible(true);
   };
 
   const setNameHandler = () => {
@@ -132,11 +126,10 @@ export const DuplicatePopups = () => {
           </form>
         </StyledModalWrapper>
       </Modal>
-      <EnterAppletPwd
-        open={passwordModalVisible}
-        onClose={passwordModalClose}
-        onSubmit={handleDuplicate}
-        errorText={errorText}
+      <EnterAppletPasswordPopup
+        popupVisible={passwordModalVisible}
+        setPopupVisible={setPasswordModalVisible}
+        submitCallback={submitCallback}
       />
       <Modal
         open={successModalVisible}

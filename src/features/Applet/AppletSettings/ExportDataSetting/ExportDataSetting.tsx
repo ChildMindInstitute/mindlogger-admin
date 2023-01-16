@@ -3,11 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
-import { AppletPwd, EnterAppletPwd } from 'features/Applet/Popups';
+import { EnterAppletPasswordPopup } from 'features/Applet/Popups';
 import { Svg } from 'components';
-import { account, folders } from 'redux/modules';
-import { getAppletEncryptionInfo } from 'utils/encryption';
-import { getAppletData } from 'utils/getAppletData';
 
 import {
   StyledAppletSettingsButton,
@@ -17,36 +14,8 @@ import {
 export const ExportDataSetting = () => {
   const { t } = useTranslation('app');
   const { id } = useParams();
-  const accData = account.useData();
-  const appletsFoldersData = folders.useFlattenFoldersApplets();
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
-  const [errorText, setErrorText] = useState('');
-
-  const handleClose = () => {
-    setPasswordModalVisible(false);
-    setErrorText('');
-  };
-
-  const handleSubmit = ({ appletPassword }: AppletPwd) => {
-    const { encryption } = getAppletData(appletsFoldersData, id);
-    const encryptionInfo = getAppletEncryptionInfo({
-      appletPassword,
-      accountId: accData?.account.accountId || '',
-      prime: encryption?.appletPrime || [],
-      baseNumber: encryption?.base || [],
-    });
-
-    if (
-      encryptionInfo
-        .getPublicKey()
-        .equals(Buffer.from(encryption?.appletPublicKey as unknown as WithImplicitCoercion<string>))
-    ) {
-      handleClose();
-    } else {
-      setErrorText(t('incorrectAppletPassword') as string);
-    }
-  };
 
   return (
     <>
@@ -60,11 +29,10 @@ export const ExportDataSetting = () => {
         {t('download')}
       </StyledAppletSettingsButton>
       {passwordModalVisible && (
-        <EnterAppletPwd
-          open={passwordModalVisible}
-          onClose={() => handleClose()}
-          onSubmit={handleSubmit}
-          errorText={errorText}
+        <EnterAppletPasswordPopup
+          popupVisible={passwordModalVisible}
+          setPopupVisible={setPasswordModalVisible}
+          appletId={id}
         />
       )}
     </>

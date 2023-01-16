@@ -1,5 +1,6 @@
 export type Actions = {
   scheduleSetupAction: (value: number) => void;
+  viewDataAction: (value: number) => void;
 };
 
 export type ChosenAppletData = {
