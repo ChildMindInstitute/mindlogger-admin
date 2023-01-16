@@ -3,13 +3,12 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
-import { EnterAppletPwd, AppletPwd } from 'features/Applet/Popups';
+import { EnterAppletPasswordPopup } from 'features/Applet/Popups';
 import { account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import logoSrc from 'assets/images/logo.png';
 import { variables } from 'styles/variables';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
-import { getAppletEncryptionInfo } from 'utils/encryption';
 
 import {
   StyledNotification,
@@ -46,7 +45,6 @@ export const Notification = ({
   const dispatch = useAppDispatch();
   const isActive = currentId === alertId;
   const [modalActive, setModalActive] = useState(false);
-  const [errorText, setErrorText] = useState('');
 
   const handleNotificationClick = async () => {
     const { updateAlertStatus } = account.thunk;
@@ -59,27 +57,6 @@ export const Notification = ({
   };
 
   const handleToResponseDataClick = () => setModalActive(true);
-  const handleModalSubmit = ({ appletPassword }: AppletPwd) => {
-    const encryptionInfo = getAppletEncryptionInfo({
-      appletPassword,
-      accountId,
-      prime: encryption?.appletPrime || [],
-      baseNumber: encryption?.base || [],
-    });
-
-    if (
-      encryptionInfo
-        .getPublicKey()
-        .equals(Buffer.from(encryption?.appletPublicKey as unknown as WithImplicitCoercion<string>))
-    ) {
-      setModalActive(false);
-      setErrorText('');
-      // TODO: Implement save user entered the correct password for the chosen applet
-      //  and navigate to the chosen applet data
-    } else {
-      setErrorText(t('incorrectAppletPassword') as string);
-    }
-  };
 
   return (
     <>
@@ -136,11 +113,10 @@ export const Notification = ({
           </StyledTimeAgo>
         </StyledBottomSection>
       </StyledNotification>
-      <EnterAppletPwd
-        open={modalActive}
-        onClose={() => setModalActive(false)}
-        onSubmit={handleModalSubmit}
-        errorText={errorText}
+      <EnterAppletPasswordPopup
+        popupVisible={modalActive}
+        setPopupVisible={setModalActive}
+        encryption={encryption}
       />
     </>
   );

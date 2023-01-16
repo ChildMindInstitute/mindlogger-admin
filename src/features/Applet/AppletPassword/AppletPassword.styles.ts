@@ -7,16 +7,12 @@ import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledInputWrapper = styled(Box)`
-  padding: ${theme.spacing(0, 2.4)};
-
   .MuiOutlinedInput-root {
     border-radius: ${variables.borderRadius.xxs};
   }
-
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
-
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,

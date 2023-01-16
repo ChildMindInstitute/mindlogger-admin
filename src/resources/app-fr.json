@@ -229,5 +229,6 @@
   "back": "Retour",
   "individualScheduleSetup": "Configuration individuelle du calendrier",
   "pleaseSelectAppletToSchedule": "Veuillez sélectionner l'applet à programmer pour le répondant: ",
-  "respondentIsAMemberOfTheDefaultSchedule": "<1>Le répondant {{secretUserId}}</1> est membre de l'horaire par défaut dans {{appletName}} l'applet. Do you want to set an Individual schedule for this Respondent?"
+  "respondentIsAMemberOfTheDefaultSchedule": "<1>Le répondant {{secretUserId}}</1> est membre de l'horaire par défaut dans {{appletName}} l'applet. Do you want to set an Individual schedule for this Respondent?",
+  "viewDataDescription": "Veuillez sélectionner l'applet pour afficher les données du répondant pour :"
 }
