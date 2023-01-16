@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -9,14 +9,14 @@ import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareRespondentsData } from 'utils/prepareUsersData';
 
-import { ScheduleSetupPopup } from './Popups';
+import { ScheduleSetupPopup, DataExportPopup } from './Popups';
 import {
   RespondentsTableHeader,
   StyledButton,
   StyledLeftBox,
   StyledRightBox,
 } from './Respondents.styles';
-import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
+import { getActions, getAppletsSmallTableRows, getChosenAppletData } from './Respondents.utils';
 import { headCells } from './Respondents.const';
 import { ChosenAppletData } from './Respondents.types';
 
@@ -29,7 +29,8 @@ export const Respondents = () => {
   const timeAgo = useTimeAgo();
   const [searchValue, setSearchValue] = useState('');
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
-  const [respondentsDataIndex, setRespondentsDataIndex] = useState(0);
+  const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
+  const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
   useBreadcrumbs([
@@ -43,6 +44,10 @@ export const Respondents = () => {
     scheduleSetupAction: (index: number) => {
       setRespondentsDataIndex(index);
       setScheduleSetupPopupVisible(true);
+    },
+    userDataExportAction: (index: number) => {
+      setRespondentsDataIndex(index);
+      setDataExportPopupVisible(true);
     },
   };
 
@@ -99,11 +104,34 @@ export const Respondents = () => {
         filterRows(secretId, searchValue) || filterRows(nickname, searchValue),
     );
 
+  const chosenRespondentsItems =
+    respondentsDataIndex || respondentsDataIndex === 0
+      ? usersData?.items[respondentsDataIndex]
+      : undefined;
+
   const appletsSmallTableRows = getAppletsSmallTableRows(
-    usersData?.items[respondentsDataIndex],
+    chosenRespondentsItems,
     appletsData,
     setChosenAppletData,
   );
+
+  useEffect(() => {
+    if (chosenRespondentsItems && Object.keys(chosenRespondentsItems).length === 1) {
+      const appletId = Object.keys(chosenRespondentsItems)[0];
+      const { appletName, secretUserId, hasIndividualSchedule } = getChosenAppletData(
+        chosenRespondentsItems,
+        appletsData,
+        appletId,
+      );
+      const chosenAppletData = {
+        appletId,
+        appletName,
+        secretUserId,
+        hasIndividualSchedule,
+      };
+      setChosenAppletData(chosenAppletData);
+    }
+  }, [usersData, respondentsDataIndex, appletsData]);
 
   return (
     <>
@@ -126,6 +154,15 @@ export const Respondents = () => {
         <ScheduleSetupPopup
           popupVisible={scheduleSetupPopupVisible}
           setPopupVisible={setScheduleSetupPopupVisible}
+          tableRows={appletsSmallTableRows}
+          chosenAppletData={chosenAppletData}
+          setChosenAppletData={setChosenAppletData}
+        />
+      )}
+      {dataExportPopupVisible && (
+        <DataExportPopup
+          popupVisible={dataExportPopupVisible}
+          setPopupVisible={setDataExportPopupVisible}
           tableRows={appletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}

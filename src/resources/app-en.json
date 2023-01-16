@@ -247,5 +247,8 @@
   "appletDescription": "Applet Description",
   "individualScheduleSetup": "Individual Schedule Setup",
   "pleaseSelectAppletToSchedule": "Please select applet to schedule for the Respondent: ",
-  "respondentIsAMemberOfTheDefaultSchedule": "<1>Respondent {{secretUserId}}</1> is a member of the Default Schedule within the {{appletName}} applet. Do you want to set an Individual schedule for this Respondent?"
+  "respondentIsAMemberOfTheDefaultSchedule": "<1>Respondent {{secretUserId}}</1> is a member of the Default Schedule within the {{appletName}} applet. Do you want to set an Individual schedule for this Respondent?",
+  "dataExport": "Data Export",
+  "pleaseSelectAppletToExportRespondentsData": "Please select Applet to export Respondent's data from: ",
+  "pleaseWaitForRespondentDataDownload": "Please wait for the download to complete. It could take up to 5 minutes depending on how much data has been collected. Do not navigate away from this page."
 }

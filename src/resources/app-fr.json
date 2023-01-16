@@ -229,5 +229,8 @@
   "back": "Retour",
   "individualScheduleSetup": "Configuration individuelle du calendrier",
   "pleaseSelectAppletToSchedule": "Veuillez sélectionner l'applet à programmer pour le répondant: ",
-  "respondentIsAMemberOfTheDefaultSchedule": "<1>Le répondant {{secretUserId}}</1> est membre de l'horaire par défaut dans {{appletName}} l'applet. Do you want to set an Individual schedule for this Respondent?"
+  "respondentIsAMemberOfTheDefaultSchedule": "<1>Le répondant {{secretUserId}}</1> est membre de l'horaire par défaut dans {{appletName}} l'applet. Souhaitez-vous définir un calendrier individuel pour ce répondant ?",
+  "dataExport": "Exportation de données",
+  "pleaseSelectAppletToExportRespondentsData": "Veuillez sélectionner Applet pour exporter les données du répondant depuis: ",
+  "pleaseWaitForRespondentDataDownload": "Veuillez attendre la fin du téléchargement. Cela peut prendre jusqu'à 5 minutes en fonction de la quantité de données collectées. Ne quittez pas cette page."
 }
