@@ -10,11 +10,9 @@ export const StyledInputWrapper = styled(Box)`
   .MuiOutlinedInput-root {
     border-radius: ${variables.borderRadius.xxs};
   }
-
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
-
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,

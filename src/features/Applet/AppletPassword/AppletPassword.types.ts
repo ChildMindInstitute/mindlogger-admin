@@ -1,11 +1,16 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { Encryption } from 'redux/modules';
+
+export type AppletPasswordRef = {
+  submitForm: () => void;
+};
+
 export type AppletPasswordForm = { appletPassword: string };
 
 export type AppletPasswordProps = {
-  appletId: string;
+  appletId?: string;
+  encryption?: Encryption;
   setDisabledSubmit: Dispatch<SetStateAction<boolean>>;
-  isSubmitted: boolean;
-  setIsSubmitted: Dispatch<SetStateAction<boolean>>;
-  submitCallback: () => void;
+  submitCallback: (encryptionInfo?: any) => void;
 };

@@ -9,7 +9,7 @@ import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareRespondentsData } from 'utils/prepareUsersData';
 
-import { ScheduleSetupPopup, DataExportPopup } from './Popups';
+import { ScheduleSetupPopup, ViewDataPopup, DataExportPopup } from './Popups';
 import {
   RespondentsTableHeader,
   StyledButton,
@@ -31,6 +31,7 @@ export const Respondents = () => {
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
+  const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
   useBreadcrumbs([
@@ -48,6 +49,10 @@ export const Respondents = () => {
     userDataExportAction: (index: number) => {
       setRespondentsDataIndex(index);
       setDataExportPopupVisible(true);
+    },
+    viewDataAction: (index: number) => {
+      setRespondentsDataIndex(index);
+      setViewDataPopupVisible(true);
     },
   };
 
@@ -154,6 +159,15 @@ export const Respondents = () => {
         <ScheduleSetupPopup
           popupVisible={scheduleSetupPopupVisible}
           setPopupVisible={setScheduleSetupPopupVisible}
+          tableRows={appletsSmallTableRows}
+          chosenAppletData={chosenAppletData}
+          setChosenAppletData={setChosenAppletData}
+        />
+      )}
+      {viewDataPopupVisible && (
+        <ViewDataPopup
+          popupVisible={viewDataPopupVisible}
+          setPopupVisible={setViewDataPopupVisible}
           tableRows={appletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}

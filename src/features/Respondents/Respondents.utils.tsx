@@ -12,7 +12,11 @@ import { StyledBodyMedium, StyledLabelLarge } from 'styles/styledComponents/Typo
 
 import { Actions, ChosenAppletData } from './Respondents.types';
 
-export const getActions = ({ scheduleSetupAction, userDataExportAction }: Actions) => [
+export const getActions = ({
+  scheduleSetupAction,
+  viewDataAction,
+  userDataExportAction,
+}: Actions) => [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
     action: scheduleSetupAction,
@@ -20,7 +24,7 @@ export const getActions = ({ scheduleSetupAction, userDataExportAction }: Action
   },
   {
     icon: <Svg id="data" width={22} height={22} />,
-    action: (item: UserData) => item,
+    action: viewDataAction,
     toolTipTitle: t('viewData'),
   },
   {
