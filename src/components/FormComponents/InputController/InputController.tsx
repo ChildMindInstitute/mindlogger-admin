@@ -16,6 +16,7 @@ export const InputController = <T extends FieldValues>({
   error: providedError,
   textAdornment,
   tooltip,
+  InputProps,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -57,7 +58,7 @@ export const InputController = <T extends FieldValues>({
                         </StyledFlexTopCenter>
                       ),
                     }
-                  : undefined
+                  : InputProps
               }
             />
           </Tooltip>
