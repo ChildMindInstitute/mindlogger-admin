@@ -26,6 +26,12 @@ export const StyledAppletSettingsButton = styled(Button)`
   height: 4.8rem;
   padding: ${theme.spacing(0, 2.5)};
 
+  :disabled {
+    svg {
+      fill: ${variables.palette.contained_btn_disabled_text};
+    }
+  }
+
   svg {
     fill: ${({ color }) =>
       color === 'error' ? variables.palette.semantic.error : variables.palette.primary};

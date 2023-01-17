@@ -65,7 +65,7 @@ export const Applet = ({ title, img, roles, index, setApplets, applets }: Applet
             <StyledLabel>
               {el.label === Roles.reviewer ? (
                 <>
-                  {t(el.label)}: <StyledBtn variant="body2">{t('clickHere')}</StyledBtn>
+                  {t(el.label)}: <StyledBtn variant="body2">{t('editRespondents')}</StyledBtn>
                 </>
               ) : (
                 t(el.label) || ''

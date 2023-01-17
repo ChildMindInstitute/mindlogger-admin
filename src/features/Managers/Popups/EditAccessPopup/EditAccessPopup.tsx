@@ -33,7 +33,7 @@ export const EditAccessPopup = ({
         <StyledModalWrapper>
           <StyledBodyLarge sx={{ margin: theme.spacing(-1.8, 0, 1.2) }}>
             <strong>
-              {firstName} {lastName} ({email}){' '}
+              {firstName} {lastName} ({email})
             </strong>
             {t('userHasAccess')}
           </StyledBodyLarge>
