@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -46,7 +46,13 @@ export const TransferOwnership = ({
   return (
     <form onSubmit={handleSubmit(handleTransferOwnership)} noValidate>
       <StyledBodyLarge>
-        {t('transferOwnershipConfirmation', { appletName: applet.name })}
+        <Trans i18nKey="transferOwnershipConfirmation">
+          Are you sure you want to transfer ownership of the
+          <strong>
+            <>{{ appletName: applet.name }}</>
+          </strong>
+          to another user? This will only transfer the applet and no user data will be transferred.
+        </Trans>
       </StyledBodyLarge>
       <StyledInputWrapper>
         <InputController

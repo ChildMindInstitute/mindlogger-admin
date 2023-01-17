@@ -98,11 +98,11 @@ export const SelectRespondents = ({
               {{ name }} ({{ email }})
             </>
           </b>
-          access to review the Data in the
+          access to review the data for the Applet
           <b>
             <>{{ appletName }}</>
           </b>
-          for the following Respondents:
+          to data for the following Respondents:
         </Trans>
       </StyledBodyMedium>
       <StyledFilterContainer>

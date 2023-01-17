@@ -49,10 +49,10 @@ export const InputController = <T extends FieldValues>({
                           )}
                           <StyledUpDown>
                             <StyledClearedButton onClick={handleAddNumber}>
-                              <Svg id="navigate-up" width="11" height="11" />
+                              <Svg id="navigate-up" />
                             </StyledClearedButton>
                             <StyledClearedButton onClick={handleDistractNumber}>
-                              <Svg id="navigate-down" width="11" height="11" />
+                              <Svg id="navigate-down" />
                             </StyledClearedButton>
                           </StyledUpDown>
                         </StyledFlexTopCenter>

@@ -1,6 +1,7 @@
 import { styled, Box, TextField } from '@mui/material';
 
 import theme from 'styles/theme';
+import { variables } from 'styles/variables';
 
 export const StyledTextField = styled(TextField)`
   input[type='number']::-webkit-inner-spin-button,
@@ -15,11 +16,7 @@ export const StyledUpDown = styled(Box)`
   flex-direction: column;
   margin-left: ${theme.spacing(1.5)};
 
-  button:first-of-type {
-    margin-bottom: ${theme.spacing(0.3)};
-  }
-
-  button:last-of-type {
-    margin-top: ${theme.spacing(0.3)};
+  svg {
+    fill: ${variables.palette.on_surface_variant};
   }
 `;

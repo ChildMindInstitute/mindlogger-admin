@@ -5,15 +5,6 @@ import { typography } from 'styles/typography';
 import { variables } from 'styles/variables';
 import { blendColorsNormal } from 'utils/colors';
 
-const commonFocusStyles = Object.assign(
-  {},
-  ...['&:focus', '&:active', '&:visited'].map((item) => ({
-    [item]: {
-      backgroundColor: variables.palette.primary_alfa12,
-    },
-  })),
-);
-
 const theme = createTheme({
   spacing: 10,
   typography: {
@@ -219,7 +210,6 @@ const theme = createTheme({
             '&:hover': {
               backgroundColor: variables.palette.primary_alfa8,
             },
-            ...commonFocusStyles,
             '&.Mui-disabled': {
               color: variables.palette.on_surface_alfa38,
               backgroundColor: 'transparent',
@@ -230,7 +220,6 @@ const theme = createTheme({
             '&:hover': {
               backgroundColor: variables.palette.primary_alfa8,
             },
-            ...commonFocusStyles,
             '&.Mui-disabled': {
               color: variables.palette.on_surface_alfa38,
               backgroundColor: 'transparent',

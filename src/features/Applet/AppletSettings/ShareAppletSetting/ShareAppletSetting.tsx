@@ -53,7 +53,7 @@ export const ShareAppletSetting = () => {
         />
         <StyledButton
           variant="outlined"
-          startIcon={<Svg width={14} height={14} id="share" />}
+          startIcon={<Svg width={18} height={18} id="share" />}
           disabled={isDisabled}
           onClick={() => setIsSubmitted(true)}
         >
