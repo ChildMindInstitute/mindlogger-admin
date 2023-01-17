@@ -154,7 +154,7 @@ export const Respondents = () => {
           <StyledLeftBox>
             <StyledButton
               variant="outlined"
-              startIcon={<Svg width={14} height={14} id="respondent-outlined" />}
+              startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
             >
               {t('addRespondent')}
             </StyledButton>
