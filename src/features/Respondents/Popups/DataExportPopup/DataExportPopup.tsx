@@ -10,6 +10,7 @@ import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import { getUsersDataApi } from 'api';
 import { useAsync } from 'hooks';
+import { getErrorMessage } from 'utils/errors';
 
 import { ScheduleSetupPopupProps } from './DataExportPopup.types';
 import { StyledLinearProgress } from './DataExportPopup.styles';
@@ -41,6 +42,7 @@ export const DataExportPopup = ({
     setChosenAppletData(null);
     setPopupVisible(false);
   };
+
   const handleModalSubmit = () => {
     if (appletPasswordRef?.current) {
       appletPasswordRef.current.submitForm();
@@ -61,7 +63,7 @@ export const DataExportPopup = ({
   let modalContent = (
     <>
       <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-        {t('pleaseSelectAppletToExportRespondentsData')}
+        {t('selectAppletToExportRespondentsData')}
       </StyledBodyLarge>
       <AppletsSmallTable tableRows={tableRows} />
     </>
@@ -82,7 +84,7 @@ export const DataExportPopup = ({
     modalContent = (
       <>
         <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-          {t('pleaseWaitForRespondentDataDownload')}
+          {t('waitForRespondentDataDownload')}
         </StyledBodyLarge>
         <StyledLinearProgress />
       </>
@@ -102,8 +104,8 @@ export const DataExportPopup = ({
       <StyledModalWrapper>
         {modalContent}
         {error && (
-          <StyledErrorText marginTop={1}>
-            {error.response?.data?.message || error.message}
+          <StyledErrorText sx={{ marginTop: theme.spacing(1) }}>
+            {getErrorMessage(error)}
           </StyledErrorText>
         )}
       </StyledModalWrapper>
