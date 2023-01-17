@@ -12,7 +12,6 @@ export const StyledEditor = styled(MDEditor)`
     color: ${variables.palette.on_surface_variant};
     font-size: ${variables.font.size.lg};
     box-shadow: unset;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   }
 
   .w-md-editor-toolbar {
