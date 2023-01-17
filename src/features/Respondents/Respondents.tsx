@@ -121,8 +121,9 @@ export const Respondents = () => {
   );
 
   useEffect(() => {
-    if (chosenRespondentsItems && Object.keys(chosenRespondentsItems).length === 1) {
-      const appletId = Object.keys(chosenRespondentsItems)[0];
+    const keys = chosenRespondentsItems && Object.keys(chosenRespondentsItems);
+    if (keys && keys.length === 1) {
+      const appletId = keys[0];
       const { appletName, secretUserId, hasIndividualSchedule } = getChosenAppletData(
         chosenRespondentsItems,
         appletsData,
