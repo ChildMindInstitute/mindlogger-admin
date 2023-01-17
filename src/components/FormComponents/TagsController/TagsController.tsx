@@ -11,6 +11,8 @@ import { StyledTextField } from './TagsController.styles';
 export const TagsController = <T extends FieldValues>({
   name,
   control,
+  error: providedError,
+  helperText,
   tags,
   onAddTagClick,
   onRemoveTagClick,
@@ -29,16 +31,20 @@ export const TagsController = <T extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <>
           <StyledTextField
             {...props}
+            onBlur={() => onAddTagClick(value)}
             onChange={onChange}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
+                e.preventDefault();
                 onAddTagClick(value);
               }
             }}
+            error={!!error || providedError}
+            helperText={error ? error.message : helperText}
             value={value}
             InputProps={{
               startAdornment: uiType === UiType.secondary && chips,

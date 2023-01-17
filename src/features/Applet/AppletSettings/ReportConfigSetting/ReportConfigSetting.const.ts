@@ -1,6 +1,6 @@
 export const defaultValues = {
   email: '',
-  emails: [],
+  emailRecipients: [],
   respondentId: false,
   caseId: false,
   subject: '',

@@ -1,8 +1,10 @@
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { folders } from 'redux/modules';
 import {
   CheckboxController,
   EditorController,
@@ -27,38 +29,51 @@ import {
 import { FormValues } from './ReportConfigSetting.types';
 
 export const ReportConfigSetting = () => {
+  const { id } = useParams();
+  const applet = folders.useApplet(id as string);
   const { t } = useTranslation();
   const isServerConfigured = false; // TODO: add server configured functionality when the back-end is ready
   const [isSettingsOpen, setSettingsOpen] = useState(false);
-  const {
-    handleSubmit,
-    control,
-    setValue,
-    formState: { isValid },
-    watch,
-  } = useForm<FormValues>({
+  const { handleSubmit, control, setValue, watch, trigger } = useForm<FormValues>({
     resolver: yupResolver(reportConfigSchema()),
     defaultValues,
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
-  const emails = watch('emails');
+  const emailRecipients = watch('emailRecipients');
+  const respondentId = watch('respondentId');
+  const caseId = watch('caseId');
 
-  const handleAddEmail = (value: string) => {
+  const handleAddEmail = async (value: string) => {
+    const isValid = await trigger(['email']);
+    if (!isValid) return;
+
     if (value.length) {
       setValue('email', '');
-      if (!emails.some((item) => item === value)) {
-        setValue('emails', [...emails, value]);
+      if (!emailRecipients.some((item) => item === value)) {
+        setValue('emailRecipients', [...emailRecipients, value]);
       }
     }
   };
 
   const handleRemoveEmail = (index: number) => {
-    setValue('emails', emails.filter((_, i) => i !== index) as string[]);
+    setValue('emailRecipients', emailRecipients.filter((_, i) => i !== index) as string[]);
   };
 
   const onSubmit = (values: FormValues) => {
     console.log(values);
   };
+
+  useEffect(() => {
+    let subject = 'REPORT';
+    if (respondentId) {
+      subject += ' by user123';
+    }
+    if (caseId) {
+      subject += ' about case123';
+    }
+    subject += `: ${applet.name || 'Example applet'} /activity123 or activityflow123`; // TODO will be fixed for activities
+    setValue('subject', subject);
+  }, [respondentId, caseId]);
 
   return (
     <StyledForm noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -69,7 +84,6 @@ export const ReportConfigSetting = () => {
         <StyledAppletSettingsButton
           variant="outlined"
           type="submit"
-          disabled={!isValid}
           startIcon={<Svg width="19" height="18" id="save" />}
         >
           {t('save')}
@@ -83,10 +97,11 @@ export const ReportConfigSetting = () => {
           name="email"
           control={control}
           label={t('recipient')}
-          tags={emails}
+          tags={emailRecipients}
           onAddTagClick={handleAddEmail}
           onRemoveTagClick={handleRemoveEmail}
           uiType={UiType.secondary}
+          helperText={t('enterRecipientsEmails')}
         />
         <StyledTitleMedium sx={{ margin: theme.spacing(4.8, 0, 1.2) }}>
           {t('includeInEmail')}
@@ -104,10 +119,10 @@ export const ReportConfigSetting = () => {
           label={<StyledBodyLarge>{t('caseId')}</StyledBodyLarge>}
         />
         <InputController
+          inputProps={{ readOnly: true }}
           control={control}
           name="subject"
           label={t('subjectPreview')}
-          placeholder={t('subjectPreviewText')}
           multiline
           rows={2}
           sx={{ margin: theme.spacing(4.8, 0) }}
