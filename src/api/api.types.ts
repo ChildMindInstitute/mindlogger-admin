@@ -144,10 +144,8 @@ export type UpdateActivityVis = {
 };
 
 export type GetUsersData = AppletId & {
-  pageIndex: string;
-  options: {
-    users: string;
-  };
+  pageIndex?: string;
+  users?: string;
 };
 
 export type GetUserList = AppletId & { reviewerId: string };
