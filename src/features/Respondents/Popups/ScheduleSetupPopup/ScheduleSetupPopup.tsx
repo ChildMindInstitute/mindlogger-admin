@@ -70,7 +70,7 @@ export const ScheduleSetupPopup = ({
         ) : (
           <>
             <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-              {t('pleaseSelectAppletToSchedule')}
+              {t('selectAppletToSchedule')}
             </StyledBodyLarge>
             <AppletsSmallTable tableRows={tableRows} />
           </>

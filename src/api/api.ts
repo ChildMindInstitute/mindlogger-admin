@@ -714,16 +714,16 @@ export const getAppletApi = (
 };
 
 export const getUsersDataApi = (
-  { appletId, options, pageIndex }: GetUsersData,
+  { appletId, users, pageIndex }: GetUsersData,
   signal?: AbortSignal,
 ) =>
   authApiClient.get(`/applet/${appletId}/data`, {
     params: {
-      ...options,
-      pagination: {
+      users: JSON.stringify(users),
+      pagination: JSON.stringify({
         allow: true,
         pageIndex: pageIndex || 0,
-      },
+      }),
     },
     signal,
   });
