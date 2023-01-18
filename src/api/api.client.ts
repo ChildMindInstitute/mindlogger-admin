@@ -32,6 +32,17 @@ authApiClient.interceptors.request.use((config: AxiosRequestConfig) => {
   return config;
 });
 
+authApiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response.status === 401) {
+      return getRequestTokenData(error);
+    } else {
+      return Promise.reject(error);
+    }
+  },
+);
+
 authApiClientWithFullLang.interceptors.request.use((config: AxiosRequestConfig) => {
   getRequestTokenData(config);
   getRequestFullLangData(config);

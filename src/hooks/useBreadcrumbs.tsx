@@ -21,7 +21,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   useEffect(() => {
     const newBreadcrumbs: Breadcrumb[] = [];
 
-    if (authData) {
+    if (authData?.user?.firstName) {
       const { firstName, lastName } = authData.user;
       newBreadcrumbs.push({
         icon: <Svg id="home" width="14" height="16" />,

@@ -2,17 +2,21 @@ export type ServerUrlOption = {
   name: string;
   value: string;
 };
+
 export type SignIn = { email: string; password: string };
 
-export type SignInWithToken = { token: string };
+export type GetUserData = { token: string };
 
 export type SignUpArgs = {
   body: {
     email: string;
-    firstName: string;
-    lastName: string;
+    fullName: string;
     password: string;
   };
+};
+
+export type SignInRefreshTokenArgs = {
+  refreshToken: string | null;
 };
 
 export type ResetPassword = { email: string };

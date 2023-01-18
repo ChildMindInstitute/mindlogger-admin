@@ -1,14 +1,16 @@
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { signInRefreshTokenApi } from './api';
 
 import { BASE_API_URL, LANGUAGES } from './api.const';
 
 export const getBaseUrl = () => sessionStorage.getItem('apiUrl') || BASE_API_URL;
 
 export const getRequestTokenData = (config: AxiosRequestConfig) => {
+  const accessToken = sessionStorage.getItem('accessToken');
   if (!config.headers) {
     config.headers = {};
   }
-  config.headers['Girder-Token'] = sessionStorage.getItem('accessToken');
+  config.headers['Authorization'] = `bearer ${accessToken}`;
 };
 
 export const getRequestLangData = (config: AxiosRequestConfig) => {
@@ -31,4 +33,25 @@ export const attachUrl = (origin: string, resource: string) => {
   }
 
   return `${origin}/${resource}`;
+};
+
+export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
+  try {
+    const { response: errorResponse } = err;
+    const refreshToken = sessionStorage.getItem('refreshToken');
+    const accessToken = await signInRefreshTokenApi({
+      refreshToken,
+    });
+
+    const retryOriginalRequest = new Promise((resolve) => {
+      if (errorResponse?.config?.headers) {
+        errorResponse.config.headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+      resolve(axios(errorResponse?.config || {}));
+    });
+
+    return retryOriginalRequest;
+  } catch (err) {
+    return Promise.reject(err);
+  }
 };

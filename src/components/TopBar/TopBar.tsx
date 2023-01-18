@@ -19,7 +19,7 @@ export const TopBar = (): JSX.Element => {
   const [alertsQuantity, setAlertsQuantity] = useState(0);
 
   useEffect(() => {
-    if (authData) {
+    if (authData?.account?.accountId) {
       const { accountId } = authData.account;
       (async () => await dispatch(account.thunk.switchAccount({ accountId })))();
     }

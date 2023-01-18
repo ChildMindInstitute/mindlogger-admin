@@ -1,11 +1,11 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import { BaseLayout } from 'layouts/BaseLayout';
 import { AuthLayout } from 'layouts/AuthLayout';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { page } from 'resources';
-import { BaseLayout } from 'layouts/BaseLayout';
 
 import { PrivateRoute } from './PrivateRoute';
 import { appletRoutes, authRoutes } from './routes.const';
@@ -15,21 +15,14 @@ const Applet = lazy(() => import('pages/Applet'));
 
 export const AppRoutes = () => {
   const token = sessionStorage.getItem('accessToken');
-
-  const [loaded, setLoaded] = useState(!token);
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
   const status = auth.useStatus();
-
-  useEffect(() => {
-    if (status === 'error' || status === 'success') {
-      setLoaded(true);
-    }
-  }, [status]);
+  const loaded = !token || status === 'error' || status === 'success';
 
   useEffect(() => {
     if (!isAuthorized && token) {
-      dispatch(auth.thunk.signInWithToken({ token }));
+      dispatch(auth.thunk.getUserDetails());
     }
   }, [isAuthorized, token, dispatch]);
 

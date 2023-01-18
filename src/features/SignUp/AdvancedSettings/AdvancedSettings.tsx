@@ -4,7 +4,7 @@ import { FilterOptionsState, TextField, Autocomplete } from '@mui/material';
 
 import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
 import { StyledLabelSmall } from 'styles/styledComponents/Typography';
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { variables } from 'styles/variables';
 
 import {
