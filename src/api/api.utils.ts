@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { signInRefreshTokenApi } from './api';
 
+import { signInRefreshTokenApi } from './api';
 import { BASE_API_URL, LANGUAGES } from './api.const';
 
 export const getBaseUrl = () => sessionStorage.getItem('apiUrl') || BASE_API_URL;
@@ -39,13 +39,13 @@ export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
   try {
     const { response: errorResponse } = err;
     const refreshToken = sessionStorage.getItem('refreshToken');
-    const accessToken = await signInRefreshTokenApi({
+    const { data } = await signInRefreshTokenApi({
       refreshToken,
     });
 
     const retryOriginalRequest = new Promise((resolve) => {
-      if (errorResponse?.config?.headers) {
-        errorResponse.config.headers['Authorization'] = `Bearer ${accessToken}`;
+      if (errorResponse?.config?.headers && data?.result?.accessToken) {
+        errorResponse.config.headers['Authorization'] = `Bearer ${data.result.accessToken}`;
       }
       resolve(axios(errorResponse?.config || {}));
     });
