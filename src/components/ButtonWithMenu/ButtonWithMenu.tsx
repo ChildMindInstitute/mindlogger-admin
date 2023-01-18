@@ -27,8 +27,8 @@ export const ButtonWithMenu = ({
         variant={variant}
         aria-haspopup="true"
         aria-expanded={openMenu ? 'true' : undefined}
-        startIcon={startIcon || <Svg id="add" width="12" height="12" />}
-        endIcon={<Svg id={openMenu ? 'navigate-up' : 'navigate-down'} width="9" height="9" />}
+        startIcon={startIcon || <Svg id="add" width="18" height="18" />}
+        endIcon={<Svg id={openMenu ? 'navigate-up' : 'navigate-down'} width="18" height="18" />}
         onClick={handleMenuOpen}
       >
         {t(label)}

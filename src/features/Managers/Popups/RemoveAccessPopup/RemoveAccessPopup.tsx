@@ -20,7 +20,7 @@ import {
   StyledSmallAppletImgPlaceholder,
 } from 'styles/styledComponents/AppletImage';
 
-import { buttonTextByStep, headCells } from './RemoveAccessPopup.const';
+import { buttonTextByStep, getHeadCells } from './RemoveAccessPopup.const';
 import { RemoveAccessPopupProps, Steps } from './RemoveAccessPopupProps.types';
 
 export const RemoveAccessPopup = ({
@@ -106,7 +106,7 @@ export const RemoveAccessPopup = ({
         </b>
         {t('userHasAccess')}
       </StyledBodyLarge>
-      <Table columns={headCells} rows={rows} orderBy="name" uiType={UiType.secondary} />
+      <Table columns={getHeadCells()} rows={rows} orderBy="name" uiType={UiType.secondary} />
     </form>
   );
 
@@ -121,7 +121,7 @@ export const RemoveAccessPopup = ({
             <>
               {{ firstName }} {{ lastName }}
             </>
-          </b>{' '}
+          </b>
           the
           <b>
             <>{{ appletName }}</>
@@ -155,16 +155,16 @@ export const RemoveAccessPopup = ({
     return (
       <StyledBodyLarge>
         <Trans i18nKey="removeAccessSuccess">
-          Access for{' '}
+          Access for
           <b>
             <>
               {{ firstName }} {{ lastName }} ({{ email }})
             </>
           </b>
-          to the{' '}
+          to the
           <b>
             <>{{ appletName }}</>
-          </b>{' '}
+          </b>
           has been removed successfully.
         </Trans>
       </StyledBodyLarge>
@@ -175,7 +175,7 @@ export const RemoveAccessPopup = ({
     <>
       <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
         <Trans i18nKey="multipleRemoveAccessSuccess">
-          Access for{' '}
+          Access for
           <b>
             <>
               {{ firstName }} {{ lastName }} ({{ email }})
