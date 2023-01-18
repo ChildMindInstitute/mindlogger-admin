@@ -46,7 +46,6 @@ export const ExportSchedulePopup = ({
             </Trans>
           )}
         </Box>
-
         <Table
           columns={getHeadCells()}
           rows={scheduleTableRows}
