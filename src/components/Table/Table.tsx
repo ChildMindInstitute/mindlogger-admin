@@ -1,13 +1,13 @@
-import { useState, MouseEvent, ChangeEvent } from 'react';
-import { Table as MuiTable, TableBody, TablePagination, TableRow, TableCell } from '@mui/material';
+import { ChangeEvent, MouseEvent, useState } from 'react';
+import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } from '@mui/material';
 import uniqueId from 'lodash.uniqueid';
 
 import { Order } from 'types/table';
 
-import { DEFAULT_ROWS_PER_PAGE } from './Table.const';
-import { StyledTableContainer, StyledTableCellContent } from './Table.styles';
-import { Row, TableProps, UiType } from './Table.types';
 import { Head } from './Head';
+import { DEFAULT_ROWS_PER_PAGE, TERTIARY_TYPE_ROWS_PER_PAGE } from './Table.const';
+import { StyledTableCellContent, StyledTableContainer } from './Table.styles';
+import { Row, TableProps, UiType } from './Table.types';
 
 export const Table = ({
   columns,
@@ -19,7 +19,9 @@ export const Table = ({
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
+  const [rowsPerPage, setRowsPerPage] = useState(
+    uiType === UiType.tertiary ? TERTIARY_TYPE_ROWS_PER_PAGE : DEFAULT_ROWS_PER_PAGE,
+  );
 
   function descendingComparator(a: Row, b: Row, orderBy: string) {
     if (b[orderBy].value < a[orderBy].value) {
@@ -54,7 +56,7 @@ export const Table = ({
   };
 
   const tableHeader = (
-    <StyledTableCellContent>
+    <StyledTableCellContent uiType={uiType}>
       <TablePagination
         component="div"
         count={rows?.length || 0}
@@ -69,37 +71,40 @@ export const Table = ({
   );
 
   return (
-    <StyledTableContainer height={tableHeight} uiType={uiType}>
-      <MuiTable stickyHeader>
-        <Head
-          headCells={columns}
-          order={order}
-          orderBy={orderBy}
-          onRequestSort={handleRequestSort}
-          tableHeader={tableHeader}
-          uiType={uiType}
-        />
-        <TableBody>
-          {rows
-            ?.sort(getComparator(order, orderBy))
-            ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row) => (
-              <TableRow key={uniqueId('row_')} data-testid="table-row">
-                {Object.keys(row)?.map((key) => (
-                  <TableCell
-                    onClick={row[key].onClick}
-                    scope="row"
-                    key={key}
-                    align={row[key].align}
-                    width={row[key].width}
-                  >
-                    {row[key].content(row)}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-        </TableBody>
-      </MuiTable>
-    </StyledTableContainer>
+    <>
+      <StyledTableContainer height={tableHeight} uiType={uiType}>
+        <MuiTable stickyHeader>
+          <Head
+            headCells={columns}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            tableHeader={tableHeader}
+            uiType={uiType}
+          />
+          <TableBody>
+            {rows
+              ?.sort(getComparator(order, orderBy))
+              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <TableRow key={uniqueId('row_')} data-testid="table-row">
+                  {Object.keys(row)?.map((key) => (
+                    <TableCell
+                      onClick={row[key].onClick}
+                      scope="row"
+                      key={key}
+                      align={row[key].align}
+                      width={row[key].width}
+                    >
+                      {row[key].content(row)}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+          </TableBody>
+        </MuiTable>
+      </StyledTableContainer>
+      {uiType === UiType.tertiary && tableHeader}
+    </>
   );
 };
