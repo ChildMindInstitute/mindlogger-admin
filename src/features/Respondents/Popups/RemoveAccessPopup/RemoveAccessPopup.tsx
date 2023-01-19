@@ -9,11 +9,11 @@ import { ChosenAppletData } from 'features/Respondents/Respondents.types';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import theme from 'styles/theme';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
-import { variables } from 'styles/variables';
 import { useAsync } from 'hooks';
 import { revokeAppletUserApi } from 'api';
 
 import { RemoveAccessPopupProps, Steps } from './RemoveAccessPopup.types';
+import { getScreens } from './RespondentAccessPopup.const';
 
 export const RemoveAccessPopup = ({
   popupVisible,
@@ -97,102 +97,6 @@ export const RemoveAccessPopup = ({
     />
   );
 
-  const thirdScreen = (
-    <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
-      <Trans i18nKey="confirmRemoveRespondentAccess">
-        Are you sure you want to remove access for Respondent
-        <b>
-          <>{{ respondentName }}</>
-        </b>
-        's to the
-        <b>
-          <>{{ appletName }}</>
-        </b>
-        Applet?
-      </Trans>
-    </StyledBodyLarge>
-  );
-
-  const fourthExtScreen = (
-    <StyledBodyLarge>
-      <Trans i18nKey="confirmRemoveRespondentAccessAndData">
-        Are you sure you want to to remove Respondent
-        <b>
-          <> {{ respondentName }}</>
-        </b>
-        's access and all response data within Applet
-        <b>
-          <> {{ appletName }}</>
-        </b>
-        ?
-      </Trans>
-    </StyledBodyLarge>
-  );
-
-  const fourthScreen = (
-    <StyledBodyLarge>
-      <Trans i18nKey="respondentAccessRemoveSuccess">
-        Respondent
-        <b>
-          <>{{ respondentName }}</>
-        </b>
-        's access to
-        <b>
-          <> {{ appletName }} </>
-        </b>
-        has been removed successfully.
-      </Trans>
-    </StyledBodyLarge>
-  );
-
-  const fourthErrorScreen = (
-    <StyledBodyLarge color={variables.palette.semantic.error}>
-      <Trans i18nKey="respondentAccessRemoveError">
-        Respondent
-        <b>
-          <> {{ respondentName }}</>
-        </b>
-        's access to Applet
-        <b>
-          <> {{ appletName }} </>
-        </b>
-        has not been removed. Please try again.
-      </Trans>
-    </StyledBodyLarge>
-  );
-
-  const fifthExtScreen = (
-    <StyledBodyLarge>
-      <Trans i18nKey="respondentAccessAndDataRemoveSuccess">
-        Respondent
-        <b>
-          <> {{ respondentName }}</>
-        </b>
-        's access and all response data within Applet
-        <b>
-          <>{{ appletName }}</>
-        </b>
-        have been removed successfully.
-      </Trans>
-    </StyledBodyLarge>
-  );
-
-  const fifthExtScreenError = (
-    <StyledBodyLarge color={variables.palette.semantic.error}>
-      <Trans i18nKey="respondentAccessAndDataRemoveError">
-        Respondent
-        <b>
-          <>{{ respondentName }}</>
-        </b>
-        ’s access and all response data within Applet
-        <b>
-          <>{{ appletName }}</>
-        </b>
-        have not been removed. Please try again.
-      </Trans>
-    </StyledBodyLarge>
-  );
-
   const removeAccess = async () => {
     const { appletId, userId } = chosenAppletData as ChosenAppletData;
     await execute({ appletId, profileId: userId || '', deleteResponse: removeData });
@@ -204,82 +108,18 @@ export const RemoveAccessPopup = ({
     }
   };
 
-  const screens = [
-    { component: firstScreen, buttonText: '', hasSecondBtn: false, title: 'removeAccess' },
-    {
-      component: secondScreen,
-      buttonText: 'removeAccess',
-      hasSecondBtn: true,
-      title: 'removeAccess',
-      submitBtnColor: 'error',
-    },
-    ...(removeData
-      ? [
-          {
-            component: thirdExtScreen,
-            buttonText: 'submit',
-            hasSecondBtn: true,
-            title: 'enterAppletPassword',
-            submitForm: submitPassword,
-          },
-          {
-            component: fourthExtScreen,
-            buttonText: 'yesRemove',
-            hasSecondBtn: true,
-            title: 'removeAccessAndData',
-            submitForm: removeAccess,
-            submitBtnColor: 'error',
-          },
-          ...(isRemoved
-            ? [
-                {
-                  component: fifthExtScreen,
-                  buttonText: 'ok',
-                  hasSecondBtn: false,
-                  title: 'removeAccessAndData',
-                  submitForm: handlePopupClose,
-                },
-              ]
-            : [
-                {
-                  component: fifthExtScreenError,
-                  buttonText: 'retry',
-                  hasSecondBtn: true,
-                  title: 'removeAccessAndData',
-                  submitForm: removeAccess,
-                },
-              ]),
-        ]
-      : [
-          {
-            component: thirdScreen,
-            buttonText: 'yesRemove',
-            hasSecondBtn: true,
-            title: 'removeAccess',
-            submitForm: removeAccess,
-            submitBtnColor: 'error',
-          },
-          ...(isRemoved
-            ? [
-                {
-                  component: fourthScreen,
-                  buttonText: 'ok',
-                  hasSecondBtn: false,
-                  title: 'removeAccess',
-                  submitForm: handlePopupClose,
-                },
-              ]
-            : [
-                {
-                  component: fourthErrorScreen,
-                  buttonText: 'retry',
-                  hasSecondBtn: true,
-                  title: 'removeAccess',
-                  submitForm: removeAccess,
-                },
-              ]),
-        ]),
-  ];
+  const screens = getScreens({
+    firstScreen,
+    secondScreen,
+    thirdExtScreen,
+    respondentName,
+    appletName,
+    removeData,
+    isRemoved,
+    submitPassword,
+    removeAccess,
+    handlePopupClose,
+  });
 
   const onSecondBtnSubmit = () => {
     setStep((prevState) => --prevState as Steps);
