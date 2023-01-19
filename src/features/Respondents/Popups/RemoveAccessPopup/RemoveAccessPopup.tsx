@@ -58,22 +58,22 @@ export const RemoveAccessPopup = ({
     <>
       <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
         <Trans i18nKey="removeRespondentAccess">
-          You are about to remove Respondent{' '}
+          You are about to remove Respondent
           <b>
             <>{{ respondentName }}’s</>
-          </b>{' '}
-          access to the{' '}
+          </b>
+          access to the
           <b>
             <>{{ appletName }}</>
-          </b>{' '}
-          applet.
+          </b>
+          Applet.
         </Trans>
       </StyledBodyLarge>
       <FormControlLabel
         label={
           <StyledBodyLarge>
             <Trans i18nKey="removeRespondentData">
-              Remove Respondent{' '}
+              Remove Respondent
               <b>
                 <>{{ respondentName }}</>
               </b>
@@ -100,15 +100,15 @@ export const RemoveAccessPopup = ({
   const thirdScreen = (
     <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
       <Trans i18nKey="confirmRemoveRespondentAccess">
-        Are you sure you want to remove access for Respondent{' '}
+        Are you sure you want to remove access for Respondent
         <b>
           <>{{ respondentName }}</>
         </b>
-        's to the{' '}
+        's to the
         <b>
           <>{{ appletName }}</>
-        </b>{' '}
-        applet?
+        </b>
+        Applet?
       </Trans>
     </StyledBodyLarge>
   );
@@ -116,13 +116,13 @@ export const RemoveAccessPopup = ({
   const fourthExtScreen = (
     <StyledBodyLarge>
       <Trans i18nKey="confirmRemoveRespondentAccessAndData">
-        Are you sure you want to to remove Respondent{' '}
+        Are you sure you want to to remove Respondent
         <b>
-          <>{{ respondentName }}</>
+          <> {{ respondentName }}</>
         </b>
-        's access and all response data within Applet{' '}
+        's access and all response data within Applet
         <b>
-          <>{{ appletName }}</>
+          <> {{ appletName }}</>
         </b>
         ?
       </Trans>
@@ -132,14 +132,14 @@ export const RemoveAccessPopup = ({
   const fourthScreen = (
     <StyledBodyLarge>
       <Trans i18nKey="respondentAccessRemoveSuccess">
-        Respondent{' '}
+        Respondent
         <b>
           <>{{ respondentName }}</>
         </b>
-        's access to{' '}
+        's access to
         <b>
-          <>{{ appletName }}</>
-        </b>{' '}
+          <> {{ appletName }} </>
+        </b>
         has been removed successfully.
       </Trans>
     </StyledBodyLarge>
@@ -148,14 +148,14 @@ export const RemoveAccessPopup = ({
   const fourthErrorScreen = (
     <StyledBodyLarge color={variables.palette.semantic.error}>
       <Trans i18nKey="respondentAccessRemoveError">
-        Respondent{' '}
+        Respondent
         <b>
-          <>{{ respondentName }}</>
+          <> {{ respondentName }}</>
         </b>
-        's access to Applet{' '}
+        's access to Applet
         <b>
-          <>{{ appletName }}</>
-        </b>{' '}
+          <> {{ appletName }} </>
+        </b>
         has not been removed. Please try again.
       </Trans>
     </StyledBodyLarge>
@@ -164,14 +164,14 @@ export const RemoveAccessPopup = ({
   const fifthExtScreen = (
     <StyledBodyLarge>
       <Trans i18nKey="respondentAccessAndDataRemoveSuccess">
-        Respondent{' '}
+        Respondent
         <b>
-          <>{{ respondentName }}</>
+          <> {{ respondentName }}</>
         </b>
-        's access and all response data within Applet{' '}
+        's access and all response data within Applet
         <b>
           <>{{ appletName }}</>
-        </b>{' '}
+        </b>
         have been removed successfully.
       </Trans>
     </StyledBodyLarge>
@@ -180,14 +180,14 @@ export const RemoveAccessPopup = ({
   const fifthExtScreenError = (
     <StyledBodyLarge color={variables.palette.semantic.error}>
       <Trans i18nKey="respondentAccessAndDataRemoveError">
-        Respondent{' '}
+        Respondent
         <b>
           <>{{ respondentName }}</>
         </b>
-        ’s access and all response data within Applet{' '}
+        ’s access and all response data within Applet
         <b>
           <>{{ appletName }}</>
-        </b>{' '}
+        </b>
         have not been removed. Please try again.
       </Trans>
     </StyledBodyLarge>
