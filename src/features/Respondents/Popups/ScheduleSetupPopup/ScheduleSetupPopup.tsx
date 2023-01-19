@@ -58,18 +58,21 @@ export const ScheduleSetupPopup = ({
         {showSecondScreen ? (
           <StyledBodyLarge sx={{ marginTop: theme.spacing(-1) }}>
             <Trans i18nKey="respondentIsAMemberOfTheDefaultSchedule">
-              <strong>Respondent </strong>
+              Respondent
               <strong>
                 <>{{ secretUserId }}</>
               </strong>
-              is a member of the Default Schedule within the {{ appletName }} applet. Do you want to
-              set an Individual schedule for this Respondent?
+              is a member of the Default Schedule within the
+              <strong>
+                <>{{ appletName }}</>
+              </strong>
+              Applet. Do you want to set an Individual schedule for this Respondent?
             </Trans>
           </StyledBodyLarge>
         ) : (
           <>
             <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-              {t('pleaseSelectAppletToSchedule')}
+              {t('selectAppletToSchedule')}
             </StyledBodyLarge>
             <AppletsSmallTable tableRows={tableRows} />
           </>

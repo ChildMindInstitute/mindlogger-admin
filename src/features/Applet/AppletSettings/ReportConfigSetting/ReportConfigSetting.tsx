@@ -18,12 +18,7 @@ import { UiType } from 'components/FormComponents/TagsController';
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { defaultValues } from './ReportConfigSetting.const';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
-import {
-  StyledButton,
-  StyledContainer,
-  StyledForm,
-  StyledHeader,
-} from './ReportConfigSetting.styles';
+import { StyledButton, StyledSvg, StyledContainer, StyledForm } from './ReportConfigSetting.styles';
 import { FormValues } from './ReportConfigSetting.types';
 
 export const ReportConfigSetting = () => {
@@ -62,19 +57,9 @@ export const ReportConfigSetting = () => {
 
   return (
     <StyledForm noValidate onSubmit={handleSubmit(onSubmit)}>
-      <StyledHeader>
-        <StyledHeadline sx={{ marginRight: theme.spacing(2.4) }}>
-          {t('reportConfiguration')}
-        </StyledHeadline>
-        <StyledAppletSettingsButton
-          variant="outlined"
-          type="submit"
-          disabled={!isValid}
-          startIcon={<Svg width="19" height="18" id="save" />}
-        >
-          {t('save')}
-        </StyledAppletSettingsButton>
-      </StyledHeader>
+      <StyledHeadline sx={{ marginRight: theme.spacing(2.4) }}>
+        {t('reportConfiguration')}
+      </StyledHeadline>
       <StyledContainer>
         <StyledTitleMedium sx={{ marginBottom: theme.spacing(2.4) }}>
           {t('emailConfiguration')}
@@ -82,7 +67,7 @@ export const ReportConfigSetting = () => {
         <TagsController
           name="email"
           control={control}
-          label={t('recipient')}
+          label={t('recipients')}
           tags={emails}
           onAddTagClick={handleAddEmail}
           onRemoveTagClick={handleRemoveEmail}
@@ -116,9 +101,12 @@ export const ReportConfigSetting = () => {
       <EditorController control={control} name="description" />
       <StyledContainer>
         <StyledButton
+          disableRipple
           onClick={() => setSettingsOpen((prevState) => !prevState)}
           endIcon={
-            <Svg id={isSettingsOpen ? 'navigate-up' : 'navigate-down'} height="6" width="10" />
+            <StyledSvg>
+              <Svg id={isSettingsOpen ? 'navigate-up' : 'navigate-down'} />
+            </StyledSvg>
           }
         >
           <StyledTitleMedium>{t('advancedSettings')}</StyledTitleMedium>
@@ -159,6 +147,14 @@ export const ReportConfigSetting = () => {
           </>
         )}
       </StyledContainer>
+      <StyledAppletSettingsButton
+        variant="outlined"
+        type="submit"
+        disabled={!isValid}
+        startIcon={<Svg width="18" height="18" id="save" />}
+      >
+        {t('save')}
+      </StyledAppletSettingsButton>
     </StyledForm>
   );
 };

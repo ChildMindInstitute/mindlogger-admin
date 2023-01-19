@@ -73,7 +73,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
             </StyledLabelBoldLarge>
           )}
           <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>
-            <Svg id={showList ? 'navigate-up' : 'navigate-down'} width="12" height="8" />
+            <Svg id={showList ? 'navigate-up' : 'navigate-down'} />
           </StyledCollapseBtn>
         </StyledFlexTopCenter>
       </StyledHeader>

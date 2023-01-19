@@ -13,11 +13,8 @@ export const StyledContainer = styled(Box)`
 export const StyledButton = styled(Button)`
   width: 12rem;
   height: 5rem;
-  ${({ disabled }) =>
-    disabled &&
-    `
-    svg {
-      fill: ${variables.palette.on_surface_alfa38}
-    }
-  `}
+  svg {
+    fill: ${({ disabled }) =>
+      disabled ? variables.palette.on_surface_alfa38 : variables.palette.primary};
+  }
 `;

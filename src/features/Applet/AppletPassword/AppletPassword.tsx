@@ -54,6 +54,7 @@ export const AppletPassword = forwardRef<AppletPasswordRef, AppletPasswordProps>
             ),
           )
       ) {
+        setErrorText('');
         submitCallback && submitCallback();
       } else {
         setErrorText(t('incorrectAppletPassword') as string);

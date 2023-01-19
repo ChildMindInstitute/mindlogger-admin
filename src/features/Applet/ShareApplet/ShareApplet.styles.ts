@@ -9,6 +9,6 @@ export const StyledInputWrapper = styled(Box)`
   padding: ${theme.spacing(0, 2.4)};
 
   .MuiOutlinedInput-root {
-    border-radius: ${variables.borderRadius.xxs};
+    border-radius: ${variables.borderRadius.xs};
   }
 `;

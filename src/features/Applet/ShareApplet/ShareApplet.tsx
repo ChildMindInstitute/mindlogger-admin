@@ -74,7 +74,7 @@ export const ShareApplet = ({
 
         setLibraryUrl(libraryUrlResult?.data as string);
         setIsLoading(false);
-        onAppletShared && onAppletShared({ keywords, libraryUrl });
+        onAppletShared && onAppletShared({ keywords, libraryUrl: libraryUrlResult?.data });
         setAppletShared(true);
 
         dispatch(
@@ -89,7 +89,7 @@ export const ShareApplet = ({
       setErrorMessage(getErrorMessage(e));
       setIsLoading(false);
     }
-  }, []);
+  }, [keywords]);
 
   useEffect(() => {
     if (isSubmitted && !appletShared) {

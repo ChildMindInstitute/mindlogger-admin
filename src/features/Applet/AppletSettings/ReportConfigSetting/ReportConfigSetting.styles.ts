@@ -1,13 +1,10 @@
 import { Box } from '@mui/material';
-import { styled } from '@mui/system';
+import styled from '@emotion/styled/macro';
 
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-
-export const StyledHeader = styled(Box)`
-  display: flex;
-`;
+import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
+import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledForm = styled('form')`
   margin: ${theme.spacing(0, 6.4, 6.4, 0)};
@@ -19,12 +16,29 @@ export const StyledContainer = styled(Box)`
   width: 54.6rem;
 `;
 
+export const StyledSvg = styled(StyledFlexAllCenter)`
+  width: 4rem;
+  height: 4rem;
+  border-radius: ${variables.borderRadius.half};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
+`;
+
 export const StyledButton = styled(StyledClearedButton)`
-  justify-content: flex-start;
-  width: 20rem;
+  justify-content: space-between;
+  width: 18.6rem;
   color: ${variables.palette.on_surface};
   margin: ${theme.spacing(2.4, 0)};
-  svg {
-    fill: ${variables.palette.on_surface};
+
+  &.MuiButtonBase-root.MuiButton-root.MuiButton-text:hover {
+    background-color: transparent;
+  }
+
+  &:hover {
+    ${StyledSvg} {
+      background-color: ${variables.palette.on_surface_alfa8};
+    }
   }
 `;

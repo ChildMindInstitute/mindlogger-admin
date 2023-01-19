@@ -1,5 +1,6 @@
 export type Actions = {
   scheduleSetupAction: (value: number) => void;
+  userDataExportAction: (value: number) => void;
   viewDataAction: (value: number) => void;
   removeAccessAction: (value: number) => void;
 };

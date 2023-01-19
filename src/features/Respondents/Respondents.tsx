@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -9,14 +9,14 @@ import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareRespondentsData } from 'utils/prepareUsersData';
 
-import { ScheduleSetupPopup, ViewDataPopup, RemoveAccessPopup } from './Popups';
+import { ScheduleSetupPopup, ViewDataPopup, DataExportPopup, RemoveAccessPopup } from './Popups';
 import {
   RespondentsTableHeader,
   StyledButton,
   StyledLeftBox,
   StyledRightBox,
 } from './Respondents.styles';
-import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
+import { getActions, getAppletsSmallTableRows, getChosenAppletData } from './Respondents.utils';
 import { headCells } from './Respondents.const';
 import { ChosenAppletData } from './Respondents.types';
 
@@ -29,9 +29,10 @@ export const Respondents = () => {
   const timeAgo = useTimeAgo();
   const [searchValue, setSearchValue] = useState('');
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
+  const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
-  const [respondentsDataIndex, setRespondentsDataIndex] = useState(0);
+  const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
   useBreadcrumbs([
@@ -45,6 +46,10 @@ export const Respondents = () => {
     scheduleSetupAction: (index: number) => {
       setRespondentsDataIndex(index);
       setScheduleSetupPopupVisible(true);
+    },
+    userDataExportAction: (index: number) => {
+      setRespondentsDataIndex(index);
+      setDataExportPopupVisible(true);
     },
     viewDataAction: (index: number) => {
       setRespondentsDataIndex(index);
@@ -109,11 +114,43 @@ export const Respondents = () => {
         filterRows(secretId, searchValue) || filterRows(nickname, searchValue),
     );
 
+  const chosenRespondentsItems =
+    respondentsDataIndex || respondentsDataIndex === 0
+      ? usersData?.items[respondentsDataIndex]
+      : undefined;
+
   const appletsSmallTableRows = getAppletsSmallTableRows(
-    usersData?.items[respondentsDataIndex],
+    chosenRespondentsItems,
     appletsData,
     setChosenAppletData,
   );
+
+  useEffect(() => {
+    const keys = chosenRespondentsItems && Object.keys(chosenRespondentsItems);
+    if (keys && keys.length === 1) {
+      const appletId = keys[0];
+      const { appletName, secretUserId, hasIndividualSchedule } = getChosenAppletData(
+        chosenRespondentsItems,
+        appletsData,
+        appletId,
+      );
+      const chosenAppletData = {
+        appletId,
+        appletName,
+        secretUserId,
+        hasIndividualSchedule,
+      };
+      setChosenAppletData(chosenAppletData);
+    } else {
+      setChosenAppletData(null);
+    }
+  }, [
+    appletsData,
+    chosenRespondentsItems,
+    scheduleSetupPopupVisible,
+    dataExportPopupVisible,
+    viewDataPopupVisible,
+  ]);
 
   return (
     <>
@@ -122,7 +159,7 @@ export const Respondents = () => {
           <StyledLeftBox>
             <StyledButton
               variant="outlined"
-              startIcon={<Svg width={14} height={14} id="respondent-outlined" />}
+              startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
             >
               {t('addRespondent')}
             </StyledButton>
@@ -154,6 +191,15 @@ export const Respondents = () => {
         <RemoveAccessPopup
           popupVisible={removeAccessPopupVisible}
           setPopupVisible={setRemoveAccessPopupVisible}
+          tableRows={appletsSmallTableRows}
+          chosenAppletData={chosenAppletData}
+          setChosenAppletData={setChosenAppletData}
+        />
+      )}
+      {dataExportPopupVisible && (
+        <DataExportPopup
+          popupVisible={dataExportPopupVisible}
+          setPopupVisible={setDataExportPopupVisible}
           tableRows={appletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
