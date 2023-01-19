@@ -129,7 +129,7 @@ export const Respondents = () => {
     const keys = chosenRespondentsItems && Object.keys(chosenRespondentsItems);
     if (keys && keys.length === 1) {
       const appletId = keys[0];
-      const { appletName, secretUserId, hasIndividualSchedule } = getChosenAppletData(
+      const { appletName, secretUserId, hasIndividualSchedule, userId } = getChosenAppletData(
         chosenRespondentsItems,
         appletsData,
         appletId,
@@ -139,6 +139,7 @@ export const Respondents = () => {
         appletName,
         secretUserId,
         hasIndividualSchedule,
+        userId,
       };
       setChosenAppletData(chosenAppletData);
     } else {
@@ -150,6 +151,7 @@ export const Respondents = () => {
     scheduleSetupPopupVisible,
     dataExportPopupVisible,
     viewDataPopupVisible,
+    removeAccessPopupVisible,
   ]);
 
   return (
