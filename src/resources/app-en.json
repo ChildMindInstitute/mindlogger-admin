@@ -248,5 +248,17 @@
   "individualScheduleSetup": "Individual Schedule Setup",
   "pleaseSelectAppletToSchedule": "Please select applet to schedule for the Respondent: ",
   "respondentIsAMemberOfTheDefaultSchedule": "<1>Respondent {{secretUserId}}</1> is a member of the Default Schedule within the {{appletName}} applet. Do you want to set an Individual schedule for this Respondent?",
-  "viewDataDescription": "Please select the Applet to view Respondent's data for:"
+  "viewDataDescription": "Please select the Applet to view Respondent's data for:",
+  "removeAccessDescription": "This Respondent has access to the following Applets:",
+  "removeRespondentAccess": "You are about to remove Respondent <1>{{ respondentName }}</1>’s access to the <1>{{ appletName }}</1> applet.",
+  "removeRespondentData": "Remove Respondent <1>{{ respondentName }}</1>’s response data also.",
+  "yesRemove": "Yes, Remove",
+  "confirmRemoveRespondentAccess": "Are you sure you want to remove access for Respondent <1>{{ respondentName }}</1>'s to the <1>{{ appletName }}</1> applet?",
+  "confirmRemoveRespondentAccessAndData": "Are you sure you want to to remove Respondent <1>{{ respondentName }}</1>'s access and all response data within Applet <1>{{ appletName }}</1>?",
+  "respondentAccessRemoveSuccess": "Respondent <1>{{ respondentName }}</1>'s access to <1>{{ appletName }}</1> has been removed successfully.",
+  "respondentAccessRemoveError": "Respondent <1>{{ respondentName }}</1>'s access to Applet <1>{{ appletName }}</1> has not been removed. Please try again.",
+  "respondentAccessAndDataRemoveSuccess": "Respondent <1>{{ respondentName }}</1>'s access and all response data within Applet <1>{{ appletName }}</1> have been removed successfully.",
+  "respondentAccessAndDataRemoveError": "Respondent <1>{{ respondentName }}</1>’s access and all response data within Applet <1>{{ appletName }}</1> have not been removed. Please try again.",
+  "retry": "Retry",
+  "removeAccessAndData": "Remove Access & Data"
 }

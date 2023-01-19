@@ -12,7 +12,11 @@ import { StyledBodyMedium, StyledLabelLarge } from 'styles/styledComponents/Typo
 
 import { Actions, ChosenAppletData } from './Respondents.types';
 
-export const getActions = ({ scheduleSetupAction, viewDataAction }: Actions) => [
+export const getActions = ({
+  scheduleSetupAction,
+  viewDataAction,
+  removeAccessAction,
+}: Actions) => [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
     action: scheduleSetupAction,
@@ -29,14 +33,14 @@ export const getActions = ({ scheduleSetupAction, viewDataAction }: Actions) => 
     toolTipTitle: t('exportData'),
   },
   {
-    icon: <Svg id="edit-access" width={21} height={19} />,
+    icon: <Svg id="edit-user" width={21} height={19} />,
     action: (item: UserData) => item,
     toolTipTitle: t('editAccess'),
   },
   {
-    icon: <Svg id="edit-user" width={21} height={22} />,
-    action: (item: UserData) => item,
-    toolTipTitle: t('editUser'),
+    icon: <Svg id="remove-access" />,
+    action: removeAccessAction,
+    toolTipTitle: t('removeAccess'),
   },
 ];
 
@@ -59,6 +63,7 @@ export const getAppletsSmallTableRows = (
       appletName,
       secretUserId,
       hasIndividualSchedule,
+      userId: respondentItem['_id'],
     };
 
     return {

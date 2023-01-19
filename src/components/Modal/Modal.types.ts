@@ -9,6 +9,11 @@ type BtnSubmit =
 
 export type ActionsAlign = 'center' | 'space-around' | 'end';
 
+export type SubmitBtnColor = OverridableStringUnion<
+  'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
+  ButtonPropsColorOverrides
+>;
+
 export type ModalProps = {
   open: boolean;
   title: string;
@@ -17,15 +22,11 @@ export type ModalProps = {
   onClose: () => void;
   onSubmit: BtnSubmit;
   titleAlign?: 'left' | 'right' | 'center';
-  actionsAlign?: ActionsAlign;
   disabledSubmit?: boolean;
   width?: string;
   height?: string;
   hasSecondBtn?: boolean;
-  secondBtnColor?: OverridableStringUnion<
-    'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
-    ButtonPropsColorOverrides
-  >;
+  submitBtnColor?: SubmitBtnColor;
   secondBtnText?: string;
   onSecondBtnSubmit?: BtnSubmit;
   disabledSecondBtn?: boolean;

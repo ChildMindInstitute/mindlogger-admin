@@ -46,13 +46,12 @@ export const ScheduleSetupPopup = ({
     <Modal
       open={popupVisible}
       onClose={handlePopupClose}
-      onSubmit={handleBackClick}
+      onSubmit={handlePopupSubmit}
       title={t('individualScheduleSetup')}
-      buttonText={showSecondScreen ? t('back') : ''}
+      buttonText={showSecondScreen ? t('yes') : ''}
       hasSecondBtn={Boolean(showSecondScreen)}
-      secondBtnText={t('yes')}
-      onSecondBtnSubmit={handlePopupSubmit}
-      actionsAlign="end"
+      secondBtnText={t('back')}
+      onSecondBtnSubmit={handleBackClick}
       width="66"
     >
       <StyledModalWrapper>
