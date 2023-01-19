@@ -239,7 +239,6 @@
   "enterRecipientsEmails": "Enter the emails of the recipients",
   "includeInEmail": "In the Subject and Attachment filenames(s) for the email, include:",
   "subjectPreview": "Subject Preview",
-  "subjectPreviewText": "Report by [Respondent ID] about [Case ID]: [Applet Name] / [Activity Name]",
   "serverStatusConfigured": "Server Status: configured",
   "serverStatusNotConfigured": "Server Status: not configured",
   "configureServerURL": "For Security reasons, you must configure the Server URL (IP Address) and Publick Encryption Key to generate and email reports. Additional instructions are available at the link.",

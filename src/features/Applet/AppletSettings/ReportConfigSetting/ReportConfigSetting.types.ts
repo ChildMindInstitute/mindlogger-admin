@@ -1,6 +1,6 @@
 export type FormValues = {
   email: string;
-  emails: string[];
+  emailRecipients: string[];
   respondentId: boolean;
   caseId: boolean;
   subject: string;

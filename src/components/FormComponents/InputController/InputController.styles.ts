@@ -4,6 +4,10 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 export const StyledTextField = styled(TextField)`
+  .read-only {
+    color: ${variables.palette.outline};
+  }
+
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;

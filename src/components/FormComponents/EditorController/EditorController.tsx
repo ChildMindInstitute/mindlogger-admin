@@ -14,6 +14,7 @@ export const EditorController = <T extends FieldValues>({
     control={control}
     render={({ field: { onChange, value } }) => (
       <StyledEditor
+        data-color-mode="light"
         onChange={(editorValue, event) => {
           customChange && customChange(editorValue, event);
           onChange(event);
