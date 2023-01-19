@@ -44,7 +44,7 @@ export const TagsController = <T extends FieldValues>({
               }
             }}
             error={!!error || providedError}
-            helperText={error ? error.message : helperText}
+            helperText={error?.message || helperText}
             value={value}
             InputProps={{
               startAdornment: uiType === UiType.secondary && chips,
