@@ -48,16 +48,15 @@ export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
     const retryOriginalRequest = new Promise((resolve) => {
       if (data?.result?.accessToken) {
         storage.setItem('accessToken', data.result.accessToken);
+        resolve(
+          axios({
+            ...errorResponse?.config,
+            headers: {
+              Authorization: `Bearer ${data.result.accessToken}`,
+            },
+          }),
+        );
       }
-
-      resolve(
-        axios({
-          ...errorResponse?.config,
-          headers: {
-            Authorization: `Bearer ${data.result.accessToken}`,
-          },
-        }),
-      );
     });
 
     return retryOriginalRequest;
