@@ -6,6 +6,7 @@ import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
 import { StyledLabelSmall } from 'styles/styledComponents/Typography';
 import { Svg } from 'components';
 import { variables } from 'styles/variables';
+import storage from 'utils/storage';
 
 import {
   StyledAdvancedSettings,
@@ -20,7 +21,7 @@ export const AdvancedSettings = () => {
   const [showSettings, setShowSettings] = useState(false);
 
   const handleServerChange = (e: React.SyntheticEvent, selectedValue: string | ServerUrlOption) => {
-    sessionStorage.setItem(
+    storage.setItem(
       'apiUrl',
       typeof selectedValue === 'string' ? selectedValue : selectedValue.value,
     );

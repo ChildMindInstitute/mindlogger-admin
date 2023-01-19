@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
+import storage from 'utils/storage';
 import { ApiError } from 'redux/modules';
 
 import {
@@ -22,8 +23,8 @@ export const signIn = createAsyncThunk(
       const { data } = await signInApi({ email, password }, signal);
 
       if (data?.result) {
-        sessionStorage.setItem('refreshToken', data.result.refreshToken);
-        sessionStorage.setItem('accessToken', data.result.accessToken);
+        storage.setItem('refreshToken', data.result.refreshToken);
+        storage.setItem('accessToken', data.result.accessToken);
       }
 
       return data;

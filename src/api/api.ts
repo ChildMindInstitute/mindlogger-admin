@@ -91,13 +91,10 @@ export const signUpApi = ({ body }: SignUpArgs, signal?: AbortSignal) =>
   );
 
 export const resetPasswordApi = ({ email }: ResetPassword, signal?: AbortSignal) =>
-  apiClientWithLang.put(
-    '/user/password/temporary',
-    {},
+  apiClient.post(
+    '/users/me/password/recover',
+    { email },
     {
-      params: {
-        email,
-      },
       signal,
     },
   );

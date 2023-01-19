@@ -6,6 +6,7 @@ import { AuthLayout } from 'layouts/AuthLayout';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { page } from 'resources';
+import storage from 'utils/storage';
 
 import { PrivateRoute } from './PrivateRoute';
 import { appletRoutes, authRoutes } from './routes.const';
@@ -14,7 +15,7 @@ const Dashboard = lazy(() => import('pages/Dashboard'));
 const Applet = lazy(() => import('pages/Applet'));
 
 export const AppRoutes = () => {
-  const token = sessionStorage.getItem('accessToken');
+  const token = storage.getItem('accessToken');
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
   const status = auth.useStatus();
