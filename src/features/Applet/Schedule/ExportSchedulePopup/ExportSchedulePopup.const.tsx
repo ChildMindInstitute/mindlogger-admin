@@ -1,6 +1,7 @@
-import { t } from 'i18next';
-
+import i18n from 'i18n';
 import { HeadCell } from 'types/table';
+
+const { t } = i18n;
 
 export const getHeadCells = (): HeadCell[] => [
   {
