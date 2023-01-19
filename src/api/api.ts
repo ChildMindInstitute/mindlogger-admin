@@ -73,7 +73,7 @@ export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,
   signal?: AbortSignal,
 ) =>
-  apiClientWithLang.post(
+  apiClient.post(
     '/auth/token/refresh',
     { refreshToken },
     {

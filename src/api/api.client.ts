@@ -5,6 +5,7 @@ import {
   getRequestFullLangData,
   getRequestLangData,
   getRequestTokenData,
+  refreshTokenAndReattemptRequest,
 } from './api.utils';
 
 export const authApiClient = axios.create();
@@ -36,7 +37,7 @@ authApiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response.status === 401) {
-      return getRequestTokenData(error);
+      return refreshTokenAndReattemptRequest(error);
     } else {
       return Promise.reject(error);
     }
