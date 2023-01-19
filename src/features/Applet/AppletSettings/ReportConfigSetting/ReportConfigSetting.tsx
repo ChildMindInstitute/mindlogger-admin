@@ -105,7 +105,7 @@ export const ReportConfigSetting = () => {
           label={<StyledBodyLarge>{t('caseId')}</StyledBodyLarge>}
         />
         <InputController
-          inputProps={{ readOnly: true }}
+          inputProps={{ readOnly: true, className: 'read-only' }}
           control={control}
           name="subject"
           label={t('subjectPreview')}
