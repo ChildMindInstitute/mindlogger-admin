@@ -7,8 +7,8 @@ import {
 } from './api.client';
 import {
   SignIn,
-  SignInWithToken,
   SignUpArgs,
+  SignInRefreshTokenArgs,
   ResetPassword,
   SwitchAccount,
   AccountUserList,
@@ -61,46 +61,46 @@ import {
 } from './api.types';
 
 export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
-  apiClientWithLang.get('user/authentication', {
-    headers: { 'Girder-Authorization': `Basic ${window.btoa(`${email}:${password}`)}` },
-    signal,
-  });
-
-export const signInWithTokenApi = ({ token }: SignInWithToken, signal?: AbortSignal) =>
-  apiClientWithLang.get('/user/authentication', {
-    headers: {
-      'Girder-Token': token,
+  apiClientWithLang.post(
+    'auth/token',
+    { email, password },
+    {
+      signal,
     },
-    signal,
-  });
+  );
+
+export const signInRefreshTokenApi = (
+  { refreshToken }: SignInRefreshTokenArgs,
+  signal?: AbortSignal,
+) =>
+  apiClientWithLang.post(
+    '/auth/token/refresh',
+    { refreshToken },
+    {
+      signal,
+    },
+  );
 
 export const signUpApi = ({ body }: SignUpArgs, signal?: AbortSignal) =>
   apiClient.post(
-    '/user',
-    {},
+    '/users',
+    { ...body },
     {
-      params: {
-        ...body,
-        admin: true,
-      },
       signal,
     },
   );
 
 export const resetPasswordApi = ({ email }: ResetPassword, signal?: AbortSignal) =>
-  apiClientWithLang.put(
-    '/user/password/temporary',
-    {},
+  apiClient.post(
+    '/users/me/password/recover',
+    { email },
     {
-      params: {
-        email,
-      },
       signal,
     },
   );
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
-  authApiClient.get('/user/me', { signal });
+  authApiClient.get('/users/me', { signal });
 
 export const getAccountsApi = (signal?: AbortSignal) =>
   authApiClient.get('/user/accounts', { signal });

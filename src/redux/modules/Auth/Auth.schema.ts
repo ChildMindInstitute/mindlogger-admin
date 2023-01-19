@@ -40,10 +40,13 @@ export type AuthToken = {
 };
 
 export type AuthData = {
-  account: AccountData;
-  authToken: AuthToken;
-  user: User;
-  message?: string;
+  result: {
+    email: string;
+    fullName: string;
+    id: number;
+  };
+  account?: AccountData;
+  user?: User;
 };
 
 export type AuthSchema = {

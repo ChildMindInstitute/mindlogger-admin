@@ -30,7 +30,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const authData = auth.useData();
   const currentApplet = accountData?.account?.applets?.find((el) => el.id === id);
   const accountNameShowed =
-    authData?.user?.displayName === authData?.account.accountName &&
+    authData?.user?.displayName === authData?.account?.accountName &&
     currentApplet?.roles?.includes('owner');
   const {
     handleSubmit,
@@ -59,7 +59,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
       if (id) {
         const options = {
           ...values,
-          accountName: values.accountName || authData?.account.accountName || '',
+          accountName: values.accountName || authData?.account?.accountName || '',
         };
 
         await getAppletInvitationApi({ appletId: id, options });

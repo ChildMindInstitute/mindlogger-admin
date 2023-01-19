@@ -2,7 +2,7 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { inputAcceptsValue } from 'tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'utils/renderComponentForEachTest';
-import { SignUp } from './SignUp';
+import { SignUpForm } from './SignUpForm';
 
 const submitForm = (username: string, password: string, firstName: string, lastName: string) => {
   fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: username } });
@@ -15,7 +15,7 @@ const submitForm = (username: string, password: string, firstName: string, lastN
 const onSubmitMock = jest.fn();
 
 describe('SignUp component tests', () => {
-  renderComponentForEachTest(<SignUp onSubmitForTest={onSubmitMock} />);
+  renderComponentForEachTest(<SignUpForm onSubmitForTest={onSubmitMock} />);
 
   test('SignUp inputs should accept values', () => {
     inputAcceptsValue('Email', 'test@gmail.com');

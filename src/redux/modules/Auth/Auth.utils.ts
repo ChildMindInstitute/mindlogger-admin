@@ -24,7 +24,7 @@ export const createAuthFulfilledData = (
     authentication.status = 'success';
     authentication.error ? (authentication.error = undefined) : null;
     authentication.data = data;
-    data?.authToken.token ? (state.isAuthorized = true) : null;
+    data?.result ? (state.isAuthorized = true) : null;
   }
 };
 
@@ -53,7 +53,7 @@ export const setAccountNameFulfilledData = (
     authentication.requestId = initialState.authentication.requestId;
     authentication.status = 'success';
     authentication.error ? (authentication.error = undefined) : null;
-    if (authentication.data) {
+    if (authentication?.data?.account) {
       authentication.data.account.accountName = accountName;
     }
   }

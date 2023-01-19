@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
+import storage from 'utils/storage';
 import { ApiError } from 'redux/modules';
 
 import {
   signInApi,
   SignIn,
-  signInWithTokenApi,
-  SignInWithToken,
+  getUserDetailsApi,
   signUpApi,
   SignUpArgs,
   resetPasswordApi,
@@ -20,23 +20,25 @@ export const signIn = createAsyncThunk(
   'mindlogger_login',
   async ({ email, password }: SignIn, { rejectWithValue, signal }) => {
     try {
-      const result = await signInApi({ email, password }, signal);
-      if (result?.data.authToken.token) {
-        sessionStorage.setItem('accessToken', result.data.authToken.token);
+      const { data } = await signInApi({ email, password }, signal);
+
+      if (data?.result) {
+        storage.setItem('refreshToken', data.result.refreshToken);
+        storage.setItem('accessToken', data.result.accessToken);
       }
 
-      return result;
+      return data;
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }
   },
 );
 
-export const signInWithToken = createAsyncThunk(
-  'mindlogger_login_with_token',
-  async ({ token }: SignInWithToken, { rejectWithValue, signal }) => {
+export const getUserDetails = createAsyncThunk(
+  'mindlogger_get_user_data',
+  async (_: void, { rejectWithValue, signal }) => {
     try {
-      return await signInWithTokenApi({ token }, signal);
+      return await getUserDetailsApi(signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }
@@ -45,14 +47,11 @@ export const signInWithToken = createAsyncThunk(
 
 export const signUp = createAsyncThunk(
   'mindlogger_signup',
-  async ({ body }: SignUpArgs, { rejectWithValue, signal }) => {
+  async ({ body }: SignUpArgs, { rejectWithValue, signal, dispatch }) => {
     try {
-      const result = await signUpApi({ body }, signal);
-      if (result?.data.authToken.token) {
-        sessionStorage.setItem('accessToken', result.data.authToken.token);
-      }
+      await signUpApi({ body }, signal);
 
-      return result;
+      return await dispatch(signIn({ email: body.email, password: body.password }));
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

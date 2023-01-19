@@ -1,26 +1,30 @@
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
+import storage from 'utils/storage';
+
+import { signInRefreshTokenApi } from './api';
 import { BASE_API_URL, LANGUAGES } from './api.const';
 
-export const getBaseUrl = () => sessionStorage.getItem('apiUrl') || BASE_API_URL;
+export const getBaseUrl = () => (storage.getItem('apiUrl') as string) || BASE_API_URL;
 
 export const getRequestTokenData = (config: AxiosRequestConfig) => {
+  const accessToken = storage.getItem('accessToken');
   if (!config.headers) {
     config.headers = {};
   }
-  config.headers['Girder-Token'] = sessionStorage.getItem('accessToken');
+  config.headers['Authorization'] = `bearer ${accessToken}`;
 };
 
 export const getRequestLangData = (config: AxiosRequestConfig) => {
   if (!config.params) {
     config.params = {};
   }
-  config.params.lang = sessionStorage.getItem('lang') || 'en';
+  config.params.lang = storage.getItem('lang') || 'en';
 };
 
 export const getRequestFullLangData = (config: AxiosRequestConfig) => {
   if (!config.params) config.params = {};
-  const lang = (sessionStorage.getItem('lang') || 'en') as keyof typeof LANGUAGES;
+  const lang = (storage.getItem('lang') || 'en') as keyof typeof LANGUAGES;
 
   config.params.lang = LANGUAGES[lang] as string;
 };
@@ -31,4 +35,25 @@ export const attachUrl = (origin: string, resource: string) => {
   }
 
   return `${origin}/${resource}`;
+};
+
+export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
+  try {
+    const { response: errorResponse } = err;
+    const refreshToken = storage.getItem('refreshToken') as string;
+    const { data } = await signInRefreshTokenApi({
+      refreshToken,
+    });
+
+    const retryOriginalRequest = new Promise((resolve) => {
+      if (errorResponse?.config?.headers && data?.result?.accessToken) {
+        errorResponse.config.headers['Authorization'] = `Bearer ${data.result.accessToken}`;
+      }
+      resolve(axios(errorResponse?.config || {}));
+    });
+
+    return retryOriginalRequest;
+  } catch (err) {
+    return Promise.reject(err);
+  }
 };

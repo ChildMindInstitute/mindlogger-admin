@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import { SelectLanguage, Svg } from 'components';
 import { variables } from 'styles/variables';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
+import storage from 'utils/storage';
 
 import { LanguageItem, Languages } from './Language.types';
 import { StyledLanguage, StyledFlag } from './Language.styles';
@@ -26,7 +27,7 @@ export const languages: LanguageItem[] = [
 
 export const Language = () => {
   const { i18n } = useTranslation('app');
-  const langFromStorage = sessionStorage.getItem('lang') || Languages.EN;
+  const langFromStorage = storage.getItem('lang') || Languages.EN;
   const language = languages.find((lang) => lang.value === langFromStorage) as LanguageItem;
 
   const [currentLanguage, setCurrentLanguage] = useState(language);
@@ -36,14 +37,14 @@ export const Language = () => {
     setOpen(false);
     if (language) {
       i18n.changeLanguage(language.value);
-      sessionStorage.setItem('lang', language.value);
+      storage.setItem('lang', language.value);
       setCurrentLanguage(language);
     }
   };
 
   useEffect(() => {
     if (langFromStorage) {
-      i18n.changeLanguage(langFromStorage);
+      i18n.changeLanguage(langFromStorage as string);
     }
   }, [langFromStorage, i18n]);
 

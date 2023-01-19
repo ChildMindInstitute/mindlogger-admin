@@ -2,16 +2,16 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { AxiosError } from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { ResetPassword } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { auth, ErrorResponse } from 'redux/modules';
+import { auth } from 'redux/modules';
 import { page } from 'resources';
 import { InputController } from 'components/FormComponents';
 import { StyledHeadline } from 'styles/styledComponents/Typography';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
+import { getErrorMessage } from 'utils/errors';
 
 import {
   StyledForm,
@@ -39,19 +39,14 @@ export const ResetForm = ({ setEmail, onSubmitForTest }: ResetFormProps) => {
     if (onSubmitForTest) {
       onSubmitForTest();
     }
+
     const { resetPassword } = auth.thunk;
     const result = await dispatch(resetPassword({ email }));
 
     if (resetPassword.fulfilled.match(result) && setEmail) {
       setEmail(email);
     } else if (resetPassword.rejected.match(result)) {
-      const errorObj = result.payload as AxiosError;
-      const errorData = errorObj.response?.data as AxiosError<ErrorResponse>;
-      if (errorData) {
-        setErrorMessage(errorData.message);
-      } else {
-        setErrorMessage(errorObj.message);
-      }
+      setErrorMessage(getErrorMessage(result.payload));
     }
   };
 

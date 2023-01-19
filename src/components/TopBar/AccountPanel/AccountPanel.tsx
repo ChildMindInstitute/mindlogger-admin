@@ -56,7 +56,7 @@ export const AccountPanel = ({
             </StyledAvatarWrapper>
             <StyledHeaderInfo>
               <StyledTitleSmall>{t('myAccount')}</StyledTitleSmall>
-              {authData && (
+              {authData?.user && (
                 <StyledLabelSmall color={variables.palette.on_surface_variant}>
                   {authData.user.email}
                 </StyledLabelSmall>
