@@ -16,4 +16,5 @@ export type Applet = {
   title: string;
   img: string;
   roles: Role[];
+  selectedRespondents?: string[];
 };

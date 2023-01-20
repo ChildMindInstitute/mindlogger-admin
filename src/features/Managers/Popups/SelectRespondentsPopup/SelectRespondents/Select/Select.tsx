@@ -20,7 +20,7 @@ export const Select = ({ label, onChange, value, options }: SelectProps) => {
         SelectProps={{
           IconComponent: () => (
             <StyledSvgContainer>
-              <Svg id="navigate-down" width="9" height="9" />
+              <Svg id="navigate-down" width="18" height="18" />
             </StyledSvgContainer>
           ),
         }}

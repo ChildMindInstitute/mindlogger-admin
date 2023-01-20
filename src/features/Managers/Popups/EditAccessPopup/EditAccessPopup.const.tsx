@@ -12,5 +12,12 @@ export const applets = [
       { icon: getRoleIcon(Roles.editor), label: Roles.editor },
       { icon: getRoleIcon(Roles.reviewer), label: Roles.reviewer },
     ],
+    selectedRespondents: ['001', 'respondent5'],
+  },
+  {
+    id: '2',
+    title: 'Pediatric Screener 2',
+    img: logoSrc,
+    roles: [{ icon: getRoleIcon(Roles.manager), label: Roles.manager }],
   },
 ];

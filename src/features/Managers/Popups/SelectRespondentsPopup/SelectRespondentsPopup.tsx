@@ -1,3 +1,4 @@
+import { useRef, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
@@ -5,33 +6,27 @@ import { Modal } from 'components';
 
 import { SelectRespondents } from './SelectRespondents';
 import { SelectRespondentsPopupProps } from './SuccessSharePopup.types';
+import { respondents as mockedRespondents } from './SelectRespondents.const';
+import { SelectRespondentsRef } from '../SelectRespondentsPopup/SelectRespondents/SelectRespondents.types';
 
 export const SelectRespondentsPopup = ({
+  appletName,
+  user: { firstName, lastName, email, nickName },
+  selectedRespondents,
   selectRespondentsPopupVisible,
-  setSelectRespondentsPopupVisible,
+  onClose,
 }: SelectRespondentsPopupProps) => {
+  const name = firstName || lastName ? `${firstName} ${lastName}` : nickName;
   const { t } = useTranslation();
+  const selectRespondentsRef = useRef() as RefObject<SelectRespondentsRef>;
 
-  const selectedRespondents = ['test'];
-  const respondents = [
-    {
-      secretId: 'user',
-      nickname: 'test_user',
-    },
-    {
-      secretId: 'respondent',
-      nickname: 'respondent1',
-    },
-    {
-      secretId: 'test',
-      nickname: 'respondent2',
-    },
-  ];
-
-  const handleClose = () => setSelectRespondentsPopupVisible(false);
+  const handleClose = () => onClose(selectedRespondents);
 
   const handleConfirm = () => {
-    console.log('handleConfirm');
+    if (selectRespondentsRef?.current) {
+      const selectedRespondents = selectRespondentsRef.current.confirmSelection();
+      onClose(selectedRespondents);
+    }
   };
 
   return (
@@ -51,9 +46,10 @@ export const SelectRespondentsPopup = ({
     >
       <StyledModalWrapper>
         <SelectRespondents
-          appletName="Mindlogger applet" // TODO replace with real data
-          reviewer={{ name: 'Reviewer name', email: 'reviewer@email' }}
-          respondents={respondents}
+          ref={selectRespondentsRef}
+          appletName={appletName}
+          reviewer={{ name, email }}
+          respondents={mockedRespondents}
           selectedRespondents={selectedRespondents}
         />
       </StyledModalWrapper>
