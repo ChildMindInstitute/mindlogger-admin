@@ -9,7 +9,7 @@ import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareRespondentsData } from 'utils/prepareUsersData';
 
-import { ScheduleSetupPopup, ViewDataPopup, DataExportPopup } from './Popups';
+import { ScheduleSetupPopup, ViewDataPopup, DataExportPopup, RemoveAccessPopup } from './Popups';
 import {
   RespondentsTableHeader,
   StyledButton,
@@ -31,6 +31,7 @@ export const Respondents = () => {
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
+  const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
@@ -53,6 +54,10 @@ export const Respondents = () => {
     viewDataAction: (index: number) => {
       setRespondentsDataIndex(index);
       setViewDataPopupVisible(true);
+    },
+    removeAccessAction: (index: number) => {
+      setRespondentsDataIndex(index);
+      setRemoveAccessPopupVisible(true);
     },
   };
 
@@ -124,7 +129,7 @@ export const Respondents = () => {
     const keys = chosenRespondentsItems && Object.keys(chosenRespondentsItems);
     if (keys && keys.length === 1) {
       const appletId = keys[0];
-      const { appletName, secretUserId, hasIndividualSchedule } = getChosenAppletData(
+      const { appletName, secretUserId, hasIndividualSchedule, userId } = getChosenAppletData(
         chosenRespondentsItems,
         appletsData,
         appletId,
@@ -134,6 +139,7 @@ export const Respondents = () => {
         appletName,
         secretUserId,
         hasIndividualSchedule,
+        userId,
       };
       setChosenAppletData(chosenAppletData);
     } else {
@@ -145,6 +151,7 @@ export const Respondents = () => {
     scheduleSetupPopupVisible,
     dataExportPopupVisible,
     viewDataPopupVisible,
+    removeAccessPopupVisible,
   ]);
 
   return (
@@ -177,6 +184,15 @@ export const Respondents = () => {
         <ViewDataPopup
           popupVisible={viewDataPopupVisible}
           setPopupVisible={setViewDataPopupVisible}
+          tableRows={appletsSmallTableRows}
+          chosenAppletData={chosenAppletData}
+          setChosenAppletData={setChosenAppletData}
+        />
+      )}
+      {removeAccessPopupVisible && (
+        <RemoveAccessPopup
+          popupVisible={removeAccessPopupVisible}
+          setPopupVisible={setRemoveAccessPopupVisible}
           tableRows={appletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
