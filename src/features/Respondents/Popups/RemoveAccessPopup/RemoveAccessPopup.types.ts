@@ -12,6 +12,8 @@ export type RemoveAccessPopupProps = {
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>;
 };
 
+export type getScreen = (respondentName: string, appletName: string) => JSX.Element;
+
 export type Steps = 0 | 1 | 2 | 3 | 4;
 
 export type ScreensParams = {

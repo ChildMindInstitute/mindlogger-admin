@@ -4,7 +4,7 @@ import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
-import { ScreensParams } from './RemoveAccessPopup.types';
+import { getScreen, ScreensParams } from './RemoveAccessPopup.types';
 
 const getThirdScreen = (respondentName: string, appletName: string) => (
   <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
@@ -113,79 +113,66 @@ export const getScreens = ({
   submitPassword,
   removeAccess,
   handlePopupClose,
-}: ScreensParams) => [
-  { component: firstScreen, buttonText: '', hasSecondBtn: false, title: 'removeAccess' },
-  {
-    component: secondScreen,
-    buttonText: 'removeAccess',
-    hasSecondBtn: true,
-    title: 'removeAccess',
-    submitBtnColor: 'error',
-  },
-  ...(removeData
-    ? [
-        {
-          component: thirdExtScreen,
-          buttonText: 'submit',
+}: ScreensParams) => {
+  const getResultScreens = (
+    getSuccessScreen: getScreen,
+    getErrorScreen: getScreen,
+    title: string,
+  ) =>
+    isRemoved
+      ? {
+          component: getSuccessScreen(respondentName, appletName),
+          buttonText: 'ok',
+          hasSecondBtn: false,
+          title,
+          submitForm: handlePopupClose,
+        }
+      : {
+          component: getErrorScreen(respondentName, appletName),
+          buttonText: 'retry',
           hasSecondBtn: true,
-          title: 'enterAppletPassword',
-          submitForm: submitPassword,
-        },
-        {
-          component: getFourthExtScreen(respondentName, appletName),
-          buttonText: 'yesRemove',
-          hasSecondBtn: true,
-          title: 'removeAccessAndData',
+          title,
           submitForm: removeAccess,
-          submitBtnColor: 'error',
-        },
-        ...(isRemoved
-          ? [
-              {
-                component: getFifthExtScreen(respondentName, appletName),
-                buttonText: 'ok',
-                hasSecondBtn: false,
-                title: 'removeAccessAndData',
-                submitForm: handlePopupClose,
-              },
-            ]
-          : [
-              {
-                component: getFifthExtScreenError(respondentName, appletName),
-                buttonText: 'retry',
-                hasSecondBtn: true,
-                title: 'removeAccessAndData',
-                submitForm: removeAccess,
-              },
-            ]),
-      ]
-    : [
-        {
-          component: getThirdScreen(respondentName, appletName),
-          buttonText: 'yesRemove',
-          hasSecondBtn: true,
-          title: 'removeAccess',
-          submitForm: removeAccess,
-          submitBtnColor: 'error',
-        },
-        ...(isRemoved
-          ? [
-              {
-                component: getFourthScreen(respondentName, appletName),
-                buttonText: 'ok',
-                hasSecondBtn: false,
-                title: 'removeAccess',
-                submitForm: handlePopupClose,
-              },
-            ]
-          : [
-              {
-                component: getFourthErrorScreen(respondentName, appletName),
-                buttonText: 'retry',
-                hasSecondBtn: true,
-                title: 'removeAccess',
-                submitForm: removeAccess,
-              },
-            ]),
-      ]),
-];
+        };
+
+  return [
+    { component: firstScreen, buttonText: '', hasSecondBtn: false, title: 'removeAccess' },
+    {
+      component: secondScreen,
+      buttonText: 'removeAccess',
+      hasSecondBtn: true,
+      title: 'removeAccess',
+      submitBtnColor: 'error',
+    },
+    ...(removeData
+      ? [
+          {
+            component: thirdExtScreen,
+            buttonText: 'submit',
+            hasSecondBtn: true,
+            title: 'enterAppletPassword',
+            submitForm: submitPassword,
+          },
+          {
+            component: getFourthExtScreen(respondentName, appletName),
+            buttonText: 'yesRemove',
+            hasSecondBtn: true,
+            title: 'removeAccessAndData',
+            submitForm: removeAccess,
+            submitBtnColor: 'error',
+          },
+          ...[getResultScreens(getFifthExtScreen, getFifthExtScreenError, 'removeAccessAndData')],
+        ]
+      : [
+          {
+            component: getThirdScreen(respondentName, appletName),
+            buttonText: 'yesRemove',
+            hasSecondBtn: true,
+            title: 'removeAccess',
+            submitForm: removeAccess,
+            submitBtnColor: 'error',
+          },
+          ...[getResultScreens(getFourthScreen, getFourthErrorScreen, 'removeAccess')],
+        ]),
+  ];
+};
