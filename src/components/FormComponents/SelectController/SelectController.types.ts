@@ -1,6 +1,7 @@
-import { ChangeEvent } from 'react';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
+
+import { SelectEvent } from 'types/event';
 
 export type Option = {
   value: string | boolean;
@@ -8,9 +9,9 @@ export type Option = {
 };
 
 export type FormInputProps = {
-  name: string;
   options: Option[];
-  customChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  value?: string;
+  customChange?: (e: SelectEvent) => void;
 } & TextFieldProps;
 
 export type SelectControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;

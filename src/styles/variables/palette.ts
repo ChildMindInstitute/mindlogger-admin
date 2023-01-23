@@ -35,6 +35,16 @@ export const palette = {
 
   black: '#000',
   white: '#fff',
+  blue: '#0b6e99',
+  blue_alfa30: 'rgba(11, 110, 153, 0.3)',
+  green: '#0f7B6c',
+  green_alfa30: 'rgba(15, 123, 108, 0.3)',
+  yelow: '#dfac03',
+  yelow_alfa30: 'rgba(223, 172, 3, 0.3)',
+  orange: '#d9730d',
+  orange_alfa30: 'rgba(217, 115, 13, 0.3)',
+  red: '#e14646',
+  red_alfa30: 'rgba(225, 70, 70, 0.3)',
 
   semantic: {
     error: '#ba1a1a',
