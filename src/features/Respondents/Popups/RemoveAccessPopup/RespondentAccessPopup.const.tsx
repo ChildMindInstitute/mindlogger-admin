@@ -114,11 +114,7 @@ export const getScreens = ({
   removeAccess,
   handlePopupClose,
 }: ScreensParams) => {
-  const getResultScreens = (
-    getSuccessScreen: getScreen,
-    getErrorScreen: getScreen,
-    title: string,
-  ) =>
+  const getResultScreen = (getSuccessScreen: getScreen, getErrorScreen: getScreen, title: string) =>
     isRemoved
       ? {
           component: getSuccessScreen(respondentName, appletName),
@@ -161,7 +157,7 @@ export const getScreens = ({
             submitForm: removeAccess,
             submitBtnColor: 'error',
           },
-          ...[getResultScreens(getFifthExtScreen, getFifthExtScreenError, 'removeAccessAndData')],
+          getResultScreen(getFifthExtScreen, getFifthExtScreenError, 'removeAccessAndData'),
         ]
       : [
           {
@@ -172,7 +168,7 @@ export const getScreens = ({
             submitForm: removeAccess,
             submitBtnColor: 'error',
           },
-          ...[getResultScreens(getFourthScreen, getFourthErrorScreen, 'removeAccess')],
+          getResultScreen(getFourthScreen, getFourthErrorScreen, 'removeAccess'),
         ]),
   ];
 };
