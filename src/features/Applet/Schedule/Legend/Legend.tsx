@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { SelectController } from 'components/FormComponents';
 import { Svg } from 'components';
 
-import { getExpandedLists, scheduleOptions } from './Filter.const';
-import { StyledBtn, StyledFilter, StyledRow, StyledSelect } from './Filter.styles';
+import { getExpandedLists, scheduleOptions } from './Legend.const';
+import { StyledBtn, StyledFilter, StyledRow, StyledSelect } from './Legend.styles';
 import { ExpandedList } from './ExpandedList';
 
-export const Filter = () => {
+export const Legend = () => {
   const { t } = useTranslation('app');
   const [schedule, setSchedule] = useState(scheduleOptions[0].value);
 

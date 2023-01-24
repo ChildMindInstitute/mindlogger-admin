@@ -18,10 +18,7 @@ export const SelectController = <T extends FieldValues>({
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
 
-  const renderSelect = (
-    onChange: ((e: SelectEvent) => void) | undefined,
-    value: string | undefined,
-  ) => (
+  const renderSelect = (onChange: ((e: SelectEvent) => void) | undefined, value?: string) => (
     <TextField {...props} select onChange={onChange} value={value}>
       {options?.map(({ labelKey, value, icon }) => (
         <MenuItem key={labelKey} value={value as string}>

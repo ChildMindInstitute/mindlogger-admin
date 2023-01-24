@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 import { Box } from '@mui/system';
-import i18n from 'i18n';
 
+import i18n from 'i18n';
 import { Svg } from 'components';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 
-import { schedules } from './Filter.const';
+import { schedules } from './Legend.const';
 
 export const getScheduledIndicatorColor = (type: string) => {
   const {

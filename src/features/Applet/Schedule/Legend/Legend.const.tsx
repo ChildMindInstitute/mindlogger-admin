@@ -1,11 +1,11 @@
 import { Fragment } from 'react';
-import i18n from 'i18n';
 
+import i18n from 'i18n';
 import { Svg } from 'components';
 
 import { Counter } from './Counter';
-import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Filter.styles';
-import { getScheduledIndicatorColor, getScheduledTitle } from './Filter.utils';
+import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Legend.styles';
+import { getScheduledIndicatorColor, getScheduledTitle } from './Legend.utils';
 
 const { t } = i18n;
 
@@ -29,7 +29,7 @@ export const scheduleOptions = [
     icon: <Svg id="user-calendar" />,
   },
 ];
-// TODO check trnslations after api connect
+// TODO check translations after api connect
 export const availableItems = [<>Emotional Support</>, <>Incentive Activity</>];
 
 export const deactivatedItems = [<StyledDeactivated>Draft 6</StyledDeactivated>];

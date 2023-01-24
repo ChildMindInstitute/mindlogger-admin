@@ -31,7 +31,6 @@ export const StyledChildren = styled(Box)`
 `;
 
 export const StyledItem = styled(StyledFlexTopCenter)`
-  cursor: pointer;
   font-size: ${variables.font.size.md};
   line-height: 2rem;
   font-weight: ${variables.font.weight.regular};

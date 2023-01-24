@@ -1,4 +1,4 @@
-type Buttom = {
+type Button = {
   icon: JSX.Element;
   action: () => void;
 };
@@ -6,5 +6,5 @@ type Buttom = {
 export type ExpandedListProps = {
   title: string;
   items: JSX.Element[];
-  buttons: Buttom[];
+  buttons: Button[];
 };
