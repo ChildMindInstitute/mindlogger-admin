@@ -25,7 +25,7 @@ export const Applet = ({
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
   const [selectedRespondents, setSelectedRespondents] = useState(selectedRespondentsProps || []);
 
-  const handleAddRole = (label: string) => {
+  const handleAddRole = (label: Roles) => {
     addRole(id, label);
     setAnchorEl(null);
   };

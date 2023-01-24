@@ -5,10 +5,11 @@ import { Modal } from 'components';
 import theme from 'styles/theme';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { Roles } from 'consts';
 
 import { Applet } from './Applet';
 import { EditAccessPopupProps, Applet as AppletType, Role } from './EditAccessPopup.types';
-import { applets as mockedApplets } from './EditAccessPopup.const';
+import { mockedApplets } from './EditAccessPopup.const';
 import { StyledApplets } from './EditAccessPopup.styles';
 import { getRoleIcon } from './EditAccessPopup.utils';
 
@@ -33,11 +34,11 @@ export const EditAccessPopup = ({
     setApplets(updatedApplets);
   };
 
-  const handleRemove = (id: string, label: string) => {
+  const handleRemove = (id: string, label: Roles) => {
     updateRolesHandler(id, (roles) => roles.filter((role) => role.label !== label));
   };
 
-  const handleAdd = (id: string, label: string) => {
+  const handleAdd = (id: string, label: Roles) => {
     updateRolesHandler(id, (roles) => [...roles, { label, icon: getRoleIcon(label) }]);
   };
 

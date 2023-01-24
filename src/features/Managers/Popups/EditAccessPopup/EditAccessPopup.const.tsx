@@ -3,7 +3,7 @@ import { Roles } from 'consts';
 
 import { getRoleIcon } from './EditAccessPopup.utils';
 
-export const applets = [
+export const mockedApplets = [
   {
     id: '1',
     title: 'Pediatric Screener',

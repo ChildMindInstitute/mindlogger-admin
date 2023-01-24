@@ -6,7 +6,7 @@ import { Modal } from 'components';
 
 import { SelectRespondents } from './SelectRespondents';
 import { SelectRespondentsPopupProps } from './SuccessSharePopup.types';
-import { respondents as mockedRespondents } from './SelectRespondents.const';
+import { mockedRespondents } from './SelectRespondents.const';
 import { SelectRespondentsRef } from '../SelectRespondentsPopup/SelectRespondents/SelectRespondents.types';
 
 export const SelectRespondentsPopup = ({
