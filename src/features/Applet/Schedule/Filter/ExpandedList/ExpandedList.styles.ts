@@ -22,20 +22,19 @@ export const StyledCollapseBtn = styled(Box)`
 `;
 
 export const StyledCollapse = styled(Box)`
-  border-top: 1px solid #dee3eb;
-  padding-top: 22px;
-  padding-bottom: 22px;
+  border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  padding: ${theme.spacing(2.2, 0)};
 `;
 
 export const StyledChildren = styled(Box)`
-  padding-left: 9px;
+  padding-left: ${theme.spacing(0.9)};
 `;
 
 export const StyledItem = styled(StyledFlexTopCenter)`
   cursor: pointer;
-  font-size: 1.4rem;
+  font-size: ${variables.font.size.md};
   line-height: 2rem;
-  font-weight: 400;
+  font-weight: ${variables.font.weight.regular};
   margin-top: ${theme.spacing(2.4)};
 
   svg {

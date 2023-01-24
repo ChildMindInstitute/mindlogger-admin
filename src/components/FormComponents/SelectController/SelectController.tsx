@@ -21,9 +21,9 @@ export const SelectController = <T extends FieldValues>({
     value: string | undefined,
   ) => (
     <TextField {...props} select onChange={onChange} value={value}>
-      {options?.map(({ labelKey, value }) => (
+      {options?.map(({ labelKey, value, icon }) => (
         <MenuItem key={labelKey} value={value as string}>
-          {t(labelKey)}
+          {icon || ''} {t(labelKey)}
         </MenuItem>
       ))}
     </TextField>

@@ -8,17 +8,20 @@ import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledFilter = styled(Box)`
   width: 32rem;
-  border-right: 1px solid #dee3eb;
-  padding-right: 16px;
+  border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  padding: ${theme.spacing(1.2, 1.6, 0)};
+  overflow: auto;
+  margin: ${theme.spacing(-2.4, -2.4, -1.6)};
 `;
 
 export const StyledSelect = styled(Box)`
+  width: 190px;
   .MuiOutlinedInput-notchedOutline {
     border: 0;
   }
 
   .MuiInputBase-input {
-    font-size: 22px;
+    font-size: ${variables.font.size.xl};
   }
 `;
 

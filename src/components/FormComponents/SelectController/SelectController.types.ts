@@ -6,6 +6,7 @@ import { SelectEvent } from 'types/event';
 export type Option = {
   value: string | boolean;
   labelKey: string;
+  icon?: JSX.Element;
 };
 
 export type FormInputProps = {

@@ -1,22 +1,29 @@
 import { Fragment } from 'react';
 
 import { Svg } from 'components';
+import i18n from 'i18n';
 
 import { Counter } from './Counter';
 import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Filter.styles';
 import { getScheduledIndicatorColor, getScheduledTitle } from './Filter.utils';
 
+const { t } = i18n;
+
 export const schedules = {
-  DailyJournal: 'Daily Journal',
-  PreQuestionnaire: 'Pre-questionnaire',
-  MorningAssessment: 'Morning Assessment',
-  MiddayAssessment: 'MiddayAssessment',
-  EveningAssessment: 'Evening Assessment',
+  dailyJournal: 'Daily Journal',
+  preQuestionnaire: 'Pre-questionnaire',
+  morningAssessment: 'Morning Assessment',
+  middayAssessment: 'MiddayAssessment',
+  eveningAssessment: 'Evening Assessment',
 } as const;
 
-export const options = [
-  { labelKey: 'Default Schedule', value: 'Default Schedule' },
-  { labelKey: 'Individual Schedule', value: 'Individual Schedule' },
+export const scheduleOptions = [
+  {
+    labelKey: 'defaultSchedule',
+    value: 'Default Schedule',
+    icon: <Svg id="calendar" />,
+  },
+  { labelKey: 'individualSchedule', value: 'Individual Schedule', icon: <Svg id="calendar" /> },
 ];
 
 export const availableItems = [<>Emotional Support</>, <>Incentive Activity</>];
@@ -26,7 +33,7 @@ export const deactivatedItems = [<StyledDeactivated>Draft 6</StyledDeactivated>]
 export const scheduledItems = [
   <>
     <Svg id="add" />
-    <StyledCreateBtn>Create Event</StyledCreateBtn>
+    <StyledCreateBtn>{t('createEvent')}</StyledCreateBtn>
   </>,
   ...Object.values(schedules).map((el) => (
     <Fragment key={el}>
@@ -47,17 +54,17 @@ export const getExpandedLists = () => {
         { icon: <Svg id="visibility-on" {...commonProps} />, action: () => null },
       ],
       items: scheduledItems,
-      title: 'Scheduled',
+      title: t('scheduled'),
     },
     {
       buttons: [{ icon: <Svg id="visibility-off" {...commonProps} />, action: () => null }],
       items: availableItems,
-      title: 'Always Available',
+      title: t('alwaysAvailable'),
     },
     {
       buttons: [{ icon: <Svg id="settings" {...commonProps} />, action: () => null }],
       items: deactivatedItems,
-      title: 'Deactivated',
+      title: t('deactivated'),
     },
   ];
 };

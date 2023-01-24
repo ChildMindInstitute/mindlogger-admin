@@ -244,5 +244,15 @@
   "viewDataDescription": "Veuillez sélectionner l'applet pour afficher les données du répondant pour :",
   "dataExport": "Exportation de données",
   "selectAppletToExportRespondentsData": "Veuillez sélectionner Applet pour exporter les données du répondant depuis: ",
-  "waitForRespondentDataDownload": "Veuillez attendre la fin du téléchargement. Cela peut prendre jusqu'à 5 minutes en fonction de la quantité de données collectées. Ne quittez pas cette page."
+  "waitForRespondentDataDownload": "Veuillez attendre la fin du téléchargement. Cela peut prendre jusqu'à 5 minutes en fonction de la quantité de données collectées. Ne quittez pas cette page.",
+  "scheduled": "Programmé",
+  "deactivated": "Désactivé",
+  "createEvent": "Créer un évènement",
+  "dailyJournal": "Journal quotidien",
+  "preQuestionnaire": "Pré questionnaire",
+  "morningAssessment": "Évaluation du matin",
+  "middayAssessment": "Évaluation de midi",
+  "eveningAssessment": "Évaluation du soir",
+  "defaultSchedule": "Horaire par défaut",
+  "individualSchedule": "Horaire individuel"
 }

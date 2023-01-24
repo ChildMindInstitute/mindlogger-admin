@@ -1,8 +1,12 @@
 /* eslint-disable camelcase */
+import i18n from 'i18n';
+
 import { Svg } from 'components';
 import { variables } from 'styles/variables';
 
 import { schedules } from './Filter.const';
+
+const { t } = i18n;
 
 export const getScheduledIndicatorColor = (type: string) => {
   const {
@@ -19,13 +23,13 @@ export const getScheduledIndicatorColor = (type: string) => {
   } = variables.palette;
 
   switch (type) {
-    case schedules.PreQuestionnaire:
+    case schedules.preQuestionnaire:
       return [green, green_alfa30];
-    case schedules.MorningAssessment:
+    case schedules.morningAssessment:
       return [yelow, yelow_alfa30];
-    case schedules.MiddayAssessment:
+    case schedules.middayAssessment:
       return [orange, orange_alfa30];
-    case schedules.EveningAssessment:
+    case schedules.eveningAssessment:
       return [red, red_alfa30];
     default:
       return [blue, blue_alfa30];
@@ -33,13 +37,13 @@ export const getScheduledIndicatorColor = (type: string) => {
 };
 
 export const getScheduledTitle = (type: string) => {
-  if (type === schedules.PreQuestionnaire) {
+  if (type === schedules.preQuestionnaire) {
     return (
       <>
-        <Svg id="flow" width={16} height={16} /> {type}
+        <Svg id="flow" width={16} height={16} /> {t(type)}
       </>
     );
   }
 
-  return type;
+  return t(type);
 };
