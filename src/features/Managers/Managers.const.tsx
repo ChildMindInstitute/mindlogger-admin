@@ -48,6 +48,6 @@ export const getActions = (
         {
           icon: <Svg id="edit-user" />,
           action: editAccessAction,
-          tooltipTitle: t('removeAccess'),
+          tooltipTitle: t('editAccess'),
         },
       ];

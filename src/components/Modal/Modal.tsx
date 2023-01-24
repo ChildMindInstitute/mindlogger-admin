@@ -18,11 +18,10 @@ export const Modal = ({
   buttonText,
   children,
   titleAlign = 'left',
-  actionsAlign = 'center',
   disabledSubmit = false,
   width,
   hasSecondBtn = false,
-  secondBtnColor = 'primary',
+  submitBtnColor = 'primary',
   secondBtnText,
   onSecondBtnSubmit,
   disabledSecondBtn,
@@ -35,26 +34,26 @@ export const Modal = ({
       </StyledCloseButton>
     </StyledDialogTitle>
     {children}
-    <StyledDialogActions actionsAlign={actionsAlign}>
-      {buttonText && (
-        <StyledButton
-          fontWeight={hasSecondBtn ? 'regular' : 'bold'}
-          variant="text"
-          disabled={disabledSubmit}
-          onClick={onSubmit}
-        >
-          {buttonText}
-        </StyledButton>
-      )}
+    <StyledDialogActions actionsAlign={hasSecondBtn ? 'end' : 'center'}>
       {hasSecondBtn && (
         <StyledButton
+          fontWeight="regular"
           variant="text"
           disabled={disabledSecondBtn}
           onClick={onSecondBtnSubmit}
-          color={secondBtnColor}
           sx={{ marginLeft: theme.spacing(1.6) }}
         >
           {secondBtnText}
+        </StyledButton>
+      )}
+      {buttonText && (
+        <StyledButton
+          variant="text"
+          disabled={disabledSubmit}
+          onClick={onSubmit}
+          color={submitBtnColor}
+        >
+          {buttonText}
         </StyledButton>
       )}
     </StyledDialogActions>

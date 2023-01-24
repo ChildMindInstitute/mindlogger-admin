@@ -33,14 +33,12 @@ export const SelectRespondentsPopup = ({
     <Modal
       open={selectRespondentsPopupVisible}
       onClose={handleClose}
-      onSubmit={handleClose}
+      onSubmit={handleConfirm}
       title={t('selectRespondents')}
-      buttonText={t('cancel')}
-      actionsAlign="end"
+      buttonText={t('confirm')}
       hasSecondBtn
-      secondBtnColor="primary"
-      secondBtnText={t('confirm')}
-      onSecondBtnSubmit={handleConfirm}
+      secondBtnText={t('cancel')}
+      onSecondBtnSubmit={handleClose}
       width="66"
       height="60"
     >

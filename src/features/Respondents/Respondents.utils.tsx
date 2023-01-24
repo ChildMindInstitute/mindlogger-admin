@@ -15,6 +15,7 @@ import { Actions, ChosenAppletData } from './Respondents.types';
 export const getActions = ({
   scheduleSetupAction,
   viewDataAction,
+  removeAccessAction,
   userDataExportAction,
 }: Actions) => [
   {
@@ -33,14 +34,14 @@ export const getActions = ({
     toolTipTitle: t('exportData'),
   },
   {
-    icon: <Svg id="edit-access" width={21} height={19} />,
+    icon: <Svg id="edit-user" width={21} height={19} />,
     action: (item: UserData) => item,
     toolTipTitle: t('editAccess'),
   },
   {
-    icon: <Svg id="edit-user" width={21} height={22} />,
-    action: (item: UserData) => item,
-    toolTipTitle: t('editUser'),
+    icon: <Svg id="remove-access" />,
+    action: removeAccessAction,
+    toolTipTitle: t('removeAccess'),
   },
 ];
 
@@ -56,8 +57,9 @@ export const getChosenAppletData = (
   const secretUserId = respondentItem.MRN;
   const nickName = respondentItem.nickName;
   const hasIndividualSchedule = respondentItem.hasIndividualEvent;
+  const userId = respondentItem['_id'];
 
-  return { appletName, appletImg, secretUserId, nickName, hasIndividualSchedule };
+  return { appletName, appletImg, secretUserId, nickName, hasIndividualSchedule, userId };
 };
 
 export const getAppletsSmallTableRows = (
@@ -67,13 +69,14 @@ export const getAppletsSmallTableRows = (
 ) =>
   respondentsItems &&
   Object.keys(respondentsItems).map((key) => {
-    const { appletName, appletImg, secretUserId, nickName, hasIndividualSchedule } =
+    const { appletName, appletImg, secretUserId, nickName, hasIndividualSchedule, userId } =
       getChosenAppletData(respondentsItems, appletsData, key);
     const chosenAppletData = {
       appletId: key,
       appletName,
       secretUserId,
       hasIndividualSchedule,
+      userId,
     };
 
     return {

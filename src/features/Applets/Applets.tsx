@@ -6,7 +6,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth, FolderApplet, folders } from 'redux/modules';
 import { ButtonWithMenu, Search, Svg } from 'components';
 
-import { Table } from './Table/Table';
+import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
 import { StyledButtons, AppletsTableHeader } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
@@ -39,7 +39,7 @@ export const Applets = () => {
       isRenaming: true,
       isVisible: true,
       depth: 0,
-      parentId: authData?.user?.['_id'] || '',
+      parentId: String(authData?.user?.id) || '',
     };
     dispatch(folders.actions.createNewFolder(folder));
   };
