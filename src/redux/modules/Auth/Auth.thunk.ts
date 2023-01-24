@@ -23,8 +23,9 @@ export const signIn = createAsyncThunk(
       const { data } = await signInApi({ email, password }, signal);
 
       if (data?.result) {
-        storage.setItem('refreshToken', data.result.refreshToken);
-        storage.setItem('accessToken', data.result.accessToken);
+        const { accessToken, refreshToken } = data.result.token;
+        storage.setItem('refreshToken', refreshToken);
+        storage.setItem('accessToken', accessToken);
       }
 
       return data;
