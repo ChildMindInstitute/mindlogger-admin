@@ -274,5 +274,17 @@
   "viewDataDescription": "Please select the Applet to view Respondent's data for:",
   "dataExport": "Data Export",
   "selectAppletToExportRespondentsData": "Please select Applet to export Respondent's data from: ",
-  "waitForRespondentDataDownload": "Please wait for the download to complete. It could take up to 5 minutes depending on how much data has been collected. Do not navigate away from this page."
+  "waitForRespondentDataDownload": "Please wait for the download to complete. It could take up to 5 minutes depending on how much data has been collected. Do not navigate away from this page.",
+  "removeIndividualSchedule": "Remove Individual Schedule",
+  "individualScheduleRemoved": "Individual Schedule Removed Successfully",
+  "confirmRemoveIndividualSchedule": "<1>{{ name }}</1>’s individual schedule will be removed, and the respondent will use the <1>default schedule</1> instead. Are you sure you want to continue?",
+  "confirmRemoveEmptyIndividualSchedule": "<1>You are about to remove <2>{{ name }}</2>’s individual schedule and move them to group of respondents using the <2>default schedule</2>.</1><1>All scheduled activities and their notifications will be lost. Are you sure you want to continue?</1>",
+  "removeIndividualScheduleSuccess": "Respondent <1>{{ name }}</1> is now using the <1>default schedule</1>. You may add an individual schedule for this respondent again any time.",
+  "clearScheduledEvents": "Clear All Scheduled Events from Calendar",
+  "scheduleClearedSuccess": "Schedule Cleared Successfully",
+  "clearAll": "Clear All",
+  "confirmClearEvents": "You are about to remove all scheduled events and their notifications from Applet <1>{{ appletName }}</1> default schedule. Are you sure you want to continue?",
+  "confirmClearInvidividualSchedule": "You are about to remove all scheduled events and their notifications from Applet <1>{{ appletName }} individual schedule</1>. Are you sure you want to continue?",
+  "clearEventsSuccess": "<1>Scheduled events within the <1>default schedule</1> for the Applet <1>{{ appletName }}</1> have been cleared successfully.</1><1>Respondents' <1>individual schedules</1> (if applicable) have not changed.</1>",
+  "clearIndividualScheduleSuccess": "<1>Please note that respondent <1>{{ name }}</1> is still using an <1>individual schedule</1>.</1><1>You may revert this respondent back to the <1>default schedule</1> by pressing the trash icon on the top-left.</1>"
 }

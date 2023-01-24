@@ -9,6 +9,8 @@ import theme from 'styles/theme';
 import { mockedScheduleData } from './Schedule.const';
 import { CreateActivityPopup } from './CreateActivityPopup';
 import { ExportSchedulePopup } from './ExportSchedulePopup';
+import { RemoveIndividualSchedulePopup } from './RemoveIndividualSchedulePopup';
+import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup/ClearScheduledEventsPopup';
 
 export const Schedule = () => {
   const { t } = useTranslation('app');
@@ -16,6 +18,9 @@ export const Schedule = () => {
   const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
   const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
     useState(false);
+  const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
+    useState(false);
+  const [clearScheduleEventsPopupVisible, setClearScheduleEventsPopupVisible] = useState(false);
 
   useBreadcrumbs([
     {
@@ -45,6 +50,18 @@ export const Schedule = () => {
         >
           Export Individual Schedule
         </Button>
+        <Button
+          sx={{ marginRight: theme.spacing(1.5) }}
+          onClick={() => setRemoveIndividualSchedulePopupVisible(true)}
+        >
+          Remove Individual Schedule
+        </Button>
+        <Button
+          sx={{ marginRight: theme.spacing(1.5) }}
+          onClick={() => setClearScheduleEventsPopupVisible(true)}
+        >
+          Clear Schedule Events
+        </Button>
       </Box>
       <CreateActivityPopup
         open={createActivityPopupVisible}
@@ -63,6 +80,19 @@ export const Schedule = () => {
         scheduleTableRows={mockedScheduleData}
         secretUserId="012-435"
         nickName="John Doe"
+      />
+      <RemoveIndividualSchedulePopup
+        open={removeIndividualSchedulePopupVisible}
+        name="John Doe"
+        isEmpty={false}
+        onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
+      />
+      <ClearScheduledEventsPopup
+        open={clearScheduleEventsPopupVisible}
+        appletName="Pediatric Screener"
+        isDefault={true}
+        name="John Doe"
+        onClose={() => setClearScheduleEventsPopupVisible(false)}
       />
     </>
   );
