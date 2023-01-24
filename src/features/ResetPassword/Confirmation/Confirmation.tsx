@@ -18,7 +18,7 @@ export const Confirmation = ({ email }: { email: string }) => {
 
   return (
     <StyledConfirmation>
-      <StyledHeader>{t('checkYourMail')}</StyledHeader>
+      <StyledHeader>{t('checkYourEmail')}</StyledHeader>
       <StyledSubheader>
         {t('weHaveSentPasswordResetLink')}
         <br />

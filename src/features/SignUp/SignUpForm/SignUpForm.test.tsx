@@ -41,7 +41,7 @@ describe('SignUp component tests', () => {
     waitFor(() => expect(screen.getByText('Incorrect Email')).toBeInTheDocument());
 
     submitForm('', '', '', '');
-    waitFor(() => expect(screen.getByText('E-mail is required')).toBeInTheDocument());
+    waitFor(() => expect(screen.getByText('Email is required')).toBeInTheDocument());
     waitFor(() => expect(screen.getByText('Password is required')).toBeInTheDocument());
     waitFor(() => expect(screen.getByText('First Name is required')).toBeInTheDocument());
     waitFor(() => expect(screen.getByText('Last Name is required')).toBeInTheDocument());

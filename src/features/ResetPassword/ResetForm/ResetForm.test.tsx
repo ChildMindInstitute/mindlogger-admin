@@ -23,7 +23,7 @@ describe('ResetForm component tests', () => {
     waitFor(() => expect(screen.getByText('Incorrect Email')).toBeInTheDocument());
 
     submitForm('');
-    waitFor(() => expect(screen.getByText('E-mail is required')).toBeInTheDocument());
+    waitFor(() => expect(screen.getByText('Email is required')).toBeInTheDocument());
   });
 
   test('should be able to submit ResetForm form', () => {
