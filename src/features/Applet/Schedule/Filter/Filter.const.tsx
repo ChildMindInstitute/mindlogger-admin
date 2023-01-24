@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
+import i18n from 'i18n';
 
 import { Svg } from 'components';
-import i18n from 'i18n';
 
 import { Counter } from './Counter';
 import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Filter.styles';
@@ -10,11 +10,11 @@ import { getScheduledIndicatorColor, getScheduledTitle } from './Filter.utils';
 const { t } = i18n;
 
 export const schedules = {
-  dailyJournal: 'Daily Journal',
-  preQuestionnaire: 'Pre-questionnaire',
-  morningAssessment: 'Morning Assessment',
-  middayAssessment: 'MiddayAssessment',
-  eveningAssessment: 'Evening Assessment',
+  dailyJournal: 'dailyJournal',
+  preQuestionnaire: 'preQuestionnaire',
+  morningAssessment: 'morningAssessment',
+  middayAssessment: 'middayAssessment',
+  eveningAssessment: 'eveningAssessment',
 } as const;
 
 export const scheduleOptions = [
@@ -23,19 +23,23 @@ export const scheduleOptions = [
     value: 'Default Schedule',
     icon: <Svg id="calendar" />,
   },
-  { labelKey: 'individualSchedule', value: 'Individual Schedule', icon: <Svg id="calendar" /> },
+  {
+    labelKey: 'individualSchedule',
+    value: 'Individual Schedule',
+    icon: <Svg id="user-calendar" />,
+  },
 ];
-
+// TODO check trnslations after api connect
 export const availableItems = [<>Emotional Support</>, <>Incentive Activity</>];
 
 export const deactivatedItems = [<StyledDeactivated>Draft 6</StyledDeactivated>];
 
 export const scheduledItems = [
   <>
-    <Svg id="add" />
+    <Svg id="add" width={20} height={20} />
     <StyledCreateBtn>{t('createEvent')}</StyledCreateBtn>
   </>,
-  ...Object.values(schedules).map((el) => (
+  ...Object.keys(schedules).map((el) => (
     <Fragment key={el}>
       <StyledIndicator colors={getScheduledIndicatorColor(el)} />
       {getScheduledTitle(el)}
@@ -62,7 +66,7 @@ export const getExpandedLists = () => {
       title: t('alwaysAvailable'),
     },
     {
-      buttons: [{ icon: <Svg id="settings" {...commonProps} />, action: () => null }],
+      buttons: [{ icon: <Svg id="external-link" {...commonProps} />, action: () => null }],
       items: deactivatedItems,
       title: t('deactivated'),
     },

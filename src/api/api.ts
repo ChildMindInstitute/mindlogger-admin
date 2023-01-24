@@ -62,7 +62,7 @@ import {
 
 export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
   apiClientWithLang.post(
-    'auth/token',
+    'auth/login',
     { email, password },
     {
       signal,

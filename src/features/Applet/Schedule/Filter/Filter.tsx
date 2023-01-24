@@ -17,12 +17,12 @@ export const Filter = () => {
       <StyledSelect>
         <SelectController
           name="schedule"
-          fullWidth
           value={schedule}
           customChange={(e) => setSchedule(e.target.value)}
           options={scheduleOptions}
           SelectProps={{
-            IconComponent: () => <Svg id="navigate-down" />,
+            autoWidth: true,
+            IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
           }}
         />
       </StyledSelect>

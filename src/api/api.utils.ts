@@ -45,7 +45,7 @@ export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
       refreshToken,
     });
 
-    const retryOriginalRequest = new Promise((resolve) => {
+    return new Promise((resolve) => {
       if (data?.result?.accessToken) {
         storage.setItem('accessToken', data.result.accessToken);
         resolve(
@@ -58,8 +58,6 @@ export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
         );
       }
     });
-
-    return retryOriginalRequest;
   } catch (err) {
     return Promise.reject(err);
   }

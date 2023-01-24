@@ -1,22 +1,9 @@
 import { BaseSchema } from 'redux/modules/Base';
 
 export type User = {
-  admin: boolean;
-  created: string;
-  creatorId: string;
-  displayName: string;
   email: string;
-  emailVerified: boolean;
-  firstName: string;
-  lastName: string;
-  login: string;
-  otp: boolean;
-  public: boolean;
-  size: number;
-  status: string;
-  _accessLevel: number;
-  _id: string;
-  _modelType: string;
+  fullName: string;
+  id: number;
 };
 
 export type AccountData = {
@@ -40,13 +27,8 @@ export type AuthToken = {
 };
 
 export type AuthData = {
-  result: {
-    email: string;
-    fullName: string;
-    id: number;
-  };
+  user: User;
   account?: AccountData;
-  user?: User;
 };
 
 export type AuthSchema = {

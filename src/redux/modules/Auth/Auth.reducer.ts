@@ -28,7 +28,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   builder.addCase(signIn.fulfilled, (state, action) => {
-    createAuthFulfilledData(state, action.meta.requestId, action.payload?.data);
+    createAuthFulfilledData(state, action.meta.requestId, { user: action.payload?.result.user });
   });
 
   builder.addCase(signIn.rejected, (state, action) => {
@@ -40,7 +40,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   builder.addCase(getUserDetails.fulfilled, (state, action) => {
-    createAuthFulfilledData(state, action.meta.requestId, action.payload.data);
+    createAuthFulfilledData(state, action.meta.requestId, { user: action.payload.data.result });
   });
 
   builder.addCase(getUserDetails.rejected, (state, action) => {

@@ -3,7 +3,6 @@ import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
@@ -12,6 +11,7 @@ export const StyledCollapseBtn = styled(Box)`
   display: flex;
   align-items: center;
   width: 100%;
+
   &:hover {
     background-color: transparent;
   }

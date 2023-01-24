@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { TextField, MenuItem } from '@mui/material';
+import { Box } from '@mui/system';
 
 import { SelectEvent } from 'types/event';
+import theme from 'styles/theme';
 
 import { SelectControllerProps } from './SelectController.types';
 
@@ -23,7 +25,7 @@ export const SelectController = <T extends FieldValues>({
     <TextField {...props} select onChange={onChange} value={value}>
       {options?.map(({ labelKey, value, icon }) => (
         <MenuItem key={labelKey} value={value as string}>
-          {icon || ''} {t(labelKey)}
+          {icon ? <Box sx={{ marginRight: theme.spacing(1.8) }}>{icon}</Box> : ''} {t(labelKey)}
         </MenuItem>
       ))}
     </TextField>

@@ -6,7 +6,6 @@ import { useAppDispatch } from 'redux/store';
 import { auth, FolderApplet, folders } from 'redux/modules';
 import { ButtonWithMenu, Search, Svg } from 'components';
 
-import { Filter } from 'features/Applet/Schedule/Filter';
 import { Table } from './Table/Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
 import { StyledButtons, AppletsTableHeader } from './Applets.styles';
@@ -40,7 +39,7 @@ export const Applets = () => {
       isRenaming: true,
       isVisible: true,
       depth: 0,
-      parentId: authData?.user?.['_id'] || '',
+      parentId: String(authData?.user?.id) || '',
     };
     dispatch(folders.actions.createNewFolder(folder));
   };
@@ -79,8 +78,7 @@ export const Applets = () => {
 
   return (
     <>
-      <Filter />
-      {/* <AppletsTableHeader>
+      <AppletsTableHeader>
         <StyledButtons>
           <ButtonWithMenu
             variant="outlined"
@@ -98,7 +96,7 @@ export const Applets = () => {
         rows={flattenItems?.filter(filterRows)}
         orderBy="updated"
         headerContent={headerContent}
-      /> */}
+      />
     </>
   );
 };

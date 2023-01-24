@@ -15,13 +15,23 @@ export const StyledFilter = styled(Box)`
 `;
 
 export const StyledSelect = styled(Box)`
-  width: 190px;
   .MuiOutlinedInput-notchedOutline {
     border: 0;
   }
 
-  .MuiInputBase-input {
+  .MuiOutlinedInput-input.MuiInputBase-input {
     font-size: ${variables.font.size.xl};
+  }
+
+  .MuiBox-root {
+    & > svg {
+      display: none;
+    }
+  }
+
+  .MuiSelect-icon {
+    right: 0.1rem;
+    top: auto;
   }
 `;
 

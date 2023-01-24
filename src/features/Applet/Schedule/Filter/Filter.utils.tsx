@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
+import { Box } from '@mui/system';
 import i18n from 'i18n';
 
 import { Svg } from 'components';
 import { variables } from 'styles/variables';
+import theme from 'styles/theme';
 
 import { schedules } from './Filter.const';
-
-const { t } = i18n;
 
 export const getScheduledIndicatorColor = (type: string) => {
   const {
@@ -37,10 +37,13 @@ export const getScheduledIndicatorColor = (type: string) => {
 };
 
 export const getScheduledTitle = (type: string) => {
+  const { t } = i18n;
+
   if (type === schedules.preQuestionnaire) {
     return (
       <>
-        <Svg id="flow" width={16} height={16} /> {t(type)}
+        <Svg id="flow" width={16} height={16} />
+        <Box sx={{ marginLeft: theme.spacing(0.4) }}>{t(type)}</Box>
       </>
     );
   }

@@ -254,5 +254,6 @@
   "middayAssessment": "Évaluation de midi",
   "eveningAssessment": "Évaluation du soir",
   "defaultSchedule": "Horaire par défaut",
-  "individualSchedule": "Horaire individuel"
+  "individualSchedule": "Horaire individuel",
+  "import": "Importer"
 }
