@@ -10,7 +10,7 @@ import { mockedScheduleData } from './Schedule.const';
 import { CreateActivityPopup } from './CreateActivityPopup';
 import { ExportSchedulePopup } from './ExportSchedulePopup';
 import { RemoveIndividualSchedulePopup } from './RemoveIndividualSchedulePopup';
-import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup/ClearScheduledEventsPopup';
+import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
 
 export const Schedule = () => {
   const { t } = useTranslation('app');
