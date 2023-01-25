@@ -8,21 +8,23 @@ import { ScreensParams } from './ClearScheduledEventsPopup.types';
 const getFirstScreen = (appletName: string) => (
   <StyledTitleMedium>
     <Trans i18nKey="confirmClearEvents">
-      You are about to remove all scheduled events and their notifications from Applet
+      You are about to remove all scheduled events and notifications from the
+      <strong> default schedule</strong> for Applet
       <strong>
-        <> {{ appletName }} </>
+        <> {{ appletName }}</>
       </strong>
-      default schedule. Are you sure you want to continue?
+      . Are you sure you want to continue?
     </Trans>
   </StyledTitleMedium>
 );
 
-const getFirstScreenForIndividualSchedule = (appletName: string) => (
+const getFirstScreenForIndividualSchedule = (name: string) => (
   <StyledTitleMedium>
     <Trans i18nkey="confirmClearInvidividualSchedule">
-      You are about to remove all scheduled events and their notifications from Applet
+      You are about to remove all scheduled events and notifications from the
+      <strong> individual schedule</strong> for respondent
       <strong>
-        <> {{ appletName }} individual schedule</>
+        <> {{ name }}</>
       </strong>
       . Are you sure you want to continue?
     </Trans>
@@ -30,28 +32,26 @@ const getFirstScreenForIndividualSchedule = (appletName: string) => (
 );
 
 const getSecondScreen = (appletName: string) => (
-  <Trans i18nKey="clearEventsSuccess">
-    <StyledTitleMedium>
-      Scheduled events within the <strong>default schedule</strong> for the Applet
+  <StyledTitleMedium>
+    <Trans i18nKey="clearEventsSuccess">
+      Scheduled events within the <strong>default schedule</strong> for Applet
       <strong>
-        <>{{ appletName }} </>
+        <> {{ appletName }} </>
       </strong>
-      have been cleared successfully.
-    </StyledTitleMedium>
-    <StyledTitleMedium sx={{ marginTop: theme.spacing(2.4) }}>
-      Respondents' <strong>individual schedules</strong> (if applicable) have not changed.
-    </StyledTitleMedium>
-  </Trans>
+      have been successfully cleared. Respondents' individual schedules (if applicable) have not
+      changed.
+    </Trans>
+  </StyledTitleMedium>
 );
 
-const getSecondScreenForIndividualSchedule = (appletName: string, name: string) => (
+const getSecondScreenForIndividualSchedule = (name: string) => (
   <Trans i18nKey="clearIndividualScheduleSuccess">
     <StyledTitleMedium>
       Please note that respondent
       <strong>
         <> {{ name }} </>
       </strong>
-      is still using an <strong>individual schedule</strong>.
+      is still using an individual schedule.
     </StyledTitleMedium>
     <StyledTitleMedium sx={{ marginTop: theme.spacing(2.4) }}>
       You may revert this respondent back to the <strong>default schedule</strong> by pressing the
@@ -62,7 +62,9 @@ const getSecondScreenForIndividualSchedule = (appletName: string, name: string) 
 
 export const getScreens = ({ appletName, name, isDefault, onSubmit, onClose }: ScreensParams) => [
   {
-    component: (isDefault ? getFirstScreen : getFirstScreenForIndividualSchedule)(appletName),
+    component: isDefault
+      ? getFirstScreen(appletName)
+      : getFirstScreenForIndividualSchedule(name as string),
     buttonText: 'clearAll',
     title: 'clearScheduledEvents',
     hasSecondBtn: true,
@@ -72,7 +74,7 @@ export const getScreens = ({ appletName, name, isDefault, onSubmit, onClose }: S
   {
     component: isDefault
       ? getSecondScreen(appletName)
-      : getSecondScreenForIndividualSchedule(appletName, name as string),
+      : getSecondScreenForIndividualSchedule(name as string),
     buttonText: 'ok',
     title: 'scheduleClearedSuccess',
     onSubmit: onClose,
