@@ -1,10 +1,10 @@
-import { Applet, Role } from '../EditAccessPopup.types';
+import { Roles } from 'consts';
+import { User } from 'features/Managers';
+import { Applet } from '../EditAccessPopup.types';
 
 export type AppletProps = {
-  index: number;
-  title: string;
-  img: string;
-  roles: Role[];
-  applets: Applet[];
-  setApplets: (applets: Applet[]) => void;
+  applet: Applet;
+  addRole: (id: string, role: Roles) => void;
+  removeRole: (id: string, role: Roles) => void;
+  user: User;
 };

@@ -13,6 +13,7 @@ export const ButtonWithMenu = ({
   label,
   startIcon,
   variant,
+  disabled = false,
 }: ButtonWithMenuProps) => {
   const { t } = useTranslation('app');
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
@@ -24,6 +25,7 @@ export const ButtonWithMenu = ({
   return (
     <>
       <StyledButton
+        disabled={disabled}
         variant={variant}
         aria-haspopup="true"
         aria-expanded={openMenu ? 'true' : undefined}

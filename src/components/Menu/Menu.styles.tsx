@@ -14,6 +14,7 @@ export const StyledMenu = styled(Menu)`
   }
 
   .MuiMenuItem-root {
+    text-transform: capitalize;
     border-radius: ${variables.borderRadius.xxs};
 
     &:hover {
