@@ -10,21 +10,27 @@ export const convertColorToRGBA = (color: string) => {
   if (rgba.indexOf('rgba') === -1) {
     rgba = rgba.replace(')', ', 1)');
   }
+  const matchedRgba = rgba.match(/[.\d]+/g) as RegExpMatchArray;
 
-  const [r, g, b, a] = (rgba.match(/[.\d]+/g) as RegExpMatchArray).map((color) => +color);
+  if (matchedRgba) {
+    const [r, g, b, a] = matchedRgba.map((color) => +color);
 
-  return {
-    r,
-    g,
-    b,
-    a,
-  };
+    return {
+      r,
+      g,
+      b,
+      a,
+    };
+  }
 };
 
 export const blendColorsNormal = (mainColor: string, overlayColor: string) => {
   const mainColorRGBA = convertColorToRGBA(mainColor);
   const overlayColorRGBA = convertColorToRGBA(overlayColor);
-  const { r, g, b, a } = normal(mainColorRGBA, overlayColorRGBA);
 
-  return `rgba(${r}, ${g}, ${b}, ${a})`;
+  if (mainColorRGBA && overlayColorRGBA) {
+    const { r, g, b, a } = normal(mainColorRGBA, overlayColorRGBA);
+
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
+  }
 };

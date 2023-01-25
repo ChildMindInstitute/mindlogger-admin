@@ -42,7 +42,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "jest --watch",
+    "test": "react-app-rewired test --transformIgnorePatterns \"node_modules/(?!@uiw/react-md-editor)/\"",
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
   },
@@ -74,11 +74,9 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.0",
-    "jest": "^27.1.3",
     "lint-staged": "^13.0.3",
     "mock-local-storage": "^1.1.23",
     "prettier": "^2.7.1",
-    "react-app-rewired": "^2.2.1",
-    "ts-jest": "^27.1.3"
+    "react-app-rewired": "^2.2.1"
   }
 }

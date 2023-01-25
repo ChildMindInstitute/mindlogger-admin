@@ -13,3 +13,10 @@ jest.mock('axios', () => ({
     delete: jest.fn(),
   }),
 }));
+
+jest.mock('react-secure-storage', () => ({
+  setItem: jest.fn(() => Promise.resolve()),
+  getItem: jest.fn(() => Promise.resolve('')),
+  removeItem: jest.fn(() => Promise.resolve()),
+  clear: jest.fn(() => Promise.resolve()),
+}));
