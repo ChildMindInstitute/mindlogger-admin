@@ -63,37 +63,47 @@ export const Schedule = () => {
           Clear Schedule Events
         </Button>
       </Box>
-      <CreateActivityPopup
-        open={createActivityPopupVisible}
-        onClose={() => setCreateActivityPopupVisible(false)}
-      />
-      <ExportSchedulePopup
-        open={exportDefaultSchedulePopupVisible}
-        onClose={() => setExportDefaultSchedulePopupVisible(false)}
-        onSubmit={() => setExportDefaultSchedulePopupVisible(false)}
-        scheduleTableRows={mockedScheduleData}
-      />
-      <ExportSchedulePopup
-        open={exportIndividualSchedulePopupVisible}
-        onClose={() => setExportIndividualSchedulePopupVisible(false)}
-        onSubmit={() => setExportIndividualSchedulePopupVisible(false)}
-        scheduleTableRows={mockedScheduleData}
-        secretUserId="012-435"
-        nickName="John Doe"
-      />
-      <RemoveIndividualSchedulePopup
-        open={removeIndividualSchedulePopupVisible}
-        name="John Doe"
-        isEmpty={false}
-        onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
-      />
-      <ClearScheduledEventsPopup
-        open={clearScheduleEventsPopupVisible}
-        appletName="Pediatric Screener"
-        isDefault={true}
-        name="John Doe"
-        onClose={() => setClearScheduleEventsPopupVisible(false)}
-      />
+      {createActivityPopupVisible && (
+        <CreateActivityPopup
+          open={createActivityPopupVisible}
+          onClose={() => setCreateActivityPopupVisible(false)}
+        />
+      )}
+      {exportDefaultSchedulePopupVisible && (
+        <ExportSchedulePopup
+          open={exportDefaultSchedulePopupVisible}
+          onClose={() => setExportDefaultSchedulePopupVisible(false)}
+          onSubmit={() => setExportDefaultSchedulePopupVisible(false)}
+          scheduleTableRows={mockedScheduleData}
+        />
+      )}
+      {exportIndividualSchedulePopupVisible && (
+        <ExportSchedulePopup
+          open={exportIndividualSchedulePopupVisible}
+          onClose={() => setExportIndividualSchedulePopupVisible(false)}
+          onSubmit={() => setExportIndividualSchedulePopupVisible(false)}
+          scheduleTableRows={mockedScheduleData}
+          secretUserId="012-435"
+          nickName="John Doe"
+        />
+      )}
+      {removeIndividualSchedulePopupVisible && (
+        <RemoveIndividualSchedulePopup
+          open={removeIndividualSchedulePopupVisible}
+          name="John Doe"
+          isEmpty={false}
+          onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
+        />
+      )}
+      {clearScheduleEventsPopupVisible && (
+        <ClearScheduledEventsPopup
+          open={clearScheduleEventsPopupVisible}
+          appletName="Pediatric Screener"
+          isDefault={true}
+          name="John Doe"
+          onClose={() => setClearScheduleEventsPopupVisible(false)}
+        />
+      )}
     </>
   );
 };

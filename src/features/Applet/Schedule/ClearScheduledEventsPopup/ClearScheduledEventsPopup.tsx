@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
+import { Modal, SubmitBtnColor } from 'components';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
-import { StyledTitleMedium } from 'styles/styledComponents/Typography';
-import theme from 'styles/theme';
 
-import { ClearScheduledEventsPopupProps } from './ClearScheduledEventsPopup.types';
+import { ClearScheduledEventsPopupProps, Steps } from './ClearScheduledEventsPopup.types';
+import { getScreens } from './ClearScheduleEventsPopup.const';
 
 export const ClearScheduledEventsPopup = ({
   open,
@@ -16,83 +15,27 @@ export const ClearScheduledEventsPopup = ({
   isDefault = true,
 }: ClearScheduledEventsPopupProps) => {
   const { t } = useTranslation();
-  const [isCleared, setIsCleared] = useState(false);
+  const [step, setStep] = useState<Steps>(0);
 
   const onSubmit = () => {
-    if (isCleared) {
-      onClose();
-    } else {
-      setIsCleared(true);
-    }
+    setStep((prevStep) => ++prevStep as Steps);
   };
+
+  const screens = getScreens({ appletName, name, isDefault, onSubmit, onClose });
 
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title={t(isCleared ? 'scheduleClearedSuccess' : 'clearScheduledEvents')}
-      onSubmit={onSubmit}
-      buttonText={t(isCleared ? 'ok' : 'clearAll')}
-      submitBtnColor={isCleared ? 'primary' : 'error'}
-      hasSecondBtn={!isCleared}
+      title={t(screens[step].title)}
+      onSubmit={screens[step].onSubmit}
+      buttonText={t(screens[step].buttonText)}
+      submitBtnColor={screens[step].submitBtnColor as SubmitBtnColor | undefined}
+      hasSecondBtn={screens[step].hasSecondBtn}
       secondBtnText={t('cancel')}
       width="66"
     >
-      <StyledModalWrapper>
-        {isCleared ? (
-          <>
-            {isDefault ? (
-              <Trans i18nKey="clearEventsSuccess">
-                <StyledTitleMedium>
-                  Scheduled events within the <strong>default schedule</strong> for the Applet
-                  <strong>
-                    <>{{ appletName }} </>
-                  </strong>
-                  have been cleared successfully.
-                </StyledTitleMedium>
-                <StyledTitleMedium sx={{ marginTop: theme.spacing(2.4) }}>
-                  Respondents' <strong>individual schedules</strong> (if applicable) have not
-                  changed.
-                </StyledTitleMedium>
-              </Trans>
-            ) : (
-              <Trans i18nKey="clearIndividualScheduleSuccess">
-                <StyledTitleMedium>
-                  Please note that respondent
-                  <strong>
-                    <> {{ name }} </>
-                  </strong>
-                  is still using an <strong>individual schedule</strong>.
-                </StyledTitleMedium>
-                <StyledTitleMedium sx={{ marginTop: theme.spacing(2.4) }}>
-                  You may revert this respondent back to the <strong>default schedule</strong> by
-                  pressing the trash icon on the top-left.
-                </StyledTitleMedium>
-              </Trans>
-            )}
-          </>
-        ) : (
-          <StyledTitleMedium>
-            {isDefault ? (
-              <Trans i18nKey="confirmClearEvents">
-                You are about to remove all scheduled events and their notifications from Applet
-                <strong>
-                  <> {{ appletName }} </>
-                </strong>
-                default schedule. Are you sure you want to continue?
-              </Trans>
-            ) : (
-              <Trans i18nkey="confirmClearInvidividualSchedule">
-                You are about to remove all scheduled events and their notifications from Applet
-                <strong>
-                  <> {{ appletName }} individual schedule</>
-                </strong>
-                . Are you sure you want to continue?
-              </Trans>
-            )}
-          </StyledTitleMedium>
-        )}
-      </StyledModalWrapper>
+      <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
     </Modal>
   );
 };
