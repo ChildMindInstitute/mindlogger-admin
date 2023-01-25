@@ -5,7 +5,7 @@
   "welcome": "Welcome to the MindLogger Admin Panel",
   "logIntoAccount": "Log into your MindLogger account",
   "email": "Email",
-  "emailRequired": "E-mail is required",
+  "emailRequired": "Email is required",
   "incorrectEmail": "Incorrect Email",
   "password": "Password",
   "passwordRequired": "Password is required",

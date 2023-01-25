@@ -24,7 +24,7 @@ import {
 import { resetSchema } from './ResetForm.schema';
 import { ResetFormProps } from './ResetForm.types';
 
-export const ResetForm = ({ setEmail, onSubmitForTest }: ResetFormProps) => {
+export const ResetForm = ({ setEmail }: ResetFormProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -36,10 +36,6 @@ export const ResetForm = ({ setEmail, onSubmitForTest }: ResetFormProps) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = async ({ email }: ResetPassword) => {
-    if (onSubmitForTest) {
-      onSubmitForTest();
-    }
-
     const { resetPassword } = auth.thunk;
     const result = await dispatch(resetPassword({ email }));
 
