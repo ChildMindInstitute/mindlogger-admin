@@ -24,7 +24,7 @@ export const createAuthFulfilledData = (
     authentication.status = 'success';
     authentication.error ? (authentication.error = undefined) : null;
     authentication.data = data;
-    data?.result ? (state.isAuthorized = true) : null;
+    data ? (state.isAuthorized = true) : null;
   }
 };
 

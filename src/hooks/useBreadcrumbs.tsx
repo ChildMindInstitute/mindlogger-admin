@@ -21,11 +21,11 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   useEffect(() => {
     const newBreadcrumbs: Breadcrumb[] = [];
 
-    if (authData?.user?.firstName) {
-      const { firstName, lastName } = authData.user;
+    if (authData?.user?.fullName) {
+      const { fullName } = authData.user;
       newBreadcrumbs.push({
         icon: <Svg id="home" width="14" height="16" />,
-        label: `${firstName}${lastName ? ` ${lastName}` : ''}'s Dashboard`,
+        label: `${fullName}'s Dashboard`,
         navPath: page.dashboard,
       });
     }
