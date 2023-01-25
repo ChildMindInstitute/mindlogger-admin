@@ -274,5 +274,16 @@
   "viewDataDescription": "Please select the Applet to view Respondent's data for:",
   "dataExport": "Data Export",
   "selectAppletToExportRespondentsData": "Please select Applet to export Respondent's data from: ",
-  "waitForRespondentDataDownload": "Please wait for the download to complete. It could take up to 5 minutes depending on how much data has been collected. Do not navigate away from this page."
+  "waitForRespondentDataDownload": "Please wait for the download to complete. It could take up to 5 minutes depending on how much data has been collected. Do not navigate away from this page.",
+  "scheduled": "Scheduled",
+  "deactivated": "Deactivated",
+  "createEvent": "Create Event",
+  "dailyJournal": "Daily Journal",
+  "preQuestionnaire": "Pre Questionnaire",
+  "morningAssessment": "Morning Assessment",
+  "middayAssessment": "Midday Assessment",
+  "eveningAssessment": "Evening Assessment",
+  "defaultSchedule": "Default Schedule",
+  "individualSchedule": "Individual Schedule",
+  "import": "Import"
 }
