@@ -1,3 +1,4 @@
+import { Roles } from 'consts';
 import { User } from 'features/Managers';
 
 export type EditAccessPopupProps = {
@@ -7,7 +8,7 @@ export type EditAccessPopupProps = {
 };
 
 export type Role = {
-  label: string;
+  label: Roles;
   icon: JSX.Element | undefined;
 };
 
@@ -16,4 +17,5 @@ export type Applet = {
   title: string;
   img: string;
   roles: Role[];
+  selectedRespondents?: string[];
 };

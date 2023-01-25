@@ -286,5 +286,16 @@
   "confirmClearEvents": "You are about to remove all scheduled events and their notifications from Applet <1>{{ appletName }}</1> default schedule. Are you sure you want to continue?",
   "confirmClearInvidividualSchedule": "You are about to remove all scheduled events and their notifications from Applet <1>{{ appletName }} individual schedule</1>. Are you sure you want to continue?",
   "clearEventsSuccess": "<1>Scheduled events within the <1>default schedule</1> for the Applet <1>{{ appletName }}</1> have been cleared successfully.</1><1>Respondents' <1>individual schedules</1> (if applicable) have not changed.</1>",
-  "clearIndividualScheduleSuccess": "<1>Please note that respondent <1>{{ name }}</1> is still using an <1>individual schedule</1>.</1><1>You may revert this respondent back to the <1>default schedule</1> by pressing the trash icon on the top-left.</1>"
+  "clearIndividualScheduleSuccess": "<1>Please note that respondent <1>{{ name }}</1> is still using an <1>individual schedule</1>.</1><1>You may revert this respondent back to the <1>default schedule</1> by pressing the trash icon on the top-left.</1>",
+  "scheduled": "Scheduled",
+  "deactivated": "Deactivated",
+  "createEvent": "Create Event",
+  "dailyJournal": "Daily Journal",
+  "preQuestionnaire": "Pre Questionnaire",
+  "morningAssessment": "Morning Assessment",
+  "middayAssessment": "Midday Assessment",
+  "eveningAssessment": "Evening Assessment",
+  "defaultSchedule": "Default Schedule",
+  "individualSchedule": "Individual Schedule",
+  "import": "Import"
 }
