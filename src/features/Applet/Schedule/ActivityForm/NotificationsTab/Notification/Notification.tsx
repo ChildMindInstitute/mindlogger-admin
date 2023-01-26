@@ -6,13 +6,13 @@ import { ToggleButtonGroup, TimePicker } from 'components';
 import theme from 'styles/theme';
 import { StyledLabelLarge } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { FormValues, NotificationType } from 'features/Applet/Schedule/CreateActivityPopup';
 
 import { StyledNotification, StyledCol, StyledleftCol } from './Notification.styles';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { notificationTimeToggles } from './Notification.const';
 import { Header } from '../Header';
 import { NotificationProps } from './Notification.types';
+import { FormValues, NotificationType } from '../../ActivityForm.types';
 
 export const Notification = ({ index, remove }: NotificationProps) => {
   const { t } = useTranslation('app');
