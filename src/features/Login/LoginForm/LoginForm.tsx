@@ -23,7 +23,7 @@ import {
 } from './LoginForm.styles';
 import { loginFormSchema } from './LoginForm.schema';
 
-export const LoginForm = ({ onSubmitForTest }: { onSubmitForTest?: () => void }) => {
+export const LoginForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -35,16 +35,11 @@ export const LoginForm = ({ onSubmitForTest }: { onSubmitForTest?: () => void })
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = async (data: SignIn) => {
-    if (onSubmitForTest) {
-      onSubmitForTest();
-    }
-
+    setErrorMessage('');
     const { signIn } = auth.thunk;
     const result = await dispatch(signIn(data));
 
-    if (signIn.fulfilled.match(result)) {
-      setErrorMessage('');
-    } else if (signIn.rejected.match(result)) {
+    if (signIn.rejected.match(result)) {
       setErrorMessage(getErrorMessage(result.payload));
     }
   };

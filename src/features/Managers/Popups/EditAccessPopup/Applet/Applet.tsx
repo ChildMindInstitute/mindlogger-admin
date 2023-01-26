@@ -7,74 +7,89 @@ import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import theme from 'styles/theme';
 import { Roles } from 'consts';
+import { MenuItem } from 'components/Menu/Menu.types';
 
 import { StyledApplet, StyledRow, StyledBtn, StyledLabel, StyledImg } from './Applet.styles';
 import { getMenuItems } from './Applet.const';
 import { AppletProps } from './Applet.types';
-import { getRoleIcon } from '../EditAccessPopup.utils';
-import { Applet as AppletType } from '../EditAccessPopup.types';
+import { SelectRespondentsPopup } from '../../SelectRespondentsPopup';
 
-export const Applet = ({ title, img, roles, index, setApplets, applets }: AppletProps) => {
+export const Applet = ({
+  applet: { id, title, img, roles, selectedRespondents: selectedRespondentsProps },
+  addRole,
+  removeRole,
+  user,
+}: AppletProps) => {
   const { t } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
+  const [selectedRespondents, setSelectedRespondents] = useState(selectedRespondentsProps || []);
 
-  const updateRolesHandler = (callback: (currentApplet: AppletType) => void) => {
-    const newApplets = [...applets];
-    newApplets[index] = { ...newApplets[index] };
-    callback(newApplets[index]);
-    setApplets(newApplets);
-  };
-
-  const handleRemove = (label: string) => {
-    updateRolesHandler(
-      (currentApplet) =>
-        (currentApplet.roles = currentApplet?.roles.filter((el) => el.label !== label)),
-    );
-  };
-
-  const handleAddRole = (label: string) => {
-    updateRolesHandler((currentApplet) => {
-      if (!currentApplet?.roles.find((el) => el.label === label)) {
-        currentApplet.roles = [...currentApplet.roles, { label, icon: getRoleIcon(label) }];
-      }
-    });
+  const handleAddRole = (label: Roles) => {
+    addRole(id, label);
     setAnchorEl(null);
   };
 
+  const menuItems = getMenuItems(handleAddRole);
+
+  const getFilteredMenuItems = () =>
+    menuItems?.filter((menuItem: MenuItem) => !roles.find((role) => role.label === menuItem.title));
+
+  const handleClosePopup = (selectedRespondents: string[]) => {
+    setSelectRespondentsPopupVisible(false);
+    setSelectedRespondents(selectedRespondents);
+  };
+
   return (
-    <StyledApplet>
-      <StyledRow>
-        <StyledFlexTopCenter>
-          {img && <StyledImg src={img} alt={title} />}
-          <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>{title}</StyledBodyMedium>
-        </StyledFlexTopCenter>
-        <ButtonWithMenu
-          anchorEl={anchorEl}
-          setAnchorEl={setAnchorEl}
-          menuItems={getMenuItems(handleAddRole)}
-          label={t('addRole')}
-        />
-      </StyledRow>
-      {roles?.map((el) => (
-        <Chip
-          shape={ChipShape.rounded}
-          color="secondary"
-          icon={el.icon}
-          key={el.label}
-          title={
-            <StyledLabel>
-              {el.label === Roles.reviewer ? (
-                <>
-                  {t(el.label)}: <StyledBtn variant="body2">{t('editRespondents')}</StyledBtn>
-                </>
-              ) : (
-                t(el.label) || ''
-              )}
-            </StyledLabel>
-          }
-          onRemove={() => handleRemove(el.label)}
-        />
-      ))}
-    </StyledApplet>
+    <>
+      <StyledApplet>
+        <StyledRow>
+          <StyledFlexTopCenter>
+            {img && <StyledImg src={img} alt={title} />}
+            <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>{title}</StyledBodyMedium>
+          </StyledFlexTopCenter>
+          <ButtonWithMenu
+            disabled={!getFilteredMenuItems().length}
+            anchorEl={anchorEl}
+            setAnchorEl={setAnchorEl}
+            menuItems={getFilteredMenuItems()}
+            label={t('addRole')}
+          />
+        </StyledRow>
+        {roles?.map((role) => (
+          <Chip
+            shape={ChipShape.rounded}
+            color="secondary"
+            icon={role.icon}
+            key={role.label}
+            title={
+              <StyledLabel>
+                {role.label === Roles.reviewer ? (
+                  <>
+                    {t(role.label)}:{' '}
+                    <StyledBtn
+                      onClick={() => setSelectRespondentsPopupVisible(true)}
+                      variant="body2"
+                    >
+                      {selectedRespondents?.slice(0, 3).join(', ') || t('editRespondents')}
+                    </StyledBtn>
+                  </>
+                ) : (
+                  t(role.label) || ''
+                )}
+              </StyledLabel>
+            }
+            onRemove={() => removeRole(id, role.label)}
+          />
+        ))}
+      </StyledApplet>
+      <SelectRespondentsPopup
+        appletName={title}
+        user={user}
+        selectRespondentsPopupVisible={selectRespondentsPopupVisible}
+        selectedRespondents={selectedRespondents}
+        onClose={handleClosePopup}
+      />
+    </>
   );
 };

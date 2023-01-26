@@ -25,7 +25,7 @@ import {
 import { SignUpFormSchema } from './SignUpForm.schema';
 import { SignUpData } from './SignUpForm.types';
 
-export const SignUpForm = ({ onSubmitForTest }: { onSubmitForTest?: () => void }) => {
+export const SignUpForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -44,10 +44,7 @@ export const SignUpForm = ({ onSubmitForTest }: { onSubmitForTest?: () => void }
   const termsOfService = watch('termsOfService');
 
   const onSubmit = async (data: SignUpData) => {
-    if (onSubmitForTest) {
-      onSubmitForTest();
-    }
-
+    setErrorMessage('');
     const { signUp } = auth.thunk;
     const body = {
       email: data.email,
@@ -57,9 +54,7 @@ export const SignUpForm = ({ onSubmitForTest }: { onSubmitForTest?: () => void }
 
     const result = await dispatch(signUp({ body }));
 
-    if (signUp.fulfilled.match(result)) {
-      setErrorMessage('');
-    } else if (signUp.rejected.match(result)) {
+    if (signUp.rejected.match(result)) {
       setErrorMessage(getErrorMessage(result.payload));
     }
   };

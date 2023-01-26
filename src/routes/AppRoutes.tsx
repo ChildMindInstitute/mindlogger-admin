@@ -54,6 +54,7 @@ export const AppRoutes = () => {
               ))}
             </Route>
           </Route>
+
           <Route path={page.login} element={<AuthLayout />}>
             {authRoutes.map(({ path, Component }) => (
               <Route

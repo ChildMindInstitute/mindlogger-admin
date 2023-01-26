@@ -14,3 +14,7 @@ export type SelectRespondentsProps = {
   selectedRespondents: string[];
   respondents: Respondent[];
 };
+
+export type SelectRespondentsRef = {
+  confirmSelection: () => string[];
+};

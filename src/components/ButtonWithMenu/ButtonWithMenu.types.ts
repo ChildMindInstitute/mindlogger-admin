@@ -7,4 +7,5 @@ export type ButtonWithMenuProps = {
   label: string;
   startIcon?: JSX.Element;
   variant?: 'text' | 'outlined';
+  disabled?: boolean;
 };
