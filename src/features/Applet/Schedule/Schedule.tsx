@@ -11,16 +11,20 @@ import { CreateActivityPopup } from './CreateActivityPopup';
 import { ExportSchedulePopup } from './ExportSchedulePopup';
 import { RemoveIndividualSchedulePopup } from './RemoveIndividualSchedulePopup';
 import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
+import { EditActivityPopup } from './EditActivityPopup';
+import { RemoveScheduledEventPopup } from './RemoveScheduledEventPopup';
 
 export const Schedule = () => {
   const { t } = useTranslation('app');
   const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
+  const [editActivityPopupVisible, setEditActivityPopupVisible] = useState(false);
   const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
   const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
     useState(false);
   const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
     useState(false);
   const [clearScheduleEventsPopupVisible, setClearScheduleEventsPopupVisible] = useState(false);
+  const [removeScheduledEventPopupVisible, setRemoveScheduledEventPopupVisible] = useState(false);
 
   useBreadcrumbs([
     {
@@ -67,6 +71,21 @@ export const Schedule = () => {
         <CreateActivityPopup
           open={createActivityPopupVisible}
           onClose={() => setCreateActivityPopupVisible(false)}
+        />
+      )}
+      {editActivityPopupVisible && (
+        <EditActivityPopup
+          open={editActivityPopupVisible}
+          onClose={() => setEditActivityPopupVisible(false)}
+          setRemoveEventPopupVisible={setRemoveScheduledEventPopupVisible}
+        />
+      )}
+      {removeScheduledEventPopupVisible && (
+        <RemoveScheduledEventPopup
+          open={removeScheduledEventPopupVisible}
+          onClose={() => setRemoveScheduledEventPopupVisible(false)}
+          onSubmit={() => setRemoveScheduledEventPopupVisible(false)}
+          activityName="Daily Journal"
         />
       )}
       {exportDefaultSchedulePopupVisible && (
