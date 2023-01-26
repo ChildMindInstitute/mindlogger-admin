@@ -60,6 +60,7 @@
   "addUser": "Ajouter un utilisateur",
   "nickname": "Surnom",
   "role": "Rôle",
+  "userList": "Liste d'utilisateur",
   "secretUserId": "ID utilisateur secret",
   "language": "Langue",
   "user": "utilisateur",

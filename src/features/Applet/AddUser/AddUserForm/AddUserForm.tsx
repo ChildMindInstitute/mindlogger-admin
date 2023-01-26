@@ -40,6 +40,8 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
     formState: { isDirty, isValid },
     register,
     unregister,
+    getValues,
+    setValue,
   } = useForm<FormValues>({
     resolver: yupResolver(AddUserSchema(accountNameShowed)),
     defaultValues,
@@ -99,6 +101,14 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
     }
   };
 
+  const handleRemove = (value: string) => {
+    const formValues = getValues();
+    setValue(
+      'users',
+      formValues.users.filter((user) => user !== value),
+    );
+  };
+
   return (
     <>
       <StyledTitle>{t('addUser')}</StyledTitle>
@@ -124,6 +134,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
                 <TagsInputController
                   {...commonProps}
                   name={Fields.users}
+                  onRemove={handleRemove}
                   // TODO: fix types
                   options={prepareUsersData(usersData?.items)?.map((el: any) => el?.MRN)}
                   label={t('userList')}

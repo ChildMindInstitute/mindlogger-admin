@@ -6,5 +6,7 @@ export type FormInputProps = {
   options: string[] | undefined;
 } & TextFieldProps;
 
-export type TagsInputControllerProps<T extends FieldValues> = FormInputProps &
-  UseControllerProps<T>;
+export type TagsAutocompleteControllerProps<T extends FieldValues> = FormInputProps &
+  UseControllerProps<T> & {
+    onRemove?: (value: string) => void;
+  };
