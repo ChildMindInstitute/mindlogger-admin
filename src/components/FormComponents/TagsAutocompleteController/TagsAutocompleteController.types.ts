@@ -4,7 +4,8 @@ import { FieldValues, UseControllerProps } from 'react-hook-form';
 export type FormInputProps = {
   name: string;
   options: string[] | undefined;
+  onRemove?: (value: string) => void;
 } & TextFieldProps;
 
-export type TagsInputControllerProps<T extends FieldValues> = FormInputProps &
+export type TagsAutocompleteControllerProps<T extends FieldValues> = FormInputProps &
   UseControllerProps<T>;

@@ -397,6 +397,37 @@ const theme = createTheme({
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          '&.MuiAutocomplete-paper': {
+            backgroundColor: variables.palette.surface2,
+            borderRadius: variables.borderRadius.lg,
+            boxShadow: variables.boxShadow.light2,
+            marginTop: '0.4rem',
+            padding: '0 0.4rem',
+
+            '.MuiAutocomplete-option': {
+              borderRadius: variables.borderRadius.xxs,
+              padding: '1.6rem',
+              '&:hover': {
+                backgroundColor: variables.palette.secondary_container,
+              },
+
+              '&[aria-selected="true"]': {
+                backgroundColor: variables.palette.surface_variant,
+                '&:hover': {
+                  backgroundColor: blendColorsNormal(
+                    variables.palette.surface_variant,
+                    variables.palette.on_surface_alfa8,
+                  ),
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
   palette: {
     background: {
