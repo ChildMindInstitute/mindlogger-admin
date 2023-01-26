@@ -42,7 +42,7 @@ export const StyledBack = styled(StyledClearedButton)`
   line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
 
-  &:hover {
+  &.MuiButton-text:hover {
     background-color: transparent;
   }
 `;

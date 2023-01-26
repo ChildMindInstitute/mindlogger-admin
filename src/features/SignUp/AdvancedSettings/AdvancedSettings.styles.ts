@@ -32,7 +32,7 @@ export const StyledSettingsButton = styled(StyledClearedButton)`
     display: none;
   }
 
-  &:hover {
+  &.MuiButton-text:hover {
     background-color: transparent;
   }
 `;

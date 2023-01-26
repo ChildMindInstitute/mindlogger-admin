@@ -33,11 +33,15 @@ export const Footer = () => {
         </StyledText>
       </Box>
       <StyledBox>
-        <StyledLink>{t('privacy')}</StyledLink>
+        <StyledLink target="_blank" href="https://mindlogger.org/privacy">
+          {t('privacy')}
+        </StyledLink>
         <StyledLink target="_blank" href="https://mindlogger.org/terms">
           {t('terms')}
         </StyledLink>
-        <StyledLink> {t('about')}</StyledLink>
+        <StyledLink target="_blank" href="https://mindlogger.org/about">
+          {t('about')}
+        </StyledLink>
         <Language />
       </StyledBox>
     </StyledFooter>

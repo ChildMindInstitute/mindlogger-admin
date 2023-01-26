@@ -6,15 +6,17 @@ export const loginFormSchema = () => {
   const emailRequired = t('emailRequired');
   const incorrectEmail = t('incorrectEmail');
   const passwordRequired = t('passwordRequired');
-  // const passwordMinLength = t('passwordMinLength');
+  const passwordMinLength = t('passwordMinLength');
+  const passwordBlankSpaces = t('passwordBlankSpaces');
 
   return yup
     .object({
       email: yup.string().required(emailRequired).email(incorrectEmail),
       password: yup
         .string()
-        // .min(8, passwordMinLength)
-        .required(passwordRequired),
+        .required(passwordRequired)
+        .min(8, passwordMinLength)
+        .matches(/^(\S+$)/, passwordBlankSpaces),
     })
     .required();
 };

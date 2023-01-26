@@ -21,7 +21,12 @@ describe('Login component tests', () => {
 
   test('should be able to validate login form', async () => {
     submitForm('test', 'password');
-    await waitFor(() => expect(screen.getByText('Incorrect Email')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Email must be valid')).toBeInTheDocument());
+
+    submitForm('test@gmail.com', '   password');
+    await waitFor(() =>
+      expect(screen.getByText('Password should not contain blank spaces')).toBeInTheDocument(),
+    );
 
     submitForm('', '');
     await waitFor(() => expect(screen.getByText('Email is required')).toBeInTheDocument());
