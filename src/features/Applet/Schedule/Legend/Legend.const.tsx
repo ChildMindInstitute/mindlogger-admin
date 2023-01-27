@@ -9,23 +9,28 @@ import { getScheduledIndicatorColor, getScheduledTitle } from './Legend.utils';
 
 const { t } = i18n;
 
-export const schedules = {
-  dailyJournal: 'dailyJournal',
-  preQuestionnaire: 'preQuestionnaire',
-  morningAssessment: 'morningAssessment',
-  middayAssessment: 'middayAssessment',
-  eveningAssessment: 'eveningAssessment',
+export const Schedules = {
+  DailyJournal: 'dailyJournal',
+  PreQuestionnaire: 'preQuestionnaire',
+  MorningAssessment: 'morningAssessment',
+  MiddayAssessment: 'middayAssessment',
+  EveningAssessment: 'eveningAssessment',
+} as const;
+
+export const ScheduleOptions = {
+  DefaultSchedule: 'defaultSchedule',
+  IndividualSchedule: 'individualSchedule',
 } as const;
 
 export const scheduleOptions = [
   {
-    labelKey: 'defaultSchedule',
-    value: 'Default Schedule',
+    labelKey: ScheduleOptions.DefaultSchedule,
+    value: ScheduleOptions.DefaultSchedule,
     icon: <Svg id="calendar" />,
   },
   {
-    labelKey: 'individualSchedule',
-    value: 'Individual Schedule',
+    labelKey: ScheduleOptions.IndividualSchedule,
+    value: ScheduleOptions.IndividualSchedule,
     icon: <Svg id="user-calendar" />,
   },
 ];
@@ -39,7 +44,7 @@ export const scheduledItems = [
     <Svg id="add" width={20} height={20} />
     <StyledCreateBtn>{t('createEvent')}</StyledCreateBtn>
   </>,
-  ...Object.keys(schedules).map((el) => (
+  ...Object.values(Schedules).map((el) => (
     <Fragment key={el}>
       <StyledIndicator colors={getScheduledIndicatorColor(el)} />
       {getScheduledTitle(el)}

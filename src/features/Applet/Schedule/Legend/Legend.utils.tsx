@@ -6,7 +6,7 @@ import { Svg } from 'components';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 
-import { schedules } from './Legend.const';
+import { Schedules } from './Legend.const';
 
 export const getScheduledIndicatorColor = (type: string) => {
   const {
@@ -23,13 +23,13 @@ export const getScheduledIndicatorColor = (type: string) => {
   } = variables.palette;
 
   switch (type) {
-    case schedules.preQuestionnaire:
+    case Schedules.PreQuestionnaire:
       return [green, green_alfa30];
-    case schedules.morningAssessment:
+    case Schedules.MorningAssessment:
       return [yelow, yelow_alfa30];
-    case schedules.middayAssessment:
+    case Schedules.MiddayAssessment:
       return [orange, orange_alfa30];
-    case schedules.eveningAssessment:
+    case Schedules.EveningAssessment:
       return [red, red_alfa30];
     default:
       return [blue, blue_alfa30];
@@ -39,7 +39,7 @@ export const getScheduledIndicatorColor = (type: string) => {
 export const getScheduledTitle = (type: string) => {
   const { t } = i18n;
 
-  if (type === schedules.preQuestionnaire) {
+  if (type === Schedules.PreQuestionnaire) {
     return (
       <>
         <Svg id="flow" width={16} height={16} />

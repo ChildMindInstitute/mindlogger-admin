@@ -5,9 +5,9 @@ import { Svg } from 'components/Svg';
 import { StyledTextField, StyledIcon } from './Search.styles';
 import { SearchProps } from './Search.types';
 
-export const Search = ({ placeholder, onSearch }: SearchProps) => (
+export const Search = ({ onSearch, ...props }: SearchProps) => (
   <StyledTextField
-    placeholder={placeholder}
+    {...props}
     onChange={(event: ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
     startAdornment={
       <StyledIcon>
