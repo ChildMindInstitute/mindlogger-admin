@@ -2,6 +2,7 @@ export type ToggleButton = {
   value: string;
   label: string;
   tooltip?: string;
+  icon?: JSX.Element;
 };
 
 export type ToggleButtonGroupProps = {

@@ -3,9 +3,18 @@ import { styled } from '@mui/system';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 export const StyledRow = styled(Box)`
   margin-top: ${theme.spacing(2.4)};
+`;
+
+export const StyledRowHeader = styled(StyledFlexTopCenter)`
+  margin-bottom: ${theme.spacing(1.2)};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 `;
 
 export const StyledAddBtn = styled(Button)`

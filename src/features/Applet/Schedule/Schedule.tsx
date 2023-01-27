@@ -1,30 +1,26 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
+import { Button } from '@mui/material';
 
 import { Svg } from 'components';
 import { useBreadcrumbs } from 'hooks';
 import theme from 'styles/theme';
 
+import { Calendar } from './Calendar';
 import { mockedScheduleData } from './Schedule.const';
-import { CreateActivityPopup } from './CreateActivityPopup';
 import { ExportSchedulePopup } from './ExportSchedulePopup';
 import { RemoveIndividualSchedulePopup } from './RemoveIndividualSchedulePopup';
 import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
-import { EditActivityPopup } from './EditActivityPopup';
-import { RemoveScheduledEventPopup } from './RemoveScheduledEventPopup';
+import { StyledLeftPanel, StyledSchedule } from './Schedule.styles';
 
 export const Schedule = () => {
   const { t } = useTranslation('app');
-  const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
-  const [editActivityPopupVisible, setEditActivityPopupVisible] = useState(false);
   const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
   const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
     useState(false);
   const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
     useState(false);
   const [clearScheduleEventsPopupVisible, setClearScheduleEventsPopupVisible] = useState(false);
-  const [removeScheduledEventPopupVisible, setRemoveScheduledEventPopupVisible] = useState(false);
 
   useBreadcrumbs([
     {
@@ -34,14 +30,8 @@ export const Schedule = () => {
   ]);
 
   return (
-    <>
-      <Box>
-        <Button
-          sx={{ marginRight: theme.spacing(1.5) }}
-          onClick={() => setCreateActivityPopupVisible(true)}
-        >
-          Create Activity Schedule
-        </Button>
+    <StyledSchedule>
+      <StyledLeftPanel>
         <Button
           sx={{ marginRight: theme.spacing(1.5) }}
           onClick={() => setExportDefaultSchedulePopupVisible(true)}
@@ -66,28 +56,8 @@ export const Schedule = () => {
         >
           Clear Schedule Events
         </Button>
-      </Box>
-      {createActivityPopupVisible && (
-        <CreateActivityPopup
-          open={createActivityPopupVisible}
-          onClose={() => setCreateActivityPopupVisible(false)}
-        />
-      )}
-      {editActivityPopupVisible && (
-        <EditActivityPopup
-          open={editActivityPopupVisible}
-          onClose={() => setEditActivityPopupVisible(false)}
-          setRemoveEventPopupVisible={setRemoveScheduledEventPopupVisible}
-        />
-      )}
-      {removeScheduledEventPopupVisible && (
-        <RemoveScheduledEventPopup
-          open={removeScheduledEventPopupVisible}
-          onClose={() => setRemoveScheduledEventPopupVisible(false)}
-          onSubmit={() => setRemoveScheduledEventPopupVisible(false)}
-          activityName="Daily Journal"
-        />
-      )}
+      </StyledLeftPanel>
+      <Calendar />
       {exportDefaultSchedulePopupVisible && (
         <ExportSchedulePopup
           open={exportDefaultSchedulePopupVisible}
@@ -123,6 +93,6 @@ export const Schedule = () => {
           onClose={() => setClearScheduleEventsPopupVisible(false)}
         />
       )}
-    </>
+    </StyledSchedule>
   );
 };
