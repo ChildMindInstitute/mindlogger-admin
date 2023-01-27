@@ -4,6 +4,6 @@ import { ToolbarProps as CalendarToolbarProps } from 'react-big-calendar';
 import { CalendarView } from '../Calendar.types';
 
 export type ToolbarProps = CalendarToolbarProps & {
-  activeView: string;
+  activeView: CalendarView;
   setActiveView: Dispatch<SetStateAction<CalendarView>>;
 };

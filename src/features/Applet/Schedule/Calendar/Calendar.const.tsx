@@ -9,7 +9,6 @@ export const mockedEvents: CalendarEvent[] = [
     end: new Date(2022, 11, 31, 24, 0, 0),
     backgroundColor: variables.palette.blue_alfa30,
     alwaysAvailable: false,
-    isOffRange: true,
   },
   {
     id: 'pre-questionnaire-id',
@@ -20,7 +19,6 @@ export const mockedEvents: CalendarEvent[] = [
     alwaysAvailable: false,
     endAlertIcon: true,
     startFlowIcon: true,
-    isOffRange: true,
   },
   {
     id: 'daily-journal-id',

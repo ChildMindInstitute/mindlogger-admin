@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-
 import CalendarMonthView from 'react-big-calendar/lib/Month';
 
 export type MonthViewType = typeof CalendarMonthView;
