@@ -263,5 +263,12 @@
   "defaultSchedule": "Horaire par défaut",
   "individualSchedule": "Horaire individuel",
   "import": "Importer",
+  "emotionalSupport": "Soutien affectif",
+  "incentiveActivity": "Activité incitative",
+  "hideFromCalendar": "Masquer du calendrier",
+  "activateInBuilder": "Activer dans le constructeur",
+  "clearAllScheduledEvents": "Effacer tous les événements programmés",
+  "searchOrSelectRespondent": "Recherchez ou sélectionnez un répondant pour ajouter/modifier son emploi du temps",
+  "selectRespondent": "Sélectionnez le répondant",
   "today": "Aujourd'hui"
 }

@@ -4,10 +4,12 @@ import { Box, OutlinedInput } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
+import { SearchProps } from './Search.types';
+
 export const StyledTextField = styled(OutlinedInput)`
-  height: 4rem;
-  width: 49.8rem;
-  background-color: ${variables.palette.surface1};
+  height: ${({ height }: Pick<SearchProps, 'height' | 'width' | 'background'>) => height || '4rem'};
+  width: ${({ width }) => width || '49.8rem'};
+  background-color: ${({ background }) => background || variables.palette.surface1};
   border-radius: 2.2rem;
 
   .MuiOutlinedInput-input {

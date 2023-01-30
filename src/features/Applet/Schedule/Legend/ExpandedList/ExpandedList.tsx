@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
-import { Svg } from 'components';
+import { Svg, Tooltip } from 'components';
 import { StyledLabelBoldLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
 
@@ -23,16 +23,17 @@ export const ExpandedList = ({ title, items, buttons }: ExpandedListProps) => {
         <Svg id={listVisible ? 'navigate-up' : 'navigate-down'} />
         <StyledLabelBoldLarge sx={{ marginLeft: theme.spacing(1) }}>{title}</StyledLabelBoldLarge>
         {buttons?.map((el, i) => (
-          <StyledIconBtn
-            sx={{ marginLeft: i === 0 ? 'auto' : theme.spacing(0.4) }}
-            key={uniqueId()}
-            onClick={(e) => {
-              e.stopPropagation();
-              el.action();
-            }}
-          >
-            {el.icon}
-          </StyledIconBtn>
+          <Tooltip tooltipTitle={el.tooltipTitle} key={uniqueId()}>
+            <StyledIconBtn
+              sx={{ marginLeft: i === 0 ? 'auto' : theme.spacing(0.4) }}
+              onClick={(e) => {
+                e.stopPropagation();
+                el.action();
+              }}
+            >
+              {el.icon}
+            </StyledIconBtn>
+          </Tooltip>
         ))}
       </StyledCollapseBtn>
       {listVisible && (
