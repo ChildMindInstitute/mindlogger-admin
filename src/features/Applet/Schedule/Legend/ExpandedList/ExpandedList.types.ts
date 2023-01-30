@@ -1,6 +1,7 @@
 type Button = {
   icon: JSX.Element;
   action: () => void;
+  tooltipTitle: string;
 };
 
 export type ExpandedListProps = {

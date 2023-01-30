@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/system';
 
 import { Search, Svg } from 'components';
@@ -10,6 +10,7 @@ import { SelectedRespondent } from '../Legend.types';
 import { searchItems } from './SearchPopup.const';
 import {
   StyledModal,
+  StyledModalInner,
   StyledItemsContainer,
   StyledItem,
   StyledClearBtn,
@@ -26,6 +27,8 @@ export const SearchPopup = ({
   setSelectedRespondent,
   selectedRespondent,
 }: SearchPopupProps) => {
+  const { t } = useTranslation('app');
+
   const [searchValue, setSearchValue] = useState('');
 
   const selectedRespondentHandler = (item: SelectedRespondent) => {
@@ -43,17 +46,13 @@ export const SearchPopup = ({
   };
 
   return (
-    <Modal
-      style={{ position: 'absolute', width: '66rem', top, left }}
-      open={open}
-      onClose={onClose}
-    >
-      <StyledModal>
+    <StyledModal style={{ top, left }} open={open} onClose={onClose}>
+      <StyledModalInner>
         <Search
           height="6.4rem"
           width="100%"
           background={variables.palette.surface2}
-          placeholder="Search or select respondent to add/edit their schedule"
+          placeholder={t('searchOrSelectRespondent')}
           endAdornment={
             <StyledClearBtn onClick={() => setSearchValue('')}>
               <Svg id="cross" />
@@ -86,7 +85,7 @@ export const SearchPopup = ({
             );
           })}
         </StyledItemsContainer>
-      </StyledModal>
-    </Modal>
+      </StyledModalInner>
+    </StyledModal>
   );
 };

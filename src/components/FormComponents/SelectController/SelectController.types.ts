@@ -13,6 +13,7 @@ export type FormInputProps = {
   options: Option[];
   value?: string;
   customChange?: (e: SelectEvent) => void;
+  withChecked?: boolean;
 } & TextFieldProps;
 
 export type SelectControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;

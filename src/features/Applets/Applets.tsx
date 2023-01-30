@@ -6,7 +6,6 @@ import { useAppDispatch } from 'redux/store';
 import { auth, FolderApplet, folders } from 'redux/modules';
 import { ButtonWithMenu, Search, Svg } from 'components';
 
-import { Legend } from 'features/Applet/Schedule/Legend';
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
 import { StyledButtons, AppletsTableHeader } from './Applets.styles';
@@ -79,8 +78,7 @@ export const Applets = () => {
 
   return (
     <>
-      <Legend />
-      {/* <AppletsTableHeader>
+      <AppletsTableHeader>
         <StyledButtons>
           <ButtonWithMenu
             variant="outlined"
@@ -98,7 +96,7 @@ export const Applets = () => {
         rows={flattenItems?.filter(filterRows)}
         orderBy="updated"
         headerContent={headerContent}
-      /> */}
+      />
     </>
   );
 };

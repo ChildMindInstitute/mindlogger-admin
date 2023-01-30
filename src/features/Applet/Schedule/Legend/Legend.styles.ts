@@ -58,9 +58,13 @@ export const StyledIndicator = styled(Box)`
   }
 `;
 
-export const StyledCreateBtn = styled(Box)`
-  margin-left: ${theme.spacing(1)};
+export const StyledCreateBtn = styled(StyledFlexTopCenter)`
+  cursor: pointer;
   color: ${variables.palette.outline};
+
+  svg {
+    margin-right: ${theme.spacing(1)};
+  }
 `;
 
 export const StyledDeactivated = styled(Box)`

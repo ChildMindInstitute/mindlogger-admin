@@ -297,5 +297,12 @@
   "eveningAssessment": "Evening Assessment",
   "defaultSchedule": "Default Schedule",
   "individualSchedule": "Individual Schedule",
-  "import": "Import"
+  "import": "Import",
+  "emotionalSupport": "Emotional Support",
+  "incentiveActivity": "Incentive Activity",
+  "hideFromCalendar": "Hide from calendar",
+  "activateInBuilder": "Activate in builder",
+  "clearAllScheduledEvents": "Clear all scheduled events",
+  "searchOrSelectRespondent": "Search or select respondent to add/edit their schedule",
+  "selectRespondent": "Select Respondent"
 }

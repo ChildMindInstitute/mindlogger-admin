@@ -8,9 +8,9 @@ export const StyledTextField = styled(OutlinedInput)`
   height: 5.6rem;
   width: 100%;
   background-color: ${variables.palette.surface};
-  border-radius: 2.2rem;
+  border-radius: ${variables.borderRadius.xxl};
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-  padding-left: 14px;
+  padding-left: ${theme.spacing(1.4)};
 
   &.Mui-focused {
     border: ${variables.borderWidth.lg} solid ${variables.palette.primary};

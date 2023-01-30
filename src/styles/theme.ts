@@ -387,6 +387,9 @@ const theme = createTheme({
           },
           '.MuiMenuItem-root.Mui-selected': {
             backgroundColor: variables.palette.surface_variant,
+            '&:focus': {
+              backgroundColor: variables.palette.surface_variant,
+            },
             '&:hover': {
               backgroundColor: blendColorsNormal(
                 variables.palette.surface_variant,
@@ -410,4 +413,5 @@ const theme = createTheme({
     },
   },
 });
+
 export default theme;

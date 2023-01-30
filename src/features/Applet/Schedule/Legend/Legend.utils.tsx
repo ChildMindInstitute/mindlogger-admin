@@ -6,9 +6,9 @@ import { Svg } from 'components';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 
-import { Schedules } from './Legend.const';
+import { Available, Schedules } from './Legend.const';
 
-export const getScheduledIndicatorColor = (type: string) => {
+export const getIndicatorColor = (type: string) => {
   const {
     blue,
     blue_alfa30,
@@ -31,12 +31,16 @@ export const getScheduledIndicatorColor = (type: string) => {
       return [orange, orange_alfa30];
     case Schedules.EveningAssessment:
       return [red, red_alfa30];
+    case Available.EmotionalSupport:
+      return [blue, blue];
+    case Available.IncentiveActivity:
+      return [green, green];
     default:
       return [blue, blue_alfa30];
   }
 };
 
-export const getScheduledTitle = (type: string) => {
+export const getTitle = (type: string) => {
   const { t } = i18n;
 
   if (type === Schedules.PreQuestionnaire) {

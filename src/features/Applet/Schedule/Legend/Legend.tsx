@@ -5,7 +5,7 @@ import { SelectController } from 'components/FormComponents';
 import { Svg } from 'components';
 import { SelectEvent } from 'types/event';
 
-import { getExpandedLists, ScheduleOptions, scheduleOptions } from './Legend.const';
+import { ScheduleOptions, scheduleOptions } from './Legend.const';
 import {
   StyledBtn,
   StyledLegend,
@@ -19,13 +19,18 @@ import { ExpandedList } from './ExpandedList';
 import { SearchPopup } from './SearchPopup';
 import { Search } from './Search';
 import { SelectedRespondent } from './Legend.types';
+import { useExpandedLists } from './Legend.hook';
 
 export const Legend = () => {
   const { t } = useTranslation('app');
+
   const [schedule, setSchedule] = useState<string>(scheduleOptions[0].value);
   const [searchPopupVisible, setSearchPopupVisible] = useState(false);
   const [selectedRespondent, setSelectedRespondent] = useState<SelectedRespondent>(null);
+
   const searchContainerRef = useRef<HTMLElement>(null);
+
+  const expandedLists = useExpandedLists();
   const boundingBox = searchContainerRef?.current?.getBoundingClientRect();
   const isIndividual = schedule === ScheduleOptions.IndividualSchedule;
 
@@ -46,6 +51,7 @@ export const Legend = () => {
             value={schedule}
             customChange={scheduleChangeHandler}
             options={scheduleOptions}
+            withChecked
             SelectProps={{
               autoWidth: true,
               IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
@@ -64,7 +70,7 @@ export const Legend = () => {
             ref={searchContainerRef}
             onClick={() => setSearchPopupVisible(true)}
           >
-            <Search selectedRespondent={selectedRespondent} placeholder="Select Respondent" />
+            <Search selectedRespondent={selectedRespondent} placeholder={t('selectRespondent')} />
           </StyledSearchContainer>
           <SearchPopup
             top={boundingBox?.top}
@@ -86,7 +92,7 @@ export const Legend = () => {
           {t('export')}
         </StyledBtn>
       </StyledBtnsRow>
-      {getExpandedLists().map(({ buttons, items, title }) => (
+      {expandedLists?.map(({ buttons, items, title }) => (
         <ExpandedList key={title} buttons={buttons} items={items} title={title} />
       ))}
     </StyledLegend>
