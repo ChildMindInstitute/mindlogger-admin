@@ -54,5 +54,6 @@ export const variables = {
     allLong: 'all 1s',
     bgColor: 'background-color 0.3s',
     border: 'border 0.15s',
+    opacity: 'opacity 0.3s',
   },
 };

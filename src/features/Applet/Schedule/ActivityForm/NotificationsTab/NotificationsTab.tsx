@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
 import theme from 'styles/theme';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledTitleMedium } from 'styles/styledComponents/Typography';
 
-import { StyledRow, StyledAddBtn } from './NotificationsTab.styles';
+import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
 import { Notification } from './Notification';
 import { FormValues } from '../';
 import { Reminder } from './Reminder';
@@ -35,12 +34,12 @@ export const NotificationsTab = () => {
 
   return (
     <>
-      <StyledFlexTopCenter sx={{ marginBottom: theme.spacing(1.2) }}>
+      <StyledRowHeader>
         <Svg id="alert" width="16" height="20" />
         <StyledTitleMedium sx={{ marginLeft: theme.spacing(1.5) }}>
           {t('sendNotifications')}
         </StyledTitleMedium>
-      </StyledFlexTopCenter>
+      </StyledRowHeader>
       {fields?.map((item, index) => (
         <Notification key={item.id} index={index} remove={remove} />
       ))}
@@ -52,12 +51,12 @@ export const NotificationsTab = () => {
         {t('addNotification')}
       </StyledAddBtn>
       <StyledRow>
-        <StyledFlexTopCenter sx={{ marginBottom: theme.spacing(1.2) }}>
+        <StyledRowHeader>
           <Svg id="clock" width="20" height="20" />
           <StyledTitleMedium sx={{ marginLeft: theme.spacing(1.5) }}>
             {t('sendReminder')}
           </StyledTitleMedium>
-        </StyledFlexTopCenter>
+        </StyledRowHeader>
         {reminder ? (
           <Reminder />
         ) : (

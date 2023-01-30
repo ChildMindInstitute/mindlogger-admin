@@ -154,6 +154,7 @@
   "weekdays": "Jours de la semaine",
   "monthly": "Mensuel",
   "createActivitySchedule": "Créer un calendrier d'activités",
+  "editActivitySchedule": "Modifier le calendrier des activités",
   "jan": "janv",
   "feb": "févr",
   "mar": "mars",
@@ -247,6 +248,10 @@
   "dataExport": "Exportation de données",
   "selectAppletToExportRespondentsData": "Veuillez sélectionner Applet pour exporter les données du répondant depuis: ",
   "waitForRespondentDataDownload": "Veuillez attendre la fin du téléchargement. Cela peut prendre jusqu'à 5 minutes en fonction de la quantité de données collectées. Ne quittez pas cette page.",
+  "day": "Jour",
+  "week": "La semaine",
+  "month": "Mois",
+  "year": "Année",
   "scheduled": "Programmé",
   "deactivated": "Désactivé",
   "createEvent": "Créer un évènement",
@@ -264,5 +269,6 @@
   "activateInBuilder": "Activer dans le constructeur",
   "clearAllScheduledEvents": "Effacer tous les événements programmés",
   "searchOrSelectRespondent": "Recherchez ou sélectionnez un répondant pour ajouter/modifier son emploi du temps",
-  "selectRespondent": "Sélectionnez le répondant"
+  "selectRespondent": "Sélectionnez le répondant",
+  "today": "Aujourd'hui"
 }

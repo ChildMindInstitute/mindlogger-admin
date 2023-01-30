@@ -154,6 +154,7 @@
   "weekdays": "Weekdays",
   "monthly": "Monthly",
   "createActivitySchedule": "Create Activity Schedule",
+  "editActivitySchedule": "Edit Activity Schedule",
   "jan": "Jan",
   "feb": "Feb",
   "mar": "Mar",
@@ -277,6 +278,10 @@
   "dataExport": "Data Export",
   "selectAppletToExportRespondentsData": "Please select Applet to export Respondent's data from: ",
   "waitForRespondentDataDownload": "Please wait for the download to complete. It could take up to 5 minutes depending on how much data has been collected. Do not navigate away from this page.",
+  "day": "Day",
+  "week": "Week",
+  "month": "Month",
+  "year": "Year",
   "removeIndividualSchedule": "Remove Individual Schedule",
   "individualScheduleRemoved": "Individual Schedule Removed Successfully",
   "confirmRemoveIndividualSchedule": "<1>{{ name }}</1>’s individual schedule will be removed, and the respondent will use the <1>default schedule</1> instead. Are you sure you want to continue?",
@@ -307,8 +312,8 @@
   "clearAllScheduledEvents": "Clear all scheduled events",
   "searchOrSelectRespondent": "Search or select respondent to add/edit their schedule",
   "selectRespondent": "Select Respondent",
-  "editActivitySchedule": "Edit Activity Schedule",
   "removeEvent": "Remove Event",
   "removeScheduledEvent": "Remove Scheduled Event",
-  "confirmRemoveScheduledEvent": "Are you sure you want to remove this scheduled event for <1>{{ activityName }}</1>?"
+  "confirmRemoveScheduledEvent": "Are you sure you want to remove this scheduled event for <1>{{ activityName }}</1>?",
+  "today": "Today"
 }

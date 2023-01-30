@@ -14,8 +14,8 @@ export const getIndicatorColor = (type: string) => {
     blue_alfa30,
     green,
     green_alfa30,
-    yelow,
-    yelow_alfa30,
+    yellow,
+    yellow_alfa30,
     orange,
     orange_alfa30,
     red,
@@ -25,8 +25,9 @@ export const getIndicatorColor = (type: string) => {
   switch (type) {
     case Schedules.PreQuestionnaire:
       return [green, green_alfa30];
+
     case Schedules.MorningAssessment:
-      return [yelow, yelow_alfa30];
+      return [yellow, yellow_alfa30];
     case Schedules.MiddayAssessment:
       return [orange, orange_alfa30];
     case Schedules.EveningAssessment:

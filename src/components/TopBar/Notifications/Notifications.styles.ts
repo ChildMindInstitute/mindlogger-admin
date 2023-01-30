@@ -21,6 +21,10 @@ export const StyledHeaderLeft = styled(StyledFlexTopCenter)`
 
 export const StyledIconWrapper = styled(StyledFlexTopCenter)`
   margin-right: ${theme.spacing(1.6)};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 `;
 
 export const StyledCollapseBtn = styled(StyledClearedButton)`

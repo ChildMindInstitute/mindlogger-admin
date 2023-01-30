@@ -19,7 +19,7 @@ import { ExpandedList } from './ExpandedList';
 import { SearchPopup } from './SearchPopup';
 import { Search } from './Search';
 import { SelectedRespondent } from './Legend.types';
-import { useExpandedLists } from './Legend.hook';
+import { useExpandedLists } from './Legend.hooks';
 
 export const Legend = () => {
   const { t } = useTranslation('app');
