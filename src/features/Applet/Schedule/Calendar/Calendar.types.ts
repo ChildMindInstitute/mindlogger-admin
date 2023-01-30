@@ -12,10 +12,3 @@ export type CalendarEvent = {
   isHidden?: boolean;
   isOffRange?: boolean;
 };
-
-export const enum CalendarView {
-  day = 'day',
-  week = 'week',
-  month = 'month',
-  year = 'year',
-}

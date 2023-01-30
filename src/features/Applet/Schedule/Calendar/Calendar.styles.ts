@@ -5,7 +5,7 @@ import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledAddBtn = styled(StyledClearedButton)`
-  z-index: 4;
+  z-index: ${theme.zIndex.fab};
   position: absolute;
   bottom: 2.2rem;
   right: 3.2rem;

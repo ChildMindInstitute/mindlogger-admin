@@ -1,4 +1,5 @@
 import { variables } from 'styles/variables';
+
 import { CalendarEvent } from './Calendar.types';
 
 export const mockedEvents: CalendarEvent[] = [
