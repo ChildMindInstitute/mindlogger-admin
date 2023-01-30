@@ -1,29 +1,16 @@
 import { useState } from 'react';
-import {
-  Calendar as ReactCalendar,
-  SlotInfo,
-  dateFnsLocalizer,
-  View,
-  ToolbarProps,
-  HeaderProps,
-} from 'react-big-calendar';
+import { Calendar as ReactCalendar, SlotInfo, dateFnsLocalizer, View } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { enUS, fr } from 'date-fns/locale';
 
 import i18n from 'i18n';
 import { Svg } from 'components';
-import { variables } from 'styles/variables';
 
 import { CreateActivityPopup } from '../CreateActivityPopup';
 import { EditActivityPopup } from '../EditActivityPopup';
 import { RemoveScheduledEventPopup } from '../RemoveScheduledEventPopup';
-import { Toolbar } from './Toolbar';
-import { MonthEvent } from './MonthEvent';
-import { YearView } from './YearView';
-import { MonthView } from './MonthView';
-import { MonthHeader } from './MonthHeader';
-import { mockedEvents } from './Calendar.const';
+import { getCalendarComponents, eventPropGetter, mockedEvents } from './Calendar.const';
 import { StyledCalendarWrapper, StyledAddBtn } from './Calendar.styles';
 import { CalendarEvent } from './Calendar.types';
 import { getEventsWithOffRange } from './Calendar.utils';
@@ -42,7 +29,6 @@ const dateFnsLocalize = dateFnsLocalizer({
 });
 
 export const Calendar = () => {
-  const { t } = i18n;
   const [activeView, setActiveView] = useState('month');
   const [date, setDate] = useState<Date>(new Date());
   const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
@@ -51,26 +37,7 @@ export const Calendar = () => {
 
   const events = getEventsWithOffRange(mockedEvents, date);
 
-  const { components, messages, views } = {
-    components: {
-      toolbar: (props: ToolbarProps) => (
-        <Toolbar {...props} activeView={activeView} setActiveView={setActiveView} />
-      ),
-      month: {
-        header: (props: HeaderProps) => <MonthHeader {...props} calendarDate={date} />,
-        event: MonthEvent,
-      },
-    },
-    messages: {
-      showMore: (total: number) => `${total} ${t('more').toLowerCase()}...`,
-    },
-    views: {
-      month: MonthView,
-      day: true,
-      week: true,
-      year: YearView,
-    },
-  };
+  const { components, messages, views } = getCalendarComponents(activeView, setActiveView, date);
 
   const onNavigate = (newDate: Date) => setDate(newDate);
 
@@ -85,16 +52,6 @@ export const Calendar = () => {
     console.log('on select event', event);
     setEditActivityPopupVisible(true);
   };
-
-  const eventPropGetter = (event: CalendarEvent) => ({
-    style: {
-      backgroundColor: event.backgroundColor,
-      maxWidth: '92%',
-      margin: '0 auto',
-      color: event.alwaysAvailable ? variables.palette.white : variables.palette.on_surface,
-      ...(event.isOffRange && { opacity: '0.38' }),
-    },
-  });
 
   return (
     <>
@@ -114,7 +71,7 @@ export const Calendar = () => {
           onSelectEvent={onSelectEvent}
           eventPropGetter={eventPropGetter}
           view={activeView as View}
-          onView={(newView) => setActiveView(newView)}
+          onView={setActiveView}
           messages={messages}
         />
         <StyledAddBtn onClick={handleAddClick}>

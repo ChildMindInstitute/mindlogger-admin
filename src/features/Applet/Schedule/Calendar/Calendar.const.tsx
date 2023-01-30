@@ -1,6 +1,52 @@
-import { variables } from 'styles/variables';
+import { Dispatch, SetStateAction } from 'react';
+import { HeaderProps, ToolbarProps } from 'react-big-calendar';
 
+import { variables } from 'styles/variables';
+import i18n from 'i18n';
+
+import { Toolbar } from './Toolbar';
+import { MonthHeader } from './MonthHeader';
+import { MonthEvent } from './MonthEvent';
+import { MonthView } from './MonthView';
+import { YearView } from './YearView';
 import { CalendarEvent } from './Calendar.types';
+
+const { t } = i18n;
+
+export const getCalendarComponents = (
+  activeView: string,
+  setActiveView: Dispatch<SetStateAction<string>>,
+  date: Date,
+) => ({
+  components: {
+    toolbar: (props: ToolbarProps) => (
+      <Toolbar {...props} activeView={activeView} setActiveView={setActiveView} />
+    ),
+    month: {
+      header: (props: HeaderProps) => <MonthHeader {...props} calendarDate={date} />,
+      event: MonthEvent,
+    },
+  },
+  messages: {
+    showMore: (total: number) => `${total} ${t('more').toLowerCase()}...`,
+  },
+  views: {
+    month: MonthView,
+    day: true,
+    week: true,
+    year: YearView,
+  },
+});
+
+export const eventPropGetter = (event: CalendarEvent) => ({
+  style: {
+    backgroundColor: event.backgroundColor,
+    maxWidth: '92%',
+    margin: '0 auto',
+    color: event.alwaysAvailable ? variables.palette.white : variables.palette.on_surface,
+    ...(event.isOffRange && { opacity: '0.38' }),
+  },
+});
 
 export const mockedEvents: CalendarEvent[] = [
   {
