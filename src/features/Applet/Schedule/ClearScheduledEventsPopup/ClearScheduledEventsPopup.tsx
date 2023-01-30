@@ -32,6 +32,7 @@ export const ClearScheduledEventsPopup = ({
       buttonText={t(screens[step].buttonText)}
       submitBtnColor={screens[step].submitBtnColor as SubmitBtnColor | undefined}
       hasSecondBtn={screens[step].hasSecondBtn}
+      onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
       width="66"
     >

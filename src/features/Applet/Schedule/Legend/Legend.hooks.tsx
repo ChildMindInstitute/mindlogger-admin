@@ -8,7 +8,10 @@ import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Legend.st
 import { getIndicatorColor, getTitle } from './Legend.utils';
 import { Available, Schedules } from './Legend.const';
 
-export const useExpandedLists = () => {
+export const useExpandedLists = (
+  clearAllScheduledEventsAction: () => void,
+  onCreateActivitySchedule: () => void,
+) => {
   const { t } = useTranslation('app');
   const commonProps = { width: 18, height: 18 };
 
@@ -25,7 +28,7 @@ export const useExpandedLists = () => {
   const deactivatedItems = [<StyledDeactivated>Draft 6</StyledDeactivated>];
 
   const scheduledItems = [
-    <StyledCreateBtn>
+    <StyledCreateBtn onClick={onCreateActivitySchedule}>
       <Svg id="add" width={20} height={20} />
       {t('createEvent')}
     </StyledCreateBtn>,
@@ -43,7 +46,7 @@ export const useExpandedLists = () => {
       buttons: [
         {
           icon: <Svg id="clear-calendar" {...commonProps} />,
-          action: () => null,
+          action: clearAllScheduledEventsAction,
           tooltipTitle: t('clearAllScheduledEvents'),
         },
         {
