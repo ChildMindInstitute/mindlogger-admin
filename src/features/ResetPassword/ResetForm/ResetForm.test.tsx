@@ -19,7 +19,7 @@ describe('ResetForm component tests', () => {
 
   test('should be able to validate ResetForm form', async () => {
     submitForm('test');
-    await waitFor(() => expect(screen.getByText('Incorrect Email')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Email must be valid')).toBeInTheDocument());
 
     submitForm('');
     await waitFor(() => expect(screen.getByText('Email is required')).toBeInTheDocument());

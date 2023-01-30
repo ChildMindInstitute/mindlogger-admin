@@ -26,11 +26,11 @@ export const StyledLabel = styled(StyledLabelMedium)`
 `;
 
 export const StyledLink = styled(Link)`
-  text-decoration: underline;
+  text-decoration: none;
   color: ${variables.palette.primary};
 
   &:hover {
-    text-decoration: none;
+    text-decoration: underline;
   }
 `;
 
@@ -51,7 +51,7 @@ export const StyledBack = styled(StyledClearedButton)`
   line-height: ${variables.lineHeight.sm};
   text-decoration: underline;
 
-  &:hover {
+  &.MuiButton-text:hover {
     background-color: transparent;
   }
 `;

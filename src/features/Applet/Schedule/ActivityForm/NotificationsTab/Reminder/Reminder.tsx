@@ -6,11 +6,11 @@ import { InputController } from 'components/FormComponents';
 import { StyledLabelLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { FormValues } from 'features/Applet/Schedule/CreateActivityPopup';
 
 import { StyledReminder, StyledInputWrapper } from './Reminder.styles';
 import { Header } from '../Header';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
+import { FormValues } from '../../ActivityForm.types';
 
 export const Reminder = () => {
   const { t } = useTranslation('app');

@@ -11,13 +11,18 @@ export const SignUpFormSchema = () => {
   const lastNameRequired = t('lastNameRequired');
   const passwordRequired = t('passwordRequired');
   const passwordMinLength = t('passwordMinLength');
+  const passwordBlankSpaces = t('passwordBlankSpaces');
 
   return yup
     .object({
       email: yup.string().required(emailRequired).email(incorrectEmail),
       firstName: yup.string().required(firstNameRequired),
       lastName: yup.string().required(lastNameRequired),
-      password: yup.string().min(8, passwordMinLength).required(passwordRequired),
+      password: yup
+        .string()
+        .required(passwordRequired)
+        .min(8, passwordMinLength)
+        .matches(/^(\S+$)/, passwordBlankSpaces),
     })
     .required();
 };

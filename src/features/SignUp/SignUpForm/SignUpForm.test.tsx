@@ -31,14 +31,17 @@ describe('SignUp component tests', () => {
   test('should be able to validate SignUp form', async () => {
     fireEvent.click(screen.getByLabelText(/I agree to the/i));
     submitForm('test', 'password', 'fname', 'lname');
-    await waitFor(() => expect(screen.getByText('Incorrect Email')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Email must be valid')).toBeInTheDocument());
+
+    submitForm('test@gmail.com', '   password', 'fname', 'lname');
+    await waitFor(() =>
+      expect(screen.getByText('Password should not contain blank spaces')).toBeInTheDocument(),
+    );
 
     submitForm('', '', '', '');
     await waitFor(() => expect(screen.getByText('Email is required')).toBeInTheDocument());
-    await waitFor(() =>
-      expect(screen.getByText('Password must be at least 8 characters')).toBeInTheDocument(),
-    );
-    await waitFor(() => expect(screen.getByText('First Name is required')).toBeInTheDocument());
-    await waitFor(() => expect(screen.getByText('Last Name is required')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Password is required')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('First name is required')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Last name is required')).toBeInTheDocument());
   });
 });

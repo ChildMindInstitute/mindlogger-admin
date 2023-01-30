@@ -1,4 +1,4 @@
-import { NotificationType } from 'features/Applet/Schedule/CreateActivityPopup/CreateActivityPopup.types';
+import { NotificationType } from '../../ActivityForm.types';
 
 export const notificationTimeToggles = [
   {
