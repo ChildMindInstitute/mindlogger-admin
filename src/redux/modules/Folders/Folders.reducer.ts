@@ -52,7 +52,7 @@ export const reducers = {
           ...item,
           published: action.payload.published,
           name: action.payload.appletName || item.name,
-          updated: new Date().toLocaleString(),
+          updated: new Date().toUTCString(),
         };
       }
 
