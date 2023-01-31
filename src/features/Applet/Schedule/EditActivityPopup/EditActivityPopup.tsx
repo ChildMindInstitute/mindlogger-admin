@@ -81,7 +81,6 @@ export const EditActivityPopup = ({
           </>
         </Modal>
       )}
-
       {removeScheduledEventPopupVisible && (
         <RemoveScheduledEventPopup
           open={removeScheduledEventPopupVisible}
