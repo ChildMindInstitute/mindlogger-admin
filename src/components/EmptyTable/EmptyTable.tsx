@@ -11,7 +11,7 @@ export const EmptyTable = ({ children, icon = 'confused' }: EmptyTableProps) => 
   return (
     <StyledEmptyTable>
       <StyledIcon>
-        <Svg id={icon} />
+        <Svg id={icon} width="80" height="80" />
       </StyledIcon>
       {children || t('noData')}
     </StyledEmptyTable>

@@ -14,7 +14,7 @@ export const Table = ({
   columns,
   rows,
   orderBy: orderByProp,
-  tableHeight = 'auto',
+  tableHeight = '100%',
   uiType = UiType.primary,
   emptyComponent,
 }: TableProps) => {

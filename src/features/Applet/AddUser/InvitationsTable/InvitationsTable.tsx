@@ -8,7 +8,7 @@ import { StyledTitle } from '../AddUser.styles';
 export const InvitationsTable = ({ rows }: { rows: Row[] }) => {
   const { t } = useTranslation('app');
 
-  const emptyComponent = <>{t('noPendingInvitations')}</>;
+  const emptyComponent = t('noPendingInvitations');
 
   return (
     <>

@@ -19,9 +19,5 @@ export const StyledEmptyTable = styled(StyledFlexAllCenter)`
 `;
 
 export const StyledIcon = styled(Box)`
-  display: flex;
-  padding: ${theme.spacing(1.6)};
-  border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-  border-radius: ${variables.borderRadius.half};
   margin-bottom: ${theme.spacing(1.6)};
 `;

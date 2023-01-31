@@ -7,8 +7,7 @@ import { shouldForwardProp } from 'utils/shouldForwardProp';
 import { UiType } from './Table.types';
 
 export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
-  /* height: ${({ height }: { height: string; uiType: UiType }) => height || 'auto'}; */
-  height: 100%;
+  height: ${({ height }: { height: string; uiType: UiType }) => height};
 
   ${({ uiType }) =>
     (uiType === UiType.secondary || uiType === UiType.tertiary) &&
