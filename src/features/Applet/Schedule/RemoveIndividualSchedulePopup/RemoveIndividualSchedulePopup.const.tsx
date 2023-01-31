@@ -21,11 +21,11 @@ const getSecondScreen = (name: string) => (
 
 const getFirstScreenForEmptySchedule = (name: string) => (
   <StyledTitleMedium>
-    <Trans i18nkey="confirmRemoveIndividualSchedule">
+    <Trans i18nKey="confirmRemoveEmptyIndividualSchedule">
       <strong>
-        <>{{ name }}</>
+        <>{{ name }}</>’s individual schedule{' '}
       </strong>
-      ’s individual schedule will be removed, and the respondent will use the
+      will be removed, and the respondent will use the
       <strong> default schedule </strong>
       instead. Are you sure you want to continue?
     </Trans>
@@ -33,18 +33,18 @@ const getFirstScreenForEmptySchedule = (name: string) => (
 );
 
 const getFirstScreen = (name: string) => (
-  <Trans i18nkey="confirmRemoveEmptyIndividualSchedule">
+  <Trans i18nKey="confirmRemoveIndividualSchedule">
     <StyledTitleMedium>
       You are about to remove
       <strong>
-        <> {{ name }}</>
+        <> {{ name }}</>’s individual schedule{' '}
       </strong>
-      ’s individual schedule and move them to group of respondents using the
-      <strong> default schedule</strong>.
+      and move them to group of respondents using the
+      <strong> default schedule</strong>. All scheduled activities and their notifications will be
+      lost.
     </StyledTitleMedium>
     <StyledTitleMedium sx={{ marginTop: theme.spacing(2.4) }}>
-      All scheduled activities and their notifications will be lost. Are you sure you want to
-      continue?
+      Are you sure you want to continue?
     </StyledTitleMedium>
   </Trans>
 );
@@ -56,7 +56,7 @@ export const getScreens = ({ name, isEmpty, onSubmit, onClose }: ScreensParams) 
     title: 'removeIndividualSchedule',
     hasSecondBtn: true,
     onSubmit,
-    submitBtnColor: !isEmpty ? 'error' : 'primary',
+    submitBtnColor: 'error',
   },
   {
     component: getSecondScreen(name),
