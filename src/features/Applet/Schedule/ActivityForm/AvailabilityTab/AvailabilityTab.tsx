@@ -7,6 +7,7 @@ import { CheckboxController } from 'components/FormComponents';
 import { TimePicker, DatePicker, DatePickerUiType, ToggleButtonGroup } from 'components';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
+import { variables } from 'styles/variables';
 
 import { availabilityOptions, repeatsButtons, Repeats } from './Availability.const';
 import {
@@ -20,7 +21,12 @@ import { FormValues } from '../';
 export const AvailabilityTab = () => {
   const { t } = useTranslation('app');
   const [activeRepeat, setActiveRepeat] = useState<string>(Repeats.once);
-  const { control, watch, setValue } = useFormContext<FormValues>();
+  const {
+    control,
+    watch,
+    setValue,
+    formState: { dirtyFields },
+  } = useFormContext<FormValues>();
   const availability = watch('availability');
 
   const updateDate = () => {
@@ -45,6 +51,11 @@ export const AvailabilityTab = () => {
         control={control}
         customChange={availabilityOnChange}
       />
+      {dirtyFields.availability && (
+        <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.6) }} color={variables.palette.primary}>
+          {t(availability ? 'alwaysAvailableWarning' : 'scheduledAccessWarning')}
+        </StyledBodyMedium>
+      )}
       {availability ? (
         <StyledWrapper>
           <CheckboxController

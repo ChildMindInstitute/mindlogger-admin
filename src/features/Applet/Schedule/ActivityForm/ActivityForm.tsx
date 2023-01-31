@@ -1,3 +1,4 @@
+import { forwardRef, useImperativeHandle } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 
@@ -7,32 +8,62 @@ import { UiType } from 'components/Tabs/Tabs.types';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import theme from 'styles/theme';
 
-import { ActivityFormProps, FormValues } from '.';
+import { ActivityFormProps, ActivityFormRef, FormValues } from '.';
 import { tabs, defaultValues, activities } from './ActivityForm.const';
 
-export const ActivityForm = ({ onSubmit }: ActivityFormProps) => {
-  const { t } = useTranslation('app');
+export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
+  (
+    { setRemoveAllEventsPopupVisible, setConfirmScheduledAccessPopupVisible, submitCallback },
+    ref,
+  ) => {
+    const { t } = useTranslation('app');
 
-  const methods = useForm<FormValues>({
-    defaultValues,
-    mode: 'onChange',
-  });
+    const methods = useForm<FormValues>({
+      defaultValues,
+      mode: 'onChange',
+    });
 
-  return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate autoComplete="off">
-        <StyledModalWrapper sx={{ mb: theme.spacing(2) }}>
-          <SelectController
-            fullWidth
-            name="activity"
-            options={activities}
-            control={methods.control}
-            label={t('activity')}
-            required
-          />
-        </StyledModalWrapper>
-        <Tabs tabs={tabs} uiType={UiType.secondary} />
-      </form>
-    </FormProvider>
-  );
-};
+    const {
+      getValues,
+      handleSubmit,
+      control,
+      formState: { dirtyFields },
+    } = methods;
+
+    const submitForm = () => {
+      if (dirtyFields.availability) {
+        if (getValues().availability) {
+          setRemoveAllEventsPopupVisible(true);
+        } else {
+          setConfirmScheduledAccessPopupVisible(true);
+        }
+      }
+
+      submitCallback();
+    };
+
+    useImperativeHandle(ref, () => ({
+      submitForm() {
+        handleSubmit(submitForm)();
+      },
+    }));
+
+    return (
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(submitForm)} noValidate autoComplete="off">
+          <StyledModalWrapper sx={{ mb: theme.spacing(2) }}>
+            <SelectController
+              fullWidth
+              name="activity"
+              control={control}
+              options={activities}
+              label={t('activity')}
+              required
+            />
+          </StyledModalWrapper>
+          <Tabs tabs={tabs} uiType={UiType.secondary} />
+        </form>
+      </FormProvider>
+    );
+  },
+);
