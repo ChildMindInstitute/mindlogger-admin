@@ -20,15 +20,18 @@ export const Actions = ({ items, context }: ActionsProps) => {
     >
       {showActions ? (
         <StyledActions>
-          {items.map(({ icon, disabled = false, action, toolTipTitle }, i) => (
-            <Tooltip key={i} tooltipTitle={toolTipTitle}>
-              <span>
-                <StyledActionButton disabled={disabled} onClick={() => action(context)}>
-                  {icon}
-                </StyledActionButton>
-              </span>
-            </Tooltip>
-          ))}
+          {items.map(
+            ({ icon, disabled = false, action, toolTipTitle, isDisplayed = true }, i) =>
+              isDisplayed && (
+                <Tooltip key={i} tooltipTitle={toolTipTitle}>
+                  <span>
+                    <StyledActionButton disabled={disabled} onClick={() => action(context)}>
+                      {icon}
+                    </StyledActionButton>
+                  </span>
+                </Tooltip>
+              ),
+          )}
         </StyledActions>
       ) : (
         <StyledSvg id="dots" width={18} height={4} />

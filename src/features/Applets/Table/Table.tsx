@@ -4,6 +4,7 @@ import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 import { FolderApplet } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, Head } from 'components';
 import { Order } from 'types/table';
+import { EmptyTable } from 'components';
 
 import { getComparator, sortRows } from '../Applets.utils';
 import { StyledTableContainer, StyledCellItem, StyledTableCellContent } from './Table.styles';
@@ -11,7 +12,13 @@ import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
 
-export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: TableProps) => {
+export const Table = ({
+  columns,
+  rows,
+  orderBy: orderByProp,
+  headerContent,
+  emptyComponent,
+}: TableProps) => {
   const [order, setOrder] = useState<Order>('desc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
@@ -53,27 +60,31 @@ export const Table = ({ columns, rows, orderBy: orderByProp, headerContent }: Ta
 
   return (
     <StyledTableContainer>
-      <MuiTable stickyHeader>
-        <Head
-          headCells={columns}
-          order={order}
-          orderBy={orderBy}
-          onRequestSort={handleRequestSort}
-          tableHeader={tableHeader}
-        />
-        <TableBody>
-          {sortedRows
-            ?.slice(
-              page * DEFAULT_ROWS_PER_PAGE,
-              page * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
-            )
-            .map((row: FolderApplet) => (
-              <Fragment key={row.id}>
-                {row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />}
-              </Fragment>
-            ))}
-        </TableBody>
-      </MuiTable>
+      {sortedRows.length ? (
+        <MuiTable stickyHeader>
+          <Head
+            headCells={columns}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            tableHeader={tableHeader}
+          />
+          <TableBody>
+            {sortedRows
+              ?.slice(
+                page * DEFAULT_ROWS_PER_PAGE,
+                page * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
+              )
+              .map((row: FolderApplet) => (
+                <Fragment key={row.id}>
+                  {row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />}
+                </Fragment>
+              ))}
+          </TableBody>
+        </MuiTable>
+      ) : (
+        <EmptyTable>{emptyComponent}</EmptyTable>
+      )}
     </StyledTableContainer>
   );
 };

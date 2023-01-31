@@ -31,6 +31,12 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   };
 
   const actions = {
+    removeFromFolder: () =>
+      dispatch(
+        folders.thunk.removeAppletFromFolder({
+          applet: item,
+        }),
+      ),
     viewUsers: () => navigate(`/${item.id}/${APPLET_PAGES.respondents}`),
     viewCalendar: () => navigate(`/${item.id}/${APPLET_PAGES.schedule}`),
     deleteAction: () =>
@@ -91,7 +97,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           {item.updated ? timeAgo.format(new Date(item.updated)) : ''}
         </TableCell>
         <TableCell>
-          <Actions items={getActions(actions)} context={item} />
+          <Actions items={getActions({ actions, item })} context={item} />
         </TableCell>
       </TableRow>
       {sharePopupVisible && (

@@ -3,6 +3,7 @@ import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } fr
 import uniqueId from 'lodash.uniqueid';
 
 import { Order } from 'types/table';
+import { EmptyTable } from 'components';
 
 import { Head } from './Head';
 import { DEFAULT_ROWS_PER_PAGE, TERTIARY_TYPE_ROWS_PER_PAGE } from './Table.const';
@@ -15,6 +16,7 @@ export const Table = ({
   orderBy: orderByProp,
   tableHeight = 'auto',
   uiType = UiType.primary,
+  emptyComponent,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
@@ -73,36 +75,40 @@ export const Table = ({
   return (
     <>
       <StyledTableContainer height={tableHeight} uiType={uiType}>
-        <MuiTable stickyHeader>
-          <Head
-            headCells={columns}
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}
-            tableHeader={tableHeader}
-            uiType={uiType}
-          />
-          <TableBody>
-            {rows
-              ?.sort(getComparator(order, orderBy))
-              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow key={uniqueId('row_')} data-testid="table-row">
-                  {Object.keys(row)?.map((key) => (
-                    <TableCell
-                      onClick={row[key].onClick}
-                      scope="row"
-                      key={key}
-                      align={row[key].align}
-                      width={row[key].width}
-                    >
-                      {row[key].content(row)}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-          </TableBody>
-        </MuiTable>
+        {rows?.length ? (
+          <MuiTable stickyHeader>
+            <Head
+              headCells={columns}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+              tableHeader={tableHeader}
+              uiType={uiType}
+            />
+            <TableBody>
+              {rows
+                ?.sort(getComparator(order, orderBy))
+                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow key={uniqueId('row_')} data-testid="table-row">
+                    {Object.keys(row)?.map((key) => (
+                      <TableCell
+                        onClick={row[key].onClick}
+                        scope="row"
+                        key={key}
+                        align={row[key].align}
+                        width={row[key].width}
+                      >
+                        {row[key].content(row)}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+            </TableBody>
+          </MuiTable>
+        ) : (
+          <EmptyTable>{emptyComponent}</EmptyTable>
+        )}
       </StyledTableContainer>
       {uiType === UiType.tertiary && tableHeader}
     </>

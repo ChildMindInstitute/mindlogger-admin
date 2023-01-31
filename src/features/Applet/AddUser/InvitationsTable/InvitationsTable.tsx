@@ -8,10 +8,17 @@ import { StyledTitle } from '../AddUser.styles';
 export const InvitationsTable = ({ rows }: { rows: Row[] }) => {
   const { t } = useTranslation('app');
 
+  const emptyComponent = <>{t('noPendingInvitations')}</>;
+
   return (
     <>
       <StyledTitle>{t('pendingInvitations')}</StyledTitle>
-      <Table columns={getHeadCells()} rows={rows} orderBy="dateTimeInvited" />
+      <Table
+        columns={getHeadCells()}
+        rows={rows}
+        orderBy="dateTimeInvited"
+        emptyComponent={emptyComponent}
+      />
     </>
   );
 };
