@@ -26,6 +26,7 @@ export const ActivityForm = ({ onSubmit }: ActivityFormProps) => {
             fullWidth
             name="activity"
             options={activities}
+            control={methods.control}
             label={t('activity')}
             required
           />

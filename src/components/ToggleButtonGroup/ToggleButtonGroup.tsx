@@ -1,10 +1,11 @@
+import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ToggleButton, ToggleButtonGroup as MuiToggleButtonGroup } from '@mui/material';
+import { ToggleButtonGroup as MuiToggleButtonGroup } from '@mui/material';
 
 import { Svg } from 'components/Svg';
 import { Tooltip, TooltipUiType } from 'components/Tooltip';
 
-import { StyledIcon } from './ToggleButtonGroup.styles';
+import { StyledIcon, StyledToggleBtn } from './ToggleButtonGroup.styles';
 import { ToggleButtonGroupProps } from './ToggleButtonGroup.types';
 
 export const ToggleButtonGroup = ({
@@ -15,7 +16,7 @@ export const ToggleButtonGroup = ({
 }: ToggleButtonGroupProps) => {
   const { t } = useTranslation('app');
 
-  const handleChange = (e: React.MouseEvent<HTMLElement>, selected: string) => {
+  const handleChange = (e: MouseEvent<HTMLElement>, selected: string) => {
     if (selected) {
       customChange && customChange(selected);
       setActiveButton(selected);
@@ -24,17 +25,18 @@ export const ToggleButtonGroup = ({
 
   return (
     <MuiToggleButtonGroup fullWidth value={activeButton} exclusive onChange={handleChange}>
-      {toggleButtons.map(({ value, label, tooltip }) => (
-        <ToggleButton key={value} value={value}>
-          {activeButton === value && (
+      {toggleButtons.map(({ value, label, tooltip, icon }) => (
+        <StyledToggleBtn withIcon={!!icon} key={value} value={value}>
+          {activeButton === value && !icon && (
             <StyledIcon>
               <Svg id="check" />
             </StyledIcon>
           )}
+          {icon && <StyledIcon>{icon}</StyledIcon>}
           <Tooltip uiType={TooltipUiType.secondary} tooltipTitle={t(tooltip || '')}>
             <span> {t(label)}</span>
           </Tooltip>
-        </ToggleButton>
+        </StyledToggleBtn>
       ))}
     </MuiToggleButtonGroup>
   );

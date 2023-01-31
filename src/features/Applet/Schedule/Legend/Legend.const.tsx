@@ -1,74 +1,63 @@
-import { Fragment } from 'react';
-
-import i18n from 'i18n';
 import { Svg } from 'components';
 
-import { Counter } from './Counter';
-import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Legend.styles';
-import { getScheduledIndicatorColor, getScheduledTitle } from './Legend.utils';
+export const Schedules = {
+  DailyJournal: 'dailyJournal',
+  PreQuestionnaire: 'preQuestionnaire',
+  MorningAssessment: 'morningAssessment',
+  MiddayAssessment: 'middayAssessment',
+  EveningAssessment: 'eveningAssessment',
+} as const;
 
-const { t } = i18n;
+export const Available = {
+  EmotionalSupport: 'emotionalSupport',
+  IncentiveActivity: 'incentiveActivity',
+} as const;
 
-export const schedules = {
-  dailyJournal: 'dailyJournal',
-  preQuestionnaire: 'preQuestionnaire',
-  morningAssessment: 'morningAssessment',
-  middayAssessment: 'middayAssessment',
-  eveningAssessment: 'eveningAssessment',
+export const ScheduleOptions = {
+  DefaultSchedule: 'defaultSchedule',
+  IndividualSchedule: 'individualSchedule',
 } as const;
 
 export const scheduleOptions = [
   {
-    labelKey: 'defaultSchedule',
-    value: 'Default Schedule',
+    labelKey: ScheduleOptions.DefaultSchedule,
+    value: ScheduleOptions.DefaultSchedule,
     icon: <Svg id="calendar" />,
   },
   {
-    labelKey: 'individualSchedule',
-    value: 'Individual Schedule',
+    labelKey: ScheduleOptions.IndividualSchedule,
+    value: ScheduleOptions.IndividualSchedule,
     icon: <Svg id="user-calendar" />,
   },
 ];
-// TODO check translations after api connect
-export const availableItems = [<>Emotional Support</>, <>Incentive Activity</>];
 
-export const deactivatedItems = [<StyledDeactivated>Draft 6</StyledDeactivated>];
-
-export const scheduledItems = [
-  <>
-    <Svg id="add" width={20} height={20} />
-    <StyledCreateBtn>{t('createEvent')}</StyledCreateBtn>
-  </>,
-  ...Object.keys(schedules).map((el) => (
-    <Fragment key={el}>
-      <StyledIndicator colors={getScheduledIndicatorColor(el)} />
-      {getScheduledTitle(el)}
-      <Counter count={1} />
-    </Fragment>
-  )),
-];
-
-export const getExpandedLists = () => {
-  const commonProps = { width: 18, height: 18 };
-
-  return [
-    {
-      buttons: [
-        { icon: <Svg id="clear-calendar" {...commonProps} />, action: () => null },
-        { icon: <Svg id="visibility-on" {...commonProps} />, action: () => null },
-      ],
-      items: scheduledItems,
-      title: t('scheduled'),
-    },
-    {
-      buttons: [{ icon: <Svg id="visibility-off" {...commonProps} />, action: () => null }],
-      items: availableItems,
-      title: t('alwaysAvailable'),
-    },
-    {
-      buttons: [{ icon: <Svg id="external-link" {...commonProps} />, action: () => null }],
-      items: deactivatedItems,
-      title: t('deactivated'),
-    },
-  ];
-};
+export const mockedScheduleData = new Array(22).fill(null).map((_, index) => ({
+  activityName: {
+    content: () => `Pediatric Screener #${index}`,
+    value: `Pediatric Screener ${index}`,
+  },
+  date: {
+    content: () => '07 Dec 2022',
+    value: '07 Dec 2022',
+  },
+  startTime: {
+    content: () => '8:00',
+    value: '8:00',
+  },
+  endTime: {
+    content: () => '19:00',
+    value: '19:00',
+  },
+  notificationTime: {
+    content: () => '19:00',
+    value: '19:00',
+  },
+  repeats: {
+    content: () => (index % 2 ? 'Yes' : 'No'),
+    value: index % 2 ? 'Yes' : 'No',
+  },
+  frequency: {
+    content: () => (index % 2 ? 'Daily' : 'Weekday'),
+    value: index % 2 ? 'Daily' : 'Weekday',
+  },
+}));

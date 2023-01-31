@@ -155,6 +155,7 @@
   "weekdays": "Jours de la semaine",
   "monthly": "Mensuel",
   "createActivitySchedule": "Créer un calendrier d'activités",
+  "editActivitySchedule": "Modifier le calendrier des activités",
   "jan": "janv",
   "feb": "févr",
   "mar": "mars",
@@ -248,6 +249,10 @@
   "dataExport": "Exportation de données",
   "selectAppletToExportRespondentsData": "Veuillez sélectionner Applet pour exporter les données du répondant depuis: ",
   "waitForRespondentDataDownload": "Veuillez attendre la fin du téléchargement. Cela peut prendre jusqu'à 5 minutes en fonction de la quantité de données collectées. Ne quittez pas cette page.",
+  "day": "Jour",
+  "week": "La semaine",
+  "month": "Mois",
+  "year": "Année",
   "scheduled": "Programmé",
   "deactivated": "Désactivé",
   "createEvent": "Créer un évènement",
@@ -266,5 +271,13 @@
   "noManagers": "Aucun gestionnaire pour le moment.",
   "noManagersForApplet": "Aucun gestionnaire pour le moment. Invitez votre premier en cliquant sur le bouton 'Ajouter un gestionnaire' ci-dessus.",
   "noMatchWasFound": "Aucune correspondance n'a été trouvée pour '{{searchValue}}'. Essayez un autre mot ou une autre expression de recherche.",
-  "noPendingInvitations": "Aucune invitation en attente"
+  "noPendingInvitations": "Aucune invitation en attente",
+  "emotionalSupport": "Soutien affectif",
+  "incentiveActivity": "Activité incitative",
+  "hideFromCalendar": "Masquer du calendrier",
+  "activateInBuilder": "Activer dans le constructeur",
+  "clearAllScheduledEvents": "Effacer tous les événements programmés",
+  "searchOrSelectRespondent": "Recherchez ou sélectionnez un répondant pour ajouter/modifier son emploi du temps",
+  "selectRespondent": "Sélectionnez le répondant",
+  "today": "Aujourd'hui"
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Tooltip } from 'components/Tooltip';
+import { Tooltip } from 'components';
 
 import {
   StyledActions,
