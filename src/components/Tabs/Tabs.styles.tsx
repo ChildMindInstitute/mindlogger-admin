@@ -16,7 +16,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
   ${({ uiType }) =>
     uiType === UiType.primary &&
     `
-    width: 900px;
+    width: 900rem;
     margin: 0 auto;
   `}
 
