@@ -9,7 +9,6 @@ import { Svg } from 'components';
 
 import { CreateActivityPopup } from '../CreateActivityPopup';
 import { EditActivityPopup } from '../EditActivityPopup';
-import { RemoveScheduledEventPopup } from '../RemoveScheduledEventPopup';
 import { getCalendarComponents, eventPropGetter, mockedEvents } from './Calendar.const';
 import { StyledCalendarWrapper, StyledAddBtn } from './Calendar.styles';
 import { CalendarEvent } from './Calendar.types';
@@ -33,7 +32,6 @@ export const Calendar = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
   const [editActivityPopupVisible, setEditActivityPopupVisible] = useState(false);
-  const [removeScheduledEventPopupVisible, setRemoveScheduledEventPopupVisible] = useState(false);
 
   const events = getEventsWithOffRange(mockedEvents, date);
 
@@ -78,27 +76,18 @@ export const Calendar = () => {
           <Svg id="add" />
         </StyledAddBtn>
       </StyledCalendarWrapper>
-      {createActivityPopupVisible && (
-        <CreateActivityPopup
-          open={createActivityPopupVisible}
-          onClose={() => setCreateActivityPopupVisible(false)}
-        />
-      )}
-      {editActivityPopupVisible && (
-        <EditActivityPopup
-          open={editActivityPopupVisible}
-          onClose={() => setEditActivityPopupVisible(false)}
-          setRemoveEventPopupVisible={setRemoveScheduledEventPopupVisible}
-        />
-      )}
-      {removeScheduledEventPopupVisible && (
-        <RemoveScheduledEventPopup
-          open={removeScheduledEventPopupVisible}
-          onClose={() => setRemoveScheduledEventPopupVisible(false)}
-          onSubmit={() => setRemoveScheduledEventPopupVisible(false)}
-          activityName="Daily Journal"
-        />
-      )}
+      <CreateActivityPopup
+        open={createActivityPopupVisible}
+        onClose={() => setCreateActivityPopupVisible(false)}
+        setCreateActivityPopupVisible={setCreateActivityPopupVisible}
+        activityName="Daily Journal"
+      />
+      <EditActivityPopup
+        open={editActivityPopupVisible}
+        onClose={() => setEditActivityPopupVisible(false)}
+        activityName="Daily Journal"
+        setEditActivityPopupVisible={setEditActivityPopupVisible}
+      />
     </>
   );
 };
