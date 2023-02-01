@@ -11,7 +11,7 @@ export const LinkedTabs = ({ tabs, uiType = UiType.primary }: TabsProps): JSX.El
   const { t } = useTranslation('app');
   const location = useLocation();
   const currentIndex = tabs?.findIndex((el) => el.path === location.pathname);
-  const [tabIndex, setTabIndex] = useState(currentIndex < 0 ? tabs.length - 1 : currentIndex);
+  const [tabIndex, setTabIndex] = useState(currentIndex < 0 ? 0 : currentIndex);
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
