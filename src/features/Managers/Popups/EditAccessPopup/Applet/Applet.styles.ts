@@ -23,7 +23,6 @@ export const StyledRow = styled(StyledFlexTopCenter)`
 
 export const StyledBtn = styled(Link)`
   cursor: pointer;
-  color: ${variables.palette.on_surface_variant};
   text-decoration-color: ${variables.palette.on_surface_variant};
 `;
 
