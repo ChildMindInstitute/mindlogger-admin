@@ -125,6 +125,14 @@ export const Respondents = () => {
     setChosenAppletData,
   );
 
+  const renderEmptyComponent = () => {
+    if (!rows?.length) {
+      return id ? t('noRespondentsForApplet') : t('noRespondents');
+    }
+
+    return searchValue && t('noMatchWasFound', { searchValue });
+  };
+
   useEffect(() => {
     const keys = chosenRespondentsItems && Object.keys(chosenRespondentsItems);
     if (keys && keys.length === 1) {
@@ -170,7 +178,12 @@ export const Respondents = () => {
         <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
         {id && <StyledRightBox />}
       </RespondentsTableHeader>
-      <Table columns={headCells} rows={handleFilterRows(rows)} orderBy="updated" />
+      <Table
+        columns={headCells}
+        rows={handleFilterRows(rows)}
+        orderBy="updated"
+        emptyComponent={renderEmptyComponent()}
+      />
       {scheduleSetupPopupVisible && (
         <ScheduleSetupPopup
           popupVisible={scheduleSetupPopupVisible}

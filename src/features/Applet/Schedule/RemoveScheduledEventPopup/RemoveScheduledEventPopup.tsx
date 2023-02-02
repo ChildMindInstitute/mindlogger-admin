@@ -28,9 +28,9 @@ export const RemoveScheduledEventPopup = ({
     >
       <StyledModalWrapper>
         <Trans i18nKey="confirmRemoveScheduledEvent">
-          Are you sure you want to remove this scheduled event for{' '}
+          Are you sure you want to remove this scheduled event for
           <strong>
-            <>{{ activityName }}</>
+            <> {{ activityName }}</>
           </strong>
           ?
         </Trans>

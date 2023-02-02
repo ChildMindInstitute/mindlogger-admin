@@ -5,7 +5,7 @@ import { SelectController } from 'components/FormComponents';
 import { Svg } from 'components';
 import { SelectEvent } from 'types/event';
 
-import { ScheduleOptions, scheduleOptions } from './Legend.const';
+import { mockedScheduleData, ScheduleOptions, scheduleOptions } from './Legend.const';
 import {
   StyledBtn,
   StyledLegend,
@@ -20,6 +20,10 @@ import { SearchPopup } from './SearchPopup';
 import { Search } from './Search';
 import { SelectedRespondent } from './Legend.types';
 import { useExpandedLists } from './Legend.hooks';
+import { ExportSchedulePopup } from '../ExportSchedulePopup';
+import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
+import { RemoveIndividualSchedulePopup } from '../RemoveIndividualSchedulePopup';
+import { CreateActivityPopup } from '../CreateActivityPopup';
 
 export const Legend = () => {
   const { t } = useTranslation('app');
@@ -27,10 +31,16 @@ export const Legend = () => {
   const [schedule, setSchedule] = useState<string>(scheduleOptions[0].value);
   const [searchPopupVisible, setSearchPopupVisible] = useState(false);
   const [selectedRespondent, setSelectedRespondent] = useState<SelectedRespondent>(null);
+  const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
+  const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
+    useState(false);
+  const [clearScheduleEventsPopupVisible, setClearScheduleEventsPopupVisible] = useState(false);
+  const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
+    useState(false);
+  const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
 
   const searchContainerRef = useRef<HTMLElement>(null);
 
-  const expandedLists = useExpandedLists();
   const boundingBox = searchContainerRef?.current?.getBoundingClientRect();
   const isIndividual = schedule === ScheduleOptions.IndividualSchedule;
 
@@ -39,6 +49,24 @@ export const Legend = () => {
     await setSchedule(value);
     if (value === ScheduleOptions.IndividualSchedule) {
       setSearchPopupVisible(true);
+    }
+  };
+
+  const clearAllScheduledEventsAction = () => {
+    setClearScheduleEventsPopupVisible(true);
+  };
+
+  const onCreateActivitySchedule = () => {
+    setCreateActivityPopupVisible(true);
+  };
+
+  const expandedLists = useExpandedLists(clearAllScheduledEventsAction, onCreateActivitySchedule);
+
+  const exportScheduleHandler = () => {
+    if (isIndividual) {
+      setExportIndividualSchedulePopupVisible(true);
+    } else {
+      setExportDefaultSchedulePopupVisible(true);
     }
   };
 
@@ -59,7 +87,7 @@ export const Legend = () => {
           />
         </StyledSelect>
         {isIndividual && (
-          <StyledIconBtn>
+          <StyledIconBtn onClick={() => setRemoveIndividualSchedulePopupVisible(true)}>
             <Svg id="trash" />
           </StyledIconBtn>
         )}
@@ -87,7 +115,7 @@ export const Legend = () => {
           <Svg width={18} height={18} id="export" />
           {t('import')}
         </StyledBtn>
-        <StyledBtn>
+        <StyledBtn onClick={exportScheduleHandler}>
           <Svg width={18} height={18} id="export2" />
           {t('export')}
         </StyledBtn>
@@ -95,6 +123,47 @@ export const Legend = () => {
       {expandedLists?.map(({ buttons, items, title }) => (
         <ExpandedList key={title} buttons={buttons} items={items} title={title} />
       ))}
+      {exportDefaultSchedulePopupVisible && (
+        <ExportSchedulePopup
+          open={exportDefaultSchedulePopupVisible}
+          onClose={() => setExportDefaultSchedulePopupVisible(false)}
+          onSubmit={() => setExportDefaultSchedulePopupVisible(false)}
+          scheduleTableRows={mockedScheduleData}
+        />
+      )}
+      {exportIndividualSchedulePopupVisible && (
+        <ExportSchedulePopup
+          open={exportIndividualSchedulePopupVisible}
+          onClose={() => setExportIndividualSchedulePopupVisible(false)}
+          onSubmit={() => setExportIndividualSchedulePopupVisible(false)}
+          scheduleTableRows={mockedScheduleData}
+          secretUserId="012-435"
+          nickName="John Doe"
+        />
+      )}
+      {clearScheduleEventsPopupVisible && (
+        <ClearScheduledEventsPopup
+          open={clearScheduleEventsPopupVisible}
+          appletName="Pediatric Screener"
+          isDefault={!isIndividual}
+          name="John Doe"
+          onClose={() => setClearScheduleEventsPopupVisible(false)}
+        />
+      )}
+      {removeIndividualSchedulePopupVisible && (
+        <RemoveIndividualSchedulePopup
+          open={removeIndividualSchedulePopupVisible}
+          name="John Doe"
+          isEmpty={false}
+          onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
+        />
+      )}
+      <CreateActivityPopup
+        open={createActivityPopupVisible}
+        onClose={() => setCreateActivityPopupVisible(false)}
+        setCreateActivityPopupVisible={setCreateActivityPopupVisible}
+        activityName="Daily Journal"
+      />
     </StyledLegend>
   );
 };

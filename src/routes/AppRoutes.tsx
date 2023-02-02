@@ -9,10 +9,12 @@ import { page } from 'resources';
 import storage from 'utils/storage';
 
 import { PrivateRoute } from './PrivateRoute';
-import { appletRoutes, authRoutes } from './routes.const';
+import { appletRoutes, authRoutes, newAppletRoutes } from './routes.const';
 
 const Dashboard = lazy(() => import('pages/Dashboard'));
 const Applet = lazy(() => import('pages/Applet'));
+const Builder = lazy(() => import('pages/Builder'));
+const NewApplet = lazy(() => import('pages/NewApplet'));
 
 export const AppRoutes = () => {
   const token = storage.getItem('accessToken');
@@ -32,29 +34,53 @@ export const AppRoutes = () => {
       {loaded && (
         <Routes>
           <Route element={<BaseLayout />}>
-            <Route
-              path={page.dashboard}
-              element={
-                <PrivateRoute condition={isAuthorized}>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route element={<Applet />}>
-              {appletRoutes.map(({ path, Component }) => (
-                <Route
-                  key={path}
-                  path={path}
-                  element={
-                    <PrivateRoute condition={isAuthorized}>
-                      <Component />
-                    </PrivateRoute>
-                  }
-                />
-              ))}
+            <Route path={page.dashboard}>
+              <Route
+                path={page.dashboard}
+                element={
+                  <PrivateRoute condition={isAuthorized}>
+                    <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route element={<Applet />}>
+                {appletRoutes.map(({ path, Component }) => (
+                  <Route
+                    key={path}
+                    path={path}
+                    element={
+                      <PrivateRoute condition={isAuthorized}>
+                        <Component />
+                      </PrivateRoute>
+                    }
+                  />
+                ))}
+              </Route>
+            </Route>
+            <Route path={page.builder}>
+              <Route
+                path={page.builder}
+                element={
+                  <PrivateRoute condition={isAuthorized}>
+                    <Builder />
+                  </PrivateRoute>
+                }
+              />
+              <Route element={<NewApplet />} path={page.newApplet}>
+                {newAppletRoutes.map(({ path }) => (
+                  <Route
+                    key={path}
+                    path={path}
+                    element={
+                      <PrivateRoute condition={isAuthorized}>
+                        <></>
+                      </PrivateRoute>
+                    }
+                  />
+                ))}
+              </Route>
             </Route>
           </Route>
-
           <Route path={page.login} element={<AuthLayout />}>
             {authRoutes.map(({ path, Component }) => (
               <Route
@@ -68,7 +94,7 @@ export const AppRoutes = () => {
               />
             ))}
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to={page.dashboard} replace />} />
         </Routes>
       )}
     </>

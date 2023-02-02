@@ -6,7 +6,7 @@ export enum ChipShape {
 export type ChipProps = {
   title: string | JSX.Element;
   onRemove?: () => void;
-  color?: 'primary' | 'secondary';
+  color?: 'primary' | 'secondary' | 'error';
   shape?: ChipShape;
   icon?: React.ReactElement | undefined;
 };

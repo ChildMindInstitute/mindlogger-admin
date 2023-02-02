@@ -9,6 +9,7 @@ import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { Pin, Actions } from 'components';
 import { ShareAppletPopup } from 'features/Applets/Popups';
 import { APPLET_PAGES } from 'consts';
+import { page } from 'resources';
 
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
@@ -22,7 +23,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
 
   const handleAppletClick = (id: string | undefined) => {
-    if (id) navigate(`/${id}/${APPLET_PAGES.respondents}`);
+    if (id) navigate(`${page.dashboard}/${id}/${APPLET_PAGES.respondents}`);
   };
 
   const onDragStart = (event: DragEvent<HTMLTableRowElement>) => {
@@ -31,8 +32,14 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   };
 
   const actions = {
-    viewUsers: () => navigate(`/${item.id}/${APPLET_PAGES.respondents}`),
-    viewCalendar: () => navigate(`/${item.id}/${APPLET_PAGES.schedule}`),
+    removeFromFolder: () =>
+      dispatch(
+        folders.thunk.removeAppletFromFolder({
+          applet: item,
+        }),
+      ),
+    viewUsers: () => navigate(`${page.dashboard}/${item.id}/${APPLET_PAGES.respondents}`),
+    viewCalendar: () => navigate(`${page.dashboard}/${item.id}/${APPLET_PAGES.schedule}`),
     deleteAction: () =>
       dispatch(
         popups.actions.setPopupVisible({
@@ -91,7 +98,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           {item.updated ? timeAgo.format(new Date(item.updated)) : ''}
         </TableCell>
         <TableCell>
-          <Actions items={getActions(actions)} context={item} />
+          <Actions items={getActions({ actions, item })} context={item} />
         </TableCell>
       </TableRow>
       {sharePopupVisible && (

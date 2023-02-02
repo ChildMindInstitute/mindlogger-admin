@@ -19,5 +19,6 @@ export const mockedApplets = [
     title: 'Pediatric Screener 2',
     img: logoSrc,
     roles: [{ icon: getRoleIcon(Roles.manager), label: Roles.manager }],
+    selectedRespondents: [],
   },
 ];

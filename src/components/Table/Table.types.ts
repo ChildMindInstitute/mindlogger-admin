@@ -24,4 +24,5 @@ export type TableProps = {
   orderBy: string;
   tableHeight?: string;
   uiType?: UiType;
+  emptyComponent?: JSX.Element | string;
 };

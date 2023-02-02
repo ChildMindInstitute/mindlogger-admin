@@ -4,5 +4,5 @@ import { Box } from '@mui/material';
 import theme from 'styles/theme';
 
 export const StyledModalWrapper = styled(Box)`
-  padding: ${theme.spacing(0.4, 2.4)};
+  padding: ${theme.spacing(0.4, 3.2)};
 `;

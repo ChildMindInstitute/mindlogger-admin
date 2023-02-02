@@ -3,6 +3,7 @@ export const palette = {
   primary: '#0067a0',
   primary50: '#207cbb',
   primary_container: '#cee5ff',
+  secondary60: '#8392a3',
   secondary_container: '#d5e4f7',
   surface1: '#eff4fa',
   surface2: '#e8f0f7',
@@ -17,6 +18,8 @@ export const palette = {
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
   inverse_surface: '#2f3033',
+  error_container: '#ffdAd6',
+  on_error_container: '#410002',
 
   primary_alfa8: 'rgba(0, 103, 160, 0.08)',
   primary_alfa12: 'rgba(0, 103, 160, 0.12)',
