@@ -5,3 +5,6 @@ export const getEventsWithOffRange = (events: CalendarEvent[], date: Date) =>
     ...event,
     isOffRange: event.start.getMonth() !== date.getMonth(),
   }));
+
+export const formatToYearMonthDate = (date?: Date) =>
+  date && [date.getFullYear(), date.getMonth(), date.getDate()].join('-');

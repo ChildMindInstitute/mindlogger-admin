@@ -7,7 +7,12 @@ import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
 
 export const StyledEvent = styled(StyledFlexTopCenter)`
+  width: 100%;
   justify-content: space-between;
+`;
+
+export const StyledLeftSection = styled(StyledFlexTopCenter)`
+  width: calc(100% - 1.5rem);
 
   > div:not(:last-child) {
     margin-right: ${theme.spacing(0.5)};

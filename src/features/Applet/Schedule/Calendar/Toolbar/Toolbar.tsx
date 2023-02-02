@@ -6,10 +6,11 @@ import theme from 'styles/theme';
 import { StyledTitleBoldMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
+import { formatToYearMonthDate } from '../Calendar.utils';
 import { StyledToolbar, StyledIconBtn, StyledViewsWrapper, StyledTodayBtn } from './Toolbar.styles';
 import { getCalendarViewButtons } from './Toolbar.const';
 import { ToolbarProps } from './Toolbar.types';
-import { formatDate, onlyMonthDate } from './Toolbar.utils';
+import { onlyMonthDate } from './Toolbar.utils';
 
 export const Toolbar = ({
   onView,
@@ -27,21 +28,27 @@ export const Toolbar = ({
   };
 
   const currentDate = new Date();
-  const selectedDay = formatDate(date);
-  const todayDay = formatDate(currentDate);
+  const selectedDay = formatToYearMonthDate(date);
+  const todayDay = formatToYearMonthDate(currentDate);
   const isSelectedFutureDate = () => {
-    if (activeView === 'month') {
-      return onlyMonthDate(date) > onlyMonthDate(currentDate);
+    switch (activeView) {
+      case 'year':
+        return date.getFullYear() > currentDate.getFullYear();
+      case 'month':
+        return onlyMonthDate(date) > onlyMonthDate(currentDate);
+      default:
+        return date > currentDate;
     }
-
-    return date > currentDate;
   };
   const isSelectedPastDate = () => {
-    if (activeView === 'month') {
-      return onlyMonthDate(date) < onlyMonthDate(currentDate);
+    switch (activeView) {
+      case 'year':
+        return date.getFullYear() < currentDate.getFullYear();
+      case 'month':
+        return onlyMonthDate(date) < onlyMonthDate(currentDate);
+      default:
+        return todayDay !== selectedDay && date < currentDate;
     }
-
-    return todayDay !== selectedDay && date < currentDate;
   };
 
   const todayButton = (
