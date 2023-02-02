@@ -54,17 +54,14 @@ export const EditAccessPopup = ({
     setApplets(updatedApplets);
   };
 
-  const handleRemoveRole = (id: string, label: Roles) => {
+  const handleRemoveRole = (id: string, label: Roles) =>
     updateAppletHandler(id, (roles) => roles.filter((role) => role.label !== label));
-  };
 
-  const handleAddRole = (id: string, label: Roles) => {
+  const handleAddRole = (id: string, label: Roles) =>
     updateAppletHandler(id, (roles) => [...roles, { label, icon: getRoleIcon(label) }]);
-  };
 
-  const handleAddSelectedRespondents = (id: string, respondents: string[]) => {
+  const handleAddSelectedRespondents = (id: string, respondents: string[]) =>
     updateAppletHandler(id, (roles) => roles, respondents);
-  };
 
   const handleSubmit = () => {
     const appletsWithoutRespondents = getAppletsWithoutRespondents();

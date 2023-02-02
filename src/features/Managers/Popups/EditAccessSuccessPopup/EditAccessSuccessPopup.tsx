@@ -29,7 +29,7 @@ export const EditAccessSuccessPopup = ({
           Access for the
           <strong>
             <>
-              {{ firstName }} {{ lastName }} {{ email }}
+              {{ firstName }} {{ lastName }} ({{ email }})
             </>
           </strong>
           has been updated successfully.
