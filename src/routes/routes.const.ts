@@ -48,3 +48,10 @@ export const appletRoutes = [
     Component: AddUser,
   },
 ];
+
+export const newAppletRoutes = [
+  { path: page.newAppletAbout },
+  { path: page.newAppletActivities },
+  { path: page.newAppletActivityFlow },
+  { path: page.newAppletSettings },
+];

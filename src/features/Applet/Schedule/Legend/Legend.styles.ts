@@ -7,11 +7,8 @@ import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledLegend = styled(Box)`
-  width: 32rem;
-  border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   padding: ${theme.spacing(1.2, 1.6, 0)};
   overflow: auto;
-  margin: ${theme.spacing(-2.4, -2.4, -1.6)};
 `;
 
 export const StyledSelect = styled(Box)`

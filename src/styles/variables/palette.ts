@@ -18,6 +18,8 @@ export const palette = {
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
   inverse_surface: '#2f3033',
+  error_container: '#ffdAd6',
+  on_error_container: '#410002',
 
   primary_alfa8: 'rgba(0, 103, 160, 0.08)',
   primary_alfa12: 'rgba(0, 103, 160, 0.12)',

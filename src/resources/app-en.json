@@ -193,7 +193,6 @@
   "appletContent": "Applet Content",
   "reports": "Reports",
   "sharing": "Sharing",
-  "transferDelete": "Transfer/Delete",
   "dataRetention": "Data retention",
   "downloadSchema": "Download Schema",
   "versionHistory": "Version History",
@@ -324,5 +323,18 @@
   "noManagersForApplet": "No Managers yet. Invite your first one by clicking the ‘Add Manager button above.",
   "noMatchWasFound": "No match was found for '{{searchValue}}'. Try a different search word or phrase.",
   "noPendingInvitations": "No pending invitations",
-  "today": "Today"
+  "today": "Today",
+  "confirmEditAccessSuccess": "Access for the <1>{{firstName}} {{lastName}} ({{email}})</1> has been updated successfully.",
+  "editAccessNoRespondent": "Please add access to review the Data of at least one Respondent in the {{titles}} for the Reviewer role or remove the role.",
+  "aboutApplet": "About Applet",
+  "activityFlow": "Activity Flow",
+  "newApplet": "New Applet",
+  "userDashboard": "{{ userName }}'s Dashboard",
+  "userBuilder": "{{ userName }}'s Builder",
+  "removeAllScheduledEventsForActivity": "Remove All Scheduled Events for Activity",
+  "confirmRemoveAllScheduledEventsForActivity": "All scheduled events for <1>{{ activityName }}</1> will be removed, and the activity will become always available to the user. Are you sure you want to continue?",
+  "alwaysAvailableWarning": "Once you set this activity to always available, ALL SCHEDULED events for this activity will be removed.",
+  "scheduledAccessWarning": "Once you schedule this event, the Activity will no longer be always available.",
+  "confirmScheduledAccess": "Confirm Scheduled Access",
+  "confirmChangeOnScheduledAccess": "Activity <1>{{ activityName }}</1> will no longer be always available, and the Activity will be a scheduled event. Are you sure you want to continue?"
 }

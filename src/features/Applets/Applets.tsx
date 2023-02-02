@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -16,6 +17,7 @@ export const Applets = () => {
   const dispatch = useAppDispatch();
   const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
   const authData = auth.useData();
+  const navigate = useNavigate();
 
   const [searchValue, setSearchValue] = useState('');
   const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
@@ -89,7 +91,7 @@ export const Applets = () => {
             label={t('addApplet')}
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
-            menuItems={getMenuItems(() => setAnchorEl(null))}
+            menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
             startIcon={<Svg width="18" height="18" id="applet-outlined" />}
           />
         </StyledButtons>

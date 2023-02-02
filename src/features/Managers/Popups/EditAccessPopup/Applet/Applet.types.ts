@@ -7,4 +7,6 @@ export type AppletProps = {
   addRole: (id: string, role: Roles) => void;
   removeRole: (id: string, role: Roles) => void;
   user: User;
+  handleAddSelectedRespondents: (id: string, respondents: string[]) => void;
+  appletsWithoutRespondents: string[];
 };

@@ -250,10 +250,26 @@ const theme = createTheme({
           '&.MuiChip-colorSecondary': {
             borderWidth: variables.borderWidth.md,
             border: `${variables.borderWidth.md} solid ${variables.palette.outline}`,
-            borderColor: variables.palette.outline,
+            color: variables.palette.on_surface_variant,
             backgroundColor: 'transparent',
             '&:hover': {
               backgroundColor: variables.palette.on_surface_variant_alfa8,
+            },
+            a: {
+              color: variables.palette.on_surface_variant,
+            },
+          },
+          '&.MuiChip-colorError': {
+            borderWidth: variables.borderWidth.md,
+            border: `${variables.borderWidth.md} solid ${variables.palette.on_error_container}`,
+            color: variables.palette.on_error_container,
+            backgroundColor: variables.palette.error_container,
+            '&:hover': {
+              backgroundColor: variables.palette.on_surface_variant_alfa8,
+            },
+            a: {
+              color: variables.palette.on_error_container,
+              textDecorationColor: variables.palette.on_error_container,
             },
           },
           '.MuiChip-label': {
