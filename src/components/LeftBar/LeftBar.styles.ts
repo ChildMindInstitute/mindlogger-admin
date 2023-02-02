@@ -40,7 +40,6 @@ export const StyledDrawerItem = styled(ListItem)`
 
   .active-link {
     svg {
-      fill: ${variables.palette.on_surface};
       position: relative;
       z-index: 2;
     }

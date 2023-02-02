@@ -21,13 +21,17 @@ export const LeftBar = () => {
         </NavLink>
       </StyledDrawerLogo>
       <List>
-        {links.map(({ labelKey, link, icon }) => (
+        {links.map(({ labelKey, link, icon, activeIcon }) => (
           <StyledDrawerItem key={labelKey}>
             <NavLink to={link} className={({ isActive }) => (isActive ? 'active-link' : undefined)}>
-              {icon}
-              <StyledLabelMedium color={variables.palette.on_surface_variant}>
-                {t(labelKey)}
-              </StyledLabelMedium>
+              {({ isActive }) => (
+                <>
+                  {isActive ? activeIcon : icon}
+                  <StyledLabelMedium color={variables.palette.on_surface_variant}>
+                    {t(labelKey)}
+                  </StyledLabelMedium>
+                </>
+              )}
             </NavLink>
           </StyledDrawerItem>
         ))}

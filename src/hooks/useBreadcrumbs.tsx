@@ -21,12 +21,20 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   useEffect(() => {
     const newBreadcrumbs: Breadcrumb[] = [];
 
-    if (authData?.user?.fullName) {
+    if (authData?.user?.fullName && location.pathname.includes(page.dashboard)) {
       const { fullName } = authData.user;
       newBreadcrumbs.push({
         icon: <Svg id="home" width="14" height="16" />,
-        label: `${fullName}'s Dashboard`,
+        label: t('userDashboard', { userName: fullName }),
         navPath: page.dashboard,
+      });
+    }
+    if (authData?.user?.fullName && location.pathname.includes(page.builder)) {
+      const { fullName } = authData.user;
+      newBreadcrumbs.push({
+        icon: <Svg id="builder" width="18" height="18" />,
+        label: t('userBuilder', { userName: fullName }),
+        navPath: page.builder,
       });
     }
     if (id && appletsFoldersData) {
@@ -34,6 +42,13 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       newBreadcrumbs.push({
         icon: image || '',
         label: name || '',
+        disabledLink: true,
+      });
+    }
+    if (location.pathname.includes(page.newApplet)) {
+      newBreadcrumbs.push({
+        icon: <Svg id="applet-outlined" width="18" height="18" />,
+        label: t('newApplet'),
         disabledLink: true,
       });
     }

@@ -1,7 +1,9 @@
 import { t } from 'i18next';
+import { NavigateFunction } from 'react-router-dom';
 
 import { Svg } from 'components/Svg';
 import { HeadCell } from 'types/table';
+import { page } from 'resources';
 
 export const getHeadCells = (): HeadCell[] => [
   {
@@ -22,13 +24,13 @@ export const getHeadCells = (): HeadCell[] => [
   },
 ];
 
-export const getMenuItems = (handleMenuClose: () => void) => [
+export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunction) => [
   {
     icon: <Svg id="builder" />,
     title: t('new'),
     action: () => {
       handleMenuClose();
-      console.log('build an applet');
+      navigate(page.newApplet);
     },
   },
   {
