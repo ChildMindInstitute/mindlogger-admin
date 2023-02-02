@@ -42,7 +42,7 @@ export const Applet = ({
   };
 
   const handleRemoveRole = (label: Roles) => {
-    handleAddSelectedRespondents(id, []);
+    label === Roles.reviewer && handleAddSelectedRespondents(id, []);
     removeRole(id, label);
   };
 
