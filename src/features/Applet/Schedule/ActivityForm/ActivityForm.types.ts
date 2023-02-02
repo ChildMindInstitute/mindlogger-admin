@@ -1,5 +1,13 @@
+import { Dispatch, SetStateAction } from 'react';
+
+export type ActivityFormRef = {
+  submitForm: () => void;
+};
+
 export type ActivityFormProps = {
-  onSubmit: () => void;
+  submitCallback: () => void;
+  setRemoveAllEventsPopupVisible: Dispatch<SetStateAction<boolean>>;
+  setConfirmScheduledAccessPopupVisible: Dispatch<SetStateAction<boolean>>;
 };
 
 export const enum NotificationType {

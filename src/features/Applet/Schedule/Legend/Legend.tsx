@@ -158,12 +158,12 @@ export const Legend = () => {
           onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
         />
       )}
-      {createActivityPopupVisible && (
-        <CreateActivityPopup
-          open={createActivityPopupVisible}
-          onClose={() => setCreateActivityPopupVisible(false)}
-        />
-      )}
+      <CreateActivityPopup
+        open={createActivityPopupVisible}
+        onClose={() => setCreateActivityPopupVisible(false)}
+        setCreateActivityPopupVisible={setCreateActivityPopupVisible}
+        activityName="Daily Journal"
+      />
     </StyledLegend>
   );
 };

@@ -1,25 +1,77 @@
+import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
 
 import { CreateActivityPopupProps } from './CreateActivityPopup.types';
-import { ActivityForm } from '../ActivityForm';
+import { ActivityForm, ActivityFormRef } from '../ActivityForm';
+import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
+import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup';
 
-export const CreateActivityPopup = ({ onClose, open }: CreateActivityPopupProps) => {
+export const CreateActivityPopup = ({
+  onClose,
+  open,
+  activityName,
+  setCreateActivityPopupVisible,
+}: CreateActivityPopupProps) => {
   const { t } = useTranslation('app');
+  const activityFormRef = useRef() as RefObject<ActivityFormRef>;
+  const [removeAllScheduledEventsPopupVisible, setRemoveAllScheduledEventsPopupVisible] =
+    useState(false);
+  const [confirmScheduledAcessPopupVisible, setConfirmScheduledAccessPopupVisible] =
+    useState(false);
 
-  const onSubmit = () => onClose();
+  const onSubmit = () => {
+    if (activityFormRef?.current) {
+      activityFormRef.current.submitForm();
+    }
+  };
+
+  const onConfirmScheduledAccessClose = () => {
+    setConfirmScheduledAccessPopupVisible(false);
+    setCreateActivityPopupVisible(true);
+  };
+
+  const onRemoveAllScheduledEventsClose = () => {
+    setRemoveAllScheduledEventsPopupVisible(false);
+    setCreateActivityPopupVisible(true);
+  };
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={t('createActivitySchedule')}
-      buttonText={t('save')}
-      width="67.1"
-    >
-      <ActivityForm onSubmit={onSubmit} />
-    </Modal>
+    <>
+      {open && (
+        <Modal
+          open={open}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          title={t('createActivitySchedule')}
+          buttonText={t('save')}
+          width="67.1"
+        >
+          <ActivityForm
+            ref={activityFormRef}
+            submitCallback={onClose}
+            setRemoveAllEventsPopupVisible={setRemoveAllScheduledEventsPopupVisible}
+            setConfirmScheduledAccessPopupVisible={setConfirmScheduledAccessPopupVisible}
+          />
+        </Modal>
+      )}
+      {removeAllScheduledEventsPopupVisible && (
+        <RemoveAllScheduledEventsPopup
+          open={removeAllScheduledEventsPopupVisible}
+          onClose={onRemoveAllScheduledEventsClose}
+          onSubmit={() => setRemoveAllScheduledEventsPopupVisible(false)}
+          activityName={activityName}
+        />
+      )}
+      {confirmScheduledAcessPopupVisible && (
+        <ConfirmScheduledAccessPopup
+          open={confirmScheduledAcessPopupVisible}
+          onClose={onConfirmScheduledAccessClose}
+          onSubmit={() => setConfirmScheduledAccessPopupVisible(false)}
+          activityName={activityName}
+        />
+      )}
+    </>
   );
 };
