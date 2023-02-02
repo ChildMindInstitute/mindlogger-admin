@@ -9,6 +9,7 @@ import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
 import { APPLET_PAGES } from 'consts';
+import { page } from 'resources';
 
 import { ScheduleSetupPopupProps } from './ScheduleSetupPopup.types';
 
@@ -33,7 +34,7 @@ export const ScheduleSetupPopup = ({
 
   const handlePopupSubmit = () => {
     setPopupVisible(false);
-    navigate(`/${chosenAppletData?.appletId}/${APPLET_PAGES.schedule}`);
+    navigate(`${page.dashboard}/${chosenAppletData?.appletId}/${APPLET_PAGES.schedule}`);
   };
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import { DataRetention } from '../DataRetentionSetting/DataRetention';
 import { ReportConfigSetting } from '../ReportConfigSetting';
 import { ShareAppletSetting } from '../ShareAppletSetting';
 import { TransferOwnershipSetting } from '../TransferOwnershipSetting';
+import { DuplicateAppletSettings } from '../DuplicateAppletSettings';
 
 export const navigationItems = [
   {
@@ -42,6 +43,21 @@ export const navigationItems = [
         label: 'versionHistory',
         component: <>versionHistory</>,
       },
+      {
+        icon: <Svg id="transfer-ownership" />,
+        label: 'transferOwnership',
+        component: <TransferOwnershipSetting />,
+      },
+      {
+        icon: <Svg id="duplicate" />,
+        label: 'duplicateApplet',
+        component: <DuplicateAppletSettings />,
+      },
+      {
+        icon: <Svg id="trash" />,
+        label: 'deleteApplet',
+        component: <DeleteAppletSetting />,
+      },
     ],
   },
   {
@@ -61,21 +77,6 @@ export const navigationItems = [
         icon: <Svg id="share" />,
         label: 'shareToLibrary',
         component: <ShareAppletSetting />,
-      },
-    ],
-  },
-  {
-    label: 'transferDelete',
-    items: [
-      {
-        icon: <Svg id="transfer-ownership" />,
-        label: 'transferOwnership',
-        component: <TransferOwnershipSetting />,
-      },
-      {
-        icon: <Svg id="trash" />,
-        label: 'deleteApplet',
-        component: <DeleteAppletSetting />,
       },
     ],
   },
