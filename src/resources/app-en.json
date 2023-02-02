@@ -316,6 +316,6 @@
   "removeScheduledEvent": "Remove Scheduled Event",
   "confirmRemoveScheduledEvent": "Are you sure you want to remove this scheduled event for <1>{{ activityName }}</1>?",
   "today": "Today",
-  "confirmEditAccessSuccess": "Access for the <1>{{ firstName}} {{ lastName }} ({{ email }})</1> has been updated successfully.",
+  "confirmEditAccessSuccess": "Access for the <1>{{firstName}} {{lastName}} ({{email}})</1> has been updated successfully.",
   "editAccessNoRespondent": "Please add access to review the Data of at least one Respondent in the {{titles}} for the Reviewer role or remove the role."
 }
