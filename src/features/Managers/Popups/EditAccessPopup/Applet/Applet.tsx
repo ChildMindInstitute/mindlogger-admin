@@ -15,15 +15,16 @@ import { AppletProps } from './Applet.types';
 import { SelectRespondentsPopup } from '../../SelectRespondentsPopup';
 
 export const Applet = ({
-  applet: { id, title, img, roles, selectedRespondents: selectedRespondentsProps },
+  applet: { id, title, img, roles, selectedRespondents },
   addRole,
   removeRole,
   user,
+  handleAddSelectedRespondents,
+  appletsWithoutRespondents,
 }: AppletProps) => {
   const { t } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
-  const [selectedRespondents, setSelectedRespondents] = useState(selectedRespondentsProps || []);
 
   const handleAddRole = (label: Roles) => {
     addRole(id, label);
@@ -36,8 +37,13 @@ export const Applet = ({
     menuItems?.filter((menuItem: MenuItem) => !roles.find((role) => role.label === menuItem.title));
 
   const handleClosePopup = (selectedRespondents: string[]) => {
+    handleAddSelectedRespondents(id, selectedRespondents);
     setSelectRespondentsPopupVisible(false);
-    setSelectedRespondents(selectedRespondents);
+  };
+
+  const handleRemoveRole = (label: Roles) => {
+    handleAddSelectedRespondents(id, []);
+    removeRole(id, label);
   };
 
   return (
@@ -59,7 +65,11 @@ export const Applet = ({
         {roles?.map((role) => (
           <Chip
             shape={ChipShape.rounded}
-            color="secondary"
+            color={
+              appletsWithoutRespondents.includes(title) && role.label === Roles.reviewer
+                ? 'error'
+                : 'secondary'
+            }
             icon={role.icon}
             key={role.label}
             title={
@@ -79,7 +89,7 @@ export const Applet = ({
                 )}
               </StyledLabel>
             }
-            onRemove={() => removeRole(id, role.label)}
+            onRemove={() => handleRemoveRole(role.label)}
           />
         ))}
       </StyledApplet>
@@ -87,7 +97,7 @@ export const Applet = ({
         appletName={title}
         user={user}
         selectRespondentsPopupVisible={selectRespondentsPopupVisible}
-        selectedRespondents={selectedRespondents}
+        selectedRespondents={selectedRespondents || []}
         onClose={handleClosePopup}
       />
     </>
