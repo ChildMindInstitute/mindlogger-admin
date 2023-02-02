@@ -1,19 +1,23 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
+import { StyledTitleLarge } from 'styles/styledComponents/Typography';
+import { variables } from 'styles/variables';
 
 import { EmptyTableProps } from './EmptyTable.types';
 import { StyledEmptyTable, StyledIcon } from './EmptyTable.styles';
 
-export const EmptyTable = ({ children, icon = 'confused' }: EmptyTableProps) => {
+export const EmptyTable = ({ children, icon = 'not-found' }: EmptyTableProps) => {
   const { t } = useTranslation('app');
 
   return (
     <StyledEmptyTable>
       <StyledIcon>
-        <Svg id={icon} width="80" height="80" />
+        <Svg width="80" height="80" id={icon} />
       </StyledIcon>
-      {children || t('noData')}
+      <StyledTitleLarge color={variables.palette.secondary60}>
+        {children || t('noData')}
+      </StyledTitleLarge>
     </StyledEmptyTable>
   );
 };
