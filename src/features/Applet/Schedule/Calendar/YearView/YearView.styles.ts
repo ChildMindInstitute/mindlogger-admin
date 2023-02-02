@@ -9,4 +9,5 @@ export const StyledYear = styled(Box)`
   justify-content: space-between;
   border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   padding-top: ${theme.spacing(2.6)};
+  overflow: auto;
 `;
