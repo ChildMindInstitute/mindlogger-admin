@@ -22,12 +22,12 @@ const getSecondScreen = (name: string) => (
 const getFirstScreenForEmptySchedule = (name: string) => (
   <StyledTitleMedium>
     <Trans i18nKey="confirmRemoveEmptyIndividualSchedule">
+      Respondent
       <strong>
-        <>{{ name }}</>’s individual schedule{' '}
+        <> {{ name }}’s individual schedule </>
       </strong>
-      will be removed, and the respondent will use the
-      <strong> default schedule </strong>
-      instead. Are you sure you want to continue?
+      will be removed, and the respondent will use the <strong>default schedule</strong> instead.
+      Are you sure you want to continue?
     </Trans>
   </StyledTitleMedium>
 );
