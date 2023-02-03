@@ -1,5 +1,4 @@
 import { MouseEvent, useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
 import theme from 'styles/theme';
@@ -19,7 +18,7 @@ import {
   StyledMonthName,
   StyledMore,
 } from './CalendarDate.styles';
-import { getDayName } from './CalendarDate.utils';
+import { getDayName, getMoreEventsText } from './CalendarDate.utils';
 import { MAX_EVENTS_IN_TOOLTIP, MAX_ROWS_IN_TOOLTIP, TOOLTIP_HEIGHT } from './CalendarDate.const';
 
 export const CalendarDate = ({
@@ -28,7 +27,6 @@ export const CalendarDate = ({
   onDayClick,
   events,
 }: CalendarDateProps) => {
-  const { t } = useTranslation();
   const dayBtnRef = useRef<HTMLButtonElement | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition>(null);
@@ -114,11 +112,7 @@ export const CalendarDate = ({
             <StyledHeadline>{dateToRender.getDate()}</StyledHeadline>
           </StyledTooltipDate>
           {getEventsRows()}
-          {showMoreText && (
-            <StyledMore>{`${events.length - MAX_EVENTS_IN_TOOLTIP} ${t(
-              'more',
-            ).toLowerCase()}...`}</StyledMore>
-          )}
+          {showMoreText && <StyledMore>{getMoreEventsText(events)}</StyledMore>}
         </StyledTooltip>
       )}
     </>
