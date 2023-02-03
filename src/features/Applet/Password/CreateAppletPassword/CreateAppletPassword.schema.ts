@@ -4,7 +4,6 @@ import i18n from 'i18n';
 export const createPasswordFormSchema = () => {
   const { t } = i18n;
   const passwordRequired = t('passwordRequired');
-  const passwordMinLength = t('passwordMinLength');
   const passwordMatchError = t('passwordMatchError');
   const passwordRequirements = t('appletPasswordRequirementsError');
 
@@ -16,12 +15,10 @@ export const createPasswordFormSchema = () => {
         .matches(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[`~!@#$%^&*])(?=.{8,})/,
           passwordRequirements,
-        )
-        .min(8, passwordMinLength),
+        ),
       appletPasswordConfirmation: yup
         .string()
         .required(passwordRequired)
-        .min(8, passwordMinLength)
         .oneOf([yup.ref('appletPassword')], passwordMatchError),
     })
     .required();
