@@ -22,7 +22,7 @@ export const createPasswordFormSchema = () => {
         .string()
         .required(passwordRequired)
         .min(8, passwordMinLength)
-        .oneOf([yup.ref('appletPassword'), null], passwordMatchError),
+        .oneOf([yup.ref('appletPassword')], passwordMatchError),
     })
     .required();
 };
