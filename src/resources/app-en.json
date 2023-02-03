@@ -232,7 +232,7 @@
   "remove": "Remove",
   "back": "Back",
   "userHasAccess": " has access to the following list of Applets:",
-  "confirmRemoveAccess": "Are you sure that you want to remove the access for the <1>{{ firstName }} {{ lastName }}</1> the <3>{{ appletName }}</3>?",
+  "confirmRemoveAccess": "Are you sure that you want to remove the access for the <1>{{ firstName }} {{ lastName }} ({{ email }})</1> the <3>{{ appletName }}</3>?",
   "confirmMultipleRemoveAccess": "Are you sure that you want to remove the access for the <1>{{ firstName }} {{ lastName }} ({{ email }})</1> to the list of Applets below?",
   "removeAccessSuccess": "Access for <1>{{ firstName }} {{ lastName}} ({{ email }})</1> to the <3>{{ appletName }}</3> has been removed successfully.",
   "multipleRemoveAccessSuccess": "Access for <1>{{ firstName}} {{ lastName }} ({{ email }})</1> to the list of Applets below has been removed successfully.",
@@ -284,8 +284,8 @@
   "year": "Year",
   "removeIndividualSchedule": "Remove Individual Schedule",
   "individualScheduleRemoved": "Individual Schedule Removed Successfully",
-  "confirmRemoveEmptyIndividualSchedule": "<0>{{ name }}’s individual schedule</0> will be removed, and the respondent will use the <2>default schedule</2> instead. Are you sure you want to continue?",
-  "confirmRemoveIndividualSchedule": "<0>You are about to remove <1>{{ name }}’s individual schedule</1> and move them to group of respondents using the <3>default schedule</3>. All scheduled activities and their notifications will be lost.</0><1>Are you sure you want to continue?</1>",
+  "confirmRemoveEmptyIndividualSchedule": "Respondent <1>{{ name }}’s individual schedule</1> will be removed, and the respondent will use the <3>default schedule</3> instead. Are you sure you want to continue?",
+  "confirmRemoveIndividualSchedule": "<0>You are about to remove Respondent <1>{{ name }}’s individual schedule</1> and move the respondent to a group of respondents that use the <3>default schedule</3>. All individually scheduled activities and their notifications will be lost.</0> <1>Are you sure you want to continue?</1>",
   "removeIndividualScheduleSuccess": "Respondent <1>{{ name }}</1> is now using the <1>default schedule</1>. You may add an individual schedule for this respondent again any time.",
   "clearScheduledEvents": "Clear All Scheduled Events from Calendar",
   "scheduleClearedSuccess": "Schedule Cleared Successfully",
@@ -310,7 +310,7 @@
   "hideFromCalendar": "Hide from calendar",
   "activateInBuilder": "Activate in builder",
   "clearAllScheduledEvents": "Clear all scheduled events",
-  "searchOrSelectRespondent": "Search or select respondent to add/edit their schedule",
+  "searchOrSelectRespondent": "Search for or select respondent to add/edit their schedule",
   "selectRespondent": "Select Respondent",
   "removeEvent": "Remove Event",
   "removeScheduledEvent": "Remove Scheduled Event",
@@ -336,5 +336,6 @@
   "alwaysAvailableWarning": "Once you set this activity to always available, ALL SCHEDULED events for this activity will be removed.",
   "scheduledAccessWarning": "Once you schedule this event, the Activity will no longer be always available.",
   "confirmScheduledAccess": "Confirm Scheduled Access",
-  "confirmChangeOnScheduledAccess": "Activity <1>{{ activityName }}</1> will no longer be always available, and the Activity will be a scheduled event. Are you sure you want to continue?"
+  "confirmChangeOnScheduledAccess": "Activity <1>{{ activityName }}</1> will no longer be always available, and the Activity will be a scheduled event. Are you sure you want to continue?",
+  "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName}} ({{ email }})</0> no longer has access to any Applets."
 }
