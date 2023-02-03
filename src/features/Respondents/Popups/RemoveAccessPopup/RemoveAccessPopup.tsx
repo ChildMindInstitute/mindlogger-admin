@@ -3,7 +3,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal, SubmitBtnColor } from 'components';
-import { AppletPassword, AppletPasswordRef } from 'features/Applet/AppletPassword';
+import {
+  EnterAppletPassword,
+  AppletPasswordRef,
+} from 'features/Applet/Password/EnterAppletPassword';
 import { AppletsSmallTable } from 'features/Respondents/AppletsSmallTable';
 import { ChosenAppletData } from 'features/Respondents/Respondents.types';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
@@ -89,10 +92,9 @@ export const RemoveAccessPopup = ({
   );
 
   const thirdExtScreen = (
-    <AppletPassword
+    <EnterAppletPassword
       ref={appletPasswordRef}
       appletId={chosenAppletData?.appletId}
-      setDisabledSubmit={setDisabledSubmit}
       submitCallback={() => handlePopupClose()}
     />
   );
