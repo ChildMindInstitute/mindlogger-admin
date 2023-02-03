@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import uniqueId from 'lodash.uniqueid';
 
 import i18n from 'i18n';
 
@@ -30,6 +31,31 @@ export const MonthCalendar = ({
     setActiveView('day');
   };
 
+  const monthDates = useMemo(
+    () =>
+      calendar &&
+      calendar.weeks.map((week, index) => (
+        <StyledDaysWrapper key={index}>
+          {week.map((date, index) => {
+            const currentDateEvents = events?.filter(
+              (event) => formatToYearMonthDate(event.start) === formatToYearMonthDate(date),
+            );
+
+            return (
+              <CalendarDate
+                key={index}
+                dateToRender={date}
+                dateOfMonth={calendar.date}
+                onDayClick={handleDayClick}
+                events={currentDateEvents as CalendarEvent[]}
+              />
+            );
+          })}
+        </StyledDaysWrapper>
+      )),
+    [calendar, events],
+  );
+
   useEffect(() => {
     date && setCalendar(createCalendar(date, localizer));
   }, [date]);
@@ -40,29 +66,11 @@ export const MonthCalendar = ({
         <StyledMonthInside>
           <StyledMonthName>{getMonthName(calendar.date, langLocale)}</StyledMonthName>
           <StyledDaysWrapper>
-            {shortWeekDaysArray(langLocale).map((day, index) => (
-              <StyledDay key={index}>{day}</StyledDay>
+            {shortWeekDaysArray(langLocale).map((day) => (
+              <StyledDay key={uniqueId()}>{day}</StyledDay>
             ))}
           </StyledDaysWrapper>
-          {calendar.weeks.map((week, index) => (
-            <StyledDaysWrapper key={index}>
-              {week.map((date, index) => {
-                const currentDateEvents = events?.filter(
-                  (event) => formatToYearMonthDate(event.start) === formatToYearMonthDate(date),
-                );
-
-                return (
-                  <CalendarDate
-                    key={index}
-                    dateToRender={date}
-                    dateOfMonth={calendar.date}
-                    onClick={handleDayClick}
-                    events={currentDateEvents as CalendarEvent[]}
-                  />
-                );
-              })}
-            </StyledDaysWrapper>
-          ))}
+          {monthDates}
         </StyledMonthInside>
       </StyledMonth>
     )

@@ -1,13 +1,14 @@
 import { MouseEvent, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import uniqueId from 'lodash.uniqueid';
 
 import theme from 'styles/theme';
 import { StyledBodySmall } from 'styles/styledComponents/Typography';
 import { StyledHeadline } from 'styles/styledComponents/Typography';
+import { MonthEvent } from 'features/Applet/Schedule/Calendar/MonthEvent';
+import { formatToYearMonthDate } from 'features/Applet/Schedule/Calendar/Calendar.utils';
 
-import { MonthEvent } from '../../../MonthEvent';
-import { formatToYearMonthDate } from '../../../Calendar.utils';
-import { CalendarDateProps } from './CalendarDate.types';
+import { CalendarDateProps, TooltipPosition } from './CalendarDate.types';
 import {
   StyledDayBtn,
   StyledDotsWrapper,
@@ -19,25 +20,32 @@ import {
   StyledMore,
 } from './CalendarDate.styles';
 import { getDayName } from './CalendarDate.utils';
+import { MAX_EVENTS_IN_TOOLTIP, MAX_ROWS_IN_TOOLTIP, TOOLTIP_HEIGHT } from './CalendarDate.const';
 
-export const CalendarDate = ({ dateToRender, dateOfMonth, onClick, events }: CalendarDateProps) => {
+export const CalendarDate = ({
+  dateToRender,
+  dateOfMonth,
+  onDayClick,
+  events,
+}: CalendarDateProps) => {
   const { t } = useTranslation();
   const dayBtnRef = useRef<HTMLButtonElement | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [tooltipPosition, setTooltipPosition] = useState<'bottom' | 'top' | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition>(null);
 
   const open = Boolean(anchorEl);
   const isToday = formatToYearMonthDate(dateToRender) === formatToYearMonthDate(new Date());
   const isOffRange =
     dateToRender.getMonth() < dateOfMonth.getMonth() ||
     dateToRender.getMonth() > dateOfMonth.getMonth();
-  const showMoreText = events.length > 10;
+  const showMoreText = events.length > MAX_ROWS_IN_TOOLTIP;
   const isTooltipBtm = tooltipPosition === 'bottom';
 
   const handleTooltipOpen = (event: MouseEvent<HTMLButtonElement>) => {
     if (dayBtnRef.current) {
       setTooltipPosition(
-        window.innerHeight - dayBtnRef.current.offsetTop - dayBtnRef.current.offsetHeight < 410
+        window.innerHeight - dayBtnRef.current.offsetTop - dayBtnRef.current.offsetHeight <
+          TOOLTIP_HEIGHT
           ? 'top'
           : 'bottom',
       );
@@ -50,8 +58,8 @@ export const CalendarDate = ({ dateToRender, dateOfMonth, onClick, events }: Cal
   const getEventsRows = () =>
     events.map(
       (event, index) =>
-        ((showMoreText && index < 9) || !showMoreText) && (
-          <StyledTooltipEventWrapper key={index} bgColor={event.backgroundColor}>
+        ((showMoreText && index < MAX_EVENTS_IN_TOOLTIP) || !showMoreText) && (
+          <StyledTooltipEventWrapper key={uniqueId()} bgColor={event.backgroundColor}>
             <MonthEvent title={event.title} event={event} />
           </StyledTooltipEventWrapper>
         ),
@@ -65,7 +73,7 @@ export const CalendarDate = ({ dateToRender, dateOfMonth, onClick, events }: Cal
         onMouseLeave={events.length > 0 ? handleTooltipClose : () => false}
         isToday={isToday}
         isOffRange={isOffRange}
-        onClick={() => onClick(dateToRender)}
+        onClick={() => onDayClick(dateToRender)}
       >
         <StyledBodySmall>{dateToRender.getDate()}</StyledBodySmall>
         {events.length > 0 && (
@@ -74,9 +82,9 @@ export const CalendarDate = ({ dateToRender, dateOfMonth, onClick, events }: Cal
               (event, index) =>
                 index < 5 && (
                   <StyledEventDot
-                    key={index}
+                    key={uniqueId()}
                     isRounded={!!event.startIndicator}
-                    bgColor={event.startIndicator ? event.startIndicator : event.backgroundColor}
+                    bgColor={event.startIndicator || event.backgroundColor}
                   />
                 ),
             )}
@@ -95,9 +103,6 @@ export const CalendarDate = ({ dateToRender, dateOfMonth, onClick, events }: Cal
             vertical: isTooltipBtm ? 'top' : 'bottom',
             horizontal: 'center',
           }}
-          sx={{
-            pointerEvents: 'none',
-          }}
           PaperProps={{
             style: {
               marginTop: isTooltipBtm ? theme.spacing(0.4) : theme.spacing(-0.4),
@@ -110,7 +115,9 @@ export const CalendarDate = ({ dateToRender, dateOfMonth, onClick, events }: Cal
           </StyledTooltipDate>
           {getEventsRows()}
           {showMoreText && (
-            <StyledMore>{`${events.length - 9} ${t('more').toLowerCase()}...`}</StyledMore>
+            <StyledMore>{`${events.length - MAX_EVENTS_IN_TOOLTIP} ${t(
+              'more',
+            ).toLowerCase()}...`}</StyledMore>
           )}
         </StyledTooltip>
       )}

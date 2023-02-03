@@ -16,7 +16,7 @@ export const createCalendar = (currentDate: string | Date, localizer: DateLocali
   const first: Date = firstVisibleDay(date, localizer);
   const last: Date = lastVisibleDay(date, localizer);
   const weeksCount = Math.round(Math.abs(last.getTime() - first.getTime()) / MILLISECONDS_PER_WEEK);
-  const calendar: MonthObject = Object.assign({}, { date, first, last, weeks: [] });
+  const calendar: MonthObject = { date, first, last, weeks: [] };
 
   for (let weekNumber = 0; weekNumber < weeksCount; weekNumber++) {
     const week: Week = [];

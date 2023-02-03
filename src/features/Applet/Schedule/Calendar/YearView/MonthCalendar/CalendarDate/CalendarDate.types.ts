@@ -1,8 +1,10 @@
-import { CalendarEvent } from '../../../Calendar.types';
+import { CalendarEvent } from 'features/Applet/Schedule/Calendar/Calendar.types';
 
 export type CalendarDateProps = {
   dateToRender: Date;
   dateOfMonth: Date;
-  onClick: (date: Date) => void;
+  onDayClick: (date: Date) => void;
   events: CalendarEvent[];
 };
+
+export type TooltipPosition = 'bottom' | 'top' | null;

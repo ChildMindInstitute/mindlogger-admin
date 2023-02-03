@@ -6,25 +6,24 @@ import { StyledYear } from './YearView.styles';
 import { YearViewProps } from './YearView.types';
 
 export const YearView = ({ date, localizer, events, onNavigate, components }: YearViewProps) => {
-  const months = [];
   const firstMonth = startOf(date, 'year');
   const { setDate, setActiveView } = components;
 
-  for (let i = 0; i < 12; i++) {
-    months.push(
-      <MonthCalendar
-        key={i}
-        events={events}
-        date={add(firstMonth, i, 'month')}
-        localizer={localizer}
-        onNavigate={onNavigate}
-        setDate={setDate}
-        setActiveView={setActiveView}
-      />,
-    );
-  }
-
-  return <StyledYear>{months.map((month) => month)}</StyledYear>;
+  return (
+    <StyledYear>
+      {new Array(12).fill(null).map((_, index) => (
+        <MonthCalendar
+          key={index}
+          events={events}
+          date={add(firstMonth, index, 'month')}
+          localizer={localizer}
+          onNavigate={onNavigate}
+          setDate={setDate}
+          setActiveView={setActiveView}
+        />
+      ))}
+    </StyledYear>
+  );
 };
 
 YearView.range = (date: Date) => [startOf(date, 'year')];

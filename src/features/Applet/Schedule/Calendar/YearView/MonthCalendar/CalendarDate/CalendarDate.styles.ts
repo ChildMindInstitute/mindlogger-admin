@@ -75,6 +75,8 @@ export const StyledTooltipDate = styled(StyledFlexAllCenter)`
 `;
 
 export const StyledTooltip = styled(Popover)`
+  pointer-events: none;
+
   .MuiPaper-root {
     width: 26.1rem;
     padding: ${theme.spacing(0.8, 0.9, 1.6)};

@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 import { CalendarEvent } from './Calendar.types';
 
 export const getEventsWithOffRange = (events: CalendarEvent[], date: Date) =>
@@ -6,5 +8,4 @@ export const getEventsWithOffRange = (events: CalendarEvent[], date: Date) =>
     isOffRange: event.start.getMonth() !== date.getMonth(),
   }));
 
-export const formatToYearMonthDate = (date?: Date) =>
-  date && [date.getFullYear(), date.getMonth(), date.getDate()].join('-');
+export const formatToYearMonthDate = (date?: Date) => date && format(date, 'yyyy-MM-dd');
