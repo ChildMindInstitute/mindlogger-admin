@@ -285,7 +285,7 @@
   "removeIndividualSchedule": "Remove Individual Schedule",
   "individualScheduleRemoved": "Individual Schedule Removed Successfully",
   "confirmRemoveEmptyIndividualSchedule": "Respondent <1>{{ name }}’s individual schedule</1> will be removed, and the respondent will use the <3>default schedule</3> instead. Are you sure you want to continue?",
-  "confirmRemoveIndividualSchedule": "<0>You are about to remove <1>{{ name }}’s individual schedule</1> and move them to group of respondents using the <3>default schedule</3>. All scheduled activities and their notifications will be lost.</0><1>Are you sure you want to continue?</1>",
+  "confirmRemoveIndividualSchedule": "<0>You are about to remove Respondent <1>{{ name }}’s individual schedule</1> and move the respondent to a group of respondents that use the <3>default schedule</3>. All individually scheduled activities and their notifications will be lost.</0> <1>Are you sure you want to continue?</1>",
   "removeIndividualScheduleSuccess": "Respondent <1>{{ name }}</1> is now using the <1>default schedule</1>. You may add an individual schedule for this respondent again any time.",
   "clearScheduledEvents": "Clear All Scheduled Events from Calendar",
   "scheduleClearedSuccess": "Schedule Cleared Successfully",

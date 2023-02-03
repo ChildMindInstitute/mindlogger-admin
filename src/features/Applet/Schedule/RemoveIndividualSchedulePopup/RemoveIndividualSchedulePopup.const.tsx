@@ -35,13 +35,13 @@ const getFirstScreenForEmptySchedule = (name: string) => (
 const getFirstScreen = (name: string) => (
   <Trans i18nKey="confirmRemoveIndividualSchedule">
     <StyledTitleMedium>
-      You are about to remove
+      You are about to remove Respondent
       <strong>
-        <> {{ name }}</>’s individual schedule{' '}
+        <> {{ name }}’s individual schedule </>
       </strong>
-      and move them to group of respondents using the
-      <strong> default schedule</strong>. All scheduled activities and their notifications will be
-      lost.
+      and move the respondent to a group of respondents that use the
+      <strong> default schedule</strong>. All individually scheduled activities and their
+      notifications will be lost.
     </StyledTitleMedium>
     <StyledTitleMedium sx={{ marginTop: theme.spacing(2.4) }}>
       Are you sure you want to continue?
