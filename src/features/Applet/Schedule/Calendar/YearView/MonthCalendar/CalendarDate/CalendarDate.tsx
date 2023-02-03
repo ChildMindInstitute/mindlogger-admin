@@ -69,8 +69,8 @@ export const CalendarDate = ({
     <>
       <StyledDayBtn
         ref={dayBtnRef}
-        onMouseEnter={events.length > 0 ? handleTooltipOpen : () => false}
-        onMouseLeave={events.length > 0 ? handleTooltipClose : () => false}
+        onMouseEnter={events.length ? handleTooltipOpen : () => false}
+        onMouseLeave={events.length ? handleTooltipClose : () => false}
         isToday={isToday}
         isOffRange={isOffRange}
         onClick={() => onDayClick(dateToRender)}
