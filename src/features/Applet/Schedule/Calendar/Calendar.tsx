@@ -35,7 +35,12 @@ export const Calendar = () => {
 
   const events = getEventsWithOffRange(mockedEvents, date);
 
-  const { components, messages, views } = getCalendarComponents(activeView, setActiveView, date);
+  const { components, messages, views } = getCalendarComponents(
+    activeView,
+    setActiveView,
+    date,
+    setDate,
+  );
 
   const onNavigate = (newDate: Date) => setDate(newDate);
 

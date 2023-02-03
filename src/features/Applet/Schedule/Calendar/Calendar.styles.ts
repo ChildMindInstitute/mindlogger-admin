@@ -31,6 +31,7 @@ export const StyledCalendarWrapper = styled(Box)`
   .rbc-month-view {
     border-left: unset;
     border-bottom: unset;
+    border-color: ${variables.palette.surface_variant};
 
     .rbc-header {
       padding-top: ${theme.spacing(0.3)};
