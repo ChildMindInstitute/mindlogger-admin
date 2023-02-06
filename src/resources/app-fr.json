@@ -207,6 +207,7 @@
   "idleTime": "Temps d'inactivité",
   "exportDescription": "Toutes les données téléchargées par les utilisateurs seront exportées.",
   "download": "Télécharger",
+  "downloadDescription": "Téléchargez le contenu de l'applet au format JSON:",
   "editDescription": "Ajoutez, modifiez ou supprimez le contenu de l'applet à l'aide du générateur.",
   "editAppletInBuilder": "Modifier l'applet dans Builder",
   "deleteDescription": "Une fois l'applet supprimée, vous ne pourrez plus la restaurer.",
