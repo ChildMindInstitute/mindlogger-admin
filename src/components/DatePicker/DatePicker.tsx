@@ -3,22 +3,20 @@ import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { Svg } from 'components/Svg';
-import { variables } from 'styles/variables';
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
+import { Svg } from 'components';
 
 import {
   StyledButton,
   StyledButtons,
-  StyledCollapseBtn,
   StyledIconBtn,
   StyledPopover,
   StyledTextField,
 } from './DatePicker.styles';
-import { DatePickerProps, DateVariant, MinMaxDate, UiType } from './DatePicker.types';
+import { DatePickerProps, DateVariant, UiType } from './DatePicker.types';
 import { DatePickerHeader } from './DatePickerHeader';
-import { getDateFromString, getDatesStringsArray, getStringFromDate } from './DatePicker.utils';
+import { getStringFromDate } from './DatePicker.utils';
 import { DATE_PLACEHOLDER } from './DatePicker.const';
+import { PopoverHeader } from './PopoverHeader';
 
 export const DatePicker = <T extends FieldValues>({
   control,
@@ -27,11 +25,10 @@ export const DatePicker = <T extends FieldValues>({
 }: DatePickerProps<T>) => {
   const { t } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [firstCalendarVisible, setFirstCalendarVisible] = useState(true);
-  const [secondCalendarVisible, setSecondCalendarVisible] = useState(false);
 
   const open = Boolean(anchorEl);
   const id = open ? 'date-picker-popover' : undefined;
+  const isStartEndingDate = uiType === UiType.startEndingDate;
 
   const handlePickerShow: MouseEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
@@ -40,78 +37,31 @@ export const DatePicker = <T extends FieldValues>({
 
   const handlePickerClose = () => setAnchorEl(null);
 
-  const handleShowFirstClick = () => {
-    setFirstCalendarVisible((prevState) => !prevState);
-    setSecondCalendarVisible(false);
-  };
-
-  const handleShowSecondClick = () => {
-    setFirstCalendarVisible(false);
-    setSecondCalendarVisible((prevState) => !prevState);
-  };
-
   return (
     <Controller
       control={control}
       name={name}
       render={({ field: { onChange, value } }) => {
-        const handleCancelClick = () => {
-          onChange('');
-          handlePickerClose();
-        };
-
-        const getDayPickerCalendar = (variant?: DateVariant) => (
-          <ReactDatePicker
-            selected={getSelectedDate(variant)}
-            onChange={(date) => handleDateChange(date, variant)}
-            inline
-            formatWeekDay={(nameOfDay) => nameOfDay.slice(0, 1)}
-            renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
-            minDate={variant === DateVariant.end ? getMinMaxDate(MinMaxDate.min) : undefined}
-            maxDate={variant === DateVariant.start ? getMinMaxDate(MinMaxDate.max) : undefined}
-          />
-        );
-
-        const handleDateChange = (date: Date | null, variant?: DateVariant) => {
-          if (uiType === UiType.oneDate) {
-            onChange(date ? getStringFromDate(date) : '');
-          } else {
-            const datesArr = getDatesStringsArray(value);
-            if (date) {
-              const startDate =
-                variant === DateVariant.start ? getStringFromDate(date) : datesArr?.[0];
-              const endDate = variant === DateVariant.end ? getStringFromDate(date) : datesArr?.[1];
-
-              onChange(`${startDate || DATE_PLACEHOLDER} - ${endDate || DATE_PLACEHOLDER}`);
-            }
-          }
-        };
-
         const getSelectedDate = (variant?: DateVariant) => {
-          if (uiType === UiType.oneDate) {
-            return value ? getDateFromString(value) : new Date();
-          } else {
-            let selectedDate = new Date();
-            const datesArr = value !== '' && getDatesStringsArray(value);
-            if (datesArr) {
-              const index = variant === DateVariant.start ? 0 : 1;
-              selectedDate =
-                datesArr[index] !== DATE_PLACEHOLDER
-                  ? getDateFromString(datesArr[index])
-                  : new Date();
+          if (isStartEndingDate) {
+            if (variant === DateVariant.end) {
+              return value[1] || null;
             }
 
-            return selectedDate;
+            return value[0];
           }
+
+          return value;
         };
 
-        const getMinMaxDate = (type: MinMaxDate) => {
-          const datesArr = value !== '' && getDatesStringsArray(value);
-          if (datesArr) {
-            const dateToUse = type === MinMaxDate.min ? datesArr[0] : datesArr[1];
-
-            return dateToUse !== DATE_PLACEHOLDER ? getDateFromString(dateToUse) : undefined;
+        const getValue = () => {
+          if (value && isStartEndingDate) {
+            return `${getStringFromDate(value[0]) || DATE_PLACEHOLDER} - ${
+              getStringFromDate(value[1]) || DATE_PLACEHOLDER
+            }`;
           }
+
+          return getStringFromDate(value) || '';
         };
 
         return (
@@ -119,8 +69,8 @@ export const DatePicker = <T extends FieldValues>({
             <StyledTextField
               disabled
               variant="outlined"
-              label={uiType === UiType.oneDate ? t('date') : t('startingEndingDate')}
-              value={value}
+              label={uiType === UiType.oneDate ? t('date') : t('startEndDate')}
+              value={getValue()}
               onClick={handlePickerShow}
               className={(open && 'active') || ''}
               InputProps={{
@@ -137,44 +87,29 @@ export const DatePicker = <T extends FieldValues>({
               anchorEl={anchorEl}
               onClose={handlePickerClose}
               anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
                 vertical: 'bottom',
-                horizontal: 'left',
+                horizontal: 'center',
               }}
             >
-              {uiType === UiType.oneDate ? (
-                getDayPickerCalendar()
-              ) : (
-                <>
-                  <StyledCollapseBtn
-                    sx={{
-                      backgroundColor: firstCalendarVisible
-                        ? variables.palette.surface_variant
-                        : 'transparent',
-                    }}
-                    onClick={handleShowFirstClick}
-                  >
-                    <StyledBodyLarge color={variables.palette.on_surface}>
-                      {t('selectStartingDate')}
-                    </StyledBodyLarge>
-                  </StyledCollapseBtn>
-                  {firstCalendarVisible && getDayPickerCalendar(DateVariant.start)}
-                  <StyledCollapseBtn
-                    sx={{
-                      backgroundColor: secondCalendarVisible
-                        ? variables.palette.surface_variant
-                        : 'transparent',
-                    }}
-                    onClick={handleShowSecondClick}
-                  >
-                    <StyledBodyLarge color={variables.palette.on_surface}>
-                      {t('selectEndingDate')}
-                    </StyledBodyLarge>
-                  </StyledCollapseBtn>
-                  {secondCalendarVisible && getDayPickerCalendar(DateVariant.end)}
-                </>
-              )}
+              {value && <PopoverHeader uiType={uiType} date={value} />}
+              <ReactDatePicker
+                renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
+                startDate={isStartEndingDate && getSelectedDate()}
+                endDate={isStartEndingDate && getSelectedDate(DateVariant.end)}
+                selectsRange={isStartEndingDate}
+                inline
+                selected={getSelectedDate()}
+                onChange={(date) => onChange(date)}
+                monthsShown={isStartEndingDate ? 2 : 1}
+                formatWeekDay={(nameOfDay) => nameOfDay[0]}
+                minDate={new Date()}
+              />
               <StyledButtons>
-                <StyledButton variant="text" onClick={handleCancelClick}>
+                <StyledButton variant="text" onClick={handlePickerClose}>
                   {t('cancel')}
                 </StyledButton>
                 <StyledButton variant="text" onClick={handlePickerClose}>

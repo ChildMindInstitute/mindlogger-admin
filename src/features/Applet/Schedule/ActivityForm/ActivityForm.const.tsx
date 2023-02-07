@@ -26,7 +26,7 @@ export const activities = [
 
 export const defaultValues = {
   activity: activities[0].value,
-  availability: true,
+  availability: false,
   completion: false,
   from: '',
   to: '',

@@ -4,20 +4,22 @@ import { styled } from '@mui/system';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 export const StyledHeader = styled(Box)`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: ${theme.spacing(0.8, 0)};
 `;
 
-export const StyledBox = styled(StyledFlexTopCenter)`
-  width: 50%;
-  margin: ${theme.spacing(0, 1)};
-  justify-content: space-between;
+export const StyledCol = styled(Box)`
+  display: flex;
 `;
 
 export const StyledIconBtn = styled(StyledClearedButton)`
+  width: 4rem;
+  height: 4rem;
+
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
@@ -26,5 +28,28 @@ export const StyledIconBtn = styled(StyledClearedButton)`
     svg {
       fill: ${variables.palette.primary};
     }
+  }
+`;
+
+export const StyledSelect = styled(Box)`
+  color: ${variables.palette.on_surface_variant};
+  grid-column-start: 2;
+
+  .MuiTypography-root {
+    font-size: ${variables.font.size.lg};
+    line-height: ${variables.lineHeight.lg};
+    font-weight: ${variables.font.weight.regular};
+  }
+
+  .MuiSelect-select {
+    padding: 0;
+  }
+
+  .MuiFormControl-root .MuiInputBase-root .MuiSelect-select.MuiSelect-standard {
+    padding-right: ${theme.spacing(2.5)};
+  }
+
+  .MuiFormControl-root .MuiInputBase-root .MuiSelect-icon {
+    top: 0.3rem;
   }
 `;
