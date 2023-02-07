@@ -6,13 +6,23 @@ import { FolderApplet } from 'redux/modules';
 import { Actions } from './AppletItem.types';
 
 export const getActions = ({
-  viewUsers,
-  viewCalendar,
-  deleteAction,
-  transferOwnership,
-  duplicateAction,
-  shareAppletAction,
+  actions: {
+    removeFromFolder,
+    viewUsers,
+    viewCalendar,
+    deleteAction,
+    transferOwnership,
+    duplicateAction,
+    shareAppletAction,
+  },
+  item,
 }: Actions) => [
+  {
+    isDisplayed: !!item.parentId,
+    icon: <Svg id="remove-from-folder" />,
+    action: removeFromFolder,
+    toolTipTitle: t('removeFromFolder'),
+  },
   {
     icon: <Svg id="users" />,
     action: viewUsers,

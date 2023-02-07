@@ -87,12 +87,25 @@ export const Managers = () => {
         filterRows(email, searchValue),
     );
 
+  const renderEmptyComponent = () => {
+    if (!rows?.length) {
+      return id ? t('noManagersForApplet') : t('noManagers');
+    }
+
+    return searchValue && t('noMatchWasFound', { searchValue });
+  };
+
   return (
     <>
       <ManagersTableHeader>
         <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
       </ManagersTableHeader>
-      <Table columns={getHeadCells()} rows={handleFilterRows(rows)} orderBy="updated" />
+      <Table
+        columns={getHeadCells()}
+        rows={handleFilterRows(rows)}
+        orderBy="updated"
+        emptyComponent={renderEmptyComponent()}
+      />
       {removeAccessPopupVisible && selectedManager && (
         <RemoveAccessPopup
           removeAccessPopupVisible={removeAccessPopupVisible}

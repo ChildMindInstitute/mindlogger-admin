@@ -6,6 +6,7 @@ import { variables } from 'styles/variables';
 export const StyledTableContainer = styled(TableContainer)`
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   && .MuiTableRow-root.dragged-over {
     .MuiTableCell-body {

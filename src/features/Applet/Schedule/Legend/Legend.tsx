@@ -153,7 +153,7 @@ export const Legend = () => {
       {removeIndividualSchedulePopupVisible && (
         <RemoveIndividualSchedulePopup
           open={removeIndividualSchedulePopupVisible}
-          name="John Doe"
+          name="14456 (Deebo)"
           isEmpty={false}
           onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
         />

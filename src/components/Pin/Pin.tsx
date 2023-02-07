@@ -7,7 +7,7 @@ export const Pin = ({
   isPinned = false,
   onClick,
 }: PinProps & React.HTMLProps<HTMLButtonElement>): JSX.Element => (
-  <StyledPinButton isPinned onClick={onClick}>
-    <Svg id={isPinned ? 'pin-filled' : 'pin-outlined'} />
+  <StyledPinButton isPinned={isPinned} onClick={onClick}>
+    <Svg id="pin-outlined" />
   </StyledPinButton>
 );

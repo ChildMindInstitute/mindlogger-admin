@@ -19,3 +19,4 @@ export * from './TimePicker';
 export * from './Tooltip';
 export * from './TopBar';
 export * from './ToggleButtonGroup';
+export * from './EmptyTable';

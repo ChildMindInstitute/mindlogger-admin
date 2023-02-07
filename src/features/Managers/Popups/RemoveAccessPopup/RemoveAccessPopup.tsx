@@ -30,7 +30,10 @@ export const RemoveAccessPopup = ({
 }: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { firstName, lastName, email } = user;
-  const applets = user.appletIds.map((id: string) => folders.useApplet(id));
+  const applets = [
+    { name: 'testAppletName', id: 'testId' },
+    { name: 'testAppletName2', id: 'testId2' },
+  ] as FolderApplet[];
   const [buttonText, setButtonText] = useState('removeAccess');
   const [step, setStep] = useState<Steps>(0);
   const [selectedApplets, setSelectedApplets] = useState<string[]>([]);
@@ -101,9 +104,9 @@ export const RemoveAccessPopup = ({
   const getFirstScreen = () => (
     <form noValidate>
       <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
-        <b>
+        <strong>
           {firstName} {lastName} ({email})
-        </b>
+        </strong>
         {t('userHasAccess')}
       </StyledBodyLarge>
       <Table columns={getHeadCells()} rows={rows} orderBy="name" uiType={UiType.secondary} />
@@ -117,15 +120,15 @@ export const RemoveAccessPopup = ({
       <StyledBodyLarge>
         <Trans i18nKey="confirmRemoveAccess">
           Are you sure that you want to remove the access for the
-          <b>
+          <strong>
             <>
-              {{ firstName }} {{ lastName }}
+              {{ firstName }} {{ lastName }} ({{ email }})
             </>
-          </b>
+          </strong>
           the
-          <b>
+          <strong>
             <>{{ appletName }}</>
-          </b>
+          </strong>
           ?
         </Trans>
       </StyledBodyLarge>
@@ -137,11 +140,11 @@ export const RemoveAccessPopup = ({
       <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
         <Trans i18nKey="confirmMultipleRemoveAccess">
           Are you sure that you want to remove the access for the
-          <b>
+          <strong>
             <>
               {{ firstName }} {{ lastName }} ({{ email }})
             </>
-          </b>
+          </strong>
           to the list of Applets below?
         </Trans>
       </StyledBodyLarge>
@@ -156,15 +159,15 @@ export const RemoveAccessPopup = ({
       <StyledBodyLarge>
         <Trans i18nKey="removeAccessSuccess">
           Access for
-          <b>
+          <strong>
             <>
               {{ firstName }} {{ lastName }} ({{ email }})
             </>
-          </b>
+          </strong>
           to the
-          <b>
+          <strong>
             <>{{ appletName }}</>
-          </b>
+          </strong>
           has been removed successfully.
         </Trans>
       </StyledBodyLarge>
@@ -176,15 +179,27 @@ export const RemoveAccessPopup = ({
       <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
         <Trans i18nKey="multipleRemoveAccessSuccess">
           Access for
-          <b>
+          <strong>
             <>
               {{ firstName }} {{ lastName }} ({{ email }})
             </>
-          </b>
+          </strong>
           to the list of Applets below has been removed successfully.
         </Trans>
       </StyledBodyLarge>
       {listOfSelectedApplets}
+      {!applets.length && (
+        <StyledBodyLarge sx={{ marginTop: theme.spacing(2.4) }}>
+          <Trans i18nKey="userHasNoAccessToAnyApplets">
+            <strong>
+              <>
+                {{ firstName }} {{ lastName }} ({{ email }})
+              </>
+            </strong>{' '}
+            no longer has access to any Applets.
+          </Trans>
+        </StyledBodyLarge>
+      )}
     </>
   );
 
@@ -200,7 +215,7 @@ export const RemoveAccessPopup = ({
       onClose={onClose}
       onSubmit={onSubmit}
       title={t('removeAccess')}
-      width="52.4"
+      width="66"
       hasSecondBtn={step === 1}
       secondBtnText={t('back')}
       onSecondBtnSubmit={() => setStep((prevState) => --prevState as Steps)}

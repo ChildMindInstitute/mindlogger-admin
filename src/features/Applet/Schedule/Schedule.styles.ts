@@ -14,4 +14,5 @@ export const StyledLeftPanel = styled(Box)`
   width: 32rem;
   border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   overflow-y: scroll;
+  flex-shrink: 0;
 `;

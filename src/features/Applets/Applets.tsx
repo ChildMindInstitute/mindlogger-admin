@@ -78,6 +78,10 @@ export const Applets = () => {
     </Box>
   );
 
+  const emptyComponent = !flattenItems.length
+    ? t('noApplets')
+    : t('noMatchWasFound', { searchValue });
+
   return (
     <>
       <AppletsTableHeader>
@@ -98,6 +102,7 @@ export const Applets = () => {
         rows={flattenItems?.filter(filterRows)}
         orderBy="updated"
         headerContent={headerContent}
+        emptyComponent={emptyComponent}
       />
     </>
   );

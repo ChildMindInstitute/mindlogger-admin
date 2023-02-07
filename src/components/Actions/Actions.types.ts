@@ -3,6 +3,7 @@ type Action = {
   action: (item?: any) => any | void;
   disabled?: boolean;
   toolTipTitle?: string;
+  isDisplayed?: boolean;
 };
 
 export type ActionsProps = {
