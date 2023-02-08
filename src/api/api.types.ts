@@ -210,7 +210,7 @@ export type ReplaceResponseData = AppletId & {
 
 export type AppletNameArgs = AppletId & { appletName: string };
 
-export type AppletEncryption = AppletId & { data: string };
+export type AppletEncryption = AppletId & { data: FormData };
 
 export type ProtocolData = AppletId & { versions: string[] };
 
