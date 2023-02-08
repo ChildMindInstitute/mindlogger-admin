@@ -79,7 +79,12 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
     const getSelectedRespondentsList = () =>
       Object.keys(getValues()).filter((respondent) => formValues[respondent]);
 
-    const getSelectedRespondents = () => getSelectedRespondentsList().length;
+    const selectedRespondentsLength = getSelectedRespondentsList().length;
+
+    const renderSelectedRespondents = () =>
+      selectedRespondentsLength
+        ? `${selectedRespondentsLength} ${t('respondents')}`
+        : `${t('selectRespondentsHint')}`;
 
     useImperativeHandle(ref, () => ({
       confirmSelection() {
@@ -137,7 +142,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
         <StyledBodyMedium
           sx={{ marginTop: theme.spacing(1.2), color: variables.palette.on_surface_variant }}
         >
-          {getSelectedRespondents()} {t('respondents')}
+          {renderSelectedRespondents()}
         </StyledBodyMedium>
       </>
     );

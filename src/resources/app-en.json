@@ -225,6 +225,7 @@
   "selectRespondents": "Select Respondents",
   "selectRespondentsDescription": "Give <1>{{name}} ({{email}})</1> access to review the data for the Applet <3>{{appletName}}</3> to data for the following Respondents:",
   "searchAcross": "Search Across:",
+  "selectRespondentsHint":"To proceed, at least 1 Respondent should be selected.",
   "all": "All",
   "selected": "Selected",
   "unselected": "Unselected",
