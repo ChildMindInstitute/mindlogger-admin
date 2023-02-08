@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
 
 import {
