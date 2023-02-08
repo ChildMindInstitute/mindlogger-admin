@@ -1,5 +1,4 @@
-import { Svg } from 'components/Svg';
-
+import { Svg } from 'components';
 import {
   ExportDataSetting,
   DataRetention,
