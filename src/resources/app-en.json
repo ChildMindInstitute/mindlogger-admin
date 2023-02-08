@@ -207,6 +207,7 @@
   "idleTime": "Idle time",
   "exportDescription": "All data that users uploaded will be exported.",
   "download": "Download",
+  "downloadDescription": "Download the applet content as JSON:",
   "editDescription": "Add, modify, or remove contents of the Applet using the Builder.",
   "editAppletInBuilder": "Edit Applet in Builder",
   "deleteDescription": "Once the Applet is deleted, you won't be able to restore it.",
