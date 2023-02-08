@@ -1,9 +1,7 @@
 import { Svg } from 'components';
 import {
-  ExportDataSetting,
   DataRetention,
   TransferOwnershipSetting,
-  DeleteAppletSetting,
   ShareAppletSetting,
 } from 'features/AppletSettings';
 
@@ -11,11 +9,6 @@ export const settings = [
   {
     label: 'usersAndData',
     items: [
-      {
-        icon: <Svg id="export" />,
-        label: 'exportData',
-        component: <ExportDataSetting />,
-      },
       {
         icon: <Svg id="data-retention" />,
         label: 'dataRetention',
@@ -32,19 +25,9 @@ export const settings = [
         component: <>downloadSchema</>,
       },
       {
-        icon: <Svg id="version-history" />,
-        label: 'versionHistory',
-        component: <>versionHistory</>,
-      },
-      {
         icon: <Svg id="transfer-ownership" />,
         label: 'transferOwnership',
         component: <TransferOwnershipSetting />,
-      },
-      {
-        icon: <Svg id="trash" />,
-        label: 'deleteApplet',
-        component: <DeleteAppletSetting />,
       },
     ],
   },
