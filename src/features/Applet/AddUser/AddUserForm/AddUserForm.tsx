@@ -67,7 +67,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
         await getAppletInvitationApi({ appletId: id, options });
         await getInvitationsHandler();
 
-        if (options.accountName && options.role !== Roles.user) {
+        if (options.accountName && options.role !== Roles.User) {
           dispatch(setAccountName({ accountName: options.accountName }));
         }
         setErrorMessage('');
@@ -82,7 +82,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
     const { value } = e.target;
     const { nickName, MRN, accountName, users } = Fields;
 
-    if (value === Roles.user) {
+    if (value === Roles.User) {
       register(nickName, { value: '' });
       register(MRN, { value: '' });
       unregister(accountName);
@@ -90,7 +90,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
     } else {
       unregister(nickName);
       unregister(MRN);
-      if (value === Roles.reviewer) {
+      if (value === Roles.Reviewer) {
         register(users, { value: [] });
       } else {
         unregister(users);
@@ -129,7 +129,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
                 customChange={updateFields}
               />
             </Grid>
-            {role === Roles.reviewer && (
+            {role === Roles.Reviewer && (
               <Grid item xs={12}>
                 <TagsInputController
                   {...commonProps}
@@ -151,7 +151,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
             </Grid>
           </Grid>
           <Grid container item xs={4} rowSpacing={2.4}>
-            {role === Roles.user && (
+            {role === Roles.User && (
               <>
                 <Grid item xs={12}>
                   <InputController {...commonProps} name={Fields.nickName} label={t('nickname')} />
@@ -161,7 +161,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
                 </Grid>
               </>
             )}
-            {accountNameShowed && role !== Roles.user && (
+            {accountNameShowed && role !== Roles.User && (
               <Grid item xs={12}>
                 <InputController
                   {...commonProps}

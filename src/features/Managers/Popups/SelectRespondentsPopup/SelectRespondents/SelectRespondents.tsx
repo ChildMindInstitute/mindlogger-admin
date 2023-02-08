@@ -32,7 +32,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
     }));
 
     const { t } = useTranslation('app');
-    const [searchAcrossValue, setSearchAcrossValue] = useState<string>(SearchAcross.all);
+    const [searchAcrossValue, setSearchAcrossValue] = useState<string>(SearchAcross.All);
     const [searchValue, setSearchValue] = useState('');
     const [selectAllChecked, setSelectAllChecked] = useState(false);
 
@@ -49,9 +49,9 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
     const selectFilter = ({ select }: Row) => {
       const secretId = select.value as string;
       switch (searchAcrossValue) {
-        case SearchAcross.unselected:
+        case SearchAcross.Unselected:
           return !getValues()[secretId];
-        case SearchAcross.selected:
+        case SearchAcross.Selected:
           return getValues()[secretId];
         default:
           return true;
@@ -131,7 +131,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
             columns={getHeadCells(handleSelectAllClick, selectAllChecked)}
             rows={tableRows}
             orderBy={'nickname'}
-            uiType={UiType.secondary}
+            uiType={UiType.Secondary}
           />
         </form>
         <StyledBodyMedium

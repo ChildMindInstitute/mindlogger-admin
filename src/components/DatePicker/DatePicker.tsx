@@ -23,7 +23,7 @@ import { DATE_PLACEHOLDER } from './DatePicker.const';
 export const DatePicker = <T extends FieldValues>({
   control,
   name,
-  uiType = UiType.oneDate,
+  uiType = UiType.OneDate,
 }: DatePickerProps<T>) => {
   const { t } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -67,20 +67,20 @@ export const DatePicker = <T extends FieldValues>({
             inline
             formatWeekDay={(nameOfDay) => nameOfDay.slice(0, 1)}
             renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
-            minDate={variant === DateVariant.end ? getMinMaxDate(MinMaxDate.min) : undefined}
-            maxDate={variant === DateVariant.start ? getMinMaxDate(MinMaxDate.max) : undefined}
+            minDate={variant === DateVariant.End ? getMinMaxDate(MinMaxDate.Min) : undefined}
+            maxDate={variant === DateVariant.Start ? getMinMaxDate(MinMaxDate.Max) : undefined}
           />
         );
 
         const handleDateChange = (date: Date | null, variant?: DateVariant) => {
-          if (uiType === UiType.oneDate) {
+          if (uiType === UiType.OneDate) {
             onChange(date ? getStringFromDate(date) : '');
           } else {
             const datesArr = getDatesStringsArray(value);
             if (date) {
               const startDate =
-                variant === DateVariant.start ? getStringFromDate(date) : datesArr?.[0];
-              const endDate = variant === DateVariant.end ? getStringFromDate(date) : datesArr?.[1];
+                variant === DateVariant.Start ? getStringFromDate(date) : datesArr?.[0];
+              const endDate = variant === DateVariant.End ? getStringFromDate(date) : datesArr?.[1];
 
               onChange(`${startDate || DATE_PLACEHOLDER} - ${endDate || DATE_PLACEHOLDER}`);
             }
@@ -88,13 +88,13 @@ export const DatePicker = <T extends FieldValues>({
         };
 
         const getSelectedDate = (variant?: DateVariant) => {
-          if (uiType === UiType.oneDate) {
+          if (uiType === UiType.OneDate) {
             return value ? getDateFromString(value) : new Date();
           } else {
             let selectedDate = new Date();
             const datesArr = value !== '' && getDatesStringsArray(value);
             if (datesArr) {
-              const index = variant === DateVariant.start ? 0 : 1;
+              const index = variant === DateVariant.Start ? 0 : 1;
               selectedDate =
                 datesArr[index] !== DATE_PLACEHOLDER
                   ? getDateFromString(datesArr[index])
@@ -108,7 +108,7 @@ export const DatePicker = <T extends FieldValues>({
         const getMinMaxDate = (type: MinMaxDate) => {
           const datesArr = value !== '' && getDatesStringsArray(value);
           if (datesArr) {
-            const dateToUse = type === MinMaxDate.min ? datesArr[0] : datesArr[1];
+            const dateToUse = type === MinMaxDate.Min ? datesArr[0] : datesArr[1];
 
             return dateToUse !== DATE_PLACEHOLDER ? getDateFromString(dateToUse) : undefined;
           }
@@ -119,7 +119,7 @@ export const DatePicker = <T extends FieldValues>({
             <StyledTextField
               disabled
               variant="outlined"
-              label={uiType === UiType.oneDate ? t('date') : t('startingEndingDate')}
+              label={uiType === UiType.OneDate ? t('date') : t('startingEndingDate')}
               value={value}
               onClick={handlePickerShow}
               className={(open && 'active') || ''}
@@ -141,7 +141,7 @@ export const DatePicker = <T extends FieldValues>({
                 horizontal: 'left',
               }}
             >
-              {uiType === UiType.oneDate ? (
+              {uiType === UiType.OneDate ? (
                 getDayPickerCalendar()
               ) : (
                 <>
@@ -157,7 +157,7 @@ export const DatePicker = <T extends FieldValues>({
                       {t('selectStartingDate')}
                     </StyledBodyLarge>
                   </StyledCollapseBtn>
-                  {firstCalendarVisible && getDayPickerCalendar(DateVariant.start)}
+                  {firstCalendarVisible && getDayPickerCalendar(DateVariant.Start)}
                   <StyledCollapseBtn
                     sx={{
                       backgroundColor: secondCalendarVisible
@@ -170,7 +170,7 @@ export const DatePicker = <T extends FieldValues>({
                       {t('selectEndingDate')}
                     </StyledBodyLarge>
                   </StyledCollapseBtn>
-                  {secondCalendarVisible && getDayPickerCalendar(DateVariant.end)}
+                  {secondCalendarVisible && getDayPickerCalendar(DateVariant.End)}
                 </>
               )}
               <StyledButtons>

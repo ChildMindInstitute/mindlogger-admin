@@ -9,7 +9,7 @@ import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 export const DefaultTabs = ({
   tabs,
   activeTab,
-  uiType = UiType.primary,
+  uiType = UiType.Primary,
 }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(0);

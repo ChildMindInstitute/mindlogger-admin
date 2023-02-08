@@ -13,7 +13,7 @@ import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
 
 export const AppletPasswordPopup = ({
   onClose,
-  popupType = AppletPasswordPopupType.ENTER,
+  popupType = AppletPasswordPopupType.Enter,
   popupVisible,
   appletId,
   encryption,
@@ -35,7 +35,7 @@ export const AppletPasswordPopup = ({
       onClose={onClose}
       onSubmit={submitForm}
       title={
-        popupType === AppletPasswordPopupType.ENTER
+        popupType === AppletPasswordPopupType.Enter
           ? t('enterAppletPassword')
           : t('createAppletPassword')
       }
@@ -43,7 +43,7 @@ export const AppletPasswordPopup = ({
       width="66"
     >
       <StyledAppletPasswordContainer>
-        {popupType === AppletPasswordPopupType.ENTER ? (
+        {popupType === AppletPasswordPopupType.Enter ? (
           <EnterAppletPassword
             ref={appletPasswordRef}
             appletId={appletId}

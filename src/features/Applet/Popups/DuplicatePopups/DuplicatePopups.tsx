@@ -130,7 +130,7 @@ export const DuplicatePopups = () => {
       {passwordModalVisible && (
         <AppletPasswordPopup
           onClose={passwordModalClose}
-          popupType={AppletPasswordPopupType.CREATE}
+          popupType={AppletPasswordPopupType.Create}
           popupVisible={passwordModalVisible}
           submitCallback={submitCallback}
         />
@@ -141,7 +141,7 @@ export const DuplicatePopups = () => {
           onClose={successModalClose}
           title={t('appletDuplication')}
           onSubmit={successModalClose}
-          buttonText={t('OK')}
+          buttonText={t('ok')}
         >
           <StyledModalWrapper>
             <Trans i18nKey="successDuplication">

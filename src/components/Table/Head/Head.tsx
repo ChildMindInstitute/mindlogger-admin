@@ -10,7 +10,7 @@ export const Head = ({
   order,
   orderBy,
   onRequestSort,
-  uiType = UiType.primary,
+  uiType = UiType.Primary,
 }: HeadProps): JSX.Element => {
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
@@ -18,7 +18,7 @@ export const Head = ({
 
   return (
     <StyledTableHead uiType={uiType}>
-      {uiType === UiType.primary && (
+      {uiType === UiType.Primary && (
         <TableRow>
           <TableCell colSpan={headCells.length}>{tableHeader}</TableCell>
         </TableRow>

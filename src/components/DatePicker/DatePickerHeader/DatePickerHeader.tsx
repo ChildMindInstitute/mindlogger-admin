@@ -31,7 +31,7 @@ export const DatePickerHeader = ({
     <StyledHeader
       sx={{
         padding:
-          uiType === UiType.startEndingDate ? theme.spacing(2, 1.2, 3) : theme.spacing(3, 1.2),
+          uiType === UiType.StartEndingDate ? theme.spacing(2, 1.2, 3) : theme.spacing(3, 1.2),
       }}
     >
       <StyledBox>

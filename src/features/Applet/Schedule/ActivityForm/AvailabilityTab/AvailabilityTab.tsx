@@ -20,7 +20,7 @@ import { FormValues } from '../';
 
 export const AvailabilityTab = () => {
   const { t } = useTranslation('app');
-  const [activeRepeat, setActiveRepeat] = useState<string>(Repeats.once);
+  const [activeRepeat, setActiveRepeat] = useState<string>(Repeats.Once);
   const {
     control,
     watch,
@@ -90,14 +90,14 @@ export const AvailabilityTab = () => {
               label={<StyledBodyMedium>{t('allowAccessBeforeTime')}</StyledBodyMedium>}
             />
           </StyledWrapper>
-          {activeRepeat !== Repeats.once ? (
+          {activeRepeat !== Repeats.Once ? (
             <DatePicker
               name="startEndingDate"
               control={control}
-              uiType={DatePickerUiType.startEndingDate}
+              uiType={DatePickerUiType.StartEndingDate}
             />
           ) : (
-            <DatePicker name="date" control={control} uiType={DatePickerUiType.oneDate} />
+            <DatePicker name="date" control={control} uiType={DatePickerUiType.OneDate} />
           )}
         </>
       )}

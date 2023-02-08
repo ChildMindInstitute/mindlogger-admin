@@ -13,9 +13,9 @@ export type Row = {
 };
 
 export enum UiType {
-  primary = 'primary',
-  secondary = 'secondary',
-  tertiary = 'tertiary',
+  Primary = 'primary',
+  Secondary = 'secondary',
+  Tertiary = 'tertiary',
 }
 
 export type TableProps = {

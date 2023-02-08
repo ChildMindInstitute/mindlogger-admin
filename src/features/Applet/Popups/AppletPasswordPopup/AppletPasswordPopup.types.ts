@@ -2,8 +2,8 @@ import { Encryption } from 'redux/modules';
 import { AppletPasswordForm } from 'features/Applet/Password/EnterAppletPassword/EnterAppletPassword.types';
 
 export enum AppletPasswordPopupType {
-  CREATE = 'create',
-  ENTER = 'enter',
+  Create = 'create',
+  Enter = 'enter',
 }
 
 export type AppletPasswordProps = {

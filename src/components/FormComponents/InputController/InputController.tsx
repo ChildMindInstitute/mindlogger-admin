@@ -32,7 +32,7 @@ export const InputController = <T extends FieldValues>({
         };
 
         return (
-          <Tooltip uiType={TooltipUiType.secondary} tooltipTitle={tooltip}>
+          <Tooltip uiType={TooltipUiType.Secondary} tooltipTitle={tooltip}>
             <StyledTextField
               {...textFieldProps}
               onChange={onChange}

@@ -33,7 +33,7 @@ export const ToggleButtonGroup = ({
             </StyledIcon>
           )}
           {icon && <StyledIcon>{icon}</StyledIcon>}
-          <Tooltip uiType={TooltipUiType.secondary} tooltipTitle={t(tooltip || '')}>
+          <Tooltip uiType={TooltipUiType.Secondary} tooltipTitle={t(tooltip || '')}>
             <span> {t(label)}</span>
           </Tooltip>
         </StyledToggleBtn>

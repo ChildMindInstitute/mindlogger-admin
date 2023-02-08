@@ -7,7 +7,7 @@ export const Chip = ({
   title,
   icon,
   color = 'primary',
-  shape = ChipShape.rectangular,
+  shape = ChipShape.Rectangular,
   onRemove,
 }: ChipProps) => (
   <StyledChip

@@ -3,7 +3,7 @@ import { StyledTooltip } from './Tooltip.styles';
 
 export const Tooltip = ({
   tooltipTitle = '',
-  uiType = TooltipUiType.primary,
+  uiType = TooltipUiType.Primary,
   children,
 }: TooltipProps) => (
   <StyledTooltip className={uiType} title={tooltipTitle}>
