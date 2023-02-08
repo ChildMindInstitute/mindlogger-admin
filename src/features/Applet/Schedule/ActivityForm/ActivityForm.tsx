@@ -61,7 +61,7 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
               required
             />
           </StyledModalWrapper>
-          <Tabs tabs={tabs} uiType={UiType.secondary} />
+          <Tabs tabs={tabs} uiType={UiType.Secondary} />
         </form>
       </FormProvider>
     );

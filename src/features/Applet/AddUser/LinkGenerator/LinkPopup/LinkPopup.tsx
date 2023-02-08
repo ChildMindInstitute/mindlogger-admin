@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { postAppletPublicLinkApi } from 'api';
 import { useAsync } from 'hooks/useAsync';
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 
 import {
   StyledDialog,

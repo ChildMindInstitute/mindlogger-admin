@@ -42,7 +42,7 @@ export const Applet = ({
   };
 
   const handleRemoveRole = (label: Roles) => {
-    label === Roles.reviewer && handleAddSelectedRespondents(id, []);
+    label === Roles.Reviewer && handleAddSelectedRespondents(id, []);
     removeRole(id, label);
   };
 
@@ -64,9 +64,9 @@ export const Applet = ({
         </StyledRow>
         {roles?.map((role) => (
           <Chip
-            shape={ChipShape.rounded}
+            shape={ChipShape.Rounded}
             color={
-              appletsWithoutRespondents.includes(title) && role.label === Roles.reviewer
+              appletsWithoutRespondents.includes(title) && role.label === Roles.Reviewer
                 ? 'error'
                 : 'secondary'
             }
@@ -74,7 +74,7 @@ export const Applet = ({
             key={role.label}
             title={
               <StyledLabel>
-                {role.label === Roles.reviewer ? (
+                {role.label === Roles.Reviewer ? (
                   <>
                     {t(role.label)}:{' '}
                     <StyledBtn

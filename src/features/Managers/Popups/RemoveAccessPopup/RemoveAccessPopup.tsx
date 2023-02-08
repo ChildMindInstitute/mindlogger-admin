@@ -109,7 +109,7 @@ export const RemoveAccessPopup = ({
         </strong>
         {t('userHasAccess')}
       </StyledBodyLarge>
-      <Table columns={getHeadCells()} rows={rows} orderBy="name" uiType={UiType.secondary} />
+      <Table columns={getHeadCells()} rows={rows} orderBy="name" uiType={UiType.Secondary} />
     </form>
   );
 

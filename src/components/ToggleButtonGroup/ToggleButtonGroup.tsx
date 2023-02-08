@@ -2,8 +2,7 @@ import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ToggleButtonGroup as MuiToggleButtonGroup } from '@mui/material';
 
-import { Svg } from 'components/Svg';
-import { Tooltip, TooltipUiType } from 'components/Tooltip';
+import { Svg, Tooltip, TooltipUiType } from 'components';
 
 import { StyledIcon, StyledToggleBtn } from './ToggleButtonGroup.styles';
 import { ToggleButtonGroupProps } from './ToggleButtonGroup.types';
@@ -33,7 +32,7 @@ export const ToggleButtonGroup = ({
             </StyledIcon>
           )}
           {icon && <StyledIcon>{icon}</StyledIcon>}
-          <Tooltip uiType={TooltipUiType.secondary} tooltipTitle={t(tooltip || '')}>
+          <Tooltip uiType={TooltipUiType.Secondary} tooltipTitle={t(tooltip || '')}>
             <span> {t(label)}</span>
           </Tooltip>
         </StyledToggleBtn>

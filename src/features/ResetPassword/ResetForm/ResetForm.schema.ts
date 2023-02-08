@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+
 import i18n from 'i18n';
 
 // TODO: request error texts and correct FR translations

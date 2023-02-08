@@ -1,4 +1,4 @@
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 
 import { PinProps } from './Pin.types';
 import { StyledPinButton } from './Pin.styles';

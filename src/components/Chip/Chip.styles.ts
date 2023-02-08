@@ -10,7 +10,7 @@ import { ChipShape } from './Chip.types';
 export const StyledChip = styled(Chip)`
   margin: ${theme.spacing(0.8, 0.8, 0, 0)};
   border-radius: ${({ shape }: { shape: ChipShape }) =>
-    shape === ChipShape.rounded ? variables.borderRadius.xxl : variables.borderRadius.md};
+    shape === ChipShape.Rounded ? variables.borderRadius.xxl : variables.borderRadius.md};
 `;
 
 export const StyledClearedButton = styled(ClearedButton)`

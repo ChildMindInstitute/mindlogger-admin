@@ -13,6 +13,6 @@ export type TagsInputControllerProps<T extends FieldValues> = TagsControllerProp
   UseControllerProps<T>;
 
 export enum UiType {
-  primary = 'primary',
-  secondary = 'secondary',
+  Primary = 'primary',
+  Secondary = 'secondary',
 }
