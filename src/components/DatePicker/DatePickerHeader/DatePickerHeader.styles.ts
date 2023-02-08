@@ -6,10 +6,12 @@ import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledHeader = styled(Box)`
-  display: grid;
   align-items: center;
-  display: flex;
-  padding: ${theme.spacing(0.8, 0)};
+  padding: ${theme.spacing(0.8, 1.2)};
+  display: ${({ isStartEndingDate }: { isStartEndingDate: boolean }) =>
+    isStartEndingDate ? 'grid' : 'flex'};
+  grid-template-columns: ${({ isStartEndingDate }) =>
+    isStartEndingDate ? '1fr auto 1fr' : ' auto'};
 `;
 
 export const StyledCol = styled(Box)`

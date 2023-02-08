@@ -38,9 +38,9 @@ export const DatePickerHeader = ({
   );
 
   return (
-    <StyledHeader sx={{ gridTemplateColumns: isStartEndingDate ? '1fr auto 1fr' : 'auto' }}>
+    <StyledHeader isStartEndingDate={isStartEndingDate}>
       {customHeaderCount === 0 && isStartEndingDate && (
-        <StyledCol>{renderLeftNavigateBtn()}</StyledCol>
+        <StyledCol sx={{ marginLeft: theme.spacing(-0.8) }}>{renderLeftNavigateBtn()}</StyledCol>
       )}
       <StyledSelect sx={{ gridColumnStart: isStartEndingDate ? 2 : 1 }}>
         <>
@@ -53,7 +53,7 @@ export const DatePickerHeader = ({
           )}
         </>
       </StyledSelect>
-      <StyledCol sx={{ marginLeft: 'auto' }}>
+      <StyledCol sx={{ margin: theme.spacing(0, -0.8, 0, 'auto') }}>
         {!isStartEndingDate && renderLeftNavigateBtn()}
         {(!isStartEndingDate || customHeaderCount === 1) && (
           <StyledIconBtn onClick={increaseMonth}>

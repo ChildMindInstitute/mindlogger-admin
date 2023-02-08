@@ -104,10 +104,6 @@ export const StyledPopover = styled(Popover)`
     &__month {
       margin: 0;
     }
-
-    &__month-container {
-      padding: 0 12px;
-    }
   }
 
   .react-datepicker__month-container + .react-datepicker__month-container {
