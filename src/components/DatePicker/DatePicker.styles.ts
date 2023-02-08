@@ -76,8 +76,10 @@ export const StyledPopover = styled(Popover)`
       color: ${variables.palette.primary};
     }
 
-    &__day--outside-month:empty {
+    &__day--outside-month {
       background-color: transparent;
+      color: transparent;
+      pointer-events: none;
 
       &:hover {
         background-color: transparent;
@@ -185,11 +187,18 @@ export const StyledIconBtn = styled(StyledClearedButton)`
 `;
 
 export const StyledButtons = styled(Box)`
-  padding: ${theme.spacing(0.2, 1.1, 1.6)};
-  margin-left: ${theme.spacing(0.5)};
+  padding: ${theme.spacing(0.2, 1.2, 1.6)};
   text-align: right;
 `;
 
 export const StyledButton = styled(Button)`
-  margin-left: ${theme.spacing(0.5)};
+  text-transform: uppercase;
+  font-weight: ${variables.font.weight.bold};
+  min-width: 10rem;
+`;
+
+export const StyledCancelButton = styled(StyledButton)`
+  font-weight: ${variables.font.weight.regular};
+  text-transform: none;
+  margin-right: ${theme.spacing(0.7)};
 `;

@@ -7,8 +7,8 @@ import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 
 export const StyledHeader = styled(Box)`
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  display: flex;
   padding: ${theme.spacing(0.8, 0)};
 `;
 
@@ -34,6 +34,8 @@ export const StyledIconBtn = styled(StyledClearedButton)`
 export const StyledSelect = styled(Box)`
   color: ${variables.palette.on_surface_variant};
   grid-column-start: 2;
+  display: flex;
+  align-items: center;
 
   .MuiTypography-root {
     font-size: ${variables.font.size.lg};

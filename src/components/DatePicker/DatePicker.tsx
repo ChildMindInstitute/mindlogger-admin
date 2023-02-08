@@ -2,12 +2,14 @@ import { MouseEventHandler, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
+import fr from 'date-fns/locale/fr';
 
 import { Svg } from 'components';
 
 import {
   StyledButton,
   StyledButtons,
+  StyledCancelButton,
   StyledIconBtn,
   StyledPopover,
   StyledTextField,
@@ -23,7 +25,7 @@ export const DatePicker = <T extends FieldValues>({
   name,
   uiType = UiType.oneDate,
 }: DatePickerProps<T>) => {
-  const { t } = useTranslation('app');
+  const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const open = Boolean(anchorEl);
@@ -76,7 +78,7 @@ export const DatePicker = <T extends FieldValues>({
               InputProps={{
                 endAdornment: (
                   <StyledIconBtn aria-describedby={id}>
-                    <Svg id="schedule-outlined" />
+                    <Svg id="date" />
                   </StyledIconBtn>
                 ),
               }}
@@ -97,6 +99,7 @@ export const DatePicker = <T extends FieldValues>({
             >
               {value && <PopoverHeader uiType={uiType} date={value} />}
               <ReactDatePicker
+                locale={i18n.language === 'fr' ? fr : undefined}
                 renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
                 startDate={isStartEndingDate && getSelectedDate()}
                 endDate={isStartEndingDate && getSelectedDate(DateVariant.end)}
@@ -109,9 +112,9 @@ export const DatePicker = <T extends FieldValues>({
                 minDate={new Date()}
               />
               <StyledButtons>
-                <StyledButton variant="text" onClick={handlePickerClose}>
+                <StyledCancelButton variant="text" onClick={handlePickerClose}>
                   {t('cancel')}
-                </StyledButton>
+                </StyledCancelButton>
                 <StyledButton variant="text" onClick={handlePickerClose}>
                   {t('ok')}
                 </StyledButton>

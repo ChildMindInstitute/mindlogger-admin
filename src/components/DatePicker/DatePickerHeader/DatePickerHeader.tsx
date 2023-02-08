@@ -1,12 +1,16 @@
 import { SelectChangeEvent } from '@mui/material';
+import { Box } from '@mui/system';
 import { ReactDatePickerCustomHeaderProps } from 'react-datepicker';
 import { useTranslation } from 'react-i18next';
+import { getYear } from 'date-fns';
 
 import { Svg } from 'components';
 
+import theme from 'styles/theme';
 import { UiType } from '../DatePicker.types';
-import { getMonthsArr } from './DatePickerHeader.utils';
+import { getMonthsArr, getRange } from './DatePickerHeader.utils';
 import { StyledCol, StyledHeader, StyledIconBtn, StyledSelect } from './DatePickerHeader.styles';
+import { startYear, endYear } from './DatePickerHeader.const';
 import { Select } from './Select';
 
 export const DatePickerHeader = ({
@@ -14,15 +18,17 @@ export const DatePickerHeader = ({
   decreaseMonth,
   increaseMonth,
   customHeaderCount,
-  changeMonth,
   uiType,
+  changeYear,
+  date,
 }: { uiType: UiType } & ReactDatePickerCustomHeaderProps) => {
   const { t } = useTranslation('app');
   const months = getMonthsArr(t);
+  const years = getRange(startYear, endYear);
   const isStartEndingDate = uiType === UiType.startEndingDate;
 
-  const changeMonthHandler = ({ target: { value } }: SelectChangeEvent) => {
-    changeMonth(months.indexOf(value));
+  const changeYearHandler = ({ target: { value } }: SelectChangeEvent) => {
+    changeYear(+value);
   };
 
   const renderLeftNavigateBtn = () => (
@@ -32,16 +38,20 @@ export const DatePickerHeader = ({
   );
 
   return (
-    <StyledHeader>
+    <StyledHeader sx={{ gridTemplateColumns: isStartEndingDate ? '1fr auto 1fr' : 'auto' }}>
       {customHeaderCount === 0 && isStartEndingDate && (
         <StyledCol>{renderLeftNavigateBtn()}</StyledCol>
       )}
-      <StyledSelect>
-        <Select
-          value={months[monthDate.getMonth()]}
-          changeValue={changeMonthHandler}
-          options={months}
-        />
+      <StyledSelect sx={{ gridColumnStart: isStartEndingDate ? 2 : 1 }}>
+        <>
+          <Box sx={{ marginRight: theme.spacing(0.5) }}>{months[monthDate.getMonth()]}</Box>
+          {isStartEndingDate ? (
+            getYear(date)
+          ) : (
+            <Select value={String(getYear(date))} changeValue={changeYearHandler} options={years} />
+            // TODO change design of select
+          )}
+        </>
       </StyledSelect>
       <StyledCol sx={{ marginLeft: 'auto' }}>
         {!isStartEndingDate && renderLeftNavigateBtn()}
