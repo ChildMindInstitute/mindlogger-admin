@@ -1,15 +1,17 @@
 import { Svg } from 'components/Svg';
 
-import { EditAppletSetting } from '../EditAppletSetting';
-import { ExportDataSetting } from '../ExportDataSetting';
-import { DeleteAppletSetting } from '../DeleteAppletSetting';
-import { DataRetention } from '../DataRetentionSetting/DataRetention';
-import { ReportConfigSetting } from '../ReportConfigSetting';
-import { ShareAppletSetting } from '../ShareAppletSetting';
-import { TransferOwnershipSetting } from '../TransferOwnershipSetting';
-import { DuplicateAppletSettings } from '../DuplicateAppletSettings';
+import {
+  ExportDataSetting,
+  DataRetention,
+  EditAppletSetting,
+  TransferOwnershipSetting,
+  DuplicateAppletSettings,
+  DeleteAppletSetting,
+  ReportConfigSetting,
+  ShareAppletSetting,
+} from 'features/AppletSettings';
 
-export const navigationItems = [
+export const settings = [
   {
     label: 'usersAndData',
     items: [

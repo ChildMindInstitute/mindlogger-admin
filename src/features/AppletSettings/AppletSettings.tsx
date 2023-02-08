@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
 import { useBreadcrumbs } from 'hooks';
+import { Navigation, Setting } from 'features/AppletSettings';
 
-import { Navigation } from './Navigation';
-import { Setting } from './Setting';
 import { StyledContainer } from './AppletSettings.styles';
-import { AppletSetting } from './AppletSettings.types';
+import { AppletSetting, AppletSettingsProps } from './AppletSettings.types';
 
-export const AppletSettings = () => {
+export const AppletSettings = ({ settings }: AppletSettingsProps) => {
   const { t } = useTranslation('app');
   const [selectedSetting, setSelectedSetting] = useState<AppletSetting | null>(null);
 
@@ -23,6 +22,7 @@ export const AppletSettings = () => {
   return (
     <StyledContainer>
       <Navigation
+        settings={settings}
         selectedSetting={selectedSetting}
         handleSettingClick={(setting) => setSelectedSetting(setting)}
       />

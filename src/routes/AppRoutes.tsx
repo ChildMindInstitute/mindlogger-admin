@@ -67,13 +67,13 @@ export const AppRoutes = () => {
                 }
               />
               <Route element={<NewApplet />} path={page.newApplet}>
-                {newAppletRoutes.map(({ path }) => (
+                {newAppletRoutes.map(({ path, Component }) => (
                   <Route
                     key={path}
                     path={path}
                     element={
                       <PrivateRoute condition={isAuthorized}>
-                        <></>
+                        {Component ? <Component /> : <></>}
                       </PrivateRoute>
                     }
                   />

@@ -53,7 +53,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    setCrumbs([...newBreadcrumbs, ...(id && restCrumbs ? restCrumbs : [])]);
+    setCrumbs([...newBreadcrumbs, ...(restCrumbs ? restCrumbs : [])]);
   }, [t, authData, appletsFoldersData, id]);
 
   useEffect(() => {
