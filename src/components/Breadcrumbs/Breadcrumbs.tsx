@@ -1,6 +1,6 @@
 import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { breadcrumbs } from 'redux/modules';
 import {
   StyledLabelSmall,

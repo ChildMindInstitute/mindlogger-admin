@@ -1,7 +1,7 @@
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import theme from 'styles/theme';
 import { StyledTitleMedium } from 'styles/styledComponents/Typography';
 

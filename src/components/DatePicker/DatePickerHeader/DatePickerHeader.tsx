@@ -2,7 +2,7 @@ import { SelectChangeEvent } from '@mui/material';
 import { ReactDatePickerCustomHeaderProps } from 'react-datepicker';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { StyledLabelBoldLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
 

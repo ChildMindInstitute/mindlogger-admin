@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { variables } from 'styles/variables';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 

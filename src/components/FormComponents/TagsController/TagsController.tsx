@@ -1,7 +1,6 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { Svg } from 'components/Svg';
-import { Chip } from 'components/Chip';
+import { Svg, Chip } from 'components';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { StyledFlexWrap } from 'styles/styledComponents/Flex';
 

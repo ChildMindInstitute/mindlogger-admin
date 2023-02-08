@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { auth, folders, Breadcrumb, breadcrumbs } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
 
 import {

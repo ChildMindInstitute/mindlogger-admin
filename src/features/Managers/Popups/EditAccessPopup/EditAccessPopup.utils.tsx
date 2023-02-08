@@ -1,4 +1,4 @@
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { Roles } from 'consts';
 
 export const getRoleIcon = (role: string) => {

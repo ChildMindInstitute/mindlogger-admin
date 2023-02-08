@@ -5,12 +5,10 @@ import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/materia
 import { useAppletsDnd } from 'hooks';
 import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders } from 'redux/modules';
-import { Svg } from 'components/Svg';
+import { Svg, Actions } from 'components';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { variables } from 'styles/variables';
-import { Actions } from 'components/Actions';
-
 import { FolderItemProps } from './FolderItem.types';
 import {
   StyledFolderIcon,

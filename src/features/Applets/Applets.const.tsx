@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { NavigateFunction } from 'react-router-dom';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { HeadCell } from 'types/table';
 import { page } from 'resources';
 

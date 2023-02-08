@@ -5,7 +5,7 @@ import { deleteAppletPublicLinkApi } from 'api';
 import { getErrorMessage } from 'utils/errors';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 
 import { StyledButton, StyledInput } from './LinkForm.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';

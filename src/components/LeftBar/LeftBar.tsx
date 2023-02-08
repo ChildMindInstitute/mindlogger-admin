@@ -3,7 +3,7 @@ import { List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { variables } from 'styles/variables';
 import { page } from 'resources';
 

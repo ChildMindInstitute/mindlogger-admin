@@ -1,7 +1,7 @@
 import { Controller, FieldValues } from 'react-hook-form';
 import { TextField, Autocomplete } from '@mui/material';
 
-import { Chip } from 'components/Chip';
+import { Chip } from 'components';
 
 import { TagsAutocompleteControllerProps } from './TagsAutocompleteController.types';
 

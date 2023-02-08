@@ -1,4 +1,4 @@
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 
 import { EditAppletSetting } from '../EditAppletSetting';
 import { ExportDataSetting } from '../ExportDataSetting';

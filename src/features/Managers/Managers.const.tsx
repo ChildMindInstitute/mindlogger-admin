@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { HeadCell } from 'types/table';
 
 import { Actions } from './Managers.types';
