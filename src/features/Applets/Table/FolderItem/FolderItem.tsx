@@ -9,6 +9,7 @@ import { Svg, Actions } from 'components';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { variables } from 'styles/variables';
+
 import { FolderItemProps } from './FolderItem.types';
 import {
   StyledFolderIcon,
