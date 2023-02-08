@@ -10,7 +10,7 @@ import { PopoverHeaderProps } from './PopoverHeader.types';
 
 export const PopoverHeader = ({ uiType, date }: PopoverHeaderProps) => {
   const { t } = useTranslation('app');
-  const isStartEndingDate = uiType === UiType.startEndingDate;
+  const isStartEndingDate = uiType === UiType.StartEndingDate;
 
   const renderDate = (i: number) =>
     getStringFromDateWithWeekDay(Array.isArray(date) ? date[i] : date);

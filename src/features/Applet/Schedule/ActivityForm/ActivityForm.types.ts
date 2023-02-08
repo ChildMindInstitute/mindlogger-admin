@@ -11,8 +11,8 @@ export type ActivityFormProps = {
 };
 
 export const enum NotificationType {
-  fixed = 'fixed',
-  random = 'random',
+  Fixed = 'fixed',
+  Random = 'random',
 }
 
 export type Notification = {

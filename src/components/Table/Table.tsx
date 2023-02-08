@@ -15,14 +15,14 @@ export const Table = ({
   rows,
   orderBy: orderByProp,
   tableHeight = '100%',
-  uiType = UiType.primary,
+  uiType = UiType.Primary,
   emptyComponent,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(
-    uiType === UiType.tertiary ? TERTIARY_TYPE_ROWS_PER_PAGE : DEFAULT_ROWS_PER_PAGE,
+    uiType === UiType.Tertiary ? TERTIARY_TYPE_ROWS_PER_PAGE : DEFAULT_ROWS_PER_PAGE,
   );
 
   function descendingComparator(a: Row, b: Row, orderBy: string) {
@@ -110,7 +110,7 @@ export const Table = ({
           <EmptyTable>{emptyComponent}</EmptyTable>
         )}
       </StyledTableContainer>
-      {uiType === UiType.tertiary && tableHeader}
+      {uiType === UiType.Tertiary && tableHeader}
     </>
   );
 };

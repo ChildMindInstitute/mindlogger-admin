@@ -1,6 +1,6 @@
 import * as yup from 'yup';
-import i18n from 'i18n';
 
+import i18n from 'i18n';
 import { Roles } from 'consts';
 
 export const AddUserSchema = (isAccountName: boolean | undefined) => {
@@ -20,12 +20,12 @@ export const AddUserSchema = (isAccountName: boolean | undefined) => {
       MRN: yup
         .string()
         .when('role', (role, schema) =>
-          role === Roles.user ? schema.required(secretUserIdRequired) : schema,
+          role === Roles.User ? schema.required(secretUserIdRequired) : schema,
         ),
       accountName: yup
         .string()
         .when('role', (role, schema) =>
-          role !== Roles.user && isAccountName ? schema.required(accountNameRequired) : schema,
+          role !== Roles.User && isAccountName ? schema.required(accountNameRequired) : schema,
         ),
     })
     .required();

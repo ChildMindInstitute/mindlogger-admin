@@ -1,4 +1,4 @@
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 
 import { EditAppletSetting } from '../EditAppletSetting';
 import { ExportDataSetting } from '../ExportDataSetting';
@@ -8,6 +8,7 @@ import { ReportConfigSetting } from '../ReportConfigSetting';
 import { ShareAppletSetting } from '../ShareAppletSetting';
 import { TransferOwnershipSetting } from '../TransferOwnershipSetting';
 import { DuplicateAppletSettings } from '../DuplicateAppletSettings';
+import { DownloadSchemaSetting } from '../DownloadSchemaSetting';
 
 export const navigationItems = [
   {
@@ -36,7 +37,7 @@ export const navigationItems = [
       {
         icon: <Svg id="schema" />,
         label: 'downloadSchema',
-        component: <>downloadSchema</>,
+        component: <DownloadSchemaSetting />,
       },
       {
         icon: <Svg id="version-history" />,

@@ -23,14 +23,14 @@ import { PopoverHeader } from './PopoverHeader';
 export const DatePicker = <T extends FieldValues>({
   control,
   name,
-  uiType = UiType.oneDate,
+  uiType = UiType.OneDate,
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const open = Boolean(anchorEl);
   const id = open ? 'date-picker-popover' : undefined;
-  const isStartEndingDate = uiType === UiType.startEndingDate;
+  const isStartEndingDate = uiType === UiType.StartEndingDate;
 
   const handlePickerShow: MouseEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
@@ -46,7 +46,7 @@ export const DatePicker = <T extends FieldValues>({
       render={({ field: { onChange, value } }) => {
         const getSelectedDate = (variant?: DateVariant) => {
           if (isStartEndingDate) {
-            if (variant === DateVariant.end) {
+            if (variant === DateVariant.End) {
               return value[1] || null;
             }
 
@@ -71,7 +71,7 @@ export const DatePicker = <T extends FieldValues>({
             <StyledTextField
               disabled
               variant="outlined"
-              label={uiType === UiType.oneDate ? t('date') : t('startEndDate')}
+              label={uiType === UiType.OneDate ? t('date') : t('startEndDate')}
               value={getValue()}
               onClick={handlePickerShow}
               className={(open && 'active') || ''}
@@ -102,7 +102,7 @@ export const DatePicker = <T extends FieldValues>({
                 locale={i18n.language === 'fr' ? fr : undefined}
                 renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
                 startDate={isStartEndingDate && getSelectedDate()}
-                endDate={isStartEndingDate && getSelectedDate(DateVariant.end)}
+                endDate={isStartEndingDate && getSelectedDate(DateVariant.End)}
                 selectsRange={isStartEndingDate}
                 inline
                 selected={getSelectedDate()}

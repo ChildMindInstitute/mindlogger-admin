@@ -16,9 +16,9 @@ export const DAY_FORMAT = 'dd MMM yyyy';
 export const DAY_FORMAT_WITH_WEEK_DAY = 'E, dd MMM yyyy';
 
 export enum Roles {
-  user = 'user',
-  manager = 'manager',
-  coordinator = 'coordinator',
-  editor = 'editor',
-  reviewer = 'reviewer',
+  User = 'user',
+  Manager = 'manager',
+  Coordinator = 'coordinator',
+  Editor = 'editor',
+  Reviewer = 'reviewer',
 }

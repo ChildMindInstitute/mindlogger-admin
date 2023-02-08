@@ -1,4 +1,4 @@
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 
 import { StyledButton, StyledContainer } from './Setting.styles';
 import { SettingProps } from './Setting.types';

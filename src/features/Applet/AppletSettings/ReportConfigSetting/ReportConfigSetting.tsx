@@ -86,7 +86,7 @@ export const ReportConfigSetting = () => {
           tags={emailRecipients}
           onAddTagClick={handleAddEmail}
           onRemoveTagClick={handleRemoveEmail}
-          uiType={UiType.secondary}
+          uiType={UiType.Secondary}
           helperText={t('enterRecipientsEmails')}
         />
         <StyledTitleMedium sx={{ margin: theme.spacing(4.8, 0, 1.2) }}>

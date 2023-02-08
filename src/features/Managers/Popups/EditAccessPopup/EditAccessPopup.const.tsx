@@ -9,8 +9,8 @@ export const mockedApplets = [
     title: 'Pediatric Screener',
     img: logoSrc,
     roles: [
-      { icon: getRoleIcon(Roles.editor), label: Roles.editor },
-      { icon: getRoleIcon(Roles.reviewer), label: Roles.reviewer },
+      { icon: getRoleIcon(Roles.Editor), label: Roles.Editor },
+      { icon: getRoleIcon(Roles.Reviewer), label: Roles.Reviewer },
     ],
     selectedRespondents: ['001', 'respondent5'],
   },
@@ -18,7 +18,7 @@ export const mockedApplets = [
     id: '2',
     title: 'Pediatric Screener 2',
     img: logoSrc,
-    roles: [{ icon: getRoleIcon(Roles.manager), label: Roles.manager }],
+    roles: [{ icon: getRoleIcon(Roles.Manager), label: Roles.Manager }],
     selectedRespondents: [],
   },
 ];

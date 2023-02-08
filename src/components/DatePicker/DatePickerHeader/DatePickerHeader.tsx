@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { getYear } from 'date-fns';
 
 import { Svg } from 'components';
-
 import theme from 'styles/theme';
+
 import { UiType } from '../DatePicker.types';
 import { getMonthsArr, getRange } from './DatePickerHeader.utils';
 import { StyledCol, StyledHeader, StyledIconBtn, StyledSelect } from './DatePickerHeader.styles';
@@ -25,7 +25,7 @@ export const DatePickerHeader = ({
   const { t } = useTranslation('app');
   const months = getMonthsArr(t);
   const years = getRange(startYear, endYear);
-  const isStartEndingDate = uiType === UiType.startEndingDate;
+  const isStartEndingDate = uiType === UiType.StartEndingDate;
 
   const changeYearHandler = ({ target: { value } }: SelectChangeEvent) => {
     changeYear(+value);

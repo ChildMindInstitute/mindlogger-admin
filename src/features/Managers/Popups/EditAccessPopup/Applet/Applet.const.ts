@@ -8,19 +8,19 @@ export const getMenuItems = (addRole: (title: Roles) => void): MenuItem[] => {
 
   return [
     {
-      title: Roles.editor,
+      title: Roles.Editor,
       action,
     },
     {
-      title: Roles.reviewer,
+      title: Roles.Reviewer,
       action,
     },
     {
-      title: Roles.coordinator,
+      title: Roles.Coordinator,
       action,
     },
     {
-      title: Roles.manager,
+      title: Roles.Manager,
       action,
     },
   ];

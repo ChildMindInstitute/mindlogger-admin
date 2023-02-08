@@ -1,13 +1,8 @@
 import { useState } from 'react';
 
-import { Tooltip } from 'components';
+import { Svg, Tooltip } from 'components';
 
-import {
-  StyledActions,
-  StyledActionButton,
-  StyledSvg,
-  StyledActionsWrapper,
-} from './Actions.styles';
+import { StyledActions, StyledActionButton, StyledActionsWrapper } from './Actions.styles';
 import { ActionsProps } from './Actions.types';
 
 export const Actions = ({ items, context }: ActionsProps) => {
@@ -34,7 +29,7 @@ export const Actions = ({ items, context }: ActionsProps) => {
           )}
         </StyledActions>
       ) : (
-        <StyledSvg id="dots" width={18} height={4} />
+        <Svg id="dots" width={18} height={4} />
       )}
     </StyledActionsWrapper>
   );

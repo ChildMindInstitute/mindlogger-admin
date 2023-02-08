@@ -10,11 +10,11 @@ import { UiType } from './Tabs.types';
 
 export const StyledTabs = styled(Tabs, shouldForwardProp)`
   height: ${({ uiType }: { uiType: UiType }) =>
-    uiType === UiType.primary ? TABS_HEIGHT : '4.8rem'};
+    uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem'};
   flex-shrink: 0;
 
   ${({ uiType }) =>
-    uiType === UiType.primary &&
+    uiType === UiType.Primary &&
     `
     width: 90rem;
     margin: 0 auto;
@@ -28,13 +28,13 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     color: ${variables.palette.on_surface_variant};
     text-transform: inherit;
     padding: ${({ uiType }: { uiType: UiType }) =>
-      uiType === UiType.primary ? theme.spacing(0.8, 0, 0.7) : theme.spacing(1.4, 2.2)};
+      uiType === UiType.Primary ? theme.spacing(0.8, 0, 0.7) : theme.spacing(1.4, 2.2)};
     justify-content: space-between;
     min-height: ${({ uiType }: { uiType: UiType }) =>
-      uiType === UiType.primary ? TABS_HEIGHT : '4.8rem'};
+      uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem'};
 
     ${({ uiType }) =>
-      uiType === UiType.primary &&
+      uiType === UiType.Primary &&
       `
       margin: ${theme.spacing(0, 0.8)};
       flex-grow: 1;
@@ -51,7 +51,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
 
   .MuiButtonBase-root.Mui-selected {
     color: ${({ uiType }: { uiType: UiType }) =>
-      uiType === UiType.primary ? variables.palette.on_surface : variables.palette.primary};
+      uiType === UiType.Primary ? variables.palette.on_surface : variables.palette.primary};
     font-weight: ${variables.font.weight.regular};
     color: ${variables.palette.primary};
 

@@ -1,11 +1,10 @@
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg, Tooltip, TooltipUiType } from 'components';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { Tooltip, TooltipUiType } from 'components/Tooltip';
 
 import { InputControllerProps } from './InputController.types';
 import { StyledTextField, StyledUpDown } from './InputController.styles';
@@ -32,7 +31,7 @@ export const InputController = <T extends FieldValues>({
         };
 
         return (
-          <Tooltip uiType={TooltipUiType.secondary} tooltipTitle={tooltip}>
+          <Tooltip uiType={TooltipUiType.Secondary} tooltipTitle={tooltip}>
             <StyledTextField
               {...textFieldProps}
               onChange={onChange}
