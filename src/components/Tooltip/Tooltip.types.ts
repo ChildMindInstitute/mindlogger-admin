@@ -1,6 +1,6 @@
 export enum TooltipUiType {
-  primary = 'primary',
-  secondary = 'secondary',
+  Primary = 'primary',
+  Secondary = 'secondary',
 }
 
 export type TooltipProps = {

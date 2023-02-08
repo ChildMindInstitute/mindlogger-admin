@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
-import { Chip } from 'components/Chip';
+import { Svg, Chip } from 'components';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 import {

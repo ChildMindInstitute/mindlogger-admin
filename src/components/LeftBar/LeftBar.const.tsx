@@ -1,6 +1,5 @@
 import { page } from 'resources';
-
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 
 export const links = [
   {

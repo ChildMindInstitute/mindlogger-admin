@@ -21,24 +21,24 @@ export const Fields = {
 
 export const roles = [
   {
-    labelKey: Roles.user,
-    value: Roles.user,
+    labelKey: Roles.User,
+    value: Roles.User,
   },
   {
-    labelKey: Roles.manager,
-    value: Roles.manager,
+    labelKey: Roles.Manager,
+    value: Roles.Manager,
   },
   {
-    labelKey: Roles.coordinator,
-    value: Roles.coordinator,
+    labelKey: Roles.Coordinator,
+    value: Roles.Coordinator,
   },
   {
-    labelKey: Roles.editor,
-    value: Roles.editor,
+    labelKey: Roles.Editor,
+    value: Roles.Editor,
   },
   {
-    labelKey: Roles.reviewer,
-    value: Roles.reviewer,
+    labelKey: Roles.Reviewer,
+    value: Roles.Reviewer,
   },
 ];
 
@@ -71,6 +71,6 @@ export const defaultValues = {
   nickName: '',
   email: '',
   MRN: '',
-  role: Roles.user,
+  role: Roles.User,
   lang: Langs.en,
 };

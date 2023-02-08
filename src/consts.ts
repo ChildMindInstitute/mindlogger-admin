@@ -14,9 +14,9 @@ export const APPLET_PAGES = {
 export const DAY_FORMAT = 'dd MMM yyyy';
 
 export enum Roles {
-  user = 'user',
-  manager = 'manager',
-  coordinator = 'coordinator',
-  editor = 'editor',
-  reviewer = 'reviewer',
+  User = 'user',
+  Manager = 'manager',
+  Coordinator = 'coordinator',
+  Editor = 'editor',
+  Reviewer = 'reviewer',
 }

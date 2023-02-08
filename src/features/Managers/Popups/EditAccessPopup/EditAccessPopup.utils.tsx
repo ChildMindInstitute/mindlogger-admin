@@ -1,15 +1,15 @@
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { Roles } from 'consts';
 
 export const getRoleIcon = (role: string) => {
   switch (role) {
-    case Roles.editor:
+    case Roles.Editor:
       return <Svg id="editor" width={18} height={18} />;
-    case Roles.manager:
+    case Roles.Manager:
       return <Svg id="manager-outlined" width={18} height={18} />;
-    case Roles.reviewer:
+    case Roles.Reviewer:
       return <Svg id="reviewer" width={18} height={18} />;
-    case Roles.coordinator:
+    case Roles.Coordinator:
       return <Svg id="coordinator" width={18} height={18} />;
     default:
       return undefined;

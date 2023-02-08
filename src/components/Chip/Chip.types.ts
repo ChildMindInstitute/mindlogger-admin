@@ -1,6 +1,6 @@
 export enum ChipShape {
-  rectangular = 'rectangular',
-  rounded = 'rounded',
+  Rectangular = 'rectangular',
+  Rounded = 'rounded',
 }
 
 export type ChipProps = {

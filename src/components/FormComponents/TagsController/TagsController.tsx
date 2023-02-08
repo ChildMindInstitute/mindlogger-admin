@@ -1,7 +1,6 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { Svg } from 'components/Svg';
-import { Chip } from 'components/Chip';
+import { Svg, Chip } from 'components';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { StyledFlexWrap } from 'styles/styledComponents/Flex';
 
@@ -16,7 +15,7 @@ export const TagsController = <T extends FieldValues>({
   tags,
   onAddTagClick,
   onRemoveTagClick,
-  uiType = UiType.primary,
+  uiType = UiType.Primary,
   ...props
 }: TagsInputControllerProps<T>) => {
   const chips = tags?.length > 0 && (
@@ -47,7 +46,7 @@ export const TagsController = <T extends FieldValues>({
             helperText={error?.message || helperText}
             value={value}
             InputProps={{
-              startAdornment: uiType === UiType.secondary && chips,
+              startAdornment: uiType === UiType.Secondary && chips,
               endAdornment: (
                 <StyledClearedButton onClick={() => onAddTagClick(value)}>
                   <Svg id="check" />
@@ -55,7 +54,7 @@ export const TagsController = <T extends FieldValues>({
               ),
             }}
           />
-          {uiType === UiType.primary && <StyledFlexWrap>{chips}</StyledFlexWrap>}
+          {uiType === UiType.Primary && <StyledFlexWrap>{chips}</StyledFlexWrap>}
         </>
       )}
     />

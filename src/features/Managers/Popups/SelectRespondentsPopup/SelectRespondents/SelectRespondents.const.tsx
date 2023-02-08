@@ -5,15 +5,15 @@ import i18n from 'i18n';
 import { HeadCell } from 'types/table';
 
 export enum SearchAcross {
-  all = 'all',
-  selected = 'selected',
-  unselected = 'unselected',
+  All = 'all',
+  Selected = 'selected',
+  Unselected = 'unselected',
 }
 
 export const options = [
-  { label: SearchAcross.all, value: SearchAcross.all },
-  { label: SearchAcross.selected, value: SearchAcross.selected },
-  { label: SearchAcross.unselected, value: SearchAcross.unselected },
+  { label: SearchAcross.All, value: SearchAcross.All },
+  { label: SearchAcross.Selected, value: SearchAcross.Selected },
+  { label: SearchAcross.Unselected, value: SearchAcross.Unselected },
 ];
 
 export const getHeadCells = (

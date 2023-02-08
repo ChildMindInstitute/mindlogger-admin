@@ -6,10 +6,9 @@ import { variables } from 'styles/variables';
 import { StyledBodyMedium } from 'styles/styledComponents/Typography';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
-export const StyledInputWrapper = styled(Box)`
-  .MuiOutlinedInput-root {
-    border-radius: ${variables.borderRadius.xxs};
-  }
+export const StyledController = styled(Box)`
+  margin-bottom: ${theme.spacing(2)};
+
   svg {
     fill: ${variables.palette.on_surface_variant};
   }

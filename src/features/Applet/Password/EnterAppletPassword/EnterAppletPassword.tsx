@@ -1,6 +1,7 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { account, folders } from 'redux/modules';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
@@ -9,34 +10,29 @@ import { getAppletEncryptionInfo } from 'utils/encryption';
 import { getAppletData } from 'utils/getAppletData';
 import { Svg } from 'components';
 
-import { AppletPasswordForm, AppletPasswordProps, AppletPasswordRef } from './AppletPassword.types';
-import { StyledInputWrapper, StyledHint } from './AppletPassword.styles';
+import {
+  AppletPasswordForm,
+  AppletPasswordProps,
+  AppletPasswordRef,
+} from './EnterAppletPassword.types';
+import { StyledController, StyledHint } from '../Password.styles';
+import { passwordFormSchema } from './EnterAppletPassword.schema';
 
-export const AppletPassword = forwardRef<AppletPasswordRef, AppletPasswordProps>(
-  ({ appletId, encryption, setDisabledSubmit, submitCallback }, ref) => {
+export const EnterAppletPassword = forwardRef<AppletPasswordRef, AppletPasswordProps>(
+  ({ appletId, encryption, submitCallback }, ref) => {
     const { t } = useTranslation('app');
     const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
 
-    const { handleSubmit, control, watch } = useForm<AppletPasswordForm>({
+    const { handleSubmit, control } = useForm<AppletPasswordForm>({
+      resolver: yupResolver(passwordFormSchema()),
       defaultValues: { appletPassword: '' },
     });
-    const password = watch('appletPassword');
 
     const [showPassword, setShowPassword] = useState(false);
     const [errorText, setErrorText] = useState('');
 
-    const handleTestPwd = (pwdValue: string): boolean => {
-      const appletPwdPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[`~!@#$%^&*])(?=.{8,})/;
-
-      return !appletPwdPattern.test(pwdValue);
-    };
-
     const submitForm = ({ appletPassword }: AppletPasswordForm) => {
-      if (!(appletId || encryption)) {
-        return submitCallback && submitCallback({ appletPassword });
-      }
-
       const appletEncryption = encryption || getAppletData(appletsFoldersData, appletId).encryption;
       const encryptionInfo = getAppletEncryptionInfo({
         appletPassword,
@@ -67,11 +63,9 @@ export const AppletPassword = forwardRef<AppletPasswordRef, AppletPasswordProps>
       },
     }));
 
-    useEffect(() => setDisabledSubmit && setDisabledSubmit(handleTestPwd(password)), [password]);
-
     return (
       <form onSubmit={handleSubmit(submitForm)} noValidate>
-        <StyledInputWrapper>
+        <StyledController>
           <InputController
             fullWidth
             name="appletPassword"
@@ -91,7 +85,7 @@ export const AppletPassword = forwardRef<AppletPasswordRef, AppletPasswordProps>
             }}
           />
           <StyledHint isError={!!errorText}>{errorText || t('enterAppletPasswordHint')}</StyledHint>
-        </StyledInputWrapper>
+        </StyledController>
       </form>
     );
   },

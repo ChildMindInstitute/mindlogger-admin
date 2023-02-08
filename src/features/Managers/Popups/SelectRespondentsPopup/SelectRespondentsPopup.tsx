@@ -37,7 +37,7 @@ export const SelectRespondentsPopup = ({
       title={t('selectRespondents')}
       buttonText={t('confirm')}
       hasSecondBtn
-      secondBtnText={t('cancel')}
+      secondBtnText={t('back')}
       onSecondBtnSubmit={handleClose}
       width="66"
       height="60"

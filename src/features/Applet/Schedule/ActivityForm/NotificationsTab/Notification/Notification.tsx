@@ -17,7 +17,7 @@ import { FormValues, NotificationType } from '../../ActivityForm.types';
 export const Notification = ({ index, remove }: NotificationProps) => {
   const { t } = useTranslation('app');
   const { setValue } = useFormContext<FormValues>();
-  const [activeType, setActivetype] = useState<string>(NotificationType.fixed);
+  const [activeType, setActivetype] = useState<string>(NotificationType.Fixed);
 
   const handleRemoveNotification = () => {
     remove(index);
@@ -48,7 +48,7 @@ export const Notification = ({ index, remove }: NotificationProps) => {
             />
           </StyledleftCol>
           <StyledCol sx={{ marginLeft: theme.spacing(2.4) }}>
-            {activeType === NotificationType.fixed ? (
+            {activeType === NotificationType.Fixed ? (
               <StyledColInner>
                 <TimePicker name={`notifications.${index}.at`} label={t('at')} />
               </StyledColInner>

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import avatarSrc from 'assets/images/avatar.png';

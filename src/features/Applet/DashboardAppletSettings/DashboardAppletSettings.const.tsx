@@ -8,6 +8,7 @@ import {
   DeleteAppletSetting,
   ReportConfigSetting,
   ShareAppletSetting,
+  DownloadSchemaSetting,
 } from 'features/AppletSettings';
 
 export const settings = [
@@ -37,7 +38,7 @@ export const settings = [
       {
         icon: <Svg id="schema" />,
         label: 'downloadSchema',
-        component: <>downloadSchema</>,
+        component: <DownloadSchemaSetting />,
       },
       {
         icon: <Svg id="version-history" />,

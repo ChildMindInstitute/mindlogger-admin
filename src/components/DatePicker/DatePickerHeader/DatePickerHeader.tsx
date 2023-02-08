@@ -2,7 +2,7 @@ import { SelectChangeEvent } from '@mui/material';
 import { ReactDatePickerCustomHeaderProps } from 'react-datepicker';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { StyledLabelBoldLarge } from 'styles/styledComponents/Typography';
 import theme from 'styles/theme';
 
@@ -31,7 +31,7 @@ export const DatePickerHeader = ({
     <StyledHeader
       sx={{
         padding:
-          uiType === UiType.startEndingDate ? theme.spacing(2, 1.2, 3) : theme.spacing(3, 1.2),
+          uiType === UiType.StartEndingDate ? theme.spacing(2, 1.2, 3) : theme.spacing(3, 1.2),
       }}
     >
       <StyledBox>
