@@ -1,3 +1,5 @@
+import { View } from 'react-big-calendar';
+
 export type CalendarEvent = {
   title: string;
   start: Date;
@@ -12,3 +14,12 @@ export type CalendarEvent = {
   isHidden?: boolean;
   isOffRange?: boolean;
 };
+
+export type OnViewFunc = (view: View) => void;
+
+export enum CalendarViews {
+  Day = 'day',
+  Week = 'week',
+  Month = 'month',
+  Year = 'year',
+}

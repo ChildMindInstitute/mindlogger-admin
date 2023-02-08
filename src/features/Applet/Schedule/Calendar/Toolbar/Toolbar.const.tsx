@@ -1,27 +1,29 @@
 import { Svg } from 'components';
 import i18n from 'i18n';
 
+import { CalendarViews } from '../Calendar.types';
+
 const { t } = i18n;
 
 export const getCalendarViewButtons = () => [
   {
-    value: 'day',
-    label: t('day'),
+    value: CalendarViews.Day,
+    label: t(CalendarViews.Day),
     icon: <Svg width="15.5" height="15.5" id="day-view" />,
   },
   {
-    value: 'week',
-    label: t('week'),
+    value: CalendarViews.Week,
+    label: t(CalendarViews.Week),
     icon: <Svg width="15.5" height="15.5" id="week-view" />,
   },
   {
-    value: 'month',
-    label: t('month'),
+    value: CalendarViews.Month,
+    label: t(CalendarViews.Month),
     icon: <Svg width="15.5" height="15.5" id="month-view" />,
   },
   {
-    value: 'year',
-    label: t('year'),
+    value: CalendarViews.Year,
+    label: t(CalendarViews.Year),
     icon: <Svg width="15.5" height="15.5" id="year-view" />,
   },
 ];

@@ -3,6 +3,7 @@ import { styled, Box } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 export const StyledAddBtn = styled(StyledClearedButton)`
   z-index: ${theme.zIndex.fab};
@@ -24,9 +25,97 @@ export const StyledAddBtn = styled(StyledClearedButton)`
   }
 `;
 
+export const StyledTimeHeaderGutter = styled(StyledFlexTopCenter)`
+  svg {
+    flex-shrink: 0;
+    fill: ${variables.palette.on_surface_variant};
+  }
+`;
+
 export const StyledCalendarWrapper = styled(Box)`
   position: relative;
   flex-grow: 1;
+
+  .rbc-current-time-indicator {
+    display: none;
+  }
+
+  .rbc-time-view {
+    border-width: ${variables.borderWidth.md} 0 0;
+    border-color: ${variables.palette.surface_variant};
+  }
+
+  .rbc-time-header-content {
+    padding: ${theme.spacing(1, 0.8)};
+    border: none;
+  }
+
+  .rbc-time-content {
+    padding-top: ${theme.spacing(1)};
+    border-top: ${variables.borderWidth.xl} solid ${variables.palette.surface_variant};
+
+    & > * + * > * {
+      border-left: none;
+    }
+  }
+
+  .rbc-time-gutter {
+    width: 8.5rem;
+
+    .rbc-timeslot-group {
+      position: relative;
+      border: none;
+    }
+
+    .rbc-time-slot {
+      .rbc-label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateY(-50%);
+        color: ${variables.palette.outline};
+        font-size: ${variables.font.size.md};
+        line-height: ${variables.lineHeight.md};
+        letter-spacing: ${variables.letterSpacing.sm};
+      }
+    }
+  }
+
+  .rbc-time-header {
+    margin-right: 0 !important;
+  }
+
+  .rbc-time-header-gutter {
+    display: flex;
+    align-items: center;
+  }
+
+  .rbc-time-header-content {
+    .rbc-row:empty {
+      display: none;
+    }
+  }
+
+  .rbc-timeslot-group {
+    min-height: 7.6rem;
+  }
+
+  .rbc-day-slot {
+    .rbc-timeslot-group {
+      border-left: none;
+      border-bottom: none;
+      border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+      min-height: 7.6rem;
+    }
+
+    &.rbc-today {
+      background-color: transparent;
+    }
+
+    .rbc-time-slot {
+      border: none;
+    }
+  }
 
   .rbc-month-view {
     border-left: unset;
@@ -45,6 +134,8 @@ export const StyledCalendarWrapper = styled(Box)`
     }
 
     .rbc-event {
+      max-width: 92%;
+      margin: 0 auto;
       transition: ${variables.transitions.opacity};
 
       &:hover {

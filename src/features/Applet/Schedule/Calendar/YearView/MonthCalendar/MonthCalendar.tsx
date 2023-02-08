@@ -3,7 +3,7 @@ import uniqueId from 'lodash.uniqueid';
 
 import i18n from 'i18n';
 
-import { CalendarEvent } from '../../Calendar.types';
+import { CalendarEvent, CalendarViews } from '../../Calendar.types';
 import { formatToYearMonthDate } from '../../Calendar.utils';
 import { CalendarDate } from './CalendarDate';
 import { createCalendar, getMonthName, shortWeekDaysArray } from './MonthCalendar.utils';
@@ -28,7 +28,7 @@ export const MonthCalendar = ({
 
   const handleDayClick = (date: Date) => {
     setDate(date);
-    setActiveView('day');
+    setActiveView(CalendarViews.Day);
   };
 
   const monthDates = useMemo(
