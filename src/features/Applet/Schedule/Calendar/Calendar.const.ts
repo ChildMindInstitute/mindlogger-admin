@@ -107,6 +107,7 @@ export const mockedEvents: CalendarEvent[] = [
     alwaysAvailable: true,
     backgroundColor: variables.palette.green,
     endAlertIcon: true,
+    startFlowIcon: true,
   },
   // {
   //   id: 'midday-assessment-id',

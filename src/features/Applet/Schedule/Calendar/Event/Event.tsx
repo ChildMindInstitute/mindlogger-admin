@@ -1,24 +1,26 @@
 import { Svg } from 'components';
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
 
-import { MonthEventProps } from './MonthEvent.types';
+import { EventProps, UiType } from './Event.types';
 import {
-  StyledStartIcon,
   StyledEndIcon,
   StyledEvent,
   StyledIndicator,
-  StyledTitle,
   StyledLeftSection,
-} from './MonthEvent.styles';
+  StyledStartIcon,
+  StyledTitle,
+} from './Event.styles';
 
-export const MonthEvent = ({ title, event }: MonthEventProps) => {
+export const Event = ({ title, event, uiType = UiType.Primary }: EventProps) => {
   const { startIndicator, startFlowIcon, startTime, endAlertIcon, alwaysAvailable } = event;
 
   return (
     <StyledEvent>
       <StyledLeftSection>
         {startIndicator && <StyledIndicator bgColor={startIndicator} />}
-        {startTime && <StyledLabelMedium>{startTime}</StyledLabelMedium>}
+        {uiType === UiType.Primary && startTime && (
+          <StyledLabelMedium>{startTime}</StyledLabelMedium>
+        )}
         {startFlowIcon && (
           <StyledStartIcon isWhite={alwaysAvailable}>
             <Svg id="flow" width="15" height="15" />

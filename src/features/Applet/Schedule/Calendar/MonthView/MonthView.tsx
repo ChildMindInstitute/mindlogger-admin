@@ -10,23 +10,27 @@ export const MonthView = (props: MonthViewType) => {
   const { date, activeView } = props.components;
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       const containerElement = monthRef.current?.containerRef.current;
-      const dayCellHeight = containerElement.getElementsByClassName('rbc-day-bg')[0].offsetHeight;
+      const dayCellHeight = containerElement.getElementsByClassName('rbc-day-bg')[0]?.offsetHeight;
       const dateCellHeight =
-        containerElement.getElementsByClassName('rbc-date-cell')[0].offsetHeight;
+        containerElement.getElementsByClassName('rbc-date-cell')[0]?.offsetHeight;
       const eventElement = containerElement.getElementsByClassName('rbc-row-segment')[0];
+
       if (eventElement) {
         const eventHeight = eventElement.offsetHeight;
         const eventsToShowCoefficient = (dayCellHeight - dateCellHeight) / eventHeight;
         const decimalInCoefficient = eventsToShowCoefficient - Math.floor(eventsToShowCoefficient);
-        const numberOfEventsToShow =
+        const rowLimit =
           decimalInCoefficient > COEFFICIENT_SHOW_ONE_MORE_EVENT
             ? Math.round(eventsToShowCoefficient)
             : Math.floor(eventsToShowCoefficient);
-        monthRef.current?.setState({ rowLimit: numberOfEventsToShow });
+
+        monthRef.current?.setState({ rowLimit });
       }
     });
+
+    return () => clearTimeout(timeout);
   }, [date, activeView]);
 
   return <CalendarMonthView {...props} ref={monthRef} />;

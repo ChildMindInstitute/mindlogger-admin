@@ -82,7 +82,7 @@ export const Calendar = () => {
           view={activeView as View}
           onView={setActiveView as OnViewFunc}
           messages={messages}
-          scrollToTime={new Date(date.setHours(3, 55))}
+          scrollToTime={new Date(date.setHours(3, 56))}
           formats={formats as Formats}
         />
         <StyledAddBtn onClick={handleAddClick}>

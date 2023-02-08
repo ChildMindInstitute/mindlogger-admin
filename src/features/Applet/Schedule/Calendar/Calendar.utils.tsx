@@ -1,5 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Culture, DateLocalizer, DateRange, HeaderProps, ToolbarProps } from 'react-big-calendar';
+import {
+  Culture,
+  DateLocalizer,
+  DateRange,
+  EventProps,
+  HeaderProps,
+  ToolbarProps,
+} from 'react-big-calendar';
 import { format } from 'date-fns';
 
 import { Svg } from 'components';
@@ -11,11 +18,12 @@ import { DateFormats } from 'consts';
 
 import { Toolbar } from './Toolbar';
 import { MonthHeader } from './MonthHeader';
-import { MonthEvent } from './MonthEvent';
+import { Event } from './Event';
 import { MonthView } from './MonthView';
 import { YearView } from './YearView';
 import { CalendarEvent, CalendarViews } from './Calendar.types';
 import { StyledTimeHeaderGutter } from './Calendar.styles';
+import { UiType } from './Event/Event.types';
 
 const { t } = i18n;
 
@@ -31,11 +39,11 @@ export const getCalendarComponents = (
     ),
     month: {
       header: (props: HeaderProps) => <MonthHeader {...props} calendarDate={date} />,
-      event: MonthEvent,
+      event: Event,
     },
-    // day: {
-    //   event: DayEvent,
-    // },
+    day: {
+      event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.Secondary} />,
+    },
     timeGutterHeader: () => (
       <StyledTimeHeaderGutter>
         <Svg id="navigate-right" width="19" height="19" />

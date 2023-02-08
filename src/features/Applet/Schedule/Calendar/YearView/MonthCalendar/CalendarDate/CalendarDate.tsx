@@ -4,7 +4,7 @@ import uniqueId from 'lodash.uniqueid';
 import theme from 'styles/theme';
 import { StyledBodySmall } from 'styles/styledComponents/Typography';
 import { StyledHeadline } from 'styles/styledComponents/Typography';
-import { MonthEvent } from 'features/Applet/Schedule/Calendar/MonthEvent';
+import { Event } from 'features/Applet/Schedule/Calendar/Event';
 import { formatToYearMonthDate } from 'features/Applet/Schedule/Calendar/Calendar.utils';
 
 import { CalendarDateProps, TooltipPosition } from './CalendarDate.types';
@@ -58,7 +58,7 @@ export const CalendarDate = ({
       (event, index) =>
         ((showMoreText && index < MAX_EVENTS_IN_TOOLTIP) || !showMoreText) && (
           <StyledTooltipEventWrapper key={uniqueId()} bgColor={event.backgroundColor}>
-            <MonthEvent title={event.title} event={event} />
+            <Event title={event.title} event={event} />
           </StyledTooltipEventWrapper>
         ),
     );
