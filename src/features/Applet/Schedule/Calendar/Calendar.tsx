@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import {
   Calendar as ReactCalendar,
-  SlotInfo,
   dateFnsLocalizer,
-  View,
   Formats,
+  SlotInfo,
+  View,
 } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { format, parse, startOfWeek, getDay } from 'date-fns';
+import { format, getDay, parse, startOfWeek } from 'date-fns';
 import { enUS, fr } from 'date-fns/locale';
 
 import i18n from 'i18n';
@@ -16,9 +16,9 @@ import { Svg } from 'components';
 import { CreateActivityPopup } from '../CreateActivityPopup';
 import { EditActivityPopup } from '../EditActivityPopup';
 import { mockedEvents } from './Calendar.const';
-import { getCalendarComponents, eventPropGetter, getEventsWithOffRange } from './Calendar.utils';
-import { StyledCalendarWrapper, StyledAddBtn } from './Calendar.styles';
-import { CalendarEvent, OnViewFunc, CalendarViews } from './Calendar.types';
+import { getCalendarComponents, getEventsWithOffRange, eventPropGetter } from './Calendar.utils';
+import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
+import { CalendarEvent, CalendarViews, OnViewFunc } from './Calendar.types';
 
 const locales = {
   'en-US': enUS,
@@ -78,12 +78,13 @@ export const Calendar = () => {
           selectable={true}
           onSelectSlot={onSelectSlot}
           onSelectEvent={onSelectEvent}
-          eventPropGetter={eventPropGetter}
+          eventPropGetter={(event) => eventPropGetter(event, activeView)}
           view={activeView as View}
           onView={setActiveView as OnViewFunc}
           messages={messages}
           scrollToTime={new Date(date.setHours(3, 56))}
           formats={formats as Formats}
+          dayLayoutAlgorithm="no-overlap"
         />
         <StyledAddBtn onClick={handleAddClick}>
           <Svg id="add" />

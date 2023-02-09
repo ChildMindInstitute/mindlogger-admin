@@ -7,11 +7,12 @@ export type CalendarEvent = {
   id: string;
   backgroundColor: string;
   alwaysAvailable: boolean;
-  startIndicator?: string;
-  startTime?: string;
+  isHidden: boolean;
+  scheduledColor?: string;
+  scheduledBackground?: string;
+  allDayEvent?: boolean;
   startFlowIcon?: boolean;
   endAlertIcon?: boolean;
-  isHidden?: boolean;
   isOffRange?: boolean;
 };
 

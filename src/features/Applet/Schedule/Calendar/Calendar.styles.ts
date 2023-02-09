@@ -86,8 +86,7 @@ export const StyledCalendarWrapper = styled(Box)`
   }
 
   .rbc-time-header-gutter {
-    display: flex;
-    align-items: center;
+    padding: ${theme.spacing(1, 0.8)};
   }
 
   .rbc-time-header-content {
@@ -114,6 +113,26 @@ export const StyledCalendarWrapper = styled(Box)`
 
     .rbc-time-slot {
       border: none;
+    }
+  }
+
+  .rbc-row-segment {
+    padding-bottom: ${theme.spacing(0.2)};
+  }
+
+  .rbc-event {
+    .rbc-event-label {
+      display: none;
+    }
+  }
+
+  .rbc-time-view {
+    .rbc-row {
+      min-height: unset;
+    }
+
+    .rbc-day-bg.rbc-today {
+      background-color: unset;
     }
   }
 
@@ -187,7 +206,7 @@ export const StyledCalendarWrapper = styled(Box)`
     }
 
     .rbc-show-more {
-      margin: ${theme.spacing(0.3, 0, 0, 0.9)};
+      margin: ${theme.spacing(0.2, 0, 0, 0.9)};
       font-size: ${variables.font.size.sm};
       line-height: ${variables.lineHeight.sm};
       letter-spacing: ${variables.letterSpacing.xxl};

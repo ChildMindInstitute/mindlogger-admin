@@ -16,6 +16,7 @@ import { variables } from 'styles/variables';
 import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
 import { DateFormats } from 'consts';
 
+import { UiType } from './Event/Event.types';
 import { Toolbar } from './Toolbar';
 import { MonthHeader } from './MonthHeader';
 import { Event } from './Event';
@@ -23,9 +24,11 @@ import { MonthView } from './MonthView';
 import { YearView } from './YearView';
 import { CalendarEvent, CalendarViews } from './Calendar.types';
 import { StyledTimeHeaderGutter } from './Calendar.styles';
-import { UiType } from './Event/Event.types';
 
 const { t } = i18n;
+
+export const formatToYearMonthDate = (date?: Date) =>
+  date && format(date, DateFormats.DayMonthYear);
 
 export const getCalendarComponents = (
   activeView: string,
@@ -52,10 +55,10 @@ export const getCalendarComponents = (
         </StyledLabelBoldMedium>
       </StyledTimeHeaderGutter>
     ),
-    setDate,
-    setActiveView,
     date,
+    setDate,
     activeView,
+    setActiveView,
   },
   messages: {
     showMore: (total: number) => `${total} ${t('more').toLowerCase()}...`,
@@ -80,19 +83,27 @@ export const getCalendarComponents = (
   },
 });
 
-export const eventPropGetter = (event: CalendarEvent) => ({
-  style: {
-    backgroundColor: event.backgroundColor,
-    color: event.alwaysAvailable ? variables.palette.white : variables.palette.on_surface,
-    ...(event.isOffRange && { opacity: '0.38' }),
-  },
-});
+export const eventPropGetter = (event: CalendarEvent, activeView: CalendarViews) => {
+  const isAllDayEvent = event.allDayEvent || event.alwaysAvailable;
+  const isDayWeekView = activeView === CalendarViews.Day || activeView === CalendarViews.Week;
+  const isScheduledDayWeekEvent = isDayWeekView && !isAllDayEvent;
+
+  return {
+    style: {
+      padding: isScheduledDayWeekEvent ? theme.spacing(0.2, 0.8) : theme.spacing(0.2, 0.4),
+      borderRadius: isScheduledDayWeekEvent ? variables.borderRadius.md : variables.borderRadius.xs,
+      borderWidth: `0 0 0 ${isScheduledDayWeekEvent ? variables.borderWidth.xl : 0}`,
+      borderColor: isScheduledDayWeekEvent ? event.scheduledColor : 'transparent',
+      backgroundColor:
+        (isScheduledDayWeekEvent && event.scheduledBackground) || event.backgroundColor,
+      color: event.alwaysAvailable ? variables.palette.white : variables.palette.on_surface,
+      ...(event.isOffRange && { opacity: '0.38' }),
+    },
+  };
+};
 
 export const getEventsWithOffRange = (events: CalendarEvent[], date: Date) =>
   events.map((event) => ({
     ...event,
     isOffRange: event.start.getMonth() !== date.getMonth(),
   }));
-
-export const formatToYearMonthDate = (date?: Date) =>
-  date && format(date, DateFormats.DayMonthYear);
