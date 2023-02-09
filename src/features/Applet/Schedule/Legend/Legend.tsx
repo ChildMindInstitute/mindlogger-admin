@@ -160,7 +160,6 @@ export const Legend = () => {
       )}
       <CreateActivityPopup
         open={createActivityPopupVisible}
-        onClose={() => setCreateActivityPopupVisible(false)}
         setCreateActivityPopupVisible={setCreateActivityPopupVisible}
         activityName="Daily Journal"
       />

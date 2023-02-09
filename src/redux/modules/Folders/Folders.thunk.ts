@@ -12,6 +12,7 @@ import {
   removeAppletApi,
   getAppletSearchTermsApi,
   AppletId,
+  setAppletEncryptionApi,
 } from 'api';
 
 import {
@@ -20,6 +21,7 @@ import {
   updateFolders,
   addAppletToFolder as addAppletToFolderUtil,
   removeAppletFromFolder as removeAppletFromFolderUtil,
+  changeAppletEncryption as changeAppletEncryptionUtil,
   changeFolder as changeFolderUtil,
 } from './Folders.utils';
 
@@ -193,6 +195,23 @@ export const getAppletSearchTerms = createAsyncThunk(
   async ({ appletId }: AppletId, { rejectWithValue, signal }) => {
     try {
       return getAppletSearchTermsApi({ appletId }, signal);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const setAppletEncryption = createAsyncThunk(
+  'folders/setAppletEncryption',
+  async (
+    { appletId, data }: { appletId: string; data: FormData },
+    { getState, rejectWithValue, signal },
+  ) => {
+    try {
+      await setAppletEncryptionApi({ appletId, data }, signal);
+      const { folders } = getState() as { folders: FoldersSchema };
+
+      return changeAppletEncryptionUtil(folders, appletId, data);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

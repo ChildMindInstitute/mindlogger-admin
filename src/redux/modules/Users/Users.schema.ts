@@ -3,7 +3,7 @@ import { BaseSchema } from 'redux/modules/Base';
 export type Roles = 'manager' | 'user';
 
 type CommonUserData = {
-  fake: string;
+  fake: string | boolean;
   hasIndividualEvent: boolean;
   identifiers: string;
   nickName: string;

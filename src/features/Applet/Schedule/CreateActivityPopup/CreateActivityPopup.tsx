@@ -9,7 +9,6 @@ import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
 import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup';
 
 export const CreateActivityPopup = ({
-  onClose,
   open,
   activityName,
   setCreateActivityPopupVisible,
@@ -20,6 +19,8 @@ export const CreateActivityPopup = ({
     useState(false);
   const [confirmScheduledAcessPopupVisible, setConfirmScheduledAccessPopupVisible] =
     useState(false);
+
+  const onClose = () => setCreateActivityPopupVisible(false);
 
   const onSubmit = () => {
     if (activityFormRef?.current) {

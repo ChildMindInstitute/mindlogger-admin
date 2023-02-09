@@ -12,6 +12,7 @@ import {
   togglePin,
   updateFolder,
   getAppletSearchTerms,
+  setAppletEncryption,
 } from './Folders.thunk';
 import { state as initialState } from './Folders.state';
 import {
@@ -160,9 +161,11 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
   builder.addCase(changeFolder.fulfilled, (state, action) => {
     createFulfilledData(state, 'flattenFoldersApplets', action.meta.requestId, action.payload);
   });
+
   builder.addCase(getAppletSearchTerms.pending, (state, action) => {
     createPendingData(state, 'appletsSearchTerms', action.meta.requestId);
   });
+
   builder.addCase(getAppletSearchTerms.fulfilled, ({ appletsSearchTerms }, action) => {
     if (
       appletsSearchTerms.status === 'loading' &&
@@ -176,10 +179,28 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
       };
     }
   });
+
   builder.addCase(getAppletSearchTerms.rejected, (state, action) => {
     createRejectedData(
       state,
       'appletsSearchTerms',
+      action.meta.requestId,
+      action.payload as AxiosError,
+    );
+  });
+
+  builder.addCase(setAppletEncryption.pending, (state, action) => {
+    createPendingData(state, 'flattenFoldersApplets', action.meta.requestId);
+  });
+
+  builder.addCase(setAppletEncryption.fulfilled, (state, action) => {
+    createFulfilledData(state, 'flattenFoldersApplets', action.meta.requestId, action.payload);
+  });
+
+  builder.addCase(setAppletEncryption.rejected, (state, action) => {
+    createRejectedData(
+      state,
+      'flattenFoldersApplets',
       action.meta.requestId,
       action.payload as AxiosError,
     );
