@@ -28,7 +28,7 @@ export const EditAccessPopup = ({
   const getAppletsWithoutRespondents = () =>
     applets.reduce((acc: string[], el) => {
       if (
-        el.roles.some((role) => role.label === Roles.reviewer) &&
+        el.roles.some((role) => role.label === Roles.Reviewer) &&
         !el?.selectedRespondents?.length
       ) {
         acc.push(el.title);

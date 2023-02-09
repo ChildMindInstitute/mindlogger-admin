@@ -1,4 +1,4 @@
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import theme from 'styles/theme';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledLabelLarge } from 'styles/styledComponents/Typography';

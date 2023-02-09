@@ -1,20 +1,20 @@
 export const enum Timers {
-  noTimeLimit = 'No time limit',
-  timer = 'Timer',
-  idleTime = 'Idle time',
+  NoTimeLimit = 'No time limit',
+  Timer = 'Timer',
+  IdleTime = 'Idle time',
 }
 
 export const timersButtons = [
   {
-    value: Timers.noTimeLimit,
+    value: Timers.NoTimeLimit,
     label: 'noTimeLimit',
   },
   {
-    value: Timers.timer,
+    value: Timers.Timer,
     label: 'timer',
   },
   {
-    value: Timers.idleTime,
+    value: Timers.IdleTime,
     label: 'idleTime',
   },
 ];

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -9,21 +9,22 @@ import { Modal } from 'components';
 import { InputController } from 'components/FormComponents';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import { useAsync } from 'hooks/useAsync';
-import { account, popups } from 'redux/modules';
+import { account, popups, folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { duplicateAppletApi, validateAppletNameApi } from 'api';
 import { getAppletEncryptionInfo } from 'utils/encryption';
 import { page } from 'resources';
 
-import { EnterAppletPasswordPopup } from '../EnterAppletPasswordPopup';
+import { AppletPasswordPopupType, AppletPasswordPopup } from '../AppletPasswordPopup';
 
 export const DuplicatePopups = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const history = useNavigate();
   const accountData = account.useData();
+  const appletsFoldersData = folders.useFlattenFoldersApplets();
   const { duplicatePopupsVisible, appletId } = popups.useData();
-  const currentApplet = accountData?.account?.applets?.find((el) => el.id === appletId);
+  const currentApplet = appletsFoldersData?.find((appletFolder) => appletFolder.id === appletId);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [nameModalVisible, setNameModalVisible] = useState(false);
@@ -34,7 +35,8 @@ export const DuplicatePopups = () => {
         name: yup.string().required(t('nameRequired')!),
       }),
     ),
-    defaultValues: { name: '' },
+    defaultValues: { name: `${currentApplet?.name} (1)` || '' },
+    // TODO: while changing endpoints, discuss with the backend the implementation of creating / checking the name of the applet
   });
 
   const { execute } = useAsync(
@@ -95,7 +97,6 @@ export const DuplicatePopups = () => {
     }, 4000);
 
     setPasswordModalVisible(false);
-    duplicatePopupsClose();
     setSuccessModalVisible(true);
   };
 
@@ -107,7 +108,7 @@ export const DuplicatePopups = () => {
   useEffect(() => {
     if (duplicatePopupsVisible) {
       setNameModalVisible(true);
-      execute({ name: currentApplet?.name || '' });
+      execute({ name: getValues().name || '' });
     }
   }, [duplicatePopupsVisible]);
 
@@ -116,7 +117,7 @@ export const DuplicatePopups = () => {
       <Modal
         open={nameModalVisible}
         onClose={nameModalClose}
-        title={t('appletName')}
+        title={t('appletDuplication')}
         onSubmit={setNameHandler}
         buttonText={t('submit')}
       >
@@ -126,20 +127,33 @@ export const DuplicatePopups = () => {
           </form>
         </StyledModalWrapper>
       </Modal>
-      <EnterAppletPasswordPopup
-        popupVisible={passwordModalVisible}
-        setPopupVisible={setPasswordModalVisible}
-        submitCallback={submitCallback}
-      />
-      <Modal
-        open={successModalVisible}
-        onClose={successModalClose}
-        title={t('appletDuplication')}
-        onSubmit={successModalClose}
-        buttonText={t('dismiss')}
-      >
-        <StyledModalWrapper>{t('successDuplication')}</StyledModalWrapper>
-      </Modal>
+      {passwordModalVisible && (
+        <AppletPasswordPopup
+          onClose={passwordModalClose}
+          popupType={AppletPasswordPopupType.Create}
+          popupVisible={passwordModalVisible}
+          submitCallback={submitCallback}
+        />
+      )}
+      {successModalVisible && (
+        <Modal
+          open={successModalVisible}
+          onClose={successModalClose}
+          title={t('appletDuplication')}
+          onSubmit={successModalClose}
+          buttonText={t('ok')}
+        >
+          <StyledModalWrapper>
+            <Trans i18nKey="successDuplication">
+              Applet
+              <strong>
+                <>{{ appletName: getValues().name }}</>
+              </strong>
+              has been duplicated successfully.
+            </Trans>
+          </StyledModalWrapper>
+        </Modal>
+      )}
     </>
   );
 };

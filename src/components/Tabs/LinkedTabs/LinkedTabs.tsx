@@ -7,7 +7,7 @@ import { StyledTabs } from '../Tabs.styles';
 import { TabPanel } from '../TabPanel';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
-export const LinkedTabs = ({ tabs, uiType = UiType.primary }: TabsProps): JSX.Element => {
+export const LinkedTabs = ({ tabs, uiType = UiType.Primary }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const location = useLocation();
   const currentIndex = tabs?.findIndex((el) => el.path === location.pathname);

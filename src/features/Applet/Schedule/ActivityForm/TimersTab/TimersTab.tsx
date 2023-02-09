@@ -12,7 +12,7 @@ import { FormValues } from '../';
 export const TimersTab = () => {
   const { t } = useTranslation('app');
   const { setValue } = useFormContext<FormValues>();
-  const [activeTimer, setActiveTimer] = useState<string>(Timers.noTimeLimit);
+  const [activeTimer, setActiveTimer] = useState<string>(Timers.NoTimeLimit);
 
   const updateTimers = () => {
     setValue('timerDuration', '');
@@ -27,7 +27,7 @@ export const TimersTab = () => {
         setActiveButton={setActiveTimer}
         customChange={updateTimers}
       />
-      {activeTimer === Timers.timer && (
+      {activeTimer === Timers.Timer && (
         <>
           <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>
             {t('timeToCompleteActivity')}
@@ -35,7 +35,7 @@ export const TimersTab = () => {
           <TimePicker name="timerDuration" label={t('duration')} />
         </>
       )}
-      {activeTimer === Timers.idleTime && (
+      {activeTimer === Timers.IdleTime && (
         <>
           <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>
             {t('maximumTimeAwayFromActivity')}

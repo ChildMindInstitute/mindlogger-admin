@@ -92,7 +92,6 @@ export const Calendar = () => {
       </StyledCalendarWrapper>
       <CreateActivityPopup
         open={createActivityPopupVisible}
-        onClose={() => setCreateActivityPopupVisible(false)}
         setCreateActivityPopupVisible={setCreateActivityPopupVisible}
         activityName="Daily Journal"
       />

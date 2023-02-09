@@ -10,7 +10,7 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
   height: ${({ height }: { height: string; uiType: UiType }) => height};
 
   ${({ uiType }) =>
-    (uiType === UiType.secondary || uiType === UiType.tertiary) &&
+    (uiType === UiType.Secondary || uiType === UiType.Tertiary) &&
     `
     border-color: ${variables.palette.outline_variant};
     
@@ -25,7 +25,7 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
   `}
 
   ${({ uiType }) =>
-    uiType === UiType.tertiary &&
+    uiType === UiType.Tertiary &&
     `
     & .MuiTableCell-root {
       cursor: default;
@@ -38,9 +38,9 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
 
 export const StyledTableCellContent = styled(StyledFlexTopCenter, shouldForwardProp)`
   justify-content: ${({ uiType }: { uiType: UiType }) =>
-    uiType === UiType.primary ? 'flex-end' : 'flex-start'};
+    uiType === UiType.Primary ? 'flex-end' : 'flex-start'};
 
   & .MuiTablePagination-displayedRows {
-    color: ${({ uiType }) => uiType === UiType.tertiary && variables.palette.outline};
+    color: ${({ uiType }) => uiType === UiType.Tertiary && variables.palette.outline};
   }
 `;

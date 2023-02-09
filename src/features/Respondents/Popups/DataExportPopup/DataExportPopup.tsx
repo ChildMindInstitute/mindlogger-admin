@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
 import { AppletsSmallTable } from 'features/Respondents/AppletsSmallTable';
-import { AppletPassword, AppletPasswordRef } from 'features/Applet/AppletPassword';
+import {
+  EnterAppletPassword,
+  AppletPasswordRef,
+} from 'features/Applet/Password/EnterAppletPassword';
 import theme from 'styles/theme';
 import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import { StyledBodyLarge } from 'styles/styledComponents/Typography';
@@ -23,7 +26,6 @@ export const DataExportPopup = ({
   setChosenAppletData,
 }: ScheduleSetupPopupProps) => {
   const { t } = useTranslation('app');
-  const [disabledSubmit, setDisabledSubmit] = useState(true);
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const appletPasswordRef = useRef() as RefObject<AppletPasswordRef>;
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting;
@@ -71,10 +73,9 @@ export const DataExportPopup = ({
 
   if (showEnterPwdScreen) {
     modalContent = (
-      <AppletPassword
+      <EnterAppletPassword
         ref={appletPasswordRef}
         appletId={chosenAppletData.appletId}
-        setDisabledSubmit={setDisabledSubmit}
         submitCallback={handleDataExportSubmit}
       />
     );
@@ -98,7 +99,6 @@ export const DataExportPopup = ({
       onSubmit={handleModalSubmit}
       title={showEnterPwdScreen ? t('enterAppletPassword') : t('dataExport')}
       buttonText={showEnterPwdScreen ? t('submit') : ''}
-      disabledSubmit={disabledSubmit}
       width="66"
     >
       <StyledModalWrapper>

@@ -2,22 +2,16 @@ import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
 
 export enum DateVariant {
-  start = 'start',
-  end = 'end',
-}
-
-export enum MinMaxDate {
-  min = 'min',
-  max = 'max',
+  Start = 'start',
+  End = 'end',
 }
 
 export enum UiType {
-  oneDate = 'oneDate',
-  startEndingDate = 'startEndingDate',
+  OneDate = 'oneDate',
+  StartEndingDate = 'startEndingDate',
 }
 
 type DatePicker = {
-  name: string;
   uiType?: UiType;
 } & TextFieldProps;
 

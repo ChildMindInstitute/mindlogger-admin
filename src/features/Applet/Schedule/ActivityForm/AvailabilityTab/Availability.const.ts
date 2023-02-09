@@ -10,32 +10,32 @@ export const availabilityOptions = [
 ];
 
 export const enum Repeats {
-  once = 'once',
-  daily = 'daily',
-  weekly = 'weekly',
-  weekdays = 'weekdays',
-  monthly = 'monthly',
+  Once = 'once',
+  Daily = 'daily',
+  Weekly = 'weekly',
+  Weekdays = 'weekdays',
+  Monthly = 'monthly',
 }
 
 export const repeatsButtons = [
   {
-    value: Repeats.once,
+    value: Repeats.Once,
     label: 'once',
   },
   {
-    value: Repeats.daily,
+    value: Repeats.Daily,
     label: 'daily',
   },
   {
-    value: Repeats.weekly,
+    value: Repeats.Weekly,
     label: 'weekly',
   },
   {
-    value: Repeats.weekdays,
+    value: Repeats.Weekdays,
     label: 'weekdays',
   },
   {
-    value: Repeats.monthly,
+    value: Repeats.Monthly,
     label: 'monthly',
   },
 ];

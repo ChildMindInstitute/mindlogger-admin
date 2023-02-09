@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { account, folders } from 'redux/modules';
 import { useTimeAgo } from 'hooks';
 import { getAppletData } from 'utils/getAppletData';

@@ -2,12 +2,12 @@ import { NotificationType } from '../../ActivityForm.types';
 
 export const notificationTimeToggles = [
   {
-    value: NotificationType.fixed,
+    value: NotificationType.Fixed,
     label: 'fixed',
     tooltip: 'sendNotificationAtFixedTime',
   },
   {
-    value: NotificationType.random,
+    value: NotificationType.Random,
     label: 'random',
     tooltip: 'sendNotificationAtRandomTime',
   },

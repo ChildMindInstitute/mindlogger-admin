@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
-import { EnterAppletPasswordPopup } from 'features/Applet/Popups';
+import { AppletPasswordPopup } from 'features/Applet/Popups';
 import { account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import logoSrc from 'assets/images/logo.png';
@@ -44,7 +44,7 @@ export const Notification = ({
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const isActive = currentId === alertId;
-  const [modalActive, setModalActive] = useState(false);
+  const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
 
   const handleNotificationClick = async () => {
     const { updateAlertStatus } = account.thunk;
@@ -56,7 +56,7 @@ export const Notification = ({
     }
   };
 
-  const handleToResponseDataClick = () => setModalActive(true);
+  const handleToResponseDataClick = () => setPasswordPopupVisible(true);
 
   return (
     <>
@@ -113,11 +113,13 @@ export const Notification = ({
           </StyledTimeAgo>
         </StyledBottomSection>
       </StyledNotification>
-      <EnterAppletPasswordPopup
-        popupVisible={modalActive}
-        setPopupVisible={setModalActive}
-        encryption={encryption}
-      />
+      {passwordPopupVisible && (
+        <AppletPasswordPopup
+          popupVisible={passwordPopupVisible}
+          onClose={() => setPasswordPopupVisible(false)}
+          encryption={encryption}
+        />
+      )}
     </>
   );
 };

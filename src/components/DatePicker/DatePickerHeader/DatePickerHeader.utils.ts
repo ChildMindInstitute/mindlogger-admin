@@ -14,3 +14,6 @@ export const getMonthsArr = (t: TFunction) => [
   t('nov'),
   t('dec'),
 ];
+
+export const getRange = (start: number, end: number) =>
+  new Array(end - start).fill(0).map((_, i) => String(i + start));

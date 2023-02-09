@@ -9,8 +9,8 @@ type Tab = {
 };
 
 export enum UiType {
-  primary = 'primary',
-  secondary = 'secondary',
+  Primary = 'primary',
+  Secondary = 'secondary',
 }
 
 export type TabsProps = { uiType?: UiType; tabs: Tab[]; activeTab?: number };

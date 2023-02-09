@@ -50,7 +50,7 @@ export const ExportSchedulePopup = ({
           columns={getHeadCells()}
           rows={scheduleTableRows}
           orderBy="activityName"
-          uiType={UiType.tertiary}
+          uiType={UiType.Tertiary}
         />
       </StyledModalWrapper>
     </Modal>

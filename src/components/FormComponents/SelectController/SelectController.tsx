@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { TextField, MenuItem } from '@mui/material';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { SelectEvent } from 'types/event';
 import theme from 'styles/theme';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';

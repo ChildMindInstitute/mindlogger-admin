@@ -223,3 +223,22 @@ export const createRejectedData = (
     state[property].data ? state[property].data : null;
   }
 };
+
+export const changeAppletEncryption = (
+  folders: FoldersSchema,
+  appletId: string,
+  encryptionData: FormData,
+) =>
+  folders.flattenFoldersApplets.data.map((folderApplet) => {
+    if (folderApplet.id === appletId) {
+      const encryptionString = encryptionData.get('encryption')?.toString();
+      const encryption = JSON.parse(encryptionString || '');
+
+      return {
+        ...folderApplet,
+        encryption,
+      };
+    }
+
+    return folderApplet;
+  });

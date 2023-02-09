@@ -1,4 +1,4 @@
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 
 import { ChipProps, ChipShape } from './Chip.types';
 import { StyledChip, StyledClearedButton } from './Chip.styles';
@@ -7,7 +7,7 @@ export const Chip = ({
   title,
   icon,
   color = 'primary',
-  shape = ChipShape.rectangular,
+  shape = ChipShape.Rectangular,
   onRemove,
 }: ChipProps) => (
   <StyledChip

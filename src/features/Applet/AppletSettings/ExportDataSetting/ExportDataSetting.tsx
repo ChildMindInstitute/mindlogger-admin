@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
-import { EnterAppletPasswordPopup } from 'features/Applet/Popups';
+import { AppletPasswordPopup } from 'features/Applet/Popups';
 import { Svg } from 'components';
 
 import {
@@ -29,9 +29,9 @@ export const ExportDataSetting = () => {
         {t('download')}
       </StyledAppletSettingsButton>
       {passwordModalVisible && (
-        <EnterAppletPasswordPopup
+        <AppletPasswordPopup
           popupVisible={passwordModalVisible}
-          setPopupVisible={setPasswordModalVisible}
+          onClose={() => setPasswordModalVisible(false)}
           appletId={id}
         />
       )}
