@@ -14,14 +14,13 @@ export const APPLET_PAGES = {
 export enum DateFormats {
   Year = 'yyy',
   DayMonthYear = 'dd MMM yyyy',
+  WeekDayMonthYear = 'E, dd MMM yyyy',
   FullWeekDayFullMonthYear = 'eeee, dd MMMM yyyy',
   DayFullMonth = 'dd MMMM',
   DayFullMonthYear = 'dd MMMM yyy',
   Time = 'HH:mm',
   YearMonthDayHoursMinutesSeconds = 'yyyy-MM-dd HH:mm:ss',
 }
-
-export const DAY_FORMAT_WITH_WEEK_DAY = 'E, dd MMM yyyy';
 
 export enum Roles {
   User = 'user',
