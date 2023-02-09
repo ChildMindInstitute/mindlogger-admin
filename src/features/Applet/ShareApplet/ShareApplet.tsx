@@ -52,42 +52,44 @@ export const ShareApplet = ({
   }, [checked]);
 
   const handleShareApplet = useCallback(async () => {
-    try {
-      const checkResult = await checkAppletNameInLibraryApi({
-        appletId: applet.id || '',
-        appletName: getValues().appletName || '',
-      });
-      setShowNameTakenError(!checkResult?.data);
-
-      if (checkResult?.data) {
-        setIsLoading(true);
-        await publishAppletToLibraryApi({
+    if (applet) {
+      try {
+        const checkResult = await checkAppletNameInLibraryApi({
           appletId: applet.id || '',
+          appletName: getValues().appletName || '',
         });
-        await updateAppletSearchTermsApi({
-          appletId: applet.id || '',
-          params: { keywords: JSON.stringify(keywords) },
-        });
-        const libraryUrlResult = await getAppletLibraryUrlApi({
-          appletId: applet.id || '',
-        });
+        setShowNameTakenError(!checkResult?.data);
 
-        setLibraryUrl(libraryUrlResult?.data as string);
-        setIsLoading(false);
-        onAppletShared && onAppletShared({ keywords, libraryUrl: libraryUrlResult?.data });
-        setAppletShared(true);
-
-        dispatch(
-          folders.actions.updateAppletData({
+        if (checkResult?.data) {
+          setIsLoading(true);
+          await publishAppletToLibraryApi({
             appletId: applet.id || '',
-            published: true,
-            appletName: getValues().appletName,
-          }),
-        );
+          });
+          await updateAppletSearchTermsApi({
+            appletId: applet.id || '',
+            params: { keywords: JSON.stringify(keywords) },
+          });
+          const libraryUrlResult = await getAppletLibraryUrlApi({
+            appletId: applet.id || '',
+          });
+
+          setLibraryUrl(libraryUrlResult?.data as string);
+          setIsLoading(false);
+          onAppletShared && onAppletShared({ keywords, libraryUrl: libraryUrlResult?.data });
+          setAppletShared(true);
+
+          dispatch(
+            folders.actions.updateAppletData({
+              appletId: applet.id || '',
+              published: true,
+              appletName: getValues().appletName,
+            }),
+          );
+        }
+      } catch (e) {
+        setErrorMessage(getErrorMessage(e));
+        setIsLoading(false);
       }
-    } catch (e) {
-      setErrorMessage(getErrorMessage(e));
-      setIsLoading(false);
     }
   }, [keywords]);
 
@@ -169,7 +171,7 @@ export const ShareApplet = ({
     </>
   );
 
-  if (appletShared && showSuccess) {
+  if (appletShared && showSuccess && applet) {
     modalComponent = (
       <SuccessShared
         title={getValues().appletName || applet.name || ''}
