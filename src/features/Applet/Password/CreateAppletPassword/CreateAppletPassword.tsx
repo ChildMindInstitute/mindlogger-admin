@@ -47,6 +47,12 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, AppletPassword
         >
           {t('createAppletPasswordWarning')}
         </StyledBodyLarge>
+        <StyledBodyLarge
+          color={variables.palette.semantic.error}
+          sx={{ marginBottom: theme.spacing(3.2) }}
+        >
+          {t('createAppletPasswordRequirements')}
+        </StyledBodyLarge>
         <StyledController>
           <InputController
             fullWidth
@@ -66,7 +72,6 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, AppletPassword
               ),
             }}
           />
-          <StyledHint>{t('enterAppletPasswordHint')}</StyledHint>
         </StyledController>
         <StyledController>
           <InputController

@@ -16,7 +16,7 @@ export const loginFormSchema = () => {
       password: yup
         .string()
         .required(passwordRequired)
-        .min(8, passwordMinLength)
+        .min(6, passwordMinLength)
         .matches(/^(\S+$)/, passwordBlankSpaces),
     })
     .required();

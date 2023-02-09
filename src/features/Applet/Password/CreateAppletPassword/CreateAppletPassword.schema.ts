@@ -14,7 +14,7 @@ export const createPasswordFormSchema = () => {
         .string()
         .required(passwordRequired)
         .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[`~!@#$%^&*])(?=.{8,})/,
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[`~!@#$%^&*])\S{8,}$/,
           passwordRequirements,
         ),
       appletPasswordConfirmation: yup

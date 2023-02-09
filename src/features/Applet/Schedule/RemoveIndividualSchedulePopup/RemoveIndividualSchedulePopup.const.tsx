@@ -37,7 +37,11 @@ const getFirstScreen = (name: string) => (
     <StyledTitleMedium>
       You are about to remove Respondent
       <strong>
-        <> {{ name }}’s individual schedule </>
+        <> {{ name }}</>
+      </strong>
+      ’s
+      <strong>
+        <>individual schedule </>
       </strong>
       and move the respondent to a group of respondents that use the
       <strong> default schedule</strong>. All individually scheduled activities and their
