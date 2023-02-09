@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 import { folders } from 'redux/modules';
-import { Svg } from 'components';
+import { Svg, Tooltip } from 'components';
 import { ShareApplet } from 'features/Applet/ShareApplet';
 import { SuccessSharePopup } from 'features/Applet/Popups';
 
 import { StyledButton, StyledContainer } from './ShareAppletSetting.styles';
 import { StyledHeadline } from '../AppletSettings.styles';
 
-export const ShareAppletSetting = () => {
+export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) => {
   const { t } = useTranslation('app');
   const { id } = useParams();
   const applet = folders.useApplet(id as string);
@@ -51,14 +52,18 @@ export const ShareAppletSetting = () => {
           sharePopupVisible={sharePopupVisible}
           setSharePopupVisible={setSharePopupVisible}
         />
-        <StyledButton
-          variant="outlined"
-          startIcon={<Svg width={18} height={18} id="share" />}
-          disabled={isDisabled}
-          onClick={() => setIsSubmitted(true)}
-        >
-          {t('share')}
-        </StyledButton>
+        <Tooltip tooltipTitle={isDisabled ? t('needToCreateApplet') : undefined}>
+          <Box sx={{ width: 'fit-content' }}>
+            <StyledButton
+              variant="outlined"
+              startIcon={<Svg width={18} height={18} id="share" />}
+              disabled={isDisabled || isDisabledSetting}
+              onClick={() => setIsSubmitted(true)}
+            >
+              {t('share')}
+            </StyledButton>
+          </Box>
+        </Tooltip>
       </StyledContainer>
     </>
   );

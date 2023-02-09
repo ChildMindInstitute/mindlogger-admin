@@ -1,5 +1,13 @@
+import { useLocation } from 'react-router-dom';
+
 import { AppletSettings } from 'features/AppletSettings';
+import { page } from 'resources';
 
-import { settings } from './BuilderAppletSettings.const';
+import { getSettings } from './BuilderAppletSettings.const';
 
-export const BuilderAppletSettings = () => <AppletSettings settings={settings} />;
+export const BuilderAppletSettings = () => {
+  const location = useLocation();
+  const isEditAppletPage = location.pathname.includes(page.newApplet);
+
+  return <AppletSettings settings={getSettings(isEditAppletPage)} />;
+};

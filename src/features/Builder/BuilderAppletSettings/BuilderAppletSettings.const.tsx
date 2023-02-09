@@ -8,14 +8,14 @@ import {
   ExportDataSetting,
 } from 'features/AppletSettings';
 
-export const settings = [
+export const getSettings = (isEditAppletPage: boolean) => [
   {
     label: 'usersAndData',
     items: [
       {
         icon: <Svg id="export" />,
         label: 'exportData',
-        component: <ExportDataSetting />,
+        component: <ExportDataSetting isDisabled={isEditAppletPage} />,
       },
       {
         icon: <Svg id="data-retention" />,
@@ -30,22 +30,22 @@ export const settings = [
       {
         icon: <Svg id="schema" />,
         label: 'downloadSchema',
-        component: <DownloadSchemaSetting />,
+        component: <DownloadSchemaSetting isDisabled={isEditAppletPage} />,
       },
       {
         icon: <Svg id="version-history" />,
         label: 'versionHistory',
-        component: <>versionHistory</>,
+        component: <>versionHistory</>, //TODO: Add isDisabled
       },
       {
         icon: <Svg id="transfer-ownership" />,
         label: 'transferOwnership',
-        component: <TransferOwnershipSetting />,
+        component: <TransferOwnershipSetting isDisabled={isEditAppletPage} />,
       },
       {
         icon: <Svg id="trash" />,
         label: 'deleteApplet',
-        component: <DeleteAppletSetting />,
+        component: <DeleteAppletSetting isDisabled={isEditAppletPage} />,
       },
     ],
   },
@@ -65,7 +65,7 @@ export const settings = [
       {
         icon: <Svg id="share" />,
         label: 'shareToLibrary',
-        component: <ShareAppletSetting />,
+        component: <ShareAppletSetting isDisabled={isEditAppletPage} />,
       },
     ],
   },

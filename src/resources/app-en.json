@@ -346,5 +346,6 @@
   "scheduledAccessWarning": "Once you schedule this event, the Activity will no longer be always available.",
   "confirmScheduledAccess": "Confirm Scheduled Access",
   "confirmChangeOnScheduledAccess": "Activity <1>{{ activityName }}</1> will no longer be always available, and the Activity will be a scheduled event. Are you sure you want to continue?",
-  "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName }} ({{ email }})</0> no longer has access to any Applets."
+  "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName }} ({{ email }})</0> no longer has access to any Applets.",
+  "needToCreateApplet": "You need to create an Applet first."
 }
