@@ -54,7 +54,8 @@ export const StyledCalendarWrapper = styled(Box)`
     padding-top: ${theme.spacing(1)};
     border-top: ${variables.borderWidth.xl} solid ${variables.palette.surface_variant};
 
-    & > * + * > * {
+    .rbc-timeslot-group,
+    .rbc-events-container {
       border-left: none;
     }
   }
