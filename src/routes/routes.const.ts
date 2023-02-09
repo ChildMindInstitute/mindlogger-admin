@@ -9,7 +9,8 @@ const Login = lazy(() => import('pages/Login'));
 const ResetPassword = lazy(() => import('pages/ResetPassword'));
 const SignUp = lazy(() => import('pages/SignUp'));
 const AddUser = lazy(() => import('features/Applet/AddUser'));
-const AppletSettings = lazy(() => import('features/Applet/AppletSettings'));
+const DashboardAppletSettings = lazy(() => import('features/Applet/DashboardAppletSettings'));
+const BuilderAppletSettings = lazy(() => import('features/Builder/BuilderAppletSettings'));
 
 export const authRoutes = [
   {
@@ -41,7 +42,7 @@ export const appletRoutes = [
   },
   {
     path: page.appletSettings,
-    Component: AppletSettings,
+    Component: DashboardAppletSettings,
   },
   {
     path: page.appletAddUser,
@@ -53,5 +54,8 @@ export const newAppletRoutes = [
   { path: page.newAppletAbout },
   { path: page.newAppletActivities },
   { path: page.newAppletActivityFlow },
-  { path: page.newAppletSettings },
+  {
+    path: page.newAppletSettings,
+    Component: BuilderAppletSettings,
+  },
 ];

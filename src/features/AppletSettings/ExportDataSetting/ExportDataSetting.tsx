@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
 import { AppletPasswordPopup } from 'features/Applet/Popups';
-import { Svg } from 'components';
+import { Svg, Tooltip } from 'components';
 
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
 } from '../AppletSettings.styles';
 
-export const ExportDataSetting = () => {
+export const ExportDataSetting = ({ isDisabled = false }) => {
   const { t } = useTranslation('app');
   const { id } = useParams();
 
@@ -21,13 +22,18 @@ export const ExportDataSetting = () => {
     <>
       <StyledHeadlineLarge>{t('exportData')}</StyledHeadlineLarge>
       <StyledAppletSettingsDescription>{t('exportDescription')}</StyledAppletSettingsDescription>
-      <StyledAppletSettingsButton
-        onClick={() => setPasswordModalVisible(true)}
-        variant="outlined"
-        startIcon={<Svg width="18" height="18" id="export" />}
-      >
-        {t('download')}
-      </StyledAppletSettingsButton>
+      <Tooltip tooltipTitle={isDisabled ? t('needToCreateApplet') : undefined}>
+        <Box sx={{ width: 'fit-content' }}>
+          <StyledAppletSettingsButton
+            onClick={() => setPasswordModalVisible(true)}
+            variant="outlined"
+            startIcon={<Svg width="18" height="18" id="export" />}
+            disabled={isDisabled}
+          >
+            {t('download')}
+          </StyledAppletSettingsButton>
+        </Box>
+      </Tooltip>
       {passwordModalVisible && (
         <AppletPasswordPopup
           popupVisible={passwordModalVisible}
