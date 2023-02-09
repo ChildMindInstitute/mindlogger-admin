@@ -10,12 +10,16 @@ export const MonthView = (props: MonthViewType) => {
   const { date, activeView } = props.components;
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    (async () => {
       const containerElement = monthRef.current?.containerRef.current;
-      const dayCellHeight = containerElement.getElementsByClassName('rbc-day-bg')[0]?.offsetHeight;
-      const dateCellHeight =
-        containerElement.getElementsByClassName('rbc-date-cell')[0]?.offsetHeight;
-      const eventElement = containerElement.getElementsByClassName('rbc-row-segment')[0];
+      const dayCellCollection = await containerElement.getElementsByClassName('rbc-day-bg');
+      const dateCellCollection = await containerElement.getElementsByClassName('rbc-date-cell');
+      const eventsElementsCollection = await containerElement.getElementsByClassName(
+        'rbc-row-segment',
+      );
+      const dayCellHeight = dayCellCollection[0]?.offsetHeight;
+      const dateCellHeight = dateCellCollection[0]?.offsetHeight;
+      const eventElement = eventsElementsCollection[0];
 
       if (eventElement) {
         const eventHeight = eventElement.offsetHeight;
@@ -28,9 +32,7 @@ export const MonthView = (props: MonthViewType) => {
 
         monthRef.current?.setState({ rowLimit });
       }
-    });
-
-    return () => clearTimeout(timeout);
+    })();
   }, [date, activeView]);
 
   return <CalendarMonthView {...props} ref={monthRef} />;
