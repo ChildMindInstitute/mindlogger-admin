@@ -6,18 +6,12 @@ export enum DateVariant {
   End = 'end',
 }
 
-export enum MinMaxDate {
-  Min = 'min',
-  Max = 'max',
-}
-
 export enum UiType {
   OneDate = 'oneDate',
   StartEndingDate = 'startEndingDate',
 }
 
 type DatePicker = {
-  name: string;
   uiType?: UiType;
 } & TextFieldProps;
 

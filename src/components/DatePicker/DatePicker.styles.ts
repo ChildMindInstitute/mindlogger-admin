@@ -4,43 +4,28 @@ import { styled } from '@mui/system';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-import { blendColorsNormal } from 'utils/colors';
 
 export const StyledPopover = styled(Popover)`
-  margin-top: ${theme.spacing(0.4)};
-
   .MuiPaper-root {
     background-color: ${variables.palette.surface2};
     box-shadow: ${variables.boxShadow.light2};
-    display: flex;
-    flex-direction: column;
+    border-radius: ${variables.borderRadius.xxl};
   }
 
   .react-datepicker {
-    width: 33.6rem;
-    font-size: ${variables.font.size.sm};
-    line-height: ${variables.lineHeight.sm};
-    letter-spacing: ${variables.letterSpacing.xl};
+    font-size: ${variables.font.size.md};
+    line-height: ${variables.lineHeight.md};
+    letter-spacing: ${variables.letterSpacing.lg};
     font-family: 'Atkinson', helvetica, arial, sans-serif;
     background-color: transparent;
     border: none;
     border-radius: unset;
+    padding: ${theme.spacing(0, 1.2)};
 
     &__header {
       background-color: transparent;
       border-bottom: none;
       padding: 0;
-    }
-
-    &__week,
-    &__day-names {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    &__day-names {
-      padding-bottom: ${theme.spacing(1.4)};
-      margin: ${theme.spacing(0, 2.2)};
     }
 
     &__day {
@@ -50,38 +35,100 @@ export const StyledPopover = styled(Popover)`
       justify-content: center;
       align-items: center;
       border-radius: ${variables.borderRadius.half};
-      transition: ${variables.transitions.bgColor};
+      margin: ${theme.spacing(0.4, 0)};
 
       &:hover {
-        border-radius: ${variables.borderRadius.half};
         background-color: ${variables.palette.on_surface_alfa8};
       }
     }
 
-    &__day--selected {
+    &__day--keyboard-selected {
+      color: ${variables.palette.on_surface};
+      background-color: transparent;
+    }
+
+    &__day--in-selecting-range,
+    &__day--in-range {
+      position: relative;
+      background-color: ${variables.palette.secondary_container};
+      border-radius: unset;
+      color: ${variables.palette.on_surface_variant};
+    }
+
+    &__day--selected,
+    &__day--range-end,
+    &__day--range-start {
       border-radius: ${variables.borderRadius.half};
       background-color: ${variables.palette.primary};
+      font-weight: ${variables.font.weight.bold};
+      color: ${variables.palette.white};
+      z-index: ${theme.zIndex.fab};
+      transform-style: preserve-3d;
 
       &:hover {
-        border-radius: ${variables.borderRadius.half};
-        background-color: ${blendColorsNormal(
-          variables.palette.primary,
-          variables.palette.light_alfa8,
-        )};
+        background-color: ${variables.palette.primary};
       }
     }
 
-    &__month-container {
-      width: 100%;
+    &__day--today:not(.react-datepicker__day--selected) {
+      border: ${variables.borderWidth.md} solid ${variables.palette.primary};
+      font-weight: ${variables.font.weight.regular};
+      color: ${variables.palette.primary};
+    }
+
+    &__day--outside-month {
+      background-color: transparent;
+      color: transparent;
+      pointer-events: none;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
+    &__day-name {
+      width: 4rem;
+      margin: 0;
+      color: ${variables.palette.outline};
+    }
+
+    &__week,
+    &__day-names {
+      display: flex;
+    }
+
+    &__day-names {
+      margin-bottom: ${theme.spacing(1)};
     }
 
     &__month {
-      margin: ${theme.spacing(0, 1.1)};
+      margin: 0;
     }
+  }
 
-    &__current-month {
-      display: none;
-    }
+  .react-datepicker__month-container + .react-datepicker__month-container {
+    border-left: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
+  }
+
+  .react-datepicker__day--range-start + .react-datepicker__day--in-range:not(:empty):before,
+  .react-datepicker__day--in-range:not(:empty)
+    + .react-datepicker__day--range-end:not(:empty):before {
+    position: absolute;
+    content: '';
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background-color: ${variables.palette.secondary_container};
+  }
+
+  .react-datepicker__day--range-start + .react-datepicker__day--in-range:before {
+    left: -50%;
+  }
+
+  .react-datepicker__day--in-range:not(:empty)
+    + .react-datepicker__day--range-end:not(:empty):before {
+    left: 0%;
+    transform: translateZ(-0.1rem);
   }
 `;
 
@@ -136,27 +183,18 @@ export const StyledIconBtn = styled(StyledClearedButton)`
 `;
 
 export const StyledButtons = styled(Box)`
-  padding: ${theme.spacing(0.2, 1.1, 1.6)};
-  margin-left: ${theme.spacing(0.5)};
+  padding: ${theme.spacing(0.2, 1.2, 1.6)};
   text-align: right;
 `;
 
 export const StyledButton = styled(Button)`
-  margin-left: ${theme.spacing(0.5)};
+  text-transform: uppercase;
+  font-weight: ${variables.font.weight.bold};
+  min-width: 10rem;
 `;
 
-export const StyledCollapseBtn = styled(StyledClearedButton)`
-  &.MuiButton-text {
-    width: 33.6rem;
-    justify-content: flex-start;
-    margin: ${theme.spacing(0.8, 0.4, 0)};
-    padding: ${theme.spacing(1.6)};
-    border-radius: ${variables.borderRadius.xxs};
-
-    &:hover,
-    &:focus,
-    &:active {
-      background-color: ${variables.palette.surface_variant};
-    }
-  }
+export const StyledCancelButton = styled(StyledButton)`
+  font-weight: ${variables.font.weight.regular};
+  text-transform: none;
+  margin-right: ${theme.spacing(0.7)};
 `;

@@ -13,6 +13,8 @@ export const APPLET_PAGES = {
 
 export const DAY_FORMAT = 'dd MMM yyyy';
 
+export const DAY_FORMAT_WITH_WEEK_DAY = 'E, dd MMM yyyy';
+
 export enum Roles {
   User = 'user',
   Manager = 'manager',

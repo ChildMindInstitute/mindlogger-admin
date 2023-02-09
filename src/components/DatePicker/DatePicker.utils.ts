@@ -1,10 +1,8 @@
 import { format } from 'date-fns';
 
-import { DAY_FORMAT } from 'consts';
+import { DAY_FORMAT, DAY_FORMAT_WITH_WEEK_DAY } from 'consts';
 
-export const getDatesStringsArray = (value: string) =>
-  value?.split('-').map((element) => element.trim());
+export const getStringFromDate = (date: Date | null) => date && String(format(date, DAY_FORMAT));
 
-export const getStringFromDate = (date: Date) => String(format(date, DAY_FORMAT));
-
-export const getDateFromString = (value: string) => new Date(value);
+export const getStringFromDateWithWeekDay = (date: Date | null) =>
+  date && String(format(date, DAY_FORMAT_WITH_WEEK_DAY));
