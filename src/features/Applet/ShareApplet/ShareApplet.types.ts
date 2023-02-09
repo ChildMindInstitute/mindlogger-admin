@@ -8,7 +8,7 @@ export type ShareAppletData = {
 };
 
 export type ShareAppletProps = {
-  applet: FolderApplet;
+  applet: FolderApplet | null;
   onAppletShared: ({ keywords, libraryUrl }: { keywords: string[]; libraryUrl: string }) => void;
   onDisableSubmit: (isDisabled: boolean) => void;
   isSubmitted: boolean;

@@ -32,8 +32,10 @@ export const TransferOwnership = ({
   const { execute, error } = useAsync(transferOwnershipApi);
 
   const handleTransferOwnership = async () => {
-    await execute({ appletId: applet.id, email: getValues().email });
-    setEmailTransfered(getValues().email);
+    if (applet) {
+      await execute({ appletId: applet.id, email: getValues().email });
+      setEmailTransfered(getValues().email);
+    }
   };
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export const TransferOwnership = ({
         <Trans i18nKey="transferOwnershipConfirmation">
           Are you sure you want to transfer ownership of the
           <strong>
-            <>{{ appletName: applet.name }}</>
+            <>{{ appletName: applet?.name || t('Applet') }}</>
           </strong>
           to another user? This will only transfer the applet and no user data will be transferred.
         </Trans>

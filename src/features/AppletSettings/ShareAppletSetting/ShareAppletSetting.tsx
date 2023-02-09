@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
-import { folders } from 'redux/modules';
+import { FolderApplet, folders } from 'redux/modules';
 import { Svg, Tooltip } from 'components';
 import { ShareApplet } from 'features/Applet/ShareApplet';
 import { SuccessSharePopup } from 'features/Applet/Popups';
@@ -14,13 +14,19 @@ import { StyledHeadline } from '../AppletSettings.styles';
 export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) => {
   const { t } = useTranslation('app');
   const { id } = useParams();
-  const applet = folders.useApplet(id as string);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [keywords, setKeywords] = useState<string[]>([]);
   const [libraryUrl, setLibraryUrl] = useState('');
+  const [applet, setApplet] = useState<FolderApplet | null>(null);
+
+  useEffect(() => {
+    if (id) {
+      setApplet(folders.useApplet(id));
+    }
+  }, [id]);
 
   const handleSharedApplet = ({
     keywords,
@@ -45,13 +51,15 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
           isSubmitted={isSubmitted}
           showSuccess={false}
         />
-        <SuccessSharePopup
-          applet={applet}
-          keywords={keywords}
-          libraryUrl={libraryUrl}
-          sharePopupVisible={sharePopupVisible}
-          setSharePopupVisible={setSharePopupVisible}
-        />
+        {applet && (
+          <SuccessSharePopup
+            applet={applet}
+            keywords={keywords}
+            libraryUrl={libraryUrl}
+            sharePopupVisible={sharePopupVisible}
+            setSharePopupVisible={setSharePopupVisible}
+          />
+        )}
         <Tooltip tooltipTitle={isDisabled ? t('needToCreateApplet') : undefined}>
           <Box sx={{ width: 'fit-content' }}>
             <StyledButton
