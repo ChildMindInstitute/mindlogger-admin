@@ -81,7 +81,7 @@ export const SignUpForm = () => {
         />
       </StyledController>
       {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-      <AdvancedSettings />
+      {/* <AdvancedSettings /> */}
       <StyledController>
         <CheckboxController
           name="termsOfService"
