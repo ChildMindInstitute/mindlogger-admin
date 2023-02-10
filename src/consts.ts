@@ -15,6 +15,9 @@ export const DAY_FORMAT = 'dd MMM yyyy';
 
 export const DAY_FORMAT_WITH_WEEK_DAY = 'E, dd MMM yyyy';
 
+export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;
+export const APPLET_PASSWORD_MIN_LENGTH = 8;
+
 export enum Roles {
   User = 'user',
   Manager = 'manager',
