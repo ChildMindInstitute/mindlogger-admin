@@ -13,7 +13,7 @@ export const passwordFormSchema = () => {
         .string()
         .required(passwordRequired)
         .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[`~!@#$%^&*])(?=.{8,})/,
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])(?=.{8,})/,
           passwordRequirements,
         ),
     })

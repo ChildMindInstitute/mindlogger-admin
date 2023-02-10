@@ -7,6 +7,10 @@ import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
 export const StyledWrapper = styled(Box)`
   margin: ${theme.spacing(2.4, 0)};
+
+  .MuiToggleButtonGroup-root .MuiToggleButton-root {
+    width: 100%;
+  }
 `;
 
 export const StyledButtonsTitle = styled(StyledBodyMedium)`

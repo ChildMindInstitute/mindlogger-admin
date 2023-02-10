@@ -2,7 +2,7 @@ type Action = {
   icon: JSX.Element;
   action: (item?: any) => any | void;
   disabled?: boolean;
-  toolTipTitle?: string;
+  tooltipTitle?: string;
   isDisplayed?: boolean;
 };
 

@@ -21,27 +21,27 @@ export const getActions = ({
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
     action: scheduleSetupAction,
-    toolTipTitle: t('viewCalendar'),
+    tooltipTitle: t('viewCalendar'),
   },
   {
     icon: <Svg id="data" width={22} height={22} />,
     action: viewDataAction,
-    toolTipTitle: t('viewData'),
+    tooltipTitle: t('viewData'),
   },
   {
     icon: <Svg id="export" width={18} height={20} />,
     action: userDataExportAction,
-    toolTipTitle: t('exportData'),
+    tooltipTitle: t('exportData'),
   },
   {
     icon: <Svg id="edit-user" width={21} height={19} />,
     action: (item: UserData) => item,
-    toolTipTitle: t('editAccess'),
+    tooltipTitle: t('editAccess'),
   },
   {
     icon: <Svg id="remove-access" />,
     action: removeAccessAction,
-    toolTipTitle: t('removeAccess'),
+    tooltipTitle: t('removeAccess'),
   },
 ];
 

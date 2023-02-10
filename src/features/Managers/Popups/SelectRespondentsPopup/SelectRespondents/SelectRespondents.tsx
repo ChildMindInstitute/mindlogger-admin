@@ -83,8 +83,20 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
 
     const renderSelectedRespondents = () =>
       selectedRespondentsLength
-        ? `${selectedRespondentsLength} ${t('respondents')}`
+        ? `${t('respondentsSelected', { count: selectedRespondentsLength })}`
         : `${t('selectRespondentsHint')}`;
+
+    const renderEmptyComponent = () => {
+      if (!respondents.length) {
+        return t('noRespondents');
+      }
+      if (searchValue) {
+        return t('noMatchWasFound', { searchValue });
+      }
+      if (searchAcrossValue !== SearchAcross.All) {
+        return t('noData');
+      }
+    };
 
     useImperativeHandle(ref, () => ({
       confirmSelection() {
@@ -137,6 +149,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
             rows={tableRows}
             orderBy={'nickname'}
             uiType={UiType.Secondary}
+            emptyComponent={renderEmptyComponent()}
           />
         </form>
         <StyledBodyMedium
