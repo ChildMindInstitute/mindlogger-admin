@@ -348,5 +348,6 @@
   "startDate": "Start date",
   "endDate": "End date",
   "selectDate": "Select date",
+  "allDay": "All Day",
   "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName}} ({{ email }})</0> no longer has access to any Applets."
 }

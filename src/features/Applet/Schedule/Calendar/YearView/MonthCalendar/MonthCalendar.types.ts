@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 import { CalendarProps } from 'react-big-calendar';
 
+import { CalendarViews } from '../../Calendar.types';
+
 export type MonthCalendarProps = CalendarProps & {
   setDate: Dispatch<SetStateAction<Date>>;
-  setActiveView: Dispatch<SetStateAction<string>>;
+  setActiveView: Dispatch<SetStateAction<CalendarViews>>;
 };
 
 export type Week = Date[];

@@ -1,7 +1,13 @@
 import { useState } from 'react';
-import { Calendar as ReactCalendar, SlotInfo, dateFnsLocalizer, View } from 'react-big-calendar';
+import {
+  Calendar as ReactCalendar,
+  dateFnsLocalizer,
+  Formats,
+  SlotInfo,
+  View,
+} from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { format, parse, startOfWeek, getDay } from 'date-fns';
+import { format, getDay, parse, startOfWeek } from 'date-fns';
 import { enUS, fr } from 'date-fns/locale';
 
 import i18n from 'i18n';
@@ -9,10 +15,10 @@ import { Svg } from 'components';
 
 import { CreateActivityPopup } from '../CreateActivityPopup';
 import { EditActivityPopup } from '../EditActivityPopup';
-import { getCalendarComponents, eventPropGetter, mockedEvents } from './Calendar.const';
-import { StyledCalendarWrapper, StyledAddBtn } from './Calendar.styles';
-import { CalendarEvent } from './Calendar.types';
-import { getEventsWithOffRange } from './Calendar.utils';
+import { mockedEvents } from './Calendar.const';
+import { getCalendarComponents, getEventsWithOffRange, eventPropGetter } from './Calendar.utils';
+import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
+import { CalendarEvent, CalendarViews, OnViewFunc } from './Calendar.types';
 
 const locales = {
   'en-US': enUS,
@@ -28,14 +34,14 @@ const dateFnsLocalize = dateFnsLocalizer({
 });
 
 export const Calendar = () => {
-  const [activeView, setActiveView] = useState('month');
+  const [activeView, setActiveView] = useState<CalendarViews>(CalendarViews.Month);
   const [date, setDate] = useState<Date>(new Date());
   const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
   const [editActivityPopupVisible, setEditActivityPopupVisible] = useState(false);
 
   const events = getEventsWithOffRange(mockedEvents, date);
 
-  const { components, messages, views } = getCalendarComponents(
+  const { components, messages, views, formats } = getCalendarComponents(
     activeView,
     setActiveView,
     date,
@@ -72,10 +78,13 @@ export const Calendar = () => {
           selectable={true}
           onSelectSlot={onSelectSlot}
           onSelectEvent={onSelectEvent}
-          eventPropGetter={eventPropGetter}
+          eventPropGetter={(event) => eventPropGetter(event, activeView)}
           view={activeView as View}
-          onView={setActiveView}
+          onView={setActiveView as OnViewFunc}
           messages={messages}
+          scrollToTime={new Date(date.setHours(3, 56))}
+          formats={formats as Formats}
+          dayLayoutAlgorithm="no-overlap"
         />
         <StyledAddBtn onClick={handleAddClick}>
           <Svg id="add" />

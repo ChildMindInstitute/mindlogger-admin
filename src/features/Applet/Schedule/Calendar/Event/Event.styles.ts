@@ -6,7 +6,11 @@ import { shouldForwardProp } from 'utils/shouldForwardProp';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
 
-export const StyledEvent = styled(StyledFlexTopCenter)`
+export const StyledEvent = styled(Box)`
+  width: 100%;
+`;
+
+export const StyledTopWrapper = styled(StyledFlexTopCenter)`
   width: 100%;
   justify-content: space-between;
 `;

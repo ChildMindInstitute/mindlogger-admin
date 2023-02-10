@@ -4,7 +4,7 @@ import uniqueId from 'lodash.uniqueid';
 import theme from 'styles/theme';
 import { StyledBodySmall } from 'styles/styledComponents/Typography';
 import { StyledHeadline } from 'styles/styledComponents/Typography';
-import { MonthEvent } from 'features/Applet/Schedule/Calendar/MonthEvent';
+import { Event } from 'features/Applet/Schedule/Calendar/Event';
 import { formatToYearMonthDate } from 'features/Applet/Schedule/Calendar/Calendar.utils';
 
 import { CalendarDateProps, TooltipPosition } from './CalendarDate.types';
@@ -53,15 +53,14 @@ export const CalendarDate = ({
 
   const handleTooltipClose = () => setAnchorEl(null);
 
-  const getEventsRows = () =>
-    events.map(
-      (event, index) =>
-        ((showMoreText && index < MAX_EVENTS_IN_TOOLTIP) || !showMoreText) && (
-          <StyledTooltipEventWrapper key={uniqueId()} bgColor={event.backgroundColor}>
-            <MonthEvent title={event.title} event={event} />
-          </StyledTooltipEventWrapper>
-        ),
-    );
+  const eventsRows = events.map(
+    (event, index) =>
+      ((showMoreText && index < MAX_EVENTS_IN_TOOLTIP) || !showMoreText) && (
+        <StyledTooltipEventWrapper key={uniqueId()} bgColor={event.backgroundColor}>
+          <Event title={event.title} event={event} />
+        </StyledTooltipEventWrapper>
+      ),
+  );
 
   return (
     <>
@@ -77,12 +76,12 @@ export const CalendarDate = ({
         {events.length > 0 && (
           <StyledDotsWrapper>
             {events.map(
-              (event, index) =>
+              ({ allDayEvent, alwaysAvailable, scheduledColor, backgroundColor }, index) =>
                 index < 5 && (
                   <StyledEventDot
                     key={uniqueId()}
-                    isRounded={!!event.startIndicator}
-                    bgColor={event.startIndicator || event.backgroundColor}
+                    isRounded={!(allDayEvent || alwaysAvailable)}
+                    bgColor={scheduledColor || backgroundColor}
                   />
                 ),
             )}
@@ -111,7 +110,7 @@ export const CalendarDate = ({
           <StyledTooltipDate>
             <StyledHeadline>{dateToRender.getDate()}</StyledHeadline>
           </StyledTooltipDate>
-          {getEventsRows()}
+          {eventsRows}
           {showMoreText && <StyledMore>{getMoreEventsText(events)}</StyledMore>}
         </StyledTooltip>
       )}

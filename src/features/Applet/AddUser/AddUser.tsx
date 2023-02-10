@@ -8,6 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { users } from 'redux/modules';
 import { getErrorMessage } from 'utils/errors';
 import { useBreadcrumbs } from 'hooks';
+import { DateFormats } from 'consts';
 
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
@@ -57,7 +58,8 @@ export const AddUser = () => {
                 value: _id,
               },
               dateTimeInvited: {
-                content: () => format(new Date(created), 'yyyy-MM-dd HH:mm:ss'),
+                content: () =>
+                  format(new Date(created), DateFormats.YearMonthDayHoursMinutesSeconds),
                 value: created,
               },
             }),

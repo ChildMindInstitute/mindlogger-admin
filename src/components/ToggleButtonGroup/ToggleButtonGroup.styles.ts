@@ -1,6 +1,7 @@
 import { Box, styled, ToggleButton } from '@mui/material';
 
 import { variables } from 'styles/variables';
+import theme from 'styles/theme';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledIcon = styled(Box)`
@@ -18,6 +19,7 @@ export const StyledToggleBtn = styled(ToggleButton, shouldForwardProp)`
     `
     &.MuiToggleButton-root {
       border-color: ${variables.palette.surface_variant};
+      padding: ${theme.spacing(1, 2)};
     }
     
     &.MuiToggleButton-root.MuiToggleButtonGroup-grouped:not(:first-of-type) {
