@@ -234,7 +234,7 @@
   "editRespondents": "Modifier les répondants",
   "addRole": "Ajouter un rôle",
   "selectRespondents": "Sélectionnez les répondants",
-  "selectRespondentsDescription": "Accordez à <1>{{name}} ({{email}})</1> l'accès pour examiner les données de l'applet <3>{{appletName}}</3> aux données des répondants suivants :",
+  "selectRespondentsDescription": "Donner à <1>{{name}} ({{email}})</1> l'accès pour examiner les données de l'applet <3>{{appletName}}</3> pour les Répondants suivants :",
   "searchAcross": "Rechercher dans:",
   "respondentsSelected_one": "{{count}} Répondant sélectionné",
   "respondentsSelected_other": "{{count}} Répondants sélectionnés",
