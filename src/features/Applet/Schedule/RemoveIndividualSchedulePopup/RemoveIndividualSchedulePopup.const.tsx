@@ -13,7 +13,7 @@ const getSecondScreen = (name: string) => (
         <>{{ name }}</>
       </strong>
       is now using the
-      <strong>default schedule</strong>. You may add an individual schedule for this respondent
+      <strong>default schedule</strong>. You may add an individual schedule for this Respondent
       again any time.
     </Trans>
   </StyledTitleMedium>
@@ -26,7 +26,7 @@ const getFirstScreenForEmptySchedule = (name: string) => (
       <strong>
         <> {{ name }}’s individual schedule </>
       </strong>
-      will be removed, and the respondent will use the <strong>default schedule</strong> instead.
+      will be removed, and the Respondent will use the <strong>default schedule</strong> instead.
       Are you sure you want to continue?
     </Trans>
   </StyledTitleMedium>
@@ -43,7 +43,7 @@ const getFirstScreen = (name: string) => (
       <strong>
         <>individual schedule </>
       </strong>
-      and move the respondent to a group of respondents that use the
+      and move the Respondent to a group of Respondents that use the
       <strong> default schedule</strong>. All individually scheduled activities and their
       notifications will be lost.
     </StyledTitleMedium>

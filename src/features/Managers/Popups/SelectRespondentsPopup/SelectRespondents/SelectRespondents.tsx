@@ -128,7 +128,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
             <b>
               <>{{ appletName }}</>
             </b>
-            to data for the following Respondents:
+            for the following Respondents:
           </Trans>
         </StyledBodyMedium>
         <StyledFilterContainer>

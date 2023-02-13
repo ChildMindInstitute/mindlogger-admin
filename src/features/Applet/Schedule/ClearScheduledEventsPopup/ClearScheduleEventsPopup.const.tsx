@@ -22,7 +22,7 @@ const getFirstScreenForIndividualSchedule = (name: string) => (
   <StyledTitleMedium>
     <Trans i18nKey="confirmClearInvidividualSchedule">
       You are about to remove all scheduled events and notifications from the
-      <strong> individual schedule</strong> for respondent
+      <strong> individual schedule</strong> for Respondent
       <strong>
         <> {{ name }}</>
       </strong>
@@ -49,14 +49,14 @@ const getSecondScreen = (appletName: string) => (
 const getSecondScreenForIndividualSchedule = (name: string) => (
   <Trans i18nKey="clearIndividualScheduleSuccess">
     <StyledTitleMedium>
-      Please note that respondent
+      Please note that Respondent
       <strong>
         <> {{ name }} </>
       </strong>
       is still using an <strong>individual schedule</strong>.
     </StyledTitleMedium>
     <StyledTitleMedium sx={{ marginTop: theme.spacing(2.4) }}>
-      You may revert this respondent back to the <strong>default schedule</strong> by pressing the
+      You may revert this Respondent back to the <strong>default schedule</strong> by pressing the
       trash icon on the top-left.
     </StyledTitleMedium>
   </Trans>
