@@ -4,12 +4,13 @@ import { ListItem, Box } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { blendColorsNormal } from 'utils/colors';
+import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 
 export const StyledDrawer = styled(Box)`
   background-color: ${variables.palette.surface1};
   padding: ${theme.spacing(0, 0.9)};
   border-right: none;
-  min-width: 8.8rem;
+  min-width: 8rem;
 `;
 
 export const StyledDrawerItem = styled(ListItem)`
@@ -58,8 +59,8 @@ export const StyledDrawerItem = styled(ListItem)`
   }
 `;
 
-export const StyledDrawerLogo = styled(Box)`
+export const StyledDrawerLogo = styled(StyledFlexAllCenter)`
   margin-bottom: ${theme.spacing(1.8)};
   margin-top: ${theme.spacing(2.6)};
-  text-align: center;
+  cursor: pointer;
 `;

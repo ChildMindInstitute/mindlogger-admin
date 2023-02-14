@@ -293,5 +293,7 @@
   "searchOrSelectRespondent": "Recherchez ou sélectionnez un répondant pour ajouter/modifier son emploi du temps",
   "selectRespondent": "Sélectionnez le répondant",
   "allDay": "Toute la journée",
-  "today": "Aujourd'hui"
+  "today": "Aujourd'hui",
+  "myWorkspace": "Mon espace de travail",
+  "sharedWorkspaces": "Espaces de travail partagés"
 }

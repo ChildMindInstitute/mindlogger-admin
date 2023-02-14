@@ -356,5 +356,7 @@
   "endDate": "End date",
   "selectDate": "Select date",
   "allDay": "All Day",
-  "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName}} ({{ email }})</0> no longer has access to any Applets."
+  "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName}} ({{ email }})</0> no longer has access to any Applets.",
+  "myWorkspace": "My Workspace",
+  "sharedWorkspaces": "Shared Workspaces"
 }

@@ -15,7 +15,7 @@ export const StyledAccountDrawer = styled(Drawer)`
     height: 100%;
     width: 40rem;
     padding: ${theme.spacing(1.6, 0)};
-    background-color: ${variables.palette.surface2};
+    background-color: ${variables.palette.surface1};
     display: flex;
     flex-direction: column;
     justify-content: space-between;
