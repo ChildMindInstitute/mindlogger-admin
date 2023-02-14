@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BuilderItem, BuilderHeader, Svg } from 'components';
-import { StyledWrapper, StyledTitleMedium } from 'styles/styledComponents';
+import { StyledBuilderWrapper, StyledTitleMedium } from 'styles/styledComponents';
 import theme from 'styles/theme';
 
 import { activityFlows, getActions } from './ActivityFlow.const';
@@ -12,7 +12,7 @@ export const ActivityFlow = () => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledWrapper>
+    <StyledBuilderWrapper>
       <BuilderHeader
         title={t('activityFlow')}
         buttons={[{ icon: <Svg id="flow" />, label: t('addActivityFlow') }]}
@@ -38,6 +38,6 @@ export const ActivityFlow = () => {
           {t('activityFlowIsRequired')}
         </StyledTitleMedium>
       )}
-    </StyledWrapper>
+    </StyledBuilderWrapper>
   );
 };

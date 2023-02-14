@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg, BuilderItem, BuilderHeader } from 'components';
-import { StyledTitleMedium, StyledWrapper } from 'styles/styledComponents';
+import { StyledTitleMedium, StyledBuilderWrapper } from 'styles/styledComponents';
 import theme from 'styles/theme';
 
 import { activities, getActions } from './Activities.const';
@@ -10,7 +10,7 @@ export const Activities = () => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledWrapper>
+    <StyledBuilderWrapper>
       <BuilderHeader
         title={t('activities')}
         buttons={[{ icon: <Svg id="checklist" />, label: t('addActivity') }]}
@@ -24,6 +24,6 @@ export const Activities = () => {
           {t('activityIsRequired')}
         </StyledTitleMedium>
       )}
-    </StyledWrapper>
+    </StyledBuilderWrapper>
   );
 };
