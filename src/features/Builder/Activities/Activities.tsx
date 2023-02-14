@@ -13,7 +13,7 @@ export const Activities = () => {
     <StyledBuilderWrapper>
       <BuilderHeader
         title={t('activities')}
-        buttons={[{ icon: <Svg id="checklist" />, label: t('addActivity') }]}
+        buttons={[{ icon: <Svg id="checklist-filled" />, label: t('addActivity') }]}
       />
       {activities?.length ? (
         activities.map((item) => (
