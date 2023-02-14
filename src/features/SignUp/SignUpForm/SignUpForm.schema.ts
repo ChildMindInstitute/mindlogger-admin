@@ -1,8 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-
-// TODO: request error texts and correct FR translations
+import { ACCOUNT_PASSWORD_MIN_LENGTH } from 'consts';
 
 export const SignUpFormSchema = () => {
   const { t } = i18n;
@@ -11,7 +10,7 @@ export const SignUpFormSchema = () => {
   const firstNameRequired = t('firstNameRequired');
   const lastNameRequired = t('lastNameRequired');
   const passwordRequired = t('passwordRequired');
-  const passwordMinLength = t('passwordMinLength');
+  const passwordMinLength = t('passwordMinLength', { chars: ACCOUNT_PASSWORD_MIN_LENGTH });
   const passwordBlankSpaces = t('passwordBlankSpaces');
 
   return yup
@@ -22,7 +21,7 @@ export const SignUpFormSchema = () => {
       password: yup
         .string()
         .required(passwordRequired)
-        .min(8, passwordMinLength)
+        .min(ACCOUNT_PASSWORD_MIN_LENGTH, passwordMinLength)
         .matches(/^(\S+$)/, passwordBlankSpaces),
     })
     .required();

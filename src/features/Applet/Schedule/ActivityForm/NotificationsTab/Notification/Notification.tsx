@@ -7,7 +7,7 @@ import theme from 'styles/theme';
 import { StyledLabelLarge } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
-import { StyledNotification, StyledCol, StyledleftCol } from './Notification.styles';
+import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { notificationTimeToggles } from './Notification.const';
 import { Header } from '../Header';
@@ -39,14 +39,14 @@ export const Notification = ({ index, remove }: NotificationProps) => {
       <StyledNotification>
         <Header onClickHandler={handleRemoveNotification} />
         <StyledFlexTopCenter>
-          <StyledleftCol>
+          <StyledLeftCol>
             <ToggleButtonGroup
               toggleButtons={notificationTimeToggles}
               activeButton={activeType}
               setActiveButton={setActivetype}
               customChange={updateTime}
             />
-          </StyledleftCol>
+          </StyledLeftCol>
           <StyledCol sx={{ marginLeft: theme.spacing(2.4) }}>
             {activeType === NotificationType.Fixed ? (
               <StyledColInner>

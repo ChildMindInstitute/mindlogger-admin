@@ -16,9 +16,9 @@ export const Actions = ({ items, context }: ActionsProps) => {
       {showActions ? (
         <StyledActions>
           {items.map(
-            ({ icon, disabled = false, action, toolTipTitle, isDisplayed = true }, i) =>
+            ({ icon, disabled = false, action, tooltipTitle, isDisplayed = true }, i) =>
               isDisplayed && (
-                <Tooltip key={i} tooltipTitle={toolTipTitle}>
+                <Tooltip key={i} tooltipTitle={tooltipTitle}>
                   <span>
                     <StyledActionButton disabled={disabled} onClick={() => action(context)}>
                       {icon}

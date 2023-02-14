@@ -17,6 +17,6 @@ export const StyledCol = styled(Box)`
   display: flex;
 `;
 
-export const StyledleftCol = styled(Box)`
+export const StyledLeftCol = styled(Box)`
   width: 40%;
 `;

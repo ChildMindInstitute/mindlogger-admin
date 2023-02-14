@@ -12,12 +12,12 @@ export const getActions = (
     disabled: !!folder?.isRenaming,
     icon: <Svg id="edit" />,
     action: (item: FolderApplet) => onRenameFolder(item),
-    toolTipTitle: t('edit'),
+    tooltipTitle: t('edit'),
   },
   {
     disabled: !!folder?.items?.length,
     icon: <Svg id="trash" />,
     action: (item: FolderApplet) => onDeleteFolder(item),
-    toolTipTitle: t(folder?.items?.length ? 'deleteFolderWarning' : 'delete'),
+    tooltipTitle: t(folder?.items?.length ? 'deleteFolderWarning' : 'delete'),
   },
 ];

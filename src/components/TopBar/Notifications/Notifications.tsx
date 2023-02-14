@@ -49,7 +49,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           imageSrc: image || null,
           timeAgo: timeAgo.format(new Date(alert.created), 'round'),
           viewed: alert.viewed,
-          encryption,
+          encryption: encryption || undefined,
         };
       });
 
