@@ -231,7 +231,7 @@
   "selectRespondents": "Select Respondents",
   "selectRespondentsDescription": "Give <1>{{name}} ({{email}})</1> access to review the data for the Applet <3>{{appletName}}</3> to data for the following Respondents:",
   "searchAcross": "Search Across:",
-  "selectRespondentsHint":"To proceed, at least 1 Respondent should be selected.",
+  "selectRespondentsHint": "To proceed, at least 1 Respondent should be selected.",
   "all": "All",
   "selected": "Selected",
   "unselected": "Unselected",
@@ -349,5 +349,11 @@
   "endDate": "End date",
   "selectDate": "Select date",
   "allDay": "All Day",
-  "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName}} ({{ email }})</0> no longer has access to any Applets."
+  "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName}} ({{ email }})</0> no longer has access to any Applets.",
+  "activityIsRequired": "At least 1 activity is required.",
+  "addActivity": "Add Activity",
+  "activityFlowIsRequired": "Create an Activity Flow to order the sequence of Activities.",
+  "addActivityFlow": "Add Activity Flow",
+  "item_one": "item",
+  "item_other": "items"
 }
