@@ -32,10 +32,9 @@ export const SwitchWorkspace = ({
         <Fragment key={workspacesGroup.groupName}>
           {!!index && <StyledDivider />}
           <WorkspaceGroup
-            groupName={workspacesGroup.groupName}
+            workspacesGroup={workspacesGroup}
             currentWorkspace={currentWorkspace}
             setCurrentWorkspace={setCurrentWorkspace}
-            workspaces={workspacesGroup.workspaces}
           />
         </Fragment>
       ))}

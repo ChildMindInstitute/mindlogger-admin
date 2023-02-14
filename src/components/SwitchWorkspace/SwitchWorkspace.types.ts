@@ -15,6 +15,7 @@ export enum WorkspaceGroups {
 export type WorkspaceGroup = {
   groupName: WorkspaceGroups;
   workspaces: Workspace[];
+  emptyState?: string;
 };
 
 export type SwitchWorkspaceProps = {

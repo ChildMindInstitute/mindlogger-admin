@@ -1,10 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Workspace } from '../SwitchWorkspace.types';
+import { Workspace, WorkspaceGroup } from '../SwitchWorkspace.types';
 
 export type WorkspaceGroupProps = {
-  groupName: string;
-  workspaces: Workspace[];
+  workspacesGroup: WorkspaceGroup;
   currentWorkspace: Workspace;
   setCurrentWorkspace: Dispatch<SetStateAction<Workspace>>;
 };

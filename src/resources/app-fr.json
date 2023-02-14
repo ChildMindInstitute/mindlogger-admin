@@ -295,5 +295,6 @@
   "allDay": "Toute la journée",
   "today": "Aujourd'hui",
   "myWorkspace": "Mon espace de travail",
-  "sharedWorkspaces": "Espaces de travail partagés"
+  "sharedWorkspaces": "Espaces de travail partagés",
+  "noSharedWorkspaces": "Aucun espace de travail partagé"
 }

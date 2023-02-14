@@ -11,43 +11,47 @@ import { StyledListItemButton, StyledItemContent, StyledSelect } from './Workspa
 import { WorkspaceGroupProps } from './WorkspaceGroup.types';
 
 export const WorkspaceGroup = ({
-  groupName,
-  workspaces,
+  workspacesGroup: { groupName, workspaces, emptyState = '' },
   currentWorkspace,
   setCurrentWorkspace,
 }: WorkspaceGroupProps) => {
   const { t } = useTranslation('app');
 
   return (
-    <List>
-      <StyledBodyMedium
-        sx={{ padding: theme.spacing(1.8, 2.4) }}
-        color={variables.palette.on_surface_variant}
-      >
+    <List sx={{ padding: theme.spacing(0) }}>
+      <StyledBodyMedium sx={{ padding: theme.spacing(1.6), color: variables.palette.outline }}>
         {t(groupName)}
       </StyledBodyMedium>
-      {workspaces.map((workspace) => (
-        <StyledListItemButton
-          key={workspace.accountId}
-          onClick={() => setCurrentWorkspace(workspace)}
-          selected={currentWorkspace.accountId === workspace.accountId}
-        >
-          <StyledItemContent>
-            <WorkspaceImage image={workspace?.image} workspaceName={workspace.accountName} />
-            <StyledBodyLarge
-              sx={{ marginLeft: theme.spacing(1.6), color: variables.palette.on_surface }}
-            >
-              {workspace.accountName}
-            </StyledBodyLarge>
-          </StyledItemContent>
+      {workspaces.length ? (
+        workspaces.map((workspace) => (
+          <StyledListItemButton
+            key={workspace.accountId}
+            onClick={() => setCurrentWorkspace(workspace)}
+            selected={currentWorkspace.accountId === workspace.accountId}
+          >
+            <StyledItemContent>
+              <WorkspaceImage image={workspace?.image} workspaceName={workspace.accountName} />
+              <StyledBodyLarge
+                sx={{ marginLeft: theme.spacing(1.6), color: variables.palette.on_surface }}
+              >
+                {workspace.accountName}
+              </StyledBodyLarge>
+            </StyledItemContent>
 
-          {currentWorkspace.accountId === workspace.accountId && (
-            <StyledSelect>
-              <Svg id="selected" />
-            </StyledSelect>
-          )}
-        </StyledListItemButton>
-      ))}
+            {currentWorkspace.accountId === workspace.accountId && (
+              <StyledSelect>
+                <Svg id="selected" />
+              </StyledSelect>
+            )}
+          </StyledListItemButton>
+        ))
+      ) : (
+        <StyledBodyLarge
+          sx={{ margin: theme.spacing(0, 2.4), color: variables.palette.on_surface_variant }}
+        >
+          {t(emptyState)}
+        </StyledBodyLarge>
+      )}
     </List>
   );
 };

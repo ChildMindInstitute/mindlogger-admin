@@ -358,5 +358,6 @@
   "allDay": "All Day",
   "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName}} ({{ email }})</0> no longer has access to any Applets.",
   "myWorkspace": "My Workspace",
-  "sharedWorkspaces": "Shared Workspaces"
+  "sharedWorkspaces": "Shared Workspaces",
+  "noSharedWorkspaces": "No shared Workspaces"
 }

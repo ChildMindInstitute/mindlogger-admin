@@ -8,5 +8,6 @@ export const workspacesGroups: WorkspaceGroup[] = [
   {
     groupName: WorkspaceGroups.SharedWorkspaces,
     workspaces: [],
+    emptyState: 'noSharedWorkspaces',
   },
 ];
