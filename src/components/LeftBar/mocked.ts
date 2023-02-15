@@ -1,4 +1,4 @@
-import { Workspace } from 'components/SwitchWorkspace/SwitchWorkspace.types';
+import { Workspace } from 'features/SwitchWorkspace/SwitchWorkspace.types';
 
 export const mockedWorkspaces: Workspace[] = [
   {

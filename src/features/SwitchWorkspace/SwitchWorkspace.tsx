@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
 import { Svg } from 'components';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledClearedButton } from 'styles/styledComponents';
 
 import {
   StyledCloseWrapper,

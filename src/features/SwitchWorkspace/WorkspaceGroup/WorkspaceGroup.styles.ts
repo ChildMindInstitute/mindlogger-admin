@@ -1,6 +1,6 @@
 import { Box, ListItemButton, styled } from '@mui/material';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 
+import { StyledFlexTopCenter } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 

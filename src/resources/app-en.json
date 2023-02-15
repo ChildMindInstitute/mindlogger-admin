@@ -359,5 +359,11 @@
   "userHasNoAccessToAnyApplets": "<0>{{ firstName }} {{ lastName}} ({{ email }})</0> no longer has access to any Applets.",
   "myWorkspace": "My Workspace",
   "sharedWorkspaces": "Shared Workspaces",
-  "noSharedWorkspaces": "No shared Workspaces"
+  "noSharedWorkspaces": "No shared Workspaces",
+  "activityIsRequired": "At least 1 activity is required.",
+  "addActivity": "Add Activity",
+  "activityFlowIsRequired": "Create an Activity Flow to order the sequence of Activities.",
+  "addActivityFlow": "Add Activity Flow",
+  "item_one": "item",
+  "item_other": "items"
 }

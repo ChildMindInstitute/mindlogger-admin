@@ -34,7 +34,7 @@ export const variables = {
     xxs: '0.2rem', //2px
   },
   borderWidth: {
-    xl: '0.4rem', //2px
+    xl: '0.4rem', //4px
     lg: '0.2rem', //2px
     md: '0.1rem', //1px
   },

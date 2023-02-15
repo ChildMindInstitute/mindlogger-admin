@@ -4,7 +4,7 @@ import { List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { StyledLabelMedium } from 'styles/styledComponents/Typography';
-import { SwitchWorkspace, WorkspaceImage } from 'components';
+import { SwitchWorkspace, WorkspaceImage } from 'features/SwitchWorkspace';
 import { variables } from 'styles/variables';
 
 import { links } from './LeftBar.const';

@@ -1,4 +1,6 @@
 export * from './Actions';
+export * from './BuilderItem';
+export * from './BuilderHeader';
 export * from './ButtonWithMenu';
 export * from './Breadcrumbs';
 export * from './Chip';
@@ -20,4 +22,3 @@ export * from './Tooltip';
 export * from './TopBar';
 export * from './ToggleButtonGroup';
 export * from './EmptyTable';
-export * from './SwitchWorkspace';

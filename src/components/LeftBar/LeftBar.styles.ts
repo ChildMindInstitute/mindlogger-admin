@@ -4,7 +4,7 @@ import { ListItem, Box } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { blendColorsNormal } from 'utils/colors';
-import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
+import { StyledFlexAllCenter } from 'styles/styledComponents';
 
 export const StyledDrawer = styled(Box)`
   background-color: ${variables.palette.surface1};

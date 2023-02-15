@@ -1,6 +1,6 @@
 import { styled } from '@mui/system';
 
-import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
+import { StyledFlexAllCenter } from 'styles/styledComponents';
 
 export const StyledSpinner = styled(StyledFlexAllCenter)`
   position: absolute;
