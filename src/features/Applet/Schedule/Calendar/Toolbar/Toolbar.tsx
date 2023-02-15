@@ -1,11 +1,11 @@
 import { View } from 'react-big-calendar';
+import { getISOWeek } from 'date-fns';
 
 import { ToggleButtonGroup, Svg } from 'components';
 import i18n from 'i18n';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledTitleBoldMedium } from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { StyledTitleBoldMedium, StyledFlexTopCenter } from 'styles/styledComponents';
 
 import { formatToYearMonthDate } from '../Calendar.utils';
 import { CalendarViews } from '../Calendar.types';
@@ -23,22 +23,32 @@ export const Toolbar = ({
   date,
 }: ToolbarProps) => {
   const { t } = i18n;
+  const currentDate = new Date();
+  const selectedDay = formatToYearMonthDate(date);
+  const todayDay = formatToYearMonthDate(currentDate);
+  const isTodayInDayView = activeView === CalendarViews.Day && selectedDay === todayDay;
+  const dateYear = date.getFullYear();
+  const currentDateYear = currentDate.getFullYear();
+  const dateWeek = getISOWeek(date);
+  const currentDateWeek = getISOWeek(currentDate);
+  const dateMonth = onlyMonthDate(date);
+  const currentDateMonth = onlyMonthDate(currentDate);
 
   const handleViewChange = (value: CalendarViews) => {
     setActiveView(value);
     onView(value as View);
   };
 
-  const currentDate = new Date();
-  const selectedDay = formatToYearMonthDate(date);
-  const todayDay = formatToYearMonthDate(currentDate);
-  const isTodayInDayView = activeView === CalendarViews.Day && selectedDay === todayDay;
   const isSelectedFutureDate = () => {
     switch (activeView) {
       case CalendarViews.Year:
-        return date.getFullYear() > currentDate.getFullYear();
+        return dateYear > currentDateYear;
+      case CalendarViews.Week:
+        return (
+          dateYear > currentDateYear || (dateYear === currentDateYear && dateWeek > currentDateWeek)
+        );
       case CalendarViews.Month:
-        return onlyMonthDate(date) > onlyMonthDate(currentDate);
+        return dateMonth > currentDateMonth;
       default:
         return date > currentDate;
     }
@@ -46,9 +56,13 @@ export const Toolbar = ({
   const isSelectedPastDate = () => {
     switch (activeView) {
       case CalendarViews.Year:
-        return date.getFullYear() < currentDate.getFullYear();
+        return dateYear < currentDateYear;
+      case CalendarViews.Week:
+        return (
+          dateYear < currentDateYear || (dateYear === currentDateYear && dateWeek < currentDateWeek)
+        );
       case CalendarViews.Month:
-        return onlyMonthDate(date) < onlyMonthDate(currentDate);
+        return dateMonth < currentDateMonth;
       default:
         return todayDay !== selectedDay && date < currentDate;
     }

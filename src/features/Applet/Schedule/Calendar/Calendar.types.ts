@@ -1,13 +1,15 @@
 import { View } from 'react-big-calendar';
 
 export type CalendarEvent = {
+  id: string;
+  resourceId: string;
   title: string;
   start: Date;
   end: Date;
-  id: string;
   backgroundColor: string;
   alwaysAvailable: boolean;
   isHidden: boolean;
+  isHiddenInTimeView?: boolean;
   scheduledColor?: string;
   scheduledBackground?: string;
   allDayEvent?: boolean;
@@ -23,4 +25,19 @@ export enum CalendarViews {
   Week = 'week',
   Month = 'month',
   Year = 'year',
+}
+
+export type AllDayEventsVisible = {
+  period: string;
+  visible: boolean;
+} | null;
+
+export type AllDayEventsSortedByDays = {
+  date: string;
+  eventsIds: { id: string; isHidden: boolean }[];
+}[];
+
+export enum NameLength {
+  Long = 'long',
+  Short = 'short',
 }

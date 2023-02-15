@@ -3,11 +3,7 @@ import { format } from 'date-fns';
 import { Svg } from 'components';
 import { DateFormats } from 'consts';
 import { variables } from 'styles/variables';
-import {
-  StyledBodySmall,
-  StyledLabelBoldMedium,
-  StyledLabelMedium,
-} from 'styles/styledComponents/Typography';
+import { StyledBodySmall, StyledLabelBoldMedium, StyledLabelMedium } from 'styles/styledComponents';
 
 import { EventProps, UiType } from './Event.types';
 import {
