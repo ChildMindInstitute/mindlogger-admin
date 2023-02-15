@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, DragEvent, MouseEvent, ChangeEvent } from 'react';
 import { Box, Button } from '@mui/material';
 import { Trans } from 'react-i18next';
 
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
-import { Svg } from 'components/Svg';
+import { StyledBodyLarge } from 'styles/styledComponents';
+import { Svg } from 'components';
 
 import {
   StyledContainer,
@@ -19,7 +19,7 @@ import { UploaderProps } from './Uploader.types';
 export const Uploader = ({ width, height }: UploaderProps) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
-  const stopDefaults = (e: React.DragEvent | React.MouseEvent) => {
+  const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
   };
@@ -30,7 +30,7 @@ export const Uploader = ({ width, height }: UploaderProps) => {
     onDragEnter: stopDefaults,
     onDragLeave: stopDefaults,
     onDragOver: stopDefaults,
-    onDrop: (e: React.DragEvent<HTMLElement>) => {
+    onDrop: (e: DragEvent<HTMLElement>) => {
       stopDefaults(e);
       if (e.dataTransfer.files[0]) {
         setImageUrl(URL.createObjectURL(e.dataTransfer.files[0]));
@@ -38,9 +38,10 @@ export const Uploader = ({ width, height }: UploaderProps) => {
     },
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files?.[0]) {
-      setImageUrl(URL.createObjectURL(event.target.files?.[0]));
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (files?.[0]) {
+      setImageUrl(URL.createObjectURL(files[0]));
     }
   };
 
@@ -48,7 +49,7 @@ export const Uploader = ({ width, height }: UploaderProps) => {
     setImageUrl(null);
   };
 
-  const onRemoveImg = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onRemoveImg = (e: MouseEvent) => {
     stopDefaults(e);
     setImageUrl(null);
   };

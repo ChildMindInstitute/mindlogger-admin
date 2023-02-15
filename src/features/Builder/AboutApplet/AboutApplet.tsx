@@ -6,11 +6,11 @@ import { EditorController, InputController, SelectController } from 'components/
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import { useBreadcrumbs } from 'hooks';
 import { Svg, Tooltip, Uploader } from 'components';
-import { StyledBodyMedium, StyledHeadlineLarge } from 'styles/styledComponents/Typography';
+import { StyledBodyMedium, StyledHeadlineLarge } from 'styles/styledComponents';
+import { StyledBuilderWrapper } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
-import { StyledWrapper } from '../Builder.styles';
 import {
   StyledForm,
   StyledContainer,
@@ -45,7 +45,7 @@ export const AboutApplet = () => {
   };
 
   return (
-    <StyledWrapper sx={{ marginRight: theme.spacing(20) }}>
+    <StyledBuilderWrapper sx={{ marginRight: theme.spacing(20) }}>
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutApplet')}
       </StyledHeadlineLarge>
@@ -130,6 +130,6 @@ export const AboutApplet = () => {
         </StyledTitle>
         <EditorController control={control} name="aboutApplet" />
       </StyledForm>
-    </StyledWrapper>
+    </StyledBuilderWrapper>
   );
 };

@@ -1,7 +1,7 @@
 import { Box, ButtonGroup, FormControlLabel, TextField } from '@mui/material';
 import { styled } from '@mui/system';
 
-import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
+import { StyledFlexAllCenter } from 'styles/styledComponents';
 import { variables } from 'styles/variables';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
@@ -45,6 +45,7 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
 export const StyledImgContainer = styled(Box)`
   margin: 0 auto;
   text-align: center;
+
   svg {
     fill: ${variables.palette.surface_variant};
   }
@@ -65,6 +66,7 @@ export const StyledButtonGroup = styled(ButtonGroup)`
     &:not(:first-of-type) {
       border-left: transparent;
     }
+
     &:not(:last-of-type):hover {
       border-right-color: transparent;
     }
@@ -73,6 +75,7 @@ export const StyledButtonGroup = styled(ButtonGroup)`
   .MuiButton-root.MuiButton-outlined {
     background-color: ${variables.palette.white};
     border-color: ${variables.palette.surface_variant};
+
     &:hover {
       background-color: ${variables.palette.white};
     }

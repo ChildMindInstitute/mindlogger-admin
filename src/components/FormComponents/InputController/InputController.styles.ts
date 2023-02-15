@@ -1,6 +1,6 @@
 import { styled, Box, TextField } from '@mui/material';
 
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
+import { StyledBodyMedium } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 

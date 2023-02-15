@@ -44,7 +44,7 @@ export const InputController = <T extends FieldValues>({
                 onChange={onChange}
                 value={textFieldProps.type === 'number' && value < 1 ? 1 : value}
                 error={!!error || providedError}
-                helperText={error ? error.message : null}
+                helperText={error?.message || null}
                 InputProps={
                   textFieldProps.type === 'number'
                     ? {
