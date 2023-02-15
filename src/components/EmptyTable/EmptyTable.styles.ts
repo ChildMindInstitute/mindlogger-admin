@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
+import { StyledFlexAllCenter } from 'styles/styledComponents';
 import theme from 'styles/theme';
 
 export const StyledEmptyTable = styled(StyledFlexAllCenter)`
