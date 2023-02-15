@@ -36,6 +36,7 @@ export const formatToYearMonthDate = (date?: Date) =>
 
 export const formatToWeekYear = (date: Date) => `${getISOWeek(date)} ${date.getFullYear()}`;
 
+// TODO: Reformat the logic when connecting to the API
 export const allDayEventsSortedByDays = mockedEvents
   .reduce(
     (
