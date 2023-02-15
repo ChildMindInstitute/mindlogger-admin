@@ -82,16 +82,14 @@ export const Uploader = ({ width, height }: UploaderProps) => {
                 )}
               </UploadedImgContainer>
             ) : (
-              <>
-                <StyledImgContainer>
-                  <Svg id="img-filled" width={18} height={18} />
-                  <StyledBodyLarge>
-                    <Trans i18nKey="dropImg">
-                      Drop Image here or <span>click to browse</span>.
-                    </Trans>
-                  </StyledBodyLarge>
-                </StyledImgContainer>
-              </>
+              <StyledImgContainer>
+                <Svg id="img-filled" width={18} height={18} />
+                <StyledBodyLarge>
+                  <Trans i18nKey="dropImg">
+                    Drop Image here or <span>click to browse</span>.
+                  </Trans>
+                </StyledBodyLarge>
+              </StyledImgContainer>
             )}
           </StyledContainer>
         }
