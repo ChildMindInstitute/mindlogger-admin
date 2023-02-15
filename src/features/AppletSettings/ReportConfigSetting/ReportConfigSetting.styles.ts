@@ -3,9 +3,7 @@ import styled from '@emotion/styled/macro';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-
+import { StyledFlexAllCenter, StyledClearedButton } from 'styles/styledComponents';
 export const StyledForm = styled('form')`
   margin: ${theme.spacing(0, 6.4, 6.4, 0)};
 `;

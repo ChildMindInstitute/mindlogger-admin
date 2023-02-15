@@ -11,7 +11,6 @@ import { InputController, CheckboxController } from 'components/FormComponents';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import { getErrorMessage } from 'utils/errors';
 
-import { AdvancedSettings } from '../AdvancedSettings';
 import {
   StyledSignUpHeader,
   StyledForm,

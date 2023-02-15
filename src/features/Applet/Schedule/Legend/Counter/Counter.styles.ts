@@ -2,7 +2,7 @@ import { styled } from '@mui/system';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
+import { StyledFlexAllCenter } from 'styles/styledComponents';
 
 export const StyledCounter = styled(StyledFlexAllCenter)`
   height: 2rem;

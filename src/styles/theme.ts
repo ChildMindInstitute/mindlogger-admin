@@ -68,7 +68,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '&.Mui-selected': {
-            backgroundColor: variables.palette.secondary_container,
+            backgroundColor: variables.palette.primary_alfa12,
           },
         },
       },

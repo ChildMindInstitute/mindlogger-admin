@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { useBreadcrumbs } from 'hooks';
 import { page } from 'resources';
-import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
 import { StyledBody } from 'styles/styledComponents/Body';
+import { StyledFlexAllCenter } from 'styles/styledComponents';
 
 export const Builder = () => {
   useBreadcrumbs();
