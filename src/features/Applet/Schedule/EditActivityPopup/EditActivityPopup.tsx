@@ -11,7 +11,6 @@ import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup'
 import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
 
 export const EditActivityPopup = ({
-  onClose,
   open,
   activityName,
   setEditActivityPopupVisible,
@@ -30,9 +29,11 @@ export const EditActivityPopup = ({
     }
   };
 
+  const handleOnClose = () => setEditActivityPopupVisible(false);
+
   const onRemoveEventClick = () => {
     setRemoveScheduledEventPopupVisible(true);
-    onClose();
+    handleOnClose();
   };
 
   const onRemoveScheduledEventClose = () => {
@@ -55,7 +56,7 @@ export const EditActivityPopup = ({
       {open && (
         <Modal
           open={open}
-          onClose={onClose}
+          onClose={handleOnClose}
           onSubmit={onSubmit}
           title={t('editActivitySchedule')}
           buttonText={t('save')}
@@ -74,7 +75,7 @@ export const EditActivityPopup = ({
             </StyledContainer>
             <ActivityForm
               ref={activityFormRef}
-              submitCallback={onClose}
+              submitCallback={handleOnClose}
               setRemoveAllEventsPopupVisible={setRemoveAllScheduledEventsPopupVisible}
               setConfirmScheduledAccessPopupVisible={setConfirmScheduledAccessPopupVisible}
             />

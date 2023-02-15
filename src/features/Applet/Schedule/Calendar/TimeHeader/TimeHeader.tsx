@@ -1,5 +1,4 @@
 import { MouseEvent } from 'react';
-import { Box } from '@mui/material';
 
 import { variables } from 'styles/variables';
 import { StyledLabelBoldMedium, StyledTitleLarge } from 'styles/styledComponents';
@@ -82,13 +81,11 @@ export const TimeHeader = ({
           }${date.getDate()}`}</StyledTitleLarge>
         </StyledWeekDayWrapper>
       )}
-      {isShowMoreVisible ? (
+      {isShowMoreVisible && (
         <StyledMore isWeekType={isWeekUiType} onClick={handleMoreClick}>
           {currentAllDaysEventsIds &&
             `${currentAllDaysEventsIds.length - VISIBLE_EVENTS_LENGTH} ${getMoreText()}`}
         </StyledMore>
-      ) : (
-        <Box />
       )}
     </>
   );

@@ -21,7 +21,7 @@ import { Event } from './Event';
 import { MonthView } from './MonthView';
 import { YearView } from './YearView';
 import { AllDayEventsVisible, CalendarEvent, CalendarViews } from './Calendar.types';
-import { mockedEvents } from './Calendar.const';
+import { LENGTH_TO_SET_ID_IS_HIDDEN, mockedEvents } from './Calendar.const';
 import { TimeHeader, UiType as TimeHeaderUiType } from './TimeHeader';
 import { TimeGutterHeader } from './TimeGutterHeader';
 import { EventWrapper } from './EventWrapper';
@@ -53,7 +53,7 @@ export const allDayEventsSortedByDays = mockedEvents
                 ...el,
                 eventsIds: ids.push({
                   id: event.id,
-                  isHidden: ids.length > 2,
+                  isHidden: ids.length > LENGTH_TO_SET_ID_IS_HIDDEN,
                 }),
               };
             }

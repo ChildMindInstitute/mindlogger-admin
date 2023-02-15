@@ -124,14 +124,11 @@ export const Calendar = () => {
           activityName="Daily Journal"
         />
       )}
-      {editActivityPopupVisible && (
-        <EditActivityPopup
-          open={editActivityPopupVisible}
-          onClose={() => setEditActivityPopupVisible(false)}
-          activityName="Daily Journal"
-          setEditActivityPopupVisible={setEditActivityPopupVisible}
-        />
-      )}
+      <EditActivityPopup
+        open={editActivityPopupVisible}
+        activityName="Daily Journal"
+        setEditActivityPopupVisible={setEditActivityPopupVisible}
+      />
     </>
   );
 };

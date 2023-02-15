@@ -30,7 +30,8 @@ export const TimeGutterHeader = ({
     isWeekView && formatToWeekYear(event.start) === currentWeek;
 
   const getShowEventsCondition = (event: CalendarEvent, isVisible: boolean | undefined) =>
-    Object.prototype.hasOwnProperty.call(event, 'isHiddenInTimeView') &&
+    // eslint-disable-next-line no-prototype-builtins
+    event.hasOwnProperty('isHiddenInTimeView') &&
     !isVisible &&
     (getWeekCondition(event) || getDayCondition(event));
 

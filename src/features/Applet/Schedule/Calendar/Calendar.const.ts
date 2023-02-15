@@ -2,6 +2,8 @@ import { variables } from 'styles/variables';
 
 import { CalendarEvent } from './Calendar.types';
 
+export const LENGTH_TO_SET_ID_IS_HIDDEN = 2;
+
 export const mockedEvents: CalendarEvent[] = [
   {
     id: '1',
