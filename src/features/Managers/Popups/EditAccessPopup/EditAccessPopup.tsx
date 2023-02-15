@@ -57,8 +57,13 @@ export const EditAccessPopup = ({
   const handleRemoveRole = (id: string, label: Roles) =>
     updateAppletHandler(id, (roles) => roles.filter((role) => role.label !== label));
 
-  const handleAddRole = (id: string, label: Roles) =>
-    updateAppletHandler(id, (roles) => [...roles, { label, icon: getRoleIcon(label) }]);
+  const handleAddRole = (id: string, label: Roles) => {
+    const callback = (roles: Role[]) =>
+      label === Roles.Manager
+        ? [{ label, icon: getRoleIcon(label) }]
+        : [...roles, { label, icon: getRoleIcon(label) }];
+    updateAppletHandler(id, callback);
+  };
 
   const handleAddSelectedRespondents = (id: string, respondents: string[]) =>
     updateAppletHandler(id, (roles) => roles, respondents);

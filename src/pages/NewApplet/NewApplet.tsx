@@ -1,4 +1,4 @@
-import { LinkedTabs } from 'components/Tabs';
+import { LinkedTabs } from 'components';
 import { useBreadcrumbs } from 'hooks';
 import { StyledBody } from 'styles/styledComponents/Body';
 

@@ -20,7 +20,7 @@ export type FolderApplet = {
   description?: string;
   displayName?: string;
   editing?: boolean;
-  encryption?: Encryption;
+  encryption?: Encryption | null;
   hasUrl?: boolean;
   image?: string;
   largeApplet?: boolean;

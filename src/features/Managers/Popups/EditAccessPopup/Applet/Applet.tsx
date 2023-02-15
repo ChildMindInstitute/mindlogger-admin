@@ -26,6 +26,8 @@ export const Applet = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
 
+  const isManager = !!roles.find((role) => role.label === Roles.Manager);
+
   const handleAddRole = (label: Roles) => {
     addRole(id, label);
     setAnchorEl(null);
@@ -55,7 +57,7 @@ export const Applet = ({
             <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>{title}</StyledBodyMedium>
           </StyledFlexTopCenter>
           <ButtonWithMenu
-            disabled={!getFilteredMenuItems().length}
+            disabled={isManager}
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             menuItems={getFilteredMenuItems()}
@@ -93,13 +95,15 @@ export const Applet = ({
           />
         ))}
       </StyledApplet>
-      <SelectRespondentsPopup
-        appletName={title}
-        user={user}
-        selectRespondentsPopupVisible={selectRespondentsPopupVisible}
-        selectedRespondents={selectedRespondents || []}
-        onClose={handleClosePopup}
-      />
+      {selectRespondentsPopupVisible && (
+        <SelectRespondentsPopup
+          appletName={title}
+          user={user}
+          selectRespondentsPopupVisible={selectRespondentsPopupVisible}
+          selectedRespondents={selectedRespondents || []}
+          onClose={handleClosePopup}
+        />
+      )}
     </>
   );
 };

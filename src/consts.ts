@@ -2,6 +2,7 @@ export const TABS_HEIGHT = '6.1rem';
 export const TOP_BAR_HEIGHT = '6rem';
 export const FOOTER_HEIGHT = '4.8rem';
 export const SEARCH_HEIGHT = '4rem';
+export const LEFT_BAR_WIDTH = '8rem';
 
 export const APPLET_PAGES = {
   respondents: 'respondents',
@@ -21,6 +22,9 @@ export enum DateFormats {
   Time = 'HH:mm',
   YearMonthDayHoursMinutesSeconds = 'yyyy-MM-dd HH:mm:ss',
 }
+
+export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;
+export const APPLET_PASSWORD_MIN_LENGTH = 8;
 
 export enum Roles {
   User = 'user',

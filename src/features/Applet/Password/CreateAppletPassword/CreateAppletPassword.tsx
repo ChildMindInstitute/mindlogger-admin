@@ -16,7 +16,7 @@ import {
   AppletPasswordRef,
 } from './CreateAppletPassword.types';
 import { createPasswordFormSchema } from './CreateAppletPassword.schema';
-import { StyledController, StyledHint } from '../Password.styles';
+import { StyledController } from '../Password.styles';
 
 export const CreateAppletPassword = forwardRef<AppletPasswordRef, AppletPasswordProps>(
   ({ submitCallback }, ref) => {
@@ -47,6 +47,12 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, AppletPassword
         >
           {t('createAppletPasswordWarning')}
         </StyledBodyLarge>
+        <StyledBodyLarge
+          color={variables.palette.on_surface_variant}
+          sx={{ marginBottom: theme.spacing(3.2) }}
+        >
+          {t('createAppletPasswordRequirements')}
+        </StyledBodyLarge>
         <StyledController>
           <InputController
             fullWidth
@@ -66,7 +72,6 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, AppletPassword
               ),
             }}
           />
-          <StyledHint>{t('enterAppletPasswordHint')}</StyledHint>
         </StyledController>
         <StyledController>
           <InputController

@@ -25,7 +25,7 @@ export const StyledForm = styled('form')`
 `;
 
 export const StyledController = styled(Box)`
-  margin-bottom: ${theme.spacing(2)};
+  margin-bottom: ${theme.spacing(2.4)};
 `;
 
 export const StyledButton = styled(Button)`
