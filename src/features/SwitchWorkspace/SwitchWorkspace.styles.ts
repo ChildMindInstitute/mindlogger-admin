@@ -3,6 +3,7 @@ import { Drawer, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { LEFT_BAR_WIDTH } from 'consts';
 
 export const StyledSwitchWorkspaceDrawer = styled(Drawer)`
   left: auto;
@@ -10,7 +11,7 @@ export const StyledSwitchWorkspaceDrawer = styled(Drawer)`
   .MuiPaper-root {
     height: 100%;
     width: 36rem;
-    margin-left: 8rem;
+    margin-left: ${LEFT_BAR_WIDTH};
     padding: ${theme.spacing(1.6, 0)};
     background-color: ${variables.palette.surface1};
     border-left: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
