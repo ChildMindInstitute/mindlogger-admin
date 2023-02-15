@@ -2,7 +2,7 @@ import { MouseEvent } from 'react';
 import { Box } from '@mui/material';
 
 import { variables } from 'styles/variables';
-import { StyledLabelBoldMedium, StyledTitleLarge } from 'styles/styledComponents/Typography';
+import { StyledLabelBoldMedium, StyledTitleLarge } from 'styles/styledComponents';
 
 import {
   allDayEventsSortedByDays,

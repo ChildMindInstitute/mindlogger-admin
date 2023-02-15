@@ -2,8 +2,12 @@ import { styled, Box, Popover } from '@mui/material';
 
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
-import { StyledLabelBoldLarge, StyledTitleMedium } from 'styles/styledComponents/Typography';
-import { StyledFlexAllCenter, StyledClearedButton } from 'styles/styledComponents';
+import {
+  StyledLabelBoldLarge,
+  StyledTitleMedium,
+  StyledFlexAllCenter,
+  StyledClearedButton,
+} from 'styles/styledComponents';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledDayBtn = styled(StyledClearedButton, shouldForwardProp)`

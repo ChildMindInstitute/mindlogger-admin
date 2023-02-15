@@ -2,7 +2,7 @@ import { Box, styled } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
+import { StyledLabelBoldMedium } from 'styles/styledComponents';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledMore = styled(StyledLabelBoldMedium, shouldForwardProp)`

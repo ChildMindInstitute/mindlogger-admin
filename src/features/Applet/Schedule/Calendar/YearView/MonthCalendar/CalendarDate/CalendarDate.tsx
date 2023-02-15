@@ -2,8 +2,7 @@ import { MouseEvent, useState, useRef } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
 import theme from 'styles/theme';
-import { StyledBodySmall } from 'styles/styledComponents/Typography';
-import { StyledHeadline } from 'styles/styledComponents/Typography';
+import { StyledBodySmall, StyledHeadline } from 'styles/styledComponents';
 import { Event } from 'features/Applet/Schedule/Calendar/Event';
 import {
   formatToYearMonthDate,

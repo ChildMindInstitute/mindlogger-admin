@@ -2,7 +2,7 @@ import { styled, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledClearedButton } from 'styles/styledComponents';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledAddBtn = styled(StyledClearedButton)`

@@ -117,17 +117,21 @@ export const Calendar = () => {
           <Svg id="add" />
         </StyledAddBtn>
       </StyledCalendarWrapper>
-      <CreateActivityPopup
-        open={createActivityPopupVisible}
-        setCreateActivityPopupVisible={setCreateActivityPopupVisible}
-        activityName="Daily Journal"
-      />
-      <EditActivityPopup
-        open={editActivityPopupVisible}
-        onClose={() => setEditActivityPopupVisible(false)}
-        activityName="Daily Journal"
-        setEditActivityPopupVisible={setEditActivityPopupVisible}
-      />
+      {createActivityPopupVisible && (
+        <CreateActivityPopup
+          open={createActivityPopupVisible}
+          setCreateActivityPopupVisible={setCreateActivityPopupVisible}
+          activityName="Daily Journal"
+        />
+      )}
+      {editActivityPopupVisible && (
+        <EditActivityPopup
+          open={editActivityPopupVisible}
+          onClose={() => setEditActivityPopupVisible(false)}
+          activityName="Daily Journal"
+          setEditActivityPopupVisible={setEditActivityPopupVisible}
+        />
+      )}
     </>
   );
 };

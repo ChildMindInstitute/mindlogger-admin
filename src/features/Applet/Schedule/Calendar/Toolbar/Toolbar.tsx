@@ -5,8 +5,7 @@ import { ToggleButtonGroup, Svg } from 'components';
 import i18n from 'i18n';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledTitleBoldMedium } from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { StyledTitleBoldMedium, StyledFlexTopCenter } from 'styles/styledComponents';
 
 import { formatToYearMonthDate } from '../Calendar.utils';
 import { CalendarViews } from '../Calendar.types';

@@ -1,6 +1,6 @@
 import { DateHeaderProps } from 'react-big-calendar';
 
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledClearedButton } from 'styles/styledComponents';
 
 import { getMonthName } from '../Calendar.utils';
 

@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'components';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledLabelBoldMedium, StyledClearedButton } from 'styles/styledComponents';
 
 import { CalendarEvent, CalendarViews } from '../Calendar.types';
 import { formatToWeekYear, formatToYearMonthDate, hiddenEventsIds } from '../Calendar.utils';
