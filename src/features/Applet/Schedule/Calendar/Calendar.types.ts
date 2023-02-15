@@ -28,6 +28,16 @@ export enum CalendarViews {
 }
 
 export type AllDayEventsVisible = {
-  period: string | undefined;
+  period: string;
   visible: boolean;
 } | null;
+
+export type AllDayEventsSortedByDays = {
+  date: string;
+  eventsIds: { id: string; isHidden: boolean }[];
+}[];
+
+export enum NameLength {
+  Long = 'long',
+  Short = 'short',
+}

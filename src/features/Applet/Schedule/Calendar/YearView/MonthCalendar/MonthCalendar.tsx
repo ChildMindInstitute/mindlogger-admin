@@ -38,7 +38,7 @@ export const MonthCalendar = ({
         <StyledDaysWrapper key={index}>
           {week.map((date, index) => {
             const currentDateEvents = events?.filter(
-              (event) => formatToYearMonthDate(event.start) === formatToYearMonthDate(date),
+              ({ start }) => start && formatToYearMonthDate(start) === formatToYearMonthDate(date),
             );
 
             return (

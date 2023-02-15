@@ -20,8 +20,18 @@ import { MonthHeader } from './MonthHeader';
 import { Event } from './Event';
 import { MonthView } from './MonthView';
 import { YearView } from './YearView';
-import { AllDayEventsVisible, CalendarEvent, CalendarViews } from './Calendar.types';
-import { LENGTH_TO_SET_ID_IS_HIDDEN, mockedEvents } from './Calendar.const';
+import {
+  AllDayEventsSortedByDays,
+  AllDayEventsVisible,
+  CalendarEvent,
+  CalendarViews,
+  NameLength,
+} from './Calendar.types';
+import {
+  LENGTH_TO_FILTER_DAYS_EVENTS,
+  LENGTH_TO_SET_ID_IS_HIDDEN,
+  mockedEvents,
+} from './Calendar.const';
 import { TimeHeader, UiType as TimeHeaderUiType } from './TimeHeader';
 import { TimeGutterHeader } from './TimeGutterHeader';
 import { EventWrapper } from './EventWrapper';
@@ -31,49 +41,44 @@ const { t } = i18n;
 
 export const getMoreText = () => `${t('more').toLowerCase()}...`;
 
-export const formatToYearMonthDate = (date?: Date) =>
-  date && format(date, DateFormats.DayMonthYear);
+export const formatToYearMonthDate = (date: Date) => format(date, DateFormats.DayMonthYear);
 
 export const formatToWeekYear = (date: Date) => `${getISOWeek(date)} ${date.getFullYear()}`;
 
 // TODO: Reformat the logic when connecting to the API
 export const allDayEventsSortedByDays = mockedEvents
-  .reduce(
-    (
-      acc: { date: string | undefined; eventsIds: { id: string; isHidden: boolean }[] }[],
-      event,
-    ) => {
-      const currentEventStartDate = formatToYearMonthDate(event.start);
-      if (event.allDayEvent || event.alwaysAvailable) {
-        if (acc.some((el) => el.date === currentEventStartDate)) {
-          acc.map((el) => {
-            if (el.date === currentEventStartDate) {
-              const ids = el.eventsIds;
+  .reduce((acc: AllDayEventsSortedByDays, event) => {
+    const currentEventStartDate = formatToYearMonthDate(event.start);
+    const { allDayEvent, alwaysAvailable } = event;
 
-              return {
-                ...el,
-                eventsIds: ids.push({
-                  id: event.id,
-                  isHidden: ids.length > LENGTH_TO_SET_ID_IS_HIDDEN,
-                }),
-              };
-            }
+    if (currentEventStartDate && (allDayEvent || alwaysAvailable)) {
+      if (acc.some((el) => el.date === currentEventStartDate)) {
+        acc.map((el) => {
+          if (el.date === currentEventStartDate) {
+            const ids = el.eventsIds;
 
-            return el;
-          });
-        } else {
-          acc.push({
-            date: currentEventStartDate,
-            eventsIds: [{ id: event.id, isHidden: false }],
-          });
-        }
+            return {
+              ...el,
+              eventsIds: ids.push({
+                id: event.id,
+                isHidden: ids.length > LENGTH_TO_SET_ID_IS_HIDDEN,
+              }),
+            };
+          }
+
+          return el;
+        });
+      } else {
+        acc.push({
+          date: currentEventStartDate,
+          eventsIds: [{ id: event.id, isHidden: false }],
+        });
       }
+    }
 
-      return acc;
-    },
-    [],
-  )
-  .filter((el) => el.eventsIds.length > 4);
+    return acc;
+  }, [])
+  .filter((el) => el.eventsIds.length > LENGTH_TO_FILTER_DAYS_EVENTS);
 
 export const hiddenEventsIds = allDayEventsSortedByDays.reduce((acc: string[], item) => {
   item.eventsIds.forEach((el) => el.isHidden && acc.push(el.id));
@@ -119,10 +124,10 @@ export const getHasWrapperMoreBtn = (
 };
 
 export const getDayName = (date: Date) =>
-  date.toLocaleDateString(i18n.language, { weekday: 'long' });
+  date.toLocaleDateString(i18n.language, { weekday: NameLength.Long });
 
-export const getMonthName = (date: Date, length?: 'long' | 'short') =>
-  date.toLocaleString(i18n.language, { month: length || 'long' });
+export const getMonthName = (date: Date, length?: NameLength) =>
+  date.toLocaleString(i18n.language, { month: length || NameLength.Long });
 
 export const getCalendarComponents = (
   activeView: CalendarViews,

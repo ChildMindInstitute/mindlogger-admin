@@ -12,6 +12,7 @@ import {
   getMoreText,
   hiddenEventsIds,
 } from '../Calendar.utils';
+import { NameLength } from '../Calendar.types';
 import { TimeHeaderProps, UiType } from './TimeHeader.types';
 import { StyledMore, StyledWeekDayWrapper } from './TimeHeader.styles';
 
@@ -77,7 +78,7 @@ export const TimeHeader = ({
             {getDayName(date).toUpperCase()}
           </StyledLabelBoldMedium>
           <StyledTitleLarge className="date" color={variables.palette.on_surface_variant}>{`${
-            date.getDate() === 1 ? `${getMonthName(date, 'short')} ` : ''
+            date.getDate() === 1 ? `${getMonthName(date, NameLength.Short)} ` : ''
           }${date.getDate()}`}</StyledTitleLarge>
         </StyledWeekDayWrapper>
       )}
