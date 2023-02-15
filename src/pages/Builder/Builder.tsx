@@ -4,16 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { useBreadcrumbs } from 'hooks';
 import { page } from 'resources';
 import { StyledFlexAllCenter } from 'styles/styledComponents/Flex';
+import { StyledBody } from 'styles/styledComponents/Body';
 
 export const Builder = () => {
   useBreadcrumbs();
   const navigate = useNavigate();
 
   return (
-    <StyledFlexAllCenter>
-      <Button onClick={() => navigate(page.newApplet)} sx={{ width: 200 }}>
-        New Applet
-      </Button>
-    </StyledFlexAllCenter>
+    <StyledBody>
+      <StyledFlexAllCenter>
+        <Button variant="outlined" onClick={() => navigate(page.newApplet)} sx={{ width: 200 }}>
+          New Applet
+        </Button>
+      </StyledFlexAllCenter>
+    </StyledBody>
   );
 };
