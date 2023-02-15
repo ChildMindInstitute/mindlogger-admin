@@ -1,38 +1,54 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { SignIn } from 'api';
-import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'redux/modules';
+import { auth, User } from 'redux/modules';
 import { InputController } from 'components/FormComponents';
 import { StyledErrorText } from 'styles/styledComponents/ErrorText';
-import { StyledHeadline } from 'styles/styledComponents/Typography';
+import {
+  StyledBodyMedium,
+  StyledHeadline,
+  StyledTitleMedium,
+} from 'styles/styledComponents/Typography';
 import { getErrorMessage } from 'utils/errors';
+import { variables } from 'styles/variables';
+import avatarSrc from 'assets/images/avatar.png';
+import { page } from 'resources';
 
+import { loginFormSchema } from '../Login.schema';
 import {
   StyledWelcome,
   StyledLoginSubheader,
   StyledForm,
   StyledController,
+  StyledUserInfoController,
   StyledButton,
-  StyledForgotPasswordLink,
+  StyledImageContainer,
+  StyledUserInfo,
+  StyledImage,
 } from '../Login.styles';
-import { loginFormSchema } from '../Login.schema';
 
-export const LoginForm = () => {
+export const LockForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
+
+  const { email, fullName } = auth.useData()?.user as User;
+  const [errorMessage, setErrorMessage] = useState('');
+
   const { handleSubmit, control } = useForm<SignIn>({
     resolver: yupResolver(loginFormSchema()),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email, password: '' },
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const handleLogout = () => {
+    dispatch(auth.actions.resetAuthorization());
+    navigate(page.login);
+  };
 
   const onSubmit = async (data: SignIn) => {
     setErrorMessage('');
@@ -46,13 +62,28 @@ export const LoginForm = () => {
 
   return (
     <>
-      <StyledWelcome>{t('welcome')}</StyledWelcome>
+      <StyledWelcome>{t('mindLoggerAdminPanel')}</StyledWelcome>
       <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
         <StyledHeadline>{t('login')}</StyledHeadline>
-        <StyledLoginSubheader>{t('logIntoAccount')}</StyledLoginSubheader>
-        <StyledController>
-          <InputController fullWidth name="email" control={control} label={t('email')} />
-        </StyledController>
+        <StyledLoginSubheader>
+          <Trans i18nKey="lockDescription" />
+        </StyledLoginSubheader>
+
+        <StyledUserInfoController>
+          <StyledImageContainer>
+            {/* TODO: get user image url */}
+            <StyledImage src={avatarSrc} alt="Avatar" />
+          </StyledImageContainer>
+          <StyledUserInfo>
+            <StyledTitleMedium sx={{ color: variables.palette.on_surface }}>
+              {fullName}
+            </StyledTitleMedium>
+            <StyledBodyMedium sx={{ color: variables.palette.on_surface_variant }}>
+              {email}
+            </StyledBodyMedium>
+          </StyledUserInfo>
+        </StyledUserInfoController>
+
         <StyledController>
           <InputController
             fullWidth
@@ -63,14 +94,11 @@ export const LoginForm = () => {
           />
         </StyledController>
         {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-        <StyledForgotPasswordLink onClick={() => navigate(page.passwordReset)}>
-          {t('forgotPassword')}
-        </StyledForgotPasswordLink>
         <StyledButton variant="contained" type="submit" data-testid="submit-btn">
           {t('login')}
         </StyledButton>
-        <StyledButton variant="outlined" onClick={() => navigate(page.signUp)}>
-          {t('createAccount')}
+        <StyledButton variant="outlined" onClick={handleLogout}>
+          {t('logOut')}
         </StyledButton>
       </StyledForm>
     </>

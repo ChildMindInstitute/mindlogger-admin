@@ -11,6 +11,7 @@ import storage from 'utils/storage';
 import { PrivateRoute } from './PrivateRoute';
 import { appletRoutes, authRoutes, newAppletRoutes } from './routes.const';
 
+const Lock = lazy(() => import('pages/Lock'));
 const Dashboard = lazy(() => import('pages/Dashboard'));
 const Applet = lazy(() => import('pages/Applet'));
 const Builder = lazy(() => import('pages/Builder'));
@@ -93,6 +94,16 @@ export const AppRoutes = () => {
                 }
               />
             ))}
+            <Route
+              key={page.lock}
+              path={page.lock}
+              element={
+                // TODO: supplement the condition
+                <PrivateRoute condition={isAuthorized} redirectPath="/">
+                  <Lock />
+                </PrivateRoute>
+              }
+            />
           </Route>
           <Route path="*" element={<Navigate to={page.dashboard} replace />} />
         </Routes>
