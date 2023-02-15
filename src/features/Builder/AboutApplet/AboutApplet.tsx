@@ -3,11 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { EditorController, InputController, SelectController } from 'components/FormComponents';
-import { StyledFlexTopCenter } from 'styles/styledComponents';
+import {
+  StyledFlexTopCenter,
+  StyledBodyMedium,
+  StyledHeadlineLarge,
+  StyledBuilderWrapper,
+} from 'styles/styledComponents';
 import { useBreadcrumbs } from 'hooks';
 import { Svg, Tooltip, Uploader } from 'components';
-import { StyledBodyMedium, StyledHeadlineLarge } from 'styles/styledComponents';
-import { StyledBuilderWrapper } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
