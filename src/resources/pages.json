@@ -2,6 +2,7 @@
   "login": "/auth",
   "signUp": "/auth/signup",
   "passwordReset": "/auth/reset-password",
+  "lock": "/auth/lock",
   "dashboard": "/dashboard",
   "applet": "/dashboard/:id",
   "appletRespondents": "/dashboard/:id/respondents",

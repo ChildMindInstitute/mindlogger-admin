@@ -3,6 +3,8 @@
   "fr": "French",
   "login": "Log In",
   "welcome": "Welcome to the MindLogger Admin Panel",
+  "mindLoggerAdminPanel": "MindLogger Admin Panel",
+  "lockDescription": "You have been inactive for 15 minutes.<br/> Log In to proceed.",
   "logIntoAccount": "Log into your MindLogger account",
   "email": "Email",
   "emailRequired": "Email is required",
