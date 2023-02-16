@@ -9,8 +9,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { page } from 'resources';
 import { InputController } from 'components/FormComponents';
-import { StyledHeadline } from 'styles/styledComponents/Typography';
-import { StyledErrorText } from 'styles/styledComponents/ErrorText';
+import { StyledErrorText, StyledHeadline } from 'styles/styledComponents';
 import { getErrorMessage } from 'utils/errors';
 
 import {

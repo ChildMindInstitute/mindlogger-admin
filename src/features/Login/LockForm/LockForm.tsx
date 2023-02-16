@@ -8,12 +8,12 @@ import { SignIn } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { auth, User } from 'redux/modules';
 import { InputController } from 'components/FormComponents';
-import { StyledErrorText } from 'styles/styledComponents/ErrorText';
 import {
   StyledBodyMedium,
   StyledHeadline,
   StyledTitleMedium,
-} from 'styles/styledComponents/Typography';
+  StyledErrorText,
+} from 'styles/styledComponents';
 import { getErrorMessage } from 'utils/errors';
 import { variables } from 'styles/variables';
 import avatarSrc from 'assets/images/avatar.png';
