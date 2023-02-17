@@ -13,12 +13,17 @@ import { BuilderItemProps } from './BuilderItem.types';
 
 export const BuilderItem = ({ getActions, ...props }: BuilderItemProps) => {
   const { t } = useTranslation('app');
-  const { name, description, img, count, withHover } = props;
+  const { name, description, img, count, withHover, index, total } = props;
 
   return (
     <StyledBuilderItem withHover={withHover}>
       {img && <StyledImg src={img} alt={name} />}
       <StyledCol>
+        {index && total && (
+          <StyledTitleMedium sx={{ marginBottom: theme.spacing(0.6) }}>
+            {index} {t('of')} {total}
+          </StyledTitleMedium>
+        )}
         <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
         <StyledTitleMedium>{description}</StyledTitleMedium>
         {count && (

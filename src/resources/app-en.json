@@ -365,5 +365,8 @@
   "activityFlowIsRequired": "Create an Activity Flow to order the sequence of Activities.",
   "addActivityFlow": "Add Activity Flow",
   "item_one": "item",
-  "item_other": "items"
+  "item_other": "items",
+  "clearFlow": "Clear Flow",
+  "of": "of",
+  "activityFlowBuilder": "Activity Flow Builder"
 }
