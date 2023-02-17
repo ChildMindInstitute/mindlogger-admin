@@ -8,9 +8,9 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { useBreadcrumbs } from 'hooks';
 
-import { StyledForm, StyledSettings, StyledSvg } from './NewActivityFlow.styles';
+import { StyledForm, StyledSettings, StyledSvg } from './ActivityFlow.styles';
 
-export const NewActivityFlowAbout = () => {
+export const ActivityFlowAbout = () => {
   const { t } = useTranslation();
   const { control } = useForm();
 
@@ -24,6 +24,7 @@ export const NewActivityFlowAbout = () => {
   const commonProps = {
     fullWidth: true,
     control,
+    sx: { marginBottom: theme.spacing(4.4) },
   };
 
   return (
@@ -37,14 +38,12 @@ export const NewActivityFlowAbout = () => {
           name="activityFlowName"
           label={t('activityFlowName')}
           maxLength={55}
-          sx={{ marginBottom: theme.spacing(4.4) }}
         />
         <InputController
           {...commonProps}
           name="activityFlowDescription"
           label={t('activityFlowDescription')}
           maxLength={150}
-          sx={{ marginBottom: theme.spacing(4.4) }}
         />
         <StyledTitleMedium
           color={variables.palette.on_surface_variant}

@@ -1,1 +1,3 @@
-export * from './ActivityFlowBuilder';
+import { ActivityFlowBuilder } from './ActivityFlowBuilder';
+
+export default ActivityFlowBuilder;
