@@ -26,9 +26,6 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     &.MuiTabs-root {
       display: none;
     }
-    .MuiBox-root {
-      border-top: unset;
-    }
   `}
 
   .MuiTabs-flexContainer {
