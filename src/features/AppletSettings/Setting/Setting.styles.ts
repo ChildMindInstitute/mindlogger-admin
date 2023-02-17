@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import { StyledClearedButton } from 'styles/styledComponents';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledContainer = styled(Box, shouldForwardProp)`
@@ -26,4 +26,8 @@ export const StyledButton = styled(StyledClearedButton)`
   right: ${theme.spacing(6.4)};
   top: ${theme.spacing(4.8)};
   padding: ${theme.spacing(0.8)};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 `;
