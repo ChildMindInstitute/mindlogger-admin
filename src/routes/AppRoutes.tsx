@@ -21,7 +21,6 @@ const Dashboard = lazy(() => import('pages/Dashboard'));
 const Applet = lazy(() => import('pages/Applet'));
 const Builder = lazy(() => import('pages/Builder'));
 const NewApplet = lazy(() => import('pages/NewApplet'));
-const ActivityFlow = lazy(() => import('features/Builder/ActivityFlow'));
 const NewActivityFlow = lazy(() => import('pages/NewActivityFlow'));
 
 export const AppRoutes = () => {
@@ -91,7 +90,6 @@ export const AppRoutes = () => {
                   />
                 ))}
                 <Route path={page.newAppletActivityFlow}>
-                  <Route element={<ActivityFlow />} path={page.newAppletActivityFlow} />
                   <Route element={<NewActivityFlow />} path={page.newAppletNewActivityFlow}>
                     <Route
                       path={page.newAppletNewActivityFlow}
