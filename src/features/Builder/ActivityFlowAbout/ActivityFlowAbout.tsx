@@ -9,11 +9,15 @@ import { variables } from 'styles/variables';
 import { useBreadcrumbs } from 'hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'consts';
 
-import { StyledForm, StyledSettings, StyledSvg } from './ActivityFlow.styles';
+import { StyledForm, StyledSettings, StyledSvg } from './ActivityFlowAbout.styles';
+import { defaultValues } from './ActivityFlowAbout.const';
 
 export const ActivityFlowAbout = () => {
   const { t } = useTranslation();
-  const { control } = useForm();
+  const { control } = useForm({
+    defaultValues,
+    mode: 'onChange',
+  });
 
   useBreadcrumbs([
     {
