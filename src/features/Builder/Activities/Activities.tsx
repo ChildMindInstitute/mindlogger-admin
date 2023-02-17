@@ -1,14 +1,17 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Svg, BuilderItem, BuilderHeader } from 'components';
 import { StyledTitleMedium, StyledBuilderWrapper } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { useBreadcrumbs } from 'hooks';
+import { page } from 'resources';
 
 import { activities, getActions } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
+  const navigate = useNavigate();
 
   useBreadcrumbs([
     {
@@ -21,7 +24,13 @@ export const Activities = () => {
     <StyledBuilderWrapper>
       <BuilderHeader
         title={t('activities')}
-        buttons={[{ icon: <Svg id="checklist-filled" />, label: t('addActivity') }]}
+        buttons={[
+          {
+            icon: <Svg id="checklist-filled" />,
+            label: t('addActivity'),
+            handleClick: () => navigate(page.newAppletNewActivity),
+          },
+        ]}
       />
       {activities?.length ? (
         activities.map((item) => (

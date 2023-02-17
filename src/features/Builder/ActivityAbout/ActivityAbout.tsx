@@ -2,17 +2,20 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { EditorController, InputController, SelectController } from 'components/FormComponents';
+import { CheckboxController, InputController } from 'components/FormComponents';
 import {
   StyledFlexTopCenter,
   StyledBodyMedium,
   StyledHeadlineLarge,
   StyledBuilderWrapper,
+  StyledBodyLarge,
+  StyledTitleMedium,
 } from 'styles/styledComponents';
 import { useBreadcrumbs } from 'hooks';
 import { Svg, Tooltip, Uploader } from 'components';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { MAX_NAME_LENGTH } from 'consts';
 
 import {
   StyledForm,
@@ -21,23 +24,24 @@ import {
   StyledUploadImgs,
   StyledSvg,
   StyledTitle,
-} from './AboutApplet.styles';
-import { AboutAppletSchema } from './AboutApplet.schema';
-import { defaultValues, colorThemeOptions, FormValues } from './AboutApplet.const';
+  StyledSettings,
+} from './ActivityAbout.styles';
+import { defaultValues } from './ActivityAbout.const';
+import { ActivityAboutSchema } from './ActivityAbout.schema';
 
-export const AboutApplet = () => {
+export const ActivityAbout = () => {
   const { t } = useTranslation();
   const mockedTooltipText = 'Lorem ipsum';
 
   useBreadcrumbs([
     {
       icon: <Svg id="more-info-outlined" width="18" height="18" />,
-      label: t('aboutApplet'),
+      label: t('aboutActivity'),
     },
   ]);
 
-  const { control } = useForm<FormValues>({
-    resolver: yupResolver(AboutAppletSchema()),
+  const { control } = useForm({
+    resolver: yupResolver(ActivityAboutSchema()),
     defaultValues,
     mode: 'onChange',
   });
@@ -48,48 +52,32 @@ export const AboutApplet = () => {
   };
 
   return (
-    <StyledBuilderWrapper sx={{ marginRight: theme.spacing(20) }}>
-      <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
-        {t('aboutApplet')}
-      </StyledHeadlineLarge>
+    <StyledBuilderWrapper>
+      <StyledHeadlineLarge>{t('aboutActivity')}</StyledHeadlineLarge>
       <StyledForm noValidate>
         <StyledFlexTopCenter>
           <StyledContainer>
             <InputController
               {...commonProps}
-              name="name"
-              maxLength={55}
-              label={t('appletName')}
+              name="activityName"
+              maxLength={MAX_NAME_LENGTH}
+              label={t('activityName')}
               sx={{ marginBottom: theme.spacing(4.4) }}
             />
             <InputController
               {...commonProps}
-              name="description"
+              name="activityDescription"
               maxLength={230}
-              label={t('appletDescription')}
+              label={t('activityDescription')}
               sx={{ marginBottom: theme.spacing(4.4) }}
               multiline
-              rows={2}
+              rows={3}
             />
-            <StyledFlexTopCenter sx={{ position: 'relative' }}>
-              <SelectController
-                {...commonProps}
-                name="colorTheme"
-                label={t('appletColorTheme')}
-                options={colorThemeOptions}
-                sx={{ margin: theme.spacing(0, 2.4, 3.6, 0) }}
-              />
-              <Tooltip tooltipTitle={mockedTooltipText}>
-                <span>
-                  <StyledSvg id="more-info-outlined" />
-                </span>
-              </Tooltip>
-            </StyledFlexTopCenter>
           </StyledContainer>
           <StyledUploadImgs>
             <StyledUploadImg>
               <StyledTitle>
-                {t('appletImg')}
+                {t('activityImg')}
                 <Tooltip tooltipTitle={mockedTooltipText}>
                   <span>
                     <StyledSvg id="more-info-outlined" />
@@ -106,7 +94,7 @@ export const AboutApplet = () => {
             </StyledUploadImg>
             <StyledUploadImg>
               <StyledTitle>
-                {t('appletWatermark')}
+                {t('activityWatermark')}
                 <Tooltip tooltipTitle={mockedTooltipText}>
                   <span>
                     <StyledSvg id="more-info-outlined" />
@@ -123,15 +111,49 @@ export const AboutApplet = () => {
             </StyledUploadImg>
           </StyledUploadImgs>
         </StyledFlexTopCenter>
-        <StyledTitle>
-          {t('aboutAppletPage')}
-          <Tooltip tooltipTitle={t('aboutAppletTooltip')}>
-            <span>
-              <StyledSvg id="more-info-outlined" />
-            </span>
-          </Tooltip>
-        </StyledTitle>
-        <EditorController control={control} name="aboutApplet" />
+        <StyledTitleMedium color={variables.palette.on_surface_variant}>
+          {t('itemLevelSettings')}
+        </StyledTitleMedium>
+        <StyledSettings>
+          <CheckboxController
+            control={control}
+            name="showAllQuestionsAtOnce"
+            label={
+              <StyledBodyLarge sx={{ position: 'relative' }}>
+                {t('showAllQuestionsAtOnce')}
+                <Tooltip tooltipTitle={t('webAppOnlyFeature')}>
+                  <span>
+                    <StyledSvg id="more-info-outlined" />
+                  </span>
+                </Tooltip>
+              </StyledBodyLarge>
+            }
+          />
+          <CheckboxController
+            control={control}
+            name="allowToSkipAllItems"
+            label={<StyledBodyLarge>{t('allowToSkipAllItems')}</StyledBodyLarge>}
+          />
+          <CheckboxController
+            control={control}
+            name="disableAbilityToChangeResponse"
+            label={<StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>}
+          />
+          <CheckboxController
+            control={control}
+            name="onlyAdminPanelActivity"
+            label={
+              <StyledBodyLarge>
+                {t('onlyAdminPanelActivity')}
+                <Tooltip tooltipTitle={t('webAppOnlyFeatureTooltip')}>
+                  <span>
+                    <StyledSvg id="more-info-outlined" />
+                  </span>
+                </Tooltip>
+              </StyledBodyLarge>
+            }
+          />
+        </StyledSettings>
       </StyledForm>
     </StyledBuilderWrapper>
   );

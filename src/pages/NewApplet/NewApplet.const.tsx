@@ -1,6 +1,8 @@
 import { Svg } from 'components';
 import { page } from 'resources';
 
+export const pathsWithInnerTabs = [page.newAppletNewActivity, page.newAppletNewActivityFlow];
+
 export const newAppletTabs = [
   {
     labelKey: 'aboutApplet',
