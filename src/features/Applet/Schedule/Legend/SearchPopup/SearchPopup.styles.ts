@@ -33,6 +33,10 @@ export const StyledItem = styled(StyledFlexTopCenter)`
 
 export const StyledClearBtn = styled(StyledClearedButton)`
   margin-right: ${theme.spacing(1.4)};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 `;
 
 export const StyledChecked = styled(Box)`
