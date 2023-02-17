@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { LinkedTabs, Svg } from 'components';
 import { useBreadcrumbs } from 'hooks';
 import { page } from 'resources';
-import { StyledBody } from 'styles/styledComponents/Body';
+import { StyledBody } from 'styles/styledComponents';
 
 import { newAppletTabs } from './NewApplet.const';
 

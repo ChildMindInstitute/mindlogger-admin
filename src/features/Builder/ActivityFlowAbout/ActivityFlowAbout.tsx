@@ -7,6 +7,7 @@ import { StyledBodyLarge, StyledHeadlineLarge, StyledTitleMedium } from 'styles/
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { useBreadcrumbs } from 'hooks';
+import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'consts';
 
 import { StyledForm, StyledSettings, StyledSvg } from './ActivityFlow.styles';
 
@@ -37,13 +38,13 @@ export const ActivityFlowAbout = () => {
           {...commonProps}
           name="activityFlowName"
           label={t('activityFlowName')}
-          maxLength={55}
+          maxLength={MAX_NAME_LENGTH}
         />
         <InputController
           {...commonProps}
           name="activityFlowDescription"
           label={t('activityFlowDescription')}
-          maxLength={150}
+          maxLength={MAX_DESCRIPTION_LENGTH}
         />
         <StyledTitleMedium
           color={variables.palette.on_surface_variant}
