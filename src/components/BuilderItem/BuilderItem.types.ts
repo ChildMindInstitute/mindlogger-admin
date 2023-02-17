@@ -4,6 +4,8 @@ export type BuilderItemType = {
   description: string;
   img?: string;
   count?: number;
+  index?: number;
+  total?: number;
 };
 
 type Action = {
