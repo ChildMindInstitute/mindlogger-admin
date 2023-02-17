@@ -3,13 +3,11 @@ import { styled } from '@mui/system';
 
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
-import { StyledHeadlineLarge, StyledTitleSmall } from 'styles/styledComponents/Typography';
+import { StyledHeadlineLarge, StyledTitleSmall, StyledFlexColumn } from 'styles/styledComponents';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
-export const StyledContainer = styled(Box)`
+export const StyledContainer = styled(StyledFlexColumn)`
   padding: ${theme.spacing(4.8, 6.4, 0)};
-  display: flex;
-  flex-direction: column;
   flex: 1 1 30%;
   min-width: max-content;
   height: 100%;
@@ -45,9 +43,7 @@ export const StyledSettings = styled(Box, shouldForwardProp)`
   `};
 `;
 
-export const StyledSetting = styled(Box, shouldForwardProp)`
-  display: flex;
-  flex-direction: column;
+export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
   justify-content: flex-end;
   flex-basis: 12rem;
   align-items: center;

@@ -14,7 +14,7 @@ export const StyledMonthInside = styled(Box)`
 `;
 
 export const StyledMonthName = styled(StyledBodySmall)`
-  letter-spacing: ${variables.letterSpacing.xxl};
+  letter-spacing: ${variables.font.letterSpacing.xxl};
   text-align: right;
   text-transform: uppercase;
   margin: ${theme.spacing(0, 1, 0.8, 0)};

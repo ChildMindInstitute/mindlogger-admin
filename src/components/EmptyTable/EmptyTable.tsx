@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
-import { StyledTitleLarge } from 'styles/styledComponents/Typography';
+import { StyledTitleLarge } from 'styles/styledComponents';
 import { variables } from 'styles/variables';
 
 import { EmptyTableProps } from './EmptyTable.types';

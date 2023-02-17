@@ -43,7 +43,7 @@ export const StyledDrawerItem = styled(ListItem)`
   .active-link {
     svg {
       position: relative;
-      z-index: 2;
+      z-index: ${theme.zIndex.fab};
     }
   }
 

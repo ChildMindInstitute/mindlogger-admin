@@ -4,11 +4,13 @@ import { Box, Button } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import {
+  StyledFlexColumn,
+  StyledFlexTopCenter,
   StyledLabelMedium,
   StyledBodyMedium,
   StyledTitleMedium,
-} from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+  StyledFlexWrap,
+} from 'styles/styledComponents';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 const commonImgStyles = `
@@ -17,10 +19,8 @@ const commonImgStyles = `
   border-radius: 100%;
 `;
 
-export const StyledNotification = styled(Box, shouldForwardProp)`
+export const StyledNotification = styled(StyledFlexWrap, shouldForwardProp)`
   padding: ${theme.spacing(1.6)};
-  display: flex;
-  flex-wrap: wrap;
   position: relative;
   cursor: pointer;
   border-bottom: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
@@ -75,16 +75,12 @@ export const StyledLogo = styled('img')`
   right: -0.75rem;
 `;
 
-export const StyledInfo = styled(Box)`
-  display: flex;
-  flex-direction: column;
+export const StyledInfo = styled(StyledFlexColumn)`
   width: 27rem;
   margin-right: ${theme.spacing(2.1)};
 `;
 
-export const StyledRightSection = styled(Box)`
-  display: flex;
-  flex-direction: column;
+export const StyledRightSection = styled(StyledFlexColumn)`
   justify-content: space-between;
 `;
 
@@ -96,10 +92,8 @@ export const StyledInfoCircle = styled(Box)`
   align-self: flex-end;
 `;
 
-export const StyledBottomSection = styled(Box)`
+export const StyledBottomSection = styled(StyledFlexColumn)`
   flex: 0 0 100%;
-  display: flex;
-  flex-direction: column;
   padding-left: ${theme.spacing(3.8)};
 `;
 
