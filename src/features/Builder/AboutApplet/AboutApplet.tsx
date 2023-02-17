@@ -13,6 +13,7 @@ import { useBreadcrumbs } from 'hooks';
 import { Svg, Tooltip, Uploader } from 'components';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'consts';
 
 import {
   StyledForm,
@@ -58,14 +59,14 @@ export const AboutApplet = () => {
             <InputController
               {...commonProps}
               name="name"
-              maxLength={55}
+              maxLength={MAX_NAME_LENGTH}
               label={t('appletName')}
               sx={{ marginBottom: theme.spacing(4.4) }}
             />
             <InputController
               {...commonProps}
               name="description"
-              maxLength={230}
+              maxLength={MAX_DESCRIPTION_LENGTH_LONG}
               label={t('appletDescription')}
               sx={{ marginBottom: theme.spacing(4.4) }}
               multiline

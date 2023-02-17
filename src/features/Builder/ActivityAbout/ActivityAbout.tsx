@@ -15,7 +15,7 @@ import { useBreadcrumbs } from 'hooks';
 import { Svg, Tooltip, Uploader } from 'components';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { MAX_NAME_LENGTH } from 'consts';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'consts';
 
 import {
   StyledForm,
@@ -67,7 +67,7 @@ export const ActivityAbout = () => {
             <InputController
               {...commonProps}
               name="activityDescription"
-              maxLength={230}
+              maxLength={MAX_DESCRIPTION_LENGTH_LONG}
               label={t('activityDescription')}
               sx={{ marginBottom: theme.spacing(4.4) }}
               multiline
