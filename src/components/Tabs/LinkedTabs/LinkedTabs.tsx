@@ -7,7 +7,11 @@ import { StyledTabs } from '../Tabs.styles';
 import { TabPanel } from '../TabPanel';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
-export const LinkedTabs = ({ tabs, uiType = UiType.Primary }: TabsProps): JSX.Element => {
+export const LinkedTabs = ({
+  tabs,
+  uiType = UiType.Primary,
+  hideHeader = false,
+}: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const location = useLocation();
   const currentIndex = tabs?.findIndex((el) => el.path === location.pathname);
@@ -29,7 +33,13 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary }: TabsProps): JSX.El
         />,
       );
       tabs.content.push(
-        <TabPanel key={index} value={tabIndex} index={index} isMinHeightAuto={isMinHeightAuto}>
+        <TabPanel
+          key={index}
+          value={tabIndex}
+          index={index}
+          isMinHeightAuto={isMinHeightAuto}
+          hideHeader={hideHeader}
+        >
           <Outlet />
         </TabPanel>,
       );
@@ -47,6 +57,7 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary }: TabsProps): JSX.El
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}
         centered
+        hideHeader={hideHeader}
       >
         {header}
       </StyledTabs>
