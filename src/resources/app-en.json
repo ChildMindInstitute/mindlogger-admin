@@ -380,5 +380,14 @@
   "default": "Default",
   "dropImage": "Drop Image here or <1>click to browse</1>.",
   "descriptionRequired": "Description is required",
-  "aboutAppletRequired": "About applet is required"
+  "aboutAppletRequired": "About applet is required",
+  "aboutActivityFlow": "About Activity Flow",
+  "activityFlowBuilder": "Activity Flow Builder",
+  "activityFlowName": "Activity Flow Name",
+  "activityFlowDescription": "Activity Description",
+  "additionalSettings": "Additional Settings",
+  "combineReportsIntoSingleFile": "Combine reports into a single file",
+  "hideBadge": "Hide badge",
+  "newActivityFlow": "New Activity Flow",
+  "activityFlows": "Activity Flows"
 }

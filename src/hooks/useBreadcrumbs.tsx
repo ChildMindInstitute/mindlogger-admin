@@ -53,6 +53,21 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
+    if (location.pathname.includes(page.newAppletNewActivityFlow)) {
+      newBreadcrumbs.push(
+        {
+          icon: <Svg id="flow" width="18" height="18" />,
+          label: t('activityFlow'),
+          navPath: page.newAppletActivityFlow,
+        },
+        {
+          icon: '',
+          label: t('newActivityFlow'),
+          disabledLink: true,
+        },
+      );
+    }
+
     setCrumbs([...newBreadcrumbs, ...(restCrumbs || [])]);
   }, [t, authData, appletsFoldersData, id]);
 
