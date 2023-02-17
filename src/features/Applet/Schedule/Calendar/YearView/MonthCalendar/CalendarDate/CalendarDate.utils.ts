@@ -5,7 +5,5 @@ import { MAX_EVENTS_IN_TOOLTIP } from './CalendarDate.const';
 
 const { t } = i18n;
 
-export const getDayName = (date: Date) =>
-  date.toLocaleDateString(i18n.language, { weekday: 'long' });
 export const getMoreEventsText = (events: CalendarEvent[]) =>
   `${events.length - MAX_EVENTS_IN_TOOLTIP} ${t('more').toLowerCase()}...`;

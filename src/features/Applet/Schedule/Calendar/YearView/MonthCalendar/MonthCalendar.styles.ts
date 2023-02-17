@@ -2,7 +2,7 @@ import { styled, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledBodySmall } from 'styles/styledComponents/Typography';
+import { StyledBodySmall } from 'styles/styledComponents';
 
 export const StyledMonth = styled(Box)`
   padding: ${theme.spacing(0, 2, 2.2)};

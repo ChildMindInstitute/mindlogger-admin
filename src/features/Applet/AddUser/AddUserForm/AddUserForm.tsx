@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import { users, auth, account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { InputController, SelectController, TagsInputController } from 'components/FormComponents';
-import { StyledErrorText } from 'styles/styledComponents/ErrorText';
+import { StyledErrorText } from 'styles/styledComponents';
 import { getAppletInvitationApi } from 'api';
 import { getErrorMessage } from 'utils/errors';
 import { prepareUsersData } from 'utils/prepareUsersData';

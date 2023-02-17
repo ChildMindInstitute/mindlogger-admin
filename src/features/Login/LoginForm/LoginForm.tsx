@@ -9,8 +9,7 @@ import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { InputController } from 'components/FormComponents';
-import { StyledErrorText } from 'styles/styledComponents/ErrorText';
-import { StyledHeadline } from 'styles/styledComponents/Typography';
+import { StyledErrorText, StyledHeadline } from 'styles/styledComponents';
 import { getErrorMessage } from 'utils/errors';
 
 import {
@@ -20,8 +19,8 @@ import {
   StyledController,
   StyledButton,
   StyledForgotPasswordLink,
-} from './LoginForm.styles';
-import { loginFormSchema } from './LoginForm.schema';
+} from '../Login.styles';
+import { loginFormSchema } from '../Login.schema';
 
 export const LoginForm = () => {
   const dispatch = useAppDispatch();

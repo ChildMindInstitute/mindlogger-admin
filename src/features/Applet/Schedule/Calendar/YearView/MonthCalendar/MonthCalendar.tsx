@@ -4,9 +4,9 @@ import uniqueId from 'lodash.uniqueid';
 import i18n from 'i18n';
 
 import { CalendarEvent, CalendarViews } from '../../Calendar.types';
-import { formatToYearMonthDate } from '../../Calendar.utils';
+import { formatToYearMonthDate, getMonthName } from '../../Calendar.utils';
 import { CalendarDate } from './CalendarDate';
-import { createCalendar, getMonthName, shortWeekDaysArray } from './MonthCalendar.utils';
+import { createCalendar, shortWeekDaysArray } from './MonthCalendar.utils';
 import { MonthCalendarProps, MonthObject } from './MonthCalendar.types';
 import {
   StyledMonth,
@@ -38,7 +38,7 @@ export const MonthCalendar = ({
         <StyledDaysWrapper key={index}>
           {week.map((date, index) => {
             const currentDateEvents = events?.filter(
-              (event) => formatToYearMonthDate(event.start) === formatToYearMonthDate(date),
+              ({ start }) => start && formatToYearMonthDate(start) === formatToYearMonthDate(date),
             );
 
             return (
@@ -64,7 +64,7 @@ export const MonthCalendar = ({
     calendar && (
       <StyledMonth>
         <StyledMonthInside>
-          <StyledMonthName>{getMonthName(calendar.date, langLocale)}</StyledMonthName>
+          <StyledMonthName>{getMonthName(calendar.date)}</StyledMonthName>
           <StyledDaysWrapper>
             {shortWeekDaysArray(langLocale).map((day) => (
               <StyledDay key={uniqueId()}>{day}</StyledDay>

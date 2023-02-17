@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Calendar as ReactCalendar,
   dateFnsLocalizer,
@@ -15,10 +15,15 @@ import { Svg } from 'components';
 
 import { CreateActivityPopup } from '../CreateActivityPopup';
 import { EditActivityPopup } from '../EditActivityPopup';
-import { mockedEvents } from './Calendar.const';
-import { getCalendarComponents, getEventsWithOffRange, eventPropGetter } from './Calendar.utils';
+import {
+  eventPropGetter,
+  getCalendarComponents,
+  getProcessedEvents,
+  hiddenEventsIds,
+  getHasWrapperMoreBtn,
+} from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
-import { CalendarEvent, CalendarViews, OnViewFunc } from './Calendar.types';
+import { AllDayEventsVisible, CalendarEvent, CalendarViews, OnViewFunc } from './Calendar.types';
 
 const locales = {
   'en-US': enUS,
@@ -36,16 +41,21 @@ const dateFnsLocalize = dateFnsLocalizer({
 export const Calendar = () => {
   const [activeView, setActiveView] = useState<CalendarViews>(CalendarViews.Month);
   const [date, setDate] = useState<Date>(new Date());
+  const processedEvents = useMemo(() => getProcessedEvents(date), [date]);
+  const [events, setEvents] = useState<CalendarEvent[]>(processedEvents);
   const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
   const [editActivityPopupVisible, setEditActivityPopupVisible] = useState(false);
-
-  const events = getEventsWithOffRange(mockedEvents, date);
+  const [isAllDayEventsVisible, setIsAllDayEventsVisible] = useState<AllDayEventsVisible>(null);
 
   const { components, messages, views, formats } = getCalendarComponents(
     activeView,
     setActiveView,
     date,
     setDate,
+    events,
+    setEvents,
+    isAllDayEventsVisible,
+    setIsAllDayEventsVisible,
   );
 
   const onNavigate = (newDate: Date) => setDate(newDate);
@@ -62,9 +72,26 @@ export const Calendar = () => {
     setEditActivityPopupVisible(true);
   };
 
+  useEffect(() => {
+    setIsAllDayEventsVisible(null);
+    setEvents((prevState) =>
+      prevState.map((event) => ({
+        ...event,
+        isHiddenInTimeView: hiddenEventsIds.some((id) => id === event.id),
+      })),
+    );
+  }, [date, activeView]);
+
+  const hasWrapperMoreBtn = useMemo(
+    () =>
+      (activeView === CalendarViews.Week || activeView === CalendarViews.Day) &&
+      getHasWrapperMoreBtn(activeView, events, date, isAllDayEventsVisible),
+    [activeView, events, date, isAllDayEventsVisible],
+  );
+
   return (
     <>
-      <StyledCalendarWrapper>
+      <StyledCalendarWrapper hasMoreBtn={hasWrapperMoreBtn} className={activeView}>
         <ReactCalendar
           date={date}
           onNavigate={onNavigate}
@@ -90,14 +117,15 @@ export const Calendar = () => {
           <Svg id="add" />
         </StyledAddBtn>
       </StyledCalendarWrapper>
-      <CreateActivityPopup
-        open={createActivityPopupVisible}
-        setCreateActivityPopupVisible={setCreateActivityPopupVisible}
-        activityName="Daily Journal"
-      />
+      {createActivityPopupVisible && (
+        <CreateActivityPopup
+          open={createActivityPopupVisible}
+          setCreateActivityPopupVisible={setCreateActivityPopupVisible}
+          activityName="Daily Journal"
+        />
+      )}
       <EditActivityPopup
         open={editActivityPopupVisible}
-        onClose={() => setEditActivityPopupVisible(false)}
         activityName="Daily Journal"
         setEditActivityPopupVisible={setEditActivityPopupVisible}
       />

@@ -3,6 +3,8 @@
   "fr": "French",
   "login": "Log In",
   "welcome": "Welcome to the MindLogger Admin Panel",
+  "mindLoggerAdminPanel": "MindLogger Admin Panel",
+  "lockDescription": "You have been inactive for 15 minutes.<br/> Log In to proceed.",
   "logIntoAccount": "Log into your MindLogger account",
   "email": "Email",
   "emailRequired": "Email is required",
@@ -368,5 +370,15 @@
   "item_other": "items",
   "clearFlow": "Clear Flow",
   "of": "of",
-  "activityFlowBuilder": "Activity Flow Builder"
+  "activityFlowBuilder": "Activity Flow Builder",
+  "appletColorTheme": "Applet Color Theme",
+  "aboutAppletPage": "About Applet Page",
+  "uploadImg": "Please Upload JPG or PNG image less then 2Mb",
+  "appletImg": "Applet Image",
+  "appletWatermark": "Applet Watermark",
+  "characters": "characters",
+  "default": "Default",
+  "dropImage": "Drop Image here or <1>click to browse</1>.",
+  "descriptionRequired": "Description is required",
+  "aboutAppletRequired": "About applet is required"
 }

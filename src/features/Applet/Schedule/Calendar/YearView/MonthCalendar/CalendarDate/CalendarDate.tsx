@@ -2,10 +2,12 @@ import { MouseEvent, useState, useRef } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
 import theme from 'styles/theme';
-import { StyledBodySmall } from 'styles/styledComponents/Typography';
-import { StyledHeadline } from 'styles/styledComponents/Typography';
+import { StyledBodySmall, StyledHeadline } from 'styles/styledComponents';
 import { Event } from 'features/Applet/Schedule/Calendar/Event';
-import { formatToYearMonthDate } from 'features/Applet/Schedule/Calendar/Calendar.utils';
+import {
+  formatToYearMonthDate,
+  getDayName,
+} from 'features/Applet/Schedule/Calendar/Calendar.utils';
 
 import { CalendarDateProps, TooltipPosition } from './CalendarDate.types';
 import {
@@ -18,7 +20,7 @@ import {
   StyledMonthName,
   StyledMore,
 } from './CalendarDate.styles';
-import { getDayName, getMoreEventsText } from './CalendarDate.utils';
+import { getMoreEventsText } from './CalendarDate.utils';
 import { MAX_EVENTS_IN_TOOLTIP, MAX_ROWS_IN_TOOLTIP, TOOLTIP_HEIGHT } from './CalendarDate.const';
 
 export const CalendarDate = ({

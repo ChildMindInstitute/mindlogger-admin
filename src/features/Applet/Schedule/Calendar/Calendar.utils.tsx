@@ -7,14 +7,12 @@ import {
   HeaderProps,
   ToolbarProps,
 } from 'react-big-calendar';
-import { format } from 'date-fns';
+import { format, getISOWeek } from 'date-fns';
 
-import { Svg } from 'components';
+import { DateFormats } from 'consts';
 import i18n from 'i18n';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
-import { DateFormats } from 'consts';
 
 import { UiType } from './Event/Event.types';
 import { Toolbar } from './Toolbar';
@@ -22,38 +20,168 @@ import { MonthHeader } from './MonthHeader';
 import { Event } from './Event';
 import { MonthView } from './MonthView';
 import { YearView } from './YearView';
-import { CalendarEvent, CalendarViews } from './Calendar.types';
-import { StyledTimeHeaderGutter } from './Calendar.styles';
+import {
+  AllDayEventsSortedByDays,
+  AllDayEventsVisible,
+  CalendarEvent,
+  CalendarViews,
+  NameLength,
+} from './Calendar.types';
+import {
+  LENGTH_TO_FILTER_DAYS_EVENTS,
+  LENGTH_TO_SET_ID_IS_HIDDEN,
+  mockedEvents,
+} from './Calendar.const';
+import { TimeHeader, UiType as TimeHeaderUiType } from './TimeHeader';
+import { TimeGutterHeader } from './TimeGutterHeader';
+import { EventWrapper } from './EventWrapper';
+import { DateHeader } from './DateHeader';
 
 const { t } = i18n;
 
-export const formatToYearMonthDate = (date?: Date) =>
-  date && format(date, DateFormats.DayMonthYear);
+export const getMoreText = () => `${t('more').toLowerCase()}...`;
+
+export const formatToYearMonthDate = (date: Date) => format(date, DateFormats.DayMonthYear);
+
+export const formatToWeekYear = (date: Date) => `${getISOWeek(date)} ${date.getFullYear()}`;
+
+// TODO: Reformat the logic when connecting to the API
+export const allDayEventsSortedByDays = mockedEvents
+  .reduce((acc: AllDayEventsSortedByDays, event) => {
+    const currentEventStartDate = formatToYearMonthDate(event.start);
+    const { allDayEvent, alwaysAvailable } = event;
+
+    if (currentEventStartDate && (allDayEvent || alwaysAvailable)) {
+      if (acc.some((el) => el.date === currentEventStartDate)) {
+        acc.map((el) => {
+          if (el.date === currentEventStartDate) {
+            const ids = el.eventsIds;
+
+            return {
+              ...el,
+              eventsIds: ids.push({
+                id: event.id,
+                isHidden: ids.length > LENGTH_TO_SET_ID_IS_HIDDEN,
+              }),
+            };
+          }
+
+          return el;
+        });
+      } else {
+        acc.push({
+          date: currentEventStartDate,
+          eventsIds: [{ id: event.id, isHidden: false }],
+        });
+      }
+    }
+
+    return acc;
+  }, [])
+  .filter((el) => el.eventsIds.length > LENGTH_TO_FILTER_DAYS_EVENTS);
+
+export const hiddenEventsIds = allDayEventsSortedByDays.reduce((acc: string[], item) => {
+  item.eventsIds.forEach((el) => el.isHidden && acc.push(el.id));
+
+  return acc;
+}, []);
+
+export const getProcessedEvents = (date: Date) =>
+  mockedEvents.map((event) => ({
+    ...event,
+    isOffRange: event.start.getMonth() !== date.getMonth(),
+    isHiddenInTimeView: hiddenEventsIds.some((id) => id === event.id),
+  }));
+
+export const getHasWrapperMoreBtn = (
+  activeView: CalendarViews,
+  events: CalendarEvent[],
+  date: Date,
+  isAllDayEventsVisible: AllDayEventsVisible,
+) => {
+  const currentDate = formatToYearMonthDate(date);
+  const currentWeek = formatToWeekYear(date);
+  const hasDateHiddenEvents =
+    !isAllDayEventsVisible && allDayEventsSortedByDays.some((item) => item.date === currentDate);
+  const hasDateHiddenEventsWithState =
+    isAllDayEventsVisible?.period === currentDate && !isAllDayEventsVisible?.visible;
+  const hasWeekHiddenEvents =
+    !isAllDayEventsVisible &&
+    allDayEventsSortedByDays.some(
+      (item) => item.date && formatToWeekYear(new Date(item.date)) === currentWeek,
+    );
+  const hasWeekHiddenEventsWithState =
+    isAllDayEventsVisible?.period === currentWeek && !isAllDayEventsVisible?.visible;
+
+  switch (activeView) {
+    case CalendarViews.Day:
+      return hasDateHiddenEvents || hasDateHiddenEventsWithState;
+    case CalendarViews.Week:
+      return hasWeekHiddenEvents || hasWeekHiddenEventsWithState;
+    default:
+      return false;
+  }
+};
+
+export const getDayName = (date: Date) =>
+  date.toLocaleDateString(i18n.language, { weekday: NameLength.Long });
+
+export const getMonthName = (date: Date, length?: NameLength) =>
+  date.toLocaleString(i18n.language, { month: length || NameLength.Long });
 
 export const getCalendarComponents = (
-  activeView: string,
+  activeView: CalendarViews,
   setActiveView: Dispatch<SetStateAction<CalendarViews>>,
   date: Date,
   setDate: Dispatch<SetStateAction<Date>>,
+  events: CalendarEvent[],
+  setEvents: Dispatch<SetStateAction<CalendarEvent[]>>,
+  isAllDayEventsVisible: AllDayEventsVisible,
+  setIsAllDayEventsVisible: Dispatch<SetStateAction<AllDayEventsVisible>>,
 ) => ({
   components: {
     toolbar: (props: ToolbarProps) => (
       <Toolbar {...props} activeView={activeView} setActiveView={setActiveView} />
     ),
     month: {
+      dateHeader: DateHeader,
       header: (props: HeaderProps) => <MonthHeader {...props} calendarDate={date} />,
       event: Event,
     },
-    day: {
+    week: {
+      eventWrapper: EventWrapper,
       event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.Secondary} />,
+      header: (props: HeaderProps) => (
+        <TimeHeader
+          {...props}
+          isAllDayEventsVisible={isAllDayEventsVisible}
+          setIsAllDayEventsVisible={setIsAllDayEventsVisible}
+          setEvents={setEvents}
+          uiType={TimeHeaderUiType.Week}
+        />
+      ),
+    },
+    day: {
+      eventWrapper: EventWrapper,
+      event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.Secondary} />,
+      header: (props: HeaderProps) => (
+        <TimeHeader
+          {...props}
+          isAllDayEventsVisible={isAllDayEventsVisible}
+          setIsAllDayEventsVisible={setIsAllDayEventsVisible}
+          setEvents={setEvents}
+          uiType={TimeHeaderUiType.Day}
+        />
+      ),
     },
     timeGutterHeader: () => (
-      <StyledTimeHeaderGutter>
-        <Svg id="navigate-right" width="19" height="19" />
-        <StyledLabelBoldMedium sx={{ ml: theme.spacing(0.7) }} color={variables.palette.outline}>
-          {t('allDay')}
-        </StyledLabelBoldMedium>
-      </StyledTimeHeaderGutter>
+      <TimeGutterHeader
+        date={date}
+        isAllDayEventsVisible={isAllDayEventsVisible}
+        setIsAllDayEventsVisible={setIsAllDayEventsVisible}
+        setEvents={setEvents}
+        activeView={activeView}
+      />
     ),
     date,
     setDate,
@@ -61,7 +189,7 @@ export const getCalendarComponents = (
     setActiveView,
   },
   messages: {
-    showMore: (total: number) => `${total} ${t('more').toLowerCase()}...`,
+    showMore: (total: number) => `${total} ${getMoreText()}`,
   },
   views: {
     month: MonthView,
@@ -101,9 +229,3 @@ export const eventPropGetter = (event: CalendarEvent, activeView: CalendarViews)
     },
   };
 };
-
-export const getEventsWithOffRange = (events: CalendarEvent[], date: Date) =>
-  events.map((event) => ({
-    ...event,
-    isOffRange: event.start.getMonth() !== date.getMonth(),
-  }));

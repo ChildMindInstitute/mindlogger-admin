@@ -8,8 +8,7 @@ import { getErrorMessage } from 'utils/errors';
 import { transferOwnershipApi } from 'api';
 import { useAsync } from 'hooks/useAsync';
 import { InputController } from 'components/FormComponents';
-import { StyledErrorText } from 'styles/styledComponents/ErrorText';
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
+import { StyledErrorText, StyledBodyLarge } from 'styles/styledComponents';
 
 import { StyledInputWrapper } from './TransferOwnership.styles';
 import { TransferOwnershipProps } from './TransferOwnership.types';

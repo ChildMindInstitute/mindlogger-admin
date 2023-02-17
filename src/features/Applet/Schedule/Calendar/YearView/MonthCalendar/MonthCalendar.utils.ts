@@ -5,9 +5,6 @@ import { add } from 'date-fns';
 import { EN_WEEK_DAYS, FR_WEEK_DAYS, MILLISECONDS_PER_WEEK } from './MonthCalendar.const';
 import { MonthObject, Week } from './MonthCalendar.types';
 
-export const getMonthName = (date: Date, langLocale: Intl.LocalesArgument) =>
-  date.toLocaleString(langLocale, { month: 'long' });
-
 export const shortWeekDaysArray = (langLocale: Intl.LocalesArgument) =>
   langLocale === 'en' ? EN_WEEK_DAYS : FR_WEEK_DAYS;
 
