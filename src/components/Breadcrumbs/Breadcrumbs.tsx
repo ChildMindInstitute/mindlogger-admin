@@ -17,7 +17,7 @@ import {
   StyledPlaceholder,
 } from './Breadcrumbs.styles';
 
-export const Breadcrumbs = (): JSX.Element => {
+export const Breadcrumbs = () => {
   const breadcrumbsData = breadcrumbs.useData();
 
   const getBreadcrumbIcon = (icon: string | JSX.Element, label: string) => {

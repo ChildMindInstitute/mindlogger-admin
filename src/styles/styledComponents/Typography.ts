@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 import { variables } from 'styles/variables';
 
 export type FontWeight = keyof typeof variables.font.weight;
-type LetterSpacing = keyof typeof variables.letterSpacing;
+type LetterSpacing = keyof typeof variables.font.letterSpacing;
 
 type StyledProps = {
   withDecoration?: boolean;
@@ -15,7 +15,7 @@ type StyledProps = {
 
 export const StyledHeadlineLarge = styled(Typography)`
   font-size: ${variables.font.size.xxxl};
-  line-height: ${variables.lineHeight.xxxl};
+  line-height: ${variables.font.lineHeight.xxxl};
   font-weight: ${({ fontWeight }: StyledProps) =>
     fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
@@ -23,7 +23,7 @@ export const StyledHeadlineLarge = styled(Typography)`
 
 export const StyledHeadline = styled(Typography)`
   font-size: ${variables.font.size.xxl};
-  line-height: ${variables.lineHeight.xxl};
+  line-height: ${variables.font.lineHeight.xxl};
   font-weight: ${({ fontWeight }: StyledProps) =>
     fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
@@ -31,25 +31,25 @@ export const StyledHeadline = styled(Typography)`
 
 export const StyledTitleLarge = styled(Typography)`
   font-size: ${variables.font.size.xl};
-  line-height: ${variables.lineHeight.xl};
+  line-height: ${variables.font.lineHeight.xl};
   font-weight: ${variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
 `;
 
 export const StyledTitleMedium = styled(Typography)`
   font-size: ${variables.font.size.lg};
-  line-height: ${variables.lineHeight.lg};
+  line-height: ${variables.font.lineHeight.lg};
   font-weight: ${variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
-  letter-spacing: ${variables.letterSpacing.md};
+  letter-spacing: ${variables.font.letterSpacing.md};
 `;
 
 export const StyledTitleSmall = styled(Typography)`
   font-size: ${variables.font.size.md};
-  line-height: ${variables.lineHeight.md};
+  line-height: ${variables.font.lineHeight.md};
   font-weight: ${variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.on_surface_variant};
-  letter-spacing: ${variables.letterSpacing.sm};
+  letter-spacing: ${variables.font.letterSpacing.sm};
 `;
 
 export const StyledTitleBoldLarge = styled(StyledTitleLarge)`
@@ -68,19 +68,19 @@ export const StyledLabelLarge = StyledTitleSmall;
 
 export const StyledLabelMedium = styled(Typography)`
   font-size: ${variables.font.size.sm};
-  line-height: ${variables.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.sm};
   font-weight: ${variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
   text-decoration: ${({ withDecoration }: StyledProps) => (withDecoration ? 'underline' : 'none')};
-  letter-spacing: ${variables.letterSpacing.xxl};
+  letter-spacing: ${variables.font.letterSpacing.xxl};
 `;
 
 export const StyledLabelSmall = styled(Typography)`
   font-size: ${variables.font.size.xs};
-  line-height: ${variables.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.sm};
   font-weight: ${variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
-  letter-spacing: ${variables.letterSpacing.xxl};
+  letter-spacing: ${variables.font.letterSpacing.xxl};
 `;
 
 export const StyledLabelBoldLarge = styled(StyledLabelLarge)`
@@ -97,25 +97,25 @@ export const StyledLabelBoldSmall = styled(StyledLabelSmall)`
 
 export const StyledBodyLarge = styled(Typography)`
   font-size: ${variables.font.size.lg};
-  line-height: ${variables.lineHeight.lg};
+  line-height: ${variables.font.lineHeight.lg};
   font-weight: ${variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
   letter-spacing: ${({ letterSpacing }: StyledProps) =>
-    letterSpacing ? variables.letterSpacing[letterSpacing] : variables.letterSpacing.md};
+    letterSpacing ? variables.font.letterSpacing[letterSpacing] : variables.font.letterSpacing.md};
 `;
 
 export const StyledBodyMedium = styled(Typography)`
   font-size: ${variables.font.size.md};
-  line-height: ${variables.lineHeight.md};
+  line-height: ${variables.font.lineHeight.md};
   font-weight: ${variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
-  letter-spacing: ${variables.letterSpacing.lg};
+  letter-spacing: ${variables.font.letterSpacing.lg};
 `;
 
 export const StyledBodySmall = styled(Typography)`
   font-size: ${variables.font.size.sm};
-  line-height: ${variables.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.sm};
   font-weight: ${variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
-  letter-spacing: ${variables.letterSpacing.xl};
+  letter-spacing: ${variables.font.letterSpacing.xl};
 `;
