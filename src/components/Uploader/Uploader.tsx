@@ -1,14 +1,17 @@
-import { useState, DragEvent, MouseEvent, ChangeEvent } from 'react';
-import { Box, Button } from '@mui/material';
-import { Trans } from 'react-i18next';
+import { useState, DragEvent, MouseEvent, ChangeEvent, useRef } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { Button } from '@mui/material';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { StyledBodyLarge } from 'styles/styledComponents';
+import { StyledBodyLarge, StyledBodyMedium } from 'styles/styledComponents';
 import { Svg } from 'components';
+import { CropPopup } from 'features/Builder/AboutApplet/CropPopup';
+import { variables } from 'styles/variables';
+import theme from 'styles/theme';
 
+import { FormValues } from 'features/Builder/AboutApplet/AboutApplet.const';
 import {
   StyledContainer,
-  StyledLabel,
-  StyledTextField,
   StyledImgContainer,
   StyledUploadImg,
   StyledButtonGroup,
@@ -16,12 +19,27 @@ import {
 } from './Uploader.styles';
 import { UploaderProps } from './Uploader.types';
 
-export const Uploader = ({ width, height }: UploaderProps) => {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+const MAX_FILE_SIZE = 1073741824;
+
+export const Uploader = ({ width, height, name }: UploaderProps) => {
+  const { t } = useTranslation('app');
+  const uploadInputRef = useRef<HTMLInputElement>(null);
+  const [cropPopupVisible, setCropPopupVisible] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
+
+  const { watch, setValue } = useFormContext<FormValues>();
+
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
+  };
+
+  const handleSetImage = (files: FileList | null) => {
+    if (files?.[0] && files?.[0].size < MAX_FILE_SIZE) {
+      setImage(files[0]);
+      setCropPopupVisible(true);
+    }
   };
 
   const dragEvents = {
@@ -32,77 +50,92 @@ export const Uploader = ({ width, height }: UploaderProps) => {
     onDragOver: stopDefaults,
     onDrop: (e: DragEvent<HTMLElement>) => {
       stopDefaults(e);
-      if (e.dataTransfer.files[0]) {
-        setImageUrl(URL.createObjectURL(e.dataTransfer.files[0]));
-      }
+      const { files } = e.dataTransfer;
+
+      handleSetImage(files);
     },
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
-    if (files?.[0]) {
-      setImageUrl(URL.createObjectURL(files[0]));
-    }
+
+    handleSetImage(files);
   };
 
   const onEditImg = () => {
-    setImageUrl(null);
+    setImage(null);
+    setValue(name, '');
   };
 
   const onRemoveImg = (e: MouseEvent) => {
     stopDefaults(e);
-    setImageUrl(null);
+    setImage(null);
+    setValue(name, '');
+    if (uploadInputRef.current) {
+      uploadInputRef.current.value = '';
+    }
   };
 
+  const imageField = watch(name);
+
   return (
-    <Box>
-      <StyledLabel
+    <>
+      <StyledContainer
+        width={width}
+        height={height}
+        isImgUploaded={!!imageField}
+        onClick={() => uploadInputRef?.current?.click()}
         {...dragEvents}
-        label={
-          <StyledContainer width={width} height={height} isImgUploaded={!!imageUrl}>
-            {imageUrl ? (
-              <UploadedImgContainer>
-                <StyledUploadImg
-                  alt="file upload"
-                  src={imageUrl}
-                  width={width}
-                  height={height}
-                  isMouseOver={isMouseOver}
+      >
+        {imageField ? (
+          <UploadedImgContainer>
+            <StyledUploadImg alt="file upload" src={imageField} width={width} height={height} />
+            {isMouseOver && (
+              <StyledButtonGroup variant="outlined" aria-label="button group">
+                <Button startIcon={<Svg width="18" height="18" id="edit" />} onClick={onEditImg} />
+                <Button
+                  startIcon={<Svg width="18" height="18" id="trash" />}
+                  onClick={onRemoveImg}
                 />
-                {isMouseOver && (
-                  <StyledButtonGroup variant="outlined" aria-label="button group">
-                    <Button
-                      startIcon={<Svg width="18" height="18" id="edit" />}
-                      onClick={onEditImg}
-                    />
-                    <Button
-                      startIcon={<Svg width="18" height="18" id="trash" />}
-                      onClick={onRemoveImg}
-                    />
-                  </StyledButtonGroup>
-                )}
-              </UploadedImgContainer>
-            ) : (
-              <StyledImgContainer>
-                <Svg id="img-filled" width={18} height={18} />
-                <StyledBodyLarge>
-                  <Trans i18nKey="dropImg">
-                    Drop Image here or <span>click to browse</span>.
-                  </Trans>
-                </StyledBodyLarge>
-              </StyledImgContainer>
+              </StyledButtonGroup>
             )}
-          </StyledContainer>
-        }
-        control={
-          <StyledTextField
-            onChange={handleChange}
-            inputProps={{ accept: 'image/png, image/jpg' }}
-            type="file"
-            name="uploadFile"
-          />
-        }
+          </UploadedImgContainer>
+        ) : (
+          <StyledImgContainer>
+            <Svg id="img-filled" width={18} height={18} />
+            <StyledBodyLarge>
+              <Trans i18nKey="dropImg">
+                Drop Image here or <span>click to browse</span>.
+              </Trans>
+            </StyledBodyLarge>
+          </StyledImgContainer>
+        )}
+      </StyledContainer>
+      <input
+        ref={uploadInputRef}
+        onChange={handleChange}
+        accept="image/png, image/jpg"
+        type="file"
+        name="uploadFile"
+        hidden
       />
-    </Box>
+      {cropPopupVisible && (
+        <CropPopup
+          open={cropPopupVisible}
+          setCropPopupVisible={setCropPopupVisible}
+          name={name}
+          setValue={setValue}
+          imageUrl={image ? URL.createObjectURL(image) : ''}
+        />
+      )}
+      {image?.name || (
+        <StyledBodyMedium
+          color={variables.palette.on_surface_variant}
+          sx={{ marginTop: theme.spacing(1.6) }}
+        >
+          {t('uploadImg')}
+        </StyledBodyMedium>
+      )}
+    </>
   );
 };

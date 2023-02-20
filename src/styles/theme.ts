@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import 'react-datepicker/dist/react-datepicker.min.css';
+import 'cropperjs/dist/cropper.css';
 
 import { typography } from 'styles/typography';
 import { variables } from 'styles/variables';

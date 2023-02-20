@@ -1,4 +1,5 @@
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -12,7 +13,6 @@ import {
 import { useBreadcrumbs } from 'hooks';
 import { Svg, Tooltip, Uploader } from 'components';
 import theme from 'styles/theme';
-import { variables } from 'styles/variables';
 
 import {
   StyledForm,
@@ -36,15 +36,23 @@ export const AboutApplet = () => {
     },
   ]);
 
-  const { control } = useForm<FormValues>({
+  const methods = useForm<FormValues>({
     resolver: yupResolver(AboutAppletSchema()),
     defaultValues,
     mode: 'onChange',
   });
+  const { control, setValue, watch } = methods;
 
   const commonProps = {
     control,
     fullWidth: true,
+  };
+
+  const commonUploaderProps = {
+    width: 20,
+    height: 20,
+    setValue,
+    watch,
   };
 
   return (
@@ -52,87 +60,77 @@ export const AboutApplet = () => {
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutApplet')}
       </StyledHeadlineLarge>
-      <StyledForm noValidate>
-        <StyledFlexTopCenter>
-          <StyledContainer>
-            <InputController
-              {...commonProps}
-              name="name"
-              maxLength={55}
-              label={t('appletName')}
-              sx={{ marginBottom: theme.spacing(4.4) }}
-            />
-            <InputController
-              {...commonProps}
-              name="description"
-              maxLength={230}
-              label={t('appletDescription')}
-              sx={{ marginBottom: theme.spacing(4.4) }}
-              multiline
-              rows={2}
-            />
-            <StyledFlexTopCenter sx={{ position: 'relative' }}>
-              <SelectController
+      <FormProvider {...methods}>
+        <StyledForm noValidate>
+          <StyledFlexTopCenter>
+            <StyledContainer>
+              <InputController
                 {...commonProps}
-                name="colorTheme"
-                label={t('appletColorTheme')}
-                options={colorThemeOptions}
-                sx={{ margin: theme.spacing(0, 2.4, 3.6, 0) }}
+                name="name"
+                maxLength={55}
+                label={t('appletName')}
+                sx={{ marginBottom: theme.spacing(4.4) }}
               />
-              <Tooltip tooltipTitle={mockedTooltipText}>
-                <span>
-                  <StyledSvg id="more-info-outlined" />
-                </span>
-              </Tooltip>
-            </StyledFlexTopCenter>
-          </StyledContainer>
-          <StyledUploadImgs>
-            <StyledUploadImg>
-              <StyledTitle>
-                {t('appletImg')}
+              <InputController
+                {...commonProps}
+                name="description"
+                maxLength={230}
+                label={t('appletDescription')}
+                sx={{ marginBottom: theme.spacing(4.4) }}
+                multiline
+                rows={2}
+              />
+              <StyledFlexTopCenter sx={{ position: 'relative' }}>
+                <SelectController
+                  {...commonProps}
+                  name="colorTheme"
+                  label={t('appletColorTheme')}
+                  options={colorThemeOptions}
+                  sx={{ margin: theme.spacing(0, 2.4, 3.6, 0) }}
+                />
                 <Tooltip tooltipTitle={mockedTooltipText}>
                   <span>
                     <StyledSvg id="more-info-outlined" />
                   </span>
                 </Tooltip>
-              </StyledTitle>
-              <Uploader width={20} height={20} />
-              <StyledBodyMedium
-                color={variables.palette.on_surface_variant}
-                sx={{ marginTop: theme.spacing(1.6) }}
-              >
-                {t('uploadImg')}
-              </StyledBodyMedium>
-            </StyledUploadImg>
-            <StyledUploadImg>
-              <StyledTitle>
-                {t('appletWatermark')}
-                <Tooltip tooltipTitle={mockedTooltipText}>
-                  <span>
-                    <StyledSvg id="more-info-outlined" />
-                  </span>
-                </Tooltip>
-              </StyledTitle>
-              <Uploader width={20} height={20} />
-              <StyledBodyMedium
-                color={variables.palette.on_surface_variant}
-                sx={{ marginTop: theme.spacing(1.6) }}
-              >
-                {t('uploadImg')}
-              </StyledBodyMedium>
-            </StyledUploadImg>
-          </StyledUploadImgs>
-        </StyledFlexTopCenter>
-        <StyledTitle>
-          {t('aboutAppletPage')}
-          <Tooltip tooltipTitle={mockedTooltipText}>
-            <span>
-              <StyledSvg id="more-info-outlined" />
-            </span>
-          </Tooltip>
-        </StyledTitle>
-        <EditorController control={control} name="aboutApplet" />
-      </StyledForm>
+              </StyledFlexTopCenter>
+            </StyledContainer>
+            <StyledUploadImgs>
+              <StyledUploadImg>
+                <StyledTitle>
+                  {t('appletImg')}
+                  <Tooltip tooltipTitle={mockedTooltipText}>
+                    <span>
+                      <StyledSvg id="more-info-outlined" />
+                    </span>
+                  </Tooltip>
+                </StyledTitle>
+                <Uploader name="appletImage" {...commonUploaderProps} />
+              </StyledUploadImg>
+              <StyledUploadImg>
+                <StyledTitle>
+                  {t('appletWatermark')}
+                  <Tooltip tooltipTitle={mockedTooltipText}>
+                    <span>
+                      <StyledSvg id="more-info-outlined" />
+                    </span>
+                  </Tooltip>
+                </StyledTitle>
+                <Uploader name="appletWatermark" {...commonUploaderProps} />
+              </StyledUploadImg>
+            </StyledUploadImgs>
+          </StyledFlexTopCenter>
+          <StyledTitle>
+            {t('aboutAppletPage')}
+            <Tooltip tooltipTitle={mockedTooltipText}>
+              <span>
+                <StyledSvg id="more-info-outlined" />
+              </span>
+            </Tooltip>
+          </StyledTitle>
+          <EditorController control={control} name="aboutApplet" />
+        </StyledForm>
+      </FormProvider>
     </StyledBuilderWrapper>
   );
 };

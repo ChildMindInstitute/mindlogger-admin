@@ -5,6 +5,8 @@ export const defaultValues = {
   description: '',
   colorTheme: 'default',
   aboutApplet: '',
+  appletImage: '',
+  appletWatermark: '',
 };
 
 export const colorThemeOptions = [
@@ -20,4 +22,6 @@ export type FormValues = {
   description: string;
   colorTheme: string;
   aboutApplet: string;
+  appletImage: string;
+  appletWatermark: string;
 };
