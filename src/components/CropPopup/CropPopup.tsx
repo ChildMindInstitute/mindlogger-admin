@@ -8,20 +8,14 @@ import { StyledModalWrapper } from 'styles/styledComponents';
 import { StyledCropWrapper } from './CropPopup.styles';
 import { CropPopupProps } from './CropPopup.types';
 
-export const CropPopup = ({
-  open,
-  setCropPopupVisible,
-  name,
-  setValue,
-  imageUrl,
-}: CropPopupProps) => {
+export const CropPopup = ({ open, setCropPopupVisible, setValue, imageUrl }: CropPopupProps) => {
   const { t } = useTranslation('app');
   const cropperRef = useRef<ReactCropperElement>(null);
 
   const handleCropImage = () => {
     const imageElement = cropperRef?.current;
     const cropper = imageElement?.cropper;
-    cropper && setValue(name, cropper.getCroppedCanvas().toDataURL());
+    cropper && setValue(cropper.getCroppedCanvas().toDataURL());
   };
 
   const onClose = () => {
@@ -39,7 +33,7 @@ export const CropPopup = ({
       <Modal
         open={open}
         onClose={onClose}
-        title="Please select area to display"
+        title={t('pleaseSelectArea')}
         onSubmit={handleSave}
         buttonText={t('save')}
       >

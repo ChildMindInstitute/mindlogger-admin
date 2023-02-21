@@ -380,5 +380,6 @@
   "default": "Default",
   "dropImage": "Drop Image here or <1>click to browse</1>.",
   "descriptionRequired": "Description is required",
-  "aboutAppletRequired": "About applet is required"
+  "aboutAppletRequired": "About applet is required",
+  "pleaseSelectArea": "Please select area to display"
 }

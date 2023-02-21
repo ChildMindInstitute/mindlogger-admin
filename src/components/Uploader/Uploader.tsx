@@ -1,15 +1,12 @@
 import { useState, DragEvent, MouseEvent, ChangeEvent, useRef } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { StyledBodyLarge, StyledBodyMedium } from 'styles/styledComponents';
-import { Svg } from 'components';
-import { CropPopup } from 'features/Builder/AboutApplet/CropPopup';
+import { StyledBodyMedium } from 'styles/styledComponents';
+import { Svg, CropPopup } from 'components';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 
-import { FormValues } from 'features/Builder/AboutApplet/AboutApplet.const';
 import {
   StyledContainer,
   StyledImgContainer,
@@ -21,14 +18,12 @@ import { UploaderProps } from './Uploader.types';
 
 const MAX_FILE_SIZE = 1073741824;
 
-export const Uploader = ({ width, height, name }: UploaderProps) => {
+export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) => {
   const { t } = useTranslation('app');
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
-
-  const { watch, setValue } = useFormContext<FormValues>();
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -64,19 +59,19 @@ export const Uploader = ({ width, height, name }: UploaderProps) => {
 
   const onEditImg = () => {
     setImage(null);
-    setValue(name, '');
+    setValue('');
   };
 
   const onRemoveImg = (e: MouseEvent) => {
     stopDefaults(e);
     setImage(null);
-    setValue(name, '');
+    setValue('');
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
     }
   };
 
-  const imageField = watch(name);
+  const imageField = getValue();
 
   return (
     <>
@@ -102,12 +97,12 @@ export const Uploader = ({ width, height, name }: UploaderProps) => {
           </UploadedImgContainer>
         ) : (
           <StyledImgContainer>
-            <Svg id="img-filled" width={18} height={18} />
-            <StyledBodyLarge>
+            <Svg id="img-filled" width={32} height={32} />
+            <StyledBodyMedium>
               <Trans i18nKey="dropImg">
-                Drop Image here or <span>click to browse</span>.
+                Drop Image here <br /> or <span>click to browse</span>.
               </Trans>
-            </StyledBodyLarge>
+            </StyledBodyMedium>
           </StyledImgContainer>
         )}
       </StyledContainer>
@@ -119,22 +114,19 @@ export const Uploader = ({ width, height, name }: UploaderProps) => {
         name="uploadFile"
         hidden
       />
+      <StyledBodyMedium
+        color={variables.palette.on_surface_variant}
+        sx={{ marginTop: theme.spacing(1.6) }}
+      >
+        {t('uploadImg')}
+      </StyledBodyMedium>
       {cropPopupVisible && (
         <CropPopup
           open={cropPopupVisible}
           setCropPopupVisible={setCropPopupVisible}
-          name={name}
           setValue={setValue}
           imageUrl={image ? URL.createObjectURL(image) : ''}
         />
-      )}
-      {image?.name || (
-        <StyledBodyMedium
-          color={variables.palette.on_surface_variant}
-          sx={{ marginTop: theme.spacing(1.6) }}
-        >
-          {t('uploadImg')}
-        </StyledBodyMedium>
       )}
     </>
   );
