@@ -7,6 +7,7 @@ import { StyledModalWrapper } from 'styles/styledComponents';
 
 import { StyledCropWrapper } from './CropPopup.styles';
 import { CropPopupProps } from './CropPopup.types';
+import { cropOptions } from './CropPopup.const';
 
 export const CropPopup = ({ open, setCropPopupVisible, setValue, imageUrl }: CropPopupProps) => {
   const { t } = useTranslation('app');
@@ -39,20 +40,7 @@ export const CropPopup = ({ open, setCropPopupVisible, setValue, imageUrl }: Cro
       >
         <StyledModalWrapper>
           <StyledCropWrapper>
-            <Cropper
-              ref={cropperRef}
-              initialAspectRatio={1}
-              src={imageUrl}
-              viewMode={3}
-              minCropBoxHeight={50}
-              minCropBoxWidth={50}
-              background={false}
-              responsive={true}
-              autoCropArea={1}
-              checkOrientation={true}
-              guides={false}
-              zoomable={false}
-            />
+            <Cropper ref={cropperRef} src={imageUrl} {...cropOptions} />
           </StyledCropWrapper>
         </StyledModalWrapper>
       </Modal>
