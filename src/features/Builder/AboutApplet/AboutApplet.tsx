@@ -5,14 +5,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { EditorController, InputController, SelectController } from 'components/FormComponents';
 import {
   StyledFlexTopCenter,
-  StyledBodyMedium,
   StyledHeadlineLarge,
   StyledBuilderWrapper,
 } from 'styles/styledComponents';
 import { useBreadcrumbs } from 'hooks';
 import { Svg, Tooltip, Uploader } from 'components';
 import theme from 'styles/theme';
-import { variables } from 'styles/variables';
 
 import {
   StyledForm,
@@ -36,7 +34,7 @@ export const AboutApplet = () => {
     },
   ]);
 
-  const { control } = useForm<FormValues>({
+  const { control, setValue, watch } = useForm<FormValues>({
     resolver: yupResolver(AboutAppletSchema()),
     defaultValues,
     mode: 'onChange',
@@ -45,6 +43,11 @@ export const AboutApplet = () => {
   const commonProps = {
     control,
     fullWidth: true,
+  };
+
+  const commonUploaderProps = {
+    width: 20,
+    height: 20,
   };
 
   return (
@@ -96,13 +99,11 @@ export const AboutApplet = () => {
                   </span>
                 </Tooltip>
               </StyledTitle>
-              <Uploader width={20} height={20} />
-              <StyledBodyMedium
-                color={variables.palette.on_surface_variant}
-                sx={{ marginTop: theme.spacing(1.6) }}
-              >
-                {t('uploadImg')}
-              </StyledBodyMedium>
+              <Uploader
+                {...commonUploaderProps}
+                setValue={(val: string) => setValue('appletImage', val)}
+                getValue={() => watch('appletImage')}
+              />
             </StyledUploadImg>
             <StyledUploadImg>
               <StyledTitle>
@@ -113,13 +114,11 @@ export const AboutApplet = () => {
                   </span>
                 </Tooltip>
               </StyledTitle>
-              <Uploader width={20} height={20} />
-              <StyledBodyMedium
-                color={variables.palette.on_surface_variant}
-                sx={{ marginTop: theme.spacing(1.6) }}
-              >
-                {t('uploadImg')}
-              </StyledBodyMedium>
+              <Uploader
+                {...commonUploaderProps}
+                setValue={(val: string) => setValue('appletWatermark', val)}
+                getValue={() => watch('appletWatermark')}
+              />
             </StyledUploadImg>
           </StyledUploadImgs>
         </StyledFlexTopCenter>
