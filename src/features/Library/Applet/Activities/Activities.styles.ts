@@ -24,7 +24,7 @@ export const StyledActivitiesContainer = styled(Box, shouldForwardProp)`
 `;
 
 export const StyledExpandedButton = styled(StyledClearedButton)`
-  &&:hover {
+  &.MuiButton-text:hover {
     background-color: transparent;
   }
 

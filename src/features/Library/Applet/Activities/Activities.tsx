@@ -7,6 +7,7 @@ import { StyledHeadline, StyledLabelBoldLarge } from 'styles/styledComponents';
 import { ActivitiesProps } from './Activities.types';
 import { StyledActivitiesContainer, StyledExpandedButton } from './Activities.styles';
 import { AppletUiType } from '../';
+
 export const Activities = ({ uiType = AppletUiType.List }: ActivitiesProps) => {
   const { t } = useTranslation('app');
   const [activitiesVisible, setActivitiesVisible] = useState(uiType === AppletUiType.Details);

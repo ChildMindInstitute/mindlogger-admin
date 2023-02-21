@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
-import { StyledLabelBoldMedium } from 'styles/styledComponents';
+import { StyledFlexWrap, StyledLabelBoldMedium } from 'styles/styledComponents';
 
 export const StyledAppletContainer = styled(Box)`
   display: grid;
@@ -15,9 +15,7 @@ export const StyledAppletName = styled(Box)`
   display: flex;
 `;
 
-export const StyledAppletKeywordsContainer = styled(Box)`
-  display: flex;
-  flex-wrap: wrap;
+export const StyledAppletKeywordsContainer = styled(StyledFlexWrap)`
   margin-top: ${theme.spacing(1.6)};
 `;
 
