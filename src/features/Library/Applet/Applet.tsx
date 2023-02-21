@@ -11,7 +11,6 @@ import {
   StyledTitleMedium,
 } from 'styles/styledComponents';
 import theme from 'styles/theme';
-import { AppletImage } from 'features/Library/AppletImage';
 import { Svg } from 'components';
 import { page } from 'resources';
 import { variables } from 'styles/variables';
@@ -25,6 +24,7 @@ import {
 } from './Applet.styles';
 import { AppletProps, AppletUiType } from './Applet.types';
 import { Activities } from './Activities';
+import { AppletImage } from './AppletImage';
 
 export const Applet = ({
   applet: { appletId, name, image = '', version = '', description, keywords },
