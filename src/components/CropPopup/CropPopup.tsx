@@ -36,6 +36,7 @@ export const CropPopup = ({ open, setCropPopupVisible, setValue, imageUrl }: Cro
         title={t('pleaseSelectArea')}
         onSubmit={handleSave}
         buttonText={t('save')}
+        width="auto"
       >
         <StyledModalWrapper>
           <StyledCropWrapper>
