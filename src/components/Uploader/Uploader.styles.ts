@@ -1,4 +1,4 @@
-import { Box, ButtonGroup, FormControlLabel, TextField } from '@mui/material';
+import { Box, ButtonGroup } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { StyledFlexAllCenter } from 'styles/styledComponents';
@@ -12,18 +12,9 @@ const absolutePosition = `
   transform: translate(-50%, -50%);
 `;
 
-export const StyledTextField = styled(TextField)`
-  display: none;
-`;
-
-export const StyledLabel = styled(FormControlLabel)`
-  &.MuiFormControlLabel-root {
-    margin: 0;
-  }
-`;
-
 export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
   border-radius: ${variables.borderRadius.lg2};
+  cursor: pointer;
 
   ${({
     height,
@@ -36,9 +27,9 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
   }) => `
     height: ${height}rem;
     width: ${width}rem;
-    border: ${variables.borderWidth.lg} ${isImgUploaded ? 'solid' : 'dashed'} ${
-    variables.palette.outline_variant
-  };
+    border: ${isImgUploaded ? variables.borderWidth.md : variables.borderWidth.lg} ${
+    isImgUploaded ? 'solid' : 'dashed'
+  } ${variables.palette.outline_variant};
 `}
 `;
 
@@ -70,6 +61,10 @@ export const StyledButtonGroup = styled(ButtonGroup)`
     &:not(:last-of-type):hover {
       border-right-color: transparent;
     }
+
+    .MuiButton-startIcon {
+      margin-right: 0;
+    }
   }
 
   .MuiButton-root.MuiButton-outlined {
@@ -87,10 +82,9 @@ export const StyledButtonGroup = styled(ButtonGroup)`
 `;
 
 export const StyledUploadImg = styled('img', shouldForwardProp)`
-  ${({ width, height, isMouseOver }: { width: number; height: number; isMouseOver: boolean }) => `
-    width: ${width - 0.4}rem;
-    height: ${height - 0.4}rem;
-    filter: ${isMouseOver ? 'blur(0.5rem)' : 'none'};
+  ${({ width, height }: { width: number; height: number }) => `
+    width: ${width - 0.2}rem;
+    height: ${height - 0.2}rem;
   `}
   border-radius: ${variables.borderRadius.lg2};
   ${absolutePosition}

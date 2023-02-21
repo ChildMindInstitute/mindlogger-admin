@@ -12,7 +12,7 @@ import { ActionsAlign } from './Modal.types';
 export const StyledDialog = styled(Dialog)`
   .MuiPaper-root {
     background-color: ${variables.palette.surface3};
-    width: ${({ width }: { width?: string }) => (width ? `${width}rem` : '43.4rem')};
+    width: ${({ width }: { width?: string }) => (width ? `${width}rem` : 'auto')};
     max-width: 100rem;
   }
 `;

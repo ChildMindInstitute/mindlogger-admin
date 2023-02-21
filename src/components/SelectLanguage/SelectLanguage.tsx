@@ -33,6 +33,7 @@ export const SelectLanguage = ({
       title={t('chooseLanguage')}
       titleAlign="center"
       buttonText={t('ok')}
+      width="42"
     >
       <StyledList>
         {languages.map((lang) => (
