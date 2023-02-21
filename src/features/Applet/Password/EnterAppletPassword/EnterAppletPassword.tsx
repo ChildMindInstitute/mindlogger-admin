@@ -15,7 +15,7 @@ import {
   AppletPasswordProps,
   AppletPasswordRef,
 } from './EnterAppletPassword.types';
-import { StyledController, StyledHint } from '../Password.styles';
+import { StyledController } from '../Password.styles';
 import { passwordFormSchema } from './EnterAppletPassword.schema';
 
 export const EnterAppletPassword = forwardRef<AppletPasswordRef, AppletPasswordProps>(
@@ -30,7 +30,6 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, AppletPasswordP
     });
 
     const [showPassword, setShowPassword] = useState(false);
-    const [errorText, setErrorText] = useState('');
 
     const submitForm = ({ appletPassword }: AppletPasswordForm) => {
       const appletEncryption = encryption || getAppletData(appletsFoldersData, appletId).encryption;
@@ -50,7 +49,6 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, AppletPasswordP
             ),
           )
       ) {
-        setErrorText('');
         submitCallback && submitCallback();
       } else {
         setError('appletPassword', { message: t('incorrectAppletPassword') });
@@ -84,7 +82,6 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, AppletPasswordP
               ),
             }}
           />
-          <StyledHint isError={!!errorText}>{errorText}</StyledHint>
         </StyledController>
       </form>
     );
