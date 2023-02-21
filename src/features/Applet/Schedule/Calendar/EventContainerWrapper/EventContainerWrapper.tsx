@@ -77,12 +77,13 @@ export const EventContainerWrapper = ({
               }
             });
 
-          eventsToHide.forEach((id) => {
-            const currEventWrapper = eventsWrapper.querySelector(
-              `[data-id='${id}']`,
-            ) as HTMLElement;
-            currEventWrapper?.classList.add('hidden-event');
-          });
+          lengthToShow > 0 &&
+            eventsToHide.forEach((id) => {
+              const currEventWrapper = eventsWrapper.querySelector(
+                `[data-id='${id}']`,
+              ) as HTMLElement;
+              currEventWrapper?.classList.add('hidden-event');
+            });
         });
       }
     });

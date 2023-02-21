@@ -233,20 +233,22 @@ export const eventPropGetter = (
   const isAllDayEvent = allDayEvent || alwaysAvailable;
   const isTimeView = activeView === CalendarViews.Day || activeView === CalendarViews.Week;
   const isScheduledDayWeekEvent = isTimeView && !isAllDayEvent;
-  let borderRadius = isScheduledDayWeekEvent
-    ? variables.borderRadius.md
-    : variables.borderRadius.xs;
-  if (isScheduledDayWeekEvent && eventSpanAfter) {
-    borderRadius = `${variables.borderRadius.md} ${variables.borderRadius.md} 0 0`;
-  }
-  if (isScheduledDayWeekEvent && eventSpanBefore) {
-    borderRadius = `0 0 ${variables.borderRadius.md} ${variables.borderRadius.md}`;
-  }
+
+  const getBorderRadius = () => {
+    if (isScheduledDayWeekEvent && eventSpanAfter) {
+      return `${variables.borderRadius.md} ${variables.borderRadius.md} 0 0`;
+    }
+    if (isScheduledDayWeekEvent && eventSpanBefore) {
+      return `0 0 ${variables.borderRadius.md} ${variables.borderRadius.md}`;
+    }
+
+    return isScheduledDayWeekEvent ? variables.borderRadius.md : variables.borderRadius.xs;
+  };
 
   return {
     style: {
       padding: 0,
-      borderRadius,
+      borderRadius: getBorderRadius(),
       borderWidth: `0 0 0 ${isScheduledDayWeekEvent ? variables.borderWidth.xl : 0}`,
       borderColor: isScheduledDayWeekEvent ? scheduledColor : 'transparent',
       backgroundColor: (isScheduledDayWeekEvent && scheduledBackground) || backgroundColor,
