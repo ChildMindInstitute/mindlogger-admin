@@ -25,8 +25,8 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
       `
     color: ${variables.palette.outline};
     font-size: ${variables.font.size.md};
-    line-height: ${variables.lineHeight.md};
-    letter-spacing: ${variables.letterSpacing.lg};
+    line-height: ${variables.font.lineHeight.md};
+    letter-spacing: ${variables.font.letterSpacing.lg};
   `}
   }
 `;

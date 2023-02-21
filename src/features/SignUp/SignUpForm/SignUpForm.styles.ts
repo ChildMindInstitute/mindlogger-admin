@@ -48,7 +48,7 @@ export const StyledBack = styled(StyledClearedButton)`
   text-align: center;
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.sm};
   text-decoration: underline;
 
   &.MuiButton-text:hover {

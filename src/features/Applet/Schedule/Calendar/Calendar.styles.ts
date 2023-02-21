@@ -181,8 +181,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
         transform: translateY(-50%);
         color: ${variables.palette.outline};
         font-size: ${variables.font.size.md};
-        line-height: ${variables.lineHeight.md};
-        letter-spacing: ${variables.letterSpacing.sm};
+        line-height: ${variables.font.lineHeight.md};
+        letter-spacing: ${variables.font.letterSpacing.sm};
       }
     }
   }
@@ -245,8 +245,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       padding-top: ${theme.spacing(0.3)};
       text-transform: uppercase;
       font-size: ${variables.font.size.sm};
-      line-height: ${variables.lineHeight.sm};
-      letter-spacing: ${variables.letterSpacing.xxl};
+      line-height: ${variables.font.lineHeight.sm};
+      letter-spacing: ${variables.font.letterSpacing.xxl};
       color: ${variables.palette.on_surface_variant};
       border-color: ${variables.palette.surface_variant};
       border-bottom: unset;
@@ -286,8 +286,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
         height: 2.5rem;
         font-family: 'Atkinson', helvetica, arial, sans-serif;
         font-size: ${variables.font.size.md};
-        line-height: ${variables.lineHeight.md};
-        letter-spacing: ${variables.letterSpacing.lg};
+        line-height: ${variables.font.lineHeight.md};
+        letter-spacing: ${variables.font.letterSpacing.lg};
         color: ${variables.palette.on_surface_variant};
         transition: ${variables.transitions.opacity};
         padding: ${theme.spacing(0, 0.5)};
@@ -309,8 +309,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
     .rbc-show-more {
       margin: ${theme.spacing(0.2, 0, 0, 0.9)};
       font-size: ${variables.font.size.sm};
-      line-height: ${variables.lineHeight.sm};
-      letter-spacing: ${variables.letterSpacing.xxl};
+      line-height: ${variables.font.lineHeight.sm};
+      letter-spacing: ${variables.font.letterSpacing.xxl};
       color: ${variables.palette.on_surface_variant};
       transition: ${variables.transitions.opacity};
 

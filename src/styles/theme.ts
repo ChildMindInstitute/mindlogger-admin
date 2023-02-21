@@ -126,7 +126,7 @@ const theme = createTheme({
           height: '4.8rem',
           padding: '0 1.2rem',
           fontSize: variables.font.size.sm,
-          lineHeight: variables.lineHeight.sm,
+          lineHeight: variables.font.lineHeight.sm,
           fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface,
           backgroundColor: variables.palette.surface,
@@ -160,7 +160,7 @@ const theme = createTheme({
             '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': {
               fontWeight: variables.font.weight.regular,
               fontSize: variables.font.size.md,
-              lineHeight: variables.lineHeight.md,
+              lineHeight: variables.font.lineHeight.md,
             },
             '.MuiInputBase-root': {
               display: 'none',
@@ -177,12 +177,12 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontWeight: variables.font.weight.bold,
-          lineHeight: variables.lineHeight.md,
+          lineHeight: variables.font.lineHeight.md,
           padding: '1rem 1.6rem',
           borderRadius: variables.borderRadius.xxxl,
           textTransform: 'none',
           height: 40,
-          letterSpacing: variables.letterSpacing.sm,
+          letterSpacing: variables.font.letterSpacing.sm,
           boxShadow: 'unset',
           '&.MuiButton-contained': {
             '&:hover': {
@@ -237,7 +237,7 @@ const theme = createTheme({
           borderRadius: variables.borderRadius.md,
           fontSize: variables.font.size.md,
           fontWeight: variables.font.weight.regular,
-          lineHeight: variables.lineHeight.md,
+          lineHeight: variables.font.lineHeight.md,
           '&.MuiChip-colorPrimary': {
             border: 'none',
             backgroundColor: variables.palette.secondary_container,
@@ -289,7 +289,7 @@ const theme = createTheme({
             color: variables.palette.on_secondary_container,
             fontSize: variables.font.size.md,
             fontWeight: variables.font.weight.regular,
-            lineHeight: variables.lineHeight.md,
+            lineHeight: variables.font.lineHeight.md,
             borderRadius: variables.borderRadius.xxxl,
             borderColor: variables.palette.outline,
             textTransform: 'none',

@@ -1,6 +1,6 @@
 import { Box, styled, TableContainer } from '@mui/material';
 
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { StyledFlexTopCenter } from 'styles/styledComponents';
 import { variables } from 'styles/variables';
 
 export const StyledTableContainer = styled(TableContainer)`
@@ -13,11 +13,13 @@ export const StyledTableContainer = styled(TableContainer)`
       border-top: ${variables.borderWidth.lg} solid ${variables.palette.primary};
       border-bottom: ${variables.borderWidth.lg} solid ${variables.palette.primary};
     }
+
     .MuiTableCell-body:first-of-type {
       border-left: ${variables.borderWidth.lg} solid ${variables.palette.primary};
       border-top-left-radius: ${variables.borderRadius.xs} ${variables.borderRadius.xs};
       border-bottom-left-radius: ${variables.borderRadius.xs} ${variables.borderRadius.xs};
     }
+
     .MuiTableCell-body:last-of-type {
       border-right: ${variables.borderWidth.lg} solid ${variables.palette.primary};
       border-top-right-radius: ${variables.borderRadius.xs} ${variables.borderRadius.xs};

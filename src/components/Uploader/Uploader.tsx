@@ -16,7 +16,7 @@ import {
 } from './Uploader.styles';
 import { UploaderProps } from './Uploader.types';
 
-const MAX_FILE_SIZE = 1073741824;
+const MAX_FILE_SIZE = 1073741824; //1GB
 
 export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) => {
   const { t } = useTranslation('app');

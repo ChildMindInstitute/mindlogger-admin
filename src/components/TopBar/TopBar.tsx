@@ -4,14 +4,13 @@ import { Breadcrumbs } from 'components/Breadcrumbs';
 import { useAppDispatch } from 'redux/store';
 import { account, auth } from 'redux/modules';
 import { variables } from 'styles/variables';
-import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { StyledFlexTopCenter, StyledLabelBoldMedium } from 'styles/styledComponents';
 import avatarSrc from 'assets/images/avatar.png';
 
 import { AccountPanel } from './AccountPanel';
 import { StyledTopBar, StyledAvatarBtn, StyledImage, StyledQuantity } from './TopBar.styles';
 
-export const TopBar = (): JSX.Element => {
+export const TopBar = () => {
   const dispatch = useAppDispatch();
   const authData = auth.useData();
   const accData = account.useData();

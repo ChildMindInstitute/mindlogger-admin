@@ -2,7 +2,7 @@ import { styled, Box, Button } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
+import { StyledFlexWrap, StyledBodyLarge } from 'styles/styledComponents';
 
 export const StyledSuccessShared = styled(Box)`
   padding: ${theme.spacing(2.4)};
@@ -16,9 +16,7 @@ export const StyledApplet = styled(Box)`
   border-radius: ${variables.borderRadius.lg2};
 `;
 
-export const StyledAppletContent = styled(Box)`
-  display: flex;
-  flex-direction: column;
+export const StyledAppletContent = styled(StyledFlexWrap)`
   flex-grow: 1;
   margin-left: ${theme.spacing(1.6)};
 `;

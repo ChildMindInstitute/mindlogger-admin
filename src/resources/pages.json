@@ -15,6 +15,9 @@
   "newAppletAbout": "/builder/new-applet/about",
   "newAppletActivities": "/builder/new-applet/activities",
   "newAppletActivityFlow": "/builder/new-applet/activity-flow",
+  "newAppletNewActivityFlow": "/builder/new-applet/activity-flow/new-activity-flow",
+  "newAppletNewActivityFlowAbout": "/builder/new-applet/activity-flow/new-activity-flow/about",
+  "newAppletNewActivityFlowBuilder": "/builder/new-applet/activity-flow/new-activity-flow/builder",
   "newAppletSettings": "/builder/new-applet/settings",
   "library": "/library"
 }

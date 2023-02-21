@@ -1,15 +1,12 @@
-import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
-import { StyledClearedButton } from 'styles/styledComponents';
+import { StyledClearedButton, StyledFlexColumn } from 'styles/styledComponents';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
-export const StyledContainer = styled(Box, shouldForwardProp)`
+export const StyledContainer = styled(StyledFlexColumn, shouldForwardProp)`
   padding: ${theme.spacing(4.8, 2.4, 0, 6.8)};
-  display: flex;
-  flex-direction: column;
   height: 100%;
   overflow-y: auto;
   width: ${({ isOpen }: { isOpen: boolean }) => (isOpen ? '100%' : 0)};
