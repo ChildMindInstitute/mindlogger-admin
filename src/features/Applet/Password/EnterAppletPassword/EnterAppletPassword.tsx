@@ -24,7 +24,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, AppletPasswordP
     const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
 
-    const { handleSubmit, control } = useForm<AppletPasswordForm>({
+    const { handleSubmit, control, setError } = useForm<AppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
       defaultValues: { appletPassword: '' },
     });
@@ -53,7 +53,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, AppletPasswordP
         setErrorText('');
         submitCallback && submitCallback();
       } else {
-        setErrorText(t('incorrectAppletPassword') as string);
+        setError('appletPassword', { message: t('incorrectAppletPassword') });
       }
     };
 
@@ -84,7 +84,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, AppletPasswordP
               ),
             }}
           />
-          <StyledHint isError={!!errorText}>{errorText || t('enterAppletPasswordHint')}</StyledHint>
+          <StyledHint isError={!!errorText}>{errorText}</StyledHint>
         </StyledController>
       </form>
     );

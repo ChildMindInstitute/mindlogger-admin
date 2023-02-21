@@ -117,7 +117,7 @@
   "deleteApplet": "Delete Applet",
   "transferOwnership": "Transfer Ownership",
   "shareWithTheLibrary": "Share with the library",
-  "incorrectAppletPassword": "Incorrect Applet password",
+  "incorrectAppletPassword": "Incorrect password",
   "noAlerts": "No Alerts",
   "confirmDeleteApplet": "Are you sure that you want to delete this Applet? You won’t be able to restore it.",
   "dismiss": "Dismiss",
