@@ -28,6 +28,7 @@ export const EventContainerWrapper = ({
       VALUE_DECREASING_FULL_CONTAINER_WIDTH,
     } = getVariables(isWeekView);
 
+    //TODO: Try to find a better solution for the hide/show many events, and responsive breakpoints logic in the day/week view
     setTimeout(() => {
       const eventsWrapper = wrapperRef.current;
       const containerEvents: NodeListOf<HTMLElement> | undefined =
