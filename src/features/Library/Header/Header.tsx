@@ -31,38 +31,33 @@ export const Header = ({
     navigate(page.library);
   };
 
-  const renderRightButton = () => {
-    switch (rightButtonType) {
-      case RightButtonType.Cart:
-        return (
-          <StyledCartButton
-            startIcon={<Svg width="18" height="18" id="cart-filled" />}
-            endIcon={<Svg width="20" height="20" id="navigate-right" />}
-            variant="outlined"
-            onClick={rightButtonCallback}
-          >
-            <Box sx={{ marginLeft: theme.spacing(1.2) }}>
-              <StyledLabelLarge sx={{ textAlign: 'initial', color: variables.palette.on_surface }}>
-                {t('cart')}
-              </StyledLabelLarge>
-              <StyledBodySmall sx={{ color: variables.palette.on_surface_variant }}>
-                {appletsCount} {t('applet', { count: appletsCount })}
-              </StyledBodySmall>
-            </Box>
-          </StyledCartButton>
-        );
-      case RightButtonType.Builder:
-        return (
-          <StyledBuilderButton
-            onClick={rightButtonCallback}
-            startIcon={<Svg width="18" height="18" id="builder" />}
-            variant="contained"
-          >
-            {t('addToBuilder')}
-          </StyledBuilderButton>
-        );
-    }
-  };
+  const renderCartButton = () => (
+    <StyledCartButton
+      startIcon={<Svg width="18" height="18" id="cart-filled" />}
+      endIcon={<Svg width="20" height="20" id="navigate-right" />}
+      variant="outlined"
+      onClick={rightButtonCallback}
+    >
+      <Box sx={{ marginLeft: theme.spacing(1.2) }}>
+        <StyledLabelLarge sx={{ textAlign: 'initial', color: variables.palette.on_surface }}>
+          {t('cart')}
+        </StyledLabelLarge>
+        <StyledBodySmall sx={{ color: variables.palette.on_surface_variant }}>
+          {appletsCount} {t('applet', { count: appletsCount })}
+        </StyledBodySmall>
+      </Box>
+    </StyledCartButton>
+  );
+
+  const renderBuilderButton = () => (
+    <StyledBuilderButton
+      onClick={rightButtonCallback}
+      startIcon={<Svg width="18" height="18" id="builder" />}
+      variant="contained"
+    >
+      {t('addToBuilder')}
+    </StyledBuilderButton>
+  );
 
   return (
     <StyledHeaderContainer>
@@ -76,12 +71,12 @@ export const Header = ({
           </StyledBackButton>
         )}
       </Box>
-
       <Box sx={{ margin: theme.spacing(0, 1.6) }}>
         {handleSearch && <Search placeholder={t('search')} onSearch={handleSearch} width="100%" />}
       </Box>
-
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>{renderRightButton()}</Box>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        {rightButtonType === RightButtonType.Cart ? renderCartButton() : renderBuilderButton()}
+      </Box>
     </StyledHeaderContainer>
   );
 };

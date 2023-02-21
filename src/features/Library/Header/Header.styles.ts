@@ -17,6 +17,7 @@ export const StyledBackButton = styled(Button)`
   &:hover {
     background-color: ${variables.palette.on_surface_variant_alfa8};
   }
+
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
@@ -32,6 +33,7 @@ export const StyledCartButton = styled(Button)`
       fill: ${variables.palette.primary};
     }
   }
+
   .MuiButton-endIcon {
     position: absolute;
     right: 1.4rem;

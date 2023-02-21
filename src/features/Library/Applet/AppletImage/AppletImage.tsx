@@ -7,7 +7,7 @@ import { AppletImageProps } from './AppletImage.types';
 export const AppletImage = ({ name, image }: AppletImageProps) => (
   <StyledAppletImageContainer>
     {image ? (
-      <StyledImage src={image} />
+      <StyledImage src={image} alt={name} />
     ) : (
       <StyledCustomCover>
         <StyledTitleLarge color={variables.palette.secondary}>{name[0]}</StyledTitleLarge>

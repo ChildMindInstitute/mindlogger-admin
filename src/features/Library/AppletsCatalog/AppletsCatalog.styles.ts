@@ -27,6 +27,7 @@ export const StyledTablePagination = styled(TablePagination)`
     display: flex;
     justify-content: flex-end;
   }
+
   .MuiTablePagination-displayedRows {
     color: ${variables.palette.outline};
   }
