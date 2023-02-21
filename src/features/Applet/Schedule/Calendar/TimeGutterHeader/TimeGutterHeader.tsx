@@ -75,8 +75,8 @@ export const TimeGutterHeader = ({
   };
 
   const isBtnDisabled =
-    (isDayView && allDayEventsSortedByDays.every((el) => el.date !== currentDate)) ||
-    (isWeekView && allDayEventsSortedByDays.every((el) => el.week !== currentWeek));
+    (isDayView && !allDayEventsSortedByDays.some((el) => el.date === currentDate)) ||
+    (isWeekView && !allDayEventsSortedByDays.some((el) => el.week === currentWeek));
 
   return (
     <StyledTimeGutterHeader>

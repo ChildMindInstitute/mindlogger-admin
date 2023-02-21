@@ -14,8 +14,7 @@ export const EventWrapper = ({ event, children, components }: EventWrapperProps)
       childrenRef.current?.parentElement?.parentElement;
 
     if (parentElement) {
-      for (let i = 0; i < parentElement.children.length; i++) {
-        const child = parentElement.children[i];
+      for (const child of Array.from(parentElement.children)) {
         if (child.classList.contains('rbc-row-segment')) {
           isVisible || child.querySelector('.rbc-event')
             ? child.classList.remove('hidden')

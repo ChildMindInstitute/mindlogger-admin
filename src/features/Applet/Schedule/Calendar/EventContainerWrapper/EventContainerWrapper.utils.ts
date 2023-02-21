@@ -62,34 +62,35 @@ export const getEventClassNames = (width: number, height: number) => {
   return [widthClassName, heightClassName];
 };
 
-export const getOverlappingEvents = (eventsArr: EventStartEndDates[]): EventInterval[] =>
-  eventsArr
-    .reduce((acc: EventInterval[], event) => {
-      const currEventStart = new Date(event.start).getTime();
-      const currEventEnd = new Date(event.end).getTime();
-      let overlappingInterval = acc.find(
-        (interval) =>
-          (currEventStart >= interval.intervalStart && currEventStart <= interval.intervalEnd) ||
-          (currEventEnd >= interval.intervalStart && currEventEnd <= interval.intervalEnd) ||
-          (currEventStart <= interval.intervalStart && currEventEnd >= interval.intervalEnd),
-      );
+export const getOverlappingEvents = (eventsArr: EventStartEndDates[]): EventInterval[] => {
+  const intervals: EventInterval[] = [];
+  for (const currEvent of eventsArr) {
+    const currEventStart = new Date(currEvent.start).getTime();
+    const currEventEnd = new Date(currEvent.end).getTime();
+    let overlappingInterval: EventInterval | undefined;
 
-      if (!overlappingInterval) {
-        overlappingInterval = {
-          intervalStart: currEventStart,
-          intervalEnd: currEventEnd,
-          eventIds: [],
-        };
-        acc.push(overlappingInterval);
+    for (const interval of intervals) {
+      if (currEventStart <= interval.intervalEnd && currEventEnd >= interval.intervalStart) {
+        overlappingInterval = interval;
+        break;
       }
+    }
 
+    if (overlappingInterval) {
       overlappingInterval.intervalStart = Math.min(
         currEventStart,
         overlappingInterval.intervalStart,
       );
       overlappingInterval.intervalEnd = Math.max(currEventEnd, overlappingInterval.intervalEnd);
-      overlappingInterval.eventIds.push(event.id);
+      overlappingInterval.eventIds.push(currEvent.id);
+    } else {
+      intervals.push({
+        intervalStart: currEventStart,
+        intervalEnd: currEventEnd,
+        eventIds: [currEvent.id],
+      });
+    }
+  }
 
-      return acc;
-    }, [])
-    .filter((interval) => interval.eventIds.length > MAX_VISIBLE_EVENTS_WEEK_VIEW);
+  return intervals.filter((interval) => interval.eventIds.length > MAX_VISIBLE_EVENTS_WEEK_VIEW);
+};
