@@ -123,8 +123,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       padding: ${theme.spacing(0.2, 0.4)};
       font-size: ${variables.font.size.sm};
       font-weight: ${variables.font.weight.bold};
-      line-height: ${variables.lineHeight.sm};
-      letter-spacing: ${variables.letterSpacing.xxl};
+      line-height: ${variables.font.lineHeight.sm};
+      letter-spacing: ${variables.font.letterSpacing.xxl};
       color: ${variables.palette.on_surface_variant};
       border-radius: ${variables.borderRadius.xs};
       background-color: ${variables.palette.gray_alfa50};
