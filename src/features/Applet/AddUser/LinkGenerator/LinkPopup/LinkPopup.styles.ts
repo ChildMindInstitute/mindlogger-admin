@@ -26,6 +26,10 @@ export const StyledCloseButton = styled(StyledClearedButton)`
   right: 1.5rem;
   border-radius: ${variables.borderRadius.half};
   padding: 0.8rem;
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 `;
 
 export const StyledDialogActions = styled(DialogActions)`

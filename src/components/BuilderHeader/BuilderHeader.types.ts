@@ -1,4 +1,4 @@
 export type BuilderHeaderProps = {
   title: string;
-  buttons: { label: string; icon: JSX.Element }[];
+  buttons: { label: string; icon: JSX.Element; handleClick?: () => void }[];
 };

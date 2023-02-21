@@ -1,21 +1,38 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { BuilderItem, BuilderHeader, Svg } from 'components';
+import { page } from 'resources';
 import { StyledBuilderWrapper, StyledTitleMedium } from 'styles/styledComponents';
 import theme from 'styles/theme';
+import { useBreadcrumbs } from 'hooks';
 
 import { activityFlows, getActions } from './ActivityFlow.const';
 import { StyledAdd, StyledAddWrapper } from './ActivityFlow.styles';
 
 export const ActivityFlow = () => {
   const { t } = useTranslation('app');
+  const navigate = useNavigate();
+
+  useBreadcrumbs([
+    {
+      icon: <Svg id="flow" width="18" height="18" />,
+      label: t('activityFlow'),
+    },
+  ]);
 
   return (
     <StyledBuilderWrapper>
       <BuilderHeader
         title={t('activityFlow')}
-        buttons={[{ icon: <Svg id="flow" />, label: t('addActivityFlow') }]}
+        buttons={[
+          {
+            icon: <Svg id="flow" />,
+            label: t('addActivityFlow'),
+            handleClick: () => navigate(page.newAppletNewActivityFlow),
+          },
+        ]}
       />
       {activityFlows?.length ? (
         <>

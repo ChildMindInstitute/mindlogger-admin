@@ -6,8 +6,7 @@ import { Svg, Breadcrumbs } from 'components';
 import { useAppDispatch } from 'redux/store';
 import { account, auth } from 'redux/modules';
 import { variables } from 'styles/variables';
-import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { StyledFlexTopCenter, StyledLabelBoldMedium } from 'styles/styledComponents';
 import avatarSrc from 'assets/images/avatar.png';
 import { page } from 'resources';
 
@@ -20,7 +19,7 @@ import {
   StyledLoginButton,
 } from './TopBar.styles';
 
-export const TopBar = (): JSX.Element => {
+export const TopBar = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();

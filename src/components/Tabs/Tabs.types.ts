@@ -13,7 +13,12 @@ export enum UiType {
   Secondary = 'secondary',
 }
 
-export type TabsProps = { uiType?: UiType; tabs: Tab[]; activeTab?: number };
+export type TabsProps = {
+  uiType?: UiType;
+  tabs: Tab[];
+  activeTab?: number;
+  hideHeader?: boolean;
+};
 
 export type RenderTabs = {
   header: JSX.Element[];

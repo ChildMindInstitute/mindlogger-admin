@@ -12,8 +12,10 @@ const AddUser = lazy(() => import('features/Applet/AddUser'));
 const DashboardAppletSettings = lazy(() => import('features/Applet/DashboardAppletSettings'));
 const BuilderAppletSettings = lazy(() => import('features/Builder/BuilderAppletSettings'));
 const Activities = lazy(() => import('features/Builder/Activities'));
-const ActivityFlow = lazy(() => import('features/Builder/ActivityFlow'));
 const AboutApplet = lazy(() => import('features/Builder/AboutApplet'));
+const ActivityFlowAbout = lazy(() => import('features/Builder/ActivityFlowAbout'));
+const ActivityFlow = lazy(() => import('features/Builder/ActivityFlow'));
+const ActivityFlowBuilder = lazy(() => import('features/Builder/ActivityFlowBuilder'));
 const AppletsCatalog = lazy(() => import('features/Library/AppletsCatalog'));
 const AppletDetails = lazy(() => import('features/Library/AppletDetails'));
 const Cart = lazy(() => import('features/Library/Cart'));
@@ -61,6 +63,15 @@ export const newAppletRoutes = [
   { path: page.newAppletActivities, Component: Activities },
   { path: page.newAppletActivityFlow, Component: ActivityFlow },
   { path: page.newAppletSettings, Component: BuilderAppletSettings },
+  {
+    path: page.newAppletSettings,
+    Component: BuilderAppletSettings,
+  },
+];
+
+export const newAppletNewActivityRoutes = [
+  { path: page.newAppletNewActivityFlowAbout, Component: ActivityFlowAbout },
+  { path: page.newAppletNewActivityFlowBuilder, Component: ActivityFlowBuilder },
 ];
 
 export const libraryRoutes = [

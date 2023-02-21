@@ -9,13 +9,20 @@ import { page } from 'resources';
 import storage from 'utils/storage';
 
 import { PrivateRoute } from './PrivateRoute';
-import { appletRoutes, authRoutes, libraryRoutes, newAppletRoutes } from './routes.const';
+import {
+  appletRoutes,
+  authRoutes,
+  newAppletNewActivityRoutes,
+  newAppletRoutes,
+  libraryRoutes,
+} from './routes.const';
 
 const Lock = lazy(() => import('pages/Lock'));
 const Dashboard = lazy(() => import('pages/Dashboard'));
 const Applet = lazy(() => import('pages/Applet'));
 const Builder = lazy(() => import('pages/Builder'));
 const NewApplet = lazy(() => import('pages/NewApplet'));
+const NewActivityFlow = lazy(() => import('pages/NewActivityFlow'));
 
 export const AppRoutes = () => {
   const token = storage.getItem('accessToken');
@@ -68,6 +75,10 @@ export const AppRoutes = () => {
                 }
               />
               <Route element={<NewApplet />} path={page.newApplet}>
+                <Route
+                  path={page.newApplet}
+                  element={<Navigate to={page.newAppletAbout} replace />}
+                />
                 {newAppletRoutes.map(({ path, Component }) => (
                   <Route
                     key={path}
@@ -79,6 +90,25 @@ export const AppRoutes = () => {
                     }
                   />
                 ))}
+                <Route path={page.newAppletActivityFlow}>
+                  <Route element={<NewActivityFlow />} path={page.newAppletNewActivityFlow}>
+                    <Route
+                      path={page.newAppletNewActivityFlow}
+                      element={<Navigate to={page.newAppletNewActivityFlowAbout} replace />}
+                    />
+                    {newAppletNewActivityRoutes.map(({ path, Component }) => (
+                      <Route
+                        key={path}
+                        path={path}
+                        element={
+                          <PrivateRoute condition={isAuthorized}>
+                            {Component ? <Component /> : <></>}
+                          </PrivateRoute>
+                        }
+                      />
+                    ))}
+                  </Route>
+                </Route>
               </Route>
             </Route>
             <Route path={page.library}>

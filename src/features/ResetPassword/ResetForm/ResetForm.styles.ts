@@ -16,7 +16,7 @@ export const StyledForm = styled('form')`
 export const StyledResetPasswordSubheader = styled(Typography)`
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.sm};
   margin: ${theme.spacing(0.8, 0, 2.4)};
 `;
 
@@ -39,7 +39,7 @@ export const StyledBack = styled(StyledClearedButton)`
   text-align: center;
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.sm};
   text-decoration: underline;
 
   &.MuiButton-text:hover {

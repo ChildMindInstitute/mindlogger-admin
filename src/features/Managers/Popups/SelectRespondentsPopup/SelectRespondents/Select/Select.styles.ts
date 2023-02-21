@@ -14,7 +14,7 @@ export const StyledTextField = styled(TextField)`
     color: ${variables.palette.primary};
     font-size: ${variables.font.size.md};
     font-weight: ${variables.font.weight.regular};
-    line-height: ${variables.lineHeight.md};
+    line-height: ${variables.font.lineHeight.md};
     background-color: transparent;
     border-radius: ${variables.borderRadius.xxxl};
     padding: ${theme.spacing(0, 1.6)};
