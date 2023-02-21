@@ -104,6 +104,188 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
     }
   }
 
+  .not-hidden-event {
+    .rbc-event {
+      overflow: visible;
+    }
+
+    .more {
+      pointer-events: none;
+      z-index: ${theme.zIndex.fab};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: calc(100% + 0.2rem);
+      min-width: 100%;
+      height: 1.6rem;
+      padding: ${theme.spacing(0.2, 0.4)};
+      font-size: ${variables.font.size.sm};
+      font-weight: ${variables.font.weight.bold};
+      line-height: ${variables.lineHeight.sm};
+      letter-spacing: ${variables.letterSpacing.xxl};
+      color: ${variables.palette.on_surface_variant};
+      border-radius: ${variables.borderRadius.xs};
+      background-color: ${variables.palette.gray_alfa50};
+    }
+  }
+
+  .hidden-event {
+    display: none !important;
+  }
+
+  .rbc-events-container {
+    .event-wrapper {
+      display: none;
+    }
+
+    .rbc-event-content {
+      opacity: 0;
+      animation: fadeInFromNone 0.2s ease-out;
+    }
+
+    @keyframes fadeInFromNone {
+      0% {
+        opacity: 0;
+      }
+
+      90% {
+        opacity: 0.1;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .rbc-event {
+      .event-alert-bottom {
+        display: none;
+      }
+
+      .event-title-top {
+        display: none;
+      }
+    }
+
+    .h-sm {
+      .rbc-event {
+        .event-end-time,
+        .event-bottom-section {
+          display: none;
+        }
+      }
+    }
+
+    .w-lg,
+    .w-md,
+    .w-sm {
+      .event {
+        padding: ${theme.spacing(0.2)};
+      }
+    }
+
+    .w-lg,
+    .w-md {
+      .rbc-event {
+        .event-end-time {
+          display: none;
+        }
+      }
+
+      &:not(.h-sm) {
+        .rbc-event {
+          .event-flow-top {
+            display: none;
+          }
+        }
+      }
+
+      &.h-sm {
+        .rbc-event {
+          .event-start-time {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .w-xl {
+      &:not(.h-sm) {
+        .rbc-event {
+          .event-flow-top {
+            display: none;
+          }
+        }
+      }
+
+      &.h-sm {
+        .rbc-event {
+          .event-title-top {
+            display: block;
+          }
+
+          .event-bottom-section {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .w-lg {
+      &.h-sm {
+        .rbc-event {
+          .event-title-top {
+            display: block;
+          }
+
+          .event-bottom-section {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .w-md {
+      .rbc-event {
+        .event-title-bottom,
+        .event-end-time {
+          display: none;
+        }
+
+        .event-alert-bottom {
+          display: block;
+        }
+
+        .event-alert-top {
+          display: none;
+        }
+      }
+
+      &.h-sm {
+        .rbc-event {
+          .event-top-section {
+            display: none;
+          }
+
+          .event-bottom-section {
+            display: flex;
+          }
+        }
+      }
+    }
+
+    .w-sm {
+      .rbc-event {
+        .rbc-event-label,
+        .rbc-event-content {
+          display: none;
+        }
+      }
+    }
+  }
+
   .rbc-time-content {
     .rbc-events-container {
       margin: ${theme.spacing(0, 0.8)};
@@ -215,8 +397,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
   .rbc-row-segment {
     padding-bottom: ${theme.spacing(0.2)};
 
-    &:empty {
-      padding-bottom: 0;
+    &.hidden {
+      padding: 0;
     }
   }
 

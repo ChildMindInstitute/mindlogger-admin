@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import {
+  CalendarProps,
   Culture,
   DateLocalizer,
   DateRange,
@@ -11,7 +12,6 @@ import { format, getISOWeek } from 'date-fns';
 
 import { DateFormats } from 'consts';
 import i18n from 'i18n';
-import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 import { UiType } from './Event/Event.types';
@@ -21,7 +21,7 @@ import { Event } from './Event';
 import { MonthView } from './MonthView';
 import { YearView } from './YearView';
 import {
-  AllDayEventsSortedByDays,
+  AllDayEventsSortedByDaysItem,
   AllDayEventsVisible,
   CalendarEvent,
   CalendarViews,
@@ -36,6 +36,7 @@ import { TimeHeader, UiType as TimeHeaderUiType } from './TimeHeader';
 import { TimeGutterHeader } from './TimeGutterHeader';
 import { EventWrapper } from './EventWrapper';
 import { DateHeader } from './DateHeader';
+import { EventContainerWrapper } from './EventContainerWrapper';
 
 const { t } = i18n;
 
@@ -45,49 +46,47 @@ export const formatToYearMonthDate = (date: Date) => format(date, DateFormats.Da
 
 export const formatToWeekYear = (date: Date) => `${getISOWeek(date)} ${date.getFullYear()}`;
 
-// TODO: Reformat the logic when connecting to the API
-export const allDayEventsSortedByDays = mockedEvents
-  .reduce((acc: AllDayEventsSortedByDays, event) => {
-    const currentEventStartDate = formatToYearMonthDate(event.start);
-    const { allDayEvent, alwaysAvailable } = event;
+const notHiddenEvents = mockedEvents.filter((event) => !event.isHidden);
 
-    if (currentEventStartDate && (allDayEvent || alwaysAvailable)) {
-      if (acc.some((el) => el.date === currentEventStartDate)) {
-        acc.map((el) => {
-          if (el.date === currentEventStartDate) {
-            const ids = el.eventsIds;
-
-            return {
-              ...el,
-              eventsIds: ids.push({
-                id: event.id,
-                isHidden: ids.length > LENGTH_TO_SET_ID_IS_HIDDEN,
-              }),
-            };
-          }
-
-          return el;
-        });
-      } else {
-        acc.push({
-          date: currentEventStartDate,
-          eventsIds: [{ id: event.id, isHidden: false }],
-        });
-      }
+const allDayEventsSortedByDaysMap = notHiddenEvents.reduce(
+  (acc: Map<string, AllDayEventsSortedByDaysItem>, el) => {
+    const currentEventStartDate = formatToYearMonthDate(el.start);
+    const currentEventWeek = formatToWeekYear(el.start);
+    const eventsIds = acc.get(currentEventStartDate)?.eventsIds;
+    if (el.allDayEvent || el.alwaysAvailable) {
+      acc.set(currentEventStartDate, {
+        eventsIds:
+          eventsIds && acc.has(currentEventStartDate)
+            ? [
+                ...eventsIds,
+                {
+                  id: el.id,
+                  isHiddenInTimeView: eventsIds.length > LENGTH_TO_SET_ID_IS_HIDDEN,
+                },
+              ]
+            : [{ id: el.id, isHiddenInTimeView: false }],
+        week: currentEventWeek,
+        date: currentEventStartDate,
+      });
     }
 
     return acc;
-  }, [])
-  .filter((el) => el.eventsIds.length > LENGTH_TO_FILTER_DAYS_EVENTS);
+  },
+  new Map(),
+);
+
+export const allDayEventsSortedByDays = Array.from(allDayEventsSortedByDaysMap.values()).filter(
+  (el) => el.eventsIds.length > LENGTH_TO_FILTER_DAYS_EVENTS,
+);
 
 export const hiddenEventsIds = allDayEventsSortedByDays.reduce((acc: string[], item) => {
-  item.eventsIds.forEach((el) => el.isHidden && acc.push(el.id));
+  item.eventsIds.forEach((el) => el.isHiddenInTimeView && acc.push(el.id));
 
   return acc;
 }, []);
 
 export const getProcessedEvents = (date: Date) =>
-  mockedEvents.map((event) => ({
+  notHiddenEvents.map((event) => ({
     ...event,
     isOffRange: event.start.getMonth() !== date.getMonth(),
     isHiddenInTimeView: hiddenEventsIds.some((id) => id === event.id),
@@ -149,8 +148,6 @@ export const getCalendarComponents = (
       event: Event,
     },
     week: {
-      eventWrapper: EventWrapper,
-      event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.Secondary} />,
       header: (props: HeaderProps) => (
         <TimeHeader
           {...props}
@@ -160,10 +157,13 @@ export const getCalendarComponents = (
           uiType={TimeHeaderUiType.Week}
         />
       ),
+      eventContainerWrapper: (props: Partial<CalendarProps>) => (
+        <EventContainerWrapper {...props} events={events} />
+      ),
+      eventWrapper: EventWrapper,
+      event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.TimeView} />,
     },
     day: {
-      eventWrapper: EventWrapper,
-      event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.Secondary} />,
       header: (props: HeaderProps) => (
         <TimeHeader
           {...props}
@@ -173,6 +173,11 @@ export const getCalendarComponents = (
           uiType={TimeHeaderUiType.Day}
         />
       ),
+      eventContainerWrapper: (props: Partial<CalendarProps>) => (
+        <EventContainerWrapper {...props} events={events} />
+      ),
+      eventWrapper: EventWrapper,
+      event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.TimeView} />,
     },
     timeGutterHeader: () => (
       <TimeGutterHeader
@@ -187,6 +192,7 @@ export const getCalendarComponents = (
     setDate,
     activeView,
     setActiveView,
+    isAllDayEventsVisible,
   },
   messages: {
     showMore: (total: number) => `${total} ${getMoreText()}`,
@@ -211,21 +217,41 @@ export const getCalendarComponents = (
   },
 });
 
-export const eventPropGetter = (event: CalendarEvent, activeView: CalendarViews) => {
-  const isAllDayEvent = event.allDayEvent || event.alwaysAvailable;
-  const isDayWeekView = activeView === CalendarViews.Day || activeView === CalendarViews.Week;
-  const isScheduledDayWeekEvent = isDayWeekView && !isAllDayEvent;
+export const eventPropGetter = (
+  {
+    allDayEvent,
+    alwaysAvailable,
+    eventSpanAfter,
+    eventSpanBefore,
+    scheduledColor,
+    scheduledBackground,
+    backgroundColor,
+    isOffRange,
+  }: CalendarEvent,
+  activeView: CalendarViews,
+) => {
+  const isAllDayEvent = allDayEvent || alwaysAvailable;
+  const isTimeView = activeView === CalendarViews.Day || activeView === CalendarViews.Week;
+  const isScheduledDayWeekEvent = isTimeView && !isAllDayEvent;
+  let borderRadius = isScheduledDayWeekEvent
+    ? variables.borderRadius.md
+    : variables.borderRadius.xs;
+  if (isScheduledDayWeekEvent && eventSpanAfter) {
+    borderRadius = `${variables.borderRadius.md} ${variables.borderRadius.md} 0 0`;
+  }
+  if (isScheduledDayWeekEvent && eventSpanBefore) {
+    borderRadius = `0 0 ${variables.borderRadius.md} ${variables.borderRadius.md}`;
+  }
 
   return {
     style: {
-      padding: isScheduledDayWeekEvent ? theme.spacing(0.2, 0.8) : theme.spacing(0.2, 0.4),
-      borderRadius: isScheduledDayWeekEvent ? variables.borderRadius.md : variables.borderRadius.xs,
+      padding: 0,
+      borderRadius,
       borderWidth: `0 0 0 ${isScheduledDayWeekEvent ? variables.borderWidth.xl : 0}`,
-      borderColor: isScheduledDayWeekEvent ? event.scheduledColor : 'transparent',
-      backgroundColor:
-        (isScheduledDayWeekEvent && event.scheduledBackground) || event.backgroundColor,
-      color: event.alwaysAvailable ? variables.palette.white : variables.palette.on_surface,
-      ...(event.isOffRange && { opacity: '0.38' }),
+      borderColor: isScheduledDayWeekEvent ? scheduledColor : 'transparent',
+      backgroundColor: (isScheduledDayWeekEvent && scheduledBackground) || backgroundColor,
+      color: alwaysAvailable ? variables.palette.white : variables.palette.on_surface,
+      ...(isOffRange && { opacity: '0.38' }),
     },
   };
 };

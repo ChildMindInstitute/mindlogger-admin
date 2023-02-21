@@ -6,7 +6,12 @@ import { variables } from 'styles/variables';
 import { StyledLabelBoldMedium, StyledClearedButton } from 'styles/styledComponents';
 
 import { CalendarEvent, CalendarViews } from '../Calendar.types';
-import { formatToWeekYear, formatToYearMonthDate, hiddenEventsIds } from '../Calendar.utils';
+import {
+  allDayEventsSortedByDays,
+  formatToWeekYear,
+  formatToYearMonthDate,
+  hiddenEventsIds,
+} from '../Calendar.utils';
 import { StyledTimeGutterHeader } from './TimeGutterHeader.styles';
 import { TimeGutterHeaderProps } from './TimeGutterHeader.types';
 
@@ -69,9 +74,17 @@ export const TimeGutterHeader = ({
     });
   };
 
+  const isBtnDisabled =
+    (isDayView && allDayEventsSortedByDays.every((el) => el.date !== currentDate)) ||
+    (isWeekView && allDayEventsSortedByDays.every((el) => el.week !== currentWeek));
+
   return (
     <StyledTimeGutterHeader>
-      <StyledClearedButton sx={{ p: theme.spacing(0.2) }} onClick={handleBtnClick}>
+      <StyledClearedButton
+        sx={{ p: theme.spacing(0.2) }}
+        onClick={handleBtnClick}
+        disabled={isBtnDisabled}
+      >
         <Svg
           id={navigateIconCondition ? 'navigate-down' : 'navigate-right'}
           width="19"

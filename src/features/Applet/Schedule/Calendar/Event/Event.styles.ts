@@ -3,18 +3,24 @@ import { styled, Box } from '@mui/material';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
-import { StyledFlexTopCenter, StyledLabelBoldMedium } from 'styles/styledComponents';
+import {
+  StyledFlexTopCenter,
+  StyledFlexTopStart,
+  StyledLabelBoldMedium,
+} from 'styles/styledComponents';
 
-export const StyledEvent = styled(Box)`
+export const StyledEvent = styled(Box, shouldForwardProp)`
   width: 100%;
+  padding: ${({ isScheduledDayWeekEvent }: { isScheduledDayWeekEvent: boolean }) =>
+    isScheduledDayWeekEvent ? theme.spacing(0.2, 0.8) : theme.spacing(0.2, 0.4)};
 `;
 
-export const StyledTopWrapper = styled(StyledFlexTopCenter)`
+export const StyledWrapper = styled(StyledFlexTopCenter)`
   width: 100%;
   justify-content: space-between;
 `;
 
-export const StyledLeftSection = styled(StyledFlexTopCenter)`
+export const StyledLeftSection = styled(StyledFlexTopStart)`
   width: calc(100% - 1.5rem);
 
   > div:not(:last-child) {
@@ -53,6 +59,6 @@ export const StyledTitle = styled(StyledLabelBoldMedium, shouldForwardProp)`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: ${({ isWhite }: { isWhite: boolean }) =>
+  color: ${({ isWhite }: { isWhite?: boolean }) =>
     isWhite ? variables.palette.white : variables.palette.on_surface};
 `;
