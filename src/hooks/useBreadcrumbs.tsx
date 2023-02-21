@@ -37,6 +37,13 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         navPath: page.builder,
       });
     }
+    if (location.pathname.includes(page.library)) {
+      newBreadcrumbs.push({
+        icon: <Svg id="library" width="18" height="18" />,
+        label: t('appletLibrary'),
+        navPath: page.library,
+      });
+    }
     if (id && appletsFoldersData) {
       const { name, image } = getAppletData(appletsFoldersData, id);
       newBreadcrumbs.push({

@@ -1,22 +1,36 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-import { Breadcrumbs } from 'components/Breadcrumbs';
+import { Svg, Breadcrumbs } from 'components';
 import { useAppDispatch } from 'redux/store';
 import { account, auth } from 'redux/modules';
 import { variables } from 'styles/variables';
 import { StyledLabelBoldMedium } from 'styles/styledComponents/Typography';
 import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import avatarSrc from 'assets/images/avatar.png';
+import { page } from 'resources';
 
 import { AccountPanel } from './AccountPanel';
-import { StyledTopBar, StyledAvatarBtn, StyledImage, StyledQuantity } from './TopBar.styles';
+import {
+  StyledTopBar,
+  StyledAvatarBtn,
+  StyledImage,
+  StyledQuantity,
+  StyledLoginButton,
+} from './TopBar.styles';
 
 export const TopBar = (): JSX.Element => {
+  const navigate = useNavigate();
+  const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const authData = auth.useData();
+  const isAuthorized = auth.useAuthorized();
   const accData = account.useData();
-  const [showAccDrawer, setShowAccDrawer] = useState(false);
+  const [showAccountDrawer, setShowAccountDrawer] = useState(false);
   const [alertsQuantity, setAlertsQuantity] = useState(0);
+
+  const handleLoginClick = () => navigate(page.login);
 
   useEffect(() => {
     if (authData?.account?.accountId) {
@@ -38,22 +52,34 @@ export const TopBar = (): JSX.Element => {
         <StyledFlexTopCenter>
           <Breadcrumbs />
         </StyledFlexTopCenter>
-        <StyledAvatarBtn onClick={() => setShowAccDrawer((prevState) => !prevState)} variant="text">
-          <StyledImage src={avatarSrc} alt="Avatar" />
-          {alertsQuantity > 0 && (
-            <StyledQuantity>
-              <StyledLabelBoldMedium color={variables.palette.white}>
-                {alertsQuantity}
-              </StyledLabelBoldMedium>
-            </StyledQuantity>
-          )}
-        </StyledAvatarBtn>
+        {isAuthorized ? (
+          <StyledAvatarBtn
+            onClick={() => setShowAccountDrawer((prevState) => !prevState)}
+            variant="text"
+          >
+            <StyledImage src={avatarSrc} alt="Avatar" />
+            {alertsQuantity > 0 && (
+              <StyledQuantity>
+                <StyledLabelBoldMedium color={variables.palette.white}>
+                  {alertsQuantity}
+                </StyledLabelBoldMedium>
+              </StyledQuantity>
+            )}
+          </StyledAvatarBtn>
+        ) : (
+          <StyledLoginButton
+            startIcon={<Svg width="18" height="18" id="profile" />}
+            onClick={handleLoginClick}
+          >
+            {t('loginLink')}
+          </StyledLoginButton>
+        )}
       </StyledTopBar>
-      {showAccDrawer && (
+      {showAccountDrawer && (
         <AccountPanel
           alertsQuantity={alertsQuantity}
-          setShowDrawer={setShowAccDrawer}
-          showDrawer={showAccDrawer}
+          setShowDrawer={setShowAccountDrawer}
+          showDrawer={showAccountDrawer}
         />
       )}
     </>

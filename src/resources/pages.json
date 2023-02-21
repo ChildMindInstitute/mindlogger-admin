@@ -16,5 +16,7 @@
   "newAppletActivities": "/builder/new-applet/activities",
   "newAppletActivityFlow": "/builder/new-applet/activity-flow",
   "newAppletSettings": "/builder/new-applet/settings",
-  "library": "/library"
+  "library": "/library",
+  "libraryAppletDetails": "/library/:id",
+  "libraryCart": "/library/cart"
 }

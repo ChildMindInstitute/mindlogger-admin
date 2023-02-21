@@ -9,7 +9,7 @@ import { page } from 'resources';
 import storage from 'utils/storage';
 
 import { PrivateRoute } from './PrivateRoute';
-import { appletRoutes, authRoutes, newAppletRoutes } from './routes.const';
+import { appletRoutes, authRoutes, libraryRoutes, newAppletRoutes } from './routes.const';
 
 const Lock = lazy(() => import('pages/Lock'));
 const Dashboard = lazy(() => import('pages/Dashboard'));
@@ -80,6 +80,11 @@ export const AppRoutes = () => {
                   />
                 ))}
               </Route>
+            </Route>
+            <Route path={page.library}>
+              {libraryRoutes.map(({ path, Component }) => (
+                <Route key={path} path={path} element={<Component />} />
+              ))}
             </Route>
           </Route>
           <Route path={page.login} element={<AuthLayout />}>

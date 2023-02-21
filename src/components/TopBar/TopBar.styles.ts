@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 import { TOP_BAR_HEIGHT } from 'consts';
 import theme from 'styles/theme';
@@ -32,4 +32,10 @@ export const StyledQuantity = styled(StyledQuantityCircle)`
   right: -0.2rem;
   min-width: 1.6rem;
   padding: ${theme.spacing(0.2)};
+`;
+
+export const StyledLoginButton = styled(Button)`
+  svg {
+    fill: ${variables.palette.primary};
+  }
 `;

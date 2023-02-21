@@ -1,0 +1,25 @@
+export const mockedApplet = {
+  accountId: '616fe37386fb6903962dd656',
+  appletId: '627e2e2ae50eef1fcdb5a9a8',
+  categoryId: null,
+  description:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tincidunt enim sit amet ligula rutrum, at rhoncus nisi consectetur. Interdum et malesuada fames ac ante ipsum primis in faucibus. Suspendisse ornare nibh non justo facili',
+  id: '627e4d58e50eef1fcdb5aa17',
+  image: 'https://mindlogger-applet-contents.s3.amazonaws.com/image/rdMuLKKDGwDfCRkwENpQ59.jpeg',
+  keywords: [
+    'mix',
+    'cognitive',
+    'cumulative',
+    'subscale',
+    'threshold activity',
+    'nimh',
+    'dbt',
+    'ema',
+    'cst',
+    'flanker',
+    'a/b trails',
+  ],
+  name: 'My mixed applet',
+  subCategoryId: null,
+  version: 'v3.1.2',
+};

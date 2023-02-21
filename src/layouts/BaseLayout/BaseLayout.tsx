@@ -3,31 +3,34 @@ import { Outlet } from 'react-router-dom';
 
 import { LeftBar, TopBar, Footer } from 'components';
 import { DuplicatePopups, DeletePopup, TransferOwnershipPopup } from 'features/Applet/Popups';
-import { account, users, folders, popups } from 'redux/modules';
+import { auth, account, users, folders, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 
 export const BaseLayout = () => {
   const dispatch = useAppDispatch();
+  const isAuthorized = auth.useAuthorized();
   const accountData = account.useData();
   const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible } =
     popups.useData();
 
   useEffect(() => {
-    dispatch(users.thunk.getManagersList());
-    dispatch(users.thunk.getUsersList());
-  }, [dispatch]);
+    if (isAuthorized) {
+      dispatch(users.thunk.getManagersList());
+      dispatch(users.thunk.getUsersList());
+    }
+  }, [dispatch, isAuthorized]);
 
   useEffect(() => {
-    if (accountData?.account) {
+    if (accountData?.account && isAuthorized) {
       dispatch(folders.thunk.getAppletsForFolders({ account: accountData.account }));
     }
-  }, [dispatch, accountData?.account]);
+  }, [dispatch, accountData?.account, isAuthorized]);
 
   return (
     <StyledBaseLayout>
-      <LeftBar />
+      {isAuthorized && <LeftBar />}
       <StyledCol>
         <TopBar />
         <Outlet />

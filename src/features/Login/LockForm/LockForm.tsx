@@ -68,7 +68,6 @@ export const LockForm = () => {
         <StyledLoginSubheader>
           <Trans i18nKey="lockDescription" />
         </StyledLoginSubheader>
-
         <StyledUserInfoController>
           <StyledImageContainer>
             {/* TODO: get user image url */}
@@ -83,7 +82,6 @@ export const LockForm = () => {
             </StyledBodyMedium>
           </StyledUserInfo>
         </StyledUserInfoController>
-
         <StyledController>
           <InputController
             fullWidth
