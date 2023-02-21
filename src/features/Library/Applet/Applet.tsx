@@ -35,42 +35,44 @@ export const Applet = ({
 
   const APPLET_DETAILS = `${page.library}/${appletId}`;
 
+  const renderAppletInfoListView = () => (
+    <>
+      <StyledAppletName>
+        <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
+        {version && (
+          <>
+            <StyledTitleMedium sx={{ margin: theme.spacing(0, 0.8) }}>∙</StyledTitleMedium>
+            <StyledTitleMedium>{version}</StyledTitleMedium>
+          </>
+        )}
+      </StyledAppletName>
+      {description && (
+        <StyledBodyMedium sx={{ marginTop: theme.spacing(0.4) }}>{description}</StyledBodyMedium>
+      )}
+    </>
+  );
+
+  const renderAppletInfoDetailsView = () => (
+    <>
+      <StyledHeadlineLarge>{name}</StyledHeadlineLarge>
+      {version && <StyledLabelBoldLarge>{version}</StyledLabelBoldLarge>}
+      {description && (
+        <StyledBodyLarge
+          sx={{ marginTop: theme.spacing(1.4), color: variables.palette.on_surface_variant }}
+        >
+          {description}
+        </StyledBodyLarge>
+      )}
+    </>
+  );
+
   const renderAppletInfo = () => {
     switch (uiType) {
       case AppletUiType.List:
       case AppletUiType.Cart:
-        return (
-          <>
-            <StyledAppletName>
-              <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
-              {version && (
-                <>
-                  <StyledTitleMedium sx={{ margin: theme.spacing(0, 0.8) }}>∙</StyledTitleMedium>
-                  <StyledTitleMedium>{version}</StyledTitleMedium>
-                </>
-              )}
-            </StyledAppletName>
-            {description && (
-              <StyledBodyMedium sx={{ marginTop: theme.spacing(0.4) }}>
-                {description}
-              </StyledBodyMedium>
-            )}
-          </>
-        );
+        return renderAppletInfoListView();
       case AppletUiType.Details:
-        return (
-          <>
-            <StyledHeadlineLarge>{name}</StyledHeadlineLarge>
-            {version && <StyledLabelBoldLarge>{version}</StyledLabelBoldLarge>}
-            {description && (
-              <StyledBodyLarge
-                sx={{ marginTop: theme.spacing(1.4), color: variables.palette.on_surface_variant }}
-              >
-                {description}
-              </StyledBodyLarge>
-            )}
-          </>
-        );
+        return renderAppletInfoDetailsView();
     }
   };
 
