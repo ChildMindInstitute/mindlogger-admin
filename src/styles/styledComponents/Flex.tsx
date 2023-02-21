@@ -12,6 +12,11 @@ export const StyledFlexTopCenter = styled(Box)`
   align-items: center;
 `;
 
+export const StyledFlexTopStart = styled(Box)`
+  display: flex;
+  align-items: flex-start;
+`;
+
 export const StyledFlexWrap = styled(Box)`
   display: flex;
   flex-wrap: wrap;
