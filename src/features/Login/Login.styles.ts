@@ -28,6 +28,11 @@ export const StyledController = styled(Box)`
   margin-bottom: ${theme.spacing(2.4)};
 `;
 
+export const StyledUserInfoController = styled(StyledController)`
+  display: flex;
+  width: 100%;
+`;
+
 export const StyledButton = styled(Button)`
   width: 100%;
   margin-top: ${theme.spacing(2.4)};
@@ -39,10 +44,26 @@ export const StyledForgotPasswordLink = styled(StyledClearedButton)`
   color: ${variables.palette.primary};
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.sm};
   text-decoration: underline;
 
   &.MuiButton-text:hover {
     background-color: transparent;
   }
+`;
+
+export const StyledImageContainer = styled(Box)`
+  width: 4rem;
+  height: 4rem;
+`;
+
+export const StyledImage = styled('img')`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: ${variables.borderRadius.half};
+`;
+
+export const StyledUserInfo = styled(Box)`
+  margin-left: ${theme.spacing(1.2)};
 `;

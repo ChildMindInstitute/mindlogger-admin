@@ -24,8 +24,8 @@ export const StyledSettingsButton = styled(StyledClearedButton)`
   justify-content: space-between;
   font-size: ${variables.font.size.sm};
   font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.lineHeight.sm};
-  letter-spacing: ${variables.letterSpacing.xl};
+  line-height: ${variables.font.lineHeight.sm};
+  letter-spacing: ${variables.font.letterSpacing.xl};
   color: ${variables.palette.black};
 
   .MuiTouchRipple-root {

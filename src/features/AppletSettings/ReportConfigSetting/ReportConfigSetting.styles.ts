@@ -1,16 +1,18 @@
-import { Box } from '@mui/material';
 import styled from '@emotion/styled/macro';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledFlexAllCenter, StyledClearedButton } from 'styles/styledComponents';
+import {
+  StyledFlexAllCenter,
+  StyledClearedButton,
+  StyledFlexColumn,
+} from 'styles/styledComponents';
+
 export const StyledForm = styled('form')`
   margin: ${theme.spacing(0, 6.4, 6.4, 0)};
 `;
 
-export const StyledContainer = styled(Box)`
-  display: flex;
-  flex-direction: column;
+export const StyledContainer = styled(StyledFlexColumn)`
   width: 54.6rem;
 `;
 

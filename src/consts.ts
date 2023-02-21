@@ -4,6 +4,9 @@ export const FOOTER_HEIGHT = '4.8rem';
 export const SEARCH_HEIGHT = '4rem';
 export const LEFT_BAR_WIDTH = '8rem';
 
+export const MAX_NAME_LENGTH = 55;
+export const MAX_DESCRIPTION_LENGTH = 150;
+
 export const APPLET_PAGES = {
   respondents: 'respondents',
   managers: 'managers',

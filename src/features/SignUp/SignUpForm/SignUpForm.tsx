@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'components/FormComponents';
-import { StyledErrorText } from 'styles/styledComponents/ErrorText';
+import { StyledErrorText } from 'styles/styledComponents';
 import { getErrorMessage } from 'utils/errors';
 
 import {

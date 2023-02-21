@@ -3,6 +3,8 @@
   "fr": "Français",
   "login": "Connexion",
   "welcome": "Bienvenue sur le panneau d'administration de MindLogger",
+  "mindLoggerAdminPanel": "Panneau d'administration MindLogger",
+  "lockDescription": "<0>Vous avez été inactif pendant 15 minutes.</0><1>Connectez-vous pour continuer.</1>",
   "logIntoAccount": "Connectez-vous à votre compte MindLogger",
   "email": "E-mail",
   "emailRequired": "L'e-mail est requis",

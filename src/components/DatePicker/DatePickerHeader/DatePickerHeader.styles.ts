@@ -41,7 +41,7 @@ export const StyledSelect = styled(Box)`
 
   .MuiTypography-root {
     font-size: ${variables.font.size.lg};
-    line-height: ${variables.lineHeight.lg};
+    line-height: ${variables.font.lineHeight.lg};
     font-weight: ${variables.font.weight.regular};
   }
 

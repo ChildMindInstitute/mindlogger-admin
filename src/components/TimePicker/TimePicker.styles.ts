@@ -17,7 +17,7 @@ export const StyledTimePickerWrapper = styled(Box)`
   }
 
   .react-datepicker-popper {
-    z-index: 3;
+    z-index: ${theme.zIndex.appBar};
     width: 100%;
   }
 
@@ -61,7 +61,7 @@ export const StyledTimePickerWrapper = styled(Box)`
             padding: ${theme.spacing(1, 1.6)};
             font-weight: ${variables.font.weight.regular};
             font-size: ${variables.font.size.lg};
-            line-height: ${variables.lineHeight.lg};
+            line-height: ${variables.font.lineHeight.lg};
             color: ${variables.palette.on_surface};
             border-radius: ${variables.borderRadius.xs};
 

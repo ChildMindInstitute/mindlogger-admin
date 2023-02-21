@@ -22,6 +22,6 @@ export const StyledController = styled(Box)`
 
 export const StyledHint = styled(StyledBodyMedium, shouldForwardProp)`
   padding: ${theme.spacing(0.4, 1.6)};
-  line-height: ${variables.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.sm};
   color: ${({ isError }: { isError?: boolean }) => isError && variables.palette.semantic.error};
 `;

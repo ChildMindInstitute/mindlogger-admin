@@ -11,7 +11,7 @@ export const StyledDrawer = styled(Box)`
   background-color: ${variables.palette.surface1};
   padding: ${theme.spacing(0, 0.9)};
   border-right: none;
-  min-width: ${LEFT_BAR_WIDTH};
+  width: ${LEFT_BAR_WIDTH};
 `;
 
 export const StyledDrawerItem = styled(ListItem)`
@@ -43,7 +43,7 @@ export const StyledDrawerItem = styled(ListItem)`
   .active-link {
     svg {
       position: relative;
-      z-index: 2;
+      z-index: ${theme.zIndex.fab};
     }
   }
 
