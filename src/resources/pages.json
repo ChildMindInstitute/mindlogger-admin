@@ -19,5 +19,7 @@
   "newAppletNewActivityFlowAbout": "/builder/new-applet/activity-flow/new-activity-flow/about",
   "newAppletNewActivityFlowBuilder": "/builder/new-applet/activity-flow/new-activity-flow/builder",
   "newAppletSettings": "/builder/new-applet/settings",
-  "library": "/library"
+  "library": "/library",
+  "libraryAppletDetails": "/library/:id",
+  "libraryCart": "/library/cart"
 }

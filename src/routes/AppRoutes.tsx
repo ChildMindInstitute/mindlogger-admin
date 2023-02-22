@@ -14,6 +14,7 @@ import {
   authRoutes,
   newAppletNewActivityRoutes,
   newAppletRoutes,
+  libraryRoutes,
 } from './routes.const';
 
 const Lock = lazy(() => import('pages/Lock'));
@@ -109,6 +110,11 @@ export const AppRoutes = () => {
                   </Route>
                 </Route>
               </Route>
+            </Route>
+            <Route path={page.library}>
+              {libraryRoutes.map(({ path, Component }) => (
+                <Route key={path} path={path} element={<Component />} />
+              ))}
             </Route>
           </Route>
           <Route path={page.login} element={<AuthLayout />}>

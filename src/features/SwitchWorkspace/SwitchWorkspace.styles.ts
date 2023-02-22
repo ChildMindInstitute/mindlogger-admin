@@ -30,6 +30,8 @@ export const StyledCloseWrapper = styled(Box)`
 `;
 
 export const StyledDivider = styled('hr')`
-  border: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
+  background-color: ${variables.palette.outline_variant};
+  height: 0.1rem;
+  border: 0;
   margin: ${theme.spacing(1.2, 1.6)};
 `;
