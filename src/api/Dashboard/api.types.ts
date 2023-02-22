@@ -21,6 +21,17 @@ export type SignInRefreshTokenArgs = {
 
 export type ResetPassword = { email: string };
 
+export type GetAppletsParams = {
+  params: {
+    owner_id: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+    ordering?: string;
+    roles?: string;
+  };
+};
+
 export type SwitchAccount = { accountId: string };
 
 export type AppletId = { appletId: string };
@@ -97,88 +108,18 @@ export type Event = {
   };
 };
 
-export type SetScheduleData = {
-  id: string;
-  data: {
-    around: number;
-    id: string;
-    eventsOutside: boolean;
-    fill: boolean;
-    listTimes: boolean;
-    minimumSize: number;
-    repeatCovers: boolean;
-    size: number;
-    type: number;
-    updateColumns: boolean;
-    updateRows: boolean;
-    events?: Event[];
-  };
-};
-
-export type GetScheduleData = { id: string };
-
 export type TransferOwnership = AppletId & { email: string };
 
 export type SetAccount = { accountName: string };
-
-export type GetActivityByUrl = { url: string };
-
-export type GetUserResponses = AppletId & {
-  users: string[];
-  fromDate: string;
-  toDate: string;
-};
-
-export type AddNewApplet = {
-  protocolUrl: string;
-  email: string;
-  data: string;
-};
 
 export type RevokeAppletUser = AppletId & {
   profileId: string;
   deleteResponse: boolean;
 };
 
-export type UpdateActivityVis = {
-  id: string;
-  status: boolean;
-  activityFlowIds: string[];
-  activityIds: string[];
-};
-
 export type GetUsersData = AppletId & {
   pageIndex?: string;
   users?: string;
-};
-
-export type GetUserList = AppletId & { reviewerId: string };
-
-export type UpdateUserRole = AppletId & UserId & { roleInfo: Record<string, number> };
-
-export type DeleteUserFromRole = { groupId: string; userId: string };
-
-export type CreateApplet = {
-  email: string;
-  data: string;
-  themeId: string;
-};
-
-export type GetApplet = {
-  retrieveSchedule: boolean;
-  allEvent: boolean;
-  id: string;
-  nextActivity?: boolean;
-};
-
-export type UpdateApplet = AppletId & {
-  data: string;
-  themeId: string;
-};
-
-export type PrepareApplet = AppletId & {
-  data: string;
-  thread: boolean;
 };
 
 export type AppletInvitationData = AppletId & {
@@ -194,8 +135,6 @@ export type AppletInvitationData = AppletId & {
   };
 };
 
-export type UpdateItemTemplates = { data: string };
-
 export type DuplicateApplet = AppletId & {
   options: {
     name: string;
@@ -203,16 +142,9 @@ export type DuplicateApplet = AppletId & {
   data: FormData;
 };
 
-export type ReplaceResponseData = AppletId & {
-  user: string;
-  data: string;
-};
-
 export type AppletNameArgs = AppletId & { appletName: string };
 
 export type AppletEncryption = AppletId & { data: FormData };
-
-export type ProtocolData = AppletId & { versions: string[] };
 
 export type ValidateAppletName = { name: string };
 
@@ -221,14 +153,6 @@ export type UpdateRetainingSettings = AppletId & {
     id: string;
     period: string;
     retention: string;
-  };
-};
-
-export type UpdateProfile = AppletId & {
-  options: {
-    MRN: string;
-    nickName: string;
-    userId: string;
   };
 };
 
@@ -254,60 +178,4 @@ export type PublishApplet = AppletId & { publish?: boolean };
 
 export type UpdateAppletSearchTerms = AppletId & { params: { keywords: string } };
 
-export type Notes = AppletId & { responseId: string };
-
-export type AddNote = Notes & { note: string };
-
-export type DownloadGcpFile = AppletId & { bucket: string; key: string; isAzure: boolean };
-
-export type UpdateNote = AppletId & { noteId: string; note: string };
-
-export type DeleteNote = AppletId & { noteId: string };
-
 export type PostAppletPublicLink = AppletId & { requireLogin: boolean };
-
-export type DownloadReviews = AppletId & { responseId: string };
-
-export type ResponseData = {
-  activity: {
-    id: string;
-    schema: string;
-    schemaVersion: string;
-  };
-  applet: {
-    id: string;
-    schemaVersion: string;
-  };
-  subject: string;
-  responseStarted: string;
-  responseCompleted: number;
-  client: {
-    appId: string;
-  };
-  languageCode: string;
-  reviewing: {
-    responseId: string;
-  };
-};
-
-export type PostReviewerResponse = {
-  response: ResponseData & {
-    responses: Record<string, number>;
-    dataSource: {
-      text: string;
-      key: string;
-    };
-    userPublicKey: string;
-  };
-};
-
-export type SetPdfPassword = {
-  url: string;
-  token: string;
-  password: string;
-  serverAppletId: string;
-  accountId: string;
-  appletId: string;
-};
-
-export type SetWelcomeStatus = AppletId & { status: boolean };

@@ -78,9 +78,9 @@ export const Applets = () => {
     </Box>
   );
 
-  const emptyComponent = !flattenItems.length
-    ? t('noApplets')
-    : t('noMatchWasFound', { searchValue });
+  const emptyComponent = flattenItems.length
+    ? t('noMatchWasFound', { searchValue })
+    : t('noApplets');
 
   return (
     <>
