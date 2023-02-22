@@ -1,8 +1,9 @@
 import { ServerUrlOption } from './api.types';
 
+// TODO: Move to .env
 const PROD_SERVER = 'https://api-dev.cmiml.net';
 const STAGING_SERVER = 'https://api-dev.cmiml.net';
-const DEV_SERVER = 'https://api-dev.mindlogger.org/api/v1';
+const DEV_SERVER = 'https://api-dev.cmiml.net';
 
 export const BASE_API_URL = process.env.NODE_ENV === 'production' ? PROD_SERVER : STAGING_SERVER;
 

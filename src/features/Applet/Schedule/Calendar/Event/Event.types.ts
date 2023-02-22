@@ -1,8 +1,8 @@
 import { CalendarEvent } from '../Calendar.types';
 
 export enum UiType {
-  Primary = 'primary',
-  Secondary = 'secondary',
+  MonthView = 'monthView',
+  TimeView = 'timeView',
 }
 
 export type EventProps = { title: string; event: CalendarEvent; uiType?: UiType };

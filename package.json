@@ -27,6 +27,7 @@
     "lodash.uniqueid": "^4.0.1",
     "react": "^18.2.0",
     "react-big-calendar": "^1.5.2",
+    "react-cropper": "^2.1.8",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.38.0",

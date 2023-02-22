@@ -42,6 +42,7 @@ export const TransferOwnershipPopup = () => {
       onSubmit={handleSubmit}
       title={t('transferOwnership')}
       buttonText={t('confirm')}
+      width="60"
     >
       <StyledModalWrapper>
         <TransferOwnership

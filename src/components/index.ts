@@ -4,6 +4,7 @@ export * from './BuilderHeader';
 export * from './ButtonWithMenu';
 export * from './Breadcrumbs';
 export * from './Chip';
+export * from './CropPopup';
 export * from './DatePicker';
 export * from './Footer';
 export * from './Svg';

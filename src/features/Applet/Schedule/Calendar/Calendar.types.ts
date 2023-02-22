@@ -16,6 +16,8 @@ export type CalendarEvent = {
   startFlowIcon?: boolean;
   endAlertIcon?: boolean;
   isOffRange?: boolean;
+  eventSpanBefore?: boolean;
+  eventSpanAfter?: boolean;
 };
 
 export type OnViewFunc = (view: View) => void;
@@ -32,10 +34,11 @@ export type AllDayEventsVisible = {
   visible: boolean;
 } | null;
 
-export type AllDayEventsSortedByDays = {
+export type AllDayEventsSortedByDaysItem = {
   date: string;
-  eventsIds: { id: string; isHidden: boolean }[];
-}[];
+  week: string;
+  eventsIds: { id: string; isHiddenInTimeView: boolean }[];
+};
 
 export enum NameLength {
   Long = 'long',
