@@ -16,3 +16,8 @@ export const StyledFlexWrap = styled(Box)`
   display: flex;
   flex-wrap: wrap;
 `;
+
+export const StyledFlexColumn = styled(Box)`
+  display: flex;
+  flex-direction: column;
+`;

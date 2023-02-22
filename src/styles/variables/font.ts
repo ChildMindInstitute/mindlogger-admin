@@ -12,4 +12,20 @@ export const font = {
     bold: 700,
     regular: 400,
   },
+  lineHeight: {
+    xxxl: '4rem', //40px
+    xxl: '3.2rem', //32px
+    xl: '2.8rem', //28px
+    lg: '2.4rem', //24px
+    md: '2rem', //20px
+    sm: '1.6rem', //16px
+    xs: '1.4rem', //14px
+  },
+  letterSpacing: {
+    xxl: '0.05rem', //0.5px
+    xl: '0.04rem', //0.4px
+    lg: '0.025rem', //0.25px
+    md: '0.015rem', //0.15px
+    sm: '0.01rem', //0.1px
+  },
 };

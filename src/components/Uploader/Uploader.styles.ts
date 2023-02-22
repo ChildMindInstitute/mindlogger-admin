@@ -1,7 +1,8 @@
-import { Box, ButtonGroup, FormControlLabel, TextField } from '@mui/material';
+import { Box, ButtonGroup } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { StyledFlexAllCenter } from 'styles/styledComponents';
+import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
@@ -12,18 +13,9 @@ const absolutePosition = `
   transform: translate(-50%, -50%);
 `;
 
-export const StyledTextField = styled(TextField)`
-  display: none;
-`;
-
-export const StyledLabel = styled(FormControlLabel)`
-  &.MuiFormControlLabel-root {
-    margin: 0;
-  }
-`;
-
 export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
   border-radius: ${variables.borderRadius.lg2};
+  cursor: pointer;
 
   ${({
     height,
@@ -36,9 +28,9 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
   }) => `
     height: ${height}rem;
     width: ${width}rem;
-    border: ${variables.borderWidth.lg} ${isImgUploaded ? 'solid' : 'dashed'} ${
-    variables.palette.outline_variant
-  };
+    border: ${isImgUploaded ? variables.borderWidth.md : variables.borderWidth.lg} ${
+    isImgUploaded ? 'solid' : 'dashed'
+  } ${variables.palette.outline_variant};
 `}
 `;
 
@@ -70,6 +62,10 @@ export const StyledButtonGroup = styled(ButtonGroup)`
     &:not(:last-of-type):hover {
       border-right-color: transparent;
     }
+
+    .MuiButton-startIcon {
+      margin-right: 0;
+    }
   }
 
   .MuiButton-root.MuiButton-outlined {
@@ -87,11 +83,31 @@ export const StyledButtonGroup = styled(ButtonGroup)`
 `;
 
 export const StyledUploadImg = styled('img', shouldForwardProp)`
-  ${({ width, height, isMouseOver }: { width: number; height: number; isMouseOver: boolean }) => `
-    width: ${width - 0.4}rem;
-    height: ${height - 0.4}rem;
-    filter: ${isMouseOver ? 'blur(0.5rem)' : 'none'};
+  ${({ width, height }: { width: number; height: number }) => `
+    width: ${width - 0.2}rem;
+    height: ${height - 0.2}rem;
   `}
   border-radius: ${variables.borderRadius.lg2};
   ${absolutePosition}
+`;
+
+export const StyledName = styled(Box)`
+  color: ${variables.palette.primary};
+  font-weight: ${variables.font.weight.bold};
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 17rem;
+`;
+
+export const StyledNameWrapper = styled(Box)`
+  font-size: ${variables.font.size.md};
+  line-height: ${variables.font.lineHeight.md};
+  color: ${variables.palette.on_surface_variant};
+  margin-top: ${theme.spacing(1.6)};
+  display: flex;
+
+  svg {
+    fill: ${variables.palette.primary};
+  }
 `;

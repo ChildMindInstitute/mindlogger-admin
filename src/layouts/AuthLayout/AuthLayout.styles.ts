@@ -3,13 +3,11 @@ import { Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledFlexAllCenter } from 'styles/styledComponents';
+import { StyledFlexAllCenter, StyledFlexColumn } from 'styles/styledComponents';
 
-export const StyledAuthLayout = styled(Box)`
+export const StyledAuthLayout = styled(StyledFlexColumn)`
   height: 100vh;
   margin: 0;
-  display: flex;
-  flex-direction: column;
   overflow: auto;
 `;
 
@@ -18,7 +16,7 @@ export const StyledHeader = styled(StyledFlexAllCenter)`
   top: 0;
   background-color: ${variables.palette.primary};
   padding: ${theme.spacing(1, 2.4)};
-  z-index: 2;
+  z-index: ${theme.zIndex.fab};
 `;
 
 export const StyledOutlet = styled(Box)`

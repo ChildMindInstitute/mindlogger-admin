@@ -5,29 +5,21 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxController, InputController } from 'components/FormComponents';
 import {
   StyledFlexTopCenter,
-  StyledBodyMedium,
   StyledHeadlineLarge,
   StyledBuilderWrapper,
   StyledBodyLarge,
   StyledTitleMedium,
 } from 'styles/styledComponents';
 import { useBreadcrumbs } from 'hooks';
-import { Svg, Tooltip, Uploader } from 'components';
+import { Svg, Tooltip, Uploader, BuilderUploads } from 'components';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'consts';
 
-import {
-  StyledForm,
-  StyledContainer,
-  StyledUploadImg,
-  StyledUploadImgs,
-  StyledSvg,
-  StyledTitle,
-  StyledSettings,
-} from './ActivityAbout.styles';
+import { StyledForm, StyledContainer, StyledSvg, StyledSettings } from './ActivityAbout.styles';
 import { defaultValues } from './ActivityAbout.const';
 import { ActivityAboutSchema } from './ActivityAbout.schema';
+import { FormValues } from './ActivityAbout.types';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
@@ -40,7 +32,7 @@ export const ActivityAbout = () => {
     },
   ]);
 
-  const { control } = useForm({
+  const { control, setValue, watch } = useForm<FormValues>({
     resolver: yupResolver(ActivityAboutSchema()),
     defaultValues,
     mode: 'onChange',
@@ -49,7 +41,75 @@ export const ActivityAbout = () => {
   const commonProps = {
     control,
     fullWidth: true,
+    sx: { marginBottom: theme.spacing(4.4) },
   };
+
+  const commonUploaderProps = {
+    width: 20,
+    height: 20,
+  };
+
+  const uploads = [
+    {
+      title: t('activityImg'),
+      tooltipTitle: mockedTooltipText,
+      upload: (
+        <Uploader
+          {...commonUploaderProps}
+          setValue={(val: string) => setValue('activityImg', val)}
+          getValue={() => watch('activityImg')}
+        />
+      ),
+    },
+    {
+      title: t('activityWatermark'),
+      tooltipTitle: mockedTooltipText,
+      upload: (
+        <Uploader
+          {...commonUploaderProps}
+          setValue={(val: string) => setValue('activityWatermark', val)}
+          getValue={() => watch('activityWatermark')}
+        />
+      ),
+    },
+  ];
+
+  const checkboxes = [
+    {
+      name: 'showAllQuestionsAtOnce',
+      label: (
+        <StyledBodyLarge sx={{ position: 'relative' }}>
+          {t('showAllQuestionsAtOnce')}
+          <Tooltip tooltipTitle={t('webAppOnlyFeature')}>
+            <span>
+              <StyledSvg id="more-info-outlined" />
+            </span>
+          </Tooltip>
+        </StyledBodyLarge>
+      ),
+    },
+    {
+      name: 'allowToSkipAllItems',
+      label: <StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>,
+    },
+    {
+      name: 'disableAbilityToChangeResponse',
+      label: <StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>,
+    },
+    {
+      name: 'onlyAdminPanelActivity',
+      label: (
+        <StyledBodyLarge>
+          {t('onlyAdminPanelActivity')}
+          <Tooltip tooltipTitle={t('webAppOnlyFeatureTooltip')}>
+            <span>
+              <StyledSvg id="more-info-outlined" />
+            </span>
+          </Tooltip>
+        </StyledBodyLarge>
+      ),
+    },
+  ];
 
   return (
     <StyledBuilderWrapper>
@@ -62,97 +122,30 @@ export const ActivityAbout = () => {
               name="activityName"
               maxLength={MAX_NAME_LENGTH}
               label={t('activityName')}
-              sx={{ marginBottom: theme.spacing(4.4) }}
             />
             <InputController
               {...commonProps}
               name="activityDescription"
               maxLength={MAX_DESCRIPTION_LENGTH_LONG}
               label={t('activityDescription')}
-              sx={{ marginBottom: theme.spacing(4.4) }}
               multiline
               rows={3}
             />
           </StyledContainer>
-          <StyledUploadImgs>
-            <StyledUploadImg>
-              <StyledTitle>
-                {t('activityImg')}
-                <Tooltip tooltipTitle={mockedTooltipText}>
-                  <span>
-                    <StyledSvg id="more-info-outlined" />
-                  </span>
-                </Tooltip>
-              </StyledTitle>
-              <Uploader width={20} height={20} />
-              <StyledBodyMedium
-                color={variables.palette.on_surface_variant}
-                sx={{ marginTop: theme.spacing(1.6) }}
-              >
-                {t('uploadImg')}
-              </StyledBodyMedium>
-            </StyledUploadImg>
-            <StyledUploadImg>
-              <StyledTitle>
-                {t('activityWatermark')}
-                <Tooltip tooltipTitle={mockedTooltipText}>
-                  <span>
-                    <StyledSvg id="more-info-outlined" />
-                  </span>
-                </Tooltip>
-              </StyledTitle>
-              <Uploader width={20} height={20} />
-              <StyledBodyMedium
-                color={variables.palette.on_surface_variant}
-                sx={{ marginTop: theme.spacing(1.6) }}
-              >
-                {t('uploadImg')}
-              </StyledBodyMedium>
-            </StyledUploadImg>
-          </StyledUploadImgs>
+          <BuilderUploads uploads={uploads} />
         </StyledFlexTopCenter>
         <StyledTitleMedium color={variables.palette.on_surface_variant}>
           {t('itemLevelSettings')}
         </StyledTitleMedium>
         <StyledSettings>
-          <CheckboxController
-            control={control}
-            name="showAllQuestionsAtOnce"
-            label={
-              <StyledBodyLarge sx={{ position: 'relative' }}>
-                {t('showAllQuestionsAtOnce')}
-                <Tooltip tooltipTitle={t('webAppOnlyFeature')}>
-                  <span>
-                    <StyledSvg id="more-info-outlined" />
-                  </span>
-                </Tooltip>
-              </StyledBodyLarge>
-            }
-          />
-          <CheckboxController
-            control={control}
-            name="allowToSkipAllItems"
-            label={<StyledBodyLarge>{t('allowToSkipAllItems')}</StyledBodyLarge>}
-          />
-          <CheckboxController
-            control={control}
-            name="disableAbilityToChangeResponse"
-            label={<StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>}
-          />
-          <CheckboxController
-            control={control}
-            name="onlyAdminPanelActivity"
-            label={
-              <StyledBodyLarge>
-                {t('onlyAdminPanelActivity')}
-                <Tooltip tooltipTitle={t('webAppOnlyFeatureTooltip')}>
-                  <span>
-                    <StyledSvg id="more-info-outlined" />
-                  </span>
-                </Tooltip>
-              </StyledBodyLarge>
-            }
-          />
+          {checkboxes.map(({ name, label }) => (
+            <CheckboxController
+              key={name}
+              control={control}
+              name={name as keyof FormValues}
+              label={label}
+            />
+          ))}
         </StyledSettings>
       </StyledForm>
     </StyledBuilderWrapper>

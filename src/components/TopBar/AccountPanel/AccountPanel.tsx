@@ -6,13 +6,13 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'redux/modules';
 import avatarSrc from 'assets/images/avatar.png';
 import { variables } from 'styles/variables';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import {
   StyledLabelBoldSmall,
   StyledLabelSmall,
   StyledTitleSmall,
-} from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+  StyledFlexTopCenter,
+  StyledClearedButton,
+} from 'styles/styledComponents';
 
 import { Notifications } from '../Notifications';
 import {
@@ -28,11 +28,7 @@ import {
 } from './AccountPanel.styles';
 import { AccountPanelProps } from './AccountPanel.types';
 
-export const AccountPanel = ({
-  alertsQuantity,
-  setShowDrawer,
-  showDrawer,
-}: AccountPanelProps): JSX.Element => {
+export const AccountPanel = ({ alertsQuantity, setShowDrawer, showDrawer }: AccountPanelProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const authData = auth.useData();

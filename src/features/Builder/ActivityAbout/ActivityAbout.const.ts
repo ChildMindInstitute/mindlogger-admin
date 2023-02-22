@@ -5,4 +5,6 @@ export const defaultValues = {
   allowToSkipAllItems: false,
   disableAbilityToChangeResponse: false,
   onlyAdminPanelActivity: false,
+  activityImg: '',
+  activityWatermark: '',
 };

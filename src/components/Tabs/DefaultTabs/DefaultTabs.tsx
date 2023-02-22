@@ -6,11 +6,7 @@ import { TabPanel } from '../TabPanel';
 import { StyledTabs } from '../Tabs.styles';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
-export const DefaultTabs = ({
-  tabs,
-  activeTab,
-  uiType = UiType.Primary,
-}: TabsProps): JSX.Element => {
+export const DefaultTabs = ({ tabs, activeTab, uiType = UiType.Primary }: TabsProps) => {
   const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(0);
 

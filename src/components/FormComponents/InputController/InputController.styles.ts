@@ -1,6 +1,6 @@
 import { styled, Box, TextField } from '@mui/material';
 
-import { StyledBodyMedium } from 'styles/styledComponents';
+import { StyledBodyMedium, StyledFlexColumn } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
@@ -28,9 +28,7 @@ export const StyledCounter = styled(StyledBodyMedium)`
   color: ${variables.palette.on_surface_variant};
 `;
 
-export const StyledUpDown = styled(Box)`
-  display: flex;
-  flex-direction: column;
+export const StyledUpDown = styled(StyledFlexColumn)`
   margin-left: ${theme.spacing(1.5)};
 
   svg {

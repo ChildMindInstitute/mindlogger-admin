@@ -5,6 +5,8 @@ export const defaultValues = {
   description: '',
   colorTheme: 'default',
   aboutApplet: '',
+  appletImage: '',
+  appletWatermark: '',
 };
 
 export const colorThemeOptions = [
@@ -14,10 +16,3 @@ export const colorThemeOptions = [
     icon: <Svg id="circle-primary" />,
   },
 ];
-
-export type FormValues = {
-  name: string;
-  description: string;
-  colorTheme: string;
-  aboutApplet: string;
-};
