@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
-import { auth, FolderApplet, folders } from 'redux/modules';
+import { applets, auth, FolderApplet, folders } from 'redux/modules';
 import { ButtonWithMenu, Search, Svg } from 'components';
+import { getErrorMessage } from 'utils/errors';
+import { getAppletsApiTest } from 'api';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
@@ -26,6 +28,22 @@ export const Applets = () => {
   useEffect(() => {
     setFlattenItems(foldersApplets);
   }, [foldersApplets]);
+
+  useEffect(() => {
+    // (async () => {
+    //   await getAppletsApiTest();
+    // })();
+    const { getApplets } = applets.thunk;
+    // eslint-disable-next-line camelcase
+    dispatch(getApplets({ params: { owner_id: '6' } }));
+    // dispatch(getApplets());
+
+    // if (getInvitations.fulfilled.match(result)) {
+    // }
+    // if (signIn.rejected.match(result)) {
+    //   setErrorMessage(getErrorMessage(result.payload));
+    // }
+  }, [dispatch]);
 
   const addFolder = () => {
     const newFolderName = generateNewFolderName(foldersApplets, t);

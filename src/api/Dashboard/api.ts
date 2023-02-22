@@ -82,6 +82,11 @@ export const getAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal
     signal,
   });
 
+export const getAppletsApiTest = (signal?: AbortSignal) =>
+  authApiClient.get('/applets', {
+    signal,
+  });
+
 export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
   authApiClient.put(
     '/user/switchAccount',
