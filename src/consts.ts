@@ -24,6 +24,7 @@ export enum DateFormats {
   DayFullMonth = 'dd MMMM',
   DayFullMonthYear = 'dd MMMM yyy',
   Time = 'HH:mm',
+  TimeSeconds = 'HH:mm:ss',
   YearMonthDayHoursMinutesSeconds = 'yyyy-MM-dd HH:mm:ss',
 }
 

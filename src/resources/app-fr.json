@@ -2,6 +2,7 @@
   "en": "Anglais",
   "fr": "Français",
   "login": "Connexion",
+  "loginLink": "Connexion",
   "welcome": "Bienvenue sur le panneau d'administration de MindLogger",
   "mindLoggerAdminPanel": "Panneau d'administration MindLogger",
   "lockDescription": "<0>Vous avez été inactif pendant 15 minutes.</0><1>Connectez-vous pour continuer.</1>",
@@ -117,7 +118,7 @@
   "deleteApplet": "Supprimer l'applet",
   "transferOwnership": "Transférer la propriété",
   "shareWithTheLibrary": "Partager avec la bibliothèque",
-  "incorrectAppletPassword": "Mot de passe de l'applet incorrect",
+  "incorrectAppletPassword": "Mot de passe incorrect",
   "noAlerts": "Pas d'alertes",
   "confirmDeleteApplet": "Êtes-vous sûr de vouloir supprimer cette Applet ? Vous ne pourrez pas le restaurer.",
   "dismiss": "Rejeter",
@@ -298,5 +299,15 @@
   "today": "Aujourd'hui",
   "myWorkspace": "Mon espace de travail",
   "sharedWorkspaces": "Espaces de travail partagés",
-  "noSharedWorkspaces": "Aucun espace de travail partagé"
+  "noSharedWorkspaces": "Aucun espace de travail partagé",
+  "appletLibrary": "Applet library",
+  "search": "Search",
+  "appletsCatalog": "Applets Catalog",
+  "addToBuilder": "Ajouter au constructeur",
+  "applet_one": "Applet",
+  "applet_other": "Applets",
+  "viewDetails": "Afficher les détails",
+  "addToCart": "Ajouter au panier",
+  "cart": "Chariot",
+  "appletActivities": "Activités d'applet"
 }

@@ -49,6 +49,8 @@ export const palette = {
   orange_alfa30: 'rgba(217, 115, 13, 0.3)',
   red: '#e14646',
   red_alfa30: 'rgba(225, 70, 70, 0.3)',
+  gray: '#8F8E8A',
+  gray_alfa50: 'rgba(143, 142, 138, 0.5)',
 
   semantic: {
     error: '#ba1a1a',

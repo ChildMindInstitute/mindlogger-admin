@@ -25,7 +25,7 @@ describe('Login component tests', () => {
 
     submitForm('test@gmail.com', '   password');
     await waitFor(() =>
-      expect(screen.getByText('Password should not contain blank spaces')).toBeInTheDocument(),
+      expect(screen.getByText('Password must not contain spaces.')).toBeInTheDocument(),
     );
 
     submitForm('', '');
