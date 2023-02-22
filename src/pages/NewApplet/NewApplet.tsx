@@ -3,15 +3,14 @@ import { useLocation } from 'react-router-dom';
 
 import { LinkedTabs, Svg } from 'components';
 import { useBreadcrumbs } from 'hooks';
-import { page } from 'resources';
 import { StyledBody } from 'styles/styledComponents';
 
-import { newAppletTabs } from './NewApplet.const';
+import { newAppletTabs, pathsWithInnerTabs } from './NewApplet.const';
 
 export const NewApplet = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const hideHeader = location.pathname.includes(page.newAppletNewActivityFlow);
+  const hideHeader = pathsWithInnerTabs.some((path) => location.pathname.includes(path));
 
   useBreadcrumbs([
     {

@@ -12,6 +12,7 @@ import { PrivateRoute } from './PrivateRoute';
 import {
   appletRoutes,
   authRoutes,
+  newAppletNewActivityFlowRoutes,
   newAppletNewActivityRoutes,
   newAppletRoutes,
   libraryRoutes,
@@ -23,6 +24,7 @@ const Applet = lazy(() => import('pages/Applet'));
 const Builder = lazy(() => import('pages/Builder'));
 const NewApplet = lazy(() => import('pages/NewApplet'));
 const NewActivityFlow = lazy(() => import('pages/NewActivityFlow'));
+const NewActivity = lazy(() => import('pages/NewActivity'));
 
 export const AppRoutes = () => {
   const token = storage.getItem('accessToken');
@@ -90,13 +92,32 @@ export const AppRoutes = () => {
                     }
                   />
                 ))}
+                <Route path={page.newAppletActivities}>
+                  <Route element={<NewActivity />} path={page.newAppletNewActivity}>
+                    <Route
+                      path={page.newAppletNewActivity}
+                      element={<Navigate to={page.newAppletNewActivityAbout} replace />}
+                    />
+                    {newAppletNewActivityRoutes.map(({ path, Component }) => (
+                      <Route
+                        key={path}
+                        path={path}
+                        element={
+                          <PrivateRoute condition={isAuthorized}>
+                            {Component ? <Component /> : <></>}
+                          </PrivateRoute>
+                        }
+                      />
+                    ))}
+                  </Route>
+                </Route>
                 <Route path={page.newAppletActivityFlow}>
                   <Route element={<NewActivityFlow />} path={page.newAppletNewActivityFlow}>
                     <Route
                       path={page.newAppletNewActivityFlow}
                       element={<Navigate to={page.newAppletNewActivityFlowAbout} replace />}
                     />
-                    {newAppletNewActivityRoutes.map(({ path, Component }) => (
+                    {newAppletNewActivityFlowRoutes.map(({ path, Component }) => (
                       <Route
                         key={path}
                         path={path}

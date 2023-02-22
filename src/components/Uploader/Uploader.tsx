@@ -4,15 +4,17 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyMedium } from 'styles/styledComponents';
 import { Svg, CropPopup } from 'components';
-import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 
+import { variables } from 'styles/variables';
 import {
   StyledContainer,
   StyledImgContainer,
   StyledUploadImg,
   StyledButtonGroup,
   UploadedImgContainer,
+  StyledName,
+  StyledNameWrapper,
 } from './Uploader.styles';
 import { UploaderProps } from './Uploader.types';
 
@@ -24,6 +26,7 @@ export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) =
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
+  const [error, setError] = useState(false);
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -31,9 +34,13 @@ export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) =
   };
 
   const handleSetImage = (files: FileList | null) => {
-    if (files?.[0] && files?.[0].size < MAX_FILE_SIZE) {
-      setImage(files[0]);
-      setCropPopupVisible(true);
+    if (files?.[0]) {
+      const isAllowableSize = files?.[0].size < MAX_FILE_SIZE;
+      setError(!isAllowableSize);
+      if (isAllowableSize) {
+        setImage(files[0]);
+        setCropPopupVisible(true);
+      }
     }
   };
 
@@ -64,8 +71,7 @@ export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) =
 
   const onRemoveImg = (e: MouseEvent) => {
     stopDefaults(e);
-    setImage(null);
-    setValue('');
+    onEditImg();
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
     }
@@ -98,6 +104,16 @@ export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) =
         ) : (
           <StyledImgContainer>
             <Svg id="img-filled" width={32} height={32} />
+            {error && (
+              <StyledBodyMedium
+                sx={{ marginBottom: theme.spacing(1) }}
+                color={variables.palette.semantic.error}
+              >
+                <Trans i18nKey="dropError">
+                  Image is more than <br /> 1GB.
+                </Trans>
+              </StyledBodyMedium>
+            )}
             <StyledBodyMedium>
               <Trans i18nKey="dropImg">
                 Drop Image here <br /> or <span>click to browse</span>.
@@ -114,12 +130,16 @@ export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) =
         name="uploadFile"
         hidden
       />
-      <StyledBodyMedium
-        color={variables.palette.on_surface_variant}
-        sx={{ marginTop: theme.spacing(1.6) }}
-      >
-        {t('uploadImg')}
-      </StyledBodyMedium>
+      <StyledNameWrapper>
+        {image?.name ? (
+          <>
+            <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{image.name}</StyledName>{' '}
+            <Svg id="check" width={18} height={18} />
+          </>
+        ) : (
+          t('uploadImg')
+        )}
+      </StyledNameWrapper>
       {cropPopupVisible && (
         <CropPopup
           open={cropPopupVisible}

@@ -1,6 +1,7 @@
 export * from './Actions';
 export * from './BuilderItem';
 export * from './BuilderHeader';
+export * from './BuilderUploads';
 export * from './ButtonWithMenu';
 export * from './Breadcrumbs';
 export * from './Chip';

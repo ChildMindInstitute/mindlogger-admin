@@ -2,6 +2,7 @@ import { Box, ButtonGroup } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { StyledFlexAllCenter } from 'styles/styledComponents';
+import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
@@ -88,4 +89,25 @@ export const StyledUploadImg = styled('img', shouldForwardProp)`
   `}
   border-radius: ${variables.borderRadius.lg2};
   ${absolutePosition}
+`;
+
+export const StyledName = styled(Box)`
+  color: ${variables.palette.primary};
+  font-weight: ${variables.font.weight.bold};
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 17rem;
+`;
+
+export const StyledNameWrapper = styled(Box)`
+  font-size: ${variables.font.size.md};
+  line-height: ${variables.font.lineHeight.md};
+  color: ${variables.palette.on_surface_variant};
+  margin-top: ${theme.spacing(1.6)};
+  display: flex;
+
+  svg {
+    fill: ${variables.palette.primary};
+  }
 `;

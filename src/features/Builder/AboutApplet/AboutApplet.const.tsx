@@ -16,12 +16,3 @@ export const colorThemeOptions = [
     icon: <Svg id="circle-primary" />,
   },
 ];
-
-export type FormValues = {
-  name: string;
-  description: string;
-  colorTheme: string;
-  aboutApplet: string;
-  appletImage: string;
-  appletWatermark: string;
-};

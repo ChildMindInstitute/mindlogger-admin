@@ -2,7 +2,6 @@ import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { Svg } from 'components';
-import { StyledTitleMedium } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
@@ -26,14 +25,10 @@ export const StyledContainer = styled(Box)`
 
 export const StyledSvg = styled(Svg)`
   fill: ${variables.palette.outline};
+  position: absolute;
+  margin-left: ${theme.spacing(1)};
 `;
 
-export const StyledTitle = styled(StyledTitleMedium)`
-  display: flex;
-  margin-bottom: ${theme.spacing(1.6)};
-
-  svg {
-    height: 2.4rem;
-    margin-left: ${theme.spacing(0.4)};
-  }
+export const StyledSettings = styled(Box)`
+  ${column}
 `;

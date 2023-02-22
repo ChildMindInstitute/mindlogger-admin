@@ -13,6 +13,7 @@ const DashboardAppletSettings = lazy(() => import('features/Applet/DashboardAppl
 const BuilderAppletSettings = lazy(() => import('features/Builder/BuilderAppletSettings'));
 const Activities = lazy(() => import('features/Builder/Activities'));
 const AboutApplet = lazy(() => import('features/Builder/AboutApplet'));
+const ActivityAbout = lazy(() => import('features/Builder/ActivityAbout'));
 const ActivityFlowAbout = lazy(() => import('features/Builder/ActivityFlowAbout'));
 const ActivityFlow = lazy(() => import('features/Builder/ActivityFlow'));
 const ActivityFlowBuilder = lazy(() => import('features/Builder/ActivityFlowBuilder'));
@@ -70,6 +71,13 @@ export const newAppletRoutes = [
 ];
 
 export const newAppletNewActivityRoutes = [
+  { path: page.newAppletNewActivityAbout, Component: ActivityAbout },
+  { path: page.newAppletNewActivityItems },
+  { path: page.newAppletNewActivityItemFlow },
+  { path: page.newAppletNewActivitySettings },
+];
+
+export const newAppletNewActivityFlowRoutes = [
   { path: page.newAppletNewActivityFlowAbout, Component: ActivityFlowAbout },
   { path: page.newAppletNewActivityFlowBuilder, Component: ActivityFlowBuilder },
 ];

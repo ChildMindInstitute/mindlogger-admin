@@ -6,9 +6,9 @@ import { LinkedTabs, Svg } from 'components';
 import { useBreadcrumbs } from 'hooks';
 import { page } from 'resources';
 
-import { newActivityFlowTabs } from './NewActivityFlow.const';
+import { newActivityTabs } from './NewActivity.const';
 
-export const NewActivityFlow = () => {
+export const NewActivity = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   useBreadcrumbs();
@@ -17,12 +17,12 @@ export const NewActivityFlow = () => {
     <StyledBody sx={{ position: 'relative' }}>
       <DirectoryUpButton
         variant="text"
-        onClick={() => navigate(page.newAppletActivityFlow)}
+        onClick={() => navigate(page.newAppletActivities)}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
       >
-        {t('activityFlows')}
+        {t('activities')}
       </DirectoryUpButton>
-      <LinkedTabs tabs={newActivityFlowTabs} />
+      <LinkedTabs tabs={newActivityTabs} />
     </StyledBody>
   );
 };

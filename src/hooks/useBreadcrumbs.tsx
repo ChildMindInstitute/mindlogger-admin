@@ -60,6 +60,21 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
+    if (location.pathname.includes(page.newAppletNewActivity)) {
+      newBreadcrumbs.push(
+        {
+          icon: <Svg id="checklist-outlined" width="18" height="18" />,
+          label: t('activities'),
+          navPath: page.newAppletActivities,
+        },
+        {
+          icon: '',
+          label: t('newActivity'),
+          disabledLink: true,
+        },
+      );
+    }
+
     if (location.pathname.includes(page.newAppletNewActivityFlow)) {
       newBreadcrumbs.push(
         {
