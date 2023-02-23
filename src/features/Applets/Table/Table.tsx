@@ -1,12 +1,12 @@
-import { Fragment, useMemo, useState, MouseEvent } from 'react';
+import { Fragment, MouseEvent } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { FolderApplet } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, Head } from 'components';
-import { Order } from 'types/table';
+// import { Order } from 'types/table';
 import { EmptyTable } from 'components';
 
-import { getComparator, sortRows } from '../Applets.utils';
+// import { getComparator, sortRows } from '../Applets.utils';
 import { StyledTableContainer, StyledCellItem, StyledTableCellContent } from './Table.styles';
 import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';

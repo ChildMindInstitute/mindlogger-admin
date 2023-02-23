@@ -7,8 +7,6 @@ import { useAppDispatch } from 'redux/store';
 import { applets, auth, FolderApplet, folders } from 'redux/modules';
 import { ButtonWithMenu, DEFAULT_ROWS_PER_PAGE, Search, Svg } from 'components';
 import { Order } from 'types/table';
-import { getErrorMessage } from 'utils/errors';
-import { getAppletsApiTest } from 'api/Dashboard';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
@@ -26,7 +24,7 @@ export const Applets = () => {
 
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [ordering, setOrdering] = useState('updated');
+  const [ordering, setOrdering] = useState('updatedAt');
   const [order, setOrder] = useState<Order>('desc');
   const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -83,28 +81,6 @@ export const Applets = () => {
     setSearch(value);
   };
 
-  // const filterRows = (row: FolderApplet) => {
-  //   // if (!row.isVisible) return;
-  //   if (!search) {
-  //     return row;
-  //   }
-  //   if (!row?.isFolder && row?.displayName?.toLowerCase().includes(search?.toLowerCase())) {
-  //     return row;
-  //   } else {
-  //     let isFolderContainsSearchApplet = false;
-  //
-  //     row?.items?.forEach((itemInFolder) => {
-  //       if (itemInFolder?.displayName?.toLowerCase().includes(search.toLowerCase())) {
-  //         isFolderContainsSearchApplet = true;
-  //       }
-  //     });
-  //
-  //     if (isFolderContainsSearchApplet) {
-  //       return row;
-  //     }
-  //   }
-  // };
-
   const headerContent = (
     <Box onClick={() => addFolder()}>
       <Svg id="add-folder" />
@@ -130,7 +106,6 @@ export const Applets = () => {
       </AppletsTableHeader>
       <Table
         columns={getHeadCells()}
-        // rows={flattenItems?.filter(filterRows)}
         rows={flattenItems}
         order={order}
         setOrder={setOrder}
