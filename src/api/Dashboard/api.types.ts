@@ -1,5 +1,3 @@
-import { Order } from 'types/table';
-
 export type ServerUrlOption = {
   name: string;
   value: string;
@@ -30,7 +28,6 @@ export type GetAppletsParams = {
     page?: number;
     limit?: number;
     ordering?: string;
-    order?: Order;
     roles?: string;
   };
 };

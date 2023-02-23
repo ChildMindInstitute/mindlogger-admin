@@ -10,8 +10,9 @@ import { Order } from 'types/table';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
-import { StyledButtons, AppletsTableHeader } from './Applets.styles';
+import { AppletsTableHeader, StyledButtons } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
+import { OrderBy } from './Applets.types';
 
 export const Applets = () => {
   const { t } = useTranslation('app');
@@ -24,8 +25,8 @@ export const Applets = () => {
 
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [ordering, setOrdering] = useState('updatedAt');
-  const [order, setOrder] = useState<Order>('desc');
+  const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.UpdatedAt);
+  const [order, setOrder] = useState<Order>('asc');
   const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -36,6 +37,7 @@ export const Applets = () => {
   useEffect(() => {
     (async () => {
       if (userId) {
+        const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
         const { getApplets } = applets.thunk;
         const result = await dispatch(
           getApplets({
@@ -46,7 +48,6 @@ export const Applets = () => {
               search,
               page,
               ordering,
-              order,
             },
           }),
         );
@@ -56,7 +57,7 @@ export const Applets = () => {
         }
       }
     })();
-  }, [dispatch, userId, search, page, ordering, order]);
+  }, [dispatch, userId, search, page, orderBy, order]);
 
   const addFolder = () => {
     const newFolderName = generateNewFolderName(foldersApplets, t);
@@ -109,8 +110,8 @@ export const Applets = () => {
         rows={flattenItems}
         order={order}
         setOrder={setOrder}
-        orderBy={ordering}
-        setOrderBy={setOrdering}
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
         headerContent={headerContent}
         emptyComponent={emptyComponent}
         page={page}

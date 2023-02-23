@@ -2,15 +2,15 @@ import { Fragment, MouseEvent } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { FolderApplet } from 'redux/modules';
-import { DEFAULT_ROWS_PER_PAGE, Head } from 'components';
 // import { Order } from 'types/table';
-import { EmptyTable } from 'components';
+import { DEFAULT_ROWS_PER_PAGE, EmptyTable, TableHead } from 'components';
 
 // import { getComparator, sortRows } from '../Applets.utils';
-import { StyledTableContainer, StyledCellItem, StyledTableCellContent } from './Table.styles';
+import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
+import { OrderBy } from '../Applets.types';
 
 export const Table = ({
   columns,
@@ -39,9 +39,11 @@ export const Table = ({
   // }, [order, orderBy, rows]);
 
   const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
-    const isAsc = orderBy === property && order === 'asc';
+    const orderBy = property === 'name' ? OrderBy.DisplayName : OrderBy.UpdatedAt;
+    const isAsc = order === 'asc' && orderBy === property;
+
     setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+    setOrderBy(orderBy);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -75,7 +77,7 @@ export const Table = ({
       {/*{sortedRows.length ? (*/}
       {rows?.length ? (
         <MuiTable stickyHeader>
-          <Head
+          <TableHead
             headCells={columns}
             order={order}
             orderBy={orderBy}

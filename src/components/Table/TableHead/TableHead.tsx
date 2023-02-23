@@ -1,17 +1,17 @@
 import { TableRow, TableCell, TableSortLabel } from '@mui/material';
 
 import { UiType } from '../Table.types';
-import { StyledTableCell, StyledTableHead } from './Head.styles';
-import { HeadProps } from './Head.types';
+import { StyledTableCell, StyledTableHead } from './TableHead.styles';
+import { TableHeadProps } from './TableHead.types';
 
-export const Head = ({
+export const TableHead = ({
   tableHeader,
   headCells,
   order,
   orderBy,
   onRequestSort,
   uiType = UiType.Primary,
-}: HeadProps) => {
+}: TableHeadProps) => {
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
