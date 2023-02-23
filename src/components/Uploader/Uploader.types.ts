@@ -3,4 +3,5 @@ export type UploaderProps = {
   height: number;
   setValue: (val: string) => void;
   getValue: () => string;
+  description: string;
 };

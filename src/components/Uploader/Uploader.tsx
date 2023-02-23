@@ -1,6 +1,6 @@
 import { useState, DragEvent, MouseEvent, ChangeEvent, useRef } from 'react';
 import { Button } from '@mui/material';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import { StyledBodyMedium } from 'styles/styledComponents';
 import { Svg, CropPopup } from 'components';
@@ -20,8 +20,7 @@ import { UploaderProps } from './Uploader.types';
 
 const MAX_FILE_SIZE = 1073741824; //1GB
 
-export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) => {
-  const { t } = useTranslation('app');
+export const Uploader = ({ width, height, setValue, getValue, description }: UploaderProps) => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -64,14 +63,15 @@ export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) =
     handleSetImage(files);
   };
 
-  const onEditImg = () => {
-    setImage(null);
-    setValue('');
+  const onEditImg = (e: MouseEvent) => {
+    stopDefaults(e);
+    uploadInputRef?.current?.click();
   };
 
   const onRemoveImg = (e: MouseEvent) => {
     stopDefaults(e);
-    onEditImg();
+    setImage(null);
+    setValue('');
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
     }
@@ -137,7 +137,7 @@ export const Uploader = ({ width, height, setValue, getValue }: UploaderProps) =
             <Svg id="check" width={18} height={18} />
           </>
         ) : (
-          t('uploadImg')
+          description
         )}
       </StyledNameWrapper>
       {cropPopupVisible && (

@@ -3,13 +3,19 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
 import { CheckboxController, InputController } from 'components/FormComponents';
-import { StyledBodyLarge, StyledHeadlineLarge, StyledTitleMedium } from 'styles/styledComponents';
+import {
+  StyledBodyLarge,
+  StyledBuilderWrapper,
+  StyledFlexColumn,
+  StyledHeadlineLarge,
+  StyledTitleMedium,
+} from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { useBreadcrumbs } from 'hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'consts';
 
-import { StyledForm, StyledSettings, StyledSvg } from './ActivityFlowAbout.styles';
+import { StyledForm, StyledSvg } from './ActivityFlowAbout.styles';
 import { defaultValues } from './ActivityFlowAbout.const';
 
 export const ActivityFlowAbout = () => {
@@ -33,7 +39,7 @@ export const ActivityFlowAbout = () => {
   };
 
   return (
-    <>
+    <StyledBuilderWrapper>
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutActivityFlow')}
       </StyledHeadlineLarge>
@@ -49,14 +55,16 @@ export const ActivityFlowAbout = () => {
           name="activityFlowDescription"
           label={t('activityFlowDescription')}
           maxLength={MAX_DESCRIPTION_LENGTH}
+          multiline
+          rows={4}
         />
         <StyledTitleMedium
           color={variables.palette.on_surface_variant}
-          sx={{ marginBottom: theme.spacing(2.4) }}
+          sx={{ marginBottom: theme.spacing(1.4) }}
         >
           {t('additionalSettings')}
         </StyledTitleMedium>
-        <StyledSettings>
+        <StyledFlexColumn>
           <CheckboxController
             control={control}
             name="combineReports"
@@ -68,12 +76,12 @@ export const ActivityFlowAbout = () => {
             label={
               <StyledBodyLarge sx={{ position: 'relative' }}>
                 {t('hideBadge')}
-                <StyledSvg id="more-info-outlined" />
+                <span></span> <StyledSvg id="more-info-outlined" />
               </StyledBodyLarge>
             }
           />
-        </StyledSettings>
+        </StyledFlexColumn>
       </StyledForm>
-    </>
+    </StyledBuilderWrapper>
   );
 };

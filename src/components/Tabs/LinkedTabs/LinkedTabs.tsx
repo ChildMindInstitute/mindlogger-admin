@@ -10,7 +10,7 @@ import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 export const LinkedTabs = ({
   tabs,
   uiType = UiType.Primary,
-  hideHeader = false,
+  hiddenHeader = false,
 }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const location = useLocation();
@@ -38,7 +38,7 @@ export const LinkedTabs = ({
           value={tabIndex}
           index={index}
           isMinHeightAuto={isMinHeightAuto}
-          hideHeader={hideHeader}
+          hiddenHeader={hiddenHeader}
         >
           <Outlet />
         </TabPanel>,
@@ -57,9 +57,9 @@ export const LinkedTabs = ({
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}
         centered
-        hideHeader={hideHeader}
+        hiddenHeader={hiddenHeader}
       >
-        {header}
+        {!hiddenHeader && header}
       </StyledTabs>
       {content}
     </>

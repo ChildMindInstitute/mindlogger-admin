@@ -418,5 +418,6 @@
   "addToCart": "Add to cart",
   "cart": "Cart",
   "appletActivities": "Applet activities",
-  "activityFlowBuilder": "Activity Flow Builder"
+  "activityFlowBuilder": "Activity Flow Builder",
+  "uploadTransfluent": "Please upload JPG or transfluent PNG image less than 1GB."
 }

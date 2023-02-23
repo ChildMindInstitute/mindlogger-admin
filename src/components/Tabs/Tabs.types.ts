@@ -17,7 +17,7 @@ export type TabsProps = {
   uiType?: UiType;
   tabs: Tab[];
   activeTab?: number;
-  hideHeader?: boolean;
+  hiddenHeader?: boolean;
 };
 
 export type RenderTabs = {

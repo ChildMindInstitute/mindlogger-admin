@@ -6,8 +6,8 @@ import theme from 'styles/theme';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 export const StyledPanel = styled(Box, shouldForwardProp)`
-  ${({ hideHeader }: { hideHeader: boolean; isMinHeightAuto?: boolean }) =>
-    !hideHeader &&
+  ${({ hiddenHeader }: { hiddenHeader: boolean; isMinHeightAuto?: boolean }) =>
+    !hiddenHeader &&
     `
     padding: ${theme.spacing(2.4, 2.4, 1.6)};
     border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};

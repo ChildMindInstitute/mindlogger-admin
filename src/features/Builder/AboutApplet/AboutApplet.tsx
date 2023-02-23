@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@mui/material';
 
 import { EditorController, InputController, SelectController } from 'components/FormComponents';
 import {
@@ -55,6 +56,7 @@ export const AboutApplet = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue('appletImage', val)}
           getValue={() => watch('appletImage')}
+          description={t('uploadImg')}
         />
       ),
     },
@@ -66,18 +68,19 @@ export const AboutApplet = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue('appletWatermark', val)}
           getValue={() => watch('appletWatermark')}
+          description={t('uploadTransfluent')}
         />
       ),
     },
   ];
 
   return (
-    <StyledBuilderWrapper sx={{ marginRight: theme.spacing(20) }}>
+    <StyledBuilderWrapper sx={{ paddingRight: theme.spacing(27.7) }}>
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutApplet')}
       </StyledHeadlineLarge>
       <StyledForm noValidate>
-        <StyledFlexTopCenter>
+        <Box sx={{ display: 'flex' }}>
           <StyledContainer>
             <InputController
               {...commonProps}
@@ -91,7 +94,7 @@ export const AboutApplet = () => {
               maxLength={MAX_DESCRIPTION_LENGTH_LONG}
               label={t('appletDescription')}
               multiline
-              rows={2}
+              rows={5}
             />
             <StyledFlexTopCenter sx={{ position: 'relative' }}>
               <SelectController
@@ -104,7 +107,7 @@ export const AboutApplet = () => {
             </StyledFlexTopCenter>
           </StyledContainer>
           <BuilderUploads uploads={uploads} />
-        </StyledFlexTopCenter>
+        </Box>
         <StyledTitle>
           {t('aboutAppletPage')}
           <Tooltip tooltipTitle={t('aboutAppletTooltip')}>

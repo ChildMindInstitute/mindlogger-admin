@@ -13,6 +13,10 @@ export const StyledActionsWrapper = styled(StyledFlexTopCenter)`
 
 export const StyledActions = styled(Box)`
   display: flex;
+
+  span + span button {
+    margin-left: ${theme.spacing(1)};
+  }
 `;
 
 export const StyledActionButton = styled(StyledClearedButton)`
@@ -20,7 +24,6 @@ export const StyledActionButton = styled(StyledClearedButton)`
   height: 4rem;
   min-width: 4rem;
   border-radius: ${variables.borderRadius.half};
-  margin-right: ${theme.spacing(1)};
 
   &:hover {
     background: ${variables.palette.secondary_container};

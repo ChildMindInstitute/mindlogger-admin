@@ -10,7 +10,7 @@ import { newAppletTabs, pathsWithInnerTabs } from './NewApplet.const';
 export const NewApplet = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const hideHeader = pathsWithInnerTabs.some((path) => location.pathname.includes(path));
+  const hiddenHeader = pathsWithInnerTabs.some((path) => location.pathname.includes(path));
 
   useBreadcrumbs([
     {
@@ -22,7 +22,7 @@ export const NewApplet = () => {
 
   return (
     <StyledBody>
-      <LinkedTabs hideHeader={hideHeader} tabs={newAppletTabs} />
+      <LinkedTabs hiddenHeader={hiddenHeader} tabs={newAppletTabs} />
     </StyledBody>
   );
 };
