@@ -39,7 +39,7 @@ export const ActivityFlow = () => {
           {activityFlows.map((item, i) => (
             <Fragment key={item.id}>
               <BuilderItem {...item} getActions={getActions} />
-              {i === 0 && (
+              {i >= 0 && i < activityFlows.length - 1 && (
                 <StyledAddWrapper>
                   <span />
                   <StyledAdd>
