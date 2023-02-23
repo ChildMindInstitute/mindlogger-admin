@@ -10,7 +10,7 @@ export type PublishedApplet = {
   keywords: string[];
   name: string;
   subCategoryId: string | null;
-  version: string | null; // TODO: add a version to response
+  version?: string | null; // TODO: add a version to response
 };
 
 export type PublishedApplets = {
