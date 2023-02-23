@@ -15,6 +15,8 @@ export type Applet = {
   reportIncludeUserId: boolean;
   reportIncludeCaseId: boolean;
   reportEmailBody: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type AppletsSchema = {

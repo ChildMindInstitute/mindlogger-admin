@@ -1,3 +1,5 @@
+import { Order } from 'types/table';
+
 export type ServerUrlOption = {
   name: string;
   value: string;
@@ -23,11 +25,12 @@ export type ResetPassword = { email: string };
 
 export type GetAppletsParams = {
   params: {
-    owner_id: string;
+    owner_id: number;
     search?: string;
     page?: number;
     limit?: number;
     ordering?: string;
+    order?: Order;
     roles?: string;
   };
 };

@@ -29,7 +29,7 @@ export type FolderApplet = {
   published?: boolean;
   roles?: string[];
   themeId?: string;
-  updated?: string;
+  updatedAt?: string;
   welcomeApplet?: boolean;
 };
 

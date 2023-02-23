@@ -19,16 +19,16 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AppletsSchema>): 
     if (applets.status === 'loading' && applets.requestId === action.meta.requestId) {
       applets.requestId = initialState.applets.requestId;
       applets.status = 'success';
-      applets.data = action.payload.data;
+      applets.data = action.payload.data.result;
     }
   });
 
   builder.addCase(getApplets.rejected, ({ applets }, action) => {
     if (applets.status === 'loading' && applets.requestId === action.meta.requestId) {
-      const error = action.payload as AxiosError;
+      console.log('error', action);
       applets.requestId = initialState.applets.requestId;
       applets.status = 'error';
-      applets.error = error.response?.data as AxiosError<ErrorResponse>;
+      applets.error = action.error as AxiosError<ErrorResponse>;
     }
   });
 };

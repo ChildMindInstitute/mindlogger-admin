@@ -15,21 +15,28 @@ import { AppletItem } from './AppletItem';
 export const Table = ({
   columns,
   rows,
-  orderBy: orderByProp,
+  order,
+  setOrder,
+  orderBy,
+  setOrderBy,
   headerContent,
   emptyComponent,
+  page,
+  setPage,
 }: TableProps) => {
-  const [order, setOrder] = useState<Order>('desc');
-  const [orderBy, setOrderBy] = useState<string>(orderByProp);
-  const [page, setPage] = useState(0);
+  // const [order, setOrder] = useState<Order>('desc');
+  // const [orderBy, setOrderBy] = useState<string>(orderByProp);
+  // const [page, setPage] = useState(0);
 
-  const sortedRows = useMemo(() => {
-    if (!rows?.length) {
-      return [];
-    }
+  // console.log('rows', rows);
 
-    return sortRows(rows, getComparator(order, orderBy));
-  }, [order, orderBy, rows]);
+  // const sortedRows = useMemo(() => {
+  //   if (!rows?.length) {
+  //     return [];
+  //   }
+  //
+  //   return sortRows(rows, getComparator(order, orderBy));
+  // }, [order, orderBy, rows]);
 
   const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -38,7 +45,7 @@ export const Table = ({
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    setPage(newPage + 1);
   };
 
   const tableHeader = (
@@ -47,9 +54,11 @@ export const Table = ({
       <StyledCellItem>
         <TablePagination
           component="div"
-          count={rows?.length || 0}
+          // TODO: implement total count from response when API is ready
+          // count={rows?.length || 0}
+          count={200}
           rowsPerPage={DEFAULT_ROWS_PER_PAGE}
-          page={page}
+          page={page - 1}
           onPageChange={handleChangePage}
           labelRowsPerPage=""
           rowsPerPageOptions={[]}
@@ -58,9 +67,13 @@ export const Table = ({
     </StyledTableCellContent>
   );
 
+  const getRowComponent = (row: FolderApplet) =>
+    row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />;
+
   return (
     <StyledTableContainer>
-      {sortedRows.length ? (
+      {/*{sortedRows.length ? (*/}
+      {rows?.length ? (
         <MuiTable stickyHeader>
           <Head
             headCells={columns}
@@ -70,16 +83,9 @@ export const Table = ({
             tableHeader={tableHeader}
           />
           <TableBody>
-            {sortedRows
-              ?.slice(
-                page * DEFAULT_ROWS_PER_PAGE,
-                page * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
-              )
-              .map((row: FolderApplet) => (
-                <Fragment key={row.id}>
-                  {row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />}
-                </Fragment>
-              ))}
+            {rows.map((row: FolderApplet) => (
+              <Fragment key={row.id}>{getRowComponent(row)}</Fragment>
+            ))}
           </TableBody>
         </MuiTable>
       ) : (
