@@ -136,29 +136,6 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
   }
 
   .rbc-events-container {
-    .event-wrapper {
-      display: none;
-    }
-
-    .rbc-event-content {
-      opacity: 0;
-      animation: fadeInFromNone 0.2s ease-out;
-    }
-
-    @keyframes fadeInFromNone {
-      0% {
-        opacity: 0;
-      }
-
-      90% {
-        opacity: 0.1;
-      }
-
-      100% {
-        opacity: 1;
-      }
-    }
-
     .rbc-event {
       .event-alert-bottom {
         display: none;
