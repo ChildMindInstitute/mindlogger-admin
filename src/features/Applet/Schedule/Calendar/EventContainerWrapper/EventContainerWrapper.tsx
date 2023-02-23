@@ -29,23 +29,25 @@ export const EventContainerWrapper = ({
     } = getVariables(isWeekView);
 
     //TODO: Try to find a better solution for the hide/show many events, and responsive breakpoints logic in the day/week view
-    setTimeout(() => {
-      const eventsWrapper = wrapperRef.current;
+    (async () => {
+      const eventsWrapper = await wrapperRef.current;
       const containerEvents: NodeListOf<HTMLElement> | undefined =
-        eventsWrapper?.querySelectorAll('.event-wrapper');
+        await eventsWrapper?.querySelectorAll('.event-wrapper');
       const arrayOfEventsDates: EventsStartEndDates = [];
 
       if (eventsWrapper && containerEvents) {
-        containerEvents.forEach((eventWrapper) => {
+        await containerEvents.forEach((eventWrapper) => {
           const { id, start, end } = eventWrapper.dataset;
           const event = eventWrapper.querySelector('.rbc-event') as HTMLElement;
-          const eventContent = eventWrapper.querySelector('.rbc-event-content') as HTMLElement;
-          const width = event.offsetWidth;
-          const height = event.offsetHeight;
-          id && start && end && arrayOfEventsDates.push({ id, start, end });
-          width && height && eventWrapper.classList.add(...getEventClassNames(width, height));
-          eventWrapper.style.display = 'block';
-          eventContent.style.opacity = '1';
+
+          if (id && start && end) {
+            arrayOfEventsDates.push({ id, start, end });
+          }
+
+          if (event) {
+            const { offsetWidth: width, offsetHeight: height } = event;
+            eventWrapper.classList.add(...getEventClassNames(width, height));
+          }
         });
 
         const overlappingEvents = getOverlappingEvents(arrayOfEventsDates);
@@ -87,7 +89,7 @@ export const EventContainerWrapper = ({
             });
         });
       }
-    });
+    })();
   }, [events, isWeekView]);
 
   return <Box ref={wrapperRef}>{children}</Box>;
