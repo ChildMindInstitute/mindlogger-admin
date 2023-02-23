@@ -25,7 +25,6 @@ export const StyledUploadImgs = styled(StyledContainer)`
 
 export const StyledSvg = styled(Svg)`
   fill: ${variables.palette.outline};
-  position: absolute;
   margin-left: ${theme.spacing(1)};
 `;
 

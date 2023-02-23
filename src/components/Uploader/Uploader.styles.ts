@@ -88,6 +88,7 @@ export const StyledUploadImg = styled('img', shouldForwardProp)`
     height: ${height - 0.2}rem;
   `}
   border-radius: ${variables.borderRadius.lg2};
+  object-fit: cover;
   ${absolutePosition}
 `;
 
