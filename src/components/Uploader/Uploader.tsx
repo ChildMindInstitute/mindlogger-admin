@@ -34,9 +34,11 @@ export const Uploader = ({ width, height, setValue, getValue, description }: Upl
 
   const handleSetImage = (files: FileList | null) => {
     if (files?.[0]) {
-      const isAllowableSize = files?.[0].size < MAX_FILE_SIZE;
+      const isAllowableSize = files[0].size < MAX_FILE_SIZE;
+
       setError(!isAllowableSize);
-      if (isAllowableSize) {
+
+      if (isAllowableSize && files[0].type.includes('image')) {
         setImage(files[0]);
         setCropPopupVisible(true);
       }
@@ -125,7 +127,7 @@ export const Uploader = ({ width, height, setValue, getValue, description }: Upl
       <input
         ref={uploadInputRef}
         onChange={handleChange}
-        accept="image/png, image/jpg"
+        accept="image/*"
         type="file"
         name="uploadFile"
         hidden
