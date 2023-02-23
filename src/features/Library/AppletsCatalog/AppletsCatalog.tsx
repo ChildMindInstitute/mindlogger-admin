@@ -17,6 +17,7 @@ import {
   StyledAppletContainer,
   StyledTablePagination,
 } from './AppletsCatalog.styles';
+import { mockedApplets } from './mocked';
 
 export const DEFAULT_APPLETS_PER_PAGE = 6;
 
@@ -27,7 +28,8 @@ export const AppletsCatalog = () => {
 
   useBreadcrumbs();
 
-  const publishedApplets = library.usePublishedApplets();
+  // const publishedApplets = library.usePublishedApplets();
+  const publishedApplets = mockedApplets;
 
   const [pageIndex, setPageIndex] = useState(0);
   const [recordsPerPage, setRecordsPerPage] = useState(DEFAULT_APPLETS_PER_PAGE);
@@ -40,7 +42,8 @@ export const AppletsCatalog = () => {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPageIndex(newPage);
-    dispatch(library.thunk.getPublishedApplets({ recordsPerPage, pageIndex: newPage, searchText }));
+    // TODO: delete comment when endpoint is ready
+    // dispatch(library.thunk.getPublishedApplets({ recordsPerPage, pageIndex: newPage, searchText }));
   };
 
   const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
@@ -49,14 +52,14 @@ export const AppletsCatalog = () => {
   };
 
   useEffect(() => {
-    const timeout = setTimeout(
-      () =>
-        dispatch(library.thunk.getPublishedApplets({ recordsPerPage, pageIndex: 0, searchText })),
-      1000,
-      // TODO: discuss search - use hook or fix search by enter
-    );
-
-    return () => clearTimeout(timeout);
+    // TODO: delete comment when endpoint is ready
+    // const timeout = setTimeout(
+    //   () =>
+    //     dispatch(library.thunk.getPublishedApplets({ recordsPerPage, pageIndex: 0, searchText })),
+    //   1000,
+    //   // TODO: discuss search - use hook or fix search by enter
+    // );
+    // return () => clearTimeout(timeout);
   }, [searchText]);
 
   return (
@@ -73,11 +76,17 @@ export const AppletsCatalog = () => {
               {t('appletsCatalog')}
             </StyledHeadlineLarge>
             <StyledAppletList>
-              {publishedApplets?.data?.map((applet) => (
-                <StyledAppletContainer key={applet.id}>
-                  <Applet applet={applet} />
-                </StyledAppletContainer>
-              ))}
+              {publishedApplets?.data
+                // TODO: delete slice when endpoint is ready
+                ?.slice(
+                  pageIndex * DEFAULT_APPLETS_PER_PAGE,
+                  pageIndex * DEFAULT_APPLETS_PER_PAGE + DEFAULT_APPLETS_PER_PAGE,
+                )
+                .map((applet) => (
+                  <StyledAppletContainer key={applet.id}>
+                    <Applet applet={applet} />
+                  </StyledAppletContainer>
+                ))}
             </StyledAppletList>
             <StyledTablePagination
               component="div"
