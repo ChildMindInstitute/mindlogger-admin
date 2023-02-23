@@ -7,6 +7,11 @@ import { variables } from 'styles/variables';
 export const StyledAddWrapper = styled(StyledFlexAllCenter)`
   position: relative;
   margin: ${theme.spacing(-1.1, 0)};
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
 
   span {
     position: absolute;

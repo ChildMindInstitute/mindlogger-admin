@@ -18,4 +18,5 @@ export const StyledItemContent = styled(StyledFlexTopCenter)`
 export const StyledSelect = styled(Box)`
   text-align: center;
   width: 2.4rem;
+  display: flex;
 `;
