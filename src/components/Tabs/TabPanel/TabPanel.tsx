@@ -5,7 +5,7 @@ export const TabPanel = ({
   children,
   value,
   index,
-  hideHeader = false,
+  hiddenHeader = false,
   ...other
 }: TabPanelProps) => (
   <StyledPanel
@@ -13,7 +13,7 @@ export const TabPanel = ({
     hidden={value !== index}
     id={`simple-tabpanel-${index}`}
     aria-labelledby={`simple-tab-${index}`}
-    hideHeader={hideHeader}
+    hiddenHeader={hiddenHeader}
     {...other}
   >
     {value === index && children}

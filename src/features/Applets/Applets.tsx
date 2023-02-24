@@ -19,8 +19,8 @@ export const Applets = () => {
   const dispatch = useAppDispatch();
   const authData = auth.useData();
   const navigate = useNavigate();
-  const ownerId = authData?.user.id;
 
+  const ownerId = authData?.user.id;
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.UpdatedAt);

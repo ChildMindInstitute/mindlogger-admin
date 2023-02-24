@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import uniqueId from 'lodash.uniqueid';
 
 import { Svg, Tooltip } from 'components';
 
@@ -16,9 +17,9 @@ export const Actions = ({ items, context }: ActionsProps) => {
       {visibleActions ? (
         <StyledActions>
           {items.map(
-            ({ icon, disabled = false, action, tooltipTitle, isDisplayed = true }, i) =>
+            ({ icon, disabled = false, action, tooltipTitle, isDisplayed = true }) =>
               isDisplayed && (
-                <Tooltip key={i} tooltipTitle={tooltipTitle}>
+                <Tooltip key={uniqueId()} tooltipTitle={tooltipTitle}>
                   <span>
                     <StyledActionButton disabled={disabled} onClick={() => action(context)}>
                       {icon}

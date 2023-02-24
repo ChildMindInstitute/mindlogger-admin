@@ -9,7 +9,7 @@ import { shouldForwardProp } from 'utils/shouldForwardProp';
 import { UiType } from './Tabs.types';
 
 export const StyledTabs = styled(Tabs, shouldForwardProp)`
-  height: ${({ uiType, hideHeader }: { uiType: UiType; hideHeader?: boolean }) =>
+  height: ${({ uiType }: { uiType: UiType; hiddenHeader?: boolean }) =>
     uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem'};
   flex-shrink: 0;
 
@@ -20,8 +20,8 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     margin: 0 auto;
   `}
 
-  ${({ hideHeader }) =>
-    hideHeader &&
+  ${({ hiddenHeader }) =>
+    hiddenHeader &&
     `
     &.MuiTabs-root {
       display: none;

@@ -21,7 +21,7 @@ export const StyledForm = styled('form')`
 
 export const StyledContainer = styled(Box)`
   ${column}
-  width: 54.6rem;
+  width: 55rem;
 `;
 
 export const StyledSvg = styled(Svg)`
