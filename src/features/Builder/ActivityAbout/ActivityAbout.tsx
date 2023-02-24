@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@mui/material';
 
 import { CheckboxController, InputController } from 'components/FormComponents';
 import {
-  StyledFlexTopCenter,
   StyledHeadlineLarge,
   StyledBuilderWrapper,
   StyledBodyLarge,
@@ -58,6 +58,7 @@ export const ActivityAbout = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue('activityImg', val)}
           getValue={() => watch('activityImg')}
+          description={t('uploadImg')}
         />
       ),
     },
@@ -69,6 +70,7 @@ export const ActivityAbout = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue('activityWatermark', val)}
           getValue={() => watch('activityWatermark')}
+          description={t('uploadTransfluent')}
         />
       ),
     },
@@ -113,9 +115,11 @@ export const ActivityAbout = () => {
 
   return (
     <StyledBuilderWrapper>
-      <StyledHeadlineLarge>{t('aboutActivity')}</StyledHeadlineLarge>
+      <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
+        {t('aboutActivity')}
+      </StyledHeadlineLarge>
       <StyledForm noValidate>
-        <StyledFlexTopCenter>
+        <Box sx={{ display: 'flex' }}>
           <StyledContainer>
             <InputController
               {...commonProps}
@@ -129,12 +133,12 @@ export const ActivityAbout = () => {
               maxLength={MAX_DESCRIPTION_LENGTH_LONG}
               label={t('activityDescription')}
               multiline
-              rows={3}
+              rows={4}
             />
           </StyledContainer>
           <BuilderUploads uploads={uploads} />
-        </StyledFlexTopCenter>
-        <StyledTitleMedium color={variables.palette.on_surface_variant}>
+        </Box>
+        <StyledTitleMedium color={variables.palette.on_surface_variant} sx={{ marginBottom: 1.6 }}>
           {t('itemLevelSettings')}
         </StyledTitleMedium>
         <StyledSettings>

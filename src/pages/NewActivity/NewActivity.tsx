@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { DirectoryUpButton, StyledBody } from 'styles/styledComponents';
+import { StyledDirectoryUpButton, StyledBody } from 'styles/styledComponents';
 import { LinkedTabs, Svg } from 'components';
 import { useBreadcrumbs } from 'hooks';
 import { page } from 'resources';
@@ -15,13 +15,13 @@ export const NewActivity = () => {
 
   return (
     <StyledBody sx={{ position: 'relative' }}>
-      <DirectoryUpButton
+      <StyledDirectoryUpButton
         variant="text"
         onClick={() => navigate(page.newAppletActivities)}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
       >
         {t('activities')}
-      </DirectoryUpButton>
+      </StyledDirectoryUpButton>
       <LinkedTabs tabs={newActivityTabs} />
     </StyledBody>
   );

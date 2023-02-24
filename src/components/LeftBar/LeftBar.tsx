@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { StyledLabelMedium } from 'styles/styledComponents/Typography';
+import { StyledLabelMedium } from 'styles/styledComponents';
 import { SwitchWorkspace, WorkspaceImage } from 'features/SwitchWorkspace';
 import { variables } from 'styles/variables';
 

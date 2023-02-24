@@ -26,13 +26,16 @@ export const SelectController = <T extends FieldValues>({
         <MenuItem key={labelKey} value={value as string}>
           <StyledFlexTopCenter>
             {icon && (
-              <StyledFlexTopCenter sx={{ marginRight: theme.spacing(1.8) }}>
+              <StyledFlexTopCenter
+                className="icon-wrapper"
+                sx={{ marginRight: theme.spacing(1.8) }}
+              >
                 {icon}
               </StyledFlexTopCenter>
             )}
             {t(labelKey)}
             {withChecked && selectValue === value && (
-              <StyledFlexTopCenter sx={{ marginLeft: theme.spacing(1.6) }}>
+              <StyledFlexTopCenter className="icon-wrapper" sx={{ marginLeft: theme.spacing(1.6) }}>
                 <Svg id="check" />
               </StyledFlexTopCenter>
             )}

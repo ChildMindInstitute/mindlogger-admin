@@ -7,6 +7,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth, FolderApplet, folders } from 'redux/modules';
 import { ButtonWithMenu, Search, Svg } from 'components';
 
+import { EditAccessPopup } from 'features/Managers/Popups';
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
 import { StyledButtons, AppletsTableHeader } from './Applets.styles';
@@ -19,6 +20,7 @@ export const Applets = () => {
   const authData = auth.useData();
   const navigate = useNavigate();
 
+  const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(true);
   const [searchValue, setSearchValue] = useState('');
   const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -84,6 +86,12 @@ export const Applets = () => {
 
   return (
     <>
+      <EditAccessPopup
+        editAccessPopupVisible={editAccessPopupVisible}
+        onClose={() => setEditAccessPopupVisible(false)}
+        user={{ email: 'email', firstName: 'firstName', lastName: 'lastName' } as any}
+      />
+      {/* // TODO remove after demo */}
       <AppletsTableHeader>
         <StyledButtons>
           <ButtonWithMenu
