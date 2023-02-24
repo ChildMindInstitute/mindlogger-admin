@@ -23,7 +23,6 @@ export const StyledSelect = styled(Box)`
   }
 
   .MuiBox-root {
-    & > svg,
     .icon-wrapper {
       display: none;
     }
