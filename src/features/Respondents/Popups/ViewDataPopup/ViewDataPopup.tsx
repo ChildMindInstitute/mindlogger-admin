@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
 import { AppletsSmallTable } from 'features/Respondents/AppletsSmallTable';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
+import { StyledModalWrapper, StyledBodyLarge } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import {
   EnterAppletPassword,

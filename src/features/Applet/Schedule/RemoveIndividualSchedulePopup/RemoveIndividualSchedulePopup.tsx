@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal, SubmitBtnColor } from 'components';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper } from 'styles/styledComponents';
 
 import { RemoveIndividualSchedulePopupProps } from './RemoveIndividualSchedulePopup.types';
 import { Steps } from './RemoveIndividualSchedule.types';

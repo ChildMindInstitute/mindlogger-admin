@@ -2,19 +2,19 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { FolderApplet, folders } from 'redux/modules';
+import { FolderApplet } from 'redux/modules';
 import { CheckboxController } from 'components/FormComponents';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
 import {
+  StyledModalWrapper,
   StyledBodyLarge,
   StyledLabelLarge,
   StyledTitleBoldMedium,
-} from 'styles/styledComponents/Typography';
+  StyledFlexTopCenter,
+} from 'styles/styledComponents';
 import { Table, UiType, Modal } from 'components';
 import { useAsync } from 'hooks';
 import { revokeAppletUserApi } from 'api';
 import theme from 'styles/theme';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import {
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,

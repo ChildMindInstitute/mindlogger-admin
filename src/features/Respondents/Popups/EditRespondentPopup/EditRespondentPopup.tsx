@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Modal } from 'components';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper } from 'styles/styledComponents';
 import { InputController } from 'components/FormComponents';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';

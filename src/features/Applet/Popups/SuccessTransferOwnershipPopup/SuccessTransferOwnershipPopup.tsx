@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper } from 'styles/styledComponents';
 
 import { SuccessTransferOwnershipPopupProps } from './SuccessTransferOwnershipPopup.types';
 
