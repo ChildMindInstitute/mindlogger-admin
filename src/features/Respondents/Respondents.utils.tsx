@@ -17,6 +17,7 @@ export const getActions = ({
   viewDataAction,
   removeAccessAction,
   userDataExportAction,
+  editRespondent,
 }: Actions) => [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
@@ -35,8 +36,8 @@ export const getActions = ({
   },
   {
     icon: <Svg id="edit-user" width={21} height={19} />,
-    action: (item: UserData) => item,
-    tooltipTitle: t('editAccess'),
+    action: editRespondent,
+    tooltipTitle: t('editRespondent'),
   },
   {
     icon: <Svg id="remove-access" />,
