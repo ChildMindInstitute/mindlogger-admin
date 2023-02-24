@@ -17,33 +17,33 @@ import { OrderBy } from './Applets.types';
 export const Applets = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  // TODO: implement folders logic when connecting to the corresponding API
-  const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
   const authData = auth.useData();
   const navigate = useNavigate();
-  const userId = authData?.user.id;
+  const ownerId = authData?.user.id;
 
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.UpdatedAt);
-  const [order, setOrder] = useState<Order>('asc');
-  const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
+  const [order, setOrder] = useState<Order>('desc');
+  const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  useEffect(() => {
-    setFlattenItems(foldersApplets);
-  }, [foldersApplets]);
+  // TODO: implement folders logic when connecting to the corresponding API
+  const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
+  const [flattenItems, setFlattenItems] = useState<FolderApplet[] | null>(null);
+  // useEffect(() => {
+  //   setFlattenItems(foldersApplets);
+  // }, [foldersApplets]);
 
   useEffect(() => {
     (async () => {
-      if (userId) {
+      if (ownerId) {
         const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
         const { getApplets } = applets.thunk;
         const result = await dispatch(
           getApplets({
             params: {
-              // eslint-disable-next-line camelcase
-              owner_id: userId,
+              ownerId,
               limit: DEFAULT_ROWS_PER_PAGE,
               search,
               page,
@@ -53,11 +53,13 @@ export const Applets = () => {
         );
 
         if (getApplets.fulfilled.match(result)) {
-          setFlattenItems(result.payload.data.result);
+          const { result: applets, count } = result.payload.data;
+          setFlattenItems(applets);
+          setCount(count);
         }
       }
     })();
-  }, [dispatch, userId, search, page, orderBy, order]);
+  }, [dispatch, ownerId, search, page, orderBy, order]);
 
   const addFolder = () => {
     const newFolderName = generateNewFolderName(foldersApplets, t);
@@ -88,7 +90,15 @@ export const Applets = () => {
     </Box>
   );
 
-  const emptyComponent = flattenItems.length ? t('noMatchWasFound', { search }) : t('noApplets');
+  const getEmptyComponent = () => {
+    if (!flattenItems?.length) {
+      if (search) {
+        return t('noMatchWasFound', { searchValue: search });
+      }
+
+      return t('noApplets');
+    }
+  };
 
   return (
     <>
@@ -113,9 +123,10 @@ export const Applets = () => {
         orderBy={orderBy}
         setOrderBy={setOrderBy}
         headerContent={headerContent}
-        emptyComponent={emptyComponent}
+        emptyComponent={getEmptyComponent()}
         page={page}
         setPage={setPage}
+        count={count}
       />
     </>
   );

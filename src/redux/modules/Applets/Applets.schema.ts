@@ -20,5 +20,5 @@ export type Applet = {
 };
 
 export type AppletsSchema = {
-  applets: BaseSchema<Applet[] | null>;
+  applets: BaseSchema<{ result: Applet[]; count: number } | null>;
 };

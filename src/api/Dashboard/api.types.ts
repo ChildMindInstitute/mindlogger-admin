@@ -23,7 +23,7 @@ export type ResetPassword = { email: string };
 
 export type GetAppletsParams = {
   params: {
-    owner_id: number;
+    ownerId: number;
     search?: string;
     page?: number;
     limit?: number;

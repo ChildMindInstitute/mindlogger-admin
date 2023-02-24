@@ -1,16 +1,14 @@
 import { Fragment, MouseEvent } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
-import { FolderApplet } from 'redux/modules';
-// import { Order } from 'types/table';
+import { applets, FolderApplet } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, EmptyTable, TableHead } from 'components';
 
-// import { getComparator, sortRows } from '../Applets.utils';
+import { OrderBy } from '../Applets.types';
 import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
-import { OrderBy } from '../Applets.types';
 
 export const Table = ({
   columns,
@@ -23,27 +21,17 @@ export const Table = ({
   emptyComponent,
   page,
   setPage,
+  count,
 }: TableProps) => {
-  // const [order, setOrder] = useState<Order>('desc');
-  // const [orderBy, setOrderBy] = useState<string>(orderByProp);
-  // const [page, setPage] = useState(0);
-
-  // console.log('rows', rows);
-
-  // const sortedRows = useMemo(() => {
-  //   if (!rows?.length) {
-  //     return [];
-  //   }
-  //
-  //   return sortRows(rows, getComparator(order, orderBy));
-  // }, [order, orderBy, rows]);
+  const status = applets.useStatus();
+  const loading = status === 'idle' || status === 'loading';
 
   const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
-    const orderBy = property === 'name' ? OrderBy.DisplayName : OrderBy.UpdatedAt;
-    const isAsc = order === 'asc' && orderBy === property;
+    const orderByValue = property === 'name' ? OrderBy.DisplayName : OrderBy.UpdatedAt;
+    const isAsc = order === 'asc' && orderBy === orderByValue;
 
     setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(orderBy);
+    setOrderBy(orderByValue);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -56,9 +44,7 @@ export const Table = ({
       <StyledCellItem>
         <TablePagination
           component="div"
-          // TODO: implement total count from response when API is ready
-          // count={rows?.length || 0}
-          count={200}
+          count={count}
           rowsPerPage={DEFAULT_ROWS_PER_PAGE}
           page={page - 1}
           onPageChange={handleChangePage}
@@ -72,9 +58,14 @@ export const Table = ({
   const getRowComponent = (row: FolderApplet) =>
     row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />;
 
+  const getEmptyTable = () => {
+    if (!loading && rows) {
+      return <EmptyTable>{emptyComponent}</EmptyTable>;
+    }
+  };
+
   return (
     <StyledTableContainer>
-      {/*{sortedRows.length ? (*/}
       {rows?.length ? (
         <MuiTable stickyHeader>
           <TableHead
@@ -91,7 +82,7 @@ export const Table = ({
           </TableBody>
         </MuiTable>
       ) : (
-        <EmptyTable>{emptyComponent}</EmptyTable>
+        getEmptyTable()
       )}
     </StyledTableContainer>
   );

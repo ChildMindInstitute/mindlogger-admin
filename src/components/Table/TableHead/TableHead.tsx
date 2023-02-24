@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { TableRow, TableCell, TableSortLabel } from '@mui/material';
 
 import { UiType } from '../Table.types';
@@ -12,9 +13,8 @@ export const TableHead = ({
   onRequestSort,
   uiType = UiType.Primary,
 }: TableHeadProps) => {
-  const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
+  const createSortHandler = (property: string) => (event: MouseEvent<unknown>) =>
     onRequestSort(event, property);
-  };
 
   return (
     <StyledTableHead uiType={uiType}>
@@ -35,7 +35,7 @@ export const TableHead = ({
             {enableSort ? (
               <TableSortLabel
                 active={orderBy === id}
-                direction={orderBy === id ? order : 'asc'}
+                direction={order}
                 onClick={createSortHandler(id)}
               >
                 {label}

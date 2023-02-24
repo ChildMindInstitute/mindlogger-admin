@@ -19,12 +19,20 @@ const slice = createSlice({
 export const applets = {
   thunk,
   slice,
-  useAppletsData: (): AppletsSchema['applets']['data'] =>
+  useData: (): AppletsSchema['applets']['data'] =>
     useAppSelector(
       ({
-        account: {
+        applets: {
           applets: { data },
         },
       }) => data,
+    ),
+  useStatus: (): AppletsSchema['applets']['status'] =>
+    useAppSelector(
+      ({
+        applets: {
+          applets: { status },
+        },
+      }) => status,
     ),
 };
