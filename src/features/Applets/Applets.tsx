@@ -91,6 +91,7 @@ export const Applets = () => {
         onClose={() => setEditAccessPopupVisible(false)}
         user={{ email: 'email', firstName: 'firstName', lastName: 'lastName' } as any}
       />
+      {/* // TODO remove after demo */}
       <AppletsTableHeader>
         <StyledButtons>
           <ButtonWithMenu
