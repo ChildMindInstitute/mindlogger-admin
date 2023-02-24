@@ -23,7 +23,8 @@ export const StyledSelect = styled(Box)`
   }
 
   .MuiBox-root {
-    & > svg {
+    & > svg,
+    .icon-wrapper {
       display: none;
     }
   }
@@ -98,5 +99,5 @@ export const StyledSearchContainer = styled(Box)`
 `;
 
 export const StyledIconBtn = styled(StyledClearedButton)`
-  padding: ${theme.spacing(1.6)};
+  padding: ${theme.spacing(1)};
 `;
