@@ -76,7 +76,7 @@ export const ActivityFlowAbout = () => {
             label={
               <StyledBodyLarge sx={{ position: 'relative' }}>
                 {t('hideBadge')}
-                <span></span> <StyledSvg id="more-info-outlined" />
+                <StyledSvg id="more-info-outlined" />
               </StyledBodyLarge>
             }
           />
