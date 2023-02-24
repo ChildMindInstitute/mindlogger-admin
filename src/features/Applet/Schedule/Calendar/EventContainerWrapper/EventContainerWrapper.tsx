@@ -102,14 +102,14 @@ export const EventContainerWrapper = ({
           const largestArrayOfEventsIdsLength = largestArrayOfEventsIds.eventIds.length;
 
           if (largestArrayOfEventsIdsLength) {
-            timeContent.style.width = `${
+            timeContent.style.minWidth = `${
               largestArrayOfEventsIdsLength * MIN_EVENT_WIDTH_DAY_VIEW +
               largestArrayOfEventsIdsLength * OFFSET_BETWEEN_EVENTS
             }px`;
           }
         }
       } else {
-        timeContent.style.width = '';
+        timeContent.style.minWidth = '';
       }
     };
 
