@@ -3,11 +3,18 @@ import { Box } from '@mui/material';
 
 import { CalendarViews } from '../Calendar.types';
 import { EventContainerWrapperProps, EventsStartEndDates } from './EventContainerWrapper.types';
+import { getEventClassNames, getOverlappingEvents } from './EventContainerWrapper.utils';
 import {
-  getVariables,
-  getEventClassNames,
-  getOverlappingEvents,
-} from './EventContainerWrapper.utils';
+  ALL_COL_QUANTITY_WEEK_VIEW,
+  INDEX_SHOW_MORE_BTN_WEEK_VIEW,
+  LEFT_OFFSET_COEFFICIENT_WEEK_VIEW,
+  LEFT_START_VAL_WEEK_VIEW,
+  MAX_EVENTS_DAY_VIEW,
+  MAX_VISIBLE_EVENTS_WEEK_VIEW,
+  MIN_EVENT_WIDTH_DAY_VIEW,
+  OFFSET_BETWEEN_EVENTS,
+  VALUE_DECREASING_CONTAINER_WIDTH_WEEK_VIEW,
+} from './EventContainerWrapper.const';
 
 export const EventContainerWrapper = ({
   children,
@@ -19,18 +26,10 @@ export const EventContainerWrapper = ({
   const isWeekView = activeView === CalendarViews.Week;
 
   useEffect(() => {
-    const {
-      VISIBLE_EVENTS_QUANTITY,
-      ALL_COL_QUANTITY,
-      INDEX_SHOW_MORE_BTN,
-      LEFT_OFFSET_COEFFICIENT,
-      LEFT_OFFSET_START_VAL,
-      VALUE_DECREASING_FULL_CONTAINER_WIDTH,
-    } = getVariables(isWeekView);
-
     //TODO: Try to find a better solution for the hide/show many events, and responsive breakpoints logic in the day/week view
     (async () => {
       const eventsWrapper = await wrapperRef.current;
+      const timeContent = (await eventsWrapper?.closest('.rbc-day-slot')) as HTMLElement;
       const containerEvents: NodeListOf<HTMLElement> | undefined =
         await eventsWrapper?.querySelectorAll('.event-wrapper');
       const arrayOfEventsDates: EventsStartEndDates = [];
@@ -50,44 +49,65 @@ export const EventContainerWrapper = ({
           }
         });
 
-        const overlappingEvents = getOverlappingEvents(arrayOfEventsDates);
-
-        overlappingEvents.forEach(({ eventIds }) => {
-          const lengthToShow = eventIds.length - VISIBLE_EVENTS_QUANTITY;
-          const eventsToHide = eventIds.slice(VISIBLE_EVENTS_QUANTITY);
-
-          lengthToShow > 0 &&
-            eventIds.slice(0, VISIBLE_EVENTS_QUANTITY).forEach((id, index) => {
-              const currEventWrapper = eventsWrapper.querySelector(
-                `[data-id='${id}']`,
-              ) as HTMLElement;
-              const currEventEl = currEventWrapper?.querySelector('.rbc-event') as HTMLElement;
-              const showMoreEl = currEventWrapper.querySelector('.more');
-
-              if (currEventEl) {
-                currEventWrapper.classList.add('not-hidden-event');
-                currEventEl.style.width = `calc((100% - ${VALUE_DECREASING_FULL_CONTAINER_WIDTH}) /${ALL_COL_QUANTITY})`;
-                currEventEl.style.left = `${
-                  LEFT_OFFSET_START_VAL + index * LEFT_OFFSET_COEFFICIENT
-                }%`;
-
-                if (index === INDEX_SHOW_MORE_BTN && !showMoreEl) {
-                  currEventEl.insertAdjacentHTML(
-                    'afterbegin',
-                    `<span class="more">${lengthToShow}+</span>`,
-                  );
-                }
-              }
-            });
-
-          lengthToShow > 0 &&
-            eventsToHide.forEach((id) => {
-              const currEventWrapper = eventsWrapper.querySelector(
-                `[data-id='${id}']`,
-              ) as HTMLElement;
-              currEventWrapper?.classList.add('hidden-event');
-            });
+        const overlappingEvents = getOverlappingEvents({
+          eventsArr: arrayOfEventsDates,
+          maxEventsQuantity: isWeekView ? MAX_VISIBLE_EVENTS_WEEK_VIEW : MAX_EVENTS_DAY_VIEW,
         });
+
+        if (overlappingEvents.length) {
+          if (isWeekView) {
+            overlappingEvents.forEach(({ eventIds }) => {
+              const lengthToShow = eventIds.length - MAX_VISIBLE_EVENTS_WEEK_VIEW;
+              const eventsToHide = eventIds.slice(MAX_VISIBLE_EVENTS_WEEK_VIEW);
+
+              lengthToShow > 0 &&
+                eventIds.slice(0, MAX_VISIBLE_EVENTS_WEEK_VIEW).forEach((id, index) => {
+                  const currEventWrapper = eventsWrapper.querySelector(
+                    `[data-id='${id}']`,
+                  ) as HTMLElement;
+                  const currEventEl = currEventWrapper?.querySelector('.rbc-event') as HTMLElement;
+                  const showMoreEl = currEventWrapper.querySelector('.more');
+
+                  if (currEventEl) {
+                    currEventWrapper.classList.add('not-hidden-event');
+                    currEventEl.style.width = `calc((100% - ${VALUE_DECREASING_CONTAINER_WIDTH_WEEK_VIEW}) /${ALL_COL_QUANTITY_WEEK_VIEW})`;
+                    currEventEl.style.left = `${
+                      LEFT_START_VAL_WEEK_VIEW + index * LEFT_OFFSET_COEFFICIENT_WEEK_VIEW
+                    }%`;
+
+                    if (index === INDEX_SHOW_MORE_BTN_WEEK_VIEW && !showMoreEl) {
+                      currEventEl.insertAdjacentHTML(
+                        'afterbegin',
+                        `<span class="more">${lengthToShow}+</span>`,
+                      );
+                    }
+                  }
+                });
+
+              lengthToShow > 0 &&
+                eventsToHide.forEach((id) => {
+                  const currEventWrapper = eventsWrapper.querySelector(
+                    `[data-id='${id}']`,
+                  ) as HTMLElement;
+                  currEventWrapper?.classList.add('hidden-event');
+                });
+            });
+          } else {
+            const largestArrayOfEventsIds = overlappingEvents.reduce((acc, curr) =>
+              curr.eventIds.length > acc.eventIds.length ? curr : acc,
+            );
+            const largestArrayOfEventsIdsLength = largestArrayOfEventsIds.eventIds.length;
+
+            if (largestArrayOfEventsIdsLength) {
+              timeContent.style.width = `${
+                largestArrayOfEventsIdsLength * MIN_EVENT_WIDTH_DAY_VIEW +
+                largestArrayOfEventsIdsLength * OFFSET_BETWEEN_EVENTS
+              }px`;
+            }
+          }
+        } else {
+          timeContent.style.width = '';
+        }
       }
     })();
   }, [events, isWeekView]);
