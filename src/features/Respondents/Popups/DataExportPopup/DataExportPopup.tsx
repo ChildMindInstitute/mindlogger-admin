@@ -8,8 +8,7 @@ import {
   AppletPasswordRef,
 } from 'features/Applet/Password/EnterAppletPassword';
 import theme from 'styles/theme';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
-import { StyledErrorText, StyledBodyLarge } from 'styles/styledComponents';
+import { StyledModalWrapper, StyledErrorText, StyledBodyLarge } from 'styles/styledComponents';
 import { getUsersDataApi } from 'api';
 import { useAsync } from 'hooks';
 import { getErrorMessage } from 'utils/errors';

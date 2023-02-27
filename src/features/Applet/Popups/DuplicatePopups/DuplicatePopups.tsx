@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Modal } from 'components';
 import { InputController } from 'components/FormComponents';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper } from 'styles/styledComponents';
 import { useAsync } from 'hooks/useAsync';
 import { account, popups, folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';

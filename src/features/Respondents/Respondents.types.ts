@@ -3,6 +3,7 @@ export type Actions = {
   userDataExportAction: (value: number) => void;
   viewDataAction: (value: number) => void;
   removeAccessAction: (value: number) => void;
+  editRespondent: (value: number) => void;
 };
 
 export type ChosenAppletData = {
@@ -11,4 +12,5 @@ export type ChosenAppletData = {
   secretUserId?: string;
   hasIndividualSchedule?: boolean;
   userId?: string;
+  nickName?: string;
 };

@@ -5,6 +5,10 @@ import { variables } from 'styles/variables';
 import { StyledClearedButton } from 'styles/styledComponents';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
+import { LEFT_SCHEDULE_PANEL_WIDTH } from '../Schedule.const';
+
+const TIME_GUTTER_WIDTH = '8.5rem';
+
 export const StyledAddBtn = styled(StyledClearedButton)`
   z-index: ${theme.zIndex.fab};
   position: absolute;
@@ -27,7 +31,7 @@ export const StyledAddBtn = styled(StyledClearedButton)`
 
 export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
   position: relative;
-  flex-grow: 1;
+  width: calc(100% - ${LEFT_SCHEDULE_PANEL_WIDTH});
 
   &.day {
     .rbc-header {
@@ -44,6 +48,11 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       .rbc-row:empty {
         display: none;
       }
+    }
+
+    .rbc-day-slot {
+      flex-shrink: 0;
+      width: calc(100% - ${TIME_GUTTER_WIDTH});
     }
   }
 
@@ -325,7 +334,7 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
   }
 
   .rbc-time-gutter {
-    width: 8.5rem;
+    width: ${TIME_GUTTER_WIDTH};
 
     .rbc-timeslot-group {
       position: relative;

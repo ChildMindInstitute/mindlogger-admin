@@ -9,9 +9,8 @@ import {
 } from 'features/Applet/Password/EnterAppletPassword';
 import { AppletsSmallTable } from 'features/Respondents/AppletsSmallTable';
 import { ChosenAppletData } from 'features/Respondents/Respondents.types';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper, StyledBodyLarge } from 'styles/styledComponents';
 import theme from 'styles/theme';
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
 import { useAsync } from 'hooks';
 import { revokeAppletUserApi } from 'api';
 

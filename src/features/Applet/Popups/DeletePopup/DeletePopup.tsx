@@ -6,7 +6,7 @@ import { useAsync } from 'hooks/useAsync';
 import { folders, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper } from 'styles/styledComponents';
 import { page } from 'resources';
 
 export const DeletePopup = () => {
