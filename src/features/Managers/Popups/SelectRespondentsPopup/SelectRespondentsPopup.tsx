@@ -1,7 +1,7 @@
 import { useRef, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper } from 'styles/styledComponents';
 import { Modal } from 'components';
 
 import { SelectRespondents } from './SelectRespondents';

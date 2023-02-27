@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import { Modal, Table, UiType } from 'components';
 import theme from 'styles/theme';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper } from 'styles/styledComponents';
 
 import { ExportSchedulePopupProps } from './ExportSchedulePopup.types';
 import { getHeadCells } from './ExportSchedulePopup.const';

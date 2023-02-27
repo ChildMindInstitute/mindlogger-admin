@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper } from 'styles/styledComponents';
 
 import { RemoveAllScheduledEventsPopupProps } from './RemoveAllScheduledEventsPopup.types';
 

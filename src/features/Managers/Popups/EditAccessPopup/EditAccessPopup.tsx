@@ -3,8 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
 import theme from 'styles/theme';
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper, StyledBodyLarge } from 'styles/styledComponents';
 import { Roles } from 'consts';
 
 import { Applet } from './Applet';

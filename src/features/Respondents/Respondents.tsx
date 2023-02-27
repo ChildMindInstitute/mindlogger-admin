@@ -9,7 +9,13 @@ import { useTimeAgo, useBreadcrumbs } from 'hooks';
 import { filterRows } from 'utils/filterRows';
 import { prepareRespondentsData } from 'utils/prepareUsersData';
 
-import { ScheduleSetupPopup, ViewDataPopup, DataExportPopup, RemoveAccessPopup } from './Popups';
+import {
+  ScheduleSetupPopup,
+  ViewDataPopup,
+  DataExportPopup,
+  RemoveAccessPopup,
+  EditRespondentPopup,
+} from './Popups';
 import {
   RespondentsTableHeader,
   StyledButton,
@@ -32,6 +38,7 @@ export const Respondents = () => {
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
+  const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
   const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
@@ -58,6 +65,10 @@ export const Respondents = () => {
     removeAccessAction: (index: number) => {
       setRespondentsDataIndex(index);
       setRemoveAccessPopupVisible(true);
+    },
+    editRespondent: (index: number) => {
+      setRespondentsDataIndex(index);
+      setEditRespondentPopupVisible(true);
     },
   };
 
@@ -137,17 +148,15 @@ export const Respondents = () => {
     const keys = chosenRespondentsItems && Object.keys(chosenRespondentsItems);
     if (keys && keys.length === 1) {
       const appletId = keys[0];
-      const { appletName, secretUserId, hasIndividualSchedule, userId } = getChosenAppletData(
-        chosenRespondentsItems,
-        appletsData,
-        appletId,
-      );
+      const { appletName, secretUserId, hasIndividualSchedule, userId, nickName } =
+        getChosenAppletData(chosenRespondentsItems, appletsData, appletId);
       const chosenAppletData = {
         appletId,
         appletName,
         secretUserId,
         hasIndividualSchedule,
         userId,
+        nickName,
       };
       setChosenAppletData(chosenAppletData);
     } else {
@@ -160,6 +169,7 @@ export const Respondents = () => {
     dataExportPopupVisible,
     viewDataPopupVisible,
     removeAccessPopupVisible,
+    editRespondentPopupVisible,
   ]);
 
   return (
@@ -216,6 +226,14 @@ export const Respondents = () => {
           popupVisible={dataExportPopupVisible}
           setPopupVisible={setDataExportPopupVisible}
           tableRows={appletsSmallTableRows}
+          chosenAppletData={chosenAppletData}
+          setChosenAppletData={setChosenAppletData}
+        />
+      )}
+      {editRespondentPopupVisible && (
+        <EditRespondentPopup
+          popupVisible={editRespondentPopupVisible}
+          setPopupVisible={setEditRespondentPopupVisible}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
         />

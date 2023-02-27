@@ -1,7 +1,6 @@
 import { styled } from '@mui/system';
 
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
-import { StyledTitleSmall } from 'styles/styledComponents/Typography';
+import { StyledModalWrapper, StyledTitleSmall } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 

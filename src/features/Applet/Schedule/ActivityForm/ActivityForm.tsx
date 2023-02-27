@@ -5,7 +5,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { SelectController } from 'components/FormComponents';
 import { DefaultTabs as Tabs } from 'components';
 import { UiType } from 'components/Tabs/Tabs.types';
-import { StyledModalWrapper } from 'styles/styledComponents/Modal';
+import { StyledModalWrapper } from 'styles/styledComponents';
 import theme from 'styles/theme';
 
 import { ActivityFormProps, ActivityFormRef, FormValues } from '.';
