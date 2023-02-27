@@ -17,11 +17,11 @@ import {
   StyledWrapper,
 } from './Event.styles';
 
-export const Event = ({ title, event, uiType = UiType.MonthView }: EventProps) => {
+export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps) => {
   const { scheduledColor, startFlowIcon, start, end, allDayEvent, endAlertIcon, alwaysAvailable } =
     event;
   const isAllDayEvent = allDayEvent || alwaysAvailable;
-  const isMonthView = uiType === UiType.MonthView;
+  const isDefaultView = uiType === UiType.DefaultView;
   const isTimeView = uiType === UiType.TimeView;
   const isScheduledDayWeekEvent = isTimeView && !isAllDayEvent;
 
@@ -29,8 +29,8 @@ export const Event = ({ title, event, uiType = UiType.MonthView }: EventProps) =
     <StyledEvent title="" className="event" isScheduledDayWeekEvent={isScheduledDayWeekEvent}>
       <StyledWrapper className="event-top-section">
         <StyledLeftSection>
-          {isMonthView && scheduledColor && <StyledIndicator bgColor={scheduledColor} />}
-          {isMonthView && !isAllDayEvent && (
+          {isDefaultView && scheduledColor && <StyledIndicator bgColor={scheduledColor} />}
+          {isDefaultView && !isAllDayEvent && (
             <StyledLabelMedium>{format(start, DateFormats.Time)}</StyledLabelMedium>
           )}
           {isTimeView && !isAllDayEvent && (

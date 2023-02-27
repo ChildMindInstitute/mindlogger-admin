@@ -53,6 +53,7 @@ export const StyledIndicator = styled(Box, shouldForwardProp)`
   width: 0.8rem;
   border-radius: ${variables.borderRadius.half};
   background-color: ${({ bgColor }: { bgColor: string }) => bgColor};
+  align-self: center;
 `;
 
 export const StyledTitle = styled(StyledLabelBoldMedium, shouldForwardProp)`
