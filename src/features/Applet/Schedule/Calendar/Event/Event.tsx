@@ -5,6 +5,7 @@ import { DateFormats } from 'consts';
 import theme from 'styles/theme';
 import { StyledBodySmall, StyledLabelMedium } from 'styles/styledComponents';
 
+import { getEventEndTime } from '../Calendar.utils';
 import { EventProps, UiType } from './Event.types';
 import {
   StyledEndIcon,
@@ -15,7 +16,6 @@ import {
   StyledTitle,
   StyledWrapper,
 } from './Event.styles';
-import { getEventEndTime } from './Event.utils';
 
 export const Event = ({ title, event, uiType = UiType.MonthView }: EventProps) => {
   const { scheduledColor, startFlowIcon, start, end, allDayEvent, endAlertIcon, alwaysAvailable } =
@@ -26,7 +26,7 @@ export const Event = ({ title, event, uiType = UiType.MonthView }: EventProps) =
   const isScheduledDayWeekEvent = isTimeView && !isAllDayEvent;
 
   return (
-    <StyledEvent className="event" isScheduledDayWeekEvent={isScheduledDayWeekEvent}>
+    <StyledEvent title="" className="event" isScheduledDayWeekEvent={isScheduledDayWeekEvent}>
       <StyledWrapper className="event-top-section">
         <StyledLeftSection>
           {isMonthView && scheduledColor && <StyledIndicator bgColor={scheduledColor} />}

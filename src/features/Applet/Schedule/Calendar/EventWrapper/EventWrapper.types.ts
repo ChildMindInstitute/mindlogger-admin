@@ -1,12 +1,17 @@
-import { Dispatch, ReactElement, SetStateAction } from 'react';
-import { CalendarProps, EventWrapperProps as CalendarEventWrapperProps } from 'react-big-calendar';
+import { Dispatch, SetStateAction } from 'react';
+import { CalendarProps } from 'react-big-calendar';
 
-import { AllDayEventsVisible, CalendarEvent } from '../Calendar.types';
+import { AllDayEventsVisible, CalendarEventWrapperProps } from '../Calendar.types';
 
-export type EventWrapperProps = CalendarEventWrapperProps<CalendarEvent> & {
-  children: ReactElement;
-  components: CalendarProps['components'] & {
+export enum UiType {
+  TimeView = 'timeView',
+  MonthView = 'monthView',
+}
+
+export type EventWrapperProps = CalendarEventWrapperProps & {
+  components?: CalendarProps['components'] & {
     isAllDayEventsVisible: AllDayEventsVisible;
     setEditActivityPopupVisible: Dispatch<SetStateAction<boolean>>;
   };
+  uiType?: UiType;
 };

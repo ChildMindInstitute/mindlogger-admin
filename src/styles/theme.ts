@@ -29,6 +29,7 @@ const theme = createTheme({
         },
         '*::-webkit-scrollbar': {
           width: '0.8rem',
+          height: '1.2rem',
         },
         '*::-webkit-scrollbar-thumb': {
           backgroundColor: variables.palette.outline,

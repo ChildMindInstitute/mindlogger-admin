@@ -1,4 +1,5 @@
-import { View } from 'react-big-calendar';
+import { ReactElement } from 'react';
+import { EventWrapperProps, View } from 'react-big-calendar';
 
 export type CalendarEvent = {
   id: string;
@@ -44,3 +45,7 @@ export enum NameLength {
   Long = 'long',
   Short = 'short',
 }
+
+export type CalendarEventWrapperProps = EventWrapperProps<CalendarEvent> & {
+  children: ReactElement;
+};

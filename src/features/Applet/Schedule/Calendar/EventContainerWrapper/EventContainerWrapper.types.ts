@@ -23,6 +23,8 @@ export type EventInterval = {
 
 export type EventsStartEndDates = EventStartEndDates[];
 
+export type OverlappingEventsArgs = { eventsArr: EventStartEndDates[]; maxEventsQuantity: number };
+
 export enum EventsWidthBreakpoints {
   Lg = 119,
   Md = 71,

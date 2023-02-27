@@ -24,6 +24,7 @@ import {
   AllDayEventsSortedByDaysItem,
   AllDayEventsVisible,
   CalendarEvent,
+  CalendarEventWrapperProps,
   CalendarViews,
   NameLength,
 } from './Calendar.types';
@@ -37,8 +38,17 @@ import { TimeGutterHeader } from './TimeGutterHeader';
 import { EventWrapper } from './EventWrapper';
 import { DateHeader } from './DateHeader';
 import { EventContainerWrapper } from './EventContainerWrapper';
+import { UiType as EventWrapperUiType } from './EventWrapper';
 
 const { t } = i18n;
+
+export const getEventEndTime = (date: Date) =>
+  ` - ${
+    format(date, DateFormats.TimeSeconds) === '23:59:59' ||
+    format(date, DateFormats.TimeSeconds) === '00:00:00'
+      ? '24:00'
+      : format(date, DateFormats.Time)
+  }`;
 
 export const getMoreText = () => `${t('more').toLowerCase()}...`;
 
@@ -146,6 +156,11 @@ export const getCalendarComponents = (
       dateHeader: DateHeader,
       header: (props: HeaderProps) => <MonthHeader {...props} calendarDate={date} />,
       event: Event,
+      eventWrapper: (props: CalendarEventWrapperProps) => (
+        <EventWrapper {...props} uiType={EventWrapperUiType.MonthView}>
+          {props.children}
+        </EventWrapper>
+      ),
     },
     week: {
       header: (props: HeaderProps) => (

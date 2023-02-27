@@ -5,8 +5,9 @@ export const Tooltip = ({
   tooltipTitle = '',
   uiType = TooltipUiType.Primary,
   children,
+  ...props
 }: TooltipProps) => (
-  <StyledTooltip className={uiType} title={tooltipTitle}>
+  <StyledTooltip {...props} className={uiType} title={tooltipTitle}>
     {children}
   </StyledTooltip>
 );
