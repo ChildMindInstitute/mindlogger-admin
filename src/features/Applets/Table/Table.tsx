@@ -1,13 +1,11 @@
-import { Fragment, useMemo, useState, MouseEvent } from 'react';
+import { Fragment, MouseEvent } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
-import { FolderApplet } from 'redux/modules';
-import { DEFAULT_ROWS_PER_PAGE, Head } from 'components';
-import { Order } from 'types/table';
-import { EmptyTable } from 'components';
+import { applets, FolderApplet } from 'redux/modules';
+import { DEFAULT_ROWS_PER_PAGE, EmptyTable, TableHead } from 'components';
 
-import { getComparator, sortRows } from '../Applets.utils';
-import { StyledTableContainer, StyledCellItem, StyledTableCellContent } from './Table.styles';
+import { OrderBy } from '../Applets.types';
+import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
@@ -15,30 +13,29 @@ import { AppletItem } from './AppletItem';
 export const Table = ({
   columns,
   rows,
-  orderBy: orderByProp,
+  order,
+  setOrder,
+  orderBy,
+  setOrderBy,
   headerContent,
   emptyComponent,
+  page,
+  setPage,
+  count,
 }: TableProps) => {
-  const [order, setOrder] = useState<Order>('desc');
-  const [orderBy, setOrderBy] = useState<string>(orderByProp);
-  const [page, setPage] = useState(0);
-
-  const sortedRows = useMemo(() => {
-    if (!rows?.length) {
-      return [];
-    }
-
-    return sortRows(rows, getComparator(order, orderBy));
-  }, [order, orderBy, rows]);
+  const status = applets.useStatus();
+  const loading = status === 'idle' || status === 'loading';
 
   const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
-    const isAsc = orderBy === property && order === 'asc';
+    const orderByValue = property === 'name' ? OrderBy.DisplayName : OrderBy.UpdatedAt;
+    const isAsc = order === 'asc' && orderBy === orderByValue;
+
     setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+    setOrderBy(orderByValue);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    setPage(newPage + 1);
   };
 
   const tableHeader = (
@@ -47,9 +44,9 @@ export const Table = ({
       <StyledCellItem>
         <TablePagination
           component="div"
-          count={rows?.length || 0}
+          count={count}
           rowsPerPage={DEFAULT_ROWS_PER_PAGE}
-          page={page}
+          page={page - 1}
           onPageChange={handleChangePage}
           labelRowsPerPage=""
           rowsPerPageOptions={[]}
@@ -58,11 +55,20 @@ export const Table = ({
     </StyledTableCellContent>
   );
 
+  const getRowComponent = (row: FolderApplet) =>
+    row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />;
+
+  const getEmptyTable = () => {
+    if (!loading && rows) {
+      return <EmptyTable>{emptyComponent}</EmptyTable>;
+    }
+  };
+
   return (
     <StyledTableContainer>
-      {sortedRows.length ? (
+      {rows?.length ? (
         <MuiTable stickyHeader>
-          <Head
+          <TableHead
             headCells={columns}
             order={order}
             orderBy={orderBy}
@@ -70,20 +76,13 @@ export const Table = ({
             tableHeader={tableHeader}
           />
           <TableBody>
-            {sortedRows
-              ?.slice(
-                page * DEFAULT_ROWS_PER_PAGE,
-                page * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
-              )
-              .map((row: FolderApplet) => (
-                <Fragment key={row.id}>
-                  {row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />}
-                </Fragment>
-              ))}
+            {rows.map((row: FolderApplet) => (
+              <Fragment key={row.id}>{getRowComponent(row)}</Fragment>
+            ))}
           </TableBody>
         </MuiTable>
       ) : (
-        <EmptyTable>{emptyComponent}</EmptyTable>
+        getEmptyTable()
       )}
     </StyledTableContainer>
   );

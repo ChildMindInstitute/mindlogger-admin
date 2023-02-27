@@ -29,13 +29,16 @@ export const EventContainerWrapper = ({
     //TODO: Try to find a better solution for the hide/show many events, and responsive breakpoints logic in the day/week view
     const updateEventsLayout = async () => {
       const eventsWrapper = await wrapperRef.current;
-      if (!eventsWrapper) return;
-
       const containerEvents: NodeListOf<HTMLElement> | undefined =
         await eventsWrapper?.querySelectorAll('.event-wrapper');
-      if (!containerEvents.length) return;
-
       const timeContent = (await eventsWrapper?.closest('.rbc-day-slot')) as HTMLElement;
+
+      if (!eventsWrapper || !containerEvents?.length) {
+        timeContent.style.minWidth = '';
+
+        return;
+      }
+
       const arrayOfEventsDates: EventsStartEndDates = [];
 
       await containerEvents.forEach((eventWrapper) => {

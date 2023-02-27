@@ -4,30 +4,62 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
-import { auth, FolderApplet, folders } from 'redux/modules';
-import { ButtonWithMenu, Search, Svg } from 'components';
+import { applets, auth, FolderApplet, folders } from 'redux/modules';
+import { ButtonWithMenu, DEFAULT_ROWS_PER_PAGE, Search, Svg } from 'components';
+import { Order } from 'types/table';
 
-import { EditAccessPopup } from 'features/Managers/Popups';
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
-import { StyledButtons, AppletsTableHeader } from './Applets.styles';
+import { AppletsTableHeader, StyledButtons } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
+import { OrderBy } from './Applets.types';
 
 export const Applets = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
   const authData = auth.useData();
   const navigate = useNavigate();
 
-  const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(true);
-  const [searchValue, setSearchValue] = useState('');
-  const [flattenItems, setFlattenItems] = useState<FolderApplet[]>([]);
+  const ownerId = authData?.user.id;
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.UpdatedAt);
+  const [order, setOrder] = useState<Order>('desc');
+  const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
+  // TODO: implement folders logic when connecting to the corresponding API
+  const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
+  const [flattenItems, setFlattenItems] = useState<FolderApplet[] | null>(null);
+  // useEffect(() => {
+  //   setFlattenItems(foldersApplets);
+  // }, [foldersApplets]);
+
   useEffect(() => {
-    setFlattenItems(foldersApplets);
-  }, [foldersApplets]);
+    (async () => {
+      if (ownerId) {
+        const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
+        const { getApplets } = applets.thunk;
+        const result = await dispatch(
+          getApplets({
+            params: {
+              ownerId,
+              limit: DEFAULT_ROWS_PER_PAGE,
+              search,
+              page,
+              ordering,
+            },
+          }),
+        );
+
+        if (getApplets.fulfilled.match(result)) {
+          const { result: applets, count } = result.payload.data;
+          setFlattenItems(applets);
+          setCount(count);
+        }
+      }
+    })();
+  }, [dispatch, ownerId, search, page, orderBy, order]);
 
   const addFolder = () => {
     const newFolderName = generateNewFolderName(foldersApplets, t);
@@ -49,29 +81,7 @@ export const Applets = () => {
   };
 
   const handleSearch = (value: string) => {
-    setSearchValue(value);
-  };
-
-  const filterRows = (row: FolderApplet) => {
-    if (!row.isVisible) return;
-    if (!searchValue) {
-      return row;
-    }
-    if (!row?.isFolder && row?.name?.toLowerCase().includes(searchValue?.toLowerCase())) {
-      return row;
-    } else {
-      let isFolderContainsSearchApplet = false;
-
-      row?.items?.forEach((itemInFolder) => {
-        if (itemInFolder?.name?.toLowerCase().includes(searchValue.toLowerCase())) {
-          isFolderContainsSearchApplet = true;
-        }
-      });
-
-      if (isFolderContainsSearchApplet) {
-        return row;
-      }
-    }
+    setSearch(value);
   };
 
   const headerContent = (
@@ -80,18 +90,18 @@ export const Applets = () => {
     </Box>
   );
 
-  const emptyComponent = !flattenItems.length
-    ? t('noApplets')
-    : t('noMatchWasFound', { searchValue });
+  const getEmptyComponent = () => {
+    if (!flattenItems?.length) {
+      if (search) {
+        return t('noMatchWasFound', { searchValue: search });
+      }
+
+      return t('noApplets');
+    }
+  };
 
   return (
     <>
-      <EditAccessPopup
-        editAccessPopupVisible={editAccessPopupVisible}
-        onClose={() => setEditAccessPopupVisible(false)}
-        user={{ email: 'email', firstName: 'firstName', lastName: 'lastName' } as any}
-      />
-      {/* // TODO remove after demo */}
       <AppletsTableHeader>
         <StyledButtons>
           <ButtonWithMenu
@@ -107,10 +117,16 @@ export const Applets = () => {
       </AppletsTableHeader>
       <Table
         columns={getHeadCells()}
-        rows={flattenItems?.filter(filterRows)}
-        orderBy="updated"
+        rows={flattenItems}
+        order={order}
+        setOrder={setOrder}
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
         headerContent={headerContent}
-        emptyComponent={emptyComponent}
+        emptyComponent={getEmptyComponent()}
+        page={page}
+        setPage={setPage}
+        count={count}
       />
     </>
   );

@@ -132,11 +132,11 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
               </StyledPinContainer>
             )}
             <AppletImage image={item.image} appletName={item.name} />
-            <StyledBodyMedium>{item.name}</StyledBodyMedium>
+            <StyledBodyMedium>{item.displayName}</StyledBodyMedium>
           </StyledAppletName>
         </TableCell>
         <TableCell width="20%" onClick={handleAppletClick}>
-          {item.updated ? timeAgo.format(new Date(item.updated)) : ''}
+          {item.updatedAt ? timeAgo.format(new Date(item.updatedAt)) : ''}
         </TableCell>
         <TableCell>
           <Actions items={getActions({ actions, item })} context={item} />

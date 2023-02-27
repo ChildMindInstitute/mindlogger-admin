@@ -29,14 +29,6 @@ export const getRequestFullLangData = (config: AxiosRequestConfig) => {
   config.params.lang = LANGUAGES[lang] as string;
 };
 
-export const attachUrl = (origin: string, resource: string) => {
-  if (origin.endsWith('/')) {
-    return origin + resource;
-  }
-
-  return `${origin}/${resource}`;
-};
-
 export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
   try {
     const { response: errorResponse } = err;

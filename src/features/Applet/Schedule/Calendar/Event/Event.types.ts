@@ -1,7 +1,7 @@
 import { CalendarEvent } from '../Calendar.types';
 
 export enum UiType {
-  MonthView = 'monthView',
+  DefaultView = 'defaultView',
   TimeView = 'timeView',
 }
 

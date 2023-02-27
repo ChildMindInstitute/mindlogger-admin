@@ -31,7 +31,7 @@ export type Profile = {
   viewable: boolean;
 };
 
-export type Applet = {
+type Applet = {
   description: string;
   displayName: string;
   editing: boolean;

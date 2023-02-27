@@ -5,7 +5,7 @@ import uniqueId from 'lodash.uniqueid';
 import { Order } from 'types/table';
 import { EmptyTable } from 'components';
 
-import { Head } from './Head';
+import { TableHead } from './TableHead';
 import { DEFAULT_ROWS_PER_PAGE, TERTIARY_TYPE_ROWS_PER_PAGE } from './Table.const';
 import { StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { Row, TableProps, UiType } from './Table.types';
@@ -77,7 +77,7 @@ export const Table = ({
       <StyledTableContainer height={tableHeight} uiType={uiType}>
         {rows?.length ? (
           <MuiTable stickyHeader>
-            <Head
+            <TableHead
               headCells={columns}
               order={order}
               orderBy={orderBy}
