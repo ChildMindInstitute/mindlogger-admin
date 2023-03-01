@@ -31,7 +31,7 @@ export const BaseLayout = () => {
   return (
     <StyledBaseLayout>
       {isAuthorized && <LeftBar />}
-      <StyledCol>
+      <StyledCol isAuthorized={isAuthorized}>
         <TopBar />
         <Outlet />
         <Footer />

@@ -419,6 +419,8 @@
   "viewDetails": "View details",
   "addToCart": "Add to cart",
   "cart": "Cart",
+  "emptyCart": "You have not added anything to your cart yet. Add applets from the <1>Applet catalog</1>.",
+  "notFound": "Nothing was found according to your request. Try wording your request differently.",
   "appletActivities": "Applet activities",
   "activityFlowBuilder": "Activity Flow Builder",
   "uploadTransfluent": "Please upload JPG or transfluent PNG image less than 1GB."

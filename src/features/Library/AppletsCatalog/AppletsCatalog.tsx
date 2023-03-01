@@ -8,15 +8,17 @@ import { library } from 'redux/modules';
 import { Header, RightButtonType } from 'features/Library/Header';
 import { Applet } from 'features/Library/Applet';
 import { page } from 'resources';
-import { StyledBody, StyledHeadlineLarge } from 'styles/styledComponents';
+import { EmptyTable } from 'components';
+import {
+  StyledBody,
+  StyledHeadlineLarge,
+  ContentContainer,
+  StyledAppletContainer,
+  StyledAppletList,
+} from 'styles/styledComponents';
 import theme from 'styles/theme';
 
-import {
-  ContentContainer,
-  StyledAppletList,
-  StyledAppletContainer,
-  StyledTablePagination,
-} from './AppletsCatalog.styles';
+import { StyledTablePagination } from './AppletsCatalog.styles';
 import { mockedApplets } from './mocked';
 
 export const DEFAULT_APPLETS_PER_PAGE = 6;
@@ -51,6 +53,9 @@ export const AppletsCatalog = () => {
     setPageIndex(0);
   };
 
+  // TODO: check search value
+  const renderEmptyState = () => <EmptyTable>{t('notFound')}</EmptyTable>;
+
   useEffect(() => {
     // TODO: delete comment when endpoint is ready
     // const timeout = setTimeout(
@@ -70,24 +75,26 @@ export const AppletsCatalog = () => {
         rightButtonCallback={() => navigate(page.libraryCart)}
       />
       <ContentContainer>
-        {publishedApplets?.data?.length && (
-          <>
-            <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>
-              {t('appletsCatalog')}
-            </StyledHeadlineLarge>
-            <StyledAppletList>
-              {publishedApplets?.data
-                // TODO: delete slice when endpoint is ready
-                ?.slice(
-                  pageIndex * DEFAULT_APPLETS_PER_PAGE,
-                  pageIndex * DEFAULT_APPLETS_PER_PAGE + DEFAULT_APPLETS_PER_PAGE,
-                )
-                .map((applet) => (
-                  <StyledAppletContainer key={applet.id}>
-                    <Applet applet={applet} />
-                  </StyledAppletContainer>
-                ))}
-            </StyledAppletList>
+        <>
+          <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>
+            {t('appletsCatalog')}
+          </StyledHeadlineLarge>
+          <StyledAppletList>
+            {publishedApplets?.data?.length
+              ? publishedApplets.data
+                  // TODO: delete slice when endpoint is ready
+                  ?.slice(
+                    pageIndex * DEFAULT_APPLETS_PER_PAGE,
+                    pageIndex * DEFAULT_APPLETS_PER_PAGE + DEFAULT_APPLETS_PER_PAGE,
+                  )
+                  .map((applet) => (
+                    <StyledAppletContainer key={applet.id}>
+                      <Applet applet={applet} />
+                    </StyledAppletContainer>
+                  ))
+              : renderEmptyState()}
+          </StyledAppletList>
+          {publishedApplets?.data?.length && (
             <StyledTablePagination
               component="div"
               count={publishedApplets?.totalCount || 0}
@@ -98,8 +105,8 @@ export const AppletsCatalog = () => {
               labelRowsPerPage=""
               rowsPerPageOptions={[]}
             />
-          </>
-        )}
+          )}
+        </>
       </ContentContainer>
     </StyledBody>
   );
