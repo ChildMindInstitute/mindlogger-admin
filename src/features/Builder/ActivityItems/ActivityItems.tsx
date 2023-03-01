@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'components';
 import { useBreadcrumbs } from 'hooks';
 
-import ItemConfiguration from './ItemConfiguration';
+import { ItemConfiguration } from './ItemConfiguration';
 
 export const ActivityItems = () => {
   const { t } = useTranslation('app');

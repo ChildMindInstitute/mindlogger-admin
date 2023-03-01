@@ -54,7 +54,6 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         <FormControl fullWidth>
           <InputLabel id="input-type-label">{t('inputType')}</InputLabel>
           <StyledSelect
-            autoComplete="new-select"
             fullWidth
             MenuProps={{ autoFocus: false }}
             onChange={onChange}

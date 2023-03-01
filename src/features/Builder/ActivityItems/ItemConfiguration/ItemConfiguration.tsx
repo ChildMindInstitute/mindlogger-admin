@@ -39,7 +39,6 @@ export const ItemConfiguration = () => {
       </StyledTop>
       <StyledInputWrapper>
         <GroupedSelectSearchController
-          fullWidth
           name="itemsInputType"
           options={itemsTypeOptions}
           control={control}

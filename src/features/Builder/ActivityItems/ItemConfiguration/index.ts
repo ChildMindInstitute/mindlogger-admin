@@ -1,3 +1,1 @@
-import { ItemConfiguration } from './ItemConfiguration';
-
-export default ItemConfiguration;
+export * from './ItemConfiguration';
