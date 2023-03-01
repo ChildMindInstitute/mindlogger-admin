@@ -148,7 +148,6 @@ export const RemoveAccessPopup = ({
       onSecondBtnSubmit={onSecondBtnSubmit}
       secondBtnText={t('back')}
       disabledSubmit={disabledSubmit}
-      width="66"
       submitBtnColor={screens[step].submitBtnColor as SubmitBtnColor | undefined}
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>

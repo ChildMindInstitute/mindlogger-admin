@@ -34,7 +34,6 @@ export const RemoveIndividualSchedulePopup = ({
       submitBtnColor={screens[step].submitBtnColor as SubmitBtnColor | undefined}
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
-      width="66"
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
     </Modal>
