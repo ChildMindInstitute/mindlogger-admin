@@ -1,4 +1,5 @@
-import { createTheme } from '@mui/material/styles';
+import { SelectClasses, createTheme, Theme } from '@mui/material';
+import { OverridesStyleRules } from '@mui/material/styles/overrides';
 import 'react-datepicker/dist/react-datepicker.min.css';
 import 'cropperjs/dist/cropper.css';
 
@@ -385,6 +386,35 @@ const theme = createTheme({
           },
         },
       },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          borderRadius: variables.borderRadius.xs,
+          borderColor: variables.palette.outline_variant,
+          color: variables.palette.on_surface,
+          '&:hover': {
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: variables.palette.primary50,
+            },
+          },
+          '.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderWidth: variables.borderWidth.lg,
+            borderColor: variables.palette.primary,
+          },
+          svg: {
+            fill: variables.palette.on_surface_variant,
+          },
+        },
+        select: {
+          '&&': {
+            maxWidth: '89.5%',
+            paddingRight: '1.4rem',
+          },
+        },
+      } as Partial<
+        OverridesStyleRules<keyof SelectClasses, 'MuiSelect', Omit<Theme, 'components'>>
+      >,
     },
     MuiMenu: {
       styleOverrides: {

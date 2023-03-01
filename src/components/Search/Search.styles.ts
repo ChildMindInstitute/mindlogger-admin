@@ -29,4 +29,8 @@ export const StyledTextField = styled(OutlinedInput)`
 export const StyledIcon = styled(Box)`
   display: flex;
   margin-right: ${theme.spacing(1)};
+
+  svg {
+    fill: ${variables.palette.outline};
+  }
 `;
