@@ -215,7 +215,6 @@ export const RemoveAccessPopup = ({
       onClose={onClose}
       onSubmit={onSubmit}
       title={t('removeAccess')}
-      width="66"
       hasSecondBtn={step === 1}
       secondBtnText={t('back')}
       onSecondBtnSubmit={() => setStep((prevState) => --prevState as Steps)}

@@ -22,7 +22,6 @@ export const EditAccessSuccessPopup = ({
       onClose={onClose}
       onSubmit={onClose}
       buttonText={t('ok')}
-      width="66"
     >
       <StyledModalWrapper sx={{ marginTop: theme.spacing(-1) }}>
         <Trans i18nKey="confirmEditAccessSuccess">

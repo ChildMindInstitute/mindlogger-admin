@@ -34,7 +34,6 @@ export const ClearScheduledEventsPopup = ({
       hasSecondBtn={screens[step].hasSecondBtn}
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
-      width="66"
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
     </Modal>

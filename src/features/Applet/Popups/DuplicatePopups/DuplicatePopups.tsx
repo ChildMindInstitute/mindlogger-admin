@@ -120,7 +120,6 @@ export const DuplicatePopups = () => {
         title={t('appletDuplication')}
         onSubmit={setNameHandler}
         buttonText={t('submit')}
-        width="66"
       >
         <StyledModalWrapper>
           <form onSubmit={handleSubmit(setNameHandler)} noValidate>
@@ -143,7 +142,6 @@ export const DuplicatePopups = () => {
           title={t('appletDuplication')}
           onSubmit={successModalClose}
           buttonText={t('ok')}
-          width="66"
         >
           <StyledModalWrapper>
             <Trans i18nKey="successDuplication">

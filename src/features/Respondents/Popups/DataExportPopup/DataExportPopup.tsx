@@ -97,7 +97,6 @@ export const DataExportPopup = ({
       onSubmit={handleModalSubmit}
       title={showEnterPwdScreen ? t('enterAppletPassword') : t('dataExport')}
       buttonText={showEnterPwdScreen ? t('submit') : ''}
-      width="66"
     >
       <StyledModalWrapper>
         {modalContent}
