@@ -445,6 +445,8 @@
   "display": "Display",
   "searchInputType": "Search input type",
   "inputType": "Input Type",
+  "itemName": "Item Name",
+  "itemBody": "Input Body",
   "itemTypeDescription": "Provide a list of choices and allow respondents to choose a single answer.",
   "uploadTransfluent": "Please upload JPG or transfluent PNG image less than 1GB."
 }

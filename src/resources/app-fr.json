@@ -335,6 +335,8 @@
   "display": "Affichage",
   "searchInputType": "Type d'entrée de recherche",
   "inputType": "Type d'entrée",
+  "itemName": "Nom de l'article",
+  "itemBody": "Corps d'entrée",
   "itemTypeDescription": "Fournissez une liste de choix et permettez aux répondants de choisir une seule réponse.",
   "appletActivities": "Activités d'applet"
 }
