@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'hooks';
@@ -19,6 +20,7 @@ import { StyledLink } from './Cart.styles';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
+  const [searchValue, setSearchValue] = useState('');
 
   // TODO: replace with real data
   const applets: PublishedApplet[] = [];
@@ -30,23 +32,22 @@ export const Cart = () => {
     },
   ]);
 
-  const renderEmptyState = () => (
-    // check search value - <EmptyTable>{t('notFound')}</EmptyTable>
-    <EmptyTable icon="empty-cart">
-      <>
-        You have not added anything to your cart yet. Add applets from the{' '}
-        <StyledLink to={page.library}>Applet catalog</StyledLink>.
-      </>
-    </EmptyTable>
-  );
+  const renderEmptyState = () =>
+    searchValue ? (
+      <EmptyTable>{t('notFound')}</EmptyTable>
+    ) : (
+      <EmptyTable icon="empty-cart">
+        <>
+          {t('emptyCart')} <StyledLink to={page.library}>{t('appletsCatalog')}</StyledLink>.
+        </>
+      </EmptyTable>
+    );
 
   return (
     <StyledBody>
       <Header
         isBackButtonVisible
-        handleSearch={(value) => {
-          console.log(value);
-        }}
+        handleSearch={(value) => setSearchValue(value)}
         rightButtonType={RightButtonType.Builder}
         rightButtonCallback={() => console.log('add to builder')}
       />

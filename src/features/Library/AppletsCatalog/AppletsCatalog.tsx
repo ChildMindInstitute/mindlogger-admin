@@ -53,8 +53,7 @@ export const AppletsCatalog = () => {
     setPageIndex(0);
   };
 
-  // TODO: check search value
-  const renderEmptyState = () => <EmptyTable>{t('notFound')}</EmptyTable>;
+  const renderEmptyState = () => !!searchText && <EmptyTable>{t('notFound')}</EmptyTable>;
 
   useEffect(() => {
     // TODO: delete comment when endpoint is ready
