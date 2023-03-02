@@ -362,6 +362,15 @@ const theme = createTheme({
         },
       },
     },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          '.MuiSvgIcon-root': {
+            color: variables.palette.primary,
+          },
+        },
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {
