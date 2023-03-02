@@ -310,7 +310,7 @@
   "applet_other": "Applets",
   "viewDetails": "Afficher les détails",
   "addToCart": "Ajouter au panier",
-  "removeApplet": "Remove applet",
+  "removeApplet": "Supprimer l'applet",
   "removeAppletConfirmation": "Are you sure you want to to remove Applet <1>{{appletName}}</1> from your cart?",
   "yesRemove": "Yes, remove",
   "cart": "Chariot",
