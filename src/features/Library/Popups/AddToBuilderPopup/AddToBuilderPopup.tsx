@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { FormControl, RadioGroup, Radio } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { FormControlLabelProps } from '@mui/material';
 
 import { Modal } from 'components';
+import { RadioGroupController } from 'components/FormComponents/RadioGroupController';
+
 import { StyledBodyLarge, StyledLabelLarge, StyledModalWrapper } from 'styles/styledComponents';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 
 import { AddToBuilderActions, AddToBuilderPopupProps } from './AddToBuilderPopup.types';
-import { StyledFormControlLabel } from './AddToBuilderPopup.styles';
 
 export const AddToBuilderPopup = ({
   addToBuilderPopupVisible,
@@ -21,6 +22,26 @@ export const AddToBuilderPopup = ({
       addToBuilderAction: AddToBuilderActions.CreateNewApplet,
     },
   });
+
+  const addToBuilderActions: Omit<FormControlLabelProps, 'control'>[] = [
+    {
+      value: AddToBuilderActions.CreateNewApplet,
+      label: (
+        <>
+          <StyledBodyLarge>{t('createNewApplet')}</StyledBodyLarge>
+          <StyledLabelLarge
+            sx={{ color: variables.palette.primary, marginTop: theme.spacing(0.4) }}
+          >
+            {t('createNewAppletHint')}
+          </StyledLabelLarge>
+        </>
+      ),
+    },
+    {
+      value: AddToBuilderActions.AddToExistingApplet,
+      label: <StyledBodyLarge>{t('addToExistingApplet')}</StyledBodyLarge>,
+    },
+  ];
 
   const handleModalClose = () => setAddToBuilderPopupVisible(false);
 
@@ -41,35 +62,11 @@ export const AddToBuilderPopup = ({
     >
       <StyledModalWrapper>
         <form onSubmit={handleSubmit(handleContinue)}>
-          <FormControl component="fieldset">
-            <Controller
-              control={control}
-              name="addToBuilderAction"
-              render={({ field }) => (
-                <RadioGroup {...field}>
-                  <StyledFormControlLabel
-                    value={AddToBuilderActions.CreateNewApplet}
-                    control={<Radio />}
-                    label={
-                      <>
-                        <StyledBodyLarge>{t('createNewApplet')}</StyledBodyLarge>
-                        <StyledLabelLarge
-                          sx={{ color: variables.palette.primary, marginTop: theme.spacing(0.4) }}
-                        >
-                          {t('createNewAppletHint')}
-                        </StyledLabelLarge>
-                      </>
-                    }
-                  />
-                  <StyledFormControlLabel
-                    value={AddToBuilderActions.AddToExistingApplet}
-                    control={<Radio />}
-                    label={<StyledBodyLarge>{t('addToExistingApplet')}</StyledBodyLarge>}
-                  />
-                </RadioGroup>
-              )}
-            />
-          </FormControl>
+          <RadioGroupController
+            control={control}
+            name="addToBuilderAction"
+            options={addToBuilderActions}
+          />
         </form>
       </StyledModalWrapper>
     </Modal>
