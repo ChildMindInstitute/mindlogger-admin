@@ -421,6 +421,8 @@
   "removeApplet": "Remove applet",
   "removeAppletConfirmation": "Are you sure you want to to remove Applet <1>{{appletName}}</1> from your cart?",
   "cart": "Cart",
+  "emptyCart": "You have not added anything to your cart yet. Add applets from the ",
+  "notFound": "Nothing was found according to your request. Try wording your request differently.",
   "appletActivities": "Applet activities",
   "activityFlowBuilder": "Activity Flow Builder",
   "itemConfiguration": "Item Configuration",

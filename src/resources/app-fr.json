@@ -314,6 +314,8 @@
   "removeAppletConfirmation": "Are you sure you want to to remove Applet <1>{{appletName}}</1> from your cart?",
   "yesRemove": "Yes, remove",
   "cart": "Chariot",
+  "emptyCart": "Vous n'avez encore rien ajouté à votre panier. Ajoutez des applets depuis le ",
+  "notFound": "Rien n'a été trouvé selon votre requête. Essayez de formuler votre requête différemment.",
   "itemConfiguration": "Configuration de l'article",
   "singleSelection": "Sélection simple",
   "multipleSelection": "Sélection multiple",
