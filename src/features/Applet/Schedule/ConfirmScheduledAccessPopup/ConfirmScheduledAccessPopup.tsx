@@ -23,7 +23,6 @@ export const ConfirmScheduledAccessPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      width="66"
     >
       <StyledModalWrapper>
         <Trans i18nKey="confirmChangeOnScheduledAccess">

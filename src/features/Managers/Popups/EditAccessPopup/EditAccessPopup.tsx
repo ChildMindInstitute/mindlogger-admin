@@ -88,7 +88,6 @@ export const EditAccessPopup = ({
         onSubmit={handleSubmit}
         title={t('editAccess')}
         buttonText={t('save')}
-        width="66"
       >
         <>
           <StyledModalWrapper>

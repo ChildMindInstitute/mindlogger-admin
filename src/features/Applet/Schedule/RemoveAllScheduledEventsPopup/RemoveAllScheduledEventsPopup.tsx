@@ -24,7 +24,6 @@ export const RemoveAllScheduledEventsPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      width="66"
     >
       <StyledModalWrapper>
         <Trans i18nKey="confirmRemoveAllScheduledEventsForActivity">

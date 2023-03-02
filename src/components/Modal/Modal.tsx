@@ -19,7 +19,7 @@ export const Modal = ({
   children,
   titleAlign = 'left',
   disabledSubmit = false,
-  width,
+  width = '66',
   hasSecondBtn = false,
   submitBtnColor = 'primary',
   secondBtnText,

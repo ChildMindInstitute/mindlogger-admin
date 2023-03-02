@@ -6,12 +6,14 @@ import { Header, RightButtonType } from 'features/Library/Header';
 import { Applet, AppletUiType } from 'features/Library/Applet';
 import { StyledBody, StyledHeadlineLarge } from 'styles/styledComponents';
 import theme from 'styles/theme';
+import { PublishedApplet } from 'redux/modules';
 
 import { ContentContainer, StyledAppletList, StyledAppletContainer } from './Cart.styles';
-import { mockedCartApplets as applets } from './mocked';
-
 export const Cart = () => {
   const { t } = useTranslation('app');
+
+  // TODO: replace with real data
+  const applets: PublishedApplet[] = [];
 
   useBreadcrumbs([
     {

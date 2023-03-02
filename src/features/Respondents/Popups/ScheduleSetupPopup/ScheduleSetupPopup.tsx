@@ -52,7 +52,6 @@ export const ScheduleSetupPopup = ({
       hasSecondBtn={Boolean(showSecondScreen)}
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleBackClick}
-      width="66"
     >
       <StyledModalWrapper>
         {showSecondScreen ? (

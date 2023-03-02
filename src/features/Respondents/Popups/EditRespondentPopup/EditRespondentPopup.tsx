@@ -49,7 +49,6 @@ export const EditRespondentPopup = ({
       hasSecondBtn
       onSecondBtnSubmit={handlePopupClose}
       secondBtnText={t('cancel')}
-      width="66"
     >
       <StyledModalWrapper>
         <form onSubmit={handleSubmit(submitForm)} noValidate>
