@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 
-import { users, auth, account } from 'redux/modules';
+import { users, auth, account, User } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { InputController, SelectController, TagsInputController } from 'components/FormComponents';
 import { StyledErrorText } from 'styles/styledComponents';
@@ -29,9 +29,11 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const usersData = users.useUserData();
   const authData = auth.useData();
   const currentApplet = accountData?.account?.applets?.find((el) => el.id === id);
+  const { firstName, lastName } = authData?.user as User;
+  const fullName = `${firstName} ${lastName}`;
+
   const accountNameShowed =
-    authData?.user?.fullName === authData?.account?.accountName &&
-    currentApplet?.roles?.includes('owner');
+    fullName === authData?.account?.accountName && currentApplet?.roles?.includes('owner');
   const {
     handleSubmit,
     control,

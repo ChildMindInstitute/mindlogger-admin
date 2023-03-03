@@ -10,7 +10,8 @@ export type GetUserData = { token: string };
 export type SignUpArgs = {
   body: {
     email: string;
-    fullName: string;
+    firstName: string;
+    lastName: string;
     password: string;
   };
 };
@@ -23,7 +24,7 @@ export type ResetPassword = { email: string };
 
 export type GetAppletsParams = {
   params: {
-    ownerId: number;
+    ownerId: string;
     search?: string;
     page?: number;
     limit?: number;

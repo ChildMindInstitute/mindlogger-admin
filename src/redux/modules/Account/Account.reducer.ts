@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
-import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 
-import { ErrorResponse } from 'redux/modules/Base';
+import { getApiError } from 'utils/getApiError';
 
 import { AccountSchema } from './Account.schema';
 import { switchAccount } from './Account.thunk';
@@ -25,10 +25,9 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AccountSchema>): 
 
   builder.addCase(switchAccount.rejected, ({ switchAccount }, action) => {
     if (switchAccount.status === 'loading' && switchAccount.requestId === action.meta.requestId) {
-      const error = action.payload as AxiosError;
       switchAccount.requestId = initialState.switchAccount.requestId;
       switchAccount.status = 'error';
-      switchAccount.error = error.response?.data as AxiosError<ErrorResponse>;
+      switchAccount.error = getApiError(action as PayloadAction<AxiosError>);
     }
   });
 };
