@@ -18,15 +18,28 @@ import {
 } from './Event.styles';
 
 export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps) => {
-  const { scheduledColor, startFlowIcon, start, end, allDayEvent, endAlertIcon, alwaysAvailable } =
-    event;
+  const {
+    scheduledColor,
+    startFlowIcon,
+    start,
+    end,
+    allDayEvent,
+    endAlertIcon,
+    alwaysAvailable,
+    isOffRange,
+  } = event;
   const isAllDayEvent = allDayEvent || alwaysAvailable;
   const isDefaultView = uiType === UiType.DefaultView;
   const isTimeView = uiType === UiType.TimeView;
   const isScheduledDayWeekEvent = isTimeView && !isAllDayEvent;
 
   return (
-    <StyledEvent title="" className="event" isScheduledDayWeekEvent={isScheduledDayWeekEvent}>
+    <StyledEvent
+      sx={{ opacity: isOffRange && isDefaultView ? '0.38' : 1 }}
+      title=""
+      className="event"
+      isScheduledDayWeekEvent={isScheduledDayWeekEvent}
+    >
       <StyledWrapper className="event-top-section">
         <StyledLeftSection>
           {isDefaultView && scheduledColor && <StyledIndicator bgColor={scheduledColor} />}

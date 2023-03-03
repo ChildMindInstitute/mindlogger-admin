@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
 import { auth, folders, Breadcrumb, breadcrumbs } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getAppletData } from 'utils/getAppletData';
-import { useTranslation } from 'react-i18next';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { id } = useParams();
