@@ -1,17 +1,29 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'hooks';
-import { Svg } from 'components';
+import { EmptyTable, Svg } from 'components';
 import { Header, RightButtonType } from 'features/Library/Header';
 import { Applet, AppletUiType } from 'features/Library/Applet';
-import { StyledBody, StyledHeadlineLarge } from 'styles/styledComponents';
+import {
+  StyledBody,
+  StyledHeadlineLarge,
+  ContentContainer,
+  StyledAppletContainer,
+  StyledAppletList,
+} from 'styles/styledComponents';
 import theme from 'styles/theme';
+import { page } from 'resources';
+import { PublishedApplet } from 'redux/modules';
 
-import { ContentContainer, StyledAppletList, StyledAppletContainer } from './Cart.styles';
-import { mockedCartApplets as applets } from './mocked';
+import { StyledLink } from './Cart.styles';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
+  const [searchValue, setSearchValue] = useState('');
+
+  // TODO: replace with real data
+  const applets: PublishedApplet[] = [];
 
   useBreadcrumbs([
     {
@@ -20,13 +32,22 @@ export const Cart = () => {
     },
   ]);
 
+  const renderEmptyState = () =>
+    searchValue ? (
+      <EmptyTable>{t('notFound')}</EmptyTable>
+    ) : (
+      <EmptyTable icon="empty-cart">
+        <>
+          {t('emptyCart')} <StyledLink to={page.library}>{t('appletsCatalog')}</StyledLink>.
+        </>
+      </EmptyTable>
+    );
+
   return (
     <StyledBody>
       <Header
         isBackButtonVisible
-        handleSearch={(value) => {
-          console.log(value);
-        }}
+        handleSearch={(value) => setSearchValue(value)}
         rightButtonType={RightButtonType.Builder}
         rightButtonCallback={() => console.log('add to builder')}
       />
@@ -35,11 +56,13 @@ export const Cart = () => {
           {t('cart')}
         </StyledHeadlineLarge>
         <StyledAppletList>
-          {applets.map((applet) => (
-            <StyledAppletContainer key={applet.id}>
-              <Applet uiType={AppletUiType.Cart} applet={applet} />
-            </StyledAppletContainer>
-          ))}
+          {applets?.length
+            ? applets.map((applet) => (
+                <StyledAppletContainer key={applet.id}>
+                  <Applet uiType={AppletUiType.Cart} applet={applet} />
+                </StyledAppletContainer>
+              ))
+            : renderEmptyState()}
         </StyledAppletList>
       </ContentContainer>
     </StyledBody>

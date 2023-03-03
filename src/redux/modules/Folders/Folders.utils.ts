@@ -1,5 +1,5 @@
 import { Draft } from '@reduxjs/toolkit';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import {
   AppletResponse,
@@ -8,7 +8,6 @@ import {
   FoldersSchema,
   LoadedFolder,
   LoadedFolderApplet,
-  ErrorResponse,
 } from 'redux/modules';
 import { state as initialState } from './Folders.state';
 
@@ -217,9 +216,10 @@ export const createRejectedData = (
   error: AxiosError,
 ) => {
   if (state[property].status === 'loading' && state[property].requestId === requestId) {
+    const axiosResponse = error.response as AxiosResponse;
     state[property].requestId = initialState[property].requestId;
     state[property].status = 'error';
-    state[property].error = error.response?.data as AxiosError<ErrorResponse>;
+    state[property].error = axiosResponse.data.result;
     state[property].data ? state[property].data : null;
   }
 };
