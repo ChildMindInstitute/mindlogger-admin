@@ -1,11 +1,11 @@
-import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
+
+import { getApiError } from 'utils/getApiError';
 
 import { LibrarySchema } from './Library.schema';
 import { getPublishedApplets } from './Library.thunk';
 import { state as initialState } from './Library.state';
-
-import { ErrorResponse } from '../Base';
 
 export const extraReducers = (builder: ActionReducerMapBuilder<LibrarySchema>): void => {
   builder.addCase(getPublishedApplets.pending, ({ publishedApplets }, action) => {
@@ -31,10 +31,9 @@ export const extraReducers = (builder: ActionReducerMapBuilder<LibrarySchema>): 
       publishedApplets.status === 'loading' &&
       publishedApplets.requestId === action.meta.requestId
     ) {
-      const error = action.payload as AxiosError;
       publishedApplets.requestId = initialState.publishedApplets.requestId;
       publishedApplets.status = 'error';
-      publishedApplets.error = error.response?.data as AxiosError<ErrorResponse>;
+      publishedApplets.error = getApiError(action as PayloadAction<AxiosError>);
     }
   });
 };

@@ -1,7 +1,7 @@
-import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, AsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse, AxiosError } from 'axios';
 
-import { ErrorResponse } from 'redux/modules';
+import { getApiError } from 'utils/getApiError';
 
 import { UsersSchema, Roles } from './Users.schema';
 import { state as initialState } from './Users.state';
@@ -38,9 +38,8 @@ export const createUsersRejectedData = (
 ) =>
   builder.addCase(thunk.rejected, (state, action) => {
     if (state[role].status === 'loading' && state[role].requestId === action.meta.requestId) {
-      const error = action.payload as AxiosError;
       state[role].requestId = initialState[role].requestId;
       state[role].status = 'error';
-      state[role].error = error.response?.data as AxiosError<ErrorResponse>;
+      state[role].error = getApiError(action as PayloadAction<AxiosError>);
     }
   });

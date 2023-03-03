@@ -51,8 +51,9 @@ export const signUp = createAsyncThunk(
   async ({ body }: SignUpArgs, { rejectWithValue, signal, dispatch }) => {
     try {
       await signUpApi({ body }, signal);
+      const { email, password } = body;
 
-      return await dispatch(signIn({ email: body.email, password: body.password }));
+      return await dispatch(signIn({ email, password }));
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

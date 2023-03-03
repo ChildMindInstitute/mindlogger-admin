@@ -37,7 +37,8 @@ export const LockForm = () => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
 
-  const { email, fullName } = auth.useData()?.user as User;
+  const { email, firstName, lastName } = auth.useData()?.user as User;
+  const fullName = `${firstName} ${lastName}`;
   const [errorMessage, setErrorMessage] = useState('');
 
   const { handleSubmit, control } = useForm<SignIn>({
