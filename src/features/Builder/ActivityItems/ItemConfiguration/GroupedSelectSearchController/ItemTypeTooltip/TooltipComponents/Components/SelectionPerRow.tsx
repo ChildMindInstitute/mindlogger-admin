@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'components';
 import { StyledBodyMedium } from 'styles/styledComponents';
@@ -55,9 +56,9 @@ export const SelectionPerRow = ({ uiType }: SelectionProps) => {
     <>
       <StyledPresentation>
         {selectionContent.map((row, rowIndex) => (
-          <StyledMatrixLine key={rowIndex}>
+          <StyledMatrixLine key={uniqueId()}>
             {row.map((col, colIndex) => (
-              <StyledMatrixLineElement key={colIndex}>
+              <StyledMatrixLineElement key={uniqueId()}>
                 {col !== '' && typeof col === 'string' && (
                   <StyledTooltipText>{col}</StyledTooltipText>
                 )}
