@@ -3,13 +3,16 @@ import { useForm } from 'react-hook-form';
 import { FormControlLabelProps } from '@mui/material';
 
 import { Modal } from 'components';
-import { RadioGroupController } from 'components/FormComponents/RadioGroupController';
-
+import { RadioGroupController } from 'components/FormComponents';
 import { StyledBodyLarge, StyledLabelLarge, StyledModalWrapper } from 'styles/styledComponents';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 
-import { AddToBuilderActions, AddToBuilderPopupProps } from './AddToBuilderPopup.types';
+import {
+  AddToBuilderActions,
+  AddToBuilderActionsForm,
+  AddToBuilderPopupProps,
+} from './AddToBuilderPopup.types';
 
 export const AddToBuilderPopup = ({
   addToBuilderPopupVisible,
@@ -45,7 +48,7 @@ export const AddToBuilderPopup = ({
 
   const handleModalClose = () => setAddToBuilderPopupVisible(false);
 
-  const handleContinue = ({ addToBuilderAction }: { addToBuilderAction: AddToBuilderActions }) => {
+  const handleContinue = ({ addToBuilderAction }: AddToBuilderActionsForm) => {
     handleModalClose();
   };
 

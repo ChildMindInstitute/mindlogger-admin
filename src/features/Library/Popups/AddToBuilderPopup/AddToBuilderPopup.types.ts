@@ -9,3 +9,5 @@ export enum AddToBuilderActions {
   CreateNewApplet = 0,
   AddToExistingApplet = 1,
 }
+
+export type AddToBuilderActionsForm = { addToBuilderAction: AddToBuilderActions };
