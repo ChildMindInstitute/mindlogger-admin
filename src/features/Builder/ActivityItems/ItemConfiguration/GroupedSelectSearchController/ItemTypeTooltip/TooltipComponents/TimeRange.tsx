@@ -9,7 +9,9 @@ import {
   StyledTooltipText,
   StyledDateLine,
   StyledPresentationLine,
-} from '../TooltipComponents.styles';
+} from './TooltipComponents.styles';
+
+const timeRangeIcon = <Svg id="clock" width="18" height="18" />;
 
 export const TimeRange = () => {
   const { t } = useTranslation();
@@ -18,12 +20,12 @@ export const TimeRange = () => {
     <>
       <StyledPresentation>
         <StyledPresentationLine>
-          <Svg id="clock" width="18" height="18" />
+          {timeRangeIcon}
           <StyledDateLine>
             <StyledTooltipText>HH:MM</StyledTooltipText>
           </StyledDateLine>
           <StyledFlexTopCenter sx={{ m: theme.spacing(0, 1) }}>-</StyledFlexTopCenter>
-          <Svg id="clock" width="18" height="18" />
+          {timeRangeIcon}
           <StyledDateLine>
             <StyledTooltipText>HH:MM</StyledTooltipText>
           </StyledDateLine>

@@ -8,7 +8,7 @@ import {
   StyledDateLine,
   StyledPresentationLine,
   StyledTooltipText,
-} from '../TooltipComponents.styles';
+} from './TooltipComponents.styles';
 
 export const Date = () => {
   const { t } = useTranslation();

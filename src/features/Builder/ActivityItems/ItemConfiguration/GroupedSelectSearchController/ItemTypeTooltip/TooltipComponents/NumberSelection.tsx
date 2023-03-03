@@ -9,7 +9,7 @@ import {
   StyledTooltipText,
   StyledNumberSelection,
   StyledNumberSelectionLine,
-} from '../TooltipComponents.styles';
+} from './TooltipComponents.styles';
 
 export const NumberSelection = () => {
   const { t } = useTranslation();

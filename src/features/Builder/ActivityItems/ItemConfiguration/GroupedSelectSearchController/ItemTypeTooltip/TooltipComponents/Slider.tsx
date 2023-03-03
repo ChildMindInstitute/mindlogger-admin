@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'components';
 import { StyledBodyMedium } from 'styles/styledComponents';
 
-import { StyledPresentation } from '../TooltipComponents.styles';
+import { StyledPresentation } from './TooltipComponents.styles';
 
 export const Slider = () => {
   const { t } = useTranslation();

@@ -4,7 +4,7 @@ import { Svg } from 'components';
 import theme from 'styles/theme';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'styles/styledComponents';
 
-import { StyledPresentation, StyledTooltipText } from '../TooltipComponents.styles';
+import { StyledPresentation, StyledTooltipText } from './TooltipComponents.styles';
 
 export const SliderRows = () => {
   const { t } = useTranslation();

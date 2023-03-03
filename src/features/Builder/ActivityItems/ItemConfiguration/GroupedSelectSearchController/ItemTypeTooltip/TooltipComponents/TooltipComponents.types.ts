@@ -18,6 +18,10 @@ export type SelectionProps = {
   uiType: SelectionUiType;
 };
 
+export type SelectionOptionProps = {
+  optionNumber: number;
+};
+
 export type DashedProps = {
   uiType: DashedUiType;
 };

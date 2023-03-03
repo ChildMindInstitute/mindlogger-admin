@@ -9,8 +9,8 @@ import {
   StyledEnterText,
   StyledPresentation,
   StyledTooltipText,
-} from '../TooltipComponents.styles';
-import { DashedProps, DashedUiType } from '../TooltipComponents.types';
+} from './TooltipComponents.styles';
+import { DashedProps, DashedUiType } from './TooltipComponents.types';
 
 export const Dashed = ({ uiType }: DashedProps) => {
   const { t } = useTranslation();
@@ -19,21 +19,21 @@ export const Dashed = ({ uiType }: DashedProps) => {
   const isMessageUiType = uiType === DashedUiType.Message;
   const isAudioPlayerUiType = uiType === DashedUiType.AudioPlayer;
 
+  const commonStyles = { mt: theme.spacing(0.2), textAlign: 'center' };
+
   const getContent = () => ({
     [DashedUiType.Text]: <StyledEnterText>{t('enterText')}...</StyledEnterText>,
     [DashedUiType.Drawing]: <Svg id="drawing-star" width="46" height="44" />,
     [DashedUiType.Photo]: (
       <>
         <Svg id="camera-outline" />
-        <StyledTooltipText sx={{ mt: theme.spacing(0.2), textAlign: 'center' }}>
-          {t('takePhoto')}
-        </StyledTooltipText>
+        <StyledTooltipText sx={commonStyles}>{t('takePhoto')}</StyledTooltipText>
       </>
     ),
     [DashedUiType.Video]: (
       <>
         <Svg id="video" />
-        <StyledTooltipText sx={{ mt: theme.spacing(0.2), textAlign: 'center' }}>
+        <StyledTooltipText sx={commonStyles}>
           <Trans i18nKey="captureVideo">
             Capture <br /> Video
           </Trans>
@@ -43,7 +43,7 @@ export const Dashed = ({ uiType }: DashedProps) => {
     [DashedUiType.Geolocation]: (
       <>
         <Svg id="geolocation" />
-        <StyledTooltipText sx={{ mt: theme.spacing(0.2), textAlign: 'center' }}>
+        <StyledTooltipText sx={commonStyles}>
           <Trans i18nKey="setGeolocation">
             Set <br /> Geolocation
           </Trans>
@@ -53,7 +53,7 @@ export const Dashed = ({ uiType }: DashedProps) => {
     [DashedUiType.Audio]: (
       <>
         <Svg id="audio" />
-        <StyledTooltipText sx={{ mt: theme.spacing(0.2), textAlign: 'center' }}>
+        <StyledTooltipText sx={commonStyles}>
           <Trans i18nKey="recordAudio">
             Record <br /> Audio
           </Trans>
