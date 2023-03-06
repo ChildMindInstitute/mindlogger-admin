@@ -6,13 +6,13 @@ import { Svg, Tooltip } from 'components';
 import { StyledActions, StyledActionButton, StyledActionsWrapper } from './Actions.styles';
 import { ActionsProps } from './Actions.types';
 
-export const Actions = ({ items, context }: ActionsProps) => {
-  const [visibleActions, setVisibleActions] = useState(false);
+export const Actions = ({ items, context, visibleByDefault = false }: ActionsProps) => {
+  const [visibleActions, setVisibleActions] = useState(visibleByDefault);
 
   return (
     <StyledActionsWrapper
       onMouseEnter={() => setVisibleActions(true)}
-      onMouseLeave={() => setVisibleActions(false)}
+      onMouseLeave={() => setVisibleActions(visibleByDefault)}
     >
       {visibleActions ? (
         <StyledActions>

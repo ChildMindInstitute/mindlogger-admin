@@ -241,7 +241,6 @@ export const eventPropGetter = (
     scheduledColor,
     scheduledBackground,
     backgroundColor,
-    isOffRange,
   }: CalendarEvent,
   activeView: CalendarViews,
 ) => {
@@ -268,7 +267,6 @@ export const eventPropGetter = (
       borderColor: isScheduledDayWeekEvent ? scheduledColor : 'transparent',
       backgroundColor: (isScheduledDayWeekEvent && scheduledBackground) || backgroundColor,
       color: alwaysAvailable ? variables.palette.white : variables.palette.on_surface,
-      ...(isOffRange && { opacity: '0.38' }),
     },
   };
 };

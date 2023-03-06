@@ -22,7 +22,7 @@ export const LinkedTabs = ({
   };
 
   const { content, header } = tabs.reduce(
-    (tabs: RenderTabs, { icon, activeIcon, labelKey, isMinHeightAuto, path }, index) => {
+    (tabs: RenderTabs, { id, icon, activeIcon, labelKey, isMinHeightAuto, path }, index) => {
       tabs.header.push(
         <Tab
           key={index}
@@ -34,6 +34,7 @@ export const LinkedTabs = ({
       );
       tabs.content.push(
         <TabPanel
+          id={id}
           key={index}
           value={tabIndex}
           index={index}

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
@@ -15,15 +16,27 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { StyledInputWrapper, StyledOptionsWrapper, StyledTop } from './ItemConfiguration.styles';
-import { ItemConfigurationForm, ItemInputTypes } from './ItemConfiguration.types';
-import { itemsTypeOptions } from './ItemConfiguration.const';
+import { ItemSettingsDrawer } from './ItemSettingsDrawer';
+import { ItemSettingsController } from './ItemSettingsController';
 import { SelectionOption } from './SelectionOption';
+import {
+  StyledTop,
+  StyledInputWrapper,
+  StyledInputWrapper,
+  StyledOptionsWrapper,
+} from './ItemConfiguration.styles';
+import {
+  ItemConfigurationForm,
+  ItemConfigurationForm,
+  ItemInputTypes,
+} from './ItemConfiguration.types';
+import { itemsTypeOptions, DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
   const { t } = useTranslation('app');
-  const { control, watch } = useForm<ItemConfigurationForm>({
-    defaultValues: { itemsInputType: '' },
+  const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
+  const { control, watch, setValue } = useForm<ItemConfigurationForm>({
+    defaultValues: { itemsInputType: '', settings: [], timer: DEFAULT_TIMER_VALUE },
     mode: 'onChange',
   });
 
@@ -49,12 +62,20 @@ export const ItemConfiguration = () => {
       isVisible: true,
     });
 
+  useEffect(() => {
+    setValue('settings', []);
+    setValue('timer', DEFAULT_TIMER_VALUE);
+  }, [selectedInputType]);
+
   return (
     <StyledFlexColumn>
       <StyledTop>
         <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
         <StyledFlexTopCenter>
-          <StyledClearedButton sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}>
+          <StyledClearedButton
+            sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
+            onClick={() => setSettingsDrawerVisible(true)}
+          >
             <Svg id="report-configuration" />
           </StyledClearedButton>
           <StyledClearedButton sx={{ p: theme.spacing(1) }}>
@@ -75,6 +96,19 @@ export const ItemConfiguration = () => {
           {t('itemTypeDescription')}
         </StyledBodyMedium>
       </StyledInputWrapper>
+      {settingsDrawerVisible && (
+        <ItemSettingsDrawer
+          open={settingsDrawerVisible}
+          onClose={() => setSettingsDrawerVisible(false)}
+        >
+          <ItemSettingsController
+            timerName="timer"
+            name="settings"
+            inputType={selectedInputType}
+            control={control}
+          />
+        </ItemSettingsDrawer>
+      )}
       {hasOptions && (
         <StyledOptionsWrapper>
           {options?.length
