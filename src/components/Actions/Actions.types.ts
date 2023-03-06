@@ -9,4 +9,5 @@ type Action = {
 export type ActionsProps = {
   items: Action[];
   context: unknown;
+  visibleByDefault?: boolean;
 };

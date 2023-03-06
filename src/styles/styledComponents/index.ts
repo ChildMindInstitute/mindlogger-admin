@@ -6,6 +6,6 @@ export * from './Flex';
 export * from './Modal';
 export * from './QuantityCircle';
 export * from './Typography';
-export * from './Wrapper';
+export * from './Builder';
 export * from './DirectoryUpButton';
 export * from './Library';

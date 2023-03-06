@@ -19,7 +19,6 @@ import {
   eventPropGetter,
   getCalendarComponents,
   getProcessedEvents,
-  hiddenEventsIds,
   getHasWrapperMoreBtn,
 } from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
@@ -41,8 +40,7 @@ const dateFnsLocalize = dateFnsLocalizer({
 export const Calendar = () => {
   const [activeView, setActiveView] = useState<CalendarViews>(CalendarViews.Month);
   const [date, setDate] = useState<Date>(new Date());
-  const processedEvents = useMemo(() => getProcessedEvents(date), [date]);
-  const [events, setEvents] = useState<CalendarEvent[]>(processedEvents);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
   const [editActivityPopupVisible, setEditActivityPopupVisible] = useState(false);
   const [isAllDayEventsVisible, setIsAllDayEventsVisible] = useState<AllDayEventsVisible>(null);
@@ -74,12 +72,7 @@ export const Calendar = () => {
 
   useEffect(() => {
     setIsAllDayEventsVisible(null);
-    setEvents((prevState) =>
-      prevState.map((event) => ({
-        ...event,
-        isHiddenInTimeView: hiddenEventsIds.some((id) => id === event.id),
-      })),
-    );
+    setEvents(getProcessedEvents(date));
   }, [date, activeView]);
 
   const hasWrapperMoreBtn = useMemo(

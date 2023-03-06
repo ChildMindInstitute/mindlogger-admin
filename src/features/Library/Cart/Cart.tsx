@@ -15,12 +15,14 @@ import {
 import theme from 'styles/theme';
 import { page } from 'resources';
 import { PublishedApplet } from 'redux/modules';
+import { AddToBuilderPopup } from 'features/Library/Popups';
 
 import { StyledLink } from './Cart.styles';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
   const [searchValue, setSearchValue] = useState('');
+  const [addToBuilderPopupVisible, setAddToBuilderPopupVisible] = useState(false);
 
   // TODO: replace with real data
   const applets: PublishedApplet[] = [];
@@ -44,27 +46,35 @@ export const Cart = () => {
     );
 
   return (
-    <StyledBody>
-      <Header
-        isBackButtonVisible
-        handleSearch={(value) => setSearchValue(value)}
-        rightButtonType={RightButtonType.Builder}
-        rightButtonCallback={() => console.log('add to builder')}
-      />
-      <ContentContainer>
-        <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>
-          {t('cart')}
-        </StyledHeadlineLarge>
-        <StyledAppletList>
-          {applets?.length
-            ? applets.map((applet) => (
-                <StyledAppletContainer key={applet.id}>
-                  <Applet uiType={AppletUiType.Cart} applet={applet} />
-                </StyledAppletContainer>
-              ))
-            : renderEmptyState()}
-        </StyledAppletList>
-      </ContentContainer>
-    </StyledBody>
+    <>
+      <StyledBody>
+        <Header
+          isBackButtonVisible
+          handleSearch={(value) => setSearchValue(value)}
+          rightButtonType={RightButtonType.Builder}
+          rightButtonCallback={() => setAddToBuilderPopupVisible(true)}
+        />
+        <ContentContainer>
+          <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>
+            {t('cart')}
+          </StyledHeadlineLarge>
+          <StyledAppletList>
+            {applets?.length
+              ? applets.map((applet) => (
+                  <StyledAppletContainer key={applet.id}>
+                    <Applet uiType={AppletUiType.Cart} applet={applet} />
+                  </StyledAppletContainer>
+                ))
+              : renderEmptyState()}
+          </StyledAppletList>
+        </ContentContainer>
+      </StyledBody>
+      {addToBuilderPopupVisible && (
+        <AddToBuilderPopup
+          addToBuilderPopupVisible={addToBuilderPopupVisible}
+          setAddToBuilderPopupVisible={setAddToBuilderPopupVisible}
+        />
+      )}
+    </>
   );
 };
