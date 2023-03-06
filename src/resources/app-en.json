@@ -17,7 +17,7 @@
   "lastName": "Last Name",
   "firstNameRequired": "First name is required",
   "lastNameRequired": "Last name is required",
-  "requiredField":"Field is required",
+  "requiredField": "Field is required",
   "resetPassword": "Reset Password",
   "enterEmailAssociatedWithAccount": "Enter the email associated with your account",
   "sendResetLink": "Send me a reset link",
@@ -450,5 +450,6 @@
   "searchInputType": "Search input type",
   "inputType": "Input Type",
   "itemTypeDescription": "Provide a list of choices and allow respondents to choose a single answer.",
-  "uploadTransfluent": "Please upload JPG or transfluent PNG image less than 1GB."
+  "uploadTransfluent": "Please upload JPG or transfluent PNG image less than 1GB.",
+  "addItem": "Add item"
 }

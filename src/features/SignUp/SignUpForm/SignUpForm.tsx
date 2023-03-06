@@ -48,7 +48,8 @@ export const SignUpForm = () => {
     const body = {
       email: data.email,
       password: data.password,
-      fullName: `${data.firstName} ${data.lastName}`,
+      firstName: data.firstName,
+      lastName: data.lastName,
     };
 
     const result = await dispatch(signUp({ body }));

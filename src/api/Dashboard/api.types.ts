@@ -10,7 +10,8 @@ export type GetUserData = { token: string };
 export type SignUpArgs = {
   body: {
     email: string;
-    fullName: string;
+    firstName: string;
+    lastName: string;
     password: string;
   };
 };

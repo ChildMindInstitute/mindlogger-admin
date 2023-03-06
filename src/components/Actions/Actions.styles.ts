@@ -15,7 +15,7 @@ export const StyledActions = styled(Box)`
   display: flex;
 
   span + span button {
-    margin-left: ${theme.spacing(1)};
+    margin-left: ${theme.spacing(0.8)};
   }
 `;
 
