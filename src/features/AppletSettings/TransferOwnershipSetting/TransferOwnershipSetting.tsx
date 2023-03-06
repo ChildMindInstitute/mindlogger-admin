@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 import { FolderApplet, folders } from 'redux/modules';
-import { TransferOwnership } from 'features/Applet/TransferOwnership';
+import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
-import { SuccessTransferOwnershipPopup } from 'features/Applet/Popups';
+import { SuccessTransferOwnershipPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { Tooltip } from 'components';
 
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';

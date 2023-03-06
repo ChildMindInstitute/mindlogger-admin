@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
 import { useBreadcrumbs } from 'hooks';
-import { Navigation, Setting } from 'features/AppletSettings';
 
+import { Navigation, Setting } from '../AppletSettings';
 import { StyledContainer } from './AppletSettings.styles';
 import { AppletSetting, AppletSettingsProps } from './AppletSettings.types';
 

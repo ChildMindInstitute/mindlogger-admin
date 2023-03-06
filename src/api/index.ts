@@ -1,2 +1,2 @@
-export * from './Dashboard';
-export * from './Library';
+export * from 'modules/Dashboard/api';
+export * from 'modules/Library/api';

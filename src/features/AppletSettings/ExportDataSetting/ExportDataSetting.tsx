@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 import { StyledHeadlineLarge } from 'styles/styledComponents/Typography';
-import { AppletPasswordPopup } from 'features/Applet/Popups';
+//import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { Svg, Tooltip } from 'components';
 
 import {
@@ -34,13 +34,13 @@ export const ExportDataSetting = ({ isDisabled = false }) => {
           </StyledAppletSettingsButton>
         </Box>
       </Tooltip>
-      {passwordModalVisible && (
+      {/* {passwordModalVisible && (
         <AppletPasswordPopup
           popupVisible={passwordModalVisible}
           onClose={() => setPasswordModalVisible(false)}
           appletId={id}
         />
-      )}
+      )} */}
     </>
   );
 };

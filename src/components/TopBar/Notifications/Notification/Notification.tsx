@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
-import { AppletPasswordPopup } from 'features/Applet/Popups';
+//import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import logoSrc from 'assets/images/logo.png';
@@ -113,13 +113,13 @@ export const Notification = ({
           </StyledTimeAgo>
         </StyledBottomSection>
       </StyledNotification>
-      {passwordPopupVisible && (
+      {/* {passwordPopupVisible && (
         <AppletPasswordPopup
           popupVisible={passwordPopupVisible}
           onClose={() => setPasswordPopupVisible(false)}
           encryption={encryption}
         />
-      )}
+      )} */}
     </>
   );
 };
