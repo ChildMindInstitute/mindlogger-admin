@@ -455,6 +455,7 @@
   "searchInputType": "Search input type",
   "inputType": "Input Type",
   "itemTypeDescription": "Provide a list of choices and allow respondents to choose a single answer.",
+  "addItem": "Add item",
   "option": "Option",
   "provideListChoicesSingleAnswer": "Provide a list of choices and allow respondents to choose a single answer.",
   "provideListChoicesMultipleAnswers": "Provide a list of choices and allow respondents to choose multiple answers.",
