@@ -9,7 +9,7 @@ export const StyledDrawer = styled(Drawer)`
   left: unset;
   flex-shrink: 0;
   position: absolute;
-  margin-top: 6.1rem;
+  margin-top: ${theme.spacing(6.1)};
 
   .MuiDrawer-paper {
     position: absolute;

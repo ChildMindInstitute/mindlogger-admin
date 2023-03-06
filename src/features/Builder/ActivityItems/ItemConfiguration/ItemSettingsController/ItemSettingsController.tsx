@@ -33,7 +33,7 @@ export const ItemSettingsController = <T extends FieldValues>({
       render={({ field: { onChange, value } }) => (
         <>
           {itemSettingsOptionsByInputType[inputType]?.map(({ groupName, groupOptions }) => (
-            <FormControl sx={{ gap: '1.4rem' }}>
+            <FormControl sx={{ gap: '1.4rem' }} key={groupName}>
               <FormLabel component="legend" sx={{ color: variables.palette.on_surface }}>
                 {t(groupName)}
               </FormLabel>
@@ -41,21 +41,27 @@ export const ItemSettingsController = <T extends FieldValues>({
                 {groupOptions.map((settingKey) => {
                   const isTimer = settingKey === ItemConfigurationSettings.HasTimer;
 
+                  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+                    if (event.target.checked && !value?.includes(settingKey))
+                      onChange([...value, settingKey]);
+
+                    if (!event.target.checked && value?.includes(settingKey))
+                      onChange(
+                        value.filter(
+                          (selectedSetting: ItemConfigurationSettings) =>
+                            selectedSetting !== settingKey,
+                        ),
+                      );
+                  };
+
                   return (
                     <FormControlLabel
+                      key={`${groupName}-${settingKey}`}
                       control={
                         <Checkbox
                           name={settingKey}
                           checked={value?.includes(settingKey)}
-                          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                            if (event.target.checked && !value?.includes(settingKey))
-                              onChange([...value, settingKey]);
-
-                            if (!event.target.checked && value?.includes(settingKey))
-                              onChange(
-                                value.filter((s: ItemConfigurationSettings) => s !== settingKey),
-                              );
-                          }}
+                          onChange={handleCheckboxChange}
                         />
                       }
                       label={

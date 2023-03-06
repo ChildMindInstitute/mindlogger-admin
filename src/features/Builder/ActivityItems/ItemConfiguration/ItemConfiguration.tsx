@@ -18,14 +18,14 @@ import { ItemSettingsDrawer } from './ItemSettingsDrawer';
 import { ItemSettingsController } from './ItemSettingsController';
 import { StyledTop, StyledInputWrapper } from './ItemConfiguration.styles';
 import { ItemConfigurationForm } from './ItemConfiguration.types';
-import { itemsTypeOptions, defaultTimerValue } from './ItemConfiguration.const';
+import { itemsTypeOptions, DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
 
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useForm<ItemConfigurationForm>({
-    defaultValues: { itemsInputType: '', settings: [], timer: defaultTimerValue },
+    defaultValues: { itemsInputType: '', settings: [], timer: DEFAULT_TIMER_VALUE },
     mode: 'onChange',
   });
 
@@ -33,7 +33,7 @@ export const ItemConfiguration = () => {
 
   useEffect(() => {
     setValue('settings', []);
-    setValue('timer', defaultTimerValue);
+    setValue('timer', DEFAULT_TIMER_VALUE);
   }, [selectedInputType]);
 
   return (

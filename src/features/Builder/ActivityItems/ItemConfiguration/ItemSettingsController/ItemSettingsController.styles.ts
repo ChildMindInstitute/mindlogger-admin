@@ -8,15 +8,15 @@ import { shouldForwardProp } from 'utils/shouldForwardProp';
 export const StyledSettingInfoIcon = styled(Svg)`
   fill: ${variables.palette.outline};
   vertical-align: bottom;
-  margin-left: 0.8rem;
+  margin-left: ${theme.spacing(0.8)};
 `;
 
 export const StyledInputControllerContainer = styled(Box)`
   width: 8rem;
-  margin-right: 0.5rem;
+  margin-right: ${theme.spacing(0.5)};
 
   .MuiBox-root {
-    margin: ${theme.spacing(0)};
+    margin: 0;
   }
 
   .MuiButton-root {
@@ -25,7 +25,7 @@ export const StyledInputControllerContainer = styled(Box)`
 
   .MuiInputBase-root {
     padding: ${theme.spacing(0, 1)};
-    border-radius: 1rem;
+    border-radius: ${variables.borderRadius.lg};
     border-color: ${variables.palette.on_surface};
   }
 
