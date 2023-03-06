@@ -3,7 +3,13 @@ import { StyledFlexTopCenter } from 'styles/styledComponents';
 import { variables } from 'styles/variables';
 
 import { getActions } from './Item.const';
-import { StyledCol, StyledItem, StyledDsc, StyledTitle, StyledActionButton } from './Item.styles';
+import {
+  StyledCol,
+  StyledItem,
+  StyledDescription,
+  StyledTitle,
+  StyledActionButton,
+} from './Item.styles';
 import { ItemProps } from './Item.types';
 
 export const Item = ({
@@ -26,7 +32,7 @@ export const Item = ({
       <StyledFlexTopCenter {...hiddenProps}>{icon}</StyledFlexTopCenter>
       <StyledCol {...hiddenProps}>
         <StyledTitle>{name}</StyledTitle>
-        <StyledDsc>{description}</StyledDsc>
+        <StyledDescription>{description}</StyledDescription>
       </StyledCol>
       <div className="actions">
         <Actions items={getActions()} context={{ id }} visibleByDefault />

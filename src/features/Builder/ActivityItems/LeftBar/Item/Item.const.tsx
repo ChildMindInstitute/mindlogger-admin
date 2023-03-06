@@ -17,7 +17,7 @@ export const getActions = () => [
     toolTipTitle: '',
   },
   {
-    icon: <Svg id="drug" />,
+    icon: <Svg id="drag" />,
     action: () => null,
     toolTipTitle: '',
   },

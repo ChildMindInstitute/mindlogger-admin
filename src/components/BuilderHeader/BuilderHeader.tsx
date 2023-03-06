@@ -8,8 +8,7 @@ export const BuilderHeader = ({ title, buttons }: BuilderHeaderProps) => (
     <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
     <StyledButtons>
       {buttons?.map(({ icon, label, handleClick }) => (
-        <StyledBuilderBtn key={label} onClick={handleClick}>
-          {icon}
+        <StyledBuilderBtn key={label} onClick={handleClick} startIcon={icon}>
           {label}
         </StyledBuilderBtn>
       ))}

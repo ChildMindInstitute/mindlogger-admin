@@ -20,8 +20,10 @@ export const LeftBar = ({ setActiveItem, activeItem }: LeftBarProps) => {
       {items.map((item) => (
         <Item key={item.id} {...item} activeItem={activeItem} setActiveItem={setActiveItem} />
       ))}
-      <StyledBuilderBtn sx={{ margin: theme.spacing(1.6, 'auto', 0), display: 'flex' }}>
-        <Svg id="add" width={18} height={18} />
+      <StyledBuilderBtn
+        sx={{ margin: theme.spacing(1.6, 'auto', 0), display: 'flex' }}
+        startIcon={<Svg id="add" width={18} height={18} />}
+      >
         {t('addItem')}
       </StyledBuilderBtn>
     </StyledBar>

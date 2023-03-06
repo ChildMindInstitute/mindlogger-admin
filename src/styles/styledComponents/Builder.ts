@@ -18,6 +18,5 @@ export const StyledBuilderBtn = styled(Button)`
 
   svg {
     fill: ${variables.palette.primary};
-    margin-right: ${theme.spacing(0.8)};
   }
 `;

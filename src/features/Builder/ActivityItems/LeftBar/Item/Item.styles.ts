@@ -10,10 +10,15 @@ import {
 } from 'styles/styledComponents';
 import { variables } from 'styles/variables';
 
-const commonStyles = `
+const commonEllipsisStyles = `
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;`;
+
+const commonButtonStyles = `
+  width: 4rem;
+  height: 4rem;
+  min-width: 4rem;`;
 
 export const StyledItem = styled(StyledFlexTopCenter)`
   cursor: pointer;
@@ -28,13 +33,11 @@ export const StyledItem = styled(StyledFlexTopCenter)`
   .dots {
     display: flex;
     align-items: center;
-    width: 4rem;
-    height: 4rem;
-    min-width: 4rem;
+    ${commonButtonStyles};
   }
 
   &:hover {
-    background-color: rgba(222, 227, 235, 0.08);
+    background-color: ${variables.palette.surface_variant_alfa8};
 
     .actions {
       display: ${({ hidden }: { hidden: boolean }) => (hidden ? 'none' : 'flex')};
@@ -53,18 +56,16 @@ export const StyledCol = styled(StyledFlexColumn)`
   min-width: 0;
 `;
 
-export const StyledDsc = styled(StyledTitleMedium)`
-  ${commonStyles}
+export const StyledDescription = styled(StyledTitleMedium)`
+  ${commonEllipsisStyles}
 `;
 
 export const StyledTitle = styled(StyledTitleBoldMedium)`
-  ${commonStyles}
+  ${commonEllipsisStyles}
 `;
 
 export const StyledActionButton = styled(StyledClearedButton)`
-  width: 4rem;
-  height: 4rem;
-  min-width: 4rem;
+  ${commonButtonStyles};
   border-radius: ${variables.borderRadius.half};
   margin-right: ${theme.spacing(1.9)};
 
