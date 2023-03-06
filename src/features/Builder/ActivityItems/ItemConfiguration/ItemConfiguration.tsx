@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
@@ -13,23 +14,37 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
+import { ItemSettingsDrawer } from './ItemSettingsDrawer';
+import { ItemSettingsController } from './ItemSettingsController';
 import { StyledTop, StyledInputWrapper } from './ItemConfiguration.styles';
 import { ItemConfigurationForm } from './ItemConfiguration.types';
-import { itemsTypeOptions } from './ItemConfiguration.const';
+import { itemsTypeOptions, DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
+  const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
+
   const { t } = useTranslation('app');
-  const { control } = useForm<ItemConfigurationForm>({
-    defaultValues: { itemsInputType: '' },
+  const { control, watch, setValue } = useForm<ItemConfigurationForm>({
+    defaultValues: { itemsInputType: '', settings: [], timer: DEFAULT_TIMER_VALUE },
     mode: 'onChange',
   });
+
+  const selectedInputType = watch('itemsInputType');
+
+  useEffect(() => {
+    setValue('settings', []);
+    setValue('timer', DEFAULT_TIMER_VALUE);
+  }, [selectedInputType]);
 
   return (
     <StyledFlexColumn>
       <StyledTop>
         <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
         <StyledFlexTopCenter>
-          <StyledClearedButton sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}>
+          <StyledClearedButton
+            sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
+            onClick={() => setSettingsDrawerVisible(true)}
+          >
             <Svg id="report-configuration" />
           </StyledClearedButton>
           <StyledClearedButton sx={{ p: theme.spacing(1) }}>
@@ -50,6 +65,19 @@ export const ItemConfiguration = () => {
           {t('itemTypeDescription')}
         </StyledBodyMedium>
       </StyledInputWrapper>
+      {settingsDrawerVisible && (
+        <ItemSettingsDrawer
+          open={settingsDrawerVisible}
+          onClose={() => setSettingsDrawerVisible(false)}
+        >
+          <ItemSettingsController
+            timerName="timer"
+            name="settings"
+            inputType={selectedInputType}
+            control={control}
+          />
+        </ItemSettingsDrawer>
+      )}
     </StyledFlexColumn>
   );
 };
