@@ -1,6 +1,7 @@
 import { styled, MenuItem, Select, ListSubheader } from '@mui/material';
 
 import { variables } from 'styles/variables';
+import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 const {
   palette,
@@ -27,8 +28,9 @@ export const StyledGroupName = styled(MenuItem)`
   cursor: default;
 `;
 
-export const StyledMenuItem = styled(MenuItem)`
+export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
   color: ${palette.on_surface};
+  display: ${({ isHidden }: { isHidden: boolean }) => (isHidden ? 'none' : 'flex')};
 
   svg {
     fill: ${palette.on_surface_variant};

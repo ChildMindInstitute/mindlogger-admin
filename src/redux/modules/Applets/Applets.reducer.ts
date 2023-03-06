@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
-import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 
-import { ErrorResponse } from 'redux/modules/Base';
+import { getApiError } from 'utils/getApiError';
 
 import { AppletsSchema } from './Applets.schema';
 import { getApplets } from './Applets.thunk';
@@ -27,7 +27,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AppletsSchema>): 
     if (applets.status === 'loading' && applets.requestId === action.meta.requestId) {
       applets.requestId = initialState.applets.requestId;
       applets.status = 'error';
-      applets.error = action.error as AxiosError<ErrorResponse>;
+      applets.error = getApiError(action as PayloadAction<AxiosError>);
     }
   });
 };

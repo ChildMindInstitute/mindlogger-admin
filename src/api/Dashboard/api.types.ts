@@ -24,7 +24,7 @@ export type ResetPassword = { email: string };
 
 export type GetAppletsParams = {
   params: {
-    ownerId: number;
+    ownerId: string;
     search?: string;
     page?: number;
     limit?: number;

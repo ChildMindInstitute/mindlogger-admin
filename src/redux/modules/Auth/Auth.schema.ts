@@ -2,8 +2,9 @@ import { BaseSchema } from 'redux/modules/Base';
 
 export type User = {
   email: string;
-  fullName: string;
-  id: number;
+  firstName: string;
+  lastName: string;
+  id: string;
 };
 
 export type AccountData = {
