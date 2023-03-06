@@ -1,28 +1,53 @@
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { Button } from '@mui/material';
+import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'components';
 import {
-  StyledHeadlineLarge,
+  StyledBodyMedium,
   StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
-  StyledBodyMedium,
+  StyledHeadlineLarge,
 } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { StyledTop, StyledInputWrapper } from './ItemConfiguration.styles';
-import { ItemConfigurationForm } from './ItemConfiguration.types';
+import { StyledInputWrapper, StyledOptionsWrapper, StyledTop } from './ItemConfiguration.styles';
+import { ItemConfigurationForm, ItemInputTypes } from './ItemConfiguration.types';
 import { itemsTypeOptions } from './ItemConfiguration.const';
+import { SelectionOption } from './SelectionOption';
 
 export const ItemConfiguration = () => {
   const { t } = useTranslation('app');
-  const { control } = useForm<ItemConfigurationForm>({
+  const { control, watch } = useForm<ItemConfigurationForm>({
     defaultValues: { itemsInputType: '' },
     mode: 'onChange',
   });
+
+  const {
+    fields,
+    append: appendOption,
+    remove: removeOption,
+  } = useFieldArray({
+    control,
+    name: 'options',
+  });
+
+  const selectedInputType = watch('itemsInputType');
+  const options = watch('options');
+
+  const hasOptions =
+    selectedInputType === ItemInputTypes.SingleSelection ||
+    selectedInputType === ItemInputTypes.MultipleSelection;
+
+  const handleAddOption = () =>
+    appendOption({
+      text: '',
+      isVisible: true,
+    });
 
   return (
     <StyledFlexColumn>
@@ -50,6 +75,27 @@ export const ItemConfiguration = () => {
           {t('itemTypeDescription')}
         </StyledBodyMedium>
       </StyledInputWrapper>
+      {hasOptions && (
+        <StyledOptionsWrapper>
+          {options?.length
+            ? options.map((option, index) => (
+                <SelectionOption
+                  key={uniqueId()}
+                  removeOption={removeOption}
+                  index={index}
+                  {...option}
+                />
+              ))
+            : null}
+          <Button
+            onClick={handleAddOption}
+            variant="outlined"
+            startIcon={<Svg id="add" width="20" height="20" />}
+          >
+            {t('addOption')}
+          </Button>
+        </StyledOptionsWrapper>
+      )}
     </StyledFlexColumn>
   );
 };

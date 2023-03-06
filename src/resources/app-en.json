@@ -450,5 +450,10 @@
   "searchInputType": "Search input type",
   "inputType": "Input Type",
   "itemTypeDescription": "Provide a list of choices and allow respondents to choose a single answer.",
+  "optionText": "Option Text",
+  "score": "Score",
+  "tooltip": "Tooltip",
+  "supportingText": "Supporting text",
+  "addOption": "Add Option",
   "uploadTransfluent": "Please upload JPG or transfluent PNG image less than 1GB."
 }

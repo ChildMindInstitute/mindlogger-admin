@@ -341,5 +341,10 @@
   "searchInputType": "Type d'entrée de recherche",
   "inputType": "Type d'entrée",
   "itemTypeDescription": "Fournissez une liste de choix et permettez aux répondants de choisir une seule réponse.",
+  "optionText": "Texte de l'option",
+  "score": "Score",
+  "tooltip": "Info-bulle",
+  "supportingText": "Texte de support",
+  "addOption": "Ajouter une option",
   "appletActivities": "Activités d'applet"
 }

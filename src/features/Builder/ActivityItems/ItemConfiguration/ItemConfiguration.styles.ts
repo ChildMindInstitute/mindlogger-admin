@@ -16,3 +16,12 @@ export const StyledTop = styled(StyledFlexTopCenter)`
 export const StyledInputWrapper = styled(Box)`
   width: 58rem;
 `;
+
+export const StyledOptionsWrapper = styled(Box)`
+  margin: ${theme.spacing(2.4, 0)};
+  text-align: center;
+
+  svg {
+    fill: ${variables.palette.primary};
+  }
+`;

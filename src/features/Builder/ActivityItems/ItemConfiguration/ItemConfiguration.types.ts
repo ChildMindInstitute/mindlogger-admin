@@ -18,7 +18,17 @@ export enum ItemInputTypes {
   AudioPlayer = 'audioPlayer',
 }
 
-export type ItemConfigurationForm = { itemsInputType: ItemInputTypes | '' };
+export type SelectionOption = {
+  text: string;
+  score?: number;
+  tooltip?: string;
+  isVisible?: boolean;
+};
+
+export type ItemConfigurationForm = {
+  itemsInputType: ItemInputTypes | '';
+  options?: SelectionOption[];
+};
 
 export type ItemsOption = {
   value: ItemInputTypes;
