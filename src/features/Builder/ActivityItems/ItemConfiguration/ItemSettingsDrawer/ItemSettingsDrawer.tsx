@@ -37,7 +37,7 @@ export const ItemSettingsDrawer = ({ open, onClose, children }: ItemSettingsDraw
           <StyledTitleBoldSmall sx={{ flexGrow: 1 }}>{t('settings')}</StyledTitleBoldSmall>
           <StyledClearedButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
-            onClick={() => onClose()}
+            onClick={onClose}
           >
             <Svg id="cross" />
           </StyledClearedButton>
