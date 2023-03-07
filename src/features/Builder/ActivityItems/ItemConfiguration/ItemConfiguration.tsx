@@ -15,11 +15,20 @@ import { variables } from 'styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
-import { ItemSettingsDrawer } from './ItemSettingsDrawer';
-import { ItemSettingsController } from './ItemSettingsController';
+import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
+import { NumberSelection } from './InputTypeItems';
 import { StyledTop, StyledInputWrapper } from './ItemConfiguration.styles';
-import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
-import { itemsTypeOptions, DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
+import {
+  ItemConfigurationForm,
+  ItemConfigurationSettings,
+  ItemInputTypes,
+} from './ItemConfiguration.types';
+import {
+  itemsTypeOptions,
+  DEFAULT_TIMER_VALUE,
+  DEFAULT_MIN_NUMBER,
+  DEFAULT_MAX_NUMBER,
+} from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -31,6 +40,8 @@ export const ItemConfiguration = () => {
       settings: [],
       timer: DEFAULT_TIMER_VALUE,
       isTextInputOptionRequired: true,
+      minNumber: DEFAULT_MIN_NUMBER,
+      maxNumber: DEFAULT_MAX_NUMBER,
     },
     mode: 'onChange',
   });
@@ -84,6 +95,9 @@ export const ItemConfiguration = () => {
           {t('itemTypeDescription')}
         </StyledBodyMedium>
       </StyledInputWrapper>
+      {selectedInputType === ItemInputTypes.NumberSelection && (
+        <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+      )}
       {isTextInputOptionVisible && (
         <TextInputOption
           name="isTextInputOptionRequired"
