@@ -17,7 +17,7 @@ export const StyledTextInputOptionHeader = styled(StyledFlexTopCenter)`
 
 export const StyledTextInputOptionDescription = styled(Box)`
   padding: ${theme.spacing(1.6)};
-  border: 0.1rem solid ${variables.palette.surface_variant};
+  border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   border-radius: ${variables.borderRadius.xs};
   margin-top: ${theme.spacing(3.8)};
 `;
