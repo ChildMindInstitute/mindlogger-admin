@@ -4,4 +4,5 @@ export type TabPanelProps = {
   value: number;
   isMinHeightAuto?: boolean;
   hiddenHeader?: boolean;
+  id?: string;
 };

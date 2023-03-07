@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
@@ -25,6 +26,7 @@ import {
 import { AppletProps, AppletUiType } from './Applet.types';
 import { Activities } from './Activities';
 import { AppletImage } from './AppletImage';
+import { RemoveAppletPopup } from './Popups';
 
 export const Applet = ({
   applet: { appletId, name, image = '', version = '', description, keywords },
@@ -33,7 +35,13 @@ export const Applet = ({
   const { t } = useTranslation('app');
   const navigate = useNavigate();
 
+  const [removeAppletPopupVisible, setRemoveAppletPopupVisible] = useState(false);
+
   const APPLET_DETAILS = `${page.library}/${appletId}`;
+
+  const handleRemove = () => {
+    setRemoveAppletPopupVisible(true);
+  };
 
   const renderAppletInfoListView = () => (
     <>
@@ -114,6 +122,7 @@ export const Applet = ({
               variant="outlined"
               startIcon={<Svg width="18" height="18" id="trash" />}
               sx={{ marginLeft: theme.spacing(1.2) }}
+              onClick={handleRemove}
             >
               {t('remove')}
             </Button>
@@ -123,20 +132,30 @@ export const Applet = ({
   };
 
   return (
-    <StyledAppletContainer>
-      <AppletImage image={image} name={name} />
-      <Box>
-        {renderAppletInfo()}
-        {!!keywords.length && (
-          <StyledAppletKeywordsContainer>
-            {keywords.map((keyword) => (
-              <StyledAppletKeyword key={keyword}>{keyword}</StyledAppletKeyword>
-            ))}
-          </StyledAppletKeywordsContainer>
-        )}
-      </Box>
-      <StyledButtonsContainer>{renderButtons()}</StyledButtonsContainer>
-      <Activities uiType={uiType} />
-    </StyledAppletContainer>
+    <>
+      <StyledAppletContainer>
+        <AppletImage image={image} name={name} />
+        <Box>
+          {renderAppletInfo()}
+          {!!keywords.length && (
+            <StyledAppletKeywordsContainer>
+              {keywords.map((keyword) => (
+                <StyledAppletKeyword key={keyword}>{keyword}</StyledAppletKeyword>
+              ))}
+            </StyledAppletKeywordsContainer>
+          )}
+        </Box>
+        <StyledButtonsContainer>{renderButtons()}</StyledButtonsContainer>
+        <Activities uiType={uiType} />
+      </StyledAppletContainer>
+      {removeAppletPopupVisible && (
+        <RemoveAppletPopup
+          appletId={appletId}
+          appletName={name}
+          removeAppletPopupVisible={removeAppletPopupVisible}
+          setRemoveAppletPopupVisible={setRemoveAppletPopupVisible}
+        />
+      )}
+    </>
   );
 };

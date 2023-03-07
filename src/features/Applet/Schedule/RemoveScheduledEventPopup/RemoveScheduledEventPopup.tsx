@@ -24,7 +24,6 @@ export const RemoveScheduledEventPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      width="66"
     >
       <StyledModalWrapper>
         <Trans i18nKey="confirmRemoveScheduledEvent">

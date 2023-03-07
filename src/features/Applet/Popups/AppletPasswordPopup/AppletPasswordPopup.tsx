@@ -40,7 +40,6 @@ export const AppletPasswordPopup = ({
           : t('createAppletPassword')
       }
       buttonText={t('submit')}
-      width="66"
     >
       <StyledAppletPasswordContainer>
         {popupType === AppletPasswordPopupType.Enter ? (

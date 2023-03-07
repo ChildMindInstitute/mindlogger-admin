@@ -42,13 +42,14 @@ export const SignUpForm = () => {
 
   const termsOfService = watch('termsOfService');
 
-  const onSubmit = async (data: SignUpData) => {
+  const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');
     const { signUp } = auth.thunk;
     const body = {
-      email: data.email,
-      password: data.password,
-      fullName: `${data.firstName} ${data.lastName}`,
+      email,
+      password,
+      firstName,
+      lastName,
     };
 
     const result = await dispatch(signUp({ body }));

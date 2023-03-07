@@ -6,6 +6,7 @@ type Tab = {
   onClick?: () => void;
   isMinHeightAuto?: boolean;
   path?: string;
+  id?: string;
 };
 
 export enum UiType {

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
@@ -15,27 +16,70 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
+import { TextInputOption } from './TextInputOption';
+import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
+import { NumberSelection } from './InputTypeItems';
 import { StyledTop, StyledInputWrapper } from './ItemConfiguration.styles';
-import { ItemConfigurationFields, ItemConfigurationForm } from './ItemConfiguration.types';
-import { itemsTypeOptions } from './ItemConfiguration.const';
+import {
+  ItemConfigurationFields,
+  ItemConfigurationForm,
+  ItemConfigurationSettings,
+  ItemInputTypes,
+} from './ItemConfiguration.types';
+import {
+  itemsTypeOptions,
+  DEFAULT_TIMER_VALUE,
+  DEFAULT_MIN_NUMBER,
+  DEFAULT_MAX_NUMBER,
+} from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
+  const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
+
   const { t } = useTranslation('app');
-  const { control } = useForm<ItemConfigurationForm>({
+  const { control, watch, setValue } = useForm<ItemConfigurationForm>({
     defaultValues: {
       [ItemConfigurationFields.itemsInputType]: '',
       [ItemConfigurationFields.name]: '',
       [ItemConfigurationFields.body]: '',
+      settings: [],
+      timer: DEFAULT_TIMER_VALUE,
+      isTextInputOptionRequired: true,
+      minNumber: DEFAULT_MIN_NUMBER,
+      maxNumber: DEFAULT_MAX_NUMBER,
     },
     mode: 'onChange',
   });
+
+  const selectedInputType = watch('itemsInputType');
+  const settings = watch('settings');
+
+  useEffect(() => {
+    setValue('settings', []);
+    setValue('timer', DEFAULT_TIMER_VALUE);
+  }, [selectedInputType]);
+
+  const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
+
+  const handleRemoveTextInputOption = () => {
+    setValue(
+      'settings',
+      settings?.filter(
+        (settingKey: ItemConfigurationSettings) =>
+          settingKey !== ItemConfigurationSettings.HasTextInput,
+      ),
+    );
+  };
 
   return (
     <StyledFlexColumn>
       <StyledTop>
         <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
         <StyledFlexTopCenter>
-          <StyledClearedButton sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}>
+          <StyledClearedButton
+            sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
+            onClick={() => setSettingsDrawerVisible(true)}
+          >
             <Svg id="report-configuration" />
           </StyledClearedButton>
           <StyledClearedButton sx={{ p: theme.spacing(1) }}>
@@ -66,6 +110,29 @@ export const ItemConfiguration = () => {
         <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
         <EditorController name={ItemConfigurationFields.body} control={control} />
       </StyledInputWrapper>
+      {selectedInputType === ItemInputTypes.NumberSelection && (
+        <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+      )}
+      {isTextInputOptionVisible && (
+        <TextInputOption
+          name="isTextInputOptionRequired"
+          control={control}
+          onRemove={handleRemoveTextInputOption}
+        />
+      )}
+      {settingsDrawerVisible && (
+        <ItemSettingsDrawer
+          open={settingsDrawerVisible}
+          onClose={() => setSettingsDrawerVisible(false)}
+        >
+          <ItemSettingsController
+            timerName="timer"
+            name="settings"
+            inputType={selectedInputType}
+            control={control}
+          />
+        </ItemSettingsDrawer>
+      )}
     </StyledFlexColumn>
   );
 };

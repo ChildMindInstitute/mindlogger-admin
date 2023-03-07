@@ -39,7 +39,6 @@ export const SelectRespondentsPopup = ({
       hasSecondBtn
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleClose}
-      width="66"
       height="60"
     >
       <StyledModalWrapper>

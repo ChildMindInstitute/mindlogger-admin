@@ -18,6 +18,29 @@ export enum ItemInputTypes {
   AudioPlayer = 'audioPlayer',
 }
 
+export enum ItemConfigurationSettings {
+  HasScores = 'hasScores',
+  HasTooltips = 'hasTooltips',
+  HasAlerts = 'hasAlerts',
+  HasTextInput = 'hasInput',
+  HasTickMarks = 'hasTickMarks',
+  HasTickMarksLabels = 'hasTickMarksLabels',
+  HasColorPalette = 'hasColorPallete',
+  HasRandomize = 'hasRandomize',
+  HasMoreNavigationButtons = 'hasMoreNavigationButtons',
+  HasResponseDataIdentifier = 'hasResponseDataIdentifier',
+  HasTimer = 'hasTimer',
+  HasLabels = 'hasLabels',
+  IsResponseRequired = 'isResponseRequired',
+  IsCorrectAnswerRequired = 'isCorrectAnswerRequired',
+  IsNumericalRequired = 'isNumericalRequired',
+  IsSkippable = 'isSkippable',
+  IsContinuous = 'isContinuous',
+  IsMediaReplayAllowed = 'isMediaReplayAllowed',
+  IsUndoChangesForbidden = 'isUndoChangesForbidden',
+  IsGoBackRemoved = 'isGoBackRemoved',
+}
+
 export enum ItemConfigurationFields {
   itemsInputType = 'itemsInputType',
   name = 'name',
@@ -28,6 +51,11 @@ export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
   name: string;
   body: string;
+  settings: ItemConfigurationSettings[];
+  timer: number;
+  isTextInputOptionRequired: boolean;
+  minNumber: number;
+  maxNumber: number;
 };
 
 export type ItemsOption = {

@@ -3,14 +3,17 @@ import { AxiosError } from 'axios';
 export type MetaStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export type ErrorResponse = {
-  message: string;
+  message: {
+    en: string;
+  };
+  path: string[];
   type: string;
 };
 
 export type MetaSchema = {
   requestId: string;
   status: MetaStatus;
-  error?: AxiosError<ErrorResponse>;
+  error?: AxiosError<ErrorResponse[]>;
 };
 
 export type BaseSchema<DataType = unknown> = MetaSchema & {
