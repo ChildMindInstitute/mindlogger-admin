@@ -10,11 +10,13 @@ import {
   StyledClearedButton,
   StyledFlexTopCenter,
   StyledHeadlineLarge,
+  StyledFlexColumn,
 } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
+import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer } from './ItemSettingsDrawer';
 import { ItemSettingsController } from './ItemSettingsController';
 import { SelectionOption } from './InputTypeItems';
@@ -24,14 +26,24 @@ import {
   StyledOptionsWrapper,
   StyledItemConfiguration,
 } from './ItemConfiguration.styles';
-import { ItemConfigurationForm, ItemInputTypes } from './ItemConfiguration.types';
+import {
+  ItemConfigurationForm,
+  ItemInputTypes,
+  ItemConfigurationSettings,
+} from './ItemConfiguration.types';
 import { itemsTypeOptions, DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
-  const { t } = useTranslation('app');
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
+  const { t } = useTranslation('app');
+
   const methods = useForm<ItemConfigurationForm>({
-    defaultValues: { itemsInputType: '', settings: [], timer: DEFAULT_TIMER_VALUE },
+    defaultValues: {
+      itemsInputType: '',
+      settings: [],
+      timer: DEFAULT_TIMER_VALUE,
+      isTextInputOptionRequired: true,
+    },
     mode: 'onChange',
   });
 
@@ -57,6 +69,10 @@ export const ItemConfiguration = () => {
       text: '',
       isVisible: true,
     });
+
+  const settings = watch('settings');
+
+  const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
 
   useEffect(() => {
     setValue('settings', []);
@@ -93,6 +109,9 @@ export const ItemConfiguration = () => {
             {t('itemTypeDescription')}
           </StyledBodyMedium>
         </StyledInputWrapper>
+        {isTextInputOptionVisible && (
+          <TextInputOption name="isTextInputOptionRequired" control={control} />
+        )}
         {settingsDrawerVisible && (
           <ItemSettingsDrawer
             open={settingsDrawerVisible}
