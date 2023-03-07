@@ -1,0 +1,50 @@
+export const mockedCart = [
+  {
+    accountId: '61fab3cf47e81b88522ef832',
+    appletId: '61fab6d647e81b88522ef90f',
+    categoryId: null,
+    description:
+      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English.',
+    id: '61fd29467c9676d5377c10dd',
+    image: 'https://mindlogger-applet-contents.s3.amazonaws.com/image/3z85ruP3ZiC44izmmEafNN.jpeg',
+    keywords: ['applet name (anita)'],
+    name: 'applet name (anita)',
+    subCategoryId: null,
+  },
+  {
+    accountId: '629872ba7680030fb93f3d44',
+    appletId: '629a0dfc7680030fb93f45d9',
+    categoryId: null,
+    description: 'my applet macos',
+    id: '629a2cd77680030fb93f480c',
+    image: 'https://mindlogger-applet-contents.s3.amazonaws.com/image/eirwbYNPntHg1zDiHUwVLv.jpeg',
+    keywords: ['applet', 'macos', 'v0.16.1'],
+    name: 'my applet macos',
+    subCategoryId: null,
+    version: 'v2.0.1',
+  },
+  {
+    accountId: '62960db77680030fb93f2d80',
+    appletId: '629618487680030fb93f31e2',
+    categoryId: null,
+    description:
+      'My applet ML3 description It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distributio',
+    id: '62977bf77680030fb93f38ff',
+    image: 'https://mindlogger-applet-contents.s3.amazonaws.com/image/7zN2XZ9ptvu7QwtS9ofhD3.jpeg',
+    keywords: ['one keyword'],
+    name: 'My applet ML3',
+    subCategoryId: null,
+  },
+  {
+    accountId: '62960db77680030fb93f2d80',
+    appletId: '629753b17680030fb93f369d',
+    categoryId: null,
+    description:
+      'My applet ML3 description It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distributio',
+    id: '62977f897680030fb93f3933',
+    image: 'https://mindlogger-applet-contents.s3.amazonaws.com/image/7zN2XZ9ptvu7QwtS9ofhD3.jpeg',
+    keywords: ['one keyword', 'two keywords', 'three keywords'],
+    name: 'My applet ML3 (web)',
+    subCategoryId: null,
+  },
+];
