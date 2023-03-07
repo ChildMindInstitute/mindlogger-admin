@@ -10,7 +10,6 @@ import {
   StyledClearedButton,
   StyledFlexTopCenter,
   StyledHeadlineLarge,
-  StyledFlexColumn,
 } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
@@ -64,15 +63,15 @@ export const ItemConfiguration = () => {
     selectedInputType === ItemInputTypes.SingleSelection ||
     selectedInputType === ItemInputTypes.MultipleSelection;
 
+  const settings = watch('settings');
+
+  const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
+
   const handleAddOption = () =>
     appendOption({
       text: '',
       isVisible: true,
     });
-
-  const settings = watch('settings');
-
-  const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
 
   useEffect(() => {
     setValue('settings', []);

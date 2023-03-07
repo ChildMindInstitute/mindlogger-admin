@@ -35,6 +35,7 @@ export const SelectionOption = ({
   const [open, setOpen] = useState(true);
   const { setValue, watch, control } = useFormContext<ItemConfigurationForm>();
 
+  // const settings = watch('settings');
   const handleOptionToggle = () => setOpen((prevState) => !prevState);
   const handleOptionHide = () => setValue(`options.${index}.isVisible`, !isVisible);
   const handlePaletteClick = () => console.log('palette click');
