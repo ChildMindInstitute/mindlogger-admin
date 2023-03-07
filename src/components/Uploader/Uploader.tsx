@@ -1,31 +1,39 @@
-import { useState, DragEvent, MouseEvent, ChangeEvent, useRef } from 'react';
+import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Button } from '@mui/material';
 import { Trans } from 'react-i18next';
 
 import { StyledBodyMedium } from 'styles/styledComponents';
-import { Svg, CropPopup } from 'components';
+import { CropPopup, Svg } from 'components';
 import theme from 'styles/theme';
 
 import { variables } from 'styles/variables';
 import {
+  StyledButtonGroup,
   StyledContainer,
   StyledImgContainer,
-  StyledUploadImg,
-  StyledButtonGroup,
-  UploadedImgContainer,
   StyledName,
   StyledNameWrapper,
+  StyledUploadImg,
+  UploadedImgContainer,
 } from './Uploader.styles';
-import { UploaderProps } from './Uploader.types';
+import { UploaderProps, UploaderUiType } from './Uploader.types';
 
 const MAX_FILE_SIZE = 1073741824; //1GB
 
-export const Uploader = ({ width, height, setValue, getValue, description }: UploaderProps) => {
+export const Uploader = ({
+  uiType = UploaderUiType.Primary,
+  width,
+  height,
+  setValue,
+  getValue,
+  description,
+}: UploaderProps) => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
   const [error, setError] = useState(false);
+  const isPrimaryUiType = uiType === UploaderUiType.Primary;
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -39,8 +47,18 @@ export const Uploader = ({ width, height, setValue, getValue, description }: Upl
       setError(!isAllowableSize);
 
       if (isAllowableSize && files[0].type.includes('image')) {
-        setImage(files[0]);
-        setCropPopupVisible(true);
+        if (isPrimaryUiType) {
+          setImage(files[0]);
+          setCropPopupVisible(true);
+        } else {
+          const reader = new FileReader();
+          reader.readAsDataURL(files[0]);
+
+          reader.onload = () => {
+            const imageUrl = reader.result;
+            imageUrl && setValue(imageUrl as string);
+          };
+        }
       }
     }
   };
@@ -81,12 +99,18 @@ export const Uploader = ({ width, height, setValue, getValue, description }: Upl
 
   const imageField = getValue();
 
+  const placeholderImgId = isPrimaryUiType ? 'img-filled' : 'img-outlined';
+  const deleteBtnProps = {
+    sx: isPrimaryUiType ? null : { width: '4.8rem', height: '4.8rem' },
+  };
+
   return (
     <>
       <StyledContainer
         width={width}
         height={height}
         isImgUploaded={!!imageField}
+        isPrimaryUiType={isPrimaryUiType}
         onClick={() => uploadInputRef?.current?.click()}
         {...dragEvents}
       >
@@ -94,9 +118,19 @@ export const Uploader = ({ width, height, setValue, getValue, description }: Upl
           <UploadedImgContainer>
             <StyledUploadImg alt="file upload" src={imageField} width={width} height={height} />
             {isMouseOver && (
-              <StyledButtonGroup variant="outlined" aria-label="button group">
-                <Button startIcon={<Svg width="18" height="18" id="edit" />} onClick={onEditImg} />
+              <StyledButtonGroup
+                isPrimaryUiType={isPrimaryUiType}
+                variant="outlined"
+                aria-label="button group"
+              >
+                {isPrimaryUiType && (
+                  <Button
+                    startIcon={<Svg width="18" height="18" id="edit" />}
+                    onClick={onEditImg}
+                  />
+                )}
                 <Button
+                  {...deleteBtnProps}
                   startIcon={<Svg width="18" height="18" id="trash" />}
                   onClick={onRemoveImg}
                 />
@@ -104,9 +138,9 @@ export const Uploader = ({ width, height, setValue, getValue, description }: Upl
             )}
           </UploadedImgContainer>
         ) : (
-          <StyledImgContainer>
-            <Svg id="img-filled" width={32} height={32} />
-            {error && (
+          <StyledImgContainer className="image-container" isPrimaryUiType={isPrimaryUiType}>
+            <Svg id={placeholderImgId} width={32} height={32} />
+            {isPrimaryUiType && error && (
               <StyledBodyMedium
                 sx={{ marginBottom: theme.spacing(1) }}
                 color={variables.palette.semantic.error}
@@ -116,11 +150,13 @@ export const Uploader = ({ width, height, setValue, getValue, description }: Upl
                 </Trans>
               </StyledBodyMedium>
             )}
-            <StyledBodyMedium>
-              <Trans i18nKey="dropImg">
-                Drop Image here <br /> or <span>click to browse</span>.
-              </Trans>
-            </StyledBodyMedium>
+            {isPrimaryUiType && (
+              <StyledBodyMedium>
+                <Trans i18nKey="dropImg">
+                  Drop Image here <br /> or <span>click to browse</span>.
+                </Trans>
+              </StyledBodyMedium>
+            )}
           </StyledImgContainer>
         )}
       </StyledContainer>
@@ -132,16 +168,18 @@ export const Uploader = ({ width, height, setValue, getValue, description }: Upl
         name="uploadFile"
         hidden
       />
-      <StyledNameWrapper>
-        {image?.name ? (
-          <>
-            <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{image.name}</StyledName>{' '}
-            <Svg id="check" width={18} height={18} />
-          </>
-        ) : (
-          description
-        )}
-      </StyledNameWrapper>
+      {isPrimaryUiType && (
+        <StyledNameWrapper>
+          {image?.name ? (
+            <>
+              <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{image.name}</StyledName>{' '}
+              <Svg id="check" width={18} height={18} />
+            </>
+          ) : (
+            description
+          )}
+        </StyledNameWrapper>
+      )}
       {cropPopupVisible && (
         <CropPopup
           open={cropPopupVisible}

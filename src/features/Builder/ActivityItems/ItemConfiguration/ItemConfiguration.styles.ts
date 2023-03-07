@@ -2,7 +2,14 @@ import { styled, Box } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-import { StyledFlexTopCenter } from 'styles/styledComponents';
+import { StyledFlexColumn, StyledFlexTopCenter } from 'styles/styledComponents';
+
+export const StyledItemConfiguration = styled(StyledFlexColumn)`
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  padding: ${theme.spacing(2.8, 6.4)};
+`;
 
 export const StyledTop = styled(StyledFlexTopCenter)`
   justify-content: space-between;

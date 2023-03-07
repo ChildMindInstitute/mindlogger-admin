@@ -41,7 +41,7 @@ export const ActivityAbout = () => {
   const commonProps = {
     control,
     fullWidth: true,
-    sx: { marginBottom: theme.spacing(4.4) },
+    // sx: { marginBottom: theme.spacing(4.4) },
   };
 
   const commonUploaderProps = {
@@ -121,12 +121,14 @@ export const ActivityAbout = () => {
       <StyledForm noValidate>
         <Box sx={{ display: 'flex' }}>
           <StyledContainer>
-            <InputController
-              {...commonProps}
-              name="activityName"
-              maxLength={MAX_NAME_LENGTH}
-              label={t('activityName')}
-            />
+            <Box sx={{ marginBottom: theme.spacing(4.4) }}>
+              <InputController
+                {...commonProps}
+                name="activityName"
+                maxLength={MAX_NAME_LENGTH}
+                label={t('activityName')}
+              />
+            </Box>
             <InputController
               {...commonProps}
               name="activityDescription"

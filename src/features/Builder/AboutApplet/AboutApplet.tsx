@@ -39,7 +39,6 @@ export const AboutApplet = () => {
   const commonProps = {
     control,
     fullWidth: true,
-    sx: { marginBottom: theme.spacing(4.4) },
   };
 
   const commonUploaderProps = {
@@ -82,20 +81,24 @@ export const AboutApplet = () => {
       <StyledForm noValidate>
         <Box sx={{ display: 'flex' }}>
           <StyledContainer>
-            <InputController
-              {...commonProps}
-              name="name"
-              maxLength={MAX_NAME_LENGTH}
-              label={t('appletName')}
-            />
-            <InputController
-              {...commonProps}
-              name="description"
-              maxLength={MAX_DESCRIPTION_LENGTH_LONG}
-              label={t('appletDescription')}
-              multiline
-              rows={5}
-            />
+            <Box sx={{ mb: theme.spacing(4.4) }}>
+              <InputController
+                {...commonProps}
+                name="name"
+                maxLength={MAX_NAME_LENGTH}
+                label={t('appletName')}
+              />
+            </Box>
+            <Box sx={{ mb: theme.spacing(4.4) }}>
+              <InputController
+                {...commonProps}
+                name="description"
+                maxLength={MAX_DESCRIPTION_LENGTH_LONG}
+                label={t('appletDescription')}
+                multiline
+                rows={5}
+              />
+            </Box>
             <StyledFlexTopCenter sx={{ position: 'relative' }}>
               <SelectController
                 {...commonProps}

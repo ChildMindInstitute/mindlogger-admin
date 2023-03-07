@@ -46,6 +46,7 @@ export type SelectionOption = {
   score?: number;
   tooltip?: string;
   isVisible?: boolean;
+  image?: string;
 };
 
 export type ItemConfigurationForm = {

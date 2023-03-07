@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { Svg } from 'components';
 import { CheckboxController, InputController } from 'components/FormComponents';
@@ -35,7 +36,6 @@ export const ActivityFlowAbout = () => {
   const commonProps = {
     fullWidth: true,
     control,
-    sx: { marginBottom: theme.spacing(4.4) },
   };
 
   return (
@@ -44,20 +44,24 @@ export const ActivityFlowAbout = () => {
         {t('aboutActivityFlow')}
       </StyledHeadlineLarge>
       <StyledForm noValidate>
-        <InputController
-          {...commonProps}
-          name="activityFlowName"
-          label={t('activityFlowName')}
-          maxLength={MAX_NAME_LENGTH}
-        />
-        <InputController
-          {...commonProps}
-          name="activityFlowDescription"
-          label={t('activityFlowDescription')}
-          maxLength={MAX_DESCRIPTION_LENGTH}
-          multiline
-          rows={4}
-        />
+        <Box sx={{ mb: theme.spacing(4.4) }}>
+          <InputController
+            {...commonProps}
+            name="activityFlowName"
+            label={t('activityFlowName')}
+            maxLength={MAX_NAME_LENGTH}
+          />
+        </Box>
+        <Box sx={{ mb: theme.spacing(4.4) }}>
+          <InputController
+            {...commonProps}
+            name="activityFlowDescription"
+            label={t('activityFlowDescription')}
+            maxLength={MAX_DESCRIPTION_LENGTH}
+            multiline
+            rows={4}
+          />
+        </Box>
         <StyledTitleMedium
           color={variables.palette.on_surface_variant}
           sx={{ marginBottom: theme.spacing(1.4) }}

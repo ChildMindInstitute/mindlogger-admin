@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'components';
 import { StyledBodyMedium } from 'styles/styledComponents';
@@ -21,7 +22,7 @@ export const Selection = ({ uiType }: SelectionProps) => {
     <>
       <StyledPresentation>
         {new Array(3).fill(null).map((_, index) => (
-          <StyledPresentationLine>
+          <StyledPresentationLine key={uniqueId()}>
             <Svg id={getSelectionSvgId(index, isSingleSelection)} {...commonProps} />
             <SelectionOption optionNumber={index + 1} />
           </StyledPresentationLine>
