@@ -1,28 +1,115 @@
+import React, { useCallback, useRef } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
+import { ExposeParam, InsertContentGenerator } from 'md-editor-rt';
+import { useTranslation } from 'react-i18next';
+import 'md-editor-rt/lib/style.css';
 
-import { StyledEditor } from './EditorController.styles';
+import { MarkExtension } from 'components/MarkDownEditor/extensions/MarkExtension';
+import { TrashExtension } from 'components/MarkDownEditor/extensions/TrashExtension';
+import { AlignTextExtension } from 'components/MarkDownEditor/extensions/AlignTextExtension';
+import { AudioUploadExtension } from 'components/MarkDownEditor/extensions/AudioUploadExtension';
+import { ImageUploadExtension } from 'components/MarkDownEditor/extensions/ImageUploadExtension';
+import { VideoUploadExtension } from 'components/MarkDownEditor/extensions/VideoUploadExtension';
+import { LANGUAGE_BY_DEFAULT } from 'components/MarkDownEditor';
+import { FooterMessage } from 'components/MarkDownEditor/FooterMessage';
+import { CharacterCounter } from 'components/MarkDownEditor/CharacterCounter';
+
+import { StylesMdEditor } from './EditorController.styles';
 import { EditorControllerProps } from './EditorController.types';
 
 export const EditorController = <T extends FieldValues>({
   name,
   control,
-  preview = 'edit',
-  customChange,
-}: EditorControllerProps<T>) => (
-  <Controller
-    name={name}
-    control={control}
-    render={({ field: { onChange, value } }) => (
-      <StyledEditor
-        data-color-mode="light"
-        onChange={(editorValue, event) => {
-          customChange && customChange(editorValue, event);
-          onChange(event);
-        }}
-        value={value}
-        preview={preview}
-        visibleDragbar={false}
-      />
-    )}
-  />
-);
+}: EditorControllerProps<T>) => {
+  const { t } = useTranslation('app');
+
+  const editorRef = useRef<ExposeParam>();
+
+  const onInsert = useCallback((generator: InsertContentGenerator) => {
+    editorRef.current?.insert(generator);
+  }, []);
+
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field: { onChange, value } }) => (
+        <StylesMdEditor
+          ref={editorRef}
+          modelValue={value}
+          onChange={onChange}
+          language={LANGUAGE_BY_DEFAULT}
+          defToolbars={[
+            <MarkExtension key="mark-extension" onInsert={onInsert} />,
+            <TrashExtension
+              key="trash-extension"
+              onClick={() => {
+                onChange('');
+              }}
+            />,
+            <AlignTextExtension
+              key="align-left-extension"
+              type="left"
+              title={t('mdEditorAlignLeft')}
+              onInsert={onInsert}
+            />,
+            <AlignTextExtension
+              key="align-center-extension"
+              type="center"
+              title={t('mdEditorAlignCenter')}
+              onInsert={onInsert}
+            />,
+            <AlignTextExtension
+              key="align-right-extension"
+              type="right"
+              title={t('mdEditorAlignRight')}
+              onInsert={onInsert}
+            />,
+            <ImageUploadExtension key="image-upload-extension" onInsert={onInsert} />,
+            <AudioUploadExtension key="audio-upload-extension" onInsert={onInsert} />,
+            <VideoUploadExtension key="video-upload-extension" onInsert={onInsert} />,
+          ]}
+          toolbars={[
+            'bold',
+            'italic',
+            'title',
+            '-',
+            'underline',
+            'strikeThrough',
+            0, // MarkExtension
+            'sub',
+            'sup',
+            2, // AlignTextExtension: left
+            3, // AlignTextExtension: center
+            4, // AlignTextExtension: right
+            '-',
+            'quote',
+            'orderedList',
+            'unorderedList',
+            'link',
+            'codeRow',
+            'table',
+            '-',
+            'revoke',
+            'next',
+            1, // TrashExtension
+            5, // ImageUploadExtension
+            6, // AudioUploadExtension
+            7, // VideoUploadExtension
+            '-',
+            'catalog',
+            'preview',
+            'pageFullscreen',
+            'htmlPreview',
+          ]}
+          footers={[0, '=', 1]}
+          defFooters={[
+            <FooterMessage inputSize={value.toString().length} key="footer-message" />,
+            // '=',
+            <CharacterCounter inputSize={value.toString().length} key="character-counter" />,
+          ]}
+        />
+      )}
+    />
+  );
+};

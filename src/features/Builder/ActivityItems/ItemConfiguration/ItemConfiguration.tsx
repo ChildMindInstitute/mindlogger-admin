@@ -21,7 +21,6 @@ import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
 import { NumberSelection } from './InputTypeItems';
 import { StyledTop, StyledInputWrapper } from './ItemConfiguration.styles';
 import {
-  ItemConfigurationFields,
   ItemConfigurationForm,
   ItemConfigurationSettings,
   ItemInputTypes,
@@ -39,9 +38,9 @@ export const ItemConfiguration = () => {
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useForm<ItemConfigurationForm>({
     defaultValues: {
-      [ItemConfigurationFields.itemsInputType]: '',
-      [ItemConfigurationFields.name]: '',
-      [ItemConfigurationFields.body]: '',
+      itemsInputType: '',
+      name: '',
+      body: '',
       settings: [],
       timer: DEFAULT_TIMER_VALUE,
       isTextInputOptionRequired: true,
@@ -72,7 +71,7 @@ export const ItemConfiguration = () => {
   };
 
   return (
-    <StyledFlexColumn>
+    <StyledFlexColumn sx={{ m: theme.spacing(2.8, 6.4) }}>
       <StyledTop>
         <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
         <StyledFlexTopCenter>
@@ -89,10 +88,12 @@ export const ItemConfiguration = () => {
       </StyledTop>
       <StyledInputWrapper>
         <GroupedSelectSearchController
-          name={ItemConfigurationFields.itemsInputType}
+          name="itemsInputType"
           options={itemsTypeOptions}
           control={control}
         />
+      </StyledInputWrapper>
+      <StyledInputWrapper>
         <StyledBodyMedium
           sx={{ m: theme.spacing(0.5, 0, 4, 1.4) }}
           color={variables.palette.on_surface_variant}
@@ -101,15 +102,15 @@ export const ItemConfiguration = () => {
         </StyledBodyMedium>
         <InputController
           fullWidth
-          name={ItemConfigurationFields.name}
+          name="name"
           control={control}
           label={t('itemName')}
           type="text"
           sx={{ mb: theme.spacing(4) }}
         />
-        <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
-        <EditorController name={ItemConfigurationFields.body} control={control} />
       </StyledInputWrapper>
+      <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
+      <EditorController name="body" control={control} />
       {selectedInputType === ItemInputTypes.NumberSelection && (
         <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
       )}

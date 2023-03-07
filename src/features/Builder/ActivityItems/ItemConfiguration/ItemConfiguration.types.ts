@@ -41,12 +41,6 @@ export enum ItemConfigurationSettings {
   IsGoBackRemoved = 'isGoBackRemoved',
 }
 
-export enum ItemConfigurationFields {
-  itemsInputType = 'itemsInputType',
-  name = 'name',
-  body = 'body',
-}
-
 export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
   name: string;
