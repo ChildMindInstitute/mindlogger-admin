@@ -10,6 +10,8 @@ export const StyledDrawer = styled(Drawer)`
   flex-shrink: 0;
   position: absolute;
   margin-top: ${theme.spacing(6.1)};
+  box-sizing: content-box;
+  border: ${variables.borderRadius.xxs} solid ${variables.palette.surface_variant};
 
   .MuiDrawer-paper {
     position: absolute;
@@ -21,7 +23,7 @@ export const StyledDrawer = styled(Drawer)`
 
 export const StyledDrawerContent = styled(StyledFlexColumn)`
   height: 100%;
-  background-color: ${variables.palette.surface_variant};
+  background-color: ${variables.palette.surface1};
 
   padding: ${theme.spacing(2.4)};
   gap: 2.4rem;
