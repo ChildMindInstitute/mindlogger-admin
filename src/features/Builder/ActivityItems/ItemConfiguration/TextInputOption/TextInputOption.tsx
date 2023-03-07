@@ -1,10 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import { FieldValues, UseControllerProps } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { Svg } from 'components';
 import { CheckboxController } from 'components/FormComponents';
-import { StyledLabelBoldLarge, StyledLabelLarge } from 'styles/styledComponents';
+import {
+  StyledLabelBoldLarge,
+  StyledLabelLarge,
+  StyledClearedButton,
+} from 'styles/styledComponents';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 
@@ -13,18 +17,25 @@ import {
   StyledTextInputOptionHeader,
   StyledTextInputOptionDescription,
 } from './TextInputOption.styles';
+import { TextInputOptionProps } from './TextInputOption.types';
 
 export const TextInputOption = <T extends FieldValues>({
   name,
   control,
-}: UseControllerProps<T>) => {
+  onRemove,
+}: TextInputOptionProps<T>) => {
   const { t } = useTranslation('app');
 
   return (
     <StyledTextInputOptionContainer>
       <StyledTextInputOptionHeader>
         <StyledLabelBoldLarge>{t('textInputOptionLabel')}</StyledLabelBoldLarge>
-        <Svg id="trash" width="20" height="20" />
+        <StyledClearedButton
+          sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
+          onClick={onRemove}
+        >
+          <Svg id="trash" width="20" height="20" />
+        </StyledClearedButton>
       </StyledTextInputOptionHeader>
       <StyledTextInputOptionDescription>
         <StyledLabelLarge sx={{ opacity: '0.38', color: variables.palette.outline }}>

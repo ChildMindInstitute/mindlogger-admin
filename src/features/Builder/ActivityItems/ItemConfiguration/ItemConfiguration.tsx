@@ -36,15 +36,24 @@ export const ItemConfiguration = () => {
   });
 
   const selectedInputType = watch('itemsInputType');
+  const settings = watch('settings');
 
   useEffect(() => {
     setValue('settings', []);
     setValue('timer', DEFAULT_TIMER_VALUE);
   }, [selectedInputType]);
 
-  const settings = watch('settings');
-
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
+
+  const handleRemoveTextInputOption = () => {
+    setValue(
+      'settings',
+      settings?.filter(
+        (settingKey: ItemConfigurationSettings) =>
+          settingKey !== ItemConfigurationSettings.HasTextInput,
+      ),
+    );
+  };
 
   return (
     <StyledFlexColumn>
@@ -76,7 +85,11 @@ export const ItemConfiguration = () => {
         </StyledBodyMedium>
       </StyledInputWrapper>
       {isTextInputOptionVisible && (
-        <TextInputOption name="isTextInputOptionRequired" control={control} />
+        <TextInputOption
+          name="isTextInputOptionRequired"
+          control={control}
+          onRemove={handleRemoveTextInputOption}
+        />
       )}
       {settingsDrawerVisible && (
         <ItemSettingsDrawer
