@@ -2,16 +2,16 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
-import { AppletsSmallTable } from 'modules/Dashboard/features/Respondents/AppletsSmallTable';
-import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features';
+import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features/Applet';
 import theme from 'styles/theme';
 import { StyledModalWrapper, StyledErrorText, StyledBodyLarge } from 'styles/styledComponents';
 import { getUsersDataApi } from 'api';
 import { useAsync } from 'hooks';
 import { getErrorMessage } from 'utils/errors';
 
-import { ScheduleSetupPopupProps } from './DataExportPopup.types';
+import { DataExportPopupProps } from './DataExportPopup.types';
 import { StyledLinearProgress } from './DataExportPopup.styles';
+import { AppletsSmallTable } from '../../AppletsSmallTable';
 
 export const DataExportPopup = ({
   popupVisible,
@@ -19,7 +19,7 @@ export const DataExportPopup = ({
   tableRows,
   chosenAppletData,
   setChosenAppletData,
-}: ScheduleSetupPopupProps) => {
+}: DataExportPopupProps) => {
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const appletPasswordRef = useRef() as RefObject<AppletPasswordRef>;

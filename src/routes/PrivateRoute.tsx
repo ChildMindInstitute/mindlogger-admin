@@ -3,22 +3,12 @@ import { Navigate } from 'react-router-dom';
 import { page } from 'resources';
 import { auth } from 'redux/modules';
 
-type PrivateRouteDefinition = {
-  isAuthRoute?: boolean;
-  redirectPath?: string;
+type PrivateRouteProps = {
   children: JSX.Element;
 };
 
-export const PrivateRoute = ({
-  isAuthRoute,
-  redirectPath = page.login,
-  children,
-}: PrivateRouteDefinition) => {
+export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const isAuthorized = auth.useAuthorized();
 
-  if (isAuthorized || (!isAuthorized && isAuthRoute)) {
-    return children;
-  }
-
-  return <Navigate to={redirectPath} />;
+  return isAuthorized ? children : <Navigate to={page.login} />;
 };

@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
 import { InputController } from 'components/FormComponents';
 import { Svg } from 'components';
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
+import { StyledBodyLarge, StyledClearedButton } from 'styles/styledComponents';
 import { variables } from 'styles/variables';
 import theme from 'styles/theme';
 

@@ -3,12 +3,12 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
-//import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet/Popups';
+import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
 import { account } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import logoSrc from 'assets/images/logo.png';
 import { variables } from 'styles/variables';
-import { StyledLabelMedium } from 'styles/styledComponents/Typography';
+import { StyledLabelMedium } from 'styles/styledComponents';
 
 import {
   StyledNotification,
@@ -113,13 +113,13 @@ export const Notification = ({
           </StyledTimeAgo>
         </StyledBottomSection>
       </StyledNotification>
-      {/* {passwordPopupVisible && (
+      {passwordPopupVisible && (
         <AppletPasswordPopup
           popupVisible={passwordPopupVisible}
           onClose={() => setPasswordPopupVisible(false)}
           encryption={encryption}
         />
-      )} */}
+      )}
     </>
   );
 };

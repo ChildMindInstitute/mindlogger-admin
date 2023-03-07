@@ -15,7 +15,7 @@ import { duplicateAppletApi, validateAppletNameApi } from 'api';
 import { getAppletEncryptionInfo } from 'utils/encryption';
 import { page } from 'resources';
 
-//import { AppletPasswordPopupType, AppletPasswordPopup } from '../AppletPasswordPopup';
+import { AppletPasswordPopupType, AppletPasswordPopup } from '../AppletPasswordPopup';
 
 export const DuplicatePopups = () => {
   const { t } = useTranslation('app');
@@ -127,14 +127,14 @@ export const DuplicatePopups = () => {
           </form>
         </StyledModalWrapper>
       </Modal>
-      {/* {passwordModalVisible && (
+      {passwordModalVisible && (
         <AppletPasswordPopup
           onClose={passwordModalClose}
           popupType={AppletPasswordPopupType.Create}
           popupVisible={passwordModalVisible}
           submitCallback={submitCallback}
         />
-      )} */}
+      )}
       {successModalVisible && (
         <Modal
           open={successModalVisible}

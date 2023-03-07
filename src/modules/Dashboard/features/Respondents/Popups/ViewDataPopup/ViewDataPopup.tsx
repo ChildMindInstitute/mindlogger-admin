@@ -2,12 +2,12 @@ import { RefObject, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
-import { AppletsSmallTable } from 'modules/Dashboard/features/Respondents/AppletsSmallTable';
 import { StyledModalWrapper, StyledBodyLarge } from 'styles/styledComponents';
 import theme from 'styles/theme';
-import { EnterAppletPassword, AppletPasswordRef } from 'modules/Dashboard/features';
+import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features/Applet';
 
 import { ViewDataPopupProps } from './ViewDataPopup.types';
+import { AppletsSmallTable } from '../../AppletsSmallTable';
 
 export const ViewDataPopup = ({
   popupVisible,

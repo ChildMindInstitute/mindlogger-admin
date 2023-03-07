@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal, SubmitBtnColor } from 'components';
-import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features';
+import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features/Applet';
 import { StyledModalWrapper, StyledBodyLarge } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { useAsync } from 'hooks';

@@ -20,9 +20,9 @@ import { headCells } from './Respondents.const';
 import { ChosenAppletData } from './Respondents.types';
 import {
   DataExportPopup,
-  // ScheduleSetupPopup,
-  // ViewDataPopup,
-  //RespondentsRemoveAccessPopup,
+  ScheduleSetupPopup,
+  ViewDataPopup,
+  RespondentsRemoveAccessPopup,
   EditRespondentPopup,
 } from './Popups';
 
@@ -194,7 +194,7 @@ export const Respondents = () => {
         orderBy="updated"
         emptyComponent={renderEmptyComponent()}
       />
-      {/* {scheduleSetupPopupVisible && (
+      {scheduleSetupPopupVisible && (
         <ScheduleSetupPopup
           popupVisible={scheduleSetupPopupVisible}
           setPopupVisible={setScheduleSetupPopupVisible}
@@ -202,8 +202,8 @@ export const Respondents = () => {
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
         />
-      )} */}
-      {/* {viewDataPopupVisible && (
+      )}
+      {viewDataPopupVisible && (
         <ViewDataPopup
           popupVisible={viewDataPopupVisible}
           setPopupVisible={setViewDataPopupVisible}
@@ -211,8 +211,8 @@ export const Respondents = () => {
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
         />
-      )} */}
-      {/* {removeAccessPopupVisible && (
+      )}
+      {removeAccessPopupVisible && (
         <RespondentsRemoveAccessPopup
           popupVisible={removeAccessPopupVisible}
           setPopupVisible={setRemoveAccessPopupVisible}
@@ -220,7 +220,7 @@ export const Respondents = () => {
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
         />
-      )} */}
+      )}
       {dataExportPopupVisible && (
         <DataExportPopup
           popupVisible={dataExportPopupVisible}

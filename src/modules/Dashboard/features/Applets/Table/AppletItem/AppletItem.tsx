@@ -5,13 +5,9 @@ import { TableCell, TableRow } from '@mui/material';
 import { useAppletsDnd, useTimeAgo } from 'hooks';
 import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders, popups, account } from 'redux/modules';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
+import { StyledBodyMedium } from 'styles/styledComponents';
 import { Pin, Actions } from 'components';
-import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
-import {
-  //AppletPasswordPopup,
-  AppletPasswordPopupType,
-} from 'modules/Dashboard/features/Applet/Popups';
+import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
 import { APPLET_PAGES } from 'consts';
 import { page } from 'resources';
 import { getAppletEncryptionInfo } from 'utils/encryption';
@@ -19,6 +15,7 @@ import { getAppletEncryptionInfo } from 'utils/encryption';
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getActions } from './AppletItem.const';
+import { ShareAppletPopup } from '../../Popups';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const accountData = account.useData();
@@ -152,14 +149,14 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           applet={item}
         />
       )}
-      {/* {passwordPopupVisible && (
+      {passwordPopupVisible && (
         <AppletPasswordPopup
           popupVisible={passwordPopupVisible}
           onClose={() => setPasswordPopupVisible(false)}
           popupType={AppletPasswordPopupType.Create}
           submitCallback={submitCallback}
         />
-      )} */}
+      )}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { BaseLayout } from 'layouts/BaseLayout';
@@ -10,11 +10,7 @@ import storage from 'utils/storage';
 import { dashBoardRoutes } from 'modules/Dashboard/routes';
 import { builderRoutes } from 'modules/Builder/routes';
 import { libraryRoutes } from 'modules/Library/routes';
-
-import { PrivateRoute } from './PrivateRoute';
-import { authRoutes } from './routes.const';
-
-const Lock = lazy(() => import('pages/Lock'));
+import { authRoutes } from 'modules/Auth/routes';
 
 export default () => {
   const token = storage.getItem('accessToken');
@@ -38,29 +34,11 @@ export default () => {
             {builderRoutes()}
             {libraryRoutes()}
           </Route>
-          <Route path={page.login} element={<AuthLayout />}>
-            {authRoutes.map(({ path, Component }) => (
-              <Route
-                key={path}
-                path={path}
-                element={
-                  <PrivateRoute isAuthRoute redirectPath="/">
-                    <Component />
-                  </PrivateRoute>
-                }
-              />
-            ))}
-            <Route
-              key={page.lock}
-              path={page.lock}
-              element={
-                // TODO: supplement the condition
-                <PrivateRoute isAuthRoute redirectPath="/">
-                  <Lock />
-                </PrivateRoute>
-              }
-            />
-          </Route>
+          {!isAuthorized && (
+            <Route path={page.login} element={<AuthLayout />}>
+              {authRoutes()}
+            </Route>
+          )}
           <Route path="*" element={<Navigate to={page.dashboard} replace />} />
         </Routes>
       )}

@@ -1,12 +1,11 @@
 import { RefObject, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-//import { CreateAppletPassword, EnterAppletPassword } from 'modules/Dashboard/features';
 import { Modal } from 'components';
 
 import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
 import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
-import { AppletPasswordRef } from '../../Password';
+import { AppletPasswordRef, CreateAppletPassword, EnterAppletPassword } from '../../Password';
 
 export const AppletPasswordPopup = ({
   onClose,
@@ -39,7 +38,7 @@ export const AppletPasswordPopup = ({
       buttonText={t('submit')}
     >
       <StyledAppletPasswordContainer>
-        {/* {popupType === AppletPasswordPopupType.Enter ? (
+        {popupType === AppletPasswordPopupType.Enter ? (
           <EnterAppletPassword
             ref={appletPasswordRef}
             appletId={appletId}
@@ -48,7 +47,7 @@ export const AppletPasswordPopup = ({
           />
         ) : (
           <CreateAppletPassword ref={appletPasswordRef} submitCallback={submitCallback} />
-        )} */}
+        )}
       </StyledAppletPasswordContainer>
     </Modal>
   );
