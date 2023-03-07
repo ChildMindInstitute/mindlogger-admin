@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
-import { StyledModalWrapper } from 'styles/styledComponents';
+import { Modal } from 'shared/components';
+import { StyledModalWrapper } from 'shared/styles/styledComponents';
 
 import { ConfirmScheduledAccessPopupProps } from './ConfirmScheduledAccess.types';
 

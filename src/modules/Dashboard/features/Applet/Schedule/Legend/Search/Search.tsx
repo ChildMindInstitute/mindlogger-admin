@@ -1,4 +1,4 @@
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 
 import { StyledTextField, StyledIcon, StyledSelectedIcon } from './Search.styles';
 import { SearchProps } from './Search.types';

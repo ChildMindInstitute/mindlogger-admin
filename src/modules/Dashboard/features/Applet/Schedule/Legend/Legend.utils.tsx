@@ -2,9 +2,9 @@
 import { Box } from '@mui/system';
 
 import i18n from 'i18n';
-import { Svg } from 'components';
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
+import { Svg } from 'shared/components';
+import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
 
 import { Available, Schedules } from './Legend.const';
 

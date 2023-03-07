@@ -1,8 +1,8 @@
 import { styled, Box, Button } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledFlexWrap, StyledBodyLarge } from 'styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledFlexWrap, StyledBodyLarge } from 'shared/styles/styledComponents';
 
 export const StyledSuccessShared = styled(Box)`
   padding: ${theme.spacing(2.4)};

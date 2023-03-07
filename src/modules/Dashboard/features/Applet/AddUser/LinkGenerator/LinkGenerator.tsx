@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { getAppletPublicLinkApi } from 'api';
-import { useAsync } from 'hooks/useAsync';
+import { useAsync } from 'shared/hooks/useAsync';
 
 import { StyledTitle } from '../AddUser.styles';
 import { LinkForm } from './LinkForm';

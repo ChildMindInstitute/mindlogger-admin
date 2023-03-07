@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
-import { useBreadcrumbs } from 'hooks';
+import { Svg } from 'shared/components';
+import { useBreadcrumbs } from 'shared/hooks';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';

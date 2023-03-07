@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Modal } from 'components';
-import { useAsync } from 'hooks/useAsync';
+import { Modal } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
 import { folders, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
-import { StyledModalWrapper } from 'styles/styledComponents';
+import { StyledModalWrapper } from 'shared/styles/styledComponents';
 import { page } from 'resources';
 
 export const DeletePopup = () => {

@@ -1,4 +1,4 @@
-import { AppletSettings } from 'features/AppletSettings';
+import { AppletSettings } from 'shared/features/AppletSettings';
 
 import { settings } from './DashboardAppletSettings.const';
 

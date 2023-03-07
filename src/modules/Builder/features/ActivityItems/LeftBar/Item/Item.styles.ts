@@ -1,14 +1,14 @@
 import { styled } from '@mui/system';
 
-import theme from 'styles/theme';
+import theme from 'shared/styles/theme';
 import {
   StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledTitleBoldMedium,
   StyledTitleMedium,
-} from 'styles/styledComponents';
-import { variables } from 'styles/variables';
+} from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 const commonEllipsisStyles = `
   text-overflow: ellipsis;

@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
-import { Actions } from 'components';
+import { Actions } from 'shared/components';
 import {
   StyledTitleBoldMedium,
   StyledTitleMedium,
   StyledTitleBoldSmall,
-} from 'styles/styledComponents';
-import theme from 'styles/theme';
+} from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 
 import { StyledItem, StyledImg, StyledCol, StyledActions } from './Item.styles';
 import { ItemProps } from './Item.types';

@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { FilterOptionsState, TextField, Autocomplete } from '@mui/material';
 
 import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
-import { StyledLabelSmall } from 'styles/styledComponents/Typography';
-import { Svg } from 'components';
-import { variables } from 'styles/variables';
-import storage from 'utils/storage';
+import { StyledLabelSmall } from 'shared/styles/styledComponents';
+import { Svg } from 'shared/components';
+import { variables } from 'shared/styles/variables';
+import storage from 'shared/utils/storage';
 
 import {
   StyledAdvancedSettings,

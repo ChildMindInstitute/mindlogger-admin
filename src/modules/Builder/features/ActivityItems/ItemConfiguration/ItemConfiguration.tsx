@@ -2,16 +2,16 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import {
   StyledHeadlineLarge,
   StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledBodyMedium,
-} from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+} from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { ItemSettingsDrawer } from './ItemSettingsDrawer';

@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Search, Svg } from 'components';
-import { StyledBodySmall, StyledLabelLarge } from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import { Search, Svg } from 'shared/components';
+import { StyledBodySmall, StyledLabelLarge } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { page } from 'resources';
 
 import {

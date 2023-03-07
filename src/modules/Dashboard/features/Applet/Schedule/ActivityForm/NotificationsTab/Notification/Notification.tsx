@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { ToggleButtonGroup, TimePicker } from 'components';
-import theme from 'styles/theme';
-import { StyledLabelLarge } from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { ToggleButtonGroup, TimePicker } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { StyledFlexTopCenter, StyledLabelLarge } from 'shared/styles/styledComponents';
 
 import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';

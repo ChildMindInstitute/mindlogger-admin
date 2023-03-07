@@ -1,4 +1,4 @@
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import { Applets } from 'modules/Dashboard/features/Applets';
 import { Managers } from 'modules/Dashboard/features/Managers';
 import { Respondents } from 'modules/Dashboard/features/Respondents';

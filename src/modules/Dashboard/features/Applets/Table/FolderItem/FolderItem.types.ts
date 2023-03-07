@@ -1,4 +1,4 @@
-import { FolderApplet } from 'redux/modules';
+import { FolderApplet } from 'modules/Dashboard/state';
 
 export type FolderItemProps = {
   item: FolderApplet;

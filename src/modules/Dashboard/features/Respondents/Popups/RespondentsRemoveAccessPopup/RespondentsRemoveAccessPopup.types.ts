@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { AxiosResponse } from 'axios';
 
-import { Row } from 'components';
+import { Row } from 'shared/components';
 import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 
 export type RespondentAccessPopupProps = {

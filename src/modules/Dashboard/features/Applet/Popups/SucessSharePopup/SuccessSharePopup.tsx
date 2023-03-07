@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
+import { Modal } from 'shared/components';
 import { SuccessShared } from 'modules/Dashboard/features/Applet/ShareApplet/SuccessShared';
 
 import { SuccessSharePopupProps } from './SuccessSharePopup.types';

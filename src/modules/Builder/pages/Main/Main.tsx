@@ -1,9 +1,9 @@
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import { useBreadcrumbs } from 'hooks';
+import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
-import { StyledBody, StyledFlexAllCenter } from 'styles/styledComponents';
+import { StyledBody, StyledFlexAllCenter } from 'shared/styles/styledComponents';
 
 export const Main = () => {
   useBreadcrumbs();

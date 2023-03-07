@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 
-import { Svg, Row } from 'components';
+import { Svg, Row } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
 import { users } from 'redux/modules';
-import { getErrorMessage } from 'utils/errors';
-import { useBreadcrumbs } from 'hooks';
+import { getErrorMessage } from 'shared/utils/errors';
+import { useBreadcrumbs } from 'shared/hooks';
 import { DateFormats } from 'consts';
 
 import { AddUserForm } from './AddUserForm';

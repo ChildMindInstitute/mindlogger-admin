@@ -1,6 +1,6 @@
-import { DefaultTabs as Tabs } from 'components/Tabs';
-import { useBreadcrumbs } from 'hooks';
-import { StyledBody } from 'styles/styledComponents/Body';
+import { DefaultTabs as Tabs } from 'shared/components';
+import { useBreadcrumbs } from 'shared/hooks';
+import { StyledBody } from 'shared/styles/styledComponents';
 
 import { dashboardTabs } from './Main.const';
 

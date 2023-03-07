@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-import theme from 'styles/theme';
+import theme from 'shared/styles/theme';
 import { FolderApplet } from 'redux/modules';
 
 export const StyledAppletName = styled(Box)`

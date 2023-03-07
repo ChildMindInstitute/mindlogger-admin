@@ -1,7 +1,7 @@
 import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
+import { Modal } from 'shared/components';
 
 import { CreateActivityPopupProps } from './CreateActivityPopup.types';
 import { ActivityForm, ActivityFormRef } from '../ActivityForm';

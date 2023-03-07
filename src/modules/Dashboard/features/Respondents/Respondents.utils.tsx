@@ -1,14 +1,15 @@
 import { Dispatch, SetStateAction } from 'react';
 import { t } from 'i18next';
 
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import { FolderApplet, Users } from 'redux/modules';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
 import {
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
-} from 'styles/styledComponents/AppletImage';
-import { StyledBodyMedium, StyledLabelLarge } from 'styles/styledComponents/Typography';
+  StyledBodyMedium,
+  StyledLabelLarge,
+  StyledFlexTopCenter,
+} from 'shared/styles/styledComponents';
 
 import { RespondentsActions, ChosenAppletData } from './Respondents.types';
 

@@ -1,4 +1,4 @@
-import { StyledBuilderBtn, StyledHeadlineLarge } from 'styles/styledComponents';
+import { StyledBuilderBtn, StyledHeadlineLarge } from 'shared/styles/styledComponents';
 
 import { StyledRow, StyledButtons } from './Header.styles';
 import { HeaderProps } from './Header.types';

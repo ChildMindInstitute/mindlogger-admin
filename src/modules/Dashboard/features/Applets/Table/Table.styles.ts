@@ -1,7 +1,7 @@
 import { Box, styled, TableContainer } from '@mui/material';
 
-import { StyledFlexTopCenter } from 'styles/styledComponents';
-import { variables } from 'styles/variables';
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 export const StyledTableContainer = styled(TableContainer)`
   display: flex;

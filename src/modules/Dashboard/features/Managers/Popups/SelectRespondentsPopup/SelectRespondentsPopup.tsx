@@ -1,8 +1,8 @@
 import { useRef, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StyledModalWrapper } from 'styles/styledComponents';
-import { Modal } from 'components';
+import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { Modal } from 'shared/components';
 
 import { SelectRespondents } from './SelectRespondents';
 import { SelectRespondentsPopupProps } from './SuccessSharePopup.types';

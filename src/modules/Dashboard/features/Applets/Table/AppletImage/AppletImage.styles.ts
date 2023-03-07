@@ -1,7 +1,7 @@
 import { Box, styled } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledCustomCover = styled(Box)`
   height: 3.2rem;

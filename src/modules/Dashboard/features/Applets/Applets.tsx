@@ -5,8 +5,8 @@ import { Box } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
 import { applets, auth, FolderApplet, folders } from 'redux/modules';
-import { ButtonWithMenu, DEFAULT_ROWS_PER_PAGE, Search, Svg } from 'components';
-import { Order } from 'types/table';
+import { ButtonWithMenu, DEFAULT_ROWS_PER_PAGE, Search, Svg } from 'shared/components';
+import { Order } from 'shared/types/table';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';

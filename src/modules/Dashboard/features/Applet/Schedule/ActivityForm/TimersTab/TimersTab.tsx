@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { TimePicker, ToggleButtonGroup } from 'components';
-import theme from 'styles/theme';
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
+import { TimePicker, ToggleButtonGroup } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { StyledBodyLarge } from 'shared/styles/styledComponents';
 
 import { Timers, timersButtons } from './TimersTab.const.';
 import { FormValues } from '../';

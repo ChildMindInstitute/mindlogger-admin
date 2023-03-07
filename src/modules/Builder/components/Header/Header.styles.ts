@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 
-import theme from 'styles/theme';
-import { StyledFlexTopCenter } from 'styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 export const StyledRow = styled(StyledFlexTopCenter)`
   justify-content: space-between;

@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import { LinearProgress } from '@mui/material';
 
-import { variables } from 'styles/variables';
+import { variables } from 'shared/styles/variables';
 
 export const StyledLinearProgress = styled(LinearProgress)`
   background-color: ${variables.palette.white};

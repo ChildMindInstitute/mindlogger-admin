@@ -1,4 +1,4 @@
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 
 import { ItemsOptionGroup, ItemInputTypes } from './ItemConfiguration.types';
 

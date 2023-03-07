@@ -1,8 +1,8 @@
 import { Button, TextField } from '@mui/material';
 import { styled } from '@mui/system';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledButton = styled(Button)`
   background-color: transparent;

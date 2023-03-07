@@ -1,4 +1,4 @@
-import { MenuItem } from 'components/Menu/Menu.types';
+import { MenuItem } from 'shared/components/Menu/Menu.types';
 import { Roles } from 'consts';
 
 export const getMenuItems = (addRole: (title: Roles) => void): MenuItem[] => {

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Row } from 'components';
+import { Row } from 'shared/components';
 
 import { ChosenAppletData } from '../../Respondents.types';
 

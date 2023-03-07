@@ -1,9 +1,9 @@
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
-import theme from 'styles/theme';
-import { StyledTitleMedium } from 'styles/styledComponents/Typography';
+import { Svg } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { StyledTitleMedium } from 'shared/styles/styledComponents';
 
 import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
 import { Notification } from './Notification';

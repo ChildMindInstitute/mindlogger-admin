@@ -2,10 +2,9 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { deleteAppletPublicLinkApi } from 'api';
-import { getErrorMessage } from 'utils/errors';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import { Svg } from 'components';
+import { getErrorMessage } from 'shared/utils/errors';
+import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { Svg } from 'shared/components';
 
 import { StyledButton, StyledInput } from './LinkForm.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';

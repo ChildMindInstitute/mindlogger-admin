@@ -1,4 +1,4 @@
-import { Option } from 'components/FormComponents';
+import { Option } from 'shared/components/FormComponents';
 
 export type FormValues = {
   firstName: string;

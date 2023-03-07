@@ -1,9 +1,9 @@
 import { format } from 'date-fns';
 
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import { DateFormats } from 'consts';
-import theme from 'styles/theme';
-import { StyledBodySmall, StyledLabelMedium } from 'styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { StyledBodySmall, StyledLabelMedium } from 'shared/styles/styledComponents';
 
 import { getEventEndTime } from '../Calendar.utils';
 import { EventProps, UiType } from './Event.types';

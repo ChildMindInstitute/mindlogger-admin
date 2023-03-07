@@ -12,7 +12,7 @@ import { format, getISOWeek } from 'date-fns';
 
 import { DateFormats } from 'consts';
 import i18n from 'i18n';
-import { variables } from 'styles/variables';
+import { variables } from 'shared/styles/variables';
 
 import { UiType } from './Event/Event.types';
 import { Toolbar } from './Toolbar';

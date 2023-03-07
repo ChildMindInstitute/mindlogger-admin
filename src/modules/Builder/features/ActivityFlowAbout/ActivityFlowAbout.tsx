@@ -1,18 +1,18 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
-import { CheckboxController, InputController } from 'components/FormComponents';
+import { Svg } from 'shared/components';
+import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
   StyledBodyLarge,
   StyledBuilderWrapper,
   StyledFlexColumn,
   StyledHeadlineLarge,
   StyledTitleMedium,
-} from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { useBreadcrumbs } from 'hooks';
+} from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { useBreadcrumbs } from 'shared/hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'consts';
 
 import { StyledForm, StyledSvg } from './ActivityFlowAbout.styles';

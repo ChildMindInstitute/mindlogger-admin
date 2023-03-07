@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/system';
 
-import { Search, Svg } from 'components';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import { Search, Svg } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 import { SelectedRespondent } from '../Legend.types';
 import { searchItems } from './SearchPopup.const';

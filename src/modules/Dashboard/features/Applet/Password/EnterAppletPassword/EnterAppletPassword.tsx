@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { account, folders } from 'redux/modules';
-import { StyledClearedButton } from 'styles/styledComponents';
-import { InputController } from 'components/FormComponents';
-import { getAppletEncryptionInfo } from 'utils/encryption';
-import { getAppletData } from 'utils/getAppletData';
-import { Svg } from 'components';
+import { StyledClearedButton } from 'shared/styles/styledComponents';
+import { InputController } from 'shared/components/FormComponents';
+import { getAppletEncryptionInfo } from 'shared/utils/encryption';
+import { getAppletData } from 'shared/utils/getAppletData';
+import { Svg } from 'shared/components';
 
 import { EnterAppletPasswordForm, EnterAppletPasswordProps } from './EnterAppletPassword.types';
 import { StyledController } from '../Password.styles';

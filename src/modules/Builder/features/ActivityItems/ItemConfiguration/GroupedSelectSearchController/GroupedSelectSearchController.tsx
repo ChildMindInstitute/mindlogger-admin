@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { TextField, FormControl, InputLabel } from '@mui/material';
 
-import { Svg } from 'components';
-import theme from 'styles/theme';
-import { StyledClearedButton, StyledFlexTopCenter } from 'styles/styledComponents';
+import { Svg } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 import { ItemInputTypes } from '../ItemConfiguration.types';
 import { itemsTypeIcons } from '../ItemConfiguration.const';

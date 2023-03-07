@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { FolderApplet } from 'redux/modules';
-import { HeadCell, Order } from 'types/table';
+import { HeadCell, Order } from 'shared/types/table';
 
 import { OrderBy } from '../Applets.types';
 

@@ -2,11 +2,11 @@ import { forwardRef, useImperativeHandle } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 
-import { SelectController } from 'components/FormComponents';
-import { DefaultTabs as Tabs } from 'components';
-import { UiType } from 'components/Tabs/Tabs.types';
-import { StyledModalWrapper } from 'styles/styledComponents';
-import theme from 'styles/theme';
+import { SelectController } from 'shared/components/FormComponents';
+import { DefaultTabs as Tabs } from 'shared/components';
+import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { UiType } from 'shared/components/Tabs/Tabs.types';
 
 import { ActivityFormProps, ActivityFormRef, FormValues } from '.';
 import { tabs, defaultValues, activities } from './ActivityForm.const';

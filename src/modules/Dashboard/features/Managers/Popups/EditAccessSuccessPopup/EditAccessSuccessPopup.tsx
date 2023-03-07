@@ -1,8 +1,8 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
-import { StyledModalWrapper } from 'styles/styledComponents';
-import theme from 'styles/theme';
+import { Modal } from 'shared/components';
+import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 
 import { EditAccessSuccessPopupProps } from './EditAccessSuccessPopup.types';
 

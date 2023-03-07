@@ -1,9 +1,9 @@
 import { Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 export const StyledRow = styled(Box)`
   margin-top: ${theme.spacing(2.4)};

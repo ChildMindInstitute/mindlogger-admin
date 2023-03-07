@@ -1,8 +1,8 @@
 import { Trans } from 'react-i18next';
 
-import { StyledBodyLarge } from 'styles/styledComponents/Typography';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import { StyledBodyLarge } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 import { getScreen, ScreensParams } from './RespondentsRemoveAccessPopup.types';
 

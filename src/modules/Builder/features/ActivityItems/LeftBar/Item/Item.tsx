@@ -1,6 +1,6 @@
-import { Actions, Svg } from 'components';
-import { StyledFlexTopCenter } from 'styles/styledComponents';
-import { variables } from 'styles/variables';
+import { Actions, Svg } from 'shared/components';
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 import { getActions } from './Item.const';
 import {

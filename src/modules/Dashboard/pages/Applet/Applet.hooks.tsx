@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import { APPLET_PAGES } from 'consts';
 import { page } from 'resources';
 

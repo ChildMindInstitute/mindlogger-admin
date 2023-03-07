@@ -6,11 +6,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { ResetPassword } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'redux/modules';
+import { auth } from 'modules/Auth/state';
 import { page } from 'resources';
-import { InputController } from 'components/FormComponents';
-import { StyledErrorText, StyledHeadline } from 'styles/styledComponents';
-import { getErrorMessage } from 'utils/errors';
+import { InputController } from 'shared/components/FormComponents';
+import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
+import { getErrorMessage } from 'shared/utils/errors';
 
 import {
   StyledForm,

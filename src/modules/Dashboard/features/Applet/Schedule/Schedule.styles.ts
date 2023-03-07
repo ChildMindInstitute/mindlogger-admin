@@ -1,7 +1,7 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 import { LEFT_SCHEDULE_PANEL_WIDTH } from './Schedule.const';
 

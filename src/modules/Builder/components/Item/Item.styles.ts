@@ -1,10 +1,10 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledFlexTopCenter } from 'styles/styledComponents';
-import { shouldForwardProp } from 'utils/shouldForwardProp';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
   margin-bottom: ${theme.spacing(1.6)};

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
+import { Modal } from 'shared/components';
 import { account, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
-import { StyledModalWrapper } from 'styles/styledComponents';
+import { StyledModalWrapper } from 'shared/styles/styledComponents';
 
 export const TransferOwnershipPopup = () => {
   const { t } = useTranslation('app');

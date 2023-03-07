@@ -7,12 +7,16 @@ import Grid from '@mui/material/Grid';
 
 import { users, auth, account, User } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { InputController, SelectController, TagsInputController } from 'components/FormComponents';
-import { StyledErrorText } from 'styles/styledComponents';
+import {
+  InputController,
+  SelectController,
+  TagsInputController,
+} from 'shared/components/FormComponents';
+import { StyledErrorText } from 'shared/styles/styledComponents';
 import { getAppletInvitationApi } from 'api';
-import { getErrorMessage } from 'utils/errors';
-import { prepareUsersData } from 'utils/prepareUsersData';
-import { setAccountName } from 'redux/modules/Auth/Auth.thunk';
+import { getErrorMessage } from 'shared/utils/errors';
+import { prepareUsersData } from 'shared/utils/prepareUsersData';
+import { setAccountName } from 'modules/Auth/state/Auth.thunk';
 import { Roles } from 'consts';
 
 import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUserForm.styles';

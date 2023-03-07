@@ -2,11 +2,11 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import { page } from 'resources';
-import { StyledBuilderWrapper, StyledTitleMedium } from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { useBreadcrumbs } from 'hooks';
+import { StyledBuilderWrapper, StyledTitleMedium } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { useBreadcrumbs } from 'shared/hooks';
 
 import { Header, Item } from '../../components';
 import { activityFlows, getActions } from './ActivityFlow.const';

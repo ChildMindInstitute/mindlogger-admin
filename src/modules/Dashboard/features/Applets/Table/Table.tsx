@@ -2,7 +2,7 @@ import { Fragment, MouseEvent } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { applets, FolderApplet } from 'redux/modules';
-import { DEFAULT_ROWS_PER_PAGE, EmptyTable, TableHead } from 'components';
+import { DEFAULT_ROWS_PER_PAGE, EmptyTable, TableHead } from 'shared/components';
 
 import { OrderBy } from '../Applets.types';
 import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './Table.styles';

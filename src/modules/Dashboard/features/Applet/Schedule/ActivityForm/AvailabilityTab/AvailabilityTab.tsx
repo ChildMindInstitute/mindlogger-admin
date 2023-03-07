@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { SelectController } from 'components/FormComponents';
-import { CheckboxController } from 'components/FormComponents';
-import { TimePicker, DatePicker, DatePickerUiType, ToggleButtonGroup } from 'components';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import { CheckboxController, SelectController } from 'shared/components/FormComponents';
+import { TimePicker, DatePicker, DatePickerUiType, ToggleButtonGroup } from 'shared/components';
+import { StyledBodyMedium } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 import { availabilityOptions, repeatsButtons, Repeats } from './Availability.const';
 import {

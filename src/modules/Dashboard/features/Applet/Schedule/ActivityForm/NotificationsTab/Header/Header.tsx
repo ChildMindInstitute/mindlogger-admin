@@ -1,6 +1,6 @@
-import { Svg } from 'components';
-import theme from 'styles/theme';
-import { StyledLabelLarge, StyledFlexTopCenter } from 'styles/styledComponents';
+import { Svg } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { StyledLabelLarge, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 import { StyledHeader, StyledCloseBtn } from './Header.styles';
 

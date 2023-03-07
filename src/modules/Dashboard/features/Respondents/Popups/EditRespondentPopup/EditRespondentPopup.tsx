@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Modal } from 'components';
-import { StyledModalWrapper } from 'styles/styledComponents';
-import { InputController } from 'components/FormComponents';
+import { Modal } from 'shared/components';
+import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { InputController } from 'shared/components/FormComponents';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
 import { editRespondentFormSchema } from './EditRespondentPopup.schema';

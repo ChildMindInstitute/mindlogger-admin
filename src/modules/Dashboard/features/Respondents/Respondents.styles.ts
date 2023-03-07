@@ -1,10 +1,10 @@
 import { styled } from '@mui/system';
 import { Box, Button } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { shouldForwardProp } from 'utils/shouldForwardProp';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const RespondentsTableHeader = styled(Box, shouldForwardProp)`
   margin-bottom: ${theme.spacing(2.4)};

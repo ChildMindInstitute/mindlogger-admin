@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledLabelBoldMedium, StyledClearedButton } from 'styles/styledComponents';
+import { Svg } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledLabelBoldMedium, StyledClearedButton } from 'shared/styles/styledComponents';
 
 import { CalendarEvent, CalendarViews } from '../Calendar.types';
 import {

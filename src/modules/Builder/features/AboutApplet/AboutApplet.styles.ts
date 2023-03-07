@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
-import { Svg } from 'components';
-import { StyledTitleMedium } from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import { Svg } from 'shared/components';
+import { StyledTitleMedium } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 const column = `
   display: flex;

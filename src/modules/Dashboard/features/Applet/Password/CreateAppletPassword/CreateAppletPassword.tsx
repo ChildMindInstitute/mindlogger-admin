@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { InputController } from 'components/FormComponents';
-import { Svg } from 'components';
-import { StyledBodyLarge, StyledClearedButton } from 'styles/styledComponents';
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
+import { InputController } from 'shared/components/FormComponents';
+import { Svg } from 'shared/components';
+import { StyledBodyLarge, StyledClearedButton } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
 
 import { CreateAppletPasswordForm, CreateAppletPasswordProps } from './CreateAppletPassword.types';
 import { createPasswordFormSchema } from './CreateAppletPassword.schema';

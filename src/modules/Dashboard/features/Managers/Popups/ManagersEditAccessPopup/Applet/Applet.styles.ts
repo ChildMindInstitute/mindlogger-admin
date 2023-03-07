@@ -1,9 +1,9 @@
 import { styled } from '@mui/system';
 import { Box, Link } from '@mui/material';
 
-import theme from 'styles/theme';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { variables } from 'styles/variables';
+import theme from 'shared/styles/theme';
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 export const StyledApplet = styled(Box)`
   padding: ${theme.spacing(1.6)};

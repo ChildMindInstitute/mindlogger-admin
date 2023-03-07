@@ -1,8 +1,8 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledBodySmall } from 'styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledBodySmall } from 'shared/styles/styledComponents';
 
 export const StyledMonth = styled(Box)`
   padding: ${theme.spacing(0, 2, 2.2)};

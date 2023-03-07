@@ -1,4 +1,4 @@
-import { Row } from 'components';
+import { Row } from 'shared/components';
 
 export type ExportSchedulePopupProps = {
   open: boolean;

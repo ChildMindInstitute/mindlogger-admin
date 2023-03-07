@@ -1,5 +1,5 @@
 import i18n from 'i18n';
-import { HeadCell } from 'types/table';
+import { HeadCell } from 'shared/types/table';
 
 const { t } = i18n;
 

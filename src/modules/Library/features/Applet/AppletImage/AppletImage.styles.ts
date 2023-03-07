@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
-import { StyledFlexAllCenter } from 'styles/styledComponents';
+import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 
-import { variables } from 'styles/variables';
+import { variables } from 'shared/styles/variables';
 
 export const StyledAppletImageContainer = styled(StyledFlexAllCenter)`
   grid-row-start: 1;

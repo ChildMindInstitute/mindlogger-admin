@@ -1,10 +1,13 @@
 import { styled } from '@mui/system';
 import { Button, Box, Link } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-import { StyledHeadline, StyledLabelMedium } from 'styles/styledComponents/Typography';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import {
+  StyledHeadline,
+  StyledLabelMedium,
+  StyledClearedButton,
+} from 'shared/styles/styledComponents';
 
 export const StyledSignUpHeader = styled(StyledHeadline)`
   margin: ${theme.spacing(0, 0, 2.4)};

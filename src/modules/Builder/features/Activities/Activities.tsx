@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Svg } from 'components';
-import { StyledTitleMedium, StyledBuilderWrapper } from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { useBreadcrumbs } from 'hooks';
+import { Svg } from 'shared/components';
+import { StyledTitleMedium, StyledBuilderWrapper } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 
 import { Header, Item } from '../../components';

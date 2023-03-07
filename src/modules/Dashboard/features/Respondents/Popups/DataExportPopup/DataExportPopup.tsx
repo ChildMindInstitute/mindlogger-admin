@@ -1,13 +1,17 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
+import { Modal } from 'shared/components';
 import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features/Applet';
-import theme from 'styles/theme';
-import { StyledModalWrapper, StyledErrorText, StyledBodyLarge } from 'styles/styledComponents';
+import theme from 'shared/styles/theme';
+import {
+  StyledModalWrapper,
+  StyledErrorText,
+  StyledBodyLarge,
+} from 'shared/styles/styledComponents';
 import { getUsersDataApi } from 'api';
-import { useAsync } from 'hooks';
-import { getErrorMessage } from 'utils/errors';
+import { useAsync } from 'shared/hooks';
+import { getErrorMessage } from 'shared/utils/errors';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { StyledLinearProgress } from './DataExportPopup.styles';

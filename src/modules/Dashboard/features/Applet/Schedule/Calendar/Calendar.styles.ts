@@ -1,9 +1,9 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledClearedButton } from 'styles/styledComponents';
-import { shouldForwardProp } from 'utils/shouldForwardProp';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledClearedButton } from 'shared/styles/styledComponents';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { LEFT_SCHEDULE_PANEL_WIDTH } from '../Schedule.const';
 

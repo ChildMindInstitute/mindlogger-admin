@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 
-import theme from 'styles/theme';
-import { StyledClearedButton, StyledFlexTopCenter } from 'styles/styledComponents';
-import { variables } from 'styles/variables';
+import theme from 'shared/styles/theme';
+import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 export const StyledHeader = styled(StyledFlexTopCenter)`
   justify-content: space-between;

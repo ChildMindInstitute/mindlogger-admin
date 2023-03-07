@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ChipShape } from 'components/Chip/Chip.types';
-import { ButtonWithMenu, Chip } from 'components';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import theme from 'styles/theme';
+import { ButtonWithMenu, Chip } from 'shared/components';
+import { StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 import { Roles } from 'consts';
-import { MenuItem } from 'components/Menu/Menu.types';
+import { ChipShape } from 'shared/components/Chip/Chip.types';
+import { MenuItem } from 'shared/components/Menu/Menu.types';
 
 import { StyledApplet, StyledRow, StyledBtn, StyledLabel, StyledImg } from './Applet.styles';
 import { getMenuItems } from './Applet.const';

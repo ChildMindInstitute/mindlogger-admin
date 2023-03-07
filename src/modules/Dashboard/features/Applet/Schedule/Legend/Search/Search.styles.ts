@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 import { Box, OutlinedInput } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledTextField = styled(OutlinedInput)`
   height: 5.6rem;

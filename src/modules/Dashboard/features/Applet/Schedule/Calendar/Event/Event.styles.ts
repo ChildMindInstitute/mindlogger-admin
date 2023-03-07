@@ -1,13 +1,13 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { shouldForwardProp } from 'utils/shouldForwardProp';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 import {
   StyledFlexTopCenter,
   StyledFlexTopStart,
   StyledLabelBoldMedium,
-} from 'styles/styledComponents';
+} from 'shared/styles/styledComponents';
 
 export const StyledEvent = styled(Box, shouldForwardProp)`
   width: 100%;

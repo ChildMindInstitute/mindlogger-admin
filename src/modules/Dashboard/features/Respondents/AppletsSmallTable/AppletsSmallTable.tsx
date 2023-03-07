@@ -1,4 +1,4 @@
-import { Row, Table, UiType } from 'components';
+import { Row, Table, UiType } from 'shared/components';
 
 import { getHeadCells } from './AppletsSmallTable.const';
 

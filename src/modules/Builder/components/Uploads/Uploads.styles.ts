@@ -1,11 +1,10 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
-import { StyledTitleMedium } from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-
-import { Svg } from 'components/Svg';
+import { StyledTitleMedium } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { Svg } from 'shared/components';
 
 export const StyledContainer = styled(Box)`
   display: flex;

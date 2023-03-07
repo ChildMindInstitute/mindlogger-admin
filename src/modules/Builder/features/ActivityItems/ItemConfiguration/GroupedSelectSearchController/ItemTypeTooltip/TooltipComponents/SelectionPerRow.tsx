@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
-import { Svg } from 'components';
-import { StyledBodyMedium } from 'styles/styledComponents';
+import { Svg } from 'shared/components';
+import { StyledBodyMedium } from 'shared/styles/styledComponents';
 
 import { getSelectionPerRowSvgId } from './TooltipComponents.utils';
 import {

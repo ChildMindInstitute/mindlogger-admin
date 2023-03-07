@@ -1,7 +1,7 @@
 import { RefObject, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
+import { Modal } from 'shared/components';
 
 import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
 import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';

@@ -1,8 +1,8 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledFlexTopCenter } from 'styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 export const StyledTop = styled(StyledFlexTopCenter)`
   justify-content: space-between;

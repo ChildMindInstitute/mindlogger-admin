@@ -1,4 +1,4 @@
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import {
   ExportDataSetting,
   DataRetention,
@@ -9,7 +9,7 @@ import {
   ReportConfigSetting,
   ShareAppletSetting,
   DownloadSchemaSetting,
-} from 'features/AppletSettings';
+} from 'shared/features/AppletSettings';
 
 export const settings = [
   {

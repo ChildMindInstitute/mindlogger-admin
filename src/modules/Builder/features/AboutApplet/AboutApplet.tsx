@@ -3,15 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
 
-import { EditorController, InputController, SelectController } from 'components/FormComponents';
+import {
+  EditorController,
+  InputController,
+  SelectController,
+} from 'shared/components/FormComponents';
 import {
   StyledFlexTopCenter,
   StyledHeadlineLarge,
   StyledBuilderWrapper,
-} from 'styles/styledComponents';
-import { useBreadcrumbs } from 'hooks';
-import { Svg, Tooltip, Uploader } from 'components';
-import theme from 'styles/theme';
+} from 'shared/styles/styledComponents';
+import { useBreadcrumbs } from 'shared/hooks';
+import { Svg, Tooltip, Uploader } from 'shared/components';
+import theme from 'shared/styles/theme';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'consts';
 
 import { Uploads } from '../../components';

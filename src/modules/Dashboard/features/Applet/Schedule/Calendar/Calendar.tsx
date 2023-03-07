@@ -11,7 +11,7 @@ import { format, getDay, parse, startOfWeek } from 'date-fns';
 import { enUS, fr } from 'date-fns/locale';
 
 import i18n from 'i18n';
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 
 import { CreateActivityPopup } from '../CreateActivityPopup';
 import { EditActivityPopup } from '../EditActivityPopup';

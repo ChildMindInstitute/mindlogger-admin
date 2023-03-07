@@ -10,11 +10,11 @@ import {
   StyledLabelBoldLarge,
   StyledTitleBoldMedium,
   StyledTitleMedium,
-} from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { Svg } from 'components';
+} from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { Svg } from 'shared/components';
 import { page } from 'resources';
-import { variables } from 'styles/variables';
+import { variables } from 'shared/styles/variables';
 
 import {
   StyledAppletContainer,

@@ -1,9 +1,9 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
-import { StyledFlexWrap, StyledLabelBoldMedium } from 'styles/styledComponents';
+import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
+import { StyledFlexWrap, StyledLabelBoldMedium } from 'shared/styles/styledComponents';
 
 export const StyledAppletContainer = styled(Box)`
   display: grid;

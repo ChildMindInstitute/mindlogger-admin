@@ -5,11 +5,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'redux/modules';
+
 import { page } from 'resources';
-import { InputController, CheckboxController } from 'components/FormComponents';
-import { StyledErrorText } from 'styles/styledComponents';
-import { getErrorMessage } from 'utils/errors';
+import { InputController, CheckboxController } from 'shared/components/FormComponents';
+import { StyledErrorText } from 'shared/styles/styledComponents';
+import { getErrorMessage } from 'shared/utils/errors';
+import { auth } from 'modules/Auth/state';
 
 import {
   StyledSignUpHeader,

@@ -1,6 +1,6 @@
 import uniqueId from 'lodash.uniqueid';
 
-import { variables } from 'styles/variables';
+import { variables } from 'shared/styles/variables';
 
 import { CalendarEvent } from './Calendar.types';
 

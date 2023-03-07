@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 
-import { Tooltip } from 'components';
-import { InputController } from 'components/FormComponents';
-import { StyledTitleMedium } from 'styles/styledComponents';
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
+import { Tooltip } from 'shared/components';
+import { InputController } from 'shared/components/FormComponents';
+import { StyledTitleMedium } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
 
 import {
   StyledSettingInfoIcon,

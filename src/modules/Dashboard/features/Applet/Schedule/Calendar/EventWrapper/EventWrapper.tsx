@@ -2,7 +2,7 @@ import { cloneElement, useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import { format } from 'date-fns';
 
-import { Tooltip } from 'components';
+import { Tooltip } from 'shared/components';
 import { DateFormats } from 'consts';
 
 import { EventWrapperProps, UiType } from './EventWrapper.types';

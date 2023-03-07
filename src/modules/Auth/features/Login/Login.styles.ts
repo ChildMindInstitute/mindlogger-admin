@@ -1,10 +1,13 @@
 import { styled } from '@mui/system';
 import { Button, Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledHeadline, StyledLabelMedium } from 'styles/styledComponents/Typography';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import {
+  StyledHeadline,
+  StyledLabelMedium,
+  StyledClearedButton,
+} from 'shared/styles/styledComponents';
 
 export const StyledWelcome = styled(StyledHeadline)`
   color: ${variables.palette.primary};

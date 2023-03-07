@@ -2,11 +2,15 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { FormControlLabelProps } from '@mui/material';
 
-import { Modal } from 'components';
-import { RadioGroupController } from 'components/FormComponents';
-import { StyledBodyLarge, StyledLabelLarge, StyledModalWrapper } from 'styles/styledComponents';
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
+import { Modal } from 'shared/components';
+import { RadioGroupController } from 'shared/components/FormComponents';
+import {
+  StyledBodyLarge,
+  StyledLabelLarge,
+  StyledModalWrapper,
+} from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
 
 import {
   AddToBuilderActions,

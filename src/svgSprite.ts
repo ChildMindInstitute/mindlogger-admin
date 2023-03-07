@@ -1,4 +1,4 @@
-import { variables } from 'styles/variables';
+import { variables } from 'shared/styles/variables';
 
 export const svgSprite = (): string => `
 <svg>

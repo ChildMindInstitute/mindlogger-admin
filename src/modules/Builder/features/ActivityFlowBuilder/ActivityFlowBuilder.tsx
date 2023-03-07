@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
-import { StyledBuilderWrapper } from 'styles/styledComponents';
-import { useBreadcrumbs } from 'hooks';
+import { Svg } from 'shared/components';
+import { StyledBuilderWrapper } from 'shared/styles/styledComponents';
+import { useBreadcrumbs } from 'shared/hooks';
 
 import { Header, Item } from '../../components';
 import { activities, getActions, getButtons } from './ActivityFlowBuilder.const';

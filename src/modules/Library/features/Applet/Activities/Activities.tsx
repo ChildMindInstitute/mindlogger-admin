@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
-import { StyledHeadline, StyledLabelBoldLarge } from 'styles/styledComponents';
+import { Svg } from 'shared/components';
+import { StyledHeadline, StyledLabelBoldLarge } from 'shared/styles/styledComponents';
 
 import { ActivitiesProps } from './Activities.types';
 import { StyledActivitiesContainer, StyledExpandedButton } from './Activities.styles';

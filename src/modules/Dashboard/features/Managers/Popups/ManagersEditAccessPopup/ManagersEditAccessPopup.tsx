@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
-import theme from 'styles/theme';
-import { StyledModalWrapper, StyledBodyLarge } from 'styles/styledComponents';
+import { Modal } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import { Roles } from 'consts';
 
 import { Applet } from './Applet';

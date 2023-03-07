@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useBreadcrumbs } from 'hooks';
-import { EmptyTable, Svg } from 'components';
+import { useBreadcrumbs } from 'shared/hooks';
+import { EmptyTable, Svg } from 'shared/components';
 
 import {
   StyledBody,
@@ -10,10 +10,10 @@ import {
   ContentContainer,
   StyledAppletContainer,
   StyledAppletList,
-} from 'styles/styledComponents';
-import theme from 'styles/theme';
+} from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 import { page } from 'resources';
-import { PublishedApplet } from 'redux/modules';
+import { PublishedApplet } from 'modules/Library/state';
 
 import { Header, RightButtonType } from '../../components';
 import { Applet, AppletUiType } from '../Applet';

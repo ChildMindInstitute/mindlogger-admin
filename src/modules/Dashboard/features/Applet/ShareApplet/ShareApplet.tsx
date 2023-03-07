@@ -11,10 +11,14 @@ import {
 } from 'api';
 import { folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { Spinner } from 'components';
-import { InputController, CheckboxController, TagsController } from 'components/FormComponents';
-import { StyledErrorText, StyledBodyMedium } from 'styles/styledComponents';
-import { getErrorMessage } from 'utils/errors';
+import { Spinner } from 'shared/components';
+import {
+  InputController,
+  CheckboxController,
+  TagsController,
+} from 'shared/components/FormComponents';
+import { StyledErrorText, StyledBodyMedium } from 'shared/styles/styledComponents';
+import { getErrorMessage } from 'shared/utils/errors';
 
 import { shareAppletDefaultValues } from './ShareApplet.const';
 import { ShareAppletSchema } from './ShareApplet.schema';

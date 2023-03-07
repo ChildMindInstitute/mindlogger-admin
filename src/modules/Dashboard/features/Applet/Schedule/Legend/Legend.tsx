@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SelectController } from 'components/FormComponents';
-import { Svg } from 'components';
-import { SelectEvent } from 'types/event';
+import { SelectController } from 'shared/components/FormComponents';
+import { Svg } from 'shared/components';
+import { SelectEvent } from 'shared/types/event';
 
 import { mockedScheduleData, ScheduleOptions, scheduleOptions } from './Legend.const';
 import {

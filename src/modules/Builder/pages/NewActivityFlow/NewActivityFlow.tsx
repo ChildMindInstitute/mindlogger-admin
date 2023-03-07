@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { StyledDirectoryUpButton, StyledBody } from 'styles/styledComponents';
-import { LinkedTabs, Svg } from 'components';
-import { useBreadcrumbs } from 'hooks';
+import { StyledDirectoryUpButton, StyledBody } from 'shared/styles/styledComponents';
+import { LinkedTabs, Svg } from 'shared/components';
+import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 
 import { newActivityFlowTabs } from './NewActivityFlow.const';

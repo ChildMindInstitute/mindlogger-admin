@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 
-import { StyledFlexAllCenter } from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledAddWrapper = styled(StyledFlexAllCenter)`
   position: relative;

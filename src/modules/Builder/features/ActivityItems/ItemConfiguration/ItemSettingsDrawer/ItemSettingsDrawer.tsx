@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import {
   StyledTitleBoldSmall,
   StyledClearedButton,
   StyledFlexTopCenter,
   StyledFlexColumn,
-} from 'styles/styledComponents';
-import theme from 'styles/theme';
+} from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 
 import { StyledDrawer, StyledDrawerContent } from './ItemSettingsDrawer.styles';
 import { ItemSettingsDrawerProps } from './ItemSettingsDrawer.types';

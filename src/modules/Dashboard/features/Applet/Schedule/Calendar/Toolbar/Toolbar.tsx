@@ -1,11 +1,11 @@
 import { View } from 'react-big-calendar';
 import { getISOWeek } from 'date-fns';
 
-import { ToggleButtonGroup, Svg } from 'components';
+import { ToggleButtonGroup, Svg } from 'shared/components';
 import i18n from 'i18n';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledTitleBoldMedium, StyledFlexTopCenter } from 'styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledTitleBoldMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 import { formatToYearMonthDate } from '../Calendar.utils';
 import { CalendarViews } from '../Calendar.types';

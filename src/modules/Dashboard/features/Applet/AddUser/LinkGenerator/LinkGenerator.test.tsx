@@ -2,7 +2,7 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
 
-import { renderWithProviders } from 'utils/renderWithProviders';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { LinkGenerator } from './LinkGenerator';
 

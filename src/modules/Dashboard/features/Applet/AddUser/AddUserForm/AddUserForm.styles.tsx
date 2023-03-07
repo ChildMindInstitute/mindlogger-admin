@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 import { Button, Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 import { StyledTitle as AddUserTitle } from '../AddUser.styles';
 

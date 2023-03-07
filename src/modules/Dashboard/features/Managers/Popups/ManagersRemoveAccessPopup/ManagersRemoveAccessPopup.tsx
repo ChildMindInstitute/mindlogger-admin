@@ -3,22 +3,20 @@ import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { FolderApplet } from 'redux/modules';
-import { CheckboxController } from 'components/FormComponents';
+import { CheckboxController } from 'shared/components/FormComponents';
 import {
   StyledModalWrapper,
   StyledBodyLarge,
   StyledLabelLarge,
   StyledTitleBoldMedium,
   StyledFlexTopCenter,
-} from 'styles/styledComponents';
-import { Table, UiType, Modal } from 'components';
-import { useAsync } from 'hooks';
-import { revokeAppletUserApi } from 'api';
-import theme from 'styles/theme';
-import {
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
-} from 'styles/styledComponents/AppletImage';
+} from 'shared/styles/styledComponents';
+import { Table, UiType, Modal } from 'shared/components';
+import { useAsync } from 'shared/hooks';
+import { revokeAppletUserApi } from 'api';
+import theme from 'shared/styles/theme';
 
 import { buttonTextByStep, getHeadCells } from './ManagersRemoveAccessPopup.const';
 import { RemoveAccessPopupProps, Steps } from './ManagersRemoveAccessPopupProps.types';

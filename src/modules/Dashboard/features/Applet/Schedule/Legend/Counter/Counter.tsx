@@ -1,4 +1,4 @@
-import { StyledLabelMedium } from 'styles/styledComponents/Typography';
+import { StyledLabelMedium } from 'shared/styles/styledComponents';
 
 import { StyledCounter } from './Counter.styles';
 import { CounterProps } from './Counter.types';

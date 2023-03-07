@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { TimePicker } from 'components';
-import { InputController } from 'components/FormComponents';
-import { StyledLabelLarge } from 'styles/styledComponents/Typography';
-import theme from 'styles/theme';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { TimePicker } from 'shared/components';
+import { InputController } from 'shared/components/FormComponents';
+import theme from 'shared/styles/theme';
+import { StyledFlexTopCenter, StyledLabelLarge } from 'shared/styles/styledComponents';
 
 import { StyledReminder, StyledInputWrapper } from './Reminder.styles';
 import { Header } from '../Header';

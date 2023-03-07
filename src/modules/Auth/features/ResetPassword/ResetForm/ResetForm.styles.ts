@@ -1,9 +1,9 @@
 import { styled } from '@mui/system';
 import { Button, Box, Typography } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledClearedButton } from 'shared/styles/styledComponents';
 
 export const StyledForm = styled('form')`
   margin-top: ${theme.spacing(3.2)};

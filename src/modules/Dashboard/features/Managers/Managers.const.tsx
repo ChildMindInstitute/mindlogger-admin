@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 
-import { Svg } from 'components';
-import { HeadCell } from 'types/table';
+import { Svg } from 'shared/components';
+import { HeadCell } from 'shared/types/table';
 
 import { ManagersActions } from './Managers.types';
 

@@ -1,10 +1,10 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import { StyledClearedButton } from 'styles/styledComponents';
-import { variables } from 'styles/variables';
+import { StyledClearedButton } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
-import { shouldForwardProp } from 'utils/shouldForwardProp';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 import { AppletUiType } from '../';
 
 export const StyledActivitiesContainer = styled(Box, shouldForwardProp)`

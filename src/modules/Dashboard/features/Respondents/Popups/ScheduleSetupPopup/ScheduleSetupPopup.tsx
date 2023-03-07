@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 
-import { Modal } from 'components';
-import { StyledModalWrapper, StyledBodyLarge } from 'styles/styledComponents';
-import theme from 'styles/theme';
+import { Modal } from 'shared/components';
+import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 import { APPLET_PAGES } from 'consts';
 import { page } from 'resources';
 

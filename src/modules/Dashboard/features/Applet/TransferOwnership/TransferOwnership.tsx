@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import { getErrorMessage } from 'utils/errors';
+import { getErrorMessage } from 'shared/utils/errors';
 import { transferOwnershipApi } from 'api';
-import { useAsync } from 'hooks/useAsync';
-import { InputController } from 'components/FormComponents';
-import { StyledErrorText, StyledBodyLarge } from 'styles/styledComponents';
+import { useAsync } from 'shared/hooks/useAsync';
+import { InputController } from 'shared/components/FormComponents';
+import { StyledErrorText, StyledBodyLarge } from 'shared/styles/styledComponents';
 
 import { StyledInputWrapper } from './TransferOwnership.styles';
 import { TransferOwnershipProps } from './TransferOwnership.types';

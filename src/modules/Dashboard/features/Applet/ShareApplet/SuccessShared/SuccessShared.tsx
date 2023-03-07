@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Svg, Chip } from 'components';
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
+import { Svg, Chip } from 'shared/components';
+import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
 import {
   StyledBodyMedium,
   StyledLabelLarge,
   StyledTitleBoldSmall,
-} from 'styles/styledComponents/Typography';
-import { StyledFlexWrap } from 'styles/styledComponents/Flex';
+  StyledFlexWrap,
+} from 'shared/styles/styledComponents';
 
 import { SuccessSharedProps } from './SuccessShared.types';
 import {

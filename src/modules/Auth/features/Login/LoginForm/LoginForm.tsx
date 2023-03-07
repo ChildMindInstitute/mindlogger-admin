@@ -7,10 +7,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { SignIn } from 'api';
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'redux/modules';
-import { InputController } from 'components/FormComponents';
-import { StyledErrorText, StyledHeadline } from 'styles/styledComponents';
-import { getErrorMessage } from 'utils/errors';
+import { auth } from 'modules/Auth/state';
+import { InputController } from 'shared/components/FormComponents';
+import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
+import { getErrorMessage } from 'shared/utils/errors';
 
 import {
   StyledWelcome,

@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import theme from 'styles/theme';
+import theme from 'shared/styles/theme';
 
 export const StyledWrapper = styled(Box)`
   display: flex;

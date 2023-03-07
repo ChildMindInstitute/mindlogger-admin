@@ -5,9 +5,9 @@ import {
   StyledFlexTopCenter,
   StyledClearedButton,
   StyledLabelSmall,
-} from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+} from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledCloseButton = styled(StyledClearedButton)`
   border-radius: ${variables.borderRadius.half};

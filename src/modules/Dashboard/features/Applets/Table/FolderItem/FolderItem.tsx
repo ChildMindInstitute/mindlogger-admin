@@ -2,13 +2,12 @@ import { useEffect, useState, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/material';
 
-import { useAppletsDnd } from 'hooks';
+import { useAppletsDnd } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders } from 'redux/modules';
-import { Svg, Actions } from 'components';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { variables } from 'styles/variables';
+import { Svg, Actions } from 'shared/components';
+import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 import { FolderItemProps } from './FolderItem.types';
 import {

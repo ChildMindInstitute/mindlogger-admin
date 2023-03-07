@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 
-import { StyledModalWrapper, StyledTitleSmall } from 'styles/styledComponents';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import { StyledModalWrapper, StyledTitleSmall } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledApplets = styled(StyledModalWrapper)`
   height: 45rem;

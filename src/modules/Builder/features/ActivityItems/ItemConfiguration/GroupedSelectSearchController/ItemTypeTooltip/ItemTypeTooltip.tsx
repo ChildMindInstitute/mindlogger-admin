@@ -1,4 +1,4 @@
-import theme from 'styles/theme';
+import theme from 'shared/styles/theme';
 
 import { ItemTypeTooltipProps } from './ItemTypeTooltip.types';
 import { StyledPopover } from './ItemTypeTooltip.styles';

@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next';
 
-import { StyledTitleMedium } from 'styles/styledComponents/Typography';
-import theme from 'styles/theme';
+import { StyledTitleMedium } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 
 import { ScreensParams } from './ClearScheduledEventsPopup.types';
 

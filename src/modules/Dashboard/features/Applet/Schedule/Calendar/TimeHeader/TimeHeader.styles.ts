@@ -1,9 +1,9 @@
 import { Box, styled } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledLabelBoldMedium } from 'styles/styledComponents';
-import { shouldForwardProp } from 'utils/shouldForwardProp';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledLabelBoldMedium } from 'shared/styles/styledComponents';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledMore = styled(StyledLabelBoldMedium, shouldForwardProp)`
   margin-left: ${({ isWeekType }: { isWeekType: boolean }) => (isWeekType ? '0.5%' : 'unset')};

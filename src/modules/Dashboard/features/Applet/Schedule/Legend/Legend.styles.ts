@@ -1,10 +1,9 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 export const StyledLegend = styled(Box)`
   padding: ${theme.spacing(1.2, 1.6, 0)};

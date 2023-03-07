@@ -6,18 +6,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { SignIn } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { auth, User } from 'redux/modules';
-import { InputController } from 'components/FormComponents';
+
+import { InputController } from 'shared/components/FormComponents';
 import {
   StyledBodyMedium,
   StyledHeadline,
   StyledTitleMedium,
   StyledErrorText,
-} from 'styles/styledComponents';
-import { getErrorMessage } from 'utils/errors';
-import { variables } from 'styles/variables';
+} from 'shared/styles/styledComponents';
+import { getErrorMessage } from 'shared/utils/errors';
+import { variables } from 'shared/styles/variables';
 import avatarSrc from 'assets/images/avatar.png';
 import { page } from 'resources';
+import { auth, User } from 'modules/Auth/state';
 
 import { loginFormSchema } from '../Login.schema';
 import {

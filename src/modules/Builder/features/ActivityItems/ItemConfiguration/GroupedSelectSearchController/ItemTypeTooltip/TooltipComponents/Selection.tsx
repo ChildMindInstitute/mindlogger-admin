@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
-import { StyledBodyMedium } from 'styles/styledComponents';
+import { Svg } from 'shared/components';
+import { StyledBodyMedium } from 'shared/styles/styledComponents';
 
 import { SelectionOption } from './SelectionOption';
 import { getSelectionSvgId } from './TooltipComponents.utils';

@@ -2,8 +2,8 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { postAppletPublicLinkApi } from 'api';
-import { useAsync } from 'hooks/useAsync';
-import { Svg } from 'components';
+import { useAsync } from 'shared/hooks/useAsync';
+import { Svg } from 'shared/components';
 
 import {
   StyledDialog,

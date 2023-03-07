@@ -1,4 +1,4 @@
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import avatarSrc from 'assets/images/avatar.png';
 import { ItemType } from 'modules/Builder/components';
 

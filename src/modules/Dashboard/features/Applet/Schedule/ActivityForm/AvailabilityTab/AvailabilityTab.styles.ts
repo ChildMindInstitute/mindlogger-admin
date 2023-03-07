@@ -1,9 +1,8 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import theme from 'shared/styles/theme';
+import { StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles/styledComponents';
 
 export const StyledWrapper = styled(Box)`
   margin: ${theme.spacing(2.4, 0)};

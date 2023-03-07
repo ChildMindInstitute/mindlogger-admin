@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { PublishedApplet } from 'redux/modules';
-import { useBreadcrumbs } from 'hooks';
-import { StyledBody, ContentContainer } from 'styles/styledComponents';
+import { PublishedApplet } from 'modules/Library/state';
+import { useBreadcrumbs } from 'shared/hooks';
+import { StyledBody, ContentContainer } from 'shared/styles/styledComponents';
 import { page } from 'resources';
 
 import { Applet, AppletUiType } from '../Applet';

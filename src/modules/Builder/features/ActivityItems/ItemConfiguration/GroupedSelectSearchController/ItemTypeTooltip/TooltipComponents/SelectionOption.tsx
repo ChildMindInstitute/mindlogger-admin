@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import theme from 'styles/theme';
+import theme from 'shared/styles/theme';
 
 import { StyledTooltipText } from './TooltipComponents.styles';
 import { SelectionOptionProps } from './TooltipComponents.types';

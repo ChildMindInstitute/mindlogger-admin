@@ -5,14 +5,14 @@ import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Modal } from 'components';
-import { InputController } from 'components/FormComponents';
-import { StyledModalWrapper } from 'styles/styledComponents';
-import { useAsync } from 'hooks/useAsync';
+import { Modal } from 'shared/components';
+import { InputController } from 'shared/components/FormComponents';
+import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { useAsync } from 'shared/hooks/useAsync';
 import { account, popups, folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { duplicateAppletApi, validateAppletNameApi } from 'api';
-import { getAppletEncryptionInfo } from 'utils/encryption';
+import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 import { page } from 'resources';
 
 import { AppletPasswordPopupType, AppletPasswordPopup } from '../AppletPasswordPopup';

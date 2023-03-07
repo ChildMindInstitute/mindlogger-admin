@@ -1,7 +1,7 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 
-import { inputAcceptsValue } from 'tests/inputAcceptsValue';
-import { renderComponentForEachTest } from 'utils/renderComponentForEachTest';
+import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
+import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
 
 import { ResetForm } from '.';
 

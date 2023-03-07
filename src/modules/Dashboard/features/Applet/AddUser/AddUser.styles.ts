@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 
-import theme from 'styles/theme';
-import { StyledTitleBoldMedium } from 'styles/styledComponents/Typography';
+import theme from 'shared/styles/theme';
+import { StyledTitleBoldMedium } from 'shared/styles/styledComponents';
 
 export const StyledTitle = styled(StyledTitleBoldMedium)`
   margin-bottom: ${theme.spacing(1.6)};

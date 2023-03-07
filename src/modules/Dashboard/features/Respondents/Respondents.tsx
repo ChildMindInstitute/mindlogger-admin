@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search, Table, Row } from 'components';
+import { Actions, Pin, Svg, Search, Table, Row } from 'shared/components';
 import { users, UserData, folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { useTimeAgo, useBreadcrumbs } from 'hooks';
-import { filterRows } from 'utils/filterRows';
-import { prepareRespondentsData } from 'utils/prepareUsersData';
+import { useTimeAgo, useBreadcrumbs } from 'shared/hooks';
+import { filterRows } from 'shared/utils/filterRows';
+import { prepareRespondentsData } from 'shared/utils/prepareUsersData';
 
 import {
   RespondentsTableHeader,

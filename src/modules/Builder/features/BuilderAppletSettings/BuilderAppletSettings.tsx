@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 
-import { AppletSettings } from 'features/AppletSettings';
+import { AppletSettings } from 'shared/features/AppletSettings';
 import { page } from 'resources';
 
 import { getSettings } from './BuilderAppletSettings.const';

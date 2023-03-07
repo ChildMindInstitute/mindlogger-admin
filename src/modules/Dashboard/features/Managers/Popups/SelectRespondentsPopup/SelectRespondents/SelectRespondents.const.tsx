@@ -2,7 +2,7 @@ import { ChangeEvent } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import i18n from 'i18n';
 
-import { HeadCell } from 'types/table';
+import { HeadCell } from 'shared/types/table';
 
 export enum SearchAcross {
   All = 'all',

@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { LinkedTabs, Svg } from 'components';
-import { useBreadcrumbs } from 'hooks';
-import { StyledBody } from 'styles/styledComponents';
+import { LinkedTabs, Svg } from 'shared/components';
+import { useBreadcrumbs } from 'shared/hooks';
+import { StyledBody } from 'shared/styles/styledComponents';
 
 import { newAppletTabs, pathsWithInnerTabs } from './NewApplet.const';
 

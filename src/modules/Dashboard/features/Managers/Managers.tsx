@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Svg, Actions, Search, Table, Row } from 'components';
+import { Svg, Actions, Search, Table, Row } from 'shared/components';
 import { ManagerData, users } from 'redux/modules';
-import { useTimeAgo, useBreadcrumbs } from 'hooks';
-import { filterRows } from 'utils/filterRows';
-import { prepareUsersData } from 'utils/prepareUsersData';
+import { useTimeAgo, useBreadcrumbs } from 'shared/hooks';
+import { filterRows } from 'shared/utils/filterRows';
+import { prepareUsersData } from 'shared/utils/prepareUsersData';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';

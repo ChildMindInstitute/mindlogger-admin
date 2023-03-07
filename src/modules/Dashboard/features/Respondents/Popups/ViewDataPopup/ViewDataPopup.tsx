@@ -1,9 +1,9 @@
 import { RefObject, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'components';
-import { StyledModalWrapper, StyledBodyLarge } from 'styles/styledComponents';
-import theme from 'styles/theme';
+import { Modal } from 'shared/components';
+import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features/Applet';
 
 import { ViewDataPopupProps } from './ViewDataPopup.types';

@@ -3,17 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
 
-import { CheckboxController, InputController } from 'components/FormComponents';
+import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
   StyledHeadlineLarge,
   StyledBuilderWrapper,
   StyledBodyLarge,
   StyledTitleMedium,
-} from 'styles/styledComponents';
-import { useBreadcrumbs } from 'hooks';
-import { Svg, Tooltip, Uploader } from 'components';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+} from 'shared/styles/styledComponents';
+import { useBreadcrumbs } from 'shared/hooks';
+import { Svg, Tooltip, Uploader } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'consts';
 
 import { Uploads } from '../../components';

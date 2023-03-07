@@ -1,4 +1,4 @@
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 import {
   DataRetention,
   TransferOwnershipSetting,
@@ -6,7 +6,7 @@ import {
   DownloadSchemaSetting,
   DeleteAppletSetting,
   ExportDataSetting,
-} from 'features/AppletSettings';
+} from 'shared/features/AppletSettings';
 
 export const getSettings = (isEditAppletPage: boolean) => [
   {

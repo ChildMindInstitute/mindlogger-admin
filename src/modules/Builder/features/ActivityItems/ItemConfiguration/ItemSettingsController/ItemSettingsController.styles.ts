@@ -1,9 +1,9 @@
 import { Box, styled } from '@mui/material';
 
-import { Svg } from 'components';
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
-import { shouldForwardProp } from 'utils/shouldForwardProp';
+import { Svg } from 'shared/components';
+import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledSettingInfoIcon = styled(Svg)`
   fill: ${variables.palette.outline};

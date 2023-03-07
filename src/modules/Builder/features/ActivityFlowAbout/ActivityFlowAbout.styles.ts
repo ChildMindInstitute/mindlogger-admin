@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 
-import { Svg } from 'components';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import { Svg } from 'shared/components';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledForm = styled('form')`
   width: 55rem;

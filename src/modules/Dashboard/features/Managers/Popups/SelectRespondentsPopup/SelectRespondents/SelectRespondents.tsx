@@ -2,12 +2,12 @@ import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useState } fro
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
-import { CheckboxController } from 'components/FormComponents';
-import { Row, Table, UiType, Search } from 'components';
-import { filterRows } from 'utils/filterRows';
-import { StyledBodyMedium } from 'styles/styledComponents/Typography';
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import { CheckboxController } from 'shared/components/FormComponents';
+import { Row, Table, UiType, Search } from 'shared/components';
+import { filterRows } from 'shared/utils/filterRows';
+import { StyledBodyMedium } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 import { SelectRespondentsProps, SelectRespondentsRef } from './SelectRespondents.types';
 import { StyledFilterContainer, StyledSelectContainer } from './SelectRespondents.styles';

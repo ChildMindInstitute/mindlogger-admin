@@ -1,14 +1,14 @@
 import { styled, Box, Popover } from '@mui/material';
 
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
+import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
 import {
   StyledLabelBoldLarge,
   StyledTitleMedium,
   StyledFlexAllCenter,
   StyledClearedButton,
-} from 'styles/styledComponents';
-import { shouldForwardProp } from 'utils/shouldForwardProp';
+} from 'shared/styles/styledComponents';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledDayBtn = styled(StyledClearedButton, shouldForwardProp)`
   position: relative;

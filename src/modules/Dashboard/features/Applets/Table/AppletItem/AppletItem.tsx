@@ -2,15 +2,15 @@ import { useState, DragEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
-import { useAppletsDnd, useTimeAgo } from 'hooks';
+import { useAppletsDnd, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders, popups, account } from 'redux/modules';
-import { StyledBodyMedium } from 'styles/styledComponents';
-import { Pin, Actions } from 'components';
+import { StyledBodyMedium } from 'shared/styles/styledComponents';
+import { Pin, Actions } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
 import { APPLET_PAGES } from 'consts';
 import { page } from 'resources';
-import { getAppletEncryptionInfo } from 'utils/encryption';
+import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 
 import { AppletImage } from '../AppletImage';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';

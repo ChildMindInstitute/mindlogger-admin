@@ -1,6 +1,6 @@
-import { users } from 'redux/modules';
-import { StyledBody } from 'styles/styledComponents/Body';
-import { LinkedTabs, Spinner } from 'components';
+import { StyledBody } from 'shared/styles/styledComponents';
+import { LinkedTabs, Spinner } from 'shared/components';
+import { users } from 'modules/Dashboard/state';
 
 import { useAppletTabs } from './Applet.hooks';
 

@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledBar = styled(Box)`
   width: 40rem;

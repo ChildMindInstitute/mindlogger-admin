@@ -2,20 +2,19 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useBreadcrumbs } from 'hooks';
+import { useBreadcrumbs } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { library } from 'redux/modules';
 
 import { page } from 'resources';
-import { EmptyTable } from 'components';
+import { EmptyTable } from 'shared/components';
 import {
   StyledBody,
   StyledHeadlineLarge,
   ContentContainer,
   StyledAppletContainer,
   StyledAppletList,
-} from 'styles/styledComponents';
-import theme from 'styles/theme';
+} from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 
 import { Header, RightButtonType } from '../../components';
 import { Applet } from '../Applet';

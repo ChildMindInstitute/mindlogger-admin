@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react';
 
-import { variables } from 'styles/variables';
-import { StyledLabelBoldMedium, StyledTitleLarge } from 'styles/styledComponents';
+import { variables } from 'shared/styles/variables';
+import { StyledLabelBoldMedium, StyledTitleLarge } from 'shared/styles/styledComponents';
 
 import {
   allDayEventsSortedByDays,

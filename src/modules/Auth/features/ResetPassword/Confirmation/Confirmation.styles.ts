@@ -1,10 +1,9 @@
 import { styled } from '@mui/system';
 import { Box, Link } from '@mui/material';
 
-import theme from 'styles/theme';
-import { variables } from 'styles/variables';
-
-import { StyledHeadline, StyledLabelMedium } from 'styles/styledComponents/Typography';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { StyledHeadline, StyledLabelMedium } from 'shared/styles/styledComponents';
 
 export const StyledConfirmation = styled(Box)`
   text-align: center;

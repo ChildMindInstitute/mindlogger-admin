@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { StyledBuilderBtn, StyledHeadlineLarge } from 'styles/styledComponents';
-import { Svg } from 'components';
-import theme from 'styles/theme';
+import { StyledBuilderBtn, StyledHeadlineLarge } from 'shared/styles/styledComponents';
+import { Svg } from 'shared/components';
+import theme from 'shared/styles/theme';
 
 import { items } from './LeftBar.const';
 import { StyledBar } from './LeftBar.styles';

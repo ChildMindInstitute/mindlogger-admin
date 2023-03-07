@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
-import { Svg, Tooltip } from 'components';
-import { StyledLabelBoldLarge } from 'styles/styledComponents/Typography';
-import theme from 'styles/theme';
+import { Svg, Tooltip } from 'shared/components';
+import { StyledLabelBoldLarge } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 
 import {
   StyledChildren,

@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
+import { Svg } from 'shared/components';
 
 import { Counter } from './Counter';
 import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Legend.styles';
