@@ -117,7 +117,7 @@ const getTableController = ({
     render={({ field }) => (
       <RadioGroup {...field}>
         <Table
-          tableHeight="32.4rem"
+          maxHeight="32.4rem"
           columns={columns}
           rows={rows}
           orderBy={orderBy}
