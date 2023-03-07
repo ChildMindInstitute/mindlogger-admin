@@ -1,77 +1,87 @@
-import { useTranslation } from 'react-i18next';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FormControlLabelProps } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'components';
-import { RadioGroupController } from 'components/FormComponents';
-import { StyledBodyLarge, StyledLabelLarge, StyledModalWrapper } from 'styles/styledComponents';
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
+import { mockedWorkspaces as accounts } from 'components/LeftBar/mocked';
+import { StyledModalWrapper } from 'styles/styledComponents';
 
 import {
   AddToBuilderActions,
-  AddToBuilderActionsForm,
+  AddToBuilderForm,
   AddToBuilderPopupProps,
+  AddToBuilderSteps,
+  Applet,
 } from './AddToBuilderPopup.types';
+import { getSteps } from './AddToBuilderPopup.utils';
+import { mockedApplets } from './mocked';
 
 export const AddToBuilderPopup = ({
   addToBuilderPopupVisible,
   setAddToBuilderPopupVisible,
 }: AddToBuilderPopupProps) => {
+  const isSelectAccountVisible = true; // TODO: fix when the endpoint is ready
+  // true if the user has multiple accounts
   const { t } = useTranslation('app');
-
-  const { handleSubmit, control } = useForm({
+  const { control, getValues } = useForm<AddToBuilderForm>({
     defaultValues: {
+      selectedAccount: '',
       addToBuilderAction: AddToBuilderActions.CreateNewApplet,
+      selectedApplet: '',
     },
   });
-
-  const addToBuilderActions: Omit<FormControlLabelProps, 'control'>[] = [
-    {
-      value: AddToBuilderActions.CreateNewApplet,
-      label: (
-        <>
-          <StyledBodyLarge>{t('createNewApplet')}</StyledBodyLarge>
-          <StyledLabelLarge
-            sx={{ color: variables.palette.primary, marginTop: theme.spacing(0.4) }}
-          >
-            {t('createNewAppletHint')}
-          </StyledLabelLarge>
-        </>
-      ),
-    },
-    {
-      value: AddToBuilderActions.AddToExistingApplet,
-      label: <StyledBodyLarge>{t('addToExistingApplet')}</StyledBodyLarge>,
-    },
-  ];
+  const [step, setStep] = useState(
+    isSelectAccountVisible
+      ? AddToBuilderSteps.SelectAccount
+      : AddToBuilderSteps.AddToBuilderActions,
+  );
+  const [applets, setApplets] = useState<Applet[]>([]);
 
   const handleModalClose = () => setAddToBuilderPopupVisible(false);
 
-  const handleContinue = ({ addToBuilderAction }: AddToBuilderActionsForm) => {
+  const handleAddToBuilder = () => {
+    const { addToBuilderAction } = getValues();
+    if (+addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
+      // TODO: request to create a new applet and redirect to builder
+      handleModalClose();
+    }
+    // TODO: request to get applets for selected account
+    setApplets(mockedApplets);
+    setStep(AddToBuilderSteps.SelectApplet);
+  };
+
+  const handleContinue = () => {
+    console.log(getValues());
     handleModalClose();
   };
+
+  const steps = useMemo(
+    () =>
+      getSteps({
+        control,
+        isSelectAccountVisible,
+        accounts,
+        applets,
+        setStep,
+        setAddToBuilderPopupVisible,
+        handleAddToBuilder,
+        handleContinue,
+      }),
+    [applets],
+  );
 
   return (
     <Modal
       open={addToBuilderPopupVisible}
       onClose={handleModalClose}
-      onSubmit={handleSubmit(handleContinue)}
-      title={t('contentActions')}
-      buttonText={t('continue')}
-      hasSecondBtn
-      secondBtnText={t('cancel')}
-      onSecondBtnSubmit={handleModalClose}
+      onSubmit={steps[step].onSubmitStep}
+      title={t(steps[step].popupTitle)}
+      buttonText={t(steps[step].buttonText)}
+      hasSecondBtn={steps[step].hasSecondBtn}
+      secondBtnText={t(steps[step]?.secondBtnText || '')}
+      onSecondBtnSubmit={steps[step].onSecondBtnSubmit}
     >
-      <StyledModalWrapper>
-        <form onSubmit={handleSubmit(handleContinue)}>
-          <RadioGroupController
-            control={control}
-            name="addToBuilderAction"
-            options={addToBuilderActions}
-          />
-        </form>
-      </StyledModalWrapper>
+      <StyledModalWrapper>{steps[step].render()}</StyledModalWrapper>
     </Modal>
   );
 };
