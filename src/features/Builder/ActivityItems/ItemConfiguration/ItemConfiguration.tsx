@@ -51,6 +51,16 @@ export const ItemConfiguration = () => {
 
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
 
+  const handleRemoveTextInputOption = () => {
+    setValue(
+      'settings',
+      settings?.filter(
+        (settingKey: ItemConfigurationSettings) =>
+          settingKey !== ItemConfigurationSettings.HasTextInput,
+      ),
+    );
+  };
+
   return (
     <StyledFlexColumn>
       <StyledTop>
@@ -84,7 +94,11 @@ export const ItemConfiguration = () => {
         <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
       )}
       {isTextInputOptionVisible && (
-        <TextInputOption name="isTextInputOptionRequired" control={control} />
+        <TextInputOption
+          name="isTextInputOptionRequired"
+          control={control}
+          onRemove={handleRemoveTextInputOption}
+        />
       )}
       {settingsDrawerVisible && (
         <ItemSettingsDrawer
