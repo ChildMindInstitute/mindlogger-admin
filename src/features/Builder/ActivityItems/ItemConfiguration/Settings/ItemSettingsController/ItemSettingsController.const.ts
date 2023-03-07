@@ -1,4 +1,4 @@
-import { ItemInputTypes, ItemConfigurationSettings } from '../ItemConfiguration.types';
+import { ItemInputTypes, ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { ItemSettingsOptionsByInputType } from './ItemSettingsController.types';
 
 export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {

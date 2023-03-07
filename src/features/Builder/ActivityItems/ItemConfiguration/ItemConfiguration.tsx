@@ -15,10 +15,14 @@ import { variables } from 'styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
-import { ItemSettingsDrawer } from './ItemSettingsDrawer';
-import { ItemSettingsController } from './ItemSettingsController';
+import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
+import { NumberSelection } from './InputTypeItems';
 import { StyledTop, StyledInputWrapper } from './ItemConfiguration.styles';
-import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
+import {
+  ItemConfigurationForm,
+  ItemConfigurationSettings,
+  ItemInputTypes,
+} from './ItemConfiguration.types';
 import { itemsTypeOptions, DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
@@ -31,18 +35,19 @@ export const ItemConfiguration = () => {
       settings: [],
       timer: DEFAULT_TIMER_VALUE,
       isTextInputOptionRequired: true,
+      minNumber: 1,
+      maxNumber: 100,
     },
     mode: 'onChange',
   });
 
   const selectedInputType = watch('itemsInputType');
+  const settings = watch('settings');
 
   useEffect(() => {
     setValue('settings', []);
     setValue('timer', DEFAULT_TIMER_VALUE);
   }, [selectedInputType]);
-
-  const settings = watch('settings');
 
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
 
@@ -75,6 +80,9 @@ export const ItemConfiguration = () => {
           {t('itemTypeDescription')}
         </StyledBodyMedium>
       </StyledInputWrapper>
+      {selectedInputType === ItemInputTypes.NumberSelection && (
+        <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+      )}
       {isTextInputOptionVisible && (
         <TextInputOption name="isTextInputOptionRequired" control={control} />
       )}

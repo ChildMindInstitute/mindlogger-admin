@@ -16,7 +16,7 @@ import {
 } from './ItemSettingsController.styles';
 import { ItemSettingsControllerProps } from './ItemSettingsController.types';
 import { itemSettingsOptionsByInputType } from './ItemSettingsController.const';
-import { ItemConfigurationSettings } from '../ItemConfiguration.types';
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export const ItemSettingsController = <T extends FieldValues>({
   name,
