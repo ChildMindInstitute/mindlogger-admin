@@ -23,7 +23,12 @@ import {
   ItemConfigurationSettings,
   ItemInputTypes,
 } from './ItemConfiguration.types';
-import { itemsTypeOptions, DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
+import {
+  itemsTypeOptions,
+  DEFAULT_TIMER_VALUE,
+  DEFAULT_MIN_NUMBER,
+  DEFAULT_MAX_NUMBER,
+} from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -35,8 +40,8 @@ export const ItemConfiguration = () => {
       settings: [],
       timer: DEFAULT_TIMER_VALUE,
       isTextInputOptionRequired: true,
-      minNumber: 1,
-      maxNumber: 100,
+      minNumber: DEFAULT_MIN_NUMBER,
+      maxNumber: DEFAULT_MAX_NUMBER,
     },
     mode: 'onChange',
   });
