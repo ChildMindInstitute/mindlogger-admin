@@ -14,15 +14,17 @@ import {
 } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { page } from 'resources';
-import { PublishedApplet } from 'redux/modules';
-import { AddToBuilderPopup } from 'features/Library/Popups';
+import { auth, PublishedApplet } from 'redux/modules';
+import { AuthPopup, AddToBuilderPopup } from 'features/Library/Popups';
 
 import { StyledLink } from './Cart.styles';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
+  const isAuthorized = auth.useAuthorized();
   const [searchValue, setSearchValue] = useState('');
   const [addToBuilderPopupVisible, setAddToBuilderPopupVisible] = useState(false);
+  const [authPopupVisible, setAuthPopupVisible] = useState(false);
 
   // TODO: replace with real data
   const applets: PublishedApplet[] = [];
@@ -45,6 +47,9 @@ export const Cart = () => {
       </EmptyTable>
     );
 
+  const handleAddToBuilder = () =>
+    isAuthorized ? setAddToBuilderPopupVisible(true) : setAuthPopupVisible(true);
+
   return (
     <>
       <StyledBody>
@@ -52,7 +57,7 @@ export const Cart = () => {
           isBackButtonVisible
           handleSearch={(value) => setSearchValue(value)}
           rightButtonType={RightButtonType.Builder}
-          rightButtonCallback={() => setAddToBuilderPopupVisible(true)}
+          rightButtonCallback={handleAddToBuilder}
         />
         <ContentContainer>
           <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>
@@ -69,6 +74,9 @@ export const Cart = () => {
           </StyledAppletList>
         </ContentContainer>
       </StyledBody>
+      {authPopupVisible && (
+        <AuthPopup authPopupVisible={authPopupVisible} setAuthPopupVisible={setAuthPopupVisible} />
+      )}
       {addToBuilderPopupVisible && (
         <AddToBuilderPopup
           addToBuilderPopupVisible={addToBuilderPopupVisible}

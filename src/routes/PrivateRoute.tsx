@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 import { page } from 'resources';
 
@@ -12,4 +12,9 @@ export const PrivateRoute = ({
   condition,
   redirectPath = page.login,
   children,
-}: PrivateRouteDefinition) => (condition ? children : <Navigate to={redirectPath} />);
+}: PrivateRouteDefinition) => {
+  const location = useLocation();
+  const redirect = location?.state?.from || redirectPath;
+
+  return condition ? children : <Navigate to={redirect} />;
+};
