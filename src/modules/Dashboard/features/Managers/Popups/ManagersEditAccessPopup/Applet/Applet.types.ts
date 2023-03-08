@@ -1,4 +1,4 @@
-import { Roles } from 'consts';
+import { Roles } from 'shared/consts';
 import { User } from 'modules/Dashboard/features/Managers';
 import { Applet } from '../ManagersEditAccessPopup.types';
 

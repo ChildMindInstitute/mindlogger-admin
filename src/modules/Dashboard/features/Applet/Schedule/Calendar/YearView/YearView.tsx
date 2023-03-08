@@ -1,7 +1,7 @@
 import { DateLocalizer, NavigateAction } from 'react-big-calendar';
 import { startOf, add } from 'react-big-calendar/lib/utils/dates';
 
-import { DateFormats } from 'consts';
+import { DateFormats } from 'shared/consts';
 
 import { CalendarViews } from '../Calendar.types';
 import { MonthCalendar } from './MonthCalendar';

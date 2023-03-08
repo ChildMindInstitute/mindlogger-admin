@@ -5,7 +5,7 @@ import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
-import { LEFT_BAR_WIDTH } from 'consts';
+import { LEFT_BAR_WIDTH } from 'shared/consts';
 
 export const StyledDrawer = styled(Box)`
   background-color: ${variables.palette.surface1};

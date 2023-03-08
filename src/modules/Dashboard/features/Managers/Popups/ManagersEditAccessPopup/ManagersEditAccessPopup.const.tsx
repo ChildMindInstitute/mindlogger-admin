@@ -1,5 +1,5 @@
 import logoSrc from 'assets/images/logo.png';
-import { Roles } from 'consts';
+import { Roles } from 'shared/consts';
 
 import { getRoleIcon } from './ManagersEditAccessPopup.utils';
 

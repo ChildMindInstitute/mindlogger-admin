@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import { LEFT_BAR_WIDTH } from 'consts';
+import { LEFT_BAR_WIDTH } from 'shared/consts';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 import { StyledFlexColumn } from 'shared/styles/styledComponents';
 

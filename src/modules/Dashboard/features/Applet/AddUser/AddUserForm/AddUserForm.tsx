@@ -17,7 +17,7 @@ import { getAppletInvitationApi } from 'api';
 import { getErrorMessage } from 'shared/utils/errors';
 import { prepareUsersData } from 'shared/utils/prepareUsersData';
 import { setAccountName } from 'modules/Auth/state/Auth.thunk';
-import { Roles } from 'consts';
+import { Roles } from 'shared/consts';
 
 import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUserForm.styles';
 import { Fields, fields, defaultValues, langs, roles } from './AddUserForm.const';

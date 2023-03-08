@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { format } from 'date-fns';
 
 import { Tooltip } from 'shared/components';
-import { DateFormats } from 'consts';
+import { DateFormats } from 'shared/consts';
 
 import { EventWrapperProps, UiType } from './EventWrapper.types';
 import { getEventEndTime } from '../Calendar.utils';

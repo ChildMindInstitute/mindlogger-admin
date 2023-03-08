@@ -3,7 +3,7 @@ import { Drawer, Box } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { LEFT_BAR_WIDTH } from 'consts';
+import { LEFT_BAR_WIDTH } from 'shared/consts';
 
 export const StyledSwitchWorkspaceDrawer = styled(Drawer)`
   left: auto;

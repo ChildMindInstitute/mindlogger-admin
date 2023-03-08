@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ButtonWithMenu, Chip } from 'shared/components';
 import { StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { Roles } from 'consts';
+import { Roles } from 'shared/consts';
 import { ChipShape } from 'shared/components/Chip/Chip.types';
 import { MenuItem } from 'shared/components/Menu/Menu.types';
 

@@ -14,7 +14,7 @@ import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'consts';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'shared/consts';
 
 import { Uploads } from '../../components';
 import { StyledForm, StyledContainer, StyledSvg, StyledSettings } from './ActivityAbout.styles';

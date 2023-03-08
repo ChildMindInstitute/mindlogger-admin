@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { APPLET_PASSWORD_MIN_LENGTH } from 'consts';
+import { APPLET_PASSWORD_MIN_LENGTH } from 'shared/consts';
 
 export const createPasswordFormSchema = () => {
   const { t } = i18n;

@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Modal } from 'shared/components';
 import theme from 'shared/styles/theme';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
-import { Roles } from 'consts';
+import { Roles } from 'shared/consts';
 
 import { Applet } from './Applet';
 import { EditAccessPopupProps, Applet as AppletType, Role } from './ManagersEditAccessPopup.types';

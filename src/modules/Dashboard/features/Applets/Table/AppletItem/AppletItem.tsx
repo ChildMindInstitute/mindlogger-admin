@@ -8,7 +8,7 @@ import { FolderApplet, folders, popups, account } from 'redux/modules';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import { Pin, Actions } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
-import { APPLET_PAGES } from 'consts';
+import { APPLET_PAGES } from 'shared/consts';
 import { page } from 'resources';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 

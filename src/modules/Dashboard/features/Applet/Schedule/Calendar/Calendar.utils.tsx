@@ -10,7 +10,7 @@ import {
 } from 'react-big-calendar';
 import { format, getISOWeek } from 'date-fns';
 
-import { DateFormats } from 'consts';
+import { DateFormats } from 'shared/consts';
 import i18n from 'i18n';
 import { variables } from 'shared/styles/variables';
 

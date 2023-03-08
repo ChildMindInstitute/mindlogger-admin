@@ -1,14 +1,6 @@
+import { authApiClient, authApiClientWithFullLang } from 'shared/api/api.client';
+
 import {
-  apiClient,
-  apiClientWithLang,
-  authApiClient,
-  authApiClientWithFullLang,
-} from './api.client';
-import {
-  SignIn,
-  SignUpArgs,
-  SignInRefreshTokenArgs,
-  ResetPassword,
   SwitchAccount,
   AccountUserList,
   TransferOwnership,
@@ -33,45 +25,6 @@ import {
   GetUsersData,
   GetAppletsParams,
 } from './api.types';
-
-export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
-  apiClientWithLang.post(
-    'auth/login',
-    { email, password },
-    {
-      signal,
-    },
-  );
-
-export const signInRefreshTokenApi = (
-  { refreshToken }: SignInRefreshTokenArgs,
-  signal?: AbortSignal,
-) =>
-  apiClient.post(
-    '/auth/token/refresh',
-    { refreshToken },
-    {
-      signal,
-    },
-  );
-
-export const signUpApi = ({ body }: SignUpArgs, signal?: AbortSignal) =>
-  apiClient.post(
-    '/users',
-    { ...body },
-    {
-      signal,
-    },
-  );
-
-export const resetPasswordApi = ({ email }: ResetPassword, signal?: AbortSignal) =>
-  apiClient.post(
-    '/users/me/password/recover',
-    { email },
-    {
-      signal,
-    },
-  );
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });

@@ -6,7 +6,7 @@ import { Trans } from 'react-i18next';
 import { Modal } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { APPLET_PAGES } from 'consts';
+import { APPLET_PAGES } from 'shared/consts';
 import { page } from 'resources';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';

@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 
 import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
-import { TABS_HEIGHT } from 'consts';
+import { TABS_HEIGHT } from 'shared/consts';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { UiType } from './Tabs.types';

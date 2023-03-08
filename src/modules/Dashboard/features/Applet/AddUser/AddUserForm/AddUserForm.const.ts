@@ -1,4 +1,4 @@
-import { Roles } from 'consts';
+import { Roles } from 'shared/consts';
 
 import { Field } from './AddUserForm.types';
 

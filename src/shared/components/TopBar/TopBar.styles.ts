@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import { Box, Button } from '@mui/material';
 
-import { TOP_BAR_HEIGHT } from 'consts';
+import { TOP_BAR_HEIGHT } from 'shared/consts';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { StyledClearedButton, StyledQuantityCircle } from 'shared/styles/styledComponents';

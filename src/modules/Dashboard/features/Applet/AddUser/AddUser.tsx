@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { users } from 'redux/modules';
 import { getErrorMessage } from 'shared/utils/errors';
 import { useBreadcrumbs } from 'shared/hooks';
-import { DateFormats } from 'consts';
+import { DateFormats } from 'shared/consts';
 
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
