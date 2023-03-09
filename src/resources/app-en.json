@@ -506,5 +506,10 @@
   "promptCapturePhoto": "Respondents will be prompted to capture a photo.",
   "captureVideo": "Capture <br /> Video",
   "promptCaptureVideo": "Respondents will be prompted to capture a video.",
-  "uploadTransfluent": "Please upload JPG or transfluent PNG image less than 1GB."
+  "uploadTransfluent": "Please upload JPG or transfluent PNG image less than 1GB.",
+  "textInputOptionLabel": "Text Input Option",
+  "textInputOptionDescription": "The respondent will be able to enter a text response",
+  "textInputOptionRequired": "Required",
+  "minValue": "Min value",
+  "maxValue": "Max value"
 }

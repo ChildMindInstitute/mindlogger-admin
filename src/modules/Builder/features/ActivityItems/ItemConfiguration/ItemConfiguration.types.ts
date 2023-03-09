@@ -45,6 +45,9 @@ export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
   settings: ItemConfigurationSettings[];
   timer: number;
+  isTextInputOptionRequired: boolean;
+  minNumber: number;
+  maxNumber: number;
 };
 
 export type ItemsOption = {

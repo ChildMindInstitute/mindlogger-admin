@@ -14,27 +14,57 @@ import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { ItemSettingsDrawer } from './ItemSettingsDrawer';
-import { ItemSettingsController } from './ItemSettingsController';
+import { TextInputOption } from './TextInputOption';
+import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
+import { NumberSelection } from './InputTypeItems';
 import { StyledTop, StyledInputWrapper } from './ItemConfiguration.styles';
-import { ItemConfigurationForm } from './ItemConfiguration.types';
-import { itemsTypeOptions, DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
+import {
+  ItemConfigurationForm,
+  ItemConfigurationSettings,
+  ItemInputTypes,
+} from './ItemConfiguration.types';
+import {
+  itemsTypeOptions,
+  DEFAULT_TIMER_VALUE,
+  DEFAULT_MIN_NUMBER,
+  DEFAULT_MAX_NUMBER,
+} from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
 
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useForm<ItemConfigurationForm>({
-    defaultValues: { itemsInputType: '', settings: [], timer: DEFAULT_TIMER_VALUE },
+    defaultValues: {
+      itemsInputType: '',
+      settings: [],
+      timer: DEFAULT_TIMER_VALUE,
+      isTextInputOptionRequired: true,
+      minNumber: DEFAULT_MIN_NUMBER,
+      maxNumber: DEFAULT_MAX_NUMBER,
+    },
     mode: 'onChange',
   });
 
   const selectedInputType = watch('itemsInputType');
+  const settings = watch('settings');
 
   useEffect(() => {
     setValue('settings', []);
     setValue('timer', DEFAULT_TIMER_VALUE);
   }, [selectedInputType]);
+
+  const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
+
+  const handleRemoveTextInputOption = () => {
+    setValue(
+      'settings',
+      settings?.filter(
+        (settingKey: ItemConfigurationSettings) =>
+          settingKey !== ItemConfigurationSettings.HasTextInput,
+      ),
+    );
+  };
 
   return (
     <StyledFlexColumn>
@@ -65,6 +95,16 @@ export const ItemConfiguration = () => {
           {t('itemTypeDescription')}
         </StyledBodyMedium>
       </StyledInputWrapper>
+      {selectedInputType === ItemInputTypes.NumberSelection && (
+        <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+      )}
+      {isTextInputOptionVisible && (
+        <TextInputOption
+          name="isTextInputOptionRequired"
+          control={control}
+          onRemove={handleRemoveTextInputOption}
+        />
+      )}
       {settingsDrawerVisible && (
         <ItemSettingsDrawer
           open={settingsDrawerVisible}
