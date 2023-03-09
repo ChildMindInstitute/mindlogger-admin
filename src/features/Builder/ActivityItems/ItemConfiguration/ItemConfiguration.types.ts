@@ -43,6 +43,8 @@ export enum ItemConfigurationSettings {
 
 export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
+  name: string;
+  body: string;
   settings: ItemConfigurationSettings[];
   timer: number;
   isTextInputOptionRequired: boolean;

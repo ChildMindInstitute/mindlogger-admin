@@ -22,7 +22,7 @@ export type TableProps = {
   columns: HeadCell[];
   rows: Row[] | undefined;
   orderBy: string;
-  tableHeight?: string;
+  maxHeight?: string;
   uiType?: UiType;
   emptyComponent?: JSX.Element | string;
 };
