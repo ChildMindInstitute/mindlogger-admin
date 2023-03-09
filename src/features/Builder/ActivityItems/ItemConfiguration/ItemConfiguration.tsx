@@ -16,7 +16,6 @@ import { variables } from 'styles/variables';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { ItemSettingsController } from './ItemSettingsController';
 import { SelectionOption, NumberSelection } from './InputTypeItems';
 import {
   StyledTop,
