@@ -3,7 +3,7 @@ import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
 import { Paper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { StyledFlexAllCenter, StyledFlexColumn, StyledTitleSmall } from 'styles/styledComponents';
 import theme from 'styles/theme';
 

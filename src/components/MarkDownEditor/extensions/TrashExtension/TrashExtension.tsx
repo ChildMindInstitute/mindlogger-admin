@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import MdEditor from 'md-editor-rt';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { StyledFlexAllCenter } from 'styles/styledComponents';
 import theme from 'styles/theme';
 

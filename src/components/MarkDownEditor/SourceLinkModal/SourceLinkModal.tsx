@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'components/index';
+import { Modal } from 'components';
 import { InputController } from 'components/FormComponents';
 
 import {

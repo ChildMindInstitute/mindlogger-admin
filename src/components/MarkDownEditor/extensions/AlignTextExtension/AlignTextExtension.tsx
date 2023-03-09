@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { StyledFlexAllCenter } from 'styles/styledComponents';
 import theme from 'styles/theme';
 

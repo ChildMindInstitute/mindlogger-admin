@@ -4,15 +4,17 @@ import { ExposeParam, InsertContentGenerator } from 'md-editor-rt';
 import { useTranslation } from 'react-i18next';
 import 'md-editor-rt/lib/style.css';
 
-import { MarkExtension } from 'components/MarkDownEditor/extensions/MarkExtension';
-import { TrashExtension } from 'components/MarkDownEditor/extensions/TrashExtension';
-import { AlignTextExtension } from 'components/MarkDownEditor/extensions/AlignTextExtension';
-import { AudioUploadExtension } from 'components/MarkDownEditor/extensions/AudioUploadExtension';
-import { ImageUploadExtension } from 'components/MarkDownEditor/extensions/ImageUploadExtension';
-import { VideoUploadExtension } from 'components/MarkDownEditor/extensions/VideoUploadExtension';
-import { LANGUAGE_BY_DEFAULT } from 'components/MarkDownEditor';
-import { FooterMessage } from 'components/MarkDownEditor/FooterMessage';
-import { CharacterCounter } from 'components/MarkDownEditor/CharacterCounter';
+import {
+  LANGUAGE_BY_DEFAULT,
+  AlignTextExtension,
+  AudioUploadExtension,
+  CharacterCounter,
+  ImageUploadExtension,
+  FooterMessage,
+  TrashExtension,
+  VideoUploadExtension,
+  MarkExtension,
+} from 'components/MarkDownEditor';
 
 import { StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps } from './EditorController.types';

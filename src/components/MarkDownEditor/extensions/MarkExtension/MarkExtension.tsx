@@ -2,7 +2,7 @@ import React from 'react';
 import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import { StyledFlexAllCenter } from 'styles/styledComponents';
 import theme from 'styles/theme';
 
