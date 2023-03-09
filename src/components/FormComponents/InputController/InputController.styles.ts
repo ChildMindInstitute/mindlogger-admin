@@ -19,6 +19,7 @@ export const StyledTextField = styled(TextField)`
 
 export const StyledTextFieldContainer = styled(Box)`
   position: relative;
+  width: 100%;
 `;
 
 export const StyledCounter = styled(StyledBodyMedium)`

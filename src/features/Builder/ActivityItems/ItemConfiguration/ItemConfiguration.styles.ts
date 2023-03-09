@@ -25,7 +25,7 @@ export const StyledInputWrapper = styled(Box)`
 `;
 
 export const StyledOptionsWrapper = styled(Box)`
-  margin: ${theme.spacing(2.4, 0)};
+  margin: ${theme.spacing(0, 0, 2.4)};
   text-align: center;
 
   svg {
