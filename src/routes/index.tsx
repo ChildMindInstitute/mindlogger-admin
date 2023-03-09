@@ -4,7 +4,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { BaseLayout } from 'shared/layouts/BaseLayout';
 import { AuthLayout } from 'modules/Auth/layouts/AuthLayout';
 import { useAppDispatch } from 'redux/store';
-
 import { page } from 'resources';
 import storage from 'shared/utils/storage';
 import { dashBoardRoutes } from 'modules/Dashboard/routes';
