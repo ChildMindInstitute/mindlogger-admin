@@ -54,6 +54,8 @@ export type SelectionOption = {
 
 export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
+  name: string;
+  body: string;
   settings: ItemConfigurationSettings[];
   timer: number;
   options?: SelectionOption[];

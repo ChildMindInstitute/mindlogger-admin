@@ -144,7 +144,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
         </StyledFilterContainer>
         <form noValidate>
           <Table
-            tableHeight="32.4rem"
+            maxHeight="32.4rem"
             columns={getHeadCells(handleSelectAllClick, selectAllChecked)}
             rows={tableRows}
             orderBy={'nickname'}
