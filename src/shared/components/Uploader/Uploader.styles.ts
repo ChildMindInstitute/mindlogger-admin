@@ -1,7 +1,7 @@
 import { Box, ButtonGroup } from '@mui/material';
 import { styled } from '@mui/system';
 
-import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
+import { StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -14,46 +14,76 @@ const absolutePosition = `
 `;
 
 export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
-  border-radius: ${variables.borderRadius.lg2};
   cursor: pointer;
 
   ${({
     height,
     width,
     isImgUploaded,
+    isPrimaryUiType,
   }: {
     height: number;
     width: number;
     isImgUploaded: boolean;
-  }) => `
-    height: ${height}rem;
-    width: ${width}rem;
-    border: ${isImgUploaded ? variables.borderWidth.md : variables.borderWidth.lg} ${
-    isImgUploaded ? 'solid' : 'dashed'
-  } ${variables.palette.outline_variant};
-`}
+    isPrimaryUiType: boolean;
+  }) => {
+    const commonStyles = `
+      height: ${height}rem;
+      width: ${width}rem;
+    `;
+
+    if (isPrimaryUiType) {
+      return `
+        ${commonStyles}
+        border: ${isImgUploaded ? variables.borderWidth.md : variables.borderWidth.lg} ${
+        isImgUploaded ? 'solid' : 'dashed'
+      } ${variables.palette.outline_variant};
+        border-radius: ${variables.borderRadius.lg2};
+      `;
+    }
+
+    return `
+      ${commonStyles}
+      border-radius: ${variables.borderRadius.xs};
+      background-color: ${isImgUploaded ? 'transparent' : variables.palette.primary_container};
+      
+      .image-container {
+        transition: ${variables.transitions.bgColor};
+        padding: ${theme.spacing(0.7)};
+        border-radius: ${variables.borderRadius.half};
+      }
+      
+      &:hover {
+        .image-container {
+          background-color: ${variables.palette.on_surface_variant_alfa8};
+        }
+      }
+    `;
+  }}
 `;
 
-export const StyledImgContainer = styled(Box)`
-  margin: 0 auto;
-  text-align: center;
+export const StyledImgContainer = styled(StyledFlexColumn, shouldForwardProp)`
+  align-items: center;
 
-  svg {
-    fill: ${variables.palette.surface_variant};
-  }
-
-  span {
-    color: ${variables.palette.primary};
-  }
+  ${({ isPrimaryUiType }: { isPrimaryUiType: boolean }) =>
+    isPrimaryUiType &&
+    `
+     span {
+      color: ${variables.palette.primary};
+     }
+      
+     svg {
+      fill: ${variables.palette.surface_variant};
+     }
+  `};
 `;
 
 export const UploadedImgContainer = styled(Box)`
   position: relative;
 `;
 
-export const StyledButtonGroup = styled(ButtonGroup)`
+export const StyledButtonGroup = styled(ButtonGroup, shouldForwardProp)`
   ${absolutePosition}
-
   .MuiButtonGroup-grouped {
     &:not(:first-of-type) {
       border-left: transparent;
@@ -65,6 +95,7 @@ export const StyledButtonGroup = styled(ButtonGroup)`
 
     .MuiButton-startIcon {
       margin-right: 0;
+      margin-left: ${({ isPrimaryUiType }: { isPrimaryUiType: boolean }) => !isPrimaryUiType && 0};
     }
   }
 

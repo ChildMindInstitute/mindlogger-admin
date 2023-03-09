@@ -24,9 +24,17 @@ export const InputController = <T extends FieldValues>({
   maxLength,
   tooltip,
   InputProps,
+  defaultNumberValue = 1,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
+  const isNumberType = textFieldProps.type === 'number';
+
+  const getTextAdornment = (value: number) => {
+    if (!textAdornment || !value) return null;
+
+    return <StyledBodyLarge>{t(textAdornment, { count: value })}</StyledBodyLarge>;
+  };
 
   return (
     <Controller
@@ -35,7 +43,8 @@ export const InputController = <T extends FieldValues>({
       render={({ field: { onChange, value }, fieldState: { error } }) => {
         const handleAddNumber = () => onChange(+value + 1);
         const handleDistractNumber = () => {
-          +value > 1 && onChange(+value - 1);
+          const minNumberVal = defaultNumberValue === 0 ? 0 : 1;
+          +value > minNumberVal && onChange(+value - 1);
         };
 
         return (
@@ -44,19 +53,15 @@ export const InputController = <T extends FieldValues>({
               <StyledTextField
                 {...textFieldProps}
                 onChange={onChange}
-                value={textFieldProps.type === 'number' && value < 1 ? 1 : value}
+                value={isNumberType && value < defaultNumberValue ? defaultNumberValue : value}
                 error={!!error || providedError}
                 helperText={error?.message || null}
                 InputProps={
-                  textFieldProps.type === 'number'
+                  isNumberType
                     ? {
                         endAdornment: (
                           <StyledFlexTopCenter>
-                            {value && textAdornment && (
-                              <StyledBodyLarge>
-                                {t(textAdornment, { count: value })}
-                              </StyledBodyLarge>
-                            )}
+                            {getTextAdornment(value)}
                             <StyledUpDown>
                               <StyledClearedButton onClick={handleAddNumber}>
                                 <Svg id="navigate-up" />

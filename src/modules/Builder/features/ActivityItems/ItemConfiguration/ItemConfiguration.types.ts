@@ -1,3 +1,5 @@
+import { ColorResult } from 'react-color';
+
 export enum ItemInputTypes {
   SingleSelection = 'singleSelection',
   MultipleSelection = 'multipleSelection',
@@ -41,10 +43,22 @@ export enum ItemConfigurationSettings {
   IsGoBackRemoved = 'isGoBackRemoved',
 }
 
+export type SelectionOption = {
+  text: string;
+  score?: number;
+  tooltip?: string;
+  isVisible?: boolean;
+  image?: string;
+  color?: ColorResult;
+};
+
 export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
+  name: string;
+  body: string;
   settings: ItemConfigurationSettings[];
   timer: number;
+  options?: SelectionOption[];
   isTextInputOptionRequired: boolean;
   minNumber: number;
   maxNumber: number;

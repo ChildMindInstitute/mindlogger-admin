@@ -2,10 +2,14 @@ import { StyledTitleBoldSmall } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 
 import { StyledCustomCover, StyledImage } from './WorkspaceImage.styles';
-import { WorkspaceImageProps } from './WorkspaceImage.types';
+import { WorkspaceImageProps, WorkspaceUiType } from './WorkspaceImage.types';
 
-export const WorkspaceImage = ({ image, workspaceName = '' }: WorkspaceImageProps) => (
-  <StyledCustomCover>
+export const WorkspaceImage = ({
+  uiType = WorkspaceUiType.List,
+  image = '',
+  workspaceName = '',
+}: WorkspaceImageProps) => (
+  <StyledCustomCover uiType={uiType}>
     {image ? (
       <StyledImage src={image} />
     ) : (

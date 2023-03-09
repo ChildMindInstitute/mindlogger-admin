@@ -117,7 +117,9 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
 
                   return (
                     <StyledMenuItem
-                      onMouseEnter={(event) => handleTooltipOpen(event, groupValue)}
+                      onMouseEnter={
+                        selectOpen ? (event) => handleTooltipOpen(event, groupValue) : () => false
+                      }
                       onMouseLeave={handleTooltipClose}
                       isHidden={isHidden}
                       key={groupValue}

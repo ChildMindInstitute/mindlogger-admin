@@ -1,40 +1,49 @@
+import MdEditor from 'md-editor-rt';
 import { styled } from '@mui/system';
-import MDEditor from '@uiw/react-md-editor';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
-export const StyledEditor = styled(MDEditor)`
-  &.w-md-editor {
-    border-radius: ${variables.borderRadius.lg2};
-    border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-    background-color: ${variables.palette.surface};
-    color: ${variables.palette.on_surface_variant};
-    font-size: ${variables.font.size.lg};
-    box-shadow: unset;
-  }
+export const StyledMdEditor = styled(MdEditor)`
+  border-radius: ${variables.borderRadius.lg2};
+  border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  background-color: ${variables.palette.surface};
+  color: ${variables.palette.on_surface_variant};
+  font-size: ${variables.font.size.lg};
+  box-shadow: unset;
+  margin-bottom: ${theme.spacing(4)};
+  min-height: 23.6rem;
 
-  .w-md-editor-toolbar {
+  & .md-editor-toolbar-wrapper {
     background-color: ${variables.palette.surface1};
-    padding: ${theme.spacing(1)};
-    border-radius: ${variables.borderRadius.lg2} ${variables.borderRadius.lg2} 0 0;
-    border-bottom: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-    li,
-    li + li {
-      margin-right: ${theme.spacing(1)};
-    }
+    height: auto;
 
-    button:not([data-name^='comment']) svg path {
-      fill: ${variables.palette.on_surface_variant};
-    }
+    & .md-editor-toolbar {
+      min-width: auto;
+      flex-wrap: wrap;
 
-    li > button:hover {
-      background-color: ${variables.palette.primary_alfa8};
-      border-radius: ${variables.borderRadius.xxxl};
+      & .md-editor-toolbar-left {
+        flex-wrap: wrap;
+      }
+
+      & .md-editor-toolbar-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+          background-color: ${variables.palette.primary_alfa8};
+          border-radius: ${variables.borderRadius.xxxl};
+        }
+
+        & svg {
+          fill: ${variables.palette.on_surface_variant};
+        }
+      }
     }
   }
 
-  .w-md-editor-content {
-    padding: ${theme.spacing(1, 1.6)};
+  & .md-editor-dropdown-overlay {
+    margin-top: 0;
   }
 `;

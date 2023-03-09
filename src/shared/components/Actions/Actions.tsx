@@ -7,14 +7,14 @@ import { StyledActions, StyledActionButton, StyledActionsWrapper } from './Actio
 import { ActionsProps } from './Actions.types';
 
 export const Actions = ({ items, context, visibleByDefault = false }: ActionsProps) => {
-  const [visibleActions, setVisibleActions] = useState(visibleByDefault);
+  const [visibleActions, setVisibleActions] = useState(false);
 
   return (
     <StyledActionsWrapper
       onMouseEnter={() => setVisibleActions(true)}
-      onMouseLeave={() => setVisibleActions(visibleByDefault)}
+      onMouseLeave={() => setVisibleActions(false)}
     >
-      {visibleActions ? (
+      {visibleByDefault || visibleActions ? (
         <StyledActions>
           {items.map(
             ({ icon, disabled = false, action, tooltipTitle, isDisplayed = true }) =>

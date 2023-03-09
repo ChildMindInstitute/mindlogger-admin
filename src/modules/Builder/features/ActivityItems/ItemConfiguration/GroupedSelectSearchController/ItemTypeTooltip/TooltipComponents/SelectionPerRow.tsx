@@ -28,7 +28,8 @@ const selectionContent = [
 export const SelectionPerRow = ({ uiType }: SelectionProps) => {
   const { t } = useTranslation();
   const isSingleSelection = uiType === SelectionUiType.Single;
-  const getTooltipText = (text: string) => !text || <StyledTooltipText>{text}</StyledTooltipText>;
+  const getTooltipText = (text: string) =>
+    text ? <StyledTooltipText>{text}</StyledTooltipText> : '';
 
   return (
     <>

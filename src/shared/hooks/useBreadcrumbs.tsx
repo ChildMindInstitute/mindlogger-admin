@@ -15,7 +15,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const location = useLocation();
   const authData = auth.useData();
   const appletsFoldersData = folders.useFlattenFoldersApplets();
-  const { firstName, lastName } = authData?.user as User;
+  const { firstName, lastName } = (authData?.user as User) || {};
 
   const [crumbs, setCrumbs] = useState<Breadcrumb[]>([]);
 
