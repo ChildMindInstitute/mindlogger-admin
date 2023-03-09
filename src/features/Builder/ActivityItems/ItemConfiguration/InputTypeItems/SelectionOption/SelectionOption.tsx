@@ -79,7 +79,7 @@ export const SelectionOption = ({
     } else {
       scoreString && onUpdateOption(index, { ...option, score: undefined });
     }
-  }, [hasScoresChecked, scoreString, index, onUpdateOption, option]);
+  }, [hasScoresChecked, scoreString]);
 
   useEffect(() => {
     if (hasTooltipsChecked) {
@@ -87,7 +87,7 @@ export const SelectionOption = ({
     } else {
       hasTooltip && onUpdateOption(index, { ...option, tooltip: undefined });
     }
-  }, [hasTooltipsChecked, hasTooltip, index, onUpdateOption, option]);
+  }, [hasTooltipsChecked, hasTooltip]);
 
   return (
     <>

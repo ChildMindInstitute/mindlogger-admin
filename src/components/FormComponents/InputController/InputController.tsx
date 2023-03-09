@@ -24,6 +24,7 @@ export const InputController = <T extends FieldValues>({
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
+  const isNumberType = textFieldProps.type === 'number';
 
   const getTextAdornment = (value: number) => {
     if (!textAdornment || !value) return null;
@@ -48,15 +49,11 @@ export const InputController = <T extends FieldValues>({
               <StyledTextField
                 {...textFieldProps}
                 onChange={onChange}
-                value={
-                  textFieldProps.type === 'number' && value < defaultNumberValue
-                    ? defaultNumberValue
-                    : value
-                }
+                value={isNumberType && value < defaultNumberValue ? defaultNumberValue : value}
                 error={!!error || providedError}
                 helperText={error?.message || null}
                 InputProps={
-                  textFieldProps.type === 'number'
+                  isNumberType
                     ? {
                         endAdornment: (
                           <StyledFlexTopCenter>
