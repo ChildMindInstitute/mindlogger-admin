@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useForm, FormProvider } from 'react-hook-form';
 import { Button } from '@mui/material';
-import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'components';
 import {
@@ -30,7 +29,11 @@ import {
   ItemInputTypes,
   ItemConfigurationSettings,
 } from './ItemConfiguration.types';
-import { itemsTypeOptions, DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
+import {
+  itemsTypeOptions,
+  DEFAULT_TIMER_VALUE,
+  DEFAULT_SCORE_VALUE,
+} from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -51,7 +54,8 @@ export const ItemConfiguration = () => {
   const {
     fields: options,
     append: appendOption,
-    remove: removeOption,
+    remove: removeOptions,
+    update: updateOptions,
   } = useFieldArray({
     control,
     name: 'options',
@@ -66,16 +70,19 @@ export const ItemConfiguration = () => {
   const settings = watch('settings');
 
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
+  const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
 
   const handleAddOption = () =>
     appendOption({
       text: '',
       isVisible: true,
+      ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
     });
 
   useEffect(() => {
     setValue('settings', []);
     setValue('timer', DEFAULT_TIMER_VALUE);
+    removeOptions();
   }, [selectedInputType]);
 
   return (
@@ -108,9 +115,6 @@ export const ItemConfiguration = () => {
             {t('itemTypeDescription')}
           </StyledBodyMedium>
         </StyledInputWrapper>
-        {isTextInputOptionVisible && (
-          <TextInputOption name="isTextInputOptionRequired" control={control} />
-        )}
         {settingsDrawerVisible && (
           <ItemSettingsDrawer
             open={settingsDrawerVisible}
@@ -129,10 +133,10 @@ export const ItemConfiguration = () => {
             {options?.length
               ? options.map((option, index) => (
                   <SelectionOption
-                    key={uniqueId()}
-                    onRemoveOption={removeOption}
+                    key={option.id}
+                    onRemoveOption={removeOptions}
+                    onUpdateOption={updateOptions}
                     index={index}
-                    {...option}
                   />
                 ))
               : null}
@@ -144,6 +148,9 @@ export const ItemConfiguration = () => {
               {t('addOption')}
             </Button>
           </StyledOptionsWrapper>
+        )}
+        {isTextInputOptionVisible && (
+          <TextInputOption name="isTextInputOptionRequired" control={control} />
         )}
       </StyledItemConfiguration>
     </FormProvider>

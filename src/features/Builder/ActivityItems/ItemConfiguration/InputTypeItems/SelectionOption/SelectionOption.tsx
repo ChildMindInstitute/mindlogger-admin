@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
-import { Svg, Uploader, UploaderUiType } from 'components';
+import { Actions, Svg, Uploader, UploaderUiType } from 'components';
 import { InputController } from 'components/FormComponents';
 import theme from 'styles/theme';
 import {
@@ -14,31 +13,53 @@ import {
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
 } from 'styles/styledComponents';
+import { variables } from 'styles/variables';
 
-import { ItemConfigurationForm } from '../../ItemConfiguration.types';
+import { ItemConfigurationForm, ItemConfigurationSettings } from '../../ItemConfiguration.types';
+import { DEFAULT_SCORE_VALUE } from '../../ItemConfiguration.const';
+import { ColorPicker } from './ColorPicker';
 import {
-  StyledAction,
   StyledCollapsedWrapper,
   StyledItemOption,
+  StyledScoreWrapper,
+  StyledTextInputWrapper,
   StyledTooltipWrapper,
 } from './SelectionOption.styles';
 import { SelectionOptionProps } from './SelectionOption.types';
-import { OPTION_TEXT_MAX_LENGTH } from './SelectionOption.const';
+import { getActions, OPTION_TEXT_MAX_LENGTH } from './SelectionOption.const';
 
 export const SelectionOption = ({
-  text,
   onRemoveOption,
-  isVisible,
+  onUpdateOption,
   index,
 }: SelectionOptionProps) => {
   const { t } = useTranslation('app');
   const [open, setOpen] = useState(true);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { setValue, watch, control } = useFormContext<ItemConfigurationForm>();
+  const settings = watch('settings');
+  const option = watch(`options.${index}`);
+  const { text, isVisible, score, tooltip, color } = option;
+  const hasScoresChecked = settings?.includes(ItemConfigurationSettings.HasScores);
+  const hasTooltipsChecked = settings?.includes(ItemConfigurationSettings.HasTooltips);
+  const scoreString = score?.toString();
+  const hasTooltip = tooltip !== undefined;
+  const actionsRef = useRef(null);
 
-  // const settings = watch('settings');
   const handleOptionToggle = () => setOpen((prevState) => !prevState);
-  const handleOptionHide = () => setValue(`options.${index}.isVisible`, !isVisible);
-  const handlePaletteClick = () => console.log('palette click');
+
+  const handlePopoverClose = () => setAnchorEl(null);
+
+  const actions = {
+    optionHide: () => onUpdateOption(index, { ...option, isVisible: !isVisible }),
+    paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
+    optionRemove: () => onRemoveOption(index),
+  };
+
+  const commonInputProps = {
+    control,
+    fullWidth: true,
+  };
 
   const imageComponent = (
     <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
@@ -52,70 +73,100 @@ export const SelectionOption = ({
     </StyledFlexTopCenter>
   );
 
-  const commonInputProps = {
-    control,
-    fullWidth: true,
-  };
+  useEffect(() => {
+    if (hasScoresChecked) {
+      !scoreString && onUpdateOption(index, { ...option, score: DEFAULT_SCORE_VALUE });
+    } else {
+      scoreString && onUpdateOption(index, { ...option, score: undefined });
+    }
+
+    if (!hasTooltipsChecked && hasTooltip) {
+      onUpdateOption(index, { ...option, tooltip: undefined });
+    }
+  }, [hasScoresChecked, scoreString, hasTooltipsChecked, hasTooltip]);
 
   return (
-    <StyledItemOption>
-      <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
-        <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-          <StyledClearedButton onClick={handleOptionToggle}>
-            <Svg id={open ? 'navigate-up' : 'navigate-down'} />
-          </StyledClearedButton>
-          <StyledLabelBoldLarge sx={{ ml: theme.spacing(2) }}>{`${t('option')} ${
-            index + 1
-          }`}</StyledLabelBoldLarge>
-          {!open && (
-            <StyledCollapsedWrapper>
-              <Svg id="radio-button-outline" />
-              {imageComponent}
-              {text && <StyledBodyLarge>{text}</StyledBodyLarge>}
-            </StyledCollapsedWrapper>
-          )}
-        </StyledFlexTopCenter>
-        <StyledFlexTopCenter>
-          <StyledAction onClick={handleOptionHide}>
-            <Svg id={isVisible ? 'visibility-on' : 'visibility-off'} />
-          </StyledAction>
-          <StyledAction onClick={handlePaletteClick}>
-            <Svg id="paint-outline" />
-          </StyledAction>
-          <StyledAction onClick={() => onRemoveOption(index)}>
-            <Svg id="trash" />
-          </StyledAction>
-        </StyledFlexTopCenter>
-      </StyledFlexTopCenter>
-      {open && (
-        <StyledFlexColumn>
-          <StyledFlexTopCenter sx={{ m: theme.spacing(1.5, 0, 2.4) }}>
-            <StyledFlexTopCenter sx={{ mr: theme.spacing(2.4) }}>
-              <Svg id="radio-button-outline" />
-            </StyledFlexTopCenter>
-            {imageComponent}
-            <Box sx={{ width: '49.2rem', m: theme.spacing(1) }}>
-              <InputController
-                name={`options.${index}.text`}
-                label={t('optionText')}
-                maxLength={OPTION_TEXT_MAX_LENGTH}
-                {...commonInputProps}
-              />
-            </Box>
-            <InputController
-              name={`options.${index}.score`}
-              type="number"
-              label={t('score')}
-              {...commonInputProps}
-              // InputProps={{ inputProps: { min: 1 } }}
+    <>
+      <StyledItemOption leftBorderColor={color?.hex}>
+        <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
+          <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
+            <StyledClearedButton onClick={handleOptionToggle}>
+              <Svg id={open ? 'navigate-up' : 'navigate-down'} />
+            </StyledClearedButton>
+            <StyledLabelBoldLarge sx={{ ml: theme.spacing(2) }}>{`${t('option')} ${
+              index + 1
+            }`}</StyledLabelBoldLarge>
+            {!open && (
+              <StyledCollapsedWrapper>
+                <StyledFlexTopCenter sx={{ m: theme.spacing(0, 2, 0, 6) }}>
+                  <Svg id="radio-button-outline" />
+                </StyledFlexTopCenter>
+                {imageComponent}
+                {text && <StyledBodyLarge>{text}</StyledBodyLarge>}
+              </StyledCollapsedWrapper>
+            )}
+          </StyledFlexTopCenter>
+          <StyledFlexTopCenter ref={actionsRef}>
+            <Actions
+              items={getActions({ actions, isVisible })}
+              context={option}
+              visibleByDefault={open}
             />
           </StyledFlexTopCenter>
-          <StyledTooltipWrapper>
-            <InputController fullWidth name={`options.${index}.tooltip`} control={control} />
-            <StyledBodyMedium>{t('supportingText')}</StyledBodyMedium>
-          </StyledTooltipWrapper>
-        </StyledFlexColumn>
+        </StyledFlexTopCenter>
+        {open && (
+          <StyledFlexColumn>
+            <StyledFlexTopCenter sx={{ m: theme.spacing(1.5, 0, hasTooltipsChecked ? 4 : 2.4) }}>
+              <StyledFlexTopCenter sx={{ mr: theme.spacing(2) }}>
+                <Svg id="radio-button-outline" />
+              </StyledFlexTopCenter>
+              {imageComponent}
+              <StyledTextInputWrapper hasScores={!!scoreString}>
+                <InputController
+                  {...commonInputProps}
+                  name={`options.${index}.text`}
+                  label={t('optionText')}
+                  maxLength={OPTION_TEXT_MAX_LENGTH}
+                  inputProps={{ maxLength: OPTION_TEXT_MAX_LENGTH }}
+                />
+              </StyledTextInputWrapper>
+              {scoreString && (
+                <StyledScoreWrapper>
+                  <InputController
+                    {...commonInputProps}
+                    name={`options.${index}.score`}
+                    type="number"
+                    label={t('score')}
+                    defaultNumberValue={0}
+                  />
+                </StyledScoreWrapper>
+              )}
+            </StyledFlexTopCenter>
+            {hasTooltipsChecked && (
+              <StyledTooltipWrapper>
+                <InputController
+                  {...commonInputProps}
+                  label={t('tooltip')}
+                  name={`options.${index}.tooltip`}
+                />
+                <StyledBodyMedium
+                  color={variables.palette.on_surface_variant}
+                  sx={{ mr: theme.spacing(1.5) }}
+                >
+                  {t('supportingText')}
+                </StyledBodyMedium>
+              </StyledTooltipWrapper>
+            )}
+          </StyledFlexColumn>
+        )}
+      </StyledItemOption>
+      {anchorEl && (
+        <ColorPicker
+          anchorEl={anchorEl}
+          handlePopoverClose={handlePopoverClose}
+          name={`options.${index}.color`}
+        />
       )}
-    </StyledItemOption>
+    </>
   );
 };

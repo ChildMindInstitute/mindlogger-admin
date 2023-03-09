@@ -1,3 +1,5 @@
+import { ColorResult } from 'react-color';
+
 export enum ItemInputTypes {
   SingleSelection = 'singleSelection',
   MultipleSelection = 'multipleSelection',
@@ -47,6 +49,7 @@ export type SelectionOption = {
   tooltip?: string;
   isVisible?: boolean;
   image?: string;
+  color?: ColorResult;
 };
 
 export type ItemConfigurationForm = {

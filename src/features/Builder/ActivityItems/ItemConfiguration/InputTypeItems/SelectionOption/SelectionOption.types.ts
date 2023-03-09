@@ -1,6 +1,18 @@
-import { SelectionOption } from '../../ItemConfiguration.types';
+import { UseFieldArrayUpdate } from 'react-hook-form';
 
-export type SelectionOptionProps = SelectionOption & {
+import { ItemConfigurationForm } from '../../ItemConfiguration.types';
+
+export type SelectionOptionProps = {
   onRemoveOption: (index: number) => void;
+  onUpdateOption: UseFieldArrayUpdate<ItemConfigurationForm, 'options'>;
   index: number;
+};
+
+export type OptionActions = {
+  actions: {
+    optionHide: () => void;
+    paletteClick: () => void;
+    optionRemove: () => void;
+  };
+  isVisible?: boolean;
 };

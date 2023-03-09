@@ -56,7 +56,10 @@ export const Uploader = ({
 
           reader.onload = () => {
             const imageUrl = reader.result;
-            imageUrl && setValue(imageUrl as string);
+            if (imageUrl) {
+              setValue(imageUrl as string);
+              setIsMouseOver(false);
+            }
           };
         }
       }
