@@ -48,11 +48,11 @@ export const ImageUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
             <Paper>
               <StyledMenuList>
                 <StyledMenuItem onClick={onAddLinkClick}>
-                  <StyledTitleSmall>{t('mdEditorAddImgLink')} </StyledTitleSmall>
+                  <StyledTitleSmall>{t('addImgLink')} </StyledTitleSmall>
                 </StyledMenuItem>
                 <StyledMenuItem>
                   <StyledTitleSmall onClick={onUploadClick}>
-                    {t('mdEditorUploadImg')}
+                    {t('uploadMdImg')}
                     <input
                       ref={inputRef}
                       hidden
@@ -74,7 +74,7 @@ export const ImageUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
       />
       {isPopupVisible && (
         <SourceLinkModal
-          title={t('mdEditorAddImgLink')}
+          title={t('addImgLink')}
           handleClose={handlePopupClose}
           handleSubmit={handlePopupSubmit}
         />

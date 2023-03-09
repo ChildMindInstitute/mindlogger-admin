@@ -12,7 +12,7 @@ export const FooterMessage = ({ inputSize }: FooterMessageProps) => {
 
   return (
     <StyledText>
-      {t('mdEditorThresholdMessage', {
+      {t('thresholdMessage', {
         size: THRESHOLD_SIZE,
       })}
     </StyledText>

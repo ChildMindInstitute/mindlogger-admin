@@ -48,11 +48,11 @@ export const VideoUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
             <Paper>
               <StyledMenuList>
                 <StyledMenuItem onClick={onAddLinkClick}>
-                  <StyledTitleSmall>{t('mdEditorVideoLink')}</StyledTitleSmall>
+                  <StyledTitleSmall>{t('videoLink')}</StyledTitleSmall>
                 </StyledMenuItem>
                 <StyledMenuItem>
                   <StyledTitleSmall onClick={onUploadClick}>
-                    {t('mdEditorUploadVideo')}
+                    {t('uploadVideo')}
                     <input
                       ref={inputRef}
                       hidden
@@ -74,7 +74,7 @@ export const VideoUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
       />
       {isPopupVisible && (
         <SourceLinkModal
-          title={t('mdEditorVideoLink')}
+          title={t('videoLink')}
           handleClose={handlePopupClose}
           handleSubmit={handlePopupSubmit}
         />

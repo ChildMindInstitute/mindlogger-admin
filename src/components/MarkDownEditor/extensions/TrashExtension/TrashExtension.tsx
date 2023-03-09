@@ -13,7 +13,7 @@ export const TrashExtension = ({ onClick }: TrashExtensionProps) => {
 
   return (
     <NormalToolbar
-      title={t('mdEditorTrash')}
+      title={t('trash')}
       trigger={
         <StyledIconCenter>
           <Svg id="md-editor-trash" />

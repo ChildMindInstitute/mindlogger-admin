@@ -26,7 +26,7 @@ export const SourceLinkModal = ({ title, handleClose, handleSubmit }: SourceLink
       onClose={handleClose}
       onSubmit={onSubmit}
       title={title}
-      buttonText={t('mdEditorOK')}
+      buttonText={t('ok')}
       width="32"
     >
       <StyledModalWrapper>
@@ -36,8 +36,8 @@ export const SourceLinkModal = ({ title, handleClose, handleSubmit }: SourceLink
               fullWidth
               name={SourceLinkModalFormValues.Label}
               control={control}
-              label={t('mdEditorDescription')}
-              placeholder={t('mdEditorEnterDescription')}
+              label={t('description')}
+              placeholder={t('enterDescription')}
             />
           </StyledController>
           <StyledController>
@@ -45,8 +45,8 @@ export const SourceLinkModal = ({ title, handleClose, handleSubmit }: SourceLink
               fullWidth
               name={SourceLinkModalFormValues.Address}
               control={control}
-              label={t('mdEditorLink')}
-              placeholder={t('mdEditorEnterLink')}
+              label={t('link')}
+              placeholder={t('enterLink')}
             />
           </StyledController>
         </form>

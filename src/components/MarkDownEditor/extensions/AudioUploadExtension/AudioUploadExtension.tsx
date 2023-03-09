@@ -48,11 +48,11 @@ export const AudioUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
             <Paper>
               <StyledMenuList>
                 <StyledMenuItem onClick={onAddLinkClick}>
-                  <StyledTitleSmall>{t('mdEditorAudioLink')} </StyledTitleSmall>
+                  <StyledTitleSmall>{t('audioLink')} </StyledTitleSmall>
                 </StyledMenuItem>
                 <StyledMenuItem>
                   <StyledTitleSmall onClick={onUploadClick}>
-                    {t('mdEditorUploadAudio')}
+                    {t('uploadAudio')}
                     <input
                       ref={inputRef}
                       hidden
@@ -74,7 +74,7 @@ export const AudioUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
       />
       {isPopupVisible && (
         <SourceLinkModal
-          title={t('mdEditorAudioLink')}
+          title={t('audioLink')}
           handleClose={handlePopupClose}
           handleSubmit={handlePopupSubmit}
         />

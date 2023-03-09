@@ -23,7 +23,7 @@ export const MarkExtension = ({ onInsert }: InsertContentExtensionProps) => {
 
   return (
     <NormalToolbar
-      title={t('mdEditorMark')}
+      title={t('mark')}
       onClick={markHandler}
       trigger={
         <StyledIconCenter>

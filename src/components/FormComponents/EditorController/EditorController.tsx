@@ -52,19 +52,19 @@ export const EditorController = <T extends FieldValues>({
             <AlignTextExtension
               key="align-left-extension"
               type="left"
-              title={t('mdEditorAlignLeft')}
+              title={t('alignLeft')}
               onInsert={onInsert}
             />,
             <AlignTextExtension
               key="align-center-extension"
               type="center"
-              title={t('mdEditorAlignCenter')}
+              title={t('alignCenter')}
               onInsert={onInsert}
             />,
             <AlignTextExtension
               key="align-right-extension"
               type="right"
-              title={t('mdEditorAlignRight')}
+              title={t('alignRight')}
               onInsert={onInsert}
             />,
             <ImageUploadExtension key="image-upload-extension" onInsert={onInsert} />,
