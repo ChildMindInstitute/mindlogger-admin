@@ -41,29 +41,30 @@ export const Uploader = ({
   };
 
   const handleSetImage = (files: FileList | null) => {
-    if (files?.[0]) {
-      const isAllowableSize = files[0].size < MAX_FILE_SIZE;
+    if (!files?.[0]) return;
 
-      setError(!isAllowableSize);
+    const isAllowableSize = files[0].size < MAX_FILE_SIZE;
+    setError(!isAllowableSize);
 
-      if (isAllowableSize && files[0].type.includes('image')) {
-        if (isPrimaryUiType) {
-          setImage(files[0]);
-          setCropPopupVisible(true);
-        } else {
-          const reader = new FileReader();
-          reader.readAsDataURL(files[0]);
+    if (!isAllowableSize || !files[0].type.includes('image')) return;
 
-          reader.onload = () => {
-            const imageUrl = reader.result;
-            if (imageUrl) {
-              setValue(imageUrl as string);
-              setIsMouseOver(false);
-            }
-          };
-        }
-      }
+    if (isPrimaryUiType) {
+      setImage(files[0]);
+      setCropPopupVisible(true);
+
+      return;
     }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+
+    reader.onload = () => {
+      const imageUrl = reader.result;
+      if (imageUrl) {
+        setValue(imageUrl as string);
+        setIsMouseOver(false);
+      }
+    };
   };
 
   const dragEvents = {

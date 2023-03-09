@@ -26,11 +26,9 @@ export const InputController = <T extends FieldValues>({
   const { t } = useTranslation('app');
 
   const getTextAdornment = (value: number) => {
-    if (!value) return null;
+    if (!textAdornment || !value) return null;
 
-    if (textAdornment) {
-      return <StyledBodyLarge>{t(textAdornment, { count: value })}</StyledBodyLarge>;
-    }
+    return <StyledBodyLarge>{t(textAdornment, { count: value })}</StyledBodyLarge>;
   };
 
   return (
