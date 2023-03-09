@@ -1,4 +1,5 @@
 import MdEditor from 'md-editor-rt';
+
 import i18n from 'i18n';
 
 export const LANGUAGE_BY_DEFAULT = 'en';
