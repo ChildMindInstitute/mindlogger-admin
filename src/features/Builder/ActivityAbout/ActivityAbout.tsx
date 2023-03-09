@@ -91,7 +91,7 @@ export const ActivityAbout = () => {
     },
     {
       name: 'allowToSkipAllItems',
-      label: <StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>,
+      label: <StyledBodyLarge>{t('allowToSkipAllItems')}</StyledBodyLarge>,
     },
     {
       name: 'disableAbilityToChangeResponse',
