@@ -12,7 +12,7 @@ export const StyledMdEditor = styled(MdEditor)`
   font-size: ${variables.font.size.lg};
   box-shadow: unset;
   margin-bottom: ${theme.spacing(2)};
-  min-height: 20rem;
+  min-height: 23.6rem;
 
   & .md-editor-toolbar-wrapper {
     background-color: ${variables.palette.surface1};
