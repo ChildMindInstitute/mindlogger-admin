@@ -14,7 +14,7 @@ import {
   TrashExtension,
   VideoUploadExtension,
   MarkExtension,
-} from 'components/MarkDownEditor';
+} from 'components';
 
 import { StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps } from './EditorController.types';
@@ -107,7 +107,6 @@ export const EditorController = <T extends FieldValues>({
           footers={[0, '=', 1]}
           defFooters={[
             <FooterMessage inputSize={value.toString().length} key="footer-message" />,
-            // '=',
             <CharacterCounter inputSize={value.toString().length} key="character-counter" />,
           ]}
         />

@@ -1,9 +1,8 @@
+import MdEditor from 'md-editor-rt';
 import { styled } from '@mui/system';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
-
-import { MdEditor } from 'components/MarkDownEditor';
 
 export const StyledMdEditor = styled(MdEditor)`
   border-radius: ${variables.borderRadius.lg2};

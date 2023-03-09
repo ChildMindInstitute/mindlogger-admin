@@ -1,4 +1,3 @@
-import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +11,7 @@ import {
 } from './SourceLinkModal.types';
 import { StyledController, StyledModalWrapper } from './SourceLinkModal.styles';
 
-const SourceLinkModal: FC<SourceLinkModalProps> = ({ title, handleClose, handleSubmit }) => {
+export const SourceLinkModal = ({ title, handleClose, handleSubmit }: SourceLinkModalProps) => {
   const { t } = useTranslation('app');
   const { control, getValues } = useForm<SourceLinkModalForm>({
     defaultValues: { label: '', address: '' },
@@ -55,5 +54,3 @@ const SourceLinkModal: FC<SourceLinkModalProps> = ({ title, handleClose, handleS
     </Modal>
   );
 };
-
-export { SourceLinkModal };

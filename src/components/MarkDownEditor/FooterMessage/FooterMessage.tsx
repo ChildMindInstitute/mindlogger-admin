@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { THRESHOLD_SIZE } from 'components';
 
 import { FooterMessageProps } from './FooterMessage.types';
 import { StyledText } from './FooterMessage.styles';
-import { THRESHOLD_SIZE } from '../MarkDownEditor';
 
-const FooterMessage: FC<FooterMessageProps> = ({ inputSize }) => {
+export const FooterMessage = ({ inputSize }: FooterMessageProps) => {
   const { t } = useTranslation('app');
 
   if (inputSize <= THRESHOLD_SIZE) return null;
@@ -18,5 +18,3 @@ const FooterMessage: FC<FooterMessageProps> = ({ inputSize }) => {
     </StyledText>
   );
 };
-
-export { FooterMessage };

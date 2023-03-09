@@ -1,20 +1,18 @@
-import React, { FC } from 'react';
 import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
 import { Paper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
-import { StyledFlexAllCenter, StyledFlexColumn, StyledTitleSmall } from 'styles/styledComponents';
-import theme from 'styles/theme';
+import { StyledFlexColumn, StyledTitleSmall } from 'styles/styledComponents';
 
-import { StyledMenuItem, StyledMenuList } from '../extensions.styles';
+import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
-import { useUploadMethods } from '../extensions.hooks';
-import { InsertContentExtensionProps } from '../extensions.types';
+import { useUploadMethods } from '../Extensions.hooks';
+import { InsertContentExtensionProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
-const AudioUploadExtension: FC<InsertContentExtensionProps> = ({ onInsert }) => {
+export const AudioUploadExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');
   const insertHandler = (values: SourceLinkModalForm) => {
     const generator: InsertContentGenerator = () => ({
@@ -69,9 +67,9 @@ const AudioUploadExtension: FC<InsertContentExtensionProps> = ({ onInsert }) => 
           </StyledFlexColumn>
         }
         trigger={
-          <StyledFlexAllCenter sx={{ p: theme.spacing(0, 0.4) }}>
-            <Svg id="md-editor-audio" width="14" height="14" />
-          </StyledFlexAllCenter>
+          <StyledIconCenter>
+            <Svg id="md-editor-audio" />
+          </StyledIconCenter>
         }
       />
       {isPopupVisible && (
@@ -84,5 +82,3 @@ const AudioUploadExtension: FC<InsertContentExtensionProps> = ({ onInsert }) => 
     </>
   );
 };
-
-export { AudioUploadExtension };

@@ -1,20 +1,18 @@
-import React, { FC } from 'react';
 import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
 import { Paper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components';
-import { StyledFlexAllCenter, StyledFlexColumn, StyledTitleSmall } from 'styles/styledComponents';
-import theme from 'styles/theme';
+import { StyledFlexColumn, StyledTitleSmall } from 'styles/styledComponents';
 
-import { StyledMenuItem, StyledMenuList } from '../extensions.styles';
+import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
-import { useUploadMethods } from '../extensions.hooks';
-import { InsertContentExtensionProps } from '../extensions.types';
+import { useUploadMethods } from '../Extensions.hooks';
+import { InsertContentExtensionProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
-const VideoUploadExtension: FC<InsertContentExtensionProps> = ({ onInsert }) => {
+export const VideoUploadExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');
   const insertHandler = (values: SourceLinkModalForm) => {
     const generator: InsertContentGenerator = () => ({
@@ -50,7 +48,7 @@ const VideoUploadExtension: FC<InsertContentExtensionProps> = ({ onInsert }) => 
             <Paper>
               <StyledMenuList>
                 <StyledMenuItem onClick={onAddLinkClick}>
-                  <StyledTitleSmall>{t('mdEditorVideoLink')} </StyledTitleSmall>
+                  <StyledTitleSmall>{t('mdEditorVideoLink')}</StyledTitleSmall>
                 </StyledMenuItem>
                 <StyledMenuItem>
                   <StyledTitleSmall onClick={onUploadClick}>
@@ -69,9 +67,9 @@ const VideoUploadExtension: FC<InsertContentExtensionProps> = ({ onInsert }) => 
           </StyledFlexColumn>
         }
         trigger={
-          <StyledFlexAllCenter sx={{ p: theme.spacing(0, 0.4) }}>
-            <Svg id="md-editor-video" width="16" height="16" />
-          </StyledFlexAllCenter>
+          <StyledIconCenter>
+            <Svg id="md-editor-video" />
+          </StyledIconCenter>
         }
       />
       {isPopupVisible && (
@@ -84,5 +82,3 @@ const VideoUploadExtension: FC<InsertContentExtensionProps> = ({ onInsert }) => 
     </>
   );
 };
-
-export { VideoUploadExtension };

@@ -6,5 +6,5 @@ import theme from 'styles/theme';
 
 export const StyledText = styled(StyledTitleSmall)`
   color: ${variables.palette.red};
-  margin: 0 ${theme.spacing(1)};
+  margin: ${theme.spacing(0, 1)};
 `;

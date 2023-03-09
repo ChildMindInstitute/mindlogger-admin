@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+
 import { SourceLinkModalForm } from '../SourceLinkModal';
 
 type UploadMethodsProps = {
@@ -27,7 +28,7 @@ export const useUploadMethods = ({ insertHandler }: UploadMethodsProps) => {
   };
 
   const onInputChange = () => {
-    // @todo: add uploading logic
+    // TODO: add uploading logic
   };
 
   return {
