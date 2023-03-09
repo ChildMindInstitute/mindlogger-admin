@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
@@ -50,7 +50,7 @@ export const StyledPresentationLine = styled(StyledFlexTopCenter)`
   }
 `;
 
-export const StyledDateLine = styled(StyledBodySmall)`
+export const StyledDateLine = styled(Box)`
   margin-left: ${theme.spacing(1)};
   position: relative;
 

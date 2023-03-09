@@ -19,11 +19,12 @@ export const StyledTextField = styled(TextField)`
 
 export const StyledTextFieldContainer = styled(Box)`
   position: relative;
+  width: 100%;
 `;
 
 export const StyledCounter = styled(StyledBodyMedium)`
   position: absolute;
-  bottom: 2.4rem;
+  bottom: -2.1rem;
   right: 1.5rem;
   color: ${variables.palette.on_surface_variant};
 `;
