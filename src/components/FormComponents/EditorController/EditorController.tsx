@@ -14,7 +14,7 @@ import { LANGUAGE_BY_DEFAULT } from 'components/MarkDownEditor';
 import { FooterMessage } from 'components/MarkDownEditor/FooterMessage';
 import { CharacterCounter } from 'components/MarkDownEditor/CharacterCounter';
 
-import { StylesMdEditor } from './EditorController.styles';
+import { StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps } from './EditorController.types';
 
 export const EditorController = <T extends FieldValues>({
@@ -34,7 +34,7 @@ export const EditorController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => (
-        <StylesMdEditor
+        <StyledMdEditor
           ref={editorRef}
           modelValue={value}
           onChange={onChange}

@@ -5,7 +5,7 @@ import { variables } from 'styles/variables';
 
 import { MdEditor } from 'components/MarkDownEditor';
 
-export const StylesMdEditor = styled(MdEditor)`
+export const StyledMdEditor = styled(MdEditor)`
   border-radius: ${variables.borderRadius.lg2};
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   background-color: ${variables.palette.surface};

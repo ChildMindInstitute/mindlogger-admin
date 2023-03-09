@@ -1,5 +1,5 @@
 import { InsertContentGenerator } from 'md-editor-rt';
 
-export type UploadExtensionProps = {
+export type InsertContentExtensionProps = {
   onInsert: (generator: InsertContentGenerator) => void;
 };

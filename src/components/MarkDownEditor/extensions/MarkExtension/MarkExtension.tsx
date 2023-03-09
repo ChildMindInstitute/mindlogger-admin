@@ -3,12 +3,14 @@ import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
+import { StyledFlexAllCenter } from 'styles/styledComponents';
+import theme from 'styles/theme';
 
-import { MarkExtensionProp } from './MarkExtension.types';
+import { InsertContentExtensionProps } from '../extensions.types';
 
 const NormalToolbar = MdEditor.NormalToolbar;
 
-const MarkExtension = (props: MarkExtensionProp) => {
+const MarkExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');
   const markHandler = () => {
     const generator: InsertContentGenerator = (selectedText) => ({
@@ -18,14 +20,18 @@ const MarkExtension = (props: MarkExtensionProp) => {
       deviationEnd: 0,
     });
 
-    props.onInsert(generator);
+    onInsert(generator);
   };
 
   return (
     <NormalToolbar
       title={t('mdEditorMark')}
       onClick={markHandler}
-      trigger={<Svg id="md-editor-mark" width="16" height="16" />}
+      trigger={
+        <StyledFlexAllCenter sx={{ p: theme.spacing(0, 0.4) }}>
+          <Svg id="md-editor-mark" width="16" height="16" />
+        </StyledFlexAllCenter>
+      }
     ></NormalToolbar>
   );
 };

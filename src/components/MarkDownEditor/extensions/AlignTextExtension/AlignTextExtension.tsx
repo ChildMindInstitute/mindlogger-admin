@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
 
 import { Svg } from 'components/Svg';
+import { StyledFlexAllCenter } from 'styles/styledComponents';
+import theme from 'styles/theme';
 
 import { AlignTextExtensionProps } from './AlignTextExtension.types';
 
@@ -27,7 +29,11 @@ const AlignTextExtension: FC<AlignTextExtensionProps> = ({
     <NormalToolbar
       title={title}
       onClick={markHandler}
-      trigger={<Svg id={`md-editor-align-${type}`} width="14" height="14" />}
+      trigger={
+        <StyledFlexAllCenter sx={{ p: theme.spacing(0, 0.4) }}>
+          <Svg id={`md-editor-align-${type}`} width="14" height="14" />
+        </StyledFlexAllCenter>
+      }
     ></NormalToolbar>
   );
 };

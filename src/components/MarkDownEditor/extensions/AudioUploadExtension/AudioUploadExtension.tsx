@@ -4,16 +4,17 @@ import { Paper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'components/Svg';
-import { StyledFlexColumn, StyledTitleSmall } from 'styles/styledComponents';
+import { StyledFlexAllCenter, StyledFlexColumn, StyledTitleSmall } from 'styles/styledComponents';
+import theme from 'styles/theme';
 
 import { StyledMenuItem, StyledMenuList } from '../extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
 import { useUploadMethods } from '../extensions.hooks';
-import { UploadExtensionProps } from '../extensions.types';
+import { InsertContentExtensionProps } from '../extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
-const AudioUploadExtension: FC<UploadExtensionProps> = ({ onInsert }) => {
+const AudioUploadExtension: FC<InsertContentExtensionProps> = ({ onInsert }) => {
   const { t } = useTranslation('app');
   const insertHandler = (values: SourceLinkModalForm) => {
     const generator: InsertContentGenerator = () => ({
@@ -67,7 +68,11 @@ const AudioUploadExtension: FC<UploadExtensionProps> = ({ onInsert }) => {
             </Paper>
           </StyledFlexColumn>
         }
-        trigger={<Svg id="md-editor-audio" width="14" height="14" />}
+        trigger={
+          <StyledFlexAllCenter sx={{ p: theme.spacing(0, 0.4) }}>
+            <Svg id="md-editor-audio" width="14" height="14" />
+          </StyledFlexAllCenter>
+        }
       />
       {isPopupVisible && (
         <SourceLinkModal
