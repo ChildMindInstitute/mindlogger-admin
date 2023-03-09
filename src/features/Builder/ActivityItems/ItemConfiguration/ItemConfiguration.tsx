@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
 import { Svg } from 'components';
+import { EditorController, InputController } from 'components/FormComponents';
 import {
   StyledHeadlineLarge,
   StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledBodyMedium,
+  StyledTitleLarge,
 } from 'styles/styledComponents';
 import theme from 'styles/theme';
 import { variables } from 'styles/variables';
@@ -37,6 +39,8 @@ export const ItemConfiguration = () => {
   const { control, watch, setValue } = useForm<ItemConfigurationForm>({
     defaultValues: {
       itemsInputType: '',
+      name: '',
+      body: '',
       settings: [],
       timer: DEFAULT_TIMER_VALUE,
       isTextInputOptionRequired: true,
@@ -67,7 +71,7 @@ export const ItemConfiguration = () => {
   };
 
   return (
-    <StyledFlexColumn>
+    <StyledFlexColumn sx={{ m: theme.spacing(2.8, 6.4) }}>
       <StyledTop>
         <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
         <StyledFlexTopCenter>
@@ -88,13 +92,25 @@ export const ItemConfiguration = () => {
           options={itemsTypeOptions}
           control={control}
         />
+      </StyledInputWrapper>
+      <StyledInputWrapper>
         <StyledBodyMedium
-          sx={{ m: theme.spacing(0.5, 0, 0, 1.4) }}
+          sx={{ m: theme.spacing(0.5, 0, 4, 1.4) }}
           color={variables.palette.on_surface_variant}
         >
           {t('itemTypeDescription')}
         </StyledBodyMedium>
+        <InputController
+          fullWidth
+          name="name"
+          control={control}
+          label={t('itemName')}
+          type="text"
+          sx={{ mb: theme.spacing(4) }}
+        />
       </StyledInputWrapper>
+      <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
+      <EditorController name="body" control={control} />
       {selectedInputType === ItemInputTypes.NumberSelection && (
         <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
       )}
