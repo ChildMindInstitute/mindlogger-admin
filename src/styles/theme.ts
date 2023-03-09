@@ -54,16 +54,18 @@ const theme = createTheme({
     MuiDialogTitle: {
       styleOverrides: {
         root: {
-          fontSize: variables.font.size.xxl,
-          fontWeight: variables.font.weight.regular,
-          padding: '6.4rem 2.4rem 2.8rem',
+          '&.MuiTypography-root': {
+            fontSize: variables.font.size.xxl,
+            fontWeight: variables.font.weight.regular,
+            padding: '6.4rem 3.2rem 2.8rem',
+          },
         },
       },
     },
     MuiDialogActions: {
       styleOverrides: {
         root: {
-          padding: '2.4rem',
+          padding: '3.2rem',
         },
       },
     },
@@ -95,8 +97,11 @@ const theme = createTheme({
           },
           '.MuiTableCell-head': {
             borderLeft: 'none',
-            color: variables.palette.on_surface_variant,
+            color: variables.palette.outline,
             fontWeight: variables.font.weight.regular,
+            fontSize: variables.font.size.md,
+            lineHeight: variables.font.lineHeight.md,
+            letterSpacing: variables.font.letterSpacing.lg,
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
             borderLeft: `${variables.borderWidth.md} solid transparent}`,

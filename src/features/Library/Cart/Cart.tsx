@@ -18,6 +18,7 @@ import { PublishedApplet } from 'redux/modules';
 import { AddToBuilderPopup } from 'features/Library/Popups';
 
 import { StyledLink } from './Cart.styles';
+import { mockedCart } from './mocked';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
@@ -25,7 +26,7 @@ export const Cart = () => {
   const [addToBuilderPopupVisible, setAddToBuilderPopupVisible] = useState(false);
 
   // TODO: replace with real data
-  const applets: PublishedApplet[] = [];
+  const applets: PublishedApplet[] = mockedCart;
 
   useBreadcrumbs([
     {
