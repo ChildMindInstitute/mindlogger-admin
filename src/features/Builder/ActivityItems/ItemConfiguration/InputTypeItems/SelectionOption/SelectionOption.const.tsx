@@ -3,6 +3,7 @@ import { Svg } from 'components';
 import { OptionActions } from './SelectionOption.types';
 
 export const OPTION_TEXT_MAX_LENGTH = 75;
+
 export const getActions = ({
   actions: { optionHide, paletteClick, optionRemove },
   isVisible,

@@ -2,8 +2,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg, Tooltip, TooltipUiType } from 'components';
-import { StyledClearedButton } from 'styles/styledComponents/ClearedButton';
-import { StyledFlexTopCenter } from 'styles/styledComponents/Flex';
+import { StyledBodyLarge, StyledClearedButton, StyledFlexTopCenter } from 'styles/styledComponents';
 
 import { InputControllerProps } from './InputController.types';
 import {
@@ -30,7 +29,7 @@ export const InputController = <T extends FieldValues>({
     if (!value) return null;
 
     if (textAdornment) {
-      return t(textAdornment, { count: value });
+      return <StyledBodyLarge>{t(textAdornment, { count: value })}</StyledBodyLarge>;
     }
   };
 

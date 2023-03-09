@@ -41,7 +41,6 @@ export const ActivityAbout = () => {
   const commonProps = {
     control,
     fullWidth: true,
-    // sx: { marginBottom: theme.spacing(4.4) },
   };
 
   const commonUploaderProps = {
