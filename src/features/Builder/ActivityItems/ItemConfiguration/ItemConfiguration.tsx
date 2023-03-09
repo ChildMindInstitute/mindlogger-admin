@@ -15,9 +15,9 @@ import { variables } from 'styles/variables';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
-import { ItemSettingsDrawer } from './ItemSettingsDrawer';
+import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
 import { ItemSettingsController } from './ItemSettingsController';
-import { SelectionOption } from './InputTypeItems';
+import { SelectionOption, NumberSelection } from './InputTypeItems';
 import {
   StyledTop,
   StyledInputWrapper,
@@ -33,6 +33,8 @@ import {
   itemsTypeOptions,
   DEFAULT_TIMER_VALUE,
   DEFAULT_SCORE_VALUE,
+  DEFAULT_MIN_NUMBER,
+  DEFAULT_MAX_NUMBER,
 } from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
@@ -45,6 +47,8 @@ export const ItemConfiguration = () => {
       settings: [],
       timer: DEFAULT_TIMER_VALUE,
       isTextInputOptionRequired: true,
+      minNumber: DEFAULT_MIN_NUMBER,
+      maxNumber: DEFAULT_MAX_NUMBER,
     },
     mode: 'onChange',
   });
@@ -62,12 +66,11 @@ export const ItemConfiguration = () => {
   });
 
   const selectedInputType = watch('itemsInputType');
+  const settings = watch('settings');
 
   const hasOptions =
     selectedInputType === ItemInputTypes.SingleSelection ||
     selectedInputType === ItemInputTypes.MultipleSelection;
-
-  const settings = watch('settings');
 
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
   const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
@@ -78,6 +81,16 @@ export const ItemConfiguration = () => {
       isVisible: true,
       ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
     });
+
+  const handleRemoveTextInputOption = () => {
+    setValue(
+      'settings',
+      settings?.filter(
+        (settingKey: ItemConfigurationSettings) =>
+          settingKey !== ItemConfigurationSettings.HasTextInput,
+      ),
+    );
+  };
 
   useEffect(() => {
     setValue('settings', []);
@@ -115,19 +128,6 @@ export const ItemConfiguration = () => {
             {t('itemTypeDescription')}
           </StyledBodyMedium>
         </StyledInputWrapper>
-        {settingsDrawerVisible && (
-          <ItemSettingsDrawer
-            open={settingsDrawerVisible}
-            onClose={() => setSettingsDrawerVisible(false)}
-          >
-            <ItemSettingsController
-              timerName="timer"
-              name="settings"
-              inputType={selectedInputType}
-              control={control}
-            />
-          </ItemSettingsDrawer>
-        )}
         {hasOptions && (
           <StyledOptionsWrapper>
             {options?.length
@@ -149,8 +149,28 @@ export const ItemConfiguration = () => {
             </Button>
           </StyledOptionsWrapper>
         )}
+        {selectedInputType === ItemInputTypes.NumberSelection && (
+          <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+        )}
         {isTextInputOptionVisible && (
-          <TextInputOption name="isTextInputOptionRequired" control={control} />
+          <TextInputOption
+            name="isTextInputOptionRequired"
+            control={control}
+            onRemove={handleRemoveTextInputOption}
+          />
+        )}
+        {settingsDrawerVisible && (
+          <ItemSettingsDrawer
+            open={settingsDrawerVisible}
+            onClose={() => setSettingsDrawerVisible(false)}
+          >
+            <ItemSettingsController
+              timerName="timer"
+              name="settings"
+              inputType={selectedInputType}
+              control={control}
+            />
+          </ItemSettingsDrawer>
         )}
       </StyledItemConfiguration>
     </FormProvider>

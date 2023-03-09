@@ -514,5 +514,7 @@
   "uploadTransfluent": "Please upload JPG or transfluent PNG image less than 1GB.",
   "textInputOptionLabel": "Text Input Option",
   "textInputOptionDescription": "The respondent will be able to enter a text response",
-  "textInputOptionRequired": "Required"
+  "textInputOptionRequired": "Required",
+  "minValue": "Min value",
+  "maxValue": "Max value"
 }
