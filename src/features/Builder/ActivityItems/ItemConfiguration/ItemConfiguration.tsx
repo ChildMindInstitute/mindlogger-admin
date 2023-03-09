@@ -7,7 +7,6 @@ import { EditorController, InputController } from 'components/FormComponents';
 import {
   StyledHeadlineLarge,
   StyledClearedButton,
-  StyledFlexColumn,
   StyledFlexTopCenter,
   StyledBodyMedium,
   StyledTitleLarge,
@@ -18,8 +17,12 @@ import { variables } from 'styles/variables';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { NumberSelection } from './InputTypeItems';
-import { StyledTop, StyledInputWrapper } from './ItemConfiguration.styles';
+import { Date, NumberSelection } from './InputTypeItems';
+import {
+  StyledTop,
+  StyledInputWrapper,
+  StyledItemConfigurationWrapper,
+} from './ItemConfiguration.styles';
 import {
   ItemConfigurationForm,
   ItemConfigurationSettings,
@@ -46,6 +49,7 @@ export const ItemConfiguration = () => {
       isTextInputOptionRequired: true,
       minNumber: DEFAULT_MIN_NUMBER,
       maxNumber: DEFAULT_MAX_NUMBER,
+      date: '',
     },
     mode: 'onChange',
   });
@@ -71,7 +75,7 @@ export const ItemConfiguration = () => {
   };
 
   return (
-    <StyledFlexColumn sx={{ m: theme.spacing(2.8, 6.4) }}>
+    <StyledItemConfigurationWrapper>
       <StyledTop>
         <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
         <StyledFlexTopCenter>
@@ -114,6 +118,7 @@ export const ItemConfiguration = () => {
       {selectedInputType === ItemInputTypes.NumberSelection && (
         <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
       )}
+      {selectedInputType === ItemInputTypes.Date && <Date name="date" control={control} />}
       {isTextInputOptionVisible && (
         <TextInputOption
           name="isTextInputOptionRequired"
@@ -134,6 +139,6 @@ export const ItemConfiguration = () => {
           />
         </ItemSettingsDrawer>
       )}
-    </StyledFlexColumn>
+    </StyledItemConfigurationWrapper>
   );
 };

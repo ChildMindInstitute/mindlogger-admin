@@ -558,5 +558,7 @@
   "alignLeft": "Clamp text to the left",
   "alignCenter": "Center text",
   "alignRight": "Clamp text to the right",
-  "thresholdMessage": "Visibility decreases over {{size}} characters"
+  "thresholdMessage": "Visibility decreases over {{size}} characters",
+  "dateItemTitle": "Date Select",
+  "dateItemDescription": "The respondent will be able to select the date."
 }

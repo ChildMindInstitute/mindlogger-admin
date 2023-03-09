@@ -2,11 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { FieldValues } from 'react-hook-form';
 
 import { InputController } from 'components/FormComponents';
-import { StyledLabelBoldLarge, StyledFlexTopCenter } from 'styles/styledComponents';
-import theme from 'styles/theme';
+import { StyledFlexTopCenter } from 'styles/styledComponents';
 
-import { StyledNumberSelectionContainer } from './NumberSelection.styles';
 import { NumberSelectionProps } from './NumberSelection.types';
+import { ItemOptionContainer } from '../ItemOptionContainer';
 
 export const NumberSelection = <T extends FieldValues>({
   name,
@@ -16,14 +15,11 @@ export const NumberSelection = <T extends FieldValues>({
   const { t } = useTranslation('app');
 
   return (
-    <StyledNumberSelectionContainer>
-      <StyledLabelBoldLarge sx={{ marginBottom: theme.spacing(3.8) }}>
-        {t('numberSelection')}
-      </StyledLabelBoldLarge>
+    <ItemOptionContainer title={t('numberSelection')}>
       <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
         <InputController name={name} control={control} type="number" label={t('minValue')} />
         <InputController name={maxName} control={control} type="number" label={t('maxValue')} />
       </StyledFlexTopCenter>
-    </StyledNumberSelectionContainer>
+    </ItemOptionContainer>
   );
 };

@@ -24,6 +24,7 @@ export const DatePicker = <T extends FieldValues>({
   control,
   name,
   uiType = UiType.OneDate,
+  inputSx = {},
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -75,6 +76,7 @@ export const DatePicker = <T extends FieldValues>({
               value={getValue()}
               onClick={handlePickerShow}
               className={(open && 'active') || ''}
+              sx={{ ...inputSx }}
               InputProps={{
                 endAdornment: (
                   <StyledIconBtn aria-describedby={id}>

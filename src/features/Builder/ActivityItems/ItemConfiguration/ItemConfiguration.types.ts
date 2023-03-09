@@ -50,6 +50,7 @@ export type ItemConfigurationForm = {
   isTextInputOptionRequired: boolean;
   minNumber: number;
   maxNumber: number;
+  date: string;
 };
 
 export type ItemsOption = {
