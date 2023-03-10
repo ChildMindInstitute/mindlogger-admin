@@ -14,8 +14,10 @@ export const StyledItemOption = styled(Box, shouldForwardProp)`
   border-radius: ${variables.borderRadius.lg2};
   position: relative;
 
-  svg {
-    fill: ${variables.palette.on_surface_variant};
+  && {
+    svg {
+      fill: ${variables.palette.on_surface_variant};
+    }
   }
 
   &:before {
@@ -46,7 +48,7 @@ export const StyledScoreWrapper = styled(Box)`
 `;
 
 export const StyledTooltipWrapper = styled(StyledFlexColumn)`
-  width: calc(100% - 3.5rem);
+  width: calc(100% - 10.9rem);
   margin-left: auto;
   text-align: right;
 `;

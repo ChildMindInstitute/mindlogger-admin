@@ -18,11 +18,13 @@ const year = new Date().getFullYear();
 export const Footer = () => {
   const { t } = useTranslation('app');
 
+  const { NODE_ENV, REACT_APP_DEVELOP_BUILD_VERSION: buildVer } = process.env;
+
   return (
     <StyledFooter>
       <Box>
         <StyledText>
-          {version} &#169; {year}
+          {version} {NODE_ENV !== 'production' && buildVer && `(${buildVer})`} &#169; {year}
           <StyledUnderlineLink target="_blank" href="https://childmind.org">
             Child Mind Institute
           </StyledUnderlineLink>

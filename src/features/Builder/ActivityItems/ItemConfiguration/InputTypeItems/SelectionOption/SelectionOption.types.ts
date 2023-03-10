@@ -14,5 +14,7 @@ export type OptionActions = {
     paletteClick: () => void;
     optionRemove: () => void;
   };
+  hasColorPicker: boolean;
+  isColorSet: boolean;
   isVisible?: boolean;
 };
