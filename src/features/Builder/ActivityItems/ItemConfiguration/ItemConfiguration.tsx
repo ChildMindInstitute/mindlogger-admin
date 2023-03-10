@@ -170,7 +170,7 @@ export const ItemConfiguration = () => {
           <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
         )}
         {selectedInputType === ItemInputTypes.TimeRange && (
-          <TimeRange name="startTime" endTime="endTime" control={control} />
+          <TimeRange name="startTime" endTime="endTime" />
         )}
         {isTextInputOptionVisible && (
           <TextInputOption

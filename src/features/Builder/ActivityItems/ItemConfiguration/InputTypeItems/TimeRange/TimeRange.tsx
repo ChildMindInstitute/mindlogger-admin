@@ -12,22 +12,25 @@ import { TimeRangeProps } from './TimeRange.types';
 const timePickerSxProps = {
   width: '30rem',
 };
-export const TimeRange = <T extends FieldValues>({ name, endTime, control }: TimeRangeProps<T>) => {
+
+export const TimeRange = <T extends FieldValues>({ name, endTime }: TimeRangeProps<T>) => {
   const { t } = useTranslation('app');
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue, control } = useFormContext();
   const start = watch(name);
   const end = watch(endTime);
 
   useEffect(() => {
-    if (!start || !end || start === end || new Date(start).getTime() <= new Date(end).getTime())
-      return;
+    const shouldSkipRangeChange =
+      !start || !end || start === end || new Date(start).getTime() <= new Date(end).getTime();
+    if (shouldSkipRangeChange) return;
 
     setValue(endTime, start);
   }, [start]);
 
   useEffect(() => {
-    if (!start || !end || start === end || new Date(start).getTime() <= new Date(end).getTime())
-      return;
+    const shouldSkipRangeChange =
+      !start || !end || start === end || new Date(start).getTime() <= new Date(end).getTime();
+    if (shouldSkipRangeChange) return;
 
     setValue(name, end);
   }, [end]);
