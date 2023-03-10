@@ -566,5 +566,7 @@
   "alignLeft": "Clamp text to the left",
   "alignCenter": "Center text",
   "alignRight": "Clamp text to the right",
-  "thresholdMessage": "Visibility decreases over {{size}} characters"
+  "thresholdMessage": "Visibility decreases over {{size}} characters",
+  "audioRecordDescription": "The respondent will able to record audio",
+  "audioRecordDuration": "Max recording duration - milliseconds"
 }

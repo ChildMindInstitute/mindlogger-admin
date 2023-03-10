@@ -18,7 +18,7 @@ import { variables } from 'styles/variables';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { SelectionOption, NumberSelection } from './InputTypeItems';
+import { SelectionOption, NumberSelection, AudioRecord } from './InputTypeItems';
 import {
   StyledTop,
   StyledInputWrapper,
@@ -36,6 +36,7 @@ import {
   DEFAULT_SCORE_VALUE,
   DEFAULT_MIN_NUMBER,
   DEFAULT_MAX_NUMBER,
+  DEFAULT_AUDIO_DURATION_MS,
 } from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
@@ -52,6 +53,7 @@ export const ItemConfiguration = () => {
       isTextInputOptionRequired: true,
       minNumber: DEFAULT_MIN_NUMBER,
       maxNumber: DEFAULT_MAX_NUMBER,
+      audioDuration: DEFAULT_AUDIO_DURATION_MS,
     },
     mode: 'onChange',
   });
@@ -166,6 +168,9 @@ export const ItemConfiguration = () => {
         )}
         {selectedInputType === ItemInputTypes.NumberSelection && (
           <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+        )}
+        {selectedInputType === ItemInputTypes.Audio && (
+          <AudioRecord name="audioDuration" control={control} />
         )}
         {isTextInputOptionVisible && (
           <TextInputOption

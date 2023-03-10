@@ -387,5 +387,7 @@
   "tooltip": "Info-bulle",
   "supportingText": "Texte de support",
   "addOption": "Ajouter une option",
-  "appletActivities": "Activités d'applet"
+  "appletActivities": "Activités d'applet",
+  "audioRecordDescription": "Le répondant pourra enregistrer de l'audio",
+  "audioRecordDuration": "Durée maximale d'enregistrement - millisecondes"
 }

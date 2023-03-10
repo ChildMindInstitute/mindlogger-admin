@@ -62,6 +62,7 @@ export type ItemConfigurationForm = {
   isTextInputOptionRequired: boolean;
   minNumber: number;
   maxNumber: number;
+  audioDuration: number;
 };
 
 export type ItemsOption = {
