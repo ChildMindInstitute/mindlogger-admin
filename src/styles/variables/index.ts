@@ -23,6 +23,7 @@ export const variables = {
     md: '0.1rem', //1px
   },
   boxShadow: {
+    light0: '0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px 1px rgba(0, 0, 0, 0.05)',
     light1: '0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15)',
     light2: '0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15)',
     light3: '0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3)',
@@ -40,5 +41,6 @@ export const variables = {
     bgColor: 'background-color 0.3s',
     border: 'border 0.15s',
     opacity: 'opacity 0.3s',
+    boxShadow: 'box-shadow 0.3s',
   },
 };
