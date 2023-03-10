@@ -4,6 +4,7 @@ import theme from 'styles/theme';
 import { variables } from 'styles/variables';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 import { StyledFlexColumn, StyledFlexTopCenter } from 'styles/styledComponents';
+import { commonStickyStyles } from 'styles/stylesConsts';
 
 export const StyledItemConfiguration = styled(StyledFlexColumn)`
   position: relative;
@@ -13,16 +14,11 @@ export const StyledItemConfiguration = styled(StyledFlexColumn)`
 `;
 
 export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
+  ${commonStickyStyles};
   justify-content: space-between;
-  position: sticky;
-  width: 100%;
-  top: 0;
-  padding: ${theme.spacing(2.8, 6.4)};
-  background-color: ${variables.palette.surface};
-  z-index: ${theme.zIndex.fab};
   box-shadow: ${({ isSticky }: { isSticky: boolean }) =>
     isSticky ? variables.boxShadow.light0 : 'none'};
-  transition: ${variables.transitions.boxShadow};
+  padding: ${theme.spacing(2.8, 6.4)};
 
   svg {
     fill: ${variables.palette.on_surface_variant};
