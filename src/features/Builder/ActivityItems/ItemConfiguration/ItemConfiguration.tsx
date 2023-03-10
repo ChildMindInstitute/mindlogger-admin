@@ -52,8 +52,6 @@ export const ItemConfiguration = () => {
       isTextInputOptionRequired: true,
       minNumber: DEFAULT_MIN_NUMBER,
       maxNumber: DEFAULT_MAX_NUMBER,
-      startTime: '',
-      endTime: '',
     },
     mode: 'onChange',
   });
@@ -169,9 +167,7 @@ export const ItemConfiguration = () => {
         {selectedInputType === ItemInputTypes.NumberSelection && (
           <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
         )}
-        {selectedInputType === ItemInputTypes.TimeRange && (
-          <TimeRange name="startTime" endTime="endTime" />
-        )}
+        {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
         {isTextInputOptionVisible && (
           <TextInputOption
             name="isTextInputOptionRequired"

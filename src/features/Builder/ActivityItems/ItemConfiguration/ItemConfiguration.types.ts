@@ -62,8 +62,6 @@ export type ItemConfigurationForm = {
   isTextInputOptionRequired: boolean;
   minNumber: number;
   maxNumber: number;
-  startTime: string;
-  endTime: string;
 };
 
 export type ItemsOption = {
