@@ -52,7 +52,6 @@ export const ItemConfiguration = () => {
       isTextInputOptionRequired: true,
       minNumber: DEFAULT_MIN_NUMBER,
       maxNumber: DEFAULT_MAX_NUMBER,
-      date: '',
     },
     mode: 'onChange',
   });
@@ -168,7 +167,7 @@ export const ItemConfiguration = () => {
         {selectedInputType === ItemInputTypes.NumberSelection && (
           <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
         )}
-        {selectedInputType === ItemInputTypes.Date && <Date name="date" control={control} />}
+        {selectedInputType === ItemInputTypes.Date && <Date />}
         {isTextInputOptionVisible && (
           <TextInputOption
             name="isTextInputOptionRequired"
