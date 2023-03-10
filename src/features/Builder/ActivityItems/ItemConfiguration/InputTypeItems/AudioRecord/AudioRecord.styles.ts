@@ -8,8 +8,8 @@ export const StyledColumn = styled(StyledFlexColumn)`
   justify-content: flex-start;
 `;
 export const StyledButton = styled(Button)`
-  border: ${variables.borderWidth.md} solid ${variables.palette.outline};
   border-radius: ${variables.borderRadius.xxxl};
+  font-weight: ${variables.font.weight.bold};
   height: 4.8rem;
 
   &&.Mui-disabled {
