@@ -567,5 +567,9 @@
   "alignCenter": "Center text",
   "alignRight": "Clamp text to the right",
   "saveAndPublish": "Save & Publish",
-  "thresholdMessage": "Visibility decreases over {{size}} characters"
+  "thresholdMessage": "Visibility decreases over {{size}} characters",
+  "videoResponseTitle": "Video Response",
+  "videoResponseDescription": "The respondent will able to take or upload a video.",
+  "photoResponseTitle": "Photo Response",
+  "photoResponseDescription": "The respondent will able to take or upload a photo."
 }
