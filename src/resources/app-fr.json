@@ -387,5 +387,6 @@
   "tooltip": "Info-bulle",
   "supportingText": "Texte de support",
   "addOption": "Ajouter une option",
-  "appletActivities": "Activités d'applet"
+  "appletActivities": "Activités d'applet",
+  "timeRangeTitle": "Plage de temps"
 }

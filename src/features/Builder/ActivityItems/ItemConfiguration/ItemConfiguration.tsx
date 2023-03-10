@@ -18,7 +18,7 @@ import { variables } from 'styles/variables';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { SelectionOption, NumberSelection } from './InputTypeItems';
+import { SelectionOption, NumberSelection, TimeRange } from './InputTypeItems';
 import {
   StyledTop,
   StyledInputWrapper,
@@ -52,6 +52,8 @@ export const ItemConfiguration = () => {
       isTextInputOptionRequired: true,
       minNumber: DEFAULT_MIN_NUMBER,
       maxNumber: DEFAULT_MAX_NUMBER,
+      startTime: '',
+      endTime: '',
     },
     mode: 'onChange',
   });
@@ -166,6 +168,9 @@ export const ItemConfiguration = () => {
         )}
         {selectedInputType === ItemInputTypes.NumberSelection && (
           <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+        )}
+        {selectedInputType === ItemInputTypes.TimeRange && (
+          <TimeRange name="startTime" endTime="endTime" control={control} />
         )}
         {isTextInputOptionVisible && (
           <TextInputOption
