@@ -6,7 +6,7 @@ import theme from 'styles/theme';
 import { Svg } from 'components';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
-import { StyledButton, StyledColumn, StyledInputWrapper } from './AudioRecord.styles';
+import { StyledColumn, StyledInputWrapper, StyledResponseButton } from '../InputTypeItems.styles';
 
 export const AudioRecord = <T extends FieldValues>({ name, control }: UseControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -14,13 +14,13 @@ export const AudioRecord = <T extends FieldValues>({ name, control }: UseControl
   return (
     <ItemOptionContainer title={t('audio')} description={t('audioRecordDescription')}>
       <StyledColumn sx={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-        <StyledButton
+        <StyledResponseButton
           disabled
-          sx={{ margin: theme.spacing(1.6, 0) }}
+          sx={{ mb: theme.spacing(2.6) }}
           startIcon={<Svg id="audio" width={18} height={18} />}
         >
           {t('audio')}
-        </StyledButton>
+        </StyledResponseButton>
         <StyledInputWrapper sx={{ mr: theme.spacing(1.25) }}>
           <InputController
             name={name}
