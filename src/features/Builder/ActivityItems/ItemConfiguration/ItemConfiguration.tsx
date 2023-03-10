@@ -19,7 +19,7 @@ import { useHeaderSticky } from 'hooks';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { SelectionOption, NumberSelection } from './InputTypeItems';
+import { SelectionOption, NumberSelection, TextResponse } from './InputTypeItems';
 import {
   StyledHeader,
   StyledContent,
@@ -38,6 +38,7 @@ import {
   DEFAULT_SCORE_VALUE,
   DEFAULT_MIN_NUMBER,
   DEFAULT_MAX_NUMBER,
+  DEFAULT_MAX_CHARACTERS,
 } from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
@@ -56,6 +57,8 @@ export const ItemConfiguration = () => {
       isTextInputOptionRequired: true,
       minNumber: DEFAULT_MIN_NUMBER,
       maxNumber: DEFAULT_MAX_NUMBER,
+      textResponseAnswer: '',
+      textResponseMaxCharacters: DEFAULT_MAX_CHARACTERS,
     },
     mode: 'onChange',
   });
@@ -173,6 +176,13 @@ export const ItemConfiguration = () => {
           )}
           {selectedInputType === ItemInputTypes.NumberSelection && (
             <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+          )}
+          {selectedInputType === ItemInputTypes.Text && (
+            <TextResponse
+              name="textResponseAnswer"
+              maxCharacters="textResponseMaxCharacters"
+              control={control}
+            />
           )}
           {isTextInputOptionVisible && (
             <TextInputOption

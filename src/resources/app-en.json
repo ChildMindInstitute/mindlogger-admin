@@ -567,5 +567,9 @@
   "alignCenter": "Center text",
   "alignRight": "Clamp text to the right",
   "saveAndPublish": "Save & Publish",
-  "thresholdMessage": "Visibility decreases over {{size}} characters"
+  "thresholdMessage": "Visibility decreases over {{size}} characters",
+  "textResponseTitle": "Text Response",
+  "textResponseDescription": "The respondent will be able to enter a text response.",
+  "correctAnswer": "Correct Answer",
+  "maxCharacters": "Max characters"
 }

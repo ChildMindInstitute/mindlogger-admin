@@ -62,6 +62,8 @@ export type ItemConfigurationForm = {
   isTextInputOptionRequired: boolean;
   minNumber: number;
   maxNumber: number;
+  textResponseAnswer: string;
+  textResponseMaxCharacters: number;
 };
 
 export type ItemsOption = {
