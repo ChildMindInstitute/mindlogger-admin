@@ -15,8 +15,9 @@ export const StyledSelect = styled(Select)`
   }
 `;
 
-export const StyledGroupName = styled(MenuItem)`
-  border-top: ${borderWidth.md} solid ${palette.outline_variant};
+export const StyledGroupName = styled(MenuItem, shouldForwardProp)`
+  border-top: ${({ isFirstName }: { isFirstName: boolean }) =>
+    isFirstName ? 'none' : `${borderWidth.md} solid ${palette.outline_variant}`};
   background-color: transparent;
   font-size: ${size.md};
   line-height: ${lineHeight.md};

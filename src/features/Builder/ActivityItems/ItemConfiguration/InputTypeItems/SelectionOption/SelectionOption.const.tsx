@@ -7,14 +7,18 @@ export const OPTION_TEXT_MAX_LENGTH = 75;
 export const getActions = ({
   actions: { optionHide, paletteClick, optionRemove },
   isVisible,
+  hasColorPicker,
+  isColorSet,
 }: OptionActions) => [
   {
     icon: <Svg id={isVisible ? 'visibility-on' : 'visibility-off'} />,
     action: optionHide,
   },
   {
-    icon: <Svg id="paint-outline" />,
+    icon: <Svg id={isColorSet ? 'paint-filled' : 'paint-outline'} />,
     action: paletteClick,
+    isDisplayed: hasColorPicker,
+    active: isColorSet,
   },
   {
     icon: <Svg id="trash" />,

@@ -12,9 +12,6 @@ export const StyledBuilderWrapper = styled(Box)`
 
 export const StyledBuilderBtn = styled(Button)`
   border: ${variables.borderWidth.md} solid ${variables.palette.outline};
-  border-radius: ${variables.borderRadius.xxxl};
-  font-weight: ${variables.font.weight.regular};
-  height: 4.8rem;
 
   svg {
     fill: ${variables.palette.primary};

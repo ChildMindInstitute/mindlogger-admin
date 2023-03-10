@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { ColorResult } from 'react-color';
 
 import { Actions, Svg, Uploader, UploaderUiType } from 'components';
 import { InputController } from 'components/FormComponents';
@@ -42,8 +43,11 @@ export const SelectionOption = ({
   const { text, isVisible, score, tooltip, color } = option;
   const hasScoresChecked = settings?.includes(ItemConfigurationSettings.HasScores);
   const hasTooltipsChecked = settings?.includes(ItemConfigurationSettings.HasTooltips);
+  const hasColorPicker = settings?.includes(ItemConfigurationSettings.HasColorPalette);
   const scoreString = score?.toString();
   const hasTooltip = tooltip !== undefined;
+  const hasColor = color !== undefined;
+  const isColorSet = color?.hex !== '';
   const actionsRef = useRef(null);
 
   const handleOptionToggle = () => setOpen((prevState) => !prevState);
@@ -73,21 +77,27 @@ export const SelectionOption = ({
     </StyledFlexTopCenter>
   );
 
+  const setOptionFieldValue = (
+    checkedCondition: boolean,
+    elementCondition: boolean,
+    fieldName: string,
+    defaultValue: string | number | ColorResult,
+  ) =>
+    checkedCondition
+      ? !elementCondition && onUpdateOption(index, { ...option, [fieldName]: defaultValue })
+      : elementCondition && onUpdateOption(index, { ...option, [fieldName]: undefined });
+
   useEffect(() => {
-    if (hasScoresChecked) {
-      !scoreString && onUpdateOption(index, { ...option, score: DEFAULT_SCORE_VALUE });
-    } else {
-      scoreString && onUpdateOption(index, { ...option, score: undefined });
-    }
+    setOptionFieldValue(hasScoresChecked, !!scoreString, 'score', DEFAULT_SCORE_VALUE);
   }, [hasScoresChecked, scoreString]);
 
   useEffect(() => {
-    if (hasTooltipsChecked) {
-      !hasTooltip && onUpdateOption(index, { ...option, tooltip: '' });
-    } else {
-      hasTooltip && onUpdateOption(index, { ...option, tooltip: undefined });
-    }
+    setOptionFieldValue(hasTooltipsChecked, hasTooltip, 'tooltip', '');
   }, [hasTooltipsChecked, hasTooltip]);
+
+  useEffect(() => {
+    setOptionFieldValue(hasColorPicker, hasColor, 'color', { hex: '' } as ColorResult);
+  }, [hasColorPicker, hasColor]);
 
   return (
     <>
@@ -112,7 +122,7 @@ export const SelectionOption = ({
           </StyledFlexTopCenter>
           <StyledFlexTopCenter ref={actionsRef}>
             <Actions
-              items={getActions({ actions, isVisible })}
+              items={getActions({ actions, isVisible, hasColorPicker, isColorSet })}
               context={option}
               visibleByDefault={open}
             />
