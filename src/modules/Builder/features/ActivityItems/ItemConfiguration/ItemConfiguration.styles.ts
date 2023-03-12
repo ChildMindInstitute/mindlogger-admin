@@ -6,7 +6,8 @@ import { StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles/styledCompo
 
 export const StyledItemConfiguration = styled(StyledFlexColumn)`
   height: 100%;
-  width: 100%;
+  // width: 100%;
+  flex-grow: 1;
   overflow-y: auto;
   padding: ${theme.spacing(2.8, 6.4)};
 `;

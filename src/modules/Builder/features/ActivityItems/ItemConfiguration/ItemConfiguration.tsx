@@ -38,6 +38,7 @@ import {
   DEFAULT_MIN_NUMBER,
   DEFAULT_MAX_NUMBER,
 } from './ItemConfiguration.const';
+import { Alerts } from './Alerts';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -57,7 +58,7 @@ export const ItemConfiguration = () => {
     mode: 'onChange',
   });
 
-  const { control, watch, setValue } = methods;
+  const { control, watch, setValue, getValues } = methods;
 
   const {
     fields: options,
@@ -67,6 +68,15 @@ export const ItemConfiguration = () => {
   } = useFieldArray({
     control,
     name: 'options',
+  });
+  const {
+    fields: alerts,
+    append: appendAlert,
+    remove: removeAlert,
+    update: updateAlert,
+  } = useFieldArray({
+    control,
+    name: 'alerts',
   });
 
   const selectedInputType = watch('itemsInputType');
@@ -101,6 +111,7 @@ export const ItemConfiguration = () => {
     setValue('timer', DEFAULT_TIMER_VALUE);
     removeOptions();
   }, [selectedInputType]);
+  console.log(getValues());
 
   return (
     <FormProvider {...methods}>
@@ -188,6 +199,12 @@ export const ItemConfiguration = () => {
             />
           </ItemSettingsDrawer>
         )}
+        <Alerts
+          appendAlert={appendAlert}
+          removeAlert={removeAlert}
+          updateAlert={updateAlert}
+          alerts={alerts}
+        />
       </StyledItemConfiguration>
     </FormProvider>
   );

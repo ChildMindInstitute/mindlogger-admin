@@ -566,5 +566,6 @@
   "alignLeft": "Clamp text to the left",
   "alignCenter": "Center text",
   "alignRight": "Clamp text to the right",
-  "thresholdMessage": "Visibility decreases over {{size}} characters"
+  "thresholdMessage": "Visibility decreases over {{size}} characters",
+  "alertDescription": "If <0></0> is selected for <1></1> when answering this question then send:"
 }

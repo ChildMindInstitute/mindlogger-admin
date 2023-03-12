@@ -52,6 +52,12 @@ export type SelectionOption = {
   color?: ColorResult;
 };
 
+export type Alert = {
+  message: string;
+  option: string;
+  item: string;
+};
+
 export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
   name: string;
@@ -62,6 +68,7 @@ export type ItemConfigurationForm = {
   isTextInputOptionRequired: boolean;
   minNumber: number;
   maxNumber: number;
+  alerts: Alert[];
 };
 
 export type ItemsOption = {
