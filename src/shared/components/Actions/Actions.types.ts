@@ -4,6 +4,7 @@ type Action = {
   disabled?: boolean;
   tooltipTitle?: string;
   isDisplayed?: boolean;
+  active?: boolean;
 };
 
 export type ActionsProps = {

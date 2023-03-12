@@ -17,11 +17,22 @@ export const Actions = ({ items, context, visibleByDefault = false }: ActionsPro
       {visibleByDefault || visibleActions ? (
         <StyledActions>
           {items.map(
-            ({ icon, disabled = false, action, tooltipTitle, isDisplayed = true }) =>
+            ({
+              icon,
+              disabled = false,
+              action,
+              tooltipTitle,
+              isDisplayed = true,
+              active = false,
+            }) =>
               isDisplayed && (
                 <Tooltip key={uniqueId()} tooltipTitle={tooltipTitle}>
                   <span>
-                    <StyledActionButton disabled={disabled} onClick={() => action(context)}>
+                    <StyledActionButton
+                      isActive={active}
+                      disabled={disabled}
+                      onClick={() => action(context)}
+                    >
                       {icon}
                     </StyledActionButton>
                   </span>
