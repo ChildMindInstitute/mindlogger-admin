@@ -89,8 +89,8 @@ export const Table = ({
               {rows
                 ?.sort(getComparator(order, orderBy))
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <TableRow key={uniqueId('row_')} data-testid="table-row">
+                .map((row, index) => (
+                  <TableRow key={`row-${index}`} data-testid="table-row">
                     {Object.keys(row)?.map((key) => (
                       <TableCell
                         onClick={row[key].onClick}

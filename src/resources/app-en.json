@@ -441,6 +441,7 @@
   "singleSelection": "Single Selection",
   "multipleSelection": "Multiple Selection",
   "slider": "Slider",
+  "slider_option": "Slider {{- index }}",
   "numberSelection": "Number Selection",
   "timeRange": "Time Range",
   "singleSelectionPerRow": "Single Selection per Row",
@@ -566,5 +567,9 @@
   "alignLeft": "Clamp text to the left",
   "alignCenter": "Center text",
   "alignRight": "Clamp text to the right",
-  "thresholdMessage": "Visibility decreases over {{size}} characters"
+  "thresholdMessage": "Visibility decreases over {{size}} characters",
+  "addSlider": "Add slider",
+  "minLabel": "Min label",
+  "maxLabel": "Max label",
+  "value": "Value"
 }

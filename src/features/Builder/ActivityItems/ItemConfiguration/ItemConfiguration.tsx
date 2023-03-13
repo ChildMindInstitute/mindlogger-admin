@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useForm, FormProvider } from 'react-hook-form';
 import { Button } from '@mui/material';
+import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'components';
 import { EditorController, InputController } from 'components/FormComponents';
@@ -18,7 +19,7 @@ import { variables } from 'styles/variables';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { SelectionOption, NumberSelection } from './InputTypeItems';
+import { SelectionOption, NumberSelection, SliderRows } from './InputTypeItems';
 import {
   StyledTop,
   StyledInputWrapper,
@@ -30,12 +31,14 @@ import {
   ItemInputTypes,
   ItemConfigurationSettings,
 } from './ItemConfiguration.types';
+import { getEmptySliderOption } from './ItemConfiguration.utils';
 import {
   itemsTypeOptions,
   DEFAULT_TIMER_VALUE,
   DEFAULT_SCORE_VALUE,
   DEFAULT_MIN_NUMBER,
   DEFAULT_MAX_NUMBER,
+  DEFAULT_EMPTY_SLIDER,
 } from './ItemConfiguration.const';
 
 export const ItemConfiguration = () => {
@@ -52,6 +55,7 @@ export const ItemConfiguration = () => {
       isTextInputOptionRequired: true,
       minNumber: DEFAULT_MIN_NUMBER,
       maxNumber: DEFAULT_MAX_NUMBER,
+      sliderOptions: [getEmptySliderOption()],
     },
     mode: 'onChange',
   });
@@ -95,10 +99,15 @@ export const ItemConfiguration = () => {
     );
   };
 
+  const handleRemoveSliderOptions = () => {
+    setValue('sliderOptions', [getEmptySliderOption()]);
+  };
+
   useEffect(() => {
     setValue('settings', []);
     setValue('timer', DEFAULT_TIMER_VALUE);
     removeOptions();
+    handleRemoveSliderOptions();
   }, [selectedInputType]);
 
   return (
@@ -166,6 +175,12 @@ export const ItemConfiguration = () => {
         )}
         {selectedInputType === ItemInputTypes.NumberSelection && (
           <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+        )}
+        {selectedInputType === ItemInputTypes.Slider && (
+          <SliderRows name="sliderOptions" control={control} />
+        )}
+        {selectedInputType === ItemInputTypes.SliderRows && (
+          <SliderRows name="sliderOptions" control={control} isMultiple />
         )}
         {isTextInputOptionVisible && (
           <TextInputOption

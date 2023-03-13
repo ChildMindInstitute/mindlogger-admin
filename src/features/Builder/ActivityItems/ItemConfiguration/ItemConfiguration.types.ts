@@ -62,6 +62,7 @@ export type ItemConfigurationForm = {
   isTextInputOptionRequired: boolean;
   minNumber: number;
   maxNumber: number;
+  sliderOptions: SliderOption[];
 };
 
 export type ItemsOption = {
@@ -72,4 +73,15 @@ export type ItemsOption = {
 export type ItemsOptionGroup = {
   groupName: string;
   groupOptions: ItemsOption[];
+};
+
+export type SliderOption = {
+  id: string;
+  min: number;
+  max: number;
+  minLabel?: string;
+  maxLabel?: string;
+  minImage?: string;
+  maxImage?: string;
+  scores: number[];
 };
