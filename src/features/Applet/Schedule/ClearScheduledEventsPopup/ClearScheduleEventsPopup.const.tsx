@@ -20,7 +20,7 @@ const getFirstScreen = (appletName: string) => (
 
 const getFirstScreenForIndividualSchedule = (name: string) => (
   <StyledTitleMedium>
-    <Trans i18nKey="confirmClearInvidividualSchedule">
+    <Trans i18nKey="confirmClearIndividualSchedule">
       You are about to remove all scheduled events and notifications from the
       <strong> individual schedule</strong> for Respondent
       <strong>
