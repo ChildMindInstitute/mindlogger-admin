@@ -6,6 +6,7 @@ import { TextField, FormControl, InputLabel } from '@mui/material';
 import { Svg } from 'components';
 import theme from 'styles/theme';
 import { StyledClearedButton, StyledFlexTopCenter } from 'styles/styledComponents';
+import { variables } from 'styles/variables';
 
 import { ItemInputTypes } from '../ItemConfiguration.types';
 import { itemsTypeIcons } from '../ItemConfiguration.const';
@@ -61,6 +62,13 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
     handleTooltipClose();
   };
 
+  const paperStyles = {
+    maxHeight: '35rem',
+    width: '58rem',
+    mt: `${theme.spacing(2.5)} !important`,
+    ml: theme.spacing(1.1),
+  };
+
   return (
     <>
       <Controller
@@ -68,10 +76,13 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         control={control}
         render={({ field: { onChange, value } }) => (
           <FormControl fullWidth>
-            <InputLabel id="input-type-label">{t('inputType')}</InputLabel>
+            <InputLabel id="input-type-label">{t('itemType')}</InputLabel>
             <StyledSelect
               fullWidth
-              MenuProps={{ autoFocus: false }}
+              MenuProps={{
+                autoFocus: false,
+                PaperProps: { sx: paperStyles },
+              }}
               onChange={onChange}
               value={value}
               labelId="input-type-label"
@@ -90,11 +101,15 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
               IconComponent={() => <Svg id={selectOpen ? 'navigate-up' : 'navigate-down'} />}
               defaultValue=""
             >
-              <StyledListSubheader>
+              <StyledListSubheader
+                sx={{
+                  borderBottom: `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`,
+                }}
+              >
                 <form autoComplete="off">
                   <TextField
                     autoFocus
-                    placeholder={t('searchInputType')}
+                    placeholder={t('searchItemType')}
                     fullWidth
                     onChange={handleSearchChange}
                     onKeyDown={handleSearchKeyDown}
@@ -109,8 +124,14 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                   />
                 </form>
               </StyledListSubheader>
-              {options?.map(({ groupName, groupOptions }) => [
-                searchTerm ? [] : <StyledGroupName key={groupName}>{t(groupName)}</StyledGroupName>,
+              {options?.map(({ groupName, groupOptions }, index) => [
+                searchTerm ? (
+                  []
+                ) : (
+                  <StyledGroupName isFirstName={index === 0} key={groupName}>
+                    {t(groupName)}
+                  </StyledGroupName>
+                ),
                 ...groupOptions.map(({ value: groupValue, icon }) => {
                   const isHidden =
                     t(groupValue).toLowerCase().indexOf(searchTerm.toLowerCase()) === -1;

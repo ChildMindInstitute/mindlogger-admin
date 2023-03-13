@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { LinkedTabs, Svg } from 'components';
 import { useBreadcrumbs } from 'hooks';
 import { StyledBody } from 'styles/styledComponents';
+import { SaveAndPublish } from 'features/Builder';
 
 import { newAppletTabs, pathsWithInnerTabs } from './NewApplet.const';
 
@@ -21,8 +22,9 @@ export const NewApplet = () => {
   ]);
 
   return (
-    <StyledBody>
+    <StyledBody sx={{ position: 'relative' }}>
       <LinkedTabs hiddenHeader={hiddenHeader} tabs={newAppletTabs} />
+      <SaveAndPublish />
     </StyledBody>
   );
 };
