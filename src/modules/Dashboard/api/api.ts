@@ -3,7 +3,7 @@ import { authApiClient, authApiClientWithFullLang } from 'shared/api/api.client'
 import {
   SwitchAccount,
   AccountUserList,
-  TransferOwnership,
+  TransferOwnershipType,
   SetAccount,
   RevokeAppletUser,
   AppletId,
@@ -63,7 +63,7 @@ export const getAccountUserListApi = (
   });
 
 export const transferOwnershipApi = (
-  { appletId, email }: TransferOwnership,
+  { appletId, email }: TransferOwnershipType,
   signal?: AbortSignal,
 ) =>
   authApiClient.put(

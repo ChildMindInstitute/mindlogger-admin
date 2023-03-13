@@ -12,7 +12,7 @@ import { libraryRoutes } from 'modules/Library/routes';
 import { authRoutes } from 'modules/Auth/routes';
 import { auth } from 'modules/Auth/state';
 
-export default () => {
+export const AppRoutes = () => {
   const token = storage.getItem('accessToken');
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();

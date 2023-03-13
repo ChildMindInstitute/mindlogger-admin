@@ -1,1 +1,5 @@
-export type PublishedApplets = { recordsPerPage: number; pageIndex: number; searchText?: string };
+export type PublishedAppletsType = {
+  recordsPerPage: number;
+  pageIndex: number;
+  searchText?: string;
+};
