@@ -1,9 +1,7 @@
 import { styled } from '@mui/material';
 
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 export const StyledSliderPanelHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
   width: 100%;

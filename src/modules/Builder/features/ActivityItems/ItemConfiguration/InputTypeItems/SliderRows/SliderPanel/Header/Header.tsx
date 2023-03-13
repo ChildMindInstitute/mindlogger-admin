@@ -3,13 +3,13 @@ import { Slider } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import {
+  theme,
   StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
   StyledLabelLarge,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+} from 'shared/styles';
 
 import { HeaderProps } from './Header.types';
 import { StyledImg, StyledSliderPanelHeader } from './Header.styles';

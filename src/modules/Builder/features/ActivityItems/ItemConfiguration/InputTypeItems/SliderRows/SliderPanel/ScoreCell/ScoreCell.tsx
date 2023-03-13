@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { ClickAwayListener } from '@mui/material';
 
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { StyledFlexTopCenter } from 'shared/styles';
 
 import { StyledInputController } from './ScoreCell.styles';
 

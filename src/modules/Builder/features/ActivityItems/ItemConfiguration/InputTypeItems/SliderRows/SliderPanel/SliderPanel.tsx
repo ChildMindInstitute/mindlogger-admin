@@ -5,8 +5,7 @@ import { Slider } from '@mui/material';
 
 import { UploaderUiType, Uploader, Table, UiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { theme, StyledFlexTopCenter } from 'shared/styles';
 
 import { Header } from './Header';
 import { SliderPanelProps } from './SliderPanel.types';

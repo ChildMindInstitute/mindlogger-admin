@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
 import { InputController } from 'shared/components/FormComponents';
-import theme from 'shared/styles/theme';
+import { theme } from 'shared/styles';
 
 export const StyledInputController = styled(InputController)`
   .MuiInputBase-input {

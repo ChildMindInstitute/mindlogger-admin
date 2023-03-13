@@ -1,8 +1,6 @@
 import { Collapse, styled } from '@mui/material';
 
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
 
 export const StyledSliderPanelContainer = styled(Collapse)`
   background: ${variables.palette.surface1};

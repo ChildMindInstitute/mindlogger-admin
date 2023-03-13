@@ -3,7 +3,7 @@ import { FieldValues, Controller } from 'react-hook-form';
 import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { StyledFlexColumn } from 'shared/styles/styledComponents';
+import { StyledFlexColumn } from 'shared/styles';
 
 import { SliderPanel } from './SliderPanel';
 import { SliderProps } from './SliderRows.types';

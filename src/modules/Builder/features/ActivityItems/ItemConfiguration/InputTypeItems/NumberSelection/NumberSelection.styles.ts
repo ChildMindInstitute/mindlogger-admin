@@ -1,8 +1,7 @@
 import { styled } from '@mui/material';
 
 import { StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { variables, theme } from 'shared/styles';
 
 export const StyledNumberSelectionContainer = styled(StyledFlexColumn)`
   background: ${variables.palette.surface1};
