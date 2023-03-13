@@ -1,7 +1,6 @@
 import { styled, Box } from '@mui/material';
 
-import { variables } from 'styles/variables';
-import theme from 'styles/theme';
+import { variables, theme } from 'shared/styles';
 
 export const StyledGeolocation = styled(Box)`
   background-color: ${variables.palette.surface1};

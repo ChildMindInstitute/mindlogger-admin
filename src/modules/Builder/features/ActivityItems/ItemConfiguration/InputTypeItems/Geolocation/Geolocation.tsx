@@ -1,9 +1,8 @@
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'components';
-import { StyledLabelBoldLarge, StyledTitleMedium } from 'styles/styledComponents';
-import theme from 'styles/theme';
+import { Svg } from 'shared/components';
+import { StyledLabelBoldLarge, StyledTitleMedium, theme } from 'shared/styles';
 
 import { StyledGeolocation } from './Geolocation.styles';
 

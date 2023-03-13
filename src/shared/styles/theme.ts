@@ -7,7 +7,7 @@ import { typography } from 'shared/styles/typography';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
 
-const theme = createTheme({
+export const theme = createTheme({
   spacing: 10,
   typography: {
     fontFamily: 'Atkinson',
