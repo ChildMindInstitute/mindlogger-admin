@@ -1,6 +1,7 @@
 import { styled, MenuItem, Select, ListSubheader } from '@mui/material';
 
 import { variables } from 'styles/variables';
+import theme from 'styles/theme';
 import { shouldForwardProp } from 'utils/shouldForwardProp';
 
 const {
@@ -15,7 +16,9 @@ export const StyledSelect = styled(Select)`
   }
 `;
 
-export const StyledGroupName = styled(MenuItem, shouldForwardProp)`
+export const StyledGroupName = styled(ListSubheader, shouldForwardProp)`
+  padding: ${theme.spacing(1.6)};
+  position: static;
   border-top: ${({ isFirstName }: { isFirstName: boolean }) =>
     isFirstName ? 'none' : `${borderWidth.md} solid ${palette.outline_variant}`};
   background-color: transparent;
@@ -25,8 +28,6 @@ export const StyledGroupName = styled(MenuItem, shouldForwardProp)`
   text-transform: uppercase;
   color: ${palette.outline};
   letter-spacing: ${letterSpacing.sm};
-  pointer-events: none;
-  cursor: default;
 `;
 
 export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`

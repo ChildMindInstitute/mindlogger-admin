@@ -214,6 +214,9 @@ const theme = createTheme({
             '&.Mui-disabled': {
               color: variables.palette.contained_btn_disabled_text,
               backgroundColor: variables.palette.on_surface_alfa12,
+              '& svg': {
+                fill: variables.palette.contained_btn_disabled_text,
+              },
             },
           },
           '&.MuiButton-outlined': {

@@ -19,7 +19,7 @@ import { useHeaderSticky } from 'hooks';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { SelectionOption, NumberSelection } from './InputTypeItems';
+import { SelectionOption, NumberSelection, Geolocation } from './InputTypeItems';
 import {
   StyledHeader,
   StyledContent,
@@ -174,6 +174,7 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.NumberSelection && (
             <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
           )}
+          {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
           {isTextInputOptionVisible && (
             <TextInputOption
               name="isTextInputOptionRequired"
