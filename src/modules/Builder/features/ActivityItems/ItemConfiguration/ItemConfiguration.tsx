@@ -58,7 +58,7 @@ export const ItemConfiguration = () => {
     mode: 'onChange',
   });
 
-  const { control, watch, setValue, getValues } = methods;
+  const { control, watch, setValue } = methods;
 
   const {
     fields: options,
@@ -73,7 +73,6 @@ export const ItemConfiguration = () => {
     fields: alerts,
     append: appendAlert,
     remove: removeAlert,
-    update: updateAlert,
   } = useFieldArray({
     control,
     name: 'alerts',
@@ -111,7 +110,6 @@ export const ItemConfiguration = () => {
     setValue('timer', DEFAULT_TIMER_VALUE);
     removeOptions();
   }, [selectedInputType]);
-  console.log(getValues());
 
   return (
     <FormProvider {...methods}>
@@ -199,12 +197,7 @@ export const ItemConfiguration = () => {
             />
           </ItemSettingsDrawer>
         )}
-        <Alerts
-          appendAlert={appendAlert}
-          removeAlert={removeAlert}
-          updateAlert={updateAlert}
-          alerts={alerts}
-        />
+        <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
       </StyledItemConfiguration>
     </FormProvider>
   );

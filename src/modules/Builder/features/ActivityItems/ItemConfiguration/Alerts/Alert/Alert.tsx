@@ -3,21 +3,24 @@ import { useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
 import { InputController, SelectController } from 'shared/components/FormComponents';
-import { StyledFlexTopCenter, StyledTitleBoldSmall } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { StyledTitleBoldSmall } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 import { items, options } from './Alert.const';
 import { StyledAlert, StyledRow, StyledRemoveBtn, StyledDescription } from './Alert.styles';
 import { ItemConfigurationForm } from '../../ItemConfiguration.types';
+import { AlertProps } from './Alert.types';
 
-export const Alert = ({ index, removeAlert }: any) => {
+export const Alert = ({ index, removeAlert }: AlertProps) => {
   const { t } = useTranslation('app');
   const { control } = useFormContext<ItemConfigurationForm>();
 
   return (
     <StyledAlert>
       <StyledRow>
-        <StyledTitleBoldSmall>Alert {index + 1}</StyledTitleBoldSmall>
+        <StyledTitleBoldSmall>
+          {t('alert')} {index + 1}
+        </StyledTitleBoldSmall>
         <StyledRemoveBtn onClick={() => removeAlert(index)}>
           <Svg id="trash" />
         </StyledRemoveBtn>
@@ -40,8 +43,11 @@ export const Alert = ({ index, removeAlert }: any) => {
         fullWidth
         name={`alerts.${index}.message`}
         control={control}
-        label="Alert Message"
+        label={t('alertMessage')}
         type="text"
+        sx={{
+          fieldset: { borderColor: variables.palette.outline_variant },
+        }}
       />
     </StyledAlert>
   );

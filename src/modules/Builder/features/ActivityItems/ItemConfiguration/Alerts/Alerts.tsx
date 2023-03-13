@@ -1,21 +1,18 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
 import { StyledBuilderBtn } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { ItemConfigurationForm } from '../ItemConfiguration.types';
-import { Alert, items, options } from './Alert';
-//import { alerts } from './Alerts.const';
 
-export const Alerts = ({ appendAlert, removeAlert, alerts }: any) => {
+import { Alert, items, options } from './Alert';
+import { AlertProps } from './Alerts.types';
+
+export const Alerts = ({ appendAlert, removeAlert, alerts }: AlertProps) => {
   const { t } = useTranslation('app');
-  const props = useFormContext<ItemConfigurationForm>();
-  console.log(props);
 
   return (
     <>
-      {alerts.map((el: any, i: any) => (
+      {alerts.map((el, i) => (
         <Alert key={el.id} {...el} index={i} removeAlert={removeAlert} />
       ))}
       <StyledBuilderBtn
@@ -23,7 +20,7 @@ export const Alerts = ({ appendAlert, removeAlert, alerts }: any) => {
         startIcon={<Svg id="add" width={18} height={18} />}
         onClick={() => appendAlert({ option: options[0].value, item: items[0].value, message: '' })}
       >
-        {t('addItem')}
+        {t('addAlert')}
       </StyledBuilderBtn>
     </>
   );
