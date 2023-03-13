@@ -53,12 +53,12 @@ export const Header = ({
       </StyledClearedButton>
       <StyledLabelBoldLarge>{label}</StyledLabelBoldLarge>
       <StyledFlexTopCenter sx={{ width: '100%', gap: '2.4rem' }}>
-        <StyledFlexColumn sx={{ 'align-items': 'center' }}>
+        <StyledFlexColumn sx={{ alignItems: 'center' }}>
           {<StyledLabelLarge>{minLabel}</StyledLabelLarge>}
           {minImage && <StyledImg src={minImage} />}
         </StyledFlexColumn>
         <Slider min={min} max={max} />
-        <StyledFlexColumn sx={{ 'align-items': 'center' }}>
+        <StyledFlexColumn sx={{ alignItems: 'center' }}>
           {<StyledLabelLarge>{maxLabel}</StyledLabelLarge>}
           {maxImage && <StyledImg src={maxImage} />}
         </StyledFlexColumn>

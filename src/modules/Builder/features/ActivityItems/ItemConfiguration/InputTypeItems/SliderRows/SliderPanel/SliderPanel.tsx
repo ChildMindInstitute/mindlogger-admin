@@ -66,6 +66,7 @@ export const SliderPanel = <T extends FieldValues>({
       in={isExpanded}
       key={`slider-container-${id}`}
       collapsedSize="12.8rem"
+      timeout={0}
     >
       <Header
         name={name}
@@ -75,74 +76,70 @@ export const SliderPanel = <T extends FieldValues>({
         onTrashClick={onRemove}
         isMultiple={isMultiple}
       />
-      {isExpanded && (
-        <>
-          <StyledInputContainer>
-            <InputController
-              control={control}
-              name={`${name}.minLabel`}
-              placeholder={t('minLabel')}
-              maxLength={SLIDER_LABEL_MAX_LENGTH}
-            />
-            <InputController
-              control={control}
-              name={`${name}.maxLabel`}
-              placeholder={t('maxLabel')}
-              maxLength={SLIDER_LABEL_MAX_LENGTH}
-            />
-          </StyledInputContainer>
-          <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
-            <Slider min={min} max={max} />
-          </StyledFlexTopCenter>
-          <StyledInputContainer>
-            <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
-              <Uploader
-                uiType={UploaderUiType.Secondary}
-                width={5.6}
-                height={5.6}
-                setValue={(val: string) => setValue(`${name as string}.minImage`, val)}
-                getValue={() => watch(`${name}.minImage`) || ''}
-              />
-              <InputController
-                type="number"
-                control={control}
-                name={`${name}.min`}
-                label={t('minValue')}
-                defaultNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
-              />
-            </StyledFlexTopCenter>
-            <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
-              <Uploader
-                uiType={UploaderUiType.Secondary}
-                width={5.6}
-                height={5.6}
-                setValue={(val: string) => setValue(`${name as string}.maxImage`, val)}
-                getValue={() => watch(`${name}.maxImage`) || ''}
-              />
-              <InputController
-                type="number"
-                control={control}
-                name={`${name}.max`}
-                label={t('maxValue')}
-              />
-            </StyledFlexTopCenter>
-          </StyledInputContainer>
-          <StyledScoresContainer>
-            <Table
-              columns={SLIDER_VALUE_HEAD_ROWS}
-              rows={SLIDER_LABEL_ROWS}
-              orderBy="0"
-              uiType={UiType.Secondary}
-            />
-            <Table
-              columns={getHeadCells(min, max)}
-              rows={getTableRows(scores, name)}
-              orderBy="0"
-              uiType={UiType.Secondary}
-            />
-          </StyledScoresContainer>
-        </>
-      )}
+      <StyledInputContainer>
+        <InputController
+          control={control}
+          name={`${name}.minLabel`}
+          placeholder={t('minLabel')}
+          maxLength={SLIDER_LABEL_MAX_LENGTH}
+        />
+        <InputController
+          control={control}
+          name={`${name}.maxLabel`}
+          placeholder={t('maxLabel')}
+          maxLength={SLIDER_LABEL_MAX_LENGTH}
+        />
+      </StyledInputContainer>
+      <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
+        <Slider min={min} max={max} />
+      </StyledFlexTopCenter>
+      <StyledInputContainer>
+        <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
+          <Uploader
+            uiType={UploaderUiType.Secondary}
+            width={5.6}
+            height={5.6}
+            setValue={(val: string) => setValue(`${name as string}.minImage`, val)}
+            getValue={() => watch(`${name}.minImage`) || ''}
+          />
+          <InputController
+            type="number"
+            control={control}
+            name={`${name}.min`}
+            label={t('minValue')}
+            defaultNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
+          />
+        </StyledFlexTopCenter>
+        <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
+          <Uploader
+            uiType={UploaderUiType.Secondary}
+            width={5.6}
+            height={5.6}
+            setValue={(val: string) => setValue(`${name as string}.maxImage`, val)}
+            getValue={() => watch(`${name}.maxImage`) || ''}
+          />
+          <InputController
+            type="number"
+            control={control}
+            name={`${name}.max`}
+            label={t('maxValue')}
+          />
+        </StyledFlexTopCenter>
+      </StyledInputContainer>
+      <StyledScoresContainer>
+        <Table
+          columns={SLIDER_VALUE_HEAD_ROWS}
+          rows={SLIDER_LABEL_ROWS}
+          orderBy="0"
+          uiType={UiType.Secondary}
+        />
+        <Table
+          columns={getHeadCells(min, max)}
+          rows={getTableRows(scores, name)}
+          orderBy="0"
+          uiType={UiType.Secondary}
+        />
+      </StyledScoresContainer>
     </StyledSliderPanelContainer>
   );
 };

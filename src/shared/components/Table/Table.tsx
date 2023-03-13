@@ -1,6 +1,5 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } from '@mui/material';
-import uniqueId from 'lodash.uniqueid';
 
 import { Order } from 'shared/types/table';
 import { EmptyTable } from 'shared/components';
