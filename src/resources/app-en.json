@@ -567,6 +567,6 @@
   "alignCenter": "Center text",
   "alignRight": "Clamp text to the right",
   "saveAndPublish": "Save & Publish",
-  "geolocationPrompt": "The respondent will able to share geolocation",
+  "geolocationDescription": "The respondent will able to share geolocation",
   "thresholdMessage": "Visibility decreases over {{size}} characters"
 }
