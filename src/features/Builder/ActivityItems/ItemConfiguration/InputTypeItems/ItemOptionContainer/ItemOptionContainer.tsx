@@ -1,7 +1,7 @@
 import { StyledFlexColumn, StyledLabelBoldLarge, StyledTitleMedium } from 'styles/styledComponents';
 import theme from 'styles/theme';
 
-import { StyledItemOptionContainer } from '../InputTypeItems.styles';
+import { StyledItemOptionContainer } from './ItemOptionContainer.styles';
 import { ItemOptionContainerProps } from './ItemOptionContainer.types';
 
 export const ItemOptionContainer = ({ title, description, children }: ItemOptionContainerProps) => (
