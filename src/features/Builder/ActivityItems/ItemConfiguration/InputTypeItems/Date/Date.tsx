@@ -13,7 +13,6 @@ export const Date = () => {
       <StyledTextField
         disabled
         variant="outlined"
-        label={t('date')}
         value={'DD MM YYYY'}
         sx={{ width: '35rem' }}
         InputProps={{
