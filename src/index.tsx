@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import svgBuilder from 'utils/svgBuilder';
+import svgBuilder from 'shared/utils/svgBuilder';
 
 import { svgSprite } from 'svgSprite';
 import App from './App';
