@@ -12,7 +12,7 @@ import {
   StyledTitleMedium,
 } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { Svg } from 'shared/components';
+import { Svg, AppletImage } from 'shared/components';
 import { page } from 'resources';
 import { variables } from 'shared/styles/variables';
 
@@ -25,7 +25,6 @@ import {
 } from './Applet.styles';
 import { AppletProps, AppletUiType } from './Applet.types';
 import { Activities } from './Activities';
-import { AppletImage } from './AppletImage';
 import { RemoveAppletPopup } from './Popups';
 
 export const Applet = ({

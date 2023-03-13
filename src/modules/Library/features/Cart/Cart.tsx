@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'shared/hooks';
-import { EmptyTable, Svg, AddToBuilderPopup } from 'shared/components';
+import { EmptyTable, Svg } from 'shared/components';
 import {
   StyledBody,
   StyledHeadlineLarge,
@@ -18,7 +18,7 @@ import { Header, RightButtonType } from '../../components';
 import { Applet, AppletUiType } from '../Applet';
 import { StyledLink } from './Cart.styles';
 import { mockedCart } from './mocked';
-import { AuthPopup } from '../Popups/AuthPopup';
+import { AddToBuilderPopup, AuthPopup } from '../Popups';
 
 export const Cart = () => {
   const { t } = useTranslation('app');

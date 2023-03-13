@@ -1,5 +1,5 @@
 export * from './Actions';
-export * from './AddToBuilderPopup';
+export * from './AppletImage';
 export * from './ButtonWithMenu';
 export * from './Breadcrumbs';
 export * from './Chip';
