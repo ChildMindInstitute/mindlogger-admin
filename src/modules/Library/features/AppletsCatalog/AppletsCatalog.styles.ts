@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import { TablePagination } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
+import { variables } from 'shared/styles';
 
 export const StyledTablePagination = styled(TablePagination)`
   overflow: visible;

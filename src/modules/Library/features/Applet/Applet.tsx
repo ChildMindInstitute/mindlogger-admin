@@ -4,7 +4,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
+import { Svg } from 'shared/components';
 import {
+  theme,
+  variables,
   StyledBodyLarge,
   StyledBodyMedium,
   StyledHeadline,
@@ -12,11 +15,8 @@ import {
   StyledLabelBoldLarge,
   StyledTitleBoldMedium,
   StyledTitleMedium,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { Svg } from 'shared/components';
+} from 'shared/styles';
 import { page } from 'resources';
-import { variables } from 'shared/styles/variables';
 
 import {
   StyledAppletContainer,

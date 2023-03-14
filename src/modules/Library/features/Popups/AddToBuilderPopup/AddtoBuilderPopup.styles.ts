@@ -1,6 +1,6 @@
 import { FormControlLabel, styled } from '@mui/material';
 
-import theme from 'shared/styles/theme';
+import { theme } from 'shared/styles';
 
 export const StyledTableFormControlLabel = styled(FormControlLabel)`
   display: flex;

@@ -7,13 +7,13 @@ import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { EmptyTable } from 'shared/components';
 import {
+  theme,
   StyledBody,
   StyledHeadlineLarge,
   ContentContainer,
   StyledAppletContainer,
   StyledAppletList,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+} from 'shared/styles';
 
 import { Header, RightButtonType } from '../../components';
 import { Applet } from '../Applet';

@@ -1,13 +1,13 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
 import {
+  theme,
+  variables,
   StyledFlexWrap,
   StyledLabelBoldMedium,
   StyledClearedButton,
-} from 'shared/styles/styledComponents';
+} from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { AppletUiType } from './Applet.types';

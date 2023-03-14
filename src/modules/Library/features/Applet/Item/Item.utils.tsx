@@ -1,7 +1,6 @@
 import uniqueId from 'lodash.uniqueid';
 
-import { StyledBodyLarge } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
+import { variables, StyledBodyLarge } from 'shared/styles';
 import i18n from 'i18n';
 
 import { StyledItemContentRow, StyledItemSvg, StyledItemImage } from './Item.styles';

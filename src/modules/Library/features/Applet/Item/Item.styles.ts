@@ -2,9 +2,7 @@ import MdEditor from 'md-editor-rt';
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import { StyledFlexColumn, StyledFlexTopStart } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { theme, variables, StyledFlexColumn, StyledFlexTopStart } from 'shared/styles';
 
 export const StyledItemContainer = styled(StyledFlexColumn)`
   display: grid;

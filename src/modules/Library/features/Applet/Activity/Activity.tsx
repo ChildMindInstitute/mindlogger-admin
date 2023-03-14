@@ -3,8 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { Checkbox } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { StyledTitleBoldMedium } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { theme, StyledTitleBoldMedium } from 'shared/styles';
 
 import { ActivityProps } from './Activity.types';
 import {

@@ -1,5 +1,4 @@
-import { StyledTitleLarge } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
+import { variables, StyledTitleLarge } from 'shared/styles';
 
 import { StyledAppletImageContainer, StyledImage, StyledCustomCover } from './AppletImage.styles';
 import { AppletImageProps } from './AppletImage.types';
