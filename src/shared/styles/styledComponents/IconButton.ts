@@ -1,6 +1,7 @@
 import { styled } from '@mui/material';
 
-import { StyledClearedButton, variables } from 'shared/styles';
+import { variables } from '../variables';
+import { StyledClearedButton } from './ClearedButton';
 
 export const StyledIconButton = styled(StyledClearedButton)`
   width: 4rem;
