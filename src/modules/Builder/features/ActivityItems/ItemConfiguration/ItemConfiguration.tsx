@@ -41,11 +41,7 @@ import {
   ItemInputTypes,
   ItemConfigurationSettings,
 } from './ItemConfiguration.types';
-import {
-  itemsTypeOptions,
-  DEFAULT_SCORE_VALUE,
-  DEFAULT_MAX_CHARACTERS,
-} from './ItemConfiguration.const';
+import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
 import { Alerts } from './Alerts';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 
@@ -61,8 +57,6 @@ export const ItemConfiguration = () => {
       name: '',
       body: '',
       settings: [],
-      textResponseAnswer: '',
-      textResponseMaxCharacters: DEFAULT_MAX_CHARACTERS,
     },
     mode: 'onChange',
   });
@@ -196,11 +190,7 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.Date && <Date />}
           {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
           {selectedInputType === ItemInputTypes.Text && (
-            <TextResponse
-              name="textResponseAnswer"
-              maxCharacters="textResponseMaxCharacters"
-              control={control}
-            />
+            <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
           )}
           {isTextInputOptionVisible && (
             <TextInputOption
