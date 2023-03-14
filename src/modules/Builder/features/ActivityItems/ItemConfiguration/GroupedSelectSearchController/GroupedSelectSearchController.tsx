@@ -10,6 +10,7 @@ import { variables } from 'shared/styles/variables';
 
 import { ItemInputTypes } from '../ItemConfiguration.types';
 import { itemsTypeIcons } from '../ItemConfiguration.const';
+import { EmptySearch } from './EmptySearch';
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
   StyledGroupName,
@@ -155,6 +156,14 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                     </StyledMenuItem>
                   );
                 }),
+                groupOptions.filter(
+                  ({ value: groupValue }) =>
+                    t(groupValue).toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1,
+                ).length === 0 ? (
+                  <EmptySearch description={t('noMatchWasFound', { searchValue: searchTerm })} />
+                ) : (
+                  []
+                ),
               ])}
             </StyledSelect>
           </FormControl>
@@ -164,3 +173,32 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
     </>
   );
 };
+
+// const SearchResult = ({ result, searchTerm }) => {
+//   const regex = new RegExp(`(${searchTerm})`, 'gi');
+//   const parts = result.text.split(regex);
+//
+//   return (
+//     <div>
+//       {parts.map((part, i) => (
+//         <React.Fragment key={i}>
+//           {part.match(regex) ? (
+//             <mark>{part}</mark>
+//           ) : (
+//             <span>{part}</span>
+//           )}
+//         </React.Fragment>
+//       ))}
+//     </div>
+//   );
+// };
+//
+// const SearchResults = ({ results, searchTerm }) => {
+//   return (
+//     <div>
+//       {results.map((result) => (
+//         <SearchResult key={result.id} result={result} searchTerm={searchTerm} />
+//       ))}
+//     </div>
+//   );
+// };
