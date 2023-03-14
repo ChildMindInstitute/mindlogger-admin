@@ -57,12 +57,12 @@ export type ItemConfigurationForm = {
   name: string;
   body: string;
   settings: ItemConfigurationSettings[];
-  timer: number;
+  timer?: number;
   options?: SelectionOption[];
-  isTextInputOptionRequired: boolean;
-  minNumber: number;
-  maxNumber: number;
-  audioDuration: number;
+  isTextInputOptionRequired?: boolean;
+  minNumber?: number;
+  maxNumber?: number;
+  audioDuration?: number;
 };
 
 export type ItemsOption = {

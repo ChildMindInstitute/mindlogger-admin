@@ -40,14 +40,8 @@ import {
   ItemInputTypes,
   ItemConfigurationSettings,
 } from './ItemConfiguration.types';
-import {
-  itemsTypeOptions,
-  DEFAULT_TIMER_VALUE,
-  DEFAULT_SCORE_VALUE,
-  DEFAULT_MIN_NUMBER,
-  DEFAULT_MAX_NUMBER,
-  DEFAULT_AUDIO_DURATION_MS,
-} from './ItemConfiguration.const';
+import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
+import { useSettingsSetup } from './ItemConfiguration.hooks';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -61,16 +55,11 @@ export const ItemConfiguration = () => {
       name: '',
       body: '',
       settings: [],
-      timer: DEFAULT_TIMER_VALUE,
-      isTextInputOptionRequired: true,
-      minNumber: DEFAULT_MIN_NUMBER,
-      maxNumber: DEFAULT_MAX_NUMBER,
-      audioDuration: DEFAULT_AUDIO_DURATION_MS,
     },
     mode: 'onChange',
   });
 
-  const { control, watch, setValue } = methods;
+  const { control, watch, setValue, getValues } = methods;
 
   const {
     fields: options,
@@ -109,11 +98,7 @@ export const ItemConfiguration = () => {
     );
   };
 
-  useEffect(() => {
-    setValue('settings', []);
-    setValue('timer', DEFAULT_TIMER_VALUE);
-    removeOptions();
-  }, [selectedInputType]);
+  useSettingsSetup({ control, setValue, getValues, watch });
 
   return (
     <FormProvider {...methods}>
@@ -182,15 +167,13 @@ export const ItemConfiguration = () => {
             </StyledOptionsWrapper>
           )}
           {selectedInputType === ItemInputTypes.NumberSelection && (
-            <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+            <NumberSelection name="minNumber" maxName="maxNumber" />
           )}
           {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
           {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
           {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
           {selectedInputType === ItemInputTypes.Date && <Date />}
-          {selectedInputType === ItemInputTypes.Audio && (
-            <AudioRecord name="audioDuration" control={control} />
-          )}
+          {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
           {isTextInputOptionVisible && (
             <TextInputOption
               name="isTextInputOptionRequired"
