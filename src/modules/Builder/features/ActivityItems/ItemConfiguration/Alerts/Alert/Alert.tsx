@@ -3,10 +3,10 @@ import { useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
 import { InputController, SelectController } from 'shared/components/FormComponents';
-import { StyledTitleBoldSmall, variables } from 'shared/styles';
+import { StyledTitleBoldSmall, StyledIconButton, variables } from 'shared/styles';
 
 import { items, options } from './Alert.const';
-import { StyledAlert, StyledRow, StyledRemoveBtn, StyledDescription } from './Alert.styles';
+import { StyledAlert, StyledRow, StyledDescription } from './Alert.styles';
 import { ItemConfigurationForm } from '../../ItemConfiguration.types';
 import { AlertProps } from './Alert.types';
 
@@ -21,9 +21,9 @@ export const Alert = ({ index, removeAlert }: AlertProps) => {
         <StyledTitleBoldSmall>
           {t('alert')} {index + 1}
         </StyledTitleBoldSmall>
-        <StyledRemoveBtn onClick={() => removeAlert(index)}>
+        <StyledIconButton onClick={() => removeAlert(index)}>
           <Svg id="trash" />
-        </StyledRemoveBtn>
+        </StyledIconButton>
       </StyledRow>
       <StyledDescription>
         <Trans

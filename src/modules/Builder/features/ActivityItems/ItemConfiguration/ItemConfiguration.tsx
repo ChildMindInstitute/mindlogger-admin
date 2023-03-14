@@ -219,10 +219,10 @@ export const ItemConfiguration = () => {
               />
             </ItemSettingsDrawer>
           )}
+          {hasAlerts && (
+            <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
+          )}
         </StyledContent>
-        {hasAlerts && (
-          <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
-        )}
       </StyledItemConfiguration>
     </FormProvider>
   );

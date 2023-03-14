@@ -1,6 +1,6 @@
 import { styled, Box } from '@mui/material';
 
-import { theme, variables, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
+import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
 
 export const StyledAlert = styled(Box)`
   width: 100%;
@@ -28,14 +28,5 @@ export const StyledDescription = styled(StyledFlexTopCenter)`
     padding: ${theme.spacing(0.6, 1.4)};
     padding-right: ${theme.spacing(3.4)};
     font-size: ${variables.font.size.md};
-  }
-`;
-
-export const StyledRemoveBtn = styled(StyledClearedButton)`
-  width: 4rem;
-  height: 4rem;
-
-  svg:hover {
-    fill: ${variables.palette.primary};
   }
 `;

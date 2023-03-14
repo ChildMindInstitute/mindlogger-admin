@@ -68,7 +68,7 @@ export type ItemConfigurationForm = {
   isTextInputOptionRequired: boolean;
   minNumber: number;
   maxNumber: number;
-  alerts: Alert[];
+  alerts?: Alert[];
 };
 
 export type ItemsOption = {
