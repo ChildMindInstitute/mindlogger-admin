@@ -27,7 +27,13 @@ export const ScoreCell = ({ name }: { name: string }) => {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <Box>
-        <StyledInputController control={control} name={name} type="number" autoFocus />
+        <StyledInputController
+          control={control}
+          name={name}
+          type="number"
+          minNumberValue={Number.MIN_SAFE_INTEGER}
+          autoFocus
+        />
       </Box>
     </ClickAwayListener>
   );

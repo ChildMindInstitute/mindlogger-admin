@@ -113,7 +113,7 @@ export const SliderPanel = <T extends FieldValues>({
             name={`${name}.min`}
             label={t('minValue')}
             maxNumberValue={max}
-            defaultNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
+            minNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
           />
         </StyledFlexTopCenter>
         <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
@@ -130,6 +130,7 @@ export const SliderPanel = <T extends FieldValues>({
             name={`${name}.max`}
             label={t('maxValue')}
             maxNumberValue={DEFAULT_SLIDER_MAX_VALUE}
+            minNumberValue={min}
           />
         </StyledFlexTopCenter>
       </StyledInputContainer>
