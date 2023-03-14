@@ -437,5 +437,7 @@
   "dateItemTitle": "Sélection de date",
   "dateItemDescription": "Le répondant pourra sélectionner la date.",
   "geolocationDescription": "Le répondant pourra partager sa géolocalisation",
-  "appletActivities": "Activités d'applet"
+  "appletActivities": "Activités d'applet",
+  "audioRecordDescription": "Le répondant pourra enregistrer de l'audio",
+  "audioRecordDuration": "Durée maximale d'enregistrement - millisecondes"
 }
