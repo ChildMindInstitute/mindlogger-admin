@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, MouseEvent, useState } from 'react';
+import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { TextField, FormControl, InputLabel } from '@mui/material';
@@ -6,19 +6,23 @@ import { TextField, FormControl, InputLabel } from '@mui/material';
 import { Svg } from 'shared/components';
 import theme from 'shared/styles/theme';
 import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
 
 import { ItemInputTypes } from '../ItemConfiguration.types';
 import { itemsTypeIcons } from '../ItemConfiguration.const';
-import { EmptySearch } from './EmptySearch';
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
-  StyledGroupName,
   StyledMenuItem,
   StyledSelect,
   StyledListSubheader,
 } from './GroupedSelectSearchController.styles';
 import { ItemTypeTooltip } from './ItemTypeTooltip';
+import { selectDropdownStyles } from './GroupedSelectSearchController.const';
+import {
+  handleSearchKeyDown,
+  notHaveSearchValue,
+  getEmptyComponent,
+  getGroupName,
+} from './GroupedSelectSearchController.utils';
 
 export const GroupedSelectSearchController = <T extends FieldValues>({
   name,
@@ -30,6 +34,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   const [selectOpen, setSelectOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLLIElement | null>(null);
   const [currentItemType, setCurrentItemType] = useState<ItemInputTypes | null>(null);
+  const searchTermLowercase = searchTerm.toLowerCase();
 
   const handleTooltipOpen = (event: MouseEvent<HTMLLIElement>, itemType: ItemInputTypes) => {
     setCurrentItemType(itemType);
@@ -46,42 +51,12 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
     setSearchTerm(event.target.value);
   };
 
-  const handleSearchKeyDown = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape') {
-      event.stopPropagation();
-    }
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-  };
-
   const handleSelectOpen = () => setSelectOpen(true);
 
   const handleSelectClose = async () => {
     await setSelectOpen(false);
     setSearchTerm('');
     handleTooltipClose();
-  };
-
-  const paperStyles = {
-    maxHeight: '35rem',
-    width: '58rem',
-    mt: `${theme.spacing(2.5)} !important`,
-    ml: theme.spacing(1.1),
-  };
-
-  const notHaveSearchValue = (value: string) =>
-    t(value).toLowerCase().indexOf(searchTerm.toLowerCase()) === -1;
-
-  const getItemTypesNames = (): string[] =>
-    Object.keys(ItemInputTypes).map((key) =>
-      t(ItemInputTypes[key as keyof typeof ItemInputTypes]).toLowerCase(),
-    );
-
-  const getEmptyComponent = () => {
-    if (getItemTypesNames().some((name) => name.includes(searchTerm.toLowerCase()))) return null;
-
-    return <EmptySearch description={t('noMatchWasFound', { searchValue: searchTerm })} />;
   };
 
   return (
@@ -96,7 +71,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
               fullWidth
               MenuProps={{
                 autoFocus: false,
-                PaperProps: { sx: paperStyles },
+                PaperProps: { sx: selectDropdownStyles },
               }}
               onChange={onChange}
               value={value}
@@ -116,11 +91,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
               IconComponent={() => <Svg id={selectOpen ? 'navigate-up' : 'navigate-down'} />}
               defaultValue=""
             >
-              <StyledListSubheader
-                sx={{
-                  borderBottom: `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`,
-                }}
-              >
+              <StyledListSubheader>
                 <form autoComplete="off">
                   <TextField
                     autoFocus
@@ -139,16 +110,10 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                   />
                 </form>
               </StyledListSubheader>
-              {options?.map(({ groupName, groupOptions }, index) => [
-                searchTerm ? (
-                  []
-                ) : (
-                  <StyledGroupName isFirstName={index === 0} key={groupName}>
-                    {t(groupName)}
-                  </StyledGroupName>
-                ),
+              {options?.map(({ groupName, groupOptions }) => [
+                getGroupName(groupName, groupOptions, searchTermLowercase),
                 ...groupOptions.map(({ value: groupValue, icon }) => {
-                  const isHidden = notHaveSearchValue(groupValue);
+                  const isHidden = notHaveSearchValue(groupValue, searchTermLowercase);
 
                   return (
                     <StyledMenuItem
@@ -170,7 +135,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                   );
                 }),
               ])}
-              {getEmptyComponent()}
+              {getEmptyComponent(searchTerm)}
             </StyledSelect>
           </FormControl>
         )}
@@ -179,32 +144,3 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
     </>
   );
 };
-
-// const SearchResult = ({ result, searchTerm }) => {
-//   const regex = new RegExp(`(${searchTerm})`, 'gi');
-//   const parts = result.text.split(regex);
-//
-//   return (
-//     <div>
-//       {parts.map((part, i) => (
-//         <React.Fragment key={i}>
-//           {part.match(regex) ? (
-//             <mark>{part}</mark>
-//           ) : (
-//             <span>{part}</span>
-//           )}
-//         </React.Fragment>
-//       ))}
-//     </div>
-//   );
-// };
-//
-// const SearchResults = ({ results, searchTerm }) => {
-//   return (
-//     <div>
-//       {results.map((result) => (
-//         <SearchResult key={result.id} result={result} searchTerm={searchTerm} />
-//       ))}
-//     </div>
-//   );
-// };
