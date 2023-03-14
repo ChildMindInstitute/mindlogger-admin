@@ -1,9 +1,4 @@
-import {
-  StyledFlexColumn,
-  StyledLabelBoldLarge,
-  StyledTitleMedium,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { StyledFlexColumn, StyledLabelBoldLarge, StyledTitleMedium, theme } from 'shared/styles';
 
 import { StyledItemOptionContainer } from './ItemOptionContainer.styles';
 import { ItemOptionContainerProps } from './ItemOptionContainer.types';

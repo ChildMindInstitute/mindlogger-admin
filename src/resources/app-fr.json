@@ -436,5 +436,7 @@
   "alignRight": "Clamper le texte à droite",
   "thresholdMessage": "La visibilité diminue au-delà de {{size}} caractères",
   "dateItemTitle": "Sélection de date",
-  "dateItemDescription": "Le répondant pourra sélectionner la date."
+  "dateItemDescription": "Le répondant pourra sélectionner la date.",
+  "audioRecordDescription": "Le répondant pourra enregistrer de l'audio",
+  "audioRecordDuration": "Durée maximale d'enregistrement - millisecondes"
 }
