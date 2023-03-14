@@ -70,6 +70,20 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
     ml: theme.spacing(1.1),
   };
 
+  const notHaveSearchValue = (value: string) =>
+    t(value).toLowerCase().indexOf(searchTerm.toLowerCase()) === -1;
+
+  const getItemTypesNames = (): string[] =>
+    Object.keys(ItemInputTypes).map((key) =>
+      t(ItemInputTypes[key as keyof typeof ItemInputTypes]).toLowerCase(),
+    );
+
+  const getEmptyComponent = () => {
+    if (getItemTypesNames().some((name) => name.includes(searchTerm.toLowerCase()))) return null;
+
+    return <EmptySearch description={t('noMatchWasFound', { searchValue: searchTerm })} />;
+  };
+
   return (
     <>
       <Controller
@@ -134,8 +148,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                   </StyledGroupName>
                 ),
                 ...groupOptions.map(({ value: groupValue, icon }) => {
-                  const isHidden =
-                    t(groupValue).toLowerCase().indexOf(searchTerm.toLowerCase()) === -1;
+                  const isHidden = notHaveSearchValue(groupValue);
 
                   return (
                     <StyledMenuItem
@@ -156,15 +169,8 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                     </StyledMenuItem>
                   );
                 }),
-                groupOptions.filter(
-                  ({ value: groupValue }) =>
-                    t(groupValue).toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1,
-                ).length === 0 ? (
-                  <EmptySearch description={t('noMatchWasFound', { searchValue: searchTerm })} />
-                ) : (
-                  []
-                ),
               ])}
+              {getEmptyComponent()}
             </StyledSelect>
           </FormControl>
         )}

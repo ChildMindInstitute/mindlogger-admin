@@ -9,6 +9,8 @@ export const EmptySearch = ({ description }: EmptySearchProps) => (
     <StyledIcon>
       <Svg width="64" height="64" id="not-found" />
     </StyledIcon>
-    <StyledTitleLarge color={variables.palette.secondary60}>{description}</StyledTitleLarge>
+    <StyledTitleLarge sx={{ maxWidth: '40rem' }} color={variables.palette.secondary60}>
+      {description}
+    </StyledTitleLarge>
   </StyledEmptyTable>
 );

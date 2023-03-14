@@ -7,7 +7,7 @@ export const StyledEmptyTable = styled(ListItem)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 28rem;
+  height: 27.5rem;
   text-align: center;
 `;
 
