@@ -16,6 +16,10 @@ export const DEFAULT_EMPTY_SLIDER = {
   min: DEFAULT_SLIDER_MIN_NUMBER,
   max: DEFAULT_SLIDER_MAX_NUMBER,
   scores: DEFAULT_SLIDER_SCORE,
+  minLabel: '',
+  maxLabel: '',
+  minImage: '',
+  maxImage: '',
 };
 
 export const itemsTypeIcons = {

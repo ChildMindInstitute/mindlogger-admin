@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useFormContext, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -41,28 +41,31 @@ export const SliderPanel = <T extends FieldValues>({
 
   const { id, min, max, scores } = watch(name);
 
-  useEffect(() => {
-    const { max, scores } = getValues(name);
+  watch((data, { name: attributeName }: { name?: string }) => {
+    const { min, max, scores } = getValues(name);
 
     const scoresQuantity = max - min + 1;
 
-    if (scores?.length > scoresQuantity) setValue(`${name}.scores`, scores?.slice(1));
+    if (attributeName === `${name}.min`) {
+      if (scores?.length < scoresQuantity) {
+        setValue(`${name as string}.scores`, [Math.min(...scores) - 1].concat(scores));
+      }
 
-    if (scores?.length < scoresQuantity)
-      setValue(`${name as string}.scores`, [Math.min(...scores) - 1].concat(scores));
-  }, [min, name, getValues, setValue]);
+      if (scores?.length > scoresQuantity) {
+        setValue(`${name}.scores`, scores?.slice(1));
+      }
+    }
 
-  useEffect(() => {
-    const { min, scores } = getValues(name);
+    if (attributeName === `${name}.max`) {
+      if (scores?.length < scoresQuantity) {
+        setValue(`${name}.scores`, scores.concat(Math.max(...scores) + 1));
+      }
 
-    const scoresQuantity = max - min + 1;
-
-    if (scores?.length < scoresQuantity)
-      setValue(`${name}.scores`, scores.concat(Math.max(...scores) + 1));
-
-    if (scores?.length > scoresQuantity)
-      setValue(`${name}.scores`, scores?.slice(0, scoresQuantity));
-  }, [max, name, getValues, setValue]);
+      if (scores?.length > scoresQuantity) {
+        setValue(`${name}.scores`, scores?.slice(0, scoresQuantity));
+      }
+    }
+  });
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
@@ -96,7 +99,7 @@ export const SliderPanel = <T extends FieldValues>({
         />
       </StyledInputContainer>
       <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
-        <StyledSlider min={min} max={max} marks={getMarksByScores(scores)} disabled />
+        <StyledSlider min={min} max={max} value={min} marks={getMarksByScores(scores)} disabled />
       </StyledFlexTopCenter>
       <StyledInputContainer>
         <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>

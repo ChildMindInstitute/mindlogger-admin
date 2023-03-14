@@ -62,7 +62,7 @@ export type ItemConfigurationForm = {
   isTextInputOptionRequired: boolean;
   minNumber: number;
   maxNumber: number;
-  sliderOptions: SliderOption[];
+  sliderOptions?: SliderOption[];
 };
 
 export type ItemsOption = {

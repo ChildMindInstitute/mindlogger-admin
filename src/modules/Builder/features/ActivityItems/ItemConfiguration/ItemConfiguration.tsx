@@ -65,7 +65,6 @@ export const ItemConfiguration = () => {
       isTextInputOptionRequired: true,
       minNumber: DEFAULT_MIN_NUMBER,
       maxNumber: DEFAULT_MAX_NUMBER,
-      sliderOptions: [],
     },
     mode: 'onChange',
   });
@@ -119,7 +118,7 @@ export const ItemConfiguration = () => {
       selectedInputType === ItemInputTypes.SliderRows
     ) {
       setValue('sliderOptions', [getEmptySliderOption()]);
-    } else setValue('sliderOptions', []);
+    } else setValue('sliderOptions', undefined);
   }, [selectedInputType]);
 
   return (
