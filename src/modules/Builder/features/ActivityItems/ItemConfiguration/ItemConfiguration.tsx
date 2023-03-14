@@ -18,6 +18,7 @@ import { useHeaderSticky } from 'shared/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
+import { Alerts } from './Alerts';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
 import {
   SelectionOption,
@@ -27,6 +28,7 @@ import {
   PhotoResponse,
   Date,
   AudioRecord,
+  Geolocation,
 } from './InputTypeItems';
 import {
   StyledHeader,
@@ -41,7 +43,6 @@ import {
   ItemConfigurationSettings,
 } from './ItemConfiguration.types';
 import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
-import { Alerts } from './Alerts';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 
 export const ItemConfiguration = () => {
@@ -71,6 +72,7 @@ export const ItemConfiguration = () => {
     control,
     name: 'options',
   });
+
   const {
     fields: alerts,
     append: appendAlert,
@@ -183,6 +185,7 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.NumberSelection && (
             <NumberSelection name="minNumber" maxName="maxNumber" />
           )}
+          {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
           {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
           {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
           {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
@@ -194,6 +197,9 @@ export const ItemConfiguration = () => {
               control={control}
               onRemove={handleRemoveTextInputOption}
             />
+          )}
+          {hasAlerts && (
+            <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
           )}
           {settingsDrawerVisible && (
             <ItemSettingsDrawer
@@ -207,9 +213,6 @@ export const ItemConfiguration = () => {
                 control={control}
               />
             </ItemSettingsDrawer>
-          )}
-          {hasAlerts && (
-            <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
           )}
         </StyledContent>
       </StyledItemConfiguration>
