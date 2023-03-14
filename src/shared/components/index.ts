@@ -1,6 +1,4 @@
 export * from './Actions';
-// export * from './AppletImage';
-
 export * from './AppletImage';
 export * from './ButtonWithMenu';
 export * from './Breadcrumbs';
