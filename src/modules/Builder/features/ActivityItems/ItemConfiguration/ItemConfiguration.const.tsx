@@ -21,6 +21,7 @@ export const DEFAULT_EMPTY_SLIDER = {
   minImage: '',
   maxImage: '',
 };
+export const DEFAULT_AUDIO_DURATION_MS = 3000;
 
 export const itemsTypeIcons = {
   [ItemInputTypes.SingleSelection]: <Svg id="radio-button-outline" />,

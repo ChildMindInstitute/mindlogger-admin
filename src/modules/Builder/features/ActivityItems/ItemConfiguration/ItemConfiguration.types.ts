@@ -52,16 +52,24 @@ export type SelectionOption = {
   color?: ColorResult;
 };
 
+export type Alert = {
+  message: string;
+  option: string;
+  item: string;
+};
+
 export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
   name: string;
   body: string;
   settings: ItemConfigurationSettings[];
-  timer: number;
+  timer?: number;
   options?: SelectionOption[];
-  isTextInputOptionRequired: boolean;
-  minNumber: number;
-  maxNumber: number;
+  isTextInputOptionRequired?: boolean;
+  minNumber?: number;
+  maxNumber?: number;
+  alerts?: Alert[];
+  audioDuration?: number;
   sliderOptions?: SliderOption[];
 };
 

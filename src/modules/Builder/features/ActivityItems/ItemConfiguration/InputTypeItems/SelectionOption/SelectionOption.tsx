@@ -5,16 +5,16 @@ import { ColorResult } from 'react-color';
 
 import { Actions, Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import theme from 'shared/styles/theme';
 import {
+  theme,
+  variables,
   StyledBodyLarge,
   StyledBodyMedium,
   StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
-} from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
+} from 'shared/styles';
 
 import { ItemConfigurationForm, ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../../ItemConfiguration.const';

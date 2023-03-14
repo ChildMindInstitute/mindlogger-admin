@@ -7,13 +7,27 @@ import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { StyledInputWrapper } from './NumberSelection.styles';
 import { NumberSelectionProps } from './NumberSelection.types';
 import { ItemOptionContainer } from '../ItemOptionContainer';
+import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
+import { ItemInputTypes } from '../../ItemConfiguration.types';
+import { DEFAULT_MAX_NUMBER, DEFAULT_MIN_NUMBER } from '../../ItemConfiguration.const';
 
 export const NumberSelection = <T extends FieldValues>({
   name,
   maxName,
-  control,
 }: NumberSelectionProps<T>) => {
   const { t } = useTranslation('app');
+
+  const { control } = useOptionalItemSetup({
+    itemType: ItemInputTypes.NumberSelection,
+    name,
+    defaultValue: DEFAULT_MIN_NUMBER,
+  });
+
+  useOptionalItemSetup({
+    itemType: ItemInputTypes.NumberSelection,
+    name: maxName,
+    defaultValue: DEFAULT_MAX_NUMBER,
+  });
 
   const commonProps = {
     control,
