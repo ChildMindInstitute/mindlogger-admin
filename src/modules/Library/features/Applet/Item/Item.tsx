@@ -32,7 +32,6 @@ export const Item = ({ item, appletId, activityId }: ItemProps) => {
             activityId,
           },
         ];
-
     setValue(appletId, updatedSelectedItems);
   };
 
