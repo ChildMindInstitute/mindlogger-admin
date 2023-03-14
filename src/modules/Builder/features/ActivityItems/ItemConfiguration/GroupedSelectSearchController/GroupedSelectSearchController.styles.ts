@@ -26,9 +26,11 @@ export const StyledGroupName = styled(MenuItem, shouldForwardProp)`
 export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
   color: ${palette.on_surface};
   display: ${({ isHidden }: { isHidden: boolean }) => (isHidden ? 'none' : 'flex')};
+
   svg {
     fill: ${palette.on_surface_variant};
   }
+
   .svg-checkbox-multiple-filled {
     stroke: ${palette.on_surface_variant};
   }
@@ -37,14 +39,17 @@ export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
 export const StyledListSubheader = styled(ListSubheader)`
   background-color: transparent;
   position: static;
+
   .MuiInputBase-root {
     padding: 0;
     color: ${palette.outline};
     letter-spacing: ${letterSpacing.xxl};
   }
+
   .MuiOutlinedInput-notchedOutline {
     border: none;
   }
+
   svg {
     fill: ${palette.on_surface_variant};
   }

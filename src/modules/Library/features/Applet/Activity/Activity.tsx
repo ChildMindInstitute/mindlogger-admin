@@ -34,12 +34,9 @@ export const Activity = ({
     );
   };
 
-  console.log('rerender');
-
   useEffect(() => {
     const watchItemsSet = new Set(watchItems);
     const indeterminate = watchItemsSet.size !== 1;
-
     setActivityIndeterminate(indeterminate);
     setActivityChecked(!indeterminate && watchItems[0]);
     setAddToBuilderDisabled(!indeterminate && !watchItems[0]);

@@ -71,8 +71,6 @@ export const StyledButtonsContainer = styled(Box)`
   }
 `;
 
-////////
-
 export const StyledActivitiesContainer = styled(Box, shouldForwardProp)`
   ${({ uiType }: { uiType: AppletUiType }) => {
     switch (uiType) {
