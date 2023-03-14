@@ -1,17 +1,6 @@
-import { StyledTitleLarge } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-
-import { StyledAppletImageContainer, StyledImage, StyledCustomCover } from './AppletImage.styles';
+import { StyledCustomCover, StyledImage } from './AppletImage.styles';
 import { AppletImageProps } from './AppletImage.types';
 
-export const AppletImage = ({ name, image }: AppletImageProps) => (
-  <StyledAppletImageContainer>
-    {image ? (
-      <StyledImage src={image} alt={name} />
-    ) : (
-      <StyledCustomCover>
-        <StyledTitleLarge color={variables.palette.secondary}>{name[0]}</StyledTitleLarge>
-      </StyledCustomCover>
-    )}
-  </StyledAppletImageContainer>
+export const AppletImage = ({ image, appletName = '' }: AppletImageProps) => (
+  <StyledCustomCover>{image ? <StyledImage src={image} /> : appletName[0] || ''}</StyledCustomCover>
 );
