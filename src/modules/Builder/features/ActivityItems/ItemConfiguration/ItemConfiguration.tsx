@@ -11,9 +11,9 @@ import {
   StyledFlexTopCenter,
   StyledHeadlineLarge,
   StyledTitleLarge,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+  theme,
+  variables,
+} from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
@@ -46,6 +46,7 @@ import {
   DEFAULT_MIN_NUMBER,
   DEFAULT_MAX_NUMBER,
 } from './ItemConfiguration.const';
+import { Alerts } from './Alerts';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -78,6 +79,14 @@ export const ItemConfiguration = () => {
     control,
     name: 'options',
   });
+  const {
+    fields: alerts,
+    append: appendAlert,
+    remove: removeAlert,
+  } = useFieldArray({
+    control,
+    name: 'alerts',
+  });
 
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
@@ -88,6 +97,7 @@ export const ItemConfiguration = () => {
 
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
   const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
+  const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
 
   const handleAddOption = () =>
     appendOption({
@@ -111,6 +121,10 @@ export const ItemConfiguration = () => {
     setValue('timer', DEFAULT_TIMER_VALUE);
     removeOptions();
   }, [selectedInputType]);
+
+  useEffect(() => {
+    !hasAlerts && removeAlert();
+  }, [hasAlerts]);
 
   return (
     <FormProvider {...methods}>
@@ -204,6 +218,9 @@ export const ItemConfiguration = () => {
                 control={control}
               />
             </ItemSettingsDrawer>
+          )}
+          {hasAlerts && (
+            <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
           )}
         </StyledContent>
       </StyledItemConfiguration>
