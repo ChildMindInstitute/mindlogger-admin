@@ -388,5 +388,6 @@
   "supportingText": "Texte de support",
   "addOption": "Ajouter une option",
   "saveAndPublish": "Enregistrer et publier",
-  "appletActivities": "Activités d'applet"
+  "appletActivities": "Activités d'applet",
+  "timeRangeTitle": "Plage de temps"
 }

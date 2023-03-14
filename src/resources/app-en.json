@@ -567,5 +567,6 @@
   "alignCenter": "Center text",
   "alignRight": "Clamp text to the right",
   "saveAndPublish": "Save & Publish",
-  "thresholdMessage": "Visibility decreases over {{size}} characters"
+  "thresholdMessage": "Visibility decreases over {{size}} characters",
+  "timeRangeTitle": "Time Range"
 }

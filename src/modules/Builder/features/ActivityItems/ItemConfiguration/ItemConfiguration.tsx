@@ -19,7 +19,7 @@ import { useHeaderSticky } from 'shared/hooks';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { SelectionOption, NumberSelection } from './InputTypeItems';
+import { SelectionOption, NumberSelection, TimeRange } from './InputTypeItems';
 import {
   StyledHeader,
   StyledContent,
@@ -174,6 +174,7 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.NumberSelection && (
             <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
           )}
+          {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
           {isTextInputOptionVisible && (
             <TextInputOption
               name="isTextInputOptionRequired"
