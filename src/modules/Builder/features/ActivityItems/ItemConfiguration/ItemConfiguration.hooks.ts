@@ -16,6 +16,7 @@ import {
   ItemInputTypes,
 } from './ItemConfiguration.types';
 import { DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
+import { getEmptySliderOption } from './ItemConfiguration.utils';
 
 type OptionalItemSetupProps = {
   itemType: ItemInputTypes;
@@ -63,6 +64,13 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
     setValue('settings', []);
     setValue('timer', DEFAULT_TIMER_VALUE);
     removeOptions();
+
+    if (
+      selectedInputType === ItemInputTypes.Slider ||
+      selectedInputType === ItemInputTypes.SliderRows
+    ) {
+      setValue('sliderOptions', [getEmptySliderOption()]);
+    } else setValue('sliderOptions', undefined);
   }, [selectedInputType]);
 
   useEffect(() => {

@@ -44,7 +44,6 @@ import {
   ItemConfigurationSettings,
 } from './ItemConfiguration.types';
 import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
-import { getEmptySliderOption } from './ItemConfiguration.utils';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 
 export const ItemConfiguration = () => {
@@ -113,15 +112,6 @@ export const ItemConfiguration = () => {
   };
 
   useSettingsSetup({ control, setValue, getValues, watch });
-
-  useEffect(() => {
-    if (
-      selectedInputType === ItemInputTypes.Slider ||
-      selectedInputType === ItemInputTypes.SliderRows
-    ) {
-      setValue('sliderOptions', [getEmptySliderOption()]);
-    } else setValue('sliderOptions', undefined);
-  }, [selectedInputType]);
 
   useEffect(() => {
     !hasAlerts && removeAlert();
