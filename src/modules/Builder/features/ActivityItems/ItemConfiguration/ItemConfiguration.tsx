@@ -5,16 +5,15 @@ import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
-
 import {
   StyledBodyMedium,
   StyledClearedButton,
   StyledFlexTopCenter,
   StyledHeadlineLarge,
   StyledTitleLarge,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+  theme,
+  variables,
+} from 'shared/styles';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';

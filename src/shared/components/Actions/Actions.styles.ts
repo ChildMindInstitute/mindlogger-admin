@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import { StyledFlexTopCenter, StyledClearedButton } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledActionsWrapper = styled(StyledFlexTopCenter)`
   width: 100%;
@@ -18,11 +19,13 @@ export const StyledActions = styled(Box)`
   }
 `;
 
-export const StyledActionButton = styled(StyledClearedButton)`
+export const StyledActionButton = styled(StyledClearedButton, shouldForwardProp)`
   width: 4rem;
   height: 4rem;
   min-width: 4rem;
   border-radius: ${variables.borderRadius.half};
+  background-color: ${({ isActive }: { isActive: boolean; disabled: boolean }) =>
+    isActive ? variables.palette.secondary_container : 'transparent'};
 
   &:hover {
     background: ${variables.palette.secondary_container};
@@ -33,7 +36,7 @@ export const StyledActionButton = styled(StyledClearedButton)`
   }
 
   svg {
-    fill: ${({ disabled }: { disabled: boolean }) =>
+    fill: ${({ disabled }) =>
       disabled ? variables.palette.surface_variant : variables.palette.on_surface_variant};
   }
 `;

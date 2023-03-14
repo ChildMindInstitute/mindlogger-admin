@@ -7,7 +7,7 @@ import { typography } from 'shared/styles/typography';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
 
-const theme = createTheme({
+export const theme = createTheme({
   spacing: 10,
   typography: {
     fontFamily: 'Atkinson',
@@ -30,7 +30,7 @@ const theme = createTheme({
         },
         '*::-webkit-scrollbar': {
           width: '0.8rem',
-          height: '1.2rem',
+          height: '0.8rem',
         },
         '*::-webkit-scrollbar-thumb': {
           backgroundColor: variables.palette.outline,
@@ -183,15 +183,18 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          fontWeight: variables.font.weight.bold,
           lineHeight: variables.font.lineHeight.md,
-          padding: '1rem 1.6rem',
+          padding: '1rem 2rem',
           borderRadius: variables.borderRadius.xxxl,
           textTransform: 'none',
-          height: 40,
+          height: '4.8rem',
           letterSpacing: variables.font.letterSpacing.sm,
           boxShadow: 'unset',
           '&.MuiButton-contained': {
+            fontWeight: variables.font.weight.bold,
+            '& svg': {
+              fill: variables.palette.white,
+            },
             '&:hover': {
               backgroundColor: blendColorsNormal(
                 variables.palette.primary,
@@ -211,10 +214,17 @@ const theme = createTheme({
             '&.Mui-disabled': {
               color: variables.palette.contained_btn_disabled_text,
               backgroundColor: variables.palette.on_surface_alfa12,
+              '& svg': {
+                fill: variables.palette.contained_btn_disabled_text,
+              },
             },
           },
           '&.MuiButton-outlined': {
+            fontWeight: variables.font.weight.regular,
             borderColor: variables.palette.outline,
+            '& svg': {
+              fill: variables.palette.primary,
+            },
             '&:hover': {
               backgroundColor: variables.palette.primary_alfa8,
             },
@@ -422,8 +432,8 @@ const theme = createTheme({
         },
         select: {
           '&&': {
-            maxWidth: '89.5%',
-            paddingRight: '1.4rem',
+            maxWidth: '87%',
+            paddingRight: '3rem',
           },
         },
       } as Partial<
@@ -490,6 +500,13 @@ const theme = createTheme({
               },
             },
           },
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: variables.palette.primary,
         },
       },
     },

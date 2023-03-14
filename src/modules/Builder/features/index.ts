@@ -6,3 +6,4 @@ export * from './ActivityFlow';
 export * from './ActivityFlowAbout';
 export * from './ActivityFlowBuilder';
 export * from './ActivityItems';
+export * from './SaveAndPublish';

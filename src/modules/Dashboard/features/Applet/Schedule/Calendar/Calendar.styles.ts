@@ -77,6 +77,7 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       .date {
         display: flex;
         align-items: center;
+        justify-content: center;
         padding: ${theme.spacing(0, 0.95)};
         width: fit-content;
         min-width: 4rem;

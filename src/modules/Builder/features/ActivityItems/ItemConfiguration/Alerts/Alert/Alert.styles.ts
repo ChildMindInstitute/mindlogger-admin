@@ -1,12 +1,6 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import {
-  StyledClearedButton,
-  StyledFlexColumn,
-  StyledFlexTopCenter,
-} from 'shared/styles/styledComponents';
+import { theme, variables, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
 
 export const StyledAlert = styled(Box)`
   width: 100%;
@@ -25,15 +19,15 @@ export const StyledDescription = styled(StyledFlexTopCenter)`
   margin-bottom: ${theme.spacing(1.6)};
 
   .MuiFormControl-root.MuiTextField-root {
-    border-color: #72777f;
-    border-radius: 8px;
+    border-color: ${variables.palette.outline};
+    border-radius: ${variables.borderRadius.md};
     margin: ${theme.spacing(0, 0.5)};
   }
 
   .MuiOutlinedInput-input.MuiInputBase-input.MuiSelect-select {
-    padding: 6px 14px;
-    padding-right: 34px;
-    font-size: 14px;
+    padding: ${theme.spacing(0.6, 1.4)};
+    padding-right: ${theme.spacing(3.4)};
+    font-size: ${variables.font.size.md};
   }
 `;
 

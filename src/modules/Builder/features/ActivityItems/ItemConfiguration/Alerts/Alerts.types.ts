@@ -1,4 +1,4 @@
-export type ALert = {
+export type Alert = {
   id?: string;
   option: string;
   item: string;
@@ -7,6 +7,6 @@ export type ALert = {
 
 export type AlertProps = {
   removeAlert: (i: number) => void;
-  appendAlert: (item: ALert) => void;
-  alerts: ALert[];
+  appendAlert: (item: Alert) => void;
+  alerts: Alert[];
 };

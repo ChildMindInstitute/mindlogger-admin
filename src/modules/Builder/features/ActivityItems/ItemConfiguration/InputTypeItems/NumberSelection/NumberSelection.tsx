@@ -2,11 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { FieldValues } from 'react-hook-form';
 
 import { InputController } from 'shared/components/FormComponents';
-import { StyledLabelBoldLarge, StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { StyledFlexTopCenter, theme } from 'shared/styles';
 
-import { StyledInputWrapper, StyledNumberSelectionContainer } from './NumberSelection.styles';
+import { StyledInputWrapper } from './NumberSelection.styles';
 import { NumberSelectionProps } from './NumberSelection.types';
+import { ItemOptionContainer } from '../ItemOptionContainer';
 
 export const NumberSelection = <T extends FieldValues>({
   name,
@@ -21,10 +21,7 @@ export const NumberSelection = <T extends FieldValues>({
   };
 
   return (
-    <StyledNumberSelectionContainer>
-      <StyledLabelBoldLarge sx={{ marginBottom: theme.spacing(3.8) }}>
-        {t('numberSelection')}
-      </StyledLabelBoldLarge>
+    <ItemOptionContainer title={t('numberSelection')}>
       <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
         <StyledInputWrapper sx={{ mr: theme.spacing(1.25) }}>
           <InputController {...commonProps} name={name} label={t('minValue')} />
@@ -33,6 +30,6 @@ export const NumberSelection = <T extends FieldValues>({
           <InputController {...commonProps} name={maxName} label={t('maxValue')} />
         </StyledInputWrapper>
       </StyledFlexTopCenter>
-    </StyledNumberSelectionContainer>
+    </ItemOptionContainer>
   );
 };

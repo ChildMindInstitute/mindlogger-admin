@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { StyledBuilderBtn } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { StyledBuilderBtn, theme } from 'shared/styles';
 
 import { Alert, items, options } from './Alert';
 import { AlertProps } from './Alerts.types';

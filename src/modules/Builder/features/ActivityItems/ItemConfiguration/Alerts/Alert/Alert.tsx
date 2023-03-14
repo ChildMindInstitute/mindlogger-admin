@@ -3,8 +3,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
 import { InputController, SelectController } from 'shared/components/FormComponents';
-import { StyledTitleBoldSmall } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
+import { StyledTitleBoldSmall, variables } from 'shared/styles';
 
 import { items, options } from './Alert.const';
 import { StyledAlert, StyledRow, StyledRemoveBtn, StyledDescription } from './Alert.styles';
@@ -38,7 +37,6 @@ export const Alert = ({ index, removeAlert }: AlertProps) => {
           ]}
         />
       </StyledDescription>
-
       <InputController
         fullWidth
         name={`alerts.${index}.message`}

@@ -6,7 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import { store } from 'redux/store';
 import theme from 'shared/styles/theme';
-import AppRoutes from 'routes';
+import { AppRoutes } from 'routes';
 import { Spinner } from 'shared/components';
 
 const App = () => (

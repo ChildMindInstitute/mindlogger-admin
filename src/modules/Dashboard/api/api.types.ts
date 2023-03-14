@@ -87,7 +87,7 @@ export type Event = {
   };
 };
 
-export type TransferOwnership = AppletId & { email: string };
+export type TransferOwnershipType = AppletId & { email: string };
 
 export type SetAccount = { accountName: string };
 

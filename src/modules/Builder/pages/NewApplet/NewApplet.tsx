@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
+import { SaveAndPublish } from 'modules/Builder/features';
 import { LinkedTabs, Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
@@ -21,8 +22,9 @@ export const NewApplet = () => {
   ]);
 
   return (
-    <StyledBody>
+    <StyledBody sx={{ position: 'relative' }}>
       <LinkedTabs hiddenHeader={hiddenHeader} tabs={newAppletTabs} />
+      <SaveAndPublish />
     </StyledBody>
   );
 };

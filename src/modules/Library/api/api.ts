@@ -1,8 +1,8 @@
 import { apiClient } from './api.client';
-import { PublishedApplets } from './api.types';
+import { PublishedAppletsType } from './api.types';
 
 export const getPublishedAppletsApi = (
-  { recordsPerPage, pageIndex, searchText = '' }: PublishedApplets,
+  { recordsPerPage, pageIndex, searchText = '' }: PublishedAppletsType,
   signal?: AbortSignal,
 ) =>
   apiClient.get('/library/applets', {
