@@ -29,6 +29,7 @@ import {
   Date,
   AudioRecord,
   Geolocation,
+  TextResponse,
 } from './InputTypeItems';
 import {
   StyledHeader,
@@ -191,6 +192,9 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
           {selectedInputType === ItemInputTypes.Date && <Date />}
           {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
+          {selectedInputType === ItemInputTypes.Text && (
+            <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
+          )}
           {isTextInputOptionVisible && (
             <TextInputOption
               name="isTextInputOptionRequired"

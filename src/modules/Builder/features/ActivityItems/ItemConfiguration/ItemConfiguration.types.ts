@@ -70,6 +70,8 @@ export type ItemConfigurationForm = {
   maxNumber?: number;
   alerts?: Alert[];
   audioDuration?: number;
+  textResponseAnswer?: string;
+  textResponseMaxCharacters?: number;
 };
 
 export type ItemsOption = {

@@ -439,5 +439,9 @@
   "geolocationDescription": "Le répondant pourra partager sa géolocalisation",
   "appletActivities": "Activités d'applet",
   "audioRecordDescription": "Le répondant pourra enregistrer de l'audio",
-  "audioRecordDuration": "Durée maximale d'enregistrement - millisecondes"
+  "audioRecordDuration": "Durée maximale d'enregistrement - millisecondes",
+  "textResponseTitle": "TextResponse",
+  "textResponseDescription": "Le répondant pourra saisir une réponse textuelle.",
+  "correctAnswer": "Réponse correcte",
+  "maxCharacters": "Nombre maximum de caractères"
 }
