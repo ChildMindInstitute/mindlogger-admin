@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { page } from 'resources';
 import { Modal } from 'shared/components';
-import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { StyledModalWrapper } from 'shared/styles';
 
 import { AuthPopupProps } from './AuthPopup.types';
 

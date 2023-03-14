@@ -15,6 +15,7 @@ import {
   variables,
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
@@ -38,11 +39,7 @@ import {
   StyledOptionsWrapper,
   StyledItemConfiguration,
 } from './ItemConfiguration.styles';
-import {
-  ItemConfigurationForm,
-  ItemInputTypes,
-  ItemConfigurationSettings,
-} from './ItemConfiguration.types';
+import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
 import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 

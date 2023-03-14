@@ -10,11 +10,9 @@ import {
 } from 'react-hook-form';
 import { useEffect } from 'react';
 
-import {
-  ItemConfigurationForm,
-  ItemConfigurationSettings,
-  ItemInputTypes,
-} from './ItemConfiguration.types';
+import { ItemInputTypes } from 'shared/types/activityItems';
+
+import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
 import { DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 
 type OptionalItemSetupProps = {

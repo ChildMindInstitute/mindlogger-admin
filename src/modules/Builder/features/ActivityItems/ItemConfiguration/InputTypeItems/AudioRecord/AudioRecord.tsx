@@ -5,11 +5,11 @@ import { Box, Button } from '@mui/material';
 import { InputController } from 'shared/components/FormComponents';
 import { theme } from 'shared/styles';
 import { Svg } from 'shared/components';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
 import { DEFAULT_AUDIO_DURATION_MS } from '../../ItemConfiguration.const';
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
-import { ItemInputTypes } from '../../ItemConfiguration.types';
 
 export const AudioRecord = <T extends FieldValues>({ name }: UseControllerProps<FieldValues>) => {
   const { t } = useTranslation('app');

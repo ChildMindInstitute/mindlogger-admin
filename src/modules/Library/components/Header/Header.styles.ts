@@ -1,8 +1,7 @@
 import { styled } from '@mui/system';
 import { Box, Button } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { theme, variables } from 'shared/styles';
 
 export const StyledHeaderContainer = styled(Box)`
   display: grid;

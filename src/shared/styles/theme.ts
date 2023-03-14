@@ -232,6 +232,9 @@ export const theme = createTheme({
               color: variables.palette.on_surface_alfa38,
               backgroundColor: 'transparent',
               borderColor: variables.palette.on_surface_alfa12,
+              '& svg': {
+                fill: variables.palette.contained_btn_disabled_text,
+              },
             },
           },
           '&.MuiButton-text': {
