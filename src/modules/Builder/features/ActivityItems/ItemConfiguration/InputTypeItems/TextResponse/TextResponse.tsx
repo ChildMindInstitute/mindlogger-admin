@@ -41,7 +41,6 @@ export const TextResponse = <T extends FieldValues>({
           />
         </StyledMaxCharacters>
       </StyledRow>
-
       <InputController name={name} control={control} label={t('correctAnswer')} />
     </ItemOptionContainer>
   );
