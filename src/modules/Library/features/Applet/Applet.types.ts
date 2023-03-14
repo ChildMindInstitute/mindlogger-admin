@@ -10,3 +10,12 @@ export type AppletProps = {
   uiType?: AppletUiType;
   applet: PublishedApplet;
 };
+
+export type SelectedItem = {
+  id: string;
+  activityId: string;
+};
+
+export type AppletForm = {
+  [key: string]: SelectedItem[];
+};

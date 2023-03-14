@@ -4,9 +4,10 @@ import { Box } from '@mui/material';
 
 import { theme, variables, StyledFlexColumn, StyledFlexTopStart } from 'shared/styles';
 
+import { ActivityItemGrid } from '../Activity/Activity.styles';
+
 export const StyledItemContainer = styled(StyledFlexColumn)`
-  display: grid;
-  grid-template-columns: 4.8rem auto;
+  ${ActivityItemGrid}
   align-items: start;
   padding: ${theme.spacing(0.8, 2.4)};
 
@@ -20,8 +21,7 @@ export const StyledItemContainer = styled(StyledFlexColumn)`
 `;
 
 export const StyledItemHeader = styled(Box)`
-  display: grid;
-  grid-template-columns: 4.8rem auto;
+  ${ActivityItemGrid}
   cursor: pointer;
 `;
 

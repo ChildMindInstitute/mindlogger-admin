@@ -3,9 +3,13 @@ import { Box, FormControlLabel } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
 
-export const StyledActivityContainer = styled(Box)`
+export const ActivityItemGrid = `
   display: grid;
   grid-template-columns: 4.8rem auto;
+`;
+
+export const StyledActivityContainer = styled(Box)`
+  ${ActivityItemGrid}
   align-items: start;
   background: ${variables.palette.surface1};
   border-radius: ${variables.borderRadius.lg};
@@ -17,8 +21,7 @@ export const StyledActivityContainer = styled(Box)`
 `;
 
 export const StyledActivityHeader = styled(Box)`
-  display: grid;
-  grid-template-columns: 4.8rem auto;
+  ${ActivityItemGrid}
   cursor: pointer;
 `;
 

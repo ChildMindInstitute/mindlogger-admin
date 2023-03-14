@@ -41,34 +41,6 @@ export const StyledAppletKeyword = styled(StyledLabelBoldMedium)`
 export const StyledButtonsContainer = styled(Box)`
   display: flex;
   justify-content: space-between;
-
-  .MuiButton-contained {
-    &:disabled .MuiButton-startIcon {
-      svg {
-        fill: ${variables.palette.contained_btn_disabled_text};
-      }
-    }
-
-    .MuiButton-startIcon {
-      svg {
-        fill: ${variables.palette.white};
-      }
-    }
-  }
-
-  .MuiButton-outlined {
-    &:disabled .MuiButton-startIcon {
-      svg {
-        fill: ${variables.palette.contained_btn_disabled_text};
-      }
-    }
-
-    .MuiButton-startIcon {
-      svg {
-        fill: ${variables.palette.primary};
-      }
-    }
-  }
 `;
 
 export const StyledActivitiesContainer = styled(Box, shouldForwardProp)`

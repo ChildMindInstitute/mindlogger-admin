@@ -28,7 +28,7 @@ import {
   StyledExpandedButton,
   StyledActivities,
 } from './Applet.styles';
-import { AppletProps, AppletUiType } from './Applet.types';
+import { AppletForm, AppletProps, AppletUiType } from './Applet.types';
 import { RemoveAppletPopup } from './Popups';
 import { Activity } from './Activity';
 import { AppletImage } from './AppletImage';
@@ -41,27 +41,12 @@ export const Applet = ({
   const navigate = useNavigate();
 
   const [activitiesVisible, setActivitiesVisible] = useState(uiType === AppletUiType.Details);
+  const [removeAppletPopupVisible, setRemoveAppletPopupVisible] = useState(false);
 
-  const defaultValues = {
-    [appletId]: activities?.reduce((appletActivities, activity) => {
-      const items = activity.items.reduce(
-        (activityItems, item) => ({
-          ...activityItems,
-          [item.id]: false, // TODO: get values from session storage (old library) ?
-        }),
-        {},
-      );
-
-      return { ...appletActivities, [activity.id]: items };
-    }, {}),
-  };
-
-  const methods = useForm({ defaultValues, mode: 'onChange' });
+  const methods = useForm<AppletForm>({ defaultValues: { [appletId]: [] }, mode: 'onChange' });
   const { getValues } = methods;
 
-  const [removeAppletPopupVisible, setRemoveAppletPopupVisible] = useState(false);
-  const [addToBuilderDisabled, setAddToBuilderDisabled] = useState(true);
-
+  const selectedItems = getValues()[appletId];
   const APPLET_DETAILS = `${page.library}/${appletId}`;
 
   const handleRemove = () => {
@@ -118,7 +103,7 @@ export const Applet = ({
               {t('viewDetails')}
             </Button>
             <Button
-              disabled={addToBuilderDisabled}
+              disabled={!selectedItems.length}
               variant="outlined"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ marginLeft: theme.spacing(1.2) }}
@@ -133,7 +118,7 @@ export const Applet = ({
         return (
           <>
             <Button
-              disabled={addToBuilderDisabled}
+              disabled={!selectedItems.length}
               variant="contained"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ marginLeft: theme.spacing(1.2) }}
@@ -193,11 +178,7 @@ export const Applet = ({
                 <StyledActivities>
                   {activities.map((activity) => (
                     <Fragment key={activity.id}>
-                      <Activity
-                        appletId={appletId}
-                        activity={activity}
-                        setAddToBuilderDisabled={setAddToBuilderDisabled}
-                      />
+                      <Activity appletId={appletId} activity={activity} />
                     </Fragment>
                   ))}
                 </StyledActivities>

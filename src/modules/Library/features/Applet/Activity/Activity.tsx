@@ -13,33 +13,27 @@ import {
   StyledItemsList,
 } from './Activity.styles';
 import { Item } from '../Item';
+import { AppletForm } from '../Applet.types';
 
-export const Activity = ({
-  appletId,
-  setAddToBuilderDisabled,
-  activity: { id, name, items },
-}: ActivityProps) => {
-  const { watch, setValue } = useFormContext();
-  const watchItems = watch(items.map((item) => `${appletId}.${id}.${item.id}`));
+export const Activity = ({ appletId, activity: { id, name, items } }: ActivityProps) => {
+  const { watch, setValue } = useFormContext<AppletForm>();
+  const watchApplet = watch(appletId);
   const [activityVisible, setActivityVisible] = useState(false);
   const [activityIndeterminate, setActivityIndeterminate] = useState(false);
   const [activityChecked, setActivityChecked] = useState(false);
 
   const handleActivityChecked = (event: SyntheticEvent<Element, Event>, checked: boolean) => {
     setActivityChecked(checked);
-    setValue(
-      `${appletId}.${id}`,
-      items.reduce((activityItems, item) => ({ ...activityItems, [item.id]: checked }), []),
-    );
+    setValue(appletId, checked ? items.map((item) => ({ id: item.id, activityId: id })) : []);
   };
 
   useEffect(() => {
-    const watchItemsSet = new Set(watchItems);
-    const indeterminate = watchItemsSet.size !== 1;
-    setActivityIndeterminate(indeterminate);
-    setActivityChecked(!indeterminate && watchItems[0]);
-    setAddToBuilderDisabled(!indeterminate && !watchItems[0]);
-  }, [watchItems]);
+    const currentActivityItems = watchApplet.filter((item) => item.activityId === id);
+    const isAllItemsSelected = currentActivityItems.length === items.length;
+    const isIndeterminate = currentActivityItems.length > 0 && !isAllItemsSelected;
+    setActivityIndeterminate(isIndeterminate);
+    setActivityChecked(isAllItemsSelected);
+  }, [watchApplet]);
 
   return (
     <StyledActivityContainer>
