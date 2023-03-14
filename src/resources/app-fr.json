@@ -389,5 +389,9 @@
   "addOption": "Ajouter une option",
   "saveAndPublish": "Enregistrer et publier",
   "appletActivities": "Activités d'applet",
-  "timeRangeTitle": "Plage de temps"
+  "timeRangeTitle": "Plage de temps",
+  "videoResponseTitle": "VideoResponse",
+  "videoResponseDescription": "Le répondant pourra prendre ou mettre en ligne une vidéo.",
+  "photoResponseTitle": "PhotoResponse",
+  "photoResponseDescription": "Le répondant pourra prendre ou télécharger une photo."
 }
