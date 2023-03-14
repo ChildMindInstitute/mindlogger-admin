@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useForm, FormProvider } from 'react-hook-form';
 import { Button } from '@mui/material';
@@ -14,13 +14,22 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { useHeaderSticky } from 'shared/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { SelectionOption, NumberSelection } from './InputTypeItems';
 import {
-  StyledTop,
+  SelectionOption,
+  NumberSelection,
+  TimeRange,
+  VideoResponse,
+  PhotoResponse,
+  Date,
+} from './InputTypeItems';
+import {
+  StyledHeader,
+  StyledContent,
   StyledInputWrapper,
   StyledOptionsWrapper,
   StyledItemConfiguration,
@@ -41,6 +50,8 @@ import { Alerts } from './Alerts';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
+  const containerRef = useRef<HTMLElement | null>(null);
+  const isHeaderSticky = useHeaderSticky(containerRef);
   const { t } = useTranslation('app');
 
   const methods = useForm<ItemConfigurationForm>({
@@ -117,90 +128,98 @@ export const ItemConfiguration = () => {
 
   return (
     <FormProvider {...methods}>
-      <StyledItemConfiguration>
-        <StyledTop>
+      <StyledItemConfiguration ref={containerRef}>
+        <StyledHeader isSticky={isHeaderSticky}>
           <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
           <StyledFlexTopCenter>
-            <StyledClearedButton
-              sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
-              onClick={() => setSettingsDrawerVisible(true)}
-            >
-              <Svg id="report-configuration" />
-            </StyledClearedButton>
+            {selectedInputType && (
+              <StyledClearedButton
+                sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
+                onClick={() => setSettingsDrawerVisible(true)}
+              >
+                <Svg id="report-configuration" />
+              </StyledClearedButton>
+            )}
             <StyledClearedButton sx={{ p: theme.spacing(1) }}>
               <Svg id="close" />
             </StyledClearedButton>
           </StyledFlexTopCenter>
-        </StyledTop>
-        <StyledInputWrapper>
-          <GroupedSelectSearchController
-            name="itemsInputType"
-            options={itemsTypeOptions}
-            control={control}
-          />
-        </StyledInputWrapper>
-        <StyledInputWrapper>
-          <StyledBodyMedium
-            sx={{ m: theme.spacing(0.5, 0, 4, 1.4) }}
-            color={variables.palette.on_surface_variant}
-          >
-            {t('itemTypeDescription')}
-          </StyledBodyMedium>
-          <InputController
-            fullWidth
-            name="name"
-            control={control}
-            label={t('itemName')}
-            type="text"
-            sx={{ mb: theme.spacing(4) }}
-          />
-        </StyledInputWrapper>
-        <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
-        <EditorController name="body" control={control} />
-        {hasOptions && (
-          <StyledOptionsWrapper>
-            {options?.length
-              ? options.map((option, index) => (
-                  <SelectionOption
-                    key={option.id}
-                    onRemoveOption={removeOptions}
-                    onUpdateOption={updateOptions}
-                    index={index}
-                  />
-                ))
-              : null}
-            <Button
-              onClick={handleAddOption}
-              variant="outlined"
-              startIcon={<Svg id="add" width="20" height="20" />}
-            >
-              {t('addOption')}
-            </Button>
-          </StyledOptionsWrapper>
-        )}
-        {selectedInputType === ItemInputTypes.NumberSelection && (
-          <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
-        )}
-        {isTextInputOptionVisible && (
-          <TextInputOption
-            name="isTextInputOptionRequired"
-            control={control}
-            onRemove={handleRemoveTextInputOption}
-          />
-        )}
-        {settingsDrawerVisible && (
-          <ItemSettingsDrawer
-            open={settingsDrawerVisible}
-            onClose={() => setSettingsDrawerVisible(false)}
-          >
-            <ItemSettingsController
-              timerName="timer"
-              name="settings"
-              inputType={selectedInputType}
+        </StyledHeader>
+        <StyledContent>
+          <StyledInputWrapper>
+            <GroupedSelectSearchController
+              name="itemsInputType"
+              options={itemsTypeOptions}
               control={control}
             />
-          </ItemSettingsDrawer>
-        )}
+          </StyledInputWrapper>
+          <StyledInputWrapper>
+            <StyledBodyMedium
+              sx={{ m: theme.spacing(0.2, 0, 4, 1.4) }}
+              color={variables.palette.on_surface_variant}
+            >
+              {t('itemTypeDescription')}
+            </StyledBodyMedium>
+            <InputController
+              fullWidth
+              name="name"
+              control={control}
+              label={t('itemName')}
+              type="text"
+              sx={{ mb: theme.spacing(4) }}
+            />
+          </StyledInputWrapper>
+          <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
+          <EditorController name="body" control={control} />
+          {hasOptions && (
+            <StyledOptionsWrapper>
+              {options?.length
+                ? options.map((option, index) => (
+                    <SelectionOption
+                      key={option.id}
+                      onRemoveOption={removeOptions}
+                      onUpdateOption={updateOptions}
+                      index={index}
+                    />
+                  ))
+                : null}
+              <Button
+                onClick={handleAddOption}
+                variant="outlined"
+                startIcon={<Svg id="add" width="20" height="20" />}
+              >
+                {t('addOption')}
+              </Button>
+            </StyledOptionsWrapper>
+          )}
+          {selectedInputType === ItemInputTypes.NumberSelection && (
+            <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+          )}
+          {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
+          {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
+          {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
+          {selectedInputType === ItemInputTypes.Date && <Date />}
+          {isTextInputOptionVisible && (
+            <TextInputOption
+              name="isTextInputOptionRequired"
+              control={control}
+              onRemove={handleRemoveTextInputOption}
+            />
+          )}
+          {settingsDrawerVisible && (
+            <ItemSettingsDrawer
+              open={settingsDrawerVisible}
+              onClose={() => setSettingsDrawerVisible(false)}
+            >
+              <ItemSettingsController
+                timerName="timer"
+                name="settings"
+                inputType={selectedInputType}
+                control={control}
+              />
+            </ItemSettingsDrawer>
+          )}
+        </StyledContent>
         {hasAlerts && (
           <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
         )}
