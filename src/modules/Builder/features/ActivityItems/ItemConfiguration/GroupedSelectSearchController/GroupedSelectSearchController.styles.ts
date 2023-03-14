@@ -1,7 +1,7 @@
 import { styled, MenuItem, ListSubheader } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
-import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+import { variables, theme } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 const {
   palette,
@@ -19,8 +19,6 @@ export const StyledGroupName = styled(MenuItem, shouldForwardProp)`
   text-transform: uppercase;
   color: ${palette.outline};
   letter-spacing: ${letterSpacing.sm};
-  pointer-events: none;
-  cursor: default;
 `;
 
 export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`

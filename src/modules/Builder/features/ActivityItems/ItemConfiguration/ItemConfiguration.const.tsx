@@ -7,6 +7,7 @@ export const DEFAULT_TIMER_VALUE = 100;
 export const DEFAULT_SCORE_VALUE = 0;
 export const DEFAULT_MIN_NUMBER = 1;
 export const DEFAULT_MAX_NUMBER = 100;
+export const DEFAULT_AUDIO_DURATION_MS = 3000;
 
 export const itemsTypeIcons = {
   [ItemInputTypes.SingleSelection]: <Svg id="radio-button-outline" />,

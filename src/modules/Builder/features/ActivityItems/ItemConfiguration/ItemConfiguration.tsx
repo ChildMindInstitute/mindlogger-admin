@@ -19,6 +19,7 @@ import { ItemInputTypes } from 'shared/types/activityItems';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
+import { Alerts } from './Alerts';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
 import {
   SelectionOption,
@@ -27,6 +28,8 @@ import {
   VideoResponse,
   PhotoResponse,
   Date,
+  AudioRecord,
+  Geolocation,
 } from './InputTypeItems';
 import {
   StyledHeader,
@@ -36,14 +39,8 @@ import {
   StyledItemConfiguration,
 } from './ItemConfiguration.styles';
 import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
-import {
-  itemsTypeOptions,
-  DEFAULT_TIMER_VALUE,
-  DEFAULT_SCORE_VALUE,
-  DEFAULT_MIN_NUMBER,
-  DEFAULT_MAX_NUMBER,
-} from './ItemConfiguration.const';
-import { Alerts } from './Alerts';
+import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
+import { useSettingsSetup } from './ItemConfiguration.hooks';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -57,15 +54,11 @@ export const ItemConfiguration = () => {
       name: '',
       body: '',
       settings: [],
-      timer: DEFAULT_TIMER_VALUE,
-      isTextInputOptionRequired: true,
-      minNumber: DEFAULT_MIN_NUMBER,
-      maxNumber: DEFAULT_MAX_NUMBER,
     },
     mode: 'onChange',
   });
 
-  const { control, watch, setValue } = methods;
+  const { control, watch, setValue, getValues } = methods;
 
   const {
     fields: options,
@@ -76,6 +69,7 @@ export const ItemConfiguration = () => {
     control,
     name: 'options',
   });
+
   const {
     fields: alerts,
     append: appendAlert,
@@ -113,11 +107,7 @@ export const ItemConfiguration = () => {
     );
   };
 
-  useEffect(() => {
-    setValue('settings', []);
-    setValue('timer', DEFAULT_TIMER_VALUE);
-    removeOptions();
-  }, [selectedInputType]);
+  useSettingsSetup({ control, setValue, getValues, watch });
 
   useEffect(() => {
     !hasAlerts && removeAlert();
@@ -190,18 +180,23 @@ export const ItemConfiguration = () => {
             </StyledOptionsWrapper>
           )}
           {selectedInputType === ItemInputTypes.NumberSelection && (
-            <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
+            <NumberSelection name="minNumber" maxName="maxNumber" />
           )}
+          {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
           {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
           {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
           {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
           {selectedInputType === ItemInputTypes.Date && <Date />}
+          {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
           {isTextInputOptionVisible && (
             <TextInputOption
               name="isTextInputOptionRequired"
               control={control}
               onRemove={handleRemoveTextInputOption}
             />
+          )}
+          {hasAlerts && (
+            <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
           )}
           {settingsDrawerVisible && (
             <ItemSettingsDrawer
@@ -215,9 +210,6 @@ export const ItemConfiguration = () => {
                 control={control}
               />
             </ItemSettingsDrawer>
-          )}
-          {hasAlerts && (
-            <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
           )}
         </StyledContent>
       </StyledItemConfiguration>

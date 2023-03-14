@@ -1,17 +1,12 @@
-import { styled } from '@mui/system';
-import { Box } from '@mui/material';
+import { styled, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { theme, variables, StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
-import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+import { StyledItemOptionContainer } from '../ItemOptionContainer';
 
-export const StyledItemOption = styled(Box, shouldForwardProp)`
+export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardProp)`
   padding: ${theme.spacing(1.6, 2.4, 1.6, 3.4)};
-  margin-bottom: ${theme.spacing(2.4)};
-  background-color: ${variables.palette.surface1};
-  border-radius: ${variables.borderRadius.lg2};
   position: relative;
 
   && {

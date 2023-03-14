@@ -388,7 +388,6 @@
   "supportingText": "Texte de support",
   "addOption": "Ajouter une option",
   "saveAndPublish": "Enregistrer et publier",
-  "appletActivities": "Activités d'applet",
   "timeRangeTitle": "Plage de temps",
   "videoResponseTitle": "VideoResponse",
   "videoResponseDescription": "Le répondant pourra prendre ou mettre en ligne une vidéo.",
@@ -436,5 +435,9 @@
   "alignRight": "Clamper le texte à droite",
   "thresholdMessage": "La visibilité diminue au-delà de {{size}} caractères",
   "dateItemTitle": "Sélection de date",
-  "dateItemDescription": "Le répondant pourra sélectionner la date."
+  "dateItemDescription": "Le répondant pourra sélectionner la date.",
+  "geolocationDescription": "Le répondant pourra partager sa géolocalisation",
+  "appletActivities": "Activités d'applet",
+  "audioRecordDescription": "Le répondant pourra enregistrer de l'audio",
+  "audioRecordDuration": "Durée maximale d'enregistrement - millisecondes"
 }

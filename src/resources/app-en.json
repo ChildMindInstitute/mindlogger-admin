@@ -578,5 +578,8 @@
   "photoResponseTitle": "Photo Response",
   "photoResponseDescription": "The respondent will able to take or upload a photo.",
   "dateItemTitle": "Date Select",
-  "dateItemDescription": "The respondent will be able to select the date."
+  "dateItemDescription": "The respondent will be able to select the date.",
+  "geolocationDescription": "The respondent will able to share geolocation",
+  "audioRecordDescription": "The respondent will able to record audio",
+  "audioRecordDuration": "Max recording duration - milliseconds"
 }
