@@ -572,5 +572,12 @@
   "maxLabel": "Max label",
   "value": "Value",
   "saveAndPublish": "Save & Publish",
-  "thresholdMessage": "Visibility decreases over {{size}} characters"
+  "thresholdMessage": "Visibility decreases over {{size}} characters",
+  "timeRangeTitle": "Time Range",
+  "videoResponseTitle": "Video Response",
+  "videoResponseDescription": "The respondent will able to take or upload a video.",
+  "photoResponseTitle": "Photo Response",
+  "photoResponseDescription": "The respondent will able to take or upload a photo.",
+  "dateItemTitle": "Date Select",
+  "dateItemDescription": "The respondent will be able to select the date."
 }

@@ -19,7 +19,15 @@ import { useHeaderSticky } from 'shared/hooks';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { SelectionOption, NumberSelection, SliderRows } from './InputTypeItems';
+import {
+  SelectionOption,
+  NumberSelection,
+  TimeRange,
+  VideoResponse,
+  PhotoResponse,
+  Date,
+  SliderRows,
+} from './InputTypeItems';
 import {
   StyledHeader,
   StyledContent,
@@ -182,6 +190,10 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.SliderRows && (
             <SliderRows name="sliderOptions" control={control} isMultiple />
           )}
+          {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
+          {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
+          {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
+          {selectedInputType === ItemInputTypes.Date && <Date />}
           {isTextInputOptionVisible && (
             <TextInputOption
               name="isTextInputOptionRequired"
