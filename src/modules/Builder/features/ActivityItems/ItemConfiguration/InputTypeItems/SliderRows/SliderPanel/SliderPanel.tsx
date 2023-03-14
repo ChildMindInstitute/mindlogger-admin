@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useFormContext, FieldValues, Path } from 'react-hook-form';
+import { useFormContext, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Slider } from '@mui/material';
 
 import { UploaderUiType, Uploader, Table, UiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
@@ -13,12 +12,19 @@ import {
   StyledSliderPanelContainer,
   StyledInputContainer,
   StyledScoresContainer,
+  StyledSlider,
 } from './SliderPanel.styles';
-import { getHeadCells, getTableRows } from './SliderPanel.utils';
-import { SLIDER_VALUE_HEAD_ROWS, SLIDER_LABEL_ROWS } from './SliderPanel.const';
+import {
+  getHeadCells,
+  getTableRows,
+  getStaticHeadRow,
+  getStaticBodyRow,
+  getMarksByScores,
+} from './SliderPanel.utils';
 import {
   DEFAULT_SLIDER_MIN_NUMBER,
   SLIDER_LABEL_MAX_LENGTH,
+  DEFAULT_SLIDER_MAX_VALUE,
 } from '../../../ItemConfiguration.const';
 
 export const SliderPanel = <T extends FieldValues>({
@@ -58,7 +64,7 @@ export const SliderPanel = <T extends FieldValues>({
       setValue(`${name}.scores`, scores?.slice(0, scoresQuantity));
   }, [max, name, getValues, setValue]);
 
-  const handleCollapse = () => setIsExpanded(!isExpanded);
+  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
   return (
     <StyledSliderPanelContainer
@@ -90,7 +96,7 @@ export const SliderPanel = <T extends FieldValues>({
         />
       </StyledInputContainer>
       <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
-        <Slider min={min} max={max} />
+        <StyledSlider min={min} max={max} marks={getMarksByScores(scores)} disabled />
       </StyledFlexTopCenter>
       <StyledInputContainer>
         <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
@@ -106,6 +112,7 @@ export const SliderPanel = <T extends FieldValues>({
             control={control}
             name={`${name}.min`}
             label={t('minValue')}
+            maxNumberValue={max}
             defaultNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
           />
         </StyledFlexTopCenter>
@@ -122,13 +129,14 @@ export const SliderPanel = <T extends FieldValues>({
             control={control}
             name={`${name}.max`}
             label={t('maxValue')}
+            maxNumberValue={DEFAULT_SLIDER_MAX_VALUE}
           />
         </StyledFlexTopCenter>
       </StyledInputContainer>
       <StyledScoresContainer>
         <Table
-          columns={SLIDER_VALUE_HEAD_ROWS}
-          rows={SLIDER_LABEL_ROWS}
+          columns={getStaticHeadRow()}
+          rows={getStaticBodyRow()}
           orderBy="0"
           uiType={UiType.Secondary}
         />

@@ -1,4 +1,4 @@
-import { Collapse, styled } from '@mui/material';
+import { Collapse, Slider, styled } from '@mui/material';
 
 import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
 
@@ -39,6 +39,11 @@ export const StyledScoresContainer = styled(StyledFlexTopCenter)`
 
     .MuiTableCell-head {
       background: transparent;
+      color: ${variables.palette.outline};
+    }
+
+    .MuiTableCell-body {
+      color: ${variables.palette.on_surface};
     }
 
     .MuiTableCell-head,
@@ -46,8 +51,25 @@ export const StyledScoresContainer = styled(StyledFlexTopCenter)`
       font-size: ${variables.font.size.md};
       line-height: ${variables.font.lineHeight.md};
       font-weight: ${variables.font.weight.regular};
-      color: ${variables.palette.on_surface};
       letter-spacing: ${variables.font.letterSpacing.lg};
     }
+  }
+`;
+
+export const StyledSlider = styled(Slider)`
+  .MuiSlider-rail {
+    color: ${variables.palette.surface_variant};
+  }
+
+  .MuiSlider-thumb {
+    color: ${variables.palette.on_surface_variant};
+
+    &:hover {
+      box-shadow: ${variables.boxShadow.light1};
+    }
+  }
+
+  .MuiSlider-mark {
+    color: ${variables.palette.on_surface_alfa38};
   }
 `;

@@ -24,6 +24,7 @@ export const InputController = <T extends FieldValues>({
   maxLength,
   tooltip,
   InputProps,
+  maxNumberValue,
   defaultNumberValue = 1,
   ...textFieldProps
 }: InputControllerProps<T>) => {
@@ -41,7 +42,10 @@ export const InputController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
-        const handleAddNumber = () => onChange(+value + 1);
+        const handleAddNumber = () => {
+          if (+value < maxNumberValue) onChange(+value + 1);
+        };
+
         const handleDistractNumber = () => {
           const minNumberVal = defaultNumberValue === 0 ? 0 : 1;
           +value > minNumberVal && onChange(+value - 1);

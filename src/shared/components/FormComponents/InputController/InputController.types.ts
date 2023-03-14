@@ -5,6 +5,7 @@ type FormInputProps = {
   textAdornment?: string;
   tooltip?: string;
   maxLength?: number;
+  maxNumberValue?: number;
   defaultNumberValue?: number;
 } & TextFieldProps;
 

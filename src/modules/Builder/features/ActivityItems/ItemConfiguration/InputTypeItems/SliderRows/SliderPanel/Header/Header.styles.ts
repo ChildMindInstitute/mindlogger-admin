@@ -11,7 +11,8 @@ export const StyledSliderPanelHeader = styled(StyledFlexTopCenter, shouldForward
   ${({ isExpanded }: { isExpanded?: boolean }) =>
     !isExpanded &&
     `
-  height: 100%;`}
+      height: 100%;
+  `}
 
   .MuiTypography-root {
     white-space: nowrap;
@@ -24,4 +25,9 @@ export const StyledImg = styled('img')`
   height: 5.6rem;
   border-radius: ${variables.borderRadius.lg2};
   object-fit: cover;
+`;
+
+export const StyledSliderPanelPreviewContainer = styled(StyledFlexTopCenter)`
+  width: 100%;
+  gap: 2.4rem;
 `;

@@ -2,7 +2,7 @@ export type HeaderProps = {
   name: string;
   label: string;
   isExpanded: boolean;
-  isMultiple: boolean | undefined;
+  isMultiple?: boolean;
   onArrowClick: () => void;
   onTrashClick: () => void;
 };

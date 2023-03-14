@@ -37,7 +37,10 @@ export const SliderRows = <T extends FieldValues>({
                 <SliderPanel
                   key={`slider-panel-${id}`}
                   name={`${name}[${index}]`}
-                  label={t('slider', { context: 'option', index: index + 1 })}
+                  label={t('slider', {
+                    context: 'option',
+                    index: isMultiple ? index + 1 : undefined,
+                  })}
                   isMultiple={isMultiple}
                   onRemove={handleRemove}
                 />

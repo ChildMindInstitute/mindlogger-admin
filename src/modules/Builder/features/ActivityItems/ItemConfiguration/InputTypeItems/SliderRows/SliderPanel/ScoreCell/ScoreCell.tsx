@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ClickAwayListener } from '@mui/material';
+import { Box, ClickAwayListener } from '@mui/material';
 
 import { StyledFlexTopCenter } from 'shared/styles';
 
@@ -26,9 +26,9 @@ export const ScoreCell = ({ name }: { name: string }) => {
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
-      <div>
+      <Box>
         <StyledInputController control={control} name={name} type="number" autoFocus />
-      </div>
+      </Box>
     </ClickAwayListener>
   );
 };

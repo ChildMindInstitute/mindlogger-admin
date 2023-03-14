@@ -6,13 +6,18 @@ import {
   theme,
   StyledClearedButton,
   StyledFlexColumn,
-  StyledFlexTopCenter,
   StyledLabelBoldLarge,
   StyledLabelLarge,
 } from 'shared/styles';
 
 import { HeaderProps } from './Header.types';
-import { StyledImg, StyledSliderPanelHeader } from './Header.styles';
+import {
+  StyledImg,
+  StyledSliderPanelHeader,
+  StyledSliderPanelPreviewContainer,
+} from './Header.styles';
+import { StyledSlider } from '../SliderPanel.styles';
+import { getMarksByScores } from '../SliderPanel.utils';
 
 const commonButtonStyles = {
   p: theme.spacing(1),
@@ -27,11 +32,11 @@ export const Header = ({
   onArrowClick,
   onTrashClick,
 }: HeaderProps) => {
-  const { getValues } = useFormContext();
+  const { watch } = useFormContext();
 
-  const { min, max, minLabel, maxLabel, minImage, maxImage } = getValues(name);
+  const { min, max, minLabel, maxLabel, minImage, maxImage, scores } = watch(name);
 
-  if (isExpanded)
+  if (isExpanded) {
     return (
       <StyledSliderPanelHeader isExpanded>
         <StyledClearedButton onClick={onArrowClick} sx={commonButtonStyles}>
@@ -45,6 +50,7 @@ export const Header = ({
         )}
       </StyledSliderPanelHeader>
     );
+  }
 
   return (
     <StyledSliderPanelHeader>
@@ -52,17 +58,17 @@ export const Header = ({
         <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
       </StyledClearedButton>
       <StyledLabelBoldLarge>{label}</StyledLabelBoldLarge>
-      <StyledFlexTopCenter sx={{ width: '100%', gap: '2.4rem' }}>
+      <StyledSliderPanelPreviewContainer>
         <StyledFlexColumn sx={{ alignItems: 'center' }}>
           {<StyledLabelLarge>{minLabel}</StyledLabelLarge>}
           {minImage && <StyledImg src={minImage} />}
         </StyledFlexColumn>
-        <Slider min={min} max={max} />
+        <StyledSlider min={min} max={max} marks={getMarksByScores(scores)} disabled />
         <StyledFlexColumn sx={{ alignItems: 'center' }}>
           {<StyledLabelLarge>{maxLabel}</StyledLabelLarge>}
           {maxImage && <StyledImg src={maxImage} />}
         </StyledFlexColumn>
-      </StyledFlexTopCenter>
+      </StyledSliderPanelPreviewContainer>
     </StyledSliderPanelHeader>
   );
 };
