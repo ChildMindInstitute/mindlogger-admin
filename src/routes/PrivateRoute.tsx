@@ -1,20 +1,14 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import { page } from 'resources';
+import { auth } from 'redux/modules';
 
-type PrivateRouteDefinition = {
-  condition: boolean;
-  redirectPath?: string;
+type PrivateRouteProps = {
   children: JSX.Element;
 };
 
-export const PrivateRoute = ({
-  condition,
-  redirectPath = page.login,
-  children,
-}: PrivateRouteDefinition) => {
-  const location = useLocation();
-  const redirect = location?.state?.from || redirectPath;
+export const PrivateRoute = ({ children }: PrivateRouteProps) => {
+  const isAuthorized = auth.useAuthorized();
 
-  return condition ? children : <Navigate to={redirect} />;
+  return isAuthorized ? children : <Navigate to={page.login} />;
 };
