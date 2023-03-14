@@ -5,6 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { UploaderUiType, Uploader, Table, UiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, StyledFlexTopCenter } from 'shared/styles';
+import {
+  DEFAULT_SLIDER_MIN_NUMBER,
+  SLIDER_LABEL_MAX_LENGTH,
+  DEFAULT_SLIDER_MAX_VALUE,
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
 
 import { Header } from './Header';
 import { SliderPanelProps } from './SliderPanel.types';
@@ -21,11 +26,6 @@ import {
   getStaticBodyRow,
   getMarksByScores,
 } from './SliderPanel.utils';
-import {
-  DEFAULT_SLIDER_MIN_NUMBER,
-  SLIDER_LABEL_MAX_LENGTH,
-  DEFAULT_SLIDER_MAX_VALUE,
-} from '../../../ItemConfiguration.const';
 
 export const SliderPanel = <T extends FieldValues>({
   name,
