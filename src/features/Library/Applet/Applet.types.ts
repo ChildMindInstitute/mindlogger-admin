@@ -1,4 +1,4 @@
-import { PublishedApplet } from 'redux/modules';
+import { PublishedApplet } from '../AppletsCatalog/AppletsCatalog.types';
 
 export enum AppletUiType {
   List = 'list',

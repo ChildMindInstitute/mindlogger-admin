@@ -7,14 +7,16 @@ import { Header } from 'features/Library/Header';
 import { RightButtonType } from 'features/Library/Header/Header.types';
 import { Applet, AppletUiType } from 'features/Library/Applet';
 import { page } from 'resources';
-import { mockedApplets } from 'features/Library/AppletsCatalog/mocked';
+import { mockedPublishedAppletResponse } from 'features/Library/AppletsCatalog/mocked';
 
 export const AppletDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
   // TODO: replace with real data when the endpoint is ready
-  const applet = mockedApplets.data.find(({ appletId }) => appletId === id) as PublishedApplet;
+  const applet = mockedPublishedAppletResponse.data.find(
+    ({ appletId }) => appletId === id,
+  ) as PublishedApplet;
 
   useBreadcrumbs();
 
