@@ -42,7 +42,11 @@ export const SliderPanel = <T extends FieldValues>({
   const { id, min, max, scores } = watch(name);
 
   watch((data, { name: attributeName }: { name?: string }) => {
-    const { min, max, scores } = getValues(name);
+    const option = getValues(name);
+
+    if (!option) return;
+
+    const { min, max, scores } = option;
 
     const scoresQuantity = max - min + 1;
 
