@@ -13,12 +13,13 @@ export const TimePicker = <T extends FieldValues>({
   format = 'HH:mm',
   label,
   name,
+  wrapperSx = {},
 }: TimePickerProps<T>) => (
   <Controller
     control={control}
     name={name}
     render={({ field: { onChange, value } }) => (
-      <StyledTimePickerWrapper>
+      <StyledTimePickerWrapper sx={{ ...wrapperSx }}>
         <ReactDatePicker
           className="date-picker"
           selected={value}

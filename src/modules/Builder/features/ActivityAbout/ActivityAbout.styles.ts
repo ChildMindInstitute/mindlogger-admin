@@ -19,7 +19,7 @@ export const StyledForm = styled('form')`
 `;
 
 export const StyledContainer = styled(Box)`
-  ${column}
+  ${column};
   width: 54.6rem;
 `;
 

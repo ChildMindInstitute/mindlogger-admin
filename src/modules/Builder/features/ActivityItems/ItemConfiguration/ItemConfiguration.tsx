@@ -11,15 +11,24 @@ import {
   StyledFlexTopCenter,
   StyledHeadlineLarge,
   StyledTitleLarge,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+  theme,
+  variables,
+} from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
+import { Alerts } from './Alerts';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { SelectionOption, NumberSelection, Geolocation } from './InputTypeItems';
+import {
+  SelectionOption,
+  NumberSelection,
+  TimeRange,
+  VideoResponse,
+  PhotoResponse,
+  Date,
+  Geolocation,
+} from './InputTypeItems';
 import {
   StyledHeader,
   StyledContent,
@@ -72,6 +81,15 @@ export const ItemConfiguration = () => {
     name: 'options',
   });
 
+  const {
+    fields: alerts,
+    append: appendAlert,
+    remove: removeAlert,
+  } = useFieldArray({
+    control,
+    name: 'alerts',
+  });
+
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
 
@@ -81,6 +99,7 @@ export const ItemConfiguration = () => {
 
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
   const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
+  const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
 
   const handleAddOption = () =>
     appendOption({
@@ -104,6 +123,10 @@ export const ItemConfiguration = () => {
     setValue('timer', DEFAULT_TIMER_VALUE);
     removeOptions();
   }, [selectedInputType]);
+
+  useEffect(() => {
+    !hasAlerts && removeAlert();
+  }, [hasAlerts]);
 
   return (
     <FormProvider {...methods}>
@@ -175,12 +198,19 @@ export const ItemConfiguration = () => {
             <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
           )}
           {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
+          {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
+          {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
+          {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
+          {selectedInputType === ItemInputTypes.Date && <Date />}
           {isTextInputOptionVisible && (
             <TextInputOption
               name="isTextInputOptionRequired"
               control={control}
               onRemove={handleRemoveTextInputOption}
             />
+          )}
+          {hasAlerts && (
+            <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
           )}
           {settingsDrawerVisible && (
             <ItemSettingsDrawer
