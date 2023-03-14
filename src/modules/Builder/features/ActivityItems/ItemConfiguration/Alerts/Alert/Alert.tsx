@@ -14,6 +14,7 @@ export const Alert = ({ index, removeAlert }: AlertProps) => {
   const { t } = useTranslation('app');
   const { control } = useFormContext<ItemConfigurationForm>();
 
+  // TODO: change fields depends on item type
   return (
     <StyledAlert>
       <StyledRow>

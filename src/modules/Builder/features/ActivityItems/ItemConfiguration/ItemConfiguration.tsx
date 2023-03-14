@@ -86,6 +86,7 @@ export const ItemConfiguration = () => {
 
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
   const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
+  const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
 
   const handleAddOption = () =>
     appendOption({
@@ -109,6 +110,10 @@ export const ItemConfiguration = () => {
     setValue('timer', DEFAULT_TIMER_VALUE);
     removeOptions();
   }, [selectedInputType]);
+
+  useEffect(() => {
+    !hasAlerts && setValue('alerts', []);
+  }, [hasAlerts]);
 
   return (
     <FormProvider {...methods}>
@@ -196,7 +201,9 @@ export const ItemConfiguration = () => {
             />
           </ItemSettingsDrawer>
         )}
-        <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
+        {hasAlerts && (
+          <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
+        )}
       </StyledItemConfiguration>
     </FormProvider>
   );
