@@ -19,7 +19,14 @@ import { useHeaderSticky } from 'shared/hooks';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
-import { Date, SelectionOption, NumberSelection } from './InputTypeItems';
+import {
+  SelectionOption,
+  NumberSelection,
+  TimeRange,
+  VideoResponse,
+  PhotoResponse,
+  Date,
+} from './InputTypeItems';
 import {
   StyledHeader,
   StyledContent,
@@ -174,6 +181,9 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.NumberSelection && (
             <NumberSelection name="minNumber" maxName="maxNumber" control={control} />
           )}
+          {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
+          {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
+          {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
           {selectedInputType === ItemInputTypes.Date && <Date />}
           {isTextInputOptionVisible && (
             <TextInputOption

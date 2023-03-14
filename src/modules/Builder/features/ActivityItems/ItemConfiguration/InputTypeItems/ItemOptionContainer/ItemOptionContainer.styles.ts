@@ -1,7 +1,6 @@
 import { styled } from '@mui/material';
 
-import { StyledFlexColumn } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
+import { StyledFlexColumn, variables } from 'shared/styles';
 import theme from 'shared/styles/theme';
 
 export const StyledItemOptionContainer = styled(StyledFlexColumn)`
