@@ -572,5 +572,7 @@
   "videoResponseTitle": "Video Response",
   "videoResponseDescription": "The respondent will able to take or upload a video.",
   "photoResponseTitle": "Photo Response",
-  "photoResponseDescription": "The respondent will able to take or upload a photo."
+  "photoResponseDescription": "The respondent will able to take or upload a photo.",
+  "dateItemTitle": "Date Select",
+  "dateItemDescription": "The respondent will be able to select the date."
 }

@@ -2,8 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { FieldValues } from 'react-hook-form';
 
 import { InputController } from 'shared/components/FormComponents';
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { StyledFlexTopCenter, theme } from 'shared/styles';
 
 import { StyledInputWrapper } from './NumberSelection.styles';
 import { NumberSelectionProps } from './NumberSelection.types';

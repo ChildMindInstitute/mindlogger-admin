@@ -25,6 +25,7 @@ import {
   TimeRange,
   VideoResponse,
   PhotoResponse,
+  Date,
 } from './InputTypeItems';
 import {
   StyledHeader,
@@ -183,6 +184,7 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
           {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
           {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
+          {selectedInputType === ItemInputTypes.Date && <Date />}
           {isTextInputOptionVisible && (
             <TextInputOption
               name="isTextInputOptionRequired"
