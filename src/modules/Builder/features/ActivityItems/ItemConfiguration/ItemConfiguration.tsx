@@ -112,7 +112,7 @@ export const ItemConfiguration = () => {
   }, [selectedInputType]);
 
   useEffect(() => {
-    !hasAlerts && setValue('alerts', []);
+    !hasAlerts && removeAlert();
   }, [hasAlerts]);
 
   return (
