@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import { styled } from '@mui/material';
 
 import { StyledFlexColumn, variables } from 'shared/styles';
 import theme from 'shared/styles/theme';

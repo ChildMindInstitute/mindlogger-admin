@@ -568,6 +568,7 @@
   "alignRight": "Clamp text to the right",
   "saveAndPublish": "Save & Publish",
   "thresholdMessage": "Visibility decreases over {{size}} characters",
+  "timeRangeTitle": "Time Range",
   "videoResponseTitle": "Video Response",
   "videoResponseDescription": "The respondent will able to take or upload a video.",
   "photoResponseTitle": "Photo Response",

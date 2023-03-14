@@ -142,6 +142,7 @@ export const StyledTextField = styled(TextField)`
   input.Mui-disabled {
     color: ${variables.palette.black};
     -webkit-text-fill-color: ${variables.palette.black};
+    opacity: 0.38;
   }
 
   .MuiOutlinedInput-notchedOutline {
@@ -173,9 +174,15 @@ export const StyledIconBtn = styled(StyledClearedButton)`
     fill: ${variables.palette.on_surface_variant};
   }
 
-  &:hover,
-  &:active,
-  &:focus {
+  &:disabled {
+    svg {
+      opacity: 0.38;
+    }
+  }
+
+  &:hover:not([disabled]),
+  &:active:not([disabled]),
+  &:focus:not([disabled]) {
     svg {
       fill: ${variables.palette.primary};
     }
