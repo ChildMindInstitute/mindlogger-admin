@@ -1,6 +1,7 @@
 import { Svg } from 'shared/components';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
-import { ItemsOptionGroup, ItemInputTypes } from './ItemConfiguration.types';
+import { ItemsOptionGroup } from './ItemConfiguration.types';
 
 export const DEFAULT_TIMER_VALUE = 100;
 export const DEFAULT_SCORE_VALUE = 0;

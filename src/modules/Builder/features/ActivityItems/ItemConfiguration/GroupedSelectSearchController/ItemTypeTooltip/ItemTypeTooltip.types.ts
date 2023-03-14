@@ -1,4 +1,4 @@
-import { ItemInputTypes } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
 export type ItemTypeTooltipProps = {
   uiType: ItemInputTypes;

@@ -7,8 +7,8 @@ import { Svg } from 'shared/components';
 import theme from 'shared/styles/theme';
 import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
-import { ItemInputTypes } from '../ItemConfiguration.types';
 import { itemsTypeIcons } from '../ItemConfiguration.const';
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {

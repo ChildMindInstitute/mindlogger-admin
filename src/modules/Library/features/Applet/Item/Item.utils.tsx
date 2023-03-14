@@ -1,23 +1,24 @@
 import uniqueId from 'lodash.uniqueid';
 
+import { ItemInputTypes } from 'shared/types/activityItems';
 import { variables, StyledBodyLarge } from 'shared/styles';
 import i18n from 'i18n';
 
 import { StyledItemContentRow, StyledItemSvg, StyledItemImage } from './Item.styles';
-import { Item, ItemResponseType } from '../../AppletsCatalog/AppletsCatalog.types';
-import { itemResponseTypes } from '../../AppletsCatalog/AppletsCatalog.conts';
+import { Item } from '../../AppletsCatalog/AppletsCatalog.types';
+import { ItemInputTypess } from '../../AppletsCatalog/AppletsCatalog.conts';
 
 export const renderItemContent = (item: Item) => {
   const { t } = i18n;
 
   switch (item.responseType) {
-    case ItemResponseType.SingleSelection:
-    case ItemResponseType.MultipleSelection:
+    case ItemInputTypes.SingleSelection:
+    case ItemInputTypes.MultipleSelection:
       return (
         <>
           {item.options?.map(({ title, image }) => (
             <StyledItemContentRow key={uniqueId()}>
-              <StyledItemSvg>{itemResponseTypes[item.responseType].icon}</StyledItemSvg>
+              <StyledItemSvg>{ItemInputTypess[item.responseType].icon}</StyledItemSvg>
               {image && <StyledItemImage src={image} alt="Option image" />}
               <StyledBodyLarge sx={{ color: variables.palette.on_surface }}>
                 {title}
@@ -29,9 +30,9 @@ export const renderItemContent = (item: Item) => {
     default:
       return (
         <StyledItemContentRow>
-          <StyledItemSvg>{itemResponseTypes[item.responseType].icon}</StyledItemSvg>
+          <StyledItemSvg>{ItemInputTypess[item.responseType].icon}</StyledItemSvg>
           <StyledBodyLarge sx={{ color: variables.palette.outline }}>
-            {t(itemResponseTypes[item.responseType].title)}
+            {t(ItemInputTypess[item.responseType].title)}
           </StyledBodyLarge>
         </StyledItemContentRow>
       );

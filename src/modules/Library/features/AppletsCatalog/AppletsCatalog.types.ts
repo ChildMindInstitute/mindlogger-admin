@@ -1,22 +1,4 @@
-export enum ItemResponseType {
-  SingleSelection = 'singleSelection',
-  MultipleSelection = 'multipleSelection',
-  Slider = 'slider',
-  Date = 'date',
-  NumberSelection = 'numberSelection',
-  TimeRange = 'timeRange',
-  SingleSelectionPerRow = 'singleSelectionPerRow',
-  MultipleSelectionPerRow = 'multipleSelectionPerRow',
-  SliderRows = 'sliderRows',
-  Text = 'text',
-  Drawing = 'drawing',
-  Photo = 'photo',
-  Video = 'video',
-  Geolocation = 'geolocation',
-  Audio = 'audio',
-  Message = 'message',
-  AudioPlayer = 'audioPlayer',
-}
+import { ItemInputTypes } from 'shared/types/activityItems';
 
 export type ItemOption = {
   title: string;
@@ -26,7 +8,7 @@ export type ItemOption = {
 export type Item = {
   id: string;
   question: string;
-  responseType: ItemResponseType;
+  responseType: ItemInputTypes;
   options?: ItemOption[];
 };
 

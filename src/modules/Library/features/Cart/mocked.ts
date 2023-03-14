@@ -1,4 +1,4 @@
-import { ItemResponseType } from '../AppletsCatalog/AppletsCatalog.types';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
 export const mockedCart = [
   {
@@ -20,77 +20,77 @@ export const mockedCart = [
           {
             id: '6177f838ca0b5b2015f31320_activity1_item1',
             question: '<p>Test <strong><u>slider</u></strong> item response type<p>',
-            responseType: ItemResponseType.Slider,
+            responseType: ItemInputTypes.Slider,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item2',
             question: 'Test <strong><u>date</u></strong> item response type',
-            responseType: ItemResponseType.Date,
+            responseType: ItemInputTypes.Date,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item3',
             question: 'Test <strong><u>number selection</u></strong> item response type',
-            responseType: ItemResponseType.NumberSelection,
+            responseType: ItemInputTypes.NumberSelection,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item4',
             question: 'Test <strong><u>time range</u></strong> item response type',
-            responseType: ItemResponseType.TimeRange,
+            responseType: ItemInputTypes.TimeRange,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item5',
             question: 'Test <strong><u>single selection per row</u></strong> item response type',
-            responseType: ItemResponseType.SingleSelectionPerRow,
+            responseType: ItemInputTypes.SingleSelectionPerRow,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item6',
             question: 'Test <strong><u>multiple selection per row</u></strong> item response type',
-            responseType: ItemResponseType.MultipleSelectionPerRow,
+            responseType: ItemInputTypes.MultipleSelectionPerRow,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item7',
             question: 'Test <strong><u>slider rows</u></strong> item response type',
-            responseType: ItemResponseType.SliderRows,
+            responseType: ItemInputTypes.SliderRows,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item8',
             question: 'Test <strong><u>text</u></strong> item response type',
-            responseType: ItemResponseType.Text,
+            responseType: ItemInputTypes.Text,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item9',
             question: 'Test <strong><u>drawing</u></strong> item response type',
-            responseType: ItemResponseType.Drawing,
+            responseType: ItemInputTypes.Drawing,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item10',
             question: 'Test <strong><u>photo</u></strong> item response type',
-            responseType: ItemResponseType.Photo,
+            responseType: ItemInputTypes.Photo,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item11',
             question: 'Test <strong><u>video</u></strong> item response type',
-            responseType: ItemResponseType.Video,
+            responseType: ItemInputTypes.Video,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item12',
             question: 'Test <strong><u>geolocation</u></strong> item response type',
-            responseType: ItemResponseType.Geolocation,
+            responseType: ItemInputTypes.Geolocation,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item13',
             question: 'Test <strong><u>audio</u></strong> item response type',
-            responseType: ItemResponseType.Audio,
+            responseType: ItemInputTypes.Audio,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item14',
             question: 'Test <strong><u>message</u></strong> item response type',
-            responseType: ItemResponseType.Message,
+            responseType: ItemInputTypes.Message,
           },
           {
             id: '6177f838ca0b5b2015f31320_activity1_item15',
             question: 'Test <strong><u>audio player</u></strong> item response type',
-            responseType: ItemResponseType.AudioPlayer,
+            responseType: ItemInputTypes.AudioPlayer,
           },
         ],
       },
@@ -101,7 +101,7 @@ export const mockedCart = [
           {
             id: '6177f838ca0b5b2015f31320_activity2_item1',
             question: 'Test <strong><u>single selection</u></strong> item response type',
-            responseType: ItemResponseType.SingleSelection,
+            responseType: ItemInputTypes.SingleSelection,
             options: [
               {
                 title:
@@ -130,7 +130,7 @@ export const mockedCart = [
           {
             id: '6177f838ca0b5b2015f31320_activity2_item2',
             question: 'Test <strong><u>multiple selection</u></strong> item response type',
-            responseType: ItemResponseType.MultipleSelection,
+            responseType: ItemInputTypes.MultipleSelection,
             options: [
               {
                 title: 'Checking Instagram',
@@ -206,7 +206,7 @@ export const mockedCart = [
             id: '614c4400e913a1a4f2a8b738_activity2_item1',
             question:
               '*Please select the intensity level of activities you did today:*\n\n## Header\n\n> test quote\n\n1. test list 1\n2. test list 2\n',
-            responseType: ItemResponseType.MultipleSelection,
+            responseType: ItemInputTypes.MultipleSelection,
             options: [
               {
                 title: 'Vigorous activities (e.g. running/fast cycling/heavy lifting or digging)',
