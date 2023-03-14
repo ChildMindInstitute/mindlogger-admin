@@ -28,6 +28,7 @@ export const StyledContent = styled(Box)`
 
 export const StyledBtnWrapper = styled(Box)`
   text-align: center;
+
   svg {
     fill: ${variables.palette.primary};
   }
