@@ -11,8 +11,8 @@ export const TransferOwnershipPopup = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { transferOwnershipPopupVisible, appletId } = popups.useData();
-  const appletstData = applets.useData();
-  const applet = appletstData?.result?.find((el) => el.id === appletId);
+  const appletsData = applets.useData();
+  const applet = appletsData?.result?.find((el) => el.id === appletId);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [emailTransfered, setEmailTransfered] = useState('');

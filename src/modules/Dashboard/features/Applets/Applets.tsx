@@ -36,23 +36,21 @@ export const Applets = () => {
   // }, [foldersApplets]);
 
   useEffect(() => {
-    (async () => {
-      if (ownerId) {
-        const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
-        const { getApplets } = applets.thunk;
-        await dispatch(
-          getApplets({
-            params: {
-              ownerId,
-              limit: DEFAULT_ROWS_PER_PAGE,
-              search,
-              page,
-              ordering,
-            },
-          }),
-        );
-      }
-    })();
+    if (ownerId) {
+      const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
+      const { getApplets } = applets.thunk;
+      dispatch(
+        getApplets({
+          params: {
+            ownerId,
+            limit: DEFAULT_ROWS_PER_PAGE,
+            search,
+            page,
+            ordering,
+          },
+        }),
+      );
+    }
   }, [dispatch, ownerId, search, page, orderBy, order]);
 
   const addFolder = () => {

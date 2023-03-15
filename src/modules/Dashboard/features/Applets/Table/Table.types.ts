@@ -7,7 +7,7 @@ import { OrderBy } from '../Applets.types';
 
 export type TableProps = {
   columns: HeadCell[];
-  rows: FolderApplet[] | Applet[] | null | undefined;
+  rows: FolderApplet[] | Applet[] | null;
   order: Order;
   setOrder: Dispatch<SetStateAction<Order>>;
   orderBy: OrderBy;
