@@ -2,7 +2,7 @@ import { Box, ListItem, styled } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 
-export const StyledEmptyTable = styled(ListItem)`
+export const StyledEmptyItem = styled(ListItem)`
   display: flex;
   flex-direction: column;
   align-items: center;
