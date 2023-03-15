@@ -1,5 +1,10 @@
+import uniqueId from 'lodash.uniqueid';
+
 import i18n from 'i18n';
 import { ItemInputTypes } from 'shared/types';
+
+import { SliderOption } from './ItemConfiguration.types';
+import { DEFAULT_EMPTY_SLIDER } from './ItemConfiguration.const';
 
 const { t } = i18n;
 
@@ -23,4 +28,9 @@ export const getInputTypeTooltip = (): Record<ItemInputTypes, string> => ({
   [ItemInputTypes.Audio]: t('promptRecordAudio'),
   [ItemInputTypes.Message]: `${t('addCustomizableMessage')} ${t('noAnswersRequired')}`,
   [ItemInputTypes.AudioPlayer]: `${t('addAudioStimulus')} ${t('noAnswersRequired')}`,
+});
+
+export const getEmptySliderOption = (): SliderOption => ({
+  id: uniqueId('slider-'),
+  ...DEFAULT_EMPTY_SLIDER,
 });

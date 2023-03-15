@@ -1,6 +1,8 @@
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useEffect } from 'react';
 
+import { ItemInputTypes } from 'shared/types';
+
 import {
   OptionalItemSetupProps,
   SettingsSetupProps,

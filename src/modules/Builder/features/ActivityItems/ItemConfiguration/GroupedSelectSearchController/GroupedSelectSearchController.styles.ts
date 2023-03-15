@@ -40,6 +40,8 @@ export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
 `;
 
 export const StyledListSubheader = styled(ListItem)`
+  padding: ${theme.spacing(0, 1.6)};
+
   form {
     width: 100%;
   }
