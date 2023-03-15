@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components';
-import { ItemInputTypes } from 'shared/types/activityItems';
+import { ItemInputTypes } from 'shared/types';
 
 export const ItemInputTypess = {
   [ItemInputTypes.SingleSelection]: {

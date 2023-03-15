@@ -1,26 +1,16 @@
-import {
-  Control,
-  FieldValues,
-  Path,
-  useFieldArray,
-  useFormContext,
-  UseFormGetValues,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useEffect } from 'react';
 
-import { ItemInputTypes } from 'shared/types/activityItems';
+import { ItemInputTypes } from 'shared/types';
 
-import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
+import {
+  OptionalItemSetupProps,
+  SettingsSetupProps,
+  ItemConfigurationSettings,
+} from './ItemConfiguration.types';
 import { DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 import { getEmptySliderOption } from './ItemConfiguration.utils';
 
-type OptionalItemSetupProps = {
-  itemType: ItemInputTypes;
-  name: Path<FieldValues>;
-  defaultValue: unknown;
-};
 export const useOptionalItemSetup = ({ name, defaultValue, itemType }: OptionalItemSetupProps) => {
   const { control, setValue, getValues } = useFormContext();
 
@@ -41,12 +31,6 @@ export const useOptionalItemSetup = ({ name, defaultValue, itemType }: OptionalI
   return { control };
 };
 
-type SettingsSetupProps = {
-  control: Control<ItemConfigurationForm>;
-  setValue: UseFormSetValue<ItemConfigurationForm>;
-  getValues: UseFormGetValues<ItemConfigurationForm>;
-  watch: UseFormWatch<ItemConfigurationForm>;
-};
 export const useSettingsSetup = ({ control, setValue, getValues, watch }: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
@@ -54,8 +38,13 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
     control,
     name: 'options',
   });
+  const { remove: removeAlert } = useFieldArray({
+    control,
+    name: 'alerts',
+  });
 
   const hasTimer = settings?.includes(ItemConfigurationSettings.HasTimer);
+  const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
 
   useEffect(() => {
@@ -70,6 +59,10 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
       setValue('sliderOptions', [getEmptySliderOption()]);
     } else setValue('sliderOptions', undefined);
   }, [selectedInputType]);
+
+  useEffect(() => {
+    !hasAlerts && removeAlert();
+  }, [hasAlerts]);
 
   useEffect(() => {
     if (hasTimer) {

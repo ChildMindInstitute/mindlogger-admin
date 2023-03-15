@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useForm, FormProvider } from 'react-hook-form';
 import { Button } from '@mui/material';
@@ -15,7 +15,7 @@ import {
   variables,
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
-import { ItemInputTypes } from 'shared/types/activityItems';
+import { ItemInputTypes } from 'shared/types';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
@@ -43,6 +43,7 @@ import {
 import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
 import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
+import { getInputTypeTooltip } from './ItemConfiguration.utils';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -111,10 +112,6 @@ export const ItemConfiguration = () => {
 
   useSettingsSetup({ control, setValue, getValues, watch });
 
-  useEffect(() => {
-    !hasAlerts && removeAlert();
-  }, [hasAlerts]);
-
   return (
     <FormProvider {...methods}>
       <StyledItemConfiguration ref={containerRef}>
@@ -147,7 +144,7 @@ export const ItemConfiguration = () => {
               sx={{ m: theme.spacing(0.2, 0, 4, 1.4) }}
               color={variables.palette.on_surface_variant}
             >
-              {t('itemTypeDescription')}
+              {selectedInputType && getInputTypeTooltip()[selectedInputType]}
             </StyledBodyMedium>
             <InputController
               fullWidth

@@ -1,6 +1,6 @@
 import { FieldValues, UseControllerProps, Path } from 'react-hook-form';
 
-import { ItemInputTypes } from 'shared/types/activityItems';
+import { ItemInputTypes } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 

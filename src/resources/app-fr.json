@@ -355,7 +355,6 @@
   "itemType": "Type d'élément",
   "itemName": "Nom de l'article",
   "itemBody": "Corps de l'article",
-  "itemTypeDescription": "Fournissez une liste de choix et permettez aux répondants de choisir une seule réponse.",
   "option": "Option",
   "provideListChoicesSingleAnswer": "Fournir une liste de choix et permettre aux répondants de choisir une réponse unique.",
   "provideListChoicesMultipleAnswers": "Fournir une liste de choix et permettre aux répondants de choisir plusieurs réponses.",

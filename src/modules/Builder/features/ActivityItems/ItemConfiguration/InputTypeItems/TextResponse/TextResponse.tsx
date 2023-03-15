@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { FieldValues } from 'react-hook-form';
 
 import { InputController } from 'shared/components/FormComponents';
-import { ItemInputTypes } from 'shared/types/activityItems';
+import { ItemInputTypes } from 'shared/types';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
 import { TextResponseProps } from './TextResponse.types';
