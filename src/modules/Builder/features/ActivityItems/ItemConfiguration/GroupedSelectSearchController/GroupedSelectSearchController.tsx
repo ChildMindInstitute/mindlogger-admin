@@ -1,20 +1,19 @@
 import { ChangeEvent, KeyboardEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
-import { TextField, FormControl, InputLabel } from '@mui/material';
+import { TextField, FormControl, InputLabel, Select } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import theme from 'shared/styles/theme';
 import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
-import { ItemInputTypes } from '../ItemConfiguration.types';
 import { itemsTypeIcons } from '../ItemConfiguration.const';
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
   StyledGroupName,
   StyledMenuItem,
-  StyledSelect,
   StyledListSubheader,
 } from './GroupedSelectSearchController.styles';
 import { ItemTypeTooltip } from './ItemTypeTooltip';
@@ -77,7 +76,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         render={({ field: { onChange, value } }) => (
           <FormControl fullWidth>
             <InputLabel id="input-type-label">{t('itemType')}</InputLabel>
-            <StyledSelect
+            <Select
               fullWidth
               MenuProps={{
                 autoFocus: false,
@@ -156,7 +155,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                   );
                 }),
               ])}
-            </StyledSelect>
+            </Select>
           </FormControl>
         )}
       />

@@ -1,4 +1,4 @@
 export type AppletImageProps = {
   image?: string | null;
-  appletName?: string;
+  name?: string;
 };

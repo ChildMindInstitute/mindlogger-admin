@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Search, Svg } from 'shared/components';
-import { StyledBodySmall, StyledLabelLarge } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { theme, variables, StyledBodySmall, StyledLabelLarge } from 'shared/styles';
 import { page } from 'resources';
 
 import {

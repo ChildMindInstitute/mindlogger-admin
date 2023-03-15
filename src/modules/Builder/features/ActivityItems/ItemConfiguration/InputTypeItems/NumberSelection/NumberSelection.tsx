@@ -3,12 +3,12 @@ import { FieldValues } from 'react-hook-form';
 
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
 import { StyledInputWrapper } from './NumberSelection.styles';
 import { NumberSelectionProps } from './NumberSelection.types';
 import { ItemOptionContainer } from '../ItemOptionContainer';
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
-import { ItemInputTypes } from '../../ItemConfiguration.types';
 import { DEFAULT_MAX_NUMBER, DEFAULT_MIN_NUMBER } from '../../ItemConfiguration.const';
 
 export const NumberSelection = <T extends FieldValues>({

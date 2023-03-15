@@ -15,6 +15,7 @@ import {
   variables,
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
@@ -30,6 +31,7 @@ import {
   SliderRows,
   AudioRecord,
   Geolocation,
+  TextResponse,
 } from './InputTypeItems';
 import {
   StyledHeader,
@@ -38,11 +40,7 @@ import {
   StyledOptionsWrapper,
   StyledItemConfiguration,
 } from './ItemConfiguration.styles';
-import {
-  ItemConfigurationForm,
-  ItemInputTypes,
-  ItemConfigurationSettings,
-} from './ItemConfiguration.types';
+import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
 import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 
@@ -198,6 +196,9 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
           {selectedInputType === ItemInputTypes.Date && <Date />}
           {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
+          {selectedInputType === ItemInputTypes.Text && (
+            <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
+          )}
           {isTextInputOptionVisible && (
             <TextInputOption
               name="isTextInputOptionRequired"

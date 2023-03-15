@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { useBreadcrumbs } from 'shared/hooks';
 import { EmptyTable, Svg } from 'shared/components';
 import {
+  theme,
   StyledBody,
   StyledHeadlineLarge,
   ContentContainer,
   StyledAppletContainer,
   StyledAppletList,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+} from 'shared/styles';
 import { page } from 'resources';
 import { auth, PublishedApplet } from 'redux/modules';
 

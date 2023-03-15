@@ -1,20 +1,22 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
+import { Svg } from 'shared/components';
 import {
+  theme,
+  variables,
   StyledBodyLarge,
   StyledBodyMedium,
+  StyledHeadline,
   StyledHeadlineLarge,
   StyledLabelBoldLarge,
   StyledTitleBoldMedium,
   StyledTitleMedium,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { Svg, AppletImage } from 'shared/components';
+} from 'shared/styles';
 import { page } from 'resources';
-import { variables } from 'shared/styles/variables';
 
 import {
   StyledAppletContainer,
@@ -22,20 +24,29 @@ import {
   StyledAppletKeywordsContainer,
   StyledAppletKeyword,
   StyledButtonsContainer,
+  StyledActivitiesContainer,
+  StyledExpandedButton,
+  StyledActivities,
 } from './Applet.styles';
-import { AppletProps, AppletUiType } from './Applet.types';
-import { Activities } from './Activities';
+import { AppletForm, AppletProps, AppletUiType } from './Applet.types';
 import { RemoveAppletPopup } from './Popups';
+import { Activity } from './Activity';
+import { AppletImage } from './AppletImage';
 
 export const Applet = ({
-  applet: { appletId, name, image = '', version = '', description, keywords },
+  applet: { appletId, name, image = '', version = '', description, keywords, activities },
   uiType = AppletUiType.List,
 }: AppletProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
 
+  const [activitiesVisible, setActivitiesVisible] = useState(uiType === AppletUiType.Details);
   const [removeAppletPopupVisible, setRemoveAppletPopupVisible] = useState(false);
 
+  const methods = useForm<AppletForm>({ defaultValues: { [appletId]: [] }, mode: 'onChange' });
+  const { getValues } = methods;
+
+  const selectedItems = getValues()[appletId];
   const APPLET_DETAILS = `${page.library}/${appletId}`;
 
   const handleRemove = () => {
@@ -92,9 +103,11 @@ export const Applet = ({
               {t('viewDetails')}
             </Button>
             <Button
+              disabled={!selectedItems.length}
               variant="outlined"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ marginLeft: theme.spacing(1.2) }}
+              onClick={() => console.log(getValues())}
             >
               {/* TODO: fix button title - if the applet is in the table, then display 'remove' */}
               {t('addToCart')}
@@ -105,9 +118,11 @@ export const Applet = ({
         return (
           <>
             <Button
+              disabled={!selectedItems.length}
               variant="contained"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ marginLeft: theme.spacing(1.2) }}
+              onClick={() => console.log(getValues())}
             >
               {/* TODO: fix button title - if the applet is in the table, then display 'remove' */}
               {t('addToCart')}
@@ -145,7 +160,32 @@ export const Applet = ({
           )}
         </Box>
         <StyledButtonsContainer>{renderButtons()}</StyledButtonsContainer>
-        <Activities uiType={uiType} />
+        <FormProvider {...methods}>
+          {activities?.length && (
+            <StyledActivitiesContainer uiType={uiType}>
+              {uiType === AppletUiType.Details ? (
+                <StyledHeadline>{`${t('appletActivities')}:`}</StyledHeadline>
+              ) : (
+                <StyledExpandedButton
+                  disableRipple
+                  onClick={() => setActivitiesVisible((prevState) => !prevState)}
+                  startIcon={<Svg id={activitiesVisible ? 'navigate-up' : 'navigate-down'} />}
+                >
+                  <StyledLabelBoldLarge>{t('activities')}</StyledLabelBoldLarge>
+                </StyledExpandedButton>
+              )}
+              {activitiesVisible && (
+                <StyledActivities>
+                  {activities.map((activity) => (
+                    <Fragment key={activity.id}>
+                      <Activity appletId={appletId} activity={activity} />
+                    </Fragment>
+                  ))}
+                </StyledActivities>
+              )}
+            </StyledActivitiesContainer>
+          )}
+        </FormProvider>
       </StyledAppletContainer>
       {removeAppletPopupVisible && (
         <RemoveAppletPopup

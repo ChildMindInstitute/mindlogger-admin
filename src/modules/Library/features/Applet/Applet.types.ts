@@ -1,4 +1,4 @@
-import { PublishedApplet } from 'redux/modules';
+import { PublishedApplet } from '../AppletsCatalog/AppletsCatalog.types';
 
 export enum AppletUiType {
   List = 'list',
@@ -9,4 +9,13 @@ export enum AppletUiType {
 export type AppletProps = {
   uiType?: AppletUiType;
   applet: PublishedApplet;
+};
+
+export type SelectedItem = {
+  id: string;
+  activityId: string;
+};
+
+export type AppletForm = {
+  [key: string]: SelectedItem[];
 };

@@ -1,6 +1,7 @@
 import { Svg } from 'shared/components';
+import { ItemInputTypes } from 'shared/types/activityItems';
 
-import { ItemsOptionGroup, ItemInputTypes } from './ItemConfiguration.types';
+import { ItemsOptionGroup } from './ItemConfiguration.types';
 
 export const DEFAULT_TIMER_VALUE = 100;
 export const DEFAULT_SCORE_VALUE = 0;
@@ -22,6 +23,7 @@ export const DEFAULT_EMPTY_SLIDER = {
   maxImage: '',
 };
 export const DEFAULT_AUDIO_DURATION_MS = 3000;
+export const DEFAULT_MAX_CHARACTERS = 72;
 
 export const itemsTypeIcons = {
   [ItemInputTypes.SingleSelection]: <Svg id="radio-button-outline" />,

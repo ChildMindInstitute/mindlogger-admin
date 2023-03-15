@@ -586,5 +586,9 @@
   "addSlider": "Add slider",
   "minLabel": "Min label",
   "maxLabel": "Max label",
-  "value": "Value"
+  "value": "Value",
+  "textResponseTitle": "Text Response",
+  "textResponseDescription": "The respondent will be able to enter a text response.",
+  "correctAnswer": "Correct Answer",
+  "maxCharacters": "Max characters"
 }

@@ -4,22 +4,22 @@ import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-
 import { page } from 'resources';
 import { EmptyTable } from 'shared/components';
 import {
+  theme,
   StyledBody,
   StyledHeadlineLarge,
   ContentContainer,
   StyledAppletContainer,
   StyledAppletList,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+} from 'shared/styles';
 
 import { Header, RightButtonType } from '../../components';
 import { Applet } from '../Applet';
 import { StyledTablePagination } from './AppletsCatalog.styles';
-import { mockedApplets } from './mocked';
+import { mockedPublishedAppletResponse } from './mocked';
+import { PublishedAppletResponse } from './AppletsCatalog.types';
 
 export const DEFAULT_APPLETS_PER_PAGE = 6;
 
@@ -31,7 +31,7 @@ export const AppletsCatalog = () => {
   useBreadcrumbs();
 
   // const publishedApplets = library.usePublishedApplets();
-  const publishedApplets = mockedApplets;
+  const publishedApplets: PublishedAppletResponse = mockedPublishedAppletResponse;
 
   const [pageIndex, setPageIndex] = useState(0);
   const [recordsPerPage, setRecordsPerPage] = useState(DEFAULT_APPLETS_PER_PAGE);
