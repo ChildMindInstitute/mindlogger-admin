@@ -2,12 +2,12 @@ import { useTranslation } from 'react-i18next';
 import { FieldValues } from 'react-hook-form';
 
 import { InputController } from 'shared/components/FormComponents';
+import { ItemInputTypes } from 'shared/types';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
 import { TextResponseProps } from './TextResponse.types';
 import { StyledMaxCharacters, StyledRow, StyledTextField } from './TextResponse.styles';
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
-import { ItemInputTypes } from '../../ItemConfiguration.types';
 import { DEFAULT_MAX_CHARACTERS } from '../../ItemConfiguration.const';
 
 export const TextResponse = <T extends FieldValues>({

@@ -463,7 +463,6 @@
   "itemType": "Item Type",
   "itemName": "Item Name",
   "itemBody": "Item Body",
-  "itemTypeDescription": "Provide a list of choices and allow respondents to choose a single answer.",
   "settings": "Settings",
   "responseSettings": "Response settings",
   "itemSettings": "Item settings",

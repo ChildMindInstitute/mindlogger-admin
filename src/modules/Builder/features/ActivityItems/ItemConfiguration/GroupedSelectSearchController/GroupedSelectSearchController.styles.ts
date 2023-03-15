@@ -1,6 +1,6 @@
-import { styled, MenuItem, ListSubheader } from '@mui/material';
+import { styled, MenuItem, ListItem } from '@mui/material';
 
-import { variables, theme } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 const {
@@ -9,7 +9,8 @@ const {
   font: { size, letterSpacing, lineHeight, weight },
 } = variables;
 
-export const StyledGroupName = styled(MenuItem, shouldForwardProp)`
+export const StyledGroupName = styled(ListItem, shouldForwardProp)`
+  padding: ${theme.spacing(1.6)};
   border-top: ${borderWidth.md} solid ${palette.outline_variant};
   background-color: transparent;
   font-size: ${size.md};
@@ -24,6 +25,11 @@ export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
   color: ${palette.on_surface};
   display: ${({ isHidden }: { isHidden: boolean }) => (isHidden ? 'none' : 'flex')};
 
+  .marked {
+    background-color: ${variables.palette.yellow};
+    border-radius: ${variables.borderRadius.xs};
+  }
+
   svg {
     fill: ${palette.on_surface_variant};
   }
@@ -33,9 +39,10 @@ export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
   }
 `;
 
-export const StyledListSubheader = styled(ListSubheader)`
-  background-color: transparent;
-  position: static;
+export const StyledListSubheader = styled(ListItem)`
+  form {
+    width: 100%;
+  }
 
   .MuiInputBase-root {
     padding: 0;

@@ -1,27 +1,23 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
-import { TextField, FormControl, InputLabel } from '@mui/material';
+import { TextField, FormControl, InputLabel, Select } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { theme, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
+import { ItemInputTypes } from 'shared/types';
 
-import { ItemInputTypes } from '../ItemConfiguration.types';
 import { itemsTypeIcons } from '../ItemConfiguration.const';
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
-import {
-  StyledMenuItem,
-  StyledSelect,
-  StyledListSubheader,
-} from './GroupedSelectSearchController.styles';
+import { StyledMenuItem, StyledListSubheader } from './GroupedSelectSearchController.styles';
 import { ItemTypeTooltip } from './ItemTypeTooltip';
 import { selectDropdownStyles } from './GroupedSelectSearchController.const';
 import {
   handleSearchKeyDown,
-  notHaveSearchValue,
+  getIsNotHaveSearchValue,
   getEmptyComponent,
   getGroupName,
+  getGroupValueText,
 } from './GroupedSelectSearchController.utils';
 
 export const GroupedSelectSearchController = <T extends FieldValues>({
@@ -67,7 +63,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         render={({ field: { onChange, value } }) => (
           <FormControl fullWidth>
             <InputLabel id="input-type-label">{t('itemType')}</InputLabel>
-            <StyledSelect
+            <Select
               fullWidth
               MenuProps={{
                 autoFocus: false,
@@ -113,7 +109,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
               {options?.map(({ groupName, groupOptions }) => [
                 getGroupName(groupName, groupOptions, searchTermLowercase),
                 ...groupOptions.map(({ value: groupValue, icon }) => {
-                  const isHidden = notHaveSearchValue(groupValue, searchTermLowercase);
+                  const isHidden = getIsNotHaveSearchValue(groupValue, searchTermLowercase);
 
                   return (
                     <StyledMenuItem
@@ -129,14 +125,14 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                         <StyledFlexTopCenter sx={{ mr: theme.spacing(1.8) }}>
                           {icon}
                         </StyledFlexTopCenter>
-                        {t(groupValue)}
+                        {getGroupValueText(searchTerm, groupValue)}
                       </StyledFlexTopCenter>
                     </StyledMenuItem>
                   );
                 }),
               ])}
               {getEmptyComponent(searchTerm)}
-            </StyledSelect>
+            </Select>
           </FormControl>
         )}
       />

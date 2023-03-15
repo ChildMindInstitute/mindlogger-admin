@@ -1,8 +1,10 @@
 import { KeyboardEvent } from 'react';
+import Highlighter from 'react-highlight-words';
 
 import i18n from 'i18n';
+import { ItemInputTypes } from 'shared/types';
 
-import { ItemInputTypes, ItemsOption } from '../ItemConfiguration.types';
+import { ItemsOption } from '../ItemConfiguration.types';
 import { EmptySearch } from './EmptySearch';
 import { StyledGroupName } from './GroupedSelectSearchController.styles';
 
@@ -17,7 +19,7 @@ export const handleSearchKeyDown = (event: KeyboardEvent) => {
   }
 };
 
-export const notHaveSearchValue = (value: string, searchTermLowercase: string) =>
+export const getIsNotHaveSearchValue = (value: string, searchTermLowercase: string) =>
   t(value).toLowerCase().indexOf(searchTermLowercase) === -1;
 
 export const getItemTypesNames = (): string[] =>
@@ -41,4 +43,19 @@ export const getGroupName = (
   }
 
   return [];
+};
+
+export const getGroupValueText = (searchTerm: string, groupValue: string) => {
+  const text = t(groupValue);
+
+  if (!searchTerm) return text;
+
+  return (
+    <Highlighter
+      highlightClassName="marked"
+      searchWords={[searchTerm]}
+      autoEscape={true}
+      textToHighlight={text}
+    />
+  );
 };
