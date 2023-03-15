@@ -66,13 +66,10 @@ export const transferOwnershipApi = (
   { appletId, email }: TransferOwnershipType,
   signal?: AbortSignal,
 ) =>
-  authApiClient.put(
-    `/applet/${appletId}/transferOwnerShip`,
-    {},
+  authApiClient.post(
+    `/applets/${appletId}/transferOwnership`,
+    { email },
     {
-      params: {
-        email,
-      },
       signal,
     },
   );
@@ -102,7 +99,7 @@ export const revokeAppletUserApi = (
   });
 
 export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.delete(`/applet/${appletId}`, { signal });
+  authApiClient.delete(`/applets/${appletId}`, { signal });
 
 export const getAppletInvitationApi = (
   { appletId, options }: AppletInvitationData,
