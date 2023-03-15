@@ -5,7 +5,8 @@ type FormInputProps = {
   textAdornment?: string;
   tooltip?: string;
   maxLength?: number;
-  defaultNumberValue?: number;
+  minNumberValue?: number;
+  maxNumberValue?: number;
 } & TextFieldProps;
 
 export type InputControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;

@@ -1,6 +1,5 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } from '@mui/material';
-import uniqueId from 'lodash.uniqueid';
 
 import { Order } from 'shared/types/table';
 import { EmptyTable } from 'shared/components';
@@ -10,6 +9,7 @@ import { DEFAULT_ROWS_PER_PAGE, TERTIARY_TYPE_ROWS_PER_PAGE } from './Table.cons
 import { StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { Row, TableProps, UiType } from './Table.types';
 
+// TODO: make rows rendering more strict
 export const Table = ({
   columns,
   rows,
@@ -89,8 +89,8 @@ export const Table = ({
               {rows
                 ?.sort(getComparator(order, orderBy))
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <TableRow key={uniqueId('row_')} data-testid="table-row">
+                .map((row, index) => (
+                  <TableRow key={`row-${index}`} data-testid="table-row">
                     {Object.keys(row)?.map((key) => (
                       <TableCell
                         onClick={row[key].onClick}

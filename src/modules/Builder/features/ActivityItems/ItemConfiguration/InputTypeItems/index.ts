@@ -1,5 +1,6 @@
 export * from './NumberSelection';
 export * from './SelectionOption';
+export * from './SliderRows';
 export * from './Geolocation';
 export * from './ItemOptionContainer';
 export * from './TimeRange';

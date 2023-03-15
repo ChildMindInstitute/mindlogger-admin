@@ -52,6 +52,7 @@ export type ItemConfigurationForm = {
   maxNumber?: number;
   alerts?: Alert[];
   audioDuration?: number;
+  sliderOptions?: SliderOption[];
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
 };
@@ -64,4 +65,15 @@ export type ItemsOption = {
 export type ItemsOptionGroup = {
   groupName: string;
   groupOptions: ItemsOption[];
+};
+
+export type SliderOption = {
+  id: string;
+  min: number;
+  max: number;
+  minLabel?: string;
+  maxLabel?: string;
+  minImage?: string;
+  maxImage?: string;
+  scores: number[];
 };

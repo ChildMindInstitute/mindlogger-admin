@@ -1,8 +1,6 @@
 import { Drawer, styled } from '@mui/material';
 
-import { StyledFlexColumn } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { theme, variables, StyledFlexColumn } from 'shared/styles';
 
 export const StyledDrawer = styled(Drawer)`
   width: 40rem;

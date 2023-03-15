@@ -1,8 +1,6 @@
-import { Box, styled } from '@mui/system';
+import { Box, styled } from '@mui/material';
 
-import { StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { theme, variables, StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles';
 
 export const StyledTextInputOptionContainer = styled(StyledFlexColumn)`
   background: ${variables.palette.surface1};

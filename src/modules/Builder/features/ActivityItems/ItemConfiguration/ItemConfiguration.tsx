@@ -28,6 +28,7 @@ import {
   VideoResponse,
   PhotoResponse,
   Date,
+  SliderRows,
   AudioRecord,
   Geolocation,
   TextResponse,
@@ -182,6 +183,12 @@ export const ItemConfiguration = () => {
           )}
           {selectedInputType === ItemInputTypes.NumberSelection && (
             <NumberSelection name="minNumber" maxName="maxNumber" />
+          )}
+          {selectedInputType === ItemInputTypes.Slider && (
+            <SliderRows name="sliderOptions" control={control} />
+          )}
+          {selectedInputType === ItemInputTypes.SliderRows && (
+            <SliderRows name="sliderOptions" control={control} isMultiple />
           )}
           {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
           {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
