@@ -27,6 +27,12 @@ import {
   getMarksByScores,
 } from './SliderPanel.utils';
 
+const commonUploaderProps = {
+  width: 5.6,
+  height: 5.6,
+  uiType: UploaderUiType.Secondary,
+};
+
 export const SliderPanel = <T extends FieldValues>({
   name,
   label,
@@ -73,6 +79,11 @@ export const SliderPanel = <T extends FieldValues>({
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
+  const commonInputProps = {
+    control,
+    type: 'number',
+  };
+
   return (
     <StyledSliderPanelContainer
       in={isExpanded}
@@ -108,15 +119,12 @@ export const SliderPanel = <T extends FieldValues>({
       <StyledInputContainer>
         <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
           <Uploader
-            uiType={UploaderUiType.Secondary}
-            width={5.6}
-            height={5.6}
+            {...commonUploaderProps}
             setValue={(val: string) => setValue(`${name as string}.minImage`, val)}
             getValue={() => watch(`${name}.minImage`) || ''}
           />
           <InputController
-            type="number"
-            control={control}
+            {...commonInputProps}
             name={`${name}.min`}
             label={t('minValue')}
             maxNumberValue={max}
@@ -125,15 +133,12 @@ export const SliderPanel = <T extends FieldValues>({
         </StyledFlexTopCenter>
         <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
           <Uploader
-            uiType={UploaderUiType.Secondary}
-            width={5.6}
-            height={5.6}
+            {...commonUploaderProps}
             setValue={(val: string) => setValue(`${name as string}.maxImage`, val)}
             getValue={() => watch(`${name}.maxImage`) || ''}
           />
           <InputController
-            type="number"
-            control={control}
+            {...commonInputProps}
             name={`${name}.max`}
             label={t('maxValue')}
             maxNumberValue={DEFAULT_SLIDER_MAX_VALUE}
