@@ -7,6 +7,14 @@ import { AppletsSchema } from './Applets.schema';
 import { getApplets } from './Applets.thunk';
 import { state as initialState } from './Applets.state';
 
+export const reducers = {
+  deleteApplet: ({ applets }: AppletsSchema, action: PayloadAction<{ id: string }>): void => {
+    if (applets?.data) {
+      applets.data.result = applets.data.result.filter((applet) => applet.id !== action.payload.id);
+    }
+  },
+};
+
 export const extraReducers = (builder: ActionReducerMapBuilder<AppletsSchema>): void => {
   builder.addCase(getApplets.pending, ({ applets }, action) => {
     if (applets.status !== 'loading') {

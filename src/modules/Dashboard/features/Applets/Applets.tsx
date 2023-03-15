@@ -18,6 +18,7 @@ export const Applets = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const authData = auth.useData();
+  const appletsData = applets.useData();
   const navigate = useNavigate();
 
   const ownerId = authData?.user.id;
@@ -25,12 +26,11 @@ export const Applets = () => {
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.UpdatedAt);
   const [order, setOrder] = useState<Order>('desc');
-  const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   // TODO: implement folders logic when connecting to the corresponding API
   const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
-  const [flattenItems, setFlattenItems] = useState<FolderApplet[] | null>(null);
+
   // useEffect(() => {
   //   setFlattenItems(foldersApplets);
   // }, [foldersApplets]);
@@ -40,7 +40,7 @@ export const Applets = () => {
       if (ownerId) {
         const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
         const { getApplets } = applets.thunk;
-        const result = await dispatch(
+        await dispatch(
           getApplets({
             params: {
               ownerId,
@@ -51,12 +51,6 @@ export const Applets = () => {
             },
           }),
         );
-
-        if (getApplets.fulfilled.match(result)) {
-          const { result: applets, count } = result.payload.data;
-          setFlattenItems(applets);
-          setCount(count);
-        }
       }
     })();
   }, [dispatch, ownerId, search, page, orderBy, order]);
@@ -91,7 +85,7 @@ export const Applets = () => {
   );
 
   const getEmptyComponent = () => {
-    if (!flattenItems?.length) {
+    if (!appletsData?.result?.length) {
       if (search) {
         return t('noMatchWasFound', { searchValue: search });
       }
@@ -117,7 +111,7 @@ export const Applets = () => {
       </AppletsTableHeader>
       <Table
         columns={getHeadCells()}
-        rows={flattenItems}
+        rows={appletsData?.result}
         order={order}
         setOrder={setOrder}
         orderBy={orderBy}
@@ -126,7 +120,7 @@ export const Applets = () => {
         emptyComponent={getEmptyComponent()}
         page={page}
         setPage={setPage}
-        count={count}
+        count={appletsData?.count || 0}
       />
     </>
   );
