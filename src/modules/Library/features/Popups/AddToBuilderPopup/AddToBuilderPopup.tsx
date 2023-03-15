@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
 import { mockedWorkspaces as accounts } from 'shared/components/LeftBar/mocked';
-import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { StyledModalWrapper } from 'shared/styles';
 
 import {
   AddToBuilderActions,

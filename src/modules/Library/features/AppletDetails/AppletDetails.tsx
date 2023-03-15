@@ -6,15 +6,17 @@ import { StyledBody, ContentContainer } from 'shared/styles/styledComponents';
 import { page } from 'resources';
 
 import { Applet, AppletUiType } from '../Applet';
-import { mockedApplets } from '../AppletsCatalog/mocked';
 import { Header, RightButtonType } from '../../components';
+import { mockedPublishedAppletResponse } from '../AppletsCatalog/mocked';
 
 export const AppletDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
   // TODO: replace with real data when the endpoint is ready
-  const applet = mockedApplets.data.find(({ appletId }) => appletId === id) as PublishedApplet;
+  const applet = mockedPublishedAppletResponse.data.find(
+    ({ appletId }) => appletId === id,
+  ) as PublishedApplet;
 
   useBreadcrumbs();
 

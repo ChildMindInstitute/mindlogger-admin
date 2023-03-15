@@ -1,24 +1,6 @@
 import { ColorResult } from 'react-color';
 
-export enum ItemInputTypes {
-  SingleSelection = 'singleSelection',
-  MultipleSelection = 'multipleSelection',
-  Slider = 'slider',
-  Date = 'date',
-  NumberSelection = 'numberSelection',
-  TimeRange = 'timeRange',
-  SingleSelectionPerRow = 'singleSelectionPerRow',
-  MultipleSelectionPerRow = 'multipleSelectionPerRow',
-  SliderRows = 'sliderRows',
-  Text = 'text',
-  Drawing = 'drawing',
-  Photo = 'photo',
-  Video = 'video',
-  Geolocation = 'geolocation',
-  Audio = 'audio',
-  Message = 'message',
-  AudioPlayer = 'audioPlayer',
-}
+import { ItemInputTypes } from 'shared/types/activityItems';
 
 export enum ItemConfigurationSettings {
   HasScores = 'hasScores',
@@ -52,16 +34,26 @@ export type SelectionOption = {
   color?: ColorResult;
 };
 
+export type Alert = {
+  message: string;
+  option: string;
+  item: string;
+};
+
 export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
   name: string;
   body: string;
   settings: ItemConfigurationSettings[];
-  timer: number;
+  timer?: number;
   options?: SelectionOption[];
-  isTextInputOptionRequired: boolean;
-  minNumber: number;
-  maxNumber: number;
+  isTextInputOptionRequired?: boolean;
+  minNumber?: number;
+  maxNumber?: number;
+  alerts?: Alert[];
+  audioDuration?: number;
+  textResponseAnswer?: string;
+  textResponseMaxCharacters?: number;
 };
 
 export type ItemsOption = {

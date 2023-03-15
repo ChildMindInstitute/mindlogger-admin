@@ -1,19 +1,18 @@
 import { Controller } from 'react-hook-form';
 import { Radio, RadioGroup, FormControlLabelProps } from '@mui/material';
 
-import { Table, UiType } from 'shared/components';
-import { AppletImage } from 'modules/Dashboard/features/Applets/Table/AppletImage';
+import { Table, UiType, AppletImage } from 'shared/components';
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { WorkspaceImage, WorkspaceUiType } from 'shared/features/SwitchWorkspace';
 import { Workspace } from 'shared/features/SwitchWorkspace/SwitchWorkspace.types';
 import {
+  theme,
+  variables,
   StyledFlexTopCenter,
   StyledLabelLarge,
   StyledBodyLarge,
-} from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
+} from 'shared/styles';
 import { HeadCell } from 'shared/types/table';
-import theme from 'shared/styles/theme';
 import i18n from 'i18n';
 
 import {

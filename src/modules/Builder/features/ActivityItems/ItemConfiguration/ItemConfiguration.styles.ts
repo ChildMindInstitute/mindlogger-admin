@@ -1,10 +1,13 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
-import { StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { commonStickyStyles } from 'shared/styles/stylesConsts';
+import { shouldForwardProp } from 'shared/utils';
+import {
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+  variables,
+  theme,
+  commonStickyStyles,
+} from 'shared/styles';
 
 export const StyledItemConfiguration = styled(StyledFlexColumn)`
   position: relative;

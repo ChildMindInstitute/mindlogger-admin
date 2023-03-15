@@ -1,19 +1,13 @@
-import { styled, MenuItem, Select, ListSubheader } from '@mui/material';
+import { styled, MenuItem, ListSubheader } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
-import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+import { variables, theme } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 const {
   palette,
   borderWidth,
   font: { size, letterSpacing, lineHeight, weight },
 } = variables;
-
-export const StyledSelect = styled(Select)`
-  .svg-checkbox-multiple-filled {
-    stroke: ${palette.on_surface_variant};
-  }
-`;
 
 export const StyledGroupName = styled(MenuItem, shouldForwardProp)`
   border-top: ${borderWidth.md} solid ${palette.outline_variant};
@@ -24,8 +18,6 @@ export const StyledGroupName = styled(MenuItem, shouldForwardProp)`
   text-transform: uppercase;
   color: ${palette.outline};
   letter-spacing: ${letterSpacing.sm};
-  pointer-events: none;
-  cursor: default;
 `;
 
 export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`

@@ -1,6 +1,8 @@
 import { FieldValues, UseControllerProps, Path } from 'react-hook-form';
 
-import { ItemInputTypes, ItemConfigurationSettings } from '../../ItemConfiguration.types';
+import { ItemInputTypes } from 'shared/types/activityItems';
+
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export type ItemSettingsControllerProps<T extends FieldValues> = {
   timerName: Path<T>;

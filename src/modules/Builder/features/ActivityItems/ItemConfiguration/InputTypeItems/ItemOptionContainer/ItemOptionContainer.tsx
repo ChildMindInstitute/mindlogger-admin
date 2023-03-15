@@ -1,12 +1,13 @@
 import {
+  theme,
+  variables,
   StyledFlexColumn,
   StyledLabelBoldLarge,
   StyledTitleMedium,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+} from 'shared/styles';
 
-import { StyledItemOptionContainer } from './ItemOptionContainer.styles';
 import { ItemOptionContainerProps } from './ItemOptionContainer.types';
+import { StyledItemOptionContainer } from './ItemOptionContainer.styles';
 
 export const ItemOptionContainer = ({ title, description, children }: ItemOptionContainerProps) => (
   <StyledItemOptionContainer>
@@ -17,7 +18,9 @@ export const ItemOptionContainer = ({ title, description, children }: ItemOption
         </StyledLabelBoldLarge>
       )}
       {description && (
-        <StyledTitleMedium sx={{ mb: theme.spacing(1) }}>{description}</StyledTitleMedium>
+        <StyledTitleMedium color={variables.palette.on_surface} sx={{ mb: theme.spacing(1) }}>
+          {description}
+        </StyledTitleMedium>
       )}
       {children}
     </StyledFlexColumn>
