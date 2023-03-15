@@ -60,6 +60,7 @@ export type ItemConfigurationForm = {
   maxNumber?: number;
   alerts?: Alert[];
   audioDuration?: number;
+  sliderOptions?: SliderOption[];
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
 };
@@ -85,4 +86,15 @@ export type OptionalItemSetupProps = {
   itemType: ItemInputTypes;
   name: Path<FieldValues>;
   defaultValue: unknown;
+};
+
+export type SliderOption = {
+  id: string;
+  min: number;
+  max: number;
+  minLabel?: string;
+  maxLabel?: string;
+  minImage?: string;
+  maxImage?: string;
+  scores: number[];
 };

@@ -7,6 +7,21 @@ export const DEFAULT_TIMER_VALUE = 100;
 export const DEFAULT_SCORE_VALUE = 0;
 export const DEFAULT_MIN_NUMBER = 1;
 export const DEFAULT_MAX_NUMBER = 100;
+export const DEFAULT_SLIDER_MIN_NUMBER = 0;
+export const DEFAULT_SLIDER_MAX_NUMBER = 4;
+export const DEFAULT_SLIDER_SCORE = [1, 2, 3, 4, 5];
+export const SLIDER_LABEL_MAX_LENGTH = 20;
+export const DEFAULT_SLIDER_MAX_VALUE = 12;
+
+export const DEFAULT_EMPTY_SLIDER = {
+  min: DEFAULT_SLIDER_MIN_NUMBER,
+  max: DEFAULT_SLIDER_MAX_NUMBER,
+  scores: DEFAULT_SLIDER_SCORE,
+  minLabel: '',
+  maxLabel: '',
+  minImage: '',
+  maxImage: '',
+};
 export const DEFAULT_AUDIO_DURATION_MS = 3000;
 export const DEFAULT_MAX_CHARACTERS = 72;
 

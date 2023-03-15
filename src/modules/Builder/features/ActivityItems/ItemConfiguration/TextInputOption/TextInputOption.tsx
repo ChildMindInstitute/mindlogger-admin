@@ -5,12 +5,12 @@ import { Box } from '@mui/material';
 import { Svg } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
 import {
+  theme,
+  variables,
   StyledLabelBoldLarge,
   StyledLabelLarge,
   StyledClearedButton,
-} from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+} from 'shared/styles';
 
 import {
   StyledTextInputOptionContainer,

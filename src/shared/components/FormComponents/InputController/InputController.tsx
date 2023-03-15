@@ -24,7 +24,8 @@ export const InputController = <T extends FieldValues>({
   maxLength,
   tooltip,
   InputProps,
-  defaultNumberValue = 1,
+  minNumberValue = 1,
+  maxNumberValue,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -41,10 +42,16 @@ export const InputController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
-        const handleAddNumber = () => onChange(+value + 1);
+        const handleAddNumber = () => {
+          if (typeof maxNumberValue !== 'number') return onChange(+value + 1);
+
+          if (+value < maxNumberValue) {
+            return onChange(+value + 1);
+          }
+        };
+
         const handleDistractNumber = () => {
-          const minNumberVal = defaultNumberValue === 0 ? 0 : 1;
-          +value > minNumberVal && onChange(+value - 1);
+          +value > minNumberValue && onChange(+value - 1);
         };
 
         return (
@@ -53,7 +60,7 @@ export const InputController = <T extends FieldValues>({
               <StyledTextField
                 {...textFieldProps}
                 onChange={onChange}
-                value={isNumberType && value < defaultNumberValue ? defaultNumberValue : value}
+                value={isNumberType && value < minNumberValue ? minNumberValue : value}
                 error={!!error || providedError}
                 helperText={error?.message || null}
                 InputProps={

@@ -5,9 +5,7 @@ import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@
 
 import { Tooltip } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledTitleMedium } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { theme, variables, StyledTitleMedium } from 'shared/styles';
 
 import {
   StyledSettingInfoIcon,
