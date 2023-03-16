@@ -2,11 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
-import { useAsync } from 'shared/hooks/useAsync';
-import { folders, popups } from 'redux/modules';
+import { useAsync } from 'shared/hooks';
+import { applets, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
-import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { StyledModalWrapper } from 'shared/styles';
 import { page } from 'resources';
 
 export const DeletePopup = () => {
@@ -26,7 +26,8 @@ export const DeletePopup = () => {
   };
 
   const { execute } = useAsync(deleteAppletApi, () => {
-    dispatch(folders.actions.deleteFolderApplet({ id: appletId }));
+    // TODO: check after folder connect
+    dispatch(applets.actions.deleteApplet({ id: appletId }));
     onClose();
     history(page.dashboard);
   });

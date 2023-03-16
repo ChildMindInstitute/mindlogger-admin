@@ -1,6 +1,14 @@
 import { ColorResult } from 'react-color';
+import {
+  Control,
+  FieldValues,
+  Path,
+  UseFormGetValues,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 
-import { ItemInputTypes } from 'shared/types/activityItems';
+import { ItemInputTypes } from 'shared/types';
 
 export enum ItemConfigurationSettings {
   HasScores = 'hasScores',
@@ -52,6 +60,7 @@ export type ItemConfigurationForm = {
   maxNumber?: number;
   alerts?: Alert[];
   audioDuration?: number;
+  sliderOptions?: SliderOption[];
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
 
@@ -67,4 +76,28 @@ export type ItemsOption = {
 export type ItemsOptionGroup = {
   groupName: string;
   groupOptions: ItemsOption[];
+};
+
+export type SettingsSetupProps = {
+  control: Control<ItemConfigurationForm>;
+  setValue: UseFormSetValue<ItemConfigurationForm>;
+  getValues: UseFormGetValues<ItemConfigurationForm>;
+  watch: UseFormWatch<ItemConfigurationForm>;
+};
+
+export type OptionalItemSetupProps = {
+  itemType: ItemInputTypes;
+  name: Path<FieldValues>;
+  defaultValue?: unknown;
+};
+
+export type SliderOption = {
+  id: string;
+  min: number;
+  max: number;
+  minLabel?: string;
+  maxLabel?: string;
+  minImage?: string;
+  maxImage?: string;
+  scores: number[];
 };

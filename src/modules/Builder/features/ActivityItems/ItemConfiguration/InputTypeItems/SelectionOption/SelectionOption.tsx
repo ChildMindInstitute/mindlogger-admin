@@ -151,7 +151,7 @@ export const SelectionOption = ({
                     name={`options.${index}.score`}
                     type="number"
                     label={t('score')}
-                    defaultNumberValue={0}
+                    minNumberValue={0}
                   />
                 </StyledScoreWrapper>
               )}

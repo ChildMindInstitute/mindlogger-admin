@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { FolderApplet } from 'redux/modules';
+import { Applet, FolderApplet } from 'redux/modules';
 import { HeadCell, Order } from 'shared/types/table';
 
 import { OrderBy } from '../Applets.types';
 
 export type TableProps = {
   columns: HeadCell[];
-  rows: FolderApplet[] | null;
+  rows?: FolderApplet[] | Applet[];
   order: Order;
   setOrder: Dispatch<SetStateAction<Order>>;
   orderBy: OrderBy;

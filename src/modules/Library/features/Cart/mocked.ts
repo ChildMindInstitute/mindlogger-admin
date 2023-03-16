@@ -1,4 +1,4 @@
-import { ItemInputTypes } from 'shared/types/activityItems';
+import { ItemInputTypes } from 'shared/types';
 
 export const mockedCart = [
   {
