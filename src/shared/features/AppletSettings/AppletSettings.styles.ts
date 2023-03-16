@@ -1,9 +1,7 @@
 import { styled } from '@mui/system';
 import { Box, Button } from '@mui/material';
 
-import { StyledHeadlineLarge, StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles';
+import { StyledHeadlineLarge, StyledFlexTopCenter, variables, theme } from 'shared/styles';
 
 export const StyledContainer = styled(StyledFlexTopCenter)`
   height: calc(100% + 4rem);

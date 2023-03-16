@@ -2,8 +2,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Svg, Tooltip } from 'shared/components';
-import { StyledBodyLarge } from 'shared/styles/styledComponents';
-import { theme } from 'shared/styles';
+import { StyledBodyLarge, theme } from 'shared/styles';
 
 import {
   StyledAppletSettingsButton,
