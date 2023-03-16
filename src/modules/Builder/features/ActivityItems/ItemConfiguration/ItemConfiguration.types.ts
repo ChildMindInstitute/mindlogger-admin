@@ -54,6 +54,9 @@ export type ItemConfigurationForm = {
   audioDuration?: number;
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
+
+  mediaTranscript?: string;
+  mediaFileResource?: string;
 };
 
 export type ItemsOption = {

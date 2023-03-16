@@ -443,5 +443,12 @@
   "textResponseTitle": "TextResponse",
   "textResponseDescription": "Le répondant pourra saisir une réponse textuelle.",
   "correctAnswer": "Réponse correcte",
-  "maxCharacters": "Nombre maximum de caractères"
+  "maxCharacters": "Nombre maximum de caractères",
+  "audioPlayerDescription": "Le répondant écoutera un stimulus audio, aucune réponse n'est requise.",
+  "mediaTranscript": "Retranscription du média",
+  "uploadAudioRestrictions": "Veuillez télécharger un fichier WAV ou MP3 de moins de 8 Mo.",
+  "uploadAudioDropText": "Déposez l'audio ici ou cliquez pour parcourir",
+  "uploadAudioDescription": "Veuillez télécharger WAV ou MP3",
+  "audioExceedSize": "L'audio fait plus de 8 Mo",
+  "audioWrongFormat": "Le fichier audio a un mauvais format"
 }

@@ -8,3 +8,4 @@ export * from './PhotoResponse';
 export * from './Date';
 export * from './AudioRecord';
 export * from './TextResponse';
+export * from './AudioPlayer';

@@ -119,3 +119,9 @@ export const StyledBodySmall = styled(Typography)`
   color: ${({ color }: StyledProps) => color || variables.palette.on_surface};
   letter-spacing: ${variables.font.letterSpacing.xl};
 `;
+
+export const StyledEllipsisText = styled(Typography)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;

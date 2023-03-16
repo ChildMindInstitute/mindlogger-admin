@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
@@ -20,27 +20,28 @@ import { ItemInputTypes } from 'shared/types/activityItems';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { Alerts } from './Alerts';
-import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
+import { ItemSettingsController, ItemSettingsDrawer } from './Settings';
 import {
-  SelectionOption,
+  AudioPlayer,
+  AudioRecord,
+  Date,
+  Geolocation,
   NumberSelection,
+  PhotoResponse,
+  SelectionOption,
+  TextResponse,
   TimeRange,
   VideoResponse,
-  PhotoResponse,
-  Date,
-  AudioRecord,
-  Geolocation,
-  TextResponse,
 } from './InputTypeItems';
 import {
-  StyledHeader,
   StyledContent,
+  StyledHeader,
   StyledInputWrapper,
-  StyledOptionsWrapper,
   StyledItemConfiguration,
+  StyledOptionsWrapper,
 } from './ItemConfiguration.styles';
 import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
-import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
+import { DEFAULT_SCORE_VALUE, itemsTypeOptions } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 
 export const ItemConfiguration = () => {
@@ -191,6 +192,9 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
           {selectedInputType === ItemInputTypes.Text && (
             <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
+          )}
+          {selectedInputType === ItemInputTypes.AudioPlayer && (
+            <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />
           )}
           {isTextInputOptionVisible && (
             <TextInputOption

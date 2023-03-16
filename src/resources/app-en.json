@@ -585,5 +585,12 @@
   "textResponseTitle": "Text Response",
   "textResponseDescription": "The respondent will be able to enter a text response.",
   "correctAnswer": "Correct Answer",
-  "maxCharacters": "Max characters"
+  "maxCharacters": "Max characters",
+  "audioPlayerDescription": "The respondent will listen to an audio stimulus, no response is required.",
+  "mediaTranscript": "Media transcript",
+  "uploadAudioRestrictions": "Please upload WAV or MP3 less than 8MB.",
+  "uploadAudioDropText": "Drop Audio here or click to browse",
+  "uploadAudioDescription": "Please Upload WAV or MP3",
+  "audioExceedSize": "Audio is more than 8Mb",
+  "audioWrongFormat": "Audio file has wrong format"
 }

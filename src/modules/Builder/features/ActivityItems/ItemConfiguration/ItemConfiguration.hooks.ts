@@ -18,9 +18,13 @@ import { DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 type OptionalItemSetupProps = {
   itemType: ItemInputTypes;
   name: Path<FieldValues>;
-  defaultValue: unknown;
+  defaultValue?: unknown;
 };
-export const useOptionalItemSetup = ({ name, defaultValue, itemType }: OptionalItemSetupProps) => {
+export const useOptionalItemSetup = ({
+  name,
+  defaultValue = '',
+  itemType,
+}: OptionalItemSetupProps) => {
   const { control, setValue, getValues } = useFormContext();
 
   useEffect(() => {
