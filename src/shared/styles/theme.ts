@@ -228,6 +228,11 @@ export const theme = createTheme({
             '&:hover': {
               backgroundColor: variables.palette.primary_alfa8,
             },
+            '&.MuiButton-outlinedError': {
+              '& svg': {
+                fill: variables.palette.semantic.error,
+              },
+            },
             '&.Mui-disabled': {
               color: variables.palette.on_surface_alfa38,
               backgroundColor: 'transparent',

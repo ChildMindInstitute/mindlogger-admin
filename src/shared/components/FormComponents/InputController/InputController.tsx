@@ -26,6 +26,7 @@ export const InputController = <T extends FieldValues>({
   InputProps,
   minNumberValue = 1,
   maxNumberValue,
+  helperText,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -60,9 +61,9 @@ export const InputController = <T extends FieldValues>({
               <StyledTextField
                 {...textFieldProps}
                 onChange={onChange}
-                value={isNumberType && value < minNumberValue ? minNumberValue : value}
+                value={isNumberType && (!value || value < minNumberValue) ? minNumberValue : value}
                 error={!!error || providedError}
-                helperText={error?.message || null}
+                helperText={error?.message || helperText}
                 InputProps={
                   isNumberType
                     ? {

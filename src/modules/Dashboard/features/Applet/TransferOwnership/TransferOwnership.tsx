@@ -8,7 +8,7 @@ import { getErrorMessage } from 'shared/utils';
 import { transferOwnershipApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledErrorText, StyledBodyLarge } from 'shared/styles';
+import { StyledErrorText, StyledBodyLarge, theme } from 'shared/styles';
 
 import { StyledInputWrapper } from './TransferOwnership.styles';
 import { TransferOwnershipProps } from './TransferOwnership.types';
@@ -46,15 +46,19 @@ export const TransferOwnership = ({
 
   return (
     <form onSubmit={handleSubmit(handleTransferOwnership)} noValidate>
-      <StyledBodyLarge>
-        <Trans i18nKey="transferOwnershipConfirmation">
-          Are you sure you want to transfer ownership of the
+      <Trans i18nKey="transferOwnershipConfirmation">
+        <StyledBodyLarge>
+          Are you sure you want to transfer ownership of Applet
           <strong>
             <>{{ appletName: applet?.name || t('Applet') }}</>
           </strong>
-          to another user? This will only transfer the applet and no user data will be transferred.
-        </Trans>
-      </StyledBodyLarge>
+          to another user?
+        </StyledBodyLarge>
+        <StyledBodyLarge marginTop={theme.spacing(2.4)}>
+          This will only transfer the Applet. No user data will be transferred. After the new Owner
+          confirms transfer, you will no longer have access to this Applet or its data.
+        </StyledBodyLarge>
+      </Trans>
       <StyledInputWrapper>
         <InputController
           required
@@ -62,6 +66,7 @@ export const TransferOwnership = ({
           name="email"
           control={control}
           label={t('ownerEmail')}
+          helperText={t('transferOwnershipHelperText')}
         />
       </StyledInputWrapper>
       {error && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}

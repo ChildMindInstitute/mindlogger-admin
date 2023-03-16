@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { StyledHeadlineLarge } from 'shared/styles/styledComponents';
 
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
+  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const EditAppletSetting = () => {
@@ -13,7 +13,7 @@ export const EditAppletSetting = () => {
 
   return (
     <>
-      <StyledHeadlineLarge>{t('editApplet')}</StyledHeadlineLarge>
+      <StyledHeadline>{t('editApplet')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('editDescription')}</StyledAppletSettingsDescription>
       <StyledAppletSettingsButton
         variant="outlined"
