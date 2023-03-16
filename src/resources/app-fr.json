@@ -476,5 +476,12 @@
   "textResponseTitle": "TextResponse",
   "textResponseDescription": "Le répondant pourra saisir une réponse textuelle.",
   "correctAnswer": "Réponse correcte",
-  "maxCharacters": "Nombre maximum de caractères"
+  "maxCharacters": "Nombre maximum de caractères",
+  "selectionRowsHeader_single": "Matrice - Sélection unique par ligne",
+  "selectionRowsHeader_multiple": "Matrice - Sélection multiple par ligne",
+  "selectionRowsOption_one": "{{ count }} option",
+  "selectionRowsOption_other": "{{ count }} options",
+  "selectionRowsOptionPlaceholder": "Option {{- index }}",
+  "selectionRowsItemPlaceholder": "Article {{- index }}",
+  "addSelectionRow": "Ajouter une rangée"
 }

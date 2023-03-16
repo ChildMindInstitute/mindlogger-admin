@@ -1,12 +1,13 @@
 import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
+import { createArray } from 'shared/utils';
 
 import { ScoreCell } from './ScoreCell';
 
 const { t } = i18n;
 
 export const getHeadCells = (min: number, max: number): HeadCell[] =>
-  Array.from({ length: max - min + 1 }).map((item, index) => ({
+  createArray(max - min + 1, (index: number) => ({
     id: `${min + index}`,
     label: `${min + index}`,
   }));

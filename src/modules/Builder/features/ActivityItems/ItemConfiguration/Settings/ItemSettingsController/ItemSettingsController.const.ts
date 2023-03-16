@@ -103,7 +103,11 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemInputTypes.SingleSelectionPerRow]: [
     {
       groupName: 'responseSettings',
-      groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      groupOptions: [
+        ItemConfigurationSettings.HasScores,
+        ItemConfigurationSettings.HasAlerts,
+        ItemConfigurationSettings.HasTooltips,
+      ],
     },
     {
       groupName: 'itemSettings',
@@ -117,7 +121,11 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemInputTypes.MultipleSelectionPerRow]: [
     {
       groupName: 'responseSettings',
-      groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      groupOptions: [
+        ItemConfigurationSettings.HasScores,
+        ItemConfigurationSettings.HasAlerts,
+        ItemConfigurationSettings.HasTooltips,
+      ],
     },
     {
       groupName: 'itemSettings',

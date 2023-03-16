@@ -40,6 +40,25 @@ export type Alert = {
   item: string;
 };
 
+export type SelectionRowsItem = {
+  label: string;
+  tooltip?: string;
+  scores?: number[];
+  image?: string;
+};
+
+export type SelectionRowsOption = {
+  label: string;
+  tooltip?: string;
+  image?: string;
+};
+
+export type SelectionRows = {
+  items: SelectionRowsItem[];
+  options: SelectionRowsOption[];
+  type: ItemInputTypes.MultipleSelectionPerRow | ItemInputTypes.SingleSelectionPerRow;
+};
+
 export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
   name: string;
@@ -55,6 +74,7 @@ export type ItemConfigurationForm = {
   sliderOptions?: SliderOption[];
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
+  selectionRows?: SelectionRows;
 };
 
 export type ItemsOption = {

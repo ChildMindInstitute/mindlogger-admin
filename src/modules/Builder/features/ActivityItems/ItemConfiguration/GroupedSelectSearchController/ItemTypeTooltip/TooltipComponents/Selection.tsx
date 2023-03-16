@@ -3,6 +3,7 @@ import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'shared/components';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
+import { createArray } from 'shared/utils';
 
 import { SelectionOption } from './SelectionOption';
 import { getSelectionSvgId } from './TooltipComponents.utils';
@@ -21,7 +22,7 @@ export const Selection = ({ uiType }: SelectionProps) => {
   return (
     <>
       <StyledPresentation>
-        {new Array(3).fill(null).map((_, index) => (
+        {createArray(3, (index) => (
           <StyledPresentationLine key={uniqueId()}>
             <Svg id={getSelectionSvgId(index, isSingleSelection)} {...commonProps} />
             <SelectionOption optionNumber={index + 1} />

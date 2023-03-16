@@ -590,5 +590,12 @@
   "textResponseTitle": "Text Response",
   "textResponseDescription": "The respondent will be able to enter a text response.",
   "correctAnswer": "Correct Answer",
-  "maxCharacters": "Max characters"
+  "maxCharacters": "Max characters",
+  "selectionRowsHeader_single": "Matrix - Single Selection per Row",
+  "selectionRowsHeader_multiple": "Matrix - Multiple Selection per Row",
+  "selectionRowsOption_one": "{{ count }} option",
+  "selectionRowsOption_other": "{{ count }} options",
+  "selectionRowsOptionPlaceholder": "Option {{- index }}",
+  "selectionRowsItemPlaceholder": "Item {{- index }}",
+  "addSelectionRow": "Add Row"
 }

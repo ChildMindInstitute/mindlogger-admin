@@ -2,6 +2,7 @@ import { DateLocalizer, NavigateAction } from 'react-big-calendar';
 import { startOf, add } from 'react-big-calendar/lib/utils/dates';
 
 import { DateFormats } from 'shared/consts';
+import { createArray } from 'shared/utils';
 
 import { CalendarViews } from '../Calendar.types';
 import { MonthCalendar } from './MonthCalendar';
@@ -14,7 +15,7 @@ export const YearView = ({ date, localizer, events, onNavigate, components }: Ye
 
   return (
     <StyledYear>
-      {new Array(12).fill(null).map((_, index) => (
+      {createArray(12, (index) => (
         <MonthCalendar
           key={index}
           events={events}

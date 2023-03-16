@@ -32,6 +32,7 @@ import {
   AudioRecord,
   Geolocation,
   TextResponse,
+  SelectionRows,
 } from './InputTypeItems';
 import {
   StyledHeader,
@@ -190,6 +191,8 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.SliderRows && (
             <SliderRows name="sliderOptions" control={control} isMultiple />
           )}
+          {selectedInputType === ItemInputTypes.SingleSelectionPerRow && <SelectionRows isSingle />}
+          {selectedInputType === ItemInputTypes.MultipleSelectionPerRow && <SelectionRows />}
           {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
           {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
           {selectedInputType === ItemInputTypes.Video && <VideoResponse />}

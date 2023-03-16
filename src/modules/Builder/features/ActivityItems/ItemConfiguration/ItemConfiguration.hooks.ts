@@ -14,7 +14,7 @@ import { ItemInputTypes } from 'shared/types/activityItems';
 
 import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
 import { DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
-import { getEmptySliderOption } from './ItemConfiguration.utils';
+import { getEmptySelectionRows, getEmptySliderOption } from './ItemConfiguration.utils';
 
 type OptionalItemSetupProps = {
   itemType: ItemInputTypes;
@@ -69,6 +69,13 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
     ) {
       setValue('sliderOptions', [getEmptySliderOption()]);
     } else setValue('sliderOptions', undefined);
+
+    if (
+      selectedInputType === ItemInputTypes.SingleSelectionPerRow ||
+      selectedInputType === ItemInputTypes.MultipleSelectionPerRow
+    ) {
+      setValue('selectionRows', getEmptySelectionRows(selectedInputType));
+    } else setValue('selectionRows', undefined);
   }, [selectedInputType]);
 
   useEffect(() => {
