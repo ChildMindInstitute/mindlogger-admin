@@ -1,4 +1,4 @@
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/lazy';
 import { Slider } from '@mui/material';
 
 import { StyledClearedButton, StyledTitleSmall, theme } from 'shared/styles';

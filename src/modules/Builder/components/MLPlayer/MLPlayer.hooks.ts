@@ -1,6 +1,6 @@
 import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { OnProgressProps } from 'react-player/base';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/lazy';
 
 import { ResourceDataType } from '../MediaUploader';
 import { MLPlayerStateProps } from './MLPlayer.types';
