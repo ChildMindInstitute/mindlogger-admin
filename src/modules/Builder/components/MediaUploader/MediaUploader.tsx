@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
-import { Svg, Tooltip } from 'shared/components/index';
+import { Svg, Tooltip } from 'shared/components';
 
 import {
   StyledContainer,
@@ -9,10 +9,10 @@ import {
   StyledSourceContainer,
   StyledSvg,
   StyledTitle,
-} from 'shared/components/MediaUploader/MediaUploader.styles';
-import { useMediaUploader } from 'shared/components/MediaUploader/MediaUploader.hooks';
-import { MediaUploaderProps } from 'shared/components/MediaUploader/MediaUploader.types';
-import { MLPlayer } from 'shared/components/MLPlayer';
+} from './MediaUploader.styles';
+import { useMediaUploader } from './MediaUploader.hooks';
+import { MediaUploaderProps } from './MediaUploader.types';
+import { MLPlayer } from '../MLPlayer';
 
 export const MediaUploader = ({
   width,

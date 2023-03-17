@@ -2,8 +2,7 @@ import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { OnProgressProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
 
-import { ResourceDataType } from 'shared/components/MediaUploader/MediaUploader.types';
-
+import { ResourceDataType } from '../MediaUploader';
 import { MLPlayerStateProps } from './MLPlayer.types';
 import { PLAYER_DEFAULTS } from './MLPlayer.const';
 

@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import {
   StyledEllipsisText,

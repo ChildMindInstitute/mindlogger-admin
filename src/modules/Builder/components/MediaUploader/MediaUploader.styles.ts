@@ -1,5 +1,4 @@
-import { Box } from '@mui/material';
-import { styled } from '@mui/system';
+import { Box, styled } from '@mui/material';
 
 import {
   StyledFlexAllCenter,
@@ -8,7 +7,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+import { shouldForwardProp } from 'shared/utils';
 import { Svg } from 'shared/components';
 
 export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`

@@ -13,9 +13,8 @@ import {
 } from 'shared/styles';
 import { Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { ItemInputTypes } from 'shared/types/activityItems';
-import { MediaUploader } from 'shared/components/MediaUploader';
-import { ResourceDataType } from 'shared/components/MediaUploader/MediaUploader.types';
+import { ItemInputTypes } from 'shared/types';
+import { MediaUploader, ResourceDataType } from 'modules/Builder/components';
 
 import {
   StyledCollapsedWrapper,
@@ -23,7 +22,6 @@ import {
 } from '../SelectionOption/SelectionOption.styles';
 import { StyledName, StyledNameWrapper } from './AudioPlayer.styles';
 import { AudioPlayerProps } from './AudioPlayer.types';
-
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 
 export const AudioPlayer = ({ name, fileResource }: AudioPlayerProps<FieldValues>) => {

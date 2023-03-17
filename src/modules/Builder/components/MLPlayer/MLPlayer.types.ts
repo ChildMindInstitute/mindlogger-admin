@@ -1,4 +1,4 @@
-import { ResourceDataType } from 'shared/components/MediaUploader/MediaUploader.types';
+import { ResourceDataType } from '../MediaUploader';
 
 export type MLPlayerProps = {
   resourceData: ResourceDataType | null;
