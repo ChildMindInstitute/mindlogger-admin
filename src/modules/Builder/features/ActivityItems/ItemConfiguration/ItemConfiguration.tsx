@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
 import { ColorResult } from 'react-color';
 
@@ -21,8 +21,9 @@ import { ItemInputTypes } from 'shared/types';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { Alerts } from './Alerts';
-import { ItemSettingsDrawer, ItemSettingsController, ColorPalette } from './Settings';
+import { ItemSettingsController, ItemSettingsDrawer, ColorPalette } from './Settings';
 import {
+  AudioPlayer,
   SelectionOption,
   NumberSelection,
   TimeRange,
@@ -35,14 +36,14 @@ import {
   TextResponse,
 } from './InputTypeItems';
 import {
-  StyledHeader,
   StyledContent,
+  StyledHeader,
   StyledInputWrapper,
-  StyledOptionsWrapper,
   StyledItemConfiguration,
+  StyledOptionsWrapper,
 } from './ItemConfiguration.styles';
 import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
-import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
+import { DEFAULT_SCORE_VALUE, itemsTypeOptions } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils';
 
@@ -202,6 +203,9 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
           {selectedInputType === ItemInputTypes.Text && (
             <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
+          )}
+          {selectedInputType === ItemInputTypes.AudioPlayer && (
+            <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />
           )}
           {isTextInputOptionVisible && (
             <TextInputOption
