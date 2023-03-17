@@ -30,7 +30,7 @@ const PLAYER_DEFAULTS = {
 };
 
 export const useMLPlayerSetup = (resourceData: ResourceDataType | null) => {
-  const { name: fileName, url } = resourceData ?? {};
+  const { name: fileName, url, uploaded } = resourceData ?? {};
 
   const [state, setState] = useState<MLPlayerStateProps>(PLAYER_DEFAULTS);
 
@@ -107,6 +107,7 @@ export const useMLPlayerSetup = (resourceData: ResourceDataType | null) => {
     state,
     fileName,
     url,
+    uploaded,
     duration,
     elapsedTime,
     handlePlayPause,

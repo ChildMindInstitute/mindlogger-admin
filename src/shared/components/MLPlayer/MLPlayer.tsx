@@ -20,6 +20,7 @@ export const MLPlayer = ({ resourceData, onRemove }: MLPlayerProps) => {
     state,
     fileName,
     url,
+    uploaded,
     duration,
     elapsedTime,
     handlePlayPause,
@@ -58,7 +59,7 @@ export const MLPlayer = ({ resourceData, onRemove }: MLPlayerProps) => {
         </StyledClearedButton>
       </StyledHeader>
       <StyledNameWrapper>
-        <Svg id="check" width={18} height={18} />{' '}
+        {uploaded && <Svg id="check" width={18} height={18} />}{' '}
         <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{fileName}</StyledName>{' '}
         <StyledClearedButton onClick={onRemove}>
           <Svg id="close" width={18} height={18} />

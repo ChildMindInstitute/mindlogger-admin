@@ -31,14 +31,8 @@ import {
   Date,
   SliderRows,
   AudioRecord,
-  Date,
   Geolocation,
-  NumberSelection,
-  PhotoResponse,
-  SelectionOption,
   TextResponse,
-  TimeRange,
-  VideoResponse,
 } from './InputTypeItems';
 import {
   StyledContent,
