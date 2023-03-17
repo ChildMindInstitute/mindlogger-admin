@@ -19,11 +19,8 @@ export const useMLPlayerSetup = (resourceData: ResourceDataType | null) => {
 
   const [state, setState] = useState<MLPlayerStateProps>(PLAYER_DEFAULTS);
 
-  const duration = useMemo(() => calculateTime(state.duration), [state.duration]);
-  const elapsedTime = useMemo(
-    () => calculateTime(state.duration * state.played),
-    [state.duration, state.played],
-  );
+  const duration = calculateTime(state.duration);
+  const elapsedTime = calculateTime(state.duration * state.played);
   const playerRef = useRef<ReactPlayer>(null);
 
   useEffect(() => {
