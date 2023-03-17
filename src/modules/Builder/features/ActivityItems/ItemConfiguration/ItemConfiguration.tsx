@@ -33,6 +33,7 @@ import {
   AudioRecord,
   Geolocation,
   TextResponse,
+  Drawing,
 } from './InputTypeItems';
 import {
   StyledContent,
@@ -199,6 +200,9 @@ export const ItemConfiguration = () => {
           )}
           {selectedInputType === ItemInputTypes.AudioPlayer && (
             <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />
+          )}
+          {selectedInputType === ItemInputTypes.Drawing && (
+            <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />
           )}
           {isTextInputOptionVisible && (
             <TextInputOption

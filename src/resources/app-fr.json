@@ -478,9 +478,9 @@
   "maxCharacters": "Nombre maximum de caractères",
   "audioPlayerDescription": "Le répondant écoutera un stimulus audio, aucune réponse n'est requise.",
   "mediaTranscript": "Retranscription du média",
-  "uploadAudioRestrictions": "Veuillez télécharger un fichier WAV ou MP3 de moins de 8 Mo.",
+  "uploadAudioRestrictions": "Veuillez télécharger un fichier WAV ou MP3 de moins de {{size}}",
   "uploadAudioDropText": "Déposez l'audio ici ou cliquez pour parcourir",
   "uploadAudioDescription": "Veuillez télécharger WAV ou MP3",
-  "audioExceedSize": "L'audio fait plus de 8 Mo",
+  "audioExceedSize": "L'audio fait plus de {{size}}",
   "audioWrongFormat": "Le fichier audio a un mauvais format"
 }

@@ -12,11 +12,12 @@ import {
   StyledFlexTopCenter,
   StyledHeadlineLarge,
   StyledBuilderWrapper,
-} from 'shared/styles/styledComponents';
+  theme,
+} from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'shared/consts';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
+import { byteFormatter } from 'shared/utils';
 
 import { Uploads } from '../../components';
 import { StyledForm, StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
@@ -26,7 +27,6 @@ import { FormValues } from './AboutApplet.types';
 
 export const AboutApplet = () => {
   const { t } = useTranslation();
-  const mockedTooltipText = 'Lorem ipsum';
 
   useBreadcrumbs([
     {
@@ -49,30 +49,31 @@ export const AboutApplet = () => {
   const commonUploaderProps = {
     width: 20,
     height: 20,
+    maxFileSize: MAX_FILE_SIZE_1GB,
   };
 
   const uploads = [
     {
       title: t('appletImg'),
-      tooltipTitle: mockedTooltipText,
+      tooltipTitle: t('appletImageDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue('appletImage', val)}
           getValue={() => watch('appletImage')}
-          description={t('uploadImg')}
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
     },
     {
       title: t('appletWatermark'),
-      tooltipTitle: mockedTooltipText,
+      tooltipTitle: t('appletWatermarkDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue('appletWatermark', val)}
           getValue={() => watch('appletWatermark')}
-          description={t('uploadTransfluent')}
+          description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
     },
