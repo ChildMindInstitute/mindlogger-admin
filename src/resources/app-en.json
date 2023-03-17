@@ -589,5 +589,6 @@
   "textResponseTitle": "Text Response",
   "textResponseDescription": "The respondent will be able to enter a text response.",
   "correctAnswer": "Correct Answer",
-  "maxCharacters": "Max characters"
+  "maxCharacters": "Max characters",
+  "colorPalette": "Color Palette"
 }

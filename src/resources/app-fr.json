@@ -475,5 +475,6 @@
   "textResponseTitle": "TextResponse",
   "textResponseDescription": "Le répondant pourra saisir une réponse textuelle.",
   "correctAnswer": "Réponse correcte",
-  "maxCharacters": "Nombre maximum de caractères"
+  "maxCharacters": "Nombre maximum de caractères",
+  "colorPalette": "Palette de couleurs"
 }

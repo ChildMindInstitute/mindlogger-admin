@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useForm, FormProvider } from 'react-hook-form';
 import { Button } from '@mui/material';
+import { ColorResult } from 'react-color';
 
 import { Svg } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
@@ -20,7 +21,7 @@ import { ItemInputTypes } from 'shared/types';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { Alerts } from './Alerts';
-import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
+import { ItemSettingsDrawer, ItemSettingsController, ColorPalette } from './Settings';
 import {
   SelectionOption,
   NumberSelection,
@@ -43,7 +44,7 @@ import {
 import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
 import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
-import { getInputTypeTooltip } from './ItemConfiguration.utils';
+import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -57,6 +58,7 @@ export const ItemConfiguration = () => {
       name: '',
       body: '',
       settings: [],
+      palette: '',
     },
     mode: 'onChange',
   });
@@ -84,6 +86,7 @@ export const ItemConfiguration = () => {
 
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
+  const palette = watch('palette');
 
   const hasOptions =
     selectedInputType === ItemInputTypes.SingleSelection ||
@@ -92,12 +95,15 @@ export const ItemConfiguration = () => {
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
   const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
   const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
+  const hasColorPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
 
   const handleAddOption = () =>
     appendOption({
       text: '',
       isVisible: true,
       ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
+      ...(hasColorPalette &&
+        palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
     });
 
   const handleRemoveTextInputOption = () => {
@@ -157,6 +163,7 @@ export const ItemConfiguration = () => {
           </StyledInputWrapper>
           <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
           <EditorController name="body" control={control} />
+          {hasOptions && hasColorPalette && <ColorPalette />}
           {hasOptions && (
             <StyledOptionsWrapper>
               {options?.length
