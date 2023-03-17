@@ -1,13 +1,10 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 
-import { ResourceDataType } from './MediaUploader.types';
+import { MediaUploaderHookProps } from './MediaUploader.types';
 
 const MAX_FILE_SIZE = 8388608; // 8 MB
 
-export type MediaUploaderProps = {
-  setResourceData: (data: ResourceDataType | null) => void;
-};
-export const useMediaUploader = ({ setResourceData }: MediaUploaderProps) => {
+export const useMediaUploader = ({ setResourceData }: MediaUploaderHookProps) => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>('');
 

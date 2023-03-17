@@ -10,3 +10,7 @@ export type ResourceDataType = {
   url: string;
   uploaded: boolean;
 };
+
+export type MediaUploaderHookProps = {
+  setResourceData: (data: ResourceDataType | null) => void;
+};
