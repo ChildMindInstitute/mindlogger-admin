@@ -28,7 +28,7 @@ export const StyledSourceContainer = styled(StyledFlexColumn, shouldForwardProp)
     color: ${variables.palette.primary};
   }
 
-  svg {
+  svg .svg-audio-player-filled {
     fill: ${variables.palette.surface_variant};
   }
 `;

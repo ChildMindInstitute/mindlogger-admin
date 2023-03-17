@@ -32,11 +32,9 @@ export const StyledNameWrapper = styled(StyledFlexTopCenter)`
   position: absolute;
   top: 0;
 
-  && {
-    svg.svg-check {
-      fill: ${variables.palette.primary};
-      margin-right: ${theme.spacing(1)};
-    }
+  svg.svg-check {
+    fill: ${variables.palette.primary};
+    margin-right: ${theme.spacing(1)};
   }
 `;
 

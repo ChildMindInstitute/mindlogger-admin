@@ -13,10 +13,8 @@ export const StyledNameWrapper = styled(StyledFlexTopCenter)`
   color: ${variables.palette.on_surface_variant};
   margin-left: ${theme.spacing(3)};
 
-  && {
-    svg {
-      fill: ${variables.palette.primary};
-      margin-right: ${theme.spacing(1)};
-    }
+  svg {
+    fill: ${variables.palette.primary};
+    margin-right: ${theme.spacing(1)};
   }
 `;
