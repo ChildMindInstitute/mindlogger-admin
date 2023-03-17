@@ -5,6 +5,7 @@ import ReactPlayer from 'react-player';
 import { ResourceDataType } from 'shared/components/MediaUploader/MediaUploader.types';
 
 import { MLPlayerStateProps } from './MLPlayer.types';
+import { PLAYER_DEFAULTS } from './MLPlayer.const';
 
 const calculateTime = (secs: number) => {
   const minutes = Math.floor(secs / 60);
@@ -12,21 +13,6 @@ const calculateTime = (secs: number) => {
   const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
 
   return `${minutes}:${returnedSeconds}`;
-};
-const PLAYER_DEFAULTS = {
-  url: null,
-  pip: false,
-  playing: false,
-  controls: false,
-  light: false,
-  volume: 0.8,
-  muted: false,
-  played: 0,
-  loaded: 0,
-  duration: 0,
-  playbackRate: 1.0,
-  loop: false,
-  seeking: false,
 };
 
 export const useMLPlayerSetup = (resourceData: ResourceDataType | null) => {

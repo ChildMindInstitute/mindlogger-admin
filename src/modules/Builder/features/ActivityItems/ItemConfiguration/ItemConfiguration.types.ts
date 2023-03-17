@@ -63,7 +63,6 @@ export type ItemConfigurationForm = {
   sliderOptions?: SliderOption[];
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
-
   mediaTranscript?: string;
   mediaFileResource?: string;
 };
