@@ -14,13 +14,10 @@ export const StyledPlayerWrapper = styled(Box)`
   position: relative;
 `;
 export const StyledHeader = styled(StyledFlexAllCenter)`
-  display: flex;
   position: relative;
 
-  && {
-    svg {
-      fill: ${variables.palette.primary};
-    }
+  svg {
+    fill: ${variables.palette.primary};
   }
 `;
 export const StyledName = styled(StyledEllipsisText)`
