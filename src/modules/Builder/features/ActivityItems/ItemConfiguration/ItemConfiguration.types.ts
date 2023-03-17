@@ -63,6 +63,8 @@ export type ItemConfigurationForm = {
   sliderOptions?: SliderOption[];
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
+  mediaTranscript?: string;
+  mediaFileResource?: string;
 };
 
 export type ItemsOption = {
@@ -85,7 +87,7 @@ export type SettingsSetupProps = {
 export type OptionalItemSetupProps = {
   itemType: ItemInputTypes;
   name: Path<FieldValues>;
-  defaultValue: unknown;
+  defaultValue?: unknown;
 };
 
 export type SliderOption = {

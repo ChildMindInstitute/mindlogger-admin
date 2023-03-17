@@ -11,7 +11,11 @@ import {
 import { DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 import { getEmptySliderOption } from './ItemConfiguration.utils';
 
-export const useOptionalItemSetup = ({ name, defaultValue, itemType }: OptionalItemSetupProps) => {
+export const useOptionalItemSetup = ({
+  name,
+  defaultValue = '',
+  itemType,
+}: OptionalItemSetupProps) => {
   const { control, setValue, getValues } = useFormContext();
 
   useEffect(() => {
