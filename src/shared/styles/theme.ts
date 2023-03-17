@@ -516,11 +516,13 @@ export const theme = createTheme({
     MuiSlider: {
       styleOverrides: {
         root: {
+          color: variables.palette.surface,
           '& .MuiSlider-thumb': {
             display: 'none',
           },
           '& .MuiSlider-track': {
             height: '0.2rem',
+            color: variables.palette.primary,
           },
         },
       },
