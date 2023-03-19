@@ -30,11 +30,11 @@ export const WorkspaceGroup = ({
             selected={currentWorkspace.accountId === workspace.accountId}
           >
             <StyledItemContent>
-              <WorkspaceImage image={workspace?.image} workspaceName={workspace.accountName} />
+              <WorkspaceImage image={workspace?.image} workspaceName={workspace.workspaceName} />
               <StyledBodyLarge
                 sx={{ marginLeft: theme.spacing(1.6), color: variables.palette.on_surface }}
               >
-                {workspace.accountName}
+                {workspace.workspaceName}
               </StyledBodyLarge>
             </StyledItemContent>
 

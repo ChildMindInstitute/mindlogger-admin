@@ -25,4 +25,5 @@ export type TableProps = {
   maxHeight?: string;
   uiType?: UiType;
   emptyComponent?: JSX.Element | string;
+  className?: string;
 };
