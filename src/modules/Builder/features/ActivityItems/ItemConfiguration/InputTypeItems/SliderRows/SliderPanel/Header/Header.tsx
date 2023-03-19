@@ -1,5 +1,4 @@
 import { useFormContext } from 'react-hook-form';
-import { Slider } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import {

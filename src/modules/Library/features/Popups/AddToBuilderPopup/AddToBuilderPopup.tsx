@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-import { mockedWorkspaces as accounts } from 'shared/components/LeftBar/mocked';
+import { mockedWorkspaces as accounts } from 'shared/layouts/BaseLayout/components/LeftBar/mocked';
 import { StyledModalWrapper } from 'shared/styles';
 
 import {
