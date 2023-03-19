@@ -102,6 +102,7 @@ export type GetUsersData = AppletId & {
 };
 
 export type AppletInvitationData = AppletId & {
+  url: string;
   options: {
     role: string;
     firstName: string;
@@ -109,7 +110,7 @@ export type AppletInvitationData = AppletId & {
     nickName: string;
     email: string;
     MRN: string;
-    accountName: string;
+    workspacePrefix: string;
     users: string[];
   };
 };

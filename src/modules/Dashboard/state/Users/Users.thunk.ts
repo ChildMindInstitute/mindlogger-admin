@@ -40,9 +40,9 @@ export const updatePin = createAsyncThunk(
 
 export const getInvitations = createAsyncThunk(
   'users/getInvitations',
-  async ({ id }: { id: string }, { rejectWithValue, signal }) => {
+  async (args, { rejectWithValue, signal }) => {
     try {
-      return await getInvitationsApi({ appletId: id }, signal);
+      return await getInvitationsApi(signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

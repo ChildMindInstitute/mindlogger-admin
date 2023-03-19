@@ -62,20 +62,35 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
 
   const resetForm = () => reset();
 
+  const getUrl = (role: string) => {
+    switch (role) {
+      case Roles.Respondent:
+        return 'respondent';
+      case Roles.Reviewer:
+        return 'reviewer';
+      default:
+        return 'managers';
+    }
+  };
+
   const onSubmit = async (values: FormValues) => {
     try {
       if (id) {
-        const options = {
-          ...values,
-          accountName: values.accountName || authData?.account?.accountName || '',
-        };
+        // const options = {
+        //   ...values,
+        //   accountName: values.accountName || authData?.account?.accountName || '',
+        // };
 
-        await getAppletInvitationApi({ appletId: id, options });
+        await getAppletInvitationApi({
+          url: getUrl(values.role),
+          appletId: id,
+          options: { ...values },
+        });
         await getInvitationsHandler();
 
-        if (options.accountName && options.role !== Roles.User) {
-          dispatch(setAccountName({ accountName: options.accountName }));
-        }
+        // if (options.accountName && options.role !== Roles.User) {
+        //   dispatch(setAccountName({ accountName: options.accountName }));
+        // }
         setErrorMessage('');
         resetForm();
       }
@@ -86,12 +101,12 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
 
   const updateFields = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = e.target;
-    const { nickName, MRN, accountName, users } = Fields;
+    const { nickName, MRN, workspacePrefix, users } = Fields;
 
-    if (value === Roles.User) {
+    if (value === Roles.Respondent) {
       register(nickName, { value: '' });
       register(MRN, { value: '' });
-      unregister(accountName);
+      unregister(workspacePrefix);
       unregister(users);
     } else {
       unregister(nickName);
@@ -102,7 +117,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
         unregister(users);
       }
       if (accountNameShowed) {
-        register(accountName, { value: '' });
+        register(workspacePrefix, { value: '' });
       }
     }
   };
@@ -120,62 +135,58 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
       <StyledTitle>{t('addUser')}</StyledTitle>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={2.4} alignItems="flex-start">
-          <Grid container item xs={8} spacing={2.4}>
+          <Grid container item xs={12} spacing={2.4}>
             {fields.map(({ name }) => (
-              <Grid item xs={6} key={name}>
+              <Grid item xs={4} key={name}>
                 <InputController {...commonProps} name={name} label={t(name)} />
               </Grid>
             ))}
-            <Grid item xs={6}>
-              <SelectController
-                {...commonProps}
-                name={Fields.role}
-                options={roles}
-                label={t('role')}
-                customChange={updateFields}
-              />
-            </Grid>
-            {role === Roles.Reviewer && (
-              <Grid item xs={12}>
-                <TagsInputController
-                  {...commonProps}
-                  name={Fields.users}
-                  onRemove={handleRemove}
-                  // TODO: fix types
-                  options={prepareUsersData(usersData?.items)?.map((el: any) => el?.MRN)}
-                  label={t('userList')}
-                />
-              </Grid>
-            )}
-            <Grid item xs={6}>
-              <SelectController
-                {...commonProps}
-                name={Fields.lang}
-                options={langs}
-                label={t('language')}
-              />
-            </Grid>
           </Grid>
-          <Grid container item xs={4} rowSpacing={2.4}>
-            {role === Roles.User && (
-              <>
-                <Grid item xs={12}>
-                  <InputController {...commonProps} name={Fields.nickName} label={t('nickname')} />
-                </Grid>
-                <Grid item xs={12}>
-                  <InputController {...commonProps} name={Fields.MRN} label={t('secretUserId')} />
-                </Grid>
-              </>
-            )}
-            {accountNameShowed && role !== Roles.User && (
-              <Grid item xs={12}>
-                <InputController
-                  {...commonProps}
-                  name={Fields.accountName}
-                  label={t('accountName')}
-                />
+          <Grid item xs={4}>
+            <SelectController
+              {...commonProps}
+              name={Fields.role}
+              options={roles}
+              label={t('role')}
+              customChange={updateFields}
+            />
+          </Grid>
+          {role === Roles.Reviewer && (
+            <Grid item xs={4}>
+              <TagsInputController
+                {...commonProps}
+                name={Fields.users}
+                onRemove={handleRemove}
+                // TODO: fix types
+                options={prepareUsersData(usersData?.items)?.map((el: any) => el?.MRN)}
+                label={t('userList')}
+              />
+            </Grid>
+          )}
+          {role === Roles.Respondent && (
+            <>
+              <Grid item xs={4}>
+                <InputController {...commonProps} name={Fields.nickName} label={t('nickname')} />
               </Grid>
-            )}
+              <Grid item xs={4}>
+                <InputController {...commonProps} name={Fields.MRN} label={t('secretUserId')} />
+              </Grid>
+            </>
+          )}
+          <Grid item xs={4}>
+            <InputController
+              {...commonProps}
+              name={Fields.workspacePrefix}
+              label={t('workspaceName')}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <SelectController
+              {...commonProps}
+              name={Fields.language}
+              options={langs}
+              label={t('language')}
+            />
           </Grid>
         </Grid>
         {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}

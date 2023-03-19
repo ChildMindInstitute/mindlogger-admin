@@ -102,14 +102,14 @@ export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}`, { signal });
 
 export const getAppletInvitationApi = (
-  { appletId, options }: AppletInvitationData,
+  { url, appletId, options }: AppletInvitationData,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/applet/${appletId}/inviteUser`,
-    {},
+    `/invitations/${appletId}/${url}`,
+    { ...options },
     {
-      params: { ...options, users: JSON.stringify(options.users) },
+      // params: { applet_id: appletId },
       signal,
     },
   );
@@ -141,8 +141,8 @@ export const updateRetainingSettingsApi = (
   signal?: AbortSignal,
 ) => authApiClient.post(`/applet/${appletId}/setRetention`, {}, { params: options, signal });
 
-export const getInvitationsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.get(`/applet/${appletId}/invitations`, {
+export const getInvitationsApi = (signal?: AbortSignal) =>
+  authApiClient.get('/invitations', {
     signal,
   });
 

@@ -6,9 +6,9 @@ export type FormValues = {
   nickName: string;
   email: string;
   MRN: string;
-  accountName: string;
+  workspacePrefix: string;
   role: string;
-  lang: string;
+  language: string;
   users: string[];
 };
 

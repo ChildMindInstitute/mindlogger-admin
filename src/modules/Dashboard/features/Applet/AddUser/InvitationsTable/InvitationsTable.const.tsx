@@ -24,8 +24,8 @@ export const getHeadCells = (): HeadCell[] => [
     enableSort: true,
   },
   {
-    id: 'invitationLink',
-    label: t('invitationLink'),
+    id: 'email',
+    label: t('email'),
     enableSort: true,
   },
   {

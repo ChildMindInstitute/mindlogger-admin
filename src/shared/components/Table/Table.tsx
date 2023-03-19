@@ -26,10 +26,10 @@ export const Table = ({
   );
 
   function descendingComparator(a: Row, b: Row, orderBy: string) {
-    if (b[orderBy].value < a[orderBy].value) {
+    if (b[orderBy]?.value < a[orderBy]?.value) {
       return -1;
     }
-    if (b[orderBy].value > a[orderBy].value) {
+    if (b[orderBy]?.value > a[orderBy]?.value) {
       return 1;
     }
 
