@@ -23,7 +23,7 @@ export const ColorPalette = () => {
       ),
     );
 
-    unregister('palette');
+    unregister('paletteName');
   };
 
   return (

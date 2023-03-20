@@ -86,7 +86,7 @@ export const ItemConfiguration = () => {
 
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
-  const palette = watch('palette');
+  const palette = watch('paletteName');
 
   const hasOptions =
     selectedInputType === ItemInputTypes.SingleSelection ||

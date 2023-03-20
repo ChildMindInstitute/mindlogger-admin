@@ -22,7 +22,7 @@ export const ColorPicker = <T extends FieldValues>({
         const handleChange: ColorChangeHandler = (...args) => {
           onChange(...args);
 
-          setValue('palette', '');
+          setValue('paletteName', '');
         };
 
         return (

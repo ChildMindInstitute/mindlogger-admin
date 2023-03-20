@@ -70,7 +70,7 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
   }, [hasAlerts]);
 
   useEffect(() => {
-    setValue('palette', '');
+    setValue('paletteName', '');
   }, [hasPalette]);
 
   useEffect(() => {

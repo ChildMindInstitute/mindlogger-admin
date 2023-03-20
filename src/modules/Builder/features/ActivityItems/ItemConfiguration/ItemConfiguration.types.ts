@@ -55,7 +55,7 @@ export type ItemConfigurationForm = {
   settings: ItemConfigurationSettings[];
   timer?: number;
   options?: SelectionOption[];
-  palette?: string;
+  paletteName?: string;
   isTextInputOptionRequired?: boolean;
   minNumber?: number;
   maxNumber?: number;
