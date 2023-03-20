@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-import { account, popups } from 'redux/modules';
+import { applets, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
@@ -11,8 +11,8 @@ export const TransferOwnershipPopup = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { transferOwnershipPopupVisible, appletId } = popups.useData();
-  const accountData = account.useData();
-  const applet = accountData?.account?.applets?.find((el) => el.id === appletId);
+  const appletsData = applets.useData();
+  const applet = appletsData?.result?.find((el) => el.id === appletId);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [emailTransfered, setEmailTransfered] = useState('');

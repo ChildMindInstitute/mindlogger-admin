@@ -1,6 +1,6 @@
 import uniqueId from 'lodash.uniqueid';
 
-import { ItemInputTypes } from 'shared/types/activityItems';
+import { ItemInputTypes } from 'shared/types';
 import { variables, StyledBodyLarge } from 'shared/styles';
 import i18n from 'i18n';
 

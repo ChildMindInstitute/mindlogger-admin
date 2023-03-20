@@ -10,3 +10,4 @@ export * from './Date';
 export * from './AudioRecord';
 export * from './TextResponse';
 export * from './SelectionRows';
+export * from './AudioPlayer';

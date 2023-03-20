@@ -9,6 +9,7 @@ export const ItemTypeTooltip = ({ uiType, anchorEl }: ItemTypeTooltipProps) => {
 
   return (
     <StyledPopover
+      disableRestoreFocus
       open={open}
       anchorEl={anchorEl}
       anchorOrigin={{

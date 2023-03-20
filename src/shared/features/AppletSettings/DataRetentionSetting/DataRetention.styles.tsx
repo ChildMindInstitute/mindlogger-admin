@@ -11,9 +11,11 @@ export const StyledContainer = styled(Box)`
 
 export const StyledInputWrapper = styled(Box)`
   margin-right: ${theme.spacing(2.4)};
-  width: 8.6rem;
+  width: 10.2rem;
+
   .MuiInputBase-inputAdornedEnd {
     padding-right: 0;
+
     & ~ div > div {
       margin-left: 0;
     }

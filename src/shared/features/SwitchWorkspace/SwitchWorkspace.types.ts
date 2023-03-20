@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 export type Workspace = {
   accountId: string;
-  accountName: string;
+  workspaceName: string;
   owned: boolean;
   image?: string;
 };

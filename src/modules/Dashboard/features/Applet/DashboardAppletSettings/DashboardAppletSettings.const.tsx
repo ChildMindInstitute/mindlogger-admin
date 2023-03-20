@@ -72,14 +72,15 @@ export const settings = [
       },
     ],
   },
-  {
-    label: 'sharing',
-    items: [
-      {
-        icon: <Svg id="share" />,
-        label: 'shareToLibrary',
-        component: <ShareAppletSetting />,
-      },
-    ],
-  },
+  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is introduced.
+  // {
+  //   label: 'sharing',
+  //   items: [
+  //     {
+  //       icon: <Svg id="share" />,
+  //       label: 'shareToLibrary',
+  //       component: <ShareAppletSetting />,
+  //     },
+  //   ],
+  // },
 ];
