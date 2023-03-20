@@ -1,11 +1,5 @@
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
-import {
-  apiClient,
-  apiClientWithLang,
-  authApiClient,
-  authApiClientWithFullLang,
-} from './api.const';
 import {
   getBaseUrl,
   getRequestFullLangData,
@@ -13,6 +7,12 @@ import {
   getRequestTokenData,
   refreshTokenAndReattemptRequest,
 } from './api.utils';
+import { DEFAULT_CONFIG } from './api.const';
+
+export const authApiClient = axios.create(DEFAULT_CONFIG);
+export const apiClient = axios.create(DEFAULT_CONFIG);
+export const apiClientWithLang = axios.create(DEFAULT_CONFIG);
+export const authApiClientWithFullLang = axios.create(DEFAULT_CONFIG);
 
 [apiClient, apiClientWithLang, authApiClient, authApiClientWithFullLang].forEach((client) =>
   client.interceptors.request.use((config: AxiosRequestConfig) => {

@@ -1,4 +1,4 @@
-import { authApiClient, authApiClientWithFullLang } from 'shared/api/api.const';
+import { authApiClient, authApiClientWithFullLang } from 'shared/api/api.client';
 
 import {
   SwitchAccount,

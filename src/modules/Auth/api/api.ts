@@ -1,4 +1,4 @@
-import { apiClient, apiClientWithLang } from 'shared/api/api.const';
+import { apiClient, apiClientWithLang } from 'shared/api/api.client';
 
 import { SignIn, SignUpArgs, ResetPassword } from './api.types';
 

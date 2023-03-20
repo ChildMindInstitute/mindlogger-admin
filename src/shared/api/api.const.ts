@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import { ServerUrlOption } from './api.types';
 
 // TODO: Move to .env
@@ -7,16 +5,11 @@ const PROD_SERVER = 'https://api-dev.cmiml.net';
 const STAGING_SERVER = 'https://api-dev.cmiml.net';
 const DEV_SERVER = 'https://api-dev.cmiml.net';
 
-const DEFAULT_CONFIG = {
+export const DEFAULT_CONFIG = {
   headers: {
     'Mindlogger-Content-Source': 'admin',
   },
 };
-
-export const authApiClient = axios.create(DEFAULT_CONFIG);
-export const apiClient = axios.create(DEFAULT_CONFIG);
-export const apiClientWithLang = axios.create(DEFAULT_CONFIG);
-export const authApiClientWithFullLang = axios.create(DEFAULT_CONFIG);
 
 export const BASE_API_URL = process.env.NODE_ENV === 'production' ? PROD_SERVER : STAGING_SERVER;
 

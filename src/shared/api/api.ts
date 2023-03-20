@@ -1,4 +1,4 @@
-import { apiClient } from './api.const';
+import { apiClient } from './api.client';
 import { SignInRefreshTokenArgs } from './api.types';
 
 export const signInRefreshTokenApi = (
