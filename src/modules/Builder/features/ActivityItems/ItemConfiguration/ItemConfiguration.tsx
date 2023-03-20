@@ -63,7 +63,7 @@ export const ItemConfiguration = () => {
     mode: 'onChange',
   });
 
-  const { control, watch, setValue, getValues } = methods;
+  const { control, watch, setValue, getValues, register, unregister } = methods;
 
   const {
     fields: options,
@@ -116,7 +116,7 @@ export const ItemConfiguration = () => {
     );
   };
 
-  useSettingsSetup({ control, setValue, getValues, watch });
+  useSettingsSetup({ control, setValue, getValues, watch, register, unregister });
 
   return (
     <FormProvider {...methods}>

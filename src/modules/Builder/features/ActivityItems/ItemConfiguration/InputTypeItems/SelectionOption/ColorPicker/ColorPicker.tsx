@@ -1,5 +1,5 @@
 import { Popover } from '@mui/material';
-import { Controller, FieldValues, useFormContext } from 'react-hook-form';
+import { Controller, FieldValues } from 'react-hook-form';
 import { ChromePicker, ColorChangeHandler } from 'react-color';
 
 import { ColorPickerProps } from './ColorPicker.types';
@@ -8,10 +8,9 @@ export const ColorPicker = <T extends FieldValues>({
   name,
   control,
   anchorEl,
+  handleColorChange,
   handlePopoverClose,
 }: ColorPickerProps<T>) => {
-  const { setValue } = useFormContext();
-
   const colorPickerVisible = Boolean(anchorEl);
 
   return (
@@ -22,7 +21,7 @@ export const ColorPicker = <T extends FieldValues>({
         const handleChange: ColorChangeHandler = (...args) => {
           onChange(...args);
 
-          setValue('paletteName', '');
+          handleColorChange && handleColorChange(...args);
         };
 
         return (

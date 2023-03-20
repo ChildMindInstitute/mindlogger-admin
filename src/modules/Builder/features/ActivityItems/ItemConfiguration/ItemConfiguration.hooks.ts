@@ -35,7 +35,14 @@ export const useOptionalItemSetup = ({
   return { control };
 };
 
-export const useSettingsSetup = ({ control, setValue, getValues, watch }: SettingsSetupProps) => {
+export const useSettingsSetup = ({
+  control,
+  setValue,
+  getValues,
+  watch,
+  register,
+  unregister,
+}: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
   const { remove: removeOptions } = useFieldArray({
@@ -70,7 +77,9 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
   }, [hasAlerts]);
 
   useEffect(() => {
-    setValue('paletteName', '');
+    if (hasPalette) {
+      register('paletteName', { value: '' });
+    } else unregister('paletteName');
   }, [hasPalette]);
 
   useEffect(() => {

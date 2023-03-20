@@ -9,7 +9,7 @@ import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 export const ColorPalette = () => {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const { watch, setValue, unregister } = useFormContext();
+  const { watch, setValue } = useFormContext();
 
   const settings = watch('settings');
 
@@ -22,8 +22,6 @@ export const ColorPalette = () => {
           setting !== ItemConfigurationSettings.HasColorPalette,
       ),
     );
-
-    unregister('paletteName');
   };
 
   return (

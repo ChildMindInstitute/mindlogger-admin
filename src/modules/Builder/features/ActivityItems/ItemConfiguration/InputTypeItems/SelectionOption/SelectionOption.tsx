@@ -49,13 +49,21 @@ export const SelectionOption = ({
   const scoreString = score?.toString();
   const hasTooltip = tooltip !== undefined;
   const hasColor = color !== undefined;
-  const hasPalette = palette !== undefined;
+  const hasPalette = !!palette;
   const isColorSet = color?.hex !== '';
   const actionsRef = useRef(null);
 
   const handleOptionToggle = () => setOpen((prevState) => !prevState);
 
   const handlePopoverClose = () => setAnchorEl(null);
+
+  const handleColorChange = () => {
+    const settings = getValues('settings');
+
+    if (settings?.includes(ItemConfigurationSettings.HasColorPalette)) {
+      setValue('paletteName', '');
+    }
+  };
 
   const actions = {
     optionHide: () => onUpdateOption(index, { ...option, isVisible: !isVisible }),
@@ -195,6 +203,7 @@ export const SelectionOption = ({
       {anchorEl && (
         <ColorPicker
           anchorEl={anchorEl}
+          handleColorChange={handleColorChange}
           handlePopoverClose={handlePopoverClose}
           name={`options.${index}.color`}
         />

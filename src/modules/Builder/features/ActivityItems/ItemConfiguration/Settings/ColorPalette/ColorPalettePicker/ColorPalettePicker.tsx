@@ -38,7 +38,12 @@ export const ColorPalettePicker = () => {
 
   return (
     <StyledColorPalettePickerContainer>
-      <RadioGroupController control={control} name="paletteName" options={RADIO_GROUP_OPTIONS} />
+      <RadioGroupController
+        key={`palette-controller-${palette}`}
+        control={control}
+        name="paletteName"
+        options={RADIO_GROUP_OPTIONS}
+      />
       <StyledFlexTopCenter sx={{ gap: '1.2rem' }}>
         {SELECTION_OPTIONS_COLOR_PALETTE.map(({ name, colors }) => (
           <StyledFlexColumn key={`palette-${name}`} sx={{ flexGrow: 1, gap: '0.1rem' }}>
