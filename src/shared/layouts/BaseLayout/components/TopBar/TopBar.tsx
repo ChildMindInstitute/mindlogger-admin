@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Svg, Breadcrumbs } from 'shared/components';
+import { Svg } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
 import { variables } from 'shared/styles/variables';
 import { StyledFlexTopCenter, StyledLabelBoldMedium } from 'shared/styles/styledComponents';
@@ -12,6 +12,7 @@ import { auth } from 'modules/Auth/state';
 import { account } from 'modules/Dashboard/state';
 
 import { AccountPanel } from './AccountPanel';
+import { Breadcrumbs } from './Breadcrumbs';
 import {
   StyledTopBar,
   StyledAvatarBtn,

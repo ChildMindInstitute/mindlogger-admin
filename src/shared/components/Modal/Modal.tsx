@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import theme from 'shared/styles/theme';
 
 import { ModalProps } from './Modal.types';

@@ -1,7 +1,8 @@
 import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Svg, Menu } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
+import { Menu } from 'shared/components/Menu';
 
 import { StyledButton } from './ButtonWithMenu.styles';
 import { ButtonWithMenuProps } from './ButtonWithMenu.types';

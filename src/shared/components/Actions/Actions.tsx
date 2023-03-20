@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
-import { Svg, Tooltip } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
+import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledActions, StyledActionButton, StyledActionsWrapper } from './Actions.styles';
 import { ActionsProps } from './Actions.types';

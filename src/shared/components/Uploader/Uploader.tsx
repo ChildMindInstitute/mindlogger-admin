@@ -2,8 +2,9 @@ import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Button } from '@mui/material';
 import { Trans } from 'react-i18next';
 
+import { CropPopup } from 'shared/components/CropPopup';
+import { Svg } from 'shared/components/Svg';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
-import { CropPopup, Svg } from 'shared/components';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 

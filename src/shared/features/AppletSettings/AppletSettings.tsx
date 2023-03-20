@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 
-import { Navigation, Setting } from '../AppletSettings';
+import { Navigation } from './Navigation';
+import { Setting } from './Setting';
 import { StyledContainer } from './AppletSettings.styles';
 import { AppletSetting, AppletSettingsProps } from './AppletSettings.types';
 
