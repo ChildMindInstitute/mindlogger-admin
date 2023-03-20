@@ -600,6 +600,7 @@
   "uploadAudioDropText": "Drop Audio here or click to browse",
   "uploadAudioDescription": "Please Upload WAV or MP3",
   "audioExceedSize": "Audio is more than {{size}}",
+  "audioWrongFormat": "Audio file has wrong format",
   "drawingExample": "Drawing Example",
   "drawingBackground": "Drawing Background"
 }

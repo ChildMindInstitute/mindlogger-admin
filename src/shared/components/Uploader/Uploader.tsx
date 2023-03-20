@@ -1,6 +1,6 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Button } from '@mui/material';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { CropPopup, Svg } from 'shared/components';
@@ -28,6 +28,7 @@ export const Uploader = ({
   maxFileSize = MAX_FILE_SIZE_2MB,
   wrapperStyles = {},
 }: UploaderProps) => {
+  const { t } = useTranslation('app');
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -147,12 +148,10 @@ export const Uploader = ({
             <Svg id={placeholderImgId} width={32} height={32} />
             {isPrimaryUiType && error && (
               <StyledBodyMedium
-                sx={{ marginBottom: theme.spacing(1) }}
+                sx={{ marginBottom: theme.spacing(1), px: theme.spacing(3) }}
                 color={variables.palette.semantic.error}
               >
-                <Trans i18nKey="dropError" size={byteFormatter(maxFileSize)}>
-                  Image is more than <br /> {byteFormatter(maxFileSize)}.
-                </Trans>
+                {t('dropError', { size: byteFormatter(maxFileSize) })}
               </StyledBodyMedium>
             )}
             {isPrimaryUiType && (
