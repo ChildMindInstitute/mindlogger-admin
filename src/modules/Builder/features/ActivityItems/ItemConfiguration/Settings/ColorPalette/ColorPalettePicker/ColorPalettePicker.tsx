@@ -43,10 +43,7 @@ export const ColorPalettePicker = () => {
         {SELECTION_OPTIONS_COLOR_PALETTE.map(({ name, colors }) => (
           <StyledFlexColumn key={`palette-${name}`} sx={{ flexGrow: 1, gap: '0.1rem' }}>
             {colors.map((hex) => (
-              <StyledPaletteColorBox
-                key={`palette-${name}-${hex}`}
-                sx={{ background: hex }}
-              ></StyledPaletteColorBox>
+              <StyledPaletteColorBox key={`palette-${name}-${hex}`} sx={{ background: hex }} />
             ))}
           </StyledFlexColumn>
         ))}

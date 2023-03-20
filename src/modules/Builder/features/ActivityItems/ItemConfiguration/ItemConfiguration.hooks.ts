@@ -49,6 +49,7 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
 
   const hasTimer = settings?.includes(ItemConfigurationSettings.HasTimer);
   const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
+  const hasPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
 
   useEffect(() => {
@@ -67,6 +68,10 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
   useEffect(() => {
     !hasAlerts && removeAlert();
   }, [hasAlerts]);
+
+  useEffect(() => {
+    setValue('palette', '');
+  }, [hasPalette]);
 
   useEffect(() => {
     if (hasTimer) {

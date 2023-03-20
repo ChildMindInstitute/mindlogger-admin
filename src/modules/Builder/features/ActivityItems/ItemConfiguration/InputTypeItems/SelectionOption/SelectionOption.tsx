@@ -28,6 +28,7 @@ import {
 } from './SelectionOption.styles';
 import { SelectionOptionProps } from './SelectionOption.types';
 import { getActions, OPTION_TEXT_MAX_LENGTH } from './SelectionOption.const';
+import { getPaletteColor } from '../../ItemConfiguration.utils';
 
 export const SelectionOption = ({
   onRemoveOption,
@@ -37,9 +38,10 @@ export const SelectionOption = ({
   const { t } = useTranslation('app');
   const [open, setOpen] = useState(true);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const { setValue, watch, control } = useFormContext<ItemConfigurationForm>();
+  const { setValue, watch, control, getValues } = useFormContext<ItemConfigurationForm>();
   const settings = watch('settings');
   const option = watch(`options.${index}`);
+  const palette = watch('palette');
   const { text, isVisible, score, tooltip, color } = option;
   const hasScoresChecked = settings?.includes(ItemConfigurationSettings.HasScores);
   const hasTooltipsChecked = settings?.includes(ItemConfigurationSettings.HasTooltips);
@@ -47,6 +49,7 @@ export const SelectionOption = ({
   const scoreString = score?.toString();
   const hasTooltip = tooltip !== undefined;
   const hasColor = color !== undefined;
+  const hasPalette = palette !== undefined;
   const isColorSet = color?.hex !== '';
   const actionsRef = useRef(null);
 
@@ -57,7 +60,22 @@ export const SelectionOption = ({
   const actions = {
     optionHide: () => onUpdateOption(index, { ...option, isVisible: !isVisible }),
     paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
-    optionRemove: () => onRemoveOption(index),
+    optionRemove: () => {
+      onRemoveOption(index);
+
+      if (hasColorPicker && hasPalette) {
+        const options = getValues('options');
+
+        options?.forEach((option, index) => {
+          onUpdateOption(index, {
+            ...option,
+            color: {
+              hex: getPaletteColor(palette, index),
+            } as ColorResult,
+          });
+        });
+      }
+    },
   };
 
   const commonInputProps = {

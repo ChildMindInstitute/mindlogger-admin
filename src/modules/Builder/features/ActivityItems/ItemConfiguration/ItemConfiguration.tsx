@@ -59,7 +59,6 @@ export const ItemConfiguration = () => {
       name: '',
       body: '',
       settings: [],
-      palette: '',
     },
     mode: 'onChange',
   });
