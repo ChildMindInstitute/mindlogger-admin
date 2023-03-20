@@ -59,14 +59,12 @@ export const AddToBuilderPopup = ({
 
   const handleNext = async (nextStep?: AddToBuilderSteps) => {
     const isStepValid = await trigger();
-    if (isStepValid) {
-      if (nextStep) {
-        return setStep(nextStep);
-      }
-
-      // TODO: fix when the endpoint is ready
-      setStep(AddToBuilderSteps.Error);
+    if (!isStepValid) return;
+    if (nextStep) {
+      return setStep(nextStep);
     }
+    // TODO: fix when the endpoint is ready
+    setStep(AddToBuilderSteps.Error);
   };
 
   const steps = useMemo(
