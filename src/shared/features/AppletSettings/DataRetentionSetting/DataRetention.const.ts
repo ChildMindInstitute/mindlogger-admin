@@ -22,6 +22,6 @@ export const periods = [
 ];
 
 export const defaultValues = {
-  periodNumber: '1',
+  periodNumber: 1,
   period: 'indefinitely',
 };

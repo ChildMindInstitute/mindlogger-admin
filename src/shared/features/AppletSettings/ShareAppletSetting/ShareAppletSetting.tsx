@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import { Svg, Tooltip } from 'shared/components';
 import { ShareApplet } from 'modules/Dashboard/features/Applet';
 import { SuccessSharePopup } from 'modules/Dashboard/features/Applet/Popups';
-import { FolderApplet, folders } from 'modules/Dashboard/state';
+import { folders } from 'modules/Dashboard/state';
 
 import { StyledButton, StyledContainer } from './ShareAppletSetting.styles';
 import { StyledHeadline } from '../AppletSettings.styles';
@@ -20,13 +20,8 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [keywords, setKeywords] = useState<string[]>([]);
   const [libraryUrl, setLibraryUrl] = useState('');
-  const [applet, setApplet] = useState<FolderApplet | null>(null);
 
-  useEffect(() => {
-    if (id) {
-      setApplet(folders.useApplet(id));
-    }
-  }, [id]);
+  const applet = id ? folders.useApplet(id) : undefined;
 
   const handleSharedApplet = ({
     keywords,

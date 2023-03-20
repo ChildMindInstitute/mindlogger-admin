@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
-import { StyledHeadlineLarge } from 'shared/styles/styledComponents';
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
 import { Svg, Tooltip } from 'shared/components';
 
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
+  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const ExportDataSetting = ({ isDisabled = false }) => {
@@ -20,7 +20,7 @@ export const ExportDataSetting = ({ isDisabled = false }) => {
 
   return (
     <>
-      <StyledHeadlineLarge>{t('exportData')}</StyledHeadlineLarge>
+      <StyledHeadline>{t('exportData')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('exportDescription')}</StyledAppletSettingsDescription>
       <Tooltip tooltipTitle={isDisabled ? t('needToCreateApplet') : undefined}>
         <Box sx={{ width: 'fit-content' }}>

@@ -2,7 +2,7 @@ import { Svg } from 'shared/components';
 import {
   DataRetention,
   TransferOwnershipSetting,
-  ShareAppletSetting,
+  // ShareAppletSetting,
   DownloadSchemaSetting,
   DeleteAppletSetting,
   ExportDataSetting,
@@ -59,14 +59,15 @@ export const getSettings = (isEditAppletPage: boolean) => [
       },
     ],
   },
-  {
-    label: 'sharing',
-    items: [
-      {
-        icon: <Svg id="share" />,
-        label: 'shareToLibrary',
-        component: <ShareAppletSetting isDisabled={isEditAppletPage} />,
-      },
-    ],
-  },
+  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is introduced.
+  // {
+  //   label: 'sharing',
+  //   items: [
+  //     {
+  //       icon: <Svg id="share" />,
+  //       label: 'shareToLibrary',
+  //       component: <ShareAppletSetting isDisabled={isEditAppletPage} />,
+  //     },
+  //   ],
+  // },
 ];
