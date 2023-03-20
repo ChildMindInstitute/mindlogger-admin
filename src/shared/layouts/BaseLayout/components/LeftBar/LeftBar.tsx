@@ -21,7 +21,7 @@ export const LeftBar = () => {
   return (
     <StyledDrawer>
       <StyledDrawerLogo onClick={() => setVisibleDrawer((prevState) => !prevState)}>
-        <WorkspaceImage workspaceName={currentWorkspace.accountName} />
+        <WorkspaceImage workspaceName={currentWorkspace.workspaceName} />
       </StyledDrawerLogo>
       <List>
         {links.map(({ labelKey, link, icon, activeIcon }) => (
