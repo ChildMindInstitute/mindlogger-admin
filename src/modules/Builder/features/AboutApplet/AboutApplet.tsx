@@ -18,8 +18,8 @@ import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
+import { Uploads } from 'modules/Builder/components';
 
-import { Uploads } from '../../components';
 import { StyledForm, StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { AboutAppletSchema } from './AboutApplet.schema';
 import { defaultValues, colorThemeOptions } from './AboutApplet.const';

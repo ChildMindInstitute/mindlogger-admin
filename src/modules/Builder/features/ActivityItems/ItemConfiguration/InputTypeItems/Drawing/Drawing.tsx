@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Uploads } from 'modules/Builder/components';
-import { Uploader, UploaderUiType } from 'shared/components';
+import { Uploader } from 'shared/components';
 import { ItemInputTypes } from 'shared/types';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_2MB } from 'shared/consts';
@@ -11,11 +11,14 @@ import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 import { DrawingProps } from './Drawing.types';
 import { SharedToggleItemProps, ToggleItem } from '../ToggleItem';
+import { StyledImage } from './Drawing.styles';
 
 export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
   const mockedTooltipTitle = 'Image Description';
+  const drawerImageWatcher = watch(drawerImage);
+  const drawerBgImageWatcher = watch(drawerBgImage);
 
   const commonUploaderProps = {
     width: 20,
@@ -30,7 +33,7 @@ export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue(drawerImage, val)}
-          getValue={() => watch(drawerImage)}
+          getValue={() => drawerImageWatcher}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_2MB) })}
         />
       ),
@@ -42,7 +45,7 @@ export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue(drawerBgImage, val)}
-          getValue={() => watch(drawerBgImage)}
+          getValue={() => drawerBgImageWatcher}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_2MB) })}
         />
       ),
@@ -62,21 +65,8 @@ export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
   const HeaderContent = ({ open }: SharedToggleItemProps) =>
     open ? null : (
       <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-        <Uploader
-          uiType={UploaderUiType.Secondary}
-          width={5.6}
-          height={5.6}
-          setValue={(val: string) => setValue(drawerImage, val)}
-          getValue={() => watch(drawerImage)}
-          wrapperStyles={{ mr: theme.spacing(1) }}
-        />
-        <Uploader
-          uiType={UploaderUiType.Secondary}
-          width={5.6}
-          height={5.6}
-          setValue={(val: string) => setValue(drawerBgImage, val)}
-          getValue={() => watch(drawerBgImage)}
-        />
+        {drawerImageWatcher && <StyledImage src={drawerImageWatcher} />}
+        {drawerBgImageWatcher && <StyledImage src={drawerBgImageWatcher} />}
       </StyledFlexTopCenter>
     );
   const Content = () => (
