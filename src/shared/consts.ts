@@ -7,6 +7,9 @@ export const LEFT_BAR_WIDTH = '8rem';
 export const MAX_NAME_LENGTH = 55;
 export const MAX_DESCRIPTION_LENGTH = 150;
 export const MAX_DESCRIPTION_LENGTH_LONG = 230;
+export const MAX_FILE_SIZE_1GB = 1_073_741_824;
+export const MAX_FILE_SIZE_8MB = 8_388_608;
+export const MAX_FILE_SIZE_2MB = 2_097_152;
 
 export const APPLET_PAGES = {
   respondents: 'respondents',

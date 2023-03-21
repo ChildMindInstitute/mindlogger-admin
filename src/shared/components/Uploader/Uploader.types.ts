@@ -1,3 +1,5 @@
+import { SxProps } from '@mui/material';
+
 export enum UploaderUiType {
   Primary = 'primary',
   Secondary = 'secondary',
@@ -10,4 +12,6 @@ export type UploaderProps = {
   getValue: () => string;
   uiType?: UploaderUiType;
   description?: string;
+  maxFileSize?: number;
+  wrapperStyles?: SxProps;
 };
