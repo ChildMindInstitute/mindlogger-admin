@@ -4,7 +4,7 @@ import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
 import fr from 'date-fns/locale/fr';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import {
   StyledButton,

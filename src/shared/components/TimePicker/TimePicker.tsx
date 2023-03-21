@@ -2,7 +2,7 @@ import { TextField } from '@mui/material';
 import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';
 import { TimePickerProps } from './TimePicker.types';

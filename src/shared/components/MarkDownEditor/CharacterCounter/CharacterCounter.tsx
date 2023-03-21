@@ -1,4 +1,4 @@
-import { THRESHOLD_SIZE } from 'shared/components';
+import { THRESHOLD_SIZE } from 'shared/components/MarkDownEditor/MarkDownEditor';
 import { StyledTitleSmall } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 

@@ -10,12 +10,12 @@ import {
   EditorController,
   InputController,
   TagsController,
+  UiType,
 } from 'shared/components/FormComponents';
 import { StyledBodyLarge, StyledTitleMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { Svg } from 'shared/components';
 import { variables } from 'shared/styles/variables';
-import { UiType } from 'shared/components/FormComponents';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { defaultValues } from './ReportConfigSetting.const';

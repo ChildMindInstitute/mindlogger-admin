@@ -3,7 +3,8 @@ import { Box } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexColumn } from 'shared/styles/styledComponents';
+
+import { StyledFlexColumn } from './Flex';
 
 export const ContentContainer = styled(StyledFlexColumn)`
   height: 100%;
