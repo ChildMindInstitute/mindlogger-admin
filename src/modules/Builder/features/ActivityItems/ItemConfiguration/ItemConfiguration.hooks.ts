@@ -35,7 +35,14 @@ export const useOptionalItemSetup = ({
   return { control };
 };
 
-export const useSettingsSetup = ({ control, setValue, getValues, watch }: SettingsSetupProps) => {
+export const useSettingsSetup = ({
+  control,
+  setValue,
+  getValues,
+  watch,
+  register,
+  unregister,
+}: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
   const { remove: removeOptions } = useFieldArray({
@@ -49,6 +56,7 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
 
   const hasTimer = settings?.includes(ItemConfigurationSettings.HasTimer);
   const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
+  const hasPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
 
   useEffect(() => {
@@ -67,6 +75,12 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
   useEffect(() => {
     !hasAlerts && removeAlert();
   }, [hasAlerts]);
+
+  useEffect(() => {
+    if (hasPalette) {
+      register('paletteName', { value: '' });
+    } else unregister('paletteName');
+  }, [hasPalette]);
 
   useEffect(() => {
     if (hasTimer) {

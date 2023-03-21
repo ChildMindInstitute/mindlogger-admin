@@ -594,6 +594,7 @@
   "textResponseDescription": "The respondent will be able to enter a text response.",
   "correctAnswer": "Correct Answer",
   "maxCharacters": "Max characters",
+  "colorPalette": "Color Palette",
   "audioPlayerDescription": "The respondent will listen to an audio stimulus, no response is required.",
   "mediaTranscript": "Media transcript",
   "uploadAudioRestrictions": "Please upload WAV or MP3 less than 8MB.",

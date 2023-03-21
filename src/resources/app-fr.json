@@ -479,6 +479,7 @@
   "textResponseDescription": "Le répondant pourra saisir une réponse textuelle.",
   "correctAnswer": "Réponse correcte",
   "maxCharacters": "Nombre maximum de caractères",
+  "colorPalette": "Palette de couleurs",
   "audioPlayerDescription": "Le répondant écoutera un stimulus audio, aucune réponse n'est requise.",
   "mediaTranscript": "Retranscription du média",
   "uploadAudioRestrictions": "Veuillez télécharger un fichier WAV ou MP3 de moins de 8 Mo.",
