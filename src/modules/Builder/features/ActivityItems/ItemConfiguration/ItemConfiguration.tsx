@@ -226,7 +226,6 @@ export const ItemConfiguration = () => {
               onClose={() => setSettingsDrawerVisible(false)}
             >
               <ItemSettingsController
-                timerName="timer"
                 name="settings"
                 inputType={selectedInputType}
                 control={control}
