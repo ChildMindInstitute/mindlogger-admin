@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Cropper, { ReactCropperElement } from 'react-cropper';
 
-import { Modal } from 'shared/components';
+import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
 
 import { StyledCropWrapper } from './CropPopup.styles';

@@ -1,7 +1,7 @@
 import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 import uniqueId from 'lodash.uniqueid';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { breadcrumbs } from 'redux/modules';
 import {
   StyledLabelSmall,

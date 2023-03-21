@@ -1,6 +1,7 @@
 import { styled } from '@mui/system';
 
 import { variables } from 'shared/styles/variables';
+
 import { StyledFlexAllCenter } from './Flex';
 
 export const StyledQuantityCircle = styled(StyledFlexAllCenter)`

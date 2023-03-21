@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { PinProps } from './Pin.types';
 import { StyledPinButton } from './Pin.styles';

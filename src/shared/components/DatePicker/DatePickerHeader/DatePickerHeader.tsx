@@ -4,7 +4,7 @@ import { ReactDatePickerCustomHeaderProps } from 'react-datepicker';
 import { useTranslation } from 'react-i18next';
 import { getYear } from 'date-fns';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import theme from 'shared/styles/theme';
 
 import { UiType } from '../DatePicker.types';

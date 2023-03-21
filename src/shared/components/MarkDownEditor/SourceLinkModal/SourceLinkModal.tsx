@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
-import { InputController } from 'shared/components/FormComponents';
+import { Modal } from 'shared/components/Modal';
+import { InputController } from 'shared/components/FormComponents/InputController';
 
 import {
   SourceLinkModalForm,
