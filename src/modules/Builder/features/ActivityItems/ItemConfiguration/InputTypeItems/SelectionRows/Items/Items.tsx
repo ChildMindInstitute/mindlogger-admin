@@ -7,11 +7,15 @@ import {
   SelectionRowsItem,
   SelectionRowsOption,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { UploaderUiType, Uploader } from 'shared/components';
+import { UploaderUiType, Uploader, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter } from 'shared/styles';
 
-import { StyledSelectionRowItem } from './Items.styles';
+import {
+  StyledSelectionRowItem,
+  StyledItemContainer,
+  StyledRemoveItemButton,
+} from './Items.styles';
 import { StyledSelectionBox } from '../SelectionRows.styles';
 
 const commonUploaderProps = {
@@ -31,12 +35,19 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
 
   const hasTooltips = settings?.includes(ItemConfigurationSettings.HasTooltips);
   const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
+  const hasRemoveButton = items?.length > 1;
+
+  const handleRemoveItem = (index: number) =>
+    setValue(
+      'selectionRows.items',
+      items?.filter((item: SelectionRowsItem, key: number) => key !== index),
+    );
 
   return items?.map((item: SelectionRowsItem, index: number) => {
     const name = `selectionRows.items[${index}]`;
 
     return (
-      <StyledSelectionRowItem key={`row-${index}`} hasTooltips={hasTooltips}>
+      <StyledSelectionRowItem key={`row-${item.id}`} hasTooltips={hasTooltips}>
         <StyledSelectionBox>
           <StyledFlexTopCenter sx={{ gap: '1.2rem' }}>
             <Uploader
@@ -48,7 +59,7 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
               control={control}
               name={`${name}.label`}
               placeholder={t('selectionRowsItemPlaceholder', { index: index + 1 })}
-              maxLength={75}
+              maxLength={11}
             />
           </StyledFlexTopCenter>
           {hasTooltips && (
@@ -61,29 +72,31 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
             </StyledFlexTopCenter>
           )}
         </StyledSelectionBox>
-        {options?.map((option: SelectionRowsOption, index: number) => {
-          if (hasScores)
-            return (
-              <StyledSelectionBox key={`score-input-${index}`}>
+        {options?.map((option: SelectionRowsOption, key: number) => (
+          <StyledSelectionBox key={`score-input-${key}`}>
+            <StyledItemContainer>
+              {isSingle ? (
+                <Radio disabled />
+              ) : (
+                <Checkbox disabled checked checkedIcon={<Svg id="checkbox-outlined" />} />
+              )}
+              {hasScores && (
                 <InputController
                   label={t('score')}
                   type="number"
                   control={control}
-                  name={`${name}.scores[${index}]`}
+                  name={`${name}.scores[${key}]`}
                   minNumberValue={Number.MIN_SAFE_INTEGER}
                 />
-              </StyledSelectionBox>
-            );
-
-          return (
-            <StyledSelectionBox
-              key={`control-placeholder-${index}`}
-              sx={{ justifyContent: 'center' }}
-            >
-              {isSingle ? <Radio disabled /> : <Checkbox disabled />}
-            </StyledSelectionBox>
-          );
-        })}
+              )}
+              {hasRemoveButton && key === options?.length - 1 && index !== 0 && (
+                <StyledRemoveItemButton onClick={() => handleRemoveItem(index)}>
+                  <Svg id="cross" />
+                </StyledRemoveItemButton>
+              )}
+            </StyledItemContainer>
+          </StyledSelectionBox>
+        ))}
       </StyledSelectionRowItem>
     );
   });

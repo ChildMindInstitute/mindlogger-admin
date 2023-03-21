@@ -33,7 +33,7 @@ export const SelectionRows = ({ isSingle }: SelectionRowsProps) => {
       <StyledFlexColumn sx={{ gap: '2.4rem' }}>
         <Header isSingle={isSingle} isExpanded={isExpanded} onArrowClick={handleCollapse} />
         <StyledFlexColumn>
-          <Options isSingle={isSingle} />
+          <Options />
           <Items isSingle={isSingle} />
         </StyledFlexColumn>
         <StyledAddRowButton

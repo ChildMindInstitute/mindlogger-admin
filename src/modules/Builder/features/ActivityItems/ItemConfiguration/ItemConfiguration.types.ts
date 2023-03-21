@@ -49,6 +49,7 @@ export type Alert = {
 };
 
 export type SelectionRowsItem = {
+  id?: string;
   label: string;
   tooltip?: string;
   scores?: number[];

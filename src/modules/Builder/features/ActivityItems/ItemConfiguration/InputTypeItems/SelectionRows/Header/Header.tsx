@@ -28,6 +28,10 @@ const commonSelectArrowProps = {
   },
 };
 
+const commonButtonProps = {
+  sx: { p: theme.spacing(1) },
+};
+
 export const Header = ({ isSingle, isExpanded, onArrowClick }: HeaderProps) => {
   const { t } = useTranslation('app');
 
@@ -68,23 +72,27 @@ export const Header = ({ isSingle, isExpanded, onArrowClick }: HeaderProps) => {
 
   return (
     <StyledFlexTopCenter sx={{ gap: '2.6rem' }}>
-      <StyledClearedButton onClick={onArrowClick} sx={{ p: theme.spacing(1) }}>
+      <StyledClearedButton onClick={onArrowClick} {...commonButtonProps}>
         <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
       </StyledClearedButton>
       <StyledLabelBoldLarge>
         {t('selectionRowsHeader', { context: isSingle ? 'single' : 'multiple' })}
       </StyledLabelBoldLarge>
-      <StyledSelectController
-        name="selectionRows.options.length"
-        options={getMultipleSelectionRowsOptions(isSingle)}
-        customChange={handleChange}
-        variant="standard"
-        value={`${options?.length}`}
-        SelectProps={{
-          IconComponent: (props) => <Svg {...commonSelectArrowProps} {...props} />,
-        }}
-        disabled={!isExpanded}
-      />
+      {isExpanded && (
+        <StyledClearedButton {...commonButtonProps}>
+          <StyledSelectController
+            name="selectionRows.options.length"
+            options={getMultipleSelectionRowsOptions(isSingle)}
+            customChange={handleChange}
+            variant="standard"
+            value={`${options?.length}`}
+            SelectProps={{
+              IconComponent: (props) => <Svg {...commonSelectArrowProps} {...props} />,
+            }}
+            disabled={!isExpanded}
+          />
+        </StyledClearedButton>
+      )}
     </StyledFlexTopCenter>
   );
 };
