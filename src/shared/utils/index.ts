@@ -11,3 +11,4 @@ export * from './shouldForwardProp';
 export * from './storage';
 export * from './svgBuilder';
 export * from './arrays';
+export * from './fileSystem';

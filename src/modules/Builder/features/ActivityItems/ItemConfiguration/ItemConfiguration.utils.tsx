@@ -10,6 +10,7 @@ import {
   DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
   DEFAULT_SELECTION_ROWS_SCORE,
   DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
+  SELECTION_OPTIONS_COLOR_PALETTE,
 } from './ItemConfiguration.const';
 
 const { t } = i18n;
@@ -56,11 +57,15 @@ export const getEmptySelectionRows = (type: SelectionRows['type']): SelectionRow
     scores.push(DEFAULT_SELECTION_ROWS_SCORE);
   }
 
-  const result = {
+  return {
     type,
     items: [{ label: '', tooltip: '', image: '', scores }],
     options,
   };
+};
 
-  return result;
+export const getPaletteColor = (paletteName: string, index: number) => {
+  const colors = SELECTION_OPTIONS_COLOR_PALETTE.find(({ name }) => name === paletteName)?.colors;
+
+  return colors?.[index % colors?.length];
 };

@@ -9,12 +9,13 @@ import {
   StyledBuilderWrapper,
   StyledBodyLarge,
   StyledTitleMedium,
-} from 'shared/styles/styledComponents';
+  theme,
+  variables,
+} from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'shared/consts';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
+import { byteFormatter } from 'shared/utils';
 
 import { Uploads } from '../../components';
 import { StyledForm, StyledContainer, StyledSvg, StyledSettings } from './ActivityAbout.styles';
@@ -24,7 +25,6 @@ import { FormValues } from './ActivityAbout.types';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
-  const mockedTooltipText = 'Lorem ipsum';
 
   useBreadcrumbs([
     {
@@ -47,30 +47,31 @@ export const ActivityAbout = () => {
   const commonUploaderProps = {
     width: 20,
     height: 20,
+    maxFileSize: MAX_FILE_SIZE_1GB,
   };
 
   const uploads = [
     {
       title: t('activityImg'),
-      tooltipTitle: mockedTooltipText,
+      tooltipTitle: t('activityImageDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue('activityImg', val)}
           getValue={() => watch('activityImg')}
-          description={t('uploadImg')}
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
     },
     {
       title: t('activityWatermark'),
-      tooltipTitle: mockedTooltipText,
+      tooltipTitle: t('activitySplashScreenDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue('activityWatermark', val)}
           getValue={() => watch('activityWatermark')}
-          description={t('uploadTransfluent')}
+          description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
     },
