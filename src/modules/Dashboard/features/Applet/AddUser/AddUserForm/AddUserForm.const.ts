@@ -71,6 +71,6 @@ export const defaultValues = {
   nickName: '',
   email: '',
   MRN: '',
-  role: Roles.Manager,
+  role: Roles.Reviewer,
   language: Langs.en,
 };

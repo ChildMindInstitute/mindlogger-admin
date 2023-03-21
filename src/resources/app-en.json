@@ -72,11 +72,12 @@
   "userList": "User List",
   "secretUserId": "Secret User ID",
   "language": "Language",
-  "user": "user",
-  "manager": "manager",
-  "coordinator": "coordinator",
-  "editor": "editor",
-  "reviewer": "reviewer",
+  "user": "User",
+  "manager": "Manager",
+  "coordinator": "Coordinator",
+  "editor": "Editor",
+  "reviewer": "Reviewer",
+  "respondent": "Respondent",
   "secretUserIdRequired": "Secret User ID is required",
   "appletName": "Applet Name",
   "lastEdit": "Last Edit",
@@ -596,5 +597,9 @@
   "uploadAudioDropText": "Drop Audio here or click to browse",
   "uploadAudioDescription": "Please Upload WAV or MP3",
   "audioExceedSize": "Audio is more than 8Mb",
-  "audioWrongFormat": "Audio file has wrong format"
+  "audioWrongFormat": "Audio file has wrong format",
+  "sendInvitation": "Send Invitation",
+  "workspaceNameRequired": "Workspace Name is required",
+  "workspaceTooltip": "Workspace name displays to the managers you have invited to your applet within their interface.",
+  "languageTooltip": "The language in which the email invitation will be created."
 }

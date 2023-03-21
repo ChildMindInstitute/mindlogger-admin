@@ -6,8 +6,9 @@ import { Svg, Row } from 'shared/components';
 import { getErrorMessage } from 'shared/utils';
 import { useBreadcrumbs } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
-
 import { getInvitationsApi } from 'api';
+import { StyledHeadlineLarge, theme } from 'shared/styles';
+
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
 import { LinkGenerator } from './LinkGenerator';
@@ -72,6 +73,7 @@ export const AddUser = () => {
 
   return (
     <>
+      <StyledHeadlineLarge sx={{ mb: theme.spacing(4.8) }}>{t('addUsers')}</StyledHeadlineLarge>
       <AddUserForm getInvitationsHandler={getInvitationsHandler} />
       <InvitationsTable rows={rows} />
       <LinkGenerator />

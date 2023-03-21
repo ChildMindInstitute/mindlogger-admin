@@ -101,7 +101,7 @@ export const revokeAppletUserApi = (
 export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}`, { signal });
 
-export const getAppletInvitationApi = (
+export const postAppletInvitationApi = (
   { url, appletId, options }: AppletInvitationData,
   signal?: AbortSignal,
 ) =>
@@ -109,7 +109,6 @@ export const getAppletInvitationApi = (
     `/invitations/${appletId}/${url}`,
     { ...options },
     {
-      // params: { applet_id: appletId },
       signal,
     },
   );

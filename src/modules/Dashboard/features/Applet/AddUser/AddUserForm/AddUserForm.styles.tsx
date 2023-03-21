@@ -1,8 +1,7 @@
 import { styled } from '@mui/system';
 import { Button, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { variables, theme } from 'shared/styles';
 
 import { StyledTitle as AddUserTitle } from '../AddUser.styles';
 
@@ -24,4 +23,12 @@ export const StyledResetButton = styled(StyledButton)`
 
 export const StyledTitle = styled(AddUserTitle)`
   margin-top: 0;
+`;
+
+export const StyledTooltip = styled(Box)`
+  margin-left: ${theme.spacing(0.6)};
+
+  svg {
+    fill: ${variables.palette.outline};
+  }
 `;
