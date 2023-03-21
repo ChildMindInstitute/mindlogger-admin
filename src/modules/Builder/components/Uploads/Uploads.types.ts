@@ -1,3 +1,5 @@
+import { SxProps } from '@mui/material';
+
 type Upload = {
   title: string;
   tooltipTitle: string;
@@ -6,4 +8,6 @@ type Upload = {
 
 export type UploadsProps = {
   uploads: Upload[];
+  wrapperStyles?: SxProps;
+  itemStyles?: SxProps;
 };

@@ -2,6 +2,8 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { Svg, Tooltip } from 'shared/components';
+import { byteFormatter } from 'shared/utils';
+import { MAX_FILE_SIZE_8MB } from 'shared/consts';
 
 import {
   StyledContainer,
@@ -39,7 +41,11 @@ export const MediaUploader = ({
         <>
           <StyledTitle>
             {t('audio')}
-            <Tooltip tooltipTitle={t('uploadAudioRestrictions')}>
+            <Tooltip
+              tooltipTitle={t('uploadAudioRestrictions', {
+                size: byteFormatter(MAX_FILE_SIZE_8MB),
+              })}
+            >
               <span>
                 <StyledSvg id="more-info-outlined" />
               </span>
@@ -58,7 +64,7 @@ export const MediaUploader = ({
                   sx={{ marginBottom: theme.spacing(1) }}
                   color={variables.palette.semantic.error}
                 >
-                  {t(error)}
+                  {t(error, { size: byteFormatter(MAX_FILE_SIZE_8MB) })}
                 </StyledBodyMedium>
               )}
               <StyledBodyMedium sx={{ m: theme.spacing(1, 0) }}>

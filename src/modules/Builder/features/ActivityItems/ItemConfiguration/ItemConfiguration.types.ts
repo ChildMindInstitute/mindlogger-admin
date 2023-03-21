@@ -6,6 +6,8 @@ import {
   UseFormGetValues,
   UseFormSetValue,
   UseFormWatch,
+  UseFormRegister,
+  UseFormUnregister,
 } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
@@ -55,6 +57,7 @@ export type ItemConfigurationForm = {
   settings: ItemConfigurationSettings[];
   timer?: number;
   options?: SelectionOption[];
+  paletteName?: string;
   isTextInputOptionRequired?: boolean;
   minNumber?: number;
   maxNumber?: number;
@@ -82,6 +85,8 @@ export type SettingsSetupProps = {
   setValue: UseFormSetValue<ItemConfigurationForm>;
   getValues: UseFormGetValues<ItemConfigurationForm>;
   watch: UseFormWatch<ItemConfigurationForm>;
+  register: UseFormRegister<ItemConfigurationForm>;
+  unregister: UseFormUnregister<ItemConfigurationForm>;
 };
 
 export type OptionalItemSetupProps = {

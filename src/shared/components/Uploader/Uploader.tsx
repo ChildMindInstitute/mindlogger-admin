@@ -1,12 +1,14 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Button } from '@mui/material';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { byteFormatter } from 'shared/utils';
+import { MAX_FILE_SIZE_2MB } from 'shared/consts';
 
 import {
   StyledButtonGroup,
@@ -19,8 +21,6 @@ import {
 } from './Uploader.styles';
 import { UploaderProps, UploaderUiType } from './Uploader.types';
 
-const MAX_FILE_SIZE = 1073741824; //1GB
-
 export const Uploader = ({
   uiType = UploaderUiType.Primary,
   width,
@@ -28,7 +28,10 @@ export const Uploader = ({
   setValue,
   getValue,
   description,
+  maxFileSize = MAX_FILE_SIZE_2MB,
+  wrapperStyles = {},
 }: UploaderProps) => {
+  const { t } = useTranslation('app');
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -44,7 +47,7 @@ export const Uploader = ({
   const handleSetImage = (files: FileList | null) => {
     if (!files?.[0]) return;
 
-    const isAllowableSize = files[0].size < MAX_FILE_SIZE;
+    const isAllowableSize = files[0].size < maxFileSize;
     setError(!isAllowableSize);
 
     if (!isAllowableSize || !files[0].type.includes('image')) return;
@@ -117,6 +120,7 @@ export const Uploader = ({
         isImgUploaded={!!imageField}
         isPrimaryUiType={isPrimaryUiType}
         onClick={() => uploadInputRef?.current?.click()}
+        sx={{ ...wrapperStyles }}
         {...dragEvents}
       >
         {imageField ? (
@@ -147,12 +151,10 @@ export const Uploader = ({
             <Svg id={placeholderImgId} width={32} height={32} />
             {isPrimaryUiType && error && (
               <StyledBodyMedium
-                sx={{ marginBottom: theme.spacing(1) }}
+                sx={{ marginBottom: theme.spacing(1), px: theme.spacing(3) }}
                 color={variables.palette.semantic.error}
               >
-                <Trans i18nKey="dropError">
-                  Image is more than <br /> 1GB.
-                </Trans>
+                {t('dropError', { size: byteFormatter(maxFileSize) })}
               </StyledBodyMedium>
             )}
             {isPrimaryUiType && (
