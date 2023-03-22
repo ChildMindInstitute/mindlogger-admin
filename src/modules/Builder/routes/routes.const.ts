@@ -17,7 +17,7 @@ export const newAppletRoutes = [
   { path: page.newAppletActivityFlow, Component: ActivityFlow },
   { path: page.newAppletSettings, Component: BuilderAppletSettings },
   {
-    path: page.newAppletSettings,
+    path: page.newAppletSettingsItem,
     Component: BuilderAppletSettings,
   },
 ];

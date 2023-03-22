@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,9 +13,7 @@ const App = () => (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Suspense fallback={<Spinner />}>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <AppRoutes />
       </Suspense>
     </ThemeProvider>
   </Provider>

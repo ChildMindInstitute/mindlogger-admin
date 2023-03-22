@@ -28,6 +28,10 @@ export const appletRoutes = [
     Component: AppletSettings,
   },
   {
+    path: page.appletSettingsItem,
+    Component: AppletSettings,
+  },
+  {
     path: page.appletAddUser,
     Component: AddUser,
   },
