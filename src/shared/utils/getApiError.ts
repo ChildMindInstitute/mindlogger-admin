@@ -3,7 +3,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 
 export const getApiError = (action: PayloadAction<AxiosError>) => {
   const axiosError = action.payload as AxiosError;
-  const axiosResponse = axiosError.response as AxiosResponse;
+  const axiosResponse = axiosError?.response as AxiosResponse;
 
-  return axiosResponse.data.result;
+  return axiosResponse?.data.result;
 };

@@ -14,6 +14,8 @@ export const StyledIcon = styled(Box)`
 `;
 
 export const StyledToggleBtn = styled(ToggleButton, shouldForwardProp)`
+  flex: 1 1 auto;
+
   ${({ withIcon }: { withIcon: boolean }) =>
     withIcon &&
     `

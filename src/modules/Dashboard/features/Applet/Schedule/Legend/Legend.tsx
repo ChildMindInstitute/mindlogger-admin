@@ -161,7 +161,7 @@ export const Legend = () => {
       <CreateActivityPopup
         open={createActivityPopupVisible}
         setCreateActivityPopupVisible={setCreateActivityPopupVisible}
-        activityName="Daily Journal"
+        defaultStartDate={new Date()}
       />
     </StyledLegend>
   );
