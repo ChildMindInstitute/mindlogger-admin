@@ -1,4 +1,3 @@
-import { CSSProperties } from 'react';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
 
@@ -12,13 +11,18 @@ export type Option = {
   tooltip?: string;
 };
 
+export enum SelectUiType {
+  Primary = 'primary',
+  Secondary = 'secondary',
+}
+
 export type FormInputProps = {
   options: Option[];
   value?: string;
   customChange?: (e: SelectEvent) => void;
   withChecked?: boolean;
-  customLiStyles?: CSSProperties;
-  isLabelTranslated?: boolean;
+  isLabelNeedTranslation?: boolean;
+  uiType?: SelectUiType;
 } & TextFieldProps;
 
 export type SelectControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;

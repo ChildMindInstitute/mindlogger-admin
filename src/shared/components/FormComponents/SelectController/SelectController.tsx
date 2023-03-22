@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldError, FieldValues } from 'react-hook-form';
-import { TextField, MenuItem, Box } from '@mui/material';
+import { TextField, Box } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
 import { SelectEvent } from 'shared/types';
 import { theme, StyledFlexTopCenter } from 'shared/styles';
 
-import { SelectControllerProps } from './SelectController.types';
-import { StyledPlaceholder, StyledItem } from './SelectController.styles';
+import { SelectControllerProps, SelectUiType } from './SelectController.types';
+import { StyledPlaceholder, StyledItem, StyledMenuItem } from './SelectController.styles';
 
 export const SelectController = <T extends FieldValues>({
   name,
@@ -17,9 +17,9 @@ export const SelectController = <T extends FieldValues>({
   value: selectValue,
   customChange,
   withChecked,
-  customLiStyles,
   placeholder,
-  isLabelTranslated = true,
+  isLabelNeedTranslation = true,
+  uiType = SelectUiType.Primary,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -30,21 +30,21 @@ export const SelectController = <T extends FieldValues>({
     disabled: boolean,
     icon?: JSX.Element,
   ) => (
-    <MenuItem sx={customLiStyles} key={labelKey} value={value as string}>
+    <StyledMenuItem uiType={uiType} key={labelKey} value={value as string}>
       <StyledItem disabled={disabled}>
         {icon && (
           <StyledFlexTopCenter className="icon-wrapper" sx={{ marginRight: theme.spacing(1.8) }}>
             {icon}
           </StyledFlexTopCenter>
         )}
-        {isLabelTranslated ? t(labelKey) : labelKey}
+        {isLabelNeedTranslation ? t(labelKey) : labelKey}
         {withChecked && selectValue === value && (
           <StyledFlexTopCenter className="icon-wrapper" sx={{ marginLeft: theme.spacing(1.6) }}>
             <Svg id="check" />
           </StyledFlexTopCenter>
         )}
       </StyledItem>
-    </MenuItem>
+    </StyledMenuItem>
   );
 
   const renderSelect = (

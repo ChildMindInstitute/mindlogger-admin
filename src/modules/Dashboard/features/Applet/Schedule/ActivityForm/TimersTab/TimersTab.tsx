@@ -3,10 +3,10 @@ import { useFormContext } from 'react-hook-form';
 
 import { TimePicker, ToggleButtonGroup } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme } from 'shared/styles';
-import { SelectController } from 'shared/components/FormComponents';
+import { SelectController, SelectUiType } from 'shared/components/FormComponents';
 import { TimerType } from 'modules/Dashboard/api';
 
-import { timersButtons, idleTimeOptions } from './TimersTab.const.';
+import { idleTimeOptions, timersButtons } from './TimersTab.const.';
 import { FormValues } from '../ActivityForm.types';
 
 export const TimersTab = () => {
@@ -52,8 +52,8 @@ export const TimersTab = () => {
                 },
               },
             }}
-            customLiStyles={{ padding: `${theme.spacing(1, 1.6)} !important` }}
-            isLabelTranslated={false}
+            isLabelNeedTranslation={false}
+            uiType={SelectUiType.Secondary}
           />
         </>
       )}

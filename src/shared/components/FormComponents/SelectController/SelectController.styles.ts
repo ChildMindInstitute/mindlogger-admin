@@ -1,7 +1,8 @@
-import { styled } from '@mui/material';
+import { MenuItem, styled } from '@mui/material';
 
-import { variables, StyledBodyLarge, StyledFlexTopCenter } from 'shared/styles';
+import { StyledBodyLarge, StyledFlexTopCenter, variables, theme } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
+import { SelectUiType } from './SelectController.types';
 
 export const StyledPlaceholder = styled(StyledBodyLarge)`
   position: absolute;
@@ -16,5 +17,15 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
     `
     pointer-events: none;
     opacity: 0.38;
+  `}
+`;
+
+export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
+  ${({ uiType }: { uiType: SelectUiType }) =>
+    uiType === SelectUiType.Secondary &&
+    `
+    && {
+      padding: ${theme.spacing(1, 1.6)};
+    }
   `}
 `;
