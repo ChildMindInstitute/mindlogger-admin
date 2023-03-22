@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 import { popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
-import { StyledHeadlineLarge } from 'shared/styles/styledComponents';
 
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
+  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const DuplicateAppletSettings = () => {
@@ -18,7 +18,7 @@ export const DuplicateAppletSettings = () => {
 
   return (
     <>
-      <StyledHeadlineLarge>{t('duplicateApplet')}</StyledHeadlineLarge>
+      <StyledHeadline>{t('duplicateApplet')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('duplicateDescription')}</StyledAppletSettingsDescription>
       <StyledAppletSettingsButton
         variant="outlined"

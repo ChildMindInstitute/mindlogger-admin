@@ -3,7 +3,7 @@ import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
 import { parse, format as dateFnsFormat } from 'date-fns';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { DateFormats } from 'shared/consts';
 
 import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';

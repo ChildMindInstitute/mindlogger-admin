@@ -5,11 +5,11 @@ import { Box } from '@mui/material';
 import { popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Svg, Tooltip } from 'shared/components';
-import { StyledHeadlineLarge } from 'shared/styles/styledComponents';
 
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
+  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const DeleteAppletSetting = ({ isDisabled = false }) => {
@@ -19,7 +19,7 @@ export const DeleteAppletSetting = ({ isDisabled = false }) => {
 
   return (
     <>
-      <StyledHeadlineLarge>{t('deleteApplet')}</StyledHeadlineLarge>
+      <StyledHeadline>{t('deleteApplet')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('deleteDescription')}</StyledAppletSettingsDescription>
       <Tooltip tooltipTitle={isDisabled ? t('needToCreateApplet') : undefined}>
         <Box sx={{ width: 'fit-content' }}>

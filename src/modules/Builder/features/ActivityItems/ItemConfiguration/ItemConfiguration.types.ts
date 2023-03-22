@@ -6,6 +6,8 @@ import {
   UseFormGetValues,
   UseFormSetValue,
   UseFormWatch,
+  UseFormRegister,
+  UseFormUnregister,
 } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
@@ -55,6 +57,7 @@ export type ItemConfigurationForm = {
   settings: ItemConfigurationSettings[];
   timer?: number;
   options?: SelectionOption[];
+  paletteName?: string;
   isTextInputOptionRequired?: boolean;
   minNumber?: number;
   maxNumber?: number;
@@ -63,6 +66,8 @@ export type ItemConfigurationForm = {
   sliderOptions?: SliderOption[];
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
+  mediaTranscript?: string;
+  mediaFileResource?: string;
 };
 
 export type ItemsOption = {
@@ -80,12 +85,14 @@ export type SettingsSetupProps = {
   setValue: UseFormSetValue<ItemConfigurationForm>;
   getValues: UseFormGetValues<ItemConfigurationForm>;
   watch: UseFormWatch<ItemConfigurationForm>;
+  register: UseFormRegister<ItemConfigurationForm>;
+  unregister: UseFormUnregister<ItemConfigurationForm>;
 };
 
 export type OptionalItemSetupProps = {
   itemType: ItemInputTypes;
   name: Path<FieldValues>;
-  defaultValue: unknown;
+  defaultValue?: unknown;
 };
 
 export type SliderOption = {

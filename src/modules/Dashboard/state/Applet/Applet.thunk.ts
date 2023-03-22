@@ -8,7 +8,7 @@ import { updateRetainingSettingsApi } from 'api';
 export const updateDataRetention = createAsyncThunk(
   'applet/updateDataRetention',
   async (
-    { appletId, period, retention }: { appletId: string; period: string; retention: string },
+    { appletId, period, retention }: { appletId: string; period: number; retention: string },
     { rejectWithValue, signal },
   ) => {
     try {

@@ -11,7 +11,11 @@ import {
 import { DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
 import { getEmptySliderOption } from './ItemConfiguration.utils';
 
-export const useOptionalItemSetup = ({ name, defaultValue, itemType }: OptionalItemSetupProps) => {
+export const useOptionalItemSetup = ({
+  name,
+  defaultValue = '',
+  itemType,
+}: OptionalItemSetupProps) => {
   const { control, setValue, getValues } = useFormContext();
 
   useEffect(() => {
@@ -31,7 +35,14 @@ export const useOptionalItemSetup = ({ name, defaultValue, itemType }: OptionalI
   return { control };
 };
 
-export const useSettingsSetup = ({ control, setValue, getValues, watch }: SettingsSetupProps) => {
+export const useSettingsSetup = ({
+  control,
+  setValue,
+  getValues,
+  watch,
+  register,
+  unregister,
+}: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
   const { remove: removeOptions } = useFieldArray({
@@ -45,6 +56,7 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
 
   const hasTimer = settings?.includes(ItemConfigurationSettings.HasTimer);
   const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
+  const hasPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
 
   useEffect(() => {
@@ -63,6 +75,12 @@ export const useSettingsSetup = ({ control, setValue, getValues, watch }: Settin
   useEffect(() => {
     !hasAlerts && removeAlert();
   }, [hasAlerts]);
+
+  useEffect(() => {
+    if (hasPalette) {
+      register('paletteName', { value: '' });
+    } else unregister('paletteName');
+  }, [hasPalette]);
 
   useEffect(() => {
     if (hasTimer) {

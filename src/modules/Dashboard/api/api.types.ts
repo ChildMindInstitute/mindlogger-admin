@@ -164,7 +164,7 @@ export type ValidateAppletName = { name: string };
 export type UpdateRetainingSettings = AppletId & {
   options: {
     id: string;
-    period: string;
+    period: number;
     retention: string;
   };
 };

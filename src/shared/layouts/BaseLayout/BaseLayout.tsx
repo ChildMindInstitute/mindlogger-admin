@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { LeftBar, TopBar, Footer } from 'shared/components';
 import {
   DuplicatePopups,
   DeletePopup,
@@ -10,7 +9,9 @@ import {
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
 import { account, folders, popups, users } from 'modules/Dashboard/state';
+import { Footer } from 'shared/components';
 
+import { LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 
 export const BaseLayout = () => {

@@ -10,12 +10,12 @@ import {
   EditorController,
   InputController,
   TagsController,
+  UiType,
 } from 'shared/components/FormComponents';
 import { StyledBodyLarge, StyledTitleMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { Svg } from 'shared/components';
 import { variables } from 'shared/styles/variables';
-import { UiType } from 'shared/components/FormComponents';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { defaultValues } from './ReportConfigSetting.const';
@@ -25,7 +25,7 @@ import { FormValues } from './ReportConfigSetting.types';
 
 export const ReportConfigSetting = () => {
   const { id } = useParams();
-  const applet = folders.useApplet(id as string);
+  const applet = id ? folders.useApplet(id) : undefined;
   const { t } = useTranslation();
   const isServerConfigured = false; // TODO: add server configured functionality when the back-end is ready
   const [isSettingsOpen, setSettingsOpen] = useState(false);
@@ -66,7 +66,7 @@ export const ReportConfigSetting = () => {
     if (caseId) {
       subject += ' about case123';
     }
-    subject += `: ${applet.name || 'Example applet'} /activity123 or activityflow123`; // TODO will be fixed for activities
+    subject += `: ${applet?.name || 'Example applet'} /activity123 or activityflow123`; // TODO will be fixed for activities
     setValue('subject', subject);
   }, [respondentId, caseId]);
 

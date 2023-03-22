@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
+import { ColorResult } from 'react-color';
 
 import { Svg } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
@@ -20,8 +21,9 @@ import { ItemInputTypes } from 'shared/types';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { TextInputOption } from './TextInputOption';
 import { Alerts } from './Alerts';
-import { ItemSettingsDrawer, ItemSettingsController } from './Settings';
+import { ItemSettingsController, ItemSettingsDrawer, ColorPalette } from './Settings';
 import {
+  AudioPlayer,
   SelectionOption,
   NumberSelection,
   TimeRange,
@@ -32,18 +34,19 @@ import {
   AudioRecord,
   Geolocation,
   TextResponse,
+  Drawing,
 } from './InputTypeItems';
 import {
-  StyledHeader,
   StyledContent,
+  StyledHeader,
   StyledInputWrapper,
-  StyledOptionsWrapper,
   StyledItemConfiguration,
+  StyledOptionsWrapper,
 } from './ItemConfiguration.styles';
 import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
-import { itemsTypeOptions, DEFAULT_SCORE_VALUE } from './ItemConfiguration.const';
+import { DEFAULT_SCORE_VALUE, itemsTypeOptions } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
-import { getInputTypeTooltip } from './ItemConfiguration.utils';
+import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -61,7 +64,7 @@ export const ItemConfiguration = () => {
     mode: 'onChange',
   });
 
-  const { control, watch, setValue, getValues } = methods;
+  const { control, watch, setValue, getValues, register, unregister } = methods;
 
   const {
     fields: options,
@@ -84,6 +87,7 @@ export const ItemConfiguration = () => {
 
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
+  const palette = watch('paletteName');
 
   const hasOptions =
     selectedInputType === ItemInputTypes.SingleSelection ||
@@ -92,12 +96,15 @@ export const ItemConfiguration = () => {
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
   const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
   const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
+  const hasColorPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
 
   const handleAddOption = () =>
     appendOption({
       text: '',
       isVisible: true,
       ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
+      ...(hasColorPalette &&
+        palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
     });
 
   const handleRemoveTextInputOption = () => {
@@ -110,7 +117,7 @@ export const ItemConfiguration = () => {
     );
   };
 
-  useSettingsSetup({ control, setValue, getValues, watch });
+  useSettingsSetup({ control, setValue, getValues, watch, register, unregister });
 
   return (
     <FormProvider {...methods}>
@@ -157,6 +164,7 @@ export const ItemConfiguration = () => {
           </StyledInputWrapper>
           <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
           <EditorController name="body" control={control} />
+          {hasOptions && hasColorPalette && <ColorPalette />}
           {hasOptions && (
             <StyledOptionsWrapper>
               {options?.length
@@ -195,6 +203,12 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
           {selectedInputType === ItemInputTypes.Text && (
             <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
+          )}
+          {selectedInputType === ItemInputTypes.AudioPlayer && (
+            <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />
+          )}
+          {selectedInputType === ItemInputTypes.Drawing && (
+            <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />
           )}
           {isTextInputOptionVisible && (
             <TextInputOption

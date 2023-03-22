@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { THRESHOLD_SIZE } from 'shared/components';
+import { THRESHOLD_SIZE } from 'shared/components/MarkDownEditor/MarkDownEditor';
 
 import { FooterMessageProps } from './FooterMessage.types';
 import { StyledText } from './FooterMessage.styles';

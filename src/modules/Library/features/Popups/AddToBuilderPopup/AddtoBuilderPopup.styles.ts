@@ -1,6 +1,6 @@
-import { FormControlLabel, styled } from '@mui/material';
+import { Box, FormControlLabel, styled } from '@mui/material';
 
-import { theme } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 
 export const StyledTableFormControlLabel = styled(FormControlLabel)`
   display: flex;
@@ -10,4 +10,12 @@ export const StyledTableFormControlLabel = styled(FormControlLabel)`
 
 export const StyledListFormControlLabel = styled(FormControlLabel)`
   margin: ${theme.spacing(0.6, 0)};
+`;
+
+export const StyledContainer = styled(Box)`
+  .MuiTableContainer-root {
+    &.error {
+      border: ${variables.borderWidth.lg} solid ${variables.palette.semantic.error};
+    }
+  }
 `;
