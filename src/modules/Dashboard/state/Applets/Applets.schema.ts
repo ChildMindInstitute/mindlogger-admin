@@ -2,7 +2,7 @@ import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 
 import { BaseSchema } from 'shared/state/Base';
-import { AppletId, GetAppletsParams } from 'api';
+import { AppletId, GetAppletsParams, Periodicity, TimerType } from 'api';
 
 export type CreateAppletsStateData = {
   builder: ActionReducerMapBuilder<AppletsSchema>;
@@ -97,11 +97,10 @@ export type Event = {
   accessBeforeSchedule: boolean;
   oneTimeCompletion: boolean;
   timer: string;
-  // TODO: change when prev PR was merged
-  timerType: 'NOT_SET';
+  timerType: TimerType;
   id: string;
   periodicity: {
-    type: 'ONCE';
+    type: Periodicity;
     startDate: string;
     endDate: string;
     selectedDate: string;
