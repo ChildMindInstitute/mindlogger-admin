@@ -26,6 +26,7 @@ export enum DateFormats {
   Time = 'HH:mm',
   TimeSeconds = 'HH:mm:ss',
   YearMonthDayHoursMinutesSeconds = 'yyyy-MM-dd HH:mm:ss',
+  YearMonthDay = 'yyyy-MM-dd',
 }
 
 export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;

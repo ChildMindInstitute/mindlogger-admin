@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import { Controller, FieldValues } from 'react-hook-form';
-import { TextField, MenuItem } from '@mui/material';
+import { Controller, FieldError, FieldValues } from 'react-hook-form';
+import { TextField, MenuItem, Box } from '@mui/material';
 
-import { Svg } from 'shared/components';
-import { SelectEvent } from 'shared/types/event';
-import theme from 'shared/styles/theme';
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { Svg } from 'shared/components/Svg';
+import { Tooltip } from 'shared/components/Tooltip';
+import { SelectEvent } from 'shared/types';
+import { theme, StyledFlexTopCenter } from 'shared/styles';
 
 import { SelectControllerProps } from './SelectController.types';
+import { StyledPlaceholder, StyledItem } from './SelectController.styles';
 
 export const SelectController = <T extends FieldValues>({
   name,
@@ -16,33 +17,60 @@ export const SelectController = <T extends FieldValues>({
   value: selectValue,
   customChange,
   withChecked,
+  customLiStyles,
+  placeholder,
+  isLabelTranslated = true,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
 
-  const renderSelect = (onChange: ((e: SelectEvent) => void) | undefined, selectValue?: string) => (
-    <TextField {...props} select onChange={onChange} value={selectValue}>
-      {options?.map(({ labelKey, value, icon }) => (
-        <MenuItem key={labelKey} value={value as string}>
-          <StyledFlexTopCenter>
-            {icon && (
-              <StyledFlexTopCenter
-                className="icon-wrapper"
-                sx={{ marginRight: theme.spacing(1.8) }}
-              >
-                {icon}
-              </StyledFlexTopCenter>
-            )}
-            {t(labelKey)}
-            {withChecked && selectValue === value && (
-              <StyledFlexTopCenter className="icon-wrapper" sx={{ marginLeft: theme.spacing(1.6) }}>
-                <Svg id="check" />
-              </StyledFlexTopCenter>
-            )}
+  const getMenuItem = (
+    labelKey: string,
+    value: string | boolean,
+    disabled: boolean,
+    icon?: JSX.Element,
+  ) => (
+    <MenuItem sx={customLiStyles} key={labelKey} value={value as string}>
+      <StyledItem disabled={disabled}>
+        {icon && (
+          <StyledFlexTopCenter className="icon-wrapper" sx={{ marginRight: theme.spacing(1.8) }}>
+            {icon}
           </StyledFlexTopCenter>
-        </MenuItem>
-      ))}
-    </TextField>
+        )}
+        {isLabelTranslated ? t(labelKey) : labelKey}
+        {withChecked && selectValue === value && (
+          <StyledFlexTopCenter className="icon-wrapper" sx={{ marginLeft: theme.spacing(1.6) }}>
+            <Svg id="check" />
+          </StyledFlexTopCenter>
+        )}
+      </StyledItem>
+    </MenuItem>
+  );
+
+  const renderSelect = (
+    onChange: ((e: SelectEvent) => void) | undefined,
+    selectValue?: string,
+    error?: FieldError,
+  ) => (
+    <Box sx={{ position: 'relative', width: '100%' }}>
+      {placeholder && !selectValue && <StyledPlaceholder>{placeholder}</StyledPlaceholder>}
+      <TextField
+        {...props}
+        select
+        onChange={onChange}
+        value={selectValue}
+        error={!!error}
+        helperText={error?.message || null}
+      >
+        {options?.map(({ labelKey, value, icon, disabled = false, tooltip }) =>
+          tooltip ? (
+            <Tooltip tooltipTitle={tooltip}>{getMenuItem(labelKey, value, disabled, icon)}</Tooltip>
+          ) : (
+            getMenuItem(labelKey, value, disabled, icon)
+          ),
+        )}
+      </TextField>
+    </Box>
   );
 
   return (
@@ -51,11 +79,15 @@ export const SelectController = <T extends FieldValues>({
         <Controller
           name={name}
           control={control}
-          render={({ field: { onChange, value } }) =>
-            renderSelect((e) => {
-              customChange && customChange(e);
-              onChange(e);
-            }, value)
+          render={({ field: { onChange, value }, fieldState: { error } }) =>
+            renderSelect(
+              (e) => {
+                customChange && customChange(e);
+                onChange(e);
+              },
+              value,
+              error,
+            )
           }
         />
       ) : (

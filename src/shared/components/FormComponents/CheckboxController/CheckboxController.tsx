@@ -7,16 +7,19 @@ export const CheckboxController = <T extends FieldValues>({
   name,
   label,
   control,
+  disabled,
   ...checkboxProps
 }: InputControllerProps<T>) => (
   <FormControlLabel
+    disabled={disabled}
+    sx={{ opacity: disabled ? 0.8 : 1 }}
     label={label}
     control={
       <Controller
         name={name}
         control={control}
         render={({ field: { onChange, value } }) => (
-          <Checkbox {...checkboxProps} checked={value} onChange={onChange} />
+          <Checkbox {...checkboxProps} disabled={disabled} checked={value} onChange={onChange} />
         )}
       />
     }

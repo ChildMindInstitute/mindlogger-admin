@@ -89,6 +89,40 @@ export type Event = {
 
 export type TransferOwnershipType = AppletId & { email: string };
 
+export enum TimerType {
+  NotSet = 'NOT_SET',
+  Timer = 'TIMER',
+  Idle = 'IDLE',
+}
+
+export enum Periodicity {
+  Once = 'ONCE',
+  Daily = 'DAILY',
+  Weekly = 'WEEKLY',
+  Weekdays = 'WEEKDAYS',
+  Monthly = 'MONTHLY',
+}
+
+export type CreateEventType = AppletId & {
+  body: {
+    startTime?: string;
+    endTime?: string;
+    accessBeforeSchedule?: boolean;
+    oneTimeCompletion?: boolean;
+    timer?: string;
+    timerType?: TimerType;
+    periodicity?: {
+      type: Periodicity | 'ALWAYS';
+      startDate?: string;
+      endDate?: string;
+      selectedDate?: string;
+    };
+    respondentId?: string;
+    activityId?: string;
+    flowId?: string;
+  };
+};
+
 export type SetAccount = { accountName: string };
 
 export type RevokeAppletUser = AppletId & {

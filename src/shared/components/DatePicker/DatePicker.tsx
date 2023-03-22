@@ -4,7 +4,7 @@ import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
 import fr from 'date-fns/locale/fr';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import {
   StyledButton,
@@ -14,7 +14,7 @@ import {
   StyledPopover,
   StyledTextField,
 } from './DatePicker.styles';
-import { DatePickerProps, DateVariant, UiType } from './DatePicker.types';
+import { DateType, DateArrayType, DatePickerProps, DateVariant, UiType } from './DatePicker.types';
 import { DatePickerHeader } from './DatePickerHeader';
 import { getStringFromDate } from './DatePicker.utils';
 import { DATE_PLACEHOLDER } from './DatePicker.const';
@@ -22,6 +22,7 @@ import { PopoverHeader } from './PopoverHeader';
 
 export const DatePicker = <T extends FieldValues>({
   control,
+  value: providedValue,
   name,
   uiType = UiType.OneDate,
   inputSx = {},
@@ -44,27 +45,31 @@ export const DatePicker = <T extends FieldValues>({
     <Controller
       control={control}
       name={name}
-      render={({ field: { onChange, value } }) => {
+      render={({ field: { onChange, value: fieldValue }, fieldState: { error } }) => {
+        const value = providedValue || fieldValue;
+        const singleDate = value as DateType;
+        const startEndingValue = value as DateArrayType;
+
         const getSelectedDate = (variant?: DateVariant) => {
           if (isStartEndingDate) {
             if (variant === DateVariant.End) {
-              return value[1] || null;
+              return startEndingValue[1] || null;
             }
 
-            return value[0];
+            return startEndingValue[0];
           }
 
-          return value;
+          return singleDate;
         };
 
         const getValue = () => {
           if (value && isStartEndingDate) {
-            return `${getStringFromDate(value[0]) || DATE_PLACEHOLDER} - ${
-              getStringFromDate(value[1]) || DATE_PLACEHOLDER
+            return `${getStringFromDate(startEndingValue[0]) || DATE_PLACEHOLDER} - ${
+              getStringFromDate(startEndingValue[1]) || DATE_PLACEHOLDER
             }`;
           }
 
-          return getStringFromDate(value) || '';
+          return getStringFromDate(singleDate) || '';
         };
 
         return (
@@ -77,6 +82,8 @@ export const DatePicker = <T extends FieldValues>({
               onClick={handlePickerShow}
               className={(open && 'active') || ''}
               sx={{ ...inputSx }}
+              error={!!error}
+              helperText={error?.message || null}
               InputProps={{
                 endAdornment: (
                   <StyledIconBtn aria-describedby={id}>
@@ -99,15 +106,17 @@ export const DatePicker = <T extends FieldValues>({
                 horizontal: 'center',
               }}
             >
-              {value && <PopoverHeader uiType={uiType} date={value} />}
+              {value && <PopoverHeader uiType={uiType} date={value as Date | Date[]} />}
               <ReactDatePicker
                 locale={i18n.language === 'fr' ? fr : undefined}
                 renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
-                startDate={isStartEndingDate && getSelectedDate()}
-                endDate={isStartEndingDate && getSelectedDate(DateVariant.End)}
+                startDate={isStartEndingDate ? (getSelectedDate() as DateType) : undefined}
+                endDate={
+                  isStartEndingDate ? (getSelectedDate(DateVariant.End) as DateType) : undefined
+                }
                 selectsRange={isStartEndingDate}
                 inline
-                selected={getSelectedDate()}
+                selected={getSelectedDate() as DateType}
                 onChange={(date) => onChange(date)}
                 monthsShown={isStartEndingDate ? 2 : 1}
                 formatWeekDay={(nameOfDay) => nameOfDay[0]}
