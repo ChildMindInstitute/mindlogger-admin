@@ -136,7 +136,7 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
         }
       } else {
         await handleCreateEvent();
-        submitCallback();
+        !error && submitCallback();
       }
     };
 
