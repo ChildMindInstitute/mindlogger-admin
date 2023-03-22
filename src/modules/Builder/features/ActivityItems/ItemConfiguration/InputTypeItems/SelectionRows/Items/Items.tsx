@@ -24,6 +24,8 @@ const commonUploaderProps = {
   uiType: UploaderUiType.Secondary,
 };
 
+const MAX_LABEL_LENGTH = 11;
+
 export const Items = ({ isSingle }: { isSingle?: boolean }) => {
   const { t } = useTranslation('app');
 
@@ -59,7 +61,7 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
               control={control}
               name={`${name}.label`}
               placeholder={t('selectionRowsItemPlaceholder', { index: index + 1 })}
-              maxLength={11}
+              maxLength={MAX_LABEL_LENGTH}
             />
           </StyledFlexTopCenter>
           {hasTooltips && (

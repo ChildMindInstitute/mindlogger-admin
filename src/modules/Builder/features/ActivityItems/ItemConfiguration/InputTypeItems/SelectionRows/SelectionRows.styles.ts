@@ -15,7 +15,6 @@ export const StyledSelectionRowsContainer = styled(Collapse)`
 
 export const StyledSelectionRow = styled(StyledFlexTopCenter, shouldForwardProp)`
   height: ${({ hasTooltips }: { hasTooltips?: boolean }) => (hasTooltips ? '20.4rem' : '12.4rem')};
-
   align-items: stretch;
 `;
 
@@ -42,5 +41,9 @@ export const StyledSelectionBox = styled(StyledFlexColumn)`
 export const StyledAddRowButton = styled(Button)`
   width: 13.2rem;
   align-self: flex-start;
-  border: none !important;
+  border: none;
+
+  &:hover {
+    border: none;
+  }
 `;

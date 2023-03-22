@@ -17,6 +17,8 @@ const commonUploaderProps = {
   uiType: UploaderUiType.Secondary,
 };
 
+const MAX_LABEL_LENGTH = 11;
+
 export const Options = () => {
   const { t } = useTranslation('app');
 
@@ -45,7 +47,7 @@ export const Options = () => {
                 control={control}
                 name={`${name}.label`}
                 placeholder={t('selectionRowsOptionPlaceholder', { index: index + 1 })}
-                maxLength={11}
+                maxLength={MAX_LABEL_LENGTH}
               />
             </StyledFlexTopCenter>
             {hasTooltips && (

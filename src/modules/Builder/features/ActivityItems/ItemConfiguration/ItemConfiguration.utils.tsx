@@ -44,25 +44,15 @@ export const getEmptySliderOption = (): SliderOption => ({
 
 export const getEmptySelectionItem = (scoresQuantity: number) => ({
   ...DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
-  id: uniqueId(),
+  id: uniqueId('selection-item-'),
   scores: createArray(scoresQuantity, () => DEFAULT_SELECTION_ROWS_SCORE),
 });
 
-export const getEmptySelectionRows = (type: SelectionRows['type']): SelectionRows => {
-  const options = [DEFAULT_EMPTY_SELECTION_ROWS_OPTION];
-  const scores = [DEFAULT_SELECTION_ROWS_SCORE];
-
-  if (type === ItemInputTypes.SingleSelectionPerRow) {
-    options.push(DEFAULT_EMPTY_SELECTION_ROWS_OPTION);
-    scores.push(DEFAULT_SELECTION_ROWS_SCORE);
-  }
-
-  return {
-    type,
-    items: [{ label: '', tooltip: '', image: '', scores }],
-    options,
-  };
-};
+export const getEmptySelectionRows = (type: SelectionRows['type']): SelectionRows => ({
+  type,
+  items: [getEmptySelectionItem(1)],
+  options: [DEFAULT_EMPTY_SELECTION_ROWS_OPTION],
+});
 
 export const getPaletteColor = (paletteName: string, index: number) => {
   const colors = SELECTION_OPTIONS_COLOR_PALETTE.find(({ name }) => name === paletteName)?.colors;

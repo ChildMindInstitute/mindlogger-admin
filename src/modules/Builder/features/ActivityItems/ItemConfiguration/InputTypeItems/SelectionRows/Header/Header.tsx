@@ -85,7 +85,7 @@ export const Header = ({ isSingle, isExpanded, onArrowClick }: HeaderProps) => {
             options={getMultipleSelectionRowsOptions(isSingle)}
             customChange={handleChange}
             variant="standard"
-            value={`${options?.length}`}
+            value={`${options?.length || ''}`}
             SelectProps={{
               IconComponent: (props) => <Svg {...commonSelectArrowProps} {...props} />,
             }}

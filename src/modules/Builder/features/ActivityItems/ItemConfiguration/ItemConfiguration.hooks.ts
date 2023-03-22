@@ -45,6 +45,8 @@ export const useSettingsSetup = ({
 }: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
+  const selectionRows = watch('selectionRows');
+
   const { remove: removeOptions } = useFieldArray({
     control,
     name: 'options',
@@ -75,8 +77,12 @@ export const useSettingsSetup = ({
       selectedInputType === ItemInputTypes.SingleSelectionPerRow ||
       selectedInputType === ItemInputTypes.MultipleSelectionPerRow
     ) {
-      setValue('selectionRows', getEmptySelectionRows(selectedInputType));
-    } else setValue('selectionRows', undefined);
+      if (selectionRows) {
+        setValue('selectionRows', getEmptySelectionRows(selectedInputType));
+      } else {
+        register('selectionRows', { value: getEmptySelectionRows(selectedInputType) });
+      }
+    } else unregister('selectionRows');
   }, [selectedInputType]);
 
   useEffect(() => {
