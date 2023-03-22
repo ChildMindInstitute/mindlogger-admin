@@ -1,4 +1,4 @@
-import { LanguageItem } from 'shared/components/Language/Language.types';
+import { LanguageItem } from '../Language.types';
 
 export type SelectLanguageProps = {
   open: boolean;

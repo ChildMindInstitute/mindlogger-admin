@@ -2,7 +2,7 @@ import { ChangeEvent, MouseEvent, useState } from 'react';
 import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } from '@mui/material';
 
 import { Order } from 'shared/types/table';
-import { EmptyTable } from 'shared/components';
+import { EmptyTable } from 'shared/components/EmptyTable';
 
 import { TableHead } from './TableHead';
 import { DEFAULT_ROWS_PER_PAGE, TERTIARY_TYPE_ROWS_PER_PAGE } from './Table.const';

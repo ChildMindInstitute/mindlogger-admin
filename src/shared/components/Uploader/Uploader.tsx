@@ -2,8 +2,11 @@ import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Button } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { StyledBodyMedium, theme, variables } from 'shared/styles';
-import { CropPopup, Svg } from 'shared/components';
+import { CropPopup } from 'shared/components/CropPopup';
+import { Svg } from 'shared/components/Svg';
+import { StyledBodyMedium } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_2MB } from 'shared/consts';
 

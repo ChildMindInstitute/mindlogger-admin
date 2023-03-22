@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import theme from 'shared/styles/theme';
 
 import { ModalProps } from './Modal.types';
@@ -25,8 +25,9 @@ export const Modal = ({
   secondBtnText,
   onSecondBtnSubmit,
   disabledSecondBtn,
+  sxProps,
 }: ModalProps) => (
-  <StyledDialog width={width} onClose={onClose} open={open}>
+  <StyledDialog sx={sxProps} width={width} onClose={onClose} open={open}>
     <StyledDialogTitle align={titleAlign}>
       {title}
       <StyledCloseButton onClick={onClose}>

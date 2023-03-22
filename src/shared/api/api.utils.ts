@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
-import { signInRefreshTokenApi } from 'modules/Auth/api';
 import storage from 'shared/utils/storage';
 
 import { BASE_API_URL, LANGUAGES } from './api.const';
+import { signInRefreshTokenApi } from './api';
 
 export const getBaseUrl = () => (storage.getItem('apiUrl') as string) || BASE_API_URL;
 

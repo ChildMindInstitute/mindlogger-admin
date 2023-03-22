@@ -1,3 +1,5 @@
+import { TimerType, Periodicity } from 'modules/Dashboard/api';
+
 import { AvailabilityTab } from './AvailabilityTab';
 import { NotificationsTab } from './NotificationsTab';
 import { TimersTab } from './TimersTab';
@@ -17,26 +19,27 @@ export const tabs = [
   },
 ];
 
-export const activities = [
-  {
-    value: 'a',
-    labelKey: 'A',
-  },
-];
+export const DEFAULT_START_TIME = '00:00';
+export const DEFAULT_END_TIME = '23:59';
 
-export const defaultValues = {
-  activity: activities[0].value,
-  availability: false,
-  completion: false,
-  from: '',
-  to: '',
-  date: '',
-  startEndingDate: '',
-  timeout: {
-    access: false,
-  },
+const DEFAULT_TIMER_DURATION = '01:00';
+
+const DEFAULT_IDLE_TIME = '00:01';
+
+export const getDefaultValues = (defaultStartDate?: Date) => ({
+  activityOrFlowId: '',
+  alwaysAvailable: true,
+  oneTimeCompletion: false,
+  startTime: DEFAULT_START_TIME,
+  endTime: DEFAULT_END_TIME,
+  date: defaultStartDate || '',
+  startEndingDate: defaultStartDate ? [defaultStartDate, null] : '',
+  accessBeforeSchedule: false,
+  timerType: TimerType.NotSet,
+  timerDuration: DEFAULT_TIMER_DURATION,
+  idleTime: DEFAULT_IDLE_TIME,
+  periodicity: Periodicity.Once,
+  defaultStartDate,
   notifications: [],
   reminder: null,
-  timerDuration: '',
-  idleTime: '',
-};
+});

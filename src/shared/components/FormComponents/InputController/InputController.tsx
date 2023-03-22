@@ -1,7 +1,9 @@
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Svg, Tooltip, TooltipUiType } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
+import { Tooltip, TooltipUiType } from 'shared/components/Tooltip';
+
 import {
   StyledBodyLarge,
   StyledClearedButton,

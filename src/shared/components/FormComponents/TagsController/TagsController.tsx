@@ -1,6 +1,7 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { Svg, Chip } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
+import { Chip } from 'shared/components/Chip';
 import { StyledFlexWrap, StyledClearedButton } from 'shared/styles/styledComponents';
 
 import { TagsInputControllerProps, UiType } from './TagsController.types';

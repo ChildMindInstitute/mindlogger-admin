@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { SelectLanguage, Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { variables } from 'shared/styles/variables';
 import { StyledLabelMedium } from 'shared/styles/styledComponents';
 import storage from 'shared/utils/storage';
 
+import { SelectLanguage } from './SelectLanguage';
 import { LanguageItem, Languages } from './Language.types';
 import { StyledLanguage, StyledFlag } from './Language.styles';
 

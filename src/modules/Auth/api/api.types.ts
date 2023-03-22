@@ -9,8 +9,4 @@ export type SignUpArgs = {
   };
 };
 
-export type SignInRefreshTokenArgs = {
-  refreshToken: string | null;
-};
-
 export type ResetPassword = { email: string };

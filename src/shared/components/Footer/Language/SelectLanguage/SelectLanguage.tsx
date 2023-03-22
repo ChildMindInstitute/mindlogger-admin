@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Modal, Svg } from 'shared/components';
+import { Modal } from 'shared/components/Modal';
+import { Svg } from 'shared/components/Svg';
 import { StyledTitleMedium, StyledTitleSmall } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 

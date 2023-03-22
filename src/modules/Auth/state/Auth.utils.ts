@@ -38,7 +38,7 @@ export const createAuthRejectedData = (
     const axiosResponse = error.response as AxiosResponse;
     authentication.requestId = initialState.authentication.requestId;
     authentication.status = 'error';
-    authentication.error = axiosResponse.data.result;
+    authentication.error = axiosResponse?.data?.result;
     authentication.data ? (authentication.data = null) : null;
     state.isAuthorized = false;
   }
