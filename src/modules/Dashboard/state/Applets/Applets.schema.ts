@@ -31,7 +31,7 @@ export type Applet = {
   updatedAt: string;
 };
 
-type ActivityFlow = {
+export type ActivityFlow = {
   id: string;
   name: string;
   description: string;
@@ -42,7 +42,7 @@ type ActivityFlow = {
   isHidden?: boolean;
 };
 
-type Activity = {
+export type Activity = {
   id: string;
   name: string;
   description: string;

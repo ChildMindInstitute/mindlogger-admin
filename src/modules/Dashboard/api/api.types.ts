@@ -89,13 +89,13 @@ export type Event = {
 
 export type TransferOwnershipType = AppletId & { email: string };
 
-export enum TimerType {
+export const enum TimerType {
   NotSet = 'NOT_SET',
   Timer = 'TIMER',
   Idle = 'IDLE',
 }
 
-export enum Periodicity {
+export const enum Periodicity {
   Once = 'ONCE',
   Daily = 'DAILY',
   Weekly = 'WEEKLY',

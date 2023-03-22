@@ -2,7 +2,6 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { format } from 'date-fns';
 
 import { Option, SelectController } from 'shared/components/FormComponents';
 import { DefaultTabs as Tabs } from 'shared/components';
@@ -10,9 +9,8 @@ import { theme, StyledModalWrapper, StyledErrorText } from 'shared/styles';
 import { getErrorMessage } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
-import { createEventApi, CreateEventType, Periodicity, TimerType } from 'api';
+import { createEventApi, CreateEventType, Periodicity } from 'api';
 import { useAsync } from 'shared/hooks';
-import { DateFormats } from 'shared/consts';
 
 import { ActivityFormProps, ActivityFormRef, FormValues } from './ActivityForm.types';
 import { tabs, getDefaultValues } from './ActivityForm.const';
@@ -21,6 +19,7 @@ import {
   addSecondsToHourMinutes,
   convertDateToYearMonthDay,
   getActivitiesFlows,
+  getTimer,
 } from './ActivityForm.utils';
 
 export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
@@ -34,7 +33,7 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
     },
     ref,
   ) => {
-    const [selectValues, setSelectValues] = useState<null | Option[]>(null);
+    const [activitiesOrFlows, setActivitiesOrFlows] = useState<null | Option[]>(null);
     const { t } = useTranslation('app');
     const appletData = applets.useAppletData();
     const appletId = appletData?.result.id;
@@ -84,19 +83,15 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
           : { activityId: activityOrFlowId }),
       };
 
-      if (timerType === TimerType.Timer) {
-        body.timer = addSecondsToHourMinutes(timerDuration);
-      }
-
-      if (timerType === TimerType.Idle) {
-        body.timer = addSecondsToHourMinutes(idleTime);
-      }
+      getTimer(timerType, body, timerDuration, idleTime);
 
       if (alwaysAvailable) {
         body.oneTimeCompletion = oneTimeCompletion;
         body.periodicity = {
           type: 'ALWAYS',
-          selectedDate: format(defaultStartDate as Date, DateFormats.YearMonthDay),
+          ...(defaultStartDate && {
+            selectedDate: convertDateToYearMonthDay(defaultStartDate),
+          }),
         };
       } else {
         body.startTime = addSecondsToHourMinutes(startTime);
@@ -107,17 +102,20 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
           type: periodicity,
           ...(periodicity === Periodicity.Once
             ? {
-                selectedDate: convertDateToYearMonthDay(date as Date),
+                selectedDate: convertDateToYearMonthDay(date),
               }
             : {
-                startDate: convertDateToYearMonthDay(startEndingDate[0] as Date),
+                ...(startEndingDate[0] && {
+                  startDate: convertDateToYearMonthDay(startEndingDate[0]),
+                }),
                 ...(startEndingDate[1] && {
-                  endDate: convertDateToYearMonthDay(startEndingDate[1] as Date),
+                  endDate: convertDateToYearMonthDay(startEndingDate[1]),
                 }),
               }),
+
           ...(defaultStartDate &&
             (periodicity === Periodicity.Weekly || periodicity === Periodicity.Monthly) && {
-              selectedDate: format(defaultStartDate as Date, DateFormats.YearMonthDay),
+              selectedDate: convertDateToYearMonthDay(defaultStartDate),
             }),
         };
       }
@@ -129,15 +127,13 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
 
     const submitForm = async () => {
       if (dirtyFields.alwaysAvailable) {
-        if (alwaysAvailable) {
-          setRemoveAllScheduledPopupVisible(true);
-        } else {
-          setRemoveAlwaysAvailablePopupVisible(true);
-        }
-      } else {
-        await handleCreateEvent();
-        !error && submitCallback();
+        return alwaysAvailable
+          ? setRemoveAllScheduledPopupVisible(true)
+          : setRemoveAlwaysAvailablePopupVisible(true);
       }
+
+      await handleCreateEvent();
+      !error && submitCallback();
     };
 
     useImperativeHandle(ref, () => ({
@@ -153,13 +149,15 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
       if (!appletData) return;
 
       const { activities = [], activityFlows = [] } = appletData.result;
-      setSelectValues(getActivitiesFlows(activities, activityFlows));
+      setActivitiesOrFlows(getActivitiesFlows(activities, activityFlows));
     }, [appletData]);
 
     useEffect(() => {
       if (!activityOrFlowId) return;
 
-      const activityName = selectValues?.find((item) => item.value === activityOrFlowId)?.labelKey;
+      const activityName = activitiesOrFlows?.find(
+        (item) => item.value === activityOrFlowId,
+      )?.labelKey;
       setActivityName(activityName || '');
     }, [activityOrFlowId]);
 
@@ -171,7 +169,7 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
               fullWidth
               name="activityOrFlowId"
               control={control}
-              options={selectValues || []}
+              options={activitiesOrFlows || []}
               label={t('activity')}
               placeholder={t('selectActivity')}
               required
