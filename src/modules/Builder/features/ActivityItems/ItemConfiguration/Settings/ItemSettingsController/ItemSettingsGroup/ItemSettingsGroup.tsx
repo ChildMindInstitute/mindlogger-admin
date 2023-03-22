@@ -3,7 +3,10 @@ import { FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material'
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import {
+  ItemConfigurationSettings,
+  DEFAULT_TIMER_VALUE,
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, variables, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
@@ -17,6 +20,7 @@ import {
   StyledItemSettingGroupContainer,
 } from './ItemSettingsGroup.styles';
 import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
+import { ITEM_SETTINGS_TO_HAVE_TOOLTIP } from './ItemSettingsGroup.const';
 
 export const ItemSettingsGroup = ({
   value,
@@ -57,9 +61,17 @@ export const ItemSettingsGroup = ({
               const isTimer = settingKey === ItemConfigurationSettings.HasTimer;
               const isTextInputRequired =
                 settingKey === ItemConfigurationSettings.IsTextInputRequired;
+              const isSkippableItem = settingKey === ItemConfigurationSettings.IsSkippable;
 
               const isDisabled =
-                isTextInputRequired && !settings?.includes(ItemConfigurationSettings.HasTextInput);
+                (isTextInputRequired &&
+                  !settings?.includes(ItemConfigurationSettings.HasTextInput)) ||
+                (isSkippableItem &&
+                  settings?.includes(ItemConfigurationSettings.IsTextInputRequired));
+              const isSecondsDisabled =
+                isTimer && !settings?.includes(ItemConfigurationSettings.HasTimer);
+
+              const hasTooltip = ITEM_SETTINGS_TO_HAVE_TOOLTIP.includes(settingKey);
 
               const sxProps = isTextInputRequired ? { ml: theme.spacing(2.4) } : {};
 
@@ -85,23 +97,34 @@ export const ItemSettingsGroup = ({
                       name={settingKey}
                       checked={value?.includes(settingKey)}
                       onChange={handleCheckboxChange}
+                      disabled={isDisabled}
                     />
                   }
-                  disabled={isDisabled}
                   label={
                     <StyledSettingTitleContainer withInput={isTimer}>
                       <StyledTitleMedium sx={{ p: theme.spacing(0, 1, 0, 1) }}>
                         {t(settingKey)}
-                        <Tooltip tooltipTitle={t(settingKey)}>
-                          <span>
-                            <StyledSettingInfoIcon id="more-info-outlined" />
-                          </span>
-                        </Tooltip>
+                        {hasTooltip && (
+                          <Tooltip
+                            tooltipTitle={t(settingKey, { context: 'tooltip' })}
+                            placement="top"
+                          >
+                            <span>
+                              <StyledSettingInfoIcon id="more-info-outlined" />
+                            </span>
+                          </Tooltip>
+                        )}
                       </StyledTitleMedium>
                       {isTimer && (
                         <>
                           <StyledInputControllerContainer>
-                            <InputController control={control} name="timer" type="number" />
+                            <InputController
+                              control={control}
+                              name="timer"
+                              type="number"
+                              disabled={isSecondsDisabled}
+                              minNumberValue={isSecondsDisabled ? DEFAULT_TIMER_VALUE : undefined}
+                            />
                           </StyledInputControllerContainer>
                           <StyledTitleMedium>{t('seconds')}</StyledTitleMedium>
                         </>

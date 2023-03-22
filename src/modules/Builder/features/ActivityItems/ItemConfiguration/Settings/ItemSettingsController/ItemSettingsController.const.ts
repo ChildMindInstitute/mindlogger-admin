@@ -233,6 +233,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsCorrectAnswerRequired,
         ItemConfigurationSettings.IsNumericalRequired,
         ItemConfigurationSettings.HasResponseDataIdentifier,
+        ItemConfigurationSettings.IsResponseRequired,
       ],
     },
     {

@@ -25,6 +25,7 @@ export enum ItemConfigurationSettings {
   HasTimer = 'hasTimer',
   IsCorrectAnswerRequired = 'isCorrectAnswerRequired',
   IsNumericalRequired = 'isNumericalRequired',
+  IsResponseRequired = 'isResponseRequired',
   IsSkippable = 'isSkippable',
   IsContinuous = 'isContinuous',
   IsPlayAudioOnce = 'isPlayAudioOnce',
