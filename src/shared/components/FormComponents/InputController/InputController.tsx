@@ -1,4 +1,4 @@
-import { BaseEvent } from 'react';
+import { ChangeEvent } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -29,6 +29,7 @@ export const InputController = <T extends FieldValues>({
   InputProps,
   minNumberValue = 1,
   maxNumberValue,
+  onChange: handleCustomChange,
   helperText,
   ...textFieldProps
 }: InputControllerProps<T>) => {
@@ -61,7 +62,9 @@ export const InputController = <T extends FieldValues>({
           if (+value > minNumberValue) onChange(+value - 1);
         };
 
-        const handleChange = (event: BaseEvent) => {
+        const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+          if (handleCustomChange) return handleCustomChange(event);
+
           if (maxLength && event.target.value?.length > maxLength) return;
 
           onChange(event.target.value);

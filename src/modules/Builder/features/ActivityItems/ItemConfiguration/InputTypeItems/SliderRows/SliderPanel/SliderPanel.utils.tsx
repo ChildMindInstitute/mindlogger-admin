@@ -32,4 +32,6 @@ export const getStaticBodyRow = () => [
 ];
 
 export const getMarksByScores = (scores: number[]) =>
-  scores?.map((score: number) => ({ value: score }));
+  scores?.every((score: number) => typeof score === 'number')
+    ? scores?.map((score: number) => ({ value: score }))
+    : [];

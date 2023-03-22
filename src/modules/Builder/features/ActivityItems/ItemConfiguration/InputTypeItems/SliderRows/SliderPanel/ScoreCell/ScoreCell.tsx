@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Box, ClickAwayListener } from '@mui/material';
 
@@ -9,11 +9,17 @@ import { StyledInputController } from './ScoreCell.styles';
 export const ScoreCell = ({ name }: { name: string }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { control, getValues } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
 
   const handleClick = () => setIsEditing(true);
 
   const handleClickAway = () => setIsEditing(false);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === '') return setValue(name, 0);
+
+    setValue(name, +event.target.value);
+  };
 
   if (!isEditing)
     return (
@@ -32,6 +38,7 @@ export const ScoreCell = ({ name }: { name: string }) => {
           name={name}
           type="number"
           minNumberValue={Number.MIN_SAFE_INTEGER}
+          onChange={handleChange}
           autoFocus
         />
       </Box>

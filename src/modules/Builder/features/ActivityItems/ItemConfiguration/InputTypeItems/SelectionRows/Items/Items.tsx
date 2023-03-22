@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { Radio, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
@@ -74,31 +75,42 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
             </StyledFlexTopCenter>
           )}
         </StyledSelectionBox>
-        {options?.map((option: SelectionRowsOption, key: number) => (
-          <StyledSelectionBox key={`score-input-${key}`}>
-            <StyledItemContainer>
-              {isSingle ? (
-                <Radio disabled />
-              ) : (
-                <Checkbox disabled checked checkedIcon={<Svg id="checkbox-outlined" />} />
-              )}
-              {hasScores && (
-                <InputController
-                  label={t('score')}
-                  type="number"
-                  control={control}
-                  name={`${name}.scores[${key}]`}
-                  minNumberValue={Number.MIN_SAFE_INTEGER}
-                />
-              )}
-              {hasRemoveButton && key === options?.length - 1 && index !== 0 && (
-                <StyledRemoveItemButton onClick={() => handleRemoveItem(index)}>
-                  <Svg id="cross" />
-                </StyledRemoveItemButton>
-              )}
-            </StyledItemContainer>
-          </StyledSelectionBox>
-        ))}
+        {options?.map((option: SelectionRowsOption, key: number) => {
+          const scoreName = `${name}.scores[${key}]`;
+
+          const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+            if (event.target.value === '') return setValue(scoreName, 0);
+
+            setValue(scoreName, +event.target.value);
+          };
+
+          return (
+            <StyledSelectionBox key={`score-input-${key}`}>
+              <StyledItemContainer>
+                {isSingle ? (
+                  <Radio disabled />
+                ) : (
+                  <Checkbox disabled checked checkedIcon={<Svg id="checkbox-outlined" />} />
+                )}
+                {hasScores && (
+                  <InputController
+                    label={t('score')}
+                    type="number"
+                    control={control}
+                    name={scoreName}
+                    onChange={handleChange}
+                    minNumberValue={Number.MIN_SAFE_INTEGER}
+                  />
+                )}
+                {hasRemoveButton && key === options?.length - 1 && index !== 0 && (
+                  <StyledRemoveItemButton onClick={() => handleRemoveItem(index)}>
+                    <Svg id="cross" />
+                  </StyledRemoveItemButton>
+                )}
+              </StyledItemContainer>
+            </StyledSelectionBox>
+          );
+        })}
       </StyledSelectionRowItem>
     );
   });

@@ -82,7 +82,7 @@ export const Header = ({ isSingle, isExpanded, onArrowClick }: HeaderProps) => {
         <StyledClearedButton {...commonButtonProps}>
           <StyledSelectController
             name="selectionRows.options.length"
-            options={getMultipleSelectionRowsOptions(isSingle)}
+            options={getMultipleSelectionRowsOptions()}
             customChange={handleChange}
             variant="standard"
             value={`${options?.length || ''}`}
