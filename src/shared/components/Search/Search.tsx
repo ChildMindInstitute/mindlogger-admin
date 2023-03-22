@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { StyledTextField, StyledIcon } from './Search.styles';
 import { SearchProps } from './Search.types';

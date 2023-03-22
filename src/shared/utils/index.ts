@@ -10,5 +10,5 @@ export * from './renderWithProviders';
 export * from './shouldForwardProp';
 export * from './storage';
 export * from './svgBuilder';
-export * from './arrays';
+export * from './array';
 export * from './fileSystem';

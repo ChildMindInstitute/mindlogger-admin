@@ -499,5 +499,13 @@
   "audioExceedSize": "L'audio fait plus de {{size}}",
   "audioWrongFormat": "Le fichier audio a un mauvais format",
   "drawing Example": "Exemple de dessin",
-  "drawing Background": "Dessin d'arrière-plan"
+  "drawing Background": "Dessin d'arrière-plan",
+  "selectActivity": "Sélectionnez une activité",
+  "activityRequired": "L'activité est requise",
+  "activityDeactivated": "L'activité est désactivée dans le générateur",
+  "flowDeactivated": "Le flux d'activité est désactivé dans le générateur",
+  "timerDurationCheck": "La durée de la minuterie doit être supérieure à 00:00",
+  "selectValidPeriod": "Sélectionnez une période de temps valide",
+  "timeNotificationsError": "Le temps sélectionné dans l'onglet Notifications est en dehors de la période de disponibilité de l'activité. Veuillez mettre à jour.",
+  "setTimeLimit": "Limite de temps"
 }

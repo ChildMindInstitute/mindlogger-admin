@@ -17,11 +17,10 @@ export const EditActivityPopup = ({
 }: EditActivityPopupProps) => {
   const { t } = useTranslation('app');
   const activityFormRef = useRef() as RefObject<ActivityFormRef>;
-  const [removeScheduledEventPopupVisible, setRemoveScheduledEventPopupVisible] = useState(false);
-  const [removeAllScheduledEventsPopupVisible, setRemoveAllScheduledEventsPopupVisible] =
-    useState(false);
-  const [confirmScheduledAcessPopupVisible, setConfirmScheduledAccessPopupVisible] =
-    useState(false);
+  const [removeSingleScheduledPopupVisible, setRemoveSingleScheduledPopupVisible] = useState(false);
+  const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
+  const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
+  const [currentActivityName, setCurrentActivityName] = useState(activityName);
 
   const onSubmit = () => {
     if (activityFormRef?.current) {
@@ -32,22 +31,22 @@ export const EditActivityPopup = ({
   const handleOnClose = () => setEditActivityPopupVisible(false);
 
   const onRemoveEventClick = () => {
-    setRemoveScheduledEventPopupVisible(true);
+    setRemoveSingleScheduledPopupVisible(true);
     handleOnClose();
   };
 
   const onRemoveScheduledEventClose = () => {
-    setRemoveScheduledEventPopupVisible(false);
+    setRemoveSingleScheduledPopupVisible(false);
     setEditActivityPopupVisible(true);
   };
 
   const onConfirmScheduledAccessClose = () => {
-    setConfirmScheduledAccessPopupVisible(false);
+    setRemoveAlwaysAvailablePopupVisible(false);
     setEditActivityPopupVisible(true);
   };
 
   const onRemoveAllScheduledEventsClose = () => {
-    setRemoveAllScheduledEventsPopupVisible(false);
+    setRemoveAllScheduledPopupVisible(false);
     setEditActivityPopupVisible(true);
   };
 
@@ -76,34 +75,35 @@ export const EditActivityPopup = ({
             <ActivityForm
               ref={activityFormRef}
               submitCallback={handleOnClose}
-              setRemoveAllEventsPopupVisible={setRemoveAllScheduledEventsPopupVisible}
-              setConfirmScheduledAccessPopupVisible={setConfirmScheduledAccessPopupVisible}
+              setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
+              setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
+              setActivityName={setCurrentActivityName}
             />
           </>
         </Modal>
       )}
-      {removeScheduledEventPopupVisible && (
+      {removeSingleScheduledPopupVisible && (
         <RemoveScheduledEventPopup
-          open={removeScheduledEventPopupVisible}
+          open={removeSingleScheduledPopupVisible}
           onClose={onRemoveScheduledEventClose}
-          onSubmit={() => setRemoveScheduledEventPopupVisible(false)}
-          activityName={activityName}
+          onSubmit={() => setRemoveSingleScheduledPopupVisible(false)}
+          activityName={currentActivityName}
         />
       )}
-      {removeAllScheduledEventsPopupVisible && (
+      {removeAllScheduledPopupVisible && (
         <RemoveAllScheduledEventsPopup
-          open={removeAllScheduledEventsPopupVisible}
+          open={removeAllScheduledPopupVisible}
           onClose={onRemoveAllScheduledEventsClose}
-          onSubmit={() => setRemoveAllScheduledEventsPopupVisible(false)}
-          activityName={activityName}
+          onSubmit={() => setRemoveAllScheduledPopupVisible(false)}
+          activityName={currentActivityName}
         />
       )}
-      {confirmScheduledAcessPopupVisible && (
+      {removeAlwaysAvailablePopupVisible && (
         <ConfirmScheduledAccessPopup
-          open={confirmScheduledAcessPopupVisible}
+          open={removeAlwaysAvailablePopupVisible}
           onClose={onConfirmScheduledAccessClose}
-          onSubmit={() => setConfirmScheduledAccessPopupVisible(false)}
-          activityName={activityName}
+          onSubmit={() => setRemoveAlwaysAvailablePopupVisible(false)}
+          activityName={currentActivityName}
         />
       )}
     </>

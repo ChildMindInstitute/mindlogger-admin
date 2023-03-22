@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { ChipProps, ChipShape } from './Chip.types';
 import { StyledChip, StyledClearedButton } from './Chip.styles';

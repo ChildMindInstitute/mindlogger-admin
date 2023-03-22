@@ -1,6 +1,6 @@
 import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { AlignTextExtensionProps } from './AlignTextExtension.types';
 import { StyledIconCenter } from '../Extensions.styles';

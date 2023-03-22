@@ -5,13 +5,13 @@ const PROD_SERVER = 'https://api-dev.cmiml.net';
 const STAGING_SERVER = 'https://api-dev.cmiml.net';
 const DEV_SERVER = 'https://api-dev.cmiml.net';
 
-export const BASE_API_URL = process.env.NODE_ENV === 'production' ? PROD_SERVER : STAGING_SERVER;
-
 export const DEFAULT_CONFIG = {
   headers: {
     'Mindlogger-Content-Source': 'admin',
   },
 };
+
+export const BASE_API_URL = process.env.NODE_ENV === 'production' ? PROD_SERVER : STAGING_SERVER;
 
 export const BACKEND_SERVERS: ServerUrlOption[] = [
   {

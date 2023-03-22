@@ -10,7 +10,7 @@ import { StyledFlexTopCenter, theme } from 'shared/styles';
 
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 import { DrawingProps } from './Drawing.types';
-import { SharedToggleItemProps, ToggleItem } from '../ToggleItem';
+import { SharedToggleItemProps, ToggleItemContainer } from '../ToggleItemContainer';
 import { StyledImage } from './Drawing.styles';
 
 export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
@@ -73,11 +73,14 @@ export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
     <Uploads
       uploads={uploads}
       wrapperStyles={{
+        mt: theme.spacing(2),
         ml: theme.spacing(-4.8),
         justifyContent: 'flex-start',
       }}
     />
   );
 
-  return <ToggleItem title={'Drawing'} HeaderContent={HeaderContent} Content={Content} />;
+  return (
+    <ToggleItemContainer title={t('drawing')} HeaderContent={HeaderContent} Content={Content} />
+  );
 };

@@ -44,6 +44,8 @@ export const Calendar = () => {
   const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
   const [editActivityPopupVisible, setEditActivityPopupVisible] = useState(false);
   const [isAllDayEventsVisible, setIsAllDayEventsVisible] = useState<AllDayEventsVisible>(null);
+  const [editedActivityName, setEditedActivityName] = useState('');
+  const [defaultStartDate, setDefaultStartDate] = useState(new Date());
 
   const { components, messages, views, formats } = getCalendarComponents(
     activeView,
@@ -58,16 +60,19 @@ export const Calendar = () => {
 
   const onNavigate = (newDate: Date) => setDate(newDate);
 
-  const handleAddClick = () => setCreateActivityPopupVisible(true);
+  const handleAddClick = () => {
+    setCreateActivityPopupVisible(true);
+    setDefaultStartDate(new Date());
+  };
 
   const onSelectSlot = (slotInfo: SlotInfo) => {
-    console.log('on select slot', slotInfo);
     setCreateActivityPopupVisible(true);
+    setDefaultStartDate(slotInfo.start);
   };
 
   const onSelectEvent = (event: CalendarEvent) => {
-    console.log('on select event', event);
     setEditActivityPopupVisible(true);
+    setEditedActivityName(event.title);
   };
 
   useEffect(() => {
@@ -114,12 +119,12 @@ export const Calendar = () => {
         <CreateActivityPopup
           open={createActivityPopupVisible}
           setCreateActivityPopupVisible={setCreateActivityPopupVisible}
-          activityName="Daily Journal"
+          defaultStartDate={defaultStartDate}
         />
       )}
       <EditActivityPopup
         open={editActivityPopupVisible}
-        activityName="Daily Journal"
+        activityName={editedActivityName}
         setEditActivityPopupVisible={setEditActivityPopupVisible}
       />
     </>

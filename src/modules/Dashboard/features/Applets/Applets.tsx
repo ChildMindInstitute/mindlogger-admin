@@ -36,21 +36,21 @@ export const Applets = () => {
   // }, [foldersApplets]);
 
   useEffect(() => {
-    if (ownerId) {
-      const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
-      const { getApplets } = applets.thunk;
-      dispatch(
-        getApplets({
-          params: {
-            ownerId,
-            limit: DEFAULT_ROWS_PER_PAGE,
-            search,
-            page,
-            ordering,
-          },
-        }),
-      );
-    }
+    if (!ownerId) return;
+
+    const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
+    const { getApplets } = applets.thunk;
+    dispatch(
+      getApplets({
+        params: {
+          ownerId,
+          limit: DEFAULT_ROWS_PER_PAGE,
+          search,
+          page,
+          ordering,
+        },
+      }),
+    );
   }, [dispatch, ownerId, search, page, orderBy, order]);
 
   const addFolder = () => {
@@ -109,7 +109,7 @@ export const Applets = () => {
       </AppletsTableHeader>
       <Table
         columns={getHeadCells()}
-        rows={appletsData?.result}
+        rows={appletsData?.result || []}
         order={order}
         setOrder={setOrder}
         orderBy={orderBy}
