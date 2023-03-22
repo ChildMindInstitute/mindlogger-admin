@@ -11,6 +11,7 @@ import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
 import { createEventApi, CreateEventType, Periodicity } from 'api';
 import { useAsync } from 'shared/hooks';
+import { useAppDispatch } from 'redux/store';
 
 import { ActivityFormProps, ActivityFormRef, FormValues } from './ActivityForm.types';
 import { tabs, getDefaultValues } from './ActivityForm.const';
@@ -35,6 +36,7 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
   ) => {
     const [activitiesOrFlows, setActivitiesOrFlows] = useState<null | Option[]>(null);
     const { t } = useTranslation('app');
+    const dispatch = useAppDispatch();
     const appletData = applets.useAppletData();
     const appletId = appletData?.result.id;
 
@@ -65,8 +67,10 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
     const date = watch('date');
     const startEndingDate = watch('startEndingDate');
 
-    // TODO: add get events callback
-    const { execute, error } = useAsync(createEventApi);
+    const { execute, error } = useAsync(
+      createEventApi,
+      () => appletId && dispatch(applets.thunk.getEvents({ appletId })),
+    );
 
     const handleCreateEvent = async () => {
       if (!appletId) {

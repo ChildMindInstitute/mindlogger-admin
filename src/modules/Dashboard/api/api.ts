@@ -83,6 +83,11 @@ export const createEventApi = ({ appletId, body }: CreateEventType, signal?: Abo
     signal,
   });
 
+export const getEventsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  authApiClient.get(`/applets/${appletId}/events`, {
+    signal,
+  });
+
 export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSignal) =>
   authApiClient.put(
     '/user/accountName',

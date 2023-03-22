@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
 
-import { AppletId, getAppletsApi, getAppletApi, GetAppletsParams } from 'api';
+import { getAppletsApi, getEventsApi, getAppletApi, GetAppletsParams, AppletId } from 'api';
 
 export const getApplets = createAsyncThunk(
   'applets/getApplets',
@@ -21,6 +21,17 @@ export const getApplet = createAsyncThunk(
   async ({ appletId }: AppletId, { rejectWithValue, signal }) => {
     try {
       return await getAppletApi({ appletId }, signal);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
+export const getEvents = createAsyncThunk(
+  'applets/getEvents',
+  async ({ appletId }: AppletId, { rejectWithValue, signal }) => {
+    try {
+      return await getEventsApi({ appletId }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }
