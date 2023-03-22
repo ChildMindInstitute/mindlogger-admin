@@ -1,41 +1,23 @@
-import { AxiosError } from 'axios';
-import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
-
-import { getApiError } from 'shared/utils/getApiError';
+import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import { AppletsSchema } from './Applets.schema';
-import { getApplets } from './Applets.thunk';
-import { state as initialState } from './Applets.state';
+import { getApplets, getApplet } from './Applets.thunk';
+import {
+  deleteApplet,
+  createAppletsPendingData,
+  createAppletsFulfilledData,
+  createAppletsRejectedData,
+} from './Applets.utils';
 
-export const reducers = {
-  deleteApplet: ({ applets }: AppletsSchema, action: PayloadAction<{ id: string }>): void => {
-    if (applets?.data) {
-      applets.data.result = applets.data.result.filter((applet) => applet.id !== action.payload.id);
-    }
-  },
-};
+export const reducers = { deleteApplet };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AppletsSchema>): void => {
-  builder.addCase(getApplets.pending, ({ applets }, action) => {
-    if (applets.status !== 'loading') {
-      applets.requestId = action.meta.requestId;
-      applets.status = 'loading';
-    }
-  });
+  createAppletsPendingData({ builder, thunk: getApplets, key: 'applets' });
+  createAppletsPendingData({ builder, thunk: getApplet, key: 'applet' });
 
-  builder.addCase(getApplets.fulfilled, ({ applets }, action) => {
-    if (applets.status === 'loading' && applets.requestId === action.meta.requestId) {
-      applets.requestId = initialState.applets.requestId;
-      applets.status = 'success';
-      applets.data = action.payload.data;
-    }
-  });
+  createAppletsFulfilledData({ builder, thunk: getApplets, key: 'applets' });
+  createAppletsFulfilledData({ builder, thunk: getApplet, key: 'applet' });
 
-  builder.addCase(getApplets.rejected, ({ applets }, action) => {
-    if (applets.status === 'loading' && applets.requestId === action.meta.requestId) {
-      applets.requestId = initialState.applets.requestId;
-      applets.status = 'error';
-      applets.error = getApiError(action as PayloadAction<AxiosError>);
-    }
-  });
+  createAppletsRejectedData({ builder, thunk: getApplets, key: 'applets' });
+  createAppletsRejectedData({ builder, thunk: getApplet, key: 'applet' });
 };

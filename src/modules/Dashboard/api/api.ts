@@ -24,6 +24,7 @@ import {
   PostAppletPublicLink,
   GetUsersData,
   GetAppletsParams,
+  CreateEventType,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -34,6 +35,9 @@ export const getAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal
     params,
     signal,
   });
+
+export const getAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  authApiClient.get(`/applets/${appletId}`, { signal });
 
 export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
   authApiClient.put(
@@ -73,6 +77,11 @@ export const transferOwnershipApi = (
       signal,
     },
   );
+
+export const createEventApi = ({ appletId, body }: CreateEventType, signal?: AbortSignal) =>
+  authApiClient.post(`/applets/${appletId}/events`, body, {
+    signal,
+  });
 
 export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSignal) =>
   authApiClient.put(
