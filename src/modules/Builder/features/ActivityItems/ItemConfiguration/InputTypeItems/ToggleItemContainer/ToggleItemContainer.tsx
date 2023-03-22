@@ -8,10 +8,10 @@ import {
 } from 'shared/styles';
 import { Svg } from 'shared/components';
 
-import { StyledItemOption, StylesTitleWrapper } from './ToggleItem.styles';
-import { ToggleItemProps } from './ToggleItem.types';
+import { StyledItemOption, StylesTitleWrapper } from './ToggleItemContainer.styles';
+import { ToggleItemProps } from './ToggleItemContainer.types';
 
-export const ToggleItem = ({ title, HeaderContent, Content }: ToggleItemProps) => {
+export const ToggleItemContainer = ({ title, HeaderContent, Content }: ToggleItemProps) => {
   const [open, setOpen] = useState(true);
   const handleToggle = () => setOpen((prevState) => !prevState);
 
