@@ -15,7 +15,7 @@ import {
 } from 'shared/components/FormComponents';
 import { theme, variables, StyledBodyLarge, StyledTitleMedium } from 'shared/styles';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
-import { useCallbackPrompt } from 'shared/hooks/useCallbackPrompt';
+import { useCallbackPrompt } from 'shared/hooks';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { defaultValues as defaultFormValues } from './ReportConfigSetting.const';
