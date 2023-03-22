@@ -19,8 +19,8 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
   const navigate = useNavigate();
   const [selectedSetting, setSelectedSetting] = useState<AppletSetting | null>(null);
 
-  const BUILDER_SETTNIGS = page.newAppletSettings;
-  const DASHBOARD_SETTNIGS = `${page.dashboard}/${id}/${APPLET_PAGES.settings}`;
+  const BUILDER_SETTINGS = page.newAppletSettings;
+  const DASHBOARD_SETTINGS = `${page.dashboard}/${id}/${APPLET_PAGES.settings}`;
 
   useBreadcrumbs([
     {
@@ -48,9 +48,9 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
 
   const navigateTo = (param = '') => {
     if (!isBuilder) {
-      return navigate(param ? `${DASHBOARD_SETTNIGS}/${param}` : DASHBOARD_SETTNIGS);
+      return navigate(param ? `${DASHBOARD_SETTINGS}/${param}` : DASHBOARD_SETTINGS);
     }
-    navigate(param ? `${BUILDER_SETTNIGS}/${param}` : BUILDER_SETTNIGS);
+    navigate(param ? `${BUILDER_SETTINGS}/${param}` : BUILDER_SETTINGS);
   };
 
   return (
