@@ -16,7 +16,6 @@ export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardP
 
 export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)`
   ${({ open }: { open?: boolean }) => `
-		margin-bottom: ${theme.spacing(open ? 3 : 0)};  
 		height: ${open ? '5.6rem' : 'inherited'}; 
 	`};
 `;
