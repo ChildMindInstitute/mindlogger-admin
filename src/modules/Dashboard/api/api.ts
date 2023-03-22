@@ -35,6 +35,12 @@ export const getAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal
     signal,
   });
 
+export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) =>
+  authApiClient.get(`/workspaces/${params.owner_id}`, {
+    // params,
+    signal,
+  });
+
 export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
   authApiClient.put(
     '/user/switchAccount',

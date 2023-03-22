@@ -4,8 +4,9 @@ import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 import { getApiError } from 'shared/utils/getApiError';
 
 import { AppletsSchema } from './Applets.schema';
-import { getApplets } from './Applets.thunk';
+import { getApplets, getWorkspaceApplets } from './Applets.thunk';
 import { state as initialState } from './Applets.state';
+import { createAppletsFulfilledData } from './Applets.utils';
 
 export const reducers = {
   deleteApplet: ({ applets }: AppletsSchema, action: PayloadAction<{ id: string }>): void => {
@@ -23,13 +24,8 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AppletsSchema>): 
     }
   });
 
-  builder.addCase(getApplets.fulfilled, ({ applets }, action) => {
-    if (applets.status === 'loading' && applets.requestId === action.meta.requestId) {
-      applets.requestId = initialState.applets.requestId;
-      applets.status = 'success';
-      applets.data = action.payload.data;
-    }
-  });
+  createAppletsFulfilledData({ builder, thunk: getApplets, key: 'applets' });
+  createAppletsFulfilledData({ builder, thunk: getWorkspaceApplets, key: 'applets' });
 
   builder.addCase(getApplets.rejected, ({ applets }, action) => {
     if (applets.status === 'loading' && applets.requestId === action.meta.requestId) {

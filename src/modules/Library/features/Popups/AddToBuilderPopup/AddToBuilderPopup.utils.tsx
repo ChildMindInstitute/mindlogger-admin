@@ -35,11 +35,11 @@ const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] =
 ];
 
 const getWorkspacesRows = (workspaces: Workspace[]) =>
-  workspaces?.map(({ accountId, workspaceName, image }) => ({
+  workspaces?.map(({ ownerId, workspaceName, image }) => ({
     workspaceName: {
       content: () => (
         <StyledTableFormControlLabel
-          value={accountId}
+          value={ownerId}
           control={<Radio />}
           labelPlacement="start"
           label={

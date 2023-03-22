@@ -2,12 +2,13 @@ export type GetUserData = { token: string };
 
 export type GetAppletsParams = {
   params: {
-    ownerId: string;
+    ownerId?: string;
     search?: string;
     page?: number;
     limit?: number;
     ordering?: string;
     roles?: string;
+    owner_id?: string;
   };
 };
 
