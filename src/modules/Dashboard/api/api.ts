@@ -146,6 +146,11 @@ export const getInvitationsApi = ({ appletId }: AppletId, signal?: AbortSignal) 
     signal,
   });
 
+export const getEventsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  authApiClient.get(`/applet/${appletId}/events`, {
+    signal,
+  });
+
 export const updatePinApi = ({ profileId, newState }: UpdatePin, signal?: AbortSignal) =>
   authApiClient.put(
     '/account/manage/pin',

@@ -20,6 +20,14 @@ export const applets = {
   thunk,
   slice,
   actions: slice.actions,
+  useEventsData: (): AppletsSchema['events']['data'] =>
+    useAppSelector(
+      ({
+        applets: {
+          events: { data },
+        },
+      }) => data,
+    ),
   useData: (): AppletsSchema['applets']['data'] =>
     useAppSelector(
       ({
