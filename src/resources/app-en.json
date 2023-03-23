@@ -607,5 +607,13 @@
   "audioExceedSize": "Audio is more than {{size}}",
   "audioWrongFormat": "Audio file has wrong format",
   "drawingExample": "Drawing Example",
-  "drawingBackground": "Drawing Background"
+  "drawingBackground": "Drawing Background",
+  "selectActivity": "Select Activity",
+  "activityRequired": "Activity is required",
+  "activityDeactivated": "Activity is deactivated in the builder",
+  "flowDeactivated": "Activity flow is deactivated in the builder",
+  "timerDurationCheck": "Timer duration must be greater than 00:00",
+  "selectValidPeriod": "Select valid time period",
+  "timeNotificationsError": "The time selected on the Notifications tab is outside the Activity's availability time. Please, update.",
+  "setTimeLimit": "Set time limit"
 }

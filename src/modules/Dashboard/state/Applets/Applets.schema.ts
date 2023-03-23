@@ -2,7 +2,7 @@ import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 
 import { BaseSchema } from 'shared/state/Base';
-import { AppletId, GetAppletsParams } from 'api';
+import { AppletId, GetAppletsParams, Periodicity, TimerType } from 'api';
 
 export type CreateAppletsStateData = {
   builder: ActionReducerMapBuilder<AppletsSchema>;
@@ -31,7 +31,7 @@ export type Applet = {
   updatedAt: string;
 };
 
-type ActivityFlow = {
+export type ActivityFlow = {
   id: string;
   name: string;
   description: string;
@@ -42,7 +42,7 @@ type ActivityFlow = {
   isHidden?: boolean;
 };
 
-type Activity = {
+export type Activity = {
   id: string;
   name: string;
   description: string;
@@ -91,7 +91,27 @@ export type SingleApplet = {
   theme: Theme;
 };
 
+export type Event = {
+  startTime: string;
+  endTime: string;
+  accessBeforeSchedule: boolean;
+  oneTimeCompletion: boolean;
+  timer: string;
+  timerType: TimerType;
+  id: string;
+  periodicity: {
+    type: Periodicity;
+    startDate: string;
+    endDate: string;
+    selectedDate: string;
+  };
+  respondentId: string;
+  activityId: string;
+  flowId: string;
+};
+
 export type AppletsSchema = {
   applets: BaseSchema<{ result: Applet[]; count: number } | null>;
   applet: BaseSchema<{ result: SingleApplet } | null>;
+  events: BaseSchema<{ result: Event[]; count: number } | null>;
 };

@@ -10,32 +10,45 @@ import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup'
 
 export const CreateActivityPopup = ({
   open,
-  activityName,
   setCreateActivityPopupVisible,
+  defaultStartDate,
 }: CreateActivityPopupProps) => {
   const { t } = useTranslation('app');
   const activityFormRef = useRef() as RefObject<ActivityFormRef>;
-  const [removeAllScheduledEventsPopupVisible, setRemoveAllScheduledEventsPopupVisible] =
-    useState(false);
-  const [confirmScheduledAcessPopupVisible, setConfirmScheduledAccessPopupVisible] =
-    useState(false);
+  const [currentActivityName, setCurrentActivityName] = useState('');
+  const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
+  const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
 
-  const onClose = () => setCreateActivityPopupVisible(false);
+  const handleCreateActivityClose = () => setCreateActivityPopupVisible(false);
 
-  const onSubmit = () => {
+  const onCreateActivitySubmit = () => {
     if (activityFormRef?.current) {
       activityFormRef.current.submitForm();
     }
   };
 
-  const onConfirmScheduledAccessClose = () => {
-    setConfirmScheduledAccessPopupVisible(false);
-    setCreateActivityPopupVisible(true);
+  const onRemoveAlwaysAvailableClose = () => {
+    setRemoveAlwaysAvailablePopupVisible(false);
   };
 
-  const onRemoveAllScheduledEventsClose = () => {
-    setRemoveAllScheduledEventsPopupVisible(false);
-    setCreateActivityPopupVisible(true);
+  const onRemoveAllScheduledClose = () => {
+    setRemoveAllScheduledPopupVisible(false);
+  };
+
+  const onRemoveAllScheduledSubmit = async () => {
+    if (activityFormRef?.current) {
+      await activityFormRef.current.createEvent();
+      setRemoveAllScheduledPopupVisible(false);
+      handleCreateActivityClose();
+    }
+  };
+
+  const onRemoveAlwaysAvailableSubmit = async () => {
+    if (activityFormRef?.current) {
+      await activityFormRef.current.createEvent();
+      setRemoveAlwaysAvailablePopupVisible(false);
+      handleCreateActivityClose();
+    }
   };
 
   return (
@@ -43,34 +56,39 @@ export const CreateActivityPopup = ({
       {open && (
         <Modal
           open={open}
-          onClose={onClose}
-          onSubmit={onSubmit}
+          onClose={handleCreateActivityClose}
+          onSubmit={onCreateActivitySubmit}
           title={t('createActivitySchedule')}
           buttonText={t('save')}
           width="67.1"
+          sxProps={{
+            opacity: removeAllScheduledPopupVisible || removeAlwaysAvailablePopupVisible ? 0 : 1,
+          }}
         >
           <ActivityForm
             ref={activityFormRef}
-            submitCallback={onClose}
-            setRemoveAllEventsPopupVisible={setRemoveAllScheduledEventsPopupVisible}
-            setConfirmScheduledAccessPopupVisible={setConfirmScheduledAccessPopupVisible}
+            submitCallback={handleCreateActivityClose}
+            setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
+            setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
+            setActivityName={setCurrentActivityName}
+            defaultStartDate={defaultStartDate}
           />
         </Modal>
       )}
-      {removeAllScheduledEventsPopupVisible && (
+      {removeAllScheduledPopupVisible && (
         <RemoveAllScheduledEventsPopup
-          open={removeAllScheduledEventsPopupVisible}
-          onClose={onRemoveAllScheduledEventsClose}
-          onSubmit={() => setRemoveAllScheduledEventsPopupVisible(false)}
-          activityName={activityName}
+          open={removeAllScheduledPopupVisible}
+          onClose={onRemoveAllScheduledClose}
+          onSubmit={onRemoveAllScheduledSubmit}
+          activityName={currentActivityName}
         />
       )}
-      {confirmScheduledAcessPopupVisible && (
+      {removeAlwaysAvailablePopupVisible && (
         <ConfirmScheduledAccessPopup
-          open={confirmScheduledAcessPopupVisible}
-          onClose={onConfirmScheduledAccessClose}
-          onSubmit={() => setConfirmScheduledAccessPopupVisible(false)}
-          activityName={activityName}
+          open={removeAlwaysAvailablePopupVisible}
+          onClose={onRemoveAlwaysAvailableClose}
+          onSubmit={onRemoveAlwaysAvailableSubmit}
+          activityName={currentActivityName}
         />
       )}
     </>

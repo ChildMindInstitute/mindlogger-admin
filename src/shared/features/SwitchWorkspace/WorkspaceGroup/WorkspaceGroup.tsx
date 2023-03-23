@@ -29,7 +29,7 @@ export const WorkspaceGroup = ({
     dispatch(
       getWorkspaceApplets({
         params: {
-          owner_id: workspace.ownerId,
+          ownerId: workspace.ownerId,
           limit: DEFAULT_ROWS_PER_PAGE,
           // search,
           // page,
@@ -59,7 +59,6 @@ export const WorkspaceGroup = ({
                 {workspace.workspaceName}
               </StyledBodyLarge>
             </StyledItemContent>
-
             {currentWorkspace?.ownerId === workspace.ownerId && (
               <StyledSelect>
                 <Svg id="selected" />
