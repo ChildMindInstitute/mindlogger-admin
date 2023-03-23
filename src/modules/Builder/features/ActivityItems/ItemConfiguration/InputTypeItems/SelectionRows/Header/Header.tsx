@@ -11,15 +11,15 @@ import {
   theme,
 } from 'shared/styles';
 import { createArray } from 'shared/utils';
-import {
-  SelectionRowsItem,
-  DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
-  DEFAULT_SELECTION_ROWS_SCORE,
-} from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import { StyledSelectController } from './Header.styles';
 import { HeaderProps } from './Header.types';
 import { getMultipleSelectionRowsOptions } from './Header.utils';
+import {
+  DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
+  DEFAULT_SELECTION_ROWS_SCORE,
+} from '../../../ItemConfiguration.const';
+import { SelectionRowsItem } from '../../../ItemConfiguration.types';
 
 const commonSelectArrowProps = {
   id: 'navigate-down',

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { getEmptySelectionItem } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { Svg } from 'shared/components';
 import { StyledFlexColumn } from 'shared/styles';
 
@@ -11,6 +10,7 @@ import { Options } from './Options';
 import { Items } from './Items';
 import { StyledSelectionRowsContainer, StyledAddRowButton } from './SelectionRows.styles';
 import { SelectionRowsProps } from './SelectionRows.types';
+import { getEmptySelectionItem } from '../../ItemConfiguration.utils';
 
 export const SelectionRows = ({ isSingle }: SelectionRowsProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
