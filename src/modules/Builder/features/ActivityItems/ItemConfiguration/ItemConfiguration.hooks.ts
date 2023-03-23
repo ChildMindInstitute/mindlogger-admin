@@ -9,7 +9,7 @@ import {
   ItemConfigurationSettings,
 } from './ItemConfiguration.types';
 import { DEFAULT_TIMER_VALUE } from './ItemConfiguration.const';
-import { getEmptySliderOption } from './ItemConfiguration.utils';
+import { getEmptySelectionRows, getEmptySliderOption } from './ItemConfiguration.utils';
 
 export const useOptionalItemSetup = ({
   name,
@@ -41,6 +41,7 @@ export const useSettingsSetup = ({
   watch,
   register,
   unregister,
+  clearErrors,
   removeOptions,
   handleAddOption,
   removeAlert,
@@ -48,6 +49,7 @@ export const useSettingsSetup = ({
 }: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
+  const selectionRows = watch('selectionRows');
 
   const hasTimer = settings?.includes(ItemConfigurationSettings.HasTimer);
   const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
@@ -74,6 +76,18 @@ export const useSettingsSetup = ({
     ) {
       setValue('sliderOptions', [getEmptySliderOption()]);
     } else setValue('sliderOptions', undefined);
+
+    if (
+      selectedInputType === ItemInputTypes.SingleSelectionPerRow ||
+      selectedInputType === ItemInputTypes.MultipleSelectionPerRow
+    ) {
+      if (selectionRows) {
+        setValue('selectionRows', getEmptySelectionRows(selectedInputType));
+        clearErrors('selectionRows');
+      } else {
+        register('selectionRows', { value: getEmptySelectionRows(selectedInputType) });
+      }
+    } else unregister('selectionRows');
   }, [selectedInputType]);
 
   useEffect(() => {

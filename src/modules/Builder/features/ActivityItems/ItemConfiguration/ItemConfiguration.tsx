@@ -11,7 +11,6 @@ import {
   StyledBodyMedium,
   StyledClearedButton,
   StyledFlexTopCenter,
-  StyledFlexTopStart,
   StyledHeadlineLarge,
   StyledTitleLarge,
   theme,
@@ -40,6 +39,7 @@ import {
   AudioRecord,
   Geolocation,
   TextResponse,
+  SelectionRows,
   Drawing,
 } from './InputTypeItems';
 import {
@@ -72,7 +72,7 @@ export const ItemConfiguration = () => {
     mode: 'onChange',
   });
 
-  const { control, watch, setValue, getValues, register, unregister } = methods;
+  const { control, watch, setValue, getValues, register, unregister, clearErrors } = methods;
 
   const {
     fields: options,
@@ -136,6 +136,7 @@ export const ItemConfiguration = () => {
     handleAddOption,
     removeAlert,
     setShowColorPalette,
+    clearErrors,
   });
 
   return (
@@ -237,6 +238,8 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.SliderRows && (
             <SliderRows name="sliderOptions" control={control} isMultiple />
           )}
+          {selectedInputType === ItemInputTypes.SingleSelectionPerRow && <SelectionRows isSingle />}
+          {selectedInputType === ItemInputTypes.MultipleSelectionPerRow && <SelectionRows />}
           {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
           {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
           {selectedInputType === ItemInputTypes.Video && <VideoResponse />}

@@ -1,4 +1,5 @@
 import { Svg } from 'shared/components';
+import { createArray } from 'shared/utils';
 
 export const Schedules = {
   DailyJournal: 'dailyJournal',
@@ -31,7 +32,7 @@ export const scheduleOptions = [
   },
 ];
 
-export const mockedScheduleData = new Array(22).fill(null).map((_, index) => ({
+export const mockedScheduleData = createArray(22, (index) => ({
   activityName: {
     content: () => `Pediatric Screener #${index}`,
     value: `Pediatric Screener ${index}`,

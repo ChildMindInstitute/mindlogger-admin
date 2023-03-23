@@ -7,6 +7,8 @@ type FormInputProps = {
   maxLength?: number;
   minNumberValue?: number;
   maxNumberValue?: number;
+  onAddNumber?: (value: number) => void;
+  onDistractNumber?: (value: number) => void;
 } & TextFieldProps;
 
 export type InputControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;
