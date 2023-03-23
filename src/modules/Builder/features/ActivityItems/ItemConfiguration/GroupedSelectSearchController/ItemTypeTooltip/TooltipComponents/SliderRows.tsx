@@ -21,7 +21,7 @@ export const SliderRows = () => {
           <Svg id="slider-rows-second" width="98" height="48" />
         </StyledFlexTopCenter>
       </StyledPresentation>
-      <StyledBodyMedium>{t('sliderRowsHint')}</StyledBodyMedium>
+      <StyledBodyMedium>{t('sliderRowsHint')}.</StyledBodyMedium>
     </>
   );
 };

@@ -52,10 +52,7 @@ export const SelectionPerRow = ({ uiType }: SelectionProps) => {
         ))}
       </StyledPresentation>
       <StyledBodyMedium>
-        {isSingleSelection ? t('singleSelectionPerRowHint') : t('multipleSelectionPerRowHint')}
-      </StyledBodyMedium>
-      <StyledBodyMedium>
-        {isSingleSelection ? t('respondentSelectSingle') : t('respondentSelectMultiple')}
+        {isSingleSelection ? t('singleSelectionPerRowHint') : t('multipleSelectionPerRowHint')}.
       </StyledBodyMedium>
     </>
   );

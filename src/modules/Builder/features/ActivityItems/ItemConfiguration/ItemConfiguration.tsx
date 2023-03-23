@@ -11,7 +11,6 @@ import {
   StyledBodyMedium,
   StyledClearedButton,
   StyledFlexTopCenter,
-  StyledFlexTopStart,
   StyledHeadlineLarge,
   StyledTitleLarge,
   theme,

@@ -21,7 +21,6 @@ export const Dashed = ({ uiType }: DashedProps) => {
   const isTextUiType = uiType === DashedUiType.Text;
   const isDrawingUiType = uiType === DashedUiType.Drawing;
   const isMessageUiType = uiType === DashedUiType.Message;
-  const isAudioPlayerUiType = uiType === DashedUiType.AudioPlayer;
 
   const commonStyles = { mt: theme.spacing(0.2), textAlign: 'center' };
 
@@ -104,10 +103,7 @@ export const Dashed = ({ uiType }: DashedProps) => {
           )}
         </StyledDashedWrapper>
       </StyledPresentation>
-      <StyledBodyMedium>{getText()[uiType]}</StyledBodyMedium>
-      {(isMessageUiType || isAudioPlayerUiType) && (
-        <StyledBodyMedium>{t('noAnswersRequired')}</StyledBodyMedium>
-      )}
+      <StyledBodyMedium>{getText()[uiType]}.</StyledBodyMedium>
     </>
   );
 };

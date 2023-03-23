@@ -29,7 +29,7 @@ export const Selection = ({ uiType }: SelectionProps) => {
         ))}
       </StyledPresentation>
       <StyledBodyMedium>
-        {isSingleSelection ? t('singleSelectionHint') : t('multipleSelectionHint')}
+        {isSingleSelection ? t('singleSelectionHint') : t('multipleSelectionHint')}.
       </StyledBodyMedium>
     </>
   );

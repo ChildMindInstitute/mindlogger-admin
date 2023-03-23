@@ -31,7 +31,7 @@ export const TimeRange = () => {
           </StyledDateLine>
         </StyledPresentationLine>
       </StyledPresentation>
-      <StyledBodyMedium>{t('timeRangeHint')}</StyledBodyMedium>
+      <StyledBodyMedium>{t('timeRangeHint')}.</StyledBodyMedium>
     </>
   );
 };

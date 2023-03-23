@@ -13,7 +13,7 @@ export const Slider = () => {
       <StyledPresentation>
         <Svg id="slider-number" width="114" height="72" />
       </StyledPresentation>
-      <StyledBodyMedium>{t('sliderHint')}</StyledBodyMedium>
+      <StyledBodyMedium>{t('sliderHint')}.</StyledBodyMedium>
     </>
   );
 };
