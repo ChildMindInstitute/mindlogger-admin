@@ -536,5 +536,6 @@
   "timerDurationCheck": "La durée de la minuterie doit être supérieure à 00:00",
   "selectValidPeriod": "Sélectionnez une période de temps valide",
   "timeNotificationsError": "Le temps sélectionné dans l'onglet Notifications est en dehors de la période de disponibilité de l'activité. Veuillez mettre à jour.",
+  "setPalette": "Définir la palette",
   "setTimeLimit": "Limite de temps"
 }

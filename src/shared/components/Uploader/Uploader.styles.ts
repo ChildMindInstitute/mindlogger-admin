@@ -78,7 +78,13 @@ export const StyledImgContainer = styled(StyledFlexColumn, shouldForwardProp)`
   `};
 `;
 
-export const UploadedImgContainer = styled(Box)`
+export const UploadedImgContainer = styled(Box, shouldForwardProp)`
+  ${({ isPrimaryUiType }: { isPrimaryUiType: boolean }) =>
+    !isPrimaryUiType &&
+    `
+     display: flex;
+     align-items: center;
+  `};
   position: relative;
 `;
 
@@ -114,11 +120,25 @@ export const StyledButtonGroup = styled(ButtonGroup, shouldForwardProp)`
 `;
 
 export const StyledUploadImg = styled('img', shouldForwardProp)`
-  ${({ width, height }: { width: number; height: number }) => `
+  ${({
+    width,
+    height,
+    isPrimaryUiType,
+  }: {
+    width: number;
+    height: number;
+    isPrimaryUiType: boolean;
+  }) => `
     width: ${width - 0.2}rem;
     height: ${height - 0.2}rem;
+    border-radius: ${isPrimaryUiType ? variables.borderRadius.lg2 : variables.borderRadius.xs};
+    border: ${
+      isPrimaryUiType
+        ? 'none'
+        : `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`
+    };
+};
   `}
-  border-radius: ${variables.borderRadius.lg2};
   object-fit: cover;
   ${absolutePosition}
 `;

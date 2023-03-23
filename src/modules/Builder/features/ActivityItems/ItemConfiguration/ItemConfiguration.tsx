@@ -53,6 +53,7 @@ import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils'
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
+  const [showColorPalette, setShowColorPalette] = useState(false);
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const { t } = useTranslation('app');
@@ -121,7 +122,17 @@ export const ItemConfiguration = () => {
     );
   };
 
-  useSettingsSetup({ control, setValue, getValues, watch, register, unregister });
+  useSettingsSetup({
+    setValue,
+    getValues,
+    watch,
+    register,
+    unregister,
+    removeOptions,
+    handleAddOption,
+    removeAlert,
+    setShowColorPalette,
+  });
 
   return (
     <FormProvider {...methods}>
@@ -169,35 +180,49 @@ export const ItemConfiguration = () => {
             </Grid>
           </Grid>
           <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
-            {t('displayedСontent')}
+            {t('displayedContent')}
           </StyledTitleLarge>
           <EditorController name="body" control={control} />
           {hasOptions && (
-            <StyledTitleLarge sx={{ m: theme.spacing(4.8, 0, 2.4) }}>
-              {t('responseOptions')}
-            </StyledTitleLarge>
-          )}
-          {hasOptions && hasColorPalette && <ColorPalette />}
-          {hasOptions && (
-            <StyledOptionsWrapper>
-              {options?.length
-                ? options.map((option, index) => (
-                    <SelectionOption
-                      key={option.id}
-                      onRemoveOption={removeOptions}
-                      onUpdateOption={updateOptions}
-                      index={index}
-                    />
-                  ))
-                : null}
-              <Button
-                onClick={handleAddOption}
-                variant="outlined"
-                startIcon={<Svg id="add" width="20" height="20" />}
+            <>
+              <StyledFlexTopCenter
+                sx={{ m: theme.spacing(4.8, 0, 2.4), justifyContent: 'space-between' }}
               >
-                {t('addOption')}
-              </Button>
-            </StyledOptionsWrapper>
+                <StyledTitleLarge>{t('responseOptions')}</StyledTitleLarge>
+                {hasColorPalette && !showColorPalette && (
+                  <Button
+                    onClick={() => setShowColorPalette(true)}
+                    variant="outlined"
+                    startIcon={<Svg id="paint-outline" width="20" height="20" />}
+                  >
+                    {t('setPalette')}
+                  </Button>
+                )}
+              </StyledFlexTopCenter>
+              {hasColorPalette && showColorPalette && (
+                <ColorPalette setShowColorPalette={setShowColorPalette} />
+              )}
+              <StyledOptionsWrapper>
+                {options?.length
+                  ? options.map((option, index) => (
+                      <SelectionOption
+                        key={option.id}
+                        onRemoveOption={removeOptions}
+                        onUpdateOption={updateOptions}
+                        optionsLength={options.length}
+                        index={index}
+                      />
+                    ))
+                  : null}
+                <Button
+                  onClick={handleAddOption}
+                  variant="outlined"
+                  startIcon={<Svg id="add" width="20" height="20" />}
+                >
+                  {t('addOption')}
+                </Button>
+              </StyledOptionsWrapper>
+            </>
           )}
           {selectedInputType === ItemInputTypes.NumberSelection && (
             <NumberSelection name="minNumber" maxName="maxNumber" />

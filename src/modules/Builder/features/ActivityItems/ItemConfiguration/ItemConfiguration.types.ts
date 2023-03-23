@@ -1,6 +1,6 @@
+import { Dispatch, SetStateAction } from 'react';
 import { ColorResult } from 'react-color';
 import {
-  Control,
   FieldValues,
   Path,
   UseFormGetValues,
@@ -81,12 +81,15 @@ export type ItemsOptionGroup = {
 };
 
 export type SettingsSetupProps = {
-  control: Control<ItemConfigurationForm>;
   setValue: UseFormSetValue<ItemConfigurationForm>;
   getValues: UseFormGetValues<ItemConfigurationForm>;
   watch: UseFormWatch<ItemConfigurationForm>;
   register: UseFormRegister<ItemConfigurationForm>;
   unregister: UseFormUnregister<ItemConfigurationForm>;
+  removeOptions: () => void;
+  handleAddOption: () => void;
+  removeAlert: () => void;
+  setShowColorPalette: Dispatch<SetStateAction<boolean>>;
 };
 
 export type OptionalItemSetupProps = {
