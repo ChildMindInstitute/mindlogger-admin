@@ -5,7 +5,8 @@ import { StyledSvgArrowContainer, StyledTitleBoldMedium, theme, variables } from
 
 export const ActivityItemGrid = `
   display: grid;
-  grid-template-columns: 4.8rem auto;
+  grid-template-columns: 4rem auto;
+  column-gap: 0.2rem;
 `;
 
 export const StyledActivityContainer = styled(Box)`
@@ -22,6 +23,7 @@ export const StyledActivityContainer = styled(Box)`
 
 export const StyledActivityHeader = styled(Box)`
   ${ActivityItemGrid}
+  column-gap: 0.4rem;
   cursor: pointer;
 
   &:hover {

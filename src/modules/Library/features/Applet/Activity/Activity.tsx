@@ -38,6 +38,7 @@ export const Activity = ({ appletId, activity: { id, name, items } }: ActivityPr
   return (
     <StyledActivityContainer>
       <Checkbox
+        sx={{ width: '4rem', height: '4rem' }}
         checked={activityChecked}
         indeterminate={activityIndeterminate}
         onChange={handleActivityChecked}

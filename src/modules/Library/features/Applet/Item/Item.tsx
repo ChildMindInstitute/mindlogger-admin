@@ -42,6 +42,7 @@ export const Item = ({ item, appletId, activityId }: ItemProps) => {
         control={control}
         render={() => (
           <Checkbox
+            sx={{ width: '4rem', height: '4rem' }}
             checked={!!getValues()[appletId].find(({ id }) => id === item.id)}
             onChange={handleSelect}
           />

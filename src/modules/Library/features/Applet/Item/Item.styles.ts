@@ -28,6 +28,7 @@ export const StyledItemContainer = styled(StyledFlexColumn)`
 
 export const StyledItemHeader = styled(Box)`
   ${ActivityItemGrid}
+  column-gap: 0.4rem;
   cursor: pointer;
 
   &:hover {
