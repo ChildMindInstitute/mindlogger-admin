@@ -9,10 +9,6 @@ const {
   font: { size, letterSpacing, lineHeight, weight },
 } = variables;
 
-export const StyledSelect = styled(Select)`
-  padding-right: ${theme.spacing(0.8)};
-`;
-
 export const StyledGroupName = styled(ListItem, shouldForwardProp)`
   padding: ${theme.spacing(1.6)};
   border-top: ${borderWidth.md} solid ${palette.outline_variant};
