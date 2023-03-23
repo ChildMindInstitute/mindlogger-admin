@@ -1,5 +1,5 @@
 import { OverridableStringUnion } from '@mui/types';
-import { ButtonPropsColorOverrides } from '@mui/material';
+import { ButtonPropsColorOverrides, SxProps } from '@mui/material';
 import { BaseSyntheticEvent } from 'react';
 
 type BtnSubmit =
@@ -30,4 +30,5 @@ export type ModalProps = {
   secondBtnText?: string;
   onSecondBtnSubmit?: BtnSubmit;
   disabledSecondBtn?: boolean;
+  sxProps?: SxProps;
 };

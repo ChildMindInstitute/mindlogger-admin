@@ -1,11 +1,12 @@
-import { styled } from '@mui/system';
+import styled from '@emotion/styled/macro';
 import { Box, FormControlLabel } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { StyledSvgArrowContainer, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
 
 export const ActivityItemGrid = `
   display: grid;
-  grid-template-columns: 4.8rem auto;
+  grid-template-columns: 4rem auto;
+  column-gap: 0.2rem;
 `;
 
 export const StyledActivityContainer = styled(Box)`
@@ -13,7 +14,7 @@ export const StyledActivityContainer = styled(Box)`
   align-items: start;
   background: ${variables.palette.surface1};
   border-radius: ${variables.borderRadius.lg};
-  padding: ${theme.spacing(0.6, 2)};
+  padding: ${theme.spacing(1.6, 2)};
 
   &:not(:last-child) {
     margin-bottom: ${theme.spacing(0.8)};
@@ -22,21 +23,25 @@ export const StyledActivityContainer = styled(Box)`
 
 export const StyledActivityHeader = styled(Box)`
   ${ActivityItemGrid}
+  column-gap: 0.4rem;
   cursor: pointer;
+
+  &:hover {
+    ${StyledSvgArrowContainer} {
+      background-color: ${variables.palette.on_surface_alfa8};
+    }
+  }
 `;
 
 export const StyledFormControlLabel = styled(FormControlLabel)`
   margin: 0;
 `;
 
-export const StyledNavigateSvg = styled(Box)`
+export const StyledActivityName = styled(StyledTitleBoldMedium)`
   display: flex;
-  justify-content: center;
-  padding: ${theme.spacing(0.9, 0)};
-
-  svg {
-    fill: ${variables.palette.on_surface_variant};
-  }
+  align-items: center;
+  padding: ${theme.spacing(0.7, 0)};
+  color: ${variables.palette.on_surface_variant};
 `;
 
 export const StyledItemsList = styled(Box)`

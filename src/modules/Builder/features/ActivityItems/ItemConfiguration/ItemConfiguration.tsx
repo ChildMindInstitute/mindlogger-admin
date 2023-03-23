@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { ColorResult } from 'react-color';
 
 import { Svg } from 'shared/components';
@@ -39,7 +39,6 @@ import {
 import {
   StyledContent,
   StyledHeader,
-  StyledInputWrapper,
   StyledItemConfiguration,
   StyledOptionsWrapper,
 } from './ItemConfiguration.styles';
@@ -139,31 +138,40 @@ export const ItemConfiguration = () => {
           </StyledFlexTopCenter>
         </StyledHeader>
         <StyledContent>
-          <StyledInputWrapper>
-            <GroupedSelectSearchController
-              name="itemsInputType"
-              options={itemsTypeOptions}
-              control={control}
-            />
-          </StyledInputWrapper>
-          <StyledInputWrapper>
-            <StyledBodyMedium
-              sx={{ m: theme.spacing(0.2, 0, 4, 1.4) }}
-              color={variables.palette.on_surface_variant}
-            >
-              {selectedInputType && getInputTypeTooltip()[selectedInputType]}
-            </StyledBodyMedium>
-            <InputController
-              fullWidth
-              name="name"
-              control={control}
-              label={t('itemName')}
-              type="text"
-              sx={{ mb: theme.spacing(4) }}
-            />
-          </StyledInputWrapper>
-          <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
+          <Grid container direction="row" columns={2} spacing={2.4}>
+            <Grid item xs={1}>
+              <GroupedSelectSearchController
+                name="itemsInputType"
+                options={itemsTypeOptions}
+                control={control}
+              />
+              <StyledBodyMedium
+                sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
+                color={variables.palette.on_surface_variant}
+              >
+                {selectedInputType && getInputTypeTooltip()[selectedInputType]}
+              </StyledBodyMedium>
+            </Grid>
+            <Grid item xs={1}>
+              <InputController
+                fullWidth
+                name="name"
+                control={control}
+                label={t('itemName')}
+                type="text"
+                sx={{ mb: theme.spacing(4) }}
+              />
+            </Grid>
+          </Grid>
+          <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
+            {t('displayedСontent')}
+          </StyledTitleLarge>
           <EditorController name="body" control={control} />
+          {hasOptions && (
+            <StyledTitleLarge sx={{ m: theme.spacing(4.8, 0, 2.4) }}>
+              {t('responseOptions')}
+            </StyledTitleLarge>
+          )}
           {hasOptions && hasColorPalette && <ColorPalette />}
           {hasOptions && (
             <StyledOptionsWrapper>

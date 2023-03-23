@@ -2,6 +2,9 @@ import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
 import { SxProps } from '@mui/material';
 
+export type DateType = Date | null;
+export type DateArrayType = DateType[];
+
 export enum DateVariant {
   Start = 'start',
   End = 'end',

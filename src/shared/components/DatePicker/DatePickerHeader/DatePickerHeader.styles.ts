@@ -1,11 +1,10 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledClearedButton } from 'shared/styles/styledComponents';
+import { theme, variables, StyledClearedButton } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
-export const StyledHeader = styled(Box)`
+export const StyledHeader = styled(Box, shouldForwardProp)`
   align-items: center;
   padding: ${theme.spacing(0.8, 1.2)};
   display: ${({ isStartEndingDate }: { isStartEndingDate: boolean }) =>
