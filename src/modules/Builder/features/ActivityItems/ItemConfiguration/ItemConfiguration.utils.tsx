@@ -49,7 +49,7 @@ export const getEmptySelectionItem = (scoresQuantity: number) => ({
 export const getEmptySelectionRows = (type: SelectionRows['type']): SelectionRows => ({
   type,
   items: [getEmptySelectionItem(1)],
-  options: [DEFAULT_EMPTY_SELECTION_ROWS_OPTION],
+  options: [{ ...DEFAULT_EMPTY_SELECTION_ROWS_OPTION }],
 });
 
 export const getPaletteColor = (paletteName: string, index: number) => {

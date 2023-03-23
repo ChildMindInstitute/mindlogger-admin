@@ -2,8 +2,7 @@ import * as yup from 'yup';
 
 import i18n from 'i18n';
 
-export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
-export const SELECTION_ROW_ITEM_LABEL_MAX_LENGTH = 11;
+import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from './ItemConfiguration.const';
 
 export const SelectionRowsItemScheme = () => {
   const { t } = i18n;
@@ -14,7 +13,7 @@ export const SelectionRowsItemScheme = () => {
     t('visibilityDecreasesOverMaxCharacters', { max });
 
   return yup.object({
-    label: yup.string().max(SELECTION_ROW_ITEM_LABEL_MAX_LENGTH, maxLengthLabel),
+    label: yup.string().max(SELECTION_ROW_OPTION_LABEL_MAX_LENGTH, maxLengthLabel),
     tooltip: yup.string(),
     image: yup.string(),
     scores: yup.array().of(yup.number().required(numberValueIsRequired)),

@@ -42,6 +42,7 @@ export const useSettingsSetup = ({
   watch,
   register,
   unregister,
+  clearErrors,
 }: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
@@ -81,6 +82,7 @@ export const useSettingsSetup = ({
     ) {
       if (selectionRows) {
         setValue('selectionRows', getEmptySelectionRows(selectedInputType));
+        clearErrors('selectionRows');
       } else {
         register('selectionRows', { value: getEmptySelectionRows(selectedInputType) });
       }

@@ -18,7 +18,7 @@ import {
   SelectionRowsItem,
   SelectionRowsOption,
 } from '../../../ItemConfiguration.types';
-import { SELECTION_ROW_ITEM_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.scheme';
+import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.const';
 
 const commonUploaderProps = {
   width: 5.6,
@@ -61,7 +61,7 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
               control={control}
               name={`${name}.label`}
               placeholder={t('selectionRowsItemPlaceholder', { index: index + 1 })}
-              maxLength={SELECTION_ROW_ITEM_LABEL_MAX_LENGTH}
+              maxLength={SELECTION_ROW_OPTION_LABEL_MAX_LENGTH}
             />
           </StyledFlexTopStart>
           {hasTooltips && (

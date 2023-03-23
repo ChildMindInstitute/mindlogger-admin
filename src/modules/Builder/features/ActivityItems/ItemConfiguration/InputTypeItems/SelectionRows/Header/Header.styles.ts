@@ -8,6 +8,7 @@ export const StyledSelectController = styled(SelectController)`
     font-size: ${variables.font.size.md};
     color: ${variables.palette.primary};
 
+    //TODO: remove important if possible
     &::before,
     &::after {
       border-bottom: none !important;

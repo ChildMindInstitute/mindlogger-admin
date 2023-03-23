@@ -7,7 +7,7 @@ import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
 
 import { StyledSelectionRow, StyledSelectionBox } from '../SelectionRows.styles';
 import { ItemConfigurationSettings, SelectionRowsOption } from '../../../ItemConfiguration.types';
-import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.scheme';
+import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.const';
 
 const commonUploaderProps = {
   width: 5.6,

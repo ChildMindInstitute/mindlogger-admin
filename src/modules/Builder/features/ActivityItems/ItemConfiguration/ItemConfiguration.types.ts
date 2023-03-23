@@ -8,6 +8,7 @@ import {
   UseFormWatch,
   UseFormRegister,
   UseFormUnregister,
+  UseFormClearErrors,
 } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
@@ -108,6 +109,7 @@ export type SettingsSetupProps = {
   watch: UseFormWatch<ItemConfigurationForm>;
   register: UseFormRegister<ItemConfigurationForm>;
   unregister: UseFormUnregister<ItemConfigurationForm>;
+  clearErrors: UseFormClearErrors<ItemConfigurationForm>;
 };
 
 export type OptionalItemSetupProps = {
