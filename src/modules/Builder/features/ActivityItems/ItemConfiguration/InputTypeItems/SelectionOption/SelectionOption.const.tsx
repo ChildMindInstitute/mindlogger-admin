@@ -9,6 +9,7 @@ export const getActions = ({
   isVisible,
   hasColorPicker,
   isColorSet,
+  optionsLength,
 }: OptionActions) => [
   {
     icon: <Svg id={isVisible ? 'visibility-on' : 'visibility-off'} />,
@@ -22,6 +23,7 @@ export const getActions = ({
   },
   {
     icon: <Svg id="trash" />,
+    isDisplayed: optionsLength > 1,
     action: optionRemove,
   },
 ];

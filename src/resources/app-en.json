@@ -480,10 +480,9 @@
   "searchItemType": "Search item type",
   "itemType": "Item Type",
   "itemName": "Item Name",
-  "displayedСontent": "Displayed Сontent",
+  "displayedContent": "Displayed Content",
   "responseOptions": "Response Options",
   "settings": "Settings",
-  "responseOptions": "Response Option",
   "responseOptions_singleSelection": "Single Selection Response Option",
   "responseOptions_multipleSelection": "Multiple Selection Response Options",
   "responseOptions_slider": "Slider Response Options",
@@ -658,7 +657,8 @@
   "timerDurationCheck": "Timer duration must be greater than 00:00",
   "selectValidPeriod": "Select valid time period",
   "timeNotificationsError": "The time selected on the Notifications tab is outside the Activity's availability time. Please, update.",
-  "setTimeLimit": "Set time limit",
   "visibilityDecreasesOverMaxCharacters": "Visibility decreases over {{max}} characters",
-  "numberValueIsRequired": "Number value is required"
+  "numberValueIsRequired": "Number value is required",
+  "setPalette": "Set Palette",
+  "setTimeLimit": "Set time limit"
 }

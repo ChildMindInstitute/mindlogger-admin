@@ -6,7 +6,10 @@ import { shouldForwardProp } from 'shared/utils';
 import { StyledItemOptionContainer } from '../ItemOptionContainer';
 
 export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardProp)`
-  padding: ${theme.spacing(1.6, 2.4, 1.6, 3.4)};
+  padding: ${theme.spacing(2, 2.4, 2, 3.4)};
+  height: ${({ optionOpen }: { optionOpen: boolean; leftBorderColor?: string }) =>
+    optionOpen ? 'auto' : '8.8rem'};
+  justify-content: center;
   position: relative;
 
   svg {
@@ -22,8 +25,13 @@ export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardP
     height: 100%;
     border-top-left-radius: ${variables.borderRadius.lg2};
     border-bottom-left-radius: ${variables.borderRadius.lg2};
-    background-color: ${({ leftBorderColor }: { leftBorderColor?: string }) =>
-      leftBorderColor || 'transparent'};
+    background-color: ${({ leftBorderColor }) => leftBorderColor || 'transparent'};
+  }
+`;
+
+export const StyledSvgWrapper = styled(StyledFlexTopCenter)`
+  svg {
+    stroke: ${variables.palette.on_surface_variant};
   }
 `;
 
@@ -44,4 +52,12 @@ export const StyledTooltipWrapper = styled(StyledFlexColumn)`
   width: calc(100% - 10.9rem);
   margin-left: auto;
   text-align: right;
+`;
+
+export const StyledImg = styled('img')`
+  border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  width: 5.4rem;
+  height: 5.4rem;
+  border-radius: ${variables.borderRadius.xs};
+  object-fit: cover;
 `;
