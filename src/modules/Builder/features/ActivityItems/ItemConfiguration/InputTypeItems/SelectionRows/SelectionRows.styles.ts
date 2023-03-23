@@ -36,6 +36,12 @@ export const StyledSelectionBox = styled(StyledFlexColumn)`
   && .MuiSvgIcon-root {
     color: ${variables.palette.on_surface_variant};
   }
+
+  .MuiFormHelperText-root {
+    position: absolute;
+    bottom: -2.4rem;
+    font-size: ${variables.font.size.md};
+  }
 `;
 
 export const StyledAddRowButton = styled(Button)`
