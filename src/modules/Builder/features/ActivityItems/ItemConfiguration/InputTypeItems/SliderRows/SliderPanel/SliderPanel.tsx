@@ -24,8 +24,9 @@ import {
   getTableRows,
   getStaticHeadRow,
   getStaticBodyRow,
-  getMarksByScores,
+  getMarks,
 } from './SliderPanel.utils';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 
 const commonUploaderProps = {
   width: 5.6,
@@ -46,6 +47,10 @@ export const SliderPanel = <T extends FieldValues>({
   const { control, watch, setValue, getValues } = useFormContext();
 
   const { id, min, max, scores } = watch(name);
+  const settings = watch('settings');
+
+  const hasTickMarks = settings?.includes(ItemConfigurationSettings.HasTickMarks);
+  const hasTickMarksLabels = settings?.includes(ItemConfigurationSettings.HasTickMarksLabels);
 
   watch((data, { name: attributeName }: { name?: string }) => {
     const option = getValues(name);
@@ -84,6 +89,8 @@ export const SliderPanel = <T extends FieldValues>({
     type: 'number',
   };
 
+  const marks = hasTickMarks && getMarks(min, max, hasTickMarksLabels);
+
   return (
     <StyledSliderPanelContainer
       in={isExpanded}
@@ -114,7 +121,7 @@ export const SliderPanel = <T extends FieldValues>({
         />
       </StyledInputContainer>
       <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
-        <StyledSlider min={min} max={max} value={min} marks={getMarksByScores(scores)} disabled />
+        <StyledSlider min={min} max={max} value={min} marks={marks} disabled />
       </StyledFlexTopCenter>
       <StyledInputContainer>
         <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>

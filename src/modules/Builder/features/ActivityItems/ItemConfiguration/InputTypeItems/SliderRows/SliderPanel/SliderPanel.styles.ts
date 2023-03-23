@@ -72,4 +72,13 @@ export const StyledSlider = styled(Slider)`
   .MuiSlider-mark {
     color: ${variables.palette.on_surface_alfa38};
   }
+
+  .MuiSlider-markLabel {
+    font-size: ${variables.font.size.sm};
+    color: ${variables.palette.black};
+  }
+
+  .MuiSlider-thumb {
+    display: flex;
+  }
 `;
