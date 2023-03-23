@@ -11,6 +11,7 @@ export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardP
 
   svg {
     fill: ${variables.palette.on_surface_variant};
+    // stroke: ${variables.palette.on_surface_variant};
   }
 
   &:before {
@@ -24,6 +25,12 @@ export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardP
     border-bottom-left-radius: ${variables.borderRadius.lg2};
     background-color: ${({ leftBorderColor }: { leftBorderColor?: string }) =>
       leftBorderColor || 'transparent'};
+  }
+`;
+
+export const StyledSvgWrapper = styled(StyledFlexTopCenter)`
+  svg {
+    stroke: ${variables.palette.on_surface_variant};
   }
 `;
 
@@ -44,4 +51,12 @@ export const StyledTooltipWrapper = styled(StyledFlexColumn)`
   width: calc(100% - 10.9rem);
   margin-left: auto;
   text-align: right;
+`;
+
+export const StyledImg = styled('img')`
+  border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  width: 5.4rem;
+  height: 5.4rem;
+  border-radius: ${variables.borderRadius.xs};
+  object-fit: cover;
 `;

@@ -17,4 +17,5 @@ export type OptionActions = {
   hasColorPicker: boolean;
   isColorSet: boolean;
   isVisible?: boolean;
+  index: number;
 };

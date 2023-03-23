@@ -117,7 +117,16 @@ export const ItemConfiguration = () => {
     );
   };
 
-  useSettingsSetup({ control, setValue, getValues, watch, register, unregister });
+  useSettingsSetup({
+    setValue,
+    getValues,
+    watch,
+    register,
+    unregister,
+    removeOptions,
+    handleAddOption,
+    removeAlert,
+  });
 
   return (
     <FormProvider {...methods}>
