@@ -1,4 +1,4 @@
-import { styled, MenuItem, ListItem, Select } from '@mui/material';
+import { styled, MenuItem, ListItem } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
