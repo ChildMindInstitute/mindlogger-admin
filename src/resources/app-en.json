@@ -660,5 +660,14 @@
   "visibilityDecreasesOverMaxCharacters": "Visibility decreases over {{max}} characters",
   "numberValueIsRequired": "Number value is required",
   "setPalette": "Set Palette",
-  "setTimeLimit": "Set time limit"
+  "setTimeLimit": "Set time limit",
+  "drawingExampleDescription": "This image is optional and will serve as an example for the drawing. The respondent will not be able to draw on it.",
+  "drawingBackgroundDescription": "This image is optional will serve as the background for the drawing. The respondent will be able to draw on it.",
+  "itemNameRequired": "Item Name is required",
+  "itemNameSymbols": "Item Name must contain only alphanumeric characters or underscores",
+  "displayedContentRequired": "Displayed Content is required",
+  "maxValueBiggerThanMin": "Max Value should be bigger than Min Value",
+  "minValueLessThanMax": "Min Value should be less than Max Value",
+  "minValuePositiveInt": "Min Value must be a positive integer",
+  "maxValuePositiveInt": "Max Value must be a positive integer"
 }

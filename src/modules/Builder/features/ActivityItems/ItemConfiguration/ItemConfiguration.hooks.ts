@@ -16,7 +16,7 @@ export const useOptionalItemSetup = ({
   defaultValue = '',
   itemType,
 }: OptionalItemSetupProps) => {
-  const { control, setValue, getValues } = useFormContext();
+  const { watch, control, setValue, getValues } = useFormContext();
 
   useEffect(() => {
     const initialValue = getValues()[name];
@@ -32,7 +32,7 @@ export const useOptionalItemSetup = ({
     };
   }, [getValues]);
 
-  return { control };
+  return { control, watch, setValue };
 };
 
 export const useSettingsSetup = ({

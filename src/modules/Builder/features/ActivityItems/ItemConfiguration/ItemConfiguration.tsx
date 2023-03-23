@@ -52,7 +52,7 @@ import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfigur
 import { DEFAULT_SCORE_VALUE, itemsTypeOptions } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils';
-import { ItemConfigurationScheme } from './ItemConfiguration.scheme';
+import { itemConfigurationFormSchema } from './ItemConfiguration.schema';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -62,7 +62,7 @@ export const ItemConfiguration = () => {
   const { t } = useTranslation('app');
 
   const methods = useForm<ItemConfigurationForm>({
-    resolver: yupResolver(ItemConfigurationScheme()),
+    resolver: yupResolver(itemConfigurationFormSchema()),
     defaultValues: {
       itemsInputType: '',
       name: '',

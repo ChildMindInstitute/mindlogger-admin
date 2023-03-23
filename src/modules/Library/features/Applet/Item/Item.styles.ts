@@ -13,7 +13,7 @@ import {
 import { ActivityItemGrid } from '../Activity/Activity.styles';
 
 export const StyledItemContainer = styled(StyledFlexColumn)`
-  ${ActivityItemGrid}
+  ${ActivityItemGrid};
   align-items: start;
   padding: ${theme.spacing(0.8, 2.4)};
 
@@ -27,7 +27,7 @@ export const StyledItemContainer = styled(StyledFlexColumn)`
 `;
 
 export const StyledItemHeader = styled(Box)`
-  ${ActivityItemGrid}
+  ${ActivityItemGrid};
   column-gap: 0.4rem;
   cursor: pointer;
 
