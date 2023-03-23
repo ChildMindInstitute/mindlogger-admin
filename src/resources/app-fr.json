@@ -535,6 +535,7 @@
   "timerDurationCheck": "La durée de la minuterie doit être supérieure à 00:00",
   "selectValidPeriod": "Sélectionnez une période de temps valide",
   "timeNotificationsError": "Le temps sélectionné dans l'onglet Notifications est en dehors de la période de disponibilité de l'activité. Veuillez mettre à jour.",
+  "setPalette": "Définir la palette",
   "setTimeLimit": "Limite de temps",
   "drawingExampleDescription": "Cette image est facultative et servira d'exemple pour le dessin. Le répondant ne pourra pas dessiner dessus.",
   "drawingBackgroundDescription": "Cette image est facultative servira de fond au dessin. Le répondant pourra dessiner dessus.",

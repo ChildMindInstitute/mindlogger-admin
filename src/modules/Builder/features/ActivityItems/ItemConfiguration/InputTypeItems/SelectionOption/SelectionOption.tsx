@@ -15,14 +15,18 @@ import {
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
 } from 'shared/styles';
+import { ItemInputTypes } from 'shared/types';
+import { falseReturnFunc } from 'shared/utils';
 
 import { ItemConfigurationForm, ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../../ItemConfiguration.const';
 import { ColorPicker } from './ColorPicker';
 import {
   StyledCollapsedWrapper,
+  StyledImg,
   StyledItemOption,
   StyledScoreWrapper,
+  StyledSvgWrapper,
   StyledTextInputWrapper,
   StyledTooltipWrapper,
 } from './SelectionOption.styles';
@@ -34,46 +38,46 @@ export const SelectionOption = ({
   onRemoveOption,
   onUpdateOption,
   index,
+  optionsLength,
 }: SelectionOptionProps) => {
   const { t } = useTranslation('app');
-  const [open, setOpen] = useState(true);
+  const [optionOpen, setOptionOpen] = useState(true);
+  const [visibleActions, setVisibleActions] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { setValue, watch, control, getValues } = useFormContext<ItemConfigurationForm>();
   const settings = watch('settings');
+  const selectedInputType = watch('itemsInputType');
   const option = watch(`options.${index}`);
   const palette = watch('paletteName');
-  const { text, isVisible, score, tooltip, color } = option;
+  const imageSrc = watch(`options.${index}.image`);
   const hasScoresChecked = settings?.includes(ItemConfigurationSettings.HasScores);
   const hasTooltipsChecked = settings?.includes(ItemConfigurationSettings.HasTooltips);
   const hasColorPicker = settings?.includes(ItemConfigurationSettings.HasColorPalette);
+  const { text = '', isVisible = true, score, tooltip, color } = option || {};
   const scoreString = score?.toString();
   const hasTooltip = tooltip !== undefined;
   const hasColor = color !== undefined;
   const hasPalette = !!palette;
   const isColorSet = color?.hex !== '';
   const actionsRef = useRef(null);
+  const isSingleSelection = selectedInputType === ItemInputTypes.SingleSelection;
 
-  const handleOptionToggle = () => setOpen((prevState) => !prevState);
-
+  const handleOptionToggle = () => setOptionOpen((prevState) => !prevState);
   const handlePopoverClose = () => setAnchorEl(null);
-
   const handleColorChange = () => {
     const settings = getValues('settings');
-
     if (settings?.includes(ItemConfigurationSettings.HasColorPalette)) {
       setValue('paletteName', '');
     }
   };
 
   const actions = {
-    optionHide: () => onUpdateOption(index, { ...option, isVisible: !isVisible }),
+    optionHide: () => setValue(`options.${index}.isVisible`, !isVisible),
     paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
     optionRemove: () => {
       onRemoveOption(index);
-
       if (hasColorPicker && hasPalette) {
         const options = getValues('options');
-
         options?.forEach((option, index) => {
           onUpdateOption(index, {
             ...option,
@@ -98,7 +102,7 @@ export const SelectionOption = ({
         width={5.6}
         height={5.6}
         setValue={(val: string) => setValue(`options.${index}.image`, val)}
-        getValue={() => watch(`options.${index}.image`) || ''}
+        getValue={() => imageSrc || ''}
       />
     </StyledFlexTopCenter>
   );
@@ -127,39 +131,50 @@ export const SelectionOption = ({
 
   return (
     <>
-      <StyledItemOption leftBorderColor={color?.hex}>
+      <StyledItemOption
+        onMouseEnter={optionOpen ? falseReturnFunc : () => setVisibleActions(true)}
+        onMouseLeave={optionOpen ? falseReturnFunc : () => setVisibleActions(false)}
+        optionOpen={optionOpen}
+        leftBorderColor={color?.hex}
+      >
         <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
           <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
             <StyledClearedButton onClick={handleOptionToggle}>
-              <Svg id={open ? 'navigate-up' : 'navigate-down'} />
+              <Svg id={optionOpen ? 'navigate-up' : 'navigate-down'} />
             </StyledClearedButton>
             <StyledLabelBoldLarge sx={{ ml: theme.spacing(2) }}>{`${t('option')} ${
               index + 1
             }`}</StyledLabelBoldLarge>
-            {!open && (
+            {!optionOpen && (
               <StyledCollapsedWrapper>
-                <StyledFlexTopCenter sx={{ m: theme.spacing(0, 2, 0, 6) }}>
-                  <Svg id="radio-button-outline" />
-                </StyledFlexTopCenter>
-                {imageComponent}
-                {text && <StyledBodyLarge>{text}</StyledBodyLarge>}
+                <StyledSvgWrapper sx={{ m: theme.spacing(0, 2, 0, 6) }}>
+                  <Svg
+                    id={isSingleSelection ? 'radio-button-outline' : 'checkbox-multiple-filled'}
+                  />
+                </StyledSvgWrapper>
+                {imageSrc && <StyledImg src={imageSrc} alt="option-image" />}
+                {text && (
+                  <StyledBodyLarge sx={{ ml: imageSrc ? theme.spacing(1) : 0 }}>
+                    {text}
+                  </StyledBodyLarge>
+                )}
               </StyledCollapsedWrapper>
             )}
           </StyledFlexTopCenter>
           <StyledFlexTopCenter ref={actionsRef}>
             <Actions
-              items={getActions({ actions, isVisible, hasColorPicker, isColorSet })}
+              items={getActions({ actions, isVisible, hasColorPicker, isColorSet, optionsLength })}
               context={option}
-              visibleByDefault={open}
+              visibleByDefault={optionOpen || visibleActions}
             />
           </StyledFlexTopCenter>
         </StyledFlexTopCenter>
-        {open && (
+        {optionOpen && (
           <StyledFlexColumn>
             <StyledFlexTopCenter sx={{ m: theme.spacing(1.5, 0, hasTooltipsChecked ? 4 : 2.4) }}>
-              <StyledFlexTopCenter sx={{ mr: theme.spacing(2) }}>
-                <Svg id="radio-button-outline" />
-              </StyledFlexTopCenter>
+              <StyledSvgWrapper sx={{ mr: theme.spacing(2) }}>
+                <Svg id={isSingleSelection ? 'radio-button-outline' : 'checkbox-multiple-filled'} />
+              </StyledSvgWrapper>
               {imageComponent}
               <StyledTextInputWrapper hasScores={!!scoreString}>
                 <InputController

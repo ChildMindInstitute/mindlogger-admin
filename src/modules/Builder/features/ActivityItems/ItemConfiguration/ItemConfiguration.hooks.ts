@@ -1,4 +1,4 @@
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useEffect } from 'react';
 
 import { ItemInputTypes } from 'shared/types';
@@ -36,24 +36,18 @@ export const useOptionalItemSetup = ({
 };
 
 export const useSettingsSetup = ({
-  control,
   setValue,
   getValues,
   watch,
   register,
   unregister,
+  removeOptions,
+  handleAddOption,
+  removeAlert,
+  setShowColorPalette,
 }: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
-
-  const { remove: removeOptions } = useFieldArray({
-    control,
-    name: 'options',
-  });
-  const { remove: removeAlert } = useFieldArray({
-    control,
-    name: 'alerts',
-  });
 
   const hasTimer = settings?.includes(ItemConfigurationSettings.HasTimer);
   const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
@@ -66,6 +60,13 @@ export const useSettingsSetup = ({
     setValue('settings', []);
     setValue('timer', DEFAULT_TIMER_VALUE);
     removeOptions();
+
+    if (
+      selectedInputType === ItemInputTypes.SingleSelection ||
+      selectedInputType === ItemInputTypes.MultipleSelection
+    ) {
+      handleAddOption();
+    }
 
     if (
       selectedInputType === ItemInputTypes.Slider ||
@@ -82,7 +83,10 @@ export const useSettingsSetup = ({
   useEffect(() => {
     if (hasPalette) {
       register('paletteName', { value: '' });
-    } else unregister('paletteName');
+    } else {
+      unregister('paletteName');
+      setShowColorPalette(false);
+    }
   }, [hasPalette]);
 
   useEffect(() => {
