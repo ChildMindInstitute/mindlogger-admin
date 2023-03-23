@@ -10,7 +10,8 @@ export const DEFAULT_MAX_NUMBER = 30;
 export const DEFAULT_SLIDER_MIN_NUMBER = 0;
 export const DEFAULT_SLIDER_MAX_NUMBER = 4;
 export const DEFAULT_SLIDER_SCORE = [1, 2, 3, 4, 5];
-export const SLIDER_LABEL_MAX_LENGTH = 20;
+export const SLIDER_LABEL_MAX_LENGTH = 11;
+export const SLIDER_VALUE_LABEL_MAX_LENGTH = 20;
 export const DEFAULT_SLIDER_MAX_VALUE = 12;
 
 export const DEFAULT_EMPTY_SLIDER = {
@@ -21,6 +22,10 @@ export const DEFAULT_EMPTY_SLIDER = {
   maxLabel: '',
   minImage: '',
   maxImage: '',
+};
+export const DEFAULT_EMPTY_SLIDER_ROWS = {
+  ...DEFAULT_EMPTY_SLIDER,
+  sliderLabel: '',
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
 export const DEFAULT_MAX_CHARACTERS = 72;

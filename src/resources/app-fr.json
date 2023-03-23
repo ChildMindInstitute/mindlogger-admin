@@ -332,7 +332,8 @@
   "appletRequired": "Veuillez sélectionner l'applet pour continuer.",
   "workspaceName": "Nom de l'espace de travail",
   "createNewApplet": "Créer une nouvelle applet avec les activités sélectionnées",
-  "createNewAppletHint": "Vous allez ajouter une nouvelle applet à partir de zéro en utilisant le contenu sélectionné que vous avez choisi",
+  "createNewAppletHint": "Tout le contenu du panier sera ajouté à la nouvelle applet",
+  "exitingAppletHint": "Tout le contenu du panier sera ajouté au contenu de l'applet existante",
   "addToExistingApplet": "Ajouter à une applet existante",
   "selectApplet": "Sélectionner l'applet",
   "selectAppletDescription": "Tout le contenu sélectionné sera ajouté à une applet que vous sélectionnez en plus du contenu existant.",
@@ -504,6 +505,7 @@
   "hasAlerts_tooltip": "Les alertes sont des notifications qui vous sont envoyées automatiquement chaque fois qu'une nouvelle réponse correspond à vos critères d'alerte",
   "isResponseRequired_tooltip": "Dans le texte, le 'bouton Suivant' est masqué jusqu'à ce qu'une réponse soit fournie.\nSi activé, désactive la case à cocher 'Élément désactivable'.",
   "addSlider": "Ajouter un curseur",
+  "sliderLabel": "Libellé du curseur",
   "minLabel": "Étiquette min",
   "maxLabel": "Libellé max",
   "value": "Valeur",
@@ -521,8 +523,8 @@
   "selectionRowsHeader_multiple": "Sélection multiple par ligne",
   "selectionRowsOption_one": "{{ count }}-option Matrice",
   "selectionRowsOption_other": "{{ count }}-options Matrice",
-  "selectionRowsOptionPlaceholder": "Option {{- index }}",
-  "selectionRowsItemPlaceholder": "Ligne {{- index }}",
+  "selectionRowsOptionLabel": "Option {{- index }}",
+  "selectionRowsItemLabel": "Ligne {{- index }}",
   "addSelectionRow": "Ajouter une rangée",
   "colorPalette": "Palette de couleurs",
   "audioPlayerDescription": "Le répondant écoutera un stimulus audio, aucune réponse n'est requise.",
@@ -553,5 +555,7 @@
   "minValueRequired": "La valeur minimale est requise",
   "maxValueRequired": "La valeur maximale est requise",
   "maxValueBiggerThanMin": "La valeur maximale doit être supérieure à la valeur minimale",
-  "minValueLessThanMax": "La valeur min doit être inférieure à la valeur max", "minValue Positive Int": "La valeur min doit être un entier positif", "maxValuePositiveInt": "La valeur max doit être un entier positif"
+  "minValueLessThanMax": "La valeur min doit être inférieure à la valeur max",
+  "minValue Positive Int": "La valeur min doit être un entier positif",
+  "maxValuePositiveInt": "La valeur max doit être un entier positif"
 }

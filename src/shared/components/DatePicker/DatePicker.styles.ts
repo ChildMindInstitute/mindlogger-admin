@@ -139,11 +139,6 @@ export const StyledTextField = styled(TextField)`
     padding-right: ${theme.spacing(0.5)};
   }
 
-  input.Mui-disabled {
-    color: ${variables.palette.on_surface};
-    -webkit-text-fill-color: ${variables.palette.on_surface};
-  }
-
   .MuiOutlinedInput-notchedOutline {
     transition: ${variables.transitions.border};
   }

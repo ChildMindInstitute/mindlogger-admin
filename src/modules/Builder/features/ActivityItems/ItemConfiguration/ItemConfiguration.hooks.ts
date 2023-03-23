@@ -74,7 +74,8 @@ export const useSettingsSetup = ({
       selectedInputType === ItemInputTypes.Slider ||
       selectedInputType === ItemInputTypes.SliderRows
     ) {
-      setValue('sliderOptions', [getEmptySliderOption()]);
+      const isMultiple = selectedInputType === ItemInputTypes.SliderRows;
+      setValue('sliderOptions', [getEmptySliderOption(isMultiple)]);
     } else setValue('sliderOptions', undefined);
 
     if (

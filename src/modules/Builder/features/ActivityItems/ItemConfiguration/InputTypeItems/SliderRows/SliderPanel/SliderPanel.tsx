@@ -6,8 +6,9 @@ import { UploaderUiType, Uploader, Table, UiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, StyledFlexTopCenter } from 'shared/styles';
 import {
-  DEFAULT_SLIDER_MIN_NUMBER,
   SLIDER_LABEL_MAX_LENGTH,
+  DEFAULT_SLIDER_MIN_NUMBER,
+  SLIDER_VALUE_LABEL_MAX_LENGTH,
   DEFAULT_SLIDER_MAX_VALUE,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
 
@@ -126,18 +127,28 @@ export const SliderPanel = <T extends FieldValues>({
         onTrashClick={onRemove}
         isMultiple={isMultiple}
       />
+      {isMultiple && (
+        <StyledInputContainer sx={{ mb: theme.spacing(2.4) }}>
+          <InputController
+            control={control}
+            name={`${name}.label`}
+            label={t('sliderLabel')}
+            maxLength={SLIDER_LABEL_MAX_LENGTH}
+          />
+        </StyledInputContainer>
+      )}
       <StyledInputContainer>
         <InputController
           control={control}
           name={`${name}.minLabel`}
-          placeholder={t('minLabel')}
-          maxLength={SLIDER_LABEL_MAX_LENGTH}
+          label={t('minLabel')}
+          maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
         />
         <InputController
           control={control}
           name={`${name}.maxLabel`}
-          placeholder={t('maxLabel')}
-          maxLength={SLIDER_LABEL_MAX_LENGTH}
+          label={t('maxLabel')}
+          maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
         />
       </StyledInputContainer>
       <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>

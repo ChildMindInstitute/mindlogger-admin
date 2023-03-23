@@ -48,6 +48,7 @@ export const ReportConfigSetting = () => {
     setValue,
     watch,
     trigger,
+    reset,
     formState: { isDirty, isSubmitted, defaultValues },
   } = useForm<FormValues>({
     resolver: yupResolver(reportConfigSchema()),
@@ -96,6 +97,12 @@ export const ReportConfigSetting = () => {
   const saveReportConfigurations = () => {
     // TODO: make a request and depending on a response, show the corresponding popup
     setSuccessPopupVisible(true);
+    reset({}, { keepValues: true });
+  };
+
+  const handleSaveChanges = () => {
+    cancelNavigation();
+    handleSubmit(onSubmit)();
   };
 
   useEffect(() => {
@@ -248,7 +255,7 @@ export const ReportConfigSetting = () => {
         <SaveChanges
           popupVisible={promptVisible}
           onClose={confirmNavigation}
-          saveCallback={cancelNavigation}
+          saveCallback={handleSaveChanges}
         />
       )}
     </>

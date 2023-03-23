@@ -13,7 +13,7 @@ import { getEmptySliderOption } from '../../ItemConfiguration.utils';
 export const SliderRows = <T extends FieldValues>({
   name,
   control,
-  isMultiple,
+  isMultiple = false,
 }: SliderProps<T>) => {
   const { t } = useTranslation('app');
 
@@ -23,7 +23,7 @@ export const SliderRows = <T extends FieldValues>({
       control={control}
       render={({ field: { onChange, value } }) => {
         const handleAddSlider = () => {
-          onChange([...value, getEmptySliderOption()]);
+          onChange([...value, getEmptySliderOption(isMultiple)]);
         };
 
         return (
@@ -51,7 +51,7 @@ export const SliderRows = <T extends FieldValues>({
                 onClick={handleAddSlider}
                 variant="outlined"
                 startIcon={<Svg id="add" width="20" height="20" />}
-                sx={{ width: '13.2rem', alignSelf: 'center' }}
+                sx={{ width: '13.2rem' }}
               >
                 {t('addSlider')}
               </Button>

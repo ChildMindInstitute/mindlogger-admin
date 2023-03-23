@@ -1,4 +1,4 @@
-import { useState, SyntheticEvent, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import Tab from '@mui/material/Tab';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ export const LinkedTabs = ({
 
   useEffect(() => {
     const tabIndex = tabs?.findIndex((tab) => tab.path && pathname.includes(tab.path));
-    setTabIndex(tabIndex);
+    setTabIndex(tabIndex > -1 ? tabIndex : 0);
   }, [pathname]);
 
   const { content, header } = tabs.reduce(
