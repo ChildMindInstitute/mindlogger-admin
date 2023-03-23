@@ -60,8 +60,3 @@ export const StyledFormControl = styled(FormControl)`
   width: 100%;
   gap: 1.4rem;
 `;
-
-// export const StyledFormControlLabel = styled(FormControlLabel, shouldForwardProp)`
-//   margin-left: ${({ isTextInputRequired }: { isTextInputRequired: boolean }) =>
-//     isTextInputRequired ? theme.spacing(2.8) : 0};
-// `;

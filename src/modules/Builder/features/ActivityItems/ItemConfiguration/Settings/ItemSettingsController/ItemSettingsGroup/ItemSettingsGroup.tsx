@@ -3,10 +3,6 @@ import { FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material'
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import {
-  ItemConfigurationSettings,
-  DEFAULT_TIMER_VALUE,
-} from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, variables, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
@@ -21,6 +17,8 @@ import {
 } from './ItemSettingsGroup.styles';
 import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
 import { ITEM_SETTINGS_TO_HAVE_TOOLTIP } from './ItemSettingsGroup.const';
+import { DEFAULT_TIMER_VALUE } from '../../../ItemConfiguration.const';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 
 export const ItemSettingsGroup = ({
   value,

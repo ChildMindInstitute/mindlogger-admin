@@ -1,7 +1,7 @@
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { ItemInputTypes } from 'shared/types';
 
 import { ItemSettingsGroupNames } from '../ItemSettingsController.const';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 
 export type ItemSettingsGroupProps = {
   value?: any;
