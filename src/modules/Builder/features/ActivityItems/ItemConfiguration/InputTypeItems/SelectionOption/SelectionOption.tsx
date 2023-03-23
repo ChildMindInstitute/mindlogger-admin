@@ -16,6 +16,7 @@ import {
   StyledLabelBoldLarge,
 } from 'shared/styles';
 import { ItemInputTypes } from 'shared/types';
+import { falseReturnFunc } from 'shared/utils';
 
 import { ItemConfigurationForm, ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../../ItemConfiguration.const';
@@ -37,6 +38,7 @@ export const SelectionOption = ({
   onRemoveOption,
   onUpdateOption,
   index,
+  optionsLength,
 }: SelectionOptionProps) => {
   const { t } = useTranslation('app');
   const [optionOpen, setOptionOpen] = useState(true);
@@ -115,8 +117,6 @@ export const SelectionOption = ({
       ? !elementCondition && onUpdateOption(index, { ...option, [fieldName]: defaultValue })
       : elementCondition && onUpdateOption(index, { ...option, [fieldName]: undefined });
 
-  const falseReturnFunc = () => false;
-
   useEffect(() => {
     setOptionFieldValue(hasScoresChecked, !!scoreString, 'score', DEFAULT_SCORE_VALUE);
   }, [hasScoresChecked, scoreString]);
@@ -163,7 +163,7 @@ export const SelectionOption = ({
           </StyledFlexTopCenter>
           <StyledFlexTopCenter ref={actionsRef}>
             <Actions
-              items={getActions({ actions, isVisible, hasColorPicker, isColorSet, index })}
+              items={getActions({ actions, isVisible, hasColorPicker, isColorSet, optionsLength })}
               context={option}
               visibleByDefault={optionOpen || visibleActions}
             />

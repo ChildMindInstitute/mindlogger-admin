@@ -6,6 +6,7 @@ export type SelectionOptionProps = {
   onRemoveOption: (index: number) => void;
   onUpdateOption: UseFieldArrayUpdate<ItemConfigurationForm, 'options'>;
   index: number;
+  optionsLength: number;
 };
 
 export type OptionActions = {
@@ -17,5 +18,5 @@ export type OptionActions = {
   hasColorPicker: boolean;
   isColorSet: boolean;
   isVisible?: boolean;
-  index: number;
+  optionsLength: number;
 };

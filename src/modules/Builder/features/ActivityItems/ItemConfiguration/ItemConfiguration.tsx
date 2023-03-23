@@ -209,6 +209,7 @@ export const ItemConfiguration = () => {
                         key={option.id}
                         onRemoveOption={removeOptions}
                         onUpdateOption={updateOptions}
+                        optionsLength={options.length}
                         index={index}
                       />
                     ))

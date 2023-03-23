@@ -6,6 +6,7 @@ import { TextField, FormControl, InputLabel } from '@mui/material';
 import { Svg } from 'shared/components';
 import { theme, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
 import { ItemInputTypes } from 'shared/types';
+import { falseReturnFunc } from 'shared/utils';
 
 import { itemsTypeIcons } from '../ItemConfiguration.const';
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
@@ -119,7 +120,9 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                   return (
                     <StyledMenuItem
                       onMouseEnter={
-                        selectOpen ? (event) => handleTooltipOpen(event, groupValue) : () => false
+                        selectOpen
+                          ? (event) => handleTooltipOpen(event, groupValue)
+                          : falseReturnFunc
                       }
                       onMouseLeave={handleTooltipClose}
                       isHidden={isHidden}
