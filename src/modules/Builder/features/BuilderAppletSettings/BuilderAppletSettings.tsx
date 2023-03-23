@@ -9,5 +9,5 @@ export const BuilderAppletSettings = () => {
   const location = useLocation();
   const isEditAppletPage = location.pathname.includes(page.newApplet);
 
-  return <AppletSettings settings={getSettings(isEditAppletPage)} />;
+  return <AppletSettings isBuilder settings={getSettings(isEditAppletPage)} />;
 };

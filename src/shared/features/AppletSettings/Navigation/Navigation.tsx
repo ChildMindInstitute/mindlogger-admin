@@ -22,9 +22,9 @@ export const Navigation = ({ settings, selectedSetting, handleSettingClick }: Na
         <StyledSettingsGroup key={label} isCompact={!!selectedSetting}>
           <StyledTitleSmall>{t(label)}</StyledTitleSmall>
           <StyledSettings isCompact={!!selectedSetting}>
-            {items.map(({ icon, label, component }) => (
+            {items.map(({ icon, label, component, param }) => (
               <StyledSetting
-                onClick={() => handleSettingClick({ label, component })}
+                onClick={() => handleSettingClick({ label, component, param })}
                 key={label}
                 isCompact={!!selectedSetting}
                 isSelected={selectedSetting?.label === label}
