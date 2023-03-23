@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
 import { ColorResult } from 'react-color';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Svg } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
@@ -10,6 +11,7 @@ import {
   StyledBodyMedium,
   StyledClearedButton,
   StyledFlexTopCenter,
+  StyledFlexTopStart,
   StyledHeadlineLarge,
   StyledTitleLarge,
   theme,
@@ -47,6 +49,7 @@ import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfigur
 import { DEFAULT_SCORE_VALUE, itemsTypeOptions } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils';
+import { itemConfigurationFormSchema } from './ItemConfiguration.schema';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -55,6 +58,7 @@ export const ItemConfiguration = () => {
   const { t } = useTranslation('app');
 
   const methods = useForm<ItemConfigurationForm>({
+    resolver: yupResolver(itemConfigurationFormSchema()),
     defaultValues: {
       itemsInputType: '',
       name: '',
@@ -139,29 +143,31 @@ export const ItemConfiguration = () => {
           </StyledFlexTopCenter>
         </StyledHeader>
         <StyledContent>
-          <StyledInputWrapper>
-            <GroupedSelectSearchController
-              name="itemsInputType"
-              options={itemsTypeOptions}
-              control={control}
-            />
-          </StyledInputWrapper>
-          <StyledInputWrapper>
-            <StyledBodyMedium
-              sx={{ m: theme.spacing(0.2, 0, 4, 1.4) }}
-              color={variables.palette.on_surface_variant}
-            >
-              {selectedInputType && getInputTypeTooltip()[selectedInputType]}
-            </StyledBodyMedium>
-            <InputController
-              fullWidth
-              name="name"
-              control={control}
-              label={t('itemName')}
-              type="text"
-              sx={{ mb: theme.spacing(4) }}
-            />
-          </StyledInputWrapper>
+          <StyledFlexTopStart>
+            <StyledInputWrapper sx={{ mr: theme.spacing(2) }}>
+              <GroupedSelectSearchController
+                name="itemsInputType"
+                options={itemsTypeOptions}
+                control={control}
+              />
+              <StyledBodyMedium
+                sx={{ m: theme.spacing(0.2, 0, 4, 1.4) }}
+                color={variables.palette.on_surface_variant}
+              >
+                {selectedInputType && getInputTypeTooltip()[selectedInputType]}
+              </StyledBodyMedium>
+            </StyledInputWrapper>
+            <StyledInputWrapper>
+              <InputController
+                fullWidth
+                name="name"
+                control={control}
+                label={t('itemName')}
+                type="text"
+                sx={{ mb: theme.spacing(4) }}
+              />
+            </StyledInputWrapper>
+          </StyledFlexTopStart>
           <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
           <EditorController name="body" control={control} />
           {hasOptions && hasColorPalette && <ColorPalette />}

@@ -359,7 +359,7 @@
   "searchItemType": "Type d'élément de recherche",
   "itemType": "Type d'élément",
   "itemName": "Nom de l'article",
-  "itemBody": "Corps de l'article",
+  "itemBody": "Contenu affiché",
   "option": "Option",
   "provideListChoicesSingleAnswer": "Fournir une liste de choix et permettre aux répondants de choisir une réponse unique.",
   "provideListChoicesMultipleAnswers": "Fournir une liste de choix et permettre aux répondants de choisir plusieurs réponses.",
@@ -492,5 +492,14 @@
   "audioExceedSize": "L'audio fait plus de {{size}}",
   "audioWrongFormat": "Le fichier audio a un mauvais format",
   "drawing Example": "Exemple de dessin",
-  "drawing Background": "Dessin d'arrière-plan"
+  "drawing Background": "Dessin d'arrière-plan",
+  "drawingExampleDescription": "Cette image est facultative et servira d'exemple pour le dessin. Le répondant ne pourra pas dessiner dessus.",
+  "drawingBackgroundDescription": "Cette image est facultative servira de fond au dessin. Le répondant pourra dessiner dessus.",
+  "itemNameRequired": "Le nom de l'élément est requis",
+  "itemNameSymbols": "Le nom de l'élément ne doit contenir que des caractères alphanumériques ou des traits de soulignement",
+  "displayedContentRequired": "Le contenu affiché est requis",
+  "minValueRequired": "La valeur minimale est requise",
+  "maxValueRequired": "La valeur maximale est requise",
+  "maxValueBiggerThanMin": "La valeur maximale doit être supérieure à la valeur minimale",
+  "minValueLessThanMax": "La valeur min doit être inférieure à la valeur max", "minValue Positive Int": "La valeur min doit être un entier positif", "maxValuePositiveInt": "La valeur max doit être un entier positif"
 }

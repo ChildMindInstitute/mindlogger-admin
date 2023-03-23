@@ -33,7 +33,7 @@ export const StyledContent = styled(Box)`
 `;
 
 export const StyledInputWrapper = styled(Box)`
-  width: 58rem;
+  width: 50%;
 `;
 
 export const StyledOptionsWrapper = styled(Box)`
