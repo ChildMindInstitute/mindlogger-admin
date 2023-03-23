@@ -53,6 +53,8 @@ export const useSettingsSetup = ({
   const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
   const hasPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
   const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
+  const isTextInputRequired = settings?.includes(ItemConfigurationSettings.IsTextInputRequired);
+  const isSkippable = settings?.includes(ItemConfigurationSettings.IsSkippable);
 
   useEffect(() => {
     setValue('settings', []);
@@ -88,6 +90,25 @@ export const useSettingsSetup = ({
   }, [hasPalette]);
 
   useEffect(() => {
+    //TODO add to isSkippable: 'Reset to True IF Allow respondent to skip all Items = True AND Required = False;'
+    if (isTextInputRequired && isSkippable) {
+      setValue(
+        'settings',
+        settings?.filter(
+          (settingKey: ItemConfigurationSettings) =>
+            settingKey !== ItemConfigurationSettings.IsSkippable,
+        ),
+      );
+    }
+
+    if (isTextInputOptionVisible) {
+      const initialValue = getValues()['isTextInputOptionRequired'];
+
+      register('isTextInputOptionRequired', { value: initialValue });
+    } else unregister('isTextInputOptionRequired');
+  }, [settings]);
+
+  useEffect(() => {
     if (hasTimer) {
       const initialValue = getValues()['timer'];
       if (initialValue === undefined) {
@@ -99,17 +120,4 @@ export const useSettingsSetup = ({
 
     setValue('timer', undefined);
   }, [selectedInputType, hasTimer]);
-
-  useEffect(() => {
-    if (isTextInputOptionVisible) {
-      const initialValue = getValues()['isTextInputOptionRequired'];
-      if (initialValue === undefined) {
-        setValue('isTextInputOptionRequired', true);
-      }
-
-      return;
-    }
-
-    setValue('isTextInputOptionRequired', undefined);
-  }, [selectedInputType, isTextInputOptionVisible]);
 };

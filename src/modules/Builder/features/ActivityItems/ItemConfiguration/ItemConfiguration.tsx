@@ -19,9 +19,13 @@ import { useHeaderSticky } from 'shared/hooks';
 import { ItemInputTypes } from 'shared/types';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { TextInputOption } from './TextInputOption';
 import { Alerts } from './Alerts';
-import { ItemSettingsController, ItemSettingsDrawer, ColorPalette } from './Settings';
+import {
+  ItemSettingsController,
+  ItemSettingsDrawer,
+  ColorPalette,
+  TextInputOption,
+} from './Settings';
 import {
   AudioPlayer,
   SelectionOption,
@@ -112,7 +116,8 @@ export const ItemConfiguration = () => {
       'settings',
       settings?.filter(
         (settingKey: ItemConfigurationSettings) =>
-          settingKey !== ItemConfigurationSettings.HasTextInput,
+          settingKey !== ItemConfigurationSettings.HasTextInput &&
+          settingKey !== ItemConfigurationSettings.IsTextInputRequired,
       ),
     );
   };
@@ -242,13 +247,7 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.Drawing && (
             <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />
           )}
-          {isTextInputOptionVisible && (
-            <TextInputOption
-              name="isTextInputOptionRequired"
-              control={control}
-              onRemove={handleRemoveTextInputOption}
-            />
-          )}
+          {isTextInputOptionVisible && <TextInputOption onRemove={handleRemoveTextInputOption} />}
           {hasAlerts && (
             <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
           )}
@@ -258,7 +257,6 @@ export const ItemConfiguration = () => {
               onClose={() => setSettingsDrawerVisible(false)}
             >
               <ItemSettingsController
-                timerName="timer"
                 name="settings"
                 inputType={selectedInputType}
                 control={control}

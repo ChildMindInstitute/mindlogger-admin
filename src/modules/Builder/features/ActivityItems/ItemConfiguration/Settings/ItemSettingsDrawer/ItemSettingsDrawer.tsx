@@ -42,7 +42,7 @@ export const ItemSettingsDrawer = ({ open, onClose, children }: ItemSettingsDraw
             <Svg id="cross" />
           </StyledClearedButton>
         </StyledFlexTopCenter>
-        <StyledFlexColumn sx={{ overflowY: 'auto', gap: '2rem' }}>{children}</StyledFlexColumn>
+        <StyledFlexColumn sx={{ overflowY: 'auto', gap: '0.6rem' }}>{children}</StyledFlexColumn>
       </StyledDrawerContent>
     </StyledDrawer>
   );
