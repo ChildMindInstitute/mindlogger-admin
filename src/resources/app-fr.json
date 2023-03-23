@@ -457,7 +457,6 @@
   "textInputOptionDescription_required": "Le répondant devra saisir une réponse textuelle supplémentaire",
   "textInputOptionHelpText": "*Requis",
   "settings": "Paramètres",
-  "responseOptions": "Option de réponse",
   "responseOptions_singleSelection": "Option de réponse à sélection unique",
   "responseOptions_multipleSelection": "Options de réponse à sélection multiple",
   "responseOptions_slider": "Options de réponse du curseur",
@@ -537,5 +536,14 @@
   "selectValidPeriod": "Sélectionnez une période de temps valide",
   "timeNotificationsError": "Le temps sélectionné dans l'onglet Notifications est en dehors de la période de disponibilité de l'activité. Veuillez mettre à jour.",
   "setPalette": "Définir la palette",
-  "setTimeLimit": "Limite de temps"
+  "setTimeLimit": "Limite de temps",
+  "drawingExampleDescription": "Cette image est facultative et servira d'exemple pour le dessin. Le répondant ne pourra pas dessiner dessus.",
+  "drawingBackgroundDescription": "Cette image est facultative servira de fond au dessin. Le répondant pourra dessiner dessus.",
+  "itemNameRequired": "Le nom de l'élément est requis",
+  "itemNameSymbols": "Le nom de l'élément ne doit contenir que des caractères alphanumériques ou des traits de soulignement",
+  "displayedContentRequired": "Le contenu affiché est requis",
+  "minValueRequired": "La valeur minimale est requise",
+  "maxValueRequired": "La valeur maximale est requise",
+  "maxValueBiggerThanMin": "La valeur maximale doit être supérieure à la valeur minimale",
+  "minValueLessThanMax": "La valeur min doit être inférieure à la valeur max", "minValue Positive Int": "La valeur min doit être un entier positif", "maxValuePositiveInt": "La valeur max doit être un entier positif"
 }

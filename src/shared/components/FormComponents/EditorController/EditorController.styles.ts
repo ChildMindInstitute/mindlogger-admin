@@ -1,8 +1,7 @@
 import MdEditor from 'md-editor-rt';
 import { styled } from '@mui/system';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
 export const StyledMdEditor = styled(MdEditor)`
   border-radius: ${variables.borderRadius.lg2};
@@ -12,7 +11,12 @@ export const StyledMdEditor = styled(MdEditor)`
   font-size: ${variables.font.size.lg};
   box-shadow: unset;
   margin-bottom: ${theme.spacing(2)};
-  min-height: 23.6rem;
+  height: 24rem;
+
+  &.isRequired {
+    border: ${variables.borderWidth.md} solid ${variables.palette.semantic.error};
+    margin-bottom: 0;
+  }
 
   & .md-editor-toolbar-wrapper {
     background-color: ${variables.palette.surface1};
@@ -46,4 +50,10 @@ export const StyledMdEditor = styled(MdEditor)`
   & .md-editor-dropdown-overlay {
     margin-top: 0;
   }
+`;
+
+export const StyledErrorText = styled(StyledBodyMedium)`
+  color: ${variables.palette.semantic.error};
+  font-size: ${variables.font.size.sm};
+  margin-bottom: ${theme.spacing(2)};
 `;

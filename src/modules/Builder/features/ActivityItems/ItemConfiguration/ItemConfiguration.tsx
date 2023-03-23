@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Button, Grid } from '@mui/material';
 import { ColorResult } from 'react-color';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Svg } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
@@ -10,6 +11,7 @@ import {
   StyledBodyMedium,
   StyledClearedButton,
   StyledFlexTopCenter,
+  StyledFlexTopStart,
   StyledHeadlineLarge,
   StyledTitleLarge,
   theme,
@@ -50,6 +52,7 @@ import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfigur
 import { DEFAULT_SCORE_VALUE, itemsTypeOptions } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils';
+import { itemConfigurationFormSchema } from './ItemConfiguration.schema';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -59,6 +62,7 @@ export const ItemConfiguration = () => {
   const { t } = useTranslation('app');
 
   const methods = useForm<ItemConfigurationForm>({
+    resolver: yupResolver(itemConfigurationFormSchema()),
     defaultValues: {
       itemsInputType: '',
       name: '',

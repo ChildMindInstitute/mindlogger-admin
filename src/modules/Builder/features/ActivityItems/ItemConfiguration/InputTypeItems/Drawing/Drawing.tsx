@@ -16,7 +16,6 @@ import { StyledImage } from './Drawing.styles';
 export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
-  const mockedTooltipTitle = 'Image Description';
   const drawerImageWatcher = watch(drawerImage);
   const drawerBgImageWatcher = watch(drawerBgImage);
 
@@ -28,7 +27,7 @@ export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
   const uploads = [
     {
       title: t('drawingExample'),
-      tooltipTitle: mockedTooltipTitle,
+      tooltipTitle: t('drawingExampleDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}
@@ -40,7 +39,7 @@ export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
     },
     {
       title: t('drawingBackground'),
-      tooltipTitle: mockedTooltipTitle,
+      tooltipTitle: t('drawingBackgroundDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}

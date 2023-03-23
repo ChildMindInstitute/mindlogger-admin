@@ -10,7 +10,7 @@ export const ActivityItemGrid = `
 `;
 
 export const StyledActivityContainer = styled(Box)`
-  ${ActivityItemGrid}
+  ${ActivityItemGrid};
   align-items: start;
   background: ${variables.palette.surface1};
   border-radius: ${variables.borderRadius.lg};
@@ -22,7 +22,7 @@ export const StyledActivityContainer = styled(Box)`
 `;
 
 export const StyledActivityHeader = styled(Box)`
-  ${ActivityItemGrid}
+  ${ActivityItemGrid};
   column-gap: 0.4rem;
   cursor: pointer;
 
