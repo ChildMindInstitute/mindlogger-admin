@@ -44,6 +44,7 @@ export const useSettingsSetup = ({
   removeOptions,
   handleAddOption,
   removeAlert,
+  setShowColorPalette,
 }: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
@@ -80,7 +81,10 @@ export const useSettingsSetup = ({
   useEffect(() => {
     if (hasPalette) {
       register('paletteName', { value: '' });
-    } else unregister('paletteName');
+    } else {
+      unregister('paletteName');
+      setShowColorPalette(false);
+    }
   }, [hasPalette]);
 
   useEffect(() => {

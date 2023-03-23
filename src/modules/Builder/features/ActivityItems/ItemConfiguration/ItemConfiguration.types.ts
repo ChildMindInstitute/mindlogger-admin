@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { ColorResult } from 'react-color';
 import {
   FieldValues,
@@ -88,6 +89,7 @@ export type SettingsSetupProps = {
   removeOptions: () => void;
   handleAddOption: () => void;
   removeAlert: () => void;
+  setShowColorPalette: Dispatch<SetStateAction<boolean>>;
 };
 
 export type OptionalItemSetupProps = {

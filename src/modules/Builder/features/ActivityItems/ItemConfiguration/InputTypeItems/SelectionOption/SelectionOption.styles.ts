@@ -6,12 +6,14 @@ import { shouldForwardProp } from 'shared/utils';
 import { StyledItemOptionContainer } from '../ItemOptionContainer';
 
 export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardProp)`
-  padding: ${theme.spacing(1.6, 2.4, 1.6, 3.4)};
+  padding: ${theme.spacing(2, 2.4, 2, 3.4)};
+  height: ${({ optionOpen }: { optionOpen: boolean; leftBorderColor?: string }) =>
+    optionOpen ? 'auto' : '8.8rem'};
+  justify-content: center;
   position: relative;
 
   svg {
     fill: ${variables.palette.on_surface_variant};
-    // stroke: ${variables.palette.on_surface_variant};
   }
 
   &:before {
@@ -23,8 +25,7 @@ export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardP
     height: 100%;
     border-top-left-radius: ${variables.borderRadius.lg2};
     border-bottom-left-radius: ${variables.borderRadius.lg2};
-    background-color: ${({ leftBorderColor }: { leftBorderColor?: string }) =>
-      leftBorderColor || 'transparent'};
+    background-color: ${({ leftBorderColor }) => leftBorderColor || 'transparent'};
   }
 `;
 

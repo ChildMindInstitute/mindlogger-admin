@@ -480,7 +480,7 @@
   "searchItemType": "Search item type",
   "itemType": "Item Type",
   "itemName": "Item Name",
-  "displayedСontent": "Displayed Сontent",
+  "displayedContent": "Displayed Content",
   "responseOptions": "Response Options",
   "settings": "Settings",
   "responseSettings": "Response settings",
@@ -623,5 +623,6 @@
   "timerDurationCheck": "Timer duration must be greater than 00:00",
   "selectValidPeriod": "Select valid time period",
   "timeNotificationsError": "The time selected on the Notifications tab is outside the Activity's availability time. Please, update.",
+  "setPalette": "Set Palette",
   "setTimeLimit": "Set time limit"
 }

@@ -1,7 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 
-export type ColorPaletteHeaderProps = {
-  isExpanded: boolean;
-  onArrowClick: () => void;
+export type ColorPaletteProps = {
   setShowColorPalette: Dispatch<SetStateAction<boolean>>;
 };

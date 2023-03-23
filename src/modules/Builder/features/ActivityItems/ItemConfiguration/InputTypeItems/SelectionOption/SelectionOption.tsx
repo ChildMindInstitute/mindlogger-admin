@@ -40,6 +40,7 @@ export const SelectionOption = ({
 }: SelectionOptionProps) => {
   const { t } = useTranslation('app');
   const [optionOpen, setOptionOpen] = useState(true);
+  const [visibleActions, setVisibleActions] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { setValue, watch, control, getValues } = useFormContext<ItemConfigurationForm>();
   const settings = watch('settings');
@@ -114,6 +115,8 @@ export const SelectionOption = ({
       ? !elementCondition && onUpdateOption(index, { ...option, [fieldName]: defaultValue })
       : elementCondition && onUpdateOption(index, { ...option, [fieldName]: undefined });
 
+  const falseReturnFunc = () => false;
+
   useEffect(() => {
     setOptionFieldValue(hasScoresChecked, !!scoreString, 'score', DEFAULT_SCORE_VALUE);
   }, [hasScoresChecked, scoreString]);
@@ -128,7 +131,12 @@ export const SelectionOption = ({
 
   return (
     <>
-      <StyledItemOption leftBorderColor={color?.hex}>
+      <StyledItemOption
+        onMouseEnter={optionOpen ? falseReturnFunc : () => setVisibleActions(true)}
+        onMouseLeave={optionOpen ? falseReturnFunc : () => setVisibleActions(false)}
+        optionOpen={optionOpen}
+        leftBorderColor={color?.hex}
+      >
         <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
           <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
             <StyledClearedButton onClick={handleOptionToggle}>
@@ -157,7 +165,7 @@ export const SelectionOption = ({
             <Actions
               items={getActions({ actions, isVisible, hasColorPicker, isColorSet, index })}
               context={option}
-              visibleByDefault={optionOpen}
+              visibleByDefault={optionOpen || visibleActions}
             />
           </StyledFlexTopCenter>
         </StyledFlexTopCenter>
