@@ -15,6 +15,7 @@ import {
   StyledLabelBoldLarge,
   StyledTitleBoldMedium,
   StyledTitleMedium,
+  StyledSvgArrowContainer,
 } from 'shared/styles';
 import { page } from 'resources';
 
@@ -27,7 +28,6 @@ import {
   StyledActivitiesContainer,
   StyledExpandedButton,
   StyledActivities,
-  StyledSvg,
 } from './Applet.styles';
 import { AppletForm, AppletProps, AppletUiType } from './Applet.types';
 import { RemoveAppletPopup } from './Popups';
@@ -171,9 +171,9 @@ export const Applet = ({
                   disableRipple
                   onClick={() => setActivitiesVisible((prevState) => !prevState)}
                   startIcon={
-                    <StyledSvg>
+                    <StyledSvgArrowContainer>
                       <Svg id={activitiesVisible ? 'navigate-up' : 'navigate-down'} />
-                    </StyledSvg>
+                    </StyledSvgArrowContainer>
                   }
                 >
                   <StyledLabelBoldLarge>{t('activities')}</StyledLabelBoldLarge>

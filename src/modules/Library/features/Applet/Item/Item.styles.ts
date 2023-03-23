@@ -7,7 +7,7 @@ import {
   variables,
   StyledFlexColumn,
   StyledFlexTopStart,
-  StyledFlexAllCenter,
+  StyledSvgArrowContainer,
 } from 'shared/styles';
 
 import { ActivityItemGrid } from '../Activity/Activity.styles';
@@ -26,22 +26,12 @@ export const StyledItemContainer = styled(StyledFlexColumn)`
   }
 `;
 
-export const StyledSvg = styled(StyledFlexAllCenter)`
-  width: 4rem;
-  height: 4rem;
-  border-radius: ${variables.borderRadius.half};
-
-  svg {
-    fill: ${variables.palette.on_surface_variant};
-  }
-`;
-
 export const StyledItemHeader = styled(Box)`
   ${ActivityItemGrid}
   cursor: pointer;
 
   &:hover {
-    ${StyledSvg} {
+    ${StyledSvgArrowContainer} {
       background-color: ${variables.palette.on_surface_alfa8};
     }
   }

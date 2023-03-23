@@ -7,7 +7,7 @@ import {
   StyledFlexWrap,
   StyledLabelBoldMedium,
   StyledClearedButton,
-  StyledFlexAllCenter,
+  StyledSvgArrowContainer,
 } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
@@ -62,23 +62,13 @@ export const StyledActivitiesContainer = styled(Box, shouldForwardProp)`
   margin-top: ${theme.spacing(0.8)};
 `;
 
-export const StyledSvg = styled(StyledFlexAllCenter)`
-  width: 4rem;
-  height: 4rem;
-  border-radius: ${variables.borderRadius.half};
-
-  svg {
-    fill: ${variables.palette.outline};
-  }
-`;
-
 export const StyledExpandedButton = styled(StyledClearedButton)`
   .MuiTypography-root {
     color: ${variables.palette.outline};
   }
 
   &:hover {
-    ${StyledSvg} {
+    ${StyledSvgArrowContainer} {
       background-color: ${variables.palette.on_surface_alfa8};
     }
 

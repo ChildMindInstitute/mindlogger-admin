@@ -4,11 +4,11 @@ import 'md-editor-rt/lib/style.css';
 import { Checkbox } from '@mui/material';
 
 import { Svg } from 'shared/components';
+import { StyledSvgArrowContainer } from 'shared/styles';
 
 import {
   StyledItemContainer,
   StyledItemHeader,
-  StyledSvg,
   StyledMdEditor,
   StyledItemContent,
 } from './Item.styles';
@@ -48,9 +48,9 @@ export const Item = ({ item, appletId, activityId }: ItemProps) => {
         )}
       />
       <StyledItemHeader onClick={() => setItemVisible((prevState) => !prevState)}>
-        <StyledSvg>
+        <StyledSvgArrowContainer>
           <Svg id={itemVisible ? 'navigate-up' : 'navigate-right'} />
-        </StyledSvg>
+        </StyledSvgArrowContainer>
         <StyledMdEditor modelValue={item.question} previewOnly />
       </StyledItemHeader>
       {itemVisible && <StyledItemContent>{renderItemContent(item)}</StyledItemContent>}

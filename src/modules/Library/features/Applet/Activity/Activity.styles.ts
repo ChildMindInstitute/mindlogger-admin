@@ -1,7 +1,7 @@
 import styled from '@emotion/styled/macro';
 import { Box, FormControlLabel } from '@mui/material';
 
-import { StyledFlexAllCenter, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
+import { StyledSvgArrowContainer, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
 
 export const ActivityItemGrid = `
   display: grid;
@@ -13,20 +13,10 @@ export const StyledActivityContainer = styled(Box)`
   align-items: start;
   background: ${variables.palette.surface1};
   border-radius: ${variables.borderRadius.lg};
-  padding: ${theme.spacing(0.6, 2)};
+  padding: ${theme.spacing(1.6, 2)};
 
   &:not(:last-child) {
     margin-bottom: ${theme.spacing(0.8)};
-  }
-`;
-
-export const StyledSvg = styled(StyledFlexAllCenter)`
-  width: 4rem;
-  height: 4rem;
-  border-radius: ${variables.borderRadius.half};
-
-  svg {
-    fill: ${variables.palette.on_surface_variant};
   }
 `;
 
@@ -35,7 +25,7 @@ export const StyledActivityHeader = styled(Box)`
   cursor: pointer;
 
   &:hover {
-    ${StyledSvg} {
+    ${StyledSvgArrowContainer} {
       background-color: ${variables.palette.on_surface_alfa8};
     }
   }
