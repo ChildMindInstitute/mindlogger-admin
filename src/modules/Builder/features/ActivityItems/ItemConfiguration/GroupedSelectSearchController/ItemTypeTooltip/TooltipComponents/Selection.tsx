@@ -30,9 +30,7 @@ export const Selection = ({ uiType }: SelectionProps) => {
         ))}
       </StyledPresentation>
       <StyledBodyMedium>
-        {isSingleSelection
-          ? t('provideListChoicesSingleAnswer')
-          : t('provideListChoicesMultipleAnswers')}
+        {isSingleSelection ? t('singleSelectionHint') : t('multipleSelectionHint')}
       </StyledBodyMedium>
     </>
   );

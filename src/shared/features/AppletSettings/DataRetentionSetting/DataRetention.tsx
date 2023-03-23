@@ -19,7 +19,7 @@ export const DataRetention = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { handleSubmit, control, watch, register, unregister, setValue } = useForm({
+  const { handleSubmit, control, watch, register, unregister } = useForm({
     mode: 'onChange',
     resolver: yupResolver(dataRetentionSchema()),
     defaultValues,

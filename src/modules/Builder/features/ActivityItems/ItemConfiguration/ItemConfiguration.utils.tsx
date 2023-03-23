@@ -16,25 +16,23 @@ import {
 const { t } = i18n;
 
 export const getInputTypeTooltip = (): Record<ItemInputTypes, string> => ({
-  [ItemInputTypes.SingleSelection]: t('provideListChoicesSingleAnswer'),
-  [ItemInputTypes.MultipleSelection]: t('provideListChoicesMultipleAnswers'),
-  [ItemInputTypes.Slider]: t('createNumericalScale'),
-  [ItemInputTypes.Date]: t('promptSelectDate'),
-  [ItemInputTypes.NumberSelection]: t('createDropdownNumeric'),
-  [ItemInputTypes.TimeRange]: t('promptSelectTimeRange'),
-  [ItemInputTypes.SingleSelectionPerRow]: `${t('setupMatrixRadio')} ${t('respondentSelectSingle')}`,
-  [ItemInputTypes.MultipleSelectionPerRow]: `${t('setupMatrixCheckboxes')} ${t(
-    'respondentSelectMultiple',
-  )}`,
-  [ItemInputTypes.SliderRows]: t('setupMatrixSliders'),
-  [ItemInputTypes.Text]: t('createQuestionWriteAnswer'),
-  [ItemInputTypes.Drawing]: t('promptDrawImage'),
-  [ItemInputTypes.Photo]: t('promptCapturePhoto'),
-  [ItemInputTypes.Video]: t('promptCaptureVideo'),
-  [ItemInputTypes.Geolocation]: t('promptAccessLocation'),
-  [ItemInputTypes.Audio]: t('promptRecordAudio'),
-  [ItemInputTypes.Message]: `${t('addCustomizableMessage')} ${t('noAnswersRequired')}`,
-  [ItemInputTypes.AudioPlayer]: `${t('addAudioStimulus')} ${t('noAnswersRequired')}`,
+  [ItemInputTypes.SingleSelection]: t('singleSelectionHint'),
+  [ItemInputTypes.MultipleSelection]: t('multipleSelectionHint'),
+  [ItemInputTypes.Slider]: t('sliderHint'),
+  [ItemInputTypes.Date]: t('dateHint'),
+  [ItemInputTypes.NumberSelection]: t('numberSelectionHint'),
+  [ItemInputTypes.TimeRange]: t('timeRangeHint'),
+  [ItemInputTypes.SingleSelectionPerRow]: t('singleSelectionPerRowHint'),
+  [ItemInputTypes.MultipleSelectionPerRow]: t('multipleSelectionPerRowHint'),
+  [ItemInputTypes.SliderRows]: t('sliderRowsHint'),
+  [ItemInputTypes.Text]: t('textHint'),
+  [ItemInputTypes.Drawing]: t('drawingHint'),
+  [ItemInputTypes.Photo]: t('photoHint'),
+  [ItemInputTypes.Video]: t('videoHint'),
+  [ItemInputTypes.Geolocation]: t('geolocationHint'),
+  [ItemInputTypes.Audio]: t('audioHint'),
+  [ItemInputTypes.Message]: t('messageHint'),
+  [ItemInputTypes.AudioPlayer]: t('audioPlayerHint'),
 });
 
 export const getEmptySliderOption = (): SliderOption => ({

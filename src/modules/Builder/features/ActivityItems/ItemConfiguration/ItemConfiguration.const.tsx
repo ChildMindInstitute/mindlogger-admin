@@ -22,7 +22,7 @@ export const DEFAULT_EMPTY_SLIDER = {
   minImage: '',
   maxImage: '',
 };
-export const DEFAULT_AUDIO_DURATION_MS = 3000;
+export const DEFAULT_AUDIO_DURATION_SEC = 300;
 export const DEFAULT_MAX_CHARACTERS = 72;
 export const DEFAULT_EMPTY_SELECTION_ROWS_OPTION = { label: '', tooltip: '', image: '' };
 export const DEFAULT_EMPTY_SELECTION_ROWS_ITEM = { label: '', tooltip: '', image: '', scores: [] };

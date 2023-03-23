@@ -32,7 +32,7 @@ export const NumberSelection = () => {
           </StyledNumberSelectionLine>
         </StyledNumberSelection>
       </StyledPresentation>
-      <StyledBodyMedium>{t('createDropdownNumeric')}</StyledBodyMedium>
+      <StyledBodyMedium>{t('numberSelectionHint')}</StyledBodyMedium>
     </>
   );
 };
