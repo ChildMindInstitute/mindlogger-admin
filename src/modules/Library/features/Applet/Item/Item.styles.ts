@@ -1,8 +1,14 @@
 import MdEditor from 'md-editor-rt';
-import { styled } from '@mui/system';
+import styled from '@emotion/styled/macro';
 import { Box } from '@mui/material';
 
-import { theme, variables, StyledFlexColumn, StyledFlexTopStart } from 'shared/styles';
+import {
+  theme,
+  variables,
+  StyledFlexColumn,
+  StyledFlexTopStart,
+  StyledFlexAllCenter,
+} from 'shared/styles';
 
 import { ActivityItemGrid } from '../Activity/Activity.styles';
 
@@ -20,18 +26,24 @@ export const StyledItemContainer = styled(StyledFlexColumn)`
   }
 `;
 
-export const StyledItemHeader = styled(Box)`
-  ${ActivityItemGrid}
-  cursor: pointer;
-`;
-
-export const StyledNavigateSvg = styled(Box)`
-  display: flex;
-  justify-content: center;
-  padding: ${theme.spacing(0.9, 0)};
+export const StyledSvg = styled(StyledFlexAllCenter)`
+  width: 4rem;
+  height: 4rem;
+  border-radius: ${variables.borderRadius.half};
 
   svg {
     fill: ${variables.palette.on_surface_variant};
+  }
+`;
+
+export const StyledItemHeader = styled(Box)`
+  ${ActivityItemGrid}
+  cursor: pointer;
+
+  &:hover {
+    ${StyledSvg} {
+      background-color: ${variables.palette.on_surface_alfa8};
+    }
   }
 `;
 

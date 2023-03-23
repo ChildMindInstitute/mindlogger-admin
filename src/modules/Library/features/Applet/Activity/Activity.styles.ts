@@ -1,7 +1,7 @@
-import { styled } from '@mui/system';
+import styled from '@emotion/styled/macro';
 import { Box, FormControlLabel } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { StyledFlexAllCenter, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
 
 export const ActivityItemGrid = `
   display: grid;
@@ -20,23 +20,36 @@ export const StyledActivityContainer = styled(Box)`
   }
 `;
 
+export const StyledSvg = styled(StyledFlexAllCenter)`
+  width: 4rem;
+  height: 4rem;
+  border-radius: ${variables.borderRadius.half};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
+`;
+
 export const StyledActivityHeader = styled(Box)`
   ${ActivityItemGrid}
   cursor: pointer;
+
+  &:hover {
+    ${StyledSvg} {
+      background-color: ${variables.palette.on_surface_alfa8};
+    }
+  }
 `;
 
 export const StyledFormControlLabel = styled(FormControlLabel)`
   margin: 0;
 `;
 
-export const StyledNavigateSvg = styled(Box)`
+export const StyledActivityName = styled(StyledTitleBoldMedium)`
   display: flex;
-  justify-content: center;
-  padding: ${theme.spacing(0.9, 0)};
-
-  svg {
-    fill: ${variables.palette.on_surface_variant};
-  }
+  align-items: center;
+  padding: ${theme.spacing(0.7, 0)};
+  color: ${variables.palette.on_surface_variant};
 `;
 
 export const StyledItemsList = styled(Box)`

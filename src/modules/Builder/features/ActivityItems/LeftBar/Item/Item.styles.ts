@@ -26,6 +26,10 @@ export const StyledItem = styled(StyledFlexTopCenter)`
   border-radius: ${variables.borderRadius.lg2};
   margin-bottom: ${theme.spacing(1.6)};
 
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
+
   .actions {
     display: none;
   }

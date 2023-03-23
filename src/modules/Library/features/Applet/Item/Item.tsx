@@ -8,7 +8,7 @@ import { Svg } from 'shared/components';
 import {
   StyledItemContainer,
   StyledItemHeader,
-  StyledNavigateSvg,
+  StyledSvg,
   StyledMdEditor,
   StyledItemContent,
 } from './Item.styles';
@@ -48,9 +48,9 @@ export const Item = ({ item, appletId, activityId }: ItemProps) => {
         )}
       />
       <StyledItemHeader onClick={() => setItemVisible((prevState) => !prevState)}>
-        <StyledNavigateSvg>
+        <StyledSvg>
           <Svg id={itemVisible ? 'navigate-up' : 'navigate-right'} />
-        </StyledNavigateSvg>
+        </StyledSvg>
         <StyledMdEditor modelValue={item.question} previewOnly />
       </StyledItemHeader>
       {itemVisible && <StyledItemContent>{renderItemContent(item)}</StyledItemContent>}
