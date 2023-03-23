@@ -25,8 +25,9 @@ export const Modal = ({
   secondBtnText,
   onSecondBtnSubmit,
   disabledSecondBtn,
+  sxProps,
 }: ModalProps) => (
-  <StyledDialog width={width} onClose={onClose} open={open}>
+  <StyledDialog sx={sxProps} width={width} onClose={onClose} open={open}>
     <StyledDialogTitle align={titleAlign}>
       {title}
       <StyledCloseButton onClick={onClose}>

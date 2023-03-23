@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { getYear } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
-import theme from 'shared/styles/theme';
+import { theme } from 'shared/styles';
 
 import { UiType } from '../DatePicker.types';
 import { getMonthsArr, getRange } from './DatePickerHeader.utils';

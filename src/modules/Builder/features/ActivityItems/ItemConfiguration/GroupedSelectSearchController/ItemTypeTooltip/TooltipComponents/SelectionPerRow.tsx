@@ -52,7 +52,7 @@ export const SelectionPerRow = ({ uiType }: SelectionProps) => {
         ))}
       </StyledPresentation>
       <StyledBodyMedium>
-        {isSingleSelection ? t('setupMatrixRadio') : t('setupMatrixCheckboxes')}
+        {isSingleSelection ? t('singleSelectionPerRowHint') : t('multipleSelectionPerRowHint')}
       </StyledBodyMedium>
       <StyledBodyMedium>
         {isSingleSelection ? t('respondentSelectSingle') : t('respondentSelectMultiple')}

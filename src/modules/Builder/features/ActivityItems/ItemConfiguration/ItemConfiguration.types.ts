@@ -21,18 +21,18 @@ export enum ItemConfigurationSettings {
   HasTickMarksLabels = 'hasTickMarksLabels',
   HasColorPalette = 'hasColorPallete',
   HasRandomize = 'hasRandomize',
-  HasMoreNavigationButtons = 'hasMoreNavigationButtons',
   HasResponseDataIdentifier = 'hasResponseDataIdentifier',
   HasTimer = 'hasTimer',
-  HasLabels = 'hasLabels',
-  IsResponseRequired = 'isResponseRequired',
   IsCorrectAnswerRequired = 'isCorrectAnswerRequired',
   IsNumericalRequired = 'isNumericalRequired',
+  IsResponseRequired = 'isResponseRequired',
   IsSkippable = 'isSkippable',
   IsContinuous = 'isContinuous',
-  IsMediaReplayAllowed = 'isMediaReplayAllowed',
-  IsUndoChangesForbidden = 'isUndoChangesForbidden',
+  IsPlayAudioOnce = 'isPlayAudioOnce',
   IsGoBackRemoved = 'isGoBackRemoved',
+  IsTextInputRequired = 'isTextInputRequired',
+  IsUndoRemoved = 'isUndoRemoved',
+  IsNavigationMovedToTheTop = 'isNavigationMovedToTheTop',
 }
 
 export type SelectionOption = {

@@ -2,15 +2,15 @@ import { FieldValues, UseControllerProps, Path } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
 
+import { ItemSettingsGroupNames } from './ItemSettingsController.const';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export type ItemSettingsControllerProps<T extends FieldValues> = {
-  timerName: Path<T>;
   inputType: ItemInputTypes | '';
 } & UseControllerProps<T>;
 
 export type ItemSettingsOptionsGroup = {
-  groupName: 'responseSettings' | 'itemSettings';
+  groupName: ItemSettingsGroupNames;
   groupOptions: ItemConfigurationSettings[];
 };
 
