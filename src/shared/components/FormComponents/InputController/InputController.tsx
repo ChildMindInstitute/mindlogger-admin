@@ -65,8 +65,6 @@ export const InputController = <T extends FieldValues>({
         const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
           if (handleCustomChange) return handleCustomChange(event);
 
-          if (maxLength && event.target.value?.length > maxLength) return;
-
           onChange(event.target.value);
         };
 

@@ -3,14 +3,9 @@ import { Radio, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import {
-  ItemConfigurationSettings,
-  SelectionRowsItem,
-  SelectionRowsOption,
-} from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import { UploaderUiType, Uploader, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledFlexTopCenter } from 'shared/styles';
+import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
 
 import {
   StyledSelectionRowItem,
@@ -18,14 +13,18 @@ import {
   StyledRemoveItemButton,
 } from './Items.styles';
 import { StyledSelectionBox } from '../SelectionRows.styles';
+import {
+  ItemConfigurationSettings,
+  SelectionRowsItem,
+  SelectionRowsOption,
+} from '../../../ItemConfiguration.types';
+import { SELECTION_ROW_ITEM_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.scheme';
 
 const commonUploaderProps = {
   width: 5.6,
   height: 5.6,
   uiType: UploaderUiType.Secondary,
 };
-
-const MAX_LABEL_LENGTH = 11;
 
 export const Items = ({ isSingle }: { isSingle?: boolean }) => {
   const { t } = useTranslation('app');
@@ -52,7 +51,7 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
     return (
       <StyledSelectionRowItem key={`row-${item.id}`} hasTooltips={hasTooltips}>
         <StyledSelectionBox>
-          <StyledFlexTopCenter sx={{ gap: '1.2rem' }}>
+          <StyledFlexTopStart sx={{ gap: '1.2rem' }}>
             <Uploader
               {...commonUploaderProps}
               setValue={(val: string) => setValue(`${name}.image`, val)}
@@ -62,9 +61,9 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
               control={control}
               name={`${name}.label`}
               placeholder={t('selectionRowsItemPlaceholder', { index: index + 1 })}
-              maxLength={MAX_LABEL_LENGTH}
+              maxLength={SELECTION_ROW_ITEM_LABEL_MAX_LENGTH}
             />
-          </StyledFlexTopCenter>
+          </StyledFlexTopStart>
           {hasTooltips && (
             <StyledFlexTopCenter>
               <InputController

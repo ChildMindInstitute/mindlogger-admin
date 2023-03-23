@@ -622,5 +622,7 @@
   "timerDurationCheck": "Timer duration must be greater than 00:00",
   "selectValidPeriod": "Select valid time period",
   "timeNotificationsError": "The time selected on the Notifications tab is outside the Activity's availability time. Please, update.",
-  "setTimeLimit": "Set time limit"
+  "setTimeLimit": "Set time limit",
+  "visibilityDecreasesOverMaxCharacters": "Visibility decreases over {{max}} characters",
+  "numberValueIsRequired": "Number value is required"
 }
