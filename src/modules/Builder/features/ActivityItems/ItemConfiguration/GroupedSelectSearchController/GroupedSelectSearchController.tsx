@@ -73,6 +73,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 autoFocus: false,
                 PaperProps: { sx: selectDropdownStyles },
               }}
+              sx={{ pr: theme.spacing(1) }}
               onChange={onChange}
               value={value}
               labelId="input-type-label"

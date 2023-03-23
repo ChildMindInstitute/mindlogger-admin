@@ -9,6 +9,10 @@ import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 export const StyledActionsWrapper = styled(StyledFlexTopCenter)`
   width: 100%;
   height: 100%;
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 `;
 
 export const StyledActions = styled(Box)`

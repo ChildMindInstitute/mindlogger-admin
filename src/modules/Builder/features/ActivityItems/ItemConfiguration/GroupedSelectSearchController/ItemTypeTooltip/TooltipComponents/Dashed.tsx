@@ -81,14 +81,14 @@ export const Dashed = ({ uiType }: DashedProps) => {
   });
 
   const getText = () => ({
-    [DashedUiType.Text]: t('createQuestionWriteAnswer'),
-    [DashedUiType.Drawing]: t('promptDrawImage'),
-    [DashedUiType.Photo]: t('promptCapturePhoto'),
-    [DashedUiType.Video]: t('promptCaptureVideo'),
-    [DashedUiType.Geolocation]: t('promptAccessLocation'),
-    [DashedUiType.Audio]: t('promptRecordAudio'),
-    [DashedUiType.Message]: t('addCustomizableMessage'),
-    [DashedUiType.AudioPlayer]: t('addAudioStimulus'),
+    [DashedUiType.Text]: t('textHint'),
+    [DashedUiType.Drawing]: t('drawingHint'),
+    [DashedUiType.Photo]: t('photoHint'),
+    [DashedUiType.Video]: t('videoHint'),
+    [DashedUiType.Geolocation]: t('geolocationHint'),
+    [DashedUiType.Audio]: t('audioHint'),
+    [DashedUiType.Message]: t('messageHint'),
+    [DashedUiType.AudioPlayer]: t('audioPlayerHint'),
   });
 
   const alignItems = isMessageUiType ? 'flex-start' : 'center';

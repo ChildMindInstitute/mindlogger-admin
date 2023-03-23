@@ -9,7 +9,7 @@ import { appletRoutes } from './routes.const';
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
 
-export const dashBoardRoutes = () => (
+export const dashboardRoutes = () => (
   <Route path={page.dashboard}>
     <Route
       path={page.dashboard}

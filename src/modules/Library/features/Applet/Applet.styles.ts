@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import styled from '@emotion/styled/macro';
 import { Box } from '@mui/material';
 
 import {
@@ -7,6 +7,7 @@ import {
   StyledFlexWrap,
   StyledLabelBoldMedium,
   StyledClearedButton,
+  StyledFlexAllCenter,
 } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
@@ -58,19 +59,33 @@ export const StyledActivitiesContainer = styled(Box, shouldForwardProp)`
           grid-column-end: 4;`;
     }
   }}
+  margin-top: ${theme.spacing(0.8)};
+`;
+
+export const StyledSvgContainer = styled(StyledFlexAllCenter)`
+  width: 4rem;
+  height: 4rem;
+  border-radius: ${variables.borderRadius.half};
+  transition: ${variables.transitions.bgColor};
+
+  svg {
+    fill: ${variables.palette.outline};
+  }
 `;
 
 export const StyledExpandedButton = styled(StyledClearedButton)`
-  &.MuiButton-text:hover {
-    background-color: transparent;
-  }
-
   .MuiTypography-root {
     color: ${variables.palette.outline};
   }
 
-  svg {
-    fill: ${variables.palette.outline};
+  &:hover {
+    ${StyledSvgContainer} {
+      background-color: ${variables.palette.on_surface_alfa8};
+    }
+
+    &.MuiButton-text {
+      background-color: transparent;
+    }
   }
 `;
 
