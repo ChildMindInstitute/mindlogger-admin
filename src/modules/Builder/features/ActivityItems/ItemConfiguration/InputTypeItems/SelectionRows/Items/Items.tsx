@@ -76,6 +76,8 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
         </StyledSelectionBox>
         {options?.map((option: SelectionRowsOption, key: number) => {
           const scoreName = `${name}.scores[${key}]`;
+          const isRemoveButtonVisible =
+            hasRemoveButton && key === options?.length - 1 && index !== 0;
 
           const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
             if (event.target.value === '') return setValue(scoreName, 0);
@@ -101,7 +103,7 @@ export const Items = ({ isSingle }: { isSingle?: boolean }) => {
                     minNumberValue={Number.MIN_SAFE_INTEGER}
                   />
                 )}
-                {hasRemoveButton && key === options?.length - 1 && index !== 0 && (
+                {isRemoveButtonVisible && (
                   <StyledRemoveItemButton onClick={() => handleRemoveItem(index)}>
                     <Svg id="cross" />
                   </StyledRemoveItemButton>
