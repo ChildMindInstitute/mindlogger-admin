@@ -75,7 +75,8 @@ export const useSettingsSetup = ({
       selectedInputType === ItemInputTypes.SliderRows
     ) {
       setValue('sliderOptions', [getEmptySliderOption()]);
-    } else setValue('sliderOptions', undefined);
+      clearErrors('sliderOptions');
+    } else unregister('sliderOptions');
 
     if (
       selectedInputType === ItemInputTypes.SingleSelectionPerRow ||

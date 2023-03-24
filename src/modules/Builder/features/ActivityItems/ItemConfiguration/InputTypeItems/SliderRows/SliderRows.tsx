@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { FieldValues, Controller, useFormContext } from 'react-hook-form';
+import { FieldValues, Controller } from 'react-hook-form';
 import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
@@ -16,10 +16,6 @@ export const SliderRows = <T extends FieldValues>({
   isMultiple,
 }: SliderProps<T>) => {
   const { t } = useTranslation('app');
-
-  const { watch } = useFormContext();
-
-  const settings = watch('settings');
 
   return (
     <Controller

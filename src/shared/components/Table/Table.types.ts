@@ -24,6 +24,7 @@ export type TableProps = {
   orderBy: string;
   maxHeight?: string;
   uiType?: UiType;
+  showEmptyTable?: boolean;
   emptyComponent?: JSX.Element | string;
   className?: string;
 };

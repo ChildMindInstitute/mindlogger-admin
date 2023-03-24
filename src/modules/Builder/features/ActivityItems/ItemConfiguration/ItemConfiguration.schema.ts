@@ -2,42 +2,46 @@ import * as yup from 'yup';
 
 import i18n from 'i18n';
 
-import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from './ItemConfiguration.const';
+import {
+  getMaxLengthValidationError,
+  getNumberRequiredValidationError,
+} from './ItemConfiguration.utils';
+import {
+  SELECTION_ROW_OPTION_LABEL_MAX_LENGTH,
+  SLIDER_LABEL_MAX_LENGTH,
+} from './ItemConfiguration.const';
 
-export const SelectionRowsItemScheme = () => {
-  const { t } = i18n;
-
-  const numberValueIsRequired = t('numberValueIsRequired');
-
-  const maxLengthLabel = ({ max }: { max: number }) =>
-    t('visibilityDecreasesOverMaxCharacters', { max });
-
-  return yup.object({
-    label: yup.string().max(SELECTION_ROW_OPTION_LABEL_MAX_LENGTH, maxLengthLabel),
-    tooltip: yup.string(),
-    image: yup.string(),
-    scores: yup.array().of(yup.number().required(numberValueIsRequired)),
-  });
-};
-
-export const SelectionRowsOptionScheme = () => {
-  const { t } = i18n;
-
-  const maxLengthLabel = ({ max }: { max: number }) =>
-    t('visibilityDecreasesOverMaxCharacters', { max });
-
-  return yup.object({
-    label: yup.string().max(SELECTION_ROW_OPTION_LABEL_MAX_LENGTH, maxLengthLabel),
-    tooltip: yup.string(),
-    image: yup.string(),
-  });
-};
-
-export const SelectionRowsScheme = () =>
+export const SelectionRowsItemSchema = () =>
   yup.object({
-    items: yup.array().of(SelectionRowsItemScheme()),
-    options: yup.array().of(SelectionRowsOptionScheme()),
+    label: yup.string().max(SELECTION_ROW_OPTION_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+    tooltip: yup.string(),
+    image: yup.string(),
+    scores: yup.array().of(yup.number().required(getNumberRequiredValidationError())),
+  });
+
+export const SelectionRowsOptionSchema = () =>
+  yup.object({
+    label: yup.string().max(SELECTION_ROW_OPTION_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+    tooltip: yup.string(),
+    image: yup.string(),
+  });
+
+export const SelectionRowsSchema = () =>
+  yup.object({
+    items: yup.array().of(SelectionRowsItemSchema()),
+    options: yup.array().of(SelectionRowsOptionSchema()),
     type: yup.string(),
+  });
+
+export const SliderOptionSchema = () =>
+  yup.object({
+    min: yup.number().required(),
+    max: yup.number().required(),
+    minLabel: yup.string().max(SLIDER_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+    maxLabel: yup.string().max(SLIDER_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+    minImage: yup.string(),
+    maxImage: yup.string(),
+    scores: yup.array().of(yup.mixed().notOneOf([''], getNumberRequiredValidationError())),
   });
 
 export const itemConfigurationFormSchema = () => {
@@ -63,7 +67,8 @@ export const itemConfigurationFormSchema = () => {
         .number()
         .typeError(maxValuePositiveInt)
         .moreThan(yup.ref('minNumber'), maxValueBiggerThanMin),
-      selectionRows: SelectionRowsScheme(),
+      selectionRows: SelectionRowsSchema(),
+      sliderOptions: yup.array().of(SliderOptionSchema()),
     })
     .required();
 };

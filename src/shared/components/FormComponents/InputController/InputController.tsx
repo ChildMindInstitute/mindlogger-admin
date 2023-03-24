@@ -31,6 +31,7 @@ export const InputController = <T extends FieldValues>({
   maxNumberValue,
   onChange: handleCustomChange,
   helperText,
+  isEmptyStringAllowed = false,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -48,7 +49,8 @@ export const InputController = <T extends FieldValues>({
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
         const textFieldValue =
-          isNumberType && (typeof value !== 'number' || value < minNumberValue)
+          isNumberType &&
+          ((typeof value !== 'number' && !isEmptyStringAllowed) || value < minNumberValue)
             ? minNumberValue
             : value;
 
