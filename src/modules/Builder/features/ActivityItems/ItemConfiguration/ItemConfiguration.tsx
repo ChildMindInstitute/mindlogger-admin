@@ -187,7 +187,12 @@ export const ItemConfiguration = () => {
           <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
             {t('displayedContent')}
           </StyledTitleLarge>
-          <EditorController name="body" control={control} />
+          <EditorController
+            name="body"
+            control={control}
+            requiredStateMessage={t('displayedContentRequired')}
+            hasRequiredState
+          />
           {hasOptions && (
             <>
               <StyledFlexTopCenter
