@@ -17,6 +17,7 @@ export const LinkedTabs = ({
   const [tabIndex, setTabIndex] = useState(0);
 
   useEffect(() => {
+    // TODO: investigate negative tabIndex
     const tabIndex = tabs?.findIndex((tab) => tab.path && pathname.includes(tab.path));
     setTabIndex(tabIndex > -1 ? tabIndex : 0);
   }, [pathname]);
