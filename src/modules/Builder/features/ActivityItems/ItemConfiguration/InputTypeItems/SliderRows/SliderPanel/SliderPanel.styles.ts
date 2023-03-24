@@ -1,6 +1,7 @@
 import { Collapse, Slider, styled } from '@mui/material';
 
 import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 export const StyledSliderPanelContainer = styled(Collapse)`
   background: ${variables.palette.surface1};
@@ -14,12 +15,27 @@ export const StyledSliderPanelContainer = styled(Collapse)`
 
 export const StyledInputContainer = styled(StyledFlexTopCenter)`
   gap: 2.4rem;
+
+  .MuiFormHelperText-root {
+    position: absolute;
+    bottom: -2.4rem;
+    font-size: ${variables.font.size.md};
+  }
 `;
 
-export const StyledScoresContainer = styled(StyledFlexTopCenter)`
+export const StyledScoresContainer = styled(StyledFlexTopCenter, shouldForwardProp)`
+  ${({ hasScores }: { hasScores: boolean }) =>
+    !hasScores &&
+    `
+      .MuiTableCell-root {
+        border-bottom: none;
+      }
+  `};
+
   border: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
   border-radius: ${variables.borderRadius.lg2};
   margin-top: ${theme.spacing(2.4)};
+  position: relative;
 
   .MuiTableContainer-root {
     border: none;
@@ -35,6 +51,7 @@ export const StyledScoresContainer = styled(StyledFlexTopCenter)`
 
     &:last-of-type {
       flex-grow: 1;
+      overflow-y: hidden;
     }
 
     .MuiTableCell-head {
@@ -54,6 +71,11 @@ export const StyledScoresContainer = styled(StyledFlexTopCenter)`
       letter-spacing: ${variables.font.letterSpacing.lg};
     }
   }
+
+  .MuiFormControl-root,
+  .MuiBox-root {
+    position: static;
+  }
 `;
 
 export const StyledSlider = styled(Slider)`
@@ -71,5 +93,14 @@ export const StyledSlider = styled(Slider)`
 
   .MuiSlider-mark {
     color: ${variables.palette.on_surface_alfa38};
+  }
+
+  .MuiSlider-markLabel {
+    font-size: ${variables.font.size.sm};
+    color: ${variables.palette.black};
+  }
+
+  .MuiSlider-thumb {
+    display: flex;
   }
 `;

@@ -3,7 +3,7 @@ import { FieldValues, Controller } from 'react-hook-form';
 import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { StyledFlexColumn } from 'shared/styles';
+import { theme, StyledFlexColumn } from 'shared/styles';
 
 import { SliderPanel } from './SliderPanel';
 import { SliderProps } from './SliderRows.types';
@@ -27,7 +27,7 @@ export const SliderRows = <T extends FieldValues>({
         };
 
         return (
-          <StyledFlexColumn sx={{ gap: '2.4rem' }}>
+          <StyledFlexColumn sx={{ mb: theme.spacing(2), gap: '2.4rem' }}>
             {value?.map(({ id }: SliderOption, index: number) => {
               const handleRemove = () => {
                 onChange(value.filter(({ id: sliderId }: SliderOption) => sliderId !== id));

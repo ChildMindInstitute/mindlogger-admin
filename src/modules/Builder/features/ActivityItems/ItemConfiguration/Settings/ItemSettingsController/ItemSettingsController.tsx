@@ -15,16 +15,19 @@ export const ItemSettingsController = <T extends FieldValues>({
       control={control}
       render={({ field: { onChange, value } }) => (
         <>
-          {itemSettingsOptionsByInputType[inputType]?.map(({ groupName, groupOptions }) => (
-            <ItemSettingsGroup
-              key={`item-settings-group-${groupName}`}
-              value={value}
-              onChange={onChange}
-              groupName={groupName}
-              inputType={inputType}
-              groupOptions={groupOptions}
-            />
-          ))}
+          {itemSettingsOptionsByInputType[inputType]?.map(
+            ({ groupName, groupOptions, collapsedByDefault }) => (
+              <ItemSettingsGroup
+                key={`item-settings-group-${groupName}`}
+                value={value}
+                onChange={onChange}
+                groupName={groupName}
+                inputType={inputType}
+                groupOptions={groupOptions}
+                collapsedByDefault={collapsedByDefault}
+              />
+            ),
+          )}
         </>
       )}
     />

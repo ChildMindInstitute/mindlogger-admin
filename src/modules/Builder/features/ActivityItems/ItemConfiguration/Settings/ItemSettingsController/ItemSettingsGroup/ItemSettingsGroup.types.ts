@@ -9,4 +9,5 @@ export type ItemSettingsGroupProps = {
   groupName: ItemSettingsGroupNames;
   inputType: ItemInputTypes | '';
   groupOptions: ItemConfigurationSettings[];
+  collapsedByDefault?: boolean;
 };
