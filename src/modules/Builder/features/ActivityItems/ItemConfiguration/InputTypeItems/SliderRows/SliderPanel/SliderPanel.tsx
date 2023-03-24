@@ -10,7 +10,7 @@ import {
   DEFAULT_SLIDER_MIN_NUMBER,
   SLIDER_VALUE_LABEL_MAX_LENGTH,
   DEFAULT_SLIDER_MAX_VALUE,
-} from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
+} from '../../../ItemConfiguration.const';
 
 import { Header } from './Header';
 import { SliderPanelProps } from './SliderPanel.types';
@@ -25,8 +25,9 @@ import {
   getTableRows,
   getStaticHeadRow,
   getStaticBodyRow,
-  getMarksByScores,
+  getMarks,
 } from './SliderPanel.utils';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 
 const commonUploaderProps = {
   width: 5.6,
@@ -47,6 +48,11 @@ export const SliderPanel = <T extends FieldValues>({
   const { control, watch, setValue, getValues } = useFormContext();
 
   const { id, min, max, scores } = watch(name);
+  const settings = watch('settings');
+
+  const hasTickMarks = settings?.includes(ItemConfigurationSettings.HasTickMarks);
+  const hasTickMarksLabels = settings?.includes(ItemConfigurationSettings.HasTickMarksLabels);
+  const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
 
   watch((data, { name: attributeName }: { name?: string }) => {
     const option = getValues(name);
@@ -86,7 +92,7 @@ export const SliderPanel = <T extends FieldValues>({
 
     if (value === '') return setValue(minScoreName, DEFAULT_SLIDER_MIN_NUMBER);
 
-    if (+value > max) return setValue(minScoreName, max);
+    if (+value > max - 1) return setValue(minScoreName, max - 1);
 
     if (+value < DEFAULT_SLIDER_MIN_NUMBER)
       return setValue(minScoreName, DEFAULT_SLIDER_MIN_NUMBER);
@@ -102,7 +108,7 @@ export const SliderPanel = <T extends FieldValues>({
 
     if (+value > DEFAULT_SLIDER_MAX_VALUE) return setValue(maxScoreName, DEFAULT_SLIDER_MAX_VALUE);
 
-    if (+value < min) return setValue(maxScoreName, min);
+    if (+value < min + 1) return setValue(maxScoreName, min + 1);
 
     setValue(maxScoreName, +value);
   };
@@ -111,6 +117,8 @@ export const SliderPanel = <T extends FieldValues>({
     control,
     type: 'number',
   };
+
+  const marks = hasTickMarks && getMarks(min, max, hasTickMarksLabels);
 
   return (
     <StyledSliderPanelContainer
@@ -152,7 +160,7 @@ export const SliderPanel = <T extends FieldValues>({
         />
       </StyledInputContainer>
       <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
-        <StyledSlider min={min} max={max} value={min} marks={getMarksByScores(scores)} disabled />
+        <StyledSlider min={min} max={max} value={min} marks={marks} disabled />
       </StyledFlexTopCenter>
       <StyledInputContainer>
         <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
@@ -165,7 +173,7 @@ export const SliderPanel = <T extends FieldValues>({
             {...commonInputProps}
             name={`${name}.min`}
             label={t('minValue')}
-            maxNumberValue={max}
+            maxNumberValue={max - 1}
             onChange={handleChangeMinScore}
             minNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
           />
@@ -182,22 +190,24 @@ export const SliderPanel = <T extends FieldValues>({
             label={t('maxValue')}
             onChange={handleChangeMaxScore}
             maxNumberValue={DEFAULT_SLIDER_MAX_VALUE}
-            minNumberValue={min}
+            minNumberValue={min + 1}
           />
         </StyledFlexTopCenter>
       </StyledInputContainer>
-      <StyledScoresContainer>
+      <StyledScoresContainer hasScores={hasScores}>
         <Table
           columns={getStaticHeadRow()}
-          rows={getStaticBodyRow()}
+          rows={hasScores ? getStaticBodyRow() : []}
           orderBy="0"
           uiType={UiType.Secondary}
+          showEmptyTable
         />
         <Table
           columns={getHeadCells(min, max)}
-          rows={getTableRows(scores, name)}
+          rows={hasScores ? getTableRows(scores, name) : []}
           orderBy="0"
           uiType={UiType.Secondary}
+          showEmptyTable
         />
       </StyledScoresContainer>
     </StyledSliderPanelContainer>

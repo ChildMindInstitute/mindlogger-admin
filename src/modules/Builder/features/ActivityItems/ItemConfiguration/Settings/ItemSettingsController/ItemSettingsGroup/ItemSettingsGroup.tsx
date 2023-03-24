@@ -26,8 +26,9 @@ export const ItemSettingsGroup = ({
   groupName,
   inputType,
   groupOptions,
+  collapsedByDefault,
 }: ItemSettingsGroupProps) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(!collapsedByDefault);
 
   const { t } = useTranslation('app');
 

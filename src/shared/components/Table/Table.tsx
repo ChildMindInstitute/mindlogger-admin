@@ -17,6 +17,7 @@ export const Table = ({
   maxHeight = '100%',
   uiType = UiType.Primary,
   emptyComponent,
+  showEmptyTable = false,
   className = '',
 }: TableProps) => {
   const [order, setOrder] = useState<Order>('asc');
@@ -76,7 +77,7 @@ export const Table = ({
   return (
     <>
       <StyledTableContainer className={className} maxHeight={maxHeight} uiType={uiType}>
-        {rows?.length ? (
+        {rows?.length || showEmptyTable ? (
           <MuiTable stickyHeader>
             <TableHead
               headCells={columns}

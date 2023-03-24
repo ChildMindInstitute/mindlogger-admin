@@ -12,6 +12,7 @@ export type ItemSettingsControllerProps<T extends FieldValues> = {
 export type ItemSettingsOptionsGroup = {
   groupName: ItemSettingsGroupNames;
   groupOptions: ItemConfigurationSettings[];
+  collapsedByDefault?: boolean;
 };
 
 export type ItemSettingsOptionsByInputType = {
