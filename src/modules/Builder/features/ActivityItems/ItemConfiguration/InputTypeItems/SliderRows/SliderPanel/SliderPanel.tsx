@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useFormContext, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -84,6 +84,33 @@ export const SliderPanel = <T extends FieldValues>({
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
+  const handleChangeMinScore = (event: ChangeEvent<HTMLInputElement>) => {
+    const minScoreName = `${name}.min`;
+    const value = event.target.value;
+
+    if (value === '') return setValue(minScoreName, DEFAULT_SLIDER_MIN_NUMBER);
+
+    if (+value > max) return setValue(minScoreName, max);
+
+    if (+value < DEFAULT_SLIDER_MIN_NUMBER)
+      return setValue(minScoreName, DEFAULT_SLIDER_MIN_NUMBER);
+
+    setValue(minScoreName, +value);
+  };
+
+  const handleChangeMaxScore = (event: ChangeEvent<HTMLInputElement>) => {
+    const maxScoreName = `${name}.max`;
+    const value = event.target.value;
+
+    if (value === '') return setValue(maxScoreName, min);
+
+    if (+value > DEFAULT_SLIDER_MAX_VALUE) return setValue(maxScoreName, DEFAULT_SLIDER_MAX_VALUE);
+
+    if (+value < min) return setValue(maxScoreName, min);
+
+    setValue(maxScoreName, +value);
+  };
+
   const commonInputProps = {
     control,
     type: 'number',
@@ -135,6 +162,7 @@ export const SliderPanel = <T extends FieldValues>({
             name={`${name}.min`}
             label={t('minValue')}
             maxNumberValue={max}
+            onChange={handleChangeMinScore}
             minNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
           />
         </StyledFlexTopCenter>
@@ -148,6 +176,7 @@ export const SliderPanel = <T extends FieldValues>({
             {...commonInputProps}
             name={`${name}.max`}
             label={t('maxValue')}
+            onChange={handleChangeMaxScore}
             maxNumberValue={DEFAULT_SLIDER_MAX_VALUE}
             minNumberValue={min}
           />

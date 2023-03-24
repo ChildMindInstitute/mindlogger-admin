@@ -1,13 +1,13 @@
 import { MouseEvent, useState, useRef } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
-import theme from 'shared/styles/theme';
-import { StyledBodySmall, StyledHeadline } from 'shared/styles/styledComponents';
+import { theme, StyledBodySmall, StyledHeadline } from 'shared/styles';
 import { Event } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Event';
 import {
   formatToYearMonthDate,
   getDayName,
 } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+import { falseReturnFunc } from 'shared/utils';
 
 import { CalendarDateProps, TooltipPosition } from './CalendarDate.types';
 import {
@@ -68,8 +68,8 @@ export const CalendarDate = ({
     <>
       <StyledDayBtn
         ref={dayBtnRef}
-        onMouseEnter={events.length ? handleTooltipOpen : () => false}
-        onMouseLeave={events.length ? handleTooltipClose : () => false}
+        onMouseEnter={events.length ? handleTooltipOpen : falseReturnFunc}
+        onMouseLeave={events.length ? handleTooltipClose : falseReturnFunc}
         isToday={isToday}
         isOffRange={isOffRange}
         onClick={() => onDayClick(dateToRender)}

@@ -18,17 +18,17 @@ const commonButtonStyles = {
 export const ColorPaletteHeader = ({
   isExpanded,
   onArrowClick,
-  onTrashClick,
+  setShowColorPalette,
 }: ColorPaletteHeaderProps) => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledFlexTopCenter sx={{ gap: '2.4rem' }}>
+    <StyledFlexTopCenter sx={{ gap: '2.4rem', mb: theme.spacing(0.5) }}>
       <StyledClearedButton onClick={onArrowClick} sx={commonButtonStyles}>
         <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
       </StyledClearedButton>
       <StyledLabelBoldLarge sx={{ flexGrow: 1 }}>{t('colorPalette')}</StyledLabelBoldLarge>
-      <StyledClearedButton onClick={onTrashClick} sx={commonButtonStyles}>
+      <StyledClearedButton onClick={() => setShowColorPalette(false)} sx={commonButtonStyles}>
         <Svg id="trash" />
       </StyledClearedButton>
     </StyledFlexTopCenter>

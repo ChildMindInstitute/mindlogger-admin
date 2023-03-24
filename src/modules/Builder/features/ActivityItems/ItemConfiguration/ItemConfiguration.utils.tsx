@@ -2,9 +2,16 @@ import uniqueId from 'lodash.uniqueid';
 
 import i18n from 'i18n';
 import { ItemInputTypes } from 'shared/types';
+import { createArray } from 'shared/utils';
 
-import { SliderOption } from './ItemConfiguration.types';
-import { DEFAULT_EMPTY_SLIDER, SELECTION_OPTIONS_COLOR_PALETTE } from './ItemConfiguration.const';
+import { SelectionRows, SliderOption } from './ItemConfiguration.types';
+import {
+  DEFAULT_EMPTY_SLIDER,
+  DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
+  DEFAULT_SELECTION_ROWS_SCORE,
+  DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
+  SELECTION_OPTIONS_COLOR_PALETTE,
+} from './ItemConfiguration.const';
 
 const { t } = i18n;
 
@@ -31,6 +38,18 @@ export const getInputTypeTooltip = (): Record<ItemInputTypes, string> => ({
 export const getEmptySliderOption = (): SliderOption => ({
   id: uniqueId('slider-'),
   ...DEFAULT_EMPTY_SLIDER,
+});
+
+export const getEmptySelectionItem = (scoresQuantity: number) => ({
+  ...DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
+  id: uniqueId('selection-item-'),
+  scores: createArray(scoresQuantity, () => DEFAULT_SELECTION_ROWS_SCORE),
+});
+
+export const getEmptySelectionRows = (type: SelectionRows['type']): SelectionRows => ({
+  type,
+  items: [getEmptySelectionItem(1)],
+  options: [{ ...DEFAULT_EMPTY_SELECTION_ROWS_OPTION }],
 });
 
 export const getPaletteColor = (paletteName: string, index: number) => {

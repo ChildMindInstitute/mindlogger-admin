@@ -23,7 +23,7 @@ export const Date = () => {
           </StyledDateLine>
         </StyledPresentationLine>
       </StyledPresentation>
-      <StyledBodyMedium>{t('dateHint')}</StyledBodyMedium>
+      <StyledBodyMedium>{t('dateHint')}.</StyledBodyMedium>
     </>
   );
 };

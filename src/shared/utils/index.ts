@@ -12,3 +12,4 @@ export * from './storage';
 export * from './svgBuilder';
 export * from './array';
 export * from './fileSystem';
+export * from './func';

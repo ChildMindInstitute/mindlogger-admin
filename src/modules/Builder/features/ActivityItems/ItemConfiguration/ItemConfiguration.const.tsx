@@ -7,7 +7,7 @@ import { ItemsOptionGroup } from './ItemConfiguration.types';
 export const DEFAULT_TIMER_VALUE = 100;
 export const DEFAULT_SCORE_VALUE = 0;
 export const DEFAULT_MIN_NUMBER = 1;
-export const DEFAULT_MAX_NUMBER = 100;
+export const DEFAULT_MAX_NUMBER = 30;
 export const DEFAULT_SLIDER_MIN_NUMBER = 0;
 export const DEFAULT_SLIDER_MAX_NUMBER = 12;
 export const SLIDER_LABEL_MAX_LENGTH = 20;
@@ -25,6 +25,10 @@ export const DEFAULT_EMPTY_SLIDER = {
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
 export const DEFAULT_MAX_CHARACTERS = 72;
+export const DEFAULT_EMPTY_SELECTION_ROWS_OPTION = { label: '', tooltip: '', image: '' };
+export const DEFAULT_EMPTY_SELECTION_ROWS_ITEM = { label: '', tooltip: '', image: '', scores: [] };
+export const DEFAULT_SELECTION_ROWS_SCORE = 1;
+export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
 
 export const itemsTypeIcons = {
   [ItemInputTypes.SingleSelection]: <Svg id="radio-button-outline" />,
