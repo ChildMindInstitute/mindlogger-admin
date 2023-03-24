@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { ExposeParam, InsertContentGenerator } from 'md-editor-rt';
 import { useTranslation } from 'react-i18next';
@@ -18,15 +18,16 @@ import {
 
 import { StyledErrorText, StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps } from './EditorController.types';
-import { useTouchedTextarea } from './EditorController.hooks';
 
 export const EditorController = <T extends FieldValues>({
   name,
   control,
+  hasRequiredState,
+  requiredStateMessage,
 }: EditorControllerProps<T>) => {
   const { t } = useTranslation('app');
   const editorRef = useRef<ExposeParam>();
-  const { touched } = useTouchedTextarea(editorRef);
+  const [changed, setChanged] = useState(false);
 
   const onInsert = useCallback((generator: InsertContentGenerator) => {
     editorRef.current?.insert(generator);
@@ -37,7 +38,7 @@ export const EditorController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => {
-        const isRequired = touched && (value ?? '').length === 0;
+        const isRequired = hasRequiredState && changed && (value ?? '').length === 0;
 
         return (
           <>
@@ -45,7 +46,10 @@ export const EditorController = <T extends FieldValues>({
               className={isRequired ? 'isRequired' : ''}
               ref={editorRef}
               modelValue={value}
-              onChange={onChange}
+              onChange={(...props) => {
+                setChanged(true);
+                onChange(...props);
+              }}
               language={LANGUAGE_BY_DEFAULT}
               defToolbars={[
                 <MarkExtension key="mark-extension" onInsert={onInsert} />,
@@ -116,7 +120,9 @@ export const EditorController = <T extends FieldValues>({
                 <CharacterCounter inputSize={value.toString().length} key="character-counter" />,
               ]}
             />
-            {isRequired && <StyledErrorText>{t('displayedContentRequired')}</StyledErrorText>}
+            {isRequired && !!requiredStateMessage && (
+              <StyledErrorText>{requiredStateMessage}</StyledErrorText>
+            )}
           </>
         );
       }}
