@@ -1,7 +1,6 @@
 import { Collapse, Slider, styled } from '@mui/material';
 
 import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
 
 export const StyledSliderPanelContainer = styled(Collapse)`
   background: ${variables.palette.surface1};
@@ -23,15 +22,7 @@ export const StyledInputContainer = styled(StyledFlexTopCenter)`
   }
 `;
 
-export const StyledScoresContainer = styled(StyledFlexTopCenter, shouldForwardProp)`
-  ${({ hasScores }: { hasScores: boolean }) =>
-    !hasScores &&
-    `
-      .MuiTableCell-root {
-        border-bottom: none;
-      }
-  `};
-
+export const StyledScoresContainer = styled(StyledFlexTopCenter)`
   border: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
   border-radius: ${variables.borderRadius.lg2};
   margin-top: ${theme.spacing(2.4)};

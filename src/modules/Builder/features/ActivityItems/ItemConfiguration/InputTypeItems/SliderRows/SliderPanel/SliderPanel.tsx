@@ -194,22 +194,22 @@ export const SliderPanel = <T extends FieldValues>({
           />
         </StyledFlexTopCenter>
       </StyledInputContainer>
-      <StyledScoresContainer hasScores={hasScores}>
-        <Table
-          columns={getStaticHeadRow()}
-          rows={hasScores ? getStaticBodyRow() : []}
-          orderBy="0"
-          uiType={UiType.Secondary}
-          showEmptyTable
-        />
-        <Table
-          columns={getHeadCells(min, max)}
-          rows={hasScores ? getTableRows(scores, name) : []}
-          orderBy="0"
-          uiType={UiType.Secondary}
-          showEmptyTable
-        />
-      </StyledScoresContainer>
+      {hasScores && (
+        <StyledScoresContainer>
+          <Table
+            columns={getStaticHeadRow()}
+            rows={getStaticBodyRow()}
+            orderBy="0"
+            uiType={UiType.Secondary}
+          />
+          <Table
+            columns={getHeadCells(min, max)}
+            rows={getTableRows(scores, name)}
+            orderBy="0"
+            uiType={UiType.Secondary}
+          />
+        </StyledScoresContainer>
+      )}
     </StyledSliderPanelContainer>
   );
 };
