@@ -24,7 +24,7 @@ import {
   Step,
   TableController,
 } from './AddToBuilderPopup.types';
-import { StyledTableFormControlLabel } from './AddtoBuilderPopup.styles';
+import { StyledTableFormControlLabel } from './AddToBuilderPopup.styles';
 
 const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] => [
   {
