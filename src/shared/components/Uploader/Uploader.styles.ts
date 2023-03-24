@@ -15,6 +15,7 @@ const absolutePosition = `
 
 export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
   cursor: pointer;
+  flex-shrink: 0;
 
   ${({
     height,
