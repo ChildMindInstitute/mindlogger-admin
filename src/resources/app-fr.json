@@ -460,7 +460,7 @@
   "responseOptions_singleSelection": "Option de réponse à sélection unique",
   "responseOptions_multipleSelection": "Options de réponse à sélection multiple",
   "responseOptions_slider": "Options de réponse du curseur",
-  "responseOptions_text": "Multiple Selection Response Options",
+  "responseOptions_text": "Options de réponse textuelle",
   "additionalResponseOptions": "Options de réponse à sélection multiple",
   "screenConfigurationsAndTimer": "Configurations d'écran et minuterie",
   "scoresAndAlerts": "Scores et alertes",

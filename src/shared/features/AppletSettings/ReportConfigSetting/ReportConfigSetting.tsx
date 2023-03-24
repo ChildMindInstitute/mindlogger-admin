@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { folders } from 'redux/modules';
-import { Svg } from 'shared/components';
+import { SaveChangesPopup, Svg } from 'shared/components';
 import {
   CheckboxController,
   EditorController,
@@ -22,13 +22,7 @@ import { defaultValues as defaultFormValues } from './ReportConfigSetting.const'
 import { reportConfigSchema } from './ReportConfigSetting.schema';
 import { StyledButton, StyledSvg, StyledContainer, StyledForm } from './ReportConfigSetting.styles';
 import { FormValues } from './ReportConfigSetting.types';
-import {
-  ErrorPopup,
-  SaveChanges,
-  ServerVerifyErrorPopup,
-  SuccessPopup,
-  WarningPopup,
-} from './Popups';
+import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
 
 export const ReportConfigSetting = () => {
   const { id } = useParams();
@@ -103,6 +97,10 @@ export const ReportConfigSetting = () => {
   const handleSaveChanges = () => {
     cancelNavigation();
     handleSubmit(onSubmit)();
+  };
+
+  const handleCancel = () => {
+    cancelNavigation();
   };
 
   useEffect(() => {
@@ -252,10 +250,11 @@ export const ReportConfigSetting = () => {
         <SuccessPopup popupVisible={successPopupVisible} setPopupVisible={setSuccessPopupVisible} />
       )}
       {promptVisible && (
-        <SaveChanges
+        <SaveChangesPopup
           popupVisible={promptVisible}
-          onClose={confirmNavigation}
-          saveCallback={handleSaveChanges}
+          onDontSave={confirmNavigation}
+          onCancel={handleCancel}
+          onSave={handleSaveChanges}
         />
       )}
     </>

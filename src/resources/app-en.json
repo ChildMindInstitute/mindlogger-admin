@@ -487,7 +487,7 @@
   "responseOptions_singleSelection": "Single Selection Response Option",
   "responseOptions_multipleSelection": "Multiple Selection Response Options",
   "responseOptions_slider": "Slider Response Options",
-  "responseOptions_text": "Multiple Selection Response Options",
+  "responseOptions_text": "Text Response Options",
   "additionalResponseOptions": "Additional Response Options",
   "screenConfigurationsAndTimer": "Screen Configurations and Timer",
   "scoresAndAlerts": "Scores and Alerts",

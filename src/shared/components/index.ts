@@ -19,3 +19,4 @@ export * from './ToggleButtonGroup';
 export * from './EmptyTable';
 export * from './Uploader';
 export * from './MarkDownEditor';
+export * from './SaveChangesPopup';
