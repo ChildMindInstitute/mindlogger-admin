@@ -28,6 +28,7 @@ export const DEFAULT_EMPTY_SELECTION_ROWS_OPTION = { label: '', tooltip: '', ima
 export const DEFAULT_EMPTY_SELECTION_ROWS_ITEM = { label: '', tooltip: '', image: '', scores: [] };
 export const DEFAULT_SELECTION_ROWS_SCORE = 1;
 export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
+export const SELECTION_OPTION_TEXT_MAX_LENGTH = 75;
 
 export const itemsTypeIcons = {
   [ItemInputTypes.SingleSelection]: <Svg id="radio-button-outline" />,

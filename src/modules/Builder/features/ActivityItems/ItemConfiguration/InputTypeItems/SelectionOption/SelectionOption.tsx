@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ColorResult } from 'react-color';
 
-import { Actions, Svg, Uploader, UploaderUiType } from 'shared/components';
+import { Actions, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import {
   theme,
@@ -19,7 +19,8 @@ import { ItemInputTypes } from 'shared/types';
 import { falseReturnFunc } from 'shared/utils';
 
 import { ItemConfigurationForm, ItemConfigurationSettings } from '../../ItemConfiguration.types';
-import { DEFAULT_SCORE_VALUE } from '../../ItemConfiguration.const';
+import { SELECTION_OPTION_TEXT_MAX_LENGTH } from '../../ItemConfiguration.const';
+import { getPaletteColor } from '../../ItemConfiguration.utils';
 import { ColorPicker } from './ColorPicker';
 import {
   StyledCollapsedWrapper,
@@ -31,8 +32,8 @@ import {
   StyledTooltipWrapper,
 } from './SelectionOption.styles';
 import { SelectionOptionProps } from './SelectionOption.types';
-import { getActions, OPTION_TEXT_MAX_LENGTH } from './SelectionOption.const';
-import { getPaletteColor } from '../../ItemConfiguration.utils';
+import { getActions, getUploaderComponent } from './SelectionOption.utils';
+import { useSetSelectionOptionValue } from './SelectionOption.hooks';
 
 export const SelectionOption = ({
   onRemoveOption,
@@ -43,7 +44,7 @@ export const SelectionOption = ({
   const { t } = useTranslation('app');
   const [optionOpen, setOptionOpen] = useState(true);
   const [visibleActions, setVisibleActions] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const { setValue, watch, control, getValues } = useFormContext<ItemConfigurationForm>();
   const settings = watch('settings');
   const selectedInputType = watch('itemsInputType');
@@ -71,6 +72,14 @@ export const SelectionOption = ({
     }
   };
 
+  const scoreName = `options.${index}.score` as `options.${number}.score`;
+
+  const handleScoreChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === '') return setValue(scoreName, 0);
+
+    setValue(scoreName, +event.target.value);
+  };
+
   const actions = {
     optionHide: () => setValue(`options.${index}.isVisible`, !isVisible),
     paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
@@ -95,39 +104,17 @@ export const SelectionOption = ({
     fullWidth: true,
   };
 
-  const imageComponent = (
-    <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-      <Uploader
-        uiType={UploaderUiType.Secondary}
-        width={5.6}
-        height={5.6}
-        setValue={(val: string) => setValue(`options.${index}.image`, val)}
-        getValue={() => imageSrc || ''}
-      />
-    </StyledFlexTopCenter>
-  );
-
-  const setOptionFieldValue = (
-    checkedCondition: boolean,
-    elementCondition: boolean,
-    fieldName: string,
-    defaultValue: string | number | ColorResult,
-  ) =>
-    checkedCondition
-      ? !elementCondition && onUpdateOption(index, { ...option, [fieldName]: defaultValue })
-      : elementCondition && onUpdateOption(index, { ...option, [fieldName]: undefined });
-
-  useEffect(() => {
-    setOptionFieldValue(hasScoresChecked, !!scoreString, 'score', DEFAULT_SCORE_VALUE);
-  }, [hasScoresChecked, scoreString]);
-
-  useEffect(() => {
-    setOptionFieldValue(hasTooltipsChecked, hasTooltip, 'tooltip', '');
-  }, [hasTooltipsChecked, hasTooltip]);
-
-  useEffect(() => {
-    setOptionFieldValue(hasColorPicker, hasColor, 'color', { hex: '' } as ColorResult);
-  }, [hasColorPicker, hasColor]);
+  useSetSelectionOptionValue({
+    option,
+    onUpdateOption,
+    index,
+    hasScoresChecked,
+    scoreString,
+    hasTooltipsChecked,
+    hasTooltip,
+    hasColorPicker,
+    hasColor,
+  });
 
   return (
     <>
@@ -175,24 +162,24 @@ export const SelectionOption = ({
               <StyledSvgWrapper sx={{ mr: theme.spacing(2) }}>
                 <Svg id={isSingleSelection ? 'radio-button-outline' : 'checkbox-multiple-filled'} />
               </StyledSvgWrapper>
-              {imageComponent}
+              {getUploaderComponent(setValue, index, imageSrc)}
               <StyledTextInputWrapper hasScores={!!scoreString}>
                 <InputController
                   {...commonInputProps}
                   name={`options.${index}.text`}
                   label={t('optionText')}
-                  maxLength={OPTION_TEXT_MAX_LENGTH}
-                  inputProps={{ maxLength: OPTION_TEXT_MAX_LENGTH }}
+                  maxLength={SELECTION_OPTION_TEXT_MAX_LENGTH}
                 />
               </StyledTextInputWrapper>
               {scoreString && (
                 <StyledScoreWrapper>
                   <InputController
                     {...commonInputProps}
-                    name={`options.${index}.score`}
+                    name={scoreName}
                     type="number"
                     label={t('score')}
-                    minNumberValue={0}
+                    minNumberValue={Number.MIN_SAFE_INTEGER}
+                    onChange={handleScoreChange}
                   />
                 </StyledScoreWrapper>
               )}

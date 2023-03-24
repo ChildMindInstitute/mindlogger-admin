@@ -2,13 +2,26 @@ import * as yup from 'yup';
 
 import i18n from 'i18n';
 
-import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from './ItemConfiguration.const';
+import {
+  SELECTION_ROW_OPTION_LABEL_MAX_LENGTH,
+  SELECTION_OPTION_TEXT_MAX_LENGTH,
+} from './ItemConfiguration.const';
+
+const { t } = i18n;
+const numberValueIsRequired = t('numberValueIsRequired');
+
+export const SelectionOptionScheme = () => {
+  const maxLengthLabel = ({ max }: { max: number }) =>
+    t('visibilityDecreasesOverMaxCharacters', { max });
+
+  return yup.object({
+    text: yup.string().max(SELECTION_OPTION_TEXT_MAX_LENGTH, maxLengthLabel),
+    tooltip: yup.string(),
+    score: yup.number().required(numberValueIsRequired),
+  });
+};
 
 export const SelectionRowsItemScheme = () => {
-  const { t } = i18n;
-
-  const numberValueIsRequired = t('numberValueIsRequired');
-
   const maxLengthLabel = ({ max }: { max: number }) =>
     t('visibilityDecreasesOverMaxCharacters', { max });
 
@@ -21,8 +34,6 @@ export const SelectionRowsItemScheme = () => {
 };
 
 export const SelectionRowsOptionScheme = () => {
-  const { t } = i18n;
-
   const maxLengthLabel = ({ max }: { max: number }) =>
     t('visibilityDecreasesOverMaxCharacters', { max });
 
@@ -41,7 +52,6 @@ export const SelectionRowsScheme = () =>
   });
 
 export const itemConfigurationFormSchema = () => {
-  const { t } = i18n;
   const itemNameRequired = t('itemNameRequired');
   const itemNameSymbols = t('itemNameSymbols');
   const minValueLessThanMax = t('minValueLessThanMax');
@@ -55,6 +65,7 @@ export const itemConfigurationFormSchema = () => {
         .string()
         .required(itemNameRequired)
         .matches(/^[a-zA-Z0-9_]+$/, itemNameSymbols),
+      options: yup.array().of(SelectionOptionScheme()),
       minNumber: yup
         .number()
         .typeError(minValuePositiveInt)
