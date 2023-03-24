@@ -7,6 +7,7 @@ import { createArray } from 'shared/utils';
 import { SelectionRows, SliderOption } from './ItemConfiguration.types';
 import {
   DEFAULT_EMPTY_SLIDER,
+  DEFAULT_EMPTY_SLIDER_ROWS,
   DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
   DEFAULT_SELECTION_ROWS_SCORE,
   DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
@@ -35,9 +36,9 @@ export const getInputTypeTooltip = (): Record<ItemInputTypes, string> => ({
   [ItemInputTypes.AudioPlayer]: t('audioPlayerHint'),
 });
 
-export const getEmptySliderOption = (): SliderOption => ({
+export const getEmptySliderOption = (isMultiple: boolean): SliderOption => ({
   id: uniqueId('slider-'),
-  ...DEFAULT_EMPTY_SLIDER,
+  ...(isMultiple ? DEFAULT_EMPTY_SLIDER_ROWS : DEFAULT_EMPTY_SLIDER),
 });
 
 export const getEmptySelectionItem = (scoresQuantity: number) => ({

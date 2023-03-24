@@ -16,7 +16,7 @@ import {
 } from './AddToBuilderPopup.types';
 import { getSteps } from './AddToBuilderPopup.utils';
 import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
-import { StyledContainer } from './AddtoBuilderPopup.styles';
+import { StyledContainer } from './AddToBuilderPopup.styles';
 import { mockedApplets } from './mocked';
 
 export const AddToBuilderPopup = ({

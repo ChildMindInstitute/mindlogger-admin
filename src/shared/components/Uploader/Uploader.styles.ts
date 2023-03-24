@@ -131,6 +131,7 @@ export const StyledUploadImg = styled('img', shouldForwardProp)`
   }) => `
     width: ${width - 0.2}rem;
     height: ${height - 0.2}rem;
+    object-fit: cover;
     border-radius: ${isPrimaryUiType ? variables.borderRadius.lg2 : variables.borderRadius.xs};
     border: ${
       isPrimaryUiType

@@ -18,4 +18,14 @@ export const StyledContainer = styled(Box)`
       border: ${variables.borderWidth.lg} solid ${variables.palette.semantic.error};
     }
   }
+
+  .option-hint {
+    display: none;
+  }
+
+  .Mui-checked + .MuiTypography-root {
+    .option-hint {
+      display: flex;
+    }
+  }
 `;

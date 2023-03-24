@@ -42,17 +42,13 @@ export const Options = () => {
               <InputController
                 control={control}
                 name={`${name}.label`}
-                placeholder={t('selectionRowsOptionPlaceholder', { index: index + 1 })}
+                label={t('selectionRowsOptionLabel', { index: index + 1 })}
                 maxLength={SELECTION_ROW_OPTION_LABEL_MAX_LENGTH}
               />
             </StyledFlexTopStart>
             {hasTooltips && (
               <StyledFlexTopCenter>
-                <InputController
-                  control={control}
-                  name={`${name}.tooltip`}
-                  placeholder={t('tooltip')}
-                />
+                <InputController control={control} name={`${name}.tooltip`} label={t('tooltip')} />
               </StyledFlexTopCenter>
             )}
           </StyledSelectionBox>
