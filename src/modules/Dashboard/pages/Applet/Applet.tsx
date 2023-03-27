@@ -22,8 +22,11 @@ export const Applet = () => {
 
   useEffect(() => {
     if (!id) return;
-    const { getApplet } = applets.thunk;
-    dispatch(getApplet({ appletId: id }));
+
+    const appletId = id;
+    const { getApplet, getEvents } = applets.thunk;
+    dispatch(getApplet({ appletId }));
+    dispatch(getEvents({ appletId }));
   }, [id]);
 
   return <StyledBody>{isLoading ? <Spinner /> : <LinkedTabs tabs={appletTabs} />}</StyledBody>;

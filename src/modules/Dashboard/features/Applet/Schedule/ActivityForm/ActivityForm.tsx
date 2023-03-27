@@ -1,20 +1,20 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Option, SelectController } from 'shared/components/FormComponents';
 import { DefaultTabs as Tabs } from 'shared/components';
-import { theme, StyledModalWrapper, StyledErrorText } from 'shared/styles';
+import { StyledErrorText, StyledModalWrapper, theme } from 'shared/styles';
 import { getErrorMessage } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
-import { createEventApi, CreateEventType, Periodicity } from 'api';
+import { createEventApi, CreateEventType, Periodicity, PeriodicityAlways } from 'api';
 import { useAsync } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 
 import { ActivityFormProps, ActivityFormRef, FormValues } from './ActivityForm.types';
-import { tabs, getDefaultValues } from './ActivityForm.const';
+import { getDefaultValues, tabs } from './ActivityForm.const';
 import { ActivityFormSchema } from './ActivityForm.schema';
 import {
   addSecondsToHourMinutes,
@@ -92,7 +92,7 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
       if (alwaysAvailable) {
         body.oneTimeCompletion = oneTimeCompletion;
         body.periodicity = {
-          type: 'ALWAYS',
+          type: PeriodicityAlways.Always,
           ...(defaultStartDate && {
             selectedDate: convertDateToYearMonthDay(defaultStartDate),
           }),

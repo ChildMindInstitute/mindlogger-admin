@@ -2,7 +2,7 @@ import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 
 import { BaseSchema } from 'shared/state/Base';
-import { AppletId, GetAppletsParams, Periodicity, TimerType } from 'api';
+import { AppletId, GetAppletsParams, Periodicity, PeriodicityAlways, TimerType } from 'api';
 
 export type CreateAppletsStateData = {
   builder: ActionReducerMapBuilder<AppletsSchema>;
@@ -100,7 +100,7 @@ export type Event = {
   timerType: TimerType;
   id: string;
   periodicity: {
-    type: Periodicity;
+    type: Periodicity | PeriodicityAlways;
     startDate: string;
     endDate: string;
     selectedDate: string;

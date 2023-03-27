@@ -3,40 +3,45 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
 
+import { PreparedEvents } from '../Schedule.types';
 import { Counter } from './Counter';
 import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Legend.styles';
-import { getIndicatorColor, getTitle } from './Legend.utils';
-import { Available, Schedules } from './Legend.const';
+import { getTitle } from './Legend.utils';
 
 export const useExpandedLists = (
+  legendEvents: PreparedEvents | null,
   clearAllScheduledEventsAction: () => void,
   onCreateActivitySchedule: () => void,
 ) => {
-  const { t } = useTranslation('app');
-  const commonProps = { width: 18, height: 18 };
-
   const [scheduledVisibility, setScheduledVisibility] = useState(true);
   const [availableVisibility, setAvailableVisibility] = useState(false);
+  const { t } = useTranslation('app');
+  if (!legendEvents) return;
 
-  const availableItems = Object.values(Available).map((el) => (
-    <Fragment key={el}>
-      {availableVisibility && <StyledIndicator colors={getIndicatorColor(el)} />}
-      {getTitle(el)}
+  const commonProps = { width: 18, height: 18 };
+  const { alwaysAvailableEvents = [], scheduledEvents = [], deactivatedEvents = [] } = legendEvents;
+
+  const availableItems = alwaysAvailableEvents.map(({ name, id, isFlow, colors }) => (
+    <Fragment key={id}>
+      {availableVisibility && colors && <StyledIndicator colors={colors} />}
+      {getTitle(name, isFlow)}
     </Fragment>
   ));
 
-  const deactivatedItems = [<StyledDeactivated>Draft 6</StyledDeactivated>];
+  const deactivatedItems = deactivatedEvents.map(({ name, id, isFlow }) => (
+    <StyledDeactivated key={id}>{getTitle(name, isFlow)}</StyledDeactivated>
+  ));
 
   const scheduledItems = [
     <StyledCreateBtn onClick={onCreateActivitySchedule}>
       <Svg id="add" width={20} height={20} />
       {t('createEvent')}
     </StyledCreateBtn>,
-    ...Object.values(Schedules).map((el) => (
-      <Fragment key={el}>
-        {scheduledVisibility && <StyledIndicator colors={getIndicatorColor(el)} />}
-        {getTitle(el)}
-        <Counter count={1} />
+    ...scheduledEvents.map(({ name, id, isFlow, count, colors }) => (
+      <Fragment key={id}>
+        {scheduledVisibility && colors && <StyledIndicator colors={colors} />}
+        {getTitle(name, isFlow)}
+        {count && <Counter count={count} />}
       </Fragment>
     )),
   ];

@@ -95,6 +95,10 @@ export const enum TimerType {
   Idle = 'IDLE',
 }
 
+export const enum PeriodicityAlways {
+  Always = 'ALWAYS',
+}
+
 export const enum Periodicity {
   Once = 'ONCE',
   Daily = 'DAILY',
@@ -112,7 +116,7 @@ export type CreateEventType = AppletId & {
     timer?: string;
     timerType?: TimerType;
     periodicity?: {
-      type: Periodicity | 'ALWAYS';
+      type: Periodicity | PeriodicityAlways;
       startDate?: string;
       endDate?: string;
       selectedDate?: string;

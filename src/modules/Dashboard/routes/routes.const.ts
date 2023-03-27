@@ -2,10 +2,10 @@ import { lazy } from 'react';
 
 import { Managers } from 'modules/Dashboard/features/Managers';
 import { Respondents } from 'modules/Dashboard/features/Respondents';
-import { Schedule } from 'modules/Dashboard/features/Applet/Schedule';
 import { page } from 'resources';
 
 const AddUser = lazy(() => import('modules/Dashboard/features/Applet/AddUser'));
+const Schedule = lazy(() => import('modules/Dashboard/features/Applet/Schedule'));
 const AppletSettings = lazy(
   () => import('modules/Dashboard/features/Applet/DashboardAppletSettings'),
 );

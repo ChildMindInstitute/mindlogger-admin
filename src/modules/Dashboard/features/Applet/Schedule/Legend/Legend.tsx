@@ -18,14 +18,14 @@ import {
 import { ExpandedList } from './ExpandedList';
 import { SearchPopup } from './SearchPopup';
 import { Search } from './Search';
-import { SelectedRespondent } from './Legend.types';
+import { LegendProps, SelectedRespondent } from './Legend.types';
 import { useExpandedLists } from './Legend.hooks';
 import { ExportSchedulePopup } from '../ExportSchedulePopup';
 import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
 import { RemoveIndividualSchedulePopup } from '../RemoveIndividualSchedulePopup';
 import { CreateActivityPopup } from '../CreateActivityPopup';
 
-export const Legend = () => {
+export const Legend = ({ legendEvents }: LegendProps) => {
   const { t } = useTranslation('app');
 
   const [schedule, setSchedule] = useState<string>(scheduleOptions[0].value);
@@ -60,7 +60,11 @@ export const Legend = () => {
     setCreateActivityPopupVisible(true);
   };
 
-  const expandedLists = useExpandedLists(clearAllScheduledEventsAction, onCreateActivitySchedule);
+  const expandedLists = useExpandedLists(
+    legendEvents,
+    clearAllScheduledEventsAction,
+    onCreateActivitySchedule,
+  );
 
   const exportScheduleHandler = () => {
     if (isIndividual) {
