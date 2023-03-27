@@ -1,7 +1,7 @@
 import { LeftBarProps } from '../LeftBar.types';
-import { ActivitySettings } from '../../BuilderAppletSettings.const';
+import { ActivitySettingsOptions } from '../../ActivitySettings.const';
 
 export type ItemProps = {
-  name: ActivitySettings;
+  name: ActivitySettingsOptions;
   icon: JSX.Element;
 } & LeftBarProps;
