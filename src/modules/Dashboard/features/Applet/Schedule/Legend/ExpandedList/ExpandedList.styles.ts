@@ -5,11 +5,9 @@ import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
-export const StyledCollapseBtn = styled(Box)`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+export const StyledCollapseBtn = styled(StyledFlexTopCenter)`
   width: 100%;
+  justify-content: space-between;
 
   &:hover {
     background-color: transparent;

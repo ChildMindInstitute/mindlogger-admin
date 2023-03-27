@@ -14,7 +14,7 @@ export const useExpandedLists = (
   onCreateActivitySchedule: () => void,
 ) => {
   const [scheduledVisibility, setScheduledVisibility] = useState(true);
-  const [availableVisibility, setAvailableVisibility] = useState(false);
+  const [availableVisibility, setAvailableVisibility] = useState(true);
   const { t } = useTranslation('app');
   if (!legendEvents) return;
 
@@ -53,6 +53,7 @@ export const useExpandedLists = (
           icon: <Svg id="clear-calendar" {...commonProps} />,
           action: clearAllScheduledEventsAction,
           tooltipTitle: t('clearAllScheduledEvents'),
+          disabled: scheduledEvents.length === 0,
         },
         {
           icon: (
@@ -60,6 +61,7 @@ export const useExpandedLists = (
           ),
           action: () => setScheduledVisibility((prev) => !prev),
           tooltipTitle: t('hideFromCalendar'),
+          disabled: scheduledEvents.length === 0,
         },
       ],
       items: scheduledItems,
@@ -73,10 +75,13 @@ export const useExpandedLists = (
           ),
           action: () => setAvailableVisibility((prev) => !prev),
           tooltipTitle: t('hideFromCalendar'),
+          disabled: alwaysAvailableEvents.length === 0,
         },
       ],
       items: availableItems,
       title: t('alwaysAvailable'),
+      isHiddenInLegend: scheduledEvents.length === 0 && alwaysAvailableEvents.length === 0,
+      availableEventsScheduled: alwaysAvailableEvents.length === 0 && scheduledEvents.length > 0,
     },
     {
       buttons: [
