@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import { useState } from 'react';
 
 import { Svg } from 'shared/components';
+import { useTimeAgo } from 'shared/hooks';
 import { StyledBodyLarge, StyledBodyMedium, StyledFlexTopStart, variables } from 'shared/styles';
 import { FeedbackNote as FeedbackNoteType } from '../FeedbackNotes.types';
 
@@ -14,6 +15,7 @@ import {
 } from './FeedbackNote.styles';
 
 export const FeedbackNote = ({ note }: { note: FeedbackNoteType }) => {
+  const timeAgo = useTimeAgo();
   const [isVisibleActions, setIsVisibleActions] = useState(false);
 
   return (
@@ -24,7 +26,9 @@ export const FeedbackNote = ({ note }: { note: FeedbackNoteType }) => {
       <StyledNoteHeader>
         <StyledFlexTopStart>
           <StyledAuthorLabel color={variables.palette.outline}>{note.author}</StyledAuthorLabel>
-          <StyledBodyMedium color={variables.palette.outline}>2 hours ago</StyledBodyMedium>
+          <StyledBodyMedium color={variables.palette.outline}>
+            {timeAgo.format(note.date)}
+          </StyledBodyMedium>
         </StyledFlexTopStart>
         {isVisibleActions && (
           <StyledActions>
