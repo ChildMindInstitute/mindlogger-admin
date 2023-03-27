@@ -1,19 +1,15 @@
 import { styled } from '@mui/system';
 
-import theme from 'shared/styles/theme';
 import {
+  theme,
+  variables,
   StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledTitleBoldMedium,
   StyledTitleMedium,
-} from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-
-const commonEllipsisStyles = `
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;`;
+  commonEllipsisStyles,
+} from 'shared/styles';
 
 const commonButtonStyles = `
   width: 4rem;

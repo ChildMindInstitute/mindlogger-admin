@@ -6,9 +6,12 @@ import { useBreadcrumbs } from 'shared/hooks';
 
 import { LeftBar } from './LeftBar';
 import { StyledWrapper } from './BuilderAppletSettings.styles';
+import { ActivitySettings } from './BuilderAppletSettings.const';
 
 export const BuilderAppletSettings = () => {
-  const [activeSetting, setActiveSetting] = useState('scoresAndReports');
+  const [activeSetting, setActiveSetting] = useState<ActivitySettings>(
+    ActivitySettings.ScoresAndReports,
+  );
 
   const { t } = useTranslation('app');
 

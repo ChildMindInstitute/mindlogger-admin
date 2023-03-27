@@ -4,16 +4,11 @@ import {
   theme,
   variables,
   StyledFlexColumn,
-  StyledFlexTopCenter,
-  StyledTitleBoldMedium,
   StyledTitleMedium,
+  StyledFlexTopCenter,
+  commonEllipsisStyles,
 } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
-
-const commonEllipsisStyles = `
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;`;
 
 export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
   position: relative;
@@ -57,10 +52,12 @@ export const StyledCol = styled(StyledFlexColumn)`
   min-width: 0;
 `;
 
-export const StyledInactiveTitle = styled(StyledTitleMedium)`
+export const StyledTitle = styled(StyledTitleMedium, shouldForwardProp)`
   ${commonEllipsisStyles}
-`;
 
-export const StyledActiveTitle = styled(StyledTitleBoldMedium)`
-  ${commonEllipsisStyles}
+  ${({ isActive }: { isActive: boolean }) =>
+    isActive &&
+    `
+      font-weight: ${variables.font.weight.bold};
+  `}
 `;

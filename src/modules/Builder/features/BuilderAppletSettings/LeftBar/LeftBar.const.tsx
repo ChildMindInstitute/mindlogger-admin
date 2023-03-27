@@ -1,12 +1,14 @@
 import { Svg } from 'shared/components';
 
+import { ActivitySettings } from '../BuilderAppletSettings.const';
+
 export const items = [
   {
     groupName: 'reports',
     groupItems: [
       {
         icon: <Svg id="scores-and-reports" />,
-        name: 'scoresAndReports',
+        name: ActivitySettings.ScoresAndReports,
       },
     ],
   },
@@ -15,7 +17,7 @@ export const items = [
     groupItems: [
       {
         icon: <Svg id="grid-outlined" />,
-        name: 'subscalesConfiguration',
+        name: ActivitySettings.SubscalesConfiguration,
       },
     ],
   },

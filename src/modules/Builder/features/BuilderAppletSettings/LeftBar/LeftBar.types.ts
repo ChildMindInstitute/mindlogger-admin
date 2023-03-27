@@ -1,4 +1,6 @@
+import { ActivitySettings } from '../BuilderAppletSettings.const';
+
 export type LeftBarProps = {
-  setActiveSetting: (val: string) => void;
+  setActiveSetting: (val: ActivitySettings) => void;
   activeSetting: string;
 };
