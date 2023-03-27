@@ -26,6 +26,7 @@ export const DatePicker = <T extends FieldValues>({
   name,
   uiType = UiType.OneDate,
   inputSx = {},
+  label,
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -77,7 +78,7 @@ export const DatePicker = <T extends FieldValues>({
             <StyledTextField
               disabled
               variant="outlined"
-              label={uiType === UiType.OneDate ? t('date') : t('startEndDate')}
+              label={label || (uiType === UiType.OneDate ? t('date') : t('startEndDate'))}
               value={getValue()}
               onClick={handlePickerShow}
               className={(open && 'active') || ''}
