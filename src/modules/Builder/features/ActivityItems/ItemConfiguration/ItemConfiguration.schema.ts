@@ -6,10 +6,21 @@ import {
   getMaxLengthValidationError,
   getNumberRequiredValidationError,
 } from './ItemConfiguration.utils';
+
 import {
   SELECTION_ROW_OPTION_LABEL_MAX_LENGTH,
+  SELECTION_OPTION_TEXT_MAX_LENGTH,
   SLIDER_LABEL_MAX_LENGTH,
 } from './ItemConfiguration.const';
+
+const { t } = i18n;
+
+export const SelectionOptionScheme = () =>
+  yup.object({
+    text: yup.string().max(SELECTION_OPTION_TEXT_MAX_LENGTH, getMaxLengthValidationError),
+    tooltip: yup.string(),
+    score: yup.number().required(getNumberRequiredValidationError()),
+  });
 
 export const SelectionRowsItemSchema = () =>
   yup.object({
@@ -45,7 +56,6 @@ export const SliderOptionSchema = () =>
   });
 
 export const itemConfigurationFormSchema = () => {
-  const { t } = i18n;
   const itemNameRequired = t('itemNameRequired');
   const itemNameSymbols = t('itemNameSymbols');
   const minValueLessThanMax = t('minValueLessThanMax');
@@ -67,6 +77,7 @@ export const itemConfigurationFormSchema = () => {
         .number()
         .typeError(maxValuePositiveInt)
         .moreThan(yup.ref('minNumber'), maxValueBiggerThanMin),
+      options: yup.array().of(SelectionOptionScheme()),
       selectionRows: SelectionRowsSchema(),
       sliderOptions: yup.array().of(SliderOptionSchema()),
     })
