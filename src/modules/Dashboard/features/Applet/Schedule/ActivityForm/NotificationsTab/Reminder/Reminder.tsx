@@ -33,9 +33,10 @@ export const Reminder = () => {
               type="number"
               name="reminder.activityIncomplete"
               control={control}
-              InputProps={{ inputProps: { min: 1 } }}
+              InputProps={{ inputProps: { min: 0 } }}
               textAdornment="day"
               tooltip={t('numberOfConsecutiveDays')}
+              minNumberValue={0}
             />
           </StyledInputWrapper>
           <StyledColInner>

@@ -16,6 +16,8 @@ export const TimePicker = <T extends FieldValues>({
   label,
   name,
   wrapperSx = {},
+  minTime,
+  maxTime,
 }: TimePickerProps<T>) => (
   <Controller
     control={control}
@@ -32,6 +34,8 @@ export const TimePicker = <T extends FieldValues>({
           showPopperArrow={false}
           dateFormat={format}
           timeFormat={format}
+          minTime={minTime}
+          maxTime={maxTime}
           customInput={
             <TextField
               variant="outlined"
