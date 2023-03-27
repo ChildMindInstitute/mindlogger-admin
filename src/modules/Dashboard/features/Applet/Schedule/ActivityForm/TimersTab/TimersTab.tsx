@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import { setHours, setMinutes } from 'date-fns';
 
 import { TimePicker, ToggleButtonGroup } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme } from 'shared/styles';
@@ -7,6 +8,7 @@ import { TimerType } from 'modules/Dashboard/api';
 
 import { timersButtons } from './TimersTab.const.';
 import { FormValues } from '../ActivityForm.types';
+import { StyledTimePickerWrapper } from './TimersTab.styles';
 
 export const TimersTab = () => {
   const { t } = useTranslation('app');
@@ -36,7 +38,14 @@ export const TimersTab = () => {
           <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>
             {t('maximumTimeAwayFromActivity')}
           </StyledBodyLarge>
-          <TimePicker name="idleTime" label={t('duration')} />
+          <StyledTimePickerWrapper>
+            <TimePicker
+              name="idleTime"
+              label={t('duration')}
+              minTime={setHours(setMinutes(new Date(), 15), 0)}
+              maxTime={setHours(setMinutes(new Date(), 45), 0)}
+            />
+          </StyledTimePickerWrapper>
         </>
       )}
     </>
