@@ -124,8 +124,15 @@ export const Legend = ({ legendEvents }: LegendProps) => {
           {t('export')}
         </StyledBtn>
       </StyledBtnsRow>
-      {expandedLists?.map(({ buttons, items, title }) => (
-        <ExpandedList key={title} buttons={buttons} items={items} title={title} />
+      {expandedLists?.map(({ buttons, items, title, allAvailableScheduled, isHiddenInLegend }) => (
+        <ExpandedList
+          key={title}
+          buttons={buttons}
+          items={items}
+          title={title}
+          isHiddenInLegend={isHiddenInLegend}
+          allAvailableScheduled={allAvailableScheduled}
+        />
       ))}
       {exportDefaultSchedulePopupVisible && (
         <ExportSchedulePopup

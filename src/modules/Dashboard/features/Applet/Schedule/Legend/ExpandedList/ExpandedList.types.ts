@@ -10,5 +10,5 @@ export type ExpandedListProps = {
   items: JSX.Element[];
   buttons: Button[];
   isHiddenInLegend?: boolean;
-  availableEventsScheduled?: boolean;
+  allAvailableScheduled?: boolean;
 };

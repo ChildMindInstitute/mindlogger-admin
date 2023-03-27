@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import { Box } from '@mui/material';
 import uniqueId from 'lodash.uniqueid';
+import { useTranslation } from 'react-i18next';
 
 import { Svg, Tooltip } from 'shared/components';
-import { StyledFlexTopCenter, StyledLabelBoldLarge } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import {
+  theme,
+  StyledBodyMedium,
+  StyledFlexTopCenter,
+  StyledLabelBoldLarge,
+  variables,
+} from 'shared/styles';
 
 import {
   StyledChildren,
@@ -15,23 +21,32 @@ import {
 } from './ExpandedList.styles';
 import { ExpandedListProps } from './ExpandedList.types';
 
-export const ExpandedList = ({ title, items, buttons }: ExpandedListProps) => {
+export const ExpandedList = ({
+  title,
+  items,
+  buttons,
+  isHiddenInLegend,
+  allAvailableScheduled,
+}: ExpandedListProps) => {
   const [listVisible, setListVisible] = useState(true);
+  const { t } = useTranslation('app');
+  const collapseBtnId = listVisible ? 'navigate-up' : 'navigate-down';
+  const getIconBtnMargin = (index: number) => (index === 0 ? 'auto' : theme.spacing(0.4));
 
-  return (
+  return isHiddenInLegend ? null : (
     <StyledCollapse>
       <StyledCollapseBtn onClick={() => setListVisible((prevState) => !prevState)}>
         <StyledFlexTopCenter sx={{ cursor: 'pointer' }}>
-          <Svg id={listVisible ? 'navigate-up' : 'navigate-down'} />
+          <Svg id={collapseBtnId} />
           <StyledLabelBoldLarge sx={{ marginLeft: theme.spacing(1) }}>{title}</StyledLabelBoldLarge>
         </StyledFlexTopCenter>
         <Box>
-          {buttons?.map((el, i) => (
+          {buttons?.map((el, index) => (
             <Tooltip tooltipTitle={el.tooltipTitle} key={uniqueId()}>
               <Box component="span">
                 <StyledIconBtn
                   disabled={el.disabled}
-                  sx={{ marginLeft: i === 0 ? 'auto' : theme.spacing(0.4) }}
+                  sx={{ ml: getIconBtnMargin(index) }}
                   onClick={(e) => {
                     e.stopPropagation();
                     el.action();
@@ -45,11 +60,21 @@ export const ExpandedList = ({ title, items, buttons }: ExpandedListProps) => {
         </Box>
       </StyledCollapseBtn>
       {listVisible && (
-        <StyledChildren>
-          {items?.map((el) => (
-            <StyledItem key={uniqueId()}>{el}</StyledItem>
-          ))}
-        </StyledChildren>
+        <>
+          {allAvailableScheduled && (
+            <StyledBodyMedium
+              color={variables.palette.outline}
+              sx={{ p: theme.spacing(2.4, 0.9, 0, 0.9) }}
+            >
+              {t('activateActivitiesScheduled')}
+            </StyledBodyMedium>
+          )}
+          <StyledChildren>
+            {items?.map((el) => (
+              <StyledItem key={uniqueId()}>{el}</StyledItem>
+            ))}
+          </StyledChildren>
+        </>
       )}
     </StyledCollapse>
   );

@@ -331,6 +331,7 @@
   "import": "Import",
   "hideFromCalendar": "Hide from calendar",
   "activateInBuilder": "Activate in builder",
+  "activateActivitiesScheduled": "All activated Activities are scheduled.",
   "clearAllScheduledEvents": "Clear all scheduled events",
   "searchOrSelectRespondent": "Search for or select Respondent to add/edit their schedule",
   "selectRespondent": "Select Respondent",

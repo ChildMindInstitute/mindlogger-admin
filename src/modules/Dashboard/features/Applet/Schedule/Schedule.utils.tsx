@@ -1,8 +1,8 @@
-import { Event, SingleApplet } from 'modules/Dashboard/state';
+import { Activity, ActivityFlow, Event, SingleApplet } from 'modules/Dashboard/state';
 import { PeriodicityAlways } from 'modules/Dashboard/api';
 import { variables } from 'shared/styles';
 
-import { LegendEvent, PreparedEvents } from './Schedule.types';
+import { AddEventsToCategories, LegendEvent, PreparedEvents } from './Schedule.types';
 
 const getCount = (ids: string[], id: string) => ids.filter((item) => item === id).length;
 
@@ -39,13 +39,10 @@ const colorsArray = [
   [purple, purpleAlfa30],
 ];
 
-let colorIndex = 0;
+const getNextColor = (index: number) => {
+  const colorIndex = index % colorsArray.length;
 
-const getNextColor = () => {
-  const color = colorsArray[colorIndex];
-  colorIndex = (colorIndex + 1) % colorsArray.length;
-
-  return color;
+  return colorsArray[colorIndex];
 };
 
 export const getPreparedEvents = (
@@ -64,17 +61,10 @@ export const getPreparedEvents = (
   const scheduledEvents: LegendEvent[] = [];
   const deactivatedEvents: LegendEvent[] = [];
 
-  const addEventsToCategories = ({
-    id,
-    name,
-    isFlow,
-    isHidden,
-  }: Omit<LegendEvent, 'count'> & { isHidden?: boolean }) => {
-    const colors = getNextColor();
+  const addEventsToCategories = ({ id, name, isFlow, isHidden, index }: AddEventsToCategories) => {
+    const colors = getNextColor(index);
     const event = { id, name, isFlow };
-    // if (isHidden) return deactivatedEvents.push(event);
-
-    return deactivatedEvents.push(event);
+    if (isHidden) return deactivatedEvents.push(event);
 
     if (scheduledEventsIds.some((scheduledEventId) => scheduledEventId === id)) {
       return scheduledEvents.push({ ...event, count: getCount(scheduledEventsIds, id), colors });
@@ -82,12 +72,11 @@ export const getPreparedEvents = (
     alwaysAvailableEvents.push({ ...event, colors: [colors[0], colors[0]] });
   };
 
-  activities.forEach(({ id, name, isHidden }) =>
-    addEventsToCategories({ id, name, isFlow: false, isHidden }),
-  );
-
-  activityFlows.forEach(({ id, name, isHidden }) =>
-    addEventsToCategories({ id, name, isFlow: true, isHidden }),
+  [...activities, ...activityFlows].forEach(
+    (
+      { id, name, isHidden, activityIds }: ActivityFlow | (Activity & { activityIds?: string[] }),
+      index,
+    ) => addEventsToCategories({ id, name, isFlow: !!activityIds, isHidden, index }),
   );
 
   return { alwaysAvailableEvents, scheduledEvents, deactivatedEvents };

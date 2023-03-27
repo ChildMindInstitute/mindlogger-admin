@@ -11,3 +11,8 @@ export type PreparedEvents = {
   scheduledEvents: LegendEvent[];
   deactivatedEvents: LegendEvent[];
 };
+
+export type AddEventsToCategories = Omit<LegendEvent, 'count'> & {
+  isHidden?: boolean;
+  index: number;
+};

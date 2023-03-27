@@ -1,7 +1,10 @@
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
+import { page } from 'resources';
+import { BUILDER_PAGES } from 'shared/consts';
 
 import { PreparedEvents } from '../Schedule.types';
 import { Counter } from './Counter';
@@ -16,6 +19,9 @@ export const useExpandedLists = (
   const [scheduledVisibility, setScheduledVisibility] = useState(true);
   const [availableVisibility, setAvailableVisibility] = useState(true);
   const { t } = useTranslation('app');
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   if (!legendEvents) return;
 
   const commonProps = { width: 18, height: 18 };
@@ -46,6 +52,10 @@ export const useExpandedLists = (
     )),
   ];
 
+  const noScheduledEvents = scheduledEvents.length === 0;
+  const noAvailableEvents = alwaysAvailableEvents.length === 0;
+  const noDeactivatedEvents = deactivatedEvents.length === 0;
+
   return [
     {
       buttons: [
@@ -53,7 +63,7 @@ export const useExpandedLists = (
           icon: <Svg id="clear-calendar" {...commonProps} />,
           action: clearAllScheduledEventsAction,
           tooltipTitle: t('clearAllScheduledEvents'),
-          disabled: scheduledEvents.length === 0,
+          disabled: noScheduledEvents,
         },
         {
           icon: (
@@ -61,7 +71,7 @@ export const useExpandedLists = (
           ),
           action: () => setScheduledVisibility((prev) => !prev),
           tooltipTitle: t('hideFromCalendar'),
-          disabled: scheduledEvents.length === 0,
+          disabled: noScheduledEvents,
         },
       ],
       items: scheduledItems,
@@ -75,24 +85,25 @@ export const useExpandedLists = (
           ),
           action: () => setAvailableVisibility((prev) => !prev),
           tooltipTitle: t('hideFromCalendar'),
-          disabled: alwaysAvailableEvents.length === 0,
+          disabled: noAvailableEvents,
         },
       ],
       items: availableItems,
       title: t('alwaysAvailable'),
-      isHiddenInLegend: scheduledEvents.length === 0 && alwaysAvailableEvents.length === 0,
-      availableEventsScheduled: alwaysAvailableEvents.length === 0 && scheduledEvents.length > 0,
+      isHiddenInLegend: noScheduledEvents && noAvailableEvents,
+      allAvailableScheduled: noAvailableEvents && !noScheduledEvents,
     },
     {
       buttons: [
         {
           icon: <Svg id="external-link" {...commonProps} />,
-          action: () => null,
+          action: () => navigate(`${page.builder}/${id}/${BUILDER_PAGES.activities}`),
           tooltipTitle: t('activateInBuilder'),
         },
       ],
       items: deactivatedItems,
       title: t('deactivated'),
+      isHiddenInLegend: noDeactivatedEvents,
     },
   ];
 };

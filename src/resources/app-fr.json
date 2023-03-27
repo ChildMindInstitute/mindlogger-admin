@@ -297,6 +297,7 @@
   "noPendingInvitations": "Aucune invitation en attente",
   "hideFromCalendar": "Masquer du calendrier",
   "activateInBuilder": "Activer dans le constructeur",
+  "activateActivitiesScheduled": "Toutes les activités activées sont programmées.",
   "clearAllScheduledEvents": "Effacer tous les événements programmés",
   "searchOrSelectRespondent": "Recherchez ou sélectionnez un répondant pour ajouter/modifier son emploi du temps",
   "selectRespondent": "Sélectionnez le répondant",
