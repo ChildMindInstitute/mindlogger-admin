@@ -1,13 +1,27 @@
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { AppletSettings } from 'shared/features/AppletSettings';
-import { page } from 'resources';
+import { Svg } from 'shared/components';
+import { useBreadcrumbs } from 'shared/hooks';
 
-import { getSettings } from './BuilderAppletSettings.const';
+import { LeftBar } from './LeftBar';
+import { StyledWrapper } from './BuilderAppletSettings.styles';
 
 export const BuilderAppletSettings = () => {
-  const location = useLocation();
-  const isEditAppletPage = location.pathname.includes(page.newApplet);
+  const [activeSetting, setActiveSetting] = useState('scoresAndReports');
 
-  return <AppletSettings isBuilder settings={getSettings(isEditAppletPage)} />;
+  const { t } = useTranslation('app');
+
+  useBreadcrumbs([
+    {
+      icon: <Svg id="settings" width="18" height="18" />,
+      label: t('activitySettings'),
+    },
+  ]);
+
+  return (
+    <StyledWrapper>
+      <LeftBar activeSetting={activeSetting} setActiveSetting={setActiveSetting} />
+    </StyledWrapper>
+  );
 };

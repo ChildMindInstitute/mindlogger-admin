@@ -557,5 +557,8 @@
   "maxValueBiggerThanMin": "La valeur maximale doit être supérieure à la valeur minimale",
   "minValueLessThanMax": "La valeur min doit être inférieure à la valeur max",
   "minValue Positive Int": "La valeur min doit être un entier positif",
-  "maxValuePositiveInt": "La valeur max doit être un entier positif"
+  "maxValuePositiveInt": "La valeur max doit être un entier positif",
+  "scoresAndReports": "Notes et rapports",
+  "subscales": "Sous-échelles",
+  "subscalesConfiguration": "Configuration des sous-échelles"
 }
