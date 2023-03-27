@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { folders } from 'redux/modules';
-import { Svg } from 'shared/components';
+import { SaveChangesPopup, Svg } from 'shared/components';
 import {
   CheckboxController,
   EditorController,
@@ -22,13 +22,7 @@ import { defaultValues as defaultFormValues } from './ReportConfigSetting.const'
 import { reportConfigSchema } from './ReportConfigSetting.schema';
 import { StyledButton, StyledSvg, StyledContainer, StyledForm } from './ReportConfigSetting.styles';
 import { FormValues } from './ReportConfigSetting.types';
-import {
-  ErrorPopup,
-  SaveChanges,
-  ServerVerifyErrorPopup,
-  SuccessPopup,
-  WarningPopup,
-} from './Popups';
+import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
 
 export const ReportConfigSetting = () => {
   const { id } = useParams();
@@ -48,6 +42,7 @@ export const ReportConfigSetting = () => {
     setValue,
     watch,
     trigger,
+    reset,
     formState: { isDirty, isSubmitted, defaultValues },
   } = useForm<FormValues>({
     resolver: yupResolver(reportConfigSchema()),
@@ -96,6 +91,16 @@ export const ReportConfigSetting = () => {
   const saveReportConfigurations = () => {
     // TODO: make a request and depending on a response, show the corresponding popup
     setSuccessPopupVisible(true);
+    reset({}, { keepValues: true });
+  };
+
+  const handleSaveChanges = () => {
+    cancelNavigation();
+    handleSubmit(onSubmit)();
+  };
+
+  const handleCancel = () => {
+    cancelNavigation();
   };
 
   useEffect(() => {
@@ -245,10 +250,11 @@ export const ReportConfigSetting = () => {
         <SuccessPopup popupVisible={successPopupVisible} setPopupVisible={setSuccessPopupVisible} />
       )}
       {promptVisible && (
-        <SaveChanges
+        <SaveChangesPopup
           popupVisible={promptVisible}
-          onClose={confirmNavigation}
-          saveCallback={cancelNavigation}
+          onDontSave={confirmNavigation}
+          onCancel={handleCancel}
+          onSave={handleSaveChanges}
         />
       )}
     </>

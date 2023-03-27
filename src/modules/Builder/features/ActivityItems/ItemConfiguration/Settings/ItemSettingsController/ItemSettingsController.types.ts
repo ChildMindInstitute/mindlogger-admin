@@ -1,4 +1,4 @@
-import { FieldValues, UseControllerProps, Path } from 'react-hook-form';
+import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
 
@@ -12,6 +12,7 @@ export type ItemSettingsControllerProps<T extends FieldValues> = {
 export type ItemSettingsOptionsGroup = {
   groupName: ItemSettingsGroupNames;
   groupOptions: ItemConfigurationSettings[];
+  collapsedByDefault?: boolean;
 };
 
 export type ItemSettingsOptionsByInputType = {

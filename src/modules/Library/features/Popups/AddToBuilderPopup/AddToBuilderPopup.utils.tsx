@@ -24,7 +24,7 @@ import {
   Step,
   TableController,
 } from './AddToBuilderPopup.types';
-import { StyledTableFormControlLabel } from './AddtoBuilderPopup.styles';
+import { StyledTableFormControlLabel } from './AddToBuilderPopup.styles';
 
 const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] => [
   {
@@ -92,6 +92,7 @@ const getActions = (): Omit<FormControlLabelProps, 'control'>[] => {
         <>
           <StyledBodyLarge>{t('createNewApplet')}</StyledBodyLarge>
           <StyledLabelLarge
+            className="option-hint"
             sx={{ color: variables.palette.primary, marginTop: theme.spacing(0.4) }}
           >
             {t('createNewAppletHint')}
@@ -101,7 +102,17 @@ const getActions = (): Omit<FormControlLabelProps, 'control'>[] => {
     },
     {
       value: AddToBuilderActions.AddToExistingApplet,
-      label: <StyledBodyLarge>{t('addToExistingApplet')}</StyledBodyLarge>,
+      label: (
+        <>
+          <StyledBodyLarge>{t('addToExistingApplet')}</StyledBodyLarge>
+          <StyledLabelLarge
+            className="option-hint"
+            sx={{ color: variables.palette.primary, marginTop: theme.spacing(0.4) }}
+          >
+            {t('exitingAppletHint')}
+          </StyledLabelLarge>
+        </>
+      ),
     },
   ];
 };

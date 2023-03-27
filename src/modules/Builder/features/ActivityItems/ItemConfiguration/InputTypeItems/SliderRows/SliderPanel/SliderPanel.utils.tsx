@@ -31,7 +31,8 @@ export const getStaticBodyRow = () => [
   { placeholder: { content: () => t('score'), value: t('score') } },
 ];
 
-export const getMarksByScores = (scores: number[]) =>
-  scores?.every((score: number) => typeof score === 'number')
-    ? scores?.map((score: number) => ({ value: score }))
-    : [];
+export const getMarks = (min: number, max: number, hasLabels: boolean) =>
+  createArray(max - min + 1, (index: number) => ({
+    value: min + index,
+    ...(hasLabels && { label: `${min + index}` }),
+  }));

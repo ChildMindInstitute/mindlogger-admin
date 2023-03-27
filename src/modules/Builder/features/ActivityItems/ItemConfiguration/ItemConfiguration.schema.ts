@@ -3,52 +3,56 @@ import * as yup from 'yup';
 import i18n from 'i18n';
 
 import {
+  getMaxLengthValidationError,
+  getNumberRequiredValidationError,
+} from './ItemConfiguration.utils';
+
+import {
   SELECTION_ROW_OPTION_LABEL_MAX_LENGTH,
   SELECTION_OPTION_TEXT_MAX_LENGTH,
+  SLIDER_LABEL_MAX_LENGTH,
 } from './ItemConfiguration.const';
 
 const { t } = i18n;
-const numberValueIsRequired = t('numberValueIsRequired');
 
-export const SelectionOptionScheme = () => {
-  const maxLengthLabel = ({ max }: { max: number }) =>
-    t('visibilityDecreasesOverMaxCharacters', { max });
-
-  return yup.object({
-    text: yup.string().max(SELECTION_OPTION_TEXT_MAX_LENGTH, maxLengthLabel),
-    tooltip: yup.string(),
-    score: yup.number().required(numberValueIsRequired),
-  });
-};
-
-export const SelectionRowsItemScheme = () => {
-  const maxLengthLabel = ({ max }: { max: number }) =>
-    t('visibilityDecreasesOverMaxCharacters', { max });
-
-  return yup.object({
-    label: yup.string().max(SELECTION_ROW_OPTION_LABEL_MAX_LENGTH, maxLengthLabel),
-    tooltip: yup.string(),
-    image: yup.string(),
-    scores: yup.array().of(yup.number().required(numberValueIsRequired)),
-  });
-};
-
-export const SelectionRowsOptionScheme = () => {
-  const maxLengthLabel = ({ max }: { max: number }) =>
-    t('visibilityDecreasesOverMaxCharacters', { max });
-
-  return yup.object({
-    label: yup.string().max(SELECTION_ROW_OPTION_LABEL_MAX_LENGTH, maxLengthLabel),
-    tooltip: yup.string(),
-    image: yup.string(),
-  });
-};
-
-export const SelectionRowsScheme = () =>
+export const SelectionOptionScheme = () =>
   yup.object({
-    items: yup.array().of(SelectionRowsItemScheme()),
-    options: yup.array().of(SelectionRowsOptionScheme()),
+    text: yup.string().max(SELECTION_OPTION_TEXT_MAX_LENGTH, getMaxLengthValidationError),
+    tooltip: yup.string(),
+    score: yup.number().required(getNumberRequiredValidationError()),
+  });
+
+export const SelectionRowsItemSchema = () =>
+  yup.object({
+    label: yup.string().max(SELECTION_ROW_OPTION_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+    tooltip: yup.string(),
+    image: yup.string(),
+    scores: yup.array().of(yup.number().required(getNumberRequiredValidationError())),
+  });
+
+export const SelectionRowsOptionSchema = () =>
+  yup.object({
+    label: yup.string().max(SELECTION_ROW_OPTION_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+    tooltip: yup.string(),
+    image: yup.string(),
+  });
+
+export const SelectionRowsSchema = () =>
+  yup.object({
+    items: yup.array().of(SelectionRowsItemSchema()),
+    options: yup.array().of(SelectionRowsOptionSchema()),
     type: yup.string(),
+  });
+
+export const SliderOptionSchema = () =>
+  yup.object({
+    min: yup.number().required(),
+    max: yup.number().required(),
+    minLabel: yup.string().max(SLIDER_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+    maxLabel: yup.string().max(SLIDER_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+    minImage: yup.string(),
+    maxImage: yup.string(),
+    scores: yup.array().of(yup.mixed().notOneOf([''], getNumberRequiredValidationError())),
   });
 
 export const itemConfigurationFormSchema = () => {
@@ -65,7 +69,6 @@ export const itemConfigurationFormSchema = () => {
         .string()
         .required(itemNameRequired)
         .matches(/^[a-zA-Z0-9_]+$/, itemNameSymbols),
-      options: yup.array().of(SelectionOptionScheme()),
       minNumber: yup
         .number()
         .typeError(minValuePositiveInt)
@@ -74,7 +77,9 @@ export const itemConfigurationFormSchema = () => {
         .number()
         .typeError(maxValuePositiveInt)
         .moreThan(yup.ref('minNumber'), maxValueBiggerThanMin),
-      selectionRows: SelectionRowsScheme(),
+      options: yup.array().of(SelectionOptionScheme()),
+      selectionRows: SelectionRowsSchema(),
+      sliderOptions: yup.array().of(SliderOptionSchema()),
     })
     .required();
 };

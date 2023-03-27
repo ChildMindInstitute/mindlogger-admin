@@ -86,6 +86,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.HasTextInput,
         ItemConfigurationSettings.IsTextInputRequired,
       ],
+      collapsedByDefault: true,
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -94,10 +95,12 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
     {
       groupName: ItemSettingsGroupNames.ScoresAndAlerts,
       groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.Date]: [
