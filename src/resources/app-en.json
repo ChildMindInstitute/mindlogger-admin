@@ -670,5 +670,8 @@
   "maxValueBiggerThanMin": "Max Value should be bigger than Min Value",
   "minValueLessThanMax": "Min Value should be less than Max Value",
   "minValuePositiveInt": "Min Value must be a positive integer",
-  "maxValuePositiveInt": "Max Value must be a positive integer"
+  "maxValuePositiveInt": "Max Value must be a positive integer",
+  "scoresAndReports": "Scores & Reports",
+  "subscales": "Subscales",
+  "subscalesConfiguration": "Subscales Configuration"
 }
