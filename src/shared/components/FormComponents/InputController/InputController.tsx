@@ -38,7 +38,7 @@ export const InputController = <T extends FieldValues>({
   const isNumberType = textFieldProps.type === 'number';
 
   const getTextAdornment = (value: number) => {
-    if (!textAdornment || !value) return null;
+    if (!textAdornment || (!value && value !== 0)) return null;
 
     return <StyledBodyLarge>{t(textAdornment, { count: value })}</StyledBodyLarge>;
   };

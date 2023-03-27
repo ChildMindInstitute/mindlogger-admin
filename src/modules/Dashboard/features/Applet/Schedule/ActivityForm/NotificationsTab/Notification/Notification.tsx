@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
 import { ToggleButtonGroup, TimePicker } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { StyledFlexTopCenter, StyledLabelLarge } from 'shared/styles/styledComponents';
+import { StyledFlexTopCenter, StyledLabelLarge, theme } from 'shared/styles';
 
 import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
@@ -15,18 +13,19 @@ import { FormValues, NotificationType } from '../../ActivityForm.types';
 
 export const Notification = ({ index, remove }: NotificationProps) => {
   const { t } = useTranslation('app');
-  const { setValue } = useFormContext<FormValues>();
-  const [activeType, setActivetype] = useState<string>(NotificationType.Fixed);
+  const { setValue, watch } = useFormContext<FormValues>();
+  const notification = watch(`notifications.${index}`);
 
   const handleRemoveNotification = () => {
     remove(index);
   };
 
-  const updateTime = () => {
+  const updateTime = (selected: string) => {
     setValue(`notifications.${index}`, {
       at: null,
       from: null,
       to: null,
+      type: selected as NotificationType,
     });
   };
 
@@ -41,13 +40,12 @@ export const Notification = ({ index, remove }: NotificationProps) => {
           <StyledLeftCol>
             <ToggleButtonGroup
               toggleButtons={notificationTimeToggles}
-              activeButton={activeType}
-              setActiveButton={setActivetype}
+              activeButton={notification.type}
               customChange={updateTime}
             />
           </StyledLeftCol>
           <StyledCol sx={{ marginLeft: theme.spacing(2.4) }}>
-            {activeType === NotificationType.Fixed ? (
+            {notification.type === NotificationType.Fixed ? (
               <StyledColInner>
                 <TimePicker name={`notifications.${index}.at`} label={t('at')} />
               </StyledColInner>

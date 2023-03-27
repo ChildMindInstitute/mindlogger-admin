@@ -13,6 +13,7 @@ export const StyledDialog = styled(Dialog)`
     background-color: ${variables.palette.surface3};
     width: ${({ width }: { width?: string }) => (width ? `${width}rem` : 'auto')};
     max-width: 100rem;
+    height: ${({ height }: { height?: string }) => height || 'auto'};
   }
 `;
 
@@ -34,6 +35,7 @@ export const StyledCloseButton = styled(StyledClearedButton)`
 
 export const StyledDialogActions = styled(DialogActions, shouldForwardProp)`
   justify-content: ${({ actionsAlign }: { actionsAlign: ActionsAlign }) => actionsAlign};
+  margin-top: auto;
 `;
 
 export const StyledButton = styled(Button)`

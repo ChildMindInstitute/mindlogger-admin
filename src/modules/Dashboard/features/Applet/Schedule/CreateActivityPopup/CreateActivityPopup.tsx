@@ -61,6 +61,7 @@ export const CreateActivityPopup = ({
           title={t('createActivitySchedule')}
           buttonText={t('save')}
           width="67.1"
+          height="81.2rem"
           sxProps={{
             opacity: removeAllScheduledPopupVisible || removeAlwaysAvailablePopupVisible ? 0 : 1,
           }}
