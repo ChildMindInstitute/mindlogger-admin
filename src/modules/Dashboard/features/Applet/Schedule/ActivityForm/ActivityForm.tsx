@@ -9,7 +9,7 @@ import { StyledErrorText, StyledModalWrapper, theme } from 'shared/styles';
 import { getErrorMessage } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
-import { createEventApi, CreateEventType, Periodicity, PeriodicityAlways } from 'api';
+import { createEventApi, CreateEventType, Periodicity } from 'api';
 import { useAsync } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 
@@ -92,7 +92,7 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
       if (alwaysAvailable) {
         body.oneTimeCompletion = oneTimeCompletion;
         body.periodicity = {
-          type: PeriodicityAlways.Always,
+          type: Periodicity.Always,
           ...(defaultStartDate && {
             selectedDate: convertDateToYearMonthDay(defaultStartDate),
           }),
