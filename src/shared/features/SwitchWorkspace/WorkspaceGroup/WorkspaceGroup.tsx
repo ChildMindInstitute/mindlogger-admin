@@ -5,6 +5,7 @@ import { DEFAULT_ROWS_PER_PAGE, Svg } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { applets } from 'redux/modules';
+import { OrderBy } from 'modules/Dashboard/features/Applets/Applets.types';
 
 import { WorkspaceImage } from '../WorkspaceImage';
 import { StyledListItemButton, StyledItemContent, StyledSelect } from './WorkspaceGroup.styles';
@@ -27,7 +28,7 @@ export const WorkspaceGroup = ({
         params: {
           ownerId: workspace.ownerId,
           limit: DEFAULT_ROWS_PER_PAGE,
-          ordering: '-desc',
+          ordering: `-${OrderBy.UpdatedAt}`,
         },
       }),
     );
