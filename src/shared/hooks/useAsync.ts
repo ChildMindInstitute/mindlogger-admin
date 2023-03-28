@@ -4,14 +4,14 @@ import { AxiosError } from 'axios';
 import { ApiError } from 'redux/modules';
 
 export const useAsync = <T, K>(
-  asyncFunction: ((args: T) => Promise<K>) | undefined,
+  asyncFunction: ((args?: T) => Promise<K>) | undefined,
   callback?: (data: K | null) => void,
 ) => {
   const [value, setValue] = useState<K | null>(null);
   const [error, setError] = useState<AxiosError<ApiError> | null>(null);
 
   const execute = useCallback(
-    (body: T) => {
+    (body?: T) => {
       if (!asyncFunction) {
         return Promise.resolve();
       }
