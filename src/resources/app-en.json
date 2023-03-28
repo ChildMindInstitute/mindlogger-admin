@@ -667,5 +667,10 @@
   "maxValuePositiveInt": "Max Value must be a positive integer",
   "scoresAndReports": "Scores & Reports",
   "subscales": "Subscales",
-  "subscalesConfiguration": "Subscales Configuration"
+  "subscalesConfiguration": "Subscales Configuration",
+  "generateReport": "Generate Report",
+  "showScoreSummary": "Show Score Summary",
+  "showScoreSummaryTooltip": "Show Score Summary",
+  "addScore": "Add Score",
+  "addSection": "Add Section"
 }

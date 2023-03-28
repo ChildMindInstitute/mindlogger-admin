@@ -19,7 +19,7 @@ export const LeftBar = ({ activeSetting, setActiveSetting }: LeftBarProps) => {
       <StyledHeader isSticky={isHeaderSticky}>{t('activitySettings')}</StyledHeader>
       <StyledContent>
         {items.map(({ groupName, groupItems }) => (
-          <StyledGroupContainer>
+          <StyledGroupContainer key={`group-${groupName}`}>
             <StyledBodyMedium>{t(groupName)}</StyledBodyMedium>
             {groupItems?.map((item) => (
               <Item
