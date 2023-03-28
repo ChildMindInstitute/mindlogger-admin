@@ -29,4 +29,8 @@ export const StyledDescription = styled(StyledFlexTopCenter)`
     padding-right: ${theme.spacing(3.4)};
     font-size: ${variables.font.size.md};
   }
+
+  .MuiBox-root {
+    width: auto;
+  }
 `;

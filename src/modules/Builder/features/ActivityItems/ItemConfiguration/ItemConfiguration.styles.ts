@@ -32,11 +32,6 @@ export const StyledContent = styled(Box)`
   padding: ${theme.spacing(2.8, 6.4)};
 `;
 
-export const StyledInputWrapper = styled(Box)`
-  width: 58rem;
-`;
-
 export const StyledOptionsWrapper = styled(Box)`
   margin-bottom: ${theme.spacing(2.4)};
-  text-align: center;
 `;

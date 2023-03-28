@@ -9,3 +9,9 @@ export const commonStickyStyles = `
   z-index: ${theme.zIndex.fab};
   transition: ${variables.transitions.boxShadow};
 `;
+
+export const commonEllipsisStyles = `
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;

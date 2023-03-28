@@ -4,7 +4,7 @@ export const defaultValues = {
   respondentId: false,
   caseId: false,
   subject: '',
-  description: '',
+  description: 'Please click this link to download the report.',
   serverURL: '',
-  appletDescription: '',
+  publicEncryptionKey: '',
 };

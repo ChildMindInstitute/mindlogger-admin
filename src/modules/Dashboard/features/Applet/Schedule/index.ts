@@ -1,1 +1,3 @@
-export * from './Schedule';
+import { Schedule } from './Schedule';
+
+export default Schedule;

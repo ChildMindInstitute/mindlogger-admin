@@ -3,12 +3,10 @@ import { useFormContext } from 'react-hook-form';
 
 import { StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles';
 import { RadioGroupController } from 'shared/components/FormComponents';
-import {
-  SelectionOption,
-  getPaletteColor,
-  SELECTION_OPTIONS_COLOR_PALETTE,
-} from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
+import { SELECTION_OPTIONS_COLOR_PALETTE } from '../../../ItemConfiguration.const';
+import { getPaletteColor } from '../../../ItemConfiguration.utils';
+import { SelectionOption } from '../../../ItemConfiguration.types';
 import {
   StyledColorPalettePickerContainer,
   StyledPaletteColorBox,

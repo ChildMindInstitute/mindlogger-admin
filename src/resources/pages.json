@@ -9,6 +9,7 @@
   "appletManagers": "/dashboard/:id/managers",
   "appletSchedule": "/dashboard/:id/schedule",
   "appletSettings": "/dashboard/:id/settings",
+  "appletSettingsItem": "/dashboard/:id/settings/:settingItem",
   "appletAddUser": "/dashboard/:id/add-user",
   "builder": "/builder",
   "newApplet": "/builder/new-applet",
@@ -24,6 +25,7 @@
   "newAppletNewActivityFlowAbout": "/builder/new-applet/activity-flow/new-activity-flow/about",
   "newAppletNewActivityFlowBuilder": "/builder/new-applet/activity-flow/new-activity-flow/builder",
   "newAppletSettings": "/builder/new-applet/settings",
+  "newAppletSettingsItem": "/builder/new-applet/settings/:settingItem",
   "library": "/library",
   "libraryAppletDetails": "/library/:id",
   "libraryCart": "/library/cart"

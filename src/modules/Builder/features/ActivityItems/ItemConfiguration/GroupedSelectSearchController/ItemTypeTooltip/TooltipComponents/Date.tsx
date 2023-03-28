@@ -23,7 +23,7 @@ export const Date = () => {
           </StyledDateLine>
         </StyledPresentationLine>
       </StyledPresentation>
-      <StyledBodyMedium>{t('promptSelectDate')}</StyledBodyMedium>
+      <StyledBodyMedium>{t('dateHint')}.</StyledBodyMedium>
     </>
   );
 };

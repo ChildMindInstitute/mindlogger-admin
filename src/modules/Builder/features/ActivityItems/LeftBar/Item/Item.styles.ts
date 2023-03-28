@@ -1,19 +1,15 @@
 import { styled } from '@mui/system';
 
-import theme from 'shared/styles/theme';
 import {
+  theme,
+  variables,
   StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledTitleBoldMedium,
   StyledTitleMedium,
-} from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-
-const commonEllipsisStyles = `
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;`;
+  commonEllipsisStyles,
+} from 'shared/styles';
 
 const commonButtonStyles = `
   width: 4rem;
@@ -25,6 +21,10 @@ export const StyledItem = styled(StyledFlexTopCenter)`
   padding: ${theme.spacing(1.2, 1.2, 1.2, 2.2)};
   border-radius: ${variables.borderRadius.lg2};
   margin-bottom: ${theme.spacing(1.6)};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 
   .actions {
     display: none;

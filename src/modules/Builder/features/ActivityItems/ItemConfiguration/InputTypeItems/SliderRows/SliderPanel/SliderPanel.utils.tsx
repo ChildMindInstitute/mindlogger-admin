@@ -1,12 +1,13 @@
 import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
+import { createArray } from 'shared/utils';
 
 import { ScoreCell } from './ScoreCell';
 
 const { t } = i18n;
 
 export const getHeadCells = (min: number, max: number): HeadCell[] =>
-  Array.from({ length: max - min + 1 }).map((item, index) => ({
+  createArray(max - min + 1, (index: number) => ({
     id: `${min + index}`,
     label: `${min + index}`,
   }));
@@ -30,5 +31,8 @@ export const getStaticBodyRow = () => [
   { placeholder: { content: () => t('score'), value: t('score') } },
 ];
 
-export const getMarksByScores = (scores: number[]) =>
-  scores?.map((score: number) => ({ value: score }));
+export const getMarks = (min: number, max: number, hasLabels: boolean) =>
+  createArray(max - min + 1, (index: number) => ({
+    value: min + index,
+    ...(hasLabels && { label: `${min + index}` }),
+  }));

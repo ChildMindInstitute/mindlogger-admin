@@ -124,8 +124,14 @@ export const Uploader = ({
         {...dragEvents}
       >
         {imageField ? (
-          <UploadedImgContainer>
-            <StyledUploadImg alt="file upload" src={imageField} width={width} height={height} />
+          <UploadedImgContainer isPrimaryUiType={isPrimaryUiType}>
+            <StyledUploadImg
+              alt="file upload"
+              src={imageField}
+              width={width}
+              height={height}
+              isPrimaryUiType={isPrimaryUiType}
+            />
             {isMouseOver && (
               <StyledButtonGroup
                 isPrimaryUiType={isPrimaryUiType}

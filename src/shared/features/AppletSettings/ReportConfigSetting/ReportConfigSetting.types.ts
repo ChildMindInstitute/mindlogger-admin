@@ -6,5 +6,5 @@ export type FormValues = {
   subject: string;
   description: string;
   serverURL: string;
-  appletDescription: string;
+  publicEncryptionKey: string;
 };

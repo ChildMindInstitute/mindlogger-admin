@@ -1,6 +1,6 @@
+import { Dispatch, SetStateAction } from 'react';
 import { ColorResult } from 'react-color';
 import {
-  Control,
   FieldValues,
   Path,
   UseFormGetValues,
@@ -8,6 +8,7 @@ import {
   UseFormWatch,
   UseFormRegister,
   UseFormUnregister,
+  UseFormClearErrors,
 } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
@@ -21,18 +22,18 @@ export enum ItemConfigurationSettings {
   HasTickMarksLabels = 'hasTickMarksLabels',
   HasColorPalette = 'hasColorPallete',
   HasRandomize = 'hasRandomize',
-  HasMoreNavigationButtons = 'hasMoreNavigationButtons',
   HasResponseDataIdentifier = 'hasResponseDataIdentifier',
   HasTimer = 'hasTimer',
-  HasLabels = 'hasLabels',
-  IsResponseRequired = 'isResponseRequired',
   IsCorrectAnswerRequired = 'isCorrectAnswerRequired',
   IsNumericalRequired = 'isNumericalRequired',
+  IsResponseRequired = 'isResponseRequired',
   IsSkippable = 'isSkippable',
   IsContinuous = 'isContinuous',
-  IsMediaReplayAllowed = 'isMediaReplayAllowed',
-  IsUndoChangesForbidden = 'isUndoChangesForbidden',
+  IsPlayAudioOnce = 'isPlayAudioOnce',
   IsGoBackRemoved = 'isGoBackRemoved',
+  IsTextInputRequired = 'isTextInputRequired',
+  IsUndoRemoved = 'isUndoRemoved',
+  IsNavigationMovedToTheTop = 'isNavigationMovedToTheTop',
 }
 
 export type SelectionOption = {
@@ -48,6 +49,26 @@ export type Alert = {
   message: string;
   option: string;
   item: string;
+};
+
+export type SelectionRowsItem = {
+  id?: string;
+  label: string;
+  tooltip?: string;
+  scores?: number[];
+  image?: string;
+};
+
+export type SelectionRowsOption = {
+  label: string;
+  tooltip?: string;
+  image?: string;
+};
+
+export type SelectionRows = {
+  items: SelectionRowsItem[];
+  options: SelectionRowsOption[];
+  type: ItemInputTypes.MultipleSelectionPerRow | ItemInputTypes.SingleSelectionPerRow;
 };
 
 export type ItemConfigurationForm = {
@@ -66,6 +87,7 @@ export type ItemConfigurationForm = {
   sliderOptions?: SliderOption[];
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
+  selectionRows?: SelectionRows;
   mediaTranscript?: string;
   mediaFileResource?: string;
 };
@@ -81,12 +103,16 @@ export type ItemsOptionGroup = {
 };
 
 export type SettingsSetupProps = {
-  control: Control<ItemConfigurationForm>;
   setValue: UseFormSetValue<ItemConfigurationForm>;
   getValues: UseFormGetValues<ItemConfigurationForm>;
   watch: UseFormWatch<ItemConfigurationForm>;
   register: UseFormRegister<ItemConfigurationForm>;
   unregister: UseFormUnregister<ItemConfigurationForm>;
+  clearErrors: UseFormClearErrors<ItemConfigurationForm>;
+  removeOptions: () => void;
+  handleAddOption: () => void;
+  removeAlert: () => void;
+  setShowColorPalette: Dispatch<SetStateAction<boolean>>;
 };
 
 export type OptionalItemSetupProps = {

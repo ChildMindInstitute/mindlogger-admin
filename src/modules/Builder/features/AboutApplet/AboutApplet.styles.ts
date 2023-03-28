@@ -13,10 +13,6 @@ const column = `
 
 export const StyledForm = styled('form')`
   ${column}
-
-  .MuiOutlinedInput-notchedOutline {
-    border-color: ${variables.palette.surface_variant};
-  }
 `;
 
 export const StyledContainer = styled(Box)`

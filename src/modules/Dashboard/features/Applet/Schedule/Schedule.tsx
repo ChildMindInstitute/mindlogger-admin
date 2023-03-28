@@ -1,20 +1,19 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { applets } from 'modules/Dashboard/state';
-import { useAppDispatch } from 'redux/store';
 
 import { Calendar } from './Calendar';
 import { Legend } from './Legend';
 import { StyledLeftPanel, StyledSchedule } from './Schedule.styles';
+import { getPreparedEvents } from './Schedule.utils';
 
 export const Schedule = () => {
   const { t } = useTranslation('app');
-  const { id } = useParams();
-  const dispatch = useAppDispatch();
+  const appletData = applets.useAppletData();
+  const eventsData = applets.useEventsData();
+  const preparedEvents = getPreparedEvents(appletData?.result, eventsData?.result);
 
   useBreadcrumbs([
     {
@@ -23,16 +22,10 @@ export const Schedule = () => {
     },
   ]);
 
-  useEffect(() => {
-    if (!id) return;
-
-    dispatch(applets.thunk.getEvents({ appletId: id }));
-  }, [id]);
-
   return (
     <StyledSchedule>
       <StyledLeftPanel>
-        <Legend />
+        <Legend legendEvents={preparedEvents} />
       </StyledLeftPanel>
       <Calendar />
     </StyledSchedule>

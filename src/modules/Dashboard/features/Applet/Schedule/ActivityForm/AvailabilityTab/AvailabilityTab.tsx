@@ -15,6 +15,7 @@ import {
   StyledTimeRow,
   StyledTimeWrapper,
   StyledWrapper,
+  StyledDatePickerWrapper,
 } from './AvailabilityTab.styles';
 
 export const AvailabilityTab = () => {
@@ -36,17 +37,26 @@ export const AvailabilityTab = () => {
   const getDatePicker = () => {
     if (periodicity === Periodicity.Once) {
       return (
-        <DatePicker name="date" value={date} control={control} uiType={DatePickerUiType.OneDate} />
+        <StyledDatePickerWrapper>
+          <DatePicker
+            name="date"
+            value={date}
+            control={control}
+            uiType={DatePickerUiType.OneDate}
+          />
+        </StyledDatePickerWrapper>
       );
     }
 
     return (
-      <DatePicker
-        name="startEndingDate"
-        value={startEndingDate}
-        control={control}
-        uiType={DatePickerUiType.StartEndingDate}
-      />
+      <StyledDatePickerWrapper>
+        <DatePicker
+          name="startEndingDate"
+          value={startEndingDate}
+          control={control}
+          uiType={DatePickerUiType.StartEndingDate}
+        />
+      </StyledDatePickerWrapper>
     );
   };
 

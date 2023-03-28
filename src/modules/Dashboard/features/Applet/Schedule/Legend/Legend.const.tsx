@@ -1,17 +1,5 @@
 import { Svg } from 'shared/components';
-
-export const Schedules = {
-  DailyJournal: 'dailyJournal',
-  PreQuestionnaire: 'preQuestionnaire',
-  MorningAssessment: 'morningAssessment',
-  MiddayAssessment: 'middayAssessment',
-  EveningAssessment: 'eveningAssessment',
-} as const;
-
-export const Available = {
-  EmotionalSupport: 'emotionalSupport',
-  IncentiveActivity: 'incentiveActivity',
-} as const;
+import { createArray } from 'shared/utils';
 
 export const ScheduleOptions = {
   DefaultSchedule: 'defaultSchedule',
@@ -31,7 +19,7 @@ export const scheduleOptions = [
   },
 ];
 
-export const mockedScheduleData = new Array(22).fill(null).map((_, index) => ({
+export const mockedScheduleData = createArray(22, (index) => ({
   activityName: {
     content: () => `Pediatric Screener #${index}`,
     value: `Pediatric Screener ${index}`,

@@ -18,13 +18,15 @@ export const Applet = () => {
     managerMetaStatus === 'loading' ||
     managerMetaStatus === 'idle';
   const appletTabs = useAppletTabs();
-  const { id } = useParams();
+  const { id: appletId } = useParams();
 
   useEffect(() => {
-    if (!id) return;
-    const { getApplet } = applets.thunk;
-    dispatch(getApplet({ appletId: id }));
-  }, [id]);
+    if (!appletId) return;
+
+    const { getApplet, getEvents } = applets.thunk;
+    dispatch(getApplet({ appletId }));
+    dispatch(getEvents({ appletId }));
+  }, [appletId]);
 
   return <StyledBody>{isLoading ? <Spinner /> : <LinkedTabs tabs={appletTabs} />}</StyledBody>;
 };

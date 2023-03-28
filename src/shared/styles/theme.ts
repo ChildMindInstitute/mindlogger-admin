@@ -190,6 +190,11 @@ export const theme = createTheme({
           height: '4.8rem',
           letterSpacing: variables.font.letterSpacing.sm,
           boxShadow: 'unset',
+          '&.Mui-disabled': {
+            '& svg': {
+              fill: variables.palette.contained_btn_disabled_text,
+            },
+          },
           '&.MuiButton-contained': {
             fontWeight: variables.font.weight.bold,
             '& svg': {
@@ -373,13 +378,23 @@ export const theme = createTheme({
         root: {
           borderRadius: variables.borderRadius.sm,
           '&:hover': {
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: variables.palette.primary50,
+            },
+            '&.Mui-disabled': {
+              '.MuiOutlinedInput-notchedOutline': {
+                borderColor: variables.palette.on_surface_alfa12,
+              },
+            },
             '&.Mui-error': {
               '.MuiOutlinedInput-notchedOutline': {
                 borderColor: variables.palette.semantic.error,
               },
             },
+          },
+          '&.Mui-disabled': {
             '.MuiOutlinedInput-notchedOutline': {
-              borderColor: variables.palette.primary50,
+              borderColor: variables.palette.on_surface_alfa12,
             },
           },
         },

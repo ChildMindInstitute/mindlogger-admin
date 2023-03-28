@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { ColorResult } from 'react-color';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Svg } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
@@ -19,9 +20,13 @@ import { useHeaderSticky } from 'shared/hooks';
 import { ItemInputTypes } from 'shared/types';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { TextInputOption } from './TextInputOption';
 import { Alerts } from './Alerts';
-import { ItemSettingsController, ItemSettingsDrawer, ColorPalette } from './Settings';
+import {
+  ItemSettingsController,
+  ItemSettingsDrawer,
+  ColorPalette,
+  TextInputOption,
+} from './Settings';
 import {
   AudioPlayer,
   SelectionOption,
@@ -34,12 +39,12 @@ import {
   AudioRecord,
   Geolocation,
   TextResponse,
+  SelectionRows,
   Drawing,
 } from './InputTypeItems';
 import {
   StyledContent,
   StyledHeader,
-  StyledInputWrapper,
   StyledItemConfiguration,
   StyledOptionsWrapper,
 } from './ItemConfiguration.styles';
@@ -47,14 +52,17 @@ import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfigur
 import { DEFAULT_SCORE_VALUE, itemsTypeOptions } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils';
+import { itemConfigurationFormSchema } from './ItemConfiguration.schema';
 
 export const ItemConfiguration = () => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
+  const [showColorPalette, setShowColorPalette] = useState(false);
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const { t } = useTranslation('app');
 
   const methods = useForm<ItemConfigurationForm>({
+    resolver: yupResolver(itemConfigurationFormSchema()),
     defaultValues: {
       itemsInputType: '',
       name: '',
@@ -64,7 +72,7 @@ export const ItemConfiguration = () => {
     mode: 'onChange',
   });
 
-  const { control, watch, setValue, getValues, register, unregister } = methods;
+  const { control, watch, setValue, getValues, register, unregister, clearErrors } = methods;
 
   const {
     fields: options,
@@ -112,12 +120,24 @@ export const ItemConfiguration = () => {
       'settings',
       settings?.filter(
         (settingKey: ItemConfigurationSettings) =>
-          settingKey !== ItemConfigurationSettings.HasTextInput,
+          settingKey !== ItemConfigurationSettings.HasTextInput &&
+          settingKey !== ItemConfigurationSettings.IsTextInputRequired,
       ),
     );
   };
 
-  useSettingsSetup({ control, setValue, getValues, watch, register, unregister });
+  useSettingsSetup({
+    setValue,
+    getValues,
+    watch,
+    register,
+    unregister,
+    removeOptions,
+    handleAddOption,
+    removeAlert,
+    setShowColorPalette,
+    clearErrors,
+  });
 
   return (
     <FormProvider {...methods}>
@@ -139,52 +159,80 @@ export const ItemConfiguration = () => {
           </StyledFlexTopCenter>
         </StyledHeader>
         <StyledContent>
-          <StyledInputWrapper>
-            <GroupedSelectSearchController
-              name="itemsInputType"
-              options={itemsTypeOptions}
-              control={control}
-            />
-          </StyledInputWrapper>
-          <StyledInputWrapper>
-            <StyledBodyMedium
-              sx={{ m: theme.spacing(0.2, 0, 4, 1.4) }}
-              color={variables.palette.on_surface_variant}
-            >
-              {selectedInputType && getInputTypeTooltip()[selectedInputType]}
-            </StyledBodyMedium>
-            <InputController
-              fullWidth
-              name="name"
-              control={control}
-              label={t('itemName')}
-              type="text"
-              sx={{ mb: theme.spacing(4) }}
-            />
-          </StyledInputWrapper>
-          <StyledTitleLarge sx={{ mb: theme.spacing(1) }}>{t('itemBody')}</StyledTitleLarge>
-          <EditorController name="body" control={control} />
-          {hasOptions && hasColorPalette && <ColorPalette />}
-          {hasOptions && (
-            <StyledOptionsWrapper>
-              {options?.length
-                ? options.map((option, index) => (
-                    <SelectionOption
-                      key={option.id}
-                      onRemoveOption={removeOptions}
-                      onUpdateOption={updateOptions}
-                      index={index}
-                    />
-                  ))
-                : null}
-              <Button
-                onClick={handleAddOption}
-                variant="outlined"
-                startIcon={<Svg id="add" width="20" height="20" />}
+          <Grid container direction="row" columns={2} spacing={2.4}>
+            <Grid item xs={1}>
+              <GroupedSelectSearchController
+                name="itemsInputType"
+                options={itemsTypeOptions}
+                control={control}
+              />
+              <StyledBodyMedium
+                sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
+                color={variables.palette.on_surface_variant}
               >
-                {t('addOption')}
-              </Button>
-            </StyledOptionsWrapper>
+                {selectedInputType && getInputTypeTooltip()[selectedInputType]}
+              </StyledBodyMedium>
+            </Grid>
+            <Grid item xs={1}>
+              <InputController
+                fullWidth
+                name="name"
+                control={control}
+                label={t('itemName')}
+                type="text"
+                sx={{ mb: theme.spacing(4) }}
+              />
+            </Grid>
+          </Grid>
+          <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
+            {t('displayedContent')}
+          </StyledTitleLarge>
+          <EditorController
+            name="body"
+            control={control}
+            requiredStateMessage={t('displayedContentRequired')}
+            hasRequiredState
+          />
+          {hasOptions && (
+            <>
+              <StyledFlexTopCenter
+                sx={{ m: theme.spacing(4.8, 0, 2.4), justifyContent: 'space-between' }}
+              >
+                <StyledTitleLarge>{t('responseOptions')}</StyledTitleLarge>
+                {hasColorPalette && !showColorPalette && (
+                  <Button
+                    onClick={() => setShowColorPalette(true)}
+                    variant="outlined"
+                    startIcon={<Svg id="paint-outline" width="20" height="20" />}
+                  >
+                    {t('setPalette')}
+                  </Button>
+                )}
+              </StyledFlexTopCenter>
+              {hasColorPalette && showColorPalette && (
+                <ColorPalette setShowColorPalette={setShowColorPalette} />
+              )}
+              <StyledOptionsWrapper>
+                {options?.length
+                  ? options.map((option, index) => (
+                      <SelectionOption
+                        key={option.id}
+                        onRemoveOption={removeOptions}
+                        onUpdateOption={updateOptions}
+                        optionsLength={options.length}
+                        index={index}
+                      />
+                    ))
+                  : null}
+                <Button
+                  onClick={handleAddOption}
+                  variant="outlined"
+                  startIcon={<Svg id="add" width="20" height="20" />}
+                >
+                  {t('addOption')}
+                </Button>
+              </StyledOptionsWrapper>
+            </>
           )}
           {selectedInputType === ItemInputTypes.NumberSelection && (
             <NumberSelection name="minNumber" maxName="maxNumber" />
@@ -195,6 +243,8 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.SliderRows && (
             <SliderRows name="sliderOptions" control={control} isMultiple />
           )}
+          {selectedInputType === ItemInputTypes.SingleSelectionPerRow && <SelectionRows isSingle />}
+          {selectedInputType === ItemInputTypes.MultipleSelectionPerRow && <SelectionRows />}
           {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
           {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
           {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
@@ -210,13 +260,7 @@ export const ItemConfiguration = () => {
           {selectedInputType === ItemInputTypes.Drawing && (
             <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />
           )}
-          {isTextInputOptionVisible && (
-            <TextInputOption
-              name="isTextInputOptionRequired"
-              control={control}
-              onRemove={handleRemoveTextInputOption}
-            />
-          )}
+          {isTextInputOptionVisible && <TextInputOption onRemove={handleRemoveTextInputOption} />}
           {hasAlerts && (
             <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
           )}
@@ -226,7 +270,6 @@ export const ItemConfiguration = () => {
               onClose={() => setSettingsDrawerVisible(false)}
             >
               <ItemSettingsController
-                timerName="timer"
                 name="settings"
                 inputType={selectedInputType}
                 control={control}
