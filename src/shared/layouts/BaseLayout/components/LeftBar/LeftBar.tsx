@@ -1,27 +1,51 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { StyledLabelMedium } from 'shared/styles/styledComponents';
+import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
-import { variables } from 'shared/styles/variables';
+import { Workspace } from 'shared/features/SwitchWorkspace/SwitchWorkspace.types';
+import { getWorkspacesApi } from 'shared/api';
+import { auth } from 'modules/Auth/state';
+import { useAsync } from 'shared/hooks';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
-import { mockedWorkspaces as workspaces } from './mocked';
 
 export const LeftBar = () => {
   const { t } = useTranslation('app');
-
+  const userData = auth.useData();
   const [visibleDrawer, setVisibleDrawer] = useState(false);
-  const [currentWorkspace, setCurrentWorkspace] = useState(workspaces[0]);
-  // TODO: get list of available workspaces and set the current one
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+  const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
+
+  const { execute } = useAsync(getWorkspacesApi, (result) => {
+    const { firstName, lastName, id } = userData?.user || {};
+
+    id &&
+      setWorkspaces([
+        {
+          owned: true,
+          ownerId: id,
+          workspaceName: `${firstName} ${lastName}`,
+        },
+        ...(result?.data?.result || []),
+      ]);
+  });
+
+  useEffect(() => {
+    execute(undefined);
+  }, []);
+
+  useEffect(() => {
+    workspaces.length && setCurrentWorkspace(workspaces[0]);
+  }, [workspaces]);
 
   return (
     <StyledDrawer>
       <StyledDrawerLogo onClick={() => setVisibleDrawer((prevState) => !prevState)}>
-        <WorkspaceImage workspaceName={currentWorkspace.workspaceName} />
+        <WorkspaceImage workspaceName={currentWorkspace?.workspaceName} />
       </StyledDrawerLogo>
       <List>
         {links.map(({ labelKey, link, icon, activeIcon }) => (
