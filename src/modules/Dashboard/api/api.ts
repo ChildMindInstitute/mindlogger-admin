@@ -36,11 +36,14 @@ export const getAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal
     signal,
   });
 
-export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) =>
-  authApiClient.get(`/workspaces/${params.ownerId}`, {
-    // params,
+export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get(`/workspaces/${ownerId}/applets`, {
+    params: restParams,
     signal,
   });
+};
 
 export const getAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}`, { signal });

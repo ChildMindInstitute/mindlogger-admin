@@ -2,12 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { List } from '@mui/material';
 
 import { DEFAULT_ROWS_PER_PAGE, Svg } from 'shared/components';
-import { StyledBodyLarge, StyledBodyMedium } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
-
 import { applets } from 'redux/modules';
+
 import { WorkspaceImage } from '../WorkspaceImage';
 import { StyledListItemButton, StyledItemContent, StyledSelect } from './WorkspaceGroup.styles';
 import { WorkspaceGroupProps } from './WorkspaceGroup.types';
@@ -23,17 +21,13 @@ export const WorkspaceGroup = ({
 
   const changeWorkspaceHandler = (workspace: Workspace) => {
     setCurrentWorkspace(workspace);
-
-    // const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
     const { getWorkspaceApplets } = applets.thunk;
     dispatch(
       getWorkspaceApplets({
         params: {
           ownerId: workspace.ownerId,
           limit: DEFAULT_ROWS_PER_PAGE,
-          // search,
-          // page,
-          //ordering,
+          ordering: '-desc',
         },
       }),
     );

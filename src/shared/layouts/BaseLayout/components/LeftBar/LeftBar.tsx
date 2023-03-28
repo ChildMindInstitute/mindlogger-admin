@@ -3,12 +3,13 @@ import { NavLink } from 'react-router-dom';
 import { List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { StyledLabelMedium } from 'shared/styles/styledComponents';
+import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
-import { variables } from 'shared/styles/variables';
-import { getWorkspacesApi } from 'shared/api/api';
-import { auth } from 'modules/Auth/state';
 import { Workspace } from 'shared/features/SwitchWorkspace/SwitchWorkspace.types';
+import { getWorkspacesApi } from 'shared/api';
+import { auth } from 'modules/Auth/state';
+
+import { getErrorMessage } from 'shared/utils';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
@@ -21,17 +22,26 @@ export const LeftBar = () => {
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
 
   useEffect(() => {
-    getWorkspacesApi().then(({ data }) => {
-      const { firstName, lastName, id } = userData?.user || {};
-      setWorkspaces([
-        {
-          owned: true,
-          ownerId: id,
-          workspaceName: `${firstName} ${lastName}`,
-        },
-        ...data.result,
-      ]);
-    });
+    const getWorkspaces = async () => {
+      try {
+        const { data } = await getWorkspacesApi();
+        const { firstName, lastName, id } = userData?.user || {};
+
+        id &&
+          setWorkspaces([
+            {
+              owned: true,
+              ownerId: id,
+              workspaceName: `${firstName} ${lastName}`,
+            },
+            ...(data?.result || []),
+          ]);
+      } catch (error) {
+        getErrorMessage(error);
+      }
+    };
+
+    getWorkspaces();
   }, []);
 
   useEffect(() => {
