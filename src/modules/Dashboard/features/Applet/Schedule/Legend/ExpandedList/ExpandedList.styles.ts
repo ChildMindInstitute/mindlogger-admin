@@ -1,15 +1,11 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { theme, variables, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
 
-export const StyledCollapseBtn = styled(Box)`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+export const StyledCollapseBtn = styled(StyledFlexTopCenter)`
   width: 100%;
+  justify-content: space-between;
 
   &:hover {
     background-color: transparent;

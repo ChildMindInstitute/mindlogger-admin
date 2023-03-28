@@ -19,6 +19,10 @@ export const APPLET_PAGES = {
   addUser: 'add-user',
 };
 
+export const BUILDER_PAGES = {
+  activities: 'activities',
+};
+
 export enum DateFormats {
   Year = 'yyy',
   DayMonthYear = 'dd MMM yyyy',
