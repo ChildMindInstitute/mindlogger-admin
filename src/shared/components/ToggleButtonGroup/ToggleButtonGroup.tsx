@@ -19,7 +19,7 @@ export const ToggleButtonGroup = ({
   const handleChange = (e: MouseEvent<HTMLElement>, selected: string) => {
     if (selected) {
       customChange && customChange(selected);
-      setActiveButton(selected);
+      setActiveButton && setActiveButton(selected);
     }
   };
 

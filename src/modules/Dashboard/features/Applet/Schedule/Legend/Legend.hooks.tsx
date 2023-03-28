@@ -1,45 +1,60 @@
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
+import { page } from 'resources';
+import { BUILDER_PAGES } from 'shared/consts';
 
+import { PreparedEvents } from '../Schedule.types';
 import { Counter } from './Counter';
 import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Legend.styles';
-import { getIndicatorColor, getTitle } from './Legend.utils';
-import { Available, Schedules } from './Legend.const';
+import { getTitle } from './Legend.utils';
 
 export const useExpandedLists = (
+  legendEvents: PreparedEvents | null,
   clearAllScheduledEventsAction: () => void,
   onCreateActivitySchedule: () => void,
 ) => {
-  const { t } = useTranslation('app');
-  const commonProps = { width: 18, height: 18 };
-
   const [scheduledVisibility, setScheduledVisibility] = useState(true);
-  const [availableVisibility, setAvailableVisibility] = useState(false);
+  const [availableVisibility, setAvailableVisibility] = useState(true);
+  const { t } = useTranslation('app');
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-  const availableItems = Object.values(Available).map((el) => (
-    <Fragment key={el}>
-      {availableVisibility && <StyledIndicator colors={getIndicatorColor(el)} />}
-      {getTitle(el)}
+  if (!legendEvents) return;
+
+  const commonProps = { width: 18, height: 18 };
+  const { alwaysAvailableEvents = [], scheduledEvents = [], deactivatedEvents = [] } = legendEvents;
+
+  const availableItems = alwaysAvailableEvents.map(({ name, id, isFlow, colors }) => (
+    <Fragment key={id}>
+      {availableVisibility && colors && <StyledIndicator colors={colors} />}
+      {getTitle(name, isFlow)}
     </Fragment>
   ));
 
-  const deactivatedItems = [<StyledDeactivated>Draft 6</StyledDeactivated>];
+  const deactivatedItems = deactivatedEvents.map(({ name, id, isFlow }) => (
+    <StyledDeactivated key={id}>{getTitle(name, isFlow)}</StyledDeactivated>
+  ));
 
   const scheduledItems = [
     <StyledCreateBtn onClick={onCreateActivitySchedule}>
       <Svg id="add" width={20} height={20} />
       {t('createEvent')}
     </StyledCreateBtn>,
-    ...Object.values(Schedules).map((el) => (
-      <Fragment key={el}>
-        {scheduledVisibility && <StyledIndicator colors={getIndicatorColor(el)} />}
-        {getTitle(el)}
-        <Counter count={1} />
+    ...scheduledEvents.map(({ name, id, isFlow, count, colors }) => (
+      <Fragment key={id}>
+        {scheduledVisibility && colors && <StyledIndicator colors={colors} />}
+        {getTitle(name, isFlow)}
+        {count && <Counter count={count} />}
       </Fragment>
     )),
   ];
+
+  const noScheduledEvents = scheduledEvents.length === 0;
+  const noAvailableEvents = alwaysAvailableEvents.length === 0;
+  const noDeactivatedEvents = deactivatedEvents.length === 0;
 
   return [
     {
@@ -48,6 +63,7 @@ export const useExpandedLists = (
           icon: <Svg id="clear-calendar" {...commonProps} />,
           action: clearAllScheduledEventsAction,
           tooltipTitle: t('clearAllScheduledEvents'),
+          disabled: noScheduledEvents,
         },
         {
           icon: (
@@ -55,6 +71,7 @@ export const useExpandedLists = (
           ),
           action: () => setScheduledVisibility((prev) => !prev),
           tooltipTitle: t('hideFromCalendar'),
+          disabled: noScheduledEvents,
         },
       ],
       items: scheduledItems,
@@ -68,21 +85,25 @@ export const useExpandedLists = (
           ),
           action: () => setAvailableVisibility((prev) => !prev),
           tooltipTitle: t('hideFromCalendar'),
+          disabled: noAvailableEvents,
         },
       ],
       items: availableItems,
       title: t('alwaysAvailable'),
+      isHiddenInLegend: noScheduledEvents && noAvailableEvents,
+      allAvailableScheduled: noAvailableEvents && !noScheduledEvents,
     },
     {
       buttons: [
         {
           icon: <Svg id="external-link" {...commonProps} />,
-          action: () => null,
+          action: () => navigate(`${page.builder}/${id}/${BUILDER_PAGES.activities}`),
           tooltipTitle: t('activateInBuilder'),
         },
       ],
       items: deactivatedItems,
       title: t('deactivated'),
+      isHiddenInLegend: noDeactivatedEvents,
     },
   ];
 };

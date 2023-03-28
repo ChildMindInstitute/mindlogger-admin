@@ -67,6 +67,10 @@ export const StyledTimePickerWrapper = styled(Box)`
             &:hover {
               background-color: ${variables.palette.on_secondary_container_alfa8};
             }
+
+            &.react-datepicker__time-list-item--disabled {
+              display: none;
+            }
           }
 
           &.react-datepicker__time-list-item--selected {

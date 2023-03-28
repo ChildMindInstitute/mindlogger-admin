@@ -19,15 +19,17 @@ export const Applet = () => {
     managerMetaStatus === 'loading' ||
     managerMetaStatus === 'idle';
   const appletTabs = useAppletTabs();
-  const { id } = useParams();
+  const { id: appletId } = useParams();
 
   const hiddenHeader = location.pathname.includes('data');
 
   useEffect(() => {
-    if (!id) return;
-    const { getApplet } = applets.thunk;
-    dispatch(getApplet({ appletId: id }));
-  }, [id]);
+    if (!appletId) return;
+
+    const { getApplet, getEvents } = applets.thunk;
+    dispatch(getApplet({ appletId }));
+    dispatch(getEvents({ appletId }));
+  }, [appletId]);
 
   return (
     <StyledBody>

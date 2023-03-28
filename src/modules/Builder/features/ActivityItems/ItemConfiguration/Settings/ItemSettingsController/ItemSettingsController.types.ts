@@ -1,4 +1,4 @@
-import { FieldValues, UseControllerProps, Path } from 'react-hook-form';
+import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
 

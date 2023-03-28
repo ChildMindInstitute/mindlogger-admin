@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 export type Workspace = {
-  accountId: string;
+  ownerId: string;
   workspaceName: string;
   owned: boolean;
   image?: string;
@@ -19,8 +19,8 @@ export type WorkspaceGroup = {
 };
 
 export type SwitchWorkspaceProps = {
-  currentWorkspace: Workspace;
-  setCurrentWorkspace: Dispatch<SetStateAction<Workspace>>;
+  currentWorkspace: Workspace | null;
+  setCurrentWorkspace: (val: Workspace | null) => void;
   visibleDrawer: boolean;
   setVisibleDrawer: Dispatch<SetStateAction<boolean>>;
   workspaces: Workspace[];

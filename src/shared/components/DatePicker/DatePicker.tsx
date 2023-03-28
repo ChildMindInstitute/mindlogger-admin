@@ -76,6 +76,7 @@ export const DatePicker = <T extends FieldValues>({
         return (
           <>
             <StyledTextField
+              fullWidth
               disabled
               variant="outlined"
               label={label || (uiType === UiType.OneDate ? t('date') : t('startEndDate'))}

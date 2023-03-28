@@ -1,17 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import { setHours, setMinutes } from 'date-fns';
 
 import { TimePicker, ToggleButtonGroup } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme } from 'shared/styles';
-import { SelectController, SelectUiType } from 'shared/components/FormComponents';
 import { TimerType } from 'modules/Dashboard/api';
 
-import { idleTimeOptions, timersButtons } from './TimersTab.const.';
+import { timersButtons } from './TimersTab.const.';
 import { FormValues } from '../ActivityForm.types';
+import { StyledTimePickerWrapper } from './TimersTab.styles';
 
 export const TimersTab = () => {
   const { t } = useTranslation('app');
-  const { watch, setValue, control } = useFormContext<FormValues>();
+  const { watch, setValue } = useFormContext<FormValues>();
   const activeTimer = watch('timerType');
 
   const handleSetTimerType = (timerType: string) => setValue('timerType', timerType as TimerType);
@@ -37,24 +38,14 @@ export const TimersTab = () => {
           <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>
             {t('maximumTimeAwayFromActivity')}
           </StyledBodyLarge>
-          <SelectController
-            control={control}
-            name="idleTime"
-            label={t('duration')}
-            options={idleTimeOptions}
-            fullWidth
-            SelectProps={{
-              MenuProps: {
-                PaperProps: {
-                  sx: {
-                    maxHeight: '20rem',
-                  },
-                },
-              },
-            }}
-            isLabelNeedTranslation={false}
-            uiType={SelectUiType.Secondary}
-          />
+          <StyledTimePickerWrapper>
+            <TimePicker
+              name="idleTime"
+              label={t('duration')}
+              minTime={setHours(setMinutes(new Date(), 15), 0)}
+              maxTime={setHours(setMinutes(new Date(), 45), 0)}
+            />
+          </StyledTimePickerWrapper>
         </>
       )}
     </>

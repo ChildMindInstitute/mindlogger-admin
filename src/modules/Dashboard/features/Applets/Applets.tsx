@@ -39,9 +39,10 @@ export const Applets = () => {
     if (!ownerId) return;
 
     const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
-    const { getApplets } = applets.thunk;
+    const { getWorkspaceApplets } = applets.thunk;
+
     dispatch(
-      getApplets({
+      getWorkspaceApplets({
         params: {
           ownerId,
           limit: DEFAULT_ROWS_PER_PAGE,

@@ -101,6 +101,7 @@ export const enum Periodicity {
   Weekly = 'WEEKLY',
   Weekdays = 'WEEKDAYS',
   Monthly = 'MONTHLY',
+  Always = 'ALWAYS',
 }
 
 export type CreateEventType = AppletId & {
@@ -112,7 +113,7 @@ export type CreateEventType = AppletId & {
     timer?: string;
     timerType?: TimerType;
     periodicity?: {
-      type: Periodicity | 'ALWAYS';
+      type: Periodicity;
       startDate?: string;
       endDate?: string;
       selectedDate?: string;

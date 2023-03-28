@@ -1,4 +1,4 @@
-import { apiClient } from './api.client';
+import { apiClient, authApiClient } from './api.client';
 import { SignInRefreshTokenArgs } from './api.types';
 
 export const signInRefreshTokenApi = (
@@ -12,3 +12,8 @@ export const signInRefreshTokenApi = (
       signal,
     },
   );
+
+export const getWorkspacesApi = (signal?: AbortSignal) =>
+  authApiClient.get('/workspaces', {
+    signal,
+  });

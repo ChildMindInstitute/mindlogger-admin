@@ -24,6 +24,7 @@ export type Notification = {
   at?: Date | null;
   from?: Date | null;
   to?: Date | null;
+  type: NotificationType;
 };
 
 export type Reminder = { activityIncomplete: number; reminderTime: Date | null };
