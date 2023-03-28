@@ -8,8 +8,7 @@ import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace
 import { Workspace } from 'shared/features/SwitchWorkspace/SwitchWorkspace.types';
 import { getWorkspacesApi } from 'shared/api';
 import { auth } from 'modules/Auth/state';
-
-import { getErrorMessage } from 'shared/utils';
+import { useAsync } from 'shared/hooks';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
@@ -21,27 +20,22 @@ export const LeftBar = () => {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
 
+  const { execute } = useAsync(getWorkspacesApi, (result) => {
+    const { firstName, lastName, id } = userData?.user || {};
+
+    id &&
+      setWorkspaces([
+        {
+          owned: true,
+          ownerId: id,
+          workspaceName: `${firstName} ${lastName}`,
+        },
+        ...(result?.data?.result || []),
+      ]);
+  });
+
   useEffect(() => {
-    const getWorkspaces = async () => {
-      try {
-        const { data } = await getWorkspacesApi();
-        const { firstName, lastName, id } = userData?.user || {};
-
-        id &&
-          setWorkspaces([
-            {
-              owned: true,
-              ownerId: id,
-              workspaceName: `${firstName} ${lastName}`,
-            },
-            ...(data?.result || []),
-          ]);
-      } catch (error) {
-        getErrorMessage(error);
-      }
-    };
-
-    getWorkspaces();
+    execute(undefined);
   }, []);
 
   useEffect(() => {
