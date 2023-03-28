@@ -30,12 +30,6 @@ import {
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
 
-export const getAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) =>
-  authApiClient.get('/applets', {
-    params,
-    signal,
-  });
-
 export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
   const { ownerId, ...restParams } = params;
 

@@ -35,7 +35,7 @@ export const LeftBar = () => {
   });
 
   useEffect(() => {
-    execute();
+    execute(undefined);
   }, []);
 
   useEffect(() => {
