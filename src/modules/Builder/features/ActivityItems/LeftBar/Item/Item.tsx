@@ -11,28 +11,31 @@ import {
   StyledActionButton,
 } from './Item.styles';
 import { ItemProps } from './Item.types';
+import { itemsTypeIcons } from '../../ActivityItems.const';
 
 export const Item = ({
   id,
   name,
-  description,
-  icon,
+  body,
+  itemsInputType,
   hidden,
-  activeItem,
-  setActiveItem,
+  activeItemId,
+  handleSetActiveItem,
 }: ItemProps) => {
   const hiddenProps = { sx: { opacity: hidden ? 0.38 : 1 } };
 
   return (
     <StyledItem
-      sx={{ backgroundColor: activeItem === id ? variables.palette.secondary_container : '' }}
-      onClick={() => setActiveItem(id)}
+      sx={{ backgroundColor: activeItemId === id ? variables.palette.secondary_container : '' }}
+      onClick={() => handleSetActiveItem(id)}
       hidden={hidden}
     >
-      <StyledFlexTopCenter {...hiddenProps}>{icon}</StyledFlexTopCenter>
+      <StyledFlexTopCenter {...hiddenProps}>
+        {itemsInputType ? itemsTypeIcons[itemsInputType] : ''}
+      </StyledFlexTopCenter>
       <StyledCol {...hiddenProps}>
         <StyledTitle>{name}</StyledTitle>
-        <StyledDescription>{description}</StyledDescription>
+        <StyledDescription>{body}</StyledDescription>
       </StyledCol>
       <div className="actions">
         <Actions items={getActions()} context={{ id }} visibleByDefault />

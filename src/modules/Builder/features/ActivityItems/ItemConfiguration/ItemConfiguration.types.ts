@@ -12,6 +12,7 @@ import {
 } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
+import { APIItem } from 'modules/Builder/api';
 
 export enum ItemConfigurationSettings {
   HasScores = 'hasScores',
@@ -130,4 +131,9 @@ export type SliderOption = {
   minImage?: string;
   maxImage?: string;
   scores: number[];
+};
+
+export type ItemConfigurationProps = {
+  item: APIItem | null;
+  onItemChange: (d: Omit<APIItem, 'id' | 'hidden'>) => void;
 };

@@ -1,9 +1,5 @@
+import { APIItem } from 'modules/Builder/api';
+
 import { LeftBarProps } from '../LeftBar.types';
 
-export type ItemProps = {
-  id: string;
-  name: string;
-  description: string;
-  icon: JSX.Element;
-  hidden: boolean;
-} & LeftBarProps;
+export type ItemProps = APIItem & Omit<LeftBarProps, 'items' | 'handleAddItem'>;

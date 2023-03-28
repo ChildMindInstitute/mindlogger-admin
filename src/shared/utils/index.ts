@@ -13,3 +13,4 @@ export * from './svgBuilder';
 export * from './array';
 export * from './fileSystem';
 export * from './func';
+export * from './sessionStorage';

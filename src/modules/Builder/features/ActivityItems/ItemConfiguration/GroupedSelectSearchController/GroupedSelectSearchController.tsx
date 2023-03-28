@@ -8,7 +8,6 @@ import { theme, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
 import { ItemInputTypes } from 'shared/types';
 import { falseReturnFunc } from 'shared/utils';
 
-import { itemsTypeIcons } from '../ItemConfiguration.const';
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
   StyledMenuItem,
@@ -24,6 +23,7 @@ import {
   getGroupName,
   getGroupValueText,
 } from './GroupedSelectSearchController.utils';
+import { itemsTypeIcons } from '../../ActivityItems.const';
 
 export const GroupedSelectSearchController = <T extends FieldValues>({
   name,

@@ -12,10 +12,11 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useBreadcrumbs } from 'shared/hooks';
+import { useBreadcrumbs, useBuilderSessionStorageFormChange } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
+import { useBuilderSessionStorageFormValues } from 'shared/hooks';
 
 import { Uploads } from '../../components';
 import { StyledForm, StyledContainer, StyledSvg, StyledSettings } from './ActivityAbout.styles';
@@ -33,11 +34,14 @@ export const ActivityAbout = () => {
     },
   ]);
 
-  const { control, setValue, watch } = useForm<FormValues>({
+  const { getFormValues } = useBuilderSessionStorageFormValues<FormValues>(defaultValues);
+  const { control, setValue, watch, getValues } = useForm<FormValues>({
     resolver: yupResolver(ActivityAboutSchema()),
-    defaultValues,
+    defaultValues: getFormValues(),
     mode: 'onChange',
   });
+
+  const { handleFormChange } = useBuilderSessionStorageFormChange<FormValues>(getValues);
 
   const commonProps = {
     control,
@@ -119,7 +123,7 @@ export const ActivityAbout = () => {
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutActivity')}
       </StyledHeadlineLarge>
-      <StyledForm noValidate>
+      <StyledForm noValidate onChange={handleFormChange}>
         <Box sx={{ display: 'flex' }}>
           <StyledContainer>
             <Box sx={{ marginBottom: theme.spacing(4.4) }}>

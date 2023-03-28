@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Button, Grid } from '@mui/material';
@@ -22,25 +22,25 @@ import { ItemInputTypes } from 'shared/types';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { Alerts } from './Alerts';
 import {
+  ColorPalette,
   ItemSettingsController,
   ItemSettingsDrawer,
-  ColorPalette,
   TextInputOption,
 } from './Settings';
 import {
   AudioPlayer,
-  SelectionOption,
+  AudioRecord,
+  Date,
+  Drawing,
+  Geolocation,
   NumberSelection,
+  PhotoResponse,
+  SelectionOption,
+  SelectionRows,
+  SliderRows,
+  TextResponse,
   TimeRange,
   VideoResponse,
-  PhotoResponse,
-  Date,
-  SliderRows,
-  AudioRecord,
-  Geolocation,
-  TextResponse,
-  SelectionRows,
-  Drawing,
 } from './InputTypeItems';
 import {
   StyledContent,
@@ -48,13 +48,17 @@ import {
   StyledItemConfiguration,
   StyledOptionsWrapper,
 } from './ItemConfiguration.styles';
-import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration.types';
+import {
+  ItemConfigurationForm,
+  ItemConfigurationProps,
+  ItemConfigurationSettings,
+} from './ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE, itemsTypeOptions } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
 import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils';
 import { itemConfigurationFormSchema } from './ItemConfiguration.schema';
 
-export const ItemConfiguration = () => {
+export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps) => {
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
   const [showColorPalette, setShowColorPalette] = useState(false);
   const containerRef = useRef<HTMLElement | null>(null);
@@ -72,7 +76,7 @@ export const ItemConfiguration = () => {
     mode: 'onChange',
   });
 
-  const { control, watch, setValue, getValues, register, unregister, clearErrors } = methods;
+  const { control, watch, setValue, getValues, register, unregister, clearErrors, reset } = methods;
 
   const {
     fields: options,
@@ -96,6 +100,17 @@ export const ItemConfiguration = () => {
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
   const palette = watch('paletteName');
+
+  useEffect(() => {
+    reset(
+      {
+        ...item,
+      },
+      {
+        keepErrors: true,
+      },
+    );
+  }, [item]);
 
   const hasOptions =
     selectedInputType === ItemInputTypes.SingleSelection ||
@@ -139,145 +154,153 @@ export const ItemConfiguration = () => {
     clearErrors,
   });
 
+  const handleFormChange = () => {
+    onItemChange(getValues());
+  };
+
   return (
     <FormProvider {...methods}>
-      <StyledItemConfiguration ref={containerRef}>
-        <StyledHeader isSticky={isHeaderSticky}>
-          <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
-          <StyledFlexTopCenter>
-            {selectedInputType && (
-              <StyledClearedButton
-                sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
-                onClick={() => setSettingsDrawerVisible(true)}
-              >
-                <Svg id="report-configuration" />
-              </StyledClearedButton>
-            )}
-            <StyledClearedButton sx={{ p: theme.spacing(1) }}>
-              <Svg id="close" />
-            </StyledClearedButton>
-          </StyledFlexTopCenter>
-        </StyledHeader>
-        <StyledContent>
-          <Grid container direction="row" columns={2} spacing={2.4}>
-            <Grid item xs={1}>
-              <GroupedSelectSearchController
-                name="itemsInputType"
-                options={itemsTypeOptions}
-                control={control}
-              />
-              <StyledBodyMedium
-                sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
-                color={variables.palette.on_surface_variant}
-              >
-                {selectedInputType && getInputTypeTooltip()[selectedInputType]}
-              </StyledBodyMedium>
-            </Grid>
-            <Grid item xs={1}>
-              <InputController
-                fullWidth
-                name="name"
-                control={control}
-                label={t('itemName')}
-                type="text"
-                sx={{ mb: theme.spacing(4) }}
-              />
-            </Grid>
-          </Grid>
-          <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
-            {t('displayedContent')}
-          </StyledTitleLarge>
-          <EditorController
-            name="body"
-            control={control}
-            requiredStateMessage={t('displayedContentRequired')}
-            hasRequiredState
-          />
-          {hasOptions && (
-            <>
-              <StyledFlexTopCenter
-                sx={{ m: theme.spacing(4.8, 0, 2.4), justifyContent: 'space-between' }}
-              >
-                <StyledTitleLarge>{t('responseOptions')}</StyledTitleLarge>
-                {hasColorPalette && !showColorPalette && (
-                  <Button
-                    onClick={() => setShowColorPalette(true)}
-                    variant="outlined"
-                    startIcon={<Svg id="paint-outline" width="20" height="20" />}
-                  >
-                    {t('setPalette')}
-                  </Button>
-                )}
-              </StyledFlexTopCenter>
-              {hasColorPalette && showColorPalette && (
-                <ColorPalette setShowColorPalette={setShowColorPalette} />
-              )}
-              <StyledOptionsWrapper>
-                {options?.length
-                  ? options.map((option, index) => (
-                      <SelectionOption
-                        key={option.id}
-                        onRemoveOption={removeOptions}
-                        onUpdateOption={updateOptions}
-                        optionsLength={options.length}
-                        index={index}
-                      />
-                    ))
-                  : null}
-                <Button
-                  onClick={handleAddOption}
-                  variant="outlined"
-                  startIcon={<Svg id="add" width="20" height="20" />}
+      <form noValidate onChange={handleFormChange}>
+        <StyledItemConfiguration ref={containerRef}>
+          <StyledHeader isSticky={isHeaderSticky}>
+            <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
+            <StyledFlexTopCenter>
+              {selectedInputType && (
+                <StyledClearedButton
+                  sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
+                  onClick={() => setSettingsDrawerVisible(true)}
                 >
-                  {t('addOption')}
-                </Button>
-              </StyledOptionsWrapper>
-            </>
-          )}
-          {selectedInputType === ItemInputTypes.NumberSelection && (
-            <NumberSelection name="minNumber" maxName="maxNumber" />
-          )}
-          {selectedInputType === ItemInputTypes.Slider && (
-            <SliderRows name="sliderOptions" control={control} />
-          )}
-          {selectedInputType === ItemInputTypes.SliderRows && (
-            <SliderRows name="sliderOptions" control={control} isMultiple />
-          )}
-          {selectedInputType === ItemInputTypes.SingleSelectionPerRow && <SelectionRows isSingle />}
-          {selectedInputType === ItemInputTypes.MultipleSelectionPerRow && <SelectionRows />}
-          {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
-          {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
-          {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
-          {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
-          {selectedInputType === ItemInputTypes.Date && <Date />}
-          {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
-          {selectedInputType === ItemInputTypes.Text && (
-            <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
-          )}
-          {selectedInputType === ItemInputTypes.AudioPlayer && (
-            <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />
-          )}
-          {selectedInputType === ItemInputTypes.Drawing && (
-            <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />
-          )}
-          {isTextInputOptionVisible && <TextInputOption onRemove={handleRemoveTextInputOption} />}
-          {hasAlerts && (
-            <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
-          )}
-          {settingsDrawerVisible && (
-            <ItemSettingsDrawer
-              open={settingsDrawerVisible}
-              onClose={() => setSettingsDrawerVisible(false)}
-            >
-              <ItemSettingsController
-                name="settings"
-                inputType={selectedInputType}
-                control={control}
-              />
-            </ItemSettingsDrawer>
-          )}
-        </StyledContent>
-      </StyledItemConfiguration>
+                  <Svg id="report-configuration" />
+                </StyledClearedButton>
+              )}
+              <StyledClearedButton sx={{ p: theme.spacing(1) }}>
+                <Svg id="close" />
+              </StyledClearedButton>
+            </StyledFlexTopCenter>
+          </StyledHeader>
+          <StyledContent>
+            <Grid container direction="row" columns={2} spacing={2.4}>
+              <Grid item xs={1}>
+                <GroupedSelectSearchController
+                  name="itemsInputType"
+                  options={itemsTypeOptions}
+                  control={control}
+                />
+                <StyledBodyMedium
+                  sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
+                  color={variables.palette.on_surface_variant}
+                >
+                  {selectedInputType && getInputTypeTooltip()[selectedInputType]}
+                </StyledBodyMedium>
+              </Grid>
+              <Grid item xs={1}>
+                <InputController
+                  fullWidth
+                  name="name"
+                  control={control}
+                  label={t('itemName')}
+                  type="text"
+                  sx={{ mb: theme.spacing(4) }}
+                />
+              </Grid>
+            </Grid>
+            <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
+              {t('displayedContent')}
+            </StyledTitleLarge>
+            <EditorController
+              name="body"
+              control={control}
+              requiredStateMessage={t('displayedContentRequired')}
+              hasRequiredState
+            />
+            {hasOptions && (
+              <>
+                <StyledFlexTopCenter
+                  sx={{ m: theme.spacing(4.8, 0, 2.4), justifyContent: 'space-between' }}
+                >
+                  <StyledTitleLarge>{t('responseOptions')}</StyledTitleLarge>
+                  {hasColorPalette && !showColorPalette && (
+                    <Button
+                      onClick={() => setShowColorPalette(true)}
+                      variant="outlined"
+                      startIcon={<Svg id="paint-outline" width="20" height="20" />}
+                    >
+                      {t('setPalette')}
+                    </Button>
+                  )}
+                </StyledFlexTopCenter>
+                {hasColorPalette && showColorPalette && (
+                  <ColorPalette setShowColorPalette={setShowColorPalette} />
+                )}
+                <StyledOptionsWrapper>
+                  {options?.length
+                    ? options.map((option, index) => (
+                        <SelectionOption
+                          key={option.id}
+                          onRemoveOption={removeOptions}
+                          onUpdateOption={updateOptions}
+                          optionsLength={options.length}
+                          index={index}
+                        />
+                      ))
+                    : null}
+                  <Button
+                    onClick={handleAddOption}
+                    variant="outlined"
+                    startIcon={<Svg id="add" width="20" height="20" />}
+                  >
+                    {t('addOption')}
+                  </Button>
+                </StyledOptionsWrapper>
+              </>
+            )}
+            {selectedInputType === ItemInputTypes.NumberSelection && (
+              <NumberSelection name="minNumber" maxName="maxNumber" />
+            )}
+            {selectedInputType === ItemInputTypes.Slider && (
+              <SliderRows name="sliderOptions" control={control} />
+            )}
+            {selectedInputType === ItemInputTypes.SliderRows && (
+              <SliderRows name="sliderOptions" control={control} isMultiple />
+            )}
+            {selectedInputType === ItemInputTypes.SingleSelectionPerRow && (
+              <SelectionRows isSingle />
+            )}
+            {selectedInputType === ItemInputTypes.MultipleSelectionPerRow && <SelectionRows />}
+            {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
+            {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
+            {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
+            {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
+            {selectedInputType === ItemInputTypes.Date && <Date />}
+            {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
+            {selectedInputType === ItemInputTypes.Text && (
+              <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
+            )}
+            {selectedInputType === ItemInputTypes.AudioPlayer && (
+              <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />
+            )}
+            {selectedInputType === ItemInputTypes.Drawing && (
+              <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />
+            )}
+            {isTextInputOptionVisible && <TextInputOption onRemove={handleRemoveTextInputOption} />}
+            {hasAlerts && (
+              <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
+            )}
+            {settingsDrawerVisible && (
+              <ItemSettingsDrawer
+                open={settingsDrawerVisible}
+                onClose={() => setSettingsDrawerVisible(false)}
+              >
+                <ItemSettingsController
+                  name="settings"
+                  inputType={selectedInputType}
+                  control={control}
+                />
+              </ItemSettingsDrawer>
+            )}
+          </StyledContent>
+        </StyledItemConfiguration>
+      </form>
     </FormProvider>
   );
 };
