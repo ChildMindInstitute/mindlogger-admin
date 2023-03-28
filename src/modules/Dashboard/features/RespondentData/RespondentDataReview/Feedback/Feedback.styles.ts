@@ -1,5 +1,4 @@
-import { Box } from '@mui/material';
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { StyledClearedButton, theme, variables } from 'shared/styles';
 

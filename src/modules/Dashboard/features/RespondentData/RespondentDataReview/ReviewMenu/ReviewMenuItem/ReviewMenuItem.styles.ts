@@ -1,5 +1,4 @@
-import { Box, Button } from '@mui/material';
-import { styled } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { StyledFlexTopStart, theme, variables } from 'shared/styles';

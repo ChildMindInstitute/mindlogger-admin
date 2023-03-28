@@ -1,5 +1,4 @@
-import { Button } from '@mui/material';
-import { styled } from '@mui/material';
+import { Button, styled } from '@mui/material';
 
 import { StyledFlexColumn, theme, variables } from 'shared/styles';
 

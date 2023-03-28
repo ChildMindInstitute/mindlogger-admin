@@ -4,8 +4,8 @@ import { Box } from '@mui/material';
 import { Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
 import { StyledBodyLarge, StyledBodyMedium, StyledFlexTopStart, variables } from 'shared/styles';
-import { FeedbackNote as FeedbackNoteType } from '../FeedbackNotes.types';
 
+import { FeedbackNote as FeedbackNoteType } from '../FeedbackNotes.types';
 import {
   StyledActions,
   StyledAuthorLabel,
