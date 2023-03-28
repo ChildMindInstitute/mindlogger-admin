@@ -9,24 +9,17 @@ import { StyledForm, StyledTimeText } from './ReportFilters.styles';
 
 export const ReportFilters = () => {
   const { t } = useTranslation();
-
   const { control } = useForm();
+  const commonDatePickerProps = {
+    control,
+    inputSx: { width: '19rem' },
+  };
 
   return (
     <StyledForm>
-      <DatePicker
-        name="startDate"
-        control={control}
-        label={t('startDate')}
-        inputSx={{ width: '19rem' }}
-      />
+      <DatePicker name="startDate" label={t('startDate')} {...commonDatePickerProps} />
       <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
-      <DatePicker
-        name="endDate"
-        control={control}
-        label={t('endDate')}
-        inputSx={{ width: '19rem' }}
-      />
+      <DatePicker name="endDate" label={t('endDate')} {...commonDatePickerProps} />
       <Box sx={{ position: 'relative' }}>
         <TimePicker
           name="startTime"

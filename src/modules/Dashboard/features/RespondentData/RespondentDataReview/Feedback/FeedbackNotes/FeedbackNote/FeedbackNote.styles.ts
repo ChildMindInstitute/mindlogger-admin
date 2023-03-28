@@ -1,5 +1,5 @@
 import { Box, Button } from '@mui/material';
-import { styled } from '@mui/system';
+import { styled } from '@mui/material';
 
 import {
   StyledBodyMedium,
@@ -30,7 +30,7 @@ export const StyledActions = styled(StyledFlexTopStart)`
 
 export const StyledButton = styled(Button)`
   min-width: 1.5rem;
-  padding: 1rem;
+  padding: ${theme.spacing(1)};
   height: unset;
 `;
 

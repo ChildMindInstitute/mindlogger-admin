@@ -8,7 +8,7 @@ export const FeedbackReviewed = () => {
   return (
     <StyledContainer>
       {reviewers.map((reviewer) => (
-        <FeedbackReviewer key={reviewer.id} reviewer={reviewer} />
+        <FeedbackReviewer key={String(reviewer.id)} reviewer={reviewer} />
       ))}
     </StyledContainer>
   );

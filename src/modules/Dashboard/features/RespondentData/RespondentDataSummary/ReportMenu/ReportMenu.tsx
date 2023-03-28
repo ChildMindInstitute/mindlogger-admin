@@ -22,7 +22,7 @@ export const ReportMenu = ({
       </Box>
       {activities.map((activity) => (
         <StyledActivity
-          key={activity.id}
+          key={String(activity.id)}
           isSelected={selectedActivity.id === activity.id}
           onClick={() => setSelectedActivity(activity)}
         >

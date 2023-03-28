@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
+import { APPLET_PAGES } from 'shared/consts';
 import { page } from 'resources';
 
 export const useRespondentDataTabs = () => {
@@ -11,13 +12,13 @@ export const useRespondentDataTabs = () => {
       labelKey: 'summary',
       icon: <Svg id="chart" />,
       activeIcon: <Svg id="chart" />,
-      path: `${page.dashboard}/${id}/respondents/${respondentId}/data/summary`,
+      path: `${page.dashboard}/${id}/${APPLET_PAGES.respondents}/${respondentId}/data/summary`,
     },
     {
       labelKey: 'review',
       icon: <Svg id="checkbox-filled" />,
       activeIcon: <Svg id="checkbox-filled" />,
-      path: `${page.dashboard}/${id}/respondents/${respondentId}/data/review`,
+      path: `${page.dashboard}/${id}/${APPLET_PAGES.respondents}/${respondentId}/data/review`,
     },
   ];
 };
