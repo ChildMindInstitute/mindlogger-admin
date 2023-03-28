@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
 import { useState } from 'react';
+import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';

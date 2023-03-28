@@ -1,13 +1,7 @@
 import { styled } from '@mui/system';
 import { Box, Button } from '@mui/material';
 
-import { StyledHeadlineLarge, StyledFlexTopCenter, variables, theme } from 'shared/styles';
-
-export const StyledContainer = styled(StyledFlexTopCenter)`
-  height: calc(100% + 4rem);
-  overflow-y: hidden;
-  margin: ${theme.spacing(-2.4, -2.4, -1.6)};
-`;
+import { StyledHeadlineLarge, variables, theme } from 'shared/styles';
 
 export const StyledHeadline = styled(StyledHeadlineLarge)`
   margin-bottom: ${theme.spacing(4.8)};

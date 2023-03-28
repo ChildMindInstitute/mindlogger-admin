@@ -1,15 +1,9 @@
-import { Box, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { styled } from '@mui/material';
 
-import { StyledFlexAllCenter, theme, variables } from 'shared/styles';
+import { StyledFlexColumn, theme, variables } from 'shared/styles';
 
-export const StyledContainer = styled(StyledFlexAllCenter)`
-  height: calc(100% + 4rem);
-  overflow-y: hidden;
-  margin: ${theme.spacing(-2.4, -2.4, -1.6)};
-`;
-
-export const StyledMenu = styled(Box)`
+export const StyledMenu = styled(StyledFlexColumn)`
   display: flex;
   flex-direction: column;
   width: 40rem;

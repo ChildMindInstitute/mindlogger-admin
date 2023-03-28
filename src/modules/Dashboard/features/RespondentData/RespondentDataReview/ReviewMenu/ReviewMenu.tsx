@@ -34,20 +34,18 @@ export const ReviewMenu = ({
           label={t('reviewDate')}
         />
       </StyledHeader>
-      <Box>
-        <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
-          {t('selectActivityAndResponse')}
-        </StyledLabelLarge>
-        {activities.map((activity) => (
-          <ReviewMenuItem
-            key={activity.id}
-            isSelected={selectedActivity.id === activity.id}
-            item={activity}
-            setSelectedItem={setSelectedActivity}
-            setSelectedReview={setSelectedReview}
-          />
-        ))}
-      </Box>
+      <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
+        {t('selectActivityAndResponse')}
+      </StyledLabelLarge>
+      {activities.map((activity) => (
+        <ReviewMenuItem
+          key={activity.id}
+          isSelected={selectedActivity.id === activity.id}
+          item={activity}
+          setSelectedItem={setSelectedActivity}
+          setSelectedReview={setSelectedReview}
+        />
+      ))}
     </StyledMenu>
   );
 };

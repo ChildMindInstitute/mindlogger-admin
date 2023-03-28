@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Activity } from 'redux/modules';
 import { Svg } from 'shared/components';
+import { StyledContainer } from 'shared/styles';
 
 import { mockedActivities } from '../mock';
-import { StyledContainer } from '../RespondentData.styles';
 import { Feedback } from './Feedback';
 import { StyledFeedbackBtn, StyledReviewContainer } from './RespondentDataReview.styles';
 import { ReviewType } from './RespondentDataReview.types';

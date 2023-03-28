@@ -1,8 +1,9 @@
 import { useState } from 'react';
+
 import { Activity } from 'redux/modules';
+import { StyledContainer } from 'shared/styles';
 
 import { mockedActivities } from '../mock';
-import { StyledContainer } from '../RespondentData.styles';
 import { Report } from './Report';
 import { ReportMenu } from './ReportMenu';
 
