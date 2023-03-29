@@ -2,7 +2,7 @@ import { ColorResult } from 'react-color';
 import { FieldValues, Path } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
-import { ApiItem } from 'modules/Builder/api';
+import { ActivityItemApi } from 'modules/Builder/api';
 
 export enum ItemConfigurationSettings {
   HasScores = 'hasScores',
@@ -111,6 +111,6 @@ export type SliderOption = {
 };
 
 export type ItemConfigurationProps = {
-  item: ApiItem | null;
-  onItemChange: (d: Omit<ApiItem, 'id' | 'hidden'>) => void;
+  item: ActivityItemApi | null;
+  onItemChange: (d: Omit<ActivityItemApi, 'id' | 'hidden'>) => void;
 };
