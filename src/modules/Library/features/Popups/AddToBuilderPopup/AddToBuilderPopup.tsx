@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Modal } from 'shared/components';
-import { mockedWorkspaces as workspaces } from 'shared/layouts/BaseLayout/components/LeftBar/mocked';
 import { StyledModalWrapper } from 'shared/styles';
 
 import {
@@ -72,7 +71,7 @@ export const AddToBuilderPopup = ({
       getSteps({
         control,
         isSelectedWorkspaceVisible,
-        workspaces,
+        workspaces: [],
         applets,
         setStep,
         setAddToBuilderPopupVisible,
