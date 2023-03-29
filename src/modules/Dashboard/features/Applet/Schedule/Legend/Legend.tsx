@@ -163,7 +163,7 @@ export const Legend = ({ legendEvents, appletName }: LegendProps) => {
       {clearScheduleEventsPopupVisible && (
         <ClearScheduledEventsPopup
           open={clearScheduleEventsPopupVisible}
-          appletName="Pediatric Screener"
+          appletName={appletName}
           isDefault={!isIndividual}
           name="John Doe"
           onClose={() => setClearScheduleEventsPopupVisible(false)}
