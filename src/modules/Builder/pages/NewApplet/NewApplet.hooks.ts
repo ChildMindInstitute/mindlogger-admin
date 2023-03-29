@@ -2,29 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Update } from 'history';
 
-import { page } from 'resources';
 import { useBlocker } from 'shared/hooks';
 
-export const APPLET_LAYER_ROUTES = [
-  page.newAppletAbout,
-  page.newAppletActivities,
-  page.newAppletActivityFlow,
-  page.newAppletSettings,
-];
-export const ACTIVITY_LAYER_ROUTES = [
-  page.newAppletNewActivity,
-  page.newAppletNewActivityAbout,
-  page.newAppletNewActivityItems,
-  page.newAppletNewActivityItemFlow,
-  page.newAppletNewActivitySettings,
-];
-
-export const APPLET_LAYER_REGEXP_ROUTES = APPLET_LAYER_ROUTES.map((route) =>
-  route === page.newAppletActivities ? new RegExp(`^${route}$`) : new RegExp(`^${route}.*`),
-);
-export const ACTIVITY_LAYER_REGEXP_ROUTES = ACTIVITY_LAYER_ROUTES.map(
-  (route) => new RegExp(`^${route}.*`),
-);
+import { ACTIVITY_LAYER_REGEXP_ROUTES, APPLET_LAYER_REGEXP_ROUTES } from './NewApplet.utils';
 
 export const isAppletRoute = (path: string) =>
   APPLET_LAYER_REGEXP_ROUTES.some((route) => route.test(path));
