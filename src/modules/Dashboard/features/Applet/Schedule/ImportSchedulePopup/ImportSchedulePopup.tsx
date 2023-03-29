@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { FileUploader, Modal, SubmitBtnColor } from 'shared/components';
+import { ImportedFile } from 'shared/components/FileUploader/FileUploader.types';
 import { StyledBodyLarge, StyledModalWrapper } from 'shared/styles';
-import { getScreens } from './ImportSchedule.const';
 
+import { getScreens, invalidFileFormatError, uploadLabel } from './ImportSchedule.const';
 import { ImportSchedulePopupProps, Steps } from './ImportSchedulePopup.types';
 
 export const ImportSchedulePopup = ({
@@ -18,7 +19,7 @@ export const ImportSchedulePopup = ({
   const respondentName = '0234 (John Doe)';
   const [step, setStep] = useState<Steps>(0);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-  const [fileName, setFileName] = useState(null);
+  const [fileName, setFileName] = useState<string | null>(null);
 
   useEffect(() => {
     if (step === 1) {
@@ -26,24 +27,10 @@ export const ImportSchedulePopup = ({
     }
   }, [step]);
 
-  const onFileReady = (file: any) => {
+  const onFileReady = (file: ImportedFile) => {
     setFileName(file?.name);
     setIsSubmitDisabled(!file);
   };
-
-  const invalidFileFormatError = (
-    <Trans i18nKey="invalidFileFormat">
-      Invalid file format. Please upload a schedule table in one of the following formats:{' '}
-      <strong>.csv, .xls, .xlsx, .ods.</strong>
-    </Trans>
-  );
-
-  const uploadLabel = (
-    <Trans i18nKey="uploadSchedule">
-      Please upload a schedule in one of the following formats:
-      <strong> .csv, .xls, .xlsx, .ods. </strong>
-    </Trans>
-  );
 
   const fileUploader = (
     <FileUploader
@@ -59,10 +46,10 @@ export const ImportSchedulePopup = ({
       fileUploader,
       <StyledBodyLarge>
         <Trans i18nKey="confirmUpdateSchedule">
-          Are you sure you want to update the default schedule for Applet{' '}
+          Are you sure you want to update the default schedule for Applet
           <strong>
-            <>{{ appletName }}</>
-          </strong>{' '}
+            <> {{ appletName }} </>
+          </strong>
           and replace the current schedule with information from the
           <strong>
             <> {{ fileName }} </>

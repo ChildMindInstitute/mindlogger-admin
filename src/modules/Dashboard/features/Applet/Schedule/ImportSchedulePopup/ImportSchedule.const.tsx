@@ -1,3 +1,5 @@
+import { Trans } from 'react-i18next';
+
 export const getScreens = (
   type: 'individual' | 'default',
   components: Record<'individual' | 'default', JSX.Element[]>,
@@ -18,3 +20,17 @@ export const getScreens = (
     submitBtnColor: type === 'default' ? 'error' : 'primary',
   },
 ];
+
+export const invalidFileFormatError = (
+  <Trans i18nKey="invalidFileFormat">
+    Invalid file format. Please upload a schedule table in one of the following formats:
+    <strong> .csv, .xls, .xlsx, .ods.</strong>
+  </Trans>
+);
+
+export const uploadLabel = (
+  <Trans i18nKey="uploadSchedule">
+    Please upload a schedule in one of the following formats:
+    <strong> .csv, .xls, .xlsx, .ods. </strong>
+  </Trans>
+);
