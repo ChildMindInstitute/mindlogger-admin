@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { FieldValues, UseFormGetValues } from 'react-hook-form';
 
 import { builderSessionStorage } from 'shared/utils';
-import { isActivityRoute, isAppletRoute } from 'modules/Builder/pages/NewApplet/NewApplet.hooks';
+import { isActivityRoute, isAppletRoute } from 'modules/Builder/pages/NewApplet/NewApplet.utils';
 
 /*
  *
@@ -53,7 +53,7 @@ export const useBuilderSessionStorageApplyChanges = () => {
   const { pathname } = useLocation();
   const layer = getLayer(pathname);
 
-  const applyChanges = (data: Record<string, any>) => {
+  const applyChanges = (data: Record<string, unknown>) => {
     if (!layer) return;
 
     const layerData = builderSessionStorage.getItem(layer) ?? {};

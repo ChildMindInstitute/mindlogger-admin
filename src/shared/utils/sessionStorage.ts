@@ -1,7 +1,7 @@
 import { BuilderLayers } from 'shared/hooks';
 
 const getItemName = (layer: BuilderLayers) => `builder_${layer}_data`;
-const setSpecificItem = (layer: BuilderLayers, data: Record<string, any>) => {
+const setSpecificItem = (layer: BuilderLayers, data: Record<string, unknown>) => {
   const str = JSON.stringify(data);
   sessionStorage.setItem(getItemName(layer), str);
 };

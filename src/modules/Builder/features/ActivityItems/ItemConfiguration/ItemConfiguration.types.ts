@@ -12,7 +12,7 @@ import {
 } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
-import { APIItem } from 'modules/Builder/api';
+import { ApiItem } from 'modules/Builder/api';
 
 export enum ItemConfigurationSettings {
   HasScores = 'hasScores',
@@ -134,6 +134,6 @@ export type SliderOption = {
 };
 
 export type ItemConfigurationProps = {
-  item: APIItem | null;
-  onItemChange: (d: Omit<APIItem, 'id' | 'hidden'>) => void;
+  item: ApiItem | null;
+  onItemChange: (d: Omit<ApiItem, 'id' | 'hidden'>) => void;
 };

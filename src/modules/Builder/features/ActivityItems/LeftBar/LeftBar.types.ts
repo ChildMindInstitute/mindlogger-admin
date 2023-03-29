@@ -1,7 +1,7 @@
-import { APIItem } from 'modules/Builder/api';
+import { ApiItem } from 'modules/Builder/api';
 
 export type LeftBarProps = {
-  items: APIItem[];
+  items: ApiItem[];
   activeItemId: string;
   onSetActiveItem: (id: string) => void;
   onAddItem: () => void;

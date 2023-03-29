@@ -4,12 +4,7 @@ import { Update } from 'history';
 
 import { useBlocker } from 'shared/hooks';
 
-import { ACTIVITY_LAYER_REGEXP_ROUTES, APPLET_LAYER_REGEXP_ROUTES } from './NewApplet.utils';
-
-export const isAppletRoute = (path: string) =>
-  APPLET_LAYER_REGEXP_ROUTES.some((route) => route.test(path));
-export const isActivityRoute = (path: string) =>
-  ACTIVITY_LAYER_REGEXP_ROUTES.some((route) => route.test(path));
+import { isActivityRoute, isAppletRoute } from './NewApplet.utils';
 
 export const usePrompt = () => {
   const navigate = useNavigate();
@@ -18,10 +13,10 @@ export const usePrompt = () => {
   const [lastLocation, setLastLocation] = useState<Update | null>(null);
   const [confirmedNavigation, setConfirmedNavigation] = useState(false);
 
-  const cancelNavigation = useCallback(() => {
+  const cancelNavigation = () => {
     setPromptVisible(false);
     setLastLocation(null);
-  }, []);
+  };
 
   // handle blocking when user click on another route prompt will be shown
   const handleBlockedNavigation = useCallback(

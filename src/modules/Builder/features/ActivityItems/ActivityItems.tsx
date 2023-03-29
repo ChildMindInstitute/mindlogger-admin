@@ -4,7 +4,7 @@ import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
-import { APIItem } from 'modules/Builder/api';
+import { ApiItem } from 'modules/Builder/api';
 import {
   useBuilderSessionStorageFormValues,
   useBuilderSessionStorageApplyChanges,
@@ -16,8 +16,8 @@ import { StyledWrapper } from './ActivityItems.styles';
 import { items } from './ActivityItems.const';
 
 export const ActivityItems = () => {
-  const { getFormValues } = useBuilderSessionStorageFormValues<{ items: APIItem[] }>({ items });
-  const [currentItems, setCurrentItems] = useState<APIItem[]>(getFormValues().items);
+  const { getFormValues } = useBuilderSessionStorageFormValues<{ items: ApiItem[] }>({ items });
+  const [currentItems, setCurrentItems] = useState<ApiItem[]>(getFormValues().items);
   const { t } = useTranslation('app');
   const [activeItemId, setActiveItemId] = useState('');
 
@@ -25,7 +25,7 @@ export const ActivityItems = () => {
 
   const { applyChanges } = useBuilderSessionStorageApplyChanges();
 
-  const handleItemChange = (id: string) => (data: Omit<APIItem, 'id' | 'hidden'>) => {
+  const handleItemChange = (id: string) => (data: Omit<ApiItem, 'id' | 'hidden'>) => {
     const updatedItems = currentItems.map((item) =>
       item.id !== id
         ? item
@@ -45,7 +45,7 @@ export const ActivityItems = () => {
     const updatedItems = currentItems.concat({
       id: newItemId,
       name: 'NewItem',
-    } as APIItem);
+    } as ApiItem);
     setActiveItemId(newItemId);
     setCurrentItems(updatedItems);
     applyChanges({
