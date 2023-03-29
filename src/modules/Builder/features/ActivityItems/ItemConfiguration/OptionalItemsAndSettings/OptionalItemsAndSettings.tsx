@@ -97,11 +97,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     useImperativeHandle(
       ref,
       () => ({
-        removeAlert,
-        removeOptions,
-        handleAddOption,
         setSettingsDrawerVisible,
-        setShowColorPalette,
       }),
       [],
     );

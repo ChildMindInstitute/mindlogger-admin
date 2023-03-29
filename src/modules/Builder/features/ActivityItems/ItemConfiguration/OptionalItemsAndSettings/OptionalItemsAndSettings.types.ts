@@ -25,11 +25,7 @@ export type OptionalItemsProps = {
 };
 
 export type OptionalItemsRef = {
-  removeAlert: () => void;
-  removeOptions: () => void;
-  handleAddOption: () => void;
   setSettingsDrawerVisible: (value: boolean) => void;
-  setShowColorPalette: Dispatch<SetStateAction<boolean>>;
 };
 
 export type ActiveItemHookProps = {
