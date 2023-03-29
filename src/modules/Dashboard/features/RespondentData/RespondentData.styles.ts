@@ -3,8 +3,6 @@ import { Button, styled } from '@mui/material';
 import { StyledFlexColumn, theme, variables } from 'shared/styles';
 
 export const StyledMenu = styled(StyledFlexColumn)`
-  display: flex;
-  flex-direction: column;
   width: 40rem;
   height: 100%;
   flex-shrink: 0;
