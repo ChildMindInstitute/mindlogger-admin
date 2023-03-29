@@ -9,8 +9,6 @@ import {
   useBuilderSessionStorageFormValues,
   useBuilderSessionStorageApplyChanges,
 } from 'shared/hooks';
-import { ActionsProps } from 'shared/components/Actions/Actions.types';
-import { ItemContextType } from 'modules/Builder/features/ActivityItems/LeftBar/Item/Item.types';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
@@ -55,11 +53,12 @@ export const ActivityItems = () => {
     });
   };
 
-  const onRemoveItem = (context: ActionsProps<ItemContextType>['context']) => {
-    if (!context?.id) return;
+  const onRemoveItem = (id: string) => {
+    if (!id) return;
 
-    const updatedItems = currentItems.filter((item) => item.id !== context.id);
+    const updatedItems = currentItems.filter((item) => item.id !== id);
     setCurrentItems(updatedItems);
+    setActiveItemId('');
   };
 
   useBreadcrumbs([

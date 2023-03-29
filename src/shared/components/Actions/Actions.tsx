@@ -7,11 +7,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { StyledActions, StyledActionButton, StyledActionsWrapper } from './Actions.styles';
 import { Action, ActionsProps } from './Actions.types';
 
-export const Actions = <T extends number>({
-  items,
-  context,
-  visibleByDefault = false,
-}: ActionsProps<T>) => {
+export const Actions = ({ items, context, visibleByDefault = false }: ActionsProps) => {
   const [visibleActions, setVisibleActions] = useState(false);
 
   const onClick = (action: Action['action']) => (e: SyntheticEvent<HTMLButtonElement>) => {

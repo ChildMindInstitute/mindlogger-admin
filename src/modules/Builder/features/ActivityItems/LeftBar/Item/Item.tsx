@@ -10,7 +10,7 @@ import {
   StyledTitle,
   StyledActionButton,
 } from './Item.styles';
-import { ItemContextType, ItemProps } from './Item.types';
+import { ItemProps } from './Item.types';
 import { itemsTypeIcons } from '../../ActivityItems.const';
 
 export const Item = ({
@@ -39,11 +39,7 @@ export const Item = ({
         <StyledDescription>{body}</StyledDescription>
       </StyledCol>
       <div className="actions">
-        <Actions<ItemContextType>
-          items={getActions({ onRemoveItem })}
-          context={{ id }}
-          visibleByDefault
-        />
+        <Actions items={getActions({ onRemoveItem })} context={id} visibleByDefault />
       </div>
       {hidden && (
         <StyledActionButton>

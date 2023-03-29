@@ -18,3 +18,8 @@ export type OptionalItemsRef = {
   setSettingsDrawerVisible: (value: boolean) => void;
   setShowColorPalette: Dispatch<SetStateAction<boolean>>;
 };
+
+export type ActiveItemHookProps = {
+  selectedInputType: ItemConfigurationForm['itemsInputType'];
+  control: OptionalItemsProps['control'];
+};

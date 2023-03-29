@@ -18,23 +18,10 @@ import {
   TextInputOption,
 } from '../Settings';
 import { Alerts } from '../Alerts';
-import {
-  AudioPlayer,
-  AudioRecord,
-  Date,
-  Drawing,
-  Geolocation,
-  NumberSelection,
-  PhotoResponse,
-  SelectionOption,
-  SelectionRows,
-  SliderRows,
-  TextResponse,
-  TimeRange,
-  VideoResponse,
-} from '../InputTypeItems';
+import { SelectionOption } from '../InputTypeItems';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
+import { useActiveItem } from './OptionalItemsAndSettings.hooks';
 
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ setValue, control, selectedInputType, settings, palette }, ref) => {
@@ -87,6 +74,11 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
         ),
       );
     };
+
+    const activeItem = useActiveItem({
+      selectedInputType,
+      control,
+    });
 
     useImperativeHandle(
       ref,
@@ -143,32 +135,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
             </StyledOptionsWrapper>
           </>
         )}
-        {selectedInputType === ItemInputTypes.NumberSelection && (
-          <NumberSelection name="minNumber" maxName="maxNumber" />
-        )}
-        {selectedInputType === ItemInputTypes.Slider && (
-          <SliderRows name="sliderOptions" control={control} />
-        )}
-        {selectedInputType === ItemInputTypes.SliderRows && (
-          <SliderRows name="sliderOptions" control={control} isMultiple />
-        )}
-        {selectedInputType === ItemInputTypes.SingleSelectionPerRow && <SelectionRows isSingle />}
-        {selectedInputType === ItemInputTypes.MultipleSelectionPerRow && <SelectionRows />}
-        {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
-        {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
-        {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
-        {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
-        {selectedInputType === ItemInputTypes.Date && <Date />}
-        {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
-        {selectedInputType === ItemInputTypes.Text && (
-          <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
-        )}
-        {selectedInputType === ItemInputTypes.AudioPlayer && (
-          <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />
-        )}
-        {selectedInputType === ItemInputTypes.Drawing && (
-          <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />
-        )}
+        {activeItem}
         {isTextInputOptionVisible && <TextInputOption onRemove={handleRemoveTextInputOption} />}
         {hasAlerts && (
           <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />

@@ -7,8 +7,8 @@ export type Action = {
   active?: boolean;
 };
 
-export type ActionsProps<T extends number> = {
+export type ActionsProps = {
   items: Action[];
-  context: T;
+  context: unknown;
   visibleByDefault?: boolean;
 };
