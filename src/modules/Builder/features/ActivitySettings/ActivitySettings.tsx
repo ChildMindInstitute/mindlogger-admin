@@ -63,15 +63,18 @@ export const ActivitySettings = () => {
     <StyledWrapper>
       <LeftBar activeSetting={activeSetting} setActiveSetting={setActiveSetting} />
       <FormProvider {...methods}>
-        {activeSetting === ActivitySettingsOptions.ScoresAndReports && <ScoresAndReports />}
-        <StyledButtonsContainer>
-          <Button {...commonButtonProps} onClick={handleAddScore}>
-            {t('addScore')}
-          </Button>
-          <Button {...commonButtonProps} onClick={handleAddSection}>
-            {t('addSection')}
-          </Button>
-        </StyledButtonsContainer>
+        {activeSetting === ActivitySettingsOptions.ScoresAndReports && (
+          <ScoresAndReports>
+            <StyledButtonsContainer>
+              <Button {...commonButtonProps} onClick={handleAddScore}>
+                {t('addScore')}
+              </Button>
+              <Button {...commonButtonProps} onClick={handleAddSection}>
+                {t('addSection')}
+              </Button>
+            </StyledButtonsContainer>
+          </ScoresAndReports>
+        )}
       </FormProvider>
     </StyledWrapper>
   );
