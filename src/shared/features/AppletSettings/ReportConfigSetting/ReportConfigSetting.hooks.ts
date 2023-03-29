@@ -1,11 +1,8 @@
 import { useCallback } from 'react';
-
 import { Update } from 'history';
 import { useCallbackPrompt, usePromptSetup } from 'shared/hooks';
 
-import { isActivityRoute, isAppletRoute } from './NewApplet.utils';
-
-export const usePrompt = () => {
+export const usePrompt = (when: boolean) => {
   const {
     location,
     promptVisible,
@@ -18,21 +15,12 @@ export const usePrompt = () => {
 
   const handleBlockedNavigation = useCallback(
     (nextLocation: Update) => {
-      const currentPathname = location.pathname;
-      const nextPathname = nextLocation.location.pathname;
-      const shouldSkip =
-        (isAppletRoute(currentPathname) && isAppletRoute(nextPathname)) ||
-        (isActivityRoute(currentPathname) && isActivityRoute(nextPathname));
-
-      if (!confirmedNavigation && !shouldSkip) {
+      if (!confirmedNavigation && nextLocation.location.pathname !== location.pathname) {
         setPromptVisible(true);
         setLastLocation(nextLocation);
 
         return false;
       }
-
-      setLastLocation(nextLocation);
-      setConfirmedNavigation(true);
 
       return true;
     },
@@ -42,7 +30,7 @@ export const usePrompt = () => {
   return {
     promptVisible,
     ...useCallbackPrompt({
-      when: true,
+      when,
       handleBlockedNavigation,
       lastLocation,
       setLastLocation,
