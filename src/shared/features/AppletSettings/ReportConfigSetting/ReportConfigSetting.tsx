@@ -15,7 +15,6 @@ import {
 } from 'shared/components/FormComponents';
 import { theme, variables, StyledBodyLarge, StyledTitleMedium } from 'shared/styles';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
-import { useCallbackPrompt } from 'shared/hooks';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { defaultValues as defaultFormValues } from './ReportConfigSetting.const';
@@ -23,6 +22,7 @@ import { reportConfigSchema } from './ReportConfigSetting.schema';
 import { StyledButton, StyledSvg, StyledContainer, StyledForm } from './ReportConfigSetting.styles';
 import { FormValues } from './ReportConfigSetting.types';
 import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
+import { usePrompt } from './ReportConfigSetting.hooks';
 
 export const ReportConfigSetting = () => {
   const { id } = useParams();
@@ -50,9 +50,7 @@ export const ReportConfigSetting = () => {
     mode: 'onSubmit',
   });
 
-  const { promptVisible, confirmNavigation, cancelNavigation } = useCallbackPrompt(
-    isDirty && !isSubmitted,
-  );
+  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
 
   const emailRecipients = watch('emailRecipients');
   const respondentId = watch('respondentId');

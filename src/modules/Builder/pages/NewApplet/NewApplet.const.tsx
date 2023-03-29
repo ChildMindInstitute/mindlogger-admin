@@ -29,3 +29,17 @@ export const newAppletTabs = [
     path: page.newAppletSettings,
   },
 ];
+
+export const APPLET_LAYER_ROUTES = [
+  page.newAppletAbout,
+  page.newAppletActivities,
+  page.newAppletActivityFlow,
+  page.newAppletSettings,
+];
+export const ACTIVITY_LAYER_ROUTES = [
+  page.newAppletNewActivity,
+  page.newAppletNewActivityAbout,
+  page.newAppletNewActivityItems,
+  page.newAppletNewActivityItemFlow,
+  page.newAppletNewActivitySettings,
+];

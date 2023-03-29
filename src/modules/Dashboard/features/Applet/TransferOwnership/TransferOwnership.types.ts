@@ -8,3 +8,7 @@ export type TransferOwnershipProps = {
   setIsSubmitted: Dispatch<SetStateAction<boolean>>;
   setEmailTransfered: Dispatch<SetStateAction<string>>;
 };
+
+export type TransferOwnershipFormValues = {
+  email: string;
+};

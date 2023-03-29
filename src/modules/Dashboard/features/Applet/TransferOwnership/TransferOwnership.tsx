@@ -9,9 +9,14 @@ import { transferOwnershipApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledBodyLarge, theme } from 'shared/styles';
+import {
+  useBuilderSessionStorageFormValues,
+  useBuilderSessionStorageFormChange,
+} from 'shared/hooks';
 
 import { StyledInputWrapper } from './TransferOwnership.styles';
-import { TransferOwnershipProps } from './TransferOwnership.types';
+import { TransferOwnershipFormValues, TransferOwnershipProps } from './TransferOwnership.types';
+import { defaultValues } from './TransferOwnership.const';
 
 export const TransferOwnership = ({
   applet,
@@ -20,14 +25,20 @@ export const TransferOwnership = ({
   setEmailTransfered,
 }: TransferOwnershipProps) => {
   const { t } = useTranslation('app');
-  const { getValues, handleSubmit, control } = useForm<{ email: string }>({
+  const { getFormValues } =
+    useBuilderSessionStorageFormValues<TransferOwnershipFormValues>(defaultValues);
+  const { getValues, handleSubmit, control } = useForm<TransferOwnershipFormValues>({
     resolver: yupResolver(
       yup.object({
         email: yup.string().required(t('emailRequired')!).email(t('incorrectEmail')!),
       }),
     ),
-    defaultValues: { email: '' },
+    defaultValues: getFormValues(),
   });
+
+  const { handleFormChange } =
+    useBuilderSessionStorageFormChange<TransferOwnershipFormValues>(getValues);
+
   const { execute, error } = useAsync(transferOwnershipApi);
 
   const handleTransferOwnership = async () => {
@@ -45,7 +56,7 @@ export const TransferOwnership = ({
   }, [isSubmitted]);
 
   return (
-    <form onSubmit={handleSubmit(handleTransferOwnership)} noValidate>
+    <form onSubmit={handleSubmit(handleTransferOwnership)} onChange={handleFormChange} noValidate>
       <Trans i18nKey="transferOwnershipConfirmation">
         <StyledBodyLarge>
           Are you sure you want to transfer ownership of Applet

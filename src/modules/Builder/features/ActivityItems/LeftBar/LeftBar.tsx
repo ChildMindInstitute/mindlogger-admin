@@ -5,12 +5,17 @@ import { Button } from '@mui/material';
 import { Svg } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
 
-import { items } from './LeftBar.const';
 import { StyledBar, StyledHeader, StyledContent, StyledBtnWrapper } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
 import { Item } from './Item';
 
-export const LeftBar = ({ setActiveItem, activeItem }: LeftBarProps) => {
+export const LeftBar = ({
+  items,
+  activeItemId,
+  onSetActiveItem,
+  onAddItem,
+  onRemoveItem,
+}: LeftBarProps) => {
   const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
@@ -20,10 +25,20 @@ export const LeftBar = ({ setActiveItem, activeItem }: LeftBarProps) => {
       <StyledHeader isSticky={isHeaderSticky}>{t('items')}</StyledHeader>
       <StyledContent>
         {items.map((item) => (
-          <Item key={item.id} {...item} activeItem={activeItem} setActiveItem={setActiveItem} />
+          <Item
+            key={item.id}
+            {...item}
+            activeItemId={activeItemId}
+            onSetActiveItem={onSetActiveItem}
+            onRemoveItem={onRemoveItem}
+          />
         ))}
         <StyledBtnWrapper>
-          <Button variant="outlined" startIcon={<Svg id="add" width={18} height={18} />}>
+          <Button
+            variant="outlined"
+            startIcon={<Svg id="add" width={18} height={18} />}
+            onClick={onAddItem}
+          >
             {t('addItem')}
           </Button>
         </StyledBtnWrapper>

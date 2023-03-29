@@ -1,40 +1,38 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Update } from 'history';
 
 import { useBlocker } from './useBlocker';
 
-export const useCallbackPrompt = (when: boolean) => {
+export type CallbackPromptHookProps = {
+  when: boolean;
+  handleBlockedNavigation: (nextLocation: Update) => boolean;
+  lastLocation: Update | null;
+  setLastLocation: Dispatch<SetStateAction<Update | null>>;
+  setPromptVisible: Dispatch<SetStateAction<boolean>>;
+  confirmedNavigation: boolean;
+  setConfirmedNavigation: Dispatch<SetStateAction<boolean>>;
+};
+export const useCallbackPrompt = ({
+  when,
+  handleBlockedNavigation,
+  lastLocation,
+  setLastLocation,
+  setPromptVisible,
+  confirmedNavigation,
+  setConfirmedNavigation,
+}: CallbackPromptHookProps) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [promptVisible, setPromptVisible] = useState(false);
-  const [lastLocation, setLastLocation] = useState<Update | null>(null);
-  const [confirmedNavigation, setConfirmedNavigation] = useState(false);
 
-  const cancelNavigation = useCallback(() => {
+  const cancelNavigation = () => {
     setPromptVisible(false);
     setLastLocation(null);
-  }, []);
+  };
 
-  // handle blocking when user click on another route prompt will be shown
-  const handleBlockedNavigation = useCallback(
-    (nextLocation: Update) => {
-      if (!confirmedNavigation && nextLocation.location.pathname !== location.pathname) {
-        setPromptVisible(true);
-        setLastLocation(nextLocation);
-
-        return false;
-      }
-
-      return true;
-    },
-    [confirmedNavigation, location],
-  );
-
-  const confirmNavigation = useCallback(() => {
+  const confirmNavigation = () => {
     setPromptVisible(false);
     setConfirmedNavigation(true);
-  }, []);
+  };
 
   useEffect(() => {
     if (confirmedNavigation && lastLocation) {
@@ -45,5 +43,22 @@ export const useCallbackPrompt = (when: boolean) => {
 
   useBlocker(handleBlockedNavigation, when);
 
-  return { promptVisible, confirmNavigation, cancelNavigation };
+  return { confirmNavigation, cancelNavigation };
+};
+
+export const usePromptSetup = () => {
+  const location = useLocation();
+  const [promptVisible, setPromptVisible] = useState(false);
+  const [lastLocation, setLastLocation] = useState<Update | null>(null);
+  const [confirmedNavigation, setConfirmedNavigation] = useState(false);
+
+  return {
+    location,
+    promptVisible,
+    setPromptVisible,
+    lastLocation,
+    setLastLocation,
+    confirmedNavigation,
+    setConfirmedNavigation,
+  };
 };

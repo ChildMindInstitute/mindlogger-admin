@@ -27,6 +27,11 @@ export const Modal = ({
   onSecondBtnSubmit,
   disabledSecondBtn,
   sxProps,
+  secondBtnStyles = {},
+  hasThirdBtn = false,
+  thirdBtnText,
+  thirdBtnStyles = {},
+  onThirdBtnSubmit,
 }: ModalProps) => (
   <StyledDialog sx={sxProps} width={width} height={height} onClose={onClose} open={open}>
     <StyledDialogTitle align={titleAlign}>
@@ -36,28 +41,40 @@ export const Modal = ({
       </StyledCloseButton>
     </StyledDialogTitle>
     {children}
-    <StyledDialogActions actionsAlign={hasSecondBtn ? 'end' : 'center'}>
-      {hasSecondBtn && (
+    <StyledDialogActions actionsAlign={hasThirdBtn ? 'space-between' : 'end'} sx={{ p: 0 }}>
+      {hasThirdBtn && (
         <StyledButton
           fontWeight="regular"
           variant="text"
-          disabled={disabledSecondBtn}
-          onClick={onSecondBtnSubmit}
-          sx={{ marginLeft: theme.spacing(1.6) }}
+          onClick={onThirdBtnSubmit}
+          sx={{ ...thirdBtnStyles }}
         >
-          {secondBtnText}
+          {thirdBtnText}
         </StyledButton>
       )}
-      {buttonText && (
-        <StyledButton
-          variant="text"
-          disabled={disabledSubmit}
-          onClick={onSubmit}
-          color={submitBtnColor}
-        >
-          {buttonText}
-        </StyledButton>
-      )}
+      <StyledDialogActions actionsAlign={hasSecondBtn ? 'end' : 'center'}>
+        {hasSecondBtn && (
+          <StyledButton
+            fontWeight="regular"
+            variant="text"
+            disabled={disabledSecondBtn}
+            onClick={onSecondBtnSubmit}
+            sx={{ marginLeft: theme.spacing(1.6), ...secondBtnStyles }}
+          >
+            {secondBtnText}
+          </StyledButton>
+        )}
+        {buttonText && (
+          <StyledButton
+            variant="text"
+            disabled={disabledSubmit}
+            onClick={onSubmit}
+            color={submitBtnColor}
+          >
+            {buttonText}
+          </StyledButton>
+        )}
+      </StyledDialogActions>
     </StyledDialogActions>
   </StyledDialog>
 );

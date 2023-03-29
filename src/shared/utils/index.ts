@@ -15,3 +15,4 @@ export * from './fileSystem';
 export * from './func';
 export * from './getTableCell';
 export * from './exportToCsv';
+export * from './sessionStorage';
