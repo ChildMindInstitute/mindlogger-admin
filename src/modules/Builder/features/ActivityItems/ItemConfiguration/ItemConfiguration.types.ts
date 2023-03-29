@@ -1,15 +1,5 @@
-import { Dispatch, SetStateAction } from 'react';
 import { ColorResult } from 'react-color';
-import {
-  FieldValues,
-  Path,
-  UseFormGetValues,
-  UseFormSetValue,
-  UseFormWatch,
-  UseFormRegister,
-  UseFormUnregister,
-  UseFormClearErrors,
-} from 'react-hook-form';
+import { FieldValues, Path } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
 import { ApiItem } from 'modules/Builder/api';
@@ -101,19 +91,6 @@ export type ItemsOption = {
 export type ItemsOptionGroup = {
   groupName: string;
   groupOptions: ItemsOption[];
-};
-
-export type SettingsSetupProps = {
-  setValue: UseFormSetValue<ItemConfigurationForm>;
-  getValues: UseFormGetValues<ItemConfigurationForm>;
-  watch: UseFormWatch<ItemConfigurationForm>;
-  register: UseFormRegister<ItemConfigurationForm>;
-  unregister: UseFormUnregister<ItemConfigurationForm>;
-  clearErrors: UseFormClearErrors<ItemConfigurationForm>;
-  removeOptions?: () => void;
-  handleAddOption?: () => void;
-  removeAlert?: () => void;
-  setShowColorPalette?: Dispatch<SetStateAction<boolean>>;
 };
 
 export type OptionalItemSetupProps = {

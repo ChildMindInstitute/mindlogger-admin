@@ -23,7 +23,6 @@ import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { StyledContent, StyledHeader, StyledItemConfiguration } from './ItemConfiguration.styles';
 import { ItemConfigurationForm, ItemConfigurationProps } from './ItemConfiguration.types';
 import { itemsTypeOptions } from './ItemConfiguration.const';
-import { useSettingsSetup } from './ItemConfiguration.hooks';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { itemConfigurationFormSchema } from './ItemConfiguration.schema';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
@@ -61,19 +60,6 @@ export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps
       },
     );
   }, [item]);
-
-  useSettingsSetup({
-    setValue,
-    getValues,
-    watch,
-    register,
-    unregister,
-    removeOptions: optionalItemsRef.current?.removeOptions,
-    handleAddOption: optionalItemsRef.current?.handleAddOption,
-    removeAlert: optionalItemsRef.current?.removeAlert,
-    setShowColorPalette: optionalItemsRef.current?.setShowColorPalette,
-    clearErrors,
-  });
 
   const handleFormChangeDelayed = debounce(() => onItemChange(getValues()), INPUT_DEBOUNCE_TIME);
 
@@ -135,6 +121,11 @@ export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps
             <OptionalItemsAndSettings
               ref={optionalItemsRef}
               setValue={setValue}
+              getValues={getValues}
+              watch={watch}
+              register={register}
+              unregister={unregister}
+              clearErrors={clearErrors}
               control={control}
               selectedInputType={selectedInputType}
               settings={settings}

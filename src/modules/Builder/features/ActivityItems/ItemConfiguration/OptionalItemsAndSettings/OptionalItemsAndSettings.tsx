@@ -21,10 +21,24 @@ import { Alerts } from '../Alerts';
 import { SelectionOption } from '../InputTypeItems';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
-import { useActiveItem } from './OptionalItemsAndSettings.hooks';
+import { useActiveItem, useSettingsSetup } from './OptionalItemsAndSettings.hooks';
 
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
-  ({ setValue, control, selectedInputType, settings, palette }, ref) => {
+  (
+    {
+      setValue,
+      getValues,
+      watch,
+      register,
+      unregister,
+      clearErrors,
+      control,
+      selectedInputType,
+      settings,
+      palette,
+    },
+    ref,
+  ) => {
     const { t } = useTranslation('app');
     const [showColorPalette, setShowColorPalette] = useState(false);
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
@@ -91,6 +105,19 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       }),
       [],
     );
+
+    useSettingsSetup({
+      setValue,
+      getValues,
+      watch,
+      register,
+      unregister,
+      clearErrors,
+      removeOptions,
+      handleAddOption,
+      removeAlert,
+      setShowColorPalette,
+    });
 
     return (
       <>
