@@ -667,5 +667,16 @@
   "maxValuePositiveInt": "Max Value must be a positive integer",
   "scoresAndReports": "Scores & Reports",
   "subscales": "Subscales",
-  "subscalesConfiguration": "Subscales Configuration"
+  "subscalesConfiguration": "Subscales Configuration",
+  "importIndividualSchedule": "Import Individual Schedule",
+  "importDefaultSchedule": "Import Default Schedule",
+  "confirmImportSchedule": "Importing a new default schedule will replace the current default schedule. Are you sure you want to continue?",
+  "confirmUpdateSchedule": "Are you sure you want to update the default schedule for Applet <1>{{ appletName }}</1> and replace the current schedule with information from the <1>{{ fileName }}</1> file?",
+  "confirmImportIndividualSchedule": "Importing a new individual schedule for respondent <1>{{ respondentName }}</1> will replace the respondent’s current individual schedule. Are you sure you want to continue?",
+  "confirmUpdateIndividualSchedule": "Are you sure you want to update the individual schedule for respondent <1>{{ respondentName }}</1> for Applet <3>{{ appletName }}</3> and replace the current schedule with information from the <5>{{ fileName }}</5> file?",
+  "updateSchedule": "Update Schedule",
+  "uploadSchedule": "Please upload a schedule in one of the following formats: <1>.csv, .xls, .xlsx, .ods.</1>",
+  "downloadTemplate": "Download Template",
+  "dropFile": "Drop <1>.csv, .xls, .xlsx</1> or <3>.ods</3> here or <5>click to browse<5>.",
+  "invalidFileFormat": "Invalid file format. Please upload a schedule table in one of the following formats: <1>.csv, .xls, .xlsx, .ods.</1>"
 }

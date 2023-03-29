@@ -24,6 +24,7 @@ import { ExportSchedulePopup } from '../ExportSchedulePopup';
 import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
 import { RemoveIndividualSchedulePopup } from '../RemoveIndividualSchedulePopup';
 import { CreateActivityPopup } from '../CreateActivityPopup';
+import { ImportSchedulePopup } from '../ImportSchedulePopup';
 
 export const Legend = ({ legendEvents }: LegendProps) => {
   const { t } = useTranslation('app');
@@ -34,6 +35,7 @@ export const Legend = ({ legendEvents }: LegendProps) => {
   const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
   const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
     useState(false);
+  const [importSchedulePopupVisible, setImportSchedulePopupVisible] = useState(false);
   const [clearScheduleEventsPopupVisible, setClearScheduleEventsPopupVisible] = useState(false);
   const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
     useState(false);
@@ -115,7 +117,7 @@ export const Legend = ({ legendEvents }: LegendProps) => {
         </>
       )}
       <StyledBtnsRow>
-        <StyledBtn>
+        <StyledBtn onClick={() => setImportSchedulePopupVisible(true)}>
           <Svg width={18} height={18} id="export" />
           {t('import')}
         </StyledBtn>
@@ -150,6 +152,13 @@ export const Legend = ({ legendEvents }: LegendProps) => {
           scheduleTableRows={mockedScheduleData}
           secretUserId="012-435"
           nickName="John Doe"
+        />
+      )}
+      {importSchedulePopupVisible && (
+        <ImportSchedulePopup
+          open={importSchedulePopupVisible}
+          isIndividual={isIndividual}
+          onClose={() => setImportSchedulePopupVisible(false)}
         />
       )}
       {clearScheduleEventsPopupVisible && (
