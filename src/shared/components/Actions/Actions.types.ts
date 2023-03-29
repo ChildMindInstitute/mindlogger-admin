@@ -1,4 +1,4 @@
-type Action = {
+export type Action = {
   icon: JSX.Element;
   action: (item?: any) => any | void;
   disabled?: boolean;
@@ -7,8 +7,8 @@ type Action = {
   active?: boolean;
 };
 
-export type ActionsProps = {
+export type ActionsProps<T extends Record<string, any>> = {
   items: Action[];
-  context: unknown;
+  context: T;
   visibleByDefault?: boolean;
 };

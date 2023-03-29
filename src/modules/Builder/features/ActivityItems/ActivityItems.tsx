@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
@@ -9,6 +9,8 @@ import {
   useBuilderSessionStorageFormValues,
   useBuilderSessionStorageApplyChanges,
 } from 'shared/hooks';
+import { ActionsProps } from 'shared/components/Actions/Actions.types';
+import { ItemContextType } from 'modules/Builder/features/ActivityItems/LeftBar/Item/Item.types';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
@@ -20,26 +22,18 @@ export const ActivityItems = () => {
   const [currentItems, setCurrentItems] = useState<APIItem[]>(getFormValues().items);
   const { t } = useTranslation('app');
   const [activeItemId, setActiveItemId] = useState('');
-  const [isNewItem, setIsNewItem] = useState(true);
 
-  const activeItem = useMemo(() => {
-    if (isNewItem) return null;
-
-    const currentItem = currentItems.find((i) => i.id === activeItemId);
-    if (!currentItem) return null;
-
-    return currentItem;
-  }, [activeItemId, isNewItem]);
+  const activeItem = currentItems.find((item) => item.id === activeItemId) || null;
 
   const { applyChanges } = useBuilderSessionStorageApplyChanges();
 
   const handleItemChange = (id: string) => (data: Omit<APIItem, 'id' | 'hidden'>) => {
-    const updatedItems = currentItems.map((i) =>
-      i.id !== id
-        ? i
+    const updatedItems = currentItems.map((item) =>
+      item.id !== id
+        ? item
         : {
-            id: i.id,
-            hidden: i.hidden,
+            id: item.id,
+            hidden: item.hidden,
             ...data,
           },
     );
@@ -48,24 +42,24 @@ export const ActivityItems = () => {
       items: updatedItems,
     });
   };
-  const handleAddItem = () => {
+  const onAddItem = () => {
     const newItemId = uniqueId();
     const updatedItems = currentItems.concat({
       id: newItemId,
       name: 'NewItem',
     } as APIItem);
-    setIsNewItem(true);
     setActiveItemId(newItemId);
     setCurrentItems(updatedItems);
     applyChanges({
       items: updatedItems,
     });
   };
-  const handleSetActiveItem = (id: string) => {
-    setIsNewItem(false);
-    if (!id) return;
 
-    setActiveItemId(id);
+  const onRemoveItem = (context: ActionsProps<ItemContextType>['context']) => {
+    if (!context?.id) return;
+
+    const updatedItems = currentItems.filter((item) => item.id !== context.id);
+    setCurrentItems(updatedItems);
   };
 
   useBreadcrumbs([
@@ -80,14 +74,12 @@ export const ActivityItems = () => {
       <LeftBar
         items={currentItems}
         activeItemId={activeItemId}
-        handleSetActiveItem={handleSetActiveItem}
-        handleAddItem={handleAddItem}
+        onSetActiveItem={setActiveItemId}
+        onAddItem={onAddItem}
+        onRemoveItem={onRemoveItem}
       />
-      {(activeItemId || isNewItem) && (
-        <ItemConfiguration
-          item={isNewItem ? null : activeItem}
-          onItemChange={handleItemChange(activeItemId)}
-        />
+      {activeItemId && (
+        <ItemConfiguration item={activeItem} onItemChange={handleItemChange(activeItemId)} />
       )}
     </StyledWrapper>
   );

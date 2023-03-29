@@ -1,14 +1,23 @@
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledActions, StyledActionButton, StyledActionsWrapper } from './Actions.styles';
-import { ActionsProps } from './Actions.types';
+import { Action, ActionsProps } from './Actions.types';
 
-export const Actions = ({ items, context, visibleByDefault = false }: ActionsProps) => {
+export const Actions = <T extends Record<string, any>>({
+  items,
+  context,
+  visibleByDefault = false,
+}: ActionsProps<T>) => {
   const [visibleActions, setVisibleActions] = useState(false);
+
+  const onClick = (action: Action['action']) => (e: SyntheticEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    action(context);
+  };
 
   return (
     <StyledActionsWrapper
@@ -32,7 +41,7 @@ export const Actions = ({ items, context, visibleByDefault = false }: ActionsPro
                     <StyledActionButton
                       isActive={active}
                       disabled={disabled}
-                      onClick={() => action(context)}
+                      onClick={onClick(action)}
                     >
                       {icon}
                     </StyledActionButton>

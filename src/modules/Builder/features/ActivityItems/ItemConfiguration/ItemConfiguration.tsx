@@ -4,6 +4,7 @@ import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Button, Grid } from '@mui/material';
 import { ColorResult } from 'react-color';
 import { yupResolver } from '@hookform/resolvers/yup';
+import debounce from 'lodash.debounce';
 
 import { Svg } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
@@ -18,6 +19,7 @@ import {
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
 import { ItemInputTypes } from 'shared/types';
+import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { Alerts } from './Alerts';
@@ -154,13 +156,11 @@ export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps
     clearErrors,
   });
 
-  const handleFormChange = () => {
-    onItemChange(getValues());
-  };
+  const handleFormChangeDelayed = debounce(() => onItemChange(getValues()), INPUT_DEBOUNCE_TIME);
 
   return (
     <FormProvider {...methods}>
-      <form noValidate onChange={handleFormChange}>
+      <form noValidate onChange={handleFormChangeDelayed}>
         <StyledItemConfiguration ref={containerRef}>
           <StyledHeader isSticky={isHeaderSticky}>
             <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>

@@ -24,6 +24,7 @@ export const enum BuilderLayers {
   Applet = 'applet',
   Activity = 'activity',
 }
+
 export const getLayer = (path: string) => {
   if (isAppletRoute(path)) return BuilderLayers.Applet;
 

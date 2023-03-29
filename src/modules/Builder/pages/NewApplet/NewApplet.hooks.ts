@@ -1,8 +1,9 @@
-import { page } from 'resources';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Update } from 'history';
-import { useBlocker } from 'shared/hooks/useBlocker';
+
+import { page } from 'resources';
+import { useBlocker } from 'shared/hooks';
 
 export const APPLET_LAYER_ROUTES = [
   page.newAppletAbout,
@@ -18,14 +19,17 @@ export const ACTIVITY_LAYER_ROUTES = [
   page.newAppletNewActivitySettings,
 ];
 
-export const APPLET_LAYER_REGEXP_ROUTES = APPLET_LAYER_ROUTES.map((r) =>
-  r === page.newAppletActivities ? new RegExp(`^${r}$`) : new RegExp(`^${r}.*`),
+export const APPLET_LAYER_REGEXP_ROUTES = APPLET_LAYER_ROUTES.map((route) =>
+  route === page.newAppletActivities ? new RegExp(`^${route}$`) : new RegExp(`^${route}.*`),
 );
-export const ACTIVITY_LAYER_REGEXP_ROUTES = ACTIVITY_LAYER_ROUTES.map((r) => new RegExp(`^${r}.*`));
+export const ACTIVITY_LAYER_REGEXP_ROUTES = ACTIVITY_LAYER_ROUTES.map(
+  (route) => new RegExp(`^${route}.*`),
+);
 
-export const isAppletRoute = (path: string) => APPLET_LAYER_REGEXP_ROUTES.some((r) => r.test(path));
+export const isAppletRoute = (path: string) =>
+  APPLET_LAYER_REGEXP_ROUTES.some((route) => route.test(path));
 export const isActivityRoute = (path: string) =>
-  ACTIVITY_LAYER_REGEXP_ROUTES.some((r) => r.test(path));
+  ACTIVITY_LAYER_REGEXP_ROUTES.some((route) => route.test(path));
 
 export const usePrompt = () => {
   const navigate = useNavigate();

@@ -12,8 +12,9 @@ import { Item } from './Item';
 export const LeftBar = ({
   items,
   activeItemId,
-  handleSetActiveItem,
-  handleAddItem,
+  onSetActiveItem,
+  onAddItem,
+  onRemoveItem,
 }: LeftBarProps) => {
   const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
@@ -28,14 +29,15 @@ export const LeftBar = ({
             key={item.id}
             {...item}
             activeItemId={activeItemId}
-            handleSetActiveItem={handleSetActiveItem}
+            onSetActiveItem={onSetActiveItem}
+            onRemoveItem={onRemoveItem}
           />
         ))}
         <StyledBtnWrapper>
           <Button
             variant="outlined"
             startIcon={<Svg id="add" width={18} height={18} />}
-            onClick={handleAddItem}
+            onClick={onAddItem}
           >
             {t('addItem')}
           </Button>
