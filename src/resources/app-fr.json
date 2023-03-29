@@ -571,5 +571,10 @@
   "timeIsShownInUTC": "L'heure est affichée en UTC",
   "scoresAndReports": "Notes et rapports",
   "subscales": "Sous-échelles",
-  "subscalesConfiguration": "Configuration des sous-échelles"
+  "subscalesConfiguration": "Configuration des sous-échelles",
+  "generateReport": "Générer un rapport",
+  "showScoreSummary": "Afficher le résumé des scores",
+  "showScoreSummaryTooltip": "Afficher le résumé des scores",
+  "addScore": "Ajouter une note",
+  "addSection": "Ajouter une rubrique"
 }

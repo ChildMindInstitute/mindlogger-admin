@@ -25,6 +25,7 @@
     "i18next-browser-languagedetector": "^7.0.0",
     "javascript-time-ago": "^2.5.9",
     "lodash.uniqueid": "^4.0.1",
+    "lodash.debounce": "4.0.8",
     "md-editor-rt": "2.8.1",
     "react": "^18.2.0",
     "react-big-calendar": "^1.5.2",
@@ -43,6 +44,7 @@
     "stream-browserify": "^3.0.0",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5",
     "yup": "^0.32.11"
   },
   "scripts": {
@@ -72,6 +74,7 @@
   },
   "devDependencies": {
     "@types/lodash.uniqueid": "^4.0.7",
+    "@types/lodash.debounce": "4.0.7",
     "@types/marked": "4.0.8",
     "@types/react-big-calendar": "^0.38.3",
     "@types/react-color": "^3.0.6",

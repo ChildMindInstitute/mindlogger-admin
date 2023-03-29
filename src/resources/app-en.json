@@ -684,5 +684,10 @@
   "timeIsShownInUTC": "Time is shown in UTC",
   "scoresAndReports": "Scores & Reports",
   "subscales": "Subscales",
-  "subscalesConfiguration": "Subscales Configuration"
+  "subscalesConfiguration": "Subscales Configuration",
+  "generateReport": "Generate Report",
+  "showScoreSummary": "Show Score Summary",
+  "showScoreSummaryTooltip": "Show Score Summary",
+  "addScore": "Add Score",
+  "addSection": "Add Section"
 }

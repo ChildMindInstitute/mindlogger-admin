@@ -9,21 +9,28 @@ import {
   SelectController,
 } from 'shared/components/FormComponents';
 import {
+  StyledBuilderWrapper,
   StyledFlexTopCenter,
   StyledHeadlineLarge,
-  StyledBuilderWrapper,
   theme,
 } from 'shared/styles';
-import { useBreadcrumbs } from 'shared/hooks';
+import { useBreadcrumbs, useBuilderSessionStorageFormChange } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
+import { useBuilderSessionStorageFormValues } from 'shared/hooks';
 
-import { StyledForm, StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
+import { StyledContainer, StyledForm, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { AboutAppletSchema } from './AboutApplet.schema';
-import { defaultValues, colorThemeOptions } from './AboutApplet.const';
+import { colorThemeOptions, defaultValues } from './AboutApplet.const';
 import { FormValues } from './AboutApplet.types';
+
+const commonUploaderProps = {
+  width: 20,
+  height: 20,
+  maxFileSize: MAX_FILE_SIZE_1GB,
+};
 
 export const AboutApplet = () => {
   const { t } = useTranslation();
@@ -35,21 +42,16 @@ export const AboutApplet = () => {
     },
   ]);
 
-  const { control, setValue, watch } = useForm<FormValues>({
+  const { getFormValues } = useBuilderSessionStorageFormValues<FormValues>(defaultValues);
+  const { control, setValue, watch, getValues } = useForm<FormValues>({
     resolver: yupResolver(AboutAppletSchema()),
-    defaultValues,
+    defaultValues: getFormValues(),
     mode: 'onChange',
   });
 
   const commonProps = {
     control,
     fullWidth: true,
-  };
-
-  const commonUploaderProps = {
-    width: 20,
-    height: 20,
-    maxFileSize: MAX_FILE_SIZE_1GB,
   };
 
   const uploads = [
@@ -79,12 +81,14 @@ export const AboutApplet = () => {
     },
   ];
 
+  const { handleFormChange } = useBuilderSessionStorageFormChange<FormValues>(getValues);
+
   return (
     <StyledBuilderWrapper sx={{ paddingRight: theme.spacing(27.7) }}>
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutApplet')}
       </StyledHeadlineLarge>
-      <StyledForm noValidate>
+      <StyledForm noValidate onChange={handleFormChange}>
         <Box sx={{ display: 'flex' }}>
           <StyledContainer>
             <Box sx={{ mb: theme.spacing(4.4) }}>

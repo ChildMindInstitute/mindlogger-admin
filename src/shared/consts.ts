@@ -11,6 +11,8 @@ export const MAX_FILE_SIZE_1GB = 1_073_741_824;
 export const MAX_FILE_SIZE_8MB = 8_388_608;
 export const MAX_FILE_SIZE_2MB = 2_097_152;
 
+export const INPUT_DEBOUNCE_TIME = 400;
+
 export const APPLET_PAGES = {
   respondents: 'respondents',
   managers: 'managers',

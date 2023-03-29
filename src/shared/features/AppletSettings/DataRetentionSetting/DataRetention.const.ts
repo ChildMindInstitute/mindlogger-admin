@@ -1,27 +1,29 @@
+import { Periods } from './DataRetention.types';
+
 export const periods = [
   {
-    value: 'indefinitely',
+    value: Periods.Indefinitely,
     labelKey: 'indefinitely',
   },
   {
-    value: 'day',
+    value: Periods.Day,
     labelKey: 'days',
   },
   {
-    value: 'week',
+    value: Periods.Week,
     labelKey: 'weeks',
   },
   {
-    value: 'month',
+    value: Periods.Month,
     labelKey: 'months',
   },
   {
-    value: 'year',
+    value: Periods.Year,
     labelKey: 'years',
   },
 ];
 
 export const defaultValues = {
   periodNumber: 1,
-  period: 'indefinitely',
+  period: Periods.Indefinitely,
 };

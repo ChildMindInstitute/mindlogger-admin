@@ -1,9 +1,9 @@
+import { ActivityItemApi } from 'modules/Builder/api';
+
 import { LeftBarProps } from '../LeftBar.types';
 
-export type ItemProps = {
-  id: string;
-  name: string;
-  description: string;
-  icon: JSX.Element;
-  hidden: boolean;
-} & LeftBarProps;
+export type ItemProps = ActivityItemApi & Omit<LeftBarProps, 'items' | 'onAddItem'>;
+
+export type ActionsType = {
+  onRemoveItem: LeftBarProps['onRemoveItem'];
+};
