@@ -110,10 +110,10 @@ export type SettingsSetupProps = {
   register: UseFormRegister<ItemConfigurationForm>;
   unregister: UseFormUnregister<ItemConfigurationForm>;
   clearErrors: UseFormClearErrors<ItemConfigurationForm>;
-  removeOptions: () => void;
-  handleAddOption: () => void;
-  removeAlert: () => void;
-  setShowColorPalette: Dispatch<SetStateAction<boolean>>;
+  removeOptions?: () => void;
+  handleAddOption?: () => void;
+  removeAlert?: () => void;
+  setShowColorPalette?: Dispatch<SetStateAction<boolean>>;
 };
 
 export type OptionalItemSetupProps = {

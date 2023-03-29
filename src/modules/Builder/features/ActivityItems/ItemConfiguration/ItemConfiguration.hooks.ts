@@ -61,13 +61,13 @@ export const useSettingsSetup = ({
   useEffect(() => {
     setValue('settings', []);
     setValue('timer', DEFAULT_TIMER_VALUE);
-    removeOptions();
+    removeOptions?.();
 
     if (
       selectedInputType === ItemInputTypes.SingleSelection ||
       selectedInputType === ItemInputTypes.MultipleSelection
     ) {
-      handleAddOption();
+      handleAddOption?.();
     }
 
     if (
@@ -93,7 +93,7 @@ export const useSettingsSetup = ({
   }, [selectedInputType]);
 
   useEffect(() => {
-    !hasAlerts && removeAlert();
+    !hasAlerts && removeAlert?.();
   }, [hasAlerts]);
 
   useEffect(() => {
@@ -101,7 +101,7 @@ export const useSettingsSetup = ({
       register('paletteName', { value: '' });
     } else {
       unregister('paletteName');
-      setShowColorPalette(false);
+      setShowColorPalette?.(false);
     }
   }, [hasPalette]);
 

@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import { Button, Grid } from '@mui/material';
-import { ColorResult } from 'react-color';
+import { FormProvider, useForm } from 'react-hook-form';
+import { Grid } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import debounce from 'lodash.debounce';
 
@@ -18,54 +17,22 @@ import {
   variables,
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
-import { ItemInputTypes } from 'shared/types';
 import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { Alerts } from './Alerts';
-import {
-  ColorPalette,
-  ItemSettingsController,
-  ItemSettingsDrawer,
-  TextInputOption,
-} from './Settings';
-import {
-  AudioPlayer,
-  AudioRecord,
-  Date,
-  Drawing,
-  Geolocation,
-  NumberSelection,
-  PhotoResponse,
-  SelectionOption,
-  SelectionRows,
-  SliderRows,
-  TextResponse,
-  TimeRange,
-  VideoResponse,
-} from './InputTypeItems';
-import {
-  StyledContent,
-  StyledHeader,
-  StyledItemConfiguration,
-  StyledOptionsWrapper,
-} from './ItemConfiguration.styles';
-import {
-  ItemConfigurationForm,
-  ItemConfigurationProps,
-  ItemConfigurationSettings,
-} from './ItemConfiguration.types';
-import { DEFAULT_SCORE_VALUE, itemsTypeOptions } from './ItemConfiguration.const';
+import { StyledContent, StyledHeader, StyledItemConfiguration } from './ItemConfiguration.styles';
+import { ItemConfigurationForm, ItemConfigurationProps } from './ItemConfiguration.types';
+import { itemsTypeOptions } from './ItemConfiguration.const';
 import { useSettingsSetup } from './ItemConfiguration.hooks';
-import { getInputTypeTooltip, getPaletteColor } from './ItemConfiguration.utils';
+import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { itemConfigurationFormSchema } from './ItemConfiguration.schema';
+import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 
 export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps) => {
-  const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
-  const [showColorPalette, setShowColorPalette] = useState(false);
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const { t } = useTranslation('app');
+  const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
 
   const methods = useForm<ItemConfigurationForm>({
     resolver: yupResolver(itemConfigurationFormSchema()),
@@ -79,25 +46,6 @@ export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps
   });
 
   const { control, watch, setValue, getValues, register, unregister, clearErrors, reset } = methods;
-
-  const {
-    fields: options,
-    append: appendOption,
-    remove: removeOptions,
-    update: updateOptions,
-  } = useFieldArray({
-    control,
-    name: 'options',
-  });
-
-  const {
-    fields: alerts,
-    append: appendAlert,
-    remove: removeAlert,
-  } = useFieldArray({
-    control,
-    name: 'alerts',
-  });
 
   const selectedInputType = watch('itemsInputType');
   const settings = watch('settings');
@@ -114,45 +62,16 @@ export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps
     );
   }, [item]);
 
-  const hasOptions =
-    selectedInputType === ItemInputTypes.SingleSelection ||
-    selectedInputType === ItemInputTypes.MultipleSelection;
-
-  const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
-  const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
-  const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
-  const hasColorPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
-
-  const handleAddOption = () =>
-    appendOption({
-      text: '',
-      isVisible: true,
-      ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
-      ...(hasColorPalette &&
-        palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
-    });
-
-  const handleRemoveTextInputOption = () => {
-    setValue(
-      'settings',
-      settings?.filter(
-        (settingKey: ItemConfigurationSettings) =>
-          settingKey !== ItemConfigurationSettings.HasTextInput &&
-          settingKey !== ItemConfigurationSettings.IsTextInputRequired,
-      ),
-    );
-  };
-
   useSettingsSetup({
     setValue,
     getValues,
     watch,
     register,
     unregister,
-    removeOptions,
-    handleAddOption,
-    removeAlert,
-    setShowColorPalette,
+    removeOptions: optionalItemsRef.current?.removeOptions,
+    handleAddOption: optionalItemsRef.current?.handleAddOption,
+    removeAlert: optionalItemsRef.current?.removeAlert,
+    setShowColorPalette: optionalItemsRef.current?.setShowColorPalette,
     clearErrors,
   });
 
@@ -168,7 +87,7 @@ export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps
               {selectedInputType && (
                 <StyledClearedButton
                   sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
-                  onClick={() => setSettingsDrawerVisible(true)}
+                  onClick={() => optionalItemsRef.current?.setSettingsDrawerVisible(true)}
                 >
                   <Svg id="report-configuration" />
                 </StyledClearedButton>
@@ -213,91 +132,14 @@ export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps
               requiredStateMessage={t('displayedContentRequired')}
               hasRequiredState
             />
-            {hasOptions && (
-              <>
-                <StyledFlexTopCenter
-                  sx={{ m: theme.spacing(4.8, 0, 2.4), justifyContent: 'space-between' }}
-                >
-                  <StyledTitleLarge>{t('responseOptions')}</StyledTitleLarge>
-                  {hasColorPalette && !showColorPalette && (
-                    <Button
-                      onClick={() => setShowColorPalette(true)}
-                      variant="outlined"
-                      startIcon={<Svg id="paint-outline" width="20" height="20" />}
-                    >
-                      {t('setPalette')}
-                    </Button>
-                  )}
-                </StyledFlexTopCenter>
-                {hasColorPalette && showColorPalette && (
-                  <ColorPalette setShowColorPalette={setShowColorPalette} />
-                )}
-                <StyledOptionsWrapper>
-                  {options?.length
-                    ? options.map((option, index) => (
-                        <SelectionOption
-                          key={option.id}
-                          onRemoveOption={removeOptions}
-                          onUpdateOption={updateOptions}
-                          optionsLength={options.length}
-                          index={index}
-                        />
-                      ))
-                    : null}
-                  <Button
-                    onClick={handleAddOption}
-                    variant="outlined"
-                    startIcon={<Svg id="add" width="20" height="20" />}
-                  >
-                    {t('addOption')}
-                  </Button>
-                </StyledOptionsWrapper>
-              </>
-            )}
-            {selectedInputType === ItemInputTypes.NumberSelection && (
-              <NumberSelection name="minNumber" maxName="maxNumber" />
-            )}
-            {selectedInputType === ItemInputTypes.Slider && (
-              <SliderRows name="sliderOptions" control={control} />
-            )}
-            {selectedInputType === ItemInputTypes.SliderRows && (
-              <SliderRows name="sliderOptions" control={control} isMultiple />
-            )}
-            {selectedInputType === ItemInputTypes.SingleSelectionPerRow && (
-              <SelectionRows isSingle />
-            )}
-            {selectedInputType === ItemInputTypes.MultipleSelectionPerRow && <SelectionRows />}
-            {selectedInputType === ItemInputTypes.Geolocation && <Geolocation />}
-            {selectedInputType === ItemInputTypes.TimeRange && <TimeRange />}
-            {selectedInputType === ItemInputTypes.Video && <VideoResponse />}
-            {selectedInputType === ItemInputTypes.Photo && <PhotoResponse />}
-            {selectedInputType === ItemInputTypes.Date && <Date />}
-            {selectedInputType === ItemInputTypes.Audio && <AudioRecord name="audioDuration" />}
-            {selectedInputType === ItemInputTypes.Text && (
-              <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />
-            )}
-            {selectedInputType === ItemInputTypes.AudioPlayer && (
-              <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />
-            )}
-            {selectedInputType === ItemInputTypes.Drawing && (
-              <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />
-            )}
-            {isTextInputOptionVisible && <TextInputOption onRemove={handleRemoveTextInputOption} />}
-            {hasAlerts && (
-              <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
-            )}
-            {settingsDrawerVisible && (
-              <ItemSettingsDrawer
-                open={settingsDrawerVisible}
-                onClose={() => setSettingsDrawerVisible(false)}
-              >
-                <ItemSettingsController
-                  name="settings"
-                  inputType={selectedInputType}
-                  control={control}
-                />
-              </ItemSettingsDrawer>
-            )}
+            <OptionalItemsAndSettings
+              ref={optionalItemsRef}
+              setValue={setValue}
+              control={control}
+              selectedInputType={selectedInputType}
+              settings={settings}
+              palette={palette}
+            />
           </StyledContent>
         </StyledItemConfiguration>
       </form>

@@ -7,7 +7,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { StyledActions, StyledActionButton, StyledActionsWrapper } from './Actions.styles';
 import { Action, ActionsProps } from './Actions.types';
 
-export const Actions = <T extends Record<string, any>>({
+export const Actions = <T extends number>({
   items,
   context,
   visibleByDefault = false,

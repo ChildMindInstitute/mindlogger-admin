@@ -8,25 +8,15 @@ export const useSaveChangesPopupSetup = (handleSubmit: () => void) => {
   const layer = getLayer(pathname);
 
   const onSaveClick = () => {
-    if (!layer) {
-      handleSubmit();
-
-      return;
+    if (layer) {
+      const layerStorage = builderSessionStorage.getItem(layer) ?? {};
+      builderSessionStorage.setItem(layer, layerStorage);
     }
-
-    const layerStorage = builderSessionStorage.getItem(layer) ?? {};
-    builderSessionStorage.setItem(layer, layerStorage);
     handleSubmit();
   };
 
   const onDoNotSaveClick = () => {
-    if (!layer) {
-      handleSubmit();
-
-      return;
-    }
-
-    builderSessionStorage.setItem(layer, {});
+    layer && builderSessionStorage.setItem(layer, {});
     handleSubmit();
   };
 

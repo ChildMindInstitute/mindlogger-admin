@@ -7,7 +7,7 @@ export type Action = {
   active?: boolean;
 };
 
-export type ActionsProps<T extends Record<string, any>> = {
+export type ActionsProps<T extends number> = {
   items: Action[];
   context: T;
   visibleByDefault?: boolean;
