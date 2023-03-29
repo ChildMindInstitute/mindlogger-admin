@@ -1,3 +1,5 @@
+import { Row } from 'shared/components';
+
 export type LegendEvent = {
   name: string;
   id: string;
@@ -6,10 +8,27 @@ export type LegendEvent = {
   colors?: string[];
 };
 
+export enum Repeats {
+  Yes = 'yes',
+  No = 'no',
+}
+
+export type ScheduleExportCsv = {
+  activityName: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  notificationTime: string;
+  repeats: Repeats;
+  frequency: string;
+}[];
+
 export type PreparedEvents = {
   alwaysAvailableEvents: LegendEvent[];
   scheduledEvents: LegendEvent[];
   deactivatedEvents: LegendEvent[];
+  scheduleExportTableData: Row[];
+  scheduleExportCsv: ScheduleExportCsv;
 };
 
 export type AddEventsToCategories = Omit<LegendEvent, 'count'> & {
