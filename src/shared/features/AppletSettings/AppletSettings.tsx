@@ -6,10 +6,10 @@ import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 import { APPLET_PAGES } from 'shared/consts';
+import { StyledContainer } from 'shared/styles';
 
 import { Navigation } from './Navigation';
 import { Setting } from './Setting';
-import { StyledContainer } from './AppletSettings.styles';
 import { AppletSetting, AppletSettingsProps } from './AppletSettings.types';
 import { getSettingItem } from './AppletSettings.utils';
 

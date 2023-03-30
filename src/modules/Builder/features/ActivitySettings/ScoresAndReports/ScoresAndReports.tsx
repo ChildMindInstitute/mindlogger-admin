@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
@@ -6,9 +7,8 @@ import { Tooltip } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
 
 import { StyledScoreSummaryTooltipSvg } from './ScoresAndReports.styles';
-import { ScoresAndReportsProps } from './ScoresAndReports.types';
 
-export const ScoresAndReports = () => {
+export const ScoresAndReports = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation('app');
 
   const { control } = useFormContext();
@@ -34,6 +34,7 @@ export const ScoresAndReports = () => {
           </StyledFlexTopCenter>
         }
       />
+      {children}
     </>
   );
 };

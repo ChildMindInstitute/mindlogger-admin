@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import { ButtonPropsVariantOverrides } from '@mui/material';
+import { ButtonPropsVariantOverrides, Button } from '@mui/material';
 
 import { page } from 'resources';
 import { Svg } from 'shared/components';
@@ -87,7 +87,16 @@ export const ActivitySettings = () => {
       <FormProvider {...methods}>
         <ActivitySettingsContainer title={containerTitle} onClose={handleClose}>
           {activeSetting?.name === ActivitySettingsOptionsItems.ScoresAndReports && (
-            <ScoresAndReports />
+            <ScoresAndReports>
+              <StyledButtonsContainer>
+                <Button {...commonButtonProps} onClick={handleAddScore}>
+                  {t('addScore')}
+                </Button>
+                <Button {...commonButtonProps} onClick={handleAddSection}>
+                  {t('addSection')}
+                </Button>
+              </StyledButtonsContainer>
+            </ScoresAndReports>
           )}
           {activeSetting?.name === ActivitySettingsOptionsItems.SubscalesConfiguration && (
             <SubscalesConfiguration />

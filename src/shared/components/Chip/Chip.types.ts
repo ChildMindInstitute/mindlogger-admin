@@ -9,4 +9,6 @@ export type ChipProps = {
   color?: 'primary' | 'secondary' | 'error';
   shape?: ChipShape;
   icon?: React.ReactElement | undefined;
+  canRemove?: boolean;
+  onClick?: () => void;
 };
