@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
@@ -20,7 +20,7 @@ import {
   StyledScoreSummaryTooltipSvg,
 } from './ScoresAndReports.styles';
 
-export const ScoresAndReports = () => {
+export const ScoresAndReports = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation('app');
 
   const containerRef = useRef<HTMLElement | null>(null);
@@ -57,6 +57,7 @@ export const ScoresAndReports = () => {
             </StyledFlexTopCenter>
           }
         />
+        {children}
       </StyledContent>
     </StyledScoresAndReports>
   );

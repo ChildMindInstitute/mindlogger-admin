@@ -689,5 +689,6 @@
   "showScoreSummary": "Show Score Summary",
   "showScoreSummaryTooltip": "Show Score Summary",
   "addScore": "Add Score",
-  "addSection": "Add Section"
+  "addSection": "Add Section",
+  "noSelectedItemsYet": "No selected items yet."
 }

@@ -20,3 +20,4 @@ export * from './EmptyTable';
 export * from './Uploader';
 export * from './MarkDownEditor';
 export * from './SaveChangesPopup';
+export * from './DataTable';
