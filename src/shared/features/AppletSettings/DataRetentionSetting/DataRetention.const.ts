@@ -1,29 +1,29 @@
-import { Periods } from './DataRetention.types';
+import { RetentionPeriods } from 'shared/state';
 
 export const periods = [
   {
-    value: Periods.Indefinitely,
+    value: RetentionPeriods.Indefinitely,
     labelKey: 'indefinitely',
   },
   {
-    value: Periods.Day,
+    value: RetentionPeriods.Days,
     labelKey: 'days',
   },
   {
-    value: Periods.Week,
+    value: RetentionPeriods.Weeks,
     labelKey: 'weeks',
   },
   {
-    value: Periods.Month,
+    value: RetentionPeriods.Months,
     labelKey: 'months',
   },
   {
-    value: Periods.Year,
+    value: RetentionPeriods.Years,
     labelKey: 'years',
   },
 ];
 
 export const defaultValues = {
   periodNumber: 1,
-  period: Periods.Indefinitely,
+  period: RetentionPeriods.Indefinitely,
 };

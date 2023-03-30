@@ -1,5 +1,7 @@
-import i18n from 'i18n';
 import * as yup from 'yup';
+
+import i18n from 'i18n';
+import { RetentionPeriods } from 'shared/state';
 
 export const dataRetentionSchema = () => {
   const { t } = i18n;
@@ -11,7 +13,7 @@ export const dataRetentionSchema = () => {
         .number()
         .transform((value) => (!value || isNaN(value) ? 1 : value))
         .when('period', (period, schema) =>
-          period === 'indefinitely' ? schema : schema.required(t('periodRequired')),
+          period === RetentionPeriods.Indefinitely ? schema : schema.required(t('periodRequired')),
         ),
     })
     .required();

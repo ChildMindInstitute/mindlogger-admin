@@ -55,7 +55,7 @@ export const DataRetention = () => {
       <StyledAppletSettingsDescription>{t('selectDataRetention')}</StyledAppletSettingsDescription>
       <form noValidate onSubmit={handleSubmit(onSubmit)} onChange={handleFormChange}>
         <StyledContainer>
-          {watchPeriod !== 'indefinitely' && (
+          {watchPeriod !== RetentionPeriods.Indefinitely && (
             <StyledInputWrapper>
               <InputController
                 name="periodNumber"
