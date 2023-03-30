@@ -6,7 +6,7 @@ import { ApiError } from 'redux/modules';
 import { getAppletApi, AppletId } from 'api';
 
 export const getApplet = createAsyncThunk(
-  'applets/getApplet',
+  'applet/getApplet',
   async ({ appletId }: AppletId, { rejectWithValue, signal }) => {
     try {
       return await getAppletApi({ appletId }, signal);
