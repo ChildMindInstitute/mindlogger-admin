@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
 import { StyledClearedButton, StyledHeadlineLarge, theme } from 'shared/styles';

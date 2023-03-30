@@ -33,7 +33,6 @@ export const getSettings = () => [
 
 export const getSetting = (settingPath?: string) => {
   const settings = getSettings();
-
   const group = settings.find(({ items }) => items.find(({ path }) => path === settingPath));
 
   return group?.items.find(({ path }) => path === settingPath) || null;
