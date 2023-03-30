@@ -1,4 +1,5 @@
 import { authApiClient, authApiClientWithFullLang } from 'shared/api/api.client';
+import { AppletId } from 'shared/api';
 
 import {
   SwitchAccount,
@@ -6,7 +7,6 @@ import {
   TransferOwnershipType,
   SetAccount,
   RevokeAppletUser,
-  AppletId,
   AppletInvitationData,
   DuplicateApplet,
   FolderId,
@@ -38,9 +38,6 @@ export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: Ab
     signal,
   });
 };
-
-export const getAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.get(`/applets/${appletId}`, { signal });
 
 export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
   authApiClient.put(

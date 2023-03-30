@@ -5,8 +5,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController, SelectController } from 'shared/components/FormComponents';
-import { updateDataRetention } from 'modules/Dashboard/state/Applet/Applet.thunk';
-import { useAppDispatch } from 'redux/store';
 import {
   useBuilderSessionStorageFormChange,
   useBuilderSessionStorageFormValues,
@@ -22,7 +20,6 @@ import { DataRetentionFormValues } from './DataRetention.types';
 export const DataRetention = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const dispatch = useAppDispatch();
   const { getFormValues } =
     useBuilderSessionStorageFormValues<DataRetentionFormValues>(defaultValues);
   const { handleSubmit, control, watch, register, unregister, getValues } =
@@ -36,11 +33,10 @@ export const DataRetention = () => {
   const { handleFormChange } =
     useBuilderSessionStorageFormChange<DataRetentionFormValues>(getValues);
 
+  // TODO: connect when the API is ready
   const onSubmit = async ({ period, periodNumber }: DataRetentionFormValues) => {
     if (id) {
-      await dispatch(
-        updateDataRetention({ appletId: id, retention: period, period: periodNumber }),
-      );
+      console.log('data retention values: ', period, periodNumber);
     }
   };
 

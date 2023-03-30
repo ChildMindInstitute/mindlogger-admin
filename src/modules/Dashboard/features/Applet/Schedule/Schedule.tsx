@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
+import { applet } from 'shared/state';
 import { applets } from 'modules/Dashboard/state';
 
 import { Calendar } from './Calendar';
@@ -11,7 +12,7 @@ import { getPreparedEvents } from './Schedule.utils';
 
 export const Schedule = () => {
   const { t } = useTranslation('app');
-  const { result: appletData } = applets.useAppletData() ?? {};
+  const { result: appletData } = applet.useAppletData() ?? {};
   const { result: eventsData } = applets.useEventsData() ?? {};
   const preparedEvents = getPreparedEvents(appletData, eventsData);
 

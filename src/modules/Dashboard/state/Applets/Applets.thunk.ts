@@ -3,30 +3,13 @@ import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
 
-import {
-  getEventsApi,
-  getAppletApi,
-  GetAppletsParams,
-  AppletId,
-  getWorkspaceAppletsApi,
-} from 'api';
+import { getEventsApi, GetAppletsParams, AppletId, getWorkspaceAppletsApi } from 'api';
 
 export const getWorkspaceApplets = createAsyncThunk(
   'applets/getWorkspaceApplets',
   async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
     try {
       return await getWorkspaceAppletsApi({ params }, signal);
-    } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
-    }
-  },
-);
-
-export const getApplet = createAsyncThunk(
-  'applets/getApplet',
-  async ({ appletId }: AppletId, { rejectWithValue, signal }) => {
-    try {
-      return await getAppletApi({ appletId }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

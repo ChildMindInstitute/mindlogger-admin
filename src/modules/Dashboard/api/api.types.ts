@@ -1,3 +1,5 @@
+import { AppletId } from 'shared/api';
+
 export type GetUserData = { token: string };
 
 export type GetAppletsParams = {
@@ -12,8 +14,6 @@ export type GetAppletsParams = {
 };
 
 export type SwitchAccount = { accountId: string };
-
-export type AppletId = { appletId: string };
 
 export type UserId = { userId: string };
 

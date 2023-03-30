@@ -4,6 +4,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { LinkedTabs, Spinner } from 'shared/components';
 import { StyledBody } from 'shared/styles';
 import { users, applets } from 'modules/Dashboard/state';
+import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 
 import { useAppletTabs } from './Applet.hooks';
@@ -26,7 +27,8 @@ export const Applet = () => {
   useEffect(() => {
     if (!appletId) return;
 
-    const { getApplet, getEvents } = applets.thunk;
+    const { getApplet } = applet.thunk;
+    const { getEvents } = applets.thunk;
     dispatch(getApplet({ appletId }));
     dispatch(getEvents({ appletId }));
   }, [appletId]);
