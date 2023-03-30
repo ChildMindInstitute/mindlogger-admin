@@ -1,7 +1,7 @@
-import { Svg } from 'shared/components';
 import { ItemInputTypes } from 'shared/types';
 import { createArray } from 'shared/utils';
 
+import { itemsTypeIcons } from '../ActivityItems.const';
 import { ItemsOptionGroup } from './ItemConfiguration.types';
 
 export const DEFAULT_TIMER_VALUE = 100;
@@ -35,26 +35,6 @@ export const DEFAULT_EMPTY_SELECTION_ROWS_ITEM = { label: '', tooltip: '', image
 export const DEFAULT_SELECTION_ROWS_SCORE = 1;
 export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
 export const SELECTION_OPTION_TEXT_MAX_LENGTH = 75;
-
-export const itemsTypeIcons = {
-  [ItemInputTypes.SingleSelection]: <Svg id="radio-button-outline" />,
-  [ItemInputTypes.MultipleSelection]: <Svg id="checkbox-multiple-filled" />,
-  [ItemInputTypes.Slider]: <Svg id="slider-outline" />,
-  [ItemInputTypes.Date]: <Svg id="calendar" />,
-  [ItemInputTypes.NumberSelection]: <Svg id="number-selection" />,
-  [ItemInputTypes.TimeRange]: <Svg id="clock" />,
-  [ItemInputTypes.SingleSelectionPerRow]: <Svg id="single-selection-per-row" />,
-  [ItemInputTypes.MultipleSelectionPerRow]: <Svg id="multiple-selection-per-row" />,
-  [ItemInputTypes.SliderRows]: <Svg id="slider-rows" />,
-  [ItemInputTypes.Text]: <Svg id="text" />,
-  [ItemInputTypes.Drawing]: <Svg id="drawing" />,
-  [ItemInputTypes.Photo]: <Svg id="photo" />,
-  [ItemInputTypes.Video]: <Svg id="video" />,
-  [ItemInputTypes.Geolocation]: <Svg id="geolocation" />,
-  [ItemInputTypes.Audio]: <Svg id="audio" />,
-  [ItemInputTypes.Message]: <Svg id="quote" />,
-  [ItemInputTypes.AudioPlayer]: <Svg id="audio-player" />,
-};
 
 export const itemsTypeOptions: ItemsOptionGroup[] = [
   {

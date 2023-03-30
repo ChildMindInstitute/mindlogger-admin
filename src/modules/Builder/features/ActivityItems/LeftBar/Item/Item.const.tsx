@@ -1,6 +1,8 @@
 import { Svg } from 'shared/components';
 
-export const getActions = () => [
+import { ActionsType } from './Item.types';
+
+export const getActions = ({ onRemoveItem }: ActionsType) => [
   {
     icon: <Svg id="duplicate" />,
     action: () => null,
@@ -13,7 +15,7 @@ export const getActions = () => [
   },
   {
     icon: <Svg id="trash" />,
-    action: () => null,
+    action: onRemoveItem,
     toolTipTitle: '',
   },
   {

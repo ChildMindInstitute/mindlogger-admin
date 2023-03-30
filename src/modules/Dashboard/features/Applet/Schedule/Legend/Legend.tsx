@@ -3,9 +3,18 @@ import { useTranslation } from 'react-i18next';
 
 import { SelectController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components';
-import { SelectEvent } from 'shared/types/event';
+import { SelectEvent } from 'shared/types';
+import { exportToCsv } from 'shared/utils';
 
-import { mockedScheduleData, ScheduleOptions, scheduleOptions } from './Legend.const';
+import { ExportSchedulePopup } from '../ExportSchedulePopup';
+import { ImportSchedulePopup } from '../ImportSchedulePopup';
+import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
+import { RemoveIndividualSchedulePopup } from '../RemoveIndividualSchedulePopup';
+import { CreateActivityPopup } from '../CreateActivityPopup';
+import { ExpandedList } from './ExpandedList';
+import { SearchPopup } from './SearchPopup';
+import { Search } from './Search';
+import { ScheduleOptions, scheduleOptions } from './Legend.const';
 import {
   StyledBtn,
   StyledLegend,
@@ -15,18 +24,10 @@ import {
   StyledSelectRow,
   StyledIconBtn,
 } from './Legend.styles';
-import { ExpandedList } from './ExpandedList';
-import { SearchPopup } from './SearchPopup';
-import { Search } from './Search';
 import { LegendProps, SelectedRespondent } from './Legend.types';
 import { useExpandedLists } from './Legend.hooks';
-import { ExportSchedulePopup } from '../ExportSchedulePopup';
-import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
-import { RemoveIndividualSchedulePopup } from '../RemoveIndividualSchedulePopup';
-import { CreateActivityPopup } from '../CreateActivityPopup';
-import { ImportSchedulePopup } from '../ImportSchedulePopup';
 
-export const Legend = ({ legendEvents }: LegendProps) => {
+export const Legend = ({ legendEvents, appletName }: LegendProps) => {
   const { t } = useTranslation('app');
 
   const [schedule, setSchedule] = useState<string>(scheduleOptions[0].value);
@@ -43,6 +44,7 @@ export const Legend = ({ legendEvents }: LegendProps) => {
 
   const searchContainerRef = useRef<HTMLElement>(null);
 
+  const { scheduleExportTableData = [], scheduleExportCsv = [] } = legendEvents ?? {};
   const boundingBox = searchContainerRef?.current?.getBoundingClientRect();
   const isIndividual = schedule === ScheduleOptions.IndividualSchedule;
 
@@ -74,6 +76,11 @@ export const Legend = ({ legendEvents }: LegendProps) => {
     } else {
       setExportDefaultSchedulePopupVisible(true);
     }
+  };
+
+  const handleExportScheduleSubmit = async () => {
+    await exportToCsv(scheduleExportCsv, `${appletName}_schedule`);
+    setExportDefaultSchedulePopupVisible(false);
   };
 
   return (
@@ -140,8 +147,8 @@ export const Legend = ({ legendEvents }: LegendProps) => {
         <ExportSchedulePopup
           open={exportDefaultSchedulePopupVisible}
           onClose={() => setExportDefaultSchedulePopupVisible(false)}
-          onSubmit={() => setExportDefaultSchedulePopupVisible(false)}
-          scheduleTableRows={mockedScheduleData}
+          onSubmit={handleExportScheduleSubmit}
+          scheduleTableRows={scheduleExportTableData}
         />
       )}
       {exportIndividualSchedulePopupVisible && (
@@ -149,9 +156,10 @@ export const Legend = ({ legendEvents }: LegendProps) => {
           open={exportIndividualSchedulePopupVisible}
           onClose={() => setExportIndividualSchedulePopupVisible(false)}
           onSubmit={() => setExportIndividualSchedulePopupVisible(false)}
-          scheduleTableRows={mockedScheduleData}
+          // TODO: replace with individual respondent export data
           secretUserId="012-435"
           nickName="John Doe"
+          scheduleTableRows={scheduleExportTableData}
         />
       )}
       {importSchedulePopupVisible && (
@@ -164,7 +172,7 @@ export const Legend = ({ legendEvents }: LegendProps) => {
       {clearScheduleEventsPopupVisible && (
         <ClearScheduledEventsPopup
           open={clearScheduleEventsPopupVisible}
-          appletName="Pediatric Screener"
+          appletName={appletName}
           isDefault={!isIndividual}
           name="John Doe"
           onClose={() => setClearScheduleEventsPopupVisible(false)}
@@ -173,7 +181,7 @@ export const Legend = ({ legendEvents }: LegendProps) => {
       {removeIndividualSchedulePopupVisible && (
         <RemoveIndividualSchedulePopup
           open={removeIndividualSchedulePopupVisible}
-          name="14456 (Deebo)"
+          name="14456 (Name)"
           isEmpty={false}
           onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
         />

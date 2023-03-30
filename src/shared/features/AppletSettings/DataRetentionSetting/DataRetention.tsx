@@ -7,26 +7,36 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { updateDataRetention } from 'modules/Dashboard/state/Applet/Applet.thunk';
 import { useAppDispatch } from 'redux/store';
+import {
+  useBuilderSessionStorageFormChange,
+  useBuilderSessionStorageFormValues,
+} from 'shared/hooks';
 
 import { periods } from './DataRetention.const';
 import { StyledAppletSettingsDescription, StyledHeadline } from '../AppletSettings.styles';
 import { defaultValues } from './DataRetention.const';
 import { dataRetentionSchema } from './DataRetention.schema';
 import { StyledButton, StyledContainer, StyledInputWrapper } from './DataRetention.styles';
-import { FormValues } from './DataRetention.types';
+import { DataRetentionFormValues } from './DataRetention.types';
 
 export const DataRetention = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { handleSubmit, control, watch, register, unregister } = useForm({
-    mode: 'onChange',
-    resolver: yupResolver(dataRetentionSchema()),
-    defaultValues,
-  });
+  const { getFormValues } =
+    useBuilderSessionStorageFormValues<DataRetentionFormValues>(defaultValues);
+  const { handleSubmit, control, watch, register, unregister, getValues } =
+    useForm<DataRetentionFormValues>({
+      mode: 'onChange',
+      resolver: yupResolver(dataRetentionSchema()),
+      defaultValues: getFormValues(),
+    });
   const watchPeriod = watch('period');
 
-  const onSubmit = async ({ period, periodNumber }: FormValues) => {
+  const { handleFormChange } =
+    useBuilderSessionStorageFormChange<DataRetentionFormValues>(getValues);
+
+  const onSubmit = async ({ period, periodNumber }: DataRetentionFormValues) => {
     if (id) {
       await dispatch(
         updateDataRetention({ appletId: id, retention: period, period: periodNumber }),
@@ -46,7 +56,7 @@ export const DataRetention = () => {
     <>
       <StyledHeadline>{t('dataRetention')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('selectDataRetention')}</StyledAppletSettingsDescription>
-      <form noValidate onSubmit={handleSubmit(onSubmit)}>
+      <form noValidate onSubmit={handleSubmit(onSubmit)} onChange={handleFormChange}>
         <StyledContainer>
           {watchPeriod !== 'indefinitely' && (
             <StyledInputWrapper>
