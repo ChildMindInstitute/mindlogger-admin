@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
-
 import { getEventsApi, GetAppletsParams, AppletId, getWorkspaceAppletsApi } from 'api';
 
 export const getWorkspaceApplets = createAsyncThunk(
