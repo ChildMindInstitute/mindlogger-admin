@@ -1,16 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import { Button, ButtonPropsVariantOverrides } from '@mui/material';
+import { ButtonPropsVariantOverrides } from '@mui/material';
 
+import { page } from 'resources';
 import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 
 import { LeftBar } from './LeftBar';
 import { ScoresAndReports } from './ScoresAndReports';
-import { ActivitySettingsForm } from './ActivitySettings.types';
+import { ActivitySettingsForm, ActivitySettingsOptionsItems } from './ActivitySettings.types';
 import { StyledWrapper, StyledButtonsContainer } from './ActivitySettings.styles';
-import { ActivitySettingsOptions } from './ActivitySettings.const';
+import { ActivitySettingsOptions } from './ActivitySettings.types';
+import { getSetting } from './ActivitySettings.utils';
+import { SubscalesConfiguration } from './SubscalesConfiguration';
 
 const commonButtonProps = {
   variant: 'outlined' as keyof ButtonPropsVariantOverrides,
@@ -18,11 +22,16 @@ const commonButtonProps = {
 };
 
 export const ActivitySettings = () => {
-  const [activeSetting, setActiveSetting] = useState<ActivitySettingsOptions>(
-    ActivitySettingsOptions.ScoresAndReports,
-  );
+  const [activeSetting, setActiveSetting] = useState<ActivitySettingsOptions | null>(null);
 
   const { t } = useTranslation('app');
+
+  const navigate = useNavigate();
+  const { setting } = useParams();
+
+  useEffect(() => {
+    setActiveSetting(getSetting(setting));
+  }, [setting]);
 
   useBreadcrumbs([
     {
@@ -59,19 +68,26 @@ export const ActivitySettings = () => {
     appendSection({});
   };
 
+  const handleSetActiveSetting = (setting: ActivitySettingsOptions) => {
+    setActiveSetting(setting);
+    navigate(generatePath(page.newAppletNewActivitySettingsItem, { setting: setting.path }));
+  };
+
+  const handleClose = () => {
+    setActiveSetting(null);
+    navigate(page.newAppletNewActivitySettings);
+  };
+
   return (
     <StyledWrapper>
-      <LeftBar activeSetting={activeSetting} setActiveSetting={setActiveSetting} />
+      <LeftBar setting={activeSetting} onSettingClick={handleSetActiveSetting} />
       <FormProvider {...methods}>
-        {activeSetting === ActivitySettingsOptions.ScoresAndReports && <ScoresAndReports />}
-        <StyledButtonsContainer>
-          <Button {...commonButtonProps} onClick={handleAddScore}>
-            {t('addScore')}
-          </Button>
-          <Button {...commonButtonProps} onClick={handleAddSection}>
-            {t('addSection')}
-          </Button>
-        </StyledButtonsContainer>
+        {activeSetting?.name === ActivitySettingsOptionsItems.ScoresAndReports && (
+          <ScoresAndReports onClose={handleClose} />
+        )}
+        {activeSetting?.name === ActivitySettingsOptionsItems.SubscalesConfiguration && (
+          <SubscalesConfiguration onClose={handleClose} />
+        )}
       </FormProvider>
     </StyledWrapper>
   );

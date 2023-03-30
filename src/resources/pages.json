@@ -20,6 +20,7 @@
   "newAppletNewActivityItems": "/builder/new-applet/activities/new-activity/items",
   "newAppletNewActivityItemFlow": "/builder/new-applet/activities/new-activity/item-flow",
   "newAppletNewActivitySettings": "/builder/new-applet/activities/new-activity/settings",
+  "newAppletNewActivitySettingsItem": "/builder/new-applet/activities/new-activity/settings/:setting",
   "newAppletActivityFlow": "/builder/new-applet/activity-flow",
   "newAppletNewActivityFlow": "/builder/new-applet/activity-flow/new-activity-flow",
   "newAppletNewActivityFlowAbout": "/builder/new-applet/activity-flow/new-activity-flow/about",

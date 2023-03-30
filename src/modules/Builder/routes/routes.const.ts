@@ -28,6 +28,7 @@ export const newAppletNewActivityRoutes = [
   { path: page.newAppletNewActivityItems, Component: ActivityItems },
   { path: page.newAppletNewActivityItemFlow },
   { path: page.newAppletNewActivitySettings, Component: ActivitySettings },
+  { path: page.newAppletNewActivitySettingsItem, Component: ActivitySettings },
 ];
 
 export const newAppletNewActivityFlowRoutes = [

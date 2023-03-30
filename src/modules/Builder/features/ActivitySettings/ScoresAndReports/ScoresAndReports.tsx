@@ -19,8 +19,9 @@ import {
   StyledScoresAndReports,
   StyledScoreSummaryTooltipSvg,
 } from './ScoresAndReports.styles';
+import { ScoresAndReportsProps } from './ScoresAndReports.types';
 
-export const ScoresAndReports = () => {
+export const ScoresAndReports = ({ onClose }: ScoresAndReportsProps) => {
   const { t } = useTranslation('app');
 
   const containerRef = useRef<HTMLElement | null>(null);
@@ -33,7 +34,7 @@ export const ScoresAndReports = () => {
     <StyledScoresAndReports ref={containerRef}>
       <StyledHeader isSticky={isHeaderSticky}>
         <StyledHeadlineLarge>{t('scoresAndReports')}</StyledHeadlineLarge>
-        <StyledClearedButton sx={{ p: theme.spacing(1) }}>
+        <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onClose}>
           <Svg id="close" />
         </StyledClearedButton>
       </StyledHeader>
