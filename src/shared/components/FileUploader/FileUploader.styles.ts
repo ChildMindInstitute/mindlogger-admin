@@ -37,7 +37,9 @@ export const StyledSvg = styled(Svg)`
 
 export const StyledButton = styled(Button)`
   min-width: unset;
+  height: unset;
   padding: ${theme.spacing(1)};
+  margin-left: ${theme.spacing(0.8)};
 `;
 
 export const StyledLinearProgress = styled(LinearProgress)`

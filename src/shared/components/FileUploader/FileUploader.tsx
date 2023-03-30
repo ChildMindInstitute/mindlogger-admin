@@ -35,22 +35,23 @@ export const FileUploader = ({
   const [error, setError] = useState<JSX.Element | null>(null);
 
   const handleChange = async (event: DragEvent | ChangeEvent) => {
-    setIsLoading(true);
-
     const files =
       (event as ChangeEvent<HTMLInputElement>)?.target.files ||
       (event as DragEvent)?.dataTransfer.files;
     if (!files.length) {
       return;
     }
+
+    setIsLoading(true);
     const file = files[0];
     importTable(file)
       .then((data) => {
-        setFile({ name: file.name, data });
-        onFileReady(file);
+        const importedFile = { name: file.name, data };
+        setFile(importedFile);
+        onFileReady(importedFile);
       })
       .catch(() => setError(invalidFileFormatError))
-      .finally(() => setTimeout(() => setIsLoading(false), 3000));
+      .finally(() => setIsLoading(false));
   };
 
   const removeFile = () => {
