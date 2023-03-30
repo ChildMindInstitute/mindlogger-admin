@@ -162,14 +162,6 @@ export type AppletEncryption = AppletId & { data: FormData };
 
 export type ValidateAppletName = { name: string };
 
-export type UpdateRetainingSettings = AppletId & {
-  options: {
-    id: string;
-    period: number;
-    retention: string;
-  };
-};
-
 export type UpdatePin = {
   profileId: string;
   newState: boolean;

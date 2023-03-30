@@ -13,7 +13,6 @@ import {
   AppletNameArgs,
   AppletEncryption,
   ValidateAppletName,
-  UpdateRetainingSettings,
   UpdatePin,
   Folder,
   UpdateFolder,
@@ -149,11 +148,6 @@ export const validateAppletNameApi = ({ name }: ValidateAppletName, signal?: Abo
     params: { name },
     signal,
   });
-
-export const updateRetainingSettingsApi = (
-  { appletId, options }: UpdateRetainingSettings,
-  signal?: AbortSignal,
-) => authApiClient.post(`/applet/${appletId}/setRetention`, {}, { params: options, signal });
 
 export const getInvitationsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applet/${appletId}/invitations`, {

@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
-
 import { getAppletApi, AppletId } from 'api';
 
 export const getApplet = createAsyncThunk(
