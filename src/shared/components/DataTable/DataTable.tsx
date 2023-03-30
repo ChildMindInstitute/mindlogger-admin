@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
-import { StyledBodyMedium, StyledFlexColumn, StyledLabelLarge, variables } from 'shared/styles';
+import { StyledBodyMedium, StyledFlexColumn, StyledLabelLarge, variables } from '../../styles';
 
 import { DataTableProps } from './DataTable.types';
 import { getColumns } from './DataTable.utils';
