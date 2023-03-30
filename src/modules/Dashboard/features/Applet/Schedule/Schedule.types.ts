@@ -1,5 +1,7 @@
 import { Row } from 'shared/components';
 
+import { CalendarEvent } from './Calendar/Calendar.types';
+
 export type LegendEvent = {
   name: string;
   id: string;
@@ -11,6 +13,7 @@ export type LegendEvent = {
 export enum Repeats {
   Yes = 'yes',
   No = 'no',
+  NotSet = '-',
 }
 
 export type ScheduleExportCsv = {
@@ -29,6 +32,7 @@ export type PreparedEvents = {
   deactivatedEvents: LegendEvent[];
   scheduleExportTableData: Row[];
   scheduleExportCsv: ScheduleExportCsv;
+  calendarEvents: CalendarEvent[];
 };
 
 export type AddEventsToCategories = Omit<LegendEvent, 'count'> & {
