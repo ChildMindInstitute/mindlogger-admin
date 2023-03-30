@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { FileUploader, Modal, SubmitBtnColor } from 'shared/components';
-import { ImportedFile } from 'shared/components/FileUploader/FileUploader.types';
+import { FileUploader, ImportedFile, Modal, SubmitBtnColor } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper } from 'shared/styles';
 
 import { getScreens, invalidFileFormatError, uploadLabel } from './ImportSchedule.const';
@@ -10,13 +9,14 @@ import { ImportSchedulePopupProps, Steps } from './ImportSchedulePopup.types';
 
 export const ImportSchedulePopup = ({
   isIndividual = false,
+  appletName,
+  secretUserId,
+  nickName,
   open,
   onClose,
 }: ImportSchedulePopupProps) => {
   const { t } = useTranslation('app');
 
-  const appletName = 'Pediatric Screener';
-  const respondentName = '0234 (John Doe)';
   const [step, setStep] = useState<Steps>(0);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -63,7 +63,10 @@ export const ImportSchedulePopup = ({
         <Trans i18nKey="confirmImportIndividualSchedule">
           Importing a new individual schedule for respondent
           <strong>
-            <>{{ respondentName }} </>
+            <>
+              {' '}
+              {{ secretUserId }} ({{ nickName }}){' '}
+            </>
           </strong>
           will replace the respondent’s current individual schedule. Are you sure you want to
           continue?
@@ -74,7 +77,10 @@ export const ImportSchedulePopup = ({
         <Trans i18nKey="confirmUpdateIndividualSchedule">
           Are you sure you want to update the individual schedule for respondent
           <strong>
-            <> {{ respondentName }} </>
+            <>
+              {' '}
+              {{ secretUserId }} ({{ nickName }}){' '}
+            </>
           </strong>
           for Applet
           <strong>

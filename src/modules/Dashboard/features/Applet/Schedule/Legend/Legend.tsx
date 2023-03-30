@@ -166,6 +166,10 @@ export const Legend = ({ legendEvents, appletName }: LegendProps) => {
         <ImportSchedulePopup
           open={importSchedulePopupVisible}
           isIndividual={isIndividual}
+          appletName={appletName}
+          // TODO: replace with individual respondent export data
+          secretUserId="012-435"
+          nickName="John Doe"
           onClose={() => setImportSchedulePopupVisible(false)}
         />
       )}

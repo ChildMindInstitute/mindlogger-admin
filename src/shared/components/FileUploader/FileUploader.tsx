@@ -48,17 +48,52 @@ export const FileUploader = ({
       .then((data) => {
         setFile({ name: file.name, data });
         onFileReady(file);
-        console.log(data);
       })
-      .catch(() => setError(invalidFileFormatError));
-
-    setTimeout(() => setIsLoading(false), 3000);
+      .catch(() => setError(invalidFileFormatError))
+      .finally(() => setTimeout(() => setIsLoading(false), 3000));
   };
 
   const removeFile = () => {
     setFile(null);
     onFileReady(null);
   };
+
+  const uploader = (
+    <>
+      {file ? (
+        <StyledFlexTopCenter sx={{ ml: 2 }}>
+          <StyledSvg id="check" width="18" height="18" />
+          <StyledLabelBoldLarge sx={{ ml: 0.8 }} color={variables.palette.primary}>
+            {file.name}
+          </StyledLabelBoldLarge>
+          <StyledButton onClick={removeFile}>
+            <Svg id="cross" width="18" height="18" />
+          </StyledButton>
+        </StyledFlexTopCenter>
+      ) : (
+        <StyledLabel
+          label={
+            <StyledFlexAllCenter>
+              <StyledBodyLarge>
+                <Trans i18nKey="dropFile">
+                  Drop <strong>.csv, .xls, .xlsx</strong> or <strong>.ods</strong> here or{' '}
+                  <em>click to browse</em>.
+                </Trans>
+              </StyledBodyLarge>
+            </StyledFlexAllCenter>
+          }
+          control={
+            <StyledTextField
+              onChange={handleChange}
+              inputProps={{ accept: '.csv, .xlsx, .xls, .ods' }}
+              type="file"
+              name="uploadFile"
+            />
+          }
+        />
+      )}
+    </>
+  );
 
   return (
     <>
@@ -70,46 +105,7 @@ export const FileUploader = ({
       >
         {t('downloadTemplate')}
       </Button>
-      <Box>
-        {isLoading ? (
-          <StyledLinearProgress />
-        ) : (
-          <>
-            {file ? (
-              <StyledFlexTopCenter sx={{ ml: 2 }}>
-                <StyledSvg id="check" width="18" height="18" />
-                <StyledLabelBoldLarge sx={{ ml: 0.8 }} color={variables.palette.primary}>
-                  {file.name}
-                </StyledLabelBoldLarge>
-                <StyledButton onClick={removeFile}>
-                  <Svg id="cross" width="18" height="18" />
-                </StyledButton>
-              </StyledFlexTopCenter>
-            ) : (
-              <StyledLabel
-                label={
-                  <StyledFlexAllCenter>
-                    <StyledBodyLarge>
-                      <Trans i18nKey="dropFile">
-                        Drop <strong>.csv, .xls, .xlsx</strong> or <strong>.ods</strong> here or{' '}
-                        <em>click to browse</em>.
-                      </Trans>
-                    </StyledBodyLarge>
-                  </StyledFlexAllCenter>
-                }
-                control={
-                  <StyledTextField
-                    onChange={handleChange}
-                    inputProps={{ accept: '.csv, .xlsx, .xls, .ods' }}
-                    type="file"
-                    name="uploadFile"
-                  />
-                }
-              />
-            )}
-          </>
-        )}
-      </Box>
+      <Box>{isLoading ? <StyledLinearProgress /> : uploader}</Box>
       {error && (
         <StyledTitleSmall sx={{ mt: 2.2 }} color={variables.palette.semantic.error}>
           {error}
