@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
 import { page } from 'resources';
-import { StyledBuilderWrapper, StyledTitleMedium } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { StyledBuilderWrapper, StyledTitleMedium, theme } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 
 import { Header, Item } from '../../components';
@@ -30,8 +29,8 @@ export const ActivityFlow = () => {
         buttons={[
           {
             icon: <Svg id="flow" />,
-            label: t('addActivityFlow'),
-            handleClick: () => navigate(page.newAppletNewActivityFlow),
+            label: t('addActivityFlow'), // TODO add ActivityFlow Name on Edit
+            handleClick: () => navigate(page.newAppletNewActivityFlow), // TODO add navigation on Edit
           },
         ]}
       />

@@ -3,6 +3,8 @@ import { Route, Navigate } from 'react-router-dom';
 
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
+import { Path } from 'shared/utils';
+import BuilderAppletSettings from 'modules/Builder/features/BuilderAppletSettings';
 
 import {
   newAppletNewActivityFlowRoutes,
@@ -25,8 +27,8 @@ export const builderRoutes = () => (
         </PrivateRoute>
       }
     />
-    <Route element={<NewApplet />} path={page.newApplet}>
-      <Route path={page.newApplet} element={<Navigate to={page.newAppletAbout} replace />} />
+    <Route element={<NewApplet />} path=":appletId">
+      <Route index element={<Navigate to={Path.About} replace />} />
       {newAppletRoutes.map(({ path, Component }) => (
         <Route
           key={path}
@@ -34,12 +36,21 @@ export const builderRoutes = () => (
           element={<PrivateRoute>{Component ? <Component /> : <></>}</PrivateRoute>}
         />
       ))}
-      <Route path={page.newAppletActivities}>
-        <Route element={<NewActivity />} path={page.newAppletNewActivity}>
+      <Route path={Path.Settings}>
+        <Route element={<BuilderAppletSettings />} path="">
           <Route
-            path={page.newAppletNewActivity}
-            element={<Navigate to={page.newAppletNewActivityAbout} replace />}
+            path=":settingItem"
+            element={
+              <PrivateRoute>
+                <BuilderAppletSettings />
+              </PrivateRoute>
+            }
           />
+        </Route>
+      </Route>
+      <Route path={Path.Activities}>
+        <Route element={<NewActivity />} path=":activityId">
+          <Route index element={<Navigate to={Path.About} replace />} />
           {newAppletNewActivityRoutes.map(({ path, Component }) => (
             <Route
               key={path}
@@ -49,12 +60,9 @@ export const builderRoutes = () => (
           ))}
         </Route>
       </Route>
-      <Route path={page.newAppletActivityFlow}>
-        <Route element={<NewActivityFlow />} path={page.newAppletNewActivityFlow}>
-          <Route
-            path={page.newAppletNewActivityFlow}
-            element={<Navigate to={page.newAppletNewActivityFlowAbout} replace />}
-          />
+      <Route path={Path.ActivityFlow}>
+        <Route element={<NewActivityFlow />} path=":activityFlowId">
+          <Route index element={<Navigate to={Path.About} replace />} />
           {newAppletNewActivityFlowRoutes.map(({ path, Component }) => (
             <Route
               key={path}

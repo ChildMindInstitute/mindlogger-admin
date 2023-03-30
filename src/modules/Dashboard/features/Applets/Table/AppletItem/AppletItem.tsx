@@ -11,6 +11,7 @@ import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/
 import { APPLET_PAGES } from 'shared/consts';
 import { page } from 'resources';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
+import { getBuilderAppletUrl } from 'shared/utils';
 
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getActions } from './AppletItem.const';
@@ -105,6 +106,11 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         ),
       ),
     shareAppletAction: () => checkAppletEncryption(() => setSharePopupVisible(true)),
+    editAction: () => {
+      if (item.isFolder) return; // TODO: add Edit Folder Page navigation
+
+      navigate(getBuilderAppletUrl(item.id));
+    },
   };
 
   return (

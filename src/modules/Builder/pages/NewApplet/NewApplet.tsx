@@ -20,7 +20,7 @@ export const NewApplet = () => {
   useBreadcrumbs([
     {
       icon: <Svg id="applet-outlined" width="18" height="18" />,
-      label: t('newApplet'),
+      label: t('newApplet'), // TODO get Applet NAme
       disabledLink: true,
     },
   ]);
