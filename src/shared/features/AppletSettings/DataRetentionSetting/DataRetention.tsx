@@ -9,6 +9,7 @@ import {
   useBuilderSessionStorageFormChange,
   useBuilderSessionStorageFormValues,
 } from 'shared/hooks';
+import { RetentionPeriods } from 'shared/state';
 
 import { periods } from './DataRetention.const';
 import { StyledAppletSettingsDescription, StyledHeadline } from '../AppletSettings.styles';
@@ -41,7 +42,7 @@ export const DataRetention = () => {
   };
 
   useEffect(() => {
-    if (watchPeriod === 'indefinitely') {
+    if (watchPeriod === RetentionPeriods.Indefinitely) {
       unregister('periodNumber', { keepDefaultValue: true });
     } else {
       register('periodNumber');

@@ -46,6 +46,14 @@ type Theme = {
   public: boolean;
 };
 
+export const enum RetentionPeriods {
+  Indefinitely = 'indefinitely',
+  Days = 'days',
+  Weeks = 'weeks',
+  Months = 'months',
+  Years = 'years',
+}
+
 export type SingleApplet = {
   id: string;
   displayName: string;
@@ -64,7 +72,7 @@ export type SingleApplet = {
   reportIncludeCaseId?: boolean;
   reportEmailBody?: string;
   retentionPeriod?: number;
-  retentionType?: 'indefinitely' | 'days' | 'weeks' | 'months' | 'years';
+  retentionType?: RetentionPeriods;
   activities: Activity[];
   activityFlows: ActivityFlow[];
   theme: Theme;

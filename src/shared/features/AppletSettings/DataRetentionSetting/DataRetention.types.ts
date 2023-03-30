@@ -1,12 +1,6 @@
-export const enum Periods {
-  Indefinitely = 'indefinitely',
-  Day = 'day',
-  Week = 'week',
-  Month = 'month',
-  Year = 'year',
-}
+import { RetentionPeriods } from 'shared/state';
 
 export type DataRetentionFormValues = {
-  period: Periods;
+  period: RetentionPeriods;
   periodNumber: number;
 };
