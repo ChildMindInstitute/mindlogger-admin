@@ -2,9 +2,9 @@ import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { Svg } from '../../Svg';
-import { DataTable, DataTableProps } from '../../DataTable';
-import { StyledFlexColumn, StyledTitleMedium } from '../../../styles';
+import { Svg } from 'shared/components/Svg';
+import { DataTable, DataTableProps } from 'shared/components/DataTable';
+import { StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
 
 import {
   StyledTextField,

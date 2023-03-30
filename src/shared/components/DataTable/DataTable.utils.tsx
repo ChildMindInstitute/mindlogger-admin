@@ -1,4 +1,4 @@
-import { StyledLabelLarge } from '../../styles';
+import { StyledLabelLarge } from 'shared/styles';
 
 import { DataTableColumn } from './DataTable.types';
 
