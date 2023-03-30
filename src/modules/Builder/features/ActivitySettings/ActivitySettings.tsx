@@ -9,12 +9,13 @@ import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 
 import { LeftBar } from './LeftBar';
+import { ActivitySettingsContainer } from './ActivitySettingsContainer';
 import { ScoresAndReports } from './ScoresAndReports';
+import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ActivitySettingsForm, ActivitySettingsOptionsItems } from './ActivitySettings.types';
 import { StyledWrapper, StyledButtonsContainer } from './ActivitySettings.styles';
 import { ActivitySettingsOptions } from './ActivitySettings.types';
 import { getSetting } from './ActivitySettings.utils';
-import { SubscalesConfiguration } from './SubscalesConfiguration';
 
 const commonButtonProps = {
   variant: 'outlined' as keyof ButtonPropsVariantOverrides,
@@ -78,16 +79,20 @@ export const ActivitySettings = () => {
     navigate(page.newAppletNewActivitySettings);
   };
 
+  const containerTitle = activeSetting ? t(activeSetting.name) : '';
+
   return (
     <StyledWrapper>
       <LeftBar setting={activeSetting} onSettingClick={handleSetActiveSetting} />
       <FormProvider {...methods}>
-        {activeSetting?.name === ActivitySettingsOptionsItems.ScoresAndReports && (
-          <ScoresAndReports onClose={handleClose} />
-        )}
-        {activeSetting?.name === ActivitySettingsOptionsItems.SubscalesConfiguration && (
-          <SubscalesConfiguration onClose={handleClose} />
-        )}
+        <ActivitySettingsContainer title={containerTitle} onClose={handleClose}>
+          {activeSetting?.name === ActivitySettingsOptionsItems.ScoresAndReports && (
+            <ScoresAndReports />
+          )}
+          {activeSetting?.name === ActivitySettingsOptionsItems.SubscalesConfiguration && (
+            <SubscalesConfiguration />
+          )}
+        </ActivitySettingsContainer>
       </FormProvider>
     </StyledWrapper>
   );

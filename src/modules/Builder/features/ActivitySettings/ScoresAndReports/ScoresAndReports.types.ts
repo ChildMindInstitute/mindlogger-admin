@@ -1,3 +1,1 @@
-export type ScoresAndReportsProps = {
-  onClose: () => void;
-};
+export type ScoresAndReportsProps = unknown;

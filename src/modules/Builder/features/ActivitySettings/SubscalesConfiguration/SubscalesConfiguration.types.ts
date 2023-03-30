@@ -1,3 +1,1 @@
-export type SubscalesConfigurationProps = {
-  onClose: () => void;
-};
+export type SubscalesConfigurationProps = unknown;
