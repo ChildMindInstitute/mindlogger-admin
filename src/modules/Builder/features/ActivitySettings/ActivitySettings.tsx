@@ -61,12 +61,21 @@ export const ActivitySettings = () => {
     name: 'sections',
   });
 
+  const { append: appendSubscale } = useFieldArray({
+    control,
+    name: 'subscales',
+  });
+
   const handleAddScore = () => {
     appendScore({});
   };
 
   const handleAddSection = () => {
     appendSection({});
+  };
+
+  const handleAddSubscale = () => {
+    appendSubscale({});
   };
 
   const handleSetActiveSetting = (setting: ActivitySettingsOptions) => {
@@ -99,7 +108,13 @@ export const ActivitySettings = () => {
             </ScoresAndReports>
           )}
           {activeSetting?.name === ActivitySettingsOptionsItems.SubscalesConfiguration && (
-            <SubscalesConfiguration />
+            <SubscalesConfiguration>
+              <StyledButtonsContainer>
+                <Button {...commonButtonProps} onClick={handleAddSubscale}>
+                  {t('addSubscales')}
+                </Button>
+              </StyledButtonsContainer>
+            </SubscalesConfiguration>
           )}
         </ActivitySettingsContainer>
       </FormProvider>

@@ -21,9 +21,14 @@ export type ActivitySettingsSection = {
   name?: string;
 };
 
+export type ActivitySettingsSubscale = {
+  name?: string;
+};
+
 export type ActivitySettingsForm = {
   generateReport: boolean;
   showScoreSummary: boolean;
   scores?: ActivitySettingsScore[];
   sections?: ActivitySettingsSection[];
+  subscales?: ActivitySettingsSubscale[];
 };
