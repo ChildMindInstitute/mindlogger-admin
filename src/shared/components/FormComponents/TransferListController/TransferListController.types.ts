@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 
-import { DataTableItem, DataTableColumn } from 'shared/components';
+import { DataTableItem, DataTableColumn } from '../../DataTable';
 
 export type TransferListControllerProps<T extends FieldValues> = {
   caption?: ReactNode;
