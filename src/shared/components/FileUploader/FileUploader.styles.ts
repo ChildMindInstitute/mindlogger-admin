@@ -1,4 +1,4 @@
-import { FormControlLabel, TextField, styled, Button, LinearProgress } from '@mui/material';
+import { FormControlLabel, TextField, styled, Button } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
 
@@ -40,9 +40,4 @@ export const StyledButton = styled(Button)`
   height: unset;
   padding: ${theme.spacing(1)};
   margin-left: ${theme.spacing(0.8)};
-`;
-
-export const StyledLinearProgress = styled(LinearProgress)`
-  background-color: ${variables.palette.white};
-  border-radius: ${variables.borderRadius.xs};
 `;

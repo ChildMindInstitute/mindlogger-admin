@@ -19,7 +19,7 @@ export const ImportSchedulePopup = ({
 
   const [step, setStep] = useState<Steps>(0);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (step === 1) {
@@ -27,7 +27,7 @@ export const ImportSchedulePopup = ({
     }
   }, [step]);
 
-  const onFileReady = (file: ImportedFile) => {
+  const onFileReady = (file: ImportedFile | null) => {
     setFileName(file?.name);
     setIsSubmitDisabled(!file);
   };
