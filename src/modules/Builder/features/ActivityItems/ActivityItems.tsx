@@ -9,10 +9,10 @@ import {
   useBuilderSessionStorageFormValues,
   useBuilderSessionStorageApplyChanges,
 } from 'shared/hooks';
+import { StyledContainer } from 'shared/styles';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
-import { StyledWrapper } from './ActivityItems.styles';
 import { items } from './ActivityItems.const';
 
 export const ActivityItems = () => {
@@ -71,7 +71,7 @@ export const ActivityItems = () => {
   ]);
 
   return (
-    <StyledWrapper>
+    <StyledContainer>
       <LeftBar
         items={currentItems}
         activeItemId={activeItemId}
@@ -82,6 +82,6 @@ export const ActivityItems = () => {
       {activeItemId && (
         <ItemConfiguration item={activeItem} onItemChange={handleItemChange(activeItemId)} />
       )}
-    </StyledWrapper>
+    </StyledContainer>
   );
 };
