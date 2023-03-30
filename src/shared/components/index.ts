@@ -21,5 +21,3 @@ export * from './Uploader';
 export * from './MarkDownEditor';
 export * from './SaveChangesPopup';
 export * from './DataTable';
-export * from './Collapse';
-export * from './Switch';
