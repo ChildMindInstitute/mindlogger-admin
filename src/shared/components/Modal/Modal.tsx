@@ -32,49 +32,59 @@ export const Modal = ({
   thirdBtnText,
   thirdBtnStyles = {},
   onThirdBtnSubmit,
-}: ModalProps) => (
-  <StyledDialog sx={sxProps} width={width} height={height} onClose={onClose} open={open}>
-    <StyledDialogTitle align={titleAlign}>
-      {title}
-      <StyledCloseButton onClick={onClose}>
-        <Svg id="cross" />
-      </StyledCloseButton>
-    </StyledDialogTitle>
-    {children}
-    <StyledDialogActions actionsAlign={hasThirdBtn ? 'space-between' : 'end'} sx={{ p: 0 }}>
-      {hasThirdBtn && (
-        <StyledButton
-          fontWeight="regular"
-          variant="text"
-          onClick={onThirdBtnSubmit}
-          sx={{ ...thirdBtnStyles }}
-        >
-          {thirdBtnText}
-        </StyledButton>
-      )}
-      <StyledDialogActions actionsAlign={hasSecondBtn ? 'end' : 'center'}>
-        {hasSecondBtn && (
+}: ModalProps) => {
+  const getActionsAlign = () => {
+    if (hasThirdBtn) {
+      return 'space-between';
+    } else {
+      return hasSecondBtn ? 'end' : 'center';
+    }
+  };
+
+  return (
+    <StyledDialog sx={sxProps} width={width} height={height} onClose={onClose} open={open}>
+      <StyledDialogTitle align={titleAlign}>
+        {title}
+        <StyledCloseButton onClick={onClose}>
+          <Svg id="cross" />
+        </StyledCloseButton>
+      </StyledDialogTitle>
+      {children}
+      <StyledDialogActions actionsAlign={getActionsAlign()} sx={{ p: 0 }}>
+        {hasThirdBtn && (
           <StyledButton
             fontWeight="regular"
             variant="text"
-            disabled={disabledSecondBtn}
-            onClick={onSecondBtnSubmit}
-            sx={{ marginLeft: theme.spacing(1.6), ...secondBtnStyles }}
+            onClick={onThirdBtnSubmit}
+            sx={{ ...thirdBtnStyles }}
           >
-            {secondBtnText}
+            {thirdBtnText}
           </StyledButton>
         )}
-        {buttonText && (
-          <StyledButton
-            variant="text"
-            disabled={disabledSubmit}
-            onClick={onSubmit}
-            color={submitBtnColor}
-          >
-            {buttonText}
-          </StyledButton>
-        )}
+        <StyledDialogActions>
+          {hasSecondBtn && (
+            <StyledButton
+              fontWeight="regular"
+              variant="text"
+              disabled={disabledSecondBtn}
+              onClick={onSecondBtnSubmit}
+              sx={{ marginLeft: theme.spacing(1.6), ...secondBtnStyles }}
+            >
+              {secondBtnText}
+            </StyledButton>
+          )}
+          {buttonText && (
+            <StyledButton
+              variant="text"
+              disabled={disabledSubmit}
+              onClick={onSubmit}
+              color={submitBtnColor}
+            >
+              {buttonText}
+            </StyledButton>
+          )}
+        </StyledDialogActions>
       </StyledDialogActions>
-    </StyledDialogActions>
-  </StyledDialog>
-);
+    </StyledDialog>
+  );
+};

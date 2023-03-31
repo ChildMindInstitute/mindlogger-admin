@@ -1,7 +1,6 @@
-import { LeftBarProps } from '../LeftBar.types';
-import { ActivitySettingsOptions } from '../../ActivitySettings.const';
+import { ActivitySettingsOptions } from '../../ActivitySettings.types';
 
 export type ItemProps = {
-  name: ActivitySettingsOptions;
-  icon: JSX.Element;
-} & LeftBarProps;
+  item: ActivitySettingsOptions;
+  onClick: (item: ActivitySettingsOptions) => void;
+};

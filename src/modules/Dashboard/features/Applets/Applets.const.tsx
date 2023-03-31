@@ -3,7 +3,7 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
 import { HeadCell } from 'shared/types/table';
-import { page } from 'resources';
+import { getBuilderAppletUrl, Path } from 'shared/utils';
 
 export const getHeadCells = (): HeadCell[] => [
   {
@@ -30,7 +30,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     title: t('new'),
     action: () => {
       handleMenuClose();
-      navigate(page.newApplet);
+      navigate(getBuilderAppletUrl(Path.NewApplet));
     },
   },
   {
@@ -38,7 +38,6 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     title: t('fromLibrary'),
     action: () => {
       handleMenuClose();
-      console.log('add applet from library');
     },
   },
 ];

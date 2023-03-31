@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { Update } from 'history';
 import { useCallbackPrompt, usePromptSetup } from 'shared/hooks';
 
-import { isActivityRoute, isAppletRoute } from './NewApplet.utils';
+import { isActivityRoute, isAppletRoute } from './BuilderApplet.utils';
 
 export const usePrompt = () => {
   const {

@@ -6,9 +6,9 @@ import { LinkedTabs, Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 
-import { newActivityFlowTabs } from './NewActivityFlow.const';
+import { newActivityFlowTabs } from './BuilderActivityFlow.const';
 
-export const NewActivityFlow = () => {
+export const BuilderActivityFlow = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   useBreadcrumbs();

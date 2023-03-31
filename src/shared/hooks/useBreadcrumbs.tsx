@@ -3,10 +3,16 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { auth, folders, Breadcrumb, breadcrumbs, User } from 'redux/modules';
+import { auth, folders, Breadcrumb, breadcrumbs, User, applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getAppletData } from 'shared/utils/getAppletData';
+import {
+  checkIfAppletActivityFlowUrlPassed,
+  checkIfAppletActivityUrlPassed,
+  checkIfAppletUrlPassed,
+  isNewApplet,
+} from 'shared/utils';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { id } = useParams();
@@ -16,6 +22,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const authData = auth.useData();
   const appletsFoldersData = folders.useFlattenFoldersApplets();
   const { firstName, lastName } = (authData?.user as User) || {};
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const { appletId } = useParams();
+  const appletLabel = (isNewApplet(appletId) ? t('newApplet') : appletData?.displayName) ?? '';
 
   const [crumbs, setCrumbs] = useState<Breadcrumb[]>([]);
 
@@ -52,39 +61,39 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         disabledLink: true,
       });
     }
-    if (location.pathname.includes(page.newApplet)) {
+    if (checkIfAppletUrlPassed(location.pathname)) {
       newBreadcrumbs.push({
         icon: <Svg id="applet-outlined" width="18" height="18" />,
-        label: t('newApplet'),
+        label: appletLabel,
         disabledLink: true,
       });
     }
 
-    if (location.pathname.includes(page.newAppletNewActivity)) {
+    if (checkIfAppletActivityUrlPassed(location.pathname)) {
       newBreadcrumbs.push(
         {
           icon: <Svg id="checklist-outlined" width="18" height="18" />,
           label: t('activities'),
-          navPath: page.newAppletActivities,
+          navPath: page.newAppletActivities, // TODO add Applet Activity Id on Edit
         },
         {
           icon: '',
-          label: t('newActivity'),
+          label: t('newActivity'), // TODO add Activity Name on Edit
           disabledLink: true,
         },
       );
     }
 
-    if (location.pathname.includes(page.newAppletNewActivityFlow)) {
+    if (checkIfAppletActivityFlowUrlPassed(location.pathname)) {
       newBreadcrumbs.push(
         {
           icon: <Svg id="flow" width="18" height="18" />,
           label: t('activityFlow'),
-          navPath: page.newAppletActivityFlow,
+          navPath: page.newAppletActivityFlow, // TODO add Applet Activity Flow Id on Edit
         },
         {
           icon: '',
-          label: t('newActivityFlow'),
+          label: t('newActivityFlow'), // TODO add Activity Flow Name on Edit
           disabledLink: true,
         },
       );

@@ -9,12 +9,13 @@ import {
 } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
-export const StyledBar = styled(Box)`
-  width: 40rem;
+export const StyledBar = styled(Box, shouldForwardProp)`
+  width: ${({ hasSetting }: { hasSetting: boolean }) => (hasSetting ? '40rem' : '100%')};
   flex-shrink: 0;
   border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   height: 100%;
   overflow-y: auto;
+  transition: width 0.3s ease-in;
 `;
 
 export const StyledHeader = styled(StyledHeadlineLarge, shouldForwardProp)`
