@@ -5,6 +5,7 @@ import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
 import { Path } from 'shared/utils';
 import BuilderAppletSettings from 'modules/Builder/features/BuilderAppletSettings';
+import ActivitySettings from 'modules/Builder/features/ActivitySettings';
 
 import {
   newAppletNewActivityFlowRoutes,
@@ -49,6 +50,16 @@ export const builderRoutes = () => (
               element={<PrivateRoute>{Component ? <Component /> : <></>}</PrivateRoute>}
             />
           ))}
+          <Route path={Path.Settings} element={<ActivitySettings />}>
+            <Route
+              path=":setting"
+              element={
+                <PrivateRoute>
+                  <ActivitySettings />
+                </PrivateRoute>
+              }
+            />
+          </Route>
         </Route>
       </Route>
       <Route path={Path.ActivityFlow}>
