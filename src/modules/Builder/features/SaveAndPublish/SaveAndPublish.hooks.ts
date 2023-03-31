@@ -9,7 +9,6 @@ import {
   appletActivitiesMocked,
   appletActivityFlowsMocked,
   appletDataMocked,
-  appletInfoMocked,
   appletPasswordMocked,
 } from './mock';
 
@@ -34,7 +33,6 @@ export const useAppletData = () => {
     if (isNewApplet) {
       return {
         ...appletDataMocked,
-        ...appletInfoMocked,
         ...appletInfo,
         description: {
           [language]: appletInfo.description,
@@ -55,7 +53,7 @@ export const useAppletData = () => {
       theme,
       version,
       ...appletDataForApi
-    } = appletData as any;
+    } = appletData!;
 
     return {
       ...appletDataForApi,
