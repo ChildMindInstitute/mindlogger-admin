@@ -1,7 +1,7 @@
 import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
-import { GetAppletsParams } from 'api';
 import { AxiosResponse } from 'axios';
 
+import { GetAppletsParams } from 'api';
 import { BaseSchema } from 'shared/state/Base';
 
 export type Respondent = {
