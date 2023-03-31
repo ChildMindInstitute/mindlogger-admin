@@ -1,3 +1,5 @@
+import { AppletId } from 'shared/api';
+
 export type GetUserData = { token: string };
 
 export type GetAppletsParams = {
@@ -12,8 +14,6 @@ export type GetAppletsParams = {
 };
 
 export type SwitchAccount = { accountId: string };
-
-export type AppletId = { appletId: string };
 
 export type UserId = { userId: string };
 
@@ -161,14 +161,6 @@ export type AppletNameArgs = AppletId & { appletName: string };
 export type AppletEncryption = AppletId & { data: FormData };
 
 export type ValidateAppletName = { name: string };
-
-export type UpdateRetainingSettings = AppletId & {
-  options: {
-    id: string;
-    period: number;
-    retention: string;
-  };
-};
 
 export type UpdatePin = {
   profileId: string;

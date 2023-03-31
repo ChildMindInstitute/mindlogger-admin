@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import i18n from 'i18n';
 import { DateFormats } from 'shared/consts';
 import { Svg } from 'shared/components';
-import { Activity, ActivityFlow } from 'modules/Dashboard/state';
+import { Activity, ActivityFlow } from 'shared/state';
 import { CreateEventType, TimerType } from 'modules/Dashboard/api';
 
 const { t } = i18n;
