@@ -8,7 +8,7 @@ import {
 } from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
 import { account, folders, popups, workspaces, applets, users, auth } from 'redux/modules';
-import { DEFAULT_ROWS_PER_PAGE, Footer } from '../..//components';
+import { DEFAULT_ROWS_PER_PAGE, Footer } from '../../components';
 import { OrderBy } from '../../types';
 
 import { LeftBar, TopBar } from './components';
@@ -31,12 +31,13 @@ export const BaseLayout = () => {
   useEffect(() => {
     const { getWorkspaceApplets } = applets.thunk;
     const { getWorkspaceUsers } = users.thunk;
+    const ownerId = currentWorkspaceData?.ownerId;
 
-    if (currentWorkspaceData?.ownerId) {
+    if (ownerId) {
       dispatch(
         getWorkspaceApplets({
           params: {
-            ownerId: currentWorkspaceData.ownerId,
+            ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
             ordering: `-${OrderBy.UpdatedAt}`,
           },

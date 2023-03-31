@@ -59,21 +59,6 @@ export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSig
     },
   );
 
-export const getAccountUserListApi = (
-  { appletId, role, MRN, pagination, sort }: AccountUserList,
-  signal?: AbortSignal,
-) =>
-  authApiClient.get('/account/users', {
-    params: {
-      appletId,
-      role,
-      MRN: MRN || '',
-      pagination: pagination || JSON.stringify({ allow: false }),
-      sort: sort || JSON.stringify({ allow: false }),
-    },
-    signal,
-  });
-
 export const transferOwnershipApi = (
   { appletId, email }: TransferOwnershipType,
   signal?: AbortSignal,

@@ -31,13 +31,14 @@ export const useTable = (
   };
 
   useEffect(() => {
-    if (isMounted.current && currentWorkspaceData?.ownerId) {
+    const ownerId = currentWorkspaceData?.ownerId;
+    if (isMounted.current && ownerId) {
       const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
 
       dispatch(
         thunk({
           params: {
-            ownerId: currentWorkspaceData.ownerId,
+            ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
             search: searchValue,
             page,

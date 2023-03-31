@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, MouseEvent } from 'react';
-import { Row, UiType } from 'shared/components';
 
+import { Row, UiType } from 'shared/components';
 import { HeadCell, Order, OrderBy } from 'shared/types';
 
 export type TableProps = {
