@@ -2,7 +2,10 @@ import { useLocation } from 'react-router-dom';
 import { FieldValues, UseFormGetValues } from 'react-hook-form';
 
 import { builderSessionStorage } from 'shared/utils';
-import { isActivityRoute, isAppletRoute } from 'modules/Builder/pages/NewApplet/NewApplet.utils';
+import {
+  isActivityRoute,
+  isAppletRoute,
+} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 /*
  *

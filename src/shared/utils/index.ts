@@ -16,3 +16,4 @@ export * from './func';
 export * from './getTableCell';
 export * from './exportToCsv';
 export * from './sessionStorage';
+export * from './urlGenerator';

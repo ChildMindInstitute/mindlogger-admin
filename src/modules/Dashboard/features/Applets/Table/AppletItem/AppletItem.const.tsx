@@ -1,7 +1,6 @@
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components';
-import { FolderApplet } from 'redux/modules';
 
 import { Actions } from './AppletItem.types';
 
@@ -14,6 +13,7 @@ export const getActions = ({
     transferOwnership,
     duplicateAction,
     shareAppletAction,
+    editAction,
   },
   item,
 }: Actions) => [
@@ -35,7 +35,7 @@ export const getActions = ({
   },
   {
     icon: <Svg id="widget" />,
-    action: (item: FolderApplet) => item,
+    action: editAction,
     tooltipTitle: t('editAnApplet'),
   },
   {
