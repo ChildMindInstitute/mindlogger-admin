@@ -13,8 +13,8 @@ import {
 } from './routes.const';
 
 const BuilderApplet = lazy(() => import('../pages/BuilderApplet'));
-const NewActivityFlow = lazy(() => import('../pages/NewActivityFlow'));
-const NewActivity = lazy(() => import('../pages/NewActivity'));
+const BuilderActivityFlow = lazy(() => import('../pages/BuilderActivityFlow'));
+const BuilderActivity = lazy(() => import('../pages/BuilderActivity'));
 
 export const builderRoutes = () => (
   <Route path={page.builder}>
@@ -40,7 +40,7 @@ export const builderRoutes = () => (
         </Route>
       </Route>
       <Route path={Path.Activities}>
-        <Route element={<NewActivity />} path=":activityId">
+        <Route element={<BuilderActivity />} path=":activityId">
           <Route index element={<Navigate to={Path.About} replace />} />
           {newAppletNewActivityRoutes.map(({ path, Component }) => (
             <Route
@@ -52,7 +52,7 @@ export const builderRoutes = () => (
         </Route>
       </Route>
       <Route path={Path.ActivityFlow}>
-        <Route element={<NewActivityFlow />} path=":activityFlowId">
+        <Route element={<BuilderActivityFlow />} path=":activityFlowId">
           <Route index element={<Navigate to={Path.About} replace />} />
           {newAppletNewActivityFlowRoutes.map(({ path, Component }) => (
             <Route

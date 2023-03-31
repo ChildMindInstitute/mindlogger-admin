@@ -1,3 +1,3 @@
-export * from './NewActivity';
-export * from './NewActivityFlow';
+export * from './BuilderActivity';
+export * from './BuilderActivityFlow';
 export * from './BuilderApplet';
