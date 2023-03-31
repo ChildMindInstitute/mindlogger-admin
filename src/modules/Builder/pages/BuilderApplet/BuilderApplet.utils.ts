@@ -1,6 +1,6 @@
 import { ACTIVITIES_PAGE_REGEXP_STRING } from 'shared/utils';
 
-import { ACTIVITY_LAYER_ROUTES, APPLET_LAYER_ROUTES } from './NewApplet.const';
+import { ACTIVITY_LAYER_ROUTES, APPLET_LAYER_ROUTES } from './BuilderApplet.const';
 
 export const APPLET_LAYER_REGEXP_ROUTES = APPLET_LAYER_ROUTES.map((route) =>
   route === ACTIVITIES_PAGE_REGEXP_STRING ? new RegExp(`^${route}$`) : new RegExp(`^${route}.*`),

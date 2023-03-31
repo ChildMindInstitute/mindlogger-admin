@@ -12,22 +12,13 @@ import {
   newAppletNewActivityRoutes,
 } from './routes.const';
 
-const Main = lazy(() => import('../pages/Main'));
-const NewApplet = lazy(() => import('../pages/NewApplet'));
+const BuilderApplet = lazy(() => import('../pages/BuilderApplet'));
 const NewActivityFlow = lazy(() => import('../pages/NewActivityFlow'));
 const NewActivity = lazy(() => import('../pages/NewActivity'));
 
 export const builderRoutes = () => (
   <Route path={page.builder}>
-    <Route
-      path={page.builder}
-      element={
-        <PrivateRoute>
-          <Main />
-        </PrivateRoute>
-      }
-    />
-    <Route element={<NewApplet />} path=":appletId">
+    <Route element={<BuilderApplet />} path=":appletId">
       <Route index element={<Navigate to={Path.About} replace />} />
       {newAppletRoutes.map(({ path, Component }) => (
         <Route

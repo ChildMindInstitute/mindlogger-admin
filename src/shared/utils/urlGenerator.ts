@@ -38,3 +38,5 @@ export const checkIfAppletActivityUrlPassed = (url: string) =>
 
 export const checkIfAppletActivityFlowUrlPassed = (url: string) =>
   new RegExp(`^${ACTIVITY_FLOW_PAGE_REGEXP_STRING}`).test(url);
+
+export const isNewApplet = (appletId?: string) => appletId === Path.NewApplet;
