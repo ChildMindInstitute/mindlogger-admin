@@ -577,5 +577,8 @@
   "showScoreSummaryTooltip": "Afficher le résumé des scores",
   "addScore": "Ajouter une note",
   "addSection": "Ajouter une rubrique",
-  "noSelectedItemsYet": "Aucun élément sélectionné pour le moment."
+  "noSelectedItemsYet": "Aucun élément sélectionné pour le moment.",
+  "apply": "Appliquer",
+  "addNewNote": "Ajouter une nouvelle note",
+  "addNotePlaceholder": "Ajouter une note que vous verrez toujours ici"
 }
