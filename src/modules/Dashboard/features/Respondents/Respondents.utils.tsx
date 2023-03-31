@@ -48,7 +48,7 @@ export const getActions = ({
 ];
 
 export const getChosenAppletData = (
-  respondentsItems: any,
+  respondentsItems: any, // TODO: fix later
   appletsData: FolderApplet[],
   appletId: string,
 ) => {
