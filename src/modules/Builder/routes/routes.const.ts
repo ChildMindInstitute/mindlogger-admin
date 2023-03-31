@@ -9,7 +9,6 @@ const ActivityItems = lazy(() => import('modules/Builder/features/ActivityItems'
 const ActivityFlowAbout = lazy(() => import('modules/Builder/features/ActivityFlowAbout'));
 const ActivityFlow = lazy(() => import('modules/Builder/features/ActivityFlow'));
 const ActivityFlowBuilder = lazy(() => import('modules/Builder/features/ActivityFlowBuilder'));
-const ActivitySettings = lazy(() => import('modules/Builder/features/ActivitySettings'));
 
 export const newAppletRoutes = [
   { path: Path.About, Component: AboutApplet },
