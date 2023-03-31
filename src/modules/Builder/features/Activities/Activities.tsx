@@ -28,8 +28,8 @@ export const Activities = () => {
         buttons={[
           {
             icon: <Svg id="checklist-filled" />,
-            label: t('addActivity'),
-            handleClick: () => navigate(page.newAppletNewActivity),
+            label: t('addActivity'), // TODO add Applet Activity Name on Edit
+            handleClick: () => navigate(page.newAppletNewActivity), // TODO add Applet Activity Id on Edit
           },
         ]}
       />

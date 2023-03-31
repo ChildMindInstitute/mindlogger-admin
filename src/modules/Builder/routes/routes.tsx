@@ -3,6 +3,8 @@ import { Route, Navigate } from 'react-router-dom';
 
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
+import { Path } from 'shared/utils';
+import BuilderAppletSettings from 'modules/Builder/features/BuilderAppletSettings';
 
 import {
   newAppletNewActivityFlowRoutes,
@@ -10,23 +12,14 @@ import {
   newAppletNewActivityRoutes,
 } from './routes.const';
 
-const Main = lazy(() => import('../pages/Main'));
-const NewApplet = lazy(() => import('../pages/NewApplet'));
-const NewActivityFlow = lazy(() => import('../pages/NewActivityFlow'));
-const NewActivity = lazy(() => import('../pages/NewActivity'));
+const BuilderApplet = lazy(() => import('../pages/BuilderApplet'));
+const BuilderActivityFlow = lazy(() => import('../pages/BuilderActivityFlow'));
+const BuilderActivity = lazy(() => import('../pages/BuilderActivity'));
 
 export const builderRoutes = () => (
   <Route path={page.builder}>
-    <Route
-      path={page.builder}
-      element={
-        <PrivateRoute>
-          <Main />
-        </PrivateRoute>
-      }
-    />
-    <Route element={<NewApplet />} path={page.newApplet}>
-      <Route path={page.newApplet} element={<Navigate to={page.newAppletAbout} replace />} />
+    <Route element={<BuilderApplet />} path=":appletId">
+      <Route index element={<Navigate to={Path.About} replace />} />
       {newAppletRoutes.map(({ path, Component }) => (
         <Route
           key={path}
@@ -34,12 +27,21 @@ export const builderRoutes = () => (
           element={<PrivateRoute>{Component ? <Component /> : <></>}</PrivateRoute>}
         />
       ))}
-      <Route path={page.newAppletActivities}>
-        <Route element={<NewActivity />} path={page.newAppletNewActivity}>
+      <Route path={Path.Settings}>
+        <Route element={<BuilderAppletSettings />} path="">
           <Route
-            path={page.newAppletNewActivity}
-            element={<Navigate to={page.newAppletNewActivityAbout} replace />}
+            path=":settingItem"
+            element={
+              <PrivateRoute>
+                <BuilderAppletSettings />
+              </PrivateRoute>
+            }
           />
+        </Route>
+      </Route>
+      <Route path={Path.Activities}>
+        <Route element={<BuilderActivity />} path=":activityId">
+          <Route index element={<Navigate to={Path.About} replace />} />
           {newAppletNewActivityRoutes.map(({ path, Component }) => (
             <Route
               key={path}
@@ -49,12 +51,9 @@ export const builderRoutes = () => (
           ))}
         </Route>
       </Route>
-      <Route path={page.newAppletActivityFlow}>
-        <Route element={<NewActivityFlow />} path={page.newAppletNewActivityFlow}>
-          <Route
-            path={page.newAppletNewActivityFlow}
-            element={<Navigate to={page.newAppletNewActivityFlowAbout} replace />}
-          />
+      <Route path={Path.ActivityFlow}>
+        <Route element={<BuilderActivityFlow />} path=":activityFlowId">
+          <Route index element={<Navigate to={Path.About} replace />} />
           {newAppletNewActivityFlowRoutes.map(({ path, Component }) => (
             <Route
               key={path}
