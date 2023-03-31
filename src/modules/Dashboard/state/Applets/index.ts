@@ -36,14 +36,6 @@ export const applets = {
         },
       }) => data,
     ),
-  useAppletData: (): AppletsSchema['applet']['data'] =>
-    useAppSelector(
-      ({
-        applets: {
-          applet: { data },
-        },
-      }) => data,
-    ),
   useStatus: (): AppletsSchema['applets']['status'] =>
     useAppSelector(
       ({

@@ -8,8 +8,8 @@ import { SaveChangesPopup } from 'modules/Builder/components';
 import { LinkedTabs, Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
-import { applets } from 'modules/Dashboard/state';
 import { isNewApplet } from 'shared/utils';
+import { applet } from 'shared/state';
 
 import { newAppletTabs, pathsWithInnerTabs } from './BuilderApplet.const';
 import { usePrompt } from './BuilderApplet.hooks';
@@ -21,7 +21,7 @@ export const BuilderApplet = () => {
   const dispatch = useAppDispatch();
   const { cancelNavigation, confirmNavigation, promptVisible } = usePrompt();
   const { appletId } = useParams();
-  const { result: appletData } = applets.useAppletData() ?? {};
+  const { result: appletData } = applet.useAppletData() ?? {};
   const appletLabel = (isNewApplet(appletId) ? t('newApplet') : appletData?.displayName) ?? '';
 
   useBreadcrumbs([
@@ -35,7 +35,7 @@ export const BuilderApplet = () => {
   useEffect(() => {
     if (!appletId || isNewApplet(appletId)) return;
 
-    const { getApplet } = applets.thunk;
+    const { getApplet } = applet.thunk;
     dispatch(getApplet({ appletId }));
   }, [appletId]);
 

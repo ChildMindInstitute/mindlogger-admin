@@ -3,7 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { auth, folders, Breadcrumb, breadcrumbs, User, applets } from 'redux/modules';
+import { auth, folders, Breadcrumb, breadcrumbs, User, applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getAppletData } from 'shared/utils/getAppletData';
@@ -22,7 +22,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const authData = auth.useData();
   const appletsFoldersData = folders.useFlattenFoldersApplets();
   const { firstName, lastName } = (authData?.user as User) || {};
-  const { result: appletData } = applets.useAppletData() ?? {};
+  const { result: appletData } = applet.useAppletData() ?? {};
   const { appletId } = useParams();
   const appletLabel = (isNewApplet(appletId) ? t('newApplet') : appletData?.displayName) ?? '';
 
