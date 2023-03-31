@@ -65,8 +65,8 @@ export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps
 
   return (
     <FormProvider {...methods}>
-      <form noValidate onChange={handleFormChangeDelayed}>
-        <StyledItemConfiguration ref={containerRef}>
+      <StyledItemConfiguration ref={containerRef}>
+        <form noValidate onChange={handleFormChangeDelayed}>
           <StyledHeader isSticky={isHeaderSticky}>
             <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
             <StyledFlexTopCenter>
@@ -132,8 +132,8 @@ export const ItemConfiguration = ({ item, onItemChange }: ItemConfigurationProps
               palette={palette}
             />
           </StyledContent>
-        </StyledItemConfiguration>
-      </form>
+        </form>
+      </StyledItemConfiguration>
     </FormProvider>
   );
 };
