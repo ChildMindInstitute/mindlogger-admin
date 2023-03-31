@@ -6,3 +6,5 @@ export type ServerUrlOption = {
 export type SignInRefreshTokenArgs = {
   refreshToken: string | null;
 };
+
+export type AppletId = { appletId: string };

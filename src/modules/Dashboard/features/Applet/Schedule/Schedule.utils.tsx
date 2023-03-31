@@ -4,7 +4,8 @@ import { Row } from 'shared/components';
 import { variables } from 'shared/styles';
 import { DateFormats } from 'shared/consts';
 import { getTableCell } from 'shared/utils';
-import { Activity, ActivityFlow, Event, SingleApplet } from 'modules/Dashboard/state';
+import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
+import { Event } from 'modules/Dashboard/state';
 import { Periodicity } from 'modules/Dashboard/api';
 
 import {

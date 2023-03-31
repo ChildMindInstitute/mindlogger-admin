@@ -9,6 +9,7 @@ import { StyledErrorText, StyledModalWrapper, theme } from 'shared/styles';
 import { getErrorMessage } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
+import { applet } from 'shared/state';
 import { createEventApi, CreateEventType, Periodicity } from 'api';
 import { useAsync } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
@@ -37,7 +38,7 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
     const [activitiesOrFlows, setActivitiesOrFlows] = useState<null | Option[]>(null);
     const { t } = useTranslation('app');
     const dispatch = useAppDispatch();
-    const appletData = applets.useAppletData();
+    const appletData = applet.useAppletData();
     const appletId = appletData?.result.id;
 
     //TODO: add filling up the form with the data of the edited event when the get events API is connected
