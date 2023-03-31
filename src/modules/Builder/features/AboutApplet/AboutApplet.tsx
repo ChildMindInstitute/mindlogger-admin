@@ -19,7 +19,8 @@ import { Svg, Tooltip, Uploader } from 'shared/components';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
-import { useBuilderSessionStorageFormValues } from 'shared/hooks';
+import { useBuilderSessionStorageFormValues, useCheckIfNewApplet } from 'shared/hooks';
+import { applet } from 'shared/state';
 
 import { StyledContainer, StyledForm, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { AboutAppletSchema } from './AboutApplet.schema';
@@ -33,7 +34,22 @@ const commonUploaderProps = {
 };
 
 export const AboutApplet = () => {
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const isNewApplet = useCheckIfNewApplet();
+  const defaults = isNewApplet
+    ? defaultValues
+    : ({
+        displayName: appletData?.displayName ?? '',
+        description: appletData?.description[language] ?? '',
+        themeId: appletData?.themeId ?? '',
+        about: appletData?.about[language] ?? '',
+        image: appletData?.image ?? '',
+        watermark: appletData?.watermark ?? '',
+      } as FormValues);
 
   useBreadcrumbs([
     {
@@ -42,7 +58,7 @@ export const AboutApplet = () => {
     },
   ]);
 
-  const { getFormValues } = useBuilderSessionStorageFormValues<FormValues>(defaultValues);
+  const { getFormValues } = useBuilderSessionStorageFormValues<FormValues>(defaults);
   const { control, setValue, watch, getValues } = useForm<FormValues>({
     resolver: yupResolver(AboutAppletSchema()),
     defaultValues: getFormValues(),
@@ -61,8 +77,8 @@ export const AboutApplet = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('appletImage', val)}
-          getValue={() => watch('appletImage')}
+          setValue={(val: string) => setValue('image', val)}
+          getValue={() => watch('image')}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
@@ -73,8 +89,8 @@ export const AboutApplet = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('appletWatermark', val)}
-          getValue={() => watch('appletWatermark')}
+          setValue={(val: string) => setValue('watermark', val)}
+          getValue={() => watch('watermark')}
           description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
@@ -94,7 +110,7 @@ export const AboutApplet = () => {
             <Box sx={{ mb: theme.spacing(4.4) }}>
               <InputController
                 {...commonProps}
-                name="name"
+                name="displayName"
                 maxLength={MAX_NAME_LENGTH}
                 label={t('appletName')}
               />
@@ -112,7 +128,7 @@ export const AboutApplet = () => {
             <StyledFlexTopCenter sx={{ position: 'relative' }}>
               <SelectController
                 {...commonProps}
-                name="colorTheme"
+                name="themeId"
                 label={t('appletColorTheme')}
                 options={colorThemeOptions}
                 sx={{ margin: theme.spacing(0, 0, 3.6, 0) }}
@@ -129,7 +145,7 @@ export const AboutApplet = () => {
             </span>
           </Tooltip>
         </StyledTitle>
-        <EditorController control={control} name="aboutApplet" />
+        <EditorController control={control} name="about" />
       </StyledForm>
     </StyledBuilderWrapper>
   );

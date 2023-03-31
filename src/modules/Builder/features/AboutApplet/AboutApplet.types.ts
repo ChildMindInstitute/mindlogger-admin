@@ -1,8 +1,8 @@
 export type FormValues = {
-  name: string;
+  displayName: string;
   description: string;
-  colorTheme: string;
-  aboutApplet: string;
-  appletImage: string;
-  appletWatermark: string;
+  themeId: string;
+  about: string;
+  image: string;
+  watermark: string;
 };

@@ -6,3 +6,4 @@ export * from './useHeaderSticky';
 export * from './useCallbackPrompt';
 export * from './useBuilderSessionStorage';
 export * from './useBlocker';
+export * from './useCheckIfNewApplet';

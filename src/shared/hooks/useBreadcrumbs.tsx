@@ -11,8 +11,8 @@ import {
   checkIfAppletActivityFlowUrlPassed,
   checkIfAppletActivityUrlPassed,
   checkIfAppletUrlPassed,
-  isNewApplet,
 } from 'shared/utils';
+import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { id } = useParams();
@@ -23,8 +23,8 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const appletsFoldersData = folders.useFlattenFoldersApplets();
   const { firstName, lastName } = (authData?.user as User) || {};
   const { result: appletData } = applet.useAppletData() ?? {};
-  const { appletId } = useParams();
-  const appletLabel = (isNewApplet(appletId) ? t('newApplet') : appletData?.displayName) ?? '';
+  const isNewApplet = useCheckIfNewApplet();
+  const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
   const [crumbs, setCrumbs] = useState<Breadcrumb[]>([]);
 

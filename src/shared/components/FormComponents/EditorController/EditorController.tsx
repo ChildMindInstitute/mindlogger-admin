@@ -45,7 +45,7 @@ export const EditorController = <T extends FieldValues>({
             <StyledMdEditor
               className={isRequired ? 'isRequired' : ''}
               ref={editorRef}
-              modelValue={value}
+              modelValue={value ?? ''}
               onChange={(...props) => {
                 setChanged(true);
                 onChange(...props);
@@ -116,8 +116,8 @@ export const EditorController = <T extends FieldValues>({
               ]}
               footers={[0, '=', 1]}
               defFooters={[
-                <FooterMessage inputSize={value.toString().length} key="footer-message" />,
-                <CharacterCounter inputSize={value.toString().length} key="character-counter" />,
+                <FooterMessage inputSize={(value ?? '').length} key="footer-message" />,
+                <CharacterCounter inputSize={(value ?? '').length} key="character-counter" />,
               ]}
             />
             {isRequired && !!requiredStateMessage && (
