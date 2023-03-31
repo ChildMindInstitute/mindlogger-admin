@@ -1,20 +1,8 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { Applet, FolderApplet } from 'redux/modules';
-import { HeadCell, Order } from 'shared/types/table';
 
-import { OrderBy } from '../Applets.types';
+import { TableProps as SharedTableProps } from '../../../components';
 
-export type TableProps = {
-  columns: HeadCell[];
+export type TableProps = Omit<SharedTableProps, 'rows'> & {
   rows?: FolderApplet[] | Applet[];
-  order: Order;
-  setOrder: Dispatch<SetStateAction<Order>>;
-  orderBy: OrderBy;
-  setOrderBy: Dispatch<SetStateAction<OrderBy>>;
   headerContent: JSX.Element;
-  page: number;
-  setPage: Dispatch<SetStateAction<number>>;
-  count: number;
-  emptyComponent?: JSX.Element | string;
 };

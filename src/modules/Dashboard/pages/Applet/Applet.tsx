@@ -10,13 +10,10 @@ import { useAppletTabs } from './Applet.hooks';
 
 export const Applet = () => {
   const dispatch = useAppDispatch();
-  const userMetaStatus = users.useUserMetaStatus();
-  const managerMetaStatus = users.useManagerMetaStatus();
-  const isLoading =
-    userMetaStatus === 'loading' ||
-    userMetaStatus === 'idle' ||
-    managerMetaStatus === 'loading' ||
-    managerMetaStatus === 'idle';
+  const usersMetaStatus = users.useRespondentsMetaStatus();
+
+  const isLoading = usersMetaStatus === 'loading' || usersMetaStatus === 'idle';
+
   const appletTabs = useAppletTabs();
   const { id: appletId } = useParams();
 

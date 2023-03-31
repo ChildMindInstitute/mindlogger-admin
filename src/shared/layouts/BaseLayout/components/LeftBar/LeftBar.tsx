@@ -5,20 +5,22 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
-import { Workspace } from 'shared/features/SwitchWorkspace/SwitchWorkspace.types';
 import { getWorkspacesApi } from 'shared/api';
-import { auth } from 'modules/Auth/state';
+
+import { workspaces as currentWorkspace, auth, Workspace } from 'redux/modules';
 import { useAsync } from 'shared/hooks';
 
+import { useAppDispatch } from 'redux/store';
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
 
 export const LeftBar = () => {
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
   const userData = auth.useData();
+  const currentWorkspaceData = currentWorkspace.useData();
   const [visibleDrawer, setVisibleDrawer] = useState(false);
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
-  const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
 
   const { execute } = useAsync(getWorkspacesApi, (result) => {
     const { firstName, lastName, id } = userData?.user || {};
@@ -39,13 +41,13 @@ export const LeftBar = () => {
   }, []);
 
   useEffect(() => {
-    workspaces.length && setCurrentWorkspace(workspaces[0]);
+    workspaces.length && dispatch(currentWorkspace.actions.setCurrentWorkspace(workspaces[0]));
   }, [workspaces]);
 
   return (
     <StyledDrawer>
       <StyledDrawerLogo onClick={() => setVisibleDrawer((prevState) => !prevState)}>
-        <WorkspaceImage workspaceName={currentWorkspace?.workspaceName} />
+        <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />
       </StyledDrawerLogo>
       <List>
         {links.map(({ labelKey, link, icon, activeIcon }) => (
@@ -65,8 +67,6 @@ export const LeftBar = () => {
       </List>
       {visibleDrawer && (
         <SwitchWorkspace
-          currentWorkspace={currentWorkspace}
-          setCurrentWorkspace={setCurrentWorkspace}
           setVisibleDrawer={setVisibleDrawer}
           visibleDrawer={visibleDrawer}
           workspaces={workspaces}

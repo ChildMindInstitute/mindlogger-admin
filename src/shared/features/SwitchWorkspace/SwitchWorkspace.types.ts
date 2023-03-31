@@ -19,8 +19,6 @@ export type WorkspaceGroup = {
 };
 
 export type SwitchWorkspaceProps = {
-  currentWorkspace: Workspace | null;
-  setCurrentWorkspace: (val: Workspace | null) => void;
   visibleDrawer: boolean;
   setVisibleDrawer: Dispatch<SetStateAction<boolean>>;
   workspaces: Workspace[];

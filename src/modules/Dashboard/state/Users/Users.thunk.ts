@@ -3,24 +3,19 @@ import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
 
-import { getAccountUserListApi, updatePinApi, UpdatePin, getInvitationsApi } from 'api';
+import {
+  updatePinApi,
+  UpdatePin,
+  getInvitationsApi,
+  getWorkspaceUsersApi,
+  GetAppletsParams,
+} from 'api';
 
-export const getManagersList = createAsyncThunk(
-  'users/getManagersList',
-  async (args, { rejectWithValue, signal }) => {
+export const getWorkspaceUsers = createAsyncThunk(
+  'applets/getWorkspaceUsers',
+  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
     try {
-      return await getAccountUserListApi({ role: 'manager' }, signal);
-    } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
-    }
-  },
-);
-
-export const getUsersList = createAsyncThunk(
-  'users/getUsersList',
-  async (args, { rejectWithValue, signal }) => {
-    try {
-      return await getAccountUserListApi({ role: 'user' }, signal);
+      return await getWorkspaceUsersApi({ params }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

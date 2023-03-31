@@ -13,8 +13,6 @@ import { WorkspaceGroup } from './WorkspaceGroup';
 import { getWorkspacesGroups } from './SwitchWorkspace.utils';
 
 export const SwitchWorkspace = ({
-  currentWorkspace,
-  setCurrentWorkspace,
   setVisibleDrawer,
   visibleDrawer,
   workspaces,
@@ -31,11 +29,7 @@ export const SwitchWorkspace = ({
       {workspacesGroups.map((workspacesGroup, index) => (
         <Fragment key={workspacesGroup.groupName}>
           {!!index && <StyledDivider />}
-          <WorkspaceGroup
-            workspacesGroup={workspacesGroup}
-            currentWorkspace={currentWorkspace}
-            setCurrentWorkspace={setCurrentWorkspace}
-          />
+          <WorkspaceGroup workspacesGroup={workspacesGroup} />
         </Fragment>
       ))}
     </StyledSwitchWorkspaceDrawer>

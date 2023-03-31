@@ -2,12 +2,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search, Table, Row } from 'shared/components';
-import { users, UserData, folders } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
-import { useTimeAgo, useBreadcrumbs } from 'shared/hooks';
-import { filterRows } from 'shared/utils/filterRows';
-import { prepareRespondentsData } from 'shared/utils/prepareUsersData';
+import { Actions, Pin, Svg, Search } from 'shared/components';
+import { users, folders } from 'redux/modules';
+import { useTimeAgo, useBreadcrumbs, useTable } from 'shared/hooks';
 
 import {
   RespondentsTableHeader,
@@ -25,15 +22,19 @@ import {
   RespondentsRemoveAccessPopup,
   EditRespondentPopup,
 } from './Popups';
+import { Table } from '../../components';
 
 export const Respondents = () => {
   const { id } = useParams();
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
-  const usersData = users.useUserData();
-  const appletsData = folders.useFlattenFoldersApplets();
   const timeAgo = useTimeAgo();
-  const [searchValue, setSearchValue] = useState('');
+
+  const respondentsData = users.useRespondentsData();
+  const appletsData = folders.useFlattenFoldersApplets();
+  const { getWorkspaceUsers } = users.thunk;
+
+  const { searchValue, setSearchValue, ...tableProps } = useTable(getWorkspaceUsers);
+
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
@@ -71,41 +72,36 @@ export const Respondents = () => {
       setEditRespondentPopupVisible(true);
     },
   };
-
+  // TODO: add updatePin
   const handlePinClick = async (profileId: string, newState: boolean) => {
-    const { updatePin, getUsersList } = users.thunk;
-    const result = await dispatch(updatePin({ profileId, newState }));
-
-    if (updatePin.fulfilled.match(result)) {
-      dispatch(getUsersList());
-    }
+    //const { updatePin, getUsersList } = users.thunk;
+    // const result = await dispatch(updatePin({ profileId, newState }));
+    // if (updatePin.fulfilled.match(result)) {
+    //   dispatch(getUsersList());
+    // }
   };
 
-  const usersArr = (
-    id ? prepareRespondentsData(usersData?.items, id) : prepareRespondentsData(usersData?.items)
-  ) as UserData[];
-
-  const rows = usersArr?.map((user, index) => {
-    const { pinned, MRN, nickName, updated, _id: profileId } = user;
-    const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
+  const rows = respondentsData?.result?.map((user, index) => {
+    const { secretId, nickname, lastSeen, id } = user;
+    const latestAactive = lastSeen ? timeAgo.format(new Date(lastSeen)) : '';
 
     return {
       pin: {
-        content: () => <Pin isPinned={pinned} />,
+        content: () => <Pin isPinned={false} />,
         value: '',
-        onClick: () => handlePinClick(profileId, !pinned),
+        onClick: () => handlePinClick(id, true),
       },
       secretId: {
-        content: () => MRN,
-        value: MRN,
+        content: () => secretId,
+        value: secretId,
       },
       nickname: {
-        content: () => nickName,
-        value: nickName,
+        content: () => nickname,
+        value: nickname,
       },
-      updated: {
-        content: () => lastEdited,
-        value: lastEdited,
+      latestAactive: {
+        content: () => latestAactive,
+        value: latestAactive,
       },
       actions: {
         content: () => <Actions items={getActions(actions)} context={index} />,
@@ -119,15 +115,9 @@ export const Respondents = () => {
     setSearchValue(value);
   };
 
-  const handleFilterRows = (rows: Row[]) =>
-    rows?.filter(
-      ({ secretId, nickname }) =>
-        filterRows(secretId, searchValue) || filterRows(nickname, searchValue),
-    );
-
   const chosenRespondentsItems =
     respondentsDataIndex || respondentsDataIndex === 0
-      ? usersData?.items[respondentsDataIndex]
+      ? respondentsData?.result[respondentsDataIndex]
       : undefined;
 
   const appletsSmallTableRows = getAppletsSmallTableRows(
@@ -190,9 +180,10 @@ export const Respondents = () => {
       </RespondentsTableHeader>
       <Table
         columns={headCells}
-        rows={handleFilterRows(rows)}
-        orderBy="updated"
+        rows={rows}
         emptyComponent={renderEmptyComponent()}
+        count={respondentsData?.count || 0}
+        {...tableProps}
       />
       {scheduleSetupPopupVisible && (
         <ScheduleSetupPopup

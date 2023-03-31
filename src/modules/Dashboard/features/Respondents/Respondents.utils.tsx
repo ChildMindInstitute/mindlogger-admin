@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components';
-import { FolderApplet, Users } from 'redux/modules';
+import { FolderApplet } from 'redux/modules';
 import {
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
@@ -48,7 +48,7 @@ export const getActions = ({
 ];
 
 export const getChosenAppletData = (
-  respondentsItems: Users,
+  respondentsItems: any,
   appletsData: FolderApplet[],
   appletId: string,
 ) => {
@@ -65,7 +65,7 @@ export const getChosenAppletData = (
 };
 
 export const getAppletsSmallTableRows = (
-  respondentsItems: Users | undefined,
+  respondentsItems: any, // TODO: fix later
   appletsData: FolderApplet[],
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>,
 ) =>

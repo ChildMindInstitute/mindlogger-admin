@@ -39,6 +39,15 @@ export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: Ab
   });
 };
 
+export const getWorkspaceUsersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get(`/workspaces/${ownerId}/users`, {
+    params: restParams,
+    signal,
+  });
+};
+
 export const getAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}`, { signal });
 
