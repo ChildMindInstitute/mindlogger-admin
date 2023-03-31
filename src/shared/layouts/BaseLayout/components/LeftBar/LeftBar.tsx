@@ -6,11 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
 import { getWorkspacesApi } from 'shared/api';
-
 import { workspaces as currentWorkspace, auth, Workspace } from 'redux/modules';
 import { useAsync } from 'shared/hooks';
-
 import { useAppDispatch } from 'redux/store';
+
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
 

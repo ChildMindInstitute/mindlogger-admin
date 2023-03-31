@@ -2,8 +2,8 @@ import { ChangeEvent } from 'react';
 import debounce from 'lodash.debounce';
 
 import { Svg } from 'shared/components/Svg';
-
 import { SEARCH_DEBOUNCE_VALUE } from 'shared/consts';
+
 import { StyledTextField, StyledIcon } from './Search.styles';
 import { SearchProps } from './Search.types';
 
