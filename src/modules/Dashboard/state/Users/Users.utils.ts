@@ -1,45 +1,33 @@
-import { ActionReducerMapBuilder, AsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { AxiosResponse, AxiosError } from 'axios';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 
-import { getApiError } from 'shared/utils/getApiError';
+import { getApiError } from 'shared/utils';
 
-import { UsersSchema, Roles } from './Users.schema';
 import { state as initialState } from './Users.state';
+import { CreateUsersStateData } from './Users.schema';
 
-export const createUsersPendingData = (
-  builder: ActionReducerMapBuilder<UsersSchema>,
-  thunk: AsyncThunk<AxiosResponse, void, Record<string, never>>,
-  role: Roles,
-) =>
+export const createUsersPendingData = ({ builder, thunk, key }: CreateUsersStateData) =>
   builder.addCase(thunk.pending, (state, action) => {
-    if (state[role].status !== 'loading') {
-      state[role].requestId = action.meta.requestId;
-      state[role].status = 'loading';
+    if (state[key].status !== 'loading') {
+      state[key].requestId = action.meta.requestId;
+      state[key].status = 'loading';
     }
   });
 
-export const createUsersFulfilledData = (
-  builder: ActionReducerMapBuilder<UsersSchema>,
-  thunk: AsyncThunk<AxiosResponse, void, Record<string, never>>,
-  role: Roles,
-) =>
+export const createUsersFulfilledData = ({ builder, thunk, key }: CreateUsersStateData) =>
   builder.addCase(thunk.fulfilled, (state, action) => {
-    if (state[role].status === 'loading' && state[role].requestId === action.meta.requestId) {
-      state[role].requestId = initialState[role].requestId;
-      state[role].status = 'success';
-      state[role].data = action.payload.data;
+    if (state[key].status === 'loading' && state[key].requestId === action.meta.requestId) {
+      state[key].requestId = initialState[key].requestId;
+      state[key].status = 'success';
+      state[key].data = action.payload.data;
     }
   });
 
-export const createUsersRejectedData = (
-  builder: ActionReducerMapBuilder<UsersSchema>,
-  thunk: AsyncThunk<AxiosResponse, void, Record<string, never>>,
-  role: Roles,
-) =>
+export const createUsersRejectedData = ({ builder, thunk, key }: CreateUsersStateData) =>
   builder.addCase(thunk.rejected, (state, action) => {
-    if (state[role].status === 'loading' && state[role].requestId === action.meta.requestId) {
-      state[role].requestId = initialState[role].requestId;
-      state[role].status = 'error';
-      state[role].error = getApiError(action as PayloadAction<AxiosError>);
+    if (state[key].status === 'loading' && state[key].requestId === action.meta.requestId) {
+      state[key].requestId = initialState[key].requestId;
+      state[key].status = 'error';
+      state[key].error = getApiError(action as PayloadAction<AxiosError>);
     }
   });

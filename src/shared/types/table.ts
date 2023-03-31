@@ -12,3 +12,8 @@ export type HeadCell = Cell & {
   label: string | DefaultTFuncReturn | JSX.Element;
   enableSort?: boolean;
 };
+
+export enum OrderBy {
+  UpdatedAt = 'updated_at',
+  DisplayName = 'display_name',
+}

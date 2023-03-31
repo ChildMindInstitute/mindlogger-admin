@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 
-import { HeadCell } from 'shared/types/table';
+import { HeadCell } from 'shared/types';
 
 export const headCells: HeadCell[] = [
   {
@@ -20,8 +20,8 @@ export const headCells: HeadCell[] = [
     enableSort: true,
   },
   {
-    id: 'updated',
-    label: t('updated'),
+    id: 'latestActive',
+    label: t('latestActive'),
     enableSort: true,
   },
   {

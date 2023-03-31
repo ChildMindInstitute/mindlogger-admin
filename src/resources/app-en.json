@@ -701,6 +701,7 @@
   "showScoreSummaryTooltip": "Show Score Summary",
   "addScore": "Add Score",
   "addSection": "Add Section",
+  "latestActive": "Latest active",
   "noSelectedItemsYet": "No selected items yet.",
   "addSubscales": "Add Subscale"
 }

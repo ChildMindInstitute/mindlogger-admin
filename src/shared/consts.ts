@@ -48,3 +48,5 @@ export enum Roles {
   Editor = 'editor',
   Reviewer = 'reviewer',
 }
+
+export const SEARCH_DEBOUNCE_VALUE = 700;

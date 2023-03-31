@@ -2,11 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Svg, Actions, Search, Table, Row } from 'shared/components';
-import { ManagerData, users } from 'redux/modules';
-import { useTimeAgo, useBreadcrumbs } from 'shared/hooks';
-import { filterRows } from 'shared/utils/filterRows';
-import { prepareUsersData } from 'shared/utils/prepareUsersData';
+import { Svg, Actions, Search, Table } from 'shared/components';
+import { users } from 'redux/modules';
+import { useBreadcrumbs } from 'shared/hooks';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
@@ -16,8 +14,7 @@ import { User } from './Managers.types';
 export const Managers = () => {
   const { id } = useParams();
   const { t } = useTranslation('app');
-  const timeAgo = useTimeAgo();
-  const managersData = users.useManagerData();
+  const managersData = users.useManagersData();
   const [searchValue, setSearchValue] = useState('');
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
@@ -41,14 +38,9 @@ export const Managers = () => {
     },
   };
 
-  const managersArr = (
-    id ? prepareUsersData(managersData?.items, id) : prepareUsersData(managersData?.items)
-  ) as ManagerData[];
-
-  const rows = managersArr?.map((user) => {
-    const { email, firstName, lastName, updated, roles } = user;
+  const rows = managersData?.result?.map((user) => {
+    const { email, firstName, lastName, roles } = user;
     const isOwner = roles.includes('owner');
-    const lastEdited = updated ? timeAgo.format(new Date(updated)) : '';
 
     return {
       firstName: {
@@ -63,10 +55,6 @@ export const Managers = () => {
         content: () => email,
         value: email,
       },
-      updated: {
-        content: () => lastEdited,
-        value: lastEdited,
-      },
       actions: {
         content: () => <Actions items={getActions(isOwner, id, actions)} context={user} />,
         value: '',
@@ -78,14 +66,6 @@ export const Managers = () => {
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
-
-  const handleFilterRows = (rows: Row[]) =>
-    rows?.filter(
-      ({ firstName, lastName, email }) =>
-        filterRows(firstName, searchValue) ||
-        filterRows(lastName, searchValue) ||
-        filterRows(email, searchValue),
-    );
 
   const renderEmptyComponent = () => {
     if (!rows?.length) {
@@ -102,7 +82,7 @@ export const Managers = () => {
       </ManagersTableHeader>
       <Table
         columns={getHeadCells()}
-        rows={handleFilterRows(rows)}
+        rows={rows}
         orderBy="updated"
         emptyComponent={renderEmptyComponent()}
       />

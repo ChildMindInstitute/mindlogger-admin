@@ -1,6 +1,6 @@
-import { ManagerData } from 'redux/modules';
+import { Manager } from 'redux/modules';
 
-export type User = ManagerData & { appletIds: string[] };
+export type User = Manager & { appletIds: string[]; nickName: string };
 
 export type ManagersActions = {
   removeAccessAction: (user: User) => void;

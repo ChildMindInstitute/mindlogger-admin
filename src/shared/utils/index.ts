@@ -4,7 +4,6 @@ export * from './errors';
 export * from './filterRows';
 export * from './getApiError';
 export * from './getAppletData';
-export * from './prepareUsersData';
 export * from './renderComponentForEachTest';
 export * from './renderWithProviders';
 export * from './shouldForwardProp';
