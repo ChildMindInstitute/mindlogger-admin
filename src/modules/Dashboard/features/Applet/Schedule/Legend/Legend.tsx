@@ -7,6 +7,7 @@ import { SelectEvent } from 'shared/types';
 import { exportToCsv } from 'shared/utils';
 
 import { ExportSchedulePopup } from '../ExportSchedulePopup';
+import { ImportSchedulePopup } from '../ImportSchedulePopup';
 import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
 import { RemoveIndividualSchedulePopup } from '../RemoveIndividualSchedulePopup';
 import { CreateActivityPopup } from '../CreateActivityPopup';
@@ -35,6 +36,7 @@ export const Legend = ({ legendEvents, appletName }: LegendProps) => {
   const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
   const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
     useState(false);
+  const [importSchedulePopupVisible, setImportSchedulePopupVisible] = useState(false);
   const [clearScheduleEventsPopupVisible, setClearScheduleEventsPopupVisible] = useState(false);
   const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
     useState(false);
@@ -122,7 +124,7 @@ export const Legend = ({ legendEvents, appletName }: LegendProps) => {
         </>
       )}
       <StyledBtnsRow>
-        <StyledBtn>
+        <StyledBtn onClick={() => setImportSchedulePopupVisible(true)}>
           <Svg width={18} height={18} id="export" />
           {t('import')}
         </StyledBtn>
@@ -158,6 +160,17 @@ export const Legend = ({ legendEvents, appletName }: LegendProps) => {
           secretUserId="012-435"
           nickName="John Doe"
           scheduleTableRows={scheduleExportTableData}
+        />
+      )}
+      {importSchedulePopupVisible && (
+        <ImportSchedulePopup
+          open={importSchedulePopupVisible}
+          isIndividual={isIndividual}
+          appletName={appletName}
+          // TODO: replace with individual respondent export data
+          secretUserId="012-435"
+          nickName="John Doe"
+          onClose={() => setImportSchedulePopupVisible(false)}
         />
       )}
       {clearScheduleEventsPopupVisible && (

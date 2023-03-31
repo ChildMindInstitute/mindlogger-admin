@@ -1,4 +1,5 @@
 import { authApiClient, authApiClientWithFullLang } from 'shared/api/api.client';
+import { AppletId } from 'shared/api';
 
 import {
   SwitchAccount,
@@ -6,14 +7,12 @@ import {
   TransferOwnershipType,
   SetAccount,
   RevokeAppletUser,
-  AppletId,
   AppletInvitationData,
   DuplicateApplet,
   FolderId,
   AppletNameArgs,
   AppletEncryption,
   ValidateAppletName,
-  UpdateRetainingSettings,
   UpdatePin,
   Folder,
   UpdateFolder,
@@ -38,9 +37,6 @@ export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: Ab
     signal,
   });
 };
-
-export const getAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.get(`/applets/${appletId}`, { signal });
 
 export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
   authApiClient.put(
@@ -152,11 +148,6 @@ export const validateAppletNameApi = ({ name }: ValidateAppletName, signal?: Abo
     params: { name },
     signal,
   });
-
-export const updateRetainingSettingsApi = (
-  { appletId, options }: UpdateRetainingSettings,
-  signal?: AbortSignal,
-) => authApiClient.post(`/applet/${appletId}/setRetention`, {}, { params: options, signal });
 
 export const getInvitationsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applet/${appletId}/invitations`, {

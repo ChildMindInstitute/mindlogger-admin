@@ -9,6 +9,7 @@ export type Actions = {
     duplicateAction: () => void;
     transferOwnership: () => void;
     shareAppletAction: () => void;
+    editAction: (item: FolderApplet) => void;
   };
   item: FolderApplet;
 };

@@ -9,17 +9,22 @@ export const Chip = ({
   color = 'primary',
   shape = ChipShape.Rectangular,
   onRemove,
+  canRemove = true,
+  onClick,
 }: ChipProps) => (
   <StyledChip
     shape={shape}
     color={color}
     deleteIcon={
-      <StyledClearedButton>
-        <Svg id="close" width={18} height={18} />
-      </StyledClearedButton>
+      canRemove ? (
+        <StyledClearedButton>
+          <Svg id="close" width={18} height={18} />
+        </StyledClearedButton>
+      ) : undefined
     }
     label={title}
     icon={icon || undefined}
     onDelete={onRemove}
+    onClick={onClick}
   />
 );

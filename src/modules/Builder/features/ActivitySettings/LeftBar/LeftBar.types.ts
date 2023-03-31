@@ -1,6 +1,6 @@
-import { ActivitySettingsOptions } from '../ActivitySettings.const';
+import { ActivitySettingsOptions } from '../ActivitySettings.types';
 
 export type LeftBarProps = {
-  setActiveSetting: (val: ActivitySettingsOptions) => void;
-  activeSetting: string;
+  setting: ActivitySettingsOptions | null;
+  onSettingClick: (val: ActivitySettingsOptions) => void;
 };
