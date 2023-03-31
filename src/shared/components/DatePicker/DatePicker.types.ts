@@ -18,6 +18,7 @@ export enum UiType {
 type DatePicker = {
   uiType?: UiType;
   inputSx?: SxProps;
+  label?: string;
 } & TextFieldProps;
 
 export type DatePickerProps<T extends FieldValues> = DatePicker & UseControllerProps<T>;

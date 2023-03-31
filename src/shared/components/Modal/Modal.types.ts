@@ -7,7 +7,7 @@ type BtnSubmit =
   | ((value?: unknown) => void)
   | (() => void);
 
-export type ActionsAlign = 'center' | 'space-around' | 'end';
+export type ActionsAlign = 'center' | 'space-around' | 'end' | 'space-between';
 
 export type SubmitBtnColor = OverridableStringUnion<
   'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
@@ -31,4 +31,9 @@ export type ModalProps = {
   onSecondBtnSubmit?: BtnSubmit;
   disabledSecondBtn?: boolean;
   sxProps?: SxProps;
+  secondBtnStyles?: SxProps;
+  hasThirdBtn?: boolean;
+  thirdBtnText?: string;
+  thirdBtnStyles?: SxProps;
+  onThirdBtnSubmit?: BtnSubmit;
 };
