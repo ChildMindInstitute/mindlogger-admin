@@ -3,7 +3,6 @@ import { AppletId } from 'shared/api';
 
 import {
   SwitchAccount,
-  AccountUserList,
   TransferOwnershipType,
   SetAccount,
   RevokeAppletUser,
