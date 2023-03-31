@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Actions, Pin, Svg, Search } from 'shared/components';
 import { users, folders } from 'redux/modules';
 import { useTimeAgo, useBreadcrumbs, useTable } from 'shared/hooks';
+import { Table } from 'modules/Dashboard/components';
 
 import {
   RespondentsTableHeader,
@@ -22,7 +23,6 @@ import {
   RespondentsRemoveAccessPopup,
   EditRespondentPopup,
 } from './Popups';
-import { Table } from '../../components';
 
 export const Respondents = () => {
   const { id } = useParams();
