@@ -1,4 +1,4 @@
-import { RetentionPeriods } from 'shared/state';
+import { RetentionPeriods } from 'shared/types';
 
 export const periods = [
   {

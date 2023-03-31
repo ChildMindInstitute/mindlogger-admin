@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { RetentionPeriods } from 'shared/state';
+import { RetentionPeriods } from 'shared/types';
 
 export const dataRetentionSchema = () => {
   const { t } = i18n;

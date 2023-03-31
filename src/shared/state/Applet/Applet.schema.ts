@@ -2,6 +2,7 @@ import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 
 import { BaseSchema } from 'shared/state/Base';
+import { RetentionPeriods } from 'shared/types';
 import { AppletId } from 'api';
 
 export type CreateAppletStateData = {
@@ -45,14 +46,6 @@ type Theme = {
   tertiaryColor: string;
   public: boolean;
 };
-
-export const enum RetentionPeriods {
-  Indefinitely = 'indefinitely',
-  Days = 'days',
-  Weeks = 'weeks',
-  Months = 'months',
-  Years = 'years',
-}
 
 export type SingleApplet = {
   id: string;

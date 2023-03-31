@@ -9,11 +9,10 @@ import {
   useBuilderSessionStorageFormChange,
   useBuilderSessionStorageFormValues,
 } from 'shared/hooks';
-import { RetentionPeriods } from 'shared/state';
+import { RetentionPeriods } from 'shared/types';
 
-import { periods } from './DataRetention.const';
 import { StyledAppletSettingsDescription, StyledHeadline } from '../AppletSettings.styles';
-import { defaultValues } from './DataRetention.const';
+import { periods, defaultValues } from './DataRetention.const';
 import { dataRetentionSchema } from './DataRetention.schema';
 import { StyledButton, StyledContainer, StyledInputWrapper } from './DataRetention.styles';
 import { DataRetentionFormValues } from './DataRetention.types';
