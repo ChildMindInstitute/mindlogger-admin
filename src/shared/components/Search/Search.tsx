@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 
 import { Svg } from 'shared/components/Svg';
 
-import { DEBOUNCE_VALUE } from 'shared/consts';
+import { SEARCH_DEBOUNCE_VALUE } from 'shared/consts';
 import { StyledTextField, StyledIcon } from './Search.styles';
 import { SearchProps } from './Search.types';
 
@@ -12,7 +12,7 @@ export const Search = ({ onSearch, ...props }: SearchProps) => (
     {...props}
     onChange={debounce(
       (event: ChangeEvent<HTMLInputElement>) => onSearch(event.target.value),
-      DEBOUNCE_VALUE,
+      SEARCH_DEBOUNCE_VALUE,
     )}
     startAdornment={
       <StyledIcon>
