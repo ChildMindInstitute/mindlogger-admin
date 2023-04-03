@@ -1,4 +1,4 @@
-export * from './activityItems';
+export * from './builderApplet';
 export * from './table';
 export * from './event';
 export * from './fileSystem';

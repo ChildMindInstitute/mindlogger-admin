@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 
 import { Update } from 'history';
 import { useCallbackPrompt, usePromptSetup } from 'shared/hooks';
+import { Activity } from 'shared/types';
 
 import { isActivityRoute, isAppletRoute } from './BuilderApplet.utils';
 
@@ -50,5 +53,23 @@ export const usePrompt = () => {
       confirmedNavigation,
       setConfirmedNavigation,
     }),
+  };
+};
+
+export const useCurrentActivity = () => {
+  const { activityId } = useParams();
+
+  const { getValues } = useFormContext();
+
+  const activities = getValues('activities');
+  const currentActivityIndex = activities?.findIndex(
+    ({ id, key }: Activity) => activityId === key || activityId === id,
+  );
+
+  if (!~currentActivityIndex) return {};
+
+  return {
+    activity: activities[currentActivityIndex],
+    name: `activities[${currentActivityIndex}]`,
   };
 };

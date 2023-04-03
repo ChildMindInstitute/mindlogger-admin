@@ -1,66 +1,41 @@
 import { useState } from 'react';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
-import { ActivityItemApi } from 'modules/Builder/api';
-import {
-  useBuilderSessionStorageFormValues,
-  useBuilderSessionStorageApplyChanges,
-} from 'shared/hooks';
+import { ActivityItem } from 'shared/types';
+import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { StyledContainer } from 'shared/styles';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
-import { items } from './ActivityItems.const';
 
 export const ActivityItems = () => {
-  const { getFormValues } = useBuilderSessionStorageFormValues<{ items: ActivityItemApi[] }>({
-    items,
-  });
-  const [currentItems, setCurrentItems] = useState<ActivityItemApi[]>(getFormValues().items);
   const { t } = useTranslation('app');
   const [activeItemId, setActiveItemId] = useState('');
 
-  const activeItem = currentItems.find((item) => item.id === activeItemId) || null;
+  const { name } = useCurrentActivity();
+  const { control, watch } = useFormContext();
 
-  const { applyChanges } = useBuilderSessionStorageApplyChanges();
+  const { append: appendItem, remove: removeItem } = useFieldArray({
+    control,
+    name: `${name}.items`,
+  });
 
-  const handleItemChange = (id: string) => (data: Omit<ActivityItemApi, 'id' | 'hidden'>) => {
-    const updatedItems = currentItems.map((item) =>
-      item.id !== id
-        ? item
-        : {
-            id: item.id,
-            hidden: item.hidden,
-            ...data,
-          },
-    );
-    setCurrentItems(updatedItems);
-    applyChanges({
-      items: updatedItems,
-    });
-  };
-  const onAddItem = () => {
-    const newItemId = uniqueId();
-    const updatedItems = currentItems.concat({
-      id: newItemId,
-      name: 'NewItem',
-    } as ActivityItemApi);
-    setActiveItemId(newItemId);
-    setCurrentItems(updatedItems);
-    applyChanges({
-      items: updatedItems,
-    });
+  const items = watch(`${name}.items`);
+  const activeItem = items?.find((item: ActivityItem) => item.id === activeItemId);
+  const activeItemIndex = items?.findIndex((item: ActivityItem) => item.id === activeItemId);
+
+  const handleRemoveItem = (id: string) => {
+    if (id === activeItem?.id) setActiveItemId('');
+
+    removeItem(activeItemIndex);
   };
 
-  const onRemoveItem = (id: string) => {
-    if (!id) return;
-
-    const updatedItems = currentItems.filter((item) => item.id !== id);
-    setCurrentItems(updatedItems);
-    setActiveItemId('');
+  const handleAddItem = () => {
+    appendItem(getNewActivityItem());
   };
 
   useBreadcrumbs([
@@ -73,15 +48,13 @@ export const ActivityItems = () => {
   return (
     <StyledContainer>
       <LeftBar
-        items={currentItems}
+        items={items}
         activeItemId={activeItemId}
         onSetActiveItem={setActiveItemId}
-        onAddItem={onAddItem}
-        onRemoveItem={onRemoveItem}
+        onAddItem={handleAddItem}
+        onRemoveItem={handleRemoveItem}
       />
-      {activeItemId && (
-        <ItemConfiguration item={activeItem} onItemChange={handleItemChange(activeItemId)} />
-      )}
+      {activeItemId && <ItemConfiguration item={activeItem} />}
     </StyledContainer>
   );
 };

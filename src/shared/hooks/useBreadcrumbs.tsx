@@ -9,13 +9,12 @@ import { page } from 'resources';
 import { getAppletData } from 'shared/utils/getAppletData';
 import {
   checkIfAppletActivityFlowUrlPassed,
-  checkIfAppletActivityUrlPassed,
   checkIfAppletUrlPassed,
   isNewApplet,
 } from 'shared/utils';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
-  const { id } = useParams();
+  const { id, activityId } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -69,7 +68,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (checkIfAppletActivityUrlPassed(location.pathname)) {
+    if (activityId) {
       newBreadcrumbs.push(
         {
           icon: <Svg id="checklist-outlined" width="18" height="18" />,

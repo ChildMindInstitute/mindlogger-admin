@@ -17,3 +17,31 @@ export enum ItemInputTypes {
   Message = 'message',
   AudioPlayer = 'audioPlayer',
 }
+
+export type ActivityItem = {
+  id: string;
+  name: string;
+  responseType: ItemInputTypes;
+  question: string;
+  isHidden: boolean;
+};
+
+export type Activity = {
+  id?: string;
+  key?: string;
+  name: string;
+  description: string;
+  img?: string;
+  count?: number;
+  items: ActivityItem[];
+};
+
+export type Applet = {
+  name: string;
+  description: string;
+  colorTheme: string;
+  aboutApplet: string;
+  appletImage: string;
+  appletWatermark: string;
+  activities: Activity[];
+};

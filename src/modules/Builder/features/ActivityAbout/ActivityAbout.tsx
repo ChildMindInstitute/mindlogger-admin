@@ -1,6 +1,5 @@
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
 
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
@@ -11,18 +10,16 @@ import {
   StyledTitleMedium,
   theme,
   variables,
+  StyledFlexColumn,
 } from 'shared/styles';
-import { useBreadcrumbs, useBuilderSessionStorageFormChange } from 'shared/hooks';
+import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
-import { useBuilderSessionStorageFormValues } from 'shared/hooks';
+import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 
 import { Uploads } from '../../components';
-import { StyledForm, StyledContainer, StyledSvg, StyledSettings } from './ActivityAbout.styles';
-import { defaultValues } from './ActivityAbout.const';
-import { ActivityAboutSchema } from './ActivityAbout.schema';
-import { FormValues } from './ActivityAbout.types';
+import { StyledContainer, StyledSvg } from './ActivityAbout.styles';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
@@ -34,14 +31,9 @@ export const ActivityAbout = () => {
     },
   ]);
 
-  const { getFormValues } = useBuilderSessionStorageFormValues<FormValues>(defaultValues);
-  const { control, setValue, watch, getValues } = useForm<FormValues>({
-    resolver: yupResolver(ActivityAboutSchema()),
-    defaultValues: getFormValues(),
-    mode: 'onChange',
-  });
+  const { control, setValue, watch } = useFormContext();
 
-  const { handleFormChange } = useBuilderSessionStorageFormChange<FormValues>(getValues);
+  const { name } = useCurrentActivity();
 
   const commonProps = {
     control,
@@ -61,8 +53,8 @@ export const ActivityAbout = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('activityImg', val)}
-          getValue={() => watch('activityImg')}
+          setValue={(val: string) => setValue(`${name}.image`, val)}
+          getValue={() => watch(`${name}.image`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
@@ -73,8 +65,8 @@ export const ActivityAbout = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('activityWatermark', val)}
-          getValue={() => watch('activityWatermark')}
+          setValue={(val: string) => setValue(`${name}.splashScreen`, val)}
+          getValue={() => watch(`${name}.splashScreen`)}
           description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
@@ -83,7 +75,7 @@ export const ActivityAbout = () => {
 
   const checkboxes = [
     {
-      name: 'showAllQuestionsAtOnce',
+      name: `${name}.showAllAtOnce`,
       label: (
         <StyledBodyLarge sx={{ position: 'relative' }}>
           {t('showAllQuestionsAtOnce')}
@@ -96,15 +88,15 @@ export const ActivityAbout = () => {
       ),
     },
     {
-      name: 'allowToSkipAllItems',
+      name: `${name}.isSkippable`,
       label: <StyledBodyLarge>{t('allowToSkipAllItems')}</StyledBodyLarge>,
     },
     {
-      name: 'disableAbilityToChangeResponse',
+      name: `${name}.responseIsEditable`,
       label: <StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>,
     },
     {
-      name: 'onlyAdminPanelActivity',
+      name: `${name}.isReviewable`,
       label: (
         <StyledBodyLarge>
           {t('onlyAdminPanelActivity')}
@@ -123,20 +115,20 @@ export const ActivityAbout = () => {
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutActivity')}
       </StyledHeadlineLarge>
-      <StyledForm noValidate onChange={handleFormChange}>
+      <StyledFlexColumn>
         <Box sx={{ display: 'flex' }}>
           <StyledContainer>
             <Box sx={{ marginBottom: theme.spacing(4.4) }}>
               <InputController
                 {...commonProps}
-                name="activityName"
+                name={`${name}.name`}
                 maxLength={MAX_NAME_LENGTH}
                 label={t('activityName')}
               />
             </Box>
             <InputController
               {...commonProps}
-              name="activityDescription"
+              name={`${name}.description`}
               maxLength={MAX_DESCRIPTION_LENGTH_LONG}
               label={t('activityDescription')}
               multiline
@@ -148,17 +140,12 @@ export const ActivityAbout = () => {
         <StyledTitleMedium color={variables.palette.on_surface_variant} sx={{ marginBottom: 1.6 }}>
           {t('itemLevelSettings')}
         </StyledTitleMedium>
-        <StyledSettings>
+        <StyledFlexColumn>
           {checkboxes.map(({ name, label }) => (
-            <CheckboxController
-              key={name}
-              control={control}
-              name={name as keyof FormValues}
-              label={label}
-            />
+            <CheckboxController key={name} control={control} name={name} label={label} />
           ))}
-        </StyledSettings>
-      </StyledForm>
+        </StyledFlexColumn>
+      </StyledFlexColumn>
     </StyledBuilderWrapper>
   );
 };

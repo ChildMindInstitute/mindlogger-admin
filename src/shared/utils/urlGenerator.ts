@@ -3,7 +3,7 @@ export const enum Path {
   Dashboard = 'dashboard',
   Builder = 'builder',
   NewApplet = 'new-applet',
-  NewActivity = 'new-activity',
+  Activity = ':activityId',
   NewActivityFlow = 'new-activity-flow',
   About = 'about',
   Activities = 'activities',
@@ -18,8 +18,8 @@ const uuidRegexp = '([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}
 export const APPLET_PAGE_REGEXP_STRING = `\\/${Path.Builder}\\/(${uuidRegexp}|(${Path.NewApplet}))`;
 export const ACTIVITIES_PAGE_REGEXP_STRING = `${APPLET_PAGE_REGEXP_STRING}\\/${Path.Activities}`;
 export const ACTIVITY_FLOWS_PAGE_REGEXP_STRING = `${APPLET_PAGE_REGEXP_STRING}\\/${Path.ActivityFlow}`;
-export const ACTIVITY_PAGE_REGEXP_STRING = `${ACTIVITIES_PAGE_REGEXP_STRING}\\/(${uuidRegexp}|(${Path.NewActivity}))`;
-export const ACTIVITY_FLOW_PAGE_REGEXP_STRING = `${ACTIVITY_FLOWS_PAGE_REGEXP_STRING}\\/(${uuidRegexp}|(${Path.NewActivity}))`;
+export const ACTIVITY_PAGE_REGEXP_STRING = `${ACTIVITIES_PAGE_REGEXP_STRING}\\/(${uuidRegexp}|(${Path.Activity}))`;
+export const ACTIVITY_FLOW_PAGE_REGEXP_STRING = `${ACTIVITY_FLOWS_PAGE_REGEXP_STRING}\\/(${uuidRegexp}|(${Path.Activity}))`;
 
 export const getAppletPageRegexp = (path?: string) =>
   path ? `${APPLET_PAGE_REGEXP_STRING}\\/${path}` : APPLET_PAGE_REGEXP_STRING;
@@ -32,9 +32,6 @@ export const getBuilderAppletActivityUrl = (appletId: string, activityId: string
 
 export const checkIfAppletUrlPassed = (url: string) =>
   new RegExp(`^${APPLET_PAGE_REGEXP_STRING}`).test(url);
-
-export const checkIfAppletActivityUrlPassed = (url: string) =>
-  new RegExp(`^${ACTIVITY_PAGE_REGEXP_STRING}`).test(url);
 
 export const checkIfAppletActivityFlowUrlPassed = (url: string) =>
   new RegExp(`^${ACTIVITY_FLOW_PAGE_REGEXP_STRING}`).test(url);

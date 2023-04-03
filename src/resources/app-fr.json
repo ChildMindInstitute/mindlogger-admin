@@ -589,5 +589,10 @@
   "addScore": "Ajouter une note",
   "addSection": "Ajouter une rubrique",
   "noSelectedItemsYet": "Aucun élément sélectionné pour le moment.",
-  "addSubscales": "Ajouter une sous-échelle"
+  "addSubscales": "Ajouter une sous-échelle",
+  "newActivityName": "Nouvelle activité",
+  "newItemName": "Nouvel article",
+  "validationMessages": {
+    "isRequired": "{{- field }} est requis"
+  }
 }

@@ -1,7 +1,9 @@
-import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router-dom';
-import { useAppDispatch } from 'redux/store';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch } from 'redux/store';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { SaveAndPublish } from 'modules/Builder/features';
 import { SaveChangesPopup } from 'modules/Builder/components';
@@ -10,19 +12,28 @@ import { useBreadcrumbs } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
 import { isNewApplet } from 'shared/utils';
 import { applet } from 'shared/state';
+import { Applet } from 'shared/types';
 
-import { newAppletTabs, pathsWithInnerTabs } from './BuilderApplet.const';
+import { newAppletTabs } from './BuilderApplet.const';
 import { usePrompt } from './BuilderApplet.hooks';
+import { AppletSchema } from './BuilderApplet.schema';
+import { getNewApplet } from './BuilderApplet.utils';
 
 export const BuilderApplet = () => {
   const { t } = useTranslation();
-  const location = useLocation();
-  const hiddenHeader = pathsWithInnerTabs.some((path) => location.pathname.includes(path));
+  const params = useParams();
+  const hiddenHeader = !!params.activityId;
   const dispatch = useAppDispatch();
   const { cancelNavigation, confirmNavigation, promptVisible } = usePrompt();
   const { appletId } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletLabel = (isNewApplet(appletId) ? t('newApplet') : appletData?.displayName) ?? '';
+
+  const methods = useForm<Applet>({
+    defaultValues: getNewApplet(),
+    resolver: yupResolver(AppletSchema()),
+    mode: 'onChange',
+  });
 
   useBreadcrumbs([
     {
@@ -40,7 +51,7 @@ export const BuilderApplet = () => {
   }, [appletId]);
 
   return (
-    <>
+    <FormProvider {...methods}>
       <StyledBody sx={{ position: 'relative' }}>
         <LinkedTabs hiddenHeader={hiddenHeader} tabs={newAppletTabs} />
         <SaveAndPublish />
@@ -50,6 +61,6 @@ export const BuilderApplet = () => {
         handleClose={cancelNavigation}
         handleSubmit={confirmNavigation}
       />
-    </>
+    </FormProvider>
   );
 };

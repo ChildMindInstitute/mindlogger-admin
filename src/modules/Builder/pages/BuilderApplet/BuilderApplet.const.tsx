@@ -1,13 +1,10 @@
 import { Svg } from 'shared/components';
-import { page } from 'resources';
 import {
   ACTIVITY_PAGE_REGEXP_STRING,
   getAppletActivityPageRegexp,
   getAppletPageRegexp,
   Path,
 } from 'shared/utils';
-
-export const pathsWithInnerTabs = [page.newAppletNewActivity, page.newAppletNewActivityFlow]; // TODO add acitivityId + activityFlowId if exist
 
 export const newAppletTabs = [
   {
