@@ -20,7 +20,7 @@ import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { useBuilderSessionStorageFormValues, useCheckIfNewApplet } from 'shared/hooks';
-import { applet } from 'shared/state';
+import { applet, SingleApplet } from 'shared/state';
 
 import { StyledContainer, StyledForm, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { AboutAppletSchema } from './AboutApplet.schema';
@@ -40,15 +40,27 @@ export const AboutApplet = () => {
   } = useTranslation();
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();
+  const {
+    displayName = '',
+    description,
+    themeId = '',
+    about,
+    image = '',
+    watermark = '',
+  } = appletData ??
+  ({
+    description: {},
+    about: {},
+  } as SingleApplet);
   const defaults = isNewApplet
     ? defaultValues
     : ({
-        displayName: appletData?.displayName ?? '',
-        description: appletData?.description[language] ?? '',
-        themeId: appletData?.themeId ?? '',
-        about: appletData?.about[language] ?? '',
-        image: appletData?.image ?? '',
-        watermark: appletData?.watermark ?? '',
+        displayName,
+        description: description[language] ?? '',
+        themeId,
+        about: about[language] ?? '',
+        image,
+        watermark,
       } as FormValues);
 
   useBreadcrumbs([

@@ -39,12 +39,12 @@ export const SaveAndPublish = () => {
     if (!result) return;
 
     clearStorage();
-    // eslint-disable-next-line
-    // @ts-ignore
-    const createdAppletId = result?.payload?.data?.result?.id;
-    if (!createdAppletId || !isNewApplet) return;
+    if (!isNewApplet) return;
 
-    navigate(getBuilderAppletUrl(createdAppletId));
+    if (createApplet.fulfilled.match(result)) {
+      const createdAppletId = result.payload.data.result?.id;
+      createdAppletId && navigate(getBuilderAppletUrl(createdAppletId));
+    }
   };
 
   return (
