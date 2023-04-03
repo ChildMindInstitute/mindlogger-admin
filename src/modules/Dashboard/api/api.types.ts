@@ -9,7 +9,7 @@ export type GetAppletsParams = {
     page?: number;
     limit?: number;
     ordering?: string;
-    roles?: string;
+    role?: string;
   };
 };
 
@@ -156,8 +156,8 @@ export type AppletEncryption = AppletId & { data: FormData };
 export type ValidateAppletName = { name: string };
 
 export type UpdatePin = {
-  profileId: string;
-  newState: boolean;
+  accessId: string;
+  ownerId?: string;
 };
 
 export type Folder = {

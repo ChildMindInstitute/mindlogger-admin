@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
 import { getWorkspacesApi } from 'shared/api';
-import { workspaces as currentWorkspace, auth, Workspace } from 'redux/modules';
+import { workspaces as currentWorkspace, Workspace, auth } from 'redux/modules';
 import { useAsync } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 
@@ -16,23 +16,15 @@ import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styl
 export const LeftBar = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+
   const userData = auth.useData();
+  const { id } = userData?.user || {};
   const currentWorkspaceData = currentWorkspace.useData();
   const [visibleDrawer, setVisibleDrawer] = useState(false);
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
 
   const { execute } = useAsync(getWorkspacesApi, (result) => {
-    const { firstName, lastName, id } = userData?.user || {};
-
-    id &&
-      setWorkspaces([
-        {
-          owned: true,
-          ownerId: id,
-          workspaceName: `${firstName} ${lastName}`,
-        },
-        ...(result?.data?.result || []),
-      ]);
+    setWorkspaces(result?.data?.result || []);
   });
 
   useEffect(() => {
@@ -40,7 +32,10 @@ export const LeftBar = () => {
   }, []);
 
   useEffect(() => {
-    workspaces.length && dispatch(currentWorkspace.actions.setCurrentWorkspace(workspaces[0]));
+    if (workspaces.length) {
+      const ownerWorkspace = workspaces.find((item) => item.ownerId === id);
+      ownerWorkspace && dispatch(currentWorkspace.actions.setCurrentWorkspace(ownerWorkspace));
+    }
   }, [workspaces]);
 
   return (

@@ -1,7 +1,6 @@
 export type Workspace = {
   ownerId: string;
   workspaceName: string;
-  owned: boolean;
   image?: string;
 };
 

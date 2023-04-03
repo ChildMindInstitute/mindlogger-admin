@@ -147,15 +147,11 @@ export const getInvitationsApi = ({ appletId }: AppletId, signal?: AbortSignal) 
     signal,
   });
 
-export const updatePinApi = ({ profileId, newState }: UpdatePin, signal?: AbortSignal) =>
-  authApiClient.put(
-    '/account/manage/pin',
-    {},
+export const updatePinApi = ({ ownerId, accessId }: UpdatePin, signal?: AbortSignal) =>
+  authApiClient.post(
+    `/workspaces/${ownerId}/users/pin`,
+    { accessId },
     {
-      params: {
-        profileId,
-        newState,
-      },
       signal,
     },
   );

@@ -2,9 +2,9 @@ import { Dispatch, SetStateAction } from 'react';
 import { Control } from 'react-hook-form';
 import { AnyObjectSchema, SchemaOf } from 'yup';
 
-import { Workspace } from 'shared/features/SwitchWorkspace/SwitchWorkspace.types';
 import { HeadCell } from 'shared/types/table';
 import { Row } from 'shared/components';
+import { Workspace } from 'shared/state';
 
 export type AddToBuilderPopupProps = {
   addToBuilderPopupVisible: boolean;

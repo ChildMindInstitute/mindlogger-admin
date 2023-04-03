@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Svg, Actions, Search, Table } from 'shared/components';
+import { Svg, Actions, Search } from 'shared/components';
 import { users } from 'redux/modules';
-import { useBreadcrumbs } from 'shared/hooks';
+import { useBreadcrumbs, useTable } from 'shared/hooks';
+import { Table } from 'modules/Dashboard/components';
+import { Roles } from 'shared/consts';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
@@ -15,7 +17,14 @@ export const Managers = () => {
   const { id } = useParams();
   const { t } = useTranslation('app');
   const managersData = users.useManagersData();
-  const [searchValue, setSearchValue] = useState('');
+
+  const { getWorkspaceManagers } = users.thunk;
+
+  const { searchValue, setSearchValue, ...tableProps } = useTable(
+    getWorkspaceManagers,
+    Roles.Manager,
+  );
+
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<User | null>(null);
@@ -83,8 +92,9 @@ export const Managers = () => {
       <Table
         columns={getHeadCells()}
         rows={rows}
-        orderBy="updated"
         emptyComponent={renderEmptyComponent()}
+        count={managersData?.count || 0}
+        {...tableProps}
       />
       {removeAccessPopupVisible && selectedManager && (
         <ManagersRemoveAccessPopup

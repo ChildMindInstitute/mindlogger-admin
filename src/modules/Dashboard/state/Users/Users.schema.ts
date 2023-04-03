@@ -10,6 +10,7 @@ export type Respondent = {
   roles: string[];
   secretId: string;
   lastSeen: string;
+  accessId: string;
 };
 
 export type Manager = {

@@ -7,9 +7,11 @@ import { workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/components';
 import { GetAppletsParams } from 'api';
+import { Roles } from 'shared/consts';
 
 export const useTable = (
   thunk: AsyncThunk<AxiosResponse, GetAppletsParams, Record<string, never>>,
+  role: string,
 ) => {
   const dispatch = useAppDispatch();
 
@@ -43,6 +45,7 @@ export const useTable = (
             search: searchValue,
             page,
             ordering,
+            role,
           },
         }),
       );
