@@ -68,9 +68,9 @@ export const usePrompt = () => {
 export const useCurrentActivity = () => {
   const { activityId } = useParams();
 
-  const { getValues } = useFormContext();
+  const { watch } = useFormContext();
 
-  const activities = getValues('activities');
+  const activities = watch('activities');
   const currentActivityIndex = activities?.findIndex(
     ({ id, key }: ActivityFormValues) => activityId === key || activityId === id,
   );
