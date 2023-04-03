@@ -31,12 +31,12 @@ export const getNewActivity = () => ({
 });
 
 export const getNewApplet = () => ({
-  name: '',
+  displayName: '',
   description: '',
-  colorTheme: '',
-  aboutApplet: '',
-  appletImage: '',
-  appletWatermark: '',
+  themeId: 'default',
+  about: '',
+  image: '',
+  watermark: '',
   activities: [],
 });
 

@@ -19,7 +19,10 @@ import { AppletSchema } from './BuilderApplet.schema';
 import { getNewApplet } from './BuilderApplet.utils';
 
 export const BuilderApplet = () => {
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
   const params = useParams();
   const hiddenHeader = !!params.activityId;
   const dispatch = useAppDispatch();
@@ -30,7 +33,13 @@ export const BuilderApplet = () => {
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
   const methods = useForm<Applet>({
-    defaultValues: getNewApplet(),
+    defaultValues: appletData
+      ? {
+          ...appletData,
+          description: appletData.description?.[language] ?? '',
+          about: appletData.about?.[language] ?? '',
+        }
+      : getNewApplet(),
     resolver: yupResolver(AppletSchema()),
     mode: 'onChange',
   });

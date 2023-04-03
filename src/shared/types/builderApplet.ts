@@ -37,11 +37,11 @@ export type Activity = {
 };
 
 export type Applet = {
-  name: string;
+  displayName: string;
   description: string;
-  colorTheme: string;
-  aboutApplet: string;
-  appletImage: string;
-  appletWatermark: string;
+  themeId: string;
+  about: string;
+  image: string;
+  watermark: string;
   activities: Activity[];
 };
