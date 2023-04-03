@@ -3,9 +3,9 @@ import { useFormContext } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import { Update } from 'history';
-import { Activity } from 'shared/types';
 import { BuilderLayers, useCallbackPrompt, usePromptSetup } from 'shared/hooks';
 import { builderSessionStorage } from 'shared/utils';
+import { ActivityFormValues } from './BuilderApplet.types';
 
 import { isActivityRoute, isAppletRoute } from './BuilderApplet.utils';
 
@@ -72,7 +72,7 @@ export const useCurrentActivity = () => {
 
   const activities = getValues('activities');
   const currentActivityIndex = activities?.findIndex(
-    ({ id, key }: Activity) => activityId === key || activityId === id,
+    ({ id, key }: ActivityFormValues) => activityId === key || activityId === id,
   );
 
   if (!~currentActivityIndex) return {};

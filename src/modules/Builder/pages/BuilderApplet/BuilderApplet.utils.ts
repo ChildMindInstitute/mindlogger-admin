@@ -2,6 +2,7 @@ import uniqueId from 'lodash.uniqueid';
 
 import i18n from 'i18n';
 import { ACTIVITIES_PAGE_REGEXP_STRING } from 'shared/utils';
+import { SingleApplet } from 'shared/state';
 
 import { ACTIVITY_LAYER_ROUTES, APPLET_LAYER_ROUTES } from './BuilderApplet.const';
 
@@ -48,3 +49,31 @@ export const getNewActivityItem = () => ({
   settings: [],
   isHidden: false,
 });
+
+export const getDefaultValues = ({
+  appletData,
+  language,
+}: {
+  appletData?: SingleApplet;
+  language: string;
+}) => {
+  if (!appletData) return getNewApplet();
+
+  return {
+    ...appletData,
+    description: appletData.description?.[language] ?? '',
+    about: appletData.about?.[language] ?? '',
+    activities: appletData.activities
+      ? appletData.activities.map((activity) => ({
+          ...activity,
+          items: activity.items
+            ? activity.items.map((item) => ({
+                ...item,
+                id: `${item.id}`,
+                question: item.question?.[language] ?? '',
+              }))
+            : [],
+        }))
+      : [],
+  };
+};

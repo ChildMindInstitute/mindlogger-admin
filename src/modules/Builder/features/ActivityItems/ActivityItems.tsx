@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
-import { ActivityItem } from 'shared/types';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
 import { StyledContainer } from 'shared/styles';
 
 import { ItemConfiguration } from './ItemConfiguration';
@@ -25,8 +25,8 @@ export const ActivityItems = () => {
   });
 
   const items = watch(`${name}.items`);
-  const activeItem = items?.find((item: ActivityItem) => item.id === activeItemId);
-  const activeItemIndex = items?.findIndex((item: ActivityItem) => item.id === activeItemId);
+  const activeItem = items?.find((item: ItemFormValues) => item.id === activeItemId);
+  const activeItemIndex = items?.findIndex((item: ItemFormValues) => item.id === activeItemId);
 
   const handleRemoveItem = (id: string) => {
     if (id === activeItem?.id) setActiveItemId('');

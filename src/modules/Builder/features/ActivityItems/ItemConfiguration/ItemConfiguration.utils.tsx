@@ -34,6 +34,8 @@ export const getInputTypeTooltip = (): Record<ItemInputTypes, string> => ({
   [ItemInputTypes.Audio]: t('audioHint'),
   [ItemInputTypes.Message]: t('messageHint'),
   [ItemInputTypes.AudioPlayer]: t('audioPlayerHint'),
+  [ItemInputTypes.Flanker]: '',
+  [ItemInputTypes.AbTest]: '',
 });
 
 export const getEmptySliderOption = (isMultiple: boolean): SliderOption => ({

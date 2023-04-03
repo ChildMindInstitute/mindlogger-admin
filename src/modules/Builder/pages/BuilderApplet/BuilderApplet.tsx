@@ -11,12 +11,12 @@ import { LinkedTabs, Svg } from 'shared/components';
 import { useBreadcrumbs, useCheckIfNewApplet } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
-import { Applet } from 'shared/types';
 
 import { newAppletTabs } from './BuilderApplet.const';
 import { usePrompt } from './BuilderApplet.hooks';
 import { AppletSchema } from './BuilderApplet.schema';
-import { getNewApplet } from './BuilderApplet.utils';
+import { getDefaultValues } from './BuilderApplet.utils';
+import { AppletFormValues } from './BuilderApplet.types';
 
 export const BuilderApplet = () => {
   const {
@@ -32,14 +32,8 @@ export const BuilderApplet = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
-  const methods = useForm<Applet>({
-    defaultValues: appletData
-      ? {
-          ...appletData,
-          description: appletData.description?.[language] ?? '',
-          about: appletData.about?.[language] ?? '',
-        }
-      : getNewApplet(),
+  const methods = useForm<AppletFormValues>({
+    defaultValues: getDefaultValues({ appletData, language }),
     resolver: yupResolver(AppletSchema()),
     mode: 'onChange',
   });

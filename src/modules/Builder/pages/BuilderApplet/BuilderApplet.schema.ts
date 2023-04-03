@@ -19,7 +19,6 @@ export const ActivitySchema = () =>
   yup
     .object({
       name: yup.string().required(getIsRequiredValidateMessage('activityName')),
-      key: yup.string().required(),
       description: yup.string(),
       image: yup.string(),
       splashScreen: yup.string(),
@@ -34,11 +33,11 @@ export const ActivitySchema = () =>
 
 export const AppletSchema = () =>
   yup.object({
-    name: yup.string().required(getIsRequiredValidateMessage('appletName')),
+    displayName: yup.string().required(getIsRequiredValidateMessage('appletName')),
     description: yup.string(),
-    colorTheme: yup.string(),
-    aboutApplet: yup.string(),
-    appletImage: yup.string(),
-    appletWatermark: yup.string(),
+    themeId: yup.string(),
+    about: yup.string(),
+    image: yup.string(),
+    watermark: yup.string(),
     activities: yup.array().of(ActivitySchema()).required(),
   });

@@ -62,6 +62,7 @@ export type Item = {
 
 export type Activity = {
   id: string;
+  key?: string;
   name: string;
   description: string;
   ordering: number;

@@ -5,8 +5,8 @@ import { Svg } from 'shared/components';
 import { StyledTitleMedium, StyledBuilderWrapper } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { useBreadcrumbs } from 'shared/hooks';
-import { Activity } from 'shared/types';
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
 
 import { Header, Item } from '../../components';
 import { getActions } from './Activities.const';
@@ -47,7 +47,7 @@ export const Activities = () => {
         ]}
       />
       {activities?.length ? (
-        activities.map((item: Activity) => (
+        activities.map((item: ActivityFormValues) => (
           <Item
             {...item}
             key={`activity-${item.key ?? item.id}`}

@@ -10,7 +10,7 @@ import ActivitySettings from 'modules/Builder/features/ActivitySettings';
 import {
   newAppletNewActivityFlowRoutes,
   newAppletRoutes,
-  newAppletNewActivityRoutes,
+  newAppletActivityRoutes,
 } from './routes.const';
 
 const BuilderApplet = lazy(() => import('../pages/BuilderApplet'));
@@ -43,7 +43,7 @@ export const builderRoutes = () => (
       <Route path={Path.Activities}>
         <Route element={<BuilderActivity />} path=":activityId">
           <Route index element={<Navigate to={Path.About} replace />} />
-          {newAppletNewActivityRoutes.map(({ path, Component }) => (
+          {newAppletActivityRoutes.map(({ path, Component }) => (
             <Route
               key={path}
               path={path}

@@ -1,7 +1,7 @@
-import { ActivityItem } from 'shared/types';
+import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
 
 export type LeftBarProps = {
-  items: ActivityItem[];
+  items: ItemFormValues[];
   activeItemId: string;
   onSetActiveItem: (id: string) => void;
   onAddItem: () => void;

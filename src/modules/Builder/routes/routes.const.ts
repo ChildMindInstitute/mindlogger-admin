@@ -16,7 +16,7 @@ export const newAppletRoutes = [
   { path: Path.ActivityFlow, Component: ActivityFlow },
 ];
 
-export const newAppletNewActivityRoutes = [
+export const newAppletActivityRoutes = [
   { path: Path.About, Component: ActivityAbout },
   { path: Path.Items, Component: ActivityItems },
   { path: Path.ItemsFlow },

@@ -1,15 +1,16 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { StyledDirectoryUpButton, StyledBody } from 'shared/styles/styledComponents';
 import { LinkedTabs, Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 
-import { newActivityTabs } from './BuilderActivity.const';
+import { getActivityTabs } from './BuilderActivity.utils';
 
 export const BuilderActivity = () => {
   const { t } = useTranslation();
+  const { activityId } = useParams();
   const navigate = useNavigate();
   useBreadcrumbs();
 
@@ -22,7 +23,7 @@ export const BuilderActivity = () => {
       >
         {t('activities')}
       </StyledDirectoryUpButton>
-      <LinkedTabs tabs={newActivityTabs} />
+      {activityId && <LinkedTabs tabs={getActivityTabs(activityId)} />}
     </StyledBody>
   );
 };
