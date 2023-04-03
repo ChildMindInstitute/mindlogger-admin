@@ -1,31 +1,32 @@
 export const appletPasswordMocked = '12345678';
 
+/* eslint-disable camelcase */
 export const activityItemsMocked = [
   {
-    headerImage: 'string',
+    name: 'textField',
     question: {
-      en: 'english',
-      fr: 'french',
+      en: 'string',
+      fr: 'string',
       additionalProp3: 'string',
     },
     responseType: 'text',
-    answers: ['string'],
+    responseValues: null,
     config: {
-      maxResponseLength: -1,
-      correctAnswerRequired: false,
-      correctAnswer: '',
-      numericalResponseRequired: false,
-      responseDataIdentifier: '',
-      responseRequired: false,
+      remove_back_button: true,
+      skippable_item: true,
+      max_response_length: 300,
+      correct_answer_required: true,
+      correct_answer: 'string',
+      numerical_response_required: true,
+      response_data_identifier: true,
+      response_required: true,
     },
-    skippableItem: false,
-    removeAvailabilityToGoBack: false,
   },
 ];
 
 export const appletActivitiesMocked = [
   {
-    key: '3fa85f64-5717-4562-b3fc-2c963f66afa6', // TODO: how the `key` is generated?
+    key: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
     name: 'Test activity name 1',
     description: {
       en: 'english',
@@ -55,7 +56,7 @@ export const appletActivityFlowsMocked = [
     hideBadge: false,
     items: [
       {
-        activityKey: '3fa85f64-5717-4562-b3fc-2c963f66afa6', // TODO: how the `key` is generated?
+        activityKey: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       },
     ],
     isHidden: false,

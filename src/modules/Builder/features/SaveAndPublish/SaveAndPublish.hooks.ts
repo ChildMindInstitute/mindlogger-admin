@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { BuilderLayers, useCheckIfNewApplet } from 'shared/hooks';
-import { builderSessionStorage, Path } from 'shared/utils';
+import { APPLET_PAGE_REGEXP_STRING, builderSessionStorage, Path } from 'shared/utils';
 import { applet } from 'shared/state';
 
 import {
@@ -21,15 +21,28 @@ export const useAppletInfoFromStorage = () => {
   return layerStorage[`/builder/${appletPathKey}/about`];
 };
 
+export const getAppletInfoFromStorage = () => {
+  const pathname = window.location.pathname;
+  const match = pathname.match(APPLET_PAGE_REGEXP_STRING);
+  if (!match) return {};
+
+  const layer = BuilderLayers.Applet;
+  const layerStorage = layer ? builderSessionStorage.getItem(layer) : {};
+  const appletPathKey = match[1] ?? Path.NewApplet;
+
+  return layerStorage[`/builder/${appletPathKey}/about`];
+};
+
 export const useAppletData = () => {
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
   const {
     i18n: { language },
   } = useTranslation('app');
-  const appletInfo = useAppletInfoFromStorage();
 
   return () => {
+    const appletInfo = getAppletInfoFromStorage();
+
     if (isNewApplet) {
       return {
         ...appletDataMocked,
