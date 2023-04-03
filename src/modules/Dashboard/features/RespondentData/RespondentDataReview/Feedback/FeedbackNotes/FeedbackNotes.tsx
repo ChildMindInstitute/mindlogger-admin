@@ -12,6 +12,7 @@ import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { FeedbackNote } from './FeedbackNote/FeedbackNote';
 import { FeedbackNote as FeedbackNoteType } from './FeedbackNotes.types';
 import { mockedNotes, mockUpdate } from './mock';
+import { NOTE_ROWS_COUNT } from './FeedbackNotes.const';
 
 export const FeedbackNotes = () => {
   const { t } = useTranslation();
@@ -60,7 +61,7 @@ export const FeedbackNotes = () => {
           label={t('addNewNote')}
           placeholder={t('addNotePlaceholder')}
           multiline
-          rows={2}
+          rows={NOTE_ROWS_COUNT}
         />
         <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', m: theme.spacing(0.8, 0, 2.4) }}>
           <Button variant="contained" onClick={addNewNote}>

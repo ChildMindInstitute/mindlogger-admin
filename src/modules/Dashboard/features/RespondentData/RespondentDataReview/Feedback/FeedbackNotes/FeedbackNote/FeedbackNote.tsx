@@ -25,6 +25,7 @@ import {
   StyledNoteHeader,
 } from './FeedbackNote.styles';
 import { FeedbackNoteProps } from './FeedbackNote.types';
+import { NOTE_ROWS_COUNT } from '../FeedbackNotes.const';
 
 export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
   const { t } = useTranslation();
@@ -50,6 +51,11 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
     setIsEditMode(false);
   };
 
+  const commonSvgProps = {
+    width: '15',
+    height: '15',
+  };
+
   return (
     <>
       {isEditMode ? (
@@ -60,7 +66,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
             name="noteText"
             control={control}
             multiline
-            rows={3}
+            rows={NOTE_ROWS_COUNT}
           />
           <StyledFlexTopCenter sx={{ justifyContent: 'end', mt: 0.8 }}>
             <Button onClick={() => setIsEditMode(false)}>{t('cancel')}</Button>
@@ -84,10 +90,10 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
             {isVisibleActions && (
               <StyledActions>
                 <StyledButton onClick={() => setIsEditMode(true)}>
-                  <Svg width="15" height="15" id="edit" />
+                  <Svg id="edit" {...commonSvgProps} />
                 </StyledButton>
                 <StyledButton onClick={() => onDelete(note)}>
-                  <Svg width="15" height="15" id="trash" />
+                  <Svg id="trash" {...commonSvgProps} />
                 </StyledButton>
               </StyledActions>
             )}
