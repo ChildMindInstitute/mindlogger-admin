@@ -53,8 +53,8 @@ export const AboutApplet = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('appletImage', val)}
-          getValue={() => watch('appletImage')}
+          setValue={(val: string) => setValue('image', val)}
+          getValue={() => watch('image')}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
@@ -65,8 +65,8 @@ export const AboutApplet = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('appletWatermark', val)}
-          getValue={() => watch('appletWatermark')}
+          setValue={(val: string) => setValue('watermark', val)}
+          getValue={() => watch('watermark')}
           description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
@@ -84,7 +84,7 @@ export const AboutApplet = () => {
             <Box sx={{ mb: theme.spacing(4.4) }}>
               <InputController
                 {...commonProps}
-                name="name"
+                name="displayName"
                 maxLength={MAX_NAME_LENGTH}
                 label={t('appletName')}
               />
@@ -102,7 +102,7 @@ export const AboutApplet = () => {
             <StyledFlexTopCenter sx={{ position: 'relative' }}>
               <SelectController
                 {...commonProps}
-                name="colorTheme"
+                name="themeId"
                 label={t('appletColorTheme')}
                 options={colorThemeOptions}
                 sx={{ margin: theme.spacing(0, 0, 3.6, 0) }}
@@ -119,7 +119,7 @@ export const AboutApplet = () => {
             </span>
           </Tooltip>
         </StyledTitle>
-        <EditorController control={control} name="aboutApplet" />
+        <EditorController control={control} name="about" />
       </StyledFlexColumn>
     </StyledBuilderWrapper>
   );

@@ -7,11 +7,8 @@ import { auth, folders, Breadcrumb, breadcrumbs, User, applet } from 'redux/modu
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getAppletData } from 'shared/utils/getAppletData';
-import {
-  checkIfAppletActivityFlowUrlPassed,
-  checkIfAppletUrlPassed,
-  isNewApplet,
-} from 'shared/utils';
+import { checkIfAppletActivityFlowUrlPassed, checkIfAppletUrlPassed } from 'shared/utils';
+import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { id, activityId } = useParams();
@@ -22,8 +19,8 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const appletsFoldersData = folders.useFlattenFoldersApplets();
   const { firstName, lastName } = (authData?.user as User) || {};
   const { result: appletData } = applet.useAppletData() ?? {};
-  const { appletId } = useParams();
-  const appletLabel = (isNewApplet(appletId) ? t('newApplet') : appletData?.displayName) ?? '';
+  const isNewApplet = useCheckIfNewApplet();
+  const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
   const [crumbs, setCrumbs] = useState<Breadcrumb[]>([]);
 

@@ -8,9 +8,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { SaveAndPublish } from 'modules/Builder/features';
 import { SaveChangesPopup } from 'modules/Builder/components';
 import { LinkedTabs, Svg } from 'shared/components';
-import { useBreadcrumbs } from 'shared/hooks';
+import { useBreadcrumbs, useCheckIfNewApplet } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
-import { isNewApplet } from 'shared/utils';
 import { applet } from 'shared/state';
 import { Applet } from 'shared/types';
 
@@ -26,8 +25,9 @@ export const BuilderApplet = () => {
   const dispatch = useAppDispatch();
   const { cancelNavigation, confirmNavigation, promptVisible } = usePrompt();
   const { appletId } = useParams();
+  const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
-  const appletLabel = (isNewApplet(appletId) ? t('newApplet') : appletData?.displayName) ?? '';
+  const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
   const methods = useForm<Applet>({
     defaultValues: getNewApplet(),
@@ -44,7 +44,7 @@ export const BuilderApplet = () => {
   ]);
 
   useEffect(() => {
-    if (!appletId || isNewApplet(appletId)) return;
+    if (!appletId || isNewApplet) return;
 
     const { getApplet } = applet.thunk;
     dispatch(getApplet({ appletId }));
