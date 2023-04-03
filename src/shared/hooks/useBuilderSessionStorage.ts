@@ -26,6 +26,7 @@ import {
 export const enum BuilderLayers {
   Applet = 'applet',
   Activity = 'activity',
+  AppletHasDiffs = 'has_diffs_in_applet',
 }
 
 export const getLayer = (path: string) => {
@@ -59,6 +60,7 @@ export const useBuilderSessionStorageApplyChanges = () => {
   const applyChanges = (data: Record<string, unknown>) => {
     if (!layer) return;
 
+    builderSessionStorage.setItem(BuilderLayers.AppletHasDiffs, true);
     const layerData = builderSessionStorage.getItem(layer) ?? {};
     builderSessionStorage.setItem(layer, {
       ...layerData,

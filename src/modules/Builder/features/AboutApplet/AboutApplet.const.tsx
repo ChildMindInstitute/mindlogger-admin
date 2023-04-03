@@ -1,12 +1,12 @@
 import { Svg } from 'shared/components';
 
 export const defaultValues = {
-  name: '',
+  displayName: '',
   description: '',
-  colorTheme: 'default',
-  aboutApplet: '',
-  appletImage: '',
-  appletWatermark: '',
+  themeId: 'default',
+  about: '',
+  image: '',
+  watermark: '',
 };
 
 export const colorThemeOptions = [
