@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { getLayer } from 'shared/hooks';
+import { builderSessionStorage } from 'shared/utils';
 
 import { SaveChangesPopupProps } from './SaveChangesPopup.types';
-import { useSaveChangesPopupSetup } from './SaveChangesPopup.hooks';
 
 export const SaveChangesPopup = ({
   isPopupVisible,
@@ -12,13 +14,19 @@ export const SaveChangesPopup = ({
   handleSubmit,
 }: SaveChangesPopupProps) => {
   const { t } = useTranslation('app');
-  const { onDoNotSaveClick, onSaveClick } = useSaveChangesPopupSetup(handleSubmit);
+  const { pathname } = useLocation();
+  const layer = getLayer(pathname);
+
+  const onDoNotSaveClick = () => {
+    layer && builderSessionStorage.setItem(layer, {});
+    handleSubmit();
+  };
 
   return (
     <Modal
       open={isPopupVisible}
       onClose={handleClose}
-      onSubmit={onSaveClick}
+      onSubmit={handleSubmit}
       onSecondBtnSubmit={onDoNotSaveClick}
       onThirdBtnSubmit={handleClose}
       title={t('saveChanges')}

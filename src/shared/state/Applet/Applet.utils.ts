@@ -6,7 +6,7 @@ import { getApiError } from 'shared/utils';
 import { CreateAppletStateData } from './Applet.schema';
 import { state as initialState } from './Applet.state';
 
-export const createAppletPendingData = ({ builder, thunk, key }: CreateAppletStateData) =>
+export const appletPendingData = ({ builder, thunk, key }: CreateAppletStateData) =>
   builder.addCase(thunk.pending, (state, action) => {
     if (state[key].status !== 'loading') {
       state[key].requestId = action.meta.requestId;
@@ -14,7 +14,7 @@ export const createAppletPendingData = ({ builder, thunk, key }: CreateAppletSta
     }
   });
 
-export const createAppletFulfilledData = ({ builder, thunk, key }: CreateAppletStateData) =>
+export const appletFulfilledData = ({ builder, thunk, key }: CreateAppletStateData) =>
   builder.addCase(thunk.fulfilled, (state, action) => {
     if (state[key].status === 'loading' && state[key].requestId === action.meta.requestId) {
       state[key].requestId = initialState[key].requestId;
@@ -23,7 +23,7 @@ export const createAppletFulfilledData = ({ builder, thunk, key }: CreateAppletS
     }
   });
 
-export const createAppletRejectedData = ({ builder, thunk, key }: CreateAppletStateData) =>
+export const appletRejectedData = ({ builder, thunk, key }: CreateAppletStateData) =>
   builder.addCase(thunk.rejected, (state, action) => {
     if (state[key].status === 'loading' && state[key].requestId === action.meta.requestId) {
       state[key].requestId = initialState[key].requestId;
