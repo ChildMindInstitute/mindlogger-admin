@@ -5,5 +5,5 @@ export const getDictionaryText = (description?: string | Record<string, string>)
 
   const { language } = i18n;
 
-  return typeof description === 'object' ? description[language] ?? '' : description ?? '';
+  return (typeof description === 'object' ? description[language] : description) ?? '';
 };
