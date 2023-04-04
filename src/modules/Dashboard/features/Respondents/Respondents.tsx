@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search } from 'shared/components';
-import { users, folders } from 'redux/modules';
-import { useTimeAgo, useBreadcrumbs, useTable } from 'shared/hooks';
+import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE } from 'shared/components';
+import { users, folders, workspaces } from 'redux/modules';
+import { useTimeAgo, useBreadcrumbs, useTable, useAsync } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
+import { updatePinApi } from 'api';
+import { useAppDispatch } from 'redux/store';
 
 import {
   RespondentsTableHeader,
@@ -14,7 +16,7 @@ import {
   StyledRightBox,
 } from './Respondents.styles';
 import { getActions, getAppletsSmallTableRows, getChosenAppletData } from './Respondents.utils';
-import { headCells } from './Respondents.const';
+import { getHeadCells } from './Respondents.const';
 import { ChosenAppletData } from './Respondents.types';
 import {
   DataExportPopup,
@@ -25,15 +27,19 @@ import {
 } from './Popups';
 
 export const Respondents = () => {
+  const dispatch = useAppDispatch();
   const { id } = useParams();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
 
   const respondentsData = users.useRespondentsData();
   const appletsData = folders.useFlattenFoldersApplets();
-  const { getWorkspaceUsers } = users.thunk;
+  const { ownerId } = workspaces.useData() || {};
 
-  const { searchValue, setSearchValue, ...tableProps } = useTable(getWorkspaceUsers);
+  const { getWorkspaceRespondents } = users.thunk;
+
+  const { searchValue, setSearchValue, ordering, ...tableProps } =
+    useTable(getWorkspaceRespondents);
 
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
@@ -72,24 +78,35 @@ export const Respondents = () => {
       setEditRespondentPopupVisible(true);
     },
   };
-  // TODO: add updatePin
-  const handlePinClick = async (profileId: string, newState: boolean) => {
-    //const { updatePin, getUsersList } = users.thunk;
-    // const result = await dispatch(updatePin({ profileId, newState }));
-    // if (updatePin.fulfilled.match(result)) {
-    //   dispatch(getUsersList());
-    // }
+
+  const { execute } = useAsync(updatePinApi, () => {
+    ownerId &&
+      dispatch(
+        getWorkspaceRespondents({
+          params: {
+            ownerId,
+            limit: DEFAULT_ROWS_PER_PAGE,
+            search: searchValue,
+            page: tableProps.page,
+            ...(ordering && { ordering }),
+          },
+        }),
+      );
+  });
+
+  const handlePinClick = (accessId: string) => {
+    execute({ ownerId, accessId });
   };
 
   const rows = respondentsData?.result?.map((user, index) => {
-    const { secretId, nickname, lastSeen, id } = user;
+    const { secretId, nickname, lastSeen, accessId, isPinned, schedule } = user;
     const latestAactive = lastSeen ? timeAgo.format(new Date(lastSeen)) : '';
 
     return {
       pin: {
-        content: () => <Pin isPinned={false} />,
+        content: () => <Pin isPinned={isPinned} />,
         value: '',
-        onClick: () => handlePinClick(id, true),
+        onClick: () => handlePinClick(accessId),
       },
       secretId: {
         content: () => secretId,
@@ -103,6 +120,12 @@ export const Respondents = () => {
         content: () => latestAactive,
         value: latestAactive,
       },
+      ...(id && {
+        schedule: {
+          content: () => schedule,
+          value: schedule,
+        },
+      }),
       actions: {
         content: () => <Actions items={getActions(actions)} context={index} />,
         value: '',
@@ -179,7 +202,7 @@ export const Respondents = () => {
         {id && <StyledRightBox />}
       </RespondentsTableHeader>
       <Table
-        columns={headCells}
+        columns={getHeadCells(id)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={respondentsData?.count || 0}

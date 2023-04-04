@@ -37,10 +37,19 @@ export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: Ab
   });
 };
 
-export const getWorkspaceUsersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
   const { ownerId, ...restParams } = params;
 
-  return authApiClient.get(`/workspaces/${ownerId}/users`, {
+  return authApiClient.get(`/workspaces/${ownerId}/managers`, {
+    params: restParams,
+    signal,
+  });
+};
+
+export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get(`/workspaces/${ownerId}/respondents`, {
     params: restParams,
     signal,
   });
@@ -147,15 +156,11 @@ export const getInvitationsApi = ({ appletId }: AppletId, signal?: AbortSignal) 
     signal,
   });
 
-export const updatePinApi = ({ profileId, newState }: UpdatePin, signal?: AbortSignal) =>
-  authApiClient.put(
-    '/account/manage/pin',
-    {},
+export const updatePinApi = ({ ownerId, accessId }: UpdatePin, signal?: AbortSignal) =>
+  authApiClient.post(
+    `/workspaces/${ownerId}/respondents/pin`,
+    { accessId },
     {
-      params: {
-        profileId,
-        newState,
-      },
       signal,
     },
   );

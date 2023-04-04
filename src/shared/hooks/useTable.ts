@@ -2,11 +2,12 @@ import { useState, useRef, useEffect, MouseEvent } from 'react';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 
-import { Order, OrderBy } from 'shared/types';
+import { Order } from 'shared/types';
 import { workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/components';
 import { GetAppletsParams } from 'api';
+import { formattedOrder } from 'shared/utils';
 
 export const useTable = (
   thunk: AsyncThunk<AxiosResponse, GetAppletsParams, Record<string, never>>,
@@ -17,24 +18,21 @@ export const useTable = (
 
   const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(1);
-  const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.UpdatedAt);
+  const [orderBy, setOrderBy] = useState('');
   const [order, setOrder] = useState<Order>('desc');
+  const ordering = formattedOrder(orderBy, order);
 
-  const currentWorkspaceData = workspaces.useData();
+  const { ownerId } = workspaces.useData() || {};
 
   const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
-    const orderByValue = property === 'name' ? OrderBy.DisplayName : OrderBy.UpdatedAt;
-    const isAsc = order === 'asc' && orderBy === orderByValue;
+    const isAsc = order === 'asc' && orderBy === property;
 
     setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(orderByValue);
+    setOrderBy(property);
   };
 
   useEffect(() => {
-    const ownerId = currentWorkspaceData?.ownerId;
     if (isMounted.current && ownerId) {
-      const ordering = `${order === 'asc' ? '+' : '-'}${orderBy}`;
-
       dispatch(
         thunk({
           params: {
@@ -42,7 +40,7 @@ export const useTable = (
             limit: DEFAULT_ROWS_PER_PAGE,
             search: searchValue,
             page,
-            ordering,
+            ...(ordering && { ordering }),
           },
         }),
       );
@@ -60,5 +58,6 @@ export const useTable = (
     orderBy,
     order,
     handleRequestSort,
+    ordering,
   };
 };

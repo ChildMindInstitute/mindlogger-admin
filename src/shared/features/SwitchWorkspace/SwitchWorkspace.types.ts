@@ -1,11 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-export type Workspace = {
-  ownerId: string;
-  workspaceName: string;
-  owned: boolean;
-  image?: string;
-};
+import { Workspace } from 'shared/state';
 
 export enum WorkspaceGroups {
   MyWorkspace = 'myWorkspace',

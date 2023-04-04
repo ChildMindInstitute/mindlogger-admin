@@ -4,7 +4,7 @@ import { Radio, RadioGroup, FormControlLabelProps } from '@mui/material';
 import { Table, UiType, AppletImage } from 'shared/components';
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { WorkspaceImage, WorkspaceUiType } from 'shared/features/SwitchWorkspace';
-import { Workspace } from 'shared/features/SwitchWorkspace/SwitchWorkspace.types';
+
 import {
   theme,
   variables,
@@ -15,6 +15,7 @@ import {
 } from 'shared/styles';
 import { HeadCell } from 'shared/types/table';
 import i18n from 'i18n';
+import { Workspace } from 'shared/state';
 
 import {
   AddToBuilderActions,
