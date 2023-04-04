@@ -65,22 +65,12 @@ export const SaveAndPublish = () => {
       >
         {t('saveAndPublish')}
       </StyledButton>
-      {isNewApplet ? (
-        <AppletPasswordPopup
-          onClose={() => setIsPasswordPopupOpened(false)}
-          popupType={AppletPasswordPopupType.Create}
-          popupVisible={isPasswordPopupOpened}
-          submitCallback={sendRequest}
-        />
-      ) : (
-        <AppletPasswordPopup
-          appletId={appletId}
-          onClose={() => setIsPasswordPopupOpened(false)}
-          popupType={AppletPasswordPopupType.Enter}
-          popupVisible={isPasswordPopupOpened}
-          submitCallback={sendRequest}
-        />
-      )}
+      <AppletPasswordPopup
+        onClose={() => setIsPasswordPopupOpened(false)}
+        popupType={isNewApplet ? AppletPasswordPopupType.Create : AppletPasswordPopupType.Enter}
+        popupVisible={isPasswordPopupOpened}
+        submitCallback={sendRequest}
+      />
     </>
   );
 };
