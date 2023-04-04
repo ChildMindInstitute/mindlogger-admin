@@ -16,7 +16,7 @@ import { passwordFormSchema } from './EnterAppletPassword.schema';
 import { AppletPasswordRef } from '../Password.types';
 
 export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPasswordProps>(
-  ({ appletId, encryption, submitCallback }, ref) => {
+  ({ appletId, encryption, submitCallback, isApplet }, ref) => {
     const { t } = useTranslation('app');
     const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
@@ -29,6 +29,12 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     const [showPassword, setShowPassword] = useState(false);
 
     const submitForm = ({ appletPassword }: EnterAppletPasswordForm) => {
+      if (isApplet) {
+        submitCallback && submitCallback({ appletPassword });
+
+        return;
+      }
+
       const appletEncryption = encryption || getAppletData(appletsFoldersData, appletId).encryption;
       const encryptionInfo = getAppletEncryptionInfo({
         appletPassword,
@@ -46,7 +52,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
             ),
           )
       ) {
-        submitCallback && submitCallback();
+        submitCallback && submitCallback({ appletPassword });
       } else {
         setError('appletPassword', { message: t('incorrectAppletPassword') });
       }

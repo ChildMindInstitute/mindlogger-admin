@@ -1,5 +1,3 @@
-export const appletPasswordMocked = '12345678';
-
 /* eslint-disable camelcase */
 export const activityItemsMocked = [
   {
@@ -87,7 +85,6 @@ export const appletInfoMocked = {
 };
 
 export const appletDataMocked = {
-  password: appletPasswordMocked,
   activities: appletActivitiesMocked,
   activityFlows: appletActivityFlowsMocked,
   ...appletInfoMocked,

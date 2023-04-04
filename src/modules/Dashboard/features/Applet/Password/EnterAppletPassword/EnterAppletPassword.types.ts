@@ -6,4 +6,5 @@ export type EnterAppletPasswordProps = {
   appletId?: string;
   encryption?: Encryption;
   submitCallback: (encryptionInfo?: any) => void;
+  isApplet?: boolean;
 };
