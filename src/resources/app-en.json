@@ -703,5 +703,8 @@
   "addSection": "Add Section",
   "latestActive": "Latest active",
   "noSelectedItemsYet": "No selected items yet.",
+  "apply": "Apply",
+  "addNewNote": "Add a New Note",
+  "addNotePlaceholder": "Add a note which you’ll always see here",
   "addSubscales": "Add Subscale"
 }
