@@ -5,7 +5,13 @@ import { Modal } from 'shared/components';
 
 import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
 import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
-import { AppletPasswordRef, CreateAppletPassword, EnterAppletPassword } from '../../Password';
+import {
+  AppletPasswordRef,
+  CreateAppletPassword,
+  CreateAppletPasswordForm,
+  EnterAppletPassword,
+  EnterAppletPasswordForm,
+} from '../../Password';
 
 export const AppletPasswordPopup = ({
   onClose,
@@ -23,6 +29,11 @@ export const AppletPasswordPopup = ({
     if (appletPasswordRef?.current) {
       appletPasswordRef.current.submitForm();
     }
+  };
+
+  const handleSubmitCallback = (formData: CreateAppletPasswordForm | EnterAppletPasswordForm) => {
+    submitCallback(formData);
+    onClose();
   };
 
   return (
@@ -43,10 +54,11 @@ export const AppletPasswordPopup = ({
             ref={appletPasswordRef}
             appletId={appletId}
             encryption={encryption}
-            submitCallback={submitCallback}
+            submitCallback={handleSubmitCallback}
+            isApplet
           />
         ) : (
-          <CreateAppletPassword ref={appletPasswordRef} submitCallback={submitCallback} />
+          <CreateAppletPassword ref={appletPasswordRef} submitCallback={handleSubmitCallback} />
         )}
       </StyledAppletPasswordContainer>
     </Modal>
