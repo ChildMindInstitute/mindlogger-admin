@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
+import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 
 import { StyledBar, StyledHeader, StyledContent, StyledBtnWrapper } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
@@ -20,14 +21,17 @@ export const LeftBar = ({
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
 
+  const { name } = useCurrentActivity();
+
   return (
     <StyledBar ref={containerRef}>
       <StyledHeader isSticky={isHeaderSticky}>{t('items')}</StyledHeader>
       <StyledContent>
-        {items.map((item) => (
+        {items?.map((item, index) => (
           <Item
-            key={item.id}
-            {...item}
+            item={item}
+            name={`${name}.items[${index}]`}
+            key={`item-${item.id}`}
             activeItemId={activeItemId}
             onSetActiveItem={onSetActiveItem}
             onRemoveItem={onRemoveItem}

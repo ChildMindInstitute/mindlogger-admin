@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
-import { getLayer } from 'shared/hooks';
 import { builderSessionStorage } from 'shared/utils';
 
 import { SaveChangesPopupProps } from './SaveChangesPopup.types';
@@ -13,12 +12,12 @@ export const SaveChangesPopup = ({
   handleClose,
   handleSubmit,
 }: SaveChangesPopupProps) => {
+  const { appletId } = useParams();
+
   const { t } = useTranslation('app');
-  const { pathname } = useLocation();
-  const layer = getLayer(pathname);
 
   const onDoNotSaveClick = () => {
-    layer && builderSessionStorage.setItem(layer, {});
+    appletId && builderSessionStorage.removeItem();
     handleSubmit();
   };
 

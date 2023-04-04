@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { BuilderLayers, useCheckIfNewApplet } from 'shared/hooks';
-import { APPLET_PAGE_REGEXP_STRING, builderSessionStorage, Path } from 'shared/utils';
+import { useCheckIfNewApplet } from 'shared/hooks';
+import { APPLET_PAGE_REGEXP_STRING, builderSessionStorage } from 'shared/utils';
 import { applet } from 'shared/state';
 import { EnterAppletPasswordForm } from 'modules/Dashboard';
 
@@ -12,11 +12,7 @@ export const getAppletInfoFromStorage = () => {
   const match = pathname.match(APPLET_PAGE_REGEXP_STRING);
   if (!match) return {};
 
-  const layer = BuilderLayers.Applet;
-  const layerStorage = layer ? builderSessionStorage.getItem(layer) : {};
-  const appletPathKey = match[1] ?? Path.NewApplet;
-
-  return layerStorage[`/builder/${appletPathKey}/about`];
+  return builderSessionStorage.getItem() ?? {};
 };
 
 export const useAppletData = () => {

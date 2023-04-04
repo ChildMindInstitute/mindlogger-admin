@@ -450,14 +450,14 @@
   "activitySplashScreenDescription": "This image is displayed to a respondent before the activity items.",
   "activityFlowBuilder": "Activity Flow Builder",
   "itemConfiguration": "Item Configuration",
-  "singleSelection": "Single Selection",
-  "multipleSelection": "Multiple Selection",
+  "singleSelect": "Single Selection",
+  "multiSelect": "Multiple Selection",
   "slider": "Slider",
   "slider_option": "Slider {{- index }}",
-  "numberSelection": "Number Selection",
+  "numberSelect": "Number Selection",
   "timeRange": "Time Range",
-  "singleSelectionPerRow": "Single Selection per Row",
-  "multipleSelectionPerRow": "Multiple Selection per Row",
+  "singleSelectRows": "Single Selection per Row",
+  "multiSelectRows": "Multiple Selection per Row",
   "sliderRows": "Slider Rows",
   "text": "Text",
   "drawing": "Drawing",
@@ -703,8 +703,13 @@
   "addSection": "Add Section",
   "latestActive": "Latest active",
   "noSelectedItemsYet": "No selected items yet.",
+  "addSubscales": "Add Subscale",
+  "newActivityName": "New Activity",
+  "newItemName": "New Item",
+  "validationMessages": {
+    "isRequired": "{{- field }} is required"
+  },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
-  "addNotePlaceholder": "Add a note which you’ll always see here",
-  "addSubscales": "Add Subscale"
+  "addNotePlaceholder": "Add a note which you’ll always see here"
 }

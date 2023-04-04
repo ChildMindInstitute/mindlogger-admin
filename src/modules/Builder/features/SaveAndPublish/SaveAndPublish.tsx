@@ -7,7 +7,7 @@ import { Svg } from 'shared/components';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 import { updateApplet } from 'shared/state/Applet/Applet.thunk';
-import { BuilderLayers, useCheckIfNewApplet } from 'shared/hooks';
+import { useCheckIfNewApplet } from 'shared/hooks';
 import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
@@ -16,12 +16,6 @@ import {
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useAppletData } from './SaveAndPublish.hooks';
-
-const clearStorage = () => {
-  builderSessionStorage.setItem(BuilderLayers.Applet, {});
-  builderSessionStorage.setItem(BuilderLayers.Activity, {});
-  builderSessionStorage.setItem(BuilderLayers.AppletHasDiffs, false);
-};
 
 export const SaveAndPublish = () => {
   const { t } = useTranslation('app');
@@ -45,7 +39,8 @@ export const SaveAndPublish = () => {
     }
     if (!result) return;
 
-    clearStorage();
+    builderSessionStorage.removeItem();
+
     if (!isNewApplet) return;
 
     if (createApplet.fulfilled.match(result)) {
