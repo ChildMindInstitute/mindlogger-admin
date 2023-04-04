@@ -9,7 +9,7 @@ export type GetAppletsParams = {
     page?: number;
     limit?: number;
     ordering?: string;
-    role?: string;
+    roles?: string;
   };
 };
 
