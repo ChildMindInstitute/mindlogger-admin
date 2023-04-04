@@ -3,13 +3,13 @@ import { useFormContext } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import { Update } from 'history';
-import { BuilderLayers, useCallbackPrompt, usePromptSetup } from 'shared/hooks';
 import { builderSessionStorage } from 'shared/utils';
+import { useCallbackPrompt, usePromptSetup } from 'shared/hooks';
+
 import { ActivityFormValues } from './BuilderApplet.types';
+import { isAppletRoute } from './BuilderApplet.utils';
 
-import { isActivityRoute, isAppletRoute } from './BuilderApplet.utils';
-
-export const usePrompt = () => {
+export const usePrompt = (isFormChanged: boolean) => {
   const {
     location,
     promptVisible,
@@ -22,13 +22,9 @@ export const usePrompt = () => {
 
   const handleBlockedNavigation = useCallback(
     (nextLocation: Update) => {
-      const currentPathname = location.pathname;
       const nextPathname = nextLocation.location.pathname;
-      const isFormChanged = builderSessionStorage.getItem(BuilderLayers.AppletHasDiffs);
-      const shouldSkip =
-        !isFormChanged ||
-        (isAppletRoute(currentPathname) && isAppletRoute(nextPathname)) ||
-        (isActivityRoute(currentPathname) && isActivityRoute(nextPathname));
+
+      const shouldSkip = !isFormChanged || isAppletRoute(nextPathname);
 
       if (!confirmedNavigation && !shouldSkip) {
         setPromptVisible(true);
@@ -42,7 +38,7 @@ export const usePrompt = () => {
 
       return true;
     },
-    [confirmedNavigation, location],
+    [confirmedNavigation, location, isFormChanged],
   );
 
   const { cancelNavigation: onCancel, confirmNavigation: onConfirm } = useCallbackPrompt({
@@ -58,7 +54,7 @@ export const usePrompt = () => {
   return {
     promptVisible,
     confirmNavigation: () => {
-      builderSessionStorage.setItem(BuilderLayers.AppletHasDiffs, false);
+      builderSessionStorage.removeItem();
       onConfirm();
     },
     cancelNavigation: onCancel,

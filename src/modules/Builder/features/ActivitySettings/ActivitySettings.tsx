@@ -81,13 +81,13 @@ export const ActivitySettings = () => {
   const handleSetActiveSetting = (setting: ActivitySettingsOptions) => {
     setActiveSetting(setting);
     navigate(
-      generatePath(page.newAppletActivitySettingsItem, { activityId, setting: setting.path }),
+      generatePath(page.builderAppletActivitySettingsItem, { activityId, setting: setting.path }),
     );
   };
 
   const handleClose = () => {
     setActiveSetting(null);
-    navigate(generatePath(page.newAppletActivitySettings, { activityId }));
+    navigate(generatePath(page.builderAppletActivitySettings, { activityId }));
   };
 
   const containerTitle = activeSetting ? t(activeSetting.name) : '';

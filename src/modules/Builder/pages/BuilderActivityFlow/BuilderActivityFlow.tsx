@@ -17,7 +17,7 @@ export const BuilderActivityFlow = () => {
     <StyledBody sx={{ position: 'relative' }}>
       <StyledDirectoryUpButton
         variant="text"
-        onClick={() => navigate(page.newAppletActivityFlow)}
+        onClick={() => navigate(page.builderAppletActivityFlow)}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
       >
         {t('activityFlows')}

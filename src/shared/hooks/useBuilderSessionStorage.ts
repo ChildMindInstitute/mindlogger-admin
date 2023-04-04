@@ -1,52 +1,9 @@
-import { useLocation } from 'react-router-dom';
 import { FieldValues, UseFormGetValues } from 'react-hook-form';
 
 import { builderSessionStorage } from 'shared/utils';
-import {
-  isActivityRoute,
-  isAppletRoute,
-} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-
-/*
- *
- * Top Level [new-applet]: /builder/new-applet
- * 1) About Applet - /about
- * 2) Activities - /activities
- * 3) Activity Flow - /activity-flow
- * 4) Applet Settings - /settings
- *
- * Low Level [new-activity]: /builder/new-applet/activities/new-activity
- * 1) About Activity - /about
- * 2) Items - /items
- * 3) Item Flow - /item-flow
- * 4) Activity Settings - /settings
- *
- * */
-
-export const enum BuilderLayers {
-  Applet = 'applet',
-  Activity = 'activity',
-  AppletHasDiffs = 'has_diffs_in_applet',
-}
-
-export const getLayer = (path: string) => {
-  if (isAppletRoute(path)) return BuilderLayers.Applet;
-
-  if (isActivityRoute(path)) return BuilderLayers.Activity;
-
-  return null;
-};
 
 export const useBuilderSessionStorageFormValues = <T>(defaultValues: T) => {
-  const { pathname } = useLocation();
-  const layer = getLayer(pathname);
-  const getFormValues = (): T => {
-    if (!layer) return defaultValues;
-
-    const layerStorage = builderSessionStorage.getItem(layer) ?? {};
-
-    return layerStorage[pathname] ?? defaultValues;
-  };
+  const getFormValues = (): T => builderSessionStorage.getItem() ?? defaultValues ?? {};
 
   return {
     getFormValues,
@@ -54,19 +11,11 @@ export const useBuilderSessionStorageFormValues = <T>(defaultValues: T) => {
 };
 
 export const useBuilderSessionStorageApplyChanges = () => {
-  const { pathname } = useLocation();
-  const layer = getLayer(pathname);
-
   const applyChanges = (data: Record<string, unknown>) => {
-    if (!layer) return;
-
-    builderSessionStorage.setItem(BuilderLayers.AppletHasDiffs, true);
-    const layerData = builderSessionStorage.getItem(layer) ?? {};
-    builderSessionStorage.setItem(layer, {
+    const layerData = builderSessionStorage.getItem() ?? {};
+    builderSessionStorage.setItem({
       ...layerData,
-      [pathname]: {
-        ...data,
-      },
+      ...data,
     });
   };
 

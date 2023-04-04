@@ -8,7 +8,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { SaveAndPublish } from 'modules/Builder/features';
 import { SaveChangesPopup } from 'modules/Builder/components';
 import { LinkedTabs, Svg } from 'shared/components';
-import { useBreadcrumbs, useCheckIfNewApplet } from 'shared/hooks';
+import {
+  useBreadcrumbs,
+  useBuilderSessionStorageFormValues,
+  useBuilderSessionStorageFormChange,
+  useCheckIfNewApplet,
+} from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 
@@ -26,17 +31,30 @@ export const BuilderApplet = () => {
   const params = useParams();
   const hiddenHeader = !!params.activityId;
   const dispatch = useAppDispatch();
-  const { cancelNavigation, confirmNavigation, promptVisible } = usePrompt();
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
+  const { getFormValues } = useBuilderSessionStorageFormValues(
+    getDefaultValues({ appletData, language }),
+  );
+
   const methods = useForm<AppletFormValues>({
-    defaultValues: getDefaultValues({ appletData, language }),
+    defaultValues: getFormValues(),
     resolver: yupResolver(AppletSchema()),
     mode: 'onChange',
   });
+
+  const { cancelNavigation, confirmNavigation, promptVisible } = usePrompt(
+    methods.formState.isDirty,
+  );
+
+  const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(
+    methods.getValues,
+  );
+
+  methods.watch(handleFormChange);
 
   useBreadcrumbs([
     {

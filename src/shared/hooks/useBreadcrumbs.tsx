@@ -70,7 +70,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         {
           icon: <Svg id="checklist-outlined" width="18" height="18" />,
           label: t('activities'),
-          navPath: page.newAppletActivities, // TODO add Applet Activity Id on Edit
+          navPath: page.builderAppletActivities, // TODO add Applet Activity Id on Edit
         },
         {
           icon: '',
@@ -85,7 +85,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         {
           icon: <Svg id="flow" width="18" height="18" />,
           label: t('activityFlow'),
-          navPath: page.newAppletActivityFlow, // TODO add Applet Activity Flow Id on Edit
+          navPath: page.builderAppletActivityFlow, // TODO add Applet Activity Flow Id on Edit
         },
         {
           icon: '',

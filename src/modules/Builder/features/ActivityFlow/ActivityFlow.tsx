@@ -30,7 +30,7 @@ export const ActivityFlow = () => {
           {
             icon: <Svg id="flow" />,
             label: t('addActivityFlow'), // TODO add ActivityFlow Name on Edit
-            handleClick: () => navigate(page.newAppletNewActivityFlow), // TODO add navigation on Edit
+            handleClick: () => navigate(page.builderAppletNewActivityFlow), // TODO add navigation on Edit
           },
         ]}
       />

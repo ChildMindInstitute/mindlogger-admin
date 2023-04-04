@@ -7,11 +7,7 @@ import { Path } from 'shared/utils';
 import BuilderAppletSettings from 'modules/Builder/features/BuilderAppletSettings';
 import ActivitySettings from 'modules/Builder/features/ActivitySettings';
 
-import {
-  newAppletNewActivityFlowRoutes,
-  newAppletRoutes,
-  newAppletActivityRoutes,
-} from './routes.const';
+import { appletRoutes, appletActivityRoutes, appletActivityFlowRoutes } from './routes.const';
 
 const BuilderApplet = lazy(() => import('../pages/BuilderApplet'));
 const BuilderActivityFlow = lazy(() => import('../pages/BuilderActivityFlow'));
@@ -21,7 +17,7 @@ export const builderRoutes = () => (
   <Route path={page.builder}>
     <Route element={<BuilderApplet />} path=":appletId">
       <Route index element={<Navigate to={Path.About} replace />} />
-      {newAppletRoutes.map(({ path, Component }) => (
+      {appletRoutes.map(({ path, Component }) => (
         <Route
           key={path}
           path={path}
@@ -43,7 +39,7 @@ export const builderRoutes = () => (
       <Route path={Path.Activities}>
         <Route element={<BuilderActivity />} path=":activityId">
           <Route index element={<Navigate to={Path.About} replace />} />
-          {newAppletActivityRoutes.map(({ path, Component }) => (
+          {appletActivityRoutes.map(({ path, Component }) => (
             <Route
               key={path}
               path={path}
@@ -65,7 +61,7 @@ export const builderRoutes = () => (
       <Route path={Path.ActivityFlow}>
         <Route element={<BuilderActivityFlow />} path=":activityFlowId">
           <Route index element={<Navigate to={Path.About} replace />} />
-          {newAppletNewActivityFlowRoutes.map(({ path, Component }) => (
+          {appletActivityFlowRoutes.map(({ path, Component }) => (
             <Route
               key={path}
               path={path}

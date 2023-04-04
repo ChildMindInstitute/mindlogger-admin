@@ -25,8 +25,8 @@ export const ActivityItems = () => {
   });
 
   const items = watch(`${name}.items`);
-  const activeItem = items?.find((item: ItemFormValues) => item.id === activeItemId);
   const activeItemIndex = items?.findIndex((item: ItemFormValues) => item.id === activeItemId);
+  const activeItem = items?.[activeItemIndex];
 
   const handleRemoveItem = (id: string) => {
     if (id === activeItem?.id) setActiveItemId('');

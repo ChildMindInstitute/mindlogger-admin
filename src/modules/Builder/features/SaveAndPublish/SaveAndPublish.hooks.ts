@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
-import { BuilderLayers, useCheckIfNewApplet } from 'shared/hooks';
-import { APPLET_PAGE_REGEXP_STRING, builderSessionStorage, Path } from 'shared/utils';
+import { useCheckIfNewApplet } from 'shared/hooks';
+import { APPLET_PAGE_REGEXP_STRING, builderSessionStorage } from 'shared/utils';
 import { applet } from 'shared/state';
 
 import {
@@ -12,25 +11,14 @@ import {
   appletPasswordMocked,
 } from './mock';
 
-export const useAppletInfoFromStorage = () => {
-  const { appletId } = useParams();
-  const layer = BuilderLayers.Applet;
-  const layerStorage = layer ? builderSessionStorage.getItem(layer) : {};
-  const appletPathKey = appletId ?? Path.NewApplet;
-
-  return layerStorage[`/builder/${appletPathKey}/about`];
-};
+export const useAppletInfoFromStorage = () => builderSessionStorage.getItem() ?? {};
 
 export const getAppletInfoFromStorage = () => {
   const pathname = window.location.pathname;
   const match = pathname.match(APPLET_PAGE_REGEXP_STRING);
   if (!match) return {};
 
-  const layer = BuilderLayers.Applet;
-  const layerStorage = layer ? builderSessionStorage.getItem(layer) : {};
-  const appletPathKey = match[1] ?? Path.NewApplet;
-
-  return layerStorage[`/builder/${appletPathKey}/about`];
+  return builderSessionStorage.getItem() ?? {};
 };
 
 export const useAppletData = () => {
