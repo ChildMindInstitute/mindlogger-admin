@@ -7,7 +7,6 @@ import { users, folders, workspaces } from 'redux/modules';
 import { useTimeAgo, useBreadcrumbs, useTable, useAsync } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { updatePinApi } from 'api';
-import { Roles } from 'shared/consts';
 import { useAppDispatch } from 'redux/store';
 
 import {
@@ -17,7 +16,7 @@ import {
   StyledRightBox,
 } from './Respondents.styles';
 import { getActions, getAppletsSmallTableRows, getChosenAppletData } from './Respondents.utils';
-import { headCells } from './Respondents.const';
+import { getHeadCells } from './Respondents.const';
 import { ChosenAppletData } from './Respondents.types';
 import {
   DataExportPopup,
@@ -39,10 +38,8 @@ export const Respondents = () => {
 
   const { getWorkspaceRespondents } = users.thunk;
 
-  const { searchValue, setSearchValue, ...tableProps } = useTable(
-    getWorkspaceRespondents,
-    Roles.Respondent,
-  );
+  const { searchValue, setSearchValue, ordering, ...tableProps } =
+    useTable(getWorkspaceRespondents);
 
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
@@ -91,8 +88,7 @@ export const Respondents = () => {
             limit: DEFAULT_ROWS_PER_PAGE,
             search: searchValue,
             page: tableProps.page,
-            ordering: `${tableProps.order === 'asc' ? '+' : '-'}${tableProps.orderBy}`,
-            role: Roles.Respondent,
+            ...(ordering && { ordering }),
           },
         }),
       );
@@ -103,12 +99,12 @@ export const Respondents = () => {
   };
 
   const rows = respondentsData?.result?.map((user, index) => {
-    const { secretId, nickname, lastSeen, accessId } = user;
+    const { secretId, nickname, lastSeen, accessId, isPinned, schedule } = user;
     const latestAactive = lastSeen ? timeAgo.format(new Date(lastSeen)) : '';
 
     return {
       pin: {
-        content: () => <Pin isPinned={false} />,
+        content: () => <Pin isPinned={isPinned} />,
         value: '',
         onClick: () => handlePinClick(accessId),
       },
@@ -124,6 +120,12 @@ export const Respondents = () => {
         content: () => latestAactive,
         value: latestAactive,
       },
+      ...(id && {
+        schedule: {
+          content: () => schedule,
+          value: schedule,
+        },
+      }),
       actions: {
         content: () => <Actions items={getActions(actions)} context={index} />,
         value: '',
@@ -200,7 +202,7 @@ export const Respondents = () => {
         {id && <StyledRightBox />}
       </RespondentsTableHeader>
       <Table
-        columns={headCells}
+        columns={getHeadCells(id)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={respondentsData?.count || 0}

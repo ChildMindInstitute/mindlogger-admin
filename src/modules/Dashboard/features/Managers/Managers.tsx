@@ -6,7 +6,6 @@ import { Svg, Actions, Search } from 'shared/components';
 import { users } from 'redux/modules';
 import { useBreadcrumbs, useTable } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
-import { Roles } from 'shared/consts';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
@@ -20,10 +19,7 @@ export const Managers = () => {
 
   const { getWorkspaceManagers } = users.thunk;
 
-  const { searchValue, setSearchValue, ...tableProps } = useTable(
-    getWorkspaceManagers,
-    Roles.Manager,
-  );
+  const { searchValue, setSearchValue, ...tableProps } = useTable(getWorkspaceManagers);
 
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
@@ -49,7 +45,9 @@ export const Managers = () => {
 
   const rows = managersData?.result?.map((user) => {
     const { email, firstName, lastName, roles } = user;
-    const isOwner = roles.includes('owner');
+    const stringRoles = `${roles
+      ?.map((item) => item.charAt(0).toUpperCase() + item.slice(1))
+      .join(', ')}`;
 
     return {
       firstName: {
@@ -64,8 +62,14 @@ export const Managers = () => {
         content: () => email,
         value: email,
       },
+      ...(id && {
+        roles: {
+          content: () => stringRoles,
+          value: stringRoles,
+        },
+      }),
       actions: {
-        content: () => <Actions items={getActions(isOwner, id, actions)} context={user} />,
+        content: () => <Actions items={getActions(id, actions)} context={user} />,
         value: '',
         width: '20%',
       },
@@ -90,7 +94,7 @@ export const Managers = () => {
         <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
       </ManagersTableHeader>
       <Table
-        columns={getHeadCells()}
+        columns={getHeadCells(id)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={managersData?.count || 0}

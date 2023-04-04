@@ -2,20 +2,34 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
-import { getInvitationsApi, getWorkspaceUsersApi, GetAppletsParams } from 'api';
+import {
+  getInvitationsApi,
+  getWorkspaceRespondentsApi,
+  getWorkspaceManagersApi,
+  GetAppletsParams,
+} from 'api';
 
-const getUsersThunk = async ({ params }: GetAppletsParams, { rejectWithValue, signal }: any) => {
-  try {
-    return await getWorkspaceUsersApi({ params }, signal);
-  } catch (exception) {
-    return rejectWithValue(exception as AxiosError<ApiError>);
-  }
-};
 export const getWorkspaceRespondents = createAsyncThunk(
   'users/getWorkspaceRespondents',
-  getUsersThunk,
+  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
+    try {
+      return await getWorkspaceRespondentsApi({ params }, signal);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
 );
-export const getWorkspaceManagers = createAsyncThunk('users/getWorkspaceManagers', getUsersThunk);
+
+export const getWorkspaceManagers = createAsyncThunk(
+  'users/getWorkspaceManagers',
+  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
+    try {
+      return await getWorkspaceManagersApi({ params }, signal);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
 
 export const getInvitations = createAsyncThunk(
   'users/getInvitations',
