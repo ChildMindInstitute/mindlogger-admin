@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { APPLET_PAGE_REGEXP_STRING, builderSessionStorage } from 'shared/utils';
-import { applet } from 'shared/state';
+import { applet, SingleApplet } from 'shared/state';
 import { EnterAppletPasswordForm } from 'modules/Dashboard';
 
 import { appletActivitiesMocked, appletActivityFlowsMocked, appletDataMocked } from './mock';
@@ -22,7 +22,7 @@ export const useAppletData = () => {
     i18n: { language },
   } = useTranslation('app');
 
-  return (appletPassword: EnterAppletPasswordForm['appletPassword']) => {
+  return (appletPassword?: EnterAppletPasswordForm['appletPassword']) => {
     const appletInfo = getAppletInfoFromStorage();
 
     if (isNewApplet) {
@@ -37,7 +37,8 @@ export const useAppletData = () => {
           [language]: appletInfo.about,
         },
         themeId: null, // TODO: create real themeId
-      };
+        activities: appletActivitiesMocked, // TODO: add real activities
+      } as SingleApplet;
     }
 
     const {
@@ -66,6 +67,26 @@ export const useAppletData = () => {
       themeId: null, // TODO: create real themeId
       activities: appletActivitiesMocked, // TODO: api has error details: items-missed; order-permitted, description has wrong type
       activityFlows: appletActivityFlowsMocked, // TODO: api has error details: items-missed; activitiesIds/order-permitted
-    };
+    } as SingleApplet;
+  };
+};
+
+export const useCheckIfHasAtLeastOneActivity = () => {
+  const getAppletData = useAppletData();
+
+  return () => {
+    const body = getAppletData();
+
+    return Boolean(body.activities?.length);
+  };
+};
+
+export const useCheckIfHasAtLeastOneItem = () => {
+  const getAppletData = useAppletData();
+
+  return () => {
+    const body = getAppletData();
+
+    return (body.activities ?? []).every((activity) => Boolean(activity.items?.length));
   };
 };
