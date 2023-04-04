@@ -704,5 +704,8 @@
   "latestActive": "Latest active",
   "noSelectedItemsYet": "No selected items yet.",
   "addSubscales": "Add Subscale",
-  "roles": "Roles"
+  "roles": "Roles",
+  "apply": "Apply",
+  "addNewNote": "Add a New Note",
+  "addNotePlaceholder": "Add a note which you’ll always see here"
 }

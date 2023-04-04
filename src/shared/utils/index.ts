@@ -16,3 +16,4 @@ export * from './table';
 export * from './exportToCsv';
 export * from './sessionStorage';
 export * from './urlGenerator';
+export * from './forms';

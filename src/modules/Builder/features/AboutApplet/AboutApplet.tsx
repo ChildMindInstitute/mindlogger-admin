@@ -21,6 +21,7 @@ import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { useBuilderSessionStorageFormValues, useCheckIfNewApplet } from 'shared/hooks';
 import { applet, SingleApplet } from 'shared/state';
+import { getDictionaryText } from 'shared/utils';
 
 import { StyledContainer, StyledForm, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { AboutAppletSchema } from './AboutApplet.schema';
@@ -34,17 +35,14 @@ const commonUploaderProps = {
 };
 
 export const AboutApplet = () => {
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation();
+  const { t } = useTranslation();
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();
   const {
     displayName = '',
-    description,
+    description = '',
     themeId = '',
-    about,
+    about = '',
     image = '',
     watermark = '',
   } = appletData ??
@@ -56,9 +54,9 @@ export const AboutApplet = () => {
     ? defaultValues
     : ({
         displayName,
-        description: description[language] ?? '',
+        description: getDictionaryText(description),
         themeId,
-        about: about[language] ?? '',
+        about: getDictionaryText(about),
         image,
         watermark,
       } as FormValues);
