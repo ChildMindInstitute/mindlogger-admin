@@ -2,8 +2,9 @@ import uniqueId from 'lodash.uniqueid';
 import { matchPath } from 'react-router-dom';
 
 import i18n from 'i18n';
-import { SingleApplet } from 'shared/state';
 import { page } from 'resources';
+import { SingleApplet } from 'shared/state';
+import { getDictionaryText } from 'shared/utils';
 
 const { t } = i18n;
 
@@ -39,19 +40,13 @@ export const getNewActivityItem = () => ({
   isHidden: false,
 });
 
-export const getDefaultValues = ({
-  appletData,
-  language,
-}: {
-  appletData?: SingleApplet;
-  language: string;
-}) => {
+export const getDefaultValues = (appletData?: SingleApplet) => {
   if (!appletData) return getNewApplet();
 
   return {
     ...appletData,
-    description: appletData.description?.[language] ?? '',
-    about: appletData.about?.[language] ?? '',
+    description: getDictionaryText(appletData.description),
+    about: getDictionaryText(appletData.about),
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,
@@ -59,7 +54,7 @@ export const getDefaultValues = ({
             ? activity.items.map((item) => ({
                 ...item,
                 id: `${item.id}`,
-                question: item.question?.[language] ?? '',
+                question: getDictionaryText(item.question),
               }))
             : [],
         }))

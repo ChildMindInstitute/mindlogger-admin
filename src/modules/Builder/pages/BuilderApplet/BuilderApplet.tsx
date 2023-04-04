@@ -24,10 +24,7 @@ import { getDefaultValues } from './BuilderApplet.utils';
 import { AppletFormValues } from './BuilderApplet.types';
 
 export const BuilderApplet = () => {
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation();
+  const { t } = useTranslation();
   const params = useParams();
   const hiddenHeader = !!params.activityId;
   const dispatch = useAppDispatch();
@@ -36,9 +33,7 @@ export const BuilderApplet = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
-  const { getFormValues } = useBuilderSessionStorageFormValues(
-    getDefaultValues({ appletData, language }),
-  );
+  const { getFormValues } = useBuilderSessionStorageFormValues(getDefaultValues(appletData));
 
   const methods = useForm<AppletFormValues>({
     defaultValues: getFormValues(),
