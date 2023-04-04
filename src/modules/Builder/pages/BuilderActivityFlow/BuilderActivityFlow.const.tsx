@@ -6,12 +6,12 @@ export const newActivityFlowTabs = [
     labelKey: 'aboutActivityFlow',
     icon: <Svg id="more-info-outlined" />,
     activeIcon: <Svg id="more-info-filled" />,
-    path: page.newAppletNewActivityFlowAbout,
+    path: page.builderAppletNewActivityFlowAbout,
   },
   {
     labelKey: 'activityFlowBuilder',
     icon: <Svg id="checklist-outlined" />,
     activeIcon: <Svg id="checklist-filled" />,
-    path: page.newAppletNewActivityFlowBuilder,
+    path: page.builderAppletNewActivityFlowBuilder,
   },
 ];

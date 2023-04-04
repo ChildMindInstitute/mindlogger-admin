@@ -112,5 +112,4 @@ export type SliderOption = {
 
 export type ItemConfigurationProps = {
   item: ActivityItemApi | null;
-  onItemChange: (d: Omit<ActivityItemApi, 'id' | 'hidden'>) => void;
 };
