@@ -7,6 +7,7 @@ import { workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/components';
 import { GetAppletsParams } from 'api';
+import { formattedOrder } from 'shared/utils';
 
 export const useTable = (
   thunk: AsyncThunk<AxiosResponse, GetAppletsParams, Record<string, never>>,
@@ -19,7 +20,7 @@ export const useTable = (
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState('');
   const [order, setOrder] = useState<Order>('desc');
-  const ordering = orderBy ? `${order === 'asc' ? '+' : '-'}${orderBy}` : '';
+  const ordering = formattedOrder(orderBy, order);
 
   const { ownerId } = workspaces.useData() || {};
 

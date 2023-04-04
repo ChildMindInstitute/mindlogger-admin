@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { Svg, Actions, Search } from 'shared/components';
 import { users } from 'redux/modules';
-import { useBreadcrumbs, useTable } from 'shared/hooks';
+import { joinWihComma, useBreadcrumbs, useTable } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
@@ -45,9 +45,7 @@ export const Managers = () => {
 
   const rows = managersData?.result?.map((user) => {
     const { email, firstName, lastName, roles } = user;
-    const stringRoles = `${roles
-      ?.map((item) => item.charAt(0).toUpperCase() + item.slice(1))
-      .join(', ')}`;
+    const stringRoles = joinWihComma(roles);
 
     return {
       firstName: {
