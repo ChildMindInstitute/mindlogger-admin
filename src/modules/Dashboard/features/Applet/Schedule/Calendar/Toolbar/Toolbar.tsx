@@ -3,11 +3,9 @@ import { getISOWeek } from 'date-fns';
 
 import { ToggleButtonGroup, Svg } from 'shared/components';
 import i18n from 'i18n';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledTitleBoldMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { theme, variables, StyledTitleBoldMedium, StyledFlexTopCenter } from 'shared/styles';
+import { formatToYearMonthDate } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
 
-import { formatToYearMonthDate } from '../Calendar.utils';
 import { CalendarViews } from '../Calendar.types';
 import { StyledToolbar, StyledIconBtn, StyledViewsWrapper, StyledTodayBtn } from './Toolbar.styles';
 import { getCalendarViewButtons } from './Toolbar.const';
