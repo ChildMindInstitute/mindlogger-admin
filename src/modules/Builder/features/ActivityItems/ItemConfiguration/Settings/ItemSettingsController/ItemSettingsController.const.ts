@@ -27,6 +27,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.HasTextInput,
         ItemConfigurationSettings.IsTextInputRequired,
       ],
+      collapsedByDefault: true,
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -36,10 +37,12 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsGoBackRemoved,
         ItemConfigurationSettings.HasRandomize,
       ],
+      collapsedByDefault: true,
     },
     {
       groupName: ItemSettingsGroupNames.ScoresAndAlerts,
       groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.MultipleSelection]: [
@@ -56,6 +59,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.HasTextInput,
         ItemConfigurationSettings.IsTextInputRequired,
       ],
+      collapsedByDefault: true,
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -65,10 +69,12 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsGoBackRemoved,
         ItemConfigurationSettings.HasRandomize,
       ],
+      collapsedByDefault: true,
     },
     {
       groupName: ItemSettingsGroupNames.ScoresAndAlerts,
       groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.Slider]: [
@@ -118,6 +124,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.NumberSelection]: [
@@ -134,6 +141,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.TimeRange]: [
@@ -151,6 +159,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.Geolocation]: [
@@ -168,6 +177,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.Audio]: [
@@ -185,6 +195,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.SingleSelectionPerRow]: [
@@ -199,6 +210,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     {
       groupName: ItemSettingsGroupNames.ScoresAndAlerts,
       groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.MultipleSelectionPerRow]: [
@@ -213,6 +225,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     {
       groupName: ItemSettingsGroupNames.ScoresAndAlerts,
       groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.SliderRows]: [
@@ -227,6 +240,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     {
       groupName: ItemSettingsGroupNames.ScoresAndAlerts,
       groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.Text]: [
@@ -245,6 +259,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.Drawing]: [
@@ -264,6 +279,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsUndoRemoved,
         ItemConfigurationSettings.IsNavigationMovedToTheTop,
       ],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.Photo]: [
@@ -281,6 +297,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.Video]: [
@@ -298,6 +315,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
   ],
   [ItemInputTypes.Message]: [
@@ -317,6 +335,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.HasTextInput,
         ItemConfigurationSettings.IsTextInputRequired,
       ],
+      collapsedByDefault: true,
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurations,
@@ -324,6 +343,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
         ItemConfigurationSettings.IsSkippable,
         ItemConfigurationSettings.IsGoBackRemoved,
       ],
+      collapsedByDefault: true,
     },
   ],
 };

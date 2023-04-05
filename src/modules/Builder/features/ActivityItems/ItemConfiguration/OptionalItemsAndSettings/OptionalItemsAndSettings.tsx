@@ -16,6 +16,7 @@ import {
   ItemSettingsController,
   ItemSettingsDrawer,
   TextInputOption,
+  ResponseDataIdentifier,
 } from '../Settings';
 import { Alerts } from '../Alerts';
 import { SelectionOption } from '../InputTypeItems';
@@ -68,6 +69,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       selectedInputType === ItemInputTypes.MultipleSelection;
     const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
     const hasColorPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
+    const hasResponseDataIdentifier = settings?.includes(
+      ItemConfigurationSettings.HasResponseDataIdentifier,
+    );
 
     const handleAddOption = () =>
       appendOption({
@@ -78,6 +82,26 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
       });
 
+    const handleAddAlert = () =>
+      appendAlert({
+        option: '',
+        item: '',
+        message: '',
+      });
+
+    const handleRemoveAlert = (index: number) => {
+      removeAlert(index);
+      if (!getValues().alerts?.length) {
+        setValue(
+          'settings',
+          settings?.filter(
+            (settingKey: ItemConfigurationSettings) =>
+              settingKey !== ItemConfigurationSettings.HasAlerts,
+          ),
+        );
+      }
+    };
+
     const handleRemoveTextInputOption = () => {
       setValue(
         'settings',
@@ -85,6 +109,16 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           (settingKey: ItemConfigurationSettings) =>
             settingKey !== ItemConfigurationSettings.HasTextInput &&
             settingKey !== ItemConfigurationSettings.IsTextInputRequired,
+        ),
+      );
+    };
+
+    const handleRemoveResponseDataIdentifier = () => {
+      setValue(
+        'settings',
+        settings?.filter(
+          (settingKey: ItemConfigurationSettings) =>
+            settingKey !== ItemConfigurationSettings.HasResponseDataIdentifier,
         ),
       );
     };
@@ -112,6 +146,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       removeOptions,
       handleAddOption,
       removeAlert,
+      handleAddAlert,
       setShowColorPalette,
     });
 
@@ -159,9 +194,12 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           </>
         )}
         {activeItem}
+        {hasResponseDataIdentifier && (
+          <ResponseDataIdentifier onRemove={handleRemoveResponseDataIdentifier} />
+        )}
         {isTextInputOptionVisible && <TextInputOption onRemove={handleRemoveTextInputOption} />}
         {hasAlerts && (
-          <Alerts appendAlert={appendAlert} removeAlert={removeAlert} alerts={alerts} />
+          <Alerts appendAlert={handleAddAlert} removeAlert={handleRemoveAlert} alerts={alerts} />
         )}
         {settingsDrawerVisible && (
           <ItemSettingsDrawer

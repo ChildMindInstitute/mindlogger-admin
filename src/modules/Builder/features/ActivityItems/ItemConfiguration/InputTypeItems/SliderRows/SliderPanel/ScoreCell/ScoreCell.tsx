@@ -38,6 +38,7 @@ export const ScoreCell = ({ name }: { name: string }) => {
           minNumberValue={Number.MIN_SAFE_INTEGER}
           autoFocus
           isEmptyStringAllowed
+          isErrorVisible={false}
         />
       </Box>
     </ClickAwayListener>

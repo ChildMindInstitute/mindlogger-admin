@@ -191,12 +191,6 @@ export const SelectionOption = ({
                   label={t('tooltip')}
                   name={`options.${index}.tooltip`}
                 />
-                <StyledBodyMedium
-                  color={variables.palette.on_surface_variant}
-                  sx={{ mr: theme.spacing(1.5) }}
-                >
-                  {t('supportingText')}
-                </StyledBodyMedium>
               </StyledTooltipWrapper>
             )}
           </StyledFlexColumn>

@@ -67,6 +67,7 @@ export const useSettingsSetup = ({
   removeOptions,
   handleAddOption,
   removeAlert,
+  handleAddAlert,
   setShowColorPalette,
 }: SettingsSetupProps) => {
   const selectedInputType = watch('itemsInputType');
@@ -115,7 +116,10 @@ export const useSettingsSetup = ({
   }, [selectedInputType]);
 
   useEffect(() => {
-    !hasAlerts && removeAlert?.();
+    if (!hasAlerts) {
+      return removeAlert?.();
+    }
+    handleAddAlert?.();
   }, [hasAlerts]);
 
   useEffect(() => {
