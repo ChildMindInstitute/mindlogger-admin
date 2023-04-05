@@ -36,11 +36,13 @@ export const SaveAndPublish = () => {
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
   const [publishProcessStep, setPublishProcessStep] = useState<SavaAndPublishStep>();
   const [appletPassword, setAppletPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const responseStatus = applet.useResponseStatus();
 
   useEffect(() => {
-    isLoading && setPublishProcessStep(SavaAndPublishStep.BeingCreated);
-  }, [isLoading]);
+    responseStatus === 'loading' && setPublishProcessStep(SavaAndPublishStep.BeingCreated);
+    responseStatus === 'error' && setPublishProcessStep(SavaAndPublishStep.Failed);
+    responseStatus === 'success' && setPublishProcessStep(SavaAndPublishStep.Success);
+  }, [responseStatus]);
 
   const handleSaveAndPublishFirstClick = () => {
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
@@ -76,7 +78,6 @@ export const SaveAndPublish = () => {
   };
 
   const sendRequest = async (appletPassword: EnterAppletPasswordForm['appletPassword']) => {
-    setIsLoading(true);
     setPublishProcessPopupOpened(true);
     const body = getAppletData(appletPassword);
 
@@ -87,29 +88,20 @@ export const SaveAndPublish = () => {
     if (!isNewApplet && appletId) {
       result = await dispatch(updateApplet({ appletId, body }));
     }
-    setIsLoading(false);
     if (!result) return;
 
-    builderSessionStorage.removeItem();
-
     if (updateApplet.fulfilled.match(result)) {
+      builderSessionStorage.removeItem();
       setAppletPassword('');
-      setPublishProcessStep(SavaAndPublishStep.Success);
-    }
-    if (updateApplet.rejected.match(result)) {
-      setPublishProcessStep(SavaAndPublishStep.Failed);
     }
 
     if (!isNewApplet) return;
 
     if (createApplet.fulfilled.match(result)) {
+      builderSessionStorage.removeItem();
       const createdAppletId = result.payload.data.result?.id;
       createdAppletId && navigate(getBuilderAppletUrl(createdAppletId));
       setAppletPassword('');
-      setPublishProcessStep(SavaAndPublishStep.Success);
-    }
-    if (createApplet.rejected.match(result)) {
-      setPublishProcessStep(SavaAndPublishStep.Failed);
     }
   };
 

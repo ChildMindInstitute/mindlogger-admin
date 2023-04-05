@@ -97,7 +97,7 @@ export type SingleApplet = {
   updatedAt: string;
   image?: string;
   watermark?: string;
-  themeId?: string;
+  themeId?: string | null;
   reportServerIp?: string;
   reportPublicKey?: string;
   reportRecipients?: string[];

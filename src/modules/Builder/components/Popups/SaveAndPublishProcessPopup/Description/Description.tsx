@@ -1,29 +1,30 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { applet } from 'shared/state';
 import { StyledBodyLarge, variables } from 'shared/styles';
+import { useAppletData } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.hooks';
 
 import { SavaAndPublishStep } from '../SaveAndPublishProcessPopup.types';
 import { DescriptionProps } from './Description.types';
 
 export const Description = ({ step }: DescriptionProps) => {
   const { t } = useTranslation('app');
-  const { result: appletData } = applet.useAppletData() ?? {};
+  const getAppletData = useAppletData();
+  const name = getAppletData().displayName;
 
   switch (step) {
     case SavaAndPublishStep.AtLeast1Activity:
-      return <>{t('appletIsRequiredOneActivity')}</>;
+      return <StyledBodyLarge>{t('appletIsRequiredOneActivity')}</StyledBodyLarge>;
     case SavaAndPublishStep.AtLeast1Item:
-      return <>{t('appletIsRequiredOneItem')}</>;
+      return <StyledBodyLarge>{t('appletIsRequiredOneItem')}</StyledBodyLarge>;
     case SavaAndPublishStep.BeingCreated:
-      return <>{t('appletIsBeingCreated')}</>;
+      return <StyledBodyLarge>{t('appletIsBeingCreated')}</StyledBodyLarge>;
     case SavaAndPublishStep.Success:
       return (
         <Trans i18nKey="appletSavedAndPublished">
           <StyledBodyLarge>
             Applet
             <strong>
-              <>{{ name: appletData?.displayName }}</>
+              <>{{ name }}</>
             </strong>
             has been successfully saved and published.
           </StyledBodyLarge>
@@ -35,7 +36,7 @@ export const Description = ({ step }: DescriptionProps) => {
           <StyledBodyLarge sx={{ color: variables.palette.red }}>
             Applet
             <strong>
-              <>{{ name: appletData?.displayName }}</>
+              <>{{ name }}</>
             </strong>
             has not been saved and published. Please try again.
           </StyledBodyLarge>

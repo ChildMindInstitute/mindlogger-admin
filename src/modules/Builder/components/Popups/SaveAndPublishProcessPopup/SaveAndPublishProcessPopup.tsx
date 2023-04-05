@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { Modal } from 'shared/components';
-import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
+import { StyledModalWrapper, theme } from 'shared/styles';
 
 import {
   SaveAndPublishProcessPopupProps,
@@ -45,14 +46,14 @@ export const SaveAndPublishProcessPopup = ({
       {...modalProps}
     >
       <StyledModalWrapper>
-        <StyledBodyLarge
+        <Box
           sx={{
             mt: theme.spacing(-1),
             pb: step === SavaAndPublishStep.BeingCreated ? theme.spacing(3.2) : 0,
           }}
         >
           <Description step={step} />
-        </StyledBodyLarge>
+        </Box>
       </StyledModalWrapper>
     </Modal>
   );

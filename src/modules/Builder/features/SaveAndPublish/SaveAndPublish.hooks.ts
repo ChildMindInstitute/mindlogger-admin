@@ -6,6 +6,7 @@ import { applet, SingleApplet } from 'shared/state';
 import { EnterAppletPasswordForm } from 'modules/Dashboard';
 
 import { appletActivitiesMocked, appletActivityFlowsMocked, appletDataMocked } from './mock';
+import { getAppletDataForApi } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
   const pathname = window.location.pathname;
@@ -22,13 +23,14 @@ export const useAppletData = () => {
     i18n: { language },
   } = useTranslation('app');
 
-  return (appletPassword?: EnterAppletPasswordForm['appletPassword']) => {
+  return (appletPassword?: EnterAppletPasswordForm['appletPassword']): SingleApplet => {
     const appletInfo = getAppletInfoFromStorage();
+    const appletInfoForApi = getAppletDataForApi(appletInfo);
 
     if (isNewApplet) {
       return {
         ...appletDataMocked,
-        ...appletInfo,
+        ...appletInfoForApi,
         password: appletPassword,
         description: {
           [language]: appletInfo.description,
@@ -37,24 +39,20 @@ export const useAppletData = () => {
           [language]: appletInfo.about,
         },
         themeId: null, // TODO: create real themeId
+        // eslint-disable-next-line
+        // @ts-ignore
         activities: appletActivitiesMocked, // TODO: add real activities
-      } as SingleApplet;
+        // eslint-disable-next-line
+        // @ts-ignore
+        activityFlows: appletActivityFlowsMocked, // TODO: add real activityFlows
+      };
     }
 
-    const {
-      createdAt,
-      updatedAt,
-      id,
-      retentionPeriod,
-      retentionType,
-      theme,
-      version,
-      ...appletDataForApi
-    } = appletData!;
+    const appletDataForApi = getAppletDataForApi(appletData!);
 
     return {
       ...appletDataForApi,
-      ...appletInfo,
+      ...appletInfoForApi,
       password: appletPassword,
       description: {
         ...appletDataForApi.description,
@@ -65,9 +63,13 @@ export const useAppletData = () => {
         [language]: appletInfo?.about ?? appletDataForApi.about[language],
       },
       themeId: null, // TODO: create real themeId
+      // eslint-disable-next-line
+      // @ts-ignore
       activities: appletActivitiesMocked, // TODO: api has error details: items-missed; order-permitted, description has wrong type
+      // eslint-disable-next-line
+      // @ts-ignore
       activityFlows: appletActivityFlowsMocked, // TODO: api has error details: items-missed; activitiesIds/order-permitted
-    } as SingleApplet;
+    };
   };
 };
 
