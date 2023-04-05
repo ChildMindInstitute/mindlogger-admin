@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components';
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 
 export const itemsTypeIcons = {
   [ItemResponseType.SingleSelection]: <Svg id="radio-button-outline" />,

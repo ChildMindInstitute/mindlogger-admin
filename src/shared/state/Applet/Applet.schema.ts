@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios';
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId } from 'api';
+import { ItemResponseType } from 'shared/consts';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -35,28 +36,6 @@ export type Config = {
   response_data_identifier: boolean;
   response_required: boolean;
 };
-
-export enum ItemResponseType {
-  SingleSelection = 'singleSelect',
-  MultipleSelection = 'multiSelect',
-  Slider = 'slider',
-  Date = 'date',
-  NumberSelection = 'numberSelect',
-  TimeRange = 'timeRange',
-  SingleSelectionPerRow = 'singleSelectRows',
-  MultipleSelectionPerRow = 'multiSelectRows',
-  SliderRows = 'sliderRows',
-  Text = 'text',
-  Drawing = 'drawing',
-  Photo = 'photo',
-  Video = 'video',
-  Geolocation = 'geolocation',
-  Audio = 'audio',
-  Message = 'message',
-  AudioPlayer = 'audioPlayer',
-  Flanker = 'flanker',
-  AbTest = 'abTest',
-}
 
 export type ResponseValues = Record<string, string>;
 

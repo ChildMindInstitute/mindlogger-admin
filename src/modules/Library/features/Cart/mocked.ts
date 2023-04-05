@@ -1,4 +1,4 @@
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 
 export const mockedCart = [
   {

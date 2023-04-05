@@ -6,7 +6,7 @@ import { FieldValues, useFormContext } from 'react-hook-form';
 import { StyledTitleMedium, theme, variables } from 'shared/styles';
 import { Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 import { MediaUploader, ResourceDataType } from 'modules/Builder/components';
 import { StyledName, StyledNameWrapper } from './AudioPlayer.styles';
 import { AudioPlayerProps } from './AudioPlayer.types';

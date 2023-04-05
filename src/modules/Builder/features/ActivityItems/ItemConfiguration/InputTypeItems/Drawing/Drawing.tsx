@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Uploads } from 'modules/Builder/components';
 import { Uploader } from 'shared/components';
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_2MB } from 'shared/consts';
 import { StyledFlexTopCenter, theme } from 'shared/styles';

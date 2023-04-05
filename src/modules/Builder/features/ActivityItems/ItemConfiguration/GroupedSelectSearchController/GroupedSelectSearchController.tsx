@@ -5,7 +5,7 @@ import { TextField, FormControl, InputLabel } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { theme, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc } from 'shared/utils';
 
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';

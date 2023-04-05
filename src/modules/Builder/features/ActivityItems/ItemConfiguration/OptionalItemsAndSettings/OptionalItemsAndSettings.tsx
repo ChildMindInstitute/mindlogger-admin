@@ -4,7 +4,7 @@ import { ColorResult } from 'react-color';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 

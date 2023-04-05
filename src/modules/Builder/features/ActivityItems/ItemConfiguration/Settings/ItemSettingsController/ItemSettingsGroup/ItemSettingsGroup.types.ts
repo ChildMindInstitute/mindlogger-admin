@@ -1,4 +1,4 @@
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 
 import { ItemSettingsGroupNames } from '../ItemSettingsController.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
