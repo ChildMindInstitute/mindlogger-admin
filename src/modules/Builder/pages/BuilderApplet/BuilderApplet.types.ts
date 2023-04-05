@@ -38,7 +38,7 @@ export type AppletFormValues = {
   about: string;
   image?: string;
   watermark?: string;
-  themeId?: string;
+  themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
   activities: ActivityFormValues[];
 };
