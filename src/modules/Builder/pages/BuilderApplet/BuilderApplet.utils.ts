@@ -5,10 +5,11 @@ import { page } from 'resources';
 import { SingleApplet } from 'shared/state';
 import { getDictionaryText } from 'shared/utils';
 
+import { ActivityFormValues } from './BuilderApplet.types';
+
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
-export const getNewActivity = () => ({
-  key: uuidv4(),
+export const getNewActivity = (activity?: ActivityFormValues) => ({
   name: '',
   description: '',
   items: [],
@@ -16,6 +17,8 @@ export const getNewActivity = () => ({
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
+  ...activity,
+  key: uuidv4(),
 });
 
 export const getNewApplet = () => ({

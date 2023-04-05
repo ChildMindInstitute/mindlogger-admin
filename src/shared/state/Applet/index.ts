@@ -28,7 +28,7 @@ export const applet = {
         },
       }) => data,
     ),
-  useAppletStatus: (): AppletSchema['applet']['status'] =>
+  useStatus: (): AppletSchema['applet']['status'] =>
     useAppSelector(
       ({
         applet: {
