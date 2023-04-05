@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, MouseEvent } from 'react';
 
 import { Row, UiType } from 'shared/components';
-import { HeadCell, Order, OrderBy } from 'shared/types';
+import { HeadCell, Order } from 'shared/types';
 
 export type TableProps = {
   uiType?: UiType;
@@ -10,7 +10,7 @@ export type TableProps = {
   columns: HeadCell[];
   rows?: Row[];
   order: Order;
-  orderBy: OrderBy;
+  orderBy: string;
   handleRequestSort: (event: MouseEvent<unknown>, property: string) => void;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
