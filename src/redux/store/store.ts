@@ -7,6 +7,7 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
+      // TODO: remove serializable check and fix errors
       serializableCheck: false,
     }),
 });

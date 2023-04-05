@@ -1,6 +1,8 @@
 import { CalendarProps } from 'react-big-calendar';
 
-import { CalendarEvent, CalendarViews } from '../Calendar.types';
+import { CalendarEvent } from 'modules/Dashboard/state';
+
+import { CalendarViews } from '../Calendar.types';
 
 export type EventContainerWrapperProps = Partial<CalendarProps> & {
   events: CalendarEvent[];

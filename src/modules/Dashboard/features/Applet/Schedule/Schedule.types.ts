@@ -1,6 +1,5 @@
 import { Row } from 'shared/components';
-
-import { CalendarEvent } from './Calendar/Calendar.types';
+import { CalendarEvent, CreateEventsData } from 'modules/Dashboard/state';
 
 export type LegendEvent = {
   name: string;
@@ -32,10 +31,22 @@ export type PreparedEvents = {
   deactivatedEvents: LegendEvent[];
   scheduleExportTableData: Row[];
   scheduleExportCsv: ScheduleExportCsv;
-  calendarEvents: CalendarEvent[];
 };
 
 export type AddEventsToCategories = Omit<LegendEvent, 'count'> & {
   isHidden?: boolean;
-  index: number;
+};
+
+export type ActivitiesFlowsWithColors = {
+  color: string[];
+  id: string;
+}[];
+
+export type EventsData = {
+  scheduleExportTableData: Row[];
+  scheduleExportCsv: ScheduleExportCsv;
+  scheduledActivitiesFlows: ActivitiesFlowsWithColors;
+  alwaysActivitiesFlows: ActivitiesFlowsWithColors;
+  calendarEventsArr: CalendarEvent[];
+  eventsDataArr: CreateEventsData[];
 };

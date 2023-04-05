@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Svg } from 'shared/components';
 import { page } from 'resources';
 import { BUILDER_PAGES } from 'shared/consts';
+import { calendarEvents } from 'modules/Dashboard/state';
+import { useAppDispatch } from 'redux/store';
 
 import { PreparedEvents } from '../Schedule.types';
 import { Counter } from './Counter';
@@ -21,6 +23,7 @@ export const useExpandedLists = (
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { id } = useParams();
+  const dispatch = useAppDispatch();
 
   if (!legendEvents) return;
 
@@ -56,6 +59,22 @@ export const useExpandedLists = (
   const noAvailableEvents = alwaysAvailableEvents.length === 0;
   const noDeactivatedEvents = deactivatedEvents.length === 0;
 
+  const handleAvailableVisibilityChange = () => {
+    setAvailableVisibility((isVisible) => {
+      dispatch(calendarEvents.actions.setCalendarEvents({ alwaysAvailableHidden: isVisible }));
+
+      return !isVisible;
+    });
+  };
+
+  const handleScheduledVisibilityChange = () => {
+    setScheduledVisibility((isVisible) => {
+      dispatch(calendarEvents.actions.setCalendarEvents({ scheduledHidden: isVisible }));
+
+      return !isVisible;
+    });
+  };
+
   return [
     {
       buttons: [
@@ -69,7 +88,7 @@ export const useExpandedLists = (
           icon: (
             <Svg id={scheduledVisibility ? 'visibility-on' : 'visibility-off'} {...commonProps} />
           ),
-          action: () => setScheduledVisibility((prev) => !prev),
+          action: handleScheduledVisibilityChange,
           tooltipTitle: t('hideFromCalendar'),
           disabled: noScheduledEvents,
         },
@@ -83,7 +102,7 @@ export const useExpandedLists = (
           icon: (
             <Svg id={availableVisibility ? 'visibility-on' : 'visibility-off'} {...commonProps} />
           ),
-          action: () => setAvailableVisibility((prev) => !prev),
+          action: handleAvailableVisibilityChange,
           tooltipTitle: t('hideFromCalendar'),
           disabled: noAvailableEvents,
         },
