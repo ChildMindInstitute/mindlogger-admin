@@ -31,6 +31,7 @@ export const BuilderApplet = () => {
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
+  const loadingStatus = applet.useAppletStatus() ?? {};
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
   const { getFormValues } = useBuilderSessionStorageFormValues(getDefaultValues(appletData));
@@ -41,6 +42,11 @@ export const BuilderApplet = () => {
     mode: 'onChange',
   });
 
+  useEffect(() => {
+    if (loadingStatus === 'success' && !isNewApplet) methods.reset(getFormValues());
+    if (isNewApplet) methods.reset(getDefaultValues());
+  }, [loadingStatus, isNewApplet]);
+
   const { cancelNavigation, confirmNavigation, promptVisible } = usePrompt(
     methods.formState.isDirty,
   );
@@ -49,7 +55,9 @@ export const BuilderApplet = () => {
     methods.getValues,
   );
 
-  methods.watch(handleFormChange);
+  methods.watch((_, { type, name }) => {
+    if (type === 'change' || !!name) handleFormChange();
+  });
 
   useBreadcrumbs([
     {

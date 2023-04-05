@@ -33,6 +33,8 @@ export const usePrompt = (isFormChanged: boolean) => {
         return false;
       }
 
+      builderSessionStorage.removeItem();
+
       setLastLocation(nextLocation);
       setConfirmedNavigation(true);
 

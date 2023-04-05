@@ -1,17 +1,14 @@
-import uniqueId from 'lodash.uniqueid';
 import { matchPath } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
-import i18n from 'i18n';
 import { page } from 'resources';
 import { SingleApplet } from 'shared/state';
 import { getDictionaryText } from 'shared/utils';
 
-const { t } = i18n;
-
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
 export const getNewActivity = () => ({
-  key: uniqueId(),
+  key: uuidv4(),
   name: '',
   description: '',
   items: [],
@@ -33,16 +30,16 @@ export const getNewApplet = () => ({
 });
 
 export const getNewActivityItem = () => ({
-  id: uniqueId(),
+  id: uuidv4(),
   responseType: '',
-  name: t('newItemName'),
+  name: '',
   question: '',
   settings: [],
   isHidden: false,
 });
 
 export const getNewActivityFlow = () => ({
-  id: uniqueId(),
+  id: uuidv4(),
 });
 
 export const getDefaultValues = (appletData?: SingleApplet) => {

@@ -41,12 +41,12 @@ export const SaveAndPublish = () => {
 
     builderSessionStorage.removeItem();
 
-    if (!isNewApplet) return;
-
-    if (createApplet.fulfilled.match(result)) {
+    if (isNewApplet && createApplet.fulfilled.match(result)) {
       const createdAppletId = result.payload.data.result?.id;
       createdAppletId && navigate(getBuilderAppletUrl(createdAppletId));
     }
+
+    if (!isNewApplet && appletId) navigate(getBuilderAppletUrl(appletId));
   };
 
   return (

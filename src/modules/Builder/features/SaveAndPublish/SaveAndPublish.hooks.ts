@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { APPLET_PAGE_REGEXP_STRING, builderSessionStorage } from 'shared/utils';
-import { applet } from 'shared/state';
+import { applet, Activity } from 'shared/state';
 import { EnterAppletPasswordForm } from 'modules/Dashboard';
 
-import { appletActivitiesMocked, appletActivityFlowsMocked, appletDataMocked } from './mock';
+import { appletDataMocked, activityItemsMocked } from './mock';
+import { removeAppletExtraFields, removeActivityExtraFields } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
   const pathname = window.location.pathname;
@@ -29,6 +31,15 @@ export const useAppletData = () => {
       return {
         ...appletDataMocked,
         ...appletInfo,
+        activities: appletInfo?.activities.map((activity: Activity) => ({
+          ...activity,
+          key: uuidv4(),
+          description: {
+            [language]: activity.description,
+          },
+          items: activityItemsMocked,
+          ...removeActivityExtraFields(),
+        })),
         password: appletPassword,
         description: {
           [language]: appletInfo.description,
@@ -37,6 +48,7 @@ export const useAppletData = () => {
           [language]: appletInfo.about,
         },
         themeId: null, // TODO: create real themeId
+        ...removeAppletExtraFields(),
       };
     }
 
@@ -52,7 +64,7 @@ export const useAppletData = () => {
     } = appletData!;
 
     return {
-      ...appletDataForApi,
+      ...appletData,
       ...appletInfo,
       password: appletPassword,
       description: {
@@ -64,8 +76,17 @@ export const useAppletData = () => {
         [language]: appletInfo?.about ?? appletDataForApi.about[language],
       },
       themeId: null, // TODO: create real themeId
-      activities: appletActivitiesMocked, // TODO: api has error details: items-missed; order-permitted, description has wrong type
-      activityFlows: appletActivityFlowsMocked, // TODO: api has error details: items-missed; activitiesIds/order-permitted
+      activities: appletInfo?.activities.map((activity: Activity) => ({
+        ...activity,
+        key: uuidv4(),
+        description: {
+          [language]: activity.description,
+        },
+        items: activityItemsMocked,
+        ...removeActivityExtraFields(),
+      })),
+      // activityFlows: appletActivityFlowsMocked, // TODO: api has error details: items-missed; activitiesIds/order-permitted
+      ...removeAppletExtraFields(),
     };
   };
 };

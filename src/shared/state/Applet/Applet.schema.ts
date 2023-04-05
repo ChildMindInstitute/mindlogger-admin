@@ -65,7 +65,7 @@ export type Activity = {
   key?: string;
   name: string;
   description: string;
-  ordering: number;
+  order: number;
   splashScreen?: string;
   image?: string;
   showAllAtOnce?: boolean;
