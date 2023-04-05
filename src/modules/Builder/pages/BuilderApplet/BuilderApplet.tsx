@@ -6,7 +6,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { SaveAndPublish } from 'modules/Builder/features';
-import { SaveChangesPopup } from 'modules/Builder/components';
 import { LinkedTabs, Svg } from 'shared/components';
 import {
   useBreadcrumbs,
@@ -18,7 +17,6 @@ import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 
 import { newAppletTabs } from './BuilderApplet.const';
-import { usePrompt } from './BuilderApplet.hooks';
 import { AppletSchema } from './BuilderApplet.schema';
 import { getDefaultValues } from './BuilderApplet.utils';
 import { AppletFormValues } from './BuilderApplet.types';
@@ -40,10 +38,6 @@ export const BuilderApplet = () => {
     resolver: yupResolver(AppletSchema()),
     mode: 'onChange',
   });
-
-  const { cancelNavigation, confirmNavigation, promptVisible } = usePrompt(
-    methods.formState.isDirty,
-  );
 
   const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(
     methods.getValues,
@@ -70,13 +64,8 @@ export const BuilderApplet = () => {
     <FormProvider {...methods}>
       <StyledBody sx={{ position: 'relative' }}>
         <LinkedTabs hiddenHeader={hiddenHeader} tabs={newAppletTabs} />
-        <SaveAndPublish />
+        <SaveAndPublish hasPrompt={methods.formState.isDirty} />
       </StyledBody>
-      <SaveChangesPopup
-        isPopupVisible={promptVisible}
-        handleClose={cancelNavigation}
-        handleSubmit={confirmNavigation}
-      />
     </FormProvider>
   );
 };
