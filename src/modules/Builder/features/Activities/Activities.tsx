@@ -1,25 +1,19 @@
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
-import { StyledTitleMedium, StyledBuilderWrapper } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
-import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { BuilderContainer } from 'shared/features';
 
-import { Header, Item } from '../../components';
+import { Item } from '../../components';
 import { getActions } from './Activities.const';
+import { ActivitiesHeader } from './ActivitiesHeader';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-
-  const { control, watch } = useFormContext();
-
-  const { append: appendActivity } = useFieldArray({
-    control,
-    name: 'activities',
-  });
+  const { watch } = useFormContext();
 
   const activities = watch('activities');
 
@@ -30,36 +24,24 @@ export const Activities = () => {
     },
   ]);
 
-  const handleAddActivity = () => {
-    appendActivity(getNewActivity());
-  };
-
   return (
-    <StyledBuilderWrapper>
-      <Header
-        title={t('activities')}
-        buttons={[
-          {
-            icon: <Svg id="checklist-filled" />,
-            label: t('addActivity'), // TODO add Applet Activity Name on Edit
-            handleClick: handleAddActivity,
-          },
-        ]}
-      />
-      {activities?.length ? (
-        activities.map((item: ActivityFormValues) => (
-          <Item
-            {...item}
-            key={`activity-${item.key ?? item.id}`}
-            getActions={() => getActions(item.key ?? item.id ?? '')}
-            withHover
-          />
-        ))
-      ) : (
-        <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
-          {t('activityIsRequired')}
-        </StyledTitleMedium>
-      )}
-    </StyledBuilderWrapper>
+    <BuilderContainer title={t('activities')} Header={ActivitiesHeader}>
+      <StyledFlexColumn>
+        {activities?.length ? (
+          activities.map((item: ActivityFormValues) => (
+            <Item
+              {...item}
+              key={`activity-${item.key ?? item.id}`}
+              getActions={() => getActions(item.key ?? item.id ?? '')}
+              withHover
+            />
+          ))
+        ) : (
+          <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
+            {t('activityIsRequired')}
+          </StyledTitleMedium>
+        )}
+      </StyledFlexColumn>
+    </BuilderContainer>
   );
 };

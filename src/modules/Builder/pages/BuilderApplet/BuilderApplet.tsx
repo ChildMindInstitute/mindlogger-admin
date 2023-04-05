@@ -26,7 +26,7 @@ import { AppletFormValues } from './BuilderApplet.types';
 export const BuilderApplet = () => {
   const { t } = useTranslation();
   const params = useParams();
-  const hiddenHeader = !!params.activityId;
+  const hiddenHeader = !!params.activityId || !!params.activityFlowId;
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();

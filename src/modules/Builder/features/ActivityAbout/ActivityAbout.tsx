@@ -4,8 +4,6 @@ import { Box } from '@mui/material';
 
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
-  StyledHeadlineLarge,
-  StyledBuilderWrapper,
   StyledBodyLarge,
   StyledTitleMedium,
   theme,
@@ -16,6 +14,7 @@ import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
+import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 
 import { Uploads } from '../../components';
@@ -98,7 +97,7 @@ export const ActivityAbout = () => {
     {
       name: `${name}.isReviewable`,
       label: (
-        <StyledBodyLarge>
+        <StyledBodyLarge sx={{ position: 'relative' }}>
           {t('onlyAdminPanelActivity')}
           <Tooltip tooltipTitle={t('webAppOnlyFeatureTooltip')}>
             <span>
@@ -111,41 +110,36 @@ export const ActivityAbout = () => {
   ];
 
   return (
-    <StyledBuilderWrapper>
-      <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
-        {t('aboutActivity')}
-      </StyledHeadlineLarge>
-      <StyledFlexColumn>
-        <Box sx={{ display: 'flex' }}>
-          <StyledContainer>
-            <Box sx={{ marginBottom: theme.spacing(4.4) }}>
-              <InputController
-                {...commonProps}
-                name={`${name}.name`}
-                maxLength={MAX_NAME_LENGTH}
-                label={t('activityName')}
-              />
-            </Box>
+    <BuilderContainer title={t('aboutActivity')}>
+      <Box sx={{ display: 'flex' }}>
+        <StyledContainer>
+          <Box sx={{ marginBottom: theme.spacing(4.4) }}>
             <InputController
               {...commonProps}
-              name={`${name}.description`}
-              maxLength={MAX_DESCRIPTION_LENGTH_LONG}
-              label={t('activityDescription')}
-              multiline
-              rows={4}
+              name={`${name}.name`}
+              maxLength={MAX_NAME_LENGTH}
+              label={t('activityName')}
             />
-          </StyledContainer>
-          <Uploads uploads={uploads} />
-        </Box>
-        <StyledTitleMedium color={variables.palette.on_surface_variant} sx={{ marginBottom: 1.6 }}>
-          {t('itemLevelSettings')}
-        </StyledTitleMedium>
-        <StyledFlexColumn>
-          {checkboxes.map(({ name, label }) => (
-            <CheckboxController key={name} control={control} name={name} label={label} />
-          ))}
-        </StyledFlexColumn>
+          </Box>
+          <InputController
+            {...commonProps}
+            name={`${name}.description`}
+            maxLength={MAX_DESCRIPTION_LENGTH_LONG}
+            label={t('activityDescription')}
+            multiline
+            rows={4}
+          />
+        </StyledContainer>
+        <Uploads uploads={uploads} />
+      </Box>
+      <StyledTitleMedium color={variables.palette.on_surface_variant} sx={{ marginBottom: 1.6 }}>
+        {t('itemLevelSettings')}
+      </StyledTitleMedium>
+      <StyledFlexColumn>
+        {checkboxes.map(({ name, label }) => (
+          <CheckboxController key={name} control={control} name={name} label={label} />
+        ))}
       </StyledFlexColumn>
-    </StyledBuilderWrapper>
+    </BuilderContainer>
   );
 };
