@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 import {
   AudioPlayer,
   AudioRecord,
@@ -23,34 +23,34 @@ import { getEmptySelectionRows, getEmptySliderOption } from '../ItemConfiguratio
 export const useActiveItem = ({ selectedInputType, control }: ActiveItemHookProps) =>
   useMemo(() => {
     switch (selectedInputType) {
-      case ItemInputTypes.NumberSelection:
+      case ItemResponseType.NumberSelection:
         return <NumberSelection name="minNumber" maxName="maxNumber" />;
-      case ItemInputTypes.Slider:
+      case ItemResponseType.Slider:
         return <SliderRows name="sliderOptions" control={control} />;
-      case ItemInputTypes.SliderRows:
+      case ItemResponseType.SliderRows:
         return <SliderRows name="sliderOptions" control={control} isMultiple />;
 
-      case ItemInputTypes.SingleSelectionPerRow:
+      case ItemResponseType.SingleSelectionPerRow:
         return <SelectionRows isSingle />;
-      case ItemInputTypes.MultipleSelectionPerRow:
+      case ItemResponseType.MultipleSelectionPerRow:
         return <SelectionRows />;
-      case ItemInputTypes.Geolocation:
+      case ItemResponseType.Geolocation:
         return <Geolocation />;
-      case ItemInputTypes.TimeRange:
+      case ItemResponseType.TimeRange:
         return <TimeRange />;
-      case ItemInputTypes.Video:
+      case ItemResponseType.Video:
         return <VideoResponse />;
-      case ItemInputTypes.Photo:
+      case ItemResponseType.Photo:
         return <PhotoResponse />;
-      case ItemInputTypes.Date:
+      case ItemResponseType.Date:
         return <Date />;
-      case ItemInputTypes.Audio:
+      case ItemResponseType.Audio:
         return <AudioRecord name="audioDuration" />;
-      case ItemInputTypes.Text:
+      case ItemResponseType.Text:
         return <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />;
-      case ItemInputTypes.AudioPlayer:
+      case ItemResponseType.AudioPlayer:
         return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
-      case ItemInputTypes.Drawing:
+      case ItemResponseType.Drawing:
         return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
       default:
         null;
@@ -87,24 +87,24 @@ export const useSettingsSetup = ({
     removeOptions?.();
 
     if (
-      selectedInputType === ItemInputTypes.SingleSelection ||
-      selectedInputType === ItemInputTypes.MultipleSelection
+      selectedInputType === ItemResponseType.SingleSelection ||
+      selectedInputType === ItemResponseType.MultipleSelection
     ) {
       handleAddOption?.();
     }
 
     if (
-      selectedInputType === ItemInputTypes.Slider ||
-      selectedInputType === ItemInputTypes.SliderRows
+      selectedInputType === ItemResponseType.Slider ||
+      selectedInputType === ItemResponseType.SliderRows
     ) {
-      const isMultiple = selectedInputType === ItemInputTypes.SliderRows;
+      const isMultiple = selectedInputType === ItemResponseType.SliderRows;
       setValue('sliderOptions', [getEmptySliderOption(isMultiple)]);
       clearErrors('sliderOptions');
     } else unregister('sliderOptions');
 
     if (
-      selectedInputType === ItemInputTypes.SingleSelectionPerRow ||
-      selectedInputType === ItemInputTypes.MultipleSelectionPerRow
+      selectedInputType === ItemResponseType.SingleSelectionPerRow ||
+      selectedInputType === ItemResponseType.MultipleSelectionPerRow
     ) {
       if (selectionRows) {
         setValue('selectionRows', getEmptySelectionRows(selectedInputType));

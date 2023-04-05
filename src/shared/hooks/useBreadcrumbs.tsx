@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
@@ -7,15 +7,11 @@ import { auth, folders, Breadcrumb, breadcrumbs, User, applet } from 'redux/modu
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getAppletData } from 'shared/utils/getAppletData';
-import {
-  checkIfAppletActivityFlowUrlPassed,
-  checkIfAppletActivityUrlPassed,
-  checkIfAppletUrlPassed,
-} from 'shared/utils';
+import { checkIfAppletActivityFlowUrlPassed, checkIfAppletUrlPassed } from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
-  const { id } = useParams();
+  const { id, appletId, activityId, activityFlowId } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -69,12 +65,12 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (checkIfAppletActivityUrlPassed(location.pathname)) {
+    if (activityId) {
       newBreadcrumbs.push(
         {
           icon: <Svg id="checklist-outlined" width="18" height="18" />,
           label: t('activities'),
-          navPath: page.newAppletActivities, // TODO add Applet Activity Id on Edit
+          navPath: generatePath(page.builderAppletActivities, { appletId, activityId }),
         },
         {
           icon: '',
@@ -89,7 +85,11 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         {
           icon: <Svg id="flow" width="18" height="18" />,
           label: t('activityFlow'),
-          navPath: page.newAppletActivityFlow, // TODO add Applet Activity Flow Id on Edit
+          navPath: generatePath(page.builderAppletActivityFlow, {
+            appletId,
+            activityId,
+            activityFlowId,
+          }), // TODO add Applet Activity Flow Id on Edit
         },
         {
           icon: '',
@@ -100,7 +100,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
 
     setCrumbs([...newBreadcrumbs, ...(restCrumbs || [])]);
-  }, [t, firstName, lastName, appletsFoldersData, id]);
+  }, [t, firstName, lastName, appletsFoldersData, id, appletId, activityId]);
 
   useEffect(() => {
     if (crumbs?.length) {

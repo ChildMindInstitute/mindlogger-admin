@@ -41,12 +41,35 @@ export enum DateFormats {
 export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;
 export const APPLET_PASSWORD_MIN_LENGTH = 8;
 
-export enum Roles {
+export const enum Roles {
   User = 'user',
   Manager = 'manager',
   Coordinator = 'coordinator',
   Editor = 'editor',
   Reviewer = 'reviewer',
+  Respondent = 'respondent',
 }
 
 export const SEARCH_DEBOUNCE_VALUE = 700;
+
+export enum ItemResponseType {
+  SingleSelection = 'singleSelect',
+  MultipleSelection = 'multiSelect',
+  Slider = 'slider',
+  Date = 'date',
+  NumberSelection = 'numberSelect',
+  TimeRange = 'timeRange',
+  SingleSelectionPerRow = 'singleSelectRows',
+  MultipleSelectionPerRow = 'multiSelectRows',
+  SliderRows = 'sliderRows',
+  Text = 'text',
+  Drawing = 'drawing',
+  Photo = 'photo',
+  Video = 'video',
+  Geolocation = 'geolocation',
+  Audio = 'audio',
+  Message = 'message',
+  AudioPlayer = 'audioPlayer',
+  Flanker = 'flanker',
+  AbTest = 'abTest',
+}

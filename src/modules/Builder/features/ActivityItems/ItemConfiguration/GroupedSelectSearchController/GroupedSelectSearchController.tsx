@@ -5,7 +5,7 @@ import { TextField, FormControl, InputLabel } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { theme, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc } from 'shared/utils';
 
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
@@ -34,10 +34,10 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectOpen, setSelectOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLLIElement | null>(null);
-  const [currentItemType, setCurrentItemType] = useState<ItemInputTypes | null>(null);
+  const [currentItemType, setCurrentItemType] = useState<ItemResponseType | null>(null);
   const searchTermLowercase = searchTerm.toLowerCase();
 
-  const handleTooltipOpen = (event: MouseEvent<HTMLLIElement>, itemType: ItemInputTypes) => {
+  const handleTooltipOpen = (event: MouseEvent<HTMLLIElement>, itemType: ItemResponseType) => {
     setCurrentItemType(itemType);
     setAnchorEl(event.currentTarget);
   };

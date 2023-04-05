@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { StyledBuilderWrapper } from 'shared/styles/styledComponents';
+import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
 
-import { Header, Item } from '../../components';
-import { activities, getActions, getButtons } from './ActivityFlowBuilder.const';
+import { Item } from '../../components';
+import { activities, getActions } from './ActivityFlowBuilder.const';
+import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
 
 export const ActivityFlowBuilder = () => {
   const { t } = useTranslation('app');
@@ -18,8 +19,7 @@ export const ActivityFlowBuilder = () => {
   ]);
 
   return (
-    <StyledBuilderWrapper>
-      <Header title={t('activityFlowBuilder')} buttons={getButtons()} />
+    <BuilderContainer Header={ActivityFlowBuilderHeader} title={t('activityFlowBuilder')}>
       {activities?.map((item, i) => (
         <Item
           key={item.id}
@@ -29,6 +29,6 @@ export const ActivityFlowBuilder = () => {
           {...item}
         />
       ))}
-    </StyledBuilderWrapper>
+    </BuilderContainer>
   );
 };

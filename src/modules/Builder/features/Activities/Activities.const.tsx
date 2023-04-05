@@ -1,27 +1,15 @@
+import { NavLink } from 'react-router-dom';
+
 import { Svg } from 'shared/components';
-import avatarSrc from 'assets/images/avatar.png';
-import { ItemType } from 'modules/Builder/components';
 
-export const activities: ItemType[] = [
+//TODO: add navigate for editing
+export const getActions = (key: string) => [
   {
-    id: '1',
-    name: 'Activity name 1',
-    description: 'This is the item text the quick brown fox jumps over the lazy dog ',
-    img: avatarSrc,
-    count: 10,
-  },
-  {
-    id: '2',
-    name: 'Activity name 1',
-    description: 'This is the item text the quick brown fox jumps over the lazy dog ',
-    img: avatarSrc,
-    count: 1,
-  },
-];
-
-export const getActions = () => [
-  {
-    icon: <Svg id="edit" />,
+    icon: (
+      <NavLink to={key}>
+        <Svg id="edit" />
+      </NavLink>
+    ),
     action: () => null,
     toolTipTitle: '',
   },

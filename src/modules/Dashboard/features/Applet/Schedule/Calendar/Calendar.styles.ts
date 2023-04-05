@@ -1,9 +1,7 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledClearedButton } from 'shared/styles/styledComponents';
-import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+import { theme, variables, StyledClearedButton } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 import { LEFT_SCHEDULE_PANEL_WIDTH } from '../Schedule.const';
 
@@ -105,11 +103,6 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       .rbc-row-content {
         padding: ${({ hasMoreBtn }: { hasMoreBtn: boolean }) =>
           hasMoreBtn ? theme.spacing(1.1, 0, 2.1) : theme.spacing(1.1, 0, 0.9)};
-      }
-
-      .rbc-event {
-        max-width: 91%;
-        margin: 0 auto;
       }
     }
   }
@@ -289,14 +282,8 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
     border-color: ${variables.palette.surface_variant};
 
     .rbc-event {
-      transition: ${variables.transitions.opacity};
-
-      &:hover {
-        opacity: 0.9;
-      }
-
       &:focus {
-        outline-color: ${variables.palette.primary};
+        outline: none;
       }
     }
   }
@@ -422,17 +409,13 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
     }
 
     .rbc-event {
-      max-width: 92%;
-      margin: 0 auto;
-      transition: ${variables.transitions.opacity};
-
-      &:hover {
-        opacity: 0.9;
-      }
-
       &:focus {
-        outline-color: ${variables.palette.primary};
+        outline: none;
       }
+    }
+
+    .rbc-row-segment {
+      padding: ${theme.spacing(0, 0, 0.18, 0)};
     }
 
     .rbc-row-segment .rbc-event-content {

@@ -1,4 +1,4 @@
-import { CalendarEvent } from '../Calendar.types';
+import { CalendarEvent } from 'modules/Dashboard/state';
 
 export enum UiType {
   DefaultView = 'defaultView',

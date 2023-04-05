@@ -7,22 +7,19 @@ import {
   View,
 } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { format, getDay, parse, startOfWeek } from 'date-fns';
+import { format, getDay, parse, startOfWeek, getYear } from 'date-fns';
 import { enUS, fr } from 'date-fns/locale';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
+import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
+import { useAppDispatch } from 'redux/store';
 
 import { CreateActivityPopup } from '../CreateActivityPopup';
 import { EditActivityPopup } from '../EditActivityPopup';
-import {
-  eventPropGetter,
-  getCalendarComponents,
-  getProcessedEvents,
-  getHasWrapperMoreBtn,
-} from './Calendar.utils';
+import { eventPropGetter, getCalendarComponents, getHasWrapperMoreBtn } from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
-import { AllDayEventsVisible, CalendarEvent, CalendarViews, OnViewFunc } from './Calendar.types';
+import { AllDayEventsVisible, CalendarViews, OnViewFunc } from './Calendar.types';
 
 const locales = {
   'en-US': enUS,
@@ -38,14 +35,18 @@ const dateFnsLocalize = dateFnsLocalizer({
 });
 
 export const Calendar = () => {
+  const dispatch = useAppDispatch();
   const [activeView, setActiveView] = useState<CalendarViews>(CalendarViews.Month);
   const [date, setDate] = useState<Date>(new Date());
+  const [currentYear, setCurrentYear] = useState(getYear(new Date()));
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
   const [editActivityPopupVisible, setEditActivityPopupVisible] = useState(false);
   const [isAllDayEventsVisible, setIsAllDayEventsVisible] = useState<AllDayEventsVisible>(null);
   const [editedActivityName, setEditedActivityName] = useState('');
   const [defaultStartDate, setDefaultStartDate] = useState(new Date());
+
+  const eventsToShow = calendarEvents.useVisibleEventsData() || [];
 
   const { components, messages, views, formats } = getCalendarComponents(
     activeView,
@@ -75,17 +76,24 @@ export const Calendar = () => {
     setEditedActivityName(event.title);
   };
 
-  useEffect(() => {
-    setIsAllDayEventsVisible(null);
-    setEvents(getProcessedEvents(date));
-  }, [date, activeView]);
-
   const hasWrapperMoreBtn = useMemo(
     () =>
       (activeView === CalendarViews.Week || activeView === CalendarViews.Day) &&
       getHasWrapperMoreBtn(activeView, events, date, isAllDayEventsVisible),
     [activeView, events, date, isAllDayEventsVisible],
   );
+
+  useEffect(() => {
+    setIsAllDayEventsVisible(null);
+  }, [date, activeView]);
+
+  useEffect(() => {
+    const chosenYear = getYear(date);
+    if (chosenYear !== currentYear) {
+      setCurrentYear(chosenYear);
+      dispatch(calendarEvents.actions.setNextYearEvents({ yearToCreateEvents: chosenYear }));
+    }
+  }, [date]);
 
   return (
     <>
@@ -95,12 +103,12 @@ export const Calendar = () => {
           onNavigate={onNavigate}
           localizer={dateFnsLocalize}
           culture={i18n.language}
-          events={events}
+          events={eventsToShow}
           startAccessor="start"
           endAccessor="end"
           components={components}
           views={views}
-          selectable={true}
+          selectable
           onSelectSlot={onSelectSlot}
           onSelectEvent={onSelectEvent}
           eventPropGetter={(event) => eventPropGetter(event, activeView)}

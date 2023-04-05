@@ -1,5 +1,5 @@
 import i18n from 'i18n';
-import { CalendarEvent } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.types';
+import { CalendarEvent } from 'modules/Dashboard/state';
 
 import { MAX_EVENTS_IN_TOOLTIP } from './CalendarDate.const';
 

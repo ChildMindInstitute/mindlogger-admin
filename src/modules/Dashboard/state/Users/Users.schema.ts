@@ -10,6 +10,9 @@ export type Respondent = {
   roles: string[];
   secretId: string;
   lastSeen: string;
+  accessId: string;
+  isPinned?: boolean;
+  schedule: string;
 };
 
 export type Manager = {

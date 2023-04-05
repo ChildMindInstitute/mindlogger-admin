@@ -1,4 +1,4 @@
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
 
 import { itemsTypeIcons } from '../ActivityItems.const';
@@ -41,57 +41,57 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
     groupName: 'select',
     groupOptions: [
       {
-        value: ItemInputTypes.SingleSelection,
-        icon: itemsTypeIcons[ItemInputTypes.SingleSelection],
+        value: ItemResponseType.SingleSelection,
+        icon: itemsTypeIcons[ItemResponseType.SingleSelection],
       },
       {
-        value: ItemInputTypes.MultipleSelection,
-        icon: itemsTypeIcons[ItemInputTypes.MultipleSelection],
+        value: ItemResponseType.MultipleSelection,
+        icon: itemsTypeIcons[ItemResponseType.MultipleSelection],
       },
-      { value: ItemInputTypes.Slider, icon: itemsTypeIcons[ItemInputTypes.Slider] },
-      { value: ItemInputTypes.Date, icon: itemsTypeIcons[ItemInputTypes.Date] },
+      { value: ItemResponseType.Slider, icon: itemsTypeIcons[ItemResponseType.Slider] },
+      { value: ItemResponseType.Date, icon: itemsTypeIcons[ItemResponseType.Date] },
       {
-        value: ItemInputTypes.NumberSelection,
-        icon: itemsTypeIcons[ItemInputTypes.NumberSelection],
+        value: ItemResponseType.NumberSelection,
+        icon: itemsTypeIcons[ItemResponseType.NumberSelection],
       },
-      { value: ItemInputTypes.TimeRange, icon: itemsTypeIcons[ItemInputTypes.TimeRange] },
+      { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
     ],
   },
   {
     groupName: 'matrixSelect',
     groupOptions: [
       {
-        value: ItemInputTypes.SingleSelectionPerRow,
-        icon: itemsTypeIcons[ItemInputTypes.SingleSelectionPerRow],
+        value: ItemResponseType.SingleSelectionPerRow,
+        icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
       },
       {
-        value: ItemInputTypes.MultipleSelectionPerRow,
-        icon: itemsTypeIcons[ItemInputTypes.MultipleSelectionPerRow],
+        value: ItemResponseType.MultipleSelectionPerRow,
+        icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
       },
-      { value: ItemInputTypes.SliderRows, icon: itemsTypeIcons[ItemInputTypes.SliderRows] },
+      { value: ItemResponseType.SliderRows, icon: itemsTypeIcons[ItemResponseType.SliderRows] },
     ],
   },
   {
     groupName: 'input',
     groupOptions: [
-      { value: ItemInputTypes.Text, icon: itemsTypeIcons[ItemInputTypes.Text] },
-      { value: ItemInputTypes.Drawing, icon: itemsTypeIcons[ItemInputTypes.Drawing] },
-      { value: ItemInputTypes.Photo, icon: itemsTypeIcons[ItemInputTypes.Photo] },
-      { value: ItemInputTypes.Video, icon: itemsTypeIcons[ItemInputTypes.Video] },
+      { value: ItemResponseType.Text, icon: itemsTypeIcons[ItemResponseType.Text] },
+      { value: ItemResponseType.Drawing, icon: itemsTypeIcons[ItemResponseType.Drawing] },
+      { value: ItemResponseType.Photo, icon: itemsTypeIcons[ItemResponseType.Photo] },
+      { value: ItemResponseType.Video, icon: itemsTypeIcons[ItemResponseType.Video] },
     ],
   },
   {
     groupName: 'record',
     groupOptions: [
-      { value: ItemInputTypes.Geolocation, icon: itemsTypeIcons[ItemInputTypes.Geolocation] },
-      { value: ItemInputTypes.Audio, icon: itemsTypeIcons[ItemInputTypes.Audio] },
+      { value: ItemResponseType.Geolocation, icon: itemsTypeIcons[ItemResponseType.Geolocation] },
+      { value: ItemResponseType.Audio, icon: itemsTypeIcons[ItemResponseType.Audio] },
     ],
   },
   {
     groupName: 'display',
     groupOptions: [
-      { value: ItemInputTypes.Message, icon: itemsTypeIcons[ItemInputTypes.Message] },
-      { value: ItemInputTypes.AudioPlayer, icon: itemsTypeIcons[ItemInputTypes.AudioPlayer] },
+      { value: ItemResponseType.Message, icon: itemsTypeIcons[ItemResponseType.Message] },
+      { value: ItemResponseType.AudioPlayer, icon: itemsTypeIcons[ItemResponseType.AudioPlayer] },
     ],
   },
 ];

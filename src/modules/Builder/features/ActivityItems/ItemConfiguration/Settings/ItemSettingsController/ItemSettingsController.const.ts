@@ -1,4 +1,4 @@
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { ItemSettingsOptionsByInputType } from './ItemSettingsController.types';
@@ -13,7 +13,7 @@ export enum ItemSettingsGroupNames {
 }
 
 export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
-  [ItemInputTypes.SingleSelection]: [
+  [ItemResponseType.SingleSelection]: [
     {
       groupName: ItemSettingsGroupNames.ResponseOptions,
       groupOptions: [
@@ -45,7 +45,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.MultipleSelection]: [
+  [ItemResponseType.MultipleSelection]: [
     {
       groupName: ItemSettingsGroupNames.ResponseOptions,
       groupOptions: [
@@ -77,7 +77,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.Slider]: [
+  [ItemResponseType.Slider]: [
     {
       groupName: ItemSettingsGroupNames.ResponseOptions,
       groupOptions: [
@@ -109,7 +109,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.Date]: [
+  [ItemResponseType.Date]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
       groupOptions: [
@@ -127,7 +127,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.NumberSelection]: [
+  [ItemResponseType.NumberSelection]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
       groupOptions: [
@@ -144,25 +144,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.TimeRange]: [
-    {
-      groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
-    },
-    {
-      groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
-      groupOptions: [
-        ItemConfigurationSettings.HasTimer,
-        ItemConfigurationSettings.IsSkippable,
-        ItemConfigurationSettings.IsGoBackRemoved,
-      ],
-      collapsedByDefault: true,
-    },
-  ],
-  [ItemInputTypes.Geolocation]: [
+  [ItemResponseType.TimeRange]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
       groupOptions: [
@@ -180,7 +162,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.Audio]: [
+  [ItemResponseType.Geolocation]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
       groupOptions: [
@@ -198,7 +180,25 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.SingleSelectionPerRow]: [
+  [ItemResponseType.Audio]: [
+    {
+      groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
+      groupOptions: [
+        ItemConfigurationSettings.HasTextInput,
+        ItemConfigurationSettings.IsTextInputRequired,
+      ],
+    },
+    {
+      groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
+      groupOptions: [
+        ItemConfigurationSettings.HasTimer,
+        ItemConfigurationSettings.IsSkippable,
+        ItemConfigurationSettings.IsGoBackRemoved,
+      ],
+      collapsedByDefault: true,
+    },
+  ],
+  [ItemResponseType.SingleSelectionPerRow]: [
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
       groupOptions: [
@@ -213,7 +213,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.MultipleSelectionPerRow]: [
+  [ItemResponseType.MultipleSelectionPerRow]: [
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
       groupOptions: [
@@ -228,7 +228,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.SliderRows]: [
+  [ItemResponseType.SliderRows]: [
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
       groupOptions: [
@@ -243,7 +243,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.Text]: [
+  [ItemResponseType.Text]: [
     {
       groupName: ItemSettingsGroupNames.ResponseOptions,
       groupOptions: [
@@ -262,7 +262,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.Drawing]: [
+  [ItemResponseType.Drawing]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
       groupOptions: [
@@ -282,7 +282,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.Photo]: [
+  [ItemResponseType.Photo]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
       groupOptions: [
@@ -300,7 +300,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.Video]: [
+  [ItemResponseType.Video]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
       groupOptions: [
@@ -318,13 +318,13 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
-  [ItemInputTypes.Message]: [
+  [ItemResponseType.Message]: [
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
       groupOptions: [ItemConfigurationSettings.HasTimer, ItemConfigurationSettings.IsGoBackRemoved],
     },
   ],
-  [ItemInputTypes.AudioPlayer]: [
+  [ItemResponseType.AudioPlayer]: [
     {
       groupName: ItemSettingsGroupNames.AudioPlayerOptions,
       groupOptions: [ItemConfigurationSettings.IsPlayAudioOnce],

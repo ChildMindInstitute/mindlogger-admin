@@ -1,59 +1,57 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
 
-import { builderSessionStorage, getBuilderAppletUrl } from 'shared/utils';
 import { Svg } from 'shared/components';
-import { applet } from 'shared/state';
-import { useAppDispatch } from 'redux/store';
-import { updateApplet } from 'shared/state/Applet/Applet.thunk';
-import { BuilderLayers, useCheckIfNewApplet } from 'shared/hooks';
+import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard';
+import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
+import { SaveChangesPopup } from 'modules/Builder/components';
 
 import { StyledButton } from './SaveAndPublish.styles';
-import { useAppletData } from './SaveAndPublish.hooks';
+import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
+import { SaveAndPublishProps } from './SaveAndPublish.types';
 
-const clearStorage = () => {
-  builderSessionStorage.setItem(BuilderLayers.Applet, {});
-  builderSessionStorage.setItem(BuilderLayers.Activity, {});
-  builderSessionStorage.setItem(BuilderLayers.AppletHasDiffs, false);
-};
-
-export const SaveAndPublish = () => {
+export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
   const { t } = useTranslation('app');
-  const getAppletData = useAppletData();
-  const { createApplet } = applet.thunk;
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { appletId } = useParams();
-  const isNewApplet = useCheckIfNewApplet();
-
-  const handleClick = async () => {
-    const body = getAppletData();
-
-    let result;
-    if (isNewApplet || !appletId) {
-      result = await dispatch(createApplet(body));
-    }
-    if (!isNewApplet && appletId) {
-      result = await dispatch(updateApplet({ appletId, body }));
-    }
-    if (!result) return;
-
-    clearStorage();
-    if (!isNewApplet) return;
-
-    if (createApplet.fulfilled.match(result)) {
-      const createdAppletId = result.payload.data.result?.id;
-      createdAppletId && navigate(getBuilderAppletUrl(createdAppletId));
-    }
-  };
+  const {
+    isNewApplet,
+    isPasswordPopupOpened,
+    isPublishProcessPopupOpened,
+    publishProcessStep,
+    promptVisible,
+    setIsPasswordPopupOpened,
+    handleSaveAndPublishFirstClick,
+    handleAppletPasswordSubmit,
+    handlePublishProcessOnClose,
+    handlePublishProcessOnRetry,
+    handleSaveChangesSubmit,
+    cancelNavigation,
+  } = useSaveAndPublishSetup(hasPrompt);
 
   return (
-    <StyledButton
-      variant="contained"
-      startIcon={<Svg id="save" width={18} height={18} />}
-      onClick={handleClick}
-    >
-      {t('saveAndPublish')}
-    </StyledButton>
+    <>
+      <StyledButton
+        variant="contained"
+        startIcon={<Svg id="save" width={18} height={18} />}
+        onClick={handleSaveAndPublishFirstClick}
+      >
+        {t('saveAndPublish')}
+      </StyledButton>
+      <AppletPasswordPopup
+        onClose={() => setIsPasswordPopupOpened(false)}
+        popupType={isNewApplet ? AppletPasswordPopupType.Create : AppletPasswordPopupType.Enter}
+        popupVisible={isPasswordPopupOpened}
+        submitCallback={handleAppletPasswordSubmit}
+      />
+      <SaveAndPublishProcessPopup
+        isPopupVisible={isPublishProcessPopupOpened}
+        step={publishProcessStep}
+        onClose={handlePublishProcessOnClose}
+        onRetry={handlePublishProcessOnRetry}
+      />
+      <SaveChangesPopup
+        isPopupVisible={promptVisible}
+        handleClose={cancelNavigation}
+        handleSubmit={handleSaveChangesSubmit}
+      />
+    </>
   );
 };

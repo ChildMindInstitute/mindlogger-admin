@@ -1,15 +1,74 @@
-import { ACTIVITIES_PAGE_REGEXP_STRING } from 'shared/utils';
+import uniqueId from 'lodash.uniqueid';
+import { matchPath } from 'react-router-dom';
 
-import { ACTIVITY_LAYER_ROUTES, APPLET_LAYER_ROUTES } from './BuilderApplet.const';
+import i18n from 'i18n';
+import { page } from 'resources';
+import { SingleApplet } from 'shared/state';
+import { getDictionaryText } from 'shared/utils';
 
-export const APPLET_LAYER_REGEXP_ROUTES = APPLET_LAYER_ROUTES.map((route) =>
-  route === ACTIVITIES_PAGE_REGEXP_STRING ? new RegExp(`^${route}$`) : new RegExp(`^${route}.*`),
-);
-export const ACTIVITY_LAYER_REGEXP_ROUTES = ACTIVITY_LAYER_ROUTES.map(
-  (route) => new RegExp(`^${route}.*`),
-);
+const { t } = i18n;
 
-export const isAppletRoute = (path: string) =>
-  APPLET_LAYER_REGEXP_ROUTES.some((route) => route.test(path));
-export const isActivityRoute = (path: string) =>
-  ACTIVITY_LAYER_REGEXP_ROUTES.some((route) => route.test(path));
+export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
+
+export const getNewActivity = () => ({
+  key: uniqueId(),
+  name: '',
+  description: '',
+  items: [],
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+});
+
+export const getNewApplet = () => ({
+  displayName: '',
+  description: '',
+  themeId: 'default',
+  about: '',
+  image: '',
+  watermark: '',
+  activities: [],
+  activityFlows: [],
+});
+
+export const getNewActivityItem = () => ({
+  id: uniqueId(),
+  responseType: '',
+  name: t('newItemName'),
+  question: '',
+  settings: [],
+  isHidden: false,
+});
+
+export const getNewActivityFlow = () => ({
+  id: uniqueId(),
+});
+
+export const getDefaultValues = (appletData?: SingleApplet) => {
+  if (!appletData) return getNewApplet();
+
+  return {
+    ...appletData,
+    description: getDictionaryText(appletData.description),
+    about: getDictionaryText(appletData.about),
+    activities: appletData.activities
+      ? appletData.activities.map((activity) => ({
+          ...activity,
+          description: getDictionaryText(activity.description),
+          items: activity.items
+            ? activity.items.map((item) => ({
+                ...item,
+                id: `${item.id}`,
+                question: getDictionaryText(item.question),
+                responseType: item.responseType,
+              }))
+            : [],
+        }))
+      : [],
+    activityFlows: appletData?.activityFlows.map((activityFlow) => ({
+      ...activityFlow,
+      description: getDictionaryText(activityFlow.description),
+    })),
+  };
+};

@@ -1,4 +1,5 @@
 import { Row } from 'shared/components';
+import { CalendarEvent, CreateEventsData } from 'modules/Dashboard/state';
 
 export type LegendEvent = {
   name: string;
@@ -11,6 +12,7 @@ export type LegendEvent = {
 export enum Repeats {
   Yes = 'yes',
   No = 'no',
+  NotSet = '-',
 }
 
 export type ScheduleExportCsv = {
@@ -33,5 +35,18 @@ export type PreparedEvents = {
 
 export type AddEventsToCategories = Omit<LegendEvent, 'count'> & {
   isHidden?: boolean;
-  index: number;
+};
+
+export type ActivitiesFlowsWithColors = {
+  color: string[];
+  id: string;
+}[];
+
+export type EventsData = {
+  scheduleExportTableData: Row[];
+  scheduleExportCsv: ScheduleExportCsv;
+  scheduledActivitiesFlows: ActivitiesFlowsWithColors;
+  alwaysActivitiesFlows: ActivitiesFlowsWithColors;
+  calendarEventsArr: CalendarEvent[];
+  eventsDataArr: CreateEventsData[];
 };

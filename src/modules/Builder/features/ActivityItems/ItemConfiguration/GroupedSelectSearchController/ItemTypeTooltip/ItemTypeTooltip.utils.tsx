@@ -1,4 +1,4 @@
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 
 import {
   Dashed,
@@ -17,21 +17,23 @@ const singleUiType = SelectionUiType.Single;
 const multipleUiType = SelectionUiType.Multiple;
 
 export const getInputTypeContent = () => ({
-  [ItemInputTypes.SingleSelection]: <Selection uiType={singleUiType} />,
-  [ItemInputTypes.MultipleSelection]: <Selection uiType={multipleUiType} />,
-  [ItemInputTypes.Slider]: <Slider />,
-  [ItemInputTypes.Date]: <Date />,
-  [ItemInputTypes.NumberSelection]: <NumberSelection />,
-  [ItemInputTypes.TimeRange]: <TimeRange />,
-  [ItemInputTypes.SingleSelectionPerRow]: <SelectionPerRow uiType={singleUiType} />,
-  [ItemInputTypes.MultipleSelectionPerRow]: <SelectionPerRow uiType={multipleUiType} />,
-  [ItemInputTypes.SliderRows]: <SliderRows />,
-  [ItemInputTypes.Text]: <Dashed uiType={DashedUiType.Text} />,
-  [ItemInputTypes.Drawing]: <Dashed uiType={DashedUiType.Drawing} />,
-  [ItemInputTypes.Photo]: <Dashed uiType={DashedUiType.Photo} />,
-  [ItemInputTypes.Video]: <Dashed uiType={DashedUiType.Video} />,
-  [ItemInputTypes.Geolocation]: <Dashed uiType={DashedUiType.Geolocation} />,
-  [ItemInputTypes.Audio]: <Dashed uiType={DashedUiType.Audio} />,
-  [ItemInputTypes.Message]: <Dashed uiType={DashedUiType.Message} />,
-  [ItemInputTypes.AudioPlayer]: <Dashed uiType={DashedUiType.AudioPlayer} />,
+  [ItemResponseType.SingleSelection]: <Selection uiType={singleUiType} />,
+  [ItemResponseType.MultipleSelection]: <Selection uiType={multipleUiType} />,
+  [ItemResponseType.Slider]: <Slider />,
+  [ItemResponseType.Date]: <Date />,
+  [ItemResponseType.NumberSelection]: <NumberSelection />,
+  [ItemResponseType.TimeRange]: <TimeRange />,
+  [ItemResponseType.SingleSelectionPerRow]: <SelectionPerRow uiType={singleUiType} />,
+  [ItemResponseType.MultipleSelectionPerRow]: <SelectionPerRow uiType={multipleUiType} />,
+  [ItemResponseType.SliderRows]: <SliderRows />,
+  [ItemResponseType.Text]: <Dashed uiType={DashedUiType.Text} />,
+  [ItemResponseType.Drawing]: <Dashed uiType={DashedUiType.Drawing} />,
+  [ItemResponseType.Photo]: <Dashed uiType={DashedUiType.Photo} />,
+  [ItemResponseType.Video]: <Dashed uiType={DashedUiType.Video} />,
+  [ItemResponseType.Geolocation]: <Dashed uiType={DashedUiType.Geolocation} />,
+  [ItemResponseType.Audio]: <Dashed uiType={DashedUiType.Audio} />,
+  [ItemResponseType.Message]: <Dashed uiType={DashedUiType.Message} />,
+  [ItemResponseType.AudioPlayer]: <Dashed uiType={DashedUiType.AudioPlayer} />,
+  [ItemResponseType.Flanker]: null,
+  [ItemResponseType.AbTest]: null,
 });

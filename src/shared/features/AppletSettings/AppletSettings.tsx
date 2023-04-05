@@ -19,7 +19,7 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
   const navigate = useNavigate();
   const [selectedSetting, setSelectedSetting] = useState<AppletSetting | null>(null);
 
-  const BUILDER_SETTINGS = page.newAppletSettings;
+  const BUILDER_SETTINGS = page.builderAppletSettings;
   const DASHBOARD_SETTINGS = `${page.dashboard}/${id}/${APPLET_PAGES.settings}`;
 
   useBreadcrumbs([

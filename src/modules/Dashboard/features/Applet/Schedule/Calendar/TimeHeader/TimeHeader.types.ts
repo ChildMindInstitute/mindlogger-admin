@@ -1,7 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 import { HeaderProps } from 'react-big-calendar';
 
-import { AllDayEventsVisible, CalendarEvent } from '../Calendar.types';
+import { CalendarEvent } from 'modules/Dashboard/state';
+
+import { AllDayEventsVisible } from '../Calendar.types';
 
 export enum UiType {
   Day = 'day',

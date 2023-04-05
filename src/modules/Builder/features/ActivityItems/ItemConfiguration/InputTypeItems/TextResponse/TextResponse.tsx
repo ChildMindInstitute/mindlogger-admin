@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { FieldValues } from 'react-hook-form';
 
 import { InputController } from 'shared/components/FormComponents';
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
 import { TextResponseProps } from './TextResponse.types';
@@ -18,13 +18,13 @@ export const TextResponse = <T extends FieldValues>({
   const { t } = useTranslation('app');
 
   const { control, watch } = useOptionalItemSetup({
-    itemType: ItemInputTypes.Text,
+    itemType: ItemResponseType.Text,
     name,
     defaultValue: '',
   });
 
   useOptionalItemSetup({
-    itemType: ItemInputTypes.Text,
+    itemType: ItemResponseType.Text,
     name: maxCharacters,
     defaultValue: DEFAULT_MAX_CHARACTERS,
   });
