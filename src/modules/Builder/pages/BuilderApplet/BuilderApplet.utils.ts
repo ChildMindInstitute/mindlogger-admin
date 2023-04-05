@@ -12,7 +12,7 @@ export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/
 
 export const getNewActivity = () => ({
   key: uniqueId(),
-  name: t('newActivityName'),
+  name: '',
   description: '',
   items: [],
   showAllAtOnce: false,
@@ -29,6 +29,7 @@ export const getNewApplet = () => ({
   image: '',
   watermark: '',
   activities: [],
+  activityFlows: [],
 });
 
 export const getNewActivityItem = () => ({
@@ -38,6 +39,10 @@ export const getNewActivityItem = () => ({
   question: '',
   settings: [],
   isHidden: false,
+});
+
+export const getNewActivityFlow = () => ({
+  id: uniqueId(),
 });
 
 export const getDefaultValues = (appletData?: SingleApplet) => {
