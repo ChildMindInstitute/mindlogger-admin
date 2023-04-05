@@ -5,7 +5,7 @@ import { Box, Button } from '@mui/material';
 import { InputController } from 'shared/components/FormComponents';
 import { theme } from 'shared/styles';
 import { Svg } from 'shared/components';
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
 import { DEFAULT_AUDIO_DURATION_SEC } from '../../ItemConfiguration.const';

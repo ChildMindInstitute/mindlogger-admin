@@ -2,7 +2,7 @@ import { KeyboardEvent } from 'react';
 import Highlighter from 'react-highlight-words';
 
 import i18n from 'i18n';
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 
 import { ItemsOption } from '../ItemConfiguration.types';
 import { EmptySearch } from './EmptySearch';
