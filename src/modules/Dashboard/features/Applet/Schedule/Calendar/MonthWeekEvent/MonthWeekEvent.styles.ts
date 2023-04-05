@@ -2,6 +2,7 @@ import { Box, styled } from '@mui/material';
 
 import { shouldForwardProp } from 'shared/utils';
 import { theme, variables } from 'shared/styles';
+
 import { StyledEventWrapperTypes } from './MonthWeekEvent.types';
 
 export const StyledEventWrapper = styled(Box, shouldForwardProp)`
