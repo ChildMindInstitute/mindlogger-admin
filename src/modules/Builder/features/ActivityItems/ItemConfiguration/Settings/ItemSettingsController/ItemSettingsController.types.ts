@@ -1,12 +1,12 @@
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/state';
 
 import { ItemSettingsGroupNames } from './ItemSettingsController.const';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export type ItemSettingsControllerProps<T extends FieldValues> = {
-  inputType: ItemInputTypes | '';
+  inputType: ItemResponseType | '';
 } & UseControllerProps<T>;
 
 export type ItemSettingsOptionsGroup = {
@@ -16,5 +16,5 @@ export type ItemSettingsOptionsGroup = {
 };
 
 export type ItemSettingsOptionsByInputType = {
-  [key in ItemInputTypes]?: ItemSettingsOptionsGroup[];
+  [key in ItemResponseType]?: ItemSettingsOptionsGroup[];
 };

@@ -1,15 +1,15 @@
-import { ResponseType, ResponseValues } from 'shared/state';
+import { ItemResponseType, ResponseValues } from 'shared/state';
 
 export type ItemFormValues = {
   id: string;
   name: string;
   question: string;
-  responseType: ResponseType;
-  responseValues: ResponseValues;
+  responseType: '' | ItemResponseType;
+  responseValues: null | ResponseValues;
 };
 
 export type ActivityFormValues = {
-  id: string;
+  id?: string;
   key?: string;
   name: string;
   description: string;
@@ -23,7 +23,7 @@ export type ActivityFormValues = {
 };
 
 export type ActivityFlowFormValues = {
-  id: string;
+  id?: string;
   name: string;
   description: string;
   isSingleReport?: boolean;
@@ -32,7 +32,7 @@ export type ActivityFlowFormValues = {
 };
 
 export type AppletFormValues = {
-  id: string;
+  id?: string;
   displayName: string;
   description: string;
   about: string;

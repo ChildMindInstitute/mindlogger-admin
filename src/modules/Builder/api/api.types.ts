@@ -1,9 +1,9 @@
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/state';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 export type ActivityItemApi = {
   id: string;
-  itemsInputType: ItemInputTypes | '';
+  itemsInputType: ItemResponseType | '';
   name: string;
   body: string;
   hidden: boolean;

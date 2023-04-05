@@ -8,7 +8,7 @@ export const byteFormatter: FORMATTER = (cellValue) => {
   let output = cellValue;
   [BYTE_QUANTITY.b, BYTE_QUANTITY.kb, BYTE_QUANTITY.mb, BYTE_QUANTITY.gb, BYTE_QUANTITY.tb].some(
     (quantity, i, arr) => {
-      if (output >= 1024 ** (i + 1) && i < arr.length - 1) {
+      if (Number(output) >= 1024 ** (i + 1) && i < arr.length - 1) {
         return false;
       }
 
