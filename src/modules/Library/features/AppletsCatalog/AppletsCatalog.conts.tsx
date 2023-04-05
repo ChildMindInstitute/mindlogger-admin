@@ -1,57 +1,57 @@
 import { Svg } from 'shared/components';
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/state';
 
 export const ItemResponseTypes = {
-  [ItemInputTypes.SingleSelection]: {
+  [ItemResponseType.SingleSelection]: {
     icon: <Svg id="radio-button-outline" />,
-    title: ItemInputTypes.SingleSelection,
+    title: ItemResponseType.SingleSelection,
   },
-  [ItemInputTypes.MultipleSelection]: {
+  [ItemResponseType.MultipleSelection]: {
     icon: <Svg id="checkbox-filled" />,
-    title: ItemInputTypes.MultipleSelection,
+    title: ItemResponseType.MultipleSelection,
   },
-  [ItemInputTypes.Slider]: {
+  [ItemResponseType.Slider]: {
     icon: <Svg id="slider-outline" />,
-    title: ItemInputTypes.Slider,
+    title: ItemResponseType.Slider,
   },
-  [ItemInputTypes.Date]: {
+  [ItemResponseType.Date]: {
     icon: <Svg id="calendar" />,
-    title: ItemInputTypes.Date,
+    title: ItemResponseType.Date,
   },
-  [ItemInputTypes.NumberSelection]: {
+  [ItemResponseType.NumberSelection]: {
     icon: <Svg id="number-selection" />,
-    title: ItemInputTypes.NumberSelection,
+    title: ItemResponseType.NumberSelection,
   },
-  [ItemInputTypes.TimeRange]: {
+  [ItemResponseType.TimeRange]: {
     icon: <Svg id="clock" />,
-    title: ItemInputTypes.TimeRange,
+    title: ItemResponseType.TimeRange,
   },
-  [ItemInputTypes.SingleSelectionPerRow]: {
+  [ItemResponseType.SingleSelectionPerRow]: {
     icon: <Svg id="single-selection-per-row" />,
-    title: ItemInputTypes.SingleSelectionPerRow,
+    title: ItemResponseType.SingleSelectionPerRow,
   },
-  [ItemInputTypes.MultipleSelectionPerRow]: {
+  [ItemResponseType.MultipleSelectionPerRow]: {
     icon: <Svg id="multiple-selection-per-row" />,
-    title: ItemInputTypes.MultipleSelectionPerRow,
+    title: ItemResponseType.MultipleSelectionPerRow,
   },
-  [ItemInputTypes.SliderRows]: {
+  [ItemResponseType.SliderRows]: {
     icon: <Svg id="slider-rows" />,
-    title: ItemInputTypes.SliderRows,
+    title: ItemResponseType.SliderRows,
   },
-  [ItemInputTypes.Text]: { icon: <Svg id="text" />, title: ItemInputTypes.Text },
-  [ItemInputTypes.Drawing]: { icon: <Svg id="drawing" />, title: ItemInputTypes.Drawing },
-  [ItemInputTypes.Photo]: { icon: <Svg id="photo" />, title: ItemInputTypes.Photo },
-  [ItemInputTypes.Video]: { icon: <Svg id="video" />, title: ItemInputTypes.Video },
-  [ItemInputTypes.Geolocation]: {
+  [ItemResponseType.Text]: { icon: <Svg id="text" />, title: ItemResponseType.Text },
+  [ItemResponseType.Drawing]: { icon: <Svg id="drawing" />, title: ItemResponseType.Drawing },
+  [ItemResponseType.Photo]: { icon: <Svg id="photo" />, title: ItemResponseType.Photo },
+  [ItemResponseType.Video]: { icon: <Svg id="video" />, title: ItemResponseType.Video },
+  [ItemResponseType.Geolocation]: {
     icon: <Svg id="geolocation" />,
-    title: ItemInputTypes.Geolocation,
+    title: ItemResponseType.Geolocation,
   },
-  [ItemInputTypes.Audio]: { icon: <Svg id="audio" />, title: ItemInputTypes.Audio },
-  [ItemInputTypes.Message]: { icon: <Svg id="quote" />, title: ItemInputTypes.Message },
-  [ItemInputTypes.AudioPlayer]: {
+  [ItemResponseType.Audio]: { icon: <Svg id="audio" />, title: ItemResponseType.Audio },
+  [ItemResponseType.Message]: { icon: <Svg id="quote" />, title: ItemResponseType.Message },
+  [ItemResponseType.AudioPlayer]: {
     icon: <Svg id="audio-player" />,
-    title: ItemInputTypes.AudioPlayer,
+    title: ItemResponseType.AudioPlayer,
   },
-  [ItemInputTypes.Flanker]: { icon: null, title: ItemInputTypes.Flanker },
-  [ItemInputTypes.AbTest]: { icon: null, title: ItemInputTypes.AbTest },
+  [ItemResponseType.Flanker]: { icon: null, title: ItemResponseType.Flanker },
+  [ItemResponseType.AbTest]: { icon: null, title: ItemResponseType.AbTest },
 };

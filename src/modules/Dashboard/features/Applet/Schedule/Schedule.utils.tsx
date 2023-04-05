@@ -155,7 +155,7 @@ export const getPreparedEvents = (
     (
       { id, name, isHidden, activityIds }: ActivityFlow | (Activity & { activityIds?: string[] }),
       index,
-    ) => addEventsToCategories({ id, name, isFlow: !!activityIds, isHidden, index }),
+    ) => addEventsToCategories({ id: id!, name, isFlow: !!activityIds, isHidden, index }),
   );
 
   return {

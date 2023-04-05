@@ -55,14 +55,20 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,
+          description: getDictionaryText(activity.description),
           items: activity.items
             ? activity.items.map((item) => ({
                 ...item,
                 id: `${item.id}`,
                 question: getDictionaryText(item.question),
+                responseType: item.responseType,
               }))
             : [],
         }))
       : [],
+    activityFlows: appletData?.activityFlows.map((activityFlow) => ({
+      ...activityFlow,
+      description: getDictionaryText(activityFlow.description),
+    })),
   };
 };

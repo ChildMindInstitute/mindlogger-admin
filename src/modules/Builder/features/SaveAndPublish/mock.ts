@@ -5,7 +5,6 @@ export const activityItemsMocked = [
     question: {
       en: 'string',
       fr: 'string',
-      additionalProp3: 'string',
     },
     responseType: 'text',
     responseValues: null,
@@ -29,7 +28,6 @@ export const appletActivitiesMocked = [
     description: {
       en: 'english',
       fr: 'french',
-      additionalProp3: 'string',
     },
     splashScreen: '',
     image: '',
@@ -48,7 +46,6 @@ export const appletActivityFlowsMocked = [
     description: {
       en: 'english',
       fr: 'french',
-      additionalProp3: 'string',
     },
     isSingleReport: false,
     hideBadge: false,
@@ -66,12 +63,10 @@ export const appletInfoMocked = {
   description: {
     en: 'english',
     fr: 'french',
-    additionalProp3: 'string',
   },
   about: {
     en: 'english',
     fr: 'french',
-    additionalProp3: 'string',
   },
   image: '',
   watermark: '',
