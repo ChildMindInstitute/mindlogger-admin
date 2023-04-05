@@ -1,6 +1,6 @@
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/state';
 
 export type ItemTypeTooltipProps = {
-  uiType: ItemInputTypes;
+  uiType: ItemResponseType;
   anchorEl: HTMLLIElement | null;
 };

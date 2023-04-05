@@ -31,7 +31,9 @@ export const BuilderApplet = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
-  const { getFormValues } = useBuilderSessionStorageFormValues(getDefaultValues(appletData));
+  const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
+    getDefaultValues(appletData),
+  );
 
   const methods = useForm<AppletFormValues>({
     defaultValues: getFormValues(),

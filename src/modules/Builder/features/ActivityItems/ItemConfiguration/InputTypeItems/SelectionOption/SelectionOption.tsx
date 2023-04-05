@@ -15,7 +15,7 @@ import {
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
 } from 'shared/styles';
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/state';
 import { falseReturnFunc } from 'shared/utils';
 
 import { ItemConfigurationForm, ItemConfigurationSettings } from '../../ItemConfiguration.types';
@@ -61,7 +61,7 @@ export const SelectionOption = ({
   const hasPalette = !!palette;
   const isColorSet = color?.hex !== '';
   const actionsRef = useRef(null);
-  const isSingleSelection = selectedInputType === ItemInputTypes.SingleSelection;
+  const isSingleSelection = selectedInputType === ItemResponseType.SingleSelection;
 
   const handleOptionToggle = () => setOptionOpen((prevState) => !prevState);
   const handlePopoverClose = () => setAnchorEl(null);

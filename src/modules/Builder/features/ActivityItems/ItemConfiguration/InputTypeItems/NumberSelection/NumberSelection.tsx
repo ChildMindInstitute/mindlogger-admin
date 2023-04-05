@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopStart, theme } from 'shared/styles';
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/state';
 
 import { StyledInputWrapper } from './NumberSelection.styles';
 import { NumberSelectionProps } from './NumberSelection.types';
@@ -19,13 +19,13 @@ export const NumberSelection = <T extends FieldValues>({
   const { t } = useTranslation('app');
 
   const { control, watch, setValue } = useOptionalItemSetup({
-    itemType: ItemInputTypes.NumberSelection,
+    itemType: ItemResponseType.NumberSelection,
     name,
     defaultValue: DEFAULT_MIN_NUMBER,
   });
 
   useOptionalItemSetup({
-    itemType: ItemInputTypes.NumberSelection,
+    itemType: ItemResponseType.NumberSelection,
     name: maxName,
     defaultValue: DEFAULT_MAX_NUMBER,
   });

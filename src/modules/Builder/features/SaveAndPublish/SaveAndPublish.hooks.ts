@@ -52,7 +52,7 @@ export const useAppletData = () => {
         themeId: null, // TODO: create real themeId
         activities: appletActivitiesMocked, // TODO: add real activities
         activityFlows: appletActivityFlowsMocked, // TODO: add real activityFlows
-      };
+      } as SingleApplet;
     }
 
     const appletDataForApi = getAppletDataForApi(appletData!);
@@ -74,7 +74,7 @@ export const useAppletData = () => {
       themeId: null, // TODO: create real themeId
       activities: appletActivitiesMocked, // TODO: api has error details: items-missed; order-permitted, description has wrong type
       activityFlows: appletActivityFlowsMocked, // TODO: api has error details: items-missed; activitiesIds/order-permitted
-    };
+    } as SingleApplet;
   };
 };
 

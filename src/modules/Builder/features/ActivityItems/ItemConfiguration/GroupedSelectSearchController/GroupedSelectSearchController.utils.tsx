@@ -2,7 +2,7 @@ import { KeyboardEvent } from 'react';
 import Highlighter from 'react-highlight-words';
 
 import i18n from 'i18n';
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/state';
 
 import { ItemsOption } from '../ItemConfiguration.types';
 import { EmptySearch } from './EmptySearch';
@@ -23,8 +23,8 @@ export const getIsNotHaveSearchValue = (value: string, searchTermLowercase: stri
   t(value).toLowerCase().indexOf(searchTermLowercase) === -1;
 
 export const getItemTypesNames = (): string[] =>
-  Object.keys(ItemInputTypes).map((key) =>
-    t(ItemInputTypes[key as keyof typeof ItemInputTypes]).toLowerCase(),
+  Object.keys(ItemResponseType).map((key) =>
+    t(ItemResponseType[key as keyof typeof ItemResponseType]).toLowerCase(),
   );
 
 export const getEmptyComponent = (searchTerm: string) => {

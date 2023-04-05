@@ -17,7 +17,7 @@ export type CreateAppletStateData = {
 export type ActivityFlow = {
   id?: string;
   name: string;
-  description: string | Record<string, string>;
+  description?: string | Record<string, string>;
   ordering?: number;
   isSingleReport?: boolean;
   hideBadge?: boolean;
@@ -36,26 +36,27 @@ export type Config = {
   response_required: boolean;
 };
 
-export type ResponseType =
-  | 'text'
-  | 'singleSelect'
-  | 'multiSelect'
-  | 'message'
-  | 'slider'
-  | 'numberSelect'
-  | 'timeRange'
-  | 'geolocation'
-  | 'drawing'
-  | 'photo'
-  | 'video'
-  | 'date'
-  | 'sliderRows'
-  | 'singleSelectRows'
-  | 'multiSelectRows'
-  | 'audio'
-  | 'audioPlayer'
-  | 'flanker'
-  | 'abTest';
+export enum ItemResponseType {
+  SingleSelection = 'singleSelect',
+  MultipleSelection = 'multiSelect',
+  Slider = 'slider',
+  Date = 'date',
+  NumberSelection = 'numberSelect',
+  TimeRange = 'timeRange',
+  SingleSelectionPerRow = 'singleSelectRows',
+  MultipleSelectionPerRow = 'multiSelectRows',
+  SliderRows = 'sliderRows',
+  Text = 'text',
+  Drawing = 'drawing',
+  Photo = 'photo',
+  Video = 'video',
+  Geolocation = 'geolocation',
+  Audio = 'audio',
+  Message = 'message',
+  AudioPlayer = 'audioPlayer',
+  Flanker = 'flanker',
+  AbTest = 'abTest',
+}
 
 export type ResponseValues = Record<string, string>;
 
@@ -64,7 +65,7 @@ export type Item = {
   name: string;
   question: string | Record<string, string>;
   config: Config;
-  responseType: string | ResponseType;
+  responseType: '' | ItemResponseType;
   responseValues: null | ResponseValues;
   order?: number;
 };
