@@ -7,3 +7,9 @@ export const getDictionaryText = (description?: string | Record<string, string>)
 
   return (typeof description === 'object' ? description[language] : description) ?? '';
 };
+
+export const getDictionaryObject = (description?: string | Record<string, string>) => {
+  if (typeof description !== 'object') return {};
+
+  return description;
+};

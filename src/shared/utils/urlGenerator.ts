@@ -26,8 +26,6 @@ export const getAppletActivityPageRegexp = (path?: string) =>
   path ? `${ACTIVITY_PAGE_REGEXP_STRING}\\/${path}` : ACTIVITY_PAGE_REGEXP_STRING;
 
 export const getBuilderAppletUrl = (id: string) => `/${Path.Builder}/${id}`;
-export const getBuilderAppletActivityUrl = (appletId: string, activityId: string) =>
-  `/${Path.Builder}/${appletId}/${Path.Activities}/${activityId}`;
 
 export const checkIfAppletUrlPassed = (url: string) =>
   new RegExp(`^${APPLET_PAGE_REGEXP_STRING}`).test(url);

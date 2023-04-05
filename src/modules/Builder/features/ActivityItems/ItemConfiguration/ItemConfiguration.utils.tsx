@@ -1,7 +1,7 @@
 import uniqueId from 'lodash.uniqueid';
 
 import i18n from 'i18n';
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/state';
 import { createArray } from 'shared/utils';
 
 import { SelectionRows, SliderOption } from './ItemConfiguration.types';
@@ -16,26 +16,26 @@ import {
 
 const { t } = i18n;
 
-export const getInputTypeTooltip = (): Record<ItemInputTypes, string> => ({
-  [ItemInputTypes.SingleSelection]: t('singleSelectionHint'),
-  [ItemInputTypes.MultipleSelection]: t('multipleSelectionHint'),
-  [ItemInputTypes.Slider]: t('sliderHint'),
-  [ItemInputTypes.Date]: t('dateHint'),
-  [ItemInputTypes.NumberSelection]: t('numberSelectionHint'),
-  [ItemInputTypes.TimeRange]: t('timeRangeHint'),
-  [ItemInputTypes.SingleSelectionPerRow]: t('singleSelectionPerRowHint'),
-  [ItemInputTypes.MultipleSelectionPerRow]: t('multipleSelectionPerRowHint'),
-  [ItemInputTypes.SliderRows]: t('sliderRowsHint'),
-  [ItemInputTypes.Text]: t('textHint'),
-  [ItemInputTypes.Drawing]: t('drawingHint'),
-  [ItemInputTypes.Photo]: t('photoHint'),
-  [ItemInputTypes.Video]: t('videoHint'),
-  [ItemInputTypes.Geolocation]: t('geolocationHint'),
-  [ItemInputTypes.Audio]: t('audioHint'),
-  [ItemInputTypes.Message]: t('messageHint'),
-  [ItemInputTypes.AudioPlayer]: t('audioPlayerHint'),
-  [ItemInputTypes.Flanker]: '',
-  [ItemInputTypes.AbTest]: '',
+export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
+  [ItemResponseType.SingleSelection]: t('singleSelectionHint'),
+  [ItemResponseType.MultipleSelection]: t('multipleSelectionHint'),
+  [ItemResponseType.Slider]: t('sliderHint'),
+  [ItemResponseType.Date]: t('dateHint'),
+  [ItemResponseType.NumberSelection]: t('numberSelectionHint'),
+  [ItemResponseType.TimeRange]: t('timeRangeHint'),
+  [ItemResponseType.SingleSelectionPerRow]: t('singleSelectionPerRowHint'),
+  [ItemResponseType.MultipleSelectionPerRow]: t('multipleSelectionPerRowHint'),
+  [ItemResponseType.SliderRows]: t('sliderRowsHint'),
+  [ItemResponseType.Text]: t('textHint'),
+  [ItemResponseType.Drawing]: t('drawingHint'),
+  [ItemResponseType.Photo]: t('photoHint'),
+  [ItemResponseType.Video]: t('videoHint'),
+  [ItemResponseType.Geolocation]: t('geolocationHint'),
+  [ItemResponseType.Audio]: t('audioHint'),
+  [ItemResponseType.Message]: t('messageHint'),
+  [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
+  [ItemResponseType.Flanker]: '',
+  [ItemResponseType.AbTest]: '',
 });
 
 export const getEmptySliderOption = (isMultiple: boolean): SliderOption => ({

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Uploads } from 'modules/Builder/components';
 import { Uploader } from 'shared/components';
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/state';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_2MB } from 'shared/consts';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
@@ -52,12 +52,12 @@ export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
   ];
 
   useOptionalItemSetup({
-    itemType: ItemInputTypes.Drawing,
+    itemType: ItemResponseType.Drawing,
     name: drawerImage,
   });
 
   useOptionalItemSetup({
-    itemType: ItemInputTypes.Drawing,
+    itemType: ItemResponseType.Drawing,
     name: drawerBgImage,
   });
 
