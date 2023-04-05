@@ -1,5 +1,4 @@
 import { eachDayOfInterval, subDays } from 'date-fns';
-import uniqueId from 'lodash.uniqueid';
 
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { getBorderRadius } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
@@ -36,9 +35,9 @@ export const MonthWeekEvent = ({
 
   return (
     <StyledFlexTopCenter sx={{ height: '100%' }}>
-      {datesArray.map(() => (
+      {datesArray.map((date) => (
         <StyledEventWrapper
-          key={uniqueId()}
+          key={String(date)}
           isScheduledWeekEvent={isScheduledWeekEvent}
           bgColor={isScheduledWeekEvent ? scheduledBackground : backgroundColor}
           borderRadius={getBorderRadius(isScheduledWeekEvent, eventSpanAfter, eventSpanBefore)}
