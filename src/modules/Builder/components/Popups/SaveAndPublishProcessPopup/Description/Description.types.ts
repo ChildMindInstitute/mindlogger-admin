@@ -1,5 +1,5 @@
-import { SavaAndPublishStep } from '../SaveAndPublishProcessPopup.types';
+import { SaveAndPublishSteps } from '../SaveAndPublishProcessPopup.types';
 
 export type DescriptionProps = {
-  step: SavaAndPublishStep;
+  step: SaveAndPublishSteps;
 };

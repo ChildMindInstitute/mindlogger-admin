@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { StyledBodyLarge, variables } from 'shared/styles';
 import { useAppletData } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.hooks';
 
-import { SavaAndPublishStep } from '../SaveAndPublishProcessPopup.types';
+import { SaveAndPublishSteps } from '../SaveAndPublishProcessPopup.types';
 import { DescriptionProps } from './Description.types';
 
 export const Description = ({ step }: DescriptionProps) => {
@@ -12,13 +12,13 @@ export const Description = ({ step }: DescriptionProps) => {
   const name = getAppletData().displayName;
 
   switch (step) {
-    case SavaAndPublishStep.AtLeast1Activity:
+    case SaveAndPublishSteps.AtLeastOneActivity:
       return <StyledBodyLarge>{t('appletIsRequiredOneActivity')}</StyledBodyLarge>;
-    case SavaAndPublishStep.AtLeast1Item:
+    case SaveAndPublishSteps.AtLeastOneItem:
       return <StyledBodyLarge>{t('appletIsRequiredOneItem')}</StyledBodyLarge>;
-    case SavaAndPublishStep.BeingCreated:
+    case SaveAndPublishSteps.BeingCreated:
       return <StyledBodyLarge>{t('appletIsBeingCreated')}</StyledBodyLarge>;
-    case SavaAndPublishStep.Success:
+    case SaveAndPublishSteps.Success:
       return (
         <Trans i18nKey="appletSavedAndPublished">
           <StyledBodyLarge>
@@ -30,7 +30,7 @@ export const Description = ({ step }: DescriptionProps) => {
           </StyledBodyLarge>
         </Trans>
       );
-    case SavaAndPublishStep.Failed:
+    case SaveAndPublishSteps.Failed:
       return (
         <Trans i18nKey="appletNotSavedAndPublished">
           <StyledBodyLarge sx={{ color: variables.palette.red }}>

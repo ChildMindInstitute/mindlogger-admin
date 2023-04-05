@@ -6,7 +6,7 @@ import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/Sa
 import { SaveChangesPopup } from 'modules/Builder/components';
 
 import { StyledButton } from './SaveAndPublish.styles';
-import { useSavaAndPublishSetup } from './SaveAndPublish.hooks';
+import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
 import { SaveAndPublishProps } from './SaveAndPublish.types';
 
 export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
@@ -24,7 +24,7 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
     handlePublishProcessOnRetry,
     handleSaveChangesSubmit,
     cancelNavigation,
-  } = useSavaAndPublishSetup(hasPrompt);
+  } = useSaveAndPublishSetup(hasPrompt);
 
   return (
     <>

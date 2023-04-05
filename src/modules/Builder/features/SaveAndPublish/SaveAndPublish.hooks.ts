@@ -1,18 +1,19 @@
-import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from 'redux/store';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Update } from 'history';
 
+import { useAppDispatch } from 'redux/store';
 import { useCallbackPrompt, useCheckIfNewApplet, usePromptSetup } from 'shared/hooks';
 import {
   APPLET_PAGE_REGEXP_STRING,
   builderSessionStorage,
   getBuilderAppletUrl,
+  getDictionaryObject,
 } from 'shared/utils';
 import { applet, SingleApplet } from 'shared/state';
 import { EnterAppletPasswordForm } from 'modules/Dashboard';
-import { SavaAndPublishStep } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
+import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { appletActivitiesMocked, appletActivityFlowsMocked, appletDataMocked } from './mock';
@@ -49,35 +50,29 @@ export const useAppletData = () => {
           [language]: appletInfo.about,
         },
         themeId: null, // TODO: create real themeId
-        // eslint-disable-next-line
-        // @ts-ignore
         activities: appletActivitiesMocked, // TODO: add real activities
-        // eslint-disable-next-line
-        // @ts-ignore
         activityFlows: appletActivityFlowsMocked, // TODO: add real activityFlows
       };
     }
 
     const appletDataForApi = getAppletDataForApi(appletData!);
+    const appletDescription = getDictionaryObject(appletDataForApi.description);
+    const appletAbout = getDictionaryObject(appletDataForApi.about);
 
     return {
       ...appletDataForApi,
       ...appletInfoForApi,
       password: appletPassword,
       description: {
-        ...appletDataForApi.description,
-        [language]: appletInfo?.description ?? appletDataForApi.description[language],
+        ...appletDescription,
+        [language]: appletInfo?.description ?? appletDescription[language],
       },
       about: {
-        ...appletDataForApi.about,
-        [language]: appletInfo?.about ?? appletDataForApi.about[language],
+        ...appletAbout,
+        [language]: appletInfo?.about ?? appletAbout[language],
       },
       themeId: null, // TODO: create real themeId
-      // eslint-disable-next-line
-      // @ts-ignore
       activities: appletActivitiesMocked, // TODO: api has error details: items-missed; order-permitted, description has wrong type
-      // eslint-disable-next-line
-      // @ts-ignore
       activityFlows: appletActivityFlowsMocked, // TODO: api has error details: items-missed; activitiesIds/order-permitted
     };
   };
@@ -156,7 +151,7 @@ export const usePrompt = (isFormChanged: boolean) => {
   };
 };
 
-export const useSavaAndPublishSetup = (hasPrompt: boolean) => {
+export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
@@ -167,7 +162,7 @@ export const useSavaAndPublishSetup = (hasPrompt: boolean) => {
   const isNewApplet = useCheckIfNewApplet();
   const [isPasswordPopupOpened, setIsPasswordPopupOpened] = useState(false);
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
-  const [publishProcessStep, setPublishProcessStep] = useState<SavaAndPublishStep>();
+  const [publishProcessStep, setPublishProcessStep] = useState<SaveAndPublishSteps>();
   const [appletPassword, setAppletPassword] = useState('');
   const responseStatus = applet.useResponseStatus();
   const { cancelNavigation, confirmNavigation, promptVisible, setPromptVisible } =
@@ -175,9 +170,9 @@ export const useSavaAndPublishSetup = (hasPrompt: boolean) => {
   const shouldNavigateRef = useRef(false);
 
   useEffect(() => {
-    responseStatus === 'loading' && setPublishProcessStep(SavaAndPublishStep.BeingCreated);
-    responseStatus === 'error' && setPublishProcessStep(SavaAndPublishStep.Failed);
-    responseStatus === 'success' && setPublishProcessStep(SavaAndPublishStep.Success);
+    responseStatus === 'loading' && setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
+    responseStatus === 'error' && setPublishProcessStep(SaveAndPublishSteps.Failed);
+    responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
   }, [responseStatus]);
 
   const handleSaveChangesSubmit = () => {
@@ -191,12 +186,12 @@ export const useSavaAndPublishSetup = (hasPrompt: boolean) => {
     setPublishProcessPopupOpened(true);
 
     if (hasNoActivities) {
-      setPublishProcessStep(SavaAndPublishStep.AtLeast1Activity);
+      setPublishProcessStep(SaveAndPublishSteps.AtLeastOneActivity);
 
       return;
     }
     if (hasNoItems) {
-      setPublishProcessStep(SavaAndPublishStep.AtLeast1Item);
+      setPublishProcessStep(SaveAndPublishSteps.AtLeastOneItem);
 
       return;
     }
