@@ -160,7 +160,7 @@ export const usePreparedEvents = (
         isHidden,
         activityIds,
       }: ActivityFlow | (Activity & { activityIds?: string[] })) =>
-        addEventsToCategories({ id, name, isFlow: !!activityIds, isHidden }),
+        id && addEventsToCategories({ id, name, isFlow: !!activityIds, isHidden }),
     );
   }
 

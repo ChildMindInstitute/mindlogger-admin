@@ -36,6 +36,7 @@ export const MonthCalendar = ({
     setActiveView(CalendarViews.Day);
   };
 
+  // TODO: reduce complexity
   const monthDates = useMemo(
     () =>
       calendar &&
