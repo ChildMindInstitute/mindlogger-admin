@@ -77,7 +77,7 @@ export const ManagersRemoveAccessPopup = ({
         break;
       case 1:
         selectedApplets.forEach(async (appletId: string) => {
-          await execute({ appletId, profileId: user['_id'], deleteResponse: false });
+          await execute({ appletId, profileId: 'id', deleteResponse: false });
         });
         break;
       case 2:

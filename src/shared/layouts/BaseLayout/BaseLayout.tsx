@@ -7,9 +7,8 @@ import {
   TransferOwnershipPopup,
 } from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'modules/Auth/state';
-import { account, folders, popups, users } from 'modules/Dashboard/state';
-import { Footer } from 'shared/components';
+import { account, folders, popups, workspaces, applets, users, auth } from 'redux/modules';
+import { DEFAULT_ROWS_PER_PAGE, Footer } from 'shared/components';
 
 import { LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
@@ -18,21 +17,47 @@ export const BaseLayout = () => {
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
   const accountData = account.useData();
+  const { ownerId } = workspaces.useData() || {};
   const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible } =
     popups.useData();
-
-  useEffect(() => {
-    if (isAuthorized) {
-      dispatch(users.thunk.getManagersList());
-      dispatch(users.thunk.getUsersList());
-    }
-  }, [dispatch, isAuthorized]);
 
   useEffect(() => {
     if (accountData?.account && isAuthorized) {
       dispatch(folders.thunk.getAppletsForFolders({ account: accountData.account }));
     }
   }, [dispatch, accountData?.account, isAuthorized]);
+
+  useEffect(() => {
+    const { getWorkspaceApplets } = applets.thunk;
+    const { getWorkspaceRespondents, getWorkspaceManagers } = users.thunk;
+
+    if (ownerId) {
+      dispatch(
+        getWorkspaceApplets({
+          params: {
+            ownerId,
+            limit: DEFAULT_ROWS_PER_PAGE,
+          },
+        }),
+      );
+      dispatch(
+        getWorkspaceRespondents({
+          params: {
+            ownerId,
+            limit: DEFAULT_ROWS_PER_PAGE,
+          },
+        }),
+      );
+      dispatch(
+        getWorkspaceManagers({
+          params: {
+            ownerId,
+            limit: DEFAULT_ROWS_PER_PAGE,
+          },
+        }),
+      );
+    }
+  }, [dispatch, ownerId]);
 
   return (
     <StyledBaseLayout>

@@ -1,37 +1,23 @@
 import { useTranslation } from 'react-i18next';
 import { List } from '@mui/material';
 
-import { DEFAULT_ROWS_PER_PAGE, Svg } from 'shared/components';
+import { Svg } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
-import { applets } from 'redux/modules';
-import { OrderBy } from 'modules/Dashboard/features/Applets/Applets.types';
+import { workspaces as currentWorkspace, Workspace } from 'redux/modules';
 
 import { WorkspaceImage } from '../WorkspaceImage';
 import { StyledListItemButton, StyledItemContent, StyledSelect } from './WorkspaceGroup.styles';
 import { WorkspaceGroupProps } from './WorkspaceGroup.types';
-import { Workspace } from '../SwitchWorkspace.types';
 
 export const WorkspaceGroup = ({
   workspacesGroup: { groupName, workspaces, emptyState = '' },
-  currentWorkspace,
-  setCurrentWorkspace,
 }: WorkspaceGroupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-
+  const currentWorkspaceData = currentWorkspace.useData();
   const changeWorkspaceHandler = (workspace: Workspace) => {
-    setCurrentWorkspace(workspace);
-    const { getWorkspaceApplets } = applets.thunk;
-    dispatch(
-      getWorkspaceApplets({
-        params: {
-          ownerId: workspace.ownerId,
-          limit: DEFAULT_ROWS_PER_PAGE,
-          ordering: `-${OrderBy.UpdatedAt}`,
-        },
-      }),
-    );
+    dispatch(currentWorkspace.actions.setCurrentWorkspace(workspace));
   };
 
   return (
@@ -44,7 +30,7 @@ export const WorkspaceGroup = ({
           <StyledListItemButton
             key={workspace.ownerId}
             onClick={() => changeWorkspaceHandler(workspace)}
-            selected={currentWorkspace?.ownerId === workspace.ownerId}
+            selected={currentWorkspaceData?.ownerId === workspace.ownerId}
           >
             <StyledItemContent>
               <WorkspaceImage image={workspace?.image} workspaceName={workspace.workspaceName} />
@@ -54,7 +40,7 @@ export const WorkspaceGroup = ({
                 {workspace.workspaceName}
               </StyledBodyLarge>
             </StyledItemContent>
-            {currentWorkspace?.ownerId === workspace.ownerId && (
+            {currentWorkspaceData?.ownerId === workspace.ownerId && (
               <StyledSelect>
                 <Svg id="selected" />
               </StyledSelect>

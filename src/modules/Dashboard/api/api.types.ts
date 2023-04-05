@@ -21,13 +21,6 @@ export type FolderId = { folderId: string };
 
 export type UserRoles = 'reviewer' | 'editor' | 'user' | 'coordinator' | 'manager';
 
-export type AccountUserList = Partial<AppletId> & {
-  role: UserRoles;
-  pagination?: { allow: boolean };
-  MRN?: string;
-  sort?: { allow: boolean };
-};
-
 export type Event = {
   data: {
     URI: string;
@@ -163,8 +156,8 @@ export type AppletEncryption = AppletId & { data: FormData };
 export type ValidateAppletName = { name: string };
 
 export type UpdatePin = {
-  profileId: string;
-  newState: boolean;
+  accessId: string;
+  ownerId?: string;
 };
 
 export type Folder = {

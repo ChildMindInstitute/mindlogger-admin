@@ -13,6 +13,10 @@ export const StyledNote = styled(Box)`
   padding: ${theme.spacing(1.2, 0)};
 `;
 
+export const StyledForm = styled('form')`
+  padding: ${theme.spacing(1.2, 0)};
+`;
+
 export const StyledNoteHeader = styled(StyledFlexAllCenter)`
   justify-content: space-between;
   margin-bottom: ${theme.spacing(0.8)};

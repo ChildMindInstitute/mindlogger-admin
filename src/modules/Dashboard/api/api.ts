@@ -3,7 +3,6 @@ import { AppletId } from 'shared/api';
 
 import {
   SwitchAccount,
-  AccountUserList,
   TransferOwnershipType,
   SetAccount,
   RevokeAppletUser,
@@ -38,6 +37,24 @@ export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: Ab
   });
 };
 
+export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get(`/workspaces/${ownerId}/managers`, {
+    params: restParams,
+    signal,
+  });
+};
+
+export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get(`/workspaces/${ownerId}/respondents`, {
+    params: restParams,
+    signal,
+  });
+};
+
 export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
   authApiClient.put(
     '/user/switchAccount',
@@ -49,21 +66,6 @@ export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSig
       signal,
     },
   );
-
-export const getAccountUserListApi = (
-  { appletId, role, MRN, pagination, sort }: AccountUserList,
-  signal?: AbortSignal,
-) =>
-  authApiClient.get('/account/users', {
-    params: {
-      appletId,
-      role,
-      MRN: MRN || '',
-      pagination: pagination || JSON.stringify({ allow: false }),
-      sort: sort || JSON.stringify({ allow: false }),
-    },
-    signal,
-  });
 
 export const transferOwnershipApi = (
   { appletId, email }: TransferOwnershipType,
@@ -154,15 +156,11 @@ export const getInvitationsApi = ({ appletId }: AppletId, signal?: AbortSignal) 
     signal,
   });
 
-export const updatePinApi = ({ profileId, newState }: UpdatePin, signal?: AbortSignal) =>
-  authApiClient.put(
-    '/account/manage/pin',
-    {},
+export const updatePinApi = ({ ownerId, accessId }: UpdatePin, signal?: AbortSignal) =>
+  authApiClient.post(
+    `/workspaces/${ownerId}/respondents/pin`,
+    { accessId },
     {
-      params: {
-        profileId,
-        newState,
-      },
       signal,
     },
   );

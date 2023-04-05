@@ -7,13 +7,13 @@ import { getBuilderAppletUrl, Path } from 'shared/utils';
 
 export const getHeadCells = (): HeadCell[] => [
   {
-    id: 'name',
+    id: 'displayName',
     label: t('appletName'),
     enableSort: true,
     width: '30%',
   },
   {
-    id: 'updated',
+    id: 'updatedAt',
     label: t('lastEdit'),
     enableSort: true,
     width: '15%',

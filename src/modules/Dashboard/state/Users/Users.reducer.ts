@@ -1,19 +1,19 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import { UsersSchema } from './Users.schema';
-import { getManagersList, getUsersList } from './Users.thunk';
+import { getWorkspaceRespondents, getWorkspaceManagers } from './Users.thunk';
 import {
-  createUsersFulfilledData,
   createUsersPendingData,
   createUsersRejectedData,
+  createUsersFulfilledData,
 } from './Users.utils';
 
 export const extraReducers = (builder: ActionReducerMapBuilder<UsersSchema>): void => {
-  createUsersPendingData(builder, getManagersList, 'manager');
-  createUsersFulfilledData(builder, getManagersList, 'manager');
-  createUsersRejectedData(builder, getManagersList, 'manager');
+  createUsersPendingData({ builder, thunk: getWorkspaceRespondents, key: 'respondents' });
+  createUsersFulfilledData({ builder, thunk: getWorkspaceRespondents, key: 'respondents' });
+  createUsersRejectedData({ builder, thunk: getWorkspaceRespondents, key: 'respondents' });
 
-  createUsersPendingData(builder, getUsersList, 'user');
-  createUsersFulfilledData(builder, getUsersList, 'user');
-  createUsersRejectedData(builder, getUsersList, 'user');
+  createUsersPendingData({ builder, thunk: getWorkspaceManagers, key: 'managers' });
+  createUsersFulfilledData({ builder, thunk: getWorkspaceManagers, key: 'managers' });
+  createUsersRejectedData({ builder, thunk: getWorkspaceManagers, key: 'managers' });
 };

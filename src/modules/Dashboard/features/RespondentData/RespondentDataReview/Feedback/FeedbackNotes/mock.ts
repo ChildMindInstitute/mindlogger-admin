@@ -1,4 +1,5 @@
 import uniqueId from 'lodash.uniqueid';
+import { FeedbackNote } from './FeedbackNotes.types';
 
 export const mockedNotes = [
   {
@@ -20,3 +21,13 @@ export const mockedNotes = [
     content: 'One note.',
   },
 ];
+
+export const mockUpdate = (notes: FeedbackNote[], note: FeedbackNote, isRemove = false) => {
+  const updatedNoteIndex = notes.findIndex(({ id }) => id === note.id);
+  const updatedNotes = [...notes];
+  isRemove
+    ? updatedNotes.splice(updatedNoteIndex, 1)
+    : updatedNotes.splice(updatedNoteIndex, 1, note);
+
+  return updatedNotes;
+};

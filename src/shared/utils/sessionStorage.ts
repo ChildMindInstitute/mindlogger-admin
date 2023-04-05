@@ -1,21 +1,24 @@
-import { BuilderLayers } from 'shared/hooks';
+const ITEM_NAME = 'BUILDER_APPLET_DATA';
 
-const getItemName = (layer: BuilderLayers) => `builder_${layer}_data`;
-const setSpecificItem = (layer: BuilderLayers, data: Record<string, unknown>) => {
+const setItem = (data: unknown) => {
   const str = JSON.stringify(data);
-  sessionStorage.setItem(getItemName(layer), str);
+  sessionStorage.setItem(ITEM_NAME, str);
 };
-const getSpecificItem = (layer: BuilderLayers) => {
+const getItem = () => {
   try {
-    const str = sessionStorage.getItem(getItemName(layer)) ?? '{}';
+    const str = sessionStorage.getItem(ITEM_NAME) || '';
 
     return JSON.parse(str);
   } catch {
-    return {};
+    return;
   }
+};
+const removeItem = () => {
+  sessionStorage.removeItem(ITEM_NAME);
 };
 
 export const builderSessionStorage = {
-  getItem: getSpecificItem,
-  setItem: setSpecificItem,
+  getItem,
+  setItem,
+  removeItem,
 };

@@ -19,35 +19,27 @@ const slice = createSlice({
 export const users = {
   thunk,
   slice,
-  useManagerData: (): UsersSchema['manager']['data'] =>
+  useManagersData: (): UsersSchema['managers']['data'] =>
     useAppSelector(
       ({
         users: {
-          manager: { data },
+          managers: { data },
         },
       }) => data,
     ),
-  useUserData: (): UsersSchema['user']['data'] =>
+  useRespondentsData: (): UsersSchema['respondents']['data'] =>
     useAppSelector(
       ({
         users: {
-          user: { data },
+          respondents: { data },
         },
       }) => data,
     ),
-  useUserMetaStatus: (): UsersSchema['user']['status'] =>
+  useRespondentsMetaStatus: (): UsersSchema['respondents']['status'] =>
     useAppSelector(
       ({
         users: {
-          user: { status },
-        },
-      }) => status,
-    ),
-  useManagerMetaStatus: (): UsersSchema['manager']['status'] =>
-    useAppSelector(
-      ({
-        users: {
-          user: { status },
+          respondents: { status },
         },
       }) => status,
     ),

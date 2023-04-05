@@ -1,18 +1,27 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
 import { StyledTitleMedium, StyledBuilderWrapper } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { useBreadcrumbs } from 'shared/hooks';
-import { page } from 'resources';
+import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
 
 import { Header, Item } from '../../components';
-import { activities, getActions } from './Activities.const';
+import { getActions } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const navigate = useNavigate();
+
+  const { control, watch } = useFormContext();
+
+  const { append: appendActivity } = useFieldArray({
+    control,
+    name: 'activities',
+  });
+
+  const activities = watch('activities');
 
   useBreadcrumbs([
     {
@@ -20,6 +29,10 @@ export const Activities = () => {
       label: t('activities'),
     },
   ]);
+
+  const handleAddActivity = () => {
+    appendActivity(getNewActivity());
+  };
 
   return (
     <StyledBuilderWrapper>
@@ -29,12 +42,19 @@ export const Activities = () => {
           {
             icon: <Svg id="checklist-filled" />,
             label: t('addActivity'), // TODO add Applet Activity Name on Edit
-            handleClick: () => navigate(page.newAppletNewActivity), // TODO add Applet Activity Id on Edit
+            handleClick: handleAddActivity,
           },
         ]}
       />
       {activities?.length ? (
-        activities.map((item) => <Item key={item.id} {...item} getActions={getActions} withHover />)
+        activities.map((item: ActivityFormValues) => (
+          <Item
+            {...item}
+            key={`activity-${item.key ?? item.id}`}
+            getActions={() => getActions(item.key ?? item.id ?? '')}
+            withHover
+          />
+        ))
       ) : (
         <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
           {t('activityIsRequired')}

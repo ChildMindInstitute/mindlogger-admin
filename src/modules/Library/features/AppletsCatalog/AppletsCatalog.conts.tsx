@@ -52,4 +52,6 @@ export const ItemResponseTypes = {
     icon: <Svg id="audio-player" />,
     title: ItemInputTypes.AudioPlayer,
   },
+  [ItemInputTypes.Flanker]: { icon: null, title: ItemInputTypes.Flanker },
+  [ItemInputTypes.AbTest]: { icon: null, title: ItemInputTypes.AbTest },
 };

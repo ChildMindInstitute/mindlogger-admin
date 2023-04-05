@@ -3,11 +3,14 @@ import { AxiosResponse } from 'axios';
 
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
-import { AppletId } from 'api';
+import { AppletBody, AppletId } from 'api';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
-  thunk: AsyncThunk<AxiosResponse, AppletId, Record<string, never>>;
+  thunk:
+    | AsyncThunk<AxiosResponse, AppletId, Record<string, never>>
+    | AsyncThunk<AxiosResponse, SingleApplet, Record<string, never>>
+    | AsyncThunk<AxiosResponse, AppletBody, Record<string, never>>;
   key: keyof AppletSchema;
 };
 
@@ -22,8 +25,44 @@ export type ActivityFlow = {
   isHidden?: boolean;
 };
 
+export type Config = Record<string, string>;
+
+export type ResponseType =
+  | 'text'
+  | 'singleSelect'
+  | 'multiSelect'
+  | 'message'
+  | 'slider'
+  | 'numberSelect'
+  | 'timeRange'
+  | 'geolocation'
+  | 'drawing'
+  | 'photo'
+  | 'video'
+  | 'date'
+  | 'sliderRows'
+  | 'singleSelectRows'
+  | 'multiSelectRows'
+  | 'audio'
+  | 'audioPlayer'
+  | 'flanker'
+  | 'abTest';
+
+export type ResponseValues = Record<string, string>;
+
+export type Item = {
+  id: number;
+  name: string;
+  question: Record<string, string>;
+  config: Config;
+  responseType: ResponseType;
+  responseValues: ResponseValues;
+  order: number;
+};
+
 export type Activity = {
   id: string;
+  key?: string;
   name: string;
   description: string;
   ordering: number;
@@ -34,6 +73,7 @@ export type Activity = {
   isReviewable?: boolean;
   responseIsEditable?: boolean;
   isHidden?: boolean;
+  items: Item[];
 };
 
 type Theme = {
@@ -51,8 +91,8 @@ export type SingleApplet = {
   id: string;
   displayName: string;
   version: string;
-  description: string;
-  about: string;
+  description: Record<string, string>;
+  about: Record<string, string>;
   createdAt: string;
   updatedAt: string;
   image?: string;

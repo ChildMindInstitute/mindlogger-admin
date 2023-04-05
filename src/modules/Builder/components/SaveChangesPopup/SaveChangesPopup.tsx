@@ -1,24 +1,31 @@
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { builderSessionStorage } from 'shared/utils';
 
 import { SaveChangesPopupProps } from './SaveChangesPopup.types';
-import { useSaveChangesPopupSetup } from './SaveChangesPopup.hooks';
 
 export const SaveChangesPopup = ({
   isPopupVisible,
   handleClose,
   handleSubmit,
 }: SaveChangesPopupProps) => {
+  const { appletId } = useParams();
+
   const { t } = useTranslation('app');
-  const { onDoNotSaveClick, onSaveClick } = useSaveChangesPopupSetup(handleSubmit);
+
+  const onDoNotSaveClick = () => {
+    appletId && builderSessionStorage.removeItem();
+    handleSubmit();
+  };
 
   return (
     <Modal
       open={isPopupVisible}
       onClose={handleClose}
-      onSubmit={onSaveClick}
+      onSubmit={handleSubmit}
       onSecondBtnSubmit={onDoNotSaveClick}
       onThirdBtnSubmit={handleClose}
       title={t('saveChanges')}

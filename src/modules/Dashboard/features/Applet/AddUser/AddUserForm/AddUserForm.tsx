@@ -15,7 +15,6 @@ import {
 import { StyledErrorText } from 'shared/styles/styledComponents';
 import { getAppletInvitationApi } from 'api';
 import { getErrorMessage } from 'shared/utils/errors';
-import { prepareUsersData } from 'shared/utils/prepareUsersData';
 import { setAccountName } from 'modules/Auth/state/Auth.thunk';
 import { Roles } from 'shared/consts';
 
@@ -30,7 +29,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const { t } = useTranslation('app');
   const [errorMessage, setErrorMessage] = useState('');
   const accountData = account.useData();
-  const usersData = users.useUserData();
+  const usersData = users.useRespondentsData();
   const authData = auth.useData();
   const currentApplet = accountData?.account?.applets?.find((el) => el.id === id);
   const { firstName, lastName } = authData?.user as User;
@@ -142,7 +141,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
                   name={Fields.users}
                   onRemove={handleRemove}
                   // TODO: fix types
-                  options={prepareUsersData(usersData?.items)?.map((el: any) => el?.MRN)}
+                  options={usersData?.result?.map((el) => el?.secretId)}
                   label={t('userList')}
                 />
               </Grid>

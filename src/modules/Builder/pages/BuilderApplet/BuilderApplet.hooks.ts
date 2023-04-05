@@ -1,11 +1,15 @@
 import { useCallback } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 
 import { Update } from 'history';
+import { builderSessionStorage } from 'shared/utils';
 import { useCallbackPrompt, usePromptSetup } from 'shared/hooks';
 
-import { isActivityRoute, isAppletRoute } from './BuilderApplet.utils';
+import { ActivityFormValues } from './BuilderApplet.types';
+import { isAppletRoute } from './BuilderApplet.utils';
 
-export const usePrompt = () => {
+export const usePrompt = (isFormChanged: boolean) => {
   const {
     location,
     promptVisible,
@@ -18,11 +22,9 @@ export const usePrompt = () => {
 
   const handleBlockedNavigation = useCallback(
     (nextLocation: Update) => {
-      const currentPathname = location.pathname;
       const nextPathname = nextLocation.location.pathname;
-      const shouldSkip =
-        (isAppletRoute(currentPathname) && isAppletRoute(nextPathname)) ||
-        (isActivityRoute(currentPathname) && isActivityRoute(nextPathname));
+
+      const shouldSkip = !isFormChanged || isAppletRoute(nextPathname);
 
       if (!confirmedNavigation && !shouldSkip) {
         setPromptVisible(true);
@@ -36,19 +38,43 @@ export const usePrompt = () => {
 
       return true;
     },
-    [confirmedNavigation, location],
+    [confirmedNavigation, location, isFormChanged],
   );
+
+  const { cancelNavigation: onCancel, confirmNavigation: onConfirm } = useCallbackPrompt({
+    when: true,
+    handleBlockedNavigation,
+    lastLocation,
+    setLastLocation,
+    setPromptVisible,
+    confirmedNavigation,
+    setConfirmedNavigation,
+  });
 
   return {
     promptVisible,
-    ...useCallbackPrompt({
-      when: true,
-      handleBlockedNavigation,
-      lastLocation,
-      setLastLocation,
-      setPromptVisible,
-      confirmedNavigation,
-      setConfirmedNavigation,
-    }),
+    confirmNavigation: () => {
+      builderSessionStorage.removeItem();
+      onConfirm();
+    },
+    cancelNavigation: onCancel,
+  };
+};
+
+export const useCurrentActivity = () => {
+  const { activityId } = useParams();
+
+  const { watch } = useFormContext();
+
+  const activities = watch('activities');
+  const currentActivityIndex = activities?.findIndex(
+    ({ id, key }: ActivityFormValues) => activityId === key || activityId === id,
+  );
+
+  if (!~currentActivityIndex) return {};
+
+  return {
+    activity: activities[currentActivityIndex],
+    name: `activities[${currentActivityIndex}]`,
   };
 };

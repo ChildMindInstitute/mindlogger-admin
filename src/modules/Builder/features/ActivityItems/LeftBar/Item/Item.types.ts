@@ -1,9 +1,13 @@
-import { ActivityItemApi } from 'modules/Builder/api';
+import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
 
 import { LeftBarProps } from '../LeftBar.types';
 
-export type ItemProps = ActivityItemApi & Omit<LeftBarProps, 'items' | 'onAddItem'>;
+export type ItemProps = { item: ItemFormValues; name: string } & Omit<
+  LeftBarProps,
+  'items' | 'onAddItem'
+>;
 
 export type ActionsType = {
   onRemoveItem: LeftBarProps['onRemoveItem'];
+  onChangeVisibility: () => void;
 };

@@ -1,5 +1,5 @@
 export type ItemType = {
-  id: string;
+  id?: string;
   name: string;
   description: string;
   img?: string;
@@ -15,6 +15,6 @@ type Action = {
 };
 
 export type ItemProps = {
-  getActions: () => Action[];
+  getActions: (key?: string) => Action[];
   withHover?: boolean;
 } & ItemType;
