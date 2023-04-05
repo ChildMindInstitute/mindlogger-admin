@@ -12,13 +12,13 @@ export const useRespondentDataTabs = () => {
       labelKey: 'summary',
       icon: <Svg id="chart" />,
       activeIcon: <Svg id="chart" />,
-      path: `${page.dashboard}/${id}/${APPLET_PAGES.respondents}/${respondentId}/data/summary`,
+      path: `${page.dashboard}/${id}/${APPLET_PAGES.respondents}/${respondentId}/dataviz/summary`,
     },
     {
       labelKey: 'review',
       icon: <Svg id="checkbox-filled" />,
       activeIcon: <Svg id="checkbox-filled" />,
-      path: `${page.dashboard}/${id}/${APPLET_PAGES.respondents}/${respondentId}/data/review`,
+      path: `${page.dashboard}/${id}/${APPLET_PAGES.respondents}/${respondentId}/dataviz/review`,
     },
   ];
 };
