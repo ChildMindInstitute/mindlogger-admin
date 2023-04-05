@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
 
 import { Svg } from 'shared/components';
-import { StyledClearedButton } from 'shared/styles/styledComponents';
+import { StyledClearedButton } from 'shared/styles';
+import { auth } from 'redux/modules';
 
 import {
   StyledCloseWrapper,
@@ -17,7 +18,9 @@ export const SwitchWorkspace = ({
   visibleDrawer,
   workspaces,
 }: SwitchWorkspaceProps) => {
-  const workspacesGroups = getWorkspacesGroups(workspaces);
+  const userData = auth.useData();
+  const { id } = userData?.user || {};
+  const workspacesGroups = getWorkspacesGroups(workspaces, id);
 
   return (
     <StyledSwitchWorkspaceDrawer anchor="left" open={visibleDrawer} hideBackdrop>

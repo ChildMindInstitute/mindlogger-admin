@@ -8,7 +8,6 @@ import {
 } from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
 import { account, folders, popups, workspaces, applets, users, auth } from 'redux/modules';
-import { OrderBy } from 'shared/types';
 import { DEFAULT_ROWS_PER_PAGE, Footer } from 'shared/components';
 
 import { LeftBar, TopBar } from './components';
@@ -18,7 +17,7 @@ export const BaseLayout = () => {
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
   const accountData = account.useData();
-  const currentWorkspaceData = workspaces.useData();
+  const { ownerId } = workspaces.useData() || {};
   const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible } =
     popups.useData();
 
@@ -30,8 +29,7 @@ export const BaseLayout = () => {
 
   useEffect(() => {
     const { getWorkspaceApplets } = applets.thunk;
-    const { getWorkspaceUsers } = users.thunk;
-    const ownerId = currentWorkspaceData?.ownerId;
+    const { getWorkspaceRespondents, getWorkspaceManagers } = users.thunk;
 
     if (ownerId) {
       dispatch(
@@ -39,21 +37,27 @@ export const BaseLayout = () => {
           params: {
             ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
-            ordering: `-${OrderBy.UpdatedAt}`,
           },
         }),
       );
       dispatch(
-        getWorkspaceUsers({
+        getWorkspaceRespondents({
           params: {
-            ownerId: currentWorkspaceData.ownerId,
+            ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
-            ordering: `-${OrderBy.UpdatedAt}`,
+          },
+        }),
+      );
+      dispatch(
+        getWorkspaceManagers({
+          params: {
+            ownerId,
+            limit: DEFAULT_ROWS_PER_PAGE,
           },
         }),
       );
     }
-  }, [dispatch, currentWorkspaceData]);
+  }, [dispatch, ownerId]);
 
   return (
     <StyledBaseLayout>
