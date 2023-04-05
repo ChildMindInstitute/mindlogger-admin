@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 import {
   AudioPlayer,
   AudioRecord,

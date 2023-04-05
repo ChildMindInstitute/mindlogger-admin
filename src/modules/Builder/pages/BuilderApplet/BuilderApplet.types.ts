@@ -1,4 +1,5 @@
-import { ItemResponseType, ResponseValues } from 'shared/state';
+import { ResponseValues } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 
 export type ItemFormValues = {
   id: string;

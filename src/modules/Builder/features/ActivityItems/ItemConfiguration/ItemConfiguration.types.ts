@@ -1,7 +1,7 @@
 import { ColorResult } from 'react-color';
 import { FieldValues, Path } from 'react-hook-form';
 
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 import { ActivityItemApi } from 'modules/Builder/api';
 
 export enum ItemConfigurationSettings {

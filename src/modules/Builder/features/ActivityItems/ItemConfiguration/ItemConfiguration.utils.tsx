@@ -1,7 +1,7 @@
 import uniqueId from 'lodash.uniqueid';
 
 import i18n from 'i18n';
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
 
 import { SelectionRows, SliderOption } from './ItemConfiguration.types';

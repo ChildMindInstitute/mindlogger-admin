@@ -1,6 +1,6 @@
 import uniqueId from 'lodash.uniqueid';
 
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 import { variables, StyledBodyLarge } from 'shared/styles';
 import i18n from 'i18n';
 

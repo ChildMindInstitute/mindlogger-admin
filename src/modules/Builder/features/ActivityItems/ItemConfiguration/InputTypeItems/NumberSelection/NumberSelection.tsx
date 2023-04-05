@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopStart, theme } from 'shared/styles';
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 
 import { StyledInputWrapper } from './NumberSelection.styles';
 import { NumberSelectionProps } from './NumberSelection.types';

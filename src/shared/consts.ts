@@ -51,3 +51,25 @@ export const enum Roles {
 }
 
 export const SEARCH_DEBOUNCE_VALUE = 700;
+
+export enum ItemResponseType {
+  SingleSelection = 'singleSelect',
+  MultipleSelection = 'multiSelect',
+  Slider = 'slider',
+  Date = 'date',
+  NumberSelection = 'numberSelect',
+  TimeRange = 'timeRange',
+  SingleSelectionPerRow = 'singleSelectRows',
+  MultipleSelectionPerRow = 'multiSelectRows',
+  SliderRows = 'sliderRows',
+  Text = 'text',
+  Drawing = 'drawing',
+  Photo = 'photo',
+  Video = 'video',
+  Geolocation = 'geolocation',
+  Audio = 'audio',
+  Message = 'message',
+  AudioPlayer = 'audioPlayer',
+  Flanker = 'flanker',
+  AbTest = 'abTest',
+}

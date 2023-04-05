@@ -15,7 +15,7 @@ import {
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
 } from 'shared/styles';
-import { ItemResponseType } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc } from 'shared/utils';
 
 import { ItemConfigurationForm, ItemConfigurationSettings } from '../../ItemConfiguration.types';
