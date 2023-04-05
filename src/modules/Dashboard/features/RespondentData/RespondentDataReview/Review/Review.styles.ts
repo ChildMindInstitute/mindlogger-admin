@@ -1,6 +1,12 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import { StyledFlexAllCenter, variables } from 'shared/styles';
+import { StyledFlexAllCenter, theme, variables } from 'shared/styles';
+
+export const StyledReview = styled(Box)`
+  width: 100%;
+  height: 100%;
+  padding: ${theme.spacing(2.4, 6, 4)};
+`;
 
 export const StyledEmptyReview = styled(StyledFlexAllCenter)`
   flex-direction: column;

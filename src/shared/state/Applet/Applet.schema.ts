@@ -50,6 +50,15 @@ export type ResponseType =
 
 export type ResponseValues = Record<string, string>;
 
+export type ResponseOption = {
+  value: number;
+  score: number;
+  id: string;
+  label: string;
+  image: string;
+  description: string;
+};
+
 export type Item = {
   id: number;
   name: string;
@@ -58,6 +67,7 @@ export type Item = {
   responseType: ResponseType;
   responseValues: ResponseValues;
   order: number;
+  responseOptions?: ResponseOption[];
 };
 
 export type Activity = {

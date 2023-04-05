@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -6,6 +5,7 @@ import { DatePicker, DatePickerUiType } from 'shared/components';
 import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
 
 import { StyledMenu } from '../../RespondentData.styles';
+import { getMockedResponses } from './mock';
 import { StyledHeader } from './ReviewMenu.styles';
 import { ReviewMenuProps } from './ReviewMenu.types';
 import { ReviewMenuItem } from './ReviewMenuItem';
@@ -13,8 +13,9 @@ import { ReviewMenuItem } from './ReviewMenuItem';
 export const ReviewMenu = ({
   activities,
   selectedActivity,
+  selectedResponse,
   setSelectedActivity,
-  setSelectedReview,
+  setSelectedResponse,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { control } = useForm();
@@ -37,13 +38,15 @@ export const ReviewMenu = ({
       <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
         {t('selectActivityAndResponse')}
       </StyledLabelLarge>
-      {activities.map((activity) => (
+      {activities.map((activity, index) => (
         <ReviewMenuItem
           key={activity.id}
           isSelected={selectedActivity.id === activity.id}
           item={activity}
+          responses={getMockedResponses(activity.id, index)}
+          selectedResponse={selectedResponse}
           setSelectedItem={setSelectedActivity}
-          setSelectedReview={setSelectedReview}
+          setSelectedResponse={setSelectedResponse}
         />
       ))}
     </StyledMenu>

@@ -1,5 +1,4 @@
 import ReactPlayer from 'react-player/lazy';
-import { Slider } from '@mui/material';
 
 import { StyledClearedButton, StyledTitleSmall, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
@@ -10,6 +9,7 @@ import {
   StyledName,
   StyledNameWrapper,
   StyledPlayerWrapper,
+  StyledSlider,
 } from './MLPlayer.styles';
 import { MLPlayerProps } from './MLPlayer.types';
 import { useMLPlayerSetup } from './MLPlayer.hooks';
@@ -65,7 +65,7 @@ export const MLPlayer = ({ resourceData, onRemove }: MLPlayerProps) => {
           <Svg id="close" width={18} height={18} />
         </StyledClearedButton>
       </StyledNameWrapper>
-      <Slider
+      <StyledSlider
         size="medium"
         min={0}
         max={1}

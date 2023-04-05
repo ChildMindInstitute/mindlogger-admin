@@ -3,6 +3,7 @@ export const font = {
     xxxl: '3.2rem', //32px
     xxl: '2.4rem', //24px
     xl: '2.2rem', //22px
+    lrg: '2rem', //20px
     lg: '1.6rem', //16px
     md: '1.4rem', //14px
     sm: '1.2rem', //12px
