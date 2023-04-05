@@ -5,7 +5,6 @@ import i18n from 'i18n';
 import { page } from 'resources';
 import { SingleApplet } from 'shared/state';
 import { getDictionaryText } from 'shared/utils';
-import { AppletFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
 
 const { t } = i18n;
 
@@ -13,7 +12,7 @@ export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/
 
 export const getNewActivity = () => ({
   key: uniqueId(),
-  name: t('newActivityName'),
+  name: '',
   description: '',
   items: [],
   showAllAtOnce: false,
@@ -42,7 +41,11 @@ export const getNewActivityItem = () => ({
   isHidden: false,
 });
 
-export const getDefaultValues = (appletData?: SingleApplet): AppletFormValues => {
+export const getNewActivityFlow = () => ({
+  id: uniqueId(),
+});
+
+export const getDefaultValues = (appletData?: SingleApplet) => {
   if (!appletData) return getNewApplet();
 
   return {

@@ -24,7 +24,7 @@ export const Item = ({ getActions, ...props }: ItemProps) => {
             {index} {t('of')} {total}
           </StyledTitleMedium>
         )}
-        <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
+        <StyledTitleBoldMedium>{name || t('newActivity')}</StyledTitleBoldMedium>
         <StyledTitleMedium>{description}</StyledTitleMedium>
         {count && (
           <StyledTitleBoldSmall sx={{ marginTop: theme.spacing(0.6) }}>
