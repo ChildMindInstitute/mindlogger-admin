@@ -1,9 +1,10 @@
-import { useTranslation } from 'react-i18next';
+import { Fragment, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
-import { Svg } from 'shared/components';
-import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
+import { Svg, Modal } from 'shared/components';
+import { StyledTitleMedium, StyledFlexColumn, theme, StyledModalWrapper } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
@@ -19,9 +20,10 @@ export const Activities = () => {
   const { control, watch } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
+  const [deletionModalVisible, setDeletionModalVisible] = useState(false);
 
   const {
-    append: appendActivity,
+    insert: insertActivity,
     remove: removeActivity,
     update: updateActivity,
   } = useFieldArray({
@@ -38,44 +40,77 @@ export const Activities = () => {
     },
   ]);
 
+  const navigateToActivity = (id: string) =>
+    navigate(
+      generatePath(page.builderAppletActivityAbout, {
+        appletId,
+        activityId: id,
+      }),
+    );
+  const handleHideModal = () => setDeletionModalVisible(false);
+
   return (
     <BuilderContainer title={t('activities')} Header={ActivitiesHeader}>
       <StyledFlexColumn>
         {activities?.length ? (
           activities.map((item: ActivityFormValues, index: number) => {
+            const handleEdit = () => navigateToActivity(item.key ?? item.id);
             //TODO: check if dependent activity flow is required to remove
             const handleRemove = () => removeActivity(index);
             //TODO: check if some items properties in duplicated activity are needed to be changed
             const handleDuplicate = () => {
               const newActivity = getNewActivity(item);
 
-              appendActivity(newActivity);
+              insertActivity(index + 1, newActivity);
 
-              navigate(
-                generatePath(page.builderAppletActivityAbout, {
-                  appletId,
-                  activityId: newActivity.key,
-                }),
-              );
+              navigateToActivity(newActivity.key);
             };
             const handleVisibilityChange = () =>
               updateActivity(index, { ...item, isHidden: !item.isHidden });
 
+            const activityName = item.name || 'New Activity';
+
             return (
-              <Item
-                {...item}
-                key={`activity-${item.key ?? item.id}`}
-                getActions={() =>
-                  getActions({
-                    key: item.key ?? item.id ?? '',
-                    isHidden: item.isHidden,
-                    onDuplicate: handleDuplicate,
-                    onRemove: handleRemove,
-                    onVisibilityChange: handleVisibilityChange,
-                  })
-                }
-                withHover
-              />
+              <Fragment key={`activity-${item.key ?? item.id}`}>
+                <Item
+                  {...item}
+                  img={item.image}
+                  isInactive={item.isHidden}
+                  hasStaticActions={item.isHidden}
+                  getActions={() =>
+                    getActions({
+                      key: item.key ?? item.id ?? '',
+                      isActivityHidden: item.isHidden,
+                      onEdit: handleEdit,
+                      onDuplicate: handleDuplicate,
+                      onRemove: () => setDeletionModalVisible(true),
+                      onVisibilityChange: handleVisibilityChange,
+                    })
+                  }
+                  withHover
+                />
+                <Modal
+                  open={deletionModalVisible}
+                  onClose={handleHideModal}
+                  onSubmit={handleRemove}
+                  onSecondBtnSubmit={handleHideModal}
+                  title={t('deleteActivity')}
+                  buttonText={t('delete')}
+                  secondBtnText={t('cancel')}
+                  hasSecondBtn
+                  submitBtnColor="error"
+                >
+                  <StyledModalWrapper>
+                    <Trans i18nKey="deleteActivityDescription">
+                      Are you sure you want to delete the Activity
+                      <strong>
+                        <>{{ activityName }}</>
+                      </strong>
+                      ?
+                    </Trans>
+                  </StyledModalWrapper>
+                </Modal>
+              </Fragment>
             );
           })
         ) : (

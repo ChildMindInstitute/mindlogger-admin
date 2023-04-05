@@ -31,7 +31,7 @@ export const ActivitiesHeader: BuilderContainerProps['Header'] = ({ isSticky, ch
   return (
     <StyledHeader isSticky={isSticky}>
       {children}
-      <StyledBuilderBtn startIcon={<Svg id="checklist-filled" />} onClick={handleAddActivity}>
+      <StyledBuilderBtn startIcon={<Svg id="add" />} onClick={handleAddActivity}>
         {t('addActivity')}
       </StyledBuilderBtn>
     </StyledHeader>

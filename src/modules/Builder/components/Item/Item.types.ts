@@ -17,4 +17,7 @@ type Action = {
 export type ItemProps = {
   getActions: (key?: string) => Action[];
   withHover?: boolean;
+  isInactive?: boolean;
+  visibleByDefault?: boolean;
+  hasStaticActions?: boolean;
 } & ItemType;
