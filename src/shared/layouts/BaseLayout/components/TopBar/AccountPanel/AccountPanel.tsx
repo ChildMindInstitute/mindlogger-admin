@@ -3,16 +3,16 @@ import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'modules/Auth/state';
+import { auth, workspaces } from 'redux/modules';
 import avatarSrc from 'assets/images/avatar.png';
-import { variables } from 'shared/styles/variables';
 import {
   StyledLabelBoldSmall,
   StyledLabelSmall,
   StyledTitleSmall,
   StyledFlexTopCenter,
   StyledClearedButton,
-} from 'shared/styles/styledComponents';
+  variables,
+} from 'shared/styles';
 
 import { Notifications } from '../Notifications';
 import {
@@ -33,7 +33,10 @@ export const AccountPanel = ({ alertsQuantity, setShowDrawer, showDrawer }: Acco
   const dispatch = useAppDispatch();
   const authData = auth.useData();
 
-  const handleLogout = () => dispatch(auth.actions.resetAuthorization());
+  const handleLogout = () => {
+    dispatch(workspaces.actions.setCurrentWorkspace(null));
+    dispatch(auth.actions.resetAuthorization());
+  };
 
   return (
     <StyledAccountDrawer anchor="right" open={showDrawer} hideBackdrop>
