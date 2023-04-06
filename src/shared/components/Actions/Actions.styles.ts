@@ -1,10 +1,9 @@
-import { Box } from '@mui/material';
-import { styled } from '@mui/system';
+import { Box, styled } from '@mui/material';
 
-import { StyledFlexTopCenter, StyledClearedButton } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { StyledFlexTopCenter, StyledClearedButton, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+
+import { Svg } from '../Svg';
 
 export const StyledActionsWrapper = styled(StyledFlexTopCenter)`
   width: 100%;
@@ -43,4 +42,8 @@ export const StyledActionButton = styled(StyledClearedButton, shouldForwardProp)
     fill: ${({ disabled }) =>
       disabled ? variables.palette.surface_variant : variables.palette.on_surface_variant};
   }
+`;
+
+export const StyledDotsSvg = styled(Svg)`
+  margin: ${theme.spacing(0, 1, 0, 2)};
 `;

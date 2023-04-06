@@ -11,6 +11,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
   padding: ${theme.spacing(1.3, 2.4)};
   width: 100%;
   border-radius: ${variables.borderRadius.lg2};
+  height: 9.8rem;
 
   &:hover {
     box-shadow: ${({ withHover }: { withHover?: boolean }) =>

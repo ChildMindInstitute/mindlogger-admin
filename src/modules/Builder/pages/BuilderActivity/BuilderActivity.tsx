@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
 import { StyledDirectoryUpButton, StyledBody } from 'shared/styles/styledComponents';
 import { LinkedTabs, Svg } from 'shared/components';
@@ -18,7 +18,7 @@ export const BuilderActivity = () => {
     <StyledBody sx={{ position: 'relative' }}>
       <StyledDirectoryUpButton
         variant="text"
-        onClick={() => navigate(page.builderAppletActivities)}
+        onClick={() => navigate(generatePath(page.builderAppletActivities, { appletId }))}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
       >
         {t('activities')}

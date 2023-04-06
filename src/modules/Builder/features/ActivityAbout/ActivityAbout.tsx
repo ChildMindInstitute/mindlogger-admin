@@ -12,7 +12,7 @@ import {
 } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
-import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
+import { MAX_DESCRIPTION_LENGTH, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
@@ -59,7 +59,7 @@ export const ActivityAbout = () => {
       ),
     },
     {
-      title: t('activityWatermark'),
+      title: t('activitySplashscreen'),
       tooltipTitle: t('activitySplashScreenDescription'),
       upload: (
         <Uploader
@@ -75,16 +75,7 @@ export const ActivityAbout = () => {
   const checkboxes = [
     {
       name: `${name}.showAllAtOnce`,
-      label: (
-        <StyledBodyLarge sx={{ position: 'relative' }}>
-          {t('showAllQuestionsAtOnce')}
-          <Tooltip tooltipTitle={t('webAppOnlyFeature')}>
-            <span>
-              <StyledSvg id="more-info-outlined" />
-            </span>
-          </Tooltip>
-        </StyledBodyLarge>
-      ),
+      label: <StyledBodyLarge>{t('showAllQuestionsAtOnce')}</StyledBodyLarge>,
     },
     {
       name: `${name}.isSkippable`,
@@ -99,7 +90,7 @@ export const ActivityAbout = () => {
       label: (
         <StyledBodyLarge sx={{ position: 'relative' }}>
           {t('onlyAdminPanelActivity')}
-          <Tooltip tooltipTitle={t('webAppOnlyFeatureTooltip')}>
+          <Tooltip tooltipTitle={t('onlyAdminPanelActivityTooltip')}>
             <span>
               <StyledSvg id="more-info-outlined" />
             </span>
@@ -124,7 +115,7 @@ export const ActivityAbout = () => {
           <InputController
             {...commonProps}
             name={`${name}.description`}
-            maxLength={MAX_DESCRIPTION_LENGTH_LONG}
+            maxLength={MAX_DESCRIPTION_LENGTH}
             label={t('activityDescription')}
             multiline
             rows={4}
