@@ -8,6 +8,7 @@ export const StyledMenu = styled(StyledFlexColumn)`
   flex-shrink: 0;
   border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   padding: ${theme.spacing(4.8, 1.6)};
+  overflow-y: auto;
 `;
 
 export const StyledTextBtn = styled(Button)`

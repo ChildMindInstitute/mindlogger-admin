@@ -36,6 +36,13 @@ export const StyledTitleLarge = styled(Typography)`
   color: ${({ color }: StyledProps) => color || variables.palette.black};
 `;
 
+export const StyledTitleLargish = styled(Typography)`
+  font-size: ${variables.font.size.lrg};
+  line-height: ${variables.font.lineHeight.xl};
+  font-weight: ${variables.font.weight.regular};
+  color: ${({ color }: StyledProps) => color || variables.palette.black};
+`;
+
 export const StyledTitleMedium = styled(Typography)`
   font-size: ${variables.font.size.lg};
   line-height: ${variables.font.lineHeight.lg};
@@ -53,6 +60,10 @@ export const StyledTitleSmall = styled(Typography)`
 `;
 
 export const StyledTitleBoldLarge = styled(StyledTitleLarge)`
+  font-weight: ${variables.font.weight.bold};
+`;
+
+export const StyledTitleBoldLargish = styled(StyledTitleLargish)`
   font-weight: ${variables.font.weight.bold};
 `;
 

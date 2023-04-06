@@ -1,6 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 
 import { Actions, Svg } from 'shared/components';
+import { itemsTypeIcons } from 'shared/consts';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 
@@ -13,7 +14,6 @@ import {
   StyledActionButton,
 } from './Item.styles';
 import { ItemProps } from './Item.types';
-import { itemsTypeIcons } from '../../ActivityItems.const';
 
 export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }: ItemProps) => {
   const { setValue, watch } = useFormContext();

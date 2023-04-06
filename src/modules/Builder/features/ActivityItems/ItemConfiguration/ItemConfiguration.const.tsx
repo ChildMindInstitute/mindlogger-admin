@@ -1,7 +1,7 @@
+import { itemsTypeIcons } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
 
-import { itemsTypeIcons } from '../ActivityItems.const';
 import { ItemsOptionGroup } from './ItemConfiguration.types';
 
 export const DEFAULT_TIMER_VALUE = 100;

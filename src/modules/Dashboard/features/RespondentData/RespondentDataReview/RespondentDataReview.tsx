@@ -8,7 +8,7 @@ import { StyledContainer } from 'shared/styles';
 import { mockedActivities } from '../mock';
 import { Feedback } from './Feedback';
 import { StyledFeedbackBtn, StyledReviewContainer } from './RespondentDataReview.styles';
-import { ReviewType } from './RespondentDataReview.types';
+import { Response } from './RespondentDataReview.types';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
 
@@ -17,15 +17,16 @@ export const RespondentDataReview = () => {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const activities = mockedActivities as unknown as Activity[];
   const [selectedActivity, setSelectedActivity] = useState<Activity>(activities[0]);
-  const [selectedReview, setSelectedReview] = useState<ReviewType | null>(null);
+  const [selectedResponse, setSelectedResponse] = useState<Response | null>(null);
 
   return (
     <StyledContainer sx={{ position: 'relative' }}>
       <ReviewMenu
         activities={activities}
         selectedActivity={selectedActivity}
+        selectedResponse={selectedResponse}
         setSelectedActivity={setSelectedActivity}
-        setSelectedReview={setSelectedReview}
+        setSelectedResponse={setSelectedResponse}
       />
       <StyledReviewContainer>
         <StyledFeedbackBtn
@@ -35,7 +36,7 @@ export const RespondentDataReview = () => {
         >
           {t('feedback')}
         </StyledFeedbackBtn>
-        <Review review={selectedReview} />
+        <Review response={selectedResponse} activity={selectedActivity} />
       </StyledReviewContainer>
       {isFeedbackOpen && <Feedback onClose={() => setIsFeedbackOpen(false)} />}
     </StyledContainer>
