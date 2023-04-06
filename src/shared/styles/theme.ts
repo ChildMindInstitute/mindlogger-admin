@@ -507,7 +507,6 @@ export const theme = createTheme({
 
             '.MuiAutocomplete-option': {
               borderRadius: variables.borderRadius.xxs,
-              padding: '1.6rem',
               '&:hover': {
                 backgroundColor: variables.palette.secondary_container,
               },

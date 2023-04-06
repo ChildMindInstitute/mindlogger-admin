@@ -1,19 +1,12 @@
 import { useState, useRef, useEffect, MouseEvent } from 'react';
-import { AsyncThunk } from '@reduxjs/toolkit';
-import { AxiosResponse } from 'axios';
 
 import { Order } from 'shared/types';
 import { workspaces } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/components';
 import { GetAppletsParams } from 'api';
 import { formattedOrder } from 'shared/utils';
 
-export const useTable = (
-  thunk: AsyncThunk<AxiosResponse, GetAppletsParams, Record<string, never>>,
-) => {
-  const dispatch = useAppDispatch();
-
+export const useTable = (asyncFunc: (params: GetAppletsParams) => Promise<unknown>) => {
   const isMounted = useRef(false);
 
   const [searchValue, setSearchValue] = useState('');
@@ -33,22 +26,21 @@ export const useTable = (
 
   useEffect(() => {
     if (isMounted.current && ownerId) {
-      dispatch(
-        thunk({
-          params: {
-            ownerId,
-            limit: DEFAULT_ROWS_PER_PAGE,
-            search: searchValue,
-            page,
-            ...(ordering && { ordering }),
-          },
-        }),
-      );
+      const params = {
+        ownerId,
+        limit: DEFAULT_ROWS_PER_PAGE,
+        search: searchValue,
+        page,
+        ...(ordering && { ordering }),
+      };
+      asyncFunc({
+        params,
+      });
 
       return;
     }
     isMounted.current = true;
-  }, [dispatch, page, orderBy, order, searchValue]);
+  }, [page, orderBy, order, searchValue]);
 
   return {
     searchValue,

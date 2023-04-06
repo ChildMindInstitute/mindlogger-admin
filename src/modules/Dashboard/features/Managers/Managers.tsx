@@ -4,8 +4,10 @@ import { useParams } from 'react-router-dom';
 
 import { Svg, Actions, Search } from 'shared/components';
 import { users } from 'redux/modules';
-import { joinWihComma, useBreadcrumbs, useTable } from 'shared/hooks';
+import { useBreadcrumbs, useTable } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
+import { useAppDispatch } from 'redux/store';
+import { joinWihComma } from 'shared/utils';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
@@ -15,11 +17,15 @@ import { User } from './Managers.types';
 export const Managers = () => {
   const { id } = useParams();
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
+
   const managersData = users.useManagersData();
 
   const { getWorkspaceManagers } = users.thunk;
 
-  const { searchValue, setSearchValue, ...tableProps } = useTable(getWorkspaceManagers);
+  const { searchValue, setSearchValue, ...tableProps } = useTable((params) =>
+    dispatch(getWorkspaceManagers(params)),
+  );
 
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);

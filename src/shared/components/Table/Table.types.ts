@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { Cell, HeadCell } from 'shared/types/table';
 
 export type RowContent = Cell & {
-  content: (item: Row) => ReactNode | string;
+  content: (item?: Row) => ReactNode | string;
   value: string | number | boolean;
   onClick?: () => void;
 };

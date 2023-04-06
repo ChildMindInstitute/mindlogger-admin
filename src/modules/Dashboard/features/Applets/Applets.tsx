@@ -22,7 +22,9 @@ export const Applets = () => {
   const appletsData = applets.useData();
   const { getWorkspaceApplets } = applets.thunk;
 
-  const { searchValue, setSearchValue, ...tableProps } = useTable(getWorkspaceApplets);
+  const { searchValue, setSearchValue, ...tableProps } = useTable((params) =>
+    dispatch(getWorkspaceApplets(params)),
+  );
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
