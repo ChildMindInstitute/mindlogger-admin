@@ -56,6 +56,7 @@ export const useAppletData = () => {
         description: appletDescription,
         about: appletAbout,
         themeId: null, // TODO: create real themeId
+        activityFlows: [],
         ...removeAppletExtraFields(),
       };
     }
