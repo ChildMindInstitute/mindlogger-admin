@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Update } from 'history';
+import { useFormContext } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 
+import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
 import { useCallbackPrompt, useCheckIfNewApplet, usePromptSetup } from 'shared/hooks';
 import {
@@ -11,13 +12,13 @@ import {
   getBuilderAppletUrl,
   getDictionaryObject,
 } from 'shared/utils';
-import { applet, SingleApplet } from 'shared/state';
+import { applet, Activity, SingleApplet } from 'shared/state';
 import { EnterAppletPasswordForm } from 'modules/Dashboard';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
-import { appletActivitiesMocked, appletActivityFlowsMocked, appletDataMocked } from './mock';
-import { getAppletDataForApi } from './SaveAndPublish.utils';
+import { appletInfoMocked, activityItemsMocked } from './mock';
+import { removeAppletExtraFields, removeActivityExtraFields } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
   const pathname = window.location.pathname;
@@ -29,52 +30,48 @@ export const getAppletInfoFromStorage = () => {
 
 export const useAppletData = () => {
   const isNewApplet = useCheckIfNewApplet();
-  const { result: appletData } = applet.useAppletData() ?? {};
-  const {
-    i18n: { language },
-  } = useTranslation('app');
+  const { getValues } = useFormContext();
+  const appletInfo = getValues() as SingleApplet;
 
   return (appletPassword?: EnterAppletPasswordForm['appletPassword']): SingleApplet => {
-    const appletInfo = getAppletInfoFromStorage();
-    const appletInfoForApi = getAppletDataForApi(appletInfo);
+    const appletDescription = getDictionaryObject(appletInfo.description);
+    const appletAbout = getDictionaryObject(appletInfo.about);
 
     if (isNewApplet) {
       return {
-        ...appletDataMocked,
-        ...appletInfoForApi,
+        ...appletInfoMocked,
+        ...appletInfo,
+        activities: appletInfo?.activities.map((activity: Activity) => ({
+          ...activity,
+          key: uuidv4(),
+          description: getDictionaryObject(activity.description),
+          items: activityItemsMocked,
+          ...removeActivityExtraFields(),
+        })),
         password: appletPassword,
-        description: {
-          [language]: appletInfo.description,
-        },
-        about: {
-          [language]: appletInfo.about,
-        },
+        description: appletDescription,
+        about: appletAbout,
         themeId: null, // TODO: create real themeId
-        activities: appletActivitiesMocked, // TODO: add real activities
-        activityFlows: appletActivityFlowsMocked, // TODO: add real activityFlows
-      } as SingleApplet;
+        ...removeAppletExtraFields(),
+      };
     }
 
-    const appletDataForApi = getAppletDataForApi(appletData!);
-    const appletDescription = getDictionaryObject(appletDataForApi.description);
-    const appletAbout = getDictionaryObject(appletDataForApi.about);
-
     return {
-      ...appletDataForApi,
-      ...appletInfoForApi,
+      ...appletInfo,
       password: appletPassword,
-      description: {
-        ...appletDescription,
-        [language]: appletInfo?.description ?? appletDescription[language],
-      },
-      about: {
-        ...appletAbout,
-        [language]: appletInfo?.about ?? appletAbout[language],
-      },
+      description: appletDescription,
+      about: appletAbout,
       themeId: null, // TODO: create real themeId
-      activities: appletActivitiesMocked, // TODO: api has error details: items-missed; order-permitted, description has wrong type
-      activityFlows: appletActivityFlowsMocked, // TODO: api has error details: items-missed; activitiesIds/order-permitted
-    } as SingleApplet;
+      activities: appletInfo?.activities.map((activity: Activity) => ({
+        ...activity,
+        key: uuidv4(),
+        description: getDictionaryObject(activity.description),
+        items: activityItemsMocked,
+        ...removeActivityExtraFields(),
+      })),
+      activityFlows: [],
+      ...removeAppletExtraFields(),
+    };
   };
 };
 
@@ -232,9 +229,9 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       if (shouldNavigateRef.current) {
         confirmNavigation();
       }
-    }
 
-    if (!isNewApplet) return;
+      appletId && navigate(getBuilderAppletUrl(appletId));
+    }
 
     if (createApplet.fulfilled.match(result)) {
       builderSessionStorage.removeItem();

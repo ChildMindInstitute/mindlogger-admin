@@ -1,13 +1,22 @@
 import { SyntheticEvent, useState } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
-import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
 
-import { StyledActions, StyledActionButton, StyledActionsWrapper } from './Actions.styles';
+import {
+  StyledActions,
+  StyledActionButton,
+  StyledActionsWrapper,
+  StyledDotsSvg,
+} from './Actions.styles';
 import { Action, ActionsProps } from './Actions.types';
 
-export const Actions = ({ items, context, visibleByDefault = false }: ActionsProps) => {
+export const Actions = ({
+  items,
+  context,
+  visibleByDefault = false,
+  hasStaticActions,
+}: ActionsProps) => {
   const [visibleActions, setVisibleActions] = useState(false);
 
   const onClick = (action: Action['action']) => (e: SyntheticEvent<HTMLButtonElement>) => {
@@ -15,12 +24,14 @@ export const Actions = ({ items, context, visibleByDefault = false }: ActionsPro
     action(context);
   };
 
+  const isVisible = visibleByDefault || visibleActions;
+
   return (
     <StyledActionsWrapper
       onMouseEnter={() => setVisibleActions(true)}
       onMouseLeave={() => setVisibleActions(false)}
     >
-      {visibleByDefault || visibleActions ? (
+      {(isVisible || hasStaticActions) && (
         <StyledActions>
           {items.map(
             ({
@@ -30,8 +41,13 @@ export const Actions = ({ items, context, visibleByDefault = false }: ActionsPro
               tooltipTitle,
               isDisplayed = true,
               active = false,
-            }) =>
-              isDisplayed && (
+              isStatic,
+            }) => {
+              if (!isDisplayed) return null;
+
+              if (hasStaticActions && !isStatic && !isVisible) return null;
+
+              return (
                 <Tooltip key={uniqueId()} tooltipTitle={tooltipTitle}>
                   <span>
                     <StyledActionButton
@@ -43,12 +59,12 @@ export const Actions = ({ items, context, visibleByDefault = false }: ActionsPro
                     </StyledActionButton>
                   </span>
                 </Tooltip>
-              ),
+              );
+            },
           )}
         </StyledActions>
-      ) : (
-        <Svg id="dots" width={18} height={4} />
       )}
+      {!isVisible && <StyledDotsSvg id="dots" width={18} height={4} />}
     </StyledActionsWrapper>
   );
 };

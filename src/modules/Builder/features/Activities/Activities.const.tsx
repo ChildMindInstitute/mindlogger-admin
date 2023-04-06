@@ -1,31 +1,41 @@
-import { NavLink } from 'react-router-dom';
-
 import { Svg } from 'shared/components';
 
+type GetActions = {
+  key: string;
+  isActivityHidden?: boolean;
+  onEdit: () => void;
+  onDuplicate: () => void;
+  onVisibilityChange: () => void;
+  onRemove: () => void;
+};
+
 //TODO: add navigate for editing
-export const getActions = (key: string) => [
+export const getActions = ({
+  isActivityHidden,
+  onEdit,
+  onDuplicate,
+  onVisibilityChange,
+  onRemove,
+}: GetActions) => [
   {
-    icon: (
-      <NavLink to={key}>
-        <Svg id="edit" />
-      </NavLink>
-    ),
-    action: () => null,
+    icon: <Svg id="edit" />,
+    action: onEdit,
     toolTipTitle: '',
   },
   {
     icon: <Svg id="duplicate" />,
-    action: () => null,
+    action: onDuplicate,
     toolTipTitle: '',
   },
   {
-    icon: <Svg id="visibility-on" />,
-    action: () => null,
+    icon: <Svg id={isActivityHidden ? 'visibility-off' : 'visibility-on'} />,
+    action: onVisibilityChange,
     toolTipTitle: '',
+    isStatic: true,
   },
   {
     icon: <Svg id="trash" />,
-    action: () => null,
+    action: onRemove,
     toolTipTitle: '',
   },
 ];

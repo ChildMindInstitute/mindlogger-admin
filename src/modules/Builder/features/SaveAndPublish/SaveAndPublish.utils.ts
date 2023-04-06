@@ -1,16 +1,11 @@
-import { SingleApplet } from 'shared/state';
+export const removeAppletExtraFields = () => ({
+  createdAt: undefined,
+  updatedAt: undefined,
+  id: undefined,
+  retentionPeriod: undefined,
+  retentionType: undefined,
+  theme: undefined,
+  version: undefined,
+});
 
-export const getAppletDataForApi = (applet: SingleApplet) => {
-  const {
-    createdAt,
-    updatedAt,
-    id,
-    retentionPeriod,
-    retentionType,
-    theme,
-    version,
-    ...appletDataForApi
-  } = applet;
-
-  return appletDataForApi;
-};
+export const removeActivityExtraFields = () => ({ order: undefined, id: undefined });
