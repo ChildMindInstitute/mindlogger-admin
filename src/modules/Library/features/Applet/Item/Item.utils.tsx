@@ -1,6 +1,6 @@
 import uniqueId from 'lodash.uniqueid';
 
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 import { variables, StyledBodyLarge } from 'shared/styles';
 import i18n from 'i18n';
 
@@ -12,8 +12,8 @@ export const renderItemContent = (item: Item) => {
   const { t } = i18n;
 
   switch (item.responseType) {
-    case ItemInputTypes.SingleSelection:
-    case ItemInputTypes.MultipleSelection:
+    case ItemResponseType.SingleSelection:
+    case ItemResponseType.MultipleSelection:
       return (
         <>
           {item.options?.map(({ title, image }) => (

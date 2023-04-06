@@ -6,9 +6,7 @@ import { Svg } from 'shared/components';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
   StyledBodyLarge,
-  StyledBuilderWrapper,
   StyledFlexColumn,
-  StyledHeadlineLarge,
   StyledTitleMedium,
 } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
@@ -19,6 +17,7 @@ import {
   useBuilderSessionStorageFormValues,
 } from 'shared/hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'shared/consts';
+import { BuilderContainer } from 'shared/features';
 
 import { StyledForm, StyledSvg } from './ActivityFlowAbout.styles';
 import { defaultValues } from './ActivityFlowAbout.const';
@@ -49,10 +48,7 @@ export const ActivityFlowAbout = () => {
   };
 
   return (
-    <StyledBuilderWrapper>
-      <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
-        {t('aboutActivityFlow')}
-      </StyledHeadlineLarge>
+    <BuilderContainer title={t('aboutActivityFlow')}>
       <StyledForm noValidate onChange={handleFormChange}>
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
@@ -96,6 +92,6 @@ export const ActivityFlowAbout = () => {
           />
         </StyledFlexColumn>
       </StyledForm>
-    </StyledBuilderWrapper>
+    </BuilderContainer>
   );
 };

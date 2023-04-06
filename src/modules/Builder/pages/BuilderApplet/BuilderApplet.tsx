@@ -6,7 +6,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { SaveAndPublish } from 'modules/Builder/features';
-import { SaveChangesPopup } from 'modules/Builder/components';
 import { LinkedTabs, Svg } from 'shared/components';
 import {
   useBreadcrumbs,
@@ -18,7 +17,6 @@ import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 
 import { newAppletTabs } from './BuilderApplet.const';
-import { usePrompt } from './BuilderApplet.hooks';
 import { AppletSchema } from './BuilderApplet.schema';
 import { getDefaultValues } from './BuilderApplet.utils';
 import { AppletFormValues } from './BuilderApplet.types';
@@ -26,14 +24,17 @@ import { AppletFormValues } from './BuilderApplet.types';
 export const BuilderApplet = () => {
   const { t } = useTranslation();
   const params = useParams();
-  const hiddenHeader = !!params.activityId;
+  const hiddenHeader = !!params.activityId || !!params.activityFlowId;
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
+  const loadingStatus = applet.useResponseStatus() ?? {};
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
-  const { getFormValues } = useBuilderSessionStorageFormValues(getDefaultValues(appletData));
+  const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
+    getDefaultValues(appletData),
+  );
 
   const methods = useForm<AppletFormValues>({
     defaultValues: getFormValues(),
@@ -41,15 +42,18 @@ export const BuilderApplet = () => {
     mode: 'onChange',
   });
 
-  const { cancelNavigation, confirmNavigation, promptVisible } = usePrompt(
-    methods.formState.isDirty,
-  );
+  useEffect(() => {
+    if (loadingStatus === 'success' && !isNewApplet) methods.reset(getFormValues());
+    if (isNewApplet) methods.reset(getDefaultValues());
+  }, [loadingStatus, isNewApplet]);
 
   const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(
     methods.getValues,
   );
 
-  methods.watch(handleFormChange);
+  methods.watch((_, { type, name }) => {
+    if (type === 'change' || !!name) handleFormChange();
+  });
 
   useBreadcrumbs([
     {
@@ -70,13 +74,8 @@ export const BuilderApplet = () => {
     <FormProvider {...methods}>
       <StyledBody sx={{ position: 'relative' }}>
         <LinkedTabs hiddenHeader={hiddenHeader} tabs={newAppletTabs} />
-        <SaveAndPublish />
+        <SaveAndPublish hasPrompt={methods.formState.isDirty} />
       </StyledBody>
-      <SaveChangesPopup
-        isPopupVisible={promptVisible}
-        handleClose={cancelNavigation}
-        handleSubmit={confirmNavigation}
-      />
     </FormProvider>
   );
 };

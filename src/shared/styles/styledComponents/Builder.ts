@@ -1,13 +1,11 @@
-import { styled } from '@mui/system';
-import { Box, Button } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
 export const StyledBuilderWrapper = styled(Box)`
-  max-width: 136rem;
-  width: 100%;
-  margin: ${theme.spacing(0.4, 4, 0.8)};
+  overflow-y: auto;
+  margin: ${theme.spacing(-2.4, -2.4, 0)};
 `;
 
 export const StyledBuilderBtn = styled(Button)`

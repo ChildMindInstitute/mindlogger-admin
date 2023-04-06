@@ -9,6 +9,7 @@ import { MonthCalendar } from './MonthCalendar';
 import { StyledYear } from './YearView.styles';
 import { YearViewProps } from './YearView.types';
 
+// TODO: Add preloader while year view and events for every day are loading
 export const YearView = ({ date, localizer, events, onNavigate, components }: YearViewProps) => {
   const firstMonth = startOf(date, CalendarViews.Year);
   const { setDate, setActiveView } = components;

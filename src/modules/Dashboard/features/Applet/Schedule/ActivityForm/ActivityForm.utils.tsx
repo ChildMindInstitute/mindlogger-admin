@@ -29,7 +29,7 @@ export const getTimer = (
 
 export const getActivitiesFlows = (activities: Activity[], activityFlows: ActivityFlow[]) => [
   ...activities.map(({ id, name, isHidden }) => ({
-    value: id,
+    value: id!,
     labelKey: name,
     ...(isHidden && {
       disabled: true,

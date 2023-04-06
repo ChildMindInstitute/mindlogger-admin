@@ -1,10 +1,5 @@
 import { Svg } from 'shared/components';
-import {
-  ACTIVITY_PAGE_REGEXP_STRING,
-  getAppletActivityPageRegexp,
-  getAppletPageRegexp,
-  Path,
-} from 'shared/utils';
+import { Path } from 'shared/utils';
 
 export const newAppletTabs = [
   {
@@ -31,18 +26,4 @@ export const newAppletTabs = [
     activeIcon: <Svg id="settings-filled" />,
     path: Path.Settings,
   },
-];
-
-export const APPLET_LAYER_ROUTES = [
-  getAppletPageRegexp(Path.About),
-  getAppletPageRegexp(Path.Activities),
-  getAppletPageRegexp(Path.ActivityFlow),
-  getAppletPageRegexp(Path.Settings),
-];
-export const ACTIVITY_LAYER_ROUTES = [
-  ACTIVITY_PAGE_REGEXP_STRING,
-  getAppletActivityPageRegexp(Path.About),
-  getAppletActivityPageRegexp(Path.Items),
-  getAppletActivityPageRegexp(Path.ItemsFlow),
-  getAppletActivityPageRegexp(Path.Settings),
 ];

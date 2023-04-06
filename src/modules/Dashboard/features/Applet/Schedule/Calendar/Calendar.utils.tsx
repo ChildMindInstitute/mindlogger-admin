@@ -12,49 +12,39 @@ import { format, getISOWeek } from 'date-fns';
 
 import { DateFormats } from 'shared/consts';
 import i18n from 'i18n';
-import { variables } from 'shared/styles/variables';
+import { variables } from 'shared/styles';
+import { CalendarEvent } from 'modules/Dashboard/state';
 
-import { UiType } from './Event/Event.types';
 import { Toolbar } from './Toolbar';
 import { MonthHeader } from './MonthHeader';
-import { Event } from './Event';
+import { Event, UiType } from './Event';
 import { MonthView } from './MonthView';
 import { YearView } from './YearView';
 import {
   AllDayEventsSortedByDaysItem,
   AllDayEventsVisible,
-  CalendarEvent,
   CalendarEventWrapperProps,
   CalendarViews,
   NameLength,
 } from './Calendar.types';
-import {
-  LENGTH_TO_FILTER_DAYS_EVENTS,
-  LENGTH_TO_SET_ID_IS_HIDDEN,
-  mockedEvents,
-} from './Calendar.const';
+import { LENGTH_TO_FILTER_DAYS_EVENTS, LENGTH_TO_SET_ID_IS_HIDDEN } from './Calendar.const';
 import { TimeHeader, UiType as TimeHeaderUiType } from './TimeHeader';
 import { TimeGutterHeader } from './TimeGutterHeader';
-import { EventWrapper } from './EventWrapper';
+import { EventWrapper, UiType as EventWrapperUiType } from './EventWrapper';
 import { DateHeader } from './DateHeader';
 import { EventContainerWrapper } from './EventContainerWrapper';
-import { UiType as EventWrapperUiType } from './EventWrapper';
+import { MonthWeekEvent } from './MonthWeekEvent';
 
 const { t } = i18n;
-
-export const getEventEndTime = (date: Date) =>
-  ` - ${
-    format(date, DateFormats.TimeSeconds) === '23:59:59' ||
-    format(date, DateFormats.TimeSeconds) === '00:00:00'
-      ? '24:00'
-      : format(date, DateFormats.Time)
-  }`;
 
 export const getMoreText = () => `${t('more').toLowerCase()}...`;
 
 export const formatToYearMonthDate = (date: Date) => format(date, DateFormats.DayMonthYear);
 
 export const formatToWeekYear = (date: Date) => `${getISOWeek(date)} ${date.getFullYear()}`;
+
+// TODO: connect off-range logic and hide/show all day events in the time view to the real data
+const mockedEvents: CalendarEvent[] = [];
 
 const notHiddenEvents = mockedEvents.filter((event) => !event.isHidden);
 
@@ -63,7 +53,7 @@ const allDayEventsSortedByDaysMap = notHiddenEvents.reduce(
     const currentEventStartDate = formatToYearMonthDate(el.start);
     const currentEventWeek = formatToWeekYear(el.start);
     const eventsIds = acc.get(currentEventStartDate)?.eventsIds;
-    if (el.allDayEvent || el.alwaysAvailable) {
+    if (el.allDay || el.alwaysAvailable) {
       acc.set(currentEventStartDate, {
         eventsIds:
           eventsIds && acc.has(currentEventStartDate)
@@ -155,7 +145,7 @@ export const getCalendarComponents = (
     month: {
       dateHeader: DateHeader,
       header: (props: HeaderProps) => <MonthHeader {...props} calendarDate={date} />,
-      event: Event,
+      event: MonthWeekEvent,
       eventWrapper: (props: CalendarEventWrapperProps) => (
         <EventWrapper {...props} uiType={EventWrapperUiType.MonthView}>
           {props.children}
@@ -176,7 +166,9 @@ export const getCalendarComponents = (
         <EventContainerWrapper {...props} events={events} />
       ),
       eventWrapper: EventWrapper,
-      event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.TimeView} />,
+      event: (props: EventProps<CalendarEvent>) => (
+        <MonthWeekEvent {...props} uiType={UiType.TimeView} activeView={activeView} />
+      ),
     },
     day: {
       header: (props: HeaderProps) => (
@@ -232,41 +224,57 @@ export const getCalendarComponents = (
   },
 });
 
+export const getBorderRadius = (
+  isScheduledEvent: boolean,
+  eventSpanAfter: boolean,
+  eventSpanBefore: boolean,
+) => {
+  if (isScheduledEvent && eventSpanAfter) {
+    return `${variables.borderRadius.md} ${variables.borderRadius.md} 0 0`;
+  }
+  if (isScheduledEvent && eventSpanBefore) {
+    return `0 0 ${variables.borderRadius.md} ${variables.borderRadius.md}`;
+  }
+
+  return isScheduledEvent ? variables.borderRadius.md : variables.borderRadius.xs;
+};
+
 export const eventPropGetter = (
   {
-    allDayEvent,
+    allDay,
     alwaysAvailable,
-    eventSpanAfter,
-    eventSpanBefore,
+    eventSpanAfter = false,
+    eventSpanBefore = false,
     scheduledColor,
     scheduledBackground,
     backgroundColor,
   }: CalendarEvent,
   activeView: CalendarViews,
 ) => {
-  const isAllDayEvent = allDayEvent || alwaysAvailable;
-  const isTimeView = activeView === CalendarViews.Day || activeView === CalendarViews.Week;
-  const isScheduledDayWeekEvent = isTimeView && !isAllDayEvent;
+  const isAllDayEvent = allDay || alwaysAvailable;
+  const isDayEvent = activeView === CalendarViews.Day;
+  const isScheduledDayEvent = isDayEvent && !isAllDayEvent;
 
-  const getBorderRadius = () => {
-    if (isScheduledDayWeekEvent && eventSpanAfter) {
-      return `${variables.borderRadius.md} ${variables.borderRadius.md} 0 0`;
-    }
-    if (isScheduledDayWeekEvent && eventSpanBefore) {
-      return `0 0 ${variables.borderRadius.md} ${variables.borderRadius.md}`;
+  const getBgColor = () => {
+    if (isScheduledDayEvent) {
+      return scheduledBackground;
     }
 
-    return isScheduledDayWeekEvent ? variables.borderRadius.md : variables.borderRadius.xs;
+    if (isDayEvent) {
+      return backgroundColor;
+    }
+
+    return 'transparent';
   };
 
   return {
     style: {
       padding: 0,
-      borderRadius: getBorderRadius(),
-      borderWidth: `0 0 0 ${isScheduledDayWeekEvent ? variables.borderWidth.xl : 0}`,
-      borderColor: isScheduledDayWeekEvent ? scheduledColor : 'transparent',
-      backgroundColor: (isScheduledDayWeekEvent && scheduledBackground) || backgroundColor,
       color: alwaysAvailable ? variables.palette.white : variables.palette.on_surface,
+      borderRadius: getBorderRadius(isScheduledDayEvent, eventSpanAfter, eventSpanBefore),
+      borderWidth: `0 0 0 ${isScheduledDayEvent ? variables.borderWidth.xl : 0}`,
+      borderColor: isScheduledDayEvent ? scheduledColor : 'transparent',
+      backgroundColor: getBgColor(),
     },
   };
 };

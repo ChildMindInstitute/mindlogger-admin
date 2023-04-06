@@ -78,11 +78,11 @@ export const CalendarDate = ({
         {events.length > 0 && (
           <StyledDotsWrapper>
             {events.map(
-              ({ allDayEvent, alwaysAvailable, scheduledColor, backgroundColor }, index) =>
+              ({ allDay, alwaysAvailable, scheduledColor, backgroundColor }, index) =>
                 index < 5 && (
                   <StyledEventDot
                     key={uniqueId()}
-                    isRounded={!(allDayEvent || alwaysAvailable)}
+                    isRounded={!(allDay || alwaysAvailable)}
                     bgColor={scheduledColor || backgroundColor}
                   />
                 ),

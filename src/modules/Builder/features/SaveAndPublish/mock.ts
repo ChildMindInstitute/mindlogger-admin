@@ -1,3 +1,5 @@
+import { ItemResponseType } from 'shared/consts';
+
 /* eslint-disable camelcase */
 export const activityItemsMocked = [
   {
@@ -5,9 +7,8 @@ export const activityItemsMocked = [
     question: {
       en: 'string',
       fr: 'string',
-      additionalProp3: 'string',
     },
-    responseType: 'text',
+    responseType: ItemResponseType.Text,
     responseValues: null,
     config: {
       remove_back_button: true,
@@ -22,56 +23,15 @@ export const activityItemsMocked = [
   },
 ];
 
-export const appletActivitiesMocked = [
-  {
-    key: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    name: 'Test activity name 1',
-    description: {
-      en: 'english',
-      fr: 'french',
-      additionalProp3: 'string',
-    },
-    splashScreen: '',
-    image: '',
-    showAllAtOnce: false,
-    isSkippable: false,
-    isReviewable: false,
-    responseIsEditable: false,
-    items: activityItemsMocked,
-    isHidden: false,
-  },
-];
-
-export const appletActivityFlowsMocked = [
-  {
-    name: 'string',
-    description: {
-      en: 'english',
-      fr: 'french',
-      additionalProp3: 'string',
-    },
-    isSingleReport: false,
-    hideBadge: false,
-    items: [
-      {
-        activityKey: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      },
-    ],
-    isHidden: false,
-  },
-];
-
 export const appletInfoMocked = {
   displayName: 'Applet 6',
   description: {
     en: 'english',
     fr: 'french',
-    additionalProp3: 'string',
   },
   about: {
     en: 'english',
     fr: 'french',
-    additionalProp3: 'string',
   },
   image: '',
   watermark: '',
@@ -82,10 +42,4 @@ export const appletInfoMocked = {
   reportIncludeUserId: false,
   reportIncludeCaseId: false,
   reportEmailBody: '',
-};
-
-export const appletDataMocked = {
-  activities: appletActivitiesMocked,
-  activityFlows: appletActivityFlowsMocked,
-  ...appletInfoMocked,
 };

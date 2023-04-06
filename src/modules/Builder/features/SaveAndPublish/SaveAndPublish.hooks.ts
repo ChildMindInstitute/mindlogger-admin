@@ -1,11 +1,24 @@
-import { useTranslation } from 'react-i18next';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useFormContext } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 
-import { useCheckIfNewApplet } from 'shared/hooks';
-import { APPLET_PAGE_REGEXP_STRING, builderSessionStorage } from 'shared/utils';
-import { applet } from 'shared/state';
+import { Update } from 'history';
+import { useAppDispatch } from 'redux/store';
+import { useCallbackPrompt, useCheckIfNewApplet, usePromptSetup } from 'shared/hooks';
+import {
+  APPLET_PAGE_REGEXP_STRING,
+  builderSessionStorage,
+  getBuilderAppletUrl,
+  getDictionaryObject,
+} from 'shared/utils';
+import { applet, Activity, SingleApplet } from 'shared/state';
 import { EnterAppletPasswordForm } from 'modules/Dashboard';
+import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
+import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
-import { appletActivitiesMocked, appletActivityFlowsMocked, appletDataMocked } from './mock';
+import { appletInfoMocked, activityItemsMocked } from './mock';
+import { removeAppletExtraFields, removeActivityExtraFields } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
   const pathname = window.location.pathname;
@@ -17,55 +30,235 @@ export const getAppletInfoFromStorage = () => {
 
 export const useAppletData = () => {
   const isNewApplet = useCheckIfNewApplet();
-  const { result: appletData } = applet.useAppletData() ?? {};
-  const {
-    i18n: { language },
-  } = useTranslation('app');
+  const { getValues } = useFormContext();
+  const appletInfo = getValues() as SingleApplet;
 
-  return (appletPassword: EnterAppletPasswordForm['appletPassword']) => {
-    const appletInfo = getAppletInfoFromStorage();
+  return (appletPassword?: EnterAppletPasswordForm['appletPassword']): SingleApplet => {
+    const appletDescription = getDictionaryObject(appletInfo.description);
+    const appletAbout = getDictionaryObject(appletInfo.about);
 
     if (isNewApplet) {
       return {
-        ...appletDataMocked,
+        ...appletInfoMocked,
         ...appletInfo,
+        activities: appletInfo?.activities.map((activity: Activity) => ({
+          ...activity,
+          key: uuidv4(),
+          description: getDictionaryObject(activity.description),
+          items: activityItemsMocked,
+          ...removeActivityExtraFields(),
+        })),
         password: appletPassword,
-        description: {
-          [language]: appletInfo.description,
-        },
-        about: {
-          [language]: appletInfo.about,
-        },
+        description: appletDescription,
+        about: appletAbout,
         themeId: null, // TODO: create real themeId
+        ...removeAppletExtraFields(),
       };
     }
 
-    const {
-      createdAt,
-      updatedAt,
-      id,
-      retentionPeriod,
-      retentionType,
-      theme,
-      version,
-      ...appletDataForApi
-    } = appletData!;
-
     return {
-      ...appletDataForApi,
       ...appletInfo,
       password: appletPassword,
-      description: {
-        ...appletDataForApi.description,
-        [language]: appletInfo?.description ?? appletDataForApi.description[language],
-      },
-      about: {
-        ...appletDataForApi.about,
-        [language]: appletInfo?.about ?? appletDataForApi.about[language],
-      },
+      description: appletDescription,
+      about: appletAbout,
       themeId: null, // TODO: create real themeId
-      activities: appletActivitiesMocked, // TODO: api has error details: items-missed; order-permitted, description has wrong type
-      activityFlows: appletActivityFlowsMocked, // TODO: api has error details: items-missed; activitiesIds/order-permitted
+      activities: appletInfo?.activities.map((activity: Activity) => ({
+        ...activity,
+        key: uuidv4(),
+        description: getDictionaryObject(activity.description),
+        items: activityItemsMocked,
+        ...removeActivityExtraFields(),
+      })),
+      activityFlows: [],
+      ...removeAppletExtraFields(),
     };
+  };
+};
+
+export const useCheckIfHasAtLeastOneActivity = () => {
+  const getAppletData = useAppletData();
+
+  return () => {
+    const body = getAppletData();
+
+    return Boolean(body.activities?.length);
+  };
+};
+
+export const useCheckIfHasAtLeastOneItem = () => {
+  const getAppletData = useAppletData();
+
+  return () => {
+    const body = getAppletData();
+
+    return (body.activities ?? []).every((activity) => Boolean(activity.items?.length));
+  };
+};
+
+export const usePrompt = (isFormChanged: boolean) => {
+  const {
+    location,
+    promptVisible,
+    setPromptVisible,
+    lastLocation,
+    setLastLocation,
+    confirmedNavigation,
+    setConfirmedNavigation,
+  } = usePromptSetup();
+
+  const handleBlockedNavigation = useCallback(
+    (nextLocation: Update) => {
+      const nextPathname = nextLocation.location.pathname;
+
+      const shouldSkip = !isFormChanged || isAppletRoute(nextPathname);
+
+      if (!confirmedNavigation && !shouldSkip) {
+        setPromptVisible(true);
+        setLastLocation(nextLocation);
+
+        return false;
+      }
+
+      setLastLocation(nextLocation);
+      setConfirmedNavigation(true);
+
+      return true;
+    },
+    [confirmedNavigation, location, isFormChanged],
+  );
+
+  const { cancelNavigation: onCancel, confirmNavigation: onConfirm } = useCallbackPrompt({
+    when: true,
+    handleBlockedNavigation,
+    lastLocation,
+    setLastLocation,
+    setPromptVisible,
+    confirmedNavigation,
+    setConfirmedNavigation,
+  });
+
+  return {
+    promptVisible,
+    confirmNavigation: () => {
+      builderSessionStorage.removeItem();
+      onConfirm();
+    },
+    cancelNavigation: onCancel,
+    setPromptVisible,
+  };
+};
+
+export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
+  const getAppletData = useAppletData();
+  const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
+  const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
+  const { createApplet, updateApplet } = applet.thunk;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { appletId } = useParams();
+  const isNewApplet = useCheckIfNewApplet();
+  const [isPasswordPopupOpened, setIsPasswordPopupOpened] = useState(false);
+  const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
+  const [publishProcessStep, setPublishProcessStep] = useState<SaveAndPublishSteps>();
+  const [appletPassword, setAppletPassword] = useState('');
+  const responseStatus = applet.useResponseStatus();
+  const { cancelNavigation, confirmNavigation, promptVisible, setPromptVisible } =
+    usePrompt(hasPrompt);
+  const shouldNavigateRef = useRef(false);
+
+  useEffect(() => {
+    responseStatus === 'loading' && setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
+    responseStatus === 'error' && setPublishProcessStep(SaveAndPublishSteps.Failed);
+    responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
+  }, [responseStatus]);
+
+  const handleSaveChangesSubmit = () => {
+    shouldNavigateRef.current = true;
+    setPromptVisible(false);
+    handleSaveAndPublishFirstClick();
+  };
+  const handleSaveAndPublishFirstClick = () => {
+    const hasNoActivities = !checkIfHasAtLeastOneActivity();
+    const hasNoItems = !checkIfHasAtLeastOneItem();
+    setPublishProcessPopupOpened(true);
+
+    if (hasNoActivities) {
+      setPublishProcessStep(SaveAndPublishSteps.AtLeastOneActivity);
+
+      return;
+    }
+    if (hasNoItems) {
+      setPublishProcessStep(SaveAndPublishSteps.AtLeastOneItem);
+
+      return;
+    }
+
+    setPublishProcessPopupOpened(false);
+    setIsPasswordPopupOpened(true);
+  };
+
+  const handlePublishProcessOnClose = () => {
+    setPublishProcessPopupOpened(false);
+    setPublishProcessStep(undefined);
+  };
+  const handlePublishProcessOnRetry = async () => {
+    await sendRequest(appletPassword);
+  };
+
+  const handleAppletPasswordSubmit = async ({ appletPassword }: EnterAppletPasswordForm) => {
+    setAppletPassword(appletPassword);
+    await sendRequest(appletPassword);
+  };
+
+  const sendRequest = async (appletPassword: EnterAppletPasswordForm['appletPassword']) => {
+    setPublishProcessPopupOpened(true);
+    const body = getAppletData(appletPassword);
+
+    let result;
+    if (isNewApplet || !appletId) {
+      result = await dispatch(createApplet(body));
+    }
+    if (!isNewApplet && appletId) {
+      result = await dispatch(updateApplet({ appletId, body }));
+    }
+    if (!result) return;
+
+    if (updateApplet.fulfilled.match(result)) {
+      builderSessionStorage.removeItem();
+      setAppletPassword('');
+      if (shouldNavigateRef.current) {
+        confirmNavigation();
+      }
+
+      appletId && navigate(getBuilderAppletUrl(appletId));
+    }
+
+    if (createApplet.fulfilled.match(result)) {
+      builderSessionStorage.removeItem();
+      setAppletPassword('');
+      if (shouldNavigateRef.current) {
+        confirmNavigation();
+
+        return;
+      }
+
+      const createdAppletId = result.payload.data.result?.id;
+      createdAppletId && navigate(getBuilderAppletUrl(createdAppletId));
+    }
+  };
+
+  return {
+    isNewApplet,
+    isPasswordPopupOpened,
+    isPublishProcessPopupOpened,
+    publishProcessStep,
+    promptVisible,
+    setIsPasswordPopupOpened,
+    handleSaveAndPublishFirstClick,
+    handleAppletPasswordSubmit,
+    handlePublishProcessOnClose,
+    handlePublishProcessOnRetry,
+    handleSaveChangesSubmit,
+    cancelNavigation,
   };
 };

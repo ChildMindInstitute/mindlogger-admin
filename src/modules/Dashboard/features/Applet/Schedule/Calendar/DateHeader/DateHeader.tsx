@@ -1,8 +1,8 @@
 import { DateHeaderProps } from 'react-big-calendar';
 
-import { StyledClearedButton } from 'shared/styles/styledComponents';
+import { StyledClearedButton } from 'shared/styles';
+import { getMonthName } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
 
-import { getMonthName } from '../Calendar.utils';
 import { NameLength } from '../Calendar.types';
 
 export const DateHeader = ({ date, drilldownView, onDrillDown }: DateHeaderProps) => {

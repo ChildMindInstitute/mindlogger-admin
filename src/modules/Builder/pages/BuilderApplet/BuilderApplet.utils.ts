@@ -1,24 +1,24 @@
-import uniqueId from 'lodash.uniqueid';
 import { matchPath } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
-import i18n from 'i18n';
 import { page } from 'resources';
 import { SingleApplet } from 'shared/state';
 import { getDictionaryText } from 'shared/utils';
 
-const { t } = i18n;
+import { ActivityFormValues } from './BuilderApplet.types';
 
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
-export const getNewActivity = () => ({
-  key: uniqueId(),
-  name: t('newActivityName'),
+export const getNewActivity = (activity?: ActivityFormValues) => ({
+  name: '',
   description: '',
   items: [],
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
+  ...activity,
+  key: uuidv4(),
 });
 
 export const getNewApplet = () => ({
@@ -29,15 +29,20 @@ export const getNewApplet = () => ({
   image: '',
   watermark: '',
   activities: [],
+  activityFlows: [],
 });
 
 export const getNewActivityItem = () => ({
-  id: uniqueId(),
+  id: uuidv4(),
   responseType: '',
-  name: t('newItemName'),
+  name: '',
   question: '',
   settings: [],
   isHidden: false,
+});
+
+export const getNewActivityFlow = () => ({
+  id: uuidv4(),
 });
 
 export const getDefaultValues = (appletData?: SingleApplet) => {
@@ -50,14 +55,20 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,
+          description: getDictionaryText(activity.description),
           items: activity.items
             ? activity.items.map((item) => ({
                 ...item,
                 id: `${item.id}`,
                 question: getDictionaryText(item.question),
+                responseType: item.responseType,
               }))
             : [],
         }))
       : [],
+    activityFlows: appletData?.activityFlows.map((activityFlow) => ({
+      ...activityFlow,
+      description: getDictionaryText(activityFlow.description),
+    })),
   };
 };

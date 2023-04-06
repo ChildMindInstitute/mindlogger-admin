@@ -1,17 +1,16 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledLabelBoldMedium, StyledClearedButton } from 'shared/styles/styledComponents';
-
-import { CalendarEvent, CalendarViews } from '../Calendar.types';
+import { theme, variables, StyledLabelBoldMedium, StyledClearedButton } from 'shared/styles';
+import { CalendarEvent } from 'modules/Dashboard/state';
 import {
   allDayEventsSortedByDays,
   formatToWeekYear,
   formatToYearMonthDate,
   hiddenEventsIds,
-} from '../Calendar.utils';
+} from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+
+import { CalendarViews } from '../Calendar.types';
 import { StyledTimeGutterHeader } from './TimeGutterHeader.styles';
 import { TimeGutterHeaderProps } from './TimeGutterHeader.types';
 

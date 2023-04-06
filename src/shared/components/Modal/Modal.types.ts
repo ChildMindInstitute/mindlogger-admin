@@ -20,7 +20,7 @@ export type ModalProps = {
   buttonText: string;
   children: JSX.Element | null;
   onClose: () => void;
-  onSubmit: BtnSubmit;
+  onSubmit?: BtnSubmit;
   titleAlign?: 'left' | 'right' | 'center';
   disabledSubmit?: boolean;
   width?: string;
@@ -36,4 +36,5 @@ export type ModalProps = {
   thirdBtnText?: string;
   thirdBtnStyles?: SxProps;
   onThirdBtnSubmit?: BtnSubmit;
+  hasActions?: boolean;
 };

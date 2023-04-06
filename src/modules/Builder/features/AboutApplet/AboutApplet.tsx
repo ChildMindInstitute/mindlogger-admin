@@ -7,18 +7,13 @@ import {
   InputController,
   SelectController,
 } from 'shared/components/FormComponents';
-import {
-  StyledBuilderWrapper,
-  StyledFlexColumn,
-  StyledFlexTopCenter,
-  StyledHeadlineLarge,
-  theme,
-} from 'shared/styles';
+import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
+import { BuilderContainer } from 'shared/features';
 
 import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { colorThemeOptions } from './AboutApplet.const';
@@ -74,53 +69,48 @@ export const AboutApplet = () => {
   ];
 
   return (
-    <StyledBuilderWrapper sx={{ paddingRight: theme.spacing(27.7) }}>
-      <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
-        {t('aboutApplet')}
-      </StyledHeadlineLarge>
-      <StyledFlexColumn>
-        <Box sx={{ display: 'flex' }}>
-          <StyledContainer>
-            <Box sx={{ mb: theme.spacing(4.4) }}>
-              <InputController
-                {...commonProps}
-                name="displayName"
-                maxLength={MAX_NAME_LENGTH}
-                label={t('appletName')}
-              />
-            </Box>
-            <Box sx={{ mb: theme.spacing(4.4) }}>
-              <InputController
-                {...commonProps}
-                name="description"
-                maxLength={MAX_DESCRIPTION_LENGTH_LONG}
-                label={t('appletDescription')}
-                multiline
-                rows={5}
-              />
-            </Box>
-            <StyledFlexTopCenter sx={{ position: 'relative' }}>
-              <SelectController
-                {...commonProps}
-                name="themeId"
-                label={t('appletColorTheme')}
-                options={colorThemeOptions}
-                sx={{ margin: theme.spacing(0, 0, 3.6, 0) }}
-              />
-            </StyledFlexTopCenter>
-          </StyledContainer>
-          <Uploads uploads={uploads} />
-        </Box>
-        <StyledTitle>
-          {t('aboutAppletPage')}
-          <Tooltip tooltipTitle={t('aboutAppletTooltip')}>
-            <span>
-              <StyledSvg id="more-info-outlined" />
-            </span>
-          </Tooltip>
-        </StyledTitle>
-        <EditorController control={control} name="about" />
-      </StyledFlexColumn>
-    </StyledBuilderWrapper>
+    <BuilderContainer title={t('aboutApplet')}>
+      <StyledFlexTopCenter>
+        <StyledContainer>
+          <Box sx={{ mb: theme.spacing(4.4) }}>
+            <InputController
+              {...commonProps}
+              name="displayName"
+              maxLength={MAX_NAME_LENGTH}
+              label={t('appletName')}
+            />
+          </Box>
+          <Box sx={{ mb: theme.spacing(4.4) }}>
+            <InputController
+              {...commonProps}
+              name="description"
+              maxLength={MAX_DESCRIPTION_LENGTH_LONG}
+              label={t('appletDescription')}
+              multiline
+              rows={5}
+            />
+          </Box>
+          <StyledFlexTopCenter sx={{ position: 'relative' }}>
+            <SelectController
+              {...commonProps}
+              name="themeId"
+              label={t('appletColorTheme')}
+              options={colorThemeOptions}
+              sx={{ margin: theme.spacing(0, 0, 3.6, 0) }}
+            />
+          </StyledFlexTopCenter>
+        </StyledContainer>
+        <Uploads uploads={uploads} />
+      </StyledFlexTopCenter>
+      <StyledTitle>
+        {t('aboutAppletPage')}
+        <Tooltip tooltipTitle={t('aboutAppletTooltip')}>
+          <span>
+            <StyledSvg id="more-info-outlined" />
+          </span>
+        </Tooltip>
+      </StyledTitle>
+      <EditorController control={control} name="about" />
+    </BuilderContainer>
   );
 };

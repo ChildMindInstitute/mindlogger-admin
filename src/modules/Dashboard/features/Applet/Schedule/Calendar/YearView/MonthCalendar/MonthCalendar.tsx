@@ -1,10 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import uniqueId from 'lodash.uniqueid';
+import { isWithinInterval, subSeconds } from 'date-fns';
 
 import i18n from 'i18n';
+import { CalendarEvent } from 'modules/Dashboard/state';
+import {
+  formatToYearMonthDate,
+  getMonthName,
+} from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
 
-import { CalendarEvent, CalendarViews } from '../../Calendar.types';
-import { formatToYearMonthDate, getMonthName } from '../../Calendar.utils';
+import { CalendarViews } from '../../Calendar.types';
 import { CalendarDate } from './CalendarDate';
 import { createCalendar, shortWeekDaysArray } from './MonthCalendar.utils';
 import { MonthCalendarProps, MonthObject } from './MonthCalendar.types';
@@ -31,6 +36,7 @@ export const MonthCalendar = ({
     setActiveView(CalendarViews.Day);
   };
 
+  // TODO: reduce complexity
   const monthDates = useMemo(
     () =>
       calendar &&
@@ -38,7 +44,15 @@ export const MonthCalendar = ({
         <StyledDaysWrapper key={index}>
           {week.map((date, index) => {
             const currentDateEvents = events?.filter(
-              ({ start }) => start && formatToYearMonthDate(start) === formatToYearMonthDate(date),
+              ({ start, end }) =>
+                (start && formatToYearMonthDate(start) === formatToYearMonthDate(date)) ||
+                (start &&
+                  end &&
+                  end > start &&
+                  isWithinInterval(date, {
+                    start,
+                    end: subSeconds(end, 1),
+                  })),
             );
 
             return (
