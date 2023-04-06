@@ -232,6 +232,8 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       setAppletPassword('');
       if (shouldNavigateRef.current) {
         confirmNavigation();
+
+        return;
       }
 
       appletId && navigate(getBuilderAppletUrl(appletId));
