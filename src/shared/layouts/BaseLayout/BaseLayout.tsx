@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 
 import {
   DuplicatePopups,
@@ -14,6 +14,7 @@ import { LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 
 export const BaseLayout = () => {
+  const { id } = useParams();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
   const accountData = account.useData();
@@ -45,6 +46,7 @@ export const BaseLayout = () => {
           params: {
             ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
+            ...(id && { appletId: id }),
           },
         }),
       );
@@ -53,11 +55,12 @@ export const BaseLayout = () => {
           params: {
             ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
+            ...(id && { appletId: id }),
           },
         }),
       );
     }
-  }, [dispatch, ownerId]);
+  }, [dispatch, ownerId, id]);
 
   return (
     <StyledBaseLayout>
