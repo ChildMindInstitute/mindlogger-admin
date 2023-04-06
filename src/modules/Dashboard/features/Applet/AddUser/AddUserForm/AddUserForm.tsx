@@ -82,22 +82,22 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
     const { value } = e.target;
     const { nickname, secretUserId, workspacePrefix, respondents } = Fields;
 
+    if (value !== Roles.Respondent && value !== Roles.Reviewer) {
+      unregister(nickname);
+      unregister(secretUserId);
+      unregister(respondents);
+      workspaceNameShowed && register(workspacePrefix, { value: '' });
+    }
+
     if (value === Roles.Respondent) {
       register(nickname, { value: '' });
       register(secretUserId, { value: '' });
       unregister(workspacePrefix);
       unregister(respondents);
-    } else {
-      unregister(nickname);
-      unregister(secretUserId);
-      if (value === Roles.Reviewer) {
-        register(respondents, { value: [] });
-      } else {
-        unregister(respondents);
-      }
-      if (workspaceNameShowed) {
-        register(workspacePrefix, { value: '' });
-      }
+    }
+
+    if (value === Roles.Reviewer) {
+      register(respondents, { value: [] });
     }
   };
 
