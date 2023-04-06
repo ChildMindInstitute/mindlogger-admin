@@ -21,43 +21,6 @@ export const activityItemsMocked = [
   },
 ];
 
-export const appletActivitiesMocked = [
-  {
-    key: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    name: 'Test activity name 1',
-    description: {
-      en: 'english',
-      fr: 'french',
-    },
-    splashScreen: '',
-    image: '',
-    showAllAtOnce: false,
-    isSkippable: false,
-    isReviewable: false,
-    responseIsEditable: false,
-    items: activityItemsMocked,
-    isHidden: false,
-  },
-];
-
-export const appletActivityFlowsMocked = [
-  {
-    name: 'string',
-    description: {
-      en: 'english',
-      fr: 'french',
-    },
-    isSingleReport: false,
-    hideBadge: false,
-    items: [
-      {
-        activityKey: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      },
-    ],
-    isHidden: false,
-  },
-];
-
 export const appletInfoMocked = {
   displayName: 'Applet 6',
   description: {
@@ -77,10 +40,4 @@ export const appletInfoMocked = {
   reportIncludeUserId: false,
   reportIncludeCaseId: false,
   reportEmailBody: '',
-};
-
-export const appletDataMocked = {
-  activities: appletActivitiesMocked,
-  activityFlows: appletActivityFlowsMocked,
-  ...appletInfoMocked,
 };
