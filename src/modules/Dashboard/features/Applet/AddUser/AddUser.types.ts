@@ -4,7 +4,7 @@ export type Invitation = {
   lastName: string;
   role: string;
   email: string;
-  createdAt: string | Date;
+  createdAt: string;
   key: string;
   meta: {
     secret_user_id: string;
