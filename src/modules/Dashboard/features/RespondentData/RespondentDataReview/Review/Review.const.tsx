@@ -1,13 +1,13 @@
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 
-import { MultiSelectResponseItem } from './MultiSelectResponseItem';
-import { SingleSelectResponseItem } from './SingleSelectResponseItem';
-import { SliderResponseItem } from './SliderResponseItem';
-import { TextResponseItem } from './TextResponseItem';
+import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
+import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
+import { SliderResponseItem } from '../SliderResponseItem';
+import { TextResponseItem } from '../TextResponseItem';
 
 const responseItems = {
-  [ItemInputTypes.SingleSelection]: SingleSelectResponseItem,
-  [ItemInputTypes.MultipleSelection]: MultiSelectResponseItem,
-  [ItemInputTypes.Slider]: SliderResponseItem,
-  [ItemInputTypes.Text]: TextResponseItem,
+  [ItemResponseType.SingleSelection]: SingleSelectResponseItem,
+  [ItemResponseType.MultipleSelection]: MultiSelectResponseItem,
+  [ItemResponseType.Slider]: SliderResponseItem,
+  [ItemResponseType.Text]: TextResponseItem,
 };

@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
-import { itemsTypeIcons } from 'shared/consts';
-import { ResponseType } from 'shared/state';
+import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { StyledBodyLarge, variables } from 'shared/styles';
 
 import { StyledItem } from './UnsupportedItemResponse.styles';
 
-export const UnsupportedItemResponse = ({ itemType }: { itemType: ResponseType }) => {
+export const UnsupportedItemResponse = ({ itemType }: { itemType: ItemResponseType }) => {
   const { t } = useTranslation();
 
   return (

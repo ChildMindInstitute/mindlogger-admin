@@ -1,5 +1,4 @@
 import { Svg } from 'shared/components/Svg';
-import { ItemInputTypes } from './types';
 
 export const TABS_HEIGHT = '6.1rem';
 export const TOP_BAR_HEIGHT = '6rem';

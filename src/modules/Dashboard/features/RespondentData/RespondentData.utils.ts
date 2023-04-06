@@ -1,7 +1,7 @@
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 
 import { UNSUPPORTED_ITEMS } from './consts';
 
-export const isItemUnsupported = (type: ItemInputTypes) => UNSUPPORTED_ITEMS.includes(type);
+export const isItemUnsupported = (type: ItemResponseType) => UNSUPPORTED_ITEMS.includes(type);
 
-export const getItemLabel = (type: ItemInputTypes) => `${type}ItemTask`;
+export const getItemLabel = (type: ItemResponseType) => `${type}ItemTask`;

@@ -1,1 +1,0 @@
-export const DEFAULT_SLIDER_MIN_NUMBER = 1;
