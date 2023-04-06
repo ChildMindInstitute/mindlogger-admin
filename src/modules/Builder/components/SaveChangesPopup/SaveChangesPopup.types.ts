@@ -1,5 +1,6 @@
 export type SaveChangesPopupProps = {
   isPopupVisible: boolean;
   handleClose: () => void;
-  handleSubmit: () => void;
+  handleDoNotSaveSubmit: () => void;
+  handleSaveSubmit: () => void;
 };
