@@ -43,7 +43,7 @@ export const ReviewMenu = ({
           key={activity.id}
           isSelected={selectedActivity.id === activity.id}
           item={activity}
-          responses={getMockedResponses(activity.id, index)}
+          responses={getMockedResponses(activity.id || '', index)}
           selectedResponse={selectedResponse}
           setSelectedItem={setSelectedActivity}
           setSelectedResponse={setSelectedResponse}
