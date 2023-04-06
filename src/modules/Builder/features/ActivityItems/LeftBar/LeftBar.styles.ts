@@ -7,12 +7,13 @@ import { StyledHeadlineLarge } from 'shared/styles/styledComponents';
 import { commonStickyStyles } from 'shared/styles/stylesConsts';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
-export const StyledBar = styled(Box)`
-  width: 40rem;
+export const StyledBar = styled(Box, shouldForwardProp)`
+  width: ${({ hasActiveItem }: { hasActiveItem: boolean }) => (hasActiveItem ? '40rem' : '100%')};
   flex-shrink: 0;
   border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   height: 100%;
   overflow-y: auto;
+  transition: width 0.3s;
 `;
 
 export const StyledHeader = styled(StyledHeadlineLarge, shouldForwardProp)`

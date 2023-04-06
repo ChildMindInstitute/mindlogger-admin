@@ -24,7 +24,7 @@ export const LeftBar = ({
   const { name } = useCurrentActivity();
 
   return (
-    <StyledBar ref={containerRef}>
+    <StyledBar hasActiveItem={!!activeItemId} ref={containerRef}>
       <StyledHeader isSticky={isHeaderSticky}>{t('items')}</StyledHeader>
       <StyledContent>
         {items?.map((item, index) => (
