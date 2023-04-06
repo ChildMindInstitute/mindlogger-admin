@@ -602,5 +602,6 @@
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",
+  "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants",
   "addNotePlaceholder": "Ajouter une note que vous verrez toujours ici"
 }

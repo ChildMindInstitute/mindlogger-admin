@@ -43,6 +43,10 @@ export const getNewActivityItem = () => ({
 
 export const getNewActivityFlow = () => ({
   id: uniqueId(),
+  name: '',
+  description: '',
+  isSingleReport: false,
+  hideBadge: false,
 });
 
 export const getDefaultValues = (appletData?: SingleApplet) => {

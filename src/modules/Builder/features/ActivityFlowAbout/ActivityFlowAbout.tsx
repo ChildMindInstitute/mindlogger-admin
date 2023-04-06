@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Svg, Tooltip } from 'shared/components';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
   StyledBodyLarge,
@@ -86,7 +86,11 @@ export const ActivityFlowAbout = () => {
             label={
               <StyledBodyLarge sx={{ position: 'relative' }}>
                 {t('hideBadge')}
-                <StyledSvg id="more-info-outlined" />
+                <Tooltip tooltipTitle={t('hideBadgeTooltip')}>
+                  <span>
+                    <StyledSvg id="more-info-outlined" />
+                  </span>
+                </Tooltip>
               </StyledBodyLarge>
             }
           />

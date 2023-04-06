@@ -5,8 +5,8 @@ import { Svg } from 'shared/components';
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
+import { Item } from 'modules/Builder/components';
 
-import { Item } from '../../components';
 import { activityFlows, getActions } from './ActivityFlow.const';
 import { StyledAdd, StyledAddWrapper } from './ActivityFlow.styles';
 import { ActivityFlowHeader } from './ActivityFlowHeader';

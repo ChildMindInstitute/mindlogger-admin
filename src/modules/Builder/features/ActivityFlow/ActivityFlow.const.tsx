@@ -3,16 +3,16 @@ import { Svg } from 'shared/components';
 import { ItemType } from '../../components';
 
 export const activityFlows: ItemType[] = [
-  {
-    id: '1',
-    name: 'Activity name 1',
-    description: 'This is the item text the quick brown fox jumps over the lazy dog ',
-  },
-  {
-    id: '2',
-    name: 'Activity name 1',
-    description: 'This is the item text the quick brown fox jumps over the lazy dog ',
-  },
+  // {
+  //   id: '1',
+  //   name: 'Activity name 1',
+  //   description: 'This is the item text the quick brown fox jumps over the lazy dog ',
+  // },
+  // {
+  //   id: '2',
+  //   name: 'Activity name 1',
+  //   description: 'This is the item text the quick brown fox jumps over the lazy dog ',
+  // },
 ];
 
 export const getActions = () => [
