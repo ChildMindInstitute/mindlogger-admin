@@ -2,8 +2,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Modal, Table, UiType } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { theme, StyledModalWrapper } from 'shared/styles';
 
 import { ExportSchedulePopupProps } from './ExportSchedulePopup.types';
 import { getHeadCells } from './ExportSchedulePopup.const';

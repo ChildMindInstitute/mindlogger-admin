@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Control } from 'react-hook-form';
+import { AnyObjectSchema, SchemaOf } from 'yup';
 
-import { Workspace } from 'shared/features/SwitchWorkspace/SwitchWorkspace.types';
 import { HeadCell } from 'shared/types/table';
 import { Row } from 'shared/components';
+import { Workspace } from 'shared/state';
 
 export type AddToBuilderPopupProps = {
   addToBuilderPopupVisible: boolean;
@@ -16,9 +17,10 @@ export enum AddToBuilderActions {
 }
 
 export enum AddToBuilderSteps {
-  SelectAccount = 0,
+  SelectWorkspace = 0,
   AddToBuilderActions = 1,
   SelectApplet = 2,
+  Error = 3,
 }
 
 export type Step = {
@@ -33,7 +35,7 @@ export type Step = {
 };
 
 export type AddToBuilderForm = {
-  selectedAccount: string;
+  selectedWorkspace: string;
   addToBuilderAction: AddToBuilderActions;
   selectedApplet?: string;
 };
@@ -46,13 +48,13 @@ export type Applet = {
 
 export type GetStep = {
   control: Control<AddToBuilderForm>;
-  isSelectAccountVisible: boolean;
-  accounts: Workspace[];
+  isSelectedWorkspaceVisible: boolean;
+  workspaces: Workspace[];
   applets: Applet[];
   setStep: Dispatch<SetStateAction<AddToBuilderSteps>>;
   setAddToBuilderPopupVisible: Dispatch<SetStateAction<boolean>>;
+  handleNext: (nextStep?: AddToBuilderSteps) => Promise<void>;
   handleAddToBuilder: () => void;
-  handleContinue: () => void;
 };
 
 export type TableController = {
@@ -62,4 +64,11 @@ export type TableController = {
   columns: HeadCell[];
   rows: Row[] | undefined;
   orderBy: string;
+};
+
+export type AddToBuilderPopupSchemaType = {
+  [AddToBuilderSteps.SelectWorkspace]: SchemaOf<{ selectedWorkspace: string }>;
+  [AddToBuilderSteps.AddToBuilderActions]: SchemaOf<{ addToBuilderAction: string }>;
+  [AddToBuilderSteps.SelectApplet]: SchemaOf<{ selectedApplet?: string }>;
+  [AddToBuilderSteps.Error]: AnyObjectSchema;
 };

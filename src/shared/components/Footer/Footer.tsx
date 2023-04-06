@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Language } from 'shared/components';
 import packageJson from '../../../../package.json';
-
+import { Language } from './Language';
 import {
   StyledFooter,
   StyledText,

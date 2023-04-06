@@ -1,7 +1,10 @@
+import { ChangeEvent } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Svg, Tooltip, TooltipUiType } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
+import { Tooltip, TooltipUiType } from 'shared/components/Tooltip';
+
 import {
   StyledBodyLarge,
   StyledClearedButton,
@@ -26,13 +29,16 @@ export const InputController = <T extends FieldValues>({
   InputProps,
   minNumberValue = 1,
   maxNumberValue,
+  onChange: handleCustomChange,
+  helperText,
+  isEmptyStringAllowed = false,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
   const isNumberType = textFieldProps.type === 'number';
 
   const getTextAdornment = (value: number) => {
-    if (!textAdornment || !value) return null;
+    if (!textAdornment || (!value && value !== 0)) return null;
 
     return <StyledBodyLarge>{t(textAdornment, { count: value })}</StyledBodyLarge>;
   };
@@ -42,16 +48,26 @@ export const InputController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
+        const textFieldValue =
+          isNumberType &&
+          ((typeof value !== 'number' && !isEmptyStringAllowed) || value < minNumberValue)
+            ? minNumberValue
+            : value;
+
         const handleAddNumber = () => {
           if (typeof maxNumberValue !== 'number') return onChange(+value + 1);
 
-          if (+value < maxNumberValue) {
-            return onChange(+value + 1);
-          }
+          if (+value < maxNumberValue) onChange(+value + 1);
         };
 
         const handleDistractNumber = () => {
-          +value > minNumberValue && onChange(+value - 1);
+          if (+value > minNumberValue) onChange(+value - 1);
+        };
+
+        const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+          if (handleCustomChange) return handleCustomChange(event);
+
+          onChange(event.target.value);
         };
 
         return (
@@ -59,10 +75,10 @@ export const InputController = <T extends FieldValues>({
             <StyledTextFieldContainer>
               <StyledTextField
                 {...textFieldProps}
-                onChange={onChange}
-                value={isNumberType && value < minNumberValue ? minNumberValue : value}
+                onChange={handleChange}
+                value={textFieldValue}
                 error={!!error || providedError}
-                helperText={error?.message || null}
+                helperText={error?.message || helperText}
                 InputProps={
                   isNumberType
                     ? {

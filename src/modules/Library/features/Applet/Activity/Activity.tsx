@@ -3,13 +3,13 @@ import { useFormContext } from 'react-hook-form';
 import { Checkbox } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { theme, StyledTitleBoldMedium } from 'shared/styles';
+import { StyledSvgArrowContainer } from 'shared/styles';
 
 import { ActivityProps } from './Activity.types';
 import {
   StyledActivityContainer,
   StyledActivityHeader,
-  StyledNavigateSvg,
+  StyledActivityName,
   StyledItemsList,
 } from './Activity.styles';
 import { Item } from '../Item';
@@ -38,17 +38,16 @@ export const Activity = ({ appletId, activity: { id, name, items } }: ActivityPr
   return (
     <StyledActivityContainer>
       <Checkbox
+        sx={{ width: '4rem', height: '4rem' }}
         checked={activityChecked}
         indeterminate={activityIndeterminate}
         onChange={handleActivityChecked}
       />
       <StyledActivityHeader onClick={() => setActivityVisible((prevState) => !prevState)}>
-        <StyledNavigateSvg>
+        <StyledSvgArrowContainer>
           <Svg id={activityVisible ? 'navigate-up' : 'navigate-down'} />
-        </StyledNavigateSvg>
-        <StyledTitleBoldMedium sx={{ padding: theme.spacing(0.7, 0) }}>
-          {name}
-        </StyledTitleBoldMedium>
+        </StyledSvgArrowContainer>
+        <StyledActivityName>{name}</StyledActivityName>
       </StyledActivityHeader>
       {activityVisible && !!items?.length && (
         <StyledItemsList>

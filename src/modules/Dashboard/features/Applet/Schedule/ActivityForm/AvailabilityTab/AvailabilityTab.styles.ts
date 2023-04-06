@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles/styledComponents';
+import { theme, StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles';
+import { variables } from 'shared/styles';
 
 export const StyledWrapper = styled(Box)`
   margin: ${theme.spacing(2.4, 0)};
@@ -22,4 +22,12 @@ export const StyledTimeWrapper = styled(Box)`
 
 export const StyledTimeRow = styled(StyledFlexTopCenter)`
   justify-content: space-between;
+`;
+
+export const StyledDatePickerWrapper = styled(Box)`
+  width: 100%;
+
+  input.MuiInputBase-input.MuiOutlinedInput-input.Mui-disabled {
+    -webkit-text-fill-color: ${variables.palette.on_surface};
+  }
 `;

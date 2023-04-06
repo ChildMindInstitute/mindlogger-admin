@@ -17,15 +17,15 @@ export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
       email: yup.string().required(emailRequired).email(incorrectEmail),
       firstName: yup.string().required(firstNameRequired),
       lastName: yup.string().required(lastNameRequired),
-      MRN: yup
+      secretUserId: yup
         .string()
         .when('role', (role, schema) =>
           role === Roles.Respondent ? schema.required(secretUserIdRequired) : schema,
         ),
-      accountName: yup
+      workspacePrefix: yup
         .string()
         .when('role', (role, schema) =>
-          role === Roles.Manager && isWorkspaceName
+          role !== Roles.Respondent && isWorkspaceName
             ? schema.required(workspaceNameRequired)
             : schema,
         ),

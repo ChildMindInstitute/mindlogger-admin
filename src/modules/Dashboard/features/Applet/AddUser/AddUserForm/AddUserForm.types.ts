@@ -3,13 +3,13 @@ import { Option } from 'shared/components/FormComponents';
 export type FormValues = {
   firstName: string;
   lastName: string;
-  nickName: string;
+  nickname: string;
   email: string;
-  MRN: string;
+  secretUserId: string;
   workspacePrefix: string;
   role: string;
   language: string;
-  users: string[];
+  respondents: string[];
 };
 
 export type Field = { name: keyof FormValues; options?: Option[] };

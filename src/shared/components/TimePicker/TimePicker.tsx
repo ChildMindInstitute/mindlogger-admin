@@ -1,8 +1,10 @@
 import { TextField } from '@mui/material';
 import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
+import { parse, format as dateFnsFormat } from 'date-fns';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
+import { DateFormats } from 'shared/consts';
 
 import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';
 import { TimePickerProps } from './TimePicker.types';
@@ -10,30 +12,36 @@ import { TimePickerProps } from './TimePicker.types';
 export const TimePicker = <T extends FieldValues>({
   control,
   timeIntervals = 15,
-  format = 'HH:mm',
+  format = DateFormats.Time,
   label,
   name,
   wrapperSx = {},
+  minTime,
+  maxTime,
 }: TimePickerProps<T>) => (
   <Controller
     control={control}
     name={name}
-    render={({ field: { onChange, value } }) => (
+    render={({ field: { onChange, value }, fieldState: { error } }) => (
       <StyledTimePickerWrapper sx={{ ...wrapperSx }}>
         <ReactDatePicker
           className="date-picker"
-          selected={value}
-          onChange={(date: Date) => onChange(date)}
+          selected={value ? parse(value, DateFormats.Time, new Date()) : value}
+          onChange={(date: Date) => onChange(dateFnsFormat(date, DateFormats.Time))}
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={timeIntervals}
           showPopperArrow={false}
           dateFormat={format}
           timeFormat={format}
+          minTime={minTime}
+          maxTime={maxTime}
           customInput={
             <TextField
               variant="outlined"
               label={label}
+              error={!!error}
+              helperText={error?.message || null}
               InputProps={{
                 endAdornment: (
                   <StyledIcon>

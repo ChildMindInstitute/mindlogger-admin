@@ -9,4 +9,5 @@ const initialStateData = {
 
 export const state: AppletsSchema = {
   applets: initialStateData,
+  events: initialStateData,
 };

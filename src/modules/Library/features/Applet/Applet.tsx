@@ -27,6 +27,7 @@ import {
   StyledActivitiesContainer,
   StyledExpandedButton,
   StyledActivities,
+  StyledSvgContainer,
 } from './Applet.styles';
 import { AppletForm, AppletProps, AppletUiType } from './Applet.types';
 import { RemoveAppletPopup } from './Popups';
@@ -169,7 +170,11 @@ export const Applet = ({
                 <StyledExpandedButton
                   disableRipple
                   onClick={() => setActivitiesVisible((prevState) => !prevState)}
-                  startIcon={<Svg id={activitiesVisible ? 'navigate-up' : 'navigate-down'} />}
+                  startIcon={
+                    <StyledSvgContainer>
+                      <Svg id={activitiesVisible ? 'navigate-up' : 'navigate-down'} />
+                    </StyledSvgContainer>
+                  }
                 >
                   <StyledLabelBoldLarge>{t('activities')}</StyledLabelBoldLarge>
                 </StyledExpandedButton>

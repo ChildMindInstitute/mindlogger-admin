@@ -30,7 +30,6 @@ export const StyledButton = styled(StyledClearedButton)`
   justify-content: space-between;
   width: 18.6rem;
   color: ${variables.palette.on_surface};
-  margin: ${theme.spacing(2.4, 0)};
 
   &.MuiButtonBase-root.MuiButton-root.MuiButton-text:hover {
     background-color: transparent;

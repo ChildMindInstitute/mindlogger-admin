@@ -34,4 +34,6 @@ export const getInputTypeContent = () => ({
   [ItemInputTypes.Audio]: <Dashed uiType={DashedUiType.Audio} />,
   [ItemInputTypes.Message]: <Dashed uiType={DashedUiType.Message} />,
   [ItemInputTypes.AudioPlayer]: <Dashed uiType={DashedUiType.AudioPlayer} />,
+  [ItemInputTypes.Flanker]: null,
+  [ItemInputTypes.AbTest]: null,
 });

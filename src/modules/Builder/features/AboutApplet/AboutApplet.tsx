@@ -1,6 +1,5 @@
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
 
 import {
@@ -9,24 +8,29 @@ import {
   SelectController,
 } from 'shared/components/FormComponents';
 import {
+  StyledBuilderWrapper,
+  StyledFlexColumn,
   StyledFlexTopCenter,
   StyledHeadlineLarge,
-  StyledBuilderWrapper,
-} from 'shared/styles/styledComponents';
+  theme,
+} from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'shared/consts';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
+import { byteFormatter } from 'shared/utils';
+import { Uploads } from 'modules/Builder/components';
 
-import { Uploads } from '../../components';
-import { StyledForm, StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
-import { AboutAppletSchema } from './AboutApplet.schema';
-import { defaultValues, colorThemeOptions } from './AboutApplet.const';
-import { FormValues } from './AboutApplet.types';
+import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
+import { colorThemeOptions } from './AboutApplet.const';
+
+const commonUploaderProps = {
+  width: 20,
+  height: 20,
+  maxFileSize: MAX_FILE_SIZE_1GB,
+};
 
 export const AboutApplet = () => {
   const { t } = useTranslation();
-  const mockedTooltipText = 'Lorem ipsum';
 
   useBreadcrumbs([
     {
@@ -35,44 +39,35 @@ export const AboutApplet = () => {
     },
   ]);
 
-  const { control, setValue, watch } = useForm<FormValues>({
-    resolver: yupResolver(AboutAppletSchema()),
-    defaultValues,
-    mode: 'onChange',
-  });
+  const { control, setValue, watch } = useFormContext();
 
   const commonProps = {
     control,
     fullWidth: true,
   };
 
-  const commonUploaderProps = {
-    width: 20,
-    height: 20,
-  };
-
   const uploads = [
     {
       title: t('appletImg'),
-      tooltipTitle: mockedTooltipText,
+      tooltipTitle: t('appletImageDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('appletImage', val)}
-          getValue={() => watch('appletImage')}
-          description={t('uploadImg')}
+          setValue={(val: string) => setValue('image', val)}
+          getValue={() => watch('image')}
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
     },
     {
       title: t('appletWatermark'),
-      tooltipTitle: mockedTooltipText,
+      tooltipTitle: t('appletWatermarkDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('appletWatermark', val)}
-          getValue={() => watch('appletWatermark')}
-          description={t('uploadTransfluent')}
+          setValue={(val: string) => setValue('watermark', val)}
+          getValue={() => watch('watermark')}
+          description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
     },
@@ -83,13 +78,13 @@ export const AboutApplet = () => {
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutApplet')}
       </StyledHeadlineLarge>
-      <StyledForm noValidate>
+      <StyledFlexColumn>
         <Box sx={{ display: 'flex' }}>
           <StyledContainer>
             <Box sx={{ mb: theme.spacing(4.4) }}>
               <InputController
                 {...commonProps}
-                name="name"
+                name="displayName"
                 maxLength={MAX_NAME_LENGTH}
                 label={t('appletName')}
               />
@@ -107,7 +102,7 @@ export const AboutApplet = () => {
             <StyledFlexTopCenter sx={{ position: 'relative' }}>
               <SelectController
                 {...commonProps}
-                name="colorTheme"
+                name="themeId"
                 label={t('appletColorTheme')}
                 options={colorThemeOptions}
                 sx={{ margin: theme.spacing(0, 0, 3.6, 0) }}
@@ -124,8 +119,8 @@ export const AboutApplet = () => {
             </span>
           </Tooltip>
         </StyledTitle>
-        <EditorController control={control} name="aboutApplet" />
-      </StyledForm>
+        <EditorController control={control} name="about" />
+      </StyledFlexColumn>
     </StyledBuilderWrapper>
   );
 };

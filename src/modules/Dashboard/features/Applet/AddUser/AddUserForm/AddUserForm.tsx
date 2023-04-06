@@ -10,13 +10,14 @@ import {
   SelectController,
   TagsInputController,
 } from 'shared/components/FormComponents';
-import { StyledErrorText } from 'shared/styles';
+import { StyledErrorText, theme } from 'shared/styles';
 import { postAppletInvitationApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 import { Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
-
+import { users } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
+
 import {
   StyledButton,
   StyledRow,
@@ -32,8 +33,13 @@ import { getUrl } from './AddUserForm.utils';
 export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const { id } = useParams();
   const { t } = useTranslation('app');
+
+  const respondentsData = users.useRespondentsData();
+  const respondents = respondentsData?.result?.map((item) => `${item.secretId} (${item.nickname})`);
+
   const workspaceNameShowed = false;
   // TODO add logic when back ready
+
   const {
     handleSubmit,
     control,
@@ -74,20 +80,20 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
 
   const updateFields = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = e.target;
-    const { nickName, MRN, workspacePrefix, users } = Fields;
+    const { nickname, secretUserId, workspacePrefix, respondents } = Fields;
 
     if (value === Roles.Respondent) {
-      register(nickName, { value: '' });
-      register(MRN, { value: '' });
+      register(nickname, { value: '' });
+      register(secretUserId, { value: '' });
       unregister(workspacePrefix);
-      unregister(users);
+      unregister(respondents);
     } else {
-      unregister(nickName);
-      unregister(MRN);
+      unregister(nickname);
+      unregister(secretUserId);
       if (value === Roles.Reviewer) {
-        register(users, { value: [] });
+        register(respondents, { value: [] });
       } else {
-        unregister(users);
+        unregister(respondents);
       }
       if (workspaceNameShowed) {
         register(workspacePrefix, { value: '' });
@@ -120,25 +126,29 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
             <Grid item xs={4}>
               <TagsInputController
                 {...commonProps}
-                name={Fields.users}
-                options={[]}
-                // TODO add users
+                name={Fields.respondents}
+                options={respondents}
                 label={t('respondents')}
                 labelAllSelect={t('all')}
+                noOptionsText={t('noRespondentsYet')}
               />
             </Grid>
           )}
           {role === Roles.Respondent && (
             <>
               <Grid item xs={4}>
-                <InputController {...commonProps} name={Fields.nickName} label={t('nickname')} />
+                <InputController {...commonProps} name={Fields.nickname} label={t('nickname')} />
               </Grid>
               <Grid item xs={4}>
-                <InputController {...commonProps} name={Fields.MRN} label={t('secretUserId')} />
+                <InputController
+                  {...commonProps}
+                  name={Fields.secretUserId}
+                  label={t('secretUserId')}
+                />
               </Grid>
             </>
           )}
-          {workspaceNameShowed && (
+          {workspaceNameShowed && role !== Roles.Respondent && (
             <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
               <InputController
                 {...commonProps}
@@ -166,7 +176,6 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
             </Tooltip>
           </Grid>
         </Grid>
-        {error && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
         <StyledRow>
           <StyledButton variant="contained" type="submit" disabled={!isDirty || !isValid}>
             {t('sendInvitation')}
@@ -176,6 +185,9 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
           </StyledResetButton>
         </StyledRow>
       </form>
+      {error && (
+        <StyledErrorText sx={{ mt: theme.spacing(2) }}>{getErrorMessage(error)}</StyledErrorText>
+      )}
     </>
   );
 };

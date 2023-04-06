@@ -1,14 +1,8 @@
 import { ColorResult } from 'react-color';
-import {
-  Control,
-  FieldValues,
-  Path,
-  UseFormGetValues,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form';
+import { FieldValues, Path } from 'react-hook-form';
 
 import { ItemInputTypes } from 'shared/types';
+import { ActivityItemApi } from 'modules/Builder/api';
 
 export enum ItemConfigurationSettings {
   HasScores = 'hasScores',
@@ -19,18 +13,18 @@ export enum ItemConfigurationSettings {
   HasTickMarksLabels = 'hasTickMarksLabels',
   HasColorPalette = 'hasColorPallete',
   HasRandomize = 'hasRandomize',
-  HasMoreNavigationButtons = 'hasMoreNavigationButtons',
   HasResponseDataIdentifier = 'hasResponseDataIdentifier',
   HasTimer = 'hasTimer',
-  HasLabels = 'hasLabels',
-  IsResponseRequired = 'isResponseRequired',
   IsCorrectAnswerRequired = 'isCorrectAnswerRequired',
   IsNumericalRequired = 'isNumericalRequired',
+  IsResponseRequired = 'isResponseRequired',
   IsSkippable = 'isSkippable',
   IsContinuous = 'isContinuous',
-  IsMediaReplayAllowed = 'isMediaReplayAllowed',
-  IsUndoChangesForbidden = 'isUndoChangesForbidden',
+  IsPlayAudioOnce = 'isPlayAudioOnce',
   IsGoBackRemoved = 'isGoBackRemoved',
+  IsTextInputRequired = 'isTextInputRequired',
+  IsUndoRemoved = 'isUndoRemoved',
+  IsNavigationMovedToTheTop = 'isNavigationMovedToTheTop',
 }
 
 export type SelectionOption = {
@@ -48,6 +42,26 @@ export type Alert = {
   item: string;
 };
 
+export type SelectionRowsItem = {
+  id?: string;
+  label: string;
+  tooltip?: string;
+  scores?: number[];
+  image?: string;
+};
+
+export type SelectionRowsOption = {
+  label: string;
+  tooltip?: string;
+  image?: string;
+};
+
+export type SelectionRows = {
+  items: SelectionRowsItem[];
+  options: SelectionRowsOption[];
+  type: ItemInputTypes.MultipleSelectionPerRow | ItemInputTypes.SingleSelectionPerRow;
+};
+
 export type ItemConfigurationForm = {
   itemsInputType: ItemInputTypes | '';
   name: string;
@@ -55,6 +69,7 @@ export type ItemConfigurationForm = {
   settings: ItemConfigurationSettings[];
   timer?: number;
   options?: SelectionOption[];
+  paletteName?: string;
   isTextInputOptionRequired?: boolean;
   minNumber?: number;
   maxNumber?: number;
@@ -63,6 +78,7 @@ export type ItemConfigurationForm = {
   sliderOptions?: SliderOption[];
   textResponseAnswer?: string;
   textResponseMaxCharacters?: number;
+  selectionRows?: SelectionRows;
   mediaTranscript?: string;
   mediaFileResource?: string;
 };
@@ -75,13 +91,6 @@ export type ItemsOption = {
 export type ItemsOptionGroup = {
   groupName: string;
   groupOptions: ItemsOption[];
-};
-
-export type SettingsSetupProps = {
-  control: Control<ItemConfigurationForm>;
-  setValue: UseFormSetValue<ItemConfigurationForm>;
-  getValues: UseFormGetValues<ItemConfigurationForm>;
-  watch: UseFormWatch<ItemConfigurationForm>;
 };
 
 export type OptionalItemSetupProps = {
@@ -99,4 +108,8 @@ export type SliderOption = {
   minImage?: string;
   maxImage?: string;
   scores: number[];
+};
+
+export type ItemConfigurationProps = {
+  item: ActivityItemApi | null;
 };

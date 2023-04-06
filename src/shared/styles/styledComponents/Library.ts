@@ -1,9 +1,10 @@
-import { styled } from '@mui/system';
+import styled from '@emotion/styled/macro';
 import { Box } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexColumn } from 'shared/styles/styledComponents';
+
+import { StyledFlexAllCenter, StyledFlexColumn } from './Flex';
 
 export const ContentContainer = styled(StyledFlexColumn)`
   height: 100%;
@@ -22,5 +23,16 @@ export const StyledAppletContainer = styled(Box)`
 
   &:not(:last-child) {
     border-bottom: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  }
+`;
+
+export const StyledSvgArrowContainer = styled(StyledFlexAllCenter)`
+  width: 4rem;
+  height: 4rem;
+  border-radius: ${variables.borderRadius.half};
+  transition: ${variables.transitions.bgColor};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
   }
 `;

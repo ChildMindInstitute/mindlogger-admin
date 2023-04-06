@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Modal } from 'shared/components';
-import { mockedWorkspaces as accounts } from 'shared/components/LeftBar/mocked';
 import { StyledModalWrapper } from 'shared/styles';
 
 import {
@@ -14,28 +14,34 @@ import {
   Applet,
 } from './AddToBuilderPopup.types';
 import { getSteps } from './AddToBuilderPopup.utils';
+import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
+import { StyledContainer } from './AddToBuilderPopup.styles';
 import { mockedApplets } from './mocked';
 
 export const AddToBuilderPopup = ({
   addToBuilderPopupVisible,
   setAddToBuilderPopupVisible,
 }: AddToBuilderPopupProps) => {
-  const isSelectAccountVisible = true; // TODO: fix when the endpoint is ready
-  // true if the user has multiple accounts
+  const isSelectedWorkspaceVisible = true; // TODO: fix when the endpoint is ready
+  // true if the user has multiple workspaces
   const { t } = useTranslation('app');
-  const { control, getValues } = useForm<AddToBuilderForm>({
-    defaultValues: {
-      selectedAccount: '',
-      addToBuilderAction: AddToBuilderActions.CreateNewApplet,
-      selectedApplet: '',
-    },
-  });
   const [step, setStep] = useState(
-    isSelectAccountVisible
-      ? AddToBuilderSteps.SelectAccount
+    isSelectedWorkspaceVisible
+      ? AddToBuilderSteps.SelectWorkspace
       : AddToBuilderSteps.AddToBuilderActions,
   );
   const [applets, setApplets] = useState<Applet[]>([]);
+
+  const validationSchema = addToBuilderPopupSchema();
+  const { trigger, control, getValues } = useForm<AddToBuilderForm>({
+    mode: 'onChange',
+    defaultValues: {
+      selectedWorkspace: '',
+      addToBuilderAction: AddToBuilderActions.CreateNewApplet,
+      selectedApplet: '',
+    },
+    resolver: yupResolver(validationSchema[step]),
+  });
 
   const handleModalClose = () => setAddToBuilderPopupVisible(false);
 
@@ -50,22 +56,27 @@ export const AddToBuilderPopup = ({
     setStep(AddToBuilderSteps.SelectApplet);
   };
 
-  const handleContinue = () => {
-    console.log(getValues());
-    handleModalClose();
+  const handleNext = async (nextStep?: AddToBuilderSteps) => {
+    const isStepValid = await trigger();
+    if (!isStepValid) return;
+    if (nextStep) {
+      return setStep(nextStep);
+    }
+    // TODO: fix when the endpoint is ready
+    setStep(AddToBuilderSteps.Error);
   };
 
   const steps = useMemo(
     () =>
       getSteps({
         control,
-        isSelectAccountVisible,
-        accounts,
+        isSelectedWorkspaceVisible,
+        workspaces: [],
         applets,
         setStep,
         setAddToBuilderPopupVisible,
+        handleNext,
         handleAddToBuilder,
-        handleContinue,
       }),
     [applets],
   );
@@ -81,7 +92,9 @@ export const AddToBuilderPopup = ({
       secondBtnText={t(steps[step]?.secondBtnText || '')}
       onSecondBtnSubmit={steps[step].onSecondBtnSubmit}
     >
-      <StyledModalWrapper>{steps[step].render()}</StyledModalWrapper>
+      <StyledModalWrapper>
+        <StyledContainer>{steps[step].render()}</StyledContainer>
+      </StyledModalWrapper>
     </Modal>
   );
 };

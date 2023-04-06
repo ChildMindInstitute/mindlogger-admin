@@ -1,13 +1,18 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { TimerType, Periodicity } from 'modules/Dashboard/api';
+
 export type ActivityFormRef = {
   submitForm: () => void;
+  createEvent: () => void;
 };
 
 export type ActivityFormProps = {
   submitCallback: () => void;
-  setRemoveAllEventsPopupVisible: Dispatch<SetStateAction<boolean>>;
-  setConfirmScheduledAccessPopupVisible: Dispatch<SetStateAction<boolean>>;
+  setRemoveAllScheduledPopupVisible: Dispatch<SetStateAction<boolean>>;
+  setRemoveAlwaysAvailablePopupVisible: Dispatch<SetStateAction<boolean>>;
+  setActivityName: Dispatch<SetStateAction<string>>;
+  defaultStartDate?: Date;
 };
 
 export const enum NotificationType {
@@ -19,24 +24,25 @@ export type Notification = {
   at?: Date | null;
   from?: Date | null;
   to?: Date | null;
+  type: NotificationType;
 };
 
 export type Reminder = { activityIncomplete: number; reminderTime: Date | null };
 
 export type FormValues = {
-  activity: string;
-  availability: boolean | string;
-  completion: boolean;
+  activityOrFlowId: string;
+  alwaysAvailable: boolean;
   oneTimeCompletion: boolean;
-  notifications: Notification[] | null;
-  reminder: Reminder | null;
-  date: string;
-  from: string;
-  to: string;
-  startEndingDate: string;
-  timeout: {
-    access: boolean;
-  };
+  periodicity: Periodicity;
+  startTime: string;
+  endTime: string;
+  date: Date | string;
+  startEndingDate: (Date | null)[] | string;
+  defaultStartDate?: Date;
+  accessBeforeSchedule: boolean;
+  timerType: TimerType;
   timerDuration: string;
   idleTime: string;
+  notifications: Notification[] | null;
+  reminder: Reminder | null;
 };

@@ -2,36 +2,29 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
+import {
+  getInvitationsApi,
+  getWorkspaceRespondentsApi,
+  getWorkspaceManagersApi,
+  GetAppletsParams,
+} from 'api';
 
-import { getAccountUserListApi, updatePinApi, UpdatePin, getInvitationsApi } from 'api';
-
-export const getManagersList = createAsyncThunk(
-  'users/getManagersList',
-  async (args, { rejectWithValue, signal }) => {
+export const getWorkspaceRespondents = createAsyncThunk(
+  'users/getWorkspaceRespondents',
+  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
     try {
-      return await getAccountUserListApi({ role: 'manager' }, signal);
+      return await getWorkspaceRespondentsApi({ params }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }
   },
 );
 
-export const getUsersList = createAsyncThunk(
-  'users/getUsersList',
-  async (args, { rejectWithValue, signal }) => {
+export const getWorkspaceManagers = createAsyncThunk(
+  'users/getWorkspaceManagers',
+  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
     try {
-      return await getAccountUserListApi({ role: 'user' }, signal);
-    } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
-    }
-  },
-);
-
-export const updatePin = createAsyncThunk(
-  'users/updatePin',
-  async ({ profileId, newState }: UpdatePin, { rejectWithValue, signal }) => {
-    try {
-      return await updatePinApi({ profileId, newState }, signal);
+      return await getWorkspaceManagersApi({ params }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

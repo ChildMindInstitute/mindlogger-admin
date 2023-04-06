@@ -8,7 +8,7 @@ import { Svg } from 'shared/components';
 import { ItemInputTypes } from 'shared/types';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
-import { DEFAULT_AUDIO_DURATION_MS } from '../../ItemConfiguration.const';
+import { DEFAULT_AUDIO_DURATION_SEC } from '../../ItemConfiguration.const';
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 
 export const AudioRecord = ({ name }: UseControllerProps<FieldValues>) => {
@@ -16,7 +16,7 @@ export const AudioRecord = ({ name }: UseControllerProps<FieldValues>) => {
   const { control } = useOptionalItemSetup({
     itemType: ItemInputTypes.Audio,
     name,
-    defaultValue: DEFAULT_AUDIO_DURATION_MS,
+    defaultValue: DEFAULT_AUDIO_DURATION_SEC,
   });
 
   return (

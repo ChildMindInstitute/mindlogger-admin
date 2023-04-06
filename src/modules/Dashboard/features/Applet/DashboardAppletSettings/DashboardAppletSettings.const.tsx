@@ -19,11 +19,13 @@ export const settings = [
         icon: <Svg id="export" />,
         label: 'exportData',
         component: <ExportDataSetting />,
+        param: 'export-data',
       },
       {
         icon: <Svg id="data-retention" />,
         label: 'dataRetention',
         component: <DataRetention />,
+        param: 'data-retention',
       },
     ],
   },
@@ -34,31 +36,37 @@ export const settings = [
         icon: <Svg id="edit-applet" />,
         label: 'editApplet',
         component: <EditAppletSetting />,
+        param: 'edit-applet',
       },
       {
         icon: <Svg id="schema" />,
         label: 'downloadSchema',
         component: <DownloadSchemaSetting />,
+        param: 'download-schema',
       },
       {
         icon: <Svg id="version-history" />,
         label: 'versionHistory',
         component: <>versionHistory</>,
+        param: 'version-history',
       },
       {
         icon: <Svg id="transfer-ownership" />,
         label: 'transferOwnership',
         component: <TransferOwnershipSetting />,
+        param: 'transfer-ownership',
       },
       {
         icon: <Svg id="duplicate" />,
         label: 'duplicateApplet',
         component: <DuplicateAppletSettings />,
+        param: 'duplicate-applet',
       },
       {
         icon: <Svg id="trash" />,
         label: 'deleteApplet',
         component: <DeleteAppletSetting />,
+        param: 'delete-applet',
       },
     ],
   },
@@ -69,17 +77,19 @@ export const settings = [
         icon: <Svg id="report-configuration" />,
         label: 'reportConfiguration',
         component: <ReportConfigSetting />,
+        param: 'report-configuration',
       },
     ],
   },
-  {
-    label: 'sharing',
-    items: [
-      {
-        icon: <Svg id="share" />,
-        label: 'shareToLibrary',
-        component: <ShareAppletSetting />,
-      },
-    ],
-  },
+  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is introduced.
+  // {
+  //   label: 'sharing',
+  //   items: [
+  //     {
+  //       icon: <Svg id="share" />,
+  //       label: 'shareToLibrary',
+  //       component: <ShareAppletSetting />,
+  //     },
+  //   ],
+  // },
 ];

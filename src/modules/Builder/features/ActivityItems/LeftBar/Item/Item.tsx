@@ -1,3 +1,5 @@
+import { useFormContext } from 'react-hook-form';
+
 import { Actions, Svg } from 'shared/components';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
@@ -11,34 +13,40 @@ import {
   StyledActionButton,
 } from './Item.styles';
 import { ItemProps } from './Item.types';
+import { itemsTypeIcons } from '../../ActivityItems.const';
 
-export const Item = ({
-  id,
-  name,
-  description,
-  icon,
-  hidden,
-  activeItem,
-  setActiveItem,
-}: ItemProps) => {
+export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }: ItemProps) => {
+  const { setValue, watch } = useFormContext();
+
+  const hidden = watch(`${name}.isHidden`);
   const hiddenProps = { sx: { opacity: hidden ? 0.38 : 1 } };
+
+  const onChangeVisibility = () => setValue(`${name}.isHidden`, !hidden);
 
   return (
     <StyledItem
-      sx={{ backgroundColor: activeItem === id ? variables.palette.secondary_container : '' }}
-      onClick={() => setActiveItem(id)}
+      sx={{
+        backgroundColor: activeItemId === item.id ? variables.palette.secondary_container : '',
+      }}
+      onClick={() => onSetActiveItem(activeItemId === item.id ? '' : item.id)}
       hidden={hidden}
     >
-      <StyledFlexTopCenter {...hiddenProps}>{icon}</StyledFlexTopCenter>
+      <StyledFlexTopCenter {...hiddenProps}>
+        {item.responseType ? itemsTypeIcons[item.responseType] : ''}
+      </StyledFlexTopCenter>
       <StyledCol {...hiddenProps}>
-        <StyledTitle>{name}</StyledTitle>
-        <StyledDescription>{description}</StyledDescription>
+        <StyledTitle>{item.name}</StyledTitle>
+        <StyledDescription>{item.question}</StyledDescription>
       </StyledCol>
       <div className="actions">
-        <Actions items={getActions()} context={{ id }} visibleByDefault />
+        <Actions
+          items={getActions({ onRemoveItem, onChangeVisibility })}
+          context={item.id}
+          visibleByDefault
+        />
       </div>
       {hidden && (
-        <StyledActionButton>
+        <StyledActionButton onClick={onChangeVisibility}>
           <Svg id="visibility-off" />
         </StyledActionButton>
       )}

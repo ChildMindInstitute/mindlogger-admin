@@ -1,19 +1,17 @@
 import { authApiClient, authApiClientWithFullLang } from 'shared/api/api.client';
+import { AppletId } from 'shared/api';
 
 import {
   SwitchAccount,
-  AccountUserList,
   TransferOwnershipType,
   SetAccount,
   RevokeAppletUser,
-  AppletId,
   AppletInvitationData,
   DuplicateApplet,
   FolderId,
   AppletNameArgs,
   AppletEncryption,
   ValidateAppletName,
-  UpdateRetainingSettings,
   UpdatePin,
   Folder,
   UpdateFolder,
@@ -24,16 +22,38 @@ import {
   PostAppletPublicLink,
   GetUsersData,
   GetAppletsParams,
+  CreateEventType,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
 
-export const getAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) =>
-  authApiClient.get('/applets', {
-    params,
+export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get(`/workspaces/${ownerId}/applets`, {
+    params: restParams,
     signal,
   });
+};
+
+export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get(`/workspaces/${ownerId}/managers`, {
+    params: restParams,
+    signal,
+  });
+};
+
+export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get(`/workspaces/${ownerId}/respondents`, {
+    params: restParams,
+    signal,
+  });
+};
 
 export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
   authApiClient.put(
@@ -47,21 +67,6 @@ export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSig
     },
   );
 
-export const getAccountUserListApi = (
-  { appletId, role, MRN, pagination, sort }: AccountUserList,
-  signal?: AbortSignal,
-) =>
-  authApiClient.get('/account/users', {
-    params: {
-      appletId,
-      role,
-      MRN: MRN || '',
-      pagination: pagination || JSON.stringify({ allow: false }),
-      sort: sort || JSON.stringify({ allow: false }),
-    },
-    signal,
-  });
-
 export const transferOwnershipApi = (
   { appletId, email }: TransferOwnershipType,
   signal?: AbortSignal,
@@ -73,6 +78,16 @@ export const transferOwnershipApi = (
       signal,
     },
   );
+
+export const createEventApi = ({ appletId, body }: CreateEventType, signal?: AbortSignal) =>
+  authApiClient.post(`/applets/${appletId}/events`, body, {
+    signal,
+  });
+
+export const getEventsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  authApiClient.get(`/applets/${appletId}/events`, {
+    signal,
+  });
 
 export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSignal) =>
   authApiClient.put(
@@ -135,25 +150,20 @@ export const validateAppletNameApi = ({ name }: ValidateAppletName, signal?: Abo
     signal,
   });
 
-export const updateRetainingSettingsApi = (
-  { appletId, options }: UpdateRetainingSettings,
-  signal?: AbortSignal,
-) => authApiClient.post(`/applet/${appletId}/setRetention`, {}, { params: options, signal });
+export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
 
-export const getInvitationsApi = (signal?: AbortSignal) =>
-  authApiClient.get('/invitations', {
+  return authApiClient.get('/invitations', {
+    params: restParams,
     signal,
   });
+};
 
-export const updatePinApi = ({ profileId, newState }: UpdatePin, signal?: AbortSignal) =>
-  authApiClient.put(
-    '/account/manage/pin',
-    {},
+export const updatePinApi = ({ ownerId, accessId }: UpdatePin, signal?: AbortSignal) =>
+  authApiClient.post(
+    `/workspaces/${ownerId}/respondents/pin`,
+    { accessId },
     {
-      params: {
-        profileId,
-        newState,
-      },
       signal,
     },
   );
@@ -305,14 +315,13 @@ export const getAppletLibraryUrlApi = ({ appletId }: AppletId, signal?: AbortSig
 export const postAppletPublicLinkApi = (
   { appletId, requireLogin }: PostAppletPublicLink,
   signal?: AbortSignal,
-) =>
-  authApiClient.post(`/applet/${appletId}/publicLink?requireLogin=${requireLogin}`, {}, { signal });
+) => authApiClient.post(`/applets/${appletId}/access_link`, { requireLogin }, { signal });
 
 export const getAppletPublicLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.get(`/applet/${appletId}/publicLink`, { signal });
+  authApiClient.get(`/applets/${appletId}/access_link`, { signal });
 
 export const deleteAppletPublicLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.delete(`/applet/${appletId}/publicLink`, { signal });
+  authApiClient.delete(`/applets/${appletId}/access_link`, { signal });
 
 export const getAppletInviteLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applet/${appletId}/inviteLink`, { signal });

@@ -1,8 +1,10 @@
+import { AppletId } from 'shared/api';
+
 export type GetUserData = { token: string };
 
 export type GetAppletsParams = {
   params: {
-    ownerId: string;
+    ownerId?: string;
     search?: string;
     page?: number;
     limit?: number;
@@ -13,20 +15,11 @@ export type GetAppletsParams = {
 
 export type SwitchAccount = { accountId: string };
 
-export type AppletId = { appletId: string };
-
 export type UserId = { userId: string };
 
 export type FolderId = { folderId: string };
 
 export type UserRoles = 'reviewer' | 'editor' | 'user' | 'coordinator' | 'manager';
-
-export type AccountUserList = Partial<AppletId> & {
-  role: UserRoles;
-  pagination?: { allow: boolean };
-  MRN?: string;
-  sort?: { allow: boolean };
-};
 
 export type Event = {
   data: {
@@ -89,6 +82,41 @@ export type Event = {
 
 export type TransferOwnershipType = AppletId & { email: string };
 
+export const enum TimerType {
+  NotSet = 'NOT_SET',
+  Timer = 'TIMER',
+  Idle = 'IDLE',
+}
+
+export const enum Periodicity {
+  Once = 'ONCE',
+  Daily = 'DAILY',
+  Weekly = 'WEEKLY',
+  Weekdays = 'WEEKDAYS',
+  Monthly = 'MONTHLY',
+  Always = 'ALWAYS',
+}
+
+export type CreateEventType = AppletId & {
+  body: {
+    startTime?: string;
+    endTime?: string;
+    accessBeforeSchedule?: boolean;
+    oneTimeCompletion?: boolean;
+    timer?: string;
+    timerType?: TimerType;
+    periodicity?: {
+      type: Periodicity;
+      startDate?: string;
+      endDate?: string;
+      selectedDate?: string;
+    };
+    respondentId?: string;
+    activityId?: string;
+    flowId?: string;
+  };
+};
+
 export type SetAccount = { accountName: string };
 
 export type RevokeAppletUser = AppletId & {
@@ -107,11 +135,11 @@ export type AppletInvitationData = AppletId & {
     role: string;
     firstName: string;
     lastName: string;
-    nickName: string;
+    nickname: string;
     email: string;
-    MRN: string;
+    secretUserId: string;
     workspacePrefix: string;
-    users: string[];
+    respondents: string[];
   };
 };
 
@@ -128,17 +156,9 @@ export type AppletEncryption = AppletId & { data: FormData };
 
 export type ValidateAppletName = { name: string };
 
-export type UpdateRetainingSettings = AppletId & {
-  options: {
-    id: string;
-    period: string;
-    retention: string;
-  };
-};
-
 export type UpdatePin = {
-  profileId: string;
-  newState: boolean;
+  accessId: string;
+  ownerId?: string;
 };
 
 export type Folder = {

@@ -1,10 +1,9 @@
-import { Fragment, MouseEvent } from 'react';
+import { Fragment } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { applets, FolderApplet } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, EmptyTable, TableHead } from 'shared/components';
 
-import { OrderBy } from '../Applets.types';
 import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
@@ -14,25 +13,16 @@ export const Table = ({
   columns,
   rows,
   order,
-  setOrder,
   orderBy,
-  setOrderBy,
   headerContent,
   emptyComponent,
   page,
   setPage,
   count,
+  handleRequestSort,
 }: TableProps) => {
   const status = applets.useStatus();
   const loading = status === 'idle' || status === 'loading';
-
-  const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
-    const orderByValue = property === 'name' ? OrderBy.DisplayName : OrderBy.UpdatedAt;
-    const isAsc = order === 'asc' && orderBy === orderByValue;
-
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(orderByValue);
-  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage + 1);

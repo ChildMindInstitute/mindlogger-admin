@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next';
+import { createArray } from 'shared/utils';
 
 export const getMonthsArr = (t: TFunction) => [
   t('jan'),
@@ -16,4 +17,4 @@ export const getMonthsArr = (t: TFunction) => [
 ];
 
 export const getRange = (start: number, end: number) =>
-  new Array(end - start).fill(0).map((_, i) => String(i + start));
+  createArray(end - start, (index) => String(index + start));

@@ -8,12 +8,11 @@ import { Svg } from 'shared/components';
 
 import { StyledButton, StyledInput } from './LinkForm.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';
-import { formatLink } from '../LinkGenerator.utils';
 
 export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
   const { id } = useParams();
   const { t } = useTranslation('app');
-  const publicLink = inviteLink ? formatLink(inviteLink) : '';
+  const publicLink = inviteLink?.link || '';
 
   const deleteAppletPublicLink = async () => {
     try {

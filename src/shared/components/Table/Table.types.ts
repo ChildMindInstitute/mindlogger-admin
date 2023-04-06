@@ -3,8 +3,8 @@ import { ReactNode } from 'react';
 import { Cell, HeadCell } from 'shared/types/table';
 
 export type RowContent = Cell & {
-  content: (item: Row) => ReactNode | string;
-  value: string | number | boolean;
+  content: (item?: Row) => ReactNode | string | Date;
+  value: string | number | boolean | Date;
   onClick?: () => void;
 };
 
@@ -25,4 +25,5 @@ export type TableProps = {
   maxHeight?: string;
   uiType?: UiType;
   emptyComponent?: JSX.Element | string;
+  className?: string;
 };

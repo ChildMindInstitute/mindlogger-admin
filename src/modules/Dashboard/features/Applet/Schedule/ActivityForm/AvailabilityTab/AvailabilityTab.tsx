@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -7,58 +6,77 @@ import { TimePicker, DatePicker, DatePickerUiType, ToggleButtonGroup } from 'sha
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { Periodicity } from 'modules/Dashboard/api';
 
-import { availabilityOptions, repeatsButtons, Repeats } from './Availability.const';
+import { FormValues } from '../ActivityForm.types';
+import { availabilityOptions, repeatsButtons } from './Availability.const';
 import {
   StyledButtonsTitle,
   StyledTimeRow,
   StyledTimeWrapper,
   StyledWrapper,
+  StyledDatePickerWrapper,
 } from './AvailabilityTab.styles';
-import { FormValues } from '../';
 
 export const AvailabilityTab = () => {
   const { t } = useTranslation('app');
-  const [activeRepeat, setActiveRepeat] = useState<string>(Repeats.Once);
   const {
     control,
     watch,
     setValue,
     formState: { dirtyFields },
   } = useFormContext<FormValues>();
-  const availability = watch('availability');
+  const alwaysAvailable = watch('alwaysAvailable');
+  const periodicity = watch('periodicity');
+  const date = watch('date');
+  const startEndingDate = watch('startEndingDate');
+  const startTime = watch('startTime');
 
-  const updateDate = () => {
-    setValue('date', '');
-    setValue('startEndingDate', '');
-  };
+  const handleSetPeriodicity = (period: string) => setValue('periodicity', period as Periodicity);
 
-  const availabilityOnChange = () => {
-    updateDate();
-    setValue('completion', false);
-    setValue('from', '');
-    setValue('to', '');
-    setValue('timeout.access', false);
+  const getDatePicker = () => {
+    if (periodicity === Periodicity.Once) {
+      return (
+        <StyledDatePickerWrapper>
+          <DatePicker
+            name="date"
+            value={date}
+            control={control}
+            uiType={DatePickerUiType.OneDate}
+          />
+        </StyledDatePickerWrapper>
+      );
+    }
+
+    return (
+      <StyledDatePickerWrapper>
+        <DatePicker
+          name="startEndingDate"
+          value={startEndingDate}
+          control={control}
+          uiType={DatePickerUiType.StartEndingDate}
+        />
+      </StyledDatePickerWrapper>
+    );
   };
 
   return (
     <>
       <SelectController
-        name="availability"
+        name="alwaysAvailable"
         fullWidth
         options={availabilityOptions}
         control={control}
-        customChange={availabilityOnChange}
       />
-      {dirtyFields.availability && (
+      {dirtyFields.alwaysAvailable && (
         <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.6) }} color={variables.palette.primary}>
-          {t(availability ? 'alwaysAvailableWarning' : 'scheduledAccessWarning')}
+          {t(alwaysAvailable ? 'alwaysAvailableWarning' : 'scheduledAccessWarning')}
         </StyledBodyMedium>
       )}
-      {availability ? (
+      {alwaysAvailable ? (
         <StyledWrapper>
           <CheckboxController
-            name="completion"
+            name="oneTimeCompletion"
             control={control}
             label={<StyledBodyMedium>{t('oneTimeCompletion')}</StyledBodyMedium>}
           />
@@ -69,35 +87,27 @@ export const AvailabilityTab = () => {
             <StyledButtonsTitle>{t('usersCanAccessActivity')}</StyledButtonsTitle>
             <ToggleButtonGroup
               toggleButtons={repeatsButtons}
-              activeButton={activeRepeat}
-              setActiveButton={setActiveRepeat}
-              customChange={updateDate}
+              activeButton={periodicity}
+              setActiveButton={handleSetPeriodicity}
             />
           </StyledWrapper>
           <StyledTimeRow>
             <StyledTimeWrapper>
-              <TimePicker name="from" control={control} label={t('from')} />
+              <TimePicker name="startTime" control={control} label={t('from')} />
             </StyledTimeWrapper>
             <StyledTimeWrapper sx={{ marginLeft: theme.spacing(2.4) }}>
-              <TimePicker name="to" control={control} label={t('to')} />
+              <TimePicker name="endTime" control={control} label={t('to')} />
             </StyledTimeWrapper>
           </StyledTimeRow>
           <StyledWrapper>
             <CheckboxController
-              name="timeout.access"
+              disabled={startTime === '00:00'}
+              name="accessBeforeSchedule"
               control={control}
               label={<StyledBodyMedium>{t('allowAccessBeforeTime')}</StyledBodyMedium>}
             />
           </StyledWrapper>
-          {activeRepeat !== Repeats.Once ? (
-            <DatePicker
-              name="startEndingDate"
-              control={control}
-              uiType={DatePickerUiType.StartEndingDate}
-            />
-          ) : (
-            <DatePicker name="date" control={control} uiType={DatePickerUiType.OneDate} />
-          )}
+          {getDatePicker()}
         </>
       )}
     </>

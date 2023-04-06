@@ -1,3 +1,5 @@
+import { Periodicity } from 'modules/Dashboard/api';
+
 export const availabilityOptions = [
   {
     value: true,
@@ -9,33 +11,25 @@ export const availabilityOptions = [
   },
 ];
 
-export const enum Repeats {
-  Once = 'once',
-  Daily = 'daily',
-  Weekly = 'weekly',
-  Weekdays = 'weekdays',
-  Monthly = 'monthly',
-}
-
 export const repeatsButtons = [
   {
-    value: Repeats.Once,
+    value: Periodicity.Once,
     label: 'once',
   },
   {
-    value: Repeats.Daily,
+    value: Periodicity.Daily,
     label: 'daily',
   },
   {
-    value: Repeats.Weekly,
+    value: Periodicity.Weekly,
     label: 'weekly',
   },
   {
-    value: Repeats.Weekdays,
+    value: Periodicity.Weekdays,
     label: 'weekdays',
   },
   {
-    value: Repeats.Monthly,
+    value: Periodicity.Monthly,
     label: 'monthly',
   },
 ];

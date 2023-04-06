@@ -1,8 +1,8 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 
-import { MediaUploaderHookProps } from './MediaUploader.types';
+import { MAX_FILE_SIZE_8MB } from 'shared/consts';
 
-const MAX_FILE_SIZE = 8388608; // 8 MB
+import { MediaUploaderHookProps } from './MediaUploader.types';
 
 export const useMediaUploader = ({ setResourceData }: MediaUploaderHookProps) => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
@@ -17,7 +17,7 @@ export const useMediaUploader = ({ setResourceData }: MediaUploaderHookProps) =>
     const file = files?.[0];
     if (!file) return;
 
-    const isAllowableSize = file.size < MAX_FILE_SIZE;
+    const isAllowableSize = file.size < MAX_FILE_SIZE_8MB;
     if (!isAllowableSize) {
       setError('audioExceedSize');
 

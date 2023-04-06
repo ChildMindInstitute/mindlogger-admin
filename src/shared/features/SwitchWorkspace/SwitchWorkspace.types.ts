@@ -1,11 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-export type Workspace = {
-  accountId: string;
-  accountName: string;
-  owned: boolean;
-  image?: string;
-};
+import { Workspace } from 'shared/state';
 
 export enum WorkspaceGroups {
   MyWorkspace = 'myWorkspace',
@@ -19,8 +14,6 @@ export type WorkspaceGroup = {
 };
 
 export type SwitchWorkspaceProps = {
-  currentWorkspace: Workspace;
-  setCurrentWorkspace: Dispatch<SetStateAction<Workspace>>;
   visibleDrawer: boolean;
   setVisibleDrawer: Dispatch<SetStateAction<boolean>>;
   workspaces: Workspace[];

@@ -2,7 +2,7 @@ import { Svg } from 'shared/components';
 import {
   DataRetention,
   TransferOwnershipSetting,
-  ShareAppletSetting,
+  // ShareAppletSetting,
   DownloadSchemaSetting,
   DeleteAppletSetting,
   ExportDataSetting,
@@ -16,11 +16,13 @@ export const getSettings = (isEditAppletPage: boolean) => [
         icon: <Svg id="export" />,
         label: 'exportData',
         component: <ExportDataSetting isDisabled={isEditAppletPage} />,
+        param: 'export-data',
       },
       {
         icon: <Svg id="data-retention" />,
         label: 'dataRetention',
         component: <DataRetention />,
+        param: 'data-retention',
       },
     ],
   },
@@ -31,21 +33,25 @@ export const getSettings = (isEditAppletPage: boolean) => [
         icon: <Svg id="schema" />,
         label: 'downloadSchema',
         component: <DownloadSchemaSetting isDisabled={isEditAppletPage} />,
+        param: 'download-schema',
       },
       {
         icon: <Svg id="version-history" />,
         label: 'versionHistory',
-        component: <>versionHistory</>, //TODO: Add isDisabled
+        component: <>versionHistory</>, //TODO: Add isDisabled,
+        param: 'version-history',
       },
       {
         icon: <Svg id="transfer-ownership" />,
         label: 'transferOwnership',
         component: <TransferOwnershipSetting isDisabled={isEditAppletPage} />,
+        param: 'transfer-ownership',
       },
       {
         icon: <Svg id="trash" />,
         label: 'deleteApplet',
         component: <DeleteAppletSetting isDisabled={isEditAppletPage} />,
+        param: 'delete-applet',
       },
     ],
   },
@@ -56,17 +62,19 @@ export const getSettings = (isEditAppletPage: boolean) => [
         icon: <Svg id="report-configuration" />,
         label: 'reportConfiguration',
         component: <>Builder report configuration</>,
+        param: 'report-configuration',
       },
     ],
   },
-  {
-    label: 'sharing',
-    items: [
-      {
-        icon: <Svg id="share" />,
-        label: 'shareToLibrary',
-        component: <ShareAppletSetting isDisabled={isEditAppletPage} />,
-      },
-    ],
-  },
+  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is introduced.
+  // {
+  //   label: 'sharing',
+  //   items: [
+  //     {
+  //       icon: <Svg id="share" />,
+  //       label: 'shareToLibrary',
+  //       component: <ShareAppletSetting isDisabled={isEditAppletPage} />,
+  //     },
+  //   ],
+  // },
 ];

@@ -1,12 +1,14 @@
 export type AppletSetting = {
   label: string;
   component: JSX.Element;
+  param: string;
 };
 
 type NavigationSettingItem = {
   icon: JSX.Element;
   label: string;
   component: JSX.Element;
+  param: string;
 };
 
 export type NavigationSetting = {
@@ -16,4 +18,5 @@ export type NavigationSetting = {
 
 export type AppletSettingsProps = {
   settings: NavigationSetting[];
+  isBuilder?: boolean;
 };

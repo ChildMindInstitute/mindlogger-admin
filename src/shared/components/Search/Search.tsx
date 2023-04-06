@@ -1,6 +1,8 @@
 import { ChangeEvent } from 'react';
+import debounce from 'lodash.debounce';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
+import { SEARCH_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { StyledTextField, StyledIcon } from './Search.styles';
 import { SearchProps } from './Search.types';
@@ -8,7 +10,10 @@ import { SearchProps } from './Search.types';
 export const Search = ({ onSearch, ...props }: SearchProps) => (
   <StyledTextField
     {...props}
-    onChange={(event: ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
+    onChange={debounce(
+      (event: ChangeEvent<HTMLInputElement>) => onSearch(event.target.value),
+      SEARCH_DEBOUNCE_VALUE,
+    )}
     startAdornment={
       <StyledIcon>
         <Svg id="search" />

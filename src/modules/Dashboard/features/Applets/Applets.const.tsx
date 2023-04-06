@@ -3,17 +3,17 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
 import { HeadCell } from 'shared/types/table';
-import { page } from 'resources';
+import { getBuilderAppletUrl, Path } from 'shared/utils';
 
 export const getHeadCells = (): HeadCell[] => [
   {
-    id: 'name',
+    id: 'displayName',
     label: t('appletName'),
     enableSort: true,
     width: '30%',
   },
   {
-    id: 'updated',
+    id: 'updatedAt',
     label: t('lastEdit'),
     enableSort: true,
     width: '15%',
@@ -30,7 +30,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     title: t('new'),
     action: () => {
       handleMenuClose();
-      navigate(page.newApplet);
+      navigate(getBuilderAppletUrl(Path.NewApplet));
     },
   },
   {
@@ -38,7 +38,6 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     title: t('fromLibrary'),
     action: () => {
       handleMenuClose();
-      console.log('add applet from library');
     },
   },
 ];

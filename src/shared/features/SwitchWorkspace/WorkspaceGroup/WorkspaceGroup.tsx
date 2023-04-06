@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { List } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { StyledBodyLarge, StyledBodyMedium } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
+import { useAppDispatch } from 'redux/store';
+import { workspaces as currentWorkspace, Workspace } from 'redux/modules';
 
 import { WorkspaceImage } from '../WorkspaceImage';
 import { StyledListItemButton, StyledItemContent, StyledSelect } from './WorkspaceGroup.styles';
@@ -12,10 +12,13 @@ import { WorkspaceGroupProps } from './WorkspaceGroup.types';
 
 export const WorkspaceGroup = ({
   workspacesGroup: { groupName, workspaces, emptyState = '' },
-  currentWorkspace,
-  setCurrentWorkspace,
 }: WorkspaceGroupProps) => {
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
+  const currentWorkspaceData = currentWorkspace.useData();
+  const changeWorkspaceHandler = (workspace: Workspace) => {
+    dispatch(currentWorkspace.actions.setCurrentWorkspace(workspace));
+  };
 
   return (
     <List sx={{ padding: theme.spacing(0) }}>
@@ -25,20 +28,19 @@ export const WorkspaceGroup = ({
       {workspaces.length ? (
         workspaces.map((workspace) => (
           <StyledListItemButton
-            key={workspace.accountId}
-            onClick={() => setCurrentWorkspace(workspace)}
-            selected={currentWorkspace.accountId === workspace.accountId}
+            key={workspace.ownerId}
+            onClick={() => changeWorkspaceHandler(workspace)}
+            selected={currentWorkspaceData?.ownerId === workspace.ownerId}
           >
             <StyledItemContent>
-              <WorkspaceImage image={workspace?.image} workspaceName={workspace.accountName} />
+              <WorkspaceImage image={workspace?.image} workspaceName={workspace.workspaceName} />
               <StyledBodyLarge
                 sx={{ marginLeft: theme.spacing(1.6), color: variables.palette.on_surface }}
               >
-                {workspace.accountName}
+                {workspace.workspaceName}
               </StyledBodyLarge>
             </StyledItemContent>
-
-            {currentWorkspace.accountId === workspace.accountId && (
+            {currentWorkspaceData?.ownerId === workspace.ownerId && (
               <StyledSelect>
                 <Svg id="selected" />
               </StyledSelect>

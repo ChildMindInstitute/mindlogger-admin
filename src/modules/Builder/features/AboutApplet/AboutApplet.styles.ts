@@ -1,26 +1,9 @@
-import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { Svg } from 'shared/components';
-import { StyledTitleMedium } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { StyledFlexColumn, StyledTitleMedium, theme, variables } from 'shared/styles';
 
-const column = `
-  display: flex;
-  flex-direction: column;
-`;
-
-export const StyledForm = styled('form')`
-  ${column}
-
-  .MuiOutlinedInput-notchedOutline {
-    border-color: ${variables.palette.surface_variant};
-  }
-`;
-
-export const StyledContainer = styled(Box)`
-  ${column};
+export const StyledContainer = styled(StyledFlexColumn)`
   width: 55rem;
 `;
 

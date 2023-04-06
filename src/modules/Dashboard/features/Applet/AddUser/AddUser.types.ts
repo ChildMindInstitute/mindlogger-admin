@@ -1,12 +1,18 @@
-import { UserRoles } from 'api';
-
 export type Invitation = {
-  MRN: string;
+  secretUserId: string;
   firstName: string;
   lastName: string;
-  nickName: string;
-  role: UserRoles;
-  lang: string;
-  created: string;
-  _id: string;
+  role: string;
+  email: string;
+  createdAt: string | Date;
+  key: string;
+  meta: {
+    secret_user_id: string;
+    nickname: string;
+  };
+};
+
+export type Invitations = {
+  result: Invitation[];
+  count: string;
 };

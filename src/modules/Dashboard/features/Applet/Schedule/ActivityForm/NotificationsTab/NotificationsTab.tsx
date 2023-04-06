@@ -7,7 +7,7 @@ import { StyledTitleMedium } from 'shared/styles/styledComponents';
 
 import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
 import { Notification } from './Notification';
-import { FormValues } from '../';
+import { FormValues, NotificationType } from '../';
 import { Reminder } from './Reminder';
 
 export const NotificationsTab = () => {
@@ -22,12 +22,13 @@ export const NotificationsTab = () => {
   const handleAddNotification = () => {
     append({
       at: null,
+      type: NotificationType.Fixed,
     });
   };
 
   const handleAddReminder = () => {
     setValue('reminder', {
-      activityIncomplete: 1,
+      activityIncomplete: 0,
       reminderTime: null,
     });
   };

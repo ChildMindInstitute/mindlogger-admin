@@ -1,33 +1,31 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import { setHours, setMinutes } from 'date-fns';
 
 import { TimePicker, ToggleButtonGroup } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { StyledBodyLarge } from 'shared/styles/styledComponents';
+import { StyledBodyLarge, StyledBodyMedium, theme } from 'shared/styles';
+import { TimerType } from 'modules/Dashboard/api';
 
-import { Timers, timersButtons } from './TimersTab.const.';
-import { FormValues } from '../';
+import { timersButtons } from './TimersTab.const.';
+import { FormValues } from '../ActivityForm.types';
+import { StyledTimePickerWrapper } from './TimersTab.styles';
 
 export const TimersTab = () => {
   const { t } = useTranslation('app');
-  const { setValue } = useFormContext<FormValues>();
-  const [activeTimer, setActiveTimer] = useState<string>(Timers.NoTimeLimit);
+  const { watch, setValue } = useFormContext<FormValues>();
+  const activeTimer = watch('timerType');
 
-  const updateTimers = () => {
-    setValue('timerDuration', '');
-    setValue('idleTime', '');
-  };
+  const handleSetTimerType = (timerType: string) => setValue('timerType', timerType as TimerType);
 
   return (
     <>
+      <StyledBodyMedium sx={{ mb: theme.spacing(1.2) }}>{t('setTimeLimit')}</StyledBodyMedium>
       <ToggleButtonGroup
         toggleButtons={timersButtons}
         activeButton={activeTimer}
-        setActiveButton={setActiveTimer}
-        customChange={updateTimers}
+        setActiveButton={handleSetTimerType}
       />
-      {activeTimer === Timers.Timer && (
+      {activeTimer === TimerType.Timer && (
         <>
           <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>
             {t('timeToCompleteActivity')}
@@ -35,12 +33,19 @@ export const TimersTab = () => {
           <TimePicker name="timerDuration" label={t('duration')} />
         </>
       )}
-      {activeTimer === Timers.IdleTime && (
+      {activeTimer === TimerType.Idle && (
         <>
           <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>
             {t('maximumTimeAwayFromActivity')}
           </StyledBodyLarge>
-          <TimePicker format="mm" name="idleTime" label={t('duration')} />
+          <StyledTimePickerWrapper>
+            <TimePicker
+              name="idleTime"
+              label={t('duration')}
+              minTime={setHours(setMinutes(new Date(), 15), 0)}
+              maxTime={setHours(setMinutes(new Date(), 45), 0)}
+            />
+          </StyledTimePickerWrapper>
         </>
       )}
     </>

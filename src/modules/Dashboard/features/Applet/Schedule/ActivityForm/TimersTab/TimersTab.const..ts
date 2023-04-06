@@ -1,20 +1,16 @@
-export const enum Timers {
-  NoTimeLimit = 'No time limit',
-  Timer = 'Timer',
-  IdleTime = 'Idle time',
-}
+import { TimerType } from 'modules/Dashboard/api';
 
 export const timersButtons = [
   {
-    value: Timers.NoTimeLimit,
+    value: TimerType.NotSet,
     label: 'noTimeLimit',
   },
   {
-    value: Timers.Timer,
+    value: TimerType.Timer,
     label: 'timer',
   },
   {
-    value: Timers.IdleTime,
+    value: TimerType.Idle,
     label: 'idleTime',
   },
 ];

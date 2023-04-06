@@ -1,5 +1,4 @@
 import { useFormContext } from 'react-hook-form';
-import { Slider } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import {
@@ -17,7 +16,8 @@ import {
   StyledSliderPanelPreviewContainer,
 } from './Header.styles';
 import { StyledSlider } from '../SliderPanel.styles';
-import { getMarksByScores } from '../SliderPanel.utils';
+import { getMarks } from '../SliderPanel.utils';
+import { ItemConfigurationSettings } from '../../../../ItemConfiguration.types';
 
 const commonButtonStyles = {
   p: theme.spacing(1),
@@ -34,7 +34,8 @@ export const Header = ({
 }: HeaderProps) => {
   const { watch } = useFormContext();
 
-  const { min, max, minLabel, maxLabel, minImage, maxImage, scores } = watch(name);
+  const { min, max, minLabel, maxLabel, minImage, maxImage } = watch(name);
+  const settings = watch('settings');
 
   if (isExpanded) {
     return (
@@ -52,6 +53,11 @@ export const Header = ({
     );
   }
 
+  const hasTickMarks = settings?.includes(ItemConfigurationSettings.HasTickMarks);
+  const hasTickMarksLabels = settings?.includes(ItemConfigurationSettings.HasTickMarksLabels);
+
+  const marks = hasTickMarks && getMarks(min, max, hasTickMarksLabels);
+
   return (
     <StyledSliderPanelHeader>
       <StyledClearedButton onClick={onArrowClick} sx={commonButtonStyles}>
@@ -63,7 +69,7 @@ export const Header = ({
           {<StyledLabelLarge>{minLabel}</StyledLabelLarge>}
           {minImage && <StyledImg src={minImage} />}
         </StyledFlexColumn>
-        <StyledSlider min={min} max={max} marks={getMarksByScores(scores)} disabled />
+        <StyledSlider min={min} max={max} marks={marks} disabled />
         <StyledFlexColumn sx={{ alignItems: 'center' }}>
           {<StyledLabelLarge>{maxLabel}</StyledLabelLarge>}
           {maxImage && <StyledImg src={maxImage} />}

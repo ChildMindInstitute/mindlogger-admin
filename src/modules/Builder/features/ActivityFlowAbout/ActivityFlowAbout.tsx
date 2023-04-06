@@ -13,18 +13,28 @@ import {
 } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { useBreadcrumbs } from 'shared/hooks';
+import {
+  useBreadcrumbs,
+  useBuilderSessionStorageFormChange,
+  useBuilderSessionStorageFormValues,
+} from 'shared/hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'shared/consts';
 
 import { StyledForm, StyledSvg } from './ActivityFlowAbout.styles';
 import { defaultValues } from './ActivityFlowAbout.const';
+import { ActivityFlowAboutFormValues } from './ActivityFlowAbout.types';
 
 export const ActivityFlowAbout = () => {
   const { t } = useTranslation();
-  const { control } = useForm({
-    defaultValues,
+  const { getFormValues } =
+    useBuilderSessionStorageFormValues<ActivityFlowAboutFormValues>(defaultValues);
+  const { control, getValues } = useForm<ActivityFlowAboutFormValues>({
+    defaultValues: getFormValues(),
     mode: 'onChange',
   });
+
+  const { handleFormChange } =
+    useBuilderSessionStorageFormChange<ActivityFlowAboutFormValues>(getValues);
 
   useBreadcrumbs([
     {
@@ -43,7 +53,7 @@ export const ActivityFlowAbout = () => {
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutActivityFlow')}
       </StyledHeadlineLarge>
-      <StyledForm noValidate>
+      <StyledForm noValidate onChange={handleFormChange}>
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
             {...commonProps}

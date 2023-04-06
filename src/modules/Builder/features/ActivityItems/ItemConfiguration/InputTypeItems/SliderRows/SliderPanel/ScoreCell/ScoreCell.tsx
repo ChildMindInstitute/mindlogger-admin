@@ -9,11 +9,15 @@ import { StyledInputController } from './ScoreCell.styles';
 export const ScoreCell = ({ name }: { name: string }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { control, getValues } = useFormContext();
+  const { control, getValues, getFieldState } = useFormContext();
 
   const handleClick = () => setIsEditing(true);
 
-  const handleClickAway = () => setIsEditing(false);
+  const handleClickAway = () => {
+    const { error } = getFieldState(name);
+
+    if (!error) setIsEditing(false);
+  };
 
   if (!isEditing)
     return (
@@ -33,6 +37,7 @@ export const ScoreCell = ({ name }: { name: string }) => {
           type="number"
           minNumberValue={Number.MIN_SAFE_INTEGER}
           autoFocus
+          isEmptyStringAllowed
         />
       </Box>
     </ClickAwayListener>

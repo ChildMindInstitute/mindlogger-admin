@@ -6,31 +6,36 @@ export const getHeadCells = (): HeadCell[] => [
   {
     id: 'secretUserId',
     label: t('secretUserId'),
-    enableSort: true,
+    enableSort: false,
   },
   {
     id: 'firstName',
     label: t('firstName'),
-    enableSort: true,
+    enableSort: false,
   },
   {
     id: 'lastName',
     label: t('lastName'),
-    enableSort: true,
+    enableSort: false,
   },
   {
     id: 'role',
     label: t('role'),
-    enableSort: true,
+    enableSort: false,
   },
   {
     id: 'email',
     label: t('email'),
-    enableSort: true,
+    enableSort: false,
+  },
+  {
+    id: 'invitationLink',
+    label: t('invitationLink'),
+    enableSort: false,
   },
   {
     id: 'dateTimeInvited',
     label: t('dateTimeInvited'),
-    enableSort: true,
+    enableSort: false,
   },
 ];

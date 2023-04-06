@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
 import { InputController } from 'shared/components/FormComponents';
-import { theme } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 
 export const StyledInputController = styled(InputController)`
   .MuiInputBase-root {
@@ -14,5 +14,12 @@ export const StyledInputController = styled(InputController)`
 
   && .MuiBox-root {
     margin-left: 0;
+  }
+
+  .MuiFormHelperText-root {
+    position: absolute;
+    bottom: -2.4rem;
+    font-size: ${variables.font.size.md};
+    white-space: nowrap;
   }
 `;

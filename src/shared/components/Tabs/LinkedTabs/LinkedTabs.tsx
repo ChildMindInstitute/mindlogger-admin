@@ -1,4 +1,4 @@
-import { useState, SyntheticEvent } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import Tab from '@mui/material/Tab';
 import { useTranslation } from 'react-i18next';
@@ -13,13 +13,14 @@ export const LinkedTabs = ({
   hiddenHeader = false,
 }: TabsProps): JSX.Element => {
   const { t } = useTranslation('app');
-  const location = useLocation();
-  const currentIndex = tabs?.findIndex((el) => el.path === location.pathname);
-  const [tabIndex, setTabIndex] = useState(currentIndex < 0 ? 0 : currentIndex);
+  const { pathname } = useLocation();
+  const [tabIndex, setTabIndex] = useState(0);
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setTabIndex(newValue);
-  };
+  useEffect(() => {
+    // TODO: investigate negative tabIndex
+    const tabIndex = tabs?.findIndex((tab) => tab.path && pathname.includes(tab.path));
+    setTabIndex(tabIndex > -1 ? tabIndex : 0);
+  }, [pathname]);
 
   const { content, header } = tabs.reduce(
     (tabs: RenderTabs, { id, icon, activeIcon, labelKey, isMinHeightAuto, path }, index) => {
@@ -55,7 +56,6 @@ export const LinkedTabs = ({
       <StyledTabs
         uiType={uiType}
         value={tabIndex}
-        onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}
         centered
         hiddenHeader={hiddenHeader}

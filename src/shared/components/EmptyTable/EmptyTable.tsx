@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledTitleLarge } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 

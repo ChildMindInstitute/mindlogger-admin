@@ -1,6 +1,5 @@
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
 
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
@@ -9,22 +8,21 @@ import {
   StyledBuilderWrapper,
   StyledBodyLarge,
   StyledTitleMedium,
-} from 'shared/styles/styledComponents';
+  theme,
+  variables,
+  StyledFlexColumn,
+} from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Svg, Tooltip, Uploader } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { MAX_DESCRIPTION_LENGTH_LONG, MAX_NAME_LENGTH } from 'shared/consts';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
+import { byteFormatter } from 'shared/utils';
+import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 
 import { Uploads } from '../../components';
-import { StyledForm, StyledContainer, StyledSvg, StyledSettings } from './ActivityAbout.styles';
-import { defaultValues } from './ActivityAbout.const';
-import { ActivityAboutSchema } from './ActivityAbout.schema';
-import { FormValues } from './ActivityAbout.types';
+import { StyledContainer, StyledSvg } from './ActivityAbout.styles';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
-  const mockedTooltipText = 'Lorem ipsum';
 
   useBreadcrumbs([
     {
@@ -33,11 +31,9 @@ export const ActivityAbout = () => {
     },
   ]);
 
-  const { control, setValue, watch } = useForm<FormValues>({
-    resolver: yupResolver(ActivityAboutSchema()),
-    defaultValues,
-    mode: 'onChange',
-  });
+  const { control, setValue, watch } = useFormContext();
+
+  const { name } = useCurrentActivity();
 
   const commonProps = {
     control,
@@ -47,30 +43,31 @@ export const ActivityAbout = () => {
   const commonUploaderProps = {
     width: 20,
     height: 20,
+    maxFileSize: MAX_FILE_SIZE_1GB,
   };
 
   const uploads = [
     {
       title: t('activityImg'),
-      tooltipTitle: mockedTooltipText,
+      tooltipTitle: t('activityImageDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('activityImg', val)}
-          getValue={() => watch('activityImg')}
-          description={t('uploadImg')}
+          setValue={(val: string) => setValue(`${name}.image`, val)}
+          getValue={() => watch(`${name}.image`)}
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
     },
     {
       title: t('activityWatermark'),
-      tooltipTitle: mockedTooltipText,
+      tooltipTitle: t('activitySplashScreenDescription'),
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue('activityWatermark', val)}
-          getValue={() => watch('activityWatermark')}
-          description={t('uploadTransfluent')}
+          setValue={(val: string) => setValue(`${name}.splashScreen`, val)}
+          getValue={() => watch(`${name}.splashScreen`)}
+          description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
     },
@@ -78,7 +75,7 @@ export const ActivityAbout = () => {
 
   const checkboxes = [
     {
-      name: 'showAllQuestionsAtOnce',
+      name: `${name}.showAllAtOnce`,
       label: (
         <StyledBodyLarge sx={{ position: 'relative' }}>
           {t('showAllQuestionsAtOnce')}
@@ -91,15 +88,15 @@ export const ActivityAbout = () => {
       ),
     },
     {
-      name: 'allowToSkipAllItems',
+      name: `${name}.isSkippable`,
       label: <StyledBodyLarge>{t('allowToSkipAllItems')}</StyledBodyLarge>,
     },
     {
-      name: 'disableAbilityToChangeResponse',
+      name: `${name}.responseIsEditable`,
       label: <StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>,
     },
     {
-      name: 'onlyAdminPanelActivity',
+      name: `${name}.isReviewable`,
       label: (
         <StyledBodyLarge>
           {t('onlyAdminPanelActivity')}
@@ -118,20 +115,20 @@ export const ActivityAbout = () => {
       <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(4) }}>
         {t('aboutActivity')}
       </StyledHeadlineLarge>
-      <StyledForm noValidate>
+      <StyledFlexColumn>
         <Box sx={{ display: 'flex' }}>
           <StyledContainer>
             <Box sx={{ marginBottom: theme.spacing(4.4) }}>
               <InputController
                 {...commonProps}
-                name="activityName"
+                name={`${name}.name`}
                 maxLength={MAX_NAME_LENGTH}
                 label={t('activityName')}
               />
             </Box>
             <InputController
               {...commonProps}
-              name="activityDescription"
+              name={`${name}.description`}
               maxLength={MAX_DESCRIPTION_LENGTH_LONG}
               label={t('activityDescription')}
               multiline
@@ -143,17 +140,12 @@ export const ActivityAbout = () => {
         <StyledTitleMedium color={variables.palette.on_surface_variant} sx={{ marginBottom: 1.6 }}>
           {t('itemLevelSettings')}
         </StyledTitleMedium>
-        <StyledSettings>
+        <StyledFlexColumn>
           {checkboxes.map(({ name, label }) => (
-            <CheckboxController
-              key={name}
-              control={control}
-              name={name as keyof FormValues}
-              label={label}
-            />
+            <CheckboxController key={name} control={control} name={name} label={label} />
           ))}
-        </StyledSettings>
-      </StyledForm>
+        </StyledFlexColumn>
+      </StyledFlexColumn>
     </StyledBuilderWrapper>
   );
 };

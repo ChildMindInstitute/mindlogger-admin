@@ -8,6 +8,8 @@ type TimePicker = {
   label: string;
   width?: number;
   wrapperSx?: SxProps;
+  minTime?: Date;
+  maxTime?: Date;
 } & TextFieldProps;
 
 export type TimePickerProps<T extends FieldValues> = TimePicker & UseControllerProps<T>;

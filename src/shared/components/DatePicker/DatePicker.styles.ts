@@ -127,7 +127,7 @@ export const StyledPopover = styled(Popover)`
 
   .react-datepicker__day--in-range:not(:empty)
     + .react-datepicker__day--range-end:not(:empty):before {
-    left: 0%;
+    left: 0;
     transform: translateZ(-0.1rem);
   }
 `;
@@ -139,10 +139,8 @@ export const StyledTextField = styled(TextField)`
     padding-right: ${theme.spacing(0.5)};
   }
 
-  input.Mui-disabled {
-    color: ${variables.palette.black};
-    -webkit-text-fill-color: ${variables.palette.black};
-    opacity: 0.38;
+  .Mui-disabled {
+    -webkit-text-fill-color: ${variables.palette.on_surface};
   }
 
   .MuiOutlinedInput-notchedOutline {

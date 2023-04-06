@@ -4,16 +4,18 @@ import { Radio, RadioGroup, FormControlLabelProps } from '@mui/material';
 import { Table, UiType, AppletImage } from 'shared/components';
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { WorkspaceImage, WorkspaceUiType } from 'shared/features/SwitchWorkspace';
-import { Workspace } from 'shared/features/SwitchWorkspace/SwitchWorkspace.types';
+
 import {
   theme,
   variables,
   StyledFlexTopCenter,
   StyledLabelLarge,
   StyledBodyLarge,
+  StyledErrorText,
 } from 'shared/styles';
 import { HeadCell } from 'shared/types/table';
 import i18n from 'i18n';
+import { Workspace } from 'shared/state';
 
 import {
   AddToBuilderActions,
@@ -23,7 +25,7 @@ import {
   Step,
   TableController,
 } from './AddToBuilderPopup.types';
-import { StyledTableFormControlLabel } from './AddtoBuilderPopup.styles';
+import { StyledTableFormControlLabel } from './AddToBuilderPopup.styles';
 
 const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] => [
   {
@@ -33,12 +35,12 @@ const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] =
   },
 ];
 
-const getAccountsRows = (accounts: Workspace[]) =>
-  accounts?.map(({ accountId, accountName, image }) => ({
-    accountName: {
+const getWorkspacesRows = (workspaces: Workspace[]) =>
+  workspaces?.map(({ ownerId, workspaceName, image }) => ({
+    workspaceName: {
       content: () => (
         <StyledTableFormControlLabel
-          value={accountId}
+          value={ownerId}
           control={<Radio />}
           labelPlacement="start"
           label={
@@ -46,16 +48,16 @@ const getAccountsRows = (accounts: Workspace[]) =>
               <WorkspaceImage
                 uiType={WorkspaceUiType.Table}
                 image={image}
-                workspaceName={accountName}
+                workspaceName={workspaceName}
               />
               <StyledLabelLarge sx={{ marginLeft: theme.spacing(1.2) }}>
-                {accountName}
+                {workspaceName}
               </StyledLabelLarge>
             </StyledFlexTopCenter>
           }
         />
       ),
-      value: accountName,
+      value: workspaceName,
     },
   }));
 
@@ -91,6 +93,7 @@ const getActions = (): Omit<FormControlLabelProps, 'control'>[] => {
         <>
           <StyledBodyLarge>{t('createNewApplet')}</StyledBodyLarge>
           <StyledLabelLarge
+            className="option-hint"
             sx={{ color: variables.palette.primary, marginTop: theme.spacing(0.4) }}
           >
             {t('createNewAppletHint')}
@@ -100,7 +103,17 @@ const getActions = (): Omit<FormControlLabelProps, 'control'>[] => {
     },
     {
       value: AddToBuilderActions.AddToExistingApplet,
-      label: <StyledBodyLarge>{t('addToExistingApplet')}</StyledBodyLarge>,
+      label: (
+        <>
+          <StyledBodyLarge>{t('addToExistingApplet')}</StyledBodyLarge>
+          <StyledLabelLarge
+            className="option-hint"
+            sx={{ color: variables.palette.primary, marginTop: theme.spacing(0.4) }}
+          >
+            {t('exitingAppletHint')}
+          </StyledLabelLarge>
+        </>
+      ),
     },
   ];
 };
@@ -117,53 +130,57 @@ const getTableController = ({
     name={name}
     defaultValue={defaultValue}
     control={control}
-    render={({ field }) => (
-      <RadioGroup {...field}>
-        <Table
-          maxHeight="32.4rem"
-          columns={columns}
-          rows={rows}
-          orderBy={orderBy}
-          uiType={UiType.Secondary}
-        />
-      </RadioGroup>
+    render={({ field, fieldState: { error } }) => (
+      <>
+        <RadioGroup {...field}>
+          <Table
+            className={error && 'error'}
+            maxHeight="32.4rem"
+            columns={columns}
+            rows={rows}
+            orderBy={orderBy}
+            uiType={UiType.Secondary}
+          />
+        </RadioGroup>
+        {error && <StyledErrorText marginTop={1.2}>{error?.message}</StyledErrorText>}
+      </>
     )}
   />
 );
 
 export const getSteps = ({
   control,
-  isSelectAccountVisible,
-  accounts,
+  isSelectedWorkspaceVisible,
+  workspaces,
   applets,
   setStep,
   setAddToBuilderPopupVisible,
+  handleNext,
   handleAddToBuilder,
-  handleContinue,
 }: GetStep): Step[] => {
   const { t } = i18n;
   const options = getActions();
 
   return [
     {
-      stepId: AddToBuilderSteps.SelectAccount,
-      popupTitle: 'accountSelection',
+      stepId: AddToBuilderSteps.SelectWorkspace,
+      popupTitle: 'workspaceSelection',
       render: () =>
         getTableController({
-          name: 'selectedAccount',
+          name: 'selectedWorkspace',
           control,
           columns: getHeadCell({
-            id: 'accountName',
+            id: 'workspaceName',
             label: t('workspaceName'),
           }),
-          rows: getAccountsRows(accounts),
-          orderBy: 'accountName',
+          rows: getWorkspacesRows(workspaces),
+          orderBy: 'workspaceName',
         }),
       buttonText: 'confirm',
       hasSecondBtn: true,
       secondBtnText: 'cancel',
       onSecondBtnSubmit: () => setAddToBuilderPopupVisible(false),
-      onSubmitStep: () => setStep(AddToBuilderSteps.AddToBuilderActions),
+      onSubmitStep: () => handleNext(AddToBuilderSteps.AddToBuilderActions),
     },
     {
       stepId: AddToBuilderSteps.AddToBuilderActions,
@@ -173,10 +190,10 @@ export const getSteps = ({
       ),
       buttonText: 'continue',
       hasSecondBtn: true,
-      secondBtnText: isSelectAccountVisible ? 'back' : 'cancel',
+      secondBtnText: isSelectedWorkspaceVisible ? 'back' : 'cancel',
       onSecondBtnSubmit: () =>
-        isSelectAccountVisible
-          ? setStep(AddToBuilderSteps.SelectAccount)
+        isSelectedWorkspaceVisible
+          ? setStep(AddToBuilderSteps.SelectWorkspace)
           : setAddToBuilderPopupVisible(false),
       onSubmitStep: () => handleAddToBuilder(),
     },
@@ -206,7 +223,21 @@ export const getSteps = ({
       hasSecondBtn: true,
       secondBtnText: 'back',
       onSecondBtnSubmit: () => setStep(AddToBuilderSteps.AddToBuilderActions),
-      onSubmitStep: () => handleContinue(),
+      onSubmitStep: () => handleNext(),
+    },
+    {
+      stepId: AddToBuilderSteps.Error,
+      popupTitle: 'addToBuilder',
+      render: () => (
+        <StyledBodyLarge color={variables.palette.semantic.error}>
+          {t('addToBuilderError')}
+        </StyledBodyLarge>
+      ),
+      buttonText: 'retry',
+      hasSecondBtn: true,
+      secondBtnText: 'cancel',
+      onSecondBtnSubmit: () => setAddToBuilderPopupVisible(false),
+      onSubmitStep: () => setAddToBuilderPopupVisible(false),
     },
   ];
 };

@@ -1,13 +1,13 @@
 import { Svg } from 'shared/components';
 import { ItemInputTypes } from 'shared/types';
 
-export const ItemInputTypess = {
+export const ItemResponseTypes = {
   [ItemInputTypes.SingleSelection]: {
     icon: <Svg id="radio-button-outline" />,
     title: ItemInputTypes.SingleSelection,
   },
   [ItemInputTypes.MultipleSelection]: {
-    icon: <Svg id="checkbox-multiple-filled" />,
+    icon: <Svg id="checkbox-filled" />,
     title: ItemInputTypes.MultipleSelection,
   },
   [ItemInputTypes.Slider]: {
@@ -52,4 +52,6 @@ export const ItemInputTypess = {
     icon: <Svg id="audio-player" />,
     title: ItemInputTypes.AudioPlayer,
   },
+  [ItemInputTypes.Flanker]: { icon: null, title: ItemInputTypes.Flanker },
+  [ItemInputTypes.AbTest]: { icon: null, title: ItemInputTypes.AbTest },
 };

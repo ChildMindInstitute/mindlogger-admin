@@ -6,7 +6,7 @@ import i18n from 'i18n';
 
 import { StyledItemContentRow, StyledItemSvg, StyledItemImage } from './Item.styles';
 import { Item } from '../../AppletsCatalog/AppletsCatalog.types';
-import { ItemInputTypess } from '../../AppletsCatalog/AppletsCatalog.conts';
+import { ItemResponseTypes } from '../../AppletsCatalog/AppletsCatalog.conts';
 
 export const renderItemContent = (item: Item) => {
   const { t } = i18n;
@@ -18,7 +18,7 @@ export const renderItemContent = (item: Item) => {
         <>
           {item.options?.map(({ title, image }) => (
             <StyledItemContentRow key={uniqueId()}>
-              <StyledItemSvg>{ItemInputTypess[item.responseType].icon}</StyledItemSvg>
+              <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
               {image && <StyledItemImage src={image} alt="Option image" />}
               <StyledBodyLarge sx={{ color: variables.palette.on_surface }}>
                 {title}
@@ -30,9 +30,9 @@ export const renderItemContent = (item: Item) => {
     default:
       return (
         <StyledItemContentRow>
-          <StyledItemSvg>{ItemInputTypess[item.responseType].icon}</StyledItemSvg>
+          <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
           <StyledBodyLarge sx={{ color: variables.palette.outline }}>
-            {t(ItemInputTypess[item.responseType].title)}
+            {t(ItemResponseTypes[item.responseType].title)}
           </StyledBodyLarge>
         </StyledItemContentRow>
       );

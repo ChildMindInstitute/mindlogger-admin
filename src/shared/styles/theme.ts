@@ -190,6 +190,11 @@ export const theme = createTheme({
           height: '4.8rem',
           letterSpacing: variables.font.letterSpacing.sm,
           boxShadow: 'unset',
+          '&.Mui-disabled': {
+            '& svg': {
+              fill: variables.palette.contained_btn_disabled_text,
+            },
+          },
           '&.MuiButton-contained': {
             fontWeight: variables.font.weight.bold,
             '& svg': {
@@ -227,6 +232,11 @@ export const theme = createTheme({
             },
             '&:hover': {
               backgroundColor: variables.palette.primary_alfa8,
+            },
+            '&.MuiButton-outlinedError': {
+              '& svg': {
+                fill: variables.palette.semantic.error,
+              },
             },
             '&.Mui-disabled': {
               color: variables.palette.on_surface_alfa38,
@@ -368,13 +378,23 @@ export const theme = createTheme({
         root: {
           borderRadius: variables.borderRadius.sm,
           '&:hover': {
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: variables.palette.primary50,
+            },
+            '&.Mui-disabled': {
+              '.MuiOutlinedInput-notchedOutline': {
+                borderColor: variables.palette.on_surface_alfa12,
+              },
+            },
             '&.Mui-error': {
               '.MuiOutlinedInput-notchedOutline': {
                 borderColor: variables.palette.semantic.error,
               },
             },
+          },
+          '&.Mui-disabled': {
             '.MuiOutlinedInput-notchedOutline': {
-              borderColor: variables.palette.primary50,
+              borderColor: variables.palette.on_surface_alfa12,
             },
           },
         },
@@ -487,7 +507,6 @@ export const theme = createTheme({
 
             '.MuiAutocomplete-option': {
               borderRadius: variables.borderRadius.xxs,
-              padding: '1.6rem',
               '&:hover': {
                 backgroundColor: variables.palette.secondary_container,
               },
