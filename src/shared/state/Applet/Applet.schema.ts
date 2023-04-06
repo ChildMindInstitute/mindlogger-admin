@@ -53,8 +53,8 @@ export type Activity = {
   id?: string;
   key?: string;
   name: string;
+  order?: number;
   description: string | Record<string, string>;
-  ordering?: number;
   splashScreen?: string;
   image?: string;
   showAllAtOnce?: boolean;
