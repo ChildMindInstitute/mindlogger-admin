@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
 import { StyledTitleMedium, theme } from 'shared/styles';
@@ -7,12 +8,15 @@ import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Item } from 'modules/Builder/components';
 
-import { activityFlows, getActions } from './ActivityFlow.const';
+import { getActions, activityFlows } from './ActivityFlow.const';
 import { StyledAdd, StyledAddWrapper } from './ActivityFlow.styles';
 import { ActivityFlowHeader } from './ActivityFlowHeader';
 
 export const ActivityFlow = () => {
   const { t } = useTranslation('app');
+  const { watch } = useFormContext();
+
+  // const activityFlows = watch('activityFlows');
 
   useBreadcrumbs([
     {
