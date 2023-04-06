@@ -1,3 +1,5 @@
+import { ItemResponseType } from 'shared/consts';
+
 /* eslint-disable camelcase */
 export const activityItemsMocked = [
   {
@@ -6,7 +8,7 @@ export const activityItemsMocked = [
       en: 'string',
       fr: 'string',
     },
-    responseType: 'text',
+    responseType: ItemResponseType.Text,
     responseValues: null,
     config: {
       remove_back_button: true,

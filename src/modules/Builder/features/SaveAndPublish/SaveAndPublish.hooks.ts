@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Update } from 'history';
@@ -30,12 +30,10 @@ export const getAppletInfoFromStorage = () => {
 
 export const useAppletData = () => {
   const isNewApplet = useCheckIfNewApplet();
-  const {
-    i18n: { language },
-  } = useTranslation('app');
+  const { getValues } = useFormContext();
+  const appletInfo = getValues() as SingleApplet;
 
   return (appletPassword?: EnterAppletPasswordForm['appletPassword']): SingleApplet => {
-    const appletInfo = getAppletInfoFromStorage();
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
 
@@ -44,6 +42,7 @@ export const useAppletData = () => {
         ...appletInfoMocked,
         ...appletInfo,
         activities: appletInfo?.activities.map((activity: Activity) => ({
+          ...activity,
           key: uuidv4(),
           description: getDictionaryObject(activity.description),
           items: activityItemsMocked,
@@ -73,7 +72,6 @@ export const useAppletData = () => {
       activityFlows: [],
       ...removeAppletExtraFields(),
     };
-    // } as SingleApplet;
   };
 };
 
@@ -232,7 +230,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
         confirmNavigation();
       }
 
-      navigate(getBuilderAppletUrl(appletId));
+      appletId && navigate(getBuilderAppletUrl(appletId));
     }
 
     if (createApplet.fulfilled.match(result)) {

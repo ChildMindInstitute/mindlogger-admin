@@ -40,11 +40,12 @@ export const Activities = () => {
     },
   ]);
 
-  const navigateToActivity = (id: string) =>
+  const navigateToActivity = (activityId?: string) =>
+    activityId &&
     navigate(
       generatePath(page.builderAppletActivityAbout, {
         appletId,
-        activityId: id,
+        activityId,
       }),
     );
   const handleHideModal = () => setDeletionModalVisible(false);

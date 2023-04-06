@@ -29,7 +29,7 @@ export const BuilderApplet = () => {
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
-  const loadingStatus = applet.useStatus() ?? {};
+  const loadingStatus = applet.useResponseStatus() ?? {};
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
 
   const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
