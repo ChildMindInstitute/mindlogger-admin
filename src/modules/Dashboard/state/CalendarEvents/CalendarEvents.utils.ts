@@ -202,7 +202,8 @@ export const createEvents = ({
     ];
   }
 
-  const daysInPeriod = eachDayOfInterval({ start: eventStart, end: eventEnd });
+  const daysInPeriod =
+    eventEnd > eventStart ? eachDayOfInterval({ start: eventStart, end: eventEnd }) : [];
 
   if (periodicityType === Periodicity.Daily) {
     return getEventsArrayFromDates(daysInPeriod, commonProps, startTime, endTime);

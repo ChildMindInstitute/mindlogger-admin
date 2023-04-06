@@ -1,42 +1,45 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 
-import { users, auth, account, User } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
 import {
   InputController,
   SelectController,
   TagsInputController,
 } from 'shared/components/FormComponents';
-import { StyledErrorText } from 'shared/styles/styledComponents';
-import { getAppletInvitationApi } from 'api';
-import { getErrorMessage } from 'shared/utils/errors';
-import { setAccountName } from 'modules/Auth/state/Auth.thunk';
+import { StyledErrorText, theme } from 'shared/styles';
+import { postAppletInvitationApi } from 'api';
+import { getErrorMessage } from 'shared/utils';
 import { Roles } from 'shared/consts';
+import { useAsync } from 'shared/hooks';
+import { users } from 'redux/modules';
+import { Svg, Tooltip } from 'shared/components';
 
-import { StyledButton, StyledRow, StyledResetButton, StyledTitle } from './AddUserForm.styles';
+import {
+  StyledButton,
+  StyledRow,
+  StyledResetButton,
+  StyledTitle,
+  StyledTooltip,
+} from './AddUserForm.styles';
 import { Fields, fields, defaultValues, langs, roles } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, FormValues } from './AddUserForm.types';
+import { getUrl } from './AddUserForm.utils';
 
 export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const { id } = useParams();
-  const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
-  const [errorMessage, setErrorMessage] = useState('');
-  const accountData = account.useData();
-  const usersData = users.useRespondentsData();
-  const authData = auth.useData();
-  const currentApplet = accountData?.account?.applets?.find((el) => el.id === id);
-  const { firstName, lastName } = authData?.user as User;
-  const fullName = `${firstName} ${lastName}`;
 
-  const accountNameShowed =
-    fullName === authData?.account?.accountName && currentApplet?.roles?.includes('owner');
+  const respondentsData = users.useRespondentsData();
+  const respondents = respondentsData?.result?.map((item) => `${item.secretId} (${item.nickname})`);
+
+  const workspaceNameShowed = false;
+  // TODO add logic when back ready
+
   const {
     handleSubmit,
     control,
@@ -45,13 +48,12 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
     formState: { isDirty, isValid },
     register,
     unregister,
-    getValues,
-    setValue,
   } = useForm<FormValues>({
-    resolver: yupResolver(AddUserSchema(accountNameShowed)),
+    resolver: yupResolver(AddUserSchema(workspaceNameShowed)),
     defaultValues,
     mode: 'onChange',
   });
+
   const role = watch(Fields.role);
 
   const commonProps = {
@@ -61,57 +63,42 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
 
   const resetForm = () => reset();
 
-  const onSubmit = async (values: FormValues) => {
-    try {
-      if (id) {
-        const options = {
-          ...values,
-          accountName: values.accountName || authData?.account?.accountName || '',
-        };
+  const { error, execute } = useAsync(postAppletInvitationApi, async () => {
+    await getInvitationsHandler();
+    resetForm();
+  });
 
-        await getAppletInvitationApi({ appletId: id, options });
-        await getInvitationsHandler();
-
-        if (options.accountName && options.role !== Roles.User) {
-          dispatch(setAccountName({ accountName: options.accountName }));
-        }
-        setErrorMessage('');
-        resetForm();
-      }
-    } catch (e) {
-      setErrorMessage(getErrorMessage(e));
+  const onSubmit = (values: FormValues) => {
+    if (id) {
+      execute({
+        url: getUrl(values.role),
+        appletId: id,
+        options: values,
+      });
     }
   };
 
   const updateFields = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = e.target;
-    const { nickName, MRN, accountName, users } = Fields;
+    const { nickname, secretUserId, workspacePrefix, respondents } = Fields;
 
-    if (value === Roles.User) {
-      register(nickName, { value: '' });
-      register(MRN, { value: '' });
-      unregister(accountName);
-      unregister(users);
-    } else {
-      unregister(nickName);
-      unregister(MRN);
-      if (value === Roles.Reviewer) {
-        register(users, { value: [] });
-      } else {
-        unregister(users);
-      }
-      if (accountNameShowed) {
-        register(accountName, { value: '' });
-      }
+    if (value !== Roles.Respondent && value !== Roles.Reviewer) {
+      unregister(nickname);
+      unregister(secretUserId);
+      unregister(respondents);
+      workspaceNameShowed && register(workspacePrefix, { value: '' });
     }
-  };
 
-  const handleRemove = (value: string) => {
-    const formValues = getValues();
-    setValue(
-      'users',
-      formValues.users.filter((user) => user !== value),
-    );
+    if (value === Roles.Respondent) {
+      register(nickname, { value: '' });
+      register(secretUserId, { value: '' });
+      unregister(workspacePrefix);
+      unregister(respondents);
+    }
+
+    if (value === Roles.Reviewer) {
+      register(respondents, { value: [] });
+    }
   };
 
   return (
@@ -119,74 +106,88 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
       <StyledTitle>{t('addUser')}</StyledTitle>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={2.4} alignItems="flex-start">
-          <Grid container item xs={8} spacing={2.4}>
+          <Grid container item xs={12} spacing={2.4}>
             {fields.map(({ name }) => (
-              <Grid item xs={6} key={name}>
+              <Grid item xs={4} key={name}>
                 <InputController {...commonProps} name={name} label={t(name)} />
               </Grid>
             ))}
-            <Grid item xs={6}>
-              <SelectController
-                {...commonProps}
-                name={Fields.role}
-                options={roles}
-                label={t('role')}
-                customChange={updateFields}
-              />
-            </Grid>
-            {role === Roles.Reviewer && (
-              <Grid item xs={12}>
-                <TagsInputController
-                  {...commonProps}
-                  name={Fields.users}
-                  onRemove={handleRemove}
-                  // TODO: fix types
-                  options={usersData?.result?.map((el) => el?.secretId)}
-                  label={t('userList')}
-                />
-              </Grid>
-            )}
-            <Grid item xs={6}>
-              <SelectController
-                {...commonProps}
-                name={Fields.lang}
-                options={langs}
-                label={t('language')}
-              />
-            </Grid>
           </Grid>
-          <Grid container item xs={4} rowSpacing={2.4}>
-            {role === Roles.User && (
-              <>
-                <Grid item xs={12}>
-                  <InputController {...commonProps} name={Fields.nickName} label={t('nickname')} />
-                </Grid>
-                <Grid item xs={12}>
-                  <InputController {...commonProps} name={Fields.MRN} label={t('secretUserId')} />
-                </Grid>
-              </>
-            )}
-            {accountNameShowed && role !== Roles.User && (
-              <Grid item xs={12}>
+          <Grid item xs={4}>
+            <SelectController
+              {...commonProps}
+              name={Fields.role}
+              options={roles}
+              label={t('role')}
+              customChange={updateFields}
+            />
+          </Grid>
+          {role === Roles.Reviewer && (
+            <Grid item xs={4}>
+              <TagsInputController
+                {...commonProps}
+                name={Fields.respondents}
+                options={respondents}
+                label={t('respondents')}
+                labelAllSelect={t('all')}
+                noOptionsText={t('noRespondentsYet')}
+              />
+            </Grid>
+          )}
+          {role === Roles.Respondent && (
+            <>
+              <Grid item xs={4}>
+                <InputController {...commonProps} name={Fields.nickname} label={t('nickname')} />
+              </Grid>
+              <Grid item xs={4}>
                 <InputController
                   {...commonProps}
-                  name={Fields.accountName}
-                  label={t('accountName')}
+                  name={Fields.secretUserId}
+                  label={t('secretUserId')}
                 />
               </Grid>
-            )}
+            </>
+          )}
+          {workspaceNameShowed && role !== Roles.Respondent && (
+            <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
+              <InputController
+                {...commonProps}
+                name={Fields.workspacePrefix}
+                label={t('workspaceName')}
+              />
+              <Tooltip tooltipTitle={t('workspaceTooltip')}>
+                <StyledTooltip>
+                  <Svg id="more-info-outlined" />
+                </StyledTooltip>
+              </Tooltip>
+            </Grid>
+          )}
+          <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
+            <SelectController
+              {...commonProps}
+              name={Fields.language}
+              options={langs}
+              label={t('language')}
+            />
+            <Tooltip tooltipTitle={t('languageTooltip')}>
+              <StyledTooltip>
+                <Svg id="more-info-outlined" />
+              </StyledTooltip>
+            </Tooltip>
           </Grid>
         </Grid>
-        {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
         <StyledRow>
           <StyledButton variant="contained" type="submit" disabled={!isDirty || !isValid}>
-            {t('submit')}
+            {t('sendInvitation')}
           </StyledButton>
           <StyledResetButton variant="outlined" onClick={resetForm}>
             {t('resetForm')}
           </StyledResetButton>
         </StyledRow>
       </form>
+      {error && (
+        <StyledErrorText sx={{ mt: theme.spacing(2) }}>{getErrorMessage(error)}</StyledErrorText>
+      )}
     </>
   );
 };

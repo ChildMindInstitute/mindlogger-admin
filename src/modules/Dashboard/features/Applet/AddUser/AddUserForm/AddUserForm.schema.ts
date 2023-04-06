@@ -3,29 +3,31 @@ import * as yup from 'yup';
 import i18n from 'i18n';
 import { Roles } from 'shared/consts';
 
-export const AddUserSchema = (isAccountName: boolean | undefined) => {
+export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
   const { t } = i18n;
   const emailRequired = t('emailRequired');
   const incorrectEmail = t('incorrectEmail');
   const firstNameRequired = t('firstNameRequired');
   const lastNameRequired = t('lastNameRequired');
   const secretUserIdRequired = t('secretUserIdRequired');
-  const accountNameRequired = t('accountNameRequired');
+  const workspaceNameRequired = t('workspaceNameRequired');
 
   return yup
     .object({
       email: yup.string().required(emailRequired).email(incorrectEmail),
       firstName: yup.string().required(firstNameRequired),
       lastName: yup.string().required(lastNameRequired),
-      MRN: yup
+      secretUserId: yup
         .string()
         .when('role', (role, schema) =>
-          role === Roles.User ? schema.required(secretUserIdRequired) : schema,
+          role === Roles.Respondent ? schema.required(secretUserIdRequired) : schema,
         ),
-      accountName: yup
+      workspacePrefix: yup
         .string()
         .when('role', (role, schema) =>
-          role !== Roles.User && isAccountName ? schema.required(accountNameRequired) : schema,
+          role !== Roles.Respondent && isWorkspaceName
+            ? schema.required(workspaceNameRequired)
+            : schema,
         ),
     })
     .required();

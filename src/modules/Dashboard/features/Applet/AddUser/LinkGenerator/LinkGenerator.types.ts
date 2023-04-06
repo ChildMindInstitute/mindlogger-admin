@@ -1,6 +1,6 @@
 export type InviteLink = {
-  requireLogin: boolean;
-  inviteId: string;
+  link: string;
+  requireLogin?: boolean;
 };
 
 export type LinkGeneratorProps = {

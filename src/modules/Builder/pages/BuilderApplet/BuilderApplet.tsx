@@ -15,6 +15,7 @@ import {
 } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
+import { builderSessionStorage } from 'shared/utils';
 
 import { newAppletTabs } from './BuilderApplet.const';
 import { AppletSchema } from './BuilderApplet.schema';
@@ -69,6 +70,13 @@ export const BuilderApplet = () => {
     const { getApplet } = applet.thunk;
     dispatch(getApplet({ appletId }));
   }, [appletId]);
+
+  useEffect(
+    () => () => {
+      builderSessionStorage.removeItem();
+    },
+    [],
+  );
 
   return (
     <FormProvider {...methods}>

@@ -38,8 +38,9 @@ export const Respondents = () => {
 
   const { getWorkspaceRespondents } = users.thunk;
 
-  const { searchValue, setSearchValue, ordering, ...tableProps } =
-    useTable(getWorkspaceRespondents);
+  const { searchValue, setSearchValue, ordering, ...tableProps } = useTable((params) =>
+    dispatch(getWorkspaceRespondents(params)),
+  );
 
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);

@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 
 import { getAppletPublicLinkApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
+import { theme } from 'shared/styles';
 
 import { StyledTitle } from '../AddUser.styles';
 import { LinkForm } from './LinkForm';
@@ -19,7 +20,7 @@ export const LinkGenerator = () => {
   const [linkPopupVisible, setLinkPopupVisible] = useState(false);
 
   const { execute } = useAsync(getAppletPublicLinkApi, (res) => {
-    res?.data?.inviteId && setInviteLink(res.data);
+    res?.data?.result && setInviteLink(res.data.result);
   });
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export const LinkGenerator = () => {
 
   return (
     <StyledWrapper>
-      <StyledTitle>{t('publicLink')}</StyledTitle>
+      <StyledTitle sx={{ mt: theme.spacing(4.9) }}>{t('publicLink')}</StyledTitle>
       {inviteLink ? (
         <LinkForm inviteLink={inviteLink} setInviteLink={setInviteLink} />
       ) : (

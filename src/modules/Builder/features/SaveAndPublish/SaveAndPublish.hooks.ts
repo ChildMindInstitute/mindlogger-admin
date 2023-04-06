@@ -172,7 +172,11 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
   }, [responseStatus]);
 
-  const handleSaveChangesSubmit = () => {
+  const handleSaveChangesDoNotSaveSubmit = () => {
+    setPromptVisible(false);
+    confirmNavigation();
+  };
+  const handleSaveChangesSaveSubmit = () => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     handleSaveAndPublishFirstClick();
@@ -258,7 +262,8 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     handleAppletPasswordSubmit,
     handlePublishProcessOnClose,
     handlePublishProcessOnRetry,
-    handleSaveChangesSubmit,
+    handleSaveChangesDoNotSaveSubmit,
+    handleSaveChangesSaveSubmit,
     cancelNavigation,
   };
 };

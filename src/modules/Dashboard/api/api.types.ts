@@ -4,7 +4,7 @@ export type GetUserData = { token: string };
 
 export type GetAppletsParams = {
   params: {
-    ownerId: string;
+    ownerId?: string;
     search?: string;
     page?: number;
     limit?: number;
@@ -130,15 +130,16 @@ export type GetUsersData = AppletId & {
 };
 
 export type AppletInvitationData = AppletId & {
+  url: string;
   options: {
     role: string;
     firstName: string;
     lastName: string;
-    nickName: string;
+    nickname: string;
     email: string;
-    MRN: string;
-    accountName: string;
-    users: string[];
+    secretUserId: string;
+    workspacePrefix: string;
+    respondents: string[];
   };
 };
 
