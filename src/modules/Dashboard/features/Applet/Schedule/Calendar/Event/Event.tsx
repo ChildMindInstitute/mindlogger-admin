@@ -2,10 +2,8 @@ import { format } from 'date-fns';
 
 import { Svg } from 'shared/components';
 import { DateFormats } from 'shared/consts';
-import theme from 'shared/styles/theme';
-import { StyledBodySmall, StyledLabelMedium } from 'shared/styles/styledComponents';
+import { theme, StyledBodySmall, StyledLabelMedium } from 'shared/styles';
 
-import { getEventEndTime } from '../Calendar.utils';
 import { EventProps, UiType } from './Event.types';
 import {
   StyledEndIcon,
@@ -23,12 +21,12 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
     startFlowIcon,
     start,
     end,
-    allDayEvent,
+    allDay,
     endAlertIcon,
     alwaysAvailable,
     isOffRange,
   } = event;
-  const isAllDayEvent = allDayEvent || alwaysAvailable;
+  const isAllDayEvent = allDay || alwaysAvailable;
   const isDefaultView = uiType === UiType.DefaultView;
   const isTimeView = uiType === UiType.TimeView;
   const isScheduledDayWeekEvent = isTimeView && !isAllDayEvent;
@@ -42,7 +40,9 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
     >
       <StyledWrapper className="event-top-section">
         <StyledLeftSection>
-          {isDefaultView && scheduledColor && <StyledIndicator bgColor={scheduledColor} />}
+          {!isAllDayEvent && isDefaultView && scheduledColor && (
+            <StyledIndicator bgColor={scheduledColor} />
+          )}
           {isDefaultView && !isAllDayEvent && (
             <StyledLabelMedium>{format(start, DateFormats.Time)}</StyledLabelMedium>
           )}
@@ -52,7 +52,7 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
                 {format(start, DateFormats.Time)}
               </StyledBodySmall>
               <StyledBodySmall className="event-end-time" sx={{ flexShrink: 0 }}>
-                {getEventEndTime(end)}
+                - {format(end, DateFormats.Time)}
               </StyledBodySmall>
             </>
           )}

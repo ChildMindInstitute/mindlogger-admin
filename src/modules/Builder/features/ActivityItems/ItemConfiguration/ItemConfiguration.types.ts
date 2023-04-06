@@ -1,7 +1,7 @@
 import { ColorResult } from 'react-color';
 import { FieldValues, Path } from 'react-hook-form';
 
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 import { ActivityItemApi } from 'modules/Builder/api';
 
 export enum ItemConfigurationSettings {
@@ -59,11 +59,11 @@ export type SelectionRowsOption = {
 export type SelectionRows = {
   items: SelectionRowsItem[];
   options: SelectionRowsOption[];
-  type: ItemInputTypes.MultipleSelectionPerRow | ItemInputTypes.SingleSelectionPerRow;
+  type: ItemResponseType.MultipleSelectionPerRow | ItemResponseType.SingleSelectionPerRow;
 };
 
 export type ItemConfigurationForm = {
-  itemsInputType: ItemInputTypes | '';
+  itemsInputType: ItemResponseType | '';
   name: string;
   body: string;
   settings: ItemConfigurationSettings[];
@@ -84,7 +84,7 @@ export type ItemConfigurationForm = {
 };
 
 export type ItemsOption = {
-  value: ItemInputTypes;
+  value: ItemResponseType;
   icon: JSX.Element;
 };
 
@@ -94,7 +94,7 @@ export type ItemsOptionGroup = {
 };
 
 export type OptionalItemSetupProps = {
-  itemType: ItemInputTypes;
+  itemType: ItemResponseType;
   name: Path<FieldValues>;
   defaultValue?: unknown;
 };

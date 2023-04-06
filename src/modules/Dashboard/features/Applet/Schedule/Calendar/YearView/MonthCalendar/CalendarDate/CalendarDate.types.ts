@@ -1,4 +1,4 @@
-import { CalendarEvent } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.types';
+import { CalendarEvent } from 'modules/Dashboard/state';
 
 export type CalendarDateProps = {
   dateToRender: Date;

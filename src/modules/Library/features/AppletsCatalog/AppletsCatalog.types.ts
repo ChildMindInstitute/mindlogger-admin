@@ -1,4 +1,4 @@
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 
 export type ItemOption = {
   title: string;
@@ -8,7 +8,7 @@ export type ItemOption = {
 export type Item = {
   id: string;
   question: string;
-  responseType: ItemInputTypes;
+  responseType: ItemResponseType;
   options?: ItemOption[];
 };
 

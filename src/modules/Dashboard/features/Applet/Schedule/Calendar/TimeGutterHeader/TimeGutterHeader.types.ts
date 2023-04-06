@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { AllDayEventsVisible, CalendarEvent, CalendarViews } from '../Calendar.types';
+import { CalendarEvent } from 'modules/Dashboard/state';
+
+import { AllDayEventsVisible, CalendarViews } from '../Calendar.types';
 
 export type TimeGutterHeaderProps = {
   date: Date;

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store';
+import { MetaStatus } from 'shared/state/Base';
 
 import * as thunk from './Applet.thunk';
 import { state as initialState } from './Applet.state';
@@ -28,7 +29,7 @@ export const applet = {
         },
       }) => data,
     ),
-  useStatus: (): AppletSchema['applet']['status'] =>
+  useResponseStatus: (): MetaStatus =>
     useAppSelector(
       ({
         applet: {
