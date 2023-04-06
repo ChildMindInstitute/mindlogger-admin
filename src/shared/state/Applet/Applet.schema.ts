@@ -78,15 +78,6 @@ export type ResponseValues =
   | SingleSelectItemResponseValues
   | SliderItemResponseValues;
 
-export type ResponseOption = {
-  value: number;
-  score: number;
-  id: string;
-  label: string;
-  image: string;
-  description: string;
-};
-
 export type Item = {
   id?: number;
   name: string;
