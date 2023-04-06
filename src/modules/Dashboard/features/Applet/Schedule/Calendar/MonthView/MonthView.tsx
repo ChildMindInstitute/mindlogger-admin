@@ -8,6 +8,7 @@ export type MonthViewType = typeof CalendarMonthView;
 export const MonthView = (props: MonthViewType) => {
   const monthRef = useRef<MonthViewType>();
   const { date, activeView } = props.components;
+  const { events } = props;
 
   useEffect(() => {
     (async () => {
@@ -19,7 +20,7 @@ export const MonthView = (props: MonthViewType) => {
       );
       const dayCellHeight = dayCellCollection[0]?.offsetHeight;
       const dateCellHeight = dateCellCollection[0]?.offsetHeight;
-      const eventElement = eventsElementsCollection[0];
+      const eventElement = await eventsElementsCollection[0];
 
       if (eventElement) {
         const eventHeight = eventElement.offsetHeight;
@@ -33,7 +34,7 @@ export const MonthView = (props: MonthViewType) => {
         monthRef.current?.setState({ rowLimit });
       }
     })();
-  }, [date, activeView]);
+  }, [events, date, activeView]);
 
   return <CalendarMonthView {...props} ref={monthRef} />;
 };

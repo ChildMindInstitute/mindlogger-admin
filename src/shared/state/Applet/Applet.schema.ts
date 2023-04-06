@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios';
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId } from 'api';
+import { ItemResponseType } from 'shared/consts';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -15,38 +16,26 @@ export type CreateAppletStateData = {
 };
 
 export type ActivityFlow = {
-  id: string;
+  id?: string;
   name: string;
-  description: string;
-  ordering: number;
+  description?: string | Record<string, string>;
+  ordering?: number;
   isSingleReport?: boolean;
   hideBadge?: boolean;
   activityIds?: number[];
   isHidden?: boolean;
 };
 
-export type Config = Record<string, string>;
-
-export type ResponseType =
-  | 'text'
-  | 'singleSelect'
-  | 'multiSelect'
-  | 'message'
-  | 'slider'
-  | 'numberSelect'
-  | 'timeRange'
-  | 'geolocation'
-  | 'drawing'
-  | 'photo'
-  | 'video'
-  | 'date'
-  | 'sliderRows'
-  | 'singleSelectRows'
-  | 'multiSelectRows'
-  | 'audio'
-  | 'audioPlayer'
-  | 'flanker'
-  | 'abTest';
+export type Config = {
+  remove_back_button: boolean;
+  skippable_item: boolean;
+  max_response_length: number;
+  correct_answer_required: boolean;
+  correct_answer: string;
+  numerical_response_required: boolean;
+  response_data_identifier: boolean;
+  response_required: boolean;
+};
 
 export type ResponseValues = Record<string, string>;
 
@@ -60,22 +49,21 @@ export type ResponseOption = {
 };
 
 export type Item = {
-  id: number;
+  id?: number;
   name: string;
-  question: Record<string, string>;
+  question: string | Record<string, string>;
   config: Config;
-  responseType: ResponseType;
-  responseValues: ResponseValues;
-  order: number;
-  responseOptions?: ResponseOption[];
+  responseType: '' | ItemResponseType;
+  responseValues: null | ResponseValues;
+  order?: number;
 };
 
 export type Activity = {
-  id: string;
+  id?: string;
   key?: string;
   name: string;
-  description: string;
-  ordering: number;
+  description: string | Record<string, string>;
+  ordering?: number;
   splashScreen?: string;
   image?: string;
   showAllAtOnce?: boolean;
@@ -98,16 +86,16 @@ type Theme = {
 };
 
 export type SingleApplet = {
-  id: string;
+  id?: string;
   displayName: string;
-  version: string;
-  description: Record<string, string>;
-  about: Record<string, string>;
-  createdAt: string;
-  updatedAt: string;
-  image?: string;
-  watermark?: string;
-  themeId?: string;
+  version?: string;
+  description: string | Record<string, string>;
+  about: string | Record<string, string>;
+  createdAt?: string;
+  updatedAt?: string;
+  image: string;
+  watermark: string;
+  themeId: string | null;
   reportServerIp?: string;
   reportPublicKey?: string;
   reportRecipients?: string[];
@@ -118,7 +106,8 @@ export type SingleApplet = {
   retentionType?: RetentionPeriods;
   activities: Activity[];
   activityFlows: ActivityFlow[];
-  theme: Theme;
+  theme?: Theme;
+  password?: string;
 };
 
 export type AppletSchema = {

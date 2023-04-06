@@ -8,13 +8,13 @@ import { applets } from 'modules/Dashboard/state';
 import { Calendar } from './Calendar';
 import { Legend } from './Legend';
 import { StyledLeftPanel, StyledSchedule } from './Schedule.styles';
-import { getPreparedEvents } from './Schedule.utils';
+import { usePreparedEvents } from './Schedule.hooks';
 
 export const Schedule = () => {
   const { t } = useTranslation('app');
   const { result: appletData } = applet.useAppletData() ?? {};
   const { result: eventsData } = applets.useEventsData() ?? {};
-  const preparedEvents = getPreparedEvents(appletData, eventsData);
+  const preparedEvents = usePreparedEvents(appletData, eventsData);
 
   useBreadcrumbs([
     {

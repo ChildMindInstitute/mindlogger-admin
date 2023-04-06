@@ -16,7 +16,7 @@ export const Applet = () => {
   const appletTabs = useAppletTabs();
   const { id: appletId } = useParams();
 
-  const hiddenHeader = location.pathname.includes('data');
+  const hiddenHeader = location.pathname.includes('dataviz');
 
   useEffect(() => {
     if (!appletId) return;

@@ -1,8 +1,6 @@
 import { MouseEvent } from 'react';
 
-import { variables } from 'shared/styles/variables';
-import { StyledLabelBoldMedium, StyledTitleLarge } from 'shared/styles/styledComponents';
-
+import { variables, StyledLabelBoldMedium, StyledTitleLarge } from 'shared/styles';
 import {
   allDayEventsSortedByDays,
   formatToWeekYear,
@@ -11,7 +9,8 @@ import {
   getMonthName,
   getMoreText,
   hiddenEventsIds,
-} from '../Calendar.utils';
+} from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+
 import { NameLength } from '../Calendar.types';
 import { TimeHeaderProps, UiType } from './TimeHeader.types';
 import { StyledMore, StyledWeekDayWrapper } from './TimeHeader.styles';

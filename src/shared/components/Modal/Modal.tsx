@@ -12,7 +12,7 @@ import {
 
 export const Modal = ({
   onClose,
-  onSubmit,
+  onSubmit = () => null,
   open,
   title,
   buttonText,
@@ -32,6 +32,7 @@ export const Modal = ({
   thirdBtnText,
   thirdBtnStyles = {},
   onThirdBtnSubmit,
+  hasActions = true,
 }: ModalProps) => {
   const getActionsAlign = () => {
     if (hasThirdBtn) {
@@ -50,41 +51,43 @@ export const Modal = ({
         </StyledCloseButton>
       </StyledDialogTitle>
       {children}
-      <StyledDialogActions actionsAlign={getActionsAlign()} sx={{ p: 0 }}>
-        {hasThirdBtn && (
-          <StyledButton
-            fontWeight="regular"
-            variant="text"
-            onClick={onThirdBtnSubmit}
-            sx={{ ...thirdBtnStyles }}
-          >
-            {thirdBtnText}
-          </StyledButton>
-        )}
-        <StyledDialogActions>
-          {hasSecondBtn && (
+      {hasActions && (
+        <StyledDialogActions actionsAlign={getActionsAlign()} sx={{ p: 0 }}>
+          {hasThirdBtn && (
             <StyledButton
               fontWeight="regular"
               variant="text"
-              disabled={disabledSecondBtn}
-              onClick={onSecondBtnSubmit}
-              sx={{ marginLeft: theme.spacing(1.6), ...secondBtnStyles }}
+              onClick={onThirdBtnSubmit}
+              sx={{ ...thirdBtnStyles }}
             >
-              {secondBtnText}
+              {thirdBtnText}
             </StyledButton>
           )}
-          {buttonText && (
-            <StyledButton
-              variant="text"
-              disabled={disabledSubmit}
-              onClick={onSubmit}
-              color={submitBtnColor}
-            >
-              {buttonText}
-            </StyledButton>
-          )}
+          <StyledDialogActions>
+            {hasSecondBtn && (
+              <StyledButton
+                fontWeight="regular"
+                variant="text"
+                disabled={disabledSecondBtn}
+                onClick={onSecondBtnSubmit}
+                sx={{ marginLeft: theme.spacing(1.6), ...secondBtnStyles }}
+              >
+                {secondBtnText}
+              </StyledButton>
+            )}
+            {buttonText && (
+              <StyledButton
+                variant="text"
+                disabled={disabledSubmit}
+                onClick={onSubmit}
+                color={submitBtnColor}
+              >
+                {buttonText}
+              </StyledButton>
+            )}
+          </StyledDialogActions>
         </StyledDialogActions>
-      </StyledDialogActions>
+      )}
     </StyledDialog>
   );
 };

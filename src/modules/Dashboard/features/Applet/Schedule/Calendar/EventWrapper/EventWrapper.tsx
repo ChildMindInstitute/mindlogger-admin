@@ -6,7 +6,6 @@ import { Tooltip } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 
 import { EventWrapperProps, UiType } from './EventWrapper.types';
-import { getEventEndTime } from '../Calendar.utils';
 
 export const EventWrapper = ({
   event: { title, id, start, end, isHiddenInTimeView },
@@ -21,7 +20,7 @@ export const EventWrapper = ({
 
   const tooltipTitle = (
     <>
-      <Box>{`${format(start, DateFormats.Time)}${getEventEndTime(end)}`}</Box>
+      <Box>{`${format(start, DateFormats.Time)} - ${format(end, DateFormats.Time)}`}</Box>
       <Box>{title}</Box>
     </>
   );

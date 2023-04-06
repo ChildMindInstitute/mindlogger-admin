@@ -1,19 +1,18 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
-import { page } from 'resources';
-import { StyledBuilderWrapper, StyledTitleMedium, theme } from 'shared/styles';
+import { StyledTitleMedium, theme } from 'shared/styles';
+import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
 
-import { Header, Item } from '../../components';
+import { Item } from '../../components';
 import { activityFlows, getActions } from './ActivityFlow.const';
 import { StyledAdd, StyledAddWrapper } from './ActivityFlow.styles';
+import { ActivityFlowHeader } from './ActivityFlowHeader';
 
 export const ActivityFlow = () => {
   const { t } = useTranslation('app');
-  const navigate = useNavigate();
 
   useBreadcrumbs([
     {
@@ -23,17 +22,7 @@ export const ActivityFlow = () => {
   ]);
 
   return (
-    <StyledBuilderWrapper>
-      <Header
-        title={t('activityFlow')}
-        buttons={[
-          {
-            icon: <Svg id="flow" />,
-            label: t('addActivityFlow'), // TODO add ActivityFlow Name on Edit
-            handleClick: () => navigate(page.builderAppletNewActivityFlow), // TODO add navigation on Edit
-          },
-        ]}
-      />
+    <BuilderContainer title={t('activityFlow')} Header={ActivityFlowHeader}>
       {activityFlows?.length ? (
         <>
           {activityFlows.map((item, i) => (
@@ -55,6 +44,6 @@ export const ActivityFlow = () => {
           {t('activityFlowIsRequired')}
         </StyledTitleMedium>
       )}
-    </StyledBuilderWrapper>
+    </BuilderContainer>
   );
 };

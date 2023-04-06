@@ -4,7 +4,7 @@ import { ColorResult } from 'react-color';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { ItemInputTypes } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 
@@ -64,8 +64,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
     const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
     const hasOptions =
-      selectedInputType === ItemInputTypes.SingleSelection ||
-      selectedInputType === ItemInputTypes.MultipleSelection;
+      selectedInputType === ItemResponseType.SingleSelection ||
+      selectedInputType === ItemResponseType.MultipleSelection;
     const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
     const hasColorPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
 
