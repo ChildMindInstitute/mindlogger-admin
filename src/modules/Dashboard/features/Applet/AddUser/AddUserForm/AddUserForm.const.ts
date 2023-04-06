@@ -11,18 +11,18 @@ export const Fields = {
   firstName: 'firstName',
   lastName: 'lastName',
   email: 'email',
-  MRN: 'MRN',
-  nickName: 'nickName',
-  accountName: 'accountName',
+  secretUserId: 'secretUserId',
+  nickname: 'nickname',
+  workspacePrefix: 'workspacePrefix',
   role: 'role',
-  users: 'users',
-  lang: 'lang',
+  respondents: 'respondents',
+  language: 'language',
 } as const;
 
 export const roles = [
   {
-    labelKey: Roles.User,
-    value: Roles.User,
+    labelKey: Roles.Respondent,
+    value: Roles.Respondent,
   },
   {
     labelKey: Roles.Manager,
@@ -68,9 +68,9 @@ export const fields: Field[] = [
 export const defaultValues = {
   firstName: '',
   lastName: '',
-  nickName: '',
+  nickname: '',
   email: '',
-  MRN: '',
-  role: Roles.User,
-  lang: Langs.en,
+  secretUserId: '',
+  role: Roles.Respondent,
+  language: Langs.en,
 };

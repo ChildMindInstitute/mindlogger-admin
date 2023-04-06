@@ -1,12 +1,12 @@
 import { Box, styled, TableContainer } from '@mui/material';
 
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
+import { variables, StyledFlexTopCenter } from 'shared/styles';
 
 export const StyledTableContainer = styled(TableContainer)`
   display: flex;
   flex-direction: column;
   height: 100%;
+  border-radius: ${variables.borderRadius.lg2};
 
   && .MuiTableRow-root.dragged-over {
     .MuiTableCell-body {

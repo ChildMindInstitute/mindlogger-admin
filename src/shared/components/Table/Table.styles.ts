@@ -1,14 +1,14 @@
 import { styled, TableContainer } from '@mui/material';
 
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+import { variables, StyledFlexTopCenter } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 import { UiType } from './Table.types';
 
 export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
   height: 100%;
   max-height: ${({ maxHeight }: { maxHeight: string; uiType: UiType }) => maxHeight};
+  border-radius: ${variables.borderRadius.lg2};
 
   ${({ uiType }) =>
     (uiType === UiType.Secondary || uiType === UiType.Tertiary) &&

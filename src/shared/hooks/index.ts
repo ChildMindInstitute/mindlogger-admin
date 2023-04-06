@@ -8,4 +8,3 @@ export * from './useTable';
 export * from './useBuilderSessionStorage';
 export * from './useBlocker';
 export * from './useCheckIfNewApplet';
-export * from './joinWihComma';

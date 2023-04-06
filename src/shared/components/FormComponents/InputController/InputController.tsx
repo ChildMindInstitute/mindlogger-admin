@@ -32,6 +32,7 @@ export const InputController = <T extends FieldValues>({
   onChange: handleCustomChange,
   helperText,
   isEmptyStringAllowed = false,
+  isErrorVisible = true,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -78,7 +79,7 @@ export const InputController = <T extends FieldValues>({
                 onChange={handleChange}
                 value={textFieldValue}
                 error={!!error || providedError}
-                helperText={error?.message || helperText}
+                helperText={isErrorVisible ? error?.message || helperText : ''}
                 InputProps={
                   isNumberType
                     ? {

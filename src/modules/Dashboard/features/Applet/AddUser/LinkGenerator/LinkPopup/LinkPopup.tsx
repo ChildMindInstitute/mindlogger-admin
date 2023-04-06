@@ -18,8 +18,8 @@ import { LinkPopupProps } from './LinkPopup.types';
 export const LinkPopup = ({ open, onClose, setInviteLink }: LinkPopupProps) => {
   const { t } = useTranslation('app');
   const { id } = useParams();
-  const { execute } = useAsync(postAppletPublicLinkApi, (res) => {
-    res?.data && setInviteLink(res.data);
+  const { execute } = useAsync(postAppletPublicLinkApi, async (res) => {
+    await setInviteLink(res?.data.result);
     onClose();
   });
 

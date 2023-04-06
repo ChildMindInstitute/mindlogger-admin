@@ -22,7 +22,8 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
     handleAppletPasswordSubmit,
     handlePublishProcessOnClose,
     handlePublishProcessOnRetry,
-    handleSaveChangesSubmit,
+    handleSaveChangesDoNotSaveSubmit,
+    handleSaveChangesSaveSubmit,
     cancelNavigation,
   } = useSaveAndPublishSetup(hasPrompt);
 
@@ -50,7 +51,8 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
       <SaveChangesPopup
         isPopupVisible={promptVisible}
         handleClose={cancelNavigation}
-        handleSubmit={handleSaveChangesSubmit}
+        handleDoNotSaveSubmit={handleSaveChangesDoNotSaveSubmit}
+        handleSaveSubmit={handleSaveChangesSaveSubmit}
       />
     </>
   );

@@ -7,6 +7,6 @@ export type Alert = {
 
 export type AlertProps = {
   removeAlert: (i: number) => void;
-  appendAlert: (item: Alert) => void;
+  appendAlert: () => void;
   alerts: Alert[];
 };

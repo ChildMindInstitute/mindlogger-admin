@@ -10,7 +10,8 @@ import { SaveChangesPopupProps } from './SaveChangesPopup.types';
 export const SaveChangesPopup = ({
   isPopupVisible,
   handleClose,
-  handleSubmit,
+  handleDoNotSaveSubmit,
+  handleSaveSubmit,
 }: SaveChangesPopupProps) => {
   const { appletId } = useParams();
 
@@ -18,14 +19,14 @@ export const SaveChangesPopup = ({
 
   const onDoNotSaveClick = () => {
     appletId && builderSessionStorage.removeItem();
-    handleSubmit();
+    handleDoNotSaveSubmit();
   };
 
   return (
     <Modal
       open={isPopupVisible}
       onClose={handleClose}
-      onSubmit={handleSubmit}
+      onSubmit={handleSaveSubmit}
       onSecondBtnSubmit={onDoNotSaveClick}
       onThirdBtnSubmit={handleClose}
       title={t('saveChanges')}

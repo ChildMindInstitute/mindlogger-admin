@@ -30,14 +30,3 @@ export const getWorkspaceManagers = createAsyncThunk(
     }
   },
 );
-
-export const getInvitations = createAsyncThunk(
-  'users/getInvitations',
-  async ({ id }: { id: string }, { rejectWithValue, signal }) => {
-    try {
-      return await getInvitationsApi({ appletId: id }, signal);
-    } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
-    }
-  },
-);

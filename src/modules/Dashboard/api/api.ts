@@ -116,15 +116,14 @@ export const revokeAppletUserApi = (
 export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}`, { signal });
 
-export const getAppletInvitationApi = (
-  { appletId, options }: AppletInvitationData,
+export const postAppletInvitationApi = (
+  { url, appletId, options }: AppletInvitationData,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/applet/${appletId}/inviteUser`,
-    {},
+    `/invitations/${appletId}/${url}`,
+    { ...options },
     {
-      params: { ...options, users: JSON.stringify(options.users) },
       signal,
     },
   );
@@ -151,10 +150,14 @@ export const validateAppletNameApi = ({ name }: ValidateAppletName, signal?: Abo
     signal,
   });
 
-export const getInvitationsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.get(`/applet/${appletId}/invitations`, {
+export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get('/invitations', {
+    params: restParams,
     signal,
   });
+};
 
 export const updatePinApi = ({ ownerId, accessId }: UpdatePin, signal?: AbortSignal) =>
   authApiClient.post(
@@ -312,14 +315,13 @@ export const getAppletLibraryUrlApi = ({ appletId }: AppletId, signal?: AbortSig
 export const postAppletPublicLinkApi = (
   { appletId, requireLogin }: PostAppletPublicLink,
   signal?: AbortSignal,
-) =>
-  authApiClient.post(`/applet/${appletId}/publicLink?requireLogin=${requireLogin}`, {}, { signal });
+) => authApiClient.post(`/applets/${appletId}/access_link`, { requireLogin }, { signal });
 
 export const getAppletPublicLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.get(`/applet/${appletId}/publicLink`, { signal });
+  authApiClient.get(`/applets/${appletId}/access_link`, { signal });
 
 export const deleteAppletPublicLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.delete(`/applet/${appletId}/publicLink`, { signal });
+  authApiClient.delete(`/applets/${appletId}/access_link`, { signal });
 
 export const getAppletInviteLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applet/${appletId}/inviteLink`, { signal });
