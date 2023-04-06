@@ -60,7 +60,7 @@ export const Respondents = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="respondent-outlined" width="13.5" height="15" />,
+      icon: 'respondent-outlined',
       label: t('respondents'),
     },
   ]);

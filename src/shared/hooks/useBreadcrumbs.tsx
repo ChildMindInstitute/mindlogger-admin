@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
 import { auth, folders, Breadcrumb, breadcrumbs, User, applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
@@ -14,7 +13,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { id, appletId, activityId, activityFlowId } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const location = useLocation();
+  const { pathname } = useLocation();
   const authData = auth.useData();
   const appletsFoldersData = folders.useFlattenFoldersApplets();
   const { firstName, lastName } = (authData?.user as User) || {};
@@ -28,23 +27,23 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     const newBreadcrumbs: Breadcrumb[] = [];
     const userName = `${firstName} ${lastName}`;
 
-    if (firstName && location.pathname.includes(page.dashboard)) {
+    if (firstName && pathname.includes(page.dashboard)) {
       newBreadcrumbs.push({
-        icon: <Svg id="home" width="14" height="16" />,
+        icon: 'home',
         label: t('userDashboard', { userName }),
         navPath: page.dashboard,
       });
     }
-    if (firstName && location.pathname.includes(page.builder)) {
+    if (firstName && pathname.includes(page.builder)) {
       newBreadcrumbs.push({
-        icon: <Svg id="builder" width="18" height="18" />,
+        icon: 'builder',
         label: t('userBuilder', { userName }),
         navPath: page.builder,
       });
     }
-    if (location.pathname.includes(page.library)) {
+    if (pathname.includes(page.library)) {
       newBreadcrumbs.push({
-        icon: <Svg id="library" width="18" height="18" />,
+        icon: 'library',
         label: t('appletLibrary'),
         navPath: page.library,
       });
@@ -57,9 +56,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         disabledLink: true,
       });
     }
-    if (checkIfAppletUrlPassed(location.pathname)) {
+    if (checkIfAppletUrlPassed(pathname)) {
       newBreadcrumbs.push({
-        icon: <Svg id="applet-outlined" width="18" height="18" />,
+        icon: 'applet-outlined',
         label: appletLabel,
         disabledLink: true,
       });
@@ -68,7 +67,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     if (activityId) {
       newBreadcrumbs.push(
         {
-          icon: <Svg id="checklist-outlined" width="18" height="18" />,
+          icon: 'checklist-outlined',
           label: t('activities'),
           navPath: generatePath(page.builderAppletActivities, { appletId, activityId }),
         },
@@ -80,10 +79,10 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       );
     }
 
-    if (checkIfAppletActivityFlowUrlPassed(location.pathname)) {
+    if (checkIfAppletActivityFlowUrlPassed(pathname)) {
       newBreadcrumbs.push(
         {
-          icon: <Svg id="flow" width="18" height="18" />,
+          icon: 'flow',
           label: t('activityFlow'),
           navPath: generatePath(page.builderAppletActivityFlow, {
             appletId,
@@ -100,11 +99,11 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
 
     setCrumbs([...newBreadcrumbs, ...(restCrumbs || [])]);
-  }, [t, firstName, lastName, appletsFoldersData, id, appletId, activityId]);
+  }, [t, firstName, lastName, appletsFoldersData, id, appletId, activityId, appletLabel, pathname]);
 
   useEffect(() => {
     if (crumbs?.length) {
       dispatch(breadcrumbs.actions.setBreadcrumbs(crumbs));
     }
-  }, [crumbs, dispatch, location]);
+  }, [crumbs, dispatch]);
 };

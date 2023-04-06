@@ -10,21 +10,16 @@ import {
 } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 
-import {
-  StyledLink,
-  StyledBox,
-  StyledIconWrapper,
-  StyledIconImg,
-  StyledPlaceholder,
-} from './Breadcrumbs.styles';
+import { StyledLink, StyledBox, StyledIconWrapper, StyledPlaceholder } from './Breadcrumbs.styles';
+import { BREADCRUMB_ICON_SIZE } from './Breadcrumbs.const';
 
 export const Breadcrumbs = () => {
   const breadcrumbsData = breadcrumbs.useData();
 
-  const getBreadcrumbIcon = (icon: string | JSX.Element, label: string) => (
+  const getBreadcrumbIcon = (icon: string, label: string) => (
     <StyledIconWrapper>
       {icon ? (
-        <>{typeof icon === 'string' ? <StyledIconImg src={icon} alt="Icon" /> : icon}</>
+        <Svg id={icon} width={BREADCRUMB_ICON_SIZE} height={BREADCRUMB_ICON_SIZE} />
       ) : (
         <StyledPlaceholder>
           <StyledLabelSmall color={variables.palette.on_surface}>

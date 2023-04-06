@@ -11,7 +11,7 @@ import {
   StyledFlexColumn,
 } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
-import { Svg, Tooltip, Uploader } from 'shared/components';
+import { Tooltip, Uploader } from 'shared/components';
 import { MAX_DESCRIPTION_LENGTH, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
@@ -25,7 +25,7 @@ export const ActivityAbout = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="more-info-outlined" width="18" height="18" />,
+      icon: 'more-info-outlined',
       label: t('aboutActivity'),
     },
   ]);

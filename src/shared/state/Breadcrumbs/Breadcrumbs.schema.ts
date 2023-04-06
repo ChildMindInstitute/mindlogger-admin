@@ -1,5 +1,5 @@
 export type Breadcrumb = {
-  icon: JSX.Element | string;
+  icon: string;
   label: string;
   navPath?: string;
   disabledLink?: boolean;

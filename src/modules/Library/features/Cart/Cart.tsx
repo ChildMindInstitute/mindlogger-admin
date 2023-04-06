@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'shared/hooks';
-import { EmptyTable, Svg } from 'shared/components';
+import { EmptyTable } from 'shared/components';
 import {
   theme,
   StyledBody,
@@ -32,7 +32,7 @@ export const Cart = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="cart-outlined" width="18" height="18" />,
+      icon: 'cart-outlined',
       label: t('cart'),
     },
   ]);
