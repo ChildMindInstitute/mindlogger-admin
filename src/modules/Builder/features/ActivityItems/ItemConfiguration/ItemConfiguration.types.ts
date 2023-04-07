@@ -28,6 +28,7 @@ export enum ItemConfigurationSettings {
 }
 
 export type SelectionOption = {
+  id: string;
   text: string;
   score?: number;
   tooltip?: string;
@@ -39,11 +40,14 @@ export type SelectionOption = {
 export type Alert = {
   message: string;
   option: string;
-  item: string;
+  item?: string;
+  slider?: string;
+  min?: string;
+  max?: string;
 };
 
 export type SelectionRowsItem = {
-  id?: string;
+  id: string;
   label: string;
   tooltip?: string;
   scores?: number[];
@@ -51,6 +55,7 @@ export type SelectionRowsItem = {
 };
 
 export type SelectionRowsOption = {
+  id: string;
   label: string;
   tooltip?: string;
   image?: string;
@@ -108,6 +113,7 @@ export type SliderOption = {
   minImage?: string;
   maxImage?: string;
   scores: number[];
+  label?: string;
 };
 
 export type ItemConfigurationProps = {
