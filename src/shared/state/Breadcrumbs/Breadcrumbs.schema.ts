@@ -4,6 +4,7 @@ export type Breadcrumb = {
   navPath?: string;
   disabledLink?: boolean;
   hasUrl?: boolean;
+  key?: string;
 };
 
 export type BreadcrumbsSchema = {

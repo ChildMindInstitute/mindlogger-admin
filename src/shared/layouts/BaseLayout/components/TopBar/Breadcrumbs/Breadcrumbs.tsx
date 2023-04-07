@@ -1,5 +1,4 @@
 import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
-import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'shared/components/Svg';
 import { breadcrumbs } from 'redux/modules';
@@ -46,9 +45,9 @@ export const Breadcrumbs = () => {
 
   return (
     <MuiBreadcrumbs separator={<Svg id="separator" width="8" height="12" />}>
-      {breadcrumbsData?.map(({ icon, label, navPath, disabledLink, hasUrl }, index) =>
+      {breadcrumbsData?.map(({ icon, label, navPath, disabledLink, hasUrl, key }, index) =>
         index === breadcrumbsData.length - 1 || disabledLink ? (
-          <StyledBox key={uniqueId()}>
+          <StyledBox key={key}>
             {getBreadcrumbIcon(icon, label, hasUrl)}
             {disabledLink ? (
               <StyledBodySmall color={variables.palette.on_surface_variant}>
@@ -59,7 +58,7 @@ export const Breadcrumbs = () => {
             )}
           </StyledBox>
         ) : (
-          <StyledLink key={uniqueId()} to={navPath || ''}>
+          <StyledLink key={key} to={navPath || ''}>
             {getBreadcrumbIcon(icon, label, hasUrl)}
             <StyledBodySmall color={variables.palette.on_surface_variant}>{label}</StyledBodySmall>
           </StyledLink>

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import uniqueId from 'lodash.uniqueid';
 
 import { auth, folders, Breadcrumb, breadcrumbs, User, applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
@@ -96,7 +97,10 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       );
     }
 
-    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])];
+    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])].map((crumbs) => ({
+      ...crumbs,
+      key: uniqueId(),
+    }));
     dispatch(breadcrumbs.actions.setBreadcrumbs(updatedBreadcrumbs));
   }, [
     t,
