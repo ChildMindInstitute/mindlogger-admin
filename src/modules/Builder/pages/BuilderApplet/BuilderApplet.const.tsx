@@ -1,7 +1,7 @@
 import { Svg } from 'shared/components';
 import { Path } from 'shared/utils';
 
-export const newAppletTabs = [
+export const builderAppletTabs = [
   {
     labelKey: 'aboutApplet',
     icon: <Svg id="more-info-outlined" />,

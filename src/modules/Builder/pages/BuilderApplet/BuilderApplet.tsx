@@ -15,7 +15,7 @@ import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 import { builderSessionStorage } from 'shared/utils';
 
-import { newAppletTabs } from './BuilderApplet.const';
+import { builderAppletTabs } from './BuilderApplet.const';
 import { AppletSchema } from './BuilderApplet.schema';
 import { getDefaultValues } from './BuilderApplet.utils';
 import { AppletFormValues } from './BuilderApplet.types';
@@ -62,6 +62,7 @@ export const BuilderApplet = () => {
   useEffect(
     () => () => {
       builderSessionStorage.removeItem();
+      dispatch(applet.actions.removeApplet());
     },
     [],
   );
@@ -69,7 +70,7 @@ export const BuilderApplet = () => {
   return (
     <FormProvider {...methods}>
       <StyledBody sx={{ position: 'relative' }}>
-        <LinkedTabs hiddenHeader={hiddenHeader} tabs={newAppletTabs} />
+        <LinkedTabs hiddenHeader={hiddenHeader} tabs={builderAppletTabs} />
         <SaveAndPublish hasPrompt={methods.formState.isDirty} />
       </StyledBody>
     </FormProvider>

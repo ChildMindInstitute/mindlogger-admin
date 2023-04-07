@@ -1,3 +1,8 @@
+import storage from 'shared/utils/storage';
+import { auth } from 'modules/Auth';
+import { applet } from 'shared/state';
+import { useCheckIfNewApplet } from 'shared/hooks';
+
 export const removeAppletExtraFields = () => ({
   createdAt: undefined,
   updatedAt: undefined,
@@ -9,3 +14,28 @@ export const removeAppletExtraFields = () => ({
 });
 
 export const removeActivityExtraFields = () => ({ order: undefined, id: undefined });
+
+const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
+
+export const usePasswordFromStorage = () => {
+  const isNewApplet = useCheckIfNewApplet();
+  const userData = auth.useData();
+  const ownerId = String(userData?.user?.id) || '';
+  const { result: appletData } = applet.useAppletData() ?? {};
+
+  const getPassword = () => {
+    if (isNewApplet) return '';
+    const appletId = appletData?.id ?? '';
+
+    return storage.getItem(getPasswordKey(ownerId, appletId)) as string;
+  };
+
+  const setPassword = (appletId: string, password: string) => {
+    storage.setItem(getPasswordKey(ownerId, appletId), password);
+  };
+
+  return {
+    getPassword,
+    setPassword,
+  };
+};

@@ -623,5 +623,6 @@
   "sliderItemTask": "Tâche d'élément de curseur",
   "flankerItemTask": "Tâche d'élément dérivé",
   "abTestItemTask": "Tâche d'élément de test AB",
-  "unsupportedResponseItem": "Ce type de données ne peut pas être affiché sur cette page"
+  "unsupportedResponseItem": "Ce type de données ne peut pas être affiché sur cette page",
+  "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants"
 }

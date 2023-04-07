@@ -18,7 +18,11 @@ import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPu
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { appletInfoMocked, activityItemsMocked } from './mock';
-import { removeAppletExtraFields, removeActivityExtraFields } from './SaveAndPublish.utils';
+import {
+  removeAppletExtraFields,
+  removeActivityExtraFields,
+  usePasswordFromStorage,
+} from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
   const pathname = window.location.pathname;
@@ -52,6 +56,7 @@ export const useAppletData = () => {
         description: appletDescription,
         about: appletAbout,
         themeId: null, // TODO: create real themeId
+        activityFlows: [],
         ...removeAppletExtraFields(),
       };
     }
@@ -160,11 +165,11 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const [isPasswordPopupOpened, setIsPasswordPopupOpened] = useState(false);
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
   const [publishProcessStep, setPublishProcessStep] = useState<SaveAndPublishSteps>();
-  const [appletPassword, setAppletPassword] = useState('');
   const responseStatus = applet.useResponseStatus();
   const { cancelNavigation, confirmNavigation, promptVisible, setPromptVisible } =
     usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
+  const { getPassword, setPassword } = usePasswordFromStorage();
 
   useEffect(() => {
     responseStatus === 'loading' && setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
@@ -181,7 +186,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPromptVisible(false);
     handleSaveAndPublishFirstClick();
   };
-  const handleSaveAndPublishFirstClick = () => {
+  const handleSaveAndPublishFirstClick = async () => {
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
     const hasNoItems = !checkIfHasAtLeastOneItem();
     setPublishProcessPopupOpened(true);
@@ -198,19 +203,24 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     }
 
     setPublishProcessPopupOpened(false);
-    setIsPasswordPopupOpened(true);
+    await sendRequestWithPasswordCheck();
   };
 
   const handlePublishProcessOnClose = () => {
     setPublishProcessPopupOpened(false);
     setPublishProcessStep(undefined);
   };
-  const handlePublishProcessOnRetry = async () => {
-    await sendRequest(appletPassword);
+  const sendRequestWithPasswordCheck = async () => {
+    const password = getPassword();
+    if (!password) {
+      setIsPasswordPopupOpened(true);
+
+      return;
+    }
+    await sendRequest(password);
   };
 
   const handleAppletPasswordSubmit = async ({ appletPassword }: EnterAppletPasswordForm) => {
-    setAppletPassword(appletPassword);
     await sendRequest(appletPassword);
   };
 
@@ -228,8 +238,9 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
+      const updatedAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
-      setAppletPassword('');
+      setPassword(updatedAppletId, appletPassword);
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
@@ -238,17 +249,20 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
 
       appletId && navigate(getBuilderAppletUrl(appletId));
     }
+    if (updateApplet.rejected.match(result)) {
+      setPassword(appletId!, '');
+    }
 
     if (createApplet.fulfilled.match(result)) {
+      const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
-      setAppletPassword('');
+      setPassword(createdAppletId, appletPassword);
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
         return;
       }
 
-      const createdAppletId = result.payload.data.result?.id;
       createdAppletId && navigate(getBuilderAppletUrl(createdAppletId));
     }
   };
@@ -263,7 +277,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     handleSaveAndPublishFirstClick,
     handleAppletPasswordSubmit,
     handlePublishProcessOnClose,
-    handlePublishProcessOnRetry,
+    handlePublishProcessOnRetry: sendRequestWithPasswordCheck,
     handleSaveChangesDoNotSaveSubmit,
     handleSaveChangesSaveSubmit,
     cancelNavigation,
