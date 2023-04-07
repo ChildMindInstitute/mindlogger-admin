@@ -745,5 +745,7 @@
   "unsupportedResponseItem": "This data type can’t be displayed on this page",
   "noRespondentsYet": "No respondents yet.",
   "deleteActivity": "Delete Activity",
-  "deleteActivityDescription": "Are you sure you want to delete the Activity <1>{{ activityName }}</1>?"
+  "deleteActivityDescription": "Are you sure you want to delete the Activity <1>{{ activityName }}</1>?",
+  "showMore": "Show More...",
+  "showLess": "Show Less..."
 }

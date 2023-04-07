@@ -83,7 +83,7 @@ export type Item = {
   name: string;
   question: string | Record<string, string>;
   config: Config;
-  responseType: '' | ItemResponseType;
+  responseType: ItemResponseType;
   responseValues: ResponseValues;
   order?: number;
 };
