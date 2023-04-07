@@ -41,17 +41,22 @@ export const BuilderApplet = () => {
     resolver: yupResolver(AppletSchema()),
     mode: 'onChange',
   });
+  const {
+    reset,
+    watch,
+    control,
+    getValues,
+    formState: { isDirty },
+  } = methods;
 
   useEffect(() => {
-    if (loadingStatus === 'success' && !isNewApplet) methods.reset(getFormValues());
-    if (isNewApplet) methods.reset(getDefaultValues());
+    if (loadingStatus === 'success' && !isNewApplet) reset(getFormValues());
+    if (isNewApplet) reset(getDefaultValues());
   }, [loadingStatus, isNewApplet]);
 
-  const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(
-    methods.getValues,
-  );
+  const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(getValues);
 
-  methods.watch((_, { type, name }) => {
+  watch((_, { type, name }) => {
     if (type === 'change' || !!name) handleFormChange();
   });
 
@@ -79,7 +84,7 @@ export const BuilderApplet = () => {
   );
 
   const { errors } = useFormState({
-    control: methods.control,
+    control,
     name: ['displayName', 'activityFlows', 'activities'],
   });
 
@@ -93,7 +98,7 @@ export const BuilderApplet = () => {
     <FormProvider {...methods}>
       <StyledBody sx={{ position: 'relative' }}>
         <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
-        <SaveAndPublish hasPrompt={methods.formState.isDirty} />
+        <SaveAndPublish hasPrompt={isDirty} />
       </StyledBody>
     </FormProvider>
   );
