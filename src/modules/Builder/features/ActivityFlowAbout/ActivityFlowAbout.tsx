@@ -43,13 +43,12 @@ export const ActivityFlowAbout = () => {
   ]);
 
   useEffect(() => {
-    if (activityFlowIndex === -1) {
-      navigate(
-        generatePath(page.builderAppletActivityFlow, {
-          appletId,
-        }),
-      );
-    }
+    if (activityFlowIndex !== -1) return;
+    navigate(
+      generatePath(page.builderAppletActivityFlow, {
+        appletId,
+      }),
+    );
   }, [activityFlowIndex]);
 
   return (
