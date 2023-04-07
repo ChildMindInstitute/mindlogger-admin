@@ -27,14 +27,14 @@ import {
 } from './AddUserForm.styles';
 import { Fields, fields, defaultValues, langs, roles } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
-import { AddUserFormProps, FormValues, WworkspaceInfo } from './AddUserForm.types';
+import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types';
 import { getUrl } from './AddUserForm.utils';
 
 export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const { id } = useParams();
   const { t } = useTranslation('app');
 
-  const [workspaceInfo, setWorkspaceInfo] = useState<WworkspaceInfo | null>(null);
+  const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);
   const workspaceNameVisible = !workspaceInfo?.hasManagers;
 
   const { ownerId } = workspaces.useData() || {};
@@ -102,7 +102,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
       unregister(nickname);
       unregister(secretUserId);
       unregister(respondents);
-      workspaceNameVisible && register(workspacePrefix, { value: workspaceInfo?.name });
+      workspaceNameVisible && register(workspacePrefix, { value: workspaceInfo?.name || '' });
     }
 
     if (value === Roles.Respondent) {
