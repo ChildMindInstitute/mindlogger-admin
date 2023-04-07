@@ -36,7 +36,9 @@ export const ActivityItems = () => {
   };
 
   const handleAddItem = () => {
-    appendItem(getNewActivityItem());
+    const item = getNewActivityItem();
+    appendItem(item);
+    setActiveItemId(item.id);
   };
 
   useBreadcrumbs([

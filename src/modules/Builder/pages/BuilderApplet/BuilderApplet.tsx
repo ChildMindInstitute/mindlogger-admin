@@ -74,6 +74,7 @@ export const BuilderApplet = () => {
   useEffect(
     () => () => {
       builderSessionStorage.removeItem();
+      dispatch(applet.actions.removeApplet());
     },
     [],
   );

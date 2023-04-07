@@ -42,5 +42,6 @@ export const variables = {
     border: 'border 0.15s',
     opacity: 'opacity 0.3s',
     boxShadow: 'box-shadow 0.3s',
+    width: 'width 0.3s ease-in',
   },
 };
