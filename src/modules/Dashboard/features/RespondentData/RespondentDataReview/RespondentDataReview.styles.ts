@@ -8,10 +8,11 @@ export const StyledReviewContainer = styled(StyledFlexAllCenter)`
   width: 100%;
   height: 100%;
   position: relative;
+  overflow-y: auto;
 `;
 
 export const StyledFeedbackBtn = styled(StyledTextBtn)`
   position: absolute;
-  top: 3rem;
+  top: 2rem;
   right: 8rem;
 `;

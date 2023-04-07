@@ -37,7 +37,46 @@ export type Config = {
   response_required: boolean;
 };
 
-export type ResponseValues = Record<string, string>;
+export type SliderItemResponseValues = {
+  minLabel: string | null;
+  maxLabel: string | null;
+  minValue: number;
+  maxValue: number;
+  minImage: string | null;
+  maxImage: string | null;
+};
+
+export type SingleSelectItemResponseValues = {
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    score: number | null;
+    tooltip: string | null;
+    color: string | null;
+    isHidden: boolean;
+  }>;
+};
+
+export type MultiSelectItemResponseValues = {
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    score: number | null;
+    tooltip: string | null;
+    color: string | null;
+    isHidden: boolean;
+  }>;
+};
+
+export type TextItemResponseValues = null;
+
+export type ResponseValues =
+  | TextItemResponseValues
+  | MultiSelectItemResponseValues
+  | SingleSelectItemResponseValues
+  | SliderItemResponseValues;
 
 export type Item = {
   id?: number;
@@ -45,9 +84,33 @@ export type Item = {
   question: string | Record<string, string>;
   config: Config;
   responseType: '' | ItemResponseType;
-  responseValues: null | ResponseValues;
+  responseValues: ResponseValues;
   order?: number;
 };
+
+export interface TextItem extends Item {
+  responseType: ItemResponseType.Text;
+  config: Config;
+  responseValues: TextItemResponseValues;
+}
+
+export interface SingleSelectItem extends Item {
+  responseType: ItemResponseType.SingleSelection;
+  config: Config;
+  responseValues: SingleSelectItemResponseValues;
+}
+
+export interface MultiSelectItem extends Item {
+  responseType: ItemResponseType.MultipleSelection;
+  config: Config;
+  responseValues: MultiSelectItemResponseValues;
+}
+
+export interface SliderItem extends Item {
+  responseType: ItemResponseType.Slider;
+  config: Config;
+  responseValues: SliderItemResponseValues;
+}
 
 export type Activity = {
   id?: string;

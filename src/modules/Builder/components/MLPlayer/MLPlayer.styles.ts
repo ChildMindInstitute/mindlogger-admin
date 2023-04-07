@@ -1,4 +1,4 @@
-import { Box, styled } from '@mui/material';
+import { Box, Slider, styled } from '@mui/material';
 
 import {
   StyledEllipsisText,
@@ -40,4 +40,15 @@ export const StyledNameWrapper = styled(StyledFlexTopCenter)`
 
 export const StyledFooter = styled(StyledFlexTopStart)`
   justify-content: space-between;
+`;
+
+export const StyledSlider = styled(Slider)`
+  .MuiSlider-thumb {
+    display: none;
+  }
+
+  .MuiSlider-track {
+    height: 0.2rem;
+    color: ${variables.palette.primary};
+  },
 `;
