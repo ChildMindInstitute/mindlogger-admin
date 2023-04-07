@@ -28,7 +28,8 @@ export type ActivityFlowFormValues = {
   name: string;
   description: string;
   isSingleReport?: boolean;
-  activityIds?: number[];
+  hideBadge?: boolean;
+  items?: { activityKey: string };
   isHidden?: boolean;
 };
 

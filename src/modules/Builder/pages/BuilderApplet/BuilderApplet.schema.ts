@@ -29,6 +29,25 @@ export const ActivitySchema = () =>
     isHidden: yup.boolean(),
   });
 
+export const ActivityFlowItemSchema = () =>
+  yup
+    .object({
+      activityKey: yup.string(),
+    })
+    .required();
+
+export const ActivityFlowSchema = () =>
+  yup
+    .object({
+      name: yup.string().required(getIsRequiredValidateMessage('activityFlowName')),
+      description: yup.string().required(getIsRequiredValidateMessage('activityFlowDescription')),
+      isSingleReport: yup.boolean(),
+      hideBadge: yup.boolean(),
+      items: yup.array().of(ActivityFlowItemSchema()).min(1),
+      isHidden: yup.boolean(),
+    })
+    .required();
+
 export const AppletSchema = () =>
   yup.object({
     displayName: yup.string().required(getIsRequiredValidateMessage('appletName')),
@@ -38,4 +57,5 @@ export const AppletSchema = () =>
     image: yup.string(),
     watermark: yup.string(),
     activities: yup.array().of(ActivitySchema()).min(1),
+    activityFlows: yup.array().of(ActivityFlowSchema()).required(),
   });

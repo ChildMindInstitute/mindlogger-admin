@@ -5,7 +5,8 @@ import i18n from 'i18n';
 import { Svg } from 'shared/components';
 import { page } from 'resources';
 import { SingleApplet } from 'shared/state';
-import { getDictionaryText, Path } from 'shared/utils';
+import { getDictionaryText } from 'shared/utils';
+import { Item } from 'shared/state/Applet';
 
 import { ActivityFormValues } from './BuilderApplet.types';
 
@@ -47,7 +48,21 @@ export const getNewActivityItem = () => ({
 
 export const getNewActivityFlow = () => ({
   id: uuidv4(),
+  name: '',
+  description: '',
+  isSingleReport: false,
+  hideBadge: false,
 });
+
+const getActivityItems = (items: Item[]) =>
+  items
+    ? items.map((item) => ({
+        ...item,
+        id: `${item.id}`,
+        question: getDictionaryText(item.question),
+        responseType: item.responseType,
+      }))
+    : [];
 
 export const getDefaultValues = (appletData?: SingleApplet) => {
   if (!appletData) return getNewApplet();
@@ -60,17 +75,10 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
       ? appletData.activities.map((activity) => ({
           ...activity,
           description: getDictionaryText(activity.description),
-          items: activity.items
-            ? activity.items.map((item) => ({
-                ...item,
-                id: `${item.id}`,
-                question: getDictionaryText(item.question),
-                responseType: item.responseType,
-              }))
-            : [],
+          items: getActivityItems(activity.items),
         }))
       : [],
-    activityFlows: appletData?.activityFlows.map((activityFlow) => ({
+    activityFlows: appletData.activityFlows.map((activityFlow) => ({
       ...activityFlow,
       description: getDictionaryText(activityFlow.description),
     })),

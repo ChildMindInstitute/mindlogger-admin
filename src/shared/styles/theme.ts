@@ -403,7 +403,7 @@ export const theme = createTheme({
     MuiRadio: {
       styleOverrides: {
         root: {
-          '.MuiSvgIcon-root': {
+          '&:not(.Mui-disabled) .MuiSvgIcon-root': {
             color: variables.palette.primary,
           },
         },
@@ -529,20 +529,6 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           color: variables.palette.primary,
-        },
-      },
-    },
-    MuiSlider: {
-      styleOverrides: {
-        root: {
-          color: variables.palette.surface,
-          '& .MuiSlider-thumb': {
-            display: 'none',
-          },
-          '& .MuiSlider-track': {
-            height: '0.2rem',
-            color: variables.palette.primary,
-          },
         },
       },
     },

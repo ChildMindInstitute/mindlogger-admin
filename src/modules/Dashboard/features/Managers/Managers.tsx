@@ -23,9 +23,17 @@ export const Managers = () => {
 
   const { getWorkspaceManagers } = users.thunk;
 
-  const { searchValue, setSearchValue, ...tableProps } = useTable((params) =>
-    dispatch(getWorkspaceManagers(params)),
-  );
+  const { searchValue, setSearchValue, ...tableProps } = useTable((args) => {
+    const params = {
+      ...args,
+      params: {
+        ...args.params,
+        ...(id && { appletId: id }),
+      },
+    };
+
+    return dispatch(getWorkspaceManagers({ ...params, ...(id && { appletId: id }) }));
+  });
 
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);

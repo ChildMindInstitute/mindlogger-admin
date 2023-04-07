@@ -1,7 +1,7 @@
+import { itemsTypeIcons } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
 
-import { itemsTypeIcons } from '../ActivityItems.const';
 import { ItemsOptionGroup } from './ItemConfiguration.types';
 
 export const DEFAULT_TIMER_VALUE = 100;
@@ -29,7 +29,7 @@ export const DEFAULT_EMPTY_SLIDER_ROWS = {
   sliderLabel: '',
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
-export const DEFAULT_MAX_CHARACTERS = 72;
+export const DEFAULT_MAX_CHARACTERS = 300;
 export const DEFAULT_EMPTY_SELECTION_ROWS_OPTION = { label: '', tooltip: '', image: '' };
 export const DEFAULT_EMPTY_SELECTION_ROWS_ITEM = { label: '', tooltip: '', image: '', scores: [] };
 export const DEFAULT_SELECTION_ROWS_SCORE = 1;

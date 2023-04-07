@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
+import { Item } from 'modules/Builder/components';
 
-import { Item } from '../../components';
 import { activities, getActions } from './ActivityFlowBuilder.const';
 import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
 

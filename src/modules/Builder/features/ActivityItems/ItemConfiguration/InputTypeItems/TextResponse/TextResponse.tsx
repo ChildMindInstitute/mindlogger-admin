@@ -9,6 +9,7 @@ import { TextResponseProps } from './TextResponse.types';
 import { StyledMaxCharacters, StyledRow, StyledTextField } from './TextResponse.styles';
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 import { DEFAULT_MAX_CHARACTERS } from '../../ItemConfiguration.const';
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export const TextResponse = <T extends FieldValues>({
   name,
@@ -16,7 +17,7 @@ export const TextResponse = <T extends FieldValues>({
 }: TextResponseProps<T>) => {
   const { t } = useTranslation('app');
 
-  const { control } = useOptionalItemSetup({
+  const { control, watch } = useOptionalItemSetup({
     itemType: ItemResponseType.Text,
     name,
     defaultValue: '',
@@ -27,6 +28,12 @@ export const TextResponse = <T extends FieldValues>({
     name: maxCharacters,
     defaultValue: DEFAULT_MAX_CHARACTERS,
   });
+
+  const settings = watch('settings');
+
+  const isCorrectAnswerRequired = settings?.includes(
+    ItemConfigurationSettings.IsCorrectAnswerRequired,
+  );
 
   return (
     <ItemOptionContainer title={t('textResponseTitle')} description={t('textResponseDescription')}>
@@ -41,7 +48,9 @@ export const TextResponse = <T extends FieldValues>({
           />
         </StyledMaxCharacters>
       </StyledRow>
-      <InputController name={name} control={control} label={t('correctAnswer')} />
+      {isCorrectAnswerRequired && (
+        <InputController name={name} control={control} label={t('correctAnswer')} />
+      )}
     </ItemOptionContainer>
   );
 };

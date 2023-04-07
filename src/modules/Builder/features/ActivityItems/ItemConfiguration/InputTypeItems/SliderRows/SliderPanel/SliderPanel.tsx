@@ -1,10 +1,10 @@
-import { useState, ChangeEvent } from 'react';
-import { useFormContext, FieldValues } from 'react-hook-form';
+import { useState, ChangeEvent, useEffect } from 'react';
+import { useFormContext, FieldValues, FieldError } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { UploaderUiType, Uploader, Table, UiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { theme, StyledFlexTopCenter } from 'shared/styles';
+import { theme, StyledFlexTopCenter, StyledBodyMedium, variables } from 'shared/styles';
 import {
   SLIDER_LABEL_MAX_LENGTH,
   DEFAULT_SLIDER_MIN_NUMBER,
@@ -42,10 +42,13 @@ export const SliderPanel = <T extends FieldValues>({
   onRemove,
 }: SliderPanelProps<T>) => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [error, setError] = useState<FieldError | undefined>();
 
   const { t } = useTranslation('app');
 
-  const { control, watch, setValue, getValues } = useFormContext();
+  const { control, watch, setValue, getValues, getFieldState, formState } = useFormContext();
+
+  const scoresError = getFieldState(`${name as string}.scores`, formState);
 
   const { id, min, max, scores } = watch(name);
   const settings = watch('settings');
@@ -119,6 +122,11 @@ export const SliderPanel = <T extends FieldValues>({
   };
 
   const marks = hasTickMarks && getMarks(min, max, hasTickMarksLabels);
+
+  useEffect(() => {
+    const errors = scoresError.error as unknown as FieldError[] | undefined;
+    setError(errors?.filter((error) => error)?.[0]);
+  }, [scoresError]);
 
   return (
     <StyledSliderPanelContainer
@@ -195,20 +203,27 @@ export const SliderPanel = <T extends FieldValues>({
         </StyledFlexTopCenter>
       </StyledInputContainer>
       {hasScores && (
-        <StyledScoresContainer>
-          <Table
-            columns={getStaticHeadRow()}
-            rows={getStaticBodyRow()}
-            orderBy="0"
-            uiType={UiType.Secondary}
-          />
-          <Table
-            columns={getHeadCells(min, max)}
-            rows={getTableRows(scores, name)}
-            orderBy="0"
-            uiType={UiType.Secondary}
-          />
-        </StyledScoresContainer>
+        <>
+          <StyledScoresContainer>
+            <Table
+              columns={getStaticHeadRow()}
+              rows={getStaticBodyRow()}
+              orderBy="0"
+              uiType={UiType.Secondary}
+            />
+            <Table
+              columns={getHeadCells(min, max)}
+              rows={getTableRows(scores, name)}
+              orderBy="0"
+              uiType={UiType.Secondary}
+            />
+          </StyledScoresContainer>
+          {error && (
+            <StyledBodyMedium color={variables.palette.semantic.error}>
+              {error.message}
+            </StyledBodyMedium>
+          )}
+        </>
       )}
     </StyledSliderPanelContainer>
   );

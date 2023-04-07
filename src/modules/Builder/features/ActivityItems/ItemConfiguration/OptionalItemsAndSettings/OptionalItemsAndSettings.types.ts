@@ -43,5 +43,6 @@ export type SettingsSetupProps = {
   removeOptions?: () => void;
   handleAddOption?: () => void;
   removeAlert?: () => void;
+  handleAddAlert?: () => void;
   setShowColorPalette?: Dispatch<SetStateAction<boolean>>;
 };

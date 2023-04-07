@@ -38,9 +38,17 @@ export const Respondents = () => {
 
   const { getWorkspaceRespondents } = users.thunk;
 
-  const { searchValue, setSearchValue, ordering, ...tableProps } = useTable((params) =>
-    dispatch(getWorkspaceRespondents(params)),
-  );
+  const { searchValue, setSearchValue, ordering, ...tableProps } = useTable((args) => {
+    const params = {
+      ...args,
+      params: {
+        ...args.params,
+        ...(id && { appletId: id }),
+      },
+    };
+
+    return dispatch(getWorkspaceRespondents(params));
+  });
 
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
@@ -89,6 +97,7 @@ export const Respondents = () => {
             limit: DEFAULT_ROWS_PER_PAGE,
             search: searchValue,
             page: tableProps.page,
+            ...(id && { appletId: id }),
             ...(ordering && { ordering }),
           },
         }),
