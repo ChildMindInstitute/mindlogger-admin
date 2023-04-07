@@ -29,7 +29,7 @@ export const ActivityFlowAbout = () => {
 
   const activityFlows: (Omit<ActivityFlowType, 'description'> & { description: string })[] =
     watch('activityFlows');
-  const index = activityFlows.findIndex((flow) => flow.id === activityFlowId);
+  const activityFlowIndex = activityFlows.findIndex((flow) => flow.id === activityFlowId);
   const commonProps = {
     fullWidth: true,
     control,
@@ -43,14 +43,14 @@ export const ActivityFlowAbout = () => {
   ]);
 
   useEffect(() => {
-    if (index === -1) {
+    if (activityFlowIndex === -1) {
       navigate(
         generatePath(page.builderAppletActivityFlow, {
           appletId,
         }),
       );
     }
-  }, [index]);
+  }, [activityFlowIndex]);
 
   return (
     <BuilderContainer title={t('aboutActivityFlow')}>
@@ -58,7 +58,7 @@ export const ActivityFlowAbout = () => {
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
             {...commonProps}
-            name={`activityFlows.${index}.name`}
+            name={`activityFlows.${activityFlowIndex}.name`}
             label={t('activityFlowName')}
             maxLength={MAX_NAME_LENGTH}
           />
@@ -66,7 +66,7 @@ export const ActivityFlowAbout = () => {
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
             {...commonProps}
-            name={`activityFlows.${index}.description`}
+            name={`activityFlows.${activityFlowIndex}.description`}
             label={t('activityFlowDescription')}
             maxLength={MAX_DESCRIPTION_LENGTH}
             multiline
@@ -82,12 +82,12 @@ export const ActivityFlowAbout = () => {
         <StyledFlexColumn>
           <CheckboxController
             control={control}
-            name={`activityFlows.${index}.isSingleReport`}
+            name={`activityFlows.${activityFlowIndex}.isSingleReport`}
             label={<StyledBodyLarge>{t('combineReportsIntoSingleFile')}</StyledBodyLarge>}
           />
           <CheckboxController
             control={control}
-            name={`activityFlows.${index}.hideBadge`}
+            name={`activityFlows.${activityFlowIndex}.hideBadge`}
             label={
               <StyledBodyLarge sx={{ position: 'relative' }}>
                 {t('hideBadge')}
