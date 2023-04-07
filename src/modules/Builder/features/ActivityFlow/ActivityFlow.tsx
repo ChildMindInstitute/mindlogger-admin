@@ -22,7 +22,7 @@ export const ActivityFlow = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="flow" width="18" height="18" />,
+      icon: 'flow',
       label: t('activityFlow'),
     },
   ]);

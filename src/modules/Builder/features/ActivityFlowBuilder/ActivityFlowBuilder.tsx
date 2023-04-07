@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Item } from 'modules/Builder/components';
@@ -13,7 +12,7 @@ export const ActivityFlowBuilder = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="flow" width="18" height="18" />,
+      icon: 'flow',
       label: t('activityFlowBuilder'),
     },
   ]);

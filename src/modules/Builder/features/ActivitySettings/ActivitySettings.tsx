@@ -36,7 +36,7 @@ export const ActivitySettings = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="settings" width="18" height="18" />,
+      icon: 'settings',
       label: t('activitySettings'),
     },
   ]);

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 import { APPLET_PAGES } from 'shared/consts';
@@ -24,7 +23,7 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
 
   useBreadcrumbs([
     {
-      icon: <Svg id="settings" width="15" height="15" />,
+      icon: 'settings',
       label: t('appletSettings'),
     },
   ]);

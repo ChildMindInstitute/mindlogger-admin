@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { applet } from 'shared/state';
 import { applets } from 'modules/Dashboard/state';
@@ -18,7 +17,7 @@ export const Schedule = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="schedule-outlined" width="14" height="14" />,
+      icon: 'schedule-outlined',
       label: t('schedule'),
     },
   ]);
