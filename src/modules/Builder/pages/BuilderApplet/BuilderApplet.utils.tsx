@@ -5,7 +5,7 @@ import i18n from 'i18n';
 import { Svg } from 'shared/components';
 import { page } from 'resources';
 import { SingleApplet } from 'shared/state';
-import { getDictionaryText } from 'shared/utils';
+import { getDictionaryText, Path } from 'shared/utils';
 import { Item } from 'shared/state/Applet';
 
 import { ActivityFormValues } from './BuilderApplet.types';
