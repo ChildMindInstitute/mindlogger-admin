@@ -13,7 +13,7 @@ export const StyledBar = styled(Box, shouldForwardProp)`
   border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   height: 100%;
   overflow-y: auto;
-  transition: width 0.3s;
+  transition: ${variables.transitions.width};
 `;
 
 export const StyledHeader = styled(StyledHeadlineLarge, shouldForwardProp)`
