@@ -7,8 +7,9 @@ import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Item } from 'modules/Builder/components';
+import { ActivityFlow as ActivityFlowType } from 'shared/state';
 
-import { getActions, activityFlows } from './ActivityFlow.const';
+import { getActions } from './ActivityFlow.const';
 import { StyledAdd, StyledAddWrapper } from './ActivityFlow.styles';
 import { ActivityFlowHeader } from './ActivityFlowHeader';
 
@@ -16,7 +17,8 @@ export const ActivityFlow = () => {
   const { t } = useTranslation('app');
   const { watch } = useFormContext();
 
-  // const activityFlows = watch('activityFlows');
+  const activityFlows: (Omit<ActivityFlowType, 'description'> & { description: string })[] =
+    watch('activityFlows');
 
   useBreadcrumbs([
     {
@@ -31,7 +33,7 @@ export const ActivityFlow = () => {
         <>
           {activityFlows.map((item, i) => (
             <Fragment key={item.id}>
-              <Item {...item} getActions={getActions} />
+              <Item getActions={getActions} {...item} />
               {i >= 0 && i < activityFlows.length - 1 && (
                 <StyledAddWrapper>
                   <span />
