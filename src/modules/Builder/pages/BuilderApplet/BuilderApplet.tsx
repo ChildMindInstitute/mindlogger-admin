@@ -90,12 +90,10 @@ export const BuilderApplet = () => {
 
   return (
     <FormProvider {...methods}>
-      (
       <StyledBody sx={{ position: 'relative' }}>
         <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
         <SaveAndPublish hasPrompt={methods.formState.isDirty} />
       </StyledBody>
-      );
     </FormProvider>
   );
 };

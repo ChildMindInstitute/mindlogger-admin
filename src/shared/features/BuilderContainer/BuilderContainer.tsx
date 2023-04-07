@@ -6,7 +6,12 @@ import { StyledBuilderWrapper, StyledFlexColumn, StyledHeadlineLarge, theme } fr
 import { BuilderContainerProps } from './BuilderContainer.types';
 import { StyledHeader } from './BuilderContainer.styles';
 
-export const BuilderContainer = ({ title, Header, children }: BuilderContainerProps) => {
+export const BuilderContainer = ({
+  title,
+  Header,
+  children,
+  headerProps,
+}: BuilderContainerProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
 
@@ -14,7 +19,7 @@ export const BuilderContainer = ({ title, Header, children }: BuilderContainerPr
 
   return (
     <StyledBuilderWrapper ref={containerRef} sx={{ position: 'relative' }}>
-      <HeaderComponent isSticky={isHeaderSticky}>
+      <HeaderComponent isSticky={isHeaderSticky} headerProps={headerProps}>
         <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
       </HeaderComponent>
       <StyledFlexColumn sx={{ padding: theme.spacing(1.6, 6.4, 2.4) }}>{children}</StyledFlexColumn>

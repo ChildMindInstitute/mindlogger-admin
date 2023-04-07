@@ -12,8 +12,8 @@ import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApple
 import { BuilderContainer } from 'shared/features';
 
 import { Item } from '../../components';
+import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions } from './Activities.const';
-import { StyledAddActivityBtn } from './Activities.styles';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -66,10 +66,11 @@ export const Activities = () => {
   };
 
   return (
-    <BuilderContainer title={t('activities')}>
-      <StyledAddActivityBtn startIcon={<Svg id="add" />} onClick={handleAddActivity}>
-        {t('addActivity')}
-      </StyledAddActivityBtn>
+    <BuilderContainer
+      title={t('activities')}
+      Header={ActivitiesHeader}
+      headerProps={{ onAddActivity: handleAddActivity }}
+    >
       <StyledFlexColumn>
         {activities?.length ? (
           activities.map((item: ActivityFormValues, index: number) => {
