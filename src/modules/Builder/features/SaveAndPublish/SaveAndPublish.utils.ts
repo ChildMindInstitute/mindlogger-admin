@@ -15,23 +15,23 @@ export const removeAppletExtraFields = () => ({
 
 export const removeActivityExtraFields = () => ({ order: undefined, id: undefined });
 
-const getPasswordKey = (userId: string, appletId: string) => `pwd/${userId}/${appletId}`;
+const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
 
 export const usePasswordFromStorage = () => {
   const isNewApplet = useCheckIfNewApplet();
   const userData = auth.useData();
-  const userId = String(userData?.user?.id) || '';
+  const ownerId = String(userData?.user?.id) || '';
   const { result: appletData } = applet.useAppletData() ?? {};
 
   const getPassword = () => {
     if (isNewApplet) return '';
     const appletId = appletData?.id ?? '';
 
-    return storage.getItem(getPasswordKey(userId, appletId)) as string;
+    return storage.getItem(getPasswordKey(ownerId, appletId)) as string;
   };
 
   const setPassword = (appletId: string, password: string) => {
-    storage.setItem(getPasswordKey(userId, appletId), password);
+    storage.setItem(getPasswordKey(ownerId, appletId), password);
   };
 
   return {

@@ -203,20 +203,14 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     }
 
     setPublishProcessPopupOpened(false);
-    const password = getPassword();
-    if (!password) {
-      setIsPasswordPopupOpened(true);
-
-      return;
-    }
-    await sendRequest(password);
+    await sendRequestWithPasswordCheck();
   };
 
   const handlePublishProcessOnClose = () => {
     setPublishProcessPopupOpened(false);
     setPublishProcessStep(undefined);
   };
-  const handlePublishProcessOnRetry = async () => {
+  const sendRequestWithPasswordCheck = async () => {
     const password = getPassword();
     if (!password) {
       setIsPasswordPopupOpened(true);
@@ -283,7 +277,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     handleSaveAndPublishFirstClick,
     handleAppletPasswordSubmit,
     handlePublishProcessOnClose,
-    handlePublishProcessOnRetry,
+    handlePublishProcessOnRetry: sendRequestWithPasswordCheck,
     handleSaveChangesDoNotSaveSubmit,
     handleSaveChangesSaveSubmit,
     cancelNavigation,
