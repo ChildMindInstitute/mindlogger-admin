@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -20,8 +20,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
-
-  const [crumbs, setCrumbs] = useState<Breadcrumb[]>([]);
 
   useEffect(() => {
     const newBreadcrumbs: Breadcrumb[] = [];
@@ -98,12 +96,18 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       );
     }
 
-    setCrumbs([...newBreadcrumbs, ...(restCrumbs || [])]);
-  }, [t, firstName, lastName, appletsFoldersData, id, appletId, activityId, appletLabel, pathname]);
-
-  useEffect(() => {
-    if (crumbs?.length) {
-      dispatch(breadcrumbs.actions.setBreadcrumbs(crumbs));
-    }
-  }, [crumbs, dispatch]);
+    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])];
+    dispatch(breadcrumbs.actions.setBreadcrumbs(updatedBreadcrumbs));
+  }, [
+    t,
+    firstName,
+    lastName,
+    appletsFoldersData,
+    id,
+    appletId,
+    activityId,
+    appletLabel,
+    pathname,
+    dispatch,
+  ]);
 };
