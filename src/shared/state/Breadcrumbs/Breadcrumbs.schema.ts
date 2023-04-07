@@ -3,6 +3,7 @@ export type Breadcrumb = {
   label: string;
   navPath?: string;
   disabledLink?: boolean;
+  hasUrl?: boolean;
 };
 
 export type BreadcrumbsSchema = {
