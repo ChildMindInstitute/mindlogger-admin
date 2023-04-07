@@ -3,13 +3,17 @@ import { generatePath } from 'react-router-dom';
 import { Svg } from 'shared/components';
 import { page } from 'resources';
 
-export const getActivityTabs = (params: { activityId?: string; appletId?: string }) => [
+export const getActivityTabs = (
+  params: { activityId?: string; appletId?: string },
+  { hasAboutActivityErrors, hasActivityItemsErrors }: Record<string, boolean>,
+) => [
   {
     id: 'simple-tabpanel-about',
     labelKey: 'aboutActivity',
     icon: <Svg id="more-info-outlined" />,
     activeIcon: <Svg id="more-info-filled" />,
     path: generatePath(page.builderAppletActivityAbout, params),
+    hasError: hasAboutActivityErrors,
   },
   {
     id: 'simple-tabpanel-items',
@@ -17,6 +21,7 @@ export const getActivityTabs = (params: { activityId?: string; appletId?: string
     icon: <Svg id="item-outlined" />,
     activeIcon: <Svg id="item-filled" />,
     path: generatePath(page.builderAppletActivityItems, params),
+    hasError: hasActivityItemsErrors,
   },
   {
     id: 'simple-tabpanel-flow',

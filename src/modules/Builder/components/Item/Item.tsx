@@ -21,13 +21,14 @@ export const Item = ({
 }: ItemProps) => {
   const [visibleActions, setVisibleActions] = useState(false);
   const { t } = useTranslation('app');
-  const { name, description, img, count, withHover, index, total } = props;
+  const { name, hasError, description, img, count, withHover, index, total } = props;
 
   const commonSx = isInactive ? { opacity: '0.38' } : undefined;
 
   return (
     <StyledItem
       withHover={withHover}
+      hasError={hasError}
       onMouseLeave={() => setVisibleActions(false)}
       onMouseEnter={() => setVisibleActions(true)}
     >
@@ -38,7 +39,7 @@ export const Item = ({
             {index} {t('of')} {total}
           </StyledTitleMedium>
         )}
-        <StyledTitleBoldMedium>{name || t('newActivity')}</StyledTitleBoldMedium>
+        <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
         <StyledTitleMedium>{description}</StyledTitleMedium>
         {count && (
           <StyledTitleBoldSmall sx={{ marginTop: theme.spacing(0.6) }}>

@@ -16,28 +16,26 @@ export const ItemSchema = () =>
     .required();
 
 export const ActivitySchema = () =>
-  yup
-    .object({
-      name: yup.string().required(getIsRequiredValidateMessage('activityName')),
-      description: yup.string(),
-      image: yup.string(),
-      splashScreen: yup.string(),
-      showAllAtOnce: yup.boolean(),
-      isSkippable: yup.boolean(),
-      isReviewable: yup.boolean(),
-      responseIsEditable: yup.boolean(),
-      items: yup.array().of(ItemSchema()).required(),
-      isHidden: yup.boolean(),
-    })
-    .required();
+  yup.object({
+    name: yup.string().required(getIsRequiredValidateMessage('activityName')),
+    description: yup.string(),
+    image: yup.string(),
+    splashScreen: yup.string(),
+    showAllAtOnce: yup.boolean(),
+    isSkippable: yup.boolean(),
+    isReviewable: yup.boolean(),
+    responseIsEditable: yup.boolean(),
+    items: yup.array().of(ItemSchema()),
+    isHidden: yup.boolean(),
+  });
 
 export const AppletSchema = () =>
   yup.object({
     displayName: yup.string().required(getIsRequiredValidateMessage('appletName')),
     description: yup.string(),
-    themeId: yup.string(),
+    themeId: yup.string().nullable(),
     about: yup.string(),
     image: yup.string(),
     watermark: yup.string(),
-    activities: yup.array().of(ActivitySchema()).required(),
+    activities: yup.array().of(ActivitySchema()).min(1),
   });

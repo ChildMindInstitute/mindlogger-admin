@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from 'redux/store';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useAppDispatch } from 'redux/store';
 import { SaveAndPublish } from 'modules/Builder/features';
 import { LinkedTabs, Svg } from 'shared/components';
 import {
@@ -17,9 +17,8 @@ import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 import { builderSessionStorage } from 'shared/utils';
 
-import { newAppletTabs } from './BuilderApplet.const';
 import { AppletSchema } from './BuilderApplet.schema';
-import { getDefaultValues } from './BuilderApplet.utils';
+import { getDefaultValues, getAppletTabs } from './BuilderApplet.utils';
 import { AppletFormValues } from './BuilderApplet.types';
 
 export const BuilderApplet = () => {
@@ -78,12 +77,25 @@ export const BuilderApplet = () => {
     [],
   );
 
+  const { errors } = useFormState({
+    control: methods.control,
+    name: ['displayName', 'activityFlows', 'activities'],
+  });
+
+  const tabErrors = {
+    hasAboutAppletErrors: !!errors.displayName,
+    hasAppletActivitiesErrors: !!errors.activities,
+    hasAppletActivityFlowErrors: !!errors.activityFlows,
+  };
+
   return (
     <FormProvider {...methods}>
+      (
       <StyledBody sx={{ position: 'relative' }}>
-        <LinkedTabs hiddenHeader={hiddenHeader} tabs={newAppletTabs} />
+        <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
         <SaveAndPublish hasPrompt={methods.formState.isDirty} />
       </StyledBody>
+      );
     </FormProvider>
   );
 };

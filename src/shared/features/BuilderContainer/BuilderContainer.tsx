@@ -13,7 +13,7 @@ export const BuilderContainer = ({ title, Header, children }: BuilderContainerPr
   const HeaderComponent = Header || StyledHeader;
 
   return (
-    <StyledBuilderWrapper ref={containerRef}>
+    <StyledBuilderWrapper ref={containerRef} sx={{ position: 'relative' }}>
       <HeaderComponent isSticky={isHeaderSticky}>
         <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
       </HeaderComponent>

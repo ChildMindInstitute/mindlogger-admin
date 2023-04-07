@@ -4,7 +4,7 @@ import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
 import { Svg, Modal } from 'shared/components';
-import { StyledTitleMedium, StyledFlexColumn, theme, StyledModalWrapper } from 'shared/styles';
+import { StyledTitleMedium, StyledFlexColumn, StyledModalWrapper, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
@@ -13,16 +13,17 @@ import { BuilderContainer } from 'shared/features';
 
 import { Item } from '../../components';
 import { getActions } from './Activities.const';
-import { ActivitiesHeader } from './ActivitiesHeader';
+import { StyledAddActivityBtn } from './Activities.styles';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch } = useFormContext();
+  const { control, watch, getFieldState } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
-  const [deletionModalVisible, setDeletionModalVisible] = useState(false);
+  const [activityToDelete, setActivityToDelete] = useState<string | undefined>('');
 
   const {
+    append: appendActivity,
     insert: insertActivity,
     remove: removeActivity,
     update: updateActivity,
@@ -32,6 +33,14 @@ export const Activities = () => {
   });
 
   const activities = watch('activities');
+
+  const errors = activities?.reduce(
+    (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
+      ...err,
+      [`activities[${index}]`]: !!getFieldState(`activities[${index}]`).error,
+    }),
+    {},
+  );
 
   useBreadcrumbs([
     {
@@ -48,10 +57,19 @@ export const Activities = () => {
         activityId,
       }),
     );
-  const handleHideModal = () => setDeletionModalVisible(false);
+  const handleHideModal = () => setActivityToDelete('');
+  const handleAddActivity = () => {
+    const newActivity = getNewActivity();
+
+    appendActivity(newActivity);
+    navigateToActivity(newActivity.key);
+  };
 
   return (
-    <BuilderContainer title={t('activities')} Header={ActivitiesHeader}>
+    <BuilderContainer title={t('activities')}>
+      <StyledAddActivityBtn startIcon={<Svg id="add" />} onClick={handleAddActivity}>
+        {t('addActivity')}
+      </StyledAddActivityBtn>
       <StyledFlexColumn>
         {activities?.length ? (
           activities.map((item: ActivityFormValues, index: number) => {
@@ -69,7 +87,8 @@ export const Activities = () => {
             const handleVisibilityChange = () =>
               updateActivity(index, { ...item, isHidden: !item.isHidden });
 
-            const activityName = item.name || 'New Activity';
+            const activityName = item.name;
+            const hasError = !!errors[`activities[${index}]`];
 
             return (
               <Fragment key={`activity-${item.key ?? item.id}`}>
@@ -84,14 +103,15 @@ export const Activities = () => {
                       isActivityHidden: item.isHidden,
                       onEdit: handleEdit,
                       onDuplicate: handleDuplicate,
-                      onRemove: () => setDeletionModalVisible(true),
+                      onRemove: () => setActivityToDelete(item.key || item.id),
                       onVisibilityChange: handleVisibilityChange,
                     })
                   }
+                  hasError={hasError}
                   withHover
                 />
                 <Modal
-                  open={deletionModalVisible}
+                  open={activityToDelete === (item.key || item.id)}
                   onClose={handleHideModal}
                   onSubmit={handleRemove}
                   onSecondBtnSubmit={handleHideModal}

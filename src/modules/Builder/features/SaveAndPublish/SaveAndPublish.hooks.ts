@@ -149,6 +149,7 @@ export const usePrompt = (isFormChanged: boolean) => {
 };
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
+  const { trigger } = useFormContext();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
@@ -181,7 +182,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPromptVisible(false);
     handleSaveAndPublishFirstClick();
   };
-  const handleSaveAndPublishFirstClick = () => {
+  const handleSaveAndPublishFirstClick = async () => {
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
     const hasNoItems = !checkIfHasAtLeastOneItem();
     setPublishProcessPopupOpened(true);
@@ -197,8 +198,13 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       return;
     }
 
+    const isValid = await trigger();
+
+    if (isValid) {
+      setIsPasswordPopupOpened(true);
+    }
+
     setPublishProcessPopupOpened(false);
-    setIsPasswordPopupOpened(true);
   };
 
   const handlePublishProcessOnClose = () => {
