@@ -23,6 +23,7 @@ import {
   GetUsersData,
   GetAppletsParams,
   CreateEventType,
+  OwnerId,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -54,6 +55,11 @@ export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?
     signal,
   });
 };
+
+export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
+  authApiClient.get(`/workspaces/${ownerId}`, {
+    signal,
+  });
 
 export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
   authApiClient.put(

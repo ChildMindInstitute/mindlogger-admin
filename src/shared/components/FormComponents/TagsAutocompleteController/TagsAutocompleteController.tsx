@@ -47,6 +47,7 @@ export const TagsInputController = <T extends FieldValues>({
             fullWidth
             disableCloseOnSelect
             filterSelectedOptions
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             noOptionsText={<ListItem sx={{ pl: theme.spacing(1.3) }}>{noOptionsText}</ListItem>}
             freeSolo={false}
             value={value || []}
@@ -60,7 +61,7 @@ export const TagsInputController = <T extends FieldValues>({
             renderOption={(props, option, { selected }) => (
               <ListItem {...props}>
                 <Checkbox checked={selected} />
-                {option}
+                {option.label}
               </ListItem>
             )}
             PaperComponent={(paperProps) => {

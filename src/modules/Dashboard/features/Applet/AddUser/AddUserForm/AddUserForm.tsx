@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,11 +11,11 @@ import {
   TagsInputController,
 } from 'shared/components/FormComponents';
 import { StyledErrorText, theme } from 'shared/styles';
-import { postAppletInvitationApi } from 'api';
+import { getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 import { Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
-import { users } from 'redux/modules';
+import { users, workspaces } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 
 import {
@@ -27,18 +27,22 @@ import {
 } from './AddUserForm.styles';
 import { Fields, fields, defaultValues, langs, roles } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
-import { AddUserFormProps, FormValues } from './AddUserForm.types';
+import { AddUserFormProps, FormValues, WworkspaceInfo } from './AddUserForm.types';
 import { getUrl } from './AddUserForm.utils';
 
 export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const { id } = useParams();
   const { t } = useTranslation('app');
 
-  const respondentsData = users.useRespondentsData();
-  const respondents = respondentsData?.result?.map((item) => `${item.secretId} (${item.nickname})`);
+  const [workspaceInfo, setWorkspaceInfo] = useState<WworkspaceInfo | null>(null);
+  const workspaceNameVisible = !workspaceInfo?.hasManagers;
 
-  const workspaceNameShowed = false;
-  // TODO add logic when back ready
+  const { ownerId } = workspaces.useData() || {};
+  const respondentsData = users.useRespondentsData();
+  const respondents = respondentsData?.result?.map((item) => ({
+    label: `${item.accessId} (${item.nickname})`,
+    id: item.accessId,
+  }));
 
   const {
     handleSubmit,
@@ -49,7 +53,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
     register,
     unregister,
   } = useForm<FormValues>({
-    resolver: yupResolver(AddUserSchema(workspaceNameShowed)),
+    resolver: yupResolver(AddUserSchema(workspaceNameVisible)),
     defaultValues,
     mode: 'onChange',
   });
@@ -63,17 +67,29 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
 
   const resetForm = () => reset();
 
-  const { error, execute } = useAsync(postAppletInvitationApi, async () => {
-    await getInvitationsHandler();
-    resetForm();
+  const { error, execute: executePostAppletInvitationApi } = useAsync(
+    postAppletInvitationApi,
+    async () => {
+      await getInvitationsHandler();
+      ownerId && executeGetWorkspaceInfoApi({ ownerId });
+      resetForm();
+    },
+  );
+  const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, (res) => {
+    setWorkspaceInfo(res?.data?.result || null);
   });
 
   const onSubmit = (values: FormValues) => {
+    const options = {
+      ...values,
+      ...(values.respondents && { respondents: values.respondents.map((item) => item.id) }),
+    };
+
     if (id) {
-      execute({
+      executePostAppletInvitationApi({
         url: getUrl(values.role),
         appletId: id,
-        options: values,
+        options,
       });
     }
   };
@@ -86,7 +102,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
       unregister(nickname);
       unregister(secretUserId);
       unregister(respondents);
-      workspaceNameShowed && register(workspacePrefix, { value: '' });
+      workspaceNameVisible && register(workspacePrefix, { value: workspaceInfo?.name });
     }
 
     if (value === Roles.Respondent) {
@@ -100,6 +116,10 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
       register(respondents, { value: [] });
     }
   };
+
+  useEffect(() => {
+    ownerId && executeGetWorkspaceInfoApi({ ownerId });
+  }, [ownerId]);
 
   return (
     <>
@@ -148,7 +168,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
               </Grid>
             </>
           )}
-          {workspaceNameShowed && role !== Roles.Respondent && (
+          {workspaceNameVisible && role !== Roles.Respondent && (
             <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
               <InputController
                 {...commonProps}
