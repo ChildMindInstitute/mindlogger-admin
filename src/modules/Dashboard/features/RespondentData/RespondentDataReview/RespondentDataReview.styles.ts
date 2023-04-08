@@ -1,18 +1,19 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import { StyledFlexAllCenter } from 'shared/styles';
+import { commonStickyStyles, StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
-import { StyledTextBtn } from '../RespondentData.styles';
-
-export const StyledReviewContainer = styled(StyledFlexAllCenter)`
+export const StyledReviewContainer = styled(Box)`
   width: 100%;
   height: 100%;
   position: relative;
   overflow-y: auto;
 `;
 
-export const StyledFeedbackBtn = styled(StyledTextBtn)`
-  position: absolute;
-  top: 2rem;
-  right: 8rem;
+export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
+  ${commonStickyStyles};
+  z-index: 1;
+  box-shadow: ${({ isSticky }: { isSticky: boolean }) =>
+    isSticky ? variables.boxShadow.light0 : 'none'};
+  padding: ${theme.spacing(2.4, 6.4)};
 `;

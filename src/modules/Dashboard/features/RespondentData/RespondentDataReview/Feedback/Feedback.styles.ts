@@ -1,12 +1,13 @@
-import { Box, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
-import { StyledClearedButton, theme, variables } from 'shared/styles';
+import { StyledClearedButton, StyledFlexColumn, theme, variables } from 'shared/styles';
 
-export const StyledContainer = styled(Box)`
+export const StyledContainer = styled(StyledFlexColumn)`
   width: 44rem;
   height: 100%;
   position: absolute;
   right: 0;
+  z-index: 2;
   background-color: ${variables.palette.surface1};
 `;
 
