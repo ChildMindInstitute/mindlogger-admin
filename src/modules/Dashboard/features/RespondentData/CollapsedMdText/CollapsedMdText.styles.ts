@@ -1,5 +1,4 @@
-import { Button, styled } from '@mui/material';
-import { Box } from '@mui/system';
+import { Button, styled, Box } from '@mui/material';
 import MdEditor from 'md-editor-rt';
 
 import { theme, variables } from 'shared/styles';
@@ -25,7 +24,7 @@ export const StyledCollapsedContainer = styled(Box, shouldForwardProp)`
     isOpen: boolean;
     isLarge: boolean;
   }) => (!isOpen ? `${maxHeight}px` : 'unset')};
-  border-bottom: ${({ isOpen, isLarge }: { isOpen: boolean; isLarge: boolean }) =>
+  border-bottom: ${({ isOpen, isLarge }) =>
     isLarge && !isOpen
       ? `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`
       : 'unset'};
