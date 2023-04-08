@@ -1,59 +1,63 @@
-import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Tooltip } from 'shared/components';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
+  theme,
+  variables,
   StyledBodyLarge,
   StyledFlexColumn,
   StyledTitleMedium,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import {
-  useBreadcrumbs,
-  useBuilderSessionStorageFormChange,
-  useBuilderSessionStorageFormValues,
-} from 'shared/hooks';
+} from 'shared/styles';
+import { useBreadcrumbs } from 'shared/hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
+import { ActivityFlow as ActivityFlowType } from 'shared/state';
+import { page } from 'resources';
 
-import { StyledForm, StyledSvg } from './ActivityFlowAbout.styles';
-import { defaultValues } from './ActivityFlowAbout.const';
-import { ActivityFlowAboutFormValues } from './ActivityFlowAbout.types';
+import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
 
 export const ActivityFlowAbout = () => {
   const { t } = useTranslation();
-  const { getFormValues } =
-    useBuilderSessionStorageFormValues<ActivityFlowAboutFormValues>(defaultValues);
-  const { control, getValues } = useForm<ActivityFlowAboutFormValues>({
-    defaultValues: getFormValues(),
-    mode: 'onChange',
-  });
+  const { control, watch } = useFormContext();
+  const navigate = useNavigate();
+  const { appletId, activityFlowId } = useParams();
 
-  const { handleFormChange } =
-    useBuilderSessionStorageFormChange<ActivityFlowAboutFormValues>(getValues);
-
-  useBreadcrumbs([
-    {
-      icon: <Svg id="more-info-outlined" width="18" height="18" />,
-      label: t('aboutActivityFlow'),
-    },
-  ]);
-
+  const activityFlows: (Omit<ActivityFlowType, 'description'> & { description: string })[] =
+    watch('activityFlows');
+  const activityFlowIndex = activityFlows.findIndex((flow) => flow.id === activityFlowId);
   const commonProps = {
     fullWidth: true,
     control,
   };
 
+  useBreadcrumbs([
+    {
+      icon: 'more-info-outlined',
+      label: t('aboutActivityFlow'),
+    },
+  ]);
+
+  useEffect(() => {
+    if (activityFlowIndex !== -1) return;
+    navigate(
+      generatePath(page.builderAppletActivityFlow, {
+        appletId,
+      }),
+    );
+  }, [activityFlowIndex]);
+
   return (
     <BuilderContainer title={t('aboutActivityFlow')}>
-      <StyledForm noValidate onChange={handleFormChange}>
+      <StyledWrapper>
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
             {...commonProps}
-            name="activityFlowName"
+            name={`activityFlows.${activityFlowIndex}.name`}
             label={t('activityFlowName')}
             maxLength={MAX_NAME_LENGTH}
           />
@@ -61,7 +65,7 @@ export const ActivityFlowAbout = () => {
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
             {...commonProps}
-            name="activityFlowDescription"
+            name={`activityFlows.${activityFlowIndex}.description`}
             label={t('activityFlowDescription')}
             maxLength={MAX_DESCRIPTION_LENGTH}
             multiline
@@ -77,21 +81,25 @@ export const ActivityFlowAbout = () => {
         <StyledFlexColumn>
           <CheckboxController
             control={control}
-            name="combineReports"
+            name={`activityFlows.${activityFlowIndex}.isSingleReport`}
             label={<StyledBodyLarge>{t('combineReportsIntoSingleFile')}</StyledBodyLarge>}
           />
           <CheckboxController
             control={control}
-            name="hideBadge"
+            name={`activityFlows.${activityFlowIndex}.hideBadge`}
             label={
               <StyledBodyLarge sx={{ position: 'relative' }}>
                 {t('hideBadge')}
-                <StyledSvg id="more-info-outlined" />
+                <Tooltip tooltipTitle={t('hideBadgeTooltip')}>
+                  <span>
+                    <StyledSvg id="more-info-outlined" />
+                  </span>
+                </Tooltip>
               </StyledBodyLarge>
             }
           />
         </StyledFlexColumn>
-      </StyledForm>
+      </StyledWrapper>
     </BuilderContainer>
   );
 };

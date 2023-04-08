@@ -1,10 +1,9 @@
-import { styled } from '@mui/system';
+import { Box, styled } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { theme, variables } from 'shared/styles';
 
-export const StyledForm = styled('form')`
+export const StyledWrapper = styled(Box)`
   width: 55rem;
 `;
 

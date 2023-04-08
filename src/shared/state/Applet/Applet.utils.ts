@@ -3,8 +3,14 @@ import { AxiosError } from 'axios';
 
 import { getApiError } from 'shared/utils';
 
-import { CreateAppletStateData } from './Applet.schema';
+import { AppletSchema, CreateAppletStateData } from './Applet.schema';
 import { state as initialState } from './Applet.state';
+
+export const removeApplet = ({ applet }: AppletSchema): void => {
+  if (applet.data) {
+    applet.data = null;
+  }
+};
 
 export const appletPendingData = ({ builder, thunk, key }: CreateAppletStateData) =>
   builder.addCase(thunk.pending, (state, action) => {

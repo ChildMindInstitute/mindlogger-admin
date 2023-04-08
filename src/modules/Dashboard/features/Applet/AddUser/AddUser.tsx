@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
 import { getErrorMessage } from 'shared/utils';
 import { useBreadcrumbs } from 'shared/hooks';
 import { getInvitationsApi } from 'api';
@@ -18,7 +17,7 @@ export const AddUser = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="users-outlined" width="15" height="15" />,
+      icon: 'users-outlined',
       label: t('addUser'),
     },
   ]);

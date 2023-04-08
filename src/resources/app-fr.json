@@ -625,5 +625,6 @@
   "abTestItemTask": "Tâche d'élément de test AB",
   "unsupportedResponseItem": "Ce type de données ne peut pas être affiché sur cette page",
   "showMore": "Afficher plus...",
-  "showLess": "Afficher moins..."
+  "showLess": "Afficher moins...",
+  "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants"
 }

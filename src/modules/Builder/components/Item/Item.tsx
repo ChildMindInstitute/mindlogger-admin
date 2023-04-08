@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Actions } from 'shared/components';
 import {
+  theme,
   StyledTitleBoldMedium,
   StyledTitleMedium,
   StyledTitleBoldSmall,
-} from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+} from 'shared/styles';
 
 import { StyledItem, StyledImg, StyledCol, StyledActions } from './Item.styles';
 import { ItemProps } from './Item.types';

@@ -19,9 +19,9 @@ export type ActivityFlow = {
   id?: string;
   name: string;
   description?: string | Record<string, string>;
-  ordering?: number;
   isSingleReport?: boolean;
   hideBadge?: boolean;
+  order?: number;
   activityIds?: number[];
   isHidden?: boolean;
 };
