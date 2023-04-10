@@ -1,5 +1,4 @@
 import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
-import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'shared/components/Svg';
 import { breadcrumbs } from 'redux/modules';
@@ -14,33 +13,42 @@ import {
   StyledLink,
   StyledBox,
   StyledIconWrapper,
-  StyledIconImg,
   StyledPlaceholder,
+  StyledIconImg,
 } from './Breadcrumbs.styles';
+import { BREADCRUMB_ICON_SIZE } from './Breadcrumbs.const';
 
 export const Breadcrumbs = () => {
   const breadcrumbsData = breadcrumbs.useData();
 
-  const getBreadcrumbIcon = (icon: string | JSX.Element, label: string) => (
-    <StyledIconWrapper>
-      {icon ? (
-        <>{typeof icon === 'string' ? <StyledIconImg src={icon} alt="Icon" /> : icon}</>
-      ) : (
-        <StyledPlaceholder>
-          <StyledLabelSmall color={variables.palette.on_surface}>
-            {label.substring(0, 1).toUpperCase()}
-          </StyledLabelSmall>
-        </StyledPlaceholder>
-      )}
-    </StyledIconWrapper>
-  );
+  const getBreadcrumbIcon = (icon: string, label: string, hasUrl = false) => {
+    const iconComponent = hasUrl ? (
+      <StyledIconImg src={icon} alt="Icon" />
+    ) : (
+      <Svg id={icon} width={BREADCRUMB_ICON_SIZE} height={BREADCRUMB_ICON_SIZE} />
+    );
+
+    return (
+      <StyledIconWrapper>
+        {icon ? (
+          iconComponent
+        ) : (
+          <StyledPlaceholder>
+            <StyledLabelSmall color={variables.palette.on_surface}>
+              {label.substring(0, 1).toUpperCase()}
+            </StyledLabelSmall>
+          </StyledPlaceholder>
+        )}
+      </StyledIconWrapper>
+    );
+  };
 
   return (
     <MuiBreadcrumbs separator={<Svg id="separator" width="8" height="12" />}>
-      {breadcrumbsData?.map(({ icon, label, navPath, disabledLink }, index) =>
+      {breadcrumbsData?.map(({ icon, label, navPath, disabledLink, hasUrl, key }, index) =>
         index === breadcrumbsData.length - 1 || disabledLink ? (
-          <StyledBox key={uniqueId()}>
-            {getBreadcrumbIcon(icon, label)}
+          <StyledBox key={key}>
+            {getBreadcrumbIcon(icon, label, hasUrl)}
             {disabledLink ? (
               <StyledBodySmall color={variables.palette.on_surface_variant}>
                 {label}
@@ -50,8 +58,8 @@ export const Breadcrumbs = () => {
             )}
           </StyledBox>
         ) : (
-          <StyledLink key={uniqueId()} to={navPath || ''}>
-            {getBreadcrumbIcon(icon, label)}
+          <StyledLink key={key} to={navPath || ''}>
+            {getBreadcrumbIcon(icon, label, hasUrl)}
             <StyledBodySmall color={variables.palette.on_surface_variant}>{label}</StyledBodySmall>
           </StyledLink>
         ),

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Svg, Actions, Search } from 'shared/components';
+import { Actions, Search } from 'shared/components';
 import { users } from 'redux/modules';
 import { useBreadcrumbs, useTable } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
@@ -41,7 +41,7 @@ export const Managers = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="manager-outlined" width="15" height="15" />,
+      icon: 'manager-outlined',
       label: t('managers'),
     },
   ]);

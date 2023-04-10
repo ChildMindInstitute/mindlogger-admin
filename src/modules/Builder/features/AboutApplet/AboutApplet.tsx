@@ -9,7 +9,7 @@ import {
 } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
-import { Svg, Tooltip, Uploader } from 'shared/components';
+import { Tooltip, Uploader } from 'shared/components';
 import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
@@ -29,7 +29,7 @@ export const AboutApplet = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="more-info-outlined" width="18" height="18" />,
+      icon: 'more-info-outlined',
       label: t('aboutApplet'),
     },
   ]);

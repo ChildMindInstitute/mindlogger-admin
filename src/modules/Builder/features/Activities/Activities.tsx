@@ -3,8 +3,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
-import { Svg, Modal } from 'shared/components';
-import { StyledTitleMedium, StyledFlexColumn, StyledModalWrapper, theme } from 'shared/styles';
+import { Modal } from 'shared/components';
+import { StyledTitleMedium, StyledFlexColumn, theme, StyledModalWrapper } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
@@ -44,7 +44,7 @@ export const Activities = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="checklist-filled" width="18" height="18" />,
+      icon: 'checklist-filled',
       label: t('activities'),
     },
   ]);

@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Svg, Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
   theme,
@@ -37,7 +37,7 @@ export const ActivityFlowAbout = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="more-info-outlined" width="18" height="18" />,
+      icon: 'more-info-outlined',
       label: t('aboutActivityFlow'),
     },
   ]);

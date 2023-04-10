@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
@@ -43,7 +42,7 @@ export const ActivityItems = () => {
 
   useBreadcrumbs([
     {
-      icon: <Svg id="item-outlined" width="18" height="18" />,
+      icon: 'item-outlined',
       label: t('items'),
     },
   ]);
