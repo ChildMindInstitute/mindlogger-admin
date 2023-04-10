@@ -27,14 +27,14 @@ export type ActivityFlow = {
 };
 
 export type Config = {
-  remove_back_button: boolean;
-  skippable_item: boolean;
-  max_response_length: number;
-  correct_answer_required: boolean;
-  correct_answer: string;
-  numerical_response_required: boolean;
-  response_data_identifier: boolean;
-  response_required: boolean;
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  maxResponseLength: number;
+  correctAnswerRequired: boolean;
+  correctAnswer: string;
+  numericalResponseRequired: boolean;
+  responseDataIdentifier: boolean;
+  responseRequired: boolean;
 };
 
 export type SliderItemResponseValues = {
