@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import Tab from '@mui/material/Tab';
 import { useTranslation } from 'react-i18next';
+import { Badge, Tab } from '@mui/material';
 
 import { StyledTabs } from '../Tabs.styles';
 import { TabPanel } from '../TabPanel';
@@ -23,16 +23,26 @@ export const LinkedTabs = ({
   }, [pathname]);
 
   const { content, header } = tabs.reduce(
-    (tabs: RenderTabs, { id, icon, activeIcon, labelKey, isMinHeightAuto, path }, index) => {
+    (
+      tabs: RenderTabs,
+      { id, icon, activeIcon, labelKey, isMinHeightAuto, path, hasError },
+      index,
+    ) => {
       tabs.header.push(
         <Tab
           key={index}
           component={Link}
           label={t(labelKey)}
           to={path || ''}
-          icon={tabIndex === index ? activeIcon : icon}
+          icon={
+            <>
+              {tabIndex === index ? activeIcon : icon}
+              {hasError && <Badge variant="dot" invisible={!hasError} color="error" />}
+            </>
+          }
         />,
       );
+
       tabs.content.push(
         <TabPanel
           id={id}

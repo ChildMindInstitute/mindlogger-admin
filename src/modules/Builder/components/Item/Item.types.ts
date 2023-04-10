@@ -22,6 +22,7 @@ export enum ItemUiType {
 export type ItemProps = {
   getActions: (key?: string) => Action[];
   isInactive?: boolean;
+  hasError?: boolean;
   visibleByDefault?: boolean;
   hasStaticActions?: boolean;
   uiType?: ItemUiType;

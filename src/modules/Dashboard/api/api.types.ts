@@ -179,3 +179,7 @@ export type PublishApplet = AppletId & { publish?: boolean };
 export type UpdateAppletSearchTerms = AppletId & { params: { keywords: string } };
 
 export type PostAppletPublicLink = AppletId & { requireLogin: boolean };
+
+export type OwnerId = {
+  ownerId: string;
+};

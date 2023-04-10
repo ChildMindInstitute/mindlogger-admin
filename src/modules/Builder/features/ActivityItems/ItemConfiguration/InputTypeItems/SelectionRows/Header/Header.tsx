@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'shared/components';
 import { SelectEvent } from 'shared/types/event';
@@ -55,7 +56,10 @@ export const Header = ({ isSingle, isExpanded, onArrowClick }: HeaderProps) => {
     } else {
       setValue('selectionRows.options', [
         ...options,
-        ...createArray(+e.target.value - options.length, () => DEFAULT_EMPTY_SELECTION_ROWS_OPTION),
+        ...createArray(+e.target.value - options.length, () => ({
+          ...DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
+          id: uniqueId('selection-option-'),
+        })),
       ]);
       setValue(
         'selectionRows.items',

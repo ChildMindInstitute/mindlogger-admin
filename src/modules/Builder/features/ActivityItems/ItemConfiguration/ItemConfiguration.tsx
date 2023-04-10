@@ -25,6 +25,7 @@ import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { itemConfigurationFormSchema } from './ItemConfiguration.schema';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 
+//@TODO: move to the Applet form, add validation
 export const ItemConfiguration = ({ item }: ItemConfigurationProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);

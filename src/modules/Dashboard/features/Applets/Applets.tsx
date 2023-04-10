@@ -22,7 +22,7 @@ export const Applets = () => {
   const appletsData = applets.useData();
   const { getWorkspaceApplets } = applets.thunk;
 
-  const { searchValue, setSearchValue, ...tableProps } = useTable((params) =>
+  const { handleSearch, searchValue, ...tableProps } = useTable((params) =>
     dispatch(getWorkspaceApplets(params)),
   );
 
@@ -52,10 +52,6 @@ export const Applets = () => {
       parentId: String(authData?.user?.id) || '',
     };
     dispatch(folders.actions.createNewFolder(folder));
-  };
-
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
   };
 
   const headerContent = (

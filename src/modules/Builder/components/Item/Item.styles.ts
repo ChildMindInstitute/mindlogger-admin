@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
@@ -7,7 +6,15 @@ import { shouldForwardProp } from 'shared/utils';
 import { ItemUiType } from './Item.types';
 
 export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
-  ${({ uiType, onClick }: { uiType: ItemUiType; onClick?: () => void }) => `
+  ${({
+    uiType,
+    onClick,
+    hasError,
+  }: {
+    uiType: ItemUiType;
+    onClick?: () => void;
+    hasError?: boolean;
+  }) => `
     margin-bottom: ${theme.spacing(1.6)};
     padding: ${theme.spacing(1.3, 2.4)};
     width: 100%;
@@ -15,6 +22,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
     height: ${uiType === ItemUiType.Activity ? '9.8rem' : '7.2rem'};
     transition: ${variables.transitions.all};
     cursor: ${onClick ? 'pointer' : 'default'};
+    background-color: ${hasError ? variables.palette.error_container : 'inherit'};
   
     .item-name {
       transition: ${variables.transitions.fontWeight};

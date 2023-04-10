@@ -88,10 +88,10 @@ export const InputController = <T extends FieldValues>({
                             {getTextAdornment(value)}
                             <StyledUpDown>
                               <StyledClearedButton onClick={handleAddNumber}>
-                                <Svg id="navigate-up" />
+                                <Svg width={18} height={18} id="navigate-up" />
                               </StyledClearedButton>
                               <StyledClearedButton onClick={handleDistractNumber}>
-                                <Svg id="navigate-down" />
+                                <Svg width={18} height={18} id="navigate-down" />
                               </StyledClearedButton>
                             </StyledUpDown>
                           </StyledFlexTopCenter>

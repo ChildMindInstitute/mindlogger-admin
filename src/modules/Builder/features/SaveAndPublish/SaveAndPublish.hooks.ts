@@ -154,6 +154,7 @@ export const usePrompt = (isFormChanged: boolean) => {
 };
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
+  const { trigger } = useFormContext();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
@@ -200,6 +201,12 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       setPublishProcessStep(SaveAndPublishSteps.AtLeastOneItem);
 
       return;
+    }
+
+    const isValid = await trigger();
+
+    if (isValid) {
+      setIsPasswordPopupOpened(true);
     }
 
     setPublishProcessPopupOpened(false);

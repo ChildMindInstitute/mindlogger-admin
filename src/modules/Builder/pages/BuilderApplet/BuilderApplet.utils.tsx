@@ -1,17 +1,21 @@
 import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
+import i18n from 'i18n';
+import { Svg } from 'shared/components';
 import { page } from 'resources';
 import { SingleApplet } from 'shared/state';
-import { getDictionaryText } from 'shared/utils';
+import { getDictionaryText, Path } from 'shared/utils';
 import { Item } from 'shared/state/Applet';
 
 import { ActivityFormValues } from './BuilderApplet.types';
 
+const { t } = i18n;
+
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
 export const getNewActivity = (activity?: ActivityFormValues) => ({
-  name: '',
+  name: t('newActivity'),
   description: '',
   items: [],
   showAllAtOnce: false,
@@ -81,3 +85,37 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
     })),
   };
 };
+
+export const getAppletTabs = ({
+  hasAboutAppletErrors,
+  hasAppletActivitiesErrors,
+  hasAppletActivityFlowErrors,
+}: Record<string, boolean>) => [
+  {
+    labelKey: 'aboutApplet',
+    icon: <Svg id="more-info-outlined" />,
+    activeIcon: <Svg id="more-info-filled" />,
+    path: Path.About,
+    hasError: hasAboutAppletErrors,
+  },
+  {
+    labelKey: 'activities',
+    icon: <Svg id="checklist-outlined" />,
+    activeIcon: <Svg id="checklist-filled" />,
+    path: Path.Activities,
+    hasError: hasAppletActivitiesErrors,
+  },
+  {
+    labelKey: 'activityFlow',
+    icon: <Svg id="flow-outlined" />,
+    activeIcon: <Svg id="flow-filled" />,
+    path: Path.ActivityFlow,
+    hasError: hasAppletActivityFlowErrors,
+  },
+  {
+    labelKey: 'appletSettings',
+    icon: <Svg id="settings" />,
+    activeIcon: <Svg id="settings-filled" />,
+    path: Path.Settings,
+  },
+];

@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import Tabs from '@mui/material/Tabs';
+import { Tabs, styled } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
@@ -20,7 +19,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     margin: 0 auto;
   `}
 
-  ${({ hiddenHeader }) =>
+  ${({ hiddenHeader }: { hiddenHeader?: boolean }) =>
     hiddenHeader &&
     `
     &.MuiTabs-root {
@@ -33,6 +32,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
   }
 
   .MuiTab-root {
+    opacity: 1;
     color: ${variables.palette.on_surface_variant};
     text-transform: inherit;
     padding: ${({ uiType }: { uiType: UiType }) =>
@@ -50,6 +50,11 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
 
     &:hover {
       background-color: ${variables.palette.on_surface_variant_alfa8};
+    }
+
+    .MuiBadge-root {
+      position: absolute;
+      right: 0.5rem;
     }
   }
 

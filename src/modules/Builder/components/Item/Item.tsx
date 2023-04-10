@@ -24,13 +24,14 @@ export const Item = ({
 }: ItemProps) => {
   const [visibleActions, setVisibleActions] = useState(false);
   const { t } = useTranslation('app');
-  const { name, description, img, count, index, total } = props;
+  const { name, hasError, description, img, count, index, total } = props;
   const isFlowUiType = uiType === ItemUiType.Flow;
 
   const commonSx = isInactive ? { opacity: '0.38' } : undefined;
 
   return (
     <StyledItem
+      hasError={hasError}
       uiType={uiType}
       onMouseLeave={() => setVisibleActions(false)}
       onMouseEnter={() => setVisibleActions(true)}
@@ -45,14 +46,12 @@ export const Item = ({
         )}
         {isFlowUiType ? (
           <>
-            <StyledTitleMedium className="item-name">
-              {name || t('newActivityFlow')}
-            </StyledTitleMedium>
+            <StyledTitleMedium className="item-name">{name}</StyledTitleMedium>
             <StyledBodyLarge>{description}</StyledBodyLarge>
           </>
         ) : (
           <>
-            <StyledTitleBoldMedium>{name || t('newActivity')}</StyledTitleBoldMedium>
+            <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
             <StyledTitleMedium>{description}</StyledTitleMedium>
           </>
         )}

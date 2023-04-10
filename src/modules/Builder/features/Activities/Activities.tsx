@@ -12,17 +12,18 @@ import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApple
 import { BuilderContainer } from 'shared/features';
 
 import { Item } from '../../components';
-import { getActions } from './Activities.const';
 import { ActivitiesHeader } from './ActivitiesHeader';
+import { getActions } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch } = useFormContext();
+  const { control, watch, getFieldState } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
-  const [deletionModalVisible, setDeletionModalVisible] = useState(false);
+  const [activityToDelete, setActivityToDelete] = useState<string>('');
 
   const {
+    append: appendActivity,
     insert: insertActivity,
     remove: removeActivity,
     update: updateActivity,
@@ -32,6 +33,14 @@ export const Activities = () => {
   });
 
   const activities = watch('activities');
+
+  const errors = activities?.reduce(
+    (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
+      ...err,
+      [`activities[${index}]`]: !!getFieldState(`activities[${index}]`).error,
+    }),
+    {},
+  );
 
   useBreadcrumbs([
     {
@@ -48,10 +57,20 @@ export const Activities = () => {
         activityId,
       }),
     );
-  const handleHideModal = () => setDeletionModalVisible(false);
+  const handleHideModal = () => setActivityToDelete('');
+  const handleAddActivity = () => {
+    const newActivity = getNewActivity();
+
+    appendActivity(newActivity);
+    navigateToActivity(newActivity.key);
+  };
 
   return (
-    <BuilderContainer title={t('activities')} Header={ActivitiesHeader}>
+    <BuilderContainer
+      title={t('activities')}
+      Header={ActivitiesHeader}
+      headerProps={{ onAddActivity: handleAddActivity }}
+    >
       <StyledFlexColumn>
         {activities?.length ? (
           activities.map((item: ActivityFormValues, index: number) => {
@@ -69,7 +88,8 @@ export const Activities = () => {
             const handleVisibilityChange = () =>
               updateActivity(index, { ...item, isHidden: !item.isHidden });
 
-            const activityName = item.name || 'New Activity';
+            const activityName = item.name;
+            const hasError = !!errors[`activities[${index}]`];
 
             return (
               <Fragment key={`activity-${item.key ?? item.id}`}>
@@ -84,13 +104,14 @@ export const Activities = () => {
                       isActivityHidden: item.isHidden,
                       onEdit: handleEdit,
                       onDuplicate: handleDuplicate,
-                      onRemove: () => setDeletionModalVisible(true),
+                      onRemove: () => setActivityToDelete(item.key || item.id || ''),
                       onVisibilityChange: handleVisibilityChange,
                     })
                   }
+                  hasError={hasError}
                 />
                 <Modal
-                  open={deletionModalVisible}
+                  open={activityToDelete === (item.key || item.id)}
                   onClose={handleHideModal}
                   onSubmit={handleRemove}
                   onSecondBtnSubmit={handleHideModal}

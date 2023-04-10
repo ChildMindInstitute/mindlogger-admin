@@ -3,6 +3,7 @@ import { useFieldArray } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import uniqueId from 'lodash.uniqueid';
 
 import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
@@ -75,6 +76,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
 
     const handleAddOption = () =>
       appendOption({
+        id: uniqueId('option-'),
         text: '',
         isVisible: true,
         ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
@@ -86,8 +88,23 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       appendAlert({
         option: '',
         item: '',
+        slider: '',
         message: '',
+        min: '',
+        max: '',
       });
+
+    const handleRemoveOptions = (index: number) => {
+      const { options, alerts } = getValues();
+      const option = options?.[index];
+      if (option) {
+        setValue(
+          'alerts',
+          alerts?.map((alert) => (alert.option === option.id ? { ...alert, option: '' } : alert)),
+        );
+      }
+      removeOptions(index);
+    };
 
     const handleRemoveAlert = (index: number) => {
       removeAlert(index);
@@ -176,7 +193,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
                 ? options.map((option, index) => (
                     <SelectionOption
                       key={option.id}
-                      onRemoveOption={removeOptions}
+                      onRemoveOption={handleRemoveOptions}
                       onUpdateOption={updateOptions}
                       optionsLength={options.length}
                       index={index}

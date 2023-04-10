@@ -26,7 +26,7 @@ export const DEFAULT_EMPTY_SLIDER = {
 };
 export const DEFAULT_EMPTY_SLIDER_ROWS = {
   ...DEFAULT_EMPTY_SLIDER,
-  sliderLabel: '',
+  label: '',
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
 export const DEFAULT_MAX_CHARACTERS = 300;

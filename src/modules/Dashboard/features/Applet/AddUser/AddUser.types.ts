@@ -14,5 +14,5 @@ export type Invitation = {
 
 export type Invitations = {
   result: Invitation[];
-  count: string;
+  count: number;
 };
