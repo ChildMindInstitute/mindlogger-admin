@@ -1,8 +1,6 @@
 import { styled } from '@mui/system';
 
-import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { theme, variables, StyledClearedButton, StyledFlexAllCenter } from 'shared/styles';
 
 export const StyledAddWrapper = styled(StyledFlexAllCenter)`
   position: relative;
@@ -25,12 +23,17 @@ export const StyledAddWrapper = styled(StyledFlexAllCenter)`
   }
 `;
 
-export const StyledAdd = styled(StyledFlexAllCenter)`
+export const StyledAdd = styled(StyledClearedButton)`
   width: 2.4rem;
   height: 2.4rem;
   background-color: ${variables.palette.primary};
   border-radius: ${variables.borderRadius.xs};
-  cursor: pointer;
+
+  && {
+    &:hover {
+      background-color: ${variables.palette.primary};
+    }
+  }
 
   svg {
     fill: ${variables.palette.white};

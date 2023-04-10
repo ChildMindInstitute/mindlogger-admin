@@ -48,6 +48,7 @@ export const getNewActivityFlow = () => ({
   description: '',
   isSingleReport: false,
   hideBadge: false,
+  isHidden: false,
 });
 
 const getActivityItems = (items: Item[]) =>

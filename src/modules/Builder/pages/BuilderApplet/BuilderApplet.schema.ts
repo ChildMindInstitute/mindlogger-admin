@@ -59,5 +59,5 @@ export const AppletSchema = () =>
     image: yup.string(),
     watermark: yup.string(),
     activities: yup.array().of(ActivitySchema()).required(),
-    activityFlows: yup.array().of(ActivityFlowSchema()).required(),
+    activityFlows: yup.array().of(ActivityFlowSchema()),
   });

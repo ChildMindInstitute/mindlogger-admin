@@ -14,10 +14,16 @@ type Action = {
   toolTipTitle?: string;
 };
 
+export enum ItemUiType {
+  Activity = 'activity',
+  Flow = 'flow',
+}
+
 export type ItemProps = {
   getActions: (key?: string) => Action[];
-  withHover?: boolean;
   isInactive?: boolean;
   visibleByDefault?: boolean;
   hasStaticActions?: boolean;
+  uiType?: ItemUiType;
+  onItemClick?: () => void;
 } & ItemType;

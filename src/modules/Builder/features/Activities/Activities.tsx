@@ -88,7 +88,6 @@ export const Activities = () => {
                       onVisibilityChange: handleVisibilityChange,
                     })
                   }
-                  withHover
                 />
                 <Modal
                   open={deletionModalVisible}
