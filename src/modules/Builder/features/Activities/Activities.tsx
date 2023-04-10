@@ -20,7 +20,7 @@ export const Activities = () => {
   const { control, watch, getFieldState } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
-  const [activityToDelete, setActivityToDelete] = useState<string | undefined>('');
+  const [activityToDelete, setActivityToDelete] = useState<string>('');
 
   const {
     append: appendActivity,
@@ -104,7 +104,7 @@ export const Activities = () => {
                       isActivityHidden: item.isHidden,
                       onEdit: handleEdit,
                       onDuplicate: handleDuplicate,
-                      onRemove: () => setActivityToDelete(item.key || item.id),
+                      onRemove: () => setActivityToDelete(item.key || item.id || ''),
                       onVisibilityChange: handleVisibilityChange,
                     })
                   }
