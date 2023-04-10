@@ -20,16 +20,12 @@ export const Table = ({
   className = '',
   order,
   orderBy,
-  handleRequestSort,
   emptyComponent,
   page,
-  setPage,
+  handleRequestSort,
+  handleChangePage,
   count,
 }: TableProps) => {
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage + 1);
-  };
-
   const tableHeader = (
     <StyledTableCellContent uiType={uiType}>
       <TablePagination

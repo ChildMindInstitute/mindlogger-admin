@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, MouseEvent } from 'react';
+import { useState, useEffect, MouseEvent } from 'react';
 
 import { Order } from 'shared/types';
 import { workspaces } from 'redux/modules';
@@ -6,50 +6,86 @@ import { DEFAULT_ROWS_PER_PAGE } from 'shared/components';
 import { GetAppletsParams } from 'api';
 import { formattedOrder } from 'shared/utils';
 
-export const useTable = (asyncFunc: (params: GetAppletsParams) => Promise<unknown>) => {
-  const isMounted = useRef(false);
+const defaultParams = {
+  searchValue: '',
+  order: 'desc',
+  orderBy: '',
+  page: 1,
+};
 
-  const [searchValue, setSearchValue] = useState('');
-  const [page, setPage] = useState(1);
-  const [orderBy, setOrderBy] = useState('');
-  const [order, setOrder] = useState<Order>('desc');
+export const useTable = (asyncFunc: (params: GetAppletsParams) => Promise<unknown>) => {
+  const [searchValue, setSearchValue] = useState(defaultParams.searchValue);
+  const [page, setPage] = useState(defaultParams.page);
+  const [orderBy, setOrderBy] = useState(defaultParams.orderBy);
+  const [order, setOrder] = useState<Order>(defaultParams.orderBy as Order);
+
   const ordering = formattedOrder(orderBy, order);
 
   const { ownerId } = workspaces.useData() || {};
 
+  const params = {
+    ownerId,
+    limit: DEFAULT_ROWS_PER_PAGE,
+    search: searchValue,
+    page,
+    ...(ordering && { ordering }),
+  };
+
   const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
     const isAsc = order === 'asc' && orderBy === property;
+    const orderValue = isAsc ? 'desc' : 'asc';
 
-    setOrder(isAsc ? 'desc' : 'asc');
+    setOrder(orderValue);
     setOrderBy(property);
+
+    asyncFunc({
+      params: {
+        ...params,
+        ordering: formattedOrder(property, orderValue),
+      },
+    });
+  };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    const nextPage = newPage + 1;
+    setPage(nextPage);
+
+    asyncFunc({
+      params: {
+        ...params,
+        page: nextPage,
+      },
+    });
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+
+    asyncFunc({
+      params: {
+        ...params,
+        search: value,
+      },
+    });
   };
 
   useEffect(() => {
-    if (isMounted.current && ownerId) {
-      const params = {
-        ownerId,
-        limit: DEFAULT_ROWS_PER_PAGE,
-        search: searchValue,
-        page,
-        ...(ordering && { ordering }),
-      };
-      asyncFunc({
-        params,
-      });
-
-      return;
+    if (ownerId) {
+      setPage(defaultParams.page);
+      setSearchValue(defaultParams.searchValue);
+      setOrder(defaultParams.order as Order);
+      setOrderBy(defaultParams.orderBy);
     }
-    isMounted.current = true;
-  }, [page, orderBy, order, searchValue]);
+  }, [ownerId]);
 
   return {
     searchValue,
-    setSearchValue,
     page,
-    setPage,
     orderBy,
     order,
-    handleRequestSort,
     ordering,
+    handleRequestSort,
+    handleChangePage,
+    handleSearch,
   };
 };

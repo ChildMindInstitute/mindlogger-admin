@@ -7,6 +7,7 @@ type Tab = {
   isMinHeightAuto?: boolean;
   path?: string;
   id?: string;
+  hasError?: boolean;
 };
 
 export enum UiType {

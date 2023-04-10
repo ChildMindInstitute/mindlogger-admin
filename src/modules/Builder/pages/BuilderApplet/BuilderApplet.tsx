@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from 'redux/store';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useAppDispatch } from 'redux/store';
 import { SaveAndPublish } from 'modules/Builder/features';
 import { LinkedTabs } from 'shared/components';
 import {
@@ -15,9 +15,8 @@ import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 import { builderSessionStorage } from 'shared/utils';
 
-import { builderAppletTabs } from './BuilderApplet.const';
 import { AppletSchema } from './BuilderApplet.schema';
-import { getDefaultValues } from './BuilderApplet.utils';
+import { getDefaultValues, getAppletTabs } from './BuilderApplet.utils';
 import { AppletFormValues } from './BuilderApplet.types';
 
 export const BuilderApplet = () => {
@@ -38,17 +37,22 @@ export const BuilderApplet = () => {
     resolver: yupResolver(AppletSchema()),
     mode: 'onChange',
   });
+  const {
+    reset,
+    watch,
+    control,
+    getValues,
+    formState: { isDirty },
+  } = methods;
 
   useEffect(() => {
-    if (loadingStatus === 'success' && !isNewApplet) methods.reset(getFormValues());
-    if (isNewApplet) methods.reset(getDefaultValues());
+    if (loadingStatus === 'success' && !isNewApplet) reset(getFormValues());
+    if (isNewApplet) reset(getDefaultValues());
   }, [loadingStatus, isNewApplet]);
 
-  const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(
-    methods.getValues,
-  );
+  const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(getValues);
 
-  methods.watch((_, { type, name }) => {
+  watch((_, { type, name }) => {
     if (type === 'change' || !!name) handleFormChange();
   });
 
@@ -67,11 +71,22 @@ export const BuilderApplet = () => {
     [],
   );
 
+  const { errors } = useFormState({
+    control,
+    name: ['displayName', 'activityFlows', 'activities'],
+  });
+
+  const tabErrors = {
+    hasAboutAppletErrors: !!errors.displayName,
+    hasAppletActivitiesErrors: !!errors.activities,
+    hasAppletActivityFlowErrors: !!errors.activityFlows,
+  };
+
   return (
     <FormProvider {...methods}>
       <StyledBody sx={{ position: 'relative' }}>
-        <LinkedTabs hiddenHeader={hiddenHeader} tabs={builderAppletTabs} />
-        <SaveAndPublish hasPrompt={methods.formState.isDirty} />
+        <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
+        <SaveAndPublish hasPrompt={isDirty} />
       </StyledBody>
     </FormProvider>
   );

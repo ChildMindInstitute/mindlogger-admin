@@ -23,7 +23,7 @@ export const Managers = () => {
 
   const { getWorkspaceManagers } = users.thunk;
 
-  const { searchValue, setSearchValue, ...tableProps } = useTable((args) => {
+  const { searchValue, handleSearch, ...tableProps } = useTable((args) => {
     const params = {
       ...args,
       params: {
@@ -87,10 +87,6 @@ export const Managers = () => {
       },
     };
   });
-
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
-  };
 
   const renderEmptyComponent = () => {
     if (!rows?.length) {

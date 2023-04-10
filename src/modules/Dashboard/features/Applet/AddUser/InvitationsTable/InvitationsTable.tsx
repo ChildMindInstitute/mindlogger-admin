@@ -67,7 +67,7 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
       <Table
         columns={getHeadCells()}
         rows={rows}
-        count={rows?.length || 0}
+        count={invitations?.count || 0}
         emptyComponent={emptyComponent}
         {...tableProps}
       />
