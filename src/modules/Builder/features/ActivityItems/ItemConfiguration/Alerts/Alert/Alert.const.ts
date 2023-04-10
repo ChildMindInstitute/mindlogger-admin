@@ -1,9 +1,6 @@
-export const options = [
-  { labelKey: 'Option 1', value: 'Option 1' },
-  { labelKey: 'Option 2', value: 'Option 2' },
-];
+import { DEFAULT_SLIDER_MAX_VALUE, DEFAULT_SLIDER_MIN_NUMBER } from '../../ItemConfiguration.const';
 
-export const items = [
-  { labelKey: 'Item 1', value: 'Item 1' },
-  { labelKey: 'Item 2', value: 'Item 2' },
-];
+export const minMaxValues = {
+  min: DEFAULT_SLIDER_MIN_NUMBER,
+  max: DEFAULT_SLIDER_MAX_VALUE,
+};

@@ -519,6 +519,7 @@
   "textResponseDescription": "Le répondant pourra saisir une réponse textuelle.",
   "correctAnswer": "Réponse correcte",
   "maxCharacters": "Nombre maximum de caractères",
+  "row": "Ligne",
   "selectionRowsHeader_single": "Sélection unique par ligne",
   "selectionRowsHeader_multiple": "Sélection multiple par ligne",
   "selectionRowsOption_one": "{{ count }}-option Matrice",

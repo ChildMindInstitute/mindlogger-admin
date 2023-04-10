@@ -1,0 +1,71 @@
+import i18n from 'i18n';
+import { ItemResponseType } from 'shared/consts';
+
+import { ItemConfigurationForm } from '../../ItemConfiguration.types';
+import { OptionTypes } from './Alert.types';
+
+const getOptionName = (type: OptionTypes, index: number, optionText = '') => {
+  const { t } = i18n;
+  const option = `${t(type)} ${index + 1}`;
+
+  return optionText ? `${option}: ${optionText}` : option;
+};
+
+export const getSliderOptions = (min: number, max: number) =>
+  Array.from({ length: max - min + 1 }, (_, i) => i + min).map((item) => ({
+    labelKey: item.toString(),
+    value: item.toString(),
+  }));
+
+export const getOptionsList = (formValues: ItemConfigurationForm) => {
+  const { itemsInputType, options, selectionRows, sliderOptions } = formValues;
+  if (
+    itemsInputType === ItemResponseType.SingleSelection ||
+    itemsInputType === ItemResponseType.MultipleSelection
+  ) {
+    return (
+      options?.map((option, index) => ({
+        labelKey: getOptionName(OptionTypes.Option, index, option.text),
+        value: option.id,
+      })) || []
+    );
+  }
+  if (
+    itemsInputType === ItemResponseType.SingleSelectionPerRow ||
+    itemsInputType === ItemResponseType.MultipleSelectionPerRow
+  ) {
+    return (
+      selectionRows?.options?.map((option, index) => ({
+        labelKey: getOptionName(OptionTypes.Option, index, option.label),
+        value: option.id,
+      })) || []
+    );
+  }
+  if (itemsInputType === ItemResponseType.SliderRows) {
+    return (
+      sliderOptions?.map((sliderOption, index) => ({
+        labelKey: getOptionName(OptionTypes.Slider, index, sliderOption.label),
+        value: sliderOption.id,
+      })) || []
+    );
+  }
+
+  return [];
+};
+
+export const getItemsList = (formValues: ItemConfigurationForm) => {
+  const { itemsInputType, selectionRows } = formValues;
+  if (
+    itemsInputType === ItemResponseType.SingleSelectionPerRow ||
+    itemsInputType === ItemResponseType.MultipleSelectionPerRow
+  ) {
+    return (
+      selectionRows?.items.map((selectionRow, index) => ({
+        labelKey: getOptionName(OptionTypes.Row, index, selectionRow.label),
+        value: selectionRow.id,
+      })) || []
+    );
+  }
+
+  return [];
+};
