@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, MouseEvent } from 'react';
+import { MouseEvent } from 'react';
 
 import { Row, UiType } from 'shared/components';
 import { HeadCell, Order } from 'shared/types';
@@ -13,7 +13,8 @@ export type TableProps = {
   orderBy: string;
   handleRequestSort: (event: MouseEvent<unknown>, property: string) => void;
   page: number;
-  setPage: Dispatch<SetStateAction<number>>;
   count: number;
   emptyComponent?: JSX.Element | string;
+  searchValue?: string;
+  handleChangePage: (event: unknown, newPage: number) => void;
 };

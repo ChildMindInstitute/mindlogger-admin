@@ -17,16 +17,13 @@ export const Table = ({
   headerContent,
   emptyComponent,
   page,
-  setPage,
   count,
   handleRequestSort,
+  handleChangePage,
 }: TableProps) => {
   const status = applets.useStatus();
-  const loading = status === 'idle' || status === 'loading';
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage + 1);
-  };
+  const loading = status === 'idle' || status === 'loading';
 
   const tableHeader = (
     <StyledTableCellContent>

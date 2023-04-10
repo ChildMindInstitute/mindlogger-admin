@@ -38,7 +38,7 @@ export const Respondents = () => {
 
   const { getWorkspaceRespondents } = users.thunk;
 
-  const { searchValue, setSearchValue, ordering, ...tableProps } = useTable((args) => {
+  const { searchValue, handleSearch, ordering, ...tableProps } = useTable((args) => {
     const params = {
       ...args,
       params: {
@@ -143,10 +143,6 @@ export const Respondents = () => {
       },
     };
   });
-
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
-  };
 
   const chosenRespondentsItems =
     respondentsDataIndex || respondentsDataIndex === 0
