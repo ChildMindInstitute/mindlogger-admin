@@ -1,9 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { FolderApplet } from 'redux/modules';
-
 export type TransferOwnershipProps = {
-  applet?: FolderApplet;
+  appletId?: string;
+  appletName?: string;
   isSubmitted: boolean;
   setIsSubmitted: Dispatch<SetStateAction<boolean>>;
   setEmailTransfered: Dispatch<SetStateAction<string>>;

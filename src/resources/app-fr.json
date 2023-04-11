@@ -229,7 +229,7 @@
   "deleteDescription": "Une fois l'applet supprimée, vous ne pourrez plus la restaurer.",
   "duplicateDescription": "Le contenu actuel de l'applet sera dupliqué et enregistré dans une applet distincte.",
   "confirm": "Confirmer",
-  "requestTransferOwnershipSuccess": "Votre demande a été envoyée avec succès à {{email}}. Veuillez attendre que le destinataire accepte votre demande.",
+  "requestTransferOwnershipSuccess": "<0>Votre demande a été envoyée avec succès à <1>{{email}}</1>. Veuillez attendre que le destinataire accepte votre demande.</0>",
   "selectDataRetention": "Sélectionnez la durée de stockage des données du répondant:",
   "days": "Jours",
   "weeks": "Semaines",

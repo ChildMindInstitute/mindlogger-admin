@@ -9,43 +9,35 @@ import { transferOwnershipApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledBodyLarge, theme } from 'shared/styles';
-import {
-  useBuilderSessionStorageFormValues,
-  useBuilderSessionStorageFormChange,
-} from 'shared/hooks';
 
 import { StyledInputWrapper } from './TransferOwnership.styles';
 import { TransferOwnershipFormValues, TransferOwnershipProps } from './TransferOwnership.types';
 import { defaultValues } from './TransferOwnership.const';
 
 export const TransferOwnership = ({
-  applet,
+  appletId,
+  appletName,
   isSubmitted,
   setIsSubmitted,
   setEmailTransfered,
 }: TransferOwnershipProps) => {
   const { t } = useTranslation('app');
-  const { getFormValues } =
-    useBuilderSessionStorageFormValues<TransferOwnershipFormValues>(defaultValues);
   const { getValues, handleSubmit, control } = useForm<TransferOwnershipFormValues>({
     resolver: yupResolver(
       yup.object({
         email: yup.string().required(t('emailRequired')!).email(t('incorrectEmail')!),
       }),
     ),
-    defaultValues: getFormValues(),
+    defaultValues,
   });
-
-  const { handleFormChange } =
-    useBuilderSessionStorageFormChange<TransferOwnershipFormValues>(getValues);
 
   const { execute, error } = useAsync(transferOwnershipApi);
 
   const handleTransferOwnership = async () => {
-    if (applet) {
-      await execute({ appletId: applet.id, email: getValues().email });
-      setEmailTransfered(getValues().email);
-    }
+    if (!appletId) return;
+
+    await execute({ appletId, email: getValues().email });
+    setEmailTransfered(getValues().email);
   };
 
   useEffect(() => {
@@ -56,12 +48,12 @@ export const TransferOwnership = ({
   }, [isSubmitted]);
 
   return (
-    <form onSubmit={handleSubmit(handleTransferOwnership)} onChange={handleFormChange} noValidate>
+    <form onSubmit={handleSubmit(handleTransferOwnership)} noValidate>
       <Trans i18nKey="transferOwnershipConfirmation">
         <StyledBodyLarge>
           Are you sure you want to transfer ownership of Applet
           <strong>
-            <>{{ appletName: applet?.name || t('Applet') }}</>
+            <>{{ appletName: appletName || t('Applet') }}</>
           </strong>
           to another user?
         </StyledBodyLarge>
@@ -77,10 +69,10 @@ export const TransferOwnership = ({
           name="email"
           control={control}
           label={t('ownerEmail')}
-          helperText={t('transferOwnershipHelperText')}
+          helperText={error ? '' : t('transferOwnershipHelperText')}
         />
       </StyledInputWrapper>
-      {error && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
+      {error && <StyledErrorText marginTop={0}>{getErrorMessage(error)}</StyledErrorText>}
     </form>
   );
 };

@@ -3,31 +3,32 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
-import { folders } from 'modules/Dashboard/state';
 import { StyledHeadlineLarge } from 'shared/styles/styledComponents';
 import {
   SuccessTransferOwnershipPopup,
   TransferOwnership,
 } from 'modules/Dashboard/features/Applet';
 import { Tooltip } from 'shared/components';
+import { SingleApplet } from 'shared/state';
+import { FolderApplet } from 'modules/Dashboard/state';
 
-import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
+import { StyledAppletSettingsButton } from '../AppletSettings.styles';
+import { useAppletDataOrFolderData } from './TransferOwnershipSetting.hooks';
 
-export const TransferOwnershipSetting = ({ isDisabled = false }) => {
+export const TransferOwnershipSetting = ({ isDisabled = false, isBuilder = false }) => {
   const { t } = useTranslation('app');
-  const { id } = useParams();
+  const { appletId } = useParams();
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [emailTransfered, setEmailTransfered] = useState('');
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
-
-  const applet = id ? folders.useApplet(id) : undefined;
+  const appletData = useAppletDataOrFolderData(appletId, isBuilder);
 
   useEffect(() => {
-    if (emailTransfered) {
-      setTransferOwnershipPopupVisible(true);
-    }
+    if (!emailTransfered) return;
+
+    setTransferOwnershipPopupVisible(true);
   }, [emailTransfered]);
 
   return (
@@ -35,7 +36,10 @@ export const TransferOwnershipSetting = ({ isDisabled = false }) => {
       <StyledHeadlineLarge>{t('transferOwnership')}</StyledHeadlineLarge>
       <StyledTransferOwnershipForm>
         <TransferOwnership
-          applet={applet}
+          appletId={appletData?.id}
+          appletName={
+            (appletData as SingleApplet)?.displayName ?? (appletData as FolderApplet)?.name
+          }
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
           setEmailTransfered={setEmailTransfered}
@@ -56,7 +60,10 @@ export const TransferOwnershipSetting = ({ isDisabled = false }) => {
         <SuccessTransferOwnershipPopup
           email={emailTransfered}
           transferOwnershipPopupVisible={transferOwnershipPopupVisible}
-          setTransferOwnershipPopupVisible={setTransferOwnershipPopupVisible}
+          closeTransferOwnershipPopup={() => {
+            setTransferOwnershipPopupVisible(false);
+            // TODO: add refresh the field EMAIL via ref in TransferOwnership
+          }}
         />
       )}
     </>

@@ -230,7 +230,7 @@
   "deleteDescription": "Once the Applet is deleted, you won't be able to restore it.",
   "duplicateDescription": "Current Applet content will be duplicated and saved as a separate Applet.",
   "confirm": "Confirm",
-  "requestTransferOwnershipSuccess": "Your request has been successfully sent to {{email}}. Please wait for receiver to accept your request.",
+  "requestTransferOwnershipSuccess": "<0>Your request has been successfully sent to <1>{{email}}</1>. Please wait for receiver to accept your request.</0>",
   "selectDataRetention": "Select how long Respondent's data will be stored:",
   "indefinitely": "Indefinitely",
   "days": "Days",
