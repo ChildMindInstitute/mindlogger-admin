@@ -1,5 +1,7 @@
 import i18n from 'i18n';
 
+const { t } = i18n;
+
 export const getDictionaryText = (description?: string | Record<string, string>) => {
   if (!description) return '';
 
@@ -17,3 +19,6 @@ export const getDictionaryObject = (description?: string | Record<string, string
     [language]: description ?? '',
   };
 };
+
+export const getMaxLengthValidationError = ({ max }: { max: number }) =>
+  t('visibilityDecreasesOverMaxCharacters', { max });
