@@ -8,25 +8,17 @@ import {
   SingleAndMultipleSelectionConfig,
   SingleSelectItem,
   MultiSelectItem,
+  TextInputConfig,
 } from 'shared/state';
 import { getDictionaryText } from 'shared/utils';
 
 import { ItemConfigurationForm, ItemConfigurationSettings } from './ItemConfiguration';
+import {
+  TextInputConfiguration,
+  SingleAndMultipleSelectionConfiguration,
+} from './ActivityItems.const';
 
-const SingleAndMultipleSelectionConfiguration: Record<string, ItemConfigurationSettings> = {
-  removeBackButton: ItemConfigurationSettings.IsGoBackRemoved,
-  skippableItem: ItemConfigurationSettings.IsSkippable,
-  randomizeOptions: ItemConfigurationSettings.HasRandomize,
-  addScores: ItemConfigurationSettings.HasScores,
-  setAlerts: ItemConfigurationSettings.HasAlerts,
-  addTooltip: ItemConfigurationSettings.HasTooltips,
-  setPalette: ItemConfigurationSettings.HasColorPalette,
-  timer: ItemConfigurationSettings.HasTimer,
-  'additionalResponseOption.textInputOption': ItemConfigurationSettings.HasTextInput,
-  'additionalResponseOption.textInputRequired': ItemConfigurationSettings.IsTextInputRequired,
-};
-
-export const getSingleAndMultipleSelectionConfig = (
+export const getSingleAndMultipleSelectionSettings = (
   config: SingleAndMultipleSelectionConfig,
 ): ItemConfigurationSettings[] => {
   const settings: ItemConfigurationSettings[] = [];
@@ -42,10 +34,24 @@ export const getSingleAndMultipleSelectionConfig = (
   return settings;
 };
 
+export const getTextInputSettings = (
+  config: Omit<TextInputConfig, 'maxResponseLength' | 'correctAnswer'>,
+): ItemConfigurationSettings[] => {
+  const settings: ItemConfigurationSettings[] = [];
+
+  Object.keys(TextInputConfiguration).forEach((configKey) => {
+    if (get(config, configKey)) settings.push(TextInputConfiguration[configKey]);
+  });
+
+  return settings;
+};
+
 export const getSettingsByTypeAndConfig = (type: ItemResponseType | '', config: Config) => {
   if (type === ItemResponseType.SingleSelection || type === ItemResponseType.MultipleSelection) {
-    return getSingleAndMultipleSelectionConfig(config as SingleAndMultipleSelectionConfig);
+    return getSingleAndMultipleSelectionSettings(config as SingleAndMultipleSelectionConfig);
   }
+
+  if (type === ItemResponseType.Text) return getTextInputSettings(config as TextInputConfig);
 
   return [];
 };
@@ -73,6 +79,11 @@ export const mapApiItemToItemConfigurationForm = (item: Item): ItemConfiguration
       tooltip: item.tooltip ?? undefined,
       image: item.tooltip ?? undefined,
     }));
+  }
+
+  if (responseType === ItemResponseType.Text) {
+    configuration.textResponseAnswer = (config as TextInputConfig).correctAnswer;
+    configuration.textResponseMaxCharacters = (config as TextInputConfig).maxResponseLength;
   }
 
   return configuration;
