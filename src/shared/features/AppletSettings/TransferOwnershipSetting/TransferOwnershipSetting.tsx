@@ -9,8 +9,6 @@ import {
   TransferOwnership,
 } from 'modules/Dashboard/features/Applet';
 import { Tooltip } from 'shared/components';
-import { SingleApplet } from 'shared/state';
-import { FolderApplet } from 'modules/Dashboard/state';
 import { TransferOwnershipRef } from 'modules/Dashboard/features/Applet/TransferOwnership/TransferOwnership.types';
 
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
@@ -40,9 +38,7 @@ export const TransferOwnershipSetting = ({ isDisabled = false, isBuilder = false
         <TransferOwnership
           ref={transferOwnershipRef}
           appletId={appletData?.id}
-          appletName={
-            (appletData as SingleApplet)?.displayName ?? (appletData as FolderApplet)?.name
-          }
+          appletName={appletData?.name}
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
           setEmailTransfered={setEmailTransfered}
