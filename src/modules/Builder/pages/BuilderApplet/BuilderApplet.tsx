@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -57,10 +57,9 @@ export const BuilderApplet = () => {
 
   const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(getValues);
 
-  const handleFormChangeDebounced = useMemo(
-    () => debounce(handleFormChange, INPUT_DEBOUNCE_TIME),
-    [handleFormChange],
-  );
+  const handleFormChangeDebounced = useCallback(debounce(handleFormChange, INPUT_DEBOUNCE_TIME), [
+    handleFormChange,
+  ]);
 
   watch((_, { type, name }) => {
     if (type === 'change' || !!name) handleFormChangeDebounced();
