@@ -12,7 +12,6 @@ export const StyledReviewContainer = styled(Box)`
 
 export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
   ${commonStickyStyles};
-  z-index: 1;
   box-shadow: ${({ isSticky }: { isSticky: boolean }) =>
     isSticky ? variables.boxShadow.light0 : 'none'};
   padding: ${theme.spacing(2.4, 6.4)};

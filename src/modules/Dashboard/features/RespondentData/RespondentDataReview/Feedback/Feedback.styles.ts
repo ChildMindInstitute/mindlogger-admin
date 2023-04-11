@@ -7,7 +7,7 @@ export const StyledContainer = styled(StyledFlexColumn)`
   height: 100%;
   position: absolute;
   right: 0;
-  z-index: 2;
+  z-index: ${theme.zIndex.drawer};
   background-color: ${variables.palette.surface1};
 `;
 
