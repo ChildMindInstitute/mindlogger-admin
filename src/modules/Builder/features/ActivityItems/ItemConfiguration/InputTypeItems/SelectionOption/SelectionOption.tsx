@@ -7,9 +7,7 @@ import { Actions, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import {
   theme,
-  variables,
   StyledBodyLarge,
-  StyledBodyMedium,
   StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
@@ -54,7 +52,7 @@ export const SelectionOption = ({
   const hasScoresChecked = settings?.includes(ItemConfigurationSettings.HasScores);
   const hasTooltipsChecked = settings?.includes(ItemConfigurationSettings.HasTooltips);
   const hasColorPicker = settings?.includes(ItemConfigurationSettings.HasColorPalette);
-  const { text = '', isVisible = true, score, tooltip, color } = option || {};
+  const { text = '', isHidden = false, score, tooltip, color } = option || {};
   const scoreString = score?.toString();
   const hasTooltip = tooltip !== undefined;
   const hasColor = color !== undefined;
@@ -81,7 +79,7 @@ export const SelectionOption = ({
   };
 
   const actions = {
-    optionHide: () => setValue(`options.${index}.isVisible`, !isVisible),
+    optionHide: () => setValue(`options.${index}.isHidden`, !isHidden),
     paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
     optionRemove: () => {
       onRemoveOption(index);
@@ -150,7 +148,7 @@ export const SelectionOption = ({
           </StyledFlexTopCenter>
           <StyledFlexTopCenter ref={actionsRef}>
             <Actions
-              items={getActions({ actions, isVisible, hasColorPicker, isColorSet, optionsLength })}
+              items={getActions({ actions, isHidden, hasColorPicker, isColorSet, optionsLength })}
               context={option}
               visibleByDefault={optionOpen || visibleActions}
             />

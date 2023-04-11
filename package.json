@@ -25,6 +25,7 @@
     "i18next-browser-languagedetector": "^7.0.0",
     "javascript-time-ago": "^2.5.9",
     "lodash.debounce": "^4.0.8",
+    "lodash.get": "^4.4.2",
     "lodash.uniqueid": "^4.0.1",
     "md-editor-rt": "2.8.1",
     "react": "^18.2.0",
@@ -75,6 +76,7 @@
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.7",
+    "@types/lodash.get": "^4.4.7",
     "@types/lodash.uniqueid": "^4.0.7",
     "@types/marked": "4.0.8",
     "@types/react-big-calendar": "^0.38.3",

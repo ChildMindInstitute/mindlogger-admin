@@ -10,6 +10,7 @@ import { StyledContainer } from 'shared/styles';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
+import { mapApiItemToItemConfigurationForm } from './ActivityItems.utils';
 
 export const ActivityItems = () => {
   const { t } = useTranslation('app');
@@ -56,7 +57,12 @@ export const ActivityItems = () => {
         onAddItem={handleAddItem}
         onRemoveItem={handleRemoveItem}
       />
-      {activeItemId && <ItemConfiguration item={activeItem} />}
+      {activeItemId && (
+        <ItemConfiguration
+          item={mapApiItemToItemConfigurationForm(activeItem)}
+          name={`${name}.items[${activeItemIndex}]`}
+        />
+      )}
     </StyledContainer>
   );
 };

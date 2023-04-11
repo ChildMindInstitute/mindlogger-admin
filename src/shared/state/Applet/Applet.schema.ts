@@ -26,7 +26,7 @@ export type ActivityFlow = {
   isHidden?: boolean;
 };
 
-export type Config = {
+export type TextInputConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
   maxResponseLength: number;
@@ -35,6 +35,21 @@ export type Config = {
   numericalResponseRequired: boolean;
   responseDataIdentifier: boolean;
   responseRequired: boolean;
+};
+
+export type SingleAndMultipleSelectionConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  setPalette: boolean;
+  timer?: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
 };
 
 export type SliderItemResponseValues = {
@@ -78,12 +93,14 @@ export type ResponseValues =
   | SingleSelectItemResponseValues
   | SliderItemResponseValues;
 
+export type Config = TextInputConfig | SingleAndMultipleSelectionConfig;
+
 export type Item = {
   id?: number;
   name: string;
   question: string | Record<string, string>;
   config: Config;
-  responseType: '' | ItemResponseType;
+  responseType: ItemResponseType;
   responseValues: ResponseValues;
   order?: number;
 };

@@ -4,7 +4,12 @@ import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
 
-import { SelectionRows, SliderOption } from './ItemConfiguration.types';
+import {
+  ItemConfigurationSettings,
+  SelectionRows,
+  SliderOption,
+  SelectionOption,
+} from './ItemConfiguration.types';
 import {
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
@@ -65,3 +70,27 @@ export const getMaxLengthValidationError = ({ max }: { max: number }) =>
   t('visibilityDecreasesOverMaxCharacters', { max });
 
 export const getNumberRequiredValidationError = () => t('numberValueIsRequired');
+
+export const mapSettingsToResponse = (settings: ItemConfigurationSettings[]) => {
+  const hasSetting = (settingName: ItemConfigurationSettings) => settings?.includes(settingName);
+
+  return {
+    removeBackButton: !!hasSetting(ItemConfigurationSettings.IsGoBackRemoved),
+    skippableItem: !!hasSetting(ItemConfigurationSettings.IsSkippable),
+    randomizeOptions: !!hasSetting(ItemConfigurationSettings.HasRandomize),
+    addScores: !!hasSetting(ItemConfigurationSettings.HasScores),
+    setAlerts: !!hasSetting(ItemConfigurationSettings.HasAlerts),
+    addTooltip: !!hasSetting(ItemConfigurationSettings.HasTooltips),
+    setPalette: !!hasSetting(ItemConfigurationSettings.HasColorPalette),
+    additionalResponseOption: {
+      textInputOption: !!hasSetting(ItemConfigurationSettings.HasTextInput),
+      textInputRequired: !!hasSetting(ItemConfigurationSettings.IsTextInputRequired),
+    },
+  };
+};
+
+export const mapSelectionOptionsToResponse = (options?: SelectionOption[]) =>
+  options?.map((option) => ({
+    ...option,
+    color: option?.color?.hex,
+  }));

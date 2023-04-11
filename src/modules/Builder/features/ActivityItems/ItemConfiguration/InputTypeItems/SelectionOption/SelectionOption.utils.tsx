@@ -8,13 +8,13 @@ import { OptionActions } from './SelectionOption.types';
 
 export const getActions = ({
   actions: { optionHide, paletteClick, optionRemove },
-  isVisible,
+  isHidden,
   hasColorPicker,
   isColorSet,
   optionsLength,
 }: OptionActions) => [
   {
-    icon: <Svg id={isVisible ? 'visibility-on' : 'visibility-off'} />,
+    icon: <Svg id={!isHidden ? 'visibility-on' : 'visibility-off'} />,
     action: optionHide,
   },
   {

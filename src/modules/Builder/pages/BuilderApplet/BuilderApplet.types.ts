@@ -1,4 +1,4 @@
-import { ResponseValues } from 'shared/state';
+import { ResponseValues, Config } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 
 export type ItemFormValues = {
@@ -7,6 +7,7 @@ export type ItemFormValues = {
   question: string;
   responseType: '' | ItemResponseType;
   responseValues: null | ResponseValues;
+  config: Config;
 };
 
 export type ActivityFormValues = {

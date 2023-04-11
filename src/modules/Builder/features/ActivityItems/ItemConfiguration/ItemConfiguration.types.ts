@@ -2,7 +2,6 @@ import { ColorResult } from 'react-color';
 import { FieldValues, Path } from 'react-hook-form';
 
 import { ItemResponseType } from 'shared/consts';
-import { ActivityItemApi } from 'modules/Builder/api';
 
 export enum ItemConfigurationSettings {
   HasScores = 'hasScores',
@@ -32,7 +31,7 @@ export type SelectionOption = {
   text: string;
   score?: number;
   tooltip?: string;
-  isVisible?: boolean;
+  isHidden?: boolean;
   image?: string;
   color?: ColorResult;
 };
@@ -117,5 +116,6 @@ export type SliderOption = {
 };
 
 export type ItemConfigurationProps = {
-  item: ActivityItemApi | null;
+  item: ItemConfigurationForm;
+  name: string;
 };

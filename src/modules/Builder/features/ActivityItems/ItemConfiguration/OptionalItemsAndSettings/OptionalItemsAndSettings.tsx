@@ -3,7 +3,7 @@ import { useFieldArray } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import uniqueId from 'lodash.uniqueid';
+import { v4 as uuidv4 } from 'uuid';
 
 import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
@@ -76,9 +76,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
 
     const handleAddOption = () =>
       appendOption({
-        id: uniqueId('option-'),
+        id: uuidv4(),
         text: '',
-        isVisible: true,
+        isHidden: false,
         ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
         ...(hasColorPalette &&
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),

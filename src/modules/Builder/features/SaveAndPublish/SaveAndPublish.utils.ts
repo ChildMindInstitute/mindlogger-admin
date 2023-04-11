@@ -15,6 +15,12 @@ export const removeAppletExtraFields = () => ({
 
 export const removeActivityExtraFields = () => ({ order: undefined, id: undefined });
 
+export const removeItemExtraFields = () => ({
+  id: undefined,
+  isHidden: undefined, //TODO: remove after backend fixes
+  settings: undefined,
+});
+
 const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
 
 export const usePasswordFromStorage = () => {

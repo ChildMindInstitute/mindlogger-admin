@@ -23,10 +23,11 @@ import { ItemConfigurationForm, ItemConfigurationProps } from './ItemConfigurati
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { itemConfigurationFormSchema } from './ItemConfiguration.schema';
+import { useItemConfigurationFormChange } from './ItemConfiguration.hooks';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 
-//@TODO: move to the Applet form, add validation
-export const ItemConfiguration = ({ item }: ItemConfigurationProps) => {
+//@TODO: add validation
+export const ItemConfiguration = ({ item, name }: ItemConfigurationProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const { t } = useTranslation('app');
@@ -42,6 +43,8 @@ export const ItemConfiguration = ({ item }: ItemConfigurationProps) => {
     },
     mode: 'onChange',
   });
+
+  useItemConfigurationFormChange(name, { ...methods });
 
   const { control, watch, setValue, getValues, register, unregister, clearErrors, reset } = methods;
 

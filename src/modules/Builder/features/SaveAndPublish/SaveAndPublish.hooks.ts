@@ -17,8 +17,9 @@ import { EnterAppletPasswordForm } from 'modules/Dashboard';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
-import { appletInfoMocked, activityItemsMocked } from './mock';
+import { appletInfoMocked } from './mock';
 import {
+  removeItemExtraFields,
   removeAppletExtraFields,
   removeActivityExtraFields,
   usePasswordFromStorage,
@@ -49,7 +50,11 @@ export const useAppletData = () => {
           ...activity,
           key: uuidv4(),
           description: getDictionaryObject(activity.description),
-          items: activityItemsMocked,
+          items: activity.items?.map((item) => ({
+            ...item,
+            question: getDictionaryObject(item.question),
+            ...removeItemExtraFields(),
+          })),
           ...removeActivityExtraFields(),
         })),
         password: appletPassword,
@@ -61,7 +66,7 @@ export const useAppletData = () => {
       };
     }
 
-    return {
+    const result = {
       ...appletInfo,
       password: appletPassword,
       description: appletDescription,
@@ -71,12 +76,18 @@ export const useAppletData = () => {
         ...activity,
         key: uuidv4(),
         description: getDictionaryObject(activity.description),
-        items: activityItemsMocked,
+        items: activity.items?.map((item) => ({
+          ...item,
+          question: getDictionaryObject(item.question),
+          ...removeItemExtraFields(),
+        })),
         ...removeActivityExtraFields(),
       })),
       activityFlows: [],
       ...removeAppletExtraFields(),
     };
+
+    return result;
   };
 };
 

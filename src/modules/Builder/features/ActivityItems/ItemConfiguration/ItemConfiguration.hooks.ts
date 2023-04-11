@@ -1,7 +1,8 @@
-import { useFormContext } from 'react-hook-form';
 import { useEffect } from 'react';
+import { useFormContext, useWatch, UseFormReturn } from 'react-hook-form';
 
-import { OptionalItemSetupProps } from './ItemConfiguration.types';
+import { OptionalItemSetupProps, ItemConfigurationForm } from './ItemConfiguration.types';
+import { mapSelectionOptionsToResponse, mapSettingsToResponse } from './ItemConfiguration.utils';
 
 export const useOptionalItemSetup = ({
   name,
@@ -25,4 +26,31 @@ export const useOptionalItemSetup = ({
   }, [getValues]);
 
   return { control, watch, setValue };
+};
+
+export const useItemConfigurationFormChange = (
+  name: string,
+  methods: UseFormReturn<ItemConfigurationForm>,
+) => {
+  const { setValue } = useFormContext();
+
+  const { control } = methods;
+
+  const changes = useWatch({
+    control,
+    name: ['itemsInputType', 'name', 'body', 'options', 'settings'],
+  });
+
+  const updateAppletForm = (fieldName: string, value: unknown) =>
+    setValue(`${name}.${fieldName}`, value);
+
+  useEffect(() => {
+    const [responseType, name, question, options, settings] = changes;
+
+    updateAppletForm('responseType', responseType);
+    updateAppletForm('name', name);
+    updateAppletForm('question', question);
+    updateAppletForm('responseValues', { options: mapSelectionOptionsToResponse(options) });
+    updateAppletForm('config', mapSettingsToResponse(settings));
+  }, [changes]);
 };
