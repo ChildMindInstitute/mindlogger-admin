@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
@@ -11,6 +11,7 @@ import {
 import { Tooltip } from 'shared/components';
 import { SingleApplet } from 'shared/state';
 import { FolderApplet } from 'modules/Dashboard/state';
+import { TransferOwnershipRef } from 'modules/Dashboard/features/Applet/TransferOwnership/TransferOwnership.types';
 
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
@@ -24,6 +25,7 @@ export const TransferOwnershipSetting = ({ isDisabled = false, isBuilder = false
   const [emailTransfered, setEmailTransfered] = useState('');
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
   const appletData = useAppletDataOrFolderData(appletId, isBuilder);
+  const transferOwnershipRef = useRef<TransferOwnershipRef | null>(null);
 
   useEffect(() => {
     if (!emailTransfered) return;
@@ -36,6 +38,7 @@ export const TransferOwnershipSetting = ({ isDisabled = false, isBuilder = false
       <StyledHeadlineLarge>{t('transferOwnership')}</StyledHeadlineLarge>
       <StyledTransferOwnershipForm>
         <TransferOwnership
+          ref={transferOwnershipRef}
           appletId={appletData?.id}
           appletName={
             (appletData as SingleApplet)?.displayName ?? (appletData as FolderApplet)?.name
@@ -62,7 +65,7 @@ export const TransferOwnershipSetting = ({ isDisabled = false, isBuilder = false
           transferOwnershipPopupVisible={transferOwnershipPopupVisible}
           closeTransferOwnershipPopup={() => {
             setTransferOwnershipPopupVisible(false);
-            // TODO: add refresh the field EMAIL via ref in TransferOwnership
+            transferOwnershipRef.current?.resetEmail();
           }}
         />
       )}

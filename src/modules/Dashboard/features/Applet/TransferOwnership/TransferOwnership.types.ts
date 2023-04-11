@@ -11,3 +11,7 @@ export type TransferOwnershipProps = {
 export type TransferOwnershipFormValues = {
   email: string;
 };
+
+export type TransferOwnershipRef = {
+  resetEmail: () => void;
+};
