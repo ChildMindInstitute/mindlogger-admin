@@ -14,6 +14,7 @@ import {
 import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 import { builderSessionStorage } from 'shared/utils';
+import { auth } from 'modules/Auth';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import { getDefaultValues, getAppletTabs } from './BuilderApplet.utils';
@@ -27,6 +28,8 @@ export const BuilderApplet = () => {
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
   const loadingStatus = applet.useResponseStatus() ?? {};
+  const userData = auth.useData();
+  const ownerId = String(userData?.user?.id) || '';
 
   const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
     getDefaultValues(appletData),
@@ -59,9 +62,9 @@ export const BuilderApplet = () => {
   useEffect(() => {
     if (!appletId || isNewApplet) return;
 
-    const { getApplet } = applet.thunk;
-    dispatch(getApplet({ appletId }));
-  }, [appletId]);
+    const { getAppletWithItems } = applet.thunk;
+    dispatch(getAppletWithItems({ ownerId, appletId }));
+  }, [ownerId, appletId]);
 
   useEffect(
     () => () => {
