@@ -750,5 +750,7 @@
   "noRespondentsYet": "No respondents yet.",
   "deleteActivity": "Delete Activity",
   "deleteActivityDescription": "Are you sure you want to delete the Activity <1>{{ activityName }}</1>?",
+  "showMore": "Show More...",
+  "showLess": "Show Less...",
   "hideBadgeTooltip": "The Activity Flow identifier will be hidden from Respondents"
 }
