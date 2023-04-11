@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import debounce from 'lodash.debounce';
 
 import { useAppDispatch } from 'redux/store';
 import { SaveAndPublish } from 'modules/Builder/features';
@@ -15,6 +16,7 @@ import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 import { builderSessionStorage } from 'shared/utils';
 import { auth } from 'modules/Auth';
+import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import { getDefaultValues, getAppletTabs } from './BuilderApplet.utils';
@@ -55,8 +57,13 @@ export const BuilderApplet = () => {
 
   const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(getValues);
 
+  const handleFormChangeDebounced = useMemo(
+    () => debounce(handleFormChange, INPUT_DEBOUNCE_TIME),
+    [handleFormChange],
+  );
+
   watch((_, { type, name }) => {
-    if (type === 'change' || !!name) handleFormChange();
+    if (type === 'change' || !!name) handleFormChangeDebounced();
   });
 
   useEffect(() => {
