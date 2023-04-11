@@ -11,6 +11,11 @@ export type SignInRefreshTokenArgs = {
 
 export type AppletId = { appletId: string };
 
+export type OwnerAndAppletIds = {
+  ownerId: string;
+  appletId: string;
+};
+
 export type AppletBody = AppletId & {
   body: SingleApplet;
 };
