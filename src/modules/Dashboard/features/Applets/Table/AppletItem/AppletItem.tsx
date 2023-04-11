@@ -1,5 +1,5 @@
 import { useState, DragEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
 import { useAppletsDnd, useTimeAgo } from 'shared/hooks';
@@ -8,7 +8,6 @@ import { FolderApplet, folders, popups, account } from 'redux/modules';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
-import { APPLET_PAGES } from 'shared/consts';
 import { page } from 'resources';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 import { getBuilderAppletUrl } from 'shared/utils';
@@ -26,8 +25,12 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
 
-  const APPLET_RESPONDENTS = `${page.dashboard}/${item.id}/${APPLET_PAGES.respondents}`;
-  const APPLET_SCHEDULE = `${page.dashboard}/${item.id}/${APPLET_PAGES.schedule}`;
+  const APPLET_RESPONDENTS = generatePath(page.appletRespondents, {
+    appletId: item.id,
+  });
+  const APPLET_SCHEDULE = generatePath(page.appletSchedule, {
+    appletId: item.id,
+  });
 
   const handleAppletClick = () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS));
 

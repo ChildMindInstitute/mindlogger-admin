@@ -15,7 +15,7 @@ import { getActions, getHeadCells } from './Managers.const';
 import { User } from './Managers.types';
 
 export const Managers = () => {
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
 

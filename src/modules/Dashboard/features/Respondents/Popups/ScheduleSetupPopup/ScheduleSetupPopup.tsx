@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 
 import { Modal } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { APPLET_PAGES } from 'shared/consts';
 import { page } from 'resources';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -33,7 +32,11 @@ export const ScheduleSetupPopup = ({
 
   const handlePopupSubmit = () => {
     setPopupVisible(false);
-    navigate(`${page.dashboard}/${chosenAppletData?.appletId}/${APPLET_PAGES.schedule}`);
+    navigate(
+      generatePath(page.appletSchedule, {
+        appletId: chosenAppletData?.appletId,
+      }),
+    );
   };
 
   useEffect(() => {

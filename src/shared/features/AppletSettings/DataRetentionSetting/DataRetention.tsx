@@ -19,7 +19,7 @@ import { DataRetentionFormValues } from './DataRetention.types';
 
 export const DataRetention = () => {
   const { t } = useTranslation();
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const { getFormValues } =
     useBuilderSessionStorageFormValues<DataRetentionFormValues>(defaultValues);
   const { handleSubmit, control, watch, register, unregister, getValues } =
