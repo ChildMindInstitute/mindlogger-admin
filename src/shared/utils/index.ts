@@ -19,3 +19,4 @@ export * from './urlGenerator';
 export * from './forms';
 export * from './joinWihComma';
 export * from './capitalize';
+export * from './validation';

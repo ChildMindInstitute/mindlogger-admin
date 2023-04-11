@@ -16,8 +16,8 @@ import {
 import { useBreadcrumbs } from 'shared/hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
-import { ActivityFlow as ActivityFlowType } from 'shared/state';
 import { page } from 'resources';
+import { AppletFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
 
 import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
 
@@ -27,9 +27,9 @@ export const ActivityFlowAbout = () => {
   const navigate = useNavigate();
   const { appletId, activityFlowId } = useParams();
 
-  const activityFlows: (Omit<ActivityFlowType, 'description'> & { description: string })[] =
-    watch('activityFlows');
+  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activityFlowIndex = activityFlows.findIndex((flow) => flow.id === activityFlowId);
+
   const commonProps = {
     fullWidth: true,
     control,

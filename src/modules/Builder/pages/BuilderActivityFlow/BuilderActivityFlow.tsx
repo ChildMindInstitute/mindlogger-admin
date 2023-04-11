@@ -1,3 +1,4 @@
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
@@ -12,15 +13,21 @@ export const BuilderActivityFlow = () => {
   const { appletId, activityFlowId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { trigger } = useFormContext();
   useBreadcrumbs();
 
   const appletActivityFlowUrl = generatePath(page.builderAppletActivityFlow, { appletId });
+
+  const handleBackBtnClick = async () => {
+    await trigger();
+    navigate(appletActivityFlowUrl);
+  };
 
   return (
     <StyledBody sx={{ position: 'relative' }}>
       <StyledDirectoryUpButton
         variant="text"
-        onClick={() => navigate(appletActivityFlowUrl)}
+        onClick={handleBackBtnClick}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
       >
         {t('activityFlows')}

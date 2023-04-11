@@ -3,14 +3,20 @@ import { useTranslation } from 'react-i18next';
 
 import { Actions } from 'shared/components';
 import {
-  StyledBodyLarge,
   StyledTitleBoldMedium,
   StyledTitleBoldSmall,
   StyledTitleMedium,
   theme,
 } from 'shared/styles';
 
-import { StyledActions, StyledCol, StyledImg, StyledItem } from './Item.styles';
+import {
+  StyledActions,
+  StyledActivityDescription,
+  StyledCol,
+  StyledFlowDescription,
+  StyledImg,
+  StyledItem,
+} from './Item.styles';
 import { ItemProps, ItemUiType } from './Item.types';
 
 export const Item = ({
@@ -47,12 +53,12 @@ export const Item = ({
         {isFlowUiType ? (
           <>
             <StyledTitleMedium className="item-name">{name}</StyledTitleMedium>
-            <StyledBodyLarge>{description}</StyledBodyLarge>
+            <StyledFlowDescription>{description}</StyledFlowDescription>
           </>
         ) : (
           <>
             <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
-            <StyledTitleMedium>{description}</StyledTitleMedium>
+            <StyledActivityDescription>{description}</StyledActivityDescription>
           </>
         )}
         {count && (

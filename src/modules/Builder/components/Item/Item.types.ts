@@ -15,8 +15,9 @@ type Action = {
 };
 
 export enum ItemUiType {
-  Activity = 'activity',
-  Flow = 'flow',
+  Activity,
+  Flow,
+  FlowBuilder,
 }
 
 export type ItemProps = {

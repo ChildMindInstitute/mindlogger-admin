@@ -2,7 +2,7 @@ import { Svg } from 'shared/components';
 
 import { GetActivityFlowActions } from './ActivityFlow.types';
 
-export const getActions = ({
+export const getFlowsItemActions = ({
   activityFlowIndex,
   activityFlowId,
   activityFlowHidden,
@@ -29,7 +29,12 @@ export const getActions = ({
   },
   {
     icon: <Svg id="trash" />,
-    action: () => removeActivityFlow(activityFlowIndex),
+    action: removeActivityFlow,
+    toolTipTitle: '',
+  },
+  {
+    icon: <Svg id="drag" />,
+    action: () => null,
     toolTipTitle: '',
   },
 ];

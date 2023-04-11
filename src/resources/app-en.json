@@ -749,6 +749,8 @@
   "unsupportedResponseItem": "This data type can’t be displayed on this page",
   "noRespondentsYet": "No respondents yet.",
   "deleteActivity": "Delete Activity",
+  "deleteActivityFlow": "Delete Activity Flow",
   "deleteActivityDescription": "Are you sure you want to delete the Activity <1>{{ activityName }}</1>?",
+  "deleteActivityFlowDescription": "Are you sure you want to delete the Activity Flow <1>{{ activityFlowName }}</1>?",
   "hideBadgeTooltip": "The Activity Flow identifier will be hidden from Respondents"
 }

@@ -1,12 +1,9 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
+import { getMaxLengthValidationError } from 'shared/utils';
 
-import {
-  getMaxLengthValidationError,
-  getNumberRequiredValidationError,
-} from './ItemConfiguration.utils';
-
+import { getNumberRequiredValidationError } from './ItemConfiguration.utils';
 import {
   SELECTION_ROW_OPTION_LABEL_MAX_LENGTH,
   SELECTION_OPTION_TEXT_MAX_LENGTH,

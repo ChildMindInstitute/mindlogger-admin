@@ -61,7 +61,4 @@ export const getPaletteColor = (paletteName: string, index: number) => {
   return colors?.[index % colors?.length];
 };
 
-export const getMaxLengthValidationError = ({ max }: { max: number }) =>
-  t('visibilityDecreasesOverMaxCharacters', { max });
-
 export const getNumberRequiredValidationError = () => t('numberValueIsRequired');
