@@ -1,44 +1,52 @@
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
-import { APPLET_PAGES } from 'shared/consts';
 import { page } from 'resources';
 
 export const useAppletTabs = () => {
-  const { id } = useParams();
-  const { respondents, managers, addUser, settings, schedule } = APPLET_PAGES;
+  const { appletId } = useParams();
 
   return [
     {
       labelKey: 'respondents',
       icon: <Svg id="respondent-outlined" />,
       activeIcon: <Svg id="respondent-filled" />,
-      path: `${page.dashboard}/${id}/${respondents}`,
+      path: generatePath(page.appletRespondents, {
+        appletId,
+      }),
     },
     {
       labelKey: 'managers',
       icon: <Svg id="manager-outlined" />,
       activeIcon: <Svg id="manager-filled" />,
-      path: `${page.dashboard}/${id}/${managers}`,
+      path: generatePath(page.appletManagers, {
+        appletId,
+      }),
     },
     {
       labelKey: 'addUsers',
       icon: <Svg id="add-users-outlined" />,
       activeIcon: <Svg id="add-users-filled" />,
       isMinHeightAuto: true,
-      path: `${page.dashboard}/${id}/${addUser}`,
+      path: generatePath(page.appletAddUser, {
+        appletId,
+      }),
     },
     {
       labelKey: 'generalSchedule',
       icon: <Svg id="schedule-outlined" />,
       activeIcon: <Svg id="schedule-filled" />,
-      path: `${page.dashboard}/${id}/${schedule}`,
+      path: generatePath(page.appletSchedule, {
+        appletId,
+      }),
     },
     {
       labelKey: 'appletSettings',
       icon: <Svg id="settings" />,
       activeIcon: <Svg id="settings-filled" />,
-      path: `${page.dashboard}/${id}/${settings}`,
+      path: generatePath(page.appletSettings, {
+        appletId,
+      }),
     },
   ];
 };

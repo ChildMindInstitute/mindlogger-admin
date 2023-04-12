@@ -28,7 +28,7 @@ import {
 
 export const Respondents = () => {
   const dispatch = useAppDispatch();
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
 

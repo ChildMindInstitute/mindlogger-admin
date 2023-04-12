@@ -31,7 +31,7 @@ import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types
 import { getUrl } from './AddUserForm.utils';
 
 export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const { t } = useTranslation('app');
 
   const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);

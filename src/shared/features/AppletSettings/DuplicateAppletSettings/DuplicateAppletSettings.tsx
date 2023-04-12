@@ -13,7 +13,7 @@ import {
 
 export const DuplicateAppletSettings = () => {
   const { t } = useTranslation('app');
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const dispatch = useAppDispatch();
 
   return (
