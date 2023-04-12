@@ -1,5 +1,5 @@
 import { authApiClient, authApiClientWithFullLang } from 'shared/api/api.client';
-import { AppletId } from 'shared/api';
+import { AppletId, AppletIdWithPassword } from 'shared/api';
 
 import {
   SwitchAccount,
@@ -119,8 +119,16 @@ export const revokeAppletUserApi = (
     signal,
   });
 
-export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.delete(`/applets/${appletId}`, { signal });
+export const deleteAppletApi = (
+  { appletId, password }: AppletIdWithPassword,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(`/applets/${appletId}`, {
+    data: {
+      password,
+    },
+    signal,
+  });
 
 export const postAppletInvitationApi = (
   { url, appletId, options }: AppletInvitationData,

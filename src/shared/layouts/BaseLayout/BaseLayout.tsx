@@ -1,14 +1,10 @@
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
-import {
-  DuplicatePopups,
-  DeletePopup,
-  TransferOwnershipPopup,
-} from 'modules/Dashboard/features/Applet/Popups';
+import { DuplicatePopups, TransferOwnershipPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
 import { account, folders, popups, workspaces, applets, users, auth } from 'redux/modules';
-import { DEFAULT_ROWS_PER_PAGE, Footer } from 'shared/components';
+import { DEFAULT_ROWS_PER_PAGE, DeletePopup, Footer } from 'shared/components';
 
 import { LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
