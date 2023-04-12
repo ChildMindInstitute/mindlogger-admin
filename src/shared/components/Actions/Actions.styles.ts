@@ -8,6 +8,7 @@ import { Svg } from '../Svg';
 export const StyledActionsWrapper = styled(StyledFlexTopCenter)`
   width: 100%;
   height: 100%;
+  justify-content: flex-end;
 
   svg {
     fill: ${variables.palette.on_surface_variant};

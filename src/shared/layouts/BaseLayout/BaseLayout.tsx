@@ -14,7 +14,7 @@ import { LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 
 export const BaseLayout = () => {
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
   const accountData = account.useData();

@@ -1,19 +1,23 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Activity } from 'redux/modules';
 import { Svg } from 'shared/components';
-import { StyledContainer } from 'shared/styles';
+import { useHeaderSticky } from 'shared/hooks';
+import { StyledContainer, StyledHeadlineLarge } from 'shared/styles';
 
 import { mockedActivities } from '../mock';
+import { StyledTextBtn } from '../RespondentData.styles';
 import { Feedback } from './Feedback';
-import { StyledFeedbackBtn, StyledReviewContainer } from './RespondentDataReview.styles';
+import { StyledHeader, StyledReviewContainer } from './RespondentDataReview.styles';
 import { Response } from './RespondentDataReview.types';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
 
 export const RespondentDataReview = () => {
   const { t } = useTranslation();
+  const containerRef = useRef<HTMLElement | null>(null);
+  const isHeaderSticky = useHeaderSticky(containerRef);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const activities = mockedActivities as unknown as Activity[];
   const [selectedActivity, setSelectedActivity] = useState<Activity>(activities[0]);
@@ -28,14 +32,21 @@ export const RespondentDataReview = () => {
         setSelectedActivity={setSelectedActivity}
         setSelectedResponse={setSelectedResponse}
       />
-      <StyledReviewContainer>
-        <StyledFeedbackBtn
-          variant="text"
-          onClick={() => setIsFeedbackOpen(true)}
-          startIcon={<Svg id="item-outlined" width="18" height="18" />}
+      <StyledReviewContainer ref={containerRef}>
+        <StyledHeader
+          isSticky={isHeaderSticky}
+          sx={{ justifyContent: selectedResponse ? 'space-between' : 'flex-end' }}
         >
-          {t('feedback')}
-        </StyledFeedbackBtn>
+          {selectedResponse && <StyledHeadlineLarge>{selectedActivity.name}</StyledHeadlineLarge>}
+          <StyledTextBtn
+            variant="text"
+            onClick={() => setIsFeedbackOpen(true)}
+            disabled={!selectedResponse}
+            startIcon={<Svg id="item-outlined" width="18" height="18" />}
+          >
+            {t('feedback')}
+          </StyledTextBtn>
+        </StyledHeader>
         <Review response={selectedResponse} activity={selectedActivity} />
       </StyledReviewContainer>
       {isFeedbackOpen && <Feedback onClose={() => setIsFeedbackOpen(false)} />}

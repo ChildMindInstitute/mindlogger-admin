@@ -46,7 +46,8 @@ export const TransferOwnershipPopup = () => {
     >
       <StyledModalWrapper>
         <TransferOwnership
-          applet={applet!}
+          appletId={applet?.id}
+          appletName={applet?.displayName}
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
           setEmailTransfered={setEmailTransfered}

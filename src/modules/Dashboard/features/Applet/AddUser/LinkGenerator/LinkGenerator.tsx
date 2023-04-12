@@ -15,7 +15,7 @@ import { LinkPopup } from './LinkPopup';
 
 export const LinkGenerator = () => {
   const { t } = useTranslation('app');
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const [inviteLink, setInviteLink] = useState<InviteLink | null>(null);
   const [linkPopupVisible, setLinkPopupVisible] = useState(false);
 

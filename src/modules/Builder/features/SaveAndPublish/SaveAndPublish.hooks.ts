@@ -203,13 +203,12 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       return;
     }
 
-    const isValid = await trigger();
-
-    if (isValid) {
-      setIsPasswordPopupOpened(true);
-    }
-
     setPublishProcessPopupOpened(false);
+
+    const isValid = await trigger();
+    if (!isValid) {
+      return;
+    }
     await sendRequestWithPasswordCheck();
   };
 

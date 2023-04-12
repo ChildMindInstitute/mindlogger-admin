@@ -1,42 +1,23 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams, generatePath } from 'react-router-dom';
-import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { page } from 'resources';
 import { StyledBuilderBtn } from 'shared/styles';
-import { StyledHeader, BuilderContainerProps } from 'shared/features';
+import { StyledHeader } from 'shared/features';
 import { Svg } from 'shared/components';
-import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
-export const ActivityFlowHeader: BuilderContainerProps['Header'] = ({ isSticky, children }) => {
+import { ActivityFlowHeaderProps } from './ActivityFlowHeader.types';
+
+export const ActivityFlowHeader = ({
+  isSticky,
+  children,
+  headerProps,
+}: ActivityFlowHeaderProps) => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
-  const navigate = useNavigate();
-
-  const { control } = useFormContext();
-
-  const { append: appendActivityFlow } = useFieldArray({
-    control,
-    name: 'activityFlows',
-  });
-
-  const handleAddActivityFlow = () => {
-    const newActivityFlow = getNewActivityFlow();
-
-    appendActivityFlow(newActivityFlow);
-
-    navigate(
-      generatePath(page.builderAppletActivityFlowItem, {
-        appletId,
-        activityFlowId: newActivityFlow.id,
-      }),
-    );
-  };
+  const { onAddActivityFlow = () => false } = headerProps || {};
 
   return (
     <StyledHeader isSticky={isSticky}>
       {children}
-      <StyledBuilderBtn startIcon={<Svg id="flow" />} onClick={handleAddActivityFlow}>
+      <StyledBuilderBtn startIcon={<Svg id="flow" />} onClick={() => onAddActivityFlow()}>
         {t('addActivityFlow')}
       </StyledBuilderBtn>
     </StyledHeader>

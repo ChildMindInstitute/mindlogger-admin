@@ -3,13 +3,14 @@ import { AxiosResponse } from 'axios';
 
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
-import { AppletBody, AppletId } from 'api';
+import { AppletBody, AppletId, OwnerAndAppletIds } from 'api';
 import { ItemResponseType } from 'shared/consts';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
   thunk:
     | AsyncThunk<AxiosResponse, AppletId, Record<string, never>>
+    | AsyncThunk<AxiosResponse, OwnerAndAppletIds, Record<string, never>>
     | AsyncThunk<AxiosResponse, SingleApplet, Record<string, never>>
     | AsyncThunk<AxiosResponse, AppletBody, Record<string, never>>;
   key: keyof AppletSchema;
@@ -83,7 +84,7 @@ export type Item = {
   name: string;
   question: string | Record<string, string>;
   config: Config;
-  responseType: '' | ItemResponseType;
+  responseType: ItemResponseType;
   responseValues: ResponseValues;
   order?: number;
 };
