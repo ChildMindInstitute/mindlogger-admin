@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { assessmentActivityItems } from './mock';
 import { ActivityCardItemList } from './ActivityCardItemList';
 import { ActivityItemAnswers } from './FeedbackAssessment.types';
+import { ActivityItem } from './ActivityCardItemList/ActivityCartItemList.types';
 
 const defaultValues = assessmentActivityItems.map((item) => ({
   activityItemId: item.id,
@@ -19,6 +20,7 @@ export const FeedbackAssessment = () => {
   });
 
   const [step, setStep] = useState(0);
+  const [items, setItems] = useState<ActivityItem[]>([]);
 
   const toNextStep = () => {
     setStep(step + 1);
@@ -28,10 +30,12 @@ export const FeedbackAssessment = () => {
     setStep(step - 1);
   };
 
-  const items = useMemo(() => assessmentActivityItems.slice(0, step + 1).reverse(), [step]);
-
   const isSubmitVisible = step === assessmentActivityItems.length - 1;
   const isBackVisible = items.length > 1;
+
+  useEffect(() => {
+    setItems(assessmentActivityItems.slice(0, step + 1).reverse());
+  }, [step]);
 
   return (
     <FormProvider {...methods}>
