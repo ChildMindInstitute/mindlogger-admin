@@ -1,36 +1,6 @@
 import { Slider, styled } from '@mui/material';
-import MdEditor from 'md-editor-rt';
 
 import { StyledFlexColumn, theme, variables } from 'shared/styles';
-
-export const StyledMdEditor = styled(MdEditor)`
-  background-color: transparent;
-  color: ${variables.palette.on_surface_variant};
-  font-size: ${variables.font.size.md};
-  font-weight: normal;
-  text-align: initial;
-  padding: ${theme.spacing(0.7, 0)};
-  margin-bottom: ${theme.spacing(1.6)};
-
-  .default-theme {
-    p {
-      padding: 0;
-    }
-
-    img {
-      padding: 0;
-      border: none;
-    }
-
-    table tbody tr {
-      background: transparent;
-    }
-
-    .figcaption {
-      display: none;
-    }
-  }
-`;
 
 export const StyledSlider = styled(Slider)`
   margin-bottom: ${theme.spacing(3.6)};
