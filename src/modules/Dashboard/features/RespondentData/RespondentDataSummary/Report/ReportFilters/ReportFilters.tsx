@@ -6,7 +6,7 @@ import { DatePicker, TimePicker, DatePickerUiType } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { Switch, TagsInputController } from 'shared/components/FormComponents';
 
-import { StyledForm, StyledTimeText } from './ReportFilters.styles';
+import { StyledTimeText } from './ReportFilters.styles';
 import { FilterValues } from './ReportFilters.types';
 
 export const ReportFilters = () => {
@@ -24,7 +24,7 @@ export const ReportFilters = () => {
   const filterByIdentifier = watch('filterByIdentifier');
 
   return (
-    <StyledForm>
+    <form>
       <StyledFlexTopCenter sx={{ mb: theme.spacing(3.2) }}>
         <DatePicker
           name="startDateEndDate"
@@ -87,6 +87,6 @@ export const ReportFilters = () => {
           </StyledFlexTopCenter>
         </>
       )}
-    </StyledForm>
+    </form>
   );
 };
