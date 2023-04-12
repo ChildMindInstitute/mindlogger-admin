@@ -1,13 +1,13 @@
-import { ResponseValues, Config } from 'shared/state';
+import { Config, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 
 export type ItemFormValues = {
-  id: string;
+  id?: string;
   name: string;
   question: string;
-  responseType: '' | ItemResponseType;
-  responseValues: null | ResponseValues;
   config: Config;
+  responseType: ItemResponseType | '';
+  responseValues: SingleAndMultipleSelectItemResponseValues;
 };
 
 export type ActivityFormValues = {

@@ -5,6 +5,7 @@ import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId } from 'api';
 import { ItemResponseType } from 'shared/consts';
+import { ColorResult } from 'react-color';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -45,7 +46,22 @@ export type SingleAndMultipleSelectionConfig = {
   setAlerts: boolean;
   addTooltip: boolean;
   setPalette: boolean;
-  timer?: boolean;
+  timer: number;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+};
+
+export type SliderConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  showTickMarks: boolean;
+  showTickLabels: boolean;
+  continuousSlider: boolean;
+  timer: number;
   additionalResponseOption: {
     textInputOption: boolean;
     textInputRequired: boolean;
@@ -53,56 +69,46 @@ export type SingleAndMultipleSelectionConfig = {
 };
 
 export type SliderItemResponseValues = {
-  minLabel: string | null;
-  maxLabel: string | null;
+  minLabel: string;
+  maxLabel: string;
   minValue: number;
   maxValue: number;
-  minImage: string | null;
-  maxImage: string | null;
+  minImage: string;
+  maxImage: string;
+  scores?: number[];
 };
 
-export type SingleSelectItemResponseValues = {
-  options: Array<{
-    id: string;
-    text: string;
-    image: string | null;
-    score: number | null;
-    tooltip: string | null;
-    color: string | null;
-    isHidden: boolean;
-  }>;
+export type SingleAndMultipleSelectionOption = {
+  id: string;
+  text: string;
+  image?: string;
+  score?: number;
+  tooltip?: string;
+  color?: string | ColorResult;
+  isHidden?: boolean;
 };
 
-export type MultiSelectItemResponseValues = {
-  options: Array<{
-    id: string;
-    text: string;
-    image: string | null;
-    score: number | null;
-    tooltip: string | null;
-    color: string | null;
-    isHidden: boolean;
-  }>;
+export type SingleAndMultipleSelectItemResponseValues = {
+  options: Array<SingleAndMultipleSelectionOption>;
 };
 
 export type TextItemResponseValues = null;
 
 export type ResponseValues =
   | TextItemResponseValues
-  | MultiSelectItemResponseValues
-  | SingleSelectItemResponseValues
+  | SingleAndMultipleSelectItemResponseValues
   | SliderItemResponseValues;
 
-export type Config = TextInputConfig | SingleAndMultipleSelectionConfig;
+export type Config = TextInputConfig | SingleAndMultipleSelectionConfig | SliderConfig;
 
 export type Item = {
-  id?: number;
+  id?: string;
   name: string;
   question: string | Record<string, string>;
   config: Config;
   responseType: ItemResponseType;
   responseValues: ResponseValues;
-  order?: number;
+  paletteName?: string;
 };
 
 export interface TextItem extends Item {
@@ -114,13 +120,13 @@ export interface TextItem extends Item {
 export interface SingleSelectItem extends Item {
   responseType: ItemResponseType.SingleSelection;
   config: Config;
-  responseValues: SingleSelectItemResponseValues;
+  responseValues: SingleAndMultipleSelectItemResponseValues;
 }
 
 export interface MultiSelectItem extends Item {
   responseType: ItemResponseType.MultipleSelection;
   config: Config;
-  responseValues: MultiSelectItemResponseValues;
+  responseValues: SingleAndMultipleSelectItemResponseValues;
 }
 
 export interface SliderItem extends Item {

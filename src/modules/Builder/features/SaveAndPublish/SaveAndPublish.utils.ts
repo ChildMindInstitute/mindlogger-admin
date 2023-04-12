@@ -2,6 +2,7 @@ import storage from 'shared/utils/storage';
 import { auth } from 'modules/Auth';
 import { applet } from 'shared/state';
 import { useCheckIfNewApplet } from 'shared/hooks';
+import { ItemResponseType } from 'shared/consts';
 
 export const removeAppletExtraFields = () => ({
   createdAt: undefined,
@@ -15,10 +16,12 @@ export const removeAppletExtraFields = () => ({
 
 export const removeActivityExtraFields = () => ({ order: undefined, id: undefined });
 
-export const removeItemExtraFields = () => ({
+export const removeItemExtraFields = (responseType?: ItemResponseType) => ({
   id: undefined,
   isHidden: undefined, //TODO: remove after backend fixes
+  paletteName: undefined, //TODO: remove after backend addings
   settings: undefined,
+  ...(responseType === ItemResponseType.Text && { responseValues: undefined }),
 });
 
 const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;

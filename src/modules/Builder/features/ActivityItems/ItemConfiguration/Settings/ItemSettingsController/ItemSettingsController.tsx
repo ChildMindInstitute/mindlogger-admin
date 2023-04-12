@@ -18,6 +18,7 @@ export const ItemSettingsController = <T extends FieldValues>({
           {itemSettingsOptionsByInputType[inputType]?.map(
             ({ groupName, groupOptions, collapsedByDefault }) => (
               <ItemSettingsGroup
+                name={name}
                 key={`item-settings-group-${groupName}`}
                 value={value}
                 onChange={onChange}

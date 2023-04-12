@@ -1,9 +1,10 @@
 import { useState, useRef, ChangeEvent } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ColorResult } from 'react-color';
+import get from 'lodash.get';
 
-import { Actions, Svg } from 'shared/components';
+import { Actions, Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import {
   theme,
@@ -15,8 +16,9 @@ import {
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc } from 'shared/utils';
+import { SingleAndMultipleSelectionOption } from 'shared/state';
 
-import { ItemConfigurationForm, ItemConfigurationSettings } from '../../ItemConfiguration.types';
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { SELECTION_OPTION_TEXT_MAX_LENGTH } from '../../ItemConfiguration.const';
 import { getPaletteColor } from '../../ItemConfiguration.utils';
 import { ColorPicker } from './ColorPicker';
@@ -30,28 +32,31 @@ import {
   StyledTooltipWrapper,
 } from './SelectionOption.styles';
 import { SelectionOptionProps } from './SelectionOption.types';
-import { getActions, getUploaderComponent } from './SelectionOption.utils';
+import { getActions } from './SelectionOption.utils';
 import { useSetSelectionOptionValue } from './SelectionOption.hooks';
 
 export const SelectionOption = ({
+  name,
   onRemoveOption,
   onUpdateOption,
   index,
   optionsLength,
 }: SelectionOptionProps) => {
+  const optionName = `${name}.responseValues.options.${index}`;
   const { t } = useTranslation('app');
   const [optionOpen, setOptionOpen] = useState(true);
   const [visibleActions, setVisibleActions] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  const { setValue, watch, control, getValues } = useFormContext<ItemConfigurationForm>();
-  const settings = watch('settings');
-  const selectedInputType = watch('itemsInputType');
-  const option = watch(`options.${index}`);
-  const palette = watch('paletteName');
-  const imageSrc = watch(`options.${index}.image`);
-  const hasScoresChecked = settings?.includes(ItemConfigurationSettings.HasScores);
-  const hasTooltipsChecked = settings?.includes(ItemConfigurationSettings.HasTooltips);
-  const hasColorPicker = settings?.includes(ItemConfigurationSettings.HasColorPalette);
+  const { setValue, watch, control, getValues } = useFormContext();
+  const [settings, responseType, option] = useWatch({
+    control,
+    name: [`${name}.config`, `${name}.responseType`, `${optionName}`],
+  });
+  const palette = watch(`${name}.paletteName`);
+  const imageSrc = watch(`${optionName}.image`);
+  const hasScoresChecked = get(settings, ItemConfigurationSettings.HasScores);
+  const hasTooltipsChecked = get(settings, ItemConfigurationSettings.HasTooltips);
+  const hasColorPicker = get(settings, ItemConfigurationSettings.HasColorPalette);
   const { text = '', isHidden = false, score, tooltip, color } = option || {};
   const scoreString = score?.toString();
   const hasTooltip = tooltip !== undefined;
@@ -59,18 +64,19 @@ export const SelectionOption = ({
   const hasPalette = !!palette;
   const isColorSet = color?.hex !== '';
   const actionsRef = useRef(null);
-  const isSingleSelection = selectedInputType === ItemResponseType.SingleSelection;
+  const isSingleSelection = responseType === ItemResponseType.SingleSelection;
 
   const handleOptionToggle = () => setOptionOpen((prevState) => !prevState);
   const handlePopoverClose = () => setAnchorEl(null);
   const handleColorChange = () => {
-    const settings = getValues('settings');
-    if (settings?.includes(ItemConfigurationSettings.HasColorPalette)) {
-      setValue('paletteName', '');
+    const settings = getValues(`${name}.config`);
+
+    if (get(settings, ItemConfigurationSettings.HasColorPalette)) {
+      setValue(`${name}.paletteName`, '');
     }
   };
 
-  const scoreName = `options.${index}.score` as `options.${number}.score`;
+  const scoreName = `${optionName}.score`;
 
   const handleScoreChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === '') return setValue(scoreName, 0);
@@ -79,13 +85,13 @@ export const SelectionOption = ({
   };
 
   const actions = {
-    optionHide: () => setValue(`options.${index}.isHidden`, !isHidden),
+    optionHide: () => setValue(`${optionName}.isHidden`, !isHidden),
     paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
     optionRemove: () => {
       onRemoveOption(index);
       if (hasColorPicker && hasPalette) {
-        const options = getValues('options');
-        options?.forEach((option, index) => {
+        const options = getValues(`${name}.responseValues.options`);
+        options?.forEach((option: SingleAndMultipleSelectionOption, index: number) => {
           onUpdateOption(index, {
             ...option,
             color: {
@@ -103,7 +109,7 @@ export const SelectionOption = ({
   };
 
   useSetSelectionOptionValue({
-    option,
+    name: optionName,
     onUpdateOption,
     index,
     hasScoresChecked,
@@ -160,11 +166,19 @@ export const SelectionOption = ({
               <StyledSvgWrapper sx={{ mr: theme.spacing(2) }}>
                 <Svg id={isSingleSelection ? 'radio-button-outline' : 'checkbox-multiple-filled'} />
               </StyledSvgWrapper>
-              {getUploaderComponent(setValue, index, imageSrc)}
+              <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
+                <Uploader
+                  uiType={UploaderUiType.Secondary}
+                  width={5.6}
+                  height={5.6}
+                  setValue={(val: string) => setValue(`${optionName}.image`, val)}
+                  getValue={() => imageSrc || ''}
+                />
+              </StyledFlexTopCenter>
               <StyledTextInputWrapper hasScores={!!scoreString}>
                 <InputController
                   {...commonInputProps}
-                  name={`options.${index}.text`}
+                  name={`${optionName}.text`}
                   label={t('optionText')}
                   maxLength={SELECTION_OPTION_TEXT_MAX_LENGTH}
                 />
@@ -187,7 +201,7 @@ export const SelectionOption = ({
                 <InputController
                   {...commonInputProps}
                   label={t('tooltip')}
-                  name={`options.${index}.tooltip`}
+                  name={`${optionName}.tooltip`}
                 />
               </StyledTooltipWrapper>
             )}
@@ -199,7 +213,7 @@ export const SelectionOption = ({
           anchorEl={anchorEl}
           handleColorChange={handleColorChange}
           handlePopoverClose={handlePopoverClose}
-          name={`options.${index}.color`}
+          name={`${optionName}.color`}
         />
       )}
     </>

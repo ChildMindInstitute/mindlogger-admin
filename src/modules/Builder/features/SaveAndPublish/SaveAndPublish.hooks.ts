@@ -53,7 +53,7 @@ export const useAppletData = () => {
           items: activity.items?.map((item) => ({
             ...item,
             question: getDictionaryObject(item.question),
-            ...removeItemExtraFields(),
+            ...removeItemExtraFields(item.responseType),
           })),
           ...removeActivityExtraFields(),
         })),
@@ -79,7 +79,7 @@ export const useAppletData = () => {
         items: activity.items?.map((item) => ({
           ...item,
           question: getDictionaryObject(item.question),
-          ...removeItemExtraFields(),
+          ...removeItemExtraFields(item.responseType),
         })),
         ...removeActivityExtraFields(),
       })),

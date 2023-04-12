@@ -1,17 +1,16 @@
-import { UseFieldArrayUpdate } from 'react-hook-form';
-
-import { ItemConfigurationForm, SelectionOption } from '../../ItemConfiguration.types';
+import { SingleAndMultipleSelectionOption } from 'shared/state';
 
 export type SelectionOptionProps = {
+  name: string;
   onRemoveOption: (index: number) => void;
-  onUpdateOption: UseFieldArrayUpdate<ItemConfigurationForm, 'options'>;
+  onUpdateOption: (index: number, option: SingleAndMultipleSelectionOption) => void;
   index: number;
   optionsLength: number;
 };
 
 export type SetSelectionOptionValue = {
-  option: SelectionOption;
-  onUpdateOption: UseFieldArrayUpdate<ItemConfigurationForm, 'options'>;
+  name: string;
+  onUpdateOption: (index: number, option: SingleAndMultipleSelectionOption) => void;
   index: number;
   hasScoresChecked: boolean;
   scoreString?: string;

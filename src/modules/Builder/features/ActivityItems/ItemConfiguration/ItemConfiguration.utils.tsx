@@ -1,4 +1,5 @@
 import uniqueId from 'lodash.uniqueid';
+import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
@@ -44,7 +45,7 @@ export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
 });
 
 export const getEmptySliderOption = (isMultiple: boolean): SliderOption => ({
-  id: uniqueId('slider-'),
+  ...(isMultiple && { id: uuidv4() }),
   ...(isMultiple ? DEFAULT_EMPTY_SLIDER_ROWS : DEFAULT_EMPTY_SLIDER),
 });
 

@@ -6,7 +6,7 @@ import { Svg } from 'shared/components';
 import { page } from 'resources';
 import { SingleApplet } from 'shared/state';
 import { getDictionaryText, Path } from 'shared/utils';
-import { Item } from 'shared/state/Applet';
+import { Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state/Applet';
 
 import { ActivityFormValues } from './BuilderApplet.types';
 
@@ -42,7 +42,10 @@ export const getNewActivityItem = () => ({
   responseType: '',
   name: '',
   question: '',
-  settings: [],
+  config: {},
+  responseValues: {
+    options: [],
+  },
   isHidden: false,
 });
 
@@ -57,10 +60,16 @@ export const getNewActivityFlow = () => ({
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map((item) => ({
-        ...item,
-        id: `${item.id}`,
+        id: uuidv4(),
+        name: item.name,
         question: getDictionaryText(item.question),
         responseType: item.responseType,
+        responseValues: {
+          options:
+            (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options ?? [],
+        },
+        config: item.config,
+        paletteName: item.paletteName,
       }))
     : [];
 

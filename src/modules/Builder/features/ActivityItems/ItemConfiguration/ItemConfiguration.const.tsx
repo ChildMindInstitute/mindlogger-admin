@@ -5,6 +5,7 @@ import { createArray } from 'shared/utils';
 import { ItemsOptionGroup } from './ItemConfiguration.types';
 
 export const DEFAULT_TIMER_VALUE = 100;
+export const DEFAULT_DISABLED_TIMER_VALUE = 0;
 export const DEFAULT_SCORE_VALUE = 0;
 export const DEFAULT_MIN_NUMBER = 1;
 export const DEFAULT_MAX_NUMBER = 30;
@@ -16,8 +17,8 @@ export const DEFAULT_SLIDER_MAX_VALUE = 12;
 export const DEFAULT_SLIDER_SCORE = createArray(DEFAULT_SLIDER_MAX_VALUE + 1, (i: number) => i + 1);
 
 export const DEFAULT_EMPTY_SLIDER = {
-  min: DEFAULT_SLIDER_MIN_NUMBER,
-  max: DEFAULT_SLIDER_MAX_NUMBER,
+  minValue: DEFAULT_SLIDER_MIN_NUMBER,
+  maxValue: DEFAULT_SLIDER_MAX_NUMBER,
   scores: DEFAULT_SLIDER_SCORE,
   minLabel: '',
   maxLabel: '',

@@ -4,24 +4,24 @@ import { FieldValues, Path } from 'react-hook-form';
 import { ItemResponseType } from 'shared/consts';
 
 export enum ItemConfigurationSettings {
-  HasScores = 'hasScores',
-  HasTooltips = 'hasTooltips',
-  HasAlerts = 'hasAlerts',
-  HasTextInput = 'hasInput',
-  HasTickMarks = 'hasTickMarks',
-  HasTickMarksLabels = 'hasTickMarksLabels',
-  HasColorPalette = 'hasColorPallete',
-  HasRandomize = 'hasRandomize',
-  HasResponseDataIdentifier = 'hasResponseDataIdentifier',
-  HasTimer = 'hasTimer',
-  IsCorrectAnswerRequired = 'isCorrectAnswerRequired',
-  IsNumericalRequired = 'isNumericalRequired',
-  IsResponseRequired = 'isResponseRequired',
-  IsSkippable = 'isSkippable',
-  IsContinuous = 'isContinuous',
+  HasScores = 'addScores',
+  HasTooltips = 'addTooltip',
+  HasAlerts = 'setAlerts',
+  HasTextInput = 'additionalResponseOption.textInputOption',
+  HasTickMarks = 'showTickMarks',
+  HasTickMarksLabels = 'showTickLabels',
+  HasColorPalette = 'setPalette',
+  HasRandomize = 'randomizeOptions',
+  HasResponseDataIdentifier = 'responseDataIdentifier',
+  HasTimer = 'timer',
+  IsCorrectAnswerRequired = 'correctAnswerRequired',
+  IsNumericalRequired = 'numericalResponseRequired',
+  IsResponseRequired = 'responseRequired',
+  IsSkippable = 'skippableItem',
+  IsContinuous = 'continuousSlider',
   IsPlayAudioOnce = 'isPlayAudioOnce',
-  IsGoBackRemoved = 'isGoBackRemoved',
-  IsTextInputRequired = 'isTextInputRequired',
+  IsGoBackRemoved = 'removeBackButton',
+  IsTextInputRequired = 'additionalResponseOption.textInputRequired',
   IsUndoRemoved = 'isUndoRemoved',
   IsNavigationMovedToTheTop = 'isNavigationMovedToTheTop',
 }
@@ -104,9 +104,9 @@ export type OptionalItemSetupProps = {
 };
 
 export type SliderOption = {
-  id: string;
-  min: number;
-  max: number;
+  id?: string;
+  minValue: number;
+  maxValue: number;
   minLabel?: string;
   maxLabel?: string;
   minImage?: string;
@@ -116,6 +116,5 @@ export type SliderOption = {
 };
 
 export type ItemConfigurationProps = {
-  item: ItemConfigurationForm;
   name: string;
 };

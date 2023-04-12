@@ -10,7 +10,6 @@ import { StyledContainer } from 'shared/styles';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
-import { mapApiItemToItemConfigurationForm } from './ActivityItems.utils';
 
 export const ActivityItems = () => {
   const { t } = useTranslation('app');
@@ -28,7 +27,6 @@ export const ActivityItems = () => {
   const activeItemIndex = items?.findIndex((item: ItemFormValues) => item.id === activeItemId);
   const activeItem = items?.[activeItemIndex];
 
-  //TODO: add edit items
   const handleRemoveItem = (id: string) => {
     if (id === activeItem?.id) setActiveItemId('');
 
@@ -58,10 +56,7 @@ export const ActivityItems = () => {
         onRemoveItem={handleRemoveItem}
       />
       {activeItemId && (
-        <ItemConfiguration
-          item={mapApiItemToItemConfigurationForm(activeItem)}
-          name={`${name}.items[${activeItemIndex}]`}
-        />
+        <ItemConfiguration key={`item-${activeItemId}`} name={`${name}.items.${activeItemIndex}`} />
       )}
     </StyledContainer>
   );

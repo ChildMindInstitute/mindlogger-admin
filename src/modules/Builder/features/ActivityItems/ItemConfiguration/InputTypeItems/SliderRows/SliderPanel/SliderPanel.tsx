@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, useEffect } from 'react';
-import { useFormContext, FieldValues, FieldError } from 'react-hook-form';
+import { useFormContext, FieldError } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import get from 'lodash.get';
 
 import { UploaderUiType, Uploader, Table, UiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
@@ -35,54 +36,51 @@ const commonUploaderProps = {
   uiType: UploaderUiType.Secondary,
 };
 
-export const SliderPanel = <T extends FieldValues>({
-  name,
-  label,
-  isMultiple,
-  onRemove,
-}: SliderPanelProps<T>) => {
+export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: SliderPanelProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [error, setError] = useState<FieldError | undefined>();
+
+  const sliderName = `${name}.responseValues${isMultiple ? `.${index}` : ''}`;
 
   const { t } = useTranslation('app');
 
   const { control, watch, setValue, getValues, getFieldState, formState } = useFormContext();
 
-  const scoresError = getFieldState(`${name as string}.scores`, formState);
+  const scoresError = getFieldState(`${sliderName}.scores`, formState);
 
-  const { id, min, max, scores } = watch(name);
-  const settings = watch('settings');
+  const { id, minValue, maxValue, scores } = watch(sliderName);
+  const settings = watch(`${name}.config`);
 
-  const hasTickMarks = settings?.includes(ItemConfigurationSettings.HasTickMarks);
-  const hasTickMarksLabels = settings?.includes(ItemConfigurationSettings.HasTickMarksLabels);
-  const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
+  const hasTickMarks = get(settings, ItemConfigurationSettings.HasTickMarks);
+  const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
+  const hasScores = get(settings, ItemConfigurationSettings.HasScores);
 
   watch((data, { name: attributeName }: { name?: string }) => {
-    const option = getValues(name);
+    const option = getValues(sliderName);
 
     if (!option) return;
 
-    const { min, max, scores } = option;
+    const { minValue, maxValue, scores } = option;
 
-    const scoresQuantity = max - min + 1;
+    const scoresQuantity = maxValue - minValue + 1;
 
-    if (attributeName === `${name}.min`) {
+    if (attributeName === `${sliderName}.minValue`) {
       if (scores?.length < scoresQuantity) {
-        setValue(`${name as string}.scores`, [Math.min(...scores) - 1].concat(scores));
+        setValue(`${sliderName}.scores`, [Math.min(...scores) - 1].concat(scores));
       }
 
       if (scores?.length > scoresQuantity) {
-        setValue(`${name}.scores`, scores?.slice(1));
+        setValue(`${sliderName}.scores`, scores?.slice(1));
       }
     }
 
-    if (attributeName === `${name}.max`) {
+    if (attributeName === `${sliderName}.maxValue`) {
       if (scores?.length < scoresQuantity) {
-        setValue(`${name}.scores`, scores.concat(Math.max(...scores) + 1));
+        setValue(`${sliderName}.scores`, scores.concat(Math.max(...scores) + 1));
       }
 
       if (scores?.length > scoresQuantity) {
-        setValue(`${name}.scores`, scores?.slice(0, scoresQuantity));
+        setValue(`${sliderName}.scores`, scores?.slice(0, scoresQuantity));
       }
     }
   });
@@ -90,12 +88,12 @@ export const SliderPanel = <T extends FieldValues>({
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
   const handleChangeMinScore = (event: ChangeEvent<HTMLInputElement>) => {
-    const minScoreName = `${name}.min`;
+    const minScoreName = `${sliderName}.minValue`;
     const value = event.target.value;
 
     if (value === '') return setValue(minScoreName, DEFAULT_SLIDER_MIN_NUMBER);
 
-    if (+value > max - 1) return setValue(minScoreName, max - 1);
+    if (+value > maxValue - 1) return setValue(minScoreName, maxValue - 1);
 
     if (+value < DEFAULT_SLIDER_MIN_NUMBER)
       return setValue(minScoreName, DEFAULT_SLIDER_MIN_NUMBER);
@@ -104,14 +102,14 @@ export const SliderPanel = <T extends FieldValues>({
   };
 
   const handleChangeMaxScore = (event: ChangeEvent<HTMLInputElement>) => {
-    const maxScoreName = `${name}.max`;
+    const maxScoreName = `${sliderName}.maxValue`;
     const value = event.target.value;
 
-    if (value === '') return setValue(maxScoreName, min);
+    if (value === '') return setValue(maxScoreName, minValue);
 
     if (+value > DEFAULT_SLIDER_MAX_VALUE) return setValue(maxScoreName, DEFAULT_SLIDER_MAX_VALUE);
 
-    if (+value < min + 1) return setValue(maxScoreName, min + 1);
+    if (+value < minValue + 1) return setValue(maxScoreName, minValue + 1);
 
     setValue(maxScoreName, +value);
   };
@@ -121,7 +119,7 @@ export const SliderPanel = <T extends FieldValues>({
     type: 'number',
   };
 
-  const marks = hasTickMarks && getMarks(min, max, hasTickMarksLabels);
+  const marks = hasTickMarks && getMarks(minValue, maxValue, hasTickMarksLabels);
 
   useEffect(() => {
     const errors = scoresError.error as unknown as FieldError[] | undefined;
@@ -143,85 +141,89 @@ export const SliderPanel = <T extends FieldValues>({
         onTrashClick={onRemove}
         isMultiple={isMultiple}
       />
-      {isMultiple && (
-        <StyledInputContainer sx={{ mb: theme.spacing(2.4) }}>
-          <InputController
-            control={control}
-            name={`${name}.label`}
-            label={t('sliderLabel')}
-            maxLength={SLIDER_LABEL_MAX_LENGTH}
-          />
-        </StyledInputContainer>
-      )}
-      <StyledInputContainer>
-        <InputController
-          control={control}
-          name={`${name}.minLabel`}
-          label={t('minLabel')}
-          maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
-        />
-        <InputController
-          control={control}
-          name={`${name}.maxLabel`}
-          label={t('maxLabel')}
-          maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
-        />
-      </StyledInputContainer>
-      <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
-        <StyledSlider min={min} max={max} value={min} marks={marks} disabled />
-      </StyledFlexTopCenter>
-      <StyledInputContainer>
-        <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
-          <Uploader
-            {...commonUploaderProps}
-            setValue={(val: string) => setValue(`${name as string}.minImage`, val)}
-            getValue={() => watch(`${name}.minImage`) || ''}
-          />
-          <InputController
-            {...commonInputProps}
-            name={`${name}.min`}
-            label={t('minValue')}
-            maxNumberValue={max - 1}
-            onChange={handleChangeMinScore}
-            minNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
-          />
-        </StyledFlexTopCenter>
-        <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
-          <Uploader
-            {...commonUploaderProps}
-            setValue={(val: string) => setValue(`${name as string}.maxImage`, val)}
-            getValue={() => watch(`${name}.maxImage`) || ''}
-          />
-          <InputController
-            {...commonInputProps}
-            name={`${name}.max`}
-            label={t('maxValue')}
-            onChange={handleChangeMaxScore}
-            maxNumberValue={DEFAULT_SLIDER_MAX_VALUE}
-            minNumberValue={min + 1}
-          />
-        </StyledFlexTopCenter>
-      </StyledInputContainer>
-      {hasScores && (
+      {isExpanded && (
         <>
-          <StyledScoresContainer>
-            <Table
-              columns={getStaticHeadRow()}
-              rows={getStaticBodyRow()}
-              orderBy="0"
-              uiType={UiType.Secondary}
+          {isMultiple && (
+            <StyledInputContainer sx={{ mb: theme.spacing(2.4) }}>
+              <InputController
+                control={control}
+                name={`${sliderName}.label`}
+                label={t('sliderLabel')}
+                maxLength={SLIDER_LABEL_MAX_LENGTH}
+              />
+            </StyledInputContainer>
+          )}
+          <StyledInputContainer>
+            <InputController
+              control={control}
+              name={`${sliderName}.minLabel`}
+              label={t('minLabel')}
+              maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
             />
-            <Table
-              columns={getHeadCells(min, max)}
-              rows={getTableRows(scores, name)}
-              orderBy="0"
-              uiType={UiType.Secondary}
+            <InputController
+              control={control}
+              name={`${sliderName}.maxLabel`}
+              label={t('maxLabel')}
+              maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
             />
-          </StyledScoresContainer>
-          {error && (
-            <StyledBodyMedium color={variables.palette.semantic.error}>
-              {error.message}
-            </StyledBodyMedium>
+          </StyledInputContainer>
+          <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
+            <StyledSlider min={minValue} max={maxValue} value={minValue} marks={marks} disabled />
+          </StyledFlexTopCenter>
+          <StyledInputContainer>
+            <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
+              <Uploader
+                {...commonUploaderProps}
+                setValue={(val: string) => setValue(`${sliderName}.minImage`, val)}
+                getValue={() => watch(`${sliderName}.minImage`) || ''}
+              />
+              <InputController
+                {...commonInputProps}
+                name={`${sliderName}.minValue`}
+                label={t('minValue')}
+                maxNumberValue={maxValue - 1}
+                onChange={handleChangeMinScore}
+                minNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
+              />
+            </StyledFlexTopCenter>
+            <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
+              <Uploader
+                {...commonUploaderProps}
+                setValue={(val: string) => setValue(`${sliderName}.maxImage`, val)}
+                getValue={() => watch(`${sliderName}.maxImage`) || ''}
+              />
+              <InputController
+                {...commonInputProps}
+                name={`${sliderName}.maxValue`}
+                label={t('maxValue')}
+                onChange={handleChangeMaxScore}
+                maxNumberValue={DEFAULT_SLIDER_MAX_VALUE}
+                minNumberValue={minValue + 1}
+              />
+            </StyledFlexTopCenter>
+          </StyledInputContainer>
+          {hasScores && (
+            <>
+              <StyledScoresContainer>
+                <Table
+                  columns={getStaticHeadRow()}
+                  rows={getStaticBodyRow()}
+                  orderBy="0"
+                  uiType={UiType.Secondary}
+                />
+                <Table
+                  columns={getHeadCells(minValue, maxValue)}
+                  rows={getTableRows(scores, sliderName)}
+                  orderBy="0"
+                  uiType={UiType.Secondary}
+                />
+              </StyledScoresContainer>
+              {error && (
+                <StyledBodyMedium color={variables.palette.semantic.error}>
+                  {error.message}
+                </StyledBodyMedium>
+              )}
+            </>
           )}
         </>
       )}

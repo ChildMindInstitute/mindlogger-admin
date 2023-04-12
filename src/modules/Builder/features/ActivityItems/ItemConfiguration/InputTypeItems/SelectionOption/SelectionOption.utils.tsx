@@ -1,9 +1,5 @@
-import { UseFormSetValue } from 'react-hook-form';
+import { Svg } from 'shared/components';
 
-import { Svg, Uploader, UploaderUiType } from 'shared/components';
-import { StyledFlexTopCenter, theme } from 'shared/styles';
-
-import { ItemConfigurationForm } from '../../ItemConfiguration.types';
 import { OptionActions } from './SelectionOption.types';
 
 export const getActions = ({
@@ -29,19 +25,3 @@ export const getActions = ({
     action: optionRemove,
   },
 ];
-
-export const getUploaderComponent = (
-  setValue: UseFormSetValue<ItemConfigurationForm>,
-  index: number,
-  imageSrc?: string,
-) => (
-  <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-    <Uploader
-      uiType={UploaderUiType.Secondary}
-      width={5.6}
-      height={5.6}
-      setValue={(val: string) => setValue(`options.${index}.image`, val)}
-      getValue={() => imageSrc || ''}
-    />
-  </StyledFlexTopCenter>
-);
