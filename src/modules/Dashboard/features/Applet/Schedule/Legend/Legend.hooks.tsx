@@ -22,7 +22,7 @@ export const useExpandedLists = (
   const [availableVisibility, setAvailableVisibility] = useState(true);
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const dispatch = useAppDispatch();
 
   if (!legendEvents) return;

@@ -43,5 +43,6 @@ export const variables = {
     opacity: 'opacity 0.3s',
     boxShadow: 'box-shadow 0.3s',
     width: 'width 0.3s ease-in',
+    fontWeight: 'font-weight 0.3s',
   },
 };

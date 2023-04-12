@@ -1,18 +1,16 @@
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { StyledBodyLarge, StyledModalWrapper } from 'shared/styles/styledComponents';
 
 import { SuccessTransferOwnershipPopupProps } from './SuccessTransferOwnershipPopup.types';
 
 export const SuccessTransferOwnershipPopup = ({
   email,
   transferOwnershipPopupVisible,
-  setTransferOwnershipPopupVisible,
+  closeTransferOwnershipPopup,
 }: SuccessTransferOwnershipPopupProps) => {
   const { t } = useTranslation();
-
-  const closeTransferOwnershipPopup = () => setTransferOwnershipPopupVisible(false);
 
   return (
     <Modal
@@ -23,7 +21,17 @@ export const SuccessTransferOwnershipPopup = ({
       buttonText={t('ok')}
       width="60"
     >
-      <StyledModalWrapper>{t('requestTransferOwnershipSuccess', { email })}</StyledModalWrapper>
+      <StyledModalWrapper>
+        <Trans i18nKey="requestTransferOwnershipSuccess">
+          <StyledBodyLarge>
+            Your request has been successfully sent to
+            <strong>
+              <>{{ email }}</>
+            </strong>
+            . Please wait for receiver to accept your request.
+          </StyledBodyLarge>
+        </Trans>
+      </StyledModalWrapper>
     </Modal>
   );
 };

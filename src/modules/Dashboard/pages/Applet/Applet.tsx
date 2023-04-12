@@ -14,7 +14,7 @@ export const Applet = () => {
   const location = useLocation();
 
   const appletTabs = useAppletTabs();
-  const { id: appletId } = useParams();
+  const { appletId } = useParams();
 
   const hiddenHeader = location.pathname.includes('dataviz');
 

@@ -10,7 +10,7 @@ import { StyledButton, StyledInput } from './LinkForm.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';
 
 export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const { t } = useTranslation('app');
 
   const publicLink = inviteLink?.link || '';

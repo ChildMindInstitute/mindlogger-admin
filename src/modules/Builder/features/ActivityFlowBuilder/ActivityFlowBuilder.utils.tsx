@@ -1,20 +1,7 @@
 import { Svg } from 'shared/components';
 import i18n from 'i18n';
 
-export const activities = [
-  {
-    id: '1',
-    name: 'Activity name 1',
-    description: 'This is the item text the quick brown fox jumps over the lazy dog ',
-  },
-  {
-    id: '2',
-    name: 'Activity name 2',
-    description: 'This is the item text the quick brown fox jumps over the lazy dog ',
-  },
-];
-
-export const getActions = () => [
+export const getFlowBuilderActions = () => [
   {
     icon: <Svg id="replace" />,
     action: () => null,
@@ -26,12 +13,12 @@ export const getActions = () => [
     toolTipTitle: '',
   },
   {
-    icon: <Svg id="visibility-on" />,
+    icon: <Svg id="trash" />,
     action: () => null,
     toolTipTitle: '',
   },
   {
-    icon: <Svg id="trash" />,
+    icon: <Svg id="drag" />,
     action: () => null,
     toolTipTitle: '',
   },

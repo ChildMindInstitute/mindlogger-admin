@@ -13,7 +13,7 @@ import { StyledHeadline } from '../AppletSettings.styles';
 
 export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) => {
   const { t } = useTranslation('app');
-  const { id } = useParams();
+  const { appletId: id } = useParams();
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);

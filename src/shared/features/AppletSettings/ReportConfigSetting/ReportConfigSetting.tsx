@@ -25,7 +25,7 @@ import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from '
 import { usePrompt } from './ReportConfigSetting.hooks';
 
 export const ReportConfigSetting = () => {
-  const { id } = useParams();
+  const { appletId: id } = useParams();
   const applet = id ? folders.useApplet(id) : undefined;
   const { t } = useTranslation();
   const isServerConfigured = false; // TODO: add server configured functionality when the back-end is ready

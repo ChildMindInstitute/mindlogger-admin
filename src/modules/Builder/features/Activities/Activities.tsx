@@ -109,7 +109,6 @@ export const Activities = () => {
                     })
                   }
                   hasError={hasError}
-                  withHover
                 />
                 <Modal
                   open={activityToDelete === (item.key || item.id)}

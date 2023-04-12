@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
-import { APPLET_PAGES } from 'shared/consts';
 import { StyledContainer } from 'shared/styles';
 
 import { Navigation } from './Navigation';
@@ -14,12 +13,15 @@ import { getSettingItem } from './AppletSettings.utils';
 
 export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsProps) => {
   const { t } = useTranslation('app');
-  const { id, settingItem } = useParams();
+  const { appletId, settingItem } = useParams();
   const navigate = useNavigate();
   const [selectedSetting, setSelectedSetting] = useState<AppletSetting | null>(null);
-
-  const BUILDER_SETTINGS = page.builderAppletSettings;
-  const DASHBOARD_SETTINGS = `${page.dashboard}/${id}/${APPLET_PAGES.settings}`;
+  const BUILDER_SETTINGS = generatePath(page.builderAppletSettings, {
+    appletId,
+  });
+  const DASHBOARD_SETTINGS = generatePath(page.appletSettings, {
+    appletId,
+  });
 
   useBreadcrumbs([
     {
@@ -34,7 +36,7 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
     }
     const setting = getSettingItem(settings, settingItem);
     setting && setSelectedSetting(setting);
-  }, [id, settingItem]);
+  }, [appletId, settingItem]);
 
   const handleSettingClick = (setting: AppletSetting) => {
     navigateTo(setting.param);
