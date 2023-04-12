@@ -79,7 +79,7 @@ export const DatePicker = <T extends FieldValues>({
           fullWidth: true,
           disabled: true,
           onClick: handlePickerShow,
-          className: (open && 'active') || '',
+          className: open ? 'active' : '',
           sx: { ...inputSx },
           error: !!error,
           helperText: error?.message || null,
