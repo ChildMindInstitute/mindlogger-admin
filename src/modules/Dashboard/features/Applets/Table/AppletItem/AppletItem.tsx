@@ -126,7 +126,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         onDragOver={onDragOver}
         onDrop={(e) => onDrop(e, item)}
       >
-        <TableCell width="30%" onClick={handleAppletClick}>
+        <TableCell onClick={handleAppletClick}>
           <StyledAppletName applet={item}>
             {item.parentId && (
               <StyledPinContainer>
@@ -143,7 +143,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
             <StyledBodyMedium>{item.displayName}</StyledBodyMedium>
           </StyledAppletName>
         </TableCell>
-        <TableCell width="20%" onClick={handleAppletClick}>
+        <TableCell onClick={handleAppletClick}>
           {item.updatedAt ? timeAgo.format(new Date(item.updatedAt)) : ''}
         </TableCell>
         <TableCell>

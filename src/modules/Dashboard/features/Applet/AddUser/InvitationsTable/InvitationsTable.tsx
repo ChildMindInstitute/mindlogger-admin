@@ -7,6 +7,7 @@ import { capitalize } from 'shared/utils';
 import { DateFormats } from 'shared/consts';
 import { getInvitationsApi } from 'api';
 import { theme } from 'shared/styles';
+import { DEFAULT_INVITATIONS_ROWS_PER_PAGE } from 'shared/components';
 
 import { getHeadCells } from './InvitationsTable.const';
 import { StyledTitle } from '../AddUser.styles';
@@ -19,7 +20,7 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
     const { data } = await getInvitationsApi(params);
 
     data && setInvitations(data);
-  });
+  }, DEFAULT_INVITATIONS_ROWS_PER_PAGE);
 
   const rows = invitations?.result.map(
     ({ meta, firstName, lastName, role, email, key, createdAt }) => {
@@ -69,6 +70,7 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
         rows={rows}
         count={invitations?.count || 0}
         emptyComponent={emptyComponent}
+        rowsPerPage={DEFAULT_INVITATIONS_ROWS_PER_PAGE}
         {...tableProps}
       />
     </>
