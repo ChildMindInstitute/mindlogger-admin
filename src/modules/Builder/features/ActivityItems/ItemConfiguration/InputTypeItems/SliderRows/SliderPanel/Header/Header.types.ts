@@ -4,5 +4,5 @@ export type HeaderProps = {
   isExpanded: boolean;
   isMultiple?: boolean;
   onArrowClick: () => void;
-  onTrashClick: () => void;
+  onTrashClick?: () => void;
 };

@@ -69,6 +69,7 @@ export type SliderConfig = {
 };
 
 export type SliderItemResponseValues = {
+  id?: string;
   minLabel: string;
   maxLabel: string;
   minValue: number;
@@ -101,6 +102,15 @@ export type ResponseValues =
 
 export type Config = TextInputConfig | SingleAndMultipleSelectionConfig | SliderConfig;
 
+export type ItemAlert = {
+  message: string;
+  option: string;
+  item: string;
+  slider: string;
+  min: number;
+  max: number;
+};
+
 export type Item = {
   id?: string;
   name: string;
@@ -109,6 +119,7 @@ export type Item = {
   responseType: ItemResponseType;
   responseValues: ResponseValues;
   paletteName?: string;
+  alerts: ItemAlert[];
 };
 
 export interface TextItem extends Item {

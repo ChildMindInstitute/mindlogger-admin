@@ -215,7 +215,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           <TextInputOption name={name} onRemove={handleRemoveTextInputOption} />
         )}
         {/* {hasAlerts && (
-          <Alerts appendAlert={handleAddAlert} removeAlert={handleRemoveAlert} alerts={alerts} />
+          <Alerts appendAlert={handleAddAlert} removeAlert={handleRemoveAlert} alerts={alerts} name={name} />
         )} */}
         {settingsDrawerVisible && (
           <ItemSettingsDrawer

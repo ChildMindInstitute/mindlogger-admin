@@ -70,6 +70,7 @@ const getActivityItems = (items: Item[]) =>
         },
         config: item.config,
         paletteName: item.paletteName,
+        alerts: item.alerts ?? [],
       }))
     : [];
 

@@ -30,7 +30,6 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
                 name={name}
                 label={t('slider', {
                   context: 'option',
-                  index: isMultiple ? index + 1 : undefined,
                 })}
                 isMultiple={isMultiple}
               />

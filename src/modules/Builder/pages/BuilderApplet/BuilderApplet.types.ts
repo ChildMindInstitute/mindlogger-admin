@@ -1,4 +1,10 @@
-import { Config, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
+import {
+  ItemAlert,
+  Config,
+  SingleAndMultipleSelectItemResponseValues,
+  TextItemResponseValues,
+  SliderItemResponseValues,
+} from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 
 export type ItemFormValues = {
@@ -7,7 +13,11 @@ export type ItemFormValues = {
   question: string;
   config: Config;
   responseType: ItemResponseType | '';
-  responseValues: SingleAndMultipleSelectItemResponseValues;
+  responseValues:
+    | SingleAndMultipleSelectItemResponseValues
+    | TextItemResponseValues
+    | SliderItemResponseValues;
+  alerts: ItemAlert[];
 };
 
 export type ActivityFormValues = {

@@ -7,14 +7,14 @@ import { StyledTitleLarge, theme } from 'shared/styles';
 import { Alert } from './Alert';
 import { AlertProps } from './Alerts.types';
 
-export const Alerts = ({ appendAlert, removeAlert, alerts }: AlertProps) => {
+export const Alerts = ({ name, appendAlert, removeAlert, alerts }: AlertProps) => {
   const { t } = useTranslation('app');
 
   return (
     <>
       <StyledTitleLarge sx={{ m: theme.spacing(4, 0, 2.4) }}>{t('alerts')}</StyledTitleLarge>
       {alerts.map((alert, i) => (
-        <Alert key={alert.id} {...alert} index={i} removeAlert={() => removeAlert(i)} />
+        <Alert name={name} key={alert.id} {...alert} index={i} removeAlert={() => removeAlert(i)} />
       ))}
       <Button
         variant="outlined"
