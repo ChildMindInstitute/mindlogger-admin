@@ -69,22 +69,24 @@ export const TagsInputController = <T extends FieldValues>({
 
               return (
                 <Paper {...restPaperProps}>
-                  <ListItem
-                    onMouseDown={(e) => e.preventDefault()} // prevent blur
-                    sx={{ pl: theme.spacing(2.8) }}
-                  >
-                    <FormControlLabel
-                      onClick={(e) => {
-                        e.preventDefault(); // prevent blur
-                        handleToggleSelectAll();
-                      }}
-                      label={labelAllSelect}
-                      sx={{
-                        width: '100%',
-                      }}
-                      control={<Checkbox id="select-all-checkbox" checked={selectedAll} />}
-                    />
-                  </ListItem>
+                  {options?.length ? (
+                    <ListItem
+                      onMouseDown={(e) => e.preventDefault()} // prevent blur
+                      sx={{ pl: theme.spacing(2.8) }}
+                    >
+                      <FormControlLabel
+                        onClick={(e) => {
+                          e.preventDefault(); // prevent blur
+                          handleToggleSelectAll();
+                        }}
+                        label={labelAllSelect}
+                        sx={{
+                          width: '100%',
+                        }}
+                        control={<Checkbox id="select-all-checkbox" checked={selectedAll} />}
+                      />
+                    </ListItem>
+                  ) : null}
                   <Divider />
                   {children}
                 </Paper>
