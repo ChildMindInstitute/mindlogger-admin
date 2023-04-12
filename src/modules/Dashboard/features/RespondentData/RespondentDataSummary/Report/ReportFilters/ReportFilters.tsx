@@ -28,7 +28,6 @@ export const ReportFilters = () => {
       <StyledFlexTopCenter sx={{ mb: theme.spacing(3.2) }}>
         <DatePicker
           name="startDateEndDate"
-          label={t('startDate')}
           uiType={DatePickerUiType.StartEndingDate}
           control={control}
           inputSx={{ width: '19rem' }}
