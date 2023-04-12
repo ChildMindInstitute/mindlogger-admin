@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { assessmentActivityItems } from './mock';
 import { ActivityCardItemList } from './ActivityCardItemList';
+import { ActivityItemAnswers } from './FeedbackAssessment.types';
 
 const defaultValues = assessmentActivityItems.map((item) => ({
   activityItemId: item.id,
@@ -12,14 +13,7 @@ const defaultValues = assessmentActivityItems.map((item) => ({
 }));
 
 export const FeedbackAssessment = () => {
-  const methods = useForm<{
-    answers: {
-      activityItemId: string;
-      answer: {
-        value: string[];
-      };
-    }[];
-  }>({
+  const methods = useForm<ActivityItemAnswers>({
     defaultValues: { answers: defaultValues },
     mode: 'onChange',
   });
