@@ -17,7 +17,7 @@ export type ItemFormValues = {
     | SingleAndMultipleSelectItemResponseValues
     | TextItemResponseValues
     | SliderItemResponseValues;
-  alerts: ItemAlert[];
+  alerts?: ItemAlert[];
 };
 
 export type ActivityFormValues = {

@@ -120,7 +120,7 @@ export type Item = {
   responseType: ItemResponseType;
   responseValues: ResponseValues;
   paletteName?: string;
-  alerts: ItemAlert[];
+  alerts?: ItemAlert[];
 };
 
 export interface TextItem extends Item {

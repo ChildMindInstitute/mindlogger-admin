@@ -42,36 +42,11 @@ export const useAppletData = () => {
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
 
-    if (isNewApplet) {
-      return {
-        ...appletInfoMocked,
-        ...appletInfo,
-        activities: appletInfo?.activities.map((activity: Activity) => ({
-          ...activity,
-          key: uuidv4(),
-          description: getDictionaryObject(activity.description),
-          items: activity.items?.map((item) => ({
-            ...item,
-            question: getDictionaryObject(item.question),
-            ...removeItemExtraFields(item.responseType),
-          })),
-          ...removeActivityExtraFields(),
-        })),
-        password: appletPassword,
-        description: appletDescription,
-        about: appletAbout,
-        themeId: null, // TODO: create real themeId
-        activityFlows: [],
-        ...removeAppletExtraFields(),
-      };
-    }
+    const defaultAppletInfo = isNewApplet ? appletInfoMocked : {};
 
-    const result = {
+    return {
+      ...defaultAppletInfo,
       ...appletInfo,
-      password: appletPassword,
-      description: appletDescription,
-      about: appletAbout,
-      themeId: null, // TODO: create real themeId
       activities: appletInfo?.activities.map((activity: Activity) => ({
         ...activity,
         key: uuidv4(),
@@ -83,11 +58,13 @@ export const useAppletData = () => {
         })),
         ...removeActivityExtraFields(),
       })),
+      password: appletPassword,
+      description: appletDescription,
+      about: appletAbout,
+      themeId: null, // TODO: create real themeId
       activityFlows: [],
       ...removeAppletExtraFields(),
     };
-
-    return result;
   };
 };
 

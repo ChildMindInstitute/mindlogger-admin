@@ -21,6 +21,7 @@ export const removeItemExtraFields = (responseType?: ItemResponseType) => ({
   isHidden: undefined, //TODO: remove after backend fixes
   paletteName: undefined, //TODO: remove after backend addings
   settings: undefined,
+  alerts: undefined, //TODO: remove after backend addings
   ...(responseType === ItemResponseType.Text && { responseValues: undefined }),
 });
 

@@ -26,13 +26,7 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
         return (
           <StyledFlexColumn sx={{ mb: theme.spacing(2), gap: '2.4rem' }}>
             {!isMultiple && (
-              <SliderPanel
-                name={name}
-                label={t('slider', {
-                  context: 'option',
-                })}
-                isMultiple={isMultiple}
-              />
+              <SliderPanel name={name} label={t('sliderOption')} isMultiple={isMultiple} />
             )}
             {isMultiple &&
               value?.map(({ id }: SliderOption, index: number) => {
@@ -46,8 +40,8 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
                     name={name}
                     index={index}
                     label={t('slider', {
-                      context: 'option',
-                      index: isMultiple ? index + 1 : undefined,
+                      context: 'indexed',
+                      index: index + 1,
                     })}
                     isMultiple={isMultiple}
                     onRemove={handleRemove}
