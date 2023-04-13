@@ -15,7 +15,7 @@ export const ActivityItems = () => {
   const { t } = useTranslation('app');
   const [activeItemId, setActiveItemId] = useState('');
 
-  const { name } = useCurrentActivity();
+  const { name, activity } = useCurrentActivity();
   const { control, watch } = useFormContext();
 
   const { append: appendItem, remove: removeItem } = useFieldArray({
@@ -23,11 +23,19 @@ export const ActivityItems = () => {
     name: `${name}.items`,
   });
 
+  useBreadcrumbs([
+    {
+      icon: 'item-outlined',
+      label: t('items'),
+    },
+  ]);
+
+  if (!activity) return null;
+
   const items = watch(`${name}.items`);
   const activeItemIndex = items?.findIndex((item: ItemFormValues) => item.id === activeItemId);
   const activeItem = items?.[activeItemIndex];
 
-  //TODO: add edit items
   const handleRemoveItem = (id: string) => {
     if (id === activeItem?.id) setActiveItemId('');
 
@@ -40,13 +48,6 @@ export const ActivityItems = () => {
     setActiveItemId(item.id);
   };
 
-  useBreadcrumbs([
-    {
-      icon: 'item-outlined',
-      label: t('items'),
-    },
-  ]);
-
   return (
     <StyledContainer>
       <LeftBar
@@ -56,7 +57,13 @@ export const ActivityItems = () => {
         onAddItem={handleAddItem}
         onRemoveItem={handleRemoveItem}
       />
-      {activeItemId && <ItemConfiguration item={activeItem} />}
+      {activeItemId && (
+        <ItemConfiguration
+          key={`item-${activeItemId}`}
+          name={`${name}.items.${activeItemIndex}`}
+          onClose={() => setActiveItemId('')}
+        />
+      )}
     </StyledContainer>
   );
 };

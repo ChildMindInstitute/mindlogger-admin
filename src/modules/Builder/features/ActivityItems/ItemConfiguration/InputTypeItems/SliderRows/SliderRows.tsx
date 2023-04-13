@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { FieldValues, Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
@@ -10,16 +10,13 @@ import { SliderProps } from './SliderRows.types';
 import { SliderOption } from '../../ItemConfiguration.types';
 import { getEmptySliderOption } from '../../ItemConfiguration.utils';
 
-export const SliderRows = <T extends FieldValues>({
-  name,
-  control,
-  isMultiple = false,
-}: SliderProps<T>) => {
+export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
   const { t } = useTranslation('app');
+  const { control } = useFormContext();
 
   return (
     <Controller
-      name={name}
+      name={isMultiple ? `${name}.responseValues.rows` : `${name}.responseValues`}
       control={control}
       render={({ field: { onChange, value } }) => {
         const handleAddSlider = () => {
@@ -28,24 +25,29 @@ export const SliderRows = <T extends FieldValues>({
 
         return (
           <StyledFlexColumn sx={{ mb: theme.spacing(2), gap: '2.4rem' }}>
-            {value?.map(({ id }: SliderOption, index: number) => {
-              const handleRemove = () => {
-                onChange(value.filter(({ id: sliderId }: SliderOption) => sliderId !== id));
-              };
+            {!isMultiple && (
+              <SliderPanel name={name} label={t('sliderOption')} isMultiple={isMultiple} />
+            )}
+            {isMultiple &&
+              value?.map(({ id }: SliderOption, index: number) => {
+                const handleRemove = () => {
+                  onChange(value.filter(({ id: sliderId }: SliderOption) => sliderId !== id));
+                };
 
-              return (
-                <SliderPanel
-                  key={`slider-panel-${id}`}
-                  name={`${name}[${index}]`}
-                  label={t('slider', {
-                    context: 'option',
-                    index: isMultiple ? index + 1 : undefined,
-                  })}
-                  isMultiple={isMultiple}
-                  onRemove={handleRemove}
-                />
-              );
-            })}
+                return (
+                  <SliderPanel
+                    key={`slider-panel-${id}`}
+                    name={name}
+                    index={index}
+                    label={t('slider', {
+                      context: 'indexed',
+                      index: index + 1,
+                    })}
+                    isMultiple={isMultiple}
+                    onRemove={handleRemove}
+                  />
+                );
+              })}
             {isMultiple && (
               <Button
                 onClick={handleAddSlider}

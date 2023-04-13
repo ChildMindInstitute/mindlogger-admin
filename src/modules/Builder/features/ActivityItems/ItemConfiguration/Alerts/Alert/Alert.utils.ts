@@ -1,5 +1,7 @@
 import i18n from 'i18n';
+import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
 import { ItemResponseType } from 'shared/consts';
+import { SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 
 import { ItemConfigurationForm } from '../../ItemConfiguration.types';
 import { OptionTypes } from './Alert.types';
@@ -17,55 +19,57 @@ export const getSliderOptions = (min: number, max: number) =>
     value: item.toString(),
   }));
 
-export const getOptionsList = (formValues: ItemConfigurationForm) => {
-  const { itemsInputType, options, selectionRows, sliderOptions } = formValues;
+export const getOptionsList = (formValues: ItemFormValues) => {
+  const { responseType, responseValues } = formValues;
   if (
-    itemsInputType === ItemResponseType.SingleSelection ||
-    itemsInputType === ItemResponseType.MultipleSelection
+    responseType === ItemResponseType.SingleSelection ||
+    responseType === ItemResponseType.MultipleSelection
   ) {
     return (
-      options?.map((option, index) => ({
-        labelKey: getOptionName(OptionTypes.Option, index, option.text),
-        value: option.id,
-      })) || []
+      (responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
+        (option, index) => ({
+          labelKey: getOptionName(OptionTypes.Option, index, option.text),
+          value: option.id,
+        }),
+      ) || []
     );
   }
-  if (
-    itemsInputType === ItemResponseType.SingleSelectionPerRow ||
-    itemsInputType === ItemResponseType.MultipleSelectionPerRow
-  ) {
-    return (
-      selectionRows?.options?.map((option, index) => ({
-        labelKey: getOptionName(OptionTypes.Option, index, option.label),
-        value: option.id,
-      })) || []
-    );
-  }
-  if (itemsInputType === ItemResponseType.SliderRows) {
-    return (
-      sliderOptions?.map((sliderOption, index) => ({
-        labelKey: getOptionName(OptionTypes.Slider, index, sliderOption.label),
-        value: sliderOption.id,
-      })) || []
-    );
-  }
+  //TODO: add when items will be connected to the form
+  // if (
+  //   itemsInputType === ItemResponseType.SingleSelectionPerRow ||
+  //   itemsInputType === ItemResponseType.MultipleSelectionPerRow
+  // ) {
+  //   return (
+  //     selectionRows?.options?.map((option, index) => ({
+  //       labelKey: getOptionName(OptionTypes.Option, index, option.label),
+  //       value: option.id,
+  //     })) || []
+  //   );
+  // }
+  // if (itemsInputType === ItemResponseType.SliderRows) {
+  //   return (
+  //     sliderOptions?.map((sliderOption, index) => ({
+  //       labelKey: getOptionName(OptionTypes.Slider, index, sliderOption.label),
+  //       value: sliderOption.id,
+  //     })) || []
+  //   );
+  // }
 
   return [];
 };
 
-export const getItemsList = (formValues: ItemConfigurationForm) => {
-  const { itemsInputType, selectionRows } = formValues;
-  if (
-    itemsInputType === ItemResponseType.SingleSelectionPerRow ||
-    itemsInputType === ItemResponseType.MultipleSelectionPerRow
-  ) {
-    return (
-      selectionRows?.items.map((selectionRow, index) => ({
-        labelKey: getOptionName(OptionTypes.Row, index, selectionRow.label),
-        value: selectionRow.id,
-      })) || []
-    );
-  }
+export const getItemsList = (formValues: ItemFormValues) =>
+  // const { responseType, responseValues } = formValues;
+  // if (
+  //   responseType === ItemResponseType.SingleSelectionPerRow ||
+  //   responseType === ItemResponseType.MultipleSelectionPerRow
+  // ) {
+  //   return (
+  //     selectionRows?.items.map((selectionRow, index) => ({
+  //       labelKey: getOptionName(OptionTypes.Row, index, selectionRow.label),
+  //       value: selectionRow.id,
+  //     })) || []
+  //   );
+  // }
 
-  return [];
-};
+  [];

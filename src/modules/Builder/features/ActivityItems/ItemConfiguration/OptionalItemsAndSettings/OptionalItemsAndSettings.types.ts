@@ -1,27 +1,8 @@
-import {
-  UseFormSetValue,
-  Control,
-  UseFormGetValues,
-  UseFormWatch,
-  UseFormRegister,
-  UseFormUnregister,
-  UseFormClearErrors,
-} from 'react-hook-form';
 import { Dispatch, SetStateAction } from 'react';
-
-import { ItemConfigurationForm } from '../ItemConfiguration.types';
+import { ItemResponseType } from 'shared/consts';
 
 export type OptionalItemsProps = {
-  setValue: UseFormSetValue<ItemConfigurationForm>;
-  getValues: UseFormGetValues<ItemConfigurationForm>;
-  watch: UseFormWatch<ItemConfigurationForm>;
-  register: UseFormRegister<ItemConfigurationForm>;
-  unregister: UseFormUnregister<ItemConfigurationForm>;
-  clearErrors: UseFormClearErrors<ItemConfigurationForm>;
-  control: Control<ItemConfigurationForm>;
-  selectedInputType: ItemConfigurationForm['itemsInputType'];
-  settings: ItemConfigurationForm['settings'];
-  palette: ItemConfigurationForm['paletteName'];
+  name: string;
 };
 
 export type OptionalItemsRef = {
@@ -29,17 +10,12 @@ export type OptionalItemsRef = {
 };
 
 export type ActiveItemHookProps = {
-  selectedInputType: ItemConfigurationForm['itemsInputType'];
-  control: OptionalItemsProps['control'];
+  name: string;
+  responseType: ItemResponseType;
 };
 
 export type SettingsSetupProps = {
-  setValue: UseFormSetValue<ItemConfigurationForm>;
-  getValues: UseFormGetValues<ItemConfigurationForm>;
-  watch: UseFormWatch<ItemConfigurationForm>;
-  register: UseFormRegister<ItemConfigurationForm>;
-  unregister: UseFormUnregister<ItemConfigurationForm>;
-  clearErrors: UseFormClearErrors<ItemConfigurationForm>;
+  name: string;
   removeOptions?: () => void;
   handleAddOption?: () => void;
   removeAlert?: () => void;

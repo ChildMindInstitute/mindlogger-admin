@@ -32,7 +32,7 @@ export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }
       sx={{
         backgroundColor: activeItemId === item.id ? variables.palette.secondary_container : '',
       }}
-      onClick={() => onSetActiveItem(activeItemId === item.id ? '' : item.id)}
+      onClick={() => onSetActiveItem(item.id ?? '')}
       hidden={hidden}
     >
       <StyledFlexTopCenter {...hiddenProps}>

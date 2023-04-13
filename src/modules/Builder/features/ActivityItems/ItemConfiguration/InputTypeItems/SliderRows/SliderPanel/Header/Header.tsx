@@ -1,4 +1,5 @@
 import { useFormContext } from 'react-hook-form';
+import get from 'lodash.get';
 
 import { Svg } from 'shared/components';
 import {
@@ -26,6 +27,7 @@ const commonButtonStyles = {
 
 export const Header = ({
   name,
+  index,
   label,
   isExpanded,
   isMultiple,
@@ -34,8 +36,10 @@ export const Header = ({
 }: HeaderProps) => {
   const { watch } = useFormContext();
 
-  const { min, max, minLabel, maxLabel, minImage, maxImage } = watch(name);
-  const settings = watch('settings');
+  const settings = watch(`${name}.config`);
+  const { minValue, maxValue, minLabel, maxLabel, minImage, maxImage } = watch(
+    `${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`,
+  );
 
   if (isExpanded) {
     return (
@@ -53,10 +57,10 @@ export const Header = ({
     );
   }
 
-  const hasTickMarks = settings?.includes(ItemConfigurationSettings.HasTickMarks);
-  const hasTickMarksLabels = settings?.includes(ItemConfigurationSettings.HasTickMarksLabels);
+  const hasTickMarks = get(settings, ItemConfigurationSettings.HasTickMarks);
+  const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
 
-  const marks = hasTickMarks && getMarks(min, max, hasTickMarksLabels);
+  const marks = hasTickMarks && getMarks(minValue, maxValue, hasTickMarksLabels);
 
   return (
     <StyledSliderPanelHeader>
@@ -69,7 +73,7 @@ export const Header = ({
           {<StyledLabelLarge>{minLabel}</StyledLabelLarge>}
           {minImage && <StyledImg src={minImage} />}
         </StyledFlexColumn>
-        <StyledSlider min={min} max={max} marks={marks} disabled />
+        <StyledSlider min={minValue} max={maxValue} marks={marks} disabled />
         <StyledFlexColumn sx={{ alignItems: 'center' }}>
           {<StyledLabelLarge>{maxLabel}</StyledLabelLarge>}
           {maxImage && <StyledImg src={maxImage} />}

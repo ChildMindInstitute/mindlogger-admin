@@ -20,6 +20,8 @@ export const ItemSchema = () =>
         }),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
       question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),
+      responseValues: yup.object({ options: yup.array().of(yup.object({})) }),
+      config: yup.object({}),
     })
     .required();
 
