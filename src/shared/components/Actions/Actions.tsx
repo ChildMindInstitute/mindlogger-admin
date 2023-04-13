@@ -1,5 +1,4 @@
 import { MouseEvent, useState } from 'react';
-import uniqueId from 'lodash.uniqueid';
 
 import { Tooltip } from 'shared/components/Tooltip';
 import { Svg } from 'shared/components/Svg';
@@ -50,7 +49,7 @@ export const Actions = ({
             if (!isDisplayed) return null;
 
             return (
-              <Tooltip key={uniqueId()} tooltipTitle={tooltipTitle}>
+              <Tooltip key={icon.props.id} tooltipTitle={tooltipTitle}>
                 <span>
                   <StyledActionButton
                     isActive={active}
