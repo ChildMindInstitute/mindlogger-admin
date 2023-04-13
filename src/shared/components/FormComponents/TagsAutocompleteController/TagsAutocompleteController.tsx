@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEvent, SyntheticEvent } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import {
   TextField,
@@ -12,7 +12,10 @@ import {
 
 import { theme } from 'shared/styles';
 
-import { TagsAutocompleteControllerProps } from './TagsAutocompleteController.types';
+import {
+  AutocompleteOption,
+  TagsAutocompleteControllerProps,
+} from './TagsAutocompleteController.types';
 
 export const TagsInputController = <T extends FieldValues>({
   name,
@@ -20,6 +23,7 @@ export const TagsInputController = <T extends FieldValues>({
   options,
   labelAllSelect,
   noOptionsText,
+  disabled,
   ...props
 }: TagsAutocompleteControllerProps<T>) => {
   const [selectedAll, setSelectedAll] = useState<boolean>(false);
@@ -29,7 +33,8 @@ export const TagsInputController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => {
-        const handleToggleSelectAll = () => {
+        const handleToggleSelectAll = (e: MouseEvent<HTMLLabelElement>) => {
+          e.preventDefault(); // prevent blur
           onChange(options || []);
           setSelectedAll((prev) => {
             if (!prev) onChange(options || []);
@@ -37,6 +42,16 @@ export const TagsInputController = <T extends FieldValues>({
 
             return !prev;
           });
+        };
+
+        const handleChange = (
+          _e: SyntheticEvent<Element, Event>,
+          value: AutocompleteOption[],
+          reason: string,
+        ) => {
+          if (reason === 'clear' || reason === 'removeOption') setSelectedAll(false);
+          if (reason === 'selectOption' && value?.length === options?.length) setSelectedAll(true);
+          onChange(value);
         };
 
         return (
@@ -51,12 +66,8 @@ export const TagsInputController = <T extends FieldValues>({
             noOptionsText={<ListItem sx={{ pl: theme.spacing(1.3) }}>{noOptionsText}</ListItem>}
             freeSolo={false}
             value={value || []}
-            onChange={(_e, value, reason) => {
-              if (reason === 'clear' || reason === 'removeOption') setSelectedAll(false);
-              if (reason === 'selectOption' && value?.length === options?.length)
-                setSelectedAll(true);
-              onChange(value);
-            }}
+            onChange={handleChange}
+            disabled={disabled}
             renderInput={(params) => <TextField {...params} {...props} />}
             renderOption={(props, option, { selected }) => (
               <ListItem {...props}>
@@ -69,22 +80,21 @@ export const TagsInputController = <T extends FieldValues>({
 
               return (
                 <Paper {...restPaperProps}>
-                  <ListItem
-                    onMouseDown={(e) => e.preventDefault()} // prevent blur
-                    sx={{ pl: theme.spacing(2.8) }}
-                  >
-                    <FormControlLabel
-                      onClick={(e) => {
-                        e.preventDefault(); // prevent blur
-                        handleToggleSelectAll();
-                      }}
-                      label={labelAllSelect}
-                      sx={{
-                        width: '100%',
-                      }}
-                      control={<Checkbox id="select-all-checkbox" checked={selectedAll} />}
-                    />
-                  </ListItem>
+                  {options?.length ? (
+                    <ListItem
+                      onMouseDown={(e) => e.preventDefault()} // prevent blur
+                      sx={{ pl: theme.spacing(2.8) }}
+                    >
+                      <FormControlLabel
+                        onClick={handleToggleSelectAll}
+                        label={labelAllSelect}
+                        sx={{
+                          width: '100%',
+                        }}
+                        control={<Checkbox id="select-all-checkbox" checked={selectedAll} />}
+                      />
+                    </ListItem>
+                  ) : null}
                   <Divider />
                   {children}
                 </Paper>

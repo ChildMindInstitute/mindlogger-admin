@@ -8,14 +8,14 @@ import {
   ExportDataSetting,
 } from 'shared/features/AppletSettings';
 
-export const getSettings = (isEditAppletPage: boolean) => [
+export const getSettings = (isNewApplet: boolean) => [
   {
     label: 'usersAndData',
     items: [
       {
         icon: <Svg id="export" />,
         label: 'exportData',
-        component: <ExportDataSetting isDisabled={isEditAppletPage} />,
+        component: <ExportDataSetting isDisabled={isNewApplet} />,
         param: 'export-data',
       },
       {
@@ -32,7 +32,7 @@ export const getSettings = (isEditAppletPage: boolean) => [
       {
         icon: <Svg id="schema" />,
         label: 'downloadSchema',
-        component: <DownloadSchemaSetting isDisabled={isEditAppletPage} />,
+        component: <DownloadSchemaSetting isDisabled={isNewApplet} />,
         param: 'download-schema',
       },
       {
@@ -44,13 +44,13 @@ export const getSettings = (isEditAppletPage: boolean) => [
       {
         icon: <Svg id="transfer-ownership" />,
         label: 'transferOwnership',
-        component: <TransferOwnershipSetting isDisabled={isEditAppletPage} />,
+        component: <TransferOwnershipSetting isDisabled={isNewApplet} isBuilder />,
         param: 'transfer-ownership',
       },
       {
         icon: <Svg id="trash" />,
         label: 'deleteApplet',
-        component: <DeleteAppletSetting isDisabled={isEditAppletPage} />,
+        component: <DeleteAppletSetting isDisabled={isNewApplet} />,
         param: 'delete-applet',
       },
     ],
@@ -73,7 +73,7 @@ export const getSettings = (isEditAppletPage: boolean) => [
   //     {
   //       icon: <Svg id="share" />,
   //       label: 'shareToLibrary',
-  //       component: <ShareAppletSetting isDisabled={isEditAppletPage} />,
+  //       component: <ShareAppletSetting isDisabled={isNewApplet} />,
   //     },
   //   ],
   // },

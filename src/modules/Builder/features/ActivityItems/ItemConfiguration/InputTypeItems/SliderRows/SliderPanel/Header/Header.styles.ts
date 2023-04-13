@@ -18,6 +18,10 @@ export const StyledSliderPanelHeader = styled(StyledFlexTopCenter, shouldForward
     white-space: nowrap;
     flex-grow: ${({ isExpanded }: { isExpanded?: boolean }) => (isExpanded ? '1' : '0')};
   }
+
+  .MuiSlider-root {
+    margin-bottom: 0;
+  }
 `;
 
 export const StyledImg = styled('img')`

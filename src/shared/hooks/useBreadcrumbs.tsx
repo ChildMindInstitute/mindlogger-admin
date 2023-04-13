@@ -11,7 +11,7 @@ import { checkIfAppletActivityFlowUrlPassed, checkIfAppletUrlPassed } from 'shar
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
-  const { id, appletId, activityId, activityFlowId } = useParams();
+  const { appletId, activityId, activityFlowId } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
@@ -47,8 +47,8 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         navPath: page.library,
       });
     }
-    if (id && appletsFoldersData) {
-      const { name, image } = getAppletData(appletsFoldersData, id);
+    if (appletId && appletsFoldersData) {
+      const { name, image } = getAppletData(appletsFoldersData, appletId);
       newBreadcrumbs.push({
         icon: image || '',
         label: name || '',
@@ -107,7 +107,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     firstName,
     lastName,
     appletsFoldersData,
-    id,
     appletId,
     activityId,
     appletLabel,

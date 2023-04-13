@@ -11,7 +11,7 @@ import { mockedPublishedAppletResponse } from '../AppletsCatalog/mocked';
 
 export const AppletDetails = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { appletId: id } = useParams();
 
   // TODO: replace with real data when the endpoint is ready
   const applet = mockedPublishedAppletResponse.data.find(

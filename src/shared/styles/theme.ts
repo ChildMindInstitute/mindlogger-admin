@@ -146,7 +146,6 @@ export const theme = createTheme({
         head: {
           fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface_variant,
-
           '.MuiTableSortLabel-root.Mui-active': {
             color: variables.palette.on_surface_variant,
           },
@@ -327,19 +326,15 @@ export const theme = createTheme({
             textTransform: 'none',
             height: 40,
             padding: '1rem',
-
             '&:hover': {
               backgroundColor: variables.palette.on_secondary_container_alfa8,
             },
-
             '&.MuiToggleButtonGroup-grouped:not(:first-of-type)': {
               borderLeftColor: variables.palette.outline,
             },
-
             '&.Mui-selected': {
               backgroundColor: variables.palette.secondary_container,
               color: variables.palette.on_secondary_container,
-
               '&:hover': {
                 backgroundColor: blendColorsNormal(
                   variables.palette.secondary_container,
@@ -419,7 +414,6 @@ export const theme = createTheme({
           borderWidth: variables.borderWidth.md,
           borderColor: variables.palette.outline_variant,
           color: variables.palette.black,
-
           input: {
             padding: '1.6rem',
             fontSize: variables.font.size.lg,
@@ -506,13 +500,11 @@ export const theme = createTheme({
             boxShadow: variables.boxShadow.light2,
             marginTop: '0.4rem',
             padding: '0 0.4rem',
-
             '.MuiAutocomplete-option': {
               borderRadius: variables.borderRadius.xxs,
               '&:hover': {
                 backgroundColor: variables.palette.secondary_container,
               },
-
               '&[aria-selected="true"]': {
                 backgroundColor: variables.palette.surface_variant,
                 '&:hover': {
@@ -531,6 +523,39 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           color: variables.palette.primary,
+        },
+      },
+    },
+    MuiSwitch: {
+      styleOverrides: {
+        root: {
+          width: '6.4rem',
+          alignItems: 'center',
+          '.MuiButtonBase-root': {
+            left: '0.6rem',
+            top: '0.1rem',
+            '.MuiSwitch-thumb': {
+              color: variables.palette.white,
+              width: '1.8rem',
+              height: '1.8rem',
+            },
+            '&.Mui-checked': {
+              transform: 'translateX(1.6rem)',
+              '.MuiSwitch-thumb': {
+                color: variables.palette.white,
+              },
+              '+ .MuiSwitch-track': {
+                backgroundColor: variables.palette.primary,
+                opacity: 1,
+              },
+            },
+          },
+          '.MuiSwitch-track': {
+            width: '4rem',
+            height: '2.4rem',
+            borderRadius: variables.borderRadius.xxxl,
+            backgroundColor: variables.palette.outline,
+          },
         },
       },
     },

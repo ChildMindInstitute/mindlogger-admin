@@ -1,119 +1,122 @@
 import { useEffect, useMemo } from 'react';
+import { useFormContext } from 'react-hook-form';
+import get from 'lodash.get';
 
 import { ItemResponseType } from 'shared/consts';
+import { Config } from 'shared/state';
+
 import {
-  AudioPlayer,
-  AudioRecord,
-  Date,
-  Drawing,
-  Geolocation,
-  NumberSelection,
-  PhotoResponse,
-  SelectionRows,
-  SliderRows,
   TextResponse,
-  TimeRange,
-  VideoResponse,
+  SliderRows,
+  // AudioPlayer,
+  // AudioRecord,
+  // Date,
+  // Drawing,
+  // Geolocation,
+  // NumberSelection,
+  // PhotoResponse,
+  // SelectionRows,
+  // TimeRange,
+  // VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
-import { DEFAULT_TIMER_VALUE } from '../ItemConfiguration.const';
-import { getEmptySelectionRows, getEmptySliderOption } from '../ItemConfiguration.utils';
+import {
+  defaultTextConfig,
+  defaultSliderConfig,
+  defaultSingleAndMultiSelectionConfig,
+} from './OptionalItemsAndSettings.const';
+import { getEmptySliderOption } from '../ItemConfiguration.utils';
 
-export const useActiveItem = ({ selectedInputType, control }: ActiveItemHookProps) =>
-  useMemo(() => {
-    switch (selectedInputType) {
-      case ItemResponseType.NumberSelection:
-        return <NumberSelection name="minNumber" maxName="maxNumber" />;
+export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
+  const activeItem = useMemo(() => {
+    switch (responseType) {
+      // case ItemResponseType.NumberSelection:
+      //   return <NumberSelection name="minNumber" maxName="maxNumber" />;
       case ItemResponseType.Slider:
-        return <SliderRows name="sliderOptions" control={control} />;
-      case ItemResponseType.SliderRows:
-        return <SliderRows name="sliderOptions" control={control} isMultiple />;
+        return <SliderRows name={name} />;
+      // case ItemResponseType.SliderRows:
+      //   return <SliderRows name="sliderOptions" control={control} isMultiple />;
 
-      case ItemResponseType.SingleSelectionPerRow:
-        return <SelectionRows isSingle />;
-      case ItemResponseType.MultipleSelectionPerRow:
-        return <SelectionRows />;
-      case ItemResponseType.Geolocation:
-        return <Geolocation />;
-      case ItemResponseType.TimeRange:
-        return <TimeRange />;
-      case ItemResponseType.Video:
-        return <VideoResponse />;
-      case ItemResponseType.Photo:
-        return <PhotoResponse />;
-      case ItemResponseType.Date:
-        return <Date />;
-      case ItemResponseType.Audio:
-        return <AudioRecord name="audioDuration" />;
+      // case ItemResponseType.SingleSelectionPerRow:
+      //   return <SelectionRows isSingle />;
+      // case ItemResponseType.MultipleSelectionPerRow:
+      //   return <SelectionRows />;
+      // case ItemResponseType.Geolocation:
+      //   return <Geolocation />;
+      // case ItemResponseType.TimeRange:
+      //   return <TimeRange />;
+      // case ItemResponseType.Video:
+      //   return <VideoResponse />;
+      // case ItemResponseType.Photo:
+      //   return <PhotoResponse />;
+      // case ItemResponseType.Date:
+      //   return <Date />;
+      // case ItemResponseType.Audio:
+      //   return <AudioRecord name="audioDuration" />;
       case ItemResponseType.Text:
-        return <TextResponse name="textResponseAnswer" maxCharacters="textResponseMaxCharacters" />;
-      case ItemResponseType.AudioPlayer:
-        return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
-      case ItemResponseType.Drawing:
-        return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
+        return <TextResponse name={name} />;
+      // case ItemResponseType.AudioPlayer:
+      //   return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
+      // case ItemResponseType.Drawing:
+      //   return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
       default:
         null;
     }
-  }, [selectedInputType]);
+  }, [responseType]);
+
+  return activeItem;
+};
 
 export const useSettingsSetup = ({
-  setValue,
-  getValues,
-  watch,
-  register,
-  unregister,
-  clearErrors,
+  name,
   removeOptions,
   handleAddOption,
   removeAlert,
   handleAddAlert,
   setShowColorPalette,
 }: SettingsSetupProps) => {
-  const selectedInputType = watch('itemsInputType');
-  const settings = watch('settings');
-  const selectionRows = watch('selectionRows');
+  const { setValue, getValues, watch } = useFormContext();
 
-  const hasTimer = settings?.includes(ItemConfigurationSettings.HasTimer);
-  const hasAlerts = settings?.includes(ItemConfigurationSettings.HasAlerts);
-  const hasPalette = settings?.includes(ItemConfigurationSettings.HasColorPalette);
-  const isTextInputOptionVisible = settings?.includes(ItemConfigurationSettings.HasTextInput);
-  const isTextInputRequired = settings?.includes(ItemConfigurationSettings.IsTextInputRequired);
-  const isSkippable = settings?.includes(ItemConfigurationSettings.IsSkippable);
+  const settings = watch(`${name}.config`);
+
+  const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
+  const hasPalette = get(settings, ItemConfigurationSettings.HasColorPalette);
+  const isTextInputRequired = get(settings, ItemConfigurationSettings.IsTextInputRequired);
+  const isSkippable = get(settings, ItemConfigurationSettings.IsSkippable);
+
+  const setConfig = (config: Config) => setValue(`${name}.config`, config);
 
   useEffect(() => {
-    setValue('settings', []);
-    setValue('timer', DEFAULT_TIMER_VALUE);
-    removeOptions?.();
+    const subscription = watch((_, { name: fieldName, type }) => {
+      if (fieldName === `${name}.responseType` && type === 'change') {
+        removeOptions?.();
 
-    if (
-      selectedInputType === ItemResponseType.SingleSelection ||
-      selectedInputType === ItemResponseType.MultipleSelection
-    ) {
-      handleAddOption?.();
-    }
+        const responseType = getValues(`${name}.responseType`);
 
-    if (
-      selectedInputType === ItemResponseType.Slider ||
-      selectedInputType === ItemResponseType.SliderRows
-    ) {
-      const isMultiple = selectedInputType === ItemResponseType.SliderRows;
-      setValue('sliderOptions', [getEmptySliderOption(isMultiple)]);
-      clearErrors('sliderOptions');
-    } else unregister('sliderOptions');
+        if (
+          responseType === ItemResponseType.SingleSelection ||
+          responseType === ItemResponseType.MultipleSelection
+        ) {
+          handleAddOption?.();
+          setConfig(defaultSingleAndMultiSelectionConfig);
+        }
 
-    if (
-      selectedInputType === ItemResponseType.SingleSelectionPerRow ||
-      selectedInputType === ItemResponseType.MultipleSelectionPerRow
-    ) {
-      if (selectionRows) {
-        setValue('selectionRows', getEmptySelectionRows(selectedInputType));
-        clearErrors('selectionRows');
-      } else {
-        register('selectionRows', { value: getEmptySelectionRows(selectedInputType) });
+        if (responseType === ItemResponseType.Text) {
+          setConfig(defaultTextConfig);
+        }
+
+        if (responseType === ItemResponseType.Slider) {
+          setConfig(defaultSliderConfig);
+          setValue(`${name}.responseValues`, getEmptySliderOption(false));
+        }
       }
-    } else unregister('selectionRows');
-  }, [selectedInputType]);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     if (!hasAlerts) {
@@ -123,43 +126,16 @@ export const useSettingsSetup = ({
   }, [hasAlerts]);
 
   useEffect(() => {
-    if (hasPalette) {
-      register('paletteName', { value: '' });
-    } else {
-      unregister('paletteName');
-      setShowColorPalette?.(false);
-    }
+    if (!hasPalette) setShowColorPalette?.(false);
   }, [hasPalette]);
 
   useEffect(() => {
     //TODO add to isSkippable: 'Reset to True IF Allow respondent to skip all Items = True AND Required = False;'
     if (isTextInputRequired && isSkippable) {
-      setValue(
-        'settings',
-        settings?.filter(
-          (settingKey: ItemConfigurationSettings) =>
-            settingKey !== ItemConfigurationSettings.IsSkippable,
-        ),
-      );
+      setValue(`${name}.config`, {
+        ...settings,
+        [ItemConfigurationSettings.IsSkippable]: false,
+      });
     }
-
-    if (isTextInputOptionVisible) {
-      const initialValue = getValues()['isTextInputOptionRequired'];
-
-      register('isTextInputOptionRequired', { value: initialValue });
-    } else unregister('isTextInputOptionRequired');
   }, [settings]);
-
-  useEffect(() => {
-    if (hasTimer) {
-      const initialValue = getValues()['timer'];
-      if (initialValue === undefined) {
-        setValue('timer', DEFAULT_TIMER_VALUE);
-      }
-
-      return;
-    }
-
-    setValue('timer', undefined);
-  }, [selectedInputType, hasTimer]);
 };

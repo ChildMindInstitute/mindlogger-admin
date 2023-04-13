@@ -5,6 +5,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import fr from 'date-fns/locale/fr';
 
 import { Svg } from 'shared/components/Svg';
+import { StyledBodyLarge, theme } from 'shared/styles';
 
 import {
   StyledButton,
@@ -65,35 +66,60 @@ export const DatePicker = <T extends FieldValues>({
 
         const getValue = () => {
           if (value && isStartEndingDate) {
-            return `${getStringFromDate(startEndingValue[0]) || DATE_PLACEHOLDER} - ${
-              getStringFromDate(startEndingValue[1]) || DATE_PLACEHOLDER
-            }`;
+            return [
+              getStringFromDate(startEndingValue[0]) || DATE_PLACEHOLDER,
+              getStringFromDate(startEndingValue[1]) || DATE_PLACEHOLDER,
+            ];
           }
 
           return getStringFromDate(singleDate) || '';
         };
 
+        const textFieldProps = {
+          fullWidth: true,
+          disabled: true,
+          onClick: handlePickerShow,
+          className: open ? 'active' : '',
+          sx: { ...inputSx },
+          error: !!error,
+          helperText: error?.message || null,
+          InputProps: {
+            endAdornment: (
+              <StyledIconBtn aria-describedby={id}>
+                <Svg id="date" />
+              </StyledIconBtn>
+            ),
+          },
+        };
+
         return (
           <>
-            <StyledTextField
-              fullWidth
-              disabled
-              variant="outlined"
-              label={label || (uiType === UiType.OneDate ? t('date') : t('startEndDate'))}
-              value={getValue()}
-              onClick={handlePickerShow}
-              className={(open && 'active') || ''}
-              sx={{ ...inputSx }}
-              error={!!error}
-              helperText={error?.message || null}
-              InputProps={{
-                endAdornment: (
-                  <StyledIconBtn aria-describedby={id}>
-                    <Svg id="date" />
-                  </StyledIconBtn>
-                ),
-              }}
-            />
+            {uiType === UiType.OneDate ? (
+              <StyledTextField
+                variant="outlined"
+                {...textFieldProps}
+                label={label || t('date')}
+                value={getValue()}
+              />
+            ) : (
+              <>
+                <StyledTextField
+                  variant="outlined"
+                  {...textFieldProps}
+                  label={t('startDate')}
+                  value={getValue()[0] || ''}
+                />
+                <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
+                  {t('smallTo')}
+                </StyledBodyLarge>
+                <StyledTextField
+                  variant="outlined"
+                  {...textFieldProps}
+                  label={t('endDate')}
+                  value={getValue()[1] || ''}
+                />
+              </>
+            )}
             <StyledPopover
               id={id}
               open={open}

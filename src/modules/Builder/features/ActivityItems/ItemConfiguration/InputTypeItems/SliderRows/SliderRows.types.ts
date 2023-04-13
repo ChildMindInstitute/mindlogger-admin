@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { SliderOption } from '../../ItemConfiguration.types';
 
-export type SliderProps<T extends FieldValues> = {
+export type SliderProps = {
+  name: string;
   isMultiple?: boolean;
-} & UseControllerProps<T>;
+};
 
 export type SliderMapper = (sliderOption: SliderOption, index: number) => ReactNode;

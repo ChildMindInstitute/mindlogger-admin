@@ -15,14 +15,6 @@ export const MAX_FILE_SIZE_2MB = 2_097_152;
 
 export const INPUT_DEBOUNCE_TIME = 400;
 
-export const APPLET_PAGES = {
-  respondents: 'respondents',
-  managers: 'managers',
-  schedule: 'schedule',
-  settings: 'settings',
-  addUser: 'add-user',
-};
-
 export const BUILDER_PAGES = {
   activities: 'activities',
 };

@@ -14,7 +14,7 @@ import {
 
 export const ExportDataSetting = ({ isDisabled = false }) => {
   const { t } = useTranslation('app');
-  const { id } = useParams();
+  const { appletId: id } = useParams();
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 

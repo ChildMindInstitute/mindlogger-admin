@@ -6,7 +6,7 @@ import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
 import { StyledLabelSmall } from 'shared/styles/styledComponents';
 import { Svg } from 'shared/components';
 import { variables } from 'shared/styles/variables';
-import storage from 'shared/utils/storage';
+import { storage } from 'shared/utils';
 
 import {
   StyledAdvancedSettings,

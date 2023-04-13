@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
-import { variables } from 'shared/styles/variables';
-import { StyledLabelMedium } from 'shared/styles/styledComponents';
-import storage from 'shared/utils/storage';
+import { StyledLabelMedium, variables } from 'shared/styles';
+import { storage } from 'shared/utils';
 
 import { SelectLanguage } from './SelectLanguage';
 import { LanguageItem, Languages } from './Language.types';
