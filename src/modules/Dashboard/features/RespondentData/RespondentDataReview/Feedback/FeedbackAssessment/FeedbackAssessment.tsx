@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { Item } from 'shared/state';
+
 import { assessmentActivityItems } from './mock';
 import { ActivityCardItemList } from './ActivityCardItemList';
 import { ActivityItemAnswers } from './FeedbackAssessment.types';
-import { ActivityItem } from './ActivityCardItemList/ActivityCartItemList.types';
 import { SubmitAssessmentPopup } from './SubmitAssessmentPopup';
 
 const defaultValues = assessmentActivityItems.map((item) => ({
   activityItemId: item.id,
   answer: {
-    value: item.answer,
+    value: [],
   },
 }));
 
@@ -21,7 +22,7 @@ export const FeedbackAssessment = () => {
   });
 
   const [step, setStep] = useState(0);
-  const [items, setItems] = useState<ActivityItem[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
   const [submitAssessmentPopupVisible, setSubmitAssessmentPopupVisible] = useState(false);
 
   const toNextStep = () => {

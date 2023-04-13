@@ -5,6 +5,7 @@ import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId, OwnerAndAppletIds } from 'api';
 import { ItemResponseType } from 'shared/consts';
+import { ColorResult } from 'react-color';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -27,89 +28,122 @@ export type ActivityFlow = {
   isHidden?: boolean;
 };
 
-export type Config = {
-  remove_back_button: boolean;
-  skippable_item: boolean;
-  max_response_length: number;
-  correct_answer_required: boolean;
-  correct_answer: string;
-  numerical_response_required: boolean;
-  response_data_identifier: boolean;
-  response_required: boolean;
+export type TextInputConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  maxResponseLength: number;
+  correctAnswerRequired: boolean;
+  correctAnswer: string;
+  numericalResponseRequired: boolean;
+  responseDataIdentifier: boolean;
+  responseRequired: boolean;
+};
+
+export type SingleAndMultipleSelectionConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  setPalette: boolean;
+  timer: number;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+};
+
+export type SliderConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  showTickMarks: boolean;
+  showTickLabels: boolean;
+  continuousSlider: boolean;
+  timer: number;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
 };
 
 export type SliderItemResponseValues = {
-  minLabel: string | null;
-  maxLabel: string | null;
+  id?: string;
+  minLabel: string;
+  maxLabel: string;
   minValue: number;
   maxValue: number;
-  minImage: string | null;
-  maxImage: string | null;
+  minImage: string;
+  maxImage: string;
+  scores?: number[];
 };
 
-export type SingleSelectItemResponseValues = {
-  options: Array<{
-    id: string;
-    text: string;
-    image: string | null;
-    score: number | null;
-    tooltip: string | null;
-    color: string | null;
-    isHidden: boolean;
-  }>;
+export type SingleAndMultipleSelectionOption = {
+  id: string;
+  text: string;
+  image?: string;
+  score?: number;
+  tooltip?: string;
+  color?: string | ColorResult;
+  isHidden?: boolean;
 };
 
-export type MultiSelectItemResponseValues = {
-  options: Array<{
-    id: string;
-    text: string;
-    image: string | null;
-    score: number | null;
-    tooltip: string | null;
-    color: string | null;
-    isHidden: boolean;
-  }>;
+export type SingleAndMultipleSelectItemResponseValues = {
+  options: Array<SingleAndMultipleSelectionOption>;
 };
 
 export type TextItemResponseValues = null;
 
 export type ResponseValues =
   | TextItemResponseValues
-  | MultiSelectItemResponseValues
-  | SingleSelectItemResponseValues
+  | SingleAndMultipleSelectItemResponseValues
   | SliderItemResponseValues;
 
+export type Config = TextInputConfig | SingleAndMultipleSelectionConfig | SliderConfig;
+
+export type ItemAlert = {
+  message: string;
+  option: string;
+  item: string;
+  slider: string;
+  min: number;
+  max: number;
+};
+
 export type Item = {
-  id?: number;
+  id?: string;
   name: string;
   question: string | Record<string, string>;
   config: Config;
   responseType: ItemResponseType;
   responseValues: ResponseValues;
-  order?: number;
+  paletteName?: string;
+  alerts?: ItemAlert[];
 };
 
 export interface TextItem extends Item {
   responseType: ItemResponseType.Text;
-  config: Config;
+  config: TextInputConfig;
   responseValues: TextItemResponseValues;
 }
 
 export interface SingleSelectItem extends Item {
   responseType: ItemResponseType.SingleSelection;
-  config: Config;
-  responseValues: SingleSelectItemResponseValues;
+  config: SingleAndMultipleSelectionConfig;
+  responseValues: SingleAndMultipleSelectItemResponseValues;
 }
 
 export interface MultiSelectItem extends Item {
   responseType: ItemResponseType.MultipleSelection;
-  config: Config;
-  responseValues: MultiSelectItemResponseValues;
+  config: SingleAndMultipleSelectionConfig;
+  responseValues: SingleAndMultipleSelectItemResponseValues;
 }
 
 export interface SliderItem extends Item {
   responseType: ItemResponseType.Slider;
-  config: Config;
+  config: SliderConfig;
   responseValues: SliderItemResponseValues;
 }
 

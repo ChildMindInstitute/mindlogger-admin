@@ -34,7 +34,7 @@ export const MultipleSelection = ({ item, step, isDisabled }: MultipleSelectionP
                 value={option.id}
                 label={
                   <StyledLabel>
-                    {option.image && <StyledImage src={option.image} />}
+                    {option.image && <StyledImage src={option.image} alt="Option image" />}
                     <StyledBodyLarge color={variables.palette.on_surface}>
                       {option.text}
                     </StyledBodyLarge>

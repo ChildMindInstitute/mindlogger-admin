@@ -13,7 +13,10 @@ export const ItemSchema = () =>
   yup
     .object({
       name: yup.string().required(getIsRequiredValidateMessage('itemName')),
+      question: yup.string(),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
+      responseValues: yup.object({ options: yup.array().of(yup.object({})) }),
+      config: yup.object({}),
     })
     .required();
 

@@ -1,18 +1,24 @@
-import {
-  SliderType,
-  SingleSelectionType,
-  MultipleSelectionType,
-} from './ActivityCardItemList/ActivityCartItemList.types';
+import { MultiSelectItem, SingleSelectItem, SliderItem } from 'shared/state';
+import { ItemResponseType } from 'shared/consts';
 
-export const sliderMocked: SliderType = {
+export const sliderMocked: SliderItem = {
   id: 'slider-1',
+  name: 'slider-1',
   question: '<p>Does the respondent <b>feel good</b>?<p>',
-  responseType: 'slider',
-  answer: [],
+  responseType: ItemResponseType.Slider,
   config: {
     continuousSlider: false,
     removeBackButton: false,
     skippableItem: false,
+    addScores: false,
+    setAlerts: false,
+    showTickMarks: false,
+    showTickLabels: false,
+    timer: 0,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
   },
   responseValues: {
     minImage: 'https://cdn.pixabay.com/photo/2023/01/10/07/12/cat-7709087__480.jpg',
@@ -25,15 +31,25 @@ export const sliderMocked: SliderType = {
   },
 };
 
-export const singleSelectionMocked: SingleSelectionType = {
+export const singleSelectionMocked: SingleSelectItem = {
   id: 'single-select-1',
+  name: 'single-select-1',
   question: '<p>Do you like how the respondent passed the review?<p>',
   config: {
     removeBackButton: true,
     skippableItem: true,
+    randomizeOptions: false,
+    addScores: false,
+    setAlerts: false,
+    addTooltip: false,
+    setPalette: false,
+    timer: 0,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
   },
-  responseType: 'singleSelect',
-  answer: [],
+  responseType: ItemResponseType.SingleSelection,
   responseValues: {
     options: [
       {
@@ -55,46 +71,48 @@ export const singleSelectionMocked: SingleSelectionType = {
         text: 'Often',
         image:
           'https://wdfiles.ru/plugins/imageviewer/site/thumb.php?s=8680fe9&/Frame_26086024.png',
-        tooltip: null,
       },
     ],
   },
 };
 
-export const multipleSelectionMocked: MultipleSelectionType = {
+export const multipleSelectionMocked: MultiSelectItem = {
   id: 'multiple-select-1',
+  name: 'multiple-select-1',
   question: '<p>Do you like how the respondent passed the review?<p>',
   config: {
     removeBackButton: false,
     skippableItem: false,
+    randomizeOptions: false,
+    addScores: false,
+    setAlerts: false,
+    addTooltip: false,
+    setPalette: false,
+    timer: 0,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
   },
-  responseType: 'multiSelect',
-  answer: [],
+  responseType: ItemResponseType.MultipleSelection,
   responseValues: {
     options: [
       {
         id: 'multiple-select-option-1',
         text: 'Never',
-        image: null,
-        tooltip: null,
       },
       {
         id: 'multiple-select-option-2',
         text: 'Sometimes',
-        image: null,
-        tooltip: null,
       },
       {
         id: 'multiple-select-option-3',
         text: 'Often',
-        image: null,
         tooltip: 'Often',
       },
       {
         id: 'multiple-select-option-4',
         text: 'None',
-        image: null,
-        tooltip: null,
       },
     ],
   },

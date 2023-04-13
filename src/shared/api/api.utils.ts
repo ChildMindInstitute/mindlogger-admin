@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
-import storage from 'shared/utils/storage';
+import { storage } from 'shared/utils';
 
 import { BASE_API_URL, LANGUAGES } from './api.const';
 import { signInRefreshTokenApi } from './api';

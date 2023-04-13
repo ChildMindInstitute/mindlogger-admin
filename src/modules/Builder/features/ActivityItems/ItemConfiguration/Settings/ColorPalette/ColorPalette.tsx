@@ -5,7 +5,7 @@ import { ColorPalettePicker } from './ColorPalettePicker';
 import { StyledColorPaletteContainer } from './ColorPalette.styles';
 import { ColorPaletteProps } from './ColorPalette.types';
 
-export const ColorPalette = ({ setShowColorPalette }: ColorPaletteProps) => {
+export const ColorPalette = ({ name, setShowColorPalette }: ColorPaletteProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
@@ -17,7 +17,7 @@ export const ColorPalette = ({ setShowColorPalette }: ColorPaletteProps) => {
         onArrowClick={handleCollapse}
         setShowColorPalette={setShowColorPalette}
       />
-      {isExpanded && <ColorPalettePicker />}
+      {isExpanded && <ColorPalettePicker name={name} />}
     </StyledColorPaletteContainer>
   );
 };

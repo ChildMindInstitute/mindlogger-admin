@@ -1,7 +1,7 @@
-import { FieldValues, UseControllerProps } from 'react-hook-form';
-
-export type SliderPanelProps<T extends FieldValues> = {
+export type SliderPanelProps = {
+  name: string;
   label: string;
+  index?: number;
   isMultiple?: boolean;
-  onRemove: () => void;
-} & UseControllerProps<T>;
+  onRemove?: () => void;
+};

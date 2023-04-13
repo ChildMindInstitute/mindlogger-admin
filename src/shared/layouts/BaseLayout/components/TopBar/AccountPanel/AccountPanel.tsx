@@ -13,6 +13,7 @@ import {
   StyledClearedButton,
   variables,
 } from 'shared/styles';
+import { storage } from 'shared/utils';
 
 import { Notifications } from '../Notifications';
 import {
@@ -34,6 +35,7 @@ export const AccountPanel = ({ alertsQuantity, setShowDrawer, showDrawer }: Acco
   const authData = auth.useData();
 
   const handleLogout = () => {
+    storage.removeItem('workspace');
     dispatch(workspaces.actions.setCurrentWorkspace(null));
     dispatch(auth.actions.resetAuthorization());
   };

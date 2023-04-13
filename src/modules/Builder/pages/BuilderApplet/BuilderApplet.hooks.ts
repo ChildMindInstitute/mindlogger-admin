@@ -17,6 +17,6 @@ export const useCurrentActivity = () => {
 
   return {
     activity: activities[currentActivityIndex],
-    name: `activities[${currentActivityIndex}]`,
+    name: `activities.${currentActivityIndex}`,
   };
 };

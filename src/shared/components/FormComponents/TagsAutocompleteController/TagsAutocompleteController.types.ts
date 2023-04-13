@@ -1,11 +1,16 @@
 import { TextFieldProps } from '@mui/material/TextField';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 
-export type FormInputProps = {
-  options: { label: string; id: string }[] | undefined;
+export type AutocompleteOption = {
+  label: string;
+  id: string;
+};
+
+export type FormAutocompleteProps = {
+  options: AutocompleteOption[] | undefined;
   labelAllSelect?: string;
   noOptionsText?: string;
 } & TextFieldProps;
 
-export type TagsAutocompleteControllerProps<T extends FieldValues> = FormInputProps &
+export type TagsAutocompleteControllerProps<T extends FieldValues> = FormAutocompleteProps &
   UseControllerProps<T>;
