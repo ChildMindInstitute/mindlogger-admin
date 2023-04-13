@@ -5,12 +5,12 @@ import { SxProps } from '@mui/material';
 export type DateType = Date | null;
 export type DateArrayType = DateType[];
 
-export enum DateVariant {
+export const enum DateVariant {
   Start = 'start',
   End = 'end',
 }
 
-export enum UiType {
+export const enum UiType {
   OneDate = 'oneDate',
   StartEndingDate = 'startEndingDate',
 }

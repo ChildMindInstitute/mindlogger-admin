@@ -754,5 +754,11 @@
   "deleteActivityFlowDescription": "Are you sure you want to delete the Activity Flow <1>{{ activityFlowName }}</1>?",
   "showMore": "Show More...",
   "showLess": "Show Less...",
-  "hideBadgeTooltip": "The Activity Flow identifier will be hidden from Respondents"
+  "hideBadgeTooltip": "The Activity Flow identifier will be hidden from Respondents",
+  "respondentIdentifier": "Respondent Identifier",
+  "selectAll": "Select all",
+  "versions": "Versions",
+  "noVersions": "No versions yet.",
+  "noRespondentIdentifier": "No respondent identifier yet.",
+  "filterByIdentifier": "Filter by identifier"
 }
