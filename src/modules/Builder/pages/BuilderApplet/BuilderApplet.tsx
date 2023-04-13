@@ -61,9 +61,15 @@ export const BuilderApplet = () => {
     handleFormChange,
   ]);
 
-  watch((_, { type, name }) => {
-    if (type === 'change' || !!name) handleFormChangeDebounced();
-  });
+  useEffect(() => {
+    const subscription = watch((_, { type, name }) => {
+      if (type === 'change' || !!name) handleFormChangeDebounced();
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     if (!appletId || isNewApplet) return;

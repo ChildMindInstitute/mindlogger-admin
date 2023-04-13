@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import get from 'lodash.get';
 
 import { Svg } from 'shared/components';
 import {
@@ -19,16 +20,14 @@ import {
 } from './TextInputOption.styles';
 import { TextInputOptionProps } from './TextInputOption.types';
 
-export const TextInputOption = ({ onRemove }: TextInputOptionProps) => {
+export const TextInputOption = ({ name, onRemove }: TextInputOptionProps) => {
   const { t } = useTranslation('app');
 
   const { watch } = useFormContext();
 
-  const settings = watch('settings');
+  const settings = watch(`${name}.config`);
 
-  const isTextInputOptionRequired = settings?.includes(
-    ItemConfigurationSettings.IsTextInputRequired,
-  );
+  const isTextInputOptionRequired = get(settings, ItemConfigurationSettings.IsTextInputRequired);
 
   const requiredContext = isTextInputOptionRequired ? { context: 'required' } : undefined;
 

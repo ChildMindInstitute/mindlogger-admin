@@ -24,7 +24,7 @@ export const StyledTimeRow = styled(StyledFlexTopCenter)`
   justify-content: space-between;
 `;
 
-export const StyledDatePickerWrapper = styled(Box)`
+export const StyledDatePickerWrapper = styled(StyledFlexTopCenter)`
   width: 100%;
 
   input.MuiInputBase-input.MuiOutlinedInput-input.Mui-disabled {

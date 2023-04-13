@@ -5,6 +5,7 @@ import { Svg } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { workspaces as currentWorkspace, Workspace } from 'redux/modules';
+import { storage } from 'shared/utils';
 
 import { WorkspaceImage } from '../WorkspaceImage';
 import { StyledListItemButton, StyledItemContent, StyledSelect } from './WorkspaceGroup.styles';
@@ -17,6 +18,7 @@ export const WorkspaceGroup = ({
   const dispatch = useAppDispatch();
   const currentWorkspaceData = currentWorkspace.useData();
   const changeWorkspaceHandler = (workspace: Workspace) => {
+    storage.setItem('workspace', workspace);
     dispatch(currentWorkspace.actions.setCurrentWorkspace(workspace));
   };
 
