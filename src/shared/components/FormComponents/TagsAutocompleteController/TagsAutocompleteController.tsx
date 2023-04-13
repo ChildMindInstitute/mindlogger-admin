@@ -23,6 +23,7 @@ export const TagsInputController = <T extends FieldValues>({
   options,
   labelAllSelect,
   noOptionsText,
+  disabled,
   ...props
 }: TagsAutocompleteControllerProps<T>) => {
   const [selectedAll, setSelectedAll] = useState<boolean>(false);
@@ -66,6 +67,7 @@ export const TagsInputController = <T extends FieldValues>({
             freeSolo={false}
             value={value || []}
             onChange={handleChange}
+            disabled={disabled}
             renderInput={(params) => <TextField {...params} {...props} />}
             renderOption={(props, option, { selected }) => (
               <ListItem {...props}>

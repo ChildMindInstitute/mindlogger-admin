@@ -11,7 +11,7 @@ import { FilterValues } from './ReportFilters.types';
 
 export const ReportFilters = () => {
   const { t } = useTranslation('app');
-  const { control, setValue, watch } = useForm<FilterValues>({
+  const { control, setValue, watch, register, unregister } = useForm<FilterValues>({
     defaultValues: {
       startDateEndDate: [],
       moreFiltersVisisble: false,
@@ -22,6 +22,19 @@ export const ReportFilters = () => {
 
   const moreFiltersVisisble = watch('moreFiltersVisisble');
   const filterByIdentifier = watch('filterByIdentifier');
+
+  const moreFiltersHandler = () => {
+    setValue('moreFiltersVisisble', !moreFiltersVisisble);
+    if (moreFiltersVisisble) {
+      unregister('identifier');
+      unregister('versions');
+      unregister('filterByIdentifier');
+    } else {
+      register('identifier', { value: [] });
+      register('versions', { value: [] });
+      register('filterByIdentifier', { value: true });
+    }
+  };
 
   return (
     <form>
@@ -49,7 +62,7 @@ export const ReportFilters = () => {
           wrapperSx={{ width: '13rem', marginRight: theme.spacing(1.2) }}
         />
         <Button
-          onClick={() => setValue('moreFiltersVisisble', !moreFiltersVisisble)}
+          onClick={moreFiltersHandler}
           sx={{
             height: '5.5rem',
             backgroundColor: moreFiltersVisisble ? variables.palette.primary_alfa12 : '',

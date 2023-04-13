@@ -13,10 +13,10 @@ export const Switch = <T extends FieldValues>({
   <Controller
     control={control}
     name={name}
-    render={({ field: { onChange, value } }) => (
+    render={({ field }) => (
       <FormControlLabel
         label={label}
-        control={<StyledSwitch {...props} value={value} onChange={(event, val) => onChange(val)} />}
+        control={<StyledSwitch {...props} {...field} checked={field.value} />}
       />
     )}
   />
