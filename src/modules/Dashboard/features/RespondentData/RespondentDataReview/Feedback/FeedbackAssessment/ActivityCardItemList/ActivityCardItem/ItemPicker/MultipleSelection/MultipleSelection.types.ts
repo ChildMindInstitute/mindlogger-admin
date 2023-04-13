@@ -1,7 +1,7 @@
-import { MultipleSelectionType } from '../../../ActivityCartItemList.types';
+import { MultiSelectItem } from 'shared/state';
 
 export type MultipleSelectionProps = {
-  item: MultipleSelectionType;
+  item: MultiSelectItem;
   step: number;
   isDisabled: boolean;
 };

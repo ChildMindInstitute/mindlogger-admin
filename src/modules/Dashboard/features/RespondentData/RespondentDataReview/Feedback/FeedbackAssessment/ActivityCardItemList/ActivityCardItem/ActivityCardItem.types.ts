@@ -1,8 +1,10 @@
-import { ActivityCartProps, ActivityItem } from '../ActivityCartItemList.types';
+import { Item } from 'shared/state';
+
+import { ActivityCartProps } from '../ActivityCartItemList.types';
 
 export type ActivityCardItemProps = ActivityCartProps & {
   isActive: boolean;
-  activityItem: ActivityItem;
+  activityItem: Item;
 };
 
 export type ItemCardButtonsConfig = {

@@ -32,7 +32,8 @@ export const ActivityCardItem = ({
 
   return (
     <StyledCardItemContainer>
-      <StyledMdEditor modelValue={activityItem.question} previewOnly />
+      {/* TODO: correct type for activityItem.question ?? */}
+      <StyledMdEditor modelValue={activityItem.question as string} previewOnly />
       <ItemPicker step={step} item={activityItem} isDisabled={!isActive} />
       {isActive && (
         <ItemCardButtons

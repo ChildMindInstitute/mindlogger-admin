@@ -1,7 +1,7 @@
-import { SingleSelectionType } from '../../../ActivityCartItemList.types';
+import { SingleSelectItem } from 'shared/state';
 
 export type SingleSelectionProps = {
-  item: SingleSelectionType;
+  item: SingleSelectItem;
   step: number;
   isDisabled: boolean;
 };

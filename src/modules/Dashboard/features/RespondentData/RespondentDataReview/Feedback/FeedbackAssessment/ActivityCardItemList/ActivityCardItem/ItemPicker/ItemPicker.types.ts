@@ -1,7 +1,7 @@
-import { ActivityItem } from '../../ActivityCartItemList.types';
+import { Item } from 'shared/state';
 
 export type ItemPickerProps = {
-  item: ActivityItem;
+  item: Item;
   step: number;
   isDisabled: boolean;
 };

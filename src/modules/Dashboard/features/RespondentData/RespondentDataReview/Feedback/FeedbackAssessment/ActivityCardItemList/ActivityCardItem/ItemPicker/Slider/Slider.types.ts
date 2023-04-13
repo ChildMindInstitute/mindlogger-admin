@@ -1,7 +1,7 @@
-import { SliderType } from '../../../ActivityCartItemList.types';
+import { SliderItem } from 'shared/state';
 
 export type SliderProps = {
-  item: SliderType;
+  item: SliderItem;
   step: number;
   isDisabled: boolean;
 };
