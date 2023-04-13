@@ -73,12 +73,16 @@ export type SliderType = ActivityItemBase & {
 
 export type ActivityItem = SingleSelectionType | MultipleSelectionType | SliderType;
 
-export type ActivityCardItemListProps = PropsWithChildren<{
+export type ActivityCartProps = {
   step: number;
-  items: ActivityItem[];
   isBackVisible: boolean;
   isSubmitVisible: boolean;
   onSubmit: () => void;
   toNextStep?: () => void;
   toPrevStep?: () => void;
-}>;
+};
+
+export type ActivityCardItemListProps = ActivityCartProps &
+  PropsWithChildren<{
+    items: ActivityItem[];
+  }>;

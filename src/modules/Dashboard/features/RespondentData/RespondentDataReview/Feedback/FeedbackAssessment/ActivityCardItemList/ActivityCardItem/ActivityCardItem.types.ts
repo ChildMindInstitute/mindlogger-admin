@@ -1,14 +1,8 @@
-import { ActivityItem } from '../ActivityCartItemList.types';
+import { ActivityCartProps, ActivityItem } from '../ActivityCartItemList.types';
 
-export type ActivityCardItemProps = {
-  activityItem: ActivityItem;
-  isBackVisible: boolean;
-  isSubmitVisible: boolean;
+export type ActivityCardItemProps = ActivityCartProps & {
   isActive: boolean;
-  step: number;
-  onSubmit: () => void;
-  toNextStep?: () => void;
-  toPrevStep?: () => void;
+  activityItem: ActivityItem;
 };
 
 export type ItemCardButtonsConfig = {
