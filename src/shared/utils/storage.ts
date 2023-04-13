@@ -1,3 +1,3 @@
 import secureLocalStorage from 'react-secure-storage';
 
-export default secureLocalStorage;
+export { secureLocalStorage as storage };

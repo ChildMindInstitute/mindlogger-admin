@@ -1,4 +1,4 @@
-import storage from 'shared/utils/storage';
+import { storage } from 'shared/utils';
 import { auth } from 'modules/Auth';
 import { applet } from 'shared/state';
 import { useCheckIfNewApplet } from 'shared/hooks';
