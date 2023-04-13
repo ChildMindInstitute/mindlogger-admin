@@ -86,8 +86,7 @@ export const ItemSettingsGroup = ({
                   settingKey === ItemConfigurationSettings.HasTextInput ||
                   settingKey === ItemConfigurationSettings.IsTextInputRequired
                 ) {
-                  const prefix = settingKey.split('.')[0];
-                  const postfix = settingKey.split('.')[1];
+                  const [prefix, postfix] = settingKey.split('.');
 
                   return onChange({
                     ...value,
