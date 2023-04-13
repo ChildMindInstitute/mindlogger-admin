@@ -14,27 +14,18 @@ export const getFlowsItemActions = ({
   {
     icon: <Svg id="edit" />,
     action: () => editActivityFlow(activityFlowId),
-    toolTipTitle: '',
   },
   {
     icon: <Svg id="duplicate" />,
     action: () => duplicateActivityFlow(activityFlowIndex),
-    toolTipTitle: '',
   },
   {
     icon: <Svg id={activityFlowHidden ? 'visibility-off' : 'visibility-on'} />,
     action: () => toggleActivityFlowVisibility(activityFlowIndex),
-    toolTipTitle: '',
-    isStatic: true,
+    isStatic: activityFlowHidden,
   },
   {
     icon: <Svg id="trash" />,
     action: removeActivityFlow,
-    toolTipTitle: '',
-  },
-  {
-    icon: <Svg id="drag" />,
-    action: () => null,
-    toolTipTitle: '',
   },
 ];

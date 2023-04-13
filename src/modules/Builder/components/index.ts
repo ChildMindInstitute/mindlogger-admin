@@ -4,3 +4,4 @@ export * from './Uploads';
 export * from './MediaUploader';
 export * from './MLPlayer';
 export * from './SaveChangesPopup';
+export * from './DndDroppable';

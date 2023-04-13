@@ -1,9 +1,9 @@
 import i18n from 'i18n';
-import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
 import { ItemResponseType } from 'shared/consts';
 import { SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 
-import { ItemConfigurationForm } from '../../ItemConfiguration.types';
+// import { ItemConfigurationForm } from '../../ItemConfiguration.types';
 import { OptionTypes } from './Alert.types';
 
 const getOptionName = (type: OptionTypes, index: number, optionText = '') => {

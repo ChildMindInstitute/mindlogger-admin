@@ -8,4 +8,5 @@ export type ButtonWithMenuProps = {
   startIcon?: JSX.Element;
   variant?: 'text' | 'outlined';
   disabled?: boolean;
+  menuListWidth?: string;
 };

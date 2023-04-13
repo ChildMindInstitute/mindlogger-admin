@@ -8,8 +8,8 @@ import { StyledTitleBoldSmall, StyledIconButton, variables } from 'shared/styles
 import { ItemResponseType } from 'shared/consts';
 import { SliderItemResponseValues } from 'shared/state';
 
-import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
-import { ItemConfigurationForm } from '../../ItemConfiguration.types';
+import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
+// import { ItemConfigurationForm } from '../../ItemConfiguration.types';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { StyledAlert, StyledRow, StyledDescription } from './Alert.styles';
 import { AlertProps } from './Alert.types';

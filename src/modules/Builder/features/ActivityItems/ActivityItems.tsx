@@ -7,7 +7,7 @@ import { StyledContainer, StyledModalWrapper } from 'shared/styles';
 import { Modal } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';

@@ -26,6 +26,8 @@ export const Item = ({
   hasStaticActions,
   uiType = ItemUiType.Activity,
   onItemClick,
+  dragHandleProps,
+  isDragging,
   ...props
 }: ItemProps) => {
   const [visibleActions, setVisibleActions] = useState(false);
@@ -42,6 +44,7 @@ export const Item = ({
       onMouseLeave={() => setVisibleActions(false)}
       onMouseEnter={() => setVisibleActions(true)}
       onClick={onItemClick}
+      isDragging={isDragging}
     >
       {img && <StyledImg src={img} alt={name} sx={commonSx} />}
       <StyledCol sx={commonSx}>
@@ -73,6 +76,9 @@ export const Item = ({
           context={props}
           visibleByDefault={visibleByDefault || visibleActions}
           hasStaticActions={hasStaticActions}
+          sxProps={{ justifyContent: 'flex-end', pointerEvents: isDragging ? 'none' : 'auto' }}
+          dragHandleProps={dragHandleProps}
+          isDragging={isDragging}
         />
       </StyledActions>
     </StyledItem>
