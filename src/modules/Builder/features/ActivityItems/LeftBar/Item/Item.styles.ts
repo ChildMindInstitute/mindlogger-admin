@@ -10,13 +10,14 @@ import {
   StyledTitleMedium,
   commonEllipsisStyles,
 } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 const commonButtonStyles = `
   width: 4rem;
   height: 4rem;
   min-width: 4rem;`;
 
-export const StyledItem = styled(StyledFlexTopCenter)`
+export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
   cursor: pointer;
   padding: ${theme.spacing(1.2, 1.2, 1.2, 2.2)};
   border-radius: ${variables.borderRadius.lg2};
@@ -40,15 +41,25 @@ export const StyledItem = styled(StyledFlexTopCenter)`
     ${commonButtonStyles};
   }
 
+  ${({ isActive }: { isActive: boolean }) =>
+    isActive && `background: ${variables.palette.secondary_container};`}
+  ${({ hasError }: { hasError: boolean }) =>
+    hasError && `background: ${variables.palette.error_container};`}
+
   &:hover {
-    background-color: ${variables.palette.surface_variant_alfa8};
+    ${({ isActive, hasError }: { isActive: boolean; hasError: boolean }) =>
+      !isActive &&
+      !hasError &&
+      `
+        background: ${variables.palette.surface_variant_alfa8};
+    `}
 
     .actions {
-      display: ${({ hidden }: { hidden: boolean }) => (hidden ? 'none' : 'flex')};
+      display: ${({ hidden }: { hidden?: boolean }) => (hidden ? 'none' : 'flex')};
     }
 
     .dots {
-      display: ${({ hidden }) => (hidden ? 'flex' : 'none')};
+      display: ${({ hidden }: { hidden?: boolean }) => (hidden ? 'flex' : 'none')};
     }
   }
 `;

@@ -21,19 +21,16 @@ export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }
   const hidden = watch(`${name}.isHidden`);
   const hiddenProps = { sx: { opacity: hidden ? 0.38 : 1 } };
 
-  const { invalid, error } = getFieldState(name);
+  const { invalid } = getFieldState(name);
 
   const onChangeVisibility = () => setValue(`${name}.isHidden`, !hidden);
 
-  console.log(name, invalid, error);
-
   return (
     <StyledItem
-      sx={{
-        backgroundColor: activeItemId === item.id ? variables.palette.secondary_container : '',
-      }}
-      onClick={() => onSetActiveItem(item.id ?? '')}
+      isActive={activeItemId === item.id}
+      hasError={invalid}
       hidden={hidden}
+      onClick={() => onSetActiveItem(item.id ?? '')}
     >
       <StyledFlexTopCenter {...hiddenProps}>
         {item.responseType ? itemsTypeIcons[item.responseType] : ''}
