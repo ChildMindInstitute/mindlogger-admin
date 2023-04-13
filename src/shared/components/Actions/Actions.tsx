@@ -1,7 +1,8 @@
-import { SyntheticEvent, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
 import { Tooltip } from 'shared/components/Tooltip';
+import { Svg } from 'shared/components/Svg';
 
 import {
   StyledActions,
@@ -16,55 +17,67 @@ export const Actions = ({
   context,
   visibleByDefault = false,
   hasStaticActions,
+  sxProps,
+  dragHandleProps,
+  isDragging,
 }: ActionsProps) => {
   const [visibleActions, setVisibleActions] = useState(false);
 
-  const onClick = (action: Action['action']) => (e: SyntheticEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    action(context);
+  const onClick = (action: Action['action']) => (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    action(context, event);
   };
 
-  const isVisible = visibleByDefault || visibleActions;
+  const isVisible = visibleByDefault || visibleActions || Boolean(isDragging);
 
   return (
     <StyledActionsWrapper
+      sx={sxProps}
       onMouseEnter={() => setVisibleActions(true)}
       onMouseLeave={() => setVisibleActions(false)}
     >
-      {(isVisible || hasStaticActions) && (
-        <StyledActions>
-          {items.map(
-            ({
-              icon,
-              disabled = false,
-              action,
-              tooltipTitle,
-              isDisplayed = true,
-              active = false,
-              isStatic,
-            }) => {
-              if (!isDisplayed) return null;
+      <StyledActions isVisible={isVisible}>
+        {items.map(
+          ({
+            icon,
+            disabled = false,
+            action,
+            tooltipTitle,
+            isDisplayed = true,
+            active = false,
+            isStatic,
+          }) => {
+            if (!isDisplayed) return null;
 
-              if (hasStaticActions && !isStatic && !isVisible) return null;
-
-              return (
-                <Tooltip key={uniqueId()} tooltipTitle={tooltipTitle}>
-                  <span>
-                    <StyledActionButton
-                      isActive={active}
-                      disabled={disabled}
-                      onClick={onClick(action)}
-                    >
-                      {icon}
-                    </StyledActionButton>
-                  </span>
-                </Tooltip>
-              );
-            },
-          )}
-        </StyledActions>
-      )}
-      {!isVisible && <StyledDotsSvg id="dots" width={18} height={4} />}
+            return (
+              <Tooltip key={uniqueId()} tooltipTitle={tooltipTitle}>
+                <span>
+                  <StyledActionButton
+                    isActive={active}
+                    disabled={disabled}
+                    onClick={onClick(action)}
+                    isVisible={isVisible || (hasStaticActions && !isVisible && isStatic)}
+                  >
+                    {icon}
+                  </StyledActionButton>
+                </span>
+              </Tooltip>
+            );
+          },
+        )}
+        {dragHandleProps && (
+          <StyledActionButton
+            isVisible={isVisible}
+            key={uniqueId()}
+            isActive={false}
+            disabled={false}
+            {...dragHandleProps}
+          >
+            <Svg id="drag" />
+          </StyledActionButton>
+        )}
+      </StyledActions>
+      <StyledDotsSvg isVisible={!isVisible} id="dots" width={18} height={4} />
     </StyledActionsWrapper>
   );
 };

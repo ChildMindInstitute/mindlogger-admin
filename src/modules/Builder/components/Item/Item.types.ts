@@ -1,3 +1,6 @@
+import { MouseEvent } from 'react';
+import { DraggableProvided } from 'react-beautiful-dnd';
+
 export type ItemType = {
   id?: string;
   name: string;
@@ -10,7 +13,7 @@ export type ItemType = {
 
 type Action = {
   icon: JSX.Element;
-  action: (item?: ItemType) => void;
+  action: (item?: ItemType, event?: MouseEvent<HTMLElement>) => void;
   toolTipTitle?: string;
 };
 
@@ -28,4 +31,6 @@ export type ItemProps = {
   hasStaticActions?: boolean;
   uiType?: ItemUiType;
   onItemClick?: () => void;
+  dragHandleProps?: DraggableProvided['dragHandleProps'];
+  isDragging?: boolean;
 } & ItemType;

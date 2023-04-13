@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
+import { Button } from '@mui/material';
 
-import { StyledBuilderBtn } from 'shared/styles';
 import { StyledHeader } from 'shared/features';
 import { Svg } from 'shared/components';
+import { falseReturnFunc } from 'shared/utils';
 
 import { ActivityFlowHeaderProps } from './ActivityFlowHeader.types';
 
@@ -12,14 +13,14 @@ export const ActivityFlowHeader = ({
   headerProps,
 }: ActivityFlowHeaderProps) => {
   const { t } = useTranslation('app');
-  const { onAddActivityFlow = () => false } = headerProps || {};
+  const { onAddActivityFlow = falseReturnFunc } = headerProps || {};
 
   return (
     <StyledHeader isSticky={isSticky}>
       {children}
-      <StyledBuilderBtn startIcon={<Svg id="flow" />} onClick={() => onAddActivityFlow()}>
+      <Button variant="outlined" startIcon={<Svg id="flow" />} onClick={() => onAddActivityFlow()}>
         {t('addActivityFlow')}
-      </StyledBuilderBtn>
+      </Button>
     </StyledHeader>
   );
 };
