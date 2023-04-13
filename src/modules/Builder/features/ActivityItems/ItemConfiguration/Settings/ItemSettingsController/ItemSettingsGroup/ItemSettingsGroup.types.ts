@@ -4,6 +4,7 @@ import { ItemSettingsGroupNames } from '../ItemSettingsController.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 
 export type ItemSettingsGroupProps = {
+  name: string;
   value?: any;
   onChange: (...event: any[]) => void;
   groupName: ItemSettingsGroupNames;

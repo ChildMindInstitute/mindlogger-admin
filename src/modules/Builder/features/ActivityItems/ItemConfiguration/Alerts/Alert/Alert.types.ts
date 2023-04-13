@@ -1,4 +1,5 @@
 export type AlertProps = {
+  name: string;
   index: number;
   removeAlert: (i: number) => void;
 };

@@ -1,39 +1,21 @@
 import { useTranslation } from 'react-i18next';
-import { FieldValues } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
+import get from 'lodash.get';
 
 import { InputController } from 'shared/components/FormComponents';
-import { ItemResponseType } from 'shared/consts';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
-import { TextResponseProps } from './TextResponse.types';
 import { StyledMaxCharacters, StyledRow, StyledTextField } from './TextResponse.styles';
-import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
-import { DEFAULT_MAX_CHARACTERS } from '../../ItemConfiguration.const';
+import { TextResponseProps } from './TextResponse.types';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
-export const TextResponse = <T extends FieldValues>({
-  name,
-  maxCharacters,
-}: TextResponseProps<T>) => {
+export const TextResponse = ({ name }: TextResponseProps) => {
   const { t } = useTranslation('app');
 
-  const { control, watch } = useOptionalItemSetup({
-    itemType: ItemResponseType.Text,
-    name,
-    defaultValue: '',
-  });
+  const { control, watch } = useFormContext();
+  const settings = watch(`${name}.config`);
 
-  useOptionalItemSetup({
-    itemType: ItemResponseType.Text,
-    name: maxCharacters,
-    defaultValue: DEFAULT_MAX_CHARACTERS,
-  });
-
-  const settings = watch('settings');
-
-  const isCorrectAnswerRequired = settings?.includes(
-    ItemConfigurationSettings.IsCorrectAnswerRequired,
-  );
+  const isCorrectAnswerRequired = get(settings, ItemConfigurationSettings.IsCorrectAnswerRequired);
 
   return (
     <ItemOptionContainer title={t('textResponseTitle')} description={t('textResponseDescription')}>
@@ -41,7 +23,7 @@ export const TextResponse = <T extends FieldValues>({
         <StyledTextField disabled variant="outlined" value={t('text')} />
         <StyledMaxCharacters>
           <InputController
-            name={maxCharacters}
+            name={`${name}.config.maxResponseLength`}
             control={control}
             type="number"
             label={t('maxCharacters')}
@@ -49,7 +31,11 @@ export const TextResponse = <T extends FieldValues>({
         </StyledMaxCharacters>
       </StyledRow>
       {isCorrectAnswerRequired && (
-        <InputController name={name} control={control} label={t('correctAnswer')} />
+        <InputController
+          name={`${name}.config.correctAnswer`}
+          control={control}
+          label={t('correctAnswer')}
+        />
       )}
     </ItemOptionContainer>
   );

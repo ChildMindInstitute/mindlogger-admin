@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 
 import { DEFAULT_SCORE_VALUE } from '../../ItemConfiguration.const';
 import { SetSelectionOptionValue } from './SelectionOption.types';
 
 export const useSetSelectionOptionValue = ({
-  option,
+  name,
   onUpdateOption,
   index,
   hasScoresChecked,
@@ -15,10 +16,13 @@ export const useSetSelectionOptionValue = ({
   hasColorPicker,
   hasColor,
 }: SetSelectionOptionValue) => {
+  const { watch } = useFormContext();
+  const option = watch(name);
+
   const setOptionFieldValue = (
     checkedCondition: boolean,
     elementCondition: boolean,
-    fieldName: string,
+    fieldName: 'score' | 'tooltip' | 'color',
     defaultValue: string | number | ColorResult,
   ) =>
     checkedCondition

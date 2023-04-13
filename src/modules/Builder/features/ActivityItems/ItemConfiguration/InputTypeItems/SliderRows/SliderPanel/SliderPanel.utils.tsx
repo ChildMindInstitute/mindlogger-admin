@@ -12,7 +12,7 @@ export const getHeadCells = (min: number, max: number): HeadCell[] =>
     label: `${min + index}`,
   }));
 
-export const getTableRows = (scores: number[], name: string) => [
+export const getTableRows = (scores: number[] = [], name: string) => [
   scores.reduce(
     (result, score, index) => ({
       ...result,

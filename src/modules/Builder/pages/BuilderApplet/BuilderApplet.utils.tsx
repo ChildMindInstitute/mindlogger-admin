@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
 import { page } from 'resources';
-import { SingleApplet } from 'shared/state';
+import { SingleApplet, Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 import { getDictionaryText, Path } from 'shared/utils';
-import { Item } from 'shared/state/Applet';
+import { ItemResponseType } from 'shared/consts';
 
 import { ActivityFormValues } from './BuilderApplet.types';
 
@@ -42,7 +42,10 @@ export const getNewActivityItem = () => ({
   responseType: '',
   name: '',
   question: '',
-  settings: [],
+  config: {},
+  responseValues: {
+    options: [],
+  },
   isHidden: false,
 });
 
@@ -55,13 +58,33 @@ export const getNewActivityFlow = () => ({
   isHidden: false,
 });
 
+const getActivityItemResponseValues = (item: Item) => {
+  switch (item.responseType) {
+    case ItemResponseType.SingleSelection:
+    case ItemResponseType.MultipleSelection:
+      return {
+        options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options ?? [],
+      };
+    case ItemResponseType.Slider:
+      return item.responseValues;
+    case ItemResponseType.Text:
+      return null;
+    default:
+      return null;
+  }
+};
+
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map((item) => ({
-        ...item,
-        id: `${item.id}`,
+        id: uuidv4(),
+        name: item.name,
         question: getDictionaryText(item.question),
         responseType: item.responseType,
+        responseValues: getActivityItemResponseValues(item),
+        config: item.config,
+        paletteName: item.paletteName,
+        alerts: item.alerts ?? [],
       }))
     : [];
 

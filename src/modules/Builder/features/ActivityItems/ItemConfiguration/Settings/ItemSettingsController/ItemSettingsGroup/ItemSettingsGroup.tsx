@@ -2,6 +2,7 @@ import { useState, ChangeEvent } from 'react';
 import { FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import get from 'lodash.get';
 
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
@@ -17,10 +18,14 @@ import {
 } from './ItemSettingsGroup.styles';
 import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
 import { ITEM_SETTINGS_TO_HAVE_TOOLTIP } from './ItemSettingsGroup.const';
-import { DEFAULT_TIMER_VALUE } from '../../../ItemConfiguration.const';
+import {
+  DEFAULT_TIMER_VALUE,
+  DEFAULT_DISABLED_TIMER_VALUE,
+} from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 
 export const ItemSettingsGroup = ({
+  name,
   value,
   onChange,
   groupName,
@@ -31,10 +36,7 @@ export const ItemSettingsGroup = ({
   const [isExpanded, setIsExpanded] = useState(!collapsedByDefault);
 
   const { t } = useTranslation('app');
-
-  const { control, watch } = useFormContext();
-
-  const settings = watch('settings');
+  const { control } = useFormContext();
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
@@ -63,28 +65,42 @@ export const ItemSettingsGroup = ({
               const isSkippableItem = settingKey === ItemConfigurationSettings.IsSkippable;
 
               const isDisabled =
-                (isTextInputRequired &&
-                  !settings?.includes(ItemConfigurationSettings.HasTextInput)) ||
-                (isSkippableItem &&
-                  settings?.includes(ItemConfigurationSettings.IsTextInputRequired));
-              const isSecondsDisabled =
-                isTimer && !settings?.includes(ItemConfigurationSettings.HasTimer);
+                (isTextInputRequired && !get(value, ItemConfigurationSettings.HasTextInput)) ||
+                (isSkippableItem && get(value, ItemConfigurationSettings.IsTextInputRequired));
+              const isSecondsDisabled = isTimer && !get(value, ItemConfigurationSettings.HasTimer);
 
               const hasTooltip = ITEM_SETTINGS_TO_HAVE_TOOLTIP.includes(settingKey);
 
               const sxProps = isTextInputRequired ? { ml: theme.spacing(2.4) } : {};
 
               const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
-                if (event.target.checked && !value?.includes(settingKey))
-                  onChange([...value, settingKey]);
+                if (isTimer)
+                  return onChange({
+                    ...value,
+                    [settingKey]: event.target.checked
+                      ? DEFAULT_TIMER_VALUE
+                      : DEFAULT_DISABLED_TIMER_VALUE,
+                  });
 
-                if (!event.target.checked && value?.includes(settingKey))
-                  onChange(
-                    value.filter(
-                      (selectedSetting: ItemConfigurationSettings) =>
-                        selectedSetting !== settingKey,
-                    ),
-                  );
+                if (
+                  settingKey === ItemConfigurationSettings.HasTextInput ||
+                  settingKey === ItemConfigurationSettings.IsTextInputRequired
+                ) {
+                  const [prefix, postfix] = settingKey.split('.');
+
+                  return onChange({
+                    ...value,
+                    [prefix]: {
+                      ...value?.[prefix],
+                      [postfix]: event.target.checked,
+                    },
+                  });
+                }
+
+                onChange({
+                  ...value,
+                  [settingKey]: event.target.checked,
+                });
               };
 
               return (
@@ -94,7 +110,7 @@ export const ItemSettingsGroup = ({
                   control={
                     <Checkbox
                       name={settingKey}
-                      checked={value?.includes(settingKey)}
+                      checked={!!get(value, settingKey)}
                       onChange={handleCheckboxChange}
                       disabled={isDisabled}
                     />
@@ -102,10 +118,10 @@ export const ItemSettingsGroup = ({
                   label={
                     <StyledSettingTitleContainer withInput={isTimer}>
                       <StyledTitleMedium sx={{ p: theme.spacing(0, 1, 0, 1) }}>
-                        {t(settingKey)}
+                        {t(`itemSettings.${settingKey}`)}
                         {hasTooltip && (
                           <Tooltip
-                            tooltipTitle={t(settingKey, { context: 'tooltip' })}
+                            tooltipTitle={t(`itemSettings.${settingKey}`, { context: 'tooltip' })}
                             placement="top"
                           >
                             <span>
@@ -119,10 +135,10 @@ export const ItemSettingsGroup = ({
                           <StyledInputControllerContainer>
                             <InputController
                               control={control}
-                              name="timer"
+                              name={`${name}.${ItemConfigurationSettings.HasTimer}`}
                               type="number"
                               disabled={isSecondsDisabled}
-                              minNumberValue={isSecondsDisabled ? DEFAULT_TIMER_VALUE : undefined}
+                              minNumberValue={isSecondsDisabled ? DEFAULT_DISABLED_TIMER_VALUE : 1}
                             />
                           </StyledInputControllerContainer>
                           <StyledTitleMedium>{t('seconds')}</StyledTitleMedium>

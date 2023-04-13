@@ -17,8 +17,9 @@ import { EnterAppletPasswordForm } from 'modules/Dashboard';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
-import { appletInfoMocked, activityItemsMocked } from './mock';
+import { appletInfoMocked } from './mock';
 import {
+  removeItemExtraFields,
   removeAppletExtraFields,
   removeActivityExtraFields,
   usePasswordFromStorage,
@@ -41,39 +42,26 @@ export const useAppletData = () => {
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
 
-    if (isNewApplet) {
-      return {
-        ...appletInfoMocked,
-        ...appletInfo,
-        activities: appletInfo?.activities.map((activity: Activity) => ({
-          ...activity,
-          key: uuidv4(),
-          description: getDictionaryObject(activity.description),
-          items: activityItemsMocked,
-          ...removeActivityExtraFields(),
-        })),
-        password: appletPassword,
-        description: appletDescription,
-        about: appletAbout,
-        themeId: null, // TODO: create real themeId
-        activityFlows: [],
-        ...removeAppletExtraFields(),
-      };
-    }
+    const defaultAppletInfo = isNewApplet ? appletInfoMocked : {};
 
     return {
+      ...defaultAppletInfo,
       ...appletInfo,
-      password: appletPassword,
-      description: appletDescription,
-      about: appletAbout,
-      themeId: null, // TODO: create real themeId
       activities: appletInfo?.activities.map((activity: Activity) => ({
         ...activity,
         key: uuidv4(),
         description: getDictionaryObject(activity.description),
-        items: activityItemsMocked,
+        items: activity.items?.map((item) => ({
+          ...item,
+          question: getDictionaryObject(item.question),
+          ...removeItemExtraFields(item.responseType),
+        })),
         ...removeActivityExtraFields(),
       })),
+      password: appletPassword,
+      description: appletDescription,
+      about: appletAbout,
+      themeId: null, // TODO: create real themeId
       activityFlows: [],
       ...removeAppletExtraFields(),
     };
