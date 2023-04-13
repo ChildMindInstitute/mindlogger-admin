@@ -36,7 +36,6 @@ export const ActivityItems = () => {
   const activeItemIndex = items?.findIndex((item: ItemFormValues) => item.id === activeItemId);
   const activeItem = items?.[activeItemIndex];
 
-  //TODO: add edit items
   const handleRemoveItem = (id: string) => {
     if (id === activeItem?.id) setActiveItemId('');
 
