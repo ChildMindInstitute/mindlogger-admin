@@ -600,7 +600,8 @@
   "newActivityName": "Nouvelle activité",
   "newItemName": "Nouvel article",
   "validationMessages": {
-    "isRequired": "{{- field }} est requis"
+    "isRequired": "{{- field }} est requis",
+    "alphanumeric": "{{- field }} ne doit contenir que des caractères alphanumériques ou des traits de soulignement"
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",

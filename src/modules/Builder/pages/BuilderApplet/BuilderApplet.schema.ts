@@ -12,8 +12,14 @@ export const getIsRequiredValidateMessage = (field: string) =>
 export const ItemSchema = () =>
   yup
     .object({
-      name: yup.string().required(getIsRequiredValidateMessage('itemName')),
+      name: yup
+        .string()
+        .required(getIsRequiredValidateMessage('itemName'))
+        .matches(/^[\w]+$/g, {
+          message: t('validationMessages.alphanumeric', { field: 'itemName' }),
+        }),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
+      question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),
     })
     .required();
 
