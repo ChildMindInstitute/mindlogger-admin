@@ -68,7 +68,6 @@ export const Actions = ({
         {dragHandleProps && (
           <StyledActionButton
             isVisible={isVisible}
-            key={uniqueId()}
             isActive={false}
             disabled={false}
             {...dragHandleProps}

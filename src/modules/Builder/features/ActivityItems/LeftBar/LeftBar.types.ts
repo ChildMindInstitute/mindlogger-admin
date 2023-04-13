@@ -1,4 +1,4 @@
-import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 export type LeftBarProps = {
   items: ItemFormValues[];

@@ -13,10 +13,7 @@ import { useBreadcrumbs } from 'shared/hooks';
 import { DndDroppable, Item, ItemUiType } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import {
-  ActivityFlowFormValues,
-  AppletFormValues,
-} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
 import { getFlowsItemActions } from './ActivityFlow.utils';
@@ -142,11 +139,11 @@ export const ActivityFlow = () => {
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activity-flows-dnd" direction="vertical">
             {(listProvided) => (
-              <Box {...listProvided.droppableProps} {...{ ref: listProvided.innerRef }}>
+              <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activityFlows.map((item, index) => (
                   <Draggable key={item.id} draggableId={item.id || ''} index={index}>
                     {(itemProvided, snapshot) => (
-                      <Box {...itemProvided.draggableProps} {...{ ref: itemProvided.innerRef }}>
+                      <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
                         <Item
                           dragHandleProps={itemProvided.dragHandleProps}
                           isDragging={snapshot.isDragging}

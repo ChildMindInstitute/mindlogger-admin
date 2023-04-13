@@ -13,14 +13,16 @@ import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
 import {
   ActivityFlowFormValues,
   ActivityFlowItem,
+  ActivityFormValues,
   AppletFormValues,
-} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+} from 'modules/Builder/pages/BuilderApplet';
 import { page } from 'resources';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
 import { getFlowBuilderActions, getMenuItems } from './ActivityFlowBuilder.utils';
 import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
 import { GetMenuItemsType } from './ActivityFlowBuilder.types';
+import { builderItemClassName } from './ActivityFlowBuilder.const';
 
 export const ActivityFlowBuilder = () => {
   const [flowActivityToDeleteData, setFlowActivityToDeleteData] = useState<{
@@ -65,7 +67,7 @@ export const ActivityFlowBuilder = () => {
   const handleFlowActivityToUpdateSet = (event: MouseEvent<HTMLElement>, index: number) => {
     setIndexToUpdate(index);
     let parentElement = event.currentTarget.parentNode as HTMLElement;
-    while (parentElement && !parentElement.classList.contains('builder-item')) {
+    while (parentElement && !parentElement.classList.contains(builderItemClassName)) {
       parentElement = parentElement.parentNode as HTMLElement;
     }
     setAnchorEl(parentElement || null);
@@ -112,12 +114,19 @@ export const ActivityFlowBuilder = () => {
       <DragDropContext onDragEnd={handleDragEnd}>
         <DndDroppable droppableId="activity-flow-builder-dnd" direction="vertical">
           {(listProvided) => (
-            <Box {...listProvided.droppableProps} {...{ ref: listProvided.innerRef }}>
+            <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
               {activityFlowItems?.map((item, index) => {
                 const activityKey = item.activityId;
-                const currentActivity = activities?.find(
-                  (activity) => (activity.id || activity.key) === activityKey,
+                const ids = activities.reduce(
+                  (acc: Record<string, ActivityFormValues>, activity) => {
+                    const id = activity.id || activity.key || '';
+                    acc[id] = activity;
+
+                    return acc;
+                  },
+                  {},
                 );
+                const currentActivity = ids[activityKey];
                 const activityName = currentActivity?.name;
                 const activityDescription = currentActivity?.description;
 
@@ -125,9 +134,9 @@ export const ActivityFlowBuilder = () => {
                   <Draggable key={item.id} draggableId={item.id || ''} index={index}>
                     {(itemProvided, snapshot) => (
                       <Box
-                        className="builder-item"
+                        className={builderItemClassName}
+                        ref={itemProvided.innerRef}
                         {...itemProvided.draggableProps}
-                        {...{ ref: itemProvided.innerRef }}
                       >
                         <Item
                           dragHandleProps={itemProvided.dragHandleProps}

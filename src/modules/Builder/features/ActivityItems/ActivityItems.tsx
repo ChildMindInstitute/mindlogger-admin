@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useBreadcrumbs } from 'shared/hooks';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
 import { StyledContainer } from 'shared/styles';
 
 import { ItemConfiguration } from './ItemConfiguration';
