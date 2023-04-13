@@ -55,35 +55,41 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
   const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
 
-  watch((data, { name: attributeName }: { name?: string }) => {
-    const option = getValues(sliderName);
+  useEffect(() => {
+    const subscription = watch((data, { name: attributeName }: { name?: string }) => {
+      const option = getValues(sliderName);
 
-    if (!option) return;
+      if (!option) return;
 
-    const { minValue, maxValue, scores } = option;
+      const { minValue, maxValue, scores } = option;
 
-    const scoresQuantity = maxValue - minValue + 1;
+      const scoresQuantity = maxValue - minValue + 1;
 
-    if (attributeName === `${sliderName}.minValue`) {
-      if (scores?.length < scoresQuantity) {
-        setValue(`${sliderName}.scores`, [Math.min(...scores) - 1].concat(scores));
+      if (attributeName === `${sliderName}.minValue`) {
+        if (scores?.length < scoresQuantity) {
+          setValue(`${sliderName}.scores`, [Math.min(...scores) - 1].concat(scores));
+        }
+
+        if (scores?.length > scoresQuantity) {
+          setValue(`${sliderName}.scores`, scores?.slice(1));
+        }
       }
 
-      if (scores?.length > scoresQuantity) {
-        setValue(`${sliderName}.scores`, scores?.slice(1));
-      }
-    }
+      if (attributeName === `${sliderName}.maxValue`) {
+        if (scores?.length < scoresQuantity) {
+          setValue(`${sliderName}.scores`, scores.concat(Math.max(...scores) + 1));
+        }
 
-    if (attributeName === `${sliderName}.maxValue`) {
-      if (scores?.length < scoresQuantity) {
-        setValue(`${sliderName}.scores`, scores.concat(Math.max(...scores) + 1));
+        if (scores?.length > scoresQuantity) {
+          setValue(`${sliderName}.scores`, scores?.slice(0, scoresQuantity));
+        }
       }
+    });
 
-      if (scores?.length > scoresQuantity) {
-        setValue(`${sliderName}.scores`, scores?.slice(0, scoresQuantity));
-      }
-    }
-  });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 

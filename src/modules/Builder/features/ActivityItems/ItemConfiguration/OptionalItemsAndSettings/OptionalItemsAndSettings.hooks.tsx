@@ -87,30 +87,36 @@ export const useSettingsSetup = ({
 
   const setConfig = (config: Config) => setValue(`${name}.config`, config);
 
-  watch((_, { name: fieldName, type }) => {
-    if (fieldName === `${name}.responseType` && type === 'change') {
-      removeOptions?.();
+  useEffect(() => {
+    const subscription = watch((_, { name: fieldName, type }) => {
+      if (fieldName === `${name}.responseType` && type === 'change') {
+        removeOptions?.();
 
-      const responseType = getValues(`${name}.responseType`);
+        const responseType = getValues(`${name}.responseType`);
 
-      if (
-        responseType === ItemResponseType.SingleSelection ||
-        responseType === ItemResponseType.MultipleSelection
-      ) {
-        handleAddOption?.();
-        setConfig(defaultSingleAndMultiSelectionConfig);
+        if (
+          responseType === ItemResponseType.SingleSelection ||
+          responseType === ItemResponseType.MultipleSelection
+        ) {
+          handleAddOption?.();
+          setConfig(defaultSingleAndMultiSelectionConfig);
+        }
+
+        if (responseType === ItemResponseType.Text) {
+          setConfig(defaultTextConfig);
+        }
+
+        if (responseType === ItemResponseType.Slider) {
+          setConfig(defaultSliderConfig);
+          setValue(`${name}.responseValues`, getEmptySliderOption(false));
+        }
       }
+    });
 
-      if (responseType === ItemResponseType.Text) {
-        setConfig(defaultTextConfig);
-      }
-
-      if (responseType === ItemResponseType.Slider) {
-        setConfig(defaultSliderConfig);
-        setValue(`${name}.responseValues`, getEmptySliderOption(false));
-      }
-    }
-  });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     if (!hasAlerts) {
