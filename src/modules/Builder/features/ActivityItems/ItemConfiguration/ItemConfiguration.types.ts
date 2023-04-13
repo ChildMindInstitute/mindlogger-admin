@@ -117,4 +117,5 @@ export type SliderOption = {
 
 export type ItemConfigurationProps = {
   name: string;
+  onClose: () => void;
 };

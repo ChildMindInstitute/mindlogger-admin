@@ -25,7 +25,7 @@ import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 
 //@TODO: add validation
-export const ItemConfiguration = ({ name }: ItemConfigurationProps) => {
+export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const { t } = useTranslation('app');
@@ -50,7 +50,7 @@ export const ItemConfiguration = ({ name }: ItemConfigurationProps) => {
               <Svg id="report-configuration" />
             </StyledClearedButton>
           )}
-          <StyledClearedButton sx={{ p: theme.spacing(1) }}>
+          <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onClose}>
             <Svg id="close" />
           </StyledClearedButton>
         </StyledFlexTopCenter>

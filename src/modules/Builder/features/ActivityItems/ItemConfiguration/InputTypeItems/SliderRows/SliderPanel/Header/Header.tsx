@@ -38,7 +38,7 @@ export const Header = ({
 
   const settings = watch(`${name}.config`);
   const { minValue, maxValue, minLabel, maxLabel, minImage, maxImage } = watch(
-    `${name}.responseValues${index ? `.rows.${index}` : ''}`,
+    `${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`,
   );
 
   if (isExpanded) {

@@ -58,7 +58,11 @@ export const ActivityItems = () => {
         onRemoveItem={handleRemoveItem}
       />
       {activeItemId && (
-        <ItemConfiguration key={`item-${activeItemId}`} name={`${name}.items.${activeItemIndex}`} />
+        <ItemConfiguration
+          key={`item-${activeItemId}`}
+          name={`${name}.items.${activeItemIndex}`}
+          onClose={() => setActiveItemId('')}
+        />
       )}
     </StyledContainer>
   );
