@@ -8,6 +8,7 @@ import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace
 import { getWorkspacesApi } from 'shared/api';
 import { workspaces as currentWorkspace, Workspace, auth } from 'redux/modules';
 import { useAsync } from 'shared/hooks';
+import { storage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 
 import { links } from './LeftBar.const';
@@ -34,7 +35,10 @@ export const LeftBar = () => {
   useEffect(() => {
     if (workspaces.length) {
       const ownerWorkspace = workspaces.find((item) => item.ownerId === id);
-      ownerWorkspace && dispatch(currentWorkspace.actions.setCurrentWorkspace(ownerWorkspace));
+      const storageWorkspace = storage.getItem('workspace') as Workspace;
+      dispatch(
+        currentWorkspace.actions.setCurrentWorkspace(storageWorkspace || ownerWorkspace || null),
+      );
     }
   }, [workspaces]);
 

@@ -25,13 +25,14 @@ export const Table = ({
   handleRequestSort,
   handleChangePage,
   count,
+  rowsPerPage = DEFAULT_ROWS_PER_PAGE,
 }: TableProps) => {
   const tableHeader = (
     <StyledTableCellContent uiType={uiType}>
       <TablePagination
         component="div"
         count={count}
-        rowsPerPage={DEFAULT_ROWS_PER_PAGE}
+        rowsPerPage={rowsPerPage}
         page={page - 1}
         onPageChange={handleChangePage}
         labelRowsPerPage=""

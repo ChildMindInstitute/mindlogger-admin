@@ -35,7 +35,7 @@ export const TableHead = ({
             {enableSort ? (
               <TableSortLabel
                 active={orderBy === id}
-                direction={order}
+                direction={orderBy === id ? order : 'asc'}
                 onClick={createSortHandler(id)}
               >
                 {label}

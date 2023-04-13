@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import storage from 'shared/utils/storage';
+import { storage } from 'shared/utils';
 
 import { AuthSchema } from './Auth.schema';
 import { setAccountName, signIn, getUserDetails } from './Auth.thunk';

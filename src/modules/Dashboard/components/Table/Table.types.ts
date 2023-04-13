@@ -17,4 +17,5 @@ export type TableProps = {
   emptyComponent?: JSX.Element | string;
   searchValue?: string;
   handleChangePage: (event: unknown, newPage: number) => void;
+  rowsPerPage?: number;
 };

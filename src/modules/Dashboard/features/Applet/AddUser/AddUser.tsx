@@ -5,6 +5,7 @@ import { getErrorMessage } from 'shared/utils';
 import { useBreadcrumbs } from 'shared/hooks';
 import { getInvitationsApi } from 'api';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
+import { DEFAULT_INVITATIONS_ROWS_PER_PAGE } from 'shared/components';
 
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
@@ -24,7 +25,9 @@ export const AddUser = () => {
 
   const getInvitationsHandler = async () => {
     try {
-      const { data } = await getInvitationsApi({ params: {} });
+      const { data } = await getInvitationsApi({
+        params: { limit: DEFAULT_INVITATIONS_ROWS_PER_PAGE },
+      });
 
       data && setInvitations(data);
     } catch (e) {
