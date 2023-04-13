@@ -26,6 +26,10 @@ export const StyledItem = styled(StyledFlexTopCenter)`
     fill: ${variables.palette.on_surface_variant};
   }
 
+  .svg-checkbox-multiple-filled {
+    stroke: ${variables.palette.on_surface_variant};
+  }
+
   .actions {
     display: none;
   }
