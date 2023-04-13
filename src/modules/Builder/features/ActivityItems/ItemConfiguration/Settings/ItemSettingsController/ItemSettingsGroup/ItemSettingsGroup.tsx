@@ -110,7 +110,7 @@ export const ItemSettingsGroup = ({
                   control={
                     <Checkbox
                       name={settingKey}
-                      checked={!!get(value, settingKey) || false}
+                      checked={!!get(value, settingKey)}
                       onChange={handleCheckboxChange}
                       disabled={isDisabled}
                     />
