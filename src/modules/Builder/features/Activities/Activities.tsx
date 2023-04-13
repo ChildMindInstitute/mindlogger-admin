@@ -7,7 +7,7 @@ import { Modal } from 'shared/components';
 import { StyledTitleMedium, StyledFlexColumn, theme, StyledModalWrapper } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet';
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 

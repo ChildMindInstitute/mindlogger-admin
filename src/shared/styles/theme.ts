@@ -27,6 +27,8 @@ export const theme = createTheme({
         },
         body: {
           color: variables.palette.on_surface,
+          height: '100vh',
+          overflowY: 'hidden',
         },
         '*::-webkit-scrollbar': {
           width: '0.8rem',

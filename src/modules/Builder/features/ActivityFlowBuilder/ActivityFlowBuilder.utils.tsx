@@ -1,34 +1,51 @@
-import { Svg } from 'shared/components';
-import i18n from 'i18n';
+import { MouseEvent } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-export const getFlowBuilderActions = () => [
+import { Svg } from 'shared/components';
+import { ItemType } from 'modules/Builder/components';
+
+import { GetFlowBuilderActions, GetMenuItems, GetMenuItemsType } from './ActivityFlowBuilder.types';
+
+export const getMenuItems = ({
+  type,
+  index,
+  onMenuClose,
+  activities,
+  onAddFlowActivity,
+  onUpdateFlowActivity,
+}: GetMenuItems) =>
+  activities.map((activity) => ({
+    title: activity.name,
+    action: () => {
+      const activityKey = activity.id || activity.key || '';
+      type === GetMenuItemsType.AddActivity
+        ? onAddFlowActivity && onAddFlowActivity(activityKey)
+        : onUpdateFlowActivity &&
+          index !== undefined &&
+          onUpdateFlowActivity(index, { id: uuidv4(), activityId: activityKey });
+      onMenuClose();
+    },
+  }));
+
+export const getFlowBuilderActions = ({
+  index,
+  replaceItem,
+  duplicateItem,
+  removeItem,
+  replaceItemActionActive,
+}: GetFlowBuilderActions) => [
   {
     icon: <Svg id="replace" />,
-    action: () => null,
-    toolTipTitle: '',
+    action: (item?: ItemType, event?: MouseEvent<HTMLElement>) =>
+      event && replaceItem(event, index),
+    active: replaceItemActionActive,
   },
   {
     icon: <Svg id="duplicate" />,
-    action: () => null,
-    toolTipTitle: '',
+    action: () => duplicateItem(index),
   },
   {
     icon: <Svg id="trash" />,
-    action: () => null,
-    toolTipTitle: '',
-  },
-  {
-    icon: <Svg id="drag" />,
-    action: () => null,
-    toolTipTitle: '',
+    action: removeItem,
   },
 ];
-
-export const getButtons = () => {
-  const { t } = i18n;
-
-  return [
-    { label: t('addActivity'), icon: <Svg id="add" width={18} height={18} /> },
-    { label: t('clearFlow'), icon: <Svg id="cross" width={18} height={18} /> },
-  ];
-};
