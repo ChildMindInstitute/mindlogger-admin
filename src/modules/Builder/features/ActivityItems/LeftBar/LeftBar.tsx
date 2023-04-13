@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
+import { StyledTitleMedium, theme } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 
@@ -27,16 +28,22 @@ export const LeftBar = ({
     <StyledBar hasActiveItem={!!activeItemId} ref={containerRef}>
       <StyledHeader isSticky={isHeaderSticky}>{t('items')}</StyledHeader>
       <StyledContent>
-        {items?.map((item, index) => (
-          <Item
-            item={item}
-            name={`${name}.items[${index}]`}
-            key={`item-${item.id}`}
-            activeItemId={activeItemId}
-            onSetActiveItem={onSetActiveItem}
-            onRemoveItem={onRemoveItem}
-          />
-        ))}
+        {items?.length ? (
+          items?.map((item, index) => (
+            <Item
+              item={item}
+              name={`${name}.items[${index}]`}
+              key={`item-${item.id}`}
+              activeItemId={activeItemId}
+              onSetActiveItem={onSetActiveItem}
+              onRemoveItem={onRemoveItem}
+            />
+          ))
+        ) : (
+          <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>
+            {t('itemIsRequired')}
+          </StyledTitleMedium>
+        )}
         <StyledBtnWrapper>
           <Button
             variant="outlined"
