@@ -10,7 +10,7 @@ export const getActions = ({
   optionsLength,
 }: OptionActions) => [
   {
-    icon: <Svg id={!isHidden ? 'visibility-on' : 'visibility-off'} />,
+    icon: <Svg id={isHidden ? 'visibility-off' : 'visibility-on'} />,
     action: optionHide,
   },
   {
