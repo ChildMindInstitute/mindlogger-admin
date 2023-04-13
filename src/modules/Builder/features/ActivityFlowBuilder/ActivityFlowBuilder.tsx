@@ -85,6 +85,13 @@ export const ActivityFlowBuilder = () => {
     move(source.index, destination.index);
   };
 
+  const activitiesIds = activities.reduce((acc: Record<string, ActivityFormValues>, activity) => {
+    const id = activity.id || activity.key || '';
+    acc[id] = activity;
+
+    return acc;
+  }, {});
+
   useBreadcrumbs([
     {
       icon: 'flow',
@@ -117,16 +124,7 @@ export const ActivityFlowBuilder = () => {
             <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
               {activityFlowItems?.map((item, index) => {
                 const activityKey = item.activityId;
-                const ids = activities.reduce(
-                  (acc: Record<string, ActivityFormValues>, activity) => {
-                    const id = activity.id || activity.key || '';
-                    acc[id] = activity;
-
-                    return acc;
-                  },
-                  {},
-                );
-                const currentActivity = ids[activityKey];
+                const currentActivity = activitiesIds[activityKey];
                 const activityName = currentActivity?.name;
                 const activityDescription = currentActivity?.description;
 
