@@ -30,7 +30,7 @@ export const ActivityItems = () => {
     },
   ]);
 
-  if (!activity) return;
+  if (!activity) return null;
 
   const items = watch(`${name}.items`);
   const activeItemIndex = items?.findIndex((item: ItemFormValues) => item.id === activeItemId);
