@@ -94,6 +94,7 @@ export const ActivityFlow = () => {
 
       insertActivityFlow(index + 1, {
         ...activityFlows[index],
+        id: undefined,
         key: uuidv4(),
         name: `${activityFlows[index].name} (${insertedNumber})`,
       });
