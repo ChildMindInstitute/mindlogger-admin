@@ -36,8 +36,8 @@ export const ItemSchema = () => {
       name: yup
         .string()
         .required(getIsRequiredValidateMessage('itemName'))
-        .matches(/^[\w]+$/g, {
-          message: t('validationMessages.alphanumeric', { field: 'itemName' }),
+        .matches(/^\w+$/g, {
+          message: t('validationMessages.alphanumeric', { field: t('itemName') }),
         }),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
       question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),

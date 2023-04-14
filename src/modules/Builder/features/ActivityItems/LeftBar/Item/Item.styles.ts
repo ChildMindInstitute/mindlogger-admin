@@ -41,13 +41,12 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
     ${commonButtonStyles};
   }
 
-  ${({ isActive }: { isActive: boolean }) =>
+  ${({ isActive }: { isActive: boolean; hasError: boolean; hidden: boolean }) =>
     isActive && `background: ${variables.palette.secondary_container};`}
-  ${({ hasError }: { hasError: boolean }) =>
-    hasError && `background: ${variables.palette.error_container};`}
+  ${({ hasError }) => hasError && `background: ${variables.palette.error_container};`}
 
   &:hover {
-    ${({ isActive, hasError }: { isActive: boolean; hasError: boolean }) =>
+    ${({ isActive, hasError }) =>
       !isActive &&
       !hasError &&
       `
@@ -55,11 +54,11 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
     `}
 
     .actions {
-      display: ${({ hidden }: { hidden?: boolean }) => (hidden ? 'none' : 'flex')};
+      display: ${({ hidden }) => (hidden ? 'none' : 'flex')};
     }
 
     .dots {
-      display: ${({ hidden }: { hidden?: boolean }) => (hidden ? 'flex' : 'none')};
+      display: ${({ hidden }) => (hidden ? 'flex' : 'none')};
     }
   }
 `;
