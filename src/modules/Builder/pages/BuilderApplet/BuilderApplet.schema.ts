@@ -2,23 +2,63 @@ import * as yup from 'yup';
 
 import i18n from 'i18n';
 import { getMaxLengthValidationError } from 'shared/utils';
-import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'shared/consts';
+import {
+  ItemResponseType,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_NAME_LENGTH,
+  MAX_SELECT_OPTION_TEXT_LENGTH,
+  MAX_SLIDER_LABEL_TEXT_LENGTH,
+} from 'shared/consts';
 
 const { t } = i18n;
 
 export const getIsRequiredValidateMessage = (field: string) =>
   t('validationMessages.isRequired', { field: t(field) });
 
-export const ItemSchema = () =>
-  yup
+export const ResponseValuesRowsSchema = () => ({
+  minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
+  maxLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
+});
+
+export const ResponseValuesOptionsSchema = () =>
+  yup.array().of(
+    yup.object({
+      text: yup
+        .string()
+        .required(getIsRequiredValidateMessage('optionText'))
+        .max(MAX_SELECT_OPTION_TEXT_LENGTH, getMaxLengthValidationError),
+    }),
+  );
+
+export const ItemSchema = () => {
+  const itemSchema = yup
     .object({
-      name: yup.string().required(getIsRequiredValidateMessage('itemName')),
-      question: yup.string(),
+      name: yup
+        .string()
+        .required(getIsRequiredValidateMessage('itemName'))
+        .matches(/^\w+$/g, {
+          message: t('validationMessages.alphanumeric', { field: t('itemName') }),
+        }),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
-      responseValues: yup.object({ options: yup.array().of(yup.object({})) }),
+      question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),
+      responseValues: yup.object({}).when('responseType', (responseType, schema) => {
+        if (
+          responseType === ItemResponseType.SingleSelection ||
+          responseType === ItemResponseType.MultipleSelection
+        )
+          return schema.shape({ options: ResponseValuesOptionsSchema() });
+
+        if (responseType === ItemResponseType.Slider)
+          return schema.shape(ResponseValuesRowsSchema());
+
+        return schema;
+      }),
       config: yup.object({}),
     })
     .required();
+
+  return itemSchema;
+};
 
 export const ActivitySchema = () =>
   yup.object({
@@ -30,7 +70,7 @@ export const ActivitySchema = () =>
     isSkippable: yup.boolean(),
     isReviewable: yup.boolean(),
     responseIsEditable: yup.boolean(),
-    items: yup.array().of(ItemSchema()),
+    items: yup.array().of(ItemSchema()).min(1),
     isHidden: yup.boolean(),
   });
 

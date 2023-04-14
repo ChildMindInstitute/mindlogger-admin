@@ -183,3 +183,7 @@ export type PostAppletPublicLink = AppletId & { requireLogin: boolean };
 export type OwnerId = {
   ownerId: string;
 };
+
+export type Answers = { id: string; respondentId: string; createdDate: string };
+
+export type Answer = AppletId & { answerId: string };
