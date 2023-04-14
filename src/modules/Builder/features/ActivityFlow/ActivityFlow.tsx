@@ -71,8 +71,8 @@ export const ActivityFlow = () => {
 
   const handleAddActivityFlow = (positionToAdd?: number) => {
     const flowItems = activities.map((activity) => ({
-      id: uuidv4(),
-      activityId: activity.id || activity.key || '',
+      key: uuidv4(),
+      activityKey: activity.id || activity.key || '',
     }));
     const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
 
@@ -81,7 +81,7 @@ export const ActivityFlow = () => {
     } else {
       appendActivityFlow(newActivityFlow);
     }
-    handleEditActivityFlow(newActivityFlow.id);
+    handleEditActivityFlow(newActivityFlow.key);
   };
 
   const handleDuplicateActivityFlow = (index: number) => {
@@ -93,7 +93,7 @@ export const ActivityFlow = () => {
 
       insertActivityFlow(index + 1, {
         ...activityFlows[index],
-        id: uuidv4(),
+        key: uuidv4(),
         name: `${activityFlows[index].name} (${insertedNumber})`,
       });
 
@@ -141,7 +141,11 @@ export const ActivityFlow = () => {
             {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activityFlows.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id || ''} index={index}>
+                  <Draggable
+                    key={item.id || item.key}
+                    draggableId={item.id || item.key || ''}
+                    index={index}
+                  >
                     {(itemProvided, snapshot) => (
                       <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
                         <Item
@@ -151,7 +155,7 @@ export const ActivityFlow = () => {
                           getActions={() =>
                             getFlowsItemActions({
                               activityFlowIndex: index,
-                              activityFlowId: item.id || '',
+                              activityFlowId: item.id || item.key || '',
                               activityFlowHidden: getActivityFlowVisible(item.isHidden),
                               removeActivityFlow: handleSetFlowToDeleteData(index, item.name),
                               editActivityFlow: handleEditActivityFlow,

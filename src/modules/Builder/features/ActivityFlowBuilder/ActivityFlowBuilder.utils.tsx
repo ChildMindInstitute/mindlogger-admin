@@ -22,7 +22,7 @@ export const getMenuItems = ({
         ? onAddFlowActivity && onAddFlowActivity(activityKey)
         : onUpdateFlowActivity &&
           index !== undefined &&
-          onUpdateFlowActivity(index, { id: uuidv4(), activityId: activityKey });
+          onUpdateFlowActivity(index, { key: uuidv4(), activityKey });
       onMenuClose();
     },
   }));

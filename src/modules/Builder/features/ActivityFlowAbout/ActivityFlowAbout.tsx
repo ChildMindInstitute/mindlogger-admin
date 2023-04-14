@@ -28,7 +28,9 @@ export const ActivityFlowAbout = () => {
   const { appletId, activityFlowId } = useParams();
 
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
-  const activityFlowIndex = activityFlows.findIndex((flow) => flow.id === activityFlowId);
+  const activityFlowIndex = activityFlows.findIndex(
+    (flow) => (flow.id || flow.key) === activityFlowId,
+  );
 
   const commonProps = {
     fullWidth: true,

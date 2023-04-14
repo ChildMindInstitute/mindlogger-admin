@@ -7,7 +7,7 @@ import { Modal } from 'shared/components';
 import { StyledTitleMedium, StyledFlexColumn, theme, StyledModalWrapper } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 
@@ -17,7 +17,7 @@ import { getActions } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch, getFieldState } = useFormContext();
+  const { control, watch, getFieldState, setValue } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
@@ -33,6 +33,7 @@ export const Activities = () => {
   });
 
   const activities = watch('activities');
+  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
 
   const errors = activities?.reduce(
     (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
@@ -75,8 +76,25 @@ export const Activities = () => {
         {activities?.length ? (
           activities.map((item: ActivityFormValues, index: number) => {
             const handleEdit = () => navigateToActivity(item.key ?? item.id);
-            //TODO: check if dependent activity flow is required to remove
-            const handleRemove = () => removeActivity(index);
+
+            const handleRemove = () => {
+              const activityKey = item.id || item.key;
+              const newActivityFlows = activityFlows.reduce(
+                (acc: AppletFormValues['activityFlows'], flow) => {
+                  const items = flow.items?.filter((item) => item.activityKey !== activityKey);
+                  if (items && items.length > 0) {
+                    acc.push({ ...flow, items });
+                  }
+
+                  return acc;
+                },
+                [],
+              );
+
+              removeActivity(index);
+              setValue('activityFlows', newActivityFlows);
+            };
+
             //TODO: check if some items properties in duplicated activity are needed to be changed
             const handleDuplicate = () => {
               const newActivity = getNewActivity(item);

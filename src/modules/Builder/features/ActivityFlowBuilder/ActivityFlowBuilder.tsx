@@ -36,7 +36,9 @@ export const ActivityFlowBuilder = () => {
   const { control, watch } = useFormContext();
   const { appletId, activityFlowId } = useParams();
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
-  const activityFlowIndex = activityFlows.findIndex((flow) => flow.id === activityFlowId);
+  const activityFlowIndex = activityFlows.findIndex(
+    (flow) => (flow.id || flow.key) === activityFlowId,
+  );
   const { remove, append, insert, update, move } = useFieldArray({
     control,
     name: `activityFlows.${activityFlowIndex}.items`,
@@ -48,7 +50,7 @@ export const ActivityFlowBuilder = () => {
 
   const handleFlowActivityDuplicate = (index: number) => {
     if (!activityFlowItems) return;
-    insert(index + 1, { activityId: activityFlowItems[index].activityId, id: uuidv4() });
+    insert(index + 1, { activityKey: activityFlowItems[index].activityKey, key: uuidv4() });
   };
 
   const handleFlowActivityToDeleteSet = (index: number, name: string) => () =>
@@ -61,8 +63,7 @@ export const ActivityFlowBuilder = () => {
     setFlowActivityToDeleteData(null);
   };
 
-  const handleFlowActivityAdd = (activityKey: string) =>
-    append({ id: uuidv4(), activityId: activityKey });
+  const handleFlowActivityAdd = (activityKey: string) => append({ key: uuidv4(), activityKey });
 
   const handleFlowActivityToUpdateSet = (event: MouseEvent<HTMLElement>, index: number) => {
     setIndexToUpdate(index);
@@ -85,12 +86,15 @@ export const ActivityFlowBuilder = () => {
     move(source.index, destination.index);
   };
 
-  const activitiesIds = activities.reduce((acc: Record<string, ActivityFormValues>, activity) => {
-    const id = activity.id || activity.key || '';
-    acc[id] = activity;
+  const activitiesIdsObjects = activities.reduce(
+    (acc: Record<string, ActivityFormValues>, activity) => {
+      const id = activity.id || activity.key || '';
+      acc[id] = activity;
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {},
+  );
 
   useBreadcrumbs([
     {
@@ -123,13 +127,13 @@ export const ActivityFlowBuilder = () => {
           {(listProvided) => (
             <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
               {activityFlowItems?.map((item, index) => {
-                const activityKey = item.activityId;
-                const currentActivity = activitiesIds[activityKey];
+                const key = item.id || item.key;
+                const currentActivity = activitiesIdsObjects[item.activityKey];
                 const activityName = currentActivity?.name;
                 const activityDescription = currentActivity?.description;
 
                 return (
-                  <Draggable key={item.id} draggableId={item.id || ''} index={index}>
+                  <Draggable key={key} draggableId={key || ''} index={index}>
                     {(itemProvided, snapshot) => (
                       <Box
                         className={builderItemClassName}

@@ -4,7 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
 import { page } from 'resources';
-import { SingleApplet, Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
+import {
+  SingleApplet,
+  Item,
+  ActivityFlow,
+  SingleAndMultipleSelectItemResponseValues,
+} from 'shared/state';
 import { getDictionaryText, Path } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
 
@@ -50,7 +55,7 @@ export const getNewActivityItem = () => ({
 });
 
 export const getNewActivityFlow = () => ({
-  id: uuidv4(),
+  key: uuidv4(),
   name: '',
   description: '',
   isSingleReport: false,
@@ -88,6 +93,16 @@ const getActivityItems = (items: Item[]) =>
       }))
     : [];
 
+const getActivityFlows = (activityFlows: ActivityFlow[]) =>
+  activityFlows.map(({ order, ...activityFlow }) => ({
+    ...activityFlow,
+    description: getDictionaryText(activityFlow.description),
+    items: activityFlow.items?.map(({ id, activityId }) => ({
+      id,
+      activityKey: activityId || '',
+    })),
+  }));
+
 export const getDefaultValues = (appletData?: SingleApplet) => {
   if (!appletData) return getNewApplet();
 
@@ -102,10 +117,7 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
           items: getActivityItems(activity.items),
         }))
       : [],
-    activityFlows: appletData.activityFlows.map((activityFlow) => ({
-      ...activityFlow,
-      description: getDictionaryText(activityFlow.description),
-    })),
+    activityFlows: getActivityFlows(appletData.activityFlows),
   };
 };
 
