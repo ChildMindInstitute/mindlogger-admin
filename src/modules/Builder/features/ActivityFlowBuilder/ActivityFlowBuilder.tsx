@@ -52,7 +52,11 @@ export const ActivityFlowBuilder = () => {
 
   const handleFlowActivityDuplicate = (index: number) => {
     if (!activityFlowItems) return;
-    insert(index + 1, { activityKey: activityFlowItems[index].activityKey, key: uuidv4() });
+    insert(index + 1, {
+      activityKey: activityFlowItems[index].activityKey,
+      key: uuidv4(),
+      id: undefined,
+    });
   };
 
   const handleFlowActivityToDeleteSet = (index: number, name: string) => () =>
