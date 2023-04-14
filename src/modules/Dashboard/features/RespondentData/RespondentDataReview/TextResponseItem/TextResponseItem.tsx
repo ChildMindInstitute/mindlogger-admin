@@ -1,7 +1,5 @@
 import { Box } from '@mui/material';
 
-import { TextResponseItemProps } from './TextResponseItem.types';
+import { TextItemAnswer } from '../RespondentDataReview.types';
 
-export const TextResponseItem = ({ response }: TextResponseItemProps) => (
-  <Box>{response.value}</Box>
-);
+export const TextResponseItem = ({ answer }: TextItemAnswer) => <Box>{answer.value}</Box>;

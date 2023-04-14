@@ -1,11 +1,11 @@
+import { SliderItemAnswer } from '../RespondentDataReview.types';
 import { StyledSlider } from './SliderResponseItem.styles';
-import { SliderResponseItemProps } from './SliderResponseItem.types';
 
-export const SliderResponseItem = ({ item, response }: SliderResponseItemProps) => (
+export const SliderResponseItem = ({ activityItem, answer }: SliderItemAnswer) => (
   <StyledSlider
-    min={item.responseValues.minValue}
-    max={item.responseValues.maxValue}
-    value={Number(response.value)}
+    min={activityItem.responseValues.minValue}
+    max={activityItem.responseValues.maxValue}
+    value={Number(answer.value)}
     disabled
   />
 );
