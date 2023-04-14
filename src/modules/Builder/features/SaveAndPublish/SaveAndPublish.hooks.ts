@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
@@ -50,7 +49,7 @@ export const useAppletData = () => {
       ...appletInfo,
       activities: appletInfo?.activities.map((activity: Activity) => ({
         ...activity,
-        key: uuidv4(),
+        key: activity.id || activity.key,
         description: getDictionaryObject(activity.description),
         items: activity.items?.map(({ id, ...item }) => ({
           ...item,
@@ -70,7 +69,11 @@ export const useAppletData = () => {
       description: appletDescription,
       about: appletAbout,
       themeId: null, // TODO: create real themeId
-      activityFlows: [],
+      activityFlows: appletInfo?.activityFlows.map(({ key, ...flow }) => ({
+        ...flow,
+        description: getDictionaryObject(flow.description),
+        items: flow.items?.map(({ key, ...item }) => item),
+      })),
       ...removeAppletExtraFields(),
     };
   };

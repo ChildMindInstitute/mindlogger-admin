@@ -19,6 +19,8 @@ type DatePicker = {
   uiType?: UiType;
   inputSx?: SxProps;
   label?: string;
+  minDate?: Date | null;
+  maxDate?: Date | null;
 } & TextFieldProps;
 
 export type DatePickerProps<T extends FieldValues> = DatePicker & UseControllerProps<T>;

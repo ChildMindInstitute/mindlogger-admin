@@ -14,7 +14,7 @@ export const removeAppletExtraFields = () => ({
   version: undefined,
 });
 
-export const removeActivityExtraFields = () => ({ order: undefined, id: undefined });
+export const removeActivityExtraFields = () => ({ order: undefined });
 
 export const removeItemExtraFields = (responseType: ItemResponseType) => ({
   key: undefined,
