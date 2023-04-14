@@ -55,7 +55,6 @@ export const ActivityFlowBuilder = () => {
     insert(index + 1, {
       activityKey: activityFlowItems[index].activityKey,
       key: uuidv4(),
-      id: undefined,
     });
   };
 
