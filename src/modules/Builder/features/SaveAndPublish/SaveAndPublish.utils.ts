@@ -24,6 +24,13 @@ export const removeItemExtraFields = (responseType: ItemResponseType) => ({
   ...(responseType === ItemResponseType.Text && { responseValues: undefined }),
 });
 
+export const removeResponseValuesExtraFields = (responseType: ItemResponseType) => ({
+  ...(responseType !== ItemResponseType.SingleSelection &&
+    responseType !== ItemResponseType.MultipleSelection && {
+      options: undefined,
+    }),
+});
+
 const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
 
 export const usePasswordFromStorage = () => {
