@@ -33,7 +33,7 @@ export const LeftBar = ({
             <Item
               item={item}
               name={`${name}.items[${index}]`}
-              key={`item-${item.id}`}
+              key={`item-${item.id ?? item.key}`}
               activeItemId={activeItemId}
               onSetActiveItem={onSetActiveItem}
               onRemoveItem={onRemoveItem}

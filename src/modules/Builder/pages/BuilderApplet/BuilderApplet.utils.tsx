@@ -38,7 +38,7 @@ export const getNewApplet = () => ({
 });
 
 export const getNewActivityItem = () => ({
-  id: uuidv4(),
+  key: uuidv4(),
   responseType: '',
   name: '',
   question: '',

@@ -35,9 +35,12 @@ export const ActivityItems = () => {
   if (!activity) return null;
 
   const items = watch(`${name}.items`);
-  const activeItemIndex = items?.findIndex((item: ItemFormValues) => item.id === activeItemId);
-  const activeItem = items?.[activeItemIndex];
-  const itemToDelete = items?.find((item: ItemFormValues) => itemIdToDelete === item.id);
+  const activeItemIndex = items?.findIndex(
+    (item: ItemFormValues) => (item.key ?? item.id) === activeItemId,
+  );
+  const itemToDelete = items?.find(
+    (item: ItemFormValues) => itemIdToDelete === (item.key ?? item.id),
+  );
   const itemName = itemToDelete?.name;
 
   const handleRemoveClick = (id: string) => {
@@ -47,7 +50,7 @@ export const ActivityItems = () => {
   const handleAddItem = () => {
     const item = getNewActivityItem();
     appendItem(item);
-    setActiveItemId(item.id);
+    setActiveItemId(item.key);
   };
 
   const handleModalClose = () => {

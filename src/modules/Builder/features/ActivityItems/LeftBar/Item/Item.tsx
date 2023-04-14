@@ -1,9 +1,8 @@
-import { useFormContext, useFormState } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { Actions, Svg } from 'shared/components';
 import { itemsTypeIcons } from 'shared/consts';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
 
 import { getActions } from './Item.const';
 import {
@@ -27,10 +26,10 @@ export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }
 
   return (
     <StyledItem
-      isActive={activeItemId === item.id}
+      isActive={activeItemId === (item.id ?? item.key)}
       hasError={invalid}
       hidden={hidden}
-      onClick={() => onSetActiveItem(item.id ?? '')}
+      onClick={() => onSetActiveItem(item.id ?? item.key ?? '')}
     >
       <StyledFlexTopCenter {...hiddenProps}>
         {item.responseType ? itemsTypeIcons[item.responseType] : ''}
@@ -42,7 +41,7 @@ export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }
       <div className="actions">
         <Actions
           items={getActions({ onRemoveItem, onChangeVisibility })}
-          context={item.id}
+          context={item.id ?? item.key}
           visibleByDefault
         />
       </div>
