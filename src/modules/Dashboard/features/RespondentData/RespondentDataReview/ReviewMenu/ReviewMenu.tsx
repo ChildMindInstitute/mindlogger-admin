@@ -30,7 +30,7 @@ export const ReviewMenu = ({
 
   const { execute } = useAsync(
     getAnswersApi,
-    (res) => res?.data?.result && setActivities(res?.data?.result),
+    (res) => res?.data?.result && setActivities(res.data.result),
   );
 
   useEffect(() => {
