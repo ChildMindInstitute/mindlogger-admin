@@ -23,7 +23,7 @@ export const Review = ({ answerId }: ReviewProps) => {
 
   const { execute } = useAsync(
     getAnswerApi,
-    (res) => res?.data?.result && setActivityItemAnswers(res?.data?.result.activityItemAnswers),
+    (res) => res?.data?.result && setActivityItemAnswers(res.data.result.activityItemAnswers),
   );
 
   useEffect(() => {
