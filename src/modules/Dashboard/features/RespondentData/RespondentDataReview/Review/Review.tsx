@@ -18,7 +18,7 @@ import { getResponseItem } from './Review.const';
 
 export const Review = ({ answerId }: ReviewProps) => {
   const { t } = useTranslation();
-  const { id } = useParams();
+  const { appletId } = useParams();
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
 
   const { execute } = useAsync(
@@ -27,10 +27,10 @@ export const Review = ({ answerId }: ReviewProps) => {
   );
 
   useEffect(() => {
-    if (id && answerId) {
-      execute({ appletId: id, answerId });
+    if (appletId && answerId) {
+      execute({ appletId, answerId });
     }
-  }, [id, answerId]);
+  }, [appletId, answerId]);
 
   return (
     <>

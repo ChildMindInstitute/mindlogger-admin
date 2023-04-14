@@ -8,7 +8,7 @@ export type Answer = {
 export type Activity = {
   name: string;
   id: string;
-  answers: Answer[];
+  answerDates: Answer[];
 };
 
 export type ItemAnswer = {

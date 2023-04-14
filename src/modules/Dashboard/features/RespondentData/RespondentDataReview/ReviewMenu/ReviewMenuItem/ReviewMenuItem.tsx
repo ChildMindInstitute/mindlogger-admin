@@ -40,7 +40,7 @@ export const ReviewMenuItem = ({
       </StyledHeader>
       {isOpen && (
         <StyledFlexWrap sx={{ paddingTop: theme.spacing(1.6) }}>
-          {activity.answers.map((answer) => (
+          {activity.answerDates.map((answer) => (
             <Chip
               color={selectedAnswer?.answerId === answer.answerId ? 'primary' : 'secondary'}
               key={answer.answerId}
