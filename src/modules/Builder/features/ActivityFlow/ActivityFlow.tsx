@@ -71,8 +71,9 @@ export const ActivityFlow = () => {
 
   const handleAddActivityFlow = (positionToAdd?: number) => {
     const flowItems = activities.map((activity) => ({
-      id: uuidv4(),
-      activityId: activity.id || activity.key || '',
+      // TODO: discuss with back-end to possibly change keys to ids and handle ids on back-end side
+      key: uuidv4(),
+      activityKey: activity.id || activity.key || '',
     }));
     const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
 
@@ -81,7 +82,7 @@ export const ActivityFlow = () => {
     } else {
       appendActivityFlow(newActivityFlow);
     }
-    handleEditActivityFlow(newActivityFlow.id);
+    handleEditActivityFlow(newActivityFlow.key);
   };
 
   const handleDuplicateActivityFlow = (index: number) => {
@@ -93,7 +94,7 @@ export const ActivityFlow = () => {
 
       insertActivityFlow(index + 1, {
         ...activityFlows[index],
-        id: uuidv4(),
+        key: uuidv4(),
         name: `${activityFlows[index].name} (${insertedNumber})`,
       });
 
@@ -140,30 +141,34 @@ export const ActivityFlow = () => {
           <DndDroppable droppableId="activity-flows-dnd" direction="vertical">
             {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                {activityFlows.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id || ''} index={index}>
+                {activityFlows.map((flow, index) => (
+                  <Draggable
+                    key={flow.id || flow.key}
+                    draggableId={flow.id || flow.key || ''}
+                    index={index}
+                  >
                     {(itemProvided, snapshot) => (
                       <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
                         <Item
                           dragHandleProps={itemProvided.dragHandleProps}
                           isDragging={snapshot.isDragging}
-                          onItemClick={() => handleEditActivityFlow(item.id || '')}
+                          onItemClick={() => handleEditActivityFlow(flow.id || '')}
                           getActions={() =>
                             getFlowsItemActions({
                               activityFlowIndex: index,
-                              activityFlowId: item.id || '',
-                              activityFlowHidden: getActivityFlowVisible(item.isHidden),
-                              removeActivityFlow: handleSetFlowToDeleteData(index, item.name),
+                              activityFlowId: flow.id || flow.key || '',
+                              activityFlowHidden: getActivityFlowVisible(flow.isHidden),
+                              removeActivityFlow: handleSetFlowToDeleteData(index, flow.name),
                               editActivityFlow: handleEditActivityFlow,
                               duplicateActivityFlow: handleDuplicateActivityFlow,
                               toggleActivityFlowVisibility: handleToggleActivityFlowVisibility,
                             })
                           }
-                          isInactive={item.isHidden}
-                          hasStaticActions={item.isHidden}
+                          isInactive={flow.isHidden}
+                          hasStaticActions={flow.isHidden}
                           uiType={ItemUiType.Flow}
                           hasError={errors[`activityFlows.${index}`]}
-                          {...item}
+                          {...flow}
                         />
                         {index >= 0 && index < activityFlows.length - 1 && !isDragging && (
                           <StyledAddWrapper>

@@ -35,12 +35,14 @@ export type ActivityFormValues = {
 };
 
 export type ActivityFlowItem = {
-  id: string;
-  activityId: string;
+  id?: string;
+  key?: string;
+  activityKey: string;
 };
 
 export type ActivityFlowFormValues = {
   id?: string;
+  key?: string;
   name: string;
   description: string;
   isSingleReport?: boolean;
