@@ -13,13 +13,17 @@ import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
 import {
   ActivityFlowFormValues,
   ActivityFlowItem,
-  ActivityFormValues,
   AppletFormValues,
 } from 'modules/Builder/pages/BuilderApplet';
 import { page } from 'resources';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
-import { getFlowBuilderActions, getMenuItems } from './ActivityFlowBuilder.utils';
+import {
+  getActivitiesIdsObjects,
+  getActivityFlowIndex,
+  getFlowBuilderActions,
+  getMenuItems,
+} from './ActivityFlowBuilder.utils';
 import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
 import { GetMenuItemsType } from './ActivityFlowBuilder.types';
 import { builderItemClassName } from './ActivityFlowBuilder.const';
@@ -36,9 +40,7 @@ export const ActivityFlowBuilder = () => {
   const { control, watch } = useFormContext();
   const { appletId, activityFlowId } = useParams();
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
-  const activityFlowIndex = activityFlows.findIndex(
-    (flow) => (flow.id || flow.key) === activityFlowId,
-  );
+  const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
   const { remove, append, insert, update, move } = useFieldArray({
     control,
     name: `activityFlows.${activityFlowIndex}.items`,
@@ -86,15 +88,7 @@ export const ActivityFlowBuilder = () => {
     move(source.index, destination.index);
   };
 
-  const activitiesIdsObjects = activities.reduce(
-    (acc: Record<string, ActivityFormValues>, activity) => {
-      const id = activity.id || activity.key || '';
-      acc[id] = activity;
-
-      return acc;
-    },
-    {},
-  );
+  const activitiesIdsObjects = getActivitiesIdsObjects(activities);
 
   useBreadcrumbs([
     {
