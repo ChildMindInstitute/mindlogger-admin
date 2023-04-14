@@ -1,24 +1,43 @@
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 
+import { getAnswersApi } from 'api';
 import { DatePicker, DatePickerUiType } from 'shared/components';
+import { useAsync } from 'shared/hooks';
+import { DateFormats } from 'shared/consts';
 import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
 
 import { StyledMenu } from '../../RespondentData.styles';
-import { getMockedResponses } from './mock';
+import { Activity } from '../RespondentDataReview.types';
 import { StyledHeader } from './ReviewMenu.styles';
 import { ReviewMenuProps } from './ReviewMenu.types';
 import { ReviewMenuItem } from './ReviewMenuItem';
 
 export const ReviewMenu = ({
-  activities,
   selectedActivity,
-  selectedResponse,
+  selectedAnswer,
   setSelectedActivity,
-  setSelectedResponse,
+  setSelectedAnswer,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
-  const { control } = useForm();
+  const { appletId, respondentId } = useParams();
+  const { control, watch } = useForm({ defaultValues: { date: new Date() } });
+  const date = watch('date');
+  const [activities, setActivities] = useState<Activity[]>([]);
+
+  const { execute } = useAsync(
+    getAnswersApi,
+    (res) => res?.data?.result && setActivities(res?.data?.result),
+  );
+
+  useEffect(() => {
+    if (appletId && respondentId) {
+      execute({ id: appletId, respondentId, createdDate: format(date, DateFormats.YearMonthDay) });
+    }
+  }, [appletId, respondentId, date]);
 
   return (
     <StyledMenu>
@@ -29,7 +48,7 @@ export const ReviewMenu = ({
         </StyledLabelLarge>
         <DatePicker
           name="date"
-          value={new Date(2023, 0, 31)}
+          value={new Date()}
           control={control}
           uiType={DatePickerUiType.OneDate}
           label={t('reviewDate')}
@@ -38,15 +57,14 @@ export const ReviewMenu = ({
       <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
         {t('selectActivityAndResponse')}
       </StyledLabelLarge>
-      {activities.map((activity, index) => (
+      {activities.map((activity) => (
         <ReviewMenuItem
           key={activity.id}
-          isSelected={selectedActivity.id === activity.id}
-          item={activity}
-          responses={getMockedResponses(activity.id || '', index)}
-          selectedResponse={selectedResponse}
-          setSelectedItem={setSelectedActivity}
-          setSelectedResponse={setSelectedResponse}
+          isSelected={selectedActivity?.id === activity.id}
+          activity={activity}
+          setSelectedActivity={setSelectedActivity}
+          selectedAnswer={selectedAnswer}
+          setSelectedAnswer={setSelectedAnswer}
         />
       ))}
     </StyledMenu>

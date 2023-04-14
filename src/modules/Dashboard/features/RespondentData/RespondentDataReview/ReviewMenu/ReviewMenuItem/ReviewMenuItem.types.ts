@@ -1,14 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Activity } from 'redux/modules';
-
-import { Response } from '../../RespondentDataReview.types';
+import { Activity, Answer } from '../../RespondentDataReview.types';
 
 export type ReviewMenuItemProps = {
-  item: Activity;
+  activity: Activity;
   isSelected: boolean;
-  responses: Response[];
-  selectedResponse: Response | null;
-  setSelectedItem: Dispatch<SetStateAction<Activity>>;
-  setSelectedResponse: Dispatch<SetStateAction<Response | null>>;
+  selectedAnswer: Answer | null;
+  setSelectedActivity: Dispatch<SetStateAction<Activity | null>>;
+  setSelectedAnswer: Dispatch<SetStateAction<Answer | null>>;
 };
