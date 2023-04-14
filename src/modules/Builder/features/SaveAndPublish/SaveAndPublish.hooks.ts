@@ -51,9 +51,9 @@ export const useAppletData = () => {
         ...activity,
         key: uuidv4(),
         description: getDictionaryObject(activity.description),
-        items: activity.items?.map(({ id, key, ...item }) => ({
+        items: activity.items?.map(({ id, ...item }) => ({
           ...item,
-          ...(id ? { id } : { key }),
+          ...(id && { id }),
           question: getDictionaryObject(item.question),
           ...removeItemExtraFields(item.responseType),
         })),

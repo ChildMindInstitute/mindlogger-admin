@@ -38,9 +38,10 @@ export const ActivityItems = () => {
   const activeItemIndex = items?.findIndex(
     (item: ItemFormValues) => (item.key ?? item.id) === activeItemId,
   );
-  const itemToDelete = items?.find(
+  const itemIndexToDelete = items?.findIndex(
     (item: ItemFormValues) => itemIdToDelete === (item.key ?? item.id),
   );
+  const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
 
   const handleRemoveClick = (id: string) => {
@@ -60,8 +61,8 @@ export const ActivityItems = () => {
   const handleModalSubmit = () => {
     if (itemIdToDelete === activeItemId) setActiveItemId('');
 
+    removeItem(itemIndexToDelete);
     handleModalClose();
-    removeItem(activeItemIndex);
   };
 
   return (

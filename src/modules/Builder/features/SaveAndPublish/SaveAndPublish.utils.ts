@@ -16,8 +16,8 @@ export const removeAppletExtraFields = () => ({
 
 export const removeActivityExtraFields = () => ({ order: undefined, id: undefined });
 
-export const removeItemExtraFields = (responseType?: ItemResponseType) => ({
-  // isHidden: undefined, //TODO: remove after backend fixes
+export const removeItemExtraFields = (responseType: ItemResponseType) => ({
+  key: undefined,
   paletteName: undefined, //TODO: remove after backend addings
   settings: undefined,
   alerts: undefined, //TODO: remove after backend addings

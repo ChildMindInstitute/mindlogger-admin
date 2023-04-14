@@ -23,6 +23,7 @@ export const getNewActivity = (activity?: ActivityFormValues) => ({
   isReviewable: false,
   responseIsEditable: false,
   ...activity,
+  id: undefined,
   key: uuidv4(),
 });
 
