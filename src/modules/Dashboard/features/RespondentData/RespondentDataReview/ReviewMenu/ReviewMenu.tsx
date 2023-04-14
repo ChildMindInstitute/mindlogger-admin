@@ -52,6 +52,8 @@ export const ReviewMenu = ({
           control={control}
           uiType={DatePickerUiType.OneDate}
           label={t('reviewDate')}
+          maxDate={new Date()}
+          minDate={null}
         />
       </StyledHeader>
       <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
