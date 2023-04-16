@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { List } from '@mui/material';
 
@@ -6,6 +7,7 @@ import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styl
 import { useAppDispatch } from 'redux/store';
 import { workspaces as currentWorkspace, Workspace } from 'redux/modules';
 import { storage } from 'shared/utils';
+import { page } from 'resources';
 
 import { WorkspaceImage } from '../WorkspaceImage';
 import { StyledListItemButton, StyledItemContent, StyledSelect } from './WorkspaceGroup.styles';
@@ -16,10 +18,14 @@ export const WorkspaceGroup = ({
 }: WorkspaceGroupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const currentWorkspaceData = currentWorkspace.useData();
+
   const changeWorkspaceHandler = (workspace: Workspace) => {
     storage.setItem('workspace', workspace);
     dispatch(currentWorkspace.actions.setCurrentWorkspace(workspace));
+    navigate(page.dashboard);
   };
 
   return (

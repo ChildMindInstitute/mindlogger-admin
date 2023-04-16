@@ -19,6 +19,13 @@ export const Managers = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
 
+  useBreadcrumbs([
+    {
+      icon: 'manager-outlined',
+      label: t('managers'),
+    },
+  ]);
+
   const managersData = users.useManagersData();
 
   const { getWorkspaceManagers } = users.thunk;
@@ -38,13 +45,6 @@ export const Managers = () => {
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<User | null>(null);
-
-  useBreadcrumbs([
-    {
-      icon: 'manager-outlined',
-      label: t('managers'),
-    },
-  ]);
 
   const actions = {
     removeAccessAction: (user: User) => {
