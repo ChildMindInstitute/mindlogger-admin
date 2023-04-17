@@ -9,6 +9,7 @@ import { ItemResponseType } from 'shared/consts';
 
 export type ItemFormValues = {
   id?: string;
+  key?: string;
   name: string;
   question: string;
   config: Config;

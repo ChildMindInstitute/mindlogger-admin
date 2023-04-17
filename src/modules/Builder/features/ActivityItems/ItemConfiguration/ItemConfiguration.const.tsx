@@ -22,8 +22,6 @@ export const DEFAULT_EMPTY_SLIDER = {
   scores: DEFAULT_SLIDER_SCORE,
   minLabel: '',
   maxLabel: '',
-  minImage: '',
-  maxImage: '',
 };
 export const DEFAULT_EMPTY_SLIDER_ROWS = {
   ...DEFAULT_EMPTY_SLIDER,
