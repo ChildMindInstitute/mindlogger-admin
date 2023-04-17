@@ -32,6 +32,13 @@ export const Respondents = () => {
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
 
+  useBreadcrumbs([
+    {
+      icon: 'respondent-outlined',
+      label: t('respondents'),
+    },
+  ]);
+
   const respondentsData = users.useRespondentsData();
   const appletsData = folders.useFlattenFoldersApplets();
   const { ownerId } = workspaces.useData() || {};
@@ -57,13 +64,6 @@ export const Respondents = () => {
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
   const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
-
-  useBreadcrumbs([
-    {
-      icon: 'respondent-outlined',
-      label: t('respondents'),
-    },
-  ]);
 
   const actions = {
     scheduleSetupAction: (index: number) => {
