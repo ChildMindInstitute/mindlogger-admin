@@ -16,6 +16,7 @@ import { Activity } from '../RespondentDataReview.types';
 import { StyledHeader } from './ReviewMenu.styles';
 import { ReviewMenuProps } from './ReviewMenu.types';
 import { ReviewMenuItem } from './ReviewMenuItem';
+import { getRespondentLabel } from '../../RespondentData.utils';
 
 export const ReviewMenu = ({
   selectedActivity,
@@ -26,7 +27,7 @@ export const ReviewMenu = ({
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
   const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = secretId ? `${t('user')}: ${secretId} (${nickname})` : '';
+  const respondentLabel = getRespondentLabel(secretId, nickname);
   const { control, watch } = useForm({ defaultValues: { date: new Date() } });
   const date = watch('date');
 

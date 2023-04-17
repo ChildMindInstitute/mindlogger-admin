@@ -8,6 +8,7 @@ import { theme, StyledHeadlineLarge, StyledLabelLarge, StyledBodyLarge } from 's
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledActivity } from './ReportMenu.styles';
 import { ReportMenuProps } from './ReportMenu.types';
+import { getRespondentLabel } from '../../RespondentData.utils';
 
 export const ReportMenu = ({
   activities,
@@ -17,7 +18,7 @@ export const ReportMenu = ({
   const { t } = useTranslation();
   const { respondentId } = useParams();
   const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = secretId ? `${t('user')}: ${secretId} (${nickname})` : '';
+  const respondentLabel = getRespondentLabel(secretId, nickname);
 
   return (
     <StyledMenu>

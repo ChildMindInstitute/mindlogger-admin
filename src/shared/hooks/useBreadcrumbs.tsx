@@ -8,6 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { checkIfAppletActivityFlowUrlPassed, checkIfAppletUrlPassed } from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
+import { getRespondentLabel } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { appletId, activityId, activityFlowId, respondentId } = useParams();
@@ -16,7 +17,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { pathname } = useLocation();
   const authData = auth.useData();
   const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = secretId ? `${t('user')}: ${secretId} (${nickname})` : '';
+  const respondentLabel = getRespondentLabel(secretId, nickname);
   const { firstName, lastName } = (authData?.user as User) || {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();
