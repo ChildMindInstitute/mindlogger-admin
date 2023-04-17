@@ -35,7 +35,7 @@ export const Review = ({ answerId }: ReviewProps) => {
 
   return (
     <>
-      {activityItemAnswers ? (
+      {answerId && activityItemAnswers ? (
         <StyledReview>
           {activityItemAnswers.map(({ activityItem, answer }) => (
             <Box sx={{ mb: 4.8 }} key={activityItem.id}>
