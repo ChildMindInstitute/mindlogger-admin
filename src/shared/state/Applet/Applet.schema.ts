@@ -136,25 +136,25 @@ export type Item = {
 
 export interface TextItem extends Item {
   responseType: ItemResponseType.Text;
-  config: Config;
+  config: TextInputConfig;
   responseValues: TextItemResponseValues;
 }
 
 export interface SingleSelectItem extends Item {
   responseType: ItemResponseType.SingleSelection;
-  config: Config;
+  config: SingleAndMultipleSelectionConfig;
   responseValues: SingleAndMultipleSelectItemResponseValues;
 }
 
 export interface MultiSelectItem extends Item {
   responseType: ItemResponseType.MultipleSelection;
-  config: Config;
+  config: SingleAndMultipleSelectionConfig;
   responseValues: SingleAndMultipleSelectItemResponseValues;
 }
 
 export interface SliderItem extends Item {
   responseType: ItemResponseType.Slider;
-  config: Config;
+  config: SliderConfig;
   responseValues: SliderItemResponseValues;
 }
 

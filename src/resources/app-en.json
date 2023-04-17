@@ -31,6 +31,7 @@
   "termsOfService": "Terms of Service",
   "backToLogin": "Back to Login",
   "submit": "Submit",
+  "next": "Next",
   "advancedSettings": "Advanced Settings",
   "serverThatHoldAppletConfiguration": "Server that will hold your Applet configuration settings and all the data you collect",
   "serverUrl": "Encryption Server IP Address",
@@ -772,5 +773,7 @@
   "versions": "Versions",
   "noVersions": "No versions yet.",
   "noRespondentIdentifier": "No respondent identifier yet.",
-  "filterByIdentifier": "Filter by identifier"
+  "filterByIdentifier": "Filter by identifier",
+  "time": "Time",
+  "response": "Response"
 }
