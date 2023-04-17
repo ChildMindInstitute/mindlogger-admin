@@ -52,12 +52,12 @@ export const FeedbackAssessment = () => {
           toPrevStep={toPrevStep}
           onSubmit={() => setSubmitAssessmentPopupVisible(true)}
         />
-        {
+        {submitAssessmentPopupVisible && (
           <SubmitAssessmentPopup
             popupVisible={submitAssessmentPopupVisible}
             setPopupVisible={setSubmitAssessmentPopupVisible}
           />
-        }
+        )}
       </FormProvider>
     </>
   );
