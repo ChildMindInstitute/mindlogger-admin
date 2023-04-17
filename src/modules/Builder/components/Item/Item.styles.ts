@@ -51,9 +51,11 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       }
     
       &:hover {
-        box-shadow: ${uiType === ItemUiType.Activity ? variables.boxShadow.dark5 : 'inherit'}; 
+        box-shadow: inherit; 
         background-color: ${
-          uiType === ItemUiType.Flow ? variables.palette.surface_variant_alfa8 : 'inherit'
+          uiType === ItemUiType.Flow || uiType === ItemUiType.Activity
+            ? variables.palette.surface_variant_alfa8
+            : 'inherit'
         };
         
         .item-name {

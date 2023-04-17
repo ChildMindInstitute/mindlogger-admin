@@ -5,3 +5,4 @@ export * from './MediaUploader';
 export * from './MLPlayer';
 export * from './SaveChangesPopup';
 export * from './DndDroppable';
+export * from './InsertItem';

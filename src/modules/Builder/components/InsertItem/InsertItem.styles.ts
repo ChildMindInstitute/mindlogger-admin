@@ -1,8 +1,8 @@
-import { styled } from '@mui/system';
+import { styled } from '@mui/material';
 
-import { theme, variables, StyledClearedButton, StyledFlexAllCenter } from 'shared/styles';
+import { StyledFlexAllCenter, StyledClearedButton, theme, variables } from 'shared/styles';
 
-export const StyledAddWrapper = styled(StyledFlexAllCenter)`
+export const StyledInsertWrapper = styled(StyledFlexAllCenter)`
   position: relative;
   margin: ${theme.spacing(-1.1, 0)};
   opacity: 0;
@@ -23,7 +23,7 @@ export const StyledAddWrapper = styled(StyledFlexAllCenter)`
   }
 `;
 
-export const StyledAdd = styled(StyledClearedButton)`
+export const StyledInsert = styled(StyledClearedButton)`
   width: 2.4rem;
   height: 2.4rem;
   background-color: ${variables.palette.primary};
