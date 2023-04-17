@@ -14,6 +14,19 @@ export const StyledItemConfiguration = styled(StyledFlexColumn)`
   height: 100%;
   flex-grow: 1;
   overflow-y: auto;
+
+  .MuiFormHelperText-root {
+    position: absolute;
+    bottom: -2.4rem;
+    font-size: ${variables.font.size.md};
+    white-space: nowrap;
+  }
+
+  .md-editor.isRequired + .MuiTypography-root {
+    font-size: ${variables.font.size.md};
+    white-space: nowrap;
+    margin: ${theme.spacing(0, 1.4)};
+  }
 `;
 
 export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`

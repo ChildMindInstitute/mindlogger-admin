@@ -17,8 +17,9 @@ import { useBreadcrumbs } from 'shared/hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
 import { page } from 'resources';
-import { AppletFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
 
+import { getActivityFlowIndex } from '../ActivityFlowBuilder/ActivityFlowBuilder.utils';
 import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
 
 export const ActivityFlowAbout = () => {
@@ -28,7 +29,7 @@ export const ActivityFlowAbout = () => {
   const { appletId, activityFlowId } = useParams();
 
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
-  const activityFlowIndex = activityFlows.findIndex((flow) => flow.id === activityFlowId);
+  const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
 
   const commonProps = {
     fullWidth: true,

@@ -7,45 +7,45 @@ import { StyledBodyLarge, StyledFlexWrap, theme } from 'shared/styles';
 
 import { StyledHeader, StyledItem, StyledSvg } from './ReviewMenuItem.styles';
 import { ReviewMenuItemProps } from './ReviewMenuItem.types';
-import { Response } from '../../RespondentDataReview.types';
+import { Answer } from '../../RespondentDataReview.types';
 
 export const ReviewMenuItem = ({
-  item,
+  activity,
+  setSelectedActivity,
   isSelected,
-  responses,
-  selectedResponse,
-  setSelectedItem,
-  setSelectedResponse,
+  selectedAnswer,
+  setSelectedAnswer,
 }: ReviewMenuItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleItemClick = () => {
-    setSelectedItem(item);
+  const handleActivityClick = () => {
+    setSelectedActivity(activity);
+    setSelectedAnswer(null);
     setIsOpen((state) => !state);
   };
 
-  const handleResponseClick = (response: Response) => {
+  const handleAnswerClick = (answer: Answer) => {
     if (!isSelected) {
-      setSelectedItem(item);
+      setSelectedActivity(activity);
     }
 
-    setSelectedResponse(response);
+    setSelectedAnswer(answer);
   };
 
   return (
     <StyledItem isSelected={isSelected}>
-      <StyledHeader onClick={handleItemClick}>
-        <StyledBodyLarge sx={{ maxWidth: '80%' }}>{item.name}</StyledBodyLarge>
+      <StyledHeader onClick={handleActivityClick}>
+        <StyledBodyLarge sx={{ maxWidth: '80%' }}>{activity.name}</StyledBodyLarge>
         <StyledSvg id={isOpen ? 'navigate-up' : 'navigate-down'} width={24} height={24} />
       </StyledHeader>
       {isOpen && (
         <StyledFlexWrap sx={{ paddingTop: theme.spacing(1.6) }}>
-          {responses.map((response) => (
+          {activity.answerDates.map((answer) => (
             <Chip
-              color={selectedResponse?.id === response.id ? 'primary' : 'secondary'}
-              key={response.id}
-              title={String(format(response.date, DateFormats.TimeSeconds))}
-              onClick={() => handleResponseClick(response)}
+              color={selectedAnswer?.answerId === answer.answerId ? 'primary' : 'secondary'}
+              key={answer.answerId}
+              title={String(format(new Date(answer.createdAt), DateFormats.TimeSeconds))}
+              onClick={() => handleAnswerClick(answer)}
             />
           ))}
         </StyledFlexWrap>

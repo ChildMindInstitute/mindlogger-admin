@@ -15,6 +15,7 @@ export const ButtonWithMenu = ({
   startIcon,
   variant,
   disabled = false,
+  menuListWidth,
 }: ButtonWithMenuProps) => {
   const { t } = useTranslation('app');
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
@@ -36,7 +37,12 @@ export const ButtonWithMenu = ({
       >
         {t(label)}
       </StyledButton>
-      <Menu anchorEl={anchorEl} onClose={handleMenuClose} menuItems={menuItems} />
+      <Menu
+        anchorEl={anchorEl}
+        onClose={handleMenuClose}
+        menuItems={menuItems}
+        width={menuListWidth}
+      />
     </>
   );
 };

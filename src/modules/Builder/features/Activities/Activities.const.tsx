@@ -31,7 +31,7 @@ export const getActions = ({
     icon: <Svg id={isActivityHidden ? 'visibility-off' : 'visibility-on'} />,
     action: onVisibilityChange,
     toolTipTitle: '',
-    isStatic: true,
+    isStatic: isActivityHidden,
   },
   {
     icon: <Svg id="trash" />,

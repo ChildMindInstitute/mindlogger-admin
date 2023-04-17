@@ -17,14 +17,24 @@ export type CreateAppletStateData = {
   key: keyof AppletSchema;
 };
 
+type ActivityFlowItem = {
+  activityId: string;
+  id: string;
+  order: number;
+  activityKey?: string;
+  key?: string;
+};
+
 export type ActivityFlow = {
   id?: string;
+  key?: string;
   name: string;
   description?: string | Record<string, string>;
   isSingleReport?: boolean;
   hideBadge?: boolean;
   order?: number;
   activityIds?: number[];
+  items?: ActivityFlowItem[];
   isHidden?: boolean;
 };
 

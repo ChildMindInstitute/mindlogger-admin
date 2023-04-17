@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
@@ -16,9 +17,16 @@ export const BuilderActivity = () => {
   const navigate = useNavigate();
   useBreadcrumbs();
 
-  const { name = '' } = useCurrentActivity();
+  const { name = '', activity } = useCurrentActivity();
 
   const { getFieldState } = useFormContext();
+
+  const navigateToActivities = () =>
+    navigate(generatePath(page.builderAppletActivities, { appletId }));
+
+  useEffect(() => {
+    if (activityId && !activity) navigateToActivities();
+  }, [activityId, activity]);
 
   const tabErrors = {
     hasAboutActivityErrors: !!getFieldState(`${name}.name`).error,
@@ -29,7 +37,7 @@ export const BuilderActivity = () => {
     <StyledBody sx={{ position: 'relative' }}>
       <StyledDirectoryUpButton
         variant="text"
-        onClick={() => navigate(generatePath(page.builderAppletActivities, { appletId }))}
+        onClick={navigateToActivities}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
       >
         {t('activities')}

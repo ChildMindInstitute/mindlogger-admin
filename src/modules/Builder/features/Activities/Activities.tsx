@@ -7,7 +7,7 @@ import { Modal } from 'shared/components';
 import { StyledTitleMedium, StyledFlexColumn, theme, StyledModalWrapper } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 
@@ -17,7 +17,7 @@ import { getActions } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch, getFieldState } = useFormContext();
+  const { control, watch, getFieldState, setValue } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
@@ -33,6 +33,7 @@ export const Activities = () => {
   });
 
   const activities = watch('activities');
+  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
 
   const errors = activities?.reduce(
     (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
@@ -65,6 +66,23 @@ export const Activities = () => {
     navigateToActivity(newActivity.key);
   };
 
+  const handleActivityRemove = (index: number, activityKey: string) => {
+    const newActivityFlows = activityFlows.reduce(
+      (acc: AppletFormValues['activityFlows'], flow) => {
+        const items = flow.items?.filter((item) => item.activityKey !== activityKey);
+        if (items && items.length > 0) {
+          acc.push({ ...flow, items });
+        }
+
+        return acc;
+      },
+      [],
+    );
+
+    removeActivity(index);
+    setValue('activityFlows', newActivityFlows);
+  };
+
   return (
     <BuilderContainer
       title={t('activities')}
@@ -73,47 +91,47 @@ export const Activities = () => {
     >
       <StyledFlexColumn>
         {activities?.length ? (
-          activities.map((item: ActivityFormValues, index: number) => {
-            const handleEdit = () => navigateToActivity(item.key ?? item.id);
-            //TODO: check if dependent activity flow is required to remove
-            const handleRemove = () => removeActivity(index);
+          activities.map((activity: ActivityFormValues, index: number) => {
+            const activityKey = activity.key ?? activity.id ?? '';
+            const handleEdit = () => navigateToActivity(activityKey);
+
             //TODO: check if some items properties in duplicated activity are needed to be changed
             const handleDuplicate = () => {
-              const newActivity = getNewActivity(item);
+              const newActivity = getNewActivity(activity);
 
               insertActivity(index + 1, newActivity);
 
               navigateToActivity(newActivity.key);
             };
             const handleVisibilityChange = () =>
-              updateActivity(index, { ...item, isHidden: !item.isHidden });
+              updateActivity(index, { ...activity, isHidden: !activity.isHidden });
 
-            const activityName = item.name;
+            const activityName = activity.name;
             const hasError = !!errors[`activities[${index}]`];
 
             return (
-              <Fragment key={`activity-${item.key ?? item.id}`}>
+              <Fragment key={`activity-${activityKey}`}>
                 <Item
-                  {...item}
-                  img={item.image}
-                  isInactive={item.isHidden}
-                  hasStaticActions={item.isHidden}
+                  {...activity}
+                  img={activity.image}
+                  isInactive={activity.isHidden}
+                  hasStaticActions={activity.isHidden}
                   getActions={() =>
                     getActions({
-                      key: item.key ?? item.id ?? '',
-                      isActivityHidden: item.isHidden,
+                      key: activityKey,
+                      isActivityHidden: activity.isHidden,
                       onEdit: handleEdit,
                       onDuplicate: handleDuplicate,
-                      onRemove: () => setActivityToDelete(item.key || item.id || ''),
+                      onRemove: () => setActivityToDelete(activityKey),
                       onVisibilityChange: handleVisibilityChange,
                     })
                   }
                   hasError={hasError}
                 />
                 <Modal
-                  open={activityToDelete === (item.key || item.id)}
+                  open={activityToDelete === activityKey}
                   onClose={handleHideModal}
-                  onSubmit={handleRemove}
+                  onSubmit={() => handleActivityRemove(index, activityKey)}
                   onSecondBtnSubmit={handleHideModal}
                   title={t('deleteActivity')}
                   buttonText={t('delete')}

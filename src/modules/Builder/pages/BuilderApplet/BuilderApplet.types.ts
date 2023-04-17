@@ -34,13 +34,20 @@ export type ActivityFormValues = {
   items: ItemFormValues[];
 };
 
+export type ActivityFlowItem = {
+  id?: string;
+  key?: string;
+  activityKey: string;
+};
+
 export type ActivityFlowFormValues = {
   id?: string;
+  key?: string;
   name: string;
   description: string;
   isSingleReport?: boolean;
   hideBadge?: boolean;
-  items?: { activityKey: string }[];
+  items?: ActivityFlowItem[];
   isHidden?: boolean;
 };
 

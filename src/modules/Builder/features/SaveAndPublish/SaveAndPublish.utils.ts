@@ -14,11 +14,10 @@ export const removeAppletExtraFields = () => ({
   version: undefined,
 });
 
-export const removeActivityExtraFields = () => ({ order: undefined, id: undefined });
+export const removeActivityExtraFields = () => ({ order: undefined });
 
 export const removeItemExtraFields = (responseType?: ItemResponseType) => ({
-  id: undefined,
-  isHidden: undefined, //TODO: remove after backend fixes
+  id: undefined, //TODO: remove here to send id on PUT and replace id on key on item creation
   paletteName: undefined, //TODO: remove after backend addings
   settings: undefined,
   alerts: undefined, //TODO: remove after backend addings

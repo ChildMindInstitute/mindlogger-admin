@@ -307,6 +307,7 @@
   "myWorkspace": "Mon espace de travail",
   "sharedWorkspaces": "Espaces de travail partagés",
   "noSharedWorkspaces": "Aucun espace de travail partagé",
+  "itemIsRequired": "Au moins 1 élément est requis.",
   "appletLibrary": "Applet library",
   "appletImageDescription": "Cette image est affichée à côté du nom de l'applet dans le panneau d'administration et dans l'interface du répondant.",
   "appletWatermarkDescription": "Cette image est affichée dans le coin de chaque écran d'applet dans l'interface du répondant.",
@@ -606,7 +607,8 @@
   "newActivityName": "Nouvelle activité",
   "newItemName": "Nouvel article",
   "validationMessages": {
-    "isRequired": "{{- field }} est requis"
+    "isRequired": "{{- field }} est requis",
+    "alphanumeric": "{{- field }} ne doit contenir que des caractères alphanumériques ou des traits de soulignement"
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",
@@ -631,6 +633,8 @@
   "flankerItemTask": "Tâche d'élément dérivé",
   "abTestItemTask": "Tâche d'élément de test AB",
   "unsupportedResponseItem": "Ce type de données ne peut pas être affiché sur cette page",
+  "deleteItem": "Effacer l'article",
+  "deleteItemDescription": "Êtes-vous sûr de vouloir supprimer l'élément <1>{{ itemName }}</1>?",
   "showMore": "Afficher plus...",
   "showLess": "Afficher moins...",
   "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants"

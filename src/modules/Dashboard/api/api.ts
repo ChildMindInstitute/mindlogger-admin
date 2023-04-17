@@ -24,6 +24,8 @@ import {
   GetAppletsParams,
   CreateEventType,
   OwnerId,
+  Answers,
+  Answer,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -346,3 +348,15 @@ export const getUsersDataApi = (
     },
     signal,
   });
+
+export const getAnswersApi = ({ id, respondentId, createdDate }: Answers, signal?: AbortSignal) =>
+  authApiClient.get(`/answers/applet/${id}/activities`, {
+    params: {
+      respondentId,
+      createdDate,
+    },
+    signal,
+  });
+
+export const getAnswerApi = ({ appletId, answerId }: Answer, signal?: AbortSignal) =>
+  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
