@@ -5,7 +5,7 @@ import { useAppSelector } from 'redux/store';
 import * as thunk from './Users.thunk';
 import { state as initialState } from './Users.state';
 import { extraReducers } from './Users.reducer';
-import { UsersSchema } from './Users.schema';
+import { Respondent, UsersSchema } from './Users.schema';
 
 export * from './Users.schema';
 
@@ -34,6 +34,14 @@ export const users = {
           respondents: { data },
         },
       }) => data,
+    ),
+  useRespondent: (id: string): Respondent | undefined =>
+    useAppSelector(
+      ({
+        users: {
+          respondents: { data },
+        },
+      }) => data?.result.find((respondent: Respondent) => respondent.id === id),
     ),
   useRespondentsMetaStatus: (): UsersSchema['respondents']['status'] =>
     useAppSelector(

@@ -1,10 +1,15 @@
-import { DefaultTabs as Tabs } from 'shared/components';
-import { StyledBody } from 'shared/styles';
+import { LinkedTabs } from 'shared/components';
+import { useBreadcrumbs } from 'shared/hooks';
+import { StyledBody } from 'shared/styles/styledComponents';
 
 import { dashboardTabs } from './Main.const';
 
-export const Main = () => (
-  <StyledBody>
-    <Tabs tabs={dashboardTabs} />
-  </StyledBody>
-);
+export const Main = () => {
+  useBreadcrumbs();
+
+  return (
+    <StyledBody>
+      <LinkedTabs tabs={dashboardTabs} />
+    </StyledBody>
+  );
+};

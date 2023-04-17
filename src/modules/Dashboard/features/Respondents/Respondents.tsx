@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE } from 'shared/components';
-import { users, folders, workspaces } from 'redux/modules';
+import { users, workspaces, applet, folders } from 'redux/modules';
 import { useTimeAgo, useBreadcrumbs, useTable, useAsync } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { updatePinApi } from 'api';
@@ -41,6 +41,8 @@ export const Respondents = () => {
 
   const respondentsData = users.useRespondentsData();
   const appletsData = folders.useFlattenFoldersApplets();
+
+  const { result: appletData } = applet.useAppletData() ?? {};
   const { ownerId } = workspaces.useData() || {};
 
   const { getWorkspaceRespondents } = users.thunk;
@@ -64,6 +66,8 @@ export const Respondents = () => {
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
   const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
+
+  useBreadcrumbs();
 
   const actions = {
     scheduleSetupAction: (index: number) => {
@@ -164,7 +168,25 @@ export const Respondents = () => {
   };
 
   useEffect(() => {
+    // TODO: when api for respondents applets will be ready - remove from now
+    if (chosenRespondentsItems && appletData && id) {
+      const { nickname: nickName, secretId: secretUserId, id: userId } = chosenRespondentsItems;
+      const { displayName: appletName, id } = appletData;
+      setChosenAppletData({
+        appletId: id as string,
+        appletName,
+        secretUserId,
+        hasIndividualSchedule: false,
+        userId,
+        nickName,
+      });
+
+      return;
+    }
+    // TODO: when api for respondents applets will be ready - remove till now
+
     const keys = chosenRespondentsItems && Object.keys(chosenRespondentsItems);
+
     if (keys && keys.length === 1) {
       const appletId = keys[0];
       const { appletName, secretUserId, hasIndividualSchedule, userId, nickName } =
