@@ -13,6 +13,7 @@ import {
   StyledActionButton,
 } from './Item.styles';
 import { ItemProps } from './Item.types';
+import { getEntityKey } from '../../ActivityItems.utils';
 
 export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }: ItemProps) => {
   const { setValue, watch, getFieldState } = useFormContext();
@@ -26,10 +27,10 @@ export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }
 
   return (
     <StyledItem
-      isActive={activeItemId === (item.id ?? item.key)}
+      isActive={activeItemId === getEntityKey(item)}
       hasError={invalid}
       hidden={hidden}
-      onClick={() => onSetActiveItem(item.id ?? item.key ?? '')}
+      onClick={() => onSetActiveItem(getEntityKey(item) ?? '')}
     >
       <StyledFlexTopCenter {...hiddenProps}>
         {item.responseType ? itemsTypeIcons[item.responseType] : ''}
@@ -41,7 +42,7 @@ export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }
       <div className="actions">
         <Actions
           items={getActions({ onRemoveItem, onChangeVisibility })}
-          context={item.id ?? item.key}
+          context={getEntityKey(item)}
           visibleByDefault
         />
       </div>
