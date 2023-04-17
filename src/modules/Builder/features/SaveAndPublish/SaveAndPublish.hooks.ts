@@ -56,7 +56,7 @@ export const useAppletData = () => {
           ...(id && { id }),
           question: getDictionaryObject(item.question),
           responseValues: mapItemResponseValues(item.responseType, item.responseValues),
-          ...removeItemExtraFields(item.responseType),
+          ...removeItemExtraFields(),
         })),
         ...removeActivityExtraFields(),
       })),
