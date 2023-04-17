@@ -572,6 +572,8 @@
   "feedback": "Commentaires",
   "notes": "Notes",
   "assessment": "Évaluation",
+  "submitAssessment": "Soumettre l'évaluation",
+  "submitAssessmentDescription": "Êtes-vous sûr de vouloir soumettre l'évaluation ? Seule la dernière version sera disponible dans l'onglet Révisé.",
   "reviewed": "Examiné",
   "configureServer": "Veuillez configurer le serveur de rapports pour télécharger le rapport.",
   "moreFilters": "Plus de filtres",

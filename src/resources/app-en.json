@@ -692,6 +692,8 @@
   "feedback": "Feedback",
   "notes": "Notes",
   "assessment": "Assessment",
+  "submitAssessment": "Submit Assessment",
+  "submitAssessmentDescription": "Are you sure you want to submit assessment? Only the latest version will be available on the Reviewed tab.",
   "reviewed": "Reviewed",
   "configureServer": "Please configure the report server to download the report.",
   "moreFilters": "More Filters",

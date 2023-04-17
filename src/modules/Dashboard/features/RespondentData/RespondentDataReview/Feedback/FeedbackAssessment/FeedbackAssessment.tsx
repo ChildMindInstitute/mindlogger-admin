@@ -6,6 +6,7 @@ import { Item } from 'shared/state';
 import { assessmentActivityItems } from './mock';
 import { ActivityCardItemList } from './ActivityCardItemList';
 import { ActivityItemAnswers } from './FeedbackAssessment.types';
+import { SubmitAssessmentPopup } from './SubmitAssessmentPopup';
 
 const defaultValues = assessmentActivityItems.map((item) => ({
   activityItemId: item.id,
@@ -22,6 +23,7 @@ export const FeedbackAssessment = () => {
 
   const [step, setStep] = useState(0);
   const [items, setItems] = useState<Item[]>([]);
+  const [submitAssessmentPopupVisible, setSubmitAssessmentPopupVisible] = useState(false);
 
   const toNextStep = () => {
     setStep(step + 1);
@@ -39,16 +41,24 @@ export const FeedbackAssessment = () => {
   }, [step]);
 
   return (
-    <FormProvider {...methods}>
-      <ActivityCardItemList
-        step={step}
-        items={items}
-        isBackVisible={isBackVisible}
-        isSubmitVisible={isSubmitVisible}
-        toNextStep={toNextStep}
-        toPrevStep={toPrevStep}
-        onSubmit={() => console.log(methods.getValues())}
-      />
-    </FormProvider>
+    <>
+      <FormProvider {...methods}>
+        <ActivityCardItemList
+          step={step}
+          items={items}
+          isBackVisible={isBackVisible}
+          isSubmitVisible={isSubmitVisible}
+          toNextStep={toNextStep}
+          toPrevStep={toPrevStep}
+          onSubmit={() => setSubmitAssessmentPopupVisible(true)}
+        />
+        {submitAssessmentPopupVisible && (
+          <SubmitAssessmentPopup
+            popupVisible={submitAssessmentPopupVisible}
+            setPopupVisible={setSubmitAssessmentPopupVisible}
+          />
+        )}
+      </FormProvider>
+    </>
   );
 };
