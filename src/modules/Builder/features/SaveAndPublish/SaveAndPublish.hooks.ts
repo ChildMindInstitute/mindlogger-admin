@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
@@ -35,8 +35,7 @@ export const getAppletInfoFromStorage = () => {
 
 export const useAppletData = () => {
   const isNewApplet = useCheckIfNewApplet();
-  const { getValues } = useFormContext();
-  const appletInfo = getValues() as SingleApplet;
+  const appletInfo = useWatch() as SingleApplet;
 
   return (appletPassword?: EnterAppletPasswordForm['appletPassword']): SingleApplet => {
     const appletDescription = getDictionaryObject(appletInfo.description);
