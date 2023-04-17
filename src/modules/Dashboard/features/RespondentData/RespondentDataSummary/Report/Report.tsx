@@ -10,6 +10,7 @@ import { StyledHeadlineLarge, theme } from 'shared/styles';
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
 import { StyledTextBtn } from '../../RespondentData.styles';
+import { ReportTable } from './ReportTable';
 
 export const Report = ({ activity }: { activity: Activity }) => {
   const { t } = useTranslation();
@@ -30,6 +31,7 @@ export const Report = ({ activity }: { activity: Activity }) => {
       </StyledHeader>
       <Box sx={{ margin: theme.spacing(4.8, 6.4, 4.8) }}>
         <ReportFilters />
+        <ReportTable />
       </Box>
     </StyledReport>
   );

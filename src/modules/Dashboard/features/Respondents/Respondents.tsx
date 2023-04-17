@@ -32,6 +32,13 @@ export const Respondents = () => {
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
 
+  useBreadcrumbs([
+    {
+      icon: 'respondent-outlined',
+      label: t('respondents'),
+    },
+  ]);
+
   const respondentsData = users.useRespondentsData();
   const appletsData = folders.useFlattenFoldersApplets();
 

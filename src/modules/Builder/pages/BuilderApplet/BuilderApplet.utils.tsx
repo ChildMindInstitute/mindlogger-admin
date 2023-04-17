@@ -28,6 +28,7 @@ export const getNewActivity = (activity?: ActivityFormValues) => ({
   isReviewable: false,
   responseIsEditable: false,
   ...activity,
+  id: undefined,
   key: uuidv4(),
 });
 
@@ -43,7 +44,7 @@ export const getNewApplet = () => ({
 });
 
 export const getNewActivityItem = () => ({
-  id: uuidv4(),
+  key: uuidv4(),
   responseType: '',
   name: '',
   question: '',

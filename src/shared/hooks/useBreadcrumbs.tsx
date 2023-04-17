@@ -6,7 +6,11 @@ import uniqueId from 'lodash.uniqueid';
 import { auth, Breadcrumb, breadcrumbs, User, applet, users } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import { checkIfAppletActivityFlowUrlPassed, checkIfAppletUrlPassed } from 'shared/utils';
+import {
+  checkIfAppletActivityFlowUrlPassed,
+  checkIfAppletUrlPassed,
+  getAppletData,
+} from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { getRespondentLabel } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
@@ -15,6 +19,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
+
   const authData = auth.useData();
   const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
   const respondentLabel = getRespondentLabel(secretId, nickname);
@@ -120,8 +125,8 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       );
     }
 
-    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])].map((crumbs) => ({
-      ...crumbs,
+    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])].map((crumb) => ({
+      ...crumb,
       key: uniqueId(),
     }));
     dispatch(breadcrumbs.actions.setBreadcrumbs(updatedBreadcrumbs));

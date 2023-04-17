@@ -773,5 +773,7 @@
   "versions": "Versions",
   "noVersions": "No versions yet.",
   "noRespondentIdentifier": "No respondent identifier yet.",
-  "filterByIdentifier": "Filter by identifier"
+  "filterByIdentifier": "Filter by identifier",
+  "time": "Time",
+  "response": "Response"
 }

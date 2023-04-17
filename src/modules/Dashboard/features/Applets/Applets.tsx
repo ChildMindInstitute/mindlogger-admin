@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import { useAppDispatch } from 'redux/store';
 import { applets, auth, FolderApplet, folders } from 'redux/modules';
 import { ButtonWithMenu, Search, Svg } from 'shared/components';
-import { useTable } from 'shared/hooks';
+import { useBreadcrumbs, useTable } from 'shared/hooks';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
@@ -17,6 +17,13 @@ export const Applets = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  useBreadcrumbs([
+    {
+      icon: 'applet-outlined',
+      label: t('applets'),
+    },
+  ]);
 
   const authData = auth.useData();
   const appletsData = applets.useData();

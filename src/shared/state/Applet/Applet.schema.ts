@@ -124,6 +124,7 @@ export type ItemAlert = {
 
 export type Item = {
   id?: string;
+  key?: string;
   name: string;
   question: string | Record<string, string>;
   config: Config;

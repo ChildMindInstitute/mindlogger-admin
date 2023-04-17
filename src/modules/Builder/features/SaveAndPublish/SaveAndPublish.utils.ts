@@ -16,12 +16,19 @@ export const removeAppletExtraFields = () => ({
 
 export const removeActivityExtraFields = () => ({ order: undefined });
 
-export const removeItemExtraFields = (responseType?: ItemResponseType) => ({
-  id: undefined, //TODO: remove here to send id on PUT and replace id on key on item creation
+export const removeItemExtraFields = (responseType: ItemResponseType) => ({
+  key: undefined,
   paletteName: undefined, //TODO: remove after backend addings
   settings: undefined,
   alerts: undefined, //TODO: remove after backend addings
   ...(responseType === ItemResponseType.Text && { responseValues: undefined }),
+});
+
+export const removeResponseValuesExtraFields = (responseType: ItemResponseType) => ({
+  ...(responseType !== ItemResponseType.SingleSelection &&
+    responseType !== ItemResponseType.MultipleSelection && {
+      options: undefined,
+    }),
 });
 
 const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;

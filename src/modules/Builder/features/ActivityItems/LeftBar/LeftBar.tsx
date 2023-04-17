@@ -10,6 +10,7 @@ import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderA
 import { StyledBar, StyledHeader, StyledContent, StyledBtnWrapper } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
 import { Item } from './Item';
+import { getEntityKey } from '../ActivityItems.utils';
 
 export const LeftBar = ({
   items,
@@ -33,7 +34,7 @@ export const LeftBar = ({
             <Item
               item={item}
               name={`${name}.items[${index}]`}
-              key={`item-${item.id}`}
+              key={`item-${getEntityKey(item)}`}
               activeItemId={activeItemId}
               onSetActiveItem={onSetActiveItem}
               onRemoveItem={onRemoveItem}
