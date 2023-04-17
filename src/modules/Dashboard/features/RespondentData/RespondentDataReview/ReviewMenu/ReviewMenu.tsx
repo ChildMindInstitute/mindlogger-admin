@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
+import { users } from 'redux/modules';
 import { getAnswersApi } from 'api';
 import { DatePicker, DatePickerUiType } from 'shared/components';
 import { useAsync } from 'shared/hooks';
@@ -24,8 +25,11 @@ export const ReviewMenu = ({
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
+  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
+  const respondentLabel = secretId ? `${t('user')}: ${secretId} (${nickname})` : '';
   const { control, watch } = useForm({ defaultValues: { date: new Date() } });
   const date = watch('date');
+
   const [activities, setActivities] = useState<Activity[]>([]);
 
   const { execute } = useAsync(
@@ -44,7 +48,7 @@ export const ReviewMenu = ({
       <StyledHeader>
         <StyledHeadlineLarge>{t('review')}</StyledHeadlineLarge>
         <StyledLabelLarge sx={{ marginBottom: theme.spacing(4) }}>
-          User: 112233 (John Snow)
+          {respondentLabel}
         </StyledLabelLarge>
         <DatePicker
           name="date"

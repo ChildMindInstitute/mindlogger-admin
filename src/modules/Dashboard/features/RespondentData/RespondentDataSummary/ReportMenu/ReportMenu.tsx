@@ -1,5 +1,7 @@
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { users } from 'redux/modules';
 
 import { theme, StyledHeadlineLarge, StyledLabelLarge, StyledBodyLarge } from 'shared/styles';
 
@@ -13,12 +15,15 @@ export const ReportMenu = ({
   setSelectedActivity,
 }: ReportMenuProps) => {
   const { t } = useTranslation();
+  const { respondentId } = useParams();
+  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
+  const respondentLabel = secretId ? `${t('user')}: ${secretId} (${nickname})` : '';
 
   return (
     <StyledMenu>
       <Box sx={{ margin: theme.spacing(0, 2.4, 3.2) }}>
         <StyledHeadlineLarge>{t('activities')}</StyledHeadlineLarge>
-        <StyledLabelLarge>User: 112233 (John Snow)</StyledLabelLarge>
+        <StyledLabelLarge>{respondentLabel}</StyledLabelLarge>
       </Box>
       {activities.map((activity) => (
         <StyledActivity

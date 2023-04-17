@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { useHeaderSticky } from 'shared/hooks';
+import { useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
 import { StyledContainer, StyledHeadlineLarge } from 'shared/styles';
 
 import { StyledTextBtn } from '../RespondentData.styles';
@@ -19,6 +19,12 @@ export const RespondentDataReview = () => {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
+  useBreadcrumbs([
+    {
+      icon: 'checkbox-outlined',
+      label: t('review'),
+    },
+  ]);
 
   return (
     <StyledContainer sx={{ position: 'relative' }}>

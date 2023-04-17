@@ -1,11 +1,13 @@
 import { RefObject, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features/Applet';
 
+import { page } from 'resources';
 import { ViewDataPopupProps } from './ViewDataPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 
@@ -17,6 +19,8 @@ export const ViewDataPopup = ({
   setChosenAppletData,
 }: ViewDataPopupProps) => {
   const { t } = useTranslation('app');
+  const { appletId } = useParams();
+  const navigate = useNavigate();
   const appletPasswordRef = useRef() as RefObject<AppletPasswordRef>;
 
   const submitForm = () => {
@@ -25,11 +29,20 @@ export const ViewDataPopup = ({
     }
   };
 
-  const showSecondScreen = !!chosenAppletData;
+  const showSecondScreen = !!chosenAppletData || appletId; // TODO: when api for respondents applets will be ready - remove || appletId
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
     setPopupVisible(false);
+  };
+
+  const handleSubmitCallback = () => {
+    if (chosenAppletData) {
+      const { appletId, userId } = chosenAppletData;
+      navigate(generatePath(page.appletRespondentData, { appletId, respondentId: userId }));
+    }
+
+    handlePopupClose();
   };
 
   return (
@@ -44,8 +57,9 @@ export const ViewDataPopup = ({
         {showSecondScreen ? (
           <EnterAppletPassword
             ref={appletPasswordRef}
-            appletId={chosenAppletData.appletId}
-            submitCallback={() => handlePopupClose()}
+            appletId={chosenAppletData?.appletId || appletId} // TODO: when api for respondents applets will be ready - remove || appletId
+            submitCallback={handleSubmitCallback}
+            isApplet
           />
         ) : (
           <>
