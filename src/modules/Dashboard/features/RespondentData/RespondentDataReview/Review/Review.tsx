@@ -7,6 +7,7 @@ import { getAnswerApi } from 'api';
 import { Svg } from 'shared/components';
 import { StyledTitleLarge, StyledTitleLargish, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
+import { getDictionaryText } from 'shared/utils';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
 import { getItemLabel, isItemUnsupported } from '../../RespondentData.utils';
@@ -39,7 +40,7 @@ export const Review = ({ answerId }: ReviewProps) => {
           {activityItemAnswers.map(({ activityItem, answer }) => (
             <Box sx={{ mb: 4.8 }} key={activityItem.id}>
               <StyledTitleLargish>{t(getItemLabel(activityItem.responseType))}</StyledTitleLargish>
-              <CollapsedMdText text={activityItem.question as string} maxHeight={120} />
+              <CollapsedMdText text={getDictionaryText(activityItem.question)} maxHeight={120} />
               {isItemUnsupported(activityItem.responseType) ? (
                 <UnsupportedItemResponse itemType={activityItem.responseType} />
               ) : (
