@@ -6,11 +6,7 @@ import uniqueId from 'lodash.uniqueid';
 import { auth, Breadcrumb, breadcrumbs, User, applet, users } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import {
-  checkIfAppletActivityFlowUrlPassed,
-  checkIfAppletUrlPassed,
-  getAppletData,
-} from 'shared/utils';
+import { checkIfAppletActivityFlowUrlPassed, checkIfAppletUrlPassed } from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { getRespondentLabel } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
