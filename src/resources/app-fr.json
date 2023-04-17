@@ -31,6 +31,7 @@
   "termsOfService": "conditions d'utilisation",
   "backToLogin": "Retour connexion",
   "submit": "Soumettre",
+  "next": "Suivant",
   "advancedSettings": "Réglages avancés",
   "serverThatHoldAppletConfiguration": "Serveur qui hébergera la configuration de votre Applet et toutes les données qui seront collectées",
   "serverUrl": "Adresse IP du serveur de chiffrement",
