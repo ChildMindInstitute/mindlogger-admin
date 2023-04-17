@@ -51,7 +51,7 @@ export const ItemSchema = () => {
         if (responseType === ItemResponseType.Slider)
           return schema.shape(ResponseValuesRowsSchema());
 
-        return schema;
+        return schema.nullable();
       }),
       config: yup.object({}),
     })
