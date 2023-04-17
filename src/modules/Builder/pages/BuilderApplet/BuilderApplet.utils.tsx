@@ -1,5 +1,6 @@
 import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { ColorResult } from 'react-color';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
@@ -69,7 +70,15 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection:
       return {
-        options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options ?? [],
+        options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
+          (option) => ({
+            ...option,
+            color: option.color ? ({ hex: option.color } as ColorResult) : undefined,
+          }),
+        ),
+        paletteName:
+          (item.responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ??
+          undefined,
       };
     case ItemResponseType.Slider:
       return item.responseValues;
@@ -89,7 +98,6 @@ const getActivityItems = (items: Item[]) =>
         responseType: item.responseType,
         responseValues: getActivityItemResponseValues(item),
         config: item.config,
-        paletteName: item.paletteName,
         alerts: item.alerts ?? [],
       }))
     : [];

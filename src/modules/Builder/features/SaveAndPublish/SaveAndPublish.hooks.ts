@@ -21,7 +21,7 @@ import {
   removeItemExtraFields,
   removeAppletExtraFields,
   removeActivityExtraFields,
-  removeResponseValuesExtraFields,
+  mapItemResponseValues,
   usePasswordFromStorage,
 } from './SaveAndPublish.utils';
 
@@ -55,12 +55,7 @@ export const useAppletData = () => {
           ...item,
           ...(id && { id }),
           question: getDictionaryObject(item.question),
-          responseValues: item.responseValues
-            ? {
-                ...item.responseValues,
-                ...removeResponseValuesExtraFields(item.responseType),
-              }
-            : null,
+          responseValues: mapItemResponseValues(item.responseType, item.responseValues),
           ...removeItemExtraFields(item.responseType),
         })),
         ...removeActivityExtraFields(),

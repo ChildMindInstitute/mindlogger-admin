@@ -5,16 +5,10 @@ import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
 
-import {
-  ItemConfigurationSettings,
-  SelectionRows,
-  SliderOption,
-  SelectionOption,
-} from './ItemConfiguration.types';
+import { SliderOption } from './ItemConfiguration.types';
 import {
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
-  DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
   DEFAULT_SELECTION_ROWS_SCORE,
   DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
   SELECTION_OPTIONS_COLOR_PALETTE,
@@ -55,64 +49,8 @@ export const getEmptySelectionItem = (scoresQuantity: number) => ({
   scores: createArray(scoresQuantity, () => DEFAULT_SELECTION_ROWS_SCORE),
 });
 
-export const getEmptySelectionRows = (type: SelectionRows['type']): SelectionRows => ({
-  type,
-  items: [getEmptySelectionItem(1)],
-  options: [{ ...DEFAULT_EMPTY_SELECTION_ROWS_OPTION, id: uniqueId('selection-option-') }],
-});
-
 export const getPaletteColor = (paletteName: string, index: number) => {
   const colors = SELECTION_OPTIONS_COLOR_PALETTE.find(({ name }) => name === paletteName)?.colors;
 
   return colors?.[index % colors?.length];
 };
-
-export const getNumberRequiredValidationError = () => t('numberValueIsRequired');
-
-export const mapSettingsToResponse = (
-  itemType: ItemResponseType | '',
-  settings: ItemConfigurationSettings[],
-  extraFields?: Record<string, string | number>,
-) => {
-  if (!itemType) return {};
-
-  const hasSetting = (settingName: ItemConfigurationSettings) => settings?.includes(settingName);
-
-  if (
-    itemType === ItemResponseType.SingleSelection ||
-    itemType === ItemResponseType.MultipleSelection
-  )
-    return {
-      removeBackButton: hasSetting(ItemConfigurationSettings.IsGoBackRemoved),
-      skippableItem: hasSetting(ItemConfigurationSettings.IsSkippable),
-      randomizeOptions: hasSetting(ItemConfigurationSettings.HasRandomize),
-      addScores: hasSetting(ItemConfigurationSettings.HasScores),
-      setAlerts: hasSetting(ItemConfigurationSettings.HasAlerts),
-      addTooltip: hasSetting(ItemConfigurationSettings.HasTooltips),
-      setPalette: hasSetting(ItemConfigurationSettings.HasColorPalette),
-      additionalResponseOption: {
-        textInputOption: hasSetting(ItemConfigurationSettings.HasTextInput),
-        textInputRequired: hasSetting(ItemConfigurationSettings.IsTextInputRequired),
-      },
-    };
-
-  if (itemType === ItemResponseType.Text)
-    return {
-      removeBackButton: hasSetting(ItemConfigurationSettings.IsGoBackRemoved),
-      skippableItem: hasSetting(ItemConfigurationSettings.IsSkippable),
-      maxResponseLength: extraFields?.maxResponseLength,
-      correctAnswer: extraFields?.correctAnswer,
-      correctAnswerRequired: hasSetting(ItemConfigurationSettings.IsCorrectAnswerRequired),
-      numericalResponseRequired: hasSetting(ItemConfigurationSettings.IsNumericalRequired),
-      responseDataIdentifier: hasSetting(ItemConfigurationSettings.HasResponseDataIdentifier),
-      responseRequired: hasSetting(ItemConfigurationSettings.IsResponseRequired),
-    };
-
-  return {};
-};
-
-export const mapSelectionOptionsToResponse = (options?: SelectionOption[]) =>
-  options?.map((option) => ({
-    ...option,
-    color: option?.color?.hex,
-  }));

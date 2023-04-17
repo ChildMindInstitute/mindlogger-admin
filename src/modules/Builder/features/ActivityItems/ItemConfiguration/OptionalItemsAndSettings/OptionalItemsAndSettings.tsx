@@ -30,15 +30,20 @@ import { useActiveItem, useSettingsSetup } from './OptionalItemsAndSettings.hook
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ name }, ref) => {
     const { t } = useTranslation('app');
-    const [showColorPalette, setShowColorPalette] = useState(false);
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
 
     const { control, setValue } = useFormContext();
     const [settings, responseType, palette] = useWatch({
       control,
-      name: [`${name}.config`, `${name}.responseType`, `${name}.paletteName`],
+      name: [`${name}.config`, `${name}.responseType`, `${name}.responseValues.paletteName`],
     });
 
+    const [showColorPalette, setShowColorPalette] = useState(!!palette);
+
+    const handleChangeColorPaletteVisibility = (visibility: boolean) => {
+      setShowColorPalette(visibility);
+      setValue(`${name}.responseValues.paletteName`, undefined);
+    };
     // const {
     //   fields: alerts,
     //   append: appendAlert,
@@ -160,7 +165,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       handleAddOption,
       // removeAlert: () => {}, //TODO: remove after backend ready
       // handleAddAlert: () => {}, //TODO: remove after backend ready
-      setShowColorPalette,
+      setShowColorPalette: handleChangeColorPaletteVisibility,
     });
 
     return (
@@ -173,7 +178,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
               <StyledTitleLarge>{t('responseOptions')}</StyledTitleLarge>
               {hasColorPalette && !showColorPalette && (
                 <Button
-                  onClick={() => setShowColorPalette(true)}
+                  onClick={() => handleChangeColorPaletteVisibility(true)}
                   variant="outlined"
                   startIcon={<Svg id="paint-outline" width="20" height="20" />}
                 >
@@ -182,7 +187,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
               )}
             </StyledFlexTopCenter>
             {hasColorPalette && showColorPalette && (
-              <ColorPalette name={name} setShowColorPalette={setShowColorPalette} />
+              <ColorPalette name={name} setShowColorPalette={handleChangeColorPaletteVisibility} />
             )}
             <StyledOptionsWrapper>
               {options?.length

@@ -17,7 +17,7 @@ import { ColorPalettePickerProps } from './ColorPalettePicker.types';
 export const ColorPalettePicker = ({ name }: ColorPalettePickerProps) => {
   const { watch, control, getValues, setValue } = useFormContext();
 
-  const palette = watch(`${name}.paletteName`);
+  const palette = watch(`${name}.responseValues.paletteName`);
   const optionsName = `${name}.responseValues.options`;
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export const ColorPalettePicker = ({ name }: ColorPalettePickerProps) => {
       <RadioGroupController
         key={`palette-controller-${palette}`}
         control={control}
-        name={`${name}.paletteName`}
+        name={`${name}.responseValues.paletteName`}
         options={RADIO_GROUP_OPTIONS}
       />
       <StyledFlexTopCenter sx={{ gap: '1.2rem' }}>

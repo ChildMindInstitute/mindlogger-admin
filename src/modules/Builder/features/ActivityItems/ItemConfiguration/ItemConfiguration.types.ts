@@ -66,27 +66,6 @@ export type SelectionRows = {
   type: ItemResponseType.MultipleSelectionPerRow | ItemResponseType.SingleSelectionPerRow;
 };
 
-export type ItemConfigurationForm = {
-  itemsInputType: ItemResponseType | '';
-  name: string;
-  body: string;
-  settings: ItemConfigurationSettings[];
-  timer?: number;
-  options?: SelectionOption[];
-  paletteName?: string;
-  isTextInputOptionRequired?: boolean;
-  minNumber?: number;
-  maxNumber?: number;
-  alerts?: Alert[];
-  audioDuration?: number;
-  sliderOptions?: SliderOption[];
-  textResponseAnswer?: string;
-  textResponseMaxCharacters?: number;
-  selectionRows?: SelectionRows;
-  mediaTranscript?: string;
-  mediaFileResource?: string;
-};
-
 export type ItemsOption = {
   value: ItemResponseType;
   icon: JSX.Element;
