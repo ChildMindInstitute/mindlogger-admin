@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
 import { ItemResponseType } from 'shared/consts';
 
 export type OptionalItemsProps = {
@@ -20,5 +19,5 @@ export type SettingsSetupProps = {
   handleAddOption?: () => void;
   removeAlert?: () => void;
   handleAddAlert?: () => void;
-  setShowColorPalette?: Dispatch<SetStateAction<boolean>>;
+  setShowColorPalette?: (visibility: boolean) => void;
 };

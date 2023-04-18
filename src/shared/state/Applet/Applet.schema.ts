@@ -101,6 +101,7 @@ export type SingleAndMultipleSelectionOption = {
 };
 
 export type SingleAndMultipleSelectItemResponseValues = {
+  paletteName?: string;
   options: Array<SingleAndMultipleSelectionOption>;
 };
 
@@ -130,7 +131,6 @@ export type Item = {
   config: Config;
   responseType: ItemResponseType;
   responseValues: ResponseValues;
-  paletteName?: string;
   alerts?: ItemAlert[];
 };
 

@@ -52,7 +52,7 @@ export const SelectionOption = ({
     control,
     name: [`${name}.config`, `${name}.responseType`, `${optionName}`],
   });
-  const palette = watch(`${name}.paletteName`);
+  const palette = watch(`${name}.responseValues.paletteName`);
   const imageSrc = watch(`${optionName}.image`);
   const hasScoresChecked = get(settings, ItemConfigurationSettings.HasScores);
   const hasTooltipsChecked = get(settings, ItemConfigurationSettings.HasTooltips);
@@ -72,7 +72,7 @@ export const SelectionOption = ({
     const settings = getValues(`${name}.config`);
 
     if (get(settings, ItemConfigurationSettings.HasColorPalette)) {
-      setValue(`${name}.paletteName`, '');
+      setValue(`${name}.responseValues.paletteName`, undefined);
     }
   };
 
