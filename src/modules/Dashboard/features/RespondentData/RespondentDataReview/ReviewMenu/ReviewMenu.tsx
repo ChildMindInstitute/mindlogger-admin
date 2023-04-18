@@ -53,7 +53,6 @@ export const ReviewMenu = ({
         </StyledLabelLarge>
         <DatePicker
           name="date"
-          value={new Date()}
           control={control}
           uiType={DatePickerUiType.OneDate}
           label={t('reviewDate')}

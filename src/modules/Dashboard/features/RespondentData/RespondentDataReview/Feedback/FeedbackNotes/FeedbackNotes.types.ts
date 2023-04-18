@@ -1,6 +1,11 @@
+type FullName = {
+  firstName: string;
+  lastName: string;
+};
+
 export type FeedbackNote = {
   id: string;
-  author: string;
-  content: string;
-  date: Date;
+  user: FullName;
+  note: string;
+  createdAt: string;
 };
