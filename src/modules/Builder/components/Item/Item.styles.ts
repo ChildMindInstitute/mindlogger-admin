@@ -25,8 +25,8 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
     isDragging?: boolean;
   }) => {
     let bgColor = 'inherit';
-    if (uiType === ItemUiType.Flow && isDragging) {
-      bgColor = variables.palette.surface_variant_alfa8;
+    if (isDragging) {
+      bgColor = variables.palette.surface;
     }
     if (hasError) {
       bgColor = variables.palette.error_container;
@@ -45,13 +45,13 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       cursor: ${onClick ? 'pointer' : 'default'};
       background-color: ${bgColor};
       pointer-events: ${isDragging ? 'none' : 'auto'};
+      box-shadow: ${isDragging ? variables.boxShadow.light5 : 'inherit'};
     
       .item-name {
         transition: ${variables.transitions.fontWeight};
       }
     
       &:hover {
-        box-shadow: inherit; 
         background-color: ${
           uiType === ItemUiType.Flow || uiType === ItemUiType.Activity
             ? variables.palette.surface_variant_alfa8
