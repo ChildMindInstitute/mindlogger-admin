@@ -1,23 +1,21 @@
 import { Fragment, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 import { Box } from '@mui/material';
 
-import { Modal } from 'shared/components';
-import { StyledTitleMedium, StyledFlexColumn, theme, StyledModalWrapper } from 'shared/styles';
+import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
-import { ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
+import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 
-import { Item } from '../../components';
 import { ActivitiesHeader } from './ActivitiesHeader';
-import { getActions } from './Activities.const';
-import { getActivityKey } from './Activities.utils';
+import { getActions, getActivityKey } from './Activities.utils';
+import { DeleteActivityModal } from './DeleteActivityModal';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -65,8 +63,8 @@ export const Activities = () => {
         activityId,
       }),
     );
-  const handleHideModal = () => setActivityToDelete('');
-  const handleAddActivity = (index?: number) => {
+  const handleModalClose = () => setActivityToDelete('');
+  const handleActivityAdd = (index?: number) => {
     const newActivity = getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
@@ -130,7 +128,7 @@ export const Activities = () => {
     <BuilderContainer
       title={t('activities')}
       Header={ActivitiesHeader}
-      headerProps={{ onAddActivity: handleAddActivity }}
+      headerProps={{ onAddActivity: handleActivityAdd }}
     >
       <StyledFlexColumn>
         {activities?.length ? (
@@ -174,32 +172,17 @@ export const Activities = () => {
                                 isVisible={
                                   index >= 0 && index < activities.length - 1 && !isDragging
                                 }
-                                onInsert={() => handleAddActivity(index + 1)}
+                                onInsert={() => handleActivityAdd(index + 1)}
                               />
                             </Box>
                           )}
                         </Draggable>
-                        <Modal
-                          open={activityToDelete === activityKey}
-                          onClose={handleHideModal}
-                          onSubmit={() => handleActivityRemove(index, activityKey)}
-                          onSecondBtnSubmit={handleHideModal}
-                          title={t('deleteActivity')}
-                          buttonText={t('delete')}
-                          secondBtnText={t('cancel')}
-                          hasSecondBtn
-                          submitBtnColor="error"
-                        >
-                          <StyledModalWrapper>
-                            <Trans i18nKey="deleteActivityDescription">
-                              Are you sure you want to delete the Activity
-                              <strong>
-                                <>{{ activityName }}</>
-                              </strong>
-                              ?
-                            </Trans>
-                          </StyledModalWrapper>
-                        </Modal>
+                        <DeleteActivityModal
+                          activityName={activityName}
+                          isOpen={activityToDelete === activityKey}
+                          onModalClose={handleModalClose}
+                          onModalSubmit={() => handleActivityRemove(index, activityKey)}
+                        />
                       </Fragment>
                     );
                   })}

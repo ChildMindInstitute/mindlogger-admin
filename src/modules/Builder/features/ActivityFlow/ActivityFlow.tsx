@@ -15,7 +15,7 @@ import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderA
 import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
-import { getFlowsItemActions } from './ActivityFlow.utils';
+import { getActivityFlowKey, getFlowsItemActions } from './ActivityFlow.utils';
 import { ActivityFlowHeader } from './ActivityFlowHeader';
 
 export const ActivityFlow = () => {
@@ -141,7 +141,7 @@ export const ActivityFlow = () => {
             {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activityFlows.map((flow, index) => {
-                  const activityFlowKey = flow.id ?? (flow.key || '');
+                  const activityFlowKey = getActivityFlowKey(flow);
 
                   return (
                     <Draggable key={activityFlowKey} draggableId={activityFlowKey} index={index}>
