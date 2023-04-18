@@ -5,5 +5,7 @@ export type LeftBarProps = {
   activeItemId: string;
   onSetActiveItem: (id: string) => void;
   onAddItem: () => void;
+  onInsertItem: (index: number) => void;
+  onDuplicateItem: (index: number) => void;
   onRemoveItem: (id: string) => void;
 };

@@ -8,12 +8,14 @@ import { StyledTitleMedium, StyledFlexColumn, theme, StyledModalWrapper } from '
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ItemUiType, InsertItem } from 'modules/Builder/components';
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 
 import { Item } from '../../components';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions } from './Activities.const';
+import { getActivityKey } from './Activities.utils';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -21,6 +23,7 @@ export const Activities = () => {
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
+  const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
   const {
     append: appendActivity,
@@ -59,10 +62,10 @@ export const Activities = () => {
       }),
     );
   const handleHideModal = () => setActivityToDelete('');
-  const handleAddActivity = () => {
+  const handleAddActivity = (index?: number) => {
     const newActivity = getNewActivity();
 
-    appendActivity(newActivity);
+    typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
     navigateToActivity(newActivity.key);
   };
 
@@ -83,6 +86,36 @@ export const Activities = () => {
     setValue('activityFlows', newActivityFlows);
   };
 
+  const handleDuplicateActivity = (index: number) => {
+    const activityToDuplicate = activities[index];
+    setDuplicateIndexes((prevState) => {
+      const numberToInsert = (prevState[getActivityKey(activityToDuplicate)] || 0) + 1;
+
+      insertActivity(index + 1, {
+        ...getNewActivity(activityToDuplicate),
+        name: `${activityToDuplicate.name} (${numberToInsert})`,
+      });
+
+      return {
+        ...prevState,
+        [getActivityKey(activityToDuplicate)]: numberToInsert,
+      };
+    });
+  };
+
+  const handleEditActivity = (index: number) => {
+    const activityToEdit = activities[index];
+    navigateToActivity(getActivityKey(activityToEdit));
+  };
+
+  const handleActivityVisibityChange = (index: number) => {
+    const activityToChangeVisibility = activities[index];
+    updateActivity(index, {
+      ...activityToChangeVisibility,
+      isHidden: !activityToChangeVisibility.isHidden,
+    });
+  };
+
   return (
     <BuilderContainer
       title={t('activities')}
@@ -92,19 +125,7 @@ export const Activities = () => {
       <StyledFlexColumn>
         {activities?.length ? (
           activities.map((activity: ActivityFormValues, index: number) => {
-            const activityKey = activity.key ?? activity.id ?? '';
-            const handleEdit = () => navigateToActivity(activityKey);
-
-            //TODO: check if some items properties in duplicated activity are needed to be changed
-            const handleDuplicate = () => {
-              const newActivity = getNewActivity(activity);
-
-              insertActivity(index + 1, newActivity);
-
-              navigateToActivity(newActivity.key);
-            };
-            const handleVisibilityChange = () =>
-              updateActivity(index, { ...activity, isHidden: !activity.isHidden });
+            const activityKey = getActivityKey(activity);
 
             const activityName = activity.name;
             const hasError = !!errors[`activities[${index}]`];
@@ -116,17 +137,22 @@ export const Activities = () => {
                   img={activity.image}
                   isInactive={activity.isHidden}
                   hasStaticActions={activity.isHidden}
+                  uiType={ItemUiType.Activity}
                   getActions={() =>
                     getActions({
                       key: activityKey,
                       isActivityHidden: activity.isHidden,
-                      onEdit: handleEdit,
-                      onDuplicate: handleDuplicate,
+                      onEdit: () => handleEditActivity(index),
+                      onDuplicate: () => handleDuplicateActivity(index),
                       onRemove: () => setActivityToDelete(activityKey),
-                      onVisibilityChange: handleVisibilityChange,
+                      onVisibilityChange: () => handleActivityVisibityChange(index),
                     })
                   }
                   hasError={hasError}
+                />
+                <InsertItem
+                  isVisible={index >= 0 && index < activities.length - 1}
+                  onInsert={() => handleAddActivity(index + 1)}
                 />
                 <Modal
                   open={activityToDelete === activityKey}
