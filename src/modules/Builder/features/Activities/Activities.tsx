@@ -13,9 +13,9 @@ import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/comp
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 
+import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey } from './Activities.utils';
-import { DeleteActivityModal } from './DeleteActivityModal';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
