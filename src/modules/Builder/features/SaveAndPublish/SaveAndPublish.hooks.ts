@@ -36,9 +36,10 @@ export const getAppletInfoFromStorage = () => {
 export const useAppletData = () => {
   const isNewApplet = useCheckIfNewApplet();
   const { getValues } = useFormContext();
-  const appletInfo = getValues() as SingleApplet;
 
   return (appletPassword?: EnterAppletPasswordForm['appletPassword']): SingleApplet => {
+    const appletInfo = getValues() as SingleApplet;
+
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
 
