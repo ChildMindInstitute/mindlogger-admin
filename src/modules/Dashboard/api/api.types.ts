@@ -187,3 +187,9 @@ export type OwnerId = {
 export type Answers = { id: string; respondentId: string; createdDate: string };
 
 export type Answer = AppletId & { answerId: string };
+
+export type AppletSubmitDateList = AppletId & {
+  respondentId: string;
+  fromDate: string;
+  toDate: string;
+};
