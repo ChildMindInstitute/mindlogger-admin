@@ -140,43 +140,45 @@ export const ActivityFlow = () => {
           <DndDroppable droppableId="activity-flows-dnd" direction="vertical">
             {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                {activityFlows.map((flow, index) => (
-                  <Draggable
-                    key={flow.id || flow.key}
-                    draggableId={flow.id || flow.key || ''}
-                    index={index}
-                  >
-                    {(itemProvided, snapshot) => (
-                      <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
-                        <Item
-                          dragHandleProps={itemProvided.dragHandleProps}
-                          isDragging={snapshot.isDragging}
-                          onItemClick={() => handleEditActivityFlow(flow.id || '')}
-                          getActions={() =>
-                            getFlowsItemActions({
-                              activityFlowIndex: index,
-                              activityFlowId: flow.id || flow.key || '',
-                              activityFlowHidden: getActivityFlowVisible(flow.isHidden),
-                              removeActivityFlow: handleSetFlowToDeleteData(index, flow.name),
-                              editActivityFlow: handleEditActivityFlow,
-                              duplicateActivityFlow: handleDuplicateActivityFlow,
-                              toggleActivityFlowVisibility: handleToggleActivityFlowVisibility,
-                            })
-                          }
-                          isInactive={flow.isHidden}
-                          hasStaticActions={flow.isHidden}
-                          uiType={ItemUiType.Flow}
-                          hasError={errors[`activityFlows.${index}`]}
-                          {...flow}
-                        />
-                        <InsertItem
-                          isVisible={index >= 0 && index < activityFlows.length - 1 && !isDragging}
-                          onInsert={() => handleAddActivityFlow(index + 1)}
-                        />
-                      </Box>
-                    )}
-                  </Draggable>
-                ))}
+                {activityFlows.map((flow, index) => {
+                  const activityFlowKey = flow.id ?? (flow.key || '');
+
+                  return (
+                    <Draggable key={activityFlowKey} draggableId={activityFlowKey} index={index}>
+                      {(itemProvided, snapshot) => (
+                        <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
+                          <Item
+                            dragHandleProps={itemProvided.dragHandleProps}
+                            isDragging={snapshot.isDragging}
+                            onItemClick={() => handleEditActivityFlow(activityFlowKey)}
+                            getActions={() =>
+                              getFlowsItemActions({
+                                activityFlowIndex: index,
+                                activityFlowId: activityFlowKey,
+                                activityFlowHidden: getActivityFlowVisible(flow.isHidden),
+                                removeActivityFlow: handleSetFlowToDeleteData(index, flow.name),
+                                editActivityFlow: handleEditActivityFlow,
+                                duplicateActivityFlow: handleDuplicateActivityFlow,
+                                toggleActivityFlowVisibility: handleToggleActivityFlowVisibility,
+                              })
+                            }
+                            isInactive={flow.isHidden}
+                            hasStaticActions={flow.isHidden}
+                            uiType={ItemUiType.Flow}
+                            hasError={errors[`activityFlows.${index}`]}
+                            {...flow}
+                          />
+                          <InsertItem
+                            isVisible={
+                              index >= 0 && index < activityFlows.length - 1 && !isDragging
+                            }
+                            onInsert={() => handleAddActivityFlow(index + 1)}
+                          />
+                        </Box>
+                      )}
+                    </Draggable>
+                  );
+                })}
                 {listProvided.placeholder}
               </Box>
             )}
