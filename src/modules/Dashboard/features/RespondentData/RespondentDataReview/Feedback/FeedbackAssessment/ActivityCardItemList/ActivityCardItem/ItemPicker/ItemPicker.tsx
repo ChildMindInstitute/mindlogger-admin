@@ -9,7 +9,7 @@ import {
   SingleSelectItemAnswer,
   SliderItemAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
-import { getActivityItemIndex } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers/utils';
+import { getActivityItemIndex } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers/AssesmentControllers.utils';
 
 import { ItemPickerProps } from './ItemPicker.types';
 
