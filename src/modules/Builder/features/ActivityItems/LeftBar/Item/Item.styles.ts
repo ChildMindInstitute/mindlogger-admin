@@ -3,54 +3,52 @@ import { styled } from '@mui/system';
 import {
   theme,
   variables,
-  StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledTitleBoldMedium,
   StyledTitleMedium,
   commonEllipsisStyles,
 } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
-const commonButtonStyles = `
-  width: 4rem;
-  height: 4rem;
-  min-width: 4rem;`;
+export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
+  ${({
+    isActive,
+    hasError,
+    isDragging,
+  }: {
+    isActive: boolean;
+    hasError: boolean;
+    isDragging: boolean;
+  }) => `
+      cursor: pointer;
+      padding: ${theme.spacing(1.2, 1.2, 1.2, 2.2)};
+      border-radius: ${variables.borderRadius.lg2};
+      margin-bottom: ${theme.spacing(1.6)};
+      box-shadow: ${isDragging ? variables.boxShadow.light5 : 'inherit'};
+    
+      svg {
+        fill: ${variables.palette.on_surface_variant};
+      }
+    
+      .svg-checkbox-multiple-filled {
+        stroke: ${variables.palette.on_surface_variant};
+      }
 
-export const StyledItem = styled(StyledFlexTopCenter)`
-  cursor: pointer;
-  padding: ${theme.spacing(1.2, 1.2, 1.2, 2.2)};
-  border-radius: ${variables.borderRadius.lg2};
-  margin-bottom: ${theme.spacing(1.6)};
-
-  svg {
-    fill: ${variables.palette.on_surface_variant};
-  }
-
-  .svg-checkbox-multiple-filled {
-    stroke: ${variables.palette.on_surface_variant};
-  }
-
-  .actions {
-    display: none;
-  }
-
-  .dots {
-    display: flex;
-    align-items: center;
-    ${commonButtonStyles};
-  }
-
-  &:hover {
-    background-color: ${variables.palette.surface_variant_alfa8};
-
-    .actions {
-      display: ${({ hidden }: { hidden: boolean }) => (hidden ? 'none' : 'flex')};
-    }
-
-    .dots {
-      display: ${({ hidden }) => (hidden ? 'flex' : 'none')};
-    }
-  }
+      ${isActive && `background-color: ${variables.palette.secondary_container}`};
+      ${hasError && `background-color: ${variables.palette.error_container}`};
+      ${isDragging && `background-color: ${variables.palette.surface}`};
+    
+      &:hover {
+        ${
+          !isActive &&
+          !hasError &&
+          `
+            background-color: ${variables.palette.surface_variant_alfa8};
+        `
+        };
+      }
+  `}
 `;
 
 export const StyledCol = styled(StyledFlexColumn)`
@@ -66,18 +64,4 @@ export const StyledDescription = styled(StyledTitleMedium)`
 
 export const StyledTitle = styled(StyledTitleBoldMedium)`
   ${commonEllipsisStyles}
-`;
-
-export const StyledActionButton = styled(StyledClearedButton)`
-  ${commonButtonStyles};
-  border-radius: ${variables.borderRadius.half};
-  margin-right: ${theme.spacing(1.9)};
-
-  &:hover {
-    background: ${variables.palette.secondary_container};
-
-    svg {
-      fill: ${variables.palette.primary};
-    }
-  }
 `;

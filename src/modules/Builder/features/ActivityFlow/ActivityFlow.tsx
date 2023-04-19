@@ -6,18 +6,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 import { Box } from '@mui/material';
 
-import { Svg } from 'shared/components';
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
-import { DndDroppable, Item, ItemUiType } from 'modules/Builder/components';
+import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
-import { getFlowsItemActions } from './ActivityFlow.utils';
-import { StyledAdd, StyledAddWrapper } from './ActivityFlow.styles';
+import { getActivityFlowKey, getFlowsItemActions } from './ActivityFlow.utils';
 import { ActivityFlowHeader } from './ActivityFlowHeader';
 
 export const ActivityFlow = () => {
@@ -71,8 +69,9 @@ export const ActivityFlow = () => {
 
   const handleAddActivityFlow = (positionToAdd?: number) => {
     const flowItems = activities.map((activity) => ({
-      id: uuidv4(),
-      activityId: activity.id || activity.key || '',
+      // TODO: discuss with back-end to possibly change keys to ids and handle ids on back-end side
+      key: uuidv4(),
+      activityKey: activity.id || activity.key || '',
     }));
     const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
 
@@ -81,7 +80,7 @@ export const ActivityFlow = () => {
     } else {
       appendActivityFlow(newActivityFlow);
     }
-    handleEditActivityFlow(newActivityFlow.id);
+    handleEditActivityFlow(newActivityFlow.key);
   };
 
   const handleDuplicateActivityFlow = (index: number) => {
@@ -93,7 +92,8 @@ export const ActivityFlow = () => {
 
       insertActivityFlow(index + 1, {
         ...activityFlows[index],
-        id: uuidv4(),
+        id: undefined,
+        key: uuidv4(),
         name: `${activityFlows[index].name} (${insertedNumber})`,
       });
 
@@ -140,43 +140,45 @@ export const ActivityFlow = () => {
           <DndDroppable droppableId="activity-flows-dnd" direction="vertical">
             {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                {activityFlows.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id || ''} index={index}>
-                    {(itemProvided, snapshot) => (
-                      <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
-                        <Item
-                          dragHandleProps={itemProvided.dragHandleProps}
-                          isDragging={snapshot.isDragging}
-                          onItemClick={() => handleEditActivityFlow(item.id || '')}
-                          getActions={() =>
-                            getFlowsItemActions({
-                              activityFlowIndex: index,
-                              activityFlowId: item.id || '',
-                              activityFlowHidden: getActivityFlowVisible(item.isHidden),
-                              removeActivityFlow: handleSetFlowToDeleteData(index, item.name),
-                              editActivityFlow: handleEditActivityFlow,
-                              duplicateActivityFlow: handleDuplicateActivityFlow,
-                              toggleActivityFlowVisibility: handleToggleActivityFlowVisibility,
-                            })
-                          }
-                          isInactive={item.isHidden}
-                          hasStaticActions={item.isHidden}
-                          uiType={ItemUiType.Flow}
-                          hasError={errors[`activityFlows.${index}`]}
-                          {...item}
-                        />
-                        {index >= 0 && index < activityFlows.length - 1 && !isDragging && (
-                          <StyledAddWrapper>
-                            <span />
-                            <StyledAdd onClick={() => handleAddActivityFlow(index + 1)}>
-                              <Svg id="add" width={18} height={18} />
-                            </StyledAdd>
-                          </StyledAddWrapper>
-                        )}
-                      </Box>
-                    )}
-                  </Draggable>
-                ))}
+                {activityFlows.map((flow, index) => {
+                  const activityFlowKey = getActivityFlowKey(flow);
+
+                  return (
+                    <Draggable key={activityFlowKey} draggableId={activityFlowKey} index={index}>
+                      {(itemProvided, snapshot) => (
+                        <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
+                          <Item
+                            dragHandleProps={itemProvided.dragHandleProps}
+                            isDragging={snapshot.isDragging}
+                            onItemClick={() => handleEditActivityFlow(activityFlowKey)}
+                            getActions={() =>
+                              getFlowsItemActions({
+                                activityFlowIndex: index,
+                                activityFlowId: activityFlowKey,
+                                activityFlowHidden: getActivityFlowVisible(flow.isHidden),
+                                removeActivityFlow: handleSetFlowToDeleteData(index, flow.name),
+                                editActivityFlow: handleEditActivityFlow,
+                                duplicateActivityFlow: handleDuplicateActivityFlow,
+                                toggleActivityFlowVisibility: handleToggleActivityFlowVisibility,
+                              })
+                            }
+                            isInactive={flow.isHidden}
+                            hasStaticActions={flow.isHidden}
+                            uiType={ItemUiType.Flow}
+                            hasError={errors[`activityFlows.${index}`]}
+                            {...flow}
+                          />
+                          <InsertItem
+                            isVisible={
+                              index >= 0 && index < activityFlows.length - 1 && !isDragging
+                            }
+                            onInsert={() => handleAddActivityFlow(index + 1)}
+                          />
+                        </Box>
+                      )}
+                    </Draggable>
+                  );
+                })}
                 {listProvided.placeholder}
               </Box>
             )}

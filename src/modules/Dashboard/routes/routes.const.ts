@@ -1,11 +1,9 @@
 import { lazy } from 'react';
 
+import { Applets } from 'modules/Dashboard/features/Applets';
 import { Managers } from 'modules/Dashboard/features/Managers';
 import { Respondents } from 'modules/Dashboard/features/Respondents';
-import {
-  RespondentDataSummary,
-  RespondentDataReview,
-} from 'modules/Dashboard/features/RespondentData';
+import { RespondentDataSummary } from 'modules/Dashboard/features/RespondentData';
 import { page } from 'resources';
 
 const AddUser = lazy(() => import('modules/Dashboard/features/Applet/AddUser'));
@@ -13,6 +11,21 @@ const Schedule = lazy(() => import('modules/Dashboard/features/Applet/Schedule')
 const AppletSettings = lazy(
   () => import('modules/Dashboard/features/Applet/DashboardAppletSettings'),
 );
+
+export const mainRoutes = [
+  {
+    path: page.dashboardApplets,
+    Component: Applets,
+  },
+  {
+    path: page.dashboardManagers,
+    Component: Managers,
+  },
+  {
+    path: page.dashboardRespondents,
+    Component: Respondents,
+  },
+];
 
 export const appletRoutes = [
   {
@@ -38,16 +51,5 @@ export const appletRoutes = [
   {
     path: page.appletAddUser,
     Component: AddUser,
-  },
-];
-
-export const respondentDataRoutes = [
-  {
-    path: page.appletRespondentDataReview,
-    Component: RespondentDataReview,
-  },
-  {
-    path: page.appletRespondentDataSummary,
-    Component: RespondentDataSummary,
   },
 ];

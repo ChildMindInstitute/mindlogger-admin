@@ -1,9 +1,9 @@
-import { apiClient, apiClientWithLang } from 'shared/api/api.client';
+import { apiClient } from 'shared/api/api.client';
 
 import { SignIn, SignUpArgs, ResetPassword } from './api.types';
 
 export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
-  apiClientWithLang.post(
+  apiClient.post(
     'auth/login',
     { email, password },
     {

@@ -17,14 +17,24 @@ export type CreateAppletStateData = {
   key: keyof AppletSchema;
 };
 
+type ActivityFlowItem = {
+  activityId: string;
+  id: string;
+  order: number;
+  activityKey?: string;
+  key?: string;
+};
+
 export type ActivityFlow = {
   id?: string;
+  key?: string;
   name: string;
   description?: string | Record<string, string>;
   isSingleReport?: boolean;
   hideBadge?: boolean;
   order?: number;
   activityIds?: number[];
+  items?: ActivityFlowItem[];
   isHidden?: boolean;
 };
 
@@ -91,6 +101,7 @@ export type SingleAndMultipleSelectionOption = {
 };
 
 export type SingleAndMultipleSelectItemResponseValues = {
+  paletteName?: string;
   options: Array<SingleAndMultipleSelectionOption>;
 };
 
@@ -114,36 +125,36 @@ export type ItemAlert = {
 
 export type Item = {
   id?: string;
+  key?: string;
   name: string;
   question: string | Record<string, string>;
   config: Config;
   responseType: ItemResponseType;
   responseValues: ResponseValues;
-  paletteName?: string;
   alerts?: ItemAlert[];
 };
 
 export interface TextItem extends Item {
   responseType: ItemResponseType.Text;
-  config: Config;
+  config: TextInputConfig;
   responseValues: TextItemResponseValues;
 }
 
 export interface SingleSelectItem extends Item {
   responseType: ItemResponseType.SingleSelection;
-  config: Config;
+  config: SingleAndMultipleSelectionConfig;
   responseValues: SingleAndMultipleSelectItemResponseValues;
 }
 
 export interface MultiSelectItem extends Item {
   responseType: ItemResponseType.MultipleSelection;
-  config: Config;
+  config: SingleAndMultipleSelectionConfig;
   responseValues: SingleAndMultipleSelectItemResponseValues;
 }
 
 export interface SliderItem extends Item {
   responseType: ItemResponseType.Slider;
-  config: Config;
+  config: SliderConfig;
   responseValues: SliderItemResponseValues;
 }
 

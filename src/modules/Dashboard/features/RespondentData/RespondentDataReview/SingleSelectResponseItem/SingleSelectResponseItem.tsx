@@ -1,11 +1,12 @@
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
-import { SingleSelectResponseItemProps } from './SingleSelectResponseItem.types';
+import { SingleSelectItemAnswer } from '../RespondentDataReview.types';
 
-export const SingleSelectResponseItem = ({ item, response }: SingleSelectResponseItemProps) => (
-  <RadioGroup value={response.value}>
-    {item.responseValues.options.map((option) => (
+export const SingleSelectResponseItem = ({ activityItem, answer }: SingleSelectItemAnswer) => (
+  <RadioGroup value={answer.value}>
+    {activityItem.responseValues.options.map((option) => (
       <FormControlLabel
+        key={option.id}
         value={option.id}
         disabled
         control={<Radio disabled />}

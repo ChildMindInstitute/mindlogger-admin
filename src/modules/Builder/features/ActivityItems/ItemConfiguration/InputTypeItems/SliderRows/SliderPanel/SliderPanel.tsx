@@ -180,7 +180,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
             <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
               <Uploader
                 {...commonUploaderProps}
-                setValue={(val: string) => setValue(`${sliderName}.minImage`, val)}
+                setValue={(val: string) => setValue(`${sliderName}.minImage`, val || undefined)}
                 getValue={() => watch(`${sliderName}.minImage`) || ''}
               />
               <InputController
@@ -195,7 +195,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
             <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
               <Uploader
                 {...commonUploaderProps}
-                setValue={(val: string) => setValue(`${sliderName}.maxImage`, val)}
+                setValue={(val: string) => setValue(`${sliderName}.maxImage`, val || undefined)}
                 getValue={() => watch(`${sliderName}.maxImage`) || ''}
               />
               <InputController

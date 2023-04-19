@@ -52,8 +52,11 @@ export const BuilderApplet = () => {
 
   useEffect(() => {
     if (loadingStatus === 'success' && !isNewApplet) reset(getFormValues());
-    if (isNewApplet) reset(getDefaultValues());
   }, [loadingStatus, isNewApplet]);
+
+  useEffect(() => {
+    if (isNewApplet) reset(getDefaultValues());
+  }, [isNewApplet]);
 
   const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(getValues);
 

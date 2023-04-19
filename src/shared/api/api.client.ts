@@ -1,32 +1,18 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import {
-  getBaseUrl,
-  getRequestFullLangData,
-  getRequestLangData,
-  getRequestTokenData,
-  refreshTokenAndReattemptRequest,
-} from './api.utils';
+import { getBaseUrl, getRequestTokenData, refreshTokenAndReattemptRequest } from './api.utils';
 import { DEFAULT_CONFIG } from './api.const';
 
 export const authApiClient = axios.create(DEFAULT_CONFIG);
 export const apiClient = axios.create(DEFAULT_CONFIG);
-export const apiClientWithLang = axios.create(DEFAULT_CONFIG);
-export const authApiClientWithFullLang = axios.create(DEFAULT_CONFIG);
 
-[apiClient, apiClientWithLang, authApiClient, authApiClientWithFullLang].forEach((client) =>
+[apiClient, authApiClient].forEach((client) =>
   client.interceptors.request.use((config: AxiosRequestConfig) => {
     config.baseURL = getBaseUrl();
 
     return config;
   }),
 );
-
-apiClientWithLang.interceptors.request.use((config: AxiosRequestConfig) => {
-  getRequestLangData(config);
-
-  return config;
-});
 
 authApiClient.interceptors.request.use((config: AxiosRequestConfig) => {
   getRequestTokenData(config);
@@ -44,10 +30,3 @@ authApiClient.interceptors.response.use(
     }
   },
 );
-
-authApiClientWithFullLang.interceptors.request.use((config: AxiosRequestConfig) => {
-  getRequestTokenData(config);
-  getRequestFullLangData(config);
-
-  return config;
-});

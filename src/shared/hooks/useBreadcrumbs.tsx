@@ -3,20 +3,22 @@ import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
-import { auth, folders, Breadcrumb, breadcrumbs, User, applet } from 'redux/modules';
+import { auth, Breadcrumb, breadcrumbs, User, applet, users } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import { getAppletData } from 'shared/utils/getAppletData';
 import { checkIfAppletActivityFlowUrlPassed, checkIfAppletUrlPassed } from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
+import { getRespondentLabel } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
-  const { appletId, activityId, activityFlowId } = useParams();
+  const { appletId, activityId, activityFlowId, respondentId } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
+
   const authData = auth.useData();
-  const appletsFoldersData = folders.useFlattenFoldersApplets();
+  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
+  const respondentLabel = getRespondentLabel(secretId, nickname);
   const { firstName, lastName } = (authData?.user as User) || {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();
@@ -47,11 +49,33 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         navPath: page.library,
       });
     }
-    if (appletId && appletsFoldersData) {
-      const { name, image } = getAppletData(appletsFoldersData, appletId);
+    if (appletId && appletData) {
       newBreadcrumbs.push({
-        icon: image || '',
-        label: name || '',
+        icon: appletData?.image || '',
+        label: appletData?.displayName || '',
+        disabledLink: true,
+      });
+    }
+    if (pathname.includes('respondents')) {
+      newBreadcrumbs.push({
+        icon: 'respondent-outlined',
+        label: t('respondents'),
+        navPath: appletId
+          ? generatePath(page.appletRespondents, { appletId })
+          : page.dashboardRespondents,
+      });
+    }
+    if (respondentId) {
+      newBreadcrumbs.push({
+        icon: 'account',
+        label: respondentLabel,
+        disabledLink: true,
+      });
+    }
+    if (pathname.includes('dataviz')) {
+      newBreadcrumbs.push({
+        icon: '',
+        label: t('viewData'),
         disabledLink: true,
       });
     }
@@ -97,20 +121,10 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       );
     }
 
-    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])].map((crumbs) => ({
-      ...crumbs,
+    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])].map((crumb) => ({
+      ...crumb,
       key: uniqueId(),
     }));
     dispatch(breadcrumbs.actions.setBreadcrumbs(updatedBreadcrumbs));
-  }, [
-    t,
-    firstName,
-    lastName,
-    appletsFoldersData,
-    appletId,
-    activityId,
-    appletLabel,
-    pathname,
-    dispatch,
-  ]);
+  }, [t, firstName, lastName, appletData, appletId, activityId, appletLabel, pathname, dispatch]);
 };

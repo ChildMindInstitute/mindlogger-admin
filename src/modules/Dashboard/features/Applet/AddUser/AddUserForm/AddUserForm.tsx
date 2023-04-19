@@ -41,7 +41,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const respondentsData = users.useRespondentsData();
   const respondents = respondentsData?.result?.map((item) => ({
     label: `${item.accessId} (${item.nickname})`,
-    id: item.accessId,
+    id: item.id,
   }));
 
   const {

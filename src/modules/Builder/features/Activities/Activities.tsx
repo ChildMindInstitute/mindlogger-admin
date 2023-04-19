@@ -1,38 +1,44 @@
 import { Fragment, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
+import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
+import { Box } from '@mui/material';
 
-import { Modal } from 'shared/components';
-import { StyledTitleMedium, StyledFlexColumn, theme, StyledModalWrapper } from 'shared/styles';
+import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 
-import { Item } from '../../components';
+import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
-import { getActions } from './Activities.const';
+import { getActions, getActivityKey } from './Activities.utils';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch, getFieldState } = useFormContext();
+  const { control, watch, getFieldState, setValue } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
+  const [, setDuplicateIndexes] = useState<Record<string, number>>({});
+  const [isDragging, setIsDragging] = useState(false);
 
   const {
     append: appendActivity,
     insert: insertActivity,
     remove: removeActivity,
     update: updateActivity,
+    move: moveActivity,
   } = useFieldArray({
     control,
     name: 'activities',
   });
 
   const activities = watch('activities');
+  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
 
   const errors = activities?.reduce(
     (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
@@ -57,83 +63,134 @@ export const Activities = () => {
         activityId,
       }),
     );
-  const handleHideModal = () => setActivityToDelete('');
-  const handleAddActivity = () => {
+  const handleModalClose = () => setActivityToDelete('');
+  const handleActivityAdd = (index?: number) => {
     const newActivity = getNewActivity();
 
-    appendActivity(newActivity);
+    typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
     navigateToActivity(newActivity.key);
+  };
+
+  const handleActivityRemove = (index: number, activityKey: string) => {
+    const newActivityFlows = activityFlows.reduce(
+      (acc: AppletFormValues['activityFlows'], flow) => {
+        const items = flow.items?.filter((item) => item.activityKey !== activityKey);
+        if (items && items.length > 0) {
+          acc.push({ ...flow, items });
+        }
+
+        return acc;
+      },
+      [],
+    );
+
+    removeActivity(index);
+    setValue('activityFlows', newActivityFlows);
+  };
+
+  const handleDuplicateActivity = (index: number) => {
+    const activityToDuplicate = activities[index];
+    setDuplicateIndexes((prevState) => {
+      const numberToInsert = (prevState[getActivityKey(activityToDuplicate)] || 0) + 1;
+
+      insertActivity(index + 1, {
+        ...getNewActivity(activityToDuplicate),
+        name: `${activityToDuplicate.name} (${numberToInsert})`,
+      });
+
+      return {
+        ...prevState,
+        [getActivityKey(activityToDuplicate)]: numberToInsert,
+      };
+    });
+  };
+
+  const handleEditActivity = (index: number) => {
+    const activityToEdit = activities[index];
+    navigateToActivity(getActivityKey(activityToEdit));
+  };
+
+  const handleActivityVisibilityChange = (index: number) => {
+    const activityToChangeVisibility = activities[index];
+    updateActivity(index, {
+      ...activityToChangeVisibility,
+      isHidden: !activityToChangeVisibility.isHidden,
+    });
+  };
+
+  const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
+    setIsDragging(false);
+    if (!destination) return;
+    moveActivity(source.index, destination.index);
   };
 
   return (
     <BuilderContainer
       title={t('activities')}
       Header={ActivitiesHeader}
-      headerProps={{ onAddActivity: handleAddActivity }}
+      headerProps={{ onAddActivity: handleActivityAdd }}
     >
       <StyledFlexColumn>
         {activities?.length ? (
-          activities.map((item: ActivityFormValues, index: number) => {
-            const handleEdit = () => navigateToActivity(item.key ?? item.id);
-            //TODO: check if dependent activity flow is required to remove
-            const handleRemove = () => removeActivity(index);
-            //TODO: check if some items properties in duplicated activity are needed to be changed
-            const handleDuplicate = () => {
-              const newActivity = getNewActivity(item);
+          <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
+            <DndDroppable droppableId="activities-dnd" direction="vertical">
+              {(listProvided) => (
+                <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
+                  {activities.map((activity: ActivityFormValues, index: number) => {
+                    const activityKey = getActivityKey(activity);
 
-              insertActivity(index + 1, newActivity);
+                    const activityName = activity.name;
+                    const hasError = !!errors[`activities[${index}]`];
 
-              navigateToActivity(newActivity.key);
-            };
-            const handleVisibilityChange = () =>
-              updateActivity(index, { ...item, isHidden: !item.isHidden });
-
-            const activityName = item.name;
-            const hasError = !!errors[`activities[${index}]`];
-
-            return (
-              <Fragment key={`activity-${item.key ?? item.id}`}>
-                <Item
-                  {...item}
-                  img={item.image}
-                  isInactive={item.isHidden}
-                  hasStaticActions={item.isHidden}
-                  getActions={() =>
-                    getActions({
-                      key: item.key ?? item.id ?? '',
-                      isActivityHidden: item.isHidden,
-                      onEdit: handleEdit,
-                      onDuplicate: handleDuplicate,
-                      onRemove: () => setActivityToDelete(item.key || item.id || ''),
-                      onVisibilityChange: handleVisibilityChange,
-                    })
-                  }
-                  hasError={hasError}
-                />
-                <Modal
-                  open={activityToDelete === (item.key || item.id)}
-                  onClose={handleHideModal}
-                  onSubmit={handleRemove}
-                  onSecondBtnSubmit={handleHideModal}
-                  title={t('deleteActivity')}
-                  buttonText={t('delete')}
-                  secondBtnText={t('cancel')}
-                  hasSecondBtn
-                  submitBtnColor="error"
-                >
-                  <StyledModalWrapper>
-                    <Trans i18nKey="deleteActivityDescription">
-                      Are you sure you want to delete the Activity
-                      <strong>
-                        <>{{ activityName }}</>
-                      </strong>
-                      ?
-                    </Trans>
-                  </StyledModalWrapper>
-                </Modal>
-              </Fragment>
-            );
-          })
+                    return (
+                      <Fragment key={`activity-${activityKey}`}>
+                        <Draggable draggableId={activityKey} index={index}>
+                          {(itemProvided, snapshot) => (
+                            <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
+                              <Item
+                                {...activity}
+                                onItemClick={() => handleEditActivity(index)}
+                                dragHandleProps={itemProvided.dragHandleProps}
+                                isDragging={snapshot.isDragging}
+                                img={activity.image}
+                                isInactive={activity.isHidden}
+                                hasStaticActions={activity.isHidden}
+                                uiType={ItemUiType.Activity}
+                                getActions={() =>
+                                  getActions({
+                                    key: activityKey,
+                                    isActivityHidden: activity.isHidden,
+                                    onEdit: () => handleEditActivity(index),
+                                    onDuplicate: () => handleDuplicateActivity(index),
+                                    onRemove: () => setActivityToDelete(activityKey),
+                                    onVisibilityChange: () => handleActivityVisibilityChange(index),
+                                  })
+                                }
+                                hasError={hasError}
+                              />
+                              <InsertItem
+                                isVisible={
+                                  index >= 0 && index < activities.length - 1 && !isDragging
+                                }
+                                onInsert={() => handleActivityAdd(index + 1)}
+                              />
+                            </Box>
+                          )}
+                        </Draggable>
+                        <DeleteActivityModal
+                          activityName={activityName}
+                          isOpen={activityToDelete === activityKey}
+                          onModalClose={handleModalClose}
+                          onModalSubmit={() => handleActivityRemove(index, activityKey)}
+                        />
+                      </Fragment>
+                    );
+                  })}
+                  {listProvided.placeholder}
+                </Box>
+              )}
+            </DndDroppable>
+          </DragDropContext>
         ) : (
           <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
             {t('activityIsRequired')}

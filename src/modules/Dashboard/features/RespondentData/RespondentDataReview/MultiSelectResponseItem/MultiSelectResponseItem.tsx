@@ -2,15 +2,16 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { StyledFlexColumn } from 'shared/styles';
 
-import { MultiSelectResponseItemProps } from './MultiSelectResponseItem.types';
+import { MultiSelectItemAnswer } from '../RespondentDataReview.types';
 
-export const MultiSelectResponseItem = ({ item, response }: MultiSelectResponseItemProps) => (
+export const MultiSelectResponseItem = ({ activityItem, answer }: MultiSelectItemAnswer) => (
   <StyledFlexColumn>
-    {item.responseValues.options.map((option) => (
+    {activityItem.responseValues.options.map((option) => (
       <FormControlLabel
+        key={option.id}
         disabled
         label={option.text}
-        control={<Checkbox checked={response[option.id] !== undefined} value={option.id} />}
+        control={<Checkbox checked={answer.value.includes(option.id)} value={option.id} />}
       />
     ))}
   </StyledFlexColumn>

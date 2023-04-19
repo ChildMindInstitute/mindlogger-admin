@@ -9,6 +9,7 @@ import { ItemResponseType } from 'shared/consts';
 
 export type ItemFormValues = {
   id?: string;
+  key?: string;
   name: string;
   question: string;
   config: Config;
@@ -30,17 +31,20 @@ export type ActivityFormValues = {
   showAllAtOnce?: boolean;
   isSkippable?: boolean;
   responseIsEditable?: boolean;
+  isReviewable?: boolean;
   isHidden?: boolean;
   items: ItemFormValues[];
 };
 
 export type ActivityFlowItem = {
-  id: string;
-  activityId: string;
+  id?: string;
+  key?: string;
+  activityKey: string;
 };
 
 export type ActivityFlowFormValues = {
   id?: string;
+  key?: string;
   name: string;
   description: string;
   isSingleReport?: boolean;

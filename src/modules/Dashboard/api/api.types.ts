@@ -10,6 +10,7 @@ export type GetAppletsParams = {
     limit?: number;
     ordering?: string;
     roles?: string;
+    appletId?: string;
   };
 };
 
@@ -145,16 +146,14 @@ export type AppletInvitationData = AppletId & {
 
 export type DuplicateApplet = AppletId & {
   options: {
+    password: string;
     name: string;
   };
-  data: FormData;
 };
 
 export type AppletNameArgs = AppletId & { appletName: string };
 
 export type AppletEncryption = AppletId & { data: FormData };
-
-export type ValidateAppletName = { name: string };
 
 export type UpdatePin = {
   accessId: string;
@@ -182,4 +181,31 @@ export type PostAppletPublicLink = AppletId & { requireLogin: boolean };
 
 export type OwnerId = {
   ownerId: string;
+};
+
+export type Answers = { id: string; respondentId: string; createdDate: string };
+
+export type Answer = AppletId & { answerId: string };
+
+export type AppletUniqueName = {
+  name: string;
+};
+
+export type NoteId = { noteId: string };
+
+export type Note = { note: string };
+
+export type GetAnswersNotesParams = {
+  params: {
+    search?: string;
+    page?: number;
+    limit?: number;
+    ordering?: string;
+  };
+};
+
+export type AppletSubmitDateList = AppletId & {
+  respondentId: string;
+  fromDate: string;
+  toDate: string;
 };

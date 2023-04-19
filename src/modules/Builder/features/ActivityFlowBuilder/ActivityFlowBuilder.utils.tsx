@@ -3,8 +3,23 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Svg } from 'shared/components';
 import { ItemType } from 'modules/Builder/components';
+import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 import { GetFlowBuilderActions, GetMenuItems, GetMenuItemsType } from './ActivityFlowBuilder.types';
+
+const checkOnIdOrKey = (checkId: string) => (entity: ActivityFlowFormValues) =>
+  (entity.id || entity.key) === checkId;
+
+export const getActivityFlowIndex = (activityFlows: ActivityFlowFormValues[], checkId: string) =>
+  activityFlows.findIndex(checkOnIdOrKey(checkId));
+
+export const getActivitiesIdsObjects = (activities: ActivityFormValues[]) =>
+  activities.reduce((acc: Record<string, ActivityFormValues>, activity) => {
+    const id = activity.id || activity.key || '';
+    acc[id] = activity;
+
+    return acc;
+  }, {});
 
 export const getMenuItems = ({
   type,
@@ -22,7 +37,7 @@ export const getMenuItems = ({
         ? onAddFlowActivity && onAddFlowActivity(activityKey)
         : onUpdateFlowActivity &&
           index !== undefined &&
-          onUpdateFlowActivity(index, { id: uuidv4(), activityId: activityKey });
+          onUpdateFlowActivity(index, { key: uuidv4(), activityKey });
       onMenuClose();
     },
   }));

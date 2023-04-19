@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
@@ -13,6 +12,7 @@ import {
   getDictionaryObject,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet } from 'shared/state';
+import { auth } from 'modules/Auth';
 import { EnterAppletPasswordForm } from 'modules/Dashboard';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
@@ -22,6 +22,7 @@ import {
   removeItemExtraFields,
   removeAppletExtraFields,
   removeActivityExtraFields,
+  mapItemResponseValues,
   usePasswordFromStorage,
 } from './SaveAndPublish.utils';
 
@@ -36,9 +37,10 @@ export const getAppletInfoFromStorage = () => {
 export const useAppletData = () => {
   const isNewApplet = useCheckIfNewApplet();
   const { getValues } = useFormContext();
-  const appletInfo = getValues() as SingleApplet;
 
   return (appletPassword?: EnterAppletPasswordForm['appletPassword']): SingleApplet => {
+    const appletInfo = getValues() as SingleApplet;
+
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
 
@@ -49,12 +51,14 @@ export const useAppletData = () => {
       ...appletInfo,
       activities: appletInfo?.activities.map((activity: Activity) => ({
         ...activity,
-        key: uuidv4(),
+        key: activity.id || activity.key,
         description: getDictionaryObject(activity.description),
-        items: activity.items?.map((item) => ({
+        items: activity.items?.map(({ id, ...item }) => ({
           ...item,
+          ...(id && { id }),
           question: getDictionaryObject(item.question),
-          ...removeItemExtraFields(item.responseType),
+          responseValues: mapItemResponseValues(item.responseType, item.responseValues),
+          ...removeItemExtraFields(),
         })),
         ...removeActivityExtraFields(),
       })),
@@ -62,7 +66,11 @@ export const useAppletData = () => {
       description: appletDescription,
       about: appletAbout,
       themeId: null, // TODO: create real themeId
-      activityFlows: [],
+      activityFlows: appletInfo?.activityFlows.map(({ key, ...flow }) => ({
+        ...flow,
+        description: getDictionaryObject(flow.description),
+        items: flow.items?.map(({ key, ...item }) => item),
+      })),
       ...removeAppletExtraFields(),
     };
   };
@@ -143,10 +151,11 @@ export const usePrompt = (isFormChanged: boolean) => {
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { trigger } = useFormContext();
+  const userData = auth.useData();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
-  const { createApplet, updateApplet } = applet.thunk;
+  const { createApplet, updateApplet, getAppletWithItems } = applet.thunk;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { appletId } = useParams();
@@ -159,6 +168,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
   const { getPassword, setPassword } = usePasswordFromStorage();
+  const ownerId = String(userData?.user?.id) || '';
 
   useEffect(() => {
     responseStatus === 'loading' && setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
@@ -241,7 +251,10 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
         return;
       }
 
-      appletId && navigate(getBuilderAppletUrl(appletId));
+      if (appletId) {
+        await dispatch(getAppletWithItems({ ownerId, appletId }));
+        navigate(getBuilderAppletUrl(appletId));
+      }
     }
     if (updateApplet.rejected.match(result)) {
       setPassword(appletId!, '');
