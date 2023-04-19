@@ -64,7 +64,6 @@ export const DuplicatePopups = () => {
 
   const { execute: executeGetName } = useAsync(getAppletUniqueNameApi, (res) => {
     res?.data?.result && setValue('name', res.data.result.name);
-    setNameModalVisible(true);
   });
 
   const duplicatePopupsClose = () =>
@@ -117,7 +116,10 @@ export const DuplicatePopups = () => {
   };
 
   useEffect(() => {
-    duplicatePopupsVisible && executeGetName({ name: currentApplet?.displayName || '' });
+    if (duplicatePopupsVisible) {
+      executeGetName({ name: currentApplet?.displayName || '' });
+      setNameModalVisible(true);
+    }
   }, [duplicatePopupsVisible]);
 
   return (
