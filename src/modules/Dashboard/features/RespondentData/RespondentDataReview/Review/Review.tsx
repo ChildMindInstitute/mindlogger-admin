@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
 
 import { getAnswerApi } from 'api';
@@ -8,6 +8,7 @@ import { Svg } from 'shared/components';
 import { StyledTitleLarge, StyledTitleLargish, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
 import { getDictionaryText } from 'shared/utils';
+import { page } from 'resources';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
 import { getItemLabel, isItemUnsupported } from '../../RespondentData.utils';
@@ -19,7 +20,8 @@ import { getResponseItem } from './Review.const';
 
 export const Review = ({ answerId }: ReviewProps) => {
   const { t } = useTranslation();
-  const { appletId } = useParams();
+  const { appletId, respondentId } = useParams();
+  const navigate = useNavigate();
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
 
   const { execute } = useAsync(
@@ -30,6 +32,9 @@ export const Review = ({ answerId }: ReviewProps) => {
   useEffect(() => {
     if (appletId && answerId) {
       execute({ appletId, answerId });
+      navigate(
+        generatePath(page.appletRespondentDataReviewAnswer, { appletId, respondentId, answerId }),
+      );
     }
   }, [appletId, answerId]);
 

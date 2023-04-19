@@ -188,6 +188,19 @@ export type Answers = { id: string; respondentId: string; createdDate: string };
 
 export type Answer = AppletId & { answerId: string };
 
+export type NoteId = { noteId: string };
+
+export type Note = { note: string };
+
+export type GetAnswersNotesParams = {
+  params: {
+    search?: string;
+    page?: number;
+    limit?: number;
+    ordering?: string;
+  };
+};
+
 export type AppletSubmitDateList = AppletId & {
   respondentId: string;
   fromDate: string;
