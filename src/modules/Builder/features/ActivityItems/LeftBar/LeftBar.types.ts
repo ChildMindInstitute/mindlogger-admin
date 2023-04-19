@@ -8,4 +8,5 @@ export type LeftBarProps = {
   onInsertItem: (index: number) => void;
   onDuplicateItem: (index: number) => void;
   onRemoveItem: (id: string) => void;
+  onMoveItem: (indexA: number, indexB: number) => void;
 };

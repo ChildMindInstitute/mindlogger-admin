@@ -27,6 +27,7 @@ export const ActivityItems = () => {
     append: appendItem,
     insert: insertItem,
     remove: removeItem,
+    move: moveItem,
   } = useFieldArray({
     control,
     name: `${name}.items`,
@@ -108,6 +109,7 @@ export const ActivityItems = () => {
         onInsertItem={handleInsertItem}
         onDuplicateItem={handleDuplicateItem}
         onRemoveItem={handleRemoveClick}
+        onMoveItem={moveItem}
       />
       {activeItemId && (
         <ItemConfiguration
