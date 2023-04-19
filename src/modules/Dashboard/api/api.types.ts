@@ -200,3 +200,9 @@ export type GetAnswersNotesParams = {
     ordering?: string;
   };
 };
+
+export type AppletSubmitDateList = AppletId & {
+  respondentId: string;
+  fromDate: string;
+  toDate: string;
+};

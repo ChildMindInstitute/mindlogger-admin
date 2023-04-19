@@ -29,6 +29,7 @@ import {
   GetAnswersNotesParams,
   NoteId,
   Note,
+  AppletSubmitDateList,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -398,5 +399,14 @@ export const deleteAnswerNoteApi = (
   signal?: AbortSignal,
 ) =>
   authApiClient.put(`/applets/${appletId}/answers/${answerId}/notes/${noteId}`, {
+    signal,
+  });
+
+export const getAppletSubmitDateListApi = (
+  { appletId, ...params }: AppletSubmitDateList,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/answers/applet/${appletId}/dates`, {
+    params,
     signal,
   });

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { format } from 'date-fns';
+import { endOfMonth, format, startOfMonth } from 'date-fns';
 
 import { users } from 'redux/modules';
-import { getAnswersApi } from 'api';
+import { getAnswersApi, getAppletSubmitDateListApi } from 'api';
 import { DatePicker, DatePickerUiType } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
@@ -28,21 +28,55 @@ export const ReviewMenu = ({
   const { appletId, respondentId } = useParams();
   const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
   const respondentLabel = getRespondentLabel(secretId, nickname);
-  const { control, watch } = useForm({ defaultValues: { date: new Date() } });
+  const { control, watch, setValue } = useForm({ defaultValues: { date: undefined } });
   const date = watch('date');
 
+  const [startDate, setStartDate] = useState(startOfMonth(new Date()));
+  const [endDate, setEndDate] = useState(endOfMonth(new Date()));
+  const [submitDates, setSubmitDates] = useState<Date[] | undefined>(undefined);
   const [activities, setActivities] = useState<Activity[]>([]);
 
-  const { execute } = useAsync(
+  const { execute: executeGetAppletSubmitDatesApi } = useAsync(
+    getAppletSubmitDateListApi,
+    (res) => {
+      if (res?.data?.result) {
+        const dates = res.data.result.dates.map((date: string) => new Date(date));
+        setSubmitDates(dates);
+        setValue('date', dates[dates.length - 1]);
+      }
+    },
+  );
+
+  const { execute: executeGetAnswers } = useAsync(
     getAnswersApi,
     (res) => res?.data?.result && setActivities(res.data.result),
   );
 
   useEffect(() => {
     if (appletId && respondentId) {
-      execute({ id: appletId, respondentId, createdDate: format(date, DateFormats.YearMonthDay) });
+      executeGetAppletSubmitDatesApi({
+        appletId,
+        respondentId,
+        fromDate: String(startDate.getTime()),
+        toDate: String(endDate.getTime()),
+      });
     }
-  }, [appletId, respondentId, date]);
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    if (appletId && respondentId && date) {
+      executeGetAnswers({
+        id: appletId,
+        respondentId,
+        createdDate: format(date, DateFormats.YearMonthDay),
+      });
+    }
+  }, [date]);
+
+  const onMonthChange = (date: Date) => {
+    setStartDate(startOfMonth(date));
+    setEndDate(endOfMonth(date));
+  };
 
   return (
     <StyledMenu>
@@ -56,8 +90,9 @@ export const ReviewMenu = ({
           control={control}
           uiType={DatePickerUiType.OneDate}
           label={t('reviewDate')}
-          maxDate={new Date()}
           minDate={null}
+          includeDates={submitDates}
+          onMonthChange={onMonthChange}
         />
       </StyledHeader>
       <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
