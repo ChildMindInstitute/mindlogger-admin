@@ -1,8 +1,10 @@
 import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { ColorResult } from 'react-color';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
+import { SingleAndMultipleSelectionOption } from 'shared/state';
 import { page } from 'resources';
 import {
   SingleApplet,
@@ -13,21 +15,50 @@ import {
 import { getDictionaryText, Path } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
 
-import { ActivityFormValues } from './BuilderApplet.types';
+import { ActivityFormValues, ItemFormValues } from './BuilderApplet.types';
 
 const { t } = i18n;
 
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
+export const getNewActivityItem = (item?: ItemFormValues) => ({
+  responseType: '',
+  name: '',
+  question: '',
+  config: {},
+  isHidden: false,
+  ...item,
+  id: undefined,
+  key: uuidv4(),
+  ...((item?.responseType === ItemResponseType.SingleSelection ||
+    item?.responseType === ItemResponseType.MultipleSelection) && {
+    responseValues: {
+      ...item.responseValues,
+      options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
+        (option: SingleAndMultipleSelectionOption) => ({
+          ...option,
+          id: uuidv4(),
+        }),
+      ),
+    },
+  }),
+  ...(item?.responseType === ItemResponseType.Slider && {
+    responseValues: {
+      ...item.responseValues,
+      id: uuidv4(),
+    },
+  }),
+});
+
 export const getNewActivity = (activity?: ActivityFormValues) => ({
   name: t('newActivity'),
   description: '',
-  items: [],
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
   ...activity,
+  items: activity?.items?.map((item) => getNewActivityItem(item)) || [],
   id: undefined,
   key: uuidv4(),
 });
@@ -41,18 +72,6 @@ export const getNewApplet = () => ({
   watermark: '',
   activities: [],
   activityFlows: [],
-});
-
-export const getNewActivityItem = () => ({
-  key: uuidv4(),
-  responseType: '',
-  name: '',
-  question: '',
-  config: {},
-  responseValues: {
-    options: [],
-  },
-  isHidden: false,
 });
 
 export const getNewActivityFlow = () => ({
@@ -69,7 +88,15 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection:
       return {
-        options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options ?? [],
+        options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
+          (option) => ({
+            ...option,
+            color: option.color ? ({ hex: option.color } as ColorResult) : undefined,
+          }),
+        ),
+        paletteName:
+          (item.responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ??
+          undefined,
       };
     case ItemResponseType.Slider:
       return item.responseValues;
@@ -89,7 +116,6 @@ const getActivityItems = (items: Item[]) =>
         responseType: item.responseType,
         responseValues: getActivityItemResponseValues(item),
         config: item.config,
-        paletteName: item.paletteName,
         alerts: item.alerts ?? [],
       }))
     : [];

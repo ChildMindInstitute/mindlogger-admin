@@ -1,8 +1,9 @@
 import { storage } from 'shared/utils';
 import { auth } from 'modules/Auth';
-import { applet } from 'shared/state';
+import { applet, ResponseValues, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { ItemResponseType } from 'shared/consts';
+import { ColorResult } from 'react-color';
 
 export const removeAppletExtraFields = () => ({
   createdAt: undefined,
@@ -16,20 +17,35 @@ export const removeAppletExtraFields = () => ({
 
 export const removeActivityExtraFields = () => ({ order: undefined });
 
-export const removeItemExtraFields = (responseType: ItemResponseType) => ({
+export const removeItemExtraFields = () => ({
   key: undefined,
-  paletteName: undefined, //TODO: remove after backend addings
   settings: undefined,
   alerts: undefined, //TODO: remove after backend addings
-  ...(responseType === ItemResponseType.Text && { responseValues: undefined }),
 });
 
-export const removeResponseValuesExtraFields = (responseType: ItemResponseType) => ({
-  ...(responseType !== ItemResponseType.SingleSelection &&
-    responseType !== ItemResponseType.MultipleSelection && {
-      options: undefined,
-    }),
-});
+export const mapItemResponseValues = (
+  responseType: ItemResponseType,
+  responseValues: ResponseValues,
+) => {
+  if (
+    responseType === ItemResponseType.SingleSelection ||
+    responseType === ItemResponseType.MultipleSelection
+  )
+    return {
+      paletteName:
+        (responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ?? undefined,
+      options: (responseValues as SingleAndMultipleSelectItemResponseValues).options?.map(
+        (option) => ({
+          ...option,
+          color: (option.color as ColorResult)?.hex ?? option.color ?? undefined,
+        }),
+      ),
+    };
+
+  if (responseType === ItemResponseType.Slider) return responseValues;
+
+  return null;
+};
 
 const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
 

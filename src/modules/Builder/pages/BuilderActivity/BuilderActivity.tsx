@@ -19,10 +19,15 @@ export const BuilderActivity = () => {
 
   const { name = '', activity } = useCurrentActivity();
 
-  const { getFieldState } = useFormContext();
+  const { trigger, getFieldState } = useFormContext();
 
   const navigateToActivities = () =>
     navigate(generatePath(page.builderAppletActivities, { appletId }));
+
+  const handleBackBtnClick = async () => {
+    await trigger();
+    navigateToActivities();
+  };
 
   useEffect(() => {
     if (activityId && !activity) navigateToActivities();
@@ -37,7 +42,7 @@ export const BuilderActivity = () => {
     <StyledBody sx={{ position: 'relative' }}>
       <StyledDirectoryUpButton
         variant="text"
-        onClick={navigateToActivities}
+        onClick={handleBackBtnClick}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
       >
         {t('activities')}

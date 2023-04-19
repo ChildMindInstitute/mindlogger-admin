@@ -1,36 +1,44 @@
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Actions, Svg } from 'shared/components';
+import { Actions } from 'shared/components';
 import { itemsTypeIcons } from 'shared/consts';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
-import { getActions } from './Item.const';
-import {
-  StyledCol,
-  StyledItem,
-  StyledDescription,
-  StyledTitle,
-  StyledActionButton,
-} from './Item.styles';
+import { getActions } from './Item.utils';
+import { StyledCol, StyledItem, StyledDescription, StyledTitle } from './Item.styles';
 import { ItemProps } from './Item.types';
-import { getEntityKey } from '../../ActivityItems.utils';
+import { getItemKey } from '../../ActivityItems.utils';
 
-export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }: ItemProps) => {
+export const Item = ({
+  item,
+  name,
+  index,
+  activeItemId,
+  onSetActiveItem,
+  onDuplicateItem,
+  onRemoveItem,
+  dragHandleProps,
+  isDragging,
+}: ItemProps) => {
   const { setValue, watch, getFieldState } = useFormContext();
+  const [visibleActions, setVisibleActions] = useState(false);
 
-  const hidden = watch(`${name}.isHidden`);
-  const hiddenProps = { sx: { opacity: hidden ? 0.38 : 1 } };
+  const isItemHidden = watch(`${name}.isHidden`);
+  const hiddenProps = { sx: { opacity: isItemHidden ? 0.38 : 1 } };
 
-  const { invalid } = getFieldState(name);
+  const { invalid: invalidField } = getFieldState(name);
 
-  const onChangeVisibility = () => setValue(`${name}.isHidden`, !hidden);
+  const onChangeVisibility = () => setValue(`${name}.isHidden`, !isItemHidden);
 
   return (
     <StyledItem
-      isActive={activeItemId === getEntityKey(item)}
-      hasError={invalid}
-      hidden={hidden}
-      onClick={() => onSetActiveItem(getEntityKey(item) ?? '')}
+      isActive={activeItemId === getItemKey(item)}
+      hasError={invalidField}
+      onClick={() => onSetActiveItem(getItemKey(item) ?? '')}
+      onMouseLeave={() => setVisibleActions(false)}
+      onMouseEnter={() => setVisibleActions(true)}
+      isDragging={isDragging}
     >
       <StyledFlexTopCenter {...hiddenProps}>
         {item.responseType ? itemsTypeIcons[item.responseType] : ''}
@@ -39,21 +47,20 @@ export const Item = ({ item, name, activeItemId, onSetActiveItem, onRemoveItem }
         <StyledTitle>{item.name}</StyledTitle>
         <StyledDescription>{item.question}</StyledDescription>
       </StyledCol>
-      <div className="actions">
-        <Actions
-          items={getActions({ onRemoveItem, onChangeVisibility })}
-          context={getEntityKey(item)}
-          visibleByDefault
-        />
-      </div>
-      {hidden && (
-        <StyledActionButton onClick={onChangeVisibility}>
-          <Svg id="visibility-off" />
-        </StyledActionButton>
-      )}
-      <span className="dots">
-        <Svg id="dots" />
-      </span>
+      <Actions
+        items={getActions({
+          onRemoveItem,
+          onDuplicateItem: () => onDuplicateItem(index),
+          onChangeVisibility,
+          isItemHidden,
+        })}
+        context={getItemKey(item)}
+        visibleByDefault={visibleActions}
+        sxProps={{ justifyContent: 'flex-end', pointerEvents: isDragging ? 'none' : 'auto' }}
+        dragHandleProps={dragHandleProps}
+        isDragging={isDragging}
+        hasStaticActions={isItemHidden}
+      />
     </StyledItem>
   );
 };
