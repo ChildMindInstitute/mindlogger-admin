@@ -31,7 +31,7 @@ export const ExportSchedulePopup = ({
         <Box sx={{ margin: theme.spacing(-1.8, 0, 2.4) }}>
           {isIndividualSchedule ? (
             <Trans i18nKey="individualScheduleExport">
-              The current individual schedule of Respondent
+              The current individual schedule of respondent
               <strong>
                 <>
                   {{ secretUserId }} ({{ nickName }})
