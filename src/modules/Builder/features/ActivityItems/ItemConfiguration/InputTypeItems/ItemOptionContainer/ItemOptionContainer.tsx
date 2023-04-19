@@ -5,9 +5,9 @@ import {
   StyledLabelBoldLarge,
   StyledTitleMedium,
 } from 'shared/styles';
+import { StyledItemOptionContainer } from 'modules/Builder/components';
 
 import { ItemOptionContainerProps } from './ItemOptionContainer.types';
-import { StyledItemOptionContainer } from './ItemOptionContainer.styles';
 
 export const ItemOptionContainer = ({ title, description, children }: ItemOptionContainerProps) => (
   <StyledItemOptionContainer>

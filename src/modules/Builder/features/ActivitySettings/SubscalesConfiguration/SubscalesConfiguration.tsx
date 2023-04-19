@@ -4,7 +4,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { RadioGroupController, Switch } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme } from 'shared/styles';
-import { ToggleItemContainer } from 'modules/Builder/features/ActivityItems/ItemConfiguration/InputTypeItems/ToggleItemContainer';
+import { ToggleItemContainer } from 'modules/Builder/components';
 import { AppletFormValues } from 'modules/Builder/pages';
 import { DataTable, Svg } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
