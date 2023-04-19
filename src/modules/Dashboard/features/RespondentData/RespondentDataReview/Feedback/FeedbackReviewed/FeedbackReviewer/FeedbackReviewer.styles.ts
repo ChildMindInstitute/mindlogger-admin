@@ -13,3 +13,11 @@ export const StyledButton = styled(Button)`
   height: auto;
   min-width: unset;
 `;
+
+export const StyledItem = styled(Box)`
+  margin: ${theme.spacing(3.2, 0)};
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+`;

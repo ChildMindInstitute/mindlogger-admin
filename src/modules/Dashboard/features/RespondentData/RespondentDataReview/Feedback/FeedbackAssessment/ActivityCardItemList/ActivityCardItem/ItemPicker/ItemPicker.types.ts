@@ -1,7 +1,6 @@
-import { Item } from 'shared/state';
+import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 export type ItemPickerProps = {
-  item: Item;
-  step: number;
+  activityItem: ActivityItemAnswer;
   isDisabled: boolean;
 };

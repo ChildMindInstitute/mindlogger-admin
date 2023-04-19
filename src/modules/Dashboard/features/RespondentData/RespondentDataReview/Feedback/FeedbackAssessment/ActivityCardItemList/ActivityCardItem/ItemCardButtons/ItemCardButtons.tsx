@@ -18,13 +18,16 @@ export const ItemCardButtons = ({
   const { t } = useTranslation();
   const { watch } = useFormContext();
 
-  const answerValues = watch(`answers.${step}.answer.value`);
+  const getValue = (value: string | number | string[]) =>
+    !!(Array.isArray(value) ? value.length : value);
 
-  const [isNextDisable, setIsNextDisable] = useState(!answerValues[0]);
+  const answerValue = watch(`answers.${step}.answer.value`);
+
+  const [isNextDisable, setIsNextDisable] = useState(getValue(answerValue));
 
   useEffect(() => {
-    setIsNextDisable(!answerValues[0]);
-  }, [answerValues]);
+    setIsNextDisable(!getValue(answerValue));
+  }, [answerValue]);
 
   return (
     <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', mt: theme.spacing(1.6) }}>

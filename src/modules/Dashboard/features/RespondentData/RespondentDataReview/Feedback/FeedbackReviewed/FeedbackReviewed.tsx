@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 import { StyledContainer } from './FeedbackReviewed.styles';
 import { FeedbackReviewer } from './FeedbackReviewer';
 import { mockedReviewers } from './mock';
@@ -8,7 +10,9 @@ export const FeedbackReviewed = () => {
   return (
     <StyledContainer>
       {reviewers.map((reviewer) => (
-        <FeedbackReviewer key={String(reviewer.id)} reviewer={reviewer} />
+        <Fragment key={reviewer.id}>
+          <FeedbackReviewer reviewer={reviewer} />
+        </Fragment>
       ))}
     </StyledContainer>
   );

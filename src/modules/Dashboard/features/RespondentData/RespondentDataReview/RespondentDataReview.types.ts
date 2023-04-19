@@ -12,8 +12,20 @@ export type Activity = {
 };
 
 export type ItemAnswer = {
-  value: string | string[];
+  value: number | string | string[];
   additionalText: string;
+};
+
+export type SliderAnswer = ItemAnswer & {
+  value: number;
+};
+
+export type MultiSelectAnswer = ItemAnswer & {
+  value: string[];
+};
+
+export type SingleSelectAnswer = ItemAnswer & {
+  value: string;
 };
 
 export type ActivityItemAnswer = {
@@ -25,14 +37,29 @@ export interface TextItemAnswer extends ActivityItemAnswer {
   activityItem: TextItem;
 }
 
+export type SliderActivityItem = SliderItem & {
+  edited?: boolean;
+};
+
+export type SingleSelectActivityItem = SingleSelectItem & {
+  edited?: boolean;
+};
+
+export type MultiSelectActivityItem = MultiSelectItem & {
+  edited?: boolean;
+};
+
 export interface SliderItemAnswer extends ActivityItemAnswer {
-  activityItem: SliderItem;
+  activityItem: SliderActivityItem;
+  answer: SliderAnswer;
 }
 
 export interface SingleSelectItemAnswer extends ActivityItemAnswer {
-  activityItem: SingleSelectItem;
+  activityItem: SingleSelectActivityItem;
+  answer: SingleSelectAnswer;
 }
 
 export interface MultiSelectItemAnswer extends ActivityItemAnswer {
-  activityItem: MultiSelectItem;
+  activityItem: MultiSelectActivityItem;
+  answer: MultiSelectAnswer;
 }
