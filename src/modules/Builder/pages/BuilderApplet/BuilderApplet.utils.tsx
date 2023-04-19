@@ -56,7 +56,7 @@ export const getNewActivity = (activity?: ActivityFormValues) => ({
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
-  responseIsEditable: false,
+  responseIsEditable: true,
   ...activity,
   items: activity?.items?.map((item) => getNewActivityItem(item)) || [],
   id: undefined,
