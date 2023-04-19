@@ -1,5 +1,3 @@
-import { CheckboxProps } from '@mui/material';
-
 import { MultiSelectActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 export type MultipleSelectionProps = {
@@ -7,4 +5,4 @@ export type MultipleSelectionProps = {
   value: string[];
   isDisabled?: boolean;
   onChange?: (value: string[]) => void;
-} & CheckboxProps;
+};

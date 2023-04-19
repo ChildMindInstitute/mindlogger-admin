@@ -1,38 +1,30 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, FieldValues } from 'react-hook-form';
 
 import { MultipleSelection } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessementItems';
 
 import { MultipleSelectionProps } from './MultipleSelectionController.types';
-import { getActivityItemIndex } from '../utils';
 
-export const MultipleSelectionController = ({
-  activityItem,
+export const MultipleSelectionController = <T extends FieldValues>({
+  name,
+  control,
+  activityItem: { activityItem },
   isDisabled,
-}: MultipleSelectionProps) => {
-  const { control, getValues } = useFormContext();
+}: MultipleSelectionProps<T>) => (
+  <Controller
+    name={name}
+    control={control}
+    render={({ field: { ref, onChange, value, ...checkboxProps } }) => {
+      const values = value?.filter((value: string) => value) || [];
 
-  const activityItemIndex = getActivityItemIndex(
-    getValues('answers'),
-    activityItem.activityItem.id || '',
-  );
-
-  return (
-    <Controller
-      name={`answers.${activityItemIndex}.answer.value`}
-      control={control}
-      render={({ field: { ref, onChange, value, ...checkboxProps } }) => {
-        const values = value?.filter((value: string) => value) || [];
-
-        return (
-          <MultipleSelection
-            {...checkboxProps}
-            onChange={onChange}
-            isDisabled={isDisabled}
-            activityItem={activityItem.activityItem}
-            value={values}
-          />
-        );
-      }}
-    />
-  );
-};
+      return (
+        <MultipleSelection
+          {...checkboxProps}
+          onChange={onChange}
+          isDisabled={isDisabled}
+          activityItem={activityItem}
+          value={values}
+        />
+      );
+    }}
+  />
+);
