@@ -8,6 +8,7 @@ export const MultiSelectResponseItem = ({ activityItem, answer }: MultiSelectIte
   <StyledFlexColumn>
     {activityItem.responseValues.options.map((option) => (
       <FormControlLabel
+        key={option.id}
         disabled
         label={option.text}
         control={<Checkbox checked={answer.value.includes(option.id)} value={option.id} />}

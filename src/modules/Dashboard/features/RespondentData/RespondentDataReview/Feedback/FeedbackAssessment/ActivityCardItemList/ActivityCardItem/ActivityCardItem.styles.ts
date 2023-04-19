@@ -24,6 +24,7 @@ export const StyledMdEditor = styled(MdEditor)`
   .default-theme {
     p {
       padding: 0;
+      word-break: break-word;
     }
 
     img {

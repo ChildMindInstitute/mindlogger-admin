@@ -6,6 +6,7 @@ export const SingleSelectResponseItem = ({ activityItem, answer }: SingleSelectI
   <RadioGroup value={answer.value}>
     {activityItem.responseValues.options.map((option) => (
       <FormControlLabel
+        key={option.id}
         value={option.id}
         disabled
         control={<Radio disabled />}

@@ -114,6 +114,7 @@ export const ActivityAbout = () => {
     {
       name: `${name}.responseIsEditable`,
       label: <StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>,
+      isInversed: true,
     },
     {
       name: `${name}.isReviewable`,
@@ -160,13 +161,14 @@ export const ActivityAbout = () => {
         {t('itemLevelSettings')}
       </StyledTitleMedium>
       <StyledFlexColumn>
-        {checkboxes.map(({ name, label, disabled }) => (
+        {checkboxes.map(({ name, label, isInversed, disabled }) => (
           <CheckboxController
             key={name}
             control={control}
             name={name}
             label={label}
             disabled={disabled}
+            isInversed={isInversed}
           />
         ))}
       </StyledFlexColumn>

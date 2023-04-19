@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import { Item } from 'shared/state';
+import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 export type ButtonsConfig = {
   removeBackButton: boolean;
@@ -18,5 +18,5 @@ export type ActivityCartProps = {
 
 export type ActivityCardItemListProps = ActivityCartProps &
   PropsWithChildren<{
-    items: Item[];
+    activityItems: ActivityItemAnswer[];
   }>;
