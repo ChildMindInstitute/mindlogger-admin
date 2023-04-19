@@ -1,7 +1,7 @@
 export type ActivityItemAnswer = {
   activityItemId: string;
   answer: {
-    value: string[];
+    value: number | string | string[];
   };
 };
 
