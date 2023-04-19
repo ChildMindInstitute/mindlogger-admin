@@ -16,15 +16,15 @@ import {
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
 import { ItemResponseType } from 'shared/consts';
+import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { StyledContent, StyledHeader, StyledItemConfiguration } from './ItemConfiguration.styles';
-import { ItemConfigurationProps } from './ItemConfiguration.types';
+import { ItemConfigurationProps, ItemsOptionGroup } from './ItemConfiguration.types';
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 
-//@TODO: add validation
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
@@ -32,10 +32,31 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
 
   const methods = useFormContext();
+  const { name: activityName } = useCurrentActivity();
 
   const { control, watch } = methods;
 
   const responseType = watch(`${name}.responseType`) as ItemResponseType;
+  const isReviewable = watch(`${activityName}.isReviewable`);
+
+  const availableItemsTypeOptions = isReviewable
+    ? itemsTypeOptions.reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
+        if (groupName !== 'select') return options;
+
+        return [
+          {
+            groupName,
+            groupOptions: groupOptions.filter(({ value }) =>
+              [
+                ItemResponseType.SingleSelection,
+                ItemResponseType.MultipleSelection,
+                ItemResponseType.Slider,
+              ].includes(value),
+            ),
+          },
+        ];
+      }, [])
+    : itemsTypeOptions;
 
   return (
     <StyledItemConfiguration ref={containerRef}>
@@ -60,7 +81,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           <Grid item xs={1}>
             <GroupedSelectSearchController
               name={`${name}.responseType`}
-              options={itemsTypeOptions}
+              options={availableItemsTypeOptions}
               control={control}
             />
             <StyledBodyMedium

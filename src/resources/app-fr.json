@@ -637,5 +637,7 @@
   "deleteItemDescription": "Êtes-vous sûr de vouloir supprimer l'élément <1>{{ itemName }}</1>?",
   "showMore": "Afficher plus...",
   "showLess": "Afficher moins...",
-  "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants"
+  "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants",
+  "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
+  "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}"
 }

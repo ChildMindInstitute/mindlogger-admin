@@ -12,9 +12,15 @@ import {
 } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Tooltip, Uploader } from 'shared/components';
-import { MAX_DESCRIPTION_LENGTH, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
+import {
+  ItemResponseType,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_FILE_SIZE_1GB,
+  MAX_NAME_LENGTH,
+} from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
+import { ActivityFormValues, ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 
 import { Uploads } from '../../components';
@@ -31,8 +37,32 @@ export const ActivityAbout = () => {
   ]);
 
   const { control, setValue, watch } = useFormContext();
-
   const { name } = useCurrentActivity();
+
+  const activities = watch('activities');
+  const activityItems = watch(`${name}.items`);
+  const activityWithReviewable = activities?.find((activity: ActivityFormValues, index: number) => {
+    const activityName = `activities.${index}`;
+
+    if (name === activityName) return false;
+
+    return activity.isReviewable;
+  });
+  const hasUnsupportedReviewableItemTypes = activityItems?.some(
+    (item: ItemFormValues) =>
+      ![
+        ItemResponseType.SingleSelection,
+        ItemResponseType.MultipleSelection,
+        ItemResponseType.Slider,
+        '',
+      ].includes(item.responseType as ItemResponseType),
+  );
+  const isReviewableExistsTooltip = activityWithReviewable
+    ? t('isReviewableExists', { activityName: activityWithReviewable?.name })
+    : undefined;
+  const isReviewableUnsupportedTooltip = hasUnsupportedReviewableItemTypes
+    ? t('isReviewableUnsupported')
+    : undefined;
 
   const commonProps = {
     control,
@@ -87,9 +117,12 @@ export const ActivityAbout = () => {
     },
     {
       name: `${name}.isReviewable`,
+      disabled: hasUnsupportedReviewableItemTypes || activityWithReviewable,
       label: (
         <StyledBodyLarge sx={{ position: 'relative' }}>
-          {t('onlyAdminPanelActivity')}
+          <Tooltip tooltipTitle={isReviewableExistsTooltip || isReviewableUnsupportedTooltip}>
+            <span>{t('onlyAdminPanelActivity')}</span>
+          </Tooltip>
           <Tooltip tooltipTitle={t('onlyAdminPanelActivityTooltip')}>
             <span>
               <StyledSvg id="more-info-outlined" />
@@ -127,8 +160,14 @@ export const ActivityAbout = () => {
         {t('itemLevelSettings')}
       </StyledTitleMedium>
       <StyledFlexColumn>
-        {checkboxes.map(({ name, label }) => (
-          <CheckboxController key={name} control={control} name={name} label={label} />
+        {checkboxes.map(({ name, label, disabled }) => (
+          <CheckboxController
+            key={name}
+            control={control}
+            name={name}
+            label={label}
+            disabled={disabled}
+          />
         ))}
       </StyledFlexColumn>
     </BuilderContainer>
