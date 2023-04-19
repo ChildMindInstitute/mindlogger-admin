@@ -1,8 +1,9 @@
-import { Box, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
-import { theme } from 'shared/styles';
+import { StyledFlexColumn, theme } from 'shared/styles';
 
-export const StyledContainer = styled(Box)`
+export const StyledContainer = styled(StyledFlexColumn)`
+  height: 100%;
   margin: ${theme.spacing(-2.4, -2.4, -1.6)};
   padding: ${theme.spacing(2.4, 2.4, 1.6)};
   overflow-y: auto;

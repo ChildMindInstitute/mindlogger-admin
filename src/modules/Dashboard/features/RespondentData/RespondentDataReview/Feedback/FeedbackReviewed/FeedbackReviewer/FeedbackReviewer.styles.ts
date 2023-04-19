@@ -21,3 +21,11 @@ export const StyledItem = styled(Box)`
     margin-bottom: 0;
   }
 `;
+
+export const StyledEdited = styled(Box)`
+  width: fit-content;
+  padding: ${theme.spacing(0.2, 1.2)};
+  margin-bottom: ${theme.spacing(0.2)};
+  background-color: ${variables.palette.on_surface_variant_alfa8};
+  border-radius: ${variables.borderRadius.xs};
+`;
