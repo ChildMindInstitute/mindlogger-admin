@@ -1,4 +1,5 @@
 import { Svg } from 'shared/components';
+import { ActivityFlowFormValues } from 'modules/Builder/pages';
 
 import { GetActivityFlowActions } from './ActivityFlow.types';
 
@@ -29,3 +30,5 @@ export const getFlowsItemActions = ({
     action: removeActivityFlow,
   },
 ];
+
+export const getActivityFlowKey = (flow: ActivityFlowFormValues) => flow.id ?? flow.key ?? '';
