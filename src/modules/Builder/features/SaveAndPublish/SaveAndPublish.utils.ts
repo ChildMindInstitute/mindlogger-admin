@@ -13,6 +13,9 @@ export const removeAppletExtraFields = () => ({
   retentionType: undefined,
   theme: undefined,
   version: undefined,
+  subscales: undefined, // TODO: remove when API will be ready
+  scores: undefined, // TODO: remove when API will be ready
+  sections: undefined, // TODO: remove when API will be ready
 });
 
 export const removeActivityExtraFields = () => ({ order: undefined });

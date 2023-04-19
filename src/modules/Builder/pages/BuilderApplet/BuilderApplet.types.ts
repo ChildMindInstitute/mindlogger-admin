@@ -4,8 +4,9 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   TextItemResponseValues,
   SliderItemResponseValues,
+  ActivitySettingsSubscale,
 } from 'shared/state';
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
 
 export type ItemFormValues = {
   id?: string;
@@ -62,4 +63,7 @@ export type AppletFormValues = {
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
   activities: ActivityFormValues[];
+  subscales?: ActivitySettingsSubscale[];
+  calculateTotalScore?: SubscaleTotalScore;
+  calculateTotalScoreSwitch?: boolean;
 };

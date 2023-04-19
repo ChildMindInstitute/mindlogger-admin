@@ -8,6 +8,7 @@ import { StyledItemOptionContainer } from '../ItemOptionContainer';
 export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardProp)`
   padding: ${theme.spacing(1.6, 2.4, 1.6, 3.4)};
   position: relative;
+  width: 100%;
 
   svg {
     fill: ${variables.palette.on_surface_variant};
