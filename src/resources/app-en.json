@@ -129,6 +129,7 @@
   "dismiss": "Dismiss",
   "appletDuplication": "Applet Duplication",
   "successDuplication": "Applet <1>{{appletName}}</1> has been duplicated successfully.",
+  "errorDuplication": "Applet <1>{{appletName}}</1> has not been duplicated. Please try again.",
   "nameRequired": "Name is required",
   "enterAppletName": "Enter Applet Name",
   "transferOwnershipConfirmation": "<0>Are you sure you want to transfer ownership of Applet <1>{{appletName}}</1> to another user?</0><1>This will only transfer the Applet. No user data will be transferred. After the new Owner confirms transfer, you will no longer have access to this Applet or its data.</1>",

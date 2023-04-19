@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { storage } from 'shared/utils';
 
-import { BASE_API_URL, LANGUAGES } from './api.const';
+import { BASE_API_URL } from './api.const';
 import { signInRefreshTokenApi } from './api';
 
 export const getBaseUrl = () => (storage.getItem('apiUrl') as string) || BASE_API_URL;
@@ -13,20 +13,6 @@ export const getRequestTokenData = (config: AxiosRequestConfig) => {
     config.headers = {};
   }
   config.headers['Authorization'] = `bearer ${accessToken}`;
-};
-
-export const getRequestLangData = (config: AxiosRequestConfig) => {
-  if (!config.params) {
-    config.params = {};
-  }
-  config.params.lang = storage.getItem('lang') || 'en';
-};
-
-export const getRequestFullLangData = (config: AxiosRequestConfig) => {
-  if (!config.params) config.params = {};
-  const lang = (storage.getItem('lang') || 'en') as keyof typeof LANGUAGES;
-
-  config.params.lang = LANGUAGES[lang] as string;
 };
 
 export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
