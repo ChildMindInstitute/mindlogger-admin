@@ -697,6 +697,7 @@
   "submitAssessmentDescription": "Are you sure you want to submit assessment? Only the latest version will be available on the Reviewed tab.",
   "reviewed": "Reviewed",
   "reviewedEmptyState": "No reviewer has completed the Assessment for this.",
+  "edited": "Edited",
   "configureServer": "Please configure the report server to download the report.",
   "moreFilters": "More Filters",
   "activityCompleted": "Activity Completed",
