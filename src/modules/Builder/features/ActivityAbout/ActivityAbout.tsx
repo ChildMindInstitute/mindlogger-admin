@@ -38,14 +38,14 @@ export const ActivityAbout = () => {
   ]);
 
   const { control, setValue, watch } = useFormContext();
-  const { name } = useCurrentActivity();
+  const { fieldName } = useCurrentActivity();
 
   const activities = watch('activities');
   const activityItems = watch(`${name}.items`);
   const activityWithReviewable = activities?.find((activity: ActivityFormValues, index: number) => {
-    const activityName = `activities.${index}`;
+    const activityFieldName = `activities.${index}`;
 
-    if (name === activityName) return false;
+    if (fieldName === activityFieldName) return false;
 
     return activity.isReviewable;
   });
@@ -55,10 +55,10 @@ export const ActivityAbout = () => {
   );
   const isReviewableExistsTooltip = activityWithReviewable
     ? t('isReviewableExists', { activityName: activityWithReviewable?.name })
-    : undefined;
+    : null;
   const isReviewableUnsupportedTooltip = hasUnsupportedReviewableItemTypes
     ? t('isReviewableUnsupported')
-    : undefined;
+    : null;
 
   const commonProps = {
     control,
@@ -78,8 +78,8 @@ export const ActivityAbout = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue(`${name}.image`, val)}
-          getValue={() => watch(`${name}.image`)}
+          setValue={(val: string) => setValue(`${fieldName}.image`, val)}
+          getValue={() => watch(`${fieldName}.image`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
@@ -90,8 +90,8 @@ export const ActivityAbout = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue(`${name}.splashScreen`, val)}
-          getValue={() => watch(`${name}.splashScreen`)}
+          setValue={(val: string) => setValue(`${fieldName}.splashScreen`, val)}
+          getValue={() => watch(`${fieldName}.splashScreen`)}
           description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
         />
       ),
@@ -100,20 +100,20 @@ export const ActivityAbout = () => {
 
   const checkboxes = [
     {
-      name: `${name}.showAllAtOnce`,
+      name: `${fieldName}.showAllAtOnce`,
       label: <StyledBodyLarge>{t('showAllQuestionsAtOnce')}</StyledBodyLarge>,
     },
     {
-      name: `${name}.isSkippable`,
+      name: `${fieldName}.isSkippable`,
       label: <StyledBodyLarge>{t('allowToSkipAllItems')}</StyledBodyLarge>,
     },
     {
-      name: `${name}.responseIsEditable`,
+      name: `${fieldName}.responseIsEditable`,
       label: <StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>,
       isInversed: true,
     },
     {
-      name: `${name}.isReviewable`,
+      name: `${fieldName}.isReviewable`,
       disabled: hasUnsupportedReviewableItemTypes || activityWithReviewable,
       label: (
         <StyledBodyLarge sx={{ position: 'relative' }}>
@@ -137,14 +137,14 @@ export const ActivityAbout = () => {
           <Box sx={{ marginBottom: theme.spacing(4.4) }}>
             <InputController
               {...commonProps}
-              name={`${name}.name`}
+              name={`${fieldName}.name`}
               maxLength={MAX_NAME_LENGTH}
               label={t('activityName')}
             />
           </Box>
           <InputController
             {...commonProps}
-            name={`${name}.description`}
+            name={`${fieldName}.description`}
             maxLength={MAX_DESCRIPTION_LENGTH}
             label={t('activityDescription')}
             multiline

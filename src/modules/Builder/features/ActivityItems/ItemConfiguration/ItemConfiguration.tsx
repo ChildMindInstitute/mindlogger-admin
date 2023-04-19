@@ -33,12 +33,12 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
 
   const methods = useFormContext();
-  const { name: activityName } = useCurrentActivity();
+  const { fieldName } = useCurrentActivity();
 
   const { control, watch } = methods;
 
   const responseType = watch(`${name}.responseType`) as ItemResponseType;
-  const isReviewable = watch(`${activityName}.isReviewable`);
+  const isReviewable = watch(`${fieldName}.isReviewable`);
 
   const availableItemsTypeOptions = isReviewable
     ? itemsTypeOptions.reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {

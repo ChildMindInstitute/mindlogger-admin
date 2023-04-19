@@ -17,7 +17,7 @@ export const BuilderActivity = () => {
   const navigate = useNavigate();
   useBreadcrumbs();
 
-  const { name = '', activity } = useCurrentActivity();
+  const { fieldName = '', activity } = useCurrentActivity();
 
   const { trigger, getFieldState } = useFormContext();
 
@@ -34,8 +34,8 @@ export const BuilderActivity = () => {
   }, [activityId, activity]);
 
   const tabErrors = {
-    hasAboutActivityErrors: !!getFieldState(`${name}.name`).error,
-    hasActivityItemsErrors: !!getFieldState(`${name}.items`).error,
+    hasAboutActivityErrors: !!getFieldState(`${fieldName}.name`).error,
+    hasActivityItemsErrors: !!getFieldState(`${fieldName}.items`).error,
   };
 
   return (
