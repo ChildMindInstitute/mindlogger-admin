@@ -9,6 +9,8 @@ import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 import { getAppletData } from 'shared/utils/getAppletData';
 import { Svg } from 'shared/components';
+import { useAsync } from 'shared/hooks';
+import { postAppletPasswordCheckApi } from 'shared/api';
 
 import { EnterAppletPasswordForm, EnterAppletPasswordProps } from './EnterAppletPassword.types';
 import { StyledController } from '../Password.styles';
@@ -20,6 +22,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     const { t } = useTranslation('app');
     const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
+    const { execute } = useAsync(postAppletPasswordCheckApi);
 
     const { handleSubmit, control, setError } = useForm<EnterAppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
@@ -28,9 +31,14 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const submitForm = ({ appletPassword }: EnterAppletPasswordForm) => {
-      if (isApplet) {
-        submitCallback && submitCallback({ appletPassword });
+    const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
+      if (isApplet && appletId) {
+        try {
+          await execute({ appletId, password: appletPassword });
+          submitCallback && submitCallback({ appletPassword });
+        } catch (e) {
+          setError('appletPassword', { message: t('incorrectAppletPassword') });
+        }
 
         return;
       }

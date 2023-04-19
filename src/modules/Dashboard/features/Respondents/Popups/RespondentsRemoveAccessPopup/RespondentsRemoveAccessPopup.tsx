@@ -1,13 +1,14 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal, SubmitBtnColor } from 'shared/components';
-import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features/Applet';
+import { EnterAppletPassword } from 'modules/Dashboard/features/Applet';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { useAsync } from 'shared/hooks';
 import { revokeAppletUserApi } from 'api';
+import { useSetupEnterAppletPassword } from 'modules/Dashboard/features/Applet/Password/EnterAppletPassword/EnterAppletPassword.hooks';
 
 import { ChosenAppletData } from '../../Respondents.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -22,7 +23,7 @@ export const RespondentsRemoveAccessPopup = ({
   setChosenAppletData,
 }: RespondentAccessPopupProps) => {
   const { t } = useTranslation('app');
-  const appletPasswordRef = useRef() as RefObject<AppletPasswordRef>;
+  const { appletPasswordRef, submitForm: submitPassword } = useSetupEnterAppletPassword();
   const [appletName, setAppletName] = useState('');
   const [respondentName, setRespondentName] = useState('');
   const [disabledSubmit, setDisabledSubmit] = useState(false);
@@ -98,12 +99,6 @@ export const RespondentsRemoveAccessPopup = ({
   const removeAccess = async () => {
     const { appletId, userId } = chosenAppletData as ChosenAppletData;
     await execute({ appletId, profileId: userId || '', deleteResponse: removeData });
-  };
-
-  const submitPassword = () => {
-    if (appletPasswordRef?.current) {
-      appletPasswordRef.current.submitForm();
-    }
   };
 
   const screens = getScreens({

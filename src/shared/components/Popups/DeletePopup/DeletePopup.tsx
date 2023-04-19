@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,23 +7,20 @@ import { useAsync } from 'shared/hooks';
 import { applets, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
-import { StyledModalWrapper } from 'shared/styles';
+import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { page } from 'resources';
+import { EnterAppletPassword, EnterAppletPasswordForm } from 'modules/Dashboard';
+import { useSetupEnterAppletPassword } from 'modules/Dashboard/features/Applet/Password/EnterAppletPassword/EnterAppletPassword.hooks';
 
-import {
-  DeleteAppletWithPasswordFormValues,
-  DeleteAppletWithPasswordRef,
-  DeleteAppletWithPassword,
-} from './DeleteAppletWithPassword';
-import { MODALS } from './DeletePopup.types';
+import { DeletePopupProps, MODALS } from './DeletePopup.types';
 
-export const DeletePopup = () => {
+export const DeletePopup = ({ encryption }: DeletePopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const history = useNavigate();
   const { deletePopupVisible, appletId } = popups.useData();
-  const deleteAppletWithPasswordRef = useRef<DeleteAppletWithPasswordRef | null>(null);
   const [activeModal, setActiveModal] = useState(MODALS.PasswordCheck);
+  const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
   const onClose = () => {
     dispatch(
@@ -35,19 +32,18 @@ export const DeletePopup = () => {
     );
   };
 
-  const { execute, error } = useAsync(deleteAppletApi, () => {
+  const { execute } = useAsync(deleteAppletApi, () => {
     // TODO: check after folder connect
     dispatch(applets.actions.deleteApplet({ id: appletId }));
   });
 
-  const handleDeleteApplet = async ({ password }: DeleteAppletWithPasswordFormValues) => {
-    deleteAppletWithPasswordRef.current?.setError(null);
-    const response = await execute({ appletId, password });
-
-    if (response?.status !== 204 || error) {
-      return deleteAppletWithPasswordRef.current?.setError(error);
+  const handleDeleteApplet = async ({ appletPassword: password }: EnterAppletPasswordForm) => {
+    try {
+      await execute({ appletId, password });
+      setActiveModal(MODALS.Confirmation);
+    } catch (e) {
+      //TODO: add error handler
     }
-    setActiveModal(MODALS.Confirmation);
   };
 
   const handleConfirmation = () => {
@@ -61,7 +57,7 @@ export const DeletePopup = () => {
         <Modal
           open={deletePopupVisible}
           onClose={onClose}
-          onSubmit={deleteAppletWithPasswordRef.current?.onSubmit}
+          onSubmit={submitForm}
           title={t('deleteApplet')}
           buttonText={t('delete')}
           hasSecondBtn
@@ -70,9 +66,15 @@ export const DeletePopup = () => {
           onSecondBtnSubmit={onClose}
         >
           <StyledModalWrapper>
-            <DeleteAppletWithPassword
-              ref={deleteAppletWithPasswordRef}
-              onSubmit={handleDeleteApplet}
+            <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
+              {t('deleteAppletDescriptionWithPassword')}
+            </StyledBodyLarge>
+            <EnterAppletPassword
+              ref={appletPasswordRef}
+              appletId={appletId}
+              encryption={encryption}
+              submitCallback={handleDeleteApplet}
+              isApplet
             />
           </StyledModalWrapper>
         </Modal>

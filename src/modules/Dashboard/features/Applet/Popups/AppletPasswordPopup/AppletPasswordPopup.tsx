@@ -1,12 +1,11 @@
-import { RefObject, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
+import { useSetupEnterAppletPassword } from 'modules/Dashboard/features/Applet/Password/EnterAppletPassword/EnterAppletPassword.hooks';
 
 import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
 import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
 import {
-  AppletPasswordRef,
   CreateAppletPassword,
   CreateAppletPasswordForm,
   EnterAppletPassword,
@@ -22,14 +21,7 @@ export const AppletPasswordPopup = ({
   submitCallback = () => onClose(),
 }: AppletPasswordPopupProps) => {
   const { t } = useTranslation('app');
-
-  const appletPasswordRef = useRef() as RefObject<AppletPasswordRef>;
-
-  const submitForm = () => {
-    if (appletPasswordRef?.current) {
-      appletPasswordRef.current.submitForm();
-    }
-  };
+  const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
   const handleSubmitCallback = (formData: CreateAppletPasswordForm | EnterAppletPasswordForm) => {
     submitCallback(formData);
