@@ -4,7 +4,8 @@ import { Navigate, Route } from 'react-router-dom';
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
 
-import { mainRoutes, appletRoutes, respondentDataRoutes } from './routes.const';
+import { mainRoutes, appletRoutes } from './routes.const';
+import { RespondentDataReview, RespondentDataSummary } from '../features';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
@@ -43,17 +44,24 @@ export const dashboardRoutes = () => (
           path={page.appletRespondentData}
           element={<Navigate to={page.appletRespondentDataSummary} />}
         />
-        {respondentDataRoutes.map(({ path, Component }) => (
+        <Route
+          path={page.appletRespondentDataSummary}
+          element={
+            <PrivateRoute>
+              <RespondentDataSummary />
+            </PrivateRoute>
+          }
+        />
+        <Route path={page.appletRespondentDataReview} element={<RespondentDataReview />}>
           <Route
-            key={path}
-            path={path}
+            path={page.appletRespondentDataReviewAnswer}
             element={
               <PrivateRoute>
-                <Component />
+                <RespondentDataReview />
               </PrivateRoute>
             }
           />
-        ))}
+        </Route>
       </Route>
     </Route>
   </Route>
