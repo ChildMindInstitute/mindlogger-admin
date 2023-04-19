@@ -16,6 +16,8 @@ export const removeAppletExtraFields = () => ({
   subscales: undefined, // TODO: remove when API will be ready
   scores: undefined, // TODO: remove when API will be ready
   sections: undefined, // TODO: remove when API will be ready
+  calculateTotalScore: undefined, // TODO: remove when API will be ready
+  calculateTotalScoreSwitch: undefined, // TODO: remove when API will be ready
 });
 
 export const removeActivityExtraFields = () => ({ order: undefined });
