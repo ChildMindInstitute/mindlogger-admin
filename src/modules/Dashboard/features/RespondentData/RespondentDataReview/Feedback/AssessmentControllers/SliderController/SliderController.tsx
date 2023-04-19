@@ -1,7 +1,6 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { Slider } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessementItems';
-
+import { Slider } from '../../AssessementItems';
 import { SliderProps } from './SliderController.types';
 
 export const SliderController = <T extends FieldValues>({

@@ -1,7 +1,6 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { MultipleSelection } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessementItems';
-
+import { MultipleSelection } from '../../AssessementItems';
 import { MultipleSelectionProps } from './MultipleSelectionController.types';
 
 export const MultipleSelectionController = <T extends FieldValues>({

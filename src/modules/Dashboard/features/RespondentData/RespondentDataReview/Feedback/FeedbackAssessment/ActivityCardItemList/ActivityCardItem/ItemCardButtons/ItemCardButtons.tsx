@@ -19,11 +19,11 @@ export const ItemCardButtons = ({
   const { watch } = useFormContext();
 
   const getValue = (value: string | number | string[]) =>
-    !!(Array.isArray(value) ? value.length : value);
+    Array.isArray(value) ? value.length : value;
 
   const answerValue = watch(`answers.${step}.answer.value`);
 
-  const [isNextDisable, setIsNextDisable] = useState(getValue(answerValue));
+  const [isNextDisable, setIsNextDisable] = useState(!!getValue(answerValue));
 
   useEffect(() => {
     setIsNextDisable(!getValue(answerValue));

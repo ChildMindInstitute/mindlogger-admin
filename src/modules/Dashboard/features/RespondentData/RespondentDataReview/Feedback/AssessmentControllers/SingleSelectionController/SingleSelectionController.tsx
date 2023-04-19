@@ -1,7 +1,6 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { SingleSelection } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessementItems';
-
+import { SingleSelection } from '../../AssessementItems';
 import { SingleSelectionProps } from './SingleSelectionController.types';
 
 export const SingleSelectionController = <T extends FieldValues>({

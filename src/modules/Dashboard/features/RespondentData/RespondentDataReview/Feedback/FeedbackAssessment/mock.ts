@@ -136,7 +136,7 @@ export const multipleSelectionMocked: MultiSelectItemAnswer = {
   },
   answer: {
     additionalText: '',
-    value: ['multiple-select-option-1', 'multiple-select-option-2'],
+    value: [],
   },
 };
 
