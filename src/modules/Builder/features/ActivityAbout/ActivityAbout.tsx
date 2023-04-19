@@ -25,6 +25,7 @@ import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderA
 
 import { Uploads } from '../../components';
 import { StyledContainer, StyledSvg } from './ActivityAbout.styles';
+import { itemsForReviewableActivity } from './ActivityAbout.const';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
@@ -50,12 +51,7 @@ export const ActivityAbout = () => {
   });
   const hasUnsupportedReviewableItemTypes = activityItems?.some(
     (item: ItemFormValues) =>
-      ![
-        ItemResponseType.SingleSelection,
-        ItemResponseType.MultipleSelection,
-        ItemResponseType.Slider,
-        '',
-      ].includes(item.responseType as ItemResponseType),
+      ![...itemsForReviewableActivity, ''].includes(item.responseType as ItemResponseType),
   );
   const isReviewableExistsTooltip = activityWithReviewable
     ? t('isReviewableExists', { activityName: activityWithReviewable?.name })

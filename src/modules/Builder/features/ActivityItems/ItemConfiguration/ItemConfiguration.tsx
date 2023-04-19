@@ -24,6 +24,7 @@ import { ItemConfigurationProps, ItemsOptionGroup } from './ItemConfiguration.ty
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
+import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
@@ -47,11 +48,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           {
             groupName,
             groupOptions: groupOptions.filter(({ value }) =>
-              [
-                ItemResponseType.SingleSelection,
-                ItemResponseType.MultipleSelection,
-                ItemResponseType.Slider,
-              ].includes(value),
+              itemsForReviewableActivity.includes(value),
             ),
           },
         ];
