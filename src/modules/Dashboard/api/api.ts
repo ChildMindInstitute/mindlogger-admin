@@ -375,7 +375,7 @@ export const createAnswerNoteApi = (
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/applets/${appletId}/answers/${answerId}/notes`,
+    `/answers/applet/${appletId}/answers/${answerId}/notes`,
     { note },
     {
       signal,
@@ -387,7 +387,7 @@ export const editAnswerNoteApi = (
   signal?: AbortSignal,
 ) =>
   authApiClient.put(
-    `/applets/${appletId}/answers/${answerId}/notes/${noteId}`,
+    `/answers/applet/${appletId}/answers/${answerId}/notes/${noteId}`,
     { note },
     {
       signal,
@@ -398,7 +398,7 @@ export const deleteAnswerNoteApi = (
   { appletId, answerId, noteId }: Answer & NoteId,
   signal?: AbortSignal,
 ) =>
-  authApiClient.put(`/applets/${appletId}/answers/${answerId}/notes/${noteId}`, {
+  authApiClient.delete(`/answers/applet/${appletId}/answers/${answerId}/notes/${noteId}`, {
     signal,
   });
 
