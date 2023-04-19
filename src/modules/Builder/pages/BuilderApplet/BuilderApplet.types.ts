@@ -31,6 +31,7 @@ export type ActivityFormValues = {
   showAllAtOnce?: boolean;
   isSkippable?: boolean;
   responseIsEditable?: boolean;
+  isReviewable?: boolean;
   isHidden?: boolean;
   items: ItemFormValues[];
 };

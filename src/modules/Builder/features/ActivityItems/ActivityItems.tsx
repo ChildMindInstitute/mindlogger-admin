@@ -20,7 +20,7 @@ export const ActivityItems = () => {
   const [itemIdToDelete, setItemIdToDelete] = useState('');
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
-  const { name, activity } = useCurrentActivity();
+  const { fieldName, activity } = useCurrentActivity();
   const { control, watch } = useFormContext();
 
   const {
@@ -30,7 +30,7 @@ export const ActivityItems = () => {
     move: moveItem,
   } = useFieldArray({
     control,
-    name: `${name}.items`,
+    name: `${fieldName}.items`,
   });
 
   useBreadcrumbs([
@@ -42,7 +42,7 @@ export const ActivityItems = () => {
 
   if (!activity) return null;
 
-  const items = watch(`${name}.items`);
+  const items = watch(`${fieldName}.items`);
   const activeItemIndex = items?.findIndex(
     (item: ItemFormValues) => (item.key ?? item.id) === activeItemId,
   );
@@ -114,7 +114,7 @@ export const ActivityItems = () => {
       {activeItemId && (
         <ItemConfiguration
           key={`item-${activeItemId}`}
-          name={`${name}.items.${activeItemIndex}`}
+          name={`${fieldName}.items.${activeItemIndex}`}
           onClose={() => setActiveItemId('')}
         />
       )}

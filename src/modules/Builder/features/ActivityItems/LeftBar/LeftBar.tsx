@@ -29,7 +29,7 @@ export const LeftBar = ({
   const isHeaderSticky = useHeaderSticky(containerRef);
   const [isDragging, setIsDragging] = useState(false);
 
-  const { name } = useCurrentActivity();
+  const { fieldName } = useCurrentActivity();
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
@@ -58,7 +58,7 @@ export const LeftBar = ({
                             dragHandleProps={itemProvided.dragHandleProps}
                             isDragging={snapshot.isDragging}
                             item={item}
-                            name={`${name}.items[${index}]`}
+                            name={`${fieldName}.items[${index}]`}
                             index={index}
                             activeItemId={activeItemId}
                             onSetActiveItem={onSetActiveItem}

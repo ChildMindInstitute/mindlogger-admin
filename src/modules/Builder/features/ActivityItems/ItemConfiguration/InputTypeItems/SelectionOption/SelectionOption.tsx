@@ -171,7 +171,7 @@ export const SelectionOption = ({
                   uiType={UploaderUiType.Secondary}
                   width={5.6}
                   height={5.6}
-                  setValue={(val: string) => setValue(`${optionName}.image`, val)}
+                  setValue={(val: string) => setValue(`${optionName}.image`, val || undefined)}
                   getValue={() => imageSrc || ''}
                 />
               </StyledFlexTopCenter>
