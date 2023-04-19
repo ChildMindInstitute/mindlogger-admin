@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { getErrorMessage } from 'shared/utils';
 import { useBreadcrumbs } from 'shared/hooks';
@@ -13,7 +14,9 @@ import { LinkGenerator } from './LinkGenerator';
 import { Invitations } from './AddUser.types';
 
 export const AddUser = () => {
+  const { appletId } = useParams();
   const { t } = useTranslation('app');
+
   const [invitations, setInvitations] = useState<Invitations | null>(null);
 
   useBreadcrumbs([
@@ -26,7 +29,7 @@ export const AddUser = () => {
   const getInvitationsHandler = async () => {
     try {
       const { data } = await getInvitationsApi({
-        params: { limit: DEFAULT_INVITATIONS_ROWS_PER_PAGE },
+        params: { limit: DEFAULT_INVITATIONS_ROWS_PER_PAGE, appletId },
       });
 
       data && setInvitations(data);

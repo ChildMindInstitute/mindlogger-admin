@@ -1,4 +1,4 @@
-import { authApiClient, authApiClientWithFullLang } from 'shared/api/api.client';
+import { authApiClient } from 'shared/api/api.client';
 import { AppletId } from 'shared/api';
 
 import {
@@ -11,7 +11,6 @@ import {
   FolderId,
   AppletNameArgs,
   AppletEncryption,
-  ValidateAppletName,
   UpdatePin,
   Folder,
   UpdateFolder,
@@ -26,6 +25,7 @@ import {
   OwnerId,
   Answers,
   Answer,
+  AppletUniqueName,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -136,27 +136,28 @@ export const postAppletInvitationApi = (
     },
   );
 
-export const duplicateAppletApi = (
-  { appletId, options, data }: DuplicateApplet,
-  signal?: AbortSignal,
-) =>
-  authApiClientWithFullLang.post(`/applet/${appletId}/duplicate`, data, {
-    params: {
-      ...options,
+export const duplicateAppletApi = ({ appletId, options }: DuplicateApplet, signal?: AbortSignal) =>
+  authApiClient.post(
+    `/applets/${appletId}/duplicate`,
+    { ...options },
+    {
+      signal,
     },
-    signal,
-  });
+  );
+
+export const getAppletUniqueNameApi = ({ name }: AppletUniqueName, signal?: AbortSignal) =>
+  authApiClient.post(
+    '/applets/unique_name',
+    { name },
+    {
+      signal,
+    },
+  );
 
 export const setAppletEncryptionApi = (
   { appletId, data }: AppletEncryption,
   signal?: AbortSignal,
 ) => authApiClient.put(`/applet/${appletId}/encryption`, data, { signal });
-
-export const validateAppletNameApi = ({ name }: ValidateAppletName, signal?: AbortSignal) =>
-  authApiClient.get('/applet/validateName', {
-    params: { name },
-    signal,
-  });
 
 export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
   const { ownerId, ...restParams } = params;
