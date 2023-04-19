@@ -1,4 +1,5 @@
 import { ButtonPropsVariantOverrides } from '@mui/material';
+
 import { Svg } from 'shared/components';
 
 export const commonButtonProps = {

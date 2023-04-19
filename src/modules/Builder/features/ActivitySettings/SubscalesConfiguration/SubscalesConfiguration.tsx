@@ -9,15 +9,16 @@ import { AppletFormValues } from 'modules/Builder/pages';
 import { DataTable, Svg } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { SubscaleTotalScore } from 'shared/consts';
+import { getEntityKey } from 'shared/utils';
 
 import { StyledButtonsContainer } from '../ActivitySettings.styles';
 import { commonButtonProps } from '../ActivitySettings.const';
 import { options } from './SubscalesConfiguration.const';
 import {
   getSubscalesDefaults,
-  allElementColumns,
+  allElementsTableColumns,
   getNotUsedElements,
-  filterItemElements,
+  checkOnItemType,
   getUsedWithinSubscalesElements,
   getPropertiesToFilterByIds,
 } from './SubscalesConfiguration.utils';
@@ -37,8 +38,8 @@ export const SubscalesConfiguration = () => {
   const { activity } = useCurrentActivity();
   const subscales = watch('subscales');
   const calculateTotalScoreSwitch = watch('calculateTotalScoreSwitch');
-  const filteredItems = (activity?.items ?? []).filter(filterItemElements);
-  const { subscalesMap, itemsMap, mergedIds, usedUniqueElementsIds } = getPropertiesToFilterByIds(
+  const filteredItems = (activity?.items ?? []).filter(checkOnItemType);
+  const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
     filteredItems,
     subscales,
   );
@@ -46,14 +47,14 @@ export const SubscalesConfiguration = () => {
     subscalesMap,
     itemsMap,
     mergedIds,
-    usedUniqueElementsIds,
+    markedUniqueElementsIds,
   );
   const usedWithinSubscalesElements = getUsedWithinSubscalesElements(
     subscales,
     subscalesMap,
     itemsMap,
     mergedIds,
-    usedUniqueElementsIds,
+    markedUniqueElementsIds,
   );
 
   const handleAddSubscale = () => {
@@ -66,6 +67,7 @@ export const SubscalesConfiguration = () => {
     <StyledButtonsContainer>
       {subscales?.map((subscale, index) => (
         <ToggleItemContainer
+          key={`data-subscale-${getEntityKey(subscale) || index}`}
           title={t('subscaleHeader', {
             index: index + 1,
             name: subscale?.name,
@@ -93,7 +95,7 @@ export const SubscalesConfiguration = () => {
       <StyledTitleMedium>{t('elementsAssociatedWithSubscales')}</StyledTitleMedium>
       {!!subscales?.length && (
         <DataTable
-          columns={allElementColumns}
+          columns={allElementsTableColumns}
           data={usedWithinSubscalesElements}
           noDataPlaceholder={t('noElementsYet')}
           styles={{ width: '100%' }}

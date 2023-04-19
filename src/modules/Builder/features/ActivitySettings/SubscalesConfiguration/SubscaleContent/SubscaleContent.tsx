@@ -23,7 +23,7 @@ import {
   getItemElements,
   columns,
   notUsedElementsTableColumns,
-  filterItemElements,
+  checkOnItemType,
 } from '../SubscalesConfiguration.utils';
 
 export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleContentProps) => {
@@ -31,7 +31,7 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
   const { control } = useFormContext();
   const subscales: AppletFormValues['subscales'] = useWatch({ name: 'subscales' });
   const { activity } = useCurrentActivity();
-  const items = getItemElements(subscaleId, activity?.items.filter(filterItemElements), subscales);
+  const items = getItemElements(subscaleId, activity?.items.filter(checkOnItemType), subscales);
 
   return (
     <StyledFlexColumn>

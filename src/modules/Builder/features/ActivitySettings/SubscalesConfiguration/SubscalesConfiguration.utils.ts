@@ -4,9 +4,10 @@ import i18n from 'i18n';
 import { ActivitySettingsSubscale } from 'shared/state';
 import { ItemFormValues } from 'modules/Builder/pages';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
-import { getEntityKey, getMapFromList } from 'shared/utils';
+import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 
 import {
+  ItemElement,
   SharedElementColumns,
   SubscaleColumns,
   SubscaleContentProps,
@@ -22,7 +23,7 @@ export const getSubscalesDefaults = () => ({
 });
 
 export const getItemNameInSubscale = (item: ItemFormValues) =>
-  `${t('item_one')}: ${t(item.responseType)}: ${t(item.name)}`;
+  capitalize(`${t('item_one')}: ${t(item.responseType)}: ${t(item.name)}`);
 
 export const getItemElementName = (item: ItemFormValues) =>
   `${getItemNameInSubscale(item)}: ${t(item.question)}`;
@@ -33,18 +34,17 @@ export const getSubscaleElementName = (
   itemsMap: Record<string, ItemFormValues>,
 ) =>
   `${t('subscale')}: ${subscale.name} (${subscale.items
-    .map((itemId) => {
+    .reduce((acc, itemId) => {
       const item = itemsMap[itemId];
       const subscale = subscalesMap[itemId];
-      if (item) return getItemNameInSubscale(item);
-      if (subscale) return `${t('subscale')}: ${subscale.name}`;
+      if (item) return [...acc, getItemNameInSubscale(item)];
+      if (subscale) return [...acc, `${t('subscale')}: ${subscale.name}`];
 
-      return '';
-    })
-    .filter(Boolean)
+      return acc;
+    }, [] as string[])
     .join(', ')})`;
 
-export const filterItemElements = (item: ItemFormValues) =>
+export const checkOnItemType = (item: ItemFormValues) =>
   [
     ItemResponseType.SingleSelection,
     ItemResponseType.MultipleSelection,
@@ -58,14 +58,19 @@ export const getItemElements = (
 ) => {
   if (!items) return [];
 
-  const itemsMap = getMapFromList(items);
-  const subscalesMap = getMapFromList(subscales);
-  const subscaleElements = subscales
-    .filter((subscale) => subscale.id !== subscaleId)
-    .map((subscale) => ({
-      id: subscale.id ?? '',
-      [SubscaleColumns.Name]: getSubscaleElementName(subscale, subscalesMap, itemsMap),
-    }));
+  const itemsMap = getObjectFromList(items);
+  const subscalesMap = getObjectFromList(subscales);
+  const subscaleElements = subscales.reduce((acc, subscale) => {
+    if (subscale.id === subscaleId) return acc;
+
+    return [
+      ...acc,
+      {
+        id: subscale.id ?? '',
+        [SubscaleColumns.Name]: getSubscaleElementName(subscale, subscalesMap, itemsMap),
+      },
+    ];
+  }, [] as ItemElement[]);
   const itemElements = items.map((item) => ({
     id: getEntityKey(item),
     [SubscaleColumns.Name]: getItemElementName(item),
@@ -78,12 +83,12 @@ export const getPropertiesToFilterByIds = (
   items: ItemFormValues[] = [],
   subscales: ActivitySettingsSubscale[] = [],
 ) => {
-  const itemsMap = getMapFromList(items);
-  const subscalesMap = getMapFromList(subscales);
+  const itemsMap = getObjectFromList(items);
+  const subscalesMap = getObjectFromList(subscales);
   const allSubscaleIds = subscales.map((subscale) => getEntityKey(subscale));
   const allItemIds = items.map((item) => getEntityKey(item));
   const mergedIds = allSubscaleIds.concat(allItemIds);
-  const usedUniqueElementsIds = [
+  const markedUniqueElementsIds = [
     ...new Set(subscales.reduce((acc, subscale) => acc.concat(subscale.items), [] as string[])),
   ];
 
@@ -91,7 +96,7 @@ export const getPropertiesToFilterByIds = (
     itemsMap,
     subscalesMap,
     mergedIds,
-    usedUniqueElementsIds,
+    markedUniqueElementsIds,
   };
 };
 
@@ -99,70 +104,81 @@ export const getNotUsedElements = (
   subscalesMap: Record<string, ActivitySettingsSubscale>,
   itemsMap: Record<string, ItemFormValues>,
   mergedIds: string[],
-  usedUniqueElementsIds: string[],
-) => {
-  const filteredIds = mergedIds.filter((id) => !usedUniqueElementsIds.includes(id));
-  const elements = filteredIds
-    .map((id) => {
-      const subscale = subscalesMap[id];
-      const item = itemsMap[id];
+  markedUniqueElementsIds: string[],
+) =>
+  mergedIds.reduce((acc, id) => {
+    if (markedUniqueElementsIds.includes(id)) return acc;
 
-      if (item)
-        return {
+    const subscale = subscalesMap[id];
+    const item = itemsMap[id];
+
+    if (item)
+      return [
+        ...acc,
+        {
           id,
           [SubscaleColumns.Name]: getItemNameInSubscale(item),
-        };
-      if (subscale)
-        return {
+        },
+      ];
+    if (subscale)
+      return [
+        ...acc,
+        {
           id,
           [SubscaleColumns.Name]: getSubscaleElementName(subscale, subscalesMap, itemsMap),
-        };
+        },
+      ];
 
-      return null;
-    })
-    .filter(Boolean);
-
-  return elements as SubscaleContentProps['notUsedElements'];
-};
+    return acc;
+  }, [] as SubscaleContentProps['notUsedElements']);
 
 export const getUsedWithinSubscalesElements = (
   subscales: ActivitySettingsSubscale[] = [],
   subscalesMap: Record<string, ActivitySettingsSubscale>,
   itemsMap: Record<string, ItemFormValues>,
   mergedIds: string[],
-  usedUniqueElementsIds: string[],
-) => {
-  const filteredIds = mergedIds.filter((id) => usedUniqueElementsIds.includes(id));
-  const elements = filteredIds
-    .map((id) => {
+  markedUniqueElementsIds: string[],
+) =>
+  mergedIds.reduce(
+    (acc, id) => {
+      if (!markedUniqueElementsIds.includes(id)) return acc;
+
       const subscale = subscalesMap[id];
       const item = itemsMap[id];
 
       if (item)
-        return {
-          id,
-          [SharedElementColumns.Element]: getItemNameInSubscale(item),
-          [SharedElementColumns.Subscale]:
-            (subscales.find((subscale) => subscale.items.includes(id)) ?? {}).name ?? '',
-        };
+        return [
+          ...acc,
+          {
+            id,
+            [SharedElementColumns.Element]: getItemNameInSubscale(item),
+            [SharedElementColumns.Subscale]:
+              (subscales.find((subscale) => subscale.items.includes(id)) ?? {}).name ?? '',
+          },
+        ];
       if (subscale)
-        return {
-          id,
-          [SharedElementColumns.Element]: getSubscaleElementName(subscale, subscalesMap, itemsMap),
-          [SharedElementColumns.Subscale]:
-            (subscales.find((subscale) => subscale.items.includes(id)) ?? {}).name ?? '',
-        };
+        return [
+          ...acc,
+          {
+            id,
+            [SharedElementColumns.Element]: getSubscaleElementName(
+              subscale,
+              subscalesMap,
+              itemsMap,
+            ),
+            [SharedElementColumns.Subscale]:
+              (subscales.find((subscale) => subscale.items.includes(id)) ?? {}).name ?? '',
+          },
+        ];
 
-      return null;
-    })
-    .filter(Boolean);
-
-  return elements as {
-    id: string;
-    [SharedElementColumns.Element]: string;
-    [SharedElementColumns.Subscale]: string;
-  }[];
-};
+      return acc;
+    },
+    [] as {
+      id: string;
+      [SharedElementColumns.Element]: string;
+      [SharedElementColumns.Subscale]: string;
+    }[],
+  );
 
 export const columns = [
   {
@@ -178,7 +194,7 @@ export const notUsedElementsTableColumns = [
   },
 ];
 
-export const allElementColumns = [
+export const allElementsTableColumns = [
   {
     key: SharedElementColumns.Element,
     label: t('element'),

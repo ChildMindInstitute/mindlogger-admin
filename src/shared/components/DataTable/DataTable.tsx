@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { StyledBodyMedium, StyledFlexColumn, StyledLabelLarge, variables } from 'shared/styles';
+import { getEntityKey } from 'shared/utils';
 
 import { DataTableProps } from './DataTable.types';
 import { getColumns } from './DataTable.utils';
@@ -75,11 +76,10 @@ export const DataTable = ({
               const isSelected = selected?.includes(item.id);
 
               return (
-                <TableRow key={`data-table-row-${index}`}>
+                <TableRow key={`data-table-row-${getEntityKey(item) || index}`}>
                   {selectable && (
                     <TableCell sx={{ width: '2.8rem', backgroundColor: 'inherit' }}>
                       <Checkbox
-                        key={`data-table-cell-checkbox-${isSelected}`}
                         checked={isSelected}
                         onChange={() => handleSelect(item.id, isSelected)}
                       />

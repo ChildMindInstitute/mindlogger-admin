@@ -1,4 +1,5 @@
 import { styled } from '@mui/material';
+
 import { StyledFlexColumn, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 

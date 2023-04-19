@@ -8,7 +8,6 @@ export const SubscaleHeaderContent = ({ onRemove }: SubscaleHeaderContentProps) 
 
   return (
     <StyledFlexTopCenter>
-      {' '}
       <StyledClearedButton
         sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
         onClick={handleOnLookupTable}
