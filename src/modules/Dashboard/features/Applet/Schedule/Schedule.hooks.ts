@@ -40,80 +40,82 @@ export const usePreparedEvents = (
         acc: EventsData,
         { periodicity, activityId, flowId, startTime: startTimeFull, endTime: endTimeFull },
       ) => {
-        const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
-        const isAlwaysAvailable = periodicityType === Periodicity.Always;
-
-        const date = format(new Date(selectedDate || startDate), DateFormats.DayMonthYear);
-        const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull);
-        const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull);
         const activityOrFlowId = activityId || flowId;
         const currentActivityOrFlow = activitiesAndFlows.find(
           (item) => item.id === activityOrFlowId,
         );
-        const activityOrFlowName = currentActivityOrFlow?.name || '';
-        // TODO: Add notification time after notifications connection to the API
-        const notificationTime = '-';
-        const repeats = getRepeatsAnswer(periodicityType);
-        const frequency = getFrequencyString(periodicityType);
-        const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
-        const currentYear = new Date().getFullYear();
 
-        acc.scheduleExportTableData.push({
-          activityName: getTableCell(activityOrFlowName),
-          date: getTableCell(date),
-          startTime: getTableCell(startTime),
-          endTime: getTableCell(endTime),
-          notificationTime: getTableCell(notificationTime),
-          repeats: getTableCell(repeats),
-          frequency: getTableCell(frequency),
-        });
+        if (!currentActivityOrFlow?.isHidden) {
+          const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
+          const isAlwaysAvailable = periodicityType === Periodicity.Always;
+          const date = format(new Date(selectedDate || startDate), DateFormats.DayMonthYear);
+          const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull);
+          const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull);
+          const activityOrFlowName = currentActivityOrFlow?.name || '';
+          // TODO: Add notification time after notifications connection to the API
+          const notificationTime = '-';
+          const repeats = getRepeatsAnswer(periodicityType);
+          const frequency = getFrequencyString(periodicityType);
+          const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
+          const currentYear = new Date().getFullYear();
 
-        acc.scheduleExportCsv.push({
-          activityName: activityOrFlowName,
-          date,
-          startTime,
-          endTime,
-          notificationTime,
-          repeats,
-          frequency,
-        });
-
-        const dataToCreateEvent = {
-          activityOrFlowId,
-          activityOrFlowName,
-          periodicityType,
-          selectedDate,
-          startDate,
-          endDate,
-          startTime: startTimeFull,
-          endTime: endTimeFull,
-          isAlwaysAvailable,
-          colors: activityOrFlowColors,
-          flowId,
-          nextYearDateString: null,
-          currentYear,
-        };
-
-        if (dataToCreateEvent) {
-          acc.eventsDataArr.push(dataToCreateEvent);
-        }
-
-        const calendarEvents = createEvents(dataToCreateEvent);
-
-        if (calendarEvents) {
-          acc.calendarEventsArr.push(...calendarEvents);
-        }
-
-        if (periodicityType === Periodicity.Always) {
-          acc.alwaysActivitiesFlows.push({
-            color: [activityOrFlowColors[0], activityOrFlowColors[0]],
-            id: activityId || flowId,
+          acc.scheduleExportTableData.push({
+            activityName: getTableCell(activityOrFlowName),
+            date: getTableCell(date),
+            startTime: getTableCell(startTime),
+            endTime: getTableCell(endTime),
+            notificationTime: getTableCell(notificationTime),
+            repeats: getTableCell(repeats),
+            frequency: getTableCell(frequency),
           });
-        } else {
-          acc.scheduledActivitiesFlows.push({
-            color: activityOrFlowColors,
-            id: activityId || flowId,
+
+          acc.scheduleExportCsv.push({
+            activityName: activityOrFlowName,
+            date,
+            startTime,
+            endTime,
+            notificationTime,
+            repeats,
+            frequency,
           });
+
+          const dataToCreateEvent = {
+            activityOrFlowId,
+            activityOrFlowName,
+            periodicityType,
+            selectedDate,
+            startDate,
+            endDate,
+            startTime: startTimeFull,
+            endTime: endTimeFull,
+            isAlwaysAvailable,
+            colors: activityOrFlowColors,
+            flowId,
+            nextYearDateString: null,
+            currentYear,
+          };
+
+          if (dataToCreateEvent) {
+            acc.eventsDataArr.push(dataToCreateEvent);
+          }
+
+          const calendarEvents = createEvents(dataToCreateEvent);
+
+          if (calendarEvents) {
+            acc.calendarEventsArr.push(...calendarEvents);
+          }
+
+          if (periodicityType === Periodicity.Always) {
+            acc.alwaysActivitiesFlows.push({
+              color: [activityOrFlowColors[0], activityOrFlowColors[0]],
+              id: activityId || flowId,
+            });
+          } else {
+            acc.scheduledActivitiesFlows.push({
+              color: activityOrFlowColors,
+              id: activityId || flowId,
+            });
+          }
         }
 
         return acc;

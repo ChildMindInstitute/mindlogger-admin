@@ -2,18 +2,16 @@ import uniqueId from 'lodash.uniqueid';
 import {
   eachDayOfInterval,
   eachMonthOfInterval,
+  endOfYear,
   getDate,
   getDay,
   isWeekend,
   setHours,
   setMinutes,
   setSeconds,
-  endOfYear,
   startOfYear,
-  format,
 } from 'date-fns';
 
-import { DateFormats } from 'shared/consts';
 import { Periodicity } from 'modules/Dashboard/api';
 
 import { CalendarEvent, CreateEventsData } from './CalendarEvents.schema';
@@ -56,25 +54,32 @@ const getEventStartDateTime = (
   startTime: string,
   nextYearDateString: string | null,
 ) => {
-  const nextYearDate = getDateFromDateStringTimeString(
-    nextYearDateString || format(new Date(), DateFormats.YearMonthDay),
-    '00:00:00',
-  );
-  const nextYearDateWithTime = getDateFromDateStringTimeString(
-    nextYearDateString || format(new Date(), DateFormats.YearMonthDay),
-    startTime,
-  );
+  const nextYearDate =
+    nextYearDateString && getDateFromDateStringTimeString(nextYearDateString, '00:00:00');
+
+  const nextYearDateWithTime =
+    nextYearDateString && getDateFromDateStringTimeString(nextYearDateString, startTime);
+
   const selectedDateToDate = getDateFromDateStringTimeString(selectedDate, '00:00:00');
   const selectedDateToDateWithTime = getDateFromDateStringTimeString(selectedDate, startTime);
   const startDateToDateWithTime = getDateFromDateStringTimeString(startDate, startTime);
 
-  const dateAlways = nextYearDate > selectedDateToDate ? nextYearDate : selectedDateToDate;
+  const dateAlways =
+    nextYearDate && nextYearDate.getFullYear() > selectedDateToDate.getFullYear()
+      ? nextYearDate
+      : selectedDateToDate;
+
   const dateScheduled =
-    nextYearDateWithTime > selectedDateToDateWithTime
+    nextYearDateWithTime &&
+    nextYearDateWithTime.getFullYear() > selectedDateToDateWithTime.getFullYear()
       ? nextYearDateWithTime
       : selectedDateToDateWithTime;
+
   const dateDailyWeekdays =
-    nextYearDateWithTime > startDateToDateWithTime ? nextYearDateWithTime : startDateToDateWithTime;
+    nextYearDateWithTime &&
+    nextYearDateWithTime.getFullYear() > startDateToDateWithTime.getFullYear()
+      ? nextYearDateWithTime
+      : startDateToDateWithTime;
 
   switch (periodicity) {
     case Periodicity.Always:
