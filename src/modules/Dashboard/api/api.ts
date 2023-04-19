@@ -26,6 +26,10 @@ import {
   Answers,
   Answer,
   AppletUniqueName,
+  GetAnswersNotesParams,
+  NoteId,
+  Note,
+  AppletSubmitDateList,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -361,3 +365,49 @@ export const getAnswersApi = ({ id, respondentId, createdDate }: Answers, signal
 
 export const getAnswerApi = ({ appletId, answerId }: Answer, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
+
+export const getAnswersNotesApi = (
+  { appletId, answerId, params }: Answer & GetAnswersNotesParams,
+  signal?: AbortSignal,
+) => authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/notes`, { params, signal });
+
+export const createAnswerNoteApi = (
+  { appletId, answerId, note }: Answer & Note,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/answers/applet/${appletId}/answers/${answerId}/notes`,
+    { note },
+    {
+      signal,
+    },
+  );
+
+export const editAnswerNoteApi = (
+  { appletId, answerId, noteId, note }: Answer & NoteId & Note,
+  signal?: AbortSignal,
+) =>
+  authApiClient.put(
+    `/answers/applet/${appletId}/answers/${answerId}/notes/${noteId}`,
+    { note },
+    {
+      signal,
+    },
+  );
+
+export const deleteAnswerNoteApi = (
+  { appletId, answerId, noteId }: Answer & NoteId,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(`/answers/applet/${appletId}/answers/${answerId}/notes/${noteId}`, {
+    signal,
+  });
+
+export const getAppletSubmitDateListApi = (
+  { appletId, ...params }: AppletSubmitDateList,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/answers/applet/${appletId}/dates`, {
+    params,
+    signal,
+  });

@@ -12,6 +12,7 @@ import {
   getDictionaryObject,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet } from 'shared/state';
+import { auth } from 'modules/Auth';
 import { EnterAppletPasswordForm } from 'modules/Dashboard';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
@@ -150,10 +151,11 @@ export const usePrompt = (isFormChanged: boolean) => {
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { trigger } = useFormContext();
+  const userData = auth.useData();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
-  const { createApplet, updateApplet } = applet.thunk;
+  const { createApplet, updateApplet, getAppletWithItems } = applet.thunk;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { appletId } = useParams();
@@ -166,6 +168,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
   const { getPassword, setPassword } = usePasswordFromStorage();
+  const ownerId = String(userData?.user?.id) || '';
 
   useEffect(() => {
     responseStatus === 'loading' && setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
@@ -248,7 +251,10 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
         return;
       }
 
-      appletId && navigate(getBuilderAppletUrl(appletId));
+      if (appletId) {
+        await dispatch(getAppletWithItems({ ownerId, appletId }));
+        navigate(getBuilderAppletUrl(appletId));
+      }
     }
     if (updateApplet.rejected.match(result)) {
       setPassword(appletId!, '');

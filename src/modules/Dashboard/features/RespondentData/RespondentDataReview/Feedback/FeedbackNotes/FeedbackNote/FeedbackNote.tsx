@@ -39,14 +39,13 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
         noteText: yup.string(),
       }),
     ),
-    defaultValues: { noteText: note.content || '' },
+    defaultValues: { noteText: note.note || '' },
   });
 
   const saveChanges = () => {
     onEdit({
-      ...note,
-      date: new Date(),
-      content: getValues().noteText,
+      id: note.id,
+      note: getValues().noteText,
     });
     setIsEditMode(false);
   };
@@ -82,9 +81,11 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
             onMouseLeave={() => setIsVisibleActions(false)}
           >
             <StyledFlexTopStart>
-              <StyledAuthorLabel color={variables.palette.outline}>{note.author}</StyledAuthorLabel>
+              <StyledAuthorLabel color={variables.palette.outline}>
+                {note.user.firstName}
+              </StyledAuthorLabel>
               <StyledBodyMedium color={variables.palette.outline}>
-                {timeAgo.format(note.date)}
+                {timeAgo.format(new Date(note.createdAt))}
               </StyledBodyMedium>
             </StyledFlexTopStart>
             {isVisibleActions && (
@@ -92,14 +93,14 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
                 <StyledButton onClick={() => setIsEditMode(true)}>
                   <Svg id="edit" {...commonSvgProps} />
                 </StyledButton>
-                <StyledButton onClick={() => onDelete(note)}>
+                <StyledButton onClick={() => onDelete(note.id)}>
                   <Svg id="trash" {...commonSvgProps} />
                 </StyledButton>
               </StyledActions>
             )}
           </StyledNoteHeader>
           <Box>
-            <StyledBodyLarge>{note.content}</StyledBodyLarge>
+            <StyledBodyLarge>{note.note}</StyledBodyLarge>
           </Box>
         </StyledNote>
       )}
