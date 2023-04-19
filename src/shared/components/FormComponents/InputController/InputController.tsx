@@ -33,6 +33,7 @@ export const InputController = <T extends FieldValues>({
   helperText,
   isEmptyStringAllowed = false,
   isErrorVisible = true,
+  restrictExceededValueLength = false,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -67,6 +68,11 @@ export const InputController = <T extends FieldValues>({
 
         const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
           if (handleCustomChange) return handleCustomChange(event);
+
+          const newValue = event.target.value;
+
+          if (newValue && maxLength && restrictExceededValueLength && newValue.length > maxLength)
+            return;
 
           onChange(event.target.value);
         };

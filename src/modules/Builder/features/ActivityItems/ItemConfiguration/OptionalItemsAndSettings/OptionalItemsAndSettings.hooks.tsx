@@ -8,6 +8,7 @@ import { Config } from 'shared/state';
 import {
   TextResponse,
   SliderRows,
+  SelectionRows,
   // AudioPlayer,
   // AudioRecord,
   // Date,
@@ -15,7 +16,6 @@ import {
   // Geolocation,
   // NumberSelection,
   // PhotoResponse,
-  // SelectionRows,
   // TimeRange,
   // VideoResponse,
 } from '../InputTypeItems';
@@ -25,6 +25,7 @@ import {
   defaultTextConfig,
   defaultSliderConfig,
   defaultSingleAndMultiSelectionConfig,
+  defaultSingleAndMultiSelectionRowsConfig,
 } from './OptionalItemsAndSettings.const';
 import { getEmptySliderOption } from '../ItemConfiguration.utils';
 
@@ -38,10 +39,10 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       // case ItemResponseType.SliderRows:
       //   return <SliderRows name="sliderOptions" control={control} isMultiple />;
 
-      // case ItemResponseType.SingleSelectionPerRow:
-      //   return <SelectionRows isSingle />;
-      // case ItemResponseType.MultipleSelectionPerRow:
-      //   return <SelectionRows />;
+      case ItemResponseType.SingleSelectionPerRow:
+        return <SelectionRows name={name} isSingle />;
+      case ItemResponseType.MultipleSelectionPerRow:
+        return <SelectionRows name={name} />;
       // case ItemResponseType.Geolocation:
       //   return <Geolocation />;
       // case ItemResponseType.TimeRange:
@@ -72,6 +73,8 @@ export const useSettingsSetup = ({
   name,
   removeOptions,
   handleAddOption,
+  removeRowOptions,
+  handleAddRowOption,
   removeAlert,
   handleAddAlert,
   setShowColorPalette,
@@ -91,6 +94,7 @@ export const useSettingsSetup = ({
     const subscription = watch((_, { name: fieldName, type }) => {
       if (fieldName === `${name}.responseType` && type === 'change') {
         removeOptions?.();
+        removeRowOptions?.();
 
         const responseType = getValues(`${name}.responseType`);
 
@@ -100,6 +104,14 @@ export const useSettingsSetup = ({
         ) {
           handleAddOption?.();
           setConfig(defaultSingleAndMultiSelectionConfig);
+        }
+
+        if (
+          responseType === ItemResponseType.SingleSelectionPerRow ||
+          responseType === ItemResponseType.MultipleSelectionPerRow
+        ) {
+          handleAddRowOption?.();
+          setConfig(defaultSingleAndMultiSelectionRowsConfig);
         }
 
         if (responseType === ItemResponseType.Text) {

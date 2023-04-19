@@ -39,7 +39,9 @@ export const StyledSelectionBox = styled(StyledFlexColumn)`
 
   .MuiFormHelperText-root {
     position: absolute;
-    bottom: -2.4rem;
+    top: 5.3rem;
+    bottom: unset;
+    white-space: normal;
     font-size: ${variables.font.size.md};
   }
 `;

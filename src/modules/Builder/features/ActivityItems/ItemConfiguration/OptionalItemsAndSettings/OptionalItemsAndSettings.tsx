@@ -61,6 +61,10 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       control,
       name: `${name}.responseValues.options`,
     });
+    const { append: appendRowOption, remove: removeRowOptions } = useFieldArray({
+      control,
+      name: `${name}.responseValues.rows`,
+    });
 
     //TODO: add alerts after backend ready
     // const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
@@ -83,6 +87,18 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
         ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
         ...(hasColorPalette &&
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
+      });
+
+    const handleAddRowOption = () =>
+      appendRowOption({
+        id: uuidv4(),
+        rowName: '',
+        options: [
+          {
+            id: uuidv4(),
+            text: '',
+          },
+        ],
       });
 
     // const handleAddAlert = () =>
@@ -163,6 +179,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       name,
       removeOptions,
       handleAddOption,
+      removeRowOptions,
+      handleAddRowOption,
       // removeAlert: () => {}, //TODO: remove after backend ready
       // handleAddAlert: () => {}, //TODO: remove after backend ready
       setShowColorPalette: handleChangeColorPaletteVisibility,

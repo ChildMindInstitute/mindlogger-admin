@@ -11,6 +11,7 @@ import {
   Item,
   ActivityFlow,
   SingleAndMultipleSelectItemResponseValues,
+  SingleAndMultipleSelectRowsResponseValues,
 } from 'shared/state';
 import { getDictionaryText, Path } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
@@ -102,6 +103,9 @@ const getActivityItemResponseValues = (item: Item) => {
       return item.responseValues;
     case ItemResponseType.Text:
       return null;
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow:
+      return item.responseValues as SingleAndMultipleSelectRowsResponseValues;
     default:
       return null;
   }

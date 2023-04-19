@@ -79,6 +79,15 @@ export type SliderConfig = {
   };
 };
 
+export type SingleAndMultipleSelectionPerRowConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  timer: number;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -105,14 +114,39 @@ export type SingleAndMultipleSelectItemResponseValues = {
   options: Array<SingleAndMultipleSelectionOption>;
 };
 
+export type SingleAndMultipleSelectRowOption = {
+  id: string;
+  text: string;
+  image?: string;
+  score?: number;
+  tooltip?: string;
+};
+
+export type SingleAndMultipleSelectRow = {
+  id: string;
+  rowName: string;
+  rowImage?: string;
+  tooltip?: string;
+  options: Array<SingleAndMultipleSelectRowOption>;
+};
+
+export type SingleAndMultipleSelectRowsResponseValues = {
+  rows: Array<SingleAndMultipleSelectRow>;
+};
+
 export type TextItemResponseValues = null;
 
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
-  | SliderItemResponseValues;
+  | SliderItemResponseValues
+  | SingleAndMultipleSelectRowsResponseValues;
 
-export type Config = TextInputConfig | SingleAndMultipleSelectionConfig | SliderConfig;
+export type Config =
+  | TextInputConfig
+  | SingleAndMultipleSelectionConfig
+  | SliderConfig
+  | SingleAndMultipleSelectionPerRowConfig;
 
 export type ItemAlert = {
   message: string;
@@ -156,6 +190,18 @@ export interface SliderItem extends Item {
   responseType: ItemResponseType.Slider;
   config: SliderConfig;
   responseValues: SliderItemResponseValues;
+}
+
+export interface SingleSelectRowsItem extends Item {
+  responseType: ItemResponseType.SingleSelectionPerRow;
+  config: SingleAndMultipleSelectionPerRowConfig;
+  responseValues: SingleAndMultipleSelectRowsResponseValues;
+}
+
+export interface MultiSelectRowsItem extends Item {
+  responseType: ItemResponseType.MultipleSelectionPerRow;
+  config: SingleAndMultipleSelectionPerRowConfig;
+  responseValues: SingleAndMultipleSelectRowsResponseValues;
 }
 
 export type Activity = {

@@ -200,6 +200,10 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   ],
   [ItemResponseType.SingleSelectionPerRow]: [
     {
+      groupName: ItemSettingsGroupNames.ResponseOptions,
+      groupOptions: [ItemConfigurationSettings.HasTooltips],
+    },
+    {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
       groupOptions: [
         ItemConfigurationSettings.HasTimer,
@@ -214,6 +218,10 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     },
   ],
   [ItemResponseType.MultipleSelectionPerRow]: [
+    {
+      groupName: ItemSettingsGroupNames.ResponseOptions,
+      groupOptions: [ItemConfigurationSettings.HasTooltips],
+    },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
       groupOptions: [

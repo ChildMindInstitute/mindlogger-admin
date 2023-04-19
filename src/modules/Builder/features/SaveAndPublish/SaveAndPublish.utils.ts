@@ -1,6 +1,11 @@
 import { storage } from 'shared/utils';
 import { auth } from 'modules/Auth';
-import { applet, ResponseValues, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
+import {
+  applet,
+  ResponseValues,
+  SingleAndMultipleSelectItemResponseValues,
+  SingleAndMultipleSelectRowsResponseValues,
+} from 'shared/state';
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { ItemResponseType } from 'shared/consts';
 import { ColorResult } from 'react-color';
@@ -40,6 +45,14 @@ export const mapItemResponseValues = (
           color: (option.color as ColorResult)?.hex ?? option.color ?? undefined,
         }),
       ),
+    };
+
+  if (
+    responseType === ItemResponseType.SingleSelectionPerRow ||
+    responseType === ItemResponseType.MultipleSelectionPerRow
+  )
+    return {
+      rows: (responseValues as SingleAndMultipleSelectRowsResponseValues).rows,
     };
 
   if (responseType === ItemResponseType.Slider) return responseValues;

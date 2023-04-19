@@ -15,10 +15,20 @@ const { t } = i18n;
 export const getIsRequiredValidateMessage = (field: string) =>
   t('validationMessages.isRequired', { field: t(field) });
 
-export const ResponseValuesRowsSchema = () => ({
+export const ResponseValuesSliderRowsSchema = () => ({
   minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
   maxLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
 });
+
+export const ResponseValuesSelectionRowsSchema = () =>
+  yup.object({
+    rowName: yup.string().required(getIsRequiredValidateMessage('row')),
+    options: yup.array().of(
+      yup.object({
+        text: yup.string().required(getIsRequiredValidateMessage('option')),
+      }),
+    ),
+  });
 
 export const ResponseValuesOptionsSchema = () =>
   yup.array().of(
@@ -49,7 +59,14 @@ export const ItemSchema = () => {
           return schema.shape({ options: ResponseValuesOptionsSchema() });
 
         if (responseType === ItemResponseType.Slider)
-          return schema.shape(ResponseValuesRowsSchema());
+          return schema.shape(ResponseValuesSliderRowsSchema());
+
+        if (
+          responseType === ItemResponseType.SingleSelectionPerRow ||
+          responseType === ItemResponseType.MultipleSelectionPerRow
+        ) {
+          return schema.shape({ rows: yup.array().of(ResponseValuesSelectionRowsSchema()) });
+        }
 
         return schema.nullable();
       }),

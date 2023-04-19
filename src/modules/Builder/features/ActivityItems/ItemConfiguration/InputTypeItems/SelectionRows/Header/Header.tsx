@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import uniqueId from 'lodash.uniqueid';
+import get from 'lodash.get';
 
 import { Svg } from 'shared/components';
 import { SelectEvent } from 'shared/types/event';
@@ -11,16 +11,14 @@ import {
   variables,
   theme,
 } from 'shared/styles';
-import { createArray } from 'shared/utils';
+import { SingleAndMultipleSelectRow } from 'shared/state';
 
 import { StyledSelectController } from './Header.styles';
 import { HeaderProps } from './Header.types';
 import { getMultipleSelectionRowsOptions } from './Header.utils';
-import {
-  DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
-  DEFAULT_SELECTION_ROWS_SCORE,
-} from '../../../ItemConfiguration.const';
-import { SelectionRowsItem } from '../../../ItemConfiguration.types';
+import { getEmptySelectionItemOptions } from '../../../ItemConfiguration.utils';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
+// import { options } from '../../../Alerts/Alert';
 
 const commonSelectArrowProps = {
   id: 'navigate-down',
@@ -33,41 +31,37 @@ const commonButtonProps = {
   sx: { p: theme.spacing(1) },
 };
 
-export const Header = ({ isSingle, isExpanded, onArrowClick }: HeaderProps) => {
+export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps) => {
   const { t } = useTranslation('app');
+
+  const rowsName = `${name}.responseValues.rows`;
 
   const { watch, getValues, setValue } = useFormContext();
 
-  const options = watch('selectionRows.options');
+  const rows = watch(`${rowsName}`);
+  const settings = watch(`${name}.config`);
+
+  const hasScores = get(settings, ItemConfigurationSettings.HasScores);
 
   const handleChange = (e: SelectEvent) => {
-    const options = getValues('selectionRows.options');
-    const items = getValues('selectionRows.items');
+    const rows = getValues(`${rowsName}`);
 
-    if (+e.target.value < options.length) {
-      setValue('selectionRows.options.length', +e.target.value);
+    if (+e.target.value < rows[0]?.options?.length) {
       setValue(
-        'selectionRows.items',
-        items?.map((item: SelectionRowsItem) => ({
-          ...item,
-          scores: item?.scores?.slice(0, +e.target.value),
+        rowsName,
+        rows?.map((row: SingleAndMultipleSelectRow) => ({
+          ...row,
+          options: row.options?.slice(0, +e.target.value),
         })),
       );
     } else {
-      setValue('selectionRows.options', [
-        ...options,
-        ...createArray(+e.target.value - options.length, () => ({
-          ...DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
-          id: uniqueId('selection-option-'),
-        })),
-      ]);
       setValue(
-        'selectionRows.items',
-        items?.map((item: SelectionRowsItem) => ({
-          ...item,
-          scores: [
-            ...(item?.scores || []),
-            ...createArray(+e.target.value - options.length, () => DEFAULT_SELECTION_ROWS_SCORE),
+        rowsName,
+        rows?.map((row: SingleAndMultipleSelectRow) => ({
+          ...row,
+          options: [
+            ...row.options,
+            ...getEmptySelectionItemOptions(+e.target.value - row.options?.length, hasScores),
           ],
         })),
       );
@@ -89,7 +83,7 @@ export const Header = ({ isSingle, isExpanded, onArrowClick }: HeaderProps) => {
             options={getMultipleSelectionRowsOptions()}
             customChange={handleChange}
             variant="standard"
-            value={`${options?.length || ''}`}
+            value={`${rows[0]?.options?.length || ''}`}
             SelectProps={{
               IconComponent: (props) => <Svg {...commonSelectArrowProps} {...props} />,
             }}

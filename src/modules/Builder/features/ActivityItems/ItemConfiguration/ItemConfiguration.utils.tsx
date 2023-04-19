@@ -1,4 +1,3 @@
-import uniqueId from 'lodash.uniqueid';
 import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
@@ -10,7 +9,6 @@ import {
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
   DEFAULT_SELECTION_ROWS_SCORE,
-  DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
   SELECTION_OPTIONS_COLOR_PALETTE,
 } from './ItemConfiguration.const';
 
@@ -43,10 +41,17 @@ export const getEmptySliderOption = (isMultiple: boolean): SliderOption => ({
   ...(isMultiple ? DEFAULT_EMPTY_SLIDER_ROWS : DEFAULT_EMPTY_SLIDER),
 });
 
-export const getEmptySelectionItem = (scoresQuantity: number) => ({
-  ...DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
-  id: uniqueId('selection-item-'),
-  scores: createArray(scoresQuantity, () => DEFAULT_SELECTION_ROWS_SCORE),
+export const getEmptySelectionItemOptions = (length: number, hasScores?: boolean) =>
+  createArray(length, () => ({
+    id: uuidv4(),
+    text: '',
+    ...(hasScores && { score: DEFAULT_SELECTION_ROWS_SCORE }),
+  }));
+
+export const getEmptySelectionItem = (length: number, hasScores?: boolean) => ({
+  id: uuidv4(),
+  rowName: '',
+  options: getEmptySelectionItemOptions(length, hasScores),
 });
 
 export const getPaletteColor = (paletteName: string, index: number) => {
