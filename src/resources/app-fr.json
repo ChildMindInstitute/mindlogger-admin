@@ -100,7 +100,7 @@
   "shareWithLogin": "Partagez le lien suivant pour inviter quiconque à cette étude.",
   "shareWithNoLogin": "Partagez le lien suivant pour que les utilisateurs puissent passer une évaluation sans compte",
   "enterAppletPassword": "Entrez le mot de passe de l'applet",
-  "createAppletPasswordRequirements": "Mot de passe requis : 8 caractères minimum avec au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial sans espaces.",
+  "createAppletPasswordRequirements": "Exigences du mot de passe : minimum 8 caractères sans espaces avec au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.",
   "enterAppletPasswordHint": "Min. 8 caractères avec au moins une majuscule, un chiffre, une lettre minuscule et un caractère spécial.",
   "createAppletPasswordWarning": "MindLogger ne stocke pas les mots de passe des applet pour des raisons de confidentialité. Veuillez vous assurer que ce mot de passe ne sera pas perdu car il ne peut pas être modifié ou récupéré.",
   "createAppletPassword": "Créer un mot de passe d'applet",
