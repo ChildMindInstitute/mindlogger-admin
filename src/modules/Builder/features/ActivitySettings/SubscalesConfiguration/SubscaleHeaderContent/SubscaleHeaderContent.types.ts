@@ -1,3 +1,3 @@
 export type SubscaleHeaderContentProps = {
-  index: number;
+  onRemove: () => void;
 };

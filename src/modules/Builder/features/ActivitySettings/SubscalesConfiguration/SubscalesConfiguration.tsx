@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { RadioGroupController, Switch } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme } from 'shared/styles';
@@ -28,18 +28,15 @@ import { SubscaleContentProps } from './SubscalesConfiguration.types';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
-  const { control } = useFormContext<AppletFormValues>();
-
-  const { append: appendSubscale } = useFieldArray({
+  const { control, watch } = useFormContext<AppletFormValues>();
+  const { append: appendSubscale, remove: removeSubscale } = useFieldArray({
     control,
     name: 'subscales',
   });
 
-  const [subscales, calculateTotalScoreSwitch]: [
-    AppletFormValues['subscales'],
-    AppletFormValues['calculateTotalScoreSwitch'],
-  ] = useWatch({ name: ['subscales', 'calculateTotalScoreSwitch'] });
   const { activity } = useCurrentActivity();
+  const subscales = watch('subscales');
+  const calculateTotalScoreSwitch = watch('calculateTotalScoreSwitch');
   const filteredItems = (activity?.items ?? []).filter(filterItemElements);
   const { subscalesMap, itemsMap, mergedIds, usedUniqueElementsIds } = getPropertiesToFilterByIds(
     filteredItems,
@@ -76,7 +73,9 @@ export const SubscalesConfiguration = () => {
           HeaderContent={SubscaleHeaderContent}
           Content={SubscaleContent}
           headerContentProps={{
-            index,
+            onRemove: () => {
+              removeSubscale(index);
+            },
           }}
           contentProps={{
             subscaleId: subscale.id,
