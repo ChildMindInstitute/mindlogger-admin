@@ -147,7 +147,7 @@ export type AppletInvitationData = AppletId & {
 export type DuplicateApplet = AppletId & {
   options: {
     password: string;
-    name: string;
+    displayName: string;
   };
 };
 

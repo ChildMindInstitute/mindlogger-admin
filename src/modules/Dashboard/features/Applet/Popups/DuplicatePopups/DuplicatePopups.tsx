@@ -83,7 +83,7 @@ export const DuplicatePopups = () => {
   const successModalClose = () => {
     setSuccessModalVisible(false);
     duplicatePopupsClose();
-    history(page.dashboard);
+    history(page.dashboardApplets);
   };
 
   const errorModalClose = () => {
@@ -100,7 +100,7 @@ export const DuplicatePopups = () => {
       appletId,
       options: {
         password: appletPassword,
-        name: getValues().name,
+        displayName: getValues().name,
       },
     });
   };
