@@ -100,12 +100,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           </Grid>
         </Grid>
         <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>{t('displayedContent')}</StyledTitleLarge>
-        <EditorController
-          name={`${name}.question`}
-          control={control}
-          requiredStateMessage={t('displayedContentRequired')}
-          hasRequiredState
-        />
+        <EditorController name={`${name}.question`} control={control} />
         <OptionalItemsAndSettings name={name} ref={optionalItemsRef} />
       </StyledContent>
     </StyledItemConfiguration>
