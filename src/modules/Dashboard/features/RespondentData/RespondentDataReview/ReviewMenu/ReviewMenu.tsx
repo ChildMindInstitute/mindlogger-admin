@@ -6,7 +6,7 @@ import { endOfMonth, format, startOfMonth } from 'date-fns';
 
 import { users } from 'redux/modules';
 import { getAnswersApi, getAppletSubmitDateListApi } from 'api';
-import { DatePicker, DatePickerUiType } from 'shared/components';
+import { DatePicker, DatePickerUiType, Spinner } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
 import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
@@ -36,7 +36,7 @@ export const ReviewMenu = ({
   const [submitDates, setSubmitDates] = useState<Date[] | undefined>(undefined);
   const [activities, setActivities] = useState<Activity[]>([]);
 
-  const { execute: executeGetAppletSubmitDatesApi } = useAsync(
+  const { execute: executeGetAppletSubmitDatesApi, isLoading: isLoadingDates } = useAsync(
     getAppletSubmitDateListApi,
     (res) => {
       if (res?.data?.result) {
@@ -47,7 +47,7 @@ export const ReviewMenu = ({
     },
   );
 
-  const { execute: executeGetAnswers } = useAsync(
+  const { execute: executeGetAnswers, isLoading: isLoadingAnswers } = useAsync(
     getAnswersApi,
     (res) => res?.data?.result && setActivities(res.data.result),
   );
@@ -64,14 +64,14 @@ export const ReviewMenu = ({
   }, [startDate, endDate]);
 
   useEffect(() => {
-    if (appletId && respondentId && date) {
+    if (appletId && respondentId && (date || submitDates)) {
       executeGetAnswers({
         id: appletId,
         respondentId,
-        createdDate: format(date, DateFormats.YearMonthDay),
+        createdDate: format(date || new Date(), DateFormats.YearMonthDay),
       });
     }
-  }, [date]);
+  }, [date, submitDates]);
 
   const onMonthChange = (date: Date) => {
     setStartDate(startOfMonth(date));
@@ -80,6 +80,7 @@ export const ReviewMenu = ({
 
   return (
     <StyledMenu>
+      {isLoadingAnswers || (isLoadingDates && <Spinner />)}
       <StyledHeader>
         <StyledHeadlineLarge>{t('review')}</StyledHeadlineLarge>
         <StyledLabelLarge sx={{ marginBottom: theme.spacing(4) }}>
@@ -93,6 +94,7 @@ export const ReviewMenu = ({
           minDate={null}
           includeDates={submitDates}
           onMonthChange={onMonthChange}
+          disabled={!submitDates}
         />
       </StyledHeader>
       <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>

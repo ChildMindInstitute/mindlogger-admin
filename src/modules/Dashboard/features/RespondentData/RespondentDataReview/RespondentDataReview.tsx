@@ -3,11 +3,16 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
 import { useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
-import { StyledContainer, StyledHeadlineLarge } from 'shared/styles';
+import { StyledContainer, StyledHeadlineLarge, StyledTitleLarge, variables } from 'shared/styles';
 
 import { StyledTextBtn } from '../RespondentData.styles';
 import { Feedback } from './Feedback';
-import { StyledHeader, StyledReviewContainer } from './RespondentDataReview.styles';
+import {
+  StyledEmptyReview,
+  StyledHeader,
+  StyledReviewContainer,
+  StyledWrapper,
+} from './RespondentDataReview.styles';
 import { Activity, Answer } from './RespondentDataReview.types';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
@@ -25,6 +30,24 @@ export const RespondentDataReview = () => {
       label: t('review'),
     },
   ]);
+
+  const emptyMessage = (
+    <StyledEmptyReview>
+      {selectedActivity?.answerDates.length === 0 ? (
+        <>
+          <Svg id="chart" width="67" height="67" />
+          <StyledTitleLarge color={variables.palette.outline}>
+            {t('noDataForActivity')}
+          </StyledTitleLarge>
+        </>
+      ) : (
+        <>
+          <Svg id="data" width="60" height="73" />
+          <StyledTitleLarge color={variables.palette.outline}>{t('emptyReview')}</StyledTitleLarge>
+        </>
+      )}
+    </StyledEmptyReview>
+  );
 
   return (
     <StyledContainer sx={{ position: 'relative' }}>
@@ -49,7 +72,11 @@ export const RespondentDataReview = () => {
             {t('feedback')}
           </StyledTextBtn>
         </StyledHeader>
-        <Review answerId={selectedAnswer?.answerId ?? null} />
+        {selectedAnswer ? (
+          <Review answerId={selectedAnswer.answerId} />
+        ) : (
+          <StyledWrapper>{emptyMessage}</StyledWrapper>
+        )}
       </StyledReviewContainer>
       {isFeedbackOpen && <Feedback onClose={() => setIsFeedbackOpen(false)} />}
     </StyledContainer>
