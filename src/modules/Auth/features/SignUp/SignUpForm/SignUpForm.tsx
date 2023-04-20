@@ -9,7 +9,7 @@ import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText } from 'shared/styles';
 import { getErrorMessage } from 'shared/utils';
-import { auth } from 'modules/Auth';
+import { auth } from 'modules/Auth/state';
 
 import {
   StyledSignUpHeader,

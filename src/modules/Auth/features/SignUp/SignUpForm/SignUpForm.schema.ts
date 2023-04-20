@@ -16,8 +16,8 @@ export const SignUpFormSchema = () => {
   return yup
     .object({
       email: yup.string().required(emailRequired).email(incorrectEmail),
-      firstName: yup.string().required(firstNameRequired),
-      lastName: yup.string().required(lastNameRequired),
+      firstName: yup.string().trim().required(firstNameRequired),
+      lastName: yup.string().trim().required(lastNameRequired),
       password: yup
         .string()
         .required(passwordRequired)
