@@ -79,16 +79,26 @@ export type SliderConfig = {
   };
 };
 
+export type SliderRowsConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  timer: number;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
   maxLabel: string;
   minValue: number;
   maxValue: number;
-  minImage: string;
-  maxImage: string;
+  minImage?: string;
+  maxImage?: string;
   scores?: number[];
 };
+
+export type SliderRowsItemResponseValues = SliderItemResponseValues & { label: string };
 
 export type SingleAndMultipleSelectionOption = {
   id: string;
@@ -105,14 +115,23 @@ export type SingleAndMultipleSelectItemResponseValues = {
   options: Array<SingleAndMultipleSelectionOption>;
 };
 
+export type SliderRowsResponseValues = {
+  rows: Array<SliderRowsItemResponseValues>;
+};
+
 export type TextItemResponseValues = null;
 
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
+  | SliderRowsResponseValues
   | SliderItemResponseValues;
 
-export type Config = TextInputConfig | SingleAndMultipleSelectionConfig | SliderConfig;
+export type Config =
+  | TextInputConfig
+  | SingleAndMultipleSelectionConfig
+  | SliderConfig
+  | SliderRowsConfig;
 
 export type ItemAlert = {
   message: string;
@@ -156,6 +175,12 @@ export interface SliderItem extends Item {
   responseType: ItemResponseType.Slider;
   config: SliderConfig;
   responseValues: SliderItemResponseValues;
+}
+
+export interface SliderRowsItem extends Item {
+  responseType: ItemResponseType.SliderRows;
+  config: SliderRowsConfig;
+  responseValues: SliderRowsResponseValues;
 }
 
 export type Activity = {

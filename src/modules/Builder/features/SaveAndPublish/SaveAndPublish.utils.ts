@@ -5,6 +5,7 @@ import {
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
+  SliderRowsResponseValues,
 } from 'shared/state';
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { ItemResponseType } from 'shared/consts';
@@ -57,6 +58,9 @@ export const mapItemResponseValues = (
       ...(responseValues as SliderItemResponseValues),
       options: undefined,
     };
+
+  if (responseType === ItemResponseType.SliderRows)
+    return { rows: (responseValues as SliderRowsResponseValues).rows };
 
   return null;
 };

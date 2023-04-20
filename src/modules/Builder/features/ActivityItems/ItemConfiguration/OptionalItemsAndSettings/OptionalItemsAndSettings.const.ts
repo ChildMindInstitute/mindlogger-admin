@@ -40,3 +40,11 @@ export const defaultSliderConfig = {
     textInputRequired: false,
   },
 };
+
+export const defaultSliderRowsConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  addScores: false,
+  setAlerts: false,
+  timer: 0,
+};

@@ -24,6 +24,7 @@ import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import {
   defaultTextConfig,
   defaultSliderConfig,
+  defaultSliderRowsConfig,
   defaultSingleAndMultiSelectionConfig,
 } from './OptionalItemsAndSettings.const';
 import { getEmptySliderOption } from '../ItemConfiguration.utils';
@@ -35,8 +36,8 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       //   return <NumberSelection name="minNumber" maxName="maxNumber" />;
       case ItemResponseType.Slider:
         return <SliderRows name={name} />;
-      // case ItemResponseType.SliderRows:
-      //   return <SliderRows name="sliderOptions" control={control} isMultiple />;
+      case ItemResponseType.SliderRows:
+        return <SliderRows name={name} isMultiple />;
 
       // case ItemResponseType.SingleSelectionPerRow:
       //   return <SelectionRows isSingle />;
@@ -72,6 +73,8 @@ export const useSettingsSetup = ({
   name,
   removeOptions,
   handleAddOption,
+  removeRows,
+  handleAddRow,
   removeAlert,
   handleAddAlert,
   setShowColorPalette,
@@ -91,6 +94,7 @@ export const useSettingsSetup = ({
     const subscription = watch((_, { name: fieldName, type }) => {
       if (fieldName === `${name}.responseType` && type === 'change') {
         removeOptions?.();
+        removeRows?.();
 
         const responseType = getValues(`${name}.responseType`);
 
@@ -109,6 +113,11 @@ export const useSettingsSetup = ({
         if (responseType === ItemResponseType.Slider) {
           setConfig(defaultSliderConfig);
           setValue(`${name}.responseValues`, getEmptySliderOption(false));
+        }
+
+        if (responseType === ItemResponseType.SliderRows) {
+          handleAddRow?.();
+          setConfig(defaultSliderRowsConfig);
         }
       }
     });

@@ -13,7 +13,7 @@ import { Svg } from 'shared/components';
 
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
-import { getPaletteColor } from '../ItemConfiguration.utils';
+import { getEmptySliderOption, getPaletteColor } from '../ItemConfiguration.utils';
 import {
   ColorPalette,
   ItemSettingsController,
@@ -62,6 +62,11 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       name: `${name}.responseValues.options`,
     });
 
+    const { append: appendRow, remove: removeRows } = useFieldArray({
+      control,
+      name: `${name}.responseValues.rows`,
+    });
+
     //TODO: add alerts after backend ready
     // const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
     const isTextInputOptionVisible = get(settings, ItemConfigurationSettings.HasTextInput);
@@ -84,6 +89,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
         ...(hasColorPalette &&
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
       });
+
+    const handleAddRow = () => appendRow(getEmptySliderOption(true));
 
     // const handleAddAlert = () =>
     //   appendAlert({
@@ -163,6 +170,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       name,
       removeOptions,
       handleAddOption,
+      removeRows,
+      handleAddRow,
       // removeAlert: () => {}, //TODO: remove after backend ready
       // handleAddAlert: () => {}, //TODO: remove after backend ready
       setShowColorPalette: handleChangeColorPaletteVisibility,

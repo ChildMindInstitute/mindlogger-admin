@@ -56,20 +56,20 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       // { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
     ],
   },
-  // {
-  //   groupName: 'matrixSelect',
-  //   groupOptions: [
-  //     {
-  //       value: ItemResponseType.SingleSelectionPerRow,
-  //       icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
-  //     },
-  //     {
-  //       value: ItemResponseType.MultipleSelectionPerRow,
-  //       icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
-  //     },
-  //     { value: ItemResponseType.SliderRows, icon: itemsTypeIcons[ItemResponseType.SliderRows] },
-  //   ],
-  // },
+  {
+    groupName: 'matrixSelect',
+    groupOptions: [
+      //     {
+      //       value: ItemResponseType.SingleSelectionPerRow,
+      //       icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
+      //     },
+      //     {
+      //       value: ItemResponseType.MultipleSelectionPerRow,
+      //       icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
+      //     },
+      { value: ItemResponseType.SliderRows, icon: itemsTypeIcons[ItemResponseType.SliderRows] },
+    ],
+  },
   {
     groupName: 'input',
     groupOptions: [

@@ -4,10 +4,10 @@ import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { theme, StyledFlexColumn } from 'shared/styles';
+import { SliderItemResponseValues } from 'shared/state';
 
 import { SliderPanel } from './SliderPanel';
 import { SliderProps } from './SliderRows.types';
-import { SliderOption } from '../../ItemConfiguration.types';
 import { getEmptySliderOption } from '../../ItemConfiguration.utils';
 
 export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
@@ -25,13 +25,13 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
 
         return (
           <StyledFlexColumn sx={{ mb: theme.spacing(2), gap: '2.4rem' }}>
-            {!isMultiple && (
-              <SliderPanel name={name} label={t('sliderOption')} isMultiple={isMultiple} />
-            )}
+            {!isMultiple && <SliderPanel name={name} label={t('sliderOption')} />}
             {isMultiple &&
-              value?.map(({ id }: SliderOption, index: number) => {
+              value?.map(({ id }: SliderItemResponseValues, index: number) => {
                 const handleRemove = () => {
-                  onChange(value.filter(({ id: sliderId }: SliderOption) => sliderId !== id));
+                  onChange(
+                    value.filter(({ id: sliderId }: SliderItemResponseValues) => sliderId !== id),
+                  );
                 };
 
                 return (
@@ -43,7 +43,7 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
                       context: 'indexed',
                       index: index + 1,
                     })}
-                    isMultiple={isMultiple}
+                    isMultiple
                     onRemove={handleRemove}
                   />
                 );
