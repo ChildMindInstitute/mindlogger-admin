@@ -11,6 +11,7 @@ import { auth } from 'modules/Auth/state';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
 import { getErrorMessage } from 'shared/utils/errors';
+import { variables } from 'shared/styles';
 
 import {
   StyledWelcome,
@@ -57,8 +58,10 @@ export const LoginForm = () => {
         </Trans>
       </StyledWelcome>
       <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-        <StyledHeadline>{t('login')}</StyledHeadline>
-        <StyledLoginSubheader>{t('logIntoAccount')}</StyledLoginSubheader>
+        <StyledHeadline color={variables.palette.on_surface}>{t('login')}</StyledHeadline>
+        <StyledLoginSubheader color={variables.palette.on_surface_variant}>
+          {t('logIntoAccount')}
+        </StyledLoginSubheader>
         <StyledController>
           <InputController
             fullWidth

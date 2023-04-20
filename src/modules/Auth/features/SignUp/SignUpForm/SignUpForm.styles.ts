@@ -25,6 +25,7 @@ export const StyledController = styled(Box)`
 `;
 
 export const StyledLabel = styled(StyledLabelMedium)`
+  color: ${variables.palette.on_surface};
   margin: 0;
 `;
 

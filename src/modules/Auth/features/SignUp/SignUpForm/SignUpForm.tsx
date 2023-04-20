@@ -5,12 +5,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch } from 'redux/store';
-
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
-import { StyledErrorText } from 'shared/styles/styledComponents';
-import { getErrorMessage } from 'shared/utils/errors';
-import { auth } from 'modules/Auth/state';
+import { variables, StyledErrorText } from 'shared/styles';
+import { getErrorMessage } from 'shared/utils';
+import { auth } from 'modules/Auth';
 
 import {
   StyledSignUpHeader,
@@ -62,7 +61,9 @@ export const SignUpForm = () => {
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-      <StyledSignUpHeader>{t('createAccount')}</StyledSignUpHeader>
+      <StyledSignUpHeader color={variables.palette.on_surface}>
+        {t('createAccount')}
+      </StyledSignUpHeader>
       <StyledController>
         <InputController fullWidth name="email" control={control} label={t('email')} />
       </StyledController>
