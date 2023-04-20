@@ -25,7 +25,11 @@ export const Schedule = () => {
   return (
     <StyledSchedule>
       <StyledLeftPanel>
-        <Legend legendEvents={preparedEvents} appletName={appletData?.displayName || ''} />
+        <Legend
+          legendEvents={preparedEvents}
+          appletName={appletData?.displayName || ''}
+          appletId={appletData?.id || ''}
+        />
       </StyledLeftPanel>
       <Calendar />
     </StyledSchedule>

@@ -30,6 +30,7 @@ import {
   NoteId,
   Note,
   AppletSubmitDateList,
+  RespondentId,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -100,6 +101,15 @@ export const getEventsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}/events`, {
     signal,
   });
+
+export const deleteScheduledEventsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  authApiClient.delete(`/applets/${appletId}/events`, { signal });
+
+export const deleteIndividualEventsApi = (
+  { appletId, respondentId }: AppletId & RespondentId,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(`/applets/${appletId}/events/delete_individual/${respondentId}`, { signal });
 
 export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSignal) =>
   authApiClient.put(

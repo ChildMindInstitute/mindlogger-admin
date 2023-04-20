@@ -324,7 +324,7 @@
   "clearAll": "Clear All",
   "confirmClearEvents": "You are about to remove all scheduled events and notifications from the <1>default schedule</1> for Applet <3>{{ appletName }}</3>. Are you sure you want to continue?",
   "confirmClearIndividualSchedule": "You are about to remove all scheduled events and notifications from the <1>individual schedule</1> for Respondent <3>{{ name }}</3>. Are you sure you want to continue?",
-  "clearEventsSuccess": "<0>Scheduled events within the <1>default schedule</1> for Applet <3>{{ appletName }}</3> have been successfully cleared.</0><1>Respondents' individual schedules (if applicable) have not changed.</1>",
+  "clearEventsSuccess": "<0>Scheduled events within the <1>default schedule</1> for Applet <3>{{ appletName }}</3> have been successfully cleared.</0><1>Respondents' <1>individual schedules</1> (if applicable) have not changed.</1>",
   "clearIndividualScheduleSuccess": "<0>Please note that Respondent <1>{{ name }}</1> is still using an <3>individual schedule</3>.</0> <1>You may revert this Respondent back to the <1>default schedule</1> by pressing the trash icon on the top-left.</1>",
   "scheduled": "Scheduled",
   "deactivated": "Deactivated",
