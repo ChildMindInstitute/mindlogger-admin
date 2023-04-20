@@ -31,6 +31,24 @@ export const RespondentDataReview = () => {
     },
   ]);
 
+  const emptyMessage = (
+    <StyledEmptyReview>
+      {selectedActivity?.answerDates.length === 0 ? (
+        <>
+          <Svg id="chart" width="67" height="67" />
+          <StyledTitleLarge color={variables.palette.outline}>
+            {t('noDataForActivity')}
+          </StyledTitleLarge>
+        </>
+      ) : (
+        <>
+          <Svg id="data" width="60" height="73" />
+          <StyledTitleLarge color={variables.palette.outline}>{t('emptyReview')}</StyledTitleLarge>
+        </>
+      )}
+    </StyledEmptyReview>
+  );
+
   return (
     <StyledContainer sx={{ position: 'relative' }}>
       <ReviewMenu
@@ -57,25 +75,7 @@ export const RespondentDataReview = () => {
         {selectedAnswer ? (
           <Review answerId={selectedAnswer.answerId} />
         ) : (
-          <StyledWrapper>
-            <StyledEmptyReview>
-              {selectedActivity?.answerDates.length === 0 ? (
-                <>
-                  <Svg id="chart" width="67" height="67" />
-                  <StyledTitleLarge color={variables.palette.outline}>
-                    {t('noDataForActivity')}
-                  </StyledTitleLarge>
-                </>
-              ) : (
-                <>
-                  <Svg id="data" width="60" height="73" />
-                  <StyledTitleLarge color={variables.palette.outline}>
-                    {t('emptyReview')}
-                  </StyledTitleLarge>
-                </>
-              )}
-            </StyledEmptyReview>
-          </StyledWrapper>
+          <StyledWrapper>{emptyMessage}</StyledWrapper>
         )}
       </StyledReviewContainer>
       {isFeedbackOpen && <Feedback onClose={() => setIsFeedbackOpen(false)} />}

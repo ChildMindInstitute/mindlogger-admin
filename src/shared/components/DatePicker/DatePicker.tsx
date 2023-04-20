@@ -81,7 +81,7 @@ export const DatePicker = <T extends FieldValues>({
 
         const textFieldProps = {
           fullWidth: true,
-          disabled,
+          disabled: true,
           onClick: handlePickerShow,
           className: open ? 'active' : '',
           sx: { ...inputSx },
