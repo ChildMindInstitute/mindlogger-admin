@@ -2,14 +2,13 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Modal } from 'shared/components';
+import { Modal, EnterAppletPassword, EnterAppletPasswordForm } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { applet, applets, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { page } from 'resources';
-import { EnterAppletPassword, EnterAppletPasswordForm } from 'shared/components';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { DeletePopupProps, Modals } from './DeletePopup.types';
