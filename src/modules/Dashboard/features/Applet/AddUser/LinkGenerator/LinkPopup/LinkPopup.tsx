@@ -3,16 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { postAppletPublicLinkApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
-import { Svg } from 'shared/components';
+import { Modal } from 'shared/components';
+import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 
-import {
-  StyledDialog,
-  StyledDialogTitle,
-  StyledContent,
-  StyledCloseButton,
-  StyledDialogActions,
-  StyledButton,
-} from './LinkPopup.styles';
 import { LinkPopupProps } from './LinkPopup.types';
 
 export const LinkPopup = ({ open, onClose, setInviteLink }: LinkPopupProps) => {
@@ -28,30 +21,27 @@ export const LinkPopup = ({ open, onClose, setInviteLink }: LinkPopupProps) => {
   };
 
   return (
-    <StyledDialog data-testid="modal" onClose={onClose} open={open}>
-      <StyledDialogTitle align="left">
-        {t('publicLink')}
-        <StyledCloseButton onClick={onClose}>
-          <Svg id="cross" />
-        </StyledCloseButton>
-      </StyledDialogTitle>
-      <StyledContent>{t('requireToCreateAccount')}</StyledContent>
-      <StyledDialogActions>
-        <StyledButton
-          data-testid="generate-with-login"
-          variant="text"
-          onClick={() => postAppletLink(true)}
-        >
-          {t('yes')}
-        </StyledButton>
-        <StyledButton
-          data-testid="generate-witout-login"
-          variant="text"
-          onClick={() => postAppletLink(false)}
-        >
-          {t('no')}
-        </StyledButton>
-      </StyledDialogActions>
-    </StyledDialog>
+    <Modal
+      open={open}
+      onClose={onClose}
+      onSubmit={() => postAppletLink(true)}
+      onSecondBtnSubmit={() => postAppletLink(false)}
+      onThirdBtnSubmit={onClose}
+      title={t('generatePublicLink')}
+      buttonText={t('generateLinkYes')}
+      secondBtnText={t('generateLinkNo')}
+      thirdBtnText={t('cancel')}
+      hasSecondBtn
+      hasThirdBtn
+      secondBtnStyles={{
+        fontWeight: variables.font.weight.bold,
+      }}
+    >
+      <StyledModalWrapper>
+        <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>
+          {t('requireToCreateAccount')}
+        </StyledBodyLarge>
+      </StyledModalWrapper>
+    </Modal>
   );
 };

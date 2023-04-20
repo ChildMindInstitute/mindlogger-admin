@@ -1,3 +1,5 @@
+import { Box } from '@mui/material';
+
 import { Svg } from 'shared/components/Svg';
 import theme from 'shared/styles/theme';
 
@@ -52,7 +54,7 @@ export const Modal = ({
       </StyledDialogTitle>
       {children}
       {hasActions && (
-        <StyledDialogActions actionsAlign={getActionsAlign()} sx={{ p: 0 }}>
+        <StyledDialogActions actionsAlign={getActionsAlign()}>
           {hasThirdBtn && (
             <StyledButton
               fontWeight="regular"
@@ -63,7 +65,7 @@ export const Modal = ({
               {thirdBtnText}
             </StyledButton>
           )}
-          <StyledDialogActions>
+          <Box>
             {hasSecondBtn && (
               <StyledButton
                 fontWeight="regular"
@@ -85,7 +87,7 @@ export const Modal = ({
                 {buttonText}
               </StyledButton>
             )}
-          </StyledDialogActions>
+          </Box>
         </StyledDialogActions>
       )}
     </StyledDialog>
