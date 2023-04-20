@@ -93,6 +93,7 @@
   "pendingInvitations": "Invitations en attente",
   "invitationLink": "Lien vers l'invitation",
   "publicLink": "Lien public",
+  "publicLinkTooltip": "Un lien qui permettra à quiconque de s'inviter à cette étude en tant que répondant",
   "generatePublicLink": "Générer un lien public",
   "generateLink": "Générer un lien",
   "generateLinkYes": "Oui, un compte est requis",
