@@ -1,7 +1,6 @@
 import { styled } from '@mui/system';
 
-import { theme } from 'shared/styles';
-import { StyledFlexTopStart } from 'shared/styles';
+import { theme, StyledFlexTopStart } from 'shared/styles';
 
 export const StyledTitle = styled(StyledFlexTopStart)`
   margin-bottom: ${theme.spacing(1.6)};
