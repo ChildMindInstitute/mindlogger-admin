@@ -101,7 +101,7 @@
   "shareWithLogin": "Share the following link to invite anyone to this study.",
   "shareWithNoLogin": "Share the following link for users to take assessment without account.",
   "enterAppletPassword": "Enter Applet password",
-  "createAppletPasswordRequirements": "Password requirements: minimum 8 characters with at least one capital letter, a lowercase letter, a number, and a special character without blank spaces.",
+  "createAppletPasswordRequirements": "Password requirements: minimum 8 characters without spaces with at least one capital letter, a lowercase letter, a number, and a special character.",
   "enterAppletPasswordHint": "Min. 8 characters with at least one capital letter, a number, lowercase letter and a special character.",
   "createAppletPasswordWarning": "MindLogger does not store Applet passwords due to privacy reasons. Please ensure this password will not be lost because it can not be changed or recovered.",
   "createAppletPassword": "Create Applet Password",
