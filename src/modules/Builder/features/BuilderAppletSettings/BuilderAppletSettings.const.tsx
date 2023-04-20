@@ -44,7 +44,7 @@ export const getSettings = (isNewApplet: boolean) => [
       {
         icon: <Svg id="transfer-ownership" />,
         label: 'transferOwnership',
-        component: <TransferOwnershipSetting isDisabled={isNewApplet} isBuilder />,
+        component: <TransferOwnershipSetting isDisabled={isNewApplet} isApplet />,
         param: 'transfer-ownership',
       },
       {

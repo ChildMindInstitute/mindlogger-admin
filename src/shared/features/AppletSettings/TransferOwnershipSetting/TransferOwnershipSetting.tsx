@@ -15,20 +15,21 @@ import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { useAppletDataOrFolderData } from './TransferOwnershipSetting.hooks';
 
-export const TransferOwnershipSetting = ({ isDisabled = false, isBuilder = false }) => {
+export const TransferOwnershipSetting = ({ isDisabled = false, isApplet = false }) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [emailTransfered, setEmailTransfered] = useState('');
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
-  const appletData = useAppletDataOrFolderData(appletId, isBuilder);
+  const appletData = useAppletDataOrFolderData(appletId, isApplet);
   const transferOwnershipRef = useRef<TransferOwnershipRef | null>(null);
 
   useEffect(() => {
     if (!emailTransfered) return;
 
     setTransferOwnershipPopupVisible(true);
+    setEmailTransfered('');
   }, [emailTransfered]);
 
   return (
@@ -55,16 +56,14 @@ export const TransferOwnershipSetting = ({ isDisabled = false, isBuilder = false
           </StyledAppletSettingsButton>
         </Box>
       </Tooltip>
-      {transferOwnershipPopupVisible && (
-        <SuccessTransferOwnershipPopup
-          email={emailTransfered}
-          transferOwnershipPopupVisible={transferOwnershipPopupVisible}
-          closeTransferOwnershipPopup={() => {
-            setTransferOwnershipPopupVisible(false);
-            transferOwnershipRef.current?.resetEmail();
-          }}
-        />
-      )}
+      <SuccessTransferOwnershipPopup
+        email={emailTransfered}
+        transferOwnershipPopupVisible={transferOwnershipPopupVisible}
+        closeTransferOwnershipPopup={() => {
+          setTransferOwnershipPopupVisible(false);
+          transferOwnershipRef.current?.resetEmail();
+        }}
+      />
     </>
   );
 };
