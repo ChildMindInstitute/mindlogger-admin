@@ -1,13 +1,13 @@
 import { styled } from '@mui/system';
 import { Button, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
 import {
+  theme,
+  variables,
   StyledHeadline,
-  StyledLabelMedium,
   StyledClearedButton,
-} from 'shared/styles/styledComponents';
+  StyledBodyMedium,
+} from 'shared/styles';
 
 export const StyledWelcome = styled(StyledHeadline)`
   color: ${variables.palette.primary};
@@ -15,7 +15,7 @@ export const StyledWelcome = styled(StyledHeadline)`
   text-align: center;
 `;
 
-export const StyledLoginSubheader = styled(StyledLabelMedium)`
+export const StyledLoginSubheader = styled(StyledBodyMedium)`
   margin: ${theme.spacing(0.8, 0, 2.4)};
 `;
 
@@ -45,9 +45,9 @@ export const StyledForgotPasswordLink = styled(StyledClearedButton)`
   width: fit-content;
   margin: ${theme.spacing(1.2, 0, 0.8)};
   color: ${variables.palette.primary};
-  font-size: ${variables.font.size.sm};
+  font-size: ${variables.font.size.md};
   font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.font.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.md};
   text-decoration: underline;
 
   &.MuiButton-text:hover {
