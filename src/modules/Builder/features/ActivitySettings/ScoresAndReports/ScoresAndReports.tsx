@@ -2,11 +2,9 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { StyledBodyLarge, StyledFlexTopCenter } from 'shared/styles';
+import { StyledBodyLarge, StyledFlexTopCenter, StyledTooltipSvg } from 'shared/styles';
 import { Tooltip } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
-
-import { StyledScoreSummaryTooltipSvg } from './ScoresAndReports.styles';
 
 export const ScoresAndReports = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation('app');
@@ -28,7 +26,7 @@ export const ScoresAndReports = ({ children }: { children: ReactNode }) => {
             <StyledBodyLarge>{t('showScoreSummary')}</StyledBodyLarge>
             <Tooltip tooltipTitle={t('showScoreSummaryTooltip')}>
               <StyledFlexTopCenter>
-                <StyledScoreSummaryTooltipSvg id="more-info-outlined" width="20" height="20" />
+                <StyledTooltipSvg id="more-info-outlined" width="20" height="20" />
               </StyledFlexTopCenter>
             </Tooltip>
           </StyledFlexTopCenter>

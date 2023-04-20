@@ -22,6 +22,7 @@ type DatePicker = {
   minDate?: Date | null;
   includeDates?: Date[];
   onMonthChange?: (date: Date) => void;
+  disabled?: boolean;
 } & TextFieldProps;
 
 export type DatePickerProps<T extends FieldValues> = DatePicker & UseControllerProps<T>;

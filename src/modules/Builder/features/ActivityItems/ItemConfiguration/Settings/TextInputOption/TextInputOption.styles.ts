@@ -1,18 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-import {
-  theme,
-  variables,
-  StyledFlexColumn,
-  StyledFlexTopCenter,
-  StyledBodyMedium,
-} from 'shared/styles';
-
-export const StyledTextInputOptionContainer = styled(StyledFlexColumn)`
-  background: ${variables.palette.surface1};
-  padding: ${theme.spacing(3, 3, 2.1, 3)};
-  border-radius: ${variables.borderRadius.lg2};
-`;
+import { theme, variables, StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles';
 
 export const StyledTextInputOptionHeader = styled(StyledFlexTopCenter)`
   width: 100%;

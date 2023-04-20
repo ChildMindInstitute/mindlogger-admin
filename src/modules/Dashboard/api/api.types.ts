@@ -16,7 +16,7 @@ export type GetAppletsParams = {
 
 export type SwitchAccount = { accountId: string };
 
-export type UserId = { userId: string };
+export type RespondentId = { respondentId: string };
 
 export type FolderId = { folderId: string };
 
@@ -147,7 +147,7 @@ export type AppletInvitationData = AppletId & {
 export type DuplicateApplet = AppletId & {
   options: {
     password: string;
-    name: string;
+    displayName: string;
   };
 };
 

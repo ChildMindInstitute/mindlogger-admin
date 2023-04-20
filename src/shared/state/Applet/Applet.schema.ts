@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId, OwnerAndAppletIds } from 'api';
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
 import { ColorResult } from 'react-color';
 
 export type CreateAppletStateData = {
@@ -185,6 +185,21 @@ type Theme = {
   public: boolean;
 };
 
+export type ActivitySettingsScore = {
+  name?: string;
+};
+
+export type ActivitySettingsSection = {
+  name?: string;
+};
+
+export type ActivitySettingsSubscale = {
+  id?: string;
+  name: string;
+  scoring: SubscaleTotalScore;
+  items: string[];
+};
+
 export type SingleApplet = {
   id?: string;
   displayName: string;
@@ -208,6 +223,12 @@ export type SingleApplet = {
   activityFlows: ActivityFlow[];
   theme?: Theme;
   password?: string;
+  generateReport: boolean;
+  showScoreSummary: boolean;
+  calculateTotalScore?: SubscaleTotalScore;
+  scores?: ActivitySettingsScore[];
+  sections?: ActivitySettingsSection[];
+  subscales?: ActivitySettingsSubscale[];
 };
 
 export type AppletSchema = {

@@ -8,7 +8,6 @@ import { StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
 
 import {
   StyledTextField,
-  StyledTableContainer,
   StyledErrorContainer,
   StyledTransferListController,
 } from './TransferListController.styles';
@@ -59,7 +58,7 @@ export const TransferListController = <T extends FieldValues>({
             : items;
 
         return (
-          <StyledFlexColumn sx={{ gap: '1.2rem' }}>
+          <StyledFlexColumn sx={{ gap: '1.2rem', width: '100%' }}>
             {caption && <StyledTitleMedium>{caption}</StyledTitleMedium>}
             {hasSearch && (
               <StyledTextField
@@ -70,25 +69,22 @@ export const TransferListController = <T extends FieldValues>({
               />
             )}
             <StyledTransferListController>
-              <StyledTableContainer hasError={!!error}>
+              <DataTable
+                columns={columns}
+                data={filteredData}
+                selectable={!readOnly}
+                selectedItems={value}
+                onSelect={handleSelect}
+                onSelectAll={handleSelectAll}
+                hasError={!!error}
+              />
+              {hasSelectedSection && (
                 <DataTable
                   columns={columns}
-                  data={filteredData}
-                  selectable={!readOnly}
-                  selectedItems={value}
-                  onSelect={handleSelect}
-                  onSelectAll={handleSelectAll}
+                  data={selectionSectionItems}
+                  noDataPlaceholder={t('noSelectedItemsYet')}
                 />
-              </StyledTableContainer>
-              <StyledTableContainer>
-                {hasSelectedSection && (
-                  <DataTable
-                    columns={columns}
-                    data={selectionSectionItems}
-                    noDataPlaceholder={t('noSelectedItemsYet')}
-                  />
-                )}
-              </StyledTableContainer>
+              )}
               {error && <StyledErrorContainer>{error?.message}</StyledErrorContainer>}
             </StyledTransferListController>
           </StyledFlexColumn>

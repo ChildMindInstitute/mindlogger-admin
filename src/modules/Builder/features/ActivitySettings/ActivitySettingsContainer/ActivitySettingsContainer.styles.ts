@@ -26,5 +26,5 @@ export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
 `;
 
 export const StyledContent = styled(StyledFlexColumn)`
-  padding: ${theme.spacing(1.6, 6.4, 0)};
+  padding: ${theme.spacing(1.6, 6.4)};
 `;

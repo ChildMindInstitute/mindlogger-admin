@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { DefaultTFuncReturn } from 'i18next';
+import { SxProps } from '@mui/material';
 
 export type DataTableItem = Record<string, unknown> & {
-  id: string | number;
+  id: string;
 };
 
 export type DataTableColumn = {
@@ -21,4 +22,6 @@ export type DataTableProps = {
   noDataPlaceholder?: ReactNode;
   onSelect?: (key: unknown, prevSelected: boolean) => unknown[] | void;
   onSelectAll?: (allSelected: boolean) => unknown[] | void;
+  hasError?: boolean;
+  styles?: SxProps;
 };

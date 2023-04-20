@@ -2,6 +2,7 @@ export type ClearScheduledEventsPopupProps = {
   open: boolean;
   onClose: () => void;
   appletName: string;
+  appletId: string;
   name?: string;
   isDefault?: boolean;
 };
