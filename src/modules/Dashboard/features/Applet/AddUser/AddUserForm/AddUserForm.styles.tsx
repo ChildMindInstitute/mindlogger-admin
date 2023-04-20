@@ -3,8 +3,6 @@ import { Button, Box } from '@mui/material';
 
 import { variables, theme } from 'shared/styles';
 
-import { StyledTitle as AddUserTitle } from '../AddUser.styles';
-
 export const StyledRow = styled(Box)`
   display: flex;
 `;
@@ -19,10 +17,6 @@ export const StyledResetButton = styled(StyledButton)`
   color: ${variables.palette.primary};
   border: 0.1rem solid ${variables.palette.on_surface_variant};
   margin-left: ${theme.spacing(1.2)};
-`;
-
-export const StyledTitle = styled(AddUserTitle)`
-  margin-top: 0;
 `;
 
 export const StyledTooltip = styled(Box)`
