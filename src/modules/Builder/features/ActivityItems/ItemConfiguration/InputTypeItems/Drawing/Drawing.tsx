@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Uploads } from 'modules/Builder/components';
+import { Uploads, SharedToggleItemProps, ToggleItemContainer } from 'modules/Builder/components';
 import { Uploader } from 'shared/components';
 import { ItemResponseType } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
@@ -10,7 +10,6 @@ import { StyledFlexTopCenter, theme } from 'shared/styles';
 
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 import { DrawingProps } from './Drawing.types';
-import { SharedToggleItemProps, ToggleItemContainer } from '../ToggleItemContainer';
 import { StyledImage } from './Drawing.styles';
 
 export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {

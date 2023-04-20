@@ -91,3 +91,8 @@ export const itemsTypeIcons = {
   [ItemResponseType.Flanker]: null,
   [ItemResponseType.AbTest]: null,
 };
+
+export const enum SubscaleTotalScore {
+  Sum = 'sum',
+  Average = 'average',
+}

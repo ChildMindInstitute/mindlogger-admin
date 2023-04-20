@@ -137,6 +137,9 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
+    //generateReport: false, // TODO: add these fields when api will be ready
+    //showScoreSummary: false,
+    // calculateqTotalScore: false,
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,

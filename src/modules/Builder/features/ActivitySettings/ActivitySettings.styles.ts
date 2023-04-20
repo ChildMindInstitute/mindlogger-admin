@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-import { StyledFlexTopCenter, theme } from 'shared/styles';
+import { StyledFlexTopStart, theme } from 'shared/styles';
 
 export const StyledWrapper = styled(Box)`
   display: flex;
@@ -10,7 +10,8 @@ export const StyledWrapper = styled(Box)`
   padding-left: ${theme.spacing(6.4)};
 `;
 
-export const StyledButtonsContainer = styled(StyledFlexTopCenter)`
+export const StyledButtonsContainer = styled(StyledFlexTopStart)`
   gap: 1.2rem;
   margin-top: ${theme.spacing(2.9)};
+  flex-direction: column;
 `;

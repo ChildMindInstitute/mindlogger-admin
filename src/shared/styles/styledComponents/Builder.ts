@@ -2,6 +2,7 @@ import { Box, Button, styled } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { Svg } from 'shared/components/Svg';
 
 export const StyledBuilderWrapper = styled(Box)`
   overflow-y: auto;
@@ -14,4 +15,9 @@ export const StyledBuilderBtn = styled(Button)`
   svg {
     fill: ${variables.palette.primary};
   }
+`;
+
+export const StyledTooltipSvg = styled(Svg)`
+  fill: ${variables.palette.outline};
+  margin-left: ${theme.spacing(1)};
 `;
