@@ -8,13 +8,13 @@ import {
   StyledModalWrapper,
   StyledErrorText,
   StyledBodyLarge,
+  StyledLinearProgress,
 } from 'shared/styles/styledComponents';
 import { getUsersDataApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { getErrorMessage } from 'shared/utils/errors';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
-import { StyledLinearProgress } from './DataExportPopup.styles';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 
 export const DataExportPopup = ({
