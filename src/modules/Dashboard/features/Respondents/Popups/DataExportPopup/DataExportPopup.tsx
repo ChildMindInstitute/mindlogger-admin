@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
-import { EnterAppletPassword } from 'modules/Dashboard/features/Applet';
+import { Modal, EnterAppletPassword } from 'shared/components';
 import theme from 'shared/styles/theme';
 import {
   StyledModalWrapper,
@@ -12,7 +11,7 @@ import {
 import { getUsersDataApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { getErrorMessage } from 'shared/utils/errors';
-import { useSetupEnterAppletPassword } from 'modules/Dashboard/features/Applet/Password/EnterAppletPassword/EnterAppletPassword.hooks';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { StyledLinearProgress } from './DataExportPopup.styles';

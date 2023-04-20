@@ -8,11 +8,10 @@ import { StyledClearedButton } from 'shared/styles/styledComponents';
 import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 import { getAppletData } from 'shared/utils/getAppletData';
-import { Svg } from 'shared/components';
+import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { postAppletPasswordCheckApi } from 'shared/api';
 
-import { EnterAppletPasswordForm, EnterAppletPasswordProps } from './EnterAppletPassword.types';
 import { StyledController } from '../Password.styles';
 import { passwordFormSchema } from './EnterAppletPassword.schema';
 import { AppletPasswordRef } from '../Password.types';

@@ -1,5 +1,5 @@
 import { Encryption } from 'redux/modules';
-import { CreateAppletPasswordForm, EnterAppletPasswordForm } from 'modules/Dashboard/features';
+import { CreateAppletPasswordForm, EnterAppletPasswordForm } from 'shared/components';
 
 export enum AppletPasswordPopupType {
   Create = 'create',

@@ -1,26 +1,28 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
 import { useAsync } from 'shared/hooks';
-import { applets, popups } from 'redux/modules';
+import { applet, applets, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { page } from 'resources';
-import { EnterAppletPassword, EnterAppletPasswordForm } from 'modules/Dashboard';
-import { useSetupEnterAppletPassword } from 'modules/Dashboard/features/Applet/Password/EnterAppletPassword/EnterAppletPassword.hooks';
+import { EnterAppletPassword, EnterAppletPasswordForm } from 'shared/components';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
 
-import { DeletePopupProps, MODALS } from './DeletePopup.types';
+import { DeletePopupProps, Modals } from './DeletePopup.types';
 
 export const DeletePopup = ({ encryption }: DeletePopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const history = useNavigate();
   const { deletePopupVisible, appletId } = popups.useData();
-  const [activeModal, setActiveModal] = useState(MODALS.PasswordCheck);
-  const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
+  const [activeModal, setActiveModal] = useState(Modals.PasswordCheck);
+  const { appletPasswordRef, passwordRef, submitForm } = useSetupEnterAppletPassword();
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const appletName = appletData?.displayName ?? '';
 
   const onClose = () => {
     dispatch(
@@ -37,13 +39,22 @@ export const DeletePopup = ({ encryption }: DeletePopupProps) => {
     dispatch(applets.actions.deleteApplet({ id: appletId }));
   });
 
-  const handleDeleteApplet = async ({ appletPassword: password }: EnterAppletPasswordForm) => {
+  const deleteAppletWithPassword = async (password: string) => {
     try {
       await execute({ appletId, password });
-      setActiveModal(MODALS.Confirmation);
+      setActiveModal(Modals.Confirmation);
     } catch (e) {
-      //TODO: add error handler
+      setActiveModal(Modals.DeleteError);
     }
+  };
+
+  const handleDeleteApplet = async ({ appletPassword: password }: EnterAppletPasswordForm) => {
+    passwordRef.current = password;
+    await deleteAppletWithPassword(password);
+  };
+
+  const handleRetryDelete = async () => {
+    await deleteAppletWithPassword(passwordRef.current!);
   };
 
   const handleConfirmation = () => {
@@ -52,7 +63,7 @@ export const DeletePopup = ({ encryption }: DeletePopupProps) => {
   };
 
   switch (activeModal) {
-    case MODALS.PasswordCheck:
+    case Modals.PasswordCheck:
       return (
         <Modal
           open={deletePopupVisible}
@@ -79,7 +90,7 @@ export const DeletePopup = ({ encryption }: DeletePopupProps) => {
           </StyledModalWrapper>
         </Modal>
       );
-    case MODALS.Confirmation:
+    case Modals.Confirmation:
       return (
         <Modal
           open={deletePopupVisible}
@@ -89,6 +100,30 @@ export const DeletePopup = ({ encryption }: DeletePopupProps) => {
           buttonText={t('ok')}
         >
           <StyledModalWrapper>{t('appletDeletedSuccessfully')}</StyledModalWrapper>
+        </Modal>
+      );
+    case Modals.DeleteError:
+      return (
+        <Modal
+          open={deletePopupVisible}
+          onClose={onClose}
+          onSubmit={handleRetryDelete}
+          title={t('deleteApplet')}
+          buttonText={t('retry')}
+          hasSecondBtn
+          submitBtnColor="error"
+          secondBtnText={t('cancel')}
+          onSecondBtnSubmit={onClose}
+        >
+          <StyledModalWrapper>
+            <Trans i18nKey="appletDeletedError">
+              Applet
+              <strong>
+                <>{{ appletName }}</>
+              </strong>
+              has not been deleted. Please try again.
+            </Trans>
+          </StyledModalWrapper>
         </Modal>
       );
   }

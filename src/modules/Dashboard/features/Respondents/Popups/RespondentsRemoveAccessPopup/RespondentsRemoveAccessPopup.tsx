@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
-import { Modal, SubmitBtnColor } from 'shared/components';
-import { EnterAppletPassword } from 'modules/Dashboard/features/Applet';
+import { Modal, SubmitBtnColor, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { useAsync } from 'shared/hooks';
 import { revokeAppletUserApi } from 'api';
-import { useSetupEnterAppletPassword } from 'modules/Dashboard/features/Applet/Password/EnterAppletPassword/EnterAppletPassword.hooks';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { ChosenAppletData } from '../../Respondents.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';

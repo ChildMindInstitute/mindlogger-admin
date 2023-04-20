@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Modal } from 'shared/components';
+import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { EnterAppletPassword } from 'modules/Dashboard/features/Applet';
-import { useSetupEnterAppletPassword } from 'modules/Dashboard/features/Applet/Password/EnterAppletPassword/EnterAppletPassword.hooks';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { page } from 'resources';
 import { ViewDataPopupProps } from './ViewDataPopup.types';

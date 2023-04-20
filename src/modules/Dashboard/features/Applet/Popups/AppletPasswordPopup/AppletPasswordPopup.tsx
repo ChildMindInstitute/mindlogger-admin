@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
-import { useSetupEnterAppletPassword } from 'modules/Dashboard/features/Applet/Password/EnterAppletPassword/EnterAppletPassword.hooks';
-
-import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
-import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
 import {
+  Modal,
   CreateAppletPassword,
   CreateAppletPasswordForm,
   EnterAppletPassword,
   EnterAppletPasswordForm,
-} from '../../Password';
+} from 'shared/components';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
+
+import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
+import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
 
 export const AppletPasswordPopup = ({
   onClose,
