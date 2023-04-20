@@ -5,12 +5,13 @@ import { Button } from '@mui/material';
 
 import { getAppletPublicLinkApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
-import { theme } from 'shared/styles';
+import { StyledFlexTopCenter, StyledTitleBoldMedium, theme } from 'shared/styles';
+import { Tooltip } from 'shared/components';
 
 import { StyledTitle } from '../AddUser.styles';
 import { LinkForm } from './LinkForm';
 import { InviteLink } from './LinkGenerator.types';
-import { StyledWrapper } from './LinkGenerator.styles';
+import { StyledSvg, StyledWrapper } from './LinkGenerator.styles';
 import { LinkPopup } from './LinkPopup';
 
 export const LinkGenerator = () => {
@@ -29,7 +30,14 @@ export const LinkGenerator = () => {
 
   return (
     <StyledWrapper>
-      <StyledTitle sx={{ mt: theme.spacing(4.9) }}>{t('publicLink')}</StyledTitle>
+      <StyledTitle sx={{ mt: theme.spacing(4.9) }}>
+        <StyledTitleBoldMedium>{t('publicLink')}</StyledTitleBoldMedium>
+        <Tooltip tooltipTitle={t('publicLinkTooltip')}>
+          <StyledFlexTopCenter>
+            <StyledSvg id="more-info-outlined" />
+          </StyledFlexTopCenter>
+        </Tooltip>
+      </StyledTitle>
       {inviteLink ? (
         <LinkForm inviteLink={inviteLink} setInviteLink={setInviteLink} />
       ) : (

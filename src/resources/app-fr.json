@@ -93,6 +93,7 @@
   "pendingInvitations": "Invitations en attente",
   "invitationLink": "Lien vers l'invitation",
   "publicLink": "Lien public",
+  "publicLinkTooltip": "Un lien qui permettra à quiconque de s'inviter à cette étude en tant que répondant",
   "generateLink": "Générer un lien",
   "requireToCreateAccount": "Voulez-vous demander à l'utilisateur de créer un compte?",
   "deleteInviteLink": "Supprimer le lien d'invitation",

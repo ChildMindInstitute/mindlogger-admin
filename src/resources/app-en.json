@@ -94,6 +94,7 @@
   "pendingInvitations": "Pending Invitations",
   "invitationLink": "Invitation Link",
   "publicLink": "Public Link",
+  "publicLinkTooltip": "A link that will allow anyone to invite themselves to this study as a respondent",
   "generateLink": "Generate Link",
   "requireToCreateAccount": "Do you want to require user to create account?",
   "deleteInviteLink": "Delete invite link",
