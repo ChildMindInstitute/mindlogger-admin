@@ -33,7 +33,7 @@ export const useAppletTabs = () => {
       }),
     },
     {
-      labelKey: 'generalSchedule',
+      labelKey: 'schedule',
       icon: <Svg id="schedule-outlined" />,
       activeIcon: <Svg id="schedule-filled" />,
       path: generatePath(page.appletSchedule, {
