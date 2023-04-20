@@ -132,14 +132,25 @@ export const getNotUsedElements = (
     return acc;
   }, [] as SubscaleContentProps['notUsedElements']);
 
+const getElementName =
+  (id: string) => (acc: string[], subscale: { name: string; itemsSet: Set<string> }) => {
+    if (!subscale.itemsSet.has(id)) return acc;
+
+    return [...acc, subscale.name];
+  };
 export const getUsedWithinSubscalesElements = (
   subscales: ActivitySettingsSubscale[] = [],
   subscalesMap: Record<string, ActivitySettingsSubscale>,
   itemsMap: Record<string, ItemFormValues>,
   mergedIds: string[],
   markedUniqueElementsIds: string[],
-) =>
-  mergedIds.reduce(
+) => {
+  const subscalesWithItemsSet = subscales.map((subscale) => ({
+    name: subscale.name,
+    itemsSet: subscale.items.reduce((acc, itemId) => acc.add(itemId), new Set<string>()),
+  }));
+
+  return mergedIds.reduce(
     (acc, id) => {
       if (!markedUniqueElementsIds.includes(id)) return acc;
 
@@ -152,8 +163,9 @@ export const getUsedWithinSubscalesElements = (
           {
             id,
             [SharedElementColumns.Element]: getItemNameInSubscale(item),
-            [SharedElementColumns.Subscale]:
-              (subscales.find((subscale) => subscale.items.includes(id)) ?? {}).name ?? '',
+            [SharedElementColumns.Subscale]: subscalesWithItemsSet
+              .reduce(getElementName(id), [] as string[])
+              .join(', '),
           },
         ];
       if (subscale)
@@ -166,8 +178,9 @@ export const getUsedWithinSubscalesElements = (
               subscalesMap,
               itemsMap,
             ),
-            [SharedElementColumns.Subscale]:
-              (subscales.find((subscale) => subscale.items.includes(id)) ?? {}).name ?? '',
+            [SharedElementColumns.Subscale]: subscalesWithItemsSet
+              .reduce(getElementName(id), [] as string[])
+              .join(', '),
           },
         ];
 
@@ -179,6 +192,7 @@ export const getUsedWithinSubscalesElements = (
       [SharedElementColumns.Subscale]: string;
     }[],
   );
+};
 
 export const columns = [
   {
