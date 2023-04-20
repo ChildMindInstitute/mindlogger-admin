@@ -299,7 +299,7 @@
   "exportIndividualSchedule": "Export Individual Schedule",
   "export": "Export",
   "defaultScheduleExport": "The current default schedule will be exported as a <1>.csv</1> file.",
-  "individualScheduleExport": "The current individual schedule of Respondent <1>{{secretUserId}} ({{nickName}})</1> will be exported as a <3>.csv</3> file.",
+  "individualScheduleExport": "The current individual schedule of respondent <1>{{secretUserId}} ({{nickName}})</1> will be exported as a <1>.csv</1> file.",
   "activityName": "Activity Name",
   "startTime": "Start time",
   "endTime": "End time",
@@ -696,6 +696,8 @@
   "submitAssessment": "Submit Assessment",
   "submitAssessmentDescription": "Are you sure you want to submit assessment? Only the latest version will be available on the Reviewed tab.",
   "reviewed": "Reviewed",
+  "reviewedEmptyState": "No reviewer has completed the Assessment for this.",
+  "edited": "Edited",
   "configureServer": "Please configure the report server to download the report.",
   "moreFilters": "More Filters",
   "activityCompleted": "Activity Completed",
@@ -779,5 +781,7 @@
   "filterByIdentifier": "Filter by identifier",
   "time": "Time",
   "response": "Response",
-  "noDataForActivity": "No available Data for this Activity yet"
+  "noDataForActivity": "No available Data for this Activity yet",
+  "isReviewableUnsupported": "Reviewer dashboard assessment supports only Single Selection, Multiple Selection and Slider Items",
+  "isReviewableExists": "Only one Activity within an Applet can be a Reviewer dashboard assessment. Selected one: {{- activityName }}"
 }

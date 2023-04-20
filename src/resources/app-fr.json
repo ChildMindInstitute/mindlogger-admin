@@ -266,8 +266,8 @@
   "export": "Exportation",
   "exportDefaultSchedule": "Exporter le programme par défaut",
   "exportIndividualSchedule": "Exporter un horaire individuel",
-  "defaultScheduleExport": "Le programme par défaut actuel sera exporté sous forme de fichier .csv.",
-  "individualScheduleExport": "Le calendrier individuel actuel du répondant {{secretUserId}} ({{nickName}}) sera exporté sous forme de fichier .csv.",
+  "defaultScheduleExport": "Le programme par défaut actuel sera exporté sous forme de fichier <1>.csv</1>.",
+  "individualScheduleExport": "Le calendrier individuel actuel du répondant <1>{{secretUserId}} ({{nickName}})</1> sera exporté sous forme de fichier <1>.csv</1>.",
   "activityName": "Nom de l'activité",
   "startTime": "Heure de début",
   "endTime": "Heure de fin",
@@ -575,6 +575,8 @@
   "submitAssessment": "Soumettre l'évaluation",
   "submitAssessmentDescription": "Êtes-vous sûr de vouloir soumettre l'évaluation ? Seule la dernière version sera disponible dans l'onglet Révisé.",
   "reviewed": "Examiné",
+  "reviewedEmptyState": "Aucun examinateur n'a terminé l'évaluation pour cela.",
+  "edited": "Édité",
   "configureServer": "Veuillez configurer le serveur de rapports pour télécharger le rapport.",
   "moreFilters": "Plus de filtres",
   "activityCompleted": "Activité terminée",
@@ -638,5 +640,7 @@
   "showMore": "Afficher plus...",
   "showLess": "Afficher moins...",
   "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants",
-  "noDataForActivity": "Pas encore de données disponibles pour cette activité"
+  "noDataForActivity": "Pas encore de données disponibles pour cette activité",
+  "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
+  "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}"
 }
