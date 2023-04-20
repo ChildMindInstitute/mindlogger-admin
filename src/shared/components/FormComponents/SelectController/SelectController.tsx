@@ -29,8 +29,9 @@ export const SelectController = <T extends FieldValues>({
     value: string | boolean,
     disabled: boolean,
     icon?: JSX.Element,
+    withoutKey?: boolean,
   ) => (
-    <StyledMenuItem uiType={uiType} key={labelKey} value={value as string}>
+    <StyledMenuItem {...(!withoutKey && { key: labelKey })} uiType={uiType} value={value as string}>
       <StyledItem disabled={disabled}>
         {icon && (
           <StyledFlexTopCenter className="icon-wrapper" sx={{ marginRight: theme.spacing(1.8) }}>
@@ -65,7 +66,7 @@ export const SelectController = <T extends FieldValues>({
         {options?.map(({ labelKey, value, icon, disabled = false, tooltip }) =>
           tooltip ? (
             <Tooltip key={labelKey} tooltipTitle={tooltip}>
-              {getMenuItem(labelKey, value, disabled, icon)}
+              {getMenuItem(labelKey, value, disabled, icon, true)}
             </Tooltip>
           ) : (
             getMenuItem(labelKey, value, disabled, icon)

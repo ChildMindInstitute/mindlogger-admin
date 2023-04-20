@@ -35,8 +35,6 @@ export const ClearScheduledEventsPopup = ({
   const onSubmit = async () => {
     if (isDefault) {
       await deleteScheduledEvents({ appletId });
-
-      return getNextStep();
     }
 
     return getNextStep();
