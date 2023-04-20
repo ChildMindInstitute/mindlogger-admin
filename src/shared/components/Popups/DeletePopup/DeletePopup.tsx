@@ -34,27 +34,25 @@ export const DeletePopup = ({ encryption }: DeletePopupProps) => {
     );
   };
 
-  const { execute } = useAsync(deleteAppletApi, () => {
-    // TODO: check after folder connect
-    dispatch(applets.actions.deleteApplet({ id: appletId }));
-  });
-
-  const deleteAppletWithPassword = async (password: string) => {
-    try {
-      await execute({ appletId, password });
+  const { execute } = useAsync(
+    deleteAppletApi,
+    () => {
+      // TODO: check after folder connect
+      dispatch(applets.actions.deleteApplet({ id: appletId }));
       setActiveModal(Modals.Confirmation);
-    } catch (e) {
+    },
+    () => {
       setActiveModal(Modals.DeleteError);
-    }
-  };
+    },
+  );
 
   const handleDeleteApplet = async ({ appletPassword: password }: EnterAppletPasswordForm) => {
     passwordRef.current = password;
-    await deleteAppletWithPassword(password);
+    await execute({ appletId, password });
   };
 
   const handleRetryDelete = async () => {
-    await deleteAppletWithPassword(passwordRef.current!);
+    await execute({ appletId, password: passwordRef.current! });
   };
 
   const handleConfirmation = () => {
