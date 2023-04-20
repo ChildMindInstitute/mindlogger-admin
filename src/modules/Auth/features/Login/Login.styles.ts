@@ -11,7 +11,7 @@ import {
 
 export const StyledWelcome = styled(StyledHeadline)`
   color: ${variables.palette.primary};
-  padding: ${theme.spacing(0, 4.8)};
+  padding: ${theme.spacing(0, 3.2)};
   text-align: center;
 `;
 

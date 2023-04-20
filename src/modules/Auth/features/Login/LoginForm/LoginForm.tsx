@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -51,7 +51,11 @@ export const LoginForm = () => {
 
   return (
     <>
-      <StyledWelcome>{t('welcome')}</StyledWelcome>
+      <StyledWelcome>
+        <Trans i18nKey="welcome">
+          Welcome to the MindLogger <br /> Admin Panel
+        </Trans>
+      </StyledWelcome>
       <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
         <StyledHeadline>{t('login')}</StyledHeadline>
         <StyledLoginSubheader>{t('logIntoAccount')}</StyledLoginSubheader>
