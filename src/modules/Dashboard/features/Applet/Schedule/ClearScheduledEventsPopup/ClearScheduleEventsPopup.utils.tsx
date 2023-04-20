@@ -41,7 +41,7 @@ const getSecondScreen = (appletName: string) => (
       have been successfully cleared.
     </StyledTitleMedium>
     <StyledTitleMedium sx={{ marginTop: theme.spacing(2.4) }}>
-      Respondents' individual schedules (if applicable) have not changed.
+      Respondents' <strong>individual schedules</strong> (if applicable) have not changed.
     </StyledTitleMedium>
   </Trans>
 );

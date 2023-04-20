@@ -27,7 +27,7 @@ import {
 import { LegendProps, SelectedRespondent } from './Legend.types';
 import { useExpandedLists } from './Legend.hooks';
 
-export const Legend = ({ legendEvents, appletName }: LegendProps) => {
+export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const { t } = useTranslation('app');
 
   const [schedule, setSchedule] = useState<string>(scheduleOptions[0].value);
@@ -177,6 +177,7 @@ export const Legend = ({ legendEvents, appletName }: LegendProps) => {
         <ClearScheduledEventsPopup
           open={clearScheduleEventsPopupVisible}
           appletName={appletName}
+          appletId={appletId}
           isDefault={!isIndividual}
           name="John Doe"
           onClose={() => setClearScheduleEventsPopupVisible(false)}

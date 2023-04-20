@@ -40,11 +40,14 @@ export const ActivityForm = forwardRef<ActivityFormRef, ActivityFormProps>(
     const dispatch = useAppDispatch();
     const appletData = applet.useAppletData();
     const appletId = appletData?.result.id;
+    const newDate = new Date();
+    const startDate =
+      defaultStartDate && newDate > defaultStartDate ? newDate : defaultStartDate || undefined;
 
     //TODO: add filling up the form with the data of the edited event when the get events API is connected
     const methods = useForm<FormValues>({
       resolver: yupResolver(ActivityFormSchema()),
-      defaultValues: getDefaultValues(defaultStartDate),
+      defaultValues: getDefaultValues(startDate),
       mode: 'onChange',
     });
 

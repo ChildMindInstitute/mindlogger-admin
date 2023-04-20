@@ -64,7 +64,9 @@ export const SelectController = <T extends FieldValues>({
       >
         {options?.map(({ labelKey, value, icon, disabled = false, tooltip }) =>
           tooltip ? (
-            <Tooltip tooltipTitle={tooltip}>{getMenuItem(labelKey, value, disabled, icon)}</Tooltip>
+            <Tooltip key={labelKey} tooltipTitle={tooltip}>
+              {getMenuItem(labelKey, value, disabled, icon)}
+            </Tooltip>
           ) : (
             getMenuItem(labelKey, value, disabled, icon)
           ),
