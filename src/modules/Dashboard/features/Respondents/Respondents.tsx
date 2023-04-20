@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE } from 'shared/components';
 import { users, workspaces, applet, folders } from 'redux/modules';
@@ -8,6 +8,7 @@ import { useTimeAgo, useBreadcrumbs, useTable, useAsync } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { updatePinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
+import { page } from 'resources';
 
 import {
   RespondentsTableHeader,
@@ -29,6 +30,7 @@ import {
 export const Respondents = () => {
   const dispatch = useAppDispatch();
   const { appletId: id } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
 
@@ -221,6 +223,7 @@ export const Respondents = () => {
             <StyledButton
               variant="outlined"
               startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
+              onClick={() => navigate(generatePath(page.appletAddUser, { appletId: id }))}
             >
               {t('addRespondent')}
             </StyledButton>

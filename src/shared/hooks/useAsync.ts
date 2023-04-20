@@ -10,12 +10,15 @@ export const useAsync = <T, K>(
 ) => {
   const [value, setValue] = useState<K | null>(null);
   const [error, setError] = useState<AxiosError<ApiError> | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const execute = useCallback(
     (body: T) => {
       if (!asyncFunction) {
         return Promise.resolve();
       }
+
+      setIsLoading(true);
 
       setValue(null);
       setError(null);
@@ -32,10 +35,11 @@ export const useAsync = <T, K>(
           errorCallback && errorCallback(error);
 
           throw error.response;
-        });
+        })
+        .finally(() => setIsLoading(false));
     },
     [asyncFunction],
   );
 
-  return { execute, value, error };
+  return { execute, value, error, isLoading };
 };

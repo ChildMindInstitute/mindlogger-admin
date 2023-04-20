@@ -778,5 +778,6 @@
   "noRespondentIdentifier": "No respondent identifier yet.",
   "filterByIdentifier": "Filter by identifier",
   "time": "Time",
-  "response": "Response"
+  "response": "Response",
+  "noDataForActivity": "No available Data for this Activity yet"
 }
