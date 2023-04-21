@@ -12,12 +12,14 @@ export const StyledBar = styled(Box, shouldForwardProp)`
   flex-shrink: 0;
   border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   height: 100%;
+  padding: ${({ hasActiveItem }) => (hasActiveItem ? 0 : '0 4.8rem')};
   overflow-y: auto;
   transition: ${variables.transitions.width};
 `;
 
-export const StyledHeader = styled(StyledHeadlineLarge, shouldForwardProp)`
+export const StyledHeaderTitle = styled(StyledHeadlineLarge, shouldForwardProp)`
   ${commonStickyStyles};
+  width: unset;
   padding: ${theme.spacing(2.8, 1.6, 2, 5.6)};
   box-shadow: ${({ isSticky }: { isSticky: boolean }) =>
     isSticky ? variables.boxShadow.light0 : 'none'};
