@@ -6,7 +6,8 @@ import { applets, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
-import { SuccessTransferOwnershipPopup } from 'modules/Dashboard/features/Applet/Popups/SuccessTransferOwnershipPopup';
+
+import { SuccessTransferOwnershipPopup } from '../SuccessTransferOwnershipPopup';
 
 export const TransferOwnershipPopup = () => {
   const { t } = useTranslation('app');
