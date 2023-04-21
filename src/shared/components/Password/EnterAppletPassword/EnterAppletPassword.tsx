@@ -17,7 +17,7 @@ import { passwordFormSchema } from './EnterAppletPassword.schema';
 import { AppletPasswordRef } from '../Password.types';
 
 export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPasswordProps>(
-  ({ appletId, encryption, submitCallback, isApplet }, ref) => {
+  ({ appletId, encryption, submitCallback, noEncryption }, ref) => {
     const { t } = useTranslation('app');
     const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
@@ -40,7 +40,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     const [showPassword, setShowPassword] = useState(false);
 
     const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
-      if (isApplet && appletId) {
+      if (noEncryption && appletId) {
         passwordRef.current = appletPassword;
         await execute({ appletId, password: appletPassword });
 

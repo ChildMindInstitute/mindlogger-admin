@@ -82,7 +82,7 @@ export const DeletePopup = ({ encryption }: DeletePopupProps) => {
               appletId={appletId}
               encryption={encryption}
               submitCallback={handleDeleteApplet}
-              isApplet
+              noEncryption
             />
           </StyledModalWrapper>
         </Modal>

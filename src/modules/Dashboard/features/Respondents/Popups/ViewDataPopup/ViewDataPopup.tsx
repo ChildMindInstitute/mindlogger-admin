@@ -52,7 +52,7 @@ export const ViewDataPopup = ({
             ref={appletPasswordRef}
             appletId={chosenAppletData?.appletId || appletId} // TODO: when api for respondents applets will be ready - remove || appletId
             submitCallback={handleSubmitCallback}
-            isApplet
+            noEncryption
           />
         ) : (
           <>

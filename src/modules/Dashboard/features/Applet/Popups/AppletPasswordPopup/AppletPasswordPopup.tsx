@@ -47,7 +47,7 @@ export const AppletPasswordPopup = ({
             appletId={appletId}
             encryption={encryption}
             submitCallback={handleSubmitCallback}
-            isApplet
+            noEncryption
           />
         ) : (
           <CreateAppletPassword ref={appletPasswordRef} submitCallback={handleSubmitCallback} />
