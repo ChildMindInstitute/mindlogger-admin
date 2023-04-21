@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Modal } from 'shared/components';
-import { StyledModalWrapper, theme } from 'shared/styles';
+import { StyledLinearProgress, StyledModalWrapper, theme } from 'shared/styles';
 
 import {
   SaveAndPublishProcessPopupProps,
@@ -53,6 +53,9 @@ export const SaveAndPublishProcessPopup = ({
           }}
         >
           <Description step={step} />
+          {step === SaveAndPublishSteps.BeingCreated && (
+            <StyledLinearProgress sx={{ mt: theme.spacing(3) }} />
+          )}
         </Box>
       </StyledModalWrapper>
     </Modal>
