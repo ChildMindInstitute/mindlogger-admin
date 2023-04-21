@@ -159,6 +159,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
       )}
       {passwordPopupVisible && (
         <AppletPasswordPopup
+          appletId={item.id}
           popupVisible={passwordPopupVisible}
           onClose={() => setPasswordPopupVisible(false)}
           popupType={AppletPasswordPopupType.Create}

@@ -53,6 +53,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           timeAgo: timeAgo.format(new Date(alert.created), 'round'),
           viewed: alert.viewed,
           encryption: encryption || undefined,
+          appletId: alert.appletId,
         };
       });
 

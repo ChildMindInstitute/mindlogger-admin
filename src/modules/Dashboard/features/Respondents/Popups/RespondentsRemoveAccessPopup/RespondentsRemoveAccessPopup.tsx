@@ -90,7 +90,7 @@ export const RespondentsRemoveAccessPopup = ({
   const thirdExtScreen = (
     <EnterAppletPassword
       ref={appletPasswordRef}
-      appletId={chosenAppletData?.appletId}
+      appletId={chosenAppletData?.appletId ?? ''}
       submitCallback={() => handlePopupClose()}
     />
   );
