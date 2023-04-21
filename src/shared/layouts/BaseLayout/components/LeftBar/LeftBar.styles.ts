@@ -7,6 +7,17 @@ import { blendColorsNormal } from 'shared/utils/colors';
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 import { LEFT_BAR_WIDTH } from 'shared/consts';
 
+const ItemBefore = `
+  content: '';
+  position: absolute;
+  width: 5.6rem;
+  height: 3.2rem;
+  border-radius: ${variables.borderRadius.xxxl};
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);  
+`;
+
 export const StyledDrawer = styled(Box)`
   background-color: ${variables.palette.surface1};
   padding: ${theme.spacing(0, 0.9)};
@@ -25,6 +36,11 @@ export const StyledDrawerItem = styled(ListItem)`
         variables.palette.primary_container,
         variables.palette.on_primary_container_alfa8,
       )};
+    }
+
+    :before {
+      ${ItemBefore}
+      background: ${variables.palette.on_surface_alfa8};
     }
   }
 
@@ -48,15 +64,8 @@ export const StyledDrawerItem = styled(ListItem)`
   }
 
   .active-link:before {
-    content: '';
-    position: absolute;
-    width: 5.6rem;
-    height: 3.2rem;
+    ${ItemBefore}
     background: ${variables.palette.primary_container};
-    border-radius: ${variables.borderRadius.xxxl};
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
   }
 `;
 
