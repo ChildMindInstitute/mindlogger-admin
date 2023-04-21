@@ -407,6 +407,8 @@
   "appletIsRequiredOneActivity": "Au moins 1 activité est requise pour enregistrer et publier l'applet",
   "appletIsRequiredOneItem": "Au moins 1 élément est requis pour enregistrer et publier l'applet",
   "appletIsBeingCreated": "Votre applet est en cours de création. Veuillez patienter...",
+  "appletHasEmptyRequiredFields": "Veuillez remplir tous les champs obligatoires marqués en rouge",
+  "appletHasErrorsInFields": "Veuillez corriger les erreurs dans tous les champs marqués en rouge",
   "appletSavedAndPublished": "<0>L'applet <1>{{name}}</1> a été enregistrée et publiée avec succès.</0>",
   "appletNotSavedAndPublished": "<0>L'applet <1>{{name}}</1> n'a pas été enregistrée et publiée. Veuillez réessayer.</0>",
   "timeRangeTitle": "Plage de temps",

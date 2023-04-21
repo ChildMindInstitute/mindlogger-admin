@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
+import { ValidationError } from 'yup';
 
 import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
@@ -16,6 +17,7 @@ import { auth } from 'modules/Auth';
 import { EnterAppletPasswordForm } from 'shared/components';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
 import { appletInfoMocked } from './mock';
 import {
@@ -96,6 +98,40 @@ export const useCheckIfHasAtLeastOneItem = () => {
   };
 };
 
+export const useCheckIfHasEmptyRequiredFields = () => {
+  const { getValues } = useFormContext();
+  const appletSchema = AppletSchema();
+
+  return async () => {
+    const body = getValues();
+
+    try {
+      await appletSchema.validate(body, { abortEarly: false });
+    } catch (e) {
+      const { errors } = e as ValidationError;
+
+      return errors && errors.some((errorMessage: string) => errorMessage.includes('required'));
+    }
+  };
+};
+
+export const useCheckIfHasErrorsInFields = () => {
+  const { getValues } = useFormContext();
+  const appletSchema = AppletSchema();
+
+  return async () => {
+    const body = getValues();
+
+    try {
+      await appletSchema.validate(body, { abortEarly: false });
+    } catch (e) {
+      const { errors } = e as ValidationError;
+
+      return errors?.length;
+    }
+  };
+};
+
 export const usePrompt = (isFormChanged: boolean) => {
   const {
     location,
@@ -155,6 +191,8 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
+  const checkIfHasEmptyRequiredFields = useCheckIfHasEmptyRequiredFields();
+  const checkIfHasErrorsInFields = useCheckIfHasErrorsInFields();
   const { createApplet, updateApplet, getAppletWithItems } = applet.thunk;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -188,6 +226,8 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const handleSaveAndPublishFirstClick = async () => {
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
     const hasNoItems = !checkIfHasAtLeastOneItem();
+    const hasEmptyRequiredFields = await checkIfHasEmptyRequiredFields();
+    const hasErrorsInFields = await checkIfHasErrorsInFields();
     setPublishProcessPopupOpened(true);
 
     if (hasNoActivities) {
@@ -201,12 +241,25 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       return;
     }
 
-    setPublishProcessPopupOpened(false);
-
     const isValid = await trigger();
     if (!isValid) {
+      if (hasEmptyRequiredFields) {
+        setPublishProcessStep(SaveAndPublishSteps.EmptyRequiredFields);
+
+        return;
+      }
+
+      if (hasErrorsInFields) {
+        setPublishProcessStep(SaveAndPublishSteps.ErrorsInFields);
+
+        return;
+      }
+
       return;
     }
+
+    setPublishProcessPopupOpened(false);
+
     await sendRequestWithPasswordCheck();
   };
 
