@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,7 +21,16 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     const { t } = useTranslation('app');
     const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
-    const { execute } = useAsync(postAppletPasswordCheckApi);
+    const passwordRef = useRef<string | null>(null);
+    const { execute } = useAsync(
+      postAppletPasswordCheckApi,
+      () => {
+        submitCallback && submitCallback({ appletPassword: passwordRef.current });
+      },
+      () => {
+        setError('appletPassword', { message: t('incorrectAppletPassword') });
+      },
+    );
 
     const { handleSubmit, control, setError } = useForm<EnterAppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
@@ -32,12 +41,8 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
 
     const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
       if (isApplet && appletId) {
-        try {
-          await execute({ appletId, password: appletPassword });
-          submitCallback && submitCallback({ appletPassword });
-        } catch (e) {
-          setError('appletPassword', { message: t('incorrectAppletPassword') });
-        }
+        passwordRef.current = appletPassword;
+        await execute({ appletId, password: appletPassword });
 
         return;
       }
