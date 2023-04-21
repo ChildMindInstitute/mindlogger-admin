@@ -13,7 +13,7 @@ import {
 } from 'shared/utils';
 import { applet, Activity, SingleApplet } from 'shared/state';
 import { auth } from 'modules/Auth';
-import { EnterAppletPasswordForm } from 'modules/Dashboard';
+import { EnterAppletPasswordForm } from 'shared/components';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 

@@ -22,3 +22,4 @@ export * from './MarkDownEditor';
 export * from './SaveChangesPopup';
 export * from './FileUploader';
 export * from './DataTable';
+export * from './Password';

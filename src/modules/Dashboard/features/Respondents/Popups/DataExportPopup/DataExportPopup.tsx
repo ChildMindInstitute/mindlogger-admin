@@ -1,8 +1,7 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
-import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features/Applet';
+import { Modal, EnterAppletPassword } from 'shared/components';
 import theme from 'shared/styles/theme';
 import {
   StyledModalWrapper,
@@ -13,6 +12,7 @@ import {
 import { getUsersDataApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { getErrorMessage } from 'shared/utils/errors';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -26,7 +26,7 @@ export const DataExportPopup = ({
 }: DataExportPopupProps) => {
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
-  const appletPasswordRef = useRef() as RefObject<AppletPasswordRef>;
+  const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting;
 
   // TODO: shift to the new API when it is ready,
@@ -42,12 +42,6 @@ export const DataExportPopup = ({
   const handlePopupClose = () => {
     setChosenAppletData(null);
     setPopupVisible(false);
-  };
-
-  const handleModalSubmit = () => {
-    if (appletPasswordRef?.current) {
-      appletPasswordRef.current.submitForm();
-    }
   };
 
   const handleDataExportSubmit = async () => {
@@ -95,7 +89,7 @@ export const DataExportPopup = ({
     <Modal
       open={popupVisible}
       onClose={handlePopupClose}
-      onSubmit={handleModalSubmit}
+      onSubmit={submitForm}
       title={showEnterPwdScreen ? t('enterAppletPassword') : t('dataExport')}
       buttonText={showEnterPwdScreen ? t('submit') : ''}
     >

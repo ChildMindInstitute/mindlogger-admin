@@ -125,6 +125,8 @@
   "duplicate": "Dupliquer",
   "duplicateApplet": "Dupliquer l'applet",
   "deleteApplet": "Supprimer l'applet",
+  "deleteAppletDescriptionWithPassword": "Pour supprimer, tapez le mot de passe de l'applet ici.\nAprès la suppression, vous ne pourrez pas restaurer l'applet.",
+  "appletDeletedSuccessfully": "Applet a été supprimé avec succès.",
   "transferOwnership": "Transférer la propriété",
   "shareWithTheLibrary": "Partager avec la bibliothèque",
   "incorrectAppletPassword": "Mot de passe incorrect",
