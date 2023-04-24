@@ -3,17 +3,16 @@ import { useFormContext } from 'react-hook-form';
 
 import { TimePicker } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import theme from 'shared/styles/theme';
-import { StyledFlexTopCenter, StyledLabelLarge } from 'shared/styles/styledComponents';
+import { theme, StyledFlexTopCenter, StyledLabelLarge } from 'shared/styles';
 
-import { StyledReminder, StyledInputWrapper } from './Reminder.styles';
+import { EventFormValues } from '../../EventForm.types';
 import { Header } from '../Header';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
-import { FormValues } from '../../ActivityForm.types';
+import { StyledReminder, StyledInputWrapper } from './Reminder.styles';
 
 export const Reminder = () => {
   const { t } = useTranslation('app');
-  const { setValue, control } = useFormContext<FormValues>();
+  const { setValue, control } = useFormContext<EventFormValues>();
 
   const handleARemoveReminder = () => {
     setValue('reminder', null);

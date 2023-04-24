@@ -9,11 +9,11 @@ import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.s
 import { notificationTimeToggles } from './Notification.const';
 import { Header } from '../Header';
 import { NotificationProps } from './Notification.types';
-import { FormValues, NotificationType } from '../../ActivityForm.types';
+import { EventFormValues, NotificationType } from '../../EventForm.types';
 
 export const Notification = ({ index, remove }: NotificationProps) => {
   const { t } = useTranslation('app');
-  const { setValue, watch } = useFormContext<FormValues>();
+  const { setValue, watch } = useFormContext<EventFormValues>();
   const notification = watch(`notifications.${index}`);
 
   const handleRemoveNotification = () => {

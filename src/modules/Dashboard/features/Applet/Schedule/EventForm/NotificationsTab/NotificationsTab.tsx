@@ -2,17 +2,16 @@ import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { StyledTitleMedium } from 'shared/styles/styledComponents';
+import { theme, StyledTitleMedium } from 'shared/styles';
 
-import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
+import { EventFormValues, NotificationType } from '../EventForm.types';
 import { Notification } from './Notification';
-import { FormValues, NotificationType } from '../';
 import { Reminder } from './Reminder';
+import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
 
 export const NotificationsTab = () => {
   const { t } = useTranslation('app');
-  const { setValue, control, watch } = useFormContext<FormValues>();
+  const { setValue, control, watch } = useFormContext<EventFormValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'notifications',

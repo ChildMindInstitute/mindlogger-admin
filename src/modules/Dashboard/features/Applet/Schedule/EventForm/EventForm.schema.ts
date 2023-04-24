@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import i18n from 'i18n';
 import { TimerType } from 'modules/Dashboard/api';
 
-export const ActivityFormSchema = () => {
+export const EventFormSchema = () => {
   const { t } = i18n;
   const activityRequired = t('activityRequired');
   const timerDurationCheck = t('timerDurationCheck');
