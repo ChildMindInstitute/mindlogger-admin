@@ -18,11 +18,10 @@ export const ViewDataPopup = ({
   setChosenAppletData,
 }: ViewDataPopupProps) => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
   const navigate = useNavigate();
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
-  const showSecondScreen = !!chosenAppletData || appletId; // TODO: when api for respondents applets will be ready - remove || appletId
+  const showSecondScreen = !!chosenAppletData;
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
@@ -50,7 +49,7 @@ export const ViewDataPopup = ({
         {showSecondScreen ? (
           <EnterAppletPassword
             ref={appletPasswordRef}
-            appletId={(chosenAppletData?.appletId || appletId) ?? ''} // TODO: when api for respondents applets will be ready - remove || appletId
+            appletId={chosenAppletData?.appletId}
             submitCallback={handleSubmitCallback}
             noEncryption
           />
