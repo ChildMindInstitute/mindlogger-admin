@@ -209,3 +209,5 @@ export type AppletSubmitDateList = AppletId & {
   fromDate: string;
   toDate: string;
 };
+
+export type EventId = { eventId: string };

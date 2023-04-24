@@ -1,5 +1,5 @@
 import { authApiClient } from 'shared/api/api.client';
-import { AppletId, EventId, AppletIdWithPassword } from 'shared/api';
+import { AppletId, AppletIdWithPassword } from 'shared/api';
 
 import {
   SwitchAccount,
@@ -31,6 +31,7 @@ import {
   Note,
   AppletSubmitDateList,
   RespondentId,
+  EventId,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
