@@ -38,9 +38,20 @@ export const usePreparedEvents = (
     eventsData = events?.reduce(
       (
         acc: EventsData,
-        { periodicity, activityId, flowId, startTime: startTimeFull, endTime: endTimeFull },
+        {
+          periodicity,
+          activityId,
+          flowId,
+          startTime: startTimeFull,
+          endTime: endTimeFull,
+          oneTimeCompletion,
+          accessBeforeSchedule,
+          timerType,
+          timer,
+          id: eventId,
+        },
       ) => {
-        const activityOrFlowId = activityId || flowId;
+        const activityOrFlowId = activityId || flowId || '';
         const currentActivityOrFlow = activitiesAndFlows.find(
           (item) => item.id === activityOrFlowId,
         );
@@ -48,7 +59,7 @@ export const usePreparedEvents = (
         if (!currentActivityOrFlow?.isHidden) {
           const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
           const isAlwaysAvailable = periodicityType === Periodicity.Always;
-          const date = format(new Date(selectedDate || startDate), DateFormats.DayMonthYear);
+          const date = format(new Date(selectedDate || startDate || ''), DateFormats.DayMonthYear);
           const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull);
           const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull);
           const activityOrFlowName = currentActivityOrFlow?.name || '';
@@ -81,6 +92,7 @@ export const usePreparedEvents = (
 
           const dataToCreateEvent = {
             activityOrFlowId,
+            eventId,
             activityOrFlowName,
             periodicityType,
             selectedDate,
@@ -93,6 +105,10 @@ export const usePreparedEvents = (
             flowId,
             nextYearDateString: null,
             currentYear,
+            oneTimeCompletion,
+            accessBeforeSchedule,
+            timerType,
+            timer,
           };
 
           if (dataToCreateEvent) {
@@ -108,12 +124,12 @@ export const usePreparedEvents = (
           if (periodicityType === Periodicity.Always) {
             acc.alwaysActivitiesFlows.push({
               color: [activityOrFlowColors[0], activityOrFlowColors[0]],
-              id: activityId || flowId,
+              id: activityOrFlowId,
             });
           } else {
             acc.scheduledActivitiesFlows.push({
               color: activityOrFlowColors,
-              id: activityId || flowId,
+              id: activityOrFlowId,
             });
           }
         }

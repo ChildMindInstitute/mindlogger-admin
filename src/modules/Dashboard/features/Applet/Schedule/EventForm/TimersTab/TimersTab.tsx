@@ -6,13 +6,13 @@ import { TimePicker, ToggleButtonGroup } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme } from 'shared/styles';
 import { TimerType } from 'modules/Dashboard/api';
 
+import { EventFormValues } from '../EventForm.types';
 import { timersButtons } from './TimersTab.const.';
-import { FormValues } from '../ActivityForm.types';
 import { StyledTimePickerWrapper } from './TimersTab.styles';
 
 export const TimersTab = () => {
   const { t } = useTranslation('app');
-  const { watch, setValue } = useFormContext<FormValues>();
+  const { watch, setValue } = useFormContext<EventFormValues>();
   const activeTimer = watch('timerType');
 
   const handleSetTimerType = (timerType: string) => setValue('timerType', timerType as TimerType);

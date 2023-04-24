@@ -8,7 +8,7 @@ import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { Periodicity } from 'modules/Dashboard/api';
 
-import { FormValues } from '../ActivityForm.types';
+import { EventFormValues } from '../EventForm.types';
 import { availabilityOptions, repeatsButtons } from './Availability.const';
 import {
   StyledButtonsTitle,
@@ -25,7 +25,7 @@ export const AvailabilityTab = () => {
     watch,
     setValue,
     formState: { dirtyFields },
-  } = useFormContext<FormValues>();
+  } = useFormContext<EventFormValues>();
   const alwaysAvailable = watch('alwaysAvailable');
   const periodicity = watch('periodicity');
   const date = watch('date');

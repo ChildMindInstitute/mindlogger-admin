@@ -1,5 +1,5 @@
 import { authApiClient } from 'shared/api/api.client';
-import { AppletId } from 'shared/api';
+import { AppletId, EventId } from 'shared/api';
 
 import {
   SwitchAccount,
@@ -97,6 +97,11 @@ export const createEventApi = ({ appletId, body }: CreateEventType, signal?: Abo
     signal,
   });
 
+export const updateEventApi = (
+  { appletId, body, eventId }: CreateEventType & EventId,
+  signal?: AbortSignal,
+) => authApiClient.put(`/applets/${appletId}/events/${eventId}`, body, { signal });
+
 export const getEventsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}/events`, {
     signal,
@@ -104,6 +109,9 @@ export const getEventsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
 
 export const deleteScheduledEventsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}/events`, { signal });
+
+export const deleteEventApi = ({ appletId, eventId }: AppletId & EventId, signal?: AbortSignal) =>
+  authApiClient.delete(`/applets/${appletId}/events/${eventId}`, { signal });
 
 export const deleteIndividualEventsApi = (
   { appletId, respondentId }: AppletId & RespondentId,

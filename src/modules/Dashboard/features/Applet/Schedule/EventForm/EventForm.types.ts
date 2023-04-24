@@ -1,18 +1,21 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { TimerType, Periodicity } from 'modules/Dashboard/api';
+import { CalendarEvent } from 'modules/Dashboard/state';
 
-export type ActivityFormRef = {
+export type EventFormRef = {
   submitForm: () => void;
-  createEvent: () => void;
+  processEvent: () => void;
 };
 
-export type ActivityFormProps = {
+export type EventFormProps = {
   submitCallback: () => void;
   setRemoveAllScheduledPopupVisible: Dispatch<SetStateAction<boolean>>;
   setRemoveAlwaysAvailablePopupVisible: Dispatch<SetStateAction<boolean>>;
   setActivityName: Dispatch<SetStateAction<string>>;
-  defaultStartDate?: Date;
+  defaultStartDate: Date;
+  editedEvent?: CalendarEvent;
+  onFormChange?: (isChanged: boolean) => void;
 };
 
 export const enum NotificationType {
@@ -29,7 +32,7 @@ export type Notification = {
 
 export type Reminder = { activityIncomplete: number; reminderTime: Date | null };
 
-export type FormValues = {
+export type EventFormValues = {
   activityOrFlowId: string;
   alwaysAvailable: boolean;
   oneTimeCompletion: boolean;
@@ -38,7 +41,6 @@ export type FormValues = {
   endTime: string;
   date: Date | string;
   startEndingDate: (Date | null)[] | string;
-  defaultStartDate?: Date;
   accessBeforeSchedule: boolean;
   timerType: TimerType;
   timerDuration: string;

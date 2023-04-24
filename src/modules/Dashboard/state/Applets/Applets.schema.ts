@@ -34,20 +34,20 @@ export type Applet = {
 export type Event = {
   startTime: string;
   endTime: string;
-  accessBeforeSchedule: boolean;
-  oneTimeCompletion: boolean;
-  timer: string;
+  accessBeforeSchedule: boolean | null;
+  oneTimeCompletion: boolean | null;
+  timer: number | null;
   timerType: TimerType;
   id: string;
   periodicity: {
     type: Periodicity;
-    startDate: string;
-    endDate: string;
-    selectedDate: string;
+    startDate: string | null;
+    endDate: string | null;
+    selectedDate: string | null;
   };
-  respondentId: string;
-  activityId: string;
-  flowId: string;
+  respondentId: string | null;
+  activityId: string | null;
+  flowId: string | null;
 };
 
 export type AppletsSchema = {

@@ -45,12 +45,13 @@ export const getDateFromDateTimeString = (date: Date, time: string) => {
   return setSeconds(setMinutes(setHours(date, Number(hours)), Number(minutes)), Number(seconds));
 };
 
-const getDateFromDateStringTimeString = (date: string, time: string) => new Date(`${date}T${time}`);
+const getDateFromDateStringTimeString = (date: string | null, time: string) =>
+  date && new Date(`${date}T${time}`);
 
 const getEventStartDateTime = (
   periodicity: Periodicity,
-  selectedDate: string,
-  startDate: string,
+  selectedDate: string | null,
+  startDate: string | null,
   startTime: string,
   nextYearDateString: string | null,
 ) => {
@@ -65,18 +66,22 @@ const getEventStartDateTime = (
   const startDateToDateWithTime = getDateFromDateStringTimeString(startDate, startTime);
 
   const dateAlways =
-    nextYearDate && nextYearDate.getFullYear() > selectedDateToDate.getFullYear()
+    nextYearDate &&
+    selectedDateToDate &&
+    nextYearDate.getFullYear() > selectedDateToDate.getFullYear()
       ? nextYearDate
       : selectedDateToDate;
 
   const dateScheduled =
     nextYearDateWithTime &&
+    selectedDateToDateWithTime &&
     nextYearDateWithTime.getFullYear() > selectedDateToDateWithTime.getFullYear()
       ? nextYearDateWithTime
       : selectedDateToDateWithTime;
 
   const dateDailyWeekdays =
     nextYearDateWithTime &&
+    startDateToDateWithTime &&
     nextYearDateWithTime.getFullYear() > startDateToDateWithTime.getFullYear()
       ? nextYearDateWithTime
       : startDateToDateWithTime;
@@ -96,8 +101,8 @@ const getEventStartDateTime = (
 
 const getEventEndDateTime = (
   periodicity: Periodicity,
-  selectedDate: string,
-  endDate: string,
+  selectedDate: string | null,
+  endDate: string | null,
   endTime: string,
   currentYear: number,
   eventStart: Date,
@@ -134,6 +139,7 @@ const getEventsArrayFromDates = (
 
 export const createEvents = ({
   activityOrFlowId,
+  eventId,
   activityOrFlowName,
   periodicityType,
   selectedDate,
@@ -146,22 +152,23 @@ export const createEvents = ({
   flowId,
   nextYearDateString,
   currentYear,
+  oneTimeCompletion,
+  accessBeforeSchedule,
+  timerType,
+  timer,
 }: CreateEventsData): CalendarEvent[] => {
-  const eventStart = getEventStartDateTime(
-    periodicityType,
-    selectedDate,
-    startDate,
-    startTime,
-    nextYearDateString,
-  );
-  const eventEnd = getEventEndDateTime(
-    periodicityType,
-    selectedDate,
-    endDate,
-    endTime,
-    currentYear,
-    eventStart,
-  );
+  const newDate = new Date();
+  const eventStart =
+    getEventStartDateTime(
+      periodicityType,
+      selectedDate,
+      startDate,
+      startTime,
+      nextYearDateString,
+    ) || newDate;
+  const eventEnd =
+    getEventEndDateTime(periodicityType, selectedDate, endDate, endTime, currentYear, eventStart) ||
+    newDate;
   const isAllDayEvent = startTime === '00:00:00' && endTime === '23:59:00';
 
   const getBgColor = () => {
@@ -172,12 +179,20 @@ export const createEvents = ({
   };
 
   const commonProps = {
-    resourceId: activityOrFlowId,
+    activityOrFlowId,
+    eventId,
     title: activityOrFlowName,
     alwaysAvailable: isAlwaysAvailable,
     startFlowIcon: !!flowId,
     isHidden: false,
     backgroundColor: getBgColor(),
+    periodicity: periodicityType,
+    eventStart: getDateFromDateStringTimeString(startDate, startTime) || newDate,
+    eventEnd: endDate === null ? null : eventEnd,
+    oneTimeCompletion,
+    accessBeforeSchedule,
+    timerType,
+    timer,
     allDay: isAllDayEvent,
     ...(!isAlwaysAvailable && {
       scheduledColor: colors[0],
@@ -208,13 +223,15 @@ export const createEvents = ({
   }
 
   const daysInPeriod =
-    eventEnd > eventStart ? eachDayOfInterval({ start: eventStart, end: eventEnd }) : [];
+    eventEnd && eventStart && eventEnd > eventStart
+      ? eachDayOfInterval({ start: eventStart, end: eventEnd })
+      : [];
 
   if (periodicityType === Periodicity.Daily) {
     return getEventsArrayFromDates(daysInPeriod, commonProps, startTime, endTime);
   }
 
-  if (periodicityType === Periodicity.Weekly) {
+  if (periodicityType === Periodicity.Weekly && selectedDate) {
     const dayOfWeek = getDay(new Date(selectedDate));
     const weeklyDays = daysInPeriod.filter((date) => getDay(date) === dayOfWeek);
 
@@ -227,7 +244,7 @@ export const createEvents = ({
     return getEventsArrayFromDates(weekDays, commonProps, startTime, endTime);
   }
 
-  if (periodicityType === Periodicity.Monthly) {
+  if (periodicityType === Periodicity.Monthly && selectedDate) {
     const chosenDate = getDate(new Date(selectedDate));
     const monthsBetween = eachMonthOfInterval({ start: eventStart, end: eventEnd });
 

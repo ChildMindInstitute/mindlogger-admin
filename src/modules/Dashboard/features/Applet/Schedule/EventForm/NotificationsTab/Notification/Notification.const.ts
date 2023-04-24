@@ -1,4 +1,4 @@
-import { NotificationType } from '../../ActivityForm.types';
+import { NotificationType } from '../../EventForm.types';
 
 export const notificationTimeToggles = [
   {
