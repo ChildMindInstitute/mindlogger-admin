@@ -29,6 +29,35 @@ export const convertSecondsToHHmmString = (timeInSeconds: number) => {
   return `${createTimeEntity(hours)}:${createTimeEntity(minutes)}`;
 };
 
+const getActivityOrFlowId = (
+  editedEvent?: CalendarEvent,
+  startFlowIcon?: boolean,
+  eventActivityOrFlowId?: string,
+) => {
+  if (!editedEvent) return '';
+  if (startFlowIcon) return `flow-${eventActivityOrFlowId}`;
+
+  return eventActivityOrFlowId;
+};
+
+const getStartEndingDate = (
+  isPeriodicityOnce: boolean,
+  isPeriodicityAlways: boolean,
+  defaultStartDate: Date,
+  eventStart?: Date,
+  eventEnd?: Date | null,
+  editedEvent?: CalendarEvent,
+) => {
+  if (isPeriodicityOnce || isPeriodicityAlways) {
+    return [defaultStartDate, endOfYear(defaultStartDate)];
+  }
+
+  return [
+    eventStart || defaultStartDate,
+    editedEvent && eventEnd === null ? null : eventEnd || endOfYear(eventStart || defaultStartDate),
+  ];
+};
+
 export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarEvent) => {
   const {
     alwaysAvailable: eventAlwaysAvailable,
@@ -44,28 +73,19 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     timerType: eventTimerType,
     timer,
   } = editedEvent || {};
-  const activityOrFlowId = (() => {
-    if (!editedEvent) return '';
-    if (startFlowIcon) return `flow-${eventActivityOrFlowId}`;
-
-    return eventActivityOrFlowId;
-  })();
+  const activityOrFlowId = getActivityOrFlowId(editedEvent, startFlowIcon, eventActivityOrFlowId);
   const isPeriodicityAlways = eventPeriodicity === Periodicity.Always;
   const isPeriodicityOnce = eventPeriodicity === Periodicity.Once;
   const alwaysAvailable = editedEvent ? eventAlwaysAvailable : true;
   const date = isPeriodicityOnce ? eventStart : defaultStartDate;
-  const startEndingDate = (() => {
-    if (isPeriodicityOnce || isPeriodicityAlways) {
-      return [defaultStartDate, endOfYear(defaultStartDate)];
-    }
-
-    return [
-      eventStart || defaultStartDate,
-      editedEvent && eventEnd === null
-        ? null
-        : eventEnd || endOfYear(eventStart || defaultStartDate),
-    ];
-  })();
+  const startEndingDate = getStartEndingDate(
+    isPeriodicityOnce,
+    isPeriodicityAlways,
+    defaultStartDate,
+    eventStart,
+    eventEnd,
+    editedEvent,
+  );
   const startTime = start ? format(start, DateFormats.Time) : DEFAULT_START_TIME;
   const endTime = end ? format(end, DateFormats.Time) : DEFAULT_END_TIME;
   const periodicity =
