@@ -1,11 +1,10 @@
-import { RefObject, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Modal } from 'shared/components';
+import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { AppletPasswordRef, EnterAppletPassword } from 'modules/Dashboard/features/Applet';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { page } from 'resources';
 import { ViewDataPopupProps } from './ViewDataPopup.types';
@@ -21,13 +20,7 @@ export const ViewDataPopup = ({
   const { t } = useTranslation('app');
   const { appletId } = useParams();
   const navigate = useNavigate();
-  const appletPasswordRef = useRef() as RefObject<AppletPasswordRef>;
-
-  const submitForm = () => {
-    if (appletPasswordRef?.current) {
-      appletPasswordRef.current.submitForm();
-    }
-  };
+  const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
   const showSecondScreen = !!chosenAppletData || appletId; // TODO: when api for respondents applets will be ready - remove || appletId
 
@@ -57,9 +50,9 @@ export const ViewDataPopup = ({
         {showSecondScreen ? (
           <EnterAppletPassword
             ref={appletPasswordRef}
-            appletId={chosenAppletData?.appletId || appletId} // TODO: when api for respondents applets will be ready - remove || appletId
+            appletId={(chosenAppletData?.appletId || appletId) ?? ''} // TODO: when api for respondents applets will be ready - remove || appletId
             submitCallback={handleSubmitCallback}
-            isApplet
+            noEncryption
           />
         ) : (
           <>

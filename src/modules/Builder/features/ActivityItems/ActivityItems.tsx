@@ -78,7 +78,7 @@ export const ActivityItems = () => {
         ...itemToDuplicate,
         id: undefined,
         key: uuidv4(),
-        name: `${itemToDuplicate.name} (${numberToInsert})`,
+        name: `${itemToDuplicate.name}_${numberToInsert}`,
       });
 
       return {

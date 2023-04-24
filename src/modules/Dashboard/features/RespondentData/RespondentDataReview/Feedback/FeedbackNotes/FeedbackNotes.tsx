@@ -87,7 +87,7 @@ export const FeedbackNotes = () => {
         />
         <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', m: theme.spacing(0.8, 0, 0) }}>
           <Button variant="contained" onClick={addNewNote}>
-            {t('apply')}
+            {t('save')}
           </Button>
         </StyledFlexTopCenter>
       </StyledForm>

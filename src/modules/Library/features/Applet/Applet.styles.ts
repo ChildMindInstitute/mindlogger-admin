@@ -21,6 +21,10 @@ export const StyledAppletContainer = styled(Box)`
 
 export const StyledAppletName = styled(Box)`
   display: flex;
+
+  .MuiTypography-root {
+    color: ${variables.palette.on_surface};
+  }
 `;
 
 export const StyledAppletKeywordsContainer = styled(StyledFlexWrap)`

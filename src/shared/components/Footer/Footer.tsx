@@ -27,7 +27,7 @@ export const Footer = () => {
     <StyledFooter>
       <Box>
         <StyledText>
-          {version} {buildVersion} &#169; {year}
+          MindLogger {version} {buildVersion} &#169; {year}
           <StyledUnderlineLink target="_blank" href="https://childmind.org">
             Child Mind Institute
           </StyledUnderlineLink>

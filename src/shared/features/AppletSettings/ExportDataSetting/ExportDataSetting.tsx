@@ -38,7 +38,7 @@ export const ExportDataSetting = ({ isDisabled = false }) => {
         <AppletPasswordPopup
           popupVisible={passwordModalVisible}
           onClose={() => setPasswordModalVisible(false)}
-          appletId={id}
+          appletId={id ?? ''}
         />
       )}
     </>

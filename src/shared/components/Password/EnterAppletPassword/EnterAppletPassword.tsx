@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,18 +8,29 @@ import { StyledClearedButton } from 'shared/styles/styledComponents';
 import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 import { getAppletData } from 'shared/utils/getAppletData';
-import { Svg } from 'shared/components';
+import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
+import { useAsync } from 'shared/hooks';
+import { postAppletPasswordCheckApi } from 'shared/api';
 
-import { EnterAppletPasswordForm, EnterAppletPasswordProps } from './EnterAppletPassword.types';
 import { StyledController } from '../Password.styles';
 import { passwordFormSchema } from './EnterAppletPassword.schema';
 import { AppletPasswordRef } from '../Password.types';
 
 export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPasswordProps>(
-  ({ appletId, encryption, submitCallback, isApplet }, ref) => {
+  ({ appletId, encryption, submitCallback, noEncryption }, ref) => {
     const { t } = useTranslation('app');
     const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
+    const passwordRef = useRef<string | null>(null);
+    const { execute } = useAsync(
+      postAppletPasswordCheckApi,
+      () => {
+        submitCallback && submitCallback({ appletPassword: passwordRef.current });
+      },
+      () => {
+        setError('appletPassword', { message: t('incorrectAppletPassword') });
+      },
+    );
 
     const { handleSubmit, control, setError } = useForm<EnterAppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
@@ -28,9 +39,10 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const submitForm = ({ appletPassword }: EnterAppletPasswordForm) => {
-      if (isApplet) {
-        submitCallback && submitCallback({ appletPassword });
+    const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
+      if (noEncryption && appletId) {
+        passwordRef.current = appletPassword;
+        await execute({ appletId, password: appletPassword });
 
         return;
       }

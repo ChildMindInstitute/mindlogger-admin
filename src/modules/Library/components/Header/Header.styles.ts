@@ -26,6 +26,7 @@ export const StyledCartButton = styled(Button)`
   width: 25.6rem;
   display: flex;
   justify-content: flex-start;
+  padding: ${theme.spacing(0, 2.4)};
 
   .MuiButton-startIcon {
     svg {
@@ -35,7 +36,8 @@ export const StyledCartButton = styled(Button)`
 
   .MuiButton-endIcon {
     position: absolute;
-    right: 1.4rem;
+    right: 0;
+    margin-right: ${theme.spacing(2.4)};
 
     svg {
       fill: ${variables.palette.on_surface_variant};

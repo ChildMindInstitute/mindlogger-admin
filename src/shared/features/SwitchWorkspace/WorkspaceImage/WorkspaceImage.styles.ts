@@ -24,6 +24,7 @@ export const StyledCustomCover = styled(StyledFlexAllCenter, shouldForwardProp)`
     UiTypesStyles[uiType]};
   background-color: ${variables.palette.secondary};
   text-transform: uppercase;
+  flex-shrink: 0;
 `;
 
 export const StyledImage = styled('img')`

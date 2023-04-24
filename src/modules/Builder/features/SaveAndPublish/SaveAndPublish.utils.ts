@@ -47,7 +47,7 @@ export const mapItemResponseValues = (
       options: (responseValues as SingleAndMultipleSelectItemResponseValues).options?.map(
         (option) => ({
           ...option,
-          color: (option.color as ColorResult)?.hex ?? option.color ?? undefined,
+          color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
         }),
       ),
     };
