@@ -6,17 +6,21 @@ import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
-import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
+import { SourceLinkModal } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { InsertContentExtensionProps } from '../Extensions.types';
+import { InsertContentExtensionProps, InsertHandlerProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
 export const ImageUploadExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');
-  const insertHandler = (values: SourceLinkModalForm) => {
+
+  const insertHandler = ({ values, imgLink }: InsertHandlerProps) => {
+    const targetValue = values
+      ? `![${values.label}](${values.address})`
+      : `![uploaded image](${imgLink})` || '';
     const generator: InsertContentGenerator = () => ({
-      targetValue: `![${values.label}](${values.address})`,
+      targetValue,
       select: false,
       deviationStart: 0,
       deviationEnd: 0,
@@ -24,6 +28,7 @@ export const ImageUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
 
     onInsert(generator);
   };
+
   const {
     isVisible,
     setIsVisible,

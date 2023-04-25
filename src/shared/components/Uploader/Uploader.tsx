@@ -7,8 +7,10 @@ import { Svg } from 'shared/components/Svg';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { byteFormatter } from 'shared/utils';
+import { byteFormatter, getUploadFormData } from 'shared/utils';
 import { MAX_FILE_SIZE_2MB } from 'shared/consts';
+import { postFileUploadApi } from 'api';
+import { useAsync } from 'shared/hooks';
 
 import {
   StyledButtonGroup,
@@ -32,6 +34,11 @@ export const Uploader = ({
   wrapperStyles = {},
 }: UploaderProps) => {
   const { t } = useTranslation('app');
+  const { execute: executeImgUpload } = useAsync(
+    postFileUploadApi,
+    // TODO: check field name (url, key or other)
+    (response) => response?.data?.result && setValue(response?.data?.result.url),
+  );
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -45,30 +52,23 @@ export const Uploader = ({
   };
 
   const handleSetImage = (files: FileList | null) => {
-    if (!files?.[0]) return;
+    const imageFile = files?.[0];
+    if (!imageFile) return;
 
-    const isAllowableSize = files[0].size < maxFileSize;
+    const isAllowableSize = imageFile.size < maxFileSize;
     setError(!isAllowableSize);
 
-    if (!isAllowableSize || !files[0].type.includes('image')) return;
+    if (!isAllowableSize || !imageFile.type.includes('image')) return;
 
     if (isPrimaryUiType) {
-      setImage(files[0]);
+      setImage(imageFile);
       setCropPopupVisible(true);
 
       return;
     }
 
-    const reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-
-    reader.onload = () => {
-      const imageUrl = reader.result;
-      if (imageUrl) {
-        setValue(imageUrl as string);
-        setIsMouseOver(false);
-      }
-    };
+    const body = getUploadFormData(imageFile);
+    executeImgUpload(body);
   };
 
   const dragEvents = {
@@ -193,12 +193,12 @@ export const Uploader = ({
           )}
         </StyledNameWrapper>
       )}
-      {cropPopupVisible && (
+      {cropPopupVisible && image && (
         <CropPopup
           open={cropPopupVisible}
           setCropPopupVisible={setCropPopupVisible}
           setValue={setValue}
-          imageUrl={image ? URL.createObjectURL(image) : ''}
+          image={image}
         />
       )}
     </>

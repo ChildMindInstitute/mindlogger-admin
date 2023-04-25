@@ -52,6 +52,12 @@ export const postAppletApi = (body: SingleApplet, signal?: AbortSignal) =>
     { signal },
   );
 
+export const postFileUploadApi = (body: FormData, signal?: AbortSignal) =>
+  authApiClient.post('/file/upload', body, {
+    signal,
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+
 export const postAppletPasswordCheckApi = (
   { appletId, password }: AppletIdWithPassword,
   signal?: AbortSignal,
