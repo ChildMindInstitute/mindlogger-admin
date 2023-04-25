@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -77,9 +76,5 @@ export const BarChart = () => {
     datasets: getDatasets(chartData),
   };
 
-  return (
-    <Box>
-      <Bar plugins={[legendMargin]} options={options} data={data} />
-    </Box>
-  );
+  return <Bar plugins={[legendMargin]} options={options} data={data} />;
 };
