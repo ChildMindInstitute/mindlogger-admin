@@ -6,6 +6,7 @@ import { Activity } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
+import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Charts/BarChart/BarChart';
 
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
@@ -32,6 +33,9 @@ export const Report = ({ activity }: { activity: Activity }) => {
       <Box sx={{ margin: theme.spacing(4.8, 6.4, 4.8) }}>
         <ReportFilters />
         <ReportTable />
+        <Box sx={{ m: theme.spacing(2.4, 0) }}>
+          <BarChart />
+        </Box>
       </Box>
     </StyledReport>
   );
