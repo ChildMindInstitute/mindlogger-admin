@@ -26,8 +26,8 @@ export const ReviewMenu = ({
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
-  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = getRespondentLabel(secretId, nickname);
+  const respondent = users.useRespondent(respondentId || '') || {};
+  const respondentLabel = getRespondentLabel(respondent);
   const { control, watch, setValue } = useForm({ defaultValues: { date: undefined } });
   const date = watch('date');
 

@@ -7,6 +7,8 @@ import { BaseSchema } from 'shared/state/Base';
 export type Respondent = {
   id: string;
   nickname: string;
+  firstName?: string;
+  lastName?: string;
   roles: string[];
   secretId: string;
   lastSeen: string;

@@ -17,8 +17,8 @@ export const ReportMenu = ({
 }: ReportMenuProps) => {
   const { t } = useTranslation();
   const { respondentId } = useParams();
-  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = getRespondentLabel(secretId, nickname);
+  const respondent = users.useRespondent(respondentId || '') || {};
+  const respondentLabel = getRespondentLabel(respondent);
 
   return (
     <StyledMenu>

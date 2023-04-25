@@ -17,8 +17,8 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { pathname } = useLocation();
 
   const authData = auth.useData();
-  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = getRespondentLabel(secretId, nickname);
+  const respondent = users.useRespondent(respondentId || '') || {};
+  const respondentLabel = getRespondentLabel(respondent);
   const { firstName, lastName } = (authData?.user as User) || {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();
