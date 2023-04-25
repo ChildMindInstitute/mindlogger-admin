@@ -7,7 +7,7 @@ import { CalendarEvent, CalendarEventsSchema, CreateEventsData } from './Calenda
 import { getNotHiddenEvents, getPreparedEvents, createEvents } from './CalendarEvents.utils';
 
 export const reducers = {
-  setCalendarEvents: (
+  createCalendarEvents: (
     state: CalendarEventsSchema,
     action: PayloadAction<{
       events?: CalendarEvent[];
@@ -57,7 +57,16 @@ export const reducers = {
     state.createEventsData.data = action.payload;
   },
 
-  setNextYearEvents: (
+  setProcessedEventStartYear: (
+    state: CalendarEventsSchema,
+    action: PayloadAction<{
+      processedEventStartYear: number;
+    }>,
+  ): void => {
+    state.processedEventStartYear.data = action.payload.processedEventStartYear;
+  },
+
+  createNextYearEvents: (
     state: CalendarEventsSchema,
     action: PayloadAction<{
       yearToCreateEvents: number;
@@ -66,42 +75,34 @@ export const reducers = {
     const { yearToCreateEvents } = action.payload;
 
     if (yearToCreateEvents && state.events.data) {
-      if (!state.yearToCreateEvents.data || state.yearToCreateEvents.data !== yearToCreateEvents) {
-        const date = new Date(`${yearToCreateEvents}-01-01`);
-        const nextYearDateString = format(date, DateFormats.YearMonthDay);
-        state.events.data = [];
-        state.createEventsData.data?.forEach((item) => {
-          const data = {
-            ...item,
-            nextYearDateString,
-            currentYear: yearToCreateEvents,
-          };
+      const date = new Date(`${yearToCreateEvents}-01-01`);
+      const nextYearDateString = format(date, DateFormats.YearMonthDay);
+      state.events.data = [];
+      state.createEventsData.data?.forEach((item) => {
+        const data = {
+          ...item,
+          nextYearDateString,
+          currentYear: yearToCreateEvents,
+        };
 
-          if (state.events.data) {
-            const newEventsArr = createEvents(data);
-            state.events.data = [...state.events.data, ...newEventsArr];
-          }
-        });
-
-        if (state.alwaysAvailableHidden.data !== null) {
-          state.events.data = getPreparedEvents(
-            state.events.data,
-            state.alwaysAvailableHidden.data,
-            true,
-          );
+        if (state.events.data) {
+          const newEventsArr = createEvents(data);
+          state.events.data = [...state.events.data, ...newEventsArr];
         }
-        if (state.scheduledHidden.data !== null) {
-          state.events.data = getPreparedEvents(
-            state.events.data,
-            state.scheduledHidden.data,
-            false,
-          );
-        }
+      });
 
-        state.eventsToShow.data = getNotHiddenEvents(state.events.data);
-
-        state.yearToCreateEvents.data = yearToCreateEvents;
+      if (state.alwaysAvailableHidden.data !== null) {
+        state.events.data = getPreparedEvents(
+          state.events.data,
+          state.alwaysAvailableHidden.data,
+          true,
+        );
       }
+      if (state.scheduledHidden.data !== null) {
+        state.events.data = getPreparedEvents(state.events.data, state.scheduledHidden.data, false);
+      }
+
+      state.eventsToShow.data = getNotHiddenEvents(state.events.data);
     }
   },
 };

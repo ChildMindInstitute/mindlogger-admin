@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
-import { format } from 'date-fns';
+import { useEffect, useRef } from 'react';
+import { format, getYear } from 'date-fns';
+import isEqual from 'lodash.isequal';
 
 import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
-import { calendarEvents, Event } from 'modules/Dashboard/state';
+import { applets, CalendarEvent, calendarEvents, CreateEventsData } from 'modules/Dashboard/state';
 import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
 import { getTableCell } from 'shared/utils';
@@ -18,15 +19,17 @@ import {
   getCount,
 } from './Schedule.utils';
 
-export const usePreparedEvents = (
-  appletData?: SingleApplet,
-  events?: Event[],
-): PreparedEvents | null => {
+export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | null => {
   const dispatch = useAppDispatch();
+  const { result: events } = applets.useEventsData() ?? {};
+  const processedEventStartYear = calendarEvents.useProcessedEventStartYearData();
+  const currentYear = getYear(new Date());
   const alwaysAvailableEvents: LegendEvent[] = [];
   const scheduledEvents: LegendEvent[] = [];
   const deactivatedEvents: LegendEvent[] = [];
   let eventsData: EventsData | undefined;
+  const prevCalendarEventsArrRef = useRef<CalendarEvent[] | null>();
+  const prevEventsDataArrRef = useRef<CreateEventsData[] | null>();
 
   if (appletData) {
     const { activities = [], activityFlows = [] } = appletData;
@@ -190,15 +193,31 @@ export const usePreparedEvents = (
   } = eventsData ?? {};
 
   useEffect(() => {
-    if (calendarEventsArr) {
-      dispatch(calendarEvents.actions.setCalendarEvents({ events: calendarEventsArr }));
+    if (
+      calendarEventsArr &&
+      !isEqual(calendarEventsArr, prevCalendarEventsArrRef.current) &&
+      (!processedEventStartYear || processedEventStartYear === currentYear)
+    ) {
+      dispatch(calendarEvents.actions.createCalendarEvents({ events: calendarEventsArr }));
+      prevCalendarEventsArrRef.current = calendarEventsArr;
     }
   }, [calendarEventsArr]);
 
   useEffect(() => {
-    if (eventsDataArr) {
-      dispatch(calendarEvents.actions.setCreateEventsData(eventsDataArr));
-    }
+    (async () => {
+      if (eventsDataArr && !isEqual(eventsDataArr, prevEventsDataArrRef.current)) {
+        await dispatch(calendarEvents.actions.setCreateEventsData(eventsDataArr));
+        prevEventsDataArrRef.current = eventsDataArr;
+
+        if (processedEventStartYear && processedEventStartYear !== currentYear) {
+          dispatch(
+            calendarEvents.actions.createNextYearEvents({
+              yearToCreateEvents: processedEventStartYear,
+            }),
+          );
+        }
+      }
+    })();
   }, [eventsDataArr]);
 
   return {
