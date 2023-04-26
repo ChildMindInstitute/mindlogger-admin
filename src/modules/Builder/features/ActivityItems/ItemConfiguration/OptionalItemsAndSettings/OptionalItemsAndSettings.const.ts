@@ -40,3 +40,12 @@ export const defaultSliderConfig = {
     textInputRequired: false,
   },
 };
+
+export const defaultNumberSelectionConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+};

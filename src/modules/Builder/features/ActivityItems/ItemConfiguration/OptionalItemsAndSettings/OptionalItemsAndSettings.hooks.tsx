@@ -25,8 +25,9 @@ import {
   defaultTextConfig,
   defaultSliderConfig,
   defaultSingleAndMultiSelectionConfig,
+  defaultNumberSelectionConfig,
 } from './OptionalItemsAndSettings.const';
-import { getEmptySliderOption } from '../ItemConfiguration.utils';
+import { getEmptySliderOption, getEmptyNumberSelection } from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {
@@ -70,7 +71,6 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 
 export const useSettingsSetup = ({
   name,
-  removeOptions,
   handleAddOption,
   removeAlert,
   handleAddAlert,
@@ -90,7 +90,7 @@ export const useSettingsSetup = ({
   useEffect(() => {
     const subscription = watch((_, { name: fieldName, type }) => {
       if (fieldName === `${name}.responseType` && type === 'change') {
-        removeOptions?.();
+        setValue(`${name}.responseValues`, {});
 
         const responseType = getValues(`${name}.responseType`);
 
@@ -109,6 +109,11 @@ export const useSettingsSetup = ({
         if (responseType === ItemResponseType.Slider) {
           setConfig(defaultSliderConfig);
           setValue(`${name}.responseValues`, getEmptySliderOption(false));
+        }
+
+        if (responseType === ItemResponseType.NumberSelection) {
+          setConfig(defaultNumberSelectionConfig);
+          setValue(`${name}.responseValues`, getEmptyNumberSelection());
         }
       }
     });
