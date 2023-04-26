@@ -30,8 +30,8 @@ export const ResponseValuesOptionsSchema = () =>
     }),
   );
 
-export const ItemSchema = () => {
-  const itemSchema = yup
+export const ItemSchema = () =>
+  yup
     .object({
       name: yup
         .string()
@@ -56,9 +56,6 @@ export const ItemSchema = () => {
       config: yup.object({}),
     })
     .required();
-
-  return itemSchema;
-};
 
 export const ActivitySchema = () =>
   yup.object({

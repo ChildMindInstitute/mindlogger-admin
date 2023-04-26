@@ -617,7 +617,6 @@
   "alignLeft": "Clamp text to the left",
   "alignCenter": "Center text",
   "alignRight": "Clamp text to the right",
-  "thresholdMessage": "Visibility decreases over {{size}} characters",
   "alertSingleMultipleNonContinuousSlider": "If Respondent selected <0></0> when answering this question then send:",
   "alertContinuousSlider": "If Respondent selected values between <0></0> and <1></1> when answering this question then send:",
   "alertSingleMultipleSelectionPerRow": "If <0></0> is selected for <1></1> when answering this question then send:",

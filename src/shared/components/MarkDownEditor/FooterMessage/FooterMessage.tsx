@@ -12,8 +12,8 @@ export const FooterMessage = ({ inputSize }: FooterMessageProps) => {
 
   return (
     <StyledText>
-      {t('thresholdMessage', {
-        size: THRESHOLD_SIZE,
+      {t('visibilityDecreasesOverMaxCharacters', {
+        max: THRESHOLD_SIZE,
       })}
     </StyledText>
   );
