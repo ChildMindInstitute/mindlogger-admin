@@ -455,7 +455,6 @@
   "alignLeft": "Clamper le texte à gauche",
   "alignCenter": "Centrer le texte",
   "alignRight": "Clamper le texte à droite",
-  "thresholdMessage": "La visibilité diminue au-delà de {{size}} caractères",
   "dateItemTitle": "Sélection de date",
   "dateItemDescription": "Le répondant pourra sélectionner la date.",
   "minValue": "Valeur min",
