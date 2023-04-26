@@ -1,8 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { t } from 'i18next';
 
-import { Svg } from 'shared/components';
-import { FolderApplet } from 'redux/modules';
+import { Row, Svg } from 'shared/components';
 import {
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
@@ -48,63 +47,44 @@ export const getActions = ({
 ];
 
 export const getChosenAppletData = (
-  respondentsItems: any, // TODO: fix later
-  appletsData: FolderApplet[],
-  appletId: string,
-) => {
-  const applet = appletsData.find((applet) => applet.id === appletId);
-  const appletName = applet?.name || '';
-  const appletImg = applet?.image || '';
-  const respondentItem = respondentsItems[appletId];
-  const secretUserId = respondentItem.MRN;
-  const nickName = respondentItem.nickName;
-  const hasIndividualSchedule = respondentItem.hasIndividualEvent;
-  const userId = respondentItem['_id'];
-
-  return { appletName, appletImg, secretUserId, nickName, hasIndividualSchedule, userId };
-};
+  respondentAccess: ChosenAppletData,
+  userId: string | undefined,
+) => ({ ...respondentAccess, userId });
 
 export const getAppletsSmallTableRows = (
-  respondentsItems: any, // TODO: fix later
-  appletsData: FolderApplet[],
+  respondentAccesses: ChosenAppletData[] | undefined,
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>,
+  userId: string | undefined,
 ) =>
-  respondentsItems &&
-  Object.keys(respondentsItems).map((key) => {
-    const { appletName, appletImg, secretUserId, nickName, hasIndividualSchedule, userId } =
-      getChosenAppletData(respondentsItems, appletsData, key);
-    const chosenAppletData = {
-      appletId: key,
-      appletName,
-      secretUserId,
-      hasIndividualSchedule,
-      userId,
-    };
+  (respondentAccesses &&
+    respondentAccesses.map((respondentAccess) => {
+      const chosenAppletData = getChosenAppletData(respondentAccess, userId);
+      const { appletName, appletImg, secretUserId, nickname } = chosenAppletData;
 
-    return {
-      appletName: {
-        content: () => (
-          <StyledFlexTopCenter>
-            {appletImg ? (
-              <StyledSmallAppletImg src={appletImg} alt="Applet image" />
-            ) : (
-              <StyledSmallAppletImgPlaceholder />
-            )}
-            <StyledLabelLarge>{appletName}</StyledLabelLarge>
-          </StyledFlexTopCenter>
-        ),
-        value: appletName,
-        onClick: () => setChosenAppletData(chosenAppletData),
-      },
-      secretUserId: {
-        content: () => <StyledLabelLarge>{secretUserId}</StyledLabelLarge>,
-        value: secretUserId,
-        onClick: () => setChosenAppletData(chosenAppletData),
-      },
-      nickname: {
-        content: () => <StyledBodyMedium>{nickName}</StyledBodyMedium>,
-        value: nickName,
-        onClick: () => setChosenAppletData(chosenAppletData),
-      },
-    };
-  });
+      return {
+        appletName: {
+          content: () => (
+            <StyledFlexTopCenter>
+              {appletImg ? (
+                <StyledSmallAppletImg src={appletImg} alt="Applet image" />
+              ) : (
+                <StyledSmallAppletImgPlaceholder />
+              )}
+              <StyledLabelLarge>{appletName}</StyledLabelLarge>
+            </StyledFlexTopCenter>
+          ),
+          value: appletName,
+          onClick: () => setChosenAppletData(chosenAppletData),
+        },
+        secretUserId: {
+          content: () => <StyledLabelLarge>{secretUserId}</StyledLabelLarge>,
+          value: secretUserId,
+          onClick: () => setChosenAppletData(chosenAppletData),
+        },
+        nickname: {
+          content: () => <StyledBodyMedium>{nickname}</StyledBodyMedium>,
+          value: nickname,
+          onClick: () => setChosenAppletData(chosenAppletData),
+        },
+      };
+    })) as Row[] | undefined;
