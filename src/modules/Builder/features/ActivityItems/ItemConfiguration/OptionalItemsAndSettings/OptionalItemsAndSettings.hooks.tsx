@@ -13,7 +13,7 @@ import {
   // Date,
   // Drawing,
   // Geolocation,
-  // NumberSelection,
+  NumberSelection,
   // PhotoResponse,
   // SelectionRows,
   // TimeRange,
@@ -31,8 +31,8 @@ import { getEmptySliderOption } from '../ItemConfiguration.utils';
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {
     switch (responseType) {
-      // case ItemResponseType.NumberSelection:
-      //   return <NumberSelection name="minNumber" maxName="maxNumber" />;
+      case ItemResponseType.NumberSelection:
+        return <NumberSelection name={name} />;
       case ItemResponseType.Slider:
         return <SliderRows name={name} />;
       // case ItemResponseType.SliderRows:

@@ -12,31 +12,32 @@ import { ItemOptionContainer } from '../ItemOptionContainer';
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 import { DEFAULT_MAX_NUMBER, DEFAULT_MIN_NUMBER } from '../../ItemConfiguration.const';
 
-export const NumberSelection = <T extends FieldValues>({
-  name,
-  maxName,
-}: NumberSelectionProps<T>) => {
+export const NumberSelection = ({ name }: NumberSelectionProps) => {
   const { t } = useTranslation('app');
+
+  const responseValuesName = `${name}.responseValues`;
+  const minValueName = `${responseValuesName}.minValue`;
+  const maxValueName = `${responseValuesName}.maxValue`;
 
   const { control, watch, setValue } = useOptionalItemSetup({
     itemType: ItemResponseType.NumberSelection,
-    name,
+    name: responseValuesName,
     defaultValue: DEFAULT_MIN_NUMBER,
   });
 
   useOptionalItemSetup({
     itemType: ItemResponseType.NumberSelection,
-    name: maxName,
+    name: `${name}.responseValues`,
     defaultValue: DEFAULT_MAX_NUMBER,
   });
 
-  const minNumber = watch('minNumber');
-  const maxNumber = watch('maxNumber');
+  const minNumber = watch(minValueName);
+  const maxNumber = watch(maxValueName);
 
   useEffect(() => {
     if (maxNumber !== '') return;
 
-    setValue('maxNumber', Number(minNumber) + 1, {
+    setValue(maxValueName, Number(minNumber) + 1, {
       shouldValidate: true,
     });
   }, [maxNumber]);
@@ -50,10 +51,15 @@ export const NumberSelection = <T extends FieldValues>({
     <ItemOptionContainer title={t('numberSelection')}>
       <StyledFlexTopStart sx={{ justifyContent: 'space-between' }}>
         <StyledInputWrapper sx={{ mr: theme.spacing(1.25) }}>
-          <InputController {...commonProps} name={name} label={t('minValue')} minNumberValue={0} />
+          <InputController
+            {...commonProps}
+            name={`${name}.response`}
+            label={t('minValue')}
+            minNumberValue={0}
+          />
         </StyledInputWrapper>
         <StyledInputWrapper sx={{ ml: theme.spacing(1.25) }}>
-          <InputController {...commonProps} name={maxName} label={t('maxValue')} />
+          <InputController {...commonProps} name={maxValueName} label={t('maxValue')} />
         </StyledInputWrapper>
       </StyledFlexTopStart>
     </ItemOptionContainer>
