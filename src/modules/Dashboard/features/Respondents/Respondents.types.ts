@@ -9,8 +9,9 @@ export type RespondentsActions = {
 export type ChosenAppletData = {
   appletId: string;
   appletName?: string;
+  appletImg?: string;
   secretUserId?: string;
   hasIndividualSchedule?: boolean;
   userId?: string;
-  nickName?: string;
+  nickname?: string;
 };

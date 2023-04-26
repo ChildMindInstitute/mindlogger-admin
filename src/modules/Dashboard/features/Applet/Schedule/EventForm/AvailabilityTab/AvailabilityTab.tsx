@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { TimePicker, DatePicker, DatePickerUiType, ToggleButtonGroup } from 'shared/components';
-import { StyledBodyMedium } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { theme, variables, StyledBodyMedium } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
@@ -20,17 +18,13 @@ import {
 
 export const AvailabilityTab = () => {
   const { t } = useTranslation('app');
-  const {
-    control,
-    watch,
-    setValue,
-    formState: { dirtyFields },
-  } = useFormContext<EventFormValues>();
+  const { control, watch, setValue } = useFormContext<EventFormValues>();
   const alwaysAvailable = watch('alwaysAvailable');
   const periodicity = watch('periodicity');
   const date = watch('date');
   const startEndingDate = watch('startEndingDate');
   const startTime = watch('startTime');
+  const removeWarning = watch('removeWarning');
 
   const handleSetPeriodicity = (period: string) => setValue('periodicity', period as Periodicity);
 
@@ -68,9 +62,10 @@ export const AvailabilityTab = () => {
         options={availabilityOptions}
         control={control}
       />
-      {dirtyFields.alwaysAvailable && (
+      {Object.keys(removeWarning).length !== 0 && (
         <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.6) }} color={variables.palette.primary}>
-          {t(alwaysAvailable ? 'alwaysAvailableWarning' : 'scheduledAccessWarning')}
+          {removeWarning.showRemoveAlwaysAvailable && t('scheduledAccessWarning')}
+          {removeWarning.showRemoveAllScheduled && t('alwaysAvailableWarning')}
         </StyledBodyMedium>
       )}
       {alwaysAvailable ? (

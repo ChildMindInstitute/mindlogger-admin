@@ -54,6 +54,6 @@ export type CalendarEventsSchema = {
   eventsToShow: BaseSchema<CalendarEvent[] | null>;
   alwaysAvailableHidden: BaseSchema<boolean | null>;
   scheduledHidden: BaseSchema<boolean | null>;
-  yearToCreateEvents: BaseSchema<number | null>;
   createEventsData: BaseSchema<CreateEventsData[] | null>;
+  processedEventStartYear: BaseSchema<number | null>;
 };
