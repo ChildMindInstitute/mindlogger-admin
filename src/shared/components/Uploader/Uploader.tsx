@@ -36,7 +36,6 @@ export const Uploader = ({
   const { t } = useTranslation('app');
   const { execute: executeImgUpload } = useAsync(
     postFileUploadApi,
-    // TODO: check field name (url, key or other)
     (response) => response?.data?.result && setValue(response?.data?.result.url),
   );
   const uploadInputRef = useRef<HTMLInputElement>(null);

@@ -17,7 +17,6 @@ export const CropPopup = ({ open, setCropPopupVisible, setValue, image }: CropPo
   const cropperRef = useRef<ReactCropperElement>(null);
   const { execute: executeImgUpload } = useAsync(
     postFileUploadApi,
-    // TODO: check field name (url, key or other)
     (response) => response?.data?.result && setValue(response?.data?.result.url),
   );
 
@@ -27,7 +26,6 @@ export const CropPopup = ({ open, setCropPopupVisible, setValue, image }: CropPo
     const imageElement = cropperRef?.current;
     const cropper = imageElement?.cropper;
     if (!cropper) return;
-    // cropper && setValue(cropper.getCroppedCanvas().toDataURL());
 
     cropper.getCroppedCanvas().toBlob((blob) => {
       if (!blob) return;
