@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -46,7 +46,6 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const appletId = appletData?.result.id;
     const defaultValues = getDefaultValues(defaultStartDate, editedEvent);
     const eventsData = calendarEvents.useCreateEventsData() || [];
-    const removeWarningRef = useRef<Warning | null>();
 
     const methods = useForm<EventFormValues>({
       resolver: yupResolver(EventFormSchema()),
@@ -149,11 +148,8 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     }, [watch()]);
 
     useEffect(() => {
-      if (!isEqual(removeWarning, removeWarningRef.current)) {
-        setValue('removeWarning', removeWarning);
-        removeWarningRef.current = removeWarning;
-      }
-    }, [removeWarning]);
+      setValue('removeWarning', removeWarning);
+    }, [eventsData, activityOrFlowId, alwaysAvailable]);
 
     return (
       <FormProvider {...methods}>
