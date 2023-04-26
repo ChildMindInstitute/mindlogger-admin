@@ -71,7 +71,6 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
           const repeats = getRepeatsAnswer(periodicityType);
           const frequency = getFrequencyString(periodicityType);
           const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
-          const currentYear = new Date().getFullYear();
 
           acc.scheduleExportTableData.push({
             activityName: getTableCell(activityOrFlowName),
@@ -193,29 +192,31 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
   } = eventsData ?? {};
 
   useEffect(() => {
-    if (
+    const conditionToCreateCalendarEvents =
       calendarEventsArr &&
       !isEqual(calendarEventsArr, prevCalendarEventsArrRef.current) &&
-      (!processedEventStartYear || processedEventStartYear === currentYear)
-    ) {
-      dispatch(calendarEvents.actions.createCalendarEvents({ events: calendarEventsArr }));
-      prevCalendarEventsArrRef.current = calendarEventsArr;
-    }
+      (!processedEventStartYear || processedEventStartYear === currentYear);
+    if (!conditionToCreateCalendarEvents) return;
+
+    dispatch(calendarEvents.actions.createCalendarEvents({ events: calendarEventsArr }));
+    prevCalendarEventsArrRef.current = calendarEventsArr;
   }, [calendarEventsArr]);
 
   useEffect(() => {
     (async () => {
-      if (eventsDataArr && !isEqual(eventsDataArr, prevEventsDataArrRef.current)) {
-        await dispatch(calendarEvents.actions.setCreateEventsData(eventsDataArr));
-        prevEventsDataArrRef.current = eventsDataArr;
+      const conditionToCreateEventsData =
+        eventsDataArr && !isEqual(eventsDataArr, prevEventsDataArrRef.current);
+      if (!conditionToCreateEventsData) return;
 
-        if (processedEventStartYear && processedEventStartYear !== currentYear) {
-          dispatch(
-            calendarEvents.actions.createNextYearEvents({
-              yearToCreateEvents: processedEventStartYear,
-            }),
-          );
-        }
+      await dispatch(calendarEvents.actions.setCreateEventsData(eventsDataArr));
+      prevEventsDataArrRef.current = eventsDataArr;
+
+      if (processedEventStartYear && processedEventStartYear !== currentYear) {
+        dispatch(
+          calendarEvents.actions.createNextYearEvents({
+            yearToCreateEvents: processedEventStartYear,
+          }),
+        );
       }
     })();
   }, [eventsDataArr]);

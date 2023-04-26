@@ -74,35 +74,35 @@ export const reducers = {
   ): void => {
     const { yearToCreateEvents } = action.payload;
 
-    if (yearToCreateEvents && state.events.data) {
-      const date = new Date(`${yearToCreateEvents}-01-01`);
-      const nextYearDateString = format(date, DateFormats.YearMonthDay);
-      state.events.data = [];
-      state.createEventsData.data?.forEach((item) => {
-        const data = {
-          ...item,
-          nextYearDateString,
-          currentYear: yearToCreateEvents,
-        };
+    if (!(yearToCreateEvents && state.events.data)) return;
 
-        if (state.events.data) {
-          const newEventsArr = createEvents(data);
-          state.events.data = [...state.events.data, ...newEventsArr];
-        }
-      });
+    const date = new Date(`${yearToCreateEvents}-01-01`);
+    const nextYearDateString = format(date, DateFormats.YearMonthDay);
+    state.events.data = [];
+    state.createEventsData.data?.forEach((item) => {
+      const data = {
+        ...item,
+        nextYearDateString,
+        currentYear: yearToCreateEvents,
+      };
 
-      if (state.alwaysAvailableHidden.data !== null) {
-        state.events.data = getPreparedEvents(
-          state.events.data,
-          state.alwaysAvailableHidden.data,
-          true,
-        );
+      if (state.events.data) {
+        const newEventsArr = createEvents(data);
+        state.events.data = [...state.events.data, ...newEventsArr];
       }
-      if (state.scheduledHidden.data !== null) {
-        state.events.data = getPreparedEvents(state.events.data, state.scheduledHidden.data, false);
-      }
+    });
 
-      state.eventsToShow.data = getNotHiddenEvents(state.events.data);
+    if (state.alwaysAvailableHidden.data !== null) {
+      state.events.data = getPreparedEvents(
+        state.events.data,
+        state.alwaysAvailableHidden.data,
+        true,
+      );
     }
+    if (state.scheduledHidden.data !== null) {
+      state.events.data = getPreparedEvents(state.events.data, state.scheduledHidden.data, false);
+    }
+
+    state.eventsToShow.data = getNotHiddenEvents(state.events.data);
   },
 };
