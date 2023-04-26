@@ -33,4 +33,20 @@ export const calendarEvents = {
         },
       }) => data,
     ),
+  useCreateEventsData: (): CalendarEventsSchema['createEventsData']['data'] =>
+    useAppSelector(
+      ({
+        calendarEvents: {
+          createEventsData: { data },
+        },
+      }) => data,
+    ),
+  useProcessedEventStartYearData: (): CalendarEventsSchema['processedEventStartYear']['data'] =>
+    useAppSelector(
+      ({
+        calendarEvents: {
+          processedEventStartYear: { data },
+        },
+      }) => data,
+    ),
 };

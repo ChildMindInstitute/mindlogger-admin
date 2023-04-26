@@ -32,6 +32,11 @@ export type Notification = {
 
 export type Reminder = { activityIncomplete: number; reminderTime: Date | null };
 
+export type Warning = {
+  showRemoveAlwaysAvailable?: boolean;
+  showRemoveAllScheduled?: boolean;
+};
+
 export type EventFormValues = {
   activityOrFlowId: string;
   alwaysAvailable: boolean;
@@ -47,4 +52,5 @@ export type EventFormValues = {
   idleTime: string;
   notifications: Notification[] | null;
   reminder: Reminder | null;
+  removeWarning: Warning;
 };

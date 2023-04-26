@@ -14,11 +14,17 @@ import { applet } from 'shared/state';
 import { createEventApi, updateEventApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
+import { calendarEvents } from 'modules/Dashboard/state';
 
-import { EventFormProps, EventFormRef, EventFormValues } from './EventForm.types';
+import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
 import { tabs } from './EventForm.const';
 import { EventFormSchema } from './EventForm.schema';
-import { getActivitiesFlows, getDefaultValues, getEventPayload } from './EventForm.utils';
+import {
+  getActivitiesFlows,
+  getDefaultValues,
+  getEventPayload,
+  getIdWithoutRegex,
+} from './EventForm.utils';
 
 export const EventForm = forwardRef<EventFormRef, EventFormProps>(
   (
@@ -39,6 +45,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const appletData = applet.useAppletData();
     const appletId = appletData?.result.id;
     const defaultValues = getDefaultValues(defaultStartDate, editedEvent);
+    const eventsData = calendarEvents.useCreateEventsData() || [];
 
     const methods = useForm<EventFormValues>({
       resolver: yupResolver(EventFormSchema()),
@@ -46,13 +53,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       mode: 'onChange',
     });
 
-    const {
-      handleSubmit,
-      control,
-      formState: { dirtyFields },
-      watch,
-      getValues,
-    } = methods;
+    const { handleSubmit, control, watch, getValues, setValue } = methods;
 
     const activityOrFlowId = watch('activityOrFlowId');
     const alwaysAvailable = watch('alwaysAvailable');
@@ -61,12 +62,34 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const { execute: createEvent, error: createEventError } = useAsync(createEventApi, getEvents);
     const { execute: updateEvent, error: updateEventError } = useAsync(updateEventApi, getEvents);
 
+    const removeWarning: Warning = eventsData.reduce((acc, event) => {
+      const idWithoutFlowRegex = getIdWithoutRegex(activityOrFlowId)?.id;
+      const { isAlwaysAvailable, activityOrFlowId: eventActivityOrFlowId } = event;
+
+      if (eventActivityOrFlowId !== idWithoutFlowRegex) {
+        return acc;
+      }
+
+      return {
+        ...acc,
+        showRemoveAlwaysAvailable: !alwaysAvailable && isAlwaysAvailable,
+        showRemoveAllScheduled: alwaysAvailable && !isAlwaysAvailable,
+      };
+    }, {});
+
     // TODO: add individual event create, update, Notifications and Reminders, add time selected error
     const handleProcessEvent = async () => {
       if (!appletId) {
         return;
       }
-      const body = getEventPayload(defaultStartDate, watch);
+      const { body, eventStartYear } = getEventPayload(defaultStartDate, watch);
+
+      eventStartYear &&
+        (await dispatch(
+          calendarEvents.actions.setProcessedEventStartYear({
+            processedEventStartYear: eventStartYear,
+          }),
+        ));
 
       if (editedEvent) {
         await updateEvent({
@@ -80,10 +103,12 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     };
 
     const submitForm = async () => {
-      if (dirtyFields.alwaysAvailable) {
-        return alwaysAvailable
-          ? setRemoveAllScheduledPopupVisible(true)
-          : setRemoveAlwaysAvailablePopupVisible(true);
+      if (removeWarning.showRemoveAllScheduled) {
+        return setRemoveAllScheduledPopupVisible(true);
+      }
+
+      if (removeWarning.showRemoveAlwaysAvailable) {
+        return setRemoveAlwaysAvailablePopupVisible(true);
       }
 
       await handleProcessEvent();
@@ -121,6 +146,10 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
         onFormChange(!isEqual(getValues(), defaultValues));
       }
     }, [watch()]);
+
+    useEffect(() => {
+      setValue('removeWarning', removeWarning);
+    }, [eventsData, activityOrFlowId, alwaysAvailable]);
 
     return (
       <FormProvider {...methods}>

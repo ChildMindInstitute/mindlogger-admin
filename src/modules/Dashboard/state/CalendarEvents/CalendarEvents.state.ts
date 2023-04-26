@@ -12,6 +12,6 @@ export const state: CalendarEventsSchema = {
   eventsToShow: initialStateData,
   alwaysAvailableHidden: initialStateData,
   scheduledHidden: initialStateData,
-  yearToCreateEvents: initialStateData,
   createEventsData: initialStateData,
+  processedEventStartYear: initialStateData,
 };
