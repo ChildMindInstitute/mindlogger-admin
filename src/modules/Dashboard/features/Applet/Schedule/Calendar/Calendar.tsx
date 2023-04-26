@@ -97,7 +97,7 @@ export const Calendar = () => {
     const chosenYear = getYear(date);
     if (chosenYear !== currentYear) {
       setCurrentYear(chosenYear);
-      dispatch(calendarEvents.actions.setNextYearEvents({ yearToCreateEvents: chosenYear }));
+      dispatch(calendarEvents.actions.createNextYearEvents({ yearToCreateEvents: chosenYear }));
     }
   }, [date]);
 

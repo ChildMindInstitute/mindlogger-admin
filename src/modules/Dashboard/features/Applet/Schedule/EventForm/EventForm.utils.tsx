@@ -1,5 +1,5 @@
 import { UseFormWatch } from 'react-hook-form';
-import { endOfYear, format } from 'date-fns';
+import { endOfYear, format, getYear } from 'date-fns';
 
 import i18n from 'i18n';
 import { DateFormats } from 'shared/consts';
@@ -10,9 +10,9 @@ import { CalendarEvent } from 'modules/Dashboard/state';
 
 import {
   DEFAULT_END_TIME,
+  DEFAULT_IDLE_TIME,
   DEFAULT_START_TIME,
   DEFAULT_TIMER_DURATION,
-  DEFAULT_IDLE_TIME,
   SECONDS_TO_MILLISECONDS_MULTIPLIER,
 } from './EventForm.const';
 import { EventFormValues } from './EventForm.types';
@@ -113,6 +113,7 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     periodicity,
     notifications: [],
     reminder: null,
+    removeWarning: {},
   };
 };
 
@@ -155,14 +156,30 @@ const getTimer = (
   }
 };
 
-const getFlowIdWithoutRegex = (activityOrFlowId: string) => {
+export const getIdWithoutRegex = (activityOrFlowId: string) => {
   const regexWithFlow = /^flow-/;
   const isFlowId = regexWithFlow.test(activityOrFlowId);
-  const flowId = activityOrFlowId.replace(regexWithFlow, '');
+  const id = activityOrFlowId.replace(regexWithFlow, '');
 
-  return { isFlowId, flowId };
+  return { isFlowId, id };
 };
 
+const getEventStartYear = ({
+  periodicity,
+  defaultStartDate,
+  date,
+  startEndingDate,
+}: Pick<EventFormValues, 'periodicity' | 'date' | 'startEndingDate'> & {
+  defaultStartDate: Date | string;
+}) => {
+  if (periodicity === Periodicity.Always) {
+    return typeof defaultStartDate !== 'string' && getYear(defaultStartDate);
+  }
+
+  return periodicity === Periodicity.Once
+    ? typeof date !== 'string' && getYear(date)
+    : startEndingDate[0] && typeof startEndingDate[0] !== 'string' && getYear(startEndingDate[0]);
+};
 export const getEventPayload = (defaultStartDate: Date, watch: UseFormWatch<EventFormValues>) => {
   const activityOrFlowId = watch('activityOrFlowId');
   const alwaysAvailable = watch('alwaysAvailable');
@@ -177,7 +194,14 @@ export const getEventPayload = (defaultStartDate: Date, watch: UseFormWatch<Even
   const date = watch('date');
   const startEndingDate = watch('startEndingDate');
 
-  const { isFlowId, flowId } = getFlowIdWithoutRegex(activityOrFlowId);
+  const eventStartYear = getEventStartYear({
+    periodicity,
+    defaultStartDate,
+    date,
+    startEndingDate,
+  });
+
+  const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
 
   const body: CreateEventType['body'] = {
     timerType,
@@ -221,5 +245,5 @@ export const getEventPayload = (defaultStartDate: Date, watch: UseFormWatch<Even
     };
   }
 
-  return body;
+  return { body, eventStartYear };
 };
