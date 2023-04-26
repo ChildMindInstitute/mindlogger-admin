@@ -46,15 +46,15 @@ export const getActions = ({
   },
 ];
 
-export const getChosenAppletData = (
-  respondentAccess: ChosenAppletData,
-  userId: string | undefined,
-) => ({ ...respondentAccess, userId });
+export const getChosenAppletData = (respondentAccess: ChosenAppletData, userId?: string) => ({
+  ...respondentAccess,
+  userId,
+});
 
 export const getAppletsSmallTableRows = (
-  respondentAccesses: ChosenAppletData[] | undefined,
+  respondentAccesses: ChosenAppletData[] | null,
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>,
-  userId: string | undefined,
+  userId?: string,
 ) =>
   respondentAccesses?.map((respondentAccess) => {
     const chosenAppletData = getChosenAppletData(respondentAccess, userId);

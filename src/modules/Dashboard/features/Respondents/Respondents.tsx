@@ -66,9 +66,7 @@ export const Respondents = () => {
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
   const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
-  const [respondentAccesses, setRespondentAccesses] = useState<undefined | ChosenAppletData[]>(
-    undefined,
-  );
+  const [respondentAccesses, setRespondentAccesses] = useState<null | ChosenAppletData[]>(null);
 
   useBreadcrumbs();
 
@@ -115,7 +113,7 @@ export const Respondents = () => {
     getWorkspaceRespondentAccessesApi,
     (res) => {
       const appletsData = res?.data?.result as ChosenAppletData[] | undefined;
-      setRespondentAccesses(appletsData);
+      setRespondentAccesses(appletsData ?? null);
     },
   );
 
@@ -182,9 +180,11 @@ export const Respondents = () => {
     const respondentId = chosenRespondentsItems?.id;
     if (ownerId && respondentId) {
       getWorkspaceRespondentAccesses({ ownerId, respondentId });
-    } else {
-      setRespondentAccesses(undefined);
+
+      return;
     }
+
+    setRespondentAccesses(null);
   }, [ownerId, chosenRespondentsItems]);
 
   useEffect(() => {
@@ -196,9 +196,11 @@ export const Respondents = () => {
       const chosenAppletData =
         respondentAccess && getChosenAppletData(respondentAccess, respondentId);
       setChosenAppletData(chosenAppletData ?? null);
-    } else {
-      setChosenAppletData(null);
+
+      return;
     }
+
+    setChosenAppletData(null);
   }, [respondentAccesses, chosenRespondentsItems]);
 
   return (
