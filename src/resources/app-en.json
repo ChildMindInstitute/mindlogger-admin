@@ -99,7 +99,7 @@
   "generateLink": "Generate Link",
   "generateLinkYes": "Yes, account is required",
   "generateLinkNo": "No, account is not required",
-  "requireToCreateAccount": "Do you want to require user to create account?",
+  "requireToCreateAccount": "Do you want to require the Respondent to create account?",
   "deleteInviteLink": "Delete invite link",
   "deleteLinkToNoAllow": "Delete this link no longer allow anyone to access url",
   "shareWithLogin": "Share the following link to invite anyone to this study.",
