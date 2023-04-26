@@ -11,7 +11,8 @@ import {
   DEFAULT_SLIDER_MIN_NUMBER,
   SLIDER_VALUE_LABEL_MAX_LENGTH,
   DEFAULT_SLIDER_MAX_VALUE,
-} from '../../../ItemConfiguration.const';
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 
 import { Header } from './Header';
 import { SliderPanelProps } from './SliderPanel.types';
@@ -28,7 +29,6 @@ import {
   getStaticBodyRow,
   getMarks,
 } from './SliderPanel.utils';
-import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 
 const commonUploaderProps = {
   width: 5.6,
@@ -48,7 +48,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
 
   const scoresError = getFieldState(`${sliderName}.scores`, formState);
 
-  const { id, minValue, maxValue, scores } = watch(sliderName);
+  const { id, minValue, maxValue, scores } = watch(sliderName) || {};
   const settings = watch(`${name}.config`);
 
   const hasTickMarks = get(settings, ItemConfigurationSettings.HasTickMarks);
