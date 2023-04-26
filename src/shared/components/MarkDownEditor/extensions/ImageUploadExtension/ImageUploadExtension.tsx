@@ -16,9 +16,7 @@ export const ImageUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
   const { t } = useTranslation('app');
 
   const insertHandler = ({ values, imgLink }: InsertHandlerProps) => {
-    const targetValue = values
-      ? `![${values.label}](${values.address})`
-      : `![uploaded image](${imgLink})` || '';
+    const targetValue = values ? `![${values.label}](${values.address})` : `![](${imgLink})` || '';
     const generator: InsertContentGenerator = () => ({
       targetValue,
       select: false,

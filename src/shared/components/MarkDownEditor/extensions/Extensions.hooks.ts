@@ -13,7 +13,6 @@ export const useUploadMethods = ({ insertHandler }: UploadMethodsProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { execute: executeImgUpload } = useAsync(
     postFileUploadApi,
-    // TODO: check field name (url, key or other), check insertHandler
     (response) => response?.data?.result && insertHandler({ imgLink: response?.data?.result.url }),
   );
 
