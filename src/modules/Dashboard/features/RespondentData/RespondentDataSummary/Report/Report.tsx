@@ -6,7 +6,7 @@ import { Activity } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
-import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Charts/BarChart/BarChart';
+import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Charts/BarChart';
 
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
