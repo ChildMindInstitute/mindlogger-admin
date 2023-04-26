@@ -1,11 +1,10 @@
 import { Checkbox, FormControlLabel } from '@mui/material';
 
-import { StyledFlexColumn } from 'shared/styles';
-
 import { MultiSelectItemAnswer } from '../RespondentDataReview.types';
+import { StyledContainer } from './MultiSelectResponseItem.styles';
 
 export const MultiSelectResponseItem = ({ activityItem, answer }: MultiSelectItemAnswer) => (
-  <StyledFlexColumn>
+  <StyledContainer>
     {activityItem.responseValues.options.map((option) => (
       <FormControlLabel
         key={option.id}
@@ -14,5 +13,5 @@ export const MultiSelectResponseItem = ({ activityItem, answer }: MultiSelectIte
         control={<Checkbox checked={answer.value.includes(option.id)} value={option.id} />}
       />
     ))}
-  </StyledFlexColumn>
+  </StyledContainer>
 );
