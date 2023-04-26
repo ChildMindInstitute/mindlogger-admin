@@ -199,7 +199,7 @@ export const Respondents = () => {
     } else {
       setChosenAppletData(null);
     }
-  }, [respondentAccesses, chosenRespondentsItems, respondentsDataIndex]);
+  }, [respondentAccesses, chosenRespondentsItems]);
 
   return (
     <>

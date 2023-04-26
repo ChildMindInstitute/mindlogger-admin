@@ -56,35 +56,34 @@ export const getAppletsSmallTableRows = (
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>,
   userId: string | undefined,
 ) =>
-  (respondentAccesses &&
-    respondentAccesses.map((respondentAccess) => {
-      const chosenAppletData = getChosenAppletData(respondentAccess, userId);
-      const { appletName, appletImg, secretUserId, nickname } = chosenAppletData;
+  respondentAccesses?.map((respondentAccess) => {
+    const chosenAppletData = getChosenAppletData(respondentAccess, userId);
+    const { appletName, appletImg, secretUserId, nickname } = chosenAppletData;
 
-      return {
-        appletName: {
-          content: () => (
-            <StyledFlexTopCenter>
-              {appletImg ? (
-                <StyledSmallAppletImg src={appletImg} alt="Applet image" />
-              ) : (
-                <StyledSmallAppletImgPlaceholder />
-              )}
-              <StyledLabelLarge>{appletName}</StyledLabelLarge>
-            </StyledFlexTopCenter>
-          ),
-          value: appletName,
-          onClick: () => setChosenAppletData(chosenAppletData),
-        },
-        secretUserId: {
-          content: () => <StyledLabelLarge>{secretUserId}</StyledLabelLarge>,
-          value: secretUserId,
-          onClick: () => setChosenAppletData(chosenAppletData),
-        },
-        nickname: {
-          content: () => <StyledBodyMedium>{nickname}</StyledBodyMedium>,
-          value: nickname,
-          onClick: () => setChosenAppletData(chosenAppletData),
-        },
-      };
-    })) as Row[] | undefined;
+    return {
+      appletName: {
+        content: () => (
+          <StyledFlexTopCenter>
+            {appletImg ? (
+              <StyledSmallAppletImg src={appletImg} alt="Applet image" />
+            ) : (
+              <StyledSmallAppletImgPlaceholder />
+            )}
+            <StyledLabelLarge>{appletName}</StyledLabelLarge>
+          </StyledFlexTopCenter>
+        ),
+        value: appletName,
+        onClick: () => setChosenAppletData(chosenAppletData),
+      },
+      secretUserId: {
+        content: () => <StyledLabelLarge>{secretUserId}</StyledLabelLarge>,
+        value: secretUserId,
+        onClick: () => setChosenAppletData(chosenAppletData),
+      },
+      nickname: {
+        content: () => <StyledBodyMedium>{nickname}</StyledBodyMedium>,
+        value: nickname,
+        onClick: () => setChosenAppletData(chosenAppletData),
+      },
+    };
+  }) as Row[] | undefined;
