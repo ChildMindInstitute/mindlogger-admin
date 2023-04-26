@@ -6,11 +6,11 @@ import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
 import { postFileUploadApi } from 'api';
 import { useAsync } from 'shared/hooks';
+import { getUploadFormData } from 'shared/utils';
 
 import { StyledCropWrapper } from './CropPopup.styles';
 import { CropPopupProps } from './CropPopup.types';
 import { cropOptions } from './CropPopup.const';
-import { getUploadFormData } from '../../utils';
 
 export const CropPopup = ({ open, setCropPopupVisible, setValue, image }: CropPopupProps) => {
   const { t } = useTranslation('app');
