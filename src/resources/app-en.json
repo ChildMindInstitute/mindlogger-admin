@@ -390,7 +390,7 @@
   "of": "of",
   "appletColorTheme": "Applet Color Theme",
   "aboutAppletPage": "About Applet Page",
-  "uploadImg": "Please Upload JPG or PNG image less than {{size}}.",
+  "uploadImg": "Please upload JPEG or PNG image less than {{size}}.",
   "appletImg": "Applet Image",
   "appletWatermark": "Applet Watermark",
   "characters": "characters",
