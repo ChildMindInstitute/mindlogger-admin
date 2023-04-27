@@ -1,9 +1,10 @@
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { FormControlLabel, Radio } from '@mui/material';
 
 import { SingleSelectItemAnswer } from '../RespondentDataReview.types';
+import { StyledRadioGroup } from './SingleSelectResponseItem.styles';
 
 export const SingleSelectResponseItem = ({ activityItem, answer }: SingleSelectItemAnswer) => (
-  <RadioGroup value={answer.value}>
+  <StyledRadioGroup value={answer.value}>
     {activityItem.responseValues.options.map((option) => (
       <FormControlLabel
         key={option.id}
@@ -13,5 +14,5 @@ export const SingleSelectResponseItem = ({ activityItem, answer }: SingleSelectI
         label={option.text}
       />
     ))}
-  </RadioGroup>
+  </StyledRadioGroup>
 );
