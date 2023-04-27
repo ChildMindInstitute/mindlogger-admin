@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-admin",
-  "version": "0.3.7",
+  "version": "0.3.10",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
