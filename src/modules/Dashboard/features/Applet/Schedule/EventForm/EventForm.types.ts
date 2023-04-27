@@ -19,15 +19,15 @@ export type EventFormProps = {
 };
 
 export const enum NotificationType {
-  Fixed = 'fixed',
-  Random = 'random',
+  Fixed = 'FIXED',
+  Random = 'RANDOM',
 }
 
 export type Notification = {
-  at?: Date | null;
-  from?: Date | null;
-  to?: Date | null;
-  type: NotificationType;
+  atTime?: Date | null;
+  fromTime?: Date | null;
+  toTime?: Date | null;
+  triggerType: NotificationType;
 };
 
 export type Reminder = { activityIncomplete: number; reminderTime: Date | null };

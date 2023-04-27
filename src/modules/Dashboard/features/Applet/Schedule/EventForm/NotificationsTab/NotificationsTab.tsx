@@ -20,8 +20,8 @@ export const NotificationsTab = () => {
 
   const handleAddNotification = () => {
     append({
-      at: null,
-      type: NotificationType.Fixed,
+      atTime: null,
+      triggerType: NotificationType.Fixed,
     });
   };
 

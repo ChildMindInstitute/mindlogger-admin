@@ -22,10 +22,10 @@ export const Notification = ({ index, remove }: NotificationProps) => {
 
   const updateTime = (selected: string) => {
     setValue(`notifications.${index}`, {
-      at: null,
-      from: null,
-      to: null,
-      type: selected as NotificationType,
+      atTime: null,
+      fromTime: null,
+      toTime: null,
+      triggerType: selected as NotificationType,
     });
   };
 
@@ -40,22 +40,22 @@ export const Notification = ({ index, remove }: NotificationProps) => {
           <StyledLeftCol>
             <ToggleButtonGroup
               toggleButtons={notificationTimeToggles}
-              activeButton={notification.type}
+              activeButton={notification.triggerType}
               customChange={updateTime}
             />
           </StyledLeftCol>
           <StyledCol sx={{ marginLeft: theme.spacing(2.4) }}>
-            {notification.type === NotificationType.Fixed ? (
+            {notification.triggerType === NotificationType.Fixed ? (
               <StyledColInner>
-                <TimePicker name={`notifications.${index}.at`} label={t('at')} />
+                <TimePicker name={`notifications.${index}.atTime`} label={t('at')} />
               </StyledColInner>
             ) : (
               <>
                 <StyledColInner>
-                  <TimePicker name={`notifications.${index}.from`} label={t('from')} />
+                  <TimePicker name={`notifications.${index}.fromTime`} label={t('from')} />
                 </StyledColInner>
                 <StyledColInner sx={{ marginLeft: theme.spacing(2.4) }}>
-                  <TimePicker name={`notifications.${index}.to`} label={t('to')} />
+                  <TimePicker name={`notifications.${index}.toTime`} label={t('to')} />
                 </StyledColInner>
               </>
             )}

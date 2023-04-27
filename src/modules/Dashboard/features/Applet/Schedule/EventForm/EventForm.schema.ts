@@ -2,6 +2,9 @@ import * as yup from 'yup';
 
 import i18n from 'i18n';
 import { TimerType } from 'modules/Dashboard/api';
+import { getIsRequiredValidateMessage } from 'shared/utils';
+
+import { NotificationType } from './EventForm.types';
 
 export const EventFormSchema = () => {
   const { t } = i18n;
@@ -25,6 +28,39 @@ export const EventFormSchema = () => {
       otherwise: yup.string(),
     });
 
+  const notificationSchema = yup.object().shape({
+    atTime: yup
+      .string()
+      .nullable()
+      .when('triggerType', (triggerType: NotificationType, schema) => {
+        if (triggerType === NotificationType.Fixed) {
+          return schema.required(getIsRequiredValidateMessage('atTime'));
+        }
+
+        return schema;
+      }),
+    fromTime: yup
+      .string()
+      .nullable()
+      .when('triggerType', (triggerType: NotificationType, schema) => {
+        if (triggerType === NotificationType.Random) {
+          return schema.required(getIsRequiredValidateMessage('fromTime'));
+        }
+
+        return schema;
+      }),
+    toTime: yup
+      .string()
+      .nullable()
+      .when('triggerType', (triggerType: NotificationType, schema) => {
+        if (triggerType === NotificationType.Random) {
+          return schema.required(getIsRequiredValidateMessage('toTime'));
+        }
+
+        return schema;
+      }),
+  });
+
   return yup
     .object({
       activityOrFlowId: yup.string().required(activityRequired),
@@ -42,6 +78,7 @@ export const EventFormSchema = () => {
       }),
       startTime: getTimeComparison(),
       endTime: getTimeComparison(),
+      notifications: yup.array().of(notificationSchema),
     })
     .required();
 };

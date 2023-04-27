@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { getMaxLengthValidationError } from 'shared/utils';
+import { getMaxLengthValidationError, getIsRequiredValidateMessage } from 'shared/utils';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
@@ -11,9 +11,6 @@ import {
 } from 'shared/consts';
 
 const { t } = i18n;
-
-export const getIsRequiredValidateMessage = (field: string) =>
-  t('validationMessages.isRequired', { field: t(field) });
 
 export const ResponseValuesRowsSchema = () => ({
   minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),

@@ -151,6 +151,10 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       setValue('removeWarning', removeWarning);
     }, [eventsData, activityOrFlowId, alwaysAvailable]);
 
+    useEffect(() => {
+      console.log('event form', watch());
+    }, [watch()]);
+
     return (
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(submitForm)} noValidate autoComplete="off">
