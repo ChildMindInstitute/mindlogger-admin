@@ -21,16 +21,18 @@ import { defaultValues } from './TransferOwnership.const';
 export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwnershipProps>(
   ({ appletId, appletName, isSubmitted, setIsSubmitted, setEmailTransfered }, ref) => {
     const { t } = useTranslation('app');
-    const { getValues, handleSubmit, control, resetField } = useForm<TransferOwnershipFormValues>({
-      resolver: yupResolver(
-        yup.object({
-          email: yup.string().required(t('emailRequired')!).email(t('incorrectEmail')!),
-        }),
-      ),
-      defaultValues,
-    });
+    const { getValues, handleSubmit, control, resetField, watch } =
+      useForm<TransferOwnershipFormValues>({
+        resolver: yupResolver(
+          yup.object({
+            email: yup.string().required(t('emailRequired')!).email(t('incorrectEmail')!),
+          }),
+        ),
+        defaultValues,
+      });
+    const email = watch('email');
 
-    const { execute, error } = useAsync(transferOwnershipApi);
+    const { execute, error, setError } = useAsync(transferOwnershipApi);
 
     const handleTransferOwnership = async () => {
       if (!appletId) return;
@@ -55,6 +57,10 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
       }),
       [],
     );
+
+    useEffect(() => {
+      error && setError(null);
+    }, [email]);
 
     return (
       <form onSubmit={handleSubmit(handleTransferOwnership)} noValidate>

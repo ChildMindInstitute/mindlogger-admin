@@ -14,4 +14,5 @@ export type NotificationProps = {
   viewed: boolean;
   imageSrc: string | null;
   encryption?: Encryption;
+  appletId: string;
 };

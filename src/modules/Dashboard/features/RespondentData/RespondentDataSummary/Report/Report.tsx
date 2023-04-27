@@ -6,12 +6,13 @@ import { Activity } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
+import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Charts/BarChart';
 
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportTable } from './ReportTable';
-import { CompletedActivity } from './CompletedActivity';
+import { ScatterChart } from '../Charts/ScatterChart';
 
 export const Report = ({ activity }: { activity: Activity }) => {
   const { t } = useTranslation();
@@ -32,8 +33,11 @@ export const Report = ({ activity }: { activity: Activity }) => {
       </StyledHeader>
       <Box sx={{ margin: theme.spacing(4.8, 6.4, 4.8) }}>
         <ReportFilters />
-        <CompletedActivity />
+        <ScatterChart />
         <ReportTable />
+        <Box sx={{ m: theme.spacing(2.4, 0) }}>
+          <BarChart />
+        </Box>
       </Box>
     </StyledReport>
   );

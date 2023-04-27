@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard';
@@ -26,6 +27,7 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
     handleSaveChangesSaveSubmit,
     cancelNavigation,
   } = useSaveAndPublishSetup(hasPrompt);
+  const { appletId } = useParams();
 
   return (
     <>
@@ -37,6 +39,7 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
         {t('saveAndPublish')}
       </StyledButton>
       <AppletPasswordPopup
+        appletId={appletId ?? ''}
         onClose={() => setIsPasswordPopupOpened(false)}
         popupType={isNewApplet ? AppletPasswordPopupType.Create : AppletPasswordPopupType.Enter}
         popupVisible={isPasswordPopupOpened}

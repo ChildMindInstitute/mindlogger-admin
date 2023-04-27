@@ -11,6 +11,7 @@ import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
 import { getErrorMessage } from 'shared/utils/errors';
+import { variables } from 'shared/styles';
 
 import {
   StyledForm,
@@ -47,8 +48,8 @@ export const ResetForm = ({ setEmail }: ResetFormProps) => {
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-      <StyledHeadline>{t('resetPassword')}</StyledHeadline>
-      <StyledResetPasswordSubheader>
+      <StyledHeadline color={variables.palette.on_surface}>{t('resetPassword')}</StyledHeadline>
+      <StyledResetPasswordSubheader color={variables.palette.on_surface_variant}>
         {t('enterEmailAssociatedWithAccount')}
       </StyledResetPasswordSubheader>
       <StyledController>

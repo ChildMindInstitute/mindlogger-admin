@@ -15,9 +15,14 @@ import { Svg } from 'shared/components';
 import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 
-import { CreateActivityPopup } from '../CreateActivityPopup';
-import { EditActivityPopup } from '../EditActivityPopup';
-import { eventPropGetter, getCalendarComponents, getHasWrapperMoreBtn } from './Calendar.utils';
+import { CreateEventPopup } from '../CreateEventPopup';
+import { EditEventPopup } from '../EditEventPopup';
+import {
+  eventPropGetter,
+  getCalendarComponents,
+  getDefaultStartDate,
+  getHasWrapperMoreBtn,
+} from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
 import { AllDayEventsVisible, CalendarViews, OnViewFunc } from './Calendar.types';
 
@@ -40,11 +45,11 @@ export const Calendar = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [currentYear, setCurrentYear] = useState(getYear(new Date()));
   const [events, setEvents] = useState<CalendarEvent[]>([]);
-  const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
-  const [editActivityPopupVisible, setEditActivityPopupVisible] = useState(false);
+  const [createEventPopupVisible, setCreateEventPopupVisible] = useState(false);
+  const [editEventPopupVisible, setEditEventPopupVisible] = useState(false);
   const [isAllDayEventsVisible, setIsAllDayEventsVisible] = useState<AllDayEventsVisible>(null);
-  const [editedActivityName, setEditedActivityName] = useState('');
   const [defaultStartDate, setDefaultStartDate] = useState(new Date());
+  const [editedEvent, setEditedEvent] = useState<CalendarEvent | null>(null);
 
   const eventsToShow = calendarEvents.useVisibleEventsData() || [];
 
@@ -62,18 +67,19 @@ export const Calendar = () => {
   const onNavigate = (newDate: Date) => setDate(newDate);
 
   const handleAddClick = () => {
-    setCreateActivityPopupVisible(true);
+    setCreateEventPopupVisible(true);
     setDefaultStartDate(new Date());
   };
 
   const onSelectSlot = (slotInfo: SlotInfo) => {
-    setCreateActivityPopupVisible(true);
-    setDefaultStartDate(slotInfo.start);
+    setCreateEventPopupVisible(true);
+    setDefaultStartDate(getDefaultStartDate(slotInfo.start));
   };
 
   const onSelectEvent = (event: CalendarEvent) => {
-    setEditActivityPopupVisible(true);
-    setEditedActivityName(event.title);
+    setEditEventPopupVisible(true);
+    setDefaultStartDate(getDefaultStartDate(event.start));
+    setEditedEvent(event);
   };
 
   const hasWrapperMoreBtn = useMemo(
@@ -91,7 +97,7 @@ export const Calendar = () => {
     const chosenYear = getYear(date);
     if (chosenYear !== currentYear) {
       setCurrentYear(chosenYear);
-      dispatch(calendarEvents.actions.setNextYearEvents({ yearToCreateEvents: chosenYear }));
+      dispatch(calendarEvents.actions.createNextYearEvents({ yearToCreateEvents: chosenYear }));
     }
   }, [date]);
 
@@ -123,18 +129,21 @@ export const Calendar = () => {
           <Svg id="add" />
         </StyledAddBtn>
       </StyledCalendarWrapper>
-      {createActivityPopupVisible && (
-        <CreateActivityPopup
-          open={createActivityPopupVisible}
-          setCreateActivityPopupVisible={setCreateActivityPopupVisible}
+      {createEventPopupVisible && (
+        <CreateEventPopup
+          open={createEventPopupVisible}
+          setCreateEventPopupVisible={setCreateEventPopupVisible}
           defaultStartDate={defaultStartDate}
         />
       )}
-      <EditActivityPopup
-        open={editActivityPopupVisible}
-        activityName={editedActivityName}
-        setEditActivityPopupVisible={setEditActivityPopupVisible}
-      />
+      {editedEvent && (
+        <EditEventPopup
+          open={editEventPopupVisible}
+          editedEvent={editedEvent}
+          setEditEventPopupVisible={setEditEventPopupVisible}
+          defaultStartDate={defaultStartDate}
+        />
+      )}
     </>
   );
 };

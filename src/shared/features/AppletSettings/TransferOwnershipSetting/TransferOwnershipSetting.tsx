@@ -25,11 +25,16 @@ export const TransferOwnershipSetting = ({ isDisabled = false, isApplet = false 
   const appletData = useAppletDataOrFolderData(appletId, isApplet);
   const transferOwnershipRef = useRef<TransferOwnershipRef | null>(null);
 
+  const handleSuccessPopupClose = () => {
+    setTransferOwnershipPopupVisible(false);
+    setEmailTransfered('');
+    transferOwnershipRef.current?.resetEmail();
+  };
+
   useEffect(() => {
     if (!emailTransfered) return;
 
     setTransferOwnershipPopupVisible(true);
-    setEmailTransfered('');
   }, [emailTransfered]);
 
   return (
@@ -59,10 +64,7 @@ export const TransferOwnershipSetting = ({ isDisabled = false, isApplet = false 
       <SuccessTransferOwnershipPopup
         email={emailTransfered}
         transferOwnershipPopupVisible={transferOwnershipPopupVisible}
-        closeTransferOwnershipPopup={() => {
-          setTransferOwnershipPopupVisible(false);
-          transferOwnershipRef.current?.resetEmail();
-        }}
+        closeTransferOwnershipPopup={handleSuccessPopupClose}
       />
     </>
   );

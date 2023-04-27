@@ -6,7 +6,7 @@ import { shouldForwardProp } from 'shared/utils';
 export const StyledReport = styled(Box)`
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow-y: auto;
 `;
 
 export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`

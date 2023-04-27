@@ -139,6 +139,7 @@ export const DuplicatePopups = () => {
       </Modal>
       {passwordModalVisible && (
         <AppletPasswordPopup
+          appletId={appletId}
           onClose={passwordModalClose}
           popupType={AppletPasswordPopupType.Create}
           popupVisible={passwordModalVisible}

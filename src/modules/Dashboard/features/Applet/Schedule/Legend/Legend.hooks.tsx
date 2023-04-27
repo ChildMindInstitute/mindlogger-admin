@@ -61,7 +61,7 @@ export const useExpandedLists = (
 
   const handleAvailableVisibilityChange = () => {
     setAvailableVisibility((isVisible) => {
-      dispatch(calendarEvents.actions.setCalendarEvents({ alwaysAvailableHidden: isVisible }));
+      dispatch(calendarEvents.actions.createCalendarEvents({ alwaysAvailableHidden: isVisible }));
 
       return !isVisible;
     });
@@ -69,7 +69,7 @@ export const useExpandedLists = (
 
   const handleScheduledVisibilityChange = () => {
     setScheduledVisibility((isVisible) => {
-      dispatch(calendarEvents.actions.setCalendarEvents({ scheduledHidden: isVisible }));
+      dispatch(calendarEvents.actions.createCalendarEvents({ scheduledHidden: isVisible }));
 
       return !isVisible;
     });
