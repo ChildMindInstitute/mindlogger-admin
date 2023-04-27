@@ -10,6 +10,8 @@ import {
   MAX_SLIDER_LABEL_TEXT_LENGTH,
 } from 'shared/consts';
 
+import { testFunctionForUniqueness } from './BuilderApplet.utils';
+
 const { t } = i18n;
 
 export const getIsRequiredValidateMessage = (field: string) =>
@@ -38,7 +40,12 @@ export const ItemSchema = () =>
         .required(getIsRequiredValidateMessage('itemName'))
         .matches(/^\w+$/g, {
           message: t('validationMessages.alphanumeric', { field: t('itemName') }),
-        }),
+        })
+        .test(
+          'unique-item-name',
+          t('validationMessages.unique', { field: t('itemName') }) as string,
+          (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
+        ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
       question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
@@ -59,7 +66,15 @@ export const ItemSchema = () =>
 
 export const ActivitySchema = () =>
   yup.object({
-    name: yup.string().required(getIsRequiredValidateMessage('activityName')),
+    name: yup
+      .string()
+      .required(getIsRequiredValidateMessage('activityName'))
+      .test(
+        'unique-activity-name',
+        t('validationMessages.unique', { field: t('activityName') }) as string,
+        (activityName, context) =>
+          testFunctionForUniqueness('activities', activityName ?? '', context),
+      ),
     description: yup.string(),
     image: yup.string(),
     splashScreen: yup.string(),
@@ -84,7 +99,13 @@ export const ActivityFlowSchema = () =>
       name: yup
         .string()
         .required(getIsRequiredValidateMessage('activityFlowName'))
-        .max(MAX_NAME_LENGTH, getMaxLengthValidationError),
+        .max(MAX_NAME_LENGTH, getMaxLengthValidationError)
+        .test(
+          'unique-activity-flow-name',
+          t('validationMessages.unique', { field: t('activityFlowName') }) as string,
+          (activityFlowName, context) =>
+            testFunctionForUniqueness('activityFlows', activityFlowName ?? '', context),
+        ),
       description: yup
         .string()
         .required(getIsRequiredValidateMessage('activityFlowDescription'))
