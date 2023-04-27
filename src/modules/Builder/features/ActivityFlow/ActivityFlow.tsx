@@ -15,7 +15,11 @@ import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderA
 import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
-import { getActivityFlowKey, getFlowsItemActions } from './ActivityFlow.utils';
+import {
+  getActivityFlowKey,
+  getDuplicatedActivityFlow,
+  getFlowsItemActions,
+} from './ActivityFlow.utils';
 import { ActivityFlowHeader } from './ActivityFlowHeader';
 
 export const ActivityFlow = () => {
@@ -89,13 +93,9 @@ export const ActivityFlow = () => {
       const duplicatedItemId = duplicatedItem.id || '';
       const insertedNumber =
         prevState && prevState[duplicatedItemId] ? prevState[duplicatedItemId] + 1 : 1;
+      const name = `${activityFlows[index].name} (${insertedNumber})`;
 
-      insertActivityFlow(index + 1, {
-        ...activityFlows[index],
-        id: undefined,
-        key: uuidv4(),
-        name: `${activityFlows[index].name} (${insertedNumber})`,
-      });
+      insertActivityFlow(index + 1, getDuplicatedActivityFlow(activityFlows[index], name));
 
       return {
         ...prevState,
