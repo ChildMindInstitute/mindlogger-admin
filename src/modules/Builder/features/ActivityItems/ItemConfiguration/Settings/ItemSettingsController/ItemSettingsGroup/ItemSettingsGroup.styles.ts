@@ -54,6 +54,10 @@ export const StyledItemSettingGroupContainer = styled(Collapse)`
   :not(:last-child) {
     border-bottom: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
   }
+
+  .MuiFormLabel-root {
+    color: ${variables.palette.on_surface};
+  }
 `;
 
 export const StyledFormControl = styled(FormControl)`
