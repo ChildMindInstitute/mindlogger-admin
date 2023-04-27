@@ -11,7 +11,6 @@ export const MAX_DESCRIPTION_LENGTH = 150;
 export const MAX_DESCRIPTION_LENGTH_LONG = 230;
 export const MAX_SELECT_OPTION_TEXT_LENGTH = 75;
 export const MAX_SLIDER_LABEL_TEXT_LENGTH = 20;
-export const MAX_FILE_SIZE_1GB = 1_073_741_824;
 export const MAX_FILE_SIZE_8MB = 8_388_608;
 export const MAX_FILE_SIZE_5MB = 5_242_880;
 export const MAX_FILE_SIZE_2MB = 2_097_152;
