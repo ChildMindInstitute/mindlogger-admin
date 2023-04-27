@@ -6,17 +6,21 @@ import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
-import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
+import { SourceLinkModal } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { InsertContentExtensionProps } from '../Extensions.types';
+import { InsertContentExtensionProps, InsertHandlerProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
 export const VideoUploadExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');
-  const insertHandler = (values: SourceLinkModalForm) => {
+  const insertHandler = ({ values }: InsertHandlerProps) => {
     const generator: InsertContentGenerator = () => ({
-      targetValue: `<figure><figcaption>${values.label}:</figcaption><video controls width="250"><source src="${values.address}"></video></figure>`,
+      targetValue: `<figure><figcaption>${
+        values?.label || ''
+      }:</figcaption><video controls width="250"><source src="${
+        values?.address || ''
+      }"></video></figure>`,
       select: false,
       deviationStart: 0,
       deviationEnd: 0,
