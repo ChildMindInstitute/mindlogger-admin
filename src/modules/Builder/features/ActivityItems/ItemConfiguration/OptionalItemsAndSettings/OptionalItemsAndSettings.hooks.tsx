@@ -76,7 +76,7 @@ export const useSettingsSetup = ({
   handleAddAlert,
   setShowColorPalette,
 }: SettingsSetupProps) => {
-  const { setValue, getValues, watch } = useFormContext();
+  const { setValue, getValues, watch, clearErrors } = useFormContext();
 
   const settings = watch(`${name}.config`);
 
@@ -91,6 +91,7 @@ export const useSettingsSetup = ({
     const subscription = watch((_, { name: fieldName, type }) => {
       if (fieldName === `${name}.responseType` && type === 'change') {
         setValue(`${name}.responseValues`, {});
+        clearErrors(`${name}.responseValues`);
 
         const responseType = getValues(`${name}.responseType`);
 

@@ -12,7 +12,7 @@ import { ItemOptionContainer } from '../ItemOptionContainer';
 export const NumberSelection = ({ name }: NumberSelectionProps) => {
   const { t } = useTranslation('app');
 
-  const { control, watch, trigger, clearErrors } = useFormContext();
+  const { control, watch, trigger } = useFormContext();
 
   const commonProps = {
     control,
@@ -27,10 +27,6 @@ export const NumberSelection = ({ name }: NumberSelectionProps) => {
 
   useEffect(() => {
     trigger([minValueName, maxValueName]);
-
-    return () => {
-      clearErrors([minValueName, maxValueName]);
-    };
   }, [minValue, maxValue]);
 
   return (
