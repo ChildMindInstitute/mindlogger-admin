@@ -9,16 +9,16 @@ import { useAppDispatch } from 'redux/store';
 
 import { InputController } from 'shared/components/FormComponents';
 import {
+  variables,
   StyledBodyMedium,
   StyledHeadline,
   StyledTitleMedium,
   StyledErrorText,
-} from 'shared/styles/styledComponents';
-import { getErrorMessage } from 'shared/utils/errors';
-import { variables } from 'shared/styles/variables';
+} from 'shared/styles';
+import { getErrorMessage } from 'shared/utils';
 import avatarSrc from 'assets/images/avatar.png';
 import { page } from 'resources';
-import { auth, User } from 'modules/Auth/state';
+import { applets, auth, User } from 'redux/modules';
 
 import { loginFormSchema } from '../Login.schema';
 import {
@@ -48,6 +48,7 @@ export const LockForm = () => {
   });
 
   const handleLogout = () => {
+    dispatch(applets.actions.resetAppletsData());
     dispatch(auth.actions.resetAuthorization());
     navigate(page.login);
   };

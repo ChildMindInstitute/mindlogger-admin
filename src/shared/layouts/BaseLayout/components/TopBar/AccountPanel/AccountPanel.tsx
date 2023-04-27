@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
-import { auth, workspaces } from 'redux/modules';
+import { applets, auth, workspaces } from 'redux/modules';
 import avatarSrc from 'assets/images/avatar.png';
 import {
   StyledLabelBoldSmall,
@@ -37,6 +37,7 @@ export const AccountPanel = ({ alertsQuantity, setShowDrawer, showDrawer }: Acco
   const handleLogout = () => {
     storage.removeItem('workspace');
     dispatch(workspaces.actions.setCurrentWorkspace(null));
+    dispatch(applets.actions.resetAppletsData());
     dispatch(auth.actions.resetAuthorization());
   };
 
