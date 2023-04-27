@@ -545,6 +545,7 @@
   "sliderHint": "A numerical scale with a single answer",
   "dateHint": "Date selection in the format Month DD, YYYY",
   "dropdown": "Dropdown",
+  "numberSelection": "Number Selection",
   "numberSelectionHint": "Dropdown list of numeric values with a single answer",
   "timeRangeHint": "Time Range selection in the format Start Time HH:MM - End Time HH:MM",
   "setGeolocation": "Set <br /> Geolocation",
@@ -758,7 +759,9 @@
   "newItemName": "New Item",
   "validationMessages": {
     "isRequired": "{{- field }} is required",
-    "alphanumeric": "{{- field }} must contain only alphanumeric characters or underscores"
+    "alphanumeric": "{{- field }} must contain only alphanumeric characters or underscores",
+    "lessThan": "{{- less }} should be less than {{- than }}",
+    "moreThan": "{{- more }} should be bigger than {{- than }}"
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
