@@ -44,9 +44,9 @@ MdEditor.config({
         linkModalTips: {
           linkTitle: t('addLink'),
           descLabel: t('linkText'),
-          descLabelPlaceHolder: t('textPlaceHolder'),
+          descLabelPlaceHolder: t('textPlaceholder'),
           urlLabel: t('linkUrl'),
-          urlLabelPlaceHolder: t('urlPlaceHolder'),
+          urlLabelPlaceHolder: t('urlPlaceholder'),
           buttonOK: t('ok'),
         },
       },
