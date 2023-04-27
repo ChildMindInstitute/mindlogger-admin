@@ -207,9 +207,12 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const shouldNavigateRef = useRef(false);
   const { getPassword, setPassword } = usePasswordFromStorage();
   const ownerId = String(userData?.user?.id) || '';
+  const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
 
   useEffect(() => {
-    responseStatus === 'loading' && setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
+    if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
+      setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
+    }
     responseStatus === 'error' && setPublishProcessStep(SaveAndPublishSteps.Failed);
     responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
   }, [responseStatus]);
@@ -286,12 +289,14 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     const body = getAppletData(appletPassword);
 
     let result;
+    checkIfAppletBeingCreatedOrUpdatedRef.current = true;
     if (isNewApplet || !appletId) {
       result = await dispatch(createApplet(body));
     }
     if (!isNewApplet && appletId) {
       result = await dispatch(updateApplet({ appletId, body }));
     }
+    checkIfAppletBeingCreatedOrUpdatedRef.current = false;
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
