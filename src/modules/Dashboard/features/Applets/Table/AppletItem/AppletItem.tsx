@@ -5,16 +5,16 @@ import { TableCell, TableRow } from '@mui/material';
 import { useAppletsDnd, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { FolderApplet, folders, popups, account } from 'redux/modules';
-import { StyledBodyMedium } from 'shared/styles/styledComponents';
+import { StyledBodyMedium } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
 import { page } from 'resources';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 import { getBuilderAppletUrl } from 'shared/utils';
 
-import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
-import { getActions } from './AppletItem.const';
 import { ShareAppletPopup } from '../../Popups';
+import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
+import { getActions, getDateInUserTimezone } from './AppletItem.utils';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const accountData = account.useData();
@@ -144,7 +144,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
           </StyledAppletName>
         </TableCell>
         <TableCell width="20%" onClick={handleAppletClick}>
-          {item.updatedAt ? timeAgo.format(new Date(item.updatedAt)) : ''}
+          {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
         </TableCell>
         <TableCell>
           <Actions items={getActions({ actions, item })} context={item} />
