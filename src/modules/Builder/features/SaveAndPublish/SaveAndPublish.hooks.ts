@@ -224,6 +224,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     handleSaveAndPublishFirstClick();
   };
   const handleSaveAndPublishFirstClick = async () => {
+    const isValid = await trigger();
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
     const hasNoItems = !checkIfHasAtLeastOneItem();
     const hasEmptyRequiredFields = await checkIfHasEmptyRequiredFields();
@@ -241,7 +242,6 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       return;
     }
 
-    const isValid = await trigger();
     if (!isValid) {
       if (hasEmptyRequiredFields) {
         setPublishProcessStep(SaveAndPublishSteps.EmptyRequiredFields);
