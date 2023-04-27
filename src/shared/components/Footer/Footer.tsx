@@ -10,6 +10,7 @@ import {
   StyledUnderlineLink,
   StyledBox,
 } from './Footer.styles';
+import { ABOUT_LINK, CMI_LINK, MATTER_LAB_LINK, PRIVACY_LINK, TERMS_LINK } from './Footer.const';
 
 const version = `v ${packageJson.version}`;
 const year = new Date().getFullYear();
@@ -28,23 +29,23 @@ export const Footer = () => {
       <Box>
         <StyledText>
           MindLogger {version} {buildVersion} &#169; {year}
-          <StyledUnderlineLink target="_blank" href="https://childmind.org">
+          <StyledUnderlineLink target="_blank" href={CMI_LINK}>
             Child Mind Institute
           </StyledUnderlineLink>
           &#183;
-          <StyledUnderlineLink target="_blank" href="https://matter.childmind.org">
+          <StyledUnderlineLink target="_blank" href={MATTER_LAB_LINK}>
             MATTER Lab
           </StyledUnderlineLink>
         </StyledText>
       </Box>
       <StyledBox>
-        <StyledLink target="_blank" href="https://mindlogger.org/privacy">
+        <StyledLink target="_blank" href={PRIVACY_LINK}>
           {t('privacy')}
         </StyledLink>
-        <StyledLink target="_blank" href="https://mindlogger.org/terms">
+        <StyledLink target="_blank" href={TERMS_LINK}>
           {t('terms')}
         </StyledLink>
-        <StyledLink target="_blank" href="https://mindlogger.org/about">
+        <StyledLink target="_blank" href={ABOUT_LINK}>
           {t('about')}
         </StyledLink>
         <Language />
