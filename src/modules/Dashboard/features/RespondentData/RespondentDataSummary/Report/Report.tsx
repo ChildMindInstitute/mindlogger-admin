@@ -40,7 +40,7 @@ export const Report = ({ activity }: { activity: Activity }) => {
         <ReportFilters />
         <StyledTitleLargish sx={{ mb: theme.spacing(2) }}>
           {t('activityCompleted')}
-          <Tooltip tooltipTitle={t('hideBadgeTooltip')}>
+          <Tooltip tooltipTitle={t('theRespondentCompletedTheActivity')}>
             <span>
               <StyledTitleTooltipIcon id="more-info-outlined" width={16} height={16} />
             </span>

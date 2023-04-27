@@ -807,5 +807,6 @@
   "response": "Response",
   "noDataForActivity": "No available Data for this Activity yet",
   "isReviewableUnsupported": "Reviewer dashboard assessment supports only Single Selection, Multiple Selection and Slider Items",
-  "isReviewableExists": "Only one Activity within an Applet can be a Reviewer dashboard assessment. Selected one: {{- activityName }}"
+  "isReviewableExists": "Only one Activity within an Applet can be a Reviewer dashboard assessment. Selected one: {{- activityName }}",
+  "theRespondentCompletedTheActivity": "The respondent completed the Activity at these times"
 }
