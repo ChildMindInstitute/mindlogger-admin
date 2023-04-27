@@ -85,11 +85,11 @@ export const EditorController = <T extends FieldValues>({
               'italic',
               'title',
               '-',
-              8,
-              9,
+              8, // UnderlineExtension
+              9, // StrikethroughExtension
               0, // MarkExtension
-              10,
-              11,
+              10, // SubscriptExtension
+              11, // SuperscriptExtension
               2, // AlignTextExtension: left
               3, // AlignTextExtension: center
               4, // AlignTextExtension: right
