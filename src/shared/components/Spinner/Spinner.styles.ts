@@ -4,7 +4,7 @@ import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 
 export const StyledSpinner = styled(StyledFlexAllCenter)`
-  position: fixed;
+  position: absolute;
   width: 100%;
   height: 100%;
   background-color: rgb(255 255 255 / 50%);

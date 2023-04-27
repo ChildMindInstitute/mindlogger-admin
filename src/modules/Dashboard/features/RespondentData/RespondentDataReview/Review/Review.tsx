@@ -4,14 +4,13 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
 
 import { getAnswerApi } from 'api';
-import { StyledTitleLargish } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
 import { getDictionaryText } from 'shared/utils';
 import { Spinner } from 'shared/components';
 import { page } from 'resources';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
-import { getItemLabel, isItemUnsupported } from '../../RespondentData.utils';
+import { isItemUnsupported } from '../../RespondentData.utils';
 import { UnsupportedItemResponse } from '../../UnsupportedItemResponse';
 import { StyledReview } from './Review.styles';
 import { ReviewProps } from './Review.types';
@@ -19,7 +18,6 @@ import { ActivityItemAnswer } from '../RespondentDataReview.types';
 import { getResponseItem } from './Review.const';
 
 export const Review = ({ answerId }: ReviewProps) => {
-  const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
   const navigate = useNavigate();
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
@@ -45,7 +43,6 @@ export const Review = ({ answerId }: ReviewProps) => {
         <StyledReview>
           {activityItemAnswers.map(({ activityItem, answer }) => (
             <Box sx={{ mb: 4.8 }} key={activityItem.id}>
-              <StyledTitleLargish>{t(getItemLabel(activityItem.responseType))}</StyledTitleLargish>
               <CollapsedMdText text={getDictionaryText(activityItem.question)} maxHeight={120} />
               {isItemUnsupported(activityItem.responseType) ? (
                 <UnsupportedItemResponse itemType={activityItem.responseType} />

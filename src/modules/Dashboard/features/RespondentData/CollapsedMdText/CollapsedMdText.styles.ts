@@ -5,11 +5,15 @@ import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledMdEditor = styled(MdEditor)`
-  background-color: transparent;
-  color: ${variables.palette.on_surface};
-  font-size: ${variables.font.size.lrg};
-  font-weight: normal;
-  text-align: initial;
+  .default-theme {
+    background-color: transparent;
+    color: ${variables.palette.on_surface};
+    font-size: ${variables.font.size.lrg};
+    line-height: ${variables.font.lineHeight.xl};
+    color: ${variables.palette.on_surface};
+    font-weight: normal;
+    text-align: initial;
+  }
 `;
 
 export const StyledCollapsedContainer = styled(Box, shouldForwardProp)`
