@@ -1,3 +1,5 @@
+import { enUS, fr } from 'date-fns/locale';
+
 import { Svg } from 'shared/components/Svg';
 
 export const TABS_HEIGHT = '6.1rem';
@@ -96,3 +98,8 @@ export const enum SubscaleTotalScore {
   Sum = 'sum',
   Average = 'average',
 }
+
+export const locales = {
+  'en-US': enUS,
+  fr,
+};
