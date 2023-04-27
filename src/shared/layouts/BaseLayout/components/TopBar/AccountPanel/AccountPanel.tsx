@@ -2,8 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { useAppDispatch } from 'redux/store';
-import { applets, auth, workspaces } from 'redux/modules';
+import { auth } from 'redux/modules';
 import avatarSrc from 'assets/images/avatar.png';
 import {
   StyledLabelBoldSmall,
@@ -13,7 +12,7 @@ import {
   StyledClearedButton,
   variables,
 } from 'shared/styles';
-import { storage } from 'shared/utils';
+import { useLogout } from 'shared/hooks';
 
 import { Notifications } from '../Notifications';
 import {
@@ -31,15 +30,8 @@ import { AccountPanelProps } from './AccountPanel.types';
 
 export const AccountPanel = ({ alertsQuantity, setShowDrawer, showDrawer }: AccountPanelProps) => {
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
   const authData = auth.useData();
-
-  const handleLogout = () => {
-    storage.removeItem('workspace');
-    dispatch(workspaces.actions.setCurrentWorkspace(null));
-    dispatch(applets.actions.resetAppletsData());
-    dispatch(auth.actions.resetAuthorization());
-  };
+  const handleLogout = useLogout();
 
   return (
     <StyledAccountDrawer anchor="right" open={showDrawer} hideBackdrop>
