@@ -1,26 +1,34 @@
 import { max, min } from 'date-fns';
-import { enUS, fr } from 'date-fns/locale';
 
 import { variables } from 'shared/styles';
+import { locales } from 'shared/consts';
 
-export const locales = {
-  'en-US': enUS,
-  fr,
-};
+import { Data } from './ScatterChart.types';
 
 export const mocked = {
   responses: [new Date('2023-11-06'), new Date('2023-11-27'), new Date('2023-12-07')],
   versions: [new Date('2023-11-20')],
 };
 
-export const getOptions = (lang: keyof typeof locales, data: any) => {
-  const maxDate = max([...mocked.responses, ...mocked.versions]);
-  const minDate = min([...mocked.responses, ...mocked.versions]);
+const commonConfig = {
+  type: 'time' as const,
+  time: {
+    unit: 'day' as const,
+    displayFormats: {
+      month: 'dd mmm' as const,
+    },
+  },
+};
+
+export const getOptions = (lang: keyof typeof locales, data: Data) => {
+  const datesArr = [...data.responses, ...data.versions];
+  const maxDate = max(datesArr).toString();
+  const minDate = min(datesArr).toString();
 
   return {
     maintainAspectRatio: false,
     responsive: true,
-    clip: false,
+    clip: false as const,
     plugins: {
       legend: {
         display: false,
@@ -45,19 +53,13 @@ export const getOptions = (lang: keyof typeof locales, data: any) => {
             locale: locales[lang],
           },
         },
-        type: 'time' as const,
-        time: {
-          unit: 'day' as const,
-          displayFormats: {
-            month: 'dd mmm' as const,
-          },
-        },
+        ...commonConfig,
         position: 'bottom' as const,
         grid: {
           display: false,
         },
         ticks: {
-          source: 'data',
+          source: 'data' as const,
           font: {
             size: 11,
           },
@@ -66,16 +68,10 @@ export const getOptions = (lang: keyof typeof locales, data: any) => {
         max: maxDate,
       },
       x2: {
-        type: 'time' as const,
-        time: {
-          unit: 'day' as const,
-          displayFormats: {
-            month: 'dd mmm' as const,
-          },
-        },
+        ...commonConfig,
         position: 'top' as const,
         ticks: {
-          source: 'data',
+          source: 'data' as const,
           font: {
             size: 11,
           },
@@ -91,7 +87,7 @@ export const getOptions = (lang: keyof typeof locales, data: any) => {
   };
 };
 
-export const getData = (data: any) => ({
+export const getData = (data: Data) => ({
   datasets: [
     {
       xAxisID: 'x',
@@ -112,7 +108,7 @@ export const getData = (data: any) => ({
         font: {
           size: 11,
         },
-        formatter(item: { x: number; y: number }) {
+        formatter() {
           // TODO: add logic with real data
           return '1.0.1';
         },

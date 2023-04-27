@@ -5,14 +5,19 @@ import { useTranslation } from 'react-i18next';
 import { Activity } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
-import { StyledHeadlineLarge, theme } from 'shared/styles';
-import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Charts/BarChart';
+import {
+  StyledHeadlineLarge,
+  StyledTitleLargish,
+  StyledTitleTooltipIcon,
+  theme,
+} from 'shared/styles';
 
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportTable } from './ReportTable';
 import { ScatterChart } from '../Charts/ScatterChart';
+import { BarChart } from '../Charts/BarChart';
 
 export const Report = ({ activity }: { activity: Activity }) => {
   const { t } = useTranslation();
@@ -33,6 +38,14 @@ export const Report = ({ activity }: { activity: Activity }) => {
       </StyledHeader>
       <Box sx={{ margin: theme.spacing(4.8, 6.4, 4.8) }}>
         <ReportFilters />
+        <StyledTitleLargish sx={{ mb: theme.spacing(2) }}>
+          {t('activityCompleted')}
+          <Tooltip tooltipTitle={t('hideBadgeTooltip')}>
+            <span>
+              <StyledTitleTooltipIcon id="more-info-outlined" width={16} height={16} />
+            </span>
+          </Tooltip>
+        </StyledTitleLargish>
         <ScatterChart />
         <ReportTable />
         <Box sx={{ m: theme.spacing(2.4, 0) }}>

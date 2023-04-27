@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { StyledBodyMedium, theme, variables } from 'shared/styles';
+import { StyledBodyMedium, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { Svg, Tooltip } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_8MB } from 'shared/consts';
@@ -9,7 +9,6 @@ import {
   StyledContainer,
   StyledNameWrapper,
   StyledSourceContainer,
-  StyledSvg,
   StyledTitle,
 } from './MediaUploader.styles';
 import { useMediaUploader } from './MediaUploader.hooks';
@@ -47,7 +46,7 @@ export const MediaUploader = ({
               })}
             >
               <span>
-                <StyledSvg id="more-info-outlined" />
+                <StyledTitleTooltipIcon id="more-info-outlined" />
               </span>
             </Tooltip>
           </StyledTitle>

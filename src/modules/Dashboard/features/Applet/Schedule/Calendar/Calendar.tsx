@@ -8,12 +8,12 @@ import {
 } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, getDay, parse, startOfWeek, getYear } from 'date-fns';
-import { enUS, fr } from 'date-fns/locale';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
 import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
+import { locales } from 'shared/consts';
 
 import { CreateEventPopup } from '../CreateEventPopup';
 import { EditEventPopup } from '../EditEventPopup';
@@ -25,11 +25,6 @@ import {
 } from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
 import { AllDayEventsVisible, CalendarViews, OnViewFunc } from './Calendar.types';
-
-const locales = {
-  'en-US': enUS,
-  fr,
-};
 
 const dateFnsLocalize = dateFnsLocalizer({
   format,

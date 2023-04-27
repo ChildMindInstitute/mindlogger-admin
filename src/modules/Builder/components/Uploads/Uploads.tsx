@@ -1,6 +1,7 @@
 import { Tooltip } from 'shared/components';
+import { StyledTitleTooltipIcon } from 'shared/styles';
 
-import { StyledSvg, StyledTitle, StyledUploadImg, StyledUploadImgs } from './Uploads.styles';
+import { StyledTitle, StyledUploadImg, StyledUploadImgs } from './Uploads.styles';
 import { UploadsProps } from './Uploads.types';
 
 export const Uploads = ({ uploads, wrapperStyles = {}, itemStyles = {} }: UploadsProps) => (
@@ -11,7 +12,7 @@ export const Uploads = ({ uploads, wrapperStyles = {}, itemStyles = {} }: Upload
           {title}
           <Tooltip tooltipTitle={tooltipTitle}>
             <span>
-              <StyledSvg id="more-info-outlined" />
+              <StyledTitleTooltipIcon id="more-info-outlined" />
             </span>
           </Tooltip>
         </StyledTitle>
