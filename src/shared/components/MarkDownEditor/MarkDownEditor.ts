@@ -21,7 +21,7 @@ MdEditor.config({
           quote: t('quote'),
           unorderedList: t('unorderedList'),
           orderedList: t('orderedList'),
-          code: t('mdEditorBlockLevelCode'),
+          code: t('inlineCode'),
           codeRow: t('inlineCode'),
           link: t('link'),
           image: t('image'),
@@ -41,7 +41,123 @@ MdEditor.config({
           h5: t('lv5Heading'),
           h6: t('lv6Heading'),
         },
+        linkModalTips: {
+          linkTitle: t('addLink'),
+          descLabel: t('linkText'),
+          descLabelPlaceHolder: t('textPlaceHolder'),
+          urlLabel: t('linkUrl'),
+          urlLabelPlaceHolder: t('urlPlaceHolder'),
+          buttonOK: t('ok'),
+        },
       },
     },
   },
+  markedRenderer(renderer) {
+    renderer.link = (href, title, text) =>
+      `<a href="${href}" title="${title}" target="_blank">${text}</a>`;
+
+    return renderer;
+  },
+  markedExtensions: [
+    {
+      name: 'mark',
+      level: 'inline',
+      start(src) {
+        return src.match(/==/)?.index;
+      },
+      tokenizer(src) {
+        const rule = /^==([^=]+(?<!=)=?(?!=)[^=]+)==|^==([^=]*)==/;
+        const match = rule.exec(src);
+        if (match) {
+          const token = {
+            type: 'mark',
+            raw: match[0],
+            text: (match[1] ?? match[2]).trim(),
+            tokens: [],
+          };
+          this.lexer.inline(token.text, token.tokens);
+
+          return token;
+        }
+      },
+      renderer(token) {
+        return `<mark>${this.parser.parseInline(token.tokens ?? [])}</mark>`;
+      },
+    },
+    {
+      name: 'underline',
+      level: 'inline',
+      start(src) {
+        return src.match(/\+\+/)?.index;
+      },
+      tokenizer(src) {
+        const rule = /^\+\+([^+]+(?<!\+)=?(?!\+)[^+]+)\+\+|^\+\+([^+]*)\+\+/;
+        const match = rule.exec(src);
+        if (match) {
+          const token = {
+            type: 'underline',
+            raw: match[0],
+            text: (match[1] ?? match[2]).trim(),
+            tokens: [],
+          };
+          this.lexer.inline(token.text, token.tokens);
+
+          return token;
+        }
+      },
+      renderer(token) {
+        return `<ins>${this.parser.parseInline(token.tokens ?? [])}</ins>`;
+      },
+    },
+    {
+      name: 'superscript',
+      level: 'inline',
+      start(src) {
+        return src.match(/\^/)?.index;
+      },
+      tokenizer(src) {
+        const rule = /^\^([^^]+)\^/;
+        const match = rule.exec(src);
+        if (match) {
+          const token = {
+            type: 'superscript',
+            raw: match[0],
+            text: match[1].trim(),
+            tokens: [],
+          };
+          this.lexer.inline(token.text, token.tokens);
+
+          return token;
+        }
+      },
+      renderer(token) {
+        return `<sup>${this.parser.parseInline(token.tokens ?? [])}</sup>`;
+      },
+    },
+    {
+      name: 'subscript',
+      level: 'inline',
+      start(src) {
+        return src.match(/\^/)?.index;
+      },
+      tokenizer(src) {
+        const rule = /^~([^~]+)~/;
+        const match = rule.exec(src);
+        if (match) {
+          const token = {
+            type: 'subscript',
+            raw: match[0],
+            text: match[1].trim(),
+            tokens: [],
+          };
+          this.lexer.inline(token.text, token.tokens);
+
+          return token;
+        }
+      },
+      renderer(token) {
+        return `<sub>${this.parser.parseInline(token.tokens ?? [])}</sub>`;
+      },
+    },
+  ],
 });

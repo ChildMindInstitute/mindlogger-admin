@@ -14,6 +14,10 @@ import {
   TrashExtension,
   VideoUploadExtension,
   MarkExtension,
+  UnderlineExtension,
+  StrikethroughExtension,
+  SubscriptExtension,
+  SuperscriptExtension,
 } from 'shared/components';
 
 import { StyledErrorText, StyledMdEditor } from './EditorController.styles';
@@ -71,17 +75,21 @@ export const EditorController = <T extends FieldValues>({
               <ImageUploadExtension key="image-upload-extension" onInsert={onInsert} />,
               <AudioUploadExtension key="audio-upload-extension" onInsert={onInsert} />,
               <VideoUploadExtension key="video-upload-extension" onInsert={onInsert} />,
+              <UnderlineExtension key="underline-extension" onInsert={onInsert} />,
+              <StrikethroughExtension key="strikethrough-extension" onInsert={onInsert} />,
+              <SubscriptExtension key="subscript-extension" onInsert={onInsert} />,
+              <SuperscriptExtension key="superscript-extension" onInsert={onInsert} />,
             ]}
             toolbars={[
               'bold',
               'italic',
               'title',
               '-',
-              'underline',
-              'strikeThrough',
+              8,
+              9,
               0, // MarkExtension
-              'sub',
-              'sup',
+              10,
+              11,
               2, // AlignTextExtension: left
               3, // AlignTextExtension: center
               4, // AlignTextExtension: right
