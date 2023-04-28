@@ -29,12 +29,7 @@ export const ActivitySettings = () => {
     setActiveSetting(getSetting(setting));
   }, [setting]);
 
-  useBreadcrumbs([
-    {
-      icon: 'settings',
-      label: t('activitySettings'),
-    },
-  ]);
+  useBreadcrumbs();
 
   const { control } = useFormContext();
 

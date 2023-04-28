@@ -30,12 +30,7 @@ import { itemsForReviewableActivity } from './ActivityAbout.const';
 export const ActivityAbout = () => {
   const { t } = useTranslation();
 
-  useBreadcrumbs([
-    {
-      icon: 'more-info-outlined',
-      label: t('aboutActivity'),
-    },
-  ]);
+  useBreadcrumbs();
 
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
