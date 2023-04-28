@@ -10,3 +10,4 @@ export * from './useBlocker';
 export * from './useCheckIfNewApplet';
 export * from './useSetupEnterAppletPassword';
 export * from './useLogout';
+export * from './useRemoveAppletData';

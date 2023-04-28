@@ -11,10 +11,10 @@ import {
   useBuilderSessionStorageFormValues,
   useBuilderSessionStorageFormChange,
   useCheckIfNewApplet,
+  useRemoveAppletData,
 } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
-import { builderSessionStorage } from 'shared/utils';
 import { auth } from 'modules/Auth';
 import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 
@@ -32,6 +32,7 @@ export const BuilderApplet = () => {
   const loadingStatus = applet.useResponseStatus() ?? {};
   const userData = auth.useData();
   const ownerId = String(userData?.user?.id) || '';
+  const removeAppletData = useRemoveAppletData();
 
   const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
     getDefaultValues(appletData),
@@ -55,7 +56,10 @@ export const BuilderApplet = () => {
   }, [loadingStatus, isNewApplet]);
 
   useEffect(() => {
-    if (isNewApplet) reset(getDefaultValues());
+    if (!isNewApplet) return;
+
+    removeAppletData();
+    reset(getDefaultValues());
   }, [isNewApplet]);
 
   const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(getValues);
@@ -81,13 +85,7 @@ export const BuilderApplet = () => {
     dispatch(getAppletWithItems({ ownerId, appletId }));
   }, [ownerId, appletId]);
 
-  useEffect(
-    () => () => {
-      builderSessionStorage.removeItem();
-      dispatch(applet.actions.removeApplet());
-    },
-    [],
-  );
+  useEffect(() => removeAppletData, []);
 
   const { errors } = useFormState({
     control,
