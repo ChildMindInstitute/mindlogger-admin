@@ -1,6 +1,7 @@
 import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { ColorResult } from 'react-color';
+import get from 'lodash.get';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
@@ -184,3 +185,10 @@ export const getAppletTabs = ({
     path: Path.Settings,
   },
 ];
+
+//TODO: find a way to validate nested properties for objects in arrays for uniqueness
+export const testFunctionForUniqueness = (field: string, value: string, context: unknown) => {
+  const items = get(context, `from.1.value.${field}`);
+
+  return items?.filter((item: { name: string }) => item.name === value).length < 2 ?? true;
+};

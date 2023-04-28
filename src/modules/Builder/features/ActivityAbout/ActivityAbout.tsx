@@ -41,7 +41,7 @@ export const ActivityAbout = () => {
   const { fieldName } = useCurrentActivity();
 
   const activities = watch('activities');
-  const activityItems = watch(`${name}.items`);
+  const activityItems = watch(`${fieldName}.items`);
   const activityWithReviewable = activities?.find((activity: ActivityFormValues, index: number) => {
     const activityFieldName = `activities.${index}`;
 
