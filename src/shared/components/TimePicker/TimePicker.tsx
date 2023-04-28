@@ -18,6 +18,8 @@ export const TimePicker = <T extends FieldValues>({
   wrapperSx = {},
   minTime,
   maxTime,
+  // TODO: check how to avoid using providedValue and use value from control (the issue is in the NotificationsTab of
+  //  EventForm)
   providedValue,
 }: TimePickerProps<T>) => (
   <Controller
