@@ -215,7 +215,6 @@ export const Respondents = () => {
 
   return (
     <>
-      {isLoading && <Spinner />}
       <RespondentsTableHeader hasButton={!!id}>
         {id && (
           <StyledLeftBox>
