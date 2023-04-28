@@ -36,12 +36,7 @@ export const ActivityFlowAbout = () => {
     control,
   };
 
-  useBreadcrumbs([
-    {
-      icon: 'more-info-outlined',
-      label: t('aboutActivityFlow'),
-    },
-  ]);
+  useBreadcrumbs();
 
   useEffect(() => {
     if (activityFlowIndex !== -1) return;

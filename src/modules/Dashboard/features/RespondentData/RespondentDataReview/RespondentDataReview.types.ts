@@ -30,7 +30,7 @@ export type SingleSelectAnswer = ItemAnswer & {
 
 export type ActivityItemAnswer = {
   activityItem: Item;
-  answer: ItemAnswer;
+  answer: ItemAnswer | null;
 };
 
 export interface TextItemAnswer extends ActivityItemAnswer {
@@ -51,15 +51,15 @@ export type MultiSelectActivityItem = MultiSelectItem & {
 
 export interface SliderItemAnswer extends ActivityItemAnswer {
   activityItem: SliderActivityItem;
-  answer: SliderAnswer;
+  answer: SliderAnswer | null;
 }
 
 export interface SingleSelectItemAnswer extends ActivityItemAnswer {
   activityItem: SingleSelectActivityItem;
-  answer: SingleSelectAnswer;
+  answer: SingleSelectAnswer | null;
 }
 
 export interface MultiSelectItemAnswer extends ActivityItemAnswer {
   activityItem: MultiSelectActivityItem;
-  answer: MultiSelectAnswer;
+  answer: MultiSelectAnswer | null;
 }
