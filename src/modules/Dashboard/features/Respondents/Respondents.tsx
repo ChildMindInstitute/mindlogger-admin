@@ -9,6 +9,7 @@ import { Table } from 'modules/Dashboard/components';
 import { getWorkspaceRespondentAccessesApi, updatePinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
+import { getDateInUserTimezone } from 'shared/utils';
 
 import {
   RespondentsTableHeader,
@@ -124,7 +125,7 @@ export const Respondents = () => {
 
   const rows = respondentsData?.result?.map((user, index) => {
     const { secretId, nickname, lastSeen, accessId, isPinned, schedule } = user;
-    const latestAactive = lastSeen ? timeAgo.format(new Date(lastSeen)) : '';
+    const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
 
     return {
       pin: {
@@ -140,9 +141,9 @@ export const Respondents = () => {
         content: () => nickname,
         value: nickname,
       },
-      latestAactive: {
-        content: () => latestAactive,
-        value: latestAactive,
+      latestActive: {
+        content: () => latestActive,
+        value: latestActive,
       },
       ...(id && {
         schedule: {
