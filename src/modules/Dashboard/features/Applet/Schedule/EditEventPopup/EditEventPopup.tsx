@@ -103,7 +103,7 @@ export const EditEventPopup = ({
           // TODO: only for release-one, remove after release
           // disabledSubmit={!!editedEvent && !isFormChanged}
           disabledSubmit
-          submitBtnTooltip="Edit schedule disabled for release-one"
+          submitBtnTooltip="Feature is not available in the current version of the system"
         >
           <>
             <StyledContainer>
