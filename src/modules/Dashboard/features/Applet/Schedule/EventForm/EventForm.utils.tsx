@@ -192,17 +192,12 @@ const convertDateToYearMonthDay = (date: Date | string) =>
 
 const addSecondsToHourMinutes = (timeStr?: string | null) => (timeStr ? `${timeStr}:00` : null);
 
-const getTimer = (
-  timerType: TimerType,
-  body: CreateEventType['body'],
-  timerDuration: string,
-  idleTime: string,
-) => {
+const getTimer = (timerType: TimerType, timerDuration: string, idleTime: string) => {
   switch (timerType) {
     case TimerType.Timer:
-      return (body.timer = addSecondsToHourMinutes(timerDuration) || undefined);
+      return addSecondsToHourMinutes(timerDuration) || undefined;
     case TimerType.Idle:
-      return (body.timer = addSecondsToHourMinutes(idleTime) || undefined);
+      return addSecondsToHourMinutes(idleTime) || undefined;
   }
 };
 
@@ -269,7 +264,7 @@ export const getEventPayload = (defaultStartDate: Date, watch: UseFormWatch<Even
     ...(isFlowId ? { flowId } : { activityId: activityOrFlowId }),
   };
 
-  getTimer(timerType, body, timerDuration, idleTime);
+  body.timer = getTimer(timerType, timerDuration, idleTime);
 
   if (alwaysAvailable) {
     body.oneTimeCompletion = oneTimeCompletion;
