@@ -12,11 +12,12 @@ export const SliderResponseItem = ({ activityItem, answer }: SliderItemAnswer) =
 
   return (
     <StyledSlider
+      disabled
       marks={marks}
       min={minValue}
       max={maxValue}
       value={Number(answer?.value)}
-      disabled
+      data-skipped={answer?.value === undefined || answer?.value === null}
     />
   );
 };
