@@ -60,7 +60,17 @@ export const ItemSchema = () =>
 
         return schema.nullable();
       }),
-      config: yup.object({}),
+      config: yup.object({}).shape({
+        correctAnswerRequired: yup.boolean().nullable(),
+        correctAnswer: yup
+          .string()
+          .nullable()
+          .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
+            correctAnswerRequired
+              ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+              : schema,
+          ),
+      }),
     })
     .required();
 
