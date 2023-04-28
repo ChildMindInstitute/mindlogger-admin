@@ -52,6 +52,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
           timerType,
           timer,
           id: eventId,
+          notification,
         },
       ) => {
         const activityOrFlowId = activityId || flowId || '';
@@ -62,9 +63,13 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
         if (!currentActivityOrFlow?.isHidden) {
           const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
           const isAlwaysAvailable = periodicityType === Periodicity.Always;
-          const date = format(new Date(selectedDate || startDate || ''), DateFormats.DayMonthYear);
-          const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull);
-          const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull);
+          const selectedOrStartDate = selectedDate || startDate;
+          const date = format(
+            selectedOrStartDate ? new Date(selectedOrStartDate) : new Date(),
+            DateFormats.DayMonthYear,
+          );
+          const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull) || '';
+          const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull) || '';
           const activityOrFlowName = currentActivityOrFlow?.name || '';
           // TODO: Add notification time after notifications connection to the API
           const notificationTime = '-';
@@ -111,6 +116,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
             accessBeforeSchedule,
             timerType,
             timer,
+            notification,
           };
 
           if (dataToCreateEvent) {

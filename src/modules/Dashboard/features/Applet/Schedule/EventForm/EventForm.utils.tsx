@@ -5,9 +5,17 @@ import i18n from 'i18n';
 import { DateFormats } from 'shared/consts';
 import { Svg } from 'shared/components';
 import { Activity, ActivityFlow } from 'shared/state';
-import { CreateEventType, Periodicity, TimerType } from 'modules/Dashboard/api';
+import {
+  CreateEventType,
+  EventNotifications,
+  EventReminder,
+  NotificationType,
+  Periodicity,
+  TimerType,
+} from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 
+import { removeSecondsFromTime } from '../Schedule.utils';
 import {
   DEFAULT_END_TIME,
   DEFAULT_IDLE_TIME,
@@ -15,7 +23,7 @@ import {
   DEFAULT_TIMER_DURATION,
   SECONDS_TO_MILLISECONDS_MULTIPLIER,
 } from './EventForm.const';
-import { EventFormValues } from './EventForm.types';
+import { EventFormValues, SecondsManipulation } from './EventForm.types';
 
 const { t } = i18n;
 
@@ -58,6 +66,44 @@ const getStartEndingDate = (
   ];
 };
 
+const getNotifications = (type: SecondsManipulation, notifications?: EventNotifications) =>
+  notifications?.map((notification) => {
+    const { atTime, fromTime, toTime } = notification || {};
+    if (notification.triggerType === NotificationType.Fixed) {
+      return {
+        ...notification,
+        atTime:
+          type === SecondsManipulation.AddSeconds
+            ? addSecondsToHourMinutes(atTime)
+            : removeSecondsFromTime(atTime),
+      };
+    }
+
+    return {
+      ...notification,
+      fromTime:
+        type === SecondsManipulation.AddSeconds
+          ? addSecondsToHourMinutes(fromTime)
+          : removeSecondsFromTime(fromTime),
+      toTime:
+        type === SecondsManipulation.AddSeconds
+          ? addSecondsToHourMinutes(toTime)
+          : removeSecondsFromTime(toTime),
+    };
+  }) || null;
+
+const getReminder = (type: SecondsManipulation, reminder?: EventReminder) => {
+  if (!reminder) return null;
+
+  return {
+    ...reminder,
+    reminderTime:
+      type === SecondsManipulation.AddSeconds
+        ? addSecondsToHourMinutes(reminder.reminderTime)
+        : removeSecondsFromTime(reminder.reminderTime),
+  };
+};
+
 export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarEvent) => {
   const {
     alwaysAvailable: eventAlwaysAvailable,
@@ -72,6 +118,7 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     accessBeforeSchedule: eventAccessBeforeSchedule,
     timerType: eventTimerType,
     timer,
+    notification,
   } = editedEvent || {};
   const activityOrFlowId = getActivityOrFlowId(editedEvent, startFlowIcon, eventActivityOrFlowId);
   const isPeriodicityAlways = eventPeriodicity === Periodicity.Always;
@@ -97,6 +144,9 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
   const timerDuration =
     (timerType === TimerType.Timer && timerHHmmString) || DEFAULT_TIMER_DURATION;
   const idleTime = (timerType === TimerType.Idle && timerHHmmString) || DEFAULT_IDLE_TIME;
+  const notifications =
+    getNotifications(SecondsManipulation.RemoveSeconds, notification?.notifications) || [];
+  const reminder = getReminder(SecondsManipulation.RemoveSeconds, notification?.reminder) || null;
 
   return {
     activityOrFlowId,
@@ -111,8 +161,8 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     timerDuration,
     idleTime,
     periodicity,
-    notifications: [],
-    reminder: null,
+    notifications,
+    reminder,
     removeWarning: {},
   };
 };
@@ -140,7 +190,7 @@ export const getActivitiesFlows = (activities: Activity[], activityFlows: Activi
 const convertDateToYearMonthDay = (date: Date | string) =>
   typeof date === 'string' ? date : format(date, DateFormats.YearMonthDay);
 
-const addSecondsToHourMinutes = (timeStr: string) => `${timeStr}:00`;
+const addSecondsToHourMinutes = (timeStr?: string | null) => (timeStr ? `${timeStr}:00` : null);
 
 const getTimer = (
   timerType: TimerType,
@@ -150,9 +200,9 @@ const getTimer = (
 ) => {
   switch (timerType) {
     case TimerType.Timer:
-      return (body.timer = addSecondsToHourMinutes(timerDuration));
+      return (body.timer = addSecondsToHourMinutes(timerDuration) || undefined);
     case TimerType.Idle:
-      return (body.timer = addSecondsToHourMinutes(idleTime));
+      return (body.timer = addSecondsToHourMinutes(idleTime) || undefined);
   }
 };
 
@@ -193,6 +243,10 @@ export const getEventPayload = (defaultStartDate: Date, watch: UseFormWatch<Even
   const accessBeforeSchedule = watch('accessBeforeSchedule');
   const date = watch('date');
   const startEndingDate = watch('startEndingDate');
+  const notificationsFromForm = watch('notifications');
+  const notifications = getNotifications(SecondsManipulation.AddSeconds, notificationsFromForm);
+  const reminderFromForm = watch('reminder');
+  const reminder = getReminder(SecondsManipulation.AddSeconds, reminderFromForm);
 
   const eventStartYear = getEventStartYear({
     periodicity,
@@ -205,6 +259,13 @@ export const getEventPayload = (defaultStartDate: Date, watch: UseFormWatch<Even
 
   const body: CreateEventType['body'] = {
     timerType,
+    notification:
+      notifications?.length || reminder
+        ? {
+            notifications,
+            reminder,
+          }
+        : null,
     ...(isFlowId ? { flowId } : { activityId: activityOrFlowId }),
   };
 
@@ -219,8 +280,8 @@ export const getEventPayload = (defaultStartDate: Date, watch: UseFormWatch<Even
       }),
     };
   } else {
-    body.startTime = addSecondsToHourMinutes(startTime);
-    body.endTime = addSecondsToHourMinutes(endTime);
+    body.startTime = addSecondsToHourMinutes(startTime) || undefined;
+    body.endTime = addSecondsToHourMinutes(endTime) || undefined;
     body.accessBeforeSchedule = accessBeforeSchedule;
 
     body.periodicity = {

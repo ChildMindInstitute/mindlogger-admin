@@ -24,9 +24,10 @@ export const addToBuilderPopupSchema = (): AddToBuilderPopupSchemaType => {
       selectedApplet: string().test(
         'check_addToBuilderAction',
         appletRequired,
-        (value, testContext) => {
+        (value, NotificationTimeTestContext) => {
           const isAddToExistingAppletSelected =
-            testContext.parent?.addToBuilderAction === AddToBuilderActions.AddToExistingApplet;
+            NotificationTimeTestContext.parent?.addToBuilderAction ===
+            AddToBuilderActions.AddToExistingApplet;
 
           return !!value || isAddToExistingAppletSelected;
         },

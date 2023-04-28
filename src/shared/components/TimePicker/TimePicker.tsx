@@ -18,41 +18,47 @@ export const TimePicker = <T extends FieldValues>({
   wrapperSx = {},
   minTime,
   maxTime,
+  providedValue,
 }: TimePickerProps<T>) => (
   <Controller
     control={control}
     name={name}
-    render={({ field: { onChange, value }, fieldState: { error } }) => (
-      <StyledTimePickerWrapper sx={{ ...wrapperSx }}>
-        <ReactDatePicker
-          className="date-picker"
-          selected={value ? parse(value, DateFormats.Time, new Date()) : value}
-          onChange={(date: Date) => onChange(dateFnsFormat(date, DateFormats.Time))}
-          showTimeSelect
-          showTimeSelectOnly
-          timeIntervals={timeIntervals}
-          showPopperArrow={false}
-          dateFormat={format}
-          timeFormat={format}
-          minTime={minTime}
-          maxTime={maxTime}
-          customInput={
-            <TextField
-              variant="outlined"
-              label={label}
-              error={!!error}
-              helperText={error?.message || null}
-              InputProps={{
-                endAdornment: (
-                  <StyledIcon>
-                    <Svg id="clock" />
-                  </StyledIcon>
-                ),
-              }}
-            />
-          }
-        />
-      </StyledTimePickerWrapper>
-    )}
+    render={({ field: { onChange, value }, fieldState: { error } }) => {
+      const valueToPass = providedValue || value;
+      const selected = valueToPass ? parse(valueToPass, DateFormats.Time, new Date()) : valueToPass;
+
+      return (
+        <StyledTimePickerWrapper sx={{ ...wrapperSx }}>
+          <ReactDatePicker
+            className="date-picker"
+            selected={selected as Date | null | undefined}
+            onChange={(date: Date) => onChange(dateFnsFormat(date, DateFormats.Time))}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={timeIntervals}
+            showPopperArrow={false}
+            dateFormat={format}
+            timeFormat={format}
+            minTime={minTime}
+            maxTime={maxTime}
+            customInput={
+              <TextField
+                variant="outlined"
+                label={label}
+                error={!!error}
+                helperText={error?.message || null}
+                InputProps={{
+                  endAdornment: (
+                    <StyledIcon>
+                      <Svg id="clock" />
+                    </StyledIcon>
+                  ),
+                }}
+              />
+            }
+          />
+        </StyledTimePickerWrapper>
+      );
+    }}
   />
 );

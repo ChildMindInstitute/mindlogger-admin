@@ -156,6 +156,7 @@ export const createEvents = ({
   accessBeforeSchedule,
   timerType,
   timer,
+  notification,
 }: CreateEventsData): CalendarEvent[] => {
   const newDate = new Date();
   const eventStart =
@@ -193,6 +194,8 @@ export const createEvents = ({
     accessBeforeSchedule,
     timerType,
     timer,
+    notification,
+    endAlertIcon: !!notification,
     allDay: isAllDayEvent,
     ...(!isAlwaysAvailable && {
       scheduledColor: colors[0],

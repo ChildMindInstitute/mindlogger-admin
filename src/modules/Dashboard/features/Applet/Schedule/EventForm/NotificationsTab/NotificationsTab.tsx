@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
 import { theme, StyledTitleMedium } from 'shared/styles';
+import { NotificationType } from 'modules/Dashboard/api';
 
-import { EventFormValues, NotificationType } from '../EventForm.types';
+import { EventFormValues } from '../EventForm.types';
 import { Notification } from './Notification';
 import { Reminder } from './Reminder';
 import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
@@ -17,10 +18,11 @@ export const NotificationsTab = () => {
     name: 'notifications',
   });
   const reminder = watch('reminder');
+  const startTime = watch('startTime');
 
   const handleAddNotification = () => {
     append({
-      atTime: null,
+      atTime: startTime,
       triggerType: NotificationType.Fixed,
     });
   };
@@ -28,7 +30,7 @@ export const NotificationsTab = () => {
   const handleAddReminder = () => {
     setValue('reminder', {
       activityIncomplete: 0,
-      reminderTime: null,
+      reminderTime: startTime,
     });
   };
 
@@ -47,6 +49,8 @@ export const NotificationsTab = () => {
         variant="text"
         startIcon={<Svg width="18" height="18" id="add" />}
         onClick={handleAddNotification}
+        // TODO: only for release-one, remove after release
+        disabled
       >
         {t('addNotification')}
       </StyledAddBtn>
@@ -64,6 +68,8 @@ export const NotificationsTab = () => {
             variant="text"
             startIcon={<Svg width="18" height="18" id="add" />}
             onClick={handleAddReminder}
+            // TODO: only for release-one, remove after release
+            disabled
           >
             {t('addReminder')}
           </StyledAddBtn>
