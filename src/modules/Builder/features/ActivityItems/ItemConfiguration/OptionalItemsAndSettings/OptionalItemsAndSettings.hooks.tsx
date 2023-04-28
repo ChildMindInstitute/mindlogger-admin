@@ -10,13 +10,13 @@ import {
   SliderRows,
   // AudioPlayer,
   // AudioRecord,
-  // Date,
+  Date,
   // Drawing,
   // Geolocation,
-  // NumberSelection,
+  NumberSelection,
   // PhotoResponse,
   // SelectionRows,
-  // TimeRange,
+  TimeRange,
   // VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
@@ -25,14 +25,16 @@ import {
   defaultTextConfig,
   defaultSliderConfig,
   defaultSingleAndMultiSelectionConfig,
+  defaultNumberSelectionConfig,
+  defaultDateAndTimeRangeConfig,
 } from './OptionalItemsAndSettings.const';
-import { getEmptySliderOption } from '../ItemConfiguration.utils';
+import { getEmptySliderOption, getEmptyNumberSelection } from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {
     switch (responseType) {
-      // case ItemResponseType.NumberSelection:
-      //   return <NumberSelection name="minNumber" maxName="maxNumber" />;
+      case ItemResponseType.NumberSelection:
+        return <NumberSelection name={name} />;
       case ItemResponseType.Slider:
         return <SliderRows name={name} />;
       // case ItemResponseType.SliderRows:
@@ -44,14 +46,14 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       //   return <SelectionRows />;
       // case ItemResponseType.Geolocation:
       //   return <Geolocation />;
-      // case ItemResponseType.TimeRange:
-      //   return <TimeRange />;
+      case ItemResponseType.TimeRange:
+        return <TimeRange />;
       // case ItemResponseType.Video:
       //   return <VideoResponse />;
       // case ItemResponseType.Photo:
       //   return <PhotoResponse />;
-      // case ItemResponseType.Date:
-      //   return <Date />;
+      case ItemResponseType.Date:
+        return <Date />;
       // case ItemResponseType.Audio:
       //   return <AudioRecord name="audioDuration" />;
       case ItemResponseType.Text:
@@ -70,13 +72,12 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 
 export const useSettingsSetup = ({
   name,
-  removeOptions,
   handleAddOption,
   removeAlert,
   handleAddAlert,
   setShowColorPalette,
 }: SettingsSetupProps) => {
-  const { setValue, getValues, watch } = useFormContext();
+  const { setValue, getValues, watch, clearErrors } = useFormContext();
 
   const settings = watch(`${name}.config`);
 
@@ -90,7 +91,8 @@ export const useSettingsSetup = ({
   useEffect(() => {
     const subscription = watch((_, { name: fieldName, type }) => {
       if (fieldName === `${name}.responseType` && type === 'change') {
-        removeOptions?.();
+        setValue(`${name}.responseValues`, {});
+        clearErrors(`${name}.responseValues`);
 
         const responseType = getValues(`${name}.responseType`);
 
@@ -109,6 +111,15 @@ export const useSettingsSetup = ({
         if (responseType === ItemResponseType.Slider) {
           setConfig(defaultSliderConfig);
           setValue(`${name}.responseValues`, getEmptySliderOption(false));
+        }
+
+        if (responseType === ItemResponseType.NumberSelection) {
+          setConfig(defaultNumberSelectionConfig);
+          setValue(`${name}.responseValues`, getEmptyNumberSelection());
+        }
+
+        if (responseType === ItemResponseType.Date || responseType === ItemResponseType.TimeRange) {
+          setConfig(defaultDateAndTimeRangeConfig);
         }
       }
     });

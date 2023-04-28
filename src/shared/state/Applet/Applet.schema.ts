@@ -79,6 +79,25 @@ export type SliderConfig = {
   };
 };
 
+export type NumberConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+};
+
+export type DateAndTimeRangeConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -106,13 +125,26 @@ export type SingleAndMultipleSelectItemResponseValues = {
 };
 
 export type TextItemResponseValues = null;
+export type DateAndTimeRangeResponseValues = null;
+
+export type NumberItemResponseValues = {
+  minValue: number;
+  maxValue: number;
+};
 
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
-  | SliderItemResponseValues;
+  | SliderItemResponseValues
+  | NumberItemResponseValues
+  | DateAndTimeRangeResponseValues;
 
-export type Config = TextInputConfig | SingleAndMultipleSelectionConfig | SliderConfig;
+export type Config =
+  | TextInputConfig
+  | SingleAndMultipleSelectionConfig
+  | SliderConfig
+  | NumberConfig
+  | DateAndTimeRangeConfig;
 
 export type ItemAlert = {
   message: string;

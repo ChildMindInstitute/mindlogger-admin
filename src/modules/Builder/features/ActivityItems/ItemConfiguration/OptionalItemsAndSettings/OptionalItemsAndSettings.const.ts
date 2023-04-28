@@ -40,3 +40,22 @@ export const defaultSliderConfig = {
     textInputRequired: false,
   },
 };
+
+export const defaultNumberSelectionConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+};
+
+export const defaultDateAndTimeRangeConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: DEFAULT_DISABLED_TIMER_VALUE,
+};

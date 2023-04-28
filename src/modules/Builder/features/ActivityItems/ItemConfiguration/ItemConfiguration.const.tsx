@@ -15,6 +15,8 @@ export const SLIDER_LABEL_MAX_LENGTH = 11;
 export const SLIDER_VALUE_LABEL_MAX_LENGTH = 20;
 export const DEFAULT_SLIDER_MAX_VALUE = 12;
 export const DEFAULT_SLIDER_SCORE = createArray(DEFAULT_SLIDER_MAX_VALUE + 1, (i: number) => i + 1);
+export const DEFAULT_NUMBER_MIN_VALUE = 0;
+export const DEFAULT_NUMBER_MAX_VALUE = 1;
 
 export const DEFAULT_EMPTY_SLIDER = {
   minValue: DEFAULT_SLIDER_MIN_NUMBER,
@@ -48,12 +50,12 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
         icon: itemsTypeIcons[ItemResponseType.MultipleSelection],
       },
       { value: ItemResponseType.Slider, icon: itemsTypeIcons[ItemResponseType.Slider] },
-      // { value: ItemResponseType.Date, icon: itemsTypeIcons[ItemResponseType.Date] },
-      // {
-      //   value: ItemResponseType.NumberSelection,
-      //   icon: itemsTypeIcons[ItemResponseType.NumberSelection],
-      // },
-      // { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
+      { value: ItemResponseType.Date, icon: itemsTypeIcons[ItemResponseType.Date] },
+      {
+        value: ItemResponseType.NumberSelection,
+        icon: itemsTypeIcons[ItemResponseType.NumberSelection],
+      },
+      { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
     ],
   },
   // {
