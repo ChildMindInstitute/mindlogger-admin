@@ -12,7 +12,7 @@ export const links = [
   {
     icon: <Svg id="builder" />,
     activeIcon: <Svg id="builder-filled" />,
-    link: getBuilderAppletUrl(Path.NewApplet),
+    link: page.builder,
     labelKey: 'builder',
   },
   {
