@@ -12,3 +12,4 @@ export * from './Library';
 export * from './IconButton';
 export * from './Container';
 export * from './LinearProgress';
+export * from './TitleTooltipIcon';

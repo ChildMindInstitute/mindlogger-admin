@@ -638,7 +638,8 @@
   "newItemName": "Nouvel article",
   "validationMessages": {
     "isRequired": "{{- field }} est requis",
-    "alphanumeric": "{{- field }} ne doit contenir que des caractères alphanumériques ou des traits de soulignement"
+    "alphanumeric": "{{- field }} ne doit contenir que des caractères alphanumériques ou des traits de soulignement",
+    "unique": "Cette {{- field }} déja en cours d'utilisation. Veuillez utiliser un nom différent"
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",
