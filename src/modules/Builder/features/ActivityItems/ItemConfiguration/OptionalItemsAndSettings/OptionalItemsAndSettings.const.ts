@@ -49,3 +49,13 @@ export const defaultNumberSelectionConfig = {
     textInputRequired: false,
   },
 };
+
+export const defaultDateAndTimeRangeConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: DEFAULT_DISABLED_TIMER_VALUE,
+};

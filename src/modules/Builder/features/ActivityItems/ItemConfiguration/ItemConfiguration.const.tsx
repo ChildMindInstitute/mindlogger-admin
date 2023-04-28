@@ -50,12 +50,12 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
         icon: itemsTypeIcons[ItemResponseType.MultipleSelection],
       },
       { value: ItemResponseType.Slider, icon: itemsTypeIcons[ItemResponseType.Slider] },
-      // { value: ItemResponseType.Date, icon: itemsTypeIcons[ItemResponseType.Date] },
+      { value: ItemResponseType.Date, icon: itemsTypeIcons[ItemResponseType.Date] },
       {
         value: ItemResponseType.NumberSelection,
         icon: itemsTypeIcons[ItemResponseType.NumberSelection],
       },
-      // { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
+      { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
     ],
   },
   // {

@@ -88,6 +88,16 @@ export type NumberConfig = {
   };
 };
 
+export type DateAndTimeRangeConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -115,6 +125,7 @@ export type SingleAndMultipleSelectItemResponseValues = {
 };
 
 export type TextItemResponseValues = null;
+export type DateAndTimeRangeResponseValues = null;
 
 export type NumberItemResponseValues = {
   minValue: number;
@@ -125,13 +136,15 @@ export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
   | SliderItemResponseValues
-  | NumberItemResponseValues;
+  | NumberItemResponseValues
+  | DateAndTimeRangeResponseValues;
 
 export type Config =
   | TextInputConfig
   | SingleAndMultipleSelectionConfig
   | SliderConfig
-  | NumberConfig;
+  | NumberConfig
+  | DateAndTimeRangeConfig;
 
 export type ItemAlert = {
   message: string;

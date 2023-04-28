@@ -10,13 +10,13 @@ import {
   SliderRows,
   // AudioPlayer,
   // AudioRecord,
-  // Date,
+  Date,
   // Drawing,
   // Geolocation,
   NumberSelection,
   // PhotoResponse,
   // SelectionRows,
-  // TimeRange,
+  TimeRange,
   // VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
@@ -26,6 +26,7 @@ import {
   defaultSliderConfig,
   defaultSingleAndMultiSelectionConfig,
   defaultNumberSelectionConfig,
+  defaultDateAndTimeRangeConfig,
 } from './OptionalItemsAndSettings.const';
 import { getEmptySliderOption, getEmptyNumberSelection } from '../ItemConfiguration.utils';
 
@@ -45,14 +46,14 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       //   return <SelectionRows />;
       // case ItemResponseType.Geolocation:
       //   return <Geolocation />;
-      // case ItemResponseType.TimeRange:
-      //   return <TimeRange />;
+      case ItemResponseType.TimeRange:
+        return <TimeRange />;
       // case ItemResponseType.Video:
       //   return <VideoResponse />;
       // case ItemResponseType.Photo:
       //   return <PhotoResponse />;
-      // case ItemResponseType.Date:
-      //   return <Date />;
+      case ItemResponseType.Date:
+        return <Date />;
       // case ItemResponseType.Audio:
       //   return <AudioRecord name="audioDuration" />;
       case ItemResponseType.Text:
@@ -115,6 +116,10 @@ export const useSettingsSetup = ({
         if (responseType === ItemResponseType.NumberSelection) {
           setConfig(defaultNumberSelectionConfig);
           setValue(`${name}.responseValues`, getEmptyNumberSelection());
+        }
+
+        if (responseType === ItemResponseType.Date || responseType === ItemResponseType.TimeRange) {
+          setConfig(defaultDateAndTimeRangeConfig);
         }
       }
     });
