@@ -15,7 +15,7 @@ export const SliderResponseItem = ({ activityItem, answer }: SliderItemAnswer) =
       marks={marks}
       min={minValue}
       max={maxValue}
-      value={Number(answer.value)}
+      value={Number(answer?.value)}
       disabled
     />
   );
