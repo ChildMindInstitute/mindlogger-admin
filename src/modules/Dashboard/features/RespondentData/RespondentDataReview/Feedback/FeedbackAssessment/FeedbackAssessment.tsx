@@ -13,7 +13,7 @@ import { getDefaultValue } from './FeedbackAssessment.utils';
 const defaultValues = assessmentActivityItems.map(({ activityItem, answer }) => ({
   activityItemId: activityItem.id,
   answer: {
-    value: answer.value || getDefaultValue(activityItem.responseType),
+    value: answer?.value || getDefaultValue(activityItem.responseType),
   },
 }));
 
