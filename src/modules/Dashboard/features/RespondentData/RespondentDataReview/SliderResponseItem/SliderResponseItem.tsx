@@ -16,7 +16,7 @@ export const SliderResponseItem = ({ activityItem, answer }: SliderItemAnswer) =
       marks={marks}
       min={minValue}
       max={maxValue}
-      value={Number(answer?.value)}
+      value={isNaN(Number(answer?.value)) ? 0 : Number(answer?.value)}
       data-skipped={answer?.value === undefined || answer?.value === null}
     />
   );
