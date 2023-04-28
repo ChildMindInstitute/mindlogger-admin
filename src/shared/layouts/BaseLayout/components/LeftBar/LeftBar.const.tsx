@@ -1,6 +1,5 @@
 import { page } from 'resources';
 import { Svg } from 'shared/components';
-import { getBuilderAppletUrl, Path } from 'shared/utils';
 
 export const links = [
   {
