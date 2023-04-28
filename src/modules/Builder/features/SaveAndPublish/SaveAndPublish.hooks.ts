@@ -13,7 +13,7 @@ import {
   getDictionaryObject,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet } from 'shared/state';
-import { auth } from 'modules/Auth';
+import { workspaces } from 'redux/modules';
 import { EnterAppletPasswordForm } from 'shared/components';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
@@ -187,7 +187,6 @@ export const usePrompt = (isFormChanged: boolean) => {
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { trigger } = useFormContext();
-  const userData = auth.useData();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
@@ -206,7 +205,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
   const { getPassword, setPassword } = usePasswordFromStorage();
-  const ownerId = String(userData?.user?.id) || '';
+  const { ownerId } = workspaces.useData() || {};
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
 
   useEffect(() => {
@@ -309,7 +308,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
         return;
       }
 
-      if (appletId) {
+      if (appletId && ownerId) {
         await dispatch(getAppletWithItems({ ownerId, appletId }));
         navigate(getBuilderAppletUrl(appletId));
       }
