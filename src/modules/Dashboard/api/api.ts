@@ -32,6 +32,7 @@ import {
   AppletSubmitDateList,
   RespondentId,
   EventId,
+  RespondentAccesses,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -63,6 +64,15 @@ export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?
     signal,
   });
 };
+
+export const getWorkspaceRespondentAccessesApi = (
+  { ownerId, respondentId, ...params }: RespondentAccesses,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/workspaces/${ownerId}/respondents/${respondentId}/accesses`, {
+    params,
+    signal,
+  });
 
 export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
   authApiClient.get(`/workspaces/${ownerId}`, {

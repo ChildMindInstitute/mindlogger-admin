@@ -24,7 +24,10 @@ export type CalendarEvent = {
   periodicity: Periodicity;
   eventStart: Date;
   eventEnd: Date | null;
-} & Pick<Event, 'oneTimeCompletion' | 'accessBeforeSchedule' | 'timerType' | 'timer'>;
+} & Pick<
+  Event,
+  'oneTimeCompletion' | 'accessBeforeSchedule' | 'timerType' | 'timer' | 'notification'
+>;
 
 export type CreateEventsData = {
   activityOrFlowId: string;
@@ -47,6 +50,7 @@ export type CreateEventsData = {
   | 'accessBeforeSchedule'
   | 'timerType'
   | 'timer'
+  | 'notification'
 >;
 
 export type CalendarEventsSchema = {
@@ -54,6 +58,6 @@ export type CalendarEventsSchema = {
   eventsToShow: BaseSchema<CalendarEvent[] | null>;
   alwaysAvailableHidden: BaseSchema<boolean | null>;
   scheduledHidden: BaseSchema<boolean | null>;
-  yearToCreateEvents: BaseSchema<number | null>;
   createEventsData: BaseSchema<CreateEventsData[] | null>;
+  processedEventStartYear: BaseSchema<number | null>;
 };

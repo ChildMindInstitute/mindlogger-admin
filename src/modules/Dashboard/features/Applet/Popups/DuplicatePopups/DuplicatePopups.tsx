@@ -93,6 +93,7 @@ export const DuplicatePopups = () => {
 
   const passwordModalClose = () => {
     setPasswordModalVisible(false);
+    duplicatePopupsClose();
   };
 
   const submitCallback = ({ appletPassword }: { appletPassword: string }) => {

@@ -55,7 +55,8 @@ export const getRepeatsAnswer = (periodicity: Periodicity) => {
   return periodicity === Periodicity.Once ? Repeats.No : Repeats.Yes;
 };
 
-export const removeSecondsFromTime = (time: string) => {
+export const removeSecondsFromTime = (time?: string | null) => {
+  if (!time) return null;
   const [hours, minutes] = time.split(':');
 
   return `${hours}:${minutes}`;

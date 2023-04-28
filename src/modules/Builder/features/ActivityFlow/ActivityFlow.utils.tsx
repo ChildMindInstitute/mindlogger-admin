@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { Svg } from 'shared/components';
 import { ActivityFlowFormValues } from 'modules/Builder/pages';
 
@@ -32,3 +34,20 @@ export const getFlowsItemActions = ({
 ];
 
 export const getActivityFlowKey = (flow: ActivityFlowFormValues) => flow.id ?? flow.key ?? '';
+
+export const getDuplicatedActivityFlow = (flow: ActivityFlowFormValues, name: string) => {
+  const duplicatedItems =
+    flow.items?.map((item) => ({
+      ...item,
+      id: undefined,
+      key: uuidv4(),
+    })) ?? [];
+
+  return {
+    ...flow,
+    items: duplicatedItems,
+    id: undefined,
+    key: uuidv4(),
+    name,
+  };
+};

@@ -1,6 +1,5 @@
 import { page } from 'resources';
 import { Svg } from 'shared/components';
-import { getBuilderAppletUrl, Path } from 'shared/utils';
 
 export const links = [
   {
@@ -12,7 +11,7 @@ export const links = [
   {
     icon: <Svg id="builder" />,
     activeIcon: <Svg id="builder-filled" />,
-    link: getBuilderAppletUrl(Path.NewApplet),
+    link: page.builder,
     labelKey: 'builder',
   },
   {

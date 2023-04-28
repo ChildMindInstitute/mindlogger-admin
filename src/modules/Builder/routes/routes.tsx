@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { Route, Navigate, generatePath } from 'react-router-dom';
 
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
@@ -71,5 +71,16 @@ export const builderRoutes = () => (
         </Route>
       </Route>
     </Route>
+    <Route
+      path=""
+      element={
+        <Navigate
+          to={generatePath(page.builderApplet, {
+            appletId: Path.NewApplet,
+          })}
+          replace
+        />
+      }
+    />
   </Route>
 );

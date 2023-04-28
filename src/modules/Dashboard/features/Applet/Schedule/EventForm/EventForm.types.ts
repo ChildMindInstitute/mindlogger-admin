@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { TimerType, Periodicity } from 'modules/Dashboard/api';
+import { TimerType, Periodicity, EventNotifications, EventReminder } from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 
 export type EventFormRef = {
@@ -18,19 +18,10 @@ export type EventFormProps = {
   onFormChange?: (isChanged: boolean) => void;
 };
 
-export const enum NotificationType {
-  Fixed = 'fixed',
-  Random = 'random',
-}
-
-export type Notification = {
-  at?: Date | null;
-  from?: Date | null;
-  to?: Date | null;
-  type: NotificationType;
+export type Warning = {
+  showRemoveAlwaysAvailable?: boolean;
+  showRemoveAllScheduled?: boolean;
 };
-
-export type Reminder = { activityIncomplete: number; reminderTime: Date | null };
 
 export type EventFormValues = {
   activityOrFlowId: string;
@@ -45,6 +36,20 @@ export type EventFormValues = {
   timerType: TimerType;
   timerDuration: string;
   idleTime: string;
-  notifications: Notification[] | null;
-  reminder: Reminder | null;
+  notifications: EventNotifications;
+  reminder: EventReminder;
+  removeWarning: Warning;
 };
+
+export type NotificationTimeTestContext = {
+  from: {
+    value: {
+      startTime: string;
+    };
+  }[];
+};
+
+export const enum SecondsManipulation {
+  AddSeconds,
+  RemoveSeconds,
+}

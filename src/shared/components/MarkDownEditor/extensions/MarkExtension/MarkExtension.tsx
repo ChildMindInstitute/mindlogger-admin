@@ -12,7 +12,7 @@ export const MarkExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');
   const markHandler = () => {
     const generator: InsertContentGenerator = (selectedText) => ({
-      targetValue: `<mark>${selectedText}</mark>`,
+      targetValue: `==${selectedText}==`,
       select: true,
       deviationStart: 0,
       deviationEnd: 0,

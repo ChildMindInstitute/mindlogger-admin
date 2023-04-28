@@ -13,7 +13,7 @@ import {
   getDictionaryObject,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet } from 'shared/state';
-import { auth } from 'modules/Auth';
+import { workspaces } from 'redux/modules';
 import { EnterAppletPasswordForm } from 'shared/components';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
@@ -187,7 +187,6 @@ export const usePrompt = (isFormChanged: boolean) => {
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { trigger } = useFormContext();
-  const userData = auth.useData();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
@@ -206,10 +205,13 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
   const { getPassword, setPassword } = usePasswordFromStorage();
-  const ownerId = String(userData?.user?.id) || '';
+  const { ownerId } = workspaces.useData() || {};
+  const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
 
   useEffect(() => {
-    responseStatus === 'loading' && setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
+    if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
+      setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
+    }
     responseStatus === 'error' && setPublishProcessStep(SaveAndPublishSteps.Failed);
     responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
   }, [responseStatus]);
@@ -224,6 +226,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     handleSaveAndPublishFirstClick();
   };
   const handleSaveAndPublishFirstClick = async () => {
+    const isValid = await trigger();
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
     const hasNoItems = !checkIfHasAtLeastOneItem();
     const hasEmptyRequiredFields = await checkIfHasEmptyRequiredFields();
@@ -241,7 +244,6 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       return;
     }
 
-    const isValid = await trigger();
     if (!isValid) {
       if (hasEmptyRequiredFields) {
         setPublishProcessStep(SaveAndPublishSteps.EmptyRequiredFields);
@@ -286,12 +288,14 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     const body = getAppletData(appletPassword);
 
     let result;
+    checkIfAppletBeingCreatedOrUpdatedRef.current = true;
     if (isNewApplet || !appletId) {
       result = await dispatch(createApplet(body));
     }
     if (!isNewApplet && appletId) {
       result = await dispatch(updateApplet({ appletId, body }));
     }
+    checkIfAppletBeingCreatedOrUpdatedRef.current = false;
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
@@ -304,7 +308,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
         return;
       }
 
-      if (appletId) {
+      if (appletId && ownerId) {
         await dispatch(getAppletWithItems({ ownerId, appletId }));
         navigate(getBuilderAppletUrl(appletId));
       }

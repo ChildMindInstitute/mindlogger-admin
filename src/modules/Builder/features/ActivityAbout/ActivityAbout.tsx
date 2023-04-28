@@ -15,7 +15,7 @@ import { Tooltip, Uploader } from 'shared/components';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
-  MAX_FILE_SIZE_1GB,
+  MAX_FILE_SIZE_5MB,
   MAX_NAME_LENGTH,
 } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
@@ -30,18 +30,13 @@ import { itemsForReviewableActivity } from './ActivityAbout.const';
 export const ActivityAbout = () => {
   const { t } = useTranslation();
 
-  useBreadcrumbs([
-    {
-      icon: 'more-info-outlined',
-      label: t('aboutActivity'),
-    },
-  ]);
+  useBreadcrumbs();
 
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
   const activities = watch('activities');
-  const activityItems = watch(`${name}.items`);
+  const activityItems = watch(`${fieldName}.items`);
   const activityWithReviewable = activities?.find((activity: ActivityFormValues, index: number) => {
     const activityFieldName = `activities.${index}`;
 
@@ -68,7 +63,7 @@ export const ActivityAbout = () => {
   const commonUploaderProps = {
     width: 20,
     height: 20,
-    maxFileSize: MAX_FILE_SIZE_1GB,
+    maxFileSize: MAX_FILE_SIZE_5MB,
   };
 
   const uploads = [
@@ -80,7 +75,7 @@ export const ActivityAbout = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue(`${fieldName}.image`, val)}
           getValue={() => watch(`${fieldName}.image`)}
-          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
         />
       ),
     },
@@ -92,7 +87,7 @@ export const ActivityAbout = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue(`${fieldName}.splashScreen`, val)}
           getValue={() => watch(`${fieldName}.splashScreen`)}
-          description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
         />
       ),
     },
