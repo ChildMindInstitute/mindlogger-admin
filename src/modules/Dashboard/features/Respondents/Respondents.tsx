@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE } from 'shared/components';
+import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Spinner } from 'shared/components';
 import { users, workspaces } from 'redux/modules';
 import { useTimeAgo, useBreadcrumbs, useTable, useAsync } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
@@ -109,12 +109,13 @@ export const Respondents = () => {
       );
   });
 
-  const { execute: getWorkspaceRespondentAccesses } = useAsync(
+  const { execute: getWorkspaceRespondentAccesses, isLoading } = useAsync(
     getWorkspaceRespondentAccessesApi,
     (res) => {
       const appletsData = res?.data?.result as ChosenAppletData[] | undefined;
       setRespondentAccesses(appletsData ?? null);
     },
+    () => setRespondentAccesses(null),
   );
 
   const handlePinClick = (accessId: string) => {
@@ -201,10 +202,20 @@ export const Respondents = () => {
     }
 
     setChosenAppletData(null);
-  }, [respondentAccesses, chosenRespondentsItems]);
+  }, [
+    respondentAccesses,
+    chosenRespondentsItems,
+    chosenRespondentsItems,
+    scheduleSetupPopupVisible,
+    dataExportPopupVisible,
+    viewDataPopupVisible,
+    removeAccessPopupVisible,
+    editRespondentPopupVisible,
+  ]);
 
   return (
     <>
+      {isLoading && <Spinner />}
       <RespondentsTableHeader hasButton={!!id}>
         {id && (
           <StyledLeftBox>
@@ -227,49 +238,55 @@ export const Respondents = () => {
         count={respondentsData?.count || 0}
         {...tableProps}
       />
-      {scheduleSetupPopupVisible && (
-        <ScheduleSetupPopup
-          popupVisible={scheduleSetupPopupVisible}
-          setPopupVisible={setScheduleSetupPopupVisible}
-          tableRows={appletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
-      {viewDataPopupVisible && (
-        <ViewDataPopup
-          popupVisible={viewDataPopupVisible}
-          setPopupVisible={setViewDataPopupVisible}
-          tableRows={appletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
-      {removeAccessPopupVisible && (
-        <RespondentsRemoveAccessPopup
-          popupVisible={removeAccessPopupVisible}
-          setPopupVisible={setRemoveAccessPopupVisible}
-          tableRows={appletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
-      {dataExportPopupVisible && (
-        <DataExportPopup
-          popupVisible={dataExportPopupVisible}
-          setPopupVisible={setDataExportPopupVisible}
-          tableRows={appletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
-      {editRespondentPopupVisible && (
-        <EditRespondentPopup
-          popupVisible={editRespondentPopupVisible}
-          setPopupVisible={setEditRespondentPopupVisible}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          {scheduleSetupPopupVisible && (
+            <ScheduleSetupPopup
+              popupVisible={scheduleSetupPopupVisible}
+              setPopupVisible={setScheduleSetupPopupVisible}
+              tableRows={appletsSmallTableRows}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+          {viewDataPopupVisible && (
+            <ViewDataPopup
+              popupVisible={viewDataPopupVisible}
+              setPopupVisible={setViewDataPopupVisible}
+              tableRows={appletsSmallTableRows}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+          {removeAccessPopupVisible && (
+            <RespondentsRemoveAccessPopup
+              popupVisible={removeAccessPopupVisible}
+              setPopupVisible={setRemoveAccessPopupVisible}
+              tableRows={appletsSmallTableRows}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+          {dataExportPopupVisible && (
+            <DataExportPopup
+              popupVisible={dataExportPopupVisible}
+              setPopupVisible={setDataExportPopupVisible}
+              tableRows={appletsSmallTableRows}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+          {editRespondentPopupVisible && (
+            <EditRespondentPopup
+              popupVisible={editRespondentPopupVisible}
+              setPopupVisible={setEditRespondentPopupVisible}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+        </>
       )}
     </>
   );
