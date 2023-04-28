@@ -24,13 +24,30 @@ export const getAppletPageRegexp = (path?: string) =>
   path ? `${APPLET_PAGE_REGEXP_STRING}\\/${path}` : APPLET_PAGE_REGEXP_STRING;
 export const getAppletActivityPageRegexp = (path?: string) =>
   path ? `${ACTIVITY_PAGE_REGEXP_STRING}\\/${path}` : ACTIVITY_PAGE_REGEXP_STRING;
+export const getAppletActivityFlowPageRegexp = (path?: string) =>
+  path ? `${ACTIVITY_FLOW_PAGE_REGEXP_STRING}\\/${path}` : ACTIVITY_PAGE_REGEXP_STRING;
 
 export const getBuilderAppletUrl = (id: string) => `/${Path.Builder}/${id}`;
 
 export const checkIfAppletUrlPassed = (url: string) =>
   new RegExp(`^${APPLET_PAGE_REGEXP_STRING}`).test(url);
 
+export const checkIfAppletActivityUrlPassed = (url: string) =>
+  new RegExp(`^${ACTIVITY_PAGE_REGEXP_STRING}`).test(url);
+
 export const checkIfAppletActivityFlowUrlPassed = (url: string) =>
   new RegExp(`^${ACTIVITY_FLOW_PAGE_REGEXP_STRING}`).test(url);
+
+export const checkCurrentActivityPage = (url: string) => ({
+  isAbout: new RegExp(`${getAppletActivityPageRegexp(Path.About)}`).test(url),
+  isItems: new RegExp(`${getAppletActivityPageRegexp(Path.Items)}`).test(url),
+  isItemsFlow: new RegExp(`${getAppletActivityPageRegexp(Path.ItemsFlow)}`).test(url),
+  isActivitySettings: new RegExp(`${getAppletActivityPageRegexp(Path.Settings)}`).test(url),
+});
+
+export const checkCurrentActivityFlowPage = (url: string) => ({
+  isAbout: new RegExp(`${getAppletActivityFlowPageRegexp(Path.About)}`).test(url),
+  isBuilder: new RegExp(`${getAppletActivityFlowPageRegexp(Path.FlowBuilder)}`).test(url),
+});
 
 export const isNewApplet = (appletId?: string) => appletId === Path.NewApplet;

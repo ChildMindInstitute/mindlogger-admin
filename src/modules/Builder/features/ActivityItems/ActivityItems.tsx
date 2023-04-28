@@ -33,12 +33,7 @@ export const ActivityItems = () => {
     name: `${fieldName}.items`,
   });
 
-  useBreadcrumbs([
-    {
-      icon: 'item-outlined',
-      label: t('items'),
-    },
-  ]);
+  useBreadcrumbs();
 
   if (!activity) return null;
 
