@@ -1,4 +1,4 @@
-import { NotificationType } from '../../EventForm.types';
+import { NotificationType } from 'modules/Dashboard/api';
 
 export const notificationTimeToggles = [
   {

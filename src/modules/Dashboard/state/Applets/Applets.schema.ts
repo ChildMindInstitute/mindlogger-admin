@@ -2,7 +2,14 @@ import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 
 import { BaseSchema } from 'shared/state/Base';
-import { AppletId, GetAppletsParams, Periodicity, TimerType } from 'api';
+import {
+  AppletId,
+  GetAppletsParams,
+  Periodicity,
+  TimerType,
+  EventNotifications,
+  EventReminder,
+} from 'api';
 
 export type CreateAppletsStateData = {
   builder: ActionReducerMapBuilder<AppletsSchema>;
@@ -48,6 +55,10 @@ export type Event = {
   respondentId: string | null;
   activityId: string | null;
   flowId: string | null;
+  notification: {
+    notifications: EventNotifications;
+    reminder: EventReminder;
+  } | null;
 };
 
 export type AppletsSchema = {

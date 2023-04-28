@@ -98,6 +98,22 @@ export const enum Periodicity {
   Always = 'ALWAYS',
 }
 
+export const enum NotificationType {
+  Fixed = 'FIXED',
+  Random = 'RANDOM',
+}
+
+export type EventNotifications =
+  | {
+      atTime?: string | null;
+      fromTime?: string | null;
+      toTime?: string | null;
+      triggerType: NotificationType;
+    }[]
+  | null;
+
+export type EventReminder = { activityIncomplete: number; reminderTime: string | null } | null;
+
 export type CreateEventType = AppletId & {
   body: {
     startTime?: string;
@@ -115,6 +131,10 @@ export type CreateEventType = AppletId & {
     respondentId?: string;
     activityId?: string;
     flowId?: string;
+    notification: {
+      notifications: EventNotifications;
+      reminder: EventReminder;
+    } | null;
   };
 };
 

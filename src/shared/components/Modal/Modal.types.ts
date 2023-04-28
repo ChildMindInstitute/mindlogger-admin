@@ -37,4 +37,5 @@ export type ModalProps = {
   thirdBtnStyles?: SxProps;
   onThirdBtnSubmit?: BtnSubmit;
   hasActions?: boolean;
+  submitBtnTooltip?: string;
 };

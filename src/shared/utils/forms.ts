@@ -22,3 +22,6 @@ export const getDictionaryObject = (description?: string | Record<string, string
 
 export const getMaxLengthValidationError = ({ max }: { max: number }) =>
   t('visibilityDecreasesOverMaxCharacters', { max });
+
+export const getIsRequiredValidateMessage = (field: string) =>
+  t('validationMessages.isRequired', { field: t(field) });

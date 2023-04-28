@@ -100,7 +100,10 @@ export const EditEventPopup = ({
           title={t('editActivitySchedule')}
           buttonText={t('save')}
           width="67.1"
-          disabledSubmit={!!editedEvent && !isFormChanged}
+          // TODO: only for release-one, remove after release
+          // disabledSubmit={!!editedEvent && !isFormChanged}
+          disabledSubmit
+          submitBtnTooltip="Feature is not available in the current version of the system"
         >
           <>
             <StyledContainer>
@@ -109,7 +112,9 @@ export const EditEventPopup = ({
                 type="submit"
                 onClick={onRemoveEventClick}
                 startIcon={<Svg width="18" height="18" id="clear-calendar" />}
-                disabled={editedEvent.alwaysAvailable}
+                // TODO: only for release-one, remove after release
+                // disabled={editedEvent.alwaysAvailable}
+                disabled
               >
                 {t('removeEvent')}
               </StyledButton>

@@ -11,6 +11,7 @@ import {
   StyledDialogActions,
   StyledButton,
 } from './Modal.styles';
+import { Tooltip } from '../Tooltip';
 
 export const Modal = ({
   onClose,
@@ -35,6 +36,7 @@ export const Modal = ({
   thirdBtnStyles = {},
   onThirdBtnSubmit,
   hasActions = true,
+  submitBtnTooltip,
 }: ModalProps) => {
   const getActionsAlign = () => {
     if (hasThirdBtn) {
@@ -42,6 +44,30 @@ export const Modal = ({
     } else {
       return hasSecondBtn ? 'end' : 'center';
     }
+  };
+
+  const getSubmitBtn = () => {
+    if (!buttonText) return;
+    const button = (
+      <StyledButton
+        variant="text"
+        disabled={disabledSubmit}
+        onClick={onSubmit}
+        color={submitBtnColor}
+      >
+        {buttonText}
+      </StyledButton>
+    );
+
+    if (submitBtnTooltip) {
+      return (
+        <Tooltip tooltipTitle={submitBtnTooltip}>
+          <span>{button}</span>
+        </Tooltip>
+      );
+    }
+
+    return button;
   };
 
   return (
@@ -77,16 +103,7 @@ export const Modal = ({
                 {secondBtnText}
               </StyledButton>
             )}
-            {buttonText && (
-              <StyledButton
-                variant="text"
-                disabled={disabledSubmit}
-                onClick={onSubmit}
-                color={submitBtnColor}
-              >
-                {buttonText}
-              </StyledButton>
-            )}
+            {getSubmitBtn()}
           </Box>
         </StyledDialogActions>
       )}
