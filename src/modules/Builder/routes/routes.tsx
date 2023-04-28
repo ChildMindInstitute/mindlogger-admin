@@ -78,6 +78,7 @@ export const builderRoutes = () => (
           to={generatePath(page.builderApplet, {
             appletId: Path.NewApplet,
           })}
+          replace
         />
       }
     />
