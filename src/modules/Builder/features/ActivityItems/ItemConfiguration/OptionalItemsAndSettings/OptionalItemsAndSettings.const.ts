@@ -40,3 +40,23 @@ export const defaultSliderConfig = {
     textInputRequired: false,
   },
 };
+
+export const defaultAudioAndVideoConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: 0,
+};
+
+export const defaultAudioPlayerConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  playOnce: false,
+};

@@ -79,6 +79,26 @@ export type SliderConfig = {
   };
 };
 
+export type AudioAndVideoConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type AudioPlayerConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  playOnce: boolean;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -105,14 +125,31 @@ export type SingleAndMultipleSelectItemResponseValues = {
   options: Array<SingleAndMultipleSelectionOption>;
 };
 
+export type AudioPlayerResponseValues = {
+  file: string;
+};
+
+export type AudioResponseValues = {
+  maxDuration: number;
+};
+
 export type TextItemResponseValues = null;
+export type VideoResponseValues = null;
 
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
-  | SliderItemResponseValues;
+  | SliderItemResponseValues
+  | AudioPlayerResponseValues
+  | AudioResponseValues
+  | VideoResponseValues;
 
-export type Config = TextInputConfig | SingleAndMultipleSelectionConfig | SliderConfig;
+export type Config =
+  | TextInputConfig
+  | SingleAndMultipleSelectionConfig
+  | SliderConfig
+  | AudioAndVideoConfig
+  | AudioPlayerConfig;
 
 export type ItemAlert = {
   message: string;

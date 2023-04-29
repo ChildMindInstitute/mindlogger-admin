@@ -2,6 +2,8 @@ import { storage } from 'shared/utils';
 import { auth } from 'modules/Auth';
 import {
   applet,
+  AudioPlayerResponseValues,
+  AudioResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
@@ -52,9 +54,16 @@ export const mapItemResponseValues = (
       ),
     };
 
-  if (responseType === ItemResponseType.Slider)
+  if (
+    responseType === ItemResponseType.Slider ||
+    responseType === ItemResponseType.Audio ||
+    responseType === ItemResponseType.AudioPlayer
+  )
     return {
-      ...(responseValues as SliderItemResponseValues),
+      ...(responseValues as
+        | SliderItemResponseValues
+        | AudioResponseValues
+        | AudioPlayerResponseValues),
       options: undefined,
     };
 

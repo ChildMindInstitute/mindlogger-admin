@@ -8,8 +8,8 @@ import { Config } from 'shared/state';
 import {
   TextResponse,
   SliderRows,
-  // AudioPlayer,
-  // AudioRecord,
+  AudioPlayer,
+  AudioRecord,
   // Date,
   // Drawing,
   // Geolocation,
@@ -17,7 +17,7 @@ import {
   // PhotoResponse,
   // SelectionRows,
   // TimeRange,
-  // VideoResponse,
+  VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
@@ -25,8 +25,14 @@ import {
   defaultTextConfig,
   defaultSliderConfig,
   defaultSingleAndMultiSelectionConfig,
+  defaultAudioAndVideoConfig,
+  defaultAudioPlayerConfig,
 } from './OptionalItemsAndSettings.const';
-import { getEmptySliderOption } from '../ItemConfiguration.utils';
+import {
+  getEmptySliderOption,
+  getEmptyAudioPlayerResponse,
+  getEmptyAudioResponse,
+} from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {
@@ -46,18 +52,18 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       //   return <Geolocation />;
       // case ItemResponseType.TimeRange:
       //   return <TimeRange />;
-      // case ItemResponseType.Video:
-      //   return <VideoResponse />;
+      case ItemResponseType.Video:
+        return <VideoResponse />;
       // case ItemResponseType.Photo:
       //   return <PhotoResponse />;
       // case ItemResponseType.Date:
       //   return <Date />;
-      // case ItemResponseType.Audio:
-      //   return <AudioRecord name="audioDuration" />;
+      case ItemResponseType.Audio:
+        return <AudioRecord name={name} />;
       case ItemResponseType.Text:
         return <TextResponse name={name} />;
-      // case ItemResponseType.AudioPlayer:
-      //   return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
+      case ItemResponseType.AudioPlayer:
+        return <AudioPlayer name={name} fileResource="mediaFileResource" />;
       // case ItemResponseType.Drawing:
       //   return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
       default:
@@ -94,6 +100,8 @@ export const useSettingsSetup = ({
 
         const responseType = getValues(`${name}.responseType`);
 
+        const isAudio = responseType === ItemResponseType.Audio;
+
         if (
           responseType === ItemResponseType.SingleSelection ||
           responseType === ItemResponseType.MultipleSelection
@@ -109,6 +117,17 @@ export const useSettingsSetup = ({
         if (responseType === ItemResponseType.Slider) {
           setConfig(defaultSliderConfig);
           setValue(`${name}.responseValues`, getEmptySliderOption(false));
+        }
+
+        if (isAudio || responseType === ItemResponseType.Video) {
+          setConfig(defaultAudioAndVideoConfig);
+
+          isAudio && setValue(`${name}.responseValues`, getEmptyAudioResponse());
+        }
+
+        if (responseType === ItemResponseType.AudioPlayer) {
+          setConfig(defaultAudioPlayerConfig);
+          setValue(`${name}.responseValues`, getEmptyAudioPlayerResponse());
         }
       }
     });

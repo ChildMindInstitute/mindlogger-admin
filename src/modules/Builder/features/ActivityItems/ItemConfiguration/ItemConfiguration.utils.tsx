@@ -9,6 +9,7 @@ import { SliderOption } from './ItemConfiguration.types';
 import {
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
+  DEFAULT_AUDIO_DURATION_SEC,
   DEFAULT_SELECTION_ROWS_SCORE,
   DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
   SELECTION_OPTIONS_COLOR_PALETTE,
@@ -54,3 +55,11 @@ export const getPaletteColor = (paletteName: string, index: number) => {
 
   return colors?.[index % colors?.length];
 };
+
+export const getEmptyAudioPlayerResponse = () => ({
+  file: '',
+});
+
+export const getEmptyAudioResponse = () => ({
+  maxDuration: DEFAULT_AUDIO_DURATION_SEC,
+});

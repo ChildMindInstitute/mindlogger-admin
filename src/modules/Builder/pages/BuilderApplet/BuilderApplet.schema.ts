@@ -29,6 +29,14 @@ export const ResponseValuesOptionsSchema = () =>
     }),
   );
 
+export const ResponseValuesAudioPlayer = () => ({
+  maxDuration: yup.number(),
+});
+
+export const ResponseValuesVideo = () => ({
+  file: yup.string(),
+});
+
 export const ItemSchema = () =>
   yup
     .object({
@@ -54,6 +62,11 @@ export const ItemSchema = () =>
 
         if (responseType === ItemResponseType.Slider)
           return schema.shape(ResponseValuesRowsSchema());
+
+        if (responseType === ItemResponseType.AudioPlayer)
+          return schema.shape(ResponseValuesAudioPlayer());
+
+        if (responseType === ItemResponseType.Video) return schema.shape(ResponseValuesVideo());
 
         return schema.nullable();
       }),

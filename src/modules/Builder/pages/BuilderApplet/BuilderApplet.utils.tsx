@@ -5,7 +5,7 @@ import get from 'lodash.get';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
-import { SingleAndMultipleSelectionOption } from 'shared/state';
+import { AudioPlayerResponseValues, SingleAndMultipleSelectionOption } from 'shared/state';
 import { page } from 'resources';
 import {
   SingleApplet,
@@ -100,9 +100,9 @@ const getActivityItemResponseValues = (item: Item) => {
           undefined,
       };
     case ItemResponseType.Slider:
+    case ItemResponseType.Video:
+    case ItemResponseType.AudioPlayer:
       return item.responseValues;
-    case ItemResponseType.Text:
-      return null;
     default:
       return null;
   }

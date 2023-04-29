@@ -19,7 +19,7 @@ export enum ItemConfigurationSettings {
   IsResponseRequired = 'responseRequired',
   IsSkippable = 'skippableItem',
   IsContinuous = 'continuousSlider',
-  IsPlayAudioOnce = 'isPlayAudioOnce',
+  IsPlayAudioOnce = 'playOnce',
   IsGoBackRemoved = 'removeBackButton',
   IsTextInputRequired = 'additionalResponseOption.textInputRequired',
   IsUndoRemoved = 'isUndoRemoved',
