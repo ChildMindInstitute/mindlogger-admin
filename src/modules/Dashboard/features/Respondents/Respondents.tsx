@@ -4,13 +4,18 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Spinner } from 'shared/components';
 import { users, workspaces } from 'redux/modules';
-import { useTimeAgo, useBreadcrumbs, useTable, useAsync } from 'shared/hooks';
+import {
+  useTimeAgo,
+  useBreadcrumbs,
+  useTable,
+  useAsync,
+  usePasswordFromStorage,
+} from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { getWorkspaceRespondentAccessesApi, updatePinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getDateInUserTimezone } from 'shared/utils';
-import { usePasswordFromStorage } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.utils';
 
 import {
   RespondentsTableHeader,

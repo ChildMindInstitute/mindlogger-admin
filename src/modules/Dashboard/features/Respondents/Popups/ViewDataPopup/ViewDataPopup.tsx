@@ -5,8 +5,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { useSetupEnterAppletPassword } from 'shared/hooks';
-import { usePasswordFromStorage } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.utils';
+import { useSetupEnterAppletPassword, usePasswordFromStorage } from 'shared/hooks';
 
 import { page } from 'resources';
 import { ViewDataPopupProps } from './ViewDataPopup.types';
