@@ -11,7 +11,7 @@ export const useLogout = () => {
 
   //TODO: rewrite to reset the global state data besides the data needed in lock form
   return () => {
-    storage.clear();
+    storage.clear(true);
     dispatch(workspaces.actions.setCurrentWorkspace(null));
     dispatch(applets.actions.resetAppletsData());
     dispatch(auth.actions.resetAuthorization());
