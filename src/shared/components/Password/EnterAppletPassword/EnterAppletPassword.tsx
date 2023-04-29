@@ -11,6 +11,7 @@ import { getAppletData } from 'shared/utils/getAppletData';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { postAppletPasswordCheckApi } from 'shared/api';
+import { usePasswordFromStorage } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.utils';
 
 import { StyledController } from '../Password.styles';
 import { passwordFormSchema } from './EnterAppletPassword.schema';
@@ -22,10 +23,13 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
     const passwordRef = useRef<string | null>(null);
+    const { setPassword } = usePasswordFromStorage();
     const { execute } = useAsync(
       postAppletPasswordCheckApi,
       () => {
-        submitCallback && submitCallback({ appletPassword: passwordRef.current });
+        const appletPassword = passwordRef.current ?? '';
+        setPassword(appletId, appletPassword);
+        submitCallback && submitCallback({ appletPassword });
       },
       () => {
         setError('appletPassword', { message: t('incorrectAppletPassword') });

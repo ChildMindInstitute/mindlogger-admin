@@ -270,7 +270,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPublishProcessStep(undefined);
   };
   const sendRequestWithPasswordCheck = async () => {
-    const password = getPassword();
+    const password = getPassword(appletId ?? '');
     if (!password) {
       setIsPasswordPopupOpened(true);
 
