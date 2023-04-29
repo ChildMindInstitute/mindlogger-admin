@@ -10,6 +10,7 @@ import { getWorkspaceRespondentAccessesApi, updatePinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getDateInUserTimezone } from 'shared/utils';
+import { usePasswordFromStorage } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.utils';
 
 import {
   RespondentsTableHeader,
@@ -30,7 +31,7 @@ import {
 
 export const Respondents = () => {
   const dispatch = useAppDispatch();
-  const { appletId: id } = useParams();
+  const { appletId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
@@ -53,7 +54,7 @@ export const Respondents = () => {
       ...args,
       params: {
         ...args.params,
-        ...(id && { appletId: id }),
+        ...(appletId && { appletId }),
       },
     };
 
@@ -71,6 +72,8 @@ export const Respondents = () => {
 
   useBreadcrumbs();
 
+  const { getPassword } = usePasswordFromStorage();
+  const hasPassword = Boolean(getPassword(appletId ?? ''));
   const actions = {
     scheduleSetupAction: (index: number) => {
       setRespondentsDataIndex(index);
@@ -81,6 +84,15 @@ export const Respondents = () => {
       setDataExportPopupVisible(true);
     },
     viewDataAction: (index: number) => {
+      if (hasPassword && appletId) {
+        const respondentId = respondentsData?.result[index]?.id;
+        if (!respondentId) return;
+
+        navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
+
+        return;
+      }
+
       setRespondentsDataIndex(index);
       setViewDataPopupVisible(true);
     },
@@ -103,7 +115,7 @@ export const Respondents = () => {
             limit: DEFAULT_ROWS_PER_PAGE,
             search: searchValue,
             page: tableProps.page,
-            ...(id && { appletId: id }),
+            ...(appletId && { appletId }),
             ...(ordering && { ordering }),
           },
         }),
@@ -145,7 +157,7 @@ export const Respondents = () => {
         content: () => latestActive,
         value: latestActive,
       },
-      ...(id && {
+      ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
@@ -172,7 +184,7 @@ export const Respondents = () => {
 
   const renderEmptyComponent = () => {
     if (!rows?.length) {
-      return id ? t('noRespondentsForApplet') : t('noRespondents');
+      return appletId ? t('noRespondentsForApplet') : t('noRespondents');
     }
 
     return searchValue && t('noMatchWasFound', { searchValue });
@@ -193,8 +205,10 @@ export const Respondents = () => {
     if (!respondentAccesses) return;
 
     const respondentId = chosenRespondentsItems?.id;
-    if (respondentId && id) {
-      const respondentAccess = respondentAccesses.find(({ appletId }) => id === appletId);
+    if (respondentId && appletId) {
+      const respondentAccess = respondentAccesses.find(
+        ({ appletId: accessibleAppletId }) => accessibleAppletId === appletId,
+      );
       const chosenAppletData =
         respondentAccess && getChosenAppletData(respondentAccess, respondentId);
       setChosenAppletData(chosenAppletData ?? null);
@@ -216,23 +230,23 @@ export const Respondents = () => {
 
   return (
     <>
-      <RespondentsTableHeader hasButton={!!id}>
-        {id && (
+      <RespondentsTableHeader hasButton={!!appletId}>
+        {appletId && (
           <StyledLeftBox>
             <StyledButton
               variant="outlined"
               startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
-              onClick={() => navigate(generatePath(page.appletAddUser, { appletId: id }))}
+              onClick={() => navigate(generatePath(page.appletAddUser, { appletId }))}
             >
               {t('addRespondent')}
             </StyledButton>
           </StyledLeftBox>
         )}
         <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
-        {id && <StyledRightBox />}
+        {appletId && <StyledRightBox />}
       </RespondentsTableHeader>
       <Table
-        columns={getHeadCells(id)}
+        columns={getHeadCells(appletId)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={respondentsData?.count || 0}

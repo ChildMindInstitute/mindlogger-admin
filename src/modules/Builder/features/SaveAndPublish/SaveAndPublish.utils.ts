@@ -1,7 +1,6 @@
 import { storage } from 'shared/utils';
 import { auth } from 'modules/Auth';
 import {
-  applet,
   NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
@@ -74,16 +73,16 @@ export const usePasswordFromStorage = () => {
   const isNewApplet = useCheckIfNewApplet();
   const userData = auth.useData();
   const ownerId = String(userData?.user?.id) || '';
-  const { result: appletData } = applet.useAppletData() ?? {};
 
-  const getPassword = () => {
-    if (isNewApplet) return '';
-    const appletId = appletData?.id ?? '';
+  const getPassword = (appletId: string) => {
+    if (isNewApplet || !appletId || !ownerId) return '';
 
     return storage.getItem(getPasswordKey(ownerId, appletId)) as string;
   };
 
   const setPassword = (appletId: string, password: string) => {
+    if (!appletId || !ownerId) return;
+
     storage.setItem(getPasswordKey(ownerId, appletId), password);
   };
 
