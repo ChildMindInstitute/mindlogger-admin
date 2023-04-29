@@ -9,9 +9,8 @@ import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 import { getAppletData } from 'shared/utils/getAppletData';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { useAsync, usePasswordFromStorage } from 'shared/hooks';
 import { postAppletPasswordCheckApi } from 'shared/api';
-import { usePasswordFromStorage } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.utils';
 
 import { StyledController } from '../Password.styles';
 import { passwordFormSchema } from './EnterAppletPassword.schema';
