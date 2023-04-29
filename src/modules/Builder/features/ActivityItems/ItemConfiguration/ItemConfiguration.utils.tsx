@@ -13,6 +13,8 @@ import {
   DEFAULT_SELECTION_ROWS_SCORE,
   DEFAULT_EMPTY_SELECTION_ROWS_ITEM,
   SELECTION_OPTIONS_COLOR_PALETTE,
+  DEFAULT_NUMBER_MIN_VALUE,
+  DEFAULT_NUMBER_MAX_VALUE,
 } from './ItemConfiguration.const';
 
 const { t } = i18n;
@@ -62,4 +64,9 @@ export const getEmptyAudioPlayerResponse = () => ({
 
 export const getEmptyAudioResponse = () => ({
   maxDuration: DEFAULT_AUDIO_DURATION_SEC,
+});
+
+export const getEmptyNumberSelection = () => ({
+  minValue: DEFAULT_NUMBER_MIN_VALUE,
+  maxValue: DEFAULT_NUMBER_MAX_VALUE,
 });

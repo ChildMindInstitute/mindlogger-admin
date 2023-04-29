@@ -11,13 +11,18 @@ import {
   AudioPlayer,
   AudioRecord,
   // Date,
+  // AudioPlayer,
+  // AudioRecord,
+  Date,
   // Drawing,
   // Geolocation,
-  // NumberSelection,
+  NumberSelection,
   // PhotoResponse,
   // SelectionRows,
   // TimeRange,
   VideoResponse,
+  TimeRange,
+  // VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
@@ -27,18 +32,21 @@ import {
   defaultSingleAndMultiSelectionConfig,
   defaultAudioAndVideoConfig,
   defaultAudioPlayerConfig,
+  defaultNumberSelectionConfig,
+  defaultDateAndTimeRangeConfig,
 } from './OptionalItemsAndSettings.const';
 import {
   getEmptySliderOption,
   getEmptyAudioPlayerResponse,
   getEmptyAudioResponse,
+  getEmptyNumberSelection,
 } from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {
     switch (responseType) {
-      // case ItemResponseType.NumberSelection:
-      //   return <NumberSelection name="minNumber" maxName="maxNumber" />;
+      case ItemResponseType.NumberSelection:
+        return <NumberSelection name={name} />;
       case ItemResponseType.Slider:
         return <SliderRows name={name} />;
       // case ItemResponseType.SliderRows:
@@ -60,6 +68,16 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       //   return <Date />;
       case ItemResponseType.Audio:
         return <AudioRecord name={name} />;
+      case ItemResponseType.TimeRange:
+        return <TimeRange />;
+      // case ItemResponseType.Video:
+      //   return <VideoResponse />;
+      // case ItemResponseType.Photo:
+      //   return <PhotoResponse />;
+      case ItemResponseType.Date:
+        return <Date />;
+      // case ItemResponseType.Audio:
+      //   return <AudioRecord name="audioDuration" />;
       case ItemResponseType.Text:
         return <TextResponse name={name} />;
       case ItemResponseType.AudioPlayer:
@@ -76,13 +94,12 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 
 export const useSettingsSetup = ({
   name,
-  removeOptions,
   handleAddOption,
   removeAlert,
   handleAddAlert,
   setShowColorPalette,
 }: SettingsSetupProps) => {
-  const { setValue, getValues, watch } = useFormContext();
+  const { setValue, getValues, watch, clearErrors } = useFormContext();
 
   const settings = watch(`${name}.config`);
 
@@ -96,10 +113,10 @@ export const useSettingsSetup = ({
   useEffect(() => {
     const subscription = watch((_, { name: fieldName, type }) => {
       if (fieldName === `${name}.responseType` && type === 'change') {
-        removeOptions?.();
+        setValue(`${name}.responseValues`, {});
+        clearErrors(`${name}.responseValues`);
 
         const responseType = getValues(`${name}.responseType`);
-
         const isAudio = responseType === ItemResponseType.Audio;
 
         if (
@@ -128,6 +145,15 @@ export const useSettingsSetup = ({
         if (responseType === ItemResponseType.AudioPlayer) {
           setConfig(defaultAudioPlayerConfig);
           setValue(`${name}.responseValues`, getEmptyAudioPlayerResponse());
+        }
+
+        if (responseType === ItemResponseType.NumberSelection) {
+          setConfig(defaultNumberSelectionConfig);
+          setValue(`${name}.responseValues`, getEmptyNumberSelection());
+        }
+
+        if (responseType === ItemResponseType.Date || responseType === ItemResponseType.TimeRange) {
+          setConfig(defaultDateAndTimeRangeConfig);
         }
       }
     });

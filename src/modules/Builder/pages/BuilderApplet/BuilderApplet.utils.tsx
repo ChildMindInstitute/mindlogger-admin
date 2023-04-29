@@ -102,6 +102,7 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.Slider:
     case ItemResponseType.Video:
     case ItemResponseType.AudioPlayer:
+    case ItemResponseType.NumberSelection:
       return item.responseValues;
     default:
       return null;

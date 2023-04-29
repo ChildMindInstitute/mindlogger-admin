@@ -60,3 +60,23 @@ export const defaultAudioPlayerConfig = {
   },
   playOnce: false,
 };
+
+export const defaultNumberSelectionConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: 0,
+};
+
+export const defaultDateAndTimeRangeConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: DEFAULT_DISABLED_TIMER_VALUE,
+};

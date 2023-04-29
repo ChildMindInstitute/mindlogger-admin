@@ -4,6 +4,7 @@ import {
   applet,
   AudioPlayerResponseValues,
   AudioResponseValues,
+  NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
@@ -57,13 +58,15 @@ export const mapItemResponseValues = (
   if (
     responseType === ItemResponseType.Slider ||
     responseType === ItemResponseType.Audio ||
-    responseType === ItemResponseType.AudioPlayer
+    responseType === ItemResponseType.AudioPlayer ||
+    responseType === ItemResponseType.NumberSelection
   )
     return {
       ...(responseValues as
         | SliderItemResponseValues
         | AudioResponseValues
-        | AudioPlayerResponseValues),
+        | AudioPlayerResponseValues
+        | NumberItemResponseValues),
       options: undefined,
     };
 

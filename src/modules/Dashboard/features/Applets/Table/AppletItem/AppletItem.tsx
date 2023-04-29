@@ -10,11 +10,11 @@ import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
 import { page } from 'resources';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
-import { getBuilderAppletUrl } from 'shared/utils';
+import { getBuilderAppletUrl, getDateInUserTimezone } from 'shared/utils';
 
 import { ShareAppletPopup } from '../../Popups';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
-import { getActions, getDateInUserTimezone } from './AppletItem.utils';
+import { getActions } from './AppletItem.utils';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const accountData = account.useData();

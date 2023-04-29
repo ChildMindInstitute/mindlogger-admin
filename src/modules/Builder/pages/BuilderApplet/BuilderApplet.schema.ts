@@ -37,6 +37,17 @@ export const ResponseValuesVideo = () => ({
   file: yup.string(),
 });
 
+export const ResponseValuesNumberSelectionSchema = () => ({
+  minValue: yup
+    .number()
+    .when('maxValue', (maxValue, schema) =>
+      schema.lessThan(
+        maxValue,
+        t('validationMessages.lessThan', { less: t('minValue'), than: t('maxValue') }),
+      ),
+    ),
+});
+
 export const ItemSchema = () =>
   yup
     .object({
@@ -59,6 +70,9 @@ export const ItemSchema = () =>
           responseType === ItemResponseType.MultipleSelection
         )
           return schema.shape({ options: ResponseValuesOptionsSchema() });
+
+        if (responseType === ItemResponseType.NumberSelection)
+          return schema.shape(ResponseValuesNumberSelectionSchema());
 
         if (responseType === ItemResponseType.Slider)
           return schema.shape(ResponseValuesRowsSchema());

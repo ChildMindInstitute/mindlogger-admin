@@ -89,6 +89,25 @@ export type AudioAndVideoConfig = {
   timer: number;
 };
 
+export type NumberConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+};
+
+export type DateAndTimeRangeConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
 export type AudioPlayerConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
@@ -135,6 +154,12 @@ export type AudioResponseValues = {
 
 export type TextItemResponseValues = null;
 export type VideoResponseValues = null;
+export type DateAndTimeRangeResponseValues = null;
+
+export type NumberItemResponseValues = {
+  minValue: number;
+  maxValue: number;
+};
 
 export type ResponseValues =
   | TextItemResponseValues
@@ -142,14 +167,18 @@ export type ResponseValues =
   | SliderItemResponseValues
   | AudioPlayerResponseValues
   | AudioResponseValues
-  | VideoResponseValues;
+  | VideoResponseValues
+  | NumberItemResponseValues
+  | DateAndTimeRangeResponseValues;
 
 export type Config =
   | TextInputConfig
   | SingleAndMultipleSelectionConfig
   | SliderConfig
   | AudioAndVideoConfig
-  | AudioPlayerConfig;
+  | AudioPlayerConfig
+  | NumberConfig
+  | DateAndTimeRangeConfig;
 
 export type ItemAlert = {
   message: string;
