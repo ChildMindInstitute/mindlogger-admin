@@ -70,18 +70,14 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
         return <AudioRecord name={name} />;
       case ItemResponseType.TimeRange:
         return <TimeRange />;
-      // case ItemResponseType.Video:
-      //   return <VideoResponse />;
       // case ItemResponseType.Photo:
       //   return <PhotoResponse />;
       case ItemResponseType.Date:
         return <Date />;
-      // case ItemResponseType.Audio:
-      //   return <AudioRecord name="audioDuration" />;
       case ItemResponseType.Text:
         return <TextResponse name={name} />;
       case ItemResponseType.AudioPlayer:
-        return <AudioPlayer name={name} fileResource="mediaFileResource" />;
+        return <AudioPlayer name={name} />;
       // case ItemResponseType.Drawing:
       //   return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
       default:

@@ -1,46 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { FieldValues, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium, theme, variables } from 'shared/styles';
 import { Svg } from 'shared/components';
-import { InputController } from 'shared/components/FormComponents';
-import { ItemResponseType } from 'shared/consts';
 import {
+  MediaType,
   MediaUploader,
-  ResourceDataType,
   SharedToggleItemProps,
   ToggleItemContainer,
 } from 'modules/Builder/components';
 import { StyledName, StyledNameWrapper } from './AudioPlayer.styles';
 import { AudioPlayerProps } from './AudioPlayer.types';
-import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 
-export const AudioPlayer = ({ name, fileResource }: AudioPlayerProps<FieldValues>) => {
+export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const { t } = useTranslation('app');
-  const [resourceData, setResourceData] = useState<ResourceDataType | null>(null);
+  const [media, setMedia] = useState<MediaType | null>(null);
   const { setValue } = useFormContext();
 
-  const { control } = useOptionalItemSetup({
-    itemType: ItemResponseType.AudioPlayer,
-    name,
-  });
-
-  useOptionalItemSetup({
-    itemType: ItemResponseType.AudioPlayer,
-    name: fileResource,
-  });
-
   useEffect(() => {
-    setValue(fileResource, resourceData?.url ?? undefined);
-  }, [resourceData]);
+    setValue(`${name}.responseValues.file`, media?.url ?? undefined);
+  }, [media?.url]);
 
   const HeaderContent = ({ open }: SharedToggleItemProps) =>
-    !open && !!resourceData ? (
+    !open && !!media ? (
       <StyledNameWrapper>
-        {resourceData.uploaded && <Svg id="check" width={18} height={18} />}{' '}
-        <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{resourceData.name}</StyledName>
+        {media && <Svg id="check" width={18} height={18} />}{' '}
+        <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{media?.name}</StyledName>
       </StyledNameWrapper>
     ) : null;
 
@@ -49,18 +36,7 @@ export const AudioPlayer = ({ name, fileResource }: AudioPlayerProps<FieldValues
       <StyledTitleMedium color={variables.palette.on_surface} sx={{ mb: theme.spacing(1) }}>
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
-      <InputController
-        sx={{ mb: theme.spacing(2) }}
-        name={name}
-        control={control}
-        label={t('mediaTranscript')}
-      />
-      <MediaUploader
-        width={20}
-        height={20}
-        resourceData={resourceData}
-        setResourceData={setResourceData}
-      />
+      <MediaUploader width={20} height={20} media={media} onUpload={setMedia} />
     </Box>
   );
 

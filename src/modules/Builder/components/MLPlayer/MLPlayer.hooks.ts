@@ -2,7 +2,7 @@ import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { OnProgressProps } from 'react-player/base';
 import ReactPlayer from 'react-player/lazy';
 
-import { ResourceDataType } from '../MediaUploader';
+import { MediaType } from '../MediaUploader';
 import { MLPlayerStateProps } from './MLPlayer.types';
 import { PLAYER_DEFAULTS } from './MLPlayer.const';
 
@@ -14,8 +14,8 @@ const calculateTime = (secs: number) => {
   return `${minutes}:${returnedSeconds}`;
 };
 
-export const useMLPlayerSetup = (resourceData: ResourceDataType | null) => {
-  const { name: fileName, url, uploaded } = resourceData ?? {};
+export const useMLPlayerSetup = (media: MediaType | null) => {
+  const { name: fileName, url, uploaded } = media ?? {};
 
   const [state, setState] = useState<MLPlayerStateProps>(PLAYER_DEFAULTS);
 

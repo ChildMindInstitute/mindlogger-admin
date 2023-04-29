@@ -1,7 +1,7 @@
-import { ResourceDataType } from '../MediaUploader';
+import { MediaType } from '../MediaUploader';
 
 export type MLPlayerProps = {
-  resourceData: ResourceDataType | null;
+  media: MediaType | null;
   onRemove: () => void;
 };
 export type MLPlayerStateProps = {

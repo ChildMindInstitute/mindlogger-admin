@@ -29,11 +29,11 @@ export const ResponseValuesOptionsSchema = () =>
     }),
   );
 
-export const ResponseValuesAudioPlayer = () => ({
+export const ResponseValuesAudio = () => ({
   maxDuration: yup.number(),
 });
 
-export const ResponseValuesVideo = () => ({
+export const ResponseValuesAudioPlayer = () => ({
   file: yup.string(),
 });
 
@@ -80,7 +80,7 @@ export const ItemSchema = () =>
         if (responseType === ItemResponseType.AudioPlayer)
           return schema.shape(ResponseValuesAudioPlayer());
 
-        if (responseType === ItemResponseType.Video) return schema.shape(ResponseValuesVideo());
+        if (responseType === ItemResponseType.Audio) return schema.shape(ResponseValuesAudio());
 
         return schema.nullable();
       }),

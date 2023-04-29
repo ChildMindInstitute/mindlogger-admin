@@ -15,15 +15,11 @@ import { useMediaUploader } from './MediaUploader.hooks';
 import { MediaUploaderProps } from './MediaUploader.types';
 import { MLPlayer } from '../MLPlayer';
 
-export const MediaUploader = ({
-  width,
-  height,
-  resourceData,
-  setResourceData,
-}: MediaUploaderProps) => {
+export const MediaUploader = ({ width, height, media, onUpload }: MediaUploaderProps) => {
   const { t } = useTranslation('app');
   const { uploadInputRef, error, dragEvents, handleChange, onRemove } = useMediaUploader({
-    setResourceData,
+    media,
+    onUpload,
   });
 
   return (
@@ -36,7 +32,7 @@ export const MediaUploader = ({
         name="uploadFile"
         hidden
       />
-      {!resourceData ? (
+      {!media ? (
         <>
           <StyledTitle>
             {t('audio')}
@@ -76,7 +72,7 @@ export const MediaUploader = ({
           <StyledNameWrapper>{t('uploadAudioDescription')}</StyledNameWrapper>
         </>
       ) : (
-        <MLPlayer resourceData={resourceData} onRemove={onRemove} />
+        <MLPlayer media={media} onRemove={onRemove} />
       )}
     </>
   );
