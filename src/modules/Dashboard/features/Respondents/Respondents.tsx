@@ -91,9 +91,8 @@ export const Respondents = () => {
     viewDataAction: (index: number) => {
       if (hasPassword && appletId) {
         const respondentId = respondentsData?.result[index]?.id;
-        if (!respondentId) return;
-
-        navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
+        respondentId &&
+          navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
 
         return;
       }
