@@ -184,11 +184,19 @@ export type SingleAndMultipleSelectRow = {
   rowName: string;
   rowImage?: string;
   tooltip?: string;
-  options: Array<SingleAndMultipleSelectRowOption>;
+};
+
+export type SingleAndMultipleSelectOption = {
+  id: string;
+  text: string;
+  image: string | null;
+  score: number | null;
+  tooltip: string | null;
 };
 
 export type SingleAndMultipleSelectRowsResponseValues = {
   rows: Array<SingleAndMultipleSelectRow>;
+  options: Array<SingleAndMultipleSelectOption>;
 };
 
 export type TextItemResponseValues = null;
@@ -210,6 +218,7 @@ export type DrawingResponseValues = {
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
+  | SingleAndMultipleSelectRowsResponseValues
   | SliderItemResponseValues
   | NumberItemResponseValues
   | DateAndTimeRangeResponseValues
@@ -272,18 +281,6 @@ export interface SliderItem extends Item {
   responseType: ItemResponseType.Slider;
   config: SliderConfig;
   responseValues: SliderItemResponseValues;
-}
-
-export interface SingleSelectRowsItem extends Item {
-  responseType: ItemResponseType.SingleSelectionPerRow;
-  config: SingleAndMultipleSelectionPerRowConfig;
-  responseValues: SingleAndMultipleSelectRowsResponseValues;
-}
-
-export interface MultiSelectRowsItem extends Item {
-  responseType: ItemResponseType.MultipleSelectionPerRow;
-  config: SingleAndMultipleSelectionPerRowConfig;
-  responseValues: SingleAndMultipleSelectRowsResponseValues;
 }
 
 export type Activity = {

@@ -11,7 +11,6 @@ import {
   variables,
   theme,
 } from 'shared/styles';
-import { SingleAndMultipleSelectRow } from 'shared/state';
 
 import { StyledSelectController } from './Header.styles';
 import { HeaderProps } from './Header.types';
@@ -34,38 +33,26 @@ const commonButtonProps = {
 export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps) => {
   const { t } = useTranslation('app');
 
-  const rowsName = `${name}.responseValues.rows`;
-
   const { watch, getValues, setValue } = useFormContext();
 
-  const rows = watch(`${rowsName}`);
+  const optionsName = `${name}.responseValues.options`;
+  const options = watch(optionsName);
+
   const settings = watch(`${name}.config`);
 
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
 
   const handleChange = (e: SelectEvent) => {
-    const rows = getValues(`${rowsName}`);
+    const options = getValues(optionsName);
 
-    if (+e.target.value < rows[0]?.options?.length) {
-      setValue(
-        rowsName,
-        rows?.map((row: SingleAndMultipleSelectRow) => ({
-          ...row,
-          options: row.options?.slice(0, +e.target.value),
-        })),
-      );
-    } else {
-      setValue(
-        rowsName,
-        rows?.map((row: SingleAndMultipleSelectRow) => ({
-          ...row,
-          options: [
-            ...row.options,
-            ...getEmptySelectionItemOptions(+e.target.value - row.options?.length, hasScores),
-          ],
-        })),
-      );
-    }
+    const newValue = +e.target.value;
+
+    setValue(
+      optionsName,
+      newValue < options?.length
+        ? options?.slice(0, +e.target.value)
+        : [...options, ...getEmptySelectionItemOptions(newValue - options?.length, hasScores)],
+    );
   };
 
   return (
@@ -83,7 +70,7 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
             options={getMultipleSelectionRowsOptions()}
             customChange={handleChange}
             variant="standard"
-            value={`${rows[0]?.options?.length || ''}`}
+            value={`${options?.length || ''}`}
             SelectProps={{
               IconComponent: (props) => <Svg {...commonSelectArrowProps} {...props} />,
             }}

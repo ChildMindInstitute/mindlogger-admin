@@ -7,7 +7,7 @@ import get from 'lodash.get';
 import { UploaderUiType, Uploader, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
-import { SingleAndMultipleSelectRow, SingleAndMultipleSelectRowOption } from 'shared/state';
+import { SingleAndMultipleSelectRow, SingleAndMultipleSelectOption } from 'shared/state';
 
 import {
   StyledSelectionRowItem,
@@ -30,7 +30,9 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
 
   const { watch, control, setValue } = useFormContext();
 
+  const optionsName = `${name}.responseValues.options`;
   const rows = watch(`${name}.responseValues.rows`);
+  const options = watch(optionsName);
   const settings = watch(`${name}.config`);
 
   const hasTooltips = get(settings, ItemConfigurationSettings.HasTooltips);
@@ -69,11 +71,11 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
             </StyledFlexTopCenter>
           )}
         </StyledSelectionBox>
-        {row.options?.map((option: SingleAndMultipleSelectRowOption, key: number) => {
-          const optionName = `${rowName}.options.${key}`;
+        {options?.map((option: SingleAndMultipleSelectOption, key: number) => {
+          const optionName = `${optionsName}.${key}`;
           const scoreName = `${optionName}.score`;
           const isRemoveButtonVisible =
-            hasRemoveButton && key === row.options?.length - 1 && index !== 0;
+            hasRemoveButton && key === options?.length - 1 && index !== 0;
 
           const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
             if (event.target.value === '') return setValue(scoreName, 0);

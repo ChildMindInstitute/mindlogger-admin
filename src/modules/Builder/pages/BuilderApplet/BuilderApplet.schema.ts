@@ -22,11 +22,11 @@ export const ResponseValuesSliderRowsSchema = () => ({
 export const ResponseValuesSelectionRowsSchema = () =>
   yup.object({
     rowName: yup.string().required(getIsRequiredValidateMessage('row')),
-    options: yup.array().of(
-      yup.object({
-        text: yup.string().required(getIsRequiredValidateMessage('option')),
-      }),
-    ),
+  });
+
+export const ResponseValuesSelectionOptionsSchema = () =>
+  yup.object({
+    text: yup.string().required(getIsRequiredValidateMessage('option')),
   });
 
 export const ResponseValuesOptionsSchema = () =>
@@ -83,7 +83,10 @@ export const ItemSchema = () =>
           responseType === ItemResponseType.SingleSelectionPerRow ||
           responseType === ItemResponseType.MultipleSelectionPerRow
         ) {
-          return schema.shape({ rows: yup.array().of(ResponseValuesSelectionRowsSchema()) });
+          return schema.shape({
+            rows: yup.array().of(ResponseValuesSelectionRowsSchema()),
+            options: yup.array().of(ResponseValuesSelectionOptionsSchema()),
+          });
         }
 
         return schema.nullable();

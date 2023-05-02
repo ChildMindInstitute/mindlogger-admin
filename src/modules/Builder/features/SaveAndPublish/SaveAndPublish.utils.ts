@@ -54,18 +54,21 @@ export const mapItemResponseValues = (
   if (
     responseType === ItemResponseType.Slider ||
     responseType === ItemResponseType.NumberSelection ||
-    responseType === ItemResponseType.Drawing ||
-    responseType === ItemResponseType.SingleSelectionPerRow ||
-    responseType === ItemResponseType.MultipleSelectionPerRow
+    responseType === ItemResponseType.Drawing
   )
     return {
       ...(responseValues as
         | SliderItemResponseValues
         | NumberItemResponseValues
-        | DrawingResponseValues
-        | SingleAndMultipleSelectRowsResponseValues),
+        | DrawingResponseValues),
       options: undefined,
     };
+
+  if (
+    responseType === ItemResponseType.SingleSelectionPerRow ||
+    responseType === ItemResponseType.MultipleSelectionPerRow
+  )
+    return responseValues as SingleAndMultipleSelectRowsResponseValues;
 
   return null;
 };

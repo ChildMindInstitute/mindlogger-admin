@@ -80,7 +80,6 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 export const useSettingsSetup = ({
   name,
   handleAddOption,
-  removeRowOptions,
   handleAddRowOption,
   removeAlert,
   handleAddAlert,

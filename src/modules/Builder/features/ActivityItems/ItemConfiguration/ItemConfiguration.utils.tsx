@@ -44,17 +44,18 @@ export const getEmptySliderOption = (isMultiple: boolean): SliderOption => ({
   ...(isMultiple ? DEFAULT_EMPTY_SLIDER_ROWS : DEFAULT_EMPTY_SLIDER),
 });
 
-export const getEmptySelectionItemOptions = (length: number, hasScores?: boolean) =>
-  createArray(length, () => ({
-    id: uuidv4(),
-    text: '',
-    ...(hasScores && { score: DEFAULT_SELECTION_ROWS_SCORE }),
-  }));
+export const getEmptySelectionItemOption = (hasScores?: boolean) => ({
+  id: uuidv4(),
+  text: '',
+  ...(hasScores && { score: DEFAULT_SELECTION_ROWS_SCORE }),
+});
 
-export const getEmptySelectionItem = (length: number, hasScores?: boolean) => ({
+export const getEmptySelectionItemOptions = (length: number, hasScores?: boolean) =>
+  createArray(length, () => getEmptySelectionItemOption(hasScores));
+
+export const getEmptySelectionItem = () => ({
   id: uuidv4(),
   rowName: '',
-  options: getEmptySelectionItemOptions(length, hasScores),
 });
 
 export const getPaletteColor = (paletteName: string, index: number) => {

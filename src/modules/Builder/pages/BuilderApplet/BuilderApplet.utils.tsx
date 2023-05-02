@@ -5,14 +5,18 @@ import get from 'lodash.get';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
-import { SingleAndMultipleSelectionOption } from 'shared/state';
+import {
+  DrawingResponseValues,
+  NumberItemResponseValues,
+  SingleAndMultipleSelectionOption,
+  SliderItemResponseValues,
+} from 'shared/state';
 import { page } from 'resources';
 import {
   SingleApplet,
   Item,
   ActivityFlow,
   SingleAndMultipleSelectItemResponseValues,
-  SingleAndMultipleSelectRowsResponseValues,
 } from 'shared/state';
 import { getDictionaryText, Path } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
@@ -103,12 +107,16 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.Slider:
     case ItemResponseType.NumberSelection:
     case ItemResponseType.Drawing:
-      return item.responseValues;
-    case ItemResponseType.Text:
-      return null;
+      return {
+        ...(item.responseValues as
+          | SliderItemResponseValues
+          | NumberItemResponseValues
+          | DrawingResponseValues),
+        options: undefined,
+      };
     case ItemResponseType.SingleSelectionPerRow:
     case ItemResponseType.MultipleSelectionPerRow:
-      return item.responseValues as SingleAndMultipleSelectRowsResponseValues;
+      return item.responseValues;
     default:
       return null;
   }

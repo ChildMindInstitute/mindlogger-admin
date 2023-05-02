@@ -13,7 +13,11 @@ import { Svg } from 'shared/components';
 
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
-import { getPaletteColor } from '../ItemConfiguration.utils';
+import {
+  getPaletteColor,
+  getEmptySelectionItem,
+  getEmptySelectionItemOption,
+} from '../ItemConfiguration.utils';
 import {
   ColorPalette,
   ItemSettingsController,
@@ -89,17 +93,10 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
       });
 
-    const handleAddRowOption = () =>
-      appendRowOption({
-        id: uuidv4(),
-        rowName: '',
-        options: [
-          {
-            id: uuidv4(),
-            text: '',
-          },
-        ],
-      });
+    const handleAddRowOption = () => {
+      appendRowOption(getEmptySelectionItem());
+      appendOption(getEmptySelectionItemOption());
+    };
 
     // const handleAddAlert = () =>
     //   appendAlert({
