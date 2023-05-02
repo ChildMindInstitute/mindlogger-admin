@@ -4,9 +4,9 @@ import { Accordion } from 'modules/Dashboard/components';
 
 import { ReportTable } from '../../ReportTable';
 import { SubscalesTypes } from '../Subscales.const';
-import { Subscale as SubscaleType } from '../Subscales.types';
+import { SubscaleProps } from './Subscale.types';
 
-export const Subscale = ({ items }: { items: SubscaleType[] }) => {
+export const Subscale = ({ items }: SubscaleProps) => {
   const renderItem = (type?: SubscalesTypes) => {
     switch (type) {
       case SubscalesTypes.Table:
