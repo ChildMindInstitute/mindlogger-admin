@@ -1,13 +1,10 @@
-import { storage } from 'shared/utils';
-import { auth } from 'modules/Auth';
 import {
-  applet,
+  DrawingResponseValues,
   NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
 } from 'shared/state';
-import { useCheckIfNewApplet } from 'shared/hooks';
 import { ItemResponseType } from 'shared/consts';
 import { ColorResult } from 'react-color';
 
@@ -53,42 +50,18 @@ export const mapItemResponseValues = (
       ),
     };
 
-  if (responseType === ItemResponseType.Slider)
+  if (
+    responseType === ItemResponseType.Slider ||
+    responseType === ItemResponseType.NumberSelection ||
+    responseType === ItemResponseType.Drawing
+  )
     return {
-      ...(responseValues as SliderItemResponseValues),
-      options: undefined,
-    };
-
-  if (responseType === ItemResponseType.NumberSelection)
-    return {
-      ...(responseValues as NumberItemResponseValues),
+      ...(responseValues as
+        | SliderItemResponseValues
+        | NumberItemResponseValues
+        | DrawingResponseValues),
       options: undefined,
     };
 
   return null;
-};
-
-const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
-
-export const usePasswordFromStorage = () => {
-  const isNewApplet = useCheckIfNewApplet();
-  const userData = auth.useData();
-  const ownerId = String(userData?.user?.id) || '';
-  const { result: appletData } = applet.useAppletData() ?? {};
-
-  const getPassword = () => {
-    if (isNewApplet) return '';
-    const appletId = appletData?.id ?? '';
-
-    return storage.getItem(getPasswordKey(ownerId, appletId)) as string;
-  };
-
-  const setPassword = (appletId: string, password: string) => {
-    storage.setItem(getPasswordKey(ownerId, appletId), password);
-  };
-
-  return {
-    getPassword,
-    setPassword,
-  };
 };

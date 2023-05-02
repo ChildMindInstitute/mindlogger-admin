@@ -49,8 +49,6 @@ export const NotificationsTab = () => {
         variant="text"
         startIcon={<Svg width="18" height="18" id="add" />}
         onClick={handleAddNotification}
-        // TODO: only for release-one, remove after release
-        disabled
       >
         {t('addNotification')}
       </StyledAddBtn>
@@ -68,8 +66,6 @@ export const NotificationsTab = () => {
             variant="text"
             startIcon={<Svg width="18" height="18" id="add" />}
             onClick={handleAddReminder}
-            // TODO: only for release-one, remove after release
-            disabled
           >
             {t('addReminder')}
           </StyledAddBtn>

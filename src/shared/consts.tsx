@@ -70,6 +70,7 @@ export enum ItemResponseType {
   AudioPlayer = 'audioPlayer',
   Flanker = 'flanker',
   AbTest = 'abTest',
+  Time = 'time',
 }
 
 export const itemsTypeIcons = {
@@ -90,6 +91,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.Audio]: <Svg id="audio" />,
   [ItemResponseType.Message]: <Svg id="quote" />,
   [ItemResponseType.AudioPlayer]: <Svg id="audio-player" />,
+  [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
   [ItemResponseType.AbTest]: null,
 };

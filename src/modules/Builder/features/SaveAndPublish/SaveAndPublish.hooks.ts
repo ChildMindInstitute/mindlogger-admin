@@ -5,7 +5,12 @@ import { ValidationError } from 'yup';
 
 import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
-import { useCallbackPrompt, useCheckIfNewApplet, usePromptSetup } from 'shared/hooks';
+import {
+  useCallbackPrompt,
+  useCheckIfNewApplet,
+  usePromptSetup,
+  usePasswordFromStorage,
+} from 'shared/hooks';
 import {
   APPLET_PAGE_REGEXP_STRING,
   builderSessionStorage,
@@ -25,7 +30,6 @@ import {
   removeAppletExtraFields,
   removeActivityExtraFields,
   mapItemResponseValues,
-  usePasswordFromStorage,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -270,7 +274,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPublishProcessStep(undefined);
   };
   const sendRequestWithPasswordCheck = async () => {
-    const password = getPassword();
+    const password = getPassword(appletId ?? '');
     if (!password) {
       setIsPasswordPopupOpened(true);
 
