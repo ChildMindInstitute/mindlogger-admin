@@ -5,7 +5,13 @@ import get from 'lodash.get';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
-import { SingleAndMultipleSelectionOption } from 'shared/state';
+import {
+  DrawingResponseValues,
+  NumberItemResponseValues,
+  SingleAndMultipleSelectionOption,
+  SliderItemResponseValues,
+  SliderRowsResponseValues,
+} from 'shared/state';
 import { page } from 'resources';
 import {
   SingleApplet,
@@ -99,10 +105,18 @@ const getActivityItemResponseValues = (item: Item) => {
           (item.responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ??
           undefined,
       };
+    case ItemResponseType.SliderRows:
     case ItemResponseType.Slider:
     case ItemResponseType.NumberSelection:
     case ItemResponseType.Drawing:
-      return item.responseValues;
+      return {
+        ...(item.responseValues as
+          | SliderRowsResponseValues
+          | SliderItemResponseValues
+          | NumberItemResponseValues
+          | DrawingResponseValues),
+        options: undefined,
+      };
     case ItemResponseType.Text:
       return null;
     default:

@@ -4,6 +4,7 @@ import {
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
+  SliderRowsResponseValues,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { ColorResult } from 'react-color';
@@ -62,6 +63,9 @@ export const mapItemResponseValues = (
         | DrawingResponseValues),
       options: undefined,
     };
+
+  if (responseType === ItemResponseType.SliderRows)
+    return { rows: (responseValues as SliderRowsResponseValues)?.rows };
 
   return null;
 };

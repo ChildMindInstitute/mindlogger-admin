@@ -7,6 +7,7 @@ import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export type ItemSettingsControllerProps<T extends FieldValues> = {
   inputType: ItemResponseType | '';
+  itemName: string;
 } & UseControllerProps<T>;
 
 export type ItemSettingsOptionsGroup = {
