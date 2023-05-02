@@ -55,6 +55,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
         value: ItemResponseType.NumberSelection,
         icon: itemsTypeIcons[ItemResponseType.NumberSelection],
       },
+      {
+        value: ItemResponseType.Time,
+        icon: itemsTypeIcons[ItemResponseType.Time],
+      },
       { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
     ],
   },

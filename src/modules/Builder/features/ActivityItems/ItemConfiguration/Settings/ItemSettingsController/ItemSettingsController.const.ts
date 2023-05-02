@@ -346,4 +346,22 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
       collapsedByDefault: true,
     },
   ],
+  [ItemResponseType.Time]: [
+    {
+      groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
+      groupOptions: [
+        ItemConfigurationSettings.HasTextInput,
+        ItemConfigurationSettings.IsTextInputRequired,
+      ],
+    },
+    {
+      groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
+      groupOptions: [
+        ItemConfigurationSettings.HasTimer,
+        ItemConfigurationSettings.IsSkippable,
+        ItemConfigurationSettings.IsGoBackRemoved,
+      ],
+      collapsedByDefault: true,
+    },
+  ],
 };

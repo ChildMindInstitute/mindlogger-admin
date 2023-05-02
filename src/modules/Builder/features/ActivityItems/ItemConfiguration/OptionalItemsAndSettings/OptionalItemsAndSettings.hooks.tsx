@@ -16,7 +16,7 @@ import {
   NumberSelection,
   PhotoResponse,
   SelectionRows,
-  TimeRange,
+  Time,
   VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
@@ -29,6 +29,7 @@ import {
   defaultNumberSelectionConfig,
   defaultDateAndTimeRangeConfig,
   defaultDrawingConfig,
+  defaultTimeConfig,
   defaultPhotoConfig,
   defaultGeolocationConfig,
   defaultMessageConfig,
@@ -51,7 +52,9 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       case ItemResponseType.Geolocation:
         return <Geolocation />;
       case ItemResponseType.TimeRange:
-        return <TimeRange />;
+        return <Time isRange />;
+      case ItemResponseType.Time:
+        return <Time />;
       case ItemResponseType.Video:
         return <VideoResponse />;
       case ItemResponseType.Photo:
@@ -141,6 +144,9 @@ export const useSettingsSetup = ({
           case ItemResponseType.SliderRows:
             handleAddRow?.();
             setConfig(defaultSliderRowsConfig);
+            break;
+          case ItemResponseType.Time:
+            setConfig(defaultTimeConfig);
             break;
         }
       }

@@ -36,6 +36,7 @@ export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
   [ItemResponseType.Audio]: t('audioHint'),
   [ItemResponseType.Message]: t('messageHint'),
   [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
+  [ItemResponseType.Time]: t('timeHint'),
   [ItemResponseType.Flanker]: '',
   [ItemResponseType.AbTest]: '',
 });
