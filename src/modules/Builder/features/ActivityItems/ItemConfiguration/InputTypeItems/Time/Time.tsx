@@ -5,18 +5,22 @@ import { StyledIconBtn, StyledTextField } from 'shared/components/DatePicker/Dat
 import { theme } from 'shared/styles/theme';
 import { StyledFlexTopStart } from 'shared/styles/styledComponents';
 
+import { TimeProps } from './Time.types';
 import { ItemOptionContainer } from '../ItemOptionContainer';
 
-export const TimeRange = () => {
+export const Time = ({ isRange }: TimeProps) => {
   const { t } = useTranslation('app');
 
   return (
-    <ItemOptionContainer title={t('timeRangeTitle')}>
+    <ItemOptionContainer
+      title={t(isRange ? 'timeRangeTitle' : 'timeTitle')}
+      description={t(isRange ? 'timeRangeDescription' : 'timeDescription')}
+    >
       <StyledFlexTopStart>
         <StyledTextField
           disabled
           variant="outlined"
-          label={t('startTime')}
+          label={t(isRange ? 'startTime' : 'time')}
           InputProps={{
             endAdornment: (
               <StyledIconBtn disabled>
@@ -26,18 +30,20 @@ export const TimeRange = () => {
           }}
           sx={{ mr: theme.spacing(2) }}
         />
-        <StyledTextField
-          disabled
-          variant="outlined"
-          label={t('endTime')}
-          InputProps={{
-            endAdornment: (
-              <StyledIconBtn disabled>
-                <Svg id="clock" />
-              </StyledIconBtn>
-            ),
-          }}
-        />
+        {isRange && (
+          <StyledTextField
+            disabled
+            variant="outlined"
+            label={t('endTime')}
+            InputProps={{
+              endAdornment: (
+                <StyledIconBtn disabled>
+                  <Svg id="clock" />
+                </StyledIconBtn>
+              ),
+            }}
+          />
+        )}
       </StyledFlexTopStart>
     </ItemOptionContainer>
   );

@@ -9,6 +9,7 @@ import {
   SelectionUiType,
   Slider,
   SliderRows,
+  Time,
   TimeRange,
   SelectionPerRow,
 } from './TooltipComponents';
@@ -34,6 +35,7 @@ export const getInputTypeContent = () => ({
   [ItemResponseType.Audio]: <Dashed uiType={DashedUiType.Audio} />,
   [ItemResponseType.Message]: <Dashed uiType={DashedUiType.Message} />,
   [ItemResponseType.AudioPlayer]: <Dashed uiType={DashedUiType.AudioPlayer} />,
+  [ItemResponseType.Time]: <Time />,
   [ItemResponseType.Flanker]: null,
   [ItemResponseType.AbTest]: null,
 });
