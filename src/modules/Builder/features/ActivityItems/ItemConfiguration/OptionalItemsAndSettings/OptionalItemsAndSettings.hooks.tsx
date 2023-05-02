@@ -14,7 +14,7 @@ import {
   Drawing,
   // Geolocation,
   NumberSelection,
-  // PhotoResponse,
+  PhotoResponse,
   // SelectionRows,
   TimeRange,
   // VideoResponse,
@@ -28,6 +28,7 @@ import {
   defaultNumberSelectionConfig,
   defaultDateAndTimeRangeConfig,
   defaultDrawingConfig,
+  defaultPhotoConfig,
 } from './OptionalItemsAndSettings.const';
 import { getEmptySliderOption, getEmptyNumberSelection } from '../ItemConfiguration.utils';
 
@@ -51,8 +52,8 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
         return <TimeRange />;
       // case ItemResponseType.Video:
       //   return <VideoResponse />;
-      // case ItemResponseType.Photo:
-      //   return <PhotoResponse />;
+      case ItemResponseType.Photo:
+        return <PhotoResponse />;
       case ItemResponseType.Date:
         return <Date />;
       // case ItemResponseType.Audio:
@@ -97,34 +98,33 @@ export const useSettingsSetup = ({
 
         const responseType = getValues(`${name}.responseType`);
 
-        if (
-          responseType === ItemResponseType.SingleSelection ||
-          responseType === ItemResponseType.MultipleSelection
-        ) {
-          handleAddOption?.();
-          setConfig(defaultSingleAndMultiSelectionConfig);
-        }
-
-        if (responseType === ItemResponseType.Text) {
-          setConfig(defaultTextConfig);
-        }
-
-        if (responseType === ItemResponseType.Slider) {
-          setConfig(defaultSliderConfig);
-          setValue(`${name}.responseValues`, getEmptySliderOption(false));
-        }
-
-        if (responseType === ItemResponseType.NumberSelection) {
-          setConfig(defaultNumberSelectionConfig);
-          setValue(`${name}.responseValues`, getEmptyNumberSelection());
-        }
-
-        if (responseType === ItemResponseType.Date || responseType === ItemResponseType.TimeRange) {
-          setConfig(defaultDateAndTimeRangeConfig);
-        }
-
-        if (responseType === ItemResponseType.Drawing) {
-          setConfig(defaultDrawingConfig);
+        switch (responseType) {
+          case ItemResponseType.SingleSelection:
+          case ItemResponseType.MultipleSelection:
+            handleAddOption?.();
+            setConfig(defaultSingleAndMultiSelectionConfig);
+            break;
+          case ItemResponseType.Text:
+            setConfig(defaultTextConfig);
+            break;
+          case ItemResponseType.Slider:
+            setConfig(defaultSliderConfig);
+            setValue(`${name}.responseValues`, getEmptySliderOption(false));
+            break;
+          case ItemResponseType.NumberSelection:
+            setConfig(defaultNumberSelectionConfig);
+            setValue(`${name}.responseValues`, getEmptyNumberSelection());
+            break;
+          case ItemResponseType.Date:
+          case ItemResponseType.TimeRange:
+            setConfig(defaultDateAndTimeRangeConfig);
+            break;
+          case ItemResponseType.Drawing:
+            setConfig(defaultDrawingConfig);
+            break;
+          case ItemResponseType.Photo:
+            setConfig(defaultPhotoConfig);
+            break;
         }
       }
     });

@@ -71,3 +71,13 @@ export const defaultDrawingConfig = {
   removeUndoButton: false,
   navigationToTop: false,
 };
+
+export const defaultPhotoConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: 0,
+};
