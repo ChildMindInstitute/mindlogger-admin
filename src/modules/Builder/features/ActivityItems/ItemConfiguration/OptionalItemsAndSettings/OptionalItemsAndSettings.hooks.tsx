@@ -8,16 +8,16 @@ import { Config } from 'shared/state';
 import {
   TextResponse,
   SliderRows,
-  // AudioPlayer,
-  // AudioRecord,
+  AudioPlayer,
+  AudioRecord,
   Date,
-  // Drawing,
-  // Geolocation,
+  Drawing,
+  Geolocation,
   NumberSelection,
-  // PhotoResponse,
-  // SelectionRows,
+  PhotoResponse,
+  SelectionRows,
   TimeRange,
-  // VideoResponse,
+  VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
@@ -37,31 +37,31 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
         return <NumberSelection name={name} />;
       case ItemResponseType.Slider:
         return <SliderRows name={name} />;
-      // case ItemResponseType.SliderRows:
-      //   return <SliderRows name="sliderOptions" control={control} isMultiple />;
+      case ItemResponseType.SliderRows:
+        return <SliderRows name="sliderOptions" isMultiple />;
 
-      // case ItemResponseType.SingleSelectionPerRow:
-      //   return <SelectionRows isSingle />;
-      // case ItemResponseType.MultipleSelectionPerRow:
-      //   return <SelectionRows />;
-      // case ItemResponseType.Geolocation:
-      //   return <Geolocation />;
+      case ItemResponseType.SingleSelectionPerRow:
+        return <SelectionRows isSingle />;
+      case ItemResponseType.MultipleSelectionPerRow:
+        return <SelectionRows />;
+      case ItemResponseType.Geolocation:
+        return <Geolocation />;
       case ItemResponseType.TimeRange:
         return <TimeRange />;
-      // case ItemResponseType.Video:
-      //   return <VideoResponse />;
-      // case ItemResponseType.Photo:
-      //   return <PhotoResponse />;
+      case ItemResponseType.Video:
+        return <VideoResponse />;
+      case ItemResponseType.Photo:
+        return <PhotoResponse />;
       case ItemResponseType.Date:
         return <Date />;
-      // case ItemResponseType.Audio:
-      //   return <AudioRecord name="audioDuration" />;
+      case ItemResponseType.Audio:
+        return <AudioRecord name="audioDuration" />;
       case ItemResponseType.Text:
         return <TextResponse name={name} />;
-      // case ItemResponseType.AudioPlayer:
-      //   return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
-      // case ItemResponseType.Drawing:
-      //   return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
+      case ItemResponseType.AudioPlayer:
+        return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
+      case ItemResponseType.Drawing:
+        return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
       default:
         null;
     }
