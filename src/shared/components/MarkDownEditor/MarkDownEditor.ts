@@ -66,7 +66,7 @@ MdEditor.config({
         return src.match(/==/)?.index;
       },
       tokenizer(src) {
-        const rule = /^==([^=]+(?<!=)=?(?!=)[^=]+)==|^==([^=]*)==/;
+        const rule = /^==([^=]+(?:=|)(?!\\)=?(?!\\)[^=]+)==|^==([^=]*)==/;
         const match = rule.exec(src);
         if (match) {
           const token = {
@@ -91,7 +91,7 @@ MdEditor.config({
         return src.match(/\+\+/)?.index;
       },
       tokenizer(src) {
-        const rule = /^\+\+([^+]+(?<!\+)=?(?!\+)[^+]+)\+\+|^\+\+([^+]*)\+\+/;
+        const rule = /^\+\+([^+]+(?:\+|)(?<!\\)=?(?<!\\)[^+]+)\+\+|^\+\+([^+]*)\+\+/;
         const match = rule.exec(src);
         if (match) {
           const token = {
