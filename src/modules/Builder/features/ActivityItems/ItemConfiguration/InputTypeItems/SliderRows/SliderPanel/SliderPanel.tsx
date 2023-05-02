@@ -40,7 +40,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
   const [isExpanded, setIsExpanded] = useState(true);
   const [error, setError] = useState<FieldError | undefined>();
 
-  const sliderName = `${name}.responseValues${isMultiple ? `.${index}` : ''}`;
+  const sliderName = `${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`;
 
   const { t } = useTranslation('app');
 
@@ -142,6 +142,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
       <Header
         name={name}
         label={label}
+        index={index}
         isExpanded={isExpanded}
         onArrowClick={handleCollapse}
         onTrashClick={onRemove}

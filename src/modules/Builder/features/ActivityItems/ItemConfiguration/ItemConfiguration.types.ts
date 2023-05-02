@@ -61,18 +61,6 @@ export type OptionalItemSetupProps = {
   defaultValue?: unknown;
 };
 
-export type SliderOption = {
-  id?: string;
-  minValue: number;
-  maxValue: number;
-  minLabel?: string;
-  maxLabel?: string;
-  minImage?: string;
-  maxImage?: string;
-  scores: number[];
-  label?: string;
-};
-
 export type ItemConfigurationProps = {
   name: string;
   onClose: () => void;

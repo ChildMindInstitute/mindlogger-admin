@@ -145,16 +145,26 @@ export type MessageConfig = {
   timer: number;
 };
 
+export type SliderRowsConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  timer: number;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
   maxLabel: string;
   minValue: number;
   maxValue: number;
-  minImage: string;
-  maxImage: string;
+  minImage?: string;
+  maxImage?: string;
   scores?: number[];
 };
+
+export type SliderRowsItemResponseValues = SliderItemResponseValues & { label: string };
 
 export type SingleAndMultipleSelectionOption = {
   id: string;
@@ -199,6 +209,10 @@ export type SingleAndMultipleSelectRowsResponseValues = {
   options: Array<SingleAndMultipleSelectOption>;
 };
 
+export type SliderRowsResponseValues = {
+  rows: Array<SliderRowsItemResponseValues>;
+};
+
 export type TextItemResponseValues = null;
 export type DateAndTimeRangeResponseValues = null;
 export type PhotoResponseValues = null;
@@ -219,6 +233,7 @@ export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
   | SingleAndMultipleSelectRowsResponseValues
+  | SliderRowsResponseValues
   | SliderItemResponseValues
   | NumberItemResponseValues
   | DateAndTimeRangeResponseValues
@@ -232,6 +247,7 @@ export type Config =
   | SingleAndMultipleSelectionConfig
   | SliderConfig
   | SingleAndMultipleSelectionPerRowConfig
+  | SliderRowsConfig
   | NumberConfig
   | DateAndTimeRangeConfig
   | DrawingConfig

@@ -15,6 +15,7 @@ import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
 import {
   getPaletteColor,
+  getEmptySliderOption,
   getEmptySelectionItem,
   getEmptySelectionItemOption,
 } from '../ItemConfiguration.utils';
@@ -65,7 +66,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       control,
       name: `${name}.responseValues.options`,
     });
-    const { append: appendRowOption, remove: removeRowOptions } = useFieldArray({
+
+    const { append: appendRow } = useFieldArray({
       control,
       name: `${name}.responseValues.rows`,
     });
@@ -93,10 +95,13 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
       });
 
-    const handleAddRowOption = () => {
-      appendRowOption(getEmptySelectionItem());
+    const handleAddSingleOrMultipleRow = () => {
+      appendRow(getEmptySelectionItem());
       appendOption(getEmptySelectionItemOption());
     };
+
+    const handleAddSliderRow = () =>
+      appendRow(getEmptySliderOption({ isMultiple: true, hasScores }));
 
     // const handleAddAlert = () =>
     //   appendAlert({
@@ -174,10 +179,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
 
     useSettingsSetup({
       name,
-      removeOptions,
       handleAddOption,
-      removeRowOptions,
-      handleAddRowOption,
+      handleAddSliderRow,
+      handleAddSingleOrMultipleRow,
       // removeAlert: () => {}, //TODO: remove after backend ready
       // handleAddAlert: () => {}, //TODO: remove after backend ready
       setShowColorPalette: handleChangeColorPaletteVisibility,
@@ -244,6 +248,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           >
             <ItemSettingsController
               name={`${name}.config`}
+              itemName={name}
               inputType={responseType}
               control={control}
             />

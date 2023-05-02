@@ -24,6 +24,7 @@ import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import {
   defaultTextConfig,
   defaultSliderConfig,
+  defaultSliderRowsConfig,
   defaultSingleAndMultiSelectionConfig,
   defaultSingleAndMultiSelectionRowsConfig,
   defaultNumberSelectionConfig,
@@ -44,7 +45,7 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       case ItemResponseType.Slider:
         return <SliderRows name={name} />;
       case ItemResponseType.SliderRows:
-        return <SliderRows name="sliderOptions" isMultiple />;
+        return <SliderRows name={name} isMultiple />;
       case ItemResponseType.SingleSelectionPerRow:
         return <SelectionRows name={name} isSingle />;
       case ItemResponseType.MultipleSelectionPerRow:
@@ -80,7 +81,8 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 export const useSettingsSetup = ({
   name,
   handleAddOption,
-  handleAddRowOption,
+  handleAddSliderRow,
+  handleAddSingleOrMultipleRow,
   removeAlert,
   handleAddAlert,
   setShowColorPalette,
@@ -115,7 +117,10 @@ export const useSettingsSetup = ({
             break;
           case ItemResponseType.Slider:
             setConfig(defaultSliderConfig);
-            setValue(`${name}.responseValues`, getEmptySliderOption(false));
+            setValue(
+              `${name}.responseValues`,
+              getEmptySliderOption({ isMultiple: false, hasScores: false }),
+            );
             break;
           case ItemResponseType.NumberSelection:
             setConfig(defaultNumberSelectionConfig);
@@ -137,12 +142,16 @@ export const useSettingsSetup = ({
           case ItemResponseType.Message:
             setConfig(defaultMessageConfig);
             break;
+          case ItemResponseType.SliderRows:
+            handleAddSliderRow?.();
+            setConfig(defaultSliderRowsConfig);
+            break;
           case ItemResponseType.Time:
             setConfig(defaultTimeConfig);
             break;
           case ItemResponseType.SingleSelectionPerRow:
           case ItemResponseType.MultipleSelectionPerRow:
-            handleAddRowOption?.();
+            handleAddSingleOrMultipleRow?.();
             setConfig(defaultSingleAndMultiSelectionRowsConfig);
             break;
         }

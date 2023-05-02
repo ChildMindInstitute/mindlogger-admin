@@ -7,6 +7,7 @@ export type ItemSettingsGroupProps = {
   name: string;
   value?: any;
   onChange: (...event: any[]) => void;
+  itemName: string;
   groupName: ItemSettingsGroupNames;
   inputType: ItemResponseType | '';
   groupOptions: ItemConfigurationSettings[];

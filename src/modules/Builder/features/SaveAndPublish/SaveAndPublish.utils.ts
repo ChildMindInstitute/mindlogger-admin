@@ -5,6 +5,7 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
   SliderItemResponseValues,
+  SliderRowsResponseValues,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { ColorResult } from 'react-color';
@@ -54,13 +55,15 @@ export const mapItemResponseValues = (
   if (
     responseType === ItemResponseType.Slider ||
     responseType === ItemResponseType.NumberSelection ||
-    responseType === ItemResponseType.Drawing
+    responseType === ItemResponseType.Drawing ||
+    responseType === ItemResponseType.SliderRows
   )
     return {
       ...(responseValues as
         | SliderItemResponseValues
         | NumberItemResponseValues
-        | DrawingResponseValues),
+        | DrawingResponseValues
+        | SliderRowsResponseValues),
       options: undefined,
     };
 

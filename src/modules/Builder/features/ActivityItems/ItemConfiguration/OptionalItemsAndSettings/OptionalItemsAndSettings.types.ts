@@ -15,10 +15,9 @@ export type ActiveItemHookProps = {
 
 export type SettingsSetupProps = {
   name: string;
-  removeOptions?: () => void;
   handleAddOption?: () => void;
-  removeRowOptions?: () => void;
-  handleAddRowOption?: () => void;
+  handleAddSliderRow?: () => void;
+  handleAddSingleOrMultipleRow?: () => void;
   removeAlert?: () => void;
   handleAddAlert?: () => void;
   setShowColorPalette?: (visibility: boolean) => void;

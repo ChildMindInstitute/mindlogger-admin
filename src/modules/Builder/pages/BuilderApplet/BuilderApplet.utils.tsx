@@ -10,6 +10,7 @@ import {
   NumberItemResponseValues,
   SingleAndMultipleSelectionOption,
   SliderItemResponseValues,
+  SliderRowsResponseValues,
 } from 'shared/state';
 import { page } from 'resources';
 import {
@@ -104,11 +105,13 @@ const getActivityItemResponseValues = (item: Item) => {
           (item.responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ??
           undefined,
       };
+    case ItemResponseType.SliderRows:
     case ItemResponseType.Slider:
     case ItemResponseType.NumberSelection:
     case ItemResponseType.Drawing:
       return {
         ...(item.responseValues as
+          | SliderRowsResponseValues
           | SliderItemResponseValues
           | NumberItemResponseValues
           | DrawingResponseValues),
