@@ -81,3 +81,18 @@ export const defaultPhotoConfig = {
   },
   timer: 0,
 };
+
+export const defaultGeolocationConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: 0,
+};
+
+export const defaultMessageConfig = {
+  removeBackButton: false,
+  timer: 0,
+};

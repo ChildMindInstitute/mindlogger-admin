@@ -29,6 +29,8 @@ import {
   defaultDateAndTimeRangeConfig,
   defaultDrawingConfig,
   defaultPhotoConfig,
+  defaultGeolocationConfig,
+  defaultMessageConfig,
 } from './OptionalItemsAndSettings.const';
 import { getEmptySliderOption, getEmptyNumberSelection } from '../ItemConfiguration.utils';
 
@@ -123,6 +125,12 @@ export const useSettingsSetup = ({
             break;
           case ItemResponseType.Photo:
             setConfig(defaultPhotoConfig);
+            break;
+          case ItemResponseType.Geolocation:
+            setConfig(defaultGeolocationConfig);
+            break;
+          case ItemResponseType.Message:
+            setConfig(defaultMessageConfig);
             break;
         }
       }

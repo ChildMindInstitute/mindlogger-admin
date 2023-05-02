@@ -120,6 +120,22 @@ export type PhotoConfig = {
   timer: number;
 };
 
+export type GeolocationConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type MessageConfig = {
+  skippableItem?: boolean;
+  removeBackButton: boolean;
+  timer: number;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -149,6 +165,8 @@ export type SingleAndMultipleSelectItemResponseValues = {
 export type TextItemResponseValues = null;
 export type DateAndTimeRangeResponseValues = null;
 export type PhotoResponseValues = null;
+export type GeolocationResponseValues = null;
+export type MessageResponseValues = null;
 
 export type NumberItemResponseValues = {
   minValue: number;
@@ -167,7 +185,9 @@ export type ResponseValues =
   | NumberItemResponseValues
   | DateAndTimeRangeResponseValues
   | DrawingResponseValues
-  | PhotoResponseValues;
+  | PhotoResponseValues
+  | GeolocationResponseValues
+  | MessageResponseValues;
 
 export type Config =
   | TextInputConfig
@@ -176,7 +196,9 @@ export type Config =
   | NumberConfig
   | DateAndTimeRangeConfig
   | DrawingConfig
-  | PhotoConfig;
+  | PhotoConfig
+  | GeolocationConfig
+  | MessageConfig;
 
 export type ItemAlert = {
   message: string;
