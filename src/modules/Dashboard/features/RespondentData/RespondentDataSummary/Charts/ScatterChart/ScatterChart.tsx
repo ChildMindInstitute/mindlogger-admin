@@ -7,6 +7,8 @@ import {
   LineElement,
   Tooltip,
   TimeScale,
+  TooltipItem,
+  ScriptableTooltipContext,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -27,12 +29,12 @@ ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 export const ScatterChart = ({ height = '50px' }: ScatterChartProps) => {
   const { i18n } = useTranslation('app');
   const [tooltipPosition, setTooltipPosition] = useState<ChartTooltipPosition | null>(null);
-  const [tooltipData, setTooltipData] = useState<any>(null);
+  const [tooltipData, setTooltipData] = useState<TooltipItem<'scatter'> | null>(null);
   const chartRef = useRef<ChartJSOrUndefined<'scatter', { x: Date; y: number }[], unknown> | null>(
     null,
   );
 
-  const tooltipHandler = (context: any) => {
+  const tooltipHandler = (context: ScriptableTooltipContext<'scatter'>) => {
     const { tooltip } = context;
     const { dataPoints } = tooltip;
     if (tooltip.opacity === 0) {
@@ -62,7 +64,9 @@ export const ScatterChart = ({ height = '50px' }: ScatterChartProps) => {
         data={getData(mocked)}
         plugins={[ChartDataLabels]}
       />
-      {tooltipPosition && <ChartTooltip data={tooltipData} position={tooltipPosition} />}
+      {tooltipPosition && tooltipData && (
+        <ChartTooltip data={tooltipData} position={tooltipPosition} />
+      )}
     </Box>
   );
 };
