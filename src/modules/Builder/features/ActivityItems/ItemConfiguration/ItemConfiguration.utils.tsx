@@ -8,10 +8,10 @@ import { SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/s
 import {
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
-  DEFAULT_SELECTION_ROWS_SCORE,
   SELECTION_OPTIONS_COLOR_PALETTE,
   DEFAULT_NUMBER_MIN_VALUE,
   DEFAULT_NUMBER_MAX_VALUE,
+  DEFAULT_SCORE_VALUE,
 } from './ItemConfiguration.const';
 
 const { t } = i18n;
@@ -54,7 +54,7 @@ export const getEmptySliderOption = ({
 export const getEmptySelectionItemOption = (hasScores?: boolean) => ({
   id: uuidv4(),
   text: '',
-  ...(hasScores && { score: DEFAULT_SELECTION_ROWS_SCORE }),
+  ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
 });
 
 export const getEmptySelectionItemOptions = (length: number, hasScores?: boolean) =>

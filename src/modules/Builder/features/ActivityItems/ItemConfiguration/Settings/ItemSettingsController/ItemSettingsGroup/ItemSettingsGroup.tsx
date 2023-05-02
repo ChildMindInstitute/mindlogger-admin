@@ -8,7 +8,11 @@ import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, variables, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
-import { SingleAndMultipleSelectionOption, SliderRowsItemResponseValues } from 'shared/state';
+import {
+  SingleAndMultipleSelectRowOption,
+  SingleAndMultipleSelectionOption,
+  SliderRowsItemResponseValues,
+} from 'shared/state';
 
 import {
   StyledFormControl,
@@ -152,10 +156,17 @@ export const ItemSettingsGroup = ({
                           }),
                         ),
                       );
-                    //TODO: add changing score field
                     case ItemResponseType.SingleSelectionPerRow:
                     case ItemResponseType.MultipleSelectionPerRow:
-                      return;
+                      return setValue(
+                        `${itemName}.responseValues.options`,
+                        getValues(`${itemName}.responseValues.options`)?.map(
+                          (option: SingleAndMultipleSelectRowOption) => ({
+                            ...option,
+                            score: hasScores ? DEFAULT_SCORE_VALUE : undefined,
+                          }),
+                        ),
+                      );
                   }
                 }
 
