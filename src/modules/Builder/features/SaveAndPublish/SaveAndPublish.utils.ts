@@ -65,7 +65,7 @@ export const mapItemResponseValues = (
     };
 
   if (responseType === ItemResponseType.SliderRows)
-    return { rows: (responseValues as SliderRowsResponseValues).rows };
+    return { rows: (responseValues as SliderRowsResponseValues)?.rows };
 
   return null;
 };

@@ -90,7 +90,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
       });
 
-    const handleAddRow = () => appendRow(getEmptySliderOption(true));
+    const handleAddRow = () => appendRow(getEmptySliderOption({ isMultiple: true, hasScores }));
 
     // const handleAddAlert = () =>
     //   appendAlert({
@@ -238,6 +238,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           >
             <ItemSettingsController
               name={`${name}.config`}
+              itemName={name}
               inputType={responseType}
               control={control}
             />

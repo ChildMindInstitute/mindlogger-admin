@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
+import get from 'lodash.get';
 
 import { Svg } from 'shared/components';
 import { theme, StyledFlexColumn } from 'shared/styles';
@@ -9,10 +10,14 @@ import { SliderItemResponseValues } from 'shared/state';
 import { SliderPanel } from './SliderPanel';
 import { SliderProps } from './SliderRows.types';
 import { getEmptySliderOption } from '../../ItemConfiguration.utils';
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
   const { t } = useTranslation('app');
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
+
+  const settings = watch(`${name}.config`);
+  const hasScores = get(settings, ItemConfigurationSettings.HasScores);
 
   return (
     <Controller
@@ -20,7 +25,7 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
       control={control}
       render={({ field: { onChange, value } }) => {
         const handleAddSlider = () => {
-          onChange([...value, getEmptySliderOption(isMultiple)]);
+          onChange([...value, getEmptySliderOption({ isMultiple, hasScores })]);
         };
 
         return (

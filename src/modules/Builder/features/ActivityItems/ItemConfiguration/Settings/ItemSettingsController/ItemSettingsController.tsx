@@ -6,6 +6,7 @@ import { itemSettingsOptionsByInputType } from './ItemSettingsController.const';
 
 export const ItemSettingsController = <T extends FieldValues>({
   name,
+  itemName,
   inputType,
   control,
 }: ItemSettingsControllerProps<T>) =>
@@ -19,6 +20,7 @@ export const ItemSettingsController = <T extends FieldValues>({
             ({ groupName, groupOptions, collapsedByDefault }) => (
               <ItemSettingsGroup
                 name={name}
+                itemName={itemName}
                 key={`item-settings-group-${groupName}`}
                 value={value}
                 onChange={onChange}

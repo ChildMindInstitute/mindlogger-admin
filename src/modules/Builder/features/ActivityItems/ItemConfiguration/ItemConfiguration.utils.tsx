@@ -40,11 +40,16 @@ export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
   [ItemResponseType.AbTest]: '',
 });
 
-export const getEmptySliderOption = (
-  isMultiple: boolean,
-): SliderItemResponseValues | SliderRowsItemResponseValues => ({
+export const getEmptySliderOption = ({
+  isMultiple,
+  hasScores,
+}: {
+  isMultiple?: boolean;
+  hasScores?: boolean;
+}): SliderItemResponseValues | SliderRowsItemResponseValues => ({
   ...(isMultiple && { id: uuidv4() }),
   ...(isMultiple ? DEFAULT_EMPTY_SLIDER_ROWS : DEFAULT_EMPTY_SLIDER),
+  ...(!hasScores && { scores: undefined }),
 });
 
 export const getEmptySelectionItem = (scoresQuantity: number) => ({
@@ -63,3 +68,6 @@ export const getEmptyNumberSelection = () => ({
   minValue: DEFAULT_NUMBER_MIN_VALUE,
   maxValue: DEFAULT_NUMBER_MAX_VALUE,
 });
+
+export const getDefaultSliderScores = ({ minValue, maxValue }: SliderRowsItemResponseValues) =>
+  createArray(maxValue - minValue + 1, (index) => index + 1);
