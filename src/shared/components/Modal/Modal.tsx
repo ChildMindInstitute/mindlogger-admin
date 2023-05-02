@@ -1,3 +1,5 @@
+import { Box } from '@mui/material';
+
 import { Svg } from 'shared/components/Svg';
 import theme from 'shared/styles/theme';
 
@@ -9,6 +11,7 @@ import {
   StyledDialogActions,
   StyledButton,
 } from './Modal.styles';
+import { Tooltip } from '../Tooltip';
 
 export const Modal = ({
   onClose,
@@ -33,6 +36,7 @@ export const Modal = ({
   thirdBtnStyles = {},
   onThirdBtnSubmit,
   hasActions = true,
+  submitBtnTooltip,
 }: ModalProps) => {
   const getActionsAlign = () => {
     if (hasThirdBtn) {
@@ -40,6 +44,30 @@ export const Modal = ({
     } else {
       return hasSecondBtn ? 'end' : 'center';
     }
+  };
+
+  const getSubmitBtn = () => {
+    if (!buttonText) return;
+    const button = (
+      <StyledButton
+        variant="text"
+        disabled={disabledSubmit}
+        onClick={onSubmit}
+        color={submitBtnColor}
+      >
+        {buttonText}
+      </StyledButton>
+    );
+
+    if (submitBtnTooltip) {
+      return (
+        <Tooltip tooltipTitle={submitBtnTooltip}>
+          <span>{button}</span>
+        </Tooltip>
+      );
+    }
+
+    return button;
   };
 
   return (
@@ -52,7 +80,7 @@ export const Modal = ({
       </StyledDialogTitle>
       {children}
       {hasActions && (
-        <StyledDialogActions actionsAlign={getActionsAlign()} sx={{ p: 0 }}>
+        <StyledDialogActions actionsAlign={getActionsAlign()}>
           {hasThirdBtn && (
             <StyledButton
               fontWeight="regular"
@@ -63,7 +91,7 @@ export const Modal = ({
               {thirdBtnText}
             </StyledButton>
           )}
-          <StyledDialogActions>
+          <Box>
             {hasSecondBtn && (
               <StyledButton
                 fontWeight="regular"
@@ -75,17 +103,8 @@ export const Modal = ({
                 {secondBtnText}
               </StyledButton>
             )}
-            {buttonText && (
-              <StyledButton
-                variant="text"
-                disabled={disabledSubmit}
-                onClick={onSubmit}
-                color={submitBtnColor}
-              >
-                {buttonText}
-              </StyledButton>
-            )}
-          </StyledDialogActions>
+            {getSubmitBtn()}
+          </Box>
         </StyledDialogActions>
       )}
     </StyledDialog>

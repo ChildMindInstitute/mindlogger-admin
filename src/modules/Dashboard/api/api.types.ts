@@ -10,12 +10,13 @@ export type GetAppletsParams = {
     limit?: number;
     ordering?: string;
     roles?: string;
+    appletId?: string;
   };
 };
 
 export type SwitchAccount = { accountId: string };
 
-export type UserId = { userId: string };
+export type RespondentId = { respondentId: string };
 
 export type FolderId = { folderId: string };
 
@@ -97,6 +98,22 @@ export const enum Periodicity {
   Always = 'ALWAYS',
 }
 
+export const enum NotificationType {
+  Fixed = 'FIXED',
+  Random = 'RANDOM',
+}
+
+export type EventNotifications =
+  | {
+      atTime?: string | null;
+      fromTime?: string | null;
+      toTime?: string | null;
+      triggerType: NotificationType;
+    }[]
+  | null;
+
+export type EventReminder = { activityIncomplete: number; reminderTime: string | null } | null;
+
 export type CreateEventType = AppletId & {
   body: {
     startTime?: string;
@@ -114,6 +131,10 @@ export type CreateEventType = AppletId & {
     respondentId?: string;
     activityId?: string;
     flowId?: string;
+    notification: {
+      notifications: EventNotifications;
+      reminder: EventReminder;
+    } | null;
   };
 };
 
@@ -145,16 +166,14 @@ export type AppletInvitationData = AppletId & {
 
 export type DuplicateApplet = AppletId & {
   options: {
-    name: string;
+    password: string;
+    displayName: string;
   };
-  data: FormData;
 };
 
 export type AppletNameArgs = AppletId & { appletName: string };
 
 export type AppletEncryption = AppletId & { data: FormData };
-
-export type ValidateAppletName = { name: string };
 
 export type UpdatePin = {
   accessId: string;
@@ -184,6 +203,39 @@ export type OwnerId = {
   ownerId: string;
 };
 
-export type Answers = { id: string; respondentId: string; createdDate: string };
+export type Answers = { id: string; createdDate: string } & RespondentId;
 
 export type Answer = AppletId & { answerId: string };
+
+export type AppletUniqueName = {
+  name: string;
+};
+
+export type NoteId = { noteId: string };
+
+export type Note = { note: string };
+
+export type GetAnswersNotesParams = {
+  params: {
+    search?: string;
+    page?: number;
+    limit?: number;
+    ordering?: string;
+  };
+};
+
+export type AppletSubmitDateList = AppletId &
+  RespondentId & {
+    fromDate: string;
+    toDate: string;
+  };
+
+export type EventId = { eventId: string };
+
+export type RespondentAccesses = OwnerId &
+  RespondentId & {
+    search?: string;
+    page?: number;
+    limit?: number;
+    ordering?: string;
+  };

@@ -17,9 +17,8 @@ export const StyledItemConfiguration = styled(StyledFlexColumn)`
 
   .MuiFormHelperText-root {
     position: absolute;
-    bottom: -2.4rem;
+    top: 100%;
     font-size: ${variables.font.size.md};
-    white-space: nowrap;
   }
 
   .md-editor.isRequired + .MuiTypography-root {

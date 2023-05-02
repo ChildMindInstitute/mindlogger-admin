@@ -14,8 +14,8 @@ export const ActivityCardItem = ({
   onSubmit,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
-    isSkippable: activityItem.config.skippableItem && !isSubmitVisible,
-    isBackVisible: isBackVisible && !activityItem.config.removeBackButton,
+    isSkippable: activityItem.activityItem.config.skippableItem && !isSubmitVisible,
+    isBackVisible: isBackVisible && !activityItem.activityItem.config.removeBackButton,
   };
 
   const onNextButtonClick = () => {
@@ -33,8 +33,8 @@ export const ActivityCardItem = ({
   return (
     <StyledCardItemContainer>
       {/* TODO: correct type for activityItem.question ?? */}
-      <StyledMdEditor modelValue={activityItem.question as string} previewOnly />
-      <ItemPicker step={step} item={activityItem} isDisabled={!isActive} />
+      <StyledMdEditor modelValue={activityItem.activityItem.question as string} previewOnly />
+      <ItemPicker activityItem={activityItem} isDisabled={!isActive} />
       {isActive && (
         <ItemCardButtons
           step={step}

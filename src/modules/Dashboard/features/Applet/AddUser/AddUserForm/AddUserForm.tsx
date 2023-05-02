@@ -10,7 +10,7 @@ import {
   SelectController,
   TagsInputController,
 } from 'shared/components/FormComponents';
-import { StyledErrorText, theme } from 'shared/styles';
+import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
 import { getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 import { Roles } from 'shared/consts';
@@ -18,13 +18,7 @@ import { useAsync } from 'shared/hooks';
 import { users, workspaces } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 
-import {
-  StyledButton,
-  StyledRow,
-  StyledResetButton,
-  StyledTitle,
-  StyledTooltip,
-} from './AddUserForm.styles';
+import { StyledButton, StyledRow, StyledResetButton, StyledTooltip } from './AddUserForm.styles';
 import { Fields, fields, defaultValues, langs, roles } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types';
@@ -41,7 +35,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
   const respondentsData = users.useRespondentsData();
   const respondents = respondentsData?.result?.map((item) => ({
     label: `${item.accessId} (${item.nickname})`,
-    id: item.accessId,
+    id: item.id,
   }));
 
   const {
@@ -123,7 +117,9 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
 
   return (
     <>
-      <StyledTitle>{t('addUser')}</StyledTitle>
+      <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }}>
+        {t('personalInvitation')}
+      </StyledTitleMedium>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={2.4} alignItems="flex-start">
           <Grid container item xs={12} spacing={2.4}>

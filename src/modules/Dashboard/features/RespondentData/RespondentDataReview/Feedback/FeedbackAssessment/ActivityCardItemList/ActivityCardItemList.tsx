@@ -3,7 +3,7 @@ import { ActivityCardItemListProps } from './ActivityCartItemList.types';
 
 export const ActivityCardItemList = ({
   step,
-  items,
+  activityItems,
   isBackVisible,
   isSubmitVisible,
   toNextStep,
@@ -11,12 +11,12 @@ export const ActivityCardItemList = ({
   onSubmit,
 }: ActivityCardItemListProps) => (
   <>
-    {items.map((item, index) => {
+    {activityItems.map((item, index) => {
       const isActive = index === 0;
 
       return (
         <ActivityCardItem
-          key={item.id}
+          key={item.activityItem.id}
           activityItem={item}
           isBackVisible={isBackVisible}
           isSubmitVisible={isSubmitVisible}

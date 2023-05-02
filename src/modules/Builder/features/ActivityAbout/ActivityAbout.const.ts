@@ -1,3 +1,5 @@
+import { ItemResponseType } from 'shared/consts';
+
 export const defaultValues = {
   activityName: '',
   activityDescription: '',
@@ -8,3 +10,9 @@ export const defaultValues = {
   activityImg: '',
   activityWatermark: '',
 };
+
+export const itemsForReviewableActivity = [
+  ItemResponseType.SingleSelection,
+  ItemResponseType.MultipleSelection,
+  ItemResponseType.Slider,
+];

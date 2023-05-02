@@ -1,5 +1,5 @@
-import { ItemAlert, Config, ResponseValues } from 'shared/state';
-import { ItemResponseType } from 'shared/consts';
+import { ItemAlert, Config, ActivitySettingsSubscale, ResponseValues } from 'shared/state';
+import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
 
 export type ItemFormValues = {
   id?: string;
@@ -22,6 +22,7 @@ export type ActivityFormValues = {
   showAllAtOnce?: boolean;
   isSkippable?: boolean;
   responseIsEditable?: boolean;
+  isReviewable?: boolean;
   isHidden?: boolean;
   items: ItemFormValues[];
 };
@@ -53,4 +54,7 @@ export type AppletFormValues = {
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
   activities: ActivityFormValues[];
+  subscales?: ActivitySettingsSubscale[];
+  calculateTotalScore?: SubscaleTotalScore;
+  calculateTotalScoreSwitch?: boolean;
 };

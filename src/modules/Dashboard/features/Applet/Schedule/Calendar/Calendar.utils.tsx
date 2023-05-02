@@ -39,6 +39,12 @@ const { t } = i18n;
 
 export const getMoreText = () => `${t('more').toLowerCase()}...`;
 
+export const getDefaultStartDate = (date: Date) => {
+  const newDate = new Date();
+
+  return date && newDate > date ? newDate : date || undefined;
+};
+
 export const formatToYearMonthDate = (date: Date) => format(date, DateFormats.DayMonthYear);
 
 export const formatToWeekYear = (date: Date) => `${getISOWeek(date)} ${date.getFullYear()}`;

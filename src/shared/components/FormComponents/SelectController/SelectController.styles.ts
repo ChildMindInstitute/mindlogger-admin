@@ -12,12 +12,21 @@ export const StyledPlaceholder = styled(StyledBodyLarge)`
 `;
 
 export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
-  ${({ disabled }: { disabled: boolean }) =>
-    disabled &&
-    `
-    pointer-events: none;
-    opacity: 0.38;
-  `}
+  ${({ itemDisabled, selectDisabled }: { itemDisabled: boolean; selectDisabled?: boolean }) => {
+    if (itemDisabled) {
+      return `
+        pointer-events: none;
+        opacity: 0.38;
+      `;
+    }
+    if (selectDisabled) {
+      return `
+        svg {
+          opacity: 0.38;
+        }
+      `;
+    }
+  }}
 `;
 
 export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`

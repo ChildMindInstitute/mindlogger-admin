@@ -10,7 +10,7 @@ import {
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Tooltip, Uploader } from 'shared/components';
-import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_1GB, MAX_NAME_LENGTH } from 'shared/consts';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_5MB, MAX_NAME_LENGTH } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { BuilderContainer } from 'shared/features';
@@ -21,7 +21,7 @@ import { colorThemeOptions } from './AboutApplet.const';
 const commonUploaderProps = {
   width: 20,
   height: 20,
-  maxFileSize: MAX_FILE_SIZE_1GB,
+  maxFileSize: MAX_FILE_SIZE_5MB,
 };
 
 export const AboutApplet = () => {
@@ -50,7 +50,7 @@ export const AboutApplet = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue('image', val)}
           getValue={() => watch('image')}
-          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
         />
       ),
     },
@@ -62,7 +62,7 @@ export const AboutApplet = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue('watermark', val)}
           getValue={() => watch('watermark')}
-          description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_1GB) })}
+          description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
         />
       ),
     },

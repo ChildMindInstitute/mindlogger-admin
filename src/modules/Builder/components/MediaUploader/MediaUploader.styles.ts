@@ -8,7 +8,6 @@ import {
   variables,
 } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
-import { Svg } from 'shared/components';
 
 export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
   cursor: pointer;
@@ -38,11 +37,6 @@ export const StyledNameWrapper = styled(Box)`
   line-height: ${variables.font.lineHeight.md};
   color: ${variables.palette.on_surface_variant};
   margin-top: ${theme.spacing(1.6)};
-`;
-
-export const StyledSvg = styled(Svg)`
-  fill: ${variables.palette.outline};
-  margin-left: ${theme.spacing(1)};
 `;
 
 export const StyledTitle = styled(StyledTitleMedium)`

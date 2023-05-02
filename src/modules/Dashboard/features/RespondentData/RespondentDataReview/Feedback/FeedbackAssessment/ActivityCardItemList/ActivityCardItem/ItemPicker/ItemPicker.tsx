@@ -1,22 +1,54 @@
-import { MultiSelectItem, SingleSelectItem, SliderItem } from 'shared/state';
+import { useFormContext } from 'react-hook-form';
+import {
+  MultipleSelectionController,
+  SingleSelectionController,
+  SliderController,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers';
+import {
+  MultiSelectItemAnswer,
+  SingleSelectItemAnswer,
+  SliderItemAnswer,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { getActivityItemIndex } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers/AssesmentControllers.utils';
 
-import { SingleSelection } from './SingleSelection';
-import { MultipleSelection } from './MultipleSelection';
-import { Slider } from './Slider';
 import { ItemPickerProps } from './ItemPicker.types';
 
-export const ItemPicker = ({ item, step, isDisabled }: ItemPickerProps) => {
-  switch (item.responseType) {
+export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
+  const { control, getValues } = useFormContext();
+
+  const activityItemIndex = getActivityItemIndex(
+    getValues('answers'),
+    activityItem.activityItem.id || '',
+  );
+
+  switch (activityItem.activityItem.responseType) {
     case 'singleSelect':
       return (
-        <SingleSelection item={item as SingleSelectItem} step={step} isDisabled={isDisabled} />
+        <SingleSelectionController
+          control={control}
+          name={`answers.${activityItemIndex}.answer.value`}
+          activityItem={activityItem as SingleSelectItemAnswer}
+          isDisabled={isDisabled}
+        />
       );
     case 'multiSelect':
       return (
-        <MultipleSelection item={item as MultiSelectItem} step={step} isDisabled={isDisabled} />
+        <MultipleSelectionController
+          control={control}
+          name={`answers.${activityItemIndex}.answer.value`}
+          activityItem={activityItem as MultiSelectItemAnswer}
+          isDisabled={isDisabled}
+        />
       );
     case 'slider':
-      return <Slider item={item as SliderItem} step={step} isDisabled={isDisabled} />;
+      return (
+        <SliderController
+          control={control}
+          name={`answers.${activityItemIndex}.answer.value`}
+          activityItem={activityItem as SliderItemAnswer}
+          isDisabled={isDisabled}
+        />
+      );
     default:
       return <></>;
   }

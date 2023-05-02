@@ -1,6 +1,7 @@
 import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { ColorResult } from 'react-color';
+import get from 'lodash.get';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
@@ -57,7 +58,7 @@ export const getNewActivity = (activity?: ActivityFormValues) => ({
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
-  responseIsEditable: false,
+  responseIsEditable: true,
   ...activity,
   items: activity?.items?.map((item) => getNewActivityItem(item)) || [],
   id: undefined,
@@ -100,6 +101,8 @@ const getActivityItemResponseValues = (item: Item) => {
           undefined,
       };
     case ItemResponseType.Slider:
+    case ItemResponseType.NumberSelection:
+    case ItemResponseType.Drawing:
       return item.responseValues;
     case ItemResponseType.Text:
       return null;
@@ -141,6 +144,9 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
+    //generateReport: false, // TODO: add these fields when api will be ready
+    //showScoreSummary: false,
+    // calculateqTotalScore: false,
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,
@@ -185,3 +191,10 @@ export const getAppletTabs = ({
     path: Path.Settings,
   },
 ];
+
+//TODO: find a way to validate nested properties for objects in arrays for uniqueness
+export const testFunctionForUniqueness = (field: string, value: string, context: unknown) => {
+  const items = get(context, `from.1.value.${field}`);
+
+  return items?.filter((item: { name: string }) => item.name === value).length < 2 ?? true;
+};

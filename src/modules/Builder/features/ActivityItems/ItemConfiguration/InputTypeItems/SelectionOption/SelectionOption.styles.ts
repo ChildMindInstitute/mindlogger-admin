@@ -2,8 +2,7 @@ import { styled, Box } from '@mui/material';
 
 import { theme, variables, StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
-
-import { StyledItemOptionContainer } from '../ItemOptionContainer';
+import { StyledItemOptionContainer } from 'modules/Builder/components';
 
 export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardProp)`
   padding: ${theme.spacing(2, 2.4, 2, 3.4)};

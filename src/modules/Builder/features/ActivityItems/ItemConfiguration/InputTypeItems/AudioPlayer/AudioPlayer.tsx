@@ -7,11 +7,15 @@ import { StyledTitleMedium, theme, variables } from 'shared/styles';
 import { Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
-import { MediaUploader, ResourceDataType } from 'modules/Builder/components';
+import {
+  MediaUploader,
+  ResourceDataType,
+  SharedToggleItemProps,
+  ToggleItemContainer,
+} from 'modules/Builder/components';
 import { StyledName, StyledNameWrapper } from './AudioPlayer.styles';
 import { AudioPlayerProps } from './AudioPlayer.types';
 import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
-import { SharedToggleItemProps, ToggleItemContainer } from '../ToggleItemContainer';
 
 export const AudioPlayer = ({ name, fileResource }: AudioPlayerProps<FieldValues>) => {
   const { t } = useTranslation('app');

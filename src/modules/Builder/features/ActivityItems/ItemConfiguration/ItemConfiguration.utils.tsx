@@ -10,6 +10,8 @@ import {
   DEFAULT_EMPTY_SLIDER_ROWS,
   DEFAULT_SELECTION_ROWS_SCORE,
   SELECTION_OPTIONS_COLOR_PALETTE,
+  DEFAULT_NUMBER_MIN_VALUE,
+  DEFAULT_NUMBER_MAX_VALUE,
 } from './ItemConfiguration.const';
 
 const { t } = i18n;
@@ -32,6 +34,7 @@ export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
   [ItemResponseType.Audio]: t('audioHint'),
   [ItemResponseType.Message]: t('messageHint'),
   [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
+  [ItemResponseType.Time]: t('timeHint'),
   [ItemResponseType.Flanker]: '',
   [ItemResponseType.AbTest]: '',
 });
@@ -59,3 +62,8 @@ export const getPaletteColor = (paletteName: string, index: number) => {
 
   return colors?.[index % colors?.length];
 };
+
+export const getEmptyNumberSelection = () => ({
+  minValue: DEFAULT_NUMBER_MIN_VALUE,
+  maxValue: DEFAULT_NUMBER_MAX_VALUE,
+});

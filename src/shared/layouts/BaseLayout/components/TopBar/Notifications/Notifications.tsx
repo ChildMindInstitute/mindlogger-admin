@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components';
 import { account, folders } from 'modules/Dashboard/state';
 import { useTimeAgo } from 'shared/hooks';
-import { getAppletData } from 'shared/utils/getAppletData';
-import { variables } from 'shared/styles/variables';
+import { getAppletData, getDateInUserTimezone } from 'shared/utils';
 import {
+  variables,
   StyledLabelBoldLarge,
   StyledTitleSmall,
   StyledFlexTopCenter,
-} from 'shared/styles/styledComponents';
+} from 'shared/styles';
 
 import { Notification, NotificationProps } from './Notification';
 import {
@@ -50,9 +50,10 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           title: firstName || lastName ? `${firstName} ${lastName}` : nickName,
           message: alert.alertMessage,
           imageSrc: image || null,
-          timeAgo: timeAgo.format(new Date(alert.created), 'round'),
+          timeAgo: timeAgo.format(getDateInUserTimezone(alert.created), 'round'),
           viewed: alert.viewed,
           encryption: encryption || undefined,
+          appletId: alert.appletId,
         };
       });
 

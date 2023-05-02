@@ -1,7 +1,7 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
-import { TextField, FormControl, InputLabel } from '@mui/material';
+import { TextField, FormControl, InputLabel, FormHelperText } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { theme, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
@@ -65,8 +65,8 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
       <Controller
         name={name}
         control={control}
-        render={({ field: { onChange, value } }) => (
-          <FormControl fullWidth>
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
+          <FormControl fullWidth error={!!error}>
             <InputLabel id="input-type-label">{t('itemType')}</InputLabel>
             <StyledSelect
               fullWidth
@@ -141,6 +141,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
               ])}
               {getEmptyComponent(searchTerm)}
             </StyledSelect>
+            {error?.message && <FormHelperText>{error.message}</FormHelperText>}
           </FormControl>
         )}
       />

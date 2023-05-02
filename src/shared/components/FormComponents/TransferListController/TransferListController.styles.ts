@@ -1,24 +1,12 @@
 import { Box, TextField, styled } from '@mui/material';
 
-import { StyledFlexColumn, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 export const StyledTransferListController = styled(StyledFlexTopCenter)`
   position: relative;
   width: 100%;
   gap: 2.4rem;
   padding-bottom: ${theme.spacing(2.8)};
-`;
-
-export const StyledTableContainer = styled(StyledFlexColumn, shouldForwardProp)`
-  border: ${({ hasError }: { hasError?: boolean }) =>
-    hasError
-      ? `${variables.borderWidth.lg} solid ${variables.palette.semantic.error};`
-      : `${variables.borderWidth.md} solid ${variables.palette.outline_variant};`}
-  border-radius: ${variables.borderRadius.lg2};
-  flex-grow: 1;
-  height: 28.8rem;
-  overflow-y: auto;
 `;
 
 export const StyledErrorContainer = styled(Box)`

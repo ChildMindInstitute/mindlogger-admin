@@ -28,8 +28,10 @@ export const DatePicker = <T extends FieldValues>({
   uiType = UiType.OneDate,
   inputSx = {},
   label,
-  maxDate,
+  includeDates,
   minDate,
+  onMonthChange,
+  disabled,
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -147,11 +149,13 @@ export const DatePicker = <T extends FieldValues>({
                 selectsRange={isStartEndingDate}
                 inline
                 selected={getSelectedDate() as DateType}
+                disabled={disabled}
                 onChange={(date) => onChange(date)}
                 monthsShown={isStartEndingDate ? 2 : 1}
                 formatWeekDay={(nameOfDay) => nameOfDay[0]}
                 minDate={minDate !== undefined ? minDate : new Date()}
-                maxDate={maxDate}
+                onMonthChange={onMonthChange}
+                includeDates={includeDates}
               />
               <StyledButtons>
                 <StyledCancelButton variant="text" onClick={handlePickerClose}>

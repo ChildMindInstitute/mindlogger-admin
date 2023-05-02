@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
+import { useParams } from 'react-router-dom';
 
 import { Table } from 'modules/Dashboard/components';
 import { useTable } from 'shared/hooks';
@@ -15,8 +16,16 @@ import { InvitationsTableProps } from './InvitationsTable.types';
 
 export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTableProps) => {
   const { t } = useTranslation('app');
+  const { appletId } = useParams();
 
-  const tableProps = useTable(async (params) => {
+  const tableProps = useTable(async (args) => {
+    const params = {
+      ...args,
+      params: {
+        ...args.params,
+        appletId,
+      },
+    };
     const { data } = await getInvitationsApi(params);
 
     data && setInvitations(data);

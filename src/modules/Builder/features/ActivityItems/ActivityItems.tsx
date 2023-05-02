@@ -20,28 +20,24 @@ export const ActivityItems = () => {
   const [itemIdToDelete, setItemIdToDelete] = useState('');
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
-  const { name, activity } = useCurrentActivity();
+  const { fieldName, activity } = useCurrentActivity();
   const { control, watch } = useFormContext();
 
   const {
     append: appendItem,
     insert: insertItem,
     remove: removeItem,
+    move: moveItem,
   } = useFieldArray({
     control,
-    name: `${name}.items`,
+    name: `${fieldName}.items`,
   });
 
-  useBreadcrumbs([
-    {
-      icon: 'item-outlined',
-      label: t('items'),
-    },
-  ]);
+  useBreadcrumbs();
 
   if (!activity) return null;
 
-  const items = watch(`${name}.items`);
+  const items = watch(`${fieldName}.items`);
   const activeItemIndex = items?.findIndex(
     (item: ItemFormValues) => (item.key ?? item.id) === activeItemId,
   );
@@ -77,7 +73,7 @@ export const ActivityItems = () => {
         ...itemToDuplicate,
         id: undefined,
         key: uuidv4(),
-        name: `${itemToDuplicate.name} (${numberToInsert})`,
+        name: `${itemToDuplicate.name}_${numberToInsert}`,
       });
 
       return {
@@ -108,11 +104,12 @@ export const ActivityItems = () => {
         onInsertItem={handleInsertItem}
         onDuplicateItem={handleDuplicateItem}
         onRemoveItem={handleRemoveClick}
+        onMoveItem={moveItem}
       />
       {activeItemId && (
         <ItemConfiguration
           key={`item-${activeItemId}`}
-          name={`${name}.items.${activeItemIndex}`}
+          name={`${fieldName}.items.${activeItemIndex}`}
           onClose={() => setActiveItemId('')}
         />
       )}

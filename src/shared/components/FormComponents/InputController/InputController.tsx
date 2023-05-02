@@ -74,7 +74,7 @@ export const InputController = <T extends FieldValues>({
           if (newValue && maxLength && restrictExceededValueLength && newValue.length > maxLength)
             return;
 
-          onChange(event.target.value);
+          onChange(isNumberType ? +newValue : newValue);
         };
 
         return (

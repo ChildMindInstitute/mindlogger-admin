@@ -8,3 +8,7 @@ export * from './extensions/MarkExtension';
 export * from './extensions/ImageUploadExtension';
 export * from './extensions/TrashExtension';
 export * from './extensions/VideoUploadExtension';
+export * from './extensions/UnderlineExtension';
+export * from './extensions/StrikethroughExtension';
+export * from './extensions/SubscriptExtension';
+export * from './extensions/SuperscriptExtension';

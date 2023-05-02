@@ -1,9 +1,7 @@
 import { styled } from '@mui/system';
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledClearedButton } from 'shared/styles/styledComponents';
+import { theme, variables, StyledBodyMedium, StyledClearedButton } from 'shared/styles';
 
 export const StyledForm = styled('form')`
   margin-top: ${theme.spacing(3.2)};
@@ -13,10 +11,7 @@ export const StyledForm = styled('form')`
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
 `;
 
-export const StyledResetPasswordSubheader = styled(Typography)`
-  font-size: ${variables.font.size.sm};
-  font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.font.lineHeight.sm};
+export const StyledResetPasswordSubheader = styled(StyledBodyMedium)`
   margin: ${theme.spacing(0.8, 0, 2.4)};
 `;
 

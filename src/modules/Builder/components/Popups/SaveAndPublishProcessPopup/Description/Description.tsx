@@ -11,11 +11,41 @@ export const Description = ({ step }: DescriptionProps) => {
   const getAppletData = useAppletData();
   const name = getAppletData().displayName;
 
+  const hasNotBeenSaved = (
+    <Trans i18nKey="appletNotSavedAndPublished">
+      <StyledBodyLarge sx={{ color: variables.palette.red }}>
+        Applet
+        <strong>
+          <>{{ name }}</>
+        </strong>
+        has not been saved and published. Please try again.
+      </StyledBodyLarge>
+    </Trans>
+  );
+
   switch (step) {
     case SaveAndPublishSteps.AtLeastOneActivity:
       return <StyledBodyLarge>{t('appletIsRequiredOneActivity')}</StyledBodyLarge>;
     case SaveAndPublishSteps.AtLeastOneItem:
       return <StyledBodyLarge>{t('appletIsRequiredOneItem')}</StyledBodyLarge>;
+    case SaveAndPublishSteps.EmptyRequiredFields:
+      return (
+        <>
+          {hasNotBeenSaved}
+          <StyledBodyLarge sx={{ color: variables.palette.red }}>
+            {t('appletHasEmptyRequiredFields')}
+          </StyledBodyLarge>
+        </>
+      );
+    case SaveAndPublishSteps.ErrorsInFields:
+      return (
+        <>
+          {hasNotBeenSaved}
+          <StyledBodyLarge sx={{ color: variables.palette.red }}>
+            {t('appletHasErrorsInFields')}
+          </StyledBodyLarge>
+        </>
+      );
     case SaveAndPublishSteps.BeingCreated:
       return <StyledBodyLarge>{t('appletIsBeingCreated')}</StyledBodyLarge>;
     case SaveAndPublishSteps.Success:
@@ -31,16 +61,6 @@ export const Description = ({ step }: DescriptionProps) => {
         </Trans>
       );
     case SaveAndPublishSteps.Failed:
-      return (
-        <Trans i18nKey="appletNotSavedAndPublished">
-          <StyledBodyLarge sx={{ color: variables.palette.red }}>
-            Applet
-            <strong>
-              <>{{ name }}</>
-            </strong>
-            has not been saved and published. Please try again.
-          </StyledBodyLarge>
-        </Trans>
-      );
+      return hasNotBeenSaved;
   }
 };

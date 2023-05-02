@@ -1,12 +1,11 @@
-import { storage } from 'shared/utils';
-import { auth } from 'modules/Auth';
 import {
-  applet,
+  DrawingResponseValues,
+  NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
+  SliderItemResponseValues,
 } from 'shared/state';
-import { useCheckIfNewApplet } from 'shared/hooks';
 import { ItemResponseType } from 'shared/consts';
 import { ColorResult } from 'react-color';
 
@@ -18,6 +17,11 @@ export const removeAppletExtraFields = () => ({
   retentionType: undefined,
   theme: undefined,
   version: undefined,
+  subscales: undefined, // TODO: remove when API will be ready
+  scores: undefined, // TODO: remove when API will be ready
+  sections: undefined, // TODO: remove when API will be ready
+  calculateTotalScore: undefined, // TODO: remove when API will be ready
+  calculateTotalScoreSwitch: undefined, // TODO: remove when API will be ready
 });
 
 export const removeActivityExtraFields = () => ({ order: undefined });
@@ -42,45 +46,26 @@ export const mapItemResponseValues = (
       options: (responseValues as SingleAndMultipleSelectItemResponseValues).options?.map(
         (option) => ({
           ...option,
-          color: (option.color as ColorResult)?.hex ?? option.color ?? undefined,
+          color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
         }),
       ),
     };
 
   if (
+    responseType === ItemResponseType.Slider ||
+    responseType === ItemResponseType.NumberSelection ||
+    responseType === ItemResponseType.Drawing ||
     responseType === ItemResponseType.SingleSelectionPerRow ||
     responseType === ItemResponseType.MultipleSelectionPerRow
   )
     return {
-      rows: (responseValues as SingleAndMultipleSelectRowsResponseValues).rows,
+      ...(responseValues as
+        | SliderItemResponseValues
+        | NumberItemResponseValues
+        | DrawingResponseValues
+        | SingleAndMultipleSelectRowsResponseValues),
+      options: undefined,
     };
 
-  if (responseType === ItemResponseType.Slider) return responseValues;
-
   return null;
-};
-
-const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
-
-export const usePasswordFromStorage = () => {
-  const isNewApplet = useCheckIfNewApplet();
-  const userData = auth.useData();
-  const ownerId = String(userData?.user?.id) || '';
-  const { result: appletData } = applet.useAppletData() ?? {};
-
-  const getPassword = () => {
-    if (isNewApplet) return '';
-    const appletId = appletData?.id ?? '';
-
-    return storage.getItem(getPasswordKey(ownerId, appletId)) as string;
-  };
-
-  const setPassword = (appletId: string, password: string) => {
-    storage.setItem(getPasswordKey(ownerId, appletId), password);
-  };
-
-  return {
-    getPassword,
-    setPassword,
-  };
 };

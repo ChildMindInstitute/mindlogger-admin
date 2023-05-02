@@ -20,6 +20,7 @@ export const SelectController = <T extends FieldValues>({
   placeholder,
   isLabelNeedTranslation = true,
   uiType = SelectUiType.Primary,
+  disabled,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -27,11 +28,12 @@ export const SelectController = <T extends FieldValues>({
   const getMenuItem = (
     labelKey: string,
     value: string | boolean,
-    disabled: boolean,
+    itemDisabled: boolean,
     icon?: JSX.Element,
+    withoutKey?: boolean,
   ) => (
-    <StyledMenuItem uiType={uiType} key={labelKey} value={value as string}>
-      <StyledItem disabled={disabled}>
+    <StyledMenuItem {...(!withoutKey && { key: labelKey })} uiType={uiType} value={value as string}>
+      <StyledItem itemDisabled={itemDisabled} selectDisabled={disabled}>
         {icon && (
           <StyledFlexTopCenter className="icon-wrapper" sx={{ marginRight: theme.spacing(1.8) }}>
             {icon}
@@ -61,10 +63,13 @@ export const SelectController = <T extends FieldValues>({
         value={selectValue}
         error={!!error}
         helperText={error?.message || null}
+        disabled={disabled}
       >
         {options?.map(({ labelKey, value, icon, disabled = false, tooltip }) =>
           tooltip ? (
-            <Tooltip tooltipTitle={tooltip}>{getMenuItem(labelKey, value, disabled, icon)}</Tooltip>
+            <Tooltip key={labelKey} tooltipTitle={tooltip}>
+              {getMenuItem(labelKey, value, disabled, icon, true)}
+            </Tooltip>
           ) : (
             getMenuItem(labelKey, value, disabled, icon)
           ),

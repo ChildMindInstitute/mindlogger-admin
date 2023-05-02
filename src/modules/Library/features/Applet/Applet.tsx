@@ -66,7 +66,12 @@ export const Applet = ({
         )}
       </StyledAppletName>
       {description && (
-        <StyledBodyMedium sx={{ marginTop: theme.spacing(0.4) }}>{description}</StyledBodyMedium>
+        <StyledBodyMedium
+          color={variables.palette.on_surface}
+          sx={{ marginTop: theme.spacing(0.4) }}
+        >
+          {description}
+        </StyledBodyMedium>
       )}
     </>
   );

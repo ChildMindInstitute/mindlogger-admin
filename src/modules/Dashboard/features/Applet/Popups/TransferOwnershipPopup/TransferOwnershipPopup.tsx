@@ -7,10 +7,13 @@ import { useAppDispatch } from 'redux/store';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
 
+import { SuccessTransferOwnershipPopup } from '../SuccessTransferOwnershipPopup';
+
 export const TransferOwnershipPopup = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { transferOwnershipPopupVisible, appletId } = popups.useData();
+  const [transferOwnershipSuccessVisible, setTransferOwnershipSuccessVisible] = useState(false);
   const appletsData = applets.useData();
   const applet = appletsData?.result?.find((el) => el.id === appletId);
 
@@ -27,32 +30,41 @@ export const TransferOwnershipPopup = () => {
     );
   };
 
-  useEffect(() => {
-    emailTransfered && onClose();
-  }, [emailTransfered]);
-
   const handleSubmit = () => {
     setIsSubmitted(true);
   };
 
+  useEffect(() => {
+    if (!emailTransfered) return;
+
+    setTransferOwnershipSuccessVisible(true);
+  }, [emailTransfered]);
+
   return (
-    <Modal
-      open={transferOwnershipPopupVisible}
-      onClose={onClose}
-      onSubmit={handleSubmit}
-      title={t('transferOwnership')}
-      buttonText={t('confirm')}
-      width="60"
-    >
-      <StyledModalWrapper>
-        <TransferOwnership
-          appletId={applet?.id}
-          appletName={applet?.displayName}
-          isSubmitted={isSubmitted}
-          setIsSubmitted={setIsSubmitted}
-          setEmailTransfered={setEmailTransfered}
-        />
-      </StyledModalWrapper>
-    </Modal>
+    <>
+      <Modal
+        open={transferOwnershipPopupVisible && !transferOwnershipSuccessVisible}
+        onClose={onClose}
+        onSubmit={handleSubmit}
+        title={t('transferOwnership')}
+        buttonText={t('confirm')}
+        width="60"
+      >
+        <StyledModalWrapper>
+          <TransferOwnership
+            appletId={applet?.id}
+            appletName={applet?.displayName}
+            isSubmitted={isSubmitted}
+            setIsSubmitted={setIsSubmitted}
+            setEmailTransfered={setEmailTransfered}
+          />
+        </StyledModalWrapper>
+      </Modal>
+      <SuccessTransferOwnershipPopup
+        email={emailTransfered}
+        transferOwnershipPopupVisible={transferOwnershipSuccessVisible}
+        closeTransferOwnershipPopup={onClose}
+      />
+    </>
   );
 };

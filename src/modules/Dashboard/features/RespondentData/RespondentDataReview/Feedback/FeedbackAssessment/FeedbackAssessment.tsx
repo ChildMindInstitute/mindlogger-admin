@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Item } from 'shared/state';
+import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { assessmentActivityItems } from './mock';
 import { ActivityCardItemList } from './ActivityCardItemList';
 import { ActivityItemAnswers } from './FeedbackAssessment.types';
 import { SubmitAssessmentPopup } from './SubmitAssessmentPopup';
+import { StyledContainer } from './FeedbackAssessment.styles';
+import { getDefaultValue } from './FeedbackAssessment.utils';
 
-const defaultValues = assessmentActivityItems.map((item) => ({
-  activityItemId: item.id,
+const defaultValues = assessmentActivityItems.map(({ activityItem, answer }) => ({
+  activityItemId: activityItem.id,
   answer: {
-    value: [],
+    value: answer?.value || getDefaultValue(activityItem.responseType),
   },
 }));
 
@@ -22,7 +24,7 @@ export const FeedbackAssessment = () => {
   });
 
   const [step, setStep] = useState(0);
-  const [items, setItems] = useState<Item[]>([]);
+  const [activityItems, setActivityItems] = useState<ActivityItemAnswer[]>([]);
   const [submitAssessmentPopupVisible, setSubmitAssessmentPopupVisible] = useState(false);
 
   const toNextStep = () => {
@@ -34,23 +36,26 @@ export const FeedbackAssessment = () => {
   };
 
   const isSubmitVisible = step === assessmentActivityItems.length - 1;
-  const isBackVisible = items.length > 1;
+  const isBackVisible = activityItems.length > 1;
 
   useEffect(() => {
-    setItems(assessmentActivityItems.slice(0, step + 1).reverse());
+    setActivityItems(assessmentActivityItems.slice(0, step + 1).reverse());
   }, [step]);
 
   return (
-    <>
+    <StyledContainer>
       <FormProvider {...methods}>
         <ActivityCardItemList
           step={step}
-          items={items}
+          activityItems={activityItems}
           isBackVisible={isBackVisible}
           isSubmitVisible={isSubmitVisible}
           toNextStep={toNextStep}
           toPrevStep={toPrevStep}
-          onSubmit={() => setSubmitAssessmentPopupVisible(true)}
+          onSubmit={() => {
+            console.log(methods.getValues());
+            setSubmitAssessmentPopupVisible(true);
+          }}
         />
         {submitAssessmentPopupVisible && (
           <SubmitAssessmentPopup
@@ -59,6 +64,6 @@ export const FeedbackAssessment = () => {
           />
         )}
       </FormProvider>
-    </>
+    </StyledContainer>
   );
 };

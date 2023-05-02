@@ -3,10 +3,6 @@ import { lazy } from 'react';
 import { Applets } from 'modules/Dashboard/features/Applets';
 import { Managers } from 'modules/Dashboard/features/Managers';
 import { Respondents } from 'modules/Dashboard/features/Respondents';
-import {
-  RespondentDataSummary,
-  RespondentDataReview,
-} from 'modules/Dashboard/features/RespondentData';
 import { page } from 'resources';
 
 const AddUser = lazy(() => import('modules/Dashboard/features/Applet/AddUser'));
@@ -54,16 +50,5 @@ export const appletRoutes = [
   {
     path: page.appletAddUser,
     Component: AddUser,
-  },
-];
-
-export const respondentDataRoutes = [
-  {
-    path: page.appletRespondentDataReview,
-    Component: RespondentDataReview,
-  },
-  {
-    path: page.appletRespondentDataSummary,
-    Component: RespondentDataSummary,
   },
 ];

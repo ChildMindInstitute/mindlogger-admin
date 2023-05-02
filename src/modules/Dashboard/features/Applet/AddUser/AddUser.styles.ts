@@ -1,9 +1,8 @@
 import { styled } from '@mui/system';
 
-import theme from 'shared/styles/theme';
-import { StyledTitleBoldMedium } from 'shared/styles/styledComponents';
+import { theme, StyledFlexTopStart } from 'shared/styles';
 
-export const StyledTitle = styled(StyledTitleBoldMedium)`
+export const StyledTitle = styled(StyledFlexTopStart)`
   margin-bottom: ${theme.spacing(1.6)};
   margin-top: ${theme.spacing(2.4)};
 `;

@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
-import { format } from 'date-fns';
+import { useEffect, useRef } from 'react';
+import { format, getYear } from 'date-fns';
+import isEqual from 'lodash.isequal';
 
 import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
-import { calendarEvents, Event } from 'modules/Dashboard/state';
+import { applets, CalendarEvent, calendarEvents, CreateEventsData } from 'modules/Dashboard/state';
 import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
 import { getTableCell } from 'shared/utils';
@@ -18,15 +19,17 @@ import {
   getCount,
 } from './Schedule.utils';
 
-export const usePreparedEvents = (
-  appletData?: SingleApplet,
-  events?: Event[],
-): PreparedEvents | null => {
+export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | null => {
   const dispatch = useAppDispatch();
+  const { result: events } = applets.useEventsData() ?? {};
+  const processedEventStartYear = calendarEvents.useProcessedEventStartYearData();
+  const currentYear = getYear(new Date());
   const alwaysAvailableEvents: LegendEvent[] = [];
   const scheduledEvents: LegendEvent[] = [];
   const deactivatedEvents: LegendEvent[] = [];
   let eventsData: EventsData | undefined;
+  const prevCalendarEventsArrRef = useRef<CalendarEvent[] | null>();
+  const prevEventsDataArrRef = useRef<CreateEventsData[] | null>();
 
   if (appletData) {
     const { activities = [], activityFlows = [] } = appletData;
@@ -38,82 +41,105 @@ export const usePreparedEvents = (
     eventsData = events?.reduce(
       (
         acc: EventsData,
-        { periodicity, activityId, flowId, startTime: startTimeFull, endTime: endTimeFull },
+        {
+          periodicity,
+          activityId,
+          flowId,
+          startTime: startTimeFull,
+          endTime: endTimeFull,
+          oneTimeCompletion,
+          accessBeforeSchedule,
+          timerType,
+          timer,
+          id: eventId,
+          notification,
+        },
       ) => {
-        const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
-        const isAlwaysAvailable = periodicityType === Periodicity.Always;
-
-        const date = format(new Date(selectedDate || startDate), DateFormats.DayMonthYear);
-        const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull);
-        const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull);
-        const activityOrFlowId = activityId || flowId;
+        const activityOrFlowId = activityId || flowId || '';
         const currentActivityOrFlow = activitiesAndFlows.find(
           (item) => item.id === activityOrFlowId,
         );
-        const activityOrFlowName = currentActivityOrFlow?.name || '';
-        // TODO: Add notification time after notifications connection to the API
-        const notificationTime = '-';
-        const repeats = getRepeatsAnswer(periodicityType);
-        const frequency = getFrequencyString(periodicityType);
-        const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
-        const currentYear = new Date().getFullYear();
 
-        acc.scheduleExportTableData.push({
-          activityName: getTableCell(activityOrFlowName),
-          date: getTableCell(date),
-          startTime: getTableCell(startTime),
-          endTime: getTableCell(endTime),
-          notificationTime: getTableCell(notificationTime),
-          repeats: getTableCell(repeats),
-          frequency: getTableCell(frequency),
-        });
+        if (!currentActivityOrFlow?.isHidden) {
+          const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
+          const isAlwaysAvailable = periodicityType === Periodicity.Always;
+          const selectedOrStartDate = selectedDate || startDate;
+          const date = format(
+            selectedOrStartDate ? new Date(selectedOrStartDate) : new Date(),
+            DateFormats.DayMonthYear,
+          );
+          const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull) || '';
+          const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull) || '';
+          const activityOrFlowName = currentActivityOrFlow?.name || '';
+          // TODO: Add notification time after notifications connection to the API
+          const notificationTime = '-';
+          const repeats = getRepeatsAnswer(periodicityType);
+          const frequency = getFrequencyString(periodicityType);
+          const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
 
-        acc.scheduleExportCsv.push({
-          activityName: activityOrFlowName,
-          date,
-          startTime,
-          endTime,
-          notificationTime,
-          repeats,
-          frequency,
-        });
-
-        const dataToCreateEvent = {
-          activityOrFlowId,
-          activityOrFlowName,
-          periodicityType,
-          selectedDate,
-          startDate,
-          endDate,
-          startTime: startTimeFull,
-          endTime: endTimeFull,
-          isAlwaysAvailable,
-          colors: activityOrFlowColors,
-          flowId,
-          nextYearDateString: null,
-          currentYear,
-        };
-
-        if (dataToCreateEvent) {
-          acc.eventsDataArr.push(dataToCreateEvent);
-        }
-
-        const calendarEvents = createEvents(dataToCreateEvent);
-
-        if (calendarEvents) {
-          acc.calendarEventsArr.push(...calendarEvents);
-        }
-
-        if (periodicityType === Periodicity.Always) {
-          acc.alwaysActivitiesFlows.push({
-            color: [activityOrFlowColors[0], activityOrFlowColors[0]],
-            id: activityId || flowId,
+          acc.scheduleExportTableData.push({
+            activityName: getTableCell(activityOrFlowName),
+            date: getTableCell(date),
+            startTime: getTableCell(startTime),
+            endTime: getTableCell(endTime),
+            notificationTime: getTableCell(notificationTime),
+            repeats: getTableCell(repeats),
+            frequency: getTableCell(frequency),
           });
-        } else {
-          acc.scheduledActivitiesFlows.push({
-            color: activityOrFlowColors,
-            id: activityId || flowId,
+
+          acc.scheduleExportCsv.push({
+            activityName: activityOrFlowName,
+            date,
+            startTime,
+            endTime,
+            notificationTime,
+            repeats,
+            frequency,
           });
+
+          const dataToCreateEvent = {
+            activityOrFlowId,
+            eventId,
+            activityOrFlowName,
+            periodicityType,
+            selectedDate,
+            startDate,
+            endDate,
+            startTime: startTimeFull,
+            endTime: endTimeFull,
+            isAlwaysAvailable,
+            colors: activityOrFlowColors,
+            flowId,
+            nextYearDateString: null,
+            currentYear,
+            oneTimeCompletion,
+            accessBeforeSchedule,
+            timerType,
+            timer,
+            notification,
+          };
+
+          if (dataToCreateEvent) {
+            acc.eventsDataArr.push(dataToCreateEvent);
+          }
+
+          const calendarEvents = createEvents(dataToCreateEvent);
+
+          if (calendarEvents) {
+            acc.calendarEventsArr.push(...calendarEvents);
+          }
+
+          if (periodicityType === Periodicity.Always) {
+            acc.alwaysActivitiesFlows.push({
+              color: [activityOrFlowColors[0], activityOrFlowColors[0]],
+              id: activityOrFlowId,
+            });
+          } else {
+            acc.scheduledActivitiesFlows.push({
+              color: activityOrFlowColors,
+              id: activityOrFlowId,
+            });
+          }
         }
 
         return acc;
@@ -172,15 +198,33 @@ export const usePreparedEvents = (
   } = eventsData ?? {};
 
   useEffect(() => {
-    if (calendarEventsArr) {
-      dispatch(calendarEvents.actions.setCalendarEvents({ events: calendarEventsArr }));
-    }
+    const conditionToCreateCalendarEvents =
+      calendarEventsArr &&
+      !isEqual(calendarEventsArr, prevCalendarEventsArrRef.current) &&
+      (!processedEventStartYear || processedEventStartYear === currentYear);
+    if (!conditionToCreateCalendarEvents) return;
+
+    dispatch(calendarEvents.actions.createCalendarEvents({ events: calendarEventsArr }));
+    prevCalendarEventsArrRef.current = calendarEventsArr;
   }, [calendarEventsArr]);
 
   useEffect(() => {
-    if (eventsDataArr) {
-      dispatch(calendarEvents.actions.setCreateEventsData(eventsDataArr));
-    }
+    (async () => {
+      const conditionToCreateEventsData =
+        eventsDataArr && !isEqual(eventsDataArr, prevEventsDataArrRef.current);
+      if (!conditionToCreateEventsData) return;
+
+      await dispatch(calendarEvents.actions.setCreateEventsData(eventsDataArr));
+      prevEventsDataArrRef.current = eventsDataArr;
+
+      if (processedEventStartYear && processedEventStartYear !== currentYear) {
+        dispatch(
+          calendarEvents.actions.createNextYearEvents({
+            yearToCreateEvents: processedEventStartYear,
+          }),
+        );
+      }
+    })();
   }, [eventsDataArr]);
 
   return {

@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId, OwnerAndAppletIds } from 'api';
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
 import { ColorResult } from 'react-color';
 
 export type CreateAppletStateData = {
@@ -88,6 +88,63 @@ export type SingleAndMultipleSelectionPerRowConfig = {
   addTooltip: boolean;
 };
 
+export type NumberConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+};
+
+export type DateAndTimeRangeConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type DrawingConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+  removeUndoButton: boolean;
+  navigationToTop: boolean;
+};
+
+export type PhotoConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type GeolocationConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type MessageConfig = {
+  skippableItem?: boolean;
+  removeBackButton: boolean;
+  timer: number;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -135,18 +192,43 @@ export type SingleAndMultipleSelectRowsResponseValues = {
 };
 
 export type TextItemResponseValues = null;
+export type DateAndTimeRangeResponseValues = null;
+export type PhotoResponseValues = null;
+export type GeolocationResponseValues = null;
+export type MessageResponseValues = null;
+
+export type NumberItemResponseValues = {
+  minValue: number;
+  maxValue: number;
+};
+
+export type DrawingResponseValues = {
+  drawingExample: string;
+  drawingBackground: string;
+};
 
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
   | SliderItemResponseValues
-  | SingleAndMultipleSelectRowsResponseValues;
+  | NumberItemResponseValues
+  | DateAndTimeRangeResponseValues
+  | DrawingResponseValues
+  | PhotoResponseValues
+  | GeolocationResponseValues
+  | MessageResponseValues;
 
 export type Config =
   | TextInputConfig
   | SingleAndMultipleSelectionConfig
   | SliderConfig
-  | SingleAndMultipleSelectionPerRowConfig;
+  | SingleAndMultipleSelectionPerRowConfig
+  | NumberConfig
+  | DateAndTimeRangeConfig
+  | DrawingConfig
+  | PhotoConfig
+  | GeolocationConfig
+  | MessageConfig;
 
 export type ItemAlert = {
   message: string;
@@ -231,6 +313,21 @@ type Theme = {
   public: boolean;
 };
 
+export type ActivitySettingsScore = {
+  name?: string;
+};
+
+export type ActivitySettingsSection = {
+  name?: string;
+};
+
+export type ActivitySettingsSubscale = {
+  id?: string;
+  name: string;
+  scoring: SubscaleTotalScore;
+  items: string[];
+};
+
 export type SingleApplet = {
   id?: string;
   displayName: string;
@@ -254,6 +351,12 @@ export type SingleApplet = {
   activityFlows: ActivityFlow[];
   theme?: Theme;
   password?: string;
+  generateReport: boolean;
+  showScoreSummary: boolean;
+  calculateTotalScore?: SubscaleTotalScore;
+  scores?: ActivitySettingsScore[];
+  sections?: ActivitySettingsSection[];
+  subscales?: ActivitySettingsSubscale[];
 };
 
 export type AppletSchema = {

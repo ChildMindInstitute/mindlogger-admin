@@ -13,7 +13,7 @@ export const StyledMdEditor = styled(MdEditor)`
   margin-bottom: ${theme.spacing(2)};
   height: 24rem;
 
-  &.isRequired {
+  &.has-error {
     border: ${variables.borderWidth.md} solid ${variables.palette.semantic.error};
     margin-bottom: 0;
   }
@@ -54,6 +54,6 @@ export const StyledMdEditor = styled(MdEditor)`
 
 export const StyledErrorText = styled(StyledBodyMedium)`
   color: ${variables.palette.semantic.error};
-  font-size: ${variables.font.size.sm};
-  margin-bottom: ${theme.spacing(2)};
+  font-size: ${variables.font.size.md};
+  margin: ${theme.spacing(0.3, 0, 2, 1.4)};
 `;

@@ -1,17 +1,16 @@
-import { RefObject, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
-
-import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
-import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
 import {
-  AppletPasswordRef,
+  Modal,
   CreateAppletPassword,
   CreateAppletPasswordForm,
   EnterAppletPassword,
   EnterAppletPasswordForm,
-} from '../../Password';
+} from 'shared/components';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
+
+import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
+import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
 
 export const AppletPasswordPopup = ({
   onClose,
@@ -22,14 +21,7 @@ export const AppletPasswordPopup = ({
   submitCallback = () => onClose(),
 }: AppletPasswordPopupProps) => {
   const { t } = useTranslation('app');
-
-  const appletPasswordRef = useRef() as RefObject<AppletPasswordRef>;
-
-  const submitForm = () => {
-    if (appletPasswordRef?.current) {
-      appletPasswordRef.current.submitForm();
-    }
-  };
+  const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
   const handleSubmitCallback = (formData: CreateAppletPasswordForm | EnterAppletPasswordForm) => {
     submitCallback(formData);
@@ -55,7 +47,7 @@ export const AppletPasswordPopup = ({
             appletId={appletId}
             encryption={encryption}
             submitCallback={handleSubmitCallback}
-            isApplet
+            noEncryption
           />
         ) : (
           <CreateAppletPassword ref={appletPasswordRef} submitCallback={handleSubmitCallback} />

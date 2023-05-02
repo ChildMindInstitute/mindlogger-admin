@@ -9,11 +9,11 @@ import {
   StyledLabelBoldLarge,
   StyledClearedButton,
   StyledBodyLarge,
+  StyledContainerWithBg,
 } from 'shared/styles';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 
 import {
-  StyledTextInputOptionContainer,
   StyledTextInputOptionHeader,
   StyledTextInputOptionDescription,
   StyledTextInputOptionHelpText,
@@ -32,7 +32,7 @@ export const TextInputOption = ({ name, onRemove }: TextInputOptionProps) => {
   const requiredContext = isTextInputOptionRequired ? { context: 'required' } : undefined;
 
   return (
-    <StyledTextInputOptionContainer>
+    <StyledContainerWithBg>
       <StyledTextInputOptionHeader>
         <StyledLabelBoldLarge>{t('textInputOptionLabel', requiredContext)}</StyledLabelBoldLarge>
         <StyledClearedButton
@@ -52,6 +52,6 @@ export const TextInputOption = ({ name, onRemove }: TextInputOptionProps) => {
           {t('textInputOptionHelpText')}
         </StyledTextInputOptionHelpText>
       )}
-    </StyledTextInputOptionContainer>
+    </StyledContainerWithBg>
   );
 };

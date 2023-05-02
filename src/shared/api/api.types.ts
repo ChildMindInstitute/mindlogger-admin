@@ -11,6 +11,8 @@ export type SignInRefreshTokenArgs = {
 
 export type AppletId = { appletId: string };
 
+export type AppletIdWithPassword = { appletId: string; password: string };
+
 export type OwnerAndAppletIds = {
   ownerId: string;
   appletId: string;
