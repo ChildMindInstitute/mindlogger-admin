@@ -217,7 +217,7 @@ export const ReportConfigSetting = () => {
       </StyledForm>
       {passwordPopupVisible && (
         <AppletPasswordPopup
-          appletId={id}
+          appletId={id ?? ''}
           onClose={() => setPasswordPopupVisible(false)}
           popupType={AppletPasswordPopupType.Enter}
           popupVisible={passwordPopupVisible}

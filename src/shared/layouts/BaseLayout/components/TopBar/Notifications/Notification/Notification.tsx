@@ -40,6 +40,7 @@ export const Notification = ({
   timeAgo,
   viewed,
   encryption,
+  appletId,
 }: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
@@ -115,6 +116,7 @@ export const Notification = ({
       </StyledNotification>
       {passwordPopupVisible && (
         <AppletPasswordPopup
+          appletId={appletId ?? ''}
           popupVisible={passwordPopupVisible}
           onClose={() => setPasswordPopupVisible(false)}
           encryption={encryption}

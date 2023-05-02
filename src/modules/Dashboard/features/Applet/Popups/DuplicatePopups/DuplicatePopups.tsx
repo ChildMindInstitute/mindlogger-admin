@@ -93,6 +93,7 @@ export const DuplicatePopups = () => {
 
   const passwordModalClose = () => {
     setPasswordModalVisible(false);
+    duplicatePopupsClose();
   };
 
   const submitCallback = ({ appletPassword }: { appletPassword: string }) => {
@@ -139,6 +140,7 @@ export const DuplicatePopups = () => {
       </Modal>
       {passwordModalVisible && (
         <AppletPasswordPopup
+          appletId={appletId}
           onClose={passwordModalClose}
           popupType={AppletPasswordPopupType.Create}
           popupVisible={passwordModalVisible}

@@ -8,16 +8,16 @@ import { Config } from 'shared/state';
 import {
   TextResponse,
   SliderRows,
-  // AudioPlayer,
-  // AudioRecord,
-  // Date,
-  // Drawing,
-  // Geolocation,
-  // NumberSelection,
-  // PhotoResponse,
-  // SelectionRows,
-  // TimeRange,
-  // VideoResponse,
+  AudioPlayer,
+  AudioRecord,
+  Date,
+  Drawing,
+  Geolocation,
+  NumberSelection,
+  PhotoResponse,
+  SelectionRows,
+  TimeRange,
+  VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
@@ -26,41 +26,46 @@ import {
   defaultSliderConfig,
   defaultSliderRowsConfig,
   defaultSingleAndMultiSelectionConfig,
+  defaultNumberSelectionConfig,
+  defaultDateAndTimeRangeConfig,
+  defaultDrawingConfig,
+  defaultPhotoConfig,
+  defaultGeolocationConfig,
+  defaultMessageConfig,
 } from './OptionalItemsAndSettings.const';
-import { getEmptySliderOption } from '../ItemConfiguration.utils';
+import { getEmptySliderOption, getEmptyNumberSelection } from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {
     switch (responseType) {
-      // case ItemResponseType.NumberSelection:
-      //   return <NumberSelection name="minNumber" maxName="maxNumber" />;
+      case ItemResponseType.NumberSelection:
+        return <NumberSelection name={name} />;
       case ItemResponseType.Slider:
         return <SliderRows name={name} />;
       case ItemResponseType.SliderRows:
         return <SliderRows name={name} isMultiple />;
-
-      // case ItemResponseType.SingleSelectionPerRow:
-      //   return <SelectionRows isSingle />;
-      // case ItemResponseType.MultipleSelectionPerRow:
-      //   return <SelectionRows />;
-      // case ItemResponseType.Geolocation:
-      //   return <Geolocation />;
-      // case ItemResponseType.TimeRange:
-      //   return <TimeRange />;
-      // case ItemResponseType.Video:
-      //   return <VideoResponse />;
-      // case ItemResponseType.Photo:
-      //   return <PhotoResponse />;
-      // case ItemResponseType.Date:
-      //   return <Date />;
-      // case ItemResponseType.Audio:
-      //   return <AudioRecord name="audioDuration" />;
+      case ItemResponseType.SingleSelectionPerRow:
+        return <SelectionRows isSingle />;
+      case ItemResponseType.MultipleSelectionPerRow:
+        return <SelectionRows />;
+      case ItemResponseType.Geolocation:
+        return <Geolocation />;
+      case ItemResponseType.TimeRange:
+        return <TimeRange />;
+      case ItemResponseType.Video:
+        return <VideoResponse />;
+      case ItemResponseType.Photo:
+        return <PhotoResponse />;
+      case ItemResponseType.Date:
+        return <Date />;
+      case ItemResponseType.Audio:
+        return <AudioRecord name="audioDuration" />;
       case ItemResponseType.Text:
         return <TextResponse name={name} />;
-      // case ItemResponseType.AudioPlayer:
-      //   return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
-      // case ItemResponseType.Drawing:
-      //   return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
+      case ItemResponseType.Drawing:
+        return <Drawing name={name} />;
+      case ItemResponseType.AudioPlayer:
+        return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
       default:
         null;
     }
@@ -71,7 +76,6 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 
 export const useSettingsSetup = ({
   name,
-  removeOptions,
   handleAddOption,
   removeRows,
   handleAddRow,
@@ -79,7 +83,7 @@ export const useSettingsSetup = ({
   handleAddAlert,
   setShowColorPalette,
 }: SettingsSetupProps) => {
-  const { setValue, getValues, watch } = useFormContext();
+  const { setValue, getValues, watch, clearErrors } = useFormContext();
 
   const settings = watch(`${name}.config`);
 
@@ -93,31 +97,48 @@ export const useSettingsSetup = ({
   useEffect(() => {
     const subscription = watch((_, { name: fieldName, type }) => {
       if (fieldName === `${name}.responseType` && type === 'change') {
-        removeOptions?.();
-        removeRows?.();
+        setValue(`${name}.responseValues`, {});
+        clearErrors(`${name}.responseValues`);
 
         const responseType = getValues(`${name}.responseType`);
 
-        if (
-          responseType === ItemResponseType.SingleSelection ||
-          responseType === ItemResponseType.MultipleSelection
-        ) {
-          handleAddOption?.();
-          setConfig(defaultSingleAndMultiSelectionConfig);
-        }
-
-        if (responseType === ItemResponseType.Text) {
-          setConfig(defaultTextConfig);
-        }
-
-        if (responseType === ItemResponseType.Slider) {
-          setConfig(defaultSliderConfig);
-          setValue(`${name}.responseValues`, getEmptySliderOption(false));
-        }
-
-        if (responseType === ItemResponseType.SliderRows) {
-          handleAddRow?.();
-          setConfig(defaultSliderRowsConfig);
+        switch (responseType) {
+          case ItemResponseType.SingleSelection:
+          case ItemResponseType.MultipleSelection:
+            handleAddOption?.();
+            setConfig(defaultSingleAndMultiSelectionConfig);
+            break;
+          case ItemResponseType.Text:
+            setConfig(defaultTextConfig);
+            break;
+          case ItemResponseType.Slider:
+            setConfig(defaultSliderConfig);
+            setValue(`${name}.responseValues`, getEmptySliderOption(false));
+            break;
+          case ItemResponseType.NumberSelection:
+            setConfig(defaultNumberSelectionConfig);
+            setValue(`${name}.responseValues`, getEmptyNumberSelection());
+            break;
+          case ItemResponseType.Date:
+          case ItemResponseType.TimeRange:
+            setConfig(defaultDateAndTimeRangeConfig);
+            break;
+          case ItemResponseType.Drawing:
+            setConfig(defaultDrawingConfig);
+            break;
+          case ItemResponseType.Photo:
+            setConfig(defaultPhotoConfig);
+            break;
+          case ItemResponseType.Geolocation:
+            setConfig(defaultGeolocationConfig);
+            break;
+          case ItemResponseType.Message:
+            setConfig(defaultMessageConfig);
+            break;
+          case ItemResponseType.SliderRows:
+            handleAddRow?.();
+            setConfig(defaultSliderRowsConfig);
+            break;
         }
       }
     });

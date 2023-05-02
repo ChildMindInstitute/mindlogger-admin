@@ -1,10 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
+import { ValidationError } from 'yup';
 
 import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
-import { useCallbackPrompt, useCheckIfNewApplet, usePromptSetup } from 'shared/hooks';
+import {
+  useCallbackPrompt,
+  useCheckIfNewApplet,
+  usePromptSetup,
+  usePasswordFromStorage,
+} from 'shared/hooks';
 import {
   APPLET_PAGE_REGEXP_STRING,
   builderSessionStorage,
@@ -12,10 +18,11 @@ import {
   getDictionaryObject,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet } from 'shared/state';
-import { auth } from 'modules/Auth';
-import { EnterAppletPasswordForm } from 'modules/Dashboard';
+import { workspaces } from 'redux/modules';
+import { EnterAppletPasswordForm } from 'shared/components';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
 import { appletInfoMocked } from './mock';
 import {
@@ -23,7 +30,6 @@ import {
   removeAppletExtraFields,
   removeActivityExtraFields,
   mapItemResponseValues,
-  usePasswordFromStorage,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -96,6 +102,40 @@ export const useCheckIfHasAtLeastOneItem = () => {
   };
 };
 
+export const useCheckIfHasEmptyRequiredFields = () => {
+  const { getValues } = useFormContext();
+  const appletSchema = AppletSchema();
+
+  return async () => {
+    const body = getValues();
+
+    try {
+      await appletSchema.validate(body, { abortEarly: false });
+    } catch (e) {
+      const { errors } = e as ValidationError;
+
+      return errors && errors.some((errorMessage: string) => errorMessage.includes('required'));
+    }
+  };
+};
+
+export const useCheckIfHasErrorsInFields = () => {
+  const { getValues } = useFormContext();
+  const appletSchema = AppletSchema();
+
+  return async () => {
+    const body = getValues();
+
+    try {
+      await appletSchema.validate(body, { abortEarly: false });
+    } catch (e) {
+      const { errors } = e as ValidationError;
+
+      return errors?.length;
+    }
+  };
+};
+
 export const usePrompt = (isFormChanged: boolean) => {
   const {
     location,
@@ -151,10 +191,11 @@ export const usePrompt = (isFormChanged: boolean) => {
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { trigger } = useFormContext();
-  const userData = auth.useData();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
+  const checkIfHasEmptyRequiredFields = useCheckIfHasEmptyRequiredFields();
+  const checkIfHasErrorsInFields = useCheckIfHasErrorsInFields();
   const { createApplet, updateApplet, getAppletWithItems } = applet.thunk;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -168,10 +209,13 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
   const { getPassword, setPassword } = usePasswordFromStorage();
-  const ownerId = String(userData?.user?.id) || '';
+  const { ownerId } = workspaces.useData() || {};
+  const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
 
   useEffect(() => {
-    responseStatus === 'loading' && setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
+    if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
+      setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
+    }
     responseStatus === 'error' && setPublishProcessStep(SaveAndPublishSteps.Failed);
     responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
   }, [responseStatus]);
@@ -186,8 +230,11 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     handleSaveAndPublishFirstClick();
   };
   const handleSaveAndPublishFirstClick = async () => {
+    const isValid = await trigger();
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
     const hasNoItems = !checkIfHasAtLeastOneItem();
+    const hasEmptyRequiredFields = await checkIfHasEmptyRequiredFields();
+    const hasErrorsInFields = await checkIfHasErrorsInFields();
     setPublishProcessPopupOpened(true);
 
     if (hasNoActivities) {
@@ -201,12 +248,24 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       return;
     }
 
-    setPublishProcessPopupOpened(false);
-
-    const isValid = await trigger();
     if (!isValid) {
+      if (hasEmptyRequiredFields) {
+        setPublishProcessStep(SaveAndPublishSteps.EmptyRequiredFields);
+
+        return;
+      }
+
+      if (hasErrorsInFields) {
+        setPublishProcessStep(SaveAndPublishSteps.ErrorsInFields);
+
+        return;
+      }
+
       return;
     }
+
+    setPublishProcessPopupOpened(false);
+
     await sendRequestWithPasswordCheck();
   };
 
@@ -215,7 +274,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPublishProcessStep(undefined);
   };
   const sendRequestWithPasswordCheck = async () => {
-    const password = getPassword();
+    const password = getPassword(appletId ?? '');
     if (!password) {
       setIsPasswordPopupOpened(true);
 
@@ -233,12 +292,14 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     const body = getAppletData(appletPassword);
 
     let result;
+    checkIfAppletBeingCreatedOrUpdatedRef.current = true;
     if (isNewApplet || !appletId) {
       result = await dispatch(createApplet(body));
     }
     if (!isNewApplet && appletId) {
       result = await dispatch(updateApplet({ appletId, body }));
     }
+    checkIfAppletBeingCreatedOrUpdatedRef.current = false;
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
@@ -251,7 +312,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
         return;
       }
 
-      if (appletId) {
+      if (appletId && ownerId) {
         await dispatch(getAppletWithItems({ ownerId, appletId }));
         navigate(getBuilderAppletUrl(appletId));
       }

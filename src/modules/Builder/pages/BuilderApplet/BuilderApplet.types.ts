@@ -1,4 +1,4 @@
-import { ItemAlert, Config, ResponseValues, ActivitySettingsSubscale } from 'shared/state';
+import { ItemAlert, Config, ActivitySettingsSubscale, ResponseValues } from 'shared/state';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
 
 export type ItemFormValues = {

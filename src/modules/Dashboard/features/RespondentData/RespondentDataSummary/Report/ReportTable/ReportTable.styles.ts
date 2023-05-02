@@ -10,7 +10,7 @@ export const StyledTableWrapper = styled(Box)`
     font-size: ${variables.font.size.md};
   }
 
-  thead tr:first-child .MuiTableCell-root {
+  thead tr:first-of-type .MuiTableCell-root {
     border-bottom: none;
   }
 `;

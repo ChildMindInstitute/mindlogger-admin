@@ -63,6 +63,8 @@ export const ItemSettingsGroup = ({
               const isTextInputRequired =
                 settingKey === ItemConfigurationSettings.IsTextInputRequired;
               const isSkippableItem = settingKey === ItemConfigurationSettings.IsSkippable;
+              const isCorrectAnswerRequired =
+                settingKey === ItemConfigurationSettings.IsCorrectAnswerRequired;
 
               const isDisabled =
                 (isTextInputRequired && !get(value, ItemConfigurationSettings.HasTextInput)) ||
@@ -94,6 +96,16 @@ export const ItemSettingsGroup = ({
                       ...value?.[prefix],
                       [postfix]: event.target.checked,
                     },
+                  });
+                }
+
+                if (isCorrectAnswerRequired) {
+                  const checked = event.target.checked;
+
+                  return onChange({
+                    ...value,
+                    [settingKey]: checked,
+                    correctAnswer: checked ? '' : undefined,
                   });
                 }
 

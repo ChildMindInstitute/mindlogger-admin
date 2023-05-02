@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,16 +8,16 @@ import { useAppDispatch } from 'redux/store';
 
 import { InputController } from 'shared/components/FormComponents';
 import {
+  variables,
   StyledBodyMedium,
   StyledHeadline,
   StyledTitleMedium,
   StyledErrorText,
-} from 'shared/styles/styledComponents';
-import { getErrorMessage } from 'shared/utils/errors';
-import { variables } from 'shared/styles/variables';
+} from 'shared/styles';
+import { getErrorMessage } from 'shared/utils';
 import avatarSrc from 'assets/images/avatar.png';
-import { page } from 'resources';
-import { auth, User } from 'modules/Auth/state';
+import { auth, User } from 'redux/modules';
+import { useLogout } from 'shared/hooks';
 
 import { loginFormSchema } from '../Login.schema';
 import {
@@ -36,7 +35,6 @@ import {
 export const LockForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
-  const navigate = useNavigate();
 
   const { email, firstName, lastName } = auth.useData()?.user as User;
   const fullName = `${firstName} ${lastName}`;
@@ -47,10 +45,7 @@ export const LockForm = () => {
     defaultValues: { email, password: '' },
   });
 
-  const handleLogout = () => {
-    dispatch(auth.actions.resetAuthorization());
-    navigate(page.login);
-  };
+  const handleLogout = useLogout();
 
   const onSubmit = async (data: SignIn) => {
     setErrorMessage('');

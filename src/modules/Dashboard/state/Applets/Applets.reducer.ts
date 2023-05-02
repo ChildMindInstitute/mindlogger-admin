@@ -5,12 +5,13 @@ import { getEvents, getWorkspaceApplets } from './Applets.thunk';
 
 import {
   deleteApplet,
+  resetAppletsData,
   createAppletsPendingData,
   createAppletsFulfilledData,
   createAppletsRejectedData,
 } from './Applets.utils';
 
-export const reducers = { deleteApplet };
+export const reducers = { deleteApplet, resetAppletsData };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AppletsSchema>): void => {
   createAppletsPendingData({ builder, thunk: getWorkspaceApplets, key: 'applets' });

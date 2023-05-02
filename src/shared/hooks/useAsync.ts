@@ -41,5 +41,5 @@ export const useAsync = <T, K>(
     [asyncFunction],
   );
 
-  return { execute, value, error, isLoading };
+  return { execute, value, error, isLoading, setError };
 };

@@ -2,13 +2,20 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE } from 'shared/components';
-import { users, workspaces, applet, folders } from 'redux/modules';
-import { useTimeAgo, useBreadcrumbs, useTable, useAsync } from 'shared/hooks';
+import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Spinner } from 'shared/components';
+import { users, workspaces } from 'redux/modules';
+import {
+  useTimeAgo,
+  useBreadcrumbs,
+  useTable,
+  useAsync,
+  usePasswordFromStorage,
+} from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
-import { updatePinApi } from 'api';
+import { getWorkspaceRespondentAccessesApi, updatePinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
+import { getDateInUserTimezone } from 'shared/utils';
 
 import {
   RespondentsTableHeader,
@@ -29,7 +36,7 @@ import {
 
 export const Respondents = () => {
   const dispatch = useAppDispatch();
-  const { appletId: id } = useParams();
+  const { appletId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
@@ -42,9 +49,7 @@ export const Respondents = () => {
   ]);
 
   const respondentsData = users.useRespondentsData();
-  const appletsData = folders.useFlattenFoldersApplets();
 
-  const { result: appletData } = applet.useAppletData() ?? {};
   const { ownerId } = workspaces.useData() || {};
 
   const { getWorkspaceRespondents } = users.thunk;
@@ -54,7 +59,7 @@ export const Respondents = () => {
       ...args,
       params: {
         ...args.params,
-        ...(id && { appletId: id }),
+        ...(appletId && { appletId }),
       },
     };
 
@@ -68,9 +73,12 @@ export const Respondents = () => {
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
   const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
+  const [respondentAccesses, setRespondentAccesses] = useState<null | ChosenAppletData[]>(null);
 
   useBreadcrumbs();
 
+  const { getPassword } = usePasswordFromStorage();
+  const hasPassword = Boolean(getPassword(appletId ?? ''));
   const actions = {
     scheduleSetupAction: (index: number) => {
       setRespondentsDataIndex(index);
@@ -81,6 +89,14 @@ export const Respondents = () => {
       setDataExportPopupVisible(true);
     },
     viewDataAction: (index: number) => {
+      if (hasPassword && appletId) {
+        const respondentId = respondentsData?.result[index]?.id;
+        respondentId &&
+          navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
+
+        return;
+      }
+
       setRespondentsDataIndex(index);
       setViewDataPopupVisible(true);
     },
@@ -103,12 +119,21 @@ export const Respondents = () => {
             limit: DEFAULT_ROWS_PER_PAGE,
             search: searchValue,
             page: tableProps.page,
-            ...(id && { appletId: id }),
+            ...(appletId && { appletId }),
             ...(ordering && { ordering }),
           },
         }),
       );
   });
+
+  const { execute: getWorkspaceRespondentAccesses, isLoading } = useAsync(
+    getWorkspaceRespondentAccessesApi,
+    (res) => {
+      const appletsData = res?.data?.result as ChosenAppletData[] | undefined;
+      setRespondentAccesses(appletsData ?? null);
+    },
+    () => setRespondentAccesses(null),
+  );
 
   const handlePinClick = (accessId: string) => {
     execute({ ownerId, accessId });
@@ -116,7 +141,7 @@ export const Respondents = () => {
 
   const rows = respondentsData?.result?.map((user, index) => {
     const { secretId, nickname, lastSeen, accessId, isPinned, schedule } = user;
-    const latestAactive = lastSeen ? timeAgo.format(new Date(lastSeen)) : '';
+    const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
 
     return {
       pin: {
@@ -132,11 +157,11 @@ export const Respondents = () => {
         content: () => nickname,
         value: nickname,
       },
-      latestAactive: {
-        content: () => latestAactive,
-        value: latestAactive,
+      latestActive: {
+        content: () => latestActive,
+        value: latestActive,
       },
-      ...(id && {
+      ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
@@ -156,57 +181,49 @@ export const Respondents = () => {
       : undefined;
 
   const appletsSmallTableRows = getAppletsSmallTableRows(
-    chosenRespondentsItems,
-    appletsData,
+    respondentAccesses,
     setChosenAppletData,
+    chosenRespondentsItems?.id,
   );
 
   const renderEmptyComponent = () => {
     if (!rows?.length) {
-      return id ? t('noRespondentsForApplet') : t('noRespondents');
+      return appletId ? t('noRespondentsForApplet') : t('noRespondents');
     }
 
     return searchValue && t('noMatchWasFound', { searchValue });
   };
 
   useEffect(() => {
-    // TODO: when api for respondents applets will be ready - remove from now
-    if (chosenRespondentsItems && appletData && id) {
-      const { nickname: nickName, secretId: secretUserId, id: userId } = chosenRespondentsItems;
-      const { displayName: appletName, id } = appletData;
-      setChosenAppletData({
-        appletId: id as string,
-        appletName,
-        secretUserId,
-        hasIndividualSchedule: false,
-        userId,
-        nickName,
-      });
+    const respondentId = chosenRespondentsItems?.id;
+    if (ownerId && respondentId) {
+      getWorkspaceRespondentAccesses({ ownerId, respondentId });
 
       return;
     }
-    // TODO: when api for respondents applets will be ready - remove till now
 
-    const keys = chosenRespondentsItems && Object.keys(chosenRespondentsItems);
+    setRespondentAccesses(null);
+  }, [ownerId, chosenRespondentsItems]);
 
-    if (keys && keys.length === 1) {
-      const appletId = keys[0];
-      const { appletName, secretUserId, hasIndividualSchedule, userId, nickName } =
-        getChosenAppletData(chosenRespondentsItems, appletsData, appletId);
-      const chosenAppletData = {
-        appletId,
-        appletName,
-        secretUserId,
-        hasIndividualSchedule,
-        userId,
-        nickName,
-      };
-      setChosenAppletData(chosenAppletData);
-    } else {
-      setChosenAppletData(null);
+  useEffect(() => {
+    if (!respondentAccesses) return;
+
+    const respondentId = chosenRespondentsItems?.id;
+    if (respondentId && appletId) {
+      const respondentAccess = respondentAccesses.find(
+        ({ appletId: accessibleAppletId }) => accessibleAppletId === appletId,
+      );
+      const chosenAppletData =
+        respondentAccess && getChosenAppletData(respondentAccess, respondentId);
+      setChosenAppletData(chosenAppletData ?? null);
+
+      return;
     }
+
+    setChosenAppletData(null);
   }, [
-    appletsData,
+    respondentAccesses,
+    chosenRespondentsItems,
     chosenRespondentsItems,
     scheduleSetupPopupVisible,
     dataExportPopupVisible,
@@ -217,71 +234,77 @@ export const Respondents = () => {
 
   return (
     <>
-      <RespondentsTableHeader hasButton={!!id}>
-        {id && (
+      <RespondentsTableHeader hasButton={!!appletId}>
+        {appletId && (
           <StyledLeftBox>
             <StyledButton
               variant="outlined"
               startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
-              onClick={() => navigate(generatePath(page.appletAddUser, { appletId: id }))}
+              onClick={() => navigate(generatePath(page.appletAddUser, { appletId }))}
             >
               {t('addRespondent')}
             </StyledButton>
           </StyledLeftBox>
         )}
         <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
-        {id && <StyledRightBox />}
+        {appletId && <StyledRightBox />}
       </RespondentsTableHeader>
       <Table
-        columns={getHeadCells(id)}
+        columns={getHeadCells(appletId)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={respondentsData?.count || 0}
         {...tableProps}
       />
-      {scheduleSetupPopupVisible && (
-        <ScheduleSetupPopup
-          popupVisible={scheduleSetupPopupVisible}
-          setPopupVisible={setScheduleSetupPopupVisible}
-          tableRows={appletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
-      {viewDataPopupVisible && (
-        <ViewDataPopup
-          popupVisible={viewDataPopupVisible}
-          setPopupVisible={setViewDataPopupVisible}
-          tableRows={appletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
-      {removeAccessPopupVisible && (
-        <RespondentsRemoveAccessPopup
-          popupVisible={removeAccessPopupVisible}
-          setPopupVisible={setRemoveAccessPopupVisible}
-          tableRows={appletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
-      {dataExportPopupVisible && (
-        <DataExportPopup
-          popupVisible={dataExportPopupVisible}
-          setPopupVisible={setDataExportPopupVisible}
-          tableRows={appletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
-      {editRespondentPopupVisible && (
-        <EditRespondentPopup
-          popupVisible={editRespondentPopupVisible}
-          setPopupVisible={setEditRespondentPopupVisible}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          {scheduleSetupPopupVisible && (
+            <ScheduleSetupPopup
+              popupVisible={scheduleSetupPopupVisible}
+              setPopupVisible={setScheduleSetupPopupVisible}
+              tableRows={appletsSmallTableRows}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+          {viewDataPopupVisible && (
+            <ViewDataPopup
+              popupVisible={viewDataPopupVisible}
+              setPopupVisible={setViewDataPopupVisible}
+              tableRows={appletsSmallTableRows}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+          {removeAccessPopupVisible && (
+            <RespondentsRemoveAccessPopup
+              popupVisible={removeAccessPopupVisible}
+              setPopupVisible={setRemoveAccessPopupVisible}
+              tableRows={appletsSmallTableRows}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+          {dataExportPopupVisible && (
+            <DataExportPopup
+              popupVisible={dataExportPopupVisible}
+              setPopupVisible={setDataExportPopupVisible}
+              tableRows={appletsSmallTableRows}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+          {editRespondentPopupVisible && (
+            <EditRespondentPopup
+              popupVisible={editRespondentPopupVisible}
+              setPopupVisible={setEditRespondentPopupVisible}
+              chosenAppletData={chosenAppletData}
+              setChosenAppletData={setChosenAppletData}
+            />
+          )}
+        </>
       )}
     </>
   );

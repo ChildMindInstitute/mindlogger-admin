@@ -3,20 +3,21 @@ import { useTranslation } from 'react-i18next';
 
 import { Uploads, SharedToggleItemProps, ToggleItemContainer } from 'modules/Builder/components';
 import { Uploader } from 'shared/components';
-import { ItemResponseType } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_2MB } from 'shared/consts';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 
-import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 import { DrawingProps } from './Drawing.types';
 import { StyledImage } from './Drawing.styles';
 
-export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
+export const Drawing = ({ name }: DrawingProps) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
-  const drawerImageWatcher = watch(drawerImage);
-  const drawerBgImageWatcher = watch(drawerBgImage);
+
+  const drawingExampleName = `${name}.responseValues.drawingExample`;
+  const drawingBackgroundName = `${name}.responseValues.drawingBackground`;
+  const drawingExample = watch(drawingExampleName);
+  const drawingBackground = watch(drawingBackgroundName);
 
   const commonUploaderProps = {
     width: 20,
@@ -30,8 +31,8 @@ export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue(drawerImage, val)}
-          getValue={() => drawerImageWatcher}
+          setValue={(val: string) => setValue(drawingExampleName, val)}
+          getValue={() => drawingExample}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_2MB) })}
         />
       ),
@@ -42,29 +43,19 @@ export const Drawing = ({ drawerImage, drawerBgImage }: DrawingProps) => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue(drawerBgImage, val)}
-          getValue={() => drawerBgImageWatcher}
+          setValue={(val: string) => setValue(drawingBackgroundName, val)}
+          getValue={() => drawingBackground}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_2MB) })}
         />
       ),
     },
   ];
 
-  useOptionalItemSetup({
-    itemType: ItemResponseType.Drawing,
-    name: drawerImage,
-  });
-
-  useOptionalItemSetup({
-    itemType: ItemResponseType.Drawing,
-    name: drawerBgImage,
-  });
-
   const HeaderContent = ({ open }: SharedToggleItemProps) =>
     open ? null : (
       <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-        {drawerImageWatcher && <StyledImage src={drawerImageWatcher} />}
-        {drawerBgImageWatcher && <StyledImage src={drawerBgImageWatcher} />}
+        {drawingExample && <StyledImage src={drawingExample} />}
+        {drawingBackground && <StyledImage src={drawingBackground} />}
       </StyledFlexTopCenter>
     );
   const Content = () => (

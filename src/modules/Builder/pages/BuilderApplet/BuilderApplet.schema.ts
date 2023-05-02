@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { getMaxLengthValidationError } from 'shared/utils';
+import { getMaxLengthValidationError, getIsRequiredValidateMessage } from 'shared/utils';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
@@ -11,10 +11,9 @@ import {
 } from 'shared/consts';
 import { SLIDER_LABEL_MAX_LENGTH } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
-const { t } = i18n;
+import { testFunctionForUniqueness } from './BuilderApplet.utils';
 
-export const getIsRequiredValidateMessage = (field: string) =>
-  t('validationMessages.isRequired', { field: t(field) });
+const { t } = i18n;
 
 export const ResponseValuesSliderRowsSchema = () =>
   yup.array().of(
@@ -43,15 +42,31 @@ export const ResponseValuesOptionsSchema = () =>
     }),
   );
 
-export const ItemSchema = () => {
-  const itemSchema = yup
+export const ResponseValuesNumberSelectionSchema = () => ({
+  minValue: yup
+    .number()
+    .when('maxValue', (maxValue, schema) =>
+      schema.lessThan(
+        maxValue,
+        t('validationMessages.lessThan', { less: t('minValue'), than: t('maxValue') }),
+      ),
+    ),
+});
+
+export const ItemSchema = () =>
+  yup
     .object({
       name: yup
         .string()
         .required(getIsRequiredValidateMessage('itemName'))
         .matches(/^\w+$/g, {
           message: t('validationMessages.alphanumeric', { field: t('itemName') }),
-        }),
+        })
+        .test(
+          'unique-item-name',
+          t('validationMessages.unique', { field: t('itemName') }) as string,
+          (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
+        ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
       question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
@@ -61,6 +76,9 @@ export const ItemSchema = () => {
         )
           return schema.shape({ options: ResponseValuesOptionsSchema() });
 
+        if (responseType === ItemResponseType.NumberSelection)
+          return schema.shape(ResponseValuesNumberSelectionSchema());
+
         if (responseType === ItemResponseType.Slider)
           return schema.shape(ResponseValuesRowsSchema());
 
@@ -69,16 +87,31 @@ export const ItemSchema = () => {
 
         return schema.nullable();
       }),
-      config: yup.object({}),
+      config: yup.object({}).shape({
+        correctAnswerRequired: yup.boolean().nullable(),
+        correctAnswer: yup
+          .string()
+          .nullable()
+          .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
+            correctAnswerRequired
+              ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+              : schema,
+          ),
+      }),
     })
     .required();
 
-  return itemSchema;
-};
-
 export const ActivitySchema = () =>
   yup.object({
-    name: yup.string().required(getIsRequiredValidateMessage('activityName')),
+    name: yup
+      .string()
+      .required(getIsRequiredValidateMessage('activityName'))
+      .test(
+        'unique-activity-name',
+        t('validationMessages.unique', { field: t('activityName') }) as string,
+        (activityName, context) =>
+          testFunctionForUniqueness('activities', activityName ?? '', context),
+      ),
     description: yup.string(),
     image: yup.string(),
     splashScreen: yup.string(),
@@ -103,7 +136,13 @@ export const ActivityFlowSchema = () =>
       name: yup
         .string()
         .required(getIsRequiredValidateMessage('activityFlowName'))
-        .max(MAX_NAME_LENGTH, getMaxLengthValidationError),
+        .max(MAX_NAME_LENGTH, getMaxLengthValidationError)
+        .test(
+          'unique-activity-flow-name',
+          t('validationMessages.unique', { field: t('activityFlowName') }) as string,
+          (activityFlowName, context) =>
+            testFunctionForUniqueness('activityFlows', activityFlowName ?? '', context),
+        ),
       description: yup
         .string()
         .required(getIsRequiredValidateMessage('activityFlowDescription'))

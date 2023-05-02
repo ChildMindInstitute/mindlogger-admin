@@ -90,12 +90,7 @@ export const ActivityFlowBuilder = () => {
 
   const activitiesIdsObjects = getActivitiesIdsObjects(activities);
 
-  useBreadcrumbs([
-    {
-      icon: 'flow',
-      label: t('activityFlowBuilder'),
-    },
-  ]);
+  useBreadcrumbs();
 
   useEffect(() => {
     if (activityFlowIndex !== -1) return;

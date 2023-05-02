@@ -68,7 +68,9 @@ export const InputController = <T extends FieldValues>({
         const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
           if (handleCustomChange) return handleCustomChange(event);
 
-          onChange(event.target.value);
+          const { value } = event.target;
+
+          onChange(isNumberType ? +value : value);
         };
 
         return (

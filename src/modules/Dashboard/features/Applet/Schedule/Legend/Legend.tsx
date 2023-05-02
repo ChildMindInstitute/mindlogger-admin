@@ -10,7 +10,7 @@ import { ExportSchedulePopup } from '../ExportSchedulePopup';
 import { ImportSchedulePopup } from '../ImportSchedulePopup';
 import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
 import { RemoveIndividualSchedulePopup } from '../RemoveIndividualSchedulePopup';
-import { CreateActivityPopup } from '../CreateActivityPopup';
+import { CreateEventPopup } from '../CreateEventPopup';
 import { ExpandedList } from './ExpandedList';
 import { SearchPopup } from './SearchPopup';
 import { Search } from './Search';
@@ -37,10 +37,10 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
     useState(false);
   const [importSchedulePopupVisible, setImportSchedulePopupVisible] = useState(false);
-  const [clearScheduleEventsPopupVisible, setClearScheduleEventsPopupVisible] = useState(false);
+  const [clearScheduledEventsPopupVisible, setClearScheduledEventsPopupVisible] = useState(false);
   const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
     useState(false);
-  const [createActivityPopupVisible, setCreateActivityPopupVisible] = useState(false);
+  const [createEventPopupVisible, setCreateEventPopupVisible] = useState(false);
 
   const searchContainerRef = useRef<HTMLElement>(null);
 
@@ -57,11 +57,11 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   };
 
   const clearAllScheduledEventsAction = () => {
-    setClearScheduleEventsPopupVisible(true);
+    setClearScheduledEventsPopupVisible(true);
   };
 
   const onCreateActivitySchedule = () => {
-    setCreateActivityPopupVisible(true);
+    setCreateEventPopupVisible(true);
   };
 
   const expandedLists = useExpandedLists(
@@ -173,14 +173,14 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           onClose={() => setImportSchedulePopupVisible(false)}
         />
       )}
-      {clearScheduleEventsPopupVisible && (
+      {clearScheduledEventsPopupVisible && (
         <ClearScheduledEventsPopup
-          open={clearScheduleEventsPopupVisible}
+          open={clearScheduledEventsPopupVisible}
           appletName={appletName}
           appletId={appletId}
           isDefault={!isIndividual}
           name="John Doe"
-          onClose={() => setClearScheduleEventsPopupVisible(false)}
+          onClose={() => setClearScheduledEventsPopupVisible(false)}
         />
       )}
       {removeIndividualSchedulePopupVisible && (
@@ -191,9 +191,9 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
         />
       )}
-      <CreateActivityPopup
-        open={createActivityPopupVisible}
-        setCreateActivityPopupVisible={setCreateActivityPopupVisible}
+      <CreateEventPopup
+        open={createEventPopupVisible}
+        setCreateEventPopupVisible={setCreateEventPopupVisible}
         defaultStartDate={new Date()}
       />
     </StyledLegend>

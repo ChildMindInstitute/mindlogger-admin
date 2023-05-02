@@ -7,7 +7,6 @@ import {
   DuplicateAppletSettings,
   DeleteAppletSetting,
   ReportConfigSetting,
-  ShareAppletSetting,
   DownloadSchemaSetting,
 } from 'shared/features/AppletSettings';
 
@@ -53,7 +52,7 @@ export const settings = [
       {
         icon: <Svg id="transfer-ownership" />,
         label: 'transferOwnership',
-        component: <TransferOwnershipSetting />,
+        component: <TransferOwnershipSetting isApplet />,
         param: 'transfer-ownership',
       },
       {

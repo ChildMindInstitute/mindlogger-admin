@@ -1,14 +1,11 @@
-import { Box, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { theme, variables, StyledFlexAllCenter } from 'shared/styles';
 
-export const StyledCustomCover = styled(Box)`
+export const StyledCustomCover = styled(StyledFlexAllCenter)`
   height: 3.2rem;
   width: 3.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
   border-radius: ${variables.borderRadius.xxs};
   background-color: ${variables.palette.primary_container};
   margin-right: ${theme.spacing(1.2)};

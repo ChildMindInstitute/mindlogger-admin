@@ -1,10 +1,10 @@
 import { folders } from 'modules/Dashboard/state';
 import { applet } from 'shared/state';
 
-export const useAppletDataOrFolderData = (appletId?: string, isBuilder = false) => {
+export const useAppletDataOrFolderData = (appletId?: string, isApplet = false) => {
   if (!appletId) return;
 
-  if (isBuilder) {
+  if (isApplet) {
     const appletData = applet.useAppletData()?.result;
 
     return {

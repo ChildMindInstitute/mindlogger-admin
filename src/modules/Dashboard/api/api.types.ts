@@ -98,6 +98,22 @@ export const enum Periodicity {
   Always = 'ALWAYS',
 }
 
+export const enum NotificationType {
+  Fixed = 'FIXED',
+  Random = 'RANDOM',
+}
+
+export type EventNotifications =
+  | {
+      atTime?: string | null;
+      fromTime?: string | null;
+      toTime?: string | null;
+      triggerType: NotificationType;
+    }[]
+  | null;
+
+export type EventReminder = { activityIncomplete: number; reminderTime: string | null } | null;
+
 export type CreateEventType = AppletId & {
   body: {
     startTime?: string;
@@ -115,6 +131,10 @@ export type CreateEventType = AppletId & {
     respondentId?: string;
     activityId?: string;
     flowId?: string;
+    notification: {
+      notifications: EventNotifications;
+      reminder: EventReminder;
+    } | null;
   };
 };
 
@@ -183,7 +203,7 @@ export type OwnerId = {
   ownerId: string;
 };
 
-export type Answers = { id: string; respondentId: string; createdDate: string };
+export type Answers = { id: string; createdDate: string } & RespondentId;
 
 export type Answer = AppletId & { answerId: string };
 
@@ -204,8 +224,18 @@ export type GetAnswersNotesParams = {
   };
 };
 
-export type AppletSubmitDateList = AppletId & {
-  respondentId: string;
-  fromDate: string;
-  toDate: string;
-};
+export type AppletSubmitDateList = AppletId &
+  RespondentId & {
+    fromDate: string;
+    toDate: string;
+  };
+
+export type EventId = { eventId: string };
+
+export type RespondentAccesses = OwnerId &
+  RespondentId & {
+    search?: string;
+    page?: number;
+    limit?: number;
+    ordering?: string;
+  };

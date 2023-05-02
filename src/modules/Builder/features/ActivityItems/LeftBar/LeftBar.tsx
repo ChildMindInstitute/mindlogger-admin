@@ -4,12 +4,12 @@ import { Button, Box } from '@mui/material';
 import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 
 import { Svg } from 'shared/components';
-import { StyledTitleMedium, theme } from 'shared/styles';
+import { StyledFlexAllCenter, StyledTitleMedium, theme } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { InsertItem, DndDroppable } from 'modules/Builder/components';
 
-import { StyledBar, StyledHeader, StyledContent, StyledBtnWrapper } from './LeftBar.styles';
+import { StyledBar, StyledHeaderTitle, StyledContent, StyledBtnWrapper } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
 import { Item } from './Item';
 import { getItemKey } from '../ActivityItems.utils';
@@ -30,6 +30,7 @@ export const LeftBar = ({
   const [isDragging, setIsDragging] = useState(false);
 
   const { fieldName } = useCurrentActivity();
+  const hasActiveItem = !!activeItemId;
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
@@ -37,9 +38,24 @@ export const LeftBar = ({
     onMoveItem(source.index, destination.index);
   };
 
+  const addItemBtn = (
+    <StyledBtnWrapper>
+      <Button
+        variant="outlined"
+        startIcon={<Svg id="add" width={18} height={18} />}
+        onClick={onAddItem}
+      >
+        {t('addItem')}
+      </Button>
+    </StyledBtnWrapper>
+  );
+
   return (
-    <StyledBar hasActiveItem={!!activeItemId} ref={containerRef}>
-      <StyledHeader isSticky={isHeaderSticky}>{t('items')}</StyledHeader>
+    <StyledBar hasActiveItem={hasActiveItem} ref={containerRef}>
+      <StyledFlexAllCenter sx={{ justifyContent: 'space-between' }}>
+        <StyledHeaderTitle isSticky={isHeaderSticky}>{t('items')}</StyledHeaderTitle>
+        {!hasActiveItem && addItemBtn}
+      </StyledFlexAllCenter>
       <StyledContent>
         {items?.length ? (
           <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
@@ -83,15 +99,7 @@ export const LeftBar = ({
             {t('itemIsRequired')}
           </StyledTitleMedium>
         )}
-        <StyledBtnWrapper>
-          <Button
-            variant="outlined"
-            startIcon={<Svg id="add" width={18} height={18} />}
-            onClick={onAddItem}
-          >
-            {t('addItem')}
-          </Button>
-        </StyledBtnWrapper>
+        {hasActiveItem && addItemBtn}
       </StyledContent>
     </StyledBar>
   );

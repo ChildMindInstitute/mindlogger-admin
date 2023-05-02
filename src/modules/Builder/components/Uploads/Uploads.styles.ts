@@ -3,8 +3,6 @@ import { styled } from '@mui/system';
 
 import { StyledTitleMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { Svg } from 'shared/components';
 
 export const StyledContainer = styled(Box)`
   display: flex;
@@ -20,11 +18,6 @@ export const StyledUploadImg = styled(Box)`
 export const StyledUploadImgs = styled(StyledContainer)`
   flex-direction: row;
   justify-content: flex-end;
-`;
-
-export const StyledSvg = styled(Svg)`
-  fill: ${variables.palette.outline};
-  margin-left: ${theme.spacing(1)};
 `;
 
 export const StyledTitle = styled(StyledTitleMedium)`

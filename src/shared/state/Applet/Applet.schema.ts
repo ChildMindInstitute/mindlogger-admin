@@ -79,6 +79,63 @@ export type SliderConfig = {
   };
 };
 
+export type NumberConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+};
+
+export type DateAndTimeRangeConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type DrawingConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+  removeUndoButton: boolean;
+  navigationToTop: boolean;
+};
+
+export type PhotoConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type GeolocationConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type MessageConfig = {
+  skippableItem?: boolean;
+  removeBackButton: boolean;
+  timer: number;
+};
+
 export type SliderRowsConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
@@ -120,18 +177,44 @@ export type SliderRowsResponseValues = {
 };
 
 export type TextItemResponseValues = null;
+export type DateAndTimeRangeResponseValues = null;
+export type PhotoResponseValues = null;
+export type GeolocationResponseValues = null;
+export type MessageResponseValues = null;
+
+export type NumberItemResponseValues = {
+  minValue: number;
+  maxValue: number;
+};
+
+export type DrawingResponseValues = {
+  drawingExample: string;
+  drawingBackground: string;
+};
 
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
   | SliderRowsResponseValues
-  | SliderItemResponseValues;
+  | SliderItemResponseValues
+  | NumberItemResponseValues
+  | DateAndTimeRangeResponseValues
+  | DrawingResponseValues
+  | PhotoResponseValues
+  | GeolocationResponseValues
+  | MessageResponseValues;
 
 export type Config =
   | TextInputConfig
   | SingleAndMultipleSelectionConfig
   | SliderConfig
-  | SliderRowsConfig;
+  | SliderRowsConfig
+  | NumberConfig
+  | DateAndTimeRangeConfig
+  | DrawingConfig
+  | PhotoConfig
+  | GeolocationConfig
+  | MessageConfig;
 
 export type ItemAlert = {
   message: string;

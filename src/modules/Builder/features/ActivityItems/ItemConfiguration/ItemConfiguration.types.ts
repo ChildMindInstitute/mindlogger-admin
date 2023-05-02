@@ -22,8 +22,8 @@ export enum ItemConfigurationSettings {
   IsPlayAudioOnce = 'isPlayAudioOnce',
   IsGoBackRemoved = 'removeBackButton',
   IsTextInputRequired = 'additionalResponseOption.textInputRequired',
-  IsUndoRemoved = 'isUndoRemoved',
-  IsNavigationMovedToTheTop = 'isNavigationMovedToTheTop',
+  IsUndoRemoved = 'removeUndoButton',
+  IsNavigationMovedToTheTop = 'navigationToTop',
 }
 
 export type SelectionOption = {

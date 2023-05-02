@@ -37,9 +37,8 @@ export const Header = ({
   const { watch } = useFormContext();
 
   const settings = watch(`${name}.config`);
-  const { minValue, maxValue, minLabel, maxLabel, minImage, maxImage } = watch(
-    `${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`,
-  );
+  const { minValue, maxValue, minLabel, maxLabel, minImage, maxImage } =
+    watch(`${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`) || {};
 
   if (isExpanded) {
     return (
