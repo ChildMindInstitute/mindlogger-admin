@@ -98,6 +98,44 @@ export type DateAndTimeRangeConfig = {
   timer: number;
 };
 
+export type DrawingConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+  removeUndoButton: boolean;
+  navigationToTop: boolean;
+};
+
+export type PhotoConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type GeolocationConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type MessageConfig = {
+  skippableItem?: boolean;
+  removeBackButton: boolean;
+  timer: number;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -126,10 +164,18 @@ export type SingleAndMultipleSelectItemResponseValues = {
 
 export type TextItemResponseValues = null;
 export type DateAndTimeRangeResponseValues = null;
+export type PhotoResponseValues = null;
+export type GeolocationResponseValues = null;
+export type MessageResponseValues = null;
 
 export type NumberItemResponseValues = {
   minValue: number;
   maxValue: number;
+};
+
+export type DrawingResponseValues = {
+  drawingExample: string;
+  drawingBackground: string;
 };
 
 export type ResponseValues =
@@ -137,14 +183,22 @@ export type ResponseValues =
   | SingleAndMultipleSelectItemResponseValues
   | SliderItemResponseValues
   | NumberItemResponseValues
-  | DateAndTimeRangeResponseValues;
+  | DateAndTimeRangeResponseValues
+  | DrawingResponseValues
+  | PhotoResponseValues
+  | GeolocationResponseValues
+  | MessageResponseValues;
 
 export type Config =
   | TextInputConfig
   | SingleAndMultipleSelectionConfig
   | SliderConfig
   | NumberConfig
-  | DateAndTimeRangeConfig;
+  | DateAndTimeRangeConfig
+  | DrawingConfig
+  | PhotoConfig
+  | GeolocationConfig
+  | MessageConfig;
 
 export type ItemAlert = {
   message: string;

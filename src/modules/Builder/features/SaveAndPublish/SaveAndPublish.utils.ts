@@ -1,4 +1,5 @@
 import {
+  DrawingResponseValues,
   NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
@@ -49,15 +50,16 @@ export const mapItemResponseValues = (
       ),
     };
 
-  if (responseType === ItemResponseType.Slider)
+  if (
+    responseType === ItemResponseType.Slider ||
+    responseType === ItemResponseType.NumberSelection ||
+    responseType === ItemResponseType.Drawing
+  )
     return {
-      ...(responseValues as SliderItemResponseValues),
-      options: undefined,
-    };
-
-  if (responseType === ItemResponseType.NumberSelection)
-    return {
-      ...(responseValues as NumberItemResponseValues),
+      ...(responseValues as
+        | SliderItemResponseValues
+        | NumberItemResponseValues
+        | DrawingResponseValues),
       options: undefined,
     };
 
