@@ -9,7 +9,7 @@ import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 import { getAppletData } from 'shared/utils/getAppletData';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { useAsync, usePasswordFromStorage } from 'shared/hooks';
 import { postAppletPasswordCheckApi } from 'shared/api';
 
 import { StyledController } from '../Password.styles';
@@ -22,10 +22,13 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
     const passwordRef = useRef<string | null>(null);
+    const { setPassword } = usePasswordFromStorage();
     const { execute } = useAsync(
       postAppletPasswordCheckApi,
       () => {
-        submitCallback && submitCallback({ appletPassword: passwordRef.current });
+        const appletPassword = passwordRef.current ?? '';
+        setPassword(appletId, appletPassword);
+        submitCallback && submitCallback({ appletPassword });
       },
       () => {
         setError('appletPassword', { message: t('incorrectAppletPassword') });
