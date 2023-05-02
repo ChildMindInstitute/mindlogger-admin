@@ -5,7 +5,11 @@ import { page } from 'resources';
 
 export const getActivityTabs = (
   params: { activityId?: string; appletId?: string },
-  { hasAboutActivityErrors, hasActivityItemsErrors }: Record<string, boolean>,
+  {
+    hasAboutActivityErrors,
+    hasActivityItemsErrors,
+    hasActivitySubscalesErrors,
+  }: Record<string, boolean>,
 ) => [
   {
     id: 'simple-tabpanel-about',
@@ -36,5 +40,6 @@ export const getActivityTabs = (
     icon: <Svg id="settings" />,
     activeIcon: <Svg id="settings-filled" />,
     path: generatePath(page.builderAppletActivitySettings, params),
+    hasError: hasActivitySubscalesErrors,
   },
 ];

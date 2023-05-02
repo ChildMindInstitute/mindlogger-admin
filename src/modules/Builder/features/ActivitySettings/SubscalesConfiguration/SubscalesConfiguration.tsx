@@ -1,15 +1,16 @@
+import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { RadioGroupController, Switch } from 'shared/components/FormComponents';
+import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
-import { AppletFormValues } from 'modules/Builder/pages';
-import { DataTable, Svg } from 'shared/components';
+import { DataTable, Svg, SwitchWithState } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
+import { ActivitySettingsSubscale } from 'shared/state';
 
 import { StyledButtonsContainer } from '../ActivitySettings.styles';
 import { commonButtonProps } from '../ActivitySettings.const';
@@ -29,15 +30,17 @@ import { SubscaleContentProps } from './SubscalesConfiguration.types';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
-  const { control, watch } = useFormContext<AppletFormValues>();
+  const { control, watch, register, unregister, setValue } = useFormContext();
+  const { fieldName, activity } = useCurrentActivity();
+  const subscalesName = `${fieldName}.subscales`;
+  const calculateTotalScoreName = `${fieldName}.calculateTotalScore`;
   const { append: appendSubscale, remove: removeSubscale } = useFieldArray({
     control,
-    name: 'subscales',
+    name: subscalesName,
   });
+  const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(false);
 
-  const { activity } = useCurrentActivity();
-  const subscales = watch('subscales');
-  const calculateTotalScoreSwitch = watch('calculateTotalScoreSwitch');
+  const subscales: ActivitySettingsSubscale[] = watch(subscalesName);
   const filteredItems = (activity?.items ?? []).filter(checkOnItemType);
   const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
     filteredItems,
@@ -63,32 +66,46 @@ export const SubscalesConfiguration = () => {
 
   const handleOnTotalScoreLookupTable = () => false;
 
+  useEffect(() => {
+    if (calculateTotalScoreSwitch) {
+      register(calculateTotalScoreName);
+      setValue(calculateTotalScoreName, SubscaleTotalScore.Sum);
+    }
+    if (!calculateTotalScoreSwitch) {
+      unregister(calculateTotalScoreName);
+      setValue(calculateTotalScoreName, undefined);
+    }
+  }, [calculateTotalScoreSwitch]);
+
   return (
     <StyledButtonsContainer>
-      {subscales?.map((subscale, index) => (
-        <ToggleItemContainer
-          key={`data-subscale-${getEntityKey(subscale) || index}`}
-          title={t('subscaleHeader', {
-            index: index + 1,
-            name: subscale?.name,
-          })}
-          HeaderContent={SubscaleHeaderContent}
-          Content={SubscaleContent}
-          headerContentProps={{
-            onRemove: () => {
-              removeSubscale(index);
-            },
-          }}
-          contentProps={{
-            subscaleId: subscale.id,
-            name: `subscales.${index}`,
-            notUsedElements,
-          }}
-          headerStyles={{
-            justifyContent: 'space-between',
-          }}
-        />
-      ))}
+      {subscales?.map((subscale, index) => {
+        const subscaleName = `${subscalesName}.${index}`;
+        const title = t('subscaleHeader', {
+          index: index + 1,
+          name: subscale?.name,
+        });
+
+        return (
+          <ToggleItemContainer
+            key={`data-subscale-${getEntityKey(subscale) || index}`}
+            HeaderContent={SubscaleHeaderContent}
+            Content={SubscaleContent}
+            headerContentProps={{
+              onRemove: () => {
+                removeSubscale(index);
+              },
+              name: subscaleName,
+              title,
+            }}
+            contentProps={{
+              subscaleId: subscale.id,
+              name: subscaleName,
+              notUsedElements,
+            }}
+          />
+        );
+      })}
       <Button {...commonButtonProps} onClick={handleAddSubscale} sx={{ mb: theme.spacing(2) }}>
         {t('addSubscales')}
       </Button>
@@ -101,9 +118,11 @@ export const SubscalesConfiguration = () => {
           styles={{ width: '100%' }}
         />
       )}
-      <Switch
-        name="calculateTotalScoreSwitch"
-        control={control}
+      <SwitchWithState
+        checked={calculateTotalScoreSwitch}
+        handleChange={() => {
+          setCalculateTotalScoreSwitch((prevState) => !prevState);
+        }}
         label={t('calculateTotalScore')}
         tooltipText={t('calculateTotalScoreTooltip')}
       />
@@ -113,10 +132,9 @@ export const SubscalesConfiguration = () => {
             <Svg id="lookup-table" width="20" height="20" />
           </StyledSvgButton>
           <RadioGroupController
-            name="calculateTotalScore"
+            name={calculateTotalScoreName}
             control={control}
             options={options}
-            defaultValue={SubscaleTotalScore.Sum}
           />
         </StyledContainerWithBg>
       )}

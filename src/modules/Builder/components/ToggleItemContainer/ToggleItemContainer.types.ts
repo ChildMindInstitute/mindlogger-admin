@@ -5,7 +5,7 @@ export type SharedToggleItemProps = {
   open?: boolean;
 };
 export type ToggleItemProps = {
-  title: string;
+  title?: string;
   HeaderContent: FC<SharedToggleItemProps & any>;
   Content: FC<SharedToggleItemProps & any>;
   headerContentProps?: Record<string, unknown>;

@@ -280,6 +280,12 @@ export type Activity = {
   responseIsEditable?: boolean;
   isHidden?: boolean;
   items: Item[];
+  generateReport?: boolean;
+  showScoreSummary?: boolean;
+  scores?: ActivitySettingsScore[];
+  sections?: ActivitySettingsSection[];
+  subscales?: ActivitySettingsSubscale[];
+  calculateTotalScore?: SubscaleTotalScore;
 };
 
 type Theme = {
@@ -332,11 +338,6 @@ export type SingleApplet = {
   theme?: Theme;
   password?: string;
   generateReport: boolean;
-  showScoreSummary: boolean;
-  calculateTotalScore?: SubscaleTotalScore;
-  scores?: ActivitySettingsScore[];
-  sections?: ActivitySettingsSection[];
-  subscales?: ActivitySettingsSubscale[];
 };
 
 export type AppletSchema = {

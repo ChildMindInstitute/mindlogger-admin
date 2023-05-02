@@ -95,7 +95,7 @@ export const DataTable = ({
             })}
             {!data?.length && (
               <TableRow>
-                <TableCell sx={{ textAlign: 'left' }}>
+                <TableCell sx={{ textAlign: 'left', backgroundColor: 'inherit' }}>
                   <StyledLabelLarge>{noDataPlaceholder}</StyledLabelLarge>
                 </TableCell>
               </TableRow>

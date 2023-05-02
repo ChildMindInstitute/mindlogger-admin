@@ -101,6 +101,22 @@ export const ItemSchema = () =>
     })
     .required();
 
+export const SubscaleSchema = () =>
+  yup
+    .object({
+      name: yup
+        .string()
+        .required(getIsRequiredValidateMessage('subscaleName'))
+        .test(
+          'unique-subscale-name',
+          t('validationMessages.unique', { field: t('subscaleName') }) as string,
+          (subscaleName, context) =>
+            testFunctionForUniqueness('subscales', subscaleName ?? '', context),
+        ),
+      items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
+    })
+    .required();
+
 export const ActivitySchema = () =>
   yup.object({
     name: yup
@@ -121,6 +137,7 @@ export const ActivitySchema = () =>
     responseIsEditable: yup.boolean(),
     items: yup.array().of(ItemSchema()).min(1),
     isHidden: yup.boolean(),
+    subscales: yup.array().of(SubscaleSchema()),
   });
 
 export const ActivityFlowItemSchema = () =>
