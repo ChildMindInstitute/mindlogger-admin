@@ -58,43 +58,43 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
     ],
   },
-  // {
-  //   groupName: 'matrixSelect',
-  //   groupOptions: [
-  //     {
-  //       value: ItemResponseType.SingleSelectionPerRow,
-  //       icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
-  //     },
-  //     {
-  //       value: ItemResponseType.MultipleSelectionPerRow,
-  //       icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
-  //     },
-  //     { value: ItemResponseType.SliderRows, icon: itemsTypeIcons[ItemResponseType.SliderRows] },
-  //   ],
-  // },
+  {
+    groupName: 'matrixSelect',
+    groupOptions: [
+      {
+        value: ItemResponseType.SingleSelectionPerRow,
+        icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
+      },
+      {
+        value: ItemResponseType.MultipleSelectionPerRow,
+        icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
+      },
+      { value: ItemResponseType.SliderRows, icon: itemsTypeIcons[ItemResponseType.SliderRows] },
+    ],
+  },
   {
     groupName: 'input',
     groupOptions: [
       { value: ItemResponseType.Text, icon: itemsTypeIcons[ItemResponseType.Text] },
       { value: ItemResponseType.Drawing, icon: itemsTypeIcons[ItemResponseType.Drawing] },
-      // { value: ItemResponseType.Photo, icon: itemsTypeIcons[ItemResponseType.Photo] },
-      // { value: ItemResponseType.Video, icon: itemsTypeIcons[ItemResponseType.Video] },
+      { value: ItemResponseType.Photo, icon: itemsTypeIcons[ItemResponseType.Photo] },
+      { value: ItemResponseType.Video, icon: itemsTypeIcons[ItemResponseType.Video] },
     ],
   },
-  // {
-  //   groupName: 'record',
-  //   groupOptions: [
-  //     { value: ItemResponseType.Geolocation, icon: itemsTypeIcons[ItemResponseType.Geolocation] },
-  //     { value: ItemResponseType.Audio, icon: itemsTypeIcons[ItemResponseType.Audio] },
-  //   ],
-  // },
-  // {
-  //   groupName: 'display',
-  //   groupOptions: [
-  //     { value: ItemResponseType.Message, icon: itemsTypeIcons[ItemResponseType.Message] },
-  //     { value: ItemResponseType.AudioPlayer, icon: itemsTypeIcons[ItemResponseType.AudioPlayer] },
-  //   ],
-  // },
+  {
+    groupName: 'record',
+    groupOptions: [
+      { value: ItemResponseType.Geolocation, icon: itemsTypeIcons[ItemResponseType.Geolocation] },
+      { value: ItemResponseType.Audio, icon: itemsTypeIcons[ItemResponseType.Audio] },
+    ],
+  },
+  {
+    groupName: 'display',
+    groupOptions: [
+      { value: ItemResponseType.Message, icon: itemsTypeIcons[ItemResponseType.Message] },
+      { value: ItemResponseType.AudioPlayer, icon: itemsTypeIcons[ItemResponseType.AudioPlayer] },
+    ],
+  },
 ];
 
 export const SELECTION_OPTIONS_COLOR_PALETTE = [
