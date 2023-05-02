@@ -15,9 +15,9 @@ import {
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
 import { StyledTextBtn } from '../../RespondentData.styles';
-import { ReportTable } from './ReportTable';
 import { ScatterChart } from '../Charts/ScatterChart';
 import { BarChart } from '../Charts/BarChart';
+import { Subscales } from './Subscales';
 
 export const Report = ({ activity }: { activity: Activity }) => {
   const { t } = useTranslation();
@@ -47,10 +47,10 @@ export const Report = ({ activity }: { activity: Activity }) => {
           </Tooltip>
         </StyledTitleLargish>
         <ScatterChart />
-        <ReportTable />
         <Box sx={{ m: theme.spacing(2.4, 0) }}>
           <BarChart />
         </Box>
+        <Subscales />
       </Box>
     </StyledReport>
   );
