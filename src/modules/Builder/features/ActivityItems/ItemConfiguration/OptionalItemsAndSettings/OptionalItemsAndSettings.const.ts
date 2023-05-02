@@ -59,3 +59,15 @@ export const defaultDateAndTimeRangeConfig = {
   },
   timer: DEFAULT_DISABLED_TIMER_VALUE,
 };
+
+export const defaultDrawingConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: 0,
+  removeUndoButton: false,
+  navigationToTop: false,
+};

@@ -11,7 +11,7 @@ import {
   // AudioPlayer,
   // AudioRecord,
   Date,
-  // Drawing,
+  Drawing,
   // Geolocation,
   NumberSelection,
   // PhotoResponse,
@@ -27,6 +27,7 @@ import {
   defaultSingleAndMultiSelectionConfig,
   defaultNumberSelectionConfig,
   defaultDateAndTimeRangeConfig,
+  defaultDrawingConfig,
 } from './OptionalItemsAndSettings.const';
 import { getEmptySliderOption, getEmptyNumberSelection } from '../ItemConfiguration.utils';
 
@@ -60,8 +61,8 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
         return <TextResponse name={name} />;
       // case ItemResponseType.AudioPlayer:
       //   return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
-      // case ItemResponseType.Drawing:
-      //   return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
+      case ItemResponseType.Drawing:
+        return <Drawing name={name} />;
       default:
         null;
     }
@@ -120,6 +121,10 @@ export const useSettingsSetup = ({
 
         if (responseType === ItemResponseType.Date || responseType === ItemResponseType.TimeRange) {
           setConfig(defaultDateAndTimeRangeConfig);
+        }
+
+        if (responseType === ItemResponseType.Drawing) {
+          setConfig(defaultDrawingConfig);
         }
       }
     });

@@ -101,6 +101,7 @@ const getActivityItemResponseValues = (item: Item) => {
       };
     case ItemResponseType.Slider:
     case ItemResponseType.NumberSelection:
+    case ItemResponseType.Drawing:
       return item.responseValues;
     case ItemResponseType.Text:
       return null;

@@ -76,7 +76,7 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
     groupName: 'input',
     groupOptions: [
       { value: ItemResponseType.Text, icon: itemsTypeIcons[ItemResponseType.Text] },
-      // { value: ItemResponseType.Drawing, icon: itemsTypeIcons[ItemResponseType.Drawing] },
+      { value: ItemResponseType.Drawing, icon: itemsTypeIcons[ItemResponseType.Drawing] },
       // { value: ItemResponseType.Photo, icon: itemsTypeIcons[ItemResponseType.Photo] },
       // { value: ItemResponseType.Video, icon: itemsTypeIcons[ItemResponseType.Video] },
     ],

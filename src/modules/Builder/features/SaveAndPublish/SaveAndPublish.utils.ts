@@ -2,6 +2,7 @@ import { storage } from 'shared/utils';
 import { auth } from 'modules/Auth';
 import {
   applet,
+  DrawingResponseValues,
   NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
@@ -62,6 +63,12 @@ export const mapItemResponseValues = (
   if (responseType === ItemResponseType.NumberSelection)
     return {
       ...(responseValues as NumberItemResponseValues),
+      options: undefined,
+    };
+
+  if (responseType === ItemResponseType.Drawing)
+    return {
+      ...(responseValues as DrawingResponseValues),
       options: undefined,
     };
 

@@ -98,6 +98,18 @@ export type DateAndTimeRangeConfig = {
   timer: number;
 };
 
+export type DrawingConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+  removeUndoButton: boolean;
+  navigationToTop: boolean;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -132,19 +144,26 @@ export type NumberItemResponseValues = {
   maxValue: number;
 };
 
+export type DrawingResponseValues = {
+  drawingExample: string;
+  drawingBackground: string;
+};
+
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
   | SliderItemResponseValues
   | NumberItemResponseValues
-  | DateAndTimeRangeResponseValues;
+  | DateAndTimeRangeResponseValues
+  | DrawingResponseValues;
 
 export type Config =
   | TextInputConfig
   | SingleAndMultipleSelectionConfig
   | SliderConfig
   | NumberConfig
-  | DateAndTimeRangeConfig;
+  | DateAndTimeRangeConfig
+  | DrawingConfig;
 
 export type ItemAlert = {
   message: string;
