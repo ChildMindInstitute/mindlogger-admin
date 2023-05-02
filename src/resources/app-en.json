@@ -798,5 +798,6 @@
   "theRespondentCompletedTheActivity": "The respondent completed the Activity at these times",
   "atTime": "At time",
   "fromTime": "From time",
-  "toTime": "To time"
+  "toTime": "To time",
+  "showSubscaleResult": "Show Subscale Result"
 }
