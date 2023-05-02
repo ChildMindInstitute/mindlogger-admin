@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { StyledTitleBoldMedium, variables } from 'shared/styles';
+
 import { StyledHeader, StyledItem, StyledSvg } from './Accordion.styles';
 import { AccordionProps } from './Accordion.types';
 
