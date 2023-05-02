@@ -47,6 +47,7 @@ export const Report = ({ activity }: { activity: Activity }) => {
           </Tooltip>
         </StyledTitleLargish>
         <ScatterChart />
+        <StyledTitleLargish sx={{ mt: theme.spacing(6) }}>{t('subscaleScores')}</StyledTitleLargish>
         <Box sx={{ m: theme.spacing(2.4, 0) }}>
           <BarChart />
         </Box>
