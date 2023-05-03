@@ -5,22 +5,25 @@ import { useFormContext } from 'react-hook-form';
 import { StyledBodyLarge, StyledFlexTopCenter, StyledTooltipSvg } from 'shared/styles';
 import { Tooltip } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
+import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 
 export const ScoresAndReports = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation('app');
-
+  const { fieldName } = useCurrentActivity();
   const { control } = useFormContext();
+  const generateReportName = `${fieldName}.generateReport`;
+  const showScoreSummaryName = `${fieldName}.showScoreSummary`;
 
   return (
     <>
       <CheckboxController
         control={control}
-        name="generateReport"
+        name={generateReportName}
         label={<StyledBodyLarge>{t('generateReport')}</StyledBodyLarge>}
       />
       <CheckboxController
         control={control}
-        name="showScoreSummary"
+        name={showScoreSummaryName}
         label={
           <StyledFlexTopCenter>
             <StyledBodyLarge>{t('showScoreSummary')}</StyledBodyLarge>

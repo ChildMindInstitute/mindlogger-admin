@@ -21,6 +21,7 @@ export const RadioGroupController = <T extends FieldValues>({
             value={value}
             control={<Radio />}
             label={label}
+            checked={value === field.value}
           />
         ))}
       </RadioGroup>
