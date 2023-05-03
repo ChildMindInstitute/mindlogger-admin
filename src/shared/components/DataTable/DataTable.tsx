@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { StyledBodyMedium, StyledFlexColumn, StyledLabelLarge, variables } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 
 import { DataTableProps } from './DataTable.types';
 import { getColumns } from './DataTable.utils';
-import { StyledTableContainer } from './DataTable.styles';
+import { StyledCheckbox, StyledTableContainer } from './DataTable.styles';
 
 //TODO: add pagination, sort
 export const DataTable = ({
@@ -55,7 +55,7 @@ export const DataTable = ({
             <TableRow>
               {selectable && selectAll && (
                 <TableCell sx={{ width: '2.8rem', backgroundColor: 'inherit' }}>
-                  <Checkbox
+                  <StyledCheckbox
                     checked={isAllSelected}
                     onChange={handleSelectAll}
                     disabled={!data?.length}
@@ -79,7 +79,7 @@ export const DataTable = ({
                 <TableRow key={`data-table-row-${getEntityKey(item) || index}`}>
                   {selectable && (
                     <TableCell sx={{ width: '2.8rem', backgroundColor: 'inherit' }}>
-                      <Checkbox
+                      <StyledCheckbox
                         checked={isSelected}
                         onChange={() => handleSelect(item.id, isSelected)}
                       />
