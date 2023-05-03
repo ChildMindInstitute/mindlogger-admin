@@ -47,7 +47,7 @@ export const ResponseValuesAudio = () => ({
 });
 
 export const ResponseValuesAudioPlayer = () => ({
-  file: yup.string(),
+  file: yup.string().required(getIsRequiredValidateMessage('audioPlayer')),
 });
 
 export const ResponseValuesNumberSelectionSchema = () => ({

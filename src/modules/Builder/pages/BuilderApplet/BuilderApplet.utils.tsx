@@ -111,6 +111,7 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.SliderRows:
     case ItemResponseType.Slider:
     case ItemResponseType.AudioPlayer:
+    case ItemResponseType.Audio:
     case ItemResponseType.NumberSelection:
     case ItemResponseType.Drawing:
       return {

@@ -549,7 +549,7 @@
   "selectionRowsItemLabel": "Ligne {{- index }}",
   "addSelectionRow": "Ajouter une rangée",
   "colorPalette": "Palette de couleurs",
-  "audioPlayerDescription": "Le répondant écoutera un stimulus audio, aucune réponse n'est requise.",
+  "audioPlayerDescription": "Le répondant écoutera un stimulus audio.",
   "mediaTranscript": "Retranscription du média",
   "uploadAudioRestrictions": "Veuillez télécharger un fichier WAV ou MP3 de moins de {{size}}",
   "uploadAudioDropText": "Déposez l'audio ici ou cliquez pour parcourir",

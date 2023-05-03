@@ -670,7 +670,7 @@
   "selectionRowsItemLabel": "Row {{- index }}",
   "addSelectionRow": "Add Row",
   "colorPalette": "Color Palette",
-  "audioPlayerDescription": "The respondent will listen to an audio stimulus, no response is required.",
+  "audioPlayerDescription": "The respondent will listen to an audio stimulus.",
   "mediaTranscript": "Media transcript",
   "uploadAudioRestrictions": "Please upload WAV or MP3 less than {{size}}.",
   "uploadAudioDropText": "Drop Audio here or click to browse",

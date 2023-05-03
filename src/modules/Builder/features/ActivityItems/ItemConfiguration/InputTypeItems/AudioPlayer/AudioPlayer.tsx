@@ -16,8 +16,10 @@ import { AudioPlayerProps } from './AudioPlayer.types';
 
 export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const { t } = useTranslation('app');
-  const [media, setMedia] = useState<MediaType | null>(null);
-  const { setValue } = useFormContext();
+  const { setValue, getValues } = useFormContext();
+
+  const url = getValues(`${name}.responseValues.file`);
+  const [media, setMedia] = useState<MediaType | null>(url ? { url } : null);
 
   useEffect(() => {
     setValue(`${name}.responseValues.file`, media?.url ?? undefined);
@@ -40,5 +42,7 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
     </Box>
   );
 
-  return <ToggleItemContainer title={t('audio')} HeaderContent={HeaderContent} Content={Content} />;
+  return (
+    <ToggleItemContainer title={t('audioPlayer')} HeaderContent={HeaderContent} Content={Content} />
+  );
 };
