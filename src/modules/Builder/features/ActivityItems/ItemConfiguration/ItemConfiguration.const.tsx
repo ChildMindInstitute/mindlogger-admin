@@ -31,9 +31,6 @@ export const DEFAULT_EMPTY_SLIDER_ROWS = {
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
 export const DEFAULT_MAX_CHARACTERS = 300;
-export const DEFAULT_EMPTY_SELECTION_ROWS_OPTION = { label: '', tooltip: '', image: '' };
-// export const DEFAULT_EMPTY_SELECTION_ROWS_ITEM = { label: '', tooltip: '', image: '', scores: [] };
-export const DEFAULT_SELECTION_ROWS_SCORE = 1;
 export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
 export const SELECTION_OPTION_TEXT_MAX_LENGTH = 75;
 
