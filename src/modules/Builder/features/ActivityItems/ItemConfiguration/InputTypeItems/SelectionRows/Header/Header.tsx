@@ -11,12 +11,14 @@ import {
   variables,
   theme,
 } from 'shared/styles';
+import { SingleAndMultipleSelectMatrix, SingleAndMultipleSelectOption } from 'shared/state';
 
 import { StyledSelectController } from './Header.styles';
 import { HeaderProps } from './Header.types';
 import { getMultipleSelectionRowsOptions } from './Header.utils';
 import { getEmptySelectionItemOptions } from '../../../ItemConfiguration.utils';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
+import { DEFAULT_SCORE_VALUE } from '../../../ItemConfiguration.const';
 // import { options } from '../../../Alerts/Alert';
 
 const commonSelectArrowProps = {
@@ -46,13 +48,30 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
     const options = getValues(optionsName);
 
     const newValue = +e.target.value;
+    const lessThanBefore = newValue < options?.length;
 
-    setValue(
-      optionsName,
-      newValue < options?.length
-        ? options?.slice(0, +e.target.value)
-        : [...options, ...getEmptySelectionItemOptions(newValue - options?.length, hasScores)],
-    );
+    const newOptions = lessThanBefore
+      ? options?.slice(0, newValue)
+      : [...options, ...getEmptySelectionItemOptions(newValue - options?.length)];
+
+    setValue(optionsName, newOptions);
+
+    if (hasScores) {
+      const dataMatrix = getValues(`${name}.responseValues.dataMatrix`);
+
+      setValue(
+        `${name}.responseValues.dataMatrix`,
+        dataMatrix?.map((dataMatrixRow: SingleAndMultipleSelectMatrix) => ({
+          ...dataMatrixRow,
+          options: lessThanBefore
+            ? dataMatrixRow.options?.slice(0, newValue)
+            : newOptions.map((option: SingleAndMultipleSelectOption, index: number) => ({
+                optionId: option.id,
+                score: dataMatrixRow.options?.[index]?.score ?? DEFAULT_SCORE_VALUE,
+              })),
+        })),
+      );
+    }
   };
 
   return (

@@ -7,7 +7,11 @@ import get from 'lodash.get';
 import { UploaderUiType, Uploader, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
-import { SingleAndMultipleSelectRow, SingleAndMultipleSelectOption } from 'shared/state';
+import {
+  SingleAndMultipleSelectRow,
+  SingleAndMultipleSelectOption,
+  SingleAndMultipleSelectMatrix,
+} from 'shared/state';
 
 import {
   StyledSelectionRowItem,
@@ -28,7 +32,7 @@ const commonUploaderProps = {
 export const Items = ({ name, isSingle }: ItemsProps) => {
   const { t } = useTranslation('app');
 
-  const { watch, control, setValue } = useFormContext();
+  const { watch, control, setValue, getValues } = useFormContext();
 
   const optionsName = `${name}.responseValues.options`;
   const rows = watch(`${name}.responseValues.rows`);
@@ -39,11 +43,23 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasRemoveButton = rows?.length > 1;
 
-  const handleRemoveItem = (index: number) =>
+  const handleRemoveItem = (index: number) => {
     setValue(
       `${name}.responseValues.rows`,
       rows?.filter((row: SingleAndMultipleSelectRow, key: number) => key !== index),
     );
+
+    if (hasScores) {
+      const dataMatrix = getValues(`${name}.responseValues.dataMatrix`);
+
+      setValue(
+        `${name}.responseValues.dataMatrix`,
+        dataMatrix?.filter(
+          (dataMatrixRow: SingleAndMultipleSelectMatrix, key: number) => key !== index,
+        ),
+      );
+    }
+  };
 
   return rows?.map((row: SingleAndMultipleSelectRow, index: number) => {
     const rowName = `${name}.responseValues.rows.${index}`;
@@ -72,8 +88,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
           )}
         </StyledSelectionBox>
         {options?.map((option: SingleAndMultipleSelectOption, key: number) => {
-          const optionName = `${optionsName}.${key}`;
-          const scoreName = `${optionName}.score`;
+          const scoreName = `${name}.responseValues.dataMatrix.${index}.options.${key}.score`;
           const isRemoveButtonVisible =
             hasRemoveButton && key === options?.length - 1 && index !== 0;
 

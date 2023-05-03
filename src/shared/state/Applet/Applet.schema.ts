@@ -204,9 +204,15 @@ export type SingleAndMultipleSelectOption = {
   tooltip: string | null;
 };
 
+export type SingleAndMultipleSelectMatrix = {
+  rowId: string;
+  options: Array<{ optionId: string; score: number | null; alert: string | null }>;
+};
+
 export type SingleAndMultipleSelectRowsResponseValues = {
   rows: Array<SingleAndMultipleSelectRow>;
   options: Array<SingleAndMultipleSelectOption>;
+  dataMatrix?: Array<SingleAndMultipleSelectMatrix> | null;
 };
 
 export type SliderRowsResponseValues = {

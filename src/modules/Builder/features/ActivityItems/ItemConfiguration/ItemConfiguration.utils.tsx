@@ -11,7 +11,6 @@ import {
   SELECTION_OPTIONS_COLOR_PALETTE,
   DEFAULT_NUMBER_MIN_VALUE,
   DEFAULT_NUMBER_MAX_VALUE,
-  DEFAULT_SCORE_VALUE,
 } from './ItemConfiguration.const';
 
 const { t } = i18n;
@@ -51,14 +50,13 @@ export const getEmptySliderOption = ({
   ...(!hasScores && { scores: undefined }),
 });
 
-export const getEmptySelectionItemOption = (hasScores?: boolean) => ({
+export const getEmptySelectionItemOption = () => ({
   id: uuidv4(),
   text: '',
-  ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
 });
 
-export const getEmptySelectionItemOptions = (length: number, hasScores?: boolean) =>
-  createArray(length, () => getEmptySelectionItemOption(hasScores));
+export const getEmptySelectionItemOptions = (length: number) =>
+  createArray(length, () => getEmptySelectionItemOption());
 
 export const getEmptySelectionItem = () => ({
   id: uuidv4(),

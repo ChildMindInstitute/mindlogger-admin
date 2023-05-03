@@ -9,7 +9,8 @@ import { InputController } from 'shared/components/FormComponents';
 import { theme, variables, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import {
-  SingleAndMultipleSelectRowOption,
+  SingleAndMultipleSelectOption,
+  SingleAndMultipleSelectRow,
   SingleAndMultipleSelectionOption,
   SliderRowsItemResponseValues,
 } from 'shared/state';
@@ -159,13 +160,20 @@ export const ItemSettingsGroup = ({
                     case ItemResponseType.SingleSelectionPerRow:
                     case ItemResponseType.MultipleSelectionPerRow:
                       return setValue(
-                        `${itemName}.responseValues.options`,
-                        getValues(`${itemName}.responseValues.options`)?.map(
-                          (option: SingleAndMultipleSelectRowOption) => ({
-                            ...option,
-                            score: hasScores ? DEFAULT_SCORE_VALUE : undefined,
-                          }),
-                        ),
+                        `${itemName}.responseValues.dataMatrix`,
+                        hasScores
+                          ? getValues(`${itemName}.responseValues.rows`)?.map(
+                              (row: SingleAndMultipleSelectRow) => ({
+                                rowId: row.id,
+                                options: getValues(`${itemName}.responseValues.options`)?.map(
+                                  (option: SingleAndMultipleSelectOption) => ({
+                                    optionId: option.id,
+                                    score: DEFAULT_SCORE_VALUE,
+                                  }),
+                                ),
+                              }),
+                            )
+                          : undefined,
                       );
                   }
                 }
