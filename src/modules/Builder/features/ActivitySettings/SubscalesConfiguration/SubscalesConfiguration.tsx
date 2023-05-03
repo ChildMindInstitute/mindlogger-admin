@@ -70,11 +70,12 @@ export const SubscalesConfiguration = () => {
     if (calculateTotalScoreSwitch) {
       register(calculateTotalScoreName);
       setValue(calculateTotalScoreName, SubscaleTotalScore.Sum);
+
+      return;
     }
-    if (!calculateTotalScoreSwitch) {
-      unregister(calculateTotalScoreName);
-      setValue(calculateTotalScoreName, undefined);
-    }
+
+    unregister(calculateTotalScoreName);
+    setValue(calculateTotalScoreName, undefined);
   }, [calculateTotalScoreSwitch]);
 
   return (

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { ChangeEvent } from 'react';
 
 export type SwitchWithStateProps = {
   checked: boolean;
-  handleChange?: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+  handleChange?: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void;
   label?: string;
   tooltipText?: string;
 };

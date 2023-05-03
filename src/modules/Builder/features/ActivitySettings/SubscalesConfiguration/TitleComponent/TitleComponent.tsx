@@ -14,8 +14,8 @@ import { StyledMark } from './TitleComponent.styles';
 export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
   const { getFieldState } = useFormContext();
   const errorObject = getFieldState(name).error as unknown as Record<string, FieldError>;
-  const hasErrors = !!getFieldState(name).error;
-  const errorMessages = errorObject
+  const hasErrors = !!errorObject;
+  const errorMessages = hasErrors
     ? Object.keys(errorObject).map((key) => ({
         message: errorObject[key].message,
         key,
