@@ -1,15 +1,13 @@
-import { storage } from 'shared/utils';
-import { auth } from 'modules/Auth';
 import {
-  applet,
   AudioPlayerResponseValues,
   AudioResponseValues,
+  DrawingResponseValues,
   NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
+  SliderRowsResponseValues,
 } from 'shared/state';
-import { useCheckIfNewApplet } from 'shared/hooks';
 import { ItemResponseType } from 'shared/consts';
 import { ColorResult } from 'react-color';
 
@@ -21,14 +19,17 @@ export const removeAppletExtraFields = () => ({
   retentionType: undefined,
   theme: undefined,
   version: undefined,
-  subscales: undefined, // TODO: remove when API will be ready
-  scores: undefined, // TODO: remove when API will be ready
-  sections: undefined, // TODO: remove when API will be ready
-  calculateTotalScore: undefined, // TODO: remove when API will be ready
-  calculateTotalScoreSwitch: undefined, // TODO: remove when API will be ready
 });
 
-export const removeActivityExtraFields = () => ({ order: undefined });
+export const removeActivityExtraFields = () => ({
+  order: undefined,
+  generateReport: undefined, // TODO: remove when API will be ready
+  showScoreSummary: undefined, // TODO: remove when API will be ready
+  scores: undefined, // TODO: remove when API will be ready
+  sections: undefined, // TODO: remove when API will be ready
+  subscales: undefined, // TODO: remove when API will be ready
+  calculateTotalScore: undefined, // TODO: remove when API will be ready
+});
 
 export const removeItemExtraFields = () => ({
   key: undefined,
@@ -59,41 +60,21 @@ export const mapItemResponseValues = (
     responseType === ItemResponseType.Slider ||
     responseType === ItemResponseType.Audio ||
     responseType === ItemResponseType.AudioPlayer ||
-    responseType === ItemResponseType.NumberSelection
+    responseType === ItemResponseType.NumberSelection ||
+    responseType === ItemResponseType.Drawing
   )
     return {
       ...(responseValues as
         | SliderItemResponseValues
         | AudioResponseValues
         | AudioPlayerResponseValues
-        | NumberItemResponseValues),
+        | NumberItemResponseValues
+        | DrawingResponseValues),
       options: undefined,
     };
 
+  if (responseType === ItemResponseType.SliderRows)
+    return { rows: (responseValues as SliderRowsResponseValues)?.rows };
+
   return null;
-};
-
-const getPasswordKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
-
-export const usePasswordFromStorage = () => {
-  const isNewApplet = useCheckIfNewApplet();
-  const userData = auth.useData();
-  const ownerId = String(userData?.user?.id) || '';
-  const { result: appletData } = applet.useAppletData() ?? {};
-
-  const getPassword = () => {
-    if (isNewApplet) return '';
-    const appletId = appletData?.id ?? '';
-
-    return storage.getItem(getPasswordKey(ownerId, appletId)) as string;
-  };
-
-  const setPassword = (appletId: string, password: string) => {
-    storage.setItem(getPasswordKey(ownerId, appletId), password);
-  };
-
-  return {
-    getPassword,
-    setPassword,
-  };
 };

@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { Checkbox, styled } from '@mui/material';
 
 import { StyledFlexColumn, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
@@ -12,4 +12,10 @@ export const StyledTableContainer = styled(StyledFlexColumn, shouldForwardProp)`
   flex-grow: 1;
   height: 28.8rem;
   overflow-y: auto;
+`;
+
+export const StyledCheckbox = styled(Checkbox)`
+  & svg {
+    fill: ${variables.palette.primary};
+  }
 `;

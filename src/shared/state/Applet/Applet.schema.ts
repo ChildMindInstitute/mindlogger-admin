@@ -117,6 +117,51 @@ export type AudioPlayerConfig = {
   };
   playOnce: boolean;
 };
+export type DrawingConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+  removeUndoButton: boolean;
+  navigationToTop: boolean;
+};
+
+export type PhotoConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type GeolocationConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
+export type MessageConfig = {
+  skippableItem?: boolean;
+  removeBackButton: boolean;
+  timer: number;
+};
+
+export type SliderRowsConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  timer: number;
+};
 
 export type SliderItemResponseValues = {
   id?: string;
@@ -124,10 +169,12 @@ export type SliderItemResponseValues = {
   maxLabel: string;
   minValue: number;
   maxValue: number;
-  minImage: string;
-  maxImage: string;
+  minImage?: string;
+  maxImage?: string;
   scores?: number[];
 };
+
+export type SliderRowsItemResponseValues = SliderItemResponseValues & { label: string };
 
 export type SingleAndMultipleSelectionOption = {
   id: string;
@@ -152,24 +199,41 @@ export type AudioResponseValues = {
   maxDuration: number;
 };
 
+export type SliderRowsResponseValues = {
+  rows: Array<SliderRowsItemResponseValues>;
+};
+
 export type TextItemResponseValues = null;
 export type VideoResponseValues = null;
 export type DateAndTimeRangeResponseValues = null;
+export type PhotoResponseValues = null;
+export type GeolocationResponseValues = null;
+export type MessageResponseValues = null;
 
 export type NumberItemResponseValues = {
   minValue: number;
   maxValue: number;
 };
 
+export type DrawingResponseValues = {
+  drawingExample: string;
+  drawingBackground: string;
+};
+
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
+  | SliderRowsResponseValues
   | SliderItemResponseValues
   | AudioPlayerResponseValues
   | AudioResponseValues
   | VideoResponseValues
   | NumberItemResponseValues
-  | DateAndTimeRangeResponseValues;
+  | DateAndTimeRangeResponseValues
+  | DrawingResponseValues
+  | PhotoResponseValues
+  | GeolocationResponseValues
+  | MessageResponseValues;
 
 export type Config =
   | TextInputConfig
@@ -177,8 +241,13 @@ export type Config =
   | SliderConfig
   | AudioAndVideoConfig
   | AudioPlayerConfig
+  | SliderRowsConfig
   | NumberConfig
-  | DateAndTimeRangeConfig;
+  | DateAndTimeRangeConfig
+  | DrawingConfig
+  | PhotoConfig
+  | GeolocationConfig
+  | MessageConfig;
 
 export type ItemAlert = {
   message: string;
@@ -224,6 +293,12 @@ export interface SliderItem extends Item {
   responseValues: SliderItemResponseValues;
 }
 
+export interface SliderRowsItem extends Item {
+  responseType: ItemResponseType.SliderRows;
+  config: SliderRowsConfig;
+  responseValues: SliderRowsResponseValues;
+}
+
 export type Activity = {
   id?: string;
   key?: string;
@@ -238,6 +313,12 @@ export type Activity = {
   responseIsEditable?: boolean;
   isHidden?: boolean;
   items: Item[];
+  generateReport?: boolean;
+  showScoreSummary?: boolean;
+  scores?: ActivitySettingsScore[];
+  sections?: ActivitySettingsSection[];
+  subscales?: ActivitySettingsSubscale[];
+  calculateTotalScore?: SubscaleTotalScore;
 };
 
 type Theme = {
@@ -290,11 +371,6 @@ export type SingleApplet = {
   theme?: Theme;
   password?: string;
   generateReport: boolean;
-  showScoreSummary: boolean;
-  calculateTotalScore?: SubscaleTotalScore;
-  scores?: ActivitySettingsScore[];
-  sections?: ActivitySettingsSection[];
-  subscales?: ActivitySettingsSubscale[];
 };
 
 export type AppletSchema = {

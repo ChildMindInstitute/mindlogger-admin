@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { useSetupEnterAppletPassword } from 'shared/hooks';
+import { useSetupEnterAppletPassword, usePasswordFromStorage } from 'shared/hooks';
 
 import { page } from 'resources';
 import { ViewDataPopupProps } from './ViewDataPopup.types';
@@ -20,8 +21,9 @@ export const ViewDataPopup = ({
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
-
-  const showSecondScreen = !!chosenAppletData;
+  const { getPassword } = usePasswordFromStorage();
+  const hasPassword = Boolean(getPassword(chosenAppletData?.appletId ?? ''));
+  const showSecondScreen = !!chosenAppletData && !hasPassword;
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
@@ -36,6 +38,11 @@ export const ViewDataPopup = ({
 
     handlePopupClose();
   };
+
+  useEffect(() => {
+    const shouldSkipPassword = !!chosenAppletData && hasPassword;
+    shouldSkipPassword && handleSubmitCallback();
+  }, [chosenAppletData, hasPassword]);
 
   return (
     <Modal

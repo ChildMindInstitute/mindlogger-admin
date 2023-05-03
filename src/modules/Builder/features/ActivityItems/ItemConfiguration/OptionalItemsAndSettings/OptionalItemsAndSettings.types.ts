@@ -17,6 +17,8 @@ export type SettingsSetupProps = {
   name: string;
   removeOptions?: () => void;
   handleAddOption?: () => void;
+  removeRows?: () => void;
+  handleAddRow?: () => void;
   removeAlert?: () => void;
   handleAddAlert?: () => void;
   setShowColorPalette?: (visibility: boolean) => void;

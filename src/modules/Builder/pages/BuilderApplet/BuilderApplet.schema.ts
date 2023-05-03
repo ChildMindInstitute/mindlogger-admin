@@ -9,10 +9,23 @@ import {
   MAX_SELECT_OPTION_TEXT_LENGTH,
   MAX_SLIDER_LABEL_TEXT_LENGTH,
 } from 'shared/consts';
+import { SLIDER_LABEL_MAX_LENGTH } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import { testFunctionForUniqueness } from './BuilderApplet.utils';
 
 const { t } = i18n;
+
+export const ResponseValuesSliderRowsSchema = () =>
+  yup.array().of(
+    yup.object({
+      minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
+      maxLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
+      label: yup
+        .string()
+        .required(getIsRequiredValidateMessage('sliderLabel'))
+        .max(SLIDER_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+    }),
+  );
 
 export const ResponseValuesRowsSchema = () => ({
   minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
@@ -82,6 +95,9 @@ export const ItemSchema = () =>
 
         if (responseType === ItemResponseType.Audio) return schema.shape(ResponseValuesAudio());
 
+        if (responseType === ItemResponseType.SliderRows)
+          return schema.shape({ rows: ResponseValuesSliderRowsSchema() });
+
         return schema.nullable();
       }),
       config: yup.object({}).shape({
@@ -95,6 +111,22 @@ export const ItemSchema = () =>
               : schema,
           ),
       }),
+    })
+    .required();
+
+export const SubscaleSchema = () =>
+  yup
+    .object({
+      name: yup
+        .string()
+        .required(getIsRequiredValidateMessage('subscaleName'))
+        .test(
+          'unique-subscale-name',
+          t('validationMessages.unique', { field: t('subscaleName') }) as string,
+          (subscaleName, context) =>
+            testFunctionForUniqueness('subscales', subscaleName ?? '', context),
+        ),
+      items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
     })
     .required();
 
@@ -118,6 +150,7 @@ export const ActivitySchema = () =>
     responseIsEditable: yup.boolean(),
     items: yup.array().of(ItemSchema()).min(1),
     isHidden: yup.boolean(),
+    subscales: yup.array().of(SubscaleSchema()),
   });
 
 export const ActivityFlowItemSchema = () =>

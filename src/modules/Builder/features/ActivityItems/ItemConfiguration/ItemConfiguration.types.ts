@@ -22,8 +22,8 @@ export enum ItemConfigurationSettings {
   IsPlayAudioOnce = 'playOnce',
   IsGoBackRemoved = 'removeBackButton',
   IsTextInputRequired = 'additionalResponseOption.textInputRequired',
-  IsUndoRemoved = 'isUndoRemoved',
-  IsNavigationMovedToTheTop = 'isNavigationMovedToTheTop',
+  IsUndoRemoved = 'removeUndoButton',
+  IsNavigationMovedToTheTop = 'navigationToTop',
 }
 
 export type SelectionOption = {
@@ -80,18 +80,6 @@ export type OptionalItemSetupProps = {
   itemType: ItemResponseType;
   name: Path<FieldValues>;
   defaultValue?: unknown;
-};
-
-export type SliderOption = {
-  id?: string;
-  minValue: number;
-  maxValue: number;
-  minLabel?: string;
-  maxLabel?: string;
-  minImage?: string;
-  maxImage?: string;
-  scores: number[];
-  label?: string;
 };
 
 export type ItemConfigurationProps = {

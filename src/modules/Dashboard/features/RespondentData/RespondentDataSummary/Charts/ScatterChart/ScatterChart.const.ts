@@ -1,7 +1,9 @@
 import { max, min } from 'date-fns';
+import debounce from 'lodash.debounce';
+import { ScriptableTooltipContext } from 'chart.js';
 
 import { variables } from 'shared/styles';
-import { locales } from 'shared/consts';
+import { CHART_DEBOUNCE_VALUE, locales } from 'shared/consts';
 
 import { Data } from './ScatterChart.types';
 
@@ -20,7 +22,11 @@ const commonConfig = {
   },
 };
 
-export const getOptions = (lang: keyof typeof locales, data: Data) => {
+export const getOptions = (
+  lang: keyof typeof locales,
+  data: Data,
+  tooltipHandler: (context: ScriptableTooltipContext<'scatter'>) => void,
+) => {
   const datesArr = [...data.responses, ...data.versions];
   const maxDate = max(datesArr).toString();
   const minDate = min(datesArr).toString();
@@ -32,6 +38,11 @@ export const getOptions = (lang: keyof typeof locales, data: Data) => {
     plugins: {
       legend: {
         display: false,
+      },
+      tooltip: {
+        enabled: false,
+        position: 'nearest' as const,
+        external: debounce(tooltipHandler, CHART_DEBOUNCE_VALUE),
       },
     },
     layout: {

@@ -61,6 +61,14 @@ export const defaultAudioPlayerConfig = {
   playOnce: false,
 };
 
+export const defaultSliderRowsConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  addScores: false,
+  setAlerts: false,
+  timer: 0,
+};
+
 export const defaultNumberSelectionConfig = {
   removeBackButton: false,
   skippableItem: false,
@@ -79,4 +87,51 @@ export const defaultDateAndTimeRangeConfig = {
     textInputRequired: false,
   },
   timer: DEFAULT_DISABLED_TIMER_VALUE,
+};
+
+export const defaultDrawingConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: 0,
+  removeUndoButton: false,
+  navigationToTop: false,
+};
+
+export const defaultPhotoConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: 0,
+};
+
+export const defaultGeolocationConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: 0,
+};
+
+export const defaultMessageConfig = {
+  removeBackButton: false,
+  timer: 0,
+};
+
+export const defaultTimeConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+  timer: 0,
 };

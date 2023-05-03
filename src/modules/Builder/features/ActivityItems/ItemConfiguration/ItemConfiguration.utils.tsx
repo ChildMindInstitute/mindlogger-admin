@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
+import { SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
 
-import { SliderOption } from './ItemConfiguration.types';
 import {
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
@@ -37,13 +37,21 @@ export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
   [ItemResponseType.Audio]: t('audioHint'),
   [ItemResponseType.Message]: t('messageHint'),
   [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
+  [ItemResponseType.Time]: t('timeHint'),
   [ItemResponseType.Flanker]: '',
   [ItemResponseType.AbTest]: '',
 });
 
-export const getEmptySliderOption = (isMultiple: boolean): SliderOption => ({
+export const getEmptySliderOption = ({
+  isMultiple,
+  hasScores,
+}: {
+  isMultiple?: boolean;
+  hasScores?: boolean;
+}): SliderItemResponseValues | SliderRowsItemResponseValues => ({
   ...(isMultiple && { id: uuidv4() }),
   ...(isMultiple ? DEFAULT_EMPTY_SLIDER_ROWS : DEFAULT_EMPTY_SLIDER),
+  ...(!hasScores && { scores: undefined }),
 });
 
 export const getEmptySelectionItem = (scoresQuantity: number) => ({
@@ -70,3 +78,6 @@ export const getEmptyNumberSelection = () => ({
   minValue: DEFAULT_NUMBER_MIN_VALUE,
   maxValue: DEFAULT_NUMBER_MAX_VALUE,
 });
+
+export const getDefaultSliderScores = ({ minValue, maxValue }: SliderRowsItemResponseValues) =>
+  createArray(maxValue - minValue + 1, (index) => index + 1);

@@ -30,10 +30,6 @@ export const useSetSelectionOptionValue = ({
       : elementCondition && onUpdateOption(index, { ...option, [fieldName]: undefined });
 
   useEffect(() => {
-    setOptionFieldValue(hasScoresChecked, !!scoreString, 'score', DEFAULT_SCORE_VALUE);
-  }, [hasScoresChecked, scoreString]);
-
-  useEffect(() => {
     setOptionFieldValue(hasTooltipsChecked, hasTooltip, 'tooltip', '');
   }, [hasTooltipsChecked, hasTooltip]);
 

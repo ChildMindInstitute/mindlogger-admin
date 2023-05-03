@@ -10,30 +10,31 @@ import {
   SliderRows,
   AudioPlayer,
   AudioRecord,
-  // Date,
-  // AudioPlayer,
-  // AudioRecord,
   Date,
-  // Drawing,
-  // Geolocation,
+  Drawing,
+  Geolocation,
   NumberSelection,
-  // PhotoResponse,
-  // SelectionRows,
-  // TimeRange,
   VideoResponse,
-  TimeRange,
-  // VideoResponse,
+  PhotoResponse,
+  SelectionRows,
+  Time,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import {
   defaultTextConfig,
   defaultSliderConfig,
+  defaultSliderRowsConfig,
   defaultSingleAndMultiSelectionConfig,
   defaultAudioAndVideoConfig,
   defaultAudioPlayerConfig,
   defaultNumberSelectionConfig,
   defaultDateAndTimeRangeConfig,
+  defaultDrawingConfig,
+  defaultTimeConfig,
+  defaultPhotoConfig,
+  defaultGeolocationConfig,
+  defaultMessageConfig,
 } from './OptionalItemsAndSettings.const';
 import {
   getEmptySliderOption,
@@ -49,39 +50,34 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
         return <NumberSelection name={name} />;
       case ItemResponseType.Slider:
         return <SliderRows name={name} />;
-      // case ItemResponseType.SliderRows:
-      //   return <SliderRows name="sliderOptions" control={control} isMultiple />;
-
-      // case ItemResponseType.SingleSelectionPerRow:
-      //   return <SelectionRows isSingle />;
-      // case ItemResponseType.MultipleSelectionPerRow:
-      //   return <SelectionRows />;
-      // case ItemResponseType.Geolocation:
-      //   return <Geolocation />;
-      // case ItemResponseType.TimeRange:
-      //   return <TimeRange />;
+      case ItemResponseType.SliderRows:
+        return <SliderRows name={name} isMultiple />;
+      case ItemResponseType.SingleSelectionPerRow:
+        return <SelectionRows isSingle />;
+      case ItemResponseType.MultipleSelectionPerRow:
+        return <SelectionRows />;
+      case ItemResponseType.Geolocation:
+        return <Geolocation />;
+      case ItemResponseType.TimeRange:
+        return <Time isRange />;
+      case ItemResponseType.Time:
+        return <Time />;
       case ItemResponseType.Video:
         return <VideoResponse />;
-      // case ItemResponseType.Photo:
-      //   return <PhotoResponse />;
-      // case ItemResponseType.Date:
-      //   return <Date />;
-      case ItemResponseType.Audio:
-        return <AudioRecord name={name} />;
-      case ItemResponseType.TimeRange:
-        return <TimeRange />;
-      // case ItemResponseType.Photo:
-      //   return <PhotoResponse />;
+      case ItemResponseType.Photo:
+        return <PhotoResponse />;
       case ItemResponseType.Date:
         return <Date />;
+      case ItemResponseType.Audio:
+        return <AudioRecord name={name} />;
       case ItemResponseType.Text:
         return <TextResponse name={name} />;
+      case ItemResponseType.Drawing:
+        return <Drawing name={name} />;
       case ItemResponseType.AudioPlayer:
         return <AudioPlayer name={name} />;
-      // case ItemResponseType.Drawing:
-      //   return <Drawing drawerImage="drawerImage" drawerBgImage="drawerBgImage" />;
       default:
-        null;
+        return null;
     }
   }, [responseType]);
 
@@ -91,6 +87,7 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 export const useSettingsSetup = ({
   name,
   handleAddOption,
+  handleAddRow,
   removeAlert,
   handleAddAlert,
   setShowColorPalette,
@@ -113,43 +110,61 @@ export const useSettingsSetup = ({
         clearErrors(`${name}.responseValues`);
 
         const responseType = getValues(`${name}.responseType`);
-        const isAudio = responseType === ItemResponseType.Audio;
 
-        if (
-          responseType === ItemResponseType.SingleSelection ||
-          responseType === ItemResponseType.MultipleSelection
-        ) {
-          handleAddOption?.();
-          setConfig(defaultSingleAndMultiSelectionConfig);
-        }
-
-        if (responseType === ItemResponseType.Text) {
-          setConfig(defaultTextConfig);
-        }
-
-        if (responseType === ItemResponseType.Slider) {
-          setConfig(defaultSliderConfig);
-          setValue(`${name}.responseValues`, getEmptySliderOption(false));
-        }
-
-        if (isAudio || responseType === ItemResponseType.Video) {
-          setConfig(defaultAudioAndVideoConfig);
-
-          isAudio && setValue(`${name}.responseValues`, getEmptyAudioResponse());
-        }
-
-        if (responseType === ItemResponseType.AudioPlayer) {
-          setConfig(defaultAudioPlayerConfig);
-          setValue(`${name}.responseValues`, getEmptyAudioPlayerResponse());
-        }
-
-        if (responseType === ItemResponseType.NumberSelection) {
-          setConfig(defaultNumberSelectionConfig);
-          setValue(`${name}.responseValues`, getEmptyNumberSelection());
-        }
-
-        if (responseType === ItemResponseType.Date || responseType === ItemResponseType.TimeRange) {
-          setConfig(defaultDateAndTimeRangeConfig);
+        switch (responseType) {
+          case ItemResponseType.SingleSelection:
+          case ItemResponseType.MultipleSelection:
+            handleAddOption?.();
+            setConfig(defaultSingleAndMultiSelectionConfig);
+            break;
+          case ItemResponseType.Text:
+            setConfig(defaultTextConfig);
+            break;
+          case ItemResponseType.Slider:
+            setConfig(defaultSliderConfig);
+            setValue(
+              `${name}.responseValues`,
+              getEmptySliderOption({ isMultiple: false, hasScores: false }),
+            );
+            break;
+          case ItemResponseType.NumberSelection:
+            setConfig(defaultNumberSelectionConfig);
+            setValue(`${name}.responseValues`, getEmptyNumberSelection());
+            break;
+          case ItemResponseType.Date:
+          case ItemResponseType.TimeRange:
+            setConfig(defaultDateAndTimeRangeConfig);
+            break;
+          case ItemResponseType.Drawing:
+            setConfig(defaultDrawingConfig);
+            break;
+          case ItemResponseType.Photo:
+            setConfig(defaultPhotoConfig);
+            break;
+          case ItemResponseType.Geolocation:
+            setConfig(defaultGeolocationConfig);
+            break;
+          case ItemResponseType.Message:
+            setConfig(defaultMessageConfig);
+            break;
+          case ItemResponseType.SliderRows:
+            handleAddRow?.();
+            setConfig(defaultSliderRowsConfig);
+            break;
+          case ItemResponseType.Time:
+            setConfig(defaultTimeConfig);
+            break;
+          case ItemResponseType.Audio:
+            setConfig(defaultAudioAndVideoConfig);
+            setValue(`${name}.responseValues`, getEmptyAudioResponse());
+            break;
+          case ItemResponseType.Video:
+            setConfig(defaultAudioAndVideoConfig);
+            break;
+          case ItemResponseType.AudioPlayer:
+            setConfig(defaultAudioPlayerConfig);
+            setValue(`${name}.responseValues`, getEmptyAudioPlayerResponse());
+            break;
         }
       }
     });

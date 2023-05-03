@@ -18,6 +18,8 @@ export const MAX_FILE_SIZE_5MB = 5_242_880;
 export const MAX_FILE_SIZE_2MB = 2_097_152;
 
 export const INPUT_DEBOUNCE_TIME = 400;
+export const SEARCH_DEBOUNCE_VALUE = 700;
+export const CHART_DEBOUNCE_VALUE = 700;
 
 export const BUILDER_PAGES = {
   activities: 'activities',
@@ -34,6 +36,7 @@ export enum DateFormats {
   TimeSeconds = 'HH:mm:ss',
   YearMonthDayHoursMinutesSeconds = 'yyyy-MM-dd HH:mm:ss',
   YearMonthDay = 'yyyy-MM-dd',
+  MonthDayTime = 'MMM dd, HH:mm',
 }
 
 export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;
@@ -47,8 +50,6 @@ export const enum Roles {
   Reviewer = 'reviewer',
   Respondent = 'respondent',
 }
-
-export const SEARCH_DEBOUNCE_VALUE = 700;
 
 export enum ItemResponseType {
   SingleSelection = 'singleSelect',
@@ -70,6 +71,7 @@ export enum ItemResponseType {
   AudioPlayer = 'audioPlayer',
   Flanker = 'flanker',
   AbTest = 'abTest',
+  Time = 'time',
 }
 
 export const itemsTypeIcons = {
@@ -90,6 +92,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.Audio]: <Svg id="audio" />,
   [ItemResponseType.Message]: <Svg id="quote" />,
   [ItemResponseType.AudioPlayer]: <Svg id="audio-player" />,
+  [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
   [ItemResponseType.AbTest]: null,
 };
