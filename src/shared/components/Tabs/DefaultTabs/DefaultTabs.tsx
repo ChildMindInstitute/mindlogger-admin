@@ -1,5 +1,5 @@
 import { useState, SyntheticEvent } from 'react';
-import Tab from '@mui/material/Tab';
+import { Tab, Badge } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { TabPanel } from '../TabPanel';
@@ -17,13 +17,25 @@ export const DefaultTabs = ({ tabs, activeTab, uiType = UiType.Primary }: TabsPr
   const { content, header } = tabs.reduce(
     (
       tabs: RenderTabs,
-      { icon, activeIcon, labelKey, onClick, content, isMinHeightAuto },
+      { icon, activeIcon, labelKey, onClick, content, isMinHeightAuto, hasError },
       index,
     ) => {
       tabs.header.push(
         <Tab
           key={labelKey}
-          icon={icon && tabIndex === index ? activeIcon : icon || undefined}
+          icon={
+            <>
+              {icon && tabIndex === index ? activeIcon : icon || undefined}
+              {hasError && (
+                <Badge
+                  sx={{ right: 'auto', left: 0 }}
+                  variant="dot"
+                  invisible={!hasError}
+                  color="error"
+                />
+              )}
+            </>
+          }
           label={t(labelKey)}
           onClick={onClick}
         />,
@@ -48,6 +60,7 @@ export const DefaultTabs = ({ tabs, activeTab, uiType = UiType.Primary }: TabsPr
     <>
       <StyledTabs
         uiType={uiType}
+        defaultTabs
         value={activeTab || tabIndex}
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}

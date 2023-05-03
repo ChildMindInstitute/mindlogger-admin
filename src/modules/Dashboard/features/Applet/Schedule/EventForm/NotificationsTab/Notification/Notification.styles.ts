@@ -1,8 +1,6 @@
-import { Box } from '@mui/material';
-import { styled } from '@mui/system';
+import { Box, styled } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { theme, variables } from 'shared/styles';
 
 export const StyledNotification = styled(Box)`
   padding: ${theme.spacing(3, 3, 2.4, 1.6)};
@@ -19,4 +17,5 @@ export const StyledCol = styled(Box)`
 
 export const StyledLeftCol = styled(Box)`
   width: 40%;
+  padding-top: ${theme.spacing(0.8)};
 `;

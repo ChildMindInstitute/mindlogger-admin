@@ -1,7 +1,6 @@
-import { styled } from '@mui/system';
-import { Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import { theme, StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles';
+import { theme, StyledFlexTopCenter, StyledBodyMedium, StyledFlexTopStart } from 'shared/styles';
 import { variables } from 'shared/styles';
 
 export const StyledWrapper = styled(Box)`
@@ -20,7 +19,7 @@ export const StyledTimeWrapper = styled(Box)`
   flex: 1;
 `;
 
-export const StyledTimeRow = styled(StyledFlexTopCenter)`
+export const StyledTimeRow = styled(StyledFlexTopStart)`
   justify-content: space-between;
 `;
 

@@ -808,5 +808,6 @@
   "fromTime": "From time",
   "toTime": "To time",
   "showSubscaleResult": "Show Subscale Result",
-  "subscaleScores": "Subscale Scores"
+  "subscaleScores": "Subscale Scores",
+  "activityUnavailableAtTime": "Activity is unavailable at this time"
 }
