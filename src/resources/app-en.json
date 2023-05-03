@@ -806,5 +806,6 @@
   "atTime": "At time",
   "fromTime": "From time",
   "toTime": "To time",
+  "showSubscaleResult": "Show Subscale Result",
   "subscaleScores": "Subscale Scores"
 }
