@@ -747,7 +747,7 @@
   "averageOfScores": "Average of Item Scores",
   "subscale": "Subscale",
   "subscaleHeader": "Subscale {{index}}: {{name}}",
-  "subscaleName": "Subscale name",
+  "subscaleName": "Subscale Name",
   "subscaleScoring": "Subscale scoring",
   "subscaleScoringSum": "Sum",
   "subscaleScoringAverage": "Average",
@@ -770,7 +770,8 @@
     "alphanumeric": "{{- field }} must contain only alphanumeric characters or underscores",
     "lessThan": "{{- less }} should be less than {{- than }}",
     "moreThan": "{{- more }} should be bigger than {{- than }}",
-    "unique": "That {{- field }} is already in use. Please use a different name"
+    "unique": "That {{- field }} is already in use. Please use a different name",
+    "atLeastOne": "Select at least 1 element"
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
@@ -805,5 +806,7 @@
   "theRespondentCompletedTheActivity": "The respondent completed the Activity at these times",
   "atTime": "At time",
   "fromTime": "From time",
-  "toTime": "To time"
+  "toTime": "To time",
+  "showSubscaleResult": "Show Subscale Result",
+  "subscaleScores": "Subscale Scores"
 }

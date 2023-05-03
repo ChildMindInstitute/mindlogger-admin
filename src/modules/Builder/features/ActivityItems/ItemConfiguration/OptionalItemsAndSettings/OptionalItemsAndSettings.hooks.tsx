@@ -71,7 +71,7 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       case ItemResponseType.AudioPlayer:
         return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
       default:
-        null;
+        return null;
     }
   }, [responseType]);
 

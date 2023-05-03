@@ -64,6 +64,8 @@ export const getNewActivity = (activity?: ActivityFormValues) => ({
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: true,
+  generateReport: false,
+  showScoreSummary: false,
   ...activity,
   items: activity?.items?.map((item) => getNewActivityItem(item)) || [],
   id: undefined,
@@ -155,9 +157,6 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
-    //generateReport: false, // TODO: add these fields when api will be ready
-    //showScoreSummary: false,
-    // calculateqTotalScore: false,
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,

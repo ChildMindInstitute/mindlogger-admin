@@ -6,6 +6,7 @@ import { Button } from '@mui/material';
 
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
+import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 
 import { LeftBar } from './LeftBar';
 import { ActivitySettingsContainer } from './ActivitySettingsContainer';
@@ -32,15 +33,18 @@ export const ActivitySettings = () => {
   useBreadcrumbs();
 
   const { control } = useFormContext();
+  const { fieldName } = useCurrentActivity();
+  const scoresName = `${fieldName}.scores`;
+  const sectionsName = `${fieldName}.sections`;
 
   const { append: appendScore } = useFieldArray({
     control,
-    name: 'scores',
+    name: scoresName,
   });
 
   const { append: appendSection } = useFieldArray({
     control,
-    name: 'sections',
+    name: sectionsName,
   });
 
   const handleAddScore = () => {

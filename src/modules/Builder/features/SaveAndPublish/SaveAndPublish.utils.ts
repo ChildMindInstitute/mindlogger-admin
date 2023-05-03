@@ -18,14 +18,17 @@ export const removeAppletExtraFields = () => ({
   retentionType: undefined,
   theme: undefined,
   version: undefined,
-  subscales: undefined, // TODO: remove when API will be ready
-  scores: undefined, // TODO: remove when API will be ready
-  sections: undefined, // TODO: remove when API will be ready
-  calculateTotalScore: undefined, // TODO: remove when API will be ready
-  calculateTotalScoreSwitch: undefined, // TODO: remove when API will be ready
 });
 
-export const removeActivityExtraFields = () => ({ order: undefined });
+export const removeActivityExtraFields = () => ({
+  order: undefined,
+  generateReport: undefined, // TODO: remove when API will be ready
+  showScoreSummary: undefined, // TODO: remove when API will be ready
+  scores: undefined, // TODO: remove when API will be ready
+  sections: undefined, // TODO: remove when API will be ready
+  subscales: undefined, // TODO: remove when API will be ready
+  calculateTotalScore: undefined, // TODO: remove when API will be ready
+});
 
 export const removeItemExtraFields = () => ({
   key: undefined,

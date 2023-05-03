@@ -643,7 +643,10 @@
   "validationMessages": {
     "isRequired": "{{- field }} est requis",
     "alphanumeric": "{{- field }} ne doit contenir que des caractères alphanumériques ou des traits de soulignement",
-    "unique": "Cette {{- field }} déja en cours d'utilisation. Veuillez utiliser un nom différent"
+    "lessThan": "{{- less }} doit être inférieur à {{- than }}",
+    "moreThan": "{{- more }} doit être supérieur à {{- than }}",
+    "unique": "Cette {{- field }} déja en cours d'utilisation. Veuillez utiliser un nom différent",
+    "atLeastOne": "Sélectionnez au moins 1 élément"
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",
@@ -656,5 +659,6 @@
   "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants",
   "noDataForActivity": "Pas encore de données disponibles pour cette activité",
   "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
-  "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}"
+  "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}",
+  "showSubscaleResult": "Afficher le résultat de la sous-échelle"
 }

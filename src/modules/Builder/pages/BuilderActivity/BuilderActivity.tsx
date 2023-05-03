@@ -4,7 +4,7 @@ import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { Badge } from '@mui/material';
 
-import { StyledDirectoryUpButton, StyledBody } from 'shared/styles/styledComponents';
+import { StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 import { LinkedTabs, Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
@@ -40,6 +40,7 @@ export const BuilderActivity = () => {
   const tabErrors = {
     hasAboutActivityErrors: !!getFieldState(`${fieldName}.name`).error,
     hasActivityItemsErrors: !!getFieldState(`${fieldName}.items`).error,
+    hasActivitySubscalesErrors: !!getFieldState(`${fieldName}.subscales`).error,
   };
 
   return (

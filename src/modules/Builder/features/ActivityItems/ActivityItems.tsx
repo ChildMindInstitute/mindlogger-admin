@@ -108,7 +108,7 @@ export const ActivityItems = () => {
       />
       {activeItemId && (
         <ItemConfiguration
-          key={`item-${activeItemId}`}
+          key={`item-${activeItemIndex}`}
           name={`${fieldName}.items.${activeItemIndex}`}
           onClose={() => setActiveItemId('')}
         />
