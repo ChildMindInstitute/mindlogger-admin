@@ -3,6 +3,7 @@ export * from './Selection';
 export * from './Slider';
 export * from './Date';
 export * from './NumberSelection';
+export * from './Time';
 export * from './TimeRange';
 export * from './SliderRows';
 export * from './Dashed';

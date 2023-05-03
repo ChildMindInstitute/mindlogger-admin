@@ -16,7 +16,7 @@ import {
   NumberSelection,
   PhotoResponse,
   SelectionRows,
-  TimeRange,
+  Time,
   VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
@@ -24,10 +24,12 @@ import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import {
   defaultTextConfig,
   defaultSliderConfig,
+  defaultSliderRowsConfig,
   defaultSingleAndMultiSelectionConfig,
   defaultNumberSelectionConfig,
   defaultDateAndTimeRangeConfig,
   defaultDrawingConfig,
+  defaultTimeConfig,
   defaultPhotoConfig,
   defaultGeolocationConfig,
   defaultMessageConfig,
@@ -42,7 +44,7 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       case ItemResponseType.Slider:
         return <SliderRows name={name} />;
       case ItemResponseType.SliderRows:
-        return <SliderRows name="sliderOptions" isMultiple />;
+        return <SliderRows name={name} isMultiple />;
       case ItemResponseType.SingleSelectionPerRow:
         return <SelectionRows isSingle />;
       case ItemResponseType.MultipleSelectionPerRow:
@@ -50,7 +52,9 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       case ItemResponseType.Geolocation:
         return <Geolocation />;
       case ItemResponseType.TimeRange:
-        return <TimeRange />;
+        return <Time isRange />;
+      case ItemResponseType.Time:
+        return <Time />;
       case ItemResponseType.Video:
         return <VideoResponse />;
       case ItemResponseType.Photo:
@@ -76,6 +80,8 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 export const useSettingsSetup = ({
   name,
   handleAddOption,
+  removeRows,
+  handleAddRow,
   removeAlert,
   handleAddAlert,
   setShowColorPalette,
@@ -110,7 +116,10 @@ export const useSettingsSetup = ({
             break;
           case ItemResponseType.Slider:
             setConfig(defaultSliderConfig);
-            setValue(`${name}.responseValues`, getEmptySliderOption(false));
+            setValue(
+              `${name}.responseValues`,
+              getEmptySliderOption({ isMultiple: false, hasScores: false }),
+            );
             break;
           case ItemResponseType.NumberSelection:
             setConfig(defaultNumberSelectionConfig);
@@ -131,6 +140,13 @@ export const useSettingsSetup = ({
             break;
           case ItemResponseType.Message:
             setConfig(defaultMessageConfig);
+            break;
+          case ItemResponseType.SliderRows:
+            handleAddRow?.();
+            setConfig(defaultSliderRowsConfig);
+            break;
+          case ItemResponseType.Time:
+            setConfig(defaultTimeConfig);
             break;
         }
       }

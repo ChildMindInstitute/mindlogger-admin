@@ -7,6 +7,8 @@ import get from 'lodash.get';
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, variables, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
+import { ItemResponseType } from 'shared/consts';
+import { SingleAndMultipleSelectionOption, SliderRowsItemResponseValues } from 'shared/state';
 
 import {
   StyledFormControl,
@@ -21,13 +23,16 @@ import { ITEM_SETTINGS_TO_HAVE_TOOLTIP } from './ItemSettingsGroup.const';
 import {
   DEFAULT_TIMER_VALUE,
   DEFAULT_DISABLED_TIMER_VALUE,
+  DEFAULT_SCORE_VALUE,
 } from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
+import { getDefaultSliderScores } from '../../../ItemConfiguration.utils';
 
 export const ItemSettingsGroup = ({
   name,
   value,
   onChange,
+  itemName,
   groupName,
   inputType,
   groupOptions,
@@ -36,7 +41,7 @@ export const ItemSettingsGroup = ({
   const [isExpanded, setIsExpanded] = useState(!collapsedByDefault);
 
   const { t } = useTranslation('app');
-  const { control } = useFormContext();
+  const { control, setValue, getValues } = useFormContext();
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
@@ -65,6 +70,7 @@ export const ItemSettingsGroup = ({
               const isSkippableItem = settingKey === ItemConfigurationSettings.IsSkippable;
               const isCorrectAnswerRequired =
                 settingKey === ItemConfigurationSettings.IsCorrectAnswerRequired;
+              const isScores = settingKey === ItemConfigurationSettings.HasScores;
 
               const isDisabled =
                 (isTextInputRequired && !get(value, ItemConfigurationSettings.HasTextInput)) ||
@@ -107,6 +113,50 @@ export const ItemSettingsGroup = ({
                     [settingKey]: checked,
                     correctAnswer: checked ? '' : undefined,
                   });
+                }
+
+                if (isScores) {
+                  const hasScores = event.target.checked;
+
+                  onChange({
+                    ...value,
+                    [settingKey]: hasScores,
+                  });
+
+                  switch (inputType) {
+                    case ItemResponseType.SliderRows:
+                      return setValue(
+                        `${itemName}.responseValues.rows`,
+                        getValues(`${itemName}.responseValues.rows`)?.map(
+                          (sliderRow: SliderRowsItemResponseValues) => ({
+                            ...sliderRow,
+                            scores: hasScores ? getDefaultSliderScores(sliderRow) : undefined,
+                          }),
+                        ),
+                      );
+                    case ItemResponseType.Slider:
+                      return setValue(
+                        `${itemName}.responseValues.scores`,
+                        hasScores
+                          ? getDefaultSliderScores(getValues(`${itemName}.responseValues`))
+                          : undefined,
+                      );
+                    case ItemResponseType.SingleSelection:
+                    case ItemResponseType.MultipleSelection:
+                      return setValue(
+                        `${itemName}.responseValues.options`,
+                        getValues(`${itemName}.responseValues.options`)?.map(
+                          (option: SingleAndMultipleSelectionOption) => ({
+                            ...option,
+                            score: hasScores ? DEFAULT_SCORE_VALUE : undefined,
+                          }),
+                        ),
+                      );
+                    //TODO: add changing score field
+                    case ItemResponseType.SingleSelectionPerRow:
+                    case ItemResponseType.MultipleSelectionPerRow:
+                      return;
+                  }
                 }
 
                 onChange({

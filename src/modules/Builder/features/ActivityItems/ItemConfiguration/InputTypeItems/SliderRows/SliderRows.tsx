@@ -1,18 +1,23 @@
 import { useTranslation } from 'react-i18next';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
+import get from 'lodash.get';
 
 import { Svg } from 'shared/components';
 import { theme, StyledFlexColumn } from 'shared/styles';
+import { SliderItemResponseValues } from 'shared/state';
 
 import { SliderPanel } from './SliderPanel';
 import { SliderProps } from './SliderRows.types';
-import { SliderOption } from '../../ItemConfiguration.types';
 import { getEmptySliderOption } from '../../ItemConfiguration.utils';
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
   const { t } = useTranslation('app');
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
+
+  const settings = watch(`${name}.config`);
+  const hasScores = get(settings, ItemConfigurationSettings.HasScores);
 
   return (
     <Controller
@@ -20,18 +25,18 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
       control={control}
       render={({ field: { onChange, value } }) => {
         const handleAddSlider = () => {
-          onChange([...value, getEmptySliderOption(isMultiple)]);
+          onChange([...value, getEmptySliderOption({ isMultiple, hasScores })]);
         };
 
         return (
           <StyledFlexColumn sx={{ mb: theme.spacing(2), gap: '2.4rem' }}>
-            {!isMultiple && (
-              <SliderPanel name={name} label={t('sliderOption')} isMultiple={isMultiple} />
-            )}
+            {!isMultiple && <SliderPanel name={name} label={t('sliderOption')} />}
             {isMultiple &&
-              value?.map(({ id }: SliderOption, index: number) => {
+              value?.map(({ id }: SliderItemResponseValues, index: number) => {
                 const handleRemove = () => {
-                  onChange(value.filter(({ id: sliderId }: SliderOption) => sliderId !== id));
+                  onChange(
+                    value.filter(({ id: sliderId }: SliderItemResponseValues) => sliderId !== id),
+                  );
                 };
 
                 return (
@@ -43,7 +48,7 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
                       context: 'indexed',
                       index: index + 1,
                     })}
-                    isMultiple={isMultiple}
+                    isMultiple
                     onRemove={handleRemove}
                   />
                 );

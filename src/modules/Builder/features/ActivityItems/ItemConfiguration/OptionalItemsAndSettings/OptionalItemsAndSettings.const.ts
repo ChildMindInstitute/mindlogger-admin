@@ -41,6 +41,14 @@ export const defaultSliderConfig = {
   },
 };
 
+export const defaultSliderRowsConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  addScores: false,
+  setAlerts: false,
+  timer: 0,
+};
+
 export const defaultNumberSelectionConfig = {
   removeBackButton: false,
   skippableItem: false,
@@ -94,5 +102,15 @@ export const defaultGeolocationConfig = {
 
 export const defaultMessageConfig = {
   removeBackButton: false,
+  timer: 0,
+};
+
+export const defaultTimeConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
   timer: 0,
 };
