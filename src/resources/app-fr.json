@@ -660,5 +660,9 @@
   "noDataForActivity": "Pas encore de données disponibles pour cette activité",
   "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
   "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}",
-  "showSubscaleResult": "Afficher le résultat de la sous-échelle"
+  "showSubscaleResult": "Afficher le résultat de la sous-échelle",
+  "addAudio": "Ajouter du son",
+  "audioPlayerUploadAudio": "Télécharger l'audio",
+  "audioPlayerRecordAudio": "Enregistrement audio",
+  "audioPlayerUploadAudioDescription": "Veuillez télécharger le fichier dans l'un des formats suivants: <1>.mp3, .wav.</1>"
 }

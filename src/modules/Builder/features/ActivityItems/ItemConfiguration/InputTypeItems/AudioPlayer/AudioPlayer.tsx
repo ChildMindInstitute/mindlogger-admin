@@ -11,11 +11,17 @@ import {
   SharedToggleItemProps,
   ToggleItemContainer,
 } from 'modules/Builder/components';
+
+import { AddAudio } from './AddAudio';
+import { UploadAudio } from './UploadAudio';
+import { RecordAudio } from './RecordAudio';
 import { StyledName, StyledNameWrapper } from './AudioPlayer.styles';
 import { AudioPlayerProps } from './AudioPlayer.types';
 
 export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const { t } = useTranslation('app');
+  const [isUploadPopupOpened, setUploadPopupOpened] = useState(false);
+  const [isRecordPopupOpened, setRecordPopupOpened] = useState(false);
   const { setValue, getValues } = useFormContext();
 
   const url = getValues(`${name}.responseValues.file`);
@@ -24,6 +30,9 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   useEffect(() => {
     setValue(`${name}.responseValues.file`, media?.url ?? undefined);
   }, [media?.url]);
+
+  const handleToggleUploadPopup = () => setUploadPopupOpened((prev) => !prev);
+  const handleToggleRecordPopup = () => setRecordPopupOpened((prev) => !prev);
 
   const HeaderContent = ({ open }: SharedToggleItemProps) =>
     !open && !!media ? (
@@ -35,14 +44,22 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
 
   const Content = () => (
     <Box sx={{ mt: theme.spacing(1) }}>
-      <StyledTitleMedium color={variables.palette.on_surface} sx={{ mb: theme.spacing(1) }}>
+      <StyledTitleMedium color={variables.palette.on_surface} sx={{ mb: theme.spacing(2.4) }}>
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
-      <MediaUploader width={20} height={20} media={media} onUpload={setMedia} />
+      <AddAudio onUploadAudio={handleToggleUploadPopup} onRecordAudio={handleToggleRecordPopup} />
+      {isUploadPopupOpened && <UploadAudio onClose={handleToggleUploadPopup} />}
+      {isRecordPopupOpened && <RecordAudio onClose={handleToggleRecordPopup} />}
     </Box>
   );
 
   return (
-    <ToggleItemContainer title={t('audioPlayer')} HeaderContent={HeaderContent} Content={Content} />
+    <>
+      <ToggleItemContainer
+        title={t('audioPlayer')}
+        HeaderContent={HeaderContent}
+        Content={Content}
+      />
+    </>
   );
 };

@@ -808,5 +808,9 @@
   "fromTime": "From time",
   "toTime": "To time",
   "showSubscaleResult": "Show Subscale Result",
-  "subscaleScores": "Subscale Scores"
+  "subscaleScores": "Subscale Scores",
+  "addAudio": "Add Audio",
+  "audioPlayerUploadAudio": "Upload Audio",
+  "audioPlayerRecordAudio": "Record Audio",
+  "audioPlayerUploadAudioDescription": "Please upload file in one of the following formats: <1>.mp3, .wav.</1>"
 }
