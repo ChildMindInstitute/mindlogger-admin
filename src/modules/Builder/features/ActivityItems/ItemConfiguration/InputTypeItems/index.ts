@@ -3,7 +3,7 @@ export * from './SelectionOption';
 export * from './SliderRows';
 export * from './Geolocation';
 export * from './ItemOptionContainer';
-export * from './TimeRange';
+export * from './Time';
 export * from './VideoResponse';
 export * from './PhotoResponse';
 export * from './Date';

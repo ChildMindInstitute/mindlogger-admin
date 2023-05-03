@@ -29,9 +29,11 @@ export const ToggleItemContainer = ({
           <StyledClearedButton onClick={handleToggle}>
             <Svg id={open ? 'navigate-up' : 'navigate-down'} />
           </StyledClearedButton>
-          <StyledFlexTopCenter sx={{ m: theme.spacing(0, 5, 0, 3) }}>
-            <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
-          </StyledFlexTopCenter>
+          {title && (
+            <StyledFlexTopCenter sx={{ m: theme.spacing(0, 5, 0, 3) }}>
+              <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
+            </StyledFlexTopCenter>
+          )}
         </StyledFlexTopCenter>
         <HeaderContent open={open} {...headerContentProps} />
       </StylesTitleWrapper>

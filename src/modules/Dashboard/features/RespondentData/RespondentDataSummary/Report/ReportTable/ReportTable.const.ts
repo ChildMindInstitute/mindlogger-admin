@@ -68,4 +68,100 @@ export const rows = [
         'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
     },
   },
+  {
+    date: {
+      content: () => '8 Jan 2022',
+      value: '8 Jan 2022',
+    },
+    time: {
+      content: () => '15:42',
+      value: '15:42',
+    },
+    response: {
+      content: () =>
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+      value:
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+    },
+  },
+  {
+    date: {
+      content: () => '8 Jan 2022',
+      value: '8 Jan 2022',
+    },
+    time: {
+      content: () => '15:42',
+      value: '15:42',
+    },
+    response: {
+      content: () =>
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+      value:
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+    },
+  },
+  {
+    date: {
+      content: () => '8 Jan 2022',
+      value: '8 Jan 2022',
+    },
+    time: {
+      content: () => '15:42',
+      value: '15:42',
+    },
+    response: {
+      content: () =>
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+      value:
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+    },
+  },
+  {
+    date: {
+      content: () => '8 Jan 2022',
+      value: '8 Jan 2022',
+    },
+    time: {
+      content: () => '15:42',
+      value: '15:42',
+    },
+    response: {
+      content: () =>
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+      value:
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+    },
+  },
+  {
+    date: {
+      content: () => '8 Jan 2022',
+      value: '8 Jan 2022',
+    },
+    time: {
+      content: () => '15:42',
+      value: '15:42',
+    },
+    response: {
+      content: () =>
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+      value:
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+    },
+  },
+  {
+    date: {
+      content: () => '8 Jan 2022',
+      value: '8 Jan 2022',
+    },
+    time: {
+      content: () => '15:42',
+      value: '15:42',
+    },
+    response: {
+      content: () =>
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+      value:
+        'independent committee established to help protect the rights of research subjects here also we can continue this text by texting nothing ',
+    },
+  },
 ];

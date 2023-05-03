@@ -548,6 +548,7 @@
   "numberSelection": "Number Selection",
   "numberSelectionHint": "Dropdown list of numeric values with a single answer",
   "timeRangeHint": "Time Range selection in the format Start Time HH:MM - End Time HH:MM",
+  "timeHint": "Time selection in the format HH:MM",
   "setGeolocation": "Set <br /> Geolocation",
   "geolocationHint": "Permission for geolocation",
   "recordAudio": "Record <br /> Audio",
@@ -639,6 +640,9 @@
   "appletSavedAndPublished": "<0>Applet <1>{{name}}</1> has been successfully saved and published.</0>",
   "appletNotSavedAndPublished": "<0>Applet <1>{{name}}</1> has not been saved and published. Please try again.</0>",
   "timeRangeTitle": "Time Range",
+  "timeRangeDescription": "The respondent will be prompted to take a time range.",
+  "timeTitle": "Time",
+  "timeDescription": "The respondent will be prompted to select a time.",
   "videoResponseTitle": "Video Response",
   "videoResponseDescription": "The respondent will able to take or upload a video.",
   "photoResponseTitle": "Photo Response",
@@ -743,7 +747,7 @@
   "averageOfScores": "Average of Item Scores",
   "subscale": "Subscale",
   "subscaleHeader": "Subscale {{index}}: {{name}}",
-  "subscaleName": "Subscale name",
+  "subscaleName": "Subscale Name",
   "subscaleScoring": "Subscale scoring",
   "subscaleScoringSum": "Sum",
   "subscaleScoringAverage": "Average",
@@ -766,7 +770,8 @@
     "alphanumeric": "{{- field }} must contain only alphanumeric characters or underscores",
     "lessThan": "{{- less }} should be less than {{- than }}",
     "moreThan": "{{- more }} should be bigger than {{- than }}",
-    "unique": "That {{- field }} is already in use. Please use a different name"
+    "unique": "That {{- field }} is already in use. Please use a different name",
+    "atLeastOne": "Select at least 1 element"
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
@@ -801,6 +806,8 @@
   "theRespondentCompletedTheActivity": "The respondent completed the Activity at these times",
   "atTime": "At time",
   "fromTime": "From time",
-  "activityUnavailableAtTime": "Activity is unavailable at this time",
-  "toTime": "To time"
+  "toTime": "To time",
+  "showSubscaleResult": "Show Subscale Result",
+  "subscaleScores": "Subscale Scores",
+  "activityUnavailableAtTime": "Activity is unavailable at this time"
 }

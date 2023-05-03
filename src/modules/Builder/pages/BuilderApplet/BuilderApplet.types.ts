@@ -25,6 +25,8 @@ export type ActivityFormValues = {
   isReviewable?: boolean;
   isHidden?: boolean;
   items: ItemFormValues[];
+  subscales?: ActivitySettingsSubscale[];
+  calculateTotalScore?: SubscaleTotalScore;
 };
 
 export type ActivityFlowItem = {
@@ -54,7 +56,4 @@ export type AppletFormValues = {
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
   activities: ActivityFormValues[];
-  subscales?: ActivitySettingsSubscale[];
-  calculateTotalScore?: SubscaleTotalScore;
-  calculateTotalScoreSwitch?: boolean;
 };

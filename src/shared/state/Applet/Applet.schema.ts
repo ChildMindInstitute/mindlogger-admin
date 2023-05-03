@@ -136,16 +136,26 @@ export type MessageConfig = {
   timer: number;
 };
 
+export type SliderRowsConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  timer: number;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
   maxLabel: string;
   minValue: number;
   maxValue: number;
-  minImage: string;
-  maxImage: string;
+  minImage?: string;
+  maxImage?: string;
   scores?: number[];
 };
+
+export type SliderRowsItemResponseValues = SliderItemResponseValues & { label: string };
 
 export type SingleAndMultipleSelectionOption = {
   id: string;
@@ -160,6 +170,10 @@ export type SingleAndMultipleSelectionOption = {
 export type SingleAndMultipleSelectItemResponseValues = {
   paletteName?: string;
   options: Array<SingleAndMultipleSelectionOption>;
+};
+
+export type SliderRowsResponseValues = {
+  rows: Array<SliderRowsItemResponseValues>;
 };
 
 export type TextItemResponseValues = null;
@@ -181,6 +195,7 @@ export type DrawingResponseValues = {
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
+  | SliderRowsResponseValues
   | SliderItemResponseValues
   | NumberItemResponseValues
   | DateAndTimeRangeResponseValues
@@ -193,6 +208,7 @@ export type Config =
   | TextInputConfig
   | SingleAndMultipleSelectionConfig
   | SliderConfig
+  | SliderRowsConfig
   | NumberConfig
   | DateAndTimeRangeConfig
   | DrawingConfig
@@ -244,6 +260,12 @@ export interface SliderItem extends Item {
   responseValues: SliderItemResponseValues;
 }
 
+export interface SliderRowsItem extends Item {
+  responseType: ItemResponseType.SliderRows;
+  config: SliderRowsConfig;
+  responseValues: SliderRowsResponseValues;
+}
+
 export type Activity = {
   id?: string;
   key?: string;
@@ -258,6 +280,12 @@ export type Activity = {
   responseIsEditable?: boolean;
   isHidden?: boolean;
   items: Item[];
+  generateReport?: boolean;
+  showScoreSummary?: boolean;
+  scores?: ActivitySettingsScore[];
+  sections?: ActivitySettingsSection[];
+  subscales?: ActivitySettingsSubscale[];
+  calculateTotalScore?: SubscaleTotalScore;
 };
 
 type Theme = {
@@ -310,11 +338,6 @@ export type SingleApplet = {
   theme?: Theme;
   password?: string;
   generateReport: boolean;
-  showScoreSummary: boolean;
-  calculateTotalScore?: SubscaleTotalScore;
-  scores?: ActivitySettingsScore[];
-  sections?: ActivitySettingsSection[];
-  subscales?: ActivitySettingsSubscale[];
 };
 
 export type AppletSchema = {

@@ -4,6 +4,7 @@ import {
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
+  SliderRowsResponseValues,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { ColorResult } from 'react-color';
@@ -16,14 +17,17 @@ export const removeAppletExtraFields = () => ({
   retentionType: undefined,
   theme: undefined,
   version: undefined,
-  subscales: undefined, // TODO: remove when API will be ready
-  scores: undefined, // TODO: remove when API will be ready
-  sections: undefined, // TODO: remove when API will be ready
-  calculateTotalScore: undefined, // TODO: remove when API will be ready
-  calculateTotalScoreSwitch: undefined, // TODO: remove when API will be ready
 });
 
-export const removeActivityExtraFields = () => ({ order: undefined });
+export const removeActivityExtraFields = () => ({
+  order: undefined,
+  generateReport: undefined, // TODO: remove when API will be ready
+  showScoreSummary: undefined, // TODO: remove when API will be ready
+  scores: undefined, // TODO: remove when API will be ready
+  sections: undefined, // TODO: remove when API will be ready
+  subscales: undefined, // TODO: remove when API will be ready
+  calculateTotalScore: undefined, // TODO: remove when API will be ready
+});
 
 export const removeItemExtraFields = () => ({
   key: undefined,
@@ -62,6 +66,9 @@ export const mapItemResponseValues = (
         | DrawingResponseValues),
       options: undefined,
     };
+
+  if (responseType === ItemResponseType.SliderRows)
+    return { rows: (responseValues as SliderRowsResponseValues)?.rows };
 
   return null;
 };

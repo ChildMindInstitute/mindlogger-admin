@@ -382,6 +382,7 @@
   "dropdown": "Menu déroulant",
   "numberSelectionHint": "Liste déroulante de valeurs numériques avec une seule réponse",
   "timeRangeHint": "Sélection de la plage horaire au format Heure de début HH:MM - Heure de fin HH:MM",
+  "timeHint": "Sélection de l'heure dans le format HH:MM",
   "setGeolocation": "Définir la <br /> géolocalisation",
   "geolocationHint": "Autorisation de géolocalisation",
   "recordAudio": "Enregistrer <br /> l'audio",
@@ -411,6 +412,9 @@
   "appletSavedAndPublished": "<0>L'applet <1>{{name}}</1> a été enregistrée et publiée avec succès.</0>",
   "appletNotSavedAndPublished": "<0>L'applet <1>{{name}}</1> n'a pas été enregistrée et publiée. Veuillez réessayer.</0>",
   "timeRangeTitle": "Plage de temps",
+  "timeRangeDescription": "Le répondant sera invité à prendre une plage de temps.",
+  "timeTitle": "Temps",
+  "timeDescription": "Le répondant sera invité à sélectionner une heure.",
   "videoResponseTitle": "VideoResponse",
   "videoResponseDescription": "Le répondant pourra prendre ou mettre en ligne une vidéo.",
   "photoResponseTitle": "PhotoResponse",
@@ -639,7 +643,10 @@
   "validationMessages": {
     "isRequired": "{{- field }} est requis",
     "alphanumeric": "{{- field }} ne doit contenir que des caractères alphanumériques ou des traits de soulignement",
-    "unique": "Cette {{- field }} déja en cours d'utilisation. Veuillez utiliser un nom différent"
+    "lessThan": "{{- less }} doit être inférieur à {{- than }}",
+    "moreThan": "{{- more }} doit être supérieur à {{- than }}",
+    "unique": "Cette {{- field }} déja en cours d'utilisation. Veuillez utiliser un nom différent",
+    "atLeastOne": "Sélectionnez au moins 1 élément"
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",
@@ -652,5 +659,6 @@
   "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants",
   "noDataForActivity": "Pas encore de données disponibles pour cette activité",
   "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
-  "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}"
+  "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}",
+  "showSubscaleResult": "Afficher le résultat de la sous-échelle"
 }

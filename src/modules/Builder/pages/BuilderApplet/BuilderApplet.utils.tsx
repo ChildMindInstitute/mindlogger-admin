@@ -5,7 +5,13 @@ import get from 'lodash.get';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
-import { SingleAndMultipleSelectionOption } from 'shared/state';
+import {
+  DrawingResponseValues,
+  NumberItemResponseValues,
+  SingleAndMultipleSelectionOption,
+  SliderItemResponseValues,
+  SliderRowsResponseValues,
+} from 'shared/state';
 import { page } from 'resources';
 import {
   SingleApplet,
@@ -58,6 +64,8 @@ export const getNewActivity = (activity?: ActivityFormValues) => ({
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: true,
+  generateReport: false,
+  showScoreSummary: false,
   ...activity,
   items: activity?.items?.map((item) => getNewActivityItem(item)) || [],
   id: undefined,
@@ -99,10 +107,18 @@ const getActivityItemResponseValues = (item: Item) => {
           (item.responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ??
           undefined,
       };
+    case ItemResponseType.SliderRows:
     case ItemResponseType.Slider:
     case ItemResponseType.NumberSelection:
     case ItemResponseType.Drawing:
-      return item.responseValues;
+      return {
+        ...(item.responseValues as
+          | SliderRowsResponseValues
+          | SliderItemResponseValues
+          | NumberItemResponseValues
+          | DrawingResponseValues),
+        options: undefined,
+      };
     case ItemResponseType.Text:
       return null;
     default:
@@ -140,9 +156,6 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
-    //generateReport: false, // TODO: add these fields when api will be ready
-    //showScoreSummary: false,
-    // calculateqTotalScore: false,
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,
