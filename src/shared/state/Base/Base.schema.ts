@@ -14,6 +14,7 @@ export type MetaSchema = {
   requestId: string;
   status: MetaStatus;
   error?: AxiosError<ErrorResponse[]>;
+  typePrefix?: string;
 };
 
 export type BaseSchema<DataType = unknown> = MetaSchema & {
