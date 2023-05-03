@@ -51,7 +51,7 @@ export const Description = ({ step }: DescriptionProps) => {
       );
     case SaveAndPublishSteps.BeingCreated: {
       const text =
-        typePrefix === AppletThunkTypePrefix.update
+        typePrefix === AppletThunkTypePrefix.Update
           ? t('appletIsBeingUpdated')
           : t('appletIsBeingCreated');
 
