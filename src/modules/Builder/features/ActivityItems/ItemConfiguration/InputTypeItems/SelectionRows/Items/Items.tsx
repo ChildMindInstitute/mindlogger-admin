@@ -35,6 +35,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
   const { watch, control, setValue, getValues } = useFormContext();
 
   const optionsName = `${name}.responseValues.options`;
+  const dataMatrixName = `${name}.responseValues.dataMatrix`;
   const rows = watch(`${name}.responseValues.rows`);
   const options = watch(optionsName);
   const settings = watch(`${name}.config`);
@@ -50,10 +51,10 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
     );
 
     if (hasScores) {
-      const dataMatrix = getValues(`${name}.responseValues.dataMatrix`);
+      const dataMatrix = getValues(dataMatrixName);
 
       setValue(
-        `${name}.responseValues.dataMatrix`,
+        dataMatrixName,
         dataMatrix?.filter(
           (dataMatrixRow: SingleAndMultipleSelectMatrix, key: number) => key !== index,
         ),
@@ -88,7 +89,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
           )}
         </StyledSelectionBox>
         {options?.map((option: SingleAndMultipleSelectOption, key: number) => {
-          const scoreName = `${name}.responseValues.dataMatrix.${index}.options.${key}.score`;
+          const scoreName = `${dataMatrixName}.${index}.options.${key}.score`;
           const isRemoveButtonVisible =
             hasRemoveButton && key === options?.length - 1 && index !== 0;
 
