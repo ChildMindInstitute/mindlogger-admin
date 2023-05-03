@@ -3,10 +3,19 @@ import { format } from 'date-fns';
 
 import { DateFormats } from 'shared/consts';
 
+import { state as initialState } from './CalendarEvents.state';
 import { CalendarEvent, CalendarEventsSchema, CreateEventsData } from './CalendarEvents.schema';
 import { getNotHiddenEvents, getPreparedEvents, createEvents } from './CalendarEvents.utils';
 
 export const reducers = {
+  resetCalendarEvents: (state: CalendarEventsSchema): void => {
+    state.events = initialState.events;
+    state.eventsToShow = initialState.eventsToShow;
+    state.alwaysAvailableHidden = initialState.alwaysAvailableHidden;
+    state.scheduledHidden = initialState.scheduledHidden;
+    state.createEventsData = initialState.createEventsData;
+    state.processedEventStartYear = initialState.processedEventStartYear;
+  },
   createCalendarEvents: (
     state: CalendarEventsSchema,
     action: PayloadAction<{

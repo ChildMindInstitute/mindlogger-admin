@@ -1,12 +1,12 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import isEqual from 'lodash.isequal';
 
 import { Option, SelectController } from 'shared/components/FormComponents';
 import { DefaultTabs as Tabs } from 'shared/components';
-import { StyledErrorText, StyledModalWrapper, theme } from 'shared/styles';
+import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { getErrorMessage } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
@@ -17,13 +17,13 @@ import { useAppDispatch } from 'redux/store';
 import { calendarEvents } from 'modules/Dashboard/state';
 
 import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
-import { tabs } from './EventForm.const';
 import { EventFormSchema } from './EventForm.schema';
 import {
   getActivitiesFlows,
   getDefaultValues,
   getEventPayload,
   getIdWithoutRegex,
+  getEventFormTabs,
 } from './EventForm.utils';
 
 export const EventForm = forwardRef<EventFormRef, EventFormProps>(
@@ -53,10 +53,22 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       mode: 'onChange',
     });
 
-    const { handleSubmit, control, watch, getValues, setValue } = methods;
+    const { handleSubmit, control, watch, getValues, setValue, trigger } = methods;
+
+    const { errors } = useFormState({
+      control,
+    });
+
+    const errorsObj = {
+      hasAvailabilityErrors: !!errors.startTime || !!errors.endTime,
+      hasTimerErrors: !!errors.timerDuration,
+      hasNotificationsErrors: !!errors.notifications || !!errors.reminder,
+    };
 
     const activityOrFlowId = watch('activityOrFlowId');
     const alwaysAvailable = watch('alwaysAvailable');
+    const startTime = watch('startTime');
+    const endTime = watch('endTime');
 
     const getEvents = () => appletId && dispatch(applets.thunk.getEvents({ appletId }));
     const { execute: createEvent, error: createEventError } = useAsync(createEventApi, getEvents);
@@ -77,7 +89,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       };
     }, {});
 
-    // TODO: add individual event create, update, Notifications and Reminders, add time selected error
+    // TODO: add individual event create, update
     const handleProcessEvent = async () => {
       if (!appletId) {
         return;
@@ -151,6 +163,10 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       setValue('removeWarning', removeWarning);
     }, [eventsData, activityOrFlowId, alwaysAvailable]);
 
+    useEffect(() => {
+      trigger(['startTime', 'endTime', 'notifications', 'reminder']);
+    }, [startTime, endTime]);
+
     return (
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(submitForm)} noValidate autoComplete="off">
@@ -169,11 +185,16 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
               />
             )}
           </StyledModalWrapper>
-          <Tabs tabs={tabs} uiType={UiType.Secondary} />
-          {(createEventError || updateEventError) && (
-            <StyledErrorText sx={{ m: theme.spacing(1, 2.6) }}>
-              {getErrorMessage(createEventError || updateEventError)}
-            </StyledErrorText>
+          <Tabs tabs={getEventFormTabs(errorsObj)} uiType={UiType.Secondary} />
+          {(createEventError || updateEventError || errorsObj.hasNotificationsErrors) && (
+            <StyledBodyLarge
+              color={variables.palette.semantic.error}
+              sx={{ m: theme.spacing(1, 2.6) }}
+            >
+              {errorsObj.hasNotificationsErrors
+                ? t('timeNotificationsError')
+                : getErrorMessage(createEventError || updateEventError)}
+            </StyledBodyLarge>
           )}
         </form>
       </FormProvider>

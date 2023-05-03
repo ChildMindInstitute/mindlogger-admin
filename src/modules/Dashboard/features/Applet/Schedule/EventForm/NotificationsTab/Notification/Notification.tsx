@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
 import { ToggleButtonGroup, TimePicker } from 'shared/components';
-import { StyledFlexTopCenter, StyledLabelLarge, theme } from 'shared/styles';
+import { StyledFlexTopStart, StyledLabelLarge, theme } from 'shared/styles';
 import { NotificationType } from 'modules/Dashboard/api';
 
 import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
@@ -14,7 +15,8 @@ import { EventFormValues } from '../../EventForm.types';
 
 export const Notification = ({ index, remove }: NotificationProps) => {
   const { t } = useTranslation('app');
-  const { setValue, watch } = useFormContext<EventFormValues>();
+  const { setValue, watch, trigger } = useFormContext<EventFormValues>();
+
   const notification = watch(`notifications.${index}`);
   const startTime = watch('startTime');
   const endTime = watch('endTime');
@@ -35,6 +37,14 @@ export const Notification = ({ index, remove }: NotificationProps) => {
     });
   };
 
+  useEffect(() => {
+    trigger([
+      `notifications.${index}.atTime`,
+      `notifications.${index}.fromTime`,
+      `notifications.${index}.toTime`,
+    ]);
+  }, [atTime, fromTime, toTime, startTime, endTime]);
+
   return (
     <StyledNotificationWrapper>
       <StyledLabelLarge sx={{ margin: theme.spacing(0, 0, 1.2, 1.1) }}>
@@ -42,7 +52,7 @@ export const Notification = ({ index, remove }: NotificationProps) => {
       </StyledLabelLarge>
       <StyledNotification>
         <Header onClickHandler={handleRemoveNotification} />
-        <StyledFlexTopCenter>
+        <StyledFlexTopStart>
           <StyledLeftCol>
             <ToggleButtonGroup
               toggleButtons={notificationTimeToggles}
@@ -78,7 +88,7 @@ export const Notification = ({ index, remove }: NotificationProps) => {
               </>
             )}
           </StyledCol>
-        </StyledFlexTopCenter>
+        </StyledFlexTopStart>
       </StyledNotification>
     </StyledNotificationWrapper>
   );

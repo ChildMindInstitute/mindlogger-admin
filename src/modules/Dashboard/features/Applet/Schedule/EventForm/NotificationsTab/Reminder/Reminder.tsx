@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { TimePicker } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { theme, StyledFlexTopCenter, StyledLabelLarge } from 'shared/styles';
+import { theme, StyledLabelLarge, StyledFlexTopStart } from 'shared/styles';
 
 import { EventFormValues } from '../../EventForm.types';
 import { Header } from '../Header';
@@ -25,7 +25,7 @@ export const Reminder = () => {
       </StyledLabelLarge>
       <StyledReminder>
         <Header onClickHandler={handleARemoveReminder} />
-        <StyledFlexTopCenter>
+        <StyledFlexTopStart>
           <StyledInputWrapper>
             <InputController
               label={t('activityIncomplete')}
@@ -41,7 +41,7 @@ export const Reminder = () => {
           <StyledColInner>
             <TimePicker name="reminder.reminderTime" label={t('reminderTime')} />
           </StyledColInner>
-        </StyledFlexTopCenter>
+        </StyledFlexTopStart>
       </StyledReminder>
     </StyledNotificationWrapper>
   );

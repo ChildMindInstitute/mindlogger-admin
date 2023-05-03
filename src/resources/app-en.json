@@ -801,5 +801,6 @@
   "theRespondentCompletedTheActivity": "The respondent completed the Activity at these times",
   "atTime": "At time",
   "fromTime": "From time",
+  "activityUnavailableAtTime": "Activity is unavailable at this time",
   "toTime": "To time"
 }

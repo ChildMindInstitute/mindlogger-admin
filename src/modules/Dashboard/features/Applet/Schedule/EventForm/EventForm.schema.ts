@@ -1,7 +1,13 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { TimerType } from 'modules/Dashboard/api';
+import { NotificationType, TimerType } from 'modules/Dashboard/api';
+
+import {
+  getTimeComparison,
+  getNotificationTimeComparison,
+  getNotificationsValidation,
+} from './EventForm.utils';
 
 export const EventFormSchema = () => {
   const { t } = i18n;
@@ -9,21 +15,11 @@ export const EventFormSchema = () => {
   const timerDurationCheck = t('timerDurationCheck');
   const selectValidPeriod = t('selectValidPeriod');
 
-  const getTimeComparison = () =>
-    yup.string().when('alwaysAvailable', {
-      is: false,
-      then: yup.string().test('is-valid-period', selectValidPeriod, function () {
-        const { startTime, endTime } = this.parent;
-        if (!startTime || !endTime) {
-          return false;
-        }
-        const startDate = new Date(`2000-01-01T${startTime}:00`);
-        const endDate = new Date(`2000-01-01T${endTime}:00`);
-
-        return startDate < endDate;
-      }),
-      otherwise: yup.string(),
-    });
+  const notificationSchema = yup.object().shape({
+    atTime: getNotificationsValidation('atTime', NotificationType.Fixed, false),
+    fromTime: getNotificationsValidation('fromTime', NotificationType.Random, true),
+    toTime: getNotificationsValidation('toTime', NotificationType.Random, false),
+  });
 
   return yup
     .object({
@@ -40,8 +36,19 @@ export const EventFormSchema = () => {
         }),
         otherwise: yup.string(),
       }),
-      startTime: getTimeComparison(),
-      endTime: getTimeComparison(),
+      startTime: getTimeComparison(selectValidPeriod),
+      endTime: getTimeComparison(''),
+      notifications: yup.array().of(notificationSchema),
+      reminder: yup
+        .object()
+        .nullable()
+        .shape({
+          reminderTime: getNotificationTimeComparison(
+            yup.string().nullable(),
+            'reminderTime',
+            false,
+          ),
+        }),
     })
     .required();
 };

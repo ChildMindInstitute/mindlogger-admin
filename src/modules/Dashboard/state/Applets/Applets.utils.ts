@@ -19,6 +19,10 @@ export const resetAppletsData = (state: AppletsSchema) => {
   state.applets = initialState.applets;
 };
 
+export const resetEventsData = (state: AppletsSchema) => {
+  state.events = initialState.events;
+};
+
 export const createAppletsPendingData = ({ builder, thunk, key }: CreateAppletsStateData) =>
   builder.addCase(thunk.pending, (state, action) => {
     if (state[key].status !== 'loading') {

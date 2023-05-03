@@ -31,7 +31,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
   const prevCalendarEventsArrRef = useRef<CalendarEvent[] | null>();
   const prevEventsDataArrRef = useRef<CreateEventsData[] | null>();
 
-  if (appletData) {
+  if (appletData && events?.length) {
     const { activities = [], activityFlows = [] } = appletData;
     const activitiesAndFlows = [...activities, ...activityFlows].map((item, index) => ({
       ...item,
@@ -199,7 +199,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
 
   useEffect(() => {
     const conditionToCreateCalendarEvents =
-      calendarEventsArr &&
+      calendarEventsArr?.length &&
       !isEqual(calendarEventsArr, prevCalendarEventsArrRef.current) &&
       (!processedEventStartYear || processedEventStartYear === currentYear);
     if (!conditionToCreateCalendarEvents) return;
@@ -211,7 +211,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
   useEffect(() => {
     (async () => {
       const conditionToCreateEventsData =
-        eventsDataArr && !isEqual(eventsDataArr, prevEventsDataArrRef.current);
+        eventsDataArr?.length && !isEqual(eventsDataArr, prevEventsDataArrRef.current);
       if (!conditionToCreateEventsData) return;
 
       await dispatch(calendarEvents.actions.setCreateEventsData(eventsDataArr));
