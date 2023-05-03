@@ -11,25 +11,29 @@ import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.s
 import { notificationTimeToggles } from './Notification.const';
 import { Header } from '../Header';
 import { NotificationProps } from './Notification.types';
-import { EventFormValues } from '../../EventForm.types';
 
 export const Notification = ({ index, remove }: NotificationProps) => {
   const { t } = useTranslation('app');
-  const { setValue, watch, trigger } = useFormContext<EventFormValues>();
+  const { setValue, watch, trigger } = useFormContext();
 
-  const notification = watch(`notifications.${index}`);
+  const notificationFieldName = `notifications.${index}`;
+  const atTimeFieldName = `${notificationFieldName}.atTime`;
+  const fromTimeFieldName = `${notificationFieldName}.fromTime`;
+  const toTimeFieldName = `${notificationFieldName}.toTime`;
+
+  const notification = watch(notificationFieldName);
   const startTime = watch('startTime');
   const endTime = watch('endTime');
-  const atTime = watch(`notifications.${index}.atTime`);
-  const fromTime = watch(`notifications.${index}.fromTime`);
-  const toTime = watch(`notifications.${index}.toTime`);
+  const atTime = watch(atTimeFieldName);
+  const fromTime = watch(fromTimeFieldName);
+  const toTime = watch(toTimeFieldName);
 
   const handleRemoveNotification = () => {
     remove(index);
   };
 
   const updateTime = (selected: string) => {
-    setValue(`notifications.${index}`, {
+    setValue(`${notificationFieldName}`, {
       atTime: selected === NotificationType.Fixed ? startTime : null,
       fromTime: selected === NotificationType.Random ? startTime : null,
       toTime: selected === NotificationType.Random ? endTime : null,
@@ -38,11 +42,7 @@ export const Notification = ({ index, remove }: NotificationProps) => {
   };
 
   useEffect(() => {
-    trigger([
-      `notifications.${index}.atTime`,
-      `notifications.${index}.fromTime`,
-      `notifications.${index}.toTime`,
-    ]);
+    trigger([atTimeFieldName, fromTimeFieldName, toTimeFieldName]);
   }, [atTime, fromTime, toTime, startTime, endTime]);
 
   return (
@@ -63,27 +63,15 @@ export const Notification = ({ index, remove }: NotificationProps) => {
           <StyledCol sx={{ marginLeft: theme.spacing(2.4) }}>
             {notification.triggerType === NotificationType.Fixed ? (
               <StyledColInner>
-                <TimePicker
-                  providedValue={atTime}
-                  name={`notifications.${index}.atTime`}
-                  label={t('at')}
-                />
+                <TimePicker providedValue={atTime} name={atTimeFieldName} label={t('at')} />
               </StyledColInner>
             ) : (
               <>
                 <StyledColInner>
-                  <TimePicker
-                    providedValue={fromTime}
-                    name={`notifications.${index}.fromTime`}
-                    label={t('from')}
-                  />
+                  <TimePicker providedValue={fromTime} name={fromTimeFieldName} label={t('from')} />
                 </StyledColInner>
                 <StyledColInner sx={{ marginLeft: theme.spacing(2.4) }}>
-                  <TimePicker
-                    providedValue={toTime}
-                    name={`notifications.${index}.toTime`}
-                    label={t('to')}
-                  />
+                  <TimePicker providedValue={toTime} name={toTimeFieldName} label={t('to')} />
                 </StyledColInner>
               </>
             )}

@@ -95,7 +95,7 @@ export const getNotificationTimeComparison = (
     .test(
       'is-valid-period',
       showValidPeriodMessage ? selectValidPeriod : '',
-      function (_: string, testContext: NotificationTimeTestContext) {
+      function notificationValidPeriodTest(_: string, testContext: NotificationTimeTestContext) {
         const { fromTime, toTime } = testContext.parent;
 
         if ((field !== 'fromTime' && field !== 'toTime') || !fromTime || !toTime) {
@@ -108,7 +108,7 @@ export const getNotificationTimeComparison = (
     .test(
       'after-start-time-before-end-time',
       activityUnavailableAtTime,
-      function (value: string, testContext: NotificationTimeTestContext) {
+      function notificationStartEndTest(value: string, testContext: NotificationTimeTestContext) {
         const startTimeValue = testContext.from[1].value.startTime;
         const endTimeValue = testContext.from[1].value.endTime;
 
