@@ -293,8 +293,8 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
 
     let result;
     checkIfAppletBeingCreatedOrUpdatedRef.current = true;
-    if (isNewApplet || !appletId) {
-      result = await dispatch(createApplet(body));
+    if ((isNewApplet || !appletId) && ownerId) {
+      result = await dispatch(createApplet({ ownerId, body }));
     }
     if (!isNewApplet && appletId) {
       result = await dispatch(updateApplet({ appletId, body }));

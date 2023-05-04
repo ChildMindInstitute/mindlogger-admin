@@ -8,8 +8,8 @@ import {
   postAppletApi,
   putAppletApi,
   AppletBody,
-  OwnerAndAppletIds,
   getAppletWithItemsApi,
+  OwnerId,
 } from 'api';
 
 export const enum AppletThunkTypePrefix {
@@ -30,7 +30,7 @@ export const getApplet = createAsyncThunk(
 
 export const getAppletWithItems = createAsyncThunk(
   'applet/getAppletWithItems',
-  async ({ ownerId, appletId }: OwnerAndAppletIds, { rejectWithValue, signal }) => {
+  async ({ ownerId, appletId }: OwnerId & AppletId, { rejectWithValue, signal }) => {
     try {
       return await getAppletWithItemsApi({ ownerId, appletId }, signal);
     } catch (exception) {
@@ -40,10 +40,10 @@ export const getAppletWithItems = createAsyncThunk(
 );
 
 export const createApplet = createAsyncThunk(
-  AppletThunkTypePrefix.Create,
-  async (body: SingleApplet, { rejectWithValue, signal }) => {
+  AppletThunkTypePrefix.Update,
+  async ({ ownerId, body }: OwnerId & { body: SingleApplet }, { rejectWithValue, signal }) => {
     try {
-      return await postAppletApi(body, signal);
+      return await postAppletApi({ ownerId, body }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }
