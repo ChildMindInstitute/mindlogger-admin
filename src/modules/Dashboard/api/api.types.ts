@@ -145,6 +145,18 @@ export type RevokeAppletUser = AppletId & {
   deleteResponse: boolean;
 };
 
+export type RemoveManagerAccess = {
+  userId: string;
+  appletIds: string[];
+  role: string;
+};
+
+export type RemoveRespondentAccess = {
+  userId: string;
+  appletIds: string[];
+  deleteResponses: boolean;
+};
+
 export type GetUsersData = AppletId & {
   pageIndex?: string;
   users?: string;

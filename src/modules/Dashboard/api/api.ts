@@ -33,6 +33,8 @@ import {
   RespondentId,
   EventId,
   RespondentAccesses,
+  RemoveRespondentAccess,
+  RemoveManagerAccess,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -153,6 +155,34 @@ export const revokeAppletUserApi = (
     },
     signal,
   });
+
+export const removeManagerAccess = (
+  { userId, appletIds, role }: RemoveManagerAccess,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    '/workspaces/removeAccess',
+    {
+      userId,
+      appletIds,
+      role,
+    },
+    { signal },
+  );
+
+export const removeRespondentAccess = (
+  { userId, appletIds, deleteResponses }: RemoveRespondentAccess,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    '/applets/removeAccess',
+    {
+      userId,
+      appletIds,
+      deleteResponses,
+    },
+    { signal },
+  );
 
 export const deleteAppletApi = (
   { appletId, password }: AppletIdWithPassword,

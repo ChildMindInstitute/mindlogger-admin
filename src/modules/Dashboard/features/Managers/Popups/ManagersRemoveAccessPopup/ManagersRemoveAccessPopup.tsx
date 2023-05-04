@@ -15,7 +15,7 @@ import {
 } from 'shared/styles/styledComponents';
 import { Table, UiType, Modal } from 'shared/components';
 import { useAsync } from 'shared/hooks';
-import { revokeAppletUserApi } from 'api';
+import { removeManagerAccess } from 'api';
 import theme from 'shared/styles/theme';
 
 import { buttonTextByStep, getHeadCells } from './ManagersRemoveAccessPopup.const';
@@ -63,7 +63,7 @@ export const ManagersRemoveAccessPopup = ({
     },
   }));
 
-  const { execute } = useAsync(revokeAppletUserApi);
+  const { execute } = useAsync(removeManagerAccess);
 
   const onSubmit = () => {
     switch (step) {
@@ -76,9 +76,7 @@ export const ManagersRemoveAccessPopup = ({
         );
         break;
       case 1:
-        selectedApplets.forEach(async (appletId: string) => {
-          await execute({ appletId, profileId: 'id', deleteResponse: false });
-        });
+        execute({ appletIds: selectedApplets, userId: user.id, role: 'admin' }); // TODO: remove 'admin' when requirements will be ready
         break;
       case 2:
         onClose();
