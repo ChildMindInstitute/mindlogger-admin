@@ -26,6 +26,7 @@ import {
   defaultSliderConfig,
   defaultSliderRowsConfig,
   defaultSingleAndMultiSelectionConfig,
+  defaultSingleAndMultiSelectionRowsConfig,
   defaultNumberSelectionConfig,
   defaultDateAndTimeRangeConfig,
   defaultDrawingConfig,
@@ -46,9 +47,9 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       case ItemResponseType.SliderRows:
         return <SliderRows name={name} isMultiple />;
       case ItemResponseType.SingleSelectionPerRow:
-        return <SelectionRows isSingle />;
+        return <SelectionRows name={name} isSingle />;
       case ItemResponseType.MultipleSelectionPerRow:
-        return <SelectionRows />;
+        return <SelectionRows name={name} />;
       case ItemResponseType.Geolocation:
         return <Geolocation />;
       case ItemResponseType.TimeRange:
@@ -80,8 +81,8 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 export const useSettingsSetup = ({
   name,
   handleAddOption,
-  removeRows,
-  handleAddRow,
+  handleAddSliderRow,
+  handleAddSingleOrMultipleRow,
   removeAlert,
   handleAddAlert,
   setShowColorPalette,
@@ -142,11 +143,16 @@ export const useSettingsSetup = ({
             setConfig(defaultMessageConfig);
             break;
           case ItemResponseType.SliderRows:
-            handleAddRow?.();
+            handleAddSliderRow?.();
             setConfig(defaultSliderRowsConfig);
             break;
           case ItemResponseType.Time:
             setConfig(defaultTimeConfig);
+            break;
+          case ItemResponseType.SingleSelectionPerRow:
+          case ItemResponseType.MultipleSelectionPerRow:
+            handleAddSingleOrMultipleRow?.();
+            setConfig(defaultSingleAndMultiSelectionRowsConfig);
             break;
         }
       }

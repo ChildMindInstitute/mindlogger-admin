@@ -32,6 +32,16 @@ export const ResponseValuesRowsSchema = () => ({
   maxLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
 });
 
+export const ResponseValuesSelectionRowsSchema = () =>
+  yup.object({
+    rowName: yup.string().required(getIsRequiredValidateMessage('row')),
+  });
+
+export const ResponseValuesSelectionOptionsSchema = () =>
+  yup.object({
+    text: yup.string().required(getIsRequiredValidateMessage('option')),
+  });
+
 export const ResponseValuesOptionsSchema = () =>
   yup.array().of(
     yup.object({
@@ -80,7 +90,17 @@ export const ItemSchema = () =>
           return schema.shape(ResponseValuesNumberSelectionSchema());
 
         if (responseType === ItemResponseType.Slider)
-          return schema.shape(ResponseValuesRowsSchema());
+          return schema.shape(ResponseValuesSliderRowsSchema());
+
+        if (
+          responseType === ItemResponseType.SingleSelectionPerRow ||
+          responseType === ItemResponseType.MultipleSelectionPerRow
+        ) {
+          return schema.shape({
+            rows: yup.array().of(ResponseValuesSelectionRowsSchema()),
+            options: yup.array().of(ResponseValuesSelectionOptionsSchema()),
+          });
+        }
 
         if (responseType === ItemResponseType.SliderRows)
           return schema.shape({ rows: ResponseValuesSliderRowsSchema() });

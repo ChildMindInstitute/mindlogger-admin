@@ -2,22 +2,25 @@ import { ChangeEvent } from 'react';
 import { Radio, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import get from 'lodash.get';
 
 import { UploaderUiType, Uploader, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
+import {
+  SingleAndMultipleSelectRow,
+  SingleAndMultipleSelectOption,
+  SingleAndMultipleSelectMatrix,
+} from 'shared/state';
 
 import {
   StyledSelectionRowItem,
   StyledItemContainer,
   StyledRemoveItemButton,
 } from './Items.styles';
+import { ItemsProps } from './Items.types';
 import { StyledSelectionBox } from '../SelectionRows.styles';
-import {
-  ItemConfigurationSettings,
-  SelectionRowsItem,
-  SelectionRowsOption,
-} from '../../../ItemConfiguration.types';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.const';
 
 const commonUploaderProps = {
@@ -26,52 +29,67 @@ const commonUploaderProps = {
   uiType: UploaderUiType.Secondary,
 };
 
-export const Items = ({ isSingle }: { isSingle?: boolean }) => {
+export const Items = ({ name, isSingle }: ItemsProps) => {
   const { t } = useTranslation('app');
 
-  const { watch, control, setValue } = useFormContext();
+  const { watch, control, setValue, getValues } = useFormContext();
 
-  const items = watch('selectionRows.items');
-  const options = watch('selectionRows.options');
-  const settings = watch('settings');
+  const optionsName = `${name}.responseValues.options`;
+  const dataMatrixName = `${name}.responseValues.dataMatrix`;
+  const rows = watch(`${name}.responseValues.rows`);
+  const options = watch(optionsName);
+  const settings = watch(`${name}.config`);
 
-  const hasTooltips = settings?.includes(ItemConfigurationSettings.HasTooltips);
-  const hasScores = settings?.includes(ItemConfigurationSettings.HasScores);
-  const hasRemoveButton = items?.length > 1;
+  const hasTooltips = get(settings, ItemConfigurationSettings.HasTooltips);
+  const hasScores = get(settings, ItemConfigurationSettings.HasScores);
+  const hasRemoveButton = rows?.length > 1;
 
-  const handleRemoveItem = (index: number) =>
+  const handleRemoveItem = (index: number) => {
     setValue(
-      'selectionRows.items',
-      items?.filter((item: SelectionRowsItem, key: number) => key !== index),
+      `${name}.responseValues.rows`,
+      rows?.filter((row: SingleAndMultipleSelectRow, key: number) => key !== index),
     );
 
-  return items?.map((item: SelectionRowsItem, index: number) => {
-    const name = `selectionRows.items[${index}]`;
+    if (hasScores) {
+      const dataMatrix = getValues(dataMatrixName);
+
+      setValue(
+        dataMatrixName,
+        dataMatrix?.filter(
+          (dataMatrixRow: SingleAndMultipleSelectMatrix, key: number) => key !== index,
+        ),
+      );
+    }
+  };
+
+  return rows?.map((row: SingleAndMultipleSelectRow, index: number) => {
+    const rowName = `${name}.responseValues.rows.${index}`;
 
     return (
-      <StyledSelectionRowItem key={`row-${item.id}`} hasTooltips={hasTooltips}>
+      <StyledSelectionRowItem key={`row-${row.id}`} hasTooltips={hasTooltips}>
         <StyledSelectionBox>
           <StyledFlexTopStart sx={{ gap: '1.2rem' }}>
             <Uploader
               {...commonUploaderProps}
-              setValue={(val: string) => setValue(`${name}.image`, val)}
-              getValue={() => watch(`${name}.image`) || ''}
+              setValue={(val: string) => setValue(`${rowName}.rowImage`, val || undefined)}
+              getValue={() => watch(`${rowName}.rowImage`) || ''}
             />
             <InputController
               control={control}
-              name={`${name}.label`}
+              name={`${rowName}.rowName`}
               label={t('selectionRowsItemLabel', { index: index + 1 })}
               maxLength={SELECTION_ROW_OPTION_LABEL_MAX_LENGTH}
+              restrictExceededValueLength
             />
           </StyledFlexTopStart>
           {hasTooltips && (
             <StyledFlexTopCenter>
-              <InputController control={control} name={`${name}.tooltip`} label={t('tooltip')} />
+              <InputController control={control} name={`${rowName}.tooltip`} label={t('tooltip')} />
             </StyledFlexTopCenter>
           )}
         </StyledSelectionBox>
-        {options?.map((option: SelectionRowsOption, key: number) => {
-          const scoreName = `${name}.scores[${key}]`;
+        {options?.map((option: SingleAndMultipleSelectOption, key: number) => {
+          const scoreName = `${dataMatrixName}.${index}.options.${key}.score`;
           const isRemoveButtonVisible =
             hasRemoveButton && key === options?.length - 1 && index !== 0;
 

@@ -9,6 +9,7 @@ type FormInputProps = {
   maxNumberValue?: number;
   isEmptyStringAllowed?: boolean;
   isErrorVisible?: boolean;
+  restrictExceededValueLength?: boolean;
   onAddNumber?: (value: number) => void;
   onDistractNumber?: (value: number) => void;
 } & TextFieldProps;

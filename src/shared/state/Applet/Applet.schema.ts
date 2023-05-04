@@ -79,6 +79,15 @@ export type SliderConfig = {
   };
 };
 
+export type SingleAndMultipleSelectionPerRowConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  timer: number;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+};
+
 export type NumberConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
@@ -172,6 +181,40 @@ export type SingleAndMultipleSelectItemResponseValues = {
   options: Array<SingleAndMultipleSelectionOption>;
 };
 
+export type SingleAndMultipleSelectRowOption = {
+  id: string;
+  text: string;
+  image?: string;
+  score?: number;
+  tooltip?: string;
+};
+
+export type SingleAndMultipleSelectRow = {
+  id: string;
+  rowName: string;
+  rowImage?: string;
+  tooltip?: string;
+};
+
+export type SingleAndMultipleSelectOption = {
+  id: string;
+  text: string;
+  image: string | null;
+  score: number | null;
+  tooltip: string | null;
+};
+
+export type SingleAndMultipleSelectMatrix = {
+  rowId: string;
+  options: Array<{ optionId: string; score: number | null; alert: string | null }>;
+};
+
+export type SingleAndMultipleSelectRowsResponseValues = {
+  rows: Array<SingleAndMultipleSelectRow>;
+  options: Array<SingleAndMultipleSelectOption>;
+  dataMatrix?: Array<SingleAndMultipleSelectMatrix> | null;
+};
+
 export type SliderRowsResponseValues = {
   rows: Array<SliderRowsItemResponseValues>;
 };
@@ -195,6 +238,7 @@ export type DrawingResponseValues = {
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
+  | SingleAndMultipleSelectRowsResponseValues
   | SliderRowsResponseValues
   | SliderItemResponseValues
   | NumberItemResponseValues
@@ -208,6 +252,7 @@ export type Config =
   | TextInputConfig
   | SingleAndMultipleSelectionConfig
   | SliderConfig
+  | SingleAndMultipleSelectionPerRowConfig
   | SliderRowsConfig
   | NumberConfig
   | DateAndTimeRangeConfig
@@ -258,12 +303,6 @@ export interface SliderItem extends Item {
   responseType: ItemResponseType.Slider;
   config: SliderConfig;
   responseValues: SliderItemResponseValues;
-}
-
-export interface SliderRowsItem extends Item {
-  responseType: ItemResponseType.SliderRows;
-  config: SliderRowsConfig;
-  responseValues: SliderRowsResponseValues;
 }
 
 export type Activity = {
