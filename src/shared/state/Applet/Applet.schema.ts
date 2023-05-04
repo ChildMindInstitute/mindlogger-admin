@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
-import { AppletBody, AppletId, OwnerAndAppletIds } from 'api';
+import { AppletBody, AppletId, OwnerId } from 'api';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
 import { ColorResult } from 'react-color';
 
@@ -11,8 +11,8 @@ export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
   thunk:
     | AsyncThunk<AxiosResponse, AppletId, Record<string, never>>
-    | AsyncThunk<AxiosResponse, OwnerAndAppletIds, Record<string, never>>
-    | AsyncThunk<AxiosResponse, SingleApplet, Record<string, never>>
+    | AsyncThunk<AxiosResponse, OwnerId & AppletId, Record<string, never>>
+    | AsyncThunk<AxiosResponse, OwnerId & { body: SingleApplet }, Record<string, never>>
     | AsyncThunk<AxiosResponse, AppletBody, Record<string, never>>;
   key: keyof AppletSchema;
 };
