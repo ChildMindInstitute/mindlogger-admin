@@ -1,22 +1,3 @@
-import { AvailabilityTab } from './AvailabilityTab';
-import { NotificationsTab } from './NotificationsTab';
-import { TimersTab } from './TimersTab';
-
-export const tabs = [
-  {
-    labelKey: 'availability',
-    content: <AvailabilityTab />,
-  },
-  {
-    labelKey: 'timers',
-    content: <TimersTab />,
-  },
-  {
-    labelKey: 'notifications',
-    content: <NotificationsTab />,
-  },
-];
-
 export const DEFAULT_START_TIME = '00:00';
 export const DEFAULT_END_TIME = '23:59';
 

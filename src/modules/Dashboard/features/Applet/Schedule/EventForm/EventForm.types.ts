@@ -42,9 +42,14 @@ export type EventFormValues = {
 };
 
 export type NotificationTimeTestContext = {
+  parent: {
+    fromTime: string;
+    toTime: string;
+  };
   from: {
     value: {
       startTime: string;
+      endTime: string;
     };
   }[];
 };

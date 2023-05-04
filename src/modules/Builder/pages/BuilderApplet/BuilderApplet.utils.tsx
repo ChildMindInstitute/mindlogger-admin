@@ -123,6 +123,9 @@ const getActivityItemResponseValues = (item: Item) => {
           | AudioPlayerResponseValues),
         options: undefined,
       };
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow:
+      return item.responseValues;
     default:
       return null;
   }

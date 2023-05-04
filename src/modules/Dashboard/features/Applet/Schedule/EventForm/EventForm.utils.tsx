@@ -1,5 +1,7 @@
 import { UseFormWatch } from 'react-hook-form';
 import { endOfYear, format, getYear } from 'date-fns';
+import * as yup from 'yup';
+import { AnyObject } from 'yup/lib/types';
 
 import i18n from 'i18n';
 import { DateFormats } from 'shared/consts';
@@ -14,8 +16,12 @@ import {
   TimerType,
 } from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
+import { getIsRequiredValidateMessage } from 'shared/utils';
 
 import { removeSecondsFromTime } from '../Schedule.utils';
+import { AvailabilityTab } from './AvailabilityTab';
+import { NotificationsTab } from './NotificationsTab';
+import { TimersTab } from './TimersTab';
 import {
   DEFAULT_END_TIME,
   DEFAULT_IDLE_TIME,
@@ -23,9 +29,117 @@ import {
   DEFAULT_TIMER_DURATION,
   SECONDS_TO_MILLISECONDS_MULTIPLIER,
 } from './EventForm.const';
-import { EventFormValues, SecondsManipulation } from './EventForm.types';
+import {
+  EventFormValues,
+  NotificationTimeTestContext,
+  SecondsManipulation,
+} from './EventForm.types';
 
 const { t } = i18n;
+
+export const getEventFormTabs = ({
+  hasAvailabilityErrors,
+  hasTimerErrors,
+  hasNotificationsErrors,
+}: Record<string, boolean>) => [
+  {
+    labelKey: 'availability',
+    content: <AvailabilityTab />,
+    hasError: hasAvailabilityErrors,
+  },
+  {
+    labelKey: 'timers',
+    content: <TimersTab />,
+    hasError: hasTimerErrors,
+  },
+  {
+    labelKey: 'notifications',
+    content: <NotificationsTab />,
+    hasError: hasNotificationsErrors,
+  },
+];
+
+const getStartEndComparisonResult = (startTime: string, endTime: string) => {
+  const startDate = new Date(`2000-01-01T${startTime}:00`);
+  const endDate = new Date(`2000-01-01T${endTime}:00`);
+
+  return startDate < endDate;
+};
+
+export const getTimeComparison = (message: string) =>
+  yup.string().when('alwaysAvailable', {
+    is: false,
+    then: yup.string().test('is-valid-period', message, function () {
+      const { startTime, endTime } = this.parent;
+      if (!startTime || !endTime) {
+        return true;
+      }
+
+      return getStartEndComparisonResult(startTime, endTime);
+    }),
+    otherwise: yup.string(),
+  });
+
+export const getNotificationTimeComparison = (
+  schema:
+    | yup.SchemaOf<EventFormValues>
+    | yup.StringSchema<string | null | undefined, AnyObject, string | null | undefined>,
+  field: string,
+  showValidPeriodMessage: boolean,
+) => {
+  const selectValidPeriod = t('selectValidPeriod');
+  const activityUnavailableAtTime = t('activityUnavailableAtTime');
+
+  return schema
+    .required(getIsRequiredValidateMessage(field))
+    .test(
+      'is-valid-period',
+      showValidPeriodMessage ? selectValidPeriod : '',
+      function notificationValidPeriodTest(_: string, testContext: NotificationTimeTestContext) {
+        const { fromTime, toTime } = testContext.parent;
+
+        if ((field !== 'fromTime' && field !== 'toTime') || !fromTime || !toTime) {
+          return true;
+        }
+
+        return getStartEndComparisonResult(fromTime, toTime);
+      },
+    )
+    .test(
+      'after-start-time-before-end-time',
+      activityUnavailableAtTime,
+      function notificationStartEndTest(value: string, testContext: NotificationTimeTestContext) {
+        const startTimeValue = testContext.from[1].value.startTime;
+        const endTimeValue = testContext.from[1].value.endTime;
+
+        if (!startTimeValue || !endTimeValue || !value) {
+          return true;
+        }
+
+        const timeDate = new Date(`1970-01-01T${value}:00.000Z`);
+        const startTimeDate = new Date(`1970-01-01T${startTimeValue}:00.000Z`);
+        const endTimeDate = new Date(`1970-01-01T${endTimeValue}:00.000Z`);
+
+        return timeDate >= startTimeDate && timeDate <= endTimeDate;
+      },
+    );
+};
+
+export const getNotificationsValidation = (
+  field: string,
+  notificationType: NotificationType,
+  showValidPeriodMessage: boolean,
+) =>
+  yup
+    .string()
+    .nullable()
+    .when('triggerType', (triggerType: NotificationType, schema) => {
+      if (triggerType === notificationType) {
+        return getNotificationTimeComparison(schema, field, showValidPeriodMessage);
+      }
+
+      return schema;
+    });
 
 const createTimeEntity = (timeQuantity: number) => timeQuantity.toString().padStart(2, '0');
 

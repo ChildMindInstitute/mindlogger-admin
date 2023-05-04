@@ -8,24 +8,24 @@ import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 import { UiType } from './Tabs.types';
 
 export const StyledTabs = styled(Tabs, shouldForwardProp)`
-  height: ${({ uiType }: { uiType: UiType; hiddenHeader?: boolean }) =>
+  height: ${({ uiType }: { uiType: UiType; hiddenHeader?: boolean; defaultTabs?: boolean }) =>
     uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem'};
   flex-shrink: 0;
 
   ${({ uiType }) =>
     uiType === UiType.Primary &&
     `
-    width: 90rem;
-    margin: 0 auto;
-  `}
+      width: 90rem;
+      margin: 0 auto;
+  `};
 
-  ${({ hiddenHeader }: { hiddenHeader?: boolean }) =>
+  ${({ hiddenHeader }) =>
     hiddenHeader &&
     `
-    &.MuiTabs-root {
-      display: none;
-    }
-  `}
+      &.MuiTabs-root {
+        display: none;
+      }
+  `};
 
   .MuiTabs-flexContainer {
     justify-content: center;
@@ -44,9 +44,9 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     ${({ uiType }) =>
       uiType === UiType.Primary &&
       `
-      margin: ${theme.spacing(0, 0.8)};
-      flex-grow: 1;
-    `}
+        margin: ${theme.spacing(0, 0.8)};
+        flex-grow: 1;
+    `};
 
     &:hover {
       background-color: ${variables.palette.on_surface_variant_alfa8};
@@ -54,7 +54,27 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
 
     .MuiBadge-root {
       position: absolute;
-      right: 0.5rem;
+
+      ${({ defaultTabs }) => {
+        if (defaultTabs) {
+          return `
+            left: 1.4rem;
+            top: 49%;
+            transform: translateY(-50%);
+            
+            .MuiBadge-badge {
+              min-width: 0.5rem;
+              width: 0.5rem;
+              height: 0.5rem;
+              transform: scale(1.1) translate(50%, -50%);
+            }
+          `;
+        }
+
+        return `
+          right: 0.5rem;
+        `;
+      }}
     }
   }
 

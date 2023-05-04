@@ -13,7 +13,12 @@ import { Svg } from 'shared/components';
 
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
-import { getEmptySliderOption, getPaletteColor } from '../ItemConfiguration.utils';
+import {
+  getPaletteColor,
+  getEmptySliderOption,
+  getEmptySelectionItem,
+  getEmptySelectionItemOption,
+} from '../ItemConfiguration.utils';
 import {
   ColorPalette,
   ItemSettingsController,
@@ -62,7 +67,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       name: `${name}.responseValues.options`,
     });
 
-    const { append: appendRow, remove: removeRows } = useFieldArray({
+    const { append: appendRow } = useFieldArray({
       control,
       name: `${name}.responseValues.rows`,
     });
@@ -90,7 +95,13 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
       });
 
-    const handleAddRow = () => appendRow(getEmptySliderOption({ isMultiple: true, hasScores }));
+    const handleAddSingleOrMultipleRow = () => {
+      appendRow(getEmptySelectionItem());
+      appendOption(getEmptySelectionItemOption());
+    };
+
+    const handleAddSliderRow = () =>
+      appendRow(getEmptySliderOption({ isMultiple: true, hasScores }));
 
     // const handleAddAlert = () =>
     //   appendAlert({
@@ -168,10 +179,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
 
     useSettingsSetup({
       name,
-      removeOptions,
       handleAddOption,
-      removeRows,
-      handleAddRow,
+      handleAddSliderRow,
+      handleAddSingleOrMultipleRow,
       // removeAlert: () => {}, //TODO: remove after backend ready
       // handleAddAlert: () => {}, //TODO: remove after backend ready
       setShowColorPalette: handleChangeColorPaletteVisibility,

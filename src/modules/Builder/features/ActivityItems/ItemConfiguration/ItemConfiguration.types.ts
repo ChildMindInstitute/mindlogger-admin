@@ -45,27 +45,6 @@ export type Alert = {
   max?: string;
 };
 
-export type SelectionRowsItem = {
-  id: string;
-  label: string;
-  tooltip?: string;
-  scores?: number[];
-  image?: string;
-};
-
-export type SelectionRowsOption = {
-  id: string;
-  label: string;
-  tooltip?: string;
-  image?: string;
-};
-
-export type SelectionRows = {
-  items: SelectionRowsItem[];
-  options: SelectionRowsOption[];
-  type: ItemResponseType.MultipleSelectionPerRow | ItemResponseType.SingleSelectionPerRow;
-};
-
 export type ItemsOption = {
   value: ItemResponseType;
   icon: JSX.Element;
