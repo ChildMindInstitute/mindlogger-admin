@@ -46,6 +46,7 @@ export const EditorController = <T extends FieldValues>({
             modelValue={value ?? ''}
             onChange={onChange}
             language={LANGUAGE_BY_DEFAULT}
+            placeholder={t('textPlaceholder')}
             defToolbars={[
               <MarkExtension key="mark-extension" onInsert={onInsert} />,
               <TrashExtension
