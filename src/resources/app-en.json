@@ -812,5 +812,6 @@
   "addAudio": "Add Audio",
   "audioPlayerUploadAudio": "Upload Audio",
   "audioPlayerRecordAudio": "Record Audio",
-  "audioPlayerUploadAudioDescription": "Please upload file in one of the following formats: <1>.mp3, .wav.</1>"
+  "audioPlayerUploadAudioDescription": "Please upload file in one of the following formats: <1>.mp3, .wav</1>.",
+  "mediaUploaderPlaceholder": "Drop <1>.mp3</1> or <1>.wav</1> here <br /> or click to browse."
 }

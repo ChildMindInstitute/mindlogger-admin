@@ -34,6 +34,8 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const handleToggleUploadPopup = () => setUploadPopupOpened((prev) => !prev);
   const handleToggleRecordPopup = () => setRecordPopupOpened((prev) => !prev);
 
+  const handleChange = (media: MediaType | null) => setMedia(media);
+
   const HeaderContent = ({ open }: SharedToggleItemProps) =>
     !open && !!media ? (
       <StyledNameWrapper>
@@ -48,7 +50,12 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
       <AddAudio onUploadAudio={handleToggleUploadPopup} onRecordAudio={handleToggleRecordPopup} />
-      {isUploadPopupOpened && <UploadAudio onClose={handleToggleUploadPopup} />}
+      <UploadAudio
+        open={isUploadPopupOpened}
+        media={media}
+        onChange={handleChange}
+        onClose={handleToggleUploadPopup}
+      />
       {isRecordPopupOpened && <RecordAudio onClose={handleToggleRecordPopup} />}
     </Box>
   );

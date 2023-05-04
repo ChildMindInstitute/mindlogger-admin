@@ -10,6 +10,7 @@ export type MediaUploaderProps = {
   width: number;
   height: number;
   media: MediaType | null;
+  placeholder?: JSX.Element | string;
   onUpload: Dispatch<SetStateAction<MediaType | null>>;
 };
 
