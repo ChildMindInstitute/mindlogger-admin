@@ -6,7 +6,7 @@ import { Modal, SubmitBtnColor, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { useAsync } from 'shared/hooks';
-import { revokeAppletUserApi } from 'api';
+import { removeRespondentAccess } from 'api';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { ChosenAppletData } from '../../Respondents.types';
@@ -29,7 +29,7 @@ export const RespondentsRemoveAccessPopup = ({
   const [step, setStep] = useState<Steps>(0);
   const [removeData, setRemoveData] = useState(false);
 
-  const { execute, value: isRemoved, error } = useAsync(revokeAppletUserApi);
+  const { execute, value: isRemoved, error } = useAsync(removeRespondentAccess);
 
   useEffect(() => {
     if (chosenAppletData) {
@@ -97,7 +97,7 @@ export const RespondentsRemoveAccessPopup = ({
 
   const removeAccess = async () => {
     const { appletId, userId } = chosenAppletData as ChosenAppletData;
-    await execute({ appletId, profileId: userId || '', deleteResponse: removeData });
+    userId && (await execute({ userId, appletIds: [appletId], deleteResponses: removeData }));
   };
 
   const screens = getScreens({
