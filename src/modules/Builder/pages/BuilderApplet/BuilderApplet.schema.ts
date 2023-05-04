@@ -27,7 +27,7 @@ export const ResponseValuesSliderRowsSchema = () =>
     }),
   );
 
-export const ResponseValuesRowsSchema = () => ({
+export const ResponseValuesSliderSchema = () => ({
   minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
   maxLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
 });
@@ -90,7 +90,7 @@ export const ItemSchema = () =>
           return schema.shape(ResponseValuesNumberSelectionSchema());
 
         if (responseType === ItemResponseType.Slider)
-          return schema.shape(ResponseValuesSliderRowsSchema());
+          return schema.shape(ResponseValuesSliderSchema());
 
         if (
           responseType === ItemResponseType.SingleSelectionPerRow ||
