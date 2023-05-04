@@ -18,9 +18,11 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export const BarChart = () => {
   const options = {
+    maintainAspectRatio: false,
     responsive: true,
     plugins: {
       legend: {
+        align: 'start' as const,
         labels: {
           color: variables.palette.on_surface,
           font: {

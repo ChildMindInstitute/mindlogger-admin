@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import uniqueId from 'lodash.uniqueid';
+import get from 'lodash.get';
 
 import { Svg } from 'shared/components';
 import { SelectEvent } from 'shared/types/event';
@@ -11,16 +11,15 @@ import {
   variables,
   theme,
 } from 'shared/styles';
-import { createArray } from 'shared/utils';
+import { SingleAndMultipleSelectMatrix, SingleAndMultipleSelectOption } from 'shared/state';
 
 import { StyledSelectController } from './Header.styles';
 import { HeaderProps } from './Header.types';
 import { getMultipleSelectionRowsOptions } from './Header.utils';
-import {
-  DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
-  DEFAULT_SELECTION_ROWS_SCORE,
-} from '../../../ItemConfiguration.const';
-import { SelectionRowsItem } from '../../../ItemConfiguration.types';
+import { getEmptySelectionItemOptions } from '../../../ItemConfiguration.utils';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
+import { DEFAULT_SCORE_VALUE } from '../../../ItemConfiguration.const';
+// import { options } from '../../../Alerts/Alert';
 
 const commonSelectArrowProps = {
   id: 'navigate-down',
@@ -33,42 +32,43 @@ const commonButtonProps = {
   sx: { p: theme.spacing(1) },
 };
 
-export const Header = ({ isSingle, isExpanded, onArrowClick }: HeaderProps) => {
+export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps) => {
   const { t } = useTranslation('app');
 
   const { watch, getValues, setValue } = useFormContext();
 
-  const options = watch('selectionRows.options');
+  const optionsName = `${name}.responseValues.options`;
+  const options = watch(optionsName);
+
+  const settings = watch(`${name}.config`);
+
+  const hasScores = get(settings, ItemConfigurationSettings.HasScores);
 
   const handleChange = (e: SelectEvent) => {
-    const options = getValues('selectionRows.options');
-    const items = getValues('selectionRows.items');
+    const options = getValues(optionsName);
 
-    if (+e.target.value < options.length) {
-      setValue('selectionRows.options.length', +e.target.value);
+    const newValue = +e.target.value;
+    const lessThanBefore = newValue < options?.length;
+
+    const newOptions = lessThanBefore
+      ? options?.slice(0, newValue)
+      : [...options, ...getEmptySelectionItemOptions(newValue - options?.length)];
+
+    setValue(optionsName, newOptions);
+
+    if (hasScores) {
+      const dataMatrix = getValues(`${name}.responseValues.dataMatrix`);
+
       setValue(
-        'selectionRows.items',
-        items?.map((item: SelectionRowsItem) => ({
-          ...item,
-          scores: item?.scores?.slice(0, +e.target.value),
-        })),
-      );
-    } else {
-      setValue('selectionRows.options', [
-        ...options,
-        ...createArray(+e.target.value - options.length, () => ({
-          ...DEFAULT_EMPTY_SELECTION_ROWS_OPTION,
-          id: uniqueId('selection-option-'),
-        })),
-      ]);
-      setValue(
-        'selectionRows.items',
-        items?.map((item: SelectionRowsItem) => ({
-          ...item,
-          scores: [
-            ...(item?.scores || []),
-            ...createArray(+e.target.value - options.length, () => DEFAULT_SELECTION_ROWS_SCORE),
-          ],
+        `${name}.responseValues.dataMatrix`,
+        dataMatrix?.map((dataMatrixRow: SingleAndMultipleSelectMatrix) => ({
+          ...dataMatrixRow,
+          options: lessThanBefore
+            ? dataMatrixRow.options?.slice(0, newValue)
+            : newOptions.map((option: SingleAndMultipleSelectOption, index: number) => ({
+                optionId: option.id,
+                score: dataMatrixRow.options?.[index]?.score ?? DEFAULT_SCORE_VALUE,
+              })),
         })),
       );
     }

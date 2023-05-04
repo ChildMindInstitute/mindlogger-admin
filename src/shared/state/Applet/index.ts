@@ -38,4 +38,12 @@ export const applet = {
         },
       }) => status,
     ),
+  useResponseTypePrefix: (): string =>
+    useAppSelector(
+      ({
+        applet: {
+          applet: { typePrefix },
+        },
+      }) => typePrefix,
+    ),
 };

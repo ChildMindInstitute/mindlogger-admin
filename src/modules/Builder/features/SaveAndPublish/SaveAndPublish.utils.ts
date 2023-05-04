@@ -3,6 +3,7 @@ import {
   NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
+  SingleAndMultipleSelectRowsResponseValues,
   SliderItemResponseValues,
   SliderRowsResponseValues,
 } from 'shared/state';
@@ -57,18 +58,23 @@ export const mapItemResponseValues = (
   if (
     responseType === ItemResponseType.Slider ||
     responseType === ItemResponseType.NumberSelection ||
-    responseType === ItemResponseType.Drawing
+    responseType === ItemResponseType.Drawing ||
+    responseType === ItemResponseType.SliderRows
   )
     return {
       ...(responseValues as
         | SliderItemResponseValues
         | NumberItemResponseValues
-        | DrawingResponseValues),
+        | DrawingResponseValues
+        | SliderRowsResponseValues),
       options: undefined,
     };
 
-  if (responseType === ItemResponseType.SliderRows)
-    return { rows: (responseValues as SliderRowsResponseValues)?.rows };
+  if (
+    responseType === ItemResponseType.SingleSelectionPerRow ||
+    responseType === ItemResponseType.MultipleSelectionPerRow
+  )
+    return responseValues as SingleAndMultipleSelectRowsResponseValues;
 
   return null;
 };

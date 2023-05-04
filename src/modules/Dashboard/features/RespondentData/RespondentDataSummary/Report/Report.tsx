@@ -13,7 +13,7 @@ import {
 } from 'shared/styles';
 
 import { ReportFilters } from './ReportFilters';
-import { StyledHeader, StyledReport } from './Report.styles';
+import { StyledBarChart, StyledHeader, StyledReport } from './Report.styles';
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ScatterChart } from '../Charts/ScatterChart';
 import { BarChart } from '../Charts/BarChart';
@@ -48,9 +48,9 @@ export const Report = ({ activity }: { activity: Activity }) => {
         </StyledTitleLargish>
         <ScatterChart />
         <StyledTitleLargish sx={{ mt: theme.spacing(6) }}>{t('subscaleScores')}</StyledTitleLargish>
-        <Box sx={{ m: theme.spacing(2.4, 0) }}>
+        <StyledBarChart>
           <BarChart />
-        </Box>
+        </StyledBarChart>
         <Subscales />
       </Box>
     </StyledReport>

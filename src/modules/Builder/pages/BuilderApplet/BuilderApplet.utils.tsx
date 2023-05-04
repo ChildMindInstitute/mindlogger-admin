@@ -119,8 +119,9 @@ const getActivityItemResponseValues = (item: Item) => {
           | DrawingResponseValues),
         options: undefined,
       };
-    case ItemResponseType.Text:
-      return null;
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow:
+      return item.responseValues;
     default:
       return null;
   }

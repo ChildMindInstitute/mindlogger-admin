@@ -2,15 +2,12 @@ import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 
-import { DEFAULT_SCORE_VALUE } from '../../ItemConfiguration.const';
 import { SetSelectionOptionValue } from './SelectionOption.types';
 
 export const useSetSelectionOptionValue = ({
   name,
   onUpdateOption,
   index,
-  hasScoresChecked,
-  scoreString,
   hasTooltipsChecked,
   hasTooltip,
   hasColorPicker,
