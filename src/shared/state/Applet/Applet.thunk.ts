@@ -12,6 +12,11 @@ import {
   getAppletWithItemsApi,
 } from 'api';
 
+export const enum AppletThunkTypePrefix {
+  Create = 'applet/createApplet',
+  Update = 'applet/updateApplet',
+}
+
 export const getApplet = createAsyncThunk(
   'applet/getApplet',
   async ({ appletId }: AppletId, { rejectWithValue, signal }) => {
@@ -35,7 +40,7 @@ export const getAppletWithItems = createAsyncThunk(
 );
 
 export const createApplet = createAsyncThunk(
-  'applet/createApplet',
+  AppletThunkTypePrefix.Create,
   async (body: SingleApplet, { rejectWithValue, signal }) => {
     try {
       return await postAppletApi(body, signal);
@@ -46,7 +51,7 @@ export const createApplet = createAsyncThunk(
 );
 
 export const updateApplet = createAsyncThunk(
-  'applet/updateApplet',
+  AppletThunkTypePrefix.Update,
   async ({ appletId, body }: AppletBody, { rejectWithValue, signal }) => {
     try {
       return await putAppletApi({ appletId, body }, signal);
