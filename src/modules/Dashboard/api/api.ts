@@ -5,7 +5,6 @@ import {
   SwitchAccount,
   TransferOwnershipType,
   SetAccount,
-  RevokeAppletUser,
   AppletInvitationData,
   DuplicateApplet,
   FolderId,
@@ -143,18 +142,6 @@ export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSig
       signal,
     },
   );
-
-export const revokeAppletUserApi = (
-  { appletId, profileId, deleteResponse }: RevokeAppletUser,
-  signal?: AbortSignal,
-) =>
-  authApiClient.delete(`/applet/${appletId}/deleteUser`, {
-    params: {
-      profileId,
-      deleteResponse,
-    },
-    signal,
-  });
 
 export const removeManagerAccess = (
   { userId, appletIds, role }: RemoveManagerAccess,

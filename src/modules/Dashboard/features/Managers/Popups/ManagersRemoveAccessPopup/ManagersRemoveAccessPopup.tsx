@@ -76,7 +76,7 @@ export const ManagersRemoveAccessPopup = ({
         );
         break;
       case 1:
-        execute({ appletIds: selectedApplets, userId: user.id, role: 'admin' }); // TODO: remove 'admin' when requirements will be ready
+        execute({ appletIds: selectedApplets, userId: user.id, role: 'reviewer' }); // TODO: remove 'reviewer' when requirements will be ready
         break;
       case 2:
         onClose();
