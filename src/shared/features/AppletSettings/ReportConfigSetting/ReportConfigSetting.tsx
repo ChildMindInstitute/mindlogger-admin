@@ -92,6 +92,11 @@ export const ReportConfigSetting = () => {
     reset({}, { keepValues: true });
   };
 
+  const passwordSubmit = () => {
+    saveReportConfigurations();
+    setPasswordPopupVisible(false);
+  };
+
   const handleSaveChanges = () => {
     cancelNavigation();
     handleSubmit(onSubmit)();
@@ -221,7 +226,7 @@ export const ReportConfigSetting = () => {
           onClose={() => setPasswordPopupVisible(false)}
           popupType={AppletPasswordPopupType.Enter}
           popupVisible={passwordPopupVisible}
-          submitCallback={saveReportConfigurations}
+          submitCallback={passwordSubmit}
         />
       )}
       {warningPopupVisible && (

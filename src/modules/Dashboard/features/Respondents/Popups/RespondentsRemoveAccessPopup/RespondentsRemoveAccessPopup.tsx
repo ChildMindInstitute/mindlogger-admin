@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal, SubmitBtnColor, EnterAppletPassword } from 'shared/components';
@@ -22,10 +23,12 @@ export const RespondentsRemoveAccessPopup = ({
   setChosenAppletData,
 }: RespondentAccessPopupProps) => {
   const { t } = useTranslation('app');
+  const { appletId } = useParams();
   const { appletPasswordRef, submitForm: submitPassword } = useSetupEnterAppletPassword();
   const [appletName, setAppletName] = useState('');
   const [respondentName, setRespondentName] = useState('');
   const [disabledSubmit, setDisabledSubmit] = useState(false);
+  const [secondBtnDisabled, setSecondBtnDisabled] = useState(false);
   const [step, setStep] = useState<Steps>(0);
   const [removeData, setRemoveData] = useState(false);
 
@@ -38,6 +41,16 @@ export const RespondentsRemoveAccessPopup = ({
       setStep(1);
     }
   }, [chosenAppletData]);
+
+  useEffect(() => {
+    if (!!appletId && step === 1) {
+      setSecondBtnDisabled(true);
+
+      return;
+    }
+
+    setSecondBtnDisabled(false);
+  }, [step, appletId]);
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
@@ -139,6 +152,7 @@ export const RespondentsRemoveAccessPopup = ({
       onSecondBtnSubmit={onSecondBtnSubmit}
       secondBtnText={t('back')}
       disabledSubmit={disabledSubmit}
+      disabledSecondBtn={secondBtnDisabled}
       submitBtnColor={screens[step].submitBtnColor as SubmitBtnColor | undefined}
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
