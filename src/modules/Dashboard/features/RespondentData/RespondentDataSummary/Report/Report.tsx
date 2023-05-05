@@ -5,20 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { Activity } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
-import {
-  StyledHeadlineLarge,
-  StyledTitleLargish,
-  StyledTitleTooltipIcon,
-  theme,
-} from 'shared/styles';
+import { StyledHeadlineLarge, StyledHeadline, StyledTitleTooltipIcon, theme } from 'shared/styles';
 
+import { StyledTextBtn } from '../../RespondentData.styles';
+import { ScatterChart } from '../Charts/ScatterChart';
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
-import { StyledTextBtn } from '../../RespondentData.styles';
 import { Subscales } from './Subscales';
-import { BarChart } from '../Charts/BarChart';
-import { LineChart } from '../Charts/LineChart';
-import { ScatterChart } from '../Charts/ScatterChart';
 
 export const Report = ({ activity }: { activity: Activity }) => {
   const { t } = useTranslation();
@@ -39,23 +32,16 @@ export const Report = ({ activity }: { activity: Activity }) => {
       </StyledHeader>
       <Box sx={{ margin: theme.spacing(4.8, 6.4, 4.8) }}>
         <ReportFilters />
-        <StyledTitleLargish sx={{ mb: theme.spacing(2) }}>
+        <StyledHeadline sx={{ mb: theme.spacing(2) }}>
           {t('activityCompleted')}
           <Tooltip tooltipTitle={t('theRespondentCompletedTheActivity')}>
             <span>
               <StyledTitleTooltipIcon id="more-info-outlined" width={16} height={16} />
             </span>
           </Tooltip>
-        </StyledTitleLargish>
+        </StyledHeadline>
         <ScatterChart />
-        <StyledTitleLargish sx={{ mt: theme.spacing(6) }}>{t('subscaleScores')}</StyledTitleLargish>
-        <Box sx={{ m: theme.spacing(2.4, 0) }}>
-          <BarChart />
-        </Box>
         <Subscales />
-        <Box sx={{ m: theme.spacing(2.4, 0) }}>
-          <LineChart />
-        </Box>
       </Box>
     </StyledReport>
   );

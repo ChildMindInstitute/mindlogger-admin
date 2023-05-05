@@ -10,17 +10,18 @@ import { Bar } from 'react-chartjs-2';
 
 import { variables } from 'shared/styles';
 
-import { mockedSubscales as chartData } from './mock';
 import { getDatasets } from './BarChart.utils';
-import { CustomLegend } from './BarChart.types';
+import { BarChartProps, CustomLegend } from './BarChart.types';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-export const BarChart = () => {
+export const BarChart = ({ chartData }: BarChartProps) => {
   const options = {
+    maintainAspectRatio: false,
     responsive: true,
     plugins: {
       legend: {
+        align: 'start' as const,
         labels: {
           color: variables.palette.on_surface,
           font: {

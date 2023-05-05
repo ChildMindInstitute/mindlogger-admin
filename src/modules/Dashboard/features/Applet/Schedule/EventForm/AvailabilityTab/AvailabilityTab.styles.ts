@@ -26,7 +26,7 @@ export const StyledTimeRow = styled(StyledFlexTopStart)`
 export const StyledDatePickerWrapper = styled(StyledFlexTopCenter)`
   width: 100%;
 
-  input.MuiInputBase-input.MuiOutlinedInput-input.Mui-disabled {
-    -webkit-text-fill-color: ${variables.palette.on_surface};
+  .MuiTextField-root .Mui-disabled {
+    -webkit-text-fill-color: ${variables.palette.on_surface_variant};
   }
 `;

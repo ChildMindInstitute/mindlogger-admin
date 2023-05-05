@@ -6,6 +6,7 @@ import { APPLET_PASSWORD_MIN_LENGTH } from 'shared/consts';
 export const createPasswordFormSchema = () => {
   const { t } = i18n;
   const passwordRequired = t('passwordRequired');
+  const repeatPasswordRequired = t('repeatPasswordRequired');
   const passwordMatchError = t('passwordMatchError');
   const passwordBlankSpaces = t('passwordBlankSpaces');
   const passwordCapitalLetter = t('passwordCapitalLetter');
@@ -27,7 +28,7 @@ export const createPasswordFormSchema = () => {
         .min(APPLET_PASSWORD_MIN_LENGTH, passwordMinLength),
       appletPasswordConfirmation: yup
         .string()
-        .required(passwordRequired)
+        .required(repeatPasswordRequired)
         .oneOf([yup.ref('appletPassword')], passwordMatchError),
     })
     .required();
