@@ -36,6 +36,7 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
     clip: false as const,
     plugins: {
       legend: {
+        align: 'start' as const,
         labels: {
           filter: (legendItem: LegendItem, chart: ChartData<'line'>) => {
             const versionIndex = chart.datasets.findIndex((dataset) => dataset.xAxisID === 'x2');
