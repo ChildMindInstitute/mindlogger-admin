@@ -6,7 +6,7 @@ import { endOfMonth, format, startOfMonth } from 'date-fns';
 
 import { users } from 'redux/modules';
 import { getAnswersApi, getAppletSubmitDateListApi } from 'api';
-import { DatePicker, DatePickerUiType, Spinner } from 'shared/components';
+import { DatePicker, DatePickerUiType } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
 import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
@@ -36,7 +36,7 @@ export const ReviewMenu = ({
   const [submitDates, setSubmitDates] = useState<Date[] | undefined>(undefined);
   const [activities, setActivities] = useState<Activity[]>([]);
 
-  const { execute: executeGetAppletSubmitDatesApi, isLoading: isLoadingDates } = useAsync(
+  const { execute: executeGetAppletSubmitDatesApi } = useAsync(
     getAppletSubmitDateListApi,
     (res) => {
       if (res?.data?.result) {
@@ -47,7 +47,7 @@ export const ReviewMenu = ({
     },
   );
 
-  const { execute: executeGetAnswers, isLoading: isLoadingAnswers } = useAsync(
+  const { execute: executeGetAnswers } = useAsync(
     getAnswersApi,
     (res) => res?.data?.result && setActivities(res.data.result),
   );
@@ -80,7 +80,6 @@ export const ReviewMenu = ({
 
   return (
     <StyledMenu>
-      {isLoadingAnswers || (isLoadingDates && <Spinner />)}
       <StyledHeader>
         <StyledHeadlineLarge>{t('review')}</StyledHeadlineLarge>
         <StyledLabelLarge sx={{ marginBottom: theme.spacing(4) }}>

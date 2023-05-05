@@ -823,5 +823,8 @@
   "audioPlayerRecordAudioDescription": "Record audio using your device microphone.",
   "removeAudioDescription": "Are you sure you want to delete the current audio?",
   "mediaUploaderPlaceholder": "Drop <1>.mp3</1> or <1>.wav</1> here <br /> or click to browse.",
-  "activityUnavailableAtTime": "Activity is unavailable at this time"
+  "activityUnavailableAtTime": "Activity is unavailable at this time",
+  "repeatPasswordRequired": "Repeat Password is Required",
+  "finalSubscaleScore": "Final Subscale Score",
+  "additionalInformation": "Additional Information"
 }

@@ -1,13 +1,8 @@
 import { SingleApplet } from 'shared/state';
+import { OwnerId } from 'api';
 
 import { apiClient, authApiClient } from './api.client';
-import {
-  SignInRefreshTokenArgs,
-  AppletId,
-  AppletBody,
-  OwnerAndAppletIds,
-  AppletIdWithPassword,
-} from './api.types';
+import { SignInRefreshTokenArgs, AppletId, AppletBody, AppletIdWithPassword } from './api.types';
 
 export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,
@@ -30,7 +25,7 @@ export const getAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}`, { signal });
 
 export const getAppletWithItemsApi = (
-  { ownerId, appletId }: OwnerAndAppletIds,
+  { ownerId, appletId }: OwnerId & AppletId,
   signal?: AbortSignal,
 ) => authApiClient.get(`/workspaces/${ownerId}/applets/${appletId}`, { signal });
 
@@ -43,9 +38,12 @@ export const putAppletApi = ({ appletId, body }: AppletBody, signal?: AbortSigna
     { signal },
   );
 
-export const postAppletApi = (body: SingleApplet, signal?: AbortSignal) =>
+export const postAppletApi = (
+  { ownerId, body }: OwnerId & { body: SingleApplet },
+  signal?: AbortSignal,
+) =>
   authApiClient.post(
-    '/applets',
+    `workspaces/${ownerId}/applets`,
     {
       ...body,
     },

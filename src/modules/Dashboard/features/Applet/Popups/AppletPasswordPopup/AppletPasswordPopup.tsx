@@ -25,7 +25,6 @@ export const AppletPasswordPopup = ({
 
   const handleSubmitCallback = (formData: CreateAppletPasswordForm | EnterAppletPasswordForm) => {
     submitCallback(formData);
-    onClose();
   };
 
   return (

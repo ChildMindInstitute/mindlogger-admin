@@ -674,5 +674,7 @@
   "audioPlayerDeviceError": "Périphérique d'enregistrement introuvable",
   "audioPlayerRecordAudioDescription": "Enregistrez de l'audio à l'aide du microphone de votre appareil.",
   "removeAudioDescription": "Voulez-vous vraiment supprimer l'audio actuel?",
-  "mediaUploaderPlaceholder": "Déposez <1>.mp3</1> ou <1>.wav</1> ici <br /> ou cliquez pour parcourir."
+  "mediaUploaderPlaceholder": "Déposez <1>.mp3</1> ou <1>.wav</1> ici <br /> ou cliquez pour parcourir.",
+  "finalSubscaleScore": "Score final de la sous-échelle",
+  "informationsupplémentaire": "Informations supplémentaires"
 }

@@ -140,7 +140,7 @@ export const StyledTextField = styled(TextField)`
   }
 
   .Mui-disabled {
-    -webkit-text-fill-color: ${variables.palette.on_surface};
+    -webkit-text-fill-color: ${variables.palette.on_surface_alfa38};
   }
 
   .MuiOutlinedInput-notchedOutline {
