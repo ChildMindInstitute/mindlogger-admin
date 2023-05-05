@@ -45,7 +45,6 @@ export const BarChart = () => {
           color: variables.palette.outline_variant,
         },
         border: {
-          display: false,
           dash: [8, 8],
         },
         ticks: {
