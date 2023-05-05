@@ -35,7 +35,7 @@ export const MediaUploader = ({
       <input
         ref={uploadInputRef}
         onChange={handleChange}
-        accept="audio/mp3,audio/wav"
+        accept=".mp3,.wav"
         type="file"
         name="uploadFile"
         hidden
