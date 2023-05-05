@@ -1,11 +1,11 @@
 import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
+import { ColorResult } from 'react-color';
 
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId, OwnerId } from 'api';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
-import { ColorResult } from 'react-color';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
