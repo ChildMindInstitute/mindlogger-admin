@@ -10,7 +10,7 @@ import {
 } from 'shared/styles';
 import { Svg } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
-import { MAX_FILE_SIZE_8MB } from 'shared/consts';
+import { MAX_FILE_SIZE_8MB, ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
 
 import { StyledContainer, StyledSourceContainer, StyledPreview } from './MediaUploader.styles';
 import { useMediaUploader } from './MediaUploader.hooks';
@@ -35,7 +35,7 @@ export const MediaUploader = ({
       <input
         ref={uploadInputRef}
         onChange={handleChange}
-        accept=".mp3,.wav"
+        accept={ALLOWED_AUDIO_FILE_TYPES}
         type="file"
         name="uploadFile"
         hidden

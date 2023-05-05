@@ -106,3 +106,5 @@ export const locales = {
   'en-US': enUS,
   fr,
 };
+
+export const ALLOWED_AUDIO_FILE_TYPES = '.mp3,.wav';
