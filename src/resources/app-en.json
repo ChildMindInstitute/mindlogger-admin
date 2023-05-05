@@ -799,5 +799,9 @@
   "theRespondentCompletedTheActivity": "The respondent completed the Activity at these times",
   "atTime": "At time",
   "fromTime": "From time",
-  "toTime": "To time"
+  "toTime": "To time",
+  "showSubscaleResult": "Show Subscale Result",
+  "subscaleScores": "Subscale Scores",
+  "activityUnavailableAtTime": "Activity is unavailable at this time",
+  "repeatPasswordRequired": "Repeat Password is Required"
 }
