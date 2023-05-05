@@ -1,10 +1,8 @@
+import { MediaType } from 'modules/Builder/components';
+
 export type RecordAudioProps = {
   open: boolean;
+  onUpload: (url?: string) => void;
+  onChange: (media: MediaType | null) => void;
   onClose: () => void;
 };
-
-export const enum RecordAudioStatus {
-  STARTED = 'started',
-  PAUSED = 'paused',
-  STOPPED = 'stopped',
-}

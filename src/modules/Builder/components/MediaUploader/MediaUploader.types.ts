@@ -1,7 +1,5 @@
-import { Dispatch, SetStateAction } from 'react';
-
 export type MediaType = {
-  url?: string;
+  url?: string | MediaStream;
   name?: string;
   uploaded?: boolean;
 };

@@ -665,5 +665,14 @@
   "addAudio": "Ajouter du son",
   "audioPlayerUploadAudio": "Télécharger l'audio",
   "audioPlayerRecordAudio": "Enregistrement audio",
-  "audioPlayerUploadAudioDescription": "Veuillez télécharger le fichier dans l'un des formats suivants: <1>.mp3, .wav.</1>"
+  "audioPlayerUploadAudioDescription": "Veuillez télécharger le fichier dans l'un des formats suivants: <1>.mp3, .wav.</1>",
+  "deleteAudio": "Supprimer le son",
+  "audioPlayerUpload": "Télécharger",
+  "audioPlayerRecordStart": "Enregistrer",
+  "audioPlayerRecordPause": "Pause",
+  "audioPlayerRecordStop": "Arrêt",
+  "audioPlayerDeviceError": "Périphérique d'enregistrement introuvable",
+  "audioPlayerRecordAudioDescription": "Enregistrez de l'audio à l'aide du microphone de votre appareil.",
+  "removeAudioDescription": "Voulez-vous vraiment supprimer l'audio actuel?",
+  "mediaUploaderPlaceholder": "Déposez <1>.mp3</1> ou <1>.wav</1> ici <br /> ou cliquez pour parcourir."
 }

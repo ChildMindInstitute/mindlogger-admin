@@ -9,6 +9,8 @@ export const PLAYER_DEFAULTS = {
   played: 0,
   loaded: 0,
   duration: 0,
+  loadedSeconds: 0,
+  playedSeconds: 0,
   playbackRate: 1.0,
   loop: false,
   seeking: false,

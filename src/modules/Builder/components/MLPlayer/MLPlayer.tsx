@@ -14,7 +14,7 @@ import {
 import { MLPlayerProps } from './MLPlayer.types';
 import { useMLPlayerSetup } from './MLPlayer.hooks';
 
-export const MLPlayer = ({ media, onRemove }: MLPlayerProps) => {
+export const MLPlayer = ({ media, hasRemoveButton = true, onRemove }: MLPlayerProps) => {
   const {
     playerRef,
     state,
@@ -62,9 +62,11 @@ export const MLPlayer = ({ media, onRemove }: MLPlayerProps) => {
         <StyledName sx={{ marginRight: theme.spacing(0.4) }} title={fileName}>
           {fileName}
         </StyledName>
-        <StyledClearedButton onClick={onRemove}>
-          <Svg id="close" width={18} height={18} />
-        </StyledClearedButton>
+        {hasRemoveButton && (
+          <StyledClearedButton onClick={onRemove}>
+            <Svg id="close" width={18} height={18} />
+          </StyledClearedButton>
+        )}
       </StyledNameWrapper>
       <StyledSlider
         size="medium"

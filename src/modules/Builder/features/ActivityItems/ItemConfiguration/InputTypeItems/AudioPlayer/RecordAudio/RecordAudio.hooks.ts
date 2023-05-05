@@ -1,57 +1,96 @@
-import { useState, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState, useCallback } from 'react';
 
-import { RecordAudioStatus } from './RecordAudio.types';
+export interface recorderControls {
+  startRecording: () => void;
+  stopRecording: () => void;
+  togglePauseResume: () => void;
+  clearBlob: () => void;
+  recordingBlob: Blob[];
+  isRecording: boolean;
+  isPaused: boolean;
+  isStopped: boolean;
+  recordingTime: number;
+}
 
-export const useAudioRecorder = () => {
-  const { t } = useTranslation();
-  const [status, setStatus] = useState<RecordAudioStatus>(RecordAudioStatus.STOPPED);
-  const [error, setError] = useState('');
-  const mediaRecorder = useRef<MediaRecorder | null>(null);
-  const chunks = useRef<Array<Blob>>([]);
+export const useAudioRecorder: () => recorderControls = () => {
+  const [isRecording, setIsRecording] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isStopped, setIsStopped] = useState(true);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>();
+  const [timerInterval, setTimerInterval] = useState<NodeJS.Timer>();
+  const [recordingBlob, setRecordingBlob] = useState<Blob[]>([]);
 
-  useEffect(() => {
-    const onDataAvailable = (event: BlobEvent) => chunks.current.push(event.data);
+  const startTimer = () => {
+    const interval = setInterval(() => {
+      setRecordingTime((time) => time + 1);
+    }, 1000);
+    setTimerInterval(interval);
+  };
 
-    mediaRecorder.current?.addEventListener('dataavailable', onDataAvailable, false);
+  const stopTimer = () => {
+    timerInterval !== null && clearInterval(timerInterval);
+    setTimerInterval(undefined);
+  };
 
-    return () => {
-      mediaRecorder.current?.removeEventListener('dataavailable', onDataAvailable);
-    };
-  }, [mediaRecorder.current]);
+  const startRecording = useCallback(() => {
+    if (timerInterval) return;
 
-  const onStart = () => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        if (status === RecordAudioStatus.STOPPED) {
-          mediaRecorder.current = new MediaRecorder(stream);
-        }
+        setIsStopped(false);
+        setIsRecording(true);
+        const recorder: MediaRecorder = new MediaRecorder(stream);
+        setMediaRecorder(recorder);
+        recorder.start();
+        startTimer();
 
-        mediaRecorder.current?.start();
-
-        setStatus(RecordAudioStatus.STARTED);
+        recorder.addEventListener('dataavailable', (event) => {
+          setRecordingBlob([...recordingBlob, event.data]);
+          // setRecordingBlob(event.data);
+          // recorder.stream.getTracks().forEach((t) => t.stop());
+          // setMediaRecorder(null);
+        });
       })
-      .catch((e) => {
-        setError(t('audioPlayerDeviceError') as string);
-      });
-  };
-  const onPause = () => {
-    mediaRecorder.current?.pause();
+      .catch((err) => console.log(err));
+  }, [timerInterval]);
 
-    setStatus(RecordAudioStatus.PAUSED);
+  const togglePauseResume = () => {
+    if (isPaused) {
+      setIsPaused(false);
+      mediaRecorder?.resume();
+      startTimer();
+    } else {
+      setIsPaused(true);
+      stopTimer();
+      mediaRecorder?.pause();
+    }
   };
-  const onStop = () => {
-    mediaRecorder.current?.stop();
 
-    setStatus(RecordAudioStatus.STOPPED);
+  const stopRecording = () => {
+    mediaRecorder?.stop();
+    stopTimer();
+    setRecordingTime(0);
+    setIsRecording(false);
+    setIsPaused(false);
+    setIsStopped(true);
+  };
+
+  const clearBlob = () => {
+    setRecordingBlob([]);
+    setRecordingTime(0);
   };
 
   return {
-    error,
-    status,
-    onStart,
-    onPause,
-    onStop,
+    startRecording,
+    stopRecording,
+    togglePauseResume,
+    clearBlob,
+    recordingBlob,
+    isRecording,
+    isPaused,
+    isStopped,
+    recordingTime,
   };
 };

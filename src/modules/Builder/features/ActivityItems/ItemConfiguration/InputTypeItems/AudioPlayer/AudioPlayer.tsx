@@ -15,6 +15,7 @@ import {
 import { AddAudio } from './AddAudio';
 import { UploadAudio } from './UploadAudio';
 import { RecordAudio } from './RecordAudio';
+import { RemoveAudioPopup } from './RemoveAudioPopup';
 import { StyledName, StyledNameWrapper } from './AudioPlayer.styles';
 import { AudioPlayerProps } from './AudioPlayer.types';
 import { getNameByUrl } from './AudioPlayer.utils';
@@ -23,10 +24,11 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const { t } = useTranslation('app');
   const [isUploadPopupOpened, setUploadPopupOpened] = useState(false);
   const [isRecordPopupOpened, setRecordPopupOpened] = useState(false);
-  const { setValue, getValues, trigger, getFieldState } = useFormContext();
+  const [isRemoveAudioPopupOpened, setRemoveAudioPopupOpened] = useState(false);
+  const { setValue, watch, trigger, getFieldState } = useFormContext();
 
   const urlName = `${name}.responseValues.file`;
-  const url = getValues(urlName);
+  const url = watch(urlName);
   const [media, setMedia] = useState<MediaType | null>(
     url ? { url, name: getNameByUrl(url) } : null,
   );
@@ -35,6 +37,7 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
 
   useEffect(() => {
     trigger(urlName);
+    url && setMedia({ ...media, name: getNameByUrl(url) });
   }, [url]);
 
   const onClearMedia = () => {
@@ -43,18 +46,19 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   };
   const onCloseUploadPopup = () => setUploadPopupOpened(false);
   const onCloseRecordPopup = () => setRecordPopupOpened(false);
+  const onCloseRemoveAudioPopup = () => setRemoveAudioPopupOpened(false);
 
-  const onUploadAudio = () => {
+  const handleUploadAudio = (url?: string) => {
+    setValue(urlName, url ?? media?.url);
     onCloseUploadPopup();
-    onClearMedia();
   };
-  const onUploadRecord = () => {
+  const handleUploadRecord = (url?: string) => {
+    setValue(urlName, url);
     onCloseRecordPopup();
-    onClearMedia();
   };
-  const handleUpload = () => {
-    setValue(urlName, media?.url);
-    onCloseUploadPopup();
+  const handleRemoveAudio = () => {
+    onClearMedia();
+    onCloseRemoveAudioPopup();
   };
 
   const HeaderContent = ({ open }: SharedToggleItemProps) =>
@@ -76,7 +80,7 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
           onRecordAudio={() => setRecordPopupOpened(true)}
         />
       ) : (
-        <MLPlayer media={media} onRemove={onClearMedia} />
+        <MLPlayer media={media} onRemove={() => setRemoveAudioPopupOpened(true)} />
       )}
       {error && (
         <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error?.message}</StyledBodyErrorText>
@@ -85,10 +89,20 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
         open={isUploadPopupOpened}
         media={media}
         onChange={setMedia}
-        onUpload={handleUpload}
+        onUpload={handleUploadAudio}
         onClose={onCloseUploadPopup}
       />
-      <RecordAudio open={isRecordPopupOpened} onClose={onCloseRecordPopup} />
+      <RecordAudio
+        open={isRecordPopupOpened}
+        onChange={setMedia}
+        onUpload={handleUploadRecord}
+        onClose={onCloseRecordPopup}
+      />
+      <RemoveAudioPopup
+        open={isRemoveAudioPopupOpened}
+        onClose={onCloseRemoveAudioPopup}
+        onRemove={handleRemoveAudio}
+      />
     </Box>
   );
 
