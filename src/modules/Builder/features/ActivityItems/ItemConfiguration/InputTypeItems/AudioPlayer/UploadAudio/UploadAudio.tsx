@@ -7,7 +7,7 @@ import { MediaUploader } from 'modules/Builder/components';
 
 import { UploadAudioProps } from './UploadAudio.types';
 
-export const UploadAudio = ({ open, media, onClose, onChange }: UploadAudioProps) => {
+export const UploadAudio = ({ open, media, onUpload, onClose, onChange }: UploadAudioProps) => {
   const { t } = useTranslation('app');
 
   const mediaUploaderPlaceholder = (
@@ -19,14 +19,21 @@ export const UploadAudio = ({ open, media, onClose, onChange }: UploadAudioProps
     </StyledTitleSmall>
   );
 
+  const handleCloseWithoutChanges = () => {
+    onClose();
+    onChange(null);
+  };
+
+  const modalProps = {
+    buttonText: media?.uploaded ? t('audioPlayerUpload') : t('cancel'),
+    hasSecondBtn: !!media?.uploaded,
+    secondBtnText: t('cancel'),
+    onSubmit: media?.uploaded ? onUpload : handleCloseWithoutChanges,
+    onSecondBtnSubmit: handleCloseWithoutChanges,
+  };
+
   return (
-    <Modal
-      open={open}
-      title={t('uploadAudio')}
-      buttonText={t('cancel')}
-      onClose={onClose}
-      onSubmit={onClose}
-    >
+    <Modal open={open} title={t('uploadAudio')} onClose={onClose} {...modalProps}>
       <Box sx={{ ml: theme.spacing(3.2) }}>
         <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }}>
           <Trans i18nKey="dropAudio">
@@ -37,8 +44,9 @@ export const UploadAudio = ({ open, media, onClose, onChange }: UploadAudioProps
           width={59.6}
           height={20}
           media={media}
+          hasPreview
           placeholder={mediaUploaderPlaceholder}
-          onUpload={() => ({})}
+          onUpload={onChange}
         />
       </Box>
     </Modal>

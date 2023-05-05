@@ -11,10 +11,10 @@ export type MediaUploaderProps = {
   height: number;
   media: MediaType | null;
   placeholder?: JSX.Element | string;
-  onUpload: Dispatch<SetStateAction<MediaType | null>>;
+  hasPreview?: boolean;
+  onUpload: (media: MediaType | null) => void;
 };
 
 export type MediaUploaderHookProps = {
-  media: MediaType | null;
-  onUpload: Dispatch<SetStateAction<MediaType | null>>;
+  onUpload: (media: MediaType | null) => void;
 };

@@ -811,9 +811,15 @@
   "showSubscaleResult": "Show Subscale Result",
   "subscaleScores": "Subscale Scores",
   "addAudio": "Add Audio",
+  "audioPlayerUpload": "Upload",
   "audioPlayerUploadAudio": "Upload Audio",
   "audioPlayerRecordAudio": "Record Audio",
+  "audioPlayerRecordStart": "Record",
+  "audioPlayerRecordPause": "Pause",
+  "audioPlayerRecordStop": "Stop",
+  "audioPlayerDeviceError": "Recording device not found",
   "audioPlayerUploadAudioDescription": "Please upload file in one of the following formats: <1>.mp3, .wav</1>.",
+  "audioPlayerRecordAudioDescription": "Record audio using your device microphone.",
   "mediaUploaderPlaceholder": "Drop <1>.mp3</1> or <1>.wav</1> here <br /> or click to browse.",
   "activityUnavailableAtTime": "Activity is unavailable at this time"
 }

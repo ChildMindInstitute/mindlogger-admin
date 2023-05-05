@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
-import { StyledLabelMedium } from './Typography';
+import { StyledBodyMedium, StyledLabelMedium } from './Typography';
 
 export const StyledErrorText = styled(StyledLabelMedium)`
   margin-top: ${({ marginTop }: { marginTop?: number }) =>
@@ -12,4 +12,8 @@ export const StyledErrorText = styled(StyledLabelMedium)`
   && {
     color: ${variables.palette.semantic.error};
   }
+`;
+
+export const StyledBodyErrorText = styled(StyledBodyMedium)`
+  color: ${variables.palette.semantic.error};
 `;

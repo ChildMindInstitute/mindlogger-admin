@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 
-import { StyledTitleMedium, theme, variables } from 'shared/styles';
+import { StyledTitleMedium, StyledBodyErrorText, theme, variables } from 'shared/styles';
 import { Svg } from 'shared/components';
 import {
+  MLPlayer,
   MediaType,
-  MediaUploader,
   SharedToggleItemProps,
   ToggleItemContainer,
 } from 'modules/Builder/components';
@@ -17,29 +17,50 @@ import { UploadAudio } from './UploadAudio';
 import { RecordAudio } from './RecordAudio';
 import { StyledName, StyledNameWrapper } from './AudioPlayer.styles';
 import { AudioPlayerProps } from './AudioPlayer.types';
+import { getNameByUrl } from './AudioPlayer.utils';
 
 export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const { t } = useTranslation('app');
   const [isUploadPopupOpened, setUploadPopupOpened] = useState(false);
   const [isRecordPopupOpened, setRecordPopupOpened] = useState(false);
-  const { setValue, getValues } = useFormContext();
+  const { setValue, getValues, trigger, getFieldState } = useFormContext();
 
-  const url = getValues(`${name}.responseValues.file`);
-  const [media, setMedia] = useState<MediaType | null>(url ? { url } : null);
+  const urlName = `${name}.responseValues.file`;
+  const url = getValues(urlName);
+  const [media, setMedia] = useState<MediaType | null>(
+    url ? { url, name: getNameByUrl(url) } : null,
+  );
+
+  const { error } = getFieldState(urlName);
 
   useEffect(() => {
-    setValue(`${name}.responseValues.file`, media?.url ?? undefined);
-  }, [media?.url]);
+    trigger(urlName);
+  }, [url]);
 
-  const handleToggleUploadPopup = () => setUploadPopupOpened((prev) => !prev);
-  const handleToggleRecordPopup = () => setRecordPopupOpened((prev) => !prev);
+  const onClearMedia = () => {
+    setMedia(null);
+    setValue(urlName, undefined);
+  };
+  const onCloseUploadPopup = () => setUploadPopupOpened(false);
+  const onCloseRecordPopup = () => setRecordPopupOpened(false);
 
-  const handleChange = (media: MediaType | null) => setMedia(media);
+  const onUploadAudio = () => {
+    onCloseUploadPopup();
+    onClearMedia();
+  };
+  const onUploadRecord = () => {
+    onCloseRecordPopup();
+    onClearMedia();
+  };
+  const handleUpload = () => {
+    setValue(urlName, media?.url);
+    onCloseUploadPopup();
+  };
 
   const HeaderContent = ({ open }: SharedToggleItemProps) =>
     !open && !!media ? (
       <StyledNameWrapper>
-        {media && <Svg id="check" width={18} height={18} />}{' '}
+        {media && <Svg id="check" width={18} height={18} />}
         <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{media?.name}</StyledName>
       </StyledNameWrapper>
     ) : null;
@@ -49,14 +70,25 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
       <StyledTitleMedium color={variables.palette.on_surface} sx={{ mb: theme.spacing(2.4) }}>
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
-      <AddAudio onUploadAudio={handleToggleUploadPopup} onRecordAudio={handleToggleRecordPopup} />
+      {!url ? (
+        <AddAudio
+          onUploadAudio={() => setUploadPopupOpened(true)}
+          onRecordAudio={() => setRecordPopupOpened(true)}
+        />
+      ) : (
+        <MLPlayer media={media} onRemove={onClearMedia} />
+      )}
+      {error && (
+        <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error?.message}</StyledBodyErrorText>
+      )}
       <UploadAudio
         open={isUploadPopupOpened}
         media={media}
-        onChange={handleChange}
-        onClose={handleToggleUploadPopup}
+        onChange={setMedia}
+        onUpload={handleUpload}
+        onClose={onCloseUploadPopup}
       />
-      {isRecordPopupOpened && <RecordAudio onClose={handleToggleRecordPopup} />}
+      <RecordAudio open={isRecordPopupOpened} onClose={onCloseRecordPopup} />
     </Box>
   );
 

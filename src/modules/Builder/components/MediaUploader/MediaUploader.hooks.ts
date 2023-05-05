@@ -1,4 +1,4 @@
-import { ChangeEvent, DragEvent, MouseEvent, useRef, useState, useCallback } from 'react';
+import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 
 import { MAX_FILE_SIZE_8MB } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
@@ -7,15 +7,17 @@ import { postFileUploadApi } from 'api';
 
 import { MediaUploaderHookProps } from './MediaUploader.types';
 
-export const useMediaUploader = ({ media, onUpload }: MediaUploaderHookProps) => {
+export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>('');
-  const { execute: executeMediaUpload } = useAsync(
-    postFileUploadApi,
-    (response) =>
+  const { execute: executeMediaUpload } = useAsync(postFileUploadApi, (response) => {
+    const name = response?.config?.data?.get('file')?.name;
+
+    return (
       response?.data?.result &&
-      onUpload((prev) => ({ ...prev, url: response?.data?.result.url ?? '', uploaded: true })),
-  );
+      onUpload({ name, url: response?.data?.result.url ?? '', uploaded: true })
+    );
+  });
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -42,6 +44,7 @@ export const useMediaUploader = ({ media, onUpload }: MediaUploaderHookProps) =>
     setError('');
 
     const body = getUploadFormData(file);
+
     onUpload({ name: file.name, uploaded: false });
     executeMediaUpload(body);
   };

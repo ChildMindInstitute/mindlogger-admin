@@ -59,7 +59,9 @@ export const MLPlayer = ({ media, onRemove }: MLPlayerProps) => {
       </StyledHeader>
       <StyledNameWrapper>
         {uploaded && <Svg id="check" width={18} height={18} />}
-        <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{fileName}</StyledName>
+        <StyledName sx={{ marginRight: theme.spacing(0.4) }} title={fileName}>
+          {fileName}
+        </StyledName>
         <StyledClearedButton onClick={onRemove}>
           <Svg id="close" width={18} height={18} />
         </StyledClearedButton>

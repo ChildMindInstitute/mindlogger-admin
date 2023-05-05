@@ -1,11 +1,18 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { StyledBodyMedium, theme, variables } from 'shared/styles';
+import {
+  StyledBodyMedium,
+  StyledFlexColumn,
+  StyledLinearProgress,
+  StyledLabelBoldLarge,
+  theme,
+  variables,
+} from 'shared/styles';
 import { Svg } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_8MB } from 'shared/consts';
 
-import { StyledContainer, StyledSourceContainer } from './MediaUploader.styles';
+import { StyledContainer, StyledSourceContainer, StyledPreview } from './MediaUploader.styles';
 import { useMediaUploader } from './MediaUploader.hooks';
 import { MediaUploaderProps } from './MediaUploader.types';
 import { MLPlayer } from '../MLPlayer';
@@ -15,11 +22,11 @@ export const MediaUploader = ({
   height,
   media,
   placeholder,
+  hasPreview,
   onUpload,
 }: MediaUploaderProps) => {
   const { t } = useTranslation('app');
   const { uploadInputRef, error, dragEvents, handleChange, onRemove } = useMediaUploader({
-    media,
     onUpload,
   });
 
@@ -33,7 +40,7 @@ export const MediaUploader = ({
         name="uploadFile"
         hidden
       />
-      {!media ? (
+      {!media && (
         <StyledContainer
           width={width}
           height={height}
@@ -41,7 +48,7 @@ export const MediaUploader = ({
           {...dragEvents}
         >
           <StyledSourceContainer>
-            <Svg id={'audio-player-filled'} width={32} height={42} />
+            <Svg id="audio-player-filled" width={32} height={42} />
             {error && (
               <StyledBodyMedium
                 sx={{ marginBottom: theme.spacing(1) }}
@@ -59,9 +66,19 @@ export const MediaUploader = ({
             </StyledBodyMedium>
           </StyledSourceContainer>
         </StyledContainer>
-      ) : (
-        <MLPlayer media={media} onRemove={onRemove} />
       )}
+      {!!media && hasPreview && (
+        <StyledFlexColumn sx={{ mr: theme.spacing(3.2) }}>
+          <StyledLabelBoldLarge sx={{ color: variables.palette.primary }}>
+            <StyledPreview>
+              {media.uploaded && <Svg id="check" width={16} height={16} />}
+              {media?.name}
+            </StyledPreview>
+          </StyledLabelBoldLarge>
+          {!media.uploaded && <StyledLinearProgress />}
+        </StyledFlexColumn>
+      )}
+      {!!media && !hasPreview && <MLPlayer media={media} onRemove={onRemove} />}
     </>
   );
 };
