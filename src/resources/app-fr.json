@@ -662,6 +662,7 @@
   "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
   "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}",
   "showSubscaleResult": "Afficher le résultat de la sous-échelle",
+  "repeatPasswordRequired": "Répéter le mot de passe est requis",
   "finalSubscaleScore": "Score final de la sous-échelle",
   "informationsupplémentaire": "Informations supplémentaires"
 }
