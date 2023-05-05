@@ -43,7 +43,7 @@ export const postAppletApi = (
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `workspace/${ownerId}/applets`,
+    `workspaces/${ownerId}/applets`,
     {
       ...body,
     },
