@@ -80,13 +80,26 @@ export const StyledImgContainer = styled(StyledFlexColumn, shouldForwardProp)`
 `;
 
 export const UploadedImgContainer = styled(Box, shouldForwardProp)`
-  ${({ isPrimaryUiType }: { isPrimaryUiType: boolean }) =>
-    !isPrimaryUiType &&
-    `
-     display: flex;
-     align-items: center;
-  `};
   position: relative;
+  ${({
+    isPrimaryUiType,
+    height,
+    width,
+  }: {
+    isPrimaryUiType: boolean;
+    height: number;
+    width: number;
+  }) => `
+     width: ${width - 0.2}rem;
+     height: ${height - 0.2}rem;
+     ${
+       !isPrimaryUiType &&
+       `
+      display: flex;
+      align-items: center;
+    `
+     };
+     `}
 `;
 
 export const StyledButtonGroup = styled(ButtonGroup, shouldForwardProp)`
@@ -121,18 +134,9 @@ export const StyledButtonGroup = styled(ButtonGroup, shouldForwardProp)`
 `;
 
 export const StyledUploadImg = styled('img', shouldForwardProp)`
-  ${({
-    width,
-    height,
-    isPrimaryUiType,
-  }: {
-    width: number;
-    height: number;
-    isPrimaryUiType: boolean;
-  }) => `
-    width: ${width - 0.2}rem;
-    height: ${height - 0.2}rem;
-    object-fit: cover;
+  ${({ isPrimaryUiType }: { isPrimaryUiType: boolean }) => `
+    width: 100%;
+    height: 100%;
     border-radius: ${isPrimaryUiType ? variables.borderRadius.lg2 : variables.borderRadius.xs};
     border: ${
       isPrimaryUiType

@@ -811,5 +811,7 @@
   "showSubscaleResult": "Show Subscale Result",
   "subscaleScores": "Subscale Scores",
   "activityUnavailableAtTime": "Activity is unavailable at this time",
-  "repeatPasswordRequired": "Repeat Password is Required"
+  "repeatPasswordRequired": "Repeat Password is Required",
+  "finalSubscaleScore": "Final Subscale Score",
+  "additionalInformation": "Additional Information"
 }
