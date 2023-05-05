@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { Box } from '@mui/material';
 
+import { DateFormats } from 'shared/consts';
 import { StyledBodyMedium, StyledHeadline, theme } from 'shared/styles';
 import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Charts/BarChart';
 
@@ -27,11 +28,11 @@ export const Scores = ({
         {reviewDate && (
           <>
             <StyledBodyMedium>
-              {t('reviewDate')}: {format(reviewDate, 'd MMM yyyy')}
+              {t('reviewDate')}: {format(reviewDate, DateFormats.DayMonthYear)}
             </StyledBodyMedium>
             {StringDivider}
             <StyledBodyMedium>
-              {t('time')}: {format(reviewDate, 'HH:mm:ss')}
+              {t('time')}: {format(reviewDate, DateFormats.TimeSeconds)}
             </StyledBodyMedium>
             {StringDivider}
           </>
