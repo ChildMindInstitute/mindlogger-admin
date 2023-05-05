@@ -40,7 +40,7 @@ export const getAppletWithItems = createAsyncThunk(
 );
 
 export const createApplet = createAsyncThunk(
-  AppletThunkTypePrefix.Update,
+  AppletThunkTypePrefix.Create,
   async ({ ownerId, body }: OwnerId & { body: SingleApplet }, { rejectWithValue, signal }) => {
     try {
       return await postAppletApi({ ownerId, body }, signal);
