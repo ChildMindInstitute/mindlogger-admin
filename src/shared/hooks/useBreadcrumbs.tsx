@@ -3,7 +3,7 @@ import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
-import { auth, Breadcrumb, breadcrumbs, User, applet, users } from 'redux/modules';
+import { Breadcrumb, breadcrumbs, applet, users, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import {
@@ -22,10 +22,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 
-  const authData = auth.useData();
   const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
   const respondentLabel = getRespondentLabel(secretId, nickname);
-  const { firstName, lastName } = (authData?.user as User) || {};
+  const { workspaceName } = workspaces.useData() ?? {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
@@ -41,22 +40,21 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
 
   useEffect(() => {
     const newBreadcrumbs: Breadcrumb[] = [];
-    const userName = `${firstName} ${lastName}`;
     const isDashboard = pathname.includes(page.dashboard);
     const isBuilder = pathname.includes(page.builder);
     const isLibrary = pathname.includes(page.library);
 
-    if (firstName && isDashboard) {
+    if (workspaceName && isDashboard) {
       newBreadcrumbs.push({
         icon: 'home',
-        label: t('userDashboard', { userName }),
+        label: t('userDashboard', { userName: workspaceName }),
         navPath: page.dashboard,
       });
     }
-    if (firstName && isBuilder) {
+    if (workspaceName && isBuilder) {
       newBreadcrumbs.push({
         icon: 'builder',
-        label: t('userBuilder', { userName }),
+        label: t('userBuilder', { userName: workspaceName }),
         navPath: page.builder,
       });
     }
@@ -71,7 +69,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     if (appletId && (isDashboard || isBuilder)) {
       newBreadcrumbs.push({
         icon: appletData?.image || '',
-        label: appletData?.displayName || '',
+        label: appletLabel,
         navPath: generatePath(isDashboard ? page.appletRespondents : page.builderApplet, {
           appletId,
         }),
@@ -163,8 +161,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     dispatch(breadcrumbs.actions.setBreadcrumbs(updatedBreadcrumbs));
   }, [
     t,
-    firstName,
-    lastName,
+    workspaceName,
     appletData,
     appletId,
     activityId,
