@@ -1,32 +1,66 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Modal, SubmitBtnColor } from 'shared/components';
-import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { removeIndividualEventsApi } from 'api';
+import { useAppDispatch } from 'redux/store';
+import { useAsync } from 'shared/hooks';
+import { applets } from 'modules/Dashboard/state';
+import { getErrorMessage } from 'shared/utils';
+import { page } from 'resources';
 
-import { RemoveIndividualSchedulePopupProps } from './RemoveIndividualSchedulePopup.types';
+import { RemoveIndividualScheduleProps } from './RemoveIndividualSchedulePopup.types';
 import { Steps } from './RemoveIndividualSchedule.types';
 import { getScreens } from './RemoveIndividualSchedulePopup.const';
+import { ScheduleOptions } from '../Legend/Legend.const';
 
 export const RemoveIndividualSchedulePopup = ({
   open,
   onClose,
   name,
   isEmpty,
-}: RemoveIndividualSchedulePopupProps) => {
+  setSchedule,
+  setSelectedRespondent,
+}: RemoveIndividualScheduleProps) => {
   const { t } = useTranslation();
   const [step, setStep] = useState<Steps>(0);
+  const { appletId, respondentId } = useParams();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { execute, error } = useAsync(
+    removeIndividualEventsApi,
+    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
+  );
 
-  const onSubmit = () => {
-    setStep((prevStep) => ++prevStep as Steps);
+  const getNextStep = () =>
+    setStep((prevStep) => {
+      const newStep = prevStep + 1;
+
+      return newStep as Steps;
+    });
+
+  const onSubmit = async () => {
+    if (!appletId || !respondentId) return;
+
+    await execute({ appletId, respondentId });
+    getNextStep();
   };
 
-  const screens = getScreens({ name, isEmpty, onSubmit, onClose });
+  const handleRemovedScheduleClose = () => {
+    setSchedule(ScheduleOptions.DefaultSchedule);
+    setSelectedRespondent(null);
+    navigate(generatePath(page.appletSchedule, { appletId }));
+    onClose();
+  };
+
+  const screens = getScreens({ name, isEmpty, onSubmit, handleRemovedScheduleClose, getNextStep });
 
   return (
     <Modal
       open={open}
-      onClose={onClose}
+      onClose={step === 1 ? handleRemovedScheduleClose : onClose}
       title={t(screens[step].title)}
       onSubmit={screens[step].onSubmit}
       buttonText={t(screens[step].buttonText)}
@@ -35,7 +69,14 @@ export const RemoveIndividualSchedulePopup = ({
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
     >
-      <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
+      <StyledModalWrapper>
+        {screens[step].component}
+        {error && (
+          <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
+            {getErrorMessage(error)}
+          </StyledBodyLarge>
+        )}
+      </StyledModalWrapper>
     </Modal>
   );
 };

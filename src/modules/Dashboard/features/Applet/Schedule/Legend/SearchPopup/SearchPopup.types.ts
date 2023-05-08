@@ -8,7 +8,7 @@ export type SearchPopupProps = {
   setSchedule: Dispatch<SetStateAction<null | string>>;
   top?: number;
   left?: number;
-  setSelectedRespondent: (item: SelectedRespondent) => void;
+  setSelectedRespondent: Dispatch<SetStateAction<SelectedRespondent>>;
   selectedRespondent: SelectedRespondent;
   respondentsItems?: SelectedRespondent[];
 };

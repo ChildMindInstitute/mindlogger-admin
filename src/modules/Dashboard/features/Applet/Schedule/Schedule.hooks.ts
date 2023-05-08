@@ -72,8 +72,10 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
             const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull) || '';
             const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull) || '';
             const activityOrFlowName = currentActivityOrFlow?.name || '';
-            // TODO: Add notification time after notifications connection to the API
-            const notificationTime = '-';
+            const { atTime, fromTime } = notification?.notifications?.[0] || {};
+            const notificationTime = notification?.notifications?.length
+              ? removeSecondsFromTime(atTime || fromTime) || '-'
+              : '-';
             const repeats = getRepeatsAnswer(periodicityType);
             const frequency = getFrequencyString(periodicityType);
             const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
