@@ -28,7 +28,7 @@ export const TopBar = () => {
   const authData = auth.useData();
   const isAuthorized = auth.useAuthorized();
   const accData = account.useData();
-  const [showAccountDrawer, setShowAccountDrawer] = useState(false);
+  const [visibleAccountDrawer, setVisibleAccountDrawer] = useState(false);
   const [alertsQuantity, setAlertsQuantity] = useState(0);
 
   const handleLoginClick = () => navigate(page.login);
@@ -55,7 +55,7 @@ export const TopBar = () => {
         </StyledFlexTopCenter>
         {isAuthorized ? (
           <StyledAvatarBtn
-            onClick={() => setShowAccountDrawer((prevState) => !prevState)}
+            onClick={() => setVisibleAccountDrawer((prevState) => !prevState)}
             variant="text"
           >
             <StyledImage src={avatarSrc} alt="Avatar" />
@@ -76,11 +76,11 @@ export const TopBar = () => {
           </StyledLoginButton>
         )}
       </StyledTopBar>
-      {showAccountDrawer && (
+      {visibleAccountDrawer && (
         <AccountPanel
           alertsQuantity={alertsQuantity}
-          setShowDrawer={setShowAccountDrawer}
-          showDrawer={showAccountDrawer}
+          setVisibleDrawer={setVisibleAccountDrawer}
+          visibleDrawer={visibleAccountDrawer}
         />
       )}
     </>

@@ -32,9 +32,9 @@ export const StyledBackWrapper = styled(Box)`
 export const StyledBack = styled(StyledClearedButton)`
   color: ${variables.palette.primary};
   text-align: center;
-  font-size: ${variables.font.size.sm};
+  font-size: ${variables.font.size.md};
   font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.font.lineHeight.sm};
+  line-height: ${variables.font.lineHeight.md};
   text-decoration: underline;
 
   &.MuiButton-text:hover {
