@@ -9,5 +9,4 @@ export const StyledTimeText = styled(StyledBodyMedium)`
   width: 14rem;
   bottom: -2rem;
   left: 4rem;
-}
 `;

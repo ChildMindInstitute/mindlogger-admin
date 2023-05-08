@@ -41,8 +41,10 @@ export const getOptions = (
       },
       tooltip: {
         enabled: false,
+        // intersect: false,
         position: 'nearest' as const,
-        external: debounce(tooltipHandler, CHART_DEBOUNCE_VALUE),
+        // mode: 'point' as const,
+        external: tooltipHandler,
       },
     },
     layout: {
