@@ -2,6 +2,8 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyLarge, variables } from 'shared/styles';
 import { useAppletData } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.hooks';
+import { applet } from 'shared/state';
+import { AppletThunkTypePrefix } from 'shared/state/Applet/Applet.thunk';
 
 import { SaveAndPublishSteps } from '../SaveAndPublishProcessPopup.types';
 import { DescriptionProps } from './Description.types';
@@ -10,6 +12,7 @@ export const Description = ({ step }: DescriptionProps) => {
   const { t } = useTranslation('app');
   const getAppletData = useAppletData();
   const name = getAppletData().displayName;
+  const typePrefix = applet.useResponseTypePrefix();
 
   const hasNotBeenSaved = (
     <Trans i18nKey="appletNotSavedAndPublished">
@@ -46,8 +49,14 @@ export const Description = ({ step }: DescriptionProps) => {
           </StyledBodyLarge>
         </>
       );
-    case SaveAndPublishSteps.BeingCreated:
-      return <StyledBodyLarge>{t('appletIsBeingCreated')}</StyledBodyLarge>;
+    case SaveAndPublishSteps.BeingCreated: {
+      const text =
+        typePrefix === AppletThunkTypePrefix.Update
+          ? t('appletIsBeingUpdated')
+          : t('appletIsBeingCreated');
+
+      return <StyledBodyLarge>{text}</StyledBodyLarge>;
+    }
     case SaveAndPublishSteps.Success:
       return (
         <Trans i18nKey="appletSavedAndPublished">

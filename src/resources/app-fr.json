@@ -407,6 +407,7 @@
   "appletIsRequiredOneActivity": "Au moins 1 activité est requise pour enregistrer et publier l'applet",
   "appletIsRequiredOneItem": "Au moins 1 élément est requis pour enregistrer et publier l'applet",
   "appletIsBeingCreated": "Votre applet est en cours de création. Veuillez patienter...",
+  "appletIsBeingUpdated": "Votre applet est en cours de mise à jour. Veuillez patienter...",
   "appletHasEmptyRequiredFields": "Veuillez remplir tous les champs obligatoires marqués en rouge",
   "appletHasErrorsInFields": "Veuillez corriger les erreurs dans tous les champs marqués en rouge",
   "appletSavedAndPublished": "<0>L'applet <1>{{name}}</1> a été enregistrée et publiée avec succès.</0>",
@@ -456,9 +457,9 @@
   "uploadVideo": "Télécharger une vidéo",
   "addLink": "Ajouter un lien",
   "linkText": "Texte du lien",
-  "textPlaceholder": "texte",
+  "textPlaceholder": "Saisir du texte",
   "linkUrl": "URL du lien",
-  "urlPlaceholder": "url",
+  "urlPlaceholder": "Tapez l'URL",
   "mark": "Marquer",
   "trash": "Corbeille",
   "alignLeft": "Clamper le texte à gauche",
@@ -660,5 +661,8 @@
   "noDataForActivity": "Pas encore de données disponibles pour cette activité",
   "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
   "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}",
-  "showSubscaleResult": "Afficher le résultat de la sous-échelle"
+  "showSubscaleResult": "Afficher le résultat de la sous-échelle",
+  "repeatPasswordRequired": "Répéter le mot de passe est requis",
+  "finalSubscaleScore": "Score final de la sous-échelle",
+  "informationsupplémentaire": "Informations supplémentaires"
 }

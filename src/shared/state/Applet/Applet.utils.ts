@@ -17,6 +17,7 @@ export const appletPendingData = ({ builder, thunk, key }: CreateAppletStateData
     if (state[key].status !== 'loading') {
       state[key].requestId = action.meta.requestId;
       state[key].status = 'loading';
+      state[key].typePrefix = thunk.typePrefix;
     }
   });
 

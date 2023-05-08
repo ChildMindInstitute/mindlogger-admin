@@ -140,9 +140,17 @@ export type CreateEventType = AppletId & {
 
 export type SetAccount = { accountName: string };
 
-export type RevokeAppletUser = AppletId & {
-  profileId: string;
-  deleteResponse: boolean;
+type RemoveAccess = {
+  userId: string;
+  appletIds: string[];
+};
+
+export type RemoveManagerAccess = RemoveAccess & {
+  role: UserRoles;
+};
+
+export type RemoveRespondentAccess = RemoveAccess & {
+  deleteResponses: boolean;
 };
 
 export type GetUsersData = AppletId & {

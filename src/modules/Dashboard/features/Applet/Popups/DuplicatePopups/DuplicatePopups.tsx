@@ -53,11 +53,11 @@ export const DuplicatePopups = () => {
           },
         }),
       );
-      passwordModalClose();
+      setPasswordModalVisible(false);
       setSuccessModalVisible(true);
     },
     () => {
-      passwordModalClose();
+      setPasswordModalVisible(false);
       setErrorModalVisible(true);
     },
   );

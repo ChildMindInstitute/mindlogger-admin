@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Svg } from 'shared/components';
+import { EnterAppletPasswordForm, Svg } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard';
 import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
@@ -29,6 +29,11 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
   } = useSaveAndPublishSetup(hasPrompt);
   const { appletId } = useParams();
 
+  const handlePasswordSubmit = ({ appletPassword }: EnterAppletPasswordForm) => {
+    handleAppletPasswordSubmit({ appletPassword });
+    setIsPasswordPopupOpened(false);
+  };
+
   return (
     <>
       <StyledButton
@@ -43,7 +48,7 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
         onClose={() => setIsPasswordPopupOpened(false)}
         popupType={isNewApplet ? AppletPasswordPopupType.Create : AppletPasswordPopupType.Enter}
         popupVisible={isPasswordPopupOpened}
-        submitCallback={handleAppletPasswordSubmit}
+        submitCallback={handlePasswordSubmit}
       />
       <SaveAndPublishProcessPopup
         isPopupVisible={isPublishProcessPopupOpened}

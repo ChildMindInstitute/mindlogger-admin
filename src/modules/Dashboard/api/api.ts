@@ -5,7 +5,6 @@ import {
   SwitchAccount,
   TransferOwnershipType,
   SetAccount,
-  RevokeAppletUser,
   AppletInvitationData,
   DuplicateApplet,
   FolderId,
@@ -33,6 +32,8 @@ import {
   RespondentId,
   EventId,
   RespondentAccesses,
+  RemoveRespondentAccess,
+  RemoveManagerAccess,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -148,17 +149,33 @@ export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSig
     },
   );
 
-export const revokeAppletUserApi = (
-  { appletId, profileId, deleteResponse }: RevokeAppletUser,
+export const removeManagerAccess = (
+  { userId, appletIds, role }: RemoveManagerAccess,
   signal?: AbortSignal,
 ) =>
-  authApiClient.delete(`/applet/${appletId}/deleteUser`, {
-    params: {
-      profileId,
-      deleteResponse,
+  authApiClient.post(
+    '/workspaces/removeAccess',
+    {
+      userId,
+      appletIds,
+      role,
     },
-    signal,
-  });
+    { signal },
+  );
+
+export const removeRespondentAccess = (
+  { userId, appletIds, deleteResponses }: RemoveRespondentAccess,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    '/applets/removeAccess',
+    {
+      userId,
+      appletIds,
+      deleteResponses,
+    },
+    { signal },
+  );
 
 export const deleteAppletApi = (
   { appletId, password }: AppletIdWithPassword,

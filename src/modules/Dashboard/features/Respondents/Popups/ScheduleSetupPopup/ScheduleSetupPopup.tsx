@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 
 import { Modal } from 'shared/components';
@@ -19,6 +19,7 @@ export const ScheduleSetupPopup = ({
 }: ScheduleSetupPopupProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
+  const { appletId } = useParams();
   const showSecondScreen = chosenAppletData && !chosenAppletData.hasIndividualSchedule;
   const appletName = chosenAppletData?.appletName || '';
   const secretUserId = chosenAppletData?.secretUserId || '';
@@ -56,6 +57,7 @@ export const ScheduleSetupPopup = ({
       hasSecondBtn={Boolean(showSecondScreen)}
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleBackClick}
+      disabledSecondBtn={!!appletId}
     >
       <StyledModalWrapper>
         {showSecondScreen ? (
