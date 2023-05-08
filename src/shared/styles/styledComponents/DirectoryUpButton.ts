@@ -9,6 +9,7 @@ export const StyledDirectoryUpButton = styled(Button)`
   position: absolute;
   left: 2.4rem;
   top: 1rem;
+  z-index: 1;
 
   svg {
     fill: ${variables.palette.on_surface_variant};

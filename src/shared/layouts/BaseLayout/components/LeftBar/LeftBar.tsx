@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { List } from '@mui/material';
+import { ClickAwayListener, List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { StyledLabelMedium, variables } from 'shared/styles';
@@ -43,33 +43,38 @@ export const LeftBar = () => {
   }, [workspaces]);
 
   return (
-    <StyledDrawer>
-      <StyledDrawerLogo onClick={() => setVisibleDrawer((prevState) => !prevState)}>
-        <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />
-      </StyledDrawerLogo>
-      <List>
-        {links.map(({ labelKey, link, icon, activeIcon }) => (
-          <StyledDrawerItem key={labelKey}>
-            <NavLink to={link} className={({ isActive }) => (isActive ? 'active-link' : undefined)}>
-              {({ isActive }) => (
-                <>
-                  {isActive ? activeIcon : icon}
-                  <StyledLabelMedium color={variables.palette.on_surface_variant}>
-                    {t(labelKey)}
-                  </StyledLabelMedium>
-                </>
-              )}
-            </NavLink>
-          </StyledDrawerItem>
-        ))}
-      </List>
-      {visibleDrawer && (
-        <SwitchWorkspace
-          setVisibleDrawer={setVisibleDrawer}
-          visibleDrawer={visibleDrawer}
-          workspaces={workspaces}
-        />
-      )}
-    </StyledDrawer>
+    <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
+      <StyledDrawer>
+        <StyledDrawerLogo onClick={() => setVisibleDrawer((prevState) => !prevState)}>
+          <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />
+        </StyledDrawerLogo>
+        <List>
+          {links.map(({ labelKey, link, icon, activeIcon }) => (
+            <StyledDrawerItem key={labelKey}>
+              <NavLink
+                to={link}
+                className={({ isActive }) => (isActive ? 'active-link' : undefined)}
+              >
+                {({ isActive }) => (
+                  <>
+                    {isActive ? activeIcon : icon}
+                    <StyledLabelMedium color={variables.palette.on_surface_variant}>
+                      {t(labelKey)}
+                    </StyledLabelMedium>
+                  </>
+                )}
+              </NavLink>
+            </StyledDrawerItem>
+          ))}
+        </List>
+        {visibleDrawer && (
+          <SwitchWorkspace
+            setVisibleDrawer={setVisibleDrawer}
+            visibleDrawer={visibleDrawer}
+            workspaces={workspaces}
+          />
+        )}
+      </StyledDrawer>
+    </ClickAwayListener>
   );
 };

@@ -14,6 +14,8 @@ export const DEFAULT_SLIDER_MAX_NUMBER = 12;
 export const SLIDER_LABEL_MAX_LENGTH = 11;
 export const SLIDER_VALUE_LABEL_MAX_LENGTH = 20;
 export const DEFAULT_SLIDER_MAX_VALUE = 12;
+export const DEFAULT_SLIDER_ROWS_MIN_VALUE = 1;
+export const DEFAULT_SLIDER_ROWS_MAX_VALUE = 5;
 export const DEFAULT_SLIDER_SCORE = createArray(DEFAULT_SLIDER_MAX_VALUE + 1, (i: number) => i + 1);
 export const DEFAULT_NUMBER_MIN_VALUE = 0;
 export const DEFAULT_NUMBER_MAX_VALUE = 1;
@@ -27,6 +29,8 @@ export const DEFAULT_EMPTY_SLIDER = {
 };
 export const DEFAULT_EMPTY_SLIDER_ROWS = {
   ...DEFAULT_EMPTY_SLIDER,
+  minValue: DEFAULT_SLIDER_ROWS_MIN_VALUE,
+  maxValue: DEFAULT_SLIDER_ROWS_MAX_VALUE,
   label: '',
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
