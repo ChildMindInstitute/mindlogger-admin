@@ -462,6 +462,7 @@
   "activitySplashScreenDescription": "An image that is displayed to a respondent before the activity.",
   "activityFlowBuilder": "Activity Flow Builder",
   "itemConfiguration": "Item Configuration",
+  "mobileOnly": "Mobile Only",
   "singleSelect": "Single Selection",
   "multiSelect": "Multiple Selection",
   "slider": "Slider",

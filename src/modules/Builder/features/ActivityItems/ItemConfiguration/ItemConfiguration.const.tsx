@@ -49,7 +49,11 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
         icon: itemsTypeIcons[ItemResponseType.MultipleSelection],
       },
       { value: ItemResponseType.Slider, icon: itemsTypeIcons[ItemResponseType.Slider] },
-      { value: ItemResponseType.Date, icon: itemsTypeIcons[ItemResponseType.Date] },
+      {
+        value: ItemResponseType.Date,
+        icon: itemsTypeIcons[ItemResponseType.Date],
+        isMobileOnly: true,
+      },
       {
         value: ItemResponseType.NumberSelection,
         icon: itemsTypeIcons[ItemResponseType.NumberSelection],
@@ -57,8 +61,13 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Time,
         icon: itemsTypeIcons[ItemResponseType.Time],
+        isMobileOnly: true,
       },
-      { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
+      {
+        value: ItemResponseType.TimeRange,
+        icon: itemsTypeIcons[ItemResponseType.TimeRange],
+        isMobileOnly: true,
+      },
     ],
   },
   {
@@ -67,35 +76,69 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.SingleSelectionPerRow,
         icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
+        isMobileOnly: true,
       },
       {
         value: ItemResponseType.MultipleSelectionPerRow,
         icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
+        isMobileOnly: true,
       },
-      { value: ItemResponseType.SliderRows, icon: itemsTypeIcons[ItemResponseType.SliderRows] },
+      {
+        value: ItemResponseType.SliderRows,
+        icon: itemsTypeIcons[ItemResponseType.SliderRows],
+        isMobileOnly: true,
+      },
     ],
   },
   {
     groupName: 'input',
     groupOptions: [
       { value: ItemResponseType.Text, icon: itemsTypeIcons[ItemResponseType.Text] },
-      { value: ItemResponseType.Drawing, icon: itemsTypeIcons[ItemResponseType.Drawing] },
-      { value: ItemResponseType.Photo, icon: itemsTypeIcons[ItemResponseType.Photo] },
-      { value: ItemResponseType.Video, icon: itemsTypeIcons[ItemResponseType.Video] },
+      {
+        value: ItemResponseType.Drawing,
+        icon: itemsTypeIcons[ItemResponseType.Drawing],
+        isMobileOnly: true,
+      },
+      {
+        value: ItemResponseType.Photo,
+        icon: itemsTypeIcons[ItemResponseType.Photo],
+        isMobileOnly: true,
+      },
+      {
+        value: ItemResponseType.Video,
+        icon: itemsTypeIcons[ItemResponseType.Video],
+        isMobileOnly: true,
+      },
     ],
   },
   {
     groupName: 'record',
     groupOptions: [
-      { value: ItemResponseType.Geolocation, icon: itemsTypeIcons[ItemResponseType.Geolocation] },
-      { value: ItemResponseType.Audio, icon: itemsTypeIcons[ItemResponseType.Audio] },
+      {
+        value: ItemResponseType.Geolocation,
+        icon: itemsTypeIcons[ItemResponseType.Geolocation],
+        isMobileOnly: true,
+      },
+      {
+        value: ItemResponseType.Audio,
+        icon: itemsTypeIcons[ItemResponseType.Audio],
+        isMobileOnly: true,
+      },
     ],
   },
   {
     groupName: 'display',
     groupOptions: [
-      { value: ItemResponseType.Message, icon: itemsTypeIcons[ItemResponseType.Message] },
-      { value: ItemResponseType.AudioPlayer, icon: itemsTypeIcons[ItemResponseType.AudioPlayer] },
+      {
+        value: ItemResponseType.Message,
+        icon: itemsTypeIcons[ItemResponseType.Message],
+        isMobileOnly: true,
+      },
+      {
+        value: ItemResponseType.AudioPlayer,
+        icon: itemsTypeIcons[ItemResponseType.AudioPlayer],
+        isMobileOnly: true,
+      },
     ],
   },
 ];

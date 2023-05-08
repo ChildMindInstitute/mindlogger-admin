@@ -48,6 +48,7 @@ export type Alert = {
 export type ItemsOption = {
   value: ItemResponseType;
   icon: JSX.Element;
+  isMobileOnly?: boolean;
 };
 
 export type ItemsOptionGroup = {
