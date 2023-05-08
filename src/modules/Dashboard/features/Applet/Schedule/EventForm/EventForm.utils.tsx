@@ -339,7 +339,11 @@ const getEventStartYear = ({
     ? typeof date !== 'string' && getYear(date)
     : startEndingDate[0] && typeof startEndingDate[0] !== 'string' && getYear(startEndingDate[0]);
 };
-export const getEventPayload = (defaultStartDate: Date, watch: UseFormWatch<EventFormValues>) => {
+export const getEventPayload = (
+  defaultStartDate: Date,
+  watch: UseFormWatch<EventFormValues>,
+  respondentId?: string,
+) => {
   const activityOrFlowId = watch('activityOrFlowId');
   const alwaysAvailable = watch('alwaysAvailable');
   const oneTimeCompletion = watch('oneTimeCompletion');
@@ -367,6 +371,7 @@ export const getEventPayload = (defaultStartDate: Date, watch: UseFormWatch<Even
   const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
 
   const body: CreateEventType['body'] = {
+    respondentId,
     timerType,
     notification:
       notifications?.length || reminder

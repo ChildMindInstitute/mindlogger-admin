@@ -3,24 +3,26 @@ import { AxiosResponse } from 'axios';
 
 import { GetAppletsParams } from 'api';
 import { BaseSchema } from 'shared/state/Base';
+import { Roles } from 'shared/consts';
 
 export type Respondent = {
   id: string;
-  nickname: string;
-  roles: string[];
+  accessId: string;
+  nickname: string | null;
+  role: Roles;
   secretId: string;
   lastSeen: string;
-  accessId: string;
+  hasIndividualSchedule: boolean;
   isPinned?: boolean;
-  schedule: string;
 };
 
 export type Manager = {
   id: string;
   firstName: string;
   lastName: string;
-  roles: string[];
   email: string;
+  roles: Roles[];
+  lastSeen: string;
 };
 
 export type UsersSchema = {

@@ -1,8 +1,7 @@
 export type ImportSchedulePopupProps = {
   isIndividual?: boolean;
   appletName: string;
-  secretUserId: string;
-  nickName: string;
+  respondentName: string;
   open: boolean;
   onClose: () => void;
 };

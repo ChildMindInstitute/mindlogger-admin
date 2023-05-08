@@ -8,6 +8,8 @@ export type LegendProps = {
 
 export type SelectedRespondent = {
   id: string;
-  fullName: string;
-  icon: JSX.Element;
+  icon: JSX.Element | null;
+  secretId: string;
+  nickname: string | null;
+  hasIndividualSchedule: boolean;
 } | null;

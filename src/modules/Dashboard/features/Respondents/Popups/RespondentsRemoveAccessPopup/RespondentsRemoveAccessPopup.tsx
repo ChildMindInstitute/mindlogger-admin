@@ -109,7 +109,7 @@ export const RespondentsRemoveAccessPopup = ({
   );
 
   const removeAccess = async () => {
-    const { appletId, userId } = chosenAppletData as ChosenAppletData;
+    const { appletId, respondentId: userId } = chosenAppletData as ChosenAppletData;
     userId && (await execute({ userId, appletIds: [appletId], deleteResponses: removeData }));
   };
 

@@ -32,7 +32,7 @@ export const useExpandedLists = (
 
   const availableItems = alwaysAvailableEvents.map(({ name, id, isFlow, colors }) => (
     <Fragment key={id}>
-      {availableVisibility && colors && <StyledIndicator colors={colors} />}
+      {availableVisibility && colors?.[0] && <StyledIndicator colors={colors} />}
       {getTitle(name, isFlow)}
     </Fragment>
   ));

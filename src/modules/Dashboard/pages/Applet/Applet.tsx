@@ -3,7 +3,6 @@ import { useLocation, useParams } from 'react-router-dom';
 
 import { LinkedTabs } from 'shared/components';
 import { StyledBody } from 'shared/styles';
-import { applets, calendarEvents } from 'modules/Dashboard/state';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 
@@ -22,15 +21,7 @@ export const Applet = () => {
     if (!appletId) return;
 
     const { getApplet } = applet.thunk;
-    const { getEvents } = applets.thunk;
-
     dispatch(getApplet({ appletId }));
-    dispatch(getEvents({ appletId }));
-
-    return () => {
-      dispatch(applets.actions.resetEventsData());
-      dispatch(calendarEvents.actions.resetCalendarEvents());
-    };
   }, [appletId]);
 
   return (

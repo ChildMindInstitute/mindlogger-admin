@@ -188,7 +188,7 @@ export const createEvents = ({
     isHidden: false,
     backgroundColor: getBgColor(),
     periodicity: periodicityType,
-    eventStart: getDateFromDateStringTimeString(startDate, startTime) || newDate,
+    eventStart: getDateFromDateStringTimeString(startDate || selectedDate, startTime) || newDate,
     eventEnd: endDate === null ? null : eventEnd,
     oneTimeCompletion,
     accessBeforeSchedule,
