@@ -413,9 +413,9 @@ export const getEventPayload = (
             }),
           }),
 
-      ...(defaultStartDate &&
+      ...(startEndingDate[0] &&
         (periodicity === Periodicity.Weekly || periodicity === Periodicity.Monthly) && {
-          selectedDate: convertDateToYearMonthDay(defaultStartDate),
+          selectedDate: convertDateToYearMonthDay(startEndingDate[0]),
         }),
     };
   }
