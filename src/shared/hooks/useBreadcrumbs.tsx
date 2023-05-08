@@ -75,6 +75,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         navPath: generatePath(isDashboard ? page.appletRespondents : page.builderApplet, {
           appletId,
         }),
+        hasUrl: !!appletData?.image,
       });
     }
 
@@ -173,5 +174,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     activityFlowLabel,
     pathname,
     dispatch,
+    respondentLabel,
   ]);
 };

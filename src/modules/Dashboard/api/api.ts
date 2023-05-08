@@ -113,8 +113,14 @@ export const updateEventApi = (
   signal?: AbortSignal,
 ) => authApiClient.put(`/applets/${appletId}/events/${eventId}`, body, { signal });
 
-export const getEventsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+export const getEventsApi = (
+  { appletId, respondentId }: AppletId & Partial<RespondentId>,
+  signal?: AbortSignal,
+) =>
   authApiClient.get(`/applets/${appletId}/events`, {
+    params: {
+      respondentId,
+    },
     signal,
   });
 

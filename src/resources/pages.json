@@ -15,6 +15,7 @@
   "appletRespondentDataReviewAnswer": "/dashboard/:appletId/respondents/:respondentId/dataviz/review/:answerId",
   "appletManagers": "/dashboard/:appletId/managers",
   "appletSchedule": "/dashboard/:appletId/schedule",
+  "appletScheduleIndividual": "/dashboard/:appletId/schedule/:respondentId",
   "appletSettings": "/dashboard/:appletId/settings",
   "appletSettingsItem": "/dashboard/:appletId/settings/:settingItem",
   "appletAddUser": "/dashboard/:appletId/add-user",

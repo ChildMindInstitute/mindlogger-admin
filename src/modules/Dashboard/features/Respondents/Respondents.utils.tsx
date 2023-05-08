@@ -46,9 +46,9 @@ export const getActions = ({
   },
 ];
 
-export const getChosenAppletData = (respondentAccess: ChosenAppletData, userId?: string) => ({
+export const getChosenAppletData = (respondentAccess: ChosenAppletData, respondentId?: string) => ({
   ...respondentAccess,
-  userId,
+  respondentId,
 });
 
 export const getAppletsSmallTableRows = (

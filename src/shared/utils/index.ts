@@ -22,3 +22,4 @@ export * from './capitalize';
 export * from './builderHelpers';
 export * from './getUploadFormData';
 export * from './getDateInUserTimezone';
+export * from './getRespondentName';

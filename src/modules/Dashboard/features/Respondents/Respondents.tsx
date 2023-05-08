@@ -140,8 +140,9 @@ export const Respondents = () => {
   };
 
   const rows = respondentsData?.result?.map((user, index) => {
-    const { secretId, nickname, lastSeen, accessId, isPinned, schedule } = user;
+    const { secretId, nickname, lastSeen, accessId, hasIndividualSchedule, isPinned } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
+    const schedule = hasIndividualSchedule ? t('individualSchedule') : t('defaultSchedule');
 
     return {
       pin: {
@@ -154,8 +155,8 @@ export const Respondents = () => {
         value: secretId,
       },
       nickname: {
-        content: () => nickname,
-        value: nickname,
+        content: () => nickname || '',
+        value: nickname || '',
       },
       latestActive: {
         content: () => latestActive,

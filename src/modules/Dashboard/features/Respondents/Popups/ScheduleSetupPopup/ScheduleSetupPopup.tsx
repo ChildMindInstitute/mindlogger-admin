@@ -4,8 +4,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { theme, StyledModalWrapper, StyledBodyLarge } from 'shared/styles';
 import { page } from 'resources';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -32,9 +31,11 @@ export const ScheduleSetupPopup = ({
 
   const handlePopupSubmit = () => {
     setPopupVisible(false);
+    const { appletId, respondentId } = chosenAppletData || {};
     navigate(
-      generatePath(page.appletSchedule, {
-        appletId: chosenAppletData?.appletId,
+      generatePath(page.appletScheduleIndividual, {
+        appletId,
+        respondentId,
       }),
     );
   };

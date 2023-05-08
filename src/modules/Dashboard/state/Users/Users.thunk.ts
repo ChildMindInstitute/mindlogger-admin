@@ -2,12 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
-import {
-  getInvitationsApi,
-  getWorkspaceRespondentsApi,
-  getWorkspaceManagersApi,
-  GetAppletsParams,
-} from 'api';
+import { getWorkspaceRespondentsApi, getWorkspaceManagersApi, GetAppletsParams } from 'api';
 
 export const getWorkspaceRespondents = createAsyncThunk(
   'users/getWorkspaceRespondents',

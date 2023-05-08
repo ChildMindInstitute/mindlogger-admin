@@ -40,6 +40,10 @@ export const appletRoutes = [
     Component: Schedule,
   },
   {
+    path: page.appletScheduleIndividual,
+    Component: Schedule,
+  },
+  {
     path: page.appletSettings,
     Component: AppletSettings,
   },

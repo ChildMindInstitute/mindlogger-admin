@@ -12,11 +12,10 @@ export const ExportSchedulePopup = ({
   onClose,
   onSubmit,
   scheduleTableRows,
-  secretUserId,
-  nickName,
+  respondentName,
 }: ExportSchedulePopupProps) => {
   const { t } = useTranslation('app');
-  const isIndividualSchedule = secretUserId || nickName;
+  const isIndividualSchedule = !!respondentName;
 
   return (
     <Modal
@@ -33,10 +32,8 @@ export const ExportSchedulePopup = ({
             <Trans i18nKey="individualScheduleExport">
               The current individual schedule of respondent
               <strong>
-                <>
-                  {{ secretUserId }} ({{ nickName }})
-                </>
-              </strong>{' '}
+                <>{{ respondentName }})</>
+              </strong>
               will be exported as a <strong>.csv</strong> file.
             </Trans>
           ) : (

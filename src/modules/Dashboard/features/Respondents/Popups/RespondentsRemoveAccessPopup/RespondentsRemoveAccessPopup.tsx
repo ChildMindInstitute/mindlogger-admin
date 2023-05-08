@@ -96,8 +96,8 @@ export const RespondentsRemoveAccessPopup = ({
   );
 
   const removeAccess = async () => {
-    const { appletId, userId } = chosenAppletData as ChosenAppletData;
-    await execute({ appletId, profileId: userId || '', deleteResponse: removeData });
+    const { appletId, respondentId } = chosenAppletData as ChosenAppletData;
+    await execute({ appletId, profileId: respondentId || '', deleteResponse: removeData });
   };
 
   const screens = getScreens({

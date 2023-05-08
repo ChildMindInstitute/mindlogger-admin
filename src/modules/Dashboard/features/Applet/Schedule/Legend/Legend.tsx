@@ -1,10 +1,13 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { SelectController } from 'shared/components/FormComponents';
-import { Svg } from 'shared/components';
+import { Spinner, Svg } from 'shared/components';
 import { SelectEvent } from 'shared/types';
-import { exportToCsv } from 'shared/utils';
+import { exportToCsv, getRespondentName } from 'shared/utils';
+import { page } from 'resources';
+import { users } from 'modules/Dashboard/state';
 
 import { ExportSchedulePopup } from '../ExportSchedulePopup';
 import { ImportSchedulePopup } from '../ImportSchedulePopup';
@@ -29,8 +32,20 @@ import { useExpandedLists } from './Legend.hooks';
 
 export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const { t } = useTranslation('app');
+  const { respondentId } = useParams();
+  const navigate = useNavigate();
+  const { result: respondentsData } = users.useRespondentsData() || {};
+  const respondentsItems = respondentsData?.map(
+    ({ id, hasIndividualSchedule, secretId, nickname }) => ({
+      icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
+      id,
+      secretId,
+      nickname,
+      hasIndividualSchedule,
+    }),
+  );
 
-  const [schedule, setSchedule] = useState<string>(scheduleOptions[0].value);
+  const [schedule, setSchedule] = useState<string | null>(null);
   const [searchPopupVisible, setSearchPopupVisible] = useState(false);
   const [selectedRespondent, setSelectedRespondent] = useState<SelectedRespondent>(null);
   const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
@@ -48,11 +63,23 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const boundingBox = searchContainerRef?.current?.getBoundingClientRect();
   const isIndividual = schedule === ScheduleOptions.IndividualSchedule;
 
+  const respondentName = getRespondentName(
+    selectedRespondent?.secretId || '',
+    selectedRespondent?.nickname,
+  );
+
   const scheduleChangeHandler = async (e: SelectEvent) => {
     const { value } = e.target;
     await setSchedule(value);
     if (value === ScheduleOptions.IndividualSchedule) {
       setSearchPopupVisible(true);
+    } else {
+      setSelectedRespondent(null);
+      navigate(
+        generatePath(page.appletSchedule, {
+          appletId,
+        }),
+      );
     }
   };
 
@@ -83,7 +110,21 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     setExportDefaultSchedulePopupVisible(false);
   };
 
-  return (
+  useEffect(() => {
+    setSchedule(
+      respondentId ? ScheduleOptions.IndividualSchedule : ScheduleOptions.DefaultSchedule,
+    );
+  }, [respondentId]);
+
+  useEffect(() => {
+    if (respondentId && respondentsItems?.length && !selectedRespondent) {
+      setSelectedRespondent(
+        respondentsItems.find((respondent) => respondent.id === respondentId) || null,
+      );
+    }
+  }, [respondentId, respondentsItems, selectedRespondent]);
+
+  return schedule ? (
     <StyledLegend>
       <StyledSelectRow>
         <StyledSelect>
@@ -117,9 +158,11 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
             top={boundingBox?.top}
             left={boundingBox?.left}
             open={searchPopupVisible}
-            onClose={() => setSearchPopupVisible(false)}
+            setSearchPopupVisible={setSearchPopupVisible}
+            setSchedule={setSchedule}
             setSelectedRespondent={setSelectedRespondent}
             selectedRespondent={selectedRespondent}
+            respondentsItems={respondentsItems}
           />
         </>
       )}
@@ -156,9 +199,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           open={exportIndividualSchedulePopupVisible}
           onClose={() => setExportIndividualSchedulePopupVisible(false)}
           onSubmit={() => setExportIndividualSchedulePopupVisible(false)}
-          // TODO: replace with individual respondent export data
-          secretUserId="012-435"
-          nickName="John Doe"
+          respondentName={respondentName}
           scheduleTableRows={scheduleExportTableData}
         />
       )}
@@ -167,9 +208,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           open={importSchedulePopupVisible}
           isIndividual={isIndividual}
           appletName={appletName}
-          // TODO: replace with individual respondent export data
-          secretUserId="012-435"
-          nickName="John Doe"
+          respondentName={respondentName}
           onClose={() => setImportSchedulePopupVisible(false)}
         />
       )}
@@ -179,14 +218,14 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           appletName={appletName}
           appletId={appletId}
           isDefault={!isIndividual}
-          name="John Doe"
+          name={respondentName}
           onClose={() => setClearScheduledEventsPopupVisible(false)}
         />
       )}
       {removeIndividualSchedulePopupVisible && (
         <RemoveIndividualSchedulePopup
           open={removeIndividualSchedulePopupVisible}
-          name="14456 (Name)"
+          name={respondentName}
           isEmpty={false}
           onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
         />
@@ -197,5 +236,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
         defaultStartDate={new Date()}
       />
     </StyledLegend>
+  ) : (
+    <Spinner />
   );
 };
