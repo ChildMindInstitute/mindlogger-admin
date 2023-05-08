@@ -346,6 +346,7 @@
   "emptyCart": "Vous n'avez encore rien ajouté à votre panier. Ajoutez des applets depuis le ",
   "notFound": "Rien n'a été trouvé selon votre requête. Essayez de formuler votre requête différemment.",
   "itemConfiguration": "Configuration de l'article",
+  "mobileOnly": "Mobile uniquement",
   "singleSelect": "Sélection simple",
   "multiSelect": "Sélection multiple",
   "slider": "Curseur",
