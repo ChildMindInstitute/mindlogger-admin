@@ -1,9 +1,8 @@
 import { max, min } from 'date-fns';
-import debounce from 'lodash.debounce';
 import { ScriptableTooltipContext } from 'chart.js';
 
 import { variables } from 'shared/styles';
-import { CHART_DEBOUNCE_VALUE, locales } from 'shared/consts';
+import { locales } from 'shared/consts';
 
 import { Data } from './ScatterChart.types';
 
@@ -41,9 +40,7 @@ export const getOptions = (
       },
       tooltip: {
         enabled: false,
-        // intersect: false,
         position: 'nearest' as const,
-        // mode: 'point' as const,
         external: tooltipHandler,
       },
     },

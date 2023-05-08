@@ -25,6 +25,9 @@ import { ChartTooltip } from './ChartTooltip';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
+const TOOLTIP_OFFSET_TOP = 60;
+const TOOLTIP_OFFSET_LEFT = 70;
+
 export const ScatterChart = ({ height = '5rem' }: ScatterChartProps) => {
   const { i18n } = useTranslation('app');
 
@@ -68,8 +71,8 @@ export const ScatterChart = ({ height = '5rem' }: ScatterChartProps) => {
       const top = position.top + tooltip.caretY;
 
       tooltipEl.style.display = 'block';
-      tooltipEl.style.top = `${top - 60}px`;
-      tooltipEl.style.left = `${left - 70}px`;
+      tooltipEl.style.top = `${top - TOOLTIP_OFFSET_TOP}px`;
+      tooltipEl.style.left = `${left - TOOLTIP_OFFSET_LEFT}px`;
     }
   };
 
