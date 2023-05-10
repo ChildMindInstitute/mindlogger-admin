@@ -1,18 +1,8 @@
 import { useState, useCallback } from 'react';
 
-export interface recorderControls {
-  startRecording: () => void;
-  stopRecording: () => void;
-  togglePauseResume: () => void;
-  clearBlob: () => void;
-  recordingBlob: Blob[];
-  isRecording: boolean;
-  isPaused: boolean;
-  isStopped: boolean;
-  recordingTime: number;
-}
+import { RecorderControls } from './RecordAudio.types';
 
-export const useAudioRecorder: () => recorderControls = () => {
+export const useAudioRecorder: () => RecorderControls = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isStopped, setIsStopped] = useState(true);
@@ -48,9 +38,6 @@ export const useAudioRecorder: () => recorderControls = () => {
 
         recorder.addEventListener('dataavailable', (event) => {
           setRecordingBlob([...recordingBlob, event.data]);
-          // setRecordingBlob(event.data);
-          // recorder.stream.getTracks().forEach((t) => t.stop());
-          // setMediaRecorder(null);
         });
       })
       .catch((err) => console.log(err));

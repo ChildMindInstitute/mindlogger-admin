@@ -32,7 +32,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
 
   const { execute: executeAudioUpload, isLoading } = useAsync(
     postFileUploadApi,
-    (response) => response?.data?.result && setUrl(response?.data?.result.url ?? ''),
+    (response) => response?.data?.result && setUrl(response.data.result.url ?? ''),
   );
 
   useEffect(() => {
