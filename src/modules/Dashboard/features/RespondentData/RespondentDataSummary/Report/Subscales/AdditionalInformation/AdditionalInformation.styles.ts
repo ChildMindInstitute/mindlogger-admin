@@ -28,6 +28,10 @@ export const StyledMdEditor = styled(MdEditor)`
   text-align: initial;
   padding: ${theme.spacing(0.7, 0)};
 
+  .md-editor-content .md-editor-preview {
+    word-break: break-word;
+  }
+
   .default-theme {
     p {
       padding: 0;
