@@ -216,6 +216,7 @@ export const ItemSettingsGroup = ({
                           <StyledInputControllerContainer>
                             <InputController
                               control={control}
+                              key={`timer-${isSecondsDisabled}`}
                               name={`${name}.${ItemConfigurationSettings.HasTimer}`}
                               type="number"
                               disabled={isSecondsDisabled}
