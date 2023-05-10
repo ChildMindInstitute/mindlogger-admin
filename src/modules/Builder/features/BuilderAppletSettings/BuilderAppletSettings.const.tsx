@@ -66,7 +66,8 @@ export const getSettings = (isNewApplet: boolean) => [
       },
     ],
   },
-  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is introduced (story: AUS-4.1.4.10)
+  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
+  // introduced. (Story: AUS-4.1.4.10)
   // {
   //   label: 'sharing',
   //   items: [
