@@ -29,7 +29,7 @@ export const Activity = ({ appletId, activity: { id, name, items } }: ActivityPr
     if (!checked) {
       return setValue(
         appletId,
-        selectedItems.filter((selectedItem) => !items.find((item) => item.id === selectedItem.id)),
+        selectedItems.filter((selectedItem) => selectedItem.activityId !== id),
       );
     }
 
