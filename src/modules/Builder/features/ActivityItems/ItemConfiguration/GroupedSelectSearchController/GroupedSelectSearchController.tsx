@@ -91,7 +91,9 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
               open={selectOpen}
               onClose={handleSelectClose}
               onOpen={handleSelectOpen}
-              IconComponent={() => <Svg id={selectOpen ? 'navigate-up' : 'navigate-down'} />}
+              IconComponent={() => (
+                <Svg className="navigate-arrow" id={selectOpen ? 'navigate-up' : 'navigate-down'} />
+              )}
               defaultValue=""
             >
               <StyledListSubheader>
@@ -100,12 +102,13 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                     autoFocus
                     placeholder={t('searchItemType')}
                     fullWidth
+                    value={searchTerm}
                     onChange={handleSearchChange}
                     onKeyDown={handleSearchKeyDown}
                     InputProps={{
                       startAdornment: <Svg id="search" />,
-                      endAdornment: (
-                        <StyledClearedButton onClick={handleSelectClose}>
+                      endAdornment: searchTerm && (
+                        <StyledClearedButton onClick={() => setSearchTerm('')}>
                           <Svg id="close" />
                         </StyledClearedButton>
                       ),

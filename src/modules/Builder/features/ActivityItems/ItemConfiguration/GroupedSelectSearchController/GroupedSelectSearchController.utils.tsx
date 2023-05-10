@@ -29,8 +29,14 @@ export const getItemTypesNames = (): string[] =>
 
 export const getEmptyComponent = (searchTerm: string) => {
   if (getItemTypesNames().some((name) => name.includes(searchTerm.toLowerCase()))) return null;
+  const MAX_SEARCH_VALUE_LENGTH = 80;
 
-  return <EmptySearch description={t('noMatchWasFound', { searchValue: searchTerm })} />;
+  const searchValue =
+    searchTerm.length > MAX_SEARCH_VALUE_LENGTH
+      ? `${searchTerm.substring(0, MAX_SEARCH_VALUE_LENGTH)}...`
+      : searchTerm;
+
+  return <EmptySearch description={t('noMatchWasFound', { searchValue })} />;
 };
 
 export const getGroupName = (
