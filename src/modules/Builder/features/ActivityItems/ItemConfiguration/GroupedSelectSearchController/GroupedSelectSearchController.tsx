@@ -4,7 +4,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { TextField, FormControl, InputLabel, FormHelperText } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { theme, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
+import { theme, StyledClearedButton, StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc } from 'shared/utils';
 import { itemsTypeIcons } from 'shared/consts';
@@ -14,6 +14,7 @@ import {
   StyledMenuItem,
   StyledListSubheader,
   StyledSelect,
+  StyledMobileOnly,
 } from './GroupedSelectSearchController.styles';
 import { ItemTypeTooltip } from './ItemTypeTooltip';
 import { selectDropdownStyles } from './GroupedSelectSearchController.const';
@@ -114,7 +115,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
               </StyledListSubheader>
               {options?.map(({ groupName, groupOptions }) => [
                 getGroupName(groupName, groupOptions, searchTermLowercase),
-                ...groupOptions.map(({ value: groupValue, icon }) => {
+                ...groupOptions.map(({ value: groupValue, icon, isMobileOnly }) => {
                   const isHidden = getIsNotHaveSearchValue(groupValue, searchTermLowercase);
 
                   return (
@@ -133,7 +134,14 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                         <StyledFlexTopCenter sx={{ mr: theme.spacing(1.8) }}>
                           {icon}
                         </StyledFlexTopCenter>
-                        {getGroupValueText(searchTerm, groupValue)}
+                        <StyledFlexTopCenter>
+                          {getGroupValueText(searchTerm, groupValue)}
+                          {isMobileOnly && (
+                            <StyledMobileOnly>
+                              <StyledBodyMedium>{t('mobileOnly')}</StyledBodyMedium>
+                            </StyledMobileOnly>
+                          )}
+                        </StyledFlexTopCenter>
                       </StyledFlexTopCenter>
                     </StyledMenuItem>
                   );

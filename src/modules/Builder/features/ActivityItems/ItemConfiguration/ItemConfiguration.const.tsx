@@ -10,23 +10,25 @@ export const DEFAULT_SCORE_VALUE = 0;
 export const DEFAULT_MIN_NUMBER = 1;
 export const DEFAULT_MAX_NUMBER = 30;
 export const DEFAULT_SLIDER_MIN_NUMBER = 0;
+export const DEFAULT_SLIDER_ROWS_MIN_NUMBER = 1;
 export const DEFAULT_SLIDER_MAX_NUMBER = 12;
 export const SLIDER_LABEL_MAX_LENGTH = 11;
 export const SLIDER_VALUE_LABEL_MAX_LENGTH = 20;
-export const DEFAULT_SLIDER_MAX_VALUE = 12;
+export const DEFAULT_SLIDER_MAX_VALUE = 5;
 export const DEFAULT_SLIDER_SCORE = createArray(DEFAULT_SLIDER_MAX_VALUE + 1, (i: number) => i + 1);
 export const DEFAULT_NUMBER_MIN_VALUE = 0;
 export const DEFAULT_NUMBER_MAX_VALUE = 1;
 
 export const DEFAULT_EMPTY_SLIDER = {
   minValue: DEFAULT_SLIDER_MIN_NUMBER,
-  maxValue: DEFAULT_SLIDER_MAX_NUMBER,
+  maxValue: DEFAULT_SLIDER_MAX_VALUE,
   scores: DEFAULT_SLIDER_SCORE,
   minLabel: '',
   maxLabel: '',
 };
 export const DEFAULT_EMPTY_SLIDER_ROWS = {
   ...DEFAULT_EMPTY_SLIDER,
+  minValue: DEFAULT_SLIDER_ROWS_MIN_NUMBER,
   label: '',
 };
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
@@ -47,7 +49,11 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
         icon: itemsTypeIcons[ItemResponseType.MultipleSelection],
       },
       { value: ItemResponseType.Slider, icon: itemsTypeIcons[ItemResponseType.Slider] },
-      { value: ItemResponseType.Date, icon: itemsTypeIcons[ItemResponseType.Date] },
+      {
+        value: ItemResponseType.Date,
+        icon: itemsTypeIcons[ItemResponseType.Date],
+        isMobileOnly: true,
+      },
       {
         value: ItemResponseType.NumberSelection,
         icon: itemsTypeIcons[ItemResponseType.NumberSelection],
@@ -55,8 +61,13 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Time,
         icon: itemsTypeIcons[ItemResponseType.Time],
+        isMobileOnly: true,
       },
-      { value: ItemResponseType.TimeRange, icon: itemsTypeIcons[ItemResponseType.TimeRange] },
+      {
+        value: ItemResponseType.TimeRange,
+        icon: itemsTypeIcons[ItemResponseType.TimeRange],
+        isMobileOnly: true,
+      },
     ],
   },
   {
@@ -65,35 +76,69 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.SingleSelectionPerRow,
         icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
+        isMobileOnly: true,
       },
       {
         value: ItemResponseType.MultipleSelectionPerRow,
         icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
+        isMobileOnly: true,
       },
-      { value: ItemResponseType.SliderRows, icon: itemsTypeIcons[ItemResponseType.SliderRows] },
+      {
+        value: ItemResponseType.SliderRows,
+        icon: itemsTypeIcons[ItemResponseType.SliderRows],
+        isMobileOnly: true,
+      },
     ],
   },
   {
     groupName: 'input',
     groupOptions: [
       { value: ItemResponseType.Text, icon: itemsTypeIcons[ItemResponseType.Text] },
-      { value: ItemResponseType.Drawing, icon: itemsTypeIcons[ItemResponseType.Drawing] },
-      { value: ItemResponseType.Photo, icon: itemsTypeIcons[ItemResponseType.Photo] },
-      { value: ItemResponseType.Video, icon: itemsTypeIcons[ItemResponseType.Video] },
+      {
+        value: ItemResponseType.Drawing,
+        icon: itemsTypeIcons[ItemResponseType.Drawing],
+        isMobileOnly: true,
+      },
+      {
+        value: ItemResponseType.Photo,
+        icon: itemsTypeIcons[ItemResponseType.Photo],
+        isMobileOnly: true,
+      },
+      {
+        value: ItemResponseType.Video,
+        icon: itemsTypeIcons[ItemResponseType.Video],
+        isMobileOnly: true,
+      },
     ],
   },
   {
     groupName: 'record',
     groupOptions: [
-      { value: ItemResponseType.Geolocation, icon: itemsTypeIcons[ItemResponseType.Geolocation] },
-      { value: ItemResponseType.Audio, icon: itemsTypeIcons[ItemResponseType.Audio] },
+      {
+        value: ItemResponseType.Geolocation,
+        icon: itemsTypeIcons[ItemResponseType.Geolocation],
+        isMobileOnly: true,
+      },
+      {
+        value: ItemResponseType.Audio,
+        icon: itemsTypeIcons[ItemResponseType.Audio],
+        isMobileOnly: true,
+      },
     ],
   },
   {
     groupName: 'display',
     groupOptions: [
-      { value: ItemResponseType.Message, icon: itemsTypeIcons[ItemResponseType.Message] },
-      { value: ItemResponseType.AudioPlayer, icon: itemsTypeIcons[ItemResponseType.AudioPlayer] },
+      {
+        value: ItemResponseType.Message,
+        icon: itemsTypeIcons[ItemResponseType.Message],
+        isMobileOnly: true,
+      },
+      {
+        value: ItemResponseType.AudioPlayer,
+        icon: itemsTypeIcons[ItemResponseType.AudioPlayer],
+        isMobileOnly: true,
+      },
     ],
   },
 ];

@@ -10,8 +10,7 @@ import { ImportSchedulePopupProps, Steps } from './ImportSchedulePopup.types';
 export const ImportSchedulePopup = ({
   isIndividual = false,
   appletName,
-  secretUserId,
-  nickName,
+  respondentName,
   open,
   onClose,
 }: ImportSchedulePopupProps) => {
@@ -63,10 +62,7 @@ export const ImportSchedulePopup = ({
         <Trans i18nKey="confirmImportIndividualSchedule">
           Importing a new individual schedule for respondent
           <strong>
-            <>
-              {' '}
-              {{ secretUserId }} ({{ nickName }}){' '}
-            </>
+            <>{{ respondentName }})</>
           </strong>
           will replace the respondent’s current individual schedule. Are you sure you want to
           continue?
@@ -77,10 +73,7 @@ export const ImportSchedulePopup = ({
         <Trans i18nKey="confirmUpdateIndividualSchedule">
           Are you sure you want to update the individual schedule for respondent
           <strong>
-            <>
-              {' '}
-              {{ secretUserId }} ({{ nickName }}){' '}
-            </>
+            <>{{ respondentName }})</>
           </strong>
           for Applet
           <strong>

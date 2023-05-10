@@ -71,10 +71,10 @@ export const Calendar = () => {
     setDefaultStartDate(getDefaultStartDate(slotInfo.start));
   };
 
-  const onSelectEvent = (event: CalendarEvent) => {
+  const onSelectEvent = (calendarEvent: CalendarEvent) => {
     setEditEventPopupVisible(true);
-    setDefaultStartDate(getDefaultStartDate(event.start));
-    setEditedEvent(event);
+    setDefaultStartDate(getDefaultStartDate(calendarEvent.start));
+    setEditedEvent(calendarEvent);
   };
 
   const hasWrapperMoreBtn = useMemo(

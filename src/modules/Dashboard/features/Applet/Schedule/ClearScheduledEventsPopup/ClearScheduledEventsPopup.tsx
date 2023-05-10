@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Modal, SubmitBtnColor } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
@@ -20,10 +21,11 @@ export const ClearScheduledEventsPopup = ({
   isDefault = true,
 }: ClearScheduledEventsPopupProps) => {
   const { t } = useTranslation();
+  const { respondentId } = useParams();
   const dispatch = useAppDispatch();
   const [step, setStep] = useState<Steps>(0);
   const { execute: deleteScheduledEvents } = useAsync(deleteScheduledEventsApi, () =>
-    dispatch(applets.thunk.getEvents({ appletId })),
+    dispatch(applets.thunk.getEvents({ appletId, respondentId })),
   );
 
   const getNextStep = () =>

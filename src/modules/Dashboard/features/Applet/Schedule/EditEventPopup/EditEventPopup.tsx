@@ -28,12 +28,12 @@ export const EditEventPopup = ({
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [isFormChanged, setIsFormChanged] = useState(false);
-  const { appletId } = useParams();
+  const { appletId, respondentId } = useParams();
   const dispatch = useAppDispatch();
 
   const { execute: removeEvent } = useAsync(
     deleteEventApi,
-    () => appletId && dispatch(applets.thunk.getEvents({ appletId })),
+    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
   );
 
   const handleFormChanged = (isChanged: boolean) => {

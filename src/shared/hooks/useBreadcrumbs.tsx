@@ -171,5 +171,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     activityFlowLabel,
     pathname,
     dispatch,
+    respondentLabel,
   ]);
 };

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import isEqual from 'lodash.isequal';
+import { useParams } from 'react-router-dom';
 
 import { Option, SelectController } from 'shared/components/FormComponents';
 import { DefaultTabs as Tabs } from 'shared/components';
@@ -42,6 +43,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const [activitiesOrFlows, setActivitiesOrFlows] = useState<null | Option[]>(null);
     const { t } = useTranslation('app');
     const dispatch = useAppDispatch();
+    const { respondentId } = useParams();
     const appletData = applet.useAppletData();
     const appletId = appletData?.result.id;
     const defaultValues = getDefaultValues(defaultStartDate, editedEvent);
@@ -70,7 +72,8 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const startTime = watch('startTime');
     const endTime = watch('endTime');
 
-    const getEvents = () => appletId && dispatch(applets.thunk.getEvents({ appletId }));
+    const getEvents = () =>
+      appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId }));
     const { execute: createEvent, error: createEventError } = useAsync(createEventApi, getEvents);
     const { execute: updateEvent, error: updateEventError } = useAsync(updateEventApi, getEvents);
 
@@ -89,12 +92,11 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       };
     }, {});
 
-    // TODO: add individual event create, update
     const handleProcessEvent = async () => {
       if (!appletId) {
         return;
       }
-      const { body, eventStartYear } = getEventPayload(defaultStartDate, watch);
+      const { body, eventStartYear } = getEventPayload(defaultStartDate, watch, respondentId);
 
       eventStartYear &&
         (await dispatch(

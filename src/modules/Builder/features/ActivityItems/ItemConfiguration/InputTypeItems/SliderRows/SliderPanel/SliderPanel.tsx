@@ -11,6 +11,8 @@ import {
   DEFAULT_SLIDER_MIN_NUMBER,
   SLIDER_VALUE_LABEL_MAX_LENGTH,
   DEFAULT_SLIDER_MAX_VALUE,
+  DEFAULT_SLIDER_MAX_NUMBER,
+  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 
@@ -190,7 +192,9 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
                 label={t('minValue')}
                 maxNumberValue={maxValue - 1}
                 onChange={handleChangeMinScore}
-                minNumberValue={DEFAULT_SLIDER_MIN_NUMBER}
+                minNumberValue={
+                  isMultiple ? DEFAULT_SLIDER_ROWS_MIN_NUMBER : DEFAULT_SLIDER_MIN_NUMBER
+                }
               />
             </StyledFlexTopCenter>
             <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
@@ -204,7 +208,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
                 name={`${sliderName}.maxValue`}
                 label={t('maxValue')}
                 onChange={handleChangeMaxScore}
-                maxNumberValue={DEFAULT_SLIDER_MAX_VALUE}
+                maxNumberValue={DEFAULT_SLIDER_MAX_NUMBER}
                 minNumberValue={minValue + 1}
               />
             </StyledFlexTopCenter>

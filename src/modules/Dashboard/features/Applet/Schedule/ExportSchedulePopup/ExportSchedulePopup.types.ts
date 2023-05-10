@@ -5,6 +5,5 @@ export type ExportSchedulePopupProps = {
   onClose: () => void;
   onSubmit: () => void;
   scheduleTableRows: Row[] | undefined;
-  secretUserId?: string;
-  nickName?: string;
+  respondentName?: string;
 };

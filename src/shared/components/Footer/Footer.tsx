@@ -18,11 +18,8 @@ const year = new Date().getFullYear();
 export const Footer = () => {
   const { t } = useTranslation('app');
 
-  const { NODE_ENV, REACT_APP_DEVELOP_BUILD_VERSION } = process.env;
-  const buildVersion =
-    NODE_ENV !== 'production' &&
-    REACT_APP_DEVELOP_BUILD_VERSION &&
-    `(${REACT_APP_DEVELOP_BUILD_VERSION})`;
+  const { REACT_APP_DEVELOP_BUILD_VERSION } = process.env;
+  const buildVersion = REACT_APP_DEVELOP_BUILD_VERSION && `(${REACT_APP_DEVELOP_BUILD_VERSION})`;
 
   return (
     <StyledFooter>
