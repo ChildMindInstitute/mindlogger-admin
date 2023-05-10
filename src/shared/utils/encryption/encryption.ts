@@ -20,6 +20,7 @@ export const getEncryptionToServer = (appletPassword: string, accountId: string)
 
   const encryption: Encryption = {
     publicKey: Array.from(encryptionInfo.getPublicKey()),
+    privateKey: Array.from(encryptionInfo.getPrivateKey()),
     prime: Array.from(encryptionInfo.getPrime()),
     base: Array.from(encryptionInfo.getGenerator()),
     accountId,
