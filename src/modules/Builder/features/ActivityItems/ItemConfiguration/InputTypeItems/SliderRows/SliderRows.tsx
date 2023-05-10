@@ -33,7 +33,7 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
             {!isMultiple && <SliderPanel name={name} label={t('sliderOption')} />}
             {isMultiple &&
               Array.isArray(value) &&
-              value?.map(({ id }: SliderItemResponseValues, index: number) => {
+              value.map(({ id }: SliderItemResponseValues, index: number) => {
                 const handleRemove = () => {
                   onChange(
                     value.filter(({ id: sliderId }: SliderItemResponseValues) => sliderId !== id),
