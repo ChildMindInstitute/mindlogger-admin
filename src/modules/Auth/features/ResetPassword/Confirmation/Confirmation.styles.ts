@@ -12,10 +12,6 @@ export const StyledConfirmation = styled(Box)`
   background: ${variables.palette.white};
   border-radius: ${variables.borderRadius.xl};
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-
-  a.here {
-    color: ${variables.palette.primary};
-  }
 `;
 
 export const StyledHeader = styled(StyledHeadline)`

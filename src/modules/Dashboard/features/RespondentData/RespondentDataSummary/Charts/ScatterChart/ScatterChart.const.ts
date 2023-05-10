@@ -1,11 +1,13 @@
 import { max, min } from 'date-fns';
-import debounce from 'lodash.debounce';
 import { ScriptableTooltipContext } from 'chart.js';
 
 import { variables } from 'shared/styles';
-import { CHART_DEBOUNCE_VALUE, locales } from 'shared/consts';
+import { locales } from 'shared/consts';
 
 import { Data } from './ScatterChart.types';
+
+export const TOOLTIP_OFFSET_TOP = 60;
+export const TOOLTIP_OFFSET_LEFT = 70;
 
 export const mocked = {
   responses: [new Date('2023-11-06'), new Date('2023-11-27'), new Date('2023-12-07')],
@@ -42,7 +44,7 @@ export const getOptions = (
       tooltip: {
         enabled: false,
         position: 'nearest' as const,
-        external: debounce(tooltipHandler, CHART_DEBOUNCE_VALUE),
+        external: tooltipHandler,
       },
     },
     layout: {

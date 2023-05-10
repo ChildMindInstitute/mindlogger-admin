@@ -13,10 +13,10 @@ import {
   StyledItemsList,
 } from './Activity.styles';
 import { Item } from '../Item';
-import { AppletForm } from '../Applet.types';
+import { AppletForm, SelectedItem } from '../Applet.types';
 
 export const Activity = ({ appletId, activity: { id, name, items } }: ActivityProps) => {
-  const { watch, setValue } = useFormContext<AppletForm>();
+  const { watch, setValue, getValues } = useFormContext<AppletForm>();
   const watchApplet = watch(appletId);
   const [activityVisible, setActivityVisible] = useState(false);
   const [activityIndeterminate, setActivityIndeterminate] = useState(false);
@@ -24,7 +24,24 @@ export const Activity = ({ appletId, activity: { id, name, items } }: ActivityPr
 
   const handleActivityChecked = (event: SyntheticEvent<Element, Event>, checked: boolean) => {
     setActivityChecked(checked);
-    setValue(appletId, checked ? items.map((item) => ({ id: item.id, activityId: id })) : []);
+    const selectedItems = getValues()[appletId];
+
+    if (!checked) {
+      return setValue(
+        appletId,
+        selectedItems.filter((selectedItem) => !items.find((item) => item.id === selectedItem.id)),
+      );
+    }
+
+    const unselectedItems = items.reduce(
+      (unselected: SelectedItem[], item) =>
+        !selectedItems.find((selectedItem) => item.id === selectedItem.id)
+          ? [...unselected, { id: item.id, activityId: id }]
+          : unselected,
+      [],
+    );
+
+    setValue(appletId, [...selectedItems, ...unselectedItems]);
   };
 
   useEffect(() => {

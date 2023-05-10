@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
 
 import { page } from 'resources';
@@ -14,19 +14,14 @@ export const Confirmation = ({ email }: { email: string }) => {
   return (
     <StyledConfirmation>
       <StyledHeader>{t('checkYourEmail')}</StyledHeader>
-      <StyledBodyMedium sx={{ mb: theme.spacing(2.4) }}>
+      <StyledBodyMedium
+        sx={{ mb: theme.spacing(2.4), color: variables.palette.on_surface_variant }}
+      >
         {t('weHaveSentPasswordResetLink', { email })}
       </StyledBodyMedium>
 
       <StyledBodyMedium sx={{ mb: theme.spacing(2.4), color: variables.palette.outline }}>
-        <Trans
-          i18nKey="ifYouDontReceiveEmail"
-          components={[
-            <a className="here" href="#">
-              here
-            </a>,
-          ]}
-        />
+        {t('ifYouDontReceiveEmail')}
       </StyledBodyMedium>
 
       <Button variant="contained" type="button" onClick={() => navigate(page.login)}>
