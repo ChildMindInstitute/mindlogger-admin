@@ -80,7 +80,8 @@ export const settings = [
       },
     ],
   },
-  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is introduced.
+  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
+  // introduced. (Story: AUS-4.1.4.10)
   // {
   //   label: 'sharing',
   //   items: [
