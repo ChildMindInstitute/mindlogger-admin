@@ -7,10 +7,10 @@ import { Svg, Tooltip } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
 import { StyledHeadlineLarge, StyledHeadline, StyledTitleTooltipIcon, theme } from 'shared/styles';
 
-import { ReportFilters } from './ReportFilters';
-import { StyledHeader, StyledReport } from './Report.styles';
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ScatterChart } from '../Charts/ScatterChart';
+import { ReportFilters } from './ReportFilters';
+import { StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 
 export const Report = ({ activity }: { activity: Activity }) => {
