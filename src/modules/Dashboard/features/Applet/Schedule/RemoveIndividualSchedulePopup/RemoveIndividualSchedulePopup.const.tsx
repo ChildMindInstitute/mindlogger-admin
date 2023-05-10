@@ -24,7 +24,7 @@ const getFirstScreenForEmptySchedule = (name: string) => (
     <Trans i18nKey="confirmRemoveEmptyIndividualSchedule">
       Respondent
       <strong>
-        <> {{ name }}’s individual schedule </>
+        <> {{ name }}’s individual schedule</>
       </strong>
       will be removed, and the Respondent will use the <strong>default schedule</strong> instead.
       Are you sure you want to continue?
@@ -41,7 +41,7 @@ const getFirstScreen = (name: string) => (
       </strong>
       ’s
       <strong>
-        <>individual schedule </>
+        <>individual schedule</>
       </strong>
       and move the Respondent to a group of Respondents that use the
       <strong> default schedule</strong>. All individually scheduled activities and their
@@ -53,19 +53,25 @@ const getFirstScreen = (name: string) => (
   </Trans>
 );
 
-export const getScreens = ({ name, isEmpty, onSubmit, onClose }: ScreensParams) => [
+export const getScreens = ({
+  name,
+  isEmpty,
+  onSubmit,
+  handleRemovedScheduleClose,
+  getNextStep,
+}: ScreensParams) => [
   {
     component: (isEmpty ? getFirstScreenForEmptySchedule : getFirstScreen)(name),
     buttonText: 'remove',
     title: 'removeIndividualSchedule',
     hasSecondBtn: true,
-    onSubmit,
+    onSubmit: isEmpty ? getNextStep : onSubmit,
     submitBtnColor: 'error',
   },
   {
     component: getSecondScreen(name),
     buttonText: 'ok',
     title: 'individualScheduleRemoved',
-    onSubmit: onClose,
+    onSubmit: handleRemovedScheduleClose,
   },
 ];

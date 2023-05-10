@@ -4,5 +4,6 @@ export type ScreensParams = {
   name: string;
   isEmpty: boolean;
   onSubmit: () => void;
-  onClose: () => void;
+  handleRemovedScheduleClose: () => void;
+  getNextStep: () => void;
 };

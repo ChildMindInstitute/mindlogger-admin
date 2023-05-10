@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Modal, SubmitBtnColor } from 'shared/components';
-import { StyledModalWrapper } from 'shared/styles';
+import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
-import { deleteScheduledEventsApi } from 'api';
+import { deleteScheduledEventsApi, deleteIndividualEventsApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { applets } from 'modules/Dashboard/state';
+import { getErrorMessage } from 'shared/utils';
 
 import { ClearScheduledEventsPopupProps, Steps } from './ClearScheduledEventsPopup.types';
 import { getScreens } from './ClearScheduleEventsPopup.utils';
@@ -24,9 +25,14 @@ export const ClearScheduledEventsPopup = ({
   const { respondentId } = useParams();
   const dispatch = useAppDispatch();
   const [step, setStep] = useState<Steps>(0);
-  const { execute: deleteScheduledEvents } = useAsync(deleteScheduledEventsApi, () =>
-    dispatch(applets.thunk.getEvents({ appletId, respondentId })),
+  const { execute: deleteScheduledEvents, error: deleteScheduledError } = useAsync(
+    deleteScheduledEventsApi,
+    () => dispatch(applets.thunk.getEvents({ appletId })),
   );
+  const { execute: deleteIndividualScheduledEvents, error: deleteIndividualScheduledError } =
+    useAsync(deleteIndividualEventsApi, () =>
+      dispatch(applets.thunk.getEvents({ appletId, respondentId })),
+    );
 
   const getNextStep = () =>
     setStep((prevStep) => {
@@ -34,10 +40,17 @@ export const ClearScheduledEventsPopup = ({
 
       return newStep as Steps;
     });
-  const onSubmit = async () => {
+
+  const handleScheduledEventsDelete = async () => {
     if (isDefault) {
-      await deleteScheduledEvents({ appletId });
+      return await deleteScheduledEvents({ appletId });
     }
+
+    return respondentId && (await deleteIndividualScheduledEvents({ appletId, respondentId }));
+  };
+
+  const onSubmit = async () => {
+    await handleScheduledEventsDelete();
 
     return getNextStep();
   };
@@ -56,7 +69,14 @@ export const ClearScheduledEventsPopup = ({
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
     >
-      <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
+      <StyledModalWrapper>
+        {screens[step].component}
+        {(deleteScheduledError || deleteIndividualScheduledError) && (
+          <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
+            {getErrorMessage(deleteScheduledError || deleteIndividualScheduledError)}
+          </StyledBodyLarge>
+        )}
+      </StyledModalWrapper>
     </Modal>
   );
 };

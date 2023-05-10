@@ -137,6 +137,12 @@ export const deleteIndividualEventsApi = (
 ) =>
   authApiClient.delete(`/applets/${appletId}/events/delete_individual/${respondentId}`, { signal });
 
+export const removeIndividualEventsApi = (
+  { appletId, respondentId }: AppletId & RespondentId,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(`/applets/${appletId}/events/remove_individual/${respondentId}`, { signal });
+
 export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSignal) =>
   authApiClient.put(
     '/user/accountName',
