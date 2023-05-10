@@ -19,14 +19,17 @@ import { Box } from '@mui/material';
 
 import { locales } from 'shared/consts';
 
-import { getData, getOptions, mocked } from './ScatterChart.const';
+import {
+  TOOLTIP_OFFSET_LEFT,
+  TOOLTIP_OFFSET_TOP,
+  getData,
+  getOptions,
+  mocked,
+} from './ScatterChart.const';
 import { ScatterChartProps } from './ScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
-
-const TOOLTIP_OFFSET_TOP = 60;
-const TOOLTIP_OFFSET_LEFT = 70;
 
 export const ScatterChart = ({ height = '5rem' }: ScatterChartProps) => {
   const { i18n } = useTranslation('app');

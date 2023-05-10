@@ -6,6 +6,9 @@ import { locales } from 'shared/consts';
 
 import { Data } from './ScatterChart.types';
 
+export const TOOLTIP_OFFSET_TOP = 60;
+export const TOOLTIP_OFFSET_LEFT = 70;
+
 export const mocked = {
   responses: [new Date('2023-11-06'), new Date('2023-11-27'), new Date('2023-12-07')],
   versions: [new Date('2023-11-20')],
