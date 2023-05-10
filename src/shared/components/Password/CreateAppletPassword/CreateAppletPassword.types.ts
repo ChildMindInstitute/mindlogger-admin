@@ -4,5 +4,5 @@ export type CreateAppletPasswordForm = {
 };
 
 export type CreateAppletPasswordProps = {
-  submitCallback: (encryptionInfo?: any) => void;
+  submitCallback: (encryption: string) => void;
 };

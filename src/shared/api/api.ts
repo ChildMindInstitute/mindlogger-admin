@@ -2,7 +2,7 @@ import { SingleApplet } from 'shared/state';
 import { OwnerId } from 'api';
 
 import { apiClient, authApiClient } from './api.client';
-import { SignInRefreshTokenArgs, AppletId, AppletBody, AppletIdWithPassword } from './api.types';
+import { SignInRefreshTokenArgs, AppletId, AppletBody } from './api.types';
 
 export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,
@@ -55,15 +55,3 @@ export const postFileUploadApi = (body: FormData, signal?: AbortSignal) =>
     signal,
     headers: { 'Content-Type': 'multipart/form-data' },
   });
-
-export const postAppletPasswordCheckApi = (
-  { appletId, password }: AppletIdWithPassword,
-  signal?: AbortSignal,
-) =>
-  authApiClient.post(
-    `/applets/${appletId}/password/check`,
-    {
-      password,
-    },
-    { signal },
-  );

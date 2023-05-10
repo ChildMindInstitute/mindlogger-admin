@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
-import { popups } from 'redux/modules';
+import { applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Svg, Tooltip } from 'shared/components';
 
@@ -16,6 +16,8 @@ export const DeleteAppletSetting = ({ isDisabled = false }) => {
   const { t } = useTranslation('app');
   const { appletId: id } = useParams();
   const dispatch = useAppDispatch();
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const encryption = appletData?.encryption ?? '';
 
   return (
     <>
@@ -29,6 +31,7 @@ export const DeleteAppletSetting = ({ isDisabled = false }) => {
               dispatch(
                 popups.actions.setPopupVisible({
                   appletId: id || '',
+                  encryption,
                   key: 'deletePopupVisible',
                   value: true,
                 }),

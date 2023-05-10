@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { folders } from 'redux/modules';
+import { applet, folders } from 'redux/modules';
 import { SaveChangesPopup, Svg } from 'shared/components';
 import {
   CheckboxController,
@@ -26,7 +26,7 @@ import { usePrompt } from './ReportConfigSetting.hooks';
 
 export const ReportConfigSetting = () => {
   const { appletId: id } = useParams();
-  const applet = id ? folders.useApplet(id) : undefined;
+  const folderApplet = id ? folders.useApplet(id) : undefined;
   const { t } = useTranslation();
   const isServerConfigured = false; // TODO: add server configured functionality when the back-end is ready
   const [isSettingsOpen, setSettingsOpen] = useState(false);
@@ -35,6 +35,8 @@ export const ReportConfigSetting = () => {
   const [successPopupVisible, setSuccessPopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const encryption = appletData?.encryption || folderApplet?.encryption || '';
 
   const {
     handleSubmit,
@@ -114,7 +116,7 @@ export const ReportConfigSetting = () => {
     if (caseId) {
       subject += ' about case123';
     }
-    subject += `: ${applet?.name || 'Example applet'} /activity123 or activityflow123`; // TODO will be fixed for activities
+    subject += `: ${folderApplet?.name || 'Example applet'} /activity123 or activityflow123`; // TODO will be fixed for activities
     setValue('subject', subject);
   }, [respondentId, caseId]);
 
@@ -227,6 +229,7 @@ export const ReportConfigSetting = () => {
           popupType={AppletPasswordPopupType.Enter}
           popupVisible={passwordPopupVisible}
           submitCallback={passwordSubmit}
+          encryption={encryption}
         />
       )}
       {warningPopupVisible && (

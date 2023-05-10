@@ -5,9 +5,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components';
-import { StyledBodyLarge, StyledClearedButton } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
+import { StyledBodyLarge, StyledClearedButton, variables, theme } from 'shared/styles';
+import { auth } from 'modules/Auth';
+import { getEncryptionToServer } from 'shared/utils';
 
 import { CreateAppletPasswordForm, CreateAppletPasswordProps } from './CreateAppletPassword.types';
 import { createPasswordFormSchema } from './CreateAppletPassword.schema';
@@ -17,6 +17,8 @@ import { AppletPasswordRef } from '../Password.types';
 export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPasswordProps>(
   ({ submitCallback }, ref) => {
     const { t } = useTranslation('app');
+    const userData = auth.useData();
+    const { id: accountId } = userData?.user || {};
 
     const { handleSubmit, control } = useForm<CreateAppletPasswordForm>({
       resolver: yupResolver(createPasswordFormSchema()),
@@ -26,8 +28,10 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
     const [showPassword, setShowPassword] = useState(false);
     const [showAppletPasswordConfirmation, setShowAppletPasswordConfirmation] = useState(false);
 
-    const submitForm = ({ appletPassword }: CreateAppletPasswordForm) =>
-      submitCallback && submitCallback({ appletPassword });
+    const submitForm = ({ appletPassword }: CreateAppletPasswordForm) => {
+      const encryption = getEncryptionToServer(appletPassword, accountId ?? '');
+      submitCallback(encryption);
+    };
 
     useImperativeHandle(ref, () => ({
       submitForm() {

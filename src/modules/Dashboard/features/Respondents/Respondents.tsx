@@ -9,7 +9,7 @@ import {
   useBreadcrumbs,
   useTable,
   useAsync,
-  usePasswordFromStorage,
+  useEncryptionCheckFromStorage,
 } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { getWorkspaceRespondentAccessesApi, updatePinApi } from 'api';
@@ -77,8 +77,8 @@ export const Respondents = () => {
 
   useBreadcrumbs();
 
-  const { getPassword } = usePasswordFromStorage();
-  const hasPassword = Boolean(getPassword(appletId ?? ''));
+  const { getEncryptionCheck } = useEncryptionCheckFromStorage();
+  const hasEncryptionCheck = getEncryptionCheck(appletId ?? '');
   const actions = {
     scheduleSetupAction: (index: number) => {
       setRespondentsDataIndex(index);
@@ -89,7 +89,7 @@ export const Respondents = () => {
       setDataExportPopupVisible(true);
     },
     viewDataAction: (index: number) => {
-      if (hasPassword && appletId) {
+      if (hasEncryptionCheck && appletId) {
         const respondentId = respondentsData?.result[index]?.id;
         respondentId &&
           navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
