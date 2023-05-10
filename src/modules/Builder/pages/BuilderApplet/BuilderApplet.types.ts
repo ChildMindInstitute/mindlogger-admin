@@ -1,4 +1,10 @@
-import { ItemAlert, Config, ActivitySettingsSubscale, ResponseValues } from 'shared/state';
+import {
+  ItemAlert,
+  Config,
+  ActivitySettingsSubscale,
+  ResponseValues,
+  ConditionalLogic,
+} from 'shared/state';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
 
 export type ItemFormValues = {
@@ -27,6 +33,7 @@ export type ActivityFormValues = {
   items: ItemFormValues[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
+  conditionalLogic?: ConditionalLogic[];
 };
 
 export type ActivityFlowItem = {

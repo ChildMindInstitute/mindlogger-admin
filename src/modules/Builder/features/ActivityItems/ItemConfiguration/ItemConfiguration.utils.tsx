@@ -76,3 +76,8 @@ export const getEmptyNumberSelection = () => ({
 
 export const getDefaultSliderScores = ({ minValue, maxValue }: SliderRowsItemResponseValues) =>
   createArray(maxValue - minValue + 1, (index) => index + 1);
+
+export const getEmptyFlowItem = () => ({
+  type: '',
+  itemName: '',
+});

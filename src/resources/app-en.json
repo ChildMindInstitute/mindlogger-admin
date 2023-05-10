@@ -816,5 +816,10 @@
   "activityUnavailableAtTime": "Activity is unavailable at this time",
   "repeatPasswordRequired": "Repeat Password is Required",
   "finalSubscaleScore": "Final Subscale Score",
-  "additionalInformation": "Additional Information"
+  "additionalInformation": "Additional Information",
+  "activityItemsFlow": "Item Flow",
+  "addItemFlow": "Add Condition",
+  "activityItemsFlowDescription": "To determine the order of transition from one Item to another, an Item Flow can be created.",
+  "addActivityItemsFlowTooltip": "You need to create at least two Items first",
+  "activityItemsFlowItemTitle": "Conditional {{- index }}"
 }

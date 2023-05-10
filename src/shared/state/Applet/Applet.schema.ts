@@ -5,7 +5,12 @@ import { ColorResult } from 'react-color';
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId, OwnerId } from 'api';
-import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
+import {
+  ItemResponseType,
+  SubscaleTotalScore,
+  ConditionType,
+  ConditionalLogicMatch,
+} from 'shared/consts';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -305,6 +310,35 @@ export interface SliderItem extends Item {
   responseValues: SliderItemResponseValues;
 }
 
+export type BaseCondition = {
+  itemName: string;
+  type: ConditionType | '';
+};
+
+export type OptionCondition = BaseCondition & {
+  payload?: {
+    optionId: string;
+  };
+};
+
+export type SingleValueCondition = BaseCondition & {
+  payload: {
+    value: number;
+  };
+};
+
+export type RangeValueCondition = BaseCondition & {
+  payload: {
+    minValue: number;
+    maxValue: number;
+  };
+};
+
+export type ConditionalLogic = {
+  match: ConditionalLogicMatch;
+  conditions: Array<OptionCondition | SingleValueCondition | RangeValueCondition>;
+};
+
 export type Activity = {
   id?: string;
   key?: string;
@@ -325,6 +359,7 @@ export type Activity = {
   sections?: ActivitySettingsSection[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
+  conditionalLogic?: ConditionalLogic[];
 };
 
 type Theme = {
