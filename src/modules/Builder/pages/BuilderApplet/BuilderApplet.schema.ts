@@ -52,6 +52,14 @@ export const ResponseValuesOptionsSchema = () =>
     }),
   );
 
+export const ResponseValuesAudio = () => ({
+  maxDuration: yup.number(),
+});
+
+export const ResponseValuesAudioPlayer = () => ({
+  file: yup.string().required(getIsRequiredValidateMessage('audio')),
+});
+
 export const ResponseValuesNumberSelectionSchema = () => ({
   minValue: yup
     .number()
@@ -101,6 +109,11 @@ export const ItemSchema = () =>
             options: yup.array().of(ResponseValuesSelectionOptionsSchema()),
           });
         }
+
+        if (responseType === ItemResponseType.AudioPlayer)
+          return schema.shape(ResponseValuesAudioPlayer());
+
+        if (responseType === ItemResponseType.Audio) return schema.shape(ResponseValuesAudio());
 
         if (responseType === ItemResponseType.SliderRows)
           return schema.shape({ rows: ResponseValuesSliderRowsSchema() });

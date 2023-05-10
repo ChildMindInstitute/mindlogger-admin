@@ -2,8 +2,9 @@ import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
 import { Paper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
-import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
+import { Svg } from 'shared/components';
+import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles';
+import { ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal } from '../../SourceLinkModal';
@@ -58,7 +59,7 @@ export const AudioUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
                     <input
                       ref={inputRef}
                       hidden
-                      accept="audio/*"
+                      accept={ALLOWED_AUDIO_FILE_TYPES}
                       type="file"
                       onChange={onInputChange}
                     />

@@ -1,4 +1,6 @@
 import {
+  AudioPlayerResponseValues,
+  AudioResponseValues,
   DrawingResponseValues,
   NumberItemResponseValues,
   ResponseValues,
@@ -57,6 +59,8 @@ export const mapItemResponseValues = (
 
   if (
     responseType === ItemResponseType.Slider ||
+    responseType === ItemResponseType.Audio ||
+    responseType === ItemResponseType.AudioPlayer ||
     responseType === ItemResponseType.NumberSelection ||
     responseType === ItemResponseType.Drawing ||
     responseType === ItemResponseType.SliderRows
@@ -64,6 +68,8 @@ export const mapItemResponseValues = (
     return {
       ...(responseValues as
         | SliderItemResponseValues
+        | AudioResponseValues
+        | AudioPlayerResponseValues
         | NumberItemResponseValues
         | DrawingResponseValues
         | SliderRowsResponseValues),

@@ -1,11 +1,12 @@
-import { ResourceDataType } from '../MediaUploader';
+import { MediaType } from '../MediaUploader';
 
 export type MLPlayerProps = {
-  resourceData: ResourceDataType | null;
+  media: MediaType | null;
+  hasRemoveButton?: boolean;
   onRemove: () => void;
 };
 export type MLPlayerStateProps = {
-  url?: string | null;
+  url?: string | MediaStream | null;
   pip: boolean;
   playing: boolean;
   controls: boolean;
@@ -15,6 +16,8 @@ export type MLPlayerStateProps = {
   played: number;
   loaded: number;
   duration: number;
+  loadedSeconds: number;
+  playedSeconds: number;
   playbackRate: number;
   loop: boolean;
   seeking: boolean;

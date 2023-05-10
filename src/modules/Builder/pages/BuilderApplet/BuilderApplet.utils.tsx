@@ -8,6 +8,7 @@ import { Svg } from 'shared/components';
 import {
   DrawingResponseValues,
   NumberItemResponseValues,
+  AudioPlayerResponseValues,
   SingleAndMultipleSelectionOption,
   SliderItemResponseValues,
   SliderRowsResponseValues,
@@ -109,6 +110,8 @@ const getActivityItemResponseValues = (item: Item) => {
       };
     case ItemResponseType.SliderRows:
     case ItemResponseType.Slider:
+    case ItemResponseType.AudioPlayer:
+    case ItemResponseType.Audio:
     case ItemResponseType.NumberSelection:
     case ItemResponseType.Drawing:
       return {
@@ -116,7 +119,8 @@ const getActivityItemResponseValues = (item: Item) => {
           | SliderRowsResponseValues
           | SliderItemResponseValues
           | NumberItemResponseValues
-          | DrawingResponseValues),
+          | DrawingResponseValues
+          | AudioPlayerResponseValues),
         options: undefined,
       };
     case ItemResponseType.SingleSelectionPerRow:

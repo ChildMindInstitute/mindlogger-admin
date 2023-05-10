@@ -1,12 +1,23 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 
 import { MAX_FILE_SIZE_8MB } from 'shared/consts';
+import { useAsync } from 'shared/hooks';
+import { getUploadFormData } from 'shared/utils';
+import { postFileUploadApi } from 'api';
 
 import { MediaUploaderHookProps } from './MediaUploader.types';
 
-export const useMediaUploader = ({ setResourceData }: MediaUploaderHookProps) => {
+export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>('');
+  const { execute: executeMediaUpload } = useAsync(postFileUploadApi, (response) => {
+    const name = response?.config?.data?.get('file')?.name;
+
+    return (
+      response?.data?.result &&
+      onUpload({ name, url: response?.data?.result.url ?? '', uploaded: true })
+    );
+  });
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -31,24 +42,11 @@ export const useMediaUploader = ({ setResourceData }: MediaUploaderHookProps) =>
     }
 
     setError('');
-    setResourceData({
-      name: file.name,
-      url: '',
-      uploaded: false,
-    });
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
 
-    reader.onload = () => {
-      const dataUrl = reader.result;
-      if (!dataUrl) return;
+    const body = getUploadFormData(file);
 
-      setResourceData({
-        name: file.name,
-        url: dataUrl as string,
-        uploaded: true,
-      });
-    };
+    onUpload({ name: file.name, uploaded: false });
+    executeMediaUpload(body);
   };
 
   const dragEvents = {
@@ -70,7 +68,7 @@ export const useMediaUploader = ({ setResourceData }: MediaUploaderHookProps) =>
   };
 
   const onRemove = (/*e: MouseEvent*/) => {
-    setResourceData(null);
+    onUpload(null);
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
     }

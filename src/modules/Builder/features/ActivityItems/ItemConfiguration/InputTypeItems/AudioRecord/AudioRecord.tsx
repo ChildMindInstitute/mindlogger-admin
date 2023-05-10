@@ -1,23 +1,17 @@
 import { useTranslation } from 'react-i18next';
-import { FieldValues, UseControllerProps } from 'react-hook-form';
+import { FieldValues, UseControllerProps, useFormContext } from 'react-hook-form';
 import { Box, Button } from '@mui/material';
 
 import { InputController } from 'shared/components/FormComponents';
 import { theme } from 'shared/styles';
 import { Svg } from 'shared/components';
-import { ItemResponseType } from 'shared/consts';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
-import { DEFAULT_AUDIO_DURATION_SEC } from '../../ItemConfiguration.const';
-import { useOptionalItemSetup } from '../../ItemConfiguration.hooks';
 
 export const AudioRecord = ({ name }: UseControllerProps<FieldValues>) => {
   const { t } = useTranslation('app');
-  const { control } = useOptionalItemSetup({
-    itemType: ItemResponseType.Audio,
-    name,
-    defaultValue: DEFAULT_AUDIO_DURATION_SEC,
-  });
+
+  const { control } = useFormContext();
 
   return (
     <ItemOptionContainer title={t('audio')} description={t('audioRecordDescription')}>
@@ -27,10 +21,11 @@ export const AudioRecord = ({ name }: UseControllerProps<FieldValues>) => {
         </Button>
       </Box>
       <InputController
-        name={name}
+        name={`${name}.responseValues.maxDuration`}
         control={control}
         type="number"
         label={t('audioRecordDuration')}
+        minNumberValue={0}
       />
     </ItemOptionContainer>
   );

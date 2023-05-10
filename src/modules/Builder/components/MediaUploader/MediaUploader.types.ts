@@ -1,16 +1,18 @@
+export type MediaType = {
+  url?: string | MediaStream;
+  name?: string;
+  uploaded?: boolean;
+};
+
 export type MediaUploaderProps = {
   width: number;
   height: number;
-  resourceData: ResourceDataType | null;
-  setResourceData: (data: ResourceDataType | null) => void;
-};
-
-export type ResourceDataType = {
-  name: string;
-  url: string;
-  uploaded: boolean;
+  media: MediaType | null;
+  placeholder?: JSX.Element | string;
+  hasPreview?: boolean;
+  onUpload: (media: MediaType | null) => void;
 };
 
 export type MediaUploaderHookProps = {
-  setResourceData: (data: ResourceDataType | null) => void;
+  onUpload: (media: MediaType | null) => void;
 };
