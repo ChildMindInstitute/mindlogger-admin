@@ -12,7 +12,7 @@ export const getActions = ({
     deleteAction,
     transferOwnership,
     duplicateAction,
-    shareAppletAction,
+    // shareAppletAction,
     editAction,
   },
   item,
@@ -53,9 +53,11 @@ export const getActions = ({
     action: transferOwnership,
     tooltipTitle: t('transferOwnership'),
   },
-  {
-    icon: <Svg id="share" />,
-    action: shareAppletAction,
-    tooltipTitle: t('shareWithTheLibrary'),
-  },
+  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
+  // introduced. (story: AUS-4.1.4.10)
+  // {
+  //   icon: <Svg id="share" />,
+  //   action: shareAppletAction,
+  //   tooltipTitle: t('shareWithTheLibrary'),
+  // },
 ];
