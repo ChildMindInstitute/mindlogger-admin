@@ -5,7 +5,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { useSetupEnterAppletPassword, usePasswordFromStorage } from 'shared/hooks';
+import { useSetupEnterAppletPassword, useEncryptionCheckFromStorage } from 'shared/hooks';
 
 import { page } from 'resources';
 import { ViewDataPopupProps } from './ViewDataPopup.types';
@@ -21,9 +21,9 @@ export const ViewDataPopup = ({
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
-  const { getPassword } = usePasswordFromStorage();
-  const hasPassword = Boolean(getPassword(chosenAppletData?.appletId ?? ''));
-  const showSecondScreen = !!chosenAppletData && !hasPassword;
+  const { getEncryptionCheck } = useEncryptionCheckFromStorage();
+  const hasEncryptionCheck = getEncryptionCheck(chosenAppletData?.appletId ?? '');
+  const showSecondScreen = !!chosenAppletData && !hasEncryptionCheck;
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
@@ -40,9 +40,9 @@ export const ViewDataPopup = ({
   };
 
   useEffect(() => {
-    const shouldSkipPassword = !!chosenAppletData && hasPassword;
+    const shouldSkipPassword = !!chosenAppletData && hasEncryptionCheck;
     shouldSkipPassword && handleSubmitCallback();
-  }, [chosenAppletData, hasPassword]);
+  }, [chosenAppletData, hasEncryptionCheck]);
 
   return (
     <Modal
@@ -57,8 +57,8 @@ export const ViewDataPopup = ({
           <EnterAppletPassword
             ref={appletPasswordRef}
             appletId={chosenAppletData?.appletId}
+            encryption={chosenAppletData?.encryption ?? ''}
             submitCallback={handleSubmitCallback}
-            noEncryption
           />
         ) : (
           <>

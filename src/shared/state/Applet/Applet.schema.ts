@@ -408,7 +408,7 @@ export type SingleApplet = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   theme?: Theme;
-  password?: string;
+  encryption?: string;
   generateReport: boolean;
 };
 

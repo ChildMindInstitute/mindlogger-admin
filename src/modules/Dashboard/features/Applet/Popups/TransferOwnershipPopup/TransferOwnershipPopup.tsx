@@ -24,6 +24,7 @@ export const TransferOwnershipPopup = () => {
     dispatch(
       popups.actions.setPopupVisible({
         appletId: '',
+        encryption: '',
         key: 'transferOwnershipPopupVisible',
         value: false,
       }),

@@ -227,18 +227,14 @@ export const createRejectedData = (
 export const changeAppletEncryption = (
   folders: FoldersSchema,
   appletId: string,
-  encryptionData: FormData,
+  encryption: string,
 ) =>
   folders.flattenFoldersApplets.data.map((folderApplet) => {
-    if (folderApplet.id === appletId) {
-      const encryptionString = encryptionData.get('encryption')?.toString();
-      const encryption = JSON.parse(encryptionString || '');
-
+    if (folderApplet.id === appletId)
       return {
         ...folderApplet,
         encryption,
       };
-    }
 
     return folderApplet;
   });

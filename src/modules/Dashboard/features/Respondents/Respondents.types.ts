@@ -14,4 +14,5 @@ export type ChosenAppletData = {
   hasIndividualSchedule?: boolean;
   respondentId?: string;
   nickname?: string;
+  encryption: string;
 };
