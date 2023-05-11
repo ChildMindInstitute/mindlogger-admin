@@ -3,21 +3,23 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { StyledTitleLargish, variables } from 'shared/styles';
+import { useComponentSize } from 'shared/hooks';
 
 import { StyledBtn, StyledCollapsedContainer, StyledMdEditor } from './CollapsedMdText.styles';
 import { CollapsedMdTextProps } from './CollapsedMdText.types';
 
 export const CollapsedMdText = ({ text, maxHeight }: CollapsedMdTextProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const { height } = useComponentSize(containerRef);
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isLarge, setIsLarge] = useState(false);
 
   useEffect(() => {
-    if ((containerRef.current?.offsetHeight || 0) > maxHeight) {
+    if (height > maxHeight) {
       setIsLarge(true);
     }
-  }, [isLarge, containerRef]);
+  }, [height, maxHeight]);
 
   const toggleOpen = () => {
     setIsOpen((state) => !state);
