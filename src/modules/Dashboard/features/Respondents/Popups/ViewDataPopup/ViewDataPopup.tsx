@@ -57,7 +57,7 @@ export const ViewDataPopup = ({
           <EnterAppletPassword
             ref={appletPasswordRef}
             appletId={chosenAppletData?.appletId}
-            encryption={chosenAppletData?.encryption ?? ''}
+            encryption={chosenAppletData?.encryption}
             submitCallback={handleSubmitCallback}
           />
         ) : (

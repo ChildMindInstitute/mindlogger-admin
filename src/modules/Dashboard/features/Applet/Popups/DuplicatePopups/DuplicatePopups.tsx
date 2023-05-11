@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { Encryption } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Modal } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledModalWrapper } from 'shared/styles';
@@ -70,7 +71,7 @@ export const DuplicatePopups = () => {
     dispatch(
       popups.actions.setPopupVisible({
         appletId: '',
-        encryption: '',
+        encryption: undefined,
         key: 'duplicatePopupsVisible',
         value: false,
       }),
@@ -97,7 +98,7 @@ export const DuplicatePopups = () => {
     duplicatePopupsClose();
   };
 
-  const submitCallback = (encryption: string) => {
+  const submitCallback = (encryption: Encryption) => {
     executeDuplicate({
       appletId,
       options: {

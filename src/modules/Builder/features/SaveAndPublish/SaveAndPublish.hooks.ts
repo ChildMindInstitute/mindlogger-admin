@@ -14,6 +14,7 @@ import {
 import {
   APPLET_PAGE_REGEXP_STRING,
   builderSessionStorage,
+  Encryption,
   getBuilderAppletUrl,
   getDictionaryObject,
 } from 'shared/utils';
@@ -43,7 +44,7 @@ export const useAppletData = () => {
   const isNewApplet = useCheckIfNewApplet();
   const { getValues } = useFormContext();
 
-  return (encryption?: string): SingleApplet => {
+  return (encryption?: Encryption): SingleApplet => {
     const appletInfo = getValues() as SingleApplet;
 
     const appletDescription = getDictionaryObject(appletInfo.description);
@@ -211,7 +212,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { ownerId } = workspaces.useData() || {};
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
   const { result: appletData } = applet.useAppletData() ?? {};
-  const appletEncryption = appletData?.encryption ?? '';
+  const appletEncryption = appletData?.encryption;
 
   useEffect(() => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
@@ -284,11 +285,11 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     await sendRequest();
   };
 
-  const handleAppletPasswordSubmit = async (encryption: string) => {
+  const handleAppletPasswordSubmit = async (encryption?: Encryption) => {
     await sendRequest(encryption);
   };
 
-  const sendRequest = async (encryption?: string) => {
+  const sendRequest = async (encryption?: Encryption) => {
     const encryptionData = encryption || appletEncryption;
     setPublishProcessPopupOpened(true);
     const body = getAppletData(encryptionData);

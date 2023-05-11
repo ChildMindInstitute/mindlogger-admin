@@ -36,7 +36,7 @@ export const ReportConfigSetting = () => {
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
   const { result: appletData } = applet.useAppletData() ?? {};
-  const encryption = appletData?.encryption || folderApplet?.encryption || '';
+  const encryption = appletData?.encryption || folderApplet?.encryption;
 
   const {
     handleSubmit,

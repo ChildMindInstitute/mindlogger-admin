@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { folders } from 'redux/modules';
+import { auth, folders } from 'redux/modules';
 import { StyledClearedButton } from 'shared/styles/styledComponents';
 import { InputController } from 'shared/components/FormComponents';
-import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
+import { getAppletEncryptionInfo } from 'shared/utils/encryption';
 import { getAppletData } from 'shared/utils/getAppletData';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
@@ -25,24 +25,29 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
       defaultValues: { appletPassword: '' },
     });
     const [showPassword, setShowPassword] = useState(false);
+    const userData = auth.useData();
+    const { id: accountId = '' } = userData?.user || {};
 
     const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
-      const encryptionInfoFromServer = getParsedEncryptionFromServer(
-        encryption || getAppletData(appletsFoldersData, appletId).encryption || '',
-      );
+      const encryptionInfoFromServer =
+        encryption || getAppletData(appletsFoldersData, appletId).encryption;
       if (!encryptionInfoFromServer) return;
 
-      const {
-        publicKey: publicKeyFromServer,
-        prime: primeFromServer,
-        base: baseFromServer,
-        accountId: accountIdFromServer,
-      } = encryptionInfoFromServer;
+      let publicKeyFromServer = '';
+      let primeFromServer = '';
+      let baseFromServer = '';
+      try {
+        publicKeyFromServer = JSON.parse(encryptionInfoFromServer.publicKey);
+        primeFromServer = JSON.parse(encryptionInfoFromServer.prime);
+        baseFromServer = JSON.parse(encryptionInfoFromServer.base);
+      } catch {
+        return;
+      }
       const encryptionInfoGenerated = getAppletEncryptionInfo({
         appletPassword,
-        accountId: accountIdFromServer || '',
-        prime: primeFromServer || [],
-        base: baseFromServer || [],
+        accountId, // TODO: should be appletData.accountId after M2-1828 will be merged
+        prime: primeFromServer,
+        base: baseFromServer,
       });
 
       if (

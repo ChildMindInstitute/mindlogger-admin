@@ -27,7 +27,7 @@ export const DeletePopup = () => {
     dispatch(
       popups.actions.setPopupVisible({
         appletId: '',
-        encryption: '',
+        encryption: undefined,
         key: 'deletePopupVisible',
         value: false,
       }),
@@ -47,11 +47,11 @@ export const DeletePopup = () => {
   );
 
   const handleDeleteApplet = async () => {
-    await execute({ appletId, encryption });
+    await execute({ appletId });
   };
 
   const handleRetryDelete = async () => {
-    await execute({ appletId, encryption });
+    await execute({ appletId });
   };
 
   const handleConfirmation = () => {

@@ -9,7 +9,7 @@ import { StyledBodyMedium } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
 import { page } from 'resources';
-import { getBuilderAppletUrl, getDateInUserTimezone } from 'shared/utils';
+import { Encryption, getBuilderAppletUrl, getDateInUserTimezone } from 'shared/utils';
 
 import { ShareAppletPopup } from '../../Popups';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
@@ -37,7 +37,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
     event.dataTransfer.setData('text/plain', item.id);
   };
 
-  const submitCallback = async (encryption: string) => {
+  const submitCallback = async (encryption: Encryption) => {
     await dispatch(
       folders.thunk.setAppletEncryption({
         appletId: item.id,
@@ -67,7 +67,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         dispatch(
           popups.actions.setPopupVisible({
             appletId: item.id,
-            encryption: item.encryption || '',
+            encryption: item.encryption,
             key: 'deletePopupVisible',
             value: true,
           }),
@@ -78,7 +78,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         dispatch(
           popups.actions.setPopupVisible({
             appletId: item.id,
-            encryption: item.encryption || '',
+            encryption: item.encryption,
             key: 'duplicatePopupsVisible',
             value: true,
           }),
@@ -89,7 +89,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         dispatch(
           popups.actions.setPopupVisible({
             appletId: item.id,
-            encryption: item.encryption || '',
+            encryption: item.encryption,
             key: 'transferOwnershipPopupVisible',
             value: true,
           }),

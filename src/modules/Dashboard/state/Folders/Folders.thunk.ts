@@ -14,6 +14,7 @@ import {
   AppletId,
   setAppletEncryptionApi,
 } from 'api';
+import { Encryption } from 'shared/utils';
 
 import {
   deleteFolderById,
@@ -204,7 +205,7 @@ export const getAppletSearchTerms = createAsyncThunk(
 export const setAppletEncryption = createAsyncThunk(
   'folders/setAppletEncryption',
   async (
-    { appletId, encryption }: { appletId: string; encryption: string },
+    { appletId, encryption }: { appletId: string; encryption: Encryption },
     { getState, rejectWithValue, signal },
   ) => {
     try {
