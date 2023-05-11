@@ -174,14 +174,14 @@ export type AppletInvitationData = AppletId & {
 
 export type DuplicateApplet = AppletId & {
   options: {
-    password: string;
+    encryption: string;
     displayName: string;
   };
 };
 
 export type AppletNameArgs = AppletId & { appletName: string };
 
-export type AppletEncryption = AppletId & { data: FormData };
+export type AppletEncryption = AppletId & { encryption: string };
 
 export type UpdatePin = {
   accessId: string;

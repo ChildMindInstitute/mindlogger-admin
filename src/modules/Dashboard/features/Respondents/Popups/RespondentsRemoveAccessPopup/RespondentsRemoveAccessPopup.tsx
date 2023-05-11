@@ -104,6 +104,7 @@ export const RespondentsRemoveAccessPopup = ({
     <EnterAppletPassword
       ref={appletPasswordRef}
       appletId={chosenAppletData?.appletId ?? ''}
+      encryption={chosenAppletData?.encryption ?? ''}
       submitCallback={() => handlePopupClose()}
     />
   );

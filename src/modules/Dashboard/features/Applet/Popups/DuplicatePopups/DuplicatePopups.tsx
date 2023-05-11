@@ -70,6 +70,7 @@ export const DuplicatePopups = () => {
     dispatch(
       popups.actions.setPopupVisible({
         appletId: '',
+        encryption: '',
         key: 'duplicatePopupsVisible',
         value: false,
       }),
@@ -96,11 +97,11 @@ export const DuplicatePopups = () => {
     duplicatePopupsClose();
   };
 
-  const submitCallback = ({ appletPassword }: { appletPassword: string }) => {
+  const submitCallback = (encryption: string) => {
     executeDuplicate({
       appletId,
       options: {
-        password: appletPassword,
+        encryption,
         displayName: getValues().name,
       },
     });

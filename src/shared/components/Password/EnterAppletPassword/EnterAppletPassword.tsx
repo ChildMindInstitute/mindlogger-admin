@@ -1,73 +1,57 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { account, folders } from 'redux/modules';
+import { folders } from 'redux/modules';
 import { StyledClearedButton } from 'shared/styles/styledComponents';
 import { InputController } from 'shared/components/FormComponents';
-import { getAppletEncryptionInfo } from 'shared/utils/encryption';
+import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { getAppletData } from 'shared/utils/getAppletData';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
-import { useAsync, usePasswordFromStorage } from 'shared/hooks';
-import { postAppletPasswordCheckApi } from 'shared/api';
+import { useEncryptionCheckFromStorage } from 'shared/hooks';
 
 import { StyledController } from '../Password.styles';
 import { passwordFormSchema } from './EnterAppletPassword.schema';
 import { AppletPasswordRef } from '../Password.types';
 
 export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPasswordProps>(
-  ({ appletId, encryption, submitCallback, noEncryption }, ref) => {
+  ({ appletId, encryption, submitCallback }, ref) => {
     const { t } = useTranslation('app');
-    const accData = account.useData();
     const appletsFoldersData = folders.useFlattenFoldersApplets();
-    const passwordRef = useRef<string | null>(null);
-    const { setPassword } = usePasswordFromStorage();
-    const { execute } = useAsync(
-      postAppletPasswordCheckApi,
-      () => {
-        const appletPassword = passwordRef.current ?? '';
-        setPassword(appletId, appletPassword);
-        submitCallback && submitCallback({ appletPassword });
-      },
-      () => {
-        setError('appletPassword', { message: t('incorrectAppletPassword') });
-      },
-    );
-
+    const { setEncryptionCheck } = useEncryptionCheckFromStorage();
     const { handleSubmit, control, setError } = useForm<EnterAppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
       defaultValues: { appletPassword: '' },
     });
-
     const [showPassword, setShowPassword] = useState(false);
 
     const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
-      if (noEncryption && appletId) {
-        passwordRef.current = appletPassword;
-        await execute({ appletId, password: appletPassword });
+      const encryptionInfoFromServer = getParsedEncryptionFromServer(
+        encryption || getAppletData(appletsFoldersData, appletId).encryption || '',
+      );
+      if (!encryptionInfoFromServer) return;
 
-        return;
-      }
-
-      const appletEncryption = encryption || getAppletData(appletsFoldersData, appletId).encryption;
-      const encryptionInfo = getAppletEncryptionInfo({
+      const {
+        publicKey: publicKeyFromServer,
+        prime: primeFromServer,
+        base: baseFromServer,
+        accountId: accountIdFromServer,
+      } = encryptionInfoFromServer;
+      const encryptionInfoGenerated = getAppletEncryptionInfo({
         appletPassword,
-        accountId: accData?.account.accountId || '',
-        prime: appletEncryption?.appletPrime || [],
-        baseNumber: appletEncryption?.base || [],
+        accountId: accountIdFromServer || '',
+        prime: primeFromServer || [],
+        base: baseFromServer || [],
       });
 
       if (
-        encryptionInfo
+        encryptionInfoGenerated
           .getPublicKey()
-          .equals(
-            Buffer.from(
-              appletEncryption?.appletPublicKey as unknown as WithImplicitCoercion<string>,
-            ),
-          )
+          .equals(Buffer.from(publicKeyFromServer as unknown as WithImplicitCoercion<string>))
       ) {
-        submitCallback && submitCallback({ appletPassword });
+        setEncryptionCheck(appletId, true);
+        submitCallback();
       } else {
         setError('appletPassword', { message: t('incorrectAppletPassword') });
       }
