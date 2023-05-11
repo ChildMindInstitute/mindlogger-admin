@@ -613,7 +613,7 @@
   "updateSchedule": "Calendrier de mise à jour",
   "uploadSchedule": "Veuillez télécharger un horaire dans l'un des formats suivants : <1>.csv, .xls, .xlsx, .ods.</1>",
   "downloadTemplate": "Télécharger le modèle",
-  "dropFile": "Déposez ici <1>.csv, .xls, .xlsx</1> ou <3>.ods</3> ou <5>cliquez pour parcourir<5>.",
+  "dropFile": "Déposez ici <1>.csv, .xls, .xlsx</1> ou <3>.ods</3> <br/>ou <5>cliquez pour parcourir<5>.",
   "invalidFileFormat": "Format de fichier invalide. Veuillez télécharger un tableau de planification dans l'un des formats suivants : <1>.csv, .xls, .xlsx, .ods.</1>",
   "generateReport": "Générer un rapport",
   "showScoreSummary": "Afficher le résumé des scores",
