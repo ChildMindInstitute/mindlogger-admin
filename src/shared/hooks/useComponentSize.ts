@@ -18,9 +18,9 @@ const useResizeObserved = <ELEMENT extends HTMLElement, RETURN_TYPE>(
       setDimensions(refs.map((ref) => mapperRef.current(ref.current)));
     });
 
-    for (const ref of refs) {
+    refs.forEach((ref) => {
       ref.current && resizeObserver.observe(ref.current);
-    }
+    });
 
     return () => {
       resizeObserver.disconnect();
