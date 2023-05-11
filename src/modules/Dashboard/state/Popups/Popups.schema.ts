@@ -1,3 +1,5 @@
+import { Encryption } from 'shared/utils';
+
 export type PopupsVisibility =
   | 'deletePopupVisible'
   | 'duplicatePopupsVisible'
@@ -7,13 +9,13 @@ export type PopupsPayload = {
   key: PopupsVisibility;
   value: boolean;
   appletId: string;
-  encryption: string;
+  encryption?: Encryption;
 };
 
 export type PopupsSchema = {
   data: {
     appletId: string;
-    encryption: string;
+    encryption?: Encryption;
     deletePopupVisible: boolean;
     duplicatePopupsVisible: boolean;
     transferOwnershipPopupVisible: boolean;

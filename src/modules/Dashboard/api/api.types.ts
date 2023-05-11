@@ -1,4 +1,5 @@
 import { AppletId } from 'shared/api';
+import { Encryption } from 'shared/utils';
 
 export type GetUserData = { token: string };
 
@@ -174,14 +175,14 @@ export type AppletInvitationData = AppletId & {
 
 export type DuplicateApplet = AppletId & {
   options: {
-    encryption: string;
+    encryption: Encryption;
     displayName: string;
   };
 };
 
 export type AppletNameArgs = AppletId & { appletName: string };
 
-export type AppletEncryption = AppletId & { encryption: string };
+export type AppletEncryption = AppletId & { encryption: Encryption };
 
 export type UpdatePin = {
   accessId: string;

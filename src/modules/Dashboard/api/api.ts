@@ -1,5 +1,5 @@
 import { authApiClient } from 'shared/api/api.client';
-import { AppletId, AppletIdWithEncryption } from 'shared/api';
+import { AppletId } from 'shared/api';
 
 import {
   SwitchAccount,
@@ -183,14 +183,8 @@ export const removeRespondentAccess = (
     { signal },
   );
 
-export const deleteAppletApi = (
-  { appletId, encryption }: AppletIdWithEncryption,
-  signal?: AbortSignal,
-) =>
+export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}`, {
-    data: {
-      encryption,
-    },
     signal,
   });
 

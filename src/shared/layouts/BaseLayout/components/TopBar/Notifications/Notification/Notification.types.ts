@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { Encryption } from 'shared/utils';
+
 export type NotificationProps = {
   currentId: string;
   setCurrentId: Dispatch<SetStateAction<string>>;
@@ -11,6 +13,6 @@ export type NotificationProps = {
   timeAgo: string;
   viewed: boolean;
   imageSrc: string | null;
-  encryption?: string;
+  encryption?: Encryption;
   appletId: string;
 };

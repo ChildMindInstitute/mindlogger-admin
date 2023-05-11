@@ -5,6 +5,7 @@ import { Svg } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard';
 import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
+import { Encryption } from 'shared/utils';
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
@@ -30,7 +31,7 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
   } = useSaveAndPublishSetup(hasPrompt);
   const { appletId } = useParams();
 
-  const handlePasswordSubmit = (encryption: string) => {
+  const handlePasswordSubmit = (encryption?: Encryption) => {
     handleAppletPasswordSubmit(encryption);
     setIsPasswordPopupOpened(false);
   };

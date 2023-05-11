@@ -1,3 +1,5 @@
+import { Encryption } from 'shared/utils';
+
 export enum AppletPasswordPopupType {
   Create = 'create',
   Enter = 'enter',
@@ -8,6 +10,6 @@ export type AppletPasswordPopupProps = {
   popupVisible: boolean;
   onClose: () => void;
   appletId: string;
-  encryption?: string;
-  submitCallback?: (encryption: string) => void;
+  encryption?: Encryption;
+  submitCallback?: (encryption: Encryption) => void;
 };

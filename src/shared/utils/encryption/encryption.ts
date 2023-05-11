@@ -19,14 +19,13 @@ export const getEncryptionToServer = (appletPassword: string, accountId: string)
   });
 
   const encryption: Encryption = {
-    publicKey: Array.from(encryptionInfo.getPublicKey()),
-    privateKey: Array.from(encryptionInfo.getPrivateKey()),
-    prime: Array.from(encryptionInfo.getPrime()),
-    base: Array.from(encryptionInfo.getGenerator()),
-    accountId,
+    publicKey: JSON.stringify(Array.from(encryptionInfo.getPublicKey())),
+    prime: JSON.stringify(Array.from(encryptionInfo.getPrime())),
+    base: JSON.stringify(Array.from(encryptionInfo.getGenerator())),
+    // accountId, // TODO: should be appletData.accountId after M2-1828 will be merged
   };
 
-  return JSON.stringify(encryption);
+  return encryption;
 };
 
 export const getParsedEncryptionFromServer = (encryption: string): Encryption | null => {

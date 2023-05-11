@@ -6,6 +6,7 @@ import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId, OwnerId } from 'api';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
+import { Encryption } from 'shared/utils';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -408,7 +409,7 @@ export type SingleApplet = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   theme?: Theme;
-  encryption?: string;
+  encryption?: Encryption;
   generateReport: boolean;
 };
 

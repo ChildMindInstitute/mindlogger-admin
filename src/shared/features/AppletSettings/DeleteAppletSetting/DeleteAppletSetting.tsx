@@ -17,7 +17,7 @@ export const DeleteAppletSetting = ({ isDisabled = false }) => {
   const { appletId: id } = useParams();
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
-  const encryption = appletData?.encryption ?? '';
+  const encryption = appletData?.encryption;
 
   return (
     <>
