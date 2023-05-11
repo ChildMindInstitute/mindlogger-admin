@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { StyledHeader } from 'shared/features';
 import { Svg, Tooltip } from 'shared/components';
@@ -17,7 +18,7 @@ export const ActivityItemsFlowHeader = ({
 
   return (
     <StyledHeader isSticky={isSticky}>
-      {children}
+      <Box>{children}</Box>
       <Tooltip tooltipTitle={isAddButtonDisabled ? t('addActivityItemsFlowTooltip') : null}>
         <span>
           <StyledAddItemFlowBtn

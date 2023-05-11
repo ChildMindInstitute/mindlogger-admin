@@ -821,5 +821,19 @@
   "addItemFlow": "Add Condition",
   "activityItemsFlowDescription": "To determine the order of transition from one Item to another, an Item Flow can be created.",
   "addActivityItemsFlowTooltip": "You need to create at least two Items first",
-  "activityItemsFlowItemTitle": "Conditional {{- index }}"
+  "activityItemsFlowItemTitle": "Conditional {{- index }}",
+  "if": "If",
+  "conditionItemNamePlaceholder": "Item",
+  "conditionItemNameSelected": "Item: {{- value }}",
+  "conditionTypePlaceholder": "State",
+  "equalToOption": "is equal to",
+  "notEqualToOption": "is not equal to",
+  "includesOption": "includes",
+  "notIncludesOption": "doesn’t include",
+  "greaterThan": "greater than",
+  "lessThan": "less than",
+  "equal": "is equal to",
+  "notEqual": "is not equal to",
+  "between": "between",
+  "outsideOf": "outside of"
 }

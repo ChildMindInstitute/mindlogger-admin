@@ -275,6 +275,37 @@ export type ItemAlert = {
   max: number;
 };
 
+export type BaseCondition = {
+  itemName: string;
+  type: ConditionType | '';
+};
+
+export type OptionCondition = BaseCondition & {
+  payload: {
+    optionId: string;
+  };
+};
+
+export type SingleValueCondition = BaseCondition & {
+  payload: {
+    value: number;
+  };
+};
+
+export type RangeValueCondition = BaseCondition & {
+  payload: {
+    minValue: number;
+    maxValue: number;
+  };
+};
+
+export type Condition = OptionCondition | SingleValueCondition | RangeValueCondition;
+
+export type ConditionalLogic = {
+  match: ConditionalLogicMatch;
+  conditions: Array<Condition>;
+};
+
 export type Item = {
   id?: string;
   key?: string;
@@ -284,6 +315,7 @@ export type Item = {
   responseType: ItemResponseType;
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
+  conditionalLogic?: ConditionalLogic[];
 };
 
 export interface TextItem extends Item {
@@ -310,35 +342,6 @@ export interface SliderItem extends Item {
   responseValues: SliderItemResponseValues;
 }
 
-export type BaseCondition = {
-  itemName: string;
-  type: ConditionType | '';
-};
-
-export type OptionCondition = BaseCondition & {
-  payload?: {
-    optionId: string;
-  };
-};
-
-export type SingleValueCondition = BaseCondition & {
-  payload: {
-    value: number;
-  };
-};
-
-export type RangeValueCondition = BaseCondition & {
-  payload: {
-    minValue: number;
-    maxValue: number;
-  };
-};
-
-export type ConditionalLogic = {
-  match: ConditionalLogicMatch;
-  conditions: Array<OptionCondition | SingleValueCondition | RangeValueCondition>;
-};
-
 export type Activity = {
   id?: string;
   key?: string;
@@ -359,7 +362,6 @@ export type Activity = {
   sections?: ActivitySettingsSection[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
-  conditionalLogic?: ConditionalLogic[];
 };
 
 type Theme = {
