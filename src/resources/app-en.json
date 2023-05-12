@@ -837,5 +837,14 @@
   "between": "between",
   "outsideOf": "outside of",
   "summaryRowDescription": "of the “if” rules below are true, show",
-  "any": "Any"
+  "any": "Any",
+  "ALL": "All",
+  "conditionalLogicPanelTitle": "If <0>{{match}}</0> of the “if” rules below are <1>true, show item: {{name}}</1>",
+  "conditionItem": "Item",
+  "conditionType": "State",
+  "conditionValue": "Value",
+  "conditionMatch": "Rule",
+  "conditionTarget": "Item",
+  "removeConditionalPopupTitle": "Remove Conditional",
+  "removeConditionalPopupDescription": "Are you sure you want to remove <0>Conditional {{index}}</0> from the Item Flow?"
 }

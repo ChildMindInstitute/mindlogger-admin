@@ -17,6 +17,7 @@ export const StyledSummaryRow = styled(StyledFlexTopCenter)`
 
   .MuiTypography-root {
     top: 0.6rem;
+    z-index: ${theme.zIndex.fab};
   }
 `;
 
@@ -25,9 +26,17 @@ export const StyledSelectController = styled(SelectController)`
 
   .MuiInputBase-root {
     border-radius: ${variables.borderRadius.md};
+
+    &.Mui-error {
+      background: ${variables.palette.error_container};
+    }
   }
 
   .MuiSelect-select {
     padding: ${theme.spacing(0.65, 1.2)};
+  }
+
+  .MuiFormHelperText-root {
+    display: none;
   }
 `;

@@ -26,12 +26,13 @@ import {
   DEFAULT_PAYLOAD_MIN_VALUE,
 } from './ConditionRow.const';
 
-export const ConditionRow = ({ name, index }: ConditionRowProps) => {
+export const ConditionRow = ({ name, index, onRemove }: ConditionRowProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue, getValues, watch } = useFormContext();
+  const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const conditionName = `${name}.conditions.${index}`;
+  const conditionsName = `${name}.conditions`;
+  const conditionName = `${conditionsName}.${index}`;
   const conditionItemName = `${conditionName}.itemName`;
   const conditionTypeName = `${conditionName}.type`;
   const conditionPayloadName = `${conditionName}.payload`;
@@ -40,6 +41,7 @@ export const ConditionRow = ({ name, index }: ConditionRowProps) => {
   const conditionPayloadMinValueName = `${conditionPayloadName}.minValue`;
   const conditionPayloadMaxValueName = `${conditionPayloadName}.maxValue`;
 
+  const conditions = watch(conditionsName);
   const items = watch(`${fieldName}.items`);
   const conditionItem = watch(conditionItemName);
   const conditionType = watch(conditionTypeName);
@@ -68,9 +70,6 @@ export const ConditionRow = ({ name, index }: ConditionRowProps) => {
   };
 
   const isSlider = conditionItemResponseType === ItemResponseType.Slider;
-  const isSelection =
-    conditionItemResponseType === ItemResponseType.SingleSelection ||
-    conditionItemResponseType === ItemResponseType.MultipleSelection;
   const hasRangeValueInput =
     isSlider && CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(conditionType);
   const isSingleNumberValueVisible = isSlider && !hasRangeValueInput;
@@ -99,7 +98,6 @@ export const ConditionRow = ({ name, index }: ConditionRowProps) => {
         name={`${conditionName}.type`}
         options={getTypeOptionsList(conditionItemResponseType)}
         placeholder={t('conditionTypePlaceholder')}
-        disabled={!conditionItem}
         customChange={handleChangeConditionType}
       />
       {!isSlider && (
@@ -108,7 +106,6 @@ export const ConditionRow = ({ name, index }: ConditionRowProps) => {
           name={conditionPayloadSelectionName}
           options={getValueOptionsList(selectedItem)}
           placeholder={t('value')}
-          disabled={!isSelection}
         />
       )}
       {isSingleNumberValueVisible && (
@@ -116,7 +113,6 @@ export const ConditionRow = ({ name, index }: ConditionRowProps) => {
           type="number"
           control={control}
           name={conditionPayloadValueName}
-          disabled={!conditionType}
           minNumberValue={conditionType ? Number.MIN_SAFE_INTEGER : DEFAULT_PAYLOAD_MIN_VALUE}
         />
       )}
@@ -138,9 +134,11 @@ export const ConditionRow = ({ name, index }: ConditionRowProps) => {
           />
         </>
       )}
-      <StyledClearedButton sx={{ p: theme.spacing(1) }}>
-        <Svg id="cross" />
-      </StyledClearedButton>
+      {conditions?.length > 1 && (
+        <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onRemove}>
+          <Svg id="cross" />
+        </StyledClearedButton>
+      )}
     </StyledConditionRow>
   );
 };

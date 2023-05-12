@@ -276,6 +276,8 @@ export type ItemAlert = {
 };
 
 export type BaseCondition = {
+  //for fronted purposes only
+  key?: string;
   itemName: string;
   type: ConditionType | '';
 };
@@ -303,6 +305,8 @@ export type Condition = OptionCondition | SingleValueCondition | RangeValueCondi
 
 export type ConditionalLogic = {
   match: ConditionalLogicMatch;
+  //for frontend purposes only
+  key?: string;
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   itemKey?: string;
   conditions: Array<Condition>;

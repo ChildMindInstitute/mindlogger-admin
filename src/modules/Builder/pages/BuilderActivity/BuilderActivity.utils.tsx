@@ -9,6 +9,7 @@ export const getActivityTabs = (
     hasAboutActivityErrors,
     hasActivityItemsErrors,
     hasActivitySubscalesErrors,
+    hasActivityItemsFlowErrors,
   }: Record<string, boolean>,
 ) => [
   {
@@ -33,6 +34,7 @@ export const getActivityTabs = (
     icon: <Svg id="flow-outlined" />,
     activeIcon: <Svg id="flow-filled" />,
     path: generatePath(page.builderAppletActivityItemFlow, params),
+    hasError: hasActivityItemsFlowErrors,
   },
   {
     id: 'simple-tabpanel-settings',
