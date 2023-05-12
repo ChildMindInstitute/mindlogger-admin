@@ -144,24 +144,16 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     // };
 
     const handleRemoveTextInputOption = () => {
-      setValue(
-        'settings',
-        settings?.filter(
-          (settingKey: ItemConfigurationSettings) =>
-            settingKey !== ItemConfigurationSettings.HasTextInput &&
-            settingKey !== ItemConfigurationSettings.IsTextInputRequired,
-        ),
-      );
+      setValue(`${name}.config`, {
+        [ItemConfigurationSettings.HasTextInput]: false,
+        [ItemConfigurationSettings.IsTextInputRequired]: false,
+      });
     };
 
     const handleRemoveResponseDataIdentifier = () => {
-      setValue(
-        'settings',
-        settings?.filter(
-          (settingKey: ItemConfigurationSettings) =>
-            settingKey !== ItemConfigurationSettings.HasResponseDataIdentifier,
-        ),
-      );
+      setValue(`${name}.config`, {
+        [ItemConfigurationSettings.HasResponseDataIdentifier]: false,
+      });
     };
 
     const activeItem = useActiveItem({
