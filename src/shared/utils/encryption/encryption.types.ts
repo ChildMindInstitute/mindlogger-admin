@@ -4,7 +4,7 @@ export type Encryption = {
   publicKey: string;
   prime: string;
   base: string;
-  // accountId: string;// TODO: should be appletData.accountId after M2-1828 will be merged
+  accountId: string;
 };
 
 export type GetAppletEncryptionInfo = GetPrivateKey &
