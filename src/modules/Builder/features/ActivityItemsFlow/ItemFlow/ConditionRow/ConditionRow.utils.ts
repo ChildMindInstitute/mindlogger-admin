@@ -7,9 +7,10 @@ import {
   OptionCondition,
   SingleValueCondition,
   RangeValueCondition,
+  SingleAndMultipleSelectItemResponseValues,
 } from 'shared/state';
 
-import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ItemFlowCondition.const';
+import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
 
 const { t } = i18n;
 
@@ -85,4 +86,15 @@ export const getPayload = (
     default:
       return {};
   }
+};
+
+export const getValueOptionsList = (item: ItemFormValues) => {
+  const responseValues = item?.responseValues as SingleAndMultipleSelectItemResponseValues;
+
+  if (!responseValues?.options) return [];
+
+  return responseValues.options.map(({ id, text }) => ({
+    value: id,
+    labelKey: text,
+  }));
 };

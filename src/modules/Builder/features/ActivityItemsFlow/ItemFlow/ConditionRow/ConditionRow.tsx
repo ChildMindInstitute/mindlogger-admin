@@ -2,13 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import {
-  StyledClearedButton,
-  StyledFlexAllCenter,
-  StyledTitleMedium,
-  variables,
-  theme,
-} from 'shared/styles';
+import { StyledClearedButton, StyledTitleMedium, theme } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
 import { ConditionType, ItemResponseType } from 'shared/consts';
@@ -16,25 +10,28 @@ import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderA
 import { ItemFormValues } from 'modules/Builder/pages';
 
 import {
-  StyledConditionContainer,
+  StyledConditionRow,
   StyledSelectController,
   StyledInputController,
-} from './ItemFlowCondition.styles';
-import { ItemFlowConditionProps } from './ItemFlowCondition.types';
-import { getItemNameOptionsList, getTypeOptionsList, getPayload } from './ItemFlowCondition.utils';
+} from './ConditionRow.styles';
+import { ConditionRowProps } from './ConditionRow.types';
+import {
+  getItemNameOptionsList,
+  getTypeOptionsList,
+  getPayload,
+  getValueOptionsList,
+} from './ConditionRow.utils';
 import {
   CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
-  CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
   DEFAULT_PAYLOAD_MIN_VALUE,
-  DEFAULT_PAYLOAD_MAX_VALUE,
-} from './ItemFlowCondition.const';
+} from './ConditionRow.const';
 
-export const ItemFlowCondition = ({ name, index }: ItemFlowConditionProps) => {
+export const ConditionRow = ({ name, index }: ConditionRowProps) => {
   const { t } = useTranslation('app');
   const { control, setValue, getValues, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const conditionName = `${name}.${index}`;
+  const conditionName = `${name}.conditions.${index}`;
   const conditionItemName = `${conditionName}.itemName`;
   const conditionTypeName = `${conditionName}.type`;
   const conditionPayloadName = `${conditionName}.payload`;
@@ -51,7 +48,8 @@ export const ItemFlowCondition = ({ name, index }: ItemFlowConditionProps) => {
     (item: ItemFormValues) => getEntityKey(item) === conditionItem,
   )?.responseType;
 
-  console.log('conditionPayload', conditionPayload);
+  const selectedItem = items?.find((item: ItemFormValues) => getEntityKey(item) === conditionItem);
+
   const handleChangeConditionItemName = (e: SelectEvent) => {
     const itemResponseType = items?.find(
       (item: ItemFormValues) => getEntityKey(item) === e.target.value,
@@ -77,22 +75,14 @@ export const ItemFlowCondition = ({ name, index }: ItemFlowConditionProps) => {
     isSlider && CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(conditionType);
   const isSingleNumberValueVisible = isSlider && !hasRangeValueInput;
 
-  const commonInputSx = {
-    minWidth: '10rem',
-  };
-  const numberInputSx = {
-    width: '8rem',
-  };
-
   return (
-    <StyledConditionContainer>
+    <StyledConditionRow>
       <StyledTitleMedium>{t('if')}</StyledTitleMedium>
       <StyledSelectController
         control={control}
         name={conditionItemName}
         options={getItemNameOptionsList(items)}
         placeholder={t('conditionItemNamePlaceholder')}
-        sx={commonInputSx}
         SelectProps={{
           renderValue: (value: unknown) => {
             const itemName = items?.find(
@@ -109,7 +99,6 @@ export const ItemFlowCondition = ({ name, index }: ItemFlowConditionProps) => {
         name={`${conditionName}.type`}
         options={getTypeOptionsList(conditionItemResponseType)}
         placeholder={t('conditionTypePlaceholder')}
-        sx={commonInputSx}
         disabled={!conditionItem}
         customChange={handleChangeConditionType}
       />
@@ -117,8 +106,7 @@ export const ItemFlowCondition = ({ name, index }: ItemFlowConditionProps) => {
         <StyledSelectController
           control={control}
           name={conditionPayloadSelectionName}
-          options={[]}
-          sx={commonInputSx}
+          options={getValueOptionsList(selectedItem)}
           placeholder={t('value')}
           disabled={!isSelection}
         />
@@ -129,7 +117,6 @@ export const ItemFlowCondition = ({ name, index }: ItemFlowConditionProps) => {
           control={control}
           name={conditionPayloadValueName}
           disabled={!conditionType}
-          sx={numberInputSx}
           minNumberValue={conditionType ? Number.MIN_SAFE_INTEGER : DEFAULT_PAYLOAD_MIN_VALUE}
         />
       )}
@@ -140,7 +127,6 @@ export const ItemFlowCondition = ({ name, index }: ItemFlowConditionProps) => {
             type="number"
             control={control}
             name={conditionPayloadMinValueName}
-            sx={numberInputSx}
             minNumberValue={Number.MIN_SAFE_INTEGER}
           />
           <StyledInputController
@@ -148,7 +134,6 @@ export const ItemFlowCondition = ({ name, index }: ItemFlowConditionProps) => {
             type="number"
             control={control}
             name={conditionPayloadMaxValueName}
-            sx={numberInputSx}
             minNumberValue={Number.MIN_SAFE_INTEGER}
           />
         </>
@@ -156,6 +141,6 @@ export const ItemFlowCondition = ({ name, index }: ItemFlowConditionProps) => {
       <StyledClearedButton sx={{ p: theme.spacing(1) }}>
         <Svg id="cross" />
       </StyledClearedButton>
-    </StyledConditionContainer>
+    </StyledConditionRow>
   );
 };

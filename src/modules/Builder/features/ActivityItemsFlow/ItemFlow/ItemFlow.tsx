@@ -5,16 +5,18 @@ import { ToggleItemContainer } from 'modules/Builder/components';
 import { StyledFlexColumn } from 'shared/styles';
 import { Condition } from 'shared/state';
 
-import { ItemFlowActions } from './ItemFlowActions';
+import { Actions } from './Actions';
+import { ConditionRow } from './ConditionRow';
+import { SummaryRow } from './SummaryRow';
 import { ItemFlowProps } from './ItemFlow.types';
 import { getEmptyCondition } from './ItemFlow.utils';
-import { ItemFlowCondition } from './ItemFlowCondition';
 
 const Content = ({ items, name }: { items: Condition[]; name: string }) => (
   <StyledFlexColumn>
     {items?.map((_: Condition, index: number) => (
-      <ItemFlowCondition key={`item-flow-condition-${index}`} name={name} index={index} />
+      <ConditionRow key={`item-flow-condition-${index}`} name={name} index={index} />
     ))}
+    <SummaryRow name={name} />
   </StyledFlexColumn>
 );
 
@@ -27,7 +29,7 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const { control, watch } = useFormContext();
   const { append: appendCondition } = useFieldArray({
     control,
-    name: `${itemName}.conditions`,
+    name: conditionsName,
   });
   const conditions = watch(conditionsName);
 
@@ -39,9 +41,9 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
     <ToggleItemContainer
       title={t('activityItemsFlowItemTitle', { index: index + 1 })}
       Content={Content}
-      HeaderContent={ItemFlowActions}
+      HeaderContent={Actions}
       headerStyles={{ justifyContent: 'space-between' }}
-      contentProps={{ items: conditions, name: conditionsName }}
+      contentProps={{ items: conditions, name: itemName }}
       headerContentProps={{ name: itemName, onAdd: onAddCondition, onRemove }}
     />
   );

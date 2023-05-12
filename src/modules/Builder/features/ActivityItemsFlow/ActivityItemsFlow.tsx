@@ -8,7 +8,7 @@ import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderA
 
 import { ItemFlow } from './ItemFlow';
 import { ActivityItemsFlowHeader } from './ActivityItemsFlowHeader';
-import { getEmptyFlowItem } from '../ActivityItems/ItemConfiguration';
+import { getEmptyFlowItem } from './ActivityItemsFlow.utils';
 
 export const ActivityItemsFlow = () => {
   const { t } = useTranslation('app');

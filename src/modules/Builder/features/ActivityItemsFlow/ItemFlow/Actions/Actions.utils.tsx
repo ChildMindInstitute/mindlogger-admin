@@ -1,6 +1,6 @@
 import { Svg } from 'shared/components';
 
-import { ActionsType } from './ItemFlowActions.types';
+import { ActionsType } from './Actions.types';
 
 export const getActions = ({ onAdd, onRemove }: ActionsType) => [
   {

@@ -303,6 +303,8 @@ export type Condition = OptionCondition | SingleValueCondition | RangeValueCondi
 
 export type ConditionalLogic = {
   match: ConditionalLogicMatch;
+  //TODO: for frontend purposes only - should be reviewed after refactoring phase
+  itemKey?: string;
   conditions: Array<Condition>;
 };
 
@@ -362,6 +364,8 @@ export type Activity = {
   sections?: ActivitySettingsSection[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
+  //TODO: for frontend purposes only - should be reviewed after refactoring phase
+  conditionalLogic?: ConditionalLogic[];
 };
 
 type Theme = {

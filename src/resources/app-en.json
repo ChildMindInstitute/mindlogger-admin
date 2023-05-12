@@ -835,5 +835,7 @@
   "equal": "is equal to",
   "notEqual": "is not equal to",
   "between": "between",
-  "outsideOf": "outside of"
+  "outsideOf": "outside of",
+  "summaryRowDescription": "of the “if” rules below are true, show",
+  "any": "Any"
 }

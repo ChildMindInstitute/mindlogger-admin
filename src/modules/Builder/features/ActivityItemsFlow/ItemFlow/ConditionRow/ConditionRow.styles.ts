@@ -3,7 +3,7 @@ import { styled } from '@mui/material';
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
-export const StyledConditionContainer = styled(StyledFlexTopCenter)`
+export const StyledConditionRow = styled(StyledFlexTopCenter)`
   gap: 0.4rem;
   padding: ${theme.spacing(0.8, 1.2)};
   border-radius: ${variables.borderRadius.xs};
@@ -33,6 +33,8 @@ export const StyledConditionContainer = styled(StyledFlexTopCenter)`
 `;
 
 export const StyledSelectController = styled(SelectController)`
+  min-width: 10rem;
+
   .MuiInputBase-root {
     border-radius: ${variables.borderRadius.md};
   }
@@ -43,6 +45,8 @@ export const StyledSelectController = styled(SelectController)`
 `;
 
 export const StyledInputController = styled(InputController)`
+  width: 8rem;
+
   .MuiInputBase-root {
     border-radius: ${variables.borderRadius.md};
     padding-right: ${theme.spacing(0.7)};
