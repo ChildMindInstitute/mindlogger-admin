@@ -2,12 +2,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
 import { theme, variables, StyledLabelBoldMedium, StyledClearedButton } from 'shared/styles';
-import { CalendarEvent } from 'modules/Dashboard/state';
+import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
 import {
-  allDayEventsSortedByDays,
   formatToWeekYear,
   formatToYearMonthDate,
-  hiddenEventsIds,
 } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
 
 import { CalendarViews } from '../Calendar.types';
@@ -26,6 +24,8 @@ export const TimeGutterHeader = ({
   const currentWeek = formatToWeekYear(date);
   const isDayView = activeView === CalendarViews.Day;
   const isWeekView = activeView === CalendarViews.Week;
+  const { hiddenEventsIds = [], allDayEventsSortedByDays = [] } =
+    calendarEvents.useVisibleEventsData() || {};
 
   const getDayCondition = (event: CalendarEvent) =>
     isDayView && formatToYearMonthDate(event.start) === currentDate;
@@ -57,7 +57,7 @@ export const TimeGutterHeader = ({
 
           return {
             ...event,
-            isHiddenInTimeView: hiddenEventsIds.some((id) => id === event.id),
+            isHiddenInTimeView: hiddenEventsIds?.some((id) => id === event.id),
           };
         }),
       );
@@ -73,7 +73,7 @@ export const TimeGutterHeader = ({
     });
   };
 
-  const isBtnDisabled = !allDayEventsSortedByDays.some(
+  const isBtnDisabled = !allDayEventsSortedByDays?.some(
     (el) => (isDayView && el.date === currentDate) || (isWeekView && el.week === currentWeek),
   );
 

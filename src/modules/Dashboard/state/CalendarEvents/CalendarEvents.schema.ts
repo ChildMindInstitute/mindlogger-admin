@@ -24,6 +24,7 @@ export type CalendarEvent = {
   periodicity: Periodicity;
   eventStart: Date;
   eventEnd: Date | null;
+  eventCurrentDate?: string;
 } & Pick<
   Event,
   'oneTimeCompletion' | 'accessBeforeSchedule' | 'timerType' | 'timer' | 'notification'
@@ -53,11 +54,21 @@ export type CreateEventsData = {
   | 'notification'
 >;
 
+export type AllDayEventsSortedByDaysItem = {
+  date: string;
+  week: string;
+  eventsIds: { id: string; isHiddenInTimeView: boolean }[];
+};
+
 export type CalendarEventsSchema = {
   events: BaseSchema<CalendarEvent[] | null>;
-  eventsToShow: BaseSchema<CalendarEvent[] | null>;
   alwaysAvailableHidden: BaseSchema<boolean | null>;
   scheduledHidden: BaseSchema<boolean | null>;
   createEventsData: BaseSchema<CreateEventsData[] | null>;
   processedEventStartYear: BaseSchema<number | null>;
+  processedEvents: BaseSchema<{
+    eventsToShow: CalendarEvent[] | null;
+    allDayEventsSortedByDays: AllDayEventsSortedByDaysItem[] | null;
+    hiddenEventsIds: string[] | null;
+  } | null>;
 };
