@@ -1,5 +1,5 @@
 import { authApiClient } from 'shared/api/api.client';
-import { AppletId, AppletIdWithPassword } from 'shared/api';
+import { AppletId } from 'shared/api';
 
 import {
   SwitchAccount,
@@ -183,14 +183,8 @@ export const removeRespondentAccess = (
     { signal },
   );
 
-export const deleteAppletApi = (
-  { appletId, password }: AppletIdWithPassword,
-  signal?: AbortSignal,
-) =>
+export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}`, {
-    data: {
-      password,
-    },
     signal,
   });
 
@@ -225,9 +219,9 @@ export const getAppletUniqueNameApi = ({ name }: AppletUniqueName, signal?: Abor
   );
 
 export const setAppletEncryptionApi = (
-  { appletId, data }: AppletEncryption,
+  { appletId, encryption }: AppletEncryption,
   signal?: AbortSignal,
-) => authApiClient.put(`/applet/${appletId}/encryption`, data, { signal });
+) => authApiClient.put(`/applet/${appletId}/encryption`, { encryption }, { signal });
 
 export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
   const { ownerId, ...restParams } = params;

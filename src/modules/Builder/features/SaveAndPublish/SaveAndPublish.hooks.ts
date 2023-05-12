@@ -9,17 +9,17 @@ import {
   useCallbackPrompt,
   useCheckIfNewApplet,
   usePromptSetup,
-  usePasswordFromStorage,
+  useEncryptionCheckFromStorage,
 } from 'shared/hooks';
 import {
   APPLET_PAGE_REGEXP_STRING,
   builderSessionStorage,
+  Encryption,
   getBuilderAppletUrl,
   getDictionaryObject,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet } from 'shared/state';
 import { workspaces } from 'redux/modules';
-import { EnterAppletPasswordForm } from 'shared/components';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
@@ -44,7 +44,7 @@ export const useAppletData = () => {
   const isNewApplet = useCheckIfNewApplet();
   const { getValues } = useFormContext();
 
-  return (appletPassword?: EnterAppletPasswordForm['appletPassword']): SingleApplet => {
+  return (encryption?: Encryption): SingleApplet => {
     const appletInfo = getValues() as SingleApplet;
 
     const appletDescription = getDictionaryObject(appletInfo.description);
@@ -68,7 +68,7 @@ export const useAppletData = () => {
         })),
         ...removeActivityExtraFields(),
       })),
-      password: appletPassword,
+      encryption,
       description: appletDescription,
       about: appletAbout,
       themeId: null, // TODO: create real themeId
@@ -208,9 +208,11 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { cancelNavigation, confirmNavigation, promptVisible, setPromptVisible } =
     usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
-  const { getPassword, setPassword } = usePasswordFromStorage();
+  const { getEncryptionCheck } = useEncryptionCheckFromStorage();
   const { ownerId } = workspaces.useData() || {};
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const appletEncryption = appletData?.encryption;
 
   useEffect(() => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
@@ -274,22 +276,23 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPublishProcessStep(undefined);
   };
   const sendRequestWithPasswordCheck = async () => {
-    const password = getPassword(appletId ?? '');
-    if (!password) {
+    const hasEncryptionCheck = getEncryptionCheck(appletId ?? '');
+    if (!hasEncryptionCheck) {
       setIsPasswordPopupOpened(true);
 
       return;
     }
-    await sendRequest(password);
+    await sendRequest();
   };
 
-  const handleAppletPasswordSubmit = async ({ appletPassword }: EnterAppletPasswordForm) => {
-    await sendRequest(appletPassword);
+  const handleAppletPasswordSubmit = async (encryption?: Encryption) => {
+    await sendRequest(encryption);
   };
 
-  const sendRequest = async (appletPassword: EnterAppletPasswordForm['appletPassword']) => {
+  const sendRequest = async (encryption?: Encryption) => {
+    const encryptionData = encryption || appletEncryption;
     setPublishProcessPopupOpened(true);
-    const body = getAppletData(appletPassword);
+    const body = getAppletData(encryptionData);
 
     let result;
     checkIfAppletBeingCreatedOrUpdatedRef.current = true;
@@ -303,9 +306,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      const updatedAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
-      setPassword(updatedAppletId, appletPassword);
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
@@ -317,14 +318,10 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
         navigate(getBuilderAppletUrl(appletId));
       }
     }
-    if (updateApplet.rejected.match(result)) {
-      setPassword(appletId!, '');
-    }
 
     if (createApplet.fulfilled.match(result)) {
       const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
-      setPassword(createdAppletId, appletPassword);
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
@@ -341,6 +338,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     isPublishProcessPopupOpened,
     publishProcessStep,
     promptVisible,
+    appletEncryption,
     setIsPasswordPopupOpened,
     handleSaveAndPublishFirstClick,
     handleAppletPasswordSubmit,

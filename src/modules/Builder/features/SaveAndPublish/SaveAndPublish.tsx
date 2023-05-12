@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { EnterAppletPasswordForm, Svg } from 'shared/components';
+import { Svg } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard';
 import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
+import { Encryption } from 'shared/utils';
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
@@ -18,6 +19,7 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
     isPublishProcessPopupOpened,
     publishProcessStep,
     promptVisible,
+    appletEncryption,
     setIsPasswordPopupOpened,
     handleSaveAndPublishFirstClick,
     handleAppletPasswordSubmit,
@@ -29,8 +31,8 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
   } = useSaveAndPublishSetup(hasPrompt);
   const { appletId } = useParams();
 
-  const handlePasswordSubmit = ({ appletPassword }: EnterAppletPasswordForm) => {
-    handleAppletPasswordSubmit({ appletPassword });
+  const handlePasswordSubmit = (encryption?: Encryption) => {
+    handleAppletPasswordSubmit(encryption);
     setIsPasswordPopupOpened(false);
   };
 
@@ -49,6 +51,7 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
         popupType={isNewApplet ? AppletPasswordPopupType.Create : AppletPasswordPopupType.Enter}
         popupVisible={isPasswordPopupOpened}
         submitCallback={handlePasswordSubmit}
+        encryption={appletEncryption}
       />
       <SaveAndPublishProcessPopup
         isPopupVisible={isPublishProcessPopupOpened}

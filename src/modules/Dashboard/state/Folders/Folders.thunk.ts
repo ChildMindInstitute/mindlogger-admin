@@ -14,6 +14,7 @@ import {
   AppletId,
   setAppletEncryptionApi,
 } from 'api';
+import { Encryption } from 'shared/utils';
 
 import {
   deleteFolderById,
@@ -204,14 +205,14 @@ export const getAppletSearchTerms = createAsyncThunk(
 export const setAppletEncryption = createAsyncThunk(
   'folders/setAppletEncryption',
   async (
-    { appletId, data }: { appletId: string; data: FormData },
+    { appletId, encryption }: { appletId: string; encryption: Encryption },
     { getState, rejectWithValue, signal },
   ) => {
     try {
-      await setAppletEncryptionApi({ appletId, data }, signal);
+      await setAppletEncryptionApi({ appletId, encryption }, signal);
       const { folders } = getState() as { folders: FoldersSchema };
 
-      return changeAppletEncryptionUtil(folders, appletId, data);
+      return changeAppletEncryptionUtil(folders, appletId, encryption);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

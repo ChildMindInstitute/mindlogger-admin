@@ -1,3 +1,5 @@
+import { Encryption } from 'shared/utils';
+
 export type RespondentsActions = {
   scheduleSetupAction: (value: number) => void;
   userDataExportAction: (value: number) => void;
@@ -14,4 +16,5 @@ export type ChosenAppletData = {
   hasIndividualSchedule?: boolean;
   respondentId?: string;
   nickname?: string;
+  encryption: Encryption;
 };
