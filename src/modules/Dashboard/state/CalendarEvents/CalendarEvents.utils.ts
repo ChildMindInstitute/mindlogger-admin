@@ -307,7 +307,13 @@ export const createEvents = ({
 
   if (periodicityType === Periodicity.Monthly && selectedDate) {
     const chosenDate = getDate(new Date(selectedDate));
-    const monthsBetween = eachMonthOfInterval({ start: eventStart, end: eventEnd });
+    const monthsBetween =
+      eventEnd && eventStart && eventEnd > eventStart
+        ? eachMonthOfInterval({
+            start: eventStart,
+            end: eventEnd,
+          })
+        : [];
 
     const daysOfMonth = monthsBetween.map((month) => {
       const lastDayOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0);
