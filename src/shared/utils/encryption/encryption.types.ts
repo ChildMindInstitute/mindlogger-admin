@@ -6,6 +6,11 @@ export type Encryption = {
   base: string;
   accountId: string;
 };
+export type EncryptionParsed = {
+  publicKey: number[];
+  prime: number[];
+  base: number[];
+  accountId: string;
+};
 
-export type GetAppletEncryptionInfo = GetPrivateKey &
-  Partial<Omit<Encryption, 'publicKey' | 'privateKey'>>;
+export type GetAppletEncryptionInfo = GetPrivateKey & Partial<Omit<EncryptionParsed, 'publicKey'>>;

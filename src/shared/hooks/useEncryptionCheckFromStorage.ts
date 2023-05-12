@@ -9,23 +9,30 @@ export const useEncryptionCheckFromStorage = () => {
   const userData = auth.useData();
   const ownerId = String(userData?.user?.id) || '';
 
-  const getEncryptionCheck = (appletId: string) => {
+  const getAppletPrivateKey = (appletId: string) => {
     if (isNewApplet || !appletId || !ownerId) return '';
 
-    return storage.getItem(getKey(ownerId, appletId)) as string;
+    const key = getKey(ownerId, appletId);
+    try {
+      return JSON.parse(storage.getItem(key) as string);
+    } catch {
+      storage.removeItem(key);
+
+      return '';
+    }
   };
 
-  const setEncryptionCheck = (appletId: string, checked: boolean) => {
+  const setAppletPrivateKey = (appletId: string, privateKey: number[]) => {
     if (!appletId || !ownerId) return;
 
     const key = getKey(ownerId, appletId);
-    if (!checked) return storage.removeItem(key);
+    if (!privateKey) return storage.removeItem(key);
 
-    storage.setItem(key, checked);
+    storage.setItem(key, JSON.stringify(privateKey));
   };
 
   return {
-    getEncryptionCheck,
-    setEncryptionCheck,
+    getAppletPrivateKey,
+    setAppletPrivateKey,
   };
 };

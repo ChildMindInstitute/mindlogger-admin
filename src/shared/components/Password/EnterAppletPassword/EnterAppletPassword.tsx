@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { folders } from 'redux/modules';
 import { StyledClearedButton } from 'shared/styles/styledComponents';
 import { InputController } from 'shared/components/FormComponents';
-import { getAppletEncryptionInfo } from 'shared/utils/encryption';
+import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { getAppletData } from 'shared/utils/getAppletData';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
@@ -19,7 +19,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
   ({ appletId, encryption, submitCallback }, ref) => {
     const { t } = useTranslation('app');
     const appletsFoldersData = folders.useFlattenFoldersApplets();
-    const { setEncryptionCheck } = useEncryptionCheckFromStorage();
+    const { setAppletPrivateKey } = useEncryptionCheckFromStorage();
     const { handleSubmit, control, setError } = useForm<EnterAppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
       defaultValues: { appletPassword: '' },
@@ -27,21 +27,17 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     const [showPassword, setShowPassword] = useState(false);
 
     const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
-      const encryptionInfoFromServer =
-        encryption || getAppletData(appletsFoldersData, appletId).encryption;
+      const encryptionInfoFromServer = getParsedEncryptionFromServer(
+        encryption! || getAppletData(appletsFoldersData, appletId).encryption!,
+      );
       if (!encryptionInfoFromServer) return;
 
-      let publicKeyFromServer = '';
-      let primeFromServer = '';
-      let baseFromServer = '';
-      const accountIdFromServer = encryptionInfoFromServer.accountId;
-      try {
-        publicKeyFromServer = JSON.parse(encryptionInfoFromServer.publicKey);
-        primeFromServer = JSON.parse(encryptionInfoFromServer.prime);
-        baseFromServer = JSON.parse(encryptionInfoFromServer.base);
-      } catch {
-        return;
-      }
+      const {
+        publicKey: publicKeyFromServer,
+        prime: primeFromServer,
+        base: baseFromServer,
+        accountId: accountIdFromServer,
+      } = encryptionInfoFromServer;
       const encryptionInfoGenerated = getAppletEncryptionInfo({
         appletPassword,
         accountId: accountIdFromServer,
@@ -54,7 +50,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
           .getPublicKey()
           .equals(Buffer.from(publicKeyFromServer as unknown as WithImplicitCoercion<string>))
       ) {
-        setEncryptionCheck(appletId, true);
+        setAppletPrivateKey(appletId, Array.from(encryptionInfoGenerated.getPrivateKey()));
         submitCallback();
       } else {
         setError('appletPassword', { message: t('incorrectAppletPassword') });

@@ -77,8 +77,8 @@ export const Respondents = () => {
 
   useBreadcrumbs();
 
-  const { getEncryptionCheck } = useEncryptionCheckFromStorage();
-  const hasEncryptionCheck = getEncryptionCheck(appletId ?? '');
+  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
   const actions = {
     scheduleSetupAction: (index: number) => {
       setRespondentsDataIndex(index);
