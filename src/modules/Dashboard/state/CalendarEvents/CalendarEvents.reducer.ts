@@ -5,12 +5,17 @@ import { DateFormats } from 'shared/consts';
 
 import { state as initialState } from './CalendarEvents.state';
 import { CalendarEvent, CalendarEventsSchema, CreateEventsData } from './CalendarEvents.schema';
-import { getNotHiddenEvents, getPreparedEvents, createEvents } from './CalendarEvents.utils';
+import {
+  getNotHiddenEvents,
+  getPreparedEvents,
+  createEvents,
+  getEventsWithHiddenInTimeView,
+} from './CalendarEvents.utils';
 
 export const reducers = {
   resetCalendarEvents: (state: CalendarEventsSchema): void => {
     state.events = initialState.events;
-    state.eventsToShow = initialState.eventsToShow;
+    state.processedEvents = initialState.processedEvents;
     state.alwaysAvailableHidden = initialState.alwaysAvailableHidden;
     state.scheduledHidden = initialState.scheduledHidden;
     state.createEventsData = initialState.createEventsData;
@@ -28,9 +33,11 @@ export const reducers = {
 
     if (alwaysAvailableHidden !== undefined) {
       state.alwaysAvailableHidden.data = alwaysAvailableHidden;
+      state.alwaysAvailableHidden.status = 'success';
     }
     if (scheduledHidden !== undefined) {
       state.scheduledHidden.data = scheduledHidden;
+      state.scheduledHidden.status = 'success';
     }
 
     if (events) {
@@ -55,7 +62,10 @@ export const reducers = {
     }
 
     if (state.events.data) {
-      state.eventsToShow.data = getNotHiddenEvents(state.events.data);
+      const notHiddenEvents = getNotHiddenEvents(state.events.data);
+      state.processedEvents.data = getEventsWithHiddenInTimeView(notHiddenEvents);
+      state.events.status = 'success';
+      state.processedEvents.status = 'success';
     }
   },
 
@@ -64,6 +74,7 @@ export const reducers = {
     action: PayloadAction<CreateEventsData[]>,
   ): void => {
     state.createEventsData.data = action.payload;
+    state.createEventsData.status = 'success';
   },
 
   setProcessedEventStartYear: (
@@ -73,6 +84,7 @@ export const reducers = {
     }>,
   ): void => {
     state.processedEventStartYear.data = action.payload.processedEventStartYear;
+    state.processedEventStartYear.status = 'success';
   },
 
   createNextYearEvents: (
@@ -112,6 +124,11 @@ export const reducers = {
       state.events.data = getPreparedEvents(state.events.data, state.scheduledHidden.data, false);
     }
 
-    state.eventsToShow.data = getNotHiddenEvents(state.events.data);
+    if (state.events.data) {
+      const notHiddenEvents = getNotHiddenEvents(state.events.data);
+      state.processedEvents.data = getEventsWithHiddenInTimeView(notHiddenEvents);
+      state.events.status = 'success';
+      state.processedEvents.status = 'success';
+    }
   },
 };

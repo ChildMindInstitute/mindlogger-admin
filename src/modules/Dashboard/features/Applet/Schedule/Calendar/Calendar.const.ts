@@ -1,2 +1,0 @@
-export const LENGTH_TO_SET_ID_IS_HIDDEN = 2;
-export const LENGTH_TO_FILTER_DAYS_EVENTS = 3;

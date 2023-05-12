@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { format, getDay, parse, startOfWeek, getYear } from 'date-fns';
+import { format, getDay, getYear, parse, startOfWeek } from 'date-fns';
 
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
@@ -46,7 +46,8 @@ export const Calendar = () => {
   const [defaultStartDate, setDefaultStartDate] = useState(new Date());
   const [editedEvent, setEditedEvent] = useState<CalendarEvent | null>(null);
 
-  const eventsToShow = calendarEvents.useVisibleEventsData() || [];
+  const { eventsToShow = [], allDayEventsSortedByDays = [] } =
+    calendarEvents.useVisibleEventsData() || {};
 
   const { components, messages, views, formats } = getCalendarComponents(
     activeView,
@@ -77,22 +78,44 @@ export const Calendar = () => {
     setEditedEvent(calendarEvent);
   };
 
-  const hasWrapperMoreBtn = useMemo(
-    () =>
+  const hasWrapperMoreBtn = useMemo(() => {
+    if (!activeView || !events || !date || !allDayEventsSortedByDays) {
+      return false;
+    }
+
+    return (
       (activeView === CalendarViews.Week || activeView === CalendarViews.Day) &&
-      getHasWrapperMoreBtn(activeView, events, date, isAllDayEventsVisible),
-    [activeView, events, date, isAllDayEventsVisible],
-  );
+      getHasWrapperMoreBtn(
+        activeView,
+        events,
+        date,
+        isAllDayEventsVisible,
+        allDayEventsSortedByDays,
+      )
+    );
+  }, [activeView, events, date, isAllDayEventsVisible, allDayEventsSortedByDays]);
 
   useEffect(() => {
+    if (eventsToShow) {
+      if (activeView === CalendarViews.Month) {
+        const eventsWithOffRange = eventsToShow.map((event) => ({
+          ...event,
+          isOffRange: event.start.getMonth() !== date.getMonth(),
+        }));
+        setEvents(eventsWithOffRange);
+      } else {
+        setEvents(eventsToShow);
+      }
+    }
     setIsAllDayEventsVisible(null);
-  }, [date, activeView]);
+  }, [date, activeView, eventsToShow]);
 
   useEffect(() => {
     const chosenYear = getYear(date);
     if (chosenYear !== currentYear) {
+      const { createNextYearEvents } = calendarEvents.actions;
       setCurrentYear(chosenYear);
-      dispatch(calendarEvents.actions.createNextYearEvents({ yearToCreateEvents: chosenYear }));
+      dispatch(createNextYearEvents({ yearToCreateEvents: chosenYear }));
     }
   }, [date]);
 
@@ -104,7 +127,7 @@ export const Calendar = () => {
           onNavigate={onNavigate}
           localizer={dateFnsLocalize}
           culture={i18n.language}
-          events={eventsToShow}
+          events={events}
           startAccessor="start"
           endAccessor="end"
           components={components}
