@@ -22,7 +22,7 @@ export const getEncryptionToServer = (appletPassword: string, accountId: string)
     publicKey: JSON.stringify(Array.from(encryptionInfo.getPublicKey())),
     prime: JSON.stringify(Array.from(encryptionInfo.getPrime())),
     base: JSON.stringify(Array.from(encryptionInfo.getGenerator())),
-    // accountId, // TODO: should be appletData.accountId after M2-1828 will be merged
+    accountId,
   };
 
   return encryption;

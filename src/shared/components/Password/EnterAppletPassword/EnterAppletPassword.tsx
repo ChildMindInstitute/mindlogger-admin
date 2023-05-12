@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { auth, folders } from 'redux/modules';
+import { folders } from 'redux/modules';
 import { StyledClearedButton } from 'shared/styles/styledComponents';
 import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo } from 'shared/utils/encryption';
@@ -25,8 +25,6 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
       defaultValues: { appletPassword: '' },
     });
     const [showPassword, setShowPassword] = useState(false);
-    const userData = auth.useData();
-    const { id: accountId = '' } = userData?.user || {};
 
     const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
       const encryptionInfoFromServer =
@@ -36,6 +34,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
       let publicKeyFromServer = '';
       let primeFromServer = '';
       let baseFromServer = '';
+      const accountIdFromServer = encryptionInfoFromServer.accountId;
       try {
         publicKeyFromServer = JSON.parse(encryptionInfoFromServer.publicKey);
         primeFromServer = JSON.parse(encryptionInfoFromServer.prime);
@@ -45,7 +44,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
       }
       const encryptionInfoGenerated = getAppletEncryptionInfo({
         appletPassword,
-        accountId, // TODO: should be appletData.accountId after M2-1828 will be merged
+        accountId: accountIdFromServer,
         prime: primeFromServer,
         base: baseFromServer,
       });
