@@ -13,7 +13,7 @@ import { Encryption, getBuilderAppletUrl, getDateInUserTimezone } from 'shared/u
 
 import { ShareAppletPopup } from '../../Popups';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
-import { getActions } from './AppletItem.utils';
+import { getActions, hasOwnerRole } from './AppletItem.utils';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
@@ -55,7 +55,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   };
 
   const checkAppletEncryption = (callback: () => void) =>
-    item.role?.includes('owner') && !item.encryption ? setPasswordPopupVisible(true) : callback();
+    hasOwnerRole(item) && !item.encryption ? setPasswordPopupVisible(true) : callback();
 
   const actions = {
     removeFromFolder: () =>
