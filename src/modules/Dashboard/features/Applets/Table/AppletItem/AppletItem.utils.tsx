@@ -1,8 +1,9 @@
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components';
+import { Roles } from 'shared/consts';
 
-import { Actions, Roles } from './AppletItem.types';
+import { Actions } from './AppletItem.types';
 
 export const getActions = ({
   actions: {

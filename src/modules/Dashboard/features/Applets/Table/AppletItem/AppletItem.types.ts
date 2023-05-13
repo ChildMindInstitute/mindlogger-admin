@@ -13,12 +13,3 @@ export type Actions = {
   };
   item: FolderApplet;
 };
-
-export const enum Roles {
-  User = 'user',
-  Coordinator = 'coordinator',
-  Editor = 'editor',
-  Manager = 'manager',
-  Reviewer = 'reviewer',
-  Owner = 'owner',
-}
