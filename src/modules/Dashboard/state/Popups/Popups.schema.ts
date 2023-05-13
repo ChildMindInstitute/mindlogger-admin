@@ -9,13 +9,13 @@ export type PopupsPayload = {
   key: PopupsVisibility;
   value: boolean;
   appletId: string;
-  encryption?: Encryption;
+  encryption?: Encryption | null;
 };
 
 export type PopupsSchema = {
   data: {
     appletId: string;
-    encryption?: Encryption;
+    encryption?: Encryption | null;
     deletePopupVisible: boolean;
     duplicatePopupsVisible: boolean;
     transferOwnershipPopupVisible: boolean;

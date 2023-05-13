@@ -10,6 +10,6 @@ export type AppletPasswordPopupProps = {
   popupVisible: boolean;
   onClose: () => void;
   appletId: string;
-  encryption?: Encryption;
+  encryption?: Encryption | null;
   submitCallback?: (encryption: Encryption) => void;
 };
