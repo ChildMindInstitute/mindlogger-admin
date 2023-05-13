@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { ApiError, AppletsSchema } from 'redux/modules';
+import { ApiError } from 'redux/modules';
 import {
   getEventsApi,
   GetAppletsParams,
@@ -42,12 +42,11 @@ export const setAppletEncryption = createAsyncThunk(
   'applets/setAppletEncryption',
   async (
     { appletId, encryption }: { appletId: string; encryption: Encryption },
-    { getState, rejectWithValue, signal, dispatch },
+    { rejectWithValue, signal, dispatch },
   ) => {
     try {
       await setAppletEncryptionApi({ appletId, encryption }, signal);
-      const { applets } = getState() as { applets: AppletsSchema };
-      dispatch(appletsRedux.actions.changeAppletEncryption({ applets, appletId, encryption }));
+      dispatch(appletsRedux.actions.changeAppletEncryption({ appletId, encryption }));
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

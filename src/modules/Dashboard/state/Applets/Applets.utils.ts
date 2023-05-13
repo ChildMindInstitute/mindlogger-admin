@@ -26,33 +26,21 @@ export const resetEventsData = (state: AppletsSchema) => {
 export const changeAppletEncryption = (
   state: AppletsSchema,
   action: PayloadAction<{
-    applets: AppletsSchema;
     appletId: string;
     encryption: Encryption;
   }>,
 ) => {
-  const {
-    applets: { applets },
-    appletId,
-    encryption,
-  } = action.payload;
-  const updatedResult =
-    applets.data?.result.map((applet: Applet) =>
-      applet.id === appletId
-        ? ({
-            ...applet,
-            encryption,
-          } as Applet)
-        : applet,
-    ) ?? [];
-  state.applets = {
-    ...applets,
-    data: {
-      count: 0,
-      ...applets.data,
-      result: updatedResult,
-    },
-  };
+  if (!state.applets.data) return;
+
+  const { appletId, encryption } = action.payload;
+  state.applets.data.result = state.applets.data.result.map((applet) =>
+    applet.id === appletId
+      ? ({
+          ...applet,
+          encryption,
+        } as Applet)
+      : applet,
+  );
 };
 
 export const createAppletsPendingData = ({ builder, thunk, key }: CreateAppletsStateData) =>
