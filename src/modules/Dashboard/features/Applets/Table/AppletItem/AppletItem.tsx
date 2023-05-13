@@ -4,7 +4,7 @@ import { TableCell, TableRow } from '@mui/material';
 
 import { useAppletsDnd, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { FolderApplet, folders, popups } from 'redux/modules';
+import { applets, FolderApplet, folders, popups } from 'redux/modules';
 import { StyledBodyMedium } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
@@ -38,8 +38,14 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   };
 
   const submitCallback = async (encryption: Encryption) => {
+    // await dispatch(
+    //   folders.thunk.setAppletEncryption({
+    //     appletId: item.id,
+    //     encryption,
+    //   }),
+    // );// TODO: postpone until folders api will be ready
     await dispatch(
-      folders.thunk.setAppletEncryption({
+      applets.thunk.setAppletEncryption({
         appletId: item.id,
         encryption,
       }),
@@ -49,9 +55,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   };
 
   const checkAppletEncryption = (callback: () => void) =>
-    item?.roles?.includes('owner') && !item?.encryption
-      ? setPasswordPopupVisible(true)
-      : callback();
+    item.role?.includes('owner') && !item.encryption ? setPasswordPopupVisible(true) : callback();
 
   const actions = {
     removeFromFolder: () =>

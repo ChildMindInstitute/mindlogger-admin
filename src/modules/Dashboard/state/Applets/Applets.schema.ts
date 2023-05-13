@@ -10,6 +10,7 @@ import {
   EventNotifications,
   EventReminder,
 } from 'api';
+import { Encryption } from 'shared/utils';
 
 export type CreateAppletsStateData = {
   builder: ActionReducerMapBuilder<AppletsSchema>;
@@ -36,6 +37,7 @@ export type Applet = {
   reportEmailBody: string;
   createdAt: string;
   updatedAt: string;
+  encryption?: Encryption | null;
 };
 
 export type Event = {
