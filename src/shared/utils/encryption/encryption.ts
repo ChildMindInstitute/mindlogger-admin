@@ -7,6 +7,7 @@ import {
   GetAppletEncryptionInfo,
   GetPrivateKey,
 } from './encryption.types';
+import { algorithm, encoding } from './encryption.const';
 
 const defaultBase = [2];
 
@@ -88,9 +89,9 @@ export const getAESKey = (
 
 export const decryptData = ({ text, key }: { text: string; key: number[] }) => {
   const textParts = text.split(':');
-  const iv = Buffer.from(textParts.shift()!, 'hex');
-  const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-  const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
+  const iv = Buffer.from(textParts.shift()!, encoding);
+  const encryptedText = Buffer.from(textParts.join(':'), encoding);
+  const decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv);
   const decrypted = decipher.update(encryptedText);
 
   try {
@@ -104,10 +105,10 @@ export const decryptData = ({ text, key }: { text: string; key: number[] }) => {
 
 export const encryptData = ({ text, key }: { text: string; key: number[] }) => {
   const iv: Buffer = crypto.randomBytes(config.IV_LENGTH);
-  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
+  const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
   let encrypted: Buffer = cipher.update(text);
 
   encrypted = Buffer.concat([encrypted, cipher.final()]);
 
-  return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
+  return `${iv.toString(encoding)}:${encrypted.toString(encoding)}`;
 };
