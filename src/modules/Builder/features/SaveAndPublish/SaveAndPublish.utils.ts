@@ -1,5 +1,9 @@
+import { ColorResult } from 'react-color';
+
 import {
+  ConditionalLogic,
   DrawingResponseValues,
+  Item,
   NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
@@ -8,7 +12,7 @@ import {
   SliderRowsResponseValues,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
-import { ColorResult } from 'react-color';
+import { getEntityKey } from 'shared/utils';
 
 export const removeAppletExtraFields = () => ({
   createdAt: undefined,
@@ -28,6 +32,7 @@ export const removeActivityExtraFields = () => ({
   sections: undefined, // TODO: remove when API will be ready
   subscales: undefined, // TODO: remove when API will be ready
   calculateTotalScore: undefined, // TODO: remove when API will be ready
+  conditionalLogic: undefined,
 });
 
 export const removeItemExtraFields = () => ({
@@ -78,3 +83,8 @@ export const mapItemResponseValues = (
 
   return null;
 };
+
+export const getItemConditionalLogic = (item: Item, conditionalLogic?: ConditionalLogic[]) =>
+  conditionalLogic?.filter(
+    (conditionalLogic: ConditionalLogic) => conditionalLogic.itemKey === getEntityKey(item),
+  );

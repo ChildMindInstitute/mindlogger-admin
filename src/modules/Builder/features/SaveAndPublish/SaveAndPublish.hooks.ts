@@ -30,6 +30,7 @@ import {
   removeAppletExtraFields,
   removeActivityExtraFields,
   mapItemResponseValues,
+  getItemConditionalLogic,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -64,6 +65,7 @@ export const useAppletData = () => {
           ...(id && { id }),
           question: getDictionaryObject(item.question),
           responseValues: mapItemResponseValues(item.responseType, item.responseValues),
+          conditionalLogic: getItemConditionalLogic(item, activity.conditionalLogic),
           ...removeItemExtraFields(),
         })),
         ...removeActivityExtraFields(),
