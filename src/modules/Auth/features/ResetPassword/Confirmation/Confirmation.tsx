@@ -3,14 +3,9 @@ import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
 
 import { page } from 'resources';
+import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
-import {
-  StyledConfirmation,
-  StyledHeader,
-  StyledSubheader,
-  StyledInfo,
-  StyledLink,
-} from './Confirmation.styles';
+import { StyledConfirmation, StyledHeader } from './Confirmation.styles';
 
 export const Confirmation = ({ email }: { email: string }) => {
   const { t } = useTranslation('app');
@@ -19,17 +14,16 @@ export const Confirmation = ({ email }: { email: string }) => {
   return (
     <StyledConfirmation>
       <StyledHeader>{t('checkYourEmail')}</StyledHeader>
-      <StyledSubheader>
-        {t('weHaveSentPasswordResetLink')}
-        <br />
-        {email}
-      </StyledSubheader>
-      <StyledInfo>
-        {/*TODO: Add link with information about restoring password*/}
+      <StyledBodyMedium
+        sx={{ mb: theme.spacing(2.4), color: variables.palette.on_surface_variant }}
+      >
+        {t('weHaveSentPasswordResetLink', { email })}
+      </StyledBodyMedium>
+
+      <StyledBodyMedium sx={{ mb: theme.spacing(2.4), color: variables.palette.outline }}>
         {t('ifYouDontReceiveEmail')}
-        <StyledLink href="#">{t('here')}</StyledLink>
-        {t('forMoreOptions')}
-      </StyledInfo>
+      </StyledBodyMedium>
+
       <Button variant="contained" type="button" onClick={() => navigate(page.login)}>
         {t('backToLogin')}
       </Button>

@@ -11,4 +11,5 @@ export * from './useCheckIfNewApplet';
 export * from './useSetupEnterAppletPassword';
 export * from './useLogout';
 export * from './useRemoveAppletData';
-export * from './usePasswordFromStorage';
+export * from './useComponentSize';
+export * from './useEncryptionCheckFromStorage';

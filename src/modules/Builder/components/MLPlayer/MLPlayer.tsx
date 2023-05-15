@@ -14,7 +14,7 @@ import {
 import { MLPlayerProps } from './MLPlayer.types';
 import { useMLPlayerSetup } from './MLPlayer.hooks';
 
-export const MLPlayer = ({ resourceData, onRemove }: MLPlayerProps) => {
+export const MLPlayer = ({ media, hasRemoveButton = true, onRemove }: MLPlayerProps) => {
   const {
     playerRef,
     state,
@@ -30,7 +30,7 @@ export const MLPlayer = ({ resourceData, onRemove }: MLPlayerProps) => {
     handleProgress,
     handleSeekChange,
     handleSeekMouseUp,
-  } = useMLPlayerSetup(resourceData);
+  } = useMLPlayerSetup(media);
 
   return (
     <StyledPlayerWrapper>
@@ -54,16 +54,19 @@ export const MLPlayer = ({ resourceData, onRemove }: MLPlayerProps) => {
       />
       <StyledHeader>
         <StyledClearedButton onClick={handlePlayPause}>
-          {' '}
           <Svg id={state.playing ? 'pause' : 'play'} width={24} height={24} />
         </StyledClearedButton>
       </StyledHeader>
       <StyledNameWrapper>
-        {uploaded && <Svg id="check" width={18} height={18} />}{' '}
-        <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{fileName}</StyledName>{' '}
-        <StyledClearedButton onClick={onRemove}>
-          <Svg id="close" width={18} height={18} />
-        </StyledClearedButton>
+        {uploaded && <Svg id="check" width={18} height={18} />}
+        <StyledName sx={{ marginRight: theme.spacing(0.4) }} title={fileName}>
+          {fileName}
+        </StyledName>
+        {hasRemoveButton && (
+          <StyledClearedButton onClick={onRemove}>
+            <Svg id="close" width={18} height={18} />
+          </StyledClearedButton>
+        )}
       </StyledNameWrapper>
       <StyledSlider
         size="medium"

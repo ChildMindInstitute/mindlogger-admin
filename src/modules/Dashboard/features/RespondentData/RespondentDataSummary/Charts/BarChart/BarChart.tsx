@@ -46,7 +46,6 @@ export const BarChart = ({ chartData }: BarChartProps) => {
           color: variables.palette.outline_variant,
         },
         border: {
-          display: false,
           dash: [8, 8],
         },
         ticks: {

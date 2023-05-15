@@ -8,6 +8,7 @@ import { SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/s
 import {
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
+  DEFAULT_AUDIO_DURATION_SEC,
   SELECTION_OPTIONS_COLOR_PALETTE,
   DEFAULT_NUMBER_MIN_VALUE,
   DEFAULT_NUMBER_MAX_VALUE,
@@ -69,6 +70,14 @@ export const getPaletteColor = (paletteName: string, index: number) => {
 
   return colors?.[index % colors?.length];
 };
+
+export const getEmptyAudioPlayerResponse = () => ({
+  file: '',
+});
+
+export const getEmptyAudioResponse = () => ({
+  maxDuration: DEFAULT_AUDIO_DURATION_SEC,
+});
 
 export const getEmptyNumberSelection = () => ({
   minValue: DEFAULT_NUMBER_MIN_VALUE,

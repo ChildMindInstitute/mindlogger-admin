@@ -1,11 +1,8 @@
+import { MouseEventHandler } from 'react';
 import { TooltipItem } from 'chart.js';
 
-export type ChartTooltipPosition = {
-  top: string;
-  left: string;
-};
-
 export type ChartTooltipProps = {
-  position: ChartTooltipPosition;
-  data: TooltipItem<'scatter'>;
+  data: TooltipItem<'scatter'> | null;
+  onMouseEnter: MouseEventHandler;
+  onMouseLeave: MouseEventHandler;
 };

@@ -37,7 +37,6 @@ export const CropPopup = ({ open, setCropPopupVisible, setValue, image }: CropPo
   };
 
   const onClose = () => {
-    handleCropImage();
     setCropPopupVisible(false);
   };
 

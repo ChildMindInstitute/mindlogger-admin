@@ -3,6 +3,7 @@ import { Box, styled } from '@mui/material';
 import {
   StyledFlexAllCenter,
   StyledFlexColumn,
+  StyledFlexTopCenter,
   StyledTitleMedium,
   theme,
   variables,
@@ -45,5 +46,12 @@ export const StyledTitle = styled(StyledTitleMedium)`
   svg {
     height: 2.4rem;
     margin-left: ${theme.spacing(0.4)};
+  }
+`;
+
+export const StyledPreview = styled(StyledFlexTopCenter)`
+  svg {
+    fill: ${variables.palette.primary};
+    margin-right: ${theme.spacing(1)};
   }
 `;

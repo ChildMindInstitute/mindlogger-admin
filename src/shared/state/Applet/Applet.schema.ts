@@ -11,6 +11,7 @@ import {
   ConditionType,
   ConditionalLogicMatch,
 } from 'shared/consts';
+import { Encryption } from 'shared/utils';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -84,6 +85,16 @@ export type SliderConfig = {
   };
 };
 
+export type AudioAndVideoConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  timer: number;
+};
+
 export type SingleAndMultipleSelectionPerRowConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
@@ -112,6 +123,15 @@ export type DateAndTimeRangeConfig = {
   timer: number;
 };
 
+export type AudioPlayerConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  additionalResponseOption: {
+    textInputOption: boolean;
+    textInputRequired: boolean;
+  };
+  playOnce: boolean;
+};
 export type DrawingConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
@@ -186,6 +206,14 @@ export type SingleAndMultipleSelectItemResponseValues = {
   options: Array<SingleAndMultipleSelectionOption>;
 };
 
+export type AudioPlayerResponseValues = {
+  file: string;
+};
+
+export type AudioResponseValues = {
+  maxDuration: number;
+};
+
 export type SingleAndMultipleSelectRowOption = {
   id: string;
   text: string;
@@ -225,6 +253,7 @@ export type SliderRowsResponseValues = {
 };
 
 export type TextItemResponseValues = null;
+export type VideoResponseValues = null;
 export type DateAndTimeRangeResponseValues = null;
 export type PhotoResponseValues = null;
 export type GeolocationResponseValues = null;
@@ -246,6 +275,9 @@ export type ResponseValues =
   | SingleAndMultipleSelectRowsResponseValues
   | SliderRowsResponseValues
   | SliderItemResponseValues
+  | AudioPlayerResponseValues
+  | AudioResponseValues
+  | VideoResponseValues
   | NumberItemResponseValues
   | DateAndTimeRangeResponseValues
   | DrawingResponseValues
@@ -257,6 +289,8 @@ export type Config =
   | TextInputConfig
   | SingleAndMultipleSelectionConfig
   | SliderConfig
+  | AudioAndVideoConfig
+  | AudioPlayerConfig
   | SingleAndMultipleSelectionPerRowConfig
   | SliderRowsConfig
   | NumberConfig
@@ -420,7 +454,7 @@ export type SingleApplet = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   theme?: Theme;
-  password?: string;
+  encryption?: Encryption;
   generateReport: boolean;
 };
 

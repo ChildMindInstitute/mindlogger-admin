@@ -14,10 +14,10 @@ import {
   Drawing,
   Geolocation,
   NumberSelection,
+  VideoResponse,
   PhotoResponse,
   SelectionRows,
   Time,
-  VideoResponse,
 } from '../InputTypeItems';
 import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
@@ -26,6 +26,8 @@ import {
   defaultSliderConfig,
   defaultSliderRowsConfig,
   defaultSingleAndMultiSelectionConfig,
+  defaultAudioAndVideoConfig,
+  defaultAudioPlayerConfig,
   defaultSingleAndMultiSelectionRowsConfig,
   defaultNumberSelectionConfig,
   defaultDateAndTimeRangeConfig,
@@ -35,7 +37,12 @@ import {
   defaultGeolocationConfig,
   defaultMessageConfig,
 } from './OptionalItemsAndSettings.const';
-import { getEmptySliderOption, getEmptyNumberSelection } from '../ItemConfiguration.utils';
+import {
+  getEmptySliderOption,
+  getEmptyAudioPlayerResponse,
+  getEmptyAudioResponse,
+  getEmptyNumberSelection,
+} from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {
@@ -63,13 +70,13 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
       case ItemResponseType.Date:
         return <Date />;
       case ItemResponseType.Audio:
-        return <AudioRecord name="audioDuration" />;
+        return <AudioRecord name={name} />;
       case ItemResponseType.Text:
         return <TextResponse name={name} />;
       case ItemResponseType.Drawing:
         return <Drawing name={name} />;
       case ItemResponseType.AudioPlayer:
-        return <AudioPlayer name="mediaTranscript" fileResource="mediaFileResource" />;
+        return <AudioPlayer name={name} />;
       default:
         return null;
     }
@@ -148,6 +155,17 @@ export const useSettingsSetup = ({
             break;
           case ItemResponseType.Time:
             setConfig(defaultTimeConfig);
+            break;
+          case ItemResponseType.Audio:
+            setConfig(defaultAudioAndVideoConfig);
+            setValue(`${name}.responseValues`, getEmptyAudioResponse());
+            break;
+          case ItemResponseType.Video:
+            setConfig(defaultAudioAndVideoConfig);
+            break;
+          case ItemResponseType.AudioPlayer:
+            setConfig(defaultAudioPlayerConfig);
+            setValue(`${name}.responseValues`, getEmptyAudioPlayerResponse());
             break;
           case ItemResponseType.SingleSelectionPerRow:
           case ItemResponseType.MultipleSelectionPerRow:

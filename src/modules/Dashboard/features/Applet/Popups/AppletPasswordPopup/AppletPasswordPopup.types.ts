@@ -1,5 +1,4 @@
-import { Encryption } from 'redux/modules';
-import { CreateAppletPasswordForm, EnterAppletPasswordForm } from 'shared/components';
+import { Encryption } from 'shared/utils';
 
 export enum AppletPasswordPopupType {
   Create = 'create',
@@ -11,6 +10,6 @@ export type AppletPasswordPopupProps = {
   popupVisible: boolean;
   onClose: () => void;
   appletId: string;
-  encryption?: Encryption;
-  submitCallback?: (formData: CreateAppletPasswordForm | EnterAppletPasswordForm) => void;
+  encryption?: Encryption | null;
+  submitCallback?: (encryption: Encryption) => void;
 };

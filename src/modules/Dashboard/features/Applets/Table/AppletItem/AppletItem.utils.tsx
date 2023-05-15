@@ -1,6 +1,7 @@
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components';
+import { Roles } from 'shared/consts';
 
 import { Actions } from './AppletItem.types';
 
@@ -12,7 +13,7 @@ export const getActions = ({
     deleteAction,
     transferOwnership,
     duplicateAction,
-    shareAppletAction,
+    // shareAppletAction,
     editAction,
   },
   item,
@@ -53,9 +54,14 @@ export const getActions = ({
     action: transferOwnership,
     tooltipTitle: t('transferOwnership'),
   },
-  {
-    icon: <Svg id="share" />,
-    action: shareAppletAction,
-    tooltipTitle: t('shareWithTheLibrary'),
-  },
+  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
+  // introduced. (Story: AUS-4.1.4.10)
+  // {
+  //   icon: <Svg id="share" />,
+  //   action: shareAppletAction,
+  //   tooltipTitle: t('shareWithTheLibrary'),
+  // },
 ];
+
+export const hasOwnerRole = (item: unknown & { role?: string }) =>
+  !!item.role?.includes(Roles.Owner);

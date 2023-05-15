@@ -40,12 +40,22 @@ export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
 `;
 
 export const StyledSelect = styled(Select)`
+  .MuiSelect-select.MuiSelect-outlined.MuiOutlinedInput-input {
+    max-width: 100%;
+    z-index: 1;
+  }
+
   svg {
     fill: ${palette.on_surface_variant};
   }
 
   .svg-checkbox-multiple-filled {
     stroke: ${palette.on_surface_variant};
+  }
+
+  .navigate-arrow {
+    position: absolute;
+    right: 1rem;
   }
 `;
 

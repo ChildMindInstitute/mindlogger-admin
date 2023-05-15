@@ -19,7 +19,6 @@ export const MAX_FILE_SIZE_2MB = 2_097_152;
 
 export const INPUT_DEBOUNCE_TIME = 400;
 export const SEARCH_DEBOUNCE_VALUE = 700;
-export const CHART_DEBOUNCE_VALUE = 700;
 
 export const BUILDER_PAGES = {
   activities: 'activities',
@@ -49,6 +48,7 @@ export const enum Roles {
   Editor = 'editor',
   Reviewer = 'reviewer',
   Respondent = 'respondent',
+  Owner = 'owner',
 }
 
 export enum ItemResponseType {
@@ -124,3 +124,4 @@ export const enum ConditionalLogicMatch {
   Any = 'Any',
   All = 'ALL',
 }
+export const ALLOWED_AUDIO_FILE_TYPES = '.mp3,.wav';

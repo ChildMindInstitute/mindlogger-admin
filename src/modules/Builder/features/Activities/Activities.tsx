@@ -167,6 +167,7 @@ export const Activities = () => {
                                   })
                                 }
                                 hasError={hasError}
+                                count={activity.items.length}
                               />
                               <InsertItem
                                 isVisible={

@@ -9,6 +9,8 @@ import {
   LoadedFolder,
   LoadedFolderApplet,
 } from 'redux/modules';
+import { Encryption } from 'shared/utils';
+
 import { state as initialState } from './Folders.state';
 
 export const flatFoldersApplets = (item: FolderApplet): FolderApplet[] => {
@@ -227,18 +229,14 @@ export const createRejectedData = (
 export const changeAppletEncryption = (
   folders: FoldersSchema,
   appletId: string,
-  encryptionData: FormData,
+  encryption: Encryption,
 ) =>
   folders.flattenFoldersApplets.data.map((folderApplet) => {
-    if (folderApplet.id === appletId) {
-      const encryptionString = encryptionData.get('encryption')?.toString();
-      const encryption = JSON.parse(encryptionString || '');
-
+    if (folderApplet.id === appletId)
       return {
         ...folderApplet,
         encryption,
       };
-    }
 
     return folderApplet;
   });

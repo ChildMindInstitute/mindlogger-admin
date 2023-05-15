@@ -4,20 +4,18 @@ import { TableCell, TableRow } from '@mui/material';
 
 import { useAppletsDnd, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { FolderApplet, folders, popups, account } from 'redux/modules';
+import { applets, FolderApplet, folders, popups } from 'redux/modules';
 import { StyledBodyMedium } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
 import { page } from 'resources';
-import { getAppletEncryptionInfo } from 'shared/utils/encryption';
-import { getBuilderAppletUrl, getDateInUserTimezone } from 'shared/utils';
+import { Encryption, getBuilderAppletUrl, getDateInUserTimezone } from 'shared/utils';
 
 import { ShareAppletPopup } from '../../Popups';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
-import { getActions } from './AppletItem.utils';
+import { getActions, hasOwnerRole } from './AppletItem.utils';
 
 export const AppletItem = ({ item }: { item: FolderApplet }) => {
-  const accountData = account.useData();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
@@ -39,25 +37,17 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
     event.dataTransfer.setData('text/plain', item.id);
   };
 
-  const submitCallback = async ({ appletPassword }: { appletPassword: string }) => {
-    const encryptionInfo = getAppletEncryptionInfo({
-      appletPassword,
-      accountId: accountData?.account.accountId || '',
-    });
-    const formData = new FormData();
-    formData.set(
-      'encryption',
-      JSON.stringify({
-        appletPublicKey: Array.from(encryptionInfo.getPublicKey()),
-        appletPrime: Array.from(encryptionInfo.getPrime()),
-        base: Array.from(encryptionInfo.getGenerator()),
-      }),
-    );
-
+  const submitCallback = async (encryption: Encryption) => {
+    // await dispatch(
+    //   folders.thunk.setAppletEncryption({
+    //     appletId: item.id,
+    //     encryption,
+    //   }),
+    // );// TODO: postpone until folders api will be ready
     await dispatch(
-      folders.thunk.setAppletEncryption({
+      applets.thunk.setAppletEncryption({
         appletId: item.id,
-        data: formData,
+        encryption,
       }),
     );
 
@@ -65,9 +55,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   };
 
   const checkAppletEncryption = (callback: () => void) =>
-    item?.roles?.includes('owner') && !item?.encryption
-      ? setPasswordPopupVisible(true)
-      : callback();
+    hasOwnerRole(item) && !item.encryption ? setPasswordPopupVisible(true) : callback();
 
   const actions = {
     removeFromFolder: () =>
@@ -83,6 +71,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         dispatch(
           popups.actions.setPopupVisible({
             appletId: item.id,
+            encryption: item.encryption,
             key: 'deletePopupVisible',
             value: true,
           }),
@@ -93,6 +82,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         dispatch(
           popups.actions.setPopupVisible({
             appletId: item.id,
+            encryption: item.encryption,
             key: 'duplicatePopupsVisible',
             value: true,
           }),
@@ -103,17 +93,19 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         dispatch(
           popups.actions.setPopupVisible({
             appletId: item.id,
+            encryption: item.encryption,
             key: 'transferOwnershipPopupVisible',
             value: true,
           }),
         ),
       ),
     shareAppletAction: () => checkAppletEncryption(() => setSharePopupVisible(true)),
-    editAction: () => {
-      if (item.isFolder) return; // TODO: add Edit Folder Page navigation
+    editAction: () =>
+      checkAppletEncryption(() => {
+        if (item.isFolder) return; // TODO: add Edit Folder Page navigation
 
-      navigate(getBuilderAppletUrl(item.id));
-    },
+        navigate(getBuilderAppletUrl(item.id));
+      }),
   };
 
   return (

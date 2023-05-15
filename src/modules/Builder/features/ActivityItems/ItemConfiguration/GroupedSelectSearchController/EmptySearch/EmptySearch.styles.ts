@@ -9,6 +9,7 @@ export const StyledEmptyItem = styled(ListItem)`
   justify-content: center;
   height: 27.5rem;
   text-align: center;
+  overflow-wrap: break-word;
 `;
 
 export const StyledIcon = styled(Box)`

@@ -17,12 +17,6 @@ export type AllDayEventsVisible = {
   visible: boolean;
 } | null;
 
-export type AllDayEventsSortedByDaysItem = {
-  date: string;
-  week: string;
-  eventsIds: { id: string; isHiddenInTimeView: boolean }[];
-};
-
 export enum NameLength {
   Long = 'long',
   Short = 'short',

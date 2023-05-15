@@ -80,6 +80,19 @@ export const getTimeComparison = (message: string) =>
     otherwise: yup.string(),
   });
 
+export const getTimerDurationCheck = () => {
+  const timerDurationCheck = t('timerDurationCheck');
+
+  return yup.string().test('is-valid-duration', timerDurationCheck, (value) => {
+    if (!value) {
+      return false;
+    }
+    const [hours, minutes] = value.split(':');
+
+    return Number(hours) > 0 || Number(minutes) > 0;
+  });
+};
+
 export const getNotificationTimeComparison = (
   schema:
     | yup.SchemaOf<EventFormValues>

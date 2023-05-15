@@ -1,5 +1,8 @@
-import { FieldValues, Path, UseControllerProps } from 'react-hook-form';
+export type AudioPlayerProps = {
+  name: string;
+};
 
-export type AudioPlayerProps<T extends FieldValues> = {
-  fileResource: Path<T>;
-} & UseControllerProps<T>;
+export type GetMenuItems = {
+  onUploadAudio: () => void;
+  onRecordAudio: () => void;
+};
