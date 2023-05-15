@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
-import { applets, FolderApplet } from 'redux/modules';
+import { folders, FolderApplet } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, EmptyTable, TableHead } from 'shared/components';
 
 import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './Table.styles';
@@ -21,7 +21,7 @@ export const Table = ({
   handleRequestSort,
   handleChangePage,
 }: TableProps) => {
-  const status = applets.useStatus();
+  const status = folders.useStatus();
 
   const loading = status === 'idle' || status === 'loading';
 

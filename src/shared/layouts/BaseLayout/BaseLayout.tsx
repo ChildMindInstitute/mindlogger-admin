@@ -3,7 +3,7 @@ import { Outlet, useParams } from 'react-router-dom';
 
 import { DuplicatePopups, TransferOwnershipPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
-import { account, folders, popups, workspaces, applets, users, auth } from 'redux/modules';
+import { popups, workspaces, users, auth, folders } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, Footer } from 'shared/components';
 
 import { DeletePopup, LeftBar, TopBar } from './components';
@@ -13,30 +13,30 @@ export const BaseLayout = () => {
   const { appletId: id } = useParams();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
-  const accountData = account.useData();
+  const appletsFolders = folders.useFolders();
   const { ownerId } = workspaces.useData() || {};
   const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible } =
     popups.useData();
 
   useEffect(() => {
-    if (accountData?.account && isAuthorized) {
-      dispatch(folders.thunk.getAppletsForFolders({ account: accountData.account }));
-    }
-  }, [dispatch, accountData?.account, isAuthorized]);
-
-  useEffect(() => {
-    const { getWorkspaceApplets } = applets.thunk;
-    const { getWorkspaceRespondents, getWorkspaceManagers } = users.thunk;
-
-    if (ownerId) {
+    if (appletsFolders.length && isAuthorized && ownerId) {
       dispatch(
-        getWorkspaceApplets({
+        folders.thunk.getWorkspaceApplets({
           params: {
             ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
           },
         }),
       );
+    }
+  }, [isAuthorized, appletsFolders, ownerId]);
+
+  useEffect(() => {
+    const { getFolders } = folders.thunk;
+    const { getWorkspaceRespondents, getWorkspaceManagers } = users.thunk;
+
+    if (ownerId) {
+      dispatch(getFolders());
       dispatch(
         getWorkspaceRespondents({
           params: {

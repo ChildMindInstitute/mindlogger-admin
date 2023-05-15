@@ -2,40 +2,12 @@ import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 
 import { BaseSchema } from 'shared/state/Base';
-import {
-  AppletId,
-  GetAppletsParams,
-  Periodicity,
-  TimerType,
-  EventNotifications,
-  EventReminder,
-} from 'api';
+import { AppletId, Periodicity, TimerType, EventNotifications, EventReminder } from 'api';
 
 export type CreateAppletsStateData = {
   builder: ActionReducerMapBuilder<AppletsSchema>;
-  thunk:
-    | AsyncThunk<AxiosResponse, GetAppletsParams, Record<string, never>>
-    | AsyncThunk<AxiosResponse, AppletId, Record<string, never>>;
+  thunk: AsyncThunk<AxiosResponse, AppletId, Record<string, never>>;
   key: keyof AppletsSchema;
-};
-
-export type Applet = {
-  id: string;
-  displayName: string;
-  version: string;
-  description: string;
-  about: string;
-  image: string;
-  watermark: string;
-  themeId: string;
-  reportServerIp: string;
-  reportPublicKey: string;
-  reportRecipients: string[];
-  reportIncludeUserId: boolean;
-  reportIncludeCaseId: boolean;
-  reportEmailBody: string;
-  createdAt: string;
-  updatedAt: string;
 };
 
 export type Event = {
@@ -62,6 +34,5 @@ export type Event = {
 };
 
 export type AppletsSchema = {
-  applets: BaseSchema<{ result: Applet[]; count: number } | null>;
   events: BaseSchema<{ result: Event[]; count: number } | null>;
 };

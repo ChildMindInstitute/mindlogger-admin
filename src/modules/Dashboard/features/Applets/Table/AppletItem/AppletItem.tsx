@@ -118,38 +118,40 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
 
   return (
     <>
-      <TableRow
-        className={isDragOver ? 'dragged-over' : ''}
-        draggable
-        onDragStart={onDragStart}
-        onDragLeave={onDragLeave}
-        onDragOver={onDragOver}
-        onDrop={(e) => onDrop(e, item)}
-      >
-        <TableCell width="30%" onClick={handleAppletClick}>
-          <StyledAppletName applet={item}>
-            {item.parentId && (
-              <StyledPinContainer>
-                <Pin
-                  isPinned={!!item?.pinOrder}
-                  onClick={(e) => {
-                    dispatch(folders.thunk.togglePin(item));
-                    e.stopPropagation();
-                  }}
-                />
-              </StyledPinContainer>
-            )}
-            <AppletImage image={item.image} appletName={item.name} />
-            <StyledBodyMedium>{item.displayName}</StyledBodyMedium>
-          </StyledAppletName>
-        </TableCell>
-        <TableCell width="20%" onClick={handleAppletClick}>
-          {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
-        </TableCell>
-        <TableCell>
-          <Actions items={getActions({ actions, item })} context={item} />
-        </TableCell>
-      </TableRow>
+      {item.isVisible && (
+        <TableRow
+          className={isDragOver ? 'dragged-over' : ''}
+          draggable
+          onDragStart={onDragStart}
+          onDragLeave={onDragLeave}
+          onDragOver={onDragOver}
+          onDrop={(e) => onDrop(e, item)}
+        >
+          <TableCell width="30%" onClick={handleAppletClick}>
+            <StyledAppletName applet={item}>
+              {item.parentId && (
+                <StyledPinContainer>
+                  <Pin
+                    isPinned={!!item?.pinOrder}
+                    onClick={(e) => {
+                      dispatch(folders.thunk.togglePin(item));
+                      e.stopPropagation();
+                    }}
+                  />
+                </StyledPinContainer>
+              )}
+              <AppletImage image={item.image} appletName={item.name} />
+              <StyledBodyMedium>{item.displayName}</StyledBodyMedium>
+            </StyledAppletName>
+          </TableCell>
+          <TableCell width="20%" onClick={handleAppletClick}>
+            {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
+          </TableCell>
+          <TableCell>
+            <Actions items={getActions({ actions, item })} context={item} />
+          </TableCell>
+        </TableRow>
+      )}
       {sharePopupVisible && (
         <ShareAppletPopup
           sharePopupVisible={sharePopupVisible}

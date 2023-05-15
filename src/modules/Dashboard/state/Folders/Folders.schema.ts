@@ -53,7 +53,7 @@ export type AppletResponse = {
     themeId: string;
     url: string;
     version: string;
-    _id: string;
+    id: string;
   };
   encryption?: {
     appletPrime: number[];
@@ -93,6 +93,7 @@ export type AppletsSearchTerms = {
 };
 
 export type FoldersSchema = {
+  folders: BaseSchema<Folder[]>;
   foldersApplets: BaseSchema<FolderApplet[]>;
   flattenFoldersApplets: BaseSchema<FolderApplet[]>;
   appletsSearchTerms: BaseSchema<AppletsSearchTerms | null>;

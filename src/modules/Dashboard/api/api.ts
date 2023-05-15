@@ -11,7 +11,6 @@ import {
   AppletNameArgs,
   AppletEncryption,
   UpdatePin,
-  Folder,
   UpdateFolder,
   TogglePin,
   UpdateAlertStatus,
@@ -34,12 +33,17 @@ import {
   RespondentAccesses,
   RemoveRespondentAccess,
   RemoveManagerAccess,
+  GetWorkspaceAppletsParams,
+  FolderName,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
 
-export const getWorkspaceAppletsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+export const getWorkspaceAppletsApi = (
+  { params }: GetWorkspaceAppletsParams,
+  signal?: AbortSignal,
+) => {
   const { ownerId, ...restParams } = params;
 
   return authApiClient.get(`/workspaces/${ownerId}/applets`, {
@@ -253,7 +257,7 @@ export const getAppletsInFolderApi = ({ folderId }: FolderId, signal?: AbortSign
   });
 
 export const deleteFolderApi = ({ folderId }: FolderId, signal?: AbortSignal) =>
-  authApiClient.delete(`/folder/${folderId}`, {
+  authApiClient.delete(`/folders/${folderId}`, {
     signal,
   });
 
@@ -261,78 +265,46 @@ export const addAppletToFolderApi = (
   { folderId, appletId }: FolderId & AppletId,
   signal?: AbortSignal,
 ) =>
-  authApiClient.put(
-    `/folder/${folderId}/add`,
-    {},
+  authApiClient.post(
+    '/applets/set_folder',
     {
-      params: {
-        id: folderId,
-        appletId,
-      },
-      signal,
-    },
-  );
-
-export const removeAppletApi = (
-  { folderId, appletId }: FolderId & AppletId,
-  signal?: AbortSignal,
-) =>
-  authApiClient.delete(`/folder/${folderId}/remove`, {
-    params: {
-      id: folderId,
+      folderId,
       appletId,
     },
-    signal,
-  });
+    { signal },
+  );
 
-export const saveFolderApi = ({ folder: { name, parentId } }: Folder, signal?: AbortSignal) =>
+export const removeAppletFromFolderApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.post(
-    '/folder',
-    {},
+    '/applets/set_folder',
     {
-      params: {
-        name,
-        parentType: 'user',
-        parentId,
-      },
+      folderId: null,
+      appletId,
+    },
+    { signal },
+  );
+
+export const getFoldersApi = (signal?: AbortSignal) => authApiClient.get('/folders', { signal });
+
+export const saveFolderApi = ({ name }: FolderName, signal?: AbortSignal) =>
+  authApiClient.post(
+    '/folders',
+    { name },
+    {
       signal,
     },
   );
 
-export const updateFolderApi = (
-  { folder: { name, parentId }, folderId }: UpdateFolder,
-  signal?: AbortSignal,
-) =>
-  authApiClient.put(
-    `/folder/${folderId}`,
-    {},
-    {
-      params: {
-        name,
-        parentType: 'user',
-        parentId,
-      },
-      signal,
-    },
-  );
+export const updateFolderApi = ({ name, folderId }: UpdateFolder, signal?: AbortSignal) =>
+  authApiClient.put(`/folders/${folderId}`, { name }, { signal });
 
 export const togglePinApi = (
   { applet: { parentId, id }, isPinned }: TogglePin,
   signal?: AbortSignal,
 ) => {
-  const url = isPinned ? `/folder/${parentId}/pin` : `/folder/${parentId}/unpin`;
+  const method = isPinned ? 'post' : 'delete';
 
-  return authApiClient.put(
-    url,
-    {},
-    {
-      params: {
-        id: parentId,
-        appletId: id,
-      },
-      signal,
-    },
-  );
+  return authApiClient[method](`/folders/${parentId}/pin/${id}`, {}, { signal });
 };
 
 export const updateAlertStatusApi = ({ alertId }: UpdateAlertStatus, signal?: AbortSignal) =>
