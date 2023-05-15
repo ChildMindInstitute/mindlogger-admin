@@ -1,6 +1,7 @@
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components';
+import { Roles } from 'shared/consts';
 
 import { Actions } from './AppletItem.types';
 
@@ -61,3 +62,6 @@ export const getActions = ({
   //   tooltipTitle: t('shareWithTheLibrary'),
   // },
 ];
+
+export const hasOwnerRole = (item: unknown & { role?: string }) =>
+  !!item.role?.includes(Roles.Owner);

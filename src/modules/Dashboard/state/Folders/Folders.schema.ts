@@ -15,14 +15,14 @@ export type FolderApplet = {
   description?: string;
   displayName?: string;
   editing?: boolean;
-  encryption?: Encryption;
+  encryption?: Encryption | null;
   hasUrl?: boolean;
   image?: string;
   largeApplet?: boolean;
   parentId?: string;
   pinOrder?: number;
   published?: boolean;
-  roles?: string[];
+  role?: string;
   themeId?: string;
   updatedAt?: string;
   welcomeApplet?: boolean;

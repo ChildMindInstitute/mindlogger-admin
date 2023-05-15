@@ -225,7 +225,7 @@ export const getAppletUniqueNameApi = ({ name }: AppletUniqueName, signal?: Abor
 export const setAppletEncryptionApi = (
   { appletId, encryption }: AppletEncryption,
   signal?: AbortSignal,
-) => authApiClient.put(`/applet/${appletId}/encryption`, { encryption }, { signal });
+) => authApiClient.post(`/applets/${appletId}/encryption`, { ...encryption }, { signal });
 
 export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
   const { ownerId, ...restParams } = params;
