@@ -37,5 +37,5 @@ export const MultiScatterChart = () => {
     [chartRef],
   );
 
-  return <>{renderChart}</>;
+  return renderChart;
 };
