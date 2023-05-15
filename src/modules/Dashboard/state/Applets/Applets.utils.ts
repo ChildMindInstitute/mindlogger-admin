@@ -1,33 +1,13 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { Encryption, getApiError } from 'shared/utils';
+import { getApiError } from 'shared/utils';
 
-import { Applet, AppletsSchema, CreateAppletsStateData } from './Applets.schema';
+import { AppletsSchema, CreateAppletsStateData } from './Applets.schema';
 import { state as initialState } from './Applets.state';
 
 export const resetEventsData = (state: AppletsSchema) => {
   state.events = initialState.events;
-};
-
-export const changeAppletEncryption = (
-  state: AppletsSchema,
-  action: PayloadAction<{
-    appletId: string;
-    encryption: Encryption;
-  }>,
-) => {
-  if (!state.applets.data) return;
-
-  const { appletId, encryption } = action.payload;
-  state.applets.data.result = state.applets.data.result.map((applet) =>
-    applet.id === appletId
-      ? ({
-          ...applet,
-          encryption,
-        } as Applet)
-      : applet,
-  );
 };
 
 export const createAppletsPendingData = ({ builder, thunk, key }: CreateAppletsStateData) =>
