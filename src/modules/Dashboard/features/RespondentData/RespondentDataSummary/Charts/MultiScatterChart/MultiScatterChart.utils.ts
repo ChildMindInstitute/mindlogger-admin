@@ -2,9 +2,8 @@ import { variables } from 'shared/styles';
 import { locales } from 'shared/consts';
 
 import { Context } from 'chartjs-plugin-datalabels';
-import { ExtendedChartDataset } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Charts/LineChart/LineChart.types';
 
-import { Data } from './MultiScatterChart.types';
+import { Data, ExtendedChartDataset } from './MultiScatterChart.types';
 import { commonConfig } from './MultiScatterChart.const';
 
 export const getOptions = (lang: keyof typeof locales, data: Data) => {

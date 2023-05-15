@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import {
   Chart as ChartJS,
   LinearScale,
-  CategoryScale,
   PointElement,
   LineElement,
   Tooltip,
@@ -24,7 +23,7 @@ export const MultiScatterChart = () => {
   );
   const { i18n } = useTranslation('app');
 
-  ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Tooltip, TimeScale);
+  ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
   const renderChart = useMemo(
     () => (
