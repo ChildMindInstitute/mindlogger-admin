@@ -30,7 +30,7 @@ export type SingleSelectAnswer = ItemAnswer & {
 
 export type ActivityItemAnswer = {
   activityItem: Item;
-  answer: ItemAnswer | null;
+  answer: ItemAnswer | null | string;
 };
 
 export interface TextItemAnswer extends ActivityItemAnswer {

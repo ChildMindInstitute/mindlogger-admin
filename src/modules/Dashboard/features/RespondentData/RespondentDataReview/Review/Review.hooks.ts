@@ -25,16 +25,21 @@ export const useDecryptedReviews = (userPublicKey = '') => {
   const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
 
   return (itemAnswers: ActivityItemAnswer[]): ActivityItemAnswer[] =>
-    itemAnswers.map((itemAnswer) => ({
-      ...itemAnswer,
-      answer: {
-        ...itemAnswer.answer,
-        value: JSON.parse(
-          decryptData({
-            text: itemAnswer.answer.value as string,
-            key,
-          }),
-        ),
-      },
-    }));
+    itemAnswers.map((itemAnswer) => {
+      try {
+        return {
+          ...itemAnswer,
+          answer: JSON.parse(
+            decryptData({
+              text: itemAnswer.answer as string,
+              key,
+            }),
+          ),
+        };
+      } catch {
+        console.log('Error while answer parsing');
+
+        return itemAnswer;
+      }
+    });
 };
