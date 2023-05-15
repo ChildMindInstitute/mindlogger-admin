@@ -1,6 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import uniqueId from 'lodash.uniqueid';
-import { isWithinInterval, subSeconds } from 'date-fns';
 
 import i18n from 'i18n';
 import { CalendarEvent } from 'modules/Dashboard/state';
@@ -19,6 +17,7 @@ import {
   StyledDay,
   StyledDaysWrapper,
   StyledMonthInside,
+  StyledSkeleton,
 } from './MonthCalendar.styles';
 
 export const MonthCalendar = ({
@@ -36,7 +35,6 @@ export const MonthCalendar = ({
     setActiveView(CalendarViews.Day);
   };
 
-  // TODO: reduce complexity
   const monthDates = useMemo(
     () =>
       calendar &&
@@ -44,15 +42,7 @@ export const MonthCalendar = ({
         <StyledDaysWrapper key={index}>
           {week.map((date, index) => {
             const currentDateEvents = events?.filter(
-              ({ start, end }) =>
-                (start && formatToYearMonthDate(start) === formatToYearMonthDate(date)) ||
-                (start &&
-                  end &&
-                  end > start &&
-                  isWithinInterval(date, {
-                    start,
-                    end: subSeconds(end, 1),
-                  })),
+              ({ eventCurrentDate }) => eventCurrentDate === formatToYearMonthDate(date),
             );
 
             return (
@@ -75,18 +65,22 @@ export const MonthCalendar = ({
   }, [date]);
 
   return (
-    calendar && (
-      <StyledMonth>
-        <StyledMonthInside>
-          <StyledMonthName>{getMonthName(calendar.date)}</StyledMonthName>
-          <StyledDaysWrapper>
-            {shortWeekDaysArray(langLocale).map((day) => (
-              <StyledDay key={uniqueId()}>{day}</StyledDay>
-            ))}
-          </StyledDaysWrapper>
-          {monthDates}
-        </StyledMonthInside>
-      </StyledMonth>
-    )
+    <StyledMonth>
+      <StyledMonthInside>
+        {calendar && monthDates ? (
+          <>
+            <StyledMonthName>{getMonthName(calendar.date)}</StyledMonthName>
+            <StyledDaysWrapper>
+              {shortWeekDaysArray(langLocale).map(({ id, name }) => (
+                <StyledDay key={id}>{name}</StyledDay>
+              ))}
+            </StyledDaysWrapper>
+            {monthDates}
+          </>
+        ) : (
+          <StyledSkeleton animation="wave" variant="rectangular" width={224} height={180} />
+        )}
+      </StyledMonthInside>
+    </StyledMonth>
   );
 };

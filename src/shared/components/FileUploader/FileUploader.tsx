@@ -27,6 +27,21 @@ export const FileUploader = ({
   const [file, setFile] = useState<null | ImportedFile>(null);
   const [error, setError] = useState<JSX.Element | null>(null);
 
+  const stopDefaults = (e: DragEvent | MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  const dragEvents = {
+    onDragEnter: stopDefaults,
+    onDragLeave: stopDefaults,
+    onDragOver: stopDefaults,
+    onDrop: (e: DragEvent<HTMLElement>) => {
+      stopDefaults(e);
+      handleChange(e);
+    },
+  };
+
   const handleChange = async (event: DragEvent | ChangeEvent) => {
     const files =
       (event as ChangeEvent<HTMLInputElement>)?.target.files ||
@@ -38,6 +53,7 @@ export const FileUploader = ({
     const file = files[0];
     importTable(file)
       .then((data) => {
+        setError(null);
         const importedFile = { name: file.name, data };
         setFile(importedFile);
         onFileReady(importedFile);
@@ -46,6 +62,7 @@ export const FileUploader = ({
   };
 
   const removeFile = () => {
+    setError(null);
     setFile(null);
     onFileReady(null);
   };
@@ -73,12 +90,13 @@ export const FileUploader = ({
           </StyledFlexTopCenter>
         ) : (
           <StyledLabel
+            {...dragEvents}
             label={
               <StyledFlexAllCenter>
-                <StyledBodyLarge>
+                <StyledBodyLarge sx={{ textAlign: 'center' }}>
                   <Trans i18nKey="dropFile">
-                    Drop <strong>.csv, .xls, .xlsx</strong> or <strong>.ods</strong> here or{' '}
-                    <em>click to browse</em>.
+                    Drop <strong>.csv, .xls, .xlsx</strong> or <strong>.ods</strong> here or
+                    <em> click to browse</em>.
                   </Trans>
                 </StyledBodyLarge>
               </StyledFlexAllCenter>

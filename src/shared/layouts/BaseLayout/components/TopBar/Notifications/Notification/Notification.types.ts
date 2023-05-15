@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Encryption } from 'redux/modules';
+import { Encryption } from 'shared/utils';
 
 export type NotificationProps = {
   currentId: string;

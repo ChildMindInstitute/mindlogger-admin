@@ -9,9 +9,9 @@ const initialStateData = {
 
 export const state: CalendarEventsSchema = {
   events: initialStateData,
-  eventsToShow: initialStateData,
   alwaysAvailableHidden: initialStateData,
   scheduledHidden: initialStateData,
   createEventsData: initialStateData,
   processedEventStartYear: initialStateData,
+  processedEvents: initialStateData,
 };

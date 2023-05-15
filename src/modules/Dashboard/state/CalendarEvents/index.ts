@@ -25,14 +25,6 @@ export const calendarEvents = {
         },
       }) => data,
     ),
-  useVisibleEventsData: (): CalendarEventsSchema['eventsToShow']['data'] =>
-    useAppSelector(
-      ({
-        calendarEvents: {
-          eventsToShow: { data },
-        },
-      }) => data,
-    ),
   useCreateEventsData: (): CalendarEventsSchema['createEventsData']['data'] =>
     useAppSelector(
       ({
@@ -46,6 +38,14 @@ export const calendarEvents = {
       ({
         calendarEvents: {
           processedEventStartYear: { data },
+        },
+      }) => data,
+    ),
+  useVisibleEventsData: (): CalendarEventsSchema['processedEvents']['data'] =>
+    useAppSelector(
+      ({
+        calendarEvents: {
+          processedEvents: { data },
         },
       }) => data,
     ),

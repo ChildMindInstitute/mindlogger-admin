@@ -1,8 +1,6 @@
 import { styled } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
-import { StyledFlexWrap } from 'shared/styles/styledComponents';
+import { variables, theme, StyledFlexWrap } from 'shared/styles';
 
 export const StyledYear = styled(StyledFlexWrap)`
   justify-content: space-between;

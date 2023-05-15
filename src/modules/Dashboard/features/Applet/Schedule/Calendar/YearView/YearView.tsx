@@ -3,13 +3,13 @@ import { startOf, add } from 'react-big-calendar/lib/utils/dates';
 
 import { DateFormats } from 'shared/consts';
 import { createArray } from 'shared/utils';
+import { CalendarEvent } from 'modules/Dashboard/state';
 
 import { CalendarViews } from '../Calendar.types';
 import { MonthCalendar } from './MonthCalendar';
 import { StyledYear } from './YearView.styles';
 import { YearViewProps } from './YearView.types';
 
-// TODO: Add preloader while year view and events for every day are loading
 export const YearView = ({ date, localizer, events, onNavigate, components }: YearViewProps) => {
   const firstMonth = startOf(date, CalendarViews.Year);
   const { setDate, setActiveView } = components;
@@ -19,7 +19,7 @@ export const YearView = ({ date, localizer, events, onNavigate, components }: Ye
       {createArray(12, (index) => (
         <MonthCalendar
           key={index}
-          events={events}
+          events={events as CalendarEvent[]}
           date={add(firstMonth, index, CalendarViews.Month)}
           localizer={localizer}
           onNavigate={onNavigate}

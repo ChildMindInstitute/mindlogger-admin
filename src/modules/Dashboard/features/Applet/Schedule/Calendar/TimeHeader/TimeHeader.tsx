@@ -2,14 +2,13 @@ import { MouseEvent } from 'react';
 
 import { variables, StyledLabelBoldMedium, StyledTitleLarge } from 'shared/styles';
 import {
-  allDayEventsSortedByDays,
   formatToWeekYear,
   formatToYearMonthDate,
   getDayName,
   getMonthName,
   getMoreText,
-  hiddenEventsIds,
 } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+import { calendarEvents } from 'modules/Dashboard/state';
 
 import { NameLength } from '../Calendar.types';
 import { TimeHeaderProps, UiType } from './TimeHeader.types';
@@ -25,7 +24,9 @@ export const TimeHeader = ({
   const VISIBLE_EVENTS_LENGTH = 3;
   const currentDate = formatToYearMonthDate(date);
   const currentWeek = formatToWeekYear(date);
-  const currentAllDaysEventsIds = allDayEventsSortedByDays.find(
+  const { hiddenEventsIds = [], allDayEventsSortedByDays = [] } =
+    calendarEvents.useVisibleEventsData() || {};
+  const currentAllDaysEventsIds = allDayEventsSortedByDays?.find(
     (el) => el.date === currentDate,
   )?.eventsIds;
   const isWeekUiType = uiType === UiType.Week;
@@ -59,7 +60,7 @@ export const TimeHeader = ({
 
         return {
           ...event,
-          isHiddenInTimeView: hiddenEventsIds.some((id) => id === event.id),
+          isHiddenInTimeView: hiddenEventsIds?.some((id) => id === event.id),
         };
       }),
     );
