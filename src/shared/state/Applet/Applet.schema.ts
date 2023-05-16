@@ -310,7 +310,7 @@ export type ItemAlert = {
 };
 
 export type BaseCondition = {
-  //for fronted purposes only
+  //for frontend purposes only
   key?: string;
   itemName: string;
   type: ConditionType | '';

@@ -1,6 +1,7 @@
 import { ColorResult } from 'react-color';
 
 import {
+  Condition,
   ConditionalLogic,
   AudioPlayerResponseValues,
   AudioResponseValues,
@@ -90,7 +91,23 @@ export const mapItemResponseValues = (
   return null;
 };
 
-export const getItemConditionalLogic = (item: Item, conditionalLogic?: ConditionalLogic[]) =>
-  conditionalLogic?.filter(
+export const getItemConditionalLogic = (
+  item: Item,
+  items: Item[],
+  conditionalLogic?: ConditionalLogic[],
+) => {
+  const result = conditionalLogic?.filter(
     (conditionalLogic: ConditionalLogic) => conditionalLogic.itemKey === getEntityKey(item),
   );
+
+  if (!result?.length) return;
+
+  return result.map(({ match, conditions }: ConditionalLogic) => ({
+    match,
+    conditions: conditions?.map(({ type, payload, itemName }) => ({
+      type,
+      payload: payload as keyof Condition['payload'],
+      itemName: items.find((item) => getEntityKey(item) === itemName)?.name ?? '',
+    })),
+  }));
+};

@@ -4,23 +4,23 @@ import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 
 import i18n from 'i18n';
+import { page } from 'resources';
 import { Svg } from 'shared/components';
 import {
+  Item,
+  Condition,
+  SingleApplet,
+  ActivityFlow,
+  ConditionalLogic,
   DrawingResponseValues,
   NumberItemResponseValues,
-  AudioPlayerResponseValues,
-  SingleAndMultipleSelectionOption,
   SliderItemResponseValues,
   SliderRowsResponseValues,
-} from 'shared/state';
-import { page } from 'resources';
-import {
-  SingleApplet,
-  Item,
-  ActivityFlow,
+  AudioPlayerResponseValues,
+  SingleAndMultipleSelectionOption,
   SingleAndMultipleSelectItemResponseValues,
 } from 'shared/state';
-import { getDictionaryText, Path } from 'shared/utils';
+import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
 
 import { ActivityFormValues, ItemFormValues } from './BuilderApplet.types';
@@ -154,6 +154,26 @@ const getActivityFlows = (activityFlows: ActivityFlow[]) =>
     })),
   }));
 
+const getActivityConditionalLogic = (items: Item[]) =>
+  items.reduce((result: ConditionalLogic[], item) => {
+    if (item.conditionalLogic)
+      return [
+        ...result,
+        ...item.conditionalLogic.map(({ match, conditions }) => ({
+          key: uuidv4(),
+          itemKey: getEntityKey(item),
+          match,
+          conditions: conditions.map(({ itemName, type, payload }) => ({
+            type,
+            payload: payload as keyof Condition['payload'],
+            itemName: getEntityKey(items.find((item) => item.name === itemName) ?? {}),
+          })),
+        })),
+      ];
+
+    return result;
+  }, []);
+
 export const getDefaultValues = (appletData?: SingleApplet) => {
   if (!appletData) return getNewApplet();
 
@@ -166,6 +186,8 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
           ...activity,
           description: getDictionaryText(activity.description),
           items: getActivityItems(activity.items),
+          //TODO: for frontend purposes - should be reviewed after refactoring phase
+          conditionalLogic: getActivityConditionalLogic(activity.items),
         }))
       : [],
     activityFlows: getActivityFlows(appletData.activityFlows),
