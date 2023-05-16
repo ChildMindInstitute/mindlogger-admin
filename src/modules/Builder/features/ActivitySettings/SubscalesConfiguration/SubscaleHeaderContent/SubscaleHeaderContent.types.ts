@@ -3,4 +3,5 @@ export type SubscaleHeaderContentProps = {
   name: string;
   title: string;
   open: boolean;
+  onUpdate: (lookupTableData?: string) => void;
 };
