@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { DataTableItem, ImportedFile } from 'shared/components';
+import { exportToCsv } from 'shared/utils';
 
 import { ModalType, Steps, SubscaleLookupTableSetupHookProps } from './SubscaleLookupTable.types';
+import { defaultTemplate } from './SubscaleLookupTable.const';
 
 export const useSubscaleLookupTableSetup = ({ tableData }: SubscaleLookupTableSetupHookProps) => {
   const [modalType, setModalType] = useState<ModalType | null>(
@@ -26,6 +28,10 @@ export const useSubscaleLookupTableSetup = ({ tableData }: SubscaleLookupTableSe
     }
   };
 
+  const onDownloadTemplate = async () => {
+    await exportToCsv(defaultTemplate, 'subscale_lookup_table_template');
+  };
+
   useEffect(() => {
     if (!tableData?.length) return;
 
@@ -45,5 +51,6 @@ export const useSubscaleLookupTableSetup = ({ tableData }: SubscaleLookupTableSe
     setError,
     setStep,
     onFileReady,
+    onDownloadTemplate,
   };
 };

@@ -1,4 +1,4 @@
-import { DataTableItem, ImportedFile, ModalProps } from 'shared/components';
+import { DataTableItem, FileUploaderProps, ImportedFile, ModalProps } from 'shared/components';
 
 export type SubscaleLookupTableProps = {
   open: boolean;
@@ -18,6 +18,7 @@ export type GetComponentsProps = {
   data?: DataTableItem[];
   error: JSX.Element | null;
   onFileReady: (file: ImportedFile | null) => void;
+  onDownloadTemplate: FileUploaderProps['onDownloadTemplate'];
   onUpdate: (data?: string) => void;
   onClose: () => void;
   setModalType: (value: ModalType) => void;

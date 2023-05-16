@@ -24,3 +24,39 @@ export const columnData = [
     label: t('subscaleLookupTable.column.text'),
   },
 ];
+
+export const defaultTemplate = [
+  {
+    Score: 10,
+    'Raw Score': 1,
+    Age: 15,
+    Sex: 'M',
+    Text: 'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+  },
+  {
+    Score: 20,
+    'Raw Score': 2,
+    Age: 15,
+    Sex: 'M',
+    Text: 'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+  },
+  {
+    Score: 30,
+    'Raw Score': 3,
+    Age: 15,
+    Sex: 'M',
+    Text: 'Markdown Text Here',
+  },
+  {
+    Score: 40,
+    'Raw Score': 4,
+    Age: 15,
+    Sex: 'F',
+    Text: 'Good',
+  },
+  {
+    Score: 50,
+    'Raw Score': 5,
+    Age: 15,
+  },
+];

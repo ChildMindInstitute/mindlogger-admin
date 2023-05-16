@@ -105,6 +105,7 @@ export const getComponents = ({
   onFileReady,
   onUpdate,
   onClose,
+  onDownloadTemplate,
   setModalType,
   setStep,
   setError,
@@ -120,6 +121,7 @@ export const getComponents = ({
             <FileUploader
               uploadLabel={labelsObject.upload.initDescription}
               onFileReady={onFileReady}
+              onDownloadTemplate={onDownloadTemplate}
               invalidFileFormatError={labelsObject.errors.incorrectFileFormat}
             />
             {error}
