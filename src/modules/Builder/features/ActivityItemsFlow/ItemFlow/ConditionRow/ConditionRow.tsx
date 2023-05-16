@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
-import { ConditionType } from 'shared/consts';
+import { ConditionType, ItemResponseType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { ItemFormValues } from 'modules/Builder/pages';
 import { Condition } from 'modules/Builder/components';

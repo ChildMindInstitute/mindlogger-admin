@@ -4,15 +4,18 @@ import { useTranslation, Trans } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useBreadcrumbs } from 'shared/hooks';
-import { StyledContainer, StyledModalWrapper } from 'shared/styles';
+import { StyledBodyLarge, StyledContainer, StyledModalWrapper, theme } from 'shared/styles';
 import { Modal } from 'shared/components';
+import { getEntityKey } from 'shared/utils';
+import { ConditionalLogic } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 import { ItemConfiguration } from './ItemConfiguration';
-import { getItemKey } from './ActivityItems.utils';
 import { LeftBar } from './LeftBar';
+import { getItemConditionDependencies } from './ActivityItems.utils';
+import { ConditionalPanel } from './ConditionalPanel';
 
 export const ActivityItems = () => {
   const { t } = useTranslation('app');
@@ -21,7 +24,7 @@ export const ActivityItems = () => {
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
   const { fieldName, activity } = useCurrentActivity();
-  const { control, watch } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
 
   const {
     append: appendItem,
@@ -37,6 +40,7 @@ export const ActivityItems = () => {
 
   if (!activity) return null;
 
+  const conditionalLogic = watch(`${fieldName}.conditionalLogic`);
   const items = watch(`${fieldName}.items`);
   const activeItemIndex = items?.findIndex(
     (item: ItemFormValues) => (item.key ?? item.id) === activeItemId,
@@ -46,6 +50,10 @@ export const ActivityItems = () => {
   );
   const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
+  const conditionalLogicForItemToDelete = getItemConditionDependencies(
+    itemToDelete,
+    activity.conditionalLogic,
+  );
 
   const handleRemoveClick = (id: string) => {
     setItemIdToDelete(id);
@@ -67,7 +75,7 @@ export const ActivityItems = () => {
   const handleDuplicateItem = (index: number) => {
     const itemToDuplicate = items[index];
     setDuplicateIndexes((prevState) => {
-      const numberToInsert = (prevState[getItemKey(itemToDuplicate)] || 0) + 1;
+      const numberToInsert = (prevState[getEntityKey(itemToDuplicate)] || 0) + 1;
 
       insertItem(index + 1, {
         ...itemToDuplicate,
@@ -78,20 +86,32 @@ export const ActivityItems = () => {
 
       return {
         ...prevState,
-        [getItemKey(itemToDuplicate)]: numberToInsert,
+        [getEntityKey(itemToDuplicate)]: numberToInsert,
       };
     });
   };
 
-  const handleModalClose = () => {
+  const handleRemoveModalClose = () => {
     setItemIdToDelete('');
   };
 
-  const handleModalSubmit = () => {
+  const handleRemoveModalSubmit = () => {
     if (itemIdToDelete === activeItemId) setActiveItemId('');
+    if (conditionalLogicForItemToDelete?.length) {
+      const conditionalLogicKeysToRemove = conditionalLogicForItemToDelete.map(
+        (condition: ConditionalLogic) => getEntityKey(condition),
+      );
+      setValue(
+        `${fieldName}.conditionalLogic`,
+        conditionalLogic?.filter(
+          (conditionalLogic: ConditionalLogic) =>
+            !conditionalLogicKeysToRemove.includes(getEntityKey(conditionalLogic)),
+        ),
+      );
+    }
 
     removeItem(itemIndexToDelete);
-    handleModalClose();
+    handleRemoveModalClose();
   };
 
   return (
@@ -116,23 +136,34 @@ export const ActivityItems = () => {
       {!!itemIdToDelete && (
         <Modal
           open={!!itemIdToDelete}
-          onClose={handleModalClose}
-          onSubmit={handleModalSubmit}
-          onSecondBtnSubmit={handleModalClose}
+          onClose={handleRemoveModalClose}
+          onSubmit={handleRemoveModalSubmit}
+          onSecondBtnSubmit={handleRemoveModalClose}
           title={t('deleteItem')}
           buttonText={t('delete')}
           secondBtnText={t('cancel')}
-          hasSecondBtn
+          hasSecondBtn={true}
           submitBtnColor="error"
         >
           <StyledModalWrapper>
-            <Trans i18nKey="deleteItemDescription">
-              Are you sure you want to delete the Item
-              <strong>
-                <>{{ itemName }}</>
-              </strong>
-              ?
-            </Trans>
+            <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
+              <Trans i18nKey="deleteItemDescription">
+                Are you sure you want to delete the Item
+                <strong>
+                  <>{{ itemName }}</>
+                </strong>
+                ?
+              </Trans>{' '}
+              {conditionalLogicForItemToDelete?.length
+                ? t('deleteItemWithConditionalsDescription')
+                : null}
+            </StyledBodyLarge>
+            {conditionalLogicForItemToDelete?.map((conditionalLogic: ConditionalLogic) => (
+              <ConditionalPanel
+                key={`condition-panel-${conditionalLogic.key}`}
+                condition={conditionalLogic}
+              />
+            ))}
           </StyledModalWrapper>
         </Modal>
       )}

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
@@ -12,10 +13,21 @@ import { getMatchOptions, getItemsOptions } from './SummaryRow.utils';
 
 export const SummaryRow = ({ name }: SummaryRowProps) => {
   const { t } = useTranslation('app');
-  const { control, watch } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
 
   const { fieldName } = useCurrentActivity();
   const items = watch(`${fieldName}.items`);
+  const selectedItem = watch(`${name}.itemKey`);
+
+  useEffect(() => {
+    if (selectedItem) {
+      const itemIndex = items?.findIndex(
+        (item: ItemFormValues) => getEntityKey(item) === selectedItem,
+      );
+
+      if (itemIndex !== -1) setValue(`${fieldName}.items.${itemIndex}.isHidden`, false);
+    }
+  }, [selectedItem]);
 
   return (
     <StyledSummaryRow>
