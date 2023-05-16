@@ -5,22 +5,22 @@ const { t } = i18n;
 export const columnData = [
   {
     key: 'Score',
-    label: t('Score'),
+    label: t('subscaleLookupTable.column.score'),
   },
   {
     key: 'Raw Score',
-    label: t('Raw Score'),
+    label: t('subscaleLookupTable.column.rawScore'),
   },
   {
     key: 'Age',
-    label: t('Age'),
+    label: t('subscaleLookupTable.column.age'),
   },
   {
     key: 'Sex',
-    label: t('Sex'),
+    label: t('subscaleLookupTable.column.sex'),
   },
   {
     key: 'Text',
-    label: t('Text'),
+    label: t('subscaleLookupTable.column.text'),
   },
 ];

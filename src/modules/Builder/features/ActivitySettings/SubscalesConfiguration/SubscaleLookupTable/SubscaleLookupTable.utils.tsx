@@ -2,16 +2,10 @@ import { Trans } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { StyledBodyLarge, StyledTitleSmall, theme, variables } from 'shared/styles';
-import {
-  DataTable,
-  DataTableItem,
-  FileUploader,
-  ImportedFile,
-  SubmitBtnColor,
-} from 'shared/components';
+import { DataTable, FileUploader } from 'shared/components';
 import i18n from 'i18n';
 
-import { ModalType, Steps } from './SubscaleLookupTable.types';
+import { GetComponentsProps, ModalType, ScreenObjectProps } from './SubscaleLookupTable.types';
 import { columnData } from './SubscaleLookupTable.const';
 
 const { t } = i18n;
@@ -103,7 +97,7 @@ export const labels = (name?: string) => ({
   },
 });
 
-export const getComponent = ({
+export const getComponents = ({
   modalType,
   subscaleName,
   data,
@@ -114,37 +108,11 @@ export const getComponent = ({
   setModalType,
   setStep,
   setError,
-}: {
-  modalType: ModalType;
-  subscaleName: string;
-  data?: DataTableItem[];
-  error: JSX.Element | null;
-  onFileReady: (file: ImportedFile | null) => void;
-  onUpdate: (data?: string) => void;
-  onClose: () => void;
-  setModalType: (value: ModalType) => void;
-  setStep: (value: Steps) => void;
-  setError: (value: JSX.Element | null) => void;
-}) => {
+}: GetComponentsProps) => {
   const labelsObject = labels(subscaleName);
 
-  const components: Record<
-    string,
-    {
-      title: string;
-      component: JSX.Element;
-      btnText: string;
-      submitBtnColor?: SubmitBtnColor;
-      onSubmit: () => void;
-      hasSecondBtn?: boolean;
-      secondBtnText?: string;
-      onSecondBtnSubmit?: () => void;
-      hasThirdBtn?: boolean;
-      thirdBtnText?: string;
-      onThirdBtnSubmit?: () => void;
-    }[]
-  > = {
-    upload: [
+  const components: ScreenObjectProps = {
+    [ModalType.Upload]: [
       {
         title: labelsObject[modalType].title,
         component: (
@@ -157,7 +125,7 @@ export const getComponent = ({
             {error}
           </>
         ),
-        btnText: t('save'),
+        buttonText: t('save'),
         onSubmit: () => {
           setError(labelsObject.errors.haveToUploadFile);
         },
@@ -178,7 +146,7 @@ export const getComponent = ({
             />
           </>
         ),
-        btnText: t('save'),
+        buttonText: t('save'),
         onSubmit: () => {
           if (!data?.length) return;
 
@@ -190,7 +158,7 @@ export const getComponent = ({
         onSecondBtnSubmit: onClose,
       },
     ],
-    edit: [
+    [ModalType.Edit]: [
       {
         title: labelsObject[modalType].title,
         component: (
@@ -204,7 +172,7 @@ export const getComponent = ({
             />
           </>
         ),
-        btnText: t('replace'),
+        buttonText: t('replace'),
         onSubmit: () => {
           setModalType(ModalType.Upload);
           setStep(0);
@@ -221,11 +189,11 @@ export const getComponent = ({
         onThirdBtnSubmit: onClose,
       },
     ],
-    delete: [
+    [ModalType.Delete]: [
       {
         title: labelsObject[modalType].title,
         component: labelsObject.delete.initDescription,
-        btnText: t('delete'),
+        buttonText: t('delete'),
         onSubmit: () => {
           onUpdate();
           setStep(1);
@@ -238,7 +206,7 @@ export const getComponent = ({
       {
         title: labelsObject[modalType].title,
         component: labelsObject.delete.successDescription,
-        btnText: t('ok'),
+        buttonText: t('ok'),
         onSubmit: onClose,
       },
     ],

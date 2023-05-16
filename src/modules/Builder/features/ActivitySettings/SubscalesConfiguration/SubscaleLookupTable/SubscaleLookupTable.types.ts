@@ -1,3 +1,5 @@
+import { DataTableItem, ImportedFile, ModalProps } from 'shared/components';
+
 export type SubscaleLookupTableProps = {
   open: boolean;
   subscaleName: string;
@@ -9,6 +11,36 @@ export type SubscaleLookupTableProps = {
 export type SubscaleLookupTableSetupHookProps = {
   tableData?: string;
 };
+
+export type GetComponentsProps = {
+  modalType: ModalType;
+  subscaleName: string;
+  data?: DataTableItem[];
+  error: JSX.Element | null;
+  onFileReady: (file: ImportedFile | null) => void;
+  onUpdate: (data?: string) => void;
+  onClose: () => void;
+  setModalType: (value: ModalType) => void;
+  setStep: (value: Steps) => void;
+  setError: (value: JSX.Element | null) => void;
+};
+
+export type ScreenObjectProps = Record<
+  ModalType,
+  (Pick<
+    ModalProps,
+    | 'title'
+    | 'buttonText'
+    | 'submitBtnColor'
+    | 'onSubmit'
+    | 'hasSecondBtn'
+    | 'secondBtnText'
+    | 'onSecondBtnSubmit'
+    | 'hasThirdBtn'
+    | 'thirdBtnText'
+    | 'onThirdBtnSubmit'
+  > & { component: JSX.Element })[]
+>;
 
 export const enum ModalType {
   Upload = 'upload',
