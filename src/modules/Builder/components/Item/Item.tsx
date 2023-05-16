@@ -64,7 +64,7 @@ export const Item = ({
             <StyledActivityDescription>{description}</StyledActivityDescription>
           </>
         )}
-        {count && (
+        {count !== undefined && (
           <StyledTitleBoldSmall sx={{ marginTop: theme.spacing(0.6) }}>
             {count} {t('item', { count })}
           </StyledTitleBoldSmall>

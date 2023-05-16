@@ -40,6 +40,10 @@ export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
 `;
 
 export const StyledSelect = styled(Select)`
+  &.MuiInputBase-root.MuiOutlinedInput-root {
+    padding: 0;
+  }
+
   .MuiSelect-select.MuiSelect-outlined.MuiOutlinedInput-input {
     max-width: 100%;
     z-index: 1;

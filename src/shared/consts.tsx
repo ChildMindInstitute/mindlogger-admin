@@ -48,6 +48,7 @@ export const enum Roles {
   Editor = 'editor',
   Reviewer = 'reviewer',
   Respondent = 'respondent',
+  Owner = 'owner',
 }
 
 export enum ItemResponseType {

@@ -10,9 +10,10 @@ import {
   createAppletsPendingData,
   createAppletsFulfilledData,
   createAppletsRejectedData,
+  changeAppletEncryption,
 } from './Applets.utils';
 
-export const reducers = { deleteApplet, resetAppletsData, resetEventsData };
+export const reducers = { deleteApplet, resetAppletsData, resetEventsData, changeAppletEncryption };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AppletsSchema>): void => {
   createAppletsPendingData({ builder, thunk: getWorkspaceApplets, key: 'applets' });

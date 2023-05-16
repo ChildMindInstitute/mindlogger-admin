@@ -16,3 +16,9 @@ export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
     isSticky ? variables.boxShadow.light0 : 'none'};
   justify-content: space-between;
 `;
+
+export const StyledChartContainer = styled(Box)`
+  margin: ${theme.spacing(2.4, 0)};
+  width: 83rem;
+  height: 45rem;
+`;
