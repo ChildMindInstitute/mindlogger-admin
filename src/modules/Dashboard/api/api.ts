@@ -34,6 +34,7 @@ import {
   RespondentAccesses,
   RemoveRespondentAccess,
   RemoveManagerAccess,
+  ImportSchedule,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -113,6 +114,11 @@ export const updateEventApi = (
   { appletId, body, eventId }: CreateEventType & EventId,
   signal?: AbortSignal,
 ) => authApiClient.put(`/applets/${appletId}/events/${eventId}`, body, { signal });
+
+export const importScheduleApi = ({ appletId, body }: ImportSchedule, signal?: AbortSignal) =>
+  authApiClient.post(`/applets/${appletId}/events/import`, body, {
+    signal,
+  });
 
 export const getEventsApi = (
   { appletId, respondentId }: AppletId & Partial<RespondentId>,

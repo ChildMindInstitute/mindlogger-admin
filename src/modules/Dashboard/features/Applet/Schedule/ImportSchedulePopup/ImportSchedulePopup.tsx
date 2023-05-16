@@ -1,11 +1,24 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { FileUploader, ImportedFile, Modal, SubmitBtnColor } from 'shared/components';
-import { StyledBodyLarge, StyledModalWrapper } from 'shared/styles';
+import { Error, FileUploader, Modal, SubmitBtnColor } from 'shared/components';
+import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
+import { useAsync } from 'shared/hooks';
+import { useAppDispatch } from 'redux/store';
+import {
+  deleteIndividualEventsApi,
+  deleteScheduledEventsApi,
+  importScheduleApi,
+  Periodicity,
+} from 'modules/Dashboard/api';
+import { applet } from 'shared/state';
+import { applets } from 'modules/Dashboard/state';
 
 import { getScreens, invalidFileFormatError, uploadLabel } from './ImportSchedule.const';
-import { ImportSchedulePopupProps, Steps } from './ImportSchedulePopup.types';
+import { ImportSchedulePopupProps, Steps, UploadedEvent } from './ImportSchedulePopup.types';
+import { useImportSchedule } from './ImportSchedulePopup.hooks';
+import { prepareImportPayload } from './ImportSchedulePopup.utils';
 
 export const ImportSchedulePopup = ({
   isIndividual = false,
@@ -13,29 +26,35 @@ export const ImportSchedulePopup = ({
   respondentName,
   open,
   onClose,
+  onDownloadTemplate,
+  scheduleExportData,
 }: ImportSchedulePopupProps) => {
   const { t } = useTranslation('app');
-
+  const { appletId, respondentId } = useParams();
+  const dispatch = useAppDispatch();
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const getEvents = () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId }));
+  const { execute: deleteScheduledEvents, error: deleteScheduledError } =
+    useAsync(deleteScheduledEventsApi);
+  const { execute: deleteIndividualScheduledEvents, error: deleteIndividualScheduledError } =
+    useAsync(deleteIndividualEventsApi);
+  const { execute: importSchedule, error: importScheduleError } = useAsync(
+    importScheduleApi,
+    getEvents,
+  );
+  const apiError = importScheduleError || deleteScheduledError || deleteIndividualScheduledError;
   const [step, setStep] = useState<Steps>(0);
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-  const [fileName, setFileName] = useState<string | undefined>(undefined);
 
-  useEffect(() => {
-    if (step === 1) {
-      setIsSubmitDisabled(true);
-    }
-  }, [step]);
-
-  const onFileReady = (file: ImportedFile | null) => {
-    setFileName(file?.name);
-    setIsSubmitDisabled(!file);
-  };
+  const { isSubmitDisabled, setIsSubmitDisabled, uploadedFile, validationError, handleFileReady } =
+    useImportSchedule({ appletName, scheduleExportData });
 
   const fileUploader = (
     <FileUploader
       uploadLabel={uploadLabel}
-      onFileReady={onFileReady}
+      onFileReady={handleFileReady}
       invalidFileFormatError={invalidFileFormatError}
+      onDownloadTemplate={onDownloadTemplate}
+      validationError={validationError}
     />
   );
 
@@ -51,7 +70,7 @@ export const ImportSchedulePopup = ({
           </strong>
           and replace the current schedule with information from the
           <strong>
-            <> {{ fileName }} </>
+            <> {{ fileName: uploadedFile?.name || '' }} </>
           </strong>
           file?
         </Trans>
@@ -81,7 +100,7 @@ export const ImportSchedulePopup = ({
           </strong>
           and replace the current schedule with information from the
           <strong>
-            <> {{ fileName }} </>
+            <> {{ fileName: uploadedFile?.name || '' }} </>
           </strong>
           file?
         </Trans>
@@ -91,13 +110,41 @@ export const ImportSchedulePopup = ({
 
   const screens = getScreens(isIndividual ? 'individual' : 'default', components);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (step === 2) {
+      if (!appletId) return;
+
+      const uploadedEvents = uploadedFile?.data as unknown as UploadedEvent[];
+
+      const hasScheduledEvents = () =>
+        scheduleExportData.some((event) => event.frequency.toUpperCase() !== Periodicity.Always);
+
+      const body = prepareImportPayload(
+        uploadedEvents,
+        scheduleExportData,
+        appletData,
+        respondentId,
+      );
+      if (hasScheduledEvents()) {
+        respondentId
+          ? await deleteIndividualScheduledEvents({
+              appletId,
+              respondentId,
+            })
+          : await deleteScheduledEvents({ appletId });
+      }
+      await importSchedule({ appletId, body });
       onClose();
     }
 
     setStep((prevStep) => ++prevStep as Steps);
   };
+
+  useEffect(() => {
+    if (step === 1) {
+      setIsSubmitDisabled(true);
+    }
+  }, [step]);
 
   return (
     <Modal
@@ -113,7 +160,10 @@ export const ImportSchedulePopup = ({
       disabledSubmit={isSubmitDisabled}
       width="66"
     >
-      <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
+      <StyledModalWrapper>
+        {screens[step].component}
+        {apiError && <Error error={apiError} sxProps={{ m: theme.spacing(1, 0) }} />}
+      </StyledModalWrapper>
     </Modal>
   );
 };
