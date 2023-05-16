@@ -4,7 +4,7 @@ import { TableCell, TableRow } from '@mui/material';
 
 import { useAppletsDnd, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { FolderApplet, folders, popups } from 'redux/modules';
+import { FolderApplet, folders, popups, workspaces } from 'redux/modules';
 import { StyledBodyMedium } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
@@ -19,6 +19,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
+  const { ownerId } = workspaces.useData() || {};
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
@@ -126,7 +127,7 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
                   <Pin
                     isPinned={!!item?.pinOrder}
                     onClick={(e) => {
-                      dispatch(folders.thunk.togglePin(item));
+                      ownerId && dispatch(folders.thunk.togglePin({ ownerId, applet: item }));
                       e.stopPropagation();
                     }}
                   />

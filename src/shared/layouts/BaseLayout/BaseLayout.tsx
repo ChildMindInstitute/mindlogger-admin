@@ -13,30 +13,15 @@ export const BaseLayout = () => {
   const { appletId: id } = useParams();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
-  const appletsFolders = folders.useFolders();
   const { ownerId } = workspaces.useData() || {};
   const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible } =
     popups.useData();
 
   useEffect(() => {
-    if (appletsFolders.length && isAuthorized && ownerId) {
-      dispatch(
-        folders.thunk.getWorkspaceApplets({
-          params: {
-            ownerId,
-            limit: DEFAULT_ROWS_PER_PAGE,
-          },
-        }),
-      );
-    }
-  }, [isAuthorized, appletsFolders, ownerId]);
-
-  useEffect(() => {
-    const { getFolders } = folders.thunk;
+    const { getFolders, getWorkspaceApplets } = folders.thunk;
     const { getWorkspaceRespondents, getWorkspaceManagers } = users.thunk;
 
     if (ownerId) {
-      dispatch(getFolders());
       dispatch(
         getWorkspaceRespondents({
           params: {
@@ -55,6 +40,17 @@ export const BaseLayout = () => {
           },
         }),
       );
+      (async () => {
+        await dispatch(getFolders({ ownerId }));
+        dispatch(
+          getWorkspaceApplets({
+            params: {
+              ownerId,
+              limit: DEFAULT_ROWS_PER_PAGE,
+            },
+          }),
+        );
+      })();
     }
   }, [dispatch, ownerId, id]);
 

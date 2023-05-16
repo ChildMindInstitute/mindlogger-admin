@@ -1,14 +1,7 @@
-import { PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import {
-  ApiError,
-  BaseSchema,
-  Folder,
-  FolderApplet,
-  FoldersSchema,
-  WorkspacesSchema,
-} from 'redux/modules';
+import { ApiError, Folder, FolderApplet, FoldersSchema } from 'redux/modules';
 import {
   saveFolderApi,
   deleteFolderApi,
@@ -22,6 +15,8 @@ import {
   getFoldersApi,
   getWorkspaceAppletsApi,
   GetAppletsParams,
+  OwnerId,
+  FolderId,
 } from 'api';
 import { Encryption } from 'shared/utils';
 
@@ -37,9 +32,9 @@ import {
 
 export const getFolders = createAsyncThunk(
   'folders/getFolders',
-  async (_: void, { rejectWithValue, signal }) => {
+  async ({ ownerId }: OwnerId, { rejectWithValue, signal }) => {
     try {
-      return await getFoldersApi(signal);
+      return await getFoldersApi({ ownerId }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }
@@ -66,7 +61,7 @@ export const getWorkspaceApplets = createAsyncThunk(
         .map((folder) => (folder as PromiseFulfilledResult<any>).value.payload);
     }
 
-    const applets = await dispatch(getAppletsOutsideFolders());
+    const applets = await dispatch(getAppletsOutsideFolders({ params }));
 
     return [...foldersData, ...(applets.payload as any).data.result];
   },
@@ -74,12 +69,9 @@ export const getWorkspaceApplets = createAsyncThunk(
 
 export const getAppletsOutsideFolders = createAsyncThunk(
   'folders/getAppletsInFolder',
-  async (_, { getState, rejectWithValue, signal }) => {
+  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
     try {
-      const { workspaces } = getState() as { workspaces: WorkspacesSchema };
-      const ownerId = workspaces.currentWorkspace?.ownerId;
-
-      return getWorkspaceAppletsApi({ params: { ownerId } }, signal);
+      return getWorkspaceAppletsApi({ params }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }
@@ -107,9 +99,12 @@ export const getAppletsForFolder = createAsyncThunk(
 
 export const saveFolder = createAsyncThunk(
   'folders/saveFolder',
-  async (folder: FolderApplet, { getState, rejectWithValue, signal }) => {
+  async (
+    { ownerId, folder }: OwnerId & { folder: FolderApplet },
+    { getState, rejectWithValue, signal },
+  ) => {
     try {
-      const response = await saveFolderApi({ name: folder.name as string }, signal);
+      const response = await saveFolderApi({ ownerId, name: folder.name as string }, signal);
       const { folders } = getState() as { folders: FoldersSchema };
 
       return updateFolders(
@@ -129,9 +124,15 @@ export const saveFolder = createAsyncThunk(
 
 export const updateFolder = createAsyncThunk(
   'folders/updateFolder',
-  async (folder: FolderApplet, { getState, rejectWithValue, signal }) => {
+  async (
+    { ownerId, folder }: OwnerId & { folder: FolderApplet },
+    { getState, rejectWithValue, signal },
+  ) => {
     try {
-      const response = await updateFolderApi({ name: folder.name!, folderId: folder.id }, signal);
+      const response = await updateFolderApi(
+        { ownerId, name: folder.name!, folderId: folder.id },
+        signal,
+      );
       const { folders } = getState() as { folders: FoldersSchema };
 
       return updateFolders(folders, {
@@ -147,9 +148,9 @@ export const updateFolder = createAsyncThunk(
 
 export const deleteFolder = createAsyncThunk(
   'folders/deleteFolder',
-  async ({ folderId }: { folderId: string }, { getState, rejectWithValue, signal }) => {
+  async ({ ownerId, folderId }: OwnerId & FolderId, { getState, rejectWithValue, signal }) => {
     try {
-      await deleteFolderApi({ folderId }, signal);
+      await deleteFolderApi({ ownerId, folderId }, signal);
       const { folders } = getState() as { folders: FoldersSchema };
 
       return deleteFolderById(folders, folderId);
@@ -161,11 +162,14 @@ export const deleteFolder = createAsyncThunk(
 
 export const togglePin = createAsyncThunk(
   'folders/togglePin',
-  async (applet: FolderApplet, { getState, rejectWithValue, signal }) => {
+  async (
+    { ownerId, applet }: OwnerId & { applet: FolderApplet },
+    { getState, rejectWithValue, signal },
+  ) => {
     try {
       const pinState = !applet?.pinOrder;
       await togglePinApi(
-        { applet: { id: applet.id, parentId: applet.parentId! }, isPinned: pinState },
+        { ownerId, applet: { id: applet.id, parentId: applet.parentId! }, isPinned: pinState },
         signal,
       );
       const { folders } = getState() as { folders: FoldersSchema };

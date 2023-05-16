@@ -191,9 +191,9 @@ export type UpdatePin = {
 
 export type FolderName = { name: string };
 
-export type UpdateFolder = FolderName & FolderId;
+export type UpdateFolder = OwnerId & FolderName & FolderId;
 
-export type TogglePin = { applet: { parentId: string; id: string }; isPinned: boolean };
+export type TogglePin = OwnerId & { applet: { parentId: string; id: string }; isPinned: boolean };
 
 export type UpdateAlertStatus = { alertId: string };
 
