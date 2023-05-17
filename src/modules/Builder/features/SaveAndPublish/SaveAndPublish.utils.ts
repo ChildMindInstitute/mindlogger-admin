@@ -12,7 +12,18 @@ import {
 import { ItemResponseType } from 'shared/consts';
 import { ColorResult } from 'react-color';
 
-export const removeAppletExtraFields = () => ({
+export const removeAppletExtraFields = (isNewApplet: boolean) => ({
+  ...(isNewApplet
+    ? {}
+    : {
+        isPublished: undefined,
+        reportServerIp: undefined,
+        reportPublicKey: undefined,
+        reportRecipients: undefined,
+        reportIncludeUserId: undefined,
+        reportIncludeCaseId: undefined,
+        reportEmailBody: undefined,
+      }),
   createdAt: undefined,
   updatedAt: undefined,
   id: undefined,
