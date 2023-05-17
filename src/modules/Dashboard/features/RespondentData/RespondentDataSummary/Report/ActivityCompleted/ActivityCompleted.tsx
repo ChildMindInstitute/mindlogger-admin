@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import { Tooltip } from 'shared/components';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
-import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts/ScatterChart';
+import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
 
 import { ActivityCompletedProps } from './ActivityCompleted.types';
 import { FilterFormValues } from '../Report.types';

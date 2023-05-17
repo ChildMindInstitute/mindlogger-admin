@@ -1,6 +1,6 @@
 import { ItemResponseType } from 'shared/consts';
 
-import { MultiScatterChart } from '../Charts/MultiScatterChart';
+import { MultiScatterChart } from '../Charts';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps, MultiScatterResponseValues } from './ResponseOptions.types';
 

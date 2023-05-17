@@ -4,8 +4,7 @@ import { Box } from '@mui/material';
 
 import { DateFormats } from 'shared/consts';
 import { StyledBodyMedium, StyledHeadline, theme } from 'shared/styles';
-import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts/BarChart';
-import { LineChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts/LineChart';
+import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
 
 import { AdditionalInformation } from '../AdditionalInformation';
 import { StyledChartContainer, StyledDescription } from './Scores.styles';
@@ -59,9 +58,6 @@ export const Scores = ({
       <StyledChartContainer>
         <BarChart chartData={subscaleScores} />
       </StyledChartContainer>
-      {/* <StyledChartContainer sx={{ m: theme.spacing(2.4, 0) }}>
-        <LineChart />
-      </StyledChartContainer> */}
       <Box sx={{ m: theme.spacing(6.4, 0) }}>
         <AdditionalInformation {...additionalInformation} />
       </Box>
