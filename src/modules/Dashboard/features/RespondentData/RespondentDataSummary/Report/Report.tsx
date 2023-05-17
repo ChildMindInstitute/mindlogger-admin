@@ -29,7 +29,7 @@ export const Report = ({ activity }: { activity: Activity }) => {
 
   const watchFilterFields = methods.watch();
 
-  const minDate = new Date(new Date().setMonth(new Date().getMonth() - 1)); // TODO: get from  date from backend
+  const minDate = new Date(new Date().setMonth(new Date().getMonth() - 1)); // TODO: get date from backend
 
   useEffect(() => {
     // TODO: get data from backend
