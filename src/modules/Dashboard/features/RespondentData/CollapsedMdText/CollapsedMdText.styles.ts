@@ -5,7 +5,14 @@ import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledMdEditor = styled(MdEditor)`
+  --md-bk-color: transparent;
+  margin-bottom: ${theme.spacing(2.4)};
+
   .default-theme {
+    p {
+      padding: 0;
+    }
+
     background-color: transparent;
     color: ${variables.palette.on_surface};
     font-size: ${variables.font.size.lrg};

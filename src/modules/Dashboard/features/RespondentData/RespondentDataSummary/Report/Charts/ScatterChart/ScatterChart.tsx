@@ -1,5 +1,4 @@
 import { useMemo, useRef, useState } from 'react';
-
 import {
   Chart as ChartJS,
   LinearScale,
@@ -19,19 +18,20 @@ import { Box } from '@mui/material';
 
 import { locales } from 'shared/consts';
 
-import {
-  TOOLTIP_OFFSET_LEFT,
-  TOOLTIP_OFFSET_TOP,
-  getData,
-  getOptions,
-  mocked,
-} from './ScatterChart.const';
+import { TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from './ScatterChart.const';
+import { getData, getOptions } from './ScatterChart.utils';
 import { ScatterChartProps } from './ScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
-export const ScatterChart = ({ height = '5rem' }: ScatterChartProps) => {
+export const ScatterChart = ({
+  height = '5rem',
+  responses,
+  versions,
+  minDate,
+  maxDate,
+}: ScatterChartProps) => {
   const { i18n } = useTranslation('app');
 
   const [tooltipData, setTooltipData] = useState<TooltipItem<'scatter'> | null>(null);
@@ -39,8 +39,9 @@ export const ScatterChart = ({ height = '5rem' }: ScatterChartProps) => {
     null,
   );
   const tooltipRef = useRef<HTMLDivElement | null>(null);
-
   const isHovered = useRef(false);
+
+  const lang = i18n.language as keyof typeof locales;
 
   const hideTooltip = () => {
     const tooltipEl = tooltipRef.current;
@@ -83,12 +84,12 @@ export const ScatterChart = ({ height = '5rem' }: ScatterChartProps) => {
     () => (
       <Scatter
         ref={chartRef}
-        options={getOptions(i18n.language as keyof typeof locales, mocked, tooltipHandler)}
-        data={getData(mocked)}
+        options={getOptions(lang, minDate, maxDate, tooltipHandler)}
+        data={getData(responses, versions)}
         plugins={[ChartDataLabels]}
       />
     ),
-    [chartRef],
+    [chartRef, minDate, maxDate, responses, versions, lang],
   );
 
   return (
