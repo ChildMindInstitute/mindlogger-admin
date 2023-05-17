@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
-import { applets, auth, FolderApplet, folders } from 'redux/modules';
+import { auth, FolderApplet, folders } from 'redux/modules';
 import { ButtonWithMenu, Search, Svg } from 'shared/components';
 import { useBreadcrumbs, useTable } from 'shared/hooks';
 
@@ -26,8 +26,8 @@ export const Applets = () => {
   ]);
 
   const authData = auth.useData();
-  const appletsData = applets.useData();
-  const { getWorkspaceApplets } = applets.thunk;
+  const flattenItems = folders.useFlattenFoldersApplets();
+  const { getWorkspaceApplets } = folders.thunk;
 
   const { handleSearch, searchValue, ...tableProps } = useTable((params) =>
     dispatch(getWorkspaceApplets(params)),
@@ -35,12 +35,7 @@ export const Applets = () => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  // TODO: implement folders logic when connecting to the corresponding API
   const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
-
-  // useEffect(() => {
-  //   setFlattenItems(foldersApplets);
-  // }, [foldersApplets]);
 
   const addFolder = () => {
     const newFolderName = generateNewFolderName(foldersApplets, t);
@@ -68,7 +63,7 @@ export const Applets = () => {
   );
 
   const getEmptyComponent = () => {
-    if (!appletsData?.result?.length) {
+    if (!flattenItems?.length) {
       if (searchValue) {
         return t('noMatchWasFound', { searchValue });
       }
@@ -94,10 +89,10 @@ export const Applets = () => {
       </AppletsTableHeader>
       <Table
         columns={getHeadCells()}
-        rows={appletsData?.result || []}
+        rows={flattenItems}
         headerContent={headerContent}
         emptyComponent={getEmptyComponent()}
-        count={appletsData?.count || 0}
+        count={flattenItems.length}
         {...tableProps}
       />
     </>

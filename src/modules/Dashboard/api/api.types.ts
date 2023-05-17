@@ -195,16 +195,11 @@ export type UpdatePin = {
   ownerId?: string;
 };
 
-export type Folder = {
-  folder: {
-    name: string;
-    parentId: string;
-  };
-};
+export type FolderName = { name: string };
 
-export type UpdateFolder = Folder & { folderId: string };
+export type UpdateFolder = OwnerId & FolderName & FolderId;
 
-export type TogglePin = { applet: { parentId: string; id: string }; isPinned: boolean };
+export type TogglePin = OwnerId & { applet: { parentId: string; id: string }; isPinned: boolean };
 
 export type UpdateAlertStatus = { alertId: string };
 
@@ -254,3 +249,15 @@ export type RespondentAccesses = OwnerId &
     limit?: number;
     ordering?: string;
   };
+
+export type GetWorkspaceAppletsParams = {
+  params: {
+    ownerId?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+    ordering?: string;
+    roles?: string;
+    folderId?: string | null;
+  };
+};

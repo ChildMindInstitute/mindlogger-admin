@@ -43,6 +43,7 @@
   "chooseLanguage": "Choose a language",
   "ok": "Ok",
   "cancel": "Cancel",
+  "replace": "Replace",
   "saveAnyway": "Save anyway",
   "privacy": "Privacy",
   "terms": "Terms",
@@ -766,6 +767,35 @@
   "subscaleScoring": "Subscale scoring",
   "subscaleScoringSum": "Sum",
   "subscaleScoringAverage": "Average",
+  "subscaleLookupTable": {
+    "upload": {
+      "title": "Upload Lookup Table",
+      "initDescription": "Please upload file in <1>.csv, .xls, .xlsx, .ods.</1> format.",
+      "successDescription": "Your Lookup Table for <1>{{name}}</1> was parsed successfully."
+    },
+    "edit": {
+      "title": "Edit Lookup Table",
+      "initDescription": "Current Lookup Table for <1>{{name}}</1>."
+    },
+    "delete": {
+      "title": "Delete Lookup Table",
+      "initDescription": "Are you sure you want to delete the Lookup Table for <1>{{name}}</1>?",
+      "successDescription": "The current Lookup Table for <1>{{name}}</1> has been deleted successfully."
+    },
+    "errors": {
+      "haveToUploadFile": "You have to upload file to proceed.",
+      "fileCantBeParsed": "Your file can't be parsed. Please double check your table content and try again.",
+      "incorrectFileFormat": "Incorrect file format. Please upload file in <1>.csv, .xls, .xlsx, .ods.</1> format.",
+      "onDelete": "The current Lookup Table for <1>{{name}}</1> has not been deleted. Please try again."
+    },
+    "column": {
+      "score": "Score",
+      "rawScore": "Raw Score",
+      "age": "Age",
+      "sex": "Sex",
+      "text": "Text"
+    }
+  },
   "element": "Element",
   "elementsWithinSubscale": "Elements within subscale",
   "availableElements": "Available Elements",
