@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { folders, FolderApplet } from 'redux/modules';
@@ -24,13 +24,13 @@ export const Table = ({
 }: TableProps) => {
   const status = folders.useStatus();
 
-  const sortedRows = useMemo(() => {
+  const getSortedRows = () => {
     if (!rows?.length) {
       return [];
     }
 
     return sortRows(rows, getComparator(order, orderBy));
-  }, [order, orderBy, rows]);
+  };
 
   const loading = status === 'idle' || status === 'loading';
 
@@ -72,7 +72,7 @@ export const Table = ({
             tableHeader={tableHeader}
           />
           <TableBody>
-            {sortedRows?.map((row: FolderApplet) => (
+            {getSortedRows()?.map((row: FolderApplet) => (
               <Fragment key={row.id}>{getRowComponent(row)}</Fragment>
             ))}
           </TableBody>
