@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
-import { applets, auth, workspaces } from 'redux/modules';
+import { folders, auth, workspaces } from 'redux/modules';
 import { clearLocalStorageExceptSetupKeys } from 'shared/utils';
 
 export const useLogout = () => {
@@ -13,7 +13,7 @@ export const useLogout = () => {
   return () => {
     clearLocalStorageExceptSetupKeys();
     dispatch(workspaces.actions.setCurrentWorkspace(null));
-    dispatch(applets.actions.resetAppletsData());
+    dispatch(folders.actions.resetAppletsData());
     dispatch(auth.actions.resetAuthorization());
     navigate(page.login);
   };
