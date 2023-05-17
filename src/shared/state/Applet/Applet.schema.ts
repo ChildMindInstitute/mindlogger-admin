@@ -359,6 +359,7 @@ export type Activity = {
   sections?: ActivitySettingsSection[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
+  totalScoresTableData?: string;
 };
 
 type Theme = {
@@ -385,6 +386,7 @@ export type ActivitySettingsSubscale = {
   name: string;
   scoring: SubscaleTotalScore;
   items: string[];
+  subscaleTableData?: string;
 };
 
 export type SingleApplet = {

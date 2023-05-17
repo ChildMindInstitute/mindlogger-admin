@@ -32,15 +32,19 @@ export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
   const { control, watch, register, unregister, setValue } = useFormContext();
   const { fieldName, activity } = useCurrentActivity();
-  const subscalesName = `${fieldName}.subscales`;
+  const subscalesField = `${fieldName}.subscales`;
   const calculateTotalScoreName = `${fieldName}.calculateTotalScore`;
-  const { append: appendSubscale, remove: removeSubscale } = useFieldArray({
+  const {
+    append: appendSubscale,
+    remove: removeSubscale,
+    update: updateSubscale,
+  } = useFieldArray({
     control,
-    name: subscalesName,
+    name: subscalesField,
   });
   const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(false);
 
-  const subscales: ActivitySettingsSubscale[] = watch(subscalesName);
+  const subscales: ActivitySettingsSubscale[] = watch(subscalesField);
   const filteredItems = (activity?.items ?? []).filter(checkOnItemType);
   const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
     filteredItems,
@@ -81,7 +85,7 @@ export const SubscalesConfiguration = () => {
   return (
     <StyledButtonsContainer>
       {subscales?.map((subscale, index) => {
-        const subscaleName = `${subscalesName}.${index}`;
+        const subscaleField = `${subscalesField}.${index}`;
         const title = t('subscaleHeader', {
           index: index + 1,
           name: subscale?.name,
@@ -96,12 +100,21 @@ export const SubscalesConfiguration = () => {
               onRemove: () => {
                 removeSubscale(index);
               },
-              name: subscaleName,
+              name: subscaleField,
               title,
+              onUpdate: (subscaleTableData?: string) => {
+                if (subscaleTableData === undefined) {
+                  unregister(`${subscaleField}.subscaleTableData`);
+                }
+                updateSubscale(index, {
+                  ...subscale,
+                  subscaleTableData,
+                });
+              },
             }}
             contentProps={{
               subscaleId: subscale.id,
-              name: subscaleName,
+              name: subscaleField,
               notUsedElements,
             }}
           />
