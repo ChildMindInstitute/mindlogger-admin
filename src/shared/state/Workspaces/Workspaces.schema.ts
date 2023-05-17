@@ -1,4 +1,5 @@
 import { Roles } from 'shared/consts';
+
 import { BaseSchema } from '../Base';
 
 export type Workspace = {
