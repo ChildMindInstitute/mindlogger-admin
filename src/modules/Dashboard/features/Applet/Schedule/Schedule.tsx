@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useBreadcrumbs } from 'shared/hooks';
-import { applet } from 'shared/state';
-import { applets, calendarEvents } from 'modules/Dashboard/state';
+import { applet, workspaces } from 'shared/state';
+import { applets, calendarEvents, users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 
 import { Calendar } from './Calendar';
@@ -17,6 +17,7 @@ export const Schedule = () => {
   const dispatch = useAppDispatch();
   const { respondentId } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
+  const { ownerId } = workspaces.useData() || {};
   const appletId = appletData?.id || '';
   const preparedEvents = usePreparedEvents(appletData);
 
@@ -31,13 +32,16 @@ export const Schedule = () => {
     if (!appletId) return;
 
     const { getEvents } = applets.thunk;
+    const { getAllWorkspaceRespondents } = users.thunk;
     dispatch(getEvents({ appletId, respondentId }));
+    ownerId && dispatch(getAllWorkspaceRespondents({ params: { ownerId, appletId } }));
 
     return () => {
       dispatch(applets.actions.resetEventsData());
       dispatch(calendarEvents.actions.resetCalendarEvents());
+      dispatch(users.actions.resetAllRespondentsData());
     };
-  }, [appletId, respondentId]);
+  }, [appletId, respondentId, ownerId]);
 
   return (
     <StyledSchedule>

@@ -11,11 +11,11 @@ import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/st
 import { getErrorMessage } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
-import { applet } from 'shared/state';
+import { applet, workspaces } from 'shared/state';
 import { createEventApi, updateEventApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { calendarEvents } from 'modules/Dashboard/state';
+import { calendarEvents, users } from 'modules/Dashboard/state';
 
 import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
 import { EventFormSchema } from './EventForm.schema';
@@ -45,6 +45,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const dispatch = useAppDispatch();
     const { respondentId } = useParams();
     const appletData = applet.useAppletData();
+    const { ownerId } = workspaces.useData() || {};
     const appletId = appletData?.result.id;
     const defaultValues = getDefaultValues(defaultStartDate, editedEvent);
     const eventsData = calendarEvents.useCreateEventsData() || [];
@@ -72,8 +73,14 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const startTime = watch('startTime');
     const endTime = watch('endTime');
 
-    const getEvents = () =>
-      appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId }));
+    const getEvents = () => {
+      if (!appletId) return;
+      dispatch(applets.thunk.getEvents({ appletId, respondentId }));
+      if (respondentId && ownerId && eventsData.length === 0) {
+        dispatch(users.thunk.getAllWorkspaceRespondents({ params: { ownerId, appletId } }));
+      }
+    };
+
     const { execute: createEvent, error: createEventError } = useAsync(createEventApi, getEvents);
     const { execute: updateEvent, error: updateEventError } = useAsync(updateEventApi, getEvents);
 

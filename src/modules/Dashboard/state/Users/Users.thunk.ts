@@ -15,6 +15,17 @@ export const getWorkspaceRespondents = createAsyncThunk(
   },
 );
 
+export const getAllWorkspaceRespondents = createAsyncThunk(
+  'users/getAllWorkspaceRespondents',
+  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
+    try {
+      return await getWorkspaceRespondentsApi({ params }, signal);
+    } catch (exception) {
+      return rejectWithValue(exception as AxiosError<ApiError>);
+    }
+  },
+);
+
 export const getWorkspaceManagers = createAsyncThunk(
   'users/getWorkspaceManagers',
   async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {

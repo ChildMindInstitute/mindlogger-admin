@@ -34,7 +34,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const { t } = useTranslation('app');
   const { respondentId } = useParams();
   const navigate = useNavigate();
-  const { result: respondentsData } = users.useRespondentsData() || {};
+  const { result: respondentsData } = users.useAllRespondentsData() || {};
   const respondentsItems = respondentsData?.map(
     ({ id, hasIndividualSchedule, secretId, nickname }) => ({
       icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
