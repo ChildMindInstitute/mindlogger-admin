@@ -19,7 +19,6 @@ import {
   getSubscalesDefaults,
   allElementsTableColumns,
   getNotUsedElements,
-  checkOnItemType,
   getUsedWithinSubscalesElements,
   getPropertiesToFilterByIds,
 } from './SubscalesConfiguration.utils';
@@ -27,6 +26,7 @@ import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
 import { StyledSvgButton } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
+import { checkOnItemType } from '../ActivitySettings.utils';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');

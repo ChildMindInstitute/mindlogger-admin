@@ -18,6 +18,10 @@ export const StyledMdEditor = styled(MdEditor)`
     margin-bottom: 0;
   }
 
+  &.secondary {
+    background-color: ${variables.palette.surface1};
+  }
+
   & .md-editor-toolbar-wrapper {
     background-color: ${variables.palette.surface1};
     height: auto;

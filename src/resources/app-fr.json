@@ -646,7 +646,9 @@
     "lessThan": "{{- less }} doit être inférieur à {{- than }}",
     "moreThan": "{{- more }} doit être supérieur à {{- than }}",
     "unique": "Cette {{- field }} déja en cours d'utilisation. Veuillez utiliser un nom différent",
-    "atLeastOne": "Sélectionnez au moins 1 élément"
+    "atLeastOne": "Sélectionnez au moins 1 élément",
+    "mustShowMessageOrItems": "Vous devez afficher un message ou imprimer des éléments pour publier ce rapport",
+    "atLeastOneItem": "Sélectionnez au moins 1 élément"
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",
@@ -675,5 +677,13 @@
   "removeAudioDescription": "Voulez-vous vraiment supprimer l'audio actuel?",
   "mediaUploaderPlaceholder": "Déposez <1>.mp3</1> ou <1>.wav</1> ici <br /> ou cliquez pour parcourir.",
   "finalSubscaleScore": "Score final de la sous-échelle",
-  "informationsupplémentaire": "Informations supplémentaires"
+  "informationsupplémentaire": "Informations supplémentaires",
+  "sectionHeader": "Section {{index}} : {{name}}",
+  "sectionName": "Nom de la section",
+  "showMessage": "Afficher le message",
+  "showMessageTooltip": "Message qui sera affiché dans le rapport. Pour imprimer la valeur du score, entourez l'ID du score entre [[]]",
+  "printItems": "Imprimer les éléments",
+  "printItemsTooltip": "Les réponses du répondant qui seront affichées dans le rapport",
+  "addConditinalLogic": "Ajouter une logique conditionnelle",
+  "itemBody": "Corps de l'élément"
 }

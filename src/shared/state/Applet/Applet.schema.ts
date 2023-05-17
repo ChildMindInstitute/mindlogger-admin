@@ -378,7 +378,12 @@ export type ActivitySettingsScore = {
 };
 
 export type ActivitySettingsSection = {
-  name?: string;
+  id?: string;
+  name: string;
+  showMessage: boolean;
+  printItems: boolean;
+  items?: string[];
+  message?: string;
 };
 
 export type ActivitySettingsSubscale = {
