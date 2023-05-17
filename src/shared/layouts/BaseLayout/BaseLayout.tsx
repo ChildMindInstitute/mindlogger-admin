@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
-import { DuplicatePopups, TransferOwnershipPopup } from 'modules/Dashboard/features/Applet/Popups';
+import {
+  DuplicatePopups,
+  PublishConcealAppletPopup,
+  TransferOwnershipPopup,
+} from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
 import { account, folders, popups, workspaces, applets, users, auth } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, Footer } from 'shared/components';
@@ -15,8 +19,12 @@ export const BaseLayout = () => {
   const isAuthorized = auth.useAuthorized();
   const accountData = account.useData();
   const { ownerId } = workspaces.useData() || {};
-  const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible } =
-    popups.useData();
+  const {
+    duplicatePopupsVisible,
+    deletePopupVisible,
+    transferOwnershipPopupVisible,
+    publishConcealPopupVisible,
+  } = popups.useData();
 
   useEffect(() => {
     if (accountData?.account && isAuthorized) {
@@ -69,6 +77,7 @@ export const BaseLayout = () => {
       {duplicatePopupsVisible && <DuplicatePopups />}
       {deletePopupVisible && <DeletePopup />}
       {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
+      {publishConcealPopupVisible && <PublishConcealAppletPopup />}
     </StyledBaseLayout>
   );
 };

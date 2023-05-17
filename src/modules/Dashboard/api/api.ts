@@ -471,3 +471,9 @@ export const getAppletSubmitDateListApi = (
     params,
     signal,
   });
+
+export const publishAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  authApiClient.post(`/applets/${appletId}/publish`, { signal });
+
+export const concealAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  authApiClient.post(`/applets/${appletId}/conceal`, { signal });

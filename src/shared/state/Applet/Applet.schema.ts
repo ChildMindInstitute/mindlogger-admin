@@ -411,6 +411,7 @@ export type SingleApplet = {
   theme?: Theme;
   encryption?: Encryption;
   generateReport: boolean;
+  isPublished?: boolean;
 };
 
 export type AppletSchema = {
