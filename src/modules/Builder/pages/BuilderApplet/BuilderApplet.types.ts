@@ -27,6 +27,7 @@ export type ActivityFormValues = {
   items: ItemFormValues[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
+  totalScoresTableData?: string;
 };
 
 export type ActivityFlowItem = {

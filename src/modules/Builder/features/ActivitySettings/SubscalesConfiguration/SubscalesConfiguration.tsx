@@ -14,7 +14,11 @@ import { ActivitySettingsSubscale } from 'shared/state';
 
 import { StyledButtonsContainer } from '../ActivitySettings.styles';
 import { commonButtonProps } from '../ActivitySettings.const';
-import { options } from './SubscalesConfiguration.const';
+import {
+  options,
+  totalScoreTableColumnData,
+  totalScoreTableTemplate,
+} from './SubscalesConfiguration.const';
 import {
   getSubscalesDefaults,
   allElementsTableColumns,
@@ -22,11 +26,13 @@ import {
   checkOnItemType,
   getUsedWithinSubscalesElements,
   getPropertiesToFilterByIds,
+  getAddTotalScoreModalLabels,
 } from './SubscalesConfiguration.utils';
 import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
 import { StyledSvgButton } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
+import { LookupTable } from './LookupTable';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
@@ -34,6 +40,7 @@ export const SubscalesConfiguration = () => {
   const { fieldName, activity } = useCurrentActivity();
   const subscalesField = `${fieldName}.subscales`;
   const calculateTotalScoreName = `${fieldName}.calculateTotalScore`;
+  const totalScoresTableDataField = `${fieldName}.totalScoresTableData`;
   const {
     append: appendSubscale,
     remove: removeSubscale,
@@ -43,6 +50,13 @@ export const SubscalesConfiguration = () => {
     name: subscalesField,
   });
   const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(false);
+  const [isLookupTableOpened, setIsLookupTableOpened] = useState(false);
+  const tableData = watch(totalScoresTableDataField);
+  const onTableDataUpdate = (data?: string) => {
+    data ? register(totalScoresTableDataField) : unregister(totalScoresTableDataField);
+    setValue(totalScoresTableDataField, data);
+  };
+  const iconId = `lookup-table${tableData ? '-filled' : ''}`;
 
   const subscales: ActivitySettingsSubscale[] = watch(subscalesField);
   const filteredItems = (activity?.items ?? []).filter(checkOnItemType);
@@ -67,8 +81,6 @@ export const SubscalesConfiguration = () => {
   const handleAddSubscale = () => {
     appendSubscale(getSubscalesDefaults());
   };
-
-  const handleOnTotalScoreLookupTable = () => false;
 
   useEffect(() => {
     if (calculateTotalScoreSwitch) {
@@ -142,8 +154,12 @@ export const SubscalesConfiguration = () => {
       />
       {calculateTotalScoreSwitch && (
         <StyledContainerWithBg>
-          <StyledSvgButton onClick={handleOnTotalScoreLookupTable}>
-            <Svg id="lookup-table" width="20" height="20" />
+          <StyledSvgButton
+            onClick={() => {
+              setIsLookupTableOpened(true);
+            }}
+          >
+            <Svg id={iconId} width="20" height="20" />
           </StyledSvgButton>
           <RadioGroupController
             name={calculateTotalScoreName}
@@ -151,6 +167,20 @@ export const SubscalesConfiguration = () => {
             options={options}
           />
         </StyledContainerWithBg>
+      )}
+      {isLookupTableOpened && (
+        <LookupTable
+          open={isLookupTableOpened}
+          labelsObject={getAddTotalScoreModalLabels()}
+          columnData={totalScoreTableColumnData}
+          tableData={tableData}
+          template={totalScoreTableTemplate}
+          templatePrefix={'total_score_'}
+          onUpdate={onTableDataUpdate}
+          onClose={() => {
+            setIsLookupTableOpened(false);
+          }}
+        />
       )}
     </StyledButtonsContainer>
   );

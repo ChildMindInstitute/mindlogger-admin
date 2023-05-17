@@ -28,8 +28,9 @@ export const removeActivityExtraFields = () => ({
   showScoreSummary: undefined, // TODO: remove when API will be ready
   scores: undefined, // TODO: remove when API will be ready
   sections: undefined, // TODO: remove when API will be ready
-  subscales: undefined, // TODO: remove when API will be ready
-  calculateTotalScore: undefined, // TODO: remove when API will be ready
+  subscales: undefined, // TODO: remove when M2-1738 will be ready
+  calculateTotalScore: undefined, // TODO: remove when M2-1738 will be ready
+  totalScoresTableData: undefined, // TODO: remove when M2-1738 will be ready
 });
 
 export const removeItemExtraFields = () => ({
