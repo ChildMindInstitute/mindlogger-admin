@@ -1,6 +1,6 @@
 import { RetentionPeriods } from 'shared/types';
 
-export const periods = [
+export const retentionTypes = [
   {
     value: RetentionPeriods.Indefinitely,
     labelKey: 'indefinitely',
@@ -24,6 +24,6 @@ export const periods = [
 ];
 
 export const defaultValues = {
-  periodNumber: 1,
-  period: RetentionPeriods.Indefinitely,
+  retentionPeriod: 1,
+  retentionType: RetentionPeriods.Indefinitely,
 };

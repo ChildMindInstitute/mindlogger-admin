@@ -8,12 +8,14 @@ export const dataRetentionSchema = () => {
 
   return yup
     .object({
-      period: yup.string().required(),
-      periodNumber: yup
+      retention: yup.string().required(),
+      period: yup
         .number()
         .transform((value) => (!value || isNaN(value) ? 1 : value))
-        .when('period', (period, schema) =>
-          period === RetentionPeriods.Indefinitely ? schema : schema.required(t('periodRequired')),
+        .when('retention', (retention, schema) =>
+          retention === RetentionPeriods.Indefinitely
+            ? schema
+            : schema.required(t('periodRequired')),
         ),
     })
     .required();

@@ -34,6 +34,7 @@ import {
   RespondentAccesses,
   RemoveRespondentAccess,
   RemoveManagerAccess,
+  AppletDataRetention,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -471,3 +472,15 @@ export const getAppletSubmitDateListApi = (
     params,
     signal,
   });
+
+export const postAppletDataRetentionApi = (
+  { appletId, ...dataRetentionParams }: AppletDataRetention,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/applets/${appletId}/retentions`,
+    { ...dataRetentionParams },
+    {
+      signal,
+    },
+  );

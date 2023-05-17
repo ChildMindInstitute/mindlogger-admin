@@ -248,3 +248,8 @@ export type RespondentAccesses = OwnerId &
     limit?: number;
     ordering?: string;
   };
+
+export type AppletDataRetention = AppletId & {
+  period: number;
+  retention: 'indefinitely' | 'days' | 'weeks' | 'months' | 'years';
+};
