@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { publishAppletApi, concealAppletApi } from 'api';
@@ -25,10 +25,17 @@ export const PublishConcealAppletPopup = () => {
   const [isSuccessPopupVisible, setSuccessPopupVisible] = useState(false);
   const [isErrorPopupVisible, setErrorPopupVisible] = useState(false);
 
+  const isPublishPopupRef = useRef(false);
+  useEffect(() => {
+    isPublishPopupRef.current = !!isPublished;
+  }, [isPublished]);
+  const isPublishPopup = isPublishPopupRef.current;
+
   const handleCloseProcessPopup = () => setProcessPopupVisible(false);
   const handlePostSuccess = () => {
     handleCloseProcessPopup();
     setSuccessPopupVisible(true);
+    popupProps?.onSuccess?.();
   };
   const handlePostError = () => {
     handleCloseProcessPopup();
@@ -56,11 +63,7 @@ export const PublishConcealAppletPopup = () => {
       }),
     );
   };
-  const handleSuccess = () => {
-    handleClose();
-    popupProps?.onSuccess?.();
-  };
-  const handleSubmit = () => (isPublished ? concealApplet : publishApplet)({ appletId });
+  const handleSubmit = () => (isPublishPopup ? concealApplet : publishApplet)({ appletId });
   const handleRetry = () => {
     setErrorPopupVisible(false);
 
@@ -75,7 +78,7 @@ export const PublishConcealAppletPopup = () => {
           onClose={handleClose}
           onSubmit={handleSubmit}
           onSecondBtnSubmit={handleClose}
-          title={t(isPublished ? 'concealAppletPopupTitle' : 'publishAppletPopupTitle')}
+          title={t(isPublishPopup ? 'concealAppletPopupTitle' : 'publishAppletPopupTitle')}
           buttonText={t('yes')}
           secondBtnText={t('cancel')}
           hasSecondBtn
@@ -85,7 +88,9 @@ export const PublishConcealAppletPopup = () => {
               <StyledLinearProgress />
             ) : (
               <StyledBodyLarge>
-                {t(isPublished ? 'concealAppletPopupDescription' : 'publishAppletPopupDescription')}
+                {t(
+                  isPublishing ? 'concealAppletPopupDescription' : 'publishAppletPopupDescription',
+                )}
               </StyledBodyLarge>
             )}
           </StyledModalWrapper>
@@ -95,8 +100,8 @@ export const PublishConcealAppletPopup = () => {
         <Modal
           open={isSuccessPopupVisible}
           onClose={handleClose}
-          onSubmit={handleSuccess}
-          title={t(isPublished ? 'concealAppletPopupTitle' : 'publishAppletPopupTitle')}
+          onSubmit={handleClose}
+          title={t(isPublishPopup ? 'concealAppletPopupTitle' : 'publishAppletPopupTitle')}
           buttonText={t('ok')}
         >
           <StyledModalWrapper>
@@ -108,7 +113,7 @@ export const PublishConcealAppletPopup = () => {
                   <>{{ name: displayName }}</>{' '}
                 </strong>
                 has been
-                <> {{ status: t(isPublished ? 'concealed' : 'published') }}</> successfully.
+                <> {{ status: t(isPublishPopup ? 'concealed' : 'published') }}</> successfully.
               </Trans>
             </StyledBodyLarge>
           </StyledModalWrapper>
@@ -120,7 +125,7 @@ export const PublishConcealAppletPopup = () => {
           onClose={handleClose}
           onSubmit={handleRetry}
           onSecondBtnSubmit={handleClose}
-          title={t(isPublished ? 'concealAppletPopupTitle' : 'publishAppletPopupTitle')}
+          title={t(isPublishPopup ? 'concealAppletPopupTitle' : 'publishAppletPopupTitle')}
           buttonText={t('retry')}
           secondBtnText={t('cancel')}
           hasSecondBtn
@@ -134,7 +139,7 @@ export const PublishConcealAppletPopup = () => {
                   <>{{ name: displayName }}</>{' '}
                 </strong>
                 has been
-                <> {{ status: isPublished ? 'concealed' : 'published' }}</> successfully.
+                <> {{ status: isPublishPopup ? 'concealed' : 'published' }}</> successfully.
               </Trans>
             </StyledBodyLarge>
           </StyledModalWrapper>

@@ -26,6 +26,7 @@ export type FolderApplet = {
   themeId?: string;
   updatedAt?: string;
   welcomeApplet?: boolean;
+  isPublished?: boolean;
 };
 
 export type AppletResponse = {
