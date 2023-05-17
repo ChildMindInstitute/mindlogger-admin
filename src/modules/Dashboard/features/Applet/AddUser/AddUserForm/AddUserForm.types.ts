@@ -1,4 +1,5 @@
 import { Option } from 'shared/components/FormComponents';
+import { Roles } from 'shared/consts';
 
 export type FormValues = {
   firstName: string;
@@ -16,6 +17,7 @@ export type Field = { name: keyof FormValues; options?: Option[] };
 
 export type AddUserFormProps = {
   getInvitationsHandler: () => void;
+  priorityRole: Roles | null;
 };
 
 export type WorkspaceInfo = {

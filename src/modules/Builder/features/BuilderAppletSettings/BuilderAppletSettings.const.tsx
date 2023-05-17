@@ -1,4 +1,5 @@
 import { Svg } from 'shared/components';
+import { Roles } from 'shared/consts';
 import {
   DataRetention,
   TransferOwnershipSetting,
@@ -8,24 +9,28 @@ import {
   ExportDataSetting,
 } from 'shared/features/AppletSettings';
 
-export const getSettings = (isNewApplet: boolean) => [
-  {
-    label: 'usersAndData',
-    items: [
-      {
-        icon: <Svg id="export" />,
-        label: 'exportData',
-        component: <ExportDataSetting isDisabled={isNewApplet} />,
-        param: 'export-data',
-      },
-      {
-        icon: <Svg id="data-retention" />,
-        label: 'dataRetention',
-        component: <DataRetention />,
-        param: 'data-retention',
-      },
-    ],
-  },
+export const getSettings = (isNewApplet: boolean, priorityRole: Roles | null) => [
+  ...(priorityRole !== Roles.Editor
+    ? [
+        {
+          label: 'usersAndData',
+          items: [
+            {
+              icon: <Svg id="export" />,
+              label: 'exportData',
+              component: <ExportDataSetting isDisabled={isNewApplet} />,
+              param: 'export-data',
+            },
+            {
+              icon: <Svg id="data-retention" />,
+              label: 'dataRetention',
+              component: <DataRetention />,
+              param: 'data-retention',
+            },
+          ],
+        },
+      ]
+    : []),
   {
     label: 'appletContent',
     items: [
@@ -41,18 +46,26 @@ export const getSettings = (isNewApplet: boolean) => [
         component: <>versionHistory</>, //TODO: Add isDisabled,
         param: 'version-history',
       },
-      {
-        icon: <Svg id="transfer-ownership" />,
-        label: 'transferOwnership',
-        component: <TransferOwnershipSetting isDisabled={isNewApplet} isApplet />,
-        param: 'transfer-ownership',
-      },
-      {
-        icon: <Svg id="trash" />,
-        label: 'deleteApplet',
-        component: <DeleteAppletSetting isDisabled={isNewApplet} />,
-        param: 'delete-applet',
-      },
+      ...(priorityRole === Roles.Owner
+        ? [
+            {
+              icon: <Svg id="transfer-ownership" />,
+              label: 'transferOwnership',
+              component: <TransferOwnershipSetting isDisabled={isNewApplet} isApplet />,
+              param: 'transfer-ownership',
+            },
+          ]
+        : []),
+      ...(priorityRole === Roles.Owner || priorityRole === Roles.Manager
+        ? [
+            {
+              icon: <Svg id="trash" />,
+              label: 'deleteApplet',
+              component: <DeleteAppletSetting isDisabled={isNewApplet} />,
+              param: 'delete-applet',
+            },
+          ]
+        : []),
     ],
   },
   {

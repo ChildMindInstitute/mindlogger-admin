@@ -6,6 +6,8 @@ import { PrivateRoute } from 'routes/PrivateRoute';
 import { Path } from 'shared/utils';
 import BuilderAppletSettings from 'modules/Builder/features/BuilderAppletSettings';
 import ActivitySettings from 'modules/Builder/features/ActivitySettings';
+import { WithPermissions } from 'shared/HOCs';
+import { Roles } from 'shared/consts';
 
 import { appletRoutes, appletActivityRoutes, appletActivityFlowRoutes } from './routes.const';
 
@@ -15,7 +17,14 @@ const BuilderActivity = lazy(() => import('../pages/BuilderActivity'));
 
 export const builderRoutes = () => (
   <Route path={page.builder}>
-    <Route element={<BuilderApplet />} path=":appletId">
+    <Route
+      element={
+        <WithPermissions forbiddenRoles={[Roles.Coordinator, Roles.Reviewer, Roles.Respondent]}>
+          <BuilderApplet />
+        </WithPermissions>
+      }
+      path=":appletId"
+    >
       <Route index element={<Navigate to={Path.About} replace />} />
       {appletRoutes.map(({ path, Component }) => (
         <Route

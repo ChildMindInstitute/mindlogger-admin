@@ -23,7 +23,7 @@
   "sendResetLink": "Send me a reset link",
   "checkYourEmail": "Check your email",
   "weHaveSentPasswordResetLink": "We have sent a password reset link to {{email}}",
-  "ifYouDontReceiveEmail":"If you don’t receive an email, please check your spam.",
+  "ifYouDontReceiveEmail": "If you don’t receive an email, please check your spam.",
   "createAccount": "Create Account",
   "agreement": " I agree to the ",
   "termsOfService": "Terms of Service",
@@ -827,5 +827,6 @@
   "activityUnavailableAtTime": "Activity is unavailable at this time",
   "repeatPasswordRequired": "Repeat Password is Required",
   "finalSubscaleScore": "Final Subscale Score",
-  "additionalInformation": "Additional Information"
+  "additionalInformation": "Additional Information",
+  "noPermissions": "You have no permissions to view this tab."
 }
