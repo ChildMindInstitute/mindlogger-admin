@@ -34,7 +34,12 @@ export const Schedule = () => {
     const { getEvents } = applets.thunk;
     const { getAllWorkspaceRespondents } = users.thunk;
     dispatch(getEvents({ appletId, respondentId }));
-    ownerId && dispatch(getAllWorkspaceRespondents({ params: { ownerId, appletId } }));
+    ownerId &&
+      dispatch(
+        getAllWorkspaceRespondents({
+          params: { ownerId, appletId },
+        }),
+      );
 
     return () => {
       dispatch(applets.actions.resetEventsData());

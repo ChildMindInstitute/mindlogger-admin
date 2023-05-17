@@ -77,7 +77,14 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       if (!appletId) return;
       dispatch(applets.thunk.getEvents({ appletId, respondentId }));
       if (respondentId && ownerId && eventsData.length === 0) {
-        dispatch(users.thunk.getAllWorkspaceRespondents({ params: { ownerId, appletId } }));
+        dispatch(
+          users.thunk.getAllWorkspaceRespondents({
+            params: {
+              ownerId,
+              appletId,
+            },
+          }),
+        );
       }
     };
 
