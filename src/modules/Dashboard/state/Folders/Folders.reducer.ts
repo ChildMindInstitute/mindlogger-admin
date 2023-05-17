@@ -6,13 +6,14 @@ import {
   addAppletToFolder,
   changeFolder,
   deleteFolder,
-  getAppletsForFolders,
+  getWorkspaceApplets,
   removeAppletFromFolder,
   saveFolder,
   togglePin,
   updateFolder,
   getAppletSearchTerms,
   setAppletEncryption,
+  getFolders,
 } from './Folders.thunk';
 import { state as initialState } from './Folders.state';
 import {
@@ -60,14 +61,17 @@ export const reducers = {
       return item;
     });
   },
+  resetAppletsData: (state: FoldersSchema) => {
+    state = initialState;
+  },
 };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): void => {
-  builder.addCase(getAppletsForFolders.pending, (state, action) => {
+  builder.addCase(getWorkspaceApplets.pending, (state, action) => {
     createPendingData(state, 'foldersApplets', action.meta.requestId);
   });
 
-  builder.addCase(getAppletsForFolders.fulfilled, (state, action) => {
+  builder.addCase(getWorkspaceApplets.fulfilled, (state, action) => {
     const { foldersApplets } = state;
     if (foldersApplets.status === 'loading' && foldersApplets.requestId === action.meta.requestId) {
       foldersApplets.requestId = initialState.foldersApplets.requestId;
@@ -79,13 +83,30 @@ export const extraReducers = (builder: ActionReducerMapBuilder<FoldersSchema>): 
     }
   });
 
-  builder.addCase(getAppletsForFolders.rejected, (state, action) => {
+  builder.addCase(getWorkspaceApplets.rejected, (state, action) => {
     createRejectedData(
       state,
       'foldersApplets',
       action.meta.requestId,
       action.payload as AxiosError,
     );
+  });
+
+  builder.addCase(getFolders.pending, (state, action) => {
+    createPendingData(state, 'folders', action.meta.requestId);
+  });
+
+  builder.addCase(getFolders.fulfilled, (state, action) => {
+    const { folders } = state;
+    if (folders.status === 'loading' && folders.requestId === action.meta.requestId) {
+      folders.requestId = initialState.foldersApplets.requestId;
+      folders.status = 'success';
+      folders.data = action.payload.data.result;
+    }
+  });
+
+  builder.addCase(getFolders.rejected, (state, action) => {
+    createRejectedData(state, 'folders', action.meta.requestId, action.payload as AxiosError);
   });
 
   builder.addCase(saveFolder.pending, (state, action) => {
