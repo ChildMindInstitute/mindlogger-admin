@@ -12,32 +12,13 @@ export const SubscaleLookupTable = ({
   onUpdate,
   onClose,
 }: SubscaleLookupTableProps) => {
-  const {
-    modalType,
-    step,
-    data,
-    error,
-    setModalType,
-    setError,
-    setStep,
-    onFileReady,
-    onDownloadTemplate,
-  } = useSubscaleLookupTableSetup({ tableData });
-
-  if (modalType === null) return null;
+  const { step, ...hookProps } = useSubscaleLookupTableSetup({ tableData });
 
   const screens = getComponents({
-    modalType,
+    ...hookProps,
     subscaleName,
-    data,
-    error,
-    onFileReady,
-    onDownloadTemplate,
     onUpdate,
     onClose,
-    setModalType,
-    setStep,
-    setError,
   });
   const { component, ...modalProps } = screens[step];
 

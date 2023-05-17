@@ -8,7 +8,7 @@ import { ModalType, Steps, SubscaleLookupTableSetupHookProps } from './SubscaleL
 import { defaultTemplate } from './SubscaleLookupTable.const';
 
 export const useSubscaleLookupTableSetup = ({ tableData }: SubscaleLookupTableSetupHookProps) => {
-  const [modalType, setModalType] = useState<ModalType | null>(
+  const [modalType, setModalType] = useState<ModalType>(
     tableData ? ModalType.Edit : ModalType.Upload,
   );
   const [step, setStep] = useState<Steps>(0);
@@ -28,8 +28,8 @@ export const useSubscaleLookupTableSetup = ({ tableData }: SubscaleLookupTableSe
     }
   };
 
-  const onDownloadTemplate = async () => {
-    await exportToCsv(defaultTemplate, 'subscale_lookup_table_template');
+  const onDownloadTemplate = () => {
+    exportToCsv(defaultTemplate, 'subscale_lookup_table_template');
   };
 
   useEffect(() => {
