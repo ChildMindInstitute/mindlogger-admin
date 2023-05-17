@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { folders, FolderApplet } from 'redux/modules';
@@ -8,6 +8,7 @@ import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './
 import { TableProps } from './Table.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
+import { getComparator, sortRows } from './Table.utils';
 
 export const Table = ({
   columns,
@@ -22,6 +23,14 @@ export const Table = ({
   handleChangePage,
 }: TableProps) => {
   const status = folders.useStatus();
+
+  const sortedRows = useMemo(() => {
+    if (!rows?.length) {
+      return [];
+    }
+
+    return sortRows(rows, getComparator(order, orderBy));
+  }, [order, orderBy, rows]);
 
   const loading = status === 'idle' || status === 'loading';
 
@@ -63,7 +72,7 @@ export const Table = ({
             tableHeader={tableHeader}
           />
           <TableBody>
-            {rows.map((row: FolderApplet) => (
+            {sortedRows?.map((row: FolderApplet) => (
               <Fragment key={row.id}>{getRowComponent(row)}</Fragment>
             ))}
           </TableBody>
