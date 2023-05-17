@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Modal, SubmitBtnColor } from 'shared/components';
-import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { Modal, SubmitBtnColor, Error } from 'shared/components';
+import { StyledModalWrapper } from 'shared/styles';
 import { removeIndividualEventsApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { applets } from 'modules/Dashboard/state';
-import { getErrorMessage } from 'shared/utils';
 import { page } from 'resources';
 
 import { RemoveIndividualScheduleProps } from './RemoveIndividualSchedulePopup.types';
@@ -71,11 +70,7 @@ export const RemoveIndividualSchedulePopup = ({
     >
       <StyledModalWrapper>
         {screens[step].component}
-        {error && (
-          <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
-            {getErrorMessage(error)}
-          </StyledBodyLarge>
-        )}
+        {error && <Error error={error} />}
       </StyledModalWrapper>
     </Modal>
   );

@@ -115,28 +115,34 @@ export type EventNotifications =
 
 export type EventReminder = { activityIncomplete: number; reminderTime: string | null } | null;
 
-export type CreateEventType = AppletId & {
-  body: {
-    startTime?: string;
-    endTime?: string;
-    accessBeforeSchedule?: boolean;
-    oneTimeCompletion?: boolean;
-    timer?: string;
-    timerType?: TimerType;
-    periodicity?: {
-      type: Periodicity;
-      startDate?: string;
-      endDate?: string;
-      selectedDate?: string;
-    };
-    respondentId?: string;
-    activityId?: string;
-    flowId?: string;
-    notification: {
-      notifications: EventNotifications;
-      reminder: EventReminder;
-    } | null;
+type CreateEvent = {
+  startTime?: string;
+  endTime?: string;
+  accessBeforeSchedule?: boolean;
+  oneTimeCompletion?: boolean;
+  timer?: string;
+  timerType?: TimerType;
+  periodicity?: {
+    type: Periodicity;
+    startDate?: string;
+    endDate?: string;
+    selectedDate?: string;
   };
+  respondentId?: string;
+  activityId?: string;
+  flowId?: string;
+  notification: {
+    notifications: EventNotifications;
+    reminder: EventReminder;
+  } | null;
+};
+
+export type CreateEventType = AppletId & {
+  body: CreateEvent;
+};
+
+export type ImportSchedule = AppletId & {
+  body: CreateEvent[];
 };
 
 export type SetAccount = { accountName: string };
