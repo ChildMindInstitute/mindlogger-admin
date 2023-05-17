@@ -9,8 +9,9 @@ import { StyledHeadlineLarge, StyledHeadline, StyledTitleTooltipIcon, theme } fr
 
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ScatterChart } from '../Charts/ScatterChart';
+import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { ReportFilters } from './ReportFilters';
-import { StyledHeader, StyledReport } from './Report.styles';
+import { StyledChartContainer, StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 
 export const Report = ({ activity }: { activity: Activity }) => {
@@ -41,6 +42,9 @@ export const Report = ({ activity }: { activity: Activity }) => {
           </Tooltip>
         </StyledHeadline>
         <ScatterChart />
+        <StyledChartContainer>
+          <MultiScatterChart />
+        </StyledChartContainer>
         <Subscales />
       </Box>
     </StyledReport>
