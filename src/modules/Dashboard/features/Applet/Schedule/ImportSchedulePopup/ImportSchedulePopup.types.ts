@@ -10,6 +10,17 @@ export type ImportSchedulePopupProps = {
   scheduleExportData: ScheduleExportCsv;
 };
 
+export type CheckFields = {
+  activityNames: string[];
+  invalidStartTimeField: null | JSX.Element;
+  invalidEndTimeField: null | JSX.Element;
+  invalidNotification: null | JSX.Element;
+  invalidFrequency: null | JSX.Element;
+  invalidDate: null | JSX.Element;
+  invalidStartEndTime: null | JSX.Element;
+  invalidNotificationTime: null | JSX.Element;
+};
+
 export type ImportScheduleHookProps = {
   appletName: string;
   scheduleExportData: ScheduleExportCsv;

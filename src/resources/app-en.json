@@ -741,8 +741,9 @@
   "dropFile": "Drop <1>.csv, .xls, .xlsx</1> or <3>.ods</3> here <br/>or <5>click to browse<5>.",
   "invalidFileFormat": "Invalid file format or empty file. Please upload a schedule table in one of the following formats: <1>.csv, .xls, .xlsx, .ods.</1>",
   "importScheduleErrors": {
-    "invalidActivityName": "Activity <1>[{{activityName}}]</1> does not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
-    "invalidActivityNames": "Activities <1>[{{activityNames}}]</1> do not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
+    "invalidActivityName": "Activity <1>{{activityName}}</1> does not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
+    "invalidActivityNames": "Activities <1>{{activityNames}}</1> do not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
+    "invalidDataFormat": "Invalid data format for the following fields:",
     "updateReupload": "Please update and reupload the file.",
     "startTime": "<2>Activity Start Time</2>. Valid data format: <2>HH:mm for Scheduled activity and - for Always available activity</2>.",
     "endTime": "<2>Activity End Time</2>. Valid data format: <2>HH:mm for Scheduled activity and - for Always available activity</2>.",

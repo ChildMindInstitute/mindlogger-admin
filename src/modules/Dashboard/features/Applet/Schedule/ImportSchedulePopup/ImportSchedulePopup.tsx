@@ -116,8 +116,9 @@ export const ImportSchedulePopup = ({
 
       const uploadedEvents = uploadedFile?.data as unknown as UploadedEvent[];
 
-      const hasScheduledEvents = () =>
-        scheduleExportData.some((event) => event.frequency.toUpperCase() !== Periodicity.Always);
+      const hasScheduledEvents = scheduleExportData.some(
+        (event) => event.frequency.toUpperCase() !== Periodicity.Always,
+      );
 
       const body = prepareImportPayload(
         uploadedEvents,
@@ -125,7 +126,7 @@ export const ImportSchedulePopup = ({
         appletData,
         respondentId,
       );
-      if (hasScheduledEvents()) {
+      if (hasScheduledEvents) {
         respondentId
           ? await deleteIndividualScheduledEvents({
               appletId,

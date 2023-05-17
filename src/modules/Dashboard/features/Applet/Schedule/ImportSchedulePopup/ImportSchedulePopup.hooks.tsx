@@ -2,12 +2,8 @@ import { useState } from 'react';
 
 import { ImportedFile } from 'shared/components';
 
-import { ImportScheduleErrors, ImportScheduleHookProps } from './ImportSchedulePopup.types';
-import {
-  getInvalidActivitiesError,
-  getInvalidError,
-  getUploadedScheduleErrors,
-} from './ImportSchedulePopup.utils';
+import { ImportScheduleHookProps } from './ImportSchedulePopup.types';
+import { getInvalidActivitiesError, getUploadedScheduleErrors } from './ImportSchedulePopup.utils';
 
 export const useImportSchedule = ({ appletName, scheduleExportData }: ImportScheduleHookProps) => {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
@@ -29,45 +25,30 @@ export const useImportSchedule = ({ appletName, scheduleExportData }: ImportSche
 
     const {
       notExistentActivities,
-      hasInvalidStartTimeField,
-      hasInvalidEndTimeField,
-      hasInvalidNotification,
-      hasInvalidFrequency,
-      hasInvalidDate,
-      hasInvalidStartEndTime,
-      hasInvalidNotificationTime,
+      invalidStartTimeField,
+      invalidEndTimeField,
+      invalidNotification,
+      invalidFrequency,
+      invalidDate,
+      invalidStartEndTime,
+      invalidNotificationTime,
     } = getUploadedScheduleErrors(scheduleExportData, file?.data) || {};
 
     if (notExistentActivities?.length) {
       return setValidationError(getInvalidActivitiesError(notExistentActivities, appletName));
     }
 
-    if (hasInvalidStartTimeField) {
-      return setValidationError(getInvalidError(ImportScheduleErrors.StartTime));
-    }
+    const invalidError =
+      invalidStartTimeField ||
+      invalidEndTimeField ||
+      invalidNotification ||
+      invalidFrequency ||
+      invalidDate ||
+      invalidStartEndTime ||
+      invalidNotificationTime;
 
-    if (hasInvalidEndTimeField) {
-      return setValidationError(getInvalidError(ImportScheduleErrors.EndTime));
-    }
-
-    if (hasInvalidNotification) {
-      return setValidationError(getInvalidError(ImportScheduleErrors.NotificationTime));
-    }
-
-    if (hasInvalidFrequency) {
-      return setValidationError(getInvalidError(ImportScheduleErrors.Frequency));
-    }
-
-    if (hasInvalidDate) {
-      return setValidationError(getInvalidError(ImportScheduleErrors.Date));
-    }
-
-    if (hasInvalidStartEndTime) {
-      return setValidationError(getInvalidError(ImportScheduleErrors.StartEndTime));
-    }
-
-    if (hasInvalidNotificationTime) {
-      return setValidationError(getInvalidError(ImportScheduleErrors.BetweenStartEndTime));
+    if (invalidError) {
+      return setValidationError(invalidError);
     }
 
     return handleSuccessfullyUploaded(file);
