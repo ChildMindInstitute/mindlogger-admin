@@ -11,7 +11,6 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { falseReturnFunc } from 'shared/utils';
 import { Svg } from 'shared/components';
 
 import { StyledButton, StyledLabel, StyledSvg, StyledTextField } from './FileUploader.styles';
