@@ -1,4 +1,5 @@
 import { Svg } from 'shared/components';
+import { Roles } from 'shared/consts';
 import {
   ExportDataSetting,
   DataRetention,
@@ -10,24 +11,28 @@ import {
   DownloadSchemaSetting,
 } from 'shared/features/AppletSettings';
 
-export const settings = [
-  {
-    label: 'usersAndData',
-    items: [
-      {
-        icon: <Svg id="export" />,
-        label: 'exportData',
-        component: <ExportDataSetting />,
-        param: 'export-data',
-      },
-      {
-        icon: <Svg id="data-retention" />,
-        label: 'dataRetention',
-        component: <DataRetention />,
-        param: 'data-retention',
-      },
-    ],
-  },
+export const getSettings = (priorityRole: Roles | null) => [
+  ...(priorityRole !== Roles.Editor
+    ? [
+        {
+          label: 'usersAndData',
+          items: [
+            {
+              icon: <Svg id="export" />,
+              label: 'exportData',
+              component: <ExportDataSetting />,
+              param: 'export-data',
+            },
+            {
+              icon: <Svg id="data-retention" />,
+              label: 'dataRetention',
+              component: <DataRetention />,
+              param: 'data-retention',
+            },
+          ],
+        },
+      ]
+    : []),
   {
     label: 'appletContent',
     items: [
@@ -49,24 +54,32 @@ export const settings = [
         component: <>versionHistory</>,
         param: 'version-history',
       },
-      {
-        icon: <Svg id="transfer-ownership" />,
-        label: 'transferOwnership',
-        component: <TransferOwnershipSetting isApplet />,
-        param: 'transfer-ownership',
-      },
+      ...(priorityRole === Roles.Owner
+        ? [
+            {
+              icon: <Svg id="transfer-ownership" />,
+              label: 'transferOwnership',
+              component: <TransferOwnershipSetting isApplet />,
+              param: 'transfer-ownership',
+            },
+          ]
+        : []),
       {
         icon: <Svg id="duplicate" />,
         label: 'duplicateApplet',
         component: <DuplicateAppletSettings />,
         param: 'duplicate-applet',
       },
-      {
-        icon: <Svg id="trash" />,
-        label: 'deleteApplet',
-        component: <DeleteAppletSetting />,
-        param: 'delete-applet',
-      },
+      ...(priorityRole === Roles.Owner || priorityRole === Roles.Manager
+        ? [
+            {
+              icon: <Svg id="trash" />,
+              label: 'deleteApplet',
+              component: <DeleteAppletSetting />,
+              param: 'delete-applet',
+            },
+          ]
+        : []),
     ],
   },
   {

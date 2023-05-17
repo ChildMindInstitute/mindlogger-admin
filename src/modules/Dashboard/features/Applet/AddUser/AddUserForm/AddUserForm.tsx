@@ -19,12 +19,12 @@ import { users, workspaces } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 
 import { StyledButton, StyledRow, StyledResetButton, StyledTooltip } from './AddUserForm.styles';
-import { Fields, fields, defaultValues, langs, roles } from './AddUserForm.const';
+import { Fields, fields, defaultValues, langs, getRoles } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types';
 import { getUrl } from './AddUserForm.utils';
 
-export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
+export const AddUserForm = ({ getInvitationsHandler, priorityRole }: AddUserFormProps) => {
   const { appletId: id } = useParams();
   const { t } = useTranslation('app');
 
@@ -133,7 +133,7 @@ export const AddUserForm = ({ getInvitationsHandler }: AddUserFormProps) => {
             <SelectController
               {...commonProps}
               name={Fields.role}
-              options={roles}
+              options={getRoles(priorityRole)}
               label={t('role')}
               customChange={updateFields}
             />

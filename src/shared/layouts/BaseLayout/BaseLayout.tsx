@@ -10,7 +10,7 @@ import { DeletePopup, LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 
 export const BaseLayout = () => {
-  const { appletId: id } = useParams();
+  const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
   const { ownerId } = workspaces.useData() || {};
@@ -20,14 +20,23 @@ export const BaseLayout = () => {
   useEffect(() => {
     const { getFolders, getWorkspaceApplets } = folders.thunk;
     const { getWorkspaceRespondents, getWorkspaceManagers } = users.thunk;
+    const { getWorkspacePriorityRole } = workspaces.thunk;
 
     if (ownerId) {
+      dispatch(
+        getWorkspacePriorityRole({
+          params: {
+            ownerId,
+            ...(appletId && { appletIDs: [appletId] }),
+          },
+        }),
+      );
       dispatch(
         getWorkspaceRespondents({
           params: {
             ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
-            ...(id && { appletId: id }),
+            ...(appletId && { appletId }),
           },
         }),
       );
@@ -36,7 +45,7 @@ export const BaseLayout = () => {
           params: {
             ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
-            ...(id && { appletId: id }),
+            ...(appletId && { appletId }),
           },
         }),
       );
@@ -52,7 +61,7 @@ export const BaseLayout = () => {
         );
       })();
     }
-  }, [dispatch, ownerId, id]);
+  }, [dispatch, ownerId, appletId]);
 
   return (
     <StyledBaseLayout>

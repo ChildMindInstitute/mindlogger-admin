@@ -870,5 +870,6 @@
   "activityUnavailableAtTime": "Activity is unavailable at this time",
   "repeatPasswordRequired": "Repeat Password is Required",
   "finalSubscaleScore": "Final Subscale Score",
-  "additionalInformation": "Additional Information"
+  "additionalInformation": "Additional Information",
+  "noPermissions": "You have no permissions to view this tab."
 }
