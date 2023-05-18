@@ -43,6 +43,7 @@
   "chooseLanguage": "Choisissez une langue",
   "ok": "Ok",
   "cancel": "Annuler",
+  "replace": "Remplacer",
   "saveAnyway": "Enregistrer quand même",
   "privacy": "Politique de confidentialité",
   "terms": "Conditions d'utilisation",
@@ -628,6 +629,50 @@
   "subscaleScoring": "Score de sous-échelle",
   "subscaleScoringSum": "Somme",
   "subscaleScoringAverage": "Moyenne",
+  "subscaleLookupTable": {
+    "upload": {
+      "title": "Télécharger la table de recherche",
+      "initDescription": "Veuillez télécharger le fichier au format <1>.csv, .xls, .xlsx, .ods.</1>.",
+      "successDescription": "Votre table de recherche pour <1>{{name}}</1> a été analysée avec succès."
+    },
+    "edit": {
+      "title": "Modifier la table de consultation",
+      "initDescription": "Table de recherche actuelle pour <1>{{name}}</1>."
+    },
+    "delete": {
+      "title": "Supprimer la table de consultation",
+      "initDescription": "Êtes-vous sûr de vouloir supprimer la table de recherche pour <1>{{name}}</1> ?",
+      "successDescription": "La table de consultation actuelle pour <1>{{name}}</1> a été supprimée avec succès."
+    },
+    "errors": {
+      "haveToUploadFile": "Vous devez télécharger le fichier pour continuer.",
+      "fileCantBeParsed": "Votre fichier ne peut pas être analysé. Veuillez vérifier le contenu de votre table et réessayer.",
+      "incorrectFileFormat": "Format de fichier incorrect. Veuillez télécharger le fichier au format <1>.csv, .xls, .xlsx, .ods.</1>.",
+      "onDelete": "La table de consultation actuelle pour <1>{{name}}</1> n'a pas été supprimée. Veuillez réessayer."
+    },
+    "column": {
+      "score": "Score",
+      "rawScore": "Score brut",
+      "age": "Âge",
+      "sex": "Sexe",
+      "text": "Texte"
+    }
+  },
+  "addTotalScoreLookupTable": {
+    "upload": {
+      "successDescription": "Votre table de recherche de score total a été analysée avec succès."
+    },
+    "edit": {
+      "initDescription": "Table de consultation du score total actuel."
+    },
+    "delete": {
+      "initDescription": "Êtes-vous sûr de vouloir supprimer la table de recherche de score total actuelle ?",
+      "successDescription": "La table de recherche de score total actuelle a été supprimée avec succès."
+    },
+    "column": {
+      "onDelete": "La table de recherche de score total actuelle n'a pas été supprimée. Veuillez réessayer."
+    }
+  },
   "élément": "Élément",
   "elementsWithinSubscale": "Éléments dans la sous-échelle",
   "availableElements": "Éléments disponibles",

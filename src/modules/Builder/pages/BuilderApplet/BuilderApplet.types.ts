@@ -34,6 +34,7 @@ export type ActivityFormValues = {
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
   sections?: ActivitySettingsSection[];
+  totalScoresTableData?: string;
 };
 
 export type ActivityFlowItem = {

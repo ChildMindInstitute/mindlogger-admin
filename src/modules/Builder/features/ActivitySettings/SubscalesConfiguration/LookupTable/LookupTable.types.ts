@@ -1,26 +1,47 @@
 import { DataTableItem, FileUploaderProps, ImportedFile, ModalProps } from 'shared/components';
 
-export type SubscaleLookupTableProps = {
+export type LookupTableProps = {
   open: boolean;
-  subscaleName: string;
+  labelsObject: LabelsObject;
+  columnData: { key: string; label: string }[];
   tableData?: string;
+  template: Record<string, string | number | undefined>[];
+  templatePrefix?: string;
   onClose: () => void;
   onUpdate: (lookupTableData?: string) => void;
 };
 
-export type SubscaleLookupTableSetupHookProps = {
+export type LookupTableSetupHookProps = {
+  template: LookupTableProps['template'];
+  templatePrefix: LookupTableProps['templatePrefix'];
   tableData?: string;
+};
+
+export type LabelsObject = {
+  [key in ModalType]: {
+    title: string;
+    initDescription: JSX.Element;
+    successDescription?: JSX.Element;
+  };
+} & {
+  errors: {
+    haveToUploadFile: JSX.Element;
+    incorrectFileFormat: JSX.Element;
+    fileCantBeParsed: JSX.Element;
+    onDelete: JSX.Element | string;
+  };
 };
 
 export type GetComponentsProps = {
   modalType: ModalType;
-  subscaleName: string;
+  columnData: LookupTableProps['columnData'];
   data?: DataTableItem[];
   error: JSX.Element | null;
+  labelsObject: LabelsObject;
   onFileReady: (file: ImportedFile | null) => void;
   onDownloadTemplate: FileUploaderProps['onDownloadTemplate'];
-  onUpdate: (data?: string) => void;
-  onClose: () => void;
+  onUpdate: LookupTableProps['onUpdate'];
+  onClose: LookupTableProps['onClose'];
   setModalType: (value: ModalType) => void;
   setStep: (value: Steps) => void;
   setError: (value: JSX.Element | null) => void;
