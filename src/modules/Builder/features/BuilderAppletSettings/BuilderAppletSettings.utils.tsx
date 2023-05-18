@@ -7,10 +7,13 @@ import {
   DownloadSchemaSetting,
   DeleteAppletSetting,
   ExportDataSetting,
+  PublishConcealAppletSetting,
 } from 'shared/features/AppletSettings';
 
-export const getSettings = (isNewApplet: boolean, priorityRole: Roles | null) => [
-  ...(priorityRole !== Roles.Editor
+import { GetSettings } from './BuilderAppletSettings.types';
+
+export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => [
+  ...(role !== Roles.Editor
     ? [
         {
           label: 'usersAndData',
@@ -46,7 +49,7 @@ export const getSettings = (isNewApplet: boolean, priorityRole: Roles | null) =>
         component: <>versionHistory</>, //TODO: Add isDisabled,
         param: 'version-history',
       },
-      ...(priorityRole === Roles.Owner
+      ...(role === Roles.Owner
         ? [
             {
               icon: <Svg id="transfer-ownership" />,
@@ -56,7 +59,7 @@ export const getSettings = (isNewApplet: boolean, priorityRole: Roles | null) =>
             },
           ]
         : []),
-      ...(priorityRole === Roles.Owner || priorityRole === Roles.Manager
+      ...(role === Roles.Owner || role === Roles.Manager
         ? [
             {
               icon: <Svg id="trash" />,
@@ -79,16 +82,26 @@ export const getSettings = (isNewApplet: boolean, priorityRole: Roles | null) =>
       },
     ],
   },
-  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
-  // introduced. (Story: AUS-4.1.4.10)
-  // {
-  //   label: 'sharing',
-  //   items: [
-  //     {
-  //       icon: <Svg id="share" />,
-  //       label: 'shareToLibrary',
-  //       component: <ShareAppletSetting isDisabled={isNewApplet} />,
-  //     },
-  //   ],
-  // },
+  ...(!isNewApplet
+    ? [
+        {
+          label: 'sharing',
+          items: [
+            // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
+            // introduced. (Story: AUS-4.1.4.10)
+            // {
+            //       icon: <Svg id="share" />,
+            //       label: 'shareToLibrary',
+            //       component: <ShareAppletSetting />,
+            //     },
+            {
+              icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
+              label: isPublished ? 'concealApplet' : 'publishApplet',
+              component: <PublishConcealAppletSetting isBuilder />,
+              param: 'publish-conceal',
+            },
+          ],
+        },
+      ]
+    : []),
 ];

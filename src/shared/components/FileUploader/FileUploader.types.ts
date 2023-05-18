@@ -4,7 +4,7 @@ export type ImportedFile = {
 };
 
 export type FileUploaderProps = {
-  uploadLabel: JSX.Element;
+  uploadLabel: string | JSX.Element;
   onFileReady: (file: ImportedFile | null) => void;
   invalidFileFormatError: JSX.Element;
   onDownloadTemplate?: () => void;

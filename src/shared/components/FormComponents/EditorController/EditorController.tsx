@@ -21,11 +21,12 @@ import {
 } from 'shared/components';
 
 import { StyledErrorText, StyledMdEditor } from './EditorController.styles';
-import { EditorControllerProps } from './EditorController.types';
+import { EditorControllerProps, EditorUiType } from './EditorController.types';
 
 export const EditorController = <T extends FieldValues>({
   name,
   control,
+  uiType = EditorUiType.Primary,
 }: EditorControllerProps<T>) => {
   const { t } = useTranslation('app');
   const editorRef = useRef<ExposeParam>();
@@ -41,7 +42,7 @@ export const EditorController = <T extends FieldValues>({
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <>
           <StyledMdEditor
-            className={error ? 'has-error' : ''}
+            className={`${uiType} ${error ? 'has-error' : ''}`}
             ref={editorRef}
             modelValue={value ?? ''}
             onChange={onChange}

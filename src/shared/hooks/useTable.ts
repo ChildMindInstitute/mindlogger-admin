@@ -72,6 +72,10 @@ export const useTable = (
     });
   };
 
+  const handleReload = () => {
+    asyncFunc({ params });
+  };
+
   useEffect(() => {
     if (ownerId) {
       setPage(defaultParams.page);
@@ -90,5 +94,6 @@ export const useTable = (
     handleRequestSort,
     handleChangePage,
     handleSearch,
+    handleReload,
   };
 };

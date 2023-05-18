@@ -10,3 +10,4 @@ export * from './TransferOwnershipSetting';
 export * from './Setting';
 export * from './Navigation';
 export * from './AppletSettings';
+export * from './PublishConcealAppletSetting';

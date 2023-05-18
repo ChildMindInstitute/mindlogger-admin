@@ -9,10 +9,13 @@ import {
   DeleteAppletSetting,
   ReportConfigSetting,
   DownloadSchemaSetting,
+  PublishConcealAppletSetting,
 } from 'shared/features/AppletSettings';
 
-export const getSettings = (priorityRole: Roles | null) => [
-  ...(priorityRole !== Roles.Editor
+import { GetSettings } from './DashboardAppletSettings.types';
+
+export const getSettings = ({ isPublished, role }: GetSettings) => [
+  ...(role !== Roles.Editor
     ? [
         {
           label: 'usersAndData',
@@ -54,7 +57,7 @@ export const getSettings = (priorityRole: Roles | null) => [
         component: <>versionHistory</>,
         param: 'version-history',
       },
-      ...(priorityRole === Roles.Owner
+      ...(role === Roles.Owner
         ? [
             {
               icon: <Svg id="transfer-ownership" />,
@@ -70,7 +73,7 @@ export const getSettings = (priorityRole: Roles | null) => [
         component: <DuplicateAppletSettings />,
         param: 'duplicate-applet',
       },
-      ...(priorityRole === Roles.Owner || priorityRole === Roles.Manager
+      ...(role === Roles.Owner || role === Roles.Manager
         ? [
             {
               icon: <Svg id="trash" />,
@@ -93,16 +96,22 @@ export const getSettings = (priorityRole: Roles | null) => [
       },
     ],
   },
-  // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
-  // introduced. (Story: AUS-4.1.4.10)
-  // {
-  //   label: 'sharing',
-  //   items: [
-  //     {
-  //       icon: <Svg id="share" />,
-  //       label: 'shareToLibrary',
-  //       component: <ShareAppletSetting />,
-  //     },
-  //   ],
-  // },
+  {
+    label: 'sharing',
+    items: [
+      // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
+      // introduced. (Story: AUS-4.1.4.10)
+      // {
+      //       icon: <Svg id="share" />,
+      //       label: 'shareToLibrary',
+      //       component: <ShareAppletSetting />,
+      //     },
+      {
+        icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
+        label: isPublished ? 'concealApplet' : 'publishApplet',
+        component: <PublishConcealAppletSetting isDashboard />,
+        param: 'publish-conceal',
+      },
+    ],
+  },
 ];

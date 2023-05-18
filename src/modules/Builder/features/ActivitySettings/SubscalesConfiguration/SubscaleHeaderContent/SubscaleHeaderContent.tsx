@@ -5,10 +5,12 @@ import { useFormContext } from 'react-hook-form';
 import { StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 
-import { TitleComponent } from '../TitleComponent';
+import { TitleComponent } from '../../TitleComponent';
 import { SubscaleHeaderContentProps } from './SubscaleHeaderContent.types';
 import { StyledWrapper } from './SubscaleHeaderContent.styles';
-import { SubscaleLookupTable } from '../SubscaleLookupTable';
+import { LookupTable } from '../LookupTable';
+import { getSubscaleModalLabels } from '../SubscalesConfiguration.utils';
+import { subscaleColumnData, subscaleTableTemplate } from './SubscaleHeaderContent.const';
 
 export const SubscaleHeaderContent = ({
   onRemove,
@@ -45,10 +47,13 @@ export const SubscaleHeaderContent = ({
         </Box>
       </StyledWrapper>
       {isSubscaleLookupTableOpened && (
-        <SubscaleLookupTable
+        <LookupTable
           open={isSubscaleLookupTableOpened}
-          subscaleName={subscaleName}
+          labelsObject={getSubscaleModalLabels(subscaleName)}
+          columnData={subscaleColumnData}
           tableData={subscaleTableData}
+          template={subscaleTableTemplate}
+          templatePrefix={'subscale_'}
           onUpdate={onUpdate}
           onClose={() => {
             setIsSubscaleLookupTableOpened(false);
