@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 
-import { TitleComponent } from '../TitleComponent';
+import { TitleComponent } from '../../TitleComponent';
 import { SubscaleHeaderContentProps } from './SubscaleHeaderContent.types';
 import { StyledWrapper } from './SubscaleHeaderContent.styles';
 import { LookupTable } from '../LookupTable';

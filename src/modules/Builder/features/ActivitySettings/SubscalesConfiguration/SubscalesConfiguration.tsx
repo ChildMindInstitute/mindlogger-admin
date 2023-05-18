@@ -23,7 +23,6 @@ import {
   getSubscalesDefaults,
   allElementsTableColumns,
   getNotUsedElements,
-  checkOnItemType,
   getUsedWithinSubscalesElements,
   getPropertiesToFilterByIds,
   getAddTotalScoreModalLabels,
@@ -32,6 +31,7 @@ import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
 import { StyledSvgButton } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
+import { checkOnItemType } from '../ActivitySettings.utils';
 import { LookupTable } from './LookupTable';
 
 export const SubscalesConfiguration = () => {

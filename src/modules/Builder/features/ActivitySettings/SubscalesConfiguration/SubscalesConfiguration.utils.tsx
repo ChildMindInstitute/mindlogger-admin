@@ -6,7 +6,7 @@ import { StyledTitleSmall, variables } from 'shared/styles';
 import i18n from 'i18n';
 import { ActivitySettingsSubscale } from 'shared/state';
 import { ItemFormValues } from 'modules/Builder/pages';
-import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
+import { SubscaleTotalScore } from 'shared/consts';
 import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 
 import {
@@ -47,13 +47,6 @@ export const getSubscaleElementName = (
       return acc;
     }, [] as string[])
     .join(', ')})`;
-
-export const checkOnItemType = (item: ItemFormValues) =>
-  [
-    ItemResponseType.SingleSelection,
-    ItemResponseType.MultipleSelection,
-    ItemResponseType.Slider,
-  ].includes(item.responseType as ItemResponseType);
 
 export const getItemElements = (
   subscaleId: string,
