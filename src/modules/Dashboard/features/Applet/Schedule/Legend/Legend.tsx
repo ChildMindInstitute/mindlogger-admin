@@ -125,11 +125,11 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   }, [respondentId]);
 
   useEffect(() => {
-    if (respondentId && respondentsItems?.length && !selectedRespondent) {
-      setSelectedRespondent(
-        respondentsItems.find((respondent) => respondent.id === respondentId) || null,
-      );
-    }
+    if (!respondentId || selectedRespondent) return;
+
+    const currentRespondent =
+      respondentsItems?.find((respondent) => respondent.id === respondentId) || null;
+    setSelectedRespondent(currentRespondent);
   }, [respondentId, respondentsItems, selectedRespondent]);
 
   return schedule ? (

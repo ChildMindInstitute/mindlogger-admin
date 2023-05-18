@@ -46,7 +46,7 @@ export const Calendar = () => {
   const [defaultStartDate, setDefaultStartDate] = useState(new Date());
   const [editedEvent, setEditedEvent] = useState<CalendarEvent | null>(null);
 
-  const { eventsToShow = [], allDayEventsSortedByDays = [] } =
+  const { eventsToShow = null, allDayEventsSortedByDays = null } =
     calendarEvents.useVisibleEventsData() || {};
 
   const { components, messages, views, formats } = getCalendarComponents(
