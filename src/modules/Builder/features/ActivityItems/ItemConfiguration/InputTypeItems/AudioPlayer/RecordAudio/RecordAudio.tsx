@@ -65,15 +65,21 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
   };
 
   const modalProps = {
+    open,
+    title: t('audioPlayerRecordAudio'),
     buttonText: url ? t('audioPlayerUpload') : t('cancel'),
     hasSecondBtn: !!url,
     secondBtnText: t('cancel'),
+    onClose,
     onSubmit: url ? handleUpload : onClose,
     onSecondBtnSubmit: onClose,
+    footerStyles: {
+      paddingTop: theme.spacing(2.1),
+    },
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={t('audioPlayerRecordAudio')} {...modalProps}>
+    <Modal {...modalProps}>
       <Box sx={{ m: theme.spacing(0, 3.2) }}>
         <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }}>
           {t('audioPlayerRecordAudioDescription')}
@@ -89,7 +95,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
             >
               {t('audioPlayerRecordStart')}
             </Button>
-            {formatSecondsToMinutes(recordingTime)}
+            <StyledTitleMedium>{formatSecondsToMinutes(recordingTime)}</StyledTitleMedium>
           </StyledRecordButton>
           <Button
             variant="outlined"
