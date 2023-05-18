@@ -74,7 +74,7 @@ export const ScoresAndReports = () => {
 
         return (
           <ToggleItemContainer
-            key={`data-subscale-${getEntityKey(section) || index}`}
+            key={`data-section-${getEntityKey(section) || index}`}
             HeaderContent={SectionHeaderContent}
             Content={SectionContent}
             headerContentProps={{
