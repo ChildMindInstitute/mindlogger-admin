@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { publishAppletApi, concealAppletApi } from 'api';
-import { applet, popups } from 'redux/modules';
+import { applet, popups, folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Modal } from 'shared/components';
 import {
@@ -16,10 +17,14 @@ import { useAsync } from 'shared/hooks';
 export const PublishConcealAppletPopup = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+  const { appletId: id } = useParams();
 
   const { result: appletData } = applet.useAppletData() ?? {};
-  const { isPublished, displayName } = appletData ?? {};
+  const applets = folders.useFlattenFoldersApplets();
   const { appletId, publishConcealPopupVisible, popupProps } = popups.useData();
+
+  const currentApplet = id ? appletData : applets.find((applet) => applet.id === appletId);
+  const { isPublished, displayName } = currentApplet ?? {};
 
   const [isProcessPopupVisible, setProcessPopupVisible] = useState(true);
   const [isSuccessPopupVisible, setSuccessPopupVisible] = useState(false);
@@ -68,6 +73,7 @@ export const PublishConcealAppletPopup = () => {
   const handleSubmit = () => (isPublishPopup ? concealApplet : publishApplet)({ appletId });
   const handleRetry = () => {
     setErrorPopupVisible(false);
+    setProcessPopupVisible(true);
 
     handleSubmit();
   };
@@ -140,8 +146,8 @@ export const PublishConcealAppletPopup = () => {
                   {' '}
                   <>{{ name: displayName }}</>{' '}
                 </strong>
-                has been
-                <> {{ status: isPublishPopup ? 'concealed' : 'published' }}</> successfully.
+                has not been
+                <> {{ status: isPublishPopup ? 'concealed' : 'published' }}</>. Please try again.
               </Trans>
             </StyledBodyLarge>
           </StyledModalWrapper>

@@ -6,11 +6,6 @@ import { getSettings } from './DashboardAppletSettings.utils';
 
 export const DashboardAppletSettings = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
-
-  // return <AppletSettings settings={getSettings({ isPublished: appletData?.isPublished })} />;
-  // import { getSettings } from './DashboardAppletSettings.const';
-
-  // export const DashboardAppletSettings = () => {
   const priorityRoleData = workspaces.usePriorityRoleData();
 
   return (
