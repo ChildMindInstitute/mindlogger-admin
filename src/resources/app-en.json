@@ -796,6 +796,21 @@
       "text": "Text"
     }
   },
+  "addTotalScoreLookupTable": {
+    "upload": {
+      "successDescription": "Your Total Score Lookup Table was parsed successfully."
+    },
+    "edit": {
+      "initDescription": "Current Total Score Lookup Table."
+    },
+    "delete": {
+      "initDescription": "Are you sure you want to delete the current Total Score Lookup Table?",
+      "successDescription": "The current Total Score Lookup Table has been deleted successfully."
+    },
+    "errors": {
+      "onDelete": "The current Total Score Lookup Table has not been deleted. Please try again."
+    }
+  },
   "element": "Element",
   "elementsWithinSubscale": "Elements within subscale",
   "availableElements": "Available Elements",
