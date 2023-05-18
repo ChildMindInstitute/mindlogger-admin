@@ -10,7 +10,7 @@ import { DEFAULT_ROWS_PER_PAGE, Modal } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledModalWrapper } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
-import { popups, applets, workspaces } from 'redux/modules';
+import { popups, workspaces, folders } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { duplicateAppletApi, getAppletUniqueNameApi } from 'api';
 import { page } from 'resources';
@@ -23,10 +23,10 @@ export const DuplicatePopups = () => {
   const history = useNavigate();
 
   const { ownerId } = workspaces.useData() || {};
-  const appletsData = applets.useData();
+  const applets = folders.useFlattenFoldersApplets();
   const { duplicatePopupsVisible, appletId } = popups.useData();
 
-  const currentApplet = appletsData?.result?.find((applet) => applet.id === appletId);
+  const currentApplet = applets.find((applet) => applet.id === appletId);
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
@@ -45,7 +45,7 @@ export const DuplicatePopups = () => {
   const { execute: executeDuplicate } = useAsync(
     duplicateAppletApi,
     () => {
-      const { getWorkspaceApplets } = applets.thunk;
+      const { getWorkspaceApplets } = folders.thunk;
       dispatch(
         getWorkspaceApplets({
           params: {

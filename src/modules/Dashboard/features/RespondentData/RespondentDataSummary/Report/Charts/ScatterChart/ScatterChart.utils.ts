@@ -1,37 +1,24 @@
-import { max, min } from 'date-fns';
 import { ScriptableTooltipContext } from 'chart.js';
+import { Context } from 'chartjs-plugin-datalabels';
 
 import { variables } from 'shared/styles';
 import { locales } from 'shared/consts';
 
-import { Data } from './ScatterChart.types';
+import { Response, Version } from '../../Report.types';
+import { commonConfig } from './ScatterChart.const';
+import { ExtendedChartDataset } from './ScatterChart.types';
 
-export const TOOLTIP_OFFSET_TOP = 60;
-export const TOOLTIP_OFFSET_LEFT = 70;
-
-export const mocked = {
-  responses: [new Date('2023-11-06'), new Date('2023-11-27'), new Date('2023-12-07')],
-  versions: [new Date('2023-11-20')],
-};
-
-const commonConfig = {
-  type: 'time' as const,
-  time: {
-    unit: 'day' as const,
-    displayFormats: {
-      month: 'dd mmm' as const,
-    },
-  },
-};
+const formatDateToNumber = (date: string | Date) =>
+  (typeof date === 'string' ? new Date(date) : date).getTime();
 
 export const getOptions = (
   lang: keyof typeof locales,
-  data: Data,
+  minDate: string | Date,
+  maxDate: string | Date,
   tooltipHandler: (context: ScriptableTooltipContext<'scatter'>) => void,
 ) => {
-  const datesArr = [...data.responses, ...data.versions];
-  const maxDate = max(datesArr).toString();
-  const minDate = min(datesArr).toString();
+  const min = formatDateToNumber(minDate);
+  const max = formatDateToNumber(maxDate);
 
   return {
     maintainAspectRatio: false,
@@ -43,7 +30,6 @@ export const getOptions = (
       },
       tooltip: {
         enabled: false,
-        position: 'nearest' as const,
         external: tooltipHandler,
       },
     },
@@ -77,8 +63,8 @@ export const getOptions = (
             size: 11,
           },
         },
-        min: minDate,
-        max: maxDate,
+        min,
+        max,
       },
       x2: {
         ...commonConfig,
@@ -93,18 +79,18 @@ export const getOptions = (
         border: {
           display: false,
         },
-        min: minDate,
-        max: maxDate,
+        min,
+        max,
       },
     },
   };
 };
 
-export const getData = (data: Data) => ({
+export const getData = (responses: Response[], versions: Version[]) => ({
   datasets: [
     {
       xAxisID: 'x',
-      data: data?.responses.map((item: Date) => ({ x: item, y: 0 })),
+      data: responses.map(({ date }) => ({ x: new Date(date), y: 0 })),
       borderWidth: 5,
       backgroundColor: variables.palette.primary,
       borderColor: variables.palette.primary,
@@ -114,16 +100,18 @@ export const getData = (data: Data) => ({
     },
     {
       xAxisID: 'x2',
-      data: data?.versions.map((item: Date) => ({ x: item, y: 1 })),
+      labels: versions.map(({ version }) => version),
+      data: versions.map(({ date }) => ({ x: new Date(date), y: 1 })),
       datalabels: {
         anchor: 'start' as const,
         align: 'right' as const,
         font: {
           size: 11,
         },
-        formatter() {
-          // TODO: add logic with real data
-          return '1.0.1';
+        formatter: (_: unknown, context: Context) => {
+          const dataset = context.dataset as ExtendedChartDataset;
+
+          return dataset.labels[context.dataIndex];
         },
       },
       pointStyle: false as const,

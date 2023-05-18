@@ -1,5 +1,5 @@
 import { Box, Button } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DatePicker, TimePicker, DatePickerUiType } from 'shared/components';
@@ -7,18 +7,10 @@ import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/s
 import { Switch, TagsInputController } from 'shared/components/FormComponents';
 
 import { StyledTimeText } from './ReportFilters.styles';
-import { FilterValues } from './ReportFilters.types';
 
-export const ReportFilters = () => {
+export const ReportFilters = ({ minDate }: { minDate: Date }) => {
   const { t } = useTranslation('app');
-  const { control, setValue, watch, register, unregister } = useForm<FilterValues>({
-    defaultValues: {
-      startDateEndDate: [],
-      moreFiltersVisisble: false,
-      startTime: '',
-      endTime: '',
-    },
-  });
+  const { control, watch, setValue, register, unregister } = useFormContext();
 
   const moreFiltersVisisble = watch('moreFiltersVisisble');
   const filterByIdentifier = watch('filterByIdentifier');
@@ -40,6 +32,7 @@ export const ReportFilters = () => {
     <form>
       <StyledFlexTopCenter sx={{ mb: theme.spacing(3.2) }}>
         <DatePicker
+          minDate={minDate}
           name="startDateEndDate"
           uiType={DatePickerUiType.StartEndingDate}
           control={control}
@@ -72,7 +65,7 @@ export const ReportFilters = () => {
         </Button>
       </StyledFlexTopCenter>
       {moreFiltersVisisble && (
-        <>
+        <Box sx={{ mb: theme.spacing(4.8) }}>
           <Switch name="filterByIdentifier" control={control} label={t('filterByIdentifier')} />
           <StyledFlexTopCenter sx={{ mt: theme.spacing(0.8) }}>
             <Box sx={{ width: '28rem' }}>
@@ -97,7 +90,7 @@ export const ReportFilters = () => {
               />
             </Box>
           </StyledFlexTopCenter>
-        </>
+        </Box>
       )}
     </form>
   );

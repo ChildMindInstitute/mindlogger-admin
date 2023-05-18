@@ -5,7 +5,6 @@ import theme from 'shared/styles/theme';
 
 export const StyledEmptyTable = styled(StyledFlexAllCenter)`
   flex-direction: column;
-  width: 38.1rem;
   height: 100%;
   text-align: center;
   margin: 0 auto;
