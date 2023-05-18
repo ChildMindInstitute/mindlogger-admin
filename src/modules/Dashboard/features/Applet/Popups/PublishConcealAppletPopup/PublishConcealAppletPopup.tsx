@@ -52,16 +52,18 @@ export const PublishConcealAppletPopup = () => {
     handlePostSuccess,
     handlePostError,
   );
+  const isLoading = isConcealing || isPublishing;
 
   const handleClose = () => {
-    dispatch(
-      popups.actions.setPopupVisible({
-        appletId: '',
-        key: 'publishConcealPopupVisible',
-        value: false,
-        popupProps: undefined,
-      }),
-    );
+    !isLoading &&
+      dispatch(
+        popups.actions.setPopupVisible({
+          appletId: '',
+          key: 'publishConcealPopupVisible',
+          value: false,
+          popupProps: undefined,
+        }),
+      );
   };
   const handleSubmit = () => (isPublishPopup ? concealApplet : publishApplet)({ appletId });
   const handleRetry = () => {
@@ -79,12 +81,12 @@ export const PublishConcealAppletPopup = () => {
           onSubmit={handleSubmit}
           onSecondBtnSubmit={handleClose}
           title={t(isPublishPopup ? 'concealAppletPopupTitle' : 'publishAppletPopupTitle')}
-          buttonText={t('yes')}
+          buttonText={!isLoading ? t('yes') : ''}
           secondBtnText={t('cancel')}
-          hasSecondBtn
+          hasSecondBtn={!isLoading}
         >
           <StyledModalWrapper>
-            {isConcealing || isPublishing ? (
+            {isLoading ? (
               <StyledLinearProgress />
             ) : (
               <StyledBodyLarge>
