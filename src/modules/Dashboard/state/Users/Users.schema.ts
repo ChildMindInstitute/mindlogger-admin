@@ -27,6 +27,7 @@ export type Manager = {
 
 export type UsersSchema = {
   respondents: BaseSchema<{ result: Respondent[]; count: number } | null>;
+  allRespondents: BaseSchema<{ result: Respondent[]; count: number } | null>;
   managers: BaseSchema<{ result: Manager[]; count: number } | null>;
 };
 

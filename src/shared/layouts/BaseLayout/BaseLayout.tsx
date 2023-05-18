@@ -7,17 +7,16 @@ import {
   TransferOwnershipPopup,
 } from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
-import { account, folders, popups, workspaces, applets, users, auth } from 'redux/modules';
+import { popups, workspaces, users, auth, folders } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, Footer } from 'shared/components';
 
 import { DeletePopup, LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 
 export const BaseLayout = () => {
-  const { appletId: id } = useParams();
+  const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
-  const accountData = account.useData();
   const { ownerId } = workspaces.useData() || {};
   const {
     duplicatePopupsVisible,
@@ -27,21 +26,16 @@ export const BaseLayout = () => {
   } = popups.useData();
 
   useEffect(() => {
-    if (accountData?.account && isAuthorized) {
-      dispatch(folders.thunk.getAppletsForFolders({ account: accountData.account }));
-    }
-  }, [dispatch, accountData?.account, isAuthorized]);
-
-  useEffect(() => {
-    const { getWorkspaceApplets } = applets.thunk;
+    const { getFolders, getWorkspaceApplets } = folders.thunk;
     const { getWorkspaceRespondents, getWorkspaceManagers } = users.thunk;
+    const { getWorkspacePriorityRole } = workspaces.thunk;
 
     if (ownerId) {
       dispatch(
-        getWorkspaceApplets({
+        getWorkspacePriorityRole({
           params: {
             ownerId,
-            limit: DEFAULT_ROWS_PER_PAGE,
+            ...(appletId && { appletIDs: [appletId] }),
           },
         }),
       );
@@ -50,7 +44,7 @@ export const BaseLayout = () => {
           params: {
             ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
-            ...(id && { appletId: id }),
+            ...(appletId && { appletId }),
           },
         }),
       );
@@ -59,12 +53,23 @@ export const BaseLayout = () => {
           params: {
             ownerId,
             limit: DEFAULT_ROWS_PER_PAGE,
-            ...(id && { appletId: id }),
+            ...(appletId && { appletId }),
           },
         }),
       );
+      (async () => {
+        await dispatch(getFolders({ ownerId }));
+        dispatch(
+          getWorkspaceApplets({
+            params: {
+              ownerId,
+              limit: DEFAULT_ROWS_PER_PAGE,
+            },
+          }),
+        );
+      })();
     }
-  }, [dispatch, ownerId, id]);
+  }, [dispatch, ownerId, appletId]);
 
   return (
     <StyledBaseLayout>

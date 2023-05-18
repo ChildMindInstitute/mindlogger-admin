@@ -59,11 +59,23 @@ export const getEventFormTabs = ({
   },
 ];
 
-const getStartEndComparisonResult = (startTime: string, endTime: string) => {
+export const getStartEndComparison = (startTime: string, endTime: string) => {
   const startDate = new Date(`2000-01-01T${startTime}:00`);
   const endDate = new Date(`2000-01-01T${endTime}:00`);
 
   return startDate < endDate;
+};
+
+export const getBetweenStartEndComparison = (
+  notificationTime: string,
+  startTime: string,
+  endTime: string,
+) => {
+  const timeDate = new Date(`1970-01-01T${notificationTime}:00.000Z`);
+  const startTimeDate = new Date(`1970-01-01T${startTime}:00.000Z`);
+  const endTimeDate = new Date(`1970-01-01T${endTime}:00.000Z`);
+
+  return timeDate >= startTimeDate && timeDate <= endTimeDate;
 };
 
 export const getTimeComparison = (message: string) =>
@@ -75,7 +87,7 @@ export const getTimeComparison = (message: string) =>
         return true;
       }
 
-      return getStartEndComparisonResult(startTime, endTime);
+      return getStartEndComparison(startTime, endTime);
     }),
     otherwise: yup.string(),
   });
@@ -115,7 +127,7 @@ export const getNotificationTimeComparison = (
           return true;
         }
 
-        return getStartEndComparisonResult(fromTime, toTime);
+        return getStartEndComparison(fromTime, toTime);
       },
     )
     .test(
@@ -129,11 +141,7 @@ export const getNotificationTimeComparison = (
           return true;
         }
 
-        const timeDate = new Date(`1970-01-01T${value}:00.000Z`);
-        const startTimeDate = new Date(`1970-01-01T${startTimeValue}:00.000Z`);
-        const endTimeDate = new Date(`1970-01-01T${endTimeValue}:00.000Z`);
-
-        return timeDate >= startTimeDate && timeDate <= endTimeDate;
+        return getBetweenStartEndComparison(value, startTimeValue, endTimeValue);
       },
     );
 };
@@ -314,10 +322,11 @@ export const getActivitiesFlows = (activities: Activity[], activityFlows: Activi
   })),
 ];
 
-const convertDateToYearMonthDay = (date: Date | string) =>
+export const convertDateToYearMonthDay = (date: Date | string) =>
   typeof date === 'string' ? date : format(date, DateFormats.YearMonthDay);
 
-const addSecondsToHourMinutes = (timeStr?: string | null) => (timeStr ? `${timeStr}:00` : null);
+export const addSecondsToHourMinutes = (timeStr?: string | null) =>
+  timeStr ? `${timeStr}:00` : null;
 
 const getTimer = (timerType: TimerType, timerDuration: string, idleTime: string) => {
   switch (timerType) {

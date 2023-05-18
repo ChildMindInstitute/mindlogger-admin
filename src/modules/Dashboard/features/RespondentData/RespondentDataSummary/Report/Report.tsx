@@ -1,28 +1,46 @@
-import { useRef } from 'react';
-import { Box } from '@mui/material';
+import { useEffect, useRef } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { Activity } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
-import { StyledHeadlineLarge, StyledHeadline, StyledTitleTooltipIcon, theme } from 'shared/styles';
+import { StyledHeadlineLarge, theme, variables } from 'shared/styles';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
-import { ScatterChart } from '../Charts/ScatterChart';
-import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { ReportFilters } from './ReportFilters';
-import { StyledChartContainer, StyledHeader, StyledReport } from './Report.styles';
+import { StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
+import { FilterFormValues } from './Report.types';
+import { filtersDefaultValues } from './Report.const';
+import { ActivityCompleted } from './ActivityCompleted';
+import { activityReport } from './mock';
+import { ResponseOptions } from './ResponseOptions';
 
 export const Report = ({ activity }: { activity: Activity }) => {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
 
+  const methods = useForm<FilterFormValues>({
+    defaultValues: filtersDefaultValues,
+  });
+
+  const watchFilterFields = methods.watch();
+
+  const minDate = new Date(new Date().setMonth(new Date().getMonth() - 1)); // TODO: get date from backend
+
+  useEffect(() => {
+    // TODO: get data from backend
+  }, [watchFilterFields]);
+
   return (
     <StyledReport ref={containerRef}>
       <StyledHeader isSticky={isHeaderSticky}>
-        <StyledHeadlineLarge>{activity.name}</StyledHeadlineLarge>
+        <StyledHeadlineLarge color={variables.palette.on_surface}>
+          {activity.name}
+        </StyledHeadlineLarge>
         <Tooltip tooltipTitle={t('configureServer')}>
           <span>
             <StyledTextBtn variant="text" startIcon={<Svg id="export" width="18" height="18" />}>
@@ -32,20 +50,20 @@ export const Report = ({ activity }: { activity: Activity }) => {
         </Tooltip>
       </StyledHeader>
       <Box sx={{ margin: theme.spacing(4.8, 6.4, 4.8) }}>
-        <ReportFilters />
-        <StyledHeadline sx={{ mb: theme.spacing(2) }}>
-          {t('activityCompleted')}
-          <Tooltip tooltipTitle={t('theRespondentCompletedTheActivity')}>
-            <span>
-              <StyledTitleTooltipIcon id="more-info-outlined" width={16} height={16} />
-            </span>
-          </Tooltip>
-        </StyledHeadline>
-        <ScatterChart />
-        <StyledChartContainer>
-          <MultiScatterChart />
-        </StyledChartContainer>
-        <Subscales />
+        <FormProvider {...methods}>
+          <ReportFilters minDate={minDate} />
+          <ActivityCompleted
+            responses={activityReport.responses}
+            versions={activityReport.versions}
+          />
+          <Subscales />
+          {activityReport.responseOptions && (
+            <ResponseOptions
+              responseOptions={activityReport.responseOptions}
+              versions={activityReport.versions}
+            />
+          )}
+        </FormProvider>
       </Box>
     </StyledReport>
   );

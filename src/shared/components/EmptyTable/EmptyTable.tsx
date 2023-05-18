@@ -7,11 +7,15 @@ import { variables } from 'shared/styles/variables';
 import { EmptyTableProps } from './EmptyTable.types';
 import { StyledEmptyTable, StyledIcon } from './EmptyTable.styles';
 
-export const EmptyTable = ({ children, icon = 'not-found' }: EmptyTableProps) => {
+export const EmptyTable = ({
+  children,
+  icon = 'not-found',
+  width = '38.1rem',
+}: EmptyTableProps) => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledEmptyTable>
+    <StyledEmptyTable sx={{ width }}>
       <StyledIcon>
         <Svg width="80" height="80" id={icon} />
       </StyledIcon>

@@ -14,10 +14,17 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 import { locales } from 'shared/consts';
 
-import { mocks as responses } from './mock';
-import { getOptions, getData } from './MultiScatterChart.utils';
+import { getOptions, getData, formatAnswers } from './MultiScatterChart.utils';
+import { TICK_HEIGHT } from './MultiScatterChart.const';
+import { MultiScatterChartProps } from './MultiScatterChart.types';
 
-export const MultiScatterChart = () => {
+export const MultiScatterChart = ({
+  minDate,
+  maxDate,
+  responseValues,
+  answers,
+  versions,
+}: MultiScatterChartProps) => {
   const chartRef = useRef<ChartJSOrUndefined<'scatter', { x: Date; y: number }[], unknown> | null>(
     null,
   );
@@ -25,16 +32,22 @@ export const MultiScatterChart = () => {
 
   ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
+  const height = responseValues.options.length * TICK_HEIGHT;
+  const lang = i18n.language as keyof typeof locales;
+
+  const formattedAnswers = formatAnswers(answers);
+
   const renderChart = useMemo(
     () => (
       <Scatter
+        height={height}
         ref={chartRef}
-        options={getOptions(i18n.language as keyof typeof locales, responses)}
-        data={getData(responses)}
+        options={getOptions(lang, responseValues, minDate, maxDate)}
+        data={getData(responseValues, formattedAnswers, versions)}
         plugins={[ChartDataLabels]}
       />
     ),
-    [chartRef],
+    [chartRef, minDate, maxDate, versions, responseValues, lang],
   );
 
   return renderChart;

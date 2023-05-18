@@ -4,7 +4,7 @@ import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/materia
 
 import { useAppletsDnd } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { FolderApplet, folders } from 'redux/modules';
+import { FolderApplet, folders, workspaces } from 'redux/modules';
 import { Svg, Actions } from 'shared/components';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
@@ -22,6 +22,7 @@ import { getActions } from './FolderItem.const';
 export const FolderItem = ({ item }: FolderItemProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+  const { ownerId } = workspaces.useData() || {};
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
   const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
 
@@ -36,7 +37,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
     if (folder.isNew) {
       return dispatch(folders.actions.deleteFolderApplet({ id: folder.id }));
     }
-    dispatch(folders.thunk.deleteFolder({ folderId: folder.id }));
+    ownerId && dispatch(folders.thunk.deleteFolder({ ownerId, folderId: folder.id }));
   };
 
   const handleFolderClick = () => {
@@ -73,9 +74,9 @@ export const FolderItem = ({ item }: FolderItemProps) => {
     const updatedFolder = { ...folder, name };
     const { updateFolder, saveFolder } = folders.thunk;
     if (!folder.isNew) {
-      dispatch(updateFolder(updatedFolder));
+      ownerId && dispatch(updateFolder({ ownerId, folder: updatedFolder }));
     } else {
-      dispatch(saveFolder(updatedFolder));
+      ownerId && dispatch(saveFolder({ ownerId, folder: updatedFolder }));
     }
   };
 

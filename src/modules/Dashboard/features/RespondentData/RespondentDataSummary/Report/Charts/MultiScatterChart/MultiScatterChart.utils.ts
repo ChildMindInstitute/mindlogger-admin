@@ -1,23 +1,44 @@
+import { Context } from 'chartjs-plugin-datalabels';
+
 import { variables } from 'shared/styles';
 import { locales } from 'shared/consts';
 
-import { Context } from 'chartjs-plugin-datalabels';
-
-import { Data, ExtendedChartDataset } from './MultiScatterChart.types';
+import { Version, ItemAnswer, FormattedItemAnswer } from '../../Report.types';
+import { MultiScatterResponseValues } from '../../ResponseOptions/ResponseOptions.types';
+import { ExtendedChartDataset } from './MultiScatterChart.types';
 import { commonConfig } from './MultiScatterChart.const';
 
-export const getOptions = (lang: keyof typeof locales, data: Data) => {
-  // TODO: min & max dates - get from filters
-  const maxDate = new Date(2023, 3, 29).getTime();
-  const minDate = new Date(2023, 4, 20).getTime();
+const formatDateToNumber = (date: string | Date) =>
+  (typeof date === 'string' ? new Date(date) : date).getTime();
 
-  const mapperPointOption: { [key: number]: string } = data.responseOptions.reduce(
-    (mapper, { option }, index) => ({
+export const formatAnswers = (answers: ItemAnswer[]) =>
+  answers.reduce((flattenAnswers: FormattedItemAnswer[], { value, date }: ItemAnswer) => {
+    if (Array.isArray(value)) {
+      const flattenValues = value.map((item) => ({ value: item, date }));
+
+      return [...flattenAnswers, ...flattenValues];
+    }
+
+    return [...flattenAnswers, { value, date }];
+  }, []);
+
+export const getOptions = (
+  lang: keyof typeof locales,
+  responseValues: MultiScatterResponseValues,
+  minDate: string | Date,
+  maxDate: string | Date,
+) => {
+  const min = formatDateToNumber(minDate);
+  const max = formatDateToNumber(maxDate);
+
+  const mapperPointOption: { [key: number]: string } = responseValues?.options.reduce(
+    (mapper, { text }, index) => ({
       ...mapper,
-      [index + 1]: option,
+      [index + 1]: text,
     }),
     {},
   );
+
   const maxY = Object.values(mapperPointOption).length + 1;
 
   return {
@@ -61,8 +82,8 @@ export const getOptions = (lang: keyof typeof locales, data: Data) => {
             size: 11,
           },
         },
-        min: minDate,
-        max: maxDate,
+        min,
+        max,
       },
       x2: {
         ...commonConfig,
@@ -77,21 +98,26 @@ export const getOptions = (lang: keyof typeof locales, data: Data) => {
           },
           display: false,
         },
-        min: minDate,
-        max: maxDate,
+        min,
+        max,
       },
     },
   };
 };
 
-export const getData = (data: Data) => {
-  const mapperIdPoint: { [key: string]: number } = data.responseOptions.reduce(
+export const getData = (
+  responseValues: MultiScatterResponseValues,
+  answers: FormattedItemAnswer[],
+  versions: Version[],
+) => {
+  const mapperIdPoint: { [key: string]: number } = responseValues?.options.reduce(
     (mapper, { id }, index) => ({
       ...mapper,
       [id]: index + 1,
     }),
     {},
   );
+
   const maxY = Object.values(mapperIdPoint).length + 1;
 
   return {
@@ -102,20 +128,14 @@ export const getData = (data: Data) => {
         datalabels: {
           display: false,
         },
-        data: data?.responses.reduce(
-          (acc: { x: Date | string; y: string | number }[], { dates, id }) => [
-            ...acc,
-            ...dates.map((date) => ({ x: date, y: mapperIdPoint[id] })),
-          ],
-          [],
-        ),
+        data: answers.map(({ date, value }) => ({ x: date, y: mapperIdPoint[value] })),
         borderWidth: 0,
         backgroundColor: variables.palette.orange,
       },
       {
         xAxisID: 'x2',
-        labels: data?.versions.map(({ version }) => version),
-        data: data?.versions.map(({ date }) => ({ x: date, y: maxY })),
+        labels: versions.map(({ version }) => version),
+        data: versions.map(({ date }) => ({ x: date, y: maxY })),
         datalabels: {
           anchor: 'center' as const,
           align: 'right' as const,

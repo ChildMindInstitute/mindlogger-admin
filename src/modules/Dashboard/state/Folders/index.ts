@@ -20,11 +20,11 @@ export const folders = {
   thunk,
   slice,
   actions: slice.actions,
-  useFoldersApplets: (): FoldersSchema['foldersApplets']['data'] =>
+  useFolders: (): FoldersSchema['folders']['data'] =>
     useAppSelector(
       ({
         folders: {
-          foldersApplets: { data },
+          folders: { data },
         },
       }) => data,
     ),
@@ -43,5 +43,13 @@ export const folders = {
           flattenFoldersApplets: { data },
         },
       }) => data.find((applet: FolderApplet) => applet.id === id),
+    ),
+  useStatus: (): FoldersSchema['flattenFoldersApplets']['status'] =>
+    useAppSelector(
+      ({
+        folders: {
+          foldersApplets: { status },
+        },
+      }) => status,
     ),
 };

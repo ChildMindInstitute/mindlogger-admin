@@ -1,3 +1,7 @@
+import { Roles } from 'shared/consts';
+
+import { BaseSchema } from '../Base';
+
 export type Workspace = {
   ownerId: string;
   workspaceName: string;
@@ -6,4 +10,12 @@ export type Workspace = {
 
 export type WorkspacesSchema = {
   currentWorkspace: null | Workspace;
+  priorityRole: BaseSchema<Roles | null>;
+};
+
+export type WorkspacePriorityRoleApiParams = {
+  params: {
+    ownerId: string;
+    appletIDs?: string[];
+  };
 };

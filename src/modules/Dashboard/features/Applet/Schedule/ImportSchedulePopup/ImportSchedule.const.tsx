@@ -34,3 +34,8 @@ export const uploadLabel = (
     <strong> .csv, .xls, .xlsx, .ods. </strong>
   </Trans>
 );
+
+export const timeValidationRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+export const notificationValidationRegex = /^([01]\d|2[0-3]):([0-5]\d)|(-)$/;
+
+export const frequencyArray = ['Always', 'Once', 'Daily', 'Weekly', 'Monthly', 'Weekdays'];

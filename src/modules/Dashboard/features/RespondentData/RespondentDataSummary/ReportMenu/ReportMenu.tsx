@@ -3,7 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { users } from 'redux/modules';
 
-import { theme, StyledHeadlineLarge, StyledLabelLarge, StyledBodyLarge } from 'shared/styles';
+import {
+  theme,
+  StyledHeadlineLarge,
+  StyledLabelLarge,
+  StyledBodyLarge,
+  variables,
+} from 'shared/styles';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledActivity } from './ReportMenu.styles';
@@ -32,7 +38,7 @@ export const ReportMenu = ({
           isSelected={selectedActivity.id === activity.id}
           onClick={() => setSelectedActivity(activity)}
         >
-          <StyledBodyLarge>{activity.name}</StyledBodyLarge>
+          <StyledBodyLarge color={variables.palette.on_surface}>{activity.name}</StyledBodyLarge>
         </StyledActivity>
       ))}
     </StyledMenu>

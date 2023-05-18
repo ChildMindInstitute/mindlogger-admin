@@ -15,7 +15,7 @@ export enum Repeats {
   NotSet = '-',
 }
 
-export type ScheduleExportCsv = {
+export type ScheduleExportItem = {
   activityName: string;
   date: string;
   startTime: string;
@@ -23,7 +23,9 @@ export type ScheduleExportCsv = {
   notificationTime: string;
   repeats: Repeats;
   frequency: string;
-}[];
+};
+
+export type ScheduleExportCsv = ScheduleExportItem[];
 
 export type PreparedEvents = {
   alwaysAvailableEvents: LegendEvent[];

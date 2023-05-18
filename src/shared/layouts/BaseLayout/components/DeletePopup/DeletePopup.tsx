@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { useAsync } from 'shared/hooks';
-import { applet, applets, popups } from 'redux/modules';
+import { applet, folders, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
@@ -37,8 +37,7 @@ export const DeletePopup = () => {
   const { execute } = useAsync(
     deleteAppletApi,
     () => {
-      // TODO: check after folder connect
-      dispatch(applets.actions.deleteApplet({ id: appletId }));
+      dispatch(folders.actions.deleteFolderApplet({ id: appletId }));
       setActiveModal(Modals.Confirmation);
     },
     () => {

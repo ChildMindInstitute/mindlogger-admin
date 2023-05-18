@@ -1,4 +1,4 @@
-import { SingleApplet } from 'shared/state';
+import { SingleApplet, WorkspacePriorityRoleApiParams } from 'shared/state';
 import { OwnerId } from 'api';
 
 import { apiClient, authApiClient } from './api.client';
@@ -55,3 +55,12 @@ export const postFileUploadApi = (body: FormData, signal?: AbortSignal) =>
     signal,
     headers: { 'Content-Type': 'multipart/form-data' },
   });
+
+export const getWorkspacePriorityRoleApi = (
+  { params }: WorkspacePriorityRoleApiParams,
+  signal?: AbortSignal,
+) => {
+  const { ownerId, ...restParams } = params;
+
+  return authApiClient.get(`/workspaces/${ownerId}/priority_role`, { params: restParams, signal });
+};

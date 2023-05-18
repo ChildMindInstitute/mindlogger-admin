@@ -34,7 +34,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const { t } = useTranslation('app');
   const { respondentId } = useParams();
   const navigate = useNavigate();
-  const { result: respondentsData } = users.useRespondentsData() || {};
+  const { result: respondentsData } = users.useAllRespondentsData() || {};
   const respondentsItems = respondentsData?.map(
     ({ id, hasIndividualSchedule, secretId, nickname }) => ({
       icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
@@ -105,12 +105,17 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     }
   };
 
-  const handleExportScheduleSubmit = (isDefault: boolean) => async () => {
-    await exportToCsv(
-      scheduleExportCsv,
-      `${isDefault ? appletName : selectedRespondent?.secretId || ''}_schedule`,
-    );
-    setExportDefaultSchedulePopupVisible(false);
+  const handleExportScheduleSubmit = (isDefault: boolean, isExport: boolean) => async () => {
+    const getFileName = () => {
+      if (isExport) {
+        return `${isDefault ? appletName : selectedRespondent?.secretId || ''}_schedule`;
+      }
+
+      return `${isDefault ? 'default' : 'individual'}_schedule_template`;
+    };
+
+    await exportToCsv(scheduleExportCsv, getFileName());
+    isExport && setExportDefaultSchedulePopupVisible(false);
   };
 
   useEffect(() => {
@@ -193,7 +198,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
         <ExportSchedulePopup
           open={exportDefaultSchedulePopupVisible}
           onClose={() => setExportDefaultSchedulePopupVisible(false)}
-          onSubmit={handleExportScheduleSubmit(true)}
+          onSubmit={handleExportScheduleSubmit(true, true)}
           scheduleTableRows={scheduleExportTableData}
         />
       )}
@@ -201,7 +206,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
         <ExportSchedulePopup
           open={exportIndividualSchedulePopupVisible}
           onClose={() => setExportIndividualSchedulePopupVisible(false)}
-          onSubmit={handleExportScheduleSubmit(false)}
+          onSubmit={handleExportScheduleSubmit(false, true)}
           respondentName={respondentName}
           scheduleTableRows={scheduleExportTableData}
         />
@@ -213,6 +218,8 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           appletName={appletName}
           respondentName={respondentName}
           onClose={() => setImportSchedulePopupVisible(false)}
+          onDownloadTemplate={handleExportScheduleSubmit(!isIndividual, false)}
+          scheduleExportData={scheduleExportCsv}
         />
       )}
       {clearScheduledEventsPopupVisible && (
