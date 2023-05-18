@@ -14,7 +14,6 @@ export type Respondent = {
   lastSeen: string;
   hasIndividualSchedule: boolean;
   isPinned?: boolean;
-  userPublicKey: string;
 };
 
 export type Manager = {

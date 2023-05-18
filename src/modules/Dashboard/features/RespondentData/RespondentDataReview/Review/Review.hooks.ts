@@ -6,7 +6,7 @@ import { useEncryptionCheckFromStorage } from 'shared/hooks';
 
 import { ActivityItemAnswer } from '../Feedback/FeedbackReviewed/FeedbackReviewed.types';
 
-export const useDecryptedReviews = (userPublicKey = '') => {
+export const useDecryptedReviews = () => {
   const { appletId = '' } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
   const encryption = appletData?.encryption;
@@ -16,16 +16,17 @@ export const useDecryptedReviews = (userPublicKey = '') => {
 
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(appletId);
-  let userPublicKeyParsed = [];
-  try {
-    userPublicKeyParsed = JSON.parse(userPublicKey);
-  } catch {
-    console.log('Error while user public key parsing');
-  }
-  const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
 
-  return (itemAnswers: ActivityItemAnswer[]): ActivityItemAnswer[] =>
-    itemAnswers.map((itemAnswer) => {
+  return (itemAnswers: ActivityItemAnswer[], userPublicKey: string): ActivityItemAnswer[] => {
+    let userPublicKeyParsed = [];
+    try {
+      userPublicKeyParsed = JSON.parse(userPublicKey);
+    } catch {
+      console.warn('Error while user public key parsing');
+    }
+    const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
+
+    return itemAnswers.map((itemAnswer) => {
       try {
         return {
           ...itemAnswer,
@@ -37,9 +38,10 @@ export const useDecryptedReviews = (userPublicKey = '') => {
           ),
         };
       } catch {
-        console.log('Error while answer parsing');
+        console.warn('Error while answer parsing');
 
         return itemAnswer;
       }
     });
+  };
 };

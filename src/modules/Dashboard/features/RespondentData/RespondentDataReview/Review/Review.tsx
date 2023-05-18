@@ -7,7 +7,6 @@ import { useAsync } from 'shared/hooks';
 import { getDictionaryText } from 'shared/utils';
 import { Spinner } from 'shared/components';
 import { page } from 'resources';
-import { users } from 'modules/Dashboard/state';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
 import { isItemUnsupported } from '../../RespondentData.utils';
@@ -22,15 +21,15 @@ export const Review = ({ answerId }: ReviewProps) => {
   const { appletId, respondentId } = useParams();
   const navigate = useNavigate();
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
-  const { result: respondentsData } = users.useRespondentsData() || {};
-  const respondent = respondentsData?.find((item) => item.id === respondentId);
-  const getDecryptedReviews = useDecryptedReviews(respondent?.userPublicKey);
+  const getDecryptedReviews = useDecryptedReviews();
 
   const { execute, isLoading } = useAsync(
     getAnswerApi,
     (res) =>
       res?.data?.result &&
-      setActivityItemAnswers(getDecryptedReviews(res.data.result.activityItemAnswers)),
+      setActivityItemAnswers(
+        getDecryptedReviews(res.data.result.activityItemAnswers, res.data.result.userPublicKey),
+      ),
   );
 
   useEffect(() => {
