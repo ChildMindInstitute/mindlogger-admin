@@ -150,6 +150,37 @@ export const SubscaleSchema = () =>
     })
     .required();
 
+export const SectionSchema = () =>
+  yup
+    .object({
+      name: yup
+        .string()
+        .required(getIsRequiredValidateMessage('sectionName'))
+        .test(
+          'unique-section-name',
+          t('validationMessages.unique', { field: t('sectionName') }) as string,
+          (sectionName, context) =>
+            testFunctionForUniqueness('sections', sectionName ?? '', context),
+        ),
+      showMessage: yup.boolean().required(),
+      printItems: yup
+        .boolean()
+        .required()
+        .when('showMessage', {
+          is: false,
+          then: yup.boolean().oneOf([true], <string>t('validationMessages.mustShowMessageOrItems')),
+        }),
+      message: yup.string().when('showMessage', {
+        is: true,
+        then: yup.string().required(getIsRequiredValidateMessage('message')),
+      }),
+      items: yup.array().when('printItems', {
+        is: true,
+        then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
+      }),
+    })
+    .required();
+
 export const ActivitySchema = () =>
   yup.object({
     name: yup
@@ -171,6 +202,7 @@ export const ActivitySchema = () =>
     items: yup.array().of(ItemSchema()).min(1),
     isHidden: yup.boolean(),
     subscales: yup.array().of(SubscaleSchema()),
+    sections: yup.array().of(SectionSchema()),
   });
 
 export const ActivityFlowItemSchema = () =>

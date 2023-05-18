@@ -14,11 +14,12 @@ export const getActions = ({
     transferOwnership,
     duplicateAction,
     // shareAppletAction,
+    publishAppletAction,
     editAction,
   },
   item,
 }: Actions) => {
-  const { role } = item;
+  const { role, isPublished } = item;
   const commonCondition =
     role !== Roles.Coordinator && role !== Roles.Respondent && role !== Roles.Reviewer;
 
@@ -39,7 +40,7 @@ export const getActions = ({
       icon: <Svg id="calendar" />,
       action: viewCalendar,
       tooltipTitle: t('viewGeneralCalendar'),
-      isDisplayed: commonCondition,
+      isDisplayed: role !== Roles.Respondent && role !== Roles.Reviewer,
     },
     {
       icon: <Svg id="widget" />,
@@ -72,6 +73,12 @@ export const getActions = ({
     //   action: shareAppletAction,
     //   tooltipTitle: t('shareWithTheLibrary'),
     // },
+    {
+      isDisplayed: !item.isFolder,
+      icon: <Svg id={isPublished ? 'conceal' : 'publish'} width="18" height="18" />,
+      action: publishAppletAction,
+      tooltipTitle: t(isPublished ? 'conceal' : 'publish'),
+    },
   ];
 };
 

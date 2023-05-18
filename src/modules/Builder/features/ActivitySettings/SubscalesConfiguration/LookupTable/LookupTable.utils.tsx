@@ -1,107 +1,19 @@
-import { Trans } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { StyledBodyLarge, StyledTitleSmall, theme, variables } from 'shared/styles';
 import { DataTable, FileUploader } from 'shared/components';
+import { theme } from 'shared/styles';
 import i18n from 'i18n';
 
-import { GetComponentsProps, ModalType, ScreenObjectProps } from './SubscaleLookupTable.types';
-import { columnData } from './SubscaleLookupTable.const';
+import { GetComponentsProps, ModalType, ScreenObjectProps } from './LookupTable.types';
 
 const { t } = i18n;
 
-export const labels = (name?: string) => ({
-  upload: {
-    title: t('subscaleLookupTable.upload.title'),
-    initDescription: (
-      <Trans i18nKey="subscaleLookupTable.upload.initDescription">
-        Please upload file in
-        <strong> .csv, .xls, .xlsx, .ods. </strong>
-        format
-      </Trans>
-    ),
-    successDescription: (
-      <Trans i18nKey="subscaleLookupTable.upload.successDescription">
-        Your Lookup Table for
-        <strong>
-          <> {{ name }} </>
-        </strong>
-        was parsed successfully.
-      </Trans>
-    ),
-  },
-  edit: {
-    title: t('subscaleLookupTable.edit.title'),
-    initDescription: (
-      <Trans i18nKey="subscaleLookupTable.edit.initDescription">
-        Current Lookup Table for
-        <strong>
-          <> {{ name }} </>
-        </strong>
-        .
-      </Trans>
-    ),
-  },
-  delete: {
-    title: t('subscaleLookupTable.delete.title'),
-    initDescription: (
-      <Trans i18nKey="subscaleLookupTable.delete.initDescription">
-        Are you sure you want to delete the Lookup Table for
-        <strong>
-          <> {{ name }} </>
-        </strong>
-        ?
-      </Trans>
-    ),
-    successDescription: (
-      <Trans i18nKey="subscaleLookupTable.delete.successDescription">
-        The current Lookup Table for
-        <strong>
-          <> {{ name }} </>
-        </strong>
-        has been deleted successfully.
-      </Trans>
-    ),
-  },
-  errors: {
-    haveToUploadFile: (
-      <StyledTitleSmall sx={{ mt: 2.2 }} color={variables.palette.semantic.error}>
-        {t('subscaleLookupTable.errors.haveToUploadFile')}
-      </StyledTitleSmall>
-    ),
-    fileCantBeParsed: (
-      <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
-        {t('subscaleLookupTable.errors.fileCantBeParsed')}
-      </StyledBodyLarge>
-    ),
-    incorrectFileFormat: (
-      <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
-        <Trans i18nKey="subscaleLookupTable.errors.incorrectFileFormat">
-          Incorrect file format. Please upload file in
-          <strong> .csv, .xls, .xlsx, .ods. </strong>
-          format.
-        </Trans>
-      </StyledBodyLarge>
-    ),
-    onDelete: (
-      <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
-        <Trans i18nKey="subscaleLookupTable.errors.onDelete">
-          The current Lookup Table for
-          <strong>
-            <> {{ name }} </>
-          </strong>
-          has not been deleted. Please try again.
-        </Trans>
-      </StyledBodyLarge>
-    ),
-  },
-});
-
-export const getComponents = ({
+export const getModalComponents = ({
   modalType,
-  subscaleName,
+  columnData,
   data,
   error,
+  labelsObject,
   onFileReady,
   onUpdate,
   onClose,
@@ -110,8 +22,6 @@ export const getComponents = ({
   setStep,
   setError,
 }: GetComponentsProps) => {
-  const labelsObject = labels(subscaleName);
-
   const components: ScreenObjectProps = {
     [ModalType.Upload]: [
       {
@@ -119,7 +29,7 @@ export const getComponents = ({
         component: (
           <>
             <FileUploader
-              uploadLabel={labelsObject.upload.initDescription}
+              uploadLabel={labelsObject[ModalType.Upload].initDescription}
               onFileReady={onFileReady}
               onDownloadTemplate={onDownloadTemplate}
               invalidFileFormatError={labelsObject.errors.incorrectFileFormat}
@@ -207,7 +117,7 @@ export const getComponents = ({
       },
       {
         title: labelsObject[modalType].title,
-        component: labelsObject.delete.successDescription,
+        component: labelsObject.delete.successDescription!,
         buttonText: t('ok'),
         onSubmit: onClose,
       },
