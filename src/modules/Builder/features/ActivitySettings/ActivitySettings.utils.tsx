@@ -1,6 +1,8 @@
 import i18n from 'i18next';
 
 import { Svg } from 'shared/components';
+import { ItemFormValues } from 'modules/Builder/pages';
+import { ItemResponseType } from 'shared/consts';
 
 import { ActivitySettingsOptionsItems } from './ActivitySettings.types';
 
@@ -37,3 +39,10 @@ export const getSetting = (settingPath?: string) => {
 
   return group?.items.find(({ path }) => path === settingPath) || null;
 };
+
+export const checkOnItemType = (item: ItemFormValues) =>
+  [
+    ItemResponseType.SingleSelection,
+    ItemResponseType.MultipleSelection,
+    ItemResponseType.Slider,
+  ].includes(item.responseType as ItemResponseType);

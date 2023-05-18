@@ -2,7 +2,7 @@ import i18n from 'i18n';
 
 const { t } = i18n;
 
-export const columnData = [
+export const subscaleColumnData = [
   {
     key: 'Score',
     label: t('subscaleLookupTable.column.score'),
@@ -25,7 +25,7 @@ export const columnData = [
   },
 ];
 
-export const defaultTemplate = [
+export const subscaleTableTemplate = [
   {
     Score: 10,
     'Raw Score': 1,

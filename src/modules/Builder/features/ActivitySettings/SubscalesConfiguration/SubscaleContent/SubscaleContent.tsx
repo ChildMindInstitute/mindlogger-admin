@@ -17,8 +17,8 @@ import {
   getItemElements,
   columns,
   notUsedElementsTableColumns,
-  checkOnItemType,
 } from '../SubscalesConfiguration.utils';
+import { checkOnItemType } from '../../ActivitySettings.utils';
 
 export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleContentProps) => {
   const { t } = useTranslation('app');
