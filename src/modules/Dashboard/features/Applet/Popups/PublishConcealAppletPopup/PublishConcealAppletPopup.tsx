@@ -31,9 +31,11 @@ export const PublishConcealAppletPopup = () => {
   const [isErrorPopupVisible, setErrorPopupVisible] = useState(false);
 
   const isPublishPopupRef = useRef(false);
+
   useEffect(() => {
     isPublishPopupRef.current = !!isPublished;
   }, [isPublished]);
+
   const isPublishPopup = isPublishPopupRef.current;
 
   const handleCloseProcessPopup = () => setProcessPopupVisible(false);
