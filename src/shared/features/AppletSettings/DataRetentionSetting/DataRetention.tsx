@@ -12,11 +12,16 @@ import {
   useBuilderSessionStorageFormValues,
 } from 'shared/hooks';
 import { RetentionPeriods } from 'shared/types';
+import { applet } from 'shared/state';
 import { postAppletDataRetentionApi } from 'api';
 
 import { usePrompt } from '../AppletSettings.hooks';
 import { StyledAppletSettingsDescription, StyledHeadline } from '../AppletSettings.styles';
-import { retentionTypes, defaultValues } from './DataRetention.const';
+import {
+  retentionTypes,
+  DEFAULT_RETENTION_TYPE,
+  DEFAULT_RETENTION_PERIOD,
+} from './DataRetention.const';
 import { dataRetentionSchema } from './DataRetention.schema';
 import { StyledButton, StyledContainer, StyledInputWrapper } from './DataRetention.styles';
 import { DataRetentionFormValues } from './DataRetention.types';
@@ -25,6 +30,13 @@ import { ErrorPopup, SuccessPopup } from './Popups';
 export const DataRetention = () => {
   const { t } = useTranslation();
   const { appletId: id } = useParams();
+  const { result } = applet.useAppletData() ?? {};
+
+  const defaultValues = {
+    retentionPeriod: result?.retentionPeriod || DEFAULT_RETENTION_PERIOD,
+    retentionType: result?.retentionType || DEFAULT_RETENTION_TYPE,
+  };
+
   const { getFormValues } =
     useBuilderSessionStorageFormValues<DataRetentionFormValues>(defaultValues);
   const {
@@ -55,7 +67,7 @@ export const DataRetention = () => {
   const { handleFormChange } =
     useBuilderSessionStorageFormChange<DataRetentionFormValues>(getValues);
 
-  const onSubmit = async ({ retentionPeriod = 1, retentionType }: DataRetentionFormValues) => {
+  const onSubmit = async ({ retentionPeriod, retentionType }: DataRetentionFormValues) => {
     if (id) {
       saveDataRetention({ appletId: id, period: retentionPeriod, retention: retentionType });
     }

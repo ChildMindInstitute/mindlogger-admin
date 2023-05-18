@@ -23,7 +23,5 @@ export const retentionTypes = [
   },
 ];
 
-export const defaultValues = {
-  retentionPeriod: 1,
-  retentionType: RetentionPeriods.Indefinitely,
-};
+export const DEFAULT_RETENTION_PERIOD = 1;
+export const DEFAULT_RETENTION_TYPE = RetentionPeriods.Indefinitely;
