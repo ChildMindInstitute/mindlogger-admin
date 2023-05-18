@@ -14,8 +14,9 @@ import { Encryption, getBuilderAppletUrl, getDateInUserTimezone } from 'shared/u
 import { ShareAppletPopup } from '../../Popups';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
+import { AppletItemProps } from './AppletItem.types';
 
-export const AppletItem = ({ item }: { item: FolderApplet }) => {
+export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
@@ -101,6 +102,20 @@ export const AppletItem = ({ item }: { item: FolderApplet }) => {
         ),
       ),
     shareAppletAction: () => checkAppletEncryption(() => setSharePopupVisible(true)),
+    publishAppletAction: () => {
+      if (item.isFolder) return;
+
+      dispatch(
+        popups.actions.setPopupVisible({
+          appletId: item.id,
+          key: 'publishConcealPopupVisible',
+          value: true,
+          popupProps: {
+            onSuccess: onPublish,
+          },
+        }),
+      );
+    },
     editAction: () =>
       checkAppletEncryption(() => {
         if (item.isFolder) return; // TODO: add Edit Folder Page navigation

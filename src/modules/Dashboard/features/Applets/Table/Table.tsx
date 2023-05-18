@@ -21,6 +21,7 @@ export const Table = ({
   count,
   handleRequestSort,
   handleChangePage,
+  handleReload,
 }: TableProps) => {
   const status = folders.useStatus();
 
@@ -52,7 +53,7 @@ export const Table = ({
   );
 
   const getRowComponent = (row: FolderApplet) =>
-    row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} />;
+    row?.isFolder ? <FolderItem item={row} /> : <AppletItem item={row} onPublish={handleReload} />;
 
   const getEmptyTable = () => {
     if (!loading && rows) {
