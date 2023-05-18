@@ -39,7 +39,7 @@ export const getActions = ({
       icon: <Svg id="calendar" />,
       action: viewCalendar,
       tooltipTitle: t('viewGeneralCalendar'),
-      isDisplayed: commonCondition,
+      isDisplayed: role !== Roles.Respondent && role !== Roles.Reviewer,
     },
     {
       icon: <Svg id="widget" />,
