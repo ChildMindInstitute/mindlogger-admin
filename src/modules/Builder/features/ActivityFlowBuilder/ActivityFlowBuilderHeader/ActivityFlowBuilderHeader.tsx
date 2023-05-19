@@ -48,7 +48,8 @@ export const ActivityFlowBuilderHeader = ({
             menuItems={getMenuItems({
               type: GetMenuItemsType.AddActivity,
               onMenuClose: () => setAnchorEl(null),
-              activities,
+              // TODO: remove filtering after connecting Performance Tasks API
+              activities: activities.filter((activity) => !activity.isPerformanceTask),
               onAddFlowActivity,
             })}
             startIcon={<Svg id="add" width={18} height={18} />}

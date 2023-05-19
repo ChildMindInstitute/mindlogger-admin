@@ -72,11 +72,17 @@ export const ActivityFlow = () => {
     );
 
   const handleAddActivityFlow = (positionToAdd?: number) => {
-    const flowItems = activities.map((activity) => ({
-      // TODO: discuss with back-end to possibly change keys to ids and handle ids on back-end side
-      key: uuidv4(),
-      activityKey: activity.id || activity.key || '',
-    }));
+    // TODO: remove filtering after connecting Performance Tasks API
+    const flowItems = activities.reduce((acc: { key: string; activityKey: string }[], activity) => {
+      if (!activity.isPerformanceTask) {
+        acc.push({
+          key: uuidv4(),
+          activityKey: activity.id || activity.key || '',
+        });
+      }
+
+      return acc;
+    }, []);
     const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
 
     if (positionToAdd) {

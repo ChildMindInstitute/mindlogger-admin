@@ -55,19 +55,26 @@ export const useAppletData = () => {
     return {
       ...defaultAppletInfo,
       ...appletInfo,
-      activities: appletInfo?.activities.map((activity: Activity) => ({
-        ...activity,
-        key: activity.id || activity.key,
-        description: getDictionaryObject(activity.description),
-        items: activity.items?.map(({ id, ...item }) => ({
-          ...item,
-          ...(id && { id }),
-          question: getDictionaryObject(item.question),
-          responseValues: mapItemResponseValues(item.responseType, item.responseValues),
-          ...removeItemExtraFields(),
-        })),
-        ...removeActivityExtraFields(),
-      })),
+      // TODO: remove filtering after connecting Performance Tasks API
+      activities: appletInfo?.activities.reduce((acc: Activity[], activity: Activity) => {
+        if (!activity.isPerformanceTask) {
+          acc.push({
+            ...activity,
+            key: activity.id || activity.key,
+            description: getDictionaryObject(activity.description),
+            items: activity.items?.map(({ id, ...item }) => ({
+              ...item,
+              ...(id && { id }),
+              question: getDictionaryObject(item.question),
+              responseValues: mapItemResponseValues(item.responseType, item.responseValues),
+              ...removeItemExtraFields(),
+            })),
+            ...removeActivityExtraFields(),
+          });
+        }
+
+        return acc;
+      }, []),
       encryption,
       description: appletDescription,
       about: appletAbout,

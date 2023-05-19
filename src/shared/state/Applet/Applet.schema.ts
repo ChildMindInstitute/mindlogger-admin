@@ -90,7 +90,7 @@ export type AudioAndVideoConfig = {
   timer: number;
 };
 
-export type SingleAndMultipleSelectionPerRowConfig = {
+export type SingleAndMultiplePerRowConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
   timer: number;
@@ -286,7 +286,7 @@ export type Config =
   | SliderConfig
   | AudioAndVideoConfig
   | AudioPlayerConfig
-  | SingleAndMultipleSelectionPerRowConfig
+  | SingleAndMultiplePerRowConfig
   | SliderRowsConfig
   | NumberConfig
   | DateAndTimeRangeConfig
@@ -360,6 +360,7 @@ export type Activity = {
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
   totalScoresTableData?: string;
+  isPerformanceTask?: boolean;
 };
 
 type Theme = {

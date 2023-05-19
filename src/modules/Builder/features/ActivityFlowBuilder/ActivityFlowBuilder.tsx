@@ -175,7 +175,8 @@ export const ActivityFlowBuilder = () => {
             type: GetMenuItemsType.ChangeActivity,
             index: indexToUpdate ?? undefined,
             onMenuClose: () => setAnchorEl(null),
-            activities,
+            // TODO: remove filtering after connecting Performance Tasks API
+            activities: activities.filter((activity) => !activity.isPerformanceTask),
             onUpdateFlowActivity: handleFlowActivityUpdate,
           })}
           anchorOrigin={{

@@ -8,14 +8,23 @@ import { Box } from '@mui/material';
 import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
+import {
+  ActivityFormValues,
+  PerformanceTaskFormValues,
+  AppletFormValues,
+  ItemFormValues,
+} from 'modules/Builder/pages/BuilderApplet';
 import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
-import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import {
+  getNewActivity,
+  getNewPerformanceTask,
+} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey } from './Activities.utils';
+import { ActivityAddProps } from './Activities.types';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -64,11 +73,15 @@ export const Activities = () => {
       }),
     );
   const handleModalClose = () => setActivityToDelete('');
-  const handleActivityAdd = (index?: number) => {
-    const newActivity = getNewActivity();
+  const handleActivityAdd = (props: ActivityAddProps) => {
+    const { index, performanceTaskName, performanceTaskDesc, notNavigate } = props || {};
+    const newActivity =
+      performanceTaskName && performanceTaskDesc
+        ? getNewPerformanceTask({ name: performanceTaskName, description: performanceTaskDesc })
+        : getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
-    navigateToActivity(newActivity.key);
+    !notNavigate && navigateToActivity(newActivity.key);
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {
@@ -88,13 +101,17 @@ export const Activities = () => {
     setValue('activityFlows', newActivityFlows);
   };
 
-  const handleDuplicateActivity = (index: number) => {
+  const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
     const activityToDuplicate = activities[index];
     setDuplicateIndexes((prevState) => {
       const numberToInsert = (prevState[getActivityKey(activityToDuplicate)] || 0) + 1;
 
+      const newActivity = isPerformanceTask
+        ? getNewPerformanceTask({ performanceTask: activityToDuplicate })
+        : getNewActivity(activityToDuplicate);
+
       insertActivity(index + 1, {
-        ...getNewActivity(activityToDuplicate),
+        ...newActivity,
         name: `${activityToDuplicate.name} (${numberToInsert})`,
       });
 
@@ -136,57 +153,71 @@ export const Activities = () => {
             <DndDroppable droppableId="activities-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {activities.map((activity: ActivityFormValues, index: number) => {
-                    const activityKey = getActivityKey(activity);
+                  {activities.map(
+                    (
+                      activity:
+                        | ActivityFormValues
+                        | (PerformanceTaskFormValues & {
+                            image?: string;
+                            items?: ItemFormValues[];
+                          }),
+                      index: number,
+                    ) => {
+                      const activityKey = getActivityKey(activity);
+                      const isPerformanceTask = activity?.isPerformanceTask || false;
 
-                    const activityName = activity.name;
-                    const hasError = !!errors[`activities[${index}]`];
+                      const activityName = activity.name;
+                      const hasError = !!errors[`activities[${index}]`];
 
-                    return (
-                      <Fragment key={`activity-${activityKey}`}>
-                        <Draggable draggableId={activityKey} index={index}>
-                          {(itemProvided, snapshot) => (
-                            <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
-                              <Item
-                                {...activity}
-                                onItemClick={() => handleEditActivity(index)}
-                                dragHandleProps={itemProvided.dragHandleProps}
-                                isDragging={snapshot.isDragging}
-                                img={activity.image}
-                                isInactive={activity.isHidden}
-                                hasStaticActions={activity.isHidden}
-                                uiType={ItemUiType.Activity}
-                                getActions={() =>
-                                  getActions({
-                                    key: activityKey,
-                                    isActivityHidden: activity.isHidden,
-                                    onEdit: () => handleEditActivity(index),
-                                    onDuplicate: () => handleDuplicateActivity(index),
-                                    onRemove: () => setActivityToDelete(activityKey),
-                                    onVisibilityChange: () => handleActivityVisibilityChange(index),
-                                  })
-                                }
-                                hasError={hasError}
-                                count={activity.items.length}
-                              />
-                              <InsertItem
-                                isVisible={
-                                  index >= 0 && index < activities.length - 1 && !isDragging
-                                }
-                                onInsert={() => handleActivityAdd(index + 1)}
-                              />
-                            </Box>
-                          )}
-                        </Draggable>
-                        <DeleteActivityModal
-                          activityName={activityName}
-                          isOpen={activityToDelete === activityKey}
-                          onModalClose={handleModalClose}
-                          onModalSubmit={() => handleActivityRemove(index, activityKey)}
-                        />
-                      </Fragment>
-                    );
-                  })}
+                      return (
+                        <Fragment key={`activity-${activityKey}`}>
+                          <Draggable draggableId={activityKey} index={index}>
+                            {(itemProvided, snapshot) => (
+                              <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
+                                <Item
+                                  {...activity}
+                                  onItemClick={() => handleEditActivity(index)}
+                                  dragHandleProps={itemProvided.dragHandleProps}
+                                  isDragging={snapshot.isDragging}
+                                  img={activity.image}
+                                  isInactive={activity.isHidden}
+                                  hasStaticActions={activity.isHidden}
+                                  uiType={ItemUiType.Activity}
+                                  getActions={() =>
+                                    getActions({
+                                      key: activityKey,
+                                      isActivityHidden: activity.isHidden,
+                                      onEdit: () => handleEditActivity(index),
+                                      onDuplicate: () =>
+                                        handleDuplicateActivity(index, isPerformanceTask),
+                                      onRemove: () => setActivityToDelete(activityKey),
+                                      onVisibilityChange: () =>
+                                        handleActivityVisibilityChange(index),
+                                      isEditVisible: !isPerformanceTask,
+                                    })
+                                  }
+                                  hasError={hasError}
+                                  count={activity.items?.length}
+                                />
+                                <InsertItem
+                                  isVisible={
+                                    index >= 0 && index < activities.length - 1 && !isDragging
+                                  }
+                                  onInsert={() => handleActivityAdd({ index: index + 1 })}
+                                />
+                              </Box>
+                            )}
+                          </Draggable>
+                          <DeleteActivityModal
+                            activityName={activityName}
+                            isOpen={activityToDelete === activityKey}
+                            onModalClose={handleModalClose}
+                            onModalSubmit={() => handleActivityRemove(index, activityKey)}
+                          />
+                        </Fragment>
+                      );
+                    },
+                  )}
                   {listProvided.placeholder}
                 </Box>
               )}

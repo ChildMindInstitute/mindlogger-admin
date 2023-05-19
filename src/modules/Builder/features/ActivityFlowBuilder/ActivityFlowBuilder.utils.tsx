@@ -3,7 +3,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Svg } from 'shared/components';
 import { ItemType } from 'modules/Builder/components';
-import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/pages/BuilderApplet';
+import {
+  ActivityFlowFormValues,
+  ActivityFormValues,
+  PerformanceTaskFormValues,
+} from 'modules/Builder/pages/BuilderApplet';
 
 import { GetFlowBuilderActions, GetMenuItems, GetMenuItemsType } from './ActivityFlowBuilder.types';
 
@@ -13,13 +17,18 @@ const checkOnIdOrKey = (checkId: string) => (entity: ActivityFlowFormValues) =>
 export const getActivityFlowIndex = (activityFlows: ActivityFlowFormValues[], checkId: string) =>
   activityFlows.findIndex(checkOnIdOrKey(checkId));
 
-export const getActivitiesIdsObjects = (activities: ActivityFormValues[]) =>
-  activities.reduce((acc: Record<string, ActivityFormValues>, activity) => {
-    const id = activity.id || activity.key || '';
-    acc[id] = activity;
+export const getActivitiesIdsObjects = (
+  activities: (ActivityFormValues | PerformanceTaskFormValues)[],
+) =>
+  activities.reduce(
+    (acc: Record<string, ActivityFormValues | PerformanceTaskFormValues>, activity) => {
+      const id = activity.id || activity.key || '';
+      acc[id] = activity;
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {},
+  );
 
 export const getMenuItems = ({
   type,

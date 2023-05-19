@@ -1,9 +1,10 @@
 import { Svg } from 'shared/components';
-import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFormValues, PerformanceTaskFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 import { GetActivitiesActions } from './Activities.types';
 
-export const getActivityKey = (entity: ActivityFormValues): string => entity.key ?? entity.id ?? '';
+export const getActivityKey = (entity: ActivityFormValues | PerformanceTaskFormValues): string =>
+  entity.key ?? entity.id ?? '';
 
 export const getActions = ({
   isActivityHidden,
@@ -11,22 +12,30 @@ export const getActions = ({
   onDuplicate,
   onVisibilityChange,
   onRemove,
-}: GetActivitiesActions) => [
-  {
-    icon: <Svg id="edit" />,
-    action: onEdit,
-  },
-  {
-    icon: <Svg id="duplicate" />,
-    action: onDuplicate,
-  },
-  {
-    icon: <Svg id={isActivityHidden ? 'visibility-off' : 'visibility-on'} />,
-    action: onVisibilityChange,
-    isStatic: isActivityHidden,
-  },
-  {
-    icon: <Svg id="trash" />,
-    action: onRemove,
-  },
-];
+  isEditVisible,
+}: GetActivitiesActions) => {
+  const actions = [];
+  if (isEditVisible) {
+    actions.push({
+      icon: <Svg id="edit" />,
+      action: onEdit,
+    });
+  }
+
+  return [
+    ...actions,
+    {
+      icon: <Svg id="duplicate" />,
+      action: onDuplicate,
+    },
+    {
+      icon: <Svg id={isActivityHidden ? 'visibility-off' : 'visibility-on'} />,
+      action: onVisibilityChange,
+      isStatic: isActivityHidden,
+    },
+    {
+      icon: <Svg id="trash" />,
+      action: onRemove,
+    },
+  ];
+};

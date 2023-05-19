@@ -1,20 +1,43 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Box, Button } from '@mui/material';
 
-import { StyledBuilderBtn } from 'shared/styles';
 import { StyledHeader } from 'shared/features';
-import { Svg } from 'shared/components';
+import { ButtonWithMenu, Svg } from 'shared/components';
+import { theme } from 'shared/styles';
+import { falseReturnFunc } from 'shared/utils';
 
 import { ActivitiesHeaderProps } from './ActivitiesHeader.types';
+import { getPerformanceTasksMenu } from './ActivitiesHeader.utils';
 
 export const ActivitiesHeader = ({ isSticky, children, headerProps }: ActivitiesHeaderProps) => {
   const { t } = useTranslation('app');
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleActivityAdd = headerProps?.onAddActivity;
 
   return (
     <StyledHeader isSticky={isSticky}>
       {children}
-      <StyledBuilderBtn startIcon={<Svg id="add" />} onClick={headerProps?.onAddActivity}>
-        {t('addActivity')}
-      </StyledBuilderBtn>
+      <Box>
+        <Button
+          variant="outlined"
+          startIcon={<Svg id="add" width={18} height={18} />}
+          onClick={() => handleActivityAdd && handleActivityAdd(null)}
+          sx={{ mr: theme.spacing(1.6) }}
+        >
+          {t('addActivity')}
+        </Button>
+        <ButtonWithMenu
+          variant="outlined"
+          label={t('addPerformanceTask')}
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+          menuItems={getPerformanceTasksMenu(handleActivityAdd || falseReturnFunc, setAnchorEl)}
+          startIcon={<Svg id="add" width={18} height={18} />}
+          menuListWidth="44rem"
+        />
+      </Box>
     </StyledHeader>
   );
 };

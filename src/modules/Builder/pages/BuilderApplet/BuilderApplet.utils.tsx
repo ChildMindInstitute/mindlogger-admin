@@ -23,7 +23,7 @@ import {
 import { getDictionaryText, Path } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
 
-import { ActivityFormValues, ItemFormValues } from './BuilderApplet.types';
+import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from './BuilderApplet.types';
 
 const { t } = i18n;
 
@@ -69,6 +69,19 @@ export const getNewActivity = (activity?: ActivityFormValues) => ({
   showScoreSummary: false,
   ...activity,
   items: activity?.items?.map((item) => getNewActivityItem(item)) || [],
+  id: undefined,
+  key: uuidv4(),
+});
+
+export const getNewPerformanceTask = ({
+  name,
+  description,
+  performanceTask,
+}: GetNewPerformanceTask) => ({
+  name,
+  description,
+  isPerformanceTask: true,
+  ...performanceTask,
   id: undefined,
   key: uuidv4(),
 });
