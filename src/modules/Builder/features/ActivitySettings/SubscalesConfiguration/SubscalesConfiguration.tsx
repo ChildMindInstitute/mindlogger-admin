@@ -6,7 +6,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
-import { DataTable, Svg, SwitchWithState } from 'shared/components';
+import { DataTable, SwitchWithState } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
@@ -29,7 +29,7 @@ import {
 } from './SubscalesConfiguration.utils';
 import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
-import { StyledSvgButton } from './SubscalesConfiguration.styles';
+import { StyledSvg, StyledSvgButton } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import { checkOnItemType } from '../ActivitySettings.utils';
 import { LookupTable } from './LookupTable';
@@ -84,14 +84,17 @@ export const SubscalesConfiguration = () => {
 
   useEffect(() => {
     if (calculateTotalScoreSwitch) {
-      register(calculateTotalScoreName);
+      register(calculateTotalScoreName, { value: '' });
+      register(totalScoresTableDataField);
       setValue(calculateTotalScoreName, SubscaleTotalScore.Sum);
 
       return;
     }
 
     unregister(calculateTotalScoreName);
+    unregister(totalScoresTableDataField);
     setValue(calculateTotalScoreName, undefined);
+    setValue(totalScoresTableDataField, undefined);
   }, [calculateTotalScoreSwitch]);
 
   return (
@@ -159,7 +162,7 @@ export const SubscalesConfiguration = () => {
               setIsLookupTableOpened(true);
             }}
           >
-            <Svg id={iconId} width="20" height="20" />
+            <StyledSvg isFilled={!!tableData} id={iconId} width="20" height="20" />
           </StyledSvgButton>
           <RadioGroupController
             name={calculateTotalScoreName}
