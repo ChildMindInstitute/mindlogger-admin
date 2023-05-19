@@ -74,7 +74,11 @@ export const Calendar = () => {
 
   const onSelectEvent = (calendarEvent: CalendarEvent) => {
     setEditEventPopupVisible(true);
-    setDefaultStartDate(getDefaultStartDate(calendarEvent.start));
+    setDefaultStartDate(
+      getDefaultStartDate(
+        calendarEvent.alwaysAvailable ? calendarEvent.eventStart : calendarEvent.start,
+      ),
+    );
     setEditedEvent(calendarEvent);
   };
 
