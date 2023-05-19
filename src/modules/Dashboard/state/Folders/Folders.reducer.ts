@@ -62,7 +62,10 @@ export const reducers = {
     });
   },
   resetAppletsData: (state: FoldersSchema) => {
-    state = initialState;
+    state.folders = initialState.folders;
+    state.foldersApplets = initialState.foldersApplets;
+    state.flattenFoldersApplets = initialState.flattenFoldersApplets;
+    state.appletsSearchTerms = initialState.appletsSearchTerms;
   },
 };
 
