@@ -11,6 +11,7 @@ import { StyledWrapper } from './SubscaleHeaderContent.styles';
 import { LookupTable } from '../LookupTable';
 import { getSubscaleModalLabels } from '../SubscalesConfiguration.utils';
 import { subscaleColumnData, subscaleTableTemplate } from './SubscaleHeaderContent.const';
+import { StyledSvg } from '../SubscalesConfiguration.styles';
 
 export const SubscaleHeaderContent = ({
   onRemove,
@@ -31,12 +32,12 @@ export const SubscaleHeaderContent = ({
         <TitleComponent title={title} name={name} open={open} />
         <Box>
           <StyledClearedButton
-            sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
+            sx={{ p: theme.spacing(1), mr: theme.spacing(1.4) }}
             onClick={() => {
               setIsSubscaleLookupTableOpened(true);
             }}
           >
-            <Svg id={iconId} width="20" height="20" />
+            <StyledSvg isFilled={!!subscaleTableData} id={iconId} width="20" height="20" />
           </StyledClearedButton>
           <StyledClearedButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
