@@ -28,7 +28,7 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
   const items = getItemElements(subscaleId, activity?.items.filter(checkOnItemType), subscales);
 
   return (
-    <StyledFlexColumn>
+    <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>
       <StyledFlexTopStart sx={{ mb: theme.spacing(4.4), gap: theme.spacing(2) }}>
         <InputController name={`${name}.name`} label={t('subscaleName')} />
         <SelectController
