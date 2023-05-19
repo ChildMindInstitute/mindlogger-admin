@@ -9,8 +9,8 @@ export const getPerformanceTasksMenu = (
   setAnchorEl: (el: null | HTMLElement) => void,
 ) => {
   const getAction = (props: ActivityAddProps) => {
-    const { performanceTaskName, performanceTaskDesc, notNavigate } = props || {};
-    onAddActivity({ performanceTaskName, performanceTaskDesc, notNavigate });
+    const { performanceTaskName, performanceTaskDesc, isNavigationBlocked } = props || {};
+    onAddActivity({ performanceTaskName, performanceTaskDesc, isNavigationBlocked });
     setAnchorEl(null);
   };
 
@@ -21,7 +21,7 @@ export const getPerformanceTasksMenu = (
         getAction({
           performanceTaskName: PerformanceTasks.AbTrailsIpad,
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
-          notNavigate: true,
+          isNavigationBlocked: true,
         }),
     },
     {
@@ -30,7 +30,7 @@ export const getPerformanceTasksMenu = (
         getAction({
           performanceTaskName: PerformanceTasks.AbTrailsMobile,
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
-          notNavigate: true,
+          isNavigationBlocked: true,
         }),
     },
     {
@@ -39,7 +39,7 @@ export const getPerformanceTasksMenu = (
         getAction({
           performanceTaskName: PerformanceTasks.Flanker,
           performanceTaskDesc: t('performanceTasksDesc.flanker'),
-          notNavigate: true,
+          isNavigationBlocked: true,
         }),
     },
     {
@@ -48,7 +48,7 @@ export const getPerformanceTasksMenu = (
         getAction({
           performanceTaskName: PerformanceTasks.Gyroscope,
           performanceTaskDesc: t('performanceTasksDesc.gyroscope'),
-          notNavigate: true,
+          isNavigationBlocked: true,
         }),
     },
     {
@@ -57,7 +57,7 @@ export const getPerformanceTasksMenu = (
         getAction({
           performanceTaskName: PerformanceTasks.Touch,
           performanceTaskDesc: t('performanceTasksDesc.touch'),
-          notNavigate: true,
+          isNavigationBlocked: true,
         }),
     },
   ];

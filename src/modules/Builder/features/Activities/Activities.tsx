@@ -74,14 +74,14 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
-    const { index, performanceTaskName, performanceTaskDesc, notNavigate } = props || {};
+    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked } = props || {};
     const newActivity =
       performanceTaskName && performanceTaskDesc
         ? getNewPerformanceTask({ name: performanceTaskName, description: performanceTaskDesc })
         : getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
-    !notNavigate && navigateToActivity(newActivity.key);
+    !isNavigationBlocked && navigateToActivity(newActivity.key);
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {

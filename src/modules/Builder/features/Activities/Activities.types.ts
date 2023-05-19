@@ -12,7 +12,7 @@ export type ActivityAddProps = {
   index?: number;
   performanceTaskName?: string;
   performanceTaskDesc?: string;
-  notNavigate?: boolean;
+  isNavigationBlocked?: boolean;
 } | null;
 
 export const enum PerformanceTasks {

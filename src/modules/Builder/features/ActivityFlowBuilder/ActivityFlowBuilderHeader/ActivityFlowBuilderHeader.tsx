@@ -48,7 +48,7 @@ export const ActivityFlowBuilderHeader = ({
             menuItems={getMenuItems({
               type: GetMenuItemsType.AddActivity,
               onMenuClose: () => setAnchorEl(null),
-              // TODO: remove filtering after connecting Performance Tasks API
+              // TODO: remove filtering after connecting Performance Tasks API (BE tasks: 1802, 1804, 1805, 1806)
               activities: activities.filter((activity) => !activity.isPerformanceTask),
               onAddFlowActivity,
             })}

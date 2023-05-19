@@ -16,10 +16,10 @@ import {
   AppletFormValues,
 } from 'modules/Builder/pages/BuilderApplet';
 import { page } from 'resources';
+import { getObjectFromList } from 'shared/utils';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
 import {
-  getActivitiesIdsObjects,
   getActivityFlowIndex,
   getFlowBuilderActions,
   getMenuItems,
@@ -88,7 +88,7 @@ export const ActivityFlowBuilder = () => {
     move(source.index, destination.index);
   };
 
-  const activitiesIdsObjects = getActivitiesIdsObjects(activities);
+  const activitiesIdsObjects = getObjectFromList(activities);
 
   useBreadcrumbs();
 
@@ -175,7 +175,7 @@ export const ActivityFlowBuilder = () => {
             type: GetMenuItemsType.ChangeActivity,
             index: indexToUpdate ?? undefined,
             onMenuClose: () => setAnchorEl(null),
-            // TODO: remove filtering after connecting Performance Tasks API
+            // TODO: remove filtering after connecting Performance Tasks API (BE tasks: 1802, 1804, 1805, 1806)
             activities: activities.filter((activity) => !activity.isPerformanceTask),
             onUpdateFlowActivity: handleFlowActivityUpdate,
           })}
