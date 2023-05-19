@@ -45,7 +45,7 @@ export const Modal = ({
       return hasSecondBtn ? 'end' : 'center';
     }
   };
-
+  console.log(onSubmit, 22);
   const getSubmitBtn = () => {
     if (!buttonText) return;
     const button = (

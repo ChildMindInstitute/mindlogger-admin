@@ -23,7 +23,7 @@ import {
   StyledLeftBox,
   StyledRightBox,
 } from './Respondents.styles';
-import { getActions, getAppletsSmallTableRows, getChosenAppletData } from './Respondents.utils';
+import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
 import { getHeadCells } from './Respondents.const';
 import { ChosenAppletData } from './Respondents.types';
 import {
@@ -54,7 +54,7 @@ export const Respondents = () => {
 
   const { getWorkspaceRespondents } = users.thunk;
 
-  const { searchValue, handleSearch, ordering, ...tableProps } = useTable((args) => {
+  const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable((args) => {
     const params = {
       ...args,
       params: {
@@ -169,7 +169,7 @@ export const Respondents = () => {
         },
       }),
       actions: {
-        content: () => <Actions items={getActions(actions)} context={index} />,
+        content: () => <Actions items={getActions(actions, appletId)} context={index} />,
         value: '',
         width: '330',
       },
@@ -209,13 +209,16 @@ export const Respondents = () => {
   useEffect(() => {
     if (!respondentAccesses) return;
 
-    const respondentId = chosenRespondentsItems?.id;
+    const respondentId = chosenRespondentsItems?.id ?? '';
     if (respondentId && appletId) {
       const respondentAccess = respondentAccesses.find(
         ({ appletId: accessibleAppletId }) => accessibleAppletId === appletId,
       );
-      const chosenAppletData =
-        respondentAccess && getChosenAppletData(respondentAccess, respondentId);
+      const chosenAppletData = respondentAccess && {
+        ...respondentAccess,
+        respondentId,
+        ownerId: ownerId ?? '',
+      };
       setChosenAppletData(chosenAppletData ?? null);
 
       return;
@@ -224,7 +227,6 @@ export const Respondents = () => {
     setChosenAppletData(null);
   }, [
     respondentAccesses,
-    chosenRespondentsItems,
     chosenRespondentsItems,
     scheduleSetupPopupVisible,
     dataExportPopupVisible,
@@ -303,6 +305,7 @@ export const Respondents = () => {
               setPopupVisible={setEditRespondentPopupVisible}
               chosenAppletData={chosenAppletData}
               setChosenAppletData={setChosenAppletData}
+              refetchRespondents={handleReload}
             />
           )}
         </>
