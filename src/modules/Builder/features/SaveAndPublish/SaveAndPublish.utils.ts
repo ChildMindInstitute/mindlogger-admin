@@ -48,6 +48,7 @@ export const removeItemExtraFields = () => ({
   key: undefined,
   settings: undefined,
   alerts: undefined, //TODO: remove after backend addings
+  isSubscaleSystemItem: undefined,
 });
 
 export const mapItemResponseValues = (

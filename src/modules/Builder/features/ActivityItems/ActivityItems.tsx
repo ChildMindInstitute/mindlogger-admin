@@ -37,13 +37,9 @@ export const ActivityItems = () => {
 
   if (!activity) return null;
 
-  const items = watch(`${fieldName}.items`);
-  const activeItemIndex = items?.findIndex(
-    (item: ItemFormValues) => (item.key ?? item.id) === activeItemId,
-  );
-  const itemIndexToDelete = items?.findIndex(
-    (item: ItemFormValues) => itemIdToDelete === (item.key ?? item.id),
-  );
+  const items: ItemFormValues[] = watch(`${fieldName}.items`);
+  const activeItemIndex = items?.findIndex((item) => (item.key ?? item.id) === activeItemId);
+  const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === (item.key ?? item.id));
   const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
 
@@ -53,7 +49,9 @@ export const ActivityItems = () => {
 
   const handleAddItem = () => {
     const item = getNewActivityItem();
-    appendItem(item);
+    const firstSystemIndex = items.findIndex((item) => item.isSubscaleSystemItem);
+
+    firstSystemIndex !== -1 ? insertItem(firstSystemIndex, item) : appendItem(item);
     setActiveItemId(item.key);
   };
 

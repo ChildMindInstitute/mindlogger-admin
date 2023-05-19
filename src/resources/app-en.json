@@ -912,5 +912,9 @@
   "printItems": "Print Items",
   "printItemsTooltip": "Respondent’s responses that will be displayed in the report",
   "addConditinalLogic": "Add Conditional Logic",
-  "itemBody": "Item Body"
+  "itemBody": "Item Body",
+  "genderQuestion": "How do you describe yourself?",
+  "male": "Male",
+  "female": "Female",
+  "ageQuestion": "How old are you?"
 }

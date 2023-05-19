@@ -31,6 +31,8 @@ export const LeftBar = ({
 
   const { fieldName } = useCurrentActivity();
   const hasActiveItem = !!activeItemId;
+  const draggableItems = items.filter((item) => !item.isSubscaleSystemItem);
+  const systemItems = items.filter((item) => item.isSubscaleSystemItem);
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
@@ -57,12 +59,12 @@ export const LeftBar = ({
         {!hasActiveItem && addItemBtn}
       </StyledFlexAllCenter>
       <StyledContent>
-        {items?.length ? (
+        {!!draggableItems?.length && (
           <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
             <DndDroppable droppableId="activity-items-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {items?.map((item, index) => (
+                  {draggableItems?.map((item, index) => (
                     <Draggable
                       key={`item-${getItemKey(item)}`}
                       draggableId={getItemKey(item)}
@@ -94,7 +96,18 @@ export const LeftBar = ({
               )}
             </DndDroppable>
           </DragDropContext>
-        ) : (
+        )}
+        {!!systemItems?.length &&
+          systemItems.map((item) => (
+            <Item
+              item={item}
+              activeItemId={activeItemId}
+              onSetActiveItem={onSetActiveItem}
+              onDuplicateItem={onDuplicateItem}
+              onRemoveItem={onRemoveItem}
+            />
+          ))}
+        {!items?.length && (
           <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>
             {t('itemIsRequired')}
           </StyledTitleMedium>

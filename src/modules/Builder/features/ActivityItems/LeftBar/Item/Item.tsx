@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { Actions } from 'shared/components';
 import { itemsTypeIcons } from 'shared/consts';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { falseReturnFunc } from 'shared/utils';
 
 import { getActions } from './Item.utils';
 import { StyledCol, StyledItem, StyledDescription, StyledTitle } from './Item.styles';
@@ -19,26 +20,31 @@ export const Item = ({
   onDuplicateItem,
   onRemoveItem,
   dragHandleProps,
-  isDragging,
+  isDragging = false,
 }: ItemProps) => {
   const { setValue, watch, getFieldState } = useFormContext();
   const [visibleActions, setVisibleActions] = useState(false);
-
-  const isItemHidden = watch(`${name}.isHidden`);
+  const isItemHidden = name ? watch(`${name}.isHidden`) : false;
   const hiddenProps = { sx: { opacity: isItemHidden ? 0.38 : 1 } };
+  const invalidField = name ? !!getFieldState(name).error : false;
 
-  const { invalid: invalidField } = getFieldState(name);
+  const onChangeVisibility = name
+    ? () => setValue(`${name}.isHidden`, !isItemHidden)
+    : falseReturnFunc;
 
-  const onChangeVisibility = () => setValue(`${name}.isHidden`, !isItemHidden);
+  const onClick = item.isSubscaleSystemItem
+    ? falseReturnFunc
+    : () => onSetActiveItem(getItemKey(item) ?? '');
 
   return (
     <StyledItem
       isActive={activeItemId === getItemKey(item)}
       hasError={invalidField}
-      onClick={() => onSetActiveItem(getItemKey(item) ?? '')}
+      onClick={onClick}
       onMouseLeave={() => setVisibleActions(false)}
       onMouseEnter={() => setVisibleActions(true)}
       isDragging={isDragging}
+      isSystem={!!item.isSubscaleSystemItem}
     >
       <StyledFlexTopCenter {...hiddenProps}>
         {item.responseType ? itemsTypeIcons[item.responseType] : ''}
@@ -47,20 +53,22 @@ export const Item = ({
         <StyledTitle>{item.name}</StyledTitle>
         <StyledDescription>{item.question}</StyledDescription>
       </StyledCol>
-      <Actions
-        items={getActions({
-          onRemoveItem,
-          onDuplicateItem: () => onDuplicateItem(index),
-          onChangeVisibility,
-          isItemHidden,
-        })}
-        context={getItemKey(item)}
-        visibleByDefault={visibleActions}
-        sxProps={{ justifyContent: 'flex-end', pointerEvents: isDragging ? 'none' : 'auto' }}
-        dragHandleProps={dragHandleProps}
-        isDragging={isDragging}
-        hasStaticActions={isItemHidden}
-      />
+      {!item.isSubscaleSystemItem && (
+        <Actions
+          items={getActions({
+            onRemoveItem,
+            onDuplicateItem: () => onDuplicateItem(index!),
+            onChangeVisibility,
+            isItemHidden,
+          })}
+          context={getItemKey(item)}
+          visibleByDefault={visibleActions}
+          sxProps={{ justifyContent: 'flex-end', pointerEvents: isDragging ? 'none' : 'auto' }}
+          dragHandleProps={dragHandleProps}
+          isDragging={isDragging}
+          hasStaticActions={isItemHidden}
+        />
+      )}
     </StyledItem>
   );
 };
