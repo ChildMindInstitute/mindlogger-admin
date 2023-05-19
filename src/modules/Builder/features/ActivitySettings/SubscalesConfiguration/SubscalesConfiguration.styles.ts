@@ -11,8 +11,8 @@ export const StyledSvgButton = styled(StyledClearedButton)`
 
 export const StyledSvg = styled(Svg, shouldForwardProp)`
   ${({ isFilled }: { isFilled: boolean }) => `
-			&& {
-				fill: ${isFilled ? variables.palette.primary : variables.palette.on_surface_variant};
-			}
+    && {
+      fill: ${isFilled ? variables.palette.primary : variables.palette.on_surface_variant};
+    }
   `}
 `;
