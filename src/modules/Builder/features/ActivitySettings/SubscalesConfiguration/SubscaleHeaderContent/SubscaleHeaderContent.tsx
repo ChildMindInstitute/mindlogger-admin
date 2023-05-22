@@ -1,31 +1,66 @@
+import { useState } from 'react';
 import { Box } from '@mui/material';
+import { useFormContext } from 'react-hook-form';
 
 import { StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
-import { falseReturnFunc } from 'shared/utils';
 
-import { TitleComponent } from '../TitleComponent';
+import { TitleComponent } from '../../TitleComponent';
 import { SubscaleHeaderContentProps } from './SubscaleHeaderContent.types';
 import { StyledWrapper } from './SubscaleHeaderContent.styles';
+import { LookupTable } from '../LookupTable';
+import { getSubscaleModalLabels } from '../SubscalesConfiguration.utils';
+import { subscaleColumnData, subscaleTableTemplate } from './SubscaleHeaderContent.const';
+import { StyledSvg } from '../SubscalesConfiguration.styles';
 
 export const SubscaleHeaderContent = ({
   onRemove,
   name,
   title,
   open,
-}: SubscaleHeaderContentProps) => (
-  <StyledWrapper>
-    <TitleComponent title={title} name={name} open={open} />
-    <Box>
-      <StyledClearedButton
-        sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
-        onClick={falseReturnFunc}
-      >
-        <Svg id="lookup-table" width="20" height="20" />
-      </StyledClearedButton>
-      <StyledClearedButton sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }} onClick={onRemove}>
-        <Svg id="trash" width="20" height="20" />
-      </StyledClearedButton>
-    </Box>
-  </StyledWrapper>
-);
+  onUpdate,
+}: SubscaleHeaderContentProps) => {
+  const { watch } = useFormContext();
+  const subscaleName = watch(`${name}.name`);
+  const subscaleTableData = watch(`${name}.subscaleTableData`);
+  const [isSubscaleLookupTableOpened, setIsSubscaleLookupTableOpened] = useState(false);
+  const iconId = `lookup-table${subscaleTableData ? '-filled' : ''}`;
+
+  return (
+    <>
+      <StyledWrapper>
+        <TitleComponent title={title} name={name} open={open} />
+        <Box>
+          <StyledClearedButton
+            sx={{ p: theme.spacing(1), mr: theme.spacing(1.4) }}
+            onClick={() => {
+              setIsSubscaleLookupTableOpened(true);
+            }}
+          >
+            <StyledSvg isFilled={!!subscaleTableData} id={iconId} width="20" height="20" />
+          </StyledClearedButton>
+          <StyledClearedButton
+            sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
+            onClick={onRemove}
+          >
+            <Svg id="trash" width="20" height="20" />
+          </StyledClearedButton>
+        </Box>
+      </StyledWrapper>
+      {isSubscaleLookupTableOpened && (
+        <LookupTable
+          open={isSubscaleLookupTableOpened}
+          labelsObject={getSubscaleModalLabels(subscaleName)}
+          columnData={subscaleColumnData}
+          tableData={subscaleTableData}
+          template={subscaleTableTemplate}
+          templatePrefix={'subscale_'}
+          onUpdate={onUpdate}
+          onClose={() => {
+            setIsSubscaleLookupTableOpened(false);
+          }}
+        />
+      )}
+    </>
+  );
+};

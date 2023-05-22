@@ -12,13 +12,16 @@ import {
 
 import { RespondentsActions, ChosenAppletData } from './Respondents.types';
 
-export const getActions = ({
-  scheduleSetupAction,
-  viewDataAction,
-  removeAccessAction,
-  userDataExportAction,
-  editRespondent,
-}: RespondentsActions) => [
+export const getActions = (
+  {
+    scheduleSetupAction,
+    viewDataAction,
+    removeAccessAction,
+    userDataExportAction,
+    editRespondent,
+  }: RespondentsActions,
+  appletId?: string,
+) => [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
     action: scheduleSetupAction,
@@ -38,6 +41,7 @@ export const getActions = ({
     icon: <Svg id="edit-user" width={21} height={19} />,
     action: editRespondent,
     tooltipTitle: t('editRespondent'),
+    isDisplayed: !!appletId,
   },
   {
     icon: <Svg id="remove-access" />,
@@ -46,19 +50,15 @@ export const getActions = ({
   },
 ];
 
-export const getChosenAppletData = (respondentAccess: ChosenAppletData, respondentId?: string) => ({
-  ...respondentAccess,
-  respondentId,
-});
-
 export const getAppletsSmallTableRows = (
   respondentAccesses: ChosenAppletData[] | null,
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>,
-  userId?: string,
+  respondentId?: string,
 ) =>
   respondentAccesses?.map((respondentAccess) => {
-    const chosenAppletData = getChosenAppletData(respondentAccess, userId);
-    const { appletName, appletImg, secretUserId, nickname } = chosenAppletData;
+    const choseAppletHandler = () =>
+      setChosenAppletData({ ...respondentAccess, ...(respondentId && { respondentId }) });
+    const { appletName, appletImg, secretUserId, nickname } = respondentAccess;
 
     return {
       appletName: {
@@ -73,17 +73,17 @@ export const getAppletsSmallTableRows = (
           </StyledFlexTopCenter>
         ),
         value: appletName,
-        onClick: () => setChosenAppletData(chosenAppletData),
+        onClick: choseAppletHandler,
       },
       secretUserId: {
         content: () => <StyledLabelLarge>{secretUserId}</StyledLabelLarge>,
         value: secretUserId,
-        onClick: () => setChosenAppletData(chosenAppletData),
+        onClick: choseAppletHandler,
       },
       nickname: {
         content: () => <StyledBodyMedium>{nickname}</StyledBodyMedium>,
         value: nickname,
-        onClick: () => setChosenAppletData(chosenAppletData),
+        onClick: choseAppletHandler,
       },
     };
   }) as Row[] | undefined;

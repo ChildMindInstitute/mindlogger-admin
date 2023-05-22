@@ -1,9 +1,12 @@
+import { Trans } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
+
+import { StyledTitleSmall, variables } from 'shared/styles';
 
 import i18n from 'i18n';
 import { ActivitySettingsSubscale } from 'shared/state';
 import { ItemFormValues } from 'modules/Builder/pages';
-import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
+import { SubscaleTotalScore } from 'shared/consts';
 import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 
 import {
@@ -12,6 +15,7 @@ import {
   SubscaleColumns,
   SubscaleContentProps,
 } from './SubscalesConfiguration.types';
+import { LabelsObject, ModalType } from './LookupTable';
 
 const { t } = i18n;
 
@@ -43,13 +47,6 @@ export const getSubscaleElementName = (
       return acc;
     }, [] as string[])
     .join(', ')})`;
-
-export const checkOnItemType = (item: ItemFormValues) =>
-  [
-    ItemResponseType.SingleSelection,
-    ItemResponseType.MultipleSelection,
-    ItemResponseType.Slider,
-  ].includes(item.responseType as ItemResponseType);
 
 export const getItemElements = (
   subscaleId: string,
@@ -218,3 +215,119 @@ export const allElementsTableColumns = [
     label: t('subscale'),
   },
 ];
+
+export const getSubscaleModalLabels = (name?: string): LabelsObject => ({
+  [ModalType.Upload]: {
+    title: t('subscaleLookupTable.upload.title'),
+    initDescription: (
+      <Trans i18nKey="subscaleLookupTable.upload.initDescription">
+        Please upload file in
+        <strong> .csv, .xls, .xlsx, .ods. </strong>
+        format
+      </Trans>
+    ),
+    successDescription: (
+      <Trans i18nKey="subscaleLookupTable.upload.successDescription">
+        Your Lookup Table for
+        <strong>
+          <> {{ name }} </>
+        </strong>
+        was parsed successfully.
+      </Trans>
+    ),
+  },
+  [ModalType.Edit]: {
+    title: t('subscaleLookupTable.edit.title'),
+    initDescription: (
+      <Trans i18nKey="subscaleLookupTable.edit.initDescription">
+        Current Lookup Table for
+        <strong>
+          <> {{ name }} </>
+        </strong>
+        .
+      </Trans>
+    ),
+  },
+  [ModalType.Delete]: {
+    title: t('subscaleLookupTable.delete.title'),
+    initDescription: (
+      <Trans i18nKey="subscaleLookupTable.delete.initDescription">
+        Are you sure you want to delete the Lookup Table for
+        <strong>
+          <> {{ name }} </>
+        </strong>
+        ?
+      </Trans>
+    ),
+    successDescription: (
+      <Trans i18nKey="subscaleLookupTable.delete.successDescription">
+        The current Lookup Table for
+        <strong>
+          <> {{ name }} </>
+        </strong>
+        has been deleted successfully.
+      </Trans>
+    ),
+  },
+  errors: {
+    haveToUploadFile: (
+      <StyledTitleSmall sx={{ mt: 2.2 }} color={variables.palette.semantic.error}>
+        {t('subscaleLookupTable.errors.haveToUploadFile')}
+      </StyledTitleSmall>
+    ),
+    fileCantBeParsed: (
+      <StyledTitleSmall sx={{ color: variables.palette.semantic.error }}>
+        {t('subscaleLookupTable.errors.fileCantBeParsed')}
+      </StyledTitleSmall>
+    ),
+    incorrectFileFormat: (
+      <StyledTitleSmall sx={{ color: variables.palette.semantic.error }}>
+        <Trans i18nKey="subscaleLookupTable.errors.incorrectFileFormat">
+          Incorrect file format. Please upload file in
+          <strong> .csv, .xls, .xlsx, .ods. </strong>
+          format.
+        </Trans>
+      </StyledTitleSmall>
+    ),
+    onDelete: (
+      <StyledTitleSmall sx={{ color: variables.palette.semantic.error }}>
+        <Trans i18nKey="subscaleLookupTable.errors.onDelete">
+          The current Lookup Table for
+          <strong>
+            <> {{ name }} </>
+          </strong>
+          has not been deleted. Please try again.
+        </Trans>
+      </StyledTitleSmall>
+    ),
+  },
+});
+
+export const getAddTotalScoreModalLabels = (): LabelsObject => {
+  const labels = getSubscaleModalLabels();
+
+  return {
+    ...labels,
+    [ModalType.Upload]: {
+      ...labels[ModalType.Upload],
+      successDescription: <>{t('addTotalScoreLookupTable.upload.successDescription')}</>,
+    },
+    [ModalType.Edit]: {
+      ...labels[ModalType.Edit],
+      initDescription: <>{t('addTotalScoreLookupTable.edit.initDescription')}</>,
+    },
+    [ModalType.Delete]: {
+      ...labels[ModalType.Delete],
+      initDescription: <>{t('addTotalScoreLookupTable.delete.initDescription')}</>,
+      successDescription: <>{t('addTotalScoreLookupTable.delete.successDescription')}</>,
+    },
+    errors: {
+      ...labels.errors,
+      onDelete: (
+        <StyledTitleSmall sx={{ color: variables.palette.semantic.error }}>
+          {t('addTotalScoreLookupTable.errors.onDelete')}
+        </StyledTitleSmall>
+      ),
+    },
+  };
+};

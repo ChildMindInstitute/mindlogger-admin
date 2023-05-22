@@ -17,7 +17,18 @@ import {
 import { ItemResponseType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 
-export const removeAppletExtraFields = () => ({
+export const removeAppletExtraFields = (isNewApplet: boolean) => ({
+  ...(isNewApplet
+    ? {}
+    : {
+        isPublished: undefined,
+        reportServerIp: undefined,
+        reportPublicKey: undefined,
+        reportRecipients: undefined,
+        reportIncludeUserId: undefined,
+        reportIncludeCaseId: undefined,
+        reportEmailBody: undefined,
+      }),
   createdAt: undefined,
   updatedAt: undefined,
   id: undefined,
@@ -36,6 +47,7 @@ export const removeActivityExtraFields = () => ({
   subscales: undefined, // TODO: remove when API will be ready
   calculateTotalScore: undefined, // TODO: remove when API will be ready
   conditionalLogic: undefined,
+  totalScoresTableData: undefined, // TODO: remove when M2-1738 will be ready
 });
 
 export const removeItemExtraFields = () => ({

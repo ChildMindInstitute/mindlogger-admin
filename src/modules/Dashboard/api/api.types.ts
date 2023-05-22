@@ -115,28 +115,34 @@ export type EventNotifications =
 
 export type EventReminder = { activityIncomplete: number; reminderTime: string | null } | null;
 
-export type CreateEventType = AppletId & {
-  body: {
-    startTime?: string;
-    endTime?: string;
-    accessBeforeSchedule?: boolean;
-    oneTimeCompletion?: boolean;
-    timer?: string;
-    timerType?: TimerType;
-    periodicity?: {
-      type: Periodicity;
-      startDate?: string;
-      endDate?: string;
-      selectedDate?: string;
-    };
-    respondentId?: string;
-    activityId?: string;
-    flowId?: string;
-    notification: {
-      notifications: EventNotifications;
-      reminder: EventReminder;
-    } | null;
+type CreateEvent = {
+  startTime?: string;
+  endTime?: string;
+  accessBeforeSchedule?: boolean;
+  oneTimeCompletion?: boolean;
+  timer?: string;
+  timerType?: TimerType;
+  periodicity?: {
+    type: Periodicity;
+    startDate?: string;
+    endDate?: string;
+    selectedDate?: string;
   };
+  respondentId?: string;
+  activityId?: string;
+  flowId?: string;
+  notification: {
+    notifications: EventNotifications;
+    reminder: EventReminder;
+  } | null;
+};
+
+export type CreateEventType = AppletId & {
+  body: CreateEvent;
+};
+
+export type ImportSchedule = AppletId & {
+  body: CreateEvent[];
 };
 
 export type SetAccount = { accountName: string };
@@ -152,6 +158,16 @@ export type RemoveManagerAccess = RemoveAccess & {
 
 export type RemoveRespondentAccess = RemoveAccess & {
   deleteResponses: boolean;
+};
+
+export type EditRespondentAccess = {
+  ownerId: string;
+  respondentId: string;
+  appletId: string;
+  values: {
+    secretUserId: string;
+    nickname: string;
+  };
 };
 
 export type GetUsersData = AppletId & {
@@ -189,16 +205,11 @@ export type UpdatePin = {
   ownerId?: string;
 };
 
-export type Folder = {
-  folder: {
-    name: string;
-    parentId: string;
-  };
-};
+export type FolderName = { name: string };
 
-export type UpdateFolder = Folder & { folderId: string };
+export type UpdateFolder = OwnerId & FolderName & FolderId;
 
-export type TogglePin = { applet: { parentId: string; id: string }; isPinned: boolean };
+export type TogglePin = OwnerId & { applet: { parentId: string; id: string }; isPinned: boolean };
 
 export type UpdateAlertStatus = { alertId: string };
 
@@ -248,3 +259,15 @@ export type RespondentAccesses = OwnerId &
     limit?: number;
     ordering?: string;
   };
+
+export type GetWorkspaceAppletsParams = {
+  params: {
+    ownerId?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+    ordering?: string;
+    roles?: string;
+    folderId?: string | null;
+  };
+};

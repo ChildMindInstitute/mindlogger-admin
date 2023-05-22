@@ -7,5 +7,6 @@ export const reducers = {
     state.data.appletId = action.payload.appletId;
     state.data[action.payload.key] = action.payload.value;
     state.data.encryption = action.payload.encryption;
+    state.data.popupProps = action.payload.popupProps;
   },
 };

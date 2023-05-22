@@ -404,6 +404,7 @@ export type Activity = {
   calculateTotalScore?: SubscaleTotalScore;
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
+  totalScoresTableData?: string;
 };
 
 type Theme = {
@@ -422,7 +423,12 @@ export type ActivitySettingsScore = {
 };
 
 export type ActivitySettingsSection = {
-  name?: string;
+  id?: string;
+  name: string;
+  showMessage: boolean;
+  printItems: boolean;
+  items?: string[];
+  message?: string;
 };
 
 export type ActivitySettingsSubscale = {
@@ -430,6 +436,7 @@ export type ActivitySettingsSubscale = {
   name: string;
   scoring: SubscaleTotalScore;
   items: string[];
+  subscaleTableData?: string;
 };
 
 export type SingleApplet = {
@@ -456,6 +463,7 @@ export type SingleApplet = {
   theme?: Theme;
   encryption?: Encryption;
   generateReport: boolean;
+  isPublished?: boolean;
 };
 
 export type AppletSchema = {

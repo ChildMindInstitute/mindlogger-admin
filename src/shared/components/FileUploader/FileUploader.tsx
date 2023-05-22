@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, DragEvent } from 'react';
+import { useState, ChangeEvent, DragEvent, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
@@ -11,16 +11,18 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { Svg } from 'shared/components';
 
 import { StyledButton, StyledLabel, StyledSvg, StyledTextField } from './FileUploader.styles';
 import { FileUploaderProps, ImportedFile } from './FileUploader.types';
-import { Svg } from '../Svg';
 import { importTable } from './FileUploader.utils';
 
 export const FileUploader = ({
   uploadLabel,
   onFileReady,
   invalidFileFormatError,
+  onDownloadTemplate,
+  validationError,
 }: FileUploaderProps) => {
   const { t } = useTranslation();
 
@@ -67,16 +69,27 @@ export const FileUploader = ({
     onFileReady(null);
   };
 
+  useEffect(() => {
+    if (!validationError) return;
+
+    setError(validationError);
+    setFile(null);
+    onFileReady(null);
+  }, [validationError]);
+
   return (
     <>
       <StyledBodyLarge>{uploadLabel}</StyledBodyLarge>
-      <Button
-        sx={{ margin: theme.spacing(1.2, 0, 2.4, 0) }}
-        variant="text"
-        startIcon={<StyledSvg width="18" height="18" id="export" />}
-      >
-        {t('downloadTemplate')}
-      </Button>
+      {onDownloadTemplate && (
+        <Button
+          sx={{ margin: theme.spacing(1.2, 0, 2.4, 0) }}
+          variant="text"
+          startIcon={<StyledSvg width="18" height="18" id="export" />}
+          onClick={onDownloadTemplate}
+        >
+          {t('downloadTemplate')}
+        </Button>
+      )}
       <Box>
         {file ? (
           <StyledFlexTopCenter sx={{ ml: 2 }}>

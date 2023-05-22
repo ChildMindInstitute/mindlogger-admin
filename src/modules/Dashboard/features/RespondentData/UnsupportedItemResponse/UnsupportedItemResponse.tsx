@@ -10,7 +10,7 @@ export const UnsupportedItemResponse = ({ itemType }: { itemType: ItemResponseTy
 
   return (
     <StyledItem>
-      {itemsTypeIcons[itemType]}{' '}
+      {itemsTypeIcons[itemType]}
       <StyledBodyLarge color={variables.palette.outline}>
         {t('unsupportedResponseItem')}
       </StyledBodyLarge>

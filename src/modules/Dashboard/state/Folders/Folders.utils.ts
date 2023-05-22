@@ -70,7 +70,7 @@ export const setAppletsInFolder = ({
         applet.name = appletInfo.applet.displayName;
       }
       if (!appletInfo.id) {
-        applet.id = appletInfo.applet['_id'].split('/')[1];
+        applet.id = appletInfo.applet.id.split('/')[1];
       }
       if (!appletInfo?.encryption && appletInfo.applet) {
         applet.encryption = appletInfo.applet.encryption;

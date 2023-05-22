@@ -83,7 +83,7 @@ export const useAppletData = () => {
         description: getDictionaryObject(flow.description),
         items: flow.items?.map(({ key, ...item }) => item),
       })),
-      ...removeAppletExtraFields(),
+      ...removeAppletExtraFields(isNewApplet),
     };
   };
 };
