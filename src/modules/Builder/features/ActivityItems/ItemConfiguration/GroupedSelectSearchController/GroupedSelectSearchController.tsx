@@ -105,6 +105,9 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                     value={searchTerm}
                     onChange={handleSearchChange}
                     onKeyDown={handleSearchKeyDown}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
                     InputProps={{
                       startAdornment: <Svg id="search" />,
                       endAdornment: searchTerm && (
