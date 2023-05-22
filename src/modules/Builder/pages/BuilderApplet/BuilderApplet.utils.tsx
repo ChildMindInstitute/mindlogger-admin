@@ -141,6 +141,7 @@ const getActivityItems = (items: Item[]) =>
         responseValues: getActivityItemResponseValues(item),
         config: item.config,
         alerts: item.alerts ?? [],
+        conditionalLogic: undefined,
       }))
     : [];
 
@@ -159,16 +160,16 @@ const getActivityConditionalLogic = (items: Item[]) =>
     if (item.conditionalLogic)
       return [
         ...result,
-        ...item.conditionalLogic.map(({ match, conditions }) => ({
+        {
           key: uuidv4(),
           itemKey: getEntityKey(item),
-          match,
-          conditions: conditions.map(({ itemName, type, payload }) => ({
+          match: item.conditionalLogic.match,
+          conditions: item.conditionalLogic.conditions?.map(({ itemName, type, payload }) => ({
             type,
             payload: payload as keyof Condition['payload'],
             itemName: getEntityKey(items.find((item) => item.name === itemName) ?? {}),
           })),
-        })),
+        },
       ];
 
     return result;

@@ -355,7 +355,7 @@ export type Item = {
   responseType: ItemResponseType;
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
-  conditionalLogic?: ConditionalLogic[];
+  conditionalLogic?: ConditionalLogic;
 };
 
 export interface TextItem extends Item {

@@ -120,7 +120,7 @@ export const enum ConditionType {
 }
 
 export const enum ConditionalLogicMatch {
-  Any = 'Any',
-  All = 'ALL',
+  Any = 'any',
+  All = 'all',
 }
 export const ALLOWED_AUDIO_FILE_TYPES = '.mp3,.wav';

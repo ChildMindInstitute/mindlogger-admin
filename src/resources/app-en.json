@@ -913,7 +913,6 @@
   "outsideOf": "outside of",
   "summaryRowDescription": "of the “if” rules below are true, show",
   "any": "Any",
-  "ALL": "All",
   "conditionalLogicPanelTitle": "If <0>{{match}}</0> of the “if” rules below are <1>true, show item: {{name}}</1>",
   "conditionItem": "Item",
   "conditionType": "State",

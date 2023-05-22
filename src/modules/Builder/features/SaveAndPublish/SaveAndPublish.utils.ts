@@ -108,18 +108,18 @@ export const getItemConditionalLogic = (
   items: Item[],
   conditionalLogic?: ConditionalLogic[],
 ) => {
-  const result = conditionalLogic?.filter(
-    (conditionalLogic: ConditionalLogic) => conditionalLogic.itemKey === getEntityKey(item),
+  const result = conditionalLogic?.find(
+    (conditionalLogic) => conditionalLogic.itemKey === getEntityKey(item),
   );
 
-  if (!result?.length) return;
+  if (!result) return;
 
-  return result.map(({ match, conditions }: ConditionalLogic) => ({
-    match,
-    conditions: conditions?.map(({ type, payload, itemName }) => ({
+  return {
+    match: result.match,
+    conditions: result.conditions?.map(({ type, payload, itemName }) => ({
       type,
       payload: payload as keyof Condition['payload'],
       itemName: items.find((item) => getEntityKey(item) === itemName)?.name ?? '',
     })),
-  }));
+  };
 };
