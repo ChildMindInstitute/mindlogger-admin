@@ -271,3 +271,5 @@ export type GetWorkspaceAppletsParams = {
     folderId?: string | null;
   };
 };
+
+export type AppletVersionChanges = AppletId & { version: string };

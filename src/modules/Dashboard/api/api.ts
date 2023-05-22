@@ -37,6 +37,7 @@ import {
   GetWorkspaceAppletsParams,
   FolderName,
   EditRespondentAccess,
+  AppletVersionChanges,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -473,3 +474,11 @@ export const publishAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =
 
 export const concealAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.post(`/applets/${appletId}/conceal`, { signal });
+
+export const getAppletVersionsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  authApiClient.get(`/applets/${appletId}/versions`, { signal });
+
+export const getAppletVersionChangesApi = (
+  { appletId, version }: AppletVersionChanges,
+  signal?: AbortSignal,
+) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
