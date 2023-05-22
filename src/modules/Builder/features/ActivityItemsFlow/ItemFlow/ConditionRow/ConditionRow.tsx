@@ -5,10 +5,10 @@ import { SelectEvent } from 'shared/types';
 import { ConditionType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { ItemFormValues } from 'modules/Builder/pages';
+import { Condition } from 'modules/Builder/components';
 
 import { ConditionRowProps } from './ConditionRow.types';
 import { getItemOptions, getPayload, getValueOptionsList } from './ConditionRow.utils';
-import { Condition } from '../../Condition';
 
 export const ConditionRow = ({ name, index, onRemove }: ConditionRowProps) => {
   const { control, setValue, watch } = useFormContext();

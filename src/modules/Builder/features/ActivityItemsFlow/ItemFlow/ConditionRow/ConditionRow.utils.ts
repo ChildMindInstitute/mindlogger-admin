@@ -9,9 +9,9 @@ import {
   RangeValueCondition,
   SingleAndMultipleSelectItemResponseValues,
 } from 'shared/state';
+import { ConditionItemType } from 'modules/Builder/components';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
-import { ConditionItemType } from '../../Condition/Condition.const';
 
 const { t } = i18n;
 
