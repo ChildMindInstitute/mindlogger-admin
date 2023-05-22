@@ -38,7 +38,7 @@ export const SummaryRow = ({ name }: SummaryRowProps) => {
               (item: ItemFormValues) => getEntityKey(item) === value,
             )?.name;
 
-            return <span>{t('conditionItemNameSelected', { value: itemName })}</span>;
+            return <span>{t('conditionItemSelected', { value: itemName })}</span>;
           },
         }}
       />

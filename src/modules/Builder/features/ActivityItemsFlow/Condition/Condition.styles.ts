@@ -1,9 +1,9 @@
 import { styled } from '@mui/material';
 
-import { InputController, SelectController } from 'shared/components/FormComponents';
-import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { StyledFlexTopCenter, variables, theme } from 'shared/styles';
+import { SelectController, InputController } from 'shared/components/FormComponents';
 
-export const StyledConditionRow = styled(StyledFlexTopCenter)`
+export const StyledCondition = styled(StyledFlexTopCenter)`
   gap: 0.4rem;
   padding: ${theme.spacing(0.8, 1.2)};
   border-radius: ${variables.borderRadius.xs};

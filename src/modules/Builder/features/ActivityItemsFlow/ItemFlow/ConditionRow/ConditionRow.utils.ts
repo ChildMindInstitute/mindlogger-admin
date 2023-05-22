@@ -11,47 +11,45 @@ import {
 } from 'shared/state';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
+import { ConditionItemType } from '../../Condition/Condition.const';
 
 const { t } = i18n;
 
-export const getItemNameOptionsList = (items: ItemFormValues[]) =>
-  items?.reduce((optionList: { labelKey: string; value: string }[], item) => {
-    if (
-      item.responseType === ItemResponseType.Slider ||
-      item.responseType === ItemResponseType.SingleSelection ||
-      item.responseType === ItemResponseType.MultipleSelection
-    ) {
-      return [...optionList, { labelKey: item.name, value: getEntityKey(item) }];
-    }
-
-    return optionList;
-  }, []);
-
-export const getTypeOptionsList = (responseType: ItemResponseType) => {
-  switch (responseType) {
-    case ItemResponseType.SingleSelection:
-      return [
-        { value: ConditionType.EqualToOption, labelKey: t('equalToOption') },
-        { value: ConditionType.NotEqualToOption, labelKey: t('notEqualToOption') },
-      ];
-    case ItemResponseType.MultipleSelection:
-      return [
-        { value: ConditionType.IncludesOption, labelKey: t('includesOption') },
-        { value: ConditionType.NotIncludesOption, labelKey: t('notIncludesOption') },
-      ];
+export const getConditionItemType = (item: ItemFormValues) => {
+  switch (item.responseType) {
     case ItemResponseType.Slider:
-      return [
-        { value: ConditionType.GreaterThan, labelKey: t('greaterThan') },
-        { value: ConditionType.LessThan, labelKey: t('lessThan') },
-        { value: ConditionType.Equal, labelKey: t('equal') },
-        { value: ConditionType.NotEqual, labelKey: t('notEqual') },
-        { value: ConditionType.Between, labelKey: t('between') },
-        { value: ConditionType.OutsideOf, labelKey: t('outsideOf') },
-      ];
+      return ConditionItemType.Slider;
+    case ItemResponseType.SingleSelection:
+      return ConditionItemType.SingleSelection;
+    case ItemResponseType.MultipleSelection:
+      return ConditionItemType.MultiSelection;
     default:
-      return [];
+      return ConditionItemType.SingleSelection;
   }
 };
+
+export const getItemOptions = (items: ItemFormValues[]) =>
+  items?.reduce(
+    (optionList: { labelKey: string; value: string; type: ConditionItemType }[], item) => {
+      if (
+        item.responseType === ItemResponseType.Slider ||
+        item.responseType === ItemResponseType.SingleSelection ||
+        item.responseType === ItemResponseType.MultipleSelection
+      ) {
+        return [
+          ...optionList,
+          {
+            labelKey: item.name,
+            value: getEntityKey(item),
+            type: getConditionItemType(item),
+          },
+        ];
+      }
+
+      return optionList;
+    },
+    [],
+  );
 
 export const getPayload = (
   conditionType: ConditionType,

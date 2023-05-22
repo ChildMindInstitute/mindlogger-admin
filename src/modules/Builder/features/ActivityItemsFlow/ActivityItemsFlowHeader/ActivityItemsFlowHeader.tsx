@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 import { StyledHeader } from 'shared/features';
 import { Svg, Tooltip } from 'shared/components';
 
 import { ActivityItemsFlowHeaderProps } from './ActivityItemsFlowHeader.types';
-import { StyledAddItemFlowBtn } from './ActivityItemsFlowHeader.styles';
 
 export const ActivityItemsFlowHeader = ({
   isSticky,
@@ -21,13 +20,14 @@ export const ActivityItemsFlowHeader = ({
       <Box>{children}</Box>
       <Tooltip tooltipTitle={isAddButtonDisabled ? t('addActivityItemsFlowTooltip') : null}>
         <span>
-          <StyledAddItemFlowBtn
+          <Button
+            variant="outlined"
             startIcon={<Svg id="add" />}
             onClick={headerProps?.onAddItemFlow}
             disabled={isAddButtonDisabled}
           >
             {t('addItemFlow')}
-          </StyledAddItemFlowBtn>
+          </Button>
         </span>
       </Tooltip>
     </StyledHeader>
