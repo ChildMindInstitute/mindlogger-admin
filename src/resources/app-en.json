@@ -387,6 +387,7 @@
   "activityIsRequired": "At least 1 activity is required.",
   "itemIsRequired": "At least 1 item is required.",
   "addActivity": "Add Activity",
+  "addPerformanceTask": "Add Performance Task",
   "activityFlowIsRequired": "Create an Activity Flow to order the sequence of Activities.",
   "addActivityFlow": "Add Activity Flow",
   "item_one": "item",
@@ -855,6 +856,12 @@
   "clear": "Clear",
   "clearActivityFlow": "Clear Activity Flow",
   "clearActivityFlowDescription": "Are you sure you want to clear the Activity Flow?",
+  "performanceTasksDesc": {
+    "abTrails": "A/B Trails",
+    "flanker": "This Activity contains Flanker Item. The timestamps collected for an android are not as accurate as iOS devices.",
+    "gyroscope": "This Activity contains Stability Tracker (Gyroscope) Item.",
+    "touch": "This Activity contains Stability Tracker (Touch) Item."
+  },
   "showMore": "Show More...",
   "showLess": "Show Less...",
   "hideBadgeTooltip": "The Activity Flow identifier will be hidden from Respondents",
