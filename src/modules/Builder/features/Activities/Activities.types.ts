@@ -1,3 +1,9 @@
+import {
+  ActivityFormValues,
+  ItemFormValues,
+  PerformanceTaskFormValues,
+} from 'modules/Builder/pages';
+
 export type GetActivitiesActions = {
   key: string;
   isActivityHidden?: boolean;
@@ -14,6 +20,13 @@ export type ActivityAddProps = {
   performanceTaskDesc?: string;
   isNavigationBlocked?: boolean;
 } | null;
+
+export type ActivityProps =
+  | ActivityFormValues
+  | (PerformanceTaskFormValues & {
+      image?: string;
+      items?: ItemFormValues[];
+    });
 
 export const enum PerformanceTasks {
   AbTrailsIpad = 'A/B Trails iPad',

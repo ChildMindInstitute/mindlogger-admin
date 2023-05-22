@@ -8,12 +8,7 @@ import { Box } from '@mui/material';
 import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import {
-  ActivityFormValues,
-  PerformanceTaskFormValues,
-  AppletFormValues,
-  ItemFormValues,
-} from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
 import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
 import {
   getNewActivity,
@@ -24,7 +19,7 @@ import { BuilderContainer } from 'shared/features';
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey } from './Activities.utils';
-import { ActivityAddProps } from './Activities.types';
+import { ActivityAddProps, ActivityProps } from './Activities.types';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -153,71 +148,60 @@ export const Activities = () => {
             <DndDroppable droppableId="activities-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {activities.map(
-                    (
-                      activity:
-                        | ActivityFormValues
-                        | (PerformanceTaskFormValues & {
-                            image?: string;
-                            items?: ItemFormValues[];
-                          }),
-                      index: number,
-                    ) => {
-                      const activityKey = getActivityKey(activity);
-                      const isPerformanceTask = activity?.isPerformanceTask || false;
+                  {activities.map((activity: ActivityProps, index: number) => {
+                    const activityKey = getActivityKey(activity);
+                    const isPerformanceTask = activity?.isPerformanceTask || false;
 
-                      const activityName = activity.name;
-                      const hasError = !!errors[`activities[${index}]`];
+                    const activityName = activity.name;
+                    const hasError = !!errors[`activities[${index}]`];
 
-                      return (
-                        <Fragment key={`activity-${activityKey}`}>
-                          <Draggable draggableId={activityKey} index={index}>
-                            {(itemProvided, snapshot) => (
-                              <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
-                                <Item
-                                  {...activity}
-                                  onItemClick={() => handleEditActivity(index)}
-                                  dragHandleProps={itemProvided.dragHandleProps}
-                                  isDragging={snapshot.isDragging}
-                                  img={activity.image}
-                                  isInactive={activity.isHidden}
-                                  hasStaticActions={activity.isHidden}
-                                  uiType={ItemUiType.Activity}
-                                  getActions={() =>
-                                    getActions({
-                                      key: activityKey,
-                                      isActivityHidden: activity.isHidden,
-                                      onEdit: () => handleEditActivity(index),
-                                      onDuplicate: () =>
-                                        handleDuplicateActivity(index, isPerformanceTask),
-                                      onRemove: () => setActivityToDelete(activityKey),
-                                      onVisibilityChange: () =>
-                                        handleActivityVisibilityChange(index),
-                                      isEditVisible: !isPerformanceTask,
-                                    })
-                                  }
-                                  hasError={hasError}
-                                  count={activity.items?.length}
-                                />
-                                <InsertItem
-                                  isVisible={
-                                    index >= 0 && index < activities.length - 1 && !isDragging
-                                  }
-                                  onInsert={() => handleActivityAdd({ index: index + 1 })}
-                                />
-                              </Box>
-                            )}
-                          </Draggable>
-                          <DeleteActivityModal
-                            activityName={activityName}
-                            isOpen={activityToDelete === activityKey}
-                            onModalClose={handleModalClose}
-                            onModalSubmit={() => handleActivityRemove(index, activityKey)}
-                          />
-                        </Fragment>
-                      );
-                    },
-                  )}
+                    return (
+                      <Fragment key={`activity-${activityKey}`}>
+                        <Draggable draggableId={activityKey} index={index}>
+                          {(itemProvided, snapshot) => (
+                            <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
+                              <Item
+                                {...activity}
+                                onItemClick={() => handleEditActivity(index)}
+                                dragHandleProps={itemProvided.dragHandleProps}
+                                isDragging={snapshot.isDragging}
+                                img={activity.image}
+                                isInactive={activity.isHidden}
+                                hasStaticActions={activity.isHidden}
+                                uiType={ItemUiType.Activity}
+                                getActions={() =>
+                                  getActions({
+                                    key: activityKey,
+                                    isActivityHidden: activity.isHidden,
+                                    onEdit: () => handleEditActivity(index),
+                                    onDuplicate: () =>
+                                      handleDuplicateActivity(index, isPerformanceTask),
+                                    onRemove: () => setActivityToDelete(activityKey),
+                                    onVisibilityChange: () => handleActivityVisibilityChange(index),
+                                    isEditVisible: !isPerformanceTask,
+                                  })
+                                }
+                                hasError={hasError}
+                                count={activity.items?.length}
+                              />
+                              <InsertItem
+                                isVisible={
+                                  index >= 0 && index < activities.length - 1 && !isDragging
+                                }
+                                onInsert={() => handleActivityAdd({ index: index + 1 })}
+                              />
+                            </Box>
+                          )}
+                        </Draggable>
+                        <DeleteActivityModal
+                          activityName={activityName}
+                          isOpen={activityToDelete === activityKey}
+                          onModalClose={handleModalClose}
+                          onModalSubmit={() => handleActivityRemove(index, activityKey)}
+                        />
+                      </Fragment>
+                    );
+                  })}
                   {listProvided.placeholder}
                 </Box>
               )}

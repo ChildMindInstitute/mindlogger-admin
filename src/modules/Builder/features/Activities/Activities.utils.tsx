@@ -13,29 +13,26 @@ export const getActions = ({
   onVisibilityChange,
   onRemove,
   isEditVisible,
-}: GetActivitiesActions) => {
-  const actions = [];
-  if (isEditVisible) {
-    actions.push({
-      icon: <Svg id="edit" />,
-      action: onEdit,
-    });
-  }
-
-  return [
-    ...actions,
-    {
-      icon: <Svg id="duplicate" />,
-      action: onDuplicate,
-    },
-    {
-      icon: <Svg id={isActivityHidden ? 'visibility-off' : 'visibility-on'} />,
-      action: onVisibilityChange,
-      isStatic: isActivityHidden,
-    },
-    {
-      icon: <Svg id="trash" />,
-      action: onRemove,
-    },
-  ];
-};
+}: GetActivitiesActions) => [
+  ...(isEditVisible
+    ? [
+        {
+          icon: <Svg id="edit" />,
+          action: onEdit,
+        },
+      ]
+    : []),
+  {
+    icon: <Svg id="duplicate" />,
+    action: onDuplicate,
+  },
+  {
+    icon: <Svg id={isActivityHidden ? 'visibility-off' : 'visibility-on'} />,
+    action: onVisibilityChange,
+    isStatic: isActivityHidden,
+  },
+  {
+    icon: <Svg id="trash" />,
+    action: onRemove,
+  },
+];

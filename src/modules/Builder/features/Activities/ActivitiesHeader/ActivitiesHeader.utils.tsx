@@ -9,8 +9,7 @@ export const getPerformanceTasksMenu = (
   setAnchorEl: (el: null | HTMLElement) => void,
 ) => {
   const getAction = (props: ActivityAddProps) => {
-    const { performanceTaskName, performanceTaskDesc, isNavigationBlocked } = props || {};
-    onAddActivity({ performanceTaskName, performanceTaskDesc, isNavigationBlocked });
+    onAddActivity(props);
     setAnchorEl(null);
   };
 
