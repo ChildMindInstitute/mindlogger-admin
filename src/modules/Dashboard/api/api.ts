@@ -36,6 +36,7 @@ import {
   ImportSchedule,
   GetWorkspaceAppletsParams,
   FolderName,
+  ReportConfig,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -460,3 +461,8 @@ export const publishAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =
 
 export const concealAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.post(`/applets/${appletId}/conceal`, { signal });
+
+export const postReportConfigApi = (
+  { appletId, ...params }: AppletId & ReportConfig,
+  signal?: AbortSignal,
+) => authApiClient.post(`/applets/${appletId}/report_configuration`, { ...params }, { signal });

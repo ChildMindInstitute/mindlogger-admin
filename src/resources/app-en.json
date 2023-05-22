@@ -837,7 +837,8 @@
     "unique": "That {{- field }} is already in use. Please use a different name",
     "atLeastOne": "Select at least 1 element",
     "mustShowMessageOrItems": "You must show a message or print items to publish this report",
-    "atLeastOneItem": "Select at least 1 Item"
+    "atLeastOneItem": "Select at least 1 Item",
+    "incorrectEmail": "Email must be valid"
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
@@ -912,5 +913,6 @@
   "printItems": "Print Items",
   "printItemsTooltip": "Respondent’s responses that will be displayed in the report",
   "addConditinalLogic": "Add Conditional Logic",
-  "itemBody": "Item Body"
+  "itemBody": "Item Body",
+  "saveAndPublishFirst": "Save & publish the Applet first"
 }

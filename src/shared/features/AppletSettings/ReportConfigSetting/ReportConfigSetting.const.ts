@@ -1,10 +1,10 @@
 export const defaultValues = {
   email: '',
-  emailRecipients: [],
-  respondentId: false,
-  caseId: false,
+  reportRecipients: [],
+  reportIncludeUserId: false,
+  reportIncludeCaseId: false,
   subject: '',
-  description: 'Please click this link to download the report.',
-  serverURL: '',
-  publicEncryptionKey: '',
+  reportEmailBody: 'Please click this link to download the report.',
+  reportServerIp: '',
+  reportPublicKey: '',
 };

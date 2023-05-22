@@ -9,6 +9,8 @@ type NavigationSettingItem = {
   label: string;
   component: JSX.Element;
   param: string;
+  disabled?: boolean;
+  tooltip?: string | null;
 };
 
 export type NavigationSetting = {

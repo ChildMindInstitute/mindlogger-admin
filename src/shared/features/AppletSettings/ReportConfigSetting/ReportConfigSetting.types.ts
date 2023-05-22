@@ -1,10 +1,10 @@
 export type FormValues = {
   email: string;
-  emailRecipients: string[];
-  respondentId: boolean;
-  caseId: boolean;
+  reportRecipients: string[];
+  reportIncludeUserId: boolean;
+  reportIncludeCaseId: boolean;
   subject: string;
-  description: string;
-  serverURL: string;
-  publicEncryptionKey: string;
+  reportEmailBody: string;
+  reportServerIp: string;
+  reportPublicKey: string;
 };

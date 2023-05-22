@@ -261,3 +261,12 @@ export type GetWorkspaceAppletsParams = {
     folderId?: string | null;
   };
 };
+
+export type ReportConfig = {
+  reportServerIp: string;
+  reportPublicKey: string;
+  reportRecipients: string[];
+  reportIncludeUserId: boolean;
+  reportIncludeCaseId: boolean;
+  reportEmailBody: string;
+};
