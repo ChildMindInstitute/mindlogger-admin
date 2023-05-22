@@ -1,9 +1,10 @@
 import { Svg } from 'shared/components';
-import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFormValues, PerformanceTaskFormValues } from 'modules/Builder/pages/BuilderApplet';
 
 import { GetActivitiesActions } from './Activities.types';
 
-export const getActivityKey = (entity: ActivityFormValues): string => entity.key ?? entity.id ?? '';
+export const getActivityKey = (entity: ActivityFormValues | PerformanceTaskFormValues): string =>
+  entity.key ?? entity.id ?? '';
 
 export const getActions = ({
   isActivityHidden,
@@ -11,11 +12,16 @@ export const getActions = ({
   onDuplicate,
   onVisibilityChange,
   onRemove,
+  isEditVisible,
 }: GetActivitiesActions) => [
-  {
-    icon: <Svg id="edit" />,
-    action: onEdit,
-  },
+  ...(isEditVisible
+    ? [
+        {
+          icon: <Svg id="edit" />,
+          action: onEdit,
+        },
+      ]
+    : []),
   {
     icon: <Svg id="duplicate" />,
     action: onDuplicate,

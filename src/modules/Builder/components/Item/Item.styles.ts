@@ -76,11 +76,21 @@ export const StyledActions = styled(StyledFlexTopCenter)`
   height: 2.4rem;
 `;
 
-export const StyledImg = styled('img')`
+const commonImgStyles = `
   margin-right: ${theme.spacing(1.2)};
   border-radius: ${variables.borderRadius.lg};
-  max-width: 7.2rem;
+  width: 7.2rem;
   height: 7.2rem;
+  flex: 0 0 7.2rem;
+`;
+
+export const StyledImg = styled('img')`
+  ${commonImgStyles};
+`;
+
+export const StyledImgPlaceholder = styled(Box)`
+  ${commonImgStyles};
+  background-color: ${variables.palette.primary_container};
 `;
 
 export const StyledFlowDescription = styled(StyledBodyLarge)`
