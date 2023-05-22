@@ -928,7 +928,7 @@
   "conditionMatch": "Rule",
   "conditionTarget": "Item",
   "removeConditionalPopupTitle": "Remove Conditional",
-  "removeConditionalPopupDescription": "Are you sure you want to remove <0>Conditional {{index}}</0> from the Item Flow?",
+  "removeConditionalPopupDescription": "Are you sure you want to remove <1>Conditional {{index}}</1> from the Item Flow?",
   "concealAppletPopupTitle": "Conceal Applet",
   "publishAppletPopupTitle": "Publish Applet",
   "publish": "Publish",

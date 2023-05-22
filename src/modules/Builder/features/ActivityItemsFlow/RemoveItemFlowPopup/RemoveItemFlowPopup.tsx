@@ -27,10 +27,11 @@ export const RemoveItemFlowPopup = ({
     >
       <StyledModalWrapper>
         <Trans key="removeConditionalPopupDescription">
-          Are you sure you want to remove{' '}
+          Are you sure you want to remove
           <strong>
-            Conditional <>{{ index }}</>
-          </strong>{' '}
+            {' '}
+            Conditional <>{{ index }} </>
+          </strong>
           from the Item Flow?
         </Trans>
       </StyledModalWrapper>

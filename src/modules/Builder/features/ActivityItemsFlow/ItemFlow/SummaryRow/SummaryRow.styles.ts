@@ -7,7 +7,8 @@ export const StyledSummaryRow = styled(StyledFlexTopCenter)`
   gap: 0.4rem;
   padding: ${theme.spacing(0.8, 1.2)};
 
-  & > * {
+  & > .MuiTypography-root,
+  & > .MuiBox-root {
     flex: 0;
 
     &.MuiTypography-root {

@@ -9,7 +9,8 @@ export const StyledCondition = styled(StyledFlexTopCenter)`
   border-radius: ${variables.borderRadius.xs};
   position: relative;
 
-  & > * {
+  & > .MuiTypography-root,
+  & > .MuiBox-root {
     flex: 0;
   }
 
