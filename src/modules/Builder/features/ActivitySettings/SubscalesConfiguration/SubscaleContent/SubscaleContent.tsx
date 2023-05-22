@@ -18,14 +18,18 @@ import {
   columns,
   notUsedElementsTableColumns,
 } from '../SubscalesConfiguration.utils';
-import { checkOnItemType } from '../../ActivitySettings.utils';
+import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 
 export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleContentProps) => {
   const { t } = useTranslation('app');
   const { control } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
   const subscales: ActivityFormValues['subscales'] = useWatch({ name: `${fieldName}.subscales` });
-  const items = getItemElements(subscaleId, activity?.items.filter(checkOnItemType), subscales);
+  const items = getItemElements(
+    subscaleId,
+    activity?.items.filter(checkOnItemTypeAndScore),
+    subscales,
+  );
 
   return (
     <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>
