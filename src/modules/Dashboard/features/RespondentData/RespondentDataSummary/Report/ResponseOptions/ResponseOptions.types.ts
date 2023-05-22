@@ -6,8 +6,9 @@ import {
 
 import { ItemAnswer, ResponseOption, Version } from '../Report.types';
 
-// TODO: add SliderItemResponseValues
-export type MultiScatterResponseValues = SingleAndMultipleSelectItemResponseValues;
+export type MultiScatterResponseValues =
+  | SingleAndMultipleSelectItemResponseValues
+  | SliderItemResponseValues;
 
 export type ResponseOptionsProps = {
   responseOptions: ResponseOption[];
