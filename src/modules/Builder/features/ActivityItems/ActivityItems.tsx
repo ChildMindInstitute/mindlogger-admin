@@ -49,7 +49,7 @@ export const ActivityItems = () => {
 
   const handleAddItem = () => {
     const item = getNewActivityItem();
-    const firstSystemIndex = items.findIndex((item) => item.isSubscaleSystemItem);
+    const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
 
     firstSystemIndex !== -1 ? insertItem(firstSystemIndex, item) : appendItem(item);
     setActiveItemId(item.key);

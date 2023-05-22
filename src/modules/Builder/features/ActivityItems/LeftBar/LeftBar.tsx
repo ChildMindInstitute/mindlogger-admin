@@ -31,8 +31,8 @@ export const LeftBar = ({
 
   const { fieldName } = useCurrentActivity();
   const hasActiveItem = !!activeItemId;
-  const draggableItems = items.filter((item) => !item.isSubscaleSystemItem);
-  const systemItems = items.filter((item) => item.isSubscaleSystemItem);
+  const draggableItems = items.filter((item) => item.allowEdit);
+  const systemItems = items.filter((item) => !item.allowEdit);
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);

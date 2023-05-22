@@ -16,7 +16,7 @@ export type ItemFormValues = {
   responseType: ItemResponseType | '';
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
-  isSubscaleSystemItem?: boolean;
+  allowEdit: boolean;
 };
 
 export type ActivityFormValues = {

@@ -32,19 +32,19 @@ export const Item = ({
     ? () => setValue(`${name}.isHidden`, !isItemHidden)
     : falseReturnFunc;
 
-  const onClick = item.isSubscaleSystemItem
-    ? falseReturnFunc
-    : () => onSetActiveItem(getItemKey(item) ?? '');
+  const handleItemClick = item.allowEdit
+    ? () => onSetActiveItem(getItemKey(item) ?? '')
+    : falseReturnFunc;
 
   return (
     <StyledItem
       isActive={activeItemId === getItemKey(item)}
       hasError={invalidField}
-      onClick={onClick}
+      onClick={handleItemClick}
       onMouseLeave={() => setVisibleActions(false)}
       onMouseEnter={() => setVisibleActions(true)}
       isDragging={isDragging}
-      isSystem={!!item.isSubscaleSystemItem}
+      isSystem={!item.allowEdit}
     >
       <StyledFlexTopCenter {...hiddenProps}>
         {item.responseType ? itemsTypeIcons[item.responseType] : ''}
@@ -53,7 +53,7 @@ export const Item = ({
         <StyledTitle>{item.name}</StyledTitle>
         <StyledDescription>{item.question}</StyledDescription>
       </StyledCol>
-      {!item.isSubscaleSystemItem && (
+      {item.allowEdit && (
         <Actions
           items={getActions({
             onRemoveItem,

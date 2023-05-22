@@ -50,7 +50,7 @@ export const totalScoreTableTemplate = [
 ];
 
 export const genderItem = getNewActivityItem({
-  isSubscaleSystemItem: true,
+  allowEdit: false,
   name: 'gender_screen',
   question: t('genderQuestion'),
   config: defaultSingleAndMultiSelectionConfig,
@@ -72,7 +72,7 @@ export const genderItem = getNewActivityItem({
 });
 
 export const ageItem = getNewActivityItem({
-  isSubscaleSystemItem: true,
+  allowEdit: false,
   name: 'age_screen',
   question: t('ageQuestion'),
   config: defaultTextConfig,
