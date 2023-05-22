@@ -160,6 +160,16 @@ export type RemoveRespondentAccess = RemoveAccess & {
   deleteResponses: boolean;
 };
 
+export type EditRespondentAccess = {
+  ownerId: string;
+  respondentId: string;
+  appletId: string;
+  values: {
+    secretUserId: string;
+    nickname: string;
+  };
+};
+
 export type GetUsersData = AppletId & {
   pageIndex?: string;
   users?: string;

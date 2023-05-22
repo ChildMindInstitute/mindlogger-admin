@@ -14,7 +14,8 @@ export type ChosenAppletData = {
   appletImg?: string;
   secretUserId?: string;
   hasIndividualSchedule?: boolean;
-  respondentId?: string;
+  respondentId: string;
   nickname?: string;
   encryption: Encryption;
+  ownerId: string;
 };
