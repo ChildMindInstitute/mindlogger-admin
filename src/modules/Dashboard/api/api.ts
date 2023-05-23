@@ -56,21 +56,27 @@ export const getWorkspaceAppletsApi = (
 };
 
 export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
-  const { ownerId, ...restParams } = params;
+  const { ownerId, appletId, ...restParams } = params;
 
-  return authApiClient.get(`/workspaces/${ownerId}/managers`, {
-    params: restParams,
-    signal,
-  });
+  return authApiClient.get(
+    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}managers`,
+    {
+      params: restParams,
+      signal,
+    },
+  );
 };
 
 export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
-  const { ownerId, ...restParams } = params;
+  const { ownerId, appletId, ...restParams } = params;
 
-  return authApiClient.get(`/workspaces/${ownerId}/respondents`, {
-    params: restParams,
-    signal,
-  });
+  return authApiClient.get(
+    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}respondents`,
+    {
+      params: restParams,
+      signal,
+    },
+  );
 };
 
 export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
