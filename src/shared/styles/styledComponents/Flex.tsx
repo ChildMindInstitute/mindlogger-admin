@@ -26,3 +26,8 @@ export const StyledFlexColumn = styled(Box)`
   display: flex;
   flex-direction: column;
 `;
+
+export const StyledFlexSpaceBetween = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+`;

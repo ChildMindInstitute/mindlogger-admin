@@ -457,8 +457,8 @@ export type SingleApplet = {
   reportIncludeUserId?: boolean;
   reportIncludeCaseId?: boolean;
   reportEmailBody?: string;
-  retentionPeriod?: number;
-  retentionType?: RetentionPeriods;
+  retentionPeriod?: number | null;
+  retentionType?: RetentionPeriods | null;
   activities: Activity[];
   activityFlows: ActivityFlow[];
   theme?: Theme;
