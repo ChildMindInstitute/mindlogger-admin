@@ -20,13 +20,13 @@ export const SummaryRow = ({ name }: SummaryRowProps) => {
   const selectedItem = watch(`${name}.itemKey`);
 
   useEffect(() => {
-    if (selectedItem) {
-      const itemIndex = items?.findIndex(
-        (item: ItemFormValues) => getEntityKey(item) === selectedItem,
-      );
+    if (!selectedItem) return;
 
-      if (itemIndex !== -1) setValue(`${fieldName}.items.${itemIndex}.isHidden`, false);
-    }
+    const itemIndex = items?.findIndex(
+      (item: ItemFormValues) => getEntityKey(item) === selectedItem,
+    );
+
+    if (itemIndex !== -1) setValue(`${fieldName}.items.${itemIndex}.isHidden`, false);
   }, [selectedItem]);
 
   return (
