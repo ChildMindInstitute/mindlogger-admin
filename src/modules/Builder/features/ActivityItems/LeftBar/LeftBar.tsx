@@ -51,8 +51,9 @@ export const LeftBar = ({
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
-    if (!destination) return;
+    if (!destination || source.index === destination?.index) return;
     const conditionsToRemove = getConditionsToRemove(items, activity?.conditionalLogic, {
+      sourceIndex: source.index,
       destinationIndex: destination.index,
       item: items[source.index],
     });

@@ -24,14 +24,15 @@ export const getConditionsToRemove = (
   conditionalLogic: ConditionalLogic[],
   config: GetConditionsToRemoveConfig,
 ) => {
-  const { destinationIndex, item } = config;
+  const { sourceIndex, destinationIndex, item } = config;
 
   const dependentConditions = getItemConditionDependencies(item, conditionalLogic);
 
   if (!dependentConditions?.length) return;
 
-  const leftSlice = items?.slice(0, destinationIndex);
-  const rightSlice = items?.slice(destinationIndex + 1);
+  const numberToAdd = sourceIndex < destinationIndex ? 1 : 0;
+  const leftSlice = items?.slice(0, destinationIndex + numberToAdd);
+  const rightSlice = items?.slice(destinationIndex + numberToAdd);
 
   return dependentConditions.filter(({ itemKey, conditions }) => {
     if (getEntityKey(item) === itemKey) {
