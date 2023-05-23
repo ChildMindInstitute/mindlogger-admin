@@ -53,7 +53,6 @@ export const LeftBar = ({
     setIsDragging(false);
     if (!destination) return;
     const conditionsToRemove = getConditionsToRemove(items, activity?.conditionalLogic, {
-      sourceIndex: source.index,
       destinationIndex: destination.index,
       item: items[source.index],
     });

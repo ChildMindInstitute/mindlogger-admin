@@ -24,28 +24,24 @@ export const getConditionsToRemove = (
   conditionalLogic: ConditionalLogic[],
   config: GetConditionsToRemoveConfig,
 ) => {
-  const { sourceIndex, destinationIndex, item } = config;
+  const { destinationIndex, item } = config;
 
-  const conditions = getItemConditionDependencies(item, conditionalLogic);
+  const dependentConditions = getItemConditionDependencies(item, conditionalLogic);
 
-  if (!conditions?.length) return;
+  if (!dependentConditions?.length) return;
 
-  return conditions.filter(({ itemKey, conditions }) => {
-    //if SOURCE ITEM is in summary row, we should check that ALL DEPENDENCIES are still above the SOURCE ITEM
-    if (getEntityKey(item) === itemKey)
-      return conditions?.some(({ itemName }) => {
-        const itemIndex = items?.findIndex((item) => getEntityKey(item) === itemName);
+  const leftSlice = items?.slice(0, destinationIndex);
+  const rightSlice = items?.slice(destinationIndex + 1);
 
-        return destinationIndex === itemIndex && sourceIndex < itemIndex
-          ? destinationIndex < itemIndex
-          : destinationIndex <= itemIndex;
-      });
+  return dependentConditions.filter(({ itemKey, conditions }) => {
+    if (getEntityKey(item) === itemKey) {
+      //if SOURCE ITEM is in summary row, we should check that ALL DEPENDENCIES are to the left from the SOURCE
+      return !conditions?.every(
+        ({ itemName }) => !!leftSlice?.find((item) => getEntityKey(item) === itemName),
+      );
+    }
 
-    //if SOURCE ITEM is dependent for the other, we should check that SOURCE ITEM is still above the DEPENDENCY
-    const itemIndex = items?.findIndex((item) => getEntityKey(item) === itemKey);
-
-    return destinationIndex === itemIndex && sourceIndex > itemIndex
-      ? destinationIndex > itemIndex
-      : destinationIndex >= itemIndex;
+    //if SOURCE ITEM is dependent for the other, we should check that SOURCE ITEM is to the right from the DEPENDENCY
+    return !rightSlice?.find((item) => getEntityKey(item) === itemKey);
   });
 };
