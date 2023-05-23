@@ -100,9 +100,7 @@ export const Respondents = () => {
     },
   };
 
-  const { execute } = useAsync(updatePinApi, () => {
-    handleReload();
-  });
+  const { execute } = useAsync(updatePinApi, handleReload);
 
   const handlePinClick = (userId: string) => {
     execute({ ownerId, userId });

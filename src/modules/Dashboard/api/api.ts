@@ -30,7 +30,6 @@ import {
   AppletSubmitDateList,
   RespondentId,
   EventId,
-  RespondentAccesses,
   RemoveRespondentAccess,
   RemoveManagerAccess,
   ImportSchedule,

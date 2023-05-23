@@ -1,7 +1,5 @@
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { users } from 'redux/modules';
 
 import {
   theme,
@@ -10,11 +8,11 @@ import {
   StyledBodyLarge,
   variables,
 } from 'shared/styles';
+import { useRespondentLabel } from 'modules/Dashboard/hooks';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledActivity } from './ReportMenu.styles';
 import { ReportMenuProps } from './ReportMenu.types';
-import { getRespondentLabel } from '../../RespondentData.utils';
 
 export const ReportMenu = ({
   activities,
@@ -22,12 +20,7 @@ export const ReportMenu = ({
   setSelectedActivity,
 }: ReportMenuProps) => {
   const { t } = useTranslation();
-  const { respondentId } = useParams();
-  const { details } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = getRespondentLabel(
-    details?.[0].respondentSecretId,
-    details?.[0].respondentNickname,
-  );
+  const respondentLabel = useRespondentLabel();
 
   return (
     <StyledMenu>

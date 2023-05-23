@@ -252,14 +252,6 @@ export type AppletSubmitDateList = AppletId &
 
 export type EventId = { eventId: string };
 
-export type RespondentAccesses = OwnerId &
-  RespondentId & {
-    search?: string;
-    page?: number;
-    limit?: number;
-    ordering?: string;
-  };
-
 export type GetWorkspaceAppletsParams = {
   params: {
     ownerId?: string;
