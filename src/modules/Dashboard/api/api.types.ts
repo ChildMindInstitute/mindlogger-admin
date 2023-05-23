@@ -202,7 +202,7 @@ export type AppletNameArgs = AppletId & { appletName: string };
 export type AppletEncryption = AppletId & { encryption: Encryption };
 
 export type UpdatePin = {
-  accessId: string;
+  userId: string;
   ownerId?: string;
 };
 
@@ -252,14 +252,6 @@ export type AppletSubmitDateList = AppletId &
   };
 
 export type EventId = { eventId: string };
-
-export type RespondentAccesses = OwnerId &
-  RespondentId & {
-    search?: string;
-    page?: number;
-    limit?: number;
-    ordering?: string;
-  };
 
 export type AppletDataRetention = AppletId & {
   period: number | undefined;
