@@ -7,10 +7,11 @@ import {
   ConditionalLogic,
   OptionCondition,
   RangeValueCondition,
-  SingleAndMultipleSelectOption,
+  SingleAndMultipleSelectItemResponseValues,
+  SingleAndMultipleSelectionOption,
   SingleValueCondition,
 } from 'shared/state';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { Svg } from 'shared/components';
 import {
   StyledBodyLarge,
@@ -34,13 +35,7 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
   const { fieldName } = useCurrentActivity();
 
   const items = watch(`${fieldName}.items`);
-  const groupedItems = items?.reduce(
-    (result: Record<string, ItemFormValues>, item: ItemFormValues) => ({
-      ...result,
-      [getEntityKey(item)]: item,
-    }),
-    {},
-  );
+  const groupedItems = getObjectFromList<ItemFormValues>(items ?? []);
   const currentItem = groupedItems[condition?.itemKey ?? ''];
 
   return (
@@ -87,8 +82,10 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
                 {relatedItem?.name ?? t('conditionPanelItem')}{' '}
                 {t('conditionPanelType', { context: type })}{' '}
                 {((!isSlider || (isSlider && !type)) &&
-                  relatedItem?.responseValues?.options?.find(
-                    (option: SingleAndMultipleSelectOption) =>
+                  (
+                    relatedItem?.responseValues as SingleAndMultipleSelectItemResponseValues
+                  )?.options?.find(
+                    (option: SingleAndMultipleSelectionOption) =>
                       getEntityKey(option) === (payload as OptionCondition['payload'])?.optionId,
                   )?.text) ??
                   valuePlaceholder}

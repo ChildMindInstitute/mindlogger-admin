@@ -13,7 +13,7 @@ import {
   theme,
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { InsertItem, DndDroppable } from 'modules/Builder/components';
@@ -48,13 +48,7 @@ export const LeftBar = ({
   const { fieldName, activity } = useCurrentActivity();
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
-  const groupedConditions = activity.conditionalLogic?.reduce(
-    (result: Record<string, ConditionalLogic>, condition: ConditionalLogic) => ({
-      ...result,
-      [getEntityKey(condition)]: condition,
-    }),
-    {},
-  );
+  const groupedConditions = getObjectFromList<ConditionalLogic>(activity.conditionalLogic ?? []);
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
