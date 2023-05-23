@@ -142,7 +142,7 @@ export const ActivityItems = () => {
           title={t('deleteItem')}
           buttonText={t('delete')}
           secondBtnText={t('cancel')}
-          hasSecondBtn={true}
+          hasSecondBtn
           submitBtnColor="error"
         >
           <StyledModalWrapper>

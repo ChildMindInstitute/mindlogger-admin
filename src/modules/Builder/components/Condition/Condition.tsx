@@ -2,14 +2,11 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
+import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 
 import { StyledCondition, StyledSelectController, StyledInputController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
-import {
-  ConditionItemType,
-  DEFAULT_NUMBER_MIN_VALUE,
-  CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
-} from './Condition.const';
+import { ConditionItemType, DEFAULT_NUMBER_MIN_VALUE } from './Condition.const';
 import { getStateOptions } from './Condition.utils';
 
 export const Condition = ({

@@ -132,9 +132,3 @@ export const CONDITION_TYPES_TO_HAVE_SINGLE_VALUE = [
   ConditionType.NotEqual,
 ];
 export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [ConditionType.Between, ConditionType.OutsideOf];
-export const CONDITION_TYPES_TO_HAVE_OPTION_VALUE = [
-  ConditionType.IncludesOption,
-  ConditionType.NotIncludesOption,
-  ConditionType.EqualToOption,
-  ConditionType.NotEqualToOption,
-];
