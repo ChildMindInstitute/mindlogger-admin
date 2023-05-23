@@ -36,7 +36,9 @@ export const ToggleItemContainer = ({
             </StyledFlexTopCenter>
           )}
         </StyledFlexTopCenter>
-        {HeaderContent && <HeaderContent open={open} {...headerContentProps} />}
+        {HeaderContent && (
+          <HeaderContent open={open} onToggle={handleToggle} {...headerContentProps} />
+        )}
       </StylesTitleWrapper>
       {open && <Content {...contentProps} />}
     </StyledItemOption>

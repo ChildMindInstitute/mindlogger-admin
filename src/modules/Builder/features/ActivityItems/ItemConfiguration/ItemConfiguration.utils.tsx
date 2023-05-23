@@ -13,6 +13,7 @@ import {
   DEFAULT_NUMBER_MIN_VALUE,
   DEFAULT_NUMBER_MAX_VALUE,
 } from './ItemConfiguration.const';
+import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
 
 const { t } = i18n;
 
@@ -85,3 +86,9 @@ export const getEmptyNumberSelection = () => ({
 
 export const getDefaultSliderScores = ({ minValue, maxValue }: SliderRowsItemResponseValues) =>
   createArray(maxValue - minValue + 1, (index) => index + 1);
+
+export const getEmptyFlowItem = () => ({
+  match: '',
+  itemKey: '',
+  conditions: getEmptyCondition(),
+});

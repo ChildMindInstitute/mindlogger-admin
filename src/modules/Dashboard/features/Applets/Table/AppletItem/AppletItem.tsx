@@ -133,7 +133,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
           onDragStart={onDragStart}
           onDragLeave={onDragLeave}
           onDragOver={onDragOver}
-          onDrop={(e) => onDrop(e, item)}
+          onDrop={(event) => onDrop(event, item)}
         >
           <TableCell width="30%" onClick={handleAppletClick}>
             <StyledAppletName applet={item}>
@@ -141,9 +141,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
                 <StyledPinContainer>
                   <Pin
                     isPinned={!!item?.pinOrder}
-                    onClick={(e) => {
+                    onClick={(event) => {
                       ownerId && dispatch(folders.thunk.togglePin({ ownerId, applet: item }));
-                      e.stopPropagation();
+                      event.stopPropagation();
                     }}
                   />
                 </StyledPinContainer>

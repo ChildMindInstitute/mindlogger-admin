@@ -86,9 +86,9 @@ export const SelectController = <T extends FieldValues>({
           control={control}
           render={({ field: { onChange, value }, fieldState: { error } }) =>
             renderSelect(
-              (e) => {
-                customChange && customChange(e);
-                onChange(e);
+              (event) => {
+                customChange && customChange(event);
+                onChange(event);
               },
               value,
               error,

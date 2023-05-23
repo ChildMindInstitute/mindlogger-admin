@@ -22,7 +22,7 @@ import { reportConfigSchema } from './ReportConfigSetting.schema';
 import { StyledButton, StyledSvg, StyledContainer, StyledForm } from './ReportConfigSetting.styles';
 import { FormValues } from './ReportConfigSetting.types';
 import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
-import { usePrompt } from './ReportConfigSetting.hooks';
+import { usePrompt } from '../AppletSettings.hooks';
 
 export const ReportConfigSetting = () => {
   const { appletId: id } = useParams();

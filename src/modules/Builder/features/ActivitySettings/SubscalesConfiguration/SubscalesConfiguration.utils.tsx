@@ -58,7 +58,7 @@ export const getItemElements = (
   const itemsMap = getObjectFromList(items);
   const subscalesMap = getObjectFromList(subscales);
   const subscaleElements = subscales.reduce((acc, subscale) => {
-    if (subscale.id === subscaleId) return acc;
+    if (subscale.id === subscaleId || subscale.items.includes(subscaleId)) return acc;
 
     return [
       ...acc,

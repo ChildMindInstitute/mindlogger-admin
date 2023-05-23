@@ -10,6 +10,7 @@ import {
   ReportConfigSetting,
   DownloadSchemaSetting,
   PublishConcealAppletSetting,
+  VersionHistorySetting,
 } from 'shared/features/AppletSettings';
 
 import { GetSettings } from './DashboardAppletSettings.types';
@@ -54,7 +55,7 @@ export const getSettings = ({ isPublished, role }: GetSettings) => [
       {
         icon: <Svg id="version-history" />,
         label: 'versionHistory',
-        component: <>versionHistory</>,
+        component: <VersionHistorySetting />,
         param: 'version-history',
       },
       ...(role === Roles.Owner

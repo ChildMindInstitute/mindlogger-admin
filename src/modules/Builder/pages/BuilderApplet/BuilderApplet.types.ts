@@ -3,6 +3,7 @@ import {
   Config,
   ActivitySettingsSubscale,
   ResponseValues,
+  ConditionalLogic,
   ActivitySettingsSection,
 } from 'shared/state';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
@@ -33,6 +34,7 @@ export type ActivityFormValues = {
   items: ItemFormValues[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
+  conditionalLogic?: ConditionalLogic[];
   sections?: ActivitySettingsSection[];
   totalScoresTableData?: string;
   isPerformanceTask?: boolean;
