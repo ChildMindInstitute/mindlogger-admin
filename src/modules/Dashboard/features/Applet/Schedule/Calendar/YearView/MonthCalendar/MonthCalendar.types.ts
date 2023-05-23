@@ -11,7 +11,7 @@ export type MonthCalendarProps = Omit<CalendarProps, 'events'> & {
   setActiveView: Dispatch<SetStateAction<CalendarViews>>;
 };
 
-export type Week = Date[];
+export type Week = { days: Date[]; id: string };
 
 export type MonthObject = {
   date: Date;
