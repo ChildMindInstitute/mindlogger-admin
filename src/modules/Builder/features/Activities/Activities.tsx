@@ -84,13 +84,13 @@ export const Activities = () => {
         : getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
-    if (!isNavigationBlocked) {
-      if (newActivity.isFlankerItem) {
-        return navigateToFlanker(newActivity.key);
-      }
 
-      return navigateToActivity(newActivity.key);
+    if (isNavigationBlocked) return;
+    if (newActivity.isFlankerItem) {
+      return navigateToFlanker(newActivity.key);
     }
+
+    return navigateToActivity(newActivity.key);
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {

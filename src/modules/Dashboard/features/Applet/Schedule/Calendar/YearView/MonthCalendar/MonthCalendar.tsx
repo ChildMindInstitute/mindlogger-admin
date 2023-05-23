@@ -38,9 +38,9 @@ export const MonthCalendar = ({
   const monthDates = useMemo(
     () =>
       calendar &&
-      calendar.weeks.map((week, index) => (
-        <StyledFlexSpaceBetween key={index}>
-          {week.map((date, index) => {
+      calendar.weeks.map((week) => (
+        <StyledFlexSpaceBetween key={week.id}>
+          {week.days.map((date, index) => {
             const currentDateEvents = events?.filter(
               ({ eventCurrentDate }) => eventCurrentDate === formatToYearMonthDate(date),
             );

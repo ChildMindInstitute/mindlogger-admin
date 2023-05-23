@@ -33,13 +33,11 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const currentActivityName = appletData?.activities?.find(
     (activity) => getEntityKey(activity) === activityId,
   )?.name;
-  const activityLabel = currentActivityName ?? t('newActivity') ?? '';
-  const flankerLabel = currentActivityName ?? PerformanceTasks.Flanker ?? '';
+  const activityLabel = currentActivityName ?? t('newActivity');
+  const flankerLabel = currentActivityName ?? PerformanceTasks.Flanker;
   const activityFlowLabel =
     appletData?.activityFlows?.find((activityFlow) => getEntityKey(activityFlow) === activityFlowId)
-      ?.name ??
-    t('newActivityFlow') ??
-    '';
+      ?.name ?? t('newActivityFlow');
   const activitiesBreadcrumb = {
     icon: 'checklist-outlined',
     label: t('activities'),
@@ -118,7 +116,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
 
       newBreadcrumbs.push(activitiesBreadcrumb, {
         icon: '',
-        label: activityLabel,
+        label: activityLabel!,
         navPath: generatePath(page.builderAppletActivity, { appletId, activityId }),
       });
 
@@ -157,7 +155,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         },
         {
           icon: '',
-          label: activityFlowLabel,
+          label: activityFlowLabel!,
           navPath: generatePath(page.builderAppletActivityFlowItem, { appletId, activityFlowId }),
         },
       );
