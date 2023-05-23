@@ -41,6 +41,7 @@ export const BuilderActivity = () => {
     hasAboutActivityErrors: !!getFieldState(`${fieldName}.name`).error,
     hasActivityItemsErrors: !!getFieldState(`${fieldName}.items`).error,
     hasActivitySubscalesErrors: !!getFieldState(`${fieldName}.subscales`).error,
+    hasActivityItemsFlowErrors: !!getFieldState(`${fieldName}.conditionalLogic`).error,
   };
 
   return (

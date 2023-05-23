@@ -5,7 +5,12 @@ import { ColorResult } from 'react-color';
 import { BaseSchema } from 'shared/state/Base';
 import { RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId, OwnerId } from 'api';
-import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
+import {
+  ItemResponseType,
+  SubscaleTotalScore,
+  ConditionType,
+  ConditionalLogicMatch,
+} from 'shared/consts';
 import { Encryption } from 'shared/utils';
 
 export type CreateAppletStateData = {
@@ -304,6 +309,43 @@ export type ItemAlert = {
   max: number;
 };
 
+export type BaseCondition = {
+  //for frontend purposes only
+  key?: string;
+  itemName: string;
+  type: ConditionType | '';
+};
+
+export type OptionCondition = BaseCondition & {
+  payload: {
+    optionId: string;
+  };
+};
+
+export type SingleValueCondition = BaseCondition & {
+  payload: {
+    value: number;
+  };
+};
+
+export type RangeValueCondition = BaseCondition & {
+  payload: {
+    minValue: number;
+    maxValue: number;
+  };
+};
+
+export type Condition = OptionCondition | SingleValueCondition | RangeValueCondition;
+
+export type ConditionalLogic = {
+  match: ConditionalLogicMatch;
+  //for frontend purposes only
+  key?: string;
+  //TODO: for frontend purposes only - should be reviewed after refactoring phase
+  itemKey?: string;
+  conditions: Array<Condition>;
+};
+
 export type Item = {
   id?: string;
   key?: string;
@@ -313,6 +355,7 @@ export type Item = {
   responseType: ItemResponseType;
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
+  conditionalLogic?: ConditionalLogic;
 };
 
 export interface TextItem extends Item {
@@ -359,6 +402,8 @@ export type Activity = {
   sections?: ActivitySettingsSection[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
+  //TODO: for frontend purposes only - should be reviewed after refactoring phase
+  conditionalLogic?: ConditionalLogic[];
   totalScoresTableData?: string;
   isPerformanceTask?: boolean;
 };

@@ -106,4 +106,21 @@ export const locales = {
   fr,
 };
 
+export const enum ConditionType {
+  IncludesOption = 'INCLUDES_OPTION',
+  NotIncludesOption = 'NOT_INCLUDES_OPTION',
+  EqualToOption = 'EQUAL_TO_OPTION',
+  NotEqualToOption = 'NOT_EQUAL_TO_OPTION',
+  GreaterThan = 'GREATER_THAN',
+  LessThan = 'LESS_THAN',
+  Equal = 'EQUAL',
+  NotEqual = 'NOT_EQUAL',
+  Between = 'BETWEEN',
+  OutsideOf = 'OUTSIDE_OF',
+}
+
+export const enum ConditionalLogicMatch {
+  Any = 'any',
+  All = 'all',
+}
 export const ALLOWED_AUDIO_FILE_TYPES = '.mp3,.wav';
