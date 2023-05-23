@@ -58,6 +58,7 @@ export const Condition = ({
           },
         }}
         customChange={onItemChange}
+        isLabelNeedTranslation={false}
       />
       <StyledSelectController
         control={control}
@@ -65,6 +66,7 @@ export const Condition = ({
         options={getStateOptions(selectedItem?.type)}
         placeholder={t('conditionTypePlaceholder')}
         customChange={onStateChange}
+        isLabelNeedTranslation={false}
       />
       {isValueSelectShown && (
         <StyledSelectController
@@ -72,6 +74,7 @@ export const Condition = ({
           name={optionValueName}
           options={valueOptions}
           placeholder={t('value')}
+          isLabelNeedTranslation={false}
         />
       )}
       {isNumberValueShown && (
