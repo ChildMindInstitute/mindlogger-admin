@@ -33,9 +33,11 @@ export const dashboardRoutes = () => (
     </Route>
     <Route
       element={
-        <WithPermissions forbiddenRoles={[Roles.Editor, Roles.Respondent]}>
-          <Applet />
-        </WithPermissions>
+        <PrivateRoute>
+          <WithPermissions forbiddenRoles={[Roles.Editor, Roles.Respondent]}>
+            <Applet />
+          </WithPermissions>
+        </PrivateRoute>
       }
     >
       {appletRoutes.map(({ path, Component, forbiddenRoles }) => (

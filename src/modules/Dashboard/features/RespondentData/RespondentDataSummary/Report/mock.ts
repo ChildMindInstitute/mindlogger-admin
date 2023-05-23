@@ -153,6 +153,40 @@ export const responseOptions: ResponseOption[] = [
   },
   {
     activityItem: {
+      id: '200748a6-f582-11ed-b67e-0242ac120002',
+      name: '200748a6-f582-11ed-b67e-0242ac120002',
+      question: '<p>Does the respondent <b>feel good</b>?<p>',
+      responseType: ItemResponseType.Slider,
+      config: {
+        ...commonConfig,
+        continuousSlider: false,
+      },
+      responseValues: {
+        minValue: 2,
+        maxValue: 8,
+      },
+    },
+    answers: [
+      {
+        value: 6,
+        date: new Date(2023, 4, 5),
+      },
+      {
+        value: 3,
+        date: new Date(2023, 4, 8),
+      },
+      {
+        value: 7.5,
+        date: new Date(2023, 4, 12),
+      },
+      {
+        value: 5,
+        date: new Date(2023, 4, 14),
+      },
+    ],
+  },
+  {
+    activityItem: {
       id: '6f861d58-f492-11ed-a05b-0242ac120003',
       name: 'Text Item Task',
       question: '<p>Text Item Task<p>',

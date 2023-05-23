@@ -32,10 +32,12 @@ import {
   EventId,
   RemoveRespondentAccess,
   RemoveManagerAccess,
+  AppletDataRetention,
   ImportSchedule,
   GetWorkspaceAppletsParams,
   FolderName,
   EditRespondentAccess,
+  AppletVersionChanges,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -458,8 +460,28 @@ export const getAppletSubmitDateListApi = (
     signal,
   });
 
+export const postAppletDataRetentionApi = (
+  { appletId, ...dataRetentionParams }: AppletDataRetention,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/applets/${appletId}/retentions`,
+    { ...dataRetentionParams },
+    {
+      signal,
+    },
+  );
+
 export const publishAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.post(`/applets/${appletId}/publish`, { signal });
 
 export const concealAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.post(`/applets/${appletId}/conceal`, { signal });
+
+export const getAppletVersionsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  authApiClient.get(`/applets/${appletId}/versions`, { signal });
+
+export const getAppletVersionChangesApi = (
+  { appletId, version }: AppletVersionChanges,
+  signal?: AbortSignal,
+) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });

@@ -14,14 +14,17 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 import { locales } from 'shared/consts';
 
-import { getOptions, getData, formatAnswers } from './MultiScatterChart.utils';
-import { TICK_HEIGHT } from './MultiScatterChart.const';
+import { getOptions, getData } from './MultiScatterChart.utils';
 import { MultiScatterChartProps } from './MultiScatterChart.types';
 
 export const MultiScatterChart = ({
   minDate,
   maxDate,
+  minY = 1,
+  maxY,
+  height,
   responseValues,
+  responseType,
   answers,
   versions,
 }: MultiScatterChartProps) => {
@@ -32,18 +35,15 @@ export const MultiScatterChart = ({
 
   ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
-  const height = responseValues.options.length * TICK_HEIGHT;
   const lang = i18n.language as keyof typeof locales;
-
-  const formattedAnswers = formatAnswers(answers);
 
   const renderChart = useMemo(
     () => (
       <Scatter
         height={height}
         ref={chartRef}
-        options={getOptions(lang, responseValues, minDate, maxDate)}
-        data={getData(responseValues, formattedAnswers, versions)}
+        options={getOptions({ lang, minY, maxY, minDate, maxDate, responseValues, responseType })}
+        data={getData({ maxY, responseValues, responseType, answers, versions })}
         plugins={[ChartDataLabels]}
       />
     ),

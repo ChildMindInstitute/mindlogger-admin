@@ -10,12 +10,16 @@ import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
 import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
-import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import {
+  getNewActivity,
+  getNewPerformanceTask,
+} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey } from './Activities.utils';
+import { ActivityAddProps, ActivityProps } from './Activities.types';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -64,11 +68,15 @@ export const Activities = () => {
       }),
     );
   const handleModalClose = () => setActivityToDelete('');
-  const handleActivityAdd = (index?: number) => {
-    const newActivity = getNewActivity();
+  const handleActivityAdd = (props: ActivityAddProps) => {
+    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked } = props || {};
+    const newActivity =
+      performanceTaskName && performanceTaskDesc
+        ? getNewPerformanceTask({ name: performanceTaskName, description: performanceTaskDesc })
+        : getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
-    navigateToActivity(newActivity.key);
+    !isNavigationBlocked && navigateToActivity(newActivity.key);
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {
@@ -88,13 +96,17 @@ export const Activities = () => {
     setValue('activityFlows', newActivityFlows);
   };
 
-  const handleDuplicateActivity = (index: number) => {
+  const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
     const activityToDuplicate = activities[index];
     setDuplicateIndexes((prevState) => {
       const numberToInsert = (prevState[getActivityKey(activityToDuplicate)] || 0) + 1;
 
+      const newActivity = isPerformanceTask
+        ? getNewPerformanceTask({ performanceTask: activityToDuplicate })
+        : getNewActivity(activityToDuplicate);
+
       insertActivity(index + 1, {
-        ...getNewActivity(activityToDuplicate),
+        ...newActivity,
         name: `${activityToDuplicate.name} (${numberToInsert})`,
       });
 
@@ -136,8 +148,9 @@ export const Activities = () => {
             <DndDroppable droppableId="activities-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {activities.map((activity: ActivityFormValues, index: number) => {
+                  {activities.map((activity: ActivityProps, index: number) => {
                     const activityKey = getActivityKey(activity);
+                    const isPerformanceTask = activity?.isPerformanceTask || false;
 
                     const activityName = activity.name;
                     const hasError = !!errors[`activities[${index}]`];
@@ -161,19 +174,21 @@ export const Activities = () => {
                                     key: activityKey,
                                     isActivityHidden: activity.isHidden,
                                     onEdit: () => handleEditActivity(index),
-                                    onDuplicate: () => handleDuplicateActivity(index),
+                                    onDuplicate: () =>
+                                      handleDuplicateActivity(index, isPerformanceTask),
                                     onRemove: () => setActivityToDelete(activityKey),
                                     onVisibilityChange: () => handleActivityVisibilityChange(index),
+                                    isEditVisible: !isPerformanceTask,
                                   })
                                 }
                                 hasError={hasError}
-                                count={activity.items.length}
+                                count={activity.items?.length}
                               />
                               <InsertItem
                                 isVisible={
                                   index >= 0 && index < activities.length - 1 && !isDragging
                                 }
-                                onInsert={() => handleActivityAdd(index + 1)}
+                                onInsert={() => handleActivityAdd({ index: index + 1 })}
                               />
                             </Box>
                           )}

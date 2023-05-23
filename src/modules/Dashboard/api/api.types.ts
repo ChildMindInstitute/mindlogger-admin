@@ -1,4 +1,5 @@
 import { AppletId } from 'shared/api';
+import { RetentionPeriods } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
 export type GetUserData = { token: string };
@@ -252,6 +253,11 @@ export type AppletSubmitDateList = AppletId &
 
 export type EventId = { eventId: string };
 
+export type AppletDataRetention = AppletId & {
+  period: number | undefined;
+  retention: RetentionPeriods;
+};
+
 export type GetWorkspaceAppletsParams = {
   params: {
     ownerId?: string;
@@ -263,3 +269,5 @@ export type GetWorkspaceAppletsParams = {
     folderId?: string | null;
   };
 };
+
+export type AppletVersionChanges = AppletId & { version: string };
