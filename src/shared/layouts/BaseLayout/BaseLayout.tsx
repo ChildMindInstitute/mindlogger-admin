@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 
 import {
   DuplicatePopups,
@@ -9,6 +9,7 @@ import {
 import { useAppDispatch } from 'redux/store';
 import { popups, workspaces, users, auth, folders } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE, Footer } from 'shared/components';
+import { page } from 'resources';
 
 import { DeletePopup, LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
@@ -16,6 +17,9 @@ import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 export const BaseLayout = () => {
   const { appletId } = useParams();
   const dispatch = useAppDispatch();
+  const { pathname } = useLocation();
+
+  const isDashboard = pathname.includes(page.dashboard);
   const isAuthorized = auth.useAuthorized();
   const { ownerId } = workspaces.useData() || {};
   const {
@@ -30,7 +34,7 @@ export const BaseLayout = () => {
     const { getWorkspaceRespondents, getWorkspaceManagers } = users.thunk;
     const { getWorkspacePriorityRole } = workspaces.thunk;
 
-    if (ownerId) {
+    if (ownerId && isDashboard) {
       dispatch(
         getWorkspacePriorityRole({
           params: {
@@ -57,17 +61,18 @@ export const BaseLayout = () => {
           },
         }),
       );
-      (async () => {
-        await dispatch(getFolders({ ownerId }));
-        dispatch(
-          getWorkspaceApplets({
-            params: {
-              ownerId,
-              limit: DEFAULT_ROWS_PER_PAGE,
-            },
-          }),
-        );
-      })();
+      !appletId &&
+        (async () => {
+          await dispatch(getFolders({ ownerId }));
+          dispatch(
+            getWorkspaceApplets({
+              params: {
+                ownerId,
+                limit: DEFAULT_ROWS_PER_PAGE,
+              },
+            }),
+          );
+        })();
     }
   }, [dispatch, ownerId, appletId]);
 

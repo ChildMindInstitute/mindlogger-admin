@@ -21,8 +21,8 @@ export const ScheduleSetupPopup = ({
   const navigate = useNavigate();
   const { appletId } = useParams();
   const showSecondScreen = chosenAppletData && !chosenAppletData.hasIndividualSchedule;
-  const appletName = chosenAppletData?.appletName || '';
-  const secretUserId = chosenAppletData?.secretUserId || '';
+  const appletName = chosenAppletData?.appletDisplayName || '';
+  const secretUserId = chosenAppletData?.respondentSecretId || '';
 
   const handlePopupClose = () => {
     setChosenAppletData(null);

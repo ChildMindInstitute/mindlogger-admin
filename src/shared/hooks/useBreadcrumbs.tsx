@@ -3,7 +3,7 @@ import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
-import { Breadcrumb, breadcrumbs, applet, users, workspaces } from 'redux/modules';
+import { Breadcrumb, breadcrumbs, applet, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import {
@@ -14,7 +14,7 @@ import {
   checkIfAppletActivityFlowUrlPassed,
 } from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
-import { getRespondentLabel } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
+import { useRespondentLabel } from 'modules/Dashboard/hooks';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { appletId, activityId, activityFlowId, respondentId } = useParams();
@@ -22,8 +22,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 
-  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = getRespondentLabel(secretId, nickname);
+  const respondentLabel = useRespondentLabel();
   const { workspaceName } = workspaces.useData() ?? {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();
