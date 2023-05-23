@@ -18,11 +18,6 @@ export const StyledMonthName = styled(StyledBodySmall)`
   margin: ${theme.spacing(0, 1, 0.8, 0)};
 `;
 
-export const StyledDaysWrapper = styled(Box)`
-  display: flex;
-  justify-content: space-between;
-`;
-
 export const StyledDay = styled(StyledBodySmall)`
   width: 3.2rem;
   height: 2rem;

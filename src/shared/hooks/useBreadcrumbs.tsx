@@ -12,9 +12,11 @@ import {
   checkCurrentActivityFlowPage,
   checkIfAppletActivityUrlPassed,
   checkIfAppletActivityFlowUrlPassed,
+  checkIfAppletFlankerUrlPassed,
 } from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { getRespondentLabel } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
+import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { appletId, activityId, activityFlowId, respondentId } = useParams();
@@ -28,15 +30,24 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
-  const activityLabel =
-    appletData?.activities?.find((activity) => getEntityKey(activity) === activityId)?.name ??
-    t('newActivity') ??
-    '';
+  const currentActivityName = appletData?.activities?.find(
+    (activity) => getEntityKey(activity) === activityId,
+  )?.name;
+  const activityLabel = currentActivityName ?? t('newActivity') ?? '';
+  const flankerLabel = currentActivityName ?? PerformanceTasks.Flanker ?? '';
   const activityFlowLabel =
     appletData?.activityFlows?.find((activityFlow) => getEntityKey(activityFlow) === activityFlowId)
       ?.name ??
     t('newActivityFlow') ??
     '';
+  const activitiesBreadcrumb = {
+    icon: 'checklist-outlined',
+    label: t('activities'),
+    navPath:
+      appletId && activityId
+        ? generatePath(page.builderAppletActivities, { appletId, activityId })
+        : '',
+  };
 
   useEffect(() => {
     const newBreadcrumbs: Breadcrumb[] = [];
@@ -105,24 +116,32 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       const { isAbout, isItems, isItemsFlow, isActivitySettings } =
         checkCurrentActivityPage(pathname);
 
-      newBreadcrumbs.push(
-        {
-          icon: 'checklist-outlined',
-          label: t('activities'),
-          navPath: generatePath(page.builderAppletActivities, { appletId, activityId }),
-        },
-        {
-          icon: '',
-          label: activityLabel,
-          navPath: generatePath(page.builderAppletActivity, { appletId, activityId }),
-        },
-      );
+      newBreadcrumbs.push(activitiesBreadcrumb, {
+        icon: '',
+        label: activityLabel,
+        navPath: generatePath(page.builderAppletActivity, { appletId, activityId }),
+      });
 
       if (isAbout) newBreadcrumbs.push({ icon: 'more-info-outlined', label: t('aboutActivity') });
       if (isItems) newBreadcrumbs.push({ icon: 'item-outlined', label: t('items') });
       if (isItemsFlow) newBreadcrumbs.push({ icon: 'flow', label: t('itemFlow') });
       if (isActivitySettings)
         newBreadcrumbs.push({ icon: 'settings', label: t('activitySettings') });
+    }
+
+    if (checkIfAppletFlankerUrlPassed(pathname)) {
+      newBreadcrumbs.push(
+        activitiesBreadcrumb,
+        {
+          icon: '',
+          label: flankerLabel,
+          disabledLink: true,
+        },
+        {
+          icon: 'report-configuration',
+          label: t('configure'),
+        },
+      );
     }
 
     if (checkIfAppletActivityFlowUrlPassed(pathname)) {

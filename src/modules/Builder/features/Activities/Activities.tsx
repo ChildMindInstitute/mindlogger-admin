@@ -67,6 +67,14 @@ export const Activities = () => {
         activityId,
       }),
     );
+  const navigateToFlanker = (activityId?: string) =>
+    activityId &&
+    navigate(
+      generatePath(page.builderAppletFlanker, {
+        appletId,
+        activityId,
+      }),
+    );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
     const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked } = props || {};
@@ -76,7 +84,13 @@ export const Activities = () => {
         : getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
-    !isNavigationBlocked && navigateToActivity(newActivity.key);
+    if (!isNavigationBlocked) {
+      if (newActivity.isFlankerItem) {
+        return navigateToFlanker(newActivity.key);
+      }
+
+      return navigateToActivity(newActivity.key);
+    }
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {
@@ -119,7 +133,12 @@ export const Activities = () => {
 
   const handleEditActivity = (index: number) => {
     const activityToEdit = activities[index];
-    navigateToActivity(getActivityKey(activityToEdit));
+    const activityKey = getActivityKey(activityToEdit);
+    if (activityToEdit.isFlankerItem) {
+      return navigateToFlanker(activityKey);
+    }
+
+    return navigateToActivity(activityKey);
   };
 
   const handleActivityVisibilityChange = (index: number) => {
@@ -151,8 +170,8 @@ export const Activities = () => {
                   {activities.map((activity: ActivityProps, index: number) => {
                     const activityKey = getActivityKey(activity);
                     const isPerformanceTask = activity?.isPerformanceTask || false;
-
                     const activityName = activity.name;
+                    const isEditVisible = !isPerformanceTask || !!activity.isFlankerItem;
                     const hasError = !!errors[`activities[${index}]`];
 
                     return (
@@ -178,7 +197,7 @@ export const Activities = () => {
                                       handleDuplicateActivity(index, isPerformanceTask),
                                     onRemove: () => setActivityToDelete(activityKey),
                                     onVisibilityChange: () => handleActivityVisibilityChange(index),
-                                    isEditVisible: !isPerformanceTask,
+                                    isEditVisible,
                                   })
                                 }
                                 hasError={hasError}

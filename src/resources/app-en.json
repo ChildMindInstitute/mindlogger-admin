@@ -862,6 +862,9 @@
     "gyroscope": "This Activity contains Stability Tracker (Gyroscope) Item.",
     "touch": "This Activity contains Stability Tracker (Touch) Item."
   },
+  "flanker": "Simple & Choice Reaction Time Task Builder",
+  "configure": "Configure",
+  "nameAndDescription": "Name and Description",
   "showMore": "Show More...",
   "showLess": "Show Less...",
   "hideBadgeTooltip": "The Activity Flow identifier will be hidden from Respondents",
