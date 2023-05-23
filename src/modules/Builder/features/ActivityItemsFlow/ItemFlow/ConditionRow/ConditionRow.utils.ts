@@ -12,6 +12,7 @@ import {
 import { ConditionItemType } from 'modules/Builder/components';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
+import { OptionListItem } from './ConditionRow.types';
 
 const { t } = i18n;
 
@@ -29,27 +30,24 @@ export const getConditionItemType = (item: ItemFormValues) => {
 };
 
 export const getItemOptions = (items: ItemFormValues[]) =>
-  items?.reduce(
-    (optionList: { labelKey: string; value: string; type: ConditionItemType }[], item) => {
-      if (
-        item.responseType === ItemResponseType.Slider ||
-        item.responseType === ItemResponseType.SingleSelection ||
-        item.responseType === ItemResponseType.MultipleSelection
-      ) {
-        return [
-          ...optionList,
-          {
-            labelKey: item.name,
-            value: getEntityKey(item),
-            type: getConditionItemType(item),
-          },
-        ];
-      }
+  items?.reduce((optionList: OptionListItem[], item) => {
+    if (
+      item.responseType === ItemResponseType.Slider ||
+      item.responseType === ItemResponseType.SingleSelection ||
+      item.responseType === ItemResponseType.MultipleSelection
+    ) {
+      return [
+        ...optionList,
+        {
+          labelKey: item.name,
+          value: getEntityKey(item),
+          type: getConditionItemType(item),
+        },
+      ];
+    }
 
-      return optionList;
-    },
-    [],
-  );
+    return optionList;
+  }, []);
 
 export const getPayload = (
   conditionType: ConditionType,
