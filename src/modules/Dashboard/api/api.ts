@@ -33,6 +33,7 @@ import {
   RespondentAccesses,
   RemoveRespondentAccess,
   RemoveManagerAccess,
+  AppletDataRetention,
   ImportSchedule,
   GetWorkspaceAppletsParams,
   FolderName,
@@ -468,6 +469,18 @@ export const getAppletSubmitDateListApi = (
     params,
     signal,
   });
+
+export const postAppletDataRetentionApi = (
+  { appletId, ...dataRetentionParams }: AppletDataRetention,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/applets/${appletId}/retentions`,
+    { ...dataRetentionParams },
+    {
+      signal,
+    },
+  );
 
 export const publishAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.post(`/applets/${appletId}/publish`, { signal });
