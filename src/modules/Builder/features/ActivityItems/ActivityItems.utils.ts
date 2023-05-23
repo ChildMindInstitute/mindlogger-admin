@@ -1,6 +1,6 @@
 import { ItemFormValues } from 'modules/Builder';
-import { ConditionalLogic, Item } from 'shared/state';
-import { getEntityKey } from 'shared/utils';
+import { ConditionalLogic } from 'shared/state';
+import { getEntityKey, getObjectFromList } from 'shared/utils';
 
 import { GetConditionsToRemoveConfig } from './ActivityItems.types';
 
@@ -31,18 +31,16 @@ export const getConditionsToRemove = (
   if (!dependentConditions?.length) return;
 
   const numberToAdd = sourceIndex < destinationIndex ? 1 : 0;
-  const leftSlice = items?.slice(0, destinationIndex + numberToAdd);
-  const rightSlice = items?.slice(destinationIndex + numberToAdd);
+  const leftSlice = getObjectFromList(items?.slice(0, destinationIndex + numberToAdd));
+  const rightSlice = getObjectFromList(items?.slice(destinationIndex + numberToAdd));
 
-  return dependentConditions.filter(({ itemKey, conditions }) => {
+  return dependentConditions.filter(({ itemKey = '', conditions }) => {
     if (getEntityKey(item) === itemKey) {
       //if SOURCE ITEM is in summary row, we should check that ALL DEPENDENCIES are to the left from the SOURCE
-      return !conditions?.every(
-        ({ itemName }) => !!leftSlice?.find((item) => getEntityKey(item) === itemName),
-      );
+      return !conditions?.every(({ itemName }) => leftSlice[itemName]);
     }
 
     //if SOURCE ITEM is dependent for the other, we should check that SOURCE ITEM is to the right from the DEPENDENCY
-    return !rightSlice?.find((item) => getEntityKey(item) === itemKey);
+    return !rightSlice[itemKey];
   });
 };

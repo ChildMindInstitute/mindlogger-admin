@@ -1,5 +1,3 @@
-import { ConditionType } from 'shared/consts';
-
 export const enum ConditionItemType {
   Slider = 'slider',
   SingleSelection = 'singleSelection',
