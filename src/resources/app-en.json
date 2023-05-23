@@ -221,6 +221,7 @@
   "dataRetention": "Data retention",
   "downloadSchema": "Download Schema",
   "versionHistory": "Version History",
+  "version": "version ({{version}})",
   "reportConfiguration": "Report configuration",
   "shareToLibrary": "Share to Library",
   "concealApplet": "Conceal Applet",
