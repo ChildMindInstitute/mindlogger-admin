@@ -34,14 +34,14 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
   const { fieldName } = useCurrentActivity();
 
   const items = watch(`${fieldName}.items`);
-  const itemsByEntityKey = items?.reduce(
+  const groupedItems = items?.reduce(
     (result: Record<string, ItemFormValues>, item: ItemFormValues) => ({
       ...result,
       [getEntityKey(item)]: item,
     }),
     {},
   );
-  const currentItem = itemsByEntityKey[condition?.itemKey ?? ''];
+  const currentItem = groupedItems[condition?.itemKey ?? ''];
 
   return (
     <Collapse in={isExpanded} timeout={0} collapsedSize="4.8rem">
@@ -70,7 +70,7 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
       {isExpanded && (
         <StyledFlexColumn sx={{ mt: theme.spacing(1.2) }}>
           {condition?.conditions?.map(({ key, type, itemName, payload }) => {
-            const relatedItem = itemsByEntityKey[itemName];
+            const relatedItem = groupedItems[itemName];
             const valuePlaceholder = t('conditionPanelValue');
 
             const isSlider = relatedItem?.responseType === ItemResponseType.Slider;

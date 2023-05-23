@@ -48,6 +48,13 @@ export const LeftBar = ({
   const { fieldName, activity } = useCurrentActivity();
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
+  const groupedConditions = activity.conditionalLogic?.reduce(
+    (result: Record<string, ConditionalLogic>, condition: ConditionalLogic) => ({
+      ...result,
+      [getEntityKey(condition)]: condition,
+    }),
+    {},
+  );
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
@@ -170,12 +177,7 @@ export const LeftBar = ({
               </StyledBodyLarge>
               <Box sx={{ mt: theme.spacing(2.4) }}>
                 {conditionalLogicKeysToRemove.map((conditionalLogicKey) => (
-                  <ConditionalPanel
-                    condition={activity.conditionalLogic?.find(
-                      (conditionalLogic: ConditionalLogic) =>
-                        getEntityKey(conditionalLogic) === conditionalLogicKey,
-                    )}
-                  />
+                  <ConditionalPanel condition={groupedConditions[conditionalLogicKey]} />
                 ))}
               </Box>
             </StyledModalWrapper>
