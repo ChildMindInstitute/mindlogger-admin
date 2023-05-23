@@ -26,8 +26,11 @@ export const ReviewMenu = ({
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
-  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = getRespondentLabel(secretId, nickname);
+  const { details } = users.useRespondent(respondentId || '') || {};
+  const respondentLabel = getRespondentLabel(
+    details?.[0].respondentSecretId,
+    details?.[0].respondentNickname,
+  );
   const { control, watch, setValue } = useForm({ defaultValues: { date: undefined } });
   const date = watch('date');
 

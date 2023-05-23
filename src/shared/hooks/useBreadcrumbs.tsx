@@ -22,8 +22,11 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 
-  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = getRespondentLabel(secretId, nickname);
+  const { details } = users.useRespondent(respondentId || '') || {};
+  const respondentLabel = getRespondentLabel(
+    details?.[0].respondentSecretId,
+    details?.[0].respondentNickname,
+  );
   const { workspaceName } = workspaces.useData() ?? {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const isNewApplet = useCheckIfNewApplet();

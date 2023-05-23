@@ -23,8 +23,11 @@ export const ReportMenu = ({
 }: ReportMenuProps) => {
   const { t } = useTranslation();
   const { respondentId } = useParams();
-  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = getRespondentLabel(secretId, nickname);
+  const { details } = users.useRespondent(respondentId || '') || {};
+  const respondentLabel = getRespondentLabel(
+    details?.[0].respondentSecretId,
+    details?.[0].respondentNickname,
+  );
 
   return (
     <StyledMenu>

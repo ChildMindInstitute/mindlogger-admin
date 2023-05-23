@@ -201,7 +201,7 @@ export type AppletNameArgs = AppletId & { appletName: string };
 export type AppletEncryption = AppletId & { encryption: Encryption };
 
 export type UpdatePin = {
-  accessId: string;
+  userId: string;
   ownerId?: string;
 };
 

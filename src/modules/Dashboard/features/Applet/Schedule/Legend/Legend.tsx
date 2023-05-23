@@ -35,15 +35,17 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const { respondentId } = useParams();
   const navigate = useNavigate();
   const { result: respondentsData } = users.useAllRespondentsData() || {};
-  const respondentsItems = respondentsData?.map(
-    ({ id, hasIndividualSchedule, secretId, nickname }) => ({
+  const respondentsItems = respondentsData?.map(({ id, details }) => {
+    const { respondentSecretId, hasIndividualSchedule, respondentNickname } = details?.[0] || {};
+
+    return {
       icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
       id,
-      secretId,
-      nickname,
+      secretId: respondentSecretId,
+      nickname: respondentNickname,
       hasIndividualSchedule,
-    }),
-  );
+    };
+  });
 
   const [schedule, setSchedule] = useState<string | null>(null);
   const [searchPopupVisible, setSearchPopupVisible] = useState(false);
