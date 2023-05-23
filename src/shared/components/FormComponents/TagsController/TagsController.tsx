@@ -36,9 +36,9 @@ export const TagsController = <T extends FieldValues>({
             {...props}
             onBlur={() => onAddTagClick(value)}
             onChange={onChange}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
                 onAddTagClick(value);
               }
             }}
