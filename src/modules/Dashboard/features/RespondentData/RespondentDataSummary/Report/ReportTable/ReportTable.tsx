@@ -44,11 +44,8 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
         time: format(new Date(date), DateFormats.Time),
         response: value as string,
       }))
-      .filter(
-        ({ date, time, response }) =>
-          filterReportTable(response, searchValue?.toLowerCase()) ||
-          filterReportTable(date, searchValue?.toLowerCase()) ||
-          filterReportTable(time, searchValue?.toLowerCase()),
+      .filter(({ date, time, response }) =>
+        filterReportTable(`${date} ${time} ${response}`, searchValue),
       );
 
     const visibleAnswers = stableSort(formattedAnswers, getComparator(order, orderBy)).slice(
