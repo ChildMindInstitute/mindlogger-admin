@@ -9,10 +9,14 @@ import {
   variables,
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
-import { InputController, Switch, TransferListController } from 'shared/components/FormComponents';
+import {
+  InputController,
+  Switch,
+  TransferListController,
+  EditorUiType,
+} from 'shared/components/FormComponents';
 import { Svg } from 'shared/components';
 import { Item } from 'shared/state';
-import { EditorUiType } from 'shared/components/FormComponents/EditorController/EditorController.types';
 
 import { columns } from './SectionContent.const';
 import { StyledButton, StyledEditor } from './SectionContent.styles';

@@ -41,14 +41,65 @@ export type ActivityFormValues = {
   isFlankerItem?: boolean;
 };
 
-export type PerformanceTaskFormValues = {
+type FlankerButtonSetting = {
+  name: string | null;
+  image: string | null;
+};
+
+type FlankerFixationSettings = {
+  image: string | null;
+  duration: number;
+};
+
+type FlankerStimulusId = string;
+
+type FlankerStimulusSettings = {
+  id: FlankerStimulusId;
+  image: string;
+  correctPress: 'LEFT' | 'RIGHT';
+};
+
+type FlankerBlockSettings = {
+  order: Array<FlankerStimulusId>;
+};
+
+type FlankerPracticeSettings = {
+  instruction: string;
+  blocks: Array<FlankerBlockSettings>;
+  stimulusDuration: number;
+  threshold: number;
+  randomizeOrder: boolean;
+  showFeedback: boolean;
+  showSummary: boolean;
+};
+
+type FlankerTestSettings = {
+  instruction: string;
+  blocks: Array<FlankerBlockSettings>;
+  stimulusDuration: number;
+  randomizeOrder: boolean;
+  showFeedback: boolean;
+  showSummary: boolean;
+};
+
+type FlankerGeneralSettings = {
+  instruction: string;
+  buttons: Array<FlankerButtonSetting>;
+  fixation: FlankerFixationSettings | null;
+  stimulusTrials: Array<FlankerStimulusSettings>;
+};
+
+export type FlankerFormValues = {
   id?: string;
   key?: string;
   name: string;
   description: string;
+  isHidden?: boolean;
+  general: FlankerGeneralSettings;
+  practice: FlankerPracticeSettings;
+  test: FlankerTestSettings;
   isPerformanceTask: boolean;
   isFlankerItem?: boolean;
-  isHidden?: boolean;
 };
 
 export type ActivityFlowItem = {
@@ -68,6 +119,8 @@ export type ActivityFlowFormValues = {
   isHidden?: boolean;
 };
 
+export type ActivityValue = ActivityFormValues | FlankerFormValues;
+
 export type AppletFormValues = {
   id?: string;
   displayName: string;
@@ -77,11 +130,12 @@ export type AppletFormValues = {
   watermark?: string;
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
-  activities: (ActivityFormValues | PerformanceTaskFormValues)[];
+  activities: ActivityValue[];
 };
 
 export type GetNewPerformanceTask = {
   name?: string;
   description?: string;
-  performanceTask?: PerformanceTaskFormValues;
+  performanceTask?: FlankerFormValues;
+  isFlankerItem?: boolean;
 };

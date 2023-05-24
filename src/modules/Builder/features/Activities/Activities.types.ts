@@ -1,8 +1,4 @@
-import {
-  ActivityFormValues,
-  ItemFormValues,
-  PerformanceTaskFormValues,
-} from 'modules/Builder/pages';
+import { ActivityFormValues, ItemFormValues, FlankerFormValues } from 'modules/Builder/pages';
 
 export type GetActivitiesActions = {
   key: string;
@@ -19,11 +15,12 @@ export type ActivityAddProps = {
   performanceTaskName?: string;
   performanceTaskDesc?: string;
   isNavigationBlocked?: boolean;
+  isFlankerItem?: boolean;
 } | null;
 
 export type ActivityProps =
   | ActivityFormValues
-  | (PerformanceTaskFormValues & {
+  | (FlankerFormValues & {
       image?: string;
       items?: ItemFormValues[];
     });
