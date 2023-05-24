@@ -41,18 +41,18 @@ export const ExpandedList = ({
           <StyledLabelBoldLarge sx={{ marginLeft: theme.spacing(1) }}>{title}</StyledLabelBoldLarge>
         </StyledFlexTopCenter>
         <Box>
-          {buttons?.map((el, index) => (
-            <Tooltip tooltipTitle={el.tooltipTitle} key={uniqueId()}>
+          {buttons?.map((button, index) => (
+            <Tooltip tooltipTitle={button.tooltipTitle} key={uniqueId()}>
               <Box component="span">
                 <StyledIconBtn
-                  disabled={el.disabled}
+                  disabled={button.disabled}
                   sx={{ ml: getIconBtnMargin(index) }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    el.action();
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    button.action();
                   }}
                 >
-                  {el.icon}
+                  {button.icon}
                 </StyledIconBtn>
               </Box>
             </Tooltip>

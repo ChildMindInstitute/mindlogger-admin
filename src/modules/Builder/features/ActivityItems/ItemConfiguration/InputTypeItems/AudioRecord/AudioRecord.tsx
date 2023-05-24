@@ -25,7 +25,7 @@ export const AudioRecord = ({ name }: UseControllerProps<FieldValues>) => {
         control={control}
         type="number"
         label={t('audioRecordDuration')}
-        minNumberValue={0}
+        minNumberValue={1}
       />
     </ItemOptionContainer>
   );

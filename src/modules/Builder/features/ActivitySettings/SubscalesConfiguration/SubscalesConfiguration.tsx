@@ -6,7 +6,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
-import { DataTable, Svg, SwitchWithState } from 'shared/components';
+import { DataTable, SwitchWithState } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
@@ -14,33 +14,51 @@ import { ActivitySettingsSubscale } from 'shared/state';
 
 import { StyledButtonsContainer } from '../ActivitySettings.styles';
 import { commonButtonProps } from '../ActivitySettings.const';
-import { options } from './SubscalesConfiguration.const';
+import {
+  options,
+  totalScoreTableColumnData,
+  totalScoreTableTemplate,
+} from './SubscalesConfiguration.const';
 import {
   getSubscalesDefaults,
   allElementsTableColumns,
   getNotUsedElements,
-  checkOnItemType,
   getUsedWithinSubscalesElements,
   getPropertiesToFilterByIds,
+  getAddTotalScoreModalLabels,
 } from './SubscalesConfiguration.utils';
 import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
-import { StyledSvgButton } from './SubscalesConfiguration.styles';
+import { StyledSvg, StyledSvgButton } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
+import { checkOnItemType } from '../ActivitySettings.utils';
+import { LookupTable } from './LookupTable';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
   const { control, watch, register, unregister, setValue } = useFormContext();
   const { fieldName, activity } = useCurrentActivity();
-  const subscalesName = `${fieldName}.subscales`;
+  const subscalesField = `${fieldName}.subscales`;
   const calculateTotalScoreName = `${fieldName}.calculateTotalScore`;
-  const { append: appendSubscale, remove: removeSubscale } = useFieldArray({
+  const totalScoresTableDataField = `${fieldName}.totalScoresTableData`;
+  const {
+    append: appendSubscale,
+    remove: removeSubscale,
+    update: updateSubscale,
+  } = useFieldArray({
     control,
-    name: subscalesName,
+    name: subscalesField,
   });
   const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(false);
+  const [isLookupTableOpened, setIsLookupTableOpened] = useState(false);
+  const tableData = watch(totalScoresTableDataField);
+  const onTableDataUpdate = (data?: string) => {
+    data ? register(totalScoresTableDataField) : unregister(totalScoresTableDataField);
+    setValue(totalScoresTableDataField, data);
+  };
+  const iconId = `lookup-table${tableData ? '-filled' : ''}`;
 
-  const subscales: ActivitySettingsSubscale[] = watch(subscalesName);
+  const subscales: ActivitySettingsSubscale[] = watch(subscalesField);
   const filteredItems = (activity?.items ?? []).filter(checkOnItemType);
   const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
     filteredItems,
@@ -64,24 +82,25 @@ export const SubscalesConfiguration = () => {
     appendSubscale(getSubscalesDefaults());
   };
 
-  const handleOnTotalScoreLookupTable = () => false;
-
   useEffect(() => {
     if (calculateTotalScoreSwitch) {
-      register(calculateTotalScoreName);
+      register(calculateTotalScoreName, { value: '' });
+      register(totalScoresTableDataField);
       setValue(calculateTotalScoreName, SubscaleTotalScore.Sum);
 
       return;
     }
 
     unregister(calculateTotalScoreName);
+    unregister(totalScoresTableDataField);
     setValue(calculateTotalScoreName, undefined);
+    setValue(totalScoresTableDataField, undefined);
   }, [calculateTotalScoreSwitch]);
 
   return (
     <StyledButtonsContainer>
       {subscales?.map((subscale, index) => {
-        const subscaleName = `${subscalesName}.${index}`;
+        const subscaleField = `${subscalesField}.${index}`;
         const title = t('subscaleHeader', {
           index: index + 1,
           name: subscale?.name,
@@ -96,12 +115,21 @@ export const SubscalesConfiguration = () => {
               onRemove: () => {
                 removeSubscale(index);
               },
-              name: subscaleName,
+              name: subscaleField,
               title,
+              onUpdate: (subscaleTableData?: string) => {
+                if (subscaleTableData === undefined) {
+                  unregister(`${subscaleField}.subscaleTableData`);
+                }
+                updateSubscale(index, {
+                  ...subscale,
+                  subscaleTableData,
+                });
+              },
             }}
             contentProps={{
               subscaleId: subscale.id,
-              name: subscaleName,
+              name: subscaleField,
               notUsedElements,
             }}
           />
@@ -129,8 +157,12 @@ export const SubscalesConfiguration = () => {
       />
       {calculateTotalScoreSwitch && (
         <StyledContainerWithBg>
-          <StyledSvgButton onClick={handleOnTotalScoreLookupTable}>
-            <Svg id="lookup-table" width="20" height="20" />
+          <StyledSvgButton
+            onClick={() => {
+              setIsLookupTableOpened(true);
+            }}
+          >
+            <StyledSvg isFilled={!!tableData} id={iconId} width="20" height="20" />
           </StyledSvgButton>
           <RadioGroupController
             name={calculateTotalScoreName}
@@ -138,6 +170,20 @@ export const SubscalesConfiguration = () => {
             options={options}
           />
         </StyledContainerWithBg>
+      )}
+      {isLookupTableOpened && (
+        <LookupTable
+          open={isLookupTableOpened}
+          labelsObject={getAddTotalScoreModalLabels()}
+          columnData={totalScoreTableColumnData}
+          tableData={tableData}
+          template={totalScoreTableTemplate}
+          templatePrefix={'total_score_'}
+          onUpdate={onTableDataUpdate}
+          onClose={() => {
+            setIsLookupTableOpened(false);
+          }}
+        />
       )}
     </StyledButtonsContainer>
   );

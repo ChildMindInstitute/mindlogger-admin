@@ -1,4 +1,11 @@
-import { ItemAlert, Config, ActivitySettingsSubscale, ResponseValues } from 'shared/state';
+import {
+  ItemAlert,
+  Config,
+  ActivitySettingsSubscale,
+  ResponseValues,
+  ConditionalLogic,
+  ActivitySettingsSection,
+} from 'shared/state';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
 
 export type ItemFormValues = {
@@ -27,6 +34,21 @@ export type ActivityFormValues = {
   items: ItemFormValues[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
+  conditionalLogic?: ConditionalLogic[];
+  sections?: ActivitySettingsSection[];
+  totalScoresTableData?: string;
+  isPerformanceTask?: boolean;
+  isFlankerItem?: boolean;
+};
+
+export type PerformanceTaskFormValues = {
+  id?: string;
+  key?: string;
+  name: string;
+  description: string;
+  isPerformanceTask: boolean;
+  isFlankerItem?: boolean;
+  isHidden?: boolean;
 };
 
 export type ActivityFlowItem = {
@@ -55,5 +77,11 @@ export type AppletFormValues = {
   watermark?: string;
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
-  activities: ActivityFormValues[];
+  activities: (ActivityFormValues | PerformanceTaskFormValues)[];
+};
+
+export type GetNewPerformanceTask = {
+  name?: string;
+  description?: string;
+  performanceTask?: PerformanceTaskFormValues;
 };

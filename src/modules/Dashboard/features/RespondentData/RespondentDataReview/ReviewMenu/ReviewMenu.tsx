@@ -4,19 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 
-import { users } from 'redux/modules';
 import { getAnswersApi, getAppletSubmitDateListApi } from 'api';
 import { DatePicker, DatePickerUiType } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
 import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
+import { useRespondentLabel } from 'modules/Dashboard/hooks';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { Activity } from '../RespondentDataReview.types';
 import { StyledHeader } from './ReviewMenu.styles';
 import { ReviewMenuProps } from './ReviewMenu.types';
 import { ReviewMenuItem } from './ReviewMenuItem';
-import { getRespondentLabel } from '../../RespondentData.utils';
 
 export const ReviewMenu = ({
   selectedActivity,
@@ -26,8 +25,7 @@ export const ReviewMenu = ({
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
-  const { secretId, nickname } = users.useRespondent(respondentId || '') || {};
-  const respondentLabel = getRespondentLabel(secretId, nickname);
+  const respondentLabel = useRespondentLabel();
   const { control, watch, setValue } = useForm({ defaultValues: { date: undefined } });
   const date = watch('date');
 

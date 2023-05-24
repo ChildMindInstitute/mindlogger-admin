@@ -15,17 +15,18 @@ export type FolderApplet = {
   description?: string;
   displayName?: string;
   editing?: boolean;
-  encryption?: Encryption;
+  encryption?: Encryption | null;
   hasUrl?: boolean;
   image?: string;
   largeApplet?: boolean;
   parentId?: string;
   pinOrder?: number;
   published?: boolean;
-  roles?: string[];
+  role?: string;
   themeId?: string;
   updatedAt?: string;
   welcomeApplet?: boolean;
+  isPublished?: boolean;
 };
 
 export type AppletResponse = {
@@ -48,7 +49,7 @@ export type AppletResponse = {
     themeId: string;
     url: string;
     version: string;
-    _id: string;
+    id: string;
   };
   encryption?: {
     appletPrime: number[];
@@ -88,6 +89,7 @@ export type AppletsSearchTerms = {
 };
 
 export type FoldersSchema = {
+  folders: BaseSchema<Folder[]>;
   foldersApplets: BaseSchema<FolderApplet[]>;
   flattenFoldersApplets: BaseSchema<FolderApplet[]>;
   appletsSearchTerms: BaseSchema<AppletsSearchTerms | null>;

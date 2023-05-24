@@ -20,6 +20,12 @@ export const useAppletsDnd = () => {
     setIsDragOver(true);
   };
 
+  const onDragEnd = (event: React.DragEvent<HTMLTableRowElement>, applet: FolderApplet) => {
+    event.dataTransfer?.dropEffect === 'none' &&
+      applet.parentId &&
+      dispatch(folders.thunk.removeAppletFromFolder({ applet }));
+  };
+
   const onDrop = (event: React.DragEvent<HTMLTableRowElement>, droppedItem: FolderApplet) => {
     onDragLeave(event);
 
@@ -45,6 +51,8 @@ export const useAppletsDnd = () => {
         (folderApplet) => folderApplet.id === draggedItem.parentId,
       )[0];
 
+      if (previousFolder.id === folder.id) return;
+
       return dispatch(
         folders.thunk.changeFolder({
           previousFolder,
@@ -63,5 +71,5 @@ export const useAppletsDnd = () => {
     );
   };
 
-  return { isDragOver, onDragLeave, onDragOver, onDrop };
+  return { isDragOver, onDragLeave, onDragOver, onDrop, onDragEnd };
 };

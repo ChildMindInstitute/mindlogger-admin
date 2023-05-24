@@ -1,4 +1,6 @@
-import { StyledBuilderBtn, StyledHeadlineLarge } from 'shared/styles/styledComponents';
+import { Button } from '@mui/material';
+
+import { StyledHeadlineLarge } from 'shared/styles';
 
 import { StyledRow, StyledButtons } from './Header.styles';
 import { HeaderProps } from './Header.types';
@@ -8,9 +10,9 @@ export const Header = ({ title, buttons }: HeaderProps) => (
     <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
     <StyledButtons>
       {buttons?.map(({ icon, label, handleClick }) => (
-        <StyledBuilderBtn key={label} onClick={handleClick} startIcon={icon}>
+        <Button variant="outlined" key={label} onClick={handleClick} startIcon={icon}>
           {label}
-        </StyledBuilderBtn>
+        </Button>
       ))}
     </StyledButtons>
   </StyledRow>

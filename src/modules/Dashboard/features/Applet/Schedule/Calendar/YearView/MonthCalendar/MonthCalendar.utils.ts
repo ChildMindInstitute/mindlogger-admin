@@ -1,6 +1,7 @@
 import { DateLocalizer } from 'react-big-calendar';
 import { firstVisibleDay, lastVisibleDay } from 'react-big-calendar/lib/utils/dates';
 import { add } from 'date-fns';
+import uniqueId from 'lodash.uniqueid';
 
 import { EN_WEEK_DAYS, FR_WEEK_DAYS, MILLISECONDS_PER_WEEK } from './MonthCalendar.const';
 import { MonthObject, Week } from './MonthCalendar.types';
@@ -16,14 +17,14 @@ export const createCalendar = (currentDate: string | Date, localizer: DateLocali
   const calendar: MonthObject = { date, first, last, weeks: [] };
 
   for (let weekNumber = 0; weekNumber < weeksCount; weekNumber++) {
-    const week: Week = [];
+    const week: Week = { days: [], id: uniqueId('week') };
     calendar.weeks.push(week);
     calendar.year = date.getFullYear();
     calendar.month = date.getMonth();
 
     for (let day = 7 * weekNumber; day < 7 * (weekNumber + 1); day++) {
       const date = add(first, { days: day });
-      week.push(date);
+      week.days.push(date);
     }
   }
 

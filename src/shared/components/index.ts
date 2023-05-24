@@ -24,3 +24,4 @@ export * from './FileUploader';
 export * from './DataTable';
 export * from './Password';
 export * from './SwitchWithState';
+export * from './Error';

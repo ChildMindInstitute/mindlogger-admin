@@ -4,7 +4,7 @@ import { useAppSelector } from 'redux/store';
 
 import * as thunk from './Users.thunk';
 import { state as initialState } from './Users.state';
-import { extraReducers } from './Users.reducer';
+import { reducers, extraReducers } from './Users.reducer';
 import { Respondent, UsersSchema } from './Users.schema';
 
 export * from './Users.schema';
@@ -12,13 +12,14 @@ export * from './Users.schema';
 const slice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers,
   extraReducers,
 });
 
 export const users = {
   thunk,
   slice,
+  actions: slice.actions,
   useManagersData: (): UsersSchema['managers']['data'] =>
     useAppSelector(
       ({
@@ -32,6 +33,14 @@ export const users = {
       ({
         users: {
           respondents: { data },
+        },
+      }) => data,
+    ),
+  useAllRespondentsData: (): UsersSchema['allRespondents']['data'] =>
+    useAppSelector(
+      ({
+        users: {
+          allRespondents: { data },
         },
       }) => data,
     ),

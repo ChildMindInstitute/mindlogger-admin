@@ -1,15 +1,17 @@
 import { styled } from '@mui/system';
-import { Box, Button } from '@mui/material';
+import { Button } from '@mui/material';
 
 import { TOP_BAR_HEIGHT } from 'shared/consts';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledClearedButton, StyledQuantityCircle } from 'shared/styles/styledComponents';
+import {
+  theme,
+  variables,
+  StyledClearedButton,
+  StyledFlexSpaceBetween,
+  StyledQuantityCircle,
+} from 'shared/styles';
 
-export const StyledTopBar = styled(Box)`
+export const StyledTopBar = styled(StyledFlexSpaceBetween)`
   height: ${TOP_BAR_HEIGHT};
-  display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: ${theme.spacing(1.4, 2.4, 1.4, 2)};
 `;

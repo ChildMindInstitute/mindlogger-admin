@@ -10,7 +10,7 @@ import { dashboardRoutes } from 'modules/Dashboard/routes';
 import { builderRoutes } from 'modules/Builder/routes';
 import { libraryRoutes } from 'modules/Library/routes';
 import { authRoutes } from 'modules/Auth/routes';
-import { auth } from 'modules/Auth/state';
+import { auth } from 'redux/modules';
 
 import history from './history';
 
@@ -18,6 +18,7 @@ export const AppRoutes = () => {
   const token = storage.getItem('accessToken');
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
+
   const status = auth.useStatus();
   const loaded = !token || status === 'error' || status === 'success';
 

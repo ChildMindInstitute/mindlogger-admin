@@ -9,7 +9,6 @@ export const StyledTableWrapper = styled(Box)`
 
   .MuiTableCell-root {
     font-size: ${variables.font.size.md};
-    background-color: ${variables.palette.surface1};
   }
 
   thead tr:first-of-type .MuiTableCell-root {

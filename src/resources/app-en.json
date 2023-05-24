@@ -23,7 +23,7 @@
   "sendResetLink": "Send me a reset link",
   "checkYourEmail": "Check your email",
   "weHaveSentPasswordResetLink": "We have sent a password reset link to {{email}}",
-  "ifYouDontReceiveEmail":"If you don’t receive an email, please check your spam.",
+  "ifYouDontReceiveEmail": "If you don’t receive an email, please check your spam.",
   "createAccount": "Create Account",
   "agreement": " I agree to the ",
   "termsOfService": "Terms of Service",
@@ -43,6 +43,7 @@
   "chooseLanguage": "Choose a language",
   "ok": "Ok",
   "cancel": "Cancel",
+  "replace": "Replace",
   "saveAnyway": "Save anyway",
   "privacy": "Privacy",
   "terms": "Terms",
@@ -220,8 +221,13 @@
   "dataRetention": "Data retention",
   "downloadSchema": "Download Schema",
   "versionHistory": "Version History",
+  "version": "version ({{version}})",
   "reportConfiguration": "Report configuration",
   "shareToLibrary": "Share to Library",
+  "concealApplet": "Conceal Applet",
+  "concealAppletDescription": "Once the Applet is concealed, it disappears for all MindLogger respondents.",
+  "publishApplet": "Publish Applet",
+  "publishAppletDescription": "Once the Applet is published, it will be added to all MindLogger respondents.",
   "reminder": "Reminder",
   "duration": "Duration",
   "timeToCompleteActivity": "Time to complete the activity:",
@@ -245,6 +251,9 @@
   "months": "Months",
   "years": "Years",
   "periodRequired": "Period is required",
+  "dataRetentionUpdate": "Data Retention Setting Update",
+  "dataRetentionUpdatedSuccess":"Data Retention setting has been updated successfully.",
+  "dataRetentionUpdatedFail":"The 'Data Retention' setting has not been updated. Please try again.",
   "schedule": "Schedule",
   "editRespondents": "Edit Respondents",
   "addRole": "Add Role",
@@ -382,6 +391,7 @@
   "activityIsRequired": "At least 1 activity is required.",
   "itemIsRequired": "At least 1 item is required.",
   "addActivity": "Add Activity",
+  "addPerformanceTask": "Add Performance Task",
   "activityFlowIsRequired": "Create an Activity Flow to order the sequence of Activities.",
   "addActivityFlow": "Add Activity Flow",
   "item_one": "item",
@@ -739,7 +749,20 @@
   "uploadSchedule": "Please upload a schedule in one of the following formats: <1>.csv, .xls, .xlsx, .ods.</1>",
   "downloadTemplate": "Download Template",
   "dropFile": "Drop <1>.csv, .xls, .xlsx</1> or <3>.ods</3> here <br/>or <5>click to browse<5>.",
-  "invalidFileFormat": "Invalid file format. Please upload a schedule table in one of the following formats: <1>.csv, .xls, .xlsx, .ods.</1>",
+  "invalidFileFormat": "Invalid file format or empty file. Please upload a schedule table in one of the following formats: <1>.csv, .xls, .xlsx, .ods.</1>",
+  "importScheduleErrors": {
+    "invalidActivityName": "Activity <1>{{activityName}}</1> does not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
+    "invalidActivityNames": "Activities <1>{{activityNames}}</1> do not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
+    "invalidDataFormat": "Invalid data format for the following fields:",
+    "updateReupload": "Please update and reupload the file.",
+    "startTime": "<2>Activity Start Time</2>. Valid data format: <2>HH:mm for Scheduled activity and - for Always available activity</2>.",
+    "endTime": "<2>Activity End Time</2>. Valid data format: <2>HH:mm for Scheduled activity and - for Always available activity</2>.",
+    "notificationTime": "<2>Notification Time</2>. Valid data format: <2>HH:mm or -</2>.",
+    "frequency": "<2>Frequency</2>. Valid data format: <2>Always, Once, Daily, Weekly, Monthly, Weekdays</2>.",
+    "date": "<2>Date</2>. Valid data format: <2>dd MMM yyyy</2>.",
+    "startEndTime": "<2>Activity End Time</2> should be greater than <2>Activity Start Time</2>.",
+    "betweenStartEndTime": "<2>Notification Time</2> should be between <2>Activity Start Time</2> and <2>Activity End Time</2>."
+  },
   "generateReport": "Generate Report",
   "showScoreSummary": "Show Score Summary",
   "showScoreSummaryTooltip": "Show Score Summary",
@@ -753,6 +776,50 @@
   "subscaleScoring": "Subscale scoring",
   "subscaleScoringSum": "Sum",
   "subscaleScoringAverage": "Average",
+  "subscaleLookupTable": {
+    "upload": {
+      "title": "Upload Lookup Table",
+      "initDescription": "Please upload file in <1>.csv, .xls, .xlsx, .ods.</1> format.",
+      "successDescription": "Your Lookup Table for <1>{{name}}</1> was parsed successfully."
+    },
+    "edit": {
+      "title": "Edit Lookup Table",
+      "initDescription": "Current Lookup Table for <1>{{name}}</1>."
+    },
+    "delete": {
+      "title": "Delete Lookup Table",
+      "initDescription": "Are you sure you want to delete the Lookup Table for <1>{{name}}</1>?",
+      "successDescription": "The current Lookup Table for <1>{{name}}</1> has been deleted successfully."
+    },
+    "errors": {
+      "haveToUploadFile": "You have to upload file to proceed.",
+      "fileCantBeParsed": "Your file can't be parsed. Please double check your table content and try again.",
+      "incorrectFileFormat": "Incorrect file format. Please upload file in <1>.csv, .xls, .xlsx, .ods.</1> format.",
+      "onDelete": "The current Lookup Table for <1>{{name}}</1> has not been deleted. Please try again."
+    },
+    "column": {
+      "score": "Score",
+      "rawScore": "Raw Score",
+      "age": "Age",
+      "sex": "Sex",
+      "text": "Text"
+    }
+  },
+  "addTotalScoreLookupTable": {
+    "upload": {
+      "successDescription": "Your Total Score Lookup Table was parsed successfully."
+    },
+    "edit": {
+      "initDescription": "Current Total Score Lookup Table."
+    },
+    "delete": {
+      "initDescription": "Are you sure you want to delete the current Total Score Lookup Table?",
+      "successDescription": "The current Total Score Lookup Table has been deleted successfully."
+    },
+    "errors": {
+      "onDelete": "The current Total Score Lookup Table has not been deleted. Please try again."
+    }
+  },
   "element": "Element",
   "elementsWithinSubscale": "Elements within subscale",
   "availableElements": "Available Elements",
@@ -773,7 +840,9 @@
     "lessThan": "{{- less }} should be less than {{- than }}",
     "moreThan": "{{- more }} should be bigger than {{- than }}",
     "unique": "That {{- field }} is already in use. Please use a different name",
-    "atLeastOne": "Select at least 1 element"
+    "atLeastOne": "Select at least 1 element",
+    "mustShowMessageOrItems": "You must show a message or print items to publish this report",
+    "atLeastOneItem": "Select at least 1 Item"
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
@@ -791,6 +860,15 @@
   "clear": "Clear",
   "clearActivityFlow": "Clear Activity Flow",
   "clearActivityFlowDescription": "Are you sure you want to clear the Activity Flow?",
+  "performanceTasksDesc": {
+    "abTrails": "A/B Trails",
+    "flanker": "This Activity contains Flanker Item. The timestamps collected for an android are not as accurate as iOS devices.",
+    "gyroscope": "This Activity contains Stability Tracker (Gyroscope) Item.",
+    "touch": "This Activity contains Stability Tracker (Touch) Item."
+  },
+  "flanker": "Simple & Choice Reaction Time Task Builder",
+  "configure": "Configure",
+  "nameAndDescription": "Name and Description",
   "showMore": "Show More...",
   "showLess": "Show Less...",
   "hideBadgeTooltip": "The Activity Flow identifier will be hidden from Respondents",
@@ -827,5 +905,56 @@
   "activityUnavailableAtTime": "Activity is unavailable at this time",
   "repeatPasswordRequired": "Repeat Password is Required",
   "finalSubscaleScore": "Final Subscale Score",
-  "additionalInformation": "Additional Information"
+  "additionalInformation": "Additional Information",
+  "activityItemsFlow": "Item Flow",
+  "addItemFlow": "Add Condition",
+  "activityItemsFlowDescription": "To determine the order of transition from one Item to another, an Item Flow can be created.",
+  "addActivityItemsFlowTooltip": "You need to create at least two Items first",
+  "activityItemsFlowItemTitle": "Conditional {{- index }}",
+  "if": "If",
+  "conditionItemSelected": "Item: {{- value }}",
+  "conditionScoreSelected": "Score: {{- value }}",
+  "conditionItemNamePlaceholder": "Item",
+  "conditionTypePlaceholder": "State",
+  "equalToOption": "is equal to",
+  "notEqualToOption": "is not equal to",
+  "includesOption": "includes",
+  "notIncludesOption": "doesn’t include",
+  "greaterThan": "greater than",
+  "lessThan": "less than",
+  "equal": "is equal to",
+  "notEqual": "is not equal to",
+  "between": "between",
+  "outsideOf": "outside of",
+  "summaryRowDescription": "of the “if” rules below are true, show",
+  "any": "Any",
+  "conditionalLogicPanelTitle": "If <0>{{match}}</0> of the “if” rules below are <1>true, show item: {{name}}</1>",
+  "conditionItem": "Item",
+  "conditionType": "State",
+  "conditionValue": "Value",
+  "conditionMatch": "Rule",
+  "conditionTarget": "Item",
+  "removeConditionalPopupTitle": "Remove Conditional",
+  "removeConditionalPopupDescription": "Are you sure you want to remove <1>Conditional {{index}}</1> from the Item Flow?",
+  "concealAppletPopupTitle": "Conceal Applet",
+  "publishAppletPopupTitle": "Publish Applet",
+  "publish": "Publish",
+  "conceal": "Conceal",
+  "published": "published",
+  "concealed": "concealed",
+  "concealAppletPopupDescription": "Are you sure you want to conceal this Applet for all MindLoger respondents?",
+  "publishAppletPopupDescription": "Are you sure you want to add this Applet to all MindLoger respondents?",
+  "concealAppletPopupSuccess": "The Applet [Applet name] has been concealed successfully.",
+  "publishAppletPopupSuccess": "The Applet [Applet name] has been published successfully.",
+  "publishAppletPopupSuccessDescription": "The Applet <1>{{name}}</1> has been <3>{{status}}</3> successfully.",
+  "publishAppletPopupErrorDescription": "The Applet <1>{{name}}</1> has not been <3>{{status}}</3>. Please try again.",
+  "noPermissions": "You have no permissions to view this tab.",
+  "sectionHeader": "Section {{index}}: {{name}}",
+  "sectionName": "Section name",
+  "showMessage": "Show message",
+  "showMessageTooltip": "Message that will be displayed in the report. To print the value of the score, surround the Score ID in [[]]",
+  "printItems": "Print Items",
+  "printItemsTooltip": "Respondent’s responses that will be displayed in the report",
+  "addConditinalLogic": "Add Conditional Logic",
+  "itemBody": "Item Body"
 }

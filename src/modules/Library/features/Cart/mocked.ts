@@ -205,7 +205,7 @@ export const mockedCart = [
           {
             id: '614c4400e913a1a4f2a8b738_activity2_item1',
             question:
-              '*Please select the intensity level of activities you did today:*\n\n## Header\n\n> test quote\n\n1. test list 1\n2. test list 2\n',
+              '*Please select the intensity level of activities you did today:*\n\n## Error\n\n> test quote\n\n1. test list 1\n2. test list 2\n',
             responseType: ItemResponseType.MultipleSelection,
             options: [
               {

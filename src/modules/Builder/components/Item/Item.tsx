@@ -15,6 +15,7 @@ import {
   StyledCol,
   StyledFlowDescription,
   StyledImg,
+  StyledImgPlaceholder,
   StyledItem,
 } from './Item.styles';
 import { ItemProps, ItemUiType } from './Item.types';
@@ -34,8 +35,15 @@ export const Item = ({
   const { t } = useTranslation('app');
   const { name, hasError, description, img, count, index, total } = props;
   const isFlowUiType = uiType === ItemUiType.Flow;
+  const isActivityUiType = uiType === ItemUiType.Activity;
 
   const commonSx = isInactive ? { opacity: '0.38' } : undefined;
+
+  const image = img ? (
+    <StyledImg src={img} alt={name} sx={commonSx} />
+  ) : (
+    <StyledImgPlaceholder sx={commonSx} />
+  );
 
   return (
     <StyledItem
@@ -46,7 +54,7 @@ export const Item = ({
       onClick={onItemClick}
       isDragging={isDragging}
     >
-      {img && <StyledImg src={img} alt={name} sx={commonSx} />}
+      {isActivityUiType && image}
       <StyledCol sx={commonSx}>
         {index && total && (
           <StyledTitleMedium sx={{ marginBottom: theme.spacing(0.6) }}>

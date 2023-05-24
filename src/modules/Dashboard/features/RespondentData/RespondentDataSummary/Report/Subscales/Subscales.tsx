@@ -9,7 +9,7 @@ import { Subscale } from './Subscale';
 import { AdditionalInformation } from './AdditionalInformation';
 
 export const Subscales = () => (
-  <>
+  <Box sx={{ mb: theme.spacing(6.4) }}>
     <Scores {...scores} />
     {subscales?.map(({ name, id, items, additionalInformation }) => (
       <Accordion title={name} key={id}>
@@ -23,5 +23,5 @@ export const Subscales = () => (
         </>
       </Accordion>
     ))}
-  </>
+  </Box>
 );
