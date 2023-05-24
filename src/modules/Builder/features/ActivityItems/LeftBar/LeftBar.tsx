@@ -145,7 +145,7 @@ export const LeftBar = ({
         {!!systemItems?.length &&
           systemItems.map((item) => (
             <Item
-              key={`item-${getItemKey(item)}`}
+              key={`item-${getEntityKey(item)}`}
               item={item}
               activeItemId={activeItemId}
               onSetActiveItem={onSetActiveItem}
