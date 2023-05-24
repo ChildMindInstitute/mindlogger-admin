@@ -1,10 +1,9 @@
 import { Svg } from 'shared/components';
-import { ActivityFormValues, PerformanceTaskFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityValue } from 'modules/Builder/pages/BuilderApplet';
 
 import { GetActivitiesActions } from './Activities.types';
 
-export const getActivityKey = (entity: ActivityFormValues | PerformanceTaskFormValues): string =>
-  entity.key ?? entity.id ?? '';
+export const getActivityKey = (entity: ActivityValue): string => entity.key ?? entity.id ?? '';
 
 export const getActions = ({
   isActivityHidden,

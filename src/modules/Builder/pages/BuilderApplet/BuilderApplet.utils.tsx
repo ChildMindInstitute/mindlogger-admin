@@ -22,7 +22,6 @@ import {
 } from 'shared/state';
 import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
-import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
 
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from './BuilderApplet.types';
 
@@ -78,15 +77,25 @@ export const getNewPerformanceTask = ({
   name,
   description,
   performanceTask,
-}: GetNewPerformanceTask) => ({
-  name,
-  description,
-  isPerformanceTask: true,
-  isFlankerItem: name === PerformanceTasks.Flanker,
-  ...performanceTask,
-  id: undefined,
-  key: uuidv4(),
-});
+  isFlankerItem,
+}: GetNewPerformanceTask) => {
+  const instruction = isFlankerItem && {
+    general: {
+      instruction: t('performanceTaskInstructions.defaultGeneralInstructions'),
+    },
+  };
+
+  return {
+    name,
+    description,
+    ...instruction,
+    isPerformanceTask: true,
+    isFlankerItem,
+    ...performanceTask,
+    id: undefined,
+    key: uuidv4(),
+  };
+};
 
 export const getNewApplet = () => ({
   displayName: '',

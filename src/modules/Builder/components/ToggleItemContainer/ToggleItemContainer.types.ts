@@ -19,4 +19,5 @@ export type ToggleItemProps = {
   contentProps?: Record<string, unknown>;
   headerStyles?: SxProps;
   uiType?: ToggleContainerUiType;
+  isOpenByDefault?: boolean;
 };

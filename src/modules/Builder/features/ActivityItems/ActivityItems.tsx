@@ -8,7 +8,7 @@ import { StyledBodyLarge, StyledContainer, StyledModalWrapper, theme } from 'sha
 import { Modal } from 'shared/components';
 import { getEntityKey } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
 

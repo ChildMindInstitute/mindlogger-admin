@@ -4,7 +4,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Actions as CommonActions } from 'shared/components';
 import { StyledFlexTopCenter, StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder';
 
 import { ActionsProps } from './Actions.types';
