@@ -2,6 +2,7 @@ import { styled } from '@mui/material';
 
 import { shouldForwardProp } from 'shared/utils';
 import { StyledFlexColumn, StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { ToggleContainerUiType } from './ToggleItemContainer.types';
 
 export const StyledItemOptionContainer = styled(StyledFlexColumn)`
   background: ${variables.palette.surface1};
@@ -11,7 +12,8 @@ export const StyledItemOptionContainer = styled(StyledFlexColumn)`
 `;
 
 export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardProp)`
-  padding: ${theme.spacing(1.6, 2.4, 1.6, 3.4)};
+  padding: ${({ uiType }: { uiType: ToggleContainerUiType }) =>
+    theme.spacing(1.6, 2.4, 1.6, uiType === ToggleContainerUiType.Item ? 3.4 : 2.4)};
   position: relative;
   width: 100%;
 

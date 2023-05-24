@@ -11,6 +11,7 @@ export const enum Path {
   Settings = 'settings',
   ActivityFlow = 'activity-flow',
   FlowBuilder = 'builder',
+  Flanker = 'flanker',
 }
 
 const uuidRegexp = '([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})';
@@ -18,6 +19,7 @@ export const APPLET_PAGE_REGEXP_STRING = `\\/${Path.Builder}\\/(${uuidRegexp}|${
 export const ACTIVITIES_PAGE_REGEXP_STRING = `${APPLET_PAGE_REGEXP_STRING}\\/${Path.Activities}`;
 export const ACTIVITY_FLOWS_PAGE_REGEXP_STRING = `${APPLET_PAGE_REGEXP_STRING}\\/${Path.ActivityFlow}`;
 export const ACTIVITY_PAGE_REGEXP_STRING = `${ACTIVITIES_PAGE_REGEXP_STRING}\\/(${uuidRegexp})`;
+export const FLANKER_PAGE_REGEXP_STRING = `${ACTIVITIES_PAGE_REGEXP_STRING}\\/${Path.Flanker}\\/(${uuidRegexp})`;
 export const ACTIVITY_FLOW_PAGE_REGEXP_STRING = `${ACTIVITY_FLOWS_PAGE_REGEXP_STRING}\\/(${uuidRegexp})`;
 
 export const getAppletPageRegexp = (path?: string) =>
@@ -34,6 +36,9 @@ export const checkIfAppletUrlPassed = (url: string) =>
 
 export const checkIfAppletActivityUrlPassed = (url: string) =>
   new RegExp(`^${ACTIVITY_PAGE_REGEXP_STRING}`).test(url);
+
+export const checkIfAppletFlankerUrlPassed = (url: string) =>
+  new RegExp(`^${FLANKER_PAGE_REGEXP_STRING}`).test(url);
 
 export const checkIfAppletActivityFlowUrlPassed = (url: string) =>
   new RegExp(`^${ACTIVITY_FLOW_PAGE_REGEXP_STRING}`).test(url);

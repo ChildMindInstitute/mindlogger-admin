@@ -30,9 +30,9 @@ import {
   AppletSubmitDateList,
   RespondentId,
   EventId,
-  RespondentAccesses,
   RemoveRespondentAccess,
   RemoveManagerAccess,
+  AppletDataRetention,
   ImportSchedule,
   GetWorkspaceAppletsParams,
   FolderName,
@@ -56,31 +56,28 @@ export const getWorkspaceAppletsApi = (
 };
 
 export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
-  const { ownerId, ...restParams } = params;
+  const { ownerId, appletId, ...restParams } = params;
 
-  return authApiClient.get(`/workspaces/${ownerId}/managers`, {
-    params: restParams,
-    signal,
-  });
+  return authApiClient.get(
+    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}managers`,
+    {
+      params: restParams,
+      signal,
+    },
+  );
 };
 
 export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
-  const { ownerId, ...restParams } = params;
+  const { ownerId, appletId, ...restParams } = params;
 
-  return authApiClient.get(`/workspaces/${ownerId}/respondents`, {
-    params: restParams,
-    signal,
-  });
+  return authApiClient.get(
+    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}respondents`,
+    {
+      params: restParams,
+      signal,
+    },
+  );
 };
-
-export const getWorkspaceRespondentAccessesApi = (
-  { ownerId, respondentId, ...params }: RespondentAccesses,
-  signal?: AbortSignal,
-) =>
-  authApiClient.get(`/workspaces/${ownerId}/respondents/${respondentId}/accesses`, {
-    params,
-    signal,
-  });
 
 export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
   authApiClient.get(`/workspaces/${ownerId}`, {
@@ -256,10 +253,10 @@ export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSi
   });
 };
 
-export const updatePinApi = ({ ownerId, accessId }: UpdatePin, signal?: AbortSignal) =>
+export const updatePinApi = ({ ownerId, userId }: UpdatePin, signal?: AbortSignal) =>
   authApiClient.post(
-    `/workspaces/${ownerId}/respondents/pin`,
-    { accessId },
+    `/workspaces/${ownerId}/respondents/${userId}/pin`,
+    {},
     {
       signal,
     },
@@ -468,6 +465,18 @@ export const getAppletSubmitDateListApi = (
     params,
     signal,
   });
+
+export const postAppletDataRetentionApi = (
+  { appletId, ...dataRetentionParams }: AppletDataRetention,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/applets/${appletId}/retentions`,
+    { ...dataRetentionParams },
+    {
+      signal,
+    },
+  );
 
 export const publishAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.post(`/applets/${appletId}/publish`, { signal });

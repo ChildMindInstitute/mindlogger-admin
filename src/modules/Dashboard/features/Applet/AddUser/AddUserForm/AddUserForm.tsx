@@ -17,6 +17,7 @@ import { Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
 import { users, workspaces } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
+import { useAppDispatch } from 'redux/store';
 
 import { StyledButton, StyledRow, StyledResetButton, StyledTooltip } from './AddUserForm.styles';
 import { Fields, fields, defaultValues, langs, getRoles } from './AddUserForm.const';
@@ -25,19 +26,20 @@ import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types
 import { getUrl } from './AddUserForm.utils';
 
 export const AddUserForm = ({ getInvitationsHandler, priorityRole }: AddUserFormProps) => {
-  const { appletId: id } = useParams();
+  const { appletId } = useParams();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
 
   const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);
+
   const workspaceNameVisible = !workspaceInfo?.hasManagers;
 
   const { ownerId } = workspaces.useData() || {};
-  const respondentsData = users.useRespondentsData();
-  const respondents = respondentsData?.result?.map((item) => ({
-    label: `${item.accessId} (${item.nickname})`,
-    id: item.id,
+  const respondentsData = users.useAllRespondentsData();
+  const respondents = respondentsData?.result?.map(({ details, id }) => ({
+    label: `${details?.[0].accessId} (${details?.[0].respondentNickname})`,
+    id,
   }));
-
   const {
     handleSubmit,
     control,
@@ -79,10 +81,10 @@ export const AddUserForm = ({ getInvitationsHandler, priorityRole }: AddUserForm
       ...(values.respondents && { respondents: values.respondents.map((item) => item.id) }),
     };
 
-    if (id) {
+    if (appletId) {
       executePostAppletInvitationApi({
         url: getUrl(values.role),
-        appletId: id,
+        appletId,
         options,
       });
     }
@@ -112,7 +114,16 @@ export const AddUserForm = ({ getInvitationsHandler, priorityRole }: AddUserForm
   };
 
   useEffect(() => {
-    ownerId && executeGetWorkspaceInfoApi({ ownerId });
+    if (ownerId) {
+      const { getAllWorkspaceRespondents } = users.thunk;
+
+      executeGetWorkspaceInfoApi({ ownerId });
+      dispatch(
+        getAllWorkspaceRespondents({
+          params: { ownerId, appletId },
+        }),
+      );
+    }
   }, [ownerId]);
 
   return (

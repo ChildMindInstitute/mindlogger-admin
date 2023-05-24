@@ -15,7 +15,7 @@ import { getActions, getHeadCells } from './Managers.const';
 import { User } from './Managers.types';
 
 export const Managers = () => {
-  const { appletId: id } = useParams();
+  const { appletId } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
 
@@ -35,11 +35,11 @@ export const Managers = () => {
       ...args,
       params: {
         ...args.params,
-        ...(id && { appletId: id }),
+        ...(appletId && { appletId }),
       },
     };
 
-    return dispatch(getWorkspaceManagers({ ...params, ...(id && { appletId: id }) }));
+    return dispatch(getWorkspaceManagers({ ...params, ...(appletId && { appletId }) }));
   });
 
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
@@ -74,14 +74,14 @@ export const Managers = () => {
         content: () => email,
         value: email,
       },
-      ...(id && {
+      ...(appletId && {
         roles: {
           content: () => stringRoles,
           value: stringRoles,
         },
       }),
       actions: {
-        content: () => <Actions items={getActions(id, actions)} context={user} />,
+        content: () => <Actions items={getActions(appletId, actions)} context={user} />,
         value: '',
         width: '20%',
       },
@@ -90,7 +90,7 @@ export const Managers = () => {
 
   const renderEmptyComponent = () => {
     if (!rows?.length) {
-      return id ? t('noManagersForApplet') : t('noManagers');
+      return appletId ? t('noManagersForApplet') : t('noManagers');
     }
 
     return searchValue && t('noMatchWasFound', { searchValue });
@@ -102,7 +102,7 @@ export const Managers = () => {
         <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
       </ManagersTableHeader>
       <Table
-        columns={getHeadCells(id)}
+        columns={getHeadCells(appletId)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={managersData?.count || 0}

@@ -1,9 +1,13 @@
 import { styled } from '@mui/system';
 import { Drawer, Box, Button } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledFlexAllCenter, StyledQuantityCircle } from 'shared/styles/styledComponents';
+import {
+  theme,
+  variables,
+  StyledFlexAllCenter,
+  StyledFlexSpaceBetween,
+  StyledQuantityCircle,
+} from 'shared/styles';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from './AccountPanel.const';
 
@@ -22,9 +26,7 @@ export const StyledAccountDrawer = styled(Drawer)`
   }
 `;
 
-export const StyledHeader = styled(Box)`
-  display: flex;
-  justify-content: space-between;
+export const StyledHeader = styled(StyledFlexSpaceBetween)`
   height: ${ACCOUNT_HEADER_HEIGHT};
   padding: ${theme.spacing(1.4, 1.6, 0)};
 `;
