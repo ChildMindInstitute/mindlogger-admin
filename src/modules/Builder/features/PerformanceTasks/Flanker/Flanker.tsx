@@ -6,6 +6,7 @@ import { useBreadcrumbs } from 'shared/hooks';
 
 import { PerformanceTaskHeader } from '../PerformanceTaskHeader';
 import { NameDescription } from '../NameDescription';
+import { GeneralSettings } from './GeneralSettings';
 
 export const Flanker = () => {
   const { t } = useTranslation();
@@ -15,8 +16,9 @@ export const Flanker = () => {
     <>
       <PerformanceTaskHeader />
       <Box sx={{ p: theme.spacing(2.4, 6.4) }}>
-        <StyledHeadlineLarge sx={{ mb: theme.spacing(2.4) }}>{t('flanker')}</StyledHeadlineLarge>
+        <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>{t('flanker')}</StyledHeadlineLarge>
         <NameDescription />
+        <GeneralSettings />
       </Box>
     </>
   );

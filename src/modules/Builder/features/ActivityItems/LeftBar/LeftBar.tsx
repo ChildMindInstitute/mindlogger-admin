@@ -6,7 +6,7 @@ import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautifu
 import { Svg } from 'shared/components';
 import { StyledFlexAllCenter, StyledTitleMedium, theme } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { InsertItem, DndDroppable } from 'modules/Builder/components';
 
 import { StyledBar, StyledHeaderTitle, StyledContent, StyledBtnWrapper } from './LeftBar.styles';

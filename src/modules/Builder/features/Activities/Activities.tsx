@@ -8,7 +8,12 @@ import { Box } from '@mui/material';
 import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
+import {
+  ActivityFormValues,
+  ActivityValue,
+  AppletFormValues,
+  FlankerFormValues,
+} from 'modules/Builder/pages/BuilderApplet';
 import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
 import {
   getNewActivity,
@@ -41,11 +46,11 @@ export const Activities = () => {
     name: 'activities',
   });
 
-  const activities = watch('activities');
+  const activities: ActivityValue[] = watch('activities');
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
 
   const errors = activities?.reduce(
-    (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
+    (err: Record<string, boolean>, _: ActivityValue, index: number) => ({
       ...err,
       [`activities[${index}]`]: !!getFieldState(`activities[${index}]`).error,
     }),
@@ -77,10 +82,15 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
-    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked } = props || {};
+    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked, isFlankerItem } =
+      props || {};
     const newActivity =
       performanceTaskName && performanceTaskDesc
-        ? getNewPerformanceTask({ name: performanceTaskName, description: performanceTaskDesc })
+        ? getNewPerformanceTask({
+            name: performanceTaskName,
+            description: performanceTaskDesc,
+            isFlankerItem,
+          })
         : getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
@@ -116,8 +126,10 @@ export const Activities = () => {
       const numberToInsert = (prevState[getActivityKey(activityToDuplicate)] || 0) + 1;
 
       const newActivity = isPerformanceTask
-        ? getNewPerformanceTask({ performanceTask: activityToDuplicate })
-        : getNewActivity(activityToDuplicate);
+        ? getNewPerformanceTask({
+            performanceTask: activityToDuplicate as FlankerFormValues,
+          })
+        : getNewActivity(activityToDuplicate as ActivityFormValues);
 
       insertActivity(index + 1, {
         ...newActivity,
@@ -172,7 +184,7 @@ export const Activities = () => {
                     const isPerformanceTask = activity?.isPerformanceTask || false;
                     const activityName = activity.name;
                     const isEditVisible = !isPerformanceTask || !!activity.isFlankerItem;
-                    const hasError = !!errors[`activities[${index}]`];
+                    const hasError = errors[`activities[${index}]`];
 
                     return (
                       <Fragment key={`activity-${activityKey}`}>

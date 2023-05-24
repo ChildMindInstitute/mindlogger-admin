@@ -38,7 +38,7 @@ export const getPerformanceTasksMenu = (
         getAction({
           performanceTaskName: PerformanceTasks.Flanker,
           performanceTaskDesc: t('performanceTasksDesc.flanker'),
-          isNavigationBlocked: false,
+          isFlankerItem: true,
         }),
     },
     {

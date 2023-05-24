@@ -16,7 +16,7 @@ import {
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
 import { ItemResponseType } from 'shared/consts';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { StyledContent, StyledHeader, StyledItemConfiguration } from './ItemConfiguration.styles';
