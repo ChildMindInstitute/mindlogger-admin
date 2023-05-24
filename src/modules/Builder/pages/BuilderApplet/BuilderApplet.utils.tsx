@@ -149,7 +149,7 @@ const getActivityItemResponseValues = (item: Item) => {
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map((item) => ({
-        id: uuidv4(),
+        id: item.id ?? uuidv4(),
         name: item.name,
         question: getDictionaryText(item.question),
         responseType: item.responseType,
