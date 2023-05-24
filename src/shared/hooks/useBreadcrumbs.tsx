@@ -15,7 +15,6 @@ import {
   checkIfAppletFlankerUrlPassed,
 } from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
-import { getRespondentLabel } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
 import { useRespondentLabel } from 'modules/Dashboard/hooks';
 
