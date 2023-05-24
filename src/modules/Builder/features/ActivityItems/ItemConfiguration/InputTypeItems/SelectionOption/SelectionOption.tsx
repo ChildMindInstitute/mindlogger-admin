@@ -1,10 +1,10 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 
-import { Actions, Svg, Uploader, UploaderUiType, Modal } from 'shared/components';
+import { Actions, Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import {
   theme,
@@ -13,7 +13,6 @@ import {
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
-  StyledModalWrapper,
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
@@ -33,10 +32,10 @@ import {
   StyledTextInputWrapper,
   StyledTooltipWrapper,
 } from './SelectionOption.styles';
-import { ConditionalPanel } from '../../../ConditionalPanel';
 import { SelectionOptionProps } from './SelectionOption.types';
 import { getActions, getDependentConditions } from './SelectionOption.utils';
 import { useSetSelectionOptionValue } from './SelectionOption.hooks';
+import { RemoveOptionPopup } from './RemoveOptionPopup';
 
 export const SelectionOption = ({
   name,
@@ -245,35 +244,12 @@ export const SelectionOption = ({
         />
       )}
       {indexToRemove !== -1 && (
-        <Modal
-          open
+        <RemoveOptionPopup
+          name={optionName}
+          conditions={dependentConditions}
           onClose={handleRemoveModalClose}
           onSubmit={handleSubmitRemove}
-          onSecondBtnSubmit={handleRemoveModalClose}
-          title={t('deleteOption')}
-          buttonText={t('delete')}
-          secondBtnText={t('cancel')}
-          hasSecondBtn
-          submitBtnColor="error"
-        >
-          <StyledModalWrapper>
-            <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
-              <Trans i18nKey="deleteOptionDescription">
-                Are you sure you want to delete Option
-                <strong>
-                  <>{{ name: option?.text }}</>
-                </strong>
-                ? It will also remove the Conditional(s) below
-              </Trans>
-            </StyledBodyLarge>
-            {dependentConditions?.map((conditionalLogic: ConditionalLogic) => (
-              <ConditionalPanel
-                key={`condition-panel-${conditionalLogic.key}`}
-                condition={conditionalLogic}
-              />
-            ))}
-          </StyledModalWrapper>
-        </Modal>
+        />
       )}
     </>
   );
