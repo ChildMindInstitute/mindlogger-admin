@@ -100,6 +100,7 @@ export const LeftBar = ({
         {!!systemItems?.length &&
           systemItems.map((item) => (
             <Item
+              key={`item-${getItemKey(item)}`}
               item={item}
               activeItemId={activeItemId}
               onSetActiveItem={onSetActiveItem}
