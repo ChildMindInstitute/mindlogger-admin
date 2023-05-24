@@ -57,7 +57,7 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
             of the “if” rules below are
             <strong>
               {' '}
-              true, show item: <>{{ name: currentItem.name }}</>
+              true, show item: <>{{ name: currentItem?.name ?? '' }}</>
             </strong>
           </Trans>
         </StyledBodyLarge>

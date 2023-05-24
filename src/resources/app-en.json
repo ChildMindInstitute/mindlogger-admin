@@ -968,5 +968,7 @@
   "conditionPanelType_NOT_EQUAL": "NOT EQUAL",
   "conditionPanelType_BETWEEN": "BETWEEN",
   "conditionPanelType_OUTSIDE_OF": "OUTSIDE OF",
-  "conditionPanelValueRange": "{{minValue}} and {{maxValue}}"
+  "conditionPanelValueRange": "{{minValue}} and {{maxValue}}",
+  "deleteOption": "Delete Option",
+  "deleteOptionDescription": "Are you sure you want to delete Option <1>{{name}}</1>? It will also remove the Conditional(s) below"
 }
