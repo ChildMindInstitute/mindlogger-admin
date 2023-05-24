@@ -8,4 +8,5 @@ export const commonConfig = {
   },
 };
 
-export const TICK_HEIGHT = 11;
+export const LABEL_WIDTH_Y = 180;
+export const MAX_LABEL_CHARS_Y = 24;

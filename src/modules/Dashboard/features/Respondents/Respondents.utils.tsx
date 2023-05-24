@@ -8,7 +8,8 @@ import {
   StyledBodyMedium,
   StyledLabelLarge,
   StyledFlexTopCenter,
-} from 'shared/styles/styledComponents';
+} from 'shared/styles';
+import { RespondentDetail } from 'redux/modules';
 
 import { RespondentsActions, ChosenAppletData } from './Respondents.types';
 
@@ -51,14 +52,16 @@ export const getActions = (
 ];
 
 export const getAppletsSmallTableRows = (
-  respondentAccesses: ChosenAppletData[] | null,
+  respondentAccesses: RespondentDetail[],
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>,
-  respondentId?: string,
+  respondentId: string,
+  ownerId: string,
 ) =>
   respondentAccesses?.map((respondentAccess) => {
     const choseAppletHandler = () =>
-      setChosenAppletData({ ...respondentAccess, ...(respondentId && { respondentId }) });
-    const { appletName, appletImg, secretUserId, nickname } = respondentAccess;
+      setChosenAppletData({ ...respondentAccess, ownerId, respondentId });
+    const { appletDisplayName, appletImg, respondentSecretId, respondentNickname } =
+      respondentAccess;
 
     return {
       appletName: {
@@ -69,20 +72,20 @@ export const getAppletsSmallTableRows = (
             ) : (
               <StyledSmallAppletImgPlaceholder />
             )}
-            <StyledLabelLarge>{appletName}</StyledLabelLarge>
+            <StyledLabelLarge>{appletDisplayName}</StyledLabelLarge>
           </StyledFlexTopCenter>
         ),
-        value: appletName,
+        value: appletDisplayName,
         onClick: choseAppletHandler,
       },
       secretUserId: {
-        content: () => <StyledLabelLarge>{secretUserId}</StyledLabelLarge>,
-        value: secretUserId,
+        content: () => <StyledLabelLarge>{respondentSecretId}</StyledLabelLarge>,
+        value: respondentSecretId,
         onClick: choseAppletHandler,
       },
       nickname: {
-        content: () => <StyledBodyMedium>{nickname}</StyledBodyMedium>,
-        value: nickname,
+        content: () => <StyledBodyMedium>{respondentNickname}</StyledBodyMedium>,
+        value: respondentNickname,
         onClick: choseAppletHandler,
       },
     };

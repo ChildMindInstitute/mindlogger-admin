@@ -8,14 +8,23 @@ import { Box } from '@mui/material';
 import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import { ActivityFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
+import {
+  ActivityFormValues,
+  ActivityValue,
+  AppletFormValues,
+  FlankerFormValues,
+} from 'modules/Builder/pages/BuilderApplet';
 import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
-import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import {
+  getNewActivity,
+  getNewPerformanceTask,
+} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey } from './Activities.utils';
+import { ActivityAddProps, ActivityProps } from './Activities.types';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -37,11 +46,11 @@ export const Activities = () => {
     name: 'activities',
   });
 
-  const activities = watch('activities');
+  const activities: ActivityValue[] = watch('activities');
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
 
   const errors = activities?.reduce(
-    (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
+    (err: Record<string, boolean>, _: ActivityValue, index: number) => ({
       ...err,
       [`activities[${index}]`]: !!getFieldState(`activities[${index}]`).error,
     }),
@@ -63,12 +72,35 @@ export const Activities = () => {
         activityId,
       }),
     );
+  const navigateToFlanker = (activityId?: string) =>
+    activityId &&
+    navigate(
+      generatePath(page.builderAppletFlanker, {
+        appletId,
+        activityId,
+      }),
+    );
   const handleModalClose = () => setActivityToDelete('');
-  const handleActivityAdd = (index?: number) => {
-    const newActivity = getNewActivity();
+  const handleActivityAdd = (props: ActivityAddProps) => {
+    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked, isFlankerItem } =
+      props || {};
+    const newActivity =
+      performanceTaskName && performanceTaskDesc
+        ? getNewPerformanceTask({
+            name: performanceTaskName,
+            description: performanceTaskDesc,
+            isFlankerItem,
+          })
+        : getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
-    navigateToActivity(newActivity.key);
+
+    if (isNavigationBlocked) return;
+    if (newActivity.isFlankerItem) {
+      return navigateToFlanker(newActivity.key);
+    }
+
+    return navigateToActivity(newActivity.key);
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {
@@ -88,13 +120,19 @@ export const Activities = () => {
     setValue('activityFlows', newActivityFlows);
   };
 
-  const handleDuplicateActivity = (index: number) => {
+  const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
     const activityToDuplicate = activities[index];
     setDuplicateIndexes((prevState) => {
       const numberToInsert = (prevState[getActivityKey(activityToDuplicate)] || 0) + 1;
 
+      const newActivity = isPerformanceTask
+        ? getNewPerformanceTask({
+            performanceTask: activityToDuplicate as FlankerFormValues,
+          })
+        : getNewActivity(activityToDuplicate as ActivityFormValues);
+
       insertActivity(index + 1, {
-        ...getNewActivity(activityToDuplicate),
+        ...newActivity,
         name: `${activityToDuplicate.name} (${numberToInsert})`,
       });
 
@@ -107,7 +145,12 @@ export const Activities = () => {
 
   const handleEditActivity = (index: number) => {
     const activityToEdit = activities[index];
-    navigateToActivity(getActivityKey(activityToEdit));
+    const activityKey = getActivityKey(activityToEdit);
+    if (activityToEdit.isFlankerItem) {
+      return navigateToFlanker(activityKey);
+    }
+
+    return navigateToActivity(activityKey);
   };
 
   const handleActivityVisibilityChange = (index: number) => {
@@ -136,11 +179,12 @@ export const Activities = () => {
             <DndDroppable droppableId="activities-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {activities.map((activity: ActivityFormValues, index: number) => {
+                  {activities.map((activity: ActivityProps, index: number) => {
                     const activityKey = getActivityKey(activity);
-
+                    const isPerformanceTask = activity?.isPerformanceTask || false;
                     const activityName = activity.name;
-                    const hasError = !!errors[`activities[${index}]`];
+                    const isEditVisible = !isPerformanceTask || !!activity.isFlankerItem;
+                    const hasError = errors[`activities[${index}]`];
 
                     return (
                       <Fragment key={`activity-${activityKey}`}>
@@ -161,19 +205,21 @@ export const Activities = () => {
                                     key: activityKey,
                                     isActivityHidden: activity.isHidden,
                                     onEdit: () => handleEditActivity(index),
-                                    onDuplicate: () => handleDuplicateActivity(index),
+                                    onDuplicate: () =>
+                                      handleDuplicateActivity(index, isPerformanceTask),
                                     onRemove: () => setActivityToDelete(activityKey),
                                     onVisibilityChange: () => handleActivityVisibilityChange(index),
+                                    isEditVisible,
                                   })
                                 }
                                 hasError={hasError}
-                                count={activity.items.length}
+                                count={activity.items?.length}
                               />
                               <InsertItem
                                 isVisible={
                                   index >= 0 && index < activities.length - 1 && !isDragging
                                 }
-                                onInsert={() => handleActivityAdd(index + 1)}
+                                onInsert={() => handleActivityAdd({ index: index + 1 })}
                               />
                             </Box>
                           )}

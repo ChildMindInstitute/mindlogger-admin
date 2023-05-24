@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder/pages';
 import { ActivitySettingsSubscale } from 'shared/state';
 

@@ -1,13 +1,10 @@
 import { styled } from '@mui/system';
 import { Box, Link } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
 import { FOOTER_HEIGHT } from 'shared/consts';
+import { theme, variables, StyledFlexSpaceBetween } from 'shared/styles';
 
-export const StyledFooter = styled(Box)`
-  display: flex;
-  justify-content: space-between;
+export const StyledFooter = styled(StyledFlexSpaceBetween)`
   align-items: center;
   height: ${FOOTER_HEIGHT};
   font-size: ${variables.font.size.sm};

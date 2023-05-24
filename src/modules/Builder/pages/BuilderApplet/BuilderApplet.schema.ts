@@ -12,6 +12,7 @@ import {
 import { SLIDER_LABEL_MAX_LENGTH } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import { testFunctionForUniqueness } from './BuilderApplet.utils';
+import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -150,6 +151,27 @@ export const SubscaleSchema = () =>
     })
     .required();
 
+export const ConditionSchema = () =>
+  yup.object({
+    itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
+    type: yup.string().required(getIsRequiredValidateMessage('conditionType')),
+    payload: yup.object({}).when('type', (type, schema) => {
+      if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
+        return schema.shape({
+          optionId: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+        });
+
+      return schema;
+    }),
+  });
+
+export const ConditionalLogicSchema = () =>
+  yup.object({
+    match: yup.string().required(getIsRequiredValidateMessage('conditionMatch')),
+    itemKey: yup.string().required(getIsRequiredValidateMessage('conditionTarget')),
+    conditions: yup.array().of(ConditionSchema()),
+  });
+
 export const SectionSchema = () =>
   yup
     .object({
@@ -202,6 +224,7 @@ export const ActivitySchema = () =>
     items: yup.array().of(ItemSchema()).min(1),
     isHidden: yup.boolean(),
     subscales: yup.array().of(SubscaleSchema()),
+    conditionalLogic: yup.array().of(ConditionalLogicSchema()),
     sections: yup.array().of(SectionSchema()),
   });
 

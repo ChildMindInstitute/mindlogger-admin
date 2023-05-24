@@ -9,7 +9,7 @@ import {
 import { Svg } from 'shared/components';
 
 import { StyledItemOption, StylesTitleWrapper } from './ToggleItemContainer.styles';
-import { ToggleItemProps } from './ToggleItemContainer.types';
+import { ToggleContainerUiType, ToggleItemProps } from './ToggleItemContainer.types';
 
 export const ToggleItemContainer = ({
   title,
@@ -18,12 +18,14 @@ export const ToggleItemContainer = ({
   headerContentProps,
   contentProps,
   headerStyles = {},
+  uiType = ToggleContainerUiType.Item,
+  isOpenByDefault,
 }: ToggleItemProps) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(isOpenByDefault ?? true);
   const handleToggle = () => setOpen((prevState) => !prevState);
 
   return (
-    <StyledItemOption>
+    <StyledItemOption uiType={uiType}>
       <StylesTitleWrapper open={open} sx={{ ...headerStyles }}>
         <StyledFlexTopCenter>
           <StyledClearedButton onClick={handleToggle}>
@@ -35,7 +37,9 @@ export const ToggleItemContainer = ({
             </StyledFlexTopCenter>
           )}
         </StyledFlexTopCenter>
-        <HeaderContent open={open} {...headerContentProps} />
+        {HeaderContent && (
+          <HeaderContent open={open} onToggle={handleToggle} {...headerContentProps} />
+        )}
       </StylesTitleWrapper>
       {open && <Content {...contentProps} />}
     </StyledItemOption>

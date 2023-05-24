@@ -21,7 +21,7 @@ import {
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
 import { ActivityFormValues, ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
 import { StyledContainer, StyledSvg } from './ActivityAbout.styles';

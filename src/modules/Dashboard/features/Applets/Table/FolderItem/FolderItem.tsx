@@ -87,7 +87,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       className={isDragOver ? 'dragged-over' : ''}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
-      onDrop={(e) => onDrop(e, item)}
+      onDrop={(event) => onDrop(event, item)}
     >
       <TableCell width="30%" onClick={() => (!folder?.isRenaming ? handleFolderClick() : null)}>
         <StyledFlexTopCenter>
@@ -107,8 +107,8 @@ export const FolderItem = ({ item }: FolderItemProps) => {
                 endAdornment={
                   <InputAdornment position="end">
                     <StyledCloseButton
-                      onMouseDown={(e) => {
-                        e.preventDefault();
+                      onMouseDown={(event) => {
+                        event.preventDefault();
                         handleClearClick();
                       }}
                     >

@@ -1,45 +1,41 @@
+import { LinearScale } from 'chart.js';
 import { Context } from 'chartjs-plugin-datalabels';
 
 import { variables } from 'shared/styles';
-import { locales } from 'shared/consts';
+import { ItemResponseType, locales } from 'shared/consts';
+import { SingleAndMultipleSelectItemResponseValues } from 'shared/state/Applet/Applet.schema';
 
-import { Version, ItemAnswer, FormattedItemAnswer } from '../../Report.types';
-import { MultiScatterResponseValues } from '../../ResponseOptions/ResponseOptions.types';
-import { ExtendedChartDataset } from './MultiScatterChart.types';
-import { commonConfig } from './MultiScatterChart.const';
+import { DataProps, ExtendedChartDataset, OptionsProps } from './MultiScatterChart.types';
+import { LABEL_WIDTH_Y, MAX_LABEL_CHARS_Y, commonConfig } from './MultiScatterChart.const';
 
 const formatDateToNumber = (date: string | Date) =>
   (typeof date === 'string' ? new Date(date) : date).getTime();
 
-export const formatAnswers = (answers: ItemAnswer[]) =>
-  answers.reduce((flattenAnswers: FormattedItemAnswer[], { value, date }: ItemAnswer) => {
-    if (Array.isArray(value)) {
-      const flattenValues = value.map((item) => ({ value: item, date }));
+const truncateString = (label: string) =>
+  label?.length > MAX_LABEL_CHARS_Y ? `${label.substring(0, MAX_LABEL_CHARS_Y)}...` : label;
 
-      return [...flattenAnswers, ...flattenValues];
-    }
-
-    return [...flattenAnswers, { value, date }];
-  }, []);
-
-export const getOptions = (
-  lang: keyof typeof locales,
-  responseValues: MultiScatterResponseValues,
-  minDate: string | Date,
-  maxDate: string | Date,
-) => {
+export const getOptions = ({
+  lang,
+  responseValues,
+  responseType,
+  minY,
+  maxY,
+  minDate,
+  maxDate,
+}: OptionsProps) => {
   const min = formatDateToNumber(minDate);
   const max = formatDateToNumber(maxDate);
 
-  const mapperPointOption: { [key: number]: string } = responseValues?.options.reduce(
-    (mapper, { text }, index) => ({
-      ...mapper,
-      [index + 1]: text,
-    }),
-    {},
-  );
-
-  const maxY = Object.values(mapperPointOption).length + 1;
+  const mapperPointOption: { [key: string | number]: string } =
+    responseType !== ItemResponseType.Slider
+      ? (responseValues as SingleAndMultipleSelectItemResponseValues)?.options.reduce(
+          (mapper, { text }, index) => ({
+            ...mapper,
+            [index + 1]: text,
+          }),
+          {},
+        )
+      : {};
 
   return {
     responsive: true,
@@ -54,11 +50,23 @@ export const getOptions = (
     },
     scales: {
       y: {
-        min: 1,
-        max: maxY,
+        min: minY,
+        max: maxY + 1,
+        afterFit(scaleInstance: LinearScale) {
+          scaleInstance.width = LABEL_WIDTH_Y;
+        },
         ticks: {
           stepSize: 1,
-          callback: (_: unknown, value: number) => mapperPointOption[value + 1],
+          callback: (value: string | number) => {
+            if (value === maxY + 1) return;
+
+            const label =
+              responseType === ItemResponseType.Slider
+                ? value.toString()
+                : mapperPointOption[value];
+
+            return truncateString(label);
+          },
           color: variables.palette.on_surface,
           font: {
             family: 'Atkinson',
@@ -105,20 +113,17 @@ export const getOptions = (
   };
 };
 
-export const getData = (
-  responseValues: MultiScatterResponseValues,
-  answers: FormattedItemAnswer[],
-  versions: Version[],
-) => {
-  const mapperIdPoint: { [key: string]: number } = responseValues?.options.reduce(
-    (mapper, { id }, index) => ({
-      ...mapper,
-      [id]: index + 1,
-    }),
-    {},
-  );
-
-  const maxY = Object.values(mapperIdPoint).length + 1;
+export const getData = ({ maxY, responseValues, responseType, answers, versions }: DataProps) => {
+  const mapperIdPoint: { [key: string]: number } =
+    responseType !== ItemResponseType.Slider
+      ? (responseValues as SingleAndMultipleSelectItemResponseValues)?.options.reduce(
+          (mapper, { id }, index) => ({
+            ...mapper,
+            [id]: index + 1,
+          }),
+          {},
+        )
+      : {};
 
   return {
     datasets: [
@@ -128,14 +133,17 @@ export const getData = (
         datalabels: {
           display: false,
         },
-        data: answers.map(({ date, value }) => ({ x: date, y: mapperIdPoint[value] })),
+        data: answers.map(({ date, value }) => ({
+          x: date,
+          y: responseType === ItemResponseType.Slider ? value : mapperIdPoint[value],
+        })),
         borderWidth: 0,
         backgroundColor: variables.palette.orange,
       },
       {
         xAxisID: 'x2',
         labels: versions.map(({ version }) => version),
-        data: versions.map(({ date }) => ({ x: date, y: maxY })),
+        data: versions.map(({ date }) => ({ x: date, y: maxY + 1 })),
         datalabels: {
           anchor: 'center' as const,
           align: 'right' as const,

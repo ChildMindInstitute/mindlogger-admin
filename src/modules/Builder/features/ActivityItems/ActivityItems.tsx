@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useBreadcrumbs } from 'shared/hooks';
 import { StyledContainer, StyledModalWrapper } from 'shared/styles';
 import { Modal } from 'shared/components';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
 

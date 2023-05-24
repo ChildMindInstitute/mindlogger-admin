@@ -3,6 +3,7 @@ import {
   Config,
   ActivitySettingsSubscale,
   ResponseValues,
+  ConditionalLogic,
   ActivitySettingsSection,
 } from 'shared/state';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
@@ -34,8 +35,72 @@ export type ActivityFormValues = {
   items: ItemFormValues[];
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
+  conditionalLogic?: ConditionalLogic[];
   sections?: ActivitySettingsSection[];
   totalScoresTableData?: string;
+  isPerformanceTask?: boolean;
+  isFlankerItem?: boolean;
+};
+
+type FlankerButtonSetting = {
+  name: string | null;
+  image: string | null;
+};
+
+type FlankerFixationSettings = {
+  image: string | null;
+  duration: number;
+};
+
+type FlankerStimulusId = string;
+
+type FlankerStimulusSettings = {
+  id: FlankerStimulusId;
+  image: string;
+  correctPress: 'LEFT' | 'RIGHT';
+};
+
+type FlankerBlockSettings = {
+  order: Array<FlankerStimulusId>;
+};
+
+type FlankerPracticeSettings = {
+  instruction: string;
+  blocks: Array<FlankerBlockSettings>;
+  stimulusDuration: number;
+  threshold: number;
+  randomizeOrder: boolean;
+  showFeedback: boolean;
+  showSummary: boolean;
+};
+
+type FlankerTestSettings = {
+  instruction: string;
+  blocks: Array<FlankerBlockSettings>;
+  stimulusDuration: number;
+  randomizeOrder: boolean;
+  showFeedback: boolean;
+  showSummary: boolean;
+};
+
+type FlankerGeneralSettings = {
+  instruction: string;
+  buttons: Array<FlankerButtonSetting>;
+  fixation: FlankerFixationSettings | null;
+  stimulusTrials: Array<FlankerStimulusSettings>;
+};
+
+export type FlankerFormValues = {
+  id?: string;
+  key?: string;
+  name: string;
+  description: string;
+  isHidden?: boolean;
+  general: FlankerGeneralSettings;
+  practice: FlankerPracticeSettings;
+  test: FlankerTestSettings;
+  isPerformanceTask: boolean;
+  isFlankerItem?: boolean;
 };
 
 export type ActivityFlowItem = {
@@ -55,6 +120,8 @@ export type ActivityFlowFormValues = {
   isHidden?: boolean;
 };
 
+export type ActivityValue = ActivityFormValues | FlankerFormValues;
+
 export type AppletFormValues = {
   id?: string;
   displayName: string;
@@ -64,5 +131,12 @@ export type AppletFormValues = {
   watermark?: string;
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
-  activities: ActivityFormValues[];
+  activities: ActivityValue[];
+};
+
+export type GetNewPerformanceTask = {
+  name?: string;
+  description?: string;
+  performanceTask?: FlankerFormValues;
+  isFlankerItem?: boolean;
 };
