@@ -38,6 +38,7 @@ export type ActivityFormValues = {
   sections?: ActivitySettingsSection[];
   totalScoresTableData?: string;
   isPerformanceTask?: boolean;
+  isFlankerItem?: boolean;
 };
 
 export type PerformanceTaskFormValues = {
@@ -46,6 +47,7 @@ export type PerformanceTaskFormValues = {
   name: string;
   description: string;
   isPerformanceTask: boolean;
+  isFlankerItem?: boolean;
   isHidden?: boolean;
 };
 

@@ -53,9 +53,9 @@ export const EditRespondentPopup = ({
   };
 
   useEffect(() => {
-    const { nickname = '', secretUserId = '' } = chosenAppletData || {};
-    setValue('secretUserId', secretUserId);
-    setValue('nickname', nickname);
+    const { respondentNickname = '', respondentSecretId = '' } = chosenAppletData || {};
+    setValue('secretUserId', respondentSecretId);
+    setValue('nickname', respondentNickname);
   }, [chosenAppletData]);
 
   return (

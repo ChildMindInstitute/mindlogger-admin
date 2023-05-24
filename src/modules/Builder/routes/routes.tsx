@@ -14,6 +14,7 @@ import { appletRoutes, appletActivityRoutes, appletActivityFlowRoutes } from './
 const BuilderApplet = lazy(() => import('../pages/BuilderApplet'));
 const BuilderActivityFlow = lazy(() => import('../pages/BuilderActivityFlow'));
 const BuilderActivity = lazy(() => import('../pages/BuilderActivity'));
+const Flanker = lazy(() => import('modules/Builder/features/PerformanceTasks/Flanker'));
 
 export const builderRoutes = () => (
   <Route path={page.builder}>
@@ -65,6 +66,16 @@ export const builderRoutes = () => (
               }
             />
           </Route>
+        </Route>
+        <Route path={Path.Flanker}>
+          <Route
+            path=":activityId"
+            element={
+              <PrivateRoute>
+                <Flanker />
+              </PrivateRoute>
+            }
+          />
         </Route>
       </Route>
       <Route path={Path.ActivityFlow}>

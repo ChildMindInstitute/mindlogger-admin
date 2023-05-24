@@ -6,6 +6,7 @@ import {
   formatToYearMonthDate,
   getMonthName,
 } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+import { StyledFlexSpaceBetween } from 'shared/styles';
 
 import { CalendarViews } from '../../Calendar.types';
 import { CalendarDate } from './CalendarDate';
@@ -15,7 +16,6 @@ import {
   StyledMonth,
   StyledMonthName,
   StyledDay,
-  StyledDaysWrapper,
   StyledMonthInside,
   StyledSkeleton,
 } from './MonthCalendar.styles';
@@ -38,9 +38,9 @@ export const MonthCalendar = ({
   const monthDates = useMemo(
     () =>
       calendar &&
-      calendar.weeks.map((week, index) => (
-        <StyledDaysWrapper key={index}>
-          {week.map((date, index) => {
+      calendar.weeks.map((week) => (
+        <StyledFlexSpaceBetween key={week.id}>
+          {week.days.map((date, index) => {
             const currentDateEvents = events?.filter(
               ({ eventCurrentDate }) => eventCurrentDate === formatToYearMonthDate(date),
             );
@@ -55,7 +55,7 @@ export const MonthCalendar = ({
               />
             );
           })}
-        </StyledDaysWrapper>
+        </StyledFlexSpaceBetween>
       )),
     [calendar, events],
   );
@@ -70,11 +70,11 @@ export const MonthCalendar = ({
         {calendar && monthDates ? (
           <>
             <StyledMonthName>{getMonthName(calendar.date)}</StyledMonthName>
-            <StyledDaysWrapper>
+            <StyledFlexSpaceBetween>
               {shortWeekDaysArray(langLocale).map(({ id, name }) => (
                 <StyledDay key={id}>{name}</StyledDay>
               ))}
-            </StyledDaysWrapper>
+            </StyledFlexSpaceBetween>
             {monthDates}
           </>
         ) : (
