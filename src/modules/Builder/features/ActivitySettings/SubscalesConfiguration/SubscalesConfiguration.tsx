@@ -59,7 +59,7 @@ export const SubscalesConfiguration = () => {
   };
   const iconId = `lookup-table${tableData ? '-filled' : ''}`;
 
-  const subscales: ActivitySettingsSubscale[] = watch(subscalesField);
+  const subscales: ActivitySettingsSubscale[] = watch(subscalesField) ?? [];
   const filteredItems = (activity?.items ?? []).filter(checkOnItemTypeAndScore);
   const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
     filteredItems,
