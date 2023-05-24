@@ -9,6 +9,7 @@ import { Modal } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { getEntityKey } from 'shared/utils';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { getItemKey } from './ActivityItems.utils';
@@ -38,8 +39,8 @@ export const ActivityItems = () => {
   if (!activity) return null;
 
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
-  const activeItemIndex = items?.findIndex((item) => (item.key ?? item.id) === activeItemId);
-  const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === (item.key ?? item.id));
+  const activeItemIndex = items?.findIndex((item) => getEntityKey(item) === activeItemId);
+  const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
   const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
 
