@@ -7,6 +7,7 @@ export const getActions = ({
   onDuplicateItem,
   onChangeVisibility,
   isItemHidden,
+  hasHiddenOption,
 }: ActionsType) => [
   {
     icon: <Svg id="duplicate" />,
@@ -16,6 +17,7 @@ export const getActions = ({
     icon: <Svg id={isItemHidden ? 'visibility-off' : 'visibility-on'} />,
     action: () => onChangeVisibility(),
     isStatic: isItemHidden,
+    isDisplayed: !hasHiddenOption,
   },
   {
     icon: <Svg id="trash" />,

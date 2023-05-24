@@ -1,4 +1,3 @@
-import i18n from 'i18n';
 import { ItemFormValues } from 'modules/Builder/pages';
 import { ItemResponseType, ConditionType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
@@ -13,8 +12,6 @@ import { ConditionItemType } from 'modules/Builder/components';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
 import { OptionListItem } from './ConditionRow.types';
-
-const { t } = i18n;
 
 export const getConditionItemType = (item: ItemFormValues) => {
   switch (item.responseType) {

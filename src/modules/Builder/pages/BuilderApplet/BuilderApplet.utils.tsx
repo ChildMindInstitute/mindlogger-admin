@@ -158,7 +158,7 @@ const getActivityItemResponseValues = (item: Item) => {
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map((item) => ({
-        id: uuidv4(),
+        id: item.id ?? uuidv4(),
         name: item.name,
         question: getDictionaryText(item.question),
         responseType: item.responseType,
@@ -180,7 +180,7 @@ const getActivityFlows = (activityFlows: ActivityFlow[]) =>
   }));
 
 const getActivityConditionalLogic = (items: Item[]) =>
-  items.reduce((result: ConditionalLogic[], item) => {
+  items?.reduce((result: ConditionalLogic[], item) => {
     if (item.conditionalLogic)
       return [
         ...result,

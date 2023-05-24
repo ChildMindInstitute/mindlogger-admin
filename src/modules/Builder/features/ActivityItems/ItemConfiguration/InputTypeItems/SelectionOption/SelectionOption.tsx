@@ -15,8 +15,9 @@ import {
   StyledLabelBoldLarge,
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
-import { falseReturnFunc } from 'shared/utils';
-import { SingleAndMultipleSelectionOption } from 'shared/state';
+import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
+import { SingleAndMultipleSelectionOption, ConditionalLogic } from 'shared/state';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { SELECTION_OPTION_TEXT_MAX_LENGTH } from '../../ItemConfiguration.const';
@@ -32,8 +33,9 @@ import {
   StyledTooltipWrapper,
 } from './SelectionOption.styles';
 import { SelectionOptionProps } from './SelectionOption.types';
-import { getActions } from './SelectionOption.utils';
+import { getActions, getDependentConditions } from './SelectionOption.utils';
 import { useSetSelectionOptionValue } from './SelectionOption.hooks';
+import { RemoveOptionPopup } from './RemoveOptionPopup';
 
 export const SelectionOption = ({
   name,
@@ -45,9 +47,11 @@ export const SelectionOption = ({
   const optionName = `${name}.responseValues.options.${index}`;
   const { t } = useTranslation('app');
   const [optionOpen, setOptionOpen] = useState(true);
+  const [indexToRemove, setIndexToRemove] = useState(-1);
   const [visibleActions, setVisibleActions] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const { setValue, watch, control, getValues } = useFormContext();
+  const { fieldName, activity } = useCurrentActivity();
   const [settings, responseType, option] = useWatch({
     control,
     name: [`${name}.config`, `${name}.responseType`, `${optionName}`],
@@ -65,9 +69,15 @@ export const SelectionOption = ({
   const isColorSet = color?.hex !== '';
   const actionsRef = useRef(null);
   const isSingleSelection = responseType === ItemResponseType.SingleSelection;
+  const dependentConditions = getDependentConditions(
+    getEntityKey(option),
+    activity?.conditionalLogic,
+  );
+  const groupedConditions = getObjectFromList(dependentConditions);
 
   const handleOptionToggle = () => setOptionOpen((prevState) => !prevState);
   const handlePopoverClose = () => setAnchorEl(null);
+  const handleRemoveModalClose = () => setIndexToRemove(-1);
   const handleColorChange = () => {
     const settings = getValues(`${name}.config`);
 
@@ -83,23 +93,40 @@ export const SelectionOption = ({
 
     setValue(scoreName, +event.target.value);
   };
+  const handleRemoveOption = (index: number) => {
+    onRemoveOption(index);
+
+    if (hasColorPicker && hasPalette) {
+      const options = getValues(`${name}.responseValues.options`);
+      options?.forEach((option: SingleAndMultipleSelectionOption, index: number) => {
+        onUpdateOption(index, {
+          ...option,
+          color: {
+            hex: getPaletteColor(palette, index),
+          } as ColorResult,
+        });
+      });
+    }
+  };
+  const handleRemoveConditions = () => {
+    const conditionalLogic = getValues(`${fieldName}.conditionalLogic`);
+
+    setValue(
+      `${fieldName}.conditionalLogic`,
+      conditionalLogic?.filter(({ key }: ConditionalLogic) => !groupedConditions[key ?? '']),
+    );
+  };
+  const handleSubmitRemove = () => {
+    handleRemoveConditions();
+    handleRemoveOption(indexToRemove);
+    handleRemoveModalClose();
+  };
 
   const actions = {
     optionHide: () => setValue(`${optionName}.isHidden`, !isHidden),
     paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
     optionRemove: () => {
-      onRemoveOption(index);
-      if (hasColorPicker && hasPalette) {
-        const options = getValues(`${name}.responseValues.options`);
-        options?.forEach((option: SingleAndMultipleSelectionOption, index: number) => {
-          onUpdateOption(index, {
-            ...option,
-            color: {
-              hex: getPaletteColor(palette, index),
-            } as ColorResult,
-          });
-        });
-      }
+      !dependentConditions?.length ? handleRemoveOption(index) : setIndexToRemove(index);
     },
   };
 
@@ -214,6 +241,14 @@ export const SelectionOption = ({
           handleColorChange={handleColorChange}
           handlePopoverClose={handlePopoverClose}
           name={`${optionName}.color`}
+        />
+      )}
+      {indexToRemove !== -1 && (
+        <RemoveOptionPopup
+          name={optionName}
+          conditions={dependentConditions}
+          onClose={handleRemoveModalClose}
+          onSubmit={handleSubmitRemove}
         />
       )}
     </>
