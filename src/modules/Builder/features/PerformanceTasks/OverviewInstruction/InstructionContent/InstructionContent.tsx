@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 
 import { StyledBodyLarge, theme } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { EditorController, EditorUiType } from 'shared/components/FormComponents';
 
 import { OverviewInstructionProps } from '../OverviewInstruction.types';

@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
 
 import {

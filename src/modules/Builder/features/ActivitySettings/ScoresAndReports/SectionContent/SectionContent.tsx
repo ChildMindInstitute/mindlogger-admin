@@ -8,7 +8,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import {
   InputController,
   Switch,

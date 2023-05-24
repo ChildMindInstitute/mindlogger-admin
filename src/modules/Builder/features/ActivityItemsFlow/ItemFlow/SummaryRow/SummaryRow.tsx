@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder';
 
 import { StyledSummaryRow, StyledSelectController } from './SummaryRow.styles';

@@ -21,7 +21,7 @@ export const ToggleItemContainer = ({
   uiType = ToggleContainerUiType.Item,
   isOpenByDefault,
 }: ToggleItemProps) => {
-  const [open, setOpen] = useState(isOpenByDefault === undefined ? true : isOpenByDefault);
+  const [open, setOpen] = useState(isOpenByDefault ?? true);
   const handleToggle = () => setOpen((prevState) => !prevState);
 
   return (
