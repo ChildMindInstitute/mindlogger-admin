@@ -171,7 +171,7 @@ const getActivityFlows = (activityFlows: ActivityFlow[]) =>
   }));
 
 const getActivityConditionalLogic = (items: Item[]) =>
-  items.reduce((result: ConditionalLogic[], item) => {
+  items?.reduce((result: ConditionalLogic[], item) => {
     if (item.conditionalLogic)
       return [
         ...result,
