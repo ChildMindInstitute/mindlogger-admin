@@ -17,4 +17,5 @@ export type ActionsType = {
   onDuplicateItem: () => void;
   onChangeVisibility: () => void;
   isItemHidden: boolean;
+  hasHiddenOption: boolean;
 };

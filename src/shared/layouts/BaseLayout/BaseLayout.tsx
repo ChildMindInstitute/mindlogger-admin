@@ -30,19 +30,20 @@ export const BaseLayout = () => {
   } = popups.useData();
 
   useEffect(() => {
+    if (!ownerId) return;
     const { getFolders, getWorkspaceApplets } = folders.thunk;
     const { getWorkspaceRespondents, getWorkspaceManagers } = users.thunk;
     const { getWorkspacePriorityRole } = workspaces.thunk;
 
-    if (ownerId && isDashboard) {
-      dispatch(
-        getWorkspacePriorityRole({
-          params: {
-            ownerId,
-            ...(appletId && { appletIDs: [appletId] }),
-          },
-        }),
-      );
+    dispatch(
+      getWorkspacePriorityRole({
+        params: {
+          ownerId,
+          ...(appletId && { appletIDs: [appletId] }),
+        },
+      }),
+    );
+    if (isDashboard) {
       dispatch(
         getWorkspaceRespondents({
           params: {
