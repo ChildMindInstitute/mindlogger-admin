@@ -5,7 +5,7 @@ import { Actions } from 'shared/components';
 import { StyledFlexTopCenter } from 'shared/styles';
 import { itemsTypeIcons } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { getActions } from './Item.utils';
 import { StyledCol, StyledItem, StyledDescription, StyledTitle } from './Item.styles';

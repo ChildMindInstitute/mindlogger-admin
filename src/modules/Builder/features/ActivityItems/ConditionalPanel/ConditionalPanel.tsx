@@ -25,7 +25,7 @@ import {
   CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
   CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
 } from 'shared/consts';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder';
 
 export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }) => {
