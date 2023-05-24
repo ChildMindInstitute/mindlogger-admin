@@ -43,7 +43,7 @@ export const mockedReviewers: Reviewer[] = [
         },
         answer: {
           value: 3,
-          additionalText: '',
+          text: '',
         },
       },
       {
@@ -94,7 +94,7 @@ export const mockedReviewers: Reviewer[] = [
         },
         answer: {
           value: 'reviewer-1-item-2-option-3',
-          additionalText: '',
+          text: '',
         },
       },
     ],
@@ -148,7 +148,7 @@ export const mockedReviewers: Reviewer[] = [
         },
         answer: {
           value: ['reviewer-2-item-1-option-1', 'reviewer-2-item-1-option-3'],
-          additionalText: '',
+          text: '',
         },
       },
     ],

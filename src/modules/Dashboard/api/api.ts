@@ -38,6 +38,7 @@ import {
   FolderName,
   EditRespondentAccess,
   AppletVersionChanges,
+  ActivityAnswer,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -419,6 +420,14 @@ export const getAnswersApi = ({ id, respondentId, createdDate }: Answers, signal
 
 export const getAnswerApi = ({ appletId, answerId }: Answer, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
+
+export const getActivityAnswerApi = (
+  { appletId, answerId, activityId }: ActivityAnswer,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`, {
+    signal,
+  });
 
 export const getAnswersNotesApi = (
   { appletId, answerId, params }: Answer & GetAnswersNotesParams,

@@ -12,8 +12,8 @@ export type Activity = {
 };
 
 export type ItemAnswer = {
-  value: number | string | string[];
-  additionalText: string;
+  value: number | string | (string | number)[];
+  text?: string;
 };
 
 export type SliderAnswer = ItemAnswer & {

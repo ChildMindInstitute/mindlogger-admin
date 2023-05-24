@@ -36,7 +36,7 @@ export const sliderMocked: SliderItemAnswer = {
     },
   },
   answer: {
-    additionalText: '',
+    text: '',
     value: 3,
   },
 };
@@ -87,7 +87,7 @@ export const singleSelectionMocked: SingleSelectItemAnswer = {
     },
   },
   answer: {
-    additionalText: '',
+    text: '',
     value: 'single-select-option-2',
   },
 };
@@ -135,7 +135,7 @@ export const multipleSelectionMocked: MultiSelectItemAnswer = {
     },
   },
   answer: {
-    additionalText: '',
+    text: '',
     value: [],
   },
 };
