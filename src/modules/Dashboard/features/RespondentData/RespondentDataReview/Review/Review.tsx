@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
 
-import { getAnswerApi } from 'api';
+import { getActivityAnswerApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { getDictionaryText } from 'shared/utils';
 import { Spinner } from 'shared/components';
@@ -13,23 +12,27 @@ import { CollapsedMdText } from '../../CollapsedMdText';
 import { isItemUnsupported } from '../../RespondentData.utils';
 import { UnsupportedItemResponse } from '../../UnsupportedItemResponse';
 import { StyledReview } from './Review.styles';
-import { ReviewProps } from './Review.types';
+import { AnswersApiResponse, ReviewProps } from './Review.types';
 import { ActivityItemAnswer } from '../RespondentDataReview.types';
 import { getResponseItem } from './Review.const';
+import { useDecryptedReviews } from './Review.hooks';
 
-export const Review = ({ answerId }: ReviewProps) => {
+export const Review = ({ answerId, activityId }: ReviewProps) => {
   const { appletId, respondentId } = useParams();
   const navigate = useNavigate();
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
+  const getDecryptedReviews = useDecryptedReviews();
 
   const { execute, isLoading } = useAsync(
-    getAnswerApi,
-    (res) => res?.data?.result && setActivityItemAnswers(res.data.result.activityItemAnswers),
+    getActivityAnswerApi,
+    (res) =>
+      res?.data?.result &&
+      setActivityItemAnswers(getDecryptedReviews(res.data.result as AnswersApiResponse)),
   );
 
   useEffect(() => {
     if (appletId && answerId) {
-      execute({ appletId, answerId });
+      execute({ appletId, answerId, activityId });
       navigate(
         generatePath(page.appletRespondentDataReviewAnswer, { appletId, respondentId, answerId }),
       );

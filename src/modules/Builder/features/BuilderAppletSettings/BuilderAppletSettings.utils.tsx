@@ -9,6 +9,7 @@ import {
   DeleteAppletSetting,
   ExportDataSetting,
   PublishConcealAppletSetting,
+  VersionHistorySetting,
 } from 'shared/features/AppletSettings';
 
 import { GetSettings } from './BuilderAppletSettings.types';
@@ -58,7 +59,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
         {
           icon: <Svg id="version-history" />,
           label: 'versionHistory',
-          component: <>versionHistory</>, //TODO: Add isDisabled,
+          component: <VersionHistorySetting />,
           param: 'version-history',
           disabled: isNewApplet,
           tooltip,

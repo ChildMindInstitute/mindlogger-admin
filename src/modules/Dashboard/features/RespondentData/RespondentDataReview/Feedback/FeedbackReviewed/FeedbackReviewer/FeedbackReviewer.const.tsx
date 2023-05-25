@@ -1,5 +1,6 @@
 import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackReviewed/FeedbackReviewed.types';
 import {
+  ItemAnswer,
   MultiSelectActivityItem,
   SingleSelectActivityItem,
   SliderActivityItem,
@@ -18,7 +19,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
       return (
         <SingleSelection
           activityItem={activityItemAnswer.activityItem as SingleSelectActivityItem}
-          value={activityItemAnswer.answer.value as string}
+          value={(activityItemAnswer.answer as ItemAnswer).value as string}
           isDisabled
         />
       );
@@ -26,7 +27,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
       return (
         <MultipleSelection
           activityItem={activityItemAnswer.activityItem as MultiSelectActivityItem}
-          value={activityItemAnswer.answer.value as string[]}
+          value={(activityItemAnswer.answer as ItemAnswer).value as string[]}
           isDisabled
         />
       );
@@ -34,7 +35,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
       return (
         <Slider
           activityItem={activityItemAnswer.activityItem as SliderActivityItem}
-          value={activityItemAnswer.answer.value as number}
+          value={(activityItemAnswer.answer as ItemAnswer).value as number}
           isDisabled
         />
       );
