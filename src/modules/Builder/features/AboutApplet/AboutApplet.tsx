@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -27,8 +26,6 @@ const commonUploaderProps = {
 
 export const AboutApplet = () => {
   const { t } = useTranslation();
-
-  const [imageNameToRemove, setImageNameToRemove] = useState('');
 
   useBreadcrumbs([
     {
