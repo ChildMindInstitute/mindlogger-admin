@@ -45,18 +45,16 @@ export const getActions = (
 ) => {
   const { t } = i18n;
 
-  return id
-    ? []
-    : [
-        {
-          icon: <Svg id="remove-access" />,
-          action: removeAccessAction,
-          tooltipTitle: t('removeAccess'),
-        },
-        {
-          icon: <Svg id="edit-user" />,
-          action: editAccessAction,
-          tooltipTitle: t('editAccess'),
-        },
-      ];
+  return [
+    {
+      icon: <Svg id="remove-access" />,
+      action: removeAccessAction,
+      tooltipTitle: t('removeAccess'),
+    },
+    {
+      icon: <Svg id="edit-user" />,
+      action: editAccessAction,
+      tooltipTitle: t('editAccess'),
+    },
+  ];
 };

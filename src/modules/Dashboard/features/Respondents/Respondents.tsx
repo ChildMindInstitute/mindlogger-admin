@@ -125,6 +125,7 @@ export const Respondents = () => {
       secretId: {
         content: () => stringSecretIds,
         value: stringSecretIds,
+        width: '30%',
       },
       nickname: {
         content: () => stringNicknames,

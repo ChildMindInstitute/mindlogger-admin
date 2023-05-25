@@ -31,13 +31,13 @@ import {
   RespondentId,
   EventId,
   RemoveRespondentAccess,
-  RemoveManagerAccess,
   AppletDataRetention,
   ImportSchedule,
   GetWorkspaceAppletsParams,
   FolderName,
   EditRespondentAccess,
   AppletVersionChanges,
+  RemoveAccess,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -164,16 +164,12 @@ export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSig
     },
   );
 
-export const removeManagerAccess = (
-  { userId, appletIds, role }: RemoveManagerAccess,
-  signal?: AbortSignal,
-) =>
+export const removeManagerAccess = ({ userId, appletIds }: RemoveAccess, signal?: AbortSignal) =>
   authApiClient.post(
     '/workspaces/removeAccess',
     {
       userId,
       appletIds,
-      role,
     },
     { signal },
   );
