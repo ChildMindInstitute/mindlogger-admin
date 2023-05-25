@@ -3,7 +3,9 @@ import { Manager } from 'redux/modules';
 export type RemoveAccessPopupProps = {
   removeAccessPopupVisible: boolean;
   onClose: () => void;
-  user: Manager & { appletIds: string[] };
+  user: Manager;
 };
 
-export type Steps = 0 | 1 | 2;
+export type FormValues = {
+  userApplets: { value: boolean; displayName: string; id: string; image?: string }[];
+};

@@ -1,21 +1,19 @@
 import { Roles } from 'shared/consts';
-import { User } from 'modules/Dashboard/features/Managers';
+import { Manager, ManagerApplet } from 'redux/modules';
 
 export type EditAccessPopupProps = {
   onClose: () => void;
   editAccessPopupVisible: boolean;
-  user: User;
+  user: Manager;
 };
 
 export type Role = {
-  label: Roles;
-  icon: JSX.Element | undefined;
+  role: Roles;
+  accessId?: string;
+  icon?: JSX.Element;
 };
 
-export type Applet = {
-  id: string;
-  title: string;
-  img: string;
-  roles: Role[];
+export type Applet = Omit<ManagerApplet, 'roles'> & {
   selectedRespondents?: string[];
+  roles: Role[];
 };

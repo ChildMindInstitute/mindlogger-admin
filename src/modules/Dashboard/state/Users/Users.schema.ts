@@ -26,6 +26,16 @@ export type Respondent = {
   details: RespondentDetail[];
 };
 
+export type ManagerApplet = {
+  id: string;
+  displayName: string;
+  image?: string;
+  roles: {
+    accessId?: string;
+    role: Roles;
+  }[];
+};
+
 export type Manager = {
   id: string;
   firstName: string;
@@ -34,12 +44,7 @@ export type Manager = {
   roles: Roles[];
   lastSeen: string;
   isPinned?: boolean;
-  details: {
-    appletId: string;
-    appletDisplayName: string;
-    accessId: string;
-    role: Roles;
-  }[];
+  applets: ManagerApplet[];
 };
 
 export type UsersSchema = {
