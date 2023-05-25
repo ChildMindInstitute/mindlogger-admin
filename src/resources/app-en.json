@@ -988,5 +988,6 @@
   "genderQuestion": "How do you describe yourself?",
   "male": "Male",
   "female": "Female",
-  "ageQuestion": "How old are you?"
+  "ageQuestion": "How old are you?",
+  "saveAndPublishFirst": "Save & publish the Applet first"
 }
