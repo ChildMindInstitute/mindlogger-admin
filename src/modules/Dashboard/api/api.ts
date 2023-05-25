@@ -253,9 +253,18 @@ export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSi
   });
 };
 
-export const updatePinApi = ({ ownerId, userId }: UpdatePin, signal?: AbortSignal) =>
+export const updateRespondentsPinApi = ({ ownerId, userId }: UpdatePin, signal?: AbortSignal) =>
   authApiClient.post(
     `/workspaces/${ownerId}/respondents/${userId}/pin`,
+    {},
+    {
+      signal,
+    },
+  );
+
+export const updateManagersPinApi = ({ ownerId, userId }: UpdatePin, signal?: AbortSignal) =>
+  authApiClient.post(
+    `/workspaces/${ownerId}/managers/${userId}/pin`,
     {},
     {
       signal,
