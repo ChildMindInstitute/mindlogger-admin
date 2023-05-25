@@ -42,8 +42,9 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
       const date = format(new Date(answer.date), DateFormats.DayMonthYear);
       const time = format(new Date(answer.date), DateFormats.Time);
 
-      if (!filterReportTable(`${date} ${time} ${answer.value}`, searchValue))
+      if (!filterReportTable(`${date} ${time} ${answer.value}`, searchValue)) {
         return textItemAnswers;
+      }
 
       return [
         ...textItemAnswers,
