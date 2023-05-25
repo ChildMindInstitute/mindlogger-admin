@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Svg, Tooltip } from 'shared/components';
+import { Svg } from 'shared/components';
 import { StyledBodyLarge, theme } from 'shared/styles';
 
 import {
@@ -10,7 +10,7 @@ import {
   StyledHeadline,
 } from '../AppletSettings.styles';
 
-export const DownloadSchemaSetting = ({ isDisabled = false }) => {
+export const DownloadSchemaSetting = () => {
   const { t } = useTranslation('app');
 
   return (
@@ -25,17 +25,14 @@ export const DownloadSchemaSetting = ({ isDisabled = false }) => {
           </StyledBodyLarge>
         </Trans>
       </StyledAppletSettingsDescription>
-      <Tooltip tooltipTitle={isDisabled ? t('needToCreateApplet') : undefined}>
-        <Box sx={{ width: 'fit-content' }}>
-          <StyledAppletSettingsButton
-            variant="outlined"
-            startIcon={<Svg width="18" height="18" id="export" />}
-            disabled={isDisabled}
-          >
-            {t('download')}
-          </StyledAppletSettingsButton>
-        </Box>
-      </Tooltip>
+      <Box sx={{ width: 'fit-content' }}>
+        <StyledAppletSettingsButton
+          variant="outlined"
+          startIcon={<Svg width="18" height="18" id="export" />}
+        >
+          {t('download')}
+        </StyledAppletSettingsButton>
+      </Box>
     </>
   );
 };

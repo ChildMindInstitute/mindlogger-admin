@@ -1,4 +1,5 @@
 import { Svg } from 'shared/components';
+import { ConditionalLogic, OptionCondition } from 'shared/state';
 
 import { OptionActions } from './SelectionOption.types';
 
@@ -25,3 +26,10 @@ export const getActions = ({
     action: optionRemove,
   },
 ];
+
+export const getDependentConditions = (optionId: string, conditionalLogic?: ConditionalLogic[]) =>
+  conditionalLogic?.filter(({ conditions }) =>
+    conditions?.some(
+      ({ payload }) => (payload as OptionCondition['payload'])?.optionId === optionId,
+    ),
+  );

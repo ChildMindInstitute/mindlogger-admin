@@ -17,6 +17,7 @@ export type ItemFormValues = {
   responseType: ItemResponseType | '';
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
+  allowEdit: boolean;
 };
 
 export type ActivityFormValues = {

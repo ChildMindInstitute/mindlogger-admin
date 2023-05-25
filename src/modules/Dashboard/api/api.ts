@@ -31,13 +31,14 @@ import {
   RespondentId,
   EventId,
   RemoveRespondentAccess,
-  RemoveManagerAccess,
   AppletDataRetention,
   ImportSchedule,
   GetWorkspaceAppletsParams,
   FolderName,
   EditRespondentAccess,
   AppletVersionChanges,
+  RemoveAccess,
+  ActivityAnswer,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -164,16 +165,12 @@ export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSig
     },
   );
 
-export const removeManagerAccess = (
-  { userId, appletIds, role }: RemoveManagerAccess,
-  signal?: AbortSignal,
-) =>
+export const removeManagerAccess = ({ userId, appletIds }: RemoveAccess, signal?: AbortSignal) =>
   authApiClient.post(
     '/workspaces/removeAccess',
     {
       userId,
       appletIds,
-      role,
     },
     { signal },
   );
@@ -253,9 +250,18 @@ export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSi
   });
 };
 
-export const updatePinApi = ({ ownerId, userId }: UpdatePin, signal?: AbortSignal) =>
+export const updateRespondentsPinApi = ({ ownerId, userId }: UpdatePin, signal?: AbortSignal) =>
   authApiClient.post(
     `/workspaces/${ownerId}/respondents/${userId}/pin`,
+    {},
+    {
+      signal,
+    },
+  );
+
+export const updateManagersPinApi = ({ ownerId, userId }: UpdatePin, signal?: AbortSignal) =>
+  authApiClient.post(
+    `/workspaces/${ownerId}/managers/${userId}/pin`,
     {},
     {
       signal,
@@ -419,6 +425,14 @@ export const getAnswersApi = ({ id, respondentId, createdDate }: Answers, signal
 
 export const getAnswerApi = ({ appletId, answerId }: Answer, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
+
+export const getActivityAnswerApi = (
+  { appletId, answerId, activityId }: ActivityAnswer,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`, {
+    signal,
+  });
 
 export const getAnswersNotesApi = (
   { appletId, answerId, params }: Answer & GetAnswersNotesParams,

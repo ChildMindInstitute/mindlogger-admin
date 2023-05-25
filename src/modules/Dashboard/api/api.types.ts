@@ -148,13 +148,9 @@ export type ImportSchedule = AppletId & {
 
 export type SetAccount = { accountName: string };
 
-type RemoveAccess = {
+export type RemoveAccess = {
   userId: string;
   appletIds: string[];
-};
-
-export type RemoveManagerAccess = RemoveAccess & {
-  role: UserRoles;
 };
 
 export type RemoveRespondentAccess = RemoveAccess & {
@@ -227,6 +223,8 @@ export type OwnerId = {
 export type Answers = { id: string; createdDate: string } & RespondentId;
 
 export type Answer = AppletId & { answerId: string };
+
+export type ActivityAnswer = AppletId & { answerId: string } & { activityId: string };
 
 export type AppletUniqueName = {
   name: string;

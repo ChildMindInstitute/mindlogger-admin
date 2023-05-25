@@ -17,6 +17,7 @@ export const mockedReviewers: Reviewer[] = [
           question: '<p>Does the respondent <b>feel good</b>?<p>',
           responseType: ItemResponseType.Slider,
           edited: false,
+          allowEdit: true,
           config: {
             continuousSlider: false,
             removeBackButton: false,
@@ -43,7 +44,7 @@ export const mockedReviewers: Reviewer[] = [
         },
         answer: {
           value: 3,
-          additionalText: '',
+          text: '',
         },
       },
       {
@@ -52,6 +53,7 @@ export const mockedReviewers: Reviewer[] = [
           name: 'reviewer-1-item-2',
           question: '<p>Do you like how the respondent passed the review?<p>',
           edited: true,
+          allowEdit: true,
           config: {
             removeBackButton: true,
             skippableItem: true,
@@ -94,7 +96,7 @@ export const mockedReviewers: Reviewer[] = [
         },
         answer: {
           value: 'reviewer-1-item-2-option-3',
-          additionalText: '',
+          text: '',
         },
       },
     ],
@@ -109,6 +111,7 @@ export const mockedReviewers: Reviewer[] = [
           name: 'reviewer-2-item-1',
           question: '<p>Do you like how the respondent passed the review?<p>',
           edited: true,
+          allowEdit: true,
           config: {
             removeBackButton: false,
             skippableItem: false,
@@ -148,7 +151,7 @@ export const mockedReviewers: Reviewer[] = [
         },
         answer: {
           value: ['reviewer-2-item-1-option-1', 'reviewer-2-item-1-option-3'],
-          additionalText: '',
+          text: '',
         },
       },
     ],

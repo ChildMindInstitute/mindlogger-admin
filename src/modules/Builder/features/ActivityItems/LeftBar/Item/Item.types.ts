@@ -6,10 +6,10 @@ import { LeftBarProps } from '../LeftBar.types';
 
 export type ItemProps = {
   item: ItemFormValues;
-  name: string;
-  index: number;
-  dragHandleProps: DraggableProvided['dragHandleProps'];
-  isDragging: boolean;
+  name?: string;
+  index?: number;
+  dragHandleProps?: DraggableProvided['dragHandleProps'];
+  isDragging?: boolean;
 } & Omit<LeftBarProps, 'items' | 'onAddItem' | 'onInsertItem' | 'onMoveItem'>;
 
 export type ActionsType = {
@@ -17,4 +17,5 @@ export type ActionsType = {
   onDuplicateItem: () => void;
   onChangeVisibility: () => void;
   isItemHidden: boolean;
+  hasHiddenOption: boolean;
 };

@@ -31,8 +31,9 @@ import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
 import { StyledSvg, StyledSvgButton } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
-import { checkOnItemType } from '../ActivitySettings.utils';
+import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 import { LookupTable } from './LookupTable';
+import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
@@ -58,8 +59,8 @@ export const SubscalesConfiguration = () => {
   };
   const iconId = `lookup-table${tableData ? '-filled' : ''}`;
 
-  const subscales: ActivitySettingsSubscale[] = watch(subscalesField);
-  const filteredItems = (activity?.items ?? []).filter(checkOnItemType);
+  const subscales: ActivitySettingsSubscale[] = watch(subscalesField) ?? [];
+  const filteredItems = (activity?.items ?? []).filter(checkOnItemTypeAndScore);
   const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
     filteredItems,
     subscales,
@@ -96,6 +97,8 @@ export const SubscalesConfiguration = () => {
     setValue(calculateTotalScoreName, undefined);
     setValue(totalScoresTableDataField, undefined);
   }, [calculateTotalScoreSwitch]);
+
+  useSubscalesSystemItemsSetup();
 
   return (
     <StyledButtonsContainer>

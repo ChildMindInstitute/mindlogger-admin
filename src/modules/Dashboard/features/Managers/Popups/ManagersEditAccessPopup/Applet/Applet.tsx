@@ -14,7 +14,7 @@ import { AppletProps } from './Applet.types';
 import { SelectRespondentsPopup } from '../../SelectRespondentsPopup';
 
 export const Applet = ({
-  applet: { id, title, img, roles, selectedRespondents },
+  applet: { id, displayName, image, roles, selectedRespondents },
   addRole,
   removeRole,
   user,
@@ -22,10 +22,11 @@ export const Applet = ({
   appletsWithoutRespondents,
 }: AppletProps) => {
   const { t } = useTranslation('app');
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
 
-  const isManager = !!roles.find((role) => role.label === Roles.Manager);
+  const isManager = roles.some(({ role }) => role === Roles.Manager);
 
   const handleAddRole = (label: Roles) => {
     addRole(id, label);
@@ -35,7 +36,7 @@ export const Applet = ({
   const menuItems = getMenuItems(handleAddRole);
 
   const getFilteredMenuItems = () =>
-    menuItems?.filter((menuItem: MenuItem) => !roles.find((role) => role.label === menuItem.title));
+    menuItems?.filter((menuItem: MenuItem) => !roles.find(({ role }) => role === menuItem.title));
 
   const handleClosePopup = (selectedRespondents: string[]) => {
     handleAddSelectedRespondents(id, selectedRespondents);
@@ -52,8 +53,10 @@ export const Applet = ({
       <StyledApplet>
         <StyledRow>
           <StyledFlexTopCenter>
-            {img && <StyledImg src={img} alt={title} />}
-            <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>{title}</StyledBodyMedium>
+            {image && <StyledImg src={image} alt={displayName} />}
+            <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>
+              {displayName}
+            </StyledBodyMedium>
           </StyledFlexTopCenter>
           <ButtonWithMenu
             disabled={isManager}
@@ -63,21 +66,21 @@ export const Applet = ({
             label={t('addRole')}
           />
         </StyledRow>
-        {roles?.map((role) => (
+        {roles?.map(({ role, icon }) => (
           <Chip
             shape={ChipShape.Rounded}
             color={
-              appletsWithoutRespondents.includes(title) && role.label === Roles.Reviewer
+              appletsWithoutRespondents.includes(displayName) && role === Roles.Reviewer
                 ? 'error'
                 : 'secondary'
             }
-            icon={role.icon}
-            key={role.label}
+            icon={icon}
+            key={role}
             title={
               <StyledLabel>
-                {role.label === Roles.Reviewer ? (
+                {role === Roles.Reviewer ? (
                   <>
-                    {t(role.label)}:{' '}
+                    {t(role)}:{' '}
                     <StyledBtn
                       onClick={() => setSelectRespondentsPopupVisible(true)}
                       variant="body2"
@@ -86,17 +89,18 @@ export const Applet = ({
                     </StyledBtn>
                   </>
                 ) : (
-                  t(role.label) || ''
+                  t(role) || ''
                 )}
               </StyledLabel>
             }
-            onRemove={() => handleRemoveRole(role.label)}
+            onRemove={() => handleRemoveRole(role)}
           />
         ))}
       </StyledApplet>
       {selectRespondentsPopupVisible && (
         <SelectRespondentsPopup
-          appletName={title}
+          appletName={displayName}
+          appletId={id}
           user={user}
           selectRespondentsPopupVisible={selectRespondentsPopupVisible}
           selectedRespondents={selectedRespondents || []}

@@ -126,3 +126,11 @@ export const enum ConditionalLogicMatch {
   All = 'all',
 }
 export const ALLOWED_AUDIO_FILE_TYPES = '.mp3,.wav';
+
+export const CONDITION_TYPES_TO_HAVE_SINGLE_VALUE = [
+  ConditionType.GreaterThan,
+  ConditionType.LessThan,
+  ConditionType.Equal,
+  ConditionType.NotEqual,
+];
+export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [ConditionType.Between, ConditionType.OutsideOf];

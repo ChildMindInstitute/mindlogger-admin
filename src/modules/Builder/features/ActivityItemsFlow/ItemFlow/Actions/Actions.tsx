@@ -31,13 +31,15 @@ export const Actions = ({ open, name, onAdd, onRemove, onToggle }: ActionsProps)
     <StyledFlexTopCenter sx={{ flex: '1', justifyContent: 'flex-end' }}>
       {isShowDescription && (
         <StyledTitleMedium sx={{ flex: '1' }}>
-          <Trans key="conditionalLogicPanelTitle">
-            If{' '}
+          <Trans i18nKey="conditionalLogicPanelTitle">
+            If
             <strong>
-              <>{{ match: t(selectedMatch) }}</>
-            </strong>{' '}
-            of the “if” rules below are{' '}
+              {' '}
+              <>{{ match: t(selectedMatch) }}</>{' '}
+            </strong>
+            of the “if” rules below are
             <strong>
+              {' '}
               true, show item: <>{{ name: currentItem.name }}</>
             </strong>
           </Trans>

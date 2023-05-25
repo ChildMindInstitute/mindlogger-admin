@@ -1,14 +1,13 @@
-import { Box } from '@mui/material';
-import { styled } from '@mui/system';
+import { Box, styled } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
 import {
   StyledHeadlineLarge,
   StyledTitleSmall,
   StyledFlexColumn,
-} from 'shared/styles/styledComponents';
-import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+  theme,
+  variables,
+} from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 export const StyledContainer = styled(StyledFlexColumn)`
   padding: ${theme.spacing(4.8, 6.4, 0)};
@@ -65,7 +64,7 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
     fill: ${variables.palette.on_surface_variant};
   }
 
-  ${({ isCompact }: { isSelected: boolean; isCompact: boolean }) =>
+  ${({ isCompact }: { isSelected: boolean; isCompact: boolean; disabled?: boolean }) =>
     isCompact &&
     `
     flex-basis: unset;
@@ -89,7 +88,14 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
     
 `};
 
-  ${({ isSelected }: { isSelected: boolean }) =>
+  ${({ disabled }) =>
+    disabled &&
+    `
+      pointer-events: none;
+      opacity: 0.38;
+  `}
+
+  ${({ isSelected }) =>
     isSelected &&
     `
     background-color: ${variables.palette.secondary_container};
