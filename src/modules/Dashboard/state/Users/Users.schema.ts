@@ -33,6 +33,7 @@ export type Manager = {
   email: string;
   roles: Roles[];
   lastSeen: string;
+  isPinned?: boolean;
   details: {
     appletId: string;
     appletDisplayName: string;

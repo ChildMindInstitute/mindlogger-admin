@@ -12,7 +12,7 @@ import {
   useEncryptionCheckFromStorage,
 } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
-import { updatePinApi } from 'api';
+import { updateRespondentsPinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getDateInUserTimezone, joinWihComma } from 'shared/utils';
@@ -100,7 +100,7 @@ export const Respondents = () => {
     },
   };
 
-  const { execute } = useAsync(updatePinApi, handleReload);
+  const { execute } = useAsync(updateRespondentsPinApi, handleReload);
 
   const handlePinClick = (userId: string) => {
     execute({ ownerId, userId });
