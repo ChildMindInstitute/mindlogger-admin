@@ -8,14 +8,13 @@ import {
   SuccessTransferOwnershipPopup,
   TransferOwnership,
 } from 'modules/Dashboard/features/Applet';
-import { Tooltip } from 'shared/components';
 import { TransferOwnershipRef } from 'modules/Dashboard/features/Applet/TransferOwnership/TransferOwnership.types';
 
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { useAppletDataOrFolderData } from './TransferOwnershipSetting.hooks';
 
-export const TransferOwnershipSetting = ({ isDisabled = false, isApplet = false }) => {
+export const TransferOwnershipSetting = ({ isApplet = false }) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
 
@@ -50,17 +49,11 @@ export const TransferOwnershipSetting = ({ isDisabled = false, isApplet = false 
           setEmailTransfered={setEmailTransfered}
         />
       </StyledTransferOwnershipForm>
-      <Tooltip tooltipTitle={isDisabled ? t('needToCreateApplet') : undefined}>
-        <Box sx={{ width: 'fit-content' }}>
-          <StyledAppletSettingsButton
-            variant="outlined"
-            onClick={() => setIsSubmitted(true)}
-            disabled={isDisabled}
-          >
-            {t('confirm')}
-          </StyledAppletSettingsButton>
-        </Box>
-      </Tooltip>
+      <Box sx={{ width: 'fit-content' }}>
+        <StyledAppletSettingsButton variant="outlined" onClick={() => setIsSubmitted(true)}>
+          {t('confirm')}
+        </StyledAppletSettingsButton>
+      </Box>
       <SuccessTransferOwnershipPopup
         email={emailTransfered}
         transferOwnershipPopupVisible={transferOwnershipPopupVisible}
