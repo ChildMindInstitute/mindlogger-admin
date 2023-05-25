@@ -11,6 +11,7 @@ export const sliderMocked: SliderItemAnswer = {
     name: 'slider-1',
     question: '<p>Does the respondent <b>feel good</b>?<p>',
     responseType: ItemResponseType.Slider,
+    allowEdit: true,
     config: {
       continuousSlider: false,
       removeBackButton: false,
@@ -46,6 +47,7 @@ export const singleSelectionMocked: SingleSelectItemAnswer = {
     id: 'single-select-1',
     name: 'single-select-1',
     question: '<p>Do you like how the respondent passed the review?<p>',
+    allowEdit: true,
     config: {
       removeBackButton: true,
       skippableItem: true,
@@ -97,6 +99,7 @@ export const multipleSelectionMocked: MultiSelectItemAnswer = {
     id: 'multiple-select-1',
     name: 'multiple-select-1',
     question: '<p>Do you like how the respondent passed the review?<p>',
+    allowEdit: true,
     config: {
       removeBackButton: false,
       skippableItem: false,

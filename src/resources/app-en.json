@@ -984,5 +984,9 @@
   "conditionPanelType_OUTSIDE_OF": "OUTSIDE OF",
   "conditionPanelValueRange": "{{minValue}} and {{maxValue}}",
   "deleteOption": "Delete Option",
-  "deleteOptionDescription": "Are you sure you want to delete Option <1>{{name}}</1>? It will also remove the Conditional(s) below"
+  "deleteOptionDescription": "Are you sure you want to delete Option <1>{{name}}</1>? It will also remove the Conditional(s) below",
+  "genderQuestion": "How do you describe yourself?",
+  "male": "Male",
+  "female": "Female",
+  "ageQuestion": "How old are you?"
 }

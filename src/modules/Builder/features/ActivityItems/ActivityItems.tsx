@@ -41,13 +41,9 @@ export const ActivityItems = () => {
   if (!activity) return null;
 
   const conditionalLogic = watch(`${fieldName}.conditionalLogic`);
-  const items = watch(`${fieldName}.items`);
-  const activeItemIndex = items?.findIndex(
-    (item: ItemFormValues) => (item.key ?? item.id) === activeItemId,
-  );
-  const itemIndexToDelete = items?.findIndex(
-    (item: ItemFormValues) => itemIdToDelete === (item.key ?? item.id),
-  );
+  const items: ItemFormValues[] = watch(`${fieldName}.items`);
+  const activeItemIndex = items?.findIndex((item) => getEntityKey(item) === activeItemId);
+  const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
   const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
   const conditionalLogicForItemToDelete = getItemConditionDependencies(
@@ -61,7 +57,9 @@ export const ActivityItems = () => {
 
   const handleAddItem = () => {
     const item = getNewActivityItem();
-    appendItem(item);
+    const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
+
+    firstSystemIndex !== -1 ? insertItem(firstSystemIndex, item) : appendItem(item);
     setActiveItemId(item.key);
   };
 

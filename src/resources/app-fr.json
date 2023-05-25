@@ -734,5 +734,9 @@
   "printItems": "Imprimer les éléments",
   "printItemsTooltip": "Les réponses du répondant qui seront affichées dans le rapport",
   "addConditinalLogic": "Ajouter une logique conditionnelle",
-  "itemBody": "Corps de l'élément"
+  "itemBody": "Corps de l'élément",
+  "genderQuestion": "Comment te décris-tu ?",
+  "male": "Homme",
+  "female": "Femme",
+  "ageQuestion": "Quel âge as-tu ?"
 }
