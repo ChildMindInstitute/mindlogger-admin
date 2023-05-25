@@ -990,5 +990,6 @@
   "female": "Female",
   "ageQuestion": "How old are you?",
   "removeImage": "Remove Image",
-  "removeImageDescription": "Are you sure you want to remove Image?"
+  "removeImageDescription": "Are you sure you want to remove Image?",
+  "saveAndPublishFirst": "Save & publish the Applet first"
 }

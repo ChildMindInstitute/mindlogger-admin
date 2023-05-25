@@ -12,8 +12,8 @@ export type Activity = {
 };
 
 export type ItemAnswer = {
-  value: number | string | string[];
-  additionalText: string;
+  value: number | string | (string | number)[];
+  text?: string;
 };
 
 export type SliderAnswer = ItemAnswer & {
@@ -30,7 +30,7 @@ export type SingleSelectAnswer = ItemAnswer & {
 
 export type ActivityItemAnswer = {
   activityItem: Item;
-  answer: ItemAnswer | null;
+  answer: ItemAnswer | null | string;
 };
 
 export interface TextItemAnswer extends ActivityItemAnswer {
