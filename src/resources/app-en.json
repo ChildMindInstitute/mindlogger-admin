@@ -988,5 +988,22 @@
   "genderQuestion": "How do you describe yourself?",
   "male": "Male",
   "female": "Female",
-  "ageQuestion": "How old are you?"
+  "ageQuestion": "How old are you?",
+  "scoreHeader": "Score {{index}}: {{name}}",
+  "scoreName": "Score name",
+  "scoreCalculationType": "Score Calculation Type",
+  "scoreItems": "Items used to calculate score",
+  "addScoreCondition": "Add Score Condition",
+  "scoreId": "Score ID",
+  "rangeOfScores": "Possible Range of Scores",
+  "changeScoreId": "Change Score ID",
+  "changeScoreIdText": "You are referencing this score as a variable in the markdown. Changing the Score ID will cause the variable names to update everywhere.",
+  "changeScoreIdSuccess": "Score ID has been changed successfully.",
+  "changeScoreIdError": "Score ID has not been changed. Please try again.",
+  "change": "Change",
+  "calculationTypeSum": "Sum",
+  "calculationTypeAverage": "Average",
+  "calculationTypePercentage": "Percentage",
+  "availableItems": "Available Items",
+  "selectedItems": "SelectedItems"
 }

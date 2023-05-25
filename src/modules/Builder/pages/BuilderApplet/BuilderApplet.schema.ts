@@ -172,6 +172,38 @@ export const ConditionalLogicSchema = () =>
     conditions: yup.array().of(ConditionSchema()),
   });
 
+export const ScoreSchema = () =>
+  yup
+    .object({
+      name: yup
+        .string()
+        .required(getIsRequiredValidateMessage('scoreName'))
+        .test(
+          'unique-score-name',
+          t('validationMessages.unique', { field: t('scoreName') }) as string,
+          (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
+        ),
+      showMessage: yup.boolean().required(),
+      minScore: yup.number(),
+      maxScore: yup.number(),
+      printItems: yup
+        .boolean()
+        .required()
+        .when('showMessage', {
+          is: false,
+          then: yup.boolean().oneOf([true], <string>t('validationMessages.mustShowMessageOrItems')),
+        }),
+      message: yup.string().when('showMessage', {
+        is: true,
+        then: yup.string().required(getIsRequiredValidateMessage('message')),
+      }),
+      itemsPrint: yup.array().when('printItems', {
+        is: true,
+        then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
+      }),
+    })
+    .required();
+
 export const SectionSchema = () =>
   yup
     .object({
@@ -196,7 +228,7 @@ export const SectionSchema = () =>
         is: true,
         then: yup.string().required(getIsRequiredValidateMessage('message')),
       }),
-      items: yup.array().when('printItems', {
+      itemsPrint: yup.array().when('printItems', {
         is: true,
         then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
       }),
@@ -225,7 +257,12 @@ export const ActivitySchema = () =>
     isHidden: yup.boolean(),
     subscales: yup.array().of(SubscaleSchema()),
     conditionalLogic: yup.array().of(ConditionalLogicSchema()),
-    sections: yup.array().of(SectionSchema()),
+    scoresAndReports: yup.object({
+      generateReport: yup.boolean(),
+      showScoreSummary: yup.boolean(),
+      scores: yup.array().of(ScoreSchema()),
+      sections: yup.array().of(SectionSchema()),
+    }),
   });
 
 export const ActivityFlowItemSchema = () =>

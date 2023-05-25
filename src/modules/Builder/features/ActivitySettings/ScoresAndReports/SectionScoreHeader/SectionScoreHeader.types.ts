@@ -1,4 +1,4 @@
-export type SubscaleHeaderContentProps = {
+export type SectionScoreHeaderProps = {
   onRemove: () => void;
   name: string;
   title: string;

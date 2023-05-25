@@ -421,7 +421,14 @@ type Theme = {
 };
 
 export type ActivitySettingsScore = {
+  id: string;
   name?: string;
+  showMessage: boolean;
+  printItems: boolean;
+  itemsPrint?: string[];
+  message?: string;
+  minScore: number;
+  maxScore: number;
 };
 
 export type ActivitySettingsSection = {
@@ -429,7 +436,7 @@ export type ActivitySettingsSection = {
   name: string;
   showMessage: boolean;
   printItems: boolean;
-  items?: string[];
+  itemsPrint?: string[];
   message?: string;
 };
 

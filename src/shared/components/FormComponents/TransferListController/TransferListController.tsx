@@ -21,6 +21,7 @@ export const TransferListController = <T extends FieldValues>({
   items,
   selectedItems,
   columns,
+  selectedItemsColumns,
   readOnly = false,
   hasSearch = true,
   hasSelectedSection = true,
@@ -80,7 +81,7 @@ export const TransferListController = <T extends FieldValues>({
               />
               {hasSelectedSection && (
                 <DataTable
-                  columns={columns}
+                  columns={selectedItemsColumns || columns}
                   data={selectionSectionItems}
                   noDataPlaceholder={t('noSelectedItemsYet')}
                 />
