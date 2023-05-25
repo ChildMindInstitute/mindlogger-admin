@@ -9,7 +9,7 @@ export type DataTableItem = Record<string, unknown> & {
 export type DataTableColumn = {
   key: string;
   label?: string | DefaultTFuncReturn | JSX.Element;
-  formatter?: (key: string, value: unknown, item: DataTableItem) => ReactNode;
+  styles?: SxProps;
 };
 
 export type DataTableProps = {
@@ -23,5 +23,6 @@ export type DataTableProps = {
   onSelect?: (key: unknown, prevSelected: boolean) => unknown[] | void;
   onSelectAll?: (allSelected: boolean) => unknown[] | void;
   hasError?: boolean;
-  styles?: SxProps;
+  containerStyles?: SxProps;
+  tableHeadBgColor?: string;
 };

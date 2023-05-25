@@ -8,6 +8,7 @@ import { ActivitySettingsSubscale } from 'shared/state';
 import { ItemFormValues } from 'modules/Builder/pages';
 import { SubscaleTotalScore } from 'shared/consts';
 import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
+import { DataTableColumn } from 'shared/components';
 
 import {
   ItemElement,
@@ -205,10 +206,13 @@ export const notUsedElementsTableColumns = [
   },
 ];
 
-export const allElementsTableColumns = [
+export const allElementsTableColumns: DataTableColumn[] = [
   {
     key: SharedElementColumns.Element,
     label: t('element'),
+    styles: {
+      width: '70%',
+    },
   },
   {
     key: SharedElementColumns.Subscale,
