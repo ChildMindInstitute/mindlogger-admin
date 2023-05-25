@@ -41,22 +41,27 @@ export type ActivityFormValues = {
   isFlankerItem?: boolean;
 };
 
-type FlankerButtonSetting = {
+export type FlankerButtonSetting = {
   name: string | null;
   image: string | null;
 };
 
-type FlankerFixationSettings = {
+export type FlankerFixationSettings = {
   image: string | null;
   duration: number;
 };
 
 type FlankerStimulusId = string;
 
-type FlankerStimulusSettings = {
+export enum CorrectPress {
+  Left = 'LEFT',
+  Right = 'RIGHT',
+}
+
+export type FlankerStimulusSettings = {
   id: FlankerStimulusId;
   image: string;
-  correctPress: 'LEFT' | 'RIGHT';
+  correctPress: CorrectPress;
 };
 
 type FlankerBlockSettings = {

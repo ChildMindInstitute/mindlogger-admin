@@ -10,6 +10,8 @@ export const LEFT_BAR_WIDTH = '8rem';
 
 export const MAX_NAME_LENGTH = 55;
 export const MAX_DESCRIPTION_LENGTH = 150;
+export const SMALL_INPUT_LENGTH = 5;
+export const TEXTAREA_ROWS = 5;
 export const MAX_DESCRIPTION_LENGTH_LONG = 230;
 export const MAX_SELECT_OPTION_TEXT_LENGTH = 75;
 export const MAX_SLIDER_LABEL_TEXT_LENGTH = 20;
