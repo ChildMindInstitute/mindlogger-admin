@@ -12,7 +12,7 @@ import {
   useEncryptionCheckFromStorage,
 } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
-import { updatePinApi } from 'api';
+import { updateRespondentsPinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getDateInUserTimezone, joinWihComma } from 'shared/utils';
@@ -66,9 +66,8 @@ export const Respondents = () => {
   const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
-  const { getEncryptionCheck } = useEncryptionCheckFromStorage();
-  const hasEncryptionCheck = getEncryptionCheck(appletId ?? '');
-
+  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
   const actions = {
     scheduleSetupAction: (index: number) => {
       setRespondentsDataIndex(index);
@@ -100,7 +99,7 @@ export const Respondents = () => {
     },
   };
 
-  const { execute } = useAsync(updatePinApi, handleReload);
+  const { execute } = useAsync(updateRespondentsPinApi, handleReload);
 
   const handlePinClick = (userId: string) => {
     execute({ ownerId, userId });

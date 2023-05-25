@@ -20,7 +20,7 @@ import { Item } from 'shared/state';
 
 import { columns } from './SectionContent.const';
 import { StyledButton, StyledEditor } from './SectionContent.styles';
-import { checkOnItemType } from '../../ActivitySettings.utils';
+import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { SectionContentProps } from './SectionContent.types';
 
 export const SectionContent = ({ name }: SectionContentProps) => {
@@ -31,7 +31,7 @@ export const SectionContent = ({ name }: SectionContentProps) => {
   const showMessage: boolean = useWatch({ name: `${name}.showMessage` });
   const printItems: boolean = useWatch({ name: `${name}.printItems` });
   const items = activity?.items
-    .filter(checkOnItemType)
+    .filter(checkOnItemTypeAndScore)
     .map(({ id, name, question }: Item) => ({ id, name, question }));
   const hasPrintItemsError = getFieldState(`${name}.printItems`).error as unknown as Record<
     string,

@@ -21,8 +21,8 @@ export const ViewDataPopup = ({
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
-  const { getEncryptionCheck } = useEncryptionCheckFromStorage();
-  const hasEncryptionCheck = getEncryptionCheck(chosenAppletData?.appletId ?? '');
+  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const hasEncryptionCheck = !!getAppletPrivateKey(chosenAppletData?.appletId ?? '');
   const showSecondScreen = !!chosenAppletData && !hasEncryptionCheck;
 
   const handlePopupClose = () => {

@@ -35,6 +35,7 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   question: '',
   config: {},
   isHidden: false,
+  allowEdit: true,
   ...item,
   id: undefined,
   key: uuidv4(),
@@ -166,6 +167,7 @@ const getActivityItems = (items: Item[]) =>
         config: item.config,
         alerts: item.alerts ?? [],
         conditionalLogic: undefined,
+        allowEdit: item.allowEdit,
       }))
     : [];
 

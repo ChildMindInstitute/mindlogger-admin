@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Actions, Search } from 'shared/components';
-import { Manager, users } from 'redux/modules';
-import { useBreadcrumbs, useTable } from 'shared/hooks';
+import { updateManagersPinApi } from 'api';
+import { Actions, Pin, Search } from 'shared/components';
+import { users, workspaces, Manager } from 'redux/modules';
+import { useAsync, useBreadcrumbs, useTable } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { useAppDispatch } from 'redux/store';
 import { joinWihComma } from 'shared/utils';
@@ -24,12 +25,12 @@ export const Managers = () => {
       label: t('managers'),
     },
   ]);
-
+  const { ownerId } = workspaces.useData() || {};
   const managersData = users.useManagersData();
 
   const { getWorkspaceManagers } = users.thunk;
 
-  const { searchValue, handleSearch, ...tableProps } = useTable((args) => {
+  const { searchValue, handleSearch, handleReload, ...tableProps } = useTable((args) => {
     const params = {
       ...args,
       params: {
@@ -45,6 +46,8 @@ export const Managers = () => {
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
+  const { execute } = useAsync(updateManagersPinApi, handleReload);
+
   const actions = {
     removeAccessAction: (user: Manager) => {
       setSelectedManager(user);
@@ -56,11 +59,20 @@ export const Managers = () => {
     },
   };
 
+  const handlePinClick = (userId: string) => {
+    execute({ ownerId, userId });
+  };
+
   const rows = managersData?.result?.map((user) => {
-    const { email, firstName, lastName, roles } = user;
+    const { email, firstName, lastName, roles, isPinned, id } = user;
     const stringRoles = joinWihComma(roles);
 
     return {
+      pin: {
+        content: () => <Pin isPinned={isPinned} />,
+        value: '',
+        onClick: () => handlePinClick(id),
+      },
       firstName: {
         content: () => firstName,
         value: firstName,

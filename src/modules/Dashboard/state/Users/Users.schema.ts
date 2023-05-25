@@ -43,6 +43,7 @@ export type Manager = {
   email: string;
   roles: Roles[];
   lastSeen: string;
+  isPinned?: boolean;
   applets: ManagerApplet[];
 };
 

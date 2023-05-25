@@ -9,6 +9,12 @@ export const getHeadCells = (id?: string): HeadCell[] => {
 
   return [
     {
+      id: 'pin',
+      label: '',
+      enableSort: true,
+      width: '4.8rem',
+    },
+    {
       id: 'firstName',
       label: t('firstName'),
       enableSort: true,

@@ -49,6 +49,8 @@ export const LeftBar = ({
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
   const groupedConditions = getObjectFromList<ConditionalLogic>(activity.conditionalLogic ?? []);
+  const draggableItems = items.filter((item) => item.allowEdit);
+  const systemItems = items.filter((item) => !item.allowEdit);
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
@@ -102,12 +104,12 @@ export const LeftBar = ({
         {!hasActiveItem && addItemBtn}
       </StyledFlexAllCenter>
       <StyledContent>
-        {items?.length ? (
+        {!!draggableItems?.length && (
           <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
             <DndDroppable droppableId="activity-items-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {items?.map((item, index) => (
+                  {draggableItems?.map((item, index) => (
                     <Draggable
                       key={`item-${getEntityKey(item)}`}
                       draggableId={getEntityKey(item)}
@@ -139,7 +141,19 @@ export const LeftBar = ({
               )}
             </DndDroppable>
           </DragDropContext>
-        ) : (
+        )}
+        {!!systemItems?.length &&
+          systemItems.map((item) => (
+            <Item
+              key={`item-${getEntityKey(item)}`}
+              item={item}
+              activeItemId={activeItemId}
+              onSetActiveItem={onSetActiveItem}
+              onDuplicateItem={onDuplicateItem}
+              onRemoveItem={onRemoveItem}
+            />
+          ))}
+        {!items?.length && (
           <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>
             {t('itemIsRequired')}
           </StyledTitleMedium>

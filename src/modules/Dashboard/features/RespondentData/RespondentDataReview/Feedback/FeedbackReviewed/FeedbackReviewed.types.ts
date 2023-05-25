@@ -5,7 +5,7 @@ export type ActivityItemAnswer = {
   activityItem: Item & {
     edited: boolean;
   };
-  answer: ItemAnswer;
+  answer: ItemAnswer | string;
 };
 
 export type Reviewer = {

@@ -224,6 +224,8 @@ export type Answers = { id: string; createdDate: string } & RespondentId;
 
 export type Answer = AppletId & { answerId: string };
 
+export type ActivityAnswer = AppletId & { answerId: string } & { activityId: string };
+
 export type AppletUniqueName = {
   name: string;
 };
