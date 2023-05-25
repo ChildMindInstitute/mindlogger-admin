@@ -19,7 +19,6 @@ export const DataTable = ({
   onSelect,
   onSelectAll,
   hasError,
-  containerStyles = {},
   tableHeadBgColor = variables.palette.surface1,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
@@ -47,7 +46,7 @@ export const DataTable = ({
   };
 
   return (
-    <StyledTableContainer hasError={hasError} sx={{ ...containerStyles }}>
+    <StyledTableContainer hasError={hasError}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>

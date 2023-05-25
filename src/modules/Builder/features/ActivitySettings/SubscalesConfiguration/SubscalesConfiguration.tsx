@@ -147,7 +147,6 @@ export const SubscalesConfiguration = () => {
           columns={allElementsTableColumns}
           data={usedWithinSubscalesElements}
           noDataPlaceholder={t('noElementsYet')}
-          containerStyles={{ width: '100%' }}
           tableHeadBgColor={variables.palette.white}
         />
       )}

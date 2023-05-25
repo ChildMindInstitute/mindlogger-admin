@@ -24,7 +24,6 @@ export const TransferListController = <T extends FieldValues>({
   readOnly = false,
   hasSearch = true,
   hasSelectedSection = true,
-  leftTableStyles = {},
 }: TransferListControllerProps<T>) => {
   const { t } = useTranslation('app');
 
@@ -78,7 +77,6 @@ export const TransferListController = <T extends FieldValues>({
                 onSelect={handleSelect}
                 onSelectAll={handleSelectAll}
                 hasError={!!error}
-                containerStyles={leftTableStyles}
               />
               {hasSelectedSection && (
                 <DataTable

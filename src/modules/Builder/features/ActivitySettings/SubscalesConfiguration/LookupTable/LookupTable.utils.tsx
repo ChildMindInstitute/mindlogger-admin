@@ -54,7 +54,6 @@ export const getModalComponents = ({
               columns={columnData}
               data={data}
               noDataPlaceholder={t('noElementsYet')}
-              containerStyles={{ width: '100%' }}
               tableHeadBgColor={variables.palette.surface3}
             />
           </>
@@ -81,7 +80,6 @@ export const getModalComponents = ({
               columns={columnData}
               data={data}
               noDataPlaceholder={t('noElementsYet')}
-              containerStyles={{ width: '100%' }}
               tableHeadBgColor={variables.palette.surface3}
             />
           </>

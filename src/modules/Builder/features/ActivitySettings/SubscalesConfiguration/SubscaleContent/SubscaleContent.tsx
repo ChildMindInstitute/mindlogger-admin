@@ -55,9 +55,6 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
           columns={columns}
           hasSearch={false}
           hasSelectedSection={false}
-          leftTableStyles={{
-            width: '100%',
-          }}
         />
         <DataTable
           columns={notUsedElementsTableColumns}
