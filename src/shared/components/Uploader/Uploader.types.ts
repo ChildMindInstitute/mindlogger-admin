@@ -14,4 +14,5 @@ export type UploaderProps = {
   description?: string;
   maxFileSize?: number;
   wrapperStyles?: SxProps;
+  hasRemoveConfirmation?: boolean;
 };

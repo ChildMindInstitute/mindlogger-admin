@@ -16,7 +16,6 @@ import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { BuilderContainer } from 'shared/features';
 
-import { RemoveImagePopup } from './RemoveImagePopup/RemoveImagePopup';
 import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { colorThemeOptions } from './AboutApplet.const';
 
@@ -28,6 +27,7 @@ const commonUploaderProps = {
 
 export const AboutApplet = () => {
   const { t } = useTranslation();
+
   const [imageNameToRemove, setImageNameToRemove] = useState('');
 
   useBreadcrumbs([
@@ -44,19 +44,6 @@ export const AboutApplet = () => {
     fullWidth: true,
   };
 
-  const handleChangeImage = (name: string, value: string) => {
-    if (!value) return setImageNameToRemove(name);
-
-    setValue(name, value);
-  };
-  const handleCloseRemoveImage = () => {
-    setImageNameToRemove('');
-  };
-  const handleConfirmRemoveImage = () => {
-    setValue(imageNameToRemove, '');
-    handleCloseRemoveImage();
-  };
-
   const uploads = [
     {
       title: t('appletImg'),
@@ -64,9 +51,10 @@ export const AboutApplet = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => handleChangeImage('image', val)}
+          setValue={(val: string) => setValue('image', val)}
           getValue={() => watch('image')}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
+          hasRemoveConfirmation
         />
       ),
     },
@@ -76,9 +64,10 @@ export const AboutApplet = () => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => handleChangeImage('watermark', val)}
+          setValue={(val: string) => setValue('watermark', val)}
           getValue={() => watch('watermark')}
           description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
+          hasRemoveConfirmation
         />
       ),
     },
@@ -127,11 +116,6 @@ export const AboutApplet = () => {
         </Tooltip>
       </StyledTitle>
       <EditorController control={control} name="about" />
-      <RemoveImagePopup
-        open={!!imageNameToRemove}
-        onClose={handleCloseRemoveImage}
-        onSubmit={handleConfirmRemoveImage}
-      />
     </BuilderContainer>
   );
 };

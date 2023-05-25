@@ -76,6 +76,7 @@ export const ActivityAbout = () => {
           setValue={(val: string) => setValue(`${fieldName}.image`, val)}
           getValue={() => watch(`${fieldName}.image`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
+          hasRemoveConfirmation
         />
       ),
     },
@@ -88,6 +89,7 @@ export const ActivityAbout = () => {
           setValue={(val: string) => setValue(`${fieldName}.splashScreen`, val)}
           getValue={() => watch(`${fieldName}.splashScreen`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
+          hasRemoveConfirmation
         />
       ),
     },
