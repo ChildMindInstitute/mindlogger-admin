@@ -11,7 +11,7 @@ import { DateFormats } from 'shared/consts';
 
 import { getHeadCells } from './ReportTable.const';
 import { StyledTableWrapper } from './ReportTable.styles';
-import { ReportTableProps } from './ReportTable.types';
+import { ReportTableProps, TextItemAnswer } from './ReportTable.types';
 import { filterReportTable, getComparator, getRows, stableSort } from './ReportTable.utils';
 
 export const ReportTable = ({ answers = [] }: ReportTableProps) => {
@@ -38,15 +38,22 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
 
   const visibleRows = useMemo(() => {
     const currentPage = page - 1;
-    const formattedAnswers = answers
-      .map(({ date, value }) => ({
-        date: format(new Date(date), DateFormats.DayMonthYear),
-        time: format(new Date(date), DateFormats.Time),
-        response: value as string,
-      }))
-      .filter(({ date, time, response }) =>
-        filterReportTable(`${date} ${time} ${response}`, searchValue),
-      );
+    const formattedAnswers = answers.reduce((textItemAnswers: TextItemAnswer[], answer) => {
+      const date = format(new Date(answer.date), DateFormats.DayMonthYear);
+      const time = format(new Date(answer.date), DateFormats.Time);
+
+      if (!filterReportTable(`${date} ${time} ${answer.value}`, searchValue))
+        return textItemAnswers;
+
+      return [
+        ...textItemAnswers,
+        {
+          date,
+          time,
+          response: answer.value as string,
+        },
+      ];
+    }, []);
 
     const visibleAnswers = stableSort(formattedAnswers, getComparator(order, orderBy)).slice(
       currentPage * DEFAULT_ROWS_PER_PAGE,
