@@ -9,7 +9,6 @@ import {
   DeleteAppletSetting,
   ExportDataSetting,
   PublishConcealAppletSetting,
-  ReportConfigSetting,
 } from 'shared/features/AppletSettings';
 
 import { GetSettings } from './BuilderAppletSettings.types';
