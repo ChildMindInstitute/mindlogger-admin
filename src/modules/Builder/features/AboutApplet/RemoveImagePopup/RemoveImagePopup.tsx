@@ -13,9 +13,11 @@ export const RemoveImagePopup = ({ open, onClose, onSubmit }: RemoveImagePopupPr
       open={open}
       title={t('removeImage')}
       buttonText={t('remove')}
+      secondBtnText={t('cancel')}
       onClose={onClose}
       onSecondBtnSubmit={onClose}
       onSubmit={onSubmit}
+      hasSecondBtn
     >
       <StyledModalWrapper>{t('removeImageDescription')}</StyledModalWrapper>
     </Modal>
