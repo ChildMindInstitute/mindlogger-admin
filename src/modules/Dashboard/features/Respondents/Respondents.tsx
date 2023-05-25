@@ -66,9 +66,8 @@ export const Respondents = () => {
   const [respondentsDataIndex, setRespondentsDataIndex] = useState<null | number>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
-  const { getEncryptionCheck } = useEncryptionCheckFromStorage();
-  const hasEncryptionCheck = getEncryptionCheck(appletId ?? '');
-
+  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
   const actions = {
     scheduleSetupAction: (index: number) => {
       setRespondentsDataIndex(index);
