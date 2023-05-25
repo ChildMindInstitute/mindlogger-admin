@@ -28,7 +28,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
               {
                 icon: <Svg id="export" />,
                 label: 'exportData',
-                component: <ExportDataSetting isDisabled={isNewApplet} />,
+                component: <ExportDataSetting />,
                 param: 'export-data',
                 disabled: isNewApplet,
                 tooltip,
@@ -51,7 +51,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
         {
           icon: <Svg id="schema" />,
           label: 'downloadSchema',
-          component: <DownloadSchemaSetting isDisabled={isNewApplet} />,
+          component: <DownloadSchemaSetting />,
           param: 'download-schema',
           disabled: isNewApplet,
           tooltip,
@@ -69,7 +69,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
               {
                 icon: <Svg id="transfer-ownership" />,
                 label: 'transferOwnership',
-                component: <TransferOwnershipSetting isDisabled={isNewApplet} isApplet />,
+                component: <TransferOwnershipSetting isApplet />,
                 param: 'transfer-ownership',
                 disabled: isNewApplet,
                 tooltip,
@@ -81,7 +81,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
               {
                 icon: <Svg id="trash" />,
                 label: 'deleteApplet',
-                component: <DeleteAppletSetting isDisabled={isNewApplet} />,
+                component: <DeleteAppletSetting />,
                 param: 'delete-applet',
                 disabled: isNewApplet,
                 tooltip,

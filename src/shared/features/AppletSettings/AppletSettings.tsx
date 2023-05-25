@@ -35,7 +35,10 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
       return setSelectedSetting(null);
     }
     const setting = getSettingItem(settings, settingItem);
-    setting && setSelectedSetting(setting);
+
+    if (setting && !setting.disabled) return setSelectedSetting(setting);
+
+    if (isBuilder) navigateTo();
   }, [appletId, settingItem]);
 
   const handleSettingClick = (setting: AppletSetting) => {
