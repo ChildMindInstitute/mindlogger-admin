@@ -1,6 +1,6 @@
 import { Button, styled, Box } from '@mui/material';
 
-import { MarkDownEditor } from 'shared/components';
+import { MarkDownEditor } from 'shared/components/MarkDownEditor';
 import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 

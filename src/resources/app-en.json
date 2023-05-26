@@ -526,6 +526,8 @@
     "continuousSlider": "Use Continuous Slider",
     "isMediaReplayAllowed": "Allow media replay",
     "removeBackButton": "Remove Back Button",
+    "removeUndoButton": "Remove Undo Button",
+    "navigationToTop": "Move Navigation Buttons to the Top",
     "additionalResponseOption.textInputRequired": "Required",
     "isUndoRemoved": "Remove Undo Button",
     "isNavigationMovedToTheTop": "Move Navigation Buttons To Top Of Screen",
