@@ -1,0 +1,2 @@
+export const DEFAULT_FIXATION_DURATION = 3000;
+export const MIN_FIXATION_DURATION = 1;

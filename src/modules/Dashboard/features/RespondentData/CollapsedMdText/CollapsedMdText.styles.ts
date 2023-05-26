@@ -1,10 +1,10 @@
 import { Button, styled, Box } from '@mui/material';
-import MdEditor from 'md-editor-rt';
 
+import { MarkDownEditor } from 'shared/components/MarkDownEditor';
 import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
-export const StyledMdEditor = styled(MdEditor)`
+export const StyledMdEditor = styled(MarkDownEditor)`
   --md-bk-color: transparent;
   margin-bottom: ${theme.spacing(2.4)};
 
@@ -26,15 +26,8 @@ export const StyledMdEditor = styled(MdEditor)`
 export const StyledCollapsedContainer = styled(Box, shouldForwardProp)`
   overflow-y: hidden;
 
-  max-height: ${({
-    maxHeight,
-    isOpen,
-    isLarge,
-  }: {
-    maxHeight: number;
-    isOpen: boolean;
-    isLarge: boolean;
-  }) => (!isOpen ? `${maxHeight}px` : 'unset')};
+  max-height: ${({ maxHeight, isOpen }: { maxHeight: number; isOpen: boolean; isLarge: boolean }) =>
+    !isOpen ? `${maxHeight}px` : 'unset'};
   border-bottom: ${({ isOpen, isLarge }) =>
     isLarge && !isOpen
       ? `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`

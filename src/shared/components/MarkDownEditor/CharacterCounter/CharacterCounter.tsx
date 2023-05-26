@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import { THRESHOLD_SIZE } from 'shared/components/MarkDownEditor/MarkDownEditor';
 import { StyledTitleSmall } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 
+import { THRESHOLD_SIZE } from '../MarkDownEditor.const';
 import { CharacterCounterProps } from './CharacterCounter.types';
 
 export const CharacterCounter = ({ inputSize }: CharacterCounterProps) => {

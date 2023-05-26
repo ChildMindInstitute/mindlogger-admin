@@ -14,3 +14,5 @@ export * from './useRemoveAppletData';
 export * from './useComponentSize';
 export * from './useEncryptionCheckFromStorage';
 export * from './usePermissions';
+export * from './useWindowSize';
+export * from './useIsTextNodeEllipsed';

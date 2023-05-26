@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
-import { StyledBodyMedium } from 'shared/styles/styledComponents';
+import { StyledBodyLarge, StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { byteFormatter, getUploadFormData } from 'shared/utils';
@@ -22,6 +22,7 @@ import {
   UploadedImgContainer,
 } from './Uploader.styles';
 import { UploaderProps, UploaderUiType } from './Uploader.types';
+import { RemoveImagePopup } from './RemoveImagePopup';
 
 export const Uploader = ({
   uiType = UploaderUiType.Primary,
@@ -32,6 +33,8 @@ export const Uploader = ({
   description,
   maxFileSize = MAX_FILE_SIZE_2MB,
   wrapperStyles = {},
+  hasRemoveConfirmation = false,
+  showImgName = false,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
   const { execute: executeImgUpload } = useAsync(
@@ -43,7 +46,9 @@ export const Uploader = ({
   const [image, setImage] = useState<File | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
   const [error, setError] = useState(false);
+  const [isRemovePopupOpen, setRemovePopupOpen] = useState(false);
   const isPrimaryUiType = uiType === UploaderUiType.Primary;
+  const isSecondaryUiType = uiType === UploaderUiType.Secondary;
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -59,8 +64,8 @@ export const Uploader = ({
 
     if (!isAllowableSize || !imageFile.type.includes('image')) return;
 
+    setImage(imageFile);
     if (isPrimaryUiType) {
-      setImage(imageFile);
       setCropPopupVisible(true);
 
       return;
@@ -95,13 +100,29 @@ export const Uploader = ({
     uploadInputRef?.current?.click();
   };
 
-  const onRemoveImg = (e: MouseEvent) => {
-    stopDefaults(e);
+  const handleCloseRemovePopup = () => {
+    setRemovePopupOpen(false);
+  };
+
+  const handleRemoveImg = () => {
     setImage(null);
     setValue('');
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
     }
+  };
+
+  const handleDeleteClick = (e: MouseEvent) => {
+    stopDefaults(e);
+
+    if (hasRemoveConfirmation) return setRemovePopupOpen(true);
+
+    handleRemoveImg();
+  };
+
+  const handleConfirmRemoval = () => {
+    handleRemoveImg();
+    handleCloseRemovePopup();
   };
 
   const imageField = getValue();
@@ -140,7 +161,7 @@ export const Uploader = ({
                 <Button
                   {...deleteBtnProps}
                   startIcon={<Svg width="18" height="18" id="trash" />}
-                  onClick={onRemoveImg}
+                  onClick={handleDeleteClick}
                 />
               </StyledButtonGroup>
             )}
@@ -186,6 +207,11 @@ export const Uploader = ({
           )}
         </StyledNameWrapper>
       )}
+      {isSecondaryUiType && showImgName && image?.name && (
+        <StyledBodyLarge sx={{ ml: theme.spacing(1) }} color={variables.palette.on_surface_variant}>
+          {image.name}
+        </StyledBodyLarge>
+      )}
       {cropPopupVisible && image && (
         <CropPopup
           open={cropPopupVisible}
@@ -194,6 +220,11 @@ export const Uploader = ({
           image={image}
         />
       )}
+      <RemoveImagePopup
+        open={isRemovePopupOpen}
+        onClose={handleCloseRemovePopup}
+        onSubmit={handleConfirmRemoval}
+      />
     </>
   );
 };

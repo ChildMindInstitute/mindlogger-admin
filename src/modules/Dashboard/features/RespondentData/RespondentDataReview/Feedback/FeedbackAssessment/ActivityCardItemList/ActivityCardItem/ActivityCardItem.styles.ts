@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
-import MdEditor from 'md-editor-rt';
 
+import { MarkDownEditor } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 
 export const StyledCardItemContainer = styled(Box)`
@@ -12,7 +12,7 @@ export const StyledCardItemContainer = styled(Box)`
   }
 `;
 
-export const StyledMdEditor = styled(MdEditor)`
+export const StyledMdEditor = styled(MarkDownEditor)`
   background-color: transparent;
   color: ${variables.palette.on_surface_variant};
   font-size: ${variables.font.size.md};
