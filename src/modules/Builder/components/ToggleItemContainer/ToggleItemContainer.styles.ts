@@ -23,7 +23,10 @@ export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardP
 `;
 
 export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)`
-  ${({ open }: { open?: boolean }) => `
-		height: ${open ? '5.6rem' : 'inherited'}; 
+  justify-content: space-between;
+
+  ${({ open, uiType }: { open?: boolean; uiType: ToggleContainerUiType }) => `
+		height: ${open ? '5.6rem' : 'inherit'}; 
+		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0}
 	`};
 `;
