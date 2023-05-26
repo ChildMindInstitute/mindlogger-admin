@@ -19,6 +19,7 @@ import {
   notUsedElementsTableColumns,
 } from '../SubscalesConfiguration.utils';
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
+import { StyledWrapper } from './SubscaleContent.styles';
 
 export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleContentProps) => {
   const { t } = useTranslation('app');
@@ -47,7 +48,7 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
       <StyledTitleMedium sx={{ mb: theme.spacing(1) }}>
         {t('elementsWithinSubscale')}
       </StyledTitleMedium>
-      <StyledFlexTopStart sx={{ mb: theme.spacing(4.4), gap: theme.spacing(2) }}>
+      <StyledWrapper>
         <TransferListController
           name={`${name}.items`}
           items={items}
@@ -59,9 +60,8 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
           columns={notUsedElementsTableColumns}
           data={notUsedElements}
           noDataPlaceholder={t('noElementsYet')}
-          styles={{ width: '100%' }}
         />
-      </StyledFlexTopStart>
+      </StyledWrapper>
     </StyledFlexColumn>
   );
 };

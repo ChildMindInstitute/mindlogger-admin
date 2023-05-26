@@ -26,6 +26,9 @@ export const totalScoreTableColumnData = [
   {
     key: 'Raw Score',
     label: t('subscaleLookupTable.column.rawScore'),
+    styles: {
+      width: '20%',
+    },
   },
 
   {
