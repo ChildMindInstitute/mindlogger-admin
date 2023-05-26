@@ -22,6 +22,7 @@ import {
   UploadedImgContainer,
 } from './Uploader.styles';
 import { UploaderProps, UploaderUiType } from './Uploader.types';
+import { RemoveImagePopup } from './RemoveImagePopup';
 
 export const Uploader = ({
   uiType = UploaderUiType.Primary,
@@ -32,6 +33,7 @@ export const Uploader = ({
   description,
   maxFileSize = MAX_FILE_SIZE_2MB,
   wrapperStyles = {},
+  hasRemoveConfirmation = false,
   showImgName = false,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
@@ -44,6 +46,7 @@ export const Uploader = ({
   const [image, setImage] = useState<File | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
   const [error, setError] = useState(false);
+  const [isRemovePopupOpen, setRemovePopupOpen] = useState(false);
   const isPrimaryUiType = uiType === UploaderUiType.Primary;
   const isSecondaryUiType = uiType === UploaderUiType.Secondary;
 
@@ -97,13 +100,29 @@ export const Uploader = ({
     uploadInputRef?.current?.click();
   };
 
-  const onRemoveImg = (e: MouseEvent) => {
-    stopDefaults(e);
+  const handleCloseRemovePopup = () => {
+    setRemovePopupOpen(false);
+  };
+
+  const handleRemoveImg = () => {
     setImage(null);
     setValue('');
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
     }
+  };
+
+  const handleDeleteClick = (e: MouseEvent) => {
+    stopDefaults(e);
+
+    if (hasRemoveConfirmation) return setRemovePopupOpen(true);
+
+    handleRemoveImg();
+  };
+
+  const handleConfirmRemoval = () => {
+    handleRemoveImg();
+    handleCloseRemovePopup();
   };
 
   const imageField = getValue();
@@ -142,7 +161,7 @@ export const Uploader = ({
                 <Button
                   {...deleteBtnProps}
                   startIcon={<Svg width="18" height="18" id="trash" />}
-                  onClick={onRemoveImg}
+                  onClick={handleDeleteClick}
                 />
               </StyledButtonGroup>
             )}
@@ -201,6 +220,11 @@ export const Uploader = ({
           image={image}
         />
       )}
+      <RemoveImagePopup
+        open={isRemovePopupOpen}
+        onClose={handleCloseRemovePopup}
+        onSubmit={handleConfirmRemoval}
+      />
     </>
   );
 };
