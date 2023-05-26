@@ -214,7 +214,7 @@ export const Uploader = ({
         />
       )}
       <RemoveImagePopup
-        open={!!isRemovePopupOpen}
+        open={isRemovePopupOpen}
         onClose={handleCloseRemovePopup}
         onSubmit={handleConfirmRemoval}
       />
