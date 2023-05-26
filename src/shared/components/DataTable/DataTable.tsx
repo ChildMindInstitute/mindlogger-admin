@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 
 import { StyledBodyMedium, StyledLabelLarge, variables } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
-import { ContentWithTooltip } from 'shared/components';
+import { ContentWithTooltip } from 'shared/components/ContentWithTooltip';
 
 import { DataTableProps } from './DataTable.types';
 import { StyledCheckbox, StyledTableCell, StyledTableContainer } from './DataTable.styles';

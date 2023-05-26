@@ -1,6 +1,6 @@
 import { Checkbox, styled, TableCell, TableContainer } from '@mui/material';
 
-import { variables } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 const height = '29.2rem';
@@ -27,5 +27,5 @@ export const StyledTableCell = styled(TableCell)`
     content: ' ';
     visibility: hidden;
   }
-  padding-bottom: 2rem;
+  padding-bottom: ${theme.spacing(2)};
 `;

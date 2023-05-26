@@ -2,7 +2,9 @@ import { ReactNode } from 'react';
 import { DefaultTFuncReturn } from 'i18next';
 import { SxProps } from '@mui/material';
 
-export type DataTableItem = Record<string, unknown> & {
+import { TooltipProps } from 'shared/components/Tooltip';
+
+export type DataTableItem = Record<string, TooltipProps['tooltipTitle']> & {
   id: string;
 };
 

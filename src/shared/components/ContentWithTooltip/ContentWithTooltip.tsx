@@ -15,10 +15,10 @@ export const ContentWithTooltip = ({ value, styles = {} }: ContentWithTooltipPro
     <Tooltip
       placement={'top'}
       uiType={TooltipUiType.Secondary}
-      tooltipTitle={hasTooltip ? (value as string) : undefined}
+      tooltipTitle={hasTooltip ? value : undefined}
     >
       <StyledCellText sx={styles} ref={elementRef}>
-        <>{value}</>
+        {value}
       </StyledCellText>
     </Tooltip>
   );
