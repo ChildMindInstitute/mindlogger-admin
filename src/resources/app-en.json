@@ -878,6 +878,33 @@
     "testSettings": "This instruction will be displayed for the respondent before passing the test round of the Activity.",
     "defaultGeneralInstructions": "General Instructions\n\n You will see arrows presented at the center of the screen that point either to the left '<' or right '>'.\n Press the left button if the arrow is pointing to the left '<' or press the right button if the arrow is pointing to the right '>'.\n These arrows will appear in the center of a line of other items. Sometimes, these other items will be arrows pointing in the same direction, e.g.. '> > > > >', or in the opposite direction, e.g. '< < > < <'.\n Your job is to respond to the central arrow, no matter what direction the other arrows are pointing.\n For example, you would press the left button for both '< < < < <', and '> > < > >' because the middle arrow points to the left.\n Finally, in some trials dashes ' - ' will appear beside the central arrow.\n Again, respond only to the direction of the central arrow. Please respond as quickly and accurately as possible."
   },
+  "flankerButtons": {
+    "title": "Buttons",
+    "number": "Number of buttons available to respondent:",
+    "button": "1 button",
+    "buttons": "2 buttons",
+    "buttonName": "Button Name",
+    "leftButtonName": "Left Button Name",
+    "rightButtonName": "Right Button Name",
+    "tooltip": "Button Name or Image is required"
+  },
+  "flankerFixation": {
+    "title": "Fixation Screen (Optional)",
+    "tooltip": "Fixation screen will be shown between Stimulus screens. No action from the responded required",
+    "addBtn": "Add Fixation Screen",
+    "showFixationFor": "Show fixation for:",
+    "milliseconds": "milliseconds"
+  },
+  "flankerStimulus": {
+    "title": "Stimulus Screen",
+    "tooltip": "Stimulus screens require action from the respondent",
+    "fileName": "File Name",
+    "correctPress": "Correct Button Press",
+    "left": "Left",
+    "right": "Right",
+    "addText": "Add at least 1 stimulus screen.",
+    "addBtn": "Add Stimulus Screen"
+  },
   "showMore": "Show More...",
   "showLess": "Show Less...",
   "hideBadgeTooltip": "The Activity Flow identifier will be hidden from Respondents",

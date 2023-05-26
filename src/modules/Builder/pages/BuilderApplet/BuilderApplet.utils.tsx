@@ -24,6 +24,7 @@ import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
 
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from './BuilderApplet.types';
+import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -83,6 +84,9 @@ export const getNewPerformanceTask = ({
   const instruction = isFlankerItem && {
     general: {
       instruction: t('performanceTaskInstructions.defaultGeneralInstructions'),
+      buttons: [defaultFlankerBtnObj],
+      fixation: null,
+      stimulusTrials: [],
     },
   };
 

@@ -5,12 +5,7 @@ import { Box } from '@mui/material';
 import { theme } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
-
-import {
-  NAME_MAX_LENGTH,
-  DESCRIPTION_MAX_LENGTH,
-  TEXTAREA_ROWS,
-} from './NameDescriptionContent.const';
+import { MAX_NAME_LENGTH, MAX_DESCRIPTION_LENGTH, TEXTAREA_ROWS } from 'shared/consts';
 
 export const NameDescriptionContent = () => {
   const { t } = useTranslation();
@@ -30,7 +25,7 @@ export const NameDescriptionContent = () => {
           {...commonProps}
           name={`${fieldName}.name`}
           label={t('activityName')}
-          maxLength={NAME_MAX_LENGTH}
+          maxLength={MAX_NAME_LENGTH}
         />
       </Box>
       <Box sx={{ mb: theme.spacing(1.6) }}>
@@ -38,7 +33,7 @@ export const NameDescriptionContent = () => {
           {...commonProps}
           name={`${fieldName}.description`}
           label={t('activityDescription')}
-          maxLength={DESCRIPTION_MAX_LENGTH}
+          maxLength={MAX_DESCRIPTION_LENGTH}
           multiline
           rows={TEXTAREA_ROWS}
         />
