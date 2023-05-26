@@ -14,13 +14,13 @@ import {
 
 import { GetSettings } from './BuilderAppletSettings.types';
 
-export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => {
+export const getSettings = ({ isNewApplet, isPublished, roles }: GetSettings) => {
   const { t } = i18n;
 
   const tooltip = isNewApplet ? t('saveAndPublishFirst') : undefined;
 
   return [
-    ...(role !== Roles.Editor
+    ...(!roles?.includes(Roles.Editor)
       ? [
           {
             label: 'usersAndData',
@@ -64,7 +64,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
           disabled: isNewApplet,
           tooltip,
         },
-        ...(role === Roles.Owner
+        ...(roles?.[0] === Roles.Owner
           ? [
               {
                 icon: <Svg id="transfer-ownership" />,
@@ -76,7 +76,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
               },
             ]
           : []),
-        ...(role === Roles.Owner || role === Roles.Manager
+        ...(roles?.[0] === Roles.Owner || roles?.[0] === Roles.Manager
           ? [
               {
                 icon: <Svg id="trash" />,

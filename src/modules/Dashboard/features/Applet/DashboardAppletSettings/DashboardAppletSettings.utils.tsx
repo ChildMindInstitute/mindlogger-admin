@@ -15,8 +15,8 @@ import {
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
-export const getSettings = ({ isPublished, role }: GetSettings) => [
-  ...(role !== Roles.Editor
+export const getSettings = ({ isPublished, roles }: GetSettings) => [
+  ...(!roles?.includes(Roles.Editor)
     ? [
         {
           label: 'usersAndData',
@@ -58,7 +58,7 @@ export const getSettings = ({ isPublished, role }: GetSettings) => [
         component: <VersionHistorySetting />,
         param: 'version-history',
       },
-      ...(role === Roles.Owner
+      ...(roles?.[0] === Roles.Owner
         ? [
             {
               icon: <Svg id="transfer-ownership" />,
@@ -74,7 +74,7 @@ export const getSettings = ({ isPublished, role }: GetSettings) => [
         component: <DuplicateAppletSettings />,
         param: 'duplicate-applet',
       },
-      ...(role === Roles.Owner || role === Roles.Manager
+      ...(roles?.[0] === Roles.Owner || roles?.[0] === Roles.Manager
         ? [
             {
               icon: <Svg id="trash" />,
