@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 
 import { DataTable, FileUploader } from 'shared/components';
-import { theme } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 import i18n from 'i18n';
 
 import { GetComponentsProps, ModalType, ScreenObjectProps } from './LookupTable.types';
@@ -54,7 +54,7 @@ export const getModalComponents = ({
               columns={columnData}
               data={data}
               noDataPlaceholder={t('noElementsYet')}
-              styles={{ width: '100%' }}
+              tableHeadBgColor={variables.palette.surface3}
             />
           </>
         ),
@@ -80,7 +80,7 @@ export const getModalComponents = ({
               columns={columnData}
               data={data}
               noDataPlaceholder={t('noElementsYet')}
-              styles={{ width: '100%' }}
+              tableHeadBgColor={variables.palette.surface3}
             />
           </>
         ),

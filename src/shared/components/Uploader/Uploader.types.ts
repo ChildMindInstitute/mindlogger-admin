@@ -15,4 +15,5 @@ export type UploaderProps = {
   maxFileSize?: number;
   wrapperStyles?: SxProps;
   hasRemoveConfirmation?: boolean;
+  showImgName?: boolean;
 };

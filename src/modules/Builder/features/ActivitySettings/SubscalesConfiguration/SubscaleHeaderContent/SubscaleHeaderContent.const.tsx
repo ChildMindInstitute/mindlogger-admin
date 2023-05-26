@@ -6,18 +6,30 @@ export const subscaleColumnData = [
   {
     key: 'Score',
     label: t('subscaleLookupTable.column.score'),
+    styles: {
+      width: '10%',
+    },
   },
   {
     key: 'Raw Score',
     label: t('subscaleLookupTable.column.rawScore'),
+    styles: {
+      width: '20%',
+    },
   },
   {
     key: 'Age',
     label: t('subscaleLookupTable.column.age'),
+    styles: {
+      width: '10%',
+    },
   },
   {
     key: 'Sex',
     label: t('subscaleLookupTable.column.sex'),
+    styles: {
+      width: '10%',
+    },
   },
   {
     key: 'Text',

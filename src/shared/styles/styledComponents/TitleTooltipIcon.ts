@@ -7,5 +7,8 @@ import { variables } from '../variables';
 
 export const StyledTitleTooltipIcon = styled(Svg)`
   margin-left: ${theme.spacing(1)};
-  fill: ${variables.palette.outline};
+
+  && {
+    fill: ${variables.palette.outline};
+  }
 `;

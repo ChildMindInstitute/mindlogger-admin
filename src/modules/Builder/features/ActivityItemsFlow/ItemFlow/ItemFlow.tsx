@@ -61,7 +61,6 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
       title={title}
       Content={Content}
       HeaderContent={Actions}
-      headerStyles={{ justifyContent: 'space-between' }}
       contentProps={{ items: conditions, name: itemName, onRemove: handleRemoveCondition }}
       headerContentProps={{ name: itemName, onAdd: handleAddCondition, onRemove }}
     />

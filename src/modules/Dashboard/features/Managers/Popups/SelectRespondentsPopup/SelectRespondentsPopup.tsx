@@ -1,24 +1,35 @@
-import { useRef, RefObject } from 'react';
+import { useRef, RefObject, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { StyledModalWrapper } from 'shared/styles';
 import { Modal } from 'shared/components';
+import { users, workspaces } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 
 import { SelectRespondents } from './SelectRespondents';
 import { SelectRespondentsPopupProps } from './SuccessSharePopup.types';
-import { mockedRespondents } from './SelectRespondents.const';
 import { SelectRespondentsRef } from '../SelectRespondentsPopup/SelectRespondents/SelectRespondents.types';
 
 export const SelectRespondentsPopup = ({
   appletName,
-  user: { firstName, lastName, email, nickName },
+  appletId,
+  user: { firstName, lastName, email },
   selectedRespondents,
   selectRespondentsPopupVisible,
   onClose,
 }: SelectRespondentsPopupProps) => {
-  const name = firstName || lastName ? `${firstName} ${lastName}` : nickName;
+  const name = `${firstName} ${lastName}`;
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const selectRespondentsRef = useRef() as RefObject<SelectRespondentsRef>;
+
+  const { ownerId } = workspaces.useData() || {};
+  const respondentsData = users.useAllRespondentsData();
+  const respondents = respondentsData?.result?.map(({ nicknames, secretIds, id }) => ({
+    nickname: nicknames[0],
+    secretId: secretIds[0],
+    id,
+  }));
 
   const handleClose = () => onClose(selectedRespondents);
 
@@ -28,6 +39,18 @@ export const SelectRespondentsPopup = ({
       onClose(selectedRespondents);
     }
   };
+
+  useEffect(() => {
+    if (ownerId) {
+      const { getAllWorkspaceRespondents } = users.thunk;
+
+      dispatch(
+        getAllWorkspaceRespondents({
+          params: { ownerId, appletId },
+        }),
+      );
+    }
+  }, [ownerId]);
 
   return (
     <Modal
@@ -46,7 +69,7 @@ export const SelectRespondentsPopup = ({
           ref={selectRespondentsRef}
           appletName={appletName}
           reviewer={{ name, email }}
-          respondents={mockedRespondents}
+          respondents={respondents || []}
           selectedRespondents={selectedRespondents}
         />
       </StyledModalWrapper>

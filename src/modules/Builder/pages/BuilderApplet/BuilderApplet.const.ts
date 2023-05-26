@@ -6,3 +6,5 @@ export const CONDITION_TYPES_TO_HAVE_OPTION_ID = [
   ConditionType.EqualToOption,
   ConditionType.NotEqualToOption,
 ];
+
+export const defaultFlankerBtnObj = { name: '', image: '' };

@@ -4,10 +4,8 @@ import { useForm } from 'react-hook-form';
 
 import { CheckboxController } from 'shared/components/FormComponents';
 import { Row, Table, UiType, Search } from 'shared/components';
-import { filterRows } from 'shared/utils/filterRows';
-import { StyledBodyMedium } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { filterRows } from 'shared/utils';
+import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
 import { SelectRespondentsProps, SelectRespondentsRef } from './SelectRespondents.types';
 import { StyledFilterContainer, StyledSelectContainer } from './SelectRespondents.styles';
@@ -30,7 +28,6 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
         value: nickname,
       },
     }));
-
     const { t } = useTranslation('app');
     const [searchAcrossValue, setSearchAcrossValue] = useState<string>(SearchAcross.All);
     const [searchValue, setSearchValue] = useState('');
@@ -103,6 +100,10 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
         return getSelectedRespondentsList();
       },
     }));
+
+    useEffect(() => {
+      rows && setTableRows(rows);
+    }, [rows]);
 
     useEffect(() => {
       const selectedRespondents = Object.values(formValues).filter(Boolean);

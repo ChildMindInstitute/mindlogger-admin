@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-import theme from 'shared/styles/theme';
-import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
+import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { Roles } from 'shared/consts';
 
 import { Applet } from './Applet';
-import { EditAccessPopupProps, Applet as AppletType, Role } from './ManagersEditAccessPopup.types';
-import { mockedApplets } from './ManagersEditAccessPopup.const';
+import { Applet as AppletType, EditAccessPopupProps, Role } from './ManagersEditAccessPopup.types';
 import { StyledApplets, StyledError } from './ManagersEditAccessPopup.styles';
 import { getRoleIcon } from './ManagersEditAccessPopup.utils';
 import { EditAccessSuccessPopup } from '../EditAccessSuccessPopup';
@@ -19,18 +17,18 @@ export const EditAccessPopup = ({
   user,
 }: EditAccessPopupProps) => {
   const { t } = useTranslation('app');
-  const { firstName, lastName, email } = user;
-  const [applets, setApplets] = useState<AppletType[]>(mockedApplets);
+  const { firstName, lastName, email, applets: userApplets } = user;
+  const [applets, setApplets] = useState<AppletType[]>(userApplets);
   const [appletsWithoutRespondents, setAppletsWithoutRespondents] = useState<string[]>([]);
   const [editAccessSuccessPopupVisible, setEditAccessSuccessPopupVisible] = useState(false);
 
   const getAppletsWithoutRespondents = () =>
     applets.reduce((acc: string[], el) => {
       if (
-        el.roles.some((role) => role.label === Roles.Reviewer) &&
+        el.roles.some(({ role }) => role === Roles.Reviewer) &&
         !el?.selectedRespondents?.length
       ) {
-        acc.push(el.title);
+        acc.push(el.displayName);
       }
 
       return acc;
@@ -54,13 +52,13 @@ export const EditAccessPopup = ({
   };
 
   const handleRemoveRole = (id: string, label: Roles) =>
-    updateAppletHandler(id, (roles) => roles.filter((role) => role.label !== label));
+    updateAppletHandler(id, (roles) => roles.filter(({ role }) => role !== label));
 
-  const handleAddRole = (id: string, label: Roles) => {
+  const handleAddRole = (id: string, role: Roles) => {
     const callback = (roles: Role[]) =>
-      label === Roles.Manager
-        ? [{ label, icon: getRoleIcon(label) }]
-        : [...roles, { label, icon: getRoleIcon(label) }];
+      role === Roles.Manager
+        ? [{ role, icon: getRoleIcon(role) }]
+        : [...roles, { role, icon: getRoleIcon(role) }];
     updateAppletHandler(id, callback);
   };
 
