@@ -2,10 +2,10 @@ import MdEditor from 'md-editor-rt';
 
 import i18n from 'i18n';
 
-export const LANGUAGE_BY_DEFAULT = 'en';
-export const THRESHOLD_SIZE = 75;
+import { LANGUAGE_BY_DEFAULT } from './MarkDownEditor.const';
 
 const { t } = i18n;
+
 MdEditor.config({
   editorConfig: {
     languageUserDefined: {
