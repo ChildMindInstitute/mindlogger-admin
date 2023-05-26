@@ -1,8 +1,9 @@
-import { User } from '../../Managers.types';
+import { Manager } from 'redux/modules';
 
 export type SelectRespondentsPopupProps = {
   appletName: string;
-  user: User;
+  appletId: string;
+  user: Manager;
   selectedRespondents: string[];
   selectRespondentsPopupVisible: boolean;
   onClose: (selectedRespondents: string[]) => void;

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { StyledTitleSmall } from 'shared/styles/styledComponents';
+import { StyledTitleSmall } from 'shared/styles';
+import { Tooltip, TooltipUiType } from 'shared/components';
 
 import {
   StyledSetting,
@@ -22,16 +23,24 @@ export const Navigation = ({ settings, selectedSetting, handleSettingClick }: Na
         <StyledSettingsGroup key={label} isCompact={!!selectedSetting}>
           <StyledTitleSmall>{t(label)}</StyledTitleSmall>
           <StyledSettings isCompact={!!selectedSetting}>
-            {items.map(({ icon, label, component, param }) => (
-              <StyledSetting
-                onClick={() => handleSettingClick({ label, component, param })}
-                key={label}
-                isCompact={!!selectedSetting}
-                isSelected={selectedSetting?.label === label}
+            {items.map(({ icon, label, component, param, disabled, tooltip }) => (
+              <Tooltip
+                uiType={TooltipUiType.Secondary}
+                tooltipTitle={tooltip ? tooltip : null}
+                key={`item-setting-${label}`}
               >
-                {icon}
-                <StyledTitle>{t(label)}</StyledTitle>
-              </StyledSetting>
+                <span>
+                  <StyledSetting
+                    onClick={() => handleSettingClick({ label, component, param })}
+                    isCompact={!!selectedSetting}
+                    isSelected={selectedSetting?.label === label}
+                    disabled={disabled}
+                  >
+                    {icon}
+                    <StyledTitle>{t(label)}</StyledTitle>
+                  </StyledSetting>
+                </span>
+              </Tooltip>
             ))}
           </StyledSettings>
         </StyledSettingsGroup>

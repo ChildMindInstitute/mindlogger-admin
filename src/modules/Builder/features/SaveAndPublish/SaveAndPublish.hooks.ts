@@ -221,7 +221,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { cancelNavigation, confirmNavigation, promptVisible, setPromptVisible } =
     usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
-  const { getEncryptionCheck } = useEncryptionCheckFromStorage();
+  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   const { ownerId } = workspaces.useData() || {};
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
   const { result: appletData } = applet.useAppletData() ?? {};
@@ -289,7 +289,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPublishProcessStep(undefined);
   };
   const sendRequestWithPasswordCheck = async () => {
-    const hasEncryptionCheck = getEncryptionCheck(appletId ?? '');
+    const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
     if (!hasEncryptionCheck) {
       setIsPasswordPopupOpened(true);
 

@@ -72,8 +72,8 @@ export const RespondentDataReview = () => {
             {t('feedback')}
           </StyledTextBtn>
         </StyledHeader>
-        {selectedAnswer ? (
-          <Review answerId={selectedAnswer.answerId} />
+        {selectedAnswer && selectedActivity ? (
+          <Review answerId={selectedAnswer.answerId} activityId={selectedActivity.id} />
         ) : (
           <StyledWrapper>{emptyMessage}</StyledWrapper>
         )}
