@@ -1,7 +1,8 @@
 import { Box } from '@mui/material';
 
-import { ItemAnswer, TextItemAnswer } from '../RespondentDataReview.types';
+import { TextItemAnswer } from '../RespondentDataReview.types';
+import { getTextResponse } from './TextResponseItem.utils';
 
 export const TextResponseItem = ({ answer }: TextItemAnswer) => (
-  <Box>{(answer as ItemAnswer | null)?.value || ''}</Box>
+  <Box>{getTextResponse(answer)}</Box>
 );
