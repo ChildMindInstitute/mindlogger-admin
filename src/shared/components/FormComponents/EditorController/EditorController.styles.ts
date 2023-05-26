@@ -1,9 +1,9 @@
-import MdEditor from 'md-editor-rt';
 import { styled } from '@mui/system';
 
+import { MarkDownEditor } from 'shared/components/MarkDownEditor';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
-export const StyledMdEditor = styled(MdEditor)`
+export const StyledMdEditor = styled(MarkDownEditor)`
   border-radius: ${variables.borderRadius.lg2};
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   background-color: ${variables.palette.surface};
