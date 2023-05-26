@@ -507,6 +507,8 @@
     "continuousSlider": "Utiliser le curseur continu",
     "isMediaReplayAllowed": "Autoriser la relecture multimédia",
     "removeBackButton": "Supprimer le bouton de retour",
+    "removeUndoButton": "Supprimer le bouton Annuler",
+    "navigationToTop": "Déplacer les boutons de navigation vers le haut",
     "additionalResponseOption.textInputRequired": "Requis",
     "isUndoRemoved": "Supprimer le bouton Annuler",
     "isNavigationMovedToTheTop": "Déplacer les boutons de navigation vers le haut de l'écran",
