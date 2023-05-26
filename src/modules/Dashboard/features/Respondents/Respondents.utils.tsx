@@ -46,13 +46,13 @@ export const getActions = (
     icon: <Svg id="edit-user" width={21} height={19} />,
     action: editRespondent,
     tooltipTitle: t('editRespondent'),
-    isDisplayed: !!appletId && !!filteredApplets?.editaable.length,
+    isDisplayed: !!appletId && !!filteredApplets?.editable.length,
   },
   {
     icon: <Svg id="remove-access" />,
     action: removeAccessAction,
     tooltipTitle: t('removeAccess'),
-    isDisplayed: !!filteredApplets?.editaable.length,
+    isDisplayed: !!filteredApplets?.editable.length,
   },
 ];
 

@@ -112,7 +112,7 @@ export const Respondents = () => {
       setRespondentKey(respondentId);
 
       if (respondentId && appletId && ownerId) {
-        const respondentAccess = filteredRespondents[respondentId]?.editaable?.find(
+        const respondentAccess = filteredRespondents[respondentId]?.editable?.find(
           (item) => item.appletId === appletId,
         );
         const chosenAppletData = respondentAccess && {
@@ -192,7 +192,7 @@ export const Respondents = () => {
       : undefined;
 
   const viewableAppletsSmallTableRows = getAppletsSmallTable('viewable');
-  const editableAppletsSmallTableRows = getAppletsSmallTable('editaable');
+  const editableAppletsSmallTableRows = getAppletsSmallTable('editable');
   const schedulingAppletsSmallTableRows = getAppletsSmallTable('scheduling');
 
   const renderEmptyComponent = () => {
@@ -208,15 +208,15 @@ export const Respondents = () => {
       (acc: FilteredRespondents, { details, id }) => {
         const filteredRespondents = {
           scheduling: [],
-          editaable: [],
+          editable: [],
           viewable: [],
         } as FilteredApplets;
-        const { editaable, viewable, scheduling } = filteredRespondents;
+        const { editable, viewable, scheduling } = filteredRespondents;
 
         for (const detail of details) {
           const workspaceRoles = rolesData?.data?.[detail.appletId];
           if (isManagerOrOwner(workspaceRoles?.[0])) {
-            editaable.push(detail);
+            editable.push(detail);
             viewable.push(detail);
             scheduling.push(detail);
             continue;

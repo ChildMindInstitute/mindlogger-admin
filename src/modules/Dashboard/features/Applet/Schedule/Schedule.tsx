@@ -49,7 +49,7 @@ export const Schedule = () => {
       dispatch(calendarEvents.actions.resetCalendarEvents());
       dispatch(users.actions.resetAllRespondentsData());
     };
-  }, [appletId, respondentId, ownerId]);
+  }, [appletId, respondentId]);
 
   if (isForbidden) return noPermissionsComponent;
 

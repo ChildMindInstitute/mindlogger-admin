@@ -23,7 +23,7 @@ export type ChosenAppletData = {
 
 export type FilteredApplets = {
   scheduling: RespondentDetail[];
-  editaable: RespondentDetail[];
+  editable: RespondentDetail[];
   viewable: RespondentDetail[];
 };
 
