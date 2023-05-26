@@ -49,36 +49,35 @@ export const ButtonsContent = () => {
         />
       </Box>
       <StyledFlexSpaceBetween>
-        {buttons?.length &&
-          buttons.map((button, index) => (
-            <StyledFlexSpaceBetween
-              key={index}
-              sx={{
-                mb: theme.spacing(2),
-                flex: '0 0 calc(50% - 1.2rem)',
-              }}
-            >
-              <StyledFlexTopCenter sx={{ mr: theme.spacing(0.8) }}>
-                <Uploader
-                  uiType={UploaderUiType.Secondary}
-                  width={5.6}
-                  height={5.6}
-                  setValue={(val: string) =>
-                    setValue(`${buttonsField}.${index}.image`, val || undefined)
-                  }
-                  getValue={() => button.image || ''}
-                />
-              </StyledFlexTopCenter>
-              <InputController
-                control={control}
-                fullWidth
-                name={`${buttonsField}.${index}.name`}
-                label={getButtonLabel(buttons.length, index)}
-                maxLength={SMALL_INPUT_LENGTH}
-                restrictExceededValueLength
+        {buttons?.map((button, index) => (
+          <StyledFlexSpaceBetween
+            key={index}
+            sx={{
+              mb: theme.spacing(2),
+              flex: '0 0 calc(50% - 1.2rem)',
+            }}
+          >
+            <StyledFlexTopCenter sx={{ mr: theme.spacing(0.8) }}>
+              <Uploader
+                uiType={UploaderUiType.Secondary}
+                width={5.6}
+                height={5.6}
+                setValue={(val: string) =>
+                  setValue(`${buttonsField}.${index}.image`, val || undefined)
+                }
+                getValue={() => button.image || ''}
               />
-            </StyledFlexSpaceBetween>
-          ))}
+            </StyledFlexTopCenter>
+            <InputController
+              control={control}
+              fullWidth
+              name={`${buttonsField}.${index}.name`}
+              label={getButtonLabel(buttons.length, index)}
+              maxLength={SMALL_INPUT_LENGTH}
+              restrictExceededValueLength
+            />
+          </StyledFlexSpaceBetween>
+        ))}
       </StyledFlexSpaceBetween>
     </>
   );

@@ -62,37 +62,36 @@ export const StimulusContent = () => {
           </StyledBodyLarge>
         </StyledInfoSection>
       )}
-      {!!stimulusTrials?.length &&
-        stimulusTrials.map((trial, index) => (
-          <StyledRow key={trial.id}>
-            <StyledFlexTopCenter sx={{ flex: '0 0 45%' }}>
-              <Uploader
-                uiType={UploaderUiType.Secondary}
-                width={5.6}
-                height={5.6}
-                setValue={(val: string) =>
-                  setValue(`${stimulusField}.${index}.image`, val || undefined)
-                }
-                getValue={() => trial.image || ''}
-                showImgName
+      {stimulusTrials?.map((trial, index) => (
+        <StyledRow key={trial.id}>
+          <StyledFlexTopCenter sx={{ flex: '0 0 45%' }}>
+            <Uploader
+              uiType={UploaderUiType.Secondary}
+              width={5.6}
+              height={5.6}
+              setValue={(val: string) =>
+                setValue(`${stimulusField}.${index}.image`, val || undefined)
+              }
+              getValue={() => trial.image || ''}
+              showImgName
+            />
+          </StyledFlexTopCenter>
+          <Box sx={{ flex: '0 0 45%' }}>
+            <Box sx={{ width: '18.3rem' }}>
+              <ToggleButtonGroup
+                toggleButtons={pressOptions}
+                activeButton={trial.correctPress}
+                setActiveButton={(value: string) => handleActiveBtnChange(value, index)}
               />
-            </StyledFlexTopCenter>
-            <Box sx={{ flex: '0 0 45%' }}>
-              <Box sx={{ width: '18.3rem' }}>
-                <ToggleButtonGroup
-                  toggleButtons={pressOptions}
-                  activeButton={trial.correctPress}
-                  setActiveButton={(value: string) => handleActiveBtnChange(value, index)}
-                />
-              </Box>
             </Box>
-            <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', flex: '0 0 10%' }}>
-              <StyledRemoveButton onClick={() => remove(index)}>
-                <Svg id="cross" width="1.8rem" height="1.8rem" />
-              </StyledRemoveButton>
-            </StyledFlexTopCenter>
-          </StyledRow>
-        ))}
+          </Box>
+          <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', flex: '0 0 10%' }}>
+            <StyledRemoveButton onClick={() => remove(index)}>
+              <Svg id="cross" width="1.8rem" height="1.8rem" />
+            </StyledRemoveButton>
+          </StyledFlexTopCenter>
+        </StyledRow>
+      ))}
       <StyledBtmSection>
         <StyledAddButton
           onClick={handleStimulusAdd}
