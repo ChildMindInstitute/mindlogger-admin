@@ -16,7 +16,7 @@ import { Table } from 'modules/Dashboard/components';
 import { updateRespondentsPinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import { getDateInUserTimezone, joinWihComma } from 'shared/utils';
+import { getDateInUserTimezone, isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles } from 'shared/consts';
 
 import {
@@ -215,7 +215,7 @@ export const Respondents = () => {
 
         for (const detail of details) {
           const workspaceRoles = rolesData?.data?.[detail.appletId];
-          if (workspaceRoles?.[0] === Roles.Manager || workspaceRoles?.[0] === Roles.Owner) {
+          if (isManagerOrOwner(workspaceRoles?.[0])) {
             editaable.push(detail);
             viewable.push(detail);
             scheduling.push(detail);

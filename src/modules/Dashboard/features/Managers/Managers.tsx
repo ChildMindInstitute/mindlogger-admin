@@ -8,9 +8,9 @@ import { users, workspaces, Manager } from 'redux/modules';
 import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { useAppDispatch } from 'redux/store';
-import { joinWihComma } from 'shared/utils';
-
+import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles } from 'shared/consts';
+
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
 import { getActions, getHeadCells } from './Managers.const';
@@ -62,7 +62,7 @@ export const Managers = () => {
       const userRole = applet.roles[0].role;
 
       return (
-        (workspaceUserRole === Roles.Owner || workspaceUserRole === Roles.Manager) &&
+        isManagerOrOwner(workspaceUserRole) &&
         userRole !== Roles.Manager &&
         userRole !== Roles.Owner
       );

@@ -11,6 +11,7 @@ import {
   PublishConcealAppletSetting,
   VersionHistorySetting,
 } from 'shared/features/AppletSettings';
+import { isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './BuilderAppletSettings.types';
 
@@ -76,7 +77,7 @@ export const getSettings = ({ isNewApplet, isPublished, roles }: GetSettings) =>
               },
             ]
           : []),
-        ...(roles?.[0] === Roles.Owner || roles?.[0] === Roles.Manager
+        ...(isManagerOrOwner(roles?.[0])
           ? [
               {
                 icon: <Svg id="trash" />,

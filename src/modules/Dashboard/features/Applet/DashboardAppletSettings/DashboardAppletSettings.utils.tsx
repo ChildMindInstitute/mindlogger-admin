@@ -12,6 +12,7 @@ import {
   PublishConcealAppletSetting,
   VersionHistorySetting,
 } from 'shared/features/AppletSettings';
+import { isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
@@ -74,7 +75,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
         component: <DuplicateAppletSettings />,
         param: 'duplicate-applet',
       },
-      ...(roles?.[0] === Roles.Owner || roles?.[0] === Roles.Manager
+      ...(isManagerOrOwner(roles?.[0])
         ? [
             {
               icon: <Svg id="trash" />,
