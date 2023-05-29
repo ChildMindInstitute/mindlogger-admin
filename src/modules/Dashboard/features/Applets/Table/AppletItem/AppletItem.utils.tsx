@@ -74,7 +74,7 @@ export const getActions = ({
     //   tooltipTitle: t('shareWithTheLibrary'),
     // },
     {
-      isDisplayed: !item.isFolder,
+      isDisplayed: !item.isFolder && role === Roles.SuperAdmin,
       icon: <Svg id={isPublished ? 'conceal' : 'publish'} width="18" height="18" />,
       action: publishAppletAction,
       tooltipTitle: t(isPublished ? 'conceal' : 'publish'),

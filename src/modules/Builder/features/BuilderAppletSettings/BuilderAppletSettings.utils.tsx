@@ -103,7 +103,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
         },
       ],
     },
-    ...(!isNewApplet
+    ...(!isNewApplet && role === Roles.SuperAdmin
       ? [
           {
             label: 'sharing',
