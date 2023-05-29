@@ -1,7 +1,14 @@
 import { Item, MultiSelectItem, SingleSelectItem, SliderItem } from 'shared/state';
 import { ItemResponseType, CalculationType } from 'shared/consts';
+import { getEntityKey } from 'shared/utils';
 
 import { scoreIdBase } from './ScoreContent.const';
+
+export const getTableScoreItems = (items: Item[]) =>
+  items.map((item) => ({
+    id: getEntityKey(item),
+    name: `${item.name}: ${item.question}`,
+  }));
 
 export const getScoreId = (name: string, calculationType: CalculationType) =>
   `${scoreIdBase[calculationType]}_${name}`;

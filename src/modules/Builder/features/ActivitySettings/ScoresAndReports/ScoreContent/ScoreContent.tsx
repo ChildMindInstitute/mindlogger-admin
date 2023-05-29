@@ -33,7 +33,12 @@ import {
 import { StyledButton, StyledEditor, StyledDuplicateButton } from './ScoreContent.styles';
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { ScoreContentProps } from './ScoreContent.types';
-import { getScoreId, getScoreRange, getScoreRangeLabel } from './ScoreContent.utils';
+import {
+  getScoreId,
+  getScoreRange,
+  getScoreRangeLabel,
+  getTableScoreItems,
+} from './ScoreContent.utils';
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
 
 export const ScoreContent = ({ name }: ScoreContentProps) => {
@@ -50,11 +55,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
   const itemsScore: string[] = watch(`${name}.itemsScore`);
   const scoreId = getScoreId(scoreName, calculationType);
   const items: Item[] = activity?.items.filter(checkOnItemTypeAndScore);
-  const tableItems = items.map(({ id, name, question }: Item) => ({
-    id: id as string,
-    name,
-    question,
-  }));
+  const tableItems = getTableScoreItems(items);
   const [scoreRangeLabel, setScoreRangeLabel] = useState<string>('-');
 
   useEffect(() => {
@@ -110,7 +111,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
       <StyledFlexTopStart sx={{ m: theme.spacing(1.2, 0, 4.4, 0), alignItems: 'flex-end' }}>
         <TransferListController
           name={`${name}.itemsScore`}
-          items={tableItems as DataTableItem[]}
+          items={tableItems}
           columns={scoreItemsColumns}
           selectedItemsColumns={selectedItemsColumns}
           hasSelectedSection
