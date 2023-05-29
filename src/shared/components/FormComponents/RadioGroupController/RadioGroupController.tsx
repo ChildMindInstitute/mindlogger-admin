@@ -9,10 +9,12 @@ export const RadioGroupController = <T extends FieldValues>({
   name,
   control,
   options,
+  defaultValue,
 }: RadioGroupControllerProps<T>) => (
   <Controller
     control={control}
     name={name}
+    defaultValue={defaultValue}
     render={({ field }) => (
       <RadioGroup {...field}>
         {options?.map(({ value, label }) => (
