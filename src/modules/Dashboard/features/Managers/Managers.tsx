@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { updateManagersPinApi } from 'api';
-import { Actions, Pin, Search } from 'shared/components';
+import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Search } from 'shared/components';
 import { users, workspaces, Manager } from 'redux/modules';
-import { useAsync, useBreadcrumbs, useTable } from 'shared/hooks';
+import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { useAppDispatch } from 'redux/store';
-import { joinWihComma } from 'shared/utils';
+import { isManagerOrOwner, joinWihComma } from 'shared/utils';
+import { Roles } from 'shared/consts';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
@@ -25,10 +26,22 @@ export const Managers = () => {
       label: t('managers'),
     },
   ]);
+  const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
   const managersData = users.useManagersData();
-
   const { getWorkspaceManagers } = users.thunk;
+
+  const { isForbidden, noPermissionsComponent } = usePermissions(() =>
+    dispatch(
+      getWorkspaceManagers({
+        params: {
+          ownerId,
+          limit: DEFAULT_ROWS_PER_PAGE,
+          ...(appletId && { appletId }),
+        },
+      }),
+    ),
+  );
 
   const { searchValue, handleSearch, handleReload, ...tableProps } = useTable((args) => {
     const params = {
@@ -39,7 +52,21 @@ export const Managers = () => {
       },
     };
 
-    return dispatch(getWorkspaceManagers({ ...params, ...(appletId && { appletId }) }));
+    return dispatch(getWorkspaceManagers(params));
+  });
+
+  const filterAplletsByRoles = (user: Manager) => ({
+    ...user,
+    applets: user.applets.filter((applet) => {
+      const workspaceUserRole = rolesData?.data?.[applet.id][0];
+      const userRole = applet.roles[0].role;
+
+      return (
+        isManagerOrOwner(workspaceUserRole) &&
+        userRole !== Roles.Manager &&
+        userRole !== Roles.Owner
+      );
+    }),
   });
 
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
@@ -50,11 +77,11 @@ export const Managers = () => {
 
   const actions = {
     removeAccessAction: (user: Manager) => {
-      setSelectedManager(user);
+      setSelectedManager(filterAplletsByRoles(user));
       setRemoveAccessPopupVisible(true);
     },
     editAccessAction: (user: Manager) => {
-      setSelectedManager(user);
+      setSelectedManager(filterAplletsByRoles(user));
       setEditAccessPopupVisible(true);
     },
   };
@@ -92,7 +119,13 @@ export const Managers = () => {
         },
       }),
       actions: {
-        content: () => <Actions items={getActions(appletId, actions)} context={user} />,
+        content: () => {
+          if (ownerId === id) {
+            return;
+          }
+
+          return <Actions items={getActions(actions)} context={user} />;
+        },
         value: '',
         width: '20%',
       },
@@ -100,12 +133,14 @@ export const Managers = () => {
   });
 
   const renderEmptyComponent = () => {
-    if (!rows?.length) {
+    if (rows && !rows?.length) {
       return appletId ? t('noManagersForApplet') : t('noManagers');
     }
 
     return searchValue && t('noMatchWasFound', { searchValue });
   };
+
+  if (isForbidden) return noPermissionsComponent;
 
   return (
     <>

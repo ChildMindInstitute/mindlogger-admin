@@ -19,12 +19,12 @@ export const Fields = {
   language: 'language',
 } as const;
 
-export const getRoles = (priorityRole: Roles | null) => [
+export const getRoles = (roles?: Roles[]) => [
   {
     labelKey: Roles.Respondent,
     value: Roles.Respondent,
   },
-  ...(priorityRole !== Roles.Coordinator
+  ...(!roles?.includes(Roles.Coordinator)
     ? [
         {
           labelKey: Roles.Manager,

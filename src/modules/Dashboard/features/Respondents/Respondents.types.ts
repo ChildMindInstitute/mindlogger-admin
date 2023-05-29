@@ -1,11 +1,12 @@
+import { RespondentDetail } from 'redux/modules';
 import { Encryption } from 'shared/utils';
 
 export type RespondentsActions = {
-  scheduleSetupAction: (value: number) => void;
-  userDataExportAction: (value: number) => void;
-  viewDataAction: (value: number) => void;
-  removeAccessAction: (value: number) => void;
-  editRespondent: (value: number) => void;
+  scheduleSetupAction: (value: string) => void;
+  userDataExportAction: (value: string) => void;
+  viewDataAction: (value: string) => void;
+  removeAccessAction: (value: string) => void;
+  editRespondent: (value: string) => void;
 };
 
 export type ChosenAppletData = {
@@ -18,4 +19,14 @@ export type ChosenAppletData = {
   respondentNickname?: string;
   encryption?: Encryption;
   ownerId: string;
+};
+
+export type FilteredApplets = {
+  scheduling: RespondentDetail[];
+  editable: RespondentDetail[];
+  viewable: RespondentDetail[];
+};
+
+export type FilteredRespondents = {
+  [key: string]: FilteredApplets;
 };

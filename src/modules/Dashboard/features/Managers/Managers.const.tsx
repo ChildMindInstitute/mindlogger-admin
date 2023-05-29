@@ -45,10 +45,7 @@ export const getHeadCells = (id?: string): HeadCell[] => {
   ];
 };
 
-export const getActions = (
-  id: string | undefined,
-  { removeAccessAction, editAccessAction }: ManagersActions,
-) => {
+export const getActions = ({ removeAccessAction, editAccessAction }: ManagersActions) => {
   const { t } = i18n;
 
   return [
