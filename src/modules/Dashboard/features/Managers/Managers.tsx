@@ -159,6 +159,7 @@ export const Managers = () => {
           removeAccessPopupVisible={removeAccessPopupVisible}
           onClose={() => setRemoveAccessPopupVisible(false)}
           user={selectedManager}
+          refetchManagers={handleReload}
         />
       )}
       {editAccessPopupVisible && selectedManager && (
@@ -166,6 +167,7 @@ export const Managers = () => {
           editAccessPopupVisible={editAccessPopupVisible}
           onClose={() => setEditAccessPopupVisible(false)}
           user={selectedManager}
+          refetchManagers={handleReload}
         />
       )}
     </>

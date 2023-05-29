@@ -5,6 +5,7 @@ export type EditAccessPopupProps = {
   onClose: () => void;
   editAccessPopupVisible: boolean;
   user: Manager;
+  refetchManagers: () => void;
 };
 
 export type Role = {

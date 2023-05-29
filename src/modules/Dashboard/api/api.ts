@@ -175,6 +175,15 @@ export const removeManagerAccess = ({ userId, appletIds }: RemoveAccess, signal?
     { signal },
   );
 
+export const editManagerAccess = ({ ownerId, userId, accesses }: any, signal?: AbortSignal) =>
+  authApiClient.post(
+    `/workspaces/${ownerId}/managers/${userId}/accesses`,
+    {
+      accesses,
+    },
+    { signal },
+  );
+
 export const removeRespondentAccess = (
   { userId, appletIds, deleteResponses }: RemoveRespondentAccess,
   signal?: AbortSignal,
