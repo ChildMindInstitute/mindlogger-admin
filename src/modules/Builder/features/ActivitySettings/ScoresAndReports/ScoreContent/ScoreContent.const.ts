@@ -1,6 +1,6 @@
 import i18n from 'i18n';
 
-import { CalculationType } from 'shared/state';
+import { CalculationType } from 'shared/consts';
 
 const { t } = i18n;
 

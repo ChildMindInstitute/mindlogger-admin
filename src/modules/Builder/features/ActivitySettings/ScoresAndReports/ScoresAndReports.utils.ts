@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { CalculationType } from 'shared/state';
+import { CalculationType } from 'shared/consts';
 
 import { getScoreId } from './ScoreContent/ScoreContent.utils';
 

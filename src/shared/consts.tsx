@@ -75,6 +75,12 @@ export enum ItemResponseType {
   Time = 'time',
 }
 
+export enum CalculationType {
+  Sum = 'sum',
+  Average = 'average',
+  Percentage = 'percentage',
+}
+
 export const itemsTypeIcons = {
   [ItemResponseType.SingleSelection]: <Svg id="radio-button-outline" />,
   [ItemResponseType.MultipleSelection]: <Svg id="checkbox-multiple-filled" />,

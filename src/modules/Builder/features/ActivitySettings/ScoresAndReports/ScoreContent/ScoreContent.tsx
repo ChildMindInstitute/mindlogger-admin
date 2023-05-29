@@ -19,7 +19,8 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { DataTableItem, Svg } from 'shared/components';
-import { CalculationType, Item } from 'shared/state';
+import { Item } from 'shared/state';
+import { CalculationType } from 'shared/consts';
 import { EditorUiType } from 'shared/components/FormComponents/EditorController/EditorController.types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
@@ -135,7 +136,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
         <StyledFlexTopStart sx={{ mb: theme.spacing(2.4) }}>
           <TransferListController
             name={`${name}.itemsPrint`}
-            items={items}
+            items={items as unknown as DataTableItem[]}
             columns={columns}
             hasSearch={false}
             hasSelectedSection={false}

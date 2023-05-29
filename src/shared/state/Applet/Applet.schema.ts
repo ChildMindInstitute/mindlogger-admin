@@ -10,6 +10,7 @@ import {
   SubscaleTotalScore,
   ConditionType,
   ConditionalLogicMatch,
+  CalculationType,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 
@@ -423,12 +424,6 @@ type Theme = {
   tertiaryColor: string;
   public: boolean;
 };
-
-export enum CalculationType {
-  Sum = 'sum',
-  Average = 'average',
-  Percentage = 'percentage',
-}
 
 export type ActivitySettingsScore = {
   id: string;

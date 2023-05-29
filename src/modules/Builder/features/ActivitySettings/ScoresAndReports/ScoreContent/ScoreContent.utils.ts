@@ -1,5 +1,5 @@
-import { CalculationType, Item, MultiSelectItem, SingleSelectItem, SliderItem } from 'shared/state';
-import { ItemResponseType } from 'shared/consts';
+import { Item, MultiSelectItem, SingleSelectItem, SliderItem } from 'shared/state';
+import { ItemResponseType, CalculationType } from 'shared/consts';
 
 import { scoreIdBase } from './ScoreContent.const';
 
