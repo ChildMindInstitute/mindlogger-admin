@@ -1,18 +1,16 @@
 import { useEffect, useState } from 'react';
-import { FieldError, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import {
   StyledBodyLarge,
-  StyledBodyMedium,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledFlexTopStart,
   StyledTitleMedium,
   StyledTitleSmall,
   theme,
-  variables,
 } from 'shared/styles';
 import {
   InputController,
@@ -20,8 +18,8 @@ import {
   Switch,
   TransferListController,
 } from 'shared/components/FormComponents';
-import { Svg } from 'shared/components';
-import { Item } from 'shared/state';
+import { DataTableItem, Svg } from 'shared/components';
+import { CalculationType, Item } from 'shared/state';
 import { EditorUiType } from 'shared/components/FormComponents/EditorController/EditorController.types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
@@ -33,35 +31,45 @@ import {
 } from './ScoreContent.const';
 import { StyledButton, StyledEditor, StyledDuplicateButton } from './ScoreContent.styles';
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
-import { CalculationType, ScoreContentProps } from './ScoreContent.types';
-import { generateScoreId, generateScoreRange } from './ScoreContent.utils';
+import { ScoreContentProps } from './ScoreContent.types';
+import { getScoreId, getScoreRange, getScoreRangeLabel } from './ScoreContent.utils';
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
 
 export const ScoreContent = ({ name }: ScoreContentProps) => {
   const { t } = useTranslation('app');
-  const { control, getFieldState, watch } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
   const { activity } = useCurrentActivity();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const isScoreIdVariable = false;
 
   const showMessage: boolean = watch(`${name}.showMessage`);
   const printItems: boolean = watch(`${name}.printItems`);
-  const scoreName: string = watch(`${name}'.name`);
-  const calculationType: CalculationType = watch(`${name}'.calculationType`);
-  const items = activity?.items
-    .filter(checkOnItemTypeAndScore)
-    .map(({ id, name, question }: Item) => ({ id, name, question }));
-  const hasPrintItemsError = getFieldState(`${name}.printItems`).error as unknown as Record<
-    string,
-    FieldError
-  >;
+  const scoreName: string = watch(`${name}.name`);
+  const calculationType: CalculationType = watch(`${name}.calculationType`);
+  const itemsScore: string[] = watch(`${name}.itemsScore`);
+  const scoreId = getScoreId(scoreName, calculationType);
+  const items: Item[] = activity?.items.filter(checkOnItemTypeAndScore);
+  const tableItems = items.map(({ id, name, question }: Item) => ({
+    id: id as string,
+    name,
+    question,
+  }));
+  const [scoreRangeLabel, setScoreRangeLabel] = useState<string>('-');
 
   useEffect(() => {
     isScoreIdVariable && setIsChangeScoreIdPopupVisible(true);
   }, [isScoreIdVariable, scoreName]);
 
+  useEffect(() => {
+    const selectedItems = items.filter((item) => itemsScore.includes(item.id as string));
+    const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
+    setScoreRangeLabel(getScoreRangeLabel(minScore, maxScore));
+    setValue(`${name}.minScore`, minScore);
+    setValue(`${name}.maxScore`, maxScore);
+  }, [itemsScore, calculationType]);
+
   const copyScoreId = () => {
-    navigator.clipboard.writeText(generateScoreId(scoreName, calculationType));
+    navigator.clipboard.writeText(scoreId);
   };
 
   return (
@@ -85,7 +93,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
         <Box>
           <StyledTitleSmall>{t('scoreId')}</StyledTitleSmall>
           <StyledFlexTopCenter>
-            <StyledBodyLarge>{generateScoreId(scoreName, calculationType)}</StyledBodyLarge>
+            <StyledBodyLarge>{scoreId}</StyledBodyLarge>
             <StyledDuplicateButton
               sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
               onClick={copyScoreId}
@@ -94,27 +102,20 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
             </StyledDuplicateButton>
           </StyledFlexTopCenter>
           <StyledTitleSmall sx={{ mb: theme.spacing(1.2) }}>{t('rangeOfScores')}</StyledTitleSmall>
-          <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>{generateScoreRange()}</StyledBodyLarge>
+          <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>{scoreRangeLabel}</StyledBodyLarge>
         </Box>
       </StyledFlexTopStart>
       <StyledTitleMedium>{t('scoreItems')}</StyledTitleMedium>
-      <StyledFlexTopStart
-        sx={{ m: theme.spacing(1.2, 0, 4.4, 0), gap: theme.spacing(2), alignItems: 'flex-end' }}
-      >
+      <StyledFlexTopStart sx={{ m: theme.spacing(1.2, 0, 4.4, 0), alignItems: 'flex-end' }}>
         <TransferListController
-          name={`${name}.items`}
-          items={items}
+          name={`${name}.itemsScore`}
+          items={tableItems as DataTableItem[]}
           columns={scoreItemsColumns}
           selectedItemsColumns={selectedItemsColumns}
           hasSelectedSection
           hasSearch
         />
       </StyledFlexTopStart>
-      {hasPrintItemsError && (
-        <StyledBodyMedium sx={{ mb: theme.spacing(2.4) }} color={variables.palette.semantic.error}>
-          {t('validationMessages.mustShowMessageOrItems')}
-        </StyledBodyMedium>
-      )}
       <Switch
         name={`${name}.showMessage`}
         control={control}

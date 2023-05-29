@@ -383,6 +383,13 @@ export interface SliderItem extends Item {
   responseValues: SliderItemResponseValues;
 }
 
+export type ScoresAndReports = {
+  generateReport: boolean;
+  showScoreSummary: boolean;
+  scores: ActivitySettingsScore[];
+  sections: ActivitySettingsSection[];
+};
+
 export type Activity = {
   id?: string;
   key?: string;
@@ -397,10 +404,7 @@ export type Activity = {
   responseIsEditable?: boolean;
   isHidden?: boolean;
   items: Item[];
-  generateReport?: boolean;
-  showScoreSummary?: boolean;
-  scores?: ActivitySettingsScore[];
-  sections?: ActivitySettingsSection[];
+  scoresAndReports?: ScoresAndReports;
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
@@ -420,11 +424,19 @@ type Theme = {
   public: boolean;
 };
 
+export enum CalculationType {
+  Sum = 'sum',
+  Average = 'average',
+  Percentage = 'percentage',
+}
+
 export type ActivitySettingsScore = {
   id: string;
-  name?: string;
+  name: string;
+  calculationType: CalculationType;
   showMessage: boolean;
   printItems: boolean;
+  itemsScore: string[];
   itemsPrint?: string[];
   message?: string;
   minScore: number;

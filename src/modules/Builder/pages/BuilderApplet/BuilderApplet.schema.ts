@@ -186,17 +186,13 @@ export const ScoreSchema = () =>
       showMessage: yup.boolean().required(),
       minScore: yup.number(),
       maxScore: yup.number(),
-      printItems: yup
-        .boolean()
-        .required()
-        .when('showMessage', {
-          is: false,
-          then: yup.boolean().oneOf([true], <string>t('validationMessages.mustShowMessageOrItems')),
-        }),
+      calculationType: yup.string().required(),
+      printItems: yup.boolean().required(),
       message: yup.string().when('showMessage', {
         is: true,
         then: yup.string().required(getIsRequiredValidateMessage('message')),
       }),
+      itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
       itemsPrint: yup.array().when('printItems', {
         is: true,
         then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),

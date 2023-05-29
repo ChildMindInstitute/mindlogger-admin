@@ -1,6 +1,6 @@
 import i18n from 'i18n';
 
-import { CalculationType } from './ScoreContent.types';
+import { CalculationType } from 'shared/state';
 
 const { t } = i18n;
 
@@ -31,15 +31,15 @@ export const selectedItemsColumns = [
 
 export const calculationTypes = [
   {
-    value: 'sum',
+    value: CalculationType.Sum,
     labelKey: 'calculationTypeSum',
   },
   {
-    value: 'average',
+    value: CalculationType.Average,
     labelKey: 'calculationTypeAverage',
   },
   {
-    value: 'percentage',
+    value: CalculationType.Percentage,
     labelKey: 'calculationTypePercentage',
   },
 ];

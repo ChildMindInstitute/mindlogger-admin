@@ -59,7 +59,7 @@ export const TransferListController = <T extends FieldValues>({
             : items;
 
         return (
-          <StyledFlexColumn sx={{ gap: '1.2rem' }}>
+          <StyledFlexColumn sx={{ gap: '1.2rem', width: '100%' }}>
             {caption && <StyledTitleMedium>{caption}</StyledTitleMedium>}
             {hasSearch && (
               <StyledTextField

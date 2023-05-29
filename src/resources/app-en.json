@@ -1034,8 +1034,8 @@
   "calculationTypeAverage": "Average",
   "calculationTypePercentage": "Percentage",
   "availableItems": "Available Items",
-  "selectedItems": "SelectedItems",
   "removeImage": "Remove Image",
   "removeImageDescription": "Are you sure you want to remove Image?",
+  "selectedItems": "Selected Items",
   "saveAndPublishFirst": "Save & publish the Applet first"
 }
