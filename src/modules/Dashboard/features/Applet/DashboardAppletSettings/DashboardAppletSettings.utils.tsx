@@ -12,11 +12,12 @@ import {
   PublishConcealAppletSetting,
   VersionHistorySetting,
 } from 'shared/features/AppletSettings';
+import { isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
-export const getSettings = ({ isPublished, role }: GetSettings) => [
-  ...(role !== Roles.Editor
+export const getSettings = ({ isPublished, roles }: GetSettings) => [
+  ...(!roles?.includes(Roles.Editor)
     ? [
         {
           label: 'usersAndData',
@@ -58,7 +59,7 @@ export const getSettings = ({ isPublished, role }: GetSettings) => [
         component: <VersionHistorySetting />,
         param: 'version-history',
       },
-      ...(role === Roles.Owner
+      ...(roles?.[0] === Roles.Owner
         ? [
             {
               icon: <Svg id="transfer-ownership" />,
@@ -74,7 +75,7 @@ export const getSettings = ({ isPublished, role }: GetSettings) => [
         component: <DuplicateAppletSettings />,
         param: 'duplicate-applet',
       },
-      ...(role === Roles.Owner || role === Roles.Manager
+      ...(isManagerOrOwner(roles?.[0])
         ? [
             {
               icon: <Svg id="trash" />,

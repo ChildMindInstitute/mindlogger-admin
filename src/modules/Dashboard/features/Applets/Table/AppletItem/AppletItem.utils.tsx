@@ -3,6 +3,7 @@ import { t } from 'i18next';
 import { Svg } from 'shared/components';
 import { Roles } from 'shared/consts';
 
+import { isManagerOrOwner } from 'shared/utils';
 import { Actions } from './AppletItem.types';
 
 export const getActions = ({
@@ -58,7 +59,7 @@ export const getActions = ({
       icon: <Svg id="trash" />,
       action: deleteAction,
       tooltipTitle: t('deleteApplet'),
-      isDisplayed: role === Roles.Owner || item.role === Roles.Manager,
+      isDisplayed: isManagerOrOwner(role as Roles),
     },
     {
       icon: <Svg id="switch-account" />,

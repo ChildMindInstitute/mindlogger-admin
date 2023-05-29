@@ -13,6 +13,7 @@ import {
 } from 'shared/hooks';
 import { RetentionPeriods } from 'shared/types';
 import { applet } from 'shared/state';
+import { useAppDispatch } from 'redux/store';
 import { postAppletDataRetentionApi } from 'api';
 
 import { usePrompt } from '../AppletSettings.hooks';
@@ -30,7 +31,9 @@ import { ErrorPopup, SuccessPopup } from './Popups';
 export const DataRetention = () => {
   const { t } = useTranslation();
   const { appletId: id } = useParams();
+  const dispatch = useAppDispatch();
   const { result } = applet.useAppletData() ?? {};
+  const { getApplet } = applet.thunk;
 
   const defaultValues = {
     retentionPeriod: result?.retentionPeriod || DEFAULT_RETENTION_PERIOD,
@@ -69,13 +72,14 @@ export const DataRetention = () => {
 
   const onSubmit = async ({ retentionPeriod, retentionType }: DataRetentionFormValues) => {
     if (id) {
-      saveDataRetention({ appletId: id, period: retentionPeriod, retention: retentionType });
+      await saveDataRetention({ appletId: id, period: retentionPeriod, retention: retentionType });
     }
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     cancelNavigation();
-    handleSubmit(onSubmit)();
+    await handleSubmit(onSubmit)();
+    await dispatch(getApplet({ appletId: id! }));
   };
 
   const handleCancel = () => {

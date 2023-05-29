@@ -10,12 +10,7 @@ export type Workspace = {
 
 export type WorkspacesSchema = {
   currentWorkspace: null | Workspace;
-  priorityRole: BaseSchema<Roles | null>;
-};
-
-export type WorkspacePriorityRoleApiParams = {
-  params: {
-    ownerId: string;
-    appletIDs?: string[];
-  };
+  roles: BaseSchema<{
+    [key: string]: Roles[];
+  } | null>;
 };

@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
 import { LinkedTabs } from 'shared/components';
 import { StyledBody } from 'shared/styles';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
+import { usePermissions } from 'shared/hooks';
 
 import { useAppletTabs } from './Applet.hooks';
 
@@ -16,13 +16,13 @@ export const Applet = () => {
   const { appletId } = useParams();
 
   const hiddenHeader = location.pathname.includes('dataviz');
+  const { getApplet } = applet.thunk;
 
-  useEffect(() => {
-    if (!appletId) return;
+  const { isForbidden, noPermissionsComponent } = usePermissions(() =>
+    appletId ? dispatch(getApplet({ appletId })) : undefined,
+  );
 
-    const { getApplet } = applet.thunk;
-    dispatch(getApplet({ appletId }));
-  }, [appletId]);
+  if (isForbidden) return noPermissionsComponent;
 
   return (
     <StyledBody>

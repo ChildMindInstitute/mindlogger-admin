@@ -25,7 +25,7 @@ import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types';
 import { getUrl } from './AddUserForm.utils';
 
-export const AddUserForm = ({ getInvitationsHandler, priorityRole }: AddUserFormProps) => {
+export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {
   const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
@@ -144,7 +144,7 @@ export const AddUserForm = ({ getInvitationsHandler, priorityRole }: AddUserForm
             <SelectController
               {...commonProps}
               name={Fields.role}
-              options={getRoles(priorityRole)}
+              options={getRoles(roles)}
               label={t('role')}
               customChange={updateFields}
             />

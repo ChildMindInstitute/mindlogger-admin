@@ -327,8 +327,8 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       }
 
       if (appletId && ownerId) {
-        await dispatch(getAppletWithItems({ ownerId, appletId }));
         navigate(getBuilderAppletUrl(appletId));
+        await dispatch(getAppletWithItems({ ownerId, appletId }));
       }
     }
 

@@ -2,9 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
-import { LinkedTabs, Svg } from 'shared/components';
+import { EmptyTable, LinkedTabs, Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
+import { workspaces } from 'redux/modules';
+import { Roles } from 'shared/consts';
 
 import { useRespondentDataTabs } from './RespondentData.hooks';
 
@@ -21,6 +23,12 @@ export const RespondentData = () => {
         appletId,
       }),
     );
+
+  const rolesData = workspaces.useRolesData();
+  const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
+
+  if (appletRoles?.[0] !== Roles.Coordinator)
+    return <EmptyTable width="25rem">{t('noPermissions')}</EmptyTable>;
 
   return (
     <StyledBody sx={{ position: 'relative' }}>
