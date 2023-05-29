@@ -6,16 +6,23 @@ import { Modal } from 'shared/components';
 
 import { ChangeScoreIdPopupProps } from './ChangeScoreIdPopup.types';
 
-export const ChangeScoreIdPopup = ({ isOpen, onClose, onSubmit }: ChangeScoreIdPopupProps) => {
+export const ChangeScoreIdPopup = ({ isOpen, onClose, onChange }: ChangeScoreIdPopupProps) => {
   const { t } = useTranslation();
   const [isError, setIsError] = useState(false);
   const [isFirstScreen, setIsFirstScreen] = useState(true);
 
-  const onFirstScreenSubmit = () => setIsFirstScreen(false);
+  const onFirstScreenSubmit = () => {
+    setIsFirstScreen(false);
+    try {
+      onChange();
+    } catch {
+      setIsError(true);
+    }
+  };
 
   const getSecondScreenBtn = () => (isError ? 'retry' : 'ok');
 
-  const onSecondScreenSubmit = () => (isError ? onSubmit : onClose);
+  const onSecondScreenSubmit = () => (isError ? onFirstScreenSubmit() : onClose());
 
   const getSecondScreen = () =>
     isError ? (
@@ -30,7 +37,7 @@ export const ChangeScoreIdPopup = ({ isOpen, onClose, onSubmit }: ChangeScoreIdP
     <Modal
       open={isOpen}
       onClose={onClose}
-      onSubmit={isFirstScreen ? onFirstScreenSubmit : onSecondScreenSubmit()}
+      onSubmit={isFirstScreen ? onFirstScreenSubmit : onSecondScreenSubmit}
       title={t('changeScoreId')}
       buttonText={t(isFirstScreen ? 'change' : getSecondScreenBtn())}
       hasSecondBtn={isFirstScreen || isError}

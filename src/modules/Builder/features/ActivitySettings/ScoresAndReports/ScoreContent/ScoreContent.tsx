@@ -46,7 +46,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
   const { control, watch, setValue } = useFormContext();
   const { activity } = useCurrentActivity();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
-  const isScoreIdVariable = false;
+  const isScoreIdVariable = true;
 
   const showMessage: boolean = watch(`${name}.showMessage`);
   const printItems: boolean = watch(`${name}.printItems`);
@@ -62,6 +62,8 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
     isScoreIdVariable && setIsChangeScoreIdPopupVisible(true);
   }, [isScoreIdVariable, scoreName]);
 
+  useEffect(() => setValue(`${name}.id`, scoreId), [scoreName]);
+
   useEffect(() => {
     const selectedItems = items.filter((item) => itemsScore.includes(item.id as string));
     const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
@@ -72,6 +74,10 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
 
   const copyScoreId = () => {
     navigator.clipboard.writeText(scoreId);
+  };
+
+  const onChangeScoreId = () => {
+    setValue(`${name}.id`, scoreId);
   };
 
   return (
@@ -151,6 +157,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
         <ChangeScoreIdPopup
           isOpen={isChangeScoreIdPopupVisible}
           onClose={() => setIsChangeScoreIdPopupVisible(false)}
+          onChange={onChangeScoreId}
         />
       )}
     </StyledFlexColumn>
