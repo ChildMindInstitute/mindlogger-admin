@@ -63,7 +63,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       newBreadcrumbs.push({
         icon: 'builder',
         label: t('userBuilder', { userName: workspaceName }),
-        navPath: page.builder,
+        navPath: generatePath(page.builderAppletAbout, { appletId }),
       });
     }
     if (isLibrary) {
