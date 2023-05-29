@@ -46,7 +46,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
   const { control, watch, setValue } = useFormContext();
   const { activity } = useCurrentActivity();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
-  const isScoreIdVariable = true;
+  const isScoreIdVariable = false;
 
   const showMessage: boolean = watch(`${name}.showMessage`);
   const printItems: boolean = watch(`${name}.printItems`);
