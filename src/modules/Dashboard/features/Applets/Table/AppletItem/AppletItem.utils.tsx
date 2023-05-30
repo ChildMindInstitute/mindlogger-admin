@@ -22,13 +22,12 @@ export const getActions = ({
   roles,
 }: Actions) => {
   const { isPublished } = item;
-  const isCoordinator = roles?.includes(Roles.Coordinator);
   const isRespondent = roles?.includes(Roles.Respondent);
   const isReviewer = roles?.includes(Roles.Reviewer);
   const isEditor = roles?.includes(Roles.Editor);
   const isOwner = roles?.includes(Roles.Owner);
   const isSuperAdmin = roles?.includes(Roles.SuperAdmin);
-  const commonCondition = !isCoordinator && !isRespondent && !isReviewer;
+  const commonCondition = isManagerOrOwner(roles?.[0]) || isEditor;
 
   return [
     {
