@@ -1,4 +1,10 @@
-import { Item, MultiSelectItem, SingleSelectItem, SliderItem } from 'shared/state';
+import {
+  Item,
+  MultiSelectItem,
+  SingleAndMultipleSelectionOption,
+  SingleSelectItem,
+  SliderItem,
+} from 'shared/state';
 import { ItemResponseType, CalculationType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 
@@ -22,10 +28,16 @@ const getItemScoreRange = (item: Item) => {
     item.responseType === ItemResponseType.SingleSelection ||
     item.responseType === ItemResponseType.MultipleSelection
   ) {
-    scores = (item as SingleSelectItem | MultiSelectItem).responseValues.options
-      ?.filter((option) => !option.isHidden)
-      .map((option) => option.score)
-      .filter(Boolean) as number[];
+    scores = (item as SingleSelectItem | MultiSelectItem).responseValues.options?.reduce(
+      (result: number[], option: SingleAndMultipleSelectionOption) => {
+        if (!option.isHidden && option.score) {
+          return [...result, option.score];
+        }
+
+        return result;
+      },
+      [],
+    ) as unknown as number[];
   } else {
     scores = (item as SliderItem).responseValues.scores || [];
   }
@@ -49,13 +61,13 @@ export const getScoreRange = (itemsScore: Item[], calculationType: CalculationTy
     totalMaxScore = 0;
   const count = itemsScore.length;
 
-  itemsScore
-    .filter((item) => !item.config.skippableItem)
-    .forEach((item) => {
-      const { minScore, maxScore } = getItemScoreRange(item);
-      totalMinScore += minScore;
-      totalMaxScore += maxScore;
-    });
+  itemsScore.forEach((item) => {
+    if (item.config.skippableItem) return;
+
+    const { minScore, maxScore } = getItemScoreRange(item);
+    totalMinScore += minScore;
+    totalMaxScore += maxScore;
+  });
 
   switch (calculationType) {
     case CalculationType.Sum:

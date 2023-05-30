@@ -1,30 +1,29 @@
 import i18n from 'i18n';
-
 import { CalculationType } from 'shared/consts';
 
 const { t } = i18n;
 
 export const columns = [
   {
-    key: t('name'),
+    key: 'name',
     label: t('itemName'),
   },
   {
-    key: t('question'),
+    key: 'question',
     label: t('itemBody'),
   },
 ];
 
 export const scoreItemsColumns = [
   {
-    key: t('name'),
+    key: 'name',
     label: t('availableItems'),
   },
 ];
 
 export const selectedItemsColumns = [
   {
-    key: t('name'),
+    key: 'name',
     label: t('selectedItems'),
   },
 ];
