@@ -1,16 +1,11 @@
 import { StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 
-import { SubscaleHeaderContentProps } from './SectionHeaderContent.types';
-import { StyledWrapper } from './SectionHeaderContent.styles';
+import { SectionScoreHeaderProps } from './SectionScoreHeader.types';
+import { StyledWrapper } from './SectionScoreHeader.styles';
 import { TitleComponent } from '../../TitleComponent';
 
-export const SectionHeaderContent = ({
-  onRemove,
-  name,
-  title,
-  open,
-}: SubscaleHeaderContentProps) => (
+export const SectionScoreHeader = ({ onRemove, name, title, open }: SectionScoreHeaderProps) => (
   <StyledWrapper>
     <TitleComponent title={title} name={name} open={open} />
     <StyledClearedButton sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }} onClick={onRemove}>

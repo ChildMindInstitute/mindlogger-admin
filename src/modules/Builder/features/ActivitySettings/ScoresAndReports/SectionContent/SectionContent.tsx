@@ -1,4 +1,4 @@
-import { FieldError, useFormContext, useWatch } from 'react-hook-form';
+import { FieldError, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -25,11 +25,11 @@ import { SectionContentProps } from './SectionContent.types';
 
 export const SectionContent = ({ name }: SectionContentProps) => {
   const { t } = useTranslation('app');
-  const { control, getFieldState } = useFormContext();
+  const { control, getFieldState, watch } = useFormContext();
   const { activity } = useCurrentActivity();
 
-  const showMessage: boolean = useWatch({ name: `${name}.showMessage` });
-  const printItems: boolean = useWatch({ name: `${name}.printItems` });
+  const showMessage: boolean = watch(`${name}.showMessage`);
+  const printItems: boolean = watch(`${name}.printItems`);
   const items = activity?.items
     .filter(checkOnItemTypeAndScore)
     .map(({ id, name, question }: Item) => ({ id, name, question }));
@@ -67,7 +67,7 @@ export const SectionContent = ({ name }: SectionContentProps) => {
       {printItems && (
         <StyledFlexTopStart sx={{ mb: theme.spacing(2.4) }}>
           <TransferListController
-            name={`${name}.items`}
+            name={`${name}.itemsPrint`}
             items={items}
             columns={columns}
             hasSearch={false}
