@@ -39,6 +39,7 @@ import {
   AppletVersionChanges,
   RemoveAccess,
   ActivityAnswer,
+  EditManagerAccess,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -171,6 +172,18 @@ export const removeManagerAccess = ({ userId, appletIds }: RemoveAccess, signal?
     {
       userId,
       appletIds,
+    },
+    { signal },
+  );
+
+export const editManagerAccess = (
+  { ownerId, userId, accesses }: EditManagerAccess,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/workspaces/${ownerId}/managers/${userId}/accesses`,
+    {
+      accesses,
     },
     { signal },
   );

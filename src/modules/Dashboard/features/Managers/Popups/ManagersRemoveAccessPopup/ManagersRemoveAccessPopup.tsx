@@ -26,6 +26,7 @@ export const ManagersRemoveAccessPopup = ({
   removeAccessPopupVisible,
   onClose,
   user,
+  refetchManagers,
 }: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { firstName, lastName, email, applets } = user;
@@ -77,7 +78,10 @@ export const ManagersRemoveAccessPopup = ({
     },
   }));
 
-  const { execute, error } = useAsync(removeManagerAccess, incrementStep);
+  const { execute, error } = useAsync(removeManagerAccess, () => {
+    refetchManagers();
+    incrementStep();
+  });
 
   const onSubmit = () => {
     switch (step) {

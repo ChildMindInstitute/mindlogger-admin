@@ -4,6 +4,7 @@ export type RemoveAccessPopupProps = {
   removeAccessPopupVisible: boolean;
   onClose: () => void;
   user: Manager;
+  refetchManagers: () => void;
 };
 
 export type FormValues = {
