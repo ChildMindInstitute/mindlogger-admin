@@ -98,7 +98,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
       },
     ],
   },
-  ...(role === Roles.SuperAdmin
+  ...(roles?.includes(Roles.SuperAdmin)
     ? [
         {
           label: 'sharing',
