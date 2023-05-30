@@ -50,6 +50,7 @@ export const enum Roles {
   Reviewer = 'reviewer',
   Respondent = 'respondent',
   Owner = 'owner',
+  SuperAdmin = 'super_admin',
 }
 
 export enum ItemResponseType {
