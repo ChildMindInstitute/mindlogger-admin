@@ -11,7 +11,7 @@ import {
 } from 'shared/styles';
 import { RespondentDetail } from 'redux/modules';
 
-import { RespondentsActions, ChosenAppletData } from './Respondents.types';
+import { RespondentsActions, ChosenAppletData, FilteredApplets } from './Respondents.types';
 
 export const getActions = (
   {
@@ -21,33 +21,38 @@ export const getActions = (
     userDataExportAction,
     editRespondent,
   }: RespondentsActions,
+  filteredApplets: FilteredApplets,
   appletId?: string,
 ) => [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
     action: scheduleSetupAction,
     tooltipTitle: t('viewCalendar'),
+    isDisplayed: !!filteredApplets?.scheduling.length,
   },
   {
     icon: <Svg id="data" width={22} height={22} />,
     action: viewDataAction,
     tooltipTitle: t('viewData'),
+    isDisplayed: !!filteredApplets?.viewable.length,
   },
   {
     icon: <Svg id="export" width={18} height={20} />,
     action: userDataExportAction,
     tooltipTitle: t('exportData'),
+    isDisplayed: !!filteredApplets?.viewable.length,
   },
   {
     icon: <Svg id="edit-user" width={21} height={19} />,
     action: editRespondent,
     tooltipTitle: t('editRespondent'),
-    isDisplayed: !!appletId,
+    isDisplayed: !!appletId && !!filteredApplets?.editable.length,
   },
   {
     icon: <Svg id="remove-access" />,
     action: removeAccessAction,
     tooltipTitle: t('removeAccess'),
+    isDisplayed: !!filteredApplets?.editable.length,
   },
 ];
 

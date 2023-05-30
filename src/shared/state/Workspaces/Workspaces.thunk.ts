@@ -1,14 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { ApiError, WorkspacePriorityRoleApiParams } from 'redux/modules';
-import { getWorkspacePriorityRoleApi } from 'api';
+import { ApiError } from 'redux/modules';
+import { OwnerId, getWorkspaceRolesApi } from 'api';
 
-export const getWorkspacePriorityRole = createAsyncThunk(
-  'workspace/priorityRole',
-  async ({ params }: WorkspacePriorityRoleApiParams, { rejectWithValue, signal }) => {
+export const getWorkspaceRoles = createAsyncThunk(
+  'workspace/roles',
+  async ({ ownerId }: OwnerId, { rejectWithValue, signal }) => {
     try {
-      return await getWorkspacePriorityRoleApi({ params }, signal);
+      return await getWorkspaceRolesApi({ ownerId }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

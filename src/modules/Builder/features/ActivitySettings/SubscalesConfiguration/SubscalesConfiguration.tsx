@@ -39,7 +39,7 @@ export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
   const { control, watch, register, unregister, setValue } = useFormContext();
   const { fieldName, activity } = useCurrentActivity();
-  const subscalesField = `${fieldName}.subscales` ?? [];
+  const subscalesField = `${fieldName}.subscales`;
   const calculateTotalScoreName = `${fieldName}.calculateTotalScore`;
   const totalScoresTableDataField = `${fieldName}.totalScoresTableData`;
   const {
@@ -60,6 +60,7 @@ export const SubscalesConfiguration = () => {
   const iconId = `lookup-table${tableData ? '-filled' : ''}`;
 
   const subscales: ActivitySettingsSubscale[] = watch(subscalesField) ?? [];
+  const subscalesLength = subscales.length;
   const filteredItems = (activity?.items ?? []).filter(checkOnItemTypeAndScore);
   const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
     filteredItems,
@@ -85,7 +86,7 @@ export const SubscalesConfiguration = () => {
 
   useEffect(() => {
     if (calculateTotalScoreSwitch) {
-      register(calculateTotalScoreName, { value: '' });
+      register(calculateTotalScoreName);
       register(totalScoresTableDataField);
       setValue(calculateTotalScoreName, SubscaleTotalScore.Sum);
 
@@ -97,6 +98,12 @@ export const SubscalesConfiguration = () => {
     setValue(calculateTotalScoreName, undefined);
     setValue(totalScoresTableDataField, undefined);
   }, [calculateTotalScoreSwitch]);
+
+  useEffect(() => {
+    if (subscalesLength) return;
+
+    setCalculateTotalScoreSwitch(false);
+  }, [!!subscalesLength]);
 
   useSubscalesSystemItemsSetup();
 
@@ -141,23 +148,26 @@ export const SubscalesConfiguration = () => {
       <Button {...commonButtonProps} onClick={handleAddSubscale} sx={{ mb: theme.spacing(2) }}>
         {t('addSubscales')}
       </Button>
-      <StyledTitleMedium>{t('elementsAssociatedWithSubscales')}</StyledTitleMedium>
-      {!!subscales?.length && (
-        <DataTable
-          columns={allElementsTableColumns}
-          data={usedWithinSubscalesElements}
-          noDataPlaceholder={t('noElementsYet')}
-          tableHeadBgColor={variables.palette.white}
-        />
+
+      {!!subscalesLength && (
+        <>
+          <StyledTitleMedium>{t('elementsAssociatedWithSubscales')}</StyledTitleMedium>
+          <DataTable
+            columns={allElementsTableColumns}
+            data={usedWithinSubscalesElements}
+            noDataPlaceholder={t('noElementsYet')}
+            tableHeadBgColor={variables.palette.white}
+          />
+          <SwitchWithState
+            checked={calculateTotalScoreSwitch}
+            handleChange={() => {
+              setCalculateTotalScoreSwitch((prevState) => !prevState);
+            }}
+            label={t('calculateTotalScore')}
+            tooltipText={t('calculateTotalScoreTooltip')}
+          />
+        </>
       )}
-      <SwitchWithState
-        checked={calculateTotalScoreSwitch}
-        handleChange={() => {
-          setCalculateTotalScoreSwitch((prevState) => !prevState);
-        }}
-        label={t('calculateTotalScore')}
-        tooltipText={t('calculateTotalScoreTooltip')}
-      />
       {calculateTotalScoreSwitch && (
         <StyledContainerWithBg>
           <StyledSvgButton
@@ -171,6 +181,7 @@ export const SubscalesConfiguration = () => {
             name={calculateTotalScoreName}
             control={control}
             options={options}
+            defaultValue={SubscaleTotalScore.Sum}
           />
         </StyledContainerWithBg>
       )}

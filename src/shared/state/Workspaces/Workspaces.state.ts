@@ -9,5 +9,5 @@ const initialStateData = {
 
 export const state: WorkspacesSchema = {
   currentWorkspace: null,
-  priorityRole: initialStateData,
+  roles: initialStateData,
 };

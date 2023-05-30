@@ -12,6 +12,7 @@ import {
   useBuilderSessionStorageFormChange,
   useCheckIfNewApplet,
   useRemoveAppletData,
+  usePermissions,
 } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
@@ -29,12 +30,19 @@ export const BuilderApplet = () => {
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
+  const { getAppletWithItems } = applet.thunk;
   const loadingStatus = applet.useResponseStatus() ?? {};
   const { ownerId } = workspaces.useData() || {};
   const removeAppletData = useRemoveAppletData();
 
   const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
     getDefaultValues(appletData),
+  );
+
+  const { isForbidden, noPermissionsComponent } = usePermissions(() =>
+    appletId && ownerId && !isNewApplet
+      ? dispatch(getAppletWithItems({ ownerId, appletId }))
+      : undefined,
   );
 
   const methods = useForm<AppletFormValues>({
@@ -77,13 +85,6 @@ export const BuilderApplet = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!appletId || isNewApplet || !ownerId) return;
-
-    const { getAppletWithItems } = applet.thunk;
-    dispatch(getAppletWithItems({ ownerId, appletId }));
-  }, [ownerId, appletId]);
-
   useEffect(() => removeAppletData, []);
 
   const { errors } = useFormState({
@@ -96,6 +97,8 @@ export const BuilderApplet = () => {
     hasAppletActivitiesErrors: !!errors.activities,
     hasAppletActivityFlowErrors: !!errors.activityFlows,
   };
+
+  if (isForbidden) return noPermissionsComponent;
 
   return (
     <FormProvider {...methods}>
