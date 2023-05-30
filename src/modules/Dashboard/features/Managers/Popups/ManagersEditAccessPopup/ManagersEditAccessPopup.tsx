@@ -7,6 +7,7 @@ import { Roles } from 'shared/consts';
 import { workspaces } from 'redux/modules';
 import { useAsync } from 'shared/hooks';
 import { editManagerAccess } from 'api';
+import { getErrorMessage } from 'shared/utils';
 
 import { Applet } from './Applet';
 import { Applet as AppletType, EditAccessPopupProps, Role } from './ManagersEditAccessPopup.types';
@@ -28,7 +29,7 @@ export const EditAccessPopup = ({
 
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute } = useAsync(editManagerAccess, () => {
+  const { execute, error } = useAsync(editManagerAccess, () => {
     setEditAccessSuccessPopupVisible(true);
     refetchManagers();
   });
@@ -85,6 +86,10 @@ export const EditAccessPopup = ({
         roles: roles.map(({ role }) => role),
       }));
 
+      if (!ownerId || !accesses.length || accesses.some(({ roles }) => !roles.length)) {
+        return;
+      }
+
       execute({ ownerId, userId: id, accesses });
     }
   };
@@ -102,6 +107,7 @@ export const EditAccessPopup = ({
         onSubmit={handleSubmit}
         title={t('editAccess')}
         buttonText={t('save')}
+        disabledSubmit={!applets.length}
       >
         <>
           <StyledModalWrapper>
@@ -133,6 +139,7 @@ export const EditAccessPopup = ({
               />
             </StyledError>
           )}
+          {error && <StyledError>{getErrorMessage(error)}</StyledError>}
         </>
       </Modal>
       {editAccessSuccessPopupVisible && (
