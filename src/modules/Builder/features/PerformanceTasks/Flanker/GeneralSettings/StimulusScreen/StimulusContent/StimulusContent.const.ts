@@ -1,4 +1,4 @@
-import { CorrectPress } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { CorrectPress } from 'modules/Builder/types';
 
 export const pressOptions = [
   {

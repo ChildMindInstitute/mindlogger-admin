@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { Svg } from 'shared/components';
-import { ActivityFlowFormValues } from 'modules/Builder/pages';
+import { ActivityFlowFormValues } from 'modules/Builder/types';
 
 import { GetActivityFlowActions } from './ActivityFlow.types';
 

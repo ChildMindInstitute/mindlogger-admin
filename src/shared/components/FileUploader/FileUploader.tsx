@@ -1,6 +1,6 @@
-import { useState, ChangeEvent, DragEvent, useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
+import { ChangeEvent, DragEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import {
   StyledBodyLarge,
@@ -11,23 +11,29 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Svg } from 'shared/components';
+import { FileUploaderUiType, Svg } from 'shared/components';
 
+import { DownloadTemplate } from './DownloadTemlate';
 import { StyledButton, StyledLabel, StyledSvg, StyledTextField } from './FileUploader.styles';
 import { FileUploaderProps, ImportedFile } from './FileUploader.types';
-import { importTable } from './FileUploader.utils';
+import { importTable, getDropText, getAcceptedFormats } from './FileUploader.utils';
 
 export const FileUploader = ({
   uploadLabel,
   onFileReady,
   invalidFileFormatError,
   onDownloadTemplate,
+  onDownloadSecond,
+  downloadFirstText,
+  downloadSecondText,
   validationError,
+  uiType = FileUploaderUiType.Primary,
 }: FileUploaderProps) => {
   const { t } = useTranslation();
 
   const [file, setFile] = useState<null | ImportedFile>(null);
-  const [error, setError] = useState<JSX.Element | null>(null);
+  const [error, setError] = useState<JSX.Element | string | null>(null);
+  const isPrimaryUiType = uiType === FileUploaderUiType.Primary;
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -53,7 +59,7 @@ export const FileUploader = ({
     }
 
     const file = files[0];
-    importTable(file)
+    importTable(file, isPrimaryUiType)
       .then((data) => {
         setError(null);
         const importedFile = { name: file.name, data };
@@ -80,15 +86,25 @@ export const FileUploader = ({
   return (
     <>
       <StyledBodyLarge>{uploadLabel}</StyledBodyLarge>
-      {onDownloadTemplate && (
-        <Button
-          sx={{ margin: theme.spacing(1.2, 0, 2.4, 0) }}
-          variant="text"
-          startIcon={<StyledSvg width="18" height="18" id="export" />}
-          onClick={onDownloadTemplate}
-        >
-          {t('downloadTemplate')}
-        </Button>
+      {(onDownloadTemplate || onDownloadSecond) && (
+        <StyledFlexTopCenter>
+          {onDownloadTemplate && (
+            <DownloadTemplate
+              sxProps={{ m: theme.spacing(1.2, 1.2, 2.4, 0) }}
+              onClick={onDownloadTemplate}
+            >
+              {downloadFirstText ?? t('downloadTemplate')}
+            </DownloadTemplate>
+          )}
+          {onDownloadSecond && (
+            <DownloadTemplate
+              sxProps={{ m: theme.spacing(1.2, 0, 2.4, 0) }}
+              onClick={onDownloadSecond}
+            >
+              {downloadSecondText ?? t('downloadTemplate')}
+            </DownloadTemplate>
+          )}
+        </StyledFlexTopCenter>
       )}
       <Box>
         {file ? (
@@ -107,17 +123,14 @@ export const FileUploader = ({
             label={
               <StyledFlexAllCenter>
                 <StyledBodyLarge sx={{ textAlign: 'center' }}>
-                  <Trans i18nKey="dropFile">
-                    Drop <strong>.csv, .xls, .xlsx</strong> or <strong>.ods</strong> here or
-                    <em> click to browse</em>.
-                  </Trans>
+                  {getDropText(isPrimaryUiType)}
                 </StyledBodyLarge>
               </StyledFlexAllCenter>
             }
             control={
               <StyledTextField
                 onChange={handleChange}
-                inputProps={{ accept: '.csv, .xlsx, .xls, .ods' }}
+                inputProps={{ accept: getAcceptedFormats(isPrimaryUiType) }}
                 type="file"
                 name="uploadFile"
               />

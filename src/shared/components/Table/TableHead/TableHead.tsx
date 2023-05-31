@@ -18,7 +18,7 @@ export const TableHead = ({
 
   return (
     <StyledTableHead uiType={uiType}>
-      {uiType === UiType.Primary && (
+      {(uiType === UiType.Primary || uiType === UiType.Quaternary) && (
         <TableRow>
           <TableCell colSpan={headCells.length}>{tableHeader}</TableCell>
         </TableRow>

@@ -1,6 +1,6 @@
 import { styled, TableContainer } from '@mui/material';
 
-import { variables, StyledFlexTopCenter } from 'shared/styles';
+import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 import { UiType } from './Table.types';
@@ -10,23 +10,37 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
   max-height: ${({ maxHeight }: { maxHeight: string; uiType: UiType }) => maxHeight};
   border-radius: ${variables.borderRadius.lg2};
 
-  ${({ uiType }) =>
-    (uiType === UiType.Secondary || uiType === UiType.Tertiary) &&
-    `
-    border-color: ${variables.palette.outline_variant};
-    
-    & .MuiTableCell-root {
-      background-color: transparent;
-      border-color: ${variables.palette.outline_variant};
+  ${({ uiType }) => {
+    if (uiType === UiType.Secondary || uiType === UiType.Tertiary) {
+      return `
+        border-color: ${variables.palette.outline_variant};
+        
+        & .MuiTableCell-root {
+          background-color: transparent;
+          border-color: ${variables.palette.outline_variant};
+        }
+        
+        & .MuiTableBody-root .MuiTableRow-root:hover {
+          background-color: transparent;
+        }
+      `;
     }
-    
-    & .MuiTableBody-root .MuiTableRow-root:hover {
-      background-color: transparent;
+
+    if (uiType === UiType.Quaternary) {
+      return ` 
+        & .MuiTableCell-root {
+          background-color: transparent;
+        }
+        
+        & .MuiTableBody-root .MuiTableRow-root:hover {
+          background-color: transparent;
+        }
+      `;
     }
-  `}
+  }}
 
   ${({ uiType }) =>
-    uiType === UiType.Tertiary &&
+    (uiType === UiType.Tertiary || uiType === UiType.Quaternary) &&
     `
     & .MuiTableCell-root {
       cursor: default;
@@ -39,7 +53,7 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
 
 export const StyledTableCellContent = styled(StyledFlexTopCenter, shouldForwardProp)`
   justify-content: ${({ uiType }: { uiType: UiType }) =>
-    uiType === UiType.Primary ? 'flex-end' : 'flex-start'};
+    uiType === UiType.Primary || uiType === UiType.Quaternary ? 'flex-end' : 'flex-start'};
 
   & .MuiTablePagination-displayedRows {
     color: ${({ uiType }) => uiType === UiType.Tertiary && variables.palette.outline};

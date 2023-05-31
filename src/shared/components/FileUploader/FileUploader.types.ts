@@ -1,3 +1,8 @@
+export enum FileUploaderUiType {
+  Primary,
+  Secondary,
+}
+
 export type ImportedFile = {
   name: string;
   data: Record<string, string | number>[];
@@ -8,5 +13,9 @@ export type FileUploaderProps = {
   onFileReady: (file: ImportedFile | null) => void;
   invalidFileFormatError: JSX.Element;
   onDownloadTemplate?: () => void;
-  validationError?: JSX.Element | null;
+  onDownloadSecond?: () => void;
+  downloadFirstText?: string;
+  downloadSecondText?: string;
+  validationError?: JSX.Element | string | null;
+  uiType?: FileUploaderUiType;
 };

@@ -1,4 +1,4 @@
-import { ItemFormValues } from 'modules/Builder/pages';
+import { ItemFormValues } from 'modules/Builder/types';
 
 export type GetConditionsToRemoveConfig = {
   sourceIndex: number;

@@ -16,6 +16,7 @@ export enum UiType {
   Primary = 'primary',
   Secondary = 'secondary',
   Tertiary = 'tertiary',
+  Quaternary = 'quaternary',
 }
 
 export type TableProps = {

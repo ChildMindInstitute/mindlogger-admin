@@ -21,9 +21,13 @@ import {
   SingleAndMultipleSelectItemResponseValues,
 } from 'shared/state';
 import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
-import { ItemResponseType } from 'shared/consts';
+import {
+  DEFAULT_MILLISECONDS_DURATION,
+  DEFAULT_THRESHOLD_DURATION,
+  ItemResponseType,
+} from 'shared/consts';
+import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
 
-import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from './BuilderApplet.types';
 import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
 const { t } = i18n;
@@ -81,19 +85,36 @@ export const getNewPerformanceTask = ({
   performanceTask,
   isFlankerItem,
 }: GetNewPerformanceTask) => {
-  const instruction = isFlankerItem && {
+  const commonRoundProps = {
+    stimulusDuration: DEFAULT_MILLISECONDS_DURATION,
+    randomizeOrder: true,
+    showSummary: true,
+    blocks: [],
+  };
+  const defaultFlankerProps = isFlankerItem && {
     general: {
-      instruction: t('performanceTaskInstructions.defaultGeneralInstructions'),
+      instruction: t('performanceTaskInstructions.flankerGeneral'),
       buttons: [defaultFlankerBtnObj],
       fixation: null,
       stimulusTrials: [],
+    },
+    practice: {
+      ...commonRoundProps,
+      instruction: t('performanceTaskInstructions.flankerPractice'),
+      threshold: DEFAULT_THRESHOLD_DURATION,
+      showFeedback: true,
+    },
+    test: {
+      ...commonRoundProps,
+      instruction: t('performanceTaskInstructions.flankerTest'),
+      showFeedback: false,
     },
   };
 
   return {
     name,
     description,
-    ...instruction,
+    ...defaultFlankerProps,
     isPerformanceTask: true,
     isFlankerItem,
     ...performanceTask,
