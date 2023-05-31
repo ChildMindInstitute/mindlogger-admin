@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useState, useMemo, SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import Cropper, { ReactCropperElement } from 'react-cropper';
+import ReactCrop, { Crop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
@@ -10,11 +11,19 @@ import { getUploadFormData } from 'shared/utils';
 
 import { StyledCropWrapper } from './CropPopup.styles';
 import { CropPopupProps } from './CropPopup.types';
-import { cropOptions } from './CropPopup.const';
+import { cropImage, initPercentCrop } from './CropPopup.utils';
 
-export const CropPopup = ({ open, setCropPopupVisible, setValue, image }: CropPopupProps) => {
+export const CropPopup = ({
+  open,
+  setCropPopupVisible,
+  setValue,
+  image,
+  ratio = 1,
+}: CropPopupProps) => {
   const { t } = useTranslation('app');
-  const cropperRef = useRef<ReactCropperElement>(null);
+
+  const [crop, setCrop] = useState<Crop>();
+  const imgSrc = useMemo(() => URL.createObjectURL(image), [image]);
   const { execute: executeImgUpload } = useAsync(
     postFileUploadApi,
     (response) => response?.data?.result && setValue(response?.data?.result.url),
@@ -22,18 +31,25 @@ export const CropPopup = ({ open, setCropPopupVisible, setValue, image }: CropPo
 
   const { type, name } = image;
 
+  const handleImageLoad = (event: SyntheticEvent<HTMLImageElement, Event>) => {
+    const { naturalWidth: width, naturalHeight: height } = event.currentTarget;
+
+    const crop = initPercentCrop({ width, height, ratio });
+
+    setCrop(crop);
+  };
+
   const handleCropImage = () => {
-    const imageElement = cropperRef?.current;
-    const cropper = imageElement?.cropper;
-    if (!cropper) return;
-
-    cropper.getCroppedCanvas().toBlob((blob) => {
-      if (!blob) return;
-
-      const imageFile = new File([blob], name, { type });
-      const body = getUploadFormData(imageFile);
-      executeImgUpload(body);
-    }, type);
+    cropImage({
+      image: imgSrc,
+      type,
+      crop,
+      onReady: (blob) => {
+        const imageFile = new File([blob], name, { type });
+        const body = getUploadFormData(imageFile);
+        executeImgUpload(body);
+      },
+    });
   };
 
   const onClose = () => {
@@ -54,9 +70,17 @@ export const CropPopup = ({ open, setCropPopupVisible, setValue, image }: CropPo
         onSubmit={handleSave}
         buttonText={t('save')}
       >
-        <StyledModalWrapper>
+        <StyledModalWrapper sx={{ margin: '0 auto' }}>
           <StyledCropWrapper>
-            <Cropper ref={cropperRef} src={URL.createObjectURL(image)} {...cropOptions} />
+            <ReactCrop
+              crop={crop}
+              onChange={(_, percentCrop) => setCrop(percentCrop)}
+              aspect={ratio}
+              keepSelection={true}
+              style={{ maxHeight: '60vh' }}
+            >
+              <img src={imgSrc} onLoad={handleImageLoad} />
+            </ReactCrop>
           </StyledCropWrapper>
         </StyledModalWrapper>
       </Modal>

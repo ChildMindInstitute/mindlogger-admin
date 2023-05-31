@@ -90,6 +90,7 @@ export const ActivityAbout = () => {
           getValue={() => watch(`${fieldName}.splashScreen`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
           hasRemoveConfirmation
+          cropRatio={7 / 10}
         />
       ),
     },

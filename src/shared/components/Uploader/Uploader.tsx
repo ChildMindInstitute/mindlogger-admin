@@ -35,6 +35,7 @@ export const Uploader = ({
   wrapperStyles = {},
   hasRemoveConfirmation = false,
   showImgName = false,
+  cropRatio,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
   const { execute: executeImgUpload } = useAsync(
@@ -218,6 +219,7 @@ export const Uploader = ({
           setCropPopupVisible={setCropPopupVisible}
           setValue={setValue}
           image={image}
+          ratio={cropRatio}
         />
       )}
       <RemoveImagePopup

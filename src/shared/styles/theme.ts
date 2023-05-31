@@ -1,7 +1,6 @@
 import { SelectClasses, createTheme, Theme } from '@mui/material';
 import { OverridesStyleRules } from '@mui/material/styles/overrides';
 import 'react-datepicker/dist/react-datepicker.min.css';
-import 'cropperjs/dist/cropper.css';
 
 import { typography } from 'shared/styles/typography';
 import { variables } from 'shared/styles/variables';
