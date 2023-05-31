@@ -8,17 +8,17 @@ export const getHeadCells = (): HeadCell[] => {
     {
       id: 'date',
       label: t('date'),
-      enableSort: false,
+      enableSort: true,
     },
     {
       id: 'time',
       label: t('time'),
-      enableSort: false,
+      enableSort: true,
     },
     {
       id: 'response',
       label: t('response'),
-      enableSort: false,
+      enableSort: true,
     },
   ];
 };

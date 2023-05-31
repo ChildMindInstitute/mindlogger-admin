@@ -17,7 +17,7 @@ export type Field = { name: keyof FormValues; options?: Option[] };
 
 export type AddUserFormProps = {
   getInvitationsHandler: () => void;
-  priorityRole: Roles | null;
+  roles?: Roles[];
 };
 
 export type WorkspaceInfo = {

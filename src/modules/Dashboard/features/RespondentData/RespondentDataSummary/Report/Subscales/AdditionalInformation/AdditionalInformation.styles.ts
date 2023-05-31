@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
-import MdEditor from 'md-editor-rt';
 
+import { MarkDownEditor } from 'shared/components';
 import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 export const StyledHeader = styled(StyledFlexTopCenter)`
@@ -20,7 +20,7 @@ export const StyledContent = styled(Box)`
   overflow: auto;
 `;
 
-export const StyledMdEditor = styled(MdEditor)`
+export const StyledMdEditor = styled(MarkDownEditor)`
   background-color: transparent;
   color: ${variables.palette.on_surface_variant};
   font-size: ${variables.font.size.md};

@@ -56,6 +56,7 @@ export const enum Roles {
   Reviewer = 'reviewer',
   Respondent = 'respondent',
   Owner = 'owner',
+  SuperAdmin = 'super_admin',
 }
 
 export enum ItemResponseType {
@@ -79,6 +80,12 @@ export enum ItemResponseType {
   Flanker = 'flanker',
   AbTest = 'abTest',
   Time = 'time',
+}
+
+export enum CalculationType {
+  Sum = 'sum',
+  Average = 'average',
+  Percentage = 'percentage',
 }
 
 export const itemsTypeIcons = {

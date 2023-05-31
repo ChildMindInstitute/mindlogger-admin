@@ -23,3 +23,4 @@ export * from './builderHelpers';
 export * from './getUploadFormData';
 export * from './getDateInUserTimezone';
 export * from './getRespondentName';
+export * from './isManagerOrOwner';

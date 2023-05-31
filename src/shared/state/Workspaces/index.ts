@@ -22,6 +22,6 @@ export const workspaces = {
   actions: slice.actions,
   useData: (): WorkspacesSchema['currentWorkspace'] =>
     useAppSelector(({ workspaces: { currentWorkspace } }) => currentWorkspace),
-  usePriorityRoleData: (): WorkspacesSchema['priorityRole'] =>
-    useAppSelector(({ workspaces: { priorityRole } }) => priorityRole),
+  useRolesData: (): WorkspacesSchema['roles'] =>
+    useAppSelector(({ workspaces: { roles } }) => roles),
 };

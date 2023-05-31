@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { RadioGroupController } from 'shared/components/FormComponents';
-import { StyledContainerWithBg, StyledTitleMedium, theme } from 'shared/styles';
+import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, SwitchWithState } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/hooks';
@@ -60,6 +60,7 @@ export const SubscalesConfiguration = () => {
   const iconId = `lookup-table${tableData ? '-filled' : ''}`;
 
   const subscales: ActivitySettingsSubscale[] = watch(subscalesField) ?? [];
+  const subscalesLength = subscales.length;
   const filteredItems = (activity?.items ?? []).filter(checkOnItemTypeAndScore);
   const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
     filteredItems,
@@ -85,7 +86,7 @@ export const SubscalesConfiguration = () => {
 
   useEffect(() => {
     if (calculateTotalScoreSwitch) {
-      register(calculateTotalScoreName, { value: '' });
+      register(calculateTotalScoreName);
       register(totalScoresTableDataField);
       setValue(calculateTotalScoreName, SubscaleTotalScore.Sum);
 
@@ -97,6 +98,12 @@ export const SubscalesConfiguration = () => {
     setValue(calculateTotalScoreName, undefined);
     setValue(totalScoresTableDataField, undefined);
   }, [calculateTotalScoreSwitch]);
+
+  useEffect(() => {
+    if (subscalesLength) return;
+
+    setCalculateTotalScoreSwitch(false);
+  }, [!!subscalesLength]);
 
   useSubscalesSystemItemsSetup();
 
@@ -141,23 +148,26 @@ export const SubscalesConfiguration = () => {
       <Button {...commonButtonProps} onClick={handleAddSubscale} sx={{ mb: theme.spacing(2) }}>
         {t('addSubscales')}
       </Button>
-      <StyledTitleMedium>{t('elementsAssociatedWithSubscales')}</StyledTitleMedium>
-      {!!subscales?.length && (
-        <DataTable
-          columns={allElementsTableColumns}
-          data={usedWithinSubscalesElements}
-          noDataPlaceholder={t('noElementsYet')}
-          styles={{ width: '100%' }}
-        />
+
+      {!!subscalesLength && (
+        <>
+          <StyledTitleMedium>{t('elementsAssociatedWithSubscales')}</StyledTitleMedium>
+          <DataTable
+            columns={allElementsTableColumns}
+            data={usedWithinSubscalesElements}
+            noDataPlaceholder={t('noElementsYet')}
+            tableHeadBgColor={variables.palette.white}
+          />
+          <SwitchWithState
+            checked={calculateTotalScoreSwitch}
+            handleChange={() => {
+              setCalculateTotalScoreSwitch((prevState) => !prevState);
+            }}
+            label={t('calculateTotalScore')}
+            tooltipText={t('calculateTotalScoreTooltip')}
+          />
+        </>
       )}
-      <SwitchWithState
-        checked={calculateTotalScoreSwitch}
-        handleChange={() => {
-          setCalculateTotalScoreSwitch((prevState) => !prevState);
-        }}
-        label={t('calculateTotalScore')}
-        tooltipText={t('calculateTotalScoreTooltip')}
-      />
       {calculateTotalScoreSwitch && (
         <StyledContainerWithBg>
           <StyledSvgButton
@@ -171,6 +181,7 @@ export const SubscalesConfiguration = () => {
             name={calculateTotalScoreName}
             control={control}
             options={options}
+            defaultValue={SubscaleTotalScore.Sum}
           />
         </StyledContainerWithBg>
       )}

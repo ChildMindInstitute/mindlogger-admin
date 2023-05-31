@@ -5,8 +5,9 @@ import { useParams } from 'react-router-dom';
 import { useAsync, useBreadcrumbs } from 'shared/hooks';
 import { getInvitationsApi } from 'api';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
-import { DEFAULT_INVITATIONS_ROWS_PER_PAGE } from 'shared/components';
+import { DEFAULT_INVITATIONS_ROWS_PER_PAGE, EmptyTable } from 'shared/components';
 import { workspaces } from 'redux/modules';
+import { Roles } from 'shared/consts';
 
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
@@ -19,7 +20,8 @@ export const AddUser = () => {
 
   const [invitations, setInvitations] = useState<Invitations | null>(null);
 
-  const priorityRoleData = workspaces.usePriorityRoleData();
+  const rolesData = workspaces.useRolesData();
+  const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
   const { execute } = useAsync(getInvitationsApi, (res) => res?.data && setInvitations(res.data));
   useBreadcrumbs([
@@ -39,13 +41,13 @@ export const AddUser = () => {
     getInvitationsHandler();
   }, []);
 
+  if (appletRoles?.[0] === Roles.Reviewer)
+    return <EmptyTable width="25rem">{t('noPermissions')}</EmptyTable>;
+
   return (
     <>
       <StyledHeadlineLarge sx={{ mb: theme.spacing(4.8) }}>{t('addUsers')}</StyledHeadlineLarge>
-      <AddUserForm
-        getInvitationsHandler={getInvitationsHandler}
-        priorityRole={priorityRoleData?.data}
-      />
+      <AddUserForm getInvitationsHandler={getInvitationsHandler} roles={appletRoles} />
       <InvitationsTable invitations={invitations} setInvitations={setInvitations} />
       <LinkGenerator />
     </>

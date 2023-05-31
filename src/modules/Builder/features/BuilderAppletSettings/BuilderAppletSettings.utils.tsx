@@ -11,16 +11,17 @@ import {
   PublishConcealAppletSetting,
   VersionHistorySetting,
 } from 'shared/features/AppletSettings';
+import { isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './BuilderAppletSettings.types';
 
-export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => {
+export const getSettings = ({ isNewApplet, isPublished, roles }: GetSettings) => {
   const { t } = i18n;
 
   const tooltip = isNewApplet ? t('saveAndPublishFirst') : undefined;
 
   return [
-    ...(role !== Roles.Editor
+    ...(!roles?.includes(Roles.Editor)
       ? [
           {
             label: 'usersAndData',
@@ -64,7 +65,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
           disabled: isNewApplet,
           tooltip,
         },
-        ...(role === Roles.Owner
+        ...(roles?.[0] === Roles.Owner
           ? [
               {
                 icon: <Svg id="transfer-ownership" />,
@@ -76,7 +77,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
               },
             ]
           : []),
-        ...(role === Roles.Owner || role === Roles.Manager
+        ...(isManagerOrOwner(roles?.[0])
           ? [
               {
                 icon: <Svg id="trash" />,
@@ -103,7 +104,7 @@ export const getSettings = ({ isNewApplet, isPublished, role }: GetSettings) => 
         },
       ],
     },
-    ...(!isNewApplet
+    ...(!isNewApplet && roles?.includes(Roles.SuperAdmin)
       ? [
           {
             label: 'sharing',
