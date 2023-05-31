@@ -1,15 +1,9 @@
-import { createContext, useEffect, useState, Dispatch, SetStateAction } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import {
-  getWorkspaceFoldersApi,
-  getWorkspaceAppletsApi,
-  Folder,
-  Applet,
-  GetAppletsParams,
-} from 'api';
+import { getWorkspaceAppletsApi, Folder, Applet } from 'api';
 import {
   DeletePopup,
   DuplicatePopups,
@@ -19,19 +13,13 @@ import {
 import { popups, workspaces } from 'redux/modules';
 import { ButtonWithMenu, DEFAULT_ROWS_PER_PAGE, Search, Spinner, Svg } from 'shared/components';
 import { useAsync, useBreadcrumbs, useTable } from 'shared/hooks';
+import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
 import { AppletsTableHeader, StyledButtons } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
-
-export type AppletContextType = {
-  rows: Array<Folder | Applet>;
-  setRows: Dispatch<SetStateAction<(Folder | Applet)[]>>;
-  expandedFolders: string[];
-  fetchData: () => void;
-  handleFolderClick: (folder: Folder) => void;
-};
+import { useApplets } from './Applets.hooks';
 
 export const AppletsContext = createContext<AppletContextType | null>(null);
 
@@ -48,13 +36,12 @@ export const Applets = () => {
     publishConcealPopupVisible,
   } = popups.useData();
 
-  const { execute: getWorkspaceFolders } = useAsync(getWorkspaceFoldersApi);
   const { execute: getWorkspaceApplets } = useAsync(getWorkspaceAppletsApi);
 
   const [rows, setRows] = useState<(Folder | Applet)[]>([]);
   const [expandedFolders, setExpandedFolders] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
+  const { fetchData, isLoading } = useApplets(setRows, expandedFolders);
   const { handleSearch, searchValue, ...tableProps } = useTable(
     async (params) => await fetchData(params),
   );
@@ -69,6 +56,7 @@ export const Applets = () => {
   ]);
 
   const folders = rows.filter((row) => row.isFolder) as Folder[];
+
   const addFolder = () => {
     const newFolderName = generateNewFolderName(folders, t);
     const folderRow = {
@@ -100,60 +88,6 @@ export const Applets = () => {
 
   const onCloseCallback = () => {
     fetchData();
-  };
-
-  const fetchData = async (getAppletsParams?: GetAppletsParams) => {
-    const {
-      data: { result: folders },
-    } = await getWorkspaceFolders({ ownerId: ownerId! });
-    const {
-      data: { result: applets },
-    } = await getWorkspaceApplets(
-      getAppletsParams || {
-        params: {
-          ownerId,
-          limit: DEFAULT_ROWS_PER_PAGE,
-        },
-      },
-    );
-
-    let formattedApplets = [
-      ...folders.map((folder) => ({ ...folder, isFolder: true })),
-      ...applets.map((applet) => ({ ...applet, isFolder: false })),
-    ];
-
-    setRows(formattedApplets);
-
-    if (!expandedFolders.length) return;
-
-    setIsLoading(true);
-    for await (const id of expandedFolders) {
-      const {
-        data: { result },
-      } = await getWorkspaceApplets({
-        params: {
-          ownerId,
-          limit: DEFAULT_ROWS_PER_PAGE,
-          folderId: id,
-        },
-      });
-
-      const nestedApplets = result.map((applet) => ({
-        ...applet,
-        isFolder: false,
-        parentId: id,
-      }));
-
-      const folderIndex = formattedApplets.findIndex((row) => row.id === id);
-
-      formattedApplets = [
-        ...formattedApplets.slice(0, folderIndex + 1),
-        ...nestedApplets,
-        ...formattedApplets.slice(folderIndex + 1),
-      ];
-    }
-    setRows(formattedApplets);
-    setIsLoading(false);
   };
 
   const openFolder = async (folder: Folder) => {
@@ -198,9 +132,7 @@ export const Applets = () => {
 
   useEffect(() => {
     if (!ownerId) return;
-    fetchData().finally(() => {
-      setIsLoading(false);
-    });
+    fetchData();
   }, [ownerId]);
 
   return (

@@ -7,9 +7,10 @@ import { workspaces } from 'redux/modules';
 import { Svg, Actions } from 'shared/components';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
-import { AppletContextType, AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
+import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
 import { deleteFolderApi, saveFolderApi, updateFolderApi } from 'api';
-import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/useAppletsDnd.hook';
+import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/Table.hooks';
+import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
 import { FolderItemProps } from './FolderItem.types';
 import {

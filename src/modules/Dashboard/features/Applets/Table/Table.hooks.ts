@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 
-import { AppletContextType, AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
+import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
+import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 import { Applet, Folder, addAppletToFolderApi, removeAppletFromFolderApi } from 'api';
 import { useAsync } from 'shared/hooks';
 

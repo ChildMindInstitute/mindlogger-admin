@@ -11,9 +11,10 @@ import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
 import { page } from 'resources';
 import { Encryption, getBuilderAppletUrl, getDateInUserTimezone } from 'shared/utils';
-import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/useAppletsDnd.hook';
+import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/Table.hooks';
 import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
-import { AppletContextType, AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
+import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
+import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
