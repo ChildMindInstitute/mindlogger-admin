@@ -4,6 +4,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Modal } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { Roles } from 'shared/consts';
+import { workspaces } from 'redux/modules';
+import { useAsync } from 'shared/hooks';
+import { editManagerAccess } from 'api';
+import { getErrorMessage } from 'shared/utils';
 
 import { Applet } from './Applet';
 import { Applet as AppletType, EditAccessPopupProps, Role } from './ManagersEditAccessPopup.types';
@@ -15,12 +19,20 @@ export const EditAccessPopup = ({
   onClose,
   editAccessPopupVisible,
   user,
+  refetchManagers,
 }: EditAccessPopupProps) => {
   const { t } = useTranslation('app');
-  const { firstName, lastName, email, applets: userApplets } = user;
+  const { firstName, lastName, email, applets: userApplets, id } = user;
   const [applets, setApplets] = useState<AppletType[]>(userApplets);
   const [appletsWithoutRespondents, setAppletsWithoutRespondents] = useState<string[]>([]);
   const [editAccessSuccessPopupVisible, setEditAccessSuccessPopupVisible] = useState(false);
+
+  const { ownerId } = workspaces.useData() || {};
+
+  const { execute, error } = useAsync(editManagerAccess, () => {
+    setEditAccessSuccessPopupVisible(true);
+    refetchManagers();
+  });
 
   const getAppletsWithoutRespondents = () =>
     applets.reduce((acc: string[], el) => {
@@ -69,7 +81,16 @@ export const EditAccessPopup = ({
     const appletsWithoutRespondents = getAppletsWithoutRespondents();
     setAppletsWithoutRespondents(appletsWithoutRespondents);
     if (!appletsWithoutRespondents.length) {
-      setEditAccessSuccessPopupVisible(true);
+      const accesses = applets.map(({ id, roles }) => ({
+        appletId: id,
+        roles: roles.map(({ role }) => role),
+      }));
+
+      if (!ownerId || !accesses.length || accesses.some(({ roles }) => !roles.length)) {
+        return;
+      }
+
+      execute({ ownerId, userId: id, accesses });
     }
   };
 
@@ -86,6 +107,7 @@ export const EditAccessPopup = ({
         onSubmit={handleSubmit}
         title={t('editAccess')}
         buttonText={t('save')}
+        disabledSubmit={!applets.length}
       >
         <>
           <StyledModalWrapper>
@@ -117,6 +139,7 @@ export const EditAccessPopup = ({
               />
             </StyledError>
           )}
+          {error && <StyledError>{getErrorMessage(error)}</StyledError>}
         </>
       </Modal>
       {editAccessSuccessPopupVisible && (

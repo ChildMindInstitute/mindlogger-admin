@@ -10,6 +10,7 @@ import {
   SubscaleTotalScore,
   ConditionType,
   ConditionalLogicMatch,
+  CalculationType,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 
@@ -383,6 +384,13 @@ export interface SliderItem extends Item {
   responseValues: SliderItemResponseValues;
 }
 
+export type ScoresAndReports = {
+  generateReport: boolean;
+  showScoreSummary: boolean;
+  scores: ActivitySettingsScore[];
+  sections: ActivitySettingsSection[];
+};
+
 export type Activity = {
   id?: string;
   key?: string;
@@ -397,10 +405,7 @@ export type Activity = {
   responseIsEditable?: boolean;
   isHidden?: boolean;
   items: Item[];
-  generateReport?: boolean;
-  showScoreSummary?: boolean;
-  scores?: ActivitySettingsScore[];
-  sections?: ActivitySettingsSection[];
+  scoresAndReports?: ScoresAndReports;
   subscales?: ActivitySettingsSubscale[];
   calculateTotalScore?: SubscaleTotalScore;
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
@@ -421,7 +426,16 @@ type Theme = {
 };
 
 export type ActivitySettingsScore = {
-  name?: string;
+  id: string;
+  name: string;
+  calculationType: CalculationType;
+  showMessage: boolean;
+  printItems: boolean;
+  itemsScore: string[];
+  itemsPrint?: string[];
+  message?: string;
+  minScore: number;
+  maxScore: number;
 };
 
 export type ActivitySettingsSection = {
@@ -429,7 +443,7 @@ export type ActivitySettingsSection = {
   name: string;
   showMessage: boolean;
   printItems: boolean;
-  items?: string[];
+  itemsPrint?: string[];
   message?: string;
 };
 

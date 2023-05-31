@@ -24,6 +24,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
   const { ownerId } = workspaces.useData() || {};
+  const workspaceRoles = workspaces.useRolesData();
 
   const { fetchData } = useContext(AppletsContext) as AppletContextType;
 
@@ -167,7 +168,10 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
           {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
         </TableCell>
         <TableCell>
-          <Actions items={getActions({ actions, item })} context={item} />
+          <Actions
+            items={getActions({ actions, item, roles: workspaceRoles?.data?.[item.id] })}
+            context={item}
+          />
         </TableCell>
       </TableRow>
       {sharePopupVisible && (

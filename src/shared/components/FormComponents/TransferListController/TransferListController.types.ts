@@ -9,6 +9,7 @@ export type TransferListControllerProps<T extends FieldValues> = {
   items?: DataTableItem[];
   selectedItems?: DataTableItem[];
   columns: DataTableColumn[];
+  selectedItemsColumns?: DataTableColumn[];
   readOnly?: boolean;
   hasSearch?: boolean;
   hasSelectedSection?: boolean;

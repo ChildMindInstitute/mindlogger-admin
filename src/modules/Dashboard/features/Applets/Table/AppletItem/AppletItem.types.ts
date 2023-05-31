@@ -1,4 +1,5 @@
 import { Applet } from 'api';
+import { Roles } from 'shared/consts';
 
 export type Actions = {
   actions: {
@@ -13,6 +14,7 @@ export type Actions = {
     editAction: (item: Applet) => void;
   };
   item: Applet;
+  roles?: Roles[];
 };
 
 export type AppletItemProps = { item: Applet; onPublish: () => void };
