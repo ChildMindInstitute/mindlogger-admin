@@ -12,7 +12,7 @@ import {
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { FlankerFixationSettings } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { FlankerFixationSettings } from 'modules/Builder/types';
 import { DEFAULT_MILLISECONDS_DURATION, MIN_MILLISECONDS_DURATION } from 'shared/consts';
 
 import { StyledRemoveButton } from './FixationContent.styles';

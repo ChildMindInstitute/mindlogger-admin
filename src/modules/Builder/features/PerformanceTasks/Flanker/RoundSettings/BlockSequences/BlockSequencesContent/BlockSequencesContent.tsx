@@ -12,7 +12,7 @@ import {
   variables,
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { FlankerStimulusSettings } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { FlankerStimulusSettings } from 'modules/Builder/types';
 import { exportTemplate } from 'shared/utils';
 
 import { RoundType } from '../../RoundSettings.types';

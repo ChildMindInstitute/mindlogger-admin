@@ -18,10 +18,10 @@ import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 import { workspaces } from 'redux/modules';
+import { AppletFormValues } from 'modules/Builder/types';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import { getDefaultValues, getAppletTabs } from './BuilderApplet.utils';
-import { AppletFormValues } from './BuilderApplet.types';
 
 export const BuilderApplet = () => {
   const params = useParams();

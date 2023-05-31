@@ -13,10 +13,7 @@ import {
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
-import {
-  CorrectPress,
-  FlankerStimulusSettings,
-} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { CorrectPress, FlankerStimulusSettings } from 'modules/Builder/types';
 
 import { pressOptions } from './StimulusContent.const';
 import {

@@ -18,5 +18,3 @@ export type ImportSequencesPopupProps = {
   imageNames: string[];
   setUploadedTable: SetUploadedTable;
 };
-
-export type Steps = 0 | 1 | 2;

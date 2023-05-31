@@ -26,8 +26,8 @@ import {
   DEFAULT_THRESHOLD_DURATION,
   ItemResponseType,
 } from 'shared/consts';
+import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
 
-import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from './BuilderApplet.types';
 import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
 const { t } = i18n;

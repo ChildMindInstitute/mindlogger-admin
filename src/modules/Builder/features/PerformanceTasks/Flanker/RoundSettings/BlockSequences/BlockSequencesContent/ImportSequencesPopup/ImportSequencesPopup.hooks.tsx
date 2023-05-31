@@ -6,7 +6,7 @@ import { hasUploadedFileError } from './ImportSequencesPopup.utils';
 import { invalidFieldError } from './ImportSequencesPopup.const';
 
 export const useImportSequence = (imageNames: string[]) => {
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [uploadedFile, setUploadedFile] = useState<null | ImportedFile>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 

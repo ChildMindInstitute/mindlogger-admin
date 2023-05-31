@@ -1,8 +1,9 @@
 import i18n from 'i18next';
+import { Row } from 'shared/components';
 import { HeadCell } from 'shared/types';
 import { createArray, getTableCell } from 'shared/utils';
-import { FlankerStimulusSettings } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
-import { Row } from 'shared/components';
+import { FlankerStimulusSettings } from 'modules/Builder/types';
+
 import { UploadedTable } from './BlockSequencesContent.types';
 
 const { t } = i18n;

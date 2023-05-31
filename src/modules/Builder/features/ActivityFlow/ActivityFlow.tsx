@@ -12,7 +12,7 @@ import { useBreadcrumbs } from 'shared/hooks';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/types';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
 import {

@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { ItemFormValues } from 'modules/Builder';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { StyledSummaryRow, StyledSelectController } from './SummaryRow.styles';
 import { SummaryRowProps } from './SummaryRow.types';

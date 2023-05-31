@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FileUploader, FileUploaderUiType, Modal } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
 
 import { invalidFileFormatError, uploadLabel } from './ImportSequencesPopup.const';
-import {
-  ImportSequencesPopupProps,
-  ImportSequencesType,
-  Steps,
-} from './ImportSequencesPopup.types';
+import { ImportSequencesPopupProps, ImportSequencesType } from './ImportSequencesPopup.types';
 import { useImportSequence } from './ImportSequencesPopup.hooks';
 import { getScreens } from './ImportSequencesPopup.utils';
 
@@ -23,9 +19,9 @@ export const ImportSequencesPopup = ({
   setUploadedTable,
 }: ImportSequencesPopupProps) => {
   const { t } = useTranslation('app');
-  const [step, setStep] = useState<Steps>(0);
+  const [step, setStep] = useState<number>(0);
 
-  const { isSubmitDisabled, setIsSubmitDisabled, validationError, handleFileReady, uploadedFile } =
+  const { isSubmitDisabled, validationError, handleFileReady, uploadedFile } =
     useImportSequence(imageNames);
 
   const isUpload = uiType === ImportSequencesType.Upload;
@@ -51,32 +47,24 @@ export const ImportSequencesPopup = ({
 
   const screens = getScreens(isUpload, components);
 
-  const onSubmit = async () => {
-    if (step === 0) {
-      if (uploadedFile) {
-        setUploadedTable(uploadedFile.data);
-      }
-    }
-    if (step === 1) {
-      if (uploadedFile?.data) {
-        onClose();
+  const incrementStep = () => setStep((prevStep) => prevStep + 1);
 
-        return;
-      }
-    }
+  const onSubmit = () => {
+    switch (step) {
+      case 0:
+        if (uploadedFile?.data) {
+          setUploadedTable(uploadedFile.data);
 
-    if (step === 2) {
-      return setStep(0);
-    }
+          return incrementStep();
+        }
 
-    setStep((prevStep) => ++prevStep as Steps);
+        return setStep(2);
+      case 1:
+        return onClose();
+      case 2:
+        return setStep(0);
+    }
   };
-
-  useEffect(() => {
-    if (step === 0) {
-      setIsSubmitDisabled(true);
-    }
-  }, [step]);
 
   return (
     <Modal
