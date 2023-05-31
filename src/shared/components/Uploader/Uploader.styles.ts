@@ -143,9 +143,9 @@ export const StyledUploadImg = styled('img', shouldForwardProp)`
         ? 'none'
         : `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`
     };
-};
   `}
-  object-fit: cover;
+
+  object-fit: contain;
   ${absolutePosition}
 `;
 
