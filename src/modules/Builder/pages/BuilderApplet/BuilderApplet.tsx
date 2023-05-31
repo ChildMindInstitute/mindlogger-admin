@@ -40,7 +40,7 @@ export const BuilderApplet = () => {
   );
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    appletId && ownerId && isNewApplet
+    appletId && ownerId && !isNewApplet
       ? dispatch(getAppletWithItems({ ownerId, appletId }))
       : undefined,
   );

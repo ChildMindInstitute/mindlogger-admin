@@ -1,4 +1,5 @@
 import { AppletId } from 'shared/api';
+import { Roles } from 'shared/consts';
 import { RetentionPeriods } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
@@ -151,6 +152,12 @@ export type SetAccount = { accountName: string };
 export type RemoveAccess = {
   userId: string;
   appletIds: string[];
+};
+
+export type EditManagerAccess = {
+  userId: string;
+  ownerId: string;
+  accesses: { appletId: string; roles: Roles[] }[];
 };
 
 export type RemoveRespondentAccess = RemoveAccess & {
