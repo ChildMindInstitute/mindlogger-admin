@@ -184,7 +184,7 @@ export const Applets = () => {
   };
 
   const handleFolderClick = (folder: Folder) => {
-    const isFolderExpanded = !!expandedFolders.includes(folder.id);
+    const isFolderExpanded = expandedFolders.includes(folder.id);
 
     if (isFolderExpanded) {
       setRows(rows.filter((row) => (row as Applet)?.parentId !== folder.id));
