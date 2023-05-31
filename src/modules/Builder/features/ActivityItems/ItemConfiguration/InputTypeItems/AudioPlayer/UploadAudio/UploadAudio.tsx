@@ -28,7 +28,7 @@ export const UploadAudio = ({ open, media, onUpload, onClose, onChange }: Upload
   };
 
   const modalProps = {
-    buttonText: media?.uploaded ? t('audioPlayerUpload') : t('cancel'),
+    buttonText: media?.uploaded ? t('upload') : t('cancel'),
     hasSecondBtn: !!media?.uploaded,
     secondBtnText: t('cancel'),
     onSubmit: media?.uploaded ? handleUpload : handleCloseWithoutChanges,

@@ -9,10 +9,10 @@ export type UploaderProps = {
   width: number;
   height: number;
   setValue: (val: string) => void;
+  setImgOriginalName?: (val: string) => void;
   getValue: () => string;
   uiType?: UploaderUiType;
   description?: string;
   maxFileSize?: number;
   wrapperStyles?: SxProps;
-  showImgName?: boolean;
 };

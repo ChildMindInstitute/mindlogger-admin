@@ -9,6 +9,7 @@ import {
   theme,
   variables,
   StyledFlexColumn,
+  StyledCheckboxTooltipSvg,
 } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Tooltip, Uploader } from 'shared/components';
@@ -24,7 +25,7 @@ import { ActivityFormValues, ItemFormValues } from 'modules/Builder/pages/Builde
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
-import { StyledContainer, StyledSvg } from './ActivityAbout.styles';
+import { StyledContainer } from './ActivityAbout.styles';
 import { itemsForReviewableActivity } from './ActivityAbout.const';
 
 export const ActivityAbout = () => {
@@ -117,7 +118,7 @@ export const ActivityAbout = () => {
           </Tooltip>
           <Tooltip tooltipTitle={t('onlyAdminPanelActivityTooltip')}>
             <span>
-              <StyledSvg id="more-info-outlined" />
+              <StyledCheckboxTooltipSvg id="more-info-outlined" />
             </span>
           </Tooltip>
         </StyledBodyLarge>

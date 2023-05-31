@@ -1,3 +1,3 @@
 export const DEFAULT_ROWS_PER_PAGE = 20;
 export const DEFAULT_INVITATIONS_ROWS_PER_PAGE = 10;
-export const TERTIARY_TYPE_ROWS_PER_PAGE = 7;
+export const SEVEN_ROWS_PER_PAGE = 7;

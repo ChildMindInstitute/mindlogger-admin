@@ -13,7 +13,7 @@ export * from './array';
 export * from './fileSystem';
 export * from './func';
 export * from './table';
-export * from './exportToCsv';
+export * from './exportTemplate';
 export * from './sessionStorage';
 export * from './urlGenerator';
 export * from './forms';
