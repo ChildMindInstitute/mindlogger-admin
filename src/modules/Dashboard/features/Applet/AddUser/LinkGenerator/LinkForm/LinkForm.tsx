@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -8,10 +9,13 @@ import { Svg } from 'shared/components';
 
 import { StyledButton, StyledInput } from './LinkForm.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';
+import { DeletePopup } from '../../Popups';
 
 export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
   const { appletId: id } = useParams();
   const { t } = useTranslation('app');
+
+  const [deletePopupVisible, setDeletePopupVisible] = useState(false);
 
   const publicLink = inviteLink?.link || '';
 
@@ -49,11 +53,18 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
         </StyledButton>
       </StyledFlexTopCenter>
       <StyledFlexTopCenter>
-        <StyledButton variant="outlined" onClick={deleteAppletPublicLink}>
+        <StyledButton variant="outlined" onClick={() => setDeletePopupVisible(true)}>
           {t('deleteInviteLink')}
         </StyledButton>
         <StyledBodyMedium>{t('deleteLinkToNoAllow')}</StyledBodyMedium>
       </StyledFlexTopCenter>
+      {deletePopupVisible && (
+        <DeletePopup
+          open={deletePopupVisible}
+          onClose={() => setDeletePopupVisible(false)}
+          onSubmit={deleteAppletPublicLink}
+        />
+      )}
     </>
   );
 };
