@@ -14,10 +14,12 @@ export const cropImage = ({ image, type, crop, onReady }: CropImage) => {
   const ctx = canvas.getContext('2d');
 
   originalImage.addEventListener('load', function () {
-    const x = getAbsoluteFromPercent(width, crop.x);
-    const y = getAbsoluteFromPercent(height, crop.y);
-    const width = getAbsoluteFromPercent(originalImage.width, crop.width);
-    const height = getAbsoluteFromPercent(originalImage.height, crop.height);
+    const { width: originalWidth, height: originalHeight } = originalImage;
+
+    const x = getAbsoluteFromPercent(originalWidth, crop.x);
+    const y = getAbsoluteFromPercent(originalHeight, crop.y);
+    const width = getAbsoluteFromPercent(originalWidth, crop.width);
+    const height = getAbsoluteFromPercent(originalHeight, crop.height);
 
     canvas.width = width;
     canvas.height = height;
