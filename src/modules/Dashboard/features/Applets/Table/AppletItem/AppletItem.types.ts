@@ -1,4 +1,4 @@
-import { FolderApplet } from 'redux/modules';
+import { Applet } from 'api';
 
 export type Actions = {
   actions: {
@@ -10,9 +10,9 @@ export type Actions = {
     transferOwnership: () => void;
     shareAppletAction: () => void;
     publishAppletAction: () => void;
-    editAction: (item: FolderApplet) => void;
+    editAction: (item: Applet) => void;
   };
-  item: FolderApplet;
+  item: Applet;
 };
 
-export type AppletItemProps = { item: FolderApplet; onPublish: () => void };
+export type AppletItemProps = { item: Applet; onPublish: () => void };

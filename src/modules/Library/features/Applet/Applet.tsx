@@ -113,7 +113,6 @@ export const Applet = ({
               variant="outlined"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ marginLeft: theme.spacing(1.2) }}
-              onClick={() => console.log(getValues())}
             >
               {/* TODO: fix button title - if the applet is in the table, then display 'remove' */}
               {t('addToCart')}
@@ -128,7 +127,6 @@ export const Applet = ({
               variant="contained"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ marginLeft: theme.spacing(1.2) }}
-              onClick={() => console.log(getValues())}
             >
               {/* TODO: fix button title - if the applet is in the table, then display 'remove' */}
               {t('addToCart')}

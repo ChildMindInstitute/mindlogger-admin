@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-import { folders, popups } from 'redux/modules';
+import { popups, applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
@@ -12,18 +12,19 @@ import { SuccessTransferOwnershipPopup } from '../SuccessTransferOwnershipPopup'
 export const TransferOwnershipPopup = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const { transferOwnershipPopupVisible, appletId } = popups.useData();
+  const { transferOwnershipPopupVisible, applet: appletData } = popups.useData();
+  const { result } = applet.useAppletData() || {};
+  const currentApplet = appletData || result;
+
   const [transferOwnershipSuccessVisible, setTransferOwnershipSuccessVisible] = useState(false);
-  const applets = folders.useFlattenFoldersApplets();
-  const applet = applets.find((el) => el.id === appletId);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [emailTransfered, setEmailTransfered] = useState('');
 
-  const onClose = () => {
+  const transferOwnershipPopupClose = () => {
     dispatch(
       popups.actions.setPopupVisible({
-        appletId: '',
+        applet: currentApplet,
         encryption: undefined,
         key: 'transferOwnershipPopupVisible',
         value: false,
@@ -45,7 +46,7 @@ export const TransferOwnershipPopup = () => {
     <>
       <Modal
         open={transferOwnershipPopupVisible && !transferOwnershipSuccessVisible}
-        onClose={onClose}
+        onClose={transferOwnershipPopupClose}
         onSubmit={handleSubmit}
         title={t('transferOwnership')}
         buttonText={t('confirm')}
@@ -53,8 +54,8 @@ export const TransferOwnershipPopup = () => {
       >
         <StyledModalWrapper>
           <TransferOwnership
-            appletId={applet?.id}
-            appletName={applet?.displayName}
+            appletId={currentApplet?.id ?? ''}
+            appletName={currentApplet?.displayName}
             isSubmitted={isSubmitted}
             setIsSubmitted={setIsSubmitted}
             setEmailTransfered={setEmailTransfered}
@@ -64,7 +65,7 @@ export const TransferOwnershipPopup = () => {
       <SuccessTransferOwnershipPopup
         email={emailTransfered}
         transferOwnershipPopupVisible={transferOwnershipSuccessVisible}
-        closeTransferOwnershipPopup={onClose}
+        closeTransferOwnershipPopup={transferOwnershipPopupClose}
       />
     </>
   );

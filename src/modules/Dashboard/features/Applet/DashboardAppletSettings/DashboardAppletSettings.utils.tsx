@@ -64,7 +64,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
             {
               icon: <Svg id="transfer-ownership" />,
               label: 'transferOwnership',
-              component: <TransferOwnershipSetting isApplet />,
+              component: <TransferOwnershipSetting />,
               param: 'transfer-ownership',
             },
           ]

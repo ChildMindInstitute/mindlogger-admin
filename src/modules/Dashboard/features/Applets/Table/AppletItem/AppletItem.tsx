@@ -1,17 +1,20 @@
-import { useState, DragEvent } from 'react';
+import { useState, DragEvent, useContext } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
-import { useAppletsDnd, useTimeAgo } from 'shared/hooks';
+import { removeAppletFromFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
+import { useAsync, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { folders, popups, workspaces } from 'redux/modules';
+import { popups, workspaces } from 'redux/modules';
 import { StyledBodyMedium } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
 import { page } from 'resources';
 import { Encryption, getBuilderAppletUrl, getDateInUserTimezone } from 'shared/utils';
+import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/useAppletsDnd.hook';
+import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
+import { AppletContextType, AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
 
-import { ShareAppletPopup } from '../../Popups';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
@@ -21,6 +24,13 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
   const { ownerId } = workspaces.useData() || {};
+
+  const { fetchData } = useContext(AppletsContext) as AppletContextType;
+
+  const { execute: removeAppletFromFolder } = useAsync(removeAppletFromFolderApi);
+  const { execute: togglePin } = useAsync(togglePinApi);
+  const { execute: setAppletEncryption } = useAsync(setAppletEncryptionApi);
+
   const { isDragOver, onDragLeave, onDragOver, onDrop, onDragEnd } = useAppletsDnd();
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
@@ -32,6 +42,17 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     appletId: item.id,
   });
 
+  const handleTogglePin = async () => {
+    if (!ownerId || !item.parentId) return;
+    await togglePin({
+      ownerId,
+      appletId: item.id,
+      folderId: item.parentId,
+      isPinned: !item.pinnedAt,
+    });
+    await fetchData();
+  };
+
   const handleAppletClick = () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS));
 
   const onDragStart = (event: DragEvent<HTMLTableRowElement>) => {
@@ -40,19 +61,11 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   };
 
   const submitCallback = async (encryption: Encryption) => {
-    // await dispatch(
-    //   folders.thunk.setAppletEncryption({
-    //     appletId: item.id,
-    //     encryption,
-    //   }),
-    // );// TODO: postpone until folders api will be ready
-    await dispatch(
-      folders.thunk.setAppletEncryption({
-        appletId: item.id,
-        encryption,
-      }),
-    );
-
+    await setAppletEncryption({
+      appletId: item.id,
+      encryption,
+    });
+    await fetchData();
     setPasswordPopupVisible(false);
   };
 
@@ -60,19 +73,17 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     hasOwnerRole(item) && !item.encryption ? setPasswordPopupVisible(true) : callback();
 
   const actions = {
-    removeFromFolder: () =>
-      dispatch(
-        folders.thunk.removeAppletFromFolder({
-          applet: item,
-        }),
-      ),
+    removeFromFolder: async () => {
+      await removeAppletFromFolder({ appletId: item.id });
+      await fetchData();
+    },
     viewUsers: () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS)),
     viewCalendar: () => checkAppletEncryption(() => navigate(APPLET_SCHEDULE)),
     deleteAction: () =>
       checkAppletEncryption(() =>
         dispatch(
           popups.actions.setPopupVisible({
-            appletId: item.id,
+            applet: item,
             encryption: item.encryption,
             key: 'deletePopupVisible',
             value: true,
@@ -83,7 +94,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
       checkAppletEncryption(() =>
         dispatch(
           popups.actions.setPopupVisible({
-            appletId: item.id,
+            applet: item,
             encryption: item.encryption,
             key: 'duplicatePopupsVisible',
             value: true,
@@ -94,7 +105,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
       checkAppletEncryption(() =>
         dispatch(
           popups.actions.setPopupVisible({
-            appletId: item.id,
+            applet: item,
             encryption: item.encryption,
             key: 'transferOwnershipPopupVisible',
             value: true,
@@ -107,7 +118,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
       dispatch(
         popups.actions.setPopupVisible({
-          appletId: item.id,
+          applet: item,
           key: 'publishConcealPopupVisible',
           value: true,
           popupProps: {
@@ -126,41 +137,39 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
   return (
     <>
-      {item.isVisible && (
-        <TableRow
-          className={isDragOver ? 'dragged-over' : ''}
-          draggable
-          onDragStart={onDragStart}
-          onDragLeave={onDragLeave}
-          onDragOver={onDragOver}
-          onDragEnd={(event) => onDragEnd(event, item)}
-          onDrop={(event) => onDrop(event, item)}
-        >
-          <TableCell width="30%" onClick={handleAppletClick}>
-            <StyledAppletName applet={item}>
-              {item.parentId && (
-                <StyledPinContainer>
-                  <Pin
-                    isPinned={!!item?.pinOrder}
-                    onClick={(event) => {
-                      ownerId && dispatch(folders.thunk.togglePin({ ownerId, applet: item }));
-                      event.stopPropagation();
-                    }}
-                  />
-                </StyledPinContainer>
-              )}
-              <AppletImage image={item.image} appletName={item.name} />
-              <StyledBodyMedium>{item.displayName}</StyledBodyMedium>
-            </StyledAppletName>
-          </TableCell>
-          <TableCell width="20%" onClick={handleAppletClick}>
-            {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
-          </TableCell>
-          <TableCell>
-            <Actions items={getActions({ actions, item })} context={item} />
-          </TableCell>
-        </TableRow>
-      )}
+      <TableRow
+        className={isDragOver ? 'dragged-over' : ''}
+        draggable
+        onDragStart={onDragStart}
+        onDragLeave={onDragLeave}
+        onDragOver={onDragOver}
+        onDragEnd={(event) => onDragEnd(event, item)}
+        onDrop={(event) => onDrop(event, item)}
+      >
+        <TableCell width="30%" onClick={handleAppletClick}>
+          <StyledAppletName applet={item}>
+            {item.parentId && (
+              <StyledPinContainer>
+                <Pin
+                  isPinned={!!item?.pinnedAt}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleTogglePin();
+                  }}
+                />
+              </StyledPinContainer>
+            )}
+            <AppletImage image={item.image} appletName={item.displayName} />
+            <StyledBodyMedium>{item.displayName}</StyledBodyMedium>
+          </StyledAppletName>
+        </TableCell>
+        <TableCell width="20%" onClick={handleAppletClick}>
+          {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
+        </TableCell>
+        <TableCell>
+          <Actions items={getActions({ actions, item })} context={item} />
+        </TableCell>
+      </TableRow>
       {sharePopupVisible && (
         <ShareAppletPopup
           sharePopupVisible={sharePopupVisible}

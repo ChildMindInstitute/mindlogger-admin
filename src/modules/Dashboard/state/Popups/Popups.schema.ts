@@ -1,3 +1,4 @@
+import { SingleApplet } from 'shared/state';
 import { Encryption } from 'shared/utils';
 
 export type PopupsVisibility =
@@ -13,14 +14,14 @@ export type PopupProps = {
 export type PopupsPayload = {
   key: PopupsVisibility;
   value: boolean;
-  appletId: string;
+  applet?: SingleApplet;
   encryption?: Encryption | null;
   popupProps?: PopupProps;
 };
 
 export type PopupsSchema = {
   data: {
-    appletId: string;
+    applet?: SingleApplet;
     encryption?: Encryption | null;
     popupProps?: PopupProps;
     deletePopupVisible: boolean;

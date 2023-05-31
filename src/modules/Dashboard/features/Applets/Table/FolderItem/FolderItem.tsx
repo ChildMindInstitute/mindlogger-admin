@@ -1,13 +1,15 @@
-import { useEffect, useState, KeyboardEvent } from 'react';
+import { useEffect, useState, KeyboardEvent, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/material';
 
-import { useAppletsDnd } from 'shared/hooks';
-import { useAppDispatch } from 'redux/store';
-import { FolderApplet, folders, workspaces } from 'redux/modules';
+import { useAsync } from 'shared/hooks';
+import { workspaces } from 'redux/modules';
 import { Svg, Actions } from 'shared/components';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
+import { AppletContextType, AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
+import { deleteFolderApi, saveFolderApi, updateFolderApi } from 'api';
+import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/useAppletsDnd.hook';
 
 import { FolderItemProps } from './FolderItem.types';
 import {
@@ -21,28 +23,32 @@ import { getActions } from './FolderItem.const';
 
 export const FolderItem = ({ item }: FolderItemProps) => {
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
+
+  const { rows, setRows, expandedFolders, fetchData, handleFolderClick } = useContext(
+    AppletsContext,
+  ) as AppletContextType;
+  const { execute: saveFolder } = useAsync(saveFolderApi);
+  const { execute: updateFolder } = useAsync(updateFolderApi);
+  const { execute: deleteFolder } = useAsync(deleteFolderApi);
+
   const { ownerId } = workspaces.useData() || {};
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
-  const foldersApplets: FolderApplet[] = folders.useFlattenFoldersApplets();
 
   const [folder, setFolder] = useState(item);
+
+  const isFolderExpanded = !!expandedFolders.find((id) => id === item.id);
 
   const handleRenameFolder = () => {
     setFolder((folder) => ({ ...folder, isRenaming: true }));
   };
 
-  const onDeleteFolder = () => {
-    if (folder.items?.length) return;
+  const onDeleteFolder = async () => {
+    if (folder.appletCount || !ownerId) return;
     if (folder.isNew) {
-      return dispatch(folders.actions.deleteFolderApplet({ id: folder.id }));
+      setRows([...rows.filter(({ id }) => id !== item.id)]);
     }
-    ownerId && dispatch(folders.thunk.deleteFolder({ ownerId, folderId: folder.id }));
-  };
-
-  const handleFolderClick = () => {
-    if (!folder?.items?.length) return;
-    dispatch(folders.actions.expandFolder(folder));
+    await deleteFolder({ ownerId, folderId: folder.id });
+    await fetchData();
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,29 +61,34 @@ export const FolderItem = ({ item }: FolderItemProps) => {
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      saveFolder();
+      saveFolderHandler();
     }
   };
 
   const handleBlur = () => {
-    saveFolder();
+    saveFolderHandler();
   };
 
-  const saveFolder = () => {
+  const saveFolderHandler = async () => {
     if (!folder.isNew && folder.name === item.name) {
       return setFolder((folder) => ({ ...folder, isRenaming: false }));
     }
-    const isNameExist = foldersApplets.find(
-      (folderApplet) => folderApplet.isFolder && folderApplet.name === folder.name?.trim(),
-    );
-    const name = (!isNameExist && folder.name?.trim()) || item.name;
-    const updatedFolder = { ...folder, name };
-    const { updateFolder, saveFolder } = folders.thunk;
+
+    if (!ownerId) return;
+
+    const name = folder.name?.trim() || item.name;
+
     if (!folder.isNew) {
-      ownerId && dispatch(updateFolder({ ownerId, folder: updatedFolder }));
+      await updateFolder({ ownerId, name, folderId: folder.id });
     } else {
-      ownerId && dispatch(saveFolder({ ownerId, folder: updatedFolder }));
+      await saveFolder({ ownerId, name: folder.name });
     }
+    await fetchData();
+  };
+
+  const onFolderClick = () => {
+    if (!item?.appletCount) return;
+    handleFolderClick(item);
   };
 
   useEffect(() => setFolder(item), [item]);
@@ -89,10 +100,10 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       onDragOver={onDragOver}
       onDrop={(event) => onDrop(event, item)}
     >
-      <TableCell width="30%" onClick={() => (!folder?.isRenaming ? handleFolderClick() : null)}>
+      <TableCell width="30%" onClick={() => (!folder?.isRenaming ? onFolderClick() : null)}>
         <StyledFlexTopCenter>
           <StyledFolderIcon>
-            <Svg id={folder?.isExpanded ? 'folder-opened' : 'folder'} />
+            <Svg id={isFolderExpanded ? 'folder-opened' : 'folder'} />
           </StyledFolderIcon>
           <StyledFolderName>
             {folder?.isRenaming ? (
@@ -123,9 +134,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
                   {folder.name}
                 </StyledBodyMedium>
                 <StyledCountApplets>
-                  (
-                  {item?.items?.length ? `${item?.items?.length} ${t('applets')}` : `${t('empty')}`}
-                  )
+                  ({item?.appletCount ? `${item?.appletCount} ${t('applets')}` : `${t('empty')}`})
                 </StyledCountApplets>
               </>
             )}

@@ -39,6 +39,9 @@ import {
   AppletVersionChanges,
   RemoveAccess,
   ActivityAnswer,
+  WorkspaceFoldersAppletsResponse,
+  Folder,
+  Applet,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -50,10 +53,13 @@ export const getWorkspaceAppletsApi = (
 ) => {
   const { ownerId, ...restParams } = params;
 
-  return authApiClient.get(`/workspaces/${ownerId}/applets`, {
-    params: restParams,
-    signal,
-  });
+  return authApiClient.get<WorkspaceFoldersAppletsResponse<Applet>>(
+    `/workspaces/${ownerId}/applets`,
+    {
+      params: restParams,
+      signal,
+    },
+  );
 };
 
 export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
@@ -301,8 +307,10 @@ export const removeAppletFromFolderApi = ({ appletId }: AppletId, signal?: Abort
     { signal },
   );
 
-export const getFoldersApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
-  authApiClient.get(`/workspaces/${ownerId}/folders`, { signal });
+export const getWorkspaceFoldersApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
+  authApiClient.get<WorkspaceFoldersAppletsResponse<Folder>>(`/workspaces/${ownerId}/folders`, {
+    signal,
+  });
 
 export const saveFolderApi = ({ ownerId, name }: OwnerId & FolderName, signal?: AbortSignal) =>
   authApiClient.post(
@@ -317,13 +325,13 @@ export const updateFolderApi = ({ ownerId, name, folderId }: UpdateFolder, signa
   authApiClient.put(`/workspaces/${ownerId}/folders/${folderId}`, { name }, { signal });
 
 export const togglePinApi = (
-  { ownerId, applet: { parentId, id }, isPinned }: TogglePin,
+  { ownerId, appletId, folderId, isPinned }: TogglePin,
   signal?: AbortSignal,
 ) => {
   const method = isPinned ? 'post' : 'delete';
 
   return authApiClient[method](
-    `/workspaces/${ownerId}/folders/${parentId}/pin/${id}`,
+    `/workspaces/${ownerId}/folders/${folderId}/pin/${appletId}`,
     {},
     { signal },
   );

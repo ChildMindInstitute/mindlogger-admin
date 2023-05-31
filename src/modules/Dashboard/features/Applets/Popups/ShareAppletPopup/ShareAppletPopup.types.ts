@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { FolderApplet } from 'redux/modules';
+import { Applet } from 'api';
 
 export type ShareAppletPopupProps = {
   sharePopupVisible: boolean;
   setSharePopupVisible: Dispatch<SetStateAction<boolean>>;
-  applet: FolderApplet;
+  applet: Applet;
 };

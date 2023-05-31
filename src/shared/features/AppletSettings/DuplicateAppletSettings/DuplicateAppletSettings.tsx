@@ -1,9 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
-import { popups } from 'redux/modules';
+import { page } from 'resources';
+import { applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
+import { DuplicatePopups } from 'modules/Dashboard/features/Applet/Popups';
 
 import {
   StyledAppletSettingsButton,
@@ -13,8 +15,14 @@ import {
 
 export const DuplicateAppletSettings = () => {
   const { t } = useTranslation('app');
-  const { appletId: id } = useParams();
+  const navigate = useNavigate();
+  const { duplicatePopupsVisible } = popups.useData();
+  const { result: appletData } = applet.useAppletData() ?? {};
   const dispatch = useAppDispatch();
+
+  const onCloseCallback = () => {
+    navigate(page.dashboardApplets);
+  };
 
   return (
     <>
@@ -26,7 +34,7 @@ export const DuplicateAppletSettings = () => {
         onClick={() =>
           dispatch(
             popups.actions.setPopupVisible({
-              appletId: id || '',
+              applet: appletData,
               encryption: undefined,
               key: 'duplicatePopupsVisible',
               value: true,
@@ -36,6 +44,7 @@ export const DuplicateAppletSettings = () => {
       >
         {t('duplicate')}
       </StyledAppletSettingsButton>
+      {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
     </>
   );
 };

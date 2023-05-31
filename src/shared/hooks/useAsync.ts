@@ -1,23 +1,19 @@
 import { useCallback, useState } from 'react';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { ApiError } from 'redux/modules';
 
 export const useAsync = <T, K>(
-  asyncFunction: ((args: T) => Promise<K>) | undefined,
-  callback?: (data: K | null) => void,
+  asyncFunction: (args: T) => Promise<AxiosResponse<K>>,
+  callback?: (data: AxiosResponse<K> | null) => void,
   errorCallback?: (data: K | null) => void,
 ) => {
-  const [value, setValue] = useState<K | null>(null);
+  const [value, setValue] = useState<AxiosResponse<K> | null>(null);
   const [error, setError] = useState<AxiosError<ApiError> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const execute = useCallback(
     (body: T) => {
-      if (!asyncFunction) {
-        return Promise.resolve();
-      }
-
       setIsLoading(true);
 
       setValue(null);
