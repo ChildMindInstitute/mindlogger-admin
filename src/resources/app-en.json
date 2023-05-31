@@ -1037,5 +1037,13 @@
   "removeImage": "Remove Image",
   "removeImageDescription": "Are you sure you want to remove Image?",
   "selectedItems": "Selected Items",
-  "saveAndPublishFirst": "Save & publish the Applet first"
+  "saveAndPublishFirst": "Save & publish the Applet first",
+    "scoreSummaryDescription": "conditions are true:",
+    "addCondition": "Add Condition",
+    "conditionalLogic": "Conditional Logic",
+    "flagScore": "Flag Score",
+    "flagScoreTooltip": "The score will be highlighted in red in the summary screen",
+    "scoreConditions": "Score Conditions",
+    "scoreConditional": "Score condition {{index}}",
+    "scoreConditionName": "Score Condition Name"
 }

@@ -757,5 +757,13 @@
   "calculationTypeAverage": "Moyenne",
   "calculationTypePercentage": "Pourcentage",
   "availableItems": "Articles disponibles",
-  "selectedItems": "Articles sélectionnés"
+  "selectedItems": "Articles sélectionnés",
+  "scoreSummaryDescription": "les conditions sont vraies :",
+  "addCondition": "Ajouter une condition",
+  "conditionalLogic": "Logique conditionnelle",
+  "flagScore": "Score du drapeau",
+  "flagScoreTooltip": "Le score sera surligné en rouge dans l'écran de résumé",
+  "scoreConditions": "Conditions de score",
+  "scoreConditional": "Condition de score {{index}}",
+  "scoreConditionName": "Nom de la condition de score"
 }

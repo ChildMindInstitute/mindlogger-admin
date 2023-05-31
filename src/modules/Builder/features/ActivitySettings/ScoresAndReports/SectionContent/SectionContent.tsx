@@ -1,80 +1,74 @@
-import { FieldError, useFormContext } from 'react-hook-form';
+import { FieldError, useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import {
-  StyledBodyMedium,
-  StyledFlexColumn,
-  StyledFlexTopStart,
-  theme,
-  variables,
-} from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import {
-  InputController,
-  Switch,
-  TransferListController,
-  EditorUiType,
-} from 'shared/components/FormComponents';
+import { StyledBodyMedium, StyledFlexColumn, theme, variables } from 'shared/styles';
+import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components';
-import { Item } from 'shared/state';
+import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 
-import { columns } from './SectionContent.const';
-import { StyledButton, StyledEditor } from './SectionContent.styles';
-import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { SectionContentProps } from './SectionContent.types';
+import { ConditionContent } from '../ConditionContent';
+import { StyledButton } from '../ScoresAndReports.styles';
+import { SectionScoreHeader } from '../SectionScoreHeader';
+import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
+import { ScoreConditionRowType } from '../ConditionContent/ConditionContent.types';
 
 export const SectionContent = ({ name }: SectionContentProps) => {
   const { t } = useTranslation('app');
   const { control, getFieldState, watch } = useFormContext();
-  const { activity } = useCurrentActivity();
 
-  const showMessage: boolean = watch(`${name}.showMessage`);
-  const printItems: boolean = watch(`${name}.printItems`);
-  const items = activity?.items
-    .filter(checkOnItemTypeAndScore)
-    .map(({ id, name, question }: Item) => ({ id, name, question }));
   const hasPrintItemsError = getFieldState(`${name}.printItems`).error as unknown as Record<
     string,
     FieldError
   >;
 
+  const conditionalLogicName = `${name}.conditionalLogic`;
+  const conditionalLogic = watch(conditionalLogicName);
+
+  const { append: appendConditional, remove: removeConditional } = useFieldArray({
+    control,
+    name: conditionalLogicName,
+  });
+
+  const onRemoveConditional = () => {
+    removeConditional(0);
+  };
+
   return (
     <StyledFlexColumn>
       <InputController name={`${name}.name`} label={t('sectionName')} />
-      <StyledButton startIcon={<Svg id="add" width="20" height="20" />}>
-        {t('addConditinalLogic')}
-      </StyledButton>
+      <Box sx={{ mt: theme.spacing(2.4) }}>
+        {conditionalLogic?.length ? (
+          <ToggleItemContainer
+            HeaderContent={SectionScoreHeader}
+            Content={ConditionContent}
+            contentProps={{
+              name: `${conditionalLogicName}.0`,
+              type: ScoreConditionRowType.Section,
+            }}
+            headerContentProps={{
+              onRemove: onRemoveConditional,
+              title: t('conditionalLogic'),
+            }}
+            uiType={ToggleContainerUiType.Score}
+          />
+        ) : (
+          <StyledButton
+            sx={{ mt: 0 }}
+            startIcon={<Svg id="add" width="20" height="20" />}
+            onClick={() => appendConditional({})}
+          >
+            {t('addConditinalLogic')}
+          </StyledButton>
+        )}
+      </Box>
       {hasPrintItemsError && (
         <StyledBodyMedium sx={{ mb: theme.spacing(2.4) }} color={variables.palette.semantic.error}>
           {t('validationMessages.mustShowMessageOrItems')}
         </StyledBodyMedium>
       )}
-      <Switch
-        name={`${name}.showMessage`}
-        control={control}
-        label={t('showMessage')}
-        tooltipText={t('showMessageTooltip')}
-      />
-      {showMessage && (
-        <StyledEditor uiType={EditorUiType.Secondary} name={`${name}.message`} control={control} />
-      )}
-      <Switch
-        name={`${name}.printItems`}
-        control={control}
-        label={t('printItems')}
-        tooltipText={t('printItemsTooltip')}
-      />
-      {printItems && (
-        <StyledFlexTopStart sx={{ mb: theme.spacing(2.4) }}>
-          <TransferListController
-            name={`${name}.itemsPrint`}
-            items={items}
-            columns={columns}
-            hasSearch={false}
-            hasSelectedSection={false}
-          />
-        </StyledFlexTopStart>
-      )}
+      <SectionScoreCommonFields name={name} />
     </StyledFlexColumn>
   );
 };

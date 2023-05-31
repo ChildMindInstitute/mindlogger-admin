@@ -48,3 +48,7 @@ export const scoreIdBase = {
   [CalculationType.Average]: 'averageScore',
   [CalculationType.Percentage]: 'percentScore',
 };
+
+export const getScoreConditionalDefault = () => ({
+  name: '',
+});
