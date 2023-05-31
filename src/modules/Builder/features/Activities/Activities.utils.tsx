@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components';
-import { ActivityValue } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityValue } from 'modules/Builder/types';
 
 import { GetActivitiesActions } from './Activities.types';
 

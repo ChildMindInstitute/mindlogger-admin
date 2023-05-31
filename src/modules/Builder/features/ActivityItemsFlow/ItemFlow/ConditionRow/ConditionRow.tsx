@@ -4,7 +4,7 @@ import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
 import { ConditionType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { ItemFormValues } from 'modules/Builder/pages';
+import { ItemFormValues } from 'modules/Builder/types';
 import { Condition } from 'modules/Builder/components';
 
 import { ConditionRowProps } from './ConditionRow.types';

@@ -62,6 +62,7 @@ export enum CorrectPress {
 export type FlankerStimulusSettings = {
   id: FlankerStimulusId;
   image: string;
+  imageName: string;
   correctPress: CorrectPress;
 };
 

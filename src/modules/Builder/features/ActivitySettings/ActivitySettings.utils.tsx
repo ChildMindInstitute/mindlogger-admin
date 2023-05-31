@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 
 import { Svg } from 'shared/components';
-import { ItemFormValues } from 'modules/Builder/pages';
+import { ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType } from 'shared/consts';
 import { SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/state';
 

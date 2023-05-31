@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
-import { ActivityFormValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { ActivityFormValues } from 'modules/Builder/types';
 
 export const useCurrentActivity = () => {
   const { activityId } = useParams();

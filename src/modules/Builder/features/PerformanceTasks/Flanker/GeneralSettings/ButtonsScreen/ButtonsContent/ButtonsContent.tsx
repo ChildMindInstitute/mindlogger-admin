@@ -13,7 +13,7 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { SMALL_INPUT_LENGTH } from 'shared/consts';
-import { FlankerButtonSetting } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { FlankerButtonSetting } from 'modules/Builder/types';
 import { defaultFlankerBtnObj } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
 import { ButtonsQuantity, buttonsQuantity } from './ButtonsContent.const';

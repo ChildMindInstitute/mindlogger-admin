@@ -5,7 +5,7 @@ import { Actions as CommonActions } from 'shared/components';
 import { StyledFlexTopCenter, StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { ItemFormValues } from 'modules/Builder';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { ActionsProps } from './Actions.types';
 import { getActions } from './Actions.utils';

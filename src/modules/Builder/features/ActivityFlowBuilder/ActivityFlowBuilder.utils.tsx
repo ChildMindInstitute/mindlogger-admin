@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Svg } from 'shared/components';
 import { ItemType } from 'modules/Builder/components';
-import { ActivityFlowFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFlowFormValues } from 'modules/Builder/types';
 
 import { GetFlowBuilderActions, GetMenuItems, GetMenuItemsType } from './ActivityFlowBuilder.types';
 
