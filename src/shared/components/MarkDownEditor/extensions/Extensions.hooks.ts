@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 
 import { postFileUploadApi } from 'api';
 import { useAsync } from 'shared/hooks';
-import { getUploadFormData } from 'shared/utils';
+import { falseReturnFunc, getUploadFormData } from 'shared/utils';
 
 import { SourceLinkModalForm } from '../SourceLinkModal';
 import { UploadMethodsProps } from './Extensions.types';
@@ -13,12 +13,24 @@ export const useUploadMethods = ({ insertHandler }: UploadMethodsProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { execute: executeImgUpload } = useAsync(
     postFileUploadApi,
-    (response) => response?.data?.result && insertHandler({ imgLink: response?.data?.result.url }),
+    (response) => {
+      const file = inputRef.current?.files?.[0];
+
+      response?.data?.result &&
+        insertHandler({
+          label: file?.name ?? '',
+          address: response?.data?.result.url ?? '',
+        });
+    },
+    falseReturnFunc,
+    () => {
+      inputRef.current = null;
+    },
   );
 
   const handlePopupSubmit = (formData: SourceLinkModalForm) => {
     setIsPopupVisible(false);
-    insertHandler({ values: formData });
+    insertHandler(formData);
   };
 
   const handlePopupClose = () => {
@@ -34,11 +46,11 @@ export const useUploadMethods = ({ insertHandler }: UploadMethodsProps) => {
   };
 
   const onInputChange = () => {
-    if (inputRef.current?.files) {
-      const imageFile = inputRef.current.files[0];
-      const body = getUploadFormData(imageFile);
-      executeImgUpload(body);
-    }
+    if (!inputRef.current?.files?.length) return;
+
+    const file = inputRef.current.files[0];
+    const body = getUploadFormData(file);
+    executeImgUpload(body);
   };
 
   return {
