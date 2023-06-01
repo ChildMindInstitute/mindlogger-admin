@@ -836,6 +836,7 @@
   "addSubscales": "Add Subscale",
   "roles": "Roles",
   "newActivityName": "New Activity",
+  "newItem": "Item",
   "newItemName": "New Item",
   "validationMessages": {
     "isRequired": "{{- field }} is required",
