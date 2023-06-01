@@ -6,17 +6,17 @@ import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
-import { SourceLinkModal } from '../../SourceLinkModal';
+import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { InsertContentExtensionProps, InsertHandlerProps } from '../Extensions.types';
+import { InsertContentExtensionProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
 export const ImageUploadExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');
 
-  const insertHandler = ({ values, imgLink }: InsertHandlerProps) => {
-    const targetValue = values ? `![${values.label}](${values.address})` : `![](${imgLink})` || '';
+  const insertHandler = ({ label, address }: SourceLinkModalForm) => {
+    const targetValue = label ? `![${label}](${address})` : `![](${address})` || '';
     const generator: InsertContentGenerator = () => ({
       targetValue,
       select: false,
@@ -57,6 +57,7 @@ export const ImageUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
                   <StyledTitleSmall onClick={onUploadClick}>
                     {t('uploadMdImg')}
                     <input
+                      key={inputRef.current?.toString()}
                       ref={inputRef}
                       hidden
                       accept="image/*"

@@ -253,12 +253,14 @@ export const ActivitySchema = () =>
     isHidden: yup.boolean(),
     subscales: yup.array().of(SubscaleSchema()),
     conditionalLogic: yup.array().of(ConditionalLogicSchema()),
-    scoresAndReports: yup.object({
-      generateReport: yup.boolean(),
-      showScoreSummary: yup.boolean(),
-      scores: yup.array().of(ScoreSchema()),
-      sections: yup.array().of(SectionSchema()),
-    }),
+    scoresAndReports: yup
+      .object({
+        generateReport: yup.boolean(),
+        showScoreSummary: yup.boolean(),
+        scores: yup.array().of(ScoreSchema()),
+        sections: yup.array().of(SectionSchema()),
+      })
+      .nullable(),
   });
 
 export const ActivityFlowItemSchema = () =>

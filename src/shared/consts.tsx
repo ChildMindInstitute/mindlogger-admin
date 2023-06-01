@@ -141,6 +141,8 @@ export const enum ConditionalLogicMatch {
 
 export const ALLOWED_AUDIO_FILE_TYPES = '.mp3,.wav';
 
+export const ALLOWED_VIDEO_FILE_TYPES = '.webm,.mp4';
+
 export const CONDITION_TYPES_TO_HAVE_SINGLE_VALUE = [
   ConditionType.GreaterThan,
   ConditionType.LessThan,
