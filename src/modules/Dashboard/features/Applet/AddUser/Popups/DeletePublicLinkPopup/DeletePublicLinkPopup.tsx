@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Modal } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 
-import { DeletePopupProps } from './DeletePopup.types';
+import { DeletePublicLinkPopupProps } from './DeletePublicLinkPopup.types';
 
-export const DeletePopup = ({ open, onClose, onSubmit }: DeletePopupProps) => {
+export const DeletePublicLinkPopup = ({ open, onClose, onSubmit }: DeletePublicLinkPopupProps) => {
   const { t } = useTranslation('app');
 
   return (

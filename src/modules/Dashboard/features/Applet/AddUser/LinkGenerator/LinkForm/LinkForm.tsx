@@ -9,7 +9,7 @@ import { Svg } from 'shared/components';
 
 import { StyledButton, StyledInput } from './LinkForm.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';
-import { DeletePopup } from '../../Popups';
+import { DeletePublicLinkPopup } from '../../Popups';
 
 export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
   const { appletId: id } = useParams();
@@ -59,7 +59,7 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
         <StyledBodyMedium>{t('deleteLinkToNoAllow')}</StyledBodyMedium>
       </StyledFlexTopCenter>
       {deletePopupVisible && (
-        <DeletePopup
+        <DeletePublicLinkPopup
           open={deletePopupVisible}
           onClose={() => setDeletePopupVisible(false)}
           onSubmit={deleteAppletPublicLink}

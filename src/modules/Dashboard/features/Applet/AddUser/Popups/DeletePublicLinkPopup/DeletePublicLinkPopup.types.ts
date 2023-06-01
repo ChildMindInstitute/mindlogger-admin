@@ -1,4 +1,4 @@
-export type DeletePopupProps = {
+export type DeletePublicLinkPopupProps = {
   open: boolean;
   onClose: () => void;
   onSubmit: () => void;
