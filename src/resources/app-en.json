@@ -100,6 +100,8 @@
   "generateLinkNo": "No, account is not required",
   "requireToCreateAccount": "Do you want to require the Respondent to create account?",
   "deleteInviteLink": "Delete invite link",
+  "deletePublicLink": "Delete Public Link",
+  "deletePublicLinkDescription": "If deleted, the public link will become invalid, and the respondents will not be able to use it anymore. Are you sure you want to delete it?",
   "deleteLinkToNoAllow": "Delete this link no longer allow anyone to access url",
   "shareWithLogin": "Share the following link to invite anyone to this study.",
   "shareWithNoLogin": "Share the following link for users to take assessment without account.",

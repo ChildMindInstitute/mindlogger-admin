@@ -99,6 +99,8 @@
   "generateLinkNo": "Non, le compte n'est pas requis",
   "requireToCreateAccount": "Souhaitez-vous demander au répondant de créer un compte?",
   "deleteInviteLink": "Supprimer le lien d'invitation",
+  "deletePublicLink": "Supprimer le lien public",
+  "deletePublicLinkDescription": "S'il est supprimé, le lien public deviendra invalide et les répondants ne pourront plus l'utiliser. Êtes-vous sûr de vouloir le supprimer?",
   "deleteLinkToNoAllow": "Supprimer ce lien ne permet plus à personne d'accéder à l'url",
   "shareWithLogin": "Partagez le lien suivant pour inviter quiconque à cette étude.",
   "shareWithNoLogin": "Partagez le lien suivant pour que les utilisateurs puissent passer une évaluation sans compte",
