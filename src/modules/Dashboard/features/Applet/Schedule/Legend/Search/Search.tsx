@@ -17,6 +17,9 @@ export const Search = ({ placeholder, selectedRespondent }: SearchProps) => {
       value={getSearchValue()}
       placeholder={placeholder}
       startAdornment={icon ? <StyledSelectedIcon>{icon}</StyledSelectedIcon> : null}
+      inputProps={{
+        readOnly: true,
+      }}
       endAdornment={
         <StyledIcon>
           <Svg id="search" />

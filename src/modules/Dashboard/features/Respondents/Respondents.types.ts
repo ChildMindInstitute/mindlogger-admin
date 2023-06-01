@@ -1,20 +1,32 @@
+import { RespondentDetail } from 'redux/modules';
 import { Encryption } from 'shared/utils';
 
 export type RespondentsActions = {
-  scheduleSetupAction: (value: number) => void;
-  userDataExportAction: (value: number) => void;
-  viewDataAction: (value: number) => void;
-  removeAccessAction: (value: number) => void;
-  editRespondent: (value: number) => void;
+  scheduleSetupAction: (value: string) => void;
+  userDataExportAction: (value: string) => void;
+  viewDataAction: (value: string) => void;
+  removeAccessAction: (value: string) => void;
+  editRespondent: (value: string) => void;
 };
 
 export type ChosenAppletData = {
   appletId: string;
-  appletName?: string;
+  appletDisplayName?: string;
   appletImg?: string;
-  secretUserId?: string;
+  respondentSecretId?: string;
   hasIndividualSchedule?: boolean;
-  respondentId?: string;
-  nickname?: string;
-  encryption: Encryption;
+  respondentId: string;
+  respondentNickname?: string;
+  encryption?: Encryption;
+  ownerId: string;
+};
+
+export type FilteredApplets = {
+  scheduling: RespondentDetail[];
+  editable: RespondentDetail[];
+  viewable: RespondentDetail[];
+};
+
+export type FilteredRespondents = {
+  [key: string]: FilteredApplets;
 };

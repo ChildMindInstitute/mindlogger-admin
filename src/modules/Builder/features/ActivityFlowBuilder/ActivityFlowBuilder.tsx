@@ -10,16 +10,12 @@ import { Menu } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
-import {
-  ActivityFlowFormValues,
-  ActivityFlowItem,
-  AppletFormValues,
-} from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFlowFormValues, ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
 import { page } from 'resources';
+import { getObjectFromList } from 'shared/utils';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
 import {
-  getActivitiesIdsObjects,
   getActivityFlowIndex,
   getFlowBuilderActions,
   getMenuItems,
@@ -88,7 +84,7 @@ export const ActivityFlowBuilder = () => {
     move(source.index, destination.index);
   };
 
-  const activitiesIdsObjects = getActivitiesIdsObjects(activities);
+  const activitiesIdsObjects = getObjectFromList(activities);
 
   useBreadcrumbs();
 
@@ -175,7 +171,8 @@ export const ActivityFlowBuilder = () => {
             type: GetMenuItemsType.ChangeActivity,
             index: indexToUpdate ?? undefined,
             onMenuClose: () => setAnchorEl(null),
-            activities,
+            // TODO: remove filtering after connecting Performance Tasks API (BE tasks: 1802, 1804, 1805, 1806)
+            activities: activities.filter((activity) => !activity.isPerformanceTask),
             onUpdateFlowActivity: handleFlowActivityUpdate,
           })}
           anchorOrigin={{

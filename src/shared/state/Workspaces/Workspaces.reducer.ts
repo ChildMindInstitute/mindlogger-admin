@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { getApiError } from 'shared/utils';
 
 import { Workspace, WorkspacesSchema } from './Workspaces.schema';
-import { getWorkspacePriorityRole } from './Workspaces.thunk';
+import { getWorkspaceRoles } from './Workspaces.thunk';
 import { state as initialState } from './Workspaces.state';
 
 export const reducers = {
@@ -14,26 +14,26 @@ export const reducers = {
 };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<WorkspacesSchema>): void => {
-  builder.addCase(getWorkspacePriorityRole.pending, ({ priorityRole }, action) => {
-    if (priorityRole.status !== 'loading') {
-      priorityRole.requestId = action.meta.requestId;
-      priorityRole.status = 'loading';
+  builder.addCase(getWorkspaceRoles.pending, ({ roles }, action) => {
+    if (roles.status !== 'loading') {
+      roles.requestId = action.meta.requestId;
+      roles.status = 'loading';
     }
   });
 
-  builder.addCase(getWorkspacePriorityRole.fulfilled, ({ priorityRole }, action) => {
-    if (priorityRole.status === 'loading' && priorityRole.requestId === action.meta.requestId) {
-      priorityRole.requestId = initialState.priorityRole.requestId;
-      priorityRole.status = 'success';
-      priorityRole.data = action.payload.data?.result?.role;
+  builder.addCase(getWorkspaceRoles.fulfilled, ({ roles }, action) => {
+    if (roles.status === 'loading' && roles.requestId === action.meta.requestId) {
+      roles.requestId = initialState.roles.requestId;
+      roles.status = 'success';
+      roles.data = action.payload.data?.result;
     }
   });
 
-  builder.addCase(getWorkspacePriorityRole.rejected, ({ priorityRole }, action) => {
-    if (priorityRole.status === 'loading' && priorityRole.requestId === action.meta.requestId) {
-      priorityRole.requestId = initialState.priorityRole.requestId;
-      priorityRole.status = 'error';
-      priorityRole.error = getApiError(action as PayloadAction<AxiosError>);
+  builder.addCase(getWorkspaceRoles.rejected, ({ roles }, action) => {
+    if (roles.status === 'loading' && roles.requestId === action.meta.requestId) {
+      roles.requestId = initialState.roles.requestId;
+      roles.status = 'error';
+      roles.error = getApiError(action as PayloadAction<AxiosError>);
     }
   });
 };

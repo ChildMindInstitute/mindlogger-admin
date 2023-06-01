@@ -5,7 +5,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { SelectController } from 'shared/components/FormComponents';
 import { Spinner, Svg } from 'shared/components';
 import { SelectEvent } from 'shared/types';
-import { exportToCsv, getRespondentName } from 'shared/utils';
+import { exportTemplate, getRespondentName } from 'shared/utils';
 import { page } from 'resources';
 import { users } from 'modules/Dashboard/state';
 
@@ -35,15 +35,17 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const { respondentId } = useParams();
   const navigate = useNavigate();
   const { result: respondentsData } = users.useAllRespondentsData() || {};
-  const respondentsItems = respondentsData?.map(
-    ({ id, hasIndividualSchedule, secretId, nickname }) => ({
+  const respondentsItems = respondentsData?.map(({ id, details }) => {
+    const { respondentSecretId, hasIndividualSchedule, respondentNickname } = details?.[0] || {};
+
+    return {
       icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
       id,
-      secretId,
-      nickname,
+      secretId: respondentSecretId,
+      nickname: respondentNickname,
       hasIndividualSchedule,
-    }),
-  );
+    };
+  });
 
   const [schedule, setSchedule] = useState<string | null>(null);
   const [searchPopupVisible, setSearchPopupVisible] = useState(false);
@@ -114,7 +116,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
       return `${isDefault ? 'default' : 'individual'}_schedule_template`;
     };
 
-    await exportToCsv(scheduleExportCsv, getFileName());
+    await exportTemplate(scheduleExportCsv, getFileName());
     isExport && setExportDefaultSchedulePopupVisible(false);
   };
 
@@ -125,11 +127,11 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   }, [respondentId]);
 
   useEffect(() => {
-    if (respondentId && respondentsItems?.length && !selectedRespondent) {
-      setSelectedRespondent(
-        respondentsItems.find((respondent) => respondent.id === respondentId) || null,
-      );
-    }
+    if (!respondentId || selectedRespondent) return;
+
+    const currentRespondent =
+      respondentsItems?.find((respondent) => respondent.id === respondentId) || null;
+    setSelectedRespondent(currentRespondent);
   }, [respondentId, respondentsItems, selectedRespondent]);
 
   return schedule ? (

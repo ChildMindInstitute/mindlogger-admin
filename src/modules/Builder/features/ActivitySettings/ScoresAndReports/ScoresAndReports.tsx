@@ -5,24 +5,26 @@ import { Button } from '@mui/material';
 import { StyledBodyLarge, StyledFlexTopCenter, StyledTooltipSvg, theme } from 'shared/styles';
 import { Tooltip } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
-import { ActivitySettingsSection } from 'shared/state';
+import { ActivitySettingsScore, ActivitySettingsSection } from 'shared/state';
 
 import { commonButtonProps } from '../ActivitySettings.const';
-import { SectionHeaderContent } from './SectionHeaderContent';
-import { SectionContent } from './SectionContent/SectionContent';
-import { getSectionDefaults } from './ScoresAndReports.utils';
+import { SectionScoreHeader } from './SectionScoreHeader';
+import { SectionContent } from './SectionContent';
+import { getScoreDefaults, getSectionDefaults } from './ScoresAndReports.utils';
+import { ScoreContent } from './ScoreContent';
 
 export const ScoresAndReports = () => {
   const { t } = useTranslation('app');
   const { fieldName } = useCurrentActivity();
   const { control, watch } = useFormContext();
-  const generateReportName = `${fieldName}.generateReport`;
-  const showScoreSummaryName = `${fieldName}.showScoreSummary`;
-  const scoresName = `${fieldName}.scores`;
-  const sectionsName = `${fieldName}.sections`;
+  const scoresAndReports = `${fieldName}.scoresAndReports`;
+  const generateReportName = `${scoresAndReports}.generateReport`;
+  const showScoreSummaryName = `${scoresAndReports}.showScoreSummary`;
+  const scoresName = `${scoresAndReports}.scores`;
+  const sectionsName = `${scoresAndReports}.sections`;
 
   const { append: appendScore, remove: removeScore } = useFieldArray({
     control,
@@ -35,9 +37,10 @@ export const ScoresAndReports = () => {
   });
 
   const sections: ActivitySettingsSection[] = watch(sectionsName);
+  const scores: ActivitySettingsScore[] = watch(scoresName);
 
   const handleAddScore = () => {
-    appendScore({});
+    appendScore(getScoreDefaults());
   };
 
   const handleAddSection = () => {
@@ -75,7 +78,7 @@ export const ScoresAndReports = () => {
         return (
           <ToggleItemContainer
             key={`data-section-${getEntityKey(section) || index}`}
-            HeaderContent={SectionHeaderContent}
+            HeaderContent={SectionScoreHeader}
             Content={SectionContent}
             headerContentProps={{
               onRemove: () => {
@@ -87,6 +90,32 @@ export const ScoresAndReports = () => {
             contentProps={{
               sectionId: section.id,
               name: sectionName,
+            }}
+          />
+        );
+      })}
+      {scores?.map((score, index) => {
+        const scoreName = `${scoresName}.${index}`;
+        const title = t('scoreHeader', {
+          index: index + 1,
+          name: score?.name,
+        });
+
+        return (
+          <ToggleItemContainer
+            key={`data-section-${getEntityKey(score) || index}`}
+            HeaderContent={SectionScoreHeader}
+            Content={ScoreContent}
+            headerContentProps={{
+              onRemove: () => {
+                removeScore(index);
+              },
+              name: scoreName,
+              title,
+            }}
+            contentProps={{
+              scoreId: score.id,
+              name: scoreName,
             }}
           />
         );

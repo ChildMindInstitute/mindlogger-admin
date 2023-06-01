@@ -10,6 +10,8 @@ export const LEFT_BAR_WIDTH = '8rem';
 
 export const MAX_NAME_LENGTH = 55;
 export const MAX_DESCRIPTION_LENGTH = 150;
+export const SMALL_INPUT_LENGTH = 5;
+export const TEXTAREA_ROWS = 5;
 export const MAX_DESCRIPTION_LENGTH_LONG = 230;
 export const MAX_SELECT_OPTION_TEXT_LENGTH = 75;
 export const MAX_SLIDER_LABEL_TEXT_LENGTH = 20;
@@ -19,6 +21,12 @@ export const MAX_FILE_SIZE_2MB = 2_097_152;
 
 export const INPUT_DEBOUNCE_TIME = 400;
 export const SEARCH_DEBOUNCE_VALUE = 700;
+
+export const DEFAULT_MILLISECONDS_DURATION = 3000;
+export const MIN_MILLISECONDS_DURATION = 1;
+export const DEFAULT_THRESHOLD_DURATION = 75;
+export const MIN_THRESHOLD_DURATION = 1;
+export const MAX_THRESHOLD_DURATION = 99;
 
 export const BUILDER_PAGES = {
   activities: 'activities',
@@ -48,6 +56,7 @@ export const enum Roles {
   Reviewer = 'reviewer',
   Respondent = 'respondent',
   Owner = 'owner',
+  SuperAdmin = 'super_admin',
 }
 
 export enum ItemResponseType {
@@ -71,6 +80,12 @@ export enum ItemResponseType {
   Flanker = 'flanker',
   AbTest = 'abTest',
   Time = 'time',
+}
+
+export enum CalculationType {
+  Sum = 'sum',
+  Average = 'average',
+  Percentage = 'percentage',
 }
 
 export const itemsTypeIcons = {
@@ -106,4 +121,32 @@ export const locales = {
   fr,
 };
 
+export const enum ConditionType {
+  IncludesOption = 'INCLUDES_OPTION',
+  NotIncludesOption = 'NOT_INCLUDES_OPTION',
+  EqualToOption = 'EQUAL_TO_OPTION',
+  NotEqualToOption = 'NOT_EQUAL_TO_OPTION',
+  GreaterThan = 'GREATER_THAN',
+  LessThan = 'LESS_THAN',
+  Equal = 'EQUAL',
+  NotEqual = 'NOT_EQUAL',
+  Between = 'BETWEEN',
+  OutsideOf = 'OUTSIDE_OF',
+}
+
+export const enum ConditionalLogicMatch {
+  Any = 'any',
+  All = 'all',
+}
+
 export const ALLOWED_AUDIO_FILE_TYPES = '.mp3,.wav';
+
+export const ALLOWED_VIDEO_FILE_TYPES = '.webm,.mp4';
+
+export const CONDITION_TYPES_TO_HAVE_SINGLE_VALUE = [
+  ConditionType.GreaterThan,
+  ConditionType.LessThan,
+  ConditionType.Equal,
+  ConditionType.NotEqual,
+];
+export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [ConditionType.Between, ConditionType.OutsideOf];

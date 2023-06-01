@@ -30,6 +30,7 @@ import {
   removeAppletExtraFields,
   removeActivityExtraFields,
   mapItemResponseValues,
+  getItemConditionalLogic,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -55,19 +56,31 @@ export const useAppletData = () => {
     return {
       ...defaultAppletInfo,
       ...appletInfo,
-      activities: appletInfo?.activities.map((activity: Activity) => ({
-        ...activity,
-        key: activity.id || activity.key,
-        description: getDictionaryObject(activity.description),
-        items: activity.items?.map(({ id, ...item }) => ({
-          ...item,
-          ...(id && { id }),
-          question: getDictionaryObject(item.question),
-          responseValues: mapItemResponseValues(item.responseType, item.responseValues),
-          ...removeItemExtraFields(),
-        })),
-        ...removeActivityExtraFields(),
-      })),
+      // TODO: remove filtering after connecting Performance Tasks API (BE tasks: 1802, 1804, 1805, 1806)
+      activities: appletInfo?.activities.reduce((acc: Activity[], activity: Activity) => {
+        if (!activity.isPerformanceTask) {
+          acc.push({
+            ...activity,
+            key: activity.id || activity.key,
+            description: getDictionaryObject(activity.description),
+            items: activity.items?.map(({ id, ...item }) => ({
+              ...item,
+              ...(id && { id }),
+              question: getDictionaryObject(item.question),
+              responseValues: mapItemResponseValues(item.responseType, item.responseValues),
+              conditionalLogic: getItemConditionalLogic(
+                { ...item, id },
+                activity.items,
+                activity.conditionalLogic,
+              ),
+              ...removeItemExtraFields(),
+            })),
+            ...removeActivityExtraFields(),
+          });
+        }
+
+        return acc;
+      }, []),
       encryption,
       description: appletDescription,
       about: appletAbout,
@@ -208,7 +221,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { cancelNavigation, confirmNavigation, promptVisible, setPromptVisible } =
     usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
-  const { getEncryptionCheck } = useEncryptionCheckFromStorage();
+  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   const { ownerId } = workspaces.useData() || {};
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
   const { result: appletData } = applet.useAppletData() ?? {};
@@ -276,7 +289,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPublishProcessStep(undefined);
   };
   const sendRequestWithPasswordCheck = async () => {
-    const hasEncryptionCheck = getEncryptionCheck(appletId ?? '');
+    const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
     if (!hasEncryptionCheck) {
       setIsPasswordPopupOpened(true);
 
@@ -314,8 +327,8 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       }
 
       if (appletId && ownerId) {
-        await dispatch(getAppletWithItems({ ownerId, appletId }));
         navigate(getBuilderAppletUrl(appletId));
+        await dispatch(getAppletWithItems({ ownerId, appletId }));
       }
     }
 

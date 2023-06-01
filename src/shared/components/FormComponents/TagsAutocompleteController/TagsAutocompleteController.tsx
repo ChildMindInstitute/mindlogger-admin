@@ -82,7 +82,7 @@ export const TagsInputController = <T extends FieldValues>({
                 <Paper {...restPaperProps}>
                   {options?.length ? (
                     <ListItem
-                      onMouseDown={(e) => e.preventDefault()} // prevent blur
+                      onMouseDown={(event) => event.preventDefault()} // prevent blur
                       sx={{ pl: theme.spacing(2.8) }}
                     >
                       <FormControlLabel

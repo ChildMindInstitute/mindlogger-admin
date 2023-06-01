@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { Menu } from 'shared/components/Menu';
+import { variables } from 'shared/styles';
 
 import { StyledButton } from './ButtonWithMenu.styles';
 import { ButtonWithMenuProps } from './ButtonWithMenu.types';
@@ -27,6 +28,10 @@ export const ButtonWithMenu = ({
   return (
     <>
       <StyledButton
+        sx={{
+          backgroundColor:
+            openMenu && variant === 'outlined' ? variables.palette.primary_alfa12 : 'inherit',
+        }}
         disabled={disabled}
         variant={variant}
         aria-haspopup="true"

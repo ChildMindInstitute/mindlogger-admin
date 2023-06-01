@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 
-import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
 
 export enum GetMenuItemsType {
   AddActivity,

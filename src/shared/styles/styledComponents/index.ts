@@ -13,3 +13,6 @@ export * from './IconButton';
 export * from './Container';
 export * from './LinearProgress';
 export * from './TitleTooltipIcon';
+export * from './SmallNumberInput';
+export * from './CheckboxTooltipSvg';
+export * from './SvgPrimaryColorBtn';

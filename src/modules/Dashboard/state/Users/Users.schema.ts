@@ -5,15 +5,35 @@ import { GetAppletsParams } from 'api';
 import { BaseSchema } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
 
+export type RespondentDetail = {
+  appletId: string;
+  appletDisplayName: string;
+  accessId: string;
+  respondentNickname: string;
+  respondentSecretId: string;
+  hasIndividualSchedule: boolean;
+  appletImg?: string;
+};
+
 export type Respondent = {
   id: string;
   accessId: string;
-  nickname: string | null;
+  nicknames: string[];
   role: Roles;
-  secretId: string;
+  secretIds: string[];
   lastSeen: string;
-  hasIndividualSchedule: boolean;
   isPinned?: boolean;
+  details: RespondentDetail[];
+};
+
+export type ManagerApplet = {
+  id: string;
+  displayName: string;
+  image?: string;
+  roles: {
+    accessId?: string;
+    role: Roles;
+  }[];
 };
 
 export type Manager = {
@@ -23,6 +43,8 @@ export type Manager = {
   email: string;
   roles: Roles[];
   lastSeen: string;
+  isPinned?: boolean;
+  applets: ManagerApplet[];
 };
 
 export type UsersSchema = {

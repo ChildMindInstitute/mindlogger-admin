@@ -1,7 +1,12 @@
+import { ColorResult } from 'react-color';
+
 import {
+  Condition,
+  ConditionalLogic,
   AudioPlayerResponseValues,
   AudioResponseValues,
   DrawingResponseValues,
+  Item,
   NumberItemResponseValues,
   ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
@@ -10,7 +15,7 @@ import {
   SliderRowsResponseValues,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
-import { ColorResult } from 'react-color';
+import { getEntityKey } from 'shared/utils';
 
 export const removeAppletExtraFields = () => ({
   isPublished: undefined,
@@ -30,13 +35,15 @@ export const removeAppletExtraFields = () => ({
 });
 
 export const removeActivityExtraFields = () => ({
+  createdAt: undefined,
   order: undefined,
   generateReport: undefined, // TODO: remove when API will be ready
   showScoreSummary: undefined, // TODO: remove when API will be ready
   scores: undefined, // TODO: remove when API will be ready
   sections: undefined, // TODO: remove when API will be ready
-  subscales: undefined, // TODO: remove when M2-1738 will be ready
-  calculateTotalScore: undefined, // TODO: remove when M2-1738 will be ready
+  subscales: undefined, // TODO: remove when API will be ready
+  calculateTotalScore: undefined, // TODO: remove when API will be ready
+  conditionalLogic: undefined,
   totalScoresTableData: undefined, // TODO: remove when M2-1738 will be ready
 });
 
@@ -91,4 +98,25 @@ export const mapItemResponseValues = (
     return responseValues as SingleAndMultipleSelectRowsResponseValues;
 
   return null;
+};
+
+export const getItemConditionalLogic = (
+  item: Item,
+  items: Item[],
+  conditionalLogic?: ConditionalLogic[],
+) => {
+  const result = conditionalLogic?.find(
+    (conditionalLogic) => conditionalLogic.itemKey === getEntityKey(item),
+  );
+
+  if (!result) return;
+
+  return {
+    match: result.match,
+    conditions: result.conditions?.map(({ type, payload, itemName }) => ({
+      type,
+      payload: payload as keyof Condition['payload'],
+      itemName: items.find((item) => getEntityKey(item) === itemName)?.name ?? '',
+    })),
+  };
 };

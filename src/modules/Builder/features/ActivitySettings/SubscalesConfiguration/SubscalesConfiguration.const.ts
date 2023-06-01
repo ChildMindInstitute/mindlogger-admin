@@ -1,5 +1,13 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import i18n from 'i18n';
-import { SubscaleTotalScore } from 'shared/consts';
+import { SubscaleTotalScore, ItemResponseType } from 'shared/consts';
+import { SingleAndMultipleSelectItemResponseValues, TextItemResponseValues } from 'shared/state';
+import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import {
+  defaultSingleAndMultiSelectionConfig,
+  defaultTextConfig,
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
 
 const { t } = i18n;
 
@@ -18,6 +26,9 @@ export const totalScoreTableColumnData = [
   {
     key: 'Raw Score',
     label: t('subscaleLookupTable.column.rawScore'),
+    styles: {
+      width: '20%',
+    },
   },
 
   {
@@ -40,3 +51,34 @@ export const totalScoreTableTemplate = [
     Text: 'abcd',
   },
 ];
+
+export const genderItem = getNewActivityItem({
+  allowEdit: false,
+  name: 'gender_screen',
+  question: t('genderQuestion'),
+  config: defaultSingleAndMultiSelectionConfig,
+  responseType: ItemResponseType.SingleSelection,
+  responseValues: {
+    options: [
+      {
+        id: uuidv4(),
+        text: t('male'),
+        isHidden: false,
+      },
+      {
+        id: uuidv4(),
+        text: t('female'),
+        isHidden: false,
+      },
+    ],
+  } as SingleAndMultipleSelectItemResponseValues,
+});
+
+export const ageItem = getNewActivityItem({
+  allowEdit: false,
+  name: 'age_screen',
+  question: t('ageQuestion'),
+  config: defaultTextConfig,
+  responseType: ItemResponseType.Text,
+  responseValues: null as TextItemResponseValues,
+});

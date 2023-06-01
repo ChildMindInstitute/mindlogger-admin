@@ -4,7 +4,7 @@ import { TableCell, TableRow } from '@mui/material';
 
 import { useAppletsDnd, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { FolderApplet, folders, popups, workspaces } from 'redux/modules';
+import { folders, popups, workspaces } from 'redux/modules';
 import { StyledBodyMedium } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
@@ -21,7 +21,8 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
   const { ownerId } = workspaces.useData() || {};
-  const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
+  const workspaceRoles = workspaces.useRolesData();
+  const { isDragOver, onDragLeave, onDragOver, onDrop, onDragEnd } = useAppletsDnd();
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
 
@@ -133,7 +134,8 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
           onDragStart={onDragStart}
           onDragLeave={onDragLeave}
           onDragOver={onDragOver}
-          onDrop={(e) => onDrop(e, item)}
+          onDragEnd={(event) => onDragEnd(event, item)}
+          onDrop={(event) => onDrop(event, item)}
         >
           <TableCell width="30%" onClick={handleAppletClick}>
             <StyledAppletName applet={item}>
@@ -141,9 +143,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
                 <StyledPinContainer>
                   <Pin
                     isPinned={!!item?.pinOrder}
-                    onClick={(e) => {
+                    onClick={(event) => {
                       ownerId && dispatch(folders.thunk.togglePin({ ownerId, applet: item }));
-                      e.stopPropagation();
+                      event.stopPropagation();
                     }}
                   />
                 </StyledPinContainer>
@@ -156,7 +158,10 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
           </TableCell>
           <TableCell>
-            <Actions items={getActions({ actions, item })} context={item} />
+            <Actions
+              items={getActions({ actions, item, roles: workspaceRoles?.data?.[item.id] })}
+              context={item}
+            />
           </TableCell>
         </TableRow>
       )}

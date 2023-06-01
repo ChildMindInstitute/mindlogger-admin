@@ -3,8 +3,8 @@ import { Dispatch, SetStateAction } from 'react';
 import { ChosenAppletData } from '../../Respondents.types';
 
 export type EditRespondentForm = {
-  MRN: string;
-  nickName: string;
+  secretUserId: string;
+  nickname: string;
 };
 
 export type EditRespondentPopupProps = {
@@ -12,4 +12,5 @@ export type EditRespondentPopupProps = {
   setPopupVisible: Dispatch<SetStateAction<boolean>>;
   chosenAppletData: ChosenAppletData | null;
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>;
+  refetchRespondents: () => void;
 };

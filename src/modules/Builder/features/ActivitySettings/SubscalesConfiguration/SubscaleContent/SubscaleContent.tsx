@@ -2,14 +2,14 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { StyledFlexColumn, StyledFlexTopStart, StyledTitleMedium, theme } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import {
   InputController,
   SelectController,
   TransferListController,
 } from 'shared/components/FormComponents';
 import { DataTable } from 'shared/components';
-import { ActivityFormValues } from 'modules/Builder/pages';
+import { ActivityFormValues } from 'modules/Builder/types';
 
 import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
@@ -18,17 +18,23 @@ import {
   columns,
   notUsedElementsTableColumns,
 } from '../SubscalesConfiguration.utils';
-import { checkOnItemType } from '../../ActivitySettings.utils';
+import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
+import { StyledWrapper } from './SubscaleContent.styles';
 
 export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleContentProps) => {
   const { t } = useTranslation('app');
   const { control } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
-  const subscales: ActivityFormValues['subscales'] = useWatch({ name: `${fieldName}.subscales` });
-  const items = getItemElements(subscaleId, activity?.items.filter(checkOnItemType), subscales);
+  const subscales: ActivityFormValues['subscales'] =
+    useWatch({ name: `${fieldName}.subscales` }) ?? [];
+  const items = getItemElements(
+    subscaleId,
+    activity?.items.filter(checkOnItemTypeAndScore),
+    subscales,
+  );
 
   return (
-    <StyledFlexColumn>
+    <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>
       <StyledFlexTopStart sx={{ mb: theme.spacing(4.4), gap: theme.spacing(2) }}>
         <InputController name={`${name}.name`} label={t('subscaleName')} />
         <SelectController
@@ -42,7 +48,7 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
       <StyledTitleMedium sx={{ mb: theme.spacing(1) }}>
         {t('elementsWithinSubscale')}
       </StyledTitleMedium>
-      <StyledFlexTopStart sx={{ mb: theme.spacing(4.4), gap: theme.spacing(2) }}>
+      <StyledWrapper>
         <TransferListController
           name={`${name}.items`}
           items={items}
@@ -54,9 +60,8 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
           columns={notUsedElementsTableColumns}
           data={notUsedElements}
           noDataPlaceholder={t('noElementsYet')}
-          styles={{ width: '100%' }}
         />
-      </StyledFlexTopStart>
+      </StyledWrapper>
     </StyledFlexColumn>
   );
 };

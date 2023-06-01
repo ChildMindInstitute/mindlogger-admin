@@ -8,57 +8,65 @@ import {
   StyledBodyMedium,
   StyledLabelLarge,
   StyledFlexTopCenter,
-} from 'shared/styles/styledComponents';
+} from 'shared/styles';
+import { RespondentDetail } from 'redux/modules';
 
-import { RespondentsActions, ChosenAppletData } from './Respondents.types';
+import { RespondentsActions, ChosenAppletData, FilteredApplets } from './Respondents.types';
 
-export const getActions = ({
-  scheduleSetupAction,
-  viewDataAction,
-  removeAccessAction,
-  userDataExportAction,
-  editRespondent,
-}: RespondentsActions) => [
+export const getActions = (
+  {
+    scheduleSetupAction,
+    viewDataAction,
+    removeAccessAction,
+    userDataExportAction,
+    editRespondent,
+  }: RespondentsActions,
+  filteredApplets: FilteredApplets,
+  appletId?: string,
+) => [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
     action: scheduleSetupAction,
     tooltipTitle: t('viewCalendar'),
+    isDisplayed: !!filteredApplets?.scheduling.length,
   },
   {
     icon: <Svg id="data" width={22} height={22} />,
     action: viewDataAction,
     tooltipTitle: t('viewData'),
+    isDisplayed: !!filteredApplets?.viewable.length,
   },
   {
     icon: <Svg id="export" width={18} height={20} />,
     action: userDataExportAction,
     tooltipTitle: t('exportData'),
+    isDisplayed: !!filteredApplets?.viewable.length,
   },
   {
     icon: <Svg id="edit-user" width={21} height={19} />,
     action: editRespondent,
     tooltipTitle: t('editRespondent'),
+    isDisplayed: !!appletId && !!filteredApplets?.editable.length,
   },
   {
     icon: <Svg id="remove-access" />,
     action: removeAccessAction,
     tooltipTitle: t('removeAccess'),
+    isDisplayed: !!filteredApplets?.editable.length,
   },
 ];
 
-export const getChosenAppletData = (respondentAccess: ChosenAppletData, respondentId?: string) => ({
-  ...respondentAccess,
-  respondentId,
-});
-
 export const getAppletsSmallTableRows = (
-  respondentAccesses: ChosenAppletData[] | null,
+  respondentAccesses: RespondentDetail[],
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>,
-  userId?: string,
+  respondentId: string,
+  ownerId: string,
 ) =>
   respondentAccesses?.map((respondentAccess) => {
-    const chosenAppletData = getChosenAppletData(respondentAccess, userId);
-    const { appletName, appletImg, secretUserId, nickname } = chosenAppletData;
+    const choseAppletHandler = () =>
+      setChosenAppletData({ ...respondentAccess, ownerId, respondentId });
+    const { appletDisplayName, appletImg, respondentSecretId, respondentNickname } =
+      respondentAccess;
 
     return {
       appletName: {
@@ -69,21 +77,21 @@ export const getAppletsSmallTableRows = (
             ) : (
               <StyledSmallAppletImgPlaceholder />
             )}
-            <StyledLabelLarge>{appletName}</StyledLabelLarge>
+            <StyledLabelLarge>{appletDisplayName}</StyledLabelLarge>
           </StyledFlexTopCenter>
         ),
-        value: appletName,
-        onClick: () => setChosenAppletData(chosenAppletData),
+        value: appletDisplayName,
+        onClick: choseAppletHandler,
       },
       secretUserId: {
-        content: () => <StyledLabelLarge>{secretUserId}</StyledLabelLarge>,
-        value: secretUserId,
-        onClick: () => setChosenAppletData(chosenAppletData),
+        content: () => <StyledLabelLarge>{respondentSecretId}</StyledLabelLarge>,
+        value: respondentSecretId,
+        onClick: choseAppletHandler,
       },
       nickname: {
-        content: () => <StyledBodyMedium>{nickname}</StyledBodyMedium>,
-        value: nickname,
-        onClick: () => setChosenAppletData(chosenAppletData),
+        content: () => <StyledBodyMedium>{respondentNickname}</StyledBodyMedium>,
+        value: respondentNickname,
+        onClick: choseAppletHandler,
       },
     };
   }) as Row[] | undefined;

@@ -12,6 +12,7 @@ import {
 import { SLIDER_LABEL_MAX_LENGTH } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import { testFunctionForUniqueness } from './BuilderApplet.utils';
+import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -150,6 +151,55 @@ export const SubscaleSchema = () =>
     })
     .required();
 
+export const ConditionSchema = () =>
+  yup.object({
+    itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
+    type: yup.string().required(getIsRequiredValidateMessage('conditionType')),
+    payload: yup.object({}).when('type', (type, schema) => {
+      if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
+        return schema.shape({
+          optionId: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+        });
+
+      return schema;
+    }),
+  });
+
+export const ConditionalLogicSchema = () =>
+  yup.object({
+    match: yup.string().required(getIsRequiredValidateMessage('conditionMatch')),
+    itemKey: yup.string().required(getIsRequiredValidateMessage('conditionTarget')),
+    conditions: yup.array().of(ConditionSchema()),
+  });
+
+export const ScoreSchema = () =>
+  yup
+    .object({
+      name: yup
+        .string()
+        .required(getIsRequiredValidateMessage('scoreName'))
+        .test(
+          'unique-score-name',
+          t('validationMessages.unique', { field: t('scoreName') }) as string,
+          (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
+        ),
+      showMessage: yup.boolean().required(),
+      minScore: yup.number(),
+      maxScore: yup.number(),
+      calculationType: yup.string().required(),
+      printItems: yup.boolean().required(),
+      message: yup.string().when('showMessage', {
+        is: true,
+        then: yup.string().required(getIsRequiredValidateMessage('message')),
+      }),
+      itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
+      itemsPrint: yup.array().when('printItems', {
+        is: true,
+        then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
+      }),
+    })
+    .required();
+
 export const SectionSchema = () =>
   yup
     .object({
@@ -174,7 +224,7 @@ export const SectionSchema = () =>
         is: true,
         then: yup.string().required(getIsRequiredValidateMessage('message')),
       }),
-      items: yup.array().when('printItems', {
+      itemsPrint: yup.array().when('printItems', {
         is: true,
         then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
       }),
@@ -202,7 +252,15 @@ export const ActivitySchema = () =>
     items: yup.array().of(ItemSchema()).min(1),
     isHidden: yup.boolean(),
     subscales: yup.array().of(SubscaleSchema()),
-    sections: yup.array().of(SectionSchema()),
+    conditionalLogic: yup.array().of(ConditionalLogicSchema()),
+    scoresAndReports: yup
+      .object({
+        generateReport: yup.boolean(),
+        showScoreSummary: yup.boolean(),
+        scores: yup.array().of(ScoreSchema()),
+        sections: yup.array().of(SectionSchema()),
+      })
+      .nullable(),
   });
 
 export const ActivityFlowItemSchema = () =>

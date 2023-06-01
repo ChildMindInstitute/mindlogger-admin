@@ -1,17 +1,19 @@
 import { styled, Box, Button } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledFlexWrap, StyledBodyLarge } from 'shared/styles/styledComponents';
+import {
+  theme,
+  variables,
+  StyledFlexWrap,
+  StyledBodyLarge,
+  StyledFlexSpaceBetween,
+} from 'shared/styles';
 
 export const StyledSuccessShared = styled(Box)`
   padding: ${theme.spacing(2.4)};
 `;
 
-export const StyledApplet = styled(Box)`
+export const StyledApplet = styled(StyledFlexSpaceBetween)`
   padding: ${theme.spacing(2.4)};
-  display: flex;
-  justify-content: space-between;
   background-color: ${variables.palette.surface5};
   border-radius: ${variables.borderRadius.lg2};
 `;

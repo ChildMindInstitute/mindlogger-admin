@@ -1,4 +1,6 @@
 import { AppletId } from 'shared/api';
+import { Roles } from 'shared/consts';
+import { RetentionPeriods } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
 export type GetUserData = { token: string };
@@ -147,17 +149,29 @@ export type ImportSchedule = AppletId & {
 
 export type SetAccount = { accountName: string };
 
-type RemoveAccess = {
+export type RemoveAccess = {
   userId: string;
   appletIds: string[];
 };
 
-export type RemoveManagerAccess = RemoveAccess & {
-  role: UserRoles;
+export type EditManagerAccess = {
+  userId: string;
+  ownerId: string;
+  accesses: { appletId: string; roles: Roles[] }[];
 };
 
 export type RemoveRespondentAccess = RemoveAccess & {
   deleteResponses: boolean;
+};
+
+export type EditRespondentAccess = {
+  ownerId: string;
+  respondentId: string;
+  appletId: string;
+  values: {
+    secretUserId: string;
+    nickname: string;
+  };
 };
 
 export type GetUsersData = AppletId & {
@@ -191,7 +205,7 @@ export type AppletNameArgs = AppletId & { appletName: string };
 export type AppletEncryption = AppletId & { encryption: Encryption };
 
 export type UpdatePin = {
-  accessId: string;
+  userId: string;
   ownerId?: string;
 };
 
@@ -216,6 +230,8 @@ export type OwnerId = {
 export type Answers = { id: string; createdDate: string } & RespondentId;
 
 export type Answer = AppletId & { answerId: string };
+
+export type ActivityAnswer = AppletId & { answerId: string } & { activityId: string };
 
 export type AppletUniqueName = {
   name: string;
@@ -242,13 +258,10 @@ export type AppletSubmitDateList = AppletId &
 
 export type EventId = { eventId: string };
 
-export type RespondentAccesses = OwnerId &
-  RespondentId & {
-    search?: string;
-    page?: number;
-    limit?: number;
-    ordering?: string;
-  };
+export type AppletDataRetention = AppletId & {
+  period: number | undefined;
+  retention: RetentionPeriods;
+};
 
 export type GetWorkspaceAppletsParams = {
   params: {
@@ -270,3 +283,5 @@ export type ReportConfig = {
   reportIncludeCaseId: boolean;
   reportEmailBody: string;
 };
+
+export type AppletVersionChanges = AppletId & { version: string };

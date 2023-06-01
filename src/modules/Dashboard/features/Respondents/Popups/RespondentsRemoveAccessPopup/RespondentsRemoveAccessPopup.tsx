@@ -36,8 +36,8 @@ export const RespondentsRemoveAccessPopup = ({
 
   useEffect(() => {
     if (chosenAppletData) {
-      setAppletName(chosenAppletData.appletName || '');
-      setRespondentName(chosenAppletData.secretUserId || '');
+      setAppletName(chosenAppletData?.appletDisplayName || '');
+      setRespondentName(chosenAppletData?.respondentSecretId || '');
       setStep(1);
     }
   }, [chosenAppletData]);
@@ -111,7 +111,9 @@ export const RespondentsRemoveAccessPopup = ({
 
   const removeAccess = async () => {
     const { appletId, respondentId: userId } = chosenAppletData as ChosenAppletData;
-    userId && (await execute({ userId, appletIds: [appletId], deleteResponses: removeData }));
+    userId &&
+      appletId &&
+      (await execute({ userId, appletIds: [appletId], deleteResponses: removeData }));
   };
 
   const screens = getScreens({

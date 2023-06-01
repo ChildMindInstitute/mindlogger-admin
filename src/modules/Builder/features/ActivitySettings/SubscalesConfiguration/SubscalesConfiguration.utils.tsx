@@ -5,9 +5,10 @@ import { StyledTitleSmall, variables } from 'shared/styles';
 
 import i18n from 'i18n';
 import { ActivitySettingsSubscale } from 'shared/state';
-import { ItemFormValues } from 'modules/Builder/pages';
+import { ItemFormValues } from 'modules/Builder/types';
 import { SubscaleTotalScore } from 'shared/consts';
 import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
+import { DataTableColumn } from 'shared/components';
 
 import {
   ItemElement,
@@ -58,7 +59,7 @@ export const getItemElements = (
   const itemsMap = getObjectFromList(items);
   const subscalesMap = getObjectFromList(subscales);
   const subscaleElements = subscales.reduce((acc, subscale) => {
-    if (subscale.id === subscaleId) return acc;
+    if (subscale.id === subscaleId || subscale.items.includes(subscaleId)) return acc;
 
     return [
       ...acc,
@@ -205,10 +206,13 @@ export const notUsedElementsTableColumns = [
   },
 ];
 
-export const allElementsTableColumns = [
+export const allElementsTableColumns: DataTableColumn[] = [
   {
     key: SharedElementColumns.Element,
     label: t('element'),
+    styles: {
+      width: '70%',
+    },
   },
   {
     key: SharedElementColumns.Subscale,

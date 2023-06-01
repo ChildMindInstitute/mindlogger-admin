@@ -20,7 +20,7 @@ export const ActivitySettings = () => {
   const { t } = useTranslation('app');
 
   const navigate = useNavigate();
-  const { activityId, setting } = useParams();
+  const { appletId, activityId, setting } = useParams();
 
   useEffect(() => {
     setActiveSetting(getSetting(setting));
@@ -31,13 +31,17 @@ export const ActivitySettings = () => {
   const handleSetActiveSetting = (setting: ActivitySettingsOptions) => {
     setActiveSetting(setting);
     navigate(
-      generatePath(page.builderAppletActivitySettingsItem, { activityId, setting: setting.path }),
+      generatePath(page.builderAppletActivitySettingsItem, {
+        appletId,
+        activityId,
+        setting: setting.path,
+      }),
     );
   };
 
   const handleClose = () => {
     setActiveSetting(null);
-    navigate(generatePath(page.builderAppletActivitySettings, { activityId }));
+    navigate(generatePath(page.builderAppletActivitySettings, { appletId, activityId }));
   };
 
   const containerTitle = activeSetting ? t(activeSetting.name) : '';

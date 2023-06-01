@@ -31,7 +31,7 @@ export const Drawing = ({ name }: DrawingProps) => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue(drawingExampleName, val)}
+          setValue={(val: string) => setValue(drawingExampleName, val || undefined)}
           getValue={() => drawingExample}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_2MB) })}
         />
@@ -43,7 +43,7 @@ export const Drawing = ({ name }: DrawingProps) => {
       upload: (
         <Uploader
           {...commonUploaderProps}
-          setValue={(val: string) => setValue(drawingBackgroundName, val)}
+          setValue={(val: string) => setValue(drawingBackgroundName, val || undefined)}
           getValue={() => drawingBackground}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_2MB) })}
         />

@@ -16,10 +16,12 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
     isActive,
     hasError,
     isDragging,
+    isSystem,
   }: {
     isActive: boolean;
     hasError: boolean;
     isDragging: boolean;
+    isSystem: boolean;
   }) => `
       cursor: pointer;
       padding: ${theme.spacing(1.2, 1.2, 1.2, 2.2)};
@@ -38,11 +40,19 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       ${isActive && `background-color: ${variables.palette.secondary_container}`};
       ${hasError && `background-color: ${variables.palette.error_container}`};
       ${isDragging && `background-color: ${variables.palette.surface}`};
+      ${
+        isSystem &&
+        `
+        background-color: ${variables.palette.on_surface_variant_alfa8};
+        cursor: default;
+      `
+      };
     
       &:hover {
         ${
           !isActive &&
           !hasError &&
+          !isSystem &&
           `
             background-color: ${variables.palette.surface_variant_alfa8};
         `

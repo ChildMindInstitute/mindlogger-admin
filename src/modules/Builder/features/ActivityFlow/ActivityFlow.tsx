@@ -12,7 +12,7 @@ import { useBreadcrumbs } from 'shared/hooks';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/types';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
 import {
@@ -72,11 +72,17 @@ export const ActivityFlow = () => {
     );
 
   const handleAddActivityFlow = (positionToAdd?: number) => {
-    const flowItems = activities.map((activity) => ({
-      // TODO: discuss with back-end to possibly change keys to ids and handle ids on back-end side
-      key: uuidv4(),
-      activityKey: activity.id || activity.key || '',
-    }));
+    // TODO: remove filtering after connecting Performance Tasks API (BE tasks: 1802, 1804, 1805, 1806)
+    const flowItems = activities.reduce((acc: { key: string; activityKey: string }[], activity) => {
+      if (!activity.isPerformanceTask) {
+        acc.push({
+          key: uuidv4(),
+          activityKey: activity.id || activity.key || '',
+        });
+      }
+
+      return acc;
+    }, []);
     const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
 
     if (positionToAdd) {

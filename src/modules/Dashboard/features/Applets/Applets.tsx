@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
-import { auth, FolderApplet, folders } from 'redux/modules';
-import { ButtonWithMenu, Search, Svg } from 'shared/components';
+import { auth, FolderApplet, folders, workspaces } from 'redux/modules';
+import { ButtonWithMenu, DEFAULT_ROWS_PER_PAGE, Search, Svg } from 'shared/components';
 import { useBreadcrumbs, useTable } from 'shared/hooks';
 
 import { Table } from './Table';
@@ -25,6 +25,7 @@ export const Applets = () => {
     },
   ]);
 
+  const { ownerId } = workspaces.useData() || {};
   const authData = auth.useData();
   const flattenItems = folders.useFlattenFoldersApplets();
   const { getWorkspaceApplets } = folders.thunk;
@@ -71,6 +72,23 @@ export const Applets = () => {
       return t('noApplets');
     }
   };
+
+  useEffect(() => {
+    if (!ownerId) return;
+    const { getFolders, getWorkspaceApplets } = folders.thunk;
+
+    (async () => {
+      await dispatch(getFolders({ ownerId }));
+      dispatch(
+        getWorkspaceApplets({
+          params: {
+            ownerId,
+            limit: DEFAULT_ROWS_PER_PAGE,
+          },
+        }),
+      );
+    })();
+  }, [dispatch, ownerId]);
 
   return (
     <>

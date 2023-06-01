@@ -46,7 +46,7 @@ export const Calendar = () => {
   const [defaultStartDate, setDefaultStartDate] = useState(new Date());
   const [editedEvent, setEditedEvent] = useState<CalendarEvent | null>(null);
 
-  const { eventsToShow = [], allDayEventsSortedByDays = [] } =
+  const { eventsToShow = null, allDayEventsSortedByDays = null } =
     calendarEvents.useVisibleEventsData() || {};
 
   const { components, messages, views, formats } = getCalendarComponents(
@@ -74,7 +74,11 @@ export const Calendar = () => {
 
   const onSelectEvent = (calendarEvent: CalendarEvent) => {
     setEditEventPopupVisible(true);
-    setDefaultStartDate(getDefaultStartDate(calendarEvent.start));
+    setDefaultStartDate(
+      getDefaultStartDate(
+        calendarEvent.alwaysAvailable ? calendarEvent.eventStart : calendarEvent.start,
+      ),
+    );
     setEditedEvent(calendarEvent);
   };
 

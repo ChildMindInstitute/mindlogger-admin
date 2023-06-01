@@ -67,7 +67,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
   const modalProps = {
     open,
     title: t('audioPlayerRecordAudio'),
-    buttonText: url ? t('audioPlayerUpload') : t('cancel'),
+    buttonText: url ? t('upload') : t('cancel'),
     hasSecondBtn: !!url,
     secondBtnText: t('cancel'),
     onClose,

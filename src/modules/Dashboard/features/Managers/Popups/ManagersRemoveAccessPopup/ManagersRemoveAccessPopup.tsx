@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { FolderApplet } from 'redux/modules';
 import { CheckboxController } from 'shared/components/FormComponents';
 import {
   StyledModalWrapper,
@@ -12,90 +11,98 @@ import {
   StyledFlexTopCenter,
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
-} from 'shared/styles/styledComponents';
+  theme,
+  StyledErrorText,
+} from 'shared/styles';
 import { Table, UiType, Modal } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { removeManagerAccess } from 'api';
-import theme from 'shared/styles/theme';
+import { getErrorMessage } from 'shared/utils';
 
 import { buttonTextByStep, getHeadCells } from './ManagersRemoveAccessPopup.const';
-import { RemoveAccessPopupProps, Steps } from './ManagersRemoveAccessPopupProps.types';
+import { RemoveAccessPopupProps, FormValues } from './ManagersRemoveAccessPopupProps.types';
 
 export const ManagersRemoveAccessPopup = ({
   removeAccessPopupVisible,
   onClose,
   user,
+  refetchManagers,
 }: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
-  const { firstName, lastName, email } = user;
-  const applets = [
-    { name: 'testAppletName', id: 'testId' },
-    { name: 'testAppletName2', id: 'testId2' },
-  ] as FolderApplet[];
-  const [buttonText, setButtonText] = useState('removeAccess');
-  const [step, setStep] = useState<Steps>(0);
-  const [selectedApplets, setSelectedApplets] = useState<string[]>([]);
-  const defaultValues = applets.reduce((values, { id }) => ({ ...values, [id]: false }), {}) as {
-    [key: string]: boolean;
-  };
-  const { control, getValues } = useForm({ defaultValues });
+  const { firstName, lastName, email, applets } = user;
 
-  const getAppletName = (id: string) => applets.find((applet) => applet.id === id)?.name || '';
+  const [step, setStep] = useState<number>(0);
+  const incrementStep = () => setStep((prevStep) => prevStep + 1);
+  const decrementStep = () => setStep((prevStep) => prevStep - 1);
 
-  const rows = applets?.map((applet: FolderApplet) => ({
+  const defaultValues = applets.map(({ displayName, id, image }) => ({
+    displayName,
+    id,
+    image,
+    value: false,
+  }));
+
+  const { control, watch } = useForm<FormValues>({
+    defaultValues: { userApplets: defaultValues },
+  });
+
+  const watchedUserApplets = watch('userApplets');
+
+  const selectedApplets = watchedUserApplets.filter((applet) => applet.value);
+
+  const rows = watchedUserApplets?.map(({ displayName, image, id }, index) => ({
     name: {
       content: () => (
         <StyledFlexTopCenter>
-          {applet.image ? (
-            <StyledSmallAppletImg src={applet.image} alt="Applet image" />
+          {image ? (
+            <StyledSmallAppletImg src={image} alt="Applet image" />
           ) : (
             <StyledSmallAppletImgPlaceholder />
           )}
-          <StyledLabelLarge>{applet.name}</StyledLabelLarge>
+          <StyledLabelLarge>{displayName}</StyledLabelLarge>
         </StyledFlexTopCenter>
       ),
-      value: applet.name || '',
+      value: displayName || '',
     },
     actions: {
-      content: () => <CheckboxController control={control} name={applet.id} label={<></>} />,
-      value: applet.id,
+      content: () => (
+        <CheckboxController
+          key={id}
+          control={control}
+          name={`userApplets.${index}.value`}
+          label={<></>}
+        />
+      ),
+      value: id,
       width: '200',
     },
   }));
 
-  const { execute } = useAsync(removeManagerAccess);
+  const { execute, error } = useAsync(removeManagerAccess, () => {
+    refetchManagers();
+    incrementStep();
+  });
 
   const onSubmit = () => {
     switch (step) {
       case 0:
-        setSelectedApplets(
-          Object.entries(getValues()).reduce(
-            (values, ids) => [...values, ...(ids[1] ? [ids[0]] : [])] as string[],
-            [] as string[],
-          ),
-        );
-        break;
+        return incrementStep();
       case 1:
-        execute({ appletIds: selectedApplets, userId: user.id, role: 'reviewer' }); // TODO: remove 'reviewer' when requirements will be ready
+        execute({
+          appletIds: selectedApplets.map((item) => item.id),
+          userId: user.id,
+        });
         break;
-      case 2:
+      default:
         onClose();
 
         return;
     }
-
-    setStep((prevState) => ++prevState as Steps);
   };
 
-  useEffect(() => setButtonText(buttonTextByStep[step]), [step]);
-
-  const listOfSelectedApplets = (
-    <>
-      {selectedApplets.map((id) => (
-        <StyledTitleBoldMedium key={id}>- {getAppletName(id)} </StyledTitleBoldMedium>
-      ))}
-    </>
-  );
+  const listOfSelectedApplets = selectedApplets?.map((applet) => (
+    <StyledTitleBoldMedium key={applet.id}>- {applet.displayName} </StyledTitleBoldMedium>
+  ));
 
   const getFirstScreen = () => (
     <form noValidate>
@@ -110,7 +117,7 @@ export const ManagersRemoveAccessPopup = ({
   );
 
   const getSecondScreen = () => {
-    const appletName = getAppletName(selectedApplets[0]);
+    const { displayName } = selectedApplets[0];
 
     return (
       <StyledBodyLarge>
@@ -123,7 +130,7 @@ export const ManagersRemoveAccessPopup = ({
           </strong>
           the
           <strong>
-            <>{{ appletName }}</>
+            <>{{ displayName }}</>
           </strong>
           ?
         </Trans>
@@ -149,7 +156,7 @@ export const ManagersRemoveAccessPopup = ({
   );
 
   const getThirdScreen = () => {
-    const appletName = getAppletName(selectedApplets[0]);
+    const { displayName } = selectedApplets[0];
 
     return (
       <StyledBodyLarge>
@@ -162,7 +169,7 @@ export const ManagersRemoveAccessPopup = ({
           </strong>
           to the
           <strong>
-            <>{{ appletName }}</>
+            <>{{ displayName }}</>
           </strong>
           has been removed successfully.
         </Trans>
@@ -199,10 +206,12 @@ export const ManagersRemoveAccessPopup = ({
     </>
   );
 
+  const isOneSelected = selectedApplets.length === 1;
+
   const screenByStep = [
     getFirstScreen(),
-    selectedApplets.length === 1 ? getSecondScreen() : getSecondMultipleScreen(),
-    selectedApplets.length === 1 ? getThirdScreen() : getThirdMultipleScreen(),
+    isOneSelected ? getSecondScreen() : getSecondMultipleScreen(),
+    isOneSelected ? getThirdScreen() : getThirdMultipleScreen(),
   ];
 
   return (
@@ -213,10 +222,16 @@ export const ManagersRemoveAccessPopup = ({
       title={t('removeAccess')}
       hasSecondBtn={step === 1}
       secondBtnText={t('back')}
-      onSecondBtnSubmit={() => setStep((prevState) => --prevState as Steps)}
-      buttonText={t(buttonText)}
+      onSecondBtnSubmit={decrementStep}
+      buttonText={t(buttonTextByStep[step as keyof typeof buttonTextByStep])}
+      disabledSubmit={!selectedApplets.length}
     >
-      <StyledModalWrapper>{screenByStep[step]}</StyledModalWrapper>
+      <StyledModalWrapper>
+        {screenByStep[step]}
+        {error && step === 1 && (
+          <StyledErrorText sx={{ mt: theme.spacing(1) }}>{getErrorMessage(error)}</StyledErrorText>
+        )}
+      </StyledModalWrapper>
     </Modal>
   );
 };

@@ -1,14 +1,22 @@
 import { FC } from 'react';
-import { SxProps } from '@mui/material';
+import { DefaultTFuncReturn } from 'i18next';
 
 export type SharedToggleItemProps = {
   open?: boolean;
 };
+
+export enum ToggleContainerUiType {
+  Item,
+  PerformanceTask,
+}
+
 export type ToggleItemProps = {
-  title?: string;
-  HeaderContent: FC<SharedToggleItemProps & any>;
+  title?: string | JSX.Element | DefaultTFuncReturn;
+  HeaderContent?: FC<SharedToggleItemProps & any>;
   Content: FC<SharedToggleItemProps & any>;
   headerContentProps?: Record<string, unknown>;
   contentProps?: Record<string, unknown>;
-  headerStyles?: SxProps;
+  uiType?: ToggleContainerUiType;
+  isOpenByDefault?: boolean;
+  tooltip?: string;
 };

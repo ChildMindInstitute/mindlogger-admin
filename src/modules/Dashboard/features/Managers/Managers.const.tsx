@@ -9,6 +9,12 @@ export const getHeadCells = (id?: string): HeadCell[] => {
 
   return [
     {
+      id: 'pin',
+      label: '',
+      enableSort: true,
+      width: '4.8rem',
+    },
+    {
       id: 'firstName',
       label: t('firstName'),
       enableSort: true,
@@ -39,24 +45,19 @@ export const getHeadCells = (id?: string): HeadCell[] => {
   ];
 };
 
-export const getActions = (
-  id: string | undefined,
-  { removeAccessAction, editAccessAction }: ManagersActions,
-) => {
+export const getActions = ({ removeAccessAction, editAccessAction }: ManagersActions) => {
   const { t } = i18n;
 
-  return id
-    ? []
-    : [
-        {
-          icon: <Svg id="remove-access" />,
-          action: removeAccessAction,
-          tooltipTitle: t('removeAccess'),
-        },
-        {
-          icon: <Svg id="edit-user" />,
-          action: editAccessAction,
-          tooltipTitle: t('editAccess'),
-        },
-      ];
+  return [
+    {
+      icon: <Svg id="remove-access" />,
+      action: removeAccessAction,
+      tooltipTitle: t('removeAccess'),
+    },
+    {
+      icon: <Svg id="edit-user" />,
+      action: editAccessAction,
+      tooltipTitle: t('editAccess'),
+    },
+  ];
 };
