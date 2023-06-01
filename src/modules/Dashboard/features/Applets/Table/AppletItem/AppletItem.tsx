@@ -58,7 +58,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   };
 
   const checkAppletEncryption = (callback: () => void) =>
-    hasOwnerRole(item) && !item.encryption ? setPasswordPopupVisible(true) : callback();
+    hasOwnerRole(workspaceRoles?.data?.[item.id][0]) && !item.encryption
+      ? setPasswordPopupVisible(true)
+      : callback();
 
   const actions = {
     removeFromFolder: () =>

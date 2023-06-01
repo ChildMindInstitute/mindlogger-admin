@@ -17,7 +17,7 @@ import { isManagerOrOwner } from 'shared/utils';
 import { GetSettings } from './DashboardAppletSettings.types';
 
 export const getSettings = ({ isPublished, roles }: GetSettings) => [
-  ...(!roles?.includes(Roles.Editor)
+  ...(isManagerOrOwner(roles?.[0])
     ? [
         {
           label: 'usersAndData',
