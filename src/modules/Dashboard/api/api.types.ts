@@ -174,11 +174,6 @@ export type EditRespondentAccess = {
   };
 };
 
-export type GetUsersData = AppletId & {
-  pageIndex?: string;
-  users?: string;
-};
-
 export type AppletInvitationData = AppletId & {
   url: string;
   options: {
@@ -276,3 +271,5 @@ export type GetWorkspaceAppletsParams = {
 };
 
 export type AppletVersionChanges = AppletId & { version: string };
+
+export type ExportData = AppletId & { respondentId?: string };

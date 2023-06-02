@@ -132,7 +132,7 @@ export const Managers = () => {
   });
 
   const renderEmptyComponent = () => {
-    if (rows && !rows?.length) {
+    if (rows && !rows.length) {
       return appletId ? t('noManagersForApplet') : t('noManagers');
     }
 

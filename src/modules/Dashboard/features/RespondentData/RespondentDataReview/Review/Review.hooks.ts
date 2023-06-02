@@ -8,12 +8,9 @@ import {
   getParsedEncryptionFromServer,
 } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import {
-  AnswerDecrypted,
-  AnswersApiResponse,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Review/Review.types';
 
 import { ActivityItemAnswer } from '../Feedback/FeedbackReviewed/FeedbackReviewed.types';
+import { AnswerDecrypted, AnswersApiResponse } from './Review.types';
 
 export const useDecryptedReviews = () => {
   const { appletId = '' } = useParams();
