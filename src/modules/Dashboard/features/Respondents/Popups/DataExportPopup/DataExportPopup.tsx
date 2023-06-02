@@ -9,7 +9,7 @@ import {
   StyledLinearProgress,
   theme,
 } from 'shared/styles';
-import { exportDataApi } from 'api';
+import { getExportDataApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 
@@ -28,7 +28,7 @@ export const DataExportPopup = ({
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting;
 
-  const { execute, error } = useAsync(exportDataApi, (res) => {
+  const { execute, error } = useAsync(getExportDataApi, (res) => {
     if (res?.data) {
       setDataIsExporting(false);
       handlePopupClose();
