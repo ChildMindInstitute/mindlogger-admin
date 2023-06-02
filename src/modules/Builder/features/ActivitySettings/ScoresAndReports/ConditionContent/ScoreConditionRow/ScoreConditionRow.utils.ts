@@ -1,4 +1,4 @@
-import { ItemFormValues } from 'modules/Builder/pages';
+import { ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType, ConditionType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import {

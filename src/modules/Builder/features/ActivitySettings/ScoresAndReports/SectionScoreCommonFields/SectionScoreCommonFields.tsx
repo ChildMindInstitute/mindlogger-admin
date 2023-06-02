@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
@@ -15,15 +16,41 @@ import { columns } from './SectionScoreCommonFields.const';
 export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, watch } = useFormContext();
+  const { control, watch, register, unregister, setValue } = useFormContext();
   const { activity } = useCurrentActivity();
 
   const showMessage: boolean = watch(`${name}.showMessage`);
   const printItems: boolean = watch(`${name}.printItems`);
+  const messageName = `${name}.message`;
+  const itemsPrintName = `${name}.itemsPrint`;
 
   const items = activity?.items
     .filter(checkOnItemTypeAndScore)
     .map(({ id, name, question }: Item) => ({ id, name, question }));
+
+  useEffect(() => {
+    if (showMessage) {
+      register(messageName);
+      setValue(messageName, '');
+
+      return;
+    }
+
+    unregister(messageName);
+    setValue(messageName, undefined);
+  }, [showMessage]);
+
+  useEffect(() => {
+    if (printItems) {
+      register(itemsPrintName);
+      setValue(itemsPrintName, []);
+
+      return;
+    }
+
+    unregister(itemsPrintName);
+    setValue(itemsPrintName, undefined);
+  }, [printItems]);
 
   return (
     <>
@@ -34,7 +61,7 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
         tooltipText={t('showMessageTooltip')}
       />
       {showMessage && (
-        <StyledEditor uiType={EditorUiType.Secondary} name={`${name}.message`} control={control} />
+        <StyledEditor uiType={EditorUiType.Secondary} name={messageName} control={control} />
       )}
       <Switch
         name={`${name}.printItems`}
@@ -45,7 +72,7 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
       {printItems && (
         <StyledFlexTopStart sx={{ mb: theme.spacing(2.4) }}>
           <TransferListController
-            name={`${name}.itemsPrint`}
+            name={itemsPrintName}
             items={items as unknown as DataTableItem[]}
             columns={columns}
             hasSearch={false}

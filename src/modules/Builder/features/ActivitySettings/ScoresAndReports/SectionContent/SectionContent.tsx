@@ -1,4 +1,5 @@
-import { FieldError, useFieldArray, useFormContext } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { FieldError, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -13,10 +14,12 @@ import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
 import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
 import { ScoreConditionRowType } from '../ConditionContent/ConditionContent.types';
+import { defaultConditionalValue } from './SectionContent.const';
 
 export const SectionContent = ({ name }: SectionContentProps) => {
   const { t } = useTranslation('app');
-  const { control, getFieldState, watch } = useFormContext();
+  const { control, getFieldState, watch, register, unregister, setValue } = useFormContext();
+  const [isContainConditional, setIsContainConditional] = useState(false);
 
   const hasPrintItemsError = getFieldState(`${name}.printItems`).error as unknown as Record<
     string,
@@ -26,29 +29,32 @@ export const SectionContent = ({ name }: SectionContentProps) => {
   const conditionalLogicName = `${name}.conditionalLogic`;
   const conditionalLogic = watch(conditionalLogicName);
 
-  const { append: appendConditional, remove: removeConditional } = useFieldArray({
-    control,
-    name: conditionalLogicName,
-  });
+  useEffect(() => {
+    if (isContainConditional) {
+      register(conditionalLogicName);
+      setValue(conditionalLogicName, defaultConditionalValue);
 
-  const onRemoveConditional = () => {
-    removeConditional(0);
-  };
+      return;
+    }
+
+    unregister(conditionalLogicName);
+    setValue(conditionalLogicName, undefined);
+  }, [isContainConditional]);
 
   return (
     <StyledFlexColumn>
       <InputController control={control} name={`${name}.name`} label={t('sectionName')} />
       <Box sx={{ mt: theme.spacing(2.4) }}>
-        {conditionalLogic?.length ? (
+        {conditionalLogic ? (
           <ToggleItemContainer
             HeaderContent={SectionScoreHeader}
             Content={ConditionContent}
             contentProps={{
-              name: `${conditionalLogicName}.0`,
+              name: conditionalLogicName,
               type: ScoreConditionRowType.Section,
             }}
             headerContentProps={{
-              onRemove: onRemoveConditional,
+              onRemove: () => setIsContainConditional(false),
               title: t('conditionalLogic'),
             }}
             uiType={ToggleContainerUiType.Score}
@@ -57,7 +63,7 @@ export const SectionContent = ({ name }: SectionContentProps) => {
           <StyledButton
             sx={{ mt: 0 }}
             startIcon={<Svg id="add" width="20" height="20" />}
-            onClick={() => appendConditional({})}
+            onClick={() => setIsContainConditional(true)}
           >
             {t('addConditinalLogic')}
           </StyledButton>

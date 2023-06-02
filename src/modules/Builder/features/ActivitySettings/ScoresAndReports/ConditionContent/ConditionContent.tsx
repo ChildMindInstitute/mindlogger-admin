@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
+import { Condition } from 'shared/state';
 
 import { ScoreConditionRow } from './ScoreConditionRow';
 import { ConditionContentProps } from './ConditionContent.types';
@@ -10,7 +11,7 @@ import { StyledButton } from '../ScoresAndReports.styles';
 
 export const ConditionContent = ({ name, type }: ConditionContentProps) => {
   const { t } = useTranslation();
-  const conditionsName = `${name}.conditionalLogic`;
+  const conditionsName = `${name}.conditions`;
 
   const { control, watch } = useFormContext();
   const { append: appendCondition, remove: removeCondition } = useFieldArray({
@@ -29,7 +30,7 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
 
   return (
     <>
-      {conditions?.map((condition: any, index: number) => (
+      {conditions?.map((condition: Condition, index: number) => (
         <ScoreConditionRow
           key={`score-condition-${condition.key}`}
           name={name}

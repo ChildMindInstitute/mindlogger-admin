@@ -18,22 +18,18 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components';
-import { Item } from 'shared/state';
+import { Condition, Item } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
 
-import {
-  calculationTypes,
-  getScoreConditionalDefault,
-  scoreItemsColumns,
-  selectedItemsColumns,
-} from './ScoreContent.const';
+import { calculationTypes, scoreItemsColumns, selectedItemsColumns } from './ScoreContent.const';
 import { StyledDuplicateButton } from './ScoreContent.styles';
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { ScoreContentProps } from './ScoreContent.types';
 import {
+  getDefaultConditionalValue,
   getScoreId,
   getScoreRange,
   getScoreRangeLabel,
@@ -69,7 +65,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
   });
 
   const handleAddScoreConditional = () => {
-    appendScoreConditional({});
+    appendScoreConditional(getDefaultConditionalValue(scoreId));
   };
 
   useEffect(() => {
@@ -144,7 +140,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
           <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>
             {t('scoreConditions')}
           </StyledTitleMedium>
-          {scoreConditionals?.map((conditional: any, index: number) => {
+          {scoreConditionals?.map((conditional: Condition, index: number) => {
             const conditionalName = `${scoreConditionalsName}.${index}`;
             const title = t('scoreConditional', {
               index: index + 1,
@@ -155,7 +151,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
                 key={`data-score-conditional-${getEntityKey(conditional) || index}`}
                 HeaderContent={SectionScoreHeader}
                 Content={ScoreCondition}
-                contentProps={{ name: conditionalName }}
+                contentProps={{ name: conditionalName, scoreId }}
                 headerContentProps={{
                   onRemove: () => {
                     removeScoreConditional(index);

@@ -9,6 +9,7 @@ import {
   ItemResponseType,
   SubscaleTotalScore,
   ConditionType,
+  ScoreConditionType,
   ConditionalLogicMatch,
   CalculationType,
 } from 'shared/consts';
@@ -317,6 +318,13 @@ export type BaseCondition = {
   type: ConditionType | '';
 };
 
+export type ScoreCondition = BaseCondition & {
+  type: ScoreConditionType;
+  payload: {
+    value: boolean;
+  };
+};
+
 export type OptionCondition = BaseCondition & {
   payload: {
     optionId: string;
@@ -425,6 +433,18 @@ type Theme = {
   public: boolean;
 };
 
+export type ScoreConditionalLogic = {
+  name: string;
+  id: string;
+  flagScore: boolean;
+  showMessage: boolean;
+  message?: string;
+  printItems: boolean;
+  itemsPrint?: string[];
+  match: ConditionalLogicMatch;
+  conditions: Condition[];
+};
+
 export type ActivitySettingsScore = {
   id: string;
   name: string;
@@ -436,6 +456,20 @@ export type ActivitySettingsScore = {
   message?: string;
   minScore: number;
   maxScore: number;
+  conditionalLogic?: ScoreConditionalLogic[];
+};
+
+export type SectionCondition = Condition | ScoreCondition;
+
+export type SectionConditionalLogic = {
+  name: string;
+  id: string;
+  showMessage: boolean;
+  message?: string;
+  printItems: boolean;
+  itemsPrint?: string[];
+  match: ConditionalLogicMatch;
+  conditions: SectionCondition[];
 };
 
 export type ActivitySettingsSection = {
@@ -445,6 +479,7 @@ export type ActivitySettingsSection = {
   printItems: boolean;
   itemsPrint?: string[];
   message?: string;
+  conditionalLogic?: SectionConditionalLogic;
 };
 
 export type ActivitySettingsSubscale = {
