@@ -38,6 +38,7 @@ export const ScoresAndReports = () => {
 
   const sections: ActivitySettingsSection[] = watch(sectionsName);
   const scores: ActivitySettingsScore[] = watch(scoresName);
+  const isCheckboxesEnabled = scores?.length || sections?.length;
 
   const handleAddScore = () => {
     appendScore(getScoreDefaults());
@@ -50,11 +51,13 @@ export const ScoresAndReports = () => {
   return (
     <>
       <CheckboxController
+        disabled={!isCheckboxesEnabled}
         control={control}
         name={generateReportName}
         label={<StyledBodyLarge>{t('generateReport')}</StyledBodyLarge>}
       />
       <CheckboxController
+        disabled={!isCheckboxesEnabled}
         control={control}
         name={showScoreSummaryName}
         label={

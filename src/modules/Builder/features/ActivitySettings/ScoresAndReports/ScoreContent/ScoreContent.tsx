@@ -62,10 +62,8 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
     isScoreIdVariable && setIsChangeScoreIdPopupVisible(true);
   }, [isScoreIdVariable, scoreName]);
 
-  useEffect(() => setValue(`${name}.id`, scoreId), [scoreName]);
-
   useEffect(() => {
-    const selectedItems = items.filter((item) => itemsScore.includes(item.id as string));
+    const selectedItems = items.filter((item) => itemsScore.includes(item.id || item.key || ''));
     const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
     setScoreRangeLabel(getScoreRangeLabel(minScore, maxScore));
     setValue(`${name}.minScore`, minScore);
@@ -85,8 +83,10 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
       <StyledFlexTopStart>
         <Box sx={{ mr: theme.spacing(4.8), width: '50%' }}>
           <InputController
+            control={control}
             name={`${name}.name`}
             label={t('scoreName')}
+            onBlur={() => setValue(`${name}.id`, scoreId)}
             sx={{ mb: theme.spacing(4.8) }}
           />
           <SelectController
