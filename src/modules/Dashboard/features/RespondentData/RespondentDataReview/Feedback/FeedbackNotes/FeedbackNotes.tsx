@@ -44,7 +44,8 @@ export const FeedbackNotes = ({ activity }: { activity: Activity }) => {
   );
 
   const updateListOfNotes = () => {
-    appletId && answerId && getAnswersNotes({ appletId, answerId, activityId, params: {} });
+    if (!appletId || !answerId) return;
+    getAnswersNotes({ appletId, answerId, activityId, params: {} });
   };
 
   const { execute: createAnswerNote } = useAsync(createAnswerNoteApi, () => updateListOfNotes());
