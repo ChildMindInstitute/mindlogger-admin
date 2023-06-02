@@ -37,7 +37,7 @@ export const SectionContent = ({ name }: SectionContentProps) => {
 
   return (
     <StyledFlexColumn>
-      <InputController name={`${name}.name`} label={t('sectionName')} />
+      <InputController control={control} name={`${name}.name`} label={t('sectionName')} />
       <Box sx={{ mt: theme.spacing(2.4) }}>
         {conditionalLogic?.length ? (
           <ToggleItemContainer
