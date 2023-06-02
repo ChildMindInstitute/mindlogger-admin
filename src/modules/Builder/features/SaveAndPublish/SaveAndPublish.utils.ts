@@ -51,6 +51,10 @@ export const removeActivityExtraFields = () => ({
   totalScoresTableData: undefined, // TODO: remove when M2-1738 will be ready
 });
 
+export const removeActivityFlowExtraFields = () => ({
+  createdAt: undefined,
+});
+
 export const removeItemExtraFields = () => ({
   key: undefined,
   settings: undefined,
