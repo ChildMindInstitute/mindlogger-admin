@@ -9,8 +9,6 @@ import {
   getAppletLibraryUrlApi,
   updateAppletSearchTermsApi,
 } from 'api';
-import { folders } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
 import { Spinner } from 'shared/components';
 import {
   InputController,
@@ -34,7 +32,6 @@ export const ShareApplet = ({
   showSuccess = true,
 }: ShareAppletProps) => {
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
 
   const [appletShared, setAppletShared] = useState(false);
   const [showNameTakenError, setShowNameTakenError] = useState(false);
@@ -45,7 +42,7 @@ export const ShareApplet = ({
 
   const { handleSubmit, control, watch, setValue, getValues } = useForm<ShareAppletData>({
     resolver: yupResolver(ShareAppletSchema()),
-    defaultValues: { ...shareAppletDefaultValues, appletName: applet?.name },
+    defaultValues: { ...shareAppletDefaultValues, appletName: applet?.displayName },
   });
 
   const checked = watch('checked');
@@ -80,14 +77,6 @@ export const ShareApplet = ({
           setIsLoading(false);
           onAppletShared && onAppletShared({ keywords, libraryUrl: libraryUrlResult?.data });
           setAppletShared(true);
-
-          dispatch(
-            folders.actions.updateAppletData({
-              appletId: applet.id || '',
-              published: true,
-              appletName: getValues().appletName,
-            }),
-          );
         }
       } catch (e) {
         setErrorMessage(getErrorMessage(e));
@@ -138,7 +127,7 @@ export const ShareApplet = ({
             control={control}
             label={t('appletName')}
             required
-            value={applet?.name}
+            value={applet?.displayName}
           />
           {showNameTakenError && (
             <StyledErrorText
@@ -177,8 +166,8 @@ export const ShareApplet = ({
   if (appletShared && showSuccess && applet) {
     modalComponent = (
       <SuccessShared
-        title={getValues().appletName || applet.name || ''}
-        text={applet.description || ''}
+        title={getValues().appletName || applet.displayName || ''}
+        text={applet?.description as string}
         keywords={keywords}
         // TODO: Implement applet activities quantity
         // activitiesQuantity={8}

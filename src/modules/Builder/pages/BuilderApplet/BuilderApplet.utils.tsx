@@ -36,7 +36,7 @@ export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/
 
 export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
-  name: '',
+  name: t('newItem'),
   question: '',
   config: {},
   isHidden: false,

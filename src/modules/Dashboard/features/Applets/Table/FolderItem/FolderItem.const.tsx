@@ -1,23 +1,23 @@
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components';
-import { FolderApplet } from 'redux/modules';
+import { Folder } from 'api';
 
 export const getActions = (
-  folder: FolderApplet,
-  onRenameFolder: (folder: FolderApplet) => void,
-  onDeleteFolder: (folder: FolderApplet) => void,
+  folder: Folder,
+  onRenameFolder: (folder: Folder) => void,
+  onDeleteFolder: (folder: Folder) => void,
 ) => [
   {
     disabled: !!folder?.isRenaming,
     icon: <Svg id="edit" />,
-    action: (item: FolderApplet) => onRenameFolder(item),
+    action: (item: Folder) => onRenameFolder(item),
     tooltipTitle: t('edit'),
   },
   {
-    disabled: !!folder?.items?.length,
+    disabled: !!folder.appletCount,
     icon: <Svg id="trash" />,
-    action: (item: FolderApplet) => onDeleteFolder(item),
-    tooltipTitle: t(folder?.items?.length ? 'deleteFolderWarning' : 'delete'),
+    action: (item: Folder) => onDeleteFolder(item),
+    tooltipTitle: t(folder.appletCount ? 'deleteFolderWarning' : 'delete'),
   },
 ];

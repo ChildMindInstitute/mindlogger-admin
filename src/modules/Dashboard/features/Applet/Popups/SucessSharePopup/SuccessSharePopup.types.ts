@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { FolderApplet } from 'redux/modules';
+import { SingleApplet } from 'shared/state';
 
 export type SuccessSharePopupProps = {
-  applet: FolderApplet;
+  applet: SingleApplet;
   keywords: string[];
   libraryUrl: string;
   sharePopupVisible: boolean;

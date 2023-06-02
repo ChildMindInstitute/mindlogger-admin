@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { account, folders } from 'modules/Dashboard/state';
+import { account } from 'modules/Dashboard/state';
 import { useTimeAgo } from 'shared/hooks';
 import { getAppletData, getDateInUserTimezone } from 'shared/utils';
 import {
@@ -27,7 +27,6 @@ import { NotificationsProps } from './Notifications.types';
 export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const accData = account.useData();
-  const appletsFoldersData = folders.useFlattenFoldersApplets();
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
     Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null
@@ -41,7 +40,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
       const accAlerts = accData.account.alerts.list.map((alert) => {
         const { alerts } = accData.account;
         const { firstName, lastName = '', nickName } = alerts.profiles[alert.profileId];
-        const { name, image, encryption } = getAppletData(appletsFoldersData, alert.appletId);
+        const { name, image, encryption } = getAppletData([], alert.appletId);
 
         return {
           accountId: accData.account.accountId,
@@ -57,9 +56,9 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
         };
       });
 
-      setNotifications(accAlerts);
+      // setNotifications(accAlerts);
     }
-  }, [accData, appletsFoldersData]);
+  }, [accData]);
 
   return (
     <Box>

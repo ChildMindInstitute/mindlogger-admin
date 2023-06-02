@@ -1,4 +1,5 @@
 import { AppletId } from 'shared/api';
+import { SingleApplet } from 'shared/state';
 import { Roles } from 'shared/consts';
 import { RetentionPeriods } from 'shared/types';
 import { Encryption } from 'shared/utils';
@@ -208,7 +209,11 @@ export type FolderName = { name: string };
 
 export type UpdateFolder = OwnerId & FolderName & FolderId;
 
-export type TogglePin = OwnerId & { applet: { parentId: string; id: string }; isPinned: boolean };
+export type TogglePin = OwnerId & {
+  appletId: string;
+  folderId: string;
+  isPinned: boolean;
+};
 
 export type UpdateAlertStatus = { alertId: string };
 
@@ -224,7 +229,7 @@ export type OwnerId = {
 
 export type Answers = { id: string; createdDate: string } & RespondentId;
 
-export type Answer = AppletId & { answerId: string };
+export type Answer = AppletId & { answerId: string; activityId: string };
 
 export type ActivityAnswer = AppletId & { answerId: string } & { activityId: string };
 
@@ -273,3 +278,23 @@ export type GetWorkspaceAppletsParams = {
 export type AppletVersionChanges = AppletId & { version: string };
 
 export type ExportData = AppletId & { respondentId?: string };
+
+export type Folder = {
+  appletCount: number;
+  id: string;
+  name: string;
+  isFolder?: boolean;
+  isNew?: boolean;
+  isRenaming?: boolean;
+};
+
+export type Applet = SingleApplet & {
+  id: string;
+  isFolder?: boolean;
+  parentId?: string;
+};
+
+export type WorkspaceFoldersAppletsResponse<T> = {
+  count: number;
+  result: T[];
+};

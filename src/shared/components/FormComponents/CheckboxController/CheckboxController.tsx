@@ -23,7 +23,7 @@ export const CheckboxController = <T extends FieldValues>({
   return (
     <FormControlLabel
       disabled={disabled}
-      sx={{ opacity: disabled ? 0.8 : 1 }}
+      sx={{ opacity: disabled ? 0.38 : 1 }}
       label={label}
       control={
         <Controller
