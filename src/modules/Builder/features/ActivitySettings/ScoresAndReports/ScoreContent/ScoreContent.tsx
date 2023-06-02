@@ -23,6 +23,7 @@ import { Item } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { EditorUiType } from 'shared/components/FormComponents/EditorController/EditorController.types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { getEntityKey } from 'shared/utils';
 
 import {
   calculationTypes,
@@ -63,7 +64,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
   }, [isScoreIdVariable, scoreName]);
 
   useEffect(() => {
-    const selectedItems = items.filter((item) => itemsScore.includes(item.id || item.key || ''));
+    const selectedItems = items.filter((item) => itemsScore.includes(getEntityKey(item)));
     const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
     setScoreRangeLabel(getScoreRangeLabel(minScore, maxScore));
     setValue(`${name}.minScore`, minScore);
