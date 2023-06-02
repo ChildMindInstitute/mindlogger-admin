@@ -2,7 +2,7 @@ import { useState, DragEvent, useContext } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { TableCell, TableRow } from '@mui/material';
 
-import { removeAppletFromFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
+import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
 import { useAsync, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { popups, workspaces } from 'redux/modules';
@@ -29,7 +29,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
   const { fetchData } = useContext(AppletsContext) as AppletContextType;
 
-  const { execute: removeAppletFromFolder } = useAsync(removeAppletFromFolderApi);
+  const { execute: setFolder } = useAsync(setFolderApi);
   const { execute: togglePin } = useAsync(togglePinApi);
   const { execute: setAppletEncryption } = useAsync(setAppletEncryptionApi);
 
@@ -78,7 +78,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
   const actions = {
     removeFromFolder: async () => {
-      await removeAppletFromFolder({ appletId: item.id });
+      await setFolder({ appletId: item.id });
       await fetchData();
     },
     viewUsers: () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS)),
@@ -88,7 +88,6 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         dispatch(
           popups.actions.setPopupVisible({
             applet: item,
-            encryption: item.encryption,
             key: 'deletePopupVisible',
             value: true,
           }),
@@ -99,7 +98,6 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         dispatch(
           popups.actions.setPopupVisible({
             applet: item,
-            encryption: item.encryption,
             key: 'duplicatePopupsVisible',
             value: true,
           }),
@@ -110,7 +108,6 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         dispatch(
           popups.actions.setPopupVisible({
             applet: item,
-            encryption: item.encryption,
             key: 'transferOwnershipPopupVisible',
             value: true,
           }),

@@ -24,7 +24,6 @@ export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void 
     dispatch(
       popups.actions.setPopupVisible({
         applet: undefined,
-        encryption: undefined,
         key: 'deletePopupVisible',
         value: false,
       }),

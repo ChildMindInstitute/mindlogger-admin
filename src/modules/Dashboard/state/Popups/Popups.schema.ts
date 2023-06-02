@@ -15,7 +15,6 @@ export type PopupsPayload = {
   key: PopupsVisibility;
   value: boolean;
   applet?: SingleApplet;
-  encryption?: Encryption | null;
   popupProps?: PopupProps;
 };
 

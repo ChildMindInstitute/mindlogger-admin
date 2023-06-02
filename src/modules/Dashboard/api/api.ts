@@ -297,24 +297,14 @@ export const deleteFolderApi = ({ ownerId, folderId }: OwnerId & FolderId, signa
     signal,
   });
 
-export const addAppletToFolderApi = (
-  { folderId, appletId }: FolderId & AppletId,
+export const setFolderApi = (
+  { folderId, appletId }: Partial<FolderId> & AppletId,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
     '/applets/set_folder',
     {
       folderId,
-      appletId,
-    },
-    { signal },
-  );
-
-export const removeAppletFromFolderApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.post(
-    '/applets/set_folder',
-    {
-      folderId: null,
       appletId,
     },
     { signal },

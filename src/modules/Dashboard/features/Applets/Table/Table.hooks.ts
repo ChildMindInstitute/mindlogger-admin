@@ -2,14 +2,13 @@ import { useContext, useState } from 'react';
 
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
-import { Applet, Folder, addAppletToFolderApi, removeAppletFromFolderApi } from 'api';
+import { Applet, Folder, setFolderApi } from 'api';
 import { useAsync } from 'shared/hooks';
 
 export const useAppletsDnd = () => {
   const { rows, fetchData } = useContext(AppletsContext) as AppletContextType;
 
-  const { execute: removeAppletFromFolder } = useAsync(removeAppletFromFolderApi);
-  const { execute: addAppletToFolder } = useAsync(addAppletToFolderApi);
+  const { execute: setFolder } = useAsync(setFolderApi);
 
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -26,7 +25,7 @@ export const useAppletsDnd = () => {
 
   const onDragEnd = async (event: React.DragEvent<HTMLTableRowElement>, applet: Applet) => {
     if (event.dataTransfer?.dropEffect === 'none' && applet.parentId) {
-      await removeAppletFromFolder({ appletId: applet.id });
+      await setFolder({ appletId: applet.id });
       await fetchData();
     }
   };
@@ -52,7 +51,7 @@ export const useAppletsDnd = () => {
       : rows?.filter((row) => row.id === (droppedItem as Applet).parentId)[0];
 
     if (!wasInFolder && isMovingToFolder) {
-      await addAppletToFolder({ folderId: folder.id, appletId: draggedItem.id });
+      await setFolder({ folderId: folder.id, appletId: draggedItem.id });
 
       return await fetchData();
     }
@@ -61,16 +60,14 @@ export const useAppletsDnd = () => {
       const previousFolder = rows?.filter((row) => row.id === draggedItem.parentId)[0];
 
       if (previousFolder.id === folder.id) return;
-
-      await removeAppletFromFolder({ appletId: draggedItem.id });
-      await addAppletToFolder({ folderId: folder.id, appletId: draggedItem.id });
+      await setFolder({ folderId: folder.id, appletId: draggedItem.id });
 
       return await fetchData();
     }
 
     if (!wasInFolder) return;
 
-    await removeAppletFromFolder({ appletId: draggedItem.id });
+    await setFolder({ appletId: draggedItem.id });
     await fetchData();
   };
 

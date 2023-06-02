@@ -20,7 +20,6 @@ export const DeleteAppletSetting = () => {
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { deletePopupVisible } = popups.useData();
-  const encryption = appletData?.encryption;
 
   const onCloseCallback = () => {
     navigate(page.dashboardApplets);
@@ -37,7 +36,6 @@ export const DeleteAppletSetting = () => {
             dispatch(
               popups.actions.setPopupVisible({
                 applet: appletData,
-                encryption,
                 key: 'deletePopupVisible',
                 value: true,
               }),

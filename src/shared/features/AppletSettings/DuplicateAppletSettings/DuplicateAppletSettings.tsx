@@ -35,7 +35,6 @@ export const DuplicateAppletSettings = () => {
           dispatch(
             popups.actions.setPopupVisible({
               applet: appletData,
-              encryption: undefined,
               key: 'duplicatePopupsVisible',
               value: true,
             }),

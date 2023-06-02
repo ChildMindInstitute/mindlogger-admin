@@ -42,9 +42,9 @@ export const useApplets = (
       ...applets.map((applet) => ({ ...applet, isFolder: false })),
     ];
 
-    setRows(formattedApplets);
-
     if (!expandedFolders.length) {
+      setRows(formattedApplets);
+
       return setIsLoading(false);
     }
 

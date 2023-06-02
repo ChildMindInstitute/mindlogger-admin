@@ -137,45 +137,42 @@ export const Applets = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <AppletsContext.Provider
-          value={{
-            rows,
-            setRows,
-            expandedFolders,
-            fetchData,
-            handleFolderClick,
-          }}
-        >
-          <AppletsTableHeader>
-            <StyledButtons>
-              <ButtonWithMenu
-                variant="outlined"
-                label={t('addApplet')}
-                anchorEl={anchorEl}
-                setAnchorEl={setAnchorEl}
-                menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
-                startIcon={<Svg width="18" height="18" id="applet-outlined" />}
-              />
-            </StyledButtons>
-            <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
-          </AppletsTableHeader>
-          <Table
-            columns={getHeadCells()}
-            rows={rows}
-            headerContent={headerContent}
-            emptyComponent={getEmptyComponent()}
-            count={rows.length}
-            {...tableProps}
-          />
-          {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
-          {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} />}
-          {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
-          {publishConcealPopupVisible && <PublishConcealAppletPopup />}
-        </AppletsContext.Provider>
-      )}
+      {isLoading && <Spinner />}
+      <AppletsContext.Provider
+        value={{
+          rows,
+          setRows,
+          expandedFolders,
+          fetchData,
+          handleFolderClick,
+        }}
+      >
+        <AppletsTableHeader>
+          <StyledButtons>
+            <ButtonWithMenu
+              variant="outlined"
+              label={t('addApplet')}
+              anchorEl={anchorEl}
+              setAnchorEl={setAnchorEl}
+              menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
+              startIcon={<Svg width="18" height="18" id="applet-outlined" />}
+            />
+          </StyledButtons>
+          <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
+        </AppletsTableHeader>
+        <Table
+          columns={getHeadCells()}
+          rows={rows}
+          headerContent={headerContent}
+          emptyComponent={getEmptyComponent()}
+          count={rows.length}
+          {...tableProps}
+        />
+        {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
+        {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} />}
+        {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
+        {publishConcealPopupVisible && <PublishConcealAppletPopup />}
+      </AppletsContext.Provider>
     </>
   );
 };

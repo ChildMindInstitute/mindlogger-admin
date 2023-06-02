@@ -57,7 +57,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     dispatch(
       popups.actions.setPopupVisible({
         applet: currentApplet,
-        encryption: undefined,
         key: 'duplicatePopupsVisible',
         value: false,
       }),
