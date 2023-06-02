@@ -17,7 +17,6 @@ import {
   PublishApplet,
   UpdateAppletSearchTerms,
   PostAppletPublicLink,
-  GetUsersData,
   GetAppletsParams,
   CreateEventType,
   OwnerId,
@@ -43,6 +42,7 @@ import {
   Folder,
   Applet,
   EditManagerAccess,
+  ExportData,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -410,21 +410,6 @@ export const deleteAppletPublicLinkApi = ({ appletId }: AppletId, signal?: Abort
 export const getAppletInviteLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applet/${appletId}/inviteLink`, { signal });
 
-export const getUsersDataApi = (
-  { appletId, users, pageIndex }: GetUsersData,
-  signal?: AbortSignal,
-) =>
-  authApiClient.get(`/applet/${appletId}/data`, {
-    params: {
-      users: JSON.stringify(users),
-      pagination: JSON.stringify({
-        allow: true,
-        pageIndex: pageIndex || 0,
-      }),
-    },
-    signal,
-  });
-
 export const getAnswersApi = ({ id, respondentId, createdDate }: Answers, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${id}/activities`, {
     params: {
@@ -523,3 +508,11 @@ export const getAppletVersionChangesApi = (
   { appletId, version }: AppletVersionChanges,
   signal?: AbortSignal,
 ) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
+
+export const getExportDataApi = ({ appletId, respondentId }: ExportData, signal?: AbortSignal) =>
+  authApiClient.get(`/answers/applet/${appletId}/data`, {
+    params: {
+      respondentId,
+    },
+    signal,
+  });

@@ -5,6 +5,8 @@ import { Box } from '@mui/material';
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
 import { Svg } from 'shared/components';
 import { applet } from 'shared/state';
+import { getExportDataApi } from 'api';
+import { useAsync } from 'shared/hooks';
 
 import {
   StyledAppletSettingsButton,
@@ -17,6 +19,14 @@ export const ExportDataSetting = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+
+  const { execute } = useAsync(getExportDataApi, () => setPasswordModalVisible(false));
+
+  const handleDataExportHandler = () => {
+    if (appletData?.id) {
+      execute({ appletId: appletData.id });
+    }
+  };
 
   return (
     <>
@@ -35,6 +45,7 @@ export const ExportDataSetting = () => {
         <AppletPasswordPopup
           popupVisible={passwordModalVisible}
           onClose={() => setPasswordModalVisible(false)}
+          submitCallback={handleDataExportHandler}
           appletId={appletData?.id ?? ''}
           encryption={appletData?.encryption}
         />

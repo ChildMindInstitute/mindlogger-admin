@@ -46,15 +46,11 @@ export const Table = ({
       <AppletItem item={row as Applet} onPublish={handleReload} />
     );
 
-  const getEmptyTable = () => {
-    if (rows) {
-      return <EmptyTable>{emptyComponent}</EmptyTable>;
-    }
-  };
+  const getEmptyTable = () => <EmptyTable>{emptyComponent}</EmptyTable>;
 
   return (
     <StyledTableContainer>
-      {rows?.length ? (
+      {!!rows?.length && (
         <MuiTable stickyHeader>
           <TableHead
             headCells={columns}
@@ -64,14 +60,13 @@ export const Table = ({
             tableHeader={tableHeader}
           />
           <TableBody>
-            {rows?.map((row) => (
+            {rows.map((row) => (
               <Fragment key={row.id}>{getRowComponent(row)}</Fragment>
             ))}
           </TableBody>
         </MuiTable>
-      ) : (
-        getEmptyTable()
       )}
+      {emptyComponent && getEmptyTable()}
     </StyledTableContainer>
   );
 };

@@ -13,19 +13,23 @@ import {
 import { popups, workspaces } from 'redux/modules';
 import { ButtonWithMenu, DEFAULT_ROWS_PER_PAGE, Search, Spinner, Svg } from 'shared/components';
 import { useAsync, useBreadcrumbs, useTable } from 'shared/hooks';
-import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
 import { AppletsTableHeader, StyledButtons } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
 import { useApplets } from './Applets.hooks';
+import { AppletContextType } from './Applets.types';
 
 export const AppletsContext = createContext<AppletContextType | null>(null);
 
 export const Applets = () => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
+
+  const [rows, setRows] = useState<(Folder | Applet)[]>([]);
+  const [expandedFolders, setExpandedFolders] = useState<string[]>([]);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { ownerId } = workspaces.useData() || {};
 
@@ -38,15 +42,11 @@ export const Applets = () => {
 
   const { execute: getWorkspaceApplets } = useAsync(getWorkspaceAppletsApi);
 
-  const [rows, setRows] = useState<(Folder | Applet)[]>([]);
-  const [expandedFolders, setExpandedFolders] = useState<string[]>([]);
-
   const { fetchData, isLoading } = useApplets(setRows, expandedFolders);
+
   const { handleSearch, searchValue, ...tableProps } = useTable(
     async (params) => await fetchData(params),
   );
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useBreadcrumbs([
     {
@@ -77,7 +77,7 @@ export const Applets = () => {
   );
 
   const getEmptyComponent = () => {
-    if (!rows?.length) {
+    if (!rows?.length && !isLoading) {
       if (searchValue) {
         return t('noMatchWasFound', { searchValue });
       }
@@ -137,42 +137,48 @@ export const Applets = () => {
 
   return (
     <>
-      {isLoading && <Spinner />}
-      <AppletsContext.Provider
-        value={{
-          rows,
-          setRows,
-          expandedFolders,
-          fetchData,
-          handleFolderClick,
-        }}
-      >
-        <AppletsTableHeader>
-          <StyledButtons>
-            <ButtonWithMenu
-              variant="outlined"
-              label={t('addApplet')}
-              anchorEl={anchorEl}
-              setAnchorEl={setAnchorEl}
-              menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
-              startIcon={<Svg width="18" height="18" id="applet-outlined" />}
-            />
-          </StyledButtons>
-          <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
-        </AppletsTableHeader>
-        <Table
-          columns={getHeadCells()}
-          rows={rows}
-          headerContent={headerContent}
-          emptyComponent={getEmptyComponent()}
-          count={rows.length}
-          {...tableProps}
-        />
-        {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
-        {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} />}
-        {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
-        {publishConcealPopupVisible && <PublishConcealAppletPopup />}
-      </AppletsContext.Provider>
+      {isLoading ? (
+        <Box sx={{ position: 'relative', height: '100%' }}>
+          <Spinner />
+        </Box>
+      ) : (
+        <AppletsContext.Provider
+          value={{
+            rows,
+            setRows,
+            expandedFolders,
+            fetchData,
+            handleFolderClick,
+          }}
+        >
+          <AppletsTableHeader>
+            <StyledButtons>
+              <ButtonWithMenu
+                variant="outlined"
+                label={t('addApplet')}
+                anchorEl={anchorEl}
+                setAnchorEl={setAnchorEl}
+                menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
+                startIcon={<Svg width="18" height="18" id="applet-outlined" />}
+              />
+            </StyledButtons>
+            <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
+          </AppletsTableHeader>
+
+          <Table
+            columns={getHeadCells()}
+            rows={rows}
+            headerContent={headerContent}
+            emptyComponent={getEmptyComponent()}
+            count={rows.length}
+            {...tableProps}
+          />
+          {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
+          {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} />}
+          {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
+          {publishConcealPopupVisible && <PublishConcealAppletPopup />}
+        </AppletsContext.Provider>
+      )}
     </>
   );
 };

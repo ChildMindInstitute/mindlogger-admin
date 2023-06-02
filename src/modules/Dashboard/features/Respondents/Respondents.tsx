@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
@@ -79,7 +79,6 @@ export const Respondents = () => {
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
   const [respondentKey, setRespondentKey] = useState<null | string>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
-  const [filteredRespondents, setfilteredRespondents] = useState<FilteredRespondents>({});
 
   const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
@@ -132,6 +131,39 @@ export const Respondents = () => {
     execute({ ownerId, userId });
   };
 
+  const filteredRespondents = useMemo(
+    () =>
+      respondentsData?.result?.reduce((acc: FilteredRespondents, { details, id }) => {
+        const filteredRespondents = {
+          scheduling: [],
+          editable: [],
+          viewable: [],
+        } as FilteredApplets;
+        const { editable, viewable, scheduling } = filteredRespondents;
+
+        for (const detail of details) {
+          const workspaceRoles = rolesData?.data?.[detail.appletId];
+          if (isManagerOrOwner(workspaceRoles?.[0])) {
+            editable.push(detail);
+            viewable.push(detail);
+            scheduling.push(detail);
+            continue;
+          }
+          if (workspaceRoles?.includes(Roles.Reviewer)) {
+            viewable.push(detail);
+          }
+          if (workspaceRoles?.includes(Roles.Coordinator)) {
+            scheduling.push(detail);
+          }
+        }
+
+        acc[id] = filteredRespondents;
+
+        return acc;
+      }, {}) || {},
+    [respondentsData],
+  );
+
   const rows = respondentsData?.result?.map((user) => {
     const { secretIds, nicknames, lastSeen, id, details, isPinned } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
@@ -169,7 +201,7 @@ export const Respondents = () => {
       }),
       actions: {
         content: () => (
-          <Actions items={getActions(actions, filteredRespondents[id], appletId)} context={id} />
+          <Actions items={getActions(actions, filteredRespondents?.[id], appletId)} context={id} />
         ),
         value: '',
         width: '330',
@@ -177,9 +209,7 @@ export const Respondents = () => {
     };
   });
 
-  const chosenRespondentsItems = respondentKey
-    ? filteredRespondents[respondentKey as keyof typeof filteredRespondents]
-    : undefined;
+  const chosenRespondentsItems = filteredRespondents[respondentKey as keyof FilteredRespondents];
 
   const getAppletsSmallTable = (key: keyof FilteredApplets) =>
     chosenRespondentsItems?.[key] && ownerId && respondentKey
@@ -196,47 +226,12 @@ export const Respondents = () => {
   const schedulingAppletsSmallTableRows = getAppletsSmallTable('scheduling');
 
   const renderEmptyComponent = () => {
-    if (!rows?.length) {
+    if (rows && !rows.length) {
       return appletId ? t('noRespondentsForApplet') : t('noRespondents');
     }
 
     return searchValue && t('noMatchWasFound', { searchValue });
   };
-
-  useEffect(() => {
-    const respondentsByRoles = respondentsData?.result?.reduce(
-      (acc: FilteredRespondents, { details, id }) => {
-        const filteredRespondents = {
-          scheduling: [],
-          editable: [],
-          viewable: [],
-        } as FilteredApplets;
-        const { editable, viewable, scheduling } = filteredRespondents;
-
-        for (const detail of details) {
-          const workspaceRoles = rolesData?.data?.[detail.appletId];
-          if (isManagerOrOwner(workspaceRoles?.[0])) {
-            editable.push(detail);
-            viewable.push(detail);
-            scheduling.push(detail);
-            continue;
-          }
-          if (workspaceRoles?.includes(Roles.Reviewer)) {
-            viewable.push(detail);
-          }
-          if (workspaceRoles?.includes(Roles.Coordinator)) {
-            scheduling.push(detail);
-          }
-        }
-
-        acc[id] = filteredRespondents;
-
-        return acc;
-      },
-      {},
-    );
-    respondentsByRoles && setfilteredRespondents(respondentsByRoles);
-  }, [respondentsData]);
 
   if (isForbidden) return noPermissionsComponent;
 
