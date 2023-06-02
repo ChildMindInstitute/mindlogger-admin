@@ -44,7 +44,7 @@ export const Table = ({
   return (
     <>
       <StyledTableContainer className={className} maxHeight={maxHeight} uiType={uiType}>
-        {rows?.length && (
+        {!!rows?.length && (
           <MuiTable stickyHeader>
             <TableHead
               headCells={columns}
@@ -73,7 +73,7 @@ export const Table = ({
             </TableBody>
           </MuiTable>
         )}
-        {rows && !rows.length && <EmptyTable>{emptyComponent}</EmptyTable>}
+        {emptyComponent && <EmptyTable>{emptyComponent}</EmptyTable>}
       </StyledTableContainer>
       {uiType === UiType.Tertiary && tableHeader}
     </>
