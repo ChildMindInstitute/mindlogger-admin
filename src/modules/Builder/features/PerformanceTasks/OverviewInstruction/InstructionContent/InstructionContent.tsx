@@ -6,16 +6,16 @@ import { EditorController, EditorUiType } from 'shared/components/FormComponents
 
 import { OverviewInstructionProps } from '../OverviewInstruction.types';
 
-export const InstructionContent = ({ description }: OverviewInstructionProps) => {
+export const InstructionContent = ({ instructionType, description }: OverviewInstructionProps) => {
   const { control } = useFormContext();
-  const { fieldName } = useCurrentActivity();
+  const { perfTaskItemField } = useCurrentActivity();
 
   return (
     <>
       <StyledBodyLarge sx={{ mb: theme.spacing(2) }}>{description}</StyledBodyLarge>
       <EditorController
         uiType={EditorUiType.Secondary}
-        name={`${fieldName}.general.instruction`}
+        name={`${perfTaskItemField}.${instructionType}.instruction`}
         control={control}
       />
     </>

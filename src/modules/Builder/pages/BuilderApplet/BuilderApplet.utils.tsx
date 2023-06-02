@@ -92,23 +92,31 @@ export const getNewPerformanceTask = ({
     blocks: [],
   };
   const defaultFlankerProps = isFlankerItem && {
-    general: {
-      instruction: t('performanceTaskInstructions.flankerGeneral'),
-      buttons: [defaultFlankerBtnObj],
-      fixation: null,
-      stimulusTrials: [],
-    },
-    practice: {
-      ...commonRoundProps,
-      instruction: t('performanceTaskInstructions.flankerPractice'),
-      threshold: DEFAULT_THRESHOLD_DURATION,
-      showFeedback: true,
-    },
-    test: {
-      ...commonRoundProps,
-      instruction: t('performanceTaskInstructions.flankerTest'),
-      showFeedback: false,
-    },
+    items: [
+      {
+        name: 'flanker',
+        responseType: ItemResponseType.Flanker,
+        config: {
+          general: {
+            instruction: t('performanceTaskInstructions.flankerGeneral'),
+            buttons: [defaultFlankerBtnObj],
+            fixation: null,
+            stimulusTrials: [],
+          },
+          practice: {
+            ...commonRoundProps,
+            instruction: t('performanceTaskInstructions.flankerPractice'),
+            threshold: DEFAULT_THRESHOLD_DURATION,
+            showFeedback: true,
+          },
+          test: {
+            ...commonRoundProps,
+            instruction: t('performanceTaskInstructions.flankerTest'),
+            showFeedback: false,
+          },
+        },
+      },
+    ],
   };
 
   return {

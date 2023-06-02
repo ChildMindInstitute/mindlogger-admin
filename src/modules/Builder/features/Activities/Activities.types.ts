@@ -1,5 +1,3 @@
-import { ActivityFormValues, ItemFormValues, FlankerFormValues } from 'modules/Builder/types';
-
 export type GetActivitiesActions = {
   key: string;
   isActivityHidden?: boolean;
@@ -17,13 +15,6 @@ export type ActivityAddProps = {
   isNavigationBlocked?: boolean;
   isFlankerItem?: boolean;
 } | null;
-
-export type ActivityProps =
-  | ActivityFormValues
-  | (FlankerFormValues & {
-      image?: string;
-      items?: ItemFormValues[];
-    });
 
 export const enum PerformanceTasks {
   AbTrailsIpad = 'A/B Trails iPad',

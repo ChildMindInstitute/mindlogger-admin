@@ -892,6 +892,8 @@
     "buttonName": "Button Name",
     "leftButtonName": "Left Button Name",
     "rightButtonName": "Right Button Name",
+    "leftNameOrImage": "Left Button Name or Image",
+    "rightNameOrImage": "Right Button Name or Image",
     "tooltip": "Button Name or Image is required"
   },
   "flankerFixation": {
@@ -908,7 +910,9 @@
     "left": "Left",
     "right": "Right",
     "addText": "Add at least 1 stimulus screen.",
-    "addBtn": "Add Stimulus Screen"
+    "addBtn": "Add Stimulus Screen",
+    "deleteTitle": "Delete Stimulus Screen",
+    "deleteDescription": "Are you sure you want to delete the Stimulus Screen <1>{{ imageName }}</1>? You will need to re-upload the Block Sequences."
   },
   "flankerRound": {
     "titlePractice": "Practice Round Settings",

@@ -4,6 +4,7 @@ import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
 import { SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
+import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import {
   DEFAULT_EMPTY_SLIDER,
@@ -17,7 +18,8 @@ import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.uti
 
 const { t } = i18n;
 
-export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
+// export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
+export const getInputTypeTooltip = (): Record<ItemResponseTypeNoPerfTasks, string> => ({
   [ItemResponseType.SingleSelection]: t('singleSelectionHint'),
   [ItemResponseType.MultipleSelection]: t('multipleSelectionHint'),
   [ItemResponseType.Slider]: t('sliderHint'),
@@ -36,8 +38,8 @@ export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
   [ItemResponseType.Message]: t('messageHint'),
   [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
   [ItemResponseType.Time]: t('timeHint'),
-  [ItemResponseType.Flanker]: '',
-  [ItemResponseType.AbTest]: '',
+  // [ItemResponseType.Flanker]: '',
+  // [ItemResponseType.AbTest]: '',
 });
 
 export const getEmptySliderOption = ({

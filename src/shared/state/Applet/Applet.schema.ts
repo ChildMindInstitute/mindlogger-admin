@@ -13,6 +13,7 @@ import {
   CalculationType,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
+import { CorrectPress } from 'modules/Builder/types';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -179,6 +180,63 @@ export type SliderRowsConfig = {
   timer: number;
 };
 
+export type FlankerButtonSetting = {
+  name: string | null;
+  image: string | null;
+};
+
+export type FlankerFixationSettings = {
+  image: string | null;
+  duration: number;
+};
+
+type FlankerStimulusId = string;
+
+export type FlankerStimulusSettings = {
+  id: FlankerStimulusId;
+  image: string;
+  correctPress: CorrectPress;
+};
+
+export type FlankerBlockSettings = {
+  order: Array<FlankerStimulusId>;
+  name: string;
+};
+
+type FlankerPracticeSettings = {
+  instruction: string;
+  blocks: Array<FlankerBlockSettings>;
+  stimulusDuration: number;
+  threshold: number;
+  randomizeOrder: boolean;
+  showFeedback: boolean;
+  showSummary: boolean;
+};
+
+type FlankerTestSettings = {
+  instruction: string;
+  blocks: Array<FlankerBlockSettings>;
+  stimulusDuration: number;
+  randomizeOrder: boolean;
+  showFeedback: boolean;
+  showSummary: boolean;
+};
+
+type FlankerGeneralSettings = {
+  instruction: string;
+  buttons: Array<FlankerButtonSetting>;
+  fixation: FlankerFixationSettings | null;
+  stimulusTrials: Array<FlankerStimulusSettings>;
+};
+
+type FlankerConfig = {
+  general: FlankerGeneralSettings;
+  practice: FlankerPracticeSettings;
+  test: FlankerTestSettings;
+  skippableItem?: boolean;
+  removeBackButton?: boolean;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -299,7 +357,8 @@ export type Config =
   | DrawingConfig
   | PhotoConfig
   | GeolocationConfig
-  | MessageConfig;
+  | MessageConfig
+  | FlankerConfig;
 
 export type ItemAlert = {
   message: string;

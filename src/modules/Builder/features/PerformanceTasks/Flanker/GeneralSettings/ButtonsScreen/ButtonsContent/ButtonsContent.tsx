@@ -13,7 +13,7 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { SMALL_INPUT_LENGTH } from 'shared/consts';
-import { FlankerButtonSetting } from 'modules/Builder/types';
+import { FlankerButtonSetting } from 'shared/state';
 import { defaultFlankerBtnObj } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
 import { ButtonsQuantity, buttonsQuantity } from './ButtonsContent.const';
@@ -23,8 +23,8 @@ export const ButtonsContent = () => {
   const { t } = useTranslation();
   const [activeButton, setActiveButton] = useState<ButtonsQuantity>(ButtonsQuantity.One);
   const { control, watch, setValue } = useFormContext();
-  const { fieldName } = useCurrentActivity();
-  const buttonsField = `${fieldName}.general.buttons`;
+  const { perfTaskItemField } = useCurrentActivity();
+  const buttonsField = `${perfTaskItemField}.general.buttons`;
   const buttons: FlankerButtonSetting[] = watch(buttonsField);
 
   const handleActiveBtnChange = (activeValue: string) => {
@@ -46,6 +46,7 @@ export const ButtonsContent = () => {
           toggleButtons={buttonsQuantity}
           activeButton={activeButton}
           setActiveButton={handleActiveBtnChange}
+          haveEqualWidth
         />
       </Box>
       <StyledFlexSpaceBetween>

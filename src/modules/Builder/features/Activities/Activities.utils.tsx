@@ -1,9 +1,9 @@
 import { Svg } from 'shared/components';
-import { ActivityValue } from 'modules/Builder/types';
+import { ActivityFormValues } from 'modules/Builder/types';
 
 import { GetActivitiesActions } from './Activities.types';
 
-export const getActivityKey = (entity: ActivityValue): string => entity.key ?? entity.id ?? '';
+export const getActivityKey = (entity: ActivityFormValues): string => entity.key ?? entity.id ?? '';
 
 export const getActions = ({
   isActivityHidden,

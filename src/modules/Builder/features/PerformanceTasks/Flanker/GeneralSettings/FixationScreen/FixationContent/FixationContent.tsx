@@ -12,7 +12,7 @@ import {
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { FlankerFixationSettings } from 'modules/Builder/types';
+import { FlankerFixationSettings } from 'shared/state';
 import { DEFAULT_MILLISECONDS_DURATION, MIN_MILLISECONDS_DURATION } from 'shared/consts';
 
 import { StyledRemoveButton } from './FixationContent.styles';
@@ -20,8 +20,8 @@ import { StyledRemoveButton } from './FixationContent.styles';
 export const FixationContent = () => {
   const { t } = useTranslation();
   const { control, watch, setValue } = useFormContext();
-  const { fieldName } = useCurrentActivity();
-  const fixationField = `${fieldName}.general.fixation`;
+  const { perfTaskItemField } = useCurrentActivity();
+  const fixationField = `${perfTaskItemField}.general.fixation`;
   const fixation: FlankerFixationSettings = watch(fixationField);
 
   const handleFixationAdd = () => {

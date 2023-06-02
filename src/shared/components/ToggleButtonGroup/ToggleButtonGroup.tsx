@@ -13,6 +13,7 @@ export const ToggleButtonGroup = ({
   activeButton,
   setActiveButton,
   customChange,
+  haveEqualWidth,
 }: ToggleButtonGroupProps) => {
   const { t } = useTranslation('app');
 
@@ -26,7 +27,12 @@ export const ToggleButtonGroup = ({
   return (
     <MuiToggleButtonGroup fullWidth value={activeButton} exclusive onChange={handleChange}>
       {toggleButtons.map(({ value, label, tooltip, icon }) => (
-        <StyledToggleBtn withIcon={!!icon} key={value} value={value}>
+        <StyledToggleBtn
+          haveEqualWidth={haveEqualWidth}
+          withIcon={!!icon}
+          key={value}
+          value={value}
+        >
           {activeButton === value && !icon && (
             <StyledIcon>
               <Svg id="check" />

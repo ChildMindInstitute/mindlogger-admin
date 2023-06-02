@@ -66,8 +66,9 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
   }}
 `;
 
-export const StyledCol = styled(Box)`
-  width: calc(100% - 24rem);
+export const StyledCol = styled(Box, shouldForwardProp)`
+  width: ${({ hasImage }: { hasImage: boolean }) =>
+    `calc(100% - ${hasImage ? '32.4rem' : '24rem'})`};
   padding-right: ${theme.spacing(1)};
 `;
 

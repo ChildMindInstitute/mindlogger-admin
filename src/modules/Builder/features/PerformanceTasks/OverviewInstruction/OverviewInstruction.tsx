@@ -5,14 +5,16 @@ import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/comp
 import { InstructionContent } from './InstructionContent';
 import { OverviewInstructionProps } from './OverviewInstruction.types';
 
-export const OverviewInstruction = ({ description }: OverviewInstructionProps) => {
+export const OverviewInstruction = ({ instructionType, description }: OverviewInstructionProps) => {
   const { t } = useTranslation();
 
   return (
     <ToggleItemContainer
       uiType={ToggleContainerUiType.PerformanceTask}
       title={t('overviewInstruction')}
-      Content={() => <InstructionContent description={description} />}
+      Content={() => (
+        <InstructionContent instructionType={instructionType} description={description} />
+      )}
       isOpenByDefault={false}
     />
   );

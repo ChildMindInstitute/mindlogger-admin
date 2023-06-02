@@ -77,9 +77,13 @@ export enum ItemResponseType {
   Audio = 'audio',
   Message = 'message',
   AudioPlayer = 'audioPlayer',
-  Flanker = 'flanker',
-  AbTest = 'abTest',
   Time = 'time',
+  Flanker = 'flanker',
+  Gyroscope = 'gyroscope',
+  Touch = 'touch',
+  ABTrailsIpad = 'ABTrailsIpad',
+  ABTrailsMobile = 'ABTrailsMobile',
+  // AbTest = 'abTest',
 }
 
 export enum CalculationType {
@@ -108,7 +112,11 @@ export const itemsTypeIcons = {
   [ItemResponseType.AudioPlayer]: <Svg id="audio-player" />,
   [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
-  [ItemResponseType.AbTest]: null,
+  [ItemResponseType.Gyroscope]: null,
+  [ItemResponseType.Touch]: null,
+  [ItemResponseType.ABTrailsIpad]: null,
+  [ItemResponseType.ABTrailsMobile]: null,
+  // [ItemResponseType.AbTest]: null,
 };
 
 export const enum SubscaleTotalScore {

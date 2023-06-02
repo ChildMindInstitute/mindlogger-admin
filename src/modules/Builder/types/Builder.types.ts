@@ -42,72 +42,10 @@ export type ActivityFormValues = {
   isFlankerItem?: boolean;
 };
 
-export type FlankerButtonSetting = {
-  name: string | null;
-  image: string | null;
-};
-
-export type FlankerFixationSettings = {
-  image: string | null;
-  duration: number;
-};
-
-type FlankerStimulusId = string;
-
 export enum CorrectPress {
-  Left = 'LEFT',
-  Right = 'RIGHT',
+  Left = 'left',
+  Right = 'right',
 }
-
-export type FlankerStimulusSettings = {
-  id: FlankerStimulusId;
-  image: string;
-  imageName: string;
-  correctPress: CorrectPress;
-};
-
-type FlankerBlockSettings = {
-  order: Array<FlankerStimulusId>;
-};
-
-type FlankerPracticeSettings = {
-  instruction: string;
-  blocks: Array<FlankerBlockSettings>;
-  stimulusDuration: number;
-  threshold: number;
-  randomizeOrder: boolean;
-  showFeedback: boolean;
-  showSummary: boolean;
-};
-
-type FlankerTestSettings = {
-  instruction: string;
-  blocks: Array<FlankerBlockSettings>;
-  stimulusDuration: number;
-  randomizeOrder: boolean;
-  showFeedback: boolean;
-  showSummary: boolean;
-};
-
-type FlankerGeneralSettings = {
-  instruction: string;
-  buttons: Array<FlankerButtonSetting>;
-  fixation: FlankerFixationSettings | null;
-  stimulusTrials: Array<FlankerStimulusSettings>;
-};
-
-export type FlankerFormValues = {
-  id?: string;
-  key?: string;
-  name: string;
-  description: string;
-  isHidden?: boolean;
-  general: FlankerGeneralSettings;
-  practice: FlankerPracticeSettings;
-  test: FlankerTestSettings;
-  isPerformanceTask: boolean;
-  isFlankerItem?: boolean;
-};
 
 export type ActivityFlowItem = {
   id?: string;
@@ -126,8 +64,6 @@ export type ActivityFlowFormValues = {
   isHidden?: boolean;
 };
 
-export type ActivityValue = ActivityFormValues | FlankerFormValues;
-
 export type AppletFormValues = {
   id?: string;
   displayName: string;
@@ -137,12 +73,17 @@ export type AppletFormValues = {
   watermark?: string;
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
-  activities: ActivityValue[];
+  activities: ActivityFormValues[];
 };
 
 export type GetNewPerformanceTask = {
   name?: string;
   description?: string;
-  performanceTask?: FlankerFormValues;
+  performanceTask?: ActivityFormValues;
   isFlankerItem?: boolean;
 };
+
+export type ItemResponseTypeNoPerfTasks = Exclude<
+  ItemResponseType,
+  'flanker' | 'gyroscope' | 'touch' | 'ABTrailsIpad' | 'ABTrailsMobile'
+>;

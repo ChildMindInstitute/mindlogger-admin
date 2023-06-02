@@ -3,7 +3,7 @@ import { t } from 'i18next';
 import { ItemResponseType } from 'shared/consts';
 
 import { RespondentDetail } from 'redux/modules';
-import { UNSUPPORTED_ITEMS } from './consts';
+import { UNSUPPORTED_ITEMS } from './RespondentsData.consts';
 
 export const isItemUnsupported = (type: ItemResponseType) => UNSUPPORTED_ITEMS.includes(type);
 

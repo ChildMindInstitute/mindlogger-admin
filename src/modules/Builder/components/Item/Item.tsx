@@ -55,7 +55,7 @@ export const Item = ({
       isDragging={isDragging}
     >
       {isActivityUiType && image}
-      <StyledCol sx={commonSx}>
+      <StyledCol hasImage={isActivityUiType} sx={commonSx}>
         {index && total && (
           <StyledTitleMedium sx={{ marginBottom: theme.spacing(0.6) }}>
             {index} {t('of')} {total}

@@ -72,6 +72,30 @@ export const ResponseValuesNumberSelectionSchema = () => ({
     ),
 });
 
+const buttonNameOrImageTest = (type: 'name' | 'image') =>
+  yup
+    .string()
+    .test(
+      'has-image-or-name',
+      type === 'name' ? getIsRequiredValidateMessage('flankerButtons.rightButtonName') : '',
+      function () {
+        const { image, name } = this.parent;
+
+        return !(!image && !name);
+      },
+    );
+
+export const FlankerGeneralSchema = () =>
+  yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
+    buttons: yup.array().of(
+      yup.object({
+        name: buttonNameOrImageTest('name'),
+        image: buttonNameOrImageTest('name'),
+      }),
+    ),
+  });
+
 export const ItemSchema = () =>
   yup
     .object({
@@ -87,7 +111,19 @@ export const ItemSchema = () =>
           (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
-      question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),
+      question: yup.string().when('responseType', (responseType, schema) => {
+        if (
+          responseType === ItemResponseType.Flanker ||
+          responseType === ItemResponseType.Gyroscope ||
+          responseType === ItemResponseType.Touch ||
+          responseType === ItemResponseType.ABTrailsIpad ||
+          responseType === ItemResponseType.ABTrailsMobile
+        ) {
+          return schema;
+        }
+
+        return schema.required(getIsRequiredValidateMessage('displayedContent'));
+      }),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (
           responseType === ItemResponseType.SingleSelection ||
@@ -121,16 +157,22 @@ export const ItemSchema = () =>
 
         return schema.nullable();
       }),
-      config: yup.object({}).shape({
-        correctAnswerRequired: yup.boolean().nullable(),
-        correctAnswer: yup
-          .string()
-          .nullable()
-          .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
-            correctAnswerRequired
-              ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
-              : schema,
-          ),
+      config: yup.object({}).when('responseType', (responseType, schema) => {
+        if (responseType === ItemResponseType.Flanker) {
+          return schema.shape({ general: FlankerGeneralSchema() });
+        }
+
+        return schema.shape({
+          correctAnswerRequired: yup.boolean().nullable(),
+          correctAnswer: yup
+            .string()
+            .nullable()
+            .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
+              correctAnswerRequired
+                ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+                : schema,
+            ),
+        });
       }),
     })
     .required();

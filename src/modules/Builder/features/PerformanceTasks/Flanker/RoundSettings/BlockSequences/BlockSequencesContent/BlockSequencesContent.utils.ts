@@ -1,8 +1,8 @@
 import i18n from 'i18next';
 import { Row } from 'shared/components';
 import { HeadCell } from 'shared/types';
-import { createArray, getTableCell } from 'shared/utils';
-import { FlankerStimulusSettings } from 'modules/Builder/types';
+import { createArray, getTableCell, getUploadedMediaName } from 'shared/utils';
+import { FlankerStimulusSettings, FlankerBlockSettings } from 'shared/state';
 
 import { UploadedTable } from './BlockSequencesContent.types';
 
@@ -15,13 +15,14 @@ export const getSequencesData = (stimulusTrials: FlankerStimulusSettings[] = [])
   const defaultTableRows: Row[] = [];
 
   for (const trial of stimulusTrials) {
-    if (trial?.imageName) {
+    if (trial?.image) {
+      const imageName = getUploadedMediaName(trial.image);
       const exportRow: Record<string, string> = {};
       const tableRow: Row = {};
 
       for (let index = 0; index < DEFAULT_SEQUENCES_TABLE_COLUMNS; index++) {
-        exportRow[`${t('flankerRound.block')} ${index + 1}`] = trial.imageName;
-        tableRow[`block-${index + 1}`] = getTableCell(trial.imageName);
+        exportRow[`${t('flankerRound.block')} ${index + 1}`] = imageName;
+        tableRow[`block-${index + 1}`] = getTableCell(imageName);
       }
 
       defaultExportTable.push(exportRow);
@@ -34,9 +35,9 @@ export const getSequencesData = (stimulusTrials: FlankerStimulusSettings[] = [])
 
 export const getSequencesHeadCells = (uploadedTable: UploadedTable | null): HeadCell[] =>
   uploadedTable
-    ? Object.keys(uploadedTable[0]).map((key) => ({
-        id: key.toLowerCase().replace(/\s+/g, '-'),
-        label: key,
+    ? Object.keys(uploadedTable[0]).map((label) => ({
+        id: label.toLowerCase().replace(/\s+/g, '-'),
+        label,
       }))
     : createArray(DEFAULT_SEQUENCES_TABLE_COLUMNS, (index) => ({
         id: `block-${index + 1}`,
@@ -57,21 +58,47 @@ export const getUploadedTableRows = (uploadedTable: UploadedTable) =>
     return updatedObj;
   });
 
+const getStimulusObject = (stimulusTrials: FlankerStimulusSettings[], type: 'imageKey' | 'idKey') =>
+  stimulusTrials.reduce((result: Record<string, string>, item) => {
+    const key = type === 'imageKey' ? getUploadedMediaName(item.image) : item.id;
+    const value = type === 'imageKey' ? item.id : getUploadedMediaName(item.image);
+
+    return { ...result, [key]: value };
+  }, {});
+
 export const getRoundBlocks = (
   stimulusTrials: FlankerStimulusSettings[],
   uploadedTable: UploadedTable,
 ) => {
   if (!uploadedTable?.length) return;
+  const imagesIds = getStimulusObject(stimulusTrials, 'imageKey');
 
-  const imagesIds = stimulusTrials.reduce((result: Record<string, string>, item) => {
-    result[item.imageName] = item.id;
+  return Object.keys(uploadedTable[0]).reduce(
+    (result: { order: (string | number)[]; name: string }[], key) => {
+      result.push({
+        order: uploadedTable.map((obj) => imagesIds[obj[key]]),
+        name: key,
+      });
 
-    return result;
-  }, {});
+      return result;
+    },
+    [],
+  );
+};
 
-  return Object.keys(uploadedTable[0]).reduce((result: { order: (string | number)[] }[], key) => {
-    result.push({
-      order: uploadedTable.map((obj) => imagesIds[obj[key]]),
+export const getTableFromSequences = (
+  stimulusTrials: FlankerStimulusSettings[],
+  blockSequences: FlankerBlockSettings[],
+) => {
+  if (!blockSequences?.length) return;
+  const imagesNames = getStimulusObject(stimulusTrials, 'idKey');
+
+  return blockSequences.reduce((result: Record<string, string>[], { name, order }) => {
+    order.forEach((id, index) => {
+      if (!result[index]) {
+        result[index] = {};
+      }
+      result[index][name] = imagesNames[id];
     });
 
     return result;

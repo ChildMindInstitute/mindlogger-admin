@@ -8,12 +8,7 @@ import { Box } from '@mui/material';
 import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import {
-  ActivityFormValues,
-  ActivityValue,
-  AppletFormValues,
-  FlankerFormValues,
-} from 'modules/Builder/types';
+import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
 import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
 import {
   getNewActivity,
@@ -24,7 +19,7 @@ import { BuilderContainer } from 'shared/features';
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey } from './Activities.utils';
-import { ActivityAddProps, ActivityProps } from './Activities.types';
+import { ActivityAddProps } from './Activities.types';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -46,11 +41,11 @@ export const Activities = () => {
     name: 'activities',
   });
 
-  const activities: ActivityValue[] = watch('activities');
+  const activities: ActivityFormValues[] = watch('activities');
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
 
   const errors = activities?.reduce(
-    (err: Record<string, boolean>, _: ActivityValue, index: number) => ({
+    (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
       ...err,
       [`activities[${index}]`]: !!getFieldState(`activities[${index}]`).error,
     }),
@@ -127,7 +122,7 @@ export const Activities = () => {
 
       const newActivity = isPerformanceTask
         ? getNewPerformanceTask({
-            performanceTask: activityToDuplicate as FlankerFormValues,
+            performanceTask: activityToDuplicate as ActivityFormValues,
           })
         : getNewActivity(activityToDuplicate as ActivityFormValues);
 
@@ -179,7 +174,7 @@ export const Activities = () => {
             <DndDroppable droppableId="activities-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {activities.map((activity: ActivityProps, index: number) => {
+                  {activities.map((activity: ActivityFormValues, index: number) => {
                     const activityKey = getActivityKey(activity);
                     const isPerformanceTask = activity?.isPerformanceTask || false;
                     const activityName = activity.name;

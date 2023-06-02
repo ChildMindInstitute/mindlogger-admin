@@ -15,8 +15,9 @@ import {
   variables,
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
-import { ItemResponseType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+// import { ItemResponseType } from 'shared/consts';
+import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { StyledContent, StyledHeader, StyledItemConfiguration } from './ItemConfiguration.styles';
@@ -37,7 +38,8 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
 
   const { control, watch } = methods;
 
-  const responseType = watch(`${name}.responseType`) as ItemResponseType;
+  // const responseType = watch(`${name}.responseType`) as ItemResponseType;
+  const responseType = watch(`${name}.responseType`) as ItemResponseTypeNoPerfTasks;
   const isReviewable = watch(`${fieldName}.isReviewable`);
 
   const availableItemsTypeOptions = isReviewable

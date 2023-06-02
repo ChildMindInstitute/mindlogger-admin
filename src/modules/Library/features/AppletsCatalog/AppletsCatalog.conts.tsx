@@ -53,6 +53,10 @@ export const ItemResponseTypes = {
     title: ItemResponseType.AudioPlayer,
   },
   [ItemResponseType.Flanker]: { icon: null, title: ItemResponseType.Flanker },
-  [ItemResponseType.AbTest]: { icon: null, title: ItemResponseType.AbTest },
+  [ItemResponseType.Gyroscope]: { icon: null, title: ItemResponseType.Gyroscope },
+  [ItemResponseType.Touch]: { icon: null, title: ItemResponseType.Touch },
+  [ItemResponseType.ABTrailsIpad]: { icon: null, title: ItemResponseType.ABTrailsIpad },
+  [ItemResponseType.ABTrailsMobile]: { icon: null, title: ItemResponseType.ABTrailsMobile },
+  // [ItemResponseType.AbTest]: { icon: null, title: ItemResponseType.AbTest },
   [ItemResponseType.Time]: { icon: <Svg id="clock-picker" />, title: ItemResponseType.Time },
 };

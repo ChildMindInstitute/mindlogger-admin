@@ -2,14 +2,14 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledTitleLarge, theme } from 'shared/styles';
 
-import { OverviewInstruction } from '../../OverviewInstruction';
+import { OverviewInstruction, OverviewInstructionType } from '../../OverviewInstruction';
 import { RoundOptions } from './RoundOptions';
-import { RoundSettingsProps, RoundUiType } from './RoundSettings.types';
+import { RoundSettingsProps, RoundTypeEnum } from './RoundSettings.types';
 import { BlockSequences } from './BlockSequences';
 
 export const RoundSettings = ({ uiType }: RoundSettingsProps) => {
   const { t } = useTranslation();
-  const isPracticeRound = uiType === RoundUiType.Practice;
+  const isPracticeRound = uiType === RoundTypeEnum.Practice;
 
   return (
     <>
@@ -17,6 +17,11 @@ export const RoundSettings = ({ uiType }: RoundSettingsProps) => {
         {t(`flankerRound.${isPracticeRound ? 'titlePractice' : 'titleTest'}`)}
       </StyledTitleLarge>
       <OverviewInstruction
+        instructionType={
+          isPracticeRound
+            ? OverviewInstructionType.FlankerPractice
+            : OverviewInstructionType.FlankerTest
+        }
         description={t(
           `performanceTaskInstructions.${
             isPracticeRound ? 'flankerPracticeDesc' : 'flankerTestDesc'
