@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 import { Svg, ButtonWithMenu } from 'shared/components';
 import { StyledHeader } from 'shared/features';
 import { falseReturnFunc } from 'shared/utils';
-import { AppletFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { AppletFormValues } from 'modules/Builder/types';
 
 import { ClearFlowModal } from '../ClearFlowModal';
 import { getMenuItems } from '../ActivityFlowBuilder.utils';

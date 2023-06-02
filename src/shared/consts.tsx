@@ -22,6 +22,12 @@ export const MAX_FILE_SIZE_2MB = 2_097_152;
 export const INPUT_DEBOUNCE_TIME = 400;
 export const SEARCH_DEBOUNCE_VALUE = 700;
 
+export const DEFAULT_MILLISECONDS_DURATION = 3000;
+export const MIN_MILLISECONDS_DURATION = 1;
+export const DEFAULT_THRESHOLD_DURATION = 75;
+export const MIN_THRESHOLD_DURATION = 1;
+export const MAX_THRESHOLD_DURATION = 99;
+
 export const BUILDER_PAGES = {
   activities: 'activities',
 };
@@ -50,6 +56,7 @@ export const enum Roles {
   Reviewer = 'reviewer',
   Respondent = 'respondent',
   Owner = 'owner',
+  SuperAdmin = 'super_admin',
 }
 
 export enum ItemResponseType {
@@ -131,7 +138,10 @@ export const enum ConditionalLogicMatch {
   Any = 'any',
   All = 'all',
 }
+
 export const ALLOWED_AUDIO_FILE_TYPES = '.mp3,.wav';
+
+export const ALLOWED_VIDEO_FILE_TYPES = '.webm,.mp4';
 
 export const CONDITION_TYPES_TO_HAVE_SINGLE_VALUE = [
   ConditionType.GreaterThan,

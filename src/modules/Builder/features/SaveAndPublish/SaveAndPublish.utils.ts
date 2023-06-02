@@ -39,6 +39,7 @@ export const removeAppletExtraFields = (isNewApplet: boolean) => ({
 });
 
 export const removeActivityExtraFields = () => ({
+  createdAt: undefined,
   order: undefined,
   generateReport: undefined, // TODO: remove when API will be ready
   showScoreSummary: undefined, // TODO: remove when API will be ready

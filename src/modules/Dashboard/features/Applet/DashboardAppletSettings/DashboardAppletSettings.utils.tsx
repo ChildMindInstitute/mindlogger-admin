@@ -17,7 +17,7 @@ import { isManagerOrOwner } from 'shared/utils';
 import { GetSettings } from './DashboardAppletSettings.types';
 
 export const getSettings = ({ isPublished, roles }: GetSettings) => [
-  ...(!roles?.includes(Roles.Editor)
+  ...(isManagerOrOwner(roles?.[0])
     ? [
         {
           label: 'usersAndData',
@@ -98,22 +98,26 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
       },
     ],
   },
-  {
-    label: 'sharing',
-    items: [
-      // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
-      // introduced. (Story: AUS-4.1.4.10)
-      // {
-      //       icon: <Svg id="share" />,
-      //       label: 'shareToLibrary',
-      //       component: <ShareAppletSetting />,
-      //     },
-      {
-        icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
-        label: isPublished ? 'concealApplet' : 'publishApplet',
-        component: <PublishConcealAppletSetting isDashboard />,
-        param: 'publish-conceal',
-      },
-    ],
-  },
+  ...(roles?.includes(Roles.SuperAdmin)
+    ? [
+        {
+          label: 'sharing',
+          items: [
+            // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
+            // introduced. (Story: AUS-4.1.4.10)
+            // {
+            //       icon: <Svg id="share" />,
+            //       label: 'shareToLibrary',
+            //       component: <ShareAppletSetting />,
+            //     },
+            {
+              icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
+              label: isPublished ? 'concealApplet' : 'publishApplet',
+              component: <PublishConcealAppletSetting isDashboard />,
+              param: 'publish-conceal',
+            },
+          ],
+        },
+      ]
+    : []),
 ];

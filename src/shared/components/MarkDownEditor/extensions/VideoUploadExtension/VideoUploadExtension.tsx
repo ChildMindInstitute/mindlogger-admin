@@ -4,23 +4,20 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
+import { ALLOWED_VIDEO_FILE_TYPES } from 'shared/consts';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
-import { SourceLinkModal } from '../../SourceLinkModal';
+import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { InsertContentExtensionProps, InsertHandlerProps } from '../Extensions.types';
+import { InsertContentExtensionProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
 export const VideoUploadExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');
-  const insertHandler = ({ values }: InsertHandlerProps) => {
+  const insertHandler = ({ label, address }: SourceLinkModalForm) => {
     const generator: InsertContentGenerator = () => ({
-      targetValue: `<figure><figcaption>${
-        values?.label || ''
-      }:</figcaption><video controls width="250"><source src="${
-        values?.address || ''
-      }"></video></figure>`,
+      targetValue: `<figure><figcaption>${label}:</figcaption><video controls width="250"><source src="${address}"></video></figure>`,
       select: false,
       deviationStart: 0,
       deviationEnd: 0,
@@ -58,9 +55,10 @@ export const VideoUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
                   <StyledTitleSmall onClick={onUploadClick}>
                     {t('uploadVideo')}
                     <input
+                      key={inputRef.current?.toString()}
                       ref={inputRef}
                       hidden
-                      accept="video/*"
+                      accept={ALLOWED_VIDEO_FILE_TYPES}
                       type="file"
                       onChange={onInputChange}
                     />

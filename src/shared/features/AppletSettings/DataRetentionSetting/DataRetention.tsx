@@ -73,6 +73,7 @@ export const DataRetention = () => {
   const onSubmit = async ({ retentionPeriod, retentionType }: DataRetentionFormValues) => {
     if (id) {
       await saveDataRetention({ appletId: id, period: retentionPeriod, retention: retentionType });
+      await dispatch(getApplet({ appletId: id! }));
     }
   };
 

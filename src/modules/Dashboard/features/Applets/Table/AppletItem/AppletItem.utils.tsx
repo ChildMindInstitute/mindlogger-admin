@@ -2,8 +2,8 @@ import { t } from 'i18next';
 
 import { Svg } from 'shared/components';
 import { Roles } from 'shared/consts';
-
 import { isManagerOrOwner } from 'shared/utils';
+
 import { Actions } from './AppletItem.types';
 
 export const getActions = ({
@@ -19,29 +19,34 @@ export const getActions = ({
     editAction,
   },
   item,
+  roles,
 }: Actions) => {
-  const { role, isPublished } = item;
-  const commonCondition =
-    role !== Roles.Coordinator && role !== Roles.Respondent && role !== Roles.Reviewer;
+  const { isPublished } = item;
+  const isReviewer = roles?.includes(Roles.Reviewer);
+  const isEditor = roles?.includes(Roles.Editor);
+  const isOwner = roles?.includes(Roles.Owner);
+  const isCoordinator = roles?.includes(Roles.Coordinator);
+  const isSuperAdmin = roles?.includes(Roles.SuperAdmin);
+  const commonCondition = isManagerOrOwner(roles?.[0]) || isEditor;
 
   return [
     {
-      isDisplayed: !!item.parentId,
       icon: <Svg id="remove-from-folder" />,
       action: removeFromFolder,
       tooltipTitle: t('removeFromFolder'),
+      isDisplayed: !!item.parentId,
     },
     {
       icon: <Svg id="users" />,
       action: viewUsers,
       tooltipTitle: t('viewUsers'),
-      isDisplayed: role !== Roles.Editor,
+      isDisplayed: isManagerOrOwner(roles?.[0]) || isReviewer || isCoordinator,
     },
     {
       icon: <Svg id="calendar" />,
       action: viewCalendar,
       tooltipTitle: t('viewGeneralCalendar'),
-      isDisplayed: role !== Roles.Respondent && role !== Roles.Reviewer,
+      isDisplayed: isManagerOrOwner(roles?.[0]) || isCoordinator,
     },
     {
       icon: <Svg id="widget" />,
@@ -59,13 +64,13 @@ export const getActions = ({
       icon: <Svg id="trash" />,
       action: deleteAction,
       tooltipTitle: t('deleteApplet'),
-      isDisplayed: isManagerOrOwner(role as Roles),
+      isDisplayed: isManagerOrOwner(roles?.[0]),
     },
     {
       icon: <Svg id="switch-account" />,
       action: transferOwnership,
       tooltipTitle: t('transferOwnership'),
-      isDisplayed: role === Roles.Owner,
+      isDisplayed: isOwner,
     },
     // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
     // introduced. (Story: AUS-4.1.4.10)
@@ -75,13 +80,12 @@ export const getActions = ({
     //   tooltipTitle: t('shareWithTheLibrary'),
     // },
     {
-      isDisplayed: !item.isFolder,
       icon: <Svg id={isPublished ? 'conceal' : 'publish'} width="18" height="18" />,
       action: publishAppletAction,
       tooltipTitle: t(isPublished ? 'conceal' : 'publish'),
+      isDisplayed: !item.isFolder && isSuperAdmin,
     },
   ];
 };
 
-export const hasOwnerRole = (item: unknown & { role?: string }) =>
-  !!item.role?.includes(Roles.Owner);
+export const hasOwnerRole = (role?: Roles) => role === Roles.Owner;

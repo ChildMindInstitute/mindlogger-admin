@@ -1,6 +1,6 @@
-import { ItemFormValues } from 'modules/Builder';
 import { ConditionalLogic } from 'shared/state';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { GetConditionsToRemoveConfig } from './ActivityItems.types';
 

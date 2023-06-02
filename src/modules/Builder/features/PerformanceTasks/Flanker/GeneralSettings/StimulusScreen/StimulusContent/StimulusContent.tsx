@@ -3,15 +3,18 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { Box } from '@mui/material';
 
-import { StyledBodyLarge, StyledBodyMedium, StyledFlexTopCenter, variables } from 'shared/styles';
+import {
+  theme,
+  StyledBodyLarge,
+  StyledBodyMedium,
+  StyledFlexTopCenter,
+  variables,
+  StyledSvgPrimaryColorBtn,
+} from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
-import {
-  CorrectPress,
-  FlankerStimulusSettings,
-} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.types';
+import { CorrectPress, FlankerStimulusSettings } from 'modules/Builder/types';
 
-import { StyledAddButton } from '../../GeneralSettings.styles';
 import { pressOptions } from './StimulusContent.const';
 import {
   StyledBtmSection,
@@ -35,7 +38,7 @@ export const StimulusContent = () => {
   });
 
   const handleStimulusAdd = () =>
-    append({ id: uuidv4(), image: '', correctPress: CorrectPress.Left });
+    append({ id: uuidv4(), image: '', imageName: '', correctPress: CorrectPress.Left });
 
   const handleActiveBtnChange = (value: string, index: number) => {
     update(index, {
@@ -69,12 +72,20 @@ export const StimulusContent = () => {
               uiType={UploaderUiType.Secondary}
               width={5.6}
               height={5.6}
-              setValue={(val: string) =>
-                setValue(`${stimulusField}.${index}.image`, val || undefined)
-              }
+              setValue={(val: string) => setValue(`${stimulusField}.${index}.image`, val ?? '')}
               getValue={() => trial.image || ''}
-              showImgName
+              setImgOriginalName={(name: string) =>
+                setValue(`${stimulusField}.${index}.imageName`, name ?? '')
+              }
             />
+            {trial.imageName && (
+              <StyledBodyLarge
+                sx={{ ml: theme.spacing(1) }}
+                color={variables.palette.on_surface_variant}
+              >
+                {trial.imageName}
+              </StyledBodyLarge>
+            )}
           </StyledFlexTopCenter>
           <Box sx={{ flex: '0 0 45%' }}>
             <Box sx={{ width: '18.3rem' }}>
@@ -93,13 +104,13 @@ export const StimulusContent = () => {
         </StyledRow>
       ))}
       <StyledBtmSection>
-        <StyledAddButton
+        <StyledSvgPrimaryColorBtn
           onClick={handleStimulusAdd}
           startIcon={<Svg id="add" width="1.8rem" height="1.8rem" />}
           variant="text"
         >
           {t('flankerStimulus.addBtn')}
-        </StyledAddButton>
+        </StyledSvgPrimaryColorBtn>
       </StyledBtmSection>
     </StyledWrapper>
   );

@@ -26,7 +26,7 @@ import {
   CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
 } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { ItemFormValues } from 'modules/Builder';
+import { ItemFormValues } from 'modules/Builder/types';
 
 export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }) => {
   const { t } = useTranslation('app');

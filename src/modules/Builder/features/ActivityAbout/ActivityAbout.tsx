@@ -9,6 +9,7 @@ import {
   theme,
   variables,
   StyledFlexColumn,
+  StyledCheckboxTooltipSvg,
 } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Tooltip, Uploader } from 'shared/components';
@@ -20,11 +21,11 @@ import {
 } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
-import { ActivityFormValues, ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
-import { StyledContainer, StyledSvg } from './ActivityAbout.styles';
+import { StyledContainer } from './ActivityAbout.styles';
 import { itemsForReviewableActivity } from './ActivityAbout.const';
 
 export const ActivityAbout = () => {
@@ -90,6 +91,7 @@ export const ActivityAbout = () => {
           getValue={() => watch(`${fieldName}.splashScreen`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
           hasRemoveConfirmation
+          cropRatio={7 / 10}
         />
       ),
     },
@@ -119,7 +121,7 @@ export const ActivityAbout = () => {
           </Tooltip>
           <Tooltip tooltipTitle={t('onlyAdminPanelActivityTooltip')}>
             <span>
-              <StyledSvg id="more-info-outlined" />
+              <StyledCheckboxTooltipSvg id="more-info-outlined" />
             </span>
           </Tooltip>
         </StyledBodyLarge>

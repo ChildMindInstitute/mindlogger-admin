@@ -1,4 +1,4 @@
-import { ActivityFormValues, ItemFormValues, FlankerFormValues } from 'modules/Builder/pages';
+import { ActivityFormValues, ItemFormValues, FlankerFormValues } from 'modules/Builder/types';
 
 export type GetActivitiesActions = {
   key: string;

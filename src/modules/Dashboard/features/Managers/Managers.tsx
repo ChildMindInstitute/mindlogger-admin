@@ -59,12 +59,11 @@ export const Managers = () => {
     ...user,
     applets: user.applets.filter((applet) => {
       const workspaceUserRole = rolesData?.data?.[applet.id][0];
-      const userRole = applet.roles[0].role;
+      const withoutManagerOrOwner = !applet.roles?.some(({ role }) => isManagerOrOwner(role));
 
       return (
-        isManagerOrOwner(workspaceUserRole) &&
-        userRole !== Roles.Manager &&
-        userRole !== Roles.Owner
+        workspaceUserRole === Roles.Owner ||
+        (workspaceUserRole === Roles.Manager && withoutManagerOrOwner)
       );
     }),
   });
@@ -159,6 +158,7 @@ export const Managers = () => {
           removeAccessPopupVisible={removeAccessPopupVisible}
           onClose={() => setRemoveAccessPopupVisible(false)}
           user={selectedManager}
+          refetchManagers={handleReload}
         />
       )}
       {editAccessPopupVisible && selectedManager && (
@@ -166,6 +166,7 @@ export const Managers = () => {
           editAccessPopupVisible={editAccessPopupVisible}
           onClose={() => setEditAccessPopupVisible(false)}
           user={selectedManager}
+          refetchManagers={handleReload}
         />
       )}
     </>
