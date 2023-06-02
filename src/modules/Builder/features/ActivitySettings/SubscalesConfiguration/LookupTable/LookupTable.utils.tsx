@@ -62,7 +62,7 @@ export const getModalComponents = ({
         onSubmit: () => {
           if (!data?.length) return;
 
-          onUpdate(JSON.stringify(data));
+          onUpdate(data);
           onClose();
         },
         hasSecondBtn: true,

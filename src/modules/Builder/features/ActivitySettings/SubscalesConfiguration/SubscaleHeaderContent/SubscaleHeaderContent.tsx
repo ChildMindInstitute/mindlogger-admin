@@ -22,9 +22,9 @@ export const SubscaleHeaderContent = ({
 }: SubscaleHeaderContentProps) => {
   const { watch } = useFormContext();
   const subscaleName = watch(`${name}.name`);
-  const subscaleTableData = watch(`${name}.subscaleTableData`);
+  const subscaleTableData = watch(`${name}.subscaleTableData`) ?? [];
   const [isSubscaleLookupTableOpened, setIsSubscaleLookupTableOpened] = useState(false);
-  const iconId = `lookup-table${subscaleTableData ? '-filled' : ''}`;
+  const iconId = `lookup-table${subscaleTableData?.length ? '-filled' : ''}`;
 
   return (
     <>
@@ -37,7 +37,7 @@ export const SubscaleHeaderContent = ({
               setIsSubscaleLookupTableOpened(true);
             }}
           >
-            <StyledSvg isFilled={!!subscaleTableData} id={iconId} width="20" height="20" />
+            <StyledSvg isFilled={!!subscaleTableData?.length} id={iconId} width="20" height="20" />
           </StyledClearedButton>
           <StyledClearedButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}

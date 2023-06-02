@@ -391,6 +391,12 @@ export type ScoresAndReports = {
   sections: ActivitySettingsSection[];
 };
 
+export type SubscaleSetting = {
+  calculateTotalScore?: SubscaleTotalScore | null;
+  subscales?: ActivitySettingsSubscale[];
+  totalScoresTableData?: Record<string, string>[] | null;
+};
+
 export type Activity = {
   id?: string;
   key?: string;
@@ -406,11 +412,9 @@ export type Activity = {
   isHidden?: boolean;
   items: Item[];
   scoresAndReports?: ScoresAndReports;
-  subscales?: ActivitySettingsSubscale[];
-  calculateTotalScore?: SubscaleTotalScore;
+  subscaleSetting?: SubscaleSetting | null;
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
-  totalScoresTableData?: string;
   isPerformanceTask?: boolean;
 };
 
@@ -452,7 +456,7 @@ export type ActivitySettingsSubscale = {
   name: string;
   scoring: SubscaleTotalScore;
   items: string[];
-  subscaleTableData?: string;
+  subscaleTableData?: Record<string, string>[] | null;
 };
 
 export type SingleApplet = {

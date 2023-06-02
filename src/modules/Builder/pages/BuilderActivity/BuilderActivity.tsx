@@ -40,7 +40,7 @@ export const BuilderActivity = () => {
   const tabErrors = {
     hasAboutActivityErrors: !!getFieldState(`${fieldName}.name`).error,
     hasActivityItemsErrors: !!getFieldState(`${fieldName}.items`).error,
-    hasActivitySubscalesErrors: !!getFieldState(`${fieldName}.subscales`).error,
+    hasActivitySubscalesErrors: !!getFieldState(`${fieldName}.subscaleSetting`).error,
     hasActivityItemsFlowErrors: !!getFieldState(`${fieldName}.conditionalLogic`).error,
   };
 

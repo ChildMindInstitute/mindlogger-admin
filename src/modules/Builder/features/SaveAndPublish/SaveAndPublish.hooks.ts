@@ -75,7 +75,7 @@ export const useAppletData = () => {
               ),
               ...removeItemExtraFields(),
             })),
-            ...removeActivityExtraFields(),
+            ...removeActivityExtraFields(activity),
           });
         }
 
