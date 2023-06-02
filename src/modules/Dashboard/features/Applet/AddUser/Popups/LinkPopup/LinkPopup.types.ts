@@ -1,4 +1,4 @@
-import { InviteLink } from '../LinkGenerator.types';
+import { InviteLink } from '../../LinkGenerator/LinkGenerator.types';
 
 export type LinkPopupProps = {
   open: boolean;

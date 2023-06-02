@@ -23,6 +23,7 @@ import { Item } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { EditorUiType } from 'shared/components/FormComponents/EditorController/EditorController.types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { getEntityKey } from 'shared/utils';
 
 import {
   calculationTypes,
@@ -62,10 +63,8 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
     isScoreIdVariable && setIsChangeScoreIdPopupVisible(true);
   }, [isScoreIdVariable, scoreName]);
 
-  useEffect(() => setValue(`${name}.id`, scoreId), [scoreName]);
-
   useEffect(() => {
-    const selectedItems = items.filter((item) => itemsScore.includes(item.id as string));
+    const selectedItems = items.filter((item) => itemsScore.includes(getEntityKey(item)));
     const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
     setScoreRangeLabel(getScoreRangeLabel(minScore, maxScore));
     setValue(`${name}.minScore`, minScore);
@@ -85,8 +84,10 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
       <StyledFlexTopStart>
         <Box sx={{ mr: theme.spacing(4.8), width: '50%' }}>
           <InputController
+            control={control}
             name={`${name}.name`}
             label={t('scoreName')}
+            onBlur={() => setValue(`${name}.id`, scoreId)}
             sx={{ mb: theme.spacing(4.8) }}
           />
           <SelectController

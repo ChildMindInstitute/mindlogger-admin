@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { folders } from 'redux/modules';
 import { StyledClearedButton } from 'shared/styles/styledComponents';
 import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
-import { getAppletData } from 'shared/utils/getAppletData';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
 
@@ -18,7 +16,6 @@ import { AppletPasswordRef } from '../Password.types';
 export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPasswordProps>(
   ({ appletId, encryption, submitCallback }, ref) => {
     const { t } = useTranslation('app');
-    const appletsFoldersData = folders.useFlattenFoldersApplets();
     const { setAppletPrivateKey } = useEncryptionCheckFromStorage();
     const { handleSubmit, control, setError, watch } = useForm<EnterAppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
@@ -27,9 +24,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     const [showPassword, setShowPassword] = useState(false);
 
     const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
-      const encryptionInfoFromServer = getParsedEncryptionFromServer(
-        encryption! || getAppletData(appletsFoldersData, appletId).encryption!,
-      );
+      const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
       if (!encryptionInfoFromServer) return;
 
       const {

@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Box, Button } from '@mui/material';
 
+import { Activity } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
@@ -21,7 +22,7 @@ import { NOTE_ROWS_COUNT } from './FeedbackNotes.const';
 import { StyledContainer, StyledForm } from './FeedbackNotes.styles';
 import { FeedbackNote as FeedbackNoteType } from './FeedbackNotes.types';
 
-export const FeedbackNotes = () => {
+export const FeedbackNotes = ({ activity }: { activity: Activity }) => {
   const { t } = useTranslation();
   const [notes, setNotes] = useState<FeedbackNoteType[]>([]);
   const { appletId, answerId } = useParams();
@@ -37,41 +38,50 @@ export const FeedbackNotes = () => {
     defaultValues: { newNote: '' },
   });
 
-  const { execute } = useAsync(
+  const { execute: getAnswersNotes } = useAsync(
     getAnswersNotesApi,
     (res) => res?.data?.result && setNotes(res.data.result),
   );
 
   const updateListOfNotes = () => {
-    appletId && answerId && execute({ appletId, answerId, params: {} });
+    if (!appletId || !answerId) return;
+    getAnswersNotes({ appletId, answerId, activityId, params: {} });
   };
 
-  const { execute: executeAddNote } = useAsync(createAnswerNoteApi, () => updateListOfNotes());
+  const { execute: createAnswerNote } = useAsync(createAnswerNoteApi, () => updateListOfNotes());
+  const { execute: editAnswerNote } = useAsync(editAnswerNoteApi, () => updateListOfNotes());
+  const { execute: deleteAnswerNote } = useAsync(deleteAnswerNoteApi, () => updateListOfNotes());
 
-  const { execute: executeEditNote } = useAsync(editAnswerNoteApi, () => updateListOfNotes());
-
-  const { execute: executeDeleteNote } = useAsync(deleteAnswerNoteApi, () => updateListOfNotes());
-
-  useEffect(() => {
-    if (appletId && answerId) {
-      execute({ appletId, answerId, params: {} });
-    }
-  }, [appletId, answerId]);
+  const activityId = activity?.id ?? '';
 
   const handleNoteEdit = (updatedNote: Pick<FeedbackNoteType, 'id' | 'note'>) => {
     appletId &&
       answerId &&
-      executeEditNote({ appletId, answerId, noteId: updatedNote.id, note: updatedNote.note });
+      editAnswerNote({
+        appletId,
+        answerId,
+        activityId,
+        noteId: updatedNote.id,
+        note: updatedNote.note,
+      });
   };
 
   const handleNoteDelete = (noteId: string) => {
-    appletId && answerId && executeDeleteNote({ appletId, answerId, noteId });
+    appletId && answerId && deleteAnswerNote({ appletId, answerId, activityId, noteId });
   };
 
   const addNewNote = () => {
-    appletId && answerId && executeAddNote({ appletId, answerId, note: getValues().newNote });
+    appletId &&
+      answerId &&
+      createAnswerNote({ appletId, answerId, activityId, note: getValues().newNote });
     setValue('newNote', '');
   };
+
+  useEffect(() => {
+    if (appletId && answerId) {
+      getAnswersNotes({ appletId, answerId, activityId, params: {} });
+    }
+  }, [appletId, answerId]);
 
   return (
     <StyledContainer ref={containerRef}>

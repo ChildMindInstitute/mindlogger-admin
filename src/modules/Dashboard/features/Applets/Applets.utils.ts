@@ -1,17 +1,17 @@
+import { Folder } from 'api';
 import { TFunction } from 'i18next';
-import { FolderApplet } from 'redux/modules';
 
-export const generateNewFolderName = (foldersApplets: FolderApplet[], t: TFunction) => {
+export const generateNewFolderName = (folders: Folder[], t: TFunction) => {
   const newFolder = t('newFolder');
-  const folders = foldersApplets.filter(({ isFolder, name }) => isFolder && name);
+  const names = folders.filter(({ name }) => name);
 
-  if (!folders.length) {
+  if (!names.length) {
     return newFolder;
   }
 
   const result: RegExpExecArray[] = [];
 
-  folders.forEach(({ name = '' }) => {
+  names.forEach(({ name = '' }) => {
     const exist = new RegExp(/^New Folder\s\((\d+)\)$|^New Folder$/).exec(name);
     if (exist) {
       result.push(exist);

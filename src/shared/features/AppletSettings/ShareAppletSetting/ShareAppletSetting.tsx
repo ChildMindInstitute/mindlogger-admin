@@ -1,27 +1,24 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
+import { applet } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { ShareApplet } from 'modules/Dashboard/features/Applet';
 import { SuccessSharePopup } from 'modules/Dashboard/features/Applet/Popups';
-import { folders } from 'modules/Dashboard/state';
 
 import { StyledButton, StyledContainer } from './ShareAppletSetting.styles';
 import { StyledHeadline } from '../AppletSettings.styles';
 
 export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) => {
   const { t } = useTranslation('app');
-  const { appletId: id } = useParams();
+  const { result: appletData } = applet.useAppletData() ?? {};
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [keywords, setKeywords] = useState<string[]>([]);
   const [libraryUrl, setLibraryUrl] = useState('');
-
-  const applet = id ? folders.useApplet(id) : undefined;
 
   const handleSharedApplet = ({
     keywords,
@@ -40,15 +37,15 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
       <StyledHeadline>{t('shareToLibrary')}</StyledHeadline>
       <StyledContainer>
         <ShareApplet
-          applet={applet}
+          applet={appletData}
           onAppletShared={handleSharedApplet}
           onDisableSubmit={(isDisabled) => setIsDisabled(isDisabled)}
           isSubmitted={isSubmitted}
           showSuccess={false}
         />
-        {applet && (
+        {appletData && (
           <SuccessSharePopup
-            applet={applet}
+            applet={appletData}
             keywords={keywords}
             libraryUrl={libraryUrl}
             sharePopupVisible={sharePopupVisible}

@@ -78,7 +78,9 @@ export const RespondentDataReview = () => {
           <StyledWrapper>{emptyMessage}</StyledWrapper>
         )}
       </StyledReviewContainer>
-      {isFeedbackOpen && <Feedback onClose={() => setIsFeedbackOpen(false)} />}
+      {selectedActivity && isFeedbackOpen && (
+        <Feedback selectedActivity={selectedActivity} onClose={() => setIsFeedbackOpen(false)} />
+      )}
     </StyledContainer>
   );
 };

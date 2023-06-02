@@ -477,6 +477,8 @@ export type SingleApplet = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   theme?: Theme;
+  pinnedAt?: string | null;
+  role?: string;
   encryption?: Encryption;
   generateReport: boolean;
   isPublished?: boolean;

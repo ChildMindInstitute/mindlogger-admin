@@ -1,10 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
+import { page } from 'resources';
 import { applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
+import { DeletePopup } from 'modules/Dashboard/features/Applet/Popups';
 
 import {
   StyledAppletSettingsButton,
@@ -14,10 +16,14 @@ import {
 
 export const DeleteAppletSetting = () => {
   const { t } = useTranslation('app');
-  const { appletId: id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
-  const encryption = appletData?.encryption;
+  const { deletePopupVisible } = popups.useData();
+
+  const onCloseCallback = () => {
+    navigate(page.dashboardApplets);
+  };
 
   return (
     <>
@@ -29,8 +35,7 @@ export const DeleteAppletSetting = () => {
           onClick={() =>
             dispatch(
               popups.actions.setPopupVisible({
-                appletId: id || '',
-                encryption,
+                applet: appletData,
                 key: 'deletePopupVisible',
                 value: true,
               }),
@@ -42,6 +47,7 @@ export const DeleteAppletSetting = () => {
           {t('deleteApplet')}
         </StyledAppletSettingsButton>
       </Box>
+      {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} />}
     </>
   );
 };

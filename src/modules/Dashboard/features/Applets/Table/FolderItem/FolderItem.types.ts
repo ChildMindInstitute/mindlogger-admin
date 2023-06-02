@@ -1,5 +1,5 @@
-import { FolderApplet } from 'modules/Dashboard/state';
+import { Folder } from 'api';
 
 export type FolderItemProps = {
-  item: FolderApplet;
+  item: Folder;
 };

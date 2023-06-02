@@ -27,7 +27,7 @@ export const getSettings = ({
   const tooltip = isNewApplet ? t('saveAndPublishFirst') : undefined;
 
   return [
-    ...(!roles?.includes(Roles.Editor)
+    ...(isManagerOrOwner(roles?.[0])
       ? [
           {
             label: 'usersAndData',
@@ -76,7 +76,7 @@ export const getSettings = ({
               {
                 icon: <Svg id="transfer-ownership" />,
                 label: 'transferOwnership',
-                component: <TransferOwnershipSetting isApplet />,
+                component: <TransferOwnershipSetting />,
                 param: 'transfer-ownership',
                 disabled: isNewApplet,
                 tooltip,

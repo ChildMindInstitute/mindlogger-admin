@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { postReportConfigApi } from 'api';
-import { applet, folders } from 'redux/modules';
+import { applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { SaveChangesPopup, Svg } from 'shared/components';
 import {
@@ -34,9 +33,9 @@ import { useCheckReportServer } from './ReportConfigSetting.hooks';
 import { usePrompt } from '../AppletSettings.hooks';
 
 export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConfigSettingProps) => {
-  const { appletId: id } = useParams();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { result: appletData } = applet.useAppletData() ?? {};
 
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
@@ -44,11 +43,9 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
-  const { result: appletData } = applet.useAppletData() ?? {};
 
   const { getApplet } = applet.thunk;
-  const folderApplet = id ? folders.useApplet(id) : undefined;
-  const encryption = appletData?.encryption || folderApplet?.encryption;
+  const encryption = appletData?.encryption;
 
   const { execute: postReportConfig } = useAsync(
     postReportConfigApi,
@@ -77,7 +74,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
 
   useEffect(() => {
     if (successPopupVisible && isDashboard) {
-      dispatch(getApplet({ appletId: id ?? '' }));
+      dispatch(getApplet({ appletId: appletData?.id ?? '' }));
     }
 
     if (successPopupVisible && onSubmitSuccess) {
@@ -156,7 +153,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
     };
 
     await postReportConfig({
-      appletId: id ?? '',
+      appletId: appletData?.id ?? '',
       ...body,
     });
 
@@ -318,12 +315,12 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
       </StyledForm>
       {passwordPopupVisible && (
         <AppletPasswordPopup
-          appletId={id ?? ''}
+          appletId={appletData?.id ?? ''}
           onClose={() => setPasswordPopupVisible(false)}
           popupType={AppletPasswordPopupType.Enter}
           popupVisible={passwordPopupVisible}
           submitCallback={passwordSubmit}
-          encryption={encryption}
+          encryption={appletData?.encryption}
         />
       )}
       {warningPopupVisible && (
