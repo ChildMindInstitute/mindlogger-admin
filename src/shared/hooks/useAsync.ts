@@ -7,6 +7,7 @@ export const useAsync = <T, K>(
   asyncFunction: (args: T) => Promise<AxiosResponse<K>>,
   callback?: (data: AxiosResponse<K> | null) => void,
   errorCallback?: (data: K | null) => void,
+  finallyCallback?: () => void,
 ) => {
   const [value, setValue] = useState<AxiosResponse<K> | null>(null);
   const [error, setError] = useState<AxiosError<ApiError> | null>(null);
@@ -32,7 +33,10 @@ export const useAsync = <T, K>(
 
           throw error.response;
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => {
+          setIsLoading(false);
+          finallyCallback?.();
+        });
     },
     [asyncFunction],
   );

@@ -9,7 +9,7 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { DataTable } from 'shared/components';
-import { ActivityFormValues } from 'modules/Builder/pages';
+import { ActivityFormValues } from 'modules/Builder/types';
 
 import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';

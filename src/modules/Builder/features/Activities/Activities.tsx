@@ -13,7 +13,7 @@ import {
   ActivityValue,
   AppletFormValues,
   FlankerFormValues,
-} from 'modules/Builder/pages/BuilderApplet';
+} from 'modules/Builder/types';
 import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
 import {
   getNewActivity,

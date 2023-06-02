@@ -5,7 +5,7 @@ import { Order } from 'shared/types/table';
 import { EmptyTable } from 'shared/components/EmptyTable';
 
 import { TableHead } from './TableHead';
-import { DEFAULT_ROWS_PER_PAGE, TERTIARY_TYPE_ROWS_PER_PAGE } from './Table.const';
+import { DEFAULT_ROWS_PER_PAGE, SEVEN_ROWS_PER_PAGE } from './Table.const';
 import { StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { Row, TableProps, UiType } from './Table.types';
 
@@ -23,14 +23,16 @@ export const Table = ({
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(
-    uiType === UiType.Tertiary ? TERTIARY_TYPE_ROWS_PER_PAGE : DEFAULT_ROWS_PER_PAGE,
+    uiType === UiType.Tertiary || uiType === UiType.Quaternary
+      ? SEVEN_ROWS_PER_PAGE
+      : DEFAULT_ROWS_PER_PAGE,
   );
 
   function descendingComparator(a: Row, b: Row, orderBy: string) {
-    if (b[orderBy].value < a[orderBy].value) {
+    if (b[orderBy]?.value < a[orderBy]?.value) {
       return -1;
     }
-    if (b[orderBy].value > a[orderBy].value) {
+    if (b[orderBy]?.value > a[orderBy]?.value) {
       return 1;
     }
 

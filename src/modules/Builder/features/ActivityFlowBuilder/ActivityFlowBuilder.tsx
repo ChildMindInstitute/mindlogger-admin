@@ -10,11 +10,7 @@ import { Menu } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
-import {
-  ActivityFlowFormValues,
-  ActivityFlowItem,
-  AppletFormValues,
-} from 'modules/Builder/pages/BuilderApplet';
+import { ActivityFlowFormValues, ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
 import { page } from 'resources';
 import { getObjectFromList } from 'shared/utils';
 

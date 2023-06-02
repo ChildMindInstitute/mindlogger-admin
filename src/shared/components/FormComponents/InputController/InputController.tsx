@@ -50,11 +50,19 @@ export const InputController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
-        const textFieldValue =
-          isNumberType &&
-          ((typeof value !== 'number' && !isEmptyStringAllowed) || value < minNumberValue)
-            ? minNumberValue
-            : value;
+        const getTextFieldValue = () => {
+          if (!isNumberType) return value;
+
+          if ((typeof value !== 'number' && !isEmptyStringAllowed) || value < minNumberValue) {
+            return minNumberValue;
+          }
+
+          if (maxNumberValue && value > maxNumberValue) {
+            return maxNumberValue;
+          }
+
+          return value;
+        };
 
         const handleAddNumber = () => {
           if (typeof maxNumberValue !== 'number') return onChange(+value + 1);
@@ -83,7 +91,7 @@ export const InputController = <T extends FieldValues>({
               <StyledTextField
                 {...textFieldProps}
                 onChange={handleChange}
-                value={textFieldValue}
+                value={getTextFieldValue()}
                 error={!!error || providedError}
                 helperText={isErrorVisible ? error?.message || helperText : ''}
                 InputProps={

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { DataTableItem, ImportedFile } from 'shared/components';
-import { exportToCsv } from 'shared/utils';
+import { exportTemplate } from 'shared/utils';
 
 import { ModalType, Steps, LookupTableSetupHookProps } from './LookupTable.types';
 
@@ -32,7 +32,7 @@ export const useSubscaleLookupTableSetup = ({
   };
 
   const onDownloadTemplate = () => {
-    exportToCsv(template, `${templatePrefix}lookup_table_template`);
+    exportTemplate(template, `${templatePrefix}lookup_table_template`);
   };
 
   useEffect(() => {

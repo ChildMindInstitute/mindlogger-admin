@@ -15,7 +15,7 @@ export const GeneralSettings = () => {
       <StyledTitleLarge sx={{ p: theme.spacing(1, 0, 2.4) }}>
         {t('generalSettings')}
       </StyledTitleLarge>
-      <OverviewInstruction description={t('performanceTaskInstructions.generalSettings')} />
+      <OverviewInstruction description={t('performanceTaskInstructions.flankerGeneralDesc')} />
       <ButtonsScreen />
       <FixationScreen />
       <StimulusScreen />

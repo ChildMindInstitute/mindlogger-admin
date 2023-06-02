@@ -10,7 +10,7 @@ import { getEntityKey } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
@@ -59,7 +59,7 @@ export const ActivityItems = () => {
     const item = getNewActivityItem();
     const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
 
-    firstSystemIndex !== -1 ? insertItem(firstSystemIndex, item) : appendItem(item);
+    firstSystemIndex === -1 ? appendItem(item) : insertItem(firstSystemIndex, item);
     setActiveItemId(item.key);
   };
 

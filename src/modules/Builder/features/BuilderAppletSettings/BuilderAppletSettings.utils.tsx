@@ -21,7 +21,7 @@ export const getSettings = ({ isNewApplet, isPublished, roles }: GetSettings) =>
   const tooltip = isNewApplet ? t('saveAndPublishFirst') : undefined;
 
   return [
-    ...(!roles?.includes(Roles.Editor)
+    ...(isManagerOrOwner(roles?.[0])
       ? [
           {
             label: 'usersAndData',

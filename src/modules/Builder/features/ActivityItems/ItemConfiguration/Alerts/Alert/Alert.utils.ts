@@ -1,5 +1,5 @@
 import i18n from 'i18n';
-import { ItemFormValues } from 'modules/Builder/pages/BuilderApplet';
+import { ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType } from 'shared/consts';
 import { SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 

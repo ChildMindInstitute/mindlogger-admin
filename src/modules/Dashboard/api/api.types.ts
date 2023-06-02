@@ -234,7 +234,7 @@ export type OwnerId = {
 
 export type Answers = { id: string; createdDate: string } & RespondentId;
 
-export type Answer = AppletId & { answerId: string };
+export type Answer = AppletId & { answerId: string; activityId: string };
 
 export type ActivityAnswer = AppletId & { answerId: string } & { activityId: string };
 

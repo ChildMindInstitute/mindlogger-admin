@@ -5,7 +5,7 @@ import { StyledTitleSmall, variables } from 'shared/styles';
 
 import i18n from 'i18n';
 import { ActivitySettingsSubscale } from 'shared/state';
-import { ItemFormValues } from 'modules/Builder/pages';
+import { ItemFormValues } from 'modules/Builder/types';
 import { SubscaleTotalScore } from 'shared/consts';
 import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 import { DataTableColumn } from 'shared/components';

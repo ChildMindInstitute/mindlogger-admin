@@ -5,7 +5,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { SelectController } from 'shared/components/FormComponents';
 import { Spinner, Svg } from 'shared/components';
 import { SelectEvent } from 'shared/types';
-import { exportToCsv, getRespondentName } from 'shared/utils';
+import { exportTemplate, getRespondentName } from 'shared/utils';
 import { page } from 'resources';
 import { users } from 'modules/Dashboard/state';
 
@@ -116,7 +116,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
       return `${isDefault ? 'default' : 'individual'}_schedule_template`;
     };
 
-    await exportToCsv(scheduleExportCsv, getFileName());
+    await exportTemplate(scheduleExportCsv, getFileName());
     isExport && setExportDefaultSchedulePopupVisible(false);
   };
 

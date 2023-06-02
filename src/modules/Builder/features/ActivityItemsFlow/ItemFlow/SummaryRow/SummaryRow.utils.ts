@@ -1,5 +1,5 @@
 import i18n from 'i18n';
-import { ItemFormValues } from 'modules/Builder/pages';
+import { ItemFormValues } from 'modules/Builder/types';
 import { ConditionalLogicMatch } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 

@@ -1,7 +1,6 @@
 import { SelectClasses, createTheme, Theme } from '@mui/material';
 import { OverridesStyleRules } from '@mui/material/styles/overrides';
 import 'react-datepicker/dist/react-datepicker.min.css';
-import 'cropperjs/dist/cropper.css';
 
 import { typography } from 'shared/styles/typography';
 import { variables } from 'shared/styles/variables';
@@ -60,6 +59,15 @@ export const theme = createTheme({
             fontSize: variables.font.size.xxl,
             fontWeight: variables.font.weight.regular,
             padding: '6.4rem 3.2rem 2.8rem',
+          },
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          '&&.MuiTypography-root': {
+            zIndex: 'auto',
           },
         },
       },

@@ -456,16 +456,20 @@ export const getActivityAnswerApi = (
   });
 
 export const getAnswersNotesApi = (
-  { appletId, answerId, params }: Answer & GetAnswersNotesParams,
+  { appletId, answerId, activityId, params }: Answer & GetAnswersNotesParams,
   signal?: AbortSignal,
-) => authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/notes`, { params, signal });
+) =>
+  authApiClient.get(
+    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`,
+    { params, signal },
+  );
 
 export const createAnswerNoteApi = (
-  { appletId, answerId, note }: Answer & Note,
+  { appletId, answerId, activityId, note }: Answer & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/answers/applet/${appletId}/answers/${answerId}/notes`,
+    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`,
     { note },
     {
       signal,
@@ -473,11 +477,11 @@ export const createAnswerNoteApi = (
   );
 
 export const editAnswerNoteApi = (
-  { appletId, answerId, noteId, note }: Answer & NoteId & Note,
+  { appletId, answerId, noteId, activityId, note }: Answer & NoteId & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.put(
-    `/answers/applet/${appletId}/answers/${answerId}/notes/${noteId}`,
+    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`,
     { note },
     {
       signal,
@@ -485,12 +489,15 @@ export const editAnswerNoteApi = (
   );
 
 export const deleteAnswerNoteApi = (
-  { appletId, answerId, noteId }: Answer & NoteId,
+  { appletId, answerId, activityId, noteId }: Answer & NoteId,
   signal?: AbortSignal,
 ) =>
-  authApiClient.delete(`/answers/applet/${appletId}/answers/${answerId}/notes/${noteId}`, {
-    signal,
-  });
+  authApiClient.delete(
+    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`,
+    {
+      signal,
+    },
+  );
 
 export const getAppletSubmitDateListApi = (
   { appletId, ...params }: AppletSubmitDateList,

@@ -12,7 +12,7 @@ import { StyledTitle } from '../AddUser.styles';
 import { LinkForm } from './LinkForm';
 import { InviteLink } from './LinkGenerator.types';
 import { StyledSvg, StyledWrapper } from './LinkGenerator.styles';
-import { LinkPopup } from './LinkPopup';
+import { LinkPopup } from '../Popups/LinkPopup';
 
 export const LinkGenerator = () => {
   const { t } = useTranslation('app');
