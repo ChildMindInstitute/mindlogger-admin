@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { postReportConfigApi } from 'api';
-import { SingleApplet, applet, folders } from 'redux/modules';
+import { applet, folders } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { SaveChangesPopup, Svg } from 'shared/components';
 import {
   CheckboxController,
@@ -15,29 +16,38 @@ import {
   UiType,
 } from 'shared/components/FormComponents';
 import { theme, variables, StyledBodyLarge, StyledTitleMedium } from 'shared/styles';
-import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
+import {
+  AppletPasswordPopup,
+  AppletPasswordPopupType,
+  AppletPasswordPopupProps,
+} from 'modules/Dashboard/features/Applet';
 import { useAsync } from 'shared/hooks';
+import { publicEncrypt } from 'shared/utils';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
 import { StyledButton, StyledSvg, StyledContainer, StyledForm } from './ReportConfigSetting.styles';
-import { FormValues } from './ReportConfigSetting.types';
+import { ReportConfigFormValues, ReportConfigSettingProps } from './ReportConfigSetting.types';
 import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
 import { getDefaultValues } from './ReportConfigSetting.utils';
+import { useCheckReportServer } from './ReportConfigSetting.hooks';
 import { usePrompt } from '../AppletSettings.hooks';
 
-export const ReportConfigSetting = () => {
+export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConfigSettingProps) => {
   const { appletId: id } = useParams();
-  const folderApplet = id ? folders.useApplet(id) : undefined;
   const { t } = useTranslation();
-  const isServerConfigured = false; // TODO: add server configured functionality when the back-end is ready
+  const dispatch = useAppDispatch();
+
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
-  const [serverVerifyErrorPopupVisible, setServerVerifyErrorPopupVisible] = useState(false);
   const [successPopupVisible, setSuccessPopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
+  const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
   const { result: appletData } = applet.useAppletData() ?? {};
+
+  const { getApplet } = applet.thunk;
+  const folderApplet = id ? folders.useApplet(id) : undefined;
   const encryption = appletData?.encryption || folderApplet?.encryption;
 
   const { execute: postReportConfig } = useAsync(
@@ -59,11 +69,21 @@ export const ReportConfigSetting = () => {
     trigger,
     reset,
     formState: { isDirty, isSubmitted, defaultValues },
-  } = useForm<FormValues>({
+  } = useForm<ReportConfigFormValues>({
     resolver: yupResolver(reportConfigSchema()),
     defaultValues: getDefaultValues(appletData),
     mode: 'onSubmit',
   });
+
+  useEffect(() => {
+    if (successPopupVisible && isDashboard) {
+      dispatch(getApplet({ appletId: id ?? '' }));
+    }
+
+    if (successPopupVisible && onSubmitSuccess) {
+      onSubmitSuccess(getValues());
+    }
+  }, [successPopupVisible]);
 
   useEffect(() => {
     reset(appletData);
@@ -74,6 +94,15 @@ export const ReportConfigSetting = () => {
   const reportRecipients = watch('reportRecipients') || [];
   const respondentId = watch('reportIncludeUserId');
   const caseId = watch('reportIncludeCaseId');
+  const reportServerUrl = watch('reportServerIp');
+  const reportPublicKey = watch('reportPublicKey');
+
+  const isServerConfigured = appletData?.reportServerIp && appletData?.reportPublicKey;
+
+  const { onVerify, onSetPassword } = useCheckReportServer({
+    url: reportServerUrl,
+    publicKey: reportPublicKey,
+  });
 
   const handleAddEmail = async (value: string) => {
     const isValid = await trigger(['email']);
@@ -91,7 +120,7 @@ export const ReportConfigSetting = () => {
     setValue('reportRecipients', reportRecipients.filter((_, i) => i !== index) as string[]);
   };
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit = (values: ReportConfigFormValues) => {
     const { reportServerIp, reportPublicKey } = values;
     if (!reportServerIp || !reportPublicKey) {
       return setWarningPopupVisible(true);
@@ -101,14 +130,13 @@ export const ReportConfigSetting = () => {
       reportServerIp !== defaultValues?.reportServerIp ||
       reportPublicKey !== defaultValues?.reportPublicKey
     ) {
-      return setPasswordPopupVisible(true);
+      return handleVerify();
     }
 
-    saveReportConfigurations();
+    handleSaveReportConfig();
   };
 
-  const saveReportConfigurations = async () => {
-    //@TODO: add verify report server
+  const handleSaveReportConfig = async () => {
     const {
       reportServerIp,
       reportPublicKey,
@@ -132,13 +160,33 @@ export const ReportConfigSetting = () => {
       ...body,
     });
 
-    setSuccessPopupVisible(true);
-    reset(getDefaultValues(body), { keepValues: true });
+    reset(getDefaultValues(body));
   };
 
-  const passwordSubmit = () => {
-    saveReportConfigurations();
+  const handleVerify = async () => {
+    const isVerified = await onVerify();
+
+    if (isVerified) return setPasswordPopupVisible(true);
+
+    setVerifyPopupVisible(true);
+  };
+
+  const handleSetPassword = async (password: string) => {
     setPasswordPopupVisible(false);
+
+    const isPasswordSet = await onSetPassword(
+      publicEncrypt(JSON.stringify({ password }), reportPublicKey),
+    );
+
+    if (isPasswordSet) handleSaveReportConfig();
+  };
+
+  const handleSaveWithoutServer = async () => {
+    handleSaveReportConfig();
+  };
+
+  const passwordSubmit: AppletPasswordPopupProps['submitCallback'] = (_, passwordRef) => {
+    handleSetPassword(passwordRef.current?.password ?? '');
   };
 
   const handleSaveChanges = () => {
@@ -148,6 +196,11 @@ export const ReportConfigSetting = () => {
 
   const handleCancel = () => {
     cancelNavigation();
+  };
+
+  const handleDontSave = () => {
+    reset(getDefaultValues(appletData));
+    confirmNavigation();
   };
 
   useEffect(() => {
@@ -277,20 +330,20 @@ export const ReportConfigSetting = () => {
         <WarningPopup
           popupVisible={warningPopupVisible}
           setPopupVisible={setWarningPopupVisible}
-          submitCallback={saveReportConfigurations}
+          submitCallback={handleSaveWithoutServer}
         />
       )}
-      {serverVerifyErrorPopupVisible && (
+      {verifyPopupVisible && (
         <ServerVerifyErrorPopup
-          popupVisible={serverVerifyErrorPopupVisible}
-          setPopupVisible={setServerVerifyErrorPopupVisible}
+          popupVisible={verifyPopupVisible}
+          setPopupVisible={setVerifyPopupVisible}
         />
       )}
       {errorPopupVisible && (
         <ErrorPopup
           popupVisible={errorPopupVisible}
           setPopupVisible={setErrorPopupVisible}
-          retryCallback={saveReportConfigurations}
+          retryCallback={handleSaveWithoutServer}
         />
       )}
       {successPopupVisible && (
@@ -299,7 +352,7 @@ export const ReportConfigSetting = () => {
       {promptVisible && (
         <SaveChangesPopup
           popupVisible={promptVisible}
-          onDontSave={confirmNavigation}
+          onDontSave={handleDontSave}
           onCancel={handleCancel}
           onSave={handleSaveChanges}
         />

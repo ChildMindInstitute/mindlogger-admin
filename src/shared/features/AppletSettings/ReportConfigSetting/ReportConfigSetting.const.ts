@@ -8,3 +8,6 @@ export const defaultValues = {
   reportServerIp: '',
   reportPublicKey: '',
 };
+
+export const OK_MESSAGE = 'ok';
+export const SUCCESS_MESSAGE = 'success';

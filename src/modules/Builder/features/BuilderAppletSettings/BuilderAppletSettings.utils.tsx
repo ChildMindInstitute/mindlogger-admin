@@ -16,7 +16,12 @@ import { isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './BuilderAppletSettings.types';
 
-export const getSettings = ({ isNewApplet, isPublished, roles }: GetSettings) => {
+export const getSettings = ({
+  isNewApplet,
+  isPublished,
+  roles,
+  onReportConfigSubmit,
+}: GetSettings) => {
   const { t } = i18n;
 
   const tooltip = isNewApplet ? t('saveAndPublishFirst') : undefined;
@@ -98,7 +103,7 @@ export const getSettings = ({ isNewApplet, isPublished, roles }: GetSettings) =>
         {
           icon: <Svg id="report-configuration" />,
           label: 'reportConfiguration',
-          component: <ReportConfigSetting />,
+          component: <ReportConfigSetting onSubmitSuccess={onReportConfigSubmit} />,
           param: 'report-configuration',
           disabled: isNewApplet,
           tooltip,

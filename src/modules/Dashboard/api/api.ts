@@ -512,8 +512,10 @@ export const publishAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =
 export const concealAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.post(`/applets/${appletId}/conceal`, { signal });
 
-export const postReportConfigApi = ({ appletId, ...params }: AppletId & ReportConfig) =>
-  authApiClient.post(`/applets/${appletId}/report_configuration`, { ...params }, { signal });
+export const postReportConfigApi = (
+  { appletId, ...params }: AppletId & ReportConfig,
+  signal?: AbortSignal,
+) => authApiClient.post(`/applets/${appletId}/report_configuration`, { ...params }, { signal });
 
 export const getAppletVersionsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}/versions`, { signal });
