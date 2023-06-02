@@ -1,16 +1,11 @@
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
-import {
-  DuplicatePopups,
-  PublishConcealAppletPopup,
-  TransferOwnershipPopup,
-} from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
-import { popups, workspaces, auth } from 'redux/modules';
+import { workspaces, auth } from 'redux/modules';
 import { Footer } from 'shared/components';
 
-import { DeletePopup, LeftBar, TopBar } from './components';
+import { LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
 
 export const BaseLayout = () => {
@@ -19,12 +14,6 @@ export const BaseLayout = () => {
 
   const isAuthorized = auth.useAuthorized();
   const { ownerId } = workspaces.useData() || {};
-  const {
-    duplicatePopupsVisible,
-    deletePopupVisible,
-    transferOwnershipPopupVisible,
-    publishConcealPopupVisible,
-  } = popups.useData();
 
   useEffect(() => {
     if (!ownerId) return;
@@ -45,10 +34,6 @@ export const BaseLayout = () => {
         <Outlet />
         <Footer />
       </StyledCol>
-      {duplicatePopupsVisible && <DuplicatePopups />}
-      {deletePopupVisible && <DeletePopup />}
-      {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
-      {publishConcealPopupVisible && <PublishConcealAppletPopup />}
     </StyledBaseLayout>
   );
 };

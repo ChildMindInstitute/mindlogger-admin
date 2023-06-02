@@ -24,8 +24,8 @@ export const SuccessSharePopup = ({
       width="60"
     >
       <SuccessShared
-        title={applet.name || ''}
-        text={applet.description || ''}
+        title={applet.displayName}
+        text={applet.description as string}
         keywords={keywords}
         // TODO: Implement applet activities quantity
         // activitiesQuantity={8}

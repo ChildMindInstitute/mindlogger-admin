@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
@@ -15,9 +14,7 @@ import {
 
 export const ExportDataSetting = () => {
   const { t } = useTranslation('app');
-  const { appletId: id } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
-  const encryption = appletData?.encryption;
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
@@ -38,8 +35,8 @@ export const ExportDataSetting = () => {
         <AppletPasswordPopup
           popupVisible={passwordModalVisible}
           onClose={() => setPasswordModalVisible(false)}
-          appletId={id ?? ''}
-          encryption={encryption}
+          appletId={appletData?.id ?? ''}
+          encryption={appletData?.encryption}
         />
       )}
     </>

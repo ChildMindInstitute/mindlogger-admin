@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { applet, folders } from 'redux/modules';
+import { applet } from 'redux/modules';
 import { SaveChangesPopup, Svg } from 'shared/components';
 import {
   CheckboxController,
@@ -25,9 +24,9 @@ import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from '
 import { usePrompt } from '../AppletSettings.hooks';
 
 export const ReportConfigSetting = () => {
-  const { appletId: id } = useParams();
-  const folderApplet = id ? folders.useApplet(id) : undefined;
   const { t } = useTranslation();
+  const { result: appletData } = applet.useAppletData() ?? {};
+
   const isServerConfigured = false; // TODO: add server configured functionality when the back-end is ready
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
@@ -35,8 +34,6 @@ export const ReportConfigSetting = () => {
   const [successPopupVisible, setSuccessPopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
-  const { result: appletData } = applet.useAppletData() ?? {};
-  const encryption = appletData?.encryption || folderApplet?.encryption;
 
   const {
     handleSubmit,
@@ -116,7 +113,7 @@ export const ReportConfigSetting = () => {
     if (caseId) {
       subject += ' about case123';
     }
-    subject += `: ${folderApplet?.name || 'Example applet'} /activity123 or activityflow123`; // TODO will be fixed for activities
+    subject += `: ${appletData?.displayName || 'Example applet'} /activity123 or activityflow123`; // TODO will be fixed for activities
     setValue('subject', subject);
   }, [respondentId, caseId]);
 
@@ -224,12 +221,12 @@ export const ReportConfigSetting = () => {
       </StyledForm>
       {passwordPopupVisible && (
         <AppletPasswordPopup
-          appletId={id ?? ''}
+          appletId={appletData?.id ?? ''}
           onClose={() => setPasswordPopupVisible(false)}
           popupType={AppletPasswordPopupType.Enter}
           popupVisible={passwordPopupVisible}
           submitCallback={passwordSubmit}
-          encryption={encryption}
+          encryption={appletData?.encryption}
         />
       )}
       {warningPopupVisible && (
