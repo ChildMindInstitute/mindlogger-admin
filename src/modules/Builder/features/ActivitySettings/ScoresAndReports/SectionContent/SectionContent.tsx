@@ -40,7 +40,7 @@ export const SectionContent = ({ name }: SectionContentProps) => {
 
   return (
     <StyledFlexColumn>
-      <InputController name={`${name}.name`} label={t('sectionName')} />
+      <InputController control={control} name={`${name}.name`} label={t('sectionName')} />
       <StyledButton startIcon={<Svg id="add" width="20" height="20" />}>
         {t('addConditinalLogic')}
       </StyledButton>
