@@ -50,7 +50,7 @@ export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void 
   };
 
   const handleConfirmation = () => {
-    onCloseCallback && onCloseCallback();
+    onCloseCallback?.();
     deletePopupClose();
   };
 

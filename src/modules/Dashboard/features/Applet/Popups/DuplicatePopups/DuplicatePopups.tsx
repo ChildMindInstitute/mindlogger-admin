@@ -69,7 +69,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   };
 
   const successModalClose = () => {
-    onCloseCallback && onCloseCallback();
+    onCloseCallback?.();
     setSuccessModalVisible(false);
     duplicatePopupsClose();
   };
