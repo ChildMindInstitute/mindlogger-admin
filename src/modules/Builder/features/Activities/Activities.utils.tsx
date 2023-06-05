@@ -2,7 +2,11 @@ import { Svg } from 'shared/components';
 import { ActivityValue } from 'modules/Builder/types';
 import { page } from 'resources';
 
-import { GetActivitiesActions, PerformanceTasks } from './Activities.types';
+import {
+  EditablePerformanceTasks,
+  GetActivitiesActions,
+  PerformanceTasks,
+} from './Activities.types';
 
 export const getActivityKey = (entity: ActivityValue): string => entity.key ?? entity.id ?? '';
 
@@ -37,13 +41,11 @@ export const getActions = ({
   },
 ];
 
-const performanceTaskPaths: Record<PerformanceTasks, string> = {
+const performanceTaskPaths: Record<EditablePerformanceTasks, string> = {
   [PerformanceTasks.Flanker]: page.builderAppletFlanker,
   [PerformanceTasks.Gyroscope]: page.builderAppletGyroscope,
-  [PerformanceTasks.AbTrailsIpad]: page.builderAppletAbTrailsIpad,
-  [PerformanceTasks.AbTrailsMobile]: page.builderAppletAbTrailsMobile,
   [PerformanceTasks.Touch]: page.builderAppletTouch,
 };
 
-export const getPerformanceTaskPath = (performanceTask: PerformanceTasks) =>
+export const getPerformanceTaskPath = (performanceTask: EditablePerformanceTasks) =>
   performanceTaskPaths[performanceTask];

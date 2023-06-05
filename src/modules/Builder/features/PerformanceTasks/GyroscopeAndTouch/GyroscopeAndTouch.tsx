@@ -8,7 +8,7 @@ import { PerformanceTaskHeader } from '../PerformanceTaskHeader';
 import { NameDescription } from '../NameDescription';
 import { Instruction } from '../Instruction';
 import { GeneralSettings } from './GeneralSettings';
-import { PerformanceTaskBody } from '../PerformanceTasks.styles';
+import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import { GyroscopeAndTouchProps } from './GyroscopeAndTouch.types';
 import { PerformanceTasks } from '../../Activities/Activities.types';
 
@@ -20,7 +20,7 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
   return (
     <>
       <PerformanceTaskHeader />
-      <PerformanceTaskBody sx={{ p: theme.spacing(2.4, 6.4) }}>
+      <StyledPerformanceTaskBody sx={{ p: theme.spacing(2.4, 6.4) }}>
         <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>
           {t(type === PerformanceTasks.Gyroscope ? 'gyroscope' : 'touch')}
         </StyledHeadlineLarge>
@@ -41,7 +41,7 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
           title={t('gyroscopeAndTouchInstructions.test.title')}
           description={t('gyroscopeAndTouchDesc.test')}
         />
-      </PerformanceTaskBody>
+      </StyledPerformanceTaskBody>
     </>
   );
 };

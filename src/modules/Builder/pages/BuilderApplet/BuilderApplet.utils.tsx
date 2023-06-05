@@ -30,7 +30,10 @@ import {
   ItemResponseType,
 } from 'shared/consts';
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
-import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
+import {
+  EditablePerformanceTasks,
+  PerformanceTasks,
+} from 'modules/Builder/features/Activities/Activities.types';
 
 import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
@@ -134,11 +137,11 @@ export const getNewPerformanceTask = ({
     [PerformanceTasks.Flanker]: defaultFlankerProps,
     [PerformanceTasks.Gyroscope]: defaultGyroscopeAndTouchProps,
     [PerformanceTasks.Touch]: defaultGyroscopeAndTouchProps,
-    [PerformanceTasks.AbTrailsIpad]: {},
-    [PerformanceTasks.AbTrailsMobile]: {},
   };
 
-  const defaultPropsByType = type ? propsByTypeObj[type] : {};
+  const defaultPropsByType = type
+    ? propsByTypeObj[type as unknown as EditablePerformanceTasks] || {}
+    : {};
 
   return {
     name,

@@ -32,8 +32,6 @@
   "builderAppletFlanker": "/builder/:appletId/activities/performance-task/flanker/:activityId",
   "builderAppletGyroscope": "/builder/:appletId/activities/performance-task/gyroscope/:activityId",
   "builderAppletTouch": "/builder/:appletId/activities/performance-task/touch/:activityId",
-  "builderAppletAbTrailsIpad": "/builder/:appletId/performance-task/activities/ab-trails-ipad/:activityId",
-  "builderAppletAbTrailsMobile": "/builder/:appletId/performance-task/activities/ab-trails-mobile/:activityId",
   "builderAppletActivityFlow": "/builder/:appletId/activity-flow",
   "builderAppletActivityFlowItem": "/builder/:appletId/activity-flow/:activityFlowId",
   "builderAppletActivityFlowItemAbout": "/builder/:appletId/activity-flow/:activityFlowId/about",

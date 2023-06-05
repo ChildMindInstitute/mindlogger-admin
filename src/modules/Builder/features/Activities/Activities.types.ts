@@ -31,10 +31,16 @@ export type ActivityProps =
       type?: PerformanceTasks;
     });
 
-export const enum PerformanceTasks {
-  AbTrailsIpad = 'A/B Trails iPad',
-  AbTrailsMobile = 'A/B Trails Mobile',
+export const enum EditablePerformanceTasks {
   Flanker = 'Simple & Choice Reaction Time Task Builder',
   Gyroscope = 'CST Gyroscope',
   Touch = 'CST Touch',
+}
+
+export const enum PerformanceTasks {
+  Flanker = 'Simple & Choice Reaction Time Task Builder',
+  Gyroscope = 'CST Gyroscope',
+  Touch = 'CST Touch',
+  AbTrailsIpad = 'A/B Trails iPad',
+  AbTrailsMobile = 'A/B Trails Mobile',
 }

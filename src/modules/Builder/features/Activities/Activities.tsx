@@ -24,7 +24,12 @@ import { BuilderContainer } from 'shared/features';
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
-import { ActivityAddProps, ActivityProps, PerformanceTasks } from './Activities.types';
+import {
+  ActivityAddProps,
+  ActivityProps,
+  EditablePerformanceTasks,
+  PerformanceTasks,
+} from './Activities.types';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -72,8 +77,9 @@ export const Activities = () => {
         activityId,
       }),
     );
-  const navigateToPerformanceTask = (activityId?: string, type?: PerformanceTasks) =>
+  const navigateToPerformanceTask = (activityId?: string, type?: EditablePerformanceTasks) =>
     activityId &&
+    appletId &&
     type &&
     navigate(
       generatePath(getPerformanceTaskPath(type), {
@@ -97,8 +103,11 @@ export const Activities = () => {
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
 
     if (isNavigationBlocked) return;
-    if (newActivity.isPerformanceTask) {
-      return navigateToPerformanceTask(newActivity.key, type);
+    if (newActivity.isPerformanceTask && type) {
+      return navigateToPerformanceTask(
+        newActivity.key,
+        type as unknown as EditablePerformanceTasks,
+      );
     }
 
     return navigateToActivity(newActivity.key);
@@ -147,8 +156,11 @@ export const Activities = () => {
   const handleEditActivity = (index: number) => {
     const activityToEdit = activities[index];
     const activityKey = getActivityKey(activityToEdit);
-    if (activityToEdit.isPerformanceTask) {
-      return navigateToPerformanceTask(activityKey, activityToEdit.type);
+    if (activityToEdit.isPerformanceTask && activityToEdit.type) {
+      return navigateToPerformanceTask(
+        activityKey,
+        activityToEdit.type as unknown as EditablePerformanceTasks,
+      );
     }
 
     return navigateToActivity(activityKey);

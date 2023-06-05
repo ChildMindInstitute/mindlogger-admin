@@ -1,5 +1,5 @@
 import { Box, styled } from '@mui/material';
 
-export const PerformanceTaskBody = styled(Box)`
+export const StyledPerformanceTaskBody = styled(Box)`
   width: 83.2rem;
 `;

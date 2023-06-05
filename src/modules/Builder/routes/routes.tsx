@@ -66,6 +66,7 @@ export const builderRoutes = () => (
           {performanceTasksRoutes.map(({ path, Component, props = {} }) => (
             <Route path={path}>
               <Route
+                key={path}
                 path=":activityId"
                 element={
                   <PrivateRoute>
