@@ -13,6 +13,7 @@ import {
   SingleAndMultipleSelectRowsResponseValues,
   SliderItemResponseValues,
   SliderRowsResponseValues,
+  Activity,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
@@ -38,17 +39,21 @@ export const removeAppletExtraFields = (isNewApplet: boolean) => ({
   version: undefined,
 });
 
-export const removeActivityExtraFields = () => ({
+export const removeActivityExtraFields = (activity: Activity) => ({
   createdAt: undefined,
   order: undefined,
   generateReport: undefined, // TODO: remove when API will be ready
   showScoreSummary: undefined, // TODO: remove when API will be ready
   scores: undefined, // TODO: remove when API will be ready
   sections: undefined, // TODO: remove when API will be ready
-  subscales: undefined, // TODO: remove when API will be ready
-  calculateTotalScore: undefined, // TODO: remove when API will be ready
   conditionalLogic: undefined,
-  totalScoresTableData: undefined, // TODO: remove when M2-1738 will be ready
+  subscaleSetting: {
+    ...activity.subscaleSetting,
+    subscales: activity.subscaleSetting?.subscales?.map((item) => ({
+      ...item,
+      id: undefined,
+    })),
+  },
 });
 
 export const removeActivityFlowExtraFields = () => ({

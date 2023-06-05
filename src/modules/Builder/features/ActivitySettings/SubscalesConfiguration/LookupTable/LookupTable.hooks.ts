@@ -12,7 +12,7 @@ export const useSubscaleLookupTableSetup = ({
   tableData,
 }: LookupTableSetupHookProps) => {
   const [modalType, setModalType] = useState<ModalType>(
-    tableData ? ModalType.Edit : ModalType.Upload,
+    tableData?.length ? ModalType.Edit : ModalType.Upload,
   );
   const [step, setStep] = useState<Steps>(0);
   const [data, setData] = useState<DataTableItem[]>();
@@ -36,10 +36,8 @@ export const useSubscaleLookupTableSetup = ({
   };
 
   useEffect(() => {
-    if (!tableData?.length) return;
-
     try {
-      setData(JSON.parse(tableData));
+      setData(tableData);
     } catch {
       console.warn('Error while table data parsing.');
     }

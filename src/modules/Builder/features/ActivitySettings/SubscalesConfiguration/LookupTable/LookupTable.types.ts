@@ -4,17 +4,17 @@ export type LookupTableProps = {
   open: boolean;
   labelsObject: LabelsObject;
   columnData: { key: string; label: string }[];
-  tableData?: string;
+  tableData?: DataTableItem[];
   template: Record<string, string | number | undefined>[];
   templatePrefix?: string;
   onClose: () => void;
-  onUpdate: (lookupTableData?: string) => void;
+  onUpdate: (lookupTableData?: DataTableItem[]) => void;
 };
 
 export type LookupTableSetupHookProps = {
   template: LookupTableProps['template'];
   templatePrefix: LookupTableProps['templatePrefix'];
-  tableData?: string;
+  tableData?: DataTableItem[];
 };
 
 export type LabelsObject = {
