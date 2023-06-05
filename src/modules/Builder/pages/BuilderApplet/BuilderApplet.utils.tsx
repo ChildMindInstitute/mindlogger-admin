@@ -22,11 +22,15 @@ import {
 } from 'shared/state';
 import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import {
+  DEFAULT_LAMBDA_SLOPE,
+  DEFAULT_LENGTH_OF_TEST,
   DEFAULT_MILLISECONDS_DURATION,
+  DEFAULT_NUMBER_OF_TRIALS,
   DEFAULT_THRESHOLD_DURATION,
   ItemResponseType,
 } from 'shared/consts';
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
+import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
 
 import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
@@ -83,7 +87,7 @@ export const getNewPerformanceTask = ({
   name,
   description,
   performanceTask,
-  isFlankerItem,
+  type,
 }: GetNewPerformanceTask) => {
   const commonRoundProps = {
     stimulusDuration: DEFAULT_MILLISECONDS_DURATION,
@@ -91,7 +95,8 @@ export const getNewPerformanceTask = ({
     showSummary: true,
     blocks: [],
   };
-  const defaultFlankerProps = isFlankerItem && {
+
+  const defaultFlankerProps = {
     general: {
       instruction: t('performanceTaskInstructions.flankerGeneral'),
       buttons: [defaultFlankerBtnObj],
@@ -110,14 +115,38 @@ export const getNewPerformanceTask = ({
       showFeedback: false,
     },
   };
+  const defaultGyroscopeAndTouchProps = {
+    general: {
+      instruction: t('gyroscopeAndTouchInstructions.overview.instruction'),
+      numberOfTrials: DEFAULT_NUMBER_OF_TRIALS,
+      lengthOfTest: DEFAULT_LENGTH_OF_TEST,
+      lambdaSlope: DEFAULT_LAMBDA_SLOPE,
+    },
+    practice: {
+      instruction: t('gyroscopeAndTouchInstructions.practice.instruction'),
+    },
+    test: {
+      instruction: t('gyroscopeAndTouchInstructions.test.instruction'),
+    },
+  };
+
+  const propsByTypeObj = {
+    [PerformanceTasks.Flanker]: defaultFlankerProps,
+    [PerformanceTasks.Gyroscope]: defaultGyroscopeAndTouchProps,
+    [PerformanceTasks.Touch]: defaultGyroscopeAndTouchProps,
+    [PerformanceTasks.AbTrailsIpad]: {},
+    [PerformanceTasks.AbTrailsMobile]: {},
+  };
+
+  const defaultPropsByType = type ? propsByTypeObj[type] : {};
 
   return {
     name,
     description,
-    ...defaultFlankerProps,
+    ...defaultPropsByType,
     isPerformanceTask: true,
-    isFlankerItem,
     ...performanceTask,
+    type,
     id: undefined,
     key: uuidv4(),
   };

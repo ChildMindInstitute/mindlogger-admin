@@ -1,7 +1,8 @@
 import { Svg } from 'shared/components';
 import { ActivityValue } from 'modules/Builder/types';
+import { page } from 'resources';
 
-import { GetActivitiesActions } from './Activities.types';
+import { GetActivitiesActions, PerformanceTasks } from './Activities.types';
 
 export const getActivityKey = (entity: ActivityValue): string => entity.key ?? entity.id ?? '';
 
@@ -35,3 +36,14 @@ export const getActions = ({
     action: onRemove,
   },
 ];
+
+const performanceTaskPaths: Record<PerformanceTasks, string> = {
+  [PerformanceTasks.Flanker]: page.builderAppletFlanker,
+  [PerformanceTasks.Gyroscope]: page.builderAppletGyroscope,
+  [PerformanceTasks.AbTrailsIpad]: page.builderAppletAbTrailsIpad,
+  [PerformanceTasks.AbTrailsMobile]: page.builderAppletAbTrailsMobile,
+  [PerformanceTasks.Touch]: page.builderAppletTouch,
+};
+
+export const getPerformanceTaskPath = (performanceTask: PerformanceTasks) =>
+  performanceTaskPaths[performanceTask];

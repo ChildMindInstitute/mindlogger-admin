@@ -1069,5 +1069,33 @@
   "removeImage": "Remove Image",
   "removeImageDescription": "Are you sure you want to remove Image?",
   "selectedItems": "Selected Items",
-  "saveAndPublishFirst": "Save & publish the Applet first"
+  "saveAndPublishFirst": "Save & publish the Applet first",
+  "gyroscope": "CST Gyroscope",
+  "touch": "CST Touch",
+  "gyroscopeAndTouchInstructions": {
+    "overview": {
+      "title": "Overview Instructions",
+      "instruction": "In this task, you will see a disc that will drift either to the left or right side of the screen.\nYour job will be to keep the disc in the middle of the screen.\nIf the disc is moving to the right, tilt your phone to the left to bring it back to the center.\nIf the disc is moving to the left, tilt your phone to the right to bring the disc back to center.\nDo not let the disc touch the walls to the far left or right of the screen.\nThere will be two phases to this task, a Challenge Phase, and a Focus Phase."
+    },
+    "practice": {
+      "title": "Practice Round Instructions",
+      "instruction": "This is the Challenge Phase.\nThere will be 3 trials.\nEach trial will begin at an easy level, but it will become more difficult to keep the disc at the center of the screen.\nEventually, you will lose control of the disc.\nWhen it hits a wall at the edge of the screen, the trial ends and the disc will be moved back to the center of the screen.\nTry to keep the disc away from the walls for as long as possible on each trial."
+    },
+    "test": {
+      "title": "Test Round Instructions",
+      "instruction": "This is the Focus Phase.\nThis phase will last 5 minutes.\nThe trial will begin at an easy level, and will increase to a level that should not be very difficult.\nYour task will be to focus on keeping the disc in the center of the screen, without letting it drift off center.\nIf you lose control of the disc and it hits a wall, the disc will be moved back to the center of the screen and the task will continue."
+    }
+  },
+  "gyroscopeAndTouchDesc": {
+    "overview": "This instruction will be displayed for the respondent before passing the practice round of the Activity.",
+    "practice": "This instruction will be displayed for the respondent before passing the practice round of the Activity.",
+    "test": "This instruction will be displayed for the respondent before passing the test round of the Activity."
+  },
+  "instructions": "Instructions",
+  "numberOfTrials": "Number Of Trials:",
+  "numberOfTrialsTooltip": "Number of practice rounds before the test round",
+  "lengthOfTest": "Length of Test:",
+  "lambdaSlope": "Lambda Slope:",
+  "lambdaSlopeTooltip": "Percentage increase in disc deflection rate over the selected time",
+  "minutes": "minutes"
 }

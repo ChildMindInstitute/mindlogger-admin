@@ -7,6 +7,7 @@ import {
   ActivitySettingsSection,
 } from 'shared/state';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
+import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
 
 export type ItemFormValues = {
   id?: string;
@@ -39,7 +40,7 @@ export type ActivityFormValues = {
   sections?: ActivitySettingsSection[];
   totalScoresTableData?: string;
   isPerformanceTask?: boolean;
-  isFlankerItem?: boolean;
+  type?: PerformanceTasks;
 };
 
 export type FlankerButtonSetting = {
@@ -106,13 +107,41 @@ export type FlankerFormValues = {
   practice: FlankerPracticeSettings;
   test: FlankerTestSettings;
   isPerformanceTask: boolean;
-  isFlankerItem?: boolean;
+  type?: PerformanceTasks;
 };
 
 export type ActivityFlowItem = {
   id?: string;
   key?: string;
   activityKey: string;
+};
+
+type GyroscopeGeneralSettings = {
+  instruction: string;
+  numberOfTrials: number;
+  lengthOfTest: number;
+  lambdaSlope: number;
+};
+
+type GyroscopePracticeSettings = {
+  instruction: string;
+};
+
+type GyroscopeTestSettings = {
+  instruction: string;
+};
+
+export type GyroscopeFormValues = {
+  id?: string;
+  key?: string;
+  name: string;
+  description: string;
+  isHidden: boolean;
+  general: GyroscopeGeneralSettings;
+  practice: GyroscopePracticeSettings;
+  test: GyroscopeTestSettings;
+  isPerformanceTask: boolean;
+  type?: PerformanceTasks;
 };
 
 export type ActivityFlowFormValues = {
@@ -126,7 +155,7 @@ export type ActivityFlowFormValues = {
   isHidden?: boolean;
 };
 
-export type ActivityValue = ActivityFormValues | FlankerFormValues;
+export type ActivityValue = ActivityFormValues | FlankerFormValues | GyroscopeFormValues;
 
 export type AppletFormValues = {
   id?: string;
@@ -143,6 +172,6 @@ export type AppletFormValues = {
 export type GetNewPerformanceTask = {
   name?: string;
   description?: string;
-  performanceTask?: FlankerFormValues;
-  isFlankerItem?: boolean;
+  performanceTask?: FlankerFormValues | GyroscopeFormValues;
+  type?: PerformanceTasks;
 };

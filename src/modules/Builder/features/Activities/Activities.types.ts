@@ -1,4 +1,9 @@
-import { ActivityFormValues, ItemFormValues, FlankerFormValues } from 'modules/Builder/types';
+import {
+  ActivityFormValues,
+  ItemFormValues,
+  FlankerFormValues,
+  GyroscopeFormValues,
+} from 'modules/Builder/types';
 
 export type GetActivitiesActions = {
   key: string;
@@ -15,14 +20,15 @@ export type ActivityAddProps = {
   performanceTaskName?: string;
   performanceTaskDesc?: string;
   isNavigationBlocked?: boolean;
-  isFlankerItem?: boolean;
+  type?: PerformanceTasks;
 } | null;
 
 export type ActivityProps =
   | ActivityFormValues
-  | (FlankerFormValues & {
+  | ((GyroscopeFormValues | FlankerFormValues) & {
       image?: string;
       items?: ItemFormValues[];
+      type?: PerformanceTasks;
     });
 
 export const enum PerformanceTasks {

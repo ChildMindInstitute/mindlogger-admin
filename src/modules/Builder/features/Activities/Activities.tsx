@@ -23,8 +23,8 @@ import { BuilderContainer } from 'shared/features';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
-import { getActions, getActivityKey } from './Activities.utils';
-import { ActivityAddProps, ActivityProps } from './Activities.types';
+import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
+import { ActivityAddProps, ActivityProps, PerformanceTasks } from './Activities.types';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -72,32 +72,33 @@ export const Activities = () => {
         activityId,
       }),
     );
-  const navigateToFlanker = (activityId?: string) =>
+  const navigateToPerformanceTask = (activityId?: string, type?: PerformanceTasks) =>
     activityId &&
+    type &&
     navigate(
-      generatePath(page.builderAppletFlanker, {
+      generatePath(getPerformanceTaskPath(type), {
         appletId,
         activityId,
       }),
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
-    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked, isFlankerItem } =
+    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked, type } =
       props || {};
     const newActivity =
       performanceTaskName && performanceTaskDesc
         ? getNewPerformanceTask({
             name: performanceTaskName,
             description: performanceTaskDesc,
-            isFlankerItem,
+            type,
           })
         : getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
 
     if (isNavigationBlocked) return;
-    if (newActivity.isFlankerItem) {
-      return navigateToFlanker(newActivity.key);
+    if (newActivity.isPerformanceTask) {
+      return navigateToPerformanceTask(newActivity.key, type);
     }
 
     return navigateToActivity(newActivity.key);
@@ -146,8 +147,8 @@ export const Activities = () => {
   const handleEditActivity = (index: number) => {
     const activityToEdit = activities[index];
     const activityKey = getActivityKey(activityToEdit);
-    if (activityToEdit.isFlankerItem) {
-      return navigateToFlanker(activityKey);
+    if (activityToEdit.isPerformanceTask) {
+      return navigateToPerformanceTask(activityKey, activityToEdit.type);
     }
 
     return navigateToActivity(activityKey);
@@ -183,7 +184,8 @@ export const Activities = () => {
                     const activityKey = getActivityKey(activity);
                     const isPerformanceTask = activity?.isPerformanceTask || false;
                     const activityName = activity.name;
-                    const isEditVisible = !isPerformanceTask || !!activity.isFlankerItem;
+                    const isEditVisible =
+                      !isPerformanceTask || activity.type === PerformanceTasks.Flanker;
                     const hasError = errors[`activities[${index}]`];
 
                     return (

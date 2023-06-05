@@ -27,6 +27,9 @@ export const MIN_MILLISECONDS_DURATION = 1;
 export const DEFAULT_THRESHOLD_DURATION = 75;
 export const MIN_THRESHOLD_DURATION = 1;
 export const MAX_THRESHOLD_DURATION = 99;
+export const DEFAULT_NUMBER_OF_TRIALS = 3;
+export const DEFAULT_LENGTH_OF_TEST = 5;
+export const DEFAULT_LAMBDA_SLOPE = 20;
 
 export const BUILDER_PAGES = {
   activities: 'activities',
