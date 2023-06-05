@@ -22,7 +22,7 @@ export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) =
     }
   };
 
-  const onSetPassword = async (password: unknown) => {
+  const onSetPassword = async (password: string) => {
     const token = storage.getItem('accessToken');
 
     try {
@@ -31,7 +31,7 @@ export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) =
         appletId,
         ownerId,
         token: `${token}`,
-        password: password as string,
+        password,
       });
       const { message } = (await response.json()) ?? {};
 
