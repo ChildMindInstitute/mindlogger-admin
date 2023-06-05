@@ -31,6 +31,7 @@ import {
   removeActivityExtraFields,
   mapItemResponseValues,
   getItemConditionalLogic,
+  removeActivityFlowExtraFields,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -89,6 +90,7 @@ export const useAppletData = () => {
         ...flow,
         description: getDictionaryObject(flow.description),
         items: flow.items?.map(({ key, ...item }) => item),
+        ...removeActivityFlowExtraFields(),
       })),
       ...removeAppletExtraFields(isNewApplet),
     };

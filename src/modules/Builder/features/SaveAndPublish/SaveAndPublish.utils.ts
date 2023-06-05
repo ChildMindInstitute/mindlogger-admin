@@ -56,6 +56,10 @@ export const removeActivityExtraFields = (activity: Activity) => ({
   },
 });
 
+export const removeActivityFlowExtraFields = () => ({
+  createdAt: undefined,
+});
+
 export const removeItemExtraFields = () => ({
   key: undefined,
   settings: undefined,

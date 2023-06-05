@@ -44,7 +44,7 @@ export const Table = ({
   return (
     <>
       <StyledTableContainer className={className} maxHeight={maxHeight} uiType={uiType}>
-        {rows?.length ? (
+        {!!rows?.length && (
           <MuiTable stickyHeader>
             <TableHead
               headCells={columns}
@@ -55,7 +55,7 @@ export const Table = ({
               uiType={uiType}
             />
             <TableBody>
-              {rows?.map((row, index) => (
+              {rows.map((row, index) => (
                 <TableRow key={`row-${index}`}>
                   {Object.keys(row)?.map((key) => (
                     <TableCell
@@ -72,9 +72,8 @@ export const Table = ({
               ))}
             </TableBody>
           </MuiTable>
-        ) : (
-          <EmptyTable>{emptyComponent}</EmptyTable>
         )}
+        {emptyComponent && <EmptyTable>{emptyComponent}</EmptyTable>}
       </StyledTableContainer>
       {uiType === UiType.Tertiary && tableHeader}
     </>

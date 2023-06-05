@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
+import { applet } from 'shared/state';
 import { StyledHeadlineLarge } from 'shared/styles/styledComponents';
 import {
   SuccessTransferOwnershipPopup,
@@ -12,16 +12,14 @@ import { TransferOwnershipRef } from 'modules/Dashboard/features/Applet/Transfer
 
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
-import { useAppletDataOrFolderData } from './TransferOwnershipSetting.hooks';
 
-export const TransferOwnershipSetting = ({ isApplet = false }) => {
+export const TransferOwnershipSetting = () => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
+  const { result: appletData } = applet.useAppletData() ?? {};
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [emailTransfered, setEmailTransfered] = useState('');
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
-  const appletData = useAppletDataOrFolderData(appletId, isApplet);
   const transferOwnershipRef = useRef<TransferOwnershipRef | null>(null);
 
   const handleSuccessPopupClose = () => {
@@ -43,7 +41,7 @@ export const TransferOwnershipSetting = ({ isApplet = false }) => {
         <TransferOwnership
           ref={transferOwnershipRef}
           appletId={appletData?.id}
-          appletName={appletData?.name}
+          appletName={appletData?.displayName}
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
           setEmailTransfered={setEmailTransfered}
