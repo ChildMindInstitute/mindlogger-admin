@@ -26,6 +26,4 @@ export type AnswersApiResponse = {
   ];
 };
 
-export type AnswerDecrypted =
-  | string
-  | { value: string | number | (string | number)[]; text?: string };
+export type AnswerDecrypted = string | { value: string | number | string[]; text?: string | null };

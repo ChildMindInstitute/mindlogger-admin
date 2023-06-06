@@ -233,6 +233,13 @@ export type Answer = AppletId & { answerId: string; activityId: string };
 
 export type ActivityAnswer = AppletId & { answerId: string } & { activityId: string };
 
+export type Assessment = {
+  activityId: string;
+  answer: string;
+  itemIds: string[];
+  reviewerPublicKey: string;
+};
+
 export type AppletUniqueName = {
   name: string;
 };

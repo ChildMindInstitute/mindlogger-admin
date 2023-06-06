@@ -3,14 +3,16 @@ import { useParams } from 'react-router-dom';
 import { applet } from 'shared/state';
 import {
   decryptData,
+  encryptData,
   getAESKey,
   getObjectFromList,
   getParsedEncryptionFromServer,
 } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
+import { auth } from 'redux/modules';
 
-import { ActivityItemAnswer } from '../Feedback/FeedbackReviewed/FeedbackReviewed.types';
 import { AnswerDecrypted, AnswersApiResponse } from './Review.types';
+import { ActivityItemAnswer, ItemAnswer } from '../RespondentDataReview.types';
 
 export const useDecryptedReviews = () => {
   const { appletId = '' } = useParams();
@@ -59,5 +61,34 @@ export const useDecryptedReviews = () => {
         answer: answerDecrypted,
       };
     });
+  };
+};
+
+export const useEncryptedAnswers = () => {
+  const userData = auth.useData();
+  const { id: accountId = '' } = userData?.user || {};
+  const { appletId = '' } = useParams();
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const encryption = appletData?.encryption || null;
+  const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
+  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  if (!encryptionInfoFromServer) return () => [];
+
+  const { prime, base } = encryptionInfoFromServer;
+  const privateKey = getAppletPrivateKey(appletId);
+
+  return (answers: ItemAnswer[]): string => {
+    const key = getAESKey(privateKey, accountId, prime, base);
+    let answersEncrypted = '';
+    try {
+      answersEncrypted = encryptData({
+        text: JSON.stringify(answers),
+        key,
+      });
+    } catch {
+      console.warn('Error while answer parsing');
+    }
+
+    return answersEncrypted;
   };
 };

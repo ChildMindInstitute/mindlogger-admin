@@ -43,6 +43,7 @@ import {
   Applet,
   EditManagerAccess,
   ExportData,
+  Assessment,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -482,6 +483,29 @@ export const getAppletSubmitDateListApi = (
     params,
     signal,
   });
+
+export const getAssessmentApi = (
+  { appletId, answerId, activityId }: Answer,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(
+    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/assessment`,
+    {
+      signal,
+    },
+  );
+
+export const createAssessmentApi = (
+  { appletId, answerId, activityId, ...assessment }: Answer & Assessment,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/assessment`,
+    { ...assessment, activityId },
+    {
+      signal,
+    },
+  );
 
 export const postAppletDataRetentionApi = (
   { appletId, ...dataRetentionParams }: AppletDataRetention,

@@ -10,14 +10,16 @@ import {
   SliderItemAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { getActivityItemIndex } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers/AssesmentControllers.utils';
+import { AssessmentForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/FeedbackAssessmentForm/FeedbackAssessmentForm.types';
 
 import { ItemPickerProps } from './ItemPicker.types';
 
 export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
-  const { control, getValues } = useFormContext();
+  const { control, getValues } = useFormContext<AssessmentForm>();
+  const { assessmentItems } = getValues();
 
   const activityItemIndex = getActivityItemIndex(
-    getValues('answers'),
+    assessmentItems,
     activityItem.activityItem.id || '',
   );
 
@@ -26,7 +28,7 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
       return (
         <SingleSelectionController
           control={control}
-          name={`answers.${activityItemIndex}.answer.value`}
+          name={`assessmentItems.${activityItemIndex}.answers`}
           activityItem={activityItem as SingleSelectItemAnswer}
           isDisabled={isDisabled}
         />
@@ -35,7 +37,7 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
       return (
         <MultipleSelectionController
           control={control}
-          name={`answers.${activityItemIndex}.answer.value`}
+          name={`assessmentItems.${activityItemIndex}.answers`}
           activityItem={activityItem as MultiSelectItemAnswer}
           isDisabled={isDisabled}
         />
@@ -44,7 +46,7 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
       return (
         <SliderController
           control={control}
-          name={`answers.${activityItemIndex}.answer.value`}
+          name={`assessmentItems.${activityItemIndex}.answers`}
           activityItem={activityItem as SliderItemAnswer}
           isDisabled={isDisabled}
         />

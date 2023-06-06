@@ -1,6 +1,9 @@
+import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
+import { getDictionaryText } from 'shared/utils';
+
 import { ItemPicker } from './ItemPicker';
 import { ActivityCardItemProps, ItemCardButtonsConfig } from './ActivityCardItem.types';
-import { StyledCardItemContainer, StyledMdEditor } from './ActivityCardItem.styles';
+import { StyledCardItemContainer } from './ActivityCardItem.styles';
 import { ItemCardButtons } from './ItemCardButtons';
 
 export const ActivityCardItem = ({
@@ -32,8 +35,10 @@ export const ActivityCardItem = ({
 
   return (
     <StyledCardItemContainer>
-      {/* TODO: correct type for activityItem.question ?? */}
-      <StyledMdEditor modelValue={activityItem.activityItem.question as string} previewOnly />
+      <CollapsedMdText
+        text={getDictionaryText(activityItem.activityItem.question)}
+        maxHeight={120}
+      />
       <ItemPicker activityItem={activityItem} isDisabled={!isActive} />
       {isActive && (
         <ItemCardButtons

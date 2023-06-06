@@ -10,7 +10,7 @@ export const getTabs = (selectedActivity: Activity) => [
   },
   {
     labelKey: 'assessment',
-    content: <FeedbackAssessment />,
+    content: <FeedbackAssessment activity={selectedActivity} />,
   },
   {
     labelKey: 'reviewed',

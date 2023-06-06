@@ -75,7 +75,7 @@ export const getAppletEncryptionInfo = ({
 
 export const getAESKey = (
   appletPrivateKey: number[],
-  userPublicKey: number[],
+  userPublicKey: number[] | string,
   appletPrime: number[],
   base: number[],
 ) => {

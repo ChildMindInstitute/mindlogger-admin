@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StyledMdEditor } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/ActivityCardItemList/ActivityCardItem/ActivityCardItem.styles';
+import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
+import { getDictionaryText } from 'shared/utils';
 import { Svg } from 'shared/components';
 import {
   StyledBodyMedium,
@@ -42,9 +43,9 @@ export const FeedbackReviewer = ({ reviewer }: FeedbackReviewerProps) => {
                   </StyledBodyMedium>
                 </StyledEdited>
               )}
-              <StyledMdEditor
-                modelValue={activityItemAnswer.activityItem.question as string}
-                previewOnly
+              <CollapsedMdText
+                text={getDictionaryText(activityItemAnswer.activityItem.question)}
+                maxHeight={120}
               />
               {getResponseItem(activityItemAnswer)}
             </StyledItem>
