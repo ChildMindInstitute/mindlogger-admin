@@ -35,6 +35,7 @@ export const Modal = ({
   thirdBtnText,
   thirdBtnStyles = {},
   onThirdBtnSubmit,
+  footerStyles,
   hasActions = true,
   submitBtnTooltip,
 }: ModalProps) => {
@@ -80,7 +81,7 @@ export const Modal = ({
       </StyledDialogTitle>
       {children}
       {hasActions && (
-        <StyledDialogActions actionsAlign={getActionsAlign()}>
+        <StyledDialogActions actionsAlign={getActionsAlign()} sx={footerStyles}>
           {hasThirdBtn && (
             <StyledButton
               fontWeight="regular"
