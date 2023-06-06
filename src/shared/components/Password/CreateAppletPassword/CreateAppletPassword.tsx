@@ -20,7 +20,7 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
     const userData = auth.useData();
     const { id: accountId } = userData?.user || {};
 
-    const { handleSubmit, control } = useForm<CreateAppletPasswordForm>({
+    const { handleSubmit, control, watch } = useForm<CreateAppletPasswordForm>({
       resolver: yupResolver(createPasswordFormSchema()),
       defaultValues: { appletPassword: '', appletPasswordConfirmation: '' },
     });
@@ -34,6 +34,7 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
     };
 
     useImperativeHandle(ref, () => ({
+      password: watch('appletPassword'),
       submitForm() {
         handleSubmit(submitForm)();
       },

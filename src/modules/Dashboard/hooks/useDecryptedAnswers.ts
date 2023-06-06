@@ -3,18 +3,18 @@ import { useParams } from 'react-router-dom';
 import { applet } from 'shared/state';
 import {
   decryptData,
-  encryptData,
   getAESKey,
   getObjectFromList,
   getParsedEncryptionFromServer,
 } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import { auth } from 'redux/modules';
+import {
+  AnswerDecrypted,
+  AnswersApiResponse,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Review/Review.types';
+import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
-import { AnswerDecrypted, AnswersApiResponse } from './Review.types';
-import { ActivityItemAnswer, ItemAnswer } from '../RespondentDataReview.types';
-
-export const useDecryptedReviews = () => {
+export const useDecryptedAnswers = () => {
   const { appletId = '' } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
   const encryption = appletData?.encryption;
@@ -61,34 +61,5 @@ export const useDecryptedReviews = () => {
         answer: answerDecrypted,
       };
     });
-  };
-};
-
-export const useEncryptedAnswers = () => {
-  const userData = auth.useData();
-  const { id: accountId = '' } = userData?.user || {};
-  const { appletId = '' } = useParams();
-  const { result: appletData } = applet.useAppletData() ?? {};
-  const encryption = appletData?.encryption || null;
-  const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
-  if (!encryptionInfoFromServer) return () => [];
-
-  const { prime, base } = encryptionInfoFromServer;
-  const privateKey = getAppletPrivateKey(appletId);
-
-  return (answers: ItemAnswer[]): string => {
-    const key = getAESKey(privateKey, accountId, prime, base);
-    let answersEncrypted = '';
-    try {
-      answersEncrypted = encryptData({
-        text: JSON.stringify(answers),
-        key,
-      });
-    } catch {
-      console.warn('Error while answer parsing');
-    }
-
-    return answersEncrypted;
   };
 };

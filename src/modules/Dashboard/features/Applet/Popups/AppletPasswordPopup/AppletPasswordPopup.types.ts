@@ -1,3 +1,6 @@
+import { MutableRefObject } from 'react';
+
+import { AppletPasswordRef } from 'shared/components';
 import { Encryption } from 'shared/utils';
 
 export enum AppletPasswordPopupType {
@@ -11,5 +14,8 @@ export type AppletPasswordPopupProps = {
   onClose: () => void;
   appletId: string;
   encryption?: Encryption | null;
-  submitCallback?: (encryption: Encryption) => void;
+  submitCallback?: (
+    encryption: Encryption,
+    ref: MutableRefObject<AppletPasswordRef | null>,
+  ) => void;
 };

@@ -6,7 +6,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
-import { DataTable, SwitchWithState } from 'shared/components';
+import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
@@ -37,11 +37,11 @@ import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
-  const { control, watch, register, unregister, setValue } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
   const { fieldName, activity } = useCurrentActivity();
-  const subscalesField = `${fieldName}.subscales`;
-  const calculateTotalScoreName = `${fieldName}.calculateTotalScore`;
-  const totalScoresTableDataField = `${fieldName}.totalScoresTableData`;
+  const subscalesField = `${fieldName}.subscaleSetting.subscales`;
+  const calculateTotalScoreField = `${fieldName}.subscaleSetting.calculateTotalScore`;
+  const totalScoresTableDataField = `${fieldName}.subscaleSetting.totalScoresTableData`;
   const {
     append: appendSubscale,
     remove: removeSubscale,
@@ -50,14 +50,14 @@ export const SubscalesConfiguration = () => {
     control,
     name: subscalesField,
   });
-  const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(false);
+  const calculateTotalScore = watch(calculateTotalScoreField);
+  const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(!!calculateTotalScore);
   const [isLookupTableOpened, setIsLookupTableOpened] = useState(false);
-  const tableData = watch(totalScoresTableDataField);
-  const onTableDataUpdate = (data?: string) => {
-    data ? register(totalScoresTableDataField) : unregister(totalScoresTableDataField);
+  const tableData = watch(totalScoresTableDataField) ?? [];
+  const onTableDataUpdate = (data?: DataTableItem[]) => {
     setValue(totalScoresTableDataField, data);
   };
-  const iconId = `lookup-table${tableData ? '-filled' : ''}`;
+  const iconId = `lookup-table${tableData?.length ? '-filled' : ''}`;
 
   const subscales: ActivitySettingsSubscale[] = watch(subscalesField) ?? [];
   const subscalesLength = subscales.length;
@@ -86,17 +86,13 @@ export const SubscalesConfiguration = () => {
 
   useEffect(() => {
     if (calculateTotalScoreSwitch) {
-      register(calculateTotalScoreName);
-      register(totalScoresTableDataField);
-      setValue(calculateTotalScoreName, SubscaleTotalScore.Sum);
+      setValue(calculateTotalScoreField, calculateTotalScore ?? SubscaleTotalScore.Sum);
 
       return;
     }
 
-    unregister(calculateTotalScoreName);
-    unregister(totalScoresTableDataField);
-    setValue(calculateTotalScoreName, undefined);
-    setValue(totalScoresTableDataField, undefined);
+    setValue(calculateTotalScoreField, null);
+    setValue(totalScoresTableDataField, null);
   }, [calculateTotalScoreSwitch]);
 
   useEffect(() => {
@@ -128,9 +124,6 @@ export const SubscalesConfiguration = () => {
               name: subscaleField,
               title,
               onUpdate: (subscaleTableData?: string) => {
-                if (subscaleTableData === undefined) {
-                  unregister(`${subscaleField}.subscaleTableData`);
-                }
                 updateSubscale(index, {
                   ...subscale,
                   subscaleTableData,
@@ -175,10 +168,10 @@ export const SubscalesConfiguration = () => {
               setIsLookupTableOpened(true);
             }}
           >
-            <StyledSvg isFilled={!!tableData} id={iconId} width="20" height="20" />
+            <StyledSvg isFilled={!!tableData?.length} id={iconId} width="20" height="20" />
           </StyledSvgButton>
           <RadioGroupController
-            name={calculateTotalScoreName}
+            name={calculateTotalScoreField}
             control={control}
             options={options}
             defaultValue={SubscaleTotalScore.Sum}

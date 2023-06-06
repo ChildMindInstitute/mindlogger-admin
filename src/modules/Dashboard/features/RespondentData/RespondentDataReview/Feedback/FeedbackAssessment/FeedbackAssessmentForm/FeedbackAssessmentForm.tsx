@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { useEncryptedAnswers } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Review/Review.hooks';
 import { auth } from 'redux/modules';
+import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
 import { createAssessmentApi } from 'api';
 

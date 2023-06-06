@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Spinner } from 'shared/components';
-import { useDecryptedReviews } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Review/Review.hooks';
+import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
 import { Activity } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { useAsync } from 'shared/hooks';
@@ -15,7 +15,7 @@ import { FeedbackAssessmentForm } from './FeedbackAssessmentForm';
 export const FeedbackAssessment = ({ activity }: { activity: Activity }) => {
   const { t } = useTranslation('app');
   const { appletId, answerId } = useParams();
-  const getDecryptedReviews = useDecryptedReviews();
+  const getDecryptedReviews = useDecryptedAnswers();
   const { execute: getActivityAnswer, isLoading } = useAsync(getAssessmentApi);
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[]>([]);
 

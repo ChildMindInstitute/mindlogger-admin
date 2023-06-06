@@ -282,6 +282,15 @@ export type GetWorkspaceAppletsParams = {
   };
 };
 
+export type ReportConfig = {
+  reportServerIp: string;
+  reportPublicKey: string;
+  reportRecipients: string[];
+  reportIncludeUserId: boolean;
+  reportIncludeCaseId: boolean;
+  reportEmailBody: string;
+};
+
 export type AppletVersionChanges = AppletId & { version: string };
 
 export type ExportData = AppletId & { respondentId?: string };
