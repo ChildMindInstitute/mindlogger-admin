@@ -13,7 +13,7 @@ import { CollapsedMdText } from '../../CollapsedMdText';
 import { isItemUnsupported } from '../../RespondentData.utils';
 import { UnsupportedItemResponse } from '../../UnsupportedItemResponse';
 import { StyledReview } from './Review.styles';
-import { AnswersApiResponse, ReviewProps } from './Review.types';
+import { ReviewProps } from './Review.types';
 import { ActivityItemAnswer } from '../RespondentDataReview.types';
 import { getResponseItem } from './Review.const';
 
@@ -25,9 +25,7 @@ export const Review = ({ answerId, activityId }: ReviewProps) => {
 
   const { execute, isLoading } = useAsync(
     getActivityAnswerApi,
-    (res) =>
-      res?.data?.result &&
-      setActivityItemAnswers(getDecryptedReviews(res.data.result as AnswersApiResponse)),
+    (res) => res?.data?.result && setActivityItemAnswers(getDecryptedReviews(res.data.result)),
   );
 
   useEffect(() => {

@@ -6,7 +6,6 @@ import { ActivitiesFlowsWithColors, Repeats } from './Schedule.types';
 export const getCount = (ids: ActivitiesFlowsWithColors, id: string) =>
   ids.filter((item) => item.id === id).length;
 
-/* eslint-disable camelcase */
 const {
   blue,
   blue_alfa30,
