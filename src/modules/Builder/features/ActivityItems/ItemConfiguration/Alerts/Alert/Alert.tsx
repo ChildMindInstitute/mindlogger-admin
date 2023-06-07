@@ -22,7 +22,6 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   const rowName = `${alertName}.rowId`;
 
   const alert = watch(alertName);
-
   const { responseType, config: settings, responseValues } = watch(name);
 
   const renderAlertContent = () => {
