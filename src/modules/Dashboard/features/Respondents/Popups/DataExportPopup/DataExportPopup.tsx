@@ -10,8 +10,9 @@ import {
   theme,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { getErrorMessage } from 'shared/utils';
+import { getErrorMessage, getParsedAnswers } from 'shared/utils';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
+import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -27,12 +28,14 @@ export const DataExportPopup = ({
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting;
+  const getDecryptedAnswers = useDecryptedAnswers();
 
   const { execute, error } = useAsync(getExportDataApi, (res) => {
-    if (res?.data) {
-      setDataIsExporting(false);
-      handlePopupClose();
-    }
+    if (!res?.data?.result) return;
+
+    const parsedAnswers = getParsedAnswers(res!, getDecryptedAnswers);
+    setDataIsExporting(false);
+    handlePopupClose();
   });
 
   const handlePopupClose = () => {

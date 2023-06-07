@@ -92,7 +92,7 @@ export const useAppletData = () => {
         items: flow.items?.map(({ key, ...item }) => item),
         ...removeActivityFlowExtraFields(),
       })),
-      ...removeAppletExtraFields(isNewApplet),
+      ...removeAppletExtraFields(),
     };
   };
 };
