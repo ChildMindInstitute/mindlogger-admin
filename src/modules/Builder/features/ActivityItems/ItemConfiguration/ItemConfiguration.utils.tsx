@@ -37,7 +37,8 @@ export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
   [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
   [ItemResponseType.Time]: t('timeHint'),
   [ItemResponseType.Flanker]: '',
-  [ItemResponseType.AbTest]: '',
+  [ItemResponseType.ABTrailsIpad]: '',
+  [ItemResponseType.ABTrailsMobile]: '',
   [ItemResponseType.Touch]: '',
   [ItemResponseType.Gyroscope]: '',
 });

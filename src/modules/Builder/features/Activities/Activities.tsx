@@ -19,17 +19,11 @@ import { BuilderContainer } from 'shared/features';
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
-import { ActivityAddProps, ActivityProps, EditablePerformanceTasks } from './Activities.types';
+import { ActivityAddProps, EditablePerformanceTasks } from './Activities.types';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const {
-    control,
-    watch,
-    getFieldState,
-    setValue,
-    formState: { errors: er },
-  } = useFormContext();
+  const { control, watch, getFieldState, setValue } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
@@ -188,7 +182,7 @@ export const Activities = () => {
             <DndDroppable droppableId="activities-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {activities.map((activity: ActivityProps, index: number) => {
+                  {activities.map((activity: ActivityFormValues, index: number) => {
                     const activityKey = getActivityKey(activity);
                     const isPerformanceTask = activity?.isPerformanceTask || false;
                     const activityName = activity.name;
@@ -198,15 +192,6 @@ export const Activities = () => {
                         (activity.type || '') as any,
                       );
                     const hasError = errors[`activities[${index}]`];
-                    console.log(
-                      activities?.reduce(
-                        (err: Record<string, any>, _: any, index: number) => ({
-                          ...err,
-                          [`activities[${index}]`]: getFieldState(`activities[${index}]`).error,
-                        }),
-                        {},
-                      ),
-                    );
 
                     return (
                       <Fragment key={`activity-${activityKey}`}>

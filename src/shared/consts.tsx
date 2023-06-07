@@ -89,7 +89,8 @@ export enum ItemResponseType {
   Flanker = 'flanker',
   Touch = 'touch',
   Gyroscope = 'gyroscope',
-  AbTest = 'abTest',
+  ABTrailsIpad = 'ABTrailsIpad',
+  ABTrailsMobile = 'ABTrailsMobile',
   Time = 'time',
 }
 
@@ -119,7 +120,8 @@ export const itemsTypeIcons = {
   [ItemResponseType.AudioPlayer]: <Svg id="audio-player" />,
   [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
-  [ItemResponseType.AbTest]: null,
+  [ItemResponseType.ABTrailsIpad]: null,
+  [ItemResponseType.ABTrailsMobile]: null,
   [ItemResponseType.Gyroscope]: null,
   [ItemResponseType.Touch]: null,
 };

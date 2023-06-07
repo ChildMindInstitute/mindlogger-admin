@@ -128,7 +128,7 @@ export type GyroscopeFormValues = {
   general: GyroscopeGeneralSettings;
   practice: GyroscopePracticeSettings;
   test: GyroscopeTestSettings;
-  isPerformanceTask: boolean;
+  isPerformanceTask?: boolean;
   type?: PerformanceTasks;
 };
 

@@ -117,7 +117,19 @@ export const ItemSchema = () =>
           (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
-      question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),
+      question: yup.string().when('responseType', (responseType, schema) => {
+        if (
+          responseType === ItemResponseType.Flanker ||
+          responseType === ItemResponseType.Gyroscope ||
+          responseType === ItemResponseType.Touch ||
+          responseType === ItemResponseType.ABTrailsIpad ||
+          responseType === ItemResponseType.ABTrailsMobile
+        ) {
+          return schema;
+        }
+
+        return schema.required(getIsRequiredValidateMessage('displayedContent'));
+      }),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (
           responseType === ItemResponseType.SingleSelection ||
@@ -157,19 +169,19 @@ export const ItemSchema = () =>
           responseType === ItemResponseType.Gyroscope
         ) {
           return schema.shape(GyroscopeAndTouchConfigSchema());
-        } else {
-          return schema.shape({
-            correctAnswerRequired: yup.boolean().nullable(),
-            correctAnswer: yup
-              .string()
-              .nullable()
-              .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
-                correctAnswerRequired
-                  ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
-                  : schema,
-              ),
-          });
         }
+
+        return schema.shape({
+          correctAnswerRequired: yup.boolean().nullable(),
+          correctAnswer: yup
+            .string()
+            .nullable()
+            .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
+              correctAnswerRequired
+                ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+                : schema,
+            ),
+        });
       }),
     })
     .required();

@@ -18,8 +18,6 @@ export type ActivityAddProps = {
   type?: PerformanceTasks;
 } | null;
 
-export type ActivityProps = ActivityFormValues;
-
 export enum EditablePerformanceTasks {
   Flanker = 'Simple & Choice Reaction Time Task Builder',
   Gyroscope = 'CST Gyroscope',

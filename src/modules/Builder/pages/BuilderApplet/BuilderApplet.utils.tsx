@@ -101,6 +101,7 @@ export const getNewPerformanceTask = ({
 
   const defaultFlankerProps = {
     responseType: ItemResponseType.Flanker,
+    name: ItemResponseType.Flanker,
     general: {
       instruction: t('performanceTaskInstructions.flankerGeneral'),
       buttons: [defaultFlankerBtnObj],
@@ -138,11 +139,13 @@ export const getNewPerformanceTask = ({
     [PerformanceTasks.Flanker]: defaultFlankerProps,
     [PerformanceTasks.Gyroscope]: {
       responseType: ItemResponseType.Gyroscope,
+      name: ItemResponseType.Gyroscope,
       ...defaultGyroscopeAndTouchProps,
     },
     [PerformanceTasks.Touch]: {
       responseType: ItemResponseType.Touch,
-      defaultGyroscopeAndTouchProps,
+      name: ItemResponseType.Touch,
+      ...defaultGyroscopeAndTouchProps,
     },
   };
 
@@ -155,20 +158,19 @@ export const getNewPerformanceTask = ({
   return {
     name,
     description,
+    isHidden: false,
     items: [
       {
         id: undefined,
         key: uuidv4(),
         name: `${responseType}`,
         responseType,
-        question: '',
-        responseValues: null,
         config,
       },
     ],
     isPerformanceTask: true,
-    ...performanceTask,
     type,
+    ...performanceTask,
     id: undefined,
     key: uuidv4(),
   };
