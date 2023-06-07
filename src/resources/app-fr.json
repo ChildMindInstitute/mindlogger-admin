@@ -789,5 +789,7 @@
    "lambdaSlope": "Pente Lambda :",
    "lambdaSlopeTooltip": "Pourcentage d'augmentation du taux de déflexion du disque sur la durée sélectionnée",
    "minutes": "minutes",
-   "integerError": "Entier entre 1 et 99 requis"
+   "integerError": "Entier entre 1 et 99 requis",
+   "practiceInstruction": "Instruction de la ronde d'entraînement",
+   "testInstruction": "Instruction de la ronde de test"
 }

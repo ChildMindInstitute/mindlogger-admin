@@ -80,7 +80,7 @@ export const ResponseValuesNumberSelectionSchema = () => ({
 
 export const GyroscopeAndTouchConfigSchema = () => ({
   general: yup.object({
-    instructions: yup.string(),
+    instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
     numberOfTrials: yup
       .number()
       .min(MIN_NUMBER_OF_TRIALS, <string>t('integerError'))
@@ -95,10 +95,10 @@ export const GyroscopeAndTouchConfigSchema = () => ({
       .max(MAX_SLOPE, <string>t('integerError')),
   }),
   practice: yup.object({
-    instructions: yup.string(),
+    instruction: yup.string().required(getIsRequiredValidateMessage('practiceInstruction')),
   }),
   test: yup.object({
-    instructions: yup.string(),
+    instruction: yup.string().required(getIsRequiredValidateMessage('testInstruction')),
   }),
 });
 

@@ -4,9 +4,9 @@ import { StyledBodyLarge, theme } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { EditorController, EditorUiType } from 'shared/components/FormComponents';
 
-import { InstructionContentType } from './InstructionContent.types';
+import { InstructionProps } from '../Instruction.types';
 
-export const InstructionContent = ({ description, name }: InstructionContentType) => {
+export const InstructionContent = ({ description, name }: Omit<InstructionProps, 'title'>) => {
   const { control } = useFormContext();
   const { perfTaskItemField } = useCurrentActivity();
 
