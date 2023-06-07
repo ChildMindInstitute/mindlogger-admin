@@ -73,7 +73,7 @@ export const useAppletData = () => {
           ),
           ...removeItemExtraFields(),
         })),
-        ...removeActivityExtraFields(),
+        ...removeActivityExtraFields(activity),
       })),
       encryption,
       description: appletDescription,
@@ -85,7 +85,7 @@ export const useAppletData = () => {
         items: flow.items?.map(({ key, ...item }) => item),
         ...removeActivityFlowExtraFields(),
       })),
-      ...removeAppletExtraFields(isNewApplet),
+      ...removeAppletExtraFields(),
     };
   };
 };

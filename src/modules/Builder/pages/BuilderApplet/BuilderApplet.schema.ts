@@ -186,6 +186,23 @@ export const ItemSchema = () =>
     })
     .required();
 
+const SubscaleTableDataItemSchema = () =>
+  yup
+    .object({
+      score: yup.string(),
+      rawScore: yup.string(),
+      age: yup.number().nullable(),
+      sex: yup.string().nullable(),
+      optionalText: yup.string().nullable(),
+    })
+    .required();
+
+const TotalScoreTableDataItemSchema = () =>
+  yup.object({
+    rawScore: yup.string(),
+    optionalText: yup.string().nullable(),
+  });
+
 export const SubscaleSchema = () =>
   yup
     .object({
@@ -199,6 +216,8 @@ export const SubscaleSchema = () =>
             testFunctionForUniqueness('subscales', subscaleName ?? '', context),
         ),
       items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
+      scoring: yup.string(),
+      subscaleTableData: yup.array().of(SubscaleTableDataItemSchema()),
     })
     .required();
 
@@ -302,7 +321,13 @@ export const ActivitySchema = () =>
     responseIsEditable: yup.boolean(),
     items: yup.array().of(ItemSchema()).min(1),
     isHidden: yup.boolean(),
-    subscales: yup.array().of(SubscaleSchema()),
+    subscaleSetting: yup
+      .object({
+        calculateTotalScore: yup.string().nullable(),
+        subscales: yup.array().of(SubscaleSchema()),
+        totalScoresTableData: yup.array().of(TotalScoreTableDataItemSchema()).nullable(),
+      })
+      .nullable(),
     conditionalLogic: yup.array().of(ConditionalLogicSchema()),
     scoresAndReports: yup
       .object({

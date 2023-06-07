@@ -7,6 +7,7 @@ import { useAsync } from 'shared/hooks';
 import { getDictionaryText } from 'shared/utils';
 import { Spinner } from 'shared/components';
 import { page } from 'resources';
+import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
 import { isItemUnsupported } from '../../RespondentData.utils';
@@ -15,13 +16,12 @@ import { StyledReview } from './Review.styles';
 import { AnswersApiResponse, ReviewProps } from './Review.types';
 import { ActivityItemAnswer } from '../RespondentDataReview.types';
 import { getResponseItem } from './Review.const';
-import { useDecryptedReviews } from './Review.hooks';
 
 export const Review = ({ answerId, activityId }: ReviewProps) => {
   const { appletId, respondentId } = useParams();
   const navigate = useNavigate();
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
-  const getDecryptedReviews = useDecryptedReviews();
+  const getDecryptedReviews = useDecryptedAnswers();
 
   const { execute, isLoading } = useAsync(
     getActivityAnswerApi,

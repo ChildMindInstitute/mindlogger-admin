@@ -17,7 +17,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
   ({ appletId, encryption, submitCallback }, ref) => {
     const { t } = useTranslation('app');
     const { setAppletPrivateKey } = useEncryptionCheckFromStorage();
-    const { handleSubmit, control, setError } = useForm<EnterAppletPasswordForm>({
+    const { handleSubmit, control, setError, watch } = useForm<EnterAppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
       defaultValues: { appletPassword: '' },
     });
@@ -53,6 +53,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     };
 
     useImperativeHandle(ref, () => ({
+      password: watch('appletPassword'),
       submitForm() {
         handleSubmit(submitForm)();
       },
