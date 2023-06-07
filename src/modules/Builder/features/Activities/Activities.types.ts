@@ -1,5 +1,3 @@
-import { ActivityFormValues } from 'modules/Builder/types';
-
 export type GetActivitiesActions = {
   key: string;
   isActivityHidden?: boolean;
@@ -18,7 +16,7 @@ export type ActivityAddProps = {
   type?: PerformanceTasks;
 } | null;
 
-export enum EditablePerformanceTasks {
+export enum EditablePerformanceTasksType {
   Flanker = 'Simple & Choice Reaction Time Task Builder',
   Gyroscope = 'CST Gyroscope',
   Touch = 'CST Touch',

@@ -19,7 +19,8 @@ import { BuilderContainer } from 'shared/features';
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
-import { ActivityAddProps, EditablePerformanceTasks } from './Activities.types';
+import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
+import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -67,7 +68,7 @@ export const Activities = () => {
         activityId,
       }),
     );
-  const navigateToPerformanceTask = (activityId?: string, type?: EditablePerformanceTasks) =>
+  const navigateToPerformanceTask = (activityId?: string, type?: EditablePerformanceTasksType) =>
     activityId &&
     appletId &&
     type &&
@@ -96,7 +97,7 @@ export const Activities = () => {
     if (newActivity.isPerformanceTask && type) {
       return navigateToPerformanceTask(
         newActivity.key,
-        type as unknown as EditablePerformanceTasks,
+        type as unknown as EditablePerformanceTasksType,
       );
     }
 
@@ -149,7 +150,7 @@ export const Activities = () => {
     if (activityToEdit.isPerformanceTask && activityToEdit.type) {
       return navigateToPerformanceTask(
         activityKey,
-        activityToEdit.type as unknown as EditablePerformanceTasks,
+        activityToEdit.type as unknown as EditablePerformanceTasksType,
       );
     }
 
@@ -187,10 +188,7 @@ export const Activities = () => {
                     const isPerformanceTask = activity?.isPerformanceTask || false;
                     const activityName = activity.name;
                     const isEditVisible =
-                      !isPerformanceTask ||
-                      Object.values(EditablePerformanceTasks).includes(
-                        (activity.type || '') as any,
-                      );
+                      !isPerformanceTask || EditablePerformanceTasks.includes(activity.type || '');
                     const hasError = errors[`activities[${index}]`];
 
                     return (

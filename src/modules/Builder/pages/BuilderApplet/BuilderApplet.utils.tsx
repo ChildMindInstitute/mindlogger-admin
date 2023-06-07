@@ -31,7 +31,7 @@ import {
 } from 'shared/consts';
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
 import {
-  EditablePerformanceTasks,
+  EditablePerformanceTasksType,
   PerformanceTasks,
 } from 'modules/Builder/features/Activities/Activities.types';
 
@@ -150,7 +150,7 @@ export const getNewPerformanceTask = ({
   };
 
   const defaultPropsByType = type
-    ? propsByTypeObj[type as unknown as EditablePerformanceTasks] || { responseType: '' }
+    ? propsByTypeObj[type as unknown as EditablePerformanceTasksType] || { responseType: '' }
     : { responseType: '' };
 
   const { responseType, ...config } = defaultPropsByType;
