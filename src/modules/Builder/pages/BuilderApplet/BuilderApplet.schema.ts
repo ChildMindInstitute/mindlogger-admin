@@ -5,9 +5,15 @@ import { getMaxLengthValidationError, getIsRequiredValidateMessage } from 'share
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
+  MAX_LENGTH_OF_TEST,
   MAX_NAME_LENGTH,
+  MAX_NUMBER_OF_TRIALS,
   MAX_SELECT_OPTION_TEXT_LENGTH,
   MAX_SLIDER_LABEL_TEXT_LENGTH,
+  MAX_SLOPE,
+  MIN_LENGTH_OF_TEST,
+  MIN_NUMBER_OF_TRIALS,
+  MIN_SLOPE,
 } from 'shared/consts';
 import { SLIDER_LABEL_MAX_LENGTH } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
@@ -72,6 +78,30 @@ export const ResponseValuesNumberSelectionSchema = () => ({
     ),
 });
 
+export const GyroscopeAndTouchConfigSchema = () => ({
+  general: yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
+    numberOfTrials: yup
+      .number()
+      .min(MIN_NUMBER_OF_TRIALS, <string>t('integerError'))
+      .max(MAX_NUMBER_OF_TRIALS, <string>t('integerError')),
+    lengthOfTest: yup
+      .number()
+      .min(MIN_LENGTH_OF_TEST, <string>t('integerError'))
+      .max(MAX_LENGTH_OF_TEST, <string>t('integerError')),
+    lambdaSlope: yup
+      .number()
+      .min(MIN_SLOPE, <string>t('integerError'))
+      .max(MAX_SLOPE, <string>t('integerError')),
+  }),
+  practice: yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('practiceInstruction')),
+  }),
+  test: yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('testInstruction')),
+  }),
+});
+
 export const ItemSchema = () =>
   yup
     .object({
@@ -87,7 +117,19 @@ export const ItemSchema = () =>
           (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
-      question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),
+      question: yup.string().when('responseType', (responseType, schema) => {
+        if (
+          responseType === ItemResponseType.Flanker ||
+          responseType === ItemResponseType.Gyroscope ||
+          responseType === ItemResponseType.Touch ||
+          responseType === ItemResponseType.ABTrailsIpad ||
+          responseType === ItemResponseType.ABTrailsMobile
+        ) {
+          return schema;
+        }
+
+        return schema.required(getIsRequiredValidateMessage('displayedContent'));
+      }),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (
           responseType === ItemResponseType.SingleSelection ||
@@ -121,16 +163,25 @@ export const ItemSchema = () =>
 
         return schema.nullable();
       }),
-      config: yup.object({}).shape({
-        correctAnswerRequired: yup.boolean().nullable(),
-        correctAnswer: yup
-          .string()
-          .nullable()
-          .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
-            correctAnswerRequired
-              ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
-              : schema,
-          ),
+      config: yup.object({}).when('responseType', (responseType, schema) => {
+        if (
+          responseType === ItemResponseType.Touch ||
+          responseType === ItemResponseType.Gyroscope
+        ) {
+          return schema.shape(GyroscopeAndTouchConfigSchema());
+        }
+
+        return schema.shape({
+          correctAnswerRequired: yup.boolean().nullable(),
+          correctAnswer: yup
+            .string()
+            .nullable()
+            .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
+              correctAnswerRequired
+                ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+                : schema,
+            ),
+        });
       }),
     })
     .required();
