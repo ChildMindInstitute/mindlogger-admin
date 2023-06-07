@@ -8,14 +8,14 @@ import { InstructionContentType } from './InstructionContent.types';
 
 export const InstructionContent = ({ description, name }: InstructionContentType) => {
   const { control } = useFormContext();
-  const { fieldName } = useCurrentActivity();
+  const { perfTaskItemField } = useCurrentActivity();
 
   return (
     <>
       <StyledBodyLarge sx={{ mb: theme.spacing(2) }}>{description}</StyledBodyLarge>
       <EditorController
         uiType={EditorUiType.Secondary}
-        name={name || `${fieldName}.general.instruction`}
+        name={name || `${perfTaskItemField}.general.instruction`}
         control={control}
       />
     </>

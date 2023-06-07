@@ -5,6 +5,9 @@ import {
   ResponseValues,
   ConditionalLogic,
   ActivitySettingsSection,
+  GyroscopeGeneralSettings,
+  GyroscopePracticeSettings,
+  GyroscopeTestSettings,
 } from 'shared/state';
 import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
 import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
@@ -116,21 +119,6 @@ export type ActivityFlowItem = {
   activityKey: string;
 };
 
-type GyroscopeGeneralSettings = {
-  instruction: string;
-  numberOfTrials: number;
-  lengthOfTest: number;
-  lambdaSlope: number;
-};
-
-type GyroscopePracticeSettings = {
-  instruction: string;
-};
-
-type GyroscopeTestSettings = {
-  instruction: string;
-};
-
 export type GyroscopeFormValues = {
   id?: string;
   key?: string;
@@ -155,8 +143,6 @@ export type ActivityFlowFormValues = {
   isHidden?: boolean;
 };
 
-export type ActivityValue = ActivityFormValues | FlankerFormValues | GyroscopeFormValues;
-
 export type AppletFormValues = {
   id?: string;
   displayName: string;
@@ -166,12 +152,12 @@ export type AppletFormValues = {
   watermark?: string;
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
-  activities: ActivityValue[];
+  activities: ActivityFormValues[];
 };
 
 export type GetNewPerformanceTask = {
   name?: string;
   description?: string;
-  performanceTask?: FlankerFormValues | GyroscopeFormValues;
+  performanceTask?: ActivityFormValues;
   type?: PerformanceTasks;
 };

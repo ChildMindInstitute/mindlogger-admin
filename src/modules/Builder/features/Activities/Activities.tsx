@@ -8,12 +8,7 @@ import { Box } from '@mui/material';
 import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import {
-  ActivityFormValues,
-  ActivityValue,
-  AppletFormValues,
-  FlankerFormValues,
-} from 'modules/Builder/types';
+import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
 import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
 import {
   getNewActivity,
@@ -24,16 +19,17 @@ import { BuilderContainer } from 'shared/features';
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
 import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
-import {
-  ActivityAddProps,
-  ActivityProps,
-  EditablePerformanceTasks,
-  PerformanceTasks,
-} from './Activities.types';
+import { ActivityAddProps, ActivityProps, EditablePerformanceTasks } from './Activities.types';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch, getFieldState, setValue } = useFormContext();
+  const {
+    control,
+    watch,
+    getFieldState,
+    setValue,
+    formState: { errors: er },
+  } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
@@ -51,11 +47,11 @@ export const Activities = () => {
     name: 'activities',
   });
 
-  const activities: ActivityValue[] = watch('activities');
+  const activities: ActivityFormValues[] = watch('activities');
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
 
   const errors = activities?.reduce(
-    (err: Record<string, boolean>, _: ActivityValue, index: number) => ({
+    (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
       ...err,
       [`activities[${index}]`]: !!getFieldState(`activities[${index}]`).error,
     }),
@@ -137,7 +133,7 @@ export const Activities = () => {
 
       const newActivity = isPerformanceTask
         ? getNewPerformanceTask({
-            performanceTask: activityToDuplicate as FlankerFormValues,
+            performanceTask: activityToDuplicate,
           })
         : getNewActivity(activityToDuplicate as ActivityFormValues);
 
@@ -197,8 +193,20 @@ export const Activities = () => {
                     const isPerformanceTask = activity?.isPerformanceTask || false;
                     const activityName = activity.name;
                     const isEditVisible =
-                      !isPerformanceTask || activity.type === PerformanceTasks.Flanker;
+                      !isPerformanceTask ||
+                      Object.values(EditablePerformanceTasks).includes(
+                        (activity.type || '') as any,
+                      );
                     const hasError = errors[`activities[${index}]`];
+                    console.log(
+                      activities?.reduce(
+                        (err: Record<string, any>, _: any, index: number) => ({
+                          ...err,
+                          [`activities[${index}]`]: getFieldState(`activities[${index}]`).error,
+                        }),
+                        {},
+                      ),
+                    );
 
                     return (
                       <Fragment key={`activity-${activityKey}`}>

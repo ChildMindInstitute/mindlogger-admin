@@ -27,6 +27,12 @@ export const MIN_MILLISECONDS_DURATION = 1;
 export const DEFAULT_THRESHOLD_DURATION = 75;
 export const MIN_THRESHOLD_DURATION = 1;
 export const MAX_THRESHOLD_DURATION = 99;
+export const MIN_NUMBER_OF_TRIALS = 1;
+export const MAX_NUMBER_OF_TRIALS = 99;
+export const MIN_LENGTH_OF_TEST = 1;
+export const MAX_LENGTH_OF_TEST = 99;
+export const MIN_SLOPE = 1;
+export const MAX_SLOPE = 99;
 export const DEFAULT_NUMBER_OF_TRIALS = 3;
 export const DEFAULT_LENGTH_OF_TEST = 5;
 export const DEFAULT_LAMBDA_SLOPE = 20;
@@ -81,6 +87,8 @@ export enum ItemResponseType {
   Message = 'message',
   AudioPlayer = 'audioPlayer',
   Flanker = 'flanker',
+  Touch = 'touch',
+  Gyroscope = 'gyroscope',
   AbTest = 'abTest',
   Time = 'time',
 }
@@ -112,6 +120,8 @@ export const itemsTypeIcons = {
   [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
   [ItemResponseType.AbTest]: null,
+  [ItemResponseType.Gyroscope]: null,
+  [ItemResponseType.Touch]: null,
 };
 
 export const enum SubscaleTotalScore {

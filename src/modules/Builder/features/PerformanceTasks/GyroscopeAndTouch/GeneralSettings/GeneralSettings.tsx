@@ -14,14 +14,20 @@ import {
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
 import { Tooltip } from 'shared/components';
-
-import { MAX_SLOPE, MIN_SLOPE } from './GeneralSettings.const';
+import {
+  MAX_LENGTH_OF_TEST,
+  MAX_NUMBER_OF_TRIALS,
+  MIN_LENGTH_OF_TEST,
+  MIN_NUMBER_OF_TRIALS,
+  MIN_SLOPE,
+  MAX_SLOPE,
+} from 'shared/consts';
 
 export const GeneralSettings = () => {
   const { t } = useTranslation();
   const { control } = useFormContext();
-  const { fieldName } = useCurrentActivity();
-  const generalName = `${fieldName}.general`;
+  const { perfTaskItemField } = useCurrentActivity();
+  const generalName = `${perfTaskItemField}.general`;
 
   return (
     <StyledItemOptionContainer>
@@ -41,7 +47,8 @@ export const GeneralSettings = () => {
               type="number"
               control={control}
               name={`${generalName}.numberOfTrials`}
-              minNumberValue={Number.MIN_SAFE_INTEGER}
+              minNumberValue={MIN_NUMBER_OF_TRIALS}
+              maxNumberValue={MAX_NUMBER_OF_TRIALS}
             />
           </StyledSmallNumberInput>
         </Grid>
@@ -53,7 +60,8 @@ export const GeneralSettings = () => {
                 type="number"
                 control={control}
                 name={`${generalName}.lengthOfTest`}
-                minNumberValue={Number.MIN_SAFE_INTEGER}
+                minNumberValue={MIN_LENGTH_OF_TEST}
+                maxNumberValue={MAX_LENGTH_OF_TEST}
               />
             </StyledSmallNumberInput>
             <StyledTitleMedium sx={{ ml: theme.spacing(0.4) }}>{t('minutes')}</StyledTitleMedium>

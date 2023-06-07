@@ -54,5 +54,7 @@ export const ItemResponseTypes = {
   },
   [ItemResponseType.Flanker]: { icon: null, title: ItemResponseType.Flanker },
   [ItemResponseType.AbTest]: { icon: null, title: ItemResponseType.AbTest },
+  [ItemResponseType.Gyroscope]: { icon: null, title: ItemResponseType.Gyroscope },
+  [ItemResponseType.Touch]: { icon: null, title: ItemResponseType.Touch },
   [ItemResponseType.Time]: { icon: <Svg id="clock-picker" />, title: ItemResponseType.Time },
 };

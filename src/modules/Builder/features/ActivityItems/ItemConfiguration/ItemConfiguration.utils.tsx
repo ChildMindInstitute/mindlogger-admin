@@ -38,6 +38,8 @@ export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
   [ItemResponseType.Time]: t('timeHint'),
   [ItemResponseType.Flanker]: '',
   [ItemResponseType.AbTest]: '',
+  [ItemResponseType.Touch]: '',
+  [ItemResponseType.Gyroscope]: '',
 });
 
 export const getEmptySliderOption = ({

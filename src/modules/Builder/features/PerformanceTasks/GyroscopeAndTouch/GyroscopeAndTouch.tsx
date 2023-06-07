@@ -14,7 +14,7 @@ import { PerformanceTasks } from '../../Activities/Activities.types';
 
 export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
   const { t } = useTranslation();
-  const { fieldName } = useCurrentActivity();
+  const { perfTaskItemField } = useCurrentActivity();
   useBreadcrumbs();
 
   return (
@@ -32,12 +32,12 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
           description={t('gyroscopeAndTouchDesc.overview')}
         />
         <Instruction
-          name={`${fieldName}.practice.instruction`}
+          name={`${perfTaskItemField}.practice.instruction`}
           title={t('gyroscopeAndTouchInstructions.practice.title')}
           description={t('gyroscopeAndTouchDesc.practice')}
         />
         <Instruction
-          name={`${fieldName}.test.instruction`}
+          name={`${perfTaskItemField}.test.instruction`}
           title={t('gyroscopeAndTouchInstructions.test.title')}
           description={t('gyroscopeAndTouchDesc.test')}
         />

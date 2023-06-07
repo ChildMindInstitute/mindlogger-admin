@@ -1,9 +1,4 @@
-import {
-  ActivityFormValues,
-  ItemFormValues,
-  FlankerFormValues,
-  GyroscopeFormValues,
-} from 'modules/Builder/types';
+import { ActivityFormValues } from 'modules/Builder/types';
 
 export type GetActivitiesActions = {
   key: string;
@@ -23,15 +18,9 @@ export type ActivityAddProps = {
   type?: PerformanceTasks;
 } | null;
 
-export type ActivityProps =
-  | ActivityFormValues
-  | ((GyroscopeFormValues | FlankerFormValues) & {
-      image?: string;
-      items?: ItemFormValues[];
-      type?: PerformanceTasks;
-    });
+export type ActivityProps = ActivityFormValues;
 
-export const enum EditablePerformanceTasks {
+export enum EditablePerformanceTasks {
   Flanker = 'Simple & Choice Reaction Time Task Builder',
   Gyroscope = 'CST Gyroscope',
   Touch = 'CST Touch',

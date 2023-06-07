@@ -38,4 +38,6 @@ export const getInputTypeContent = () => ({
   [ItemResponseType.Time]: <Time />,
   [ItemResponseType.Flanker]: null,
   [ItemResponseType.AbTest]: null,
+  [ItemResponseType.Gyroscope]: null,
+  [ItemResponseType.Touch]: null,
 });
