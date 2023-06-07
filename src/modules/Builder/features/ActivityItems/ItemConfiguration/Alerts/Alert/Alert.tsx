@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import get from 'lodash.get';
 
 import { Svg } from 'shared/components';
 import { InputController, Option, SelectController } from 'shared/components/FormComponents';
@@ -10,21 +11,25 @@ import { SliderItemResponseValues } from 'shared/state';
 
 import { ItemFormValues } from 'modules/Builder/types';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
-import { StyledAlert, StyledRow, StyledDescription } from './Alert.styles';
+import { StyledAlert, StyledRow, StyledDescription, StyledSelectController } from './Alert.styles';
 import { AlertProps } from './Alert.types';
-import { getItemsList, getOptionsList, getSliderOptions } from './Alert.utils';
+import { getItemsList, getOptionsList, getSliderRowsItemList } from './Alert.utils';
 import { minMaxValues } from './Alert.const';
 
 export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   const { t } = useTranslation('app');
   const { control, getValues, watch, setValue } = useFormContext();
-  const [sliderItems, setSliderItems] = useState<Option[]>([]);
+  // const [sliderItems, setSliderItems] = useState<Option[]>([]);
 
-  const alertsName = `${name}.alerts`;
-  const slider = watch(`${alertsName}.${index}.slider`);
+  const alertName = `${name}.alerts.${index}`;
+  const optionName = `${alertName}.optionId`;
+  const rowName = `${alertName}.rowId`;
+
+  const alert = watch(alertName);
+  // const slider = watch(`${alertsName}.${index}.slider`);
 
   const { responseType, config: settings, responseValues } = getValues(name);
-  const sliderOptions = responseValues?.rows;
+  // const sliderOptions = responseValues?.rows;
 
   const renderAlertContent = () => {
     switch (responseType) {
@@ -34,10 +39,11 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
           <Trans
             i18nKey="alertSingleMultipleNonContinuousSlider"
             components={[
-              <SelectController
-                name={`${alertsName}.${index}.option`}
+              <StyledSelectController
+                name={`${alertName}.value`}
                 control={control}
-                options={getOptionsList(getValues() as ItemFormValues)}
+                placeholder={t('option')}
+                options={getOptionsList(getValues(name) as ItemFormValues, alert)}
               />,
             ]}
           />
@@ -48,15 +54,17 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
           <Trans
             i18nKey="alertSingleMultipleSelectionPerRow"
             components={[
-              <SelectController
-                name={`${alertsName}.${index}.option`}
+              <StyledSelectController
+                name={`${optionName}`}
                 control={control}
-                options={getOptionsList(getValues() as ItemFormValues)}
+                placeholder={t('option')}
+                options={getOptionsList(getValues(name) as ItemFormValues, alert)}
               />,
-              <SelectController
-                name={`${alertsName}.${index}.item`}
+              <StyledSelectController
+                name={`${rowName}`}
                 control={control}
-                options={getItemsList(getValues() as ItemFormValues)}
+                placeholder={t('row')}
+                options={getItemsList(getValues(name) as ItemFormValues, alert)}
               />,
             ]}
           />
@@ -66,24 +74,29 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
           <Trans
             i18nKey="alertSliderRows"
             components={[
-              <SelectController
-                name={`${alertsName}.${index}.slider`}
+              <StyledSelectController
+                name={`${alertName}.sliderId`}
                 control={control}
-                options={getOptionsList(getValues() as ItemFormValues)}
+                placeholder={t('slider')}
+                options={getOptionsList(getValues(name) as ItemFormValues, alert)}
               />,
-              <SelectController
-                name={`${alertsName}.${index}.item`}
+              <StyledSelectController
+                name={`${alertName}.value`}
                 control={control}
-                options={sliderItems}
+                placeholder={t('option')}
+                options={getSliderRowsItemList(
+                  getValues(name) as ItemFormValues,
+                  getValues(`${alertName}`),
+                )}
               />,
             ]}
           />
         );
       case ItemResponseType.Slider:
         // eslint-disable-next-line no-case-declarations
-        const { minValue, maxValue } = sliderOptions?.[0] || minMaxValues;
+        const { minValue, maxValue } = responseValues;
 
-        if (!settings?.includes(ItemConfigurationSettings.IsContinuous)) {
+        if (!get(settings, ItemConfigurationSettings.IsContinuous)) {
           return (
             <Trans
               i18nKey="alertSingleMultipleNonContinuousSlider"
@@ -91,7 +104,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 <InputController
                   type="number"
                   control={control}
-                  name={`${alertsName}.${index}.option`}
+                  name={`${alertName}.value`}
                   maxNumberValue={maxValue}
                   minNumberValue={minValue}
                 />,
@@ -107,14 +120,14 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
               <InputController
                 type="number"
                 control={control}
-                name={`${alertsName}.${index}.min`}
+                name={`${alertName}.minValue`}
                 maxNumberValue={maxValue - 1}
                 minNumberValue={minValue}
               />,
               <InputController
                 type="number"
                 control={control}
-                name={`${alertsName}.${index}.max`}
+                name={`${alertName}.maxValue`}
                 maxNumberValue={maxValue}
                 minNumberValue={minValue + 1}
               />,
@@ -124,15 +137,15 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
     }
   };
 
-  useEffect(() => {
-    setValue(`${alertsName}.${index}.item`, '');
-    const sliderId = getValues().alerts?.[index]?.slider;
-    const slider = sliderOptions?.filter(
-      (sliderOption: SliderItemResponseValues) => sliderOption.id === sliderId,
-    )[0];
-    const { minValue, maxValue } = slider || minMaxValues;
-    setSliderItems(getSliderOptions(minValue, maxValue));
-  }, [slider]);
+  // useEffect(() => {
+  //   setValue(`${alertsName}.${index}.item`, '');
+  //   const sliderId = getValues().alerts?.[index]?.slider;
+  //   const slider = sliderOptions?.filter(
+  //     (sliderOption: SliderItemResponseValues) => sliderOption.id === sliderId,
+  //   )[0];
+  //   const { minValue, maxValue } = slider || minMaxValues;
+  //   setSliderItems(getSliderOptions(minValue, maxValue));
+  // }, [slider]);
 
   return (
     <StyledAlert>
@@ -147,7 +160,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
       <StyledDescription>{renderAlertContent()}</StyledDescription>
       <InputController
         fullWidth
-        name={`${alertsName}.${index}.message`}
+        name={`${alertName}.alert`}
         control={control}
         label={t('alertMessage')}
         type="text"

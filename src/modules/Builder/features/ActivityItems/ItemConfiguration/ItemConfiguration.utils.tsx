@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
+import get from 'lodash.get';
 
 import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
-import { SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
+import { Item, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
 
 import {
   DEFAULT_EMPTY_SLIDER,
@@ -12,8 +13,11 @@ import {
   SELECTION_OPTIONS_COLOR_PALETTE,
   DEFAULT_NUMBER_MIN_VALUE,
   DEFAULT_NUMBER_MAX_VALUE,
+  DEFAULT_SLIDER_MIN_NUMBER,
 } from './ItemConfiguration.const';
 import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
+import { ItemConfigurationSettings } from './ItemConfiguration.types';
+import { DEFAULT_SLIDER_MAX_VALUE } from './ItemConfiguration.const';
 
 const { t } = i18n;
 
@@ -92,3 +96,55 @@ export const getEmptyFlowItem = () => ({
   itemKey: '',
   conditions: getEmptyCondition(),
 });
+
+export const getEmptyAlert = ({ config, responseType, responseValues }: Partial<Item>) => {
+  const isSlider = responseType === ItemResponseType.Slider;
+  const alert = {
+    key: uuidv4(),
+    alert: '',
+  };
+
+  if (isSlider && get(config, ItemConfigurationSettings.IsContinuous)) {
+    const { minValue, maxValue } = (responseValues as SliderItemResponseValues) ?? {};
+
+    return {
+      ...alert,
+      minValue: minValue ?? DEFAULT_SLIDER_MIN_NUMBER,
+      maxValue: maxValue ?? DEFAULT_SLIDER_MAX_VALUE,
+    };
+  }
+
+  if (isSlider) {
+    const { minValue } = (responseValues as SliderItemResponseValues) ?? {};
+
+    return {
+      ...alert,
+      value: minValue ?? DEFAULT_SLIDER_MIN_NUMBER,
+    };
+  }
+
+  if (
+    ~[ItemResponseType.SingleSelectionPerRow, ItemResponseType.MultipleSelectionPerRow].indexOf(
+      responseType as ItemResponseType,
+    )
+  ) {
+    return {
+      ...alert,
+      rowId: '',
+      optionId: '',
+    };
+  }
+
+  if (responseType === ItemResponseType.SliderRows) {
+    return {
+      ...alert,
+      sliderId: '',
+      value: '',
+    };
+  }
+
+  return {
+    ...alert,
+    value: '',
+  };
+};

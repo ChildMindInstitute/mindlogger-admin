@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
@@ -42,6 +42,7 @@ import {
   getEmptyAudioPlayerResponse,
   getEmptyAudioResponse,
   getEmptyNumberSelection,
+  getEmptyAlert,
 } from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
@@ -90,15 +91,16 @@ export const useSettingsSetup = ({
   handleAddOption,
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
-  removeAlert,
-  handleAddAlert,
+  // removeAlert,
+  // handleAddAlert,
   setShowColorPalette,
 }: SettingsSetupProps) => {
   const { setValue, getValues, watch, clearErrors } = useFormContext();
 
   const settings = watch(`${name}.config`);
+  // const alerts = watch(`${name}.alerts`);
 
-  const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
+  // const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
   const hasPalette = get(settings, ItemConfigurationSettings.HasColorPalette);
   const isTextInputRequired = get(settings, ItemConfigurationSettings.IsTextInputRequired);
   const isSkippable = get(settings, ItemConfigurationSettings.IsSkippable);
@@ -181,12 +183,12 @@ export const useSettingsSetup = ({
     };
   }, []);
 
-  useEffect(() => {
-    if (!hasAlerts) {
-      return removeAlert?.();
-    }
-    handleAddAlert?.();
-  }, [hasAlerts]);
+  // useEffect(() => {
+  //   if (!hasAlerts) {
+  //     return removeAlert?.();
+  //   }
+  //   !alerts?.length && handleAddAlert?.();
+  // }, [alerts, hasAlerts]);
 
   useEffect(() => {
     if (!hasPalette) setShowColorPalette?.(false);

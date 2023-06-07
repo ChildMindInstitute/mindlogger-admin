@@ -19,6 +19,8 @@ import {
   AudioPlayerResponseValues,
   SingleAndMultipleSelectionOption,
   SingleAndMultipleSelectItemResponseValues,
+  ItemAlert,
+  SingleAndMultipleSelectRowsResponseValues,
 } from 'shared/state';
 import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import {
@@ -27,6 +29,7 @@ import {
   ItemResponseType,
 } from 'shared/consts';
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
@@ -181,6 +184,75 @@ const getActivityItemResponseValues = (item: Item) => {
   }
 };
 
+const getAlerts = (item: Item) => {
+  const { responseType, responseValues, config } = item;
+
+  if (
+    ~[ItemResponseType.SingleSelection, ItemResponseType.MultipleSelection].indexOf(responseType)
+  ) {
+    const options = (responseValues as SingleAndMultipleSelectItemResponseValues).options;
+    const optionsWithAlert = options?.filter(({ alert }) => typeof alert === 'string');
+
+    if (!optionsWithAlert?.length) return [];
+
+    return optionsWithAlert.map(({ id, alert }) => ({
+      key: uuidv4(),
+      value: id,
+      alert,
+    }));
+  }
+
+  if (responseType === ItemResponseType.Slider) {
+    const { alerts } = responseValues as SliderItemResponseValues;
+    const isContinuous = get(config, ItemConfigurationSettings.IsContinuous);
+
+    if (!alerts?.length) return [];
+
+    return alerts.map(({ value, minValue, maxValue, alert }) => ({
+      key: uuidv4(),
+      ...(!isContinuous && { value: `${value}` }),
+      ...(isContinuous && { minValue, maxValue }),
+      alert,
+    }));
+  }
+
+  if (responseType === ItemResponseType.SliderRows) {
+    const { rows } = responseValues as SliderRowsResponseValues;
+
+    return (
+      rows?.flatMap(
+        ({ id, alerts }) =>
+          alerts?.map(({ value, alert }) => ({ key: uuidv4(), sliderId: id, value, alert })) ?? [],
+      ) ?? []
+    );
+  }
+
+  if (
+    ~[ItemResponseType.SingleSelectionPerRow, ItemResponseType.MultipleSelectionPerRow].indexOf(
+      responseType,
+    )
+  ) {
+    const { dataMatrix } = responseValues as SingleAndMultipleSelectRowsResponseValues;
+    const optionsWithAlerts = dataMatrix?.reduce((result: ItemAlert[], { rowId, options }) => {
+      const withAlerts = options?.filter(({ alert }) => typeof alert === 'string');
+
+      if (!withAlerts?.length) return result;
+
+      return [
+        ...result,
+        ...withAlerts.map(({ alert, optionId }) => ({
+          key: uuidv4(),
+          rowId,
+          optionId,
+          alert,
+        })),
+      ];
+    }, []);
+
+    return optionsWithAlerts ?? [];
+  }
+};
+
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map((item) => ({
@@ -190,8 +262,8 @@ const getActivityItems = (items: Item[]) =>
         responseType: item.responseType,
         responseValues: getActivityItemResponseValues(item),
         config: item.config,
-        alerts: item.alerts ?? [],
         conditionalLogic: undefined,
+        alerts: getAlerts(item),
         allowEdit: item.allowEdit,
       }))
     : [];

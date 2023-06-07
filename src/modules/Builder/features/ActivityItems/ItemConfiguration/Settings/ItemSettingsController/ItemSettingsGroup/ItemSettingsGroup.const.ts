@@ -1,3 +1,4 @@
+import { ItemResponseType } from 'shared/consts';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 
 export const ITEM_SETTINGS_TO_HAVE_TOOLTIP = [
@@ -18,4 +19,13 @@ export const ITEM_SETTINGS_TO_HAVE_TOOLTIP = [
   ItemConfigurationSettings.IsNavigationMovedToTheTop,
   ItemConfigurationSettings.HasRandomize,
   ItemConfigurationSettings.HasAlerts,
+];
+
+export const ITEM_TYPES_TO_HAVE_ALERTS = [
+  ItemResponseType.Slider,
+  ItemResponseType.SliderRows,
+  ItemResponseType.SingleSelection,
+  ItemResponseType.MultipleSelection,
+  ItemResponseType.SingleSelectionPerRow,
+  ItemResponseType.MultipleSelectionPerRow,
 ];

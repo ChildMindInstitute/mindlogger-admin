@@ -27,6 +27,7 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
   const rows = watch(rowsName);
   const settings = watch(`${name}.config`);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
+  const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
@@ -36,14 +37,14 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
     const dataMatrix = getValues(`${name}.responseValues.dataMatrix`);
     setValue(`${name}.responseValues.rows`, [...rows, newRow]);
 
-    if (hasScores) {
+    if (hasScores || hasAlerts) {
       setValue(`${name}.responseValues.dataMatrix`, [
         ...dataMatrix,
         {
           rowId: newRow.id,
           options: options?.map((option: SingleAndMultipleSelectOption) => ({
             optionId: option.id,
-            score: DEFAULT_SCORE_VALUE,
+            ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
           })),
         },
       ]);

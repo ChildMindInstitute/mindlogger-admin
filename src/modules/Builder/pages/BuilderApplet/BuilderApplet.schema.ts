@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import get from 'lodash/get';
 
 import i18n from 'i18n';
 import { getMaxLengthValidationError, getIsRequiredValidateMessage } from 'shared/utils';
@@ -9,7 +10,11 @@ import {
   MAX_SELECT_OPTION_TEXT_LENGTH,
   MAX_SLIDER_LABEL_TEXT_LENGTH,
 } from 'shared/consts';
-import { SLIDER_LABEL_MAX_LENGTH } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { Config } from 'shared/state';
+import {
+  ItemConfigurationSettings,
+  SLIDER_LABEL_MAX_LENGTH,
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import { testFunctionForUniqueness } from './BuilderApplet.utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from './BuilderApplet.const';
@@ -121,6 +126,68 @@ export const ItemSchema = () =>
 
         return schema.nullable();
       }),
+      alerts: yup
+        .array()
+        .when('responseType', (responseType, schema) => {
+          if (
+            responseType === ItemResponseType.SingleSelection ||
+            responseType === ItemResponseType.MultipleSelection
+          )
+            return schema.of(
+              yup.object({
+                value: yup.string().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+
+          if (responseType === ItemResponseType.Slider) {
+            return schema.of(
+              yup.object({
+                value: yup.number().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+          }
+
+          if (
+            responseType === ItemResponseType.SingleSelectionPerRow ||
+            responseType === ItemResponseType.MultipleSelectionPerRow
+          ) {
+            return schema.of(
+              yup.object({
+                optionId: yup.string().required(''),
+                rowId: yup.string().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+          }
+
+          if (responseType === ItemResponseType.SliderRows) {
+            return schema.of(
+              yup.object({
+                value: yup.string().required(''),
+                sliderId: yup.string().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+          }
+
+          return schema;
+        })
+        .when(['responseType', 'config'], {
+          is: (responseType: ItemResponseType, config: Config) =>
+            responseType === ItemResponseType.Slider &&
+            get(config, ItemConfigurationSettings.IsContinuous),
+          then: (schema) =>
+            schema.of(
+              yup.object({
+                minValue: yup.number().required(''),
+                maxValue: yup.number().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            ),
+          otherwise: (schema) => schema,
+        }),
       config: yup.object({}).shape({
         correctAnswerRequired: yup.boolean().nullable(),
         correctAnswer: yup
