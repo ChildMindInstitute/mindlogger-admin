@@ -18,23 +18,19 @@ import {
 import { ItemResponseType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 
-export const removeAppletExtraFields = (isNewApplet: boolean) => ({
-  ...(isNewApplet
-    ? {}
-    : {
-        isPublished: undefined,
-        reportServerIp: undefined,
-        reportPublicKey: undefined,
-        reportRecipients: undefined,
-        reportIncludeUserId: undefined,
-        reportIncludeCaseId: undefined,
-        reportEmailBody: undefined,
-      }),
+export const removeAppletExtraFields = () => ({
+  isPublished: undefined,
+  reportServerIp: undefined,
+  reportPublicKey: undefined,
+  reportRecipients: undefined,
+  reportIncludeUserId: undefined,
+  reportIncludeCaseId: undefined,
+  reportEmailBody: undefined,
+  retentionPeriod: undefined,
+  retentionType: undefined,
   createdAt: undefined,
   updatedAt: undefined,
   id: undefined,
-  retentionPeriod: undefined,
-  retentionType: undefined,
   theme: undefined,
   version: undefined,
 });

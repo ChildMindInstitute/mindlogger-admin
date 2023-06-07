@@ -21,7 +21,7 @@ export const AppletPasswordPopup = ({
   const handleSubmitCallback = (generatedEncryption?: Encryption) => {
     const encryptionData =
       popupType === AppletPasswordPopupType.Create ? generatedEncryption : encryption;
-    submitCallback(encryptionData!);
+    submitCallback(encryptionData!, appletPasswordRef);
   };
 
   return (

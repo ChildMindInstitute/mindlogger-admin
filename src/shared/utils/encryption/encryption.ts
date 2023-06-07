@@ -112,3 +112,6 @@ export const encryptData = ({ text, key }: { text: string; key: number[] }) => {
 
   return `${initializationVector.toString(encoding)}:${encrypted.toString(encoding)}`;
 };
+
+export const publicEncrypt = (text: string, key: string) =>
+  crypto.publicEncrypt(Buffer.from(key), Buffer.from(text)).toString('base64');
