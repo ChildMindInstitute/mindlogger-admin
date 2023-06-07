@@ -783,10 +783,10 @@
      "test": "Cette instruction sera affichée pour le répondant avant de passer le tour de test de l'activité."
    },
    "instructions": "Instructions",
-   "numberOfTrials": "Nombre d'essais :",
+   "numberOfTrials": "Nombre d'essais:",
    "numberOfTrialsTooltip": "Nombre de tours d'entraînement avant le tour de test",
-   "lengthOfTest": "Durée du test :",
-   "lambdaSlope": "Pente Lambda :",
+   "lengthOfTest": "Durée du test:",
+   "lambdaSlope": "Pente Lambda:",
    "lambdaSlopeTooltip": "Pourcentage d'augmentation du taux de déflexion du disque sur la durée sélectionnée",
    "minutes": "minutes",
    "integerError": "Entier entre 1 et 99 requis",
