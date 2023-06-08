@@ -1,9 +1,9 @@
+type Mapper<T> = {
+  (item: T): string;
+};
+
 export const createArray = <T>(length: number, mapper: (index: number) => T): T[] =>
   Array.from({ length }).map((_, index) => mapper(index));
-
-interface Mapper<T> {
-  (item: T): string;
-}
 
 export const groupBy = <T, K extends keyof T>(
   array: T[],
