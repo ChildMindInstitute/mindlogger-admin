@@ -25,11 +25,9 @@ export const RoundSettings = ({ uiType }: RoundSettingsProps) => {
             isPracticeRound ? 'flankerPracticeDesc' : 'flankerTestDesc'
           }`,
         )}
-        name={
-          isPracticeRound
-            ? `${perfTaskItemField}.practice.instruction`
-            : `${perfTaskItemField}.test.instruction`
-        }
+        name={`${perfTaskItemField}.${
+          isPracticeRound ? RoundTypeEnum.Practice : RoundTypeEnum.Test
+        }.instruction`}
         title={t(isPracticeRound ? 'practiceInstruction' : 'testInstruction')}
         type={isPracticeRound ? SettingsTypeEnum.Practice : SettingsTypeEnum.Test}
       />

@@ -10,5 +10,4 @@ export type ToggleButtonGroupProps = {
   activeButton: string;
   setActiveButton?: (value: string) => void;
   customChange?: (value: string) => void;
-  haveEqualWidth?: boolean;
 };

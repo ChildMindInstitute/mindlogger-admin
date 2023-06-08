@@ -13,7 +13,6 @@ export const ToggleButtonGroup = ({
   activeButton,
   setActiveButton,
   customChange,
-  haveEqualWidth,
 }: ToggleButtonGroupProps) => {
   const { t } = useTranslation('app');
 
@@ -28,7 +27,7 @@ export const ToggleButtonGroup = ({
     <MuiToggleButtonGroup fullWidth value={activeButton} exclusive onChange={handleChange}>
       {toggleButtons.map(({ value, label, tooltip, icon }) => (
         <StyledToggleBtn
-          haveEqualWidth={haveEqualWidth}
+          sx={{ flex: `0 0 calc(100% / ${toggleButtons.length})` }}
           withIcon={!!icon}
           key={value}
           value={value}

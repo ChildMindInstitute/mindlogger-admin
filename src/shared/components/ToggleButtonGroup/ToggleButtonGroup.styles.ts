@@ -14,17 +14,7 @@ export const StyledIcon = styled(Box)`
 `;
 
 export const StyledToggleBtn = styled(ToggleButton, shouldForwardProp)`
-  flex: 1 1 auto;
-
-  ${({ haveEqualWidth }: { haveEqualWidth?: boolean; withIcon: boolean }) =>
-    haveEqualWidth &&
-    `
-    &.MuiToggleButton-root {
-      flex: 0 0 50%;
-    }
-  `};
-
-  ${({ withIcon }) =>
+  ${({ withIcon }: { withIcon: boolean }) =>
     withIcon &&
     `
     &.MuiToggleButton-root {

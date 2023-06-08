@@ -1,7 +1,6 @@
 import { ColorResult } from 'react-color';
 import { FieldValues, Path } from 'react-hook-form';
 
-// import { ItemResponseType } from 'shared/consts';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 export enum ItemConfigurationSettings {
@@ -44,7 +43,6 @@ export type Alert = {
 };
 
 export type ItemsOption = {
-  // value: ItemResponseType;
   value: ItemResponseTypeNoPerfTasks;
   icon: JSX.Element;
   isMobileOnly?: boolean;
@@ -56,7 +54,6 @@ export type ItemsOptionGroup = {
 };
 
 export type OptionalItemSetupProps = {
-  // itemType: ItemResponseType;
   itemType: ItemResponseTypeNoPerfTasks;
   name: Path<FieldValues>;
   defaultValue?: unknown;

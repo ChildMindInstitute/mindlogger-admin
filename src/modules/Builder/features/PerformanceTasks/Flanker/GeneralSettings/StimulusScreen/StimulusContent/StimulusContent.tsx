@@ -138,7 +138,6 @@ export const StimulusContent = () => {
                     toggleButtons={pressOptions}
                     activeButton={trial.correctPress}
                     setActiveButton={(value: string) => handleActiveBtnChange(value, index)}
-                    haveEqualWidth
                   />
                 </Box>
               </Box>

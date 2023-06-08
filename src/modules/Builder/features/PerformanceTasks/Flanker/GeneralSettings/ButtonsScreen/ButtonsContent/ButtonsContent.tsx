@@ -74,7 +74,6 @@ export const ButtonsContent = () => {
           toggleButtons={buttonsQuantity}
           activeButton={activeButton}
           setActiveButton={handleActiveBtnChange}
-          haveEqualWidth
         />
       </Box>
       <StyledFlexSpaceBetween>
