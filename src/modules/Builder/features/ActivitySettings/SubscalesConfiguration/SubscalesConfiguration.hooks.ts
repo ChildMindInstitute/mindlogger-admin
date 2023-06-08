@@ -16,7 +16,7 @@ export const useSubscalesSystemItemsSetup = () => {
     control,
     name: itemsFieldName,
   });
-  const subscalesField = `${activityFieldName}.subscales`;
+  const subscalesField = `${activityFieldName}.subscaleSetting.subscales`;
   const subscales: ActivitySettingsSubscale[] = watch(subscalesField) ?? [];
 
   useEffect(() => {

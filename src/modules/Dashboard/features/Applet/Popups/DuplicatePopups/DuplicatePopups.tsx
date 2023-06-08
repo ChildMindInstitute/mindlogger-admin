@@ -1,32 +1,27 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Encryption } from 'shared/utils';
-import { DEFAULT_ROWS_PER_PAGE, Modal } from 'shared/components';
+import { Modal } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledModalWrapper } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
-import { popups, workspaces, folders } from 'redux/modules';
+import { popups, applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { duplicateAppletApi, getAppletUniqueNameApi } from 'api';
-import { page } from 'resources';
 
 import { AppletPasswordPopupType, AppletPasswordPopup } from '../AppletPasswordPopup';
 
-export const DuplicatePopups = () => {
+export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => void }) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const history = useNavigate();
 
-  const { ownerId } = workspaces.useData() || {};
-  const applets = folders.useFlattenFoldersApplets();
-  const { duplicatePopupsVisible, appletId } = popups.useData();
-
-  const currentApplet = applets.find((applet) => applet.id === appletId);
+  const { duplicatePopupsVisible, applet: appletData } = popups.useData();
+  const { result } = applet.useAppletData() || {};
+  const currentApplet = appletData || result;
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
@@ -45,15 +40,6 @@ export const DuplicatePopups = () => {
   const { execute: executeDuplicate } = useAsync(
     duplicateAppletApi,
     () => {
-      const { getWorkspaceApplets } = folders.thunk;
-      dispatch(
-        getWorkspaceApplets({
-          params: {
-            ownerId,
-            limit: DEFAULT_ROWS_PER_PAGE,
-          },
-        }),
-      );
       setPasswordModalVisible(false);
       setSuccessModalVisible(true);
     },
@@ -70,8 +56,7 @@ export const DuplicatePopups = () => {
   const duplicatePopupsClose = () =>
     dispatch(
       popups.actions.setPopupVisible({
-        appletId: '',
-        encryption: undefined,
+        applet: currentApplet,
         key: 'duplicatePopupsVisible',
         value: false,
       }),
@@ -83,9 +68,9 @@ export const DuplicatePopups = () => {
   };
 
   const successModalClose = () => {
+    onCloseCallback?.();
     setSuccessModalVisible(false);
     duplicatePopupsClose();
-    history(page.dashboardApplets);
   };
 
   const errorModalClose = () => {
@@ -100,7 +85,7 @@ export const DuplicatePopups = () => {
 
   const submitCallback = (encryption: Encryption) => {
     executeDuplicate({
-      appletId,
+      appletId: currentApplet?.id as string,
       options: {
         encryption,
         displayName: getValues().name,
@@ -142,7 +127,7 @@ export const DuplicatePopups = () => {
       </Modal>
       {passwordModalVisible && (
         <AppletPasswordPopup
-          appletId={appletId}
+          appletId={currentApplet?.id ?? ''}
           onClose={passwordModalClose}
           popupType={AppletPasswordPopupType.Create}
           popupVisible={passwordModalVisible}

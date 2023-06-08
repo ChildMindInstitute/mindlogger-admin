@@ -4,18 +4,18 @@ import { StyledBodyLarge, theme } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { EditorController, EditorUiType } from 'shared/components/FormComponents';
 
-import { OverviewInstructionProps } from '../OverviewInstruction.types';
+import { InstructionProps } from '../Instruction.types';
 
-export const InstructionContent = ({ description }: OverviewInstructionProps) => {
+export const InstructionContent = ({ description, name }: Omit<InstructionProps, 'title'>) => {
   const { control } = useFormContext();
-  const { fieldName } = useCurrentActivity();
+  const { perfTaskItemField } = useCurrentActivity();
 
   return (
     <>
       <StyledBodyLarge sx={{ mb: theme.spacing(2) }}>{description}</StyledBodyLarge>
       <EditorController
         uiType={EditorUiType.Secondary}
-        name={`${fieldName}.general.instruction`}
+        name={name || `${perfTaskItemField}.general.instruction`}
         control={control}
       />
     </>

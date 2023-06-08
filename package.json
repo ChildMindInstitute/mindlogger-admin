@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-admin",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -27,6 +27,7 @@
     "i18next": "^22.0.4",
     "i18next-browser-languagedetector": "^7.0.0",
     "javascript-time-ago": "^2.5.9",
+    "jszip": "^3.10.1",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",

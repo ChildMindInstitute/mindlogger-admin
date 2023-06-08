@@ -22,11 +22,18 @@ import {
 } from 'shared/state';
 import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import {
+  DEFAULT_LAMBDA_SLOPE,
+  DEFAULT_LENGTH_OF_TEST,
   DEFAULT_MILLISECONDS_DURATION,
+  DEFAULT_NUMBER_OF_TRIALS,
   DEFAULT_THRESHOLD_DURATION,
   ItemResponseType,
 } from 'shared/consts';
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
+import {
+  EditablePerformanceTasksType,
+  PerformanceTasks,
+} from 'modules/Builder/features/Activities/Activities.types';
 
 import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
@@ -83,7 +90,7 @@ export const getNewPerformanceTask = ({
   name,
   description,
   performanceTask,
-  isFlankerItem,
+  type,
 }: GetNewPerformanceTask) => {
   const commonRoundProps = {
     stimulusDuration: DEFAULT_MILLISECONDS_DURATION,
@@ -91,7 +98,10 @@ export const getNewPerformanceTask = ({
     showSummary: true,
     blocks: [],
   };
-  const defaultFlankerProps = isFlankerItem && {
+
+  const defaultFlankerProps = {
+    responseType: ItemResponseType.Flanker,
+    name: ItemResponseType.Flanker,
     general: {
       instruction: t('performanceTaskInstructions.flankerGeneral'),
       buttons: [defaultFlankerBtnObj],
@@ -110,13 +120,56 @@ export const getNewPerformanceTask = ({
       showFeedback: false,
     },
   };
+  const defaultGyroscopeAndTouchProps = {
+    general: {
+      instruction: t('gyroscopeAndTouchInstructions.overview.instruction'),
+      numberOfTrials: DEFAULT_NUMBER_OF_TRIALS,
+      lengthOfTest: DEFAULT_LENGTH_OF_TEST,
+      lambdaSlope: DEFAULT_LAMBDA_SLOPE,
+    },
+    practice: {
+      instruction: t('gyroscopeAndTouchInstructions.practice.instruction'),
+    },
+    test: {
+      instruction: t('gyroscopeAndTouchInstructions.test.instruction'),
+    },
+  };
+
+  const propsByTypeObj = {
+    [PerformanceTasks.Flanker]: defaultFlankerProps,
+    [PerformanceTasks.Gyroscope]: {
+      responseType: ItemResponseType.Gyroscope,
+      name: ItemResponseType.Gyroscope,
+      ...defaultGyroscopeAndTouchProps,
+    },
+    [PerformanceTasks.Touch]: {
+      responseType: ItemResponseType.Touch,
+      name: ItemResponseType.Touch,
+      ...defaultGyroscopeAndTouchProps,
+    },
+  };
+
+  const defaultPropsByType = type
+    ? propsByTypeObj[type as unknown as EditablePerformanceTasksType] || { responseType: '' }
+    : { responseType: '' };
+
+  const { responseType, ...config } = defaultPropsByType;
 
   return {
     name,
     description,
-    ...defaultFlankerProps,
+    isHidden: false,
+    items: [
+      {
+        id: undefined,
+        key: uuidv4(),
+        name: `${responseType}`,
+        responseType,
+        config,
+      },
+    ],
     isPerformanceTask: true,
-    isFlankerItem,
+    type,
     ...performanceTask,
     id: undefined,
     key: uuidv4(),

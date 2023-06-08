@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 import { applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
+import { PublishConcealAppletPopup } from 'modules/Dashboard/features/Applet/Popups';
 
 import { PublishConcealAppletSettingProps } from './PublishConcealAppletSetting.types';
 import {
@@ -25,6 +26,8 @@ export const PublishConcealAppletSetting = ({
   const { getApplet } = applet.thunk;
   const { setValue, getValues } = useFormContext() ?? {};
 
+  const { publishConcealPopupVisible } = popups.useData();
+
   const isPublished = isBuilder ? getValues('isPublished') : appletData?.isPublished;
 
   const handleSuccess = () => {
@@ -43,7 +46,7 @@ export const PublishConcealAppletSetting = ({
           onClick={() =>
             dispatch(
               popups.actions.setPopupVisible({
-                appletId,
+                applet: appletData,
                 key: 'publishConcealPopupVisible',
                 value: true,
                 popupProps: { onSuccess: handleSuccess },
@@ -56,6 +59,7 @@ export const PublishConcealAppletSetting = ({
           {t(isPublished ? 'concealApplet' : 'publishApplet')}
         </StyledAppletSettingsButton>
       </Box>
+      {publishConcealPopupVisible && <PublishConcealAppletPopup />}
     </>
   );
 };

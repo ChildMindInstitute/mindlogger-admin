@@ -4,71 +4,73 @@ const { t } = i18n;
 
 export const subscaleColumnData = [
   {
-    key: 'Score',
+    key: 'score',
     label: t('subscaleLookupTable.column.score'),
     styles: {
       width: '10%',
     },
   },
   {
-    key: 'Raw Score',
+    key: 'rawScore',
     label: t('subscaleLookupTable.column.rawScore'),
     styles: {
       width: '20%',
     },
   },
   {
-    key: 'Age',
+    key: 'age',
     label: t('subscaleLookupTable.column.age'),
     styles: {
       width: '10%',
     },
   },
   {
-    key: 'Sex',
+    key: 'sex',
     label: t('subscaleLookupTable.column.sex'),
     styles: {
       width: '10%',
     },
   },
   {
-    key: 'Text',
+    key: 'optionalText',
     label: t('subscaleLookupTable.column.text'),
   },
 ];
 
 export const subscaleTableTemplate = [
   {
-    Score: 10,
-    'Raw Score': 1,
-    Age: 15,
-    Sex: 'M',
-    Text: 'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+    score: '10',
+    rawScore: '1',
+    age: 15,
+    sex: 'M',
+    optionalText:
+      'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
   },
   {
-    Score: 20,
-    'Raw Score': 2,
-    Age: 15,
-    Sex: 'M',
-    Text: 'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+    score: '20',
+    rawScore: '2',
+    age: 15,
+    sex: 'M',
+    optionalText:
+      'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
   },
   {
-    Score: 30,
-    'Raw Score': 3,
-    Age: 15,
-    Sex: 'M',
-    Text: 'Markdown Text Here',
+    score: '30',
+    rawScore: '3',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Markdown Text Here',
   },
   {
-    Score: 40,
-    'Raw Score': 4,
-    Age: 15,
-    Sex: 'F',
-    Text: 'Good',
+    score: '40',
+    rawScore: '4',
+    age: 15,
+    sex: 'F',
+    optionalText: 'Good',
   },
   {
-    Score: 50,
-    'Raw Score': 5,
-    Age: 15,
+    score: '50',
+    rawScore: '5',
+    age: 15,
   },
 ];

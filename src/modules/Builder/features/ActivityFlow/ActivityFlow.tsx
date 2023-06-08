@@ -72,17 +72,11 @@ export const ActivityFlow = () => {
     );
 
   const handleAddActivityFlow = (positionToAdd?: number) => {
-    // TODO: remove filtering after connecting Performance Tasks API (BE tasks: 1802, 1804, 1805, 1806)
-    const flowItems = activities.reduce((acc: { key: string; activityKey: string }[], activity) => {
-      if (!activity.isPerformanceTask) {
-        acc.push({
-          key: uuidv4(),
-          activityKey: activity.id || activity.key || '',
-        });
-      }
+    const flowItems = activities.map((activity) => ({
+      key: uuidv4(),
+      activityKey: activity.id || activity.key || '',
+    }));
 
-      return acc;
-    }, []);
     const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
 
     if (positionToAdd) {

@@ -271,6 +271,31 @@ export type DrawingResponseValues = {
   drawingBackground: string;
 };
 
+export type GyroscopeGeneralSettings = {
+  instruction: string;
+  numberOfTrials: number;
+  lengthOfTest: number;
+  lambdaSlope: number;
+};
+
+export type GyroscopePracticeSettings = {
+  instruction: string;
+};
+
+export type GyroscopeTestSettings = {
+  instruction: string;
+};
+
+export type GyroscopeConfig = {
+  general: GyroscopeGeneralSettings;
+  practice: GyroscopePracticeSettings;
+  test: GyroscopeTestSettings;
+  skippableItem?: boolean;
+  removeBackButton?: boolean;
+};
+
+type TouchConfig = GyroscopeConfig;
+
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
@@ -300,7 +325,9 @@ export type Config =
   | DrawingConfig
   | PhotoConfig
   | GeolocationConfig
-  | MessageConfig;
+  | MessageConfig
+  | GyroscopeConfig
+  | TouchConfig;
 
 export type ItemAlert = {
   message: string;
@@ -399,6 +426,12 @@ export type ScoresAndReports = {
   sections: ActivitySettingsSection[];
 };
 
+export type SubscaleSetting = {
+  calculateTotalScore?: SubscaleTotalScore | null;
+  subscales?: ActivitySettingsSubscale[];
+  totalScoresTableData?: Record<string, string>[] | null;
+};
+
 export type Activity = {
   id?: string;
   key?: string;
@@ -414,11 +447,9 @@ export type Activity = {
   isHidden?: boolean;
   items: Item[];
   scoresAndReports?: ScoresAndReports;
-  subscales?: ActivitySettingsSubscale[];
-  calculateTotalScore?: SubscaleTotalScore;
+  subscaleSetting?: SubscaleSetting | null;
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
-  totalScoresTableData?: string;
   isPerformanceTask?: boolean;
 };
 
@@ -487,7 +518,7 @@ export type ActivitySettingsSubscale = {
   name: string;
   scoring: SubscaleTotalScore;
   items: string[];
-  subscaleTableData?: string;
+  subscaleTableData?: Record<string, string>[] | null;
 };
 
 export type SingleApplet = {
@@ -512,6 +543,8 @@ export type SingleApplet = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   theme?: Theme;
+  pinnedAt?: string | null;
+  role?: string;
   encryption?: Encryption;
   generateReport: boolean;
   isPublished?: boolean;

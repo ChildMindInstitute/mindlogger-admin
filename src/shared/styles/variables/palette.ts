@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 export const palette = {
   primary: '#0067a0',
   primary50: '#207cbb',

@@ -8,14 +8,9 @@ import {
   getParsedEncryptionFromServer,
 } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import {
-  AnswerDecrypted,
-  AnswersApiResponse,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Review/Review.types';
+import { DecryptedAnswerData, ExtendedExportAnswer, AnswerDecrypted } from 'shared/types';
 
-import { ActivityItemAnswer } from '../Feedback/FeedbackReviewed/FeedbackReviewed.types';
-
-export const useDecryptedReviews = () => {
+export const useDecryptedAnswers = () => {
   const { appletId = '' } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
   const encryption = appletData?.encryption;
@@ -26,8 +21,8 @@ export const useDecryptedReviews = () => {
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(appletId);
 
-  return (answersApiResponse: AnswersApiResponse): ActivityItemAnswer[] => {
-    const { userPublicKey, answer, items, itemIds } = answersApiResponse;
+  return (answersApiResponse: ExtendedExportAnswer): DecryptedAnswerData[] => {
+    const { userPublicKey, answer, items, itemIds, ...rest } = answersApiResponse;
     const itemsObject = getObjectFromList(items);
     let userPublicKeyParsed = [];
     try {
@@ -55,11 +50,12 @@ export const useDecryptedReviews = () => {
 
     return answersDecrypted.map((answerDecrypted, index) => {
       const itemId = itemIds[index];
-      const activityItem = itemsObject[itemId] as unknown as ActivityItemAnswer['activityItem'];
+      const activityItem = itemsObject[itemId];
 
       return {
         activityItem,
         answer: answerDecrypted,
+        ...rest,
       };
     });
   };

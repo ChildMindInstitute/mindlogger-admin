@@ -8,12 +8,6 @@ export const reportConfigSchema = () => {
   return yup
     .object({
       email: yup.string().email(incorrectEmail),
-      respondentId: yup.string(),
-      caseId: yup.string(),
-      subject: yup.string().required(),
-      description: yup.string(),
-      serverURL: yup.string(),
-      publicEncryptionKey: yup.string(),
     })
     .required();
 };
