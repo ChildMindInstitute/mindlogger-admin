@@ -29,27 +29,30 @@ import { UploadedTable } from './BlockSequencesContent.types';
 
 export const BlockSequencesContent = ({ isPracticeRound }: IsPracticeRoundType) => {
   const { t } = useTranslation();
-  const [importTableVisible, setImportTableVisible] = useState(false);
-  const [uploadedTable, setUploadedTable] = useState<UploadedTable>(null);
   const {
     watch,
     setValue,
     formState: { errors },
   } = useFormContext();
   const { perfTaskItemField, perfTaskItemObjField } = useCurrentActivity();
+
+  const [importTableVisible, setImportTableVisible] = useState(false);
+  const [uploadedTable, setUploadedTable] = useState<UploadedTable>(null);
+
   const stimulusField = `${perfTaskItemField}.general.stimulusTrials`;
-  const stimulusTrials: FlankerStimulusSettings[] = watch(stimulusField);
   const roundField = `${perfTaskItemField}.${
     isPracticeRound ? RoundTypeEnum.Practice : RoundTypeEnum.Test
   }`;
   const blockSequencesField = `${roundField}.blocks`;
+  const stimulusTrials: FlankerStimulusSettings[] = watch(stimulusField);
+  const blockSequences = watch(blockSequencesField);
+
   const blockSequencesObjField = `${perfTaskItemObjField}.${
     isPracticeRound ? RoundTypeEnum.Practice : RoundTypeEnum.Test
   }.blocks`;
-  const blockSequences = watch(blockSequencesField);
-  const prevStimulusTrialsLength = useRef(stimulusTrials?.length);
-
   const hasBlockSequencesErrors = !!get(errors, blockSequencesObjField);
+
+  const prevStimulusTrialsLength = useRef(stimulusTrials?.length);
 
   const { defaultExportTable, defaultTableRows } = getSequencesData(stimulusTrials);
   const tableRows = uploadedTable ? getUploadedTableRows(uploadedTable) : defaultTableRows || [];
