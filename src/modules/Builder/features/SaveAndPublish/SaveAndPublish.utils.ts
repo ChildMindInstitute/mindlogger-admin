@@ -17,7 +17,7 @@ import {
   ItemAlert,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, groupBy } from 'shared/utils';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
 
@@ -153,16 +153,15 @@ export const mapItemResponseValues = (item: Item) => {
   ) {
     const { dataMatrix, ...other } = responseValues as SingleAndMultipleSelectRowsResponseValues;
 
+    const groupedAlerts = groupBy(alerts ?? [], (alert) => `${alert.optionId}-${alert.rowId}`);
+
     return {
       ...other,
       dataMatrix: dataMatrix?.map(({ rowId, options }) => ({
         rowId,
         options: options?.map((option) => ({
           ...option,
-          alert: hasAlerts
-            ? alerts?.find((alert) => alert.optionId === option.optionId && alert.rowId === rowId)
-                ?.alert
-            : undefined,
+          alert: hasAlerts ? groupedAlerts[`${option.optionId}-${rowId}`]?.[0]?.alert : undefined,
         })),
       })),
     };

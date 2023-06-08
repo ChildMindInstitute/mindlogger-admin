@@ -7,7 +7,7 @@ import {
   SliderRowsResponseValues,
   ItemAlert,
 } from 'shared/state';
-import { createArray } from 'shared/utils';
+import { createArray, groupBy } from 'shared/utils';
 import { Option } from 'shared/components/FormComponents';
 
 import { OptionTypes } from './Alert.types';
@@ -90,8 +90,10 @@ export const getItemsList = (formValues: ItemFormValues, alert: ItemAlert) => {
   ) {
     const { rows, options } = (responseValues as SingleAndMultipleSelectRowsResponseValues) ?? {};
 
+    const alertsByRow = groupBy(alerts ?? [], 'rowId');
+
     return rows?.reduce((result: Option[], row, index) => {
-      const alertsWithRow = alerts?.filter(({ rowId }) => rowId === row.id);
+      const alertsWithRow = alertsByRow[row.id];
 
       if (alertsWithRow?.length === options?.length && alert?.rowId !== row.id) return result;
 
