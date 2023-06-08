@@ -186,7 +186,7 @@ export type FlankerButtonSetting = {
 };
 
 export type FlankerFixationSettings = {
-  image: string | null;
+  image: string;
   duration: number;
 };
 

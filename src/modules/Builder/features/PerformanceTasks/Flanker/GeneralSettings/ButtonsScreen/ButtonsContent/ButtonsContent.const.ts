@@ -1,6 +1,6 @@
 export const enum ButtonsQuantity {
-  One = '1',
-  Two = '2',
+  One = '0',
+  Two = '1',
 }
 
 export const buttonsQuantity = [

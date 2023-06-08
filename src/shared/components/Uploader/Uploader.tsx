@@ -35,6 +35,7 @@ export const Uploader = ({
   wrapperStyles = {},
   hasRemoveConfirmation = false,
   cropRatio,
+  hasError,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
   const { execute: executeImgUpload } = useAsync(
@@ -134,6 +135,7 @@ export const Uploader = ({
   return (
     <>
       <StyledContainer
+        hasError={hasError}
         width={width}
         height={height}
         isImgUploaded={!!imageField}
@@ -166,7 +168,11 @@ export const Uploader = ({
             )}
           </UploadedImgContainer>
         ) : (
-          <StyledImgContainer className="image-container" isPrimaryUiType={isPrimaryUiType}>
+          <StyledImgContainer
+            className="image-container"
+            isPrimaryUiType={isPrimaryUiType}
+            hasError={hasError}
+          >
             <Svg id={placeholderImgId} width={32} height={32} />
             {isPrimaryUiType && error && (
               <StyledBodyMedium

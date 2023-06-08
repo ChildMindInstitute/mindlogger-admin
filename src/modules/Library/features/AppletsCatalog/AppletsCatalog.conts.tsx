@@ -57,6 +57,5 @@ export const ItemResponseTypes = {
   [ItemResponseType.Touch]: { icon: null, title: ItemResponseType.Touch },
   [ItemResponseType.ABTrailsIpad]: { icon: null, title: ItemResponseType.ABTrailsIpad },
   [ItemResponseType.ABTrailsMobile]: { icon: null, title: ItemResponseType.ABTrailsMobile },
-  // [ItemResponseType.AbTest]: { icon: null, title: ItemResponseType.AbTest },
   [ItemResponseType.Time]: { icon: <Svg id="clock-picker" />, title: ItemResponseType.Time },
 };

@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { getMaxLengthValidationError, getIsRequiredValidateMessage } from 'shared/utils';
+import { getIsRequiredValidateMessage, getMaxLengthValidationError } from 'shared/utils';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
@@ -10,6 +10,7 @@ import {
   MAX_SLIDER_LABEL_TEXT_LENGTH,
 } from 'shared/consts';
 import { SLIDER_LABEL_MAX_LENGTH } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { RoundTypeEnum } from 'modules/Builder/features/PerformanceTasks/Flanker/RoundSettings';
 
 import { testFunctionForUniqueness } from './BuilderApplet.utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from './BuilderApplet.const';
@@ -72,12 +73,12 @@ export const ResponseValuesNumberSelectionSchema = () => ({
     ),
 });
 
-const buttonNameOrImageTest = (type: 'name' | 'image') =>
+const getFlankerButtonsSchema = (type: 'name' | 'image') =>
   yup
     .string()
     .test(
       'has-image-or-name',
-      type === 'name' ? getIsRequiredValidateMessage('flankerButtons.rightButtonName') : '',
+      type === 'name' ? getIsRequiredValidateMessage('flankerButtons.nameOrImage') : '',
       function () {
         const { image, name } = this.parent;
 
@@ -85,15 +86,46 @@ const buttonNameOrImageTest = (type: 'name' | 'image') =>
       },
     );
 
-export const FlankerGeneralSchema = () =>
+const getFlankerRoundSchema = (type: RoundTypeEnum) => {
+  const isPracticeRound = type === RoundTypeEnum.Practice;
+
+  return yup.object({
+    instruction: yup
+      .string()
+      .required(
+        getIsRequiredValidateMessage(isPracticeRound ? 'practiceInstruction' : 'testInstruction'),
+      ),
+    blocks: yup.array().required().min(1),
+    stimulusDuration: yup.number().required(getIsRequiredValidateMessage('positiveInteger')),
+    ...(isPracticeRound && {
+      threshold: yup.number().required(getIsRequiredValidateMessage('integerBetweenOneAndHundred')),
+    }),
+  });
+};
+
+export const getFlankerGeneralSchema = () =>
   yup.object({
     instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
     buttons: yup.array().of(
       yup.object({
-        name: buttonNameOrImageTest('name'),
-        image: buttonNameOrImageTest('name'),
+        name: getFlankerButtonsSchema('name'),
+        image: getFlankerButtonsSchema('image'),
       }),
     ),
+    fixation: yup
+      .object({
+        image: yup.string().required(),
+        duration: yup.number().required(getIsRequiredValidateMessage('positiveInteger')),
+      })
+      .nullable(),
+    stimulusTrials: yup
+      .array()
+      .of(
+        yup.object({
+          image: yup.string().required(),
+        }),
+      )
+      .min(1),
   });
 
 export const ItemSchema = () =>
@@ -159,7 +191,11 @@ export const ItemSchema = () =>
       }),
       config: yup.object({}).when('responseType', (responseType, schema) => {
         if (responseType === ItemResponseType.Flanker) {
-          return schema.shape({ general: FlankerGeneralSchema() });
+          return schema.shape({
+            general: getFlankerGeneralSchema(),
+            practice: getFlankerRoundSchema(RoundTypeEnum.Practice),
+            test: getFlankerRoundSchema(RoundTypeEnum.Test),
+          });
         }
 
         return schema.shape({

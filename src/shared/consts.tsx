@@ -83,7 +83,6 @@ export enum ItemResponseType {
   Touch = 'touch',
   ABTrailsIpad = 'ABTrailsIpad',
   ABTrailsMobile = 'ABTrailsMobile',
-  // AbTest = 'abTest',
 }
 
 export enum CalculationType {
@@ -116,7 +115,6 @@ export const itemsTypeIcons = {
   [ItemResponseType.Touch]: null,
   [ItemResponseType.ABTrailsIpad]: null,
   [ItemResponseType.ABTrailsMobile]: null,
-  // [ItemResponseType.AbTest]: null,
 };
 
 export const enum SubscaleTotalScore {

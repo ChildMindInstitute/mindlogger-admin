@@ -9,7 +9,6 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.Message,
   ItemResponseType.Photo,
   ItemResponseType.Video,
-  // ItemResponseType.AbTest,
   ItemResponseType.Flanker,
   ItemResponseType.Gyroscope,
   ItemResponseType.Touch,

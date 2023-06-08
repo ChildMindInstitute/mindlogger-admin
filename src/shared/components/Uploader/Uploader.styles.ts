@@ -22,15 +22,17 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
     width,
     isImgUploaded,
     isPrimaryUiType,
+    hasError,
   }: {
     height: number;
     width: number;
     isImgUploaded: boolean;
     isPrimaryUiType: boolean;
+    hasError?: boolean;
   }) => {
     const commonStyles = `
-      height: ${height}rem;
-      width: ${width}rem;
+      height: ${hasError ? height - 0.1 : height}rem;
+      width: ${hasError ? width - 0.1 : width}rem;
     `;
 
     if (isPrimaryUiType) {
@@ -47,6 +49,9 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
       ${commonStyles}
       border-radius: ${variables.borderRadius.xs};
       background-color: ${isImgUploaded ? 'transparent' : variables.palette.primary_container};
+      border: ${
+        hasError ? `${variables.borderWidth.md} solid ${variables.palette.semantic.error}` : 'unset'
+      };
       
       .image-container {
         transition: ${variables.transitions.bgColor};
@@ -66,17 +71,27 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
 export const StyledImgContainer = styled(StyledFlexColumn, shouldForwardProp)`
   align-items: center;
 
-  ${({ isPrimaryUiType }: { isPrimaryUiType: boolean }) =>
-    isPrimaryUiType &&
-    `
-     span {
-      color: ${variables.palette.primary};
-     }
-      
-     svg {
-      fill: ${variables.palette.surface_variant};
-     }
-  `};
+  ${({ isPrimaryUiType, hasError }: { isPrimaryUiType: boolean; hasError?: boolean }) => {
+    if (isPrimaryUiType) {
+      return `
+         span {
+          color: ${variables.palette.primary};
+         }
+          
+         svg {
+          fill: ${variables.palette.surface_variant};
+         }
+      `;
+    }
+
+    if (!isPrimaryUiType && hasError) {
+      return `   
+         svg {
+          fill: ${variables.palette.semantic.error};
+         }
+      `;
+    }
+  }};
 `;
 
 export const UploadedImgContainer = styled(Box, shouldForwardProp)`

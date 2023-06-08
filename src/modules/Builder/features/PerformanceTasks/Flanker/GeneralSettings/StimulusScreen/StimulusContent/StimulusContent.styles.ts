@@ -23,7 +23,6 @@ export const StyledHeader = styled(StyledFlexTopCenter)`
 `;
 
 export const StyledRow = styled(StyledFlexTopCenter)`
-  height: 8rem;
   padding: ${theme.spacing(1.2, 1.6)};
   border-top: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
 `;
