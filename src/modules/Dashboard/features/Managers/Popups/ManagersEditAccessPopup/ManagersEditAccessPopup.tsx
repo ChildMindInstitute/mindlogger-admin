@@ -81,9 +81,10 @@ export const EditAccessPopup = ({
     const appletsWithoutRespondents = getAppletsWithoutRespondents();
     setAppletsWithoutRespondents(appletsWithoutRespondents);
     if (!appletsWithoutRespondents.length) {
-      const accesses = applets.map(({ id, roles }) => ({
+      const accesses = applets.map(({ id, roles, selectedRespondents }) => ({
         appletId: id,
         roles: roles.map(({ role }) => role),
+        respondents: [...(selectedRespondents || [])],
       }));
 
       if (!ownerId || !accesses.length || accesses.some(({ roles }) => !roles.length)) {

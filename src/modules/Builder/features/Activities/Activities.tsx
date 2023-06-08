@@ -18,8 +18,9 @@ import { BuilderContainer } from 'shared/features';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
-import { getActions, getActivityKey } from './Activities.utils';
-import { ActivityAddProps } from './Activities.types';
+import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
+import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
+import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
@@ -67,32 +68,37 @@ export const Activities = () => {
         activityId,
       }),
     );
-  const navigateToFlanker = (activityId?: string) =>
+  const navigateToPerformanceTask = (activityId?: string, type?: EditablePerformanceTasksType) =>
     activityId &&
+    appletId &&
+    type &&
     navigate(
-      generatePath(page.builderAppletFlanker, {
+      generatePath(getPerformanceTaskPath(type), {
         appletId,
         activityId,
       }),
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
-    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked, isFlankerItem } =
+    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked, type } =
       props || {};
     const newActivity =
       performanceTaskName && performanceTaskDesc
         ? getNewPerformanceTask({
             name: performanceTaskName,
             description: performanceTaskDesc,
-            isFlankerItem,
+            type,
           })
         : getNewActivity();
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
 
     if (isNavigationBlocked) return;
-    if (newActivity.isFlankerItem) {
-      return navigateToFlanker(newActivity.key);
+    if (newActivity.isPerformanceTask && type) {
+      return navigateToPerformanceTask(
+        newActivity.key,
+        type as unknown as EditablePerformanceTasksType,
+      );
     }
 
     return navigateToActivity(newActivity.key);
@@ -122,7 +128,7 @@ export const Activities = () => {
 
       const newActivity = isPerformanceTask
         ? getNewPerformanceTask({
-            performanceTask: activityToDuplicate as ActivityFormValues,
+            performanceTask: activityToDuplicate,
           })
         : getNewActivity(activityToDuplicate as ActivityFormValues);
 
@@ -141,8 +147,11 @@ export const Activities = () => {
   const handleEditActivity = (index: number) => {
     const activityToEdit = activities[index];
     const activityKey = getActivityKey(activityToEdit);
-    if (activityToEdit.isFlankerItem) {
-      return navigateToFlanker(activityKey);
+    if (activityToEdit.isPerformanceTask && activityToEdit.type) {
+      return navigateToPerformanceTask(
+        activityKey,
+        activityToEdit.type as unknown as EditablePerformanceTasksType,
+      );
     }
 
     return navigateToActivity(activityKey);
@@ -178,7 +187,8 @@ export const Activities = () => {
                     const activityKey = getActivityKey(activity);
                     const isPerformanceTask = activity?.isPerformanceTask || false;
                     const activityName = activity.name;
-                    const isEditVisible = !isPerformanceTask || !!activity.isFlankerItem;
+                    const isEditVisible =
+                      !isPerformanceTask || EditablePerformanceTasks.includes(activity.type || '');
                     const hasError = errors[`activities[${index}]`];
 
                     return (

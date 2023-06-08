@@ -13,8 +13,14 @@ export type ActivityAddProps = {
   performanceTaskName?: string;
   performanceTaskDesc?: string;
   isNavigationBlocked?: boolean;
-  isFlankerItem?: boolean;
+  type?: PerformanceTasks;
 } | null;
+
+export enum EditablePerformanceTasksType {
+  Flanker = 'Simple & Choice Reaction Time Task Builder',
+  Gyroscope = 'CST Gyroscope',
+  Touch = 'CST Touch',
+}
 
 export const enum PerformanceTasks {
   AbTrailsIpad = 'A/B Trails iPad',

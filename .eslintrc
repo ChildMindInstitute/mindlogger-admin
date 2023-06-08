@@ -52,7 +52,7 @@
     "no-undef-init": "error",
     "no-nested-ternary": "error",
     "no-unneeded-ternary": "error",
-    "camelcase": "error",
+    "camelcase": "off",
     "arrow-parens": ["off", "as-needed"],
     "no-debugger": "error",
     "no-empty": "error",

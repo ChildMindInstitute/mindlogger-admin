@@ -11,7 +11,12 @@ import {
   variables,
   theme,
 } from 'shared/styles';
-import { SingleAndMultipleSelectMatrix, SingleAndMultipleSelectOption } from 'shared/state';
+import {
+  ItemAlert,
+  SingleAndMultipleSelectMatrix,
+  SingleAndMultipleSelectOption,
+} from 'shared/state';
+import { getObjectFromList } from 'shared/utils';
 
 import { StyledSelectController } from './Header.styles';
 import { HeaderProps } from './Header.types';
@@ -19,7 +24,6 @@ import { getMultipleSelectionRowsOptions } from './Header.utils';
 import { getEmptySelectionItemOptions } from '../../../ItemConfiguration.utils';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../../../ItemConfiguration.const';
-// import { options } from '../../../Alerts/Alert';
 
 const commonSelectArrowProps = {
   id: 'navigate-down',
@@ -43,6 +47,7 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
   const settings = watch(`${name}.config`);
 
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
+  const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
 
   const handleChange = (e: SelectEvent) => {
     const options = getValues(optionsName);
@@ -55,6 +60,23 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
       : [...options, ...getEmptySelectionItemOptions(newValue - options?.length)];
 
     setValue(optionsName, newOptions);
+
+    if (hasAlerts) {
+      const newOptionsIds = getObjectFromList(newOptions);
+
+      setValue(
+        `${name}.alerts`,
+        getValues(`${name}.alerts`)?.map((alert: ItemAlert) => {
+          if (!newOptionsIds[alert.optionId ?? ''])
+            return {
+              ...alert,
+              optionId: '',
+            };
+
+          return alert;
+        }),
+      );
+    }
 
     if (hasScores) {
       const dataMatrix = getValues(`${name}.responseValues.dataMatrix`);

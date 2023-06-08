@@ -6,18 +6,19 @@ import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
 
-import { SingleAndMultipleSelectionOption } from 'shared/state';
+import { ItemAlert, SingleAndMultipleSelectionOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 
-import { ItemConfigurationSettings } from '../ItemConfiguration.types';
+import { Alert, ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
 import {
   getPaletteColor,
   getEmptySliderOption,
   getEmptySelectionItem,
   getEmptySelectionItemOption,
+  getEmptyAlert,
 } from '../ItemConfiguration.utils';
 import {
   ColorPalette,
@@ -26,7 +27,7 @@ import {
   TextInputOption,
   ResponseDataIdentifier,
 } from '../Settings';
-// import { Alerts } from '../Alerts';
+import { Alerts } from '../Alerts';
 import { SelectionOption } from '../InputTypeItems';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
@@ -38,9 +39,15 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
 
     const { control, setValue } = useFormContext();
-    const [settings, responseType, palette] = useWatch({
+    const [settings, responseType, responseValues, palette, alerts] = useWatch({
       control,
-      name: [`${name}.config`, `${name}.responseType`, `${name}.responseValues.paletteName`],
+      name: [
+        `${name}.config`,
+        `${name}.responseType`,
+        `${name}.responseValues`,
+        `${name}.responseValues.paletteName`,
+        `${name}.alerts`,
+      ],
     });
 
     const [showColorPalette, setShowColorPalette] = useState(!!palette);
@@ -49,14 +56,10 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       setShowColorPalette(visibility);
       setValue(`${name}.responseValues.paletteName`, undefined);
     };
-    // const {
-    //   fields: alerts,
-    //   append: appendAlert,
-    //   remove: removeAlert,
-    // } = useFieldArray({
-    //   control,
-    //   name: 'alerts',
-    // });
+    const { append: appendAlert, remove: removeAlert } = useFieldArray({
+      control,
+      name: `${name}.alerts`,
+    });
     const {
       fields: options,
       append: appendOption,
@@ -72,8 +75,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       name: `${name}.responseValues.rows`,
     });
 
-    //TODO: add alerts after backend ready
-    // const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
+    const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
     const isTextInputOptionVisible = get(settings, ItemConfigurationSettings.HasTextInput);
     const hasOptions =
       responseType === ItemResponseType.SingleSelection ||
@@ -103,26 +105,10 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     const handleAddSliderRow = () =>
       appendRow(getEmptySliderOption({ isMultiple: true, hasScores }));
 
-    // const handleAddAlert = () =>
-    //   appendAlert({
-    //     option: '',
-    //     item: '',
-    //     slider: '',
-    //     message: '',
-    //     min: '',
-    //     max: '',
-    //   });
+    const handleAddAlert = () =>
+      appendAlert(getEmptyAlert({ responseType, responseValues, config: settings }));
 
     const handleRemoveOptions = (index: number) => {
-      // const options = getValues(`${name}.index`);
-      // const { options, alerts } = getValues();
-      // const option = options?.[index];
-      // if (option) {
-      //   setValue(
-      //     'alerts',
-      //     alerts?.map((alert) => (alert.option === option.id ? { ...alert, option: '' } : alert)),
-      //   );
-      // }
       removeOptions(index);
     };
 
@@ -130,30 +116,21 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       updateOptions(index, option);
     };
 
-    // const handleRemoveAlert = (index: number) => {
-    //   removeAlert(index);
-    //   if (!getValues().alerts?.length) {
-    //     setValue(
-    //       'settings',
-    //       settings?.filter(
-    //         (settingKey: ItemConfigurationSettings) =>
-    //           settingKey !== ItemConfigurationSettings.HasAlerts,
-    //       ),
-    //     );
-    //   }
-    // };
+    const handleRemoveAlert = (index: number) => {
+      removeAlert(index);
+
+      if (alerts?.length === 1) {
+        setValue(`${name}.config.${ItemConfigurationSettings.HasAlerts}`, false);
+      }
+    };
 
     const handleRemoveTextInputOption = () => {
-      setValue(`${name}.config`, {
-        [ItemConfigurationSettings.HasTextInput]: false,
-        [ItemConfigurationSettings.IsTextInputRequired]: false,
-      });
+      setValue(`${name}.config.${ItemConfigurationSettings.HasTextInput}`, false);
+      setValue(`${name}.config.${ItemConfigurationSettings.IsTextInputRequired}`, false);
     };
 
     const handleRemoveResponseDataIdentifier = () => {
-      setValue(`${name}.config`, {
-        [ItemConfigurationSettings.HasResponseDataIdentifier]: false,
-      });
+      setValue(`${name}.config.${ItemConfigurationSettings.HasResponseDataIdentifier}`, false);
     };
 
     const activeItem = useActiveItem({
@@ -174,8 +151,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       handleAddOption,
       handleAddSliderRow,
       handleAddSingleOrMultipleRow,
-      // removeAlert: () => {}, //TODO: remove after backend ready
-      // handleAddAlert: () => {}, //TODO: remove after backend ready
+      removeAlert,
+      handleAddAlert,
       setShowColorPalette: handleChangeColorPaletteVisibility,
     });
 
@@ -230,9 +207,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
         {isTextInputOptionVisible && (
           <TextInputOption name={name} onRemove={handleRemoveTextInputOption} />
         )}
-        {/* {hasAlerts && (
-          <Alerts appendAlert={handleAddAlert} removeAlert={handleRemoveAlert} alerts={alerts} name={name} />
-        )} */}
+        {hasAlerts && (
+          <Alerts appendAlert={handleAddAlert} removeAlert={handleRemoveAlert} name={name} />
+        )}
         {settingsDrawerVisible && (
           <ItemSettingsDrawer
             open={settingsDrawerVisible}

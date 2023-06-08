@@ -1,16 +1,27 @@
 import * as yup from 'yup';
+import get from 'lodash/get';
 
 import i18n from 'i18n';
 import { getIsRequiredValidateMessage, getMaxLengthValidationError } from 'shared/utils';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
+  MAX_LENGTH_OF_TEST,
   MAX_NAME_LENGTH,
+  MAX_NUMBER_OF_TRIALS,
   MAX_SELECT_OPTION_TEXT_LENGTH,
   MAX_SLIDER_LABEL_TEXT_LENGTH,
+  MAX_SLOPE,
+  MIN_LENGTH_OF_TEST,
+  MIN_NUMBER_OF_TRIALS,
+  MIN_SLOPE,
 } from 'shared/consts';
-import { SLIDER_LABEL_MAX_LENGTH } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { RoundTypeEnum } from 'modules/Builder/features/PerformanceTasks/Flanker/RoundSettings';
+import { Config } from 'shared/state';
+import {
+  ItemConfigurationSettings,
+  SLIDER_LABEL_MAX_LENGTH,
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import { testFunctionForUniqueness } from './BuilderApplet.utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from './BuilderApplet.const';
@@ -128,6 +139,30 @@ export const getFlankerGeneralSchema = () =>
       .min(1),
   });
 
+export const GyroscopeAndTouchConfigSchema = () => ({
+  general: yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
+    numberOfTrials: yup
+      .number()
+      .min(MIN_NUMBER_OF_TRIALS, <string>t('integerError'))
+      .max(MAX_NUMBER_OF_TRIALS, <string>t('integerError')),
+    lengthOfTest: yup
+      .number()
+      .min(MIN_LENGTH_OF_TEST, <string>t('integerError'))
+      .max(MAX_LENGTH_OF_TEST, <string>t('integerError')),
+    lambdaSlope: yup
+      .number()
+      .min(MIN_SLOPE, <string>t('integerError'))
+      .max(MAX_SLOPE, <string>t('integerError')),
+  }),
+  practice: yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('practiceInstruction')),
+  }),
+  test: yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('testInstruction')),
+  }),
+});
+
 export const ItemSchema = () =>
   yup
     .object({
@@ -189,7 +224,76 @@ export const ItemSchema = () =>
 
         return schema.nullable();
       }),
+      alerts: yup
+        .array()
+        .when('responseType', (responseType, schema) => {
+          if (
+            responseType === ItemResponseType.SingleSelection ||
+            responseType === ItemResponseType.MultipleSelection
+          )
+            return schema.of(
+              yup.object({
+                value: yup.string().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+
+          if (responseType === ItemResponseType.Slider) {
+            return schema.of(
+              yup.object({
+                value: yup.number().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+          }
+
+          if (
+            responseType === ItemResponseType.SingleSelectionPerRow ||
+            responseType === ItemResponseType.MultipleSelectionPerRow
+          ) {
+            return schema.of(
+              yup.object({
+                optionId: yup.string().required(''),
+                rowId: yup.string().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+          }
+
+          if (responseType === ItemResponseType.SliderRows) {
+            return schema.of(
+              yup.object({
+                value: yup.string().required(''),
+                sliderId: yup.string().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+          }
+
+          return schema;
+        })
+        .when(['responseType', 'config'], {
+          is: (responseType: ItemResponseType, config: Config) =>
+            responseType === ItemResponseType.Slider &&
+            get(config, ItemConfigurationSettings.IsContinuous),
+          then: (schema) =>
+            schema.of(
+              yup.object({
+                minValue: yup.number().required(''),
+                maxValue: yup.number().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            ),
+          otherwise: (schema) => schema,
+        }),
       config: yup.object({}).when('responseType', (responseType, schema) => {
+        if (
+          responseType === ItemResponseType.Touch ||
+          responseType === ItemResponseType.Gyroscope
+        ) {
+          return schema.shape(GyroscopeAndTouchConfigSchema());
+        }
+
         if (responseType === ItemResponseType.Flanker) {
           return schema.shape({
             general: getFlankerGeneralSchema(),
@@ -213,6 +317,23 @@ export const ItemSchema = () =>
     })
     .required();
 
+const SubscaleTableDataItemSchema = () =>
+  yup
+    .object({
+      score: yup.string(),
+      rawScore: yup.string(),
+      age: yup.number().nullable(),
+      sex: yup.string().nullable(),
+      optionalText: yup.string().nullable(),
+    })
+    .required();
+
+const TotalScoreTableDataItemSchema = () =>
+  yup.object({
+    rawScore: yup.string(),
+    optionalText: yup.string().nullable(),
+  });
+
 export const SubscaleSchema = () =>
   yup
     .object({
@@ -226,6 +347,8 @@ export const SubscaleSchema = () =>
             testFunctionForUniqueness('subscales', subscaleName ?? '', context),
         ),
       items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
+      scoring: yup.string(),
+      subscaleTableData: yup.array().of(SubscaleTableDataItemSchema()),
     })
     .required();
 
@@ -329,7 +452,13 @@ export const ActivitySchema = () =>
     responseIsEditable: yup.boolean(),
     items: yup.array().of(ItemSchema()).min(1),
     isHidden: yup.boolean(),
-    subscales: yup.array().of(SubscaleSchema()),
+    subscaleSetting: yup
+      .object({
+        calculateTotalScore: yup.string().nullable(),
+        subscales: yup.array().of(SubscaleSchema()),
+        totalScoresTableData: yup.array().of(TotalScoreTableDataItemSchema()).nullable(),
+      })
+      .nullable(),
     conditionalLogic: yup.array().of(ConditionalLogicSchema()),
     scoresAndReports: yup
       .object({

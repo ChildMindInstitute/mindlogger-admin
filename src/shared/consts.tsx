@@ -27,6 +27,15 @@ export const MIN_MILLISECONDS_DURATION = 1;
 export const DEFAULT_THRESHOLD_DURATION = 75;
 export const MIN_THRESHOLD_DURATION = 1;
 export const MAX_THRESHOLD_DURATION = 99;
+export const MIN_NUMBER_OF_TRIALS = 1;
+export const MAX_NUMBER_OF_TRIALS = 99;
+export const MIN_LENGTH_OF_TEST = 1;
+export const MAX_LENGTH_OF_TEST = 99;
+export const MIN_SLOPE = 1;
+export const MAX_SLOPE = 99;
+export const DEFAULT_NUMBER_OF_TRIALS = 3;
+export const DEFAULT_LENGTH_OF_TEST = 5;
+export const DEFAULT_LAMBDA_SLOPE = 20;
 
 export const BUILDER_PAGES = {
   activities: 'activities',
@@ -77,12 +86,12 @@ export enum ItemResponseType {
   Audio = 'audio',
   Message = 'message',
   AudioPlayer = 'audioPlayer',
-  Time = 'time',
   Flanker = 'flanker',
-  Gyroscope = 'gyroscope',
   Touch = 'touch',
+  Gyroscope = 'gyroscope',
   ABTrailsIpad = 'ABTrailsIpad',
   ABTrailsMobile = 'ABTrailsMobile',
+  Time = 'time',
 }
 
 export enum CalculationType {
@@ -111,10 +120,10 @@ export const itemsTypeIcons = {
   [ItemResponseType.AudioPlayer]: <Svg id="audio-player" />,
   [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
-  [ItemResponseType.Gyroscope]: null,
-  [ItemResponseType.Touch]: null,
   [ItemResponseType.ABTrailsIpad]: null,
   [ItemResponseType.ABTrailsMobile]: null,
+  [ItemResponseType.Gyroscope]: null,
+  [ItemResponseType.Touch]: null,
 };
 
 export const enum SubscaleTotalScore {

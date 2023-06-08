@@ -10,10 +10,13 @@ import {
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 
 import { StyledButton, StyledContainer } from './Feedback.styles';
-import { tabs } from './Feedback.const';
+import { getTabs } from './Feedback.const';
+import { FeedbackProps } from './Feedback.types';
 
-export const Feedback = ({ onClose }: { onClose: () => void }) => {
+export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   const { t } = useTranslation();
+
+  const tabs = getTabs(selectedActivity);
 
   return (
     <StyledContainer>

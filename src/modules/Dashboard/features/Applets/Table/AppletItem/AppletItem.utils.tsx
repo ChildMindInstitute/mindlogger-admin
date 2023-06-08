@@ -22,31 +22,31 @@ export const getActions = ({
   roles,
 }: Actions) => {
   const { isPublished } = item;
-  const isRespondent = roles?.includes(Roles.Respondent);
   const isReviewer = roles?.includes(Roles.Reviewer);
   const isEditor = roles?.includes(Roles.Editor);
   const isOwner = roles?.includes(Roles.Owner);
+  const isCoordinator = roles?.includes(Roles.Coordinator);
   const isSuperAdmin = roles?.includes(Roles.SuperAdmin);
   const commonCondition = isManagerOrOwner(roles?.[0]) || isEditor;
 
   return [
     {
-      isDisplayed: !!item.parentId,
       icon: <Svg id="remove-from-folder" />,
       action: removeFromFolder,
       tooltipTitle: t('removeFromFolder'),
+      isDisplayed: !!item.parentId,
     },
     {
       icon: <Svg id="users" />,
       action: viewUsers,
       tooltipTitle: t('viewUsers'),
-      isDisplayed: !isEditor,
+      isDisplayed: isManagerOrOwner(roles?.[0]) || isReviewer || isCoordinator,
     },
     {
       icon: <Svg id="calendar" />,
       action: viewCalendar,
       tooltipTitle: t('viewGeneralCalendar'),
-      isDisplayed: !isRespondent && !isReviewer,
+      isDisplayed: isManagerOrOwner(roles?.[0]) || isCoordinator,
     },
     {
       icon: <Svg id="widget" />,
@@ -80,13 +80,12 @@ export const getActions = ({
     //   tooltipTitle: t('shareWithTheLibrary'),
     // },
     {
-      isDisplayed: !item.isFolder && isSuperAdmin,
       icon: <Svg id={isPublished ? 'conceal' : 'publish'} width="18" height="18" />,
       action: publishAppletAction,
       tooltipTitle: t(isPublished ? 'conceal' : 'publish'),
+      isDisplayed: !item.isFolder && isSuperAdmin,
     },
   ];
 };
 
-export const hasOwnerRole = (item: unknown & { role?: string }) =>
-  !!item.role?.includes(Roles.Owner);
+export const hasOwnerRole = (role?: Roles) => role === Roles.Owner;

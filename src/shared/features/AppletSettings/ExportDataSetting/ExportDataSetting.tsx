@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
 import { Svg } from 'shared/components';
 import { applet } from 'shared/state';
+import { getExportDataApi } from 'api';
+import { useAsync } from 'shared/hooks';
+import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
+import { getParsedAnswers } from 'shared/utils';
 
 import {
   StyledAppletSettingsButton,
@@ -15,11 +18,22 @@ import {
 
 export const ExportDataSetting = () => {
   const { t } = useTranslation('app');
-  const { appletId: id } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
-  const encryption = appletData?.encryption;
+  const getDecryptedAnswers = useDecryptedAnswers();
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+
+  const { execute } = useAsync(getExportDataApi, (res) => {
+    if (!res?.data?.result) return;
+    setPasswordModalVisible(false);
+    const parsedAnswers = getParsedAnswers(res.data.result, getDecryptedAnswers);
+  });
+
+  const handleDataExportHandler = () => {
+    if (appletData?.id) {
+      execute({ appletId: appletData.id });
+    }
+  };
 
   return (
     <>
@@ -38,8 +52,9 @@ export const ExportDataSetting = () => {
         <AppletPasswordPopup
           popupVisible={passwordModalVisible}
           onClose={() => setPasswordModalVisible(false)}
-          appletId={id ?? ''}
-          encryption={encryption}
+          submitCallback={handleDataExportHandler}
+          appletId={appletData?.id ?? ''}
+          encryption={appletData?.encryption}
         />
       )}
     </>

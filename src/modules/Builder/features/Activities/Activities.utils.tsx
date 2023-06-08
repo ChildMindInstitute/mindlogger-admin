@@ -1,7 +1,12 @@
 import { Svg } from 'shared/components';
 import { ActivityFormValues } from 'modules/Builder/types';
+import { page } from 'resources';
 
-import { GetActivitiesActions } from './Activities.types';
+import {
+  EditablePerformanceTasksType,
+  GetActivitiesActions,
+  PerformanceTasks,
+} from './Activities.types';
 
 export const getActivityKey = (entity: ActivityFormValues): string => entity.key ?? entity.id ?? '';
 
@@ -35,3 +40,12 @@ export const getActions = ({
     action: onRemove,
   },
 ];
+
+const performanceTaskPaths: Record<EditablePerformanceTasksType, string> = {
+  [PerformanceTasks.Flanker]: page.builderAppletFlanker,
+  [PerformanceTasks.Gyroscope]: page.builderAppletGyroscope,
+  [PerformanceTasks.Touch]: page.builderAppletTouch,
+};
+
+export const getPerformanceTaskPath = (performanceTask: EditablePerformanceTasksType) =>
+  performanceTaskPaths[performanceTask];

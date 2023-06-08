@@ -1,13 +1,14 @@
 import { styled } from '@mui/material';
 
-import { StyledFlexColumn, StyledFlexTopStart, theme } from 'shared/styles';
+import { StyledFlexColumn, StyledFlexTopStart } from 'shared/styles';
 
 export const StyledButtons = styled(StyledFlexTopStart)`
   gap: 1.6rem;
   justify-content: center;
-  margin-bottom: ${theme.spacing(2.4)};
 `;
 
 export const StyledRecordButton = styled(StyledFlexColumn)`
+  height: 8rem;
   align-items: center;
+  justify-content: space-between;
 `;

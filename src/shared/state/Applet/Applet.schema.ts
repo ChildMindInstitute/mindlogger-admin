@@ -246,9 +246,10 @@ export type SliderItemResponseValues = {
   minImage?: string;
   maxImage?: string;
   scores?: number[];
+  alerts?: ItemAlert[];
 };
 
-export type SliderRowsItemResponseValues = SliderItemResponseValues & { label: string };
+export type SliderRowsItemResponseValues = SliderItemResponseValues & { id: string; label: string };
 
 export type SingleAndMultipleSelectionOption = {
   id: string;
@@ -258,6 +259,7 @@ export type SingleAndMultipleSelectionOption = {
   tooltip?: string;
   color?: string | ColorResult;
   isHidden?: boolean;
+  alert?: string;
 };
 
 export type SingleAndMultipleSelectItemResponseValues = {
@@ -298,7 +300,7 @@ export type SingleAndMultipleSelectOption = {
 
 export type SingleAndMultipleSelectMatrix = {
   rowId: string;
-  options: Array<{ optionId: string; score: number | null; alert: string | null }>;
+  options: Array<{ optionId: string; score: number | null; alert: ItemAlert['alert'] }>;
 };
 
 export type SingleAndMultipleSelectRowsResponseValues = {
@@ -327,6 +329,31 @@ export type DrawingResponseValues = {
   drawingExample: string;
   drawingBackground: string;
 };
+
+export type GyroscopeGeneralSettings = {
+  instruction: string;
+  numberOfTrials: number;
+  lengthOfTest: number;
+  lambdaSlope: number;
+};
+
+export type GyroscopePracticeSettings = {
+  instruction: string;
+};
+
+export type GyroscopeTestSettings = {
+  instruction: string;
+};
+
+export type GyroscopeConfig = {
+  general: GyroscopeGeneralSettings;
+  practice: GyroscopePracticeSettings;
+  test: GyroscopeTestSettings;
+  skippableItem?: boolean;
+  removeBackButton?: boolean;
+};
+
+type TouchConfig = GyroscopeConfig;
 
 export type ResponseValues =
   | TextItemResponseValues
@@ -358,15 +385,19 @@ export type Config =
   | PhotoConfig
   | GeolocationConfig
   | MessageConfig
+  | GyroscopeConfig
+  | TouchConfig
   | FlankerConfig;
 
 export type ItemAlert = {
-  message: string;
-  option: string;
-  item: string;
-  slider: string;
-  min: number;
-  max: number;
+  key?: string;
+  value?: number | string;
+  minValue?: number | null;
+  maxValue?: number | null;
+  rowId?: string | null;
+  optionId?: string | null;
+  sliderId?: string | null;
+  alert?: string;
 };
 
 export type BaseCondition = {
@@ -450,6 +481,12 @@ export type ScoresAndReports = {
   sections: ActivitySettingsSection[];
 };
 
+export type SubscaleSetting = {
+  calculateTotalScore?: SubscaleTotalScore | null;
+  subscales?: ActivitySettingsSubscale[];
+  totalScoresTableData?: Record<string, string>[] | null;
+};
+
 export type Activity = {
   id?: string;
   key?: string;
@@ -465,11 +502,9 @@ export type Activity = {
   isHidden?: boolean;
   items: Item[];
   scoresAndReports?: ScoresAndReports;
-  subscales?: ActivitySettingsSubscale[];
-  calculateTotalScore?: SubscaleTotalScore;
+  subscaleSetting?: SubscaleSetting | null;
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
-  totalScoresTableData?: string;
   isPerformanceTask?: boolean;
 };
 
@@ -511,7 +546,7 @@ export type ActivitySettingsSubscale = {
   name: string;
   scoring: SubscaleTotalScore;
   items: string[];
-  subscaleTableData?: string;
+  subscaleTableData?: Record<string, string>[] | null;
 };
 
 export type SingleApplet = {
@@ -536,6 +571,8 @@ export type SingleApplet = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   theme?: Theme;
+  pinnedAt?: string | null;
+  role?: string;
   encryption?: Encryption;
   generateReport: boolean;
   isPublished?: boolean;

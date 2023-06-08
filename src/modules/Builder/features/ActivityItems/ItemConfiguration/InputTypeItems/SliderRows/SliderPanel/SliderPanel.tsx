@@ -15,6 +15,7 @@ import {
   DEFAULT_SLIDER_ROWS_MIN_NUMBER,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import { ItemAlert } from 'shared/state';
 
 import { Header } from './Header';
 import { SliderPanelProps } from './SliderPanel.types';
@@ -56,6 +57,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
   const hasTickMarks = get(settings, ItemConfigurationSettings.HasTickMarks);
   const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
+  const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
 
   useEffect(() => {
     const subscription = watch((data, { name: attributeName }: { name?: string }) => {
@@ -75,6 +77,14 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
         if (scores?.length > scoresQuantity) {
           setValue(`${sliderName}.scores`, scores?.slice(1));
         }
+
+        if (hasAlerts) {
+          const alerts = getValues(`${name}.alerts`);
+
+          alerts?.forEach((alert: ItemAlert, index: number) => {
+            if (alert.value! < minValue) setValue(`${name}.alerts.${index}.value`, minValue);
+          });
+        }
       }
 
       if (attributeName === `${sliderName}.maxValue`) {
@@ -84,6 +94,14 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
 
         if (scores?.length > scoresQuantity) {
           setValue(`${sliderName}.scores`, scores?.slice(0, scoresQuantity));
+        }
+
+        if (hasAlerts) {
+          const alerts = getValues(`${name}.alerts`);
+
+          alerts?.forEach((alert: ItemAlert, index: number) => {
+            if (alert.value! > maxValue) setValue(`${name}.alerts.${index}.value`, maxValue);
+          });
         }
       }
     });

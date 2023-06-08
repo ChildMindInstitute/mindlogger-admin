@@ -27,7 +27,7 @@ export const RespondentData = () => {
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
-  if (appletRoles?.[0] !== Roles.Coordinator)
+  if (appletRoles?.[0] === Roles.Coordinator)
     return <EmptyTable width="25rem">{t('noPermissions')}</EmptyTable>;
 
   return (

@@ -8,11 +8,24 @@ import { getSettings } from './BuilderAppletSettings.utils';
 
 export const BuilderAppletSettings = () => {
   const isNewApplet = useCheckIfNewApplet();
-  const { watch } = useFormContext();
+  const { watch, setValue } = useFormContext();
 
   const isPublished = watch('isPublished');
   const workspaceRoles = workspaces.useRolesData();
   const { result: appletData } = applet.useAppletData() ?? {};
+
+  const handleReportConfigSubmit = (values: Record<string, unknown>) => {
+    const keys = [
+      'reportRecipients',
+      'reportIncludeUserId',
+      'reportIncludeCaseId',
+      'reportEmailBody',
+      'reportServerIp',
+      'reportPublicKey',
+    ];
+
+    keys.forEach((key) => setValue(key, values[key]));
+  };
 
   return (
     <AppletSettings
@@ -21,6 +34,7 @@ export const BuilderAppletSettings = () => {
         isNewApplet,
         isPublished,
         roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
+        onReportConfigSubmit: handleReportConfigSubmit,
       })}
     />
   );
