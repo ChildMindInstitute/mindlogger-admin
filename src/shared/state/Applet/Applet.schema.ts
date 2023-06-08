@@ -272,6 +272,31 @@ export type DrawingResponseValues = {
   drawingBackground: string;
 };
 
+export type GyroscopeGeneralSettings = {
+  instruction: string;
+  numberOfTrials: number;
+  lengthOfTest: number;
+  lambdaSlope: number;
+};
+
+export type GyroscopePracticeSettings = {
+  instruction: string;
+};
+
+export type GyroscopeTestSettings = {
+  instruction: string;
+};
+
+export type GyroscopeConfig = {
+  general: GyroscopeGeneralSettings;
+  practice: GyroscopePracticeSettings;
+  test: GyroscopeTestSettings;
+  skippableItem?: boolean;
+  removeBackButton?: boolean;
+};
+
+type TouchConfig = GyroscopeConfig;
+
 export type ResponseValues =
   | TextItemResponseValues
   | SingleAndMultipleSelectItemResponseValues
@@ -301,7 +326,9 @@ export type Config =
   | DrawingConfig
   | PhotoConfig
   | GeolocationConfig
-  | MessageConfig;
+  | MessageConfig
+  | GyroscopeConfig
+  | TouchConfig;
 
 export type ItemAlert = {
   key?: string;

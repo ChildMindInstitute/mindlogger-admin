@@ -25,3 +25,4 @@ export * from './getDateInUserTimezone';
 export * from './getRespondentName';
 export * from './isManagerOrOwner';
 export * from './getParsedAnswers';
+export * from './exportData';

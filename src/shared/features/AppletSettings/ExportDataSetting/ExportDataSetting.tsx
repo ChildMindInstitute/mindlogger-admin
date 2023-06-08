@@ -24,8 +24,9 @@ export const ExportDataSetting = () => {
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
   const { execute } = useAsync(getExportDataApi, (res) => {
+    if (!res?.data?.result) return;
     setPasswordModalVisible(false);
-    const parsedAnswers = getParsedAnswers(res!, getDecryptedAnswers);
+    const parsedAnswers = getParsedAnswers(res.data.result, getDecryptedAnswers);
   });
 
   const handleDataExportHandler = () => {

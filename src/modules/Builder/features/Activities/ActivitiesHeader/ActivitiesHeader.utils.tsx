@@ -20,6 +20,7 @@ export const getPerformanceTasksMenu = (
         getAction({
           performanceTaskName: PerformanceTasks.AbTrailsIpad,
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
+          type: PerformanceTasks.AbTrailsIpad,
           isNavigationBlocked: true,
         }),
     },
@@ -28,6 +29,7 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.AbTrailsMobile,
+          type: PerformanceTasks.AbTrailsMobile,
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
           isNavigationBlocked: true,
         }),
@@ -37,8 +39,8 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.Flanker,
+          type: PerformanceTasks.Flanker,
           performanceTaskDesc: t('performanceTasksDesc.flanker'),
-          isFlankerItem: true,
         }),
     },
     {
@@ -46,8 +48,8 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.Gyroscope,
+          type: PerformanceTasks.Gyroscope,
           performanceTaskDesc: t('performanceTasksDesc.gyroscope'),
-          isNavigationBlocked: true,
         }),
     },
     {
@@ -55,8 +57,8 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.Touch,
+          type: PerformanceTasks.Touch,
           performanceTaskDesc: t('performanceTasksDesc.touch'),
-          isNavigationBlocked: true,
         }),
     },
   ];

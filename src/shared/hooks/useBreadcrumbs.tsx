@@ -12,10 +12,10 @@ import {
   checkCurrentActivityFlowPage,
   checkIfAppletActivityUrlPassed,
   checkIfAppletActivityFlowUrlPassed,
-  checkIfAppletFlankerUrlPassed,
+  checkIfPerformanceTaskUrlPassed,
+  checkCurrentPerformanceTaskPage,
 } from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
-import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
 import { useRespondentLabel } from 'modules/Dashboard/hooks';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
@@ -33,7 +33,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     (activity) => getEntityKey(activity) === activityId,
   )?.name;
   const activityLabel = currentActivityName ?? t('newActivity');
-  const flankerLabel = currentActivityName ?? PerformanceTasks.Flanker;
+  const performanceTaskLabel =
+    currentActivityName ??
+    Object.entries(checkCurrentPerformanceTaskPage(pathname)).find(([_, value]) => value)?.[0];
   const activityFlowLabel =
     appletData?.activityFlows?.find((activityFlow) => getEntityKey(activityFlow) === activityFlowId)
       ?.name ?? t('newActivityFlow');
@@ -126,12 +128,12 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         newBreadcrumbs.push({ icon: 'settings', label: t('activitySettings') });
     }
 
-    if (checkIfAppletFlankerUrlPassed(pathname)) {
+    if (checkIfPerformanceTaskUrlPassed(pathname)) {
       newBreadcrumbs.push(
         activitiesBreadcrumb,
         {
           icon: '',
-          label: flankerLabel,
+          label: performanceTaskLabel || '',
           disabledLink: true,
         },
         {

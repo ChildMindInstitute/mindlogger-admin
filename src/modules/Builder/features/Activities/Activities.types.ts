@@ -1,5 +1,3 @@
-import { ActivityFormValues, ItemFormValues, FlankerFormValues } from 'modules/Builder/types';
-
 export type GetActivitiesActions = {
   key: string;
   isActivityHidden?: boolean;
@@ -15,20 +13,19 @@ export type ActivityAddProps = {
   performanceTaskName?: string;
   performanceTaskDesc?: string;
   isNavigationBlocked?: boolean;
-  isFlankerItem?: boolean;
+  type?: PerformanceTasks;
 } | null;
 
-export type ActivityProps =
-  | ActivityFormValues
-  | (FlankerFormValues & {
-      image?: string;
-      items?: ItemFormValues[];
-    });
-
-export const enum PerformanceTasks {
-  AbTrailsIpad = 'A/B Trails iPad',
-  AbTrailsMobile = 'A/B Trails Mobile',
+export enum EditablePerformanceTasksType {
   Flanker = 'Simple & Choice Reaction Time Task Builder',
   Gyroscope = 'CST Gyroscope',
   Touch = 'CST Touch',
+}
+
+export const enum PerformanceTasks {
+  Flanker = 'Simple & Choice Reaction Time Task Builder',
+  Gyroscope = 'CST Gyroscope',
+  Touch = 'CST Touch',
+  AbTrailsIpad = 'A/B Trails iPad',
+  AbTrailsMobile = 'A/B Trails Mobile',
 }

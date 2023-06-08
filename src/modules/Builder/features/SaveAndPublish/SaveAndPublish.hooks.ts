@@ -57,31 +57,24 @@ export const useAppletData = () => {
     return {
       ...defaultAppletInfo,
       ...appletInfo,
-      // TODO: remove filtering after connecting Performance Tasks API (BE tasks: 1802, 1804, 1805, 1806)
-      activities: appletInfo?.activities.reduce((acc: Activity[], activity: Activity) => {
-        if (!activity.isPerformanceTask) {
-          acc.push({
-            ...activity,
-            key: activity.id || activity.key,
-            description: getDictionaryObject(activity.description),
-            items: activity.items?.map(({ id, ...item }) => ({
-              ...item,
-              ...(id && { id }),
-              question: getDictionaryObject(item.question),
-              responseValues: mapItemResponseValues(item),
-              conditionalLogic: getItemConditionalLogic(
-                { ...item, id },
-                activity.items,
-                activity.conditionalLogic,
-              ),
-              ...removeItemExtraFields(),
-            })),
-            ...removeActivityExtraFields(activity),
-          });
-        }
-
-        return acc;
-      }, []),
+      activities: appletInfo?.activities.map((activity: Activity) => ({
+        ...activity,
+        key: activity.id || activity.key,
+        description: getDictionaryObject(activity.description),
+        items: activity.items?.map(({ id, ...item }) => ({
+          ...item,
+          ...(id && { id }),
+          question: getDictionaryObject(item.question),
+          responseValues: mapItemResponseValues(item) || null,
+          conditionalLogic: getItemConditionalLogic(
+            { ...item, id },
+            activity.items,
+            activity.conditionalLogic,
+          ),
+          ...removeItemExtraFields(),
+        })),
+        ...removeActivityExtraFields(activity),
+      })),
       encryption,
       description: appletDescription,
       about: appletAbout,
