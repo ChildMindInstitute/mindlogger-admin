@@ -885,6 +885,7 @@
   "milliseconds": "milliseconds",
   "positiveInteger": "Positive Integer",
   "integerBetweenOneAndHundred": "Integer between 1 and 100 required",
+  "blockIsNecessary": "This block is necessary",
   "performanceTaskInstructions": {
     "flankerGeneralDesc": "This instruction will be displayed for the respondent before passing the Activity.",
     "flankerPracticeDesc": "This instruction will be displayed for the respondent before passing the practice round of the Activity.",
@@ -1108,7 +1109,5 @@
   "lambdaSlope": "Lambda Slope:",
   "lambdaSlopeTooltip": "Percentage increase in disc deflection rate over the selected time",
   "minutes": "minutes",
-  "integerError": "Integer between 1 and 99 required",
-  "practiceInstruction": "Practice Round Instruction",
-  "testInstruction": "Test Round Instruction"
+  "integerError": "Integer between 1 and 99 required"
 }

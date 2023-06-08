@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
@@ -5,7 +6,7 @@ import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/comp
 import { IsPracticeRoundType } from '../RoundSettings.types';
 import { BlockSequencesContent } from './BlockSequencesContent';
 
-export const BlockSequences = ({ isPracticeRound }: IsPracticeRoundType) => {
+export const BlockSequences = memo(({ isPracticeRound }: IsPracticeRoundType) => {
   const { t } = useTranslation();
 
   return (
@@ -16,4 +17,4 @@ export const BlockSequences = ({ isPracticeRound }: IsPracticeRoundType) => {
       tooltip={t('flankerRound.sequencesTooltip')}
     />
   );
-};
+});

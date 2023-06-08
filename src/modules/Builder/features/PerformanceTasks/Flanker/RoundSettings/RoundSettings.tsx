@@ -31,7 +31,7 @@ export const RoundSettings = ({ uiType }: RoundSettingsProps) => {
             : `${perfTaskItemField}.test.instruction`
         }
         title={t(isPracticeRound ? 'practiceInstruction' : 'testInstruction')}
-        type={isPracticeRound ? SettingsTypeEnum.Practice : SettingsTypeEnum.General}
+        type={isPracticeRound ? SettingsTypeEnum.Practice : SettingsTypeEnum.Test}
       />
       <BlockSequences isPracticeRound={isPracticeRound} />
       <RoundOptions isPracticeRound={isPracticeRound} />

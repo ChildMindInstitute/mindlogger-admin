@@ -88,60 +88,59 @@ export const BlockSequencesContent = ({ isPracticeRound }: IsPracticeRoundType) 
     prevStimulusTrialsLength.current = stimulusTrials?.length;
   }, [stimulusTrials]);
 
-  return (
+  return stimulusTrials?.some((trial) => !!trial.image) ? (
     <>
-      {stimulusTrials?.some((trial) => !!trial.image) ? (
-        <>
-          <Box>
-            {!uploadedTable && (
-              <StyledTitleMedium sx={{ mb: theme.spacing(1.5) }}>
-                {t('flankerRound.exampleOfSequence')}
-              </StyledTitleMedium>
-            )}
-            <Box sx={tableWrapperStyles}>
-              <Table
-                columns={getSequencesHeadCells(uploadedTable)}
-                rows={tableRows}
-                orderBy=""
-                uiType={UiType.Quaternary}
-              />
-            </Box>
-            <StyledSvgPrimaryColorBtn
-              sx={{ m: theme.spacing(2, 0, 0.5) }}
-              onClick={() => setImportTableVisible(true)}
-              startIcon={<Svg id={btnIconId} width="1.8rem" height="1.8rem" />}
-              variant="text"
-            >
-              {btnText}
-            </StyledSvgPrimaryColorBtn>
-          </Box>
-          {importTableVisible && (
-            <ImportSequencesPopup
-              open={importTableVisible}
-              onClose={() => setImportTableVisible(false)}
-              onDownloadCsv={() => exportTemplate(uploadedTable || defaultExportTable, 'template')}
-              onDownloadXlsx={() =>
-                exportTemplate(uploadedTable || defaultExportTable, 'template', true)
-              }
-              uiType={importSequencesUiType}
-              uploadedImages={stimulusTrials.map((trial) => getUploadedMediaName(trial.image))}
-              setUploadedTable={setUploadedTable}
-            />
-          )}
-        </>
-      ) : (
-        <StyledBodyMedium
-          sx={{ m: theme.spacing(-1.5, 0, 1) }}
-          color={variables.palette.semantic.error}
+      <Box>
+        {!uploadedTable && (
+          <StyledTitleMedium sx={{ mb: theme.spacing(1.5) }}>
+            {t('flankerRound.exampleOfSequence')}
+          </StyledTitleMedium>
+        )}
+        <Box sx={tableWrapperStyles}>
+          <Table
+            columns={getSequencesHeadCells(uploadedTable)}
+            rows={tableRows}
+            orderBy=""
+            uiType={UiType.Quaternary}
+          />
+        </Box>
+        <StyledSvgPrimaryColorBtn
+          sx={{ m: theme.spacing(2, 0, 0.5) }}
+          onClick={() => setImportTableVisible(true)}
+          startIcon={<Svg id={btnIconId} width="1.8rem" height="1.8rem" />}
+          variant="text"
         >
-          {t('flankerRound.addStimulus')}
-        </StyledBodyMedium>
-      )}
-      {hasBlockSequencesErrors && (
-        <StyledBodyMedium sx={{ pt: theme.spacing(2.4) }} color={variables.palette.semantic.error}>
-          {t('fillInAllRequired')}
-        </StyledBodyMedium>
+          {btnText}
+        </StyledSvgPrimaryColorBtn>
+        {!uploadedTable && hasBlockSequencesErrors && (
+          <StyledBodyMedium
+            sx={{ pt: theme.spacing(2.4) }}
+            color={variables.palette.semantic.error}
+          >
+            {t('fillInAllRequired')}
+          </StyledBodyMedium>
+        )}
+      </Box>
+      {importTableVisible && (
+        <ImportSequencesPopup
+          open={importTableVisible}
+          onClose={() => setImportTableVisible(false)}
+          onDownloadCsv={() => exportTemplate(uploadedTable || defaultExportTable, 'template')}
+          onDownloadXlsx={() =>
+            exportTemplate(uploadedTable || defaultExportTable, 'template', true)
+          }
+          uiType={importSequencesUiType}
+          uploadedImages={stimulusTrials.map((trial) => getUploadedMediaName(trial.image))}
+          setUploadedTable={setUploadedTable}
+        />
       )}
     </>
+  ) : (
+    <StyledBodyMedium
+      sx={{ m: theme.spacing(-1.5, 0, 1) }}
+      color={variables.palette.semantic.error}
+    >
+      {t('flankerRound.addStimulus')}
+    </StyledBodyMedium>
   );
 };
