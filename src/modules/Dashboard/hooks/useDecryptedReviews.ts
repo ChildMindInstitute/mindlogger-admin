@@ -8,11 +8,7 @@ import {
   getParsedEncryptionFromServer,
 } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import {
-  AnswerDecrypted,
-  AnswersApiResponse,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Review/Review.types';
-import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackReviewed/FeedbackReviewed.types';
+import { DecryptedAnswerData, ExtendedExportAnswer, AnswerDecrypted } from 'shared/types';
 
 export const useDecryptedAnswers = () => {
   const { appletId = '' } = useParams();
@@ -25,8 +21,8 @@ export const useDecryptedAnswers = () => {
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(appletId);
 
-  return (answersApiResponse: AnswersApiResponse): ActivityItemAnswer[] => {
-    const { userPublicKey, answer, items, itemIds } = answersApiResponse;
+  return (answersApiResponse: ExtendedExportAnswer): DecryptedAnswerData[] => {
+    const { userPublicKey, answer, items, itemIds, ...rest } = answersApiResponse;
     const itemsObject = getObjectFromList(items);
     let userPublicKeyParsed = [];
     try {
@@ -54,11 +50,12 @@ export const useDecryptedAnswers = () => {
 
     return answersDecrypted.map((answerDecrypted, index) => {
       const itemId = itemIds[index];
-      const activityItem = itemsObject[itemId] as unknown as ActivityItemAnswer['activityItem'];
+      const activityItem = itemsObject[itemId];
 
       return {
         activityItem,
         answer: answerDecrypted,
+        ...rest,
       };
     });
   };
