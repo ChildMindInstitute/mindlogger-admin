@@ -55,7 +55,7 @@ export const BuilderApplet = () => {
     watch,
     control,
     getValues,
-    formState: { isDirty, errors: formErrors },
+    formState: { isDirty },
   } = methods;
 
   useEffect(() => {
@@ -86,11 +86,6 @@ export const BuilderApplet = () => {
   }, []);
 
   useEffect(() => removeAppletData, []);
-
-  // useEffect(() => {
-  //   console.log('+++ form values: +++', watch());
-  //   console.log('--- form errors: ---', formErrors);
-  // }, [watch()]);
 
   const { errors } = useFormState({
     control,
