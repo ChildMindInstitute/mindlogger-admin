@@ -19,6 +19,7 @@ import { defaultFlankerBtnObj } from 'modules/Builder/pages/BuilderApplet/Builde
 
 import { ButtonsQuantity, buttonsQuantity } from './ButtonsContent.const';
 import { getButtonLabel } from './ButtonsContent.utils';
+import { StyledRowWrapper } from './ButtonsContent.styles';
 
 export const ButtonsContent = () => {
   const { t } = useTranslation();
@@ -83,14 +84,7 @@ export const ButtonsContent = () => {
           const currentBtnFieldName = `${currentBtnField}.name`;
 
           return (
-            <StyledFlexSpaceBetween
-              key={index}
-              sx={{
-                mb: theme.spacing(2),
-                flex: '0 0 calc(50% - 1.2rem)',
-                alignItems: 'flex-start',
-              }}
-            >
+            <StyledRowWrapper key={index}>
               <StyledFlexTopCenter sx={{ mr: theme.spacing(0.8) }}>
                 <Uploader
                   uiType={UploaderUiType.Secondary}
@@ -114,7 +108,7 @@ export const ButtonsContent = () => {
                 maxLength={SMALL_INPUT_LENGTH}
                 restrictExceededValueLength
               />
-            </StyledFlexSpaceBetween>
+            </StyledRowWrapper>
           );
         })}
       </StyledFlexSpaceBetween>
