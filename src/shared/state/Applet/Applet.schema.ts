@@ -188,9 +188,10 @@ export type SliderItemResponseValues = {
   minImage?: string;
   maxImage?: string;
   scores?: number[];
+  alerts?: ItemAlert[];
 };
 
-export type SliderRowsItemResponseValues = SliderItemResponseValues & { label: string };
+export type SliderRowsItemResponseValues = SliderItemResponseValues & { id: string; label: string };
 
 export type SingleAndMultipleSelectionOption = {
   id: string;
@@ -200,6 +201,7 @@ export type SingleAndMultipleSelectionOption = {
   tooltip?: string;
   color?: string | ColorResult;
   isHidden?: boolean;
+  alert?: string;
 };
 
 export type SingleAndMultipleSelectItemResponseValues = {
@@ -240,7 +242,7 @@ export type SingleAndMultipleSelectOption = {
 
 export type SingleAndMultipleSelectMatrix = {
   rowId: string;
-  options: Array<{ optionId: string; score: number | null; alert: string | null }>;
+  options: Array<{ optionId: string; score: number | null; alert: ItemAlert['alert'] }>;
 };
 
 export type SingleAndMultipleSelectRowsResponseValues = {
@@ -329,12 +331,14 @@ export type Config =
   | TouchConfig;
 
 export type ItemAlert = {
-  message: string;
-  option: string;
-  item: string;
-  slider: string;
-  min: number;
-  max: number;
+  key?: string;
+  value?: number | string;
+  minValue?: number | null;
+  maxValue?: number | null;
+  rowId?: string | null;
+  optionId?: string | null;
+  sliderId?: string | null;
+  alert?: string;
 };
 
 export type BaseCondition = {
