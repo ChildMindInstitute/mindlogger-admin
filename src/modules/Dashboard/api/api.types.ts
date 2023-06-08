@@ -158,7 +158,7 @@ export type RemoveAccess = {
 export type EditManagerAccess = {
   userId: string;
   ownerId: string;
-  accesses: { appletId: string; roles: Roles[] }[];
+  accesses: { appletId: string; roles: Roles[]; respondents: string[] }[];
 };
 
 export type RemoveRespondentAccess = RemoveAccess & {

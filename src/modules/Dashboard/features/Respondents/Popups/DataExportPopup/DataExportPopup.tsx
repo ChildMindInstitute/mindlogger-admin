@@ -10,7 +10,7 @@ import {
   theme,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { getErrorMessage, downloadFile, prepareData } from 'shared/utils';
+import { getErrorMessage, prepareData, exportTemplate } from 'shared/utils';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
 
@@ -35,7 +35,7 @@ export const DataExportPopup = ({
 
     const { reportData } = prepareData(res.data.result, getDecryptedAnswers);
 
-    downloadFile(reportData);
+    exportTemplate(reportData, 'report');
 
     setDataIsExporting(false);
     handlePopupClose();
