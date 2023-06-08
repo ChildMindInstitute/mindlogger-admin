@@ -286,23 +286,20 @@ const getAlerts = (item: Item) => {
     )
   ) {
     const { dataMatrix } = responseValues as SingleAndMultipleSelectRowsResponseValues;
-    const optionsWithAlerts = dataMatrix?.reduce((result: ItemAlert[], { rowId, options }) => {
-      const withAlerts = options?.filter(({ alert }) => typeof alert === 'string');
 
-      if (!withAlerts?.length) return result;
+    return (
+      dataMatrix?.reduce(
+        (result: ItemAlert[], { rowId, options }) => [
+          ...result,
+          ...options.reduce((result: ItemAlert[], { alert, optionId }) => {
+            if (typeof alert !== 'string') return result;
 
-      return [
-        ...result,
-        ...withAlerts.map(({ alert, optionId }) => ({
-          key: uuidv4(),
-          rowId,
-          optionId,
-          alert,
-        })),
-      ];
-    }, []);
-
-    return optionsWithAlerts ?? [];
+            return [...result, { key: uuidv4(), rowId, optionId, alert }];
+          }, []),
+        ],
+        [],
+      ) ?? []
+    );
   }
 };
 
