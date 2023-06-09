@@ -11,6 +11,7 @@ import {
   SingleAndMultipleSelectRow,
   SingleAndMultipleSelectOption,
   SingleAndMultipleSelectMatrix,
+  ItemAlert,
 } from 'shared/state';
 
 import {
@@ -39,12 +40,22 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
   const rows = watch(`${name}.responseValues.rows`);
   const options = watch(optionsName);
   const settings = watch(`${name}.config`);
+  const alerts = watch(`${name}.alerts`);
 
   const hasTooltips = get(settings, ItemConfigurationSettings.HasTooltips);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
+  const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
   const hasRemoveButton = rows?.length > 1;
 
   const handleRemoveItem = (index: number) => {
+    if (hasAlerts) {
+      const rowToRemove = rows[index];
+
+      alerts?.forEach(({ rowId }: ItemAlert, index: number) => {
+        if (rowId === rowToRemove?.id) setValue(`${name}.alerts.${index}.rowId`, '');
+      });
+    }
+
     setValue(
       `${name}.responseValues.rows`,
       rows?.filter((row: SingleAndMultipleSelectRow, key: number) => key !== index),

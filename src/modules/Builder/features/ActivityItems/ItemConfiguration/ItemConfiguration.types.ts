@@ -37,12 +37,9 @@ export type SelectionOption = {
 };
 
 export type Alert = {
-  message: string;
-  option: string;
-  item?: string;
-  slider?: string;
-  min?: string;
-  max?: string;
+  key: string;
+  value: string | number;
+  alert: string | null;
 };
 
 export type ItemsOption = {

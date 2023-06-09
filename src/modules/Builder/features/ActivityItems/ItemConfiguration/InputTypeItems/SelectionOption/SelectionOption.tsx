@@ -16,7 +16,7 @@ import {
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
-import { SingleAndMultipleSelectionOption, ConditionalLogic } from 'shared/state';
+import { SingleAndMultipleSelectionOption, ConditionalLogic, ItemAlert } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
@@ -61,6 +61,7 @@ export const SelectionOption = ({
   const hasScoresChecked = get(settings, ItemConfigurationSettings.HasScores);
   const hasTooltipsChecked = get(settings, ItemConfigurationSettings.HasTooltips);
   const hasColorPicker = get(settings, ItemConfigurationSettings.HasColorPalette);
+  const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
   const { text = '', isHidden = false, score, tooltip, color } = option || {};
   const scoreString = score?.toString();
   const hasTooltip = tooltip !== undefined;
@@ -94,6 +95,15 @@ export const SelectionOption = ({
     setValue(scoreName, +event.target.value);
   };
   const handleRemoveOption = (index: number) => {
+    if (hasAlerts) {
+      const option = getValues(`${name}.responseValues.options.${index}`);
+      const alerts = getValues(`${name}.alerts`);
+
+      alerts?.forEach((alert: ItemAlert, index: number) => {
+        if (alert.value === option?.id) setValue(`${name}.alerts.${index}.value`, '');
+      });
+    }
+
     onRemoveOption(index);
 
     if (hasColorPicker && hasPalette) {

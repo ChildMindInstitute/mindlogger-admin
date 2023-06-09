@@ -65,7 +65,7 @@ export const useAppletData = () => {
           ...item,
           ...(id && { id }),
           question: getDictionaryObject(item.question),
-          responseValues: mapItemResponseValues(item.responseType, item.responseValues) || null,
+          responseValues: mapItemResponseValues(item) || null,
           conditionalLogic: getItemConditionalLogic(
             { ...item, id },
             activity.items,

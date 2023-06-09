@@ -42,6 +42,7 @@ import {
   getEmptyAudioPlayerResponse,
   getEmptyAudioResponse,
   getEmptyNumberSelection,
+  getEmptyAlert,
 } from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
@@ -90,15 +91,12 @@ export const useSettingsSetup = ({
   handleAddOption,
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
-  removeAlert,
-  handleAddAlert,
   setShowColorPalette,
 }: SettingsSetupProps) => {
   const { setValue, getValues, watch, clearErrors } = useFormContext();
 
   const settings = watch(`${name}.config`);
 
-  const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
   const hasPalette = get(settings, ItemConfigurationSettings.HasColorPalette);
   const isTextInputRequired = get(settings, ItemConfigurationSettings.IsTextInputRequired);
   const isSkippable = get(settings, ItemConfigurationSettings.IsSkippable);
@@ -180,13 +178,6 @@ export const useSettingsSetup = ({
       subscription.unsubscribe();
     };
   }, []);
-
-  useEffect(() => {
-    if (!hasAlerts) {
-      return removeAlert?.();
-    }
-    handleAddAlert?.();
-  }, [hasAlerts]);
 
   useEffect(() => {
     if (!hasPalette) setShowColorPalette?.(false);
