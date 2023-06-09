@@ -6,7 +6,11 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Search, Svg } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import { page } from 'resources';
-import { getRespondentName } from 'shared/utils';
+import { getRespondentName, getErrorMessage } from 'shared/utils';
+import { useAsync } from 'shared/hooks';
+import { createIndividualEventsApi } from 'api';
+import { applets } from 'modules/Dashboard/state';
+import { useAppDispatch } from 'redux/store';
 
 import { AddIndividualSchedulePopup } from '../../AddIndividualSchedulePopup';
 import { SelectedRespondent } from '../Legend.types';
@@ -35,6 +39,14 @@ export const SearchPopup = ({
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletId } = useParams();
+  const dispatch = useAppDispatch();
+  const { execute: createIndividualEvents, error } = useAsync(
+    createIndividualEventsApi,
+    () =>
+      appletId &&
+      selectedRespondent &&
+      dispatch(applets.thunk.getEvents({ appletId, respondentId: selectedRespondent.id })),
+  );
 
   const [searchValue, setSearchValue] = useState('');
   const [addIndividualSchedulePopupVisible, setAddIndividualSchedulePopupVisible] = useState(false);
@@ -74,8 +86,11 @@ export const SearchPopup = ({
     setSearchValue(value);
   };
 
-  const handleAddIndividualScheduleSubmit = () => {
+  const handleAddIndividualScheduleSubmit = async () => {
     const { id: respondentId } = selectedRespondent || {};
+    if (!appletId || !respondentId) return;
+
+    await createIndividualEvents({ appletId, respondentId });
     navigate(
       generatePath(page.appletScheduleIndividual, {
         appletId,
@@ -141,6 +156,7 @@ export const SearchPopup = ({
           onClose={handleAddIndividualScheduleClose}
           onSubmit={handleAddIndividualScheduleSubmit}
           respondentName={respondentName}
+          error={error ? getErrorMessage(error) : null}
         />
       )}
     </>

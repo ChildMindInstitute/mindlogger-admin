@@ -15,11 +15,10 @@ import { usePreparedEvents } from './Schedule.hooks';
 export const Schedule = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const { respondentId } = useParams();
+  const { respondentId, appletId } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { ownerId } = workspaces.useData() || {};
   const { getAllWorkspaceRespondents } = users.thunk;
-  const appletId = appletData?.id || '';
   const preparedEvents = usePreparedEvents(appletData);
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
@@ -59,7 +58,7 @@ export const Schedule = () => {
         <Legend
           legendEvents={preparedEvents}
           appletName={appletData?.displayName || ''}
-          appletId={appletId}
+          appletId={appletId || ''}
         />
       </StyledLeftPanel>
       <Calendar />
