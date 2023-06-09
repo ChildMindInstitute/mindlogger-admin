@@ -1,6 +1,7 @@
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles';
@@ -12,15 +13,18 @@ export const PerformanceTaskHeader = () => {
   const { t } = useTranslation();
   const { appletId } = useParams();
   const navigate = useNavigate();
+  const { trigger } = useFormContext();
 
-  const navigateToActivities = () =>
+  const handleActivitiesClick = () => {
+    trigger(['activities']);
     navigate(generatePath(page.builderAppletActivities, { appletId }));
+  };
 
   return (
     <StyledWrapper>
       <Box sx={{ width: '30%' }}>
         <StyledButton
-          onClick={navigateToActivities}
+          onClick={handleActivitiesClick}
           startIcon={<Svg id="add" width="18" height="18" />}
           variant="text"
         >

@@ -11,19 +11,21 @@ import {
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
-  MIN_MILLISECONDS_DURATION,
   MAX_THRESHOLD_DURATION,
+  MIN_MILLISECONDS_DURATION,
   MIN_THRESHOLD_DURATION,
 } from 'shared/consts';
 
-import { RoundType } from '../RoundSettings.types';
+import { IsPracticeRoundType, RoundTypeEnum } from '../RoundSettings.types';
 import { getCheckboxes } from './RoundOptions.utils';
 
-export const RoundOptions = ({ isPracticeRound }: RoundType) => {
+export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
-  const { fieldName } = useCurrentActivity();
-  const roundField = `${fieldName}.${isPracticeRound ? 'practice' : 'test'}`;
+  const { perfTaskItemField } = useCurrentActivity();
+  const roundField = `${perfTaskItemField}.${
+    isPracticeRound ? RoundTypeEnum.Practice : RoundTypeEnum.Test
+  }`;
 
   return (
     <>

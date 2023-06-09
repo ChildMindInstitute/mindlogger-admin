@@ -4,6 +4,7 @@ import get from 'lodash.get';
 import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
+import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { Item, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
 
 import {
@@ -21,7 +22,7 @@ import { DEFAULT_SLIDER_MAX_VALUE } from './ItemConfiguration.const';
 
 const { t } = i18n;
 
-export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
+export const getInputTypeTooltip = (): Record<ItemResponseTypeNoPerfTasks, string> => ({
   [ItemResponseType.SingleSelection]: t('singleSelectionHint'),
   [ItemResponseType.MultipleSelection]: t('multipleSelectionHint'),
   [ItemResponseType.Slider]: t('sliderHint'),
@@ -40,11 +41,6 @@ export const getInputTypeTooltip = (): Record<ItemResponseType, string> => ({
   [ItemResponseType.Message]: t('messageHint'),
   [ItemResponseType.AudioPlayer]: t('audioPlayerHint'),
   [ItemResponseType.Time]: t('timeHint'),
-  [ItemResponseType.Flanker]: '',
-  [ItemResponseType.ABTrailsIpad]: '',
-  [ItemResponseType.ABTrailsMobile]: '',
-  [ItemResponseType.Touch]: '',
-  [ItemResponseType.Gyroscope]: '',
 });
 
 export const getEmptySliderOption = ({

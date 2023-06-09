@@ -6,6 +6,7 @@ import { StyledFlexTopCenter } from 'shared/styles';
 import { itemsTypeIcons } from 'shared/consts';
 import { falseReturnFunc, getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { getActions } from './Item.utils';
 import { StyledCol, StyledItem, StyledDescription, StyledTitle } from './Item.styles';
@@ -51,7 +52,7 @@ export const Item = ({
       isSystem={!item.allowEdit}
     >
       <StyledFlexTopCenter {...hiddenProps}>
-        {item.responseType ? itemsTypeIcons[item.responseType] : ''}
+        {item.responseType ? itemsTypeIcons[item.responseType as ItemResponseTypeNoPerfTasks] : ''}
       </StyledFlexTopCenter>
       <StyledCol {...hiddenProps}>
         <StyledTitle>{item.name}</StyledTitle>

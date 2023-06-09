@@ -26,7 +26,12 @@ export const ToggleButtonGroup = ({
   return (
     <MuiToggleButtonGroup fullWidth value={activeButton} exclusive onChange={handleChange}>
       {toggleButtons.map(({ value, label, tooltip, icon }) => (
-        <StyledToggleBtn withIcon={!!icon} key={value} value={value}>
+        <StyledToggleBtn
+          sx={{ flex: `0 0 calc(100% / ${toggleButtons.length})` }}
+          withIcon={!!icon}
+          key={value}
+          value={value}
+        >
           {activeButton === value && !icon && (
             <StyledIcon>
               <Svg id="check" />

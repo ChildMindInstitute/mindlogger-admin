@@ -36,9 +36,4 @@ export const getInputTypeContent = () => ({
   [ItemResponseType.Message]: <Dashed uiType={DashedUiType.Message} />,
   [ItemResponseType.AudioPlayer]: <Dashed uiType={DashedUiType.AudioPlayer} />,
   [ItemResponseType.Time]: <Time />,
-  [ItemResponseType.Flanker]: null,
-  [ItemResponseType.ABTrailsIpad]: null,
-  [ItemResponseType.ABTrailsMobile]: null,
-  [ItemResponseType.Gyroscope]: null,
-  [ItemResponseType.Touch]: null,
 });

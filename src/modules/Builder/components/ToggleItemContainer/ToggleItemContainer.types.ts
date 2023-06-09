@@ -19,4 +19,5 @@ export type ToggleItemProps = {
   uiType?: ToggleContainerUiType;
   isOpenByDefault?: boolean;
   tooltip?: string;
+  error?: string | null;
 };
