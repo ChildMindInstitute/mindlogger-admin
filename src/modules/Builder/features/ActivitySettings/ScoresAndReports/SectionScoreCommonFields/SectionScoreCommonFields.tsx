@@ -25,9 +25,15 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
   const itemsPrintName = `${name}.itemsPrint`;
   const hasPrintItemsError = !!getFieldState(`${name}.printItems`).error;
 
-  const items = activity?.items
-    .filter(checkOnItemTypeAndScore)
-    .map(({ id, name, question }: Item) => ({ id, name, question }));
+  const items = activity?.items.reduce(
+    (items: Pick<Item, 'id' | 'name' | 'question'>[], item: Item) => {
+      if (!checkOnItemTypeAndScore(item)) return items;
+      const { id, name, question } = item;
+
+      return [...items, { id, name, question }];
+    },
+    [],
+  );
 
   useEffect(() => {
     if (showMessage) {

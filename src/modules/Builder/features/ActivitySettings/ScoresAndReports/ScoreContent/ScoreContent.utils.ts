@@ -85,7 +85,7 @@ export const getScoreRange = (itemsScore: Item[], calculationType: CalculationTy
 };
 
 export const getDefaultConditionalValue = (scoreId: string) => ({
-  name: uuidv4(),
+  name: '',
   id: scoreId,
   showMessage: false,
   flagScore: false,

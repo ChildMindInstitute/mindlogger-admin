@@ -26,9 +26,6 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
   const handleAddCondition = () => {
     appendCondition({});
   };
-  const handleRemoveCondition = (index: number) => {
-    removeCondition(index);
-  };
 
   return (
     <>
@@ -39,7 +36,7 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
           index={index}
           type={type}
           scoreId={type === ConditionRowType.Score && getValues(`${name}.id`)}
-          onRemove={() => handleRemoveCondition(index)}
+          onRemove={() => removeCondition(index)}
         />
       ))}
       <StyledButton
