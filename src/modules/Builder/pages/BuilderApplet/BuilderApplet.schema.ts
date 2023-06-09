@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import get from 'lodash/get';
 
 import i18n from 'i18n';
-import { getMaxLengthValidationError, getIsRequiredValidateMessage } from 'shared/utils';
+import { getIsRequiredValidateMessage, getMaxLengthValidationError } from 'shared/utils';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
@@ -16,6 +16,7 @@ import {
   MIN_NUMBER_OF_TRIALS,
   MIN_SLOPE,
 } from 'shared/consts';
+import { RoundTypeEnum } from 'modules/Builder/features/PerformanceTasks/Flanker/RoundSettings';
 import { Config } from 'shared/state';
 import {
   ItemConfigurationSettings,
@@ -82,6 +83,61 @@ export const ResponseValuesNumberSelectionSchema = () => ({
       ),
     ),
 });
+
+const getFlankerButtonsSchema = (type: 'name' | 'image') =>
+  yup
+    .string()
+    .test(
+      'has-image-or-name',
+      type === 'name' ? getIsRequiredValidateMessage('flankerButtons.nameOrImage') : '',
+      function () {
+        const { image, name } = this.parent;
+
+        return !(!image && !name);
+      },
+    );
+
+const getFlankerRoundSchema = (type: RoundTypeEnum) => {
+  const isPracticeRound = type === RoundTypeEnum.Practice;
+
+  return yup.object({
+    instruction: yup
+      .string()
+      .required(
+        getIsRequiredValidateMessage(isPracticeRound ? 'practiceInstruction' : 'testInstruction'),
+      ),
+    blocks: yup.array().required().min(1),
+    stimulusDuration: yup.number().required(getIsRequiredValidateMessage('positiveInteger')),
+    ...(isPracticeRound && {
+      threshold: yup.number().required(getIsRequiredValidateMessage('integerBetweenOneAndHundred')),
+    }),
+  });
+};
+
+export const getFlankerGeneralSchema = () =>
+  yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
+    buttons: yup.array().of(
+      yup.object({
+        name: getFlankerButtonsSchema('name'),
+        image: getFlankerButtonsSchema('image'),
+      }),
+    ),
+    fixation: yup
+      .object({
+        image: yup.string().required(),
+        duration: yup.number().required(getIsRequiredValidateMessage('positiveInteger')),
+      })
+      .nullable(),
+    stimulusTrials: yup
+      .array()
+      .of(
+        yup.object({
+          image: yup.string().required(),
+        }),
+      )
+      .min(1),
+  });
 
 export const GyroscopeAndTouchConfigSchema = () => ({
   general: yup.object({
@@ -236,6 +292,14 @@ export const ItemSchema = () =>
           responseType === ItemResponseType.Gyroscope
         ) {
           return schema.shape(GyroscopeAndTouchConfigSchema());
+        }
+
+        if (responseType === ItemResponseType.Flanker) {
+          return schema.shape({
+            general: getFlankerGeneralSchema(),
+            practice: getFlankerRoundSchema(RoundTypeEnum.Practice),
+            test: getFlankerRoundSchema(RoundTypeEnum.Test),
+          });
         }
 
         return schema.shape({

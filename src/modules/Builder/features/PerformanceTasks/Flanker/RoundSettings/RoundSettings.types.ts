@@ -1,12 +1,12 @@
-export enum RoundUiType {
-  Practice,
-  Test,
+export enum RoundTypeEnum {
+  Practice = 'practice',
+  Test = 'test',
 }
 
 export type RoundSettingsProps = {
-  uiType: RoundUiType;
+  uiType: RoundTypeEnum;
 };
 
-export type RoundType = {
+export type IsPracticeRoundType = {
   isPracticeRound: boolean;
 };

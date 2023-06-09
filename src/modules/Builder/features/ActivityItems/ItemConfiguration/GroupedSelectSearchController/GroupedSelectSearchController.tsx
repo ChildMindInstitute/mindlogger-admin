@@ -5,9 +5,9 @@ import { TextField, FormControl, InputLabel, FormHelperText } from '@mui/materia
 
 import { Svg } from 'shared/components';
 import { theme, StyledClearedButton, StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles';
-import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc } from 'shared/utils';
 import { itemsTypeIcons } from 'shared/consts';
+import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
@@ -35,10 +35,13 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectOpen, setSelectOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLLIElement | null>(null);
-  const [currentItemType, setCurrentItemType] = useState<ItemResponseType | null>(null);
+  const [currentItemType, setCurrentItemType] = useState<ItemResponseTypeNoPerfTasks | null>(null);
   const searchTermLowercase = searchTerm.toLowerCase();
 
-  const handleTooltipOpen = (event: MouseEvent<HTMLLIElement>, itemType: ItemResponseType) => {
+  const handleTooltipOpen = (
+    event: MouseEvent<HTMLLIElement>,
+    itemType: ItemResponseTypeNoPerfTasks,
+  ) => {
     setCurrentItemType(itemType);
     setAnchorEl(event.currentTarget);
   };
