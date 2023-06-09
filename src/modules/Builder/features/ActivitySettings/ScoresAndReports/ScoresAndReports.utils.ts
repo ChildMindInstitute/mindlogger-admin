@@ -8,13 +8,13 @@ export const getScoreDefaults = () => ({
   name: '',
   id: getScoreId('', CalculationType.Sum),
   calculationType: CalculationType.Sum,
-  showMessage: false,
-  printItems: false,
-  itemsScore: [],
-  message: '',
-  itemsPrint: [],
   minScore: 0,
   maxScore: 0,
+  itemsScore: [],
+  showMessage: false,
+  printItems: false,
+  message: '',
+  itemsPrint: [],
 });
 
 export const getSectionDefaults = () => ({

@@ -2,21 +2,16 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
-import {
-  StyledBodyLarge,
-  StyledFlexTopCenter,
-  StyledTitleSmall,
-  StyledTooltipSvg,
-  theme,
-} from 'shared/styles';
+import { StyledBodyLarge, StyledFlexTopCenter, StyledTooltipSvg, theme } from 'shared/styles';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import { Tooltip } from 'shared/components';
+import { ConditionRowType } from 'modules/Builder/types';
 
 import { ScoreConditionProps } from './ScoreCondition.types';
 import { ConditionContent } from '../../ConditionContent';
 import { SectionScoreCommonFields } from '../../SectionScoreCommonFields';
-import { ScoreConditionRowType } from '../../ConditionContent/ConditionContent.types';
 import { getScoreConditionId } from './ScoreCondition.utils';
+import { CopyId } from '../CopyId';
 
 export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
   const { t } = useTranslation();
@@ -39,13 +34,10 @@ export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
           onBlur={handleConditionNameBlur}
         />
         <Box sx={{ ml: theme.spacing(4.8), width: '50%' }}>
-          <StyledTitleSmall sx={{ mb: theme.spacing(1.2) }}>
-            {t('scoreConditionId')}
-          </StyledTitleSmall>
-          <StyledBodyLarge>{conditionId}</StyledBodyLarge>
+          <CopyId title={t('scoreConditionId')} value={conditionId} showCopy={conditionName} />
         </Box>
       </StyledFlexTopCenter>
-      <ConditionContent name={name} type={ScoreConditionRowType.Score} />
+      <ConditionContent name={name} type={ConditionRowType.Score} />
       <CheckboxController
         control={control}
         name={`${name}.flagScoreName`}

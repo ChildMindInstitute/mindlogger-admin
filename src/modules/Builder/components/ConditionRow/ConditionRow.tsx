@@ -4,13 +4,26 @@ import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
 import { ConditionType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { ItemFormValues } from 'modules/Builder/types';
-import { Condition } from 'modules/Builder/components';
+import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 
 import { ConditionRowProps } from './ConditionRow.types';
-import { getItemOptions, getPayload, getValueOptionsList } from './ConditionRow.utils';
+import {
+  getItemOptions,
+  getPayload,
+  getScoreConditionalsOptions,
+  getScoreIdOption,
+  getScoreOptions,
+  getValueOptionsList,
+} from './ConditionRow.utils';
+import { Condition } from './Condition';
 
-export const ConditionRow = ({ name, index, onRemove }: ConditionRowProps) => {
+export const ConditionRow = ({
+  name,
+  index,
+  onRemove,
+  type = ConditionRowType.Item,
+  scoreId,
+}: ConditionRowProps) => {
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
@@ -26,6 +39,7 @@ export const ConditionRow = ({ name, index, onRemove }: ConditionRowProps) => {
 
   const conditions = watch(conditionsName);
   const items = watch(`${fieldName}.items`);
+  const scores = watch(`${fieldName}.scoresAndReports.scores`);
   const conditionItem = watch(conditionItemName);
   const conditionType = watch(conditionTypeName);
   const conditionPayload = watch(conditionPayloadName);
@@ -52,6 +66,16 @@ export const ConditionRow = ({ name, index, onRemove }: ConditionRowProps) => {
     setValue(conditionPayloadName, payload);
   };
 
+  const options = {
+    [ConditionRowType.Item]: getItemOptions(items, type),
+    [ConditionRowType.Section]: [
+      ...getItemOptions(items, type),
+      ...((scores && getScoreOptions(scores)) || []),
+      ...((scores && getScoreConditionalsOptions(scores)) || []),
+    ],
+    [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
+  };
+
   return (
     <Condition
       control={control}
@@ -61,7 +85,7 @@ export const ConditionRow = ({ name, index, onRemove }: ConditionRowProps) => {
       numberValueName={conditionPayloadValueName}
       minValueName={conditionPayloadMinValueName}
       maxValueName={conditionPayloadMaxValueName}
-      itemOptions={getItemOptions(items)}
+      itemOptions={options[type]}
       valueOptions={getValueOptionsList(selectedItem)}
       item={conditionItem}
       state={conditionType}
@@ -69,6 +93,7 @@ export const ConditionRow = ({ name, index, onRemove }: ConditionRowProps) => {
       onItemChange={handleChangeConditionItemName}
       onStateChange={handleChangeConditionType}
       onRemove={onRemove}
+      type={type}
     />
   );
 };

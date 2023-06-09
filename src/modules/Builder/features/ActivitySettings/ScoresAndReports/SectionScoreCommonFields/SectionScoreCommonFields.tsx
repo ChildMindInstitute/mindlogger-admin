@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
 import { EditorUiType, Switch, TransferListController } from 'shared/components/FormComponents';
-import { StyledFlexTopStart, theme } from 'shared/styles';
+import { StyledBodyMedium, StyledFlexTopStart, theme, variables } from 'shared/styles';
 import { Item } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { DataTableItem } from 'shared/components';
@@ -16,13 +16,14 @@ import { columns } from './SectionScoreCommonFields.const';
 export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, watch, register, unregister, setValue } = useFormContext();
+  const { control, getFieldState, watch, register, unregister } = useFormContext();
   const { activity } = useCurrentActivity();
 
   const showMessage: boolean = watch(`${name}.showMessage`);
   const printItems: boolean = watch(`${name}.printItems`);
   const messageName = `${name}.message`;
   const itemsPrintName = `${name}.itemsPrint`;
+  const hasPrintItemsError = !!getFieldState(`${name}.printItems`).error;
 
   const items = activity?.items
     .filter(checkOnItemTypeAndScore)
@@ -31,29 +32,30 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
   useEffect(() => {
     if (showMessage) {
       register(messageName);
-      setValue(messageName, '');
 
       return;
     }
 
-    unregister(messageName);
-    setValue(messageName, undefined);
+    unregister(messageName, { keepDefaultValue: true });
   }, [showMessage]);
 
   useEffect(() => {
     if (printItems) {
       register(itemsPrintName);
-      setValue(itemsPrintName, []);
 
       return;
     }
 
-    unregister(itemsPrintName);
-    setValue(itemsPrintName, undefined);
+    unregister(itemsPrintName, { keepDefaultValue: true });
   }, [printItems]);
 
   return (
     <>
+      {hasPrintItemsError && (
+        <StyledBodyMedium sx={{ mb: theme.spacing(2.4) }} color={variables.palette.semantic.error}>
+          {t('validationMessages.mustShowMessageOrItems')}
+        </StyledBodyMedium>
+      )}
       <Switch
         name={`${name}.showMessage`}
         control={control}

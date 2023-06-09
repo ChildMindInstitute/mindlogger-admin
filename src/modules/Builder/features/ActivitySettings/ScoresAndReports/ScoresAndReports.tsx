@@ -93,6 +93,7 @@ export const ScoresAndReports = () => {
             contentProps={{
               sectionId: section.id,
               name: sectionName,
+              title,
             }}
           />
         );
@@ -119,6 +120,7 @@ export const ScoresAndReports = () => {
             contentProps={{
               scoreId: score.id,
               name: scoreName,
+              title,
             }}
           />
         );

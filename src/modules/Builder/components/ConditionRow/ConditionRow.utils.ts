@@ -1,4 +1,5 @@
-import { ItemFormValues } from 'modules/Builder/types';
+import i18n from 'i18n';
+import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType, ConditionType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import {
@@ -7,11 +8,14 @@ import {
   SingleValueCondition,
   RangeValueCondition,
   SingleAndMultipleSelectItemResponseValues,
+  ActivitySettingsScore,
 } from 'shared/state';
-import { ConditionItemType } from 'modules/Builder/components';
 
-import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ScoreConditionRow.const';
-import { OptionListItem } from './ScoreConditionRow.types';
+import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
+import { OptionListItem } from './ConditionRow.types';
+import { ConditionItemType } from './Condition';
+
+const { t } = i18n;
 
 export const getConditionItemType = (item: ItemFormValues) => {
   switch (item.responseType) {
@@ -26,7 +30,7 @@ export const getConditionItemType = (item: ItemFormValues) => {
   }
 };
 
-export const getItemOptions = (items: ItemFormValues[]) =>
+export const getItemOptions = (items: ItemFormValues[], conditionRowType: ConditionRowType) =>
   items?.reduce((optionList: OptionListItem[], item) => {
     if (
       item.responseType === ItemResponseType.Slider ||
@@ -36,7 +40,10 @@ export const getItemOptions = (items: ItemFormValues[]) =>
       return [
         ...optionList,
         {
-          labelKey: item.name,
+          labelKey:
+            conditionRowType === ConditionRowType.Item
+              ? item.name
+              : `${t('conditionItem')}: ${item.name}`,
           value: getEntityKey(item),
           type: getConditionItemType(item),
         },
@@ -45,6 +52,32 @@ export const getItemOptions = (items: ItemFormValues[]) =>
 
     return optionList;
   }, []);
+
+export const getScoreOptions = (scores: ActivitySettingsScore[]) =>
+  scores?.map((score) => ({
+    labelKey: `${t('score')}: ${score.name}`,
+    value: getEntityKey(score),
+    type: ConditionItemType.Score,
+  }));
+
+export const getScoreIdOption = (scoreId: string) => ({
+  labelKey: `${t('score')}: ${scoreId}`,
+  value: scoreId,
+  type: ConditionItemType.Score,
+});
+
+export const getScoreConditionalsOptions = (scores: ActivitySettingsScore[]) =>
+  scores?.reduce(
+    (scoreConditionals: OptionListItem[], score: ActivitySettingsScore) => [
+      ...scoreConditionals,
+      ...(score.conditionalLogic?.map((conditional) => ({
+        labelKey: `${t('scoreConditionals')}: ${conditional.name}`,
+        value: getEntityKey(conditional),
+        type: ConditionItemType.ScoreCondition,
+      })) || []),
+    ],
+    [],
+  );
 
 export const getPayload = (
   conditionType: ConditionType,

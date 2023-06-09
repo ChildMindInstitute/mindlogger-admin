@@ -375,7 +375,17 @@ export type RangeValueCondition = BaseCondition & {
   };
 };
 
-export type Condition = OptionCondition | SingleValueCondition | RangeValueCondition;
+export type ScoreValueCondition = BaseCondition & {
+  payload: {
+    value: boolean;
+  };
+};
+
+export type Condition =
+  | OptionCondition
+  | SingleValueCondition
+  | RangeValueCondition
+  | ScoreValueCondition;
 
 export type ConditionalLogic = {
   match: ConditionalLogicMatch;

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ConditionalLogicMatch } from 'shared/consts';
 
 export const defaultConditionalValue = {
-  name: '',
+  name: uuidv4(),
   id: uuidv4(),
   showMessage: false,
   message: undefined,

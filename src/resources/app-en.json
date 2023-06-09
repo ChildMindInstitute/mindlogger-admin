@@ -1110,5 +1110,10 @@
   "minutes": "minutes",
   "integerError": "Integer between 1 and 99 required",
   "practiceInstruction": "Practice Round Instruction",
-  "testInstruction": "Test Round Instruction"
+  "testInstruction": "Test Round Instruction",
+  "removeConditionalLogic": "Remove Conditional Logic",
+  "confirmRemoveConditionalLogic": "Are you sure you want to remove conditional logic for the <1>{{name}}</1>?",
+  "successRemoveConditionalLogic": "Conditional logic has been removed successfully.",
+  "item": "Item: ",
+  "scoreConditionals": "Score Conditional"
 }

@@ -1,7 +1,10 @@
 import { styled } from '@mui/material';
 
-import { StyledFlexTopCenter, variables, theme } from 'shared/styles';
+import { theme } from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { SelectController } from 'shared/components/FormComponents';
+
+import { StyledFlexTopCenter } from './Flex';
 
 export const StyledSummaryRow = styled(StyledFlexTopCenter)`
   gap: 0.4rem;
@@ -22,7 +25,7 @@ export const StyledSummaryRow = styled(StyledFlexTopCenter)`
   }
 `;
 
-export const StyledSelectController = styled(SelectController)`
+export const StyledSummarySelectController = styled(SelectController)`
   min-width: 10rem;
 
   .MuiInputBase-root {

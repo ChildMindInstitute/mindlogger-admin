@@ -799,5 +799,10 @@
    "minutes": "minutes",
    "integerError": "Entier entre 1 et 99 requis",
    "practiceInstruction": "Instruction de la ronde d'entraînement",
-   "testInstruction": "Instruction de la ronde de test"
+   "testInstruction": "Instruction de la ronde de test",
+   "removeConditionalLogic": "Supprimer la logique conditionnelle",
+   "confirmRemoveConditionalLogic": "Êtes-vous sûr de vouloir supprimer la logique conditionnelle pour <1>{{name}}</1>?",
+   "successRemoveConditionalLogic": "La logique conditionnelle a été supprimée avec succès.",
+   "item": "Article : ",
+   "scoreConditionals": "Score conditionnel"
 }

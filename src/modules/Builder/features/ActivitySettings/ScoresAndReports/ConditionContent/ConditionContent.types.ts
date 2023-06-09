@@ -1,9 +1,6 @@
-export enum ScoreConditionRowType {
-  Score,
-  Section,
-}
+import { ConditionRowType } from 'modules/Builder/types';
 
 export type ConditionContentProps = {
   name: string;
-  type: ScoreConditionRowType;
+  type: ConditionRowType;
 };

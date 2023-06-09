@@ -3,8 +3,10 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components';
 import { Condition } from 'shared/state';
+import { getEntityKey } from 'shared/utils';
+import { ConditionRow } from 'modules/Builder/components';
+import { ConditionRowType } from 'modules/Builder/types';
 
-import { ScoreConditionRow } from './ScoreConditionRow';
 import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
 import { StyledButton } from '../ScoresAndReports.styles';
@@ -13,7 +15,7 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
-  const { control, watch } = useFormContext();
+  const { control, watch, getValues } = useFormContext();
   const { append: appendCondition, remove: removeCondition } = useFieldArray({
     control,
     name: conditionsName,
@@ -31,11 +33,12 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
   return (
     <>
       {conditions?.map((condition: Condition, index: number) => (
-        <ScoreConditionRow
-          key={`score-condition-${condition.key}`}
+        <ConditionRow
+          key={`score-condition-${getEntityKey(condition) || index}`}
           name={name}
           index={index}
           type={type}
+          scoreId={type === ConditionRowType.Score && getValues(`${name}.id`)}
           onRemove={() => handleRemoveCondition(index)}
         />
       ))}

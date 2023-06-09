@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   Item,
   MultiSelectItem,
@@ -83,7 +85,7 @@ export const getScoreRange = (itemsScore: Item[], calculationType: CalculationTy
 };
 
 export const getDefaultConditionalValue = (scoreId: string) => ({
-  name: '',
+  name: uuidv4(),
   id: scoreId,
   showMessage: false,
   flagScore: false,

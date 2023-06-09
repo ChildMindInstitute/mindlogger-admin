@@ -1,12 +1,13 @@
-import { ConditionItemType } from 'modules/Builder/components';
+import { ConditionRowType } from 'modules/Builder/types';
 
-import { ScoreConditionRowType } from '../ConditionContent.types';
+import { ConditionItemType } from './Condition';
 
 export type ConditionRowProps = {
   name: string;
   index: number;
-  type: ScoreConditionRowType;
   onRemove: () => void;
+  type?: ConditionRowType;
+  scoreId?: string;
 };
 
 export type OptionListItem = { labelKey: string; value: string; type: ConditionItemType };

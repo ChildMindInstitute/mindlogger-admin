@@ -3,6 +3,7 @@ export const enum ConditionItemType {
   SingleSelection = 'singleSelection',
   MultiSelection = 'multiSelection',
   Score = 'score',
+  ScoreCondition = 'scoreCondition',
 }
 
 export const DEFAULT_NUMBER_MIN_VALUE = 0;

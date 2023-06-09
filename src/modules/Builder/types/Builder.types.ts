@@ -161,3 +161,9 @@ export type GetNewPerformanceTask = {
   performanceTask?: ActivityFormValues;
   type?: PerformanceTasks;
 };
+
+export enum ConditionRowType {
+  Item = 'item',
+  Score = 'score',
+  Section = 'section',
+}

@@ -6,7 +6,6 @@ import { Box } from '@mui/material';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
-  StyledFlexTopCenter,
   StyledFlexTopStart,
   StyledTitleMedium,
   StyledTitleSmall,
@@ -25,7 +24,6 @@ import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/comp
 import { getEntityKey } from 'shared/utils';
 
 import { calculationTypes, scoreItemsColumns, selectedItemsColumns } from './ScoreContent.const';
-import { StyledDuplicateButton } from './ScoreContent.styles';
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { ScoreContentProps } from './ScoreContent.types';
 import {
@@ -40,12 +38,16 @@ import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
 import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
 import { ScoreCondition } from './ScoreCondition';
+import { CopyId } from './CopyId';
+import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 
-export const ScoreContent = ({ name }: ScoreContentProps) => {
+export const ScoreContent = ({ name, title }: ScoreContentProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext();
   const { activity } = useCurrentActivity();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
+  const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
+  const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
   const isScoreIdVariable = false;
 
   const scoreConditionalsName = `${name}.conditionalLogic`;
@@ -59,13 +61,18 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
   const tableItems = getTableScoreItems(items);
   const [scoreRangeLabel, setScoreRangeLabel] = useState<string>('-');
 
-  const { append: appendScoreConditional, remove: removeScoreConditional } = useFieldArray({
+  const { append, remove } = useFieldArray({
     control,
     name: scoreConditionalsName,
   });
 
+  const removeScoreConditional = (index: number) => {
+    setIsRemoveConditionalPopupVisible(true);
+    setIsRemoveConditionalIndex(index);
+  };
+
   const handleAddScoreConditional = () => {
-    appendScoreConditional(getDefaultConditionalValue(scoreId));
+    append(getDefaultConditionalValue(scoreId));
   };
 
   useEffect(() => {
@@ -79,10 +86,6 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
     setValue(`${name}.minScore`, minScore);
     setValue(`${name}.maxScore`, maxScore);
   }, [itemsScore, calculationType]);
-
-  const copyScoreId = () => {
-    navigator.clipboard.writeText(scoreId);
-  };
 
   const onChangeScoreId = () => {
     setValue(`${name}.id`, scoreId);
@@ -109,16 +112,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
           />
         </Box>
         <Box>
-          <StyledTitleSmall>{t('scoreId')}</StyledTitleSmall>
-          <StyledFlexTopCenter>
-            <StyledBodyLarge>{scoreId}</StyledBodyLarge>
-            <StyledDuplicateButton
-              sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
-              onClick={copyScoreId}
-            >
-              <Svg id="duplicate" width="20" height="20" />
-            </StyledDuplicateButton>
-          </StyledFlexTopCenter>
+          <CopyId title={t('scoreId')} value={scoreId} />
           <StyledTitleSmall sx={{ mb: theme.spacing(1.2) }}>{t('rangeOfScores')}</StyledTitleSmall>
           <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>{scoreRangeLabel}</StyledBodyLarge>
         </Box>
@@ -153,9 +147,7 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
                 Content={ScoreCondition}
                 contentProps={{ name: conditionalName, scoreId }}
                 headerContentProps={{
-                  onRemove: () => {
-                    removeScoreConditional(index);
-                  },
+                  onRemove: () => removeScoreConditional(index),
                   title,
                 }}
                 uiType={ToggleContainerUiType.Score}
@@ -172,9 +164,15 @@ export const ScoreContent = ({ name }: ScoreContentProps) => {
       </StyledButton>
       {isChangeScoreIdPopupVisible && (
         <ChangeScoreIdPopup
-          isOpen={isChangeScoreIdPopupVisible}
           onClose={() => setIsChangeScoreIdPopupVisible(false)}
           onChange={onChangeScoreId}
+        />
+      )}
+      {isRemoveConditionalPopupVisible && (
+        <RemoveConditionalLogicPopup
+          onClose={() => setIsRemoveConditionalPopupVisible(false)}
+          onRemove={() => remove(removeConditionalIndex)}
+          name={title}
         />
       )}
     </StyledFlexColumn>
