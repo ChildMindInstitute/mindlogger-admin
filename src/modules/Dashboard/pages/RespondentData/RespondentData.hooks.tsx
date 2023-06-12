@@ -18,7 +18,7 @@ export const useRespondentDataTabs = () => {
     },
     {
       labelKey: 'review',
-      icon: <Svg id="checkbox-filled" />,
+      icon: <Svg id="checkbox-outlined" />,
       activeIcon: <Svg id="checkbox-filled" />,
       path: generatePath(page.appletRespondentDataReview, {
         appletId,

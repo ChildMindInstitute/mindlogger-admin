@@ -6,13 +6,8 @@ import { ItemResponseType, locales } from 'shared/consts';
 import { SingleAndMultipleSelectItemResponseValues } from 'shared/state/Applet/Applet.schema';
 
 import { DataProps, ExtendedChartDataset, OptionsProps } from './MultiScatterChart.types';
-import { LABEL_WIDTH_Y, MAX_LABEL_CHARS_Y, commonConfig } from './MultiScatterChart.const';
-
-const formatDateToNumber = (date: string | Date) =>
-  (typeof date === 'string' ? new Date(date) : date).getTime();
-
-const truncateString = (label: string) =>
-  label?.length > MAX_LABEL_CHARS_Y ? `${label.substring(0, MAX_LABEL_CHARS_Y)}...` : label;
+import { getStepSize, getTimeConfig, truncateString } from '../Charts.utils';
+import { LABEL_WIDTH_Y } from '../Charts.const';
 
 export const getOptions = ({
   lang,
@@ -23,8 +18,11 @@ export const getOptions = ({
   minDate,
   maxDate,
 }: OptionsProps) => {
-  const min = formatDateToNumber(minDate);
-  const max = formatDateToNumber(maxDate);
+  const min = minDate.getTime();
+  const max = maxDate.getTime();
+
+  const timeConfig = getTimeConfig(min, max);
+  const stepSize = getStepSize(min, max);
 
   const mapperPointOption: { [key: string | number]: string } =
     responseType !== ItemResponseType.Slider
@@ -80,21 +78,44 @@ export const getOptions = ({
             locale: locales[lang],
           },
         },
-        ...commonConfig,
+        ...timeConfig,
         grid: {
           display: false,
         },
         ticks: {
-          source: 'data' as const,
+          display: false,
+        },
+        min,
+        max,
+      },
+      x1: {
+        adapters: {
+          date: {
+            locale: locales[lang],
+          },
+        },
+        ...timeConfig,
+        ticks: {
+          autoSkip: false,
+          stepSize,
           font: {
             size: 11,
           },
+        },
+        position: 'bottom' as const,
+        grid: {
+          display: true,
+          drawOnChartArea: false,
+          drawTicks: true,
+        },
+        border: {
+          display: false,
         },
         min,
         max,
       },
       x2: {
-        ...commonConfig,
+        ...timeConfig,
         position: 'top' as const,
         border: {
           display: false,
@@ -139,6 +160,10 @@ export const getData = ({ maxY, responseValues, responseType, answers, versions 
         })),
         borderWidth: 0,
         backgroundColor: variables.palette.orange,
+      },
+      {
+        xAxisID: 'x1',
+        data: [],
       },
       {
         xAxisID: 'x2',
