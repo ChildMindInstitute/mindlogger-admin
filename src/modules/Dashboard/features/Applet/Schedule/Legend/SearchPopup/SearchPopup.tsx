@@ -9,8 +9,9 @@ import { page } from 'resources';
 import { getRespondentName, getErrorMessage } from 'shared/utils';
 import { useAsync } from 'shared/hooks';
 import { createIndividualEventsApi } from 'api';
-import { applets } from 'modules/Dashboard/state';
+import { applets, users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
+import { workspaces } from 'shared/state';
 
 import { AddIndividualSchedulePopup } from '../../AddIndividualSchedulePopup';
 import { SelectedRespondent } from '../Legend.types';
@@ -40,13 +41,18 @@ export const SearchPopup = ({
   const navigate = useNavigate();
   const { appletId } = useParams();
   const dispatch = useAppDispatch();
-  const { execute: createIndividualEvents, error } = useAsync(
-    createIndividualEventsApi,
-    () =>
-      appletId &&
-      selectedRespondent &&
-      dispatch(applets.thunk.getEvents({ appletId, respondentId: selectedRespondent.id })),
-  );
+  const { ownerId } = workspaces.useData() || {};
+  const { execute: createIndividualEvents, error } = useAsync(createIndividualEventsApi, () => {
+    if (!appletId) return;
+    selectedRespondent &&
+      dispatch(applets.thunk.getEvents({ appletId, respondentId: selectedRespondent.id }));
+    ownerId &&
+      dispatch(
+        users.thunk.getAllWorkspaceRespondents({
+          params: { ownerId, appletId },
+        }),
+      );
+  });
 
   const [searchValue, setSearchValue] = useState('');
   const [addIndividualSchedulePopupVisible, setAddIndividualSchedulePopupVisible] = useState(false);
