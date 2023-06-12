@@ -4,8 +4,11 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-import { theme, StyledModalWrapper, StyledBodyLarge } from 'shared/styles';
+import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
 import { page } from 'resources';
+import { getErrorMessage } from 'shared/utils';
+import { useAsync } from 'shared/hooks';
+import { createIndividualEventsApi } from 'api';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { ScheduleSetupPopupProps } from './ScheduleSetupPopup.types';
@@ -24,15 +27,21 @@ export const ScheduleSetupPopup = ({
   const appletName = chosenAppletData?.appletDisplayName || '';
   const secretUserId = chosenAppletData?.respondentSecretId || '';
 
+  const { execute: createIndividualEvents, error } = useAsync(createIndividualEventsApi);
+
   const handlePopupClose = () => {
     setChosenAppletData(null);
     setPopupVisible(false);
   };
   const handleBackClick = () => setChosenAppletData(null);
 
-  const handlePopupSubmit = () => {
+  const handlePopupSubmit = async () => {
+    const { appletId, respondentId, hasIndividualSchedule } = chosenAppletData || {};
+    if (!appletId || !respondentId) return;
     setPopupVisible(false);
-    const { appletId, respondentId } = chosenAppletData || {};
+    if (!hasIndividualSchedule) {
+      await createIndividualEvents({ appletId, respondentId });
+    }
     navigate(
       generatePath(page.appletScheduleIndividual, {
         appletId,
@@ -81,6 +90,11 @@ export const ScheduleSetupPopup = ({
             </StyledBodyLarge>
             <AppletsSmallTable tableRows={tableRows} />
           </>
+        )}
+        {error && (
+          <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
+            {getErrorMessage(error)}
+          </StyledBodyLarge>
         )}
       </StyledModalWrapper>
     </Modal>

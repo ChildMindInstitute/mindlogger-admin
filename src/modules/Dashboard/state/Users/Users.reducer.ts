@@ -1,6 +1,5 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import { state as initialState } from './Users.state';
 import { UsersSchema } from './Users.schema';
 import {
   getWorkspaceRespondents,
@@ -12,12 +11,6 @@ import {
   createUsersRejectedData,
   createUsersFulfilledData,
 } from './Users.utils';
-
-export const reducers = {
-  resetAllRespondentsData: (state: UsersSchema): void => {
-    state.allRespondents = initialState.allRespondents;
-  },
-};
 
 export const extraReducers = (builder: ActionReducerMapBuilder<UsersSchema>): void => {
   createUsersPendingData({ builder, thunk: getWorkspaceRespondents, key: 'respondents' });

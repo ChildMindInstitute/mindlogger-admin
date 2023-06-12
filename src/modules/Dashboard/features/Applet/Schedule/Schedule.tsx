@@ -46,7 +46,6 @@ export const Schedule = () => {
     return () => {
       dispatch(applets.actions.resetEventsData());
       dispatch(calendarEvents.actions.resetCalendarEvents());
-      dispatch(users.actions.resetAllRespondentsData());
     };
   }, [appletId, respondentId]);
 
