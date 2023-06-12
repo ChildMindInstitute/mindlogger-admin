@@ -22,6 +22,7 @@ export const Instruction = ({ description, name, title, type }: InstructionProps
     <ToggleItemContainer
       uiType={ToggleContainerUiType.PerformanceTask}
       title={title || t('overviewInstruction')}
+      isOpenByDefault={false}
       Content={InstructionContent}
       contentProps={{ description, name, hasError }}
       error={hasError ? 'blockIsNecessary' : null}
