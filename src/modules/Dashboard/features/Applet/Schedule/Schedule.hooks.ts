@@ -6,7 +6,7 @@ import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
 import { applets, CalendarEvent, calendarEvents, CreateEventsData } from 'modules/Dashboard/state';
 import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
-import { getTableCell } from 'shared/utils';
+import { getDateInUserTimezone, getTableCell } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { createEvents } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
@@ -17,6 +17,7 @@ import {
   getRepeatsAnswer,
   getFrequencyString,
   getCount,
+  convertDateToYearMonthDay,
 } from './Schedule.utils';
 
 export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | null => {
@@ -63,15 +64,22 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
 
           if (!currentActivityOrFlow?.isHidden) {
             const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
+            const activityOrFlowName = currentActivityOrFlow?.name || '';
+            const activityOrFlowCreatedAt = convertDateToYearMonthDay(
+              currentActivityOrFlow?.createdAt
+                ? new Date(getDateInUserTimezone(currentActivityOrFlow.createdAt))
+                : new Date(),
+            );
             const isAlwaysAvailable = periodicityType === Periodicity.Always;
-            const selectedOrStartDate = selectedDate || startDate;
+            const selectedOrStartDate = isAlwaysAvailable
+              ? activityOrFlowCreatedAt
+              : selectedDate || startDate;
             const date = format(
               selectedOrStartDate ? new Date(selectedOrStartDate) : new Date(),
               DateFormats.DayMonthYear,
             );
             const startTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(startTimeFull) || '';
             const endTime = isAlwaysAvailable ? '-' : removeSecondsFromTime(endTimeFull) || '';
-            const activityOrFlowName = currentActivityOrFlow?.name || '';
             const { atTime, fromTime } = notification?.notifications?.[0] || {};
             const notificationTime = notification?.notifications?.length
               ? removeSecondsFromTime(atTime || fromTime) || '-'
@@ -105,7 +113,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               eventId,
               activityOrFlowName,
               periodicityType,
-              selectedDate,
+              selectedDate: isAlwaysAvailable ? activityOrFlowCreatedAt : selectedDate,
               startDate,
               endDate,
               startTime: startTimeFull,
