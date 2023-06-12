@@ -1,4 +1,5 @@
 import { styled, Box } from '@mui/material';
+import { SelectController } from 'shared/components/FormComponents';
 
 import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
 
@@ -52,4 +53,12 @@ export const StyledDescription = styled(StyledFlexTopCenter)`
   .MuiBox-root {
     width: auto;
   }
+
+  & .MuiTypography-root {
+    top: 0.6rem;
+  }
+`;
+
+export const StyledSelectController = styled(SelectController)`
+  min-width: 10rem;
 `;

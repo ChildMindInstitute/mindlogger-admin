@@ -9,6 +9,7 @@ import { InputController } from 'shared/components/FormComponents';
 import { theme, variables, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import {
+  SingleAndMultipleSelectMatrix,
   SingleAndMultipleSelectOption,
   SingleAndMultipleSelectRow,
   SingleAndMultipleSelectionOption,
@@ -24,14 +25,17 @@ import {
   StyledItemSettingGroupContainer,
 } from './ItemSettingsGroup.styles';
 import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
-import { ITEM_SETTINGS_TO_HAVE_TOOLTIP } from './ItemSettingsGroup.const';
+import {
+  ITEM_SETTINGS_TO_HAVE_TOOLTIP,
+  ITEM_TYPES_TO_HAVE_ALERTS,
+} from './ItemSettingsGroup.const';
 import {
   DEFAULT_TIMER_VALUE,
   DEFAULT_DISABLED_TIMER_VALUE,
   DEFAULT_SCORE_VALUE,
 } from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
-import { getDefaultSliderScores } from '../../../ItemConfiguration.utils';
+import { getDefaultSliderScores, getEmptyAlert } from '../../../ItemConfiguration.utils';
 
 export const ItemSettingsGroup = ({
   name,
@@ -69,6 +73,9 @@ export const ItemSettingsGroup = ({
         {isExpanded && (
           <FormGroup sx={{ p: theme.spacing(0, 1.4) }}>
             {groupOptions.map((settingKey) => {
+              const isMultiOrSingleRows =
+                inputType === ItemResponseType.SingleSelectionPerRow ||
+                inputType === ItemResponseType.MultipleSelectionPerRow;
               const isTimer = settingKey === ItemConfigurationSettings.HasTimer;
               const isTextInputRequired =
                 settingKey === ItemConfigurationSettings.IsTextInputRequired;
@@ -76,6 +83,7 @@ export const ItemSettingsGroup = ({
               const isCorrectAnswerRequired =
                 settingKey === ItemConfigurationSettings.IsCorrectAnswerRequired;
               const isScores = settingKey === ItemConfigurationSettings.HasScores;
+              const isAlerts = settingKey === ItemConfigurationSettings.HasAlerts;
 
               const isDisabled =
                 (isTextInputRequired && !get(value, ItemConfigurationSettings.HasTextInput)) ||
@@ -157,25 +165,81 @@ export const ItemSettingsGroup = ({
                           }),
                         ),
                       );
-                    case ItemResponseType.SingleSelectionPerRow:
-                    case ItemResponseType.MultipleSelectionPerRow:
-                      return setValue(
-                        `${itemName}.responseValues.dataMatrix`,
-                        hasScores
-                          ? getValues(`${itemName}.responseValues.rows`)?.map(
-                              (row: SingleAndMultipleSelectRow) => ({
-                                rowId: row.id,
-                                options: getValues(`${itemName}.responseValues.options`)?.map(
-                                  (option: SingleAndMultipleSelectOption) => ({
-                                    optionId: option.id,
-                                    score: DEFAULT_SCORE_VALUE,
-                                  }),
-                                ),
-                              }),
-                            )
-                          : undefined,
-                      );
+                    // case ItemResponseType.SingleSelectionPerRow:
+                    // case ItemResponseType.MultipleSelectionPerRow:
+                    //   return setValue(
+                    //     `${itemName}.responseValues.dataMatrix`,
+                    //     hasScores
+                    //       ? getValues(`${itemName}.responseValues.rows`)?.map(
+                    //           (row: SingleAndMultipleSelectRow) => ({
+                    //             rowId: row.id,
+                    //             options: getValues(`${itemName}.responseValues.options`)?.map(
+                    //               (option: SingleAndMultipleSelectOption) => ({
+                    //                 optionId: option.id,
+                    //                 score: DEFAULT_SCORE_VALUE,
+                    //               }),
+                    //             ),
+                    //           }),
+                    //         )
+                    //       : undefined,
+                    //   );
                   }
+                }
+
+                if ((isScores || isAlerts) && isMultiOrSingleRows) {
+                  const hasScores = isScores
+                    ? event.target.checked
+                    : get(value, ItemConfigurationSettings.HasScores);
+                  const hasAlerts = isAlerts
+                    ? event.target.checked
+                    : get(value, ItemConfigurationSettings.HasAlerts);
+
+                  const dataMatrix = getValues(`${itemName}.responseValues.dataMatrix`);
+
+                  const updatedMatrix = dataMatrix
+                    ? dataMatrix.map(({ rowId, options }: SingleAndMultipleSelectMatrix) => ({
+                        rowId,
+                        options: options?.map(({ optionId, score }) => ({
+                          ...(hasScores && { score: score ?? DEFAULT_SCORE_VALUE }),
+                          optionId,
+                        })),
+                      }))
+                    : undefined;
+                  const newMatrix =
+                    updatedMatrix ??
+                    getValues(`${itemName}.responseValues.rows`)?.map(
+                      (row: SingleAndMultipleSelectRow) => ({
+                        rowId: row.id,
+                        options: getValues(`${itemName}.responseValues.options`)?.map(
+                          (option: SingleAndMultipleSelectOption) => ({
+                            optionId: option.id,
+                            ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
+                          }),
+                        ),
+                      }),
+                    );
+
+                  setValue(
+                    `${itemName}.responseValues.dataMatrix`,
+                    hasScores || hasAlerts ? newMatrix : undefined,
+                  );
+                }
+
+                if (isAlerts && ~ITEM_TYPES_TO_HAVE_ALERTS.indexOf(inputType as ItemResponseType)) {
+                  const hasAlerts = event.target.checked;
+
+                  setValue(
+                    `${itemName}.alerts`,
+                    hasAlerts
+                      ? [
+                          getEmptyAlert({
+                            responseType: inputType as ItemResponseType,
+                            responseValues: getValues(`${itemName}.responseValues`),
+                            config: value,
+                          }),
+                        ]
+                      : undefined,
+                  );
                 }
 
                 onChange({

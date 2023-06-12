@@ -15,14 +15,13 @@ export const ImportSequencesPopup = ({
   onDownloadCsv,
   onDownloadXlsx,
   uiType,
-  imageNames,
+  uploadedImages,
   setUploadedTable,
 }: ImportSequencesPopupProps) => {
   const { t } = useTranslation('app');
   const [step, setStep] = useState<number>(0);
-
   const { isSubmitDisabled, validationError, handleFileReady, uploadedFile } =
-    useImportSequence(imageNames);
+    useImportSequence(uploadedImages);
 
   const isUpload = uiType === ImportSequencesType.Upload;
   const downloadText = t(isUpload ? 'downloadTemplate' : 'flankerRound.downloadExistingSequence');

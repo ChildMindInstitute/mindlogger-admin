@@ -1,7 +1,14 @@
 import i18n from 'i18n';
 import { ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType } from 'shared/consts';
-import { SingleAndMultipleSelectItemResponseValues } from 'shared/state';
+import {
+  SingleAndMultipleSelectItemResponseValues,
+  SingleAndMultipleSelectRowsResponseValues,
+  SliderRowsResponseValues,
+  ItemAlert,
+} from 'shared/state';
+import { createArray, groupBy } from 'shared/utils';
+import { Option } from 'shared/components/FormComponents';
 
 import { OptionTypes } from './Alert.types';
 
@@ -18,57 +25,108 @@ export const getSliderOptions = (min: number, max: number) =>
     value: item.toString(),
   }));
 
-export const getOptionsList = (formValues: ItemFormValues) => {
-  const { responseType, responseValues } = formValues;
+export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => {
+  const { responseType, responseValues, alerts } = formValues;
   if (
     responseType === ItemResponseType.SingleSelection ||
     responseType === ItemResponseType.MultipleSelection
   ) {
+    const { options } = (responseValues as SingleAndMultipleSelectItemResponseValues) ?? {};
+
     return (
-      (responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
-        (option, index) => ({
-          labelKey: getOptionName(OptionTypes.Option, index, option.text),
-          value: option.id,
-        }),
-      ) || []
+      options?.reduce((result: Option[], option, index) => {
+        if (alerts?.some(({ value }) => value === option.id && option.id !== alert?.value))
+          return result;
+
+        return [
+          ...result,
+          { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id },
+        ];
+      }, []) || []
     );
   }
-  //TODO: add when items will be connected to the form
-  // if (
-  //   itemsInputType === ItemResponseType.SingleSelectionPerRow ||
-  //   itemsInputType === ItemResponseType.MultipleSelectionPerRow
-  // ) {
-  //   return (
-  //     selectionRows?.options?.map((option, index) => ({
-  //       labelKey: getOptionName(OptionTypes.Option, index, option.label),
-  //       value: option.id,
-  //     })) || []
-  //   );
-  // }
-  // if (itemsInputType === ItemResponseType.SliderRows) {
-  //   return (
-  //     sliderOptions?.map((sliderOption, index) => ({
-  //       labelKey: getOptionName(OptionTypes.Slider, index, sliderOption.label),
-  //       value: sliderOption.id,
-  //     })) || []
-  //   );
-  // }
+
+  if (
+    responseType === ItemResponseType.SingleSelectionPerRow ||
+    responseType === ItemResponseType.MultipleSelectionPerRow
+  ) {
+    const { options, rows } = (responseValues as SingleAndMultipleSelectRowsResponseValues) ?? {};
+
+    return options?.reduce((result: Option[], option, index) => {
+      const alertsWithOption = alerts?.filter(({ optionId }) => optionId === option.id);
+
+      if (alertsWithOption?.length === rows?.length && alert?.optionId !== option.id) return result;
+
+      const hasSameAlert = alertsWithOption?.some(
+        ({ rowId, key }) => alert?.rowId && rowId === alert?.rowId && key !== alert?.key,
+      );
+
+      if (hasSameAlert) return result;
+
+      return [
+        ...result,
+        { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id },
+      ];
+    }, []);
+  }
+
+  if (responseType === ItemResponseType.SliderRows) {
+    return (
+      (responseValues as SliderRowsResponseValues)?.rows?.map(({ id, label }, index) => ({
+        labelKey: getOptionName(OptionTypes.Slider, index, label),
+        value: id,
+      })) || []
+    );
+  }
 
   return [];
 };
 
-export const getItemsList = (formValues: ItemFormValues) =>
-  // const { responseType, responseValues } = formValues;
-  // if (
-  //   responseType === ItemResponseType.SingleSelectionPerRow ||
-  //   responseType === ItemResponseType.MultipleSelectionPerRow
-  // ) {
-  //   return (
-  //     selectionRows?.items.map((selectionRow, index) => ({
-  //       labelKey: getOptionName(OptionTypes.Row, index, selectionRow.label),
-  //       value: selectionRow.id,
-  //     })) || []
-  //   );
-  // }
+export const getItemsList = (formValues: ItemFormValues, alert: ItemAlert) => {
+  const { responseType, responseValues, alerts } = formValues;
+  if (
+    responseType === ItemResponseType.SingleSelectionPerRow ||
+    responseType === ItemResponseType.MultipleSelectionPerRow
+  ) {
+    const { rows, options } = (responseValues as SingleAndMultipleSelectRowsResponseValues) ?? {};
 
-  [];
+    const alertsByRow = groupBy(alerts ?? [], 'rowId');
+
+    return rows?.reduce((result: Option[], row, index) => {
+      const alertsWithRow = alertsByRow[row.id];
+
+      if (alertsWithRow?.length === options?.length && alert?.rowId !== row.id) return result;
+
+      const hasSameAlert = alertsWithRow?.some(
+        ({ optionId, key }) =>
+          alert?.optionId && optionId === alert?.optionId && key !== alert?.key,
+      );
+
+      if (hasSameAlert) return result;
+
+      return [
+        ...result,
+        { labelKey: getOptionName(OptionTypes.Row, index, row.rowName), value: row.id },
+      ];
+    }, []);
+  }
+
+  return [];
+};
+
+export const getSliderRowsItemList = (formValues: ItemFormValues, alert: ItemAlert) => {
+  const { responseValues } = formValues;
+
+  if (!alert?.sliderId) return [];
+
+  const { minValue, maxValue } =
+    (responseValues as SliderRowsResponseValues)?.rows?.find(({ id }) => id === alert.sliderId) ??
+    {};
+
+  if (!minValue || !maxValue) return [];
+
+  return createArray(maxValue - minValue + 1, (index) => ({
+    value: `${minValue + index}`,
+    labelKey: `${minValue + index}`,
+  }));
+};

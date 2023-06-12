@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { t } from 'i18next';
 
-import { Row, Svg } from 'shared/components';
+import { Svg } from 'shared/components';
 import {
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
@@ -65,15 +65,15 @@ export const getAppletsSmallTableRows = (
   respondentAccesses?.map((respondentAccess) => {
     const choseAppletHandler = () =>
       setChosenAppletData({ ...respondentAccess, ownerId, respondentId });
-    const { appletDisplayName, appletImg, respondentSecretId, respondentNickname } =
+    const { appletDisplayName, appletImage, respondentSecretId, respondentNickname } =
       respondentAccess;
 
     return {
       appletName: {
         content: () => (
           <StyledFlexTopCenter>
-            {appletImg ? (
-              <StyledSmallAppletImg src={appletImg} alt="Applet image" />
+            {appletImage ? (
+              <StyledSmallAppletImg src={appletImage} alt="Applet image" />
             ) : (
               <StyledSmallAppletImgPlaceholder />
             )}
@@ -94,4 +94,4 @@ export const getAppletsSmallTableRows = (
         onClick: choseAppletHandler,
       },
     };
-  }) as Row[] | undefined;
+  });

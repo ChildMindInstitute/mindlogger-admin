@@ -14,8 +14,6 @@ export const StyledIcon = styled(Box)`
 `;
 
 export const StyledToggleBtn = styled(ToggleButton, shouldForwardProp)`
-  flex: 1 1 auto;
-
   ${({ withIcon }: { withIcon: boolean }) =>
     withIcon &&
     `
@@ -31,5 +29,5 @@ export const StyledToggleBtn = styled(ToggleButton, shouldForwardProp)`
     &.MuiToggleButton-root.Mui-selected {
       font-weight: ${variables.font.weight.bold};
     }
-  `}
+  `};
 `;

@@ -18,7 +18,7 @@ import {
 import { CalendarEvent } from 'modules/Dashboard/state';
 import { getIsRequiredValidateMessage } from 'shared/utils';
 
-import { removeSecondsFromTime } from '../Schedule.utils';
+import { removeSecondsFromTime, convertDateToYearMonthDay } from '../Schedule.utils';
 import { AvailabilityTab } from './AvailabilityTab';
 import { NotificationsTab } from './NotificationsTab';
 import { TimersTab } from './TimersTab';
@@ -321,9 +321,6 @@ export const getActivitiesFlows = (activities: Activity[], activityFlows: Activi
     }),
   })),
 ];
-
-export const convertDateToYearMonthDay = (date: Date | string) =>
-  typeof date === 'string' ? date : format(date, DateFormats.YearMonthDay);
 
 export const addSecondsToHourMinutes = (timeStr?: string | null) =>
   timeStr ? `${timeStr}:00` : null;

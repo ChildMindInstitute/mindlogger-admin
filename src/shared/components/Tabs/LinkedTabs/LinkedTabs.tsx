@@ -7,11 +7,7 @@ import { StyledTabs } from '../Tabs.styles';
 import { TabPanel } from '../TabPanel';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
-export const LinkedTabs = ({
-  tabs,
-  uiType = UiType.Primary,
-  hiddenHeader = false,
-}: TabsProps): JSX.Element => {
+export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false }: TabsProps) => {
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 

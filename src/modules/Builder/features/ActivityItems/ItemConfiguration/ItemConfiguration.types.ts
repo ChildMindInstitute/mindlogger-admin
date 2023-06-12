@@ -1,7 +1,7 @@
 import { ColorResult } from 'react-color';
 import { FieldValues, Path } from 'react-hook-form';
 
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 export enum ItemConfigurationSettings {
   HasScores = 'addScores',
@@ -37,16 +37,13 @@ export type SelectionOption = {
 };
 
 export type Alert = {
-  message: string;
-  option: string;
-  item?: string;
-  slider?: string;
-  min?: string;
-  max?: string;
+  key: string;
+  value: string | number;
+  alert: string | null;
 };
 
 export type ItemsOption = {
-  value: ItemResponseType;
+  value: ItemResponseTypeNoPerfTasks;
   icon: JSX.Element;
   isMobileOnly?: boolean;
 };
@@ -57,7 +54,7 @@ export type ItemsOptionGroup = {
 };
 
 export type OptionalItemSetupProps = {
-  itemType: ItemResponseType;
+  itemType: ItemResponseTypeNoPerfTasks;
   name: Path<FieldValues>;
   defaultValue?: unknown;
 };

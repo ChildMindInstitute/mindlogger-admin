@@ -9,13 +9,12 @@ export type UploaderProps = {
   width: number;
   height: number;
   setValue: (val: string) => void;
-  setImgOriginalName?: (val: string) => void;
   getValue: () => string;
   uiType?: UploaderUiType;
   description?: string;
   maxFileSize?: number;
   wrapperStyles?: SxProps;
   hasRemoveConfirmation?: boolean;
-  showImgName?: boolean;
   cropRatio?: number;
+  hasError?: boolean;
 };

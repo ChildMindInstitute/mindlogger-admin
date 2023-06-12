@@ -18,5 +18,7 @@ export const useCurrentActivity = () => {
   return {
     activity: activities[currentActivityIndex],
     fieldName: `activities.${currentActivityIndex}`,
+    perfTaskItemField: `activities.${currentActivityIndex}.items.0.config`,
+    perfTaskItemObjField: `activities[${currentActivityIndex}].items[0].config`,
   };
 };

@@ -1,4 +1,5 @@
 import { ColorResult } from 'react-color';
+import get from 'lodash.get';
 
 import {
   Condition,
@@ -8,15 +9,17 @@ import {
   DrawingResponseValues,
   Item,
   NumberItemResponseValues,
-  ResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
   SliderItemResponseValues,
   SliderRowsResponseValues,
   Activity,
+  ItemAlert,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, groupBy } from 'shared/utils';
+
+import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
 
 export const removeAppletExtraFields = () => ({
   isPublished: undefined,
@@ -38,6 +41,8 @@ export const removeAppletExtraFields = () => ({
 export const removeActivityExtraFields = (activity: Activity) => ({
   createdAt: undefined,
   order: undefined,
+  type: undefined,
+  isPerformanceTask: undefined,
   generateReport: undefined, // TODO: remove when API will be ready
   showScoreSummary: undefined, // TODO: remove when API will be ready
   scores: undefined, // TODO: remove when API will be ready
@@ -59,13 +64,14 @@ export const removeActivityFlowExtraFields = () => ({
 export const removeItemExtraFields = () => ({
   key: undefined,
   settings: undefined,
-  alerts: undefined, //TODO: remove after backend addings
+  alerts: undefined,
 });
 
-export const mapItemResponseValues = (
-  responseType: ItemResponseType,
-  responseValues: ResponseValues,
-) => {
+export const mapItemResponseValues = (item: Item) => {
+  const { responseType, responseValues, alerts, config } = item;
+
+  const hasAlerts = get(config, ItemConfigurationSettings.HasAlerts);
+
   if (
     responseType === ItemResponseType.SingleSelection ||
     responseType === ItemResponseType.MultipleSelection
@@ -77,34 +83,91 @@ export const mapItemResponseValues = (
         (option) => ({
           ...option,
           color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
+          alert: hasAlerts ? alerts?.find(({ value }) => value === option.id)?.alert : undefined,
         }),
       ),
     };
 
   if (
-    responseType === ItemResponseType.Slider ||
+    responseType === ItemResponseType.Slider &&
+    get(item.config, ItemConfigurationSettings.IsContinuous)
+  ) {
+    return {
+      ...(responseValues as SliderItemResponseValues),
+      options: undefined,
+      alerts: hasAlerts
+        ? alerts?.map(({ minValue, maxValue, alert }) => ({
+            minValue,
+            maxValue,
+            alert,
+          }))
+        : undefined,
+    };
+  }
+
+  if (responseType === ItemResponseType.Slider) {
+    return {
+      ...(responseValues as SliderItemResponseValues),
+      options: undefined,
+      alerts: hasAlerts
+        ? alerts?.map(({ value, alert }) => ({ value: +value!, alert }))
+        : undefined,
+    };
+  }
+
+  if (responseType === ItemResponseType.SliderRows) {
+    const { rows } = responseValues as SliderRowsResponseValues;
+
+    return {
+      ...(responseValues as SliderRowsResponseValues),
+      options: undefined,
+      rows: rows?.map((row) => ({
+        ...row,
+        alerts: hasAlerts
+          ? alerts?.reduce((result: ItemAlert[], { sliderId, value, alert }) => {
+              if (sliderId === row.id) return [...result, { value, alert }];
+
+              return result;
+            }, [])
+          : undefined,
+      })),
+    };
+  }
+
+  if (
     responseType === ItemResponseType.Audio ||
     responseType === ItemResponseType.AudioPlayer ||
     responseType === ItemResponseType.NumberSelection ||
-    responseType === ItemResponseType.Drawing ||
-    responseType === ItemResponseType.SliderRows
+    responseType === ItemResponseType.Drawing
   )
     return {
       ...(responseValues as
-        | SliderItemResponseValues
         | AudioResponseValues
         | AudioPlayerResponseValues
         | NumberItemResponseValues
-        | DrawingResponseValues
-        | SliderRowsResponseValues),
+        | DrawingResponseValues),
       options: undefined,
     };
 
   if (
     responseType === ItemResponseType.SingleSelectionPerRow ||
     responseType === ItemResponseType.MultipleSelectionPerRow
-  )
-    return responseValues as SingleAndMultipleSelectRowsResponseValues;
+  ) {
+    const { dataMatrix, ...other } = responseValues as SingleAndMultipleSelectRowsResponseValues;
+
+    const groupedAlerts = groupBy(alerts ?? [], (alert) => `${alert.optionId}-${alert.rowId}`);
+
+    return {
+      ...other,
+      dataMatrix: dataMatrix?.map(({ rowId, options }) => ({
+        rowId,
+        options: options?.map((option) => ({
+          ...option,
+          alert: hasAlerts ? groupedAlerts[`${option.optionId}-${rowId}`]?.[0]?.alert : undefined,
+        })),
+      })),
+    };
+  }
 
   return null;
 };

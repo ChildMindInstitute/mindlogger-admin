@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { Box } from '@mui/material';
+import { Badge, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import {
+  StyledBodyMedium,
   StyledClearedButton,
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
   StyledTitleTooltipIcon,
   theme,
+  variables,
 } from 'shared/styles';
 import { Svg, Tooltip } from 'shared/components';
 
@@ -22,7 +25,9 @@ export const ToggleItemContainer = ({
   uiType = ToggleContainerUiType.Item,
   isOpenByDefault,
   tooltip,
+  error,
 }: ToggleItemProps) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(isOpenByDefault ?? true);
   const handleToggle = () => setOpen((prevState) => !prevState);
 
@@ -36,7 +41,12 @@ export const ToggleItemContainer = ({
             </StyledClearedButton>
             {title && (
               <StyledFlexTopCenter sx={{ m: theme.spacing(0, 5, 0, 3) }}>
-                <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
+                {!open && error && (
+                  <Badge sx={{ mr: theme.spacing(1) }} variant="dot" color="error" />
+                )}
+                <StyledFlexTopCenter>
+                  <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
+                </StyledFlexTopCenter>
               </StyledFlexTopCenter>
             )}
           </StyledFlexTopCenter>
@@ -52,6 +62,14 @@ export const ToggleItemContainer = ({
           </Tooltip>
         )}
       </StylesTitleWrapper>
+      {!open && error && (
+        <StyledBodyMedium
+          sx={{ p: theme.spacing(0.5, 0, 0, 4.4) }}
+          color={variables.palette.semantic.error}
+        >
+          {t(error)}
+        </StyledBodyMedium>
+      )}
       {open && <Content {...contentProps} />}
     </StyledItemOption>
   );

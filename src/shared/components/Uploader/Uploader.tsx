@@ -1,4 +1,4 @@
-import { ChangeEvent, DragEvent, MouseEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Button } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -33,10 +33,9 @@ export const Uploader = ({
   description,
   maxFileSize = MAX_FILE_SIZE_2MB,
   wrapperStyles = {},
-  setImgOriginalName,
   hasRemoveConfirmation = false,
-  showImgName = false,
   cropRatio,
+  hasError,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
   const { execute: executeImgUpload } = useAsync(
@@ -108,7 +107,6 @@ export const Uploader = ({
   const handleRemoveImg = () => {
     setImage(null);
     setValue('');
-    setImgOriginalName && setImgOriginalName('');
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
     }
@@ -134,13 +132,10 @@ export const Uploader = ({
     sx: isPrimaryUiType ? null : { width: '4.8rem', height: '4.8rem' },
   };
 
-  useEffect(() => {
-    setImgOriginalName && image?.name && setImgOriginalName(image.name);
-  }, [image?.name]);
-
   return (
     <>
       <StyledContainer
+        hasError={hasError}
         width={width}
         height={height}
         isImgUploaded={!!imageField}
@@ -173,7 +168,11 @@ export const Uploader = ({
             )}
           </UploadedImgContainer>
         ) : (
-          <StyledImgContainer className="image-container" isPrimaryUiType={isPrimaryUiType}>
+          <StyledImgContainer
+            className="image-container"
+            isPrimaryUiType={isPrimaryUiType}
+            hasError={hasError}
+          >
             <Svg id={placeholderImgId} width={32} height={32} />
             {isPrimaryUiType && error && (
               <StyledBodyMedium

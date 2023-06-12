@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
+import get from 'lodash.get';
 
 import { Svg, Table, UiType } from 'shared/components';
 import {
@@ -12,29 +13,46 @@ import {
   variables,
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { FlankerStimulusSettings } from 'modules/Builder/types';
-import { exportTemplate } from 'shared/utils';
+import { FlankerStimulusSettings } from 'shared/state';
+import { exportTemplate, getUploadedMediaName } from 'shared/utils';
 
-import { RoundType } from '../../RoundSettings.types';
+import { IsPracticeRoundType, RoundTypeEnum } from '../../RoundSettings.types';
+import { ImportSequencesPopup, ImportSequencesType } from './ImportSequencesPopup';
 import {
   getRoundBlocks,
   getSequencesData,
   getSequencesHeadCells,
+  getTableFromSequences,
   getUploadedTableRows,
 } from './BlockSequencesContent.utils';
-import { ImportSequencesPopup } from './ImportSequencesPopup';
-import { ImportSequencesType } from './ImportSequencesPopup/ImportSequencesPopup.types';
 import { UploadedTable } from './BlockSequencesContent.types';
 
-export const BlockSequencesContent = ({ isPracticeRound }: RoundType) => {
+export const BlockSequencesContent = ({ isPracticeRound }: IsPracticeRoundType) => {
   const { t } = useTranslation();
+  const {
+    watch,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
+  const { perfTaskItemField, perfTaskItemObjField } = useCurrentActivity();
+
   const [importTableVisible, setImportTableVisible] = useState(false);
   const [uploadedTable, setUploadedTable] = useState<UploadedTable>(null);
-  const { watch, setValue } = useFormContext();
-  const { fieldName } = useCurrentActivity();
-  const stimulusField = `${fieldName}.general.stimulusTrials`;
+
+  const stimulusField = `${perfTaskItemField}.general.stimulusTrials`;
+  const roundField = `${perfTaskItemField}.${
+    isPracticeRound ? RoundTypeEnum.Practice : RoundTypeEnum.Test
+  }`;
+  const blockSequencesField = `${roundField}.blocks`;
   const stimulusTrials: FlankerStimulusSettings[] = watch(stimulusField);
-  const blockSequencesField = `${fieldName}.${isPracticeRound ? 'practice' : 'test'}.blocks`;
+  const blockSequences = watch(blockSequencesField);
+
+  const blockSequencesObjField = `${perfTaskItemObjField}.${
+    isPracticeRound ? RoundTypeEnum.Practice : RoundTypeEnum.Test
+  }.blocks`;
+  const hasBlockSequencesErrors = !!get(errors, blockSequencesObjField);
+
+  const prevStimulusTrialsLength = useRef(stimulusTrials?.length);
 
   const { defaultExportTable, defaultTableRows } = getSequencesData(stimulusTrials);
   const tableRows = uploadedTable ? getUploadedTableRows(uploadedTable) : defaultTableRows || [];
@@ -54,7 +72,23 @@ export const BlockSequencesContent = ({ isPracticeRound }: RoundType) => {
     setValue(blockSequencesField, blocks);
   }, [uploadedTable, stimulusTrials]);
 
-  return stimulusTrials?.some((trial) => !!trial.imageName) ? (
+  useEffect(() => {
+    if (!blockSequences?.length || !stimulusTrials?.length) return;
+
+    const initialUploadedTable = getTableFromSequences(stimulusTrials, blockSequences);
+    initialUploadedTable && setUploadedTable(initialUploadedTable);
+  }, []);
+
+  useEffect(() => {
+    if (stimulusTrials?.length < prevStimulusTrialsLength.current) {
+      setUploadedTable(null);
+      setValue(blockSequencesField, []);
+    }
+
+    prevStimulusTrialsLength.current = stimulusTrials?.length;
+  }, [stimulusTrials]);
+
+  return stimulusTrials?.some((trial) => !!trial.image) ? (
     <>
       <Box>
         {!uploadedTable && (
@@ -78,6 +112,14 @@ export const BlockSequencesContent = ({ isPracticeRound }: RoundType) => {
         >
           {btnText}
         </StyledSvgPrimaryColorBtn>
+        {!uploadedTable && hasBlockSequencesErrors && (
+          <StyledBodyMedium
+            sx={{ pt: theme.spacing(2.4) }}
+            color={variables.palette.semantic.error}
+          >
+            {t('fillInAllRequired')}
+          </StyledBodyMedium>
+        )}
       </Box>
       {importTableVisible && (
         <ImportSequencesPopup
@@ -88,7 +130,7 @@ export const BlockSequencesContent = ({ isPracticeRound }: RoundType) => {
             exportTemplate(uploadedTable || defaultExportTable, 'template', true)
           }
           uiType={importSequencesUiType}
-          imageNames={stimulusTrials.map((trial) => trial.imageName)}
+          uploadedImages={stimulusTrials.map((trial) => getUploadedMediaName(trial.image))}
           setUploadedTable={setUploadedTable}
         />
       )}

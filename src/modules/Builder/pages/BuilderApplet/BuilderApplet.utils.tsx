@@ -19,14 +19,25 @@ import {
   AudioPlayerResponseValues,
   SingleAndMultipleSelectionOption,
   SingleAndMultipleSelectItemResponseValues,
+  ItemAlert,
+  SingleAndMultipleSelectRowsResponseValues,
+  OptionCondition,
 } from 'shared/state';
 import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import {
+  DEFAULT_LAMBDA_SLOPE,
+  DEFAULT_LENGTH_OF_TEST,
   DEFAULT_MILLISECONDS_DURATION,
+  DEFAULT_NUMBER_OF_TRIALS,
   DEFAULT_THRESHOLD_DURATION,
   ItemResponseType,
 } from 'shared/consts';
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import {
+  EditablePerformanceTasksType,
+  PerformanceTasks,
+} from 'modules/Builder/features/Activities/Activities.types';
 
 import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
@@ -64,26 +75,88 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   }),
 });
 
-export const getNewActivity = (activity?: ActivityFormValues) => ({
-  name: t('newActivity'),
-  description: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: true,
-  generateReport: false,
-  showScoreSummary: false,
-  ...activity,
-  items: activity?.items?.map((item) => getNewActivityItem(item)) || [],
-  id: undefined,
-  key: uuidv4(),
-});
+export const getDuplicatedConditions = (
+  oldItems: ItemFormValues[],
+  newItems: Record<string, unknown>[],
+  conditions?: Condition[],
+) =>
+  conditions?.map((condition) => {
+    const optionId = (condition as OptionCondition)?.payload.optionId;
+    const result = { ...condition, key: uuidv4() };
+
+    if (!optionId) return result;
+
+    const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
+    const optionIndex = (
+      oldItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues
+    ).options?.findIndex((option) => option.id === optionId);
+
+    return {
+      ...result,
+      itemName: getEntityKey(newItems[itemIndex]) ?? '',
+      payload: {
+        optionId:
+          (newItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues)
+            ?.options?.[optionIndex]?.id ?? '',
+      },
+    };
+  });
+
+export const getDuplicatedConditional = (
+  oldItems: ItemFormValues[],
+  newItems: Record<string, unknown>[],
+  conditionalLogic?: ConditionalLogic[],
+) =>
+  conditionalLogic?.map((conditional) => {
+    const itemKey = conditional.itemKey;
+
+    if (itemKey) {
+      const itemIndex = oldItems?.findIndex((item) => itemKey === getEntityKey(item));
+
+      return {
+        ...conditional,
+        key: uuidv4(),
+        itemKey: getEntityKey(newItems?.[itemIndex]) ?? '',
+        conditions: getDuplicatedConditions(oldItems, newItems, conditional.conditions),
+      };
+    }
+
+    return {
+      ...conditional,
+      itemKey,
+    };
+  }) ?? [];
+
+export const getNewActivity = (activity?: ActivityFormValues) => {
+  const items = activity?.items?.map((item) => getNewActivityItem(item)) || [];
+  const conditionalLogic = getDuplicatedConditional(
+    activity?.items ?? [],
+    items,
+    activity?.conditionalLogic,
+  );
+
+  return {
+    name: t('newActivity'),
+    description: '',
+    showAllAtOnce: false,
+    isSkippable: false,
+    isReviewable: false,
+    responseIsEditable: true,
+    generateReport: false,
+    showScoreSummary: false,
+    ...activity,
+    items,
+    conditionalLogic,
+    id: undefined,
+    key: uuidv4(),
+  };
+};
 
 export const getNewPerformanceTask = ({
   name,
   description,
   performanceTask,
-  isFlankerItem,
+  type,
 }: GetNewPerformanceTask) => {
   const commonRoundProps = {
     stimulusDuration: DEFAULT_MILLISECONDS_DURATION,
@@ -91,7 +164,10 @@ export const getNewPerformanceTask = ({
     showSummary: true,
     blocks: [],
   };
-  const defaultFlankerProps = isFlankerItem && {
+
+  const defaultFlankerProps = {
+    responseType: ItemResponseType.Flanker,
+    name: ItemResponseType.Flanker,
     general: {
       instruction: t('performanceTaskInstructions.flankerGeneral'),
       buttons: [defaultFlankerBtnObj],
@@ -110,13 +186,56 @@ export const getNewPerformanceTask = ({
       showFeedback: false,
     },
   };
+  const defaultGyroscopeAndTouchProps = {
+    general: {
+      instruction: t('gyroscopeAndTouchInstructions.overview.instruction'),
+      numberOfTrials: DEFAULT_NUMBER_OF_TRIALS,
+      lengthOfTest: DEFAULT_LENGTH_OF_TEST,
+      lambdaSlope: DEFAULT_LAMBDA_SLOPE,
+    },
+    practice: {
+      instruction: t('gyroscopeAndTouchInstructions.practice.instruction'),
+    },
+    test: {
+      instruction: t('gyroscopeAndTouchInstructions.test.instruction'),
+    },
+  };
+
+  const propsByTypeObj = {
+    [PerformanceTasks.Flanker]: defaultFlankerProps,
+    [PerformanceTasks.Gyroscope]: {
+      responseType: ItemResponseType.Gyroscope,
+      name: ItemResponseType.Gyroscope,
+      ...defaultGyroscopeAndTouchProps,
+    },
+    [PerformanceTasks.Touch]: {
+      responseType: ItemResponseType.Touch,
+      name: ItemResponseType.Touch,
+      ...defaultGyroscopeAndTouchProps,
+    },
+  };
+
+  const defaultPropsByType = type
+    ? propsByTypeObj[type as unknown as EditablePerformanceTasksType] || { responseType: '' }
+    : { responseType: '' };
+
+  const { responseType, ...config } = defaultPropsByType;
 
   return {
     name,
     description,
-    ...defaultFlankerProps,
+    isHidden: false,
+    items: [
+      {
+        id: undefined,
+        key: uuidv4(),
+        name: `${responseType}`,
+        responseType,
+        config,
+      },
+    ],
     isPerformanceTask: true,
-    isFlankerItem,
+    type,
     ...performanceTask,
     id: undefined,
     key: uuidv4(),
@@ -181,6 +300,72 @@ const getActivityItemResponseValues = (item: Item) => {
   }
 };
 
+const getAlerts = (item: Item) => {
+  const { responseType, responseValues, config } = item;
+
+  if (
+    ~[ItemResponseType.SingleSelection, ItemResponseType.MultipleSelection].indexOf(responseType)
+  ) {
+    const options = (responseValues as SingleAndMultipleSelectItemResponseValues).options;
+    const optionsWithAlert = options?.filter(({ alert }) => typeof alert === 'string');
+
+    if (!optionsWithAlert?.length) return [];
+
+    return optionsWithAlert.map(({ id, alert }) => ({
+      key: uuidv4(),
+      value: id,
+      alert,
+    }));
+  }
+
+  if (responseType === ItemResponseType.Slider) {
+    const { alerts } = responseValues as SliderItemResponseValues;
+    const isContinuous = get(config, ItemConfigurationSettings.IsContinuous);
+
+    if (!alerts?.length) return [];
+
+    return alerts.map(({ value, minValue, maxValue, alert }) => ({
+      key: uuidv4(),
+      ...(!isContinuous && { value: `${value}` }),
+      ...(isContinuous && { minValue, maxValue }),
+      alert,
+    }));
+  }
+
+  if (responseType === ItemResponseType.SliderRows) {
+    const { rows } = responseValues as SliderRowsResponseValues;
+
+    return (
+      rows?.flatMap(
+        ({ id, alerts }) =>
+          alerts?.map(({ value, alert }) => ({ key: uuidv4(), sliderId: id, value, alert })) ?? [],
+      ) ?? []
+    );
+  }
+
+  if (
+    ~[ItemResponseType.SingleSelectionPerRow, ItemResponseType.MultipleSelectionPerRow].indexOf(
+      responseType,
+    )
+  ) {
+    const { dataMatrix } = responseValues as SingleAndMultipleSelectRowsResponseValues;
+
+    return (
+      dataMatrix?.reduce(
+        (result: ItemAlert[], { rowId, options }) => [
+          ...result,
+          ...options.reduce((result: ItemAlert[], { alert, optionId }) => {
+            if (typeof alert !== 'string') return result;
+
+            return [...result, { key: uuidv4(), rowId, optionId, alert }];
+          }, []),
+        ],
+        [],
+      ) ?? []
+    );
+  }
+};
+
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map((item) => ({
@@ -190,8 +375,8 @@ const getActivityItems = (items: Item[]) =>
         responseType: item.responseType,
         responseValues: getActivityItemResponseValues(item),
         config: item.config,
-        alerts: item.alerts ?? [],
         conditionalLogic: undefined,
+        alerts: getAlerts(item),
         allowEdit: item.allowEdit,
       }))
     : [];

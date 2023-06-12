@@ -3,11 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
-import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
+import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { useSetupEnterAppletPassword, useEncryptionCheckFromStorage } from 'shared/hooks';
-
 import { page } from 'resources';
+
 import { ViewDataPopupProps } from './ViewDataPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 

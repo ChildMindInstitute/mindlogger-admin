@@ -1,15 +1,27 @@
 import * as yup from 'yup';
+import get from 'lodash/get';
 
 import i18n from 'i18n';
-import { getMaxLengthValidationError, getIsRequiredValidateMessage } from 'shared/utils';
+import { getIsRequiredValidateMessage, getMaxLengthValidationError } from 'shared/utils';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
+  MAX_LENGTH_OF_TEST,
   MAX_NAME_LENGTH,
+  MAX_NUMBER_OF_TRIALS,
   MAX_SELECT_OPTION_TEXT_LENGTH,
   MAX_SLIDER_LABEL_TEXT_LENGTH,
+  MAX_SLOPE,
+  MIN_LENGTH_OF_TEST,
+  MIN_NUMBER_OF_TRIALS,
+  MIN_SLOPE,
 } from 'shared/consts';
-import { SLIDER_LABEL_MAX_LENGTH } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { RoundTypeEnum } from 'modules/Builder/features/PerformanceTasks/Flanker/RoundSettings';
+import { Config } from 'shared/state';
+import {
+  ItemConfigurationSettings,
+  SLIDER_LABEL_MAX_LENGTH,
+} from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import { testFunctionForUniqueness } from './BuilderApplet.utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from './BuilderApplet.const';
@@ -72,6 +84,85 @@ export const ResponseValuesNumberSelectionSchema = () => ({
     ),
 });
 
+const getFlankerButtonsSchema = (type: 'name' | 'image') =>
+  yup
+    .string()
+    .test(
+      'has-image-or-name',
+      type === 'name' ? getIsRequiredValidateMessage('flankerButtons.nameOrImage') : '',
+      function () {
+        const { image, name } = this.parent;
+
+        return !(!image && !name);
+      },
+    );
+
+const getFlankerRoundSchema = (type: RoundTypeEnum) => {
+  const isPracticeRound = type === RoundTypeEnum.Practice;
+
+  return yup.object({
+    instruction: yup
+      .string()
+      .required(
+        getIsRequiredValidateMessage(isPracticeRound ? 'practiceInstruction' : 'testInstruction'),
+      ),
+    blocks: yup.array().required().min(1),
+    stimulusDuration: yup.number().required(getIsRequiredValidateMessage('positiveInteger')),
+    ...(isPracticeRound && {
+      threshold: yup.number().required(getIsRequiredValidateMessage('integerBetweenOneAndHundred')),
+    }),
+  });
+};
+
+export const getFlankerGeneralSchema = () =>
+  yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
+    buttons: yup.array().of(
+      yup.object({
+        name: getFlankerButtonsSchema('name'),
+        image: getFlankerButtonsSchema('image'),
+      }),
+    ),
+    fixation: yup
+      .object({
+        image: yup.string().required(),
+        duration: yup.number().required(getIsRequiredValidateMessage('positiveInteger')),
+      })
+      .nullable(),
+    stimulusTrials: yup
+      .array()
+      .of(
+        yup.object({
+          image: yup.string().required(),
+        }),
+      )
+      .min(1),
+  });
+
+export const GyroscopeAndTouchConfigSchema = () => ({
+  general: yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
+    numberOfTrials: yup
+      .number()
+      .min(MIN_NUMBER_OF_TRIALS, <string>t('integerError'))
+      .max(MAX_NUMBER_OF_TRIALS, <string>t('integerError')),
+    lengthOfTest: yup
+      .number()
+      .min(MIN_LENGTH_OF_TEST, <string>t('integerError'))
+      .max(MAX_LENGTH_OF_TEST, <string>t('integerError')),
+    lambdaSlope: yup
+      .number()
+      .min(MIN_SLOPE, <string>t('integerError'))
+      .max(MAX_SLOPE, <string>t('integerError')),
+  }),
+  practice: yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('practiceInstruction')),
+  }),
+  test: yup.object({
+    instruction: yup.string().required(getIsRequiredValidateMessage('testInstruction')),
+  }),
+});
+
 export const ItemSchema = () =>
   yup
     .object({
@@ -87,7 +178,19 @@ export const ItemSchema = () =>
           (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
-      question: yup.string().required(getIsRequiredValidateMessage('displayedContent')),
+      question: yup.string().when('responseType', (responseType, schema) => {
+        if (
+          responseType === ItemResponseType.Flanker ||
+          responseType === ItemResponseType.Gyroscope ||
+          responseType === ItemResponseType.Touch ||
+          responseType === ItemResponseType.ABTrailsIpad ||
+          responseType === ItemResponseType.ABTrailsMobile
+        ) {
+          return schema;
+        }
+
+        return schema.required(getIsRequiredValidateMessage('displayedContent'));
+      }),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (
           responseType === ItemResponseType.SingleSelection ||
@@ -121,16 +224,95 @@ export const ItemSchema = () =>
 
         return schema.nullable();
       }),
-      config: yup.object({}).shape({
-        correctAnswerRequired: yup.boolean().nullable(),
-        correctAnswer: yup
-          .string()
-          .nullable()
-          .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
-            correctAnswerRequired
-              ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
-              : schema,
-          ),
+      alerts: yup
+        .array()
+        .when('responseType', (responseType, schema) => {
+          if (
+            responseType === ItemResponseType.SingleSelection ||
+            responseType === ItemResponseType.MultipleSelection
+          )
+            return schema.of(
+              yup.object({
+                value: yup.string().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+
+          if (responseType === ItemResponseType.Slider) {
+            return schema.of(
+              yup.object({
+                value: yup.number().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+          }
+
+          if (
+            responseType === ItemResponseType.SingleSelectionPerRow ||
+            responseType === ItemResponseType.MultipleSelectionPerRow
+          ) {
+            return schema.of(
+              yup.object({
+                optionId: yup.string().required(''),
+                rowId: yup.string().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+          }
+
+          if (responseType === ItemResponseType.SliderRows) {
+            return schema.of(
+              yup.object({
+                value: yup.string().required(''),
+                sliderId: yup.string().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            );
+          }
+
+          return schema;
+        })
+        .when(['responseType', 'config'], {
+          is: (responseType: ItemResponseType, config: Config) =>
+            responseType === ItemResponseType.Slider &&
+            get(config, ItemConfigurationSettings.IsContinuous),
+          then: (schema) =>
+            schema.of(
+              yup.object({
+                minValue: yup.number().required(''),
+                maxValue: yup.number().required(''),
+                alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
+              }),
+            ),
+          otherwise: (schema) => schema,
+        }),
+      config: yup.object({}).when('responseType', (responseType, schema) => {
+        if (
+          responseType === ItemResponseType.Touch ||
+          responseType === ItemResponseType.Gyroscope
+        ) {
+          return schema.shape(GyroscopeAndTouchConfigSchema());
+        }
+
+        if (responseType === ItemResponseType.Flanker) {
+          return schema.shape({
+            general: getFlankerGeneralSchema(),
+            practice: getFlankerRoundSchema(RoundTypeEnum.Practice),
+            test: getFlankerRoundSchema(RoundTypeEnum.Test),
+          });
+        }
+
+        return schema.shape({
+          correctAnswerRequired: yup.boolean().nullable(),
+          correctAnswer: yup
+            .string()
+            .nullable()
+            .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
+              correctAnswerRequired
+                ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+                : schema,
+            ),
+        });
       }),
     })
     .required();

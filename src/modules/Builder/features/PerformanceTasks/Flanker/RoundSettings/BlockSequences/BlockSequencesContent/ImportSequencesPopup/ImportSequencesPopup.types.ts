@@ -1,13 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
-
-import { UploadedTable } from '../BlockSequencesContent.types';
+import { SetUploadedTable } from '../BlockSequencesContent.types';
 
 export enum ImportSequencesType {
   Upload,
   Update,
 }
-
-export type SetUploadedTable = Dispatch<SetStateAction<UploadedTable>>;
 
 export type ImportSequencesPopupProps = {
   open: boolean;
@@ -15,6 +11,6 @@ export type ImportSequencesPopupProps = {
   onDownloadCsv: () => void;
   onDownloadXlsx: () => void;
   uiType: ImportSequencesType;
-  imageNames: string[];
+  uploadedImages: string[];
   setUploadedTable: SetUploadedTable;
 };

@@ -13,6 +13,7 @@ import {
   CalculationType,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
+import { CorrectPress } from 'modules/Builder/types';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -43,6 +44,7 @@ export type ActivityFlow = {
   activityIds?: number[];
   items?: ActivityFlowItem[];
   isHidden?: boolean;
+  createdAt?: string;
 };
 
 export type TextInputConfig = {
@@ -179,6 +181,63 @@ export type SliderRowsConfig = {
   timer: number;
 };
 
+export type FlankerButtonSetting = {
+  name: string | null;
+  image: string | null;
+};
+
+export type FlankerFixationSettings = {
+  image: string;
+  duration: number;
+};
+
+type FlankerStimulusId = string;
+
+export type FlankerStimulusSettings = {
+  id: FlankerStimulusId;
+  image: string;
+  correctPress: CorrectPress;
+};
+
+export type FlankerBlockSettings = {
+  order: Array<FlankerStimulusId>;
+  name: string;
+};
+
+type FlankerPracticeSettings = {
+  instruction: string;
+  blocks: Array<FlankerBlockSettings>;
+  stimulusDuration: number;
+  threshold: number;
+  randomizeOrder: boolean;
+  showFeedback: boolean;
+  showSummary: boolean;
+};
+
+type FlankerTestSettings = {
+  instruction: string;
+  blocks: Array<FlankerBlockSettings>;
+  stimulusDuration: number;
+  randomizeOrder: boolean;
+  showFeedback: boolean;
+  showSummary: boolean;
+};
+
+type FlankerGeneralSettings = {
+  instruction: string;
+  buttons: Array<FlankerButtonSetting>;
+  fixation: FlankerFixationSettings | null;
+  stimulusTrials: Array<FlankerStimulusSettings>;
+};
+
+type FlankerConfig = {
+  general: FlankerGeneralSettings;
+  practice: FlankerPracticeSettings;
+  test: FlankerTestSettings;
+  skippableItem?: boolean;
+  removeBackButton?: boolean;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -188,9 +247,10 @@ export type SliderItemResponseValues = {
   minImage?: string;
   maxImage?: string;
   scores?: number[];
+  alerts?: ItemAlert[];
 };
 
-export type SliderRowsItemResponseValues = SliderItemResponseValues & { label: string };
+export type SliderRowsItemResponseValues = SliderItemResponseValues & { id: string; label: string };
 
 export type SingleAndMultipleSelectionOption = {
   id: string;
@@ -200,6 +260,7 @@ export type SingleAndMultipleSelectionOption = {
   tooltip?: string;
   color?: string | ColorResult;
   isHidden?: boolean;
+  alert?: string;
 };
 
 export type SingleAndMultipleSelectItemResponseValues = {
@@ -240,7 +301,7 @@ export type SingleAndMultipleSelectOption = {
 
 export type SingleAndMultipleSelectMatrix = {
   rowId: string;
-  options: Array<{ optionId: string; score: number | null; alert: string | null }>;
+  options: Array<{ optionId: string; score: number | null; alert: ItemAlert['alert'] }>;
 };
 
 export type SingleAndMultipleSelectRowsResponseValues = {
@@ -269,6 +330,31 @@ export type DrawingResponseValues = {
   drawingExample: string;
   drawingBackground: string;
 };
+
+export type GyroscopeGeneralSettings = {
+  instruction: string;
+  numberOfTrials: number;
+  lengthOfTest: number;
+  lambdaSlope: number;
+};
+
+export type GyroscopePracticeSettings = {
+  instruction: string;
+};
+
+export type GyroscopeTestSettings = {
+  instruction: string;
+};
+
+export type GyroscopeConfig = {
+  general: GyroscopeGeneralSettings;
+  practice: GyroscopePracticeSettings;
+  test: GyroscopeTestSettings;
+  skippableItem?: boolean;
+  removeBackButton?: boolean;
+};
+
+type TouchConfig = GyroscopeConfig;
 
 export type ResponseValues =
   | TextItemResponseValues
@@ -299,15 +385,20 @@ export type Config =
   | DrawingConfig
   | PhotoConfig
   | GeolocationConfig
-  | MessageConfig;
+  | MessageConfig
+  | GyroscopeConfig
+  | TouchConfig
+  | FlankerConfig;
 
 export type ItemAlert = {
-  message: string;
-  option: string;
-  item: string;
-  slider: string;
-  min: number;
-  max: number;
+  key?: string;
+  value?: number | string;
+  minValue?: number | null;
+  maxValue?: number | null;
+  rowId?: string | null;
+  optionId?: string | null;
+  sliderId?: string | null;
+  alert?: string;
 };
 
 export type BaseCondition = {
@@ -416,6 +507,7 @@ export type Activity = {
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
   isPerformanceTask?: boolean;
+  createdAt?: string;
 };
 
 type Theme = {

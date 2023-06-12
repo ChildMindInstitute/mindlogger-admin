@@ -1,12 +1,17 @@
+import { format } from 'date-fns';
+
 import { variables } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
+import { DateFormats } from 'shared/consts';
 
 import { ActivitiesFlowsWithColors, Repeats } from './Schedule.types';
 
 export const getCount = (ids: ActivitiesFlowsWithColors, id: string) =>
   ids.filter((item) => item.id === id).length;
 
-/* eslint-disable camelcase */
+export const convertDateToYearMonthDay = (date: Date | string) =>
+  typeof date === 'string' ? date : format(date, DateFormats.YearMonthDay);
+
 const {
   blue,
   blue_alfa30,
