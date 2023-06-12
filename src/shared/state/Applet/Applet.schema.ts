@@ -44,6 +44,7 @@ export type ActivityFlow = {
   activityIds?: number[];
   items?: ActivityFlowItem[];
   isHidden?: boolean;
+  createdAt?: string;
 };
 
 export type TextInputConfig = {
@@ -506,6 +507,7 @@ export type Activity = {
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
   isPerformanceTask?: boolean;
+  createdAt?: string;
 };
 
 type Theme = {
