@@ -23,12 +23,14 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
     activityItem.activityItem.id || '',
   );
 
+  const controlName = `assessmentItems.${activityItemIndex}.answers` as const;
+
   switch (activityItem.activityItem.responseType) {
     case 'singleSelect':
       return (
         <SingleSelectionController
           control={control}
-          name={`assessmentItems.${activityItemIndex}.answers`}
+          name={controlName}
           activityItem={activityItem as SingleSelectItemAnswer}
           isDisabled={isDisabled}
         />
@@ -37,7 +39,7 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
       return (
         <MultipleSelectionController
           control={control}
-          name={`assessmentItems.${activityItemIndex}.answers`}
+          name={controlName}
           activityItem={activityItem as MultiSelectItemAnswer}
           isDisabled={isDisabled}
         />
@@ -46,7 +48,7 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
       return (
         <SliderController
           control={control}
-          name={`assessmentItems.${activityItemIndex}.answers`}
+          name={controlName}
           activityItem={activityItem as SliderItemAnswer}
           isDisabled={isDisabled}
         />
