@@ -4,8 +4,8 @@ import { Response, Version } from '../../Report.types';
 
 export type ScatterChartProps = {
   height?: string;
-  minDate: string | Date;
-  maxDate: string | Date;
+  minDate: Date;
+  maxDate: Date;
   responses: Response[];
   versions: Version[];
 };

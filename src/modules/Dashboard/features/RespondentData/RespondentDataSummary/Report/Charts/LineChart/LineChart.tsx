@@ -13,8 +13,9 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
 
 import { mockedSubscales } from './mock';
-import { getOptions, getData, locales } from './LineChart.utils';
+import { getOptions, getData } from './LineChart.utils';
 import { CustomLegend } from './LineChart.types';
+import { locales } from '../Charts.const';
 
 ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Tooltip, TimeScale);
 

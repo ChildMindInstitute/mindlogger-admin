@@ -1,5 +1,4 @@
 import { max, min } from 'date-fns';
-import { enUS, fr } from 'date-fns/locale';
 import { Context } from 'chartjs-plugin-datalabels';
 import { LegendItem, ChartData } from 'chart.js';
 
@@ -7,21 +6,8 @@ import { variables } from 'shared/styles';
 
 import { ExtendedChartDataset, SubscaleChartData, Tick } from './LineChart.types';
 import { COLORS } from './LineChart.const';
-
-export const locales = {
-  'en-US': enUS,
-  fr,
-};
-
-const commonConfig = {
-  type: 'time' as const,
-  time: {
-    unit: 'day' as const,
-    displayFormats: {
-      month: 'dd mmm' as const,
-    },
-  },
-};
+import { locales } from '../Charts.const';
+import { getStepSize, getTimeConfig } from '../Charts.utils';
 
 export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) => {
   const responses = data.subscales.map((subscale) => subscale.responses);
@@ -30,6 +16,9 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
 
   const minDate = min([...responsesDates, ...versionsDates]).getTime();
   const maxDate = max([...responsesDates, ...versionsDates]).getTime();
+
+  const timeConfig = getTimeConfig(minDate, maxDate);
+  const stepSize = getStepSize(minDate, maxDate);
 
   return {
     responsive: true,
@@ -86,7 +75,7 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
         },
       },
       x: {
-        ...commonConfig,
+        ...timeConfig,
         adapters: {
           date: {
             locale: locales[lang as keyof typeof locales],
@@ -105,8 +94,29 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
         min: minDate,
         max: maxDate,
       },
+      x1: {
+        adapters: {
+          date: {
+            locale: locales[lang],
+          },
+        },
+        ...timeConfig,
+        ticks: {
+          autoSkip: false,
+          stepSize,
+        },
+        position: 'bottom' as const,
+        grid: {
+          display: false,
+        },
+        border: {
+          display: false,
+        },
+        min: minDate,
+        max: maxDate,
+      },
       x2: {
-        ...commonConfig,
+        ...timeConfig,
         position: 'top' as const,
         ticks: {
           source: 'data' as const,
@@ -146,6 +156,10 @@ export const getData = (data: SubscaleChartData) => {
           display: false,
         },
       })),
+      {
+        xAxisID: 'x1',
+        data: [],
+      },
       {
         xAxisID: 'x2',
         labels: data.versions.map(({ version }) => version),

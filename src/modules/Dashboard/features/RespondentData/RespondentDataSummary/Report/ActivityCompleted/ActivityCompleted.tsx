@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
@@ -8,12 +9,25 @@ import { ScatterChart } from 'modules/Dashboard/features/RespondentData/Responde
 
 import { ActivityCompletedProps } from './ActivityCompleted.types';
 import { FilterFormValues } from '../Report.types';
+import { getDateTime } from '../Report.utils';
 
 export const ActivityCompleted = ({ responses, versions }: ActivityCompletedProps) => {
   const { t } = useTranslation();
-  const { getValues } = useFormContext<FilterFormValues>();
+  const { watch } = useFormContext<FilterFormValues>();
 
-  const [minDate, maxDate] = getValues().startDateEndDate;
+  const {
+    startDateEndDate: [startDate, endDate],
+    startTime,
+    endTime,
+  } = watch();
+
+  const { minDate, maxDate } = useMemo(
+    () => ({
+      minDate: getDateTime(startDate, startTime),
+      maxDate: getDateTime(endDate, endTime),
+    }),
+    [startDate, endDate, startTime, endTime],
+  );
 
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>
@@ -25,12 +39,7 @@ export const ActivityCompleted = ({ responses, versions }: ActivityCompletedProp
           </span>
         </Tooltip>
       </StyledHeadline>
-      <ScatterChart
-        minDate={minDate || new Date()}
-        maxDate={maxDate || new Date()}
-        responses={responses}
-        versions={versions}
-      />
+      <ScatterChart minDate={minDate} maxDate={maxDate} responses={responses} versions={versions} />
     </Box>
   );
 };
