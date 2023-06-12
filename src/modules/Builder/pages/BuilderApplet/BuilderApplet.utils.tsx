@@ -34,10 +34,7 @@ import {
 } from 'shared/consts';
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
-import {
-  EditablePerformanceTasksType,
-  PerformanceTasks,
-} from 'modules/Builder/features/Activities/Activities.types';
+import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
 import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
@@ -156,7 +153,7 @@ export const getNewPerformanceTask = ({
   name,
   description,
   performanceTask,
-  type,
+  performanceTaskType,
 }: GetNewPerformanceTask) => {
   const commonRoundProps = {
     stimulusDuration: DEFAULT_MILLISECONDS_DURATION,
@@ -202,21 +199,23 @@ export const getNewPerformanceTask = ({
   };
 
   const propsByTypeObj = {
-    [PerformanceTasks.Flanker]: defaultFlankerProps,
-    [PerformanceTasks.Gyroscope]: {
+    [EditablePerformanceTasksType.Flanker]: defaultFlankerProps,
+    [EditablePerformanceTasksType.Gyroscope]: {
       responseType: ItemResponseType.Gyroscope,
       name: ItemResponseType.Gyroscope,
       ...defaultGyroscopeAndTouchProps,
     },
-    [PerformanceTasks.Touch]: {
+    [EditablePerformanceTasksType.Touch]: {
       responseType: ItemResponseType.Touch,
       name: ItemResponseType.Touch,
       ...defaultGyroscopeAndTouchProps,
     },
   };
 
-  const defaultPropsByType = type
-    ? propsByTypeObj[type as unknown as EditablePerformanceTasksType] || { responseType: '' }
+  const defaultPropsByType = performanceTaskType
+    ? propsByTypeObj[performanceTaskType as unknown as EditablePerformanceTasksType] || {
+        responseType: '',
+      }
     : { responseType: '' };
 
   const { responseType, ...config } = defaultPropsByType;
@@ -235,7 +234,7 @@ export const getNewPerformanceTask = ({
       },
     ],
     isPerformanceTask: true,
-    type,
+    performanceTaskType,
     ...performanceTask,
     id: undefined,
     key: uuidv4(),
