@@ -13,11 +13,13 @@ export const useImportSequence = (imageNames: string[]) => {
   const handleSuccessfullyUploaded = (file: ImportedFile) => {
     setUploadedFile(file);
     setIsSubmitDisabled(!file);
+    setValidationError(null);
   };
 
   const handleUploadClear = () => {
     setUploadedFile(null);
     setIsSubmitDisabled(true);
+    setValidationError(null);
   };
 
   const handleFileReady = (file: ImportedFile | null) => {

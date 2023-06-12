@@ -41,7 +41,7 @@ export const removeAppletExtraFields = () => ({
 export const removeActivityExtraFields = (activity: Activity) => ({
   createdAt: undefined,
   order: undefined,
-  type: undefined,
+  performanceTaskType: undefined,
   isPerformanceTask: undefined,
   generateReport: undefined, // TODO: remove when API will be ready
   showScoreSummary: undefined, // TODO: remove when API will be ready
