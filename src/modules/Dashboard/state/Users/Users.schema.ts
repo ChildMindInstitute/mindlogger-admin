@@ -8,11 +8,11 @@ import { Roles } from 'shared/consts';
 export type RespondentDetail = {
   appletId: string;
   appletDisplayName: string;
+  appletImage?: string;
   accessId: string;
   respondentNickname: string;
   respondentSecretId: string;
   hasIndividualSchedule: boolean;
-  appletImg?: string;
 };
 
 export type Respondent = {

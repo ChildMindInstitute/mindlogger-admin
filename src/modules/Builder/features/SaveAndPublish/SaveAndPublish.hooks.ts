@@ -283,6 +283,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPublishProcessPopupOpened(false);
     setPublishProcessStep(undefined);
   };
+
   const sendRequestWithPasswordCheck = async () => {
     const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
     if (!hasEncryptionCheck) {

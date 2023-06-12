@@ -13,6 +13,7 @@ import {
 import { popups, workspaces } from 'redux/modules';
 import { ButtonWithMenu, DEFAULT_ROWS_PER_PAGE, Search, Spinner, Svg } from 'shared/components';
 import { useAsync, useBreadcrumbs, useTable } from 'shared/hooks';
+import { useAppDispatch } from 'redux/store';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
@@ -26,6 +27,7 @@ export const AppletsContext = createContext<AppletContextType | null>(null);
 export const Applets = () => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<(Folder | Applet)[]>([]);
   const [expandedFolders, setExpandedFolders] = useState<string[]>([]);
@@ -88,6 +90,14 @@ export const Applets = () => {
 
   const onCloseCallback = () => {
     fetchData();
+
+    const { getWorkspaceRoles } = workspaces.thunk;
+    ownerId &&
+      dispatch(
+        getWorkspaceRoles({
+          ownerId,
+        }),
+      );
   };
 
   const openFolder = async (folder: Folder) => {
