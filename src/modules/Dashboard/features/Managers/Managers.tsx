@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -16,8 +16,8 @@ import { ManagersTableHeader } from './Managers.styles';
 import { getActions, getHeadCells } from './Managers.const';
 
 export const Managers = () => {
-  const { appletId } = useParams();
   const { t } = useTranslation('app');
+  const { appletId } = useParams();
   const dispatch = useAppDispatch();
 
   useBreadcrumbs([
@@ -76,11 +76,11 @@ export const Managers = () => {
 
   const actions = {
     removeAccessAction: (user: Manager) => {
-      setSelectedManager(filterAplletsByRoles(user));
+      setSelectedManager(user);
       setRemoveAccessPopupVisible(true);
     },
     editAccessAction: (user: Manager) => {
-      setSelectedManager(filterAplletsByRoles(user));
+      setSelectedManager(user);
       setEditAccessPopupVisible(true);
     },
   };
@@ -89,47 +89,52 @@ export const Managers = () => {
     execute({ ownerId, userId });
   };
 
-  const rows = managersData?.result?.map((user) => {
-    const { email, firstName, lastName, roles, isPinned, id } = user;
-    const stringRoles = joinWihComma(roles);
+  const rows = useMemo(
+    () =>
+      managersData?.result?.map((user) => {
+        const filteredManager = filterAplletsByRoles(user);
+        const { email, firstName, lastName, roles, isPinned, id } = user;
+        const stringRoles = joinWihComma(roles);
 
-    return {
-      pin: {
-        content: () => <Pin isPinned={isPinned} />,
-        value: '',
-        onClick: () => handlePinClick(id),
-      },
-      firstName: {
-        content: () => firstName,
-        value: firstName,
-      },
-      lastName: {
-        content: () => lastName,
-        value: lastName,
-      },
-      email: {
-        content: () => email,
-        value: email,
-      },
-      ...(appletId && {
-        roles: {
-          content: () => stringRoles,
-          value: stringRoles,
-        },
+        return {
+          pin: {
+            content: () => <Pin isPinned={isPinned} />,
+            value: '',
+            onClick: () => handlePinClick(id),
+          },
+          firstName: {
+            content: () => firstName,
+            value: firstName,
+          },
+          lastName: {
+            content: () => lastName,
+            value: lastName,
+          },
+          email: {
+            content: () => email,
+            value: email,
+          },
+          ...(appletId && {
+            roles: {
+              content: () => stringRoles,
+              value: stringRoles,
+            },
+          }),
+          actions: {
+            content: () => {
+              if (ownerId === id || !filteredManager?.applets.length) {
+                return;
+              }
+
+              return <Actions items={getActions(actions)} context={filteredManager} />;
+            },
+            value: '',
+            width: '20%',
+          },
+        };
       }),
-      actions: {
-        content: () => {
-          if (ownerId === id) {
-            return;
-          }
-
-          return <Actions items={getActions(actions)} context={user} />;
-        },
-        value: '',
-        width: '20%',
-      },
-    };
-  });
+    [managersData],
+  );
 
   const renderEmptyComponent = () => {
     if (rows && !rows.length) {
