@@ -15,7 +15,9 @@ import { StyledButton, StyledEdited, StyledItem, StyledReviewer } from './Feedba
 import { FeedbackReviewerProps } from './FeedbackReviewer.types';
 import { getResponseItem } from './FeedbackReviewer.const';
 
-export const FeedbackReviewer = ({ reviewer }: FeedbackReviewerProps) => {
+export const FeedbackReviewer = ({
+  reviewer: { isEdited, review, reviewer },
+}: FeedbackReviewerProps) => {
   const { t } = useTranslation('app');
 
   const [isOpen, setIsOpen] = useState(false);
@@ -27,16 +29,16 @@ export const FeedbackReviewer = ({ reviewer }: FeedbackReviewerProps) => {
   return (
     <StyledReviewer>
       <StyledFlexTopStart sx={{ justifyContent: 'space-between' }}>
-        <StyledTitleBoldMedium>{reviewer.fullName}</StyledTitleBoldMedium>
+        <StyledTitleBoldMedium>{`${reviewer.firstName} ${reviewer.lastName}`}</StyledTitleBoldMedium>
         <StyledButton onClick={toggleIsOpen}>
           <Svg id={isOpen ? 'navigate-up' : 'navigate-down'} />
         </StyledButton>
       </StyledFlexTopStart>
       {isOpen && (
         <>
-          {reviewer.activityItemAnswers.map((activityItemAnswer) => (
+          {review.map((activityItemAnswer) => (
             <StyledItem key={activityItemAnswer.activityItem.id}>
-              {activityItemAnswer.activityItem.edited && (
+              {isEdited && (
                 <StyledEdited>
                   <StyledBodyMedium color={variables.palette.on_secondary_container}>
                     {t('edited')}

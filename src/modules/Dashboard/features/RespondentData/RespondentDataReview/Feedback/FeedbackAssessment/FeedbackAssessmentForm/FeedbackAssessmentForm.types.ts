@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import {
   ActivityItemAnswer,
   ItemAnswer,
@@ -10,7 +12,7 @@ export type FormattedAssessmentItem = {
 
 export type FeedbackAssessmentFormProps = {
   answers: ActivityItemAnswer[];
-  activityId: string;
+  setActiveTab: Dispatch<SetStateAction<number>>;
 };
 
 export type AssessmentFormItem = {

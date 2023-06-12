@@ -1,7 +1,23 @@
-import { ActivityItemAnswer } from '../Feedback.types';
+import { Item } from 'shared/state';
+import { DecryptedAnswerData } from 'shared/types';
 
 export type Reviewer = {
-  id: string;
-  fullName: string;
-  activityItemAnswers: ActivityItemAnswer[];
+  isEdited: boolean;
+  reviewer: {
+    firstName: string;
+    lastName: string;
+  };
+  review: DecryptedAnswerData[];
+};
+
+export type Review = {
+  isEdited: boolean;
+  reviewer: {
+    firstName: string;
+    lastName: string;
+  };
+  answer: string;
+  itemIds: string[];
+  items: Item[];
+  reviewerPublicKey: string;
 };

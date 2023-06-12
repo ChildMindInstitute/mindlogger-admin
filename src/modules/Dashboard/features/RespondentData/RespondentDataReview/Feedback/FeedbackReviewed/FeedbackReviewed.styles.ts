@@ -1,8 +1,10 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-import { StyledFlexColumn, theme } from 'shared/styles';
+import { theme } from 'shared/styles';
 
-export const StyledContainer = styled(StyledFlexColumn)`
+export const StyledContainer = styled(Box)`
+  position: relative;
+  box-sizing: content-box;
   height: 100%;
   margin: ${theme.spacing(-2.4, -2.4, -1.6)};
   padding: ${theme.spacing(2.4, 2.4, 1.6)};
@@ -10,5 +12,15 @@ export const StyledContainer = styled(StyledFlexColumn)`
 
   & > *:not(:last-child) {
     margin-bottom: ${theme.spacing(1.6)};
+  }
+
+  .spinner-container {
+    height: calc(100% - 4.8rem);
+    width: calc(100% - 4.8rem);
+    background-color: transparent;
+  }
+
+  .empty-state-container {
+    padding: 0;
   }
 `;

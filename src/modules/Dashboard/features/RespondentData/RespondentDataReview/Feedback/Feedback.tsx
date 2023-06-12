@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DefaultTabs as Tabs, Svg } from 'shared/components';
@@ -10,13 +11,15 @@ import {
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 
 import { StyledButton, StyledContainer } from './Feedback.styles';
-import { getTabs } from './Feedback.const';
+import { FeedbackTabs, getTabs } from './Feedback.const';
 import { FeedbackProps } from './Feedback.types';
 
 export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   const { t } = useTranslation();
 
-  const tabs = getTabs(selectedActivity);
+  const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
+
+  const tabs = getTabs(selectedActivity, setActiveTab);
 
   return (
     <StyledContainer>
@@ -33,7 +36,7 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
           <Svg id="cross" />
         </StyledButton>
       </StyledFlexAllCenter>
-      <Tabs tabs={tabs} uiType={UiType.Secondary} />
+      <Tabs activeTab={activeTab} tabs={tabs} uiType={UiType.Secondary} />
     </StyledContainer>
   );
 };

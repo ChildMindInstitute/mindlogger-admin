@@ -45,6 +45,7 @@ import {
   EditManagerAccess,
   ExportData,
   Assessment,
+  SaveAssessment,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -485,28 +486,27 @@ export const getAppletSubmitDateListApi = (
     signal,
   });
 
-export const getAssessmentApi = (
-  { appletId, answerId, activityId }: Answer,
+export const getAssessmentApi = ({ appletId, answerId }: Assessment, signal?: AbortSignal) =>
+  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/assessment`, {
+    signal,
+  });
+
+export const createAssessmentApi = (
+  { appletId, answerId, ...assessment }: SaveAssessment,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/assessment`,
+  authApiClient.post(
+    `/answers/applet/${appletId}/answers/${answerId}/assessment`,
+    { ...assessment },
     {
       signal,
     },
   );
 
-export const createAssessmentApi = (
-  { appletId, answerId, activityId, ...assessment }: Answer & Assessment,
-  signal?: AbortSignal,
-) =>
-  authApiClient.post(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/assessment`,
-    { ...assessment, activityId },
-    {
-      signal,
-    },
-  );
+export const getReviewsApi = ({ appletId, answerId }: Assessment, signal?: AbortSignal) =>
+  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/reviews`, {
+    signal,
+  });
 
 export const postAppletDataRetentionApi = (
   { appletId, ...dataRetentionParams }: AppletDataRetention,

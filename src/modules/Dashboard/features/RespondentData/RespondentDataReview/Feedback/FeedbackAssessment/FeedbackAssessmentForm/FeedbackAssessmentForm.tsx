@@ -6,13 +6,14 @@ import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
 import { createAssessmentApi } from 'api';
+import { FeedbackTabs } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.const';
 
 import { formatAssessment, getAnswerValue, getDefaultValue } from './FeedbackAssessmentForm.utils';
 import { ActivityCardItemList } from '../ActivityCardItemList';
 import { SubmitAssessmentPopup } from './SubmitAssessmentPopup';
 import { FeedbackAssessmentFormProps, AssessmentForm } from './FeedbackAssessmentForm.types';
 
-export const FeedbackAssessmentForm = ({ answers, activityId }: FeedbackAssessmentFormProps) => {
+export const FeedbackAssessmentForm = ({ answers, setActiveTab }: FeedbackAssessmentFormProps) => {
   const { appletId = '', answerId = '' } = useParams();
   const userData = auth.useData();
   const encryptedAnswers = useEncryptedAnswers();
@@ -52,11 +53,12 @@ export const FeedbackAssessmentForm = ({ answers, activityId }: FeedbackAssessme
     await createAssessment({
       appletId,
       answerId,
-      activityId,
       answer,
       itemIds: formattedAssessment.itemIds,
       reviewerPublicKey: accountId,
     });
+
+    setActiveTab(FeedbackTabs.Reviewed);
   };
 
   const activityItems = useMemo(() => {
