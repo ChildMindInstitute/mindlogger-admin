@@ -31,20 +31,12 @@ export const LeftBar = ({ setting, isCompact, onSettingClick }: LeftBarProps) =>
             <StyledBodyMedium>{t(label)}</StyledBodyMedium>
             <StyledItemsContainer isCompact={isCompact}>
               {items?.map((item) => (
-                <>
-                  <Item
-                    key={`left-bar-item-${item.name}`}
-                    item={item}
-                    isCompact={isCompact}
-                    onClick={onSettingClick}
-                  />
-                  <Item
-                    key={`left-bar-item-${item.name}`}
-                    item={item}
-                    isCompact={isCompact}
-                    onClick={onSettingClick}
-                  />
-                </>
+                <Item
+                  key={`left-bar-item-${item.name}`}
+                  item={item}
+                  isCompact={isCompact}
+                  onClick={onSettingClick}
+                />
               ))}
             </StyledItemsContainer>
           </StyledGroupContainer>
