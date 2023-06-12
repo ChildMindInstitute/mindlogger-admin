@@ -19,22 +19,12 @@ export const getTimeConfig = (minMs: number, maxMs: number) => {
   }
 
   const hours = msDiff / MS_PER_HOUR;
-  if (hours > 3) {
-    return {
-      type: 'time' as const,
-      time: {
-        unit: 'hour' as const,
-        displayFormats: {
-          hour: 'H:mm' as const,
-        },
-      },
-    };
-  }
+  const unit = hours > 3 ? ('hour' as const) : ('minute' as const);
 
   return {
     type: 'time' as const,
     time: {
-      unit: 'minute' as const,
+      unit,
       displayFormats: {
         hour: 'H:mm' as const,
       },
