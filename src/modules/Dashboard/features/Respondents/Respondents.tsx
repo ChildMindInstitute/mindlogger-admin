@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE } from 'shared/components';
-import { users, workspaces } from 'redux/modules';
+import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Row } from 'shared/components';
+import { Respondent, users, workspaces } from 'redux/modules';
 import {
   useTimeAgo,
   useBreadcrumbs,
@@ -131,40 +131,7 @@ export const Respondents = () => {
     execute({ ownerId, userId });
   };
 
-  const filteredRespondents = useMemo(
-    () =>
-      respondentsData?.result?.reduce((acc: FilteredRespondents, { details, id }) => {
-        const filteredRespondents = {
-          scheduling: [],
-          editable: [],
-          viewable: [],
-        } as FilteredApplets;
-        const { editable, viewable, scheduling } = filteredRespondents;
-
-        for (const detail of details) {
-          const workspaceRoles = rolesData?.data?.[detail.appletId];
-          if (isManagerOrOwner(workspaceRoles?.[0])) {
-            editable.push(detail);
-            viewable.push(detail);
-            scheduling.push(detail);
-            continue;
-          }
-          if (workspaceRoles?.includes(Roles.Reviewer)) {
-            viewable.push(detail);
-          }
-          if (workspaceRoles?.includes(Roles.Coordinator)) {
-            scheduling.push(detail);
-          }
-        }
-
-        acc[id] = filteredRespondents;
-
-        return acc;
-      }, {}) || {},
-    [respondentsData],
-  );
-
-  const rows = respondentsData?.result?.map((user) => {
+  const formatRow = (user: Respondent) => {
     const { secretIds, nicknames, lastSeen, id, details, isPinned } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule =
@@ -207,9 +174,52 @@ export const Respondents = () => {
         width: '330',
       },
     };
-  });
+  };
 
-  const chosenRespondentsItems = filteredRespondents[respondentKey as keyof FilteredRespondents];
+  const filterRespondentApplets = (user: Respondent) => {
+    const { details } = user;
+    const filteredApplets: FilteredApplets = {
+      scheduling: [],
+      editable: [],
+      viewable: [],
+    };
+    const { editable, viewable, scheduling } = filteredApplets;
+
+    for (const detail of details) {
+      const workspaceRoles = rolesData?.data?.[detail.appletId];
+      if (isManagerOrOwner(workspaceRoles?.[0])) {
+        editable.push(detail);
+        viewable.push(detail);
+        scheduling.push(detail);
+        continue;
+      }
+      if (workspaceRoles?.includes(Roles.Reviewer)) {
+        viewable.push(detail);
+      }
+      if (workspaceRoles?.includes(Roles.Coordinator)) {
+        scheduling.push(detail);
+      }
+    }
+
+    return filteredApplets;
+  };
+
+  const { rows, filteredRespondents }: { filteredRespondents: FilteredRespondents; rows?: Row[] } =
+    useMemo(
+      () =>
+        respondentsData?.result?.reduce(
+          (acc: { filteredRespondents: FilteredRespondents; rows: Row[] }, user) => {
+            acc.filteredRespondents[user.id] = filterRespondentApplets(user);
+            acc.rows.push(formatRow(user));
+
+            return acc;
+          },
+          { rows: [], filteredRespondents: {} },
+        ) || { rows: undefined, filteredRespondents: {} },
+      [respondentsData],
+    );
+
+  const chosenRespondentsItems = respondentKey ? filteredRespondents[respondentKey] : undefined;
 
   const getAppletsSmallTable = (key: keyof FilteredApplets) =>
     chosenRespondentsItems?.[key] && ownerId && respondentKey

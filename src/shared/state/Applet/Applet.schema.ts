@@ -11,6 +11,7 @@ import {
   ConditionType,
   ConditionalLogicMatch,
   CalculationType,
+  PerfTaskItemType,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 import { CorrectPress } from 'modules/Builder/types';
@@ -44,6 +45,7 @@ export type ActivityFlow = {
   activityIds?: number[];
   items?: ActivityFlowItem[];
   isHidden?: boolean;
+  createdAt?: string;
 };
 
 export type TextInputConfig = {
@@ -506,6 +508,8 @@ export type Activity = {
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
   isPerformanceTask?: boolean;
+  performanceTaskType?: PerfTaskItemType;
+  createdAt?: string;
 };
 
 type Theme = {

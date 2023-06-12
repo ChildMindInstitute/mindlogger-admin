@@ -8,7 +8,7 @@ import { EditorController, EditorUiType } from 'shared/components/FormComponents
 import { InstructionContentProps } from './InstructionContent.types';
 
 export const InstructionContent = ({ description, name, hasError }: InstructionContentProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('app');
   const { control } = useFormContext();
   const { perfTaskItemField } = useCurrentActivity();
 

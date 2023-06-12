@@ -1,4 +1,5 @@
 import i18n from 'i18n';
+import { PerfTaskItemType } from 'shared/consts';
 
 import { ActivityAddProps, PerformanceTasks } from '../Activities.types';
 
@@ -20,7 +21,7 @@ export const getPerformanceTasksMenu = (
         getAction({
           performanceTaskName: PerformanceTasks.AbTrailsIpad,
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
-          type: PerformanceTasks.AbTrailsIpad,
+          performanceTaskType: PerfTaskItemType.ABTrailsIpad,
           isNavigationBlocked: true,
         }),
     },
@@ -29,7 +30,7 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.AbTrailsMobile,
-          type: PerformanceTasks.AbTrailsMobile,
+          performanceTaskType: PerfTaskItemType.ABTrailsMobile,
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
           isNavigationBlocked: true,
         }),
@@ -39,7 +40,7 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.Flanker,
-          type: PerformanceTasks.Flanker,
+          performanceTaskType: PerfTaskItemType.Flanker,
           performanceTaskDesc: t('performanceTasksDesc.flanker'),
         }),
     },
@@ -48,7 +49,7 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.Gyroscope,
-          type: PerformanceTasks.Gyroscope,
+          performanceTaskType: PerfTaskItemType.Gyroscope,
           performanceTaskDesc: t('performanceTasksDesc.gyroscope'),
         }),
     },
@@ -57,7 +58,7 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.Touch,
-          type: PerformanceTasks.Touch,
+          performanceTaskType: PerfTaskItemType.Touch,
           performanceTaskDesc: t('performanceTasksDesc.touch'),
         }),
     },
