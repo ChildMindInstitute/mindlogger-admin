@@ -8,11 +8,15 @@ import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponen
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { InsertContentExtensionProps } from '../Extensions.types';
+import { MediaContentExtensionProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
-export const ImageUploadExtension = ({ onInsert }: InsertContentExtensionProps) => {
+export const ImageUploadExtension = ({
+  onInsert,
+  setFileSizeExceeded,
+  fileSizeExceeded,
+}: MediaContentExtensionProps) => {
   const { t } = useTranslation('app');
 
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
@@ -39,6 +43,8 @@ export const ImageUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
     inputRef,
   } = useUploadMethods({
     insertHandler,
+    setFileSizeExceeded,
+    fileSizeExceeded,
   });
 
   return (
