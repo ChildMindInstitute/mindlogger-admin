@@ -23,6 +23,7 @@ import { workspaces } from 'redux/modules';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
+import { useAppletPrivateKeySetter } from 'shared/components/Password/CreateAppletPassword/CreateAppletPassword.hooks';
 
 import { appletInfoMocked } from './mock';
 import {
@@ -221,6 +222,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletEncryption = appletData?.encryption;
+  const setAppletPrivateKey = useAppletPrivateKeySetter();
 
   useEffect(() => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
@@ -294,11 +296,11 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     await sendRequest();
   };
 
-  const handleAppletPasswordSubmit = async (encryption?: Encryption) => {
-    await sendRequest(encryption);
+  const handleAppletPasswordSubmit = async (encryption?: Encryption, password?: string) => {
+    await sendRequest(encryption, password);
   };
 
-  const sendRequest = async (encryption?: Encryption) => {
+  const sendRequest = async (encryption?: Encryption, password?: string) => {
     const encryptionData = encryption || appletEncryption;
     setPublishProcessPopupOpened(true);
     const body = getAppletData(encryptionData);
@@ -331,6 +333,15 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     if (createApplet.fulfilled.match(result)) {
       const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
+
+      if (encryption && password && appletId) {
+        setAppletPrivateKey({
+          appletPassword: password,
+          encryption,
+          appletId: createdAppletId,
+        });
+      }
+
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
