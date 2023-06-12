@@ -5,11 +5,17 @@ import { useHeaderSticky } from 'shared/hooks';
 import { StyledBodyMedium } from 'shared/styles';
 
 import { getSettings } from '../ActivitySettings.utils';
-import { StyledBar, StyledHeader, StyledContent, StyledGroupContainer } from './LeftBar.styles';
+import {
+  StyledBar,
+  StyledHeader,
+  StyledContent,
+  StyledGroupContainer,
+  StyledItemsContainer,
+} from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
 import { Item } from './Item';
 
-export const LeftBar = ({ setting, onSettingClick }: LeftBarProps) => {
+export const LeftBar = ({ setting, isCompact, onSettingClick }: LeftBarProps) => {
   const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
@@ -19,13 +25,28 @@ export const LeftBar = ({ setting, onSettingClick }: LeftBarProps) => {
   return (
     <StyledBar ref={containerRef} hasSetting={!!setting}>
       <StyledHeader isSticky={isHeaderSticky}>{t('activitySettings')}</StyledHeader>
-      <StyledContent>
+      <StyledContent isCompact={isCompact}>
         {items.map(({ label, items }) => (
-          <StyledGroupContainer key={`group-${label}`}>
+          <StyledGroupContainer key={`group-${label}`} isCompact={isCompact}>
             <StyledBodyMedium>{t(label)}</StyledBodyMedium>
-            {items?.map((item) => (
-              <Item key={`left-bar-item-${item.name}`} item={item} onClick={onSettingClick} />
-            ))}
+            <StyledItemsContainer isCompact={isCompact}>
+              {items?.map((item) => (
+                <>
+                  <Item
+                    key={`left-bar-item-${item.name}`}
+                    item={item}
+                    isCompact={isCompact}
+                    onClick={onSettingClick}
+                  />
+                  <Item
+                    key={`left-bar-item-${item.name}`}
+                    item={item}
+                    isCompact={isCompact}
+                    onClick={onSettingClick}
+                  />
+                </>
+              ))}
+            </StyledItemsContainer>
           </StyledGroupContainer>
         ))}
       </StyledContent>

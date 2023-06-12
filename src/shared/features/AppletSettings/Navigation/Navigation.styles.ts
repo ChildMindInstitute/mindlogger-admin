@@ -70,8 +70,8 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
     flex-basis: unset;
     flex-direction: row;
     justify-content: flex-start;
-    width: 27.5rem;
-    height: 5.6rem;
+    width: 27.4rem;
+    height: 4.8rem;
     padding: ${theme.spacing(0, 1.8)};
     margin: ${theme.spacing(0.2, 0, 0, 1.6)};
     border-radius: ${variables.borderRadius.xxxl};

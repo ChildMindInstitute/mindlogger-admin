@@ -4,28 +4,38 @@ import {
   theme,
   variables,
   StyledFlexColumn,
-  StyledTitleMedium,
-  StyledFlexTopCenter,
   commonEllipsisStyles,
+  StyledLabelLarge,
 } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
-export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
-  position: relative;
+export const StyledItem = styled(StyledFlexColumn)`
   cursor: pointer;
-  padding: ${theme.spacing(1.2, 1.2, 1.2, 2.2)};
-  border-radius: ${variables.borderRadius.lg2};
-  margin: ${theme.spacing(1.6, 4.4, 2.4, 3.2)};
+  padding: ${theme.spacing(0, 2.6, 1.2)};
+  border-radius: ${variables.borderRadius.lg};
+  width: 12rem;
+  height: 12rem;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;
+  margin-top: ${theme.spacing(0.2)};
 
+  :hover {
+    background-color: ${variables.palette.on_surface_alfa12};
+  }
   svg {
     fill: ${variables.palette.on_surface_variant};
+
+    &.svg-scores-and-reports {
+      margin-left: ${theme.spacing(0.6)};
+    }
+  }
+  p {
+    white-space: normal;
+    margin-top: ${theme.spacing(1)};
   }
 
-  &:hover {
-    background-color: ${variables.palette.surface_variant_alfa8};
-  }
-
-  ${({ isActive }: { isActive: boolean }) =>
+  ${({ isActive }: { isActive: boolean; isCompact: boolean }) =>
     isActive &&
     `
       background: ${variables.palette.secondary_container};
@@ -35,14 +45,29 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       }
   `}
 
-  &::before {
-    content: '';
-    position: absolute;
-    display: block;
-    height: 100%;
-    left: -1.6rem;
-    border-left: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-  }
+  ${({ isCompact }) =>
+    isCompact &&
+    `
+    flex-direction: row;
+    height: auto;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    padding: ${theme.spacing(1.2, 1.2, 1.2, 2.2)};
+    border-radius: ${variables.borderRadius.xxxl};
+    width: 27.4rem;
+
+    p {
+      margin-top: 0;
+    }
+    svg {
+      margin-right: ${theme.spacing(1.6)};
+
+      &.svg-scores-and-reports {
+        margin-right: ${theme.spacing(1)};
+      }
+    }
+  `}
 `;
 
 export const StyledCol = styled(StyledFlexColumn)`
@@ -52,7 +77,7 @@ export const StyledCol = styled(StyledFlexColumn)`
   min-width: 0;
 `;
 
-export const StyledTitle = styled(StyledTitleMedium, shouldForwardProp)`
+export const StyledTitle = styled(StyledLabelLarge, shouldForwardProp)`
   ${commonEllipsisStyles}
 
   ${({ isActive }: { isActive: boolean }) =>
