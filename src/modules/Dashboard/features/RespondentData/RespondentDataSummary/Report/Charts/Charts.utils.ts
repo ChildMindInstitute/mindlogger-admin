@@ -4,7 +4,8 @@ export const truncateString = (label: string) =>
   label?.length > MAX_LABEL_CHARS_Y ? `${label.substring(0, MAX_LABEL_CHARS_Y)}...` : label;
 
 export const getTimeConfig = (minMs: number, maxMs: number) => {
-  const days = (maxMs - minMs) / MS_PER_DAY;
+  const msDiff = maxMs - minMs;
+  const days = msDiff / MS_PER_DAY;
   if (days > 2) {
     return {
       type: 'time' as const,
@@ -17,7 +18,7 @@ export const getTimeConfig = (minMs: number, maxMs: number) => {
     };
   }
 
-  const hours = (maxMs - minMs) / MS_PER_HOUR;
+  const hours = msDiff / MS_PER_HOUR;
   if (hours > 3) {
     return {
       type: 'time' as const,
@@ -42,17 +43,18 @@ export const getTimeConfig = (minMs: number, maxMs: number) => {
 };
 
 export const getStepSize = (minMs: number, maxMs: number) => {
-  const days = (maxMs - minMs) / MS_PER_DAY;
+  const msDiff = maxMs - minMs;
+  const days = msDiff / MS_PER_DAY;
   if (days > 365) return 21; // step is 21d
-  if (days > 180) return 14; // step is 14d
-  if (days > 30) return 7; // step is 7d
-  if (days > 21) return 5; // step is 5d
-  if (days > 10) return 2; // step is 2d
-  if (days > 2) return 1; // step is 1d
+  if (days > 180) return 14;
+  if (days > 30) return 7;
+  if (days > 21) return 5;
+  if (days > 10) return 2;
+  if (days > 2) return 1;
 
-  const hours = (maxMs - minMs) / MS_PER_HOUR;
+  const hours = msDiff / MS_PER_HOUR;
   if (hours > 12) return 6; // step is 6h
-  if (hours > 3) return 1; // step is 1h
+  if (hours > 3) return 1;
 
   return 15; // step is 15m
 };
