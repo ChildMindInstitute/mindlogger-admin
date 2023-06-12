@@ -21,6 +21,7 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   ItemAlert,
   SingleAndMultipleSelectRowsResponseValues,
+  OptionCondition,
 } from 'shared/state';
 import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import {
@@ -74,20 +75,82 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   }),
 });
 
-export const getNewActivity = (activity?: ActivityFormValues) => ({
-  name: t('newActivity'),
-  description: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: true,
-  generateReport: false,
-  showScoreSummary: false,
-  ...activity,
-  items: activity?.items?.map((item) => getNewActivityItem(item)) || [],
-  id: undefined,
-  key: uuidv4(),
-});
+export const getDuplicatedConditions = (
+  oldItems: ItemFormValues[],
+  newItems: Record<string, unknown>[],
+  conditions?: Condition[],
+) =>
+  conditions?.map((condition) => {
+    const optionId = (condition as OptionCondition)?.payload.optionId;
+    const result = { ...condition, key: uuidv4() };
+
+    if (!optionId) return result;
+
+    const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
+    const optionIndex = (
+      oldItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues
+    ).options?.findIndex((option) => option.id === optionId);
+
+    return {
+      ...result,
+      itemName: getEntityKey(newItems[itemIndex]) ?? '',
+      payload: {
+        optionId:
+          (newItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues)
+            ?.options?.[optionIndex]?.id ?? '',
+      },
+    };
+  });
+
+export const getDuplicatedConditional = (
+  oldItems: ItemFormValues[],
+  newItems: Record<string, unknown>[],
+  conditionalLogic?: ConditionalLogic[],
+) =>
+  conditionalLogic?.map((conditional) => {
+    const itemKey = conditional.itemKey;
+
+    if (itemKey) {
+      const itemIndex = oldItems?.findIndex((item) => itemKey === getEntityKey(item));
+
+      return {
+        ...conditional,
+        key: uuidv4(),
+        itemKey: getEntityKey(newItems?.[itemIndex]) ?? '',
+        conditions: getDuplicatedConditions(oldItems, newItems, conditional.conditions),
+      };
+    }
+
+    return {
+      ...conditional,
+      itemKey,
+    };
+  }) ?? [];
+
+export const getNewActivity = (activity?: ActivityFormValues) => {
+  const items = activity?.items?.map((item) => getNewActivityItem(item)) || [];
+  const conditionalLogic = getDuplicatedConditional(
+    activity?.items ?? [],
+    items,
+    activity?.conditionalLogic,
+  );
+
+  return {
+    name: t('newActivity'),
+    description: '',
+    showAllAtOnce: false,
+    isSkippable: false,
+    isReviewable: false,
+    responseIsEditable: true,
+    generateReport: false,
+    showScoreSummary: false,
+    ...activity,
+    items,
+    conditionalLogic,
+    id: undefined,
+    key: uuidv4(),
+  };
+};
 
 export const getNewPerformanceTask = ({
   name,
