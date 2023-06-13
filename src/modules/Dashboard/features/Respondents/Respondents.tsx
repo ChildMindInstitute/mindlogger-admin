@@ -131,7 +131,7 @@ export const Respondents = () => {
     execute({ ownerId, userId });
   };
 
-  const formatRow = (user: Respondent) => {
+  const formatRow = (user: Respondent): Row => {
     const { secretIds, nicknames, lastSeen, id, details, isPinned } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule =
@@ -177,7 +177,7 @@ export const Respondents = () => {
         value: '',
         width: '330',
       },
-    } as Row;
+    };
   };
 
   const filterRespondentApplets = (user: Respondent) => {

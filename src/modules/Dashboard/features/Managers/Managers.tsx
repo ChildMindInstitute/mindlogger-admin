@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { updateManagersPinApi } from 'api';
-import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Row, Search } from 'shared/components';
+import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Search } from 'shared/components';
 import { users, workspaces, Manager } from 'redux/modules';
 import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
-import { Table } from 'modules/Dashboard/components';
+import { Table, TableProps } from 'modules/Dashboard/components';
 import { useAppDispatch } from 'redux/store';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles } from 'shared/consts';
@@ -89,7 +89,7 @@ export const Managers = () => {
     execute({ ownerId, userId });
   };
 
-  const rows = useMemo(
+  const rows: TableProps['rows'] = useMemo(
     () =>
       managersData?.result?.map((user) => {
         const filteredManager = filterAplletsByRoles(user);
@@ -137,7 +137,7 @@ export const Managers = () => {
             value: '',
             width: '20%',
           },
-        } as Row;
+        };
       }),
     [managersData],
   );
