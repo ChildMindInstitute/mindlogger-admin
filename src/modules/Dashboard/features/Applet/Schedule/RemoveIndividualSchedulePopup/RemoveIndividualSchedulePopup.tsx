@@ -7,8 +7,9 @@ import { StyledModalWrapper } from 'shared/styles';
 import { removeIndividualEventsApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
-import { applets } from 'modules/Dashboard/state';
+import { applets, users } from 'modules/Dashboard/state';
 import { page } from 'resources';
+import { workspaces } from 'shared/state';
 
 import { RemoveIndividualScheduleProps } from './RemoveIndividualSchedulePopup.types';
 import { Steps } from './RemoveIndividualSchedule.types';
@@ -28,10 +29,18 @@ export const RemoveIndividualSchedulePopup = ({
   const { appletId, respondentId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { execute, error } = useAsync(
-    removeIndividualEventsApi,
-    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
-  );
+  const { getAllWorkspaceRespondents } = users.thunk;
+  const { ownerId } = workspaces.useData() || {};
+  const { execute, error } = useAsync(removeIndividualEventsApi, () => {
+    if (!appletId) return;
+    dispatch(applets.thunk.getEvents({ appletId, respondentId }));
+    if (!ownerId) return;
+    dispatch(
+      getAllWorkspaceRespondents({
+        params: { ownerId, appletId },
+      }),
+    );
+  });
 
   const getNextStep = () =>
     setStep((prevStep) => {

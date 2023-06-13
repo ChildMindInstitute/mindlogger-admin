@@ -1,4 +1,4 @@
-import { useState, SyntheticEvent } from 'react';
+import { useState, SyntheticEvent, useEffect } from 'react';
 import { Tab, Badge } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -6,9 +6,9 @@ import { TabPanel } from '../TabPanel';
 import { StyledTabs } from '../Tabs.styles';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
-export const DefaultTabs = ({ tabs, activeTab, uiType = UiType.Primary }: TabsProps) => {
+export const DefaultTabs = ({ tabs, activeTab = 0, uiType = UiType.Primary }: TabsProps) => {
   const { t } = useTranslation('app');
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(activeTab);
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
@@ -41,12 +41,7 @@ export const DefaultTabs = ({ tabs, activeTab, uiType = UiType.Primary }: TabsPr
         />,
       );
       tabs.content.push(
-        <TabPanel
-          key={index}
-          value={activeTab || tabIndex}
-          index={index}
-          isMinHeightAuto={isMinHeightAuto}
-        >
+        <TabPanel key={index} value={tabIndex} index={index} isMinHeightAuto={isMinHeightAuto}>
           {content}
         </TabPanel>,
       );
@@ -56,12 +51,16 @@ export const DefaultTabs = ({ tabs, activeTab, uiType = UiType.Primary }: TabsPr
     { header: [], content: [] },
   );
 
+  useEffect(() => {
+    setTabIndex(activeTab);
+  }, [activeTab]);
+
   return (
     <>
       <StyledTabs
         uiType={uiType}
         defaultTabs
-        value={activeTab || tabIndex}
+        value={tabIndex}
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}
         centered

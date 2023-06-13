@@ -9,11 +9,15 @@ import { ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { InsertContentExtensionProps } from '../Extensions.types';
+import { MediaContentExtensionProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
-export const AudioUploadExtension = ({ onInsert }: InsertContentExtensionProps) => {
+export const AudioUploadExtension = ({
+  onInsert,
+  setFileSizeExceeded,
+  fileSizeExceeded,
+}: MediaContentExtensionProps) => {
   const { t } = useTranslation('app');
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
     const generator: InsertContentGenerator = () => ({
@@ -37,6 +41,8 @@ export const AudioUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
     inputRef,
   } = useUploadMethods({
     insertHandler,
+    setFileSizeExceeded,
+    fileSizeExceeded,
   });
 
   return (

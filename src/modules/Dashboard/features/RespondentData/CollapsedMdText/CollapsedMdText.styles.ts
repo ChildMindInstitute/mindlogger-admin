@@ -11,6 +11,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   .default-theme {
     p {
       padding: 0;
+      word-break: break-word;
     }
 
     background-color: transparent;

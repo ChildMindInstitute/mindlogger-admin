@@ -1125,5 +1125,7 @@
   "confirmRemoveConditionalLogic": "Are you sure you want to remove conditional logic for the <1>{{name}}</1>?",
   "successRemoveConditionalLogic": "Conditional logic has been removed successfully.",
   "item": "Item: ",
-  "scoreConditionals": "Score Conditional"
+  "scoreConditionals": "Score Conditional",
+  "uploadFile": "Upload File",
+  "fileSizeExceed": "File is too big. Please upload a file less than {{ size }}."
 }

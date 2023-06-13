@@ -3,4 +3,5 @@ export type AddIndividualSchedulePopupProps = {
   onClose: () => void;
   onSubmit: () => void;
   respondentName: string;
+  error: string | null;
 };
