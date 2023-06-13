@@ -25,6 +25,7 @@ import { SectionScoreHeader } from './SectionScoreHeader';
 import { SectionContent } from './SectionContent';
 import { getScoreDefaults, getSectionDefaults } from './ScoresAndReports.utils';
 import { ScoreContent } from './ScoreContent';
+import { StyledConfigureBtn } from './ScoresAndReports.styles';
 
 export const ScoresAndReports = () => {
   const { t } = useTranslation('app');
@@ -89,7 +90,7 @@ export const ScoresAndReports = () => {
         ) : (
           <>
             {t('configureServerForReport')}
-            <Button onClick={navigateToSettings}>{t('configure')}</Button>
+            <StyledConfigureBtn onClick={navigateToSettings}>{t('configure')}</StyledConfigureBtn>
           </>
         )}
       </StyledBodyLarge>
