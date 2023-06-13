@@ -1,3 +1,5 @@
+import { PerfTaskItemType } from 'shared/consts';
+
 export type GetActivitiesActions = {
   key: string;
   isActivityHidden?: boolean;
@@ -13,13 +15,13 @@ export type ActivityAddProps = {
   performanceTaskName?: string;
   performanceTaskDesc?: string;
   isNavigationBlocked?: boolean;
-  type?: PerformanceTasks;
+  performanceTaskType?: PerfTaskItemType;
 } | null;
 
 export enum EditablePerformanceTasksType {
-  Flanker = 'Simple & Choice Reaction Time Task Builder',
-  Gyroscope = 'CST Gyroscope',
-  Touch = 'CST Touch',
+  Flanker = 'flanker',
+  Gyroscope = 'gyroscope',
+  Touch = 'touch',
 }
 
 export const enum PerformanceTasks {

@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -12,12 +13,25 @@ import { getDictionaryText } from 'shared/utils';
 import { ResponseOption, FilterFormValues } from '../Report.types';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
+import { getDateTime } from '../Report.utils';
 
 export const ResponseOptions = ({ responseOptions, versions }: ResponseOptionsProps) => {
   const { t } = useTranslation();
-  const { getValues } = useFormContext<FilterFormValues>();
+  const { watch } = useFormContext<FilterFormValues>();
 
-  const [minDate, maxDate] = getValues().startDateEndDate;
+  const {
+    startDateEndDate: [startDate, endDate],
+    startTime,
+    endTime,
+  } = watch();
+
+  const { minDate, maxDate } = useMemo(
+    () => ({
+      minDate: getDateTime(startDate, startTime),
+      maxDate: getDateTime(endDate, endTime),
+    }),
+    [startDate, endDate, startTime, endTime],
+  );
 
   const renderResponseOption = ({ activityItem, answers }: ResponseOption) => {
     if (isItemUnsupported(activityItem.responseType))

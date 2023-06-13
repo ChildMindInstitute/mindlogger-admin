@@ -9,8 +9,7 @@ import {
   GyroscopePracticeSettings,
   GyroscopeTestSettings,
 } from 'shared/state';
-import { ItemResponseType, SubscaleTotalScore } from 'shared/consts';
-import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
+import { ItemResponseType, PerfTaskItemType, SubscaleTotalScore } from 'shared/consts';
 
 export type ItemFormValues = {
   id?: string;
@@ -43,7 +42,7 @@ export type ActivityFormValues = {
   sections?: ActivitySettingsSection[];
   totalScoresTableData?: string;
   isPerformanceTask?: boolean;
-  type?: PerformanceTasks;
+  performanceTaskType?: PerfTaskItemType;
 };
 
 export enum CorrectPress {
@@ -67,7 +66,7 @@ export type GyroscopeFormValues = {
   practice: GyroscopePracticeSettings;
   test: GyroscopeTestSettings;
   isPerformanceTask?: boolean;
-  type?: PerformanceTasks;
+  performanceTaskType?: PerfTaskItemType;
 };
 
 export type ActivityFlowFormValues = {
@@ -97,7 +96,7 @@ export type GetNewPerformanceTask = {
   name?: string;
   description?: string;
   performanceTask?: ActivityFormValues;
-  type?: PerformanceTasks;
+  performanceTaskType?: PerfTaskItemType;
 };
 
 export enum ConditionRowType {

@@ -6,12 +6,12 @@ import i18n from 'i18n';
 import { SingleApplet } from 'shared/state';
 import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
 
+import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { ScheduleExportCsv } from '../Schedule.types';
 import {
   getStartEndComparison,
   getBetweenStartEndComparison,
   addSecondsToHourMinutes,
-  convertDateToYearMonthDay,
 } from '../EventForm/EventForm.utils';
 import {
   frequencyArray,

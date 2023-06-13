@@ -1007,7 +1007,7 @@
   "notEqual": "is not equal to",
   "between": "between",
   "outsideOf": "outside of",
-  "summaryRowDescription": "of the “if” rules below are true, show",
+  "summaryRowDescription": "of the “if” rules above are true, show",
   "any": "Any",
   "ALL": "All",
   "conditionalLogicPanelTitle": "If <1>{{match}}</1> of the “if” rules below are <3>true, show item: {{name}}</3>",

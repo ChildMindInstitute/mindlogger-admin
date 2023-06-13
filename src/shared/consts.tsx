@@ -94,6 +94,14 @@ export enum ItemResponseType {
   Time = 'time',
 }
 
+export enum PerfTaskItemType {
+  Flanker = 'flanker',
+  Touch = 'touch',
+  Gyroscope = 'gyroscope',
+  ABTrailsIpad = 'ABTrailsIpad',
+  ABTrailsMobile = 'ABTrailsMobile',
+}
+
 export enum CalculationType {
   Sum = 'sum',
   Average = 'average',
