@@ -38,4 +38,15 @@ export const uploadLabel = (
 export const timeValidationRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 export const notificationValidationRegex = /^([01]\d|2[0-3]):([0-5]\d)|(-)$/;
 
+const dayValidation = '(?:0?[1-9]|[12][0-9]|3[01])';
+const monthValidation =
+  '(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)';
+const yearValidation = '(?:\\d{2}|\\d{4})';
+
+export const dateValidationRegex = new RegExp(
+  `^${dayValidation}([- ])?${monthValidation}\\1${yearValidation}$`,
+);
+
 export const frequencyArray = ['Always', 'Once', 'Daily', 'Weekly', 'Monthly', 'Weekdays'];
+export const EMPTY_TIME = '-';
+export const ALWAYS_FREQUENCY = 'Always';

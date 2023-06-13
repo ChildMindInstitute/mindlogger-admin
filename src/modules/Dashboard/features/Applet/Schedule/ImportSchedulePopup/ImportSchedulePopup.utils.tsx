@@ -1,10 +1,12 @@
+import { ElementType } from 'react';
 import { Trans } from 'react-i18next';
-import { endOfYear } from 'date-fns';
+import { endOfYear, format } from 'date-fns';
 import { Box } from '@mui/material';
 
 import i18n from 'i18n';
 import { SingleApplet } from 'shared/state';
 import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
+import { DateFormats } from 'shared/consts';
 
 import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { ScheduleExportCsv } from '../Schedule.types';
@@ -14,9 +16,12 @@ import {
   addSecondsToHourMinutes,
 } from '../EventForm/EventForm.utils';
 import {
+  dateValidationRegex,
   frequencyArray,
   notificationValidationRegex,
   timeValidationRegex,
+  EMPTY_TIME,
+  ALWAYS_FREQUENCY,
 } from './ImportSchedule.const';
 import { CheckFields, ImportScheduleErrors, UploadedEvent } from './ImportSchedulePopup.types';
 
@@ -49,98 +54,118 @@ export const getInvalidActivitiesError = (activityNames: string[], appletName: s
     </Trans>
   );
 
+const commonProps = { component: 'span' as ElementType, sx: { display: 'block' } };
 export const getInvalidError = (type: ImportScheduleErrors) => {
   switch (type) {
     case ImportScheduleErrors.StartTime:
       return (
         <>
-          <Box>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box>
+          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
+          <Box {...commonProps}>
             <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartTime}]`}>
               <strong>Activity Start Time</strong>. Valid data format:{' '}
               <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
             </Trans>
           </Box>
-          <Box>{t('importScheduleErrors.updateReupload')}</Box>
+          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
         </>
       );
     case ImportScheduleErrors.EndTime:
       return (
         <>
-          <Box>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box>
+          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
+          <Box {...commonProps}>
             <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.EndTime}]`}>
               <strong>Activity End Time</strong>. Valid data format:{' '}
               <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
             </Trans>
           </Box>
-          <Box>{t('importScheduleErrors.updateReupload')}</Box>
+          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
         </>
       );
     case ImportScheduleErrors.NotificationTime:
       return (
         <>
-          <Box>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box>
+          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
+          <Box {...commonProps}>
             <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.NotificationTime}]`}>
               <strong>Notification Time</strong>. Valid data format: <strong>HH:mm or -</strong>.
             </Trans>
           </Box>
-          <Box>{t('importScheduleErrors.updateReupload')}</Box>
+          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
         </>
       );
     case ImportScheduleErrors.Frequency:
       return (
         <>
-          <Box>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box>
+          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
+          <Box {...commonProps}>
             <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Frequency}]`}>
               <strong>Frequency</strong>. Valid data format:{' '}
               <strong>Always, Once, Daily, Weekly, Monthly, Weekdays</strong>.
             </Trans>
           </Box>
-          <Box>{t('importScheduleErrors.updateReupload')}</Box>
+          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
         </>
       );
     case ImportScheduleErrors.Date:
       return (
         <>
-          <Box>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box>
+          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
+          <Box {...commonProps}>
             <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Date}]`}>
               <strong>Date</strong>. Valid data format: <strong>dd MMM yyyy</strong>.
             </Trans>
           </Box>
-          <Box>{t('importScheduleErrors.updateReupload')}</Box>
+          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
         </>
       );
     case ImportScheduleErrors.StartEndTime:
       return (
         <>
-          <Box>
+          <Box {...commonProps}>
             <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartEndTime}]`}>
               <strong>Activity End Time</strong> should be greater than{' '}
               <strong>Activity Start Time</strong>.
             </Trans>
           </Box>
-          <Box>{t('importScheduleErrors.updateReupload')}</Box>
+          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
         </>
       );
     case ImportScheduleErrors.BetweenStartEndTime:
       return (
         <>
-          <Box>
+          <Box {...commonProps}>
             <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.BetweenStartEndTime}]`}>
               <strong>Notification Time</strong> should be between{' '}
               <strong>Activity Start Time</strong> and <strong>Activity End Time</strong>.
             </Trans>
           </Box>
-          <Box>{t('importScheduleErrors.updateReupload')}</Box>
+          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
         </>
       );
     default:
       return null;
   }
+};
+
+const getUploadedDate = (date: string | Date) => {
+  if (date instanceof Date) {
+    return date;
+  }
+  if (dateValidationRegex.test(date)) {
+    return new Date(date);
+  }
+
+  return date;
+};
+
+const getUploadedTime = (time: string | Date) => {
+  if (time instanceof Date) {
+    return format(time, DateFormats.Time);
+  }
+
+  return time;
 };
 
 const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) =>
@@ -149,21 +174,22 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
       acc.activityNames.push(activityName);
 
       if (isUploadedSchedule) {
+        const isAlwaysFrequency = frequency === ALWAYS_FREQUENCY;
         if (
-          (frequency === 'Always' && startTime !== '-') ||
-          (frequency !== 'Always' && !timeValidationRegex.test(startTime))
+          (isAlwaysFrequency && startTime !== EMPTY_TIME) ||
+          (!isAlwaysFrequency && !timeValidationRegex.test(getUploadedTime(startTime)))
         ) {
           acc.invalidStartTimeField = getInvalidError(ImportScheduleErrors.StartTime);
         }
 
         if (
-          (frequency === 'Always' && endTime !== '-') ||
-          (frequency !== 'Always' && !timeValidationRegex.test(endTime))
+          (isAlwaysFrequency && endTime !== EMPTY_TIME) ||
+          (!isAlwaysFrequency && !timeValidationRegex.test(getUploadedTime(endTime)))
         ) {
           acc.invalidEndTimeField = getInvalidError(ImportScheduleErrors.EndTime);
         }
 
-        if (!notificationValidationRegex.test(notificationTime)) {
+        if (!notificationValidationRegex.test(getUploadedTime(notificationTime))) {
           acc.invalidNotification = getInvalidError(ImportScheduleErrors.NotificationTime);
         }
 
@@ -171,18 +197,25 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
           acc.invalidFrequency = getInvalidError(ImportScheduleErrors.Frequency);
         }
 
-        if (!((date as unknown as Date) instanceof Date)) {
+        if (!(getUploadedDate(date) instanceof Date)) {
           acc.invalidDate = getInvalidError(ImportScheduleErrors.Date);
         }
 
-        if (frequency !== 'Always' && !getStartEndComparison(startTime, endTime)) {
+        if (
+          !isAlwaysFrequency &&
+          !getStartEndComparison(getUploadedTime(startTime), getUploadedTime(endTime))
+        ) {
           acc.invalidStartEndTime = getInvalidError(ImportScheduleErrors.StartEndTime);
         }
 
         if (
-          frequency !== 'Always' &&
-          notificationTime !== '-' &&
-          !getBetweenStartEndComparison(notificationTime, startTime, endTime)
+          !isAlwaysFrequency &&
+          notificationTime !== EMPTY_TIME &&
+          !getBetweenStartEndComparison(
+            getUploadedTime(notificationTime),
+            getUploadedTime(startTime),
+            getUploadedTime(endTime),
+          )
         ) {
           acc.invalidNotificationTime = getInvalidError(ImportScheduleErrors.BetweenStartEndTime);
         }
@@ -225,6 +258,9 @@ export const getUploadedScheduleErrors = (
   };
 };
 
+const getEndOfYearDate = (uploadedDate: Date) =>
+  endOfYear(uploadedDate < new Date() ? new Date() : uploadedDate);
+
 export const prepareImportPayload = (
   uploadedEvents: UploadedEvent[],
   scheduleExportData: ScheduleExportCsv,
@@ -237,39 +273,50 @@ export const prepareImportPayload = (
     const flow = appletData?.activityFlows?.find((flow) => flow.name === activityName);
     const activityId = activity?.id;
     const flowId = flow?.id;
+    const uploadedDate = getUploadedDate(date);
 
     return {
-      startTime: startTime === '-' ? undefined : addSecondsToHourMinutes(startTime) || undefined,
-      endTime: endTime === '-' ? undefined : addSecondsToHourMinutes(endTime) || undefined,
+      startTime:
+        startTime === EMPTY_TIME
+          ? undefined
+          : addSecondsToHourMinutes(getUploadedTime(startTime)) || undefined,
+      endTime:
+        endTime === EMPTY_TIME
+          ? undefined
+          : addSecondsToHourMinutes(getUploadedTime(endTime)) || undefined,
       accessBeforeSchedule: periodicityType === Periodicity.Always ? undefined : false,
       oneTimeCompletion: periodicityType === Periodicity.Always ? false : undefined,
       timerType: TimerType.NotSet,
       respondentId,
       periodicity: {
         type: periodicityType,
-        selectedDate:
-          periodicityType === Periodicity.Once ||
-          periodicityType === Periodicity.Weekly ||
-          periodicityType === Periodicity.Monthly
-            ? convertDateToYearMonthDay(date)
-            : undefined,
-        startDate:
-          periodicityType === Periodicity.Once ? undefined : convertDateToYearMonthDay(date),
-        endDate:
-          periodicityType === Periodicity.Once
-            ? undefined
-            : convertDateToYearMonthDay(endOfYear(date)),
+        ...(uploadedDate instanceof Date && {
+          selectedDate:
+            periodicityType === Periodicity.Once ||
+            periodicityType === Periodicity.Weekly ||
+            periodicityType === Periodicity.Monthly
+              ? convertDateToYearMonthDay(uploadedDate)
+              : undefined,
+          startDate:
+            periodicityType === Periodicity.Once
+              ? undefined
+              : convertDateToYearMonthDay(uploadedDate),
+          endDate:
+            periodicityType === Periodicity.Once
+              ? undefined
+              : convertDateToYearMonthDay(getEndOfYearDate(uploadedDate)),
+        }),
       },
       activityId,
       flowId,
       notification:
-        notificationTime === '-'
+        notificationTime === EMPTY_TIME
           ? null
           : {
               notifications: [
                 {
                   triggerType: NotificationType.Fixed,
-                  atTime: addSecondsToHourMinutes(notificationTime),
+                  atTime: addSecondsToHourMinutes(getUploadedTime(notificationTime)),
                 },
               ],
               reminder: null,
