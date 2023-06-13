@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { MutableRefObject } from 'react';
 
-import { Svg } from 'shared/components';
+import { AppletPasswordRef, Svg } from 'shared/components';
 import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard';
 import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
@@ -31,8 +32,11 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
   } = useSaveAndPublishSetup(hasPrompt);
   const { appletId } = useParams();
 
-  const handlePasswordSubmit = (encryption?: Encryption) => {
-    handleAppletPasswordSubmit(encryption);
+  const handlePasswordSubmit = (
+    encryption?: Encryption,
+    ref?: MutableRefObject<AppletPasswordRef | null>,
+  ) => {
+    handleAppletPasswordSubmit(encryption, ref?.current?.password);
     setIsPasswordPopupOpened(false);
   };
 
