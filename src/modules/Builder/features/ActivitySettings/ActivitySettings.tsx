@@ -48,7 +48,11 @@ export const ActivitySettings = () => {
 
   return (
     <StyledWrapper>
-      <LeftBar setting={activeSetting} onSettingClick={handleSetActiveSetting} />
+      <LeftBar
+        setting={activeSetting}
+        isCompact={!!activeSetting}
+        onSettingClick={handleSetActiveSetting}
+      />
       <ActivitySettingsContainer title={containerTitle} onClose={handleClose}>
         {activeSetting?.name === ActivitySettingsOptionsItems.ScoresAndReports && (
           <ScoresAndReports />

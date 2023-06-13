@@ -67,6 +67,10 @@ export const StyledDrawerItem = styled(ListItem)`
     ${ItemBefore}
     background: ${variables.palette.primary_container};
   }
+
+  .disabled-link {
+    pointer-events: none;
+  }
 `;
 
 export const StyledDrawerLogo = styled(StyledFlexAllCenter)`

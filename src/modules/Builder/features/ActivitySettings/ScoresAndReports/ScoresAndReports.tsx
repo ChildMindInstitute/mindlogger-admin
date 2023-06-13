@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
@@ -19,12 +20,12 @@ import { ScoreContent } from './ScoreContent';
 export const ScoresAndReports = () => {
   const { t } = useTranslation('app');
   const { fieldName } = useCurrentActivity();
-  const { control, watch } = useFormContext();
-  const scoresAndReports = `${fieldName}.scoresAndReports`;
-  const generateReportName = `${scoresAndReports}.generateReport`;
-  const showScoreSummaryName = `${scoresAndReports}.showScoreSummary`;
-  const scoresName = `${scoresAndReports}.scores`;
-  const sectionsName = `${scoresAndReports}.sections`;
+  const { control, watch, setValue } = useFormContext();
+  const scoresAndReportsName = `${fieldName}.scoresAndReports`;
+  const generateReportName = `${scoresAndReportsName}.generateReport`;
+  const showScoreSummaryName = `${scoresAndReportsName}.showScoreSummary`;
+  const scoresName = `${scoresAndReportsName}.scores`;
+  const sectionsName = `${scoresAndReportsName}.sections`;
 
   const { append: appendScore, remove: removeScore } = useFieldArray({
     control,
@@ -38,6 +39,8 @@ export const ScoresAndReports = () => {
 
   const sections: ActivitySettingsSection[] = watch(sectionsName);
   const scores: ActivitySettingsScore[] = watch(scoresName);
+  const showScoreSummary = watch(scoresAndReportsName);
+  const generateReport = watch(generateReportName);
   const isCheckboxesDisabled = !(scores?.length || sections?.length);
 
   const handleAddScore = () => {
@@ -47,6 +50,11 @@ export const ScoresAndReports = () => {
   const handleAddSection = () => {
     appendSection(getSectionDefaults());
   };
+
+  useEffect(() => {
+    generateReport ?? setValue(generateReportName, false);
+    showScoreSummary ?? setValue(showScoreSummaryName, false);
+  }, [generateReport, showScoreSummary]);
 
   return (
     <>
@@ -93,6 +101,7 @@ export const ScoresAndReports = () => {
             contentProps={{
               sectionId: section.id,
               name: sectionName,
+              title,
             }}
           />
         );
@@ -119,6 +128,7 @@ export const ScoresAndReports = () => {
             contentProps={{
               scoreId: score.id,
               name: scoreName,
+              title,
             }}
           />
         );

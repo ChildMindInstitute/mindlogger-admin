@@ -15,7 +15,7 @@ export const EmptyTable = ({
   const { t } = useTranslation('app');
 
   return (
-    <StyledEmptyTable sx={{ width }}>
+    <StyledEmptyTable className="empty-state-container" sx={{ width }}>
       <StyledIcon>
         <Svg width="80" height="80" id={icon} />
       </StyledIcon>

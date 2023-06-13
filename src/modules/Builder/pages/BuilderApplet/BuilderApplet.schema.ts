@@ -373,64 +373,92 @@ export const ConditionalLogicSchema = () =>
     conditions: yup.array().of(ConditionSchema()),
   });
 
-export const ScoreSchema = () =>
-  yup
-    .object({
-      name: yup
-        .string()
-        .required(getIsRequiredValidateMessage('scoreName'))
-        .test(
-          'unique-score-name',
-          t('validationMessages.unique', { field: t('scoreName') }) as string,
-          (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
-        ),
-      showMessage: yup.boolean().required(),
-      minScore: yup.number(),
-      maxScore: yup.number(),
-      calculationType: yup.string().required(),
-      printItems: yup.boolean().required(),
-      message: yup.string().when('showMessage', {
-        is: true,
-        then: yup.string().required(getIsRequiredValidateMessage('message')),
-      }),
-      itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
-      itemsPrint: yup.array().when('printItems', {
-        is: true,
-        then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
-      }),
+const ReportCommonFields = {
+  showMessage: yup.boolean(),
+  printItems: yup.boolean().when('showMessage', {
+    is: false,
+    then: yup.boolean().oneOf([true], <string>t('validationMessages.mustShowMessageOrItems')),
+  }),
+  message: yup
+    .string()
+    .when('showMessage', {
+      is: true,
+      then: yup.string().required(getIsRequiredValidateMessage('message')),
     })
-    .required();
+    .nullable(),
+  itemsPrint: yup.array().when('printItems', {
+    is: true,
+    then: yup
+      .array()
+      .min(1, <string>t('validationMessages.atLeastOneItem'))
+      .nullable(),
+  }),
+};
+
+export const ScoreConditionalLogic = () =>
+  yup.object({
+    id: yup.string().required(),
+    name: yup
+      .string()
+      .required(getIsRequiredValidateMessage('scoreConditionName'))
+      .test(
+        'unique-score-conditional-name',
+        t('validationMessages.unique', { field: t('scoreConditionName') }) as string,
+        (scoreConditionName, context) =>
+          testFunctionForUniqueness('conditionalLogic', scoreConditionName ?? '', context),
+      ),
+    conditions: yup
+      .array()
+      .of(ConditionSchema())
+      .min(1, <string>t('validationMessages.atLeastOneCondition')),
+    flagScore: yup.boolean(),
+    ...ReportCommonFields,
+    match: yup.string(),
+  });
+
+export const ScoreSchema = () =>
+  yup.object({
+    id: yup.string().required(),
+    name: yup
+      .string()
+      .required(getIsRequiredValidateMessage('scoreName'))
+      .test(
+        'unique-score-name',
+        t('validationMessages.unique', { field: t('scoreName') }) as string,
+        (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
+      ),
+    minScore: yup.number().required(),
+    maxScore: yup.number().required(),
+    calculationType: yup.string().required(),
+    ...ReportCommonFields,
+    itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
+    conditionalLogic: yup.array().of(ScoreConditionalLogic()).nullable(),
+  });
+
+export const SectionConditionalLogic = () =>
+  yup.object({
+    id: yup.string(),
+    name: yup.string(),
+    conditions: yup
+      .array()
+      .of(ConditionSchema())
+      .min(1, <string>t('validationMessages.atLeastOneCondition')),
+    match: yup.string(),
+  });
 
 export const SectionSchema = () =>
-  yup
-    .object({
-      name: yup
-        .string()
-        .required(getIsRequiredValidateMessage('sectionName'))
-        .test(
-          'unique-section-name',
-          t('validationMessages.unique', { field: t('sectionName') }) as string,
-          (sectionName, context) =>
-            testFunctionForUniqueness('sections', sectionName ?? '', context),
-        ),
-      showMessage: yup.boolean().required(),
-      printItems: yup
-        .boolean()
-        .required()
-        .when('showMessage', {
-          is: false,
-          then: yup.boolean().oneOf([true], <string>t('validationMessages.mustShowMessageOrItems')),
-        }),
-      message: yup.string().when('showMessage', {
-        is: true,
-        then: yup.string().required(getIsRequiredValidateMessage('message')),
-      }),
-      itemsPrint: yup.array().when('printItems', {
-        is: true,
-        then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
-      }),
-    })
-    .required();
+  yup.object({
+    name: yup
+      .string()
+      .required(getIsRequiredValidateMessage('sectionName'))
+      .test(
+        'unique-section-name',
+        t('validationMessages.unique', { field: t('sectionName') }) as string,
+        (sectionName, context) => testFunctionForUniqueness('sections', sectionName ?? '', context),
+      ),
+    ...ReportCommonFields,
+    conditionalLogic: SectionConditionalLogic().nullable(),
+  });
 
 export const ActivitySchema = () =>
   yup.object({

@@ -4,6 +4,7 @@ import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 
+import { ConditionRowType } from 'modules/Builder/types';
 import { StyledCondition, StyledSelectController, StyledInputController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
 import { ConditionItemType, DEFAULT_NUMBER_MIN_VALUE } from './Condition.const';
@@ -25,18 +26,24 @@ export const Condition = ({
   onStateChange,
   isRemoveVisible,
   onRemove,
+  type,
 }: ConditionProps) => {
   const { t } = useTranslation('app');
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
 
   const isItemSlider = selectedItem?.type === ConditionItemType.Slider;
+  const isItemScore = selectedItem?.type === ConditionItemType.Score;
+  const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
+  const isRowTypeItem = type === ConditionRowType.Item;
   const isItemSelect =
     selectedItem?.type === ConditionItemType.SingleSelection ||
     selectedItem?.type === ConditionItemType.MultiSelection;
   const isValueSelectShown = !selectedItem || isItemSelect;
-  const isNumberValueShown = isItemSlider && !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
-  const isRangeValueShown = isItemSlider && !isNumberValueShown;
+  const isNumberValueShown =
+    (isItemSlider || isItemScore || isItemScoreCondition) &&
+    !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
+  const isRangeValueShown = (isItemSlider || isItemScore) && !isNumberValueShown;
 
   return (
     <StyledCondition>
@@ -45,21 +52,22 @@ export const Condition = ({
         control={control}
         name={itemName}
         options={itemOptions}
-        placeholder={t('conditionItemNamePlaceholder')}
+        placeholder={t(isRowTypeItem ? 'conditionItemNamePlaceholder' : 'select')}
         SelectProps={{
           renderValue: (value: unknown) => {
             const item = itemOptions?.find((item) => item.value === value);
             const placeholder =
-              item?.type === ConditionItemType.Score
-                ? 'conditionScoreSelected'
-                : 'conditionItemSelected';
+              type === ConditionRowType.Item
+                ? t('conditionItemSelected', { value: item?.labelKey })
+                : item?.labelKey;
 
-            return <span>{t(placeholder, { value: item?.labelKey })}</span>;
+            return <span>{placeholder}</span>;
           },
         }}
         customChange={onItemChange}
         isLabelNeedTranslation={false}
       />
+      {!isRowTypeItem && <StyledTitleMedium>{t('is')}</StyledTitleMedium>}
       <StyledSelectController
         control={control}
         name={stateName}

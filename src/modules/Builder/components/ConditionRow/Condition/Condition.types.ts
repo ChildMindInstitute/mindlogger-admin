@@ -2,6 +2,7 @@ import { Control } from 'react-hook-form';
 
 import { ConditionType } from 'shared/consts';
 import { SelectEvent } from 'shared/types';
+import { ConditionRowType } from 'modules/Builder/types';
 
 import { ConditionItemType } from './Condition.const';
 
@@ -27,4 +28,5 @@ export type ConditionProps = {
   onItemChange: (e: SelectEvent) => void;
   onStateChange: (e: SelectEvent) => void;
   onRemove: () => void;
+  type: ConditionRowType;
 };

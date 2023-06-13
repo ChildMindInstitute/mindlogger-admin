@@ -23,14 +23,14 @@ export const Review = ({ answerId, activityId }: ReviewProps) => {
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
   const getDecryptedReviews = useDecryptedAnswers();
 
-  const { execute, isLoading } = useAsync(
+  const { execute: getActivityAnswer, isLoading } = useAsync(
     getActivityAnswerApi,
     (res) => res?.data?.result && setActivityItemAnswers(getDecryptedReviews(res.data.result)),
   );
 
   useEffect(() => {
     if (appletId && answerId) {
-      execute({ appletId, answerId, activityId });
+      getActivityAnswer({ appletId, answerId, activityId });
       navigate(
         generatePath(page.appletRespondentDataReviewAnswer, { appletId, respondentId, answerId }),
       );

@@ -13,6 +13,7 @@ export const links = [
     activeIcon: <Svg id="builder-filled" />,
     link: page.builder,
     labelKey: 'builder',
+    disabled: true,
   },
   {
     icon: <Svg id="library" />,

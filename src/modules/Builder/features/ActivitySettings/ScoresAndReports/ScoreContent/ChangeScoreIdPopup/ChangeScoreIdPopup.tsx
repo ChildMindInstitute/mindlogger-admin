@@ -6,7 +6,7 @@ import { Modal } from 'shared/components';
 
 import { ChangeScoreIdPopupProps } from './ChangeScoreIdPopup.types';
 
-export const ChangeScoreIdPopup = ({ isOpen, onClose, onChange }: ChangeScoreIdPopupProps) => {
+export const ChangeScoreIdPopup = ({ onClose, onChange }: ChangeScoreIdPopupProps) => {
   const { t } = useTranslation();
   const [isError, setIsError] = useState(false);
   const [isFirstScreen, setIsFirstScreen] = useState(true);
@@ -35,7 +35,7 @@ export const ChangeScoreIdPopup = ({ isOpen, onClose, onChange }: ChangeScoreIdP
 
   return (
     <Modal
-      open={isOpen}
+      open
       onClose={onClose}
       onSubmit={isFirstScreen ? onFirstScreenSubmit : onSecondScreenSubmit}
       title={t('changeScoreId')}

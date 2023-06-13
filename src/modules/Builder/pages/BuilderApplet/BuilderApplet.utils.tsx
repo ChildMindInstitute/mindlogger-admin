@@ -139,8 +139,6 @@ export const getNewActivity = (activity?: ActivityFormValues) => {
     isSkippable: false,
     isReviewable: false,
     responseIsEditable: true,
-    generateReport: false,
-    showScoreSummary: false,
     ...activity,
     items,
     conditionalLogic,

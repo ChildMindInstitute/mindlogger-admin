@@ -19,7 +19,12 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   }
 
   &.secondary {
-    background-color: ${variables.palette.surface1};
+    background-color: transparent;
+    border-color: ${variables.palette.outline_variant};
+    .md-editor-toolbar-wrapper {
+      background-color: transparent;
+      border-bottom-color: ${variables.palette.outline_variant};
+    }
   }
 
   & .md-editor-toolbar-wrapper {

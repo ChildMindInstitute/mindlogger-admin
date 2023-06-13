@@ -5,7 +5,7 @@ import {
   SingleSelectItem,
   SliderItem,
 } from 'shared/state';
-import { ItemResponseType, CalculationType } from 'shared/consts';
+import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 
 import { scoreIdBase } from './ScoreContent.const';
@@ -81,3 +81,15 @@ export const getScoreRange = (itemsScore: Item[], calculationType: CalculationTy
       return { minScore: totalMaxScore ? (totalMinScore / totalMaxScore) * 100 : 0, maxScore: 100 };
   }
 };
+
+export const getDefaultConditionalValue = (scoreId: string) => ({
+  name: '',
+  id: scoreId,
+  showMessage: false,
+  flagScore: false,
+  message: undefined,
+  printItems: false,
+  itemsPrint: undefined,
+  match: ConditionalLogicMatch.All,
+  conditions: [{}],
+});

@@ -36,7 +36,7 @@ export const ToggleItemContainer = ({
       <StylesTitleWrapper open={open} uiType={uiType}>
         <StyledFlexTopCenter sx={{ flexGrow: 1 }}>
           <StyledFlexTopCenter>
-            <StyledClearedButton onClick={handleToggle}>
+            <StyledClearedButton onClick={handleToggle} sx={{ p: theme.spacing(0.8) }}>
               <Svg id={open ? 'navigate-up' : 'navigate-down'} />
             </StyledClearedButton>
             {title && (

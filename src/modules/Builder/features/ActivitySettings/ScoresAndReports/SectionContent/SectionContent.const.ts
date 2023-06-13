@@ -1,14 +1,10 @@
-import i18n from 'i18n';
+import { v4 as uuidv4 } from 'uuid';
 
-const { t } = i18n;
+import { ConditionalLogicMatch } from 'shared/consts';
 
-export const columns = [
-  {
-    key: t('name'),
-    label: t('itemName'),
-  },
-  {
-    key: t('question'),
-    label: t('itemBody'),
-  },
-];
+export const defaultConditionalValue = {
+  id: uuidv4(),
+  name: 'section-condition',
+  match: ConditionalLogicMatch.All,
+  conditions: [{}],
+};
