@@ -38,10 +38,10 @@ export const ScheduleSetupPopup = ({
   const handlePopupSubmit = async () => {
     const { appletId, respondentId, hasIndividualSchedule } = chosenAppletData || {};
     if (!appletId || !respondentId) return;
-    setPopupVisible(false);
     if (!hasIndividualSchedule) {
       await createIndividualEvents({ appletId, respondentId });
     }
+    setPopupVisible(false);
     navigate(
       generatePath(page.appletScheduleIndividual, {
         appletId,
