@@ -12,10 +12,7 @@ import { BlockSequencesContent } from './BlockSequencesContent';
 
 export const BlockSequences = memo(({ isPracticeRound }: IsPracticeRoundType) => {
   const { t } = useTranslation();
-  const {
-    watch,
-    formState: { errors },
-  } = useFormContext();
+  const { watch } = useFormContext();
   const { perfTaskItemField } = useCurrentActivity();
 
   const stimulusTrials = watch(`${perfTaskItemField}.general.stimulusTrials`);
@@ -28,7 +25,7 @@ export const BlockSequences = memo(({ isPracticeRound }: IsPracticeRoundType) =>
       error={hasError ? t('flankerRound.addStimulus') : ''}
       uiType={ToggleContainerUiType.PerformanceTask}
       title={t('flankerRound.blockSequences')}
-      Content={() => <BlockSequencesContent isPracticeRound={isPracticeRound} />}
+      Content={() => <BlockSequencesContent isPracticeRound={isPracticeRound} on />}
       tooltip={t('flankerRound.sequencesTooltip')}
     />
   );
