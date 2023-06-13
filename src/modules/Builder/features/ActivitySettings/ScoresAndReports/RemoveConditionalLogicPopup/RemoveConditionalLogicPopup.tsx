@@ -37,9 +37,9 @@ export const RemoveConditionalLogicPopup = ({
         <StyledBodyLarge>
           {isFirstScreen ? (
             <Trans i18nKey="confirmRemoveConditionalLogic">
-              Are you sure you want to remove conditional logic for the{' '}
+              Are you sure you want to remove conditional logic for the
               <strong>
-                <>{{ name }}</>
+                <> {{ name }}</>
               </strong>
               ?
             </Trans>

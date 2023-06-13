@@ -19,7 +19,7 @@ import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 
 export const SectionContent = ({ name, title }: SectionContentProps) => {
   const { t } = useTranslation('app');
-  const { control, watch, register, unregister, setValue } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
   const conditionalLogicName = `${name}.conditionalLogic`;
   const conditionalLogic = watch(conditionalLogicName);
   const [isContainConditional, setIsContainConditional] = useState(!!conditionalLogic);
@@ -27,13 +27,10 @@ export const SectionContent = ({ name, title }: SectionContentProps) => {
 
   useEffect(() => {
     if (isContainConditional) {
-      register(conditionalLogicName);
-      !conditionalLogic && setValue(conditionalLogicName, defaultConditionalValue);
+      setValue(conditionalLogicName, defaultConditionalValue);
 
       return;
     }
-
-    unregister(conditionalLogicName, { keepDefaultValue: true });
   }, [isContainConditional]);
 
   const removeConditional = () => {
@@ -44,7 +41,7 @@ export const SectionContent = ({ name, title }: SectionContentProps) => {
     <StyledFlexColumn>
       <InputController control={control} name={`${name}.name`} label={t('sectionName')} />
       <Box sx={{ mt: theme.spacing(2.4) }}>
-        {isContainConditional || conditionalLogic ? (
+        {isContainConditional ? (
           <ToggleItemContainer
             HeaderContent={SectionScoreHeader}
             Content={ConditionContent}
@@ -55,6 +52,7 @@ export const SectionContent = ({ name, title }: SectionContentProps) => {
             headerContentProps={{
               onRemove: removeConditional,
               title: t('conditionalLogic'),
+              name: conditionalLogicName,
             }}
             uiType={ToggleContainerUiType.Score}
           />

@@ -70,8 +70,8 @@ export const ConditionRow = ({
     [ConditionRowType.Item]: getItemOptions(items, type),
     [ConditionRowType.Section]: [
       ...getItemOptions(items, type),
-      ...((scores && getScoreOptions(scores)) || []),
-      ...((scores && getScoreConditionalsOptions(scores)) || []),
+      ...((scores.length && getScoreOptions(scores)) || []),
+      ...((scores.length && getScoreConditionalsOptions(scores)) || []),
     ],
     [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
   };

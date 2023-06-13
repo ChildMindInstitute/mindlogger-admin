@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { StyledTitleMedium } from 'shared/styles';
+import { StyledLabelBoldLarge } from 'shared/styles';
 import {
   StyledSummaryRow,
   StyledSummarySelectController,
@@ -16,14 +16,14 @@ export const ScoreSummaryRow = ({ name }: ScoreSummaryRowProps) => {
 
   return (
     <StyledSummaryRow>
-      <StyledTitleMedium>{t('if')}</StyledTitleMedium>
+      <StyledLabelBoldLarge>{t('if')}</StyledLabelBoldLarge>
       <StyledSummarySelectController
         control={control}
         name={`${name}.match`}
         options={getMatchOptions()}
         placeholder={t('select')}
       />
-      <StyledTitleMedium>{t('scoreSummaryDescription')}</StyledTitleMedium>
+      <StyledLabelBoldLarge>{t('scoreSummaryDescription')}</StyledLabelBoldLarge>
     </StyledSummaryRow>
   );
 };

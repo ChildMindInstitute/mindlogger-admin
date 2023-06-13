@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
 import { EditorUiType, Switch, TransferListController } from 'shared/components/FormComponents';
-import { StyledBodyMedium, StyledFlexTopStart, theme, variables } from 'shared/styles';
+import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { Item } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { DataTableItem } from 'shared/components';
@@ -23,7 +23,9 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
   const printItems: boolean = watch(`${name}.printItems`);
   const messageName = `${name}.message`;
   const itemsPrintName = `${name}.itemsPrint`;
-  const hasPrintItemsError = !!getFieldState(`${name}.printItems`).error;
+  const printItemsError = getFieldState(`${name}.printItems`).error;
+
+  const commonProps = { control, sx: { mb: theme.spacing(0.5) } };
 
   const items = activity?.items.reduce(
     (items: Pick<Item, 'id' | 'name' | 'question'>[], item: Item) => {
@@ -57,36 +59,34 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
 
   return (
     <>
-      {hasPrintItemsError && (
+      {!!printItemsError && (
         <StyledBodyMedium sx={{ mb: theme.spacing(2.4) }} color={variables.palette.semantic.error}>
-          {t('validationMessages.mustShowMessageOrItems')}
+          {printItemsError.message}
         </StyledBodyMedium>
       )}
       <Switch
         name={`${name}.showMessage`}
-        control={control}
         label={t('showMessage')}
         tooltipText={t('showMessageTooltip')}
+        {...commonProps}
       />
       {showMessage && (
         <StyledEditor uiType={EditorUiType.Secondary} name={messageName} control={control} />
       )}
       <Switch
         name={`${name}.printItems`}
-        control={control}
         label={t('printItems')}
         tooltipText={t('printItemsTooltip')}
+        {...commonProps}
       />
       {printItems && (
-        <StyledFlexTopStart sx={{ mb: theme.spacing(2.4) }}>
-          <TransferListController
-            name={itemsPrintName}
-            items={items as unknown as DataTableItem[]}
-            columns={columns}
-            hasSearch={false}
-            hasSelectedSection={false}
-          />
-        </StyledFlexTopStart>
+        <TransferListController
+          name={itemsPrintName}
+          items={items as unknown as DataTableItem[]}
+          columns={columns}
+          hasSearch={false}
+          hasSelectedSection={false}
+        />
       )}
     </>
   );

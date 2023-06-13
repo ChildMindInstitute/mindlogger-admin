@@ -572,10 +572,6 @@ export type SectionCondition = Condition | ScoreCondition;
 export type SectionConditionalLogic = {
   name: string;
   id: string;
-  showMessage: boolean;
-  message?: string;
-  printItems: boolean;
-  itemsPrint?: string[];
   match: ConditionalLogicMatch;
   conditions: SectionCondition[];
 };
@@ -623,7 +619,6 @@ export type SingleApplet = {
   pinnedAt?: string | null;
   role?: string;
   encryption?: Encryption;
-  generateReport: boolean;
   isPublished?: boolean;
 };
 

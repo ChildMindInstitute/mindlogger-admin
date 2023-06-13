@@ -15,6 +15,8 @@ import {
   SliderRowsResponseValues,
   Activity,
   ItemAlert,
+  SectionConditionalLogic,
+  ScoreConditionalLogic,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { getEntityKey, groupBy } from 'shared/utils';
@@ -43,10 +45,6 @@ export const removeActivityExtraFields = (activity: Activity) => ({
   order: undefined,
   performanceTaskType: undefined,
   isPerformanceTask: undefined,
-  generateReport: undefined, // TODO: remove when API will be ready
-  showScoreSummary: undefined, // TODO: remove when API will be ready
-  scores: undefined, // TODO: remove when API will be ready
-  sections: undefined, // TODO: remove when API will be ready
   conditionalLogic: undefined,
   subscaleSetting: {
     ...activity.subscaleSetting,

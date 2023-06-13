@@ -12,6 +12,7 @@ import { ConditionContent } from '../../ConditionContent';
 import { SectionScoreCommonFields } from '../../SectionScoreCommonFields';
 import { getScoreConditionId } from './ScoreCondition.utils';
 import { CopyId } from '../CopyId';
+import { StyledLabel } from './ScoreCondition.styles';
 
 export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
   const { t } = useTranslation();
@@ -21,7 +22,7 @@ export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
   const conditionId = watch(`${name}.id`);
 
   const handleConditionNameBlur = () => {
-    setValue(`${name}.id`, getScoreConditionId(conditionName, scoreId));
+    setValue(`${name}.id`, getScoreConditionId(scoreId, conditionName));
   };
 
   return (
@@ -42,14 +43,14 @@ export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
         control={control}
         name={`${name}.flagScoreName`}
         label={
-          <StyledFlexTopCenter>
+          <StyledLabel>
             <StyledBodyLarge>{t('flagScore')}</StyledBodyLarge>
             <Tooltip tooltipTitle={t('flagScoreTooltip')}>
               <StyledFlexTopCenter>
                 <StyledTooltipSvg id="more-info-outlined" width="20" height="20" />
               </StyledFlexTopCenter>
             </Tooltip>
-          </StyledFlexTopCenter>
+          </StyledLabel>
         }
       />
       <SectionScoreCommonFields name={name} />

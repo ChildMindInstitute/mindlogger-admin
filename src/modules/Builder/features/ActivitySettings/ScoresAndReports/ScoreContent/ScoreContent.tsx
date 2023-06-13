@@ -118,16 +118,14 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
         </Box>
       </StyledFlexTopStart>
       <StyledTitleMedium>{t('scoreItems')}</StyledTitleMedium>
-      <StyledFlexTopStart sx={{ m: theme.spacing(1.2, 0, 4.4, 0), alignItems: 'flex-end' }}>
-        <TransferListController
-          name={`${name}.itemsScore`}
-          items={tableItems}
-          columns={scoreItemsColumns}
-          selectedItemsColumns={selectedItemsColumns}
-          hasSelectedSection
-          hasSearch
-        />
-      </StyledFlexTopStart>
+      <TransferListController
+        name={`${name}.itemsScore`}
+        items={tableItems}
+        columns={scoreItemsColumns}
+        selectedItemsColumns={selectedItemsColumns}
+        hasSelectedSection
+        hasSearch
+      />
       <SectionScoreCommonFields name={name} />
       {!!scoreConditionals?.length && (
         <>
@@ -149,6 +147,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
                 headerContentProps={{
                   onRemove: () => removeScoreConditional(index),
                   title,
+                  name: conditionalName,
                 }}
                 uiType={ToggleContainerUiType.Score}
               />

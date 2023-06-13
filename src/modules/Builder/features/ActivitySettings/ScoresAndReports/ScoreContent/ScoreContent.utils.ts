@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import {
   Item,
   MultiSelectItem,
@@ -93,5 +91,5 @@ export const getDefaultConditionalValue = (scoreId: string) => ({
   printItems: false,
   itemsPrint: undefined,
   match: ConditionalLogicMatch.All,
-  conditions: undefined,
+  conditions: [{}],
 });

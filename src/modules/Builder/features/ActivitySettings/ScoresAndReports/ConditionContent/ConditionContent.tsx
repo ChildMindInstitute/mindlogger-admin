@@ -6,6 +6,7 @@ import { Condition } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
 import { ConditionRow } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
+import { StyledBodyMedium, variables } from 'shared/styles';
 
 import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
@@ -15,11 +16,12 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
-  const { control, watch, getValues } = useFormContext();
+  const { control, watch, getValues, getFieldState } = useFormContext();
   const { append: appendCondition, remove: removeCondition } = useFieldArray({
     control,
     name: conditionsName,
   });
+  const error = getFieldState(`${name}.conditions`).error;
 
   const conditions = watch(conditionsName);
 
@@ -39,6 +41,11 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
           onRemove={() => removeCondition(index)}
         />
       ))}
+      {!!error && (
+        <StyledBodyMedium color={variables.palette.semantic.error}>
+          {error.message}
+        </StyledBodyMedium>
+      )}
       <StyledButton
         startIcon={<Svg id="add" width="20" height="20" />}
         onClick={handleAddCondition}

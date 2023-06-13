@@ -35,6 +35,7 @@ export const Condition = ({
   const isItemSlider = selectedItem?.type === ConditionItemType.Slider;
   const isItemScore = selectedItem?.type === ConditionItemType.Score;
   const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
+  const isRowTypeItem = type === ConditionRowType.Item;
   const isItemSelect =
     selectedItem?.type === ConditionItemType.SingleSelection ||
     selectedItem?.type === ConditionItemType.MultiSelection;
@@ -51,7 +52,7 @@ export const Condition = ({
         control={control}
         name={itemName}
         options={itemOptions}
-        placeholder={t('conditionItemNamePlaceholder')}
+        placeholder={t(isRowTypeItem ? 'conditionItemNamePlaceholder' : 'select')}
         SelectProps={{
           renderValue: (value: unknown) => {
             const item = itemOptions?.find((item) => item.value === value);
@@ -66,6 +67,7 @@ export const Condition = ({
         customChange={onItemChange}
         isLabelNeedTranslation={false}
       />
+      {!isRowTypeItem && <StyledTitleMedium>{t('is')}</StyledTitleMedium>}
       <StyledSelectController
         control={control}
         name={stateName}

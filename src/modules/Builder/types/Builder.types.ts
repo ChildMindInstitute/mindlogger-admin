@@ -8,6 +8,7 @@ import {
   GyroscopeGeneralSettings,
   GyroscopePracticeSettings,
   GyroscopeTestSettings,
+  ActivitySettingsScore,
 } from 'shared/state';
 import { ItemResponseType, PerfTaskItemType, SubscaleTotalScore } from 'shared/consts';
 
@@ -21,6 +22,13 @@ export type ItemFormValues = {
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
   allowEdit: boolean;
+};
+
+export type ScoresAndReports = {
+  generateReport: boolean;
+  showScoreSummary: boolean;
+  scores: ActivitySettingsScore[];
+  sections: ActivitySettingsSection[];
 };
 
 export type ActivityFormValues = {
@@ -37,9 +45,9 @@ export type ActivityFormValues = {
   isHidden?: boolean;
   items: ItemFormValues[];
   subscales?: ActivitySettingsSubscale[];
+  scoresAndReports?: ScoresAndReports;
   calculateTotalScore?: SubscaleTotalScore;
   conditionalLogic?: ConditionalLogic[];
-  sections?: ActivitySettingsSection[];
   totalScoresTableData?: string;
   isPerformanceTask?: boolean;
   performanceTaskType?: PerfTaskItemType;
