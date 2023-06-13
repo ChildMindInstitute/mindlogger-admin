@@ -27,7 +27,7 @@ import {
 } from './BlockSequencesContent.utils';
 import { UploadedTable } from './BlockSequencesContent.types';
 
-export const BlockSequencesContent = ({ isPracticeRound }: IsPracticeRoundType) => {
+export const BlockSequencesContent = ({ isPracticeRound, onError }: IsPracticeRoundType) => {
   const { t } = useTranslation();
   const {
     watch,
@@ -87,6 +87,10 @@ export const BlockSequencesContent = ({ isPracticeRound }: IsPracticeRoundType) 
 
     prevStimulusTrialsLength.current = stimulusTrials?.length;
   }, [stimulusTrials]);
+
+  useEffect(() => {
+    onError?.(!uploadedTable && hasBlockSequencesErrors ? 'fillInAllRequired' : '');
+  }, [uploadedTable, hasBlockSequencesErrors]);
 
   return stimulusTrials?.some((trial) => !!trial.image) ? (
     <>
