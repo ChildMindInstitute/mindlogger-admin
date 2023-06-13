@@ -1,6 +1,8 @@
 import * as XLSX from 'xlsx';
 import { Trans } from 'react-i18next';
 
+import { DateFormats } from 'shared/consts';
+
 export const importTable = async (file: File, isPrimaryUiType: boolean) => {
   const validFileTypes = isPrimaryUiType ? ['.csv', '.xls', '.xlsx', '.ods'] : ['.csv', '.xlsx'];
   const fileExtension = file.name.split('.').pop()?.toLowerCase();
@@ -11,10 +13,10 @@ export const importTable = async (file: File, isPrimaryUiType: boolean) => {
   const fileBuffer = await new Response(file).arrayBuffer();
   const workbook = XLSX.read(fileBuffer, {
     cellDates: true,
+    dateNF: `${DateFormats.DayMonthYear}`,
   });
   const worksheet = Object.values(workbook.Sheets)[0];
-  const data = XLSX.utils.sheet_to_json(worksheet);
-
+  const data = XLSX.utils.sheet_to_json(worksheet, { raw: false, defval: '' });
   if (!data.length) {
     throw new Error();
   }

@@ -25,7 +25,7 @@ export const PerformanceTaskHeader = () => {
       <Box sx={{ width: '30%' }}>
         <StyledButton
           onClick={handleActivitiesClick}
-          startIcon={<Svg id="add" width="18" height="18" />}
+          startIcon={<Svg id="directory-up" width="18" height="18" />}
           variant="text"
         >
           {t('activities')}
