@@ -1,5 +1,5 @@
-import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackReviewed/FeedbackReviewed.types';
 import {
+  ActivityItemAnswer,
   ItemAnswer,
   MultiSelectActivityItem,
   SingleSelectActivityItem,
@@ -12,30 +12,30 @@ import {
   Slider,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessementItems';
 
-export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
-  const responseType = activityItemAnswer.activityItem.responseType;
+export const getResponseItem = ({ activityItem, answer }: ActivityItemAnswer) => {
+  const responseType = activityItem.responseType;
   switch (responseType) {
     case ItemResponseType.SingleSelection:
       return (
         <SingleSelection
-          activityItem={activityItemAnswer.activityItem as SingleSelectActivityItem}
-          value={(activityItemAnswer.answer as ItemAnswer).value as string}
+          activityItem={activityItem as SingleSelectActivityItem}
+          value={(answer as ItemAnswer).value as string}
           isDisabled
         />
       );
     case ItemResponseType.MultipleSelection:
       return (
         <MultipleSelection
-          activityItem={activityItemAnswer.activityItem as MultiSelectActivityItem}
-          value={(activityItemAnswer.answer as ItemAnswer).value as string[]}
+          activityItem={activityItem as MultiSelectActivityItem}
+          value={(answer as ItemAnswer).value as string[]}
           isDisabled
         />
       );
     case ItemResponseType.Slider:
       return (
         <Slider
-          activityItem={activityItemAnswer.activityItem as SliderActivityItem}
-          value={(activityItemAnswer.answer as ItemAnswer).value as number}
+          activityItem={activityItem as SliderActivityItem}
+          value={(answer as ItemAnswer).value as number}
           isDisabled
         />
       );
