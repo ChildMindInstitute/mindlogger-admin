@@ -30,7 +30,7 @@ export const ToggleItemContainer = ({
 }: ToggleItemProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(isOpenByDefault ?? true);
-  const handleToggle = () => !isOpenDisabled && setOpen((prevState) => !prevState);
+  const handleToggle = () => setOpen((prevState) => !prevState);
 
   return (
     <StyledItemOption uiType={uiType}>
