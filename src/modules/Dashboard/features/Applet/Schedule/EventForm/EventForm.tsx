@@ -120,7 +120,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
         ));
 
       if (editedEvent) {
-        const { activityId, flowId, ...updateEventBody } = body;
+        const { activityId, flowId, respondentId, ...updateEventBody } = body;
         await updateEvent({
           appletId,
           eventId: editedEvent.eventId,

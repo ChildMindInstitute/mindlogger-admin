@@ -122,6 +122,18 @@ export const createEventApi = ({ appletId, body }: CreateEventType, signal?: Abo
     signal,
   });
 
+export const createIndividualEventsApi = (
+  { appletId, respondentId }: AppletId & RespondentId,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/applets/${appletId}/events/individual/${respondentId}`,
+    {},
+    {
+      signal,
+    },
+  );
+
 export const updateEventApi = (
   { appletId, body, eventId }: CreateEventType & EventId,
   signal?: AbortSignal,

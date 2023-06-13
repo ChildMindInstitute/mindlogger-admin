@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-import { theme, StyledModalWrapper, StyledBodyLarge } from 'shared/styles';
+import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
 
 import { AddIndividualSchedulePopupProps } from './AddIndividualSchedulePopup.types';
 
@@ -11,6 +11,7 @@ export const AddIndividualSchedulePopup = ({
   onClose,
   onSubmit,
   respondentName,
+  error,
 }: AddIndividualSchedulePopupProps) => {
   const { t } = useTranslation('app');
 
@@ -37,6 +38,11 @@ export const AddIndividualSchedulePopup = ({
             instead?
           </Trans>
         </StyledBodyLarge>
+        {error && (
+          <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
+            {error}
+          </StyledBodyLarge>
+        )}
       </StyledModalWrapper>
     </Modal>
   );
