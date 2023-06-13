@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { updateManagersPinApi } from 'api';
-import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Search } from 'shared/components';
+import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Row, Search } from 'shared/components';
 import { users, workspaces, Manager } from 'redux/modules';
 import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
@@ -121,17 +121,23 @@ export const Managers = () => {
             },
           }),
           actions: {
-            content: () => {
+            content: (_, hasVisibleActions) => {
               if (ownerId === id || !filteredManager?.applets.length) {
                 return;
               }
 
-              return <Actions items={getActions(actions)} context={filteredManager} />;
+              return (
+                <Actions
+                  items={getActions(actions)}
+                  context={filteredManager}
+                  visibleByDefault={hasVisibleActions}
+                />
+              );
             },
             value: '',
             width: '20%',
           },
-        };
+        } as Row;
       }),
     [managersData],
   );

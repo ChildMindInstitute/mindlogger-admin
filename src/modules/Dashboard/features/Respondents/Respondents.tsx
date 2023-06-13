@@ -167,13 +167,17 @@ export const Respondents = () => {
         },
       }),
       actions: {
-        content: () => (
-          <Actions items={getActions(actions, filteredRespondents?.[id], appletId)} context={id} />
+        content: (_, hasVisibleActions) => (
+          <Actions
+            items={getActions(actions, filteredRespondents?.[id], appletId)}
+            context={id}
+            visibleByDefault={hasVisibleActions}
+          />
         ),
         value: '',
         width: '330',
       },
-    };
+    } as Row;
   };
 
   const filterRespondentApplets = (user: Respondent) => {
