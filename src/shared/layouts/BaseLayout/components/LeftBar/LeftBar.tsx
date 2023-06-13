@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ClickAwayListener, List } from '@mui/material';
+import { ClickAwayListener, Divider, List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { StyledLabelMedium, variables } from 'shared/styles';
+import { StyledLabelMedium, theme, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
 import { getWorkspacesApi } from 'shared/api';
 import { workspaces as currentWorkspace, Workspace, auth } from 'redux/modules';
 import { useAsync } from 'shared/hooks';
 import { storage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
+import { Svg } from 'shared/components';
+import { page } from 'resources';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
@@ -42,6 +44,9 @@ export const LeftBar = () => {
     }
   }, [workspaces]);
 
+  const getClassName = (isActive: boolean, disabled?: boolean) =>
+    `${isActive ? 'active-link' : ''} ${disabled ? 'disabled-link' : ''}`;
+
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
       <StyledDrawer>
@@ -49,12 +54,9 @@ export const LeftBar = () => {
           <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />
         </StyledDrawerLogo>
         <List>
-          {links.map(({ labelKey, link, icon, activeIcon }) => (
+          {links.map(({ labelKey, link, icon, activeIcon, disabled }) => (
             <StyledDrawerItem key={labelKey}>
-              <NavLink
-                to={link}
-                className={({ isActive }) => (isActive ? 'active-link' : undefined)}
-              >
+              <NavLink to={link} className={({ isActive }) => getClassName(isActive, disabled)}>
                 {({ isActive }) => (
                   <>
                     {isActive ? activeIcon : icon}
@@ -66,6 +68,17 @@ export const LeftBar = () => {
               </NavLink>
             </StyledDrawerItem>
           ))}
+          <Divider
+            sx={{ my: theme.spacing(2.4), borderColor: variables.palette.outline_variant }}
+          />
+          <StyledDrawerItem>
+            <NavLink to={page.builder}>
+              <Svg id="add" />
+              <StyledLabelMedium color={variables.palette.on_surface_variant}>
+                {t('newApplet')}
+              </StyledLabelMedium>
+            </NavLink>
+          </StyledDrawerItem>
         </List>
         {visibleDrawer && (
           <SwitchWorkspace

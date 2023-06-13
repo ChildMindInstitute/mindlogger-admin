@@ -32,6 +32,7 @@ export const DatePicker = <T extends FieldValues>({
   minDate,
   onMonthChange,
   disabled,
+  onCloseCallback,
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -45,7 +46,10 @@ export const DatePicker = <T extends FieldValues>({
     setAnchorEl(event.currentTarget);
   };
 
-  const handlePickerClose = () => setAnchorEl(null);
+  const handlePickerClose = () => {
+    onCloseCallback?.();
+    setAnchorEl(null);
+  };
 
   return (
     <Controller
