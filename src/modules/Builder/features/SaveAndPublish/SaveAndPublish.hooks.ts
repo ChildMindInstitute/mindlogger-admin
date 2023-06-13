@@ -20,10 +20,10 @@ import {
 } from 'shared/utils';
 import { applet, Activity, SingleApplet } from 'shared/state';
 import { workspaces } from 'redux/modules';
+import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
-import { useAppletPrivateKeySetter } from 'shared/components/Password/CreateAppletPassword/CreateAppletPassword.hooks';
 
 import { appletInfoMocked } from './mock';
 import {
