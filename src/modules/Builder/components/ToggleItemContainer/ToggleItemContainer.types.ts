@@ -18,6 +18,7 @@ export type ToggleItemProps = {
   contentProps?: Record<string, unknown>;
   uiType?: ToggleContainerUiType;
   isOpenByDefault?: boolean;
+  isOpenDisabled?: boolean;
   tooltip?: string;
   error?: string | null;
 };

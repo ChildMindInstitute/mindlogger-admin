@@ -24,23 +24,28 @@ export const ToggleItemContainer = ({
   contentProps,
   uiType = ToggleContainerUiType.Item,
   isOpenByDefault,
+  isOpenDisabled,
   tooltip,
   error,
 }: ToggleItemProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(isOpenByDefault ?? true);
-  const handleToggle = () => setOpen((prevState) => !prevState);
+  const handleToggle = () => !isOpenDisabled && setOpen((prevState) => !prevState);
 
   return (
     <StyledItemOption uiType={uiType}>
       <StylesTitleWrapper open={open} uiType={uiType}>
         <StyledFlexTopCenter sx={{ flexGrow: 1 }}>
           <StyledFlexTopCenter>
-            <StyledClearedButton onClick={handleToggle} sx={{ p: theme.spacing(0.8) }}>
+            <StyledClearedButton
+              onClick={handleToggle}
+              sx={{ p: theme.spacing(0.8) }}
+              disabled={isOpenDisabled}
+            >
               <Svg id={open ? 'navigate-up' : 'navigate-down'} />
             </StyledClearedButton>
             {title && (
-              <StyledFlexTopCenter sx={{ m: theme.spacing(0, 5, 0, 3) }}>
+              <StyledFlexTopCenter sx={{ m: theme.spacing(0, 5, 0, 1.5) }}>
                 {!open && error && <StyledBadge variant="dot" color="error" />}
                 <StyledFlexTopCenter>
                   <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
