@@ -11,8 +11,8 @@ export type ExtendedChartDataset = ChartDataset & {
 };
 
 export type MultiScatterChartProps = {
-  minDate: string | Date;
-  maxDate: string | Date;
+  minDate: Date;
+  maxDate: Date;
   minY?: number;
   maxY: number;
   height: number;
@@ -28,8 +28,8 @@ export type OptionsProps = {
   responseType: ItemResponseType;
   minY: number;
   maxY: number;
-  minDate: string | Date;
-  maxDate: string | Date;
+  minDate: Date;
+  maxDate: Date;
 };
 
 export type DataProps = {

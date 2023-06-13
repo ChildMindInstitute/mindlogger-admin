@@ -1,12 +1,9 @@
 import { Svg } from 'shared/components';
 import { ActivityFormValues } from 'modules/Builder/types';
 import { page } from 'resources';
+import { PerfTaskItemType } from 'shared/consts';
 
-import {
-  EditablePerformanceTasksType,
-  GetActivitiesActions,
-  PerformanceTasks,
-} from './Activities.types';
+import { EditablePerformanceTasksType, GetActivitiesActions } from './Activities.types';
 
 export const getActivityKey = (entity: ActivityFormValues): string => entity.key ?? entity.id ?? '';
 
@@ -42,9 +39,9 @@ export const getActions = ({
 ];
 
 const performanceTaskPaths: Record<EditablePerformanceTasksType, string> = {
-  [PerformanceTasks.Flanker]: page.builderAppletFlanker,
-  [PerformanceTasks.Gyroscope]: page.builderAppletGyroscope,
-  [PerformanceTasks.Touch]: page.builderAppletTouch,
+  [PerfTaskItemType.Flanker]: page.builderAppletFlanker,
+  [PerfTaskItemType.Gyroscope]: page.builderAppletGyroscope,
+  [PerfTaskItemType.Touch]: page.builderAppletTouch,
 };
 
 export const getPerformanceTaskPath = (performanceTask: EditablePerformanceTasksType) =>

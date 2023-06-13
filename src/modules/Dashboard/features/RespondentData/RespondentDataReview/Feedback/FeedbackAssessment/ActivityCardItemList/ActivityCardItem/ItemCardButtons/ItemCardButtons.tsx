@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { StyledFlexTopCenter, theme } from 'shared/styles';
+import { checkAnswerValue } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/FeedbackAssessmentForm/FeedbackAssessmentForm.utils';
 
 import { ItemCardButtonsProps } from './ItemCardButtons.types';
 
@@ -18,15 +19,12 @@ export const ItemCardButtons = ({
   const { t } = useTranslation();
   const { watch } = useFormContext();
 
-  const getValue = (value: string | number | string[]) =>
-    Array.isArray(value) ? value.length : value;
+  const answerValue = watch(`assessmentItems.${step}.answers`);
 
-  const answerValue = watch(`answers.${step}.answer.value`);
-
-  const [isNextDisable, setIsNextDisable] = useState(!!getValue(answerValue));
+  const [isNextDisable, setIsNextDisable] = useState(checkAnswerValue(answerValue));
 
   useEffect(() => {
-    setIsNextDisable(!getValue(answerValue));
+    setIsNextDisable(checkAnswerValue(answerValue));
   }, [answerValue]);
 
   return (

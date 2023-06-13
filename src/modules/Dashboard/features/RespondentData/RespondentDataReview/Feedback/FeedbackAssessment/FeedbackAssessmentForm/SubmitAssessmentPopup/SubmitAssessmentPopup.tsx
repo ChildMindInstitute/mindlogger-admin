@@ -8,6 +8,7 @@ import { SubmitAssessmentPopupProps } from './SubmitAssessmentPopup.types';
 export const SubmitAssessmentPopup = ({
   popupVisible,
   setPopupVisible,
+  submitAssessment,
 }: SubmitAssessmentPopupProps) => {
   const { t } = useTranslation('app');
 
@@ -15,7 +16,7 @@ export const SubmitAssessmentPopup = ({
     <Modal
       open={popupVisible}
       onClose={() => setPopupVisible(false)}
-      onSubmit={() => setPopupVisible(false)} // TODO: submit assessment when the endpoint is ready
+      onSubmit={submitAssessment}
       onSecondBtnSubmit={() => setPopupVisible(false)}
       title={t('submitAssessment')}
       buttonText={t('submit')}

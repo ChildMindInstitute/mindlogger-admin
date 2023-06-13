@@ -1,2 +1,3 @@
 export * from './useRespondentLabel';
-export * from './useDecryptedReviews';
+export * from './useEncryptedAnswers';
+export * from './useDecryptedAnswers';

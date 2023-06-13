@@ -762,34 +762,36 @@
   "availableItems": "Articles disponibles",
   "selectedItems": "Articles sélectionnés",
   "gyroscope": "gyroscope CST",
-   "touch": "CST tactile",
-   "gyroscopeAndTouchInstructions": {
-     "aperçu": {
-       "title": "Instructions générales",
-       "instruction": "Dans cette tâche, vous verrez un disque qui dérivera vers la gauche ou la droite de l'écran.\nVotre travail consistera à maintenir le disque au milieu de l'écran.\nSi le disque se déplace vers la droite, inclinez votre téléphone vers la gauche pour le ramener au centre.\nSi le disque se déplace vers la gauche, inclinez votre téléphone vers la droite pour ramener le disque au centre.\nNe laissez pas le disque toucher le murs à l'extrême gauche ou à droite de l'écran.\nIl y aura deux phases pour cette tâche, une phase de défi et une phase de concentration."
+  "touch": "CST tactile",
+  "gyroscopeAndTouchInstructions": {
+    "aperçu": {
+      "title": "Instructions générales",
+      "instruction": "Dans cette tâche, vous verrez un disque qui dérivera vers la gauche ou la droite de l'écran.\nVotre travail consistera à maintenir le disque au milieu de l'écran.\nSi le disque se déplace vers la droite, inclinez votre téléphone vers la gauche pour le ramener au centre.\nSi le disque se déplace vers la gauche, inclinez votre téléphone vers la droite pour ramener le disque au centre.\nNe laissez pas le disque toucher le murs à l'extrême gauche ou à droite de l'écran.\nIl y aura deux phases pour cette tâche, une phase de défi et une phase de concentration."
      },
-     "pratique": {
-       "title": "Instructions pour la partie d'entraînement",
-       "instruction": "C'est la phase de défi.\nIl y aura 3 essais.\nChaque essai commencera à un niveau facile, mais il deviendra plus difficile de garder le disque au centre de l'écran.\nFinalement, vous devrez perdre le contrôle du disque.\nLorsqu'il heurte un mur au bord de l'écran, l'essai se termine et le disque revient au centre de l'écran.\nEssayez de garder le disque éloigné des murs aussi longtemps que possible à chaque essai."
+    "pratique": {
+      "title": "Instructions pour la partie d'entraînement",
+      "instruction": "C'est la phase de défi.\nIl y aura 3 essais.\nChaque essai commencera à un niveau facile, mais il deviendra plus difficile de garder le disque au centre de l'écran.\nFinalement, vous devrez perdre le contrôle du disque.\nLorsqu'il heurte un mur au bord de l'écran, l'essai se termine et le disque revient au centre de l'écran.\nEssayez de garder le disque éloigné des murs aussi longtemps que possible à chaque essai."
      },
-     "test": {
-       "title": "Instructions du tour de test",
-       "instruction": "C'est la phase de concentration.\nCette phase durera 5 minutes.\nL'épreuve commencera à un niveau facile et augmentera jusqu'à un niveau qui ne devrait pas être très difficile.\nVotre tâche consistera à vous concentrer sur en gardant le disque au centre de l'écran, sans le laisser dériver du centre.\nSi vous perdez le contrôle du disque et qu'il heurte un mur, le disque sera ramené au centre de l'écran et la tâche se poursuivra."
+    "test": {
+      "title": "Instructions du tour de test",
+      "instruction": "C'est la phase de concentration.\nCette phase durera 5 minutes.\nL'épreuve commencera à un niveau facile et augmentera jusqu'à un niveau qui ne devrait pas être très difficile.\nVotre tâche consistera à vous concentrer sur en gardant le disque au centre de l'écran, sans le laisser dériver du centre.\nSi vous perdez le contrôle du disque et qu'il heurte un mur, le disque sera ramené au centre de l'écran et la tâche se poursuivra."
      }
    },
-   "gyroscopeAndTouchDesc": {
-     "overview": "Cette instruction sera affichée pour le répondant avant de passer le tour d'entraînement de l'Activité.",
-     "practice": "Cette instruction sera affichée pour le répondant avant de passer le tour d'entraînement de l'Activité.",
-     "test": "Cette instruction sera affichée pour le répondant avant de passer le tour de test de l'activité."
+  "gyroscopeAndTouchDesc": {
+    "overview": "Cette instruction sera affichée pour le répondant avant de passer le tour d'entraînement de l'Activité.",
+    "practice": "Cette instruction sera affichée pour le répondant avant de passer le tour d'entraînement de l'Activité.",
+    "test": "Cette instruction sera affichée pour le répondant avant de passer le tour de test de l'activité."
    },
-   "instructions": "Instructions",
-   "numberOfTrials": "Nombre d'essais:",
-   "numberOfTrialsTooltip": "Nombre de tours d'entraînement avant le tour de test",
-   "lengthOfTest": "Durée du test:",
-   "lambdaSlope": "Pente Lambda:",
-   "lambdaSlopeTooltip": "Pourcentage d'augmentation du taux de déflexion du disque sur la durée sélectionnée",
-   "minutes": "minutes",
-   "integerError": "Entier entre 1 et 99 requis",
-   "practiceInstruction": "Instruction de la ronde d'entraînement",
-   "testInstruction": "Instruction de la ronde de test"
+  "instructions": "Instructions",
+  "numberOfTrials": "Nombre d'essais:",
+  "numberOfTrialsTooltip": "Nombre de tours d'entraînement avant le tour de test",
+  "lengthOfTest": "Durée du test:",
+  "lambdaSlope": "Pente Lambda:",
+  "lambdaSlopeTooltip": "Pourcentage d'augmentation du taux de déflexion du disque sur la durée sélectionnée",
+  "minutes": "minutes",
+  "integerError": "Entier entre 1 et 99 requis",
+  "practiceInstruction": "Instruction de la ronde d'entraînement",
+  "testInstruction": "Instruction de la ronde de test",
+  "uploadFile": "Télécharger un fichier",
+  "fileSizeExceed": "Le fichier est trop volumineux. Veuillez télécharger un fichier de moins de {{ size }}."
 }

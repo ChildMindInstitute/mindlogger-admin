@@ -21,6 +21,7 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   ItemAlert,
   SingleAndMultipleSelectRowsResponseValues,
+  OptionCondition,
 } from 'shared/state';
 import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import {
@@ -33,10 +34,7 @@ import {
 } from 'shared/consts';
 import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
-import {
-  EditablePerformanceTasksType,
-  PerformanceTasks,
-} from 'modules/Builder/features/Activities/Activities.types';
+import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
 import { defaultFlankerBtnObj } from './BuilderApplet.const';
 
@@ -74,26 +72,88 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   }),
 });
 
-export const getNewActivity = (activity?: ActivityFormValues) => ({
-  name: t('newActivity'),
-  description: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: true,
-  generateReport: false,
-  showScoreSummary: false,
-  ...activity,
-  items: activity?.items?.map((item) => getNewActivityItem(item)) || [],
-  id: undefined,
-  key: uuidv4(),
-});
+export const getDuplicatedConditions = (
+  oldItems: ItemFormValues[],
+  newItems: Record<string, unknown>[],
+  conditions?: Condition[],
+) =>
+  conditions?.map((condition) => {
+    const optionId = (condition as OptionCondition)?.payload.optionId;
+    const result = { ...condition, key: uuidv4() };
+
+    if (!optionId) return result;
+
+    const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
+    const optionIndex = (
+      oldItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues
+    ).options?.findIndex((option) => option.id === optionId);
+
+    return {
+      ...result,
+      itemName: getEntityKey(newItems[itemIndex]) ?? '',
+      payload: {
+        optionId:
+          (newItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues)
+            ?.options?.[optionIndex]?.id ?? '',
+      },
+    };
+  });
+
+export const getDuplicatedConditional = (
+  oldItems: ItemFormValues[],
+  newItems: Record<string, unknown>[],
+  conditionalLogic?: ConditionalLogic[],
+) =>
+  conditionalLogic?.map((conditional) => {
+    const itemKey = conditional.itemKey;
+
+    if (itemKey) {
+      const itemIndex = oldItems?.findIndex((item) => itemKey === getEntityKey(item));
+
+      return {
+        ...conditional,
+        key: uuidv4(),
+        itemKey: getEntityKey(newItems?.[itemIndex]) ?? '',
+        conditions: getDuplicatedConditions(oldItems, newItems, conditional.conditions),
+      };
+    }
+
+    return {
+      ...conditional,
+      itemKey,
+    };
+  }) ?? [];
+
+export const getNewActivity = (activity?: ActivityFormValues) => {
+  const items = activity?.items?.map((item) => getNewActivityItem(item)) || [];
+  const conditionalLogic = getDuplicatedConditional(
+    activity?.items ?? [],
+    items,
+    activity?.conditionalLogic,
+  );
+
+  return {
+    name: t('newActivity'),
+    description: '',
+    showAllAtOnce: false,
+    isSkippable: false,
+    isReviewable: false,
+    responseIsEditable: true,
+    generateReport: false,
+    showScoreSummary: false,
+    ...activity,
+    items,
+    conditionalLogic,
+    id: undefined,
+    key: uuidv4(),
+  };
+};
 
 export const getNewPerformanceTask = ({
   name,
   description,
   performanceTask,
-  type,
+  performanceTaskType,
 }: GetNewPerformanceTask) => {
   const commonRoundProps = {
     stimulusDuration: DEFAULT_MILLISECONDS_DURATION,
@@ -139,21 +199,23 @@ export const getNewPerformanceTask = ({
   };
 
   const propsByTypeObj = {
-    [PerformanceTasks.Flanker]: defaultFlankerProps,
-    [PerformanceTasks.Gyroscope]: {
+    [EditablePerformanceTasksType.Flanker]: defaultFlankerProps,
+    [EditablePerformanceTasksType.Gyroscope]: {
       responseType: ItemResponseType.Gyroscope,
       name: ItemResponseType.Gyroscope,
       ...defaultGyroscopeAndTouchProps,
     },
-    [PerformanceTasks.Touch]: {
+    [EditablePerformanceTasksType.Touch]: {
       responseType: ItemResponseType.Touch,
       name: ItemResponseType.Touch,
       ...defaultGyroscopeAndTouchProps,
     },
   };
 
-  const defaultPropsByType = type
-    ? propsByTypeObj[type as unknown as EditablePerformanceTasksType] || { responseType: '' }
+  const defaultPropsByType = performanceTaskType
+    ? propsByTypeObj[performanceTaskType as unknown as EditablePerformanceTasksType] || {
+        responseType: '',
+      }
     : { responseType: '' };
 
   const { responseType, ...config } = defaultPropsByType;
@@ -172,7 +234,7 @@ export const getNewPerformanceTask = ({
       },
     ],
     isPerformanceTask: true,
-    type,
+    performanceTaskType,
     ...performanceTask,
     id: undefined,
     key: uuidv4(),

@@ -1,6 +1,7 @@
 import { Box, Button } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { addDays } from 'date-fns';
 
 import { DatePicker, TimePicker, DatePickerUiType } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
@@ -14,6 +15,7 @@ export const ReportFilters = ({ minDate }: { minDate: Date }) => {
 
   const moreFiltersVisisble = watch('moreFiltersVisisble');
   const filterByIdentifier = watch('filterByIdentifier');
+  const startDateEndDate = watch('startDateEndDate');
 
   const moreFiltersHandler = () => {
     setValue('moreFiltersVisisble', !moreFiltersVisisble);
@@ -28,6 +30,13 @@ export const ReportFilters = ({ minDate }: { minDate: Date }) => {
     }
   };
 
+  const onCloseCallback = () => {
+    if (!startDateEndDate[1]) {
+      const startDate = startDateEndDate[0];
+      setValue('startDateEndDate', [startDate, addDays(startDate, 1)]);
+    }
+  };
+
   return (
     <form>
       <StyledFlexTopCenter sx={{ mb: theme.spacing(3.2) }}>
@@ -37,6 +46,7 @@ export const ReportFilters = ({ minDate }: { minDate: Date }) => {
           uiType={DatePickerUiType.StartEndingDate}
           control={control}
           inputSx={{ width: '19rem' }}
+          onCloseCallback={onCloseCallback}
         />
         <Box sx={{ position: 'relative' }}>
           <TimePicker

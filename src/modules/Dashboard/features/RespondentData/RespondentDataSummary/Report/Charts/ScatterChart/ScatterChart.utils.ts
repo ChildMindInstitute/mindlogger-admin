@@ -4,21 +4,21 @@ import { Context } from 'chartjs-plugin-datalabels';
 import { variables } from 'shared/styles';
 import { locales } from 'shared/consts';
 
-import { Response, Version } from '../../Report.types';
-import { commonConfig } from './ScatterChart.const';
 import { ExtendedChartDataset } from './ScatterChart.types';
-
-const formatDateToNumber = (date: string | Date) =>
-  (typeof date === 'string' ? new Date(date) : date).getTime();
+import { getStepSize, getTimeConfig } from '../Charts.utils';
+import { Response, Version } from '../../Report.types';
 
 export const getOptions = (
   lang: keyof typeof locales,
-  minDate: string | Date,
-  maxDate: string | Date,
+  minDate: Date,
+  maxDate: Date,
   tooltipHandler: (context: ScriptableTooltipContext<'scatter'>) => void,
 ) => {
-  const min = formatDateToNumber(minDate);
-  const max = formatDateToNumber(maxDate);
+  const min = minDate.getTime();
+  const max = maxDate.getTime();
+
+  const timeConfig = getTimeConfig(min, max);
+  const stepSize = getStepSize(min, max);
 
   return {
     maintainAspectRatio: false,
@@ -52,12 +52,13 @@ export const getOptions = (
             locale: locales[lang],
           },
         },
-        ...commonConfig,
+        ...timeConfig,
         position: 'bottom' as const,
         grid: {
           display: false,
         },
         ticks: {
+          display: false,
           source: 'data' as const,
           font: {
             size: 11,
@@ -66,8 +67,34 @@ export const getOptions = (
         min,
         max,
       },
+      x1: {
+        adapters: {
+          date: {
+            locale: locales[lang],
+          },
+        },
+        ...timeConfig,
+        ticks: {
+          autoSkip: false,
+          stepSize,
+          font: {
+            size: 11,
+          },
+        },
+        position: 'bottom' as const,
+        grid: {
+          display: true,
+          drawOnChartArea: false,
+          drawTicks: true,
+        },
+        border: {
+          display: false,
+        },
+        min,
+        max,
+      },
       x2: {
-        ...commonConfig,
+        ...timeConfig,
         position: 'top' as const,
         ticks: {
           source: 'data' as const,
@@ -99,11 +126,15 @@ export const getData = (responses: Response[], versions: Version[]) => ({
       },
     },
     {
+      xAxisID: 'x1',
+      data: [],
+    },
+    {
       xAxisID: 'x2',
       labels: versions.map(({ version }) => version),
       data: versions.map(({ date }) => ({ x: new Date(date), y: 1 })),
       datalabels: {
-        anchor: 'start' as const,
+        anchor: 'end' as const,
         align: 'right' as const,
         font: {
           size: 11,

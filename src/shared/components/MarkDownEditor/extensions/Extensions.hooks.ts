@@ -7,7 +7,11 @@ import { falseReturnFunc, getUploadFormData } from 'shared/utils';
 import { SourceLinkModalForm } from '../SourceLinkModal';
 import { UploadMethodsProps } from './Extensions.types';
 
-export const useUploadMethods = ({ insertHandler }: UploadMethodsProps) => {
+export const useUploadMethods = ({
+  insertHandler,
+  setFileSizeExceeded,
+  fileSizeExceeded,
+}: UploadMethodsProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -49,6 +53,10 @@ export const useUploadMethods = ({ insertHandler }: UploadMethodsProps) => {
     if (!inputRef.current?.files?.length) return;
 
     const file = inputRef.current.files[0];
+    if (file.size > fileSizeExceeded) {
+      return setFileSizeExceeded(fileSizeExceeded);
+    }
+
     const body = getUploadFormData(file);
     executeImgUpload(body);
   };

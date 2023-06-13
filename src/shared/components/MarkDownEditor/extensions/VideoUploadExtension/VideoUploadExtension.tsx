@@ -9,11 +9,15 @@ import { ALLOWED_VIDEO_FILE_TYPES } from 'shared/consts';
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { InsertContentExtensionProps } from '../Extensions.types';
+import { MediaContentExtensionProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
-export const VideoUploadExtension = ({ onInsert }: InsertContentExtensionProps) => {
+export const VideoUploadExtension = ({
+  onInsert,
+  setFileSizeExceeded,
+  fileSizeExceeded,
+}: MediaContentExtensionProps) => {
   const { t } = useTranslation('app');
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
     const generator: InsertContentGenerator = () => ({
@@ -37,6 +41,8 @@ export const VideoUploadExtension = ({ onInsert }: InsertContentExtensionProps) 
     inputRef,
   } = useUploadMethods({
     insertHandler,
+    setFileSizeExceeded,
+    fileSizeExceeded,
   });
 
   return (

@@ -1,12 +1,7 @@
 import { useParams } from 'react-router-dom';
 
 import { applet } from 'shared/state';
-import {
-  decryptData,
-  getAESKey,
-  getObjectFromList,
-  getParsedEncryptionFromServer,
-} from 'shared/utils';
+import { decryptData, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
 import { DecryptedAnswerData, ExtendedExportAnswer, AnswerDecrypted } from 'shared/types';
 
@@ -23,40 +18,37 @@ export const useDecryptedAnswers = () => {
 
   return (answersApiResponse: ExtendedExportAnswer): DecryptedAnswerData[] => {
     const { userPublicKey, answer, items, itemIds, ...rest } = answersApiResponse;
-    const itemsObject = getObjectFromList(items);
-    let userPublicKeyParsed = [];
-    try {
-      userPublicKeyParsed = JSON.parse(userPublicKey);
-    } catch {
-      console.warn('Error while user public key parsing');
-
-      return [];
-    }
-    const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
 
     let answersDecrypted: AnswerDecrypted[] = [];
-    try {
-      answersDecrypted = JSON.parse(
-        decryptData({
-          text: answer,
-          key,
-        }),
-      );
-    } catch {
-      console.warn('Error while answer parsing');
 
-      return [];
+    if (userPublicKey && answer) {
+      let userPublicKeyParsed;
+      try {
+        userPublicKeyParsed = JSON.parse(userPublicKey);
+      } catch {
+        userPublicKeyParsed = userPublicKey;
+      }
+
+      const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
+
+      try {
+        answersDecrypted = JSON.parse(
+          decryptData({
+            text: answer,
+            key,
+          }),
+        );
+      } catch {
+        console.warn('Error while answer parsing');
+
+        return [];
+      }
     }
 
-    return answersDecrypted.map((answerDecrypted, index) => {
-      const itemId = itemIds[index];
-      const activityItem = itemsObject[itemId];
-
-      return {
-        activityItem,
-        answer: answerDecrypted,
-        ...rest,
-      };
-    });
+    return items.map((activityItem, index) => ({
+      activityItem,
+      answer: answersDecrypted[index],
+      ...rest,
+    }));
   };
 };
