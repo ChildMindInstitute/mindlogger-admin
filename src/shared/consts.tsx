@@ -19,6 +19,10 @@ export const MAX_FILE_SIZE_8MB = 8_388_608;
 export const MAX_FILE_SIZE_5MB = 5_242_880;
 export const MAX_FILE_SIZE_2MB = 2_097_152;
 
+export const MAX_FILE_SIZE_25MB = 26_214_400;
+
+export const MAX_FILE_SIZE_150MB = 157_286_400;
+
 export const INPUT_DEBOUNCE_TIME = 400;
 export const SEARCH_DEBOUNCE_VALUE = 700;
 
