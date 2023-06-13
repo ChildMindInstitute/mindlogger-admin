@@ -27,7 +27,7 @@ export type ImportScheduleHookProps = {
 };
 
 export type UploadedEvent = Omit<ScheduleExportItem, 'date'> & {
-  date: Date;
+  date: string | Date;
 };
 
 export enum ImportScheduleErrors {
