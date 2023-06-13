@@ -83,13 +83,27 @@ export const Respondents = () => {
   const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
 
+  const handleAppletData = (respondentId: string, key: keyof FilteredApplets) => {
+    if (respondentId && appletId && ownerId) {
+      const respondentAccess = filteredRespondents[respondentId]?.[key]?.[0];
+      const chosenAppletData = respondentAccess && {
+        ...respondentAccess,
+        respondentId,
+        ownerId,
+      };
+      setChosenAppletData(chosenAppletData ?? null);
+    }
+  };
+
   const actions = {
     scheduleSetupAction: (respondentId: string) => {
       setRespondentKey(respondentId);
+      handleAppletData(respondentId, 'scheduling');
       setScheduleSetupPopupVisible(true);
     },
     userDataExportAction: (respondentId: string) => {
       setRespondentKey(respondentId);
+      handleAppletData(respondentId, 'viewable');
       setDataExportPopupVisible(true);
     },
     viewDataAction: (respondentId: string) => {
@@ -99,28 +113,18 @@ export const Respondents = () => {
 
         return;
       }
-
+      handleAppletData(respondentId, 'viewable');
       setRespondentKey(respondentId);
       setViewDataPopupVisible(true);
     },
     removeAccessAction: (respondentId: string) => {
       setRespondentKey(respondentId);
+      handleAppletData(respondentId, 'editable');
       setRemoveAccessPopupVisible(true);
     },
     editRespondent: (respondentId: string) => {
       setRespondentKey(respondentId);
-
-      if (respondentId && appletId && ownerId) {
-        const respondentAccess = filteredRespondents[respondentId]?.editable?.find(
-          (item) => item.appletId === appletId,
-        );
-        const chosenAppletData = respondentAccess && {
-          ...respondentAccess,
-          respondentId,
-          ownerId,
-        };
-        setChosenAppletData(chosenAppletData ?? null);
-      }
+      handleAppletData(respondentId, 'editable');
       setEditRespondentPopupVisible(true);
     },
   };

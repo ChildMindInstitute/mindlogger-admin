@@ -58,7 +58,7 @@ export const Managers = () => {
   const filterAplletsByRoles = (user: Manager) => ({
     ...user,
     applets: user.applets.filter((applet) => {
-      const workspaceUserRole = rolesData?.data?.[applet.id][0];
+      const workspaceUserRole = rolesData?.data?.[applet.id]?.[0];
       const withoutManagerOrOwner = !applet.roles?.some(({ role }) => isManagerOrOwner(role));
 
       return (
