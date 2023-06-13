@@ -131,7 +131,7 @@ export const Respondents = () => {
     execute({ ownerId, userId });
   };
 
-  const formatRow = (user: Respondent) => {
+  const formatRow = (user: Respondent): Row => {
     const { secretIds, nicknames, lastSeen, id, details, isPinned } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule =
@@ -167,8 +167,12 @@ export const Respondents = () => {
         },
       }),
       actions: {
-        content: () => (
-          <Actions items={getActions(actions, filteredRespondents?.[id], appletId)} context={id} />
+        content: (_, hasVisibleActions) => (
+          <Actions
+            items={getActions(actions, filteredRespondents?.[id], appletId)}
+            context={id}
+            visibleByDefault={hasVisibleActions}
+          />
         ),
         value: '',
         width: '330',

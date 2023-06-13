@@ -36,6 +36,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
 
   const [folder, setFolder] = useState(item);
+  const [hasVisibleActions, setHasVisibleActions] = useState(false);
 
   const isFolderExpanded = !!expandedFolders.find((id) => id === item.id);
 
@@ -100,6 +101,8 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
       onDrop={(event) => onDrop(event, item)}
+      onMouseEnter={() => setHasVisibleActions(true)}
+      onMouseLeave={() => setHasVisibleActions(false)}
     >
       <TableCell width="30%" onClick={() => (!folder?.isRenaming ? onFolderClick() : null)}>
         <StyledFlexTopCenter>
@@ -144,7 +147,11 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       </TableCell>
       <TableCell width="20%"></TableCell>
       <StyledCell>
-        <Actions items={getActions(folder, handleRenameFolder, onDeleteFolder)} context={item} />
+        <Actions
+          items={getActions(folder, handleRenameFolder, onDeleteFolder)}
+          context={item}
+          visibleByDefault={hasVisibleActions}
+        />
       </StyledCell>
     </TableRow>
   );
