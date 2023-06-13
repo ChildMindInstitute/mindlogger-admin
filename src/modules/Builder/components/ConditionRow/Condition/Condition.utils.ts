@@ -7,6 +7,7 @@ export const getStateOptions = (type?: ConditionItemType) => {
   const { t } = i18n;
 
   switch (type) {
+    case ConditionItemType.Score:
     case ConditionItemType.Slider:
       return [
         { value: ConditionType.GreaterThan, labelKey: t('greaterThan') },
@@ -26,8 +27,8 @@ export const getStateOptions = (type?: ConditionItemType) => {
         { value: ConditionType.IncludesOption, labelKey: t('includesOption') },
         { value: ConditionType.NotIncludesOption, labelKey: t('notIncludesOption') },
       ];
-    case ConditionItemType.Score:
-      return [];
+    case ConditionItemType.ScoreCondition:
+      return [{ value: ConditionType.Equal, labelKey: t('equal') }];
     default:
       return [];
   }

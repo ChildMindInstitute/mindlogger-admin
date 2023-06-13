@@ -848,6 +848,7 @@
     "moreThan": "{{- more }} should be bigger than {{- than }}",
     "unique": "That {{- field }} is already in use. Please use a different name",
     "atLeastOne": "Select at least 1 element",
+    "atLeastOneCondition": "Set up at least one condition",
     "mustShowMessageOrItems": "You must show a message or print items to publish this report",
     "atLeastOneItem": "Select at least 1 Item",
     "incorrectEmail": "Email must be valid"
@@ -993,6 +994,7 @@
   "addActivityItemsFlowTooltip": "You need to create at least two Items first",
   "activityItemsFlowItemTitle": "Conditional {{- index }}",
   "if": "If",
+  "is": "Is",
   "conditionItemSelected": "Item: {{- value }}",
   "conditionScoreSelected": "Score: {{- value }}",
   "conditionItemNamePlaceholder": "Item",
@@ -1081,6 +1083,15 @@
   "removeImageDescription": "Are you sure you want to remove Image?",
   "selectedItems": "Selected Items",
   "saveAndPublishFirst": "Save & publish the Applet first",
+  "scoreSummaryDescription": "conditions are true:",
+  "addCondition": "Add Condition",
+  "conditionalLogic": "Conditional Logic",
+  "flagScore": "Flag Score",
+  "flagScoreTooltip": "The score will be highlighted in red in the summary screen",
+  "scoreConditions": "Score Conditions",
+  "scoreConditional": "Score condition {{index}}:",
+  "scoreConditionName": "Score Condition Name",
+  "scoreConditionId": "Score Condition ID",
   "gyroscope": "CST Gyroscope",
   "touch": "CST Touch",
   "gyroscopeAndTouchInstructions": {
@@ -1110,6 +1121,11 @@
   "lambdaSlopeTooltip": "Percentage increase in disc deflection rate over the selected time",
   "minutes": "minutes",
   "integerError": "Integer between 1 and 99 required",
+  "removeConditionalLogic": "Remove Conditional Logic",
+  "confirmRemoveConditionalLogic": "Are you sure you want to remove conditional logic for the <1>{{name}}</1>?",
+  "successRemoveConditionalLogic": "Conditional logic has been removed successfully.",
+  "item": "Item: ",
+  "scoreConditionals": "Score Conditional",
   "uploadFile": "Upload File",
   "fileSizeExceed": "File is too big. Please upload a file less than {{ size }}."
 }

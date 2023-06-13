@@ -1,79 +1,78 @@
-import { FieldError, useFormContext } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import {
-  StyledBodyMedium,
-  StyledFlexColumn,
-  StyledFlexTopStart,
-  theme,
-  variables,
-} from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import {
-  InputController,
-  Switch,
-  TransferListController,
-  EditorUiType,
-} from 'shared/components/FormComponents';
+import { StyledFlexColumn, theme } from 'shared/styles';
+import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components';
-import { Item } from 'shared/state';
+import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
+import { ConditionRowType } from 'modules/Builder/types';
 
-import { columns } from './SectionContent.const';
-import { StyledButton, StyledEditor } from './SectionContent.styles';
-import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { SectionContentProps } from './SectionContent.types';
+import { ConditionContent } from '../ConditionContent';
+import { StyledButton } from '../ScoresAndReports.styles';
+import { SectionScoreHeader } from '../SectionScoreHeader';
+import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
+import { defaultConditionalValue } from './SectionContent.const';
+import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 
-export const SectionContent = ({ name }: SectionContentProps) => {
+export const SectionContent = ({ name, title }: SectionContentProps) => {
   const { t } = useTranslation('app');
-  const { control, getFieldState, watch } = useFormContext();
-  const { activity } = useCurrentActivity();
+  const { control, watch, setValue } = useFormContext();
+  const conditionalLogicName = `${name}.conditionalLogic`;
+  const conditionalLogic = watch(conditionalLogicName);
+  const [isContainConditional, setIsContainConditional] = useState(!!conditionalLogic);
+  const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
 
-  const showMessage: boolean = watch(`${name}.showMessage`);
-  const printItems: boolean = watch(`${name}.printItems`);
-  const items = activity?.items
-    .filter(checkOnItemTypeAndScore)
-    .map(({ id, name, question }: Item) => ({ id, name, question }));
-  const hasPrintItemsError = getFieldState(`${name}.printItems`).error as unknown as Record<
-    string,
-    FieldError
-  >;
+  useEffect(() => {
+    if (isContainConditional) {
+      setValue(conditionalLogicName, defaultConditionalValue);
+
+      return;
+    }
+  }, [isContainConditional]);
+
+  const removeConditional = () => {
+    setIsRemoveConditionalPopupVisible(true);
+  };
 
   return (
     <StyledFlexColumn>
       <InputController control={control} name={`${name}.name`} label={t('sectionName')} />
-      <StyledButton startIcon={<Svg id="add" width="20" height="20" />}>
-        {t('addConditinalLogic')}
-      </StyledButton>
-      {hasPrintItemsError && (
-        <StyledBodyMedium sx={{ mb: theme.spacing(2.4) }} color={variables.palette.semantic.error}>
-          {t('validationMessages.mustShowMessageOrItems')}
-        </StyledBodyMedium>
-      )}
-      <Switch
-        name={`${name}.showMessage`}
-        control={control}
-        label={t('showMessage')}
-        tooltipText={t('showMessageTooltip')}
-      />
-      {showMessage && (
-        <StyledEditor uiType={EditorUiType.Secondary} name={`${name}.message`} control={control} />
-      )}
-      <Switch
-        name={`${name}.printItems`}
-        control={control}
-        label={t('printItems')}
-        tooltipText={t('printItemsTooltip')}
-      />
-      {printItems && (
-        <StyledFlexTopStart sx={{ mb: theme.spacing(2.4) }}>
-          <TransferListController
-            name={`${name}.itemsPrint`}
-            items={items}
-            columns={columns}
-            hasSearch={false}
-            hasSelectedSection={false}
+      <Box sx={{ mt: theme.spacing(2.4) }}>
+        {isContainConditional ? (
+          <ToggleItemContainer
+            HeaderContent={SectionScoreHeader}
+            Content={ConditionContent}
+            contentProps={{
+              name: conditionalLogicName,
+              type: ConditionRowType.Section,
+            }}
+            headerContentProps={{
+              onRemove: removeConditional,
+              title: t('conditionalLogic'),
+              name: conditionalLogicName,
+            }}
+            uiType={ToggleContainerUiType.Score}
           />
-        </StyledFlexTopStart>
+        ) : (
+          <StyledButton
+            sx={{ mt: 0 }}
+            startIcon={<Svg id="add" width="20" height="20" />}
+            onClick={() => setIsContainConditional(true)}
+          >
+            {t('addConditinalLogic')}
+          </StyledButton>
+        )}
+      </Box>
+      <SectionScoreCommonFields name={name} />
+      {isRemoveConditionalPopupVisible && (
+        <RemoveConditionalLogicPopup
+          onClose={() => setIsRemoveConditionalPopupVisible(false)}
+          onRemove={() => setIsContainConditional(false)}
+          name={title}
+        />
       )}
     </StyledFlexColumn>
   );

@@ -6,8 +6,11 @@ import { StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder/types';
+import {
+  StyledSummaryRow,
+  StyledSummarySelectController,
+} from 'shared/styles/styledComponents/ConditionalSummary';
 
-import { StyledSummaryRow, StyledSelectController } from './SummaryRow.styles';
 import { SummaryRowProps } from './SummaryRow.types';
 import { getMatchOptions, getItemsOptions } from './SummaryRow.utils';
 
@@ -32,14 +35,14 @@ export const SummaryRow = ({ name }: SummaryRowProps) => {
   return (
     <StyledSummaryRow>
       <StyledTitleMedium>{t('if')}</StyledTitleMedium>
-      <StyledSelectController
+      <StyledSummarySelectController
         control={control}
         name={`${name}.match`}
         options={getMatchOptions()}
         placeholder={t('select')}
       />
       <StyledTitleMedium>{t('summaryRowDescription')}</StyledTitleMedium>
-      <StyledSelectController
+      <StyledSummarySelectController
         control={control}
         name={`${name}.itemKey`}
         options={getItemsOptions(items)}

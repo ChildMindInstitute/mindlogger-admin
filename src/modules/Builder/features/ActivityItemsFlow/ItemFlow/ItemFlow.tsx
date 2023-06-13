@@ -2,12 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { Badge } from '@mui/material';
 
-import { ToggleItemContainer } from 'modules/Builder/components';
+import { ConditionRow, ToggleItemContainer } from 'modules/Builder/components';
 import { StyledFlexColumn } from 'shared/styles';
 import { Condition } from 'shared/state';
 
 import { Actions } from './Actions';
-import { ConditionRow } from './ConditionRow';
 import { SummaryRow } from './SummaryRow';
 import { ItemFlowProps, ContentProps } from './ItemFlow.types';
 import { getEmptyCondition } from './ItemFlow.utils';
