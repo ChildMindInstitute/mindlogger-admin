@@ -20,6 +20,8 @@ import {
   frequencyArray,
   notificationValidationRegex,
   timeValidationRegex,
+  EMPTY_TIME,
+  ALWAYS_FREQUENCY,
 } from './ImportSchedule.const';
 import { CheckFields, ImportScheduleErrors, UploadedEvent } from './ImportSchedulePopup.types';
 
@@ -172,16 +174,17 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
       acc.activityNames.push(activityName);
 
       if (isUploadedSchedule) {
+        const isAlwaysFrequency = frequency === ALWAYS_FREQUENCY;
         if (
-          (frequency === 'Always' && startTime !== '-') ||
-          (frequency !== 'Always' && !timeValidationRegex.test(getUploadedTime(startTime)))
+          (isAlwaysFrequency && startTime !== EMPTY_TIME) ||
+          (!isAlwaysFrequency && !timeValidationRegex.test(getUploadedTime(startTime)))
         ) {
           acc.invalidStartTimeField = getInvalidError(ImportScheduleErrors.StartTime);
         }
 
         if (
-          (frequency === 'Always' && endTime !== '-') ||
-          (frequency !== 'Always' && !timeValidationRegex.test(getUploadedTime(endTime)))
+          (isAlwaysFrequency && endTime !== EMPTY_TIME) ||
+          (!isAlwaysFrequency && !timeValidationRegex.test(getUploadedTime(endTime)))
         ) {
           acc.invalidEndTimeField = getInvalidError(ImportScheduleErrors.EndTime);
         }
@@ -199,15 +202,15 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
         }
 
         if (
-          frequency !== 'Always' &&
+          !isAlwaysFrequency &&
           !getStartEndComparison(getUploadedTime(startTime), getUploadedTime(endTime))
         ) {
           acc.invalidStartEndTime = getInvalidError(ImportScheduleErrors.StartEndTime);
         }
 
         if (
-          frequency !== 'Always' &&
-          notificationTime !== '-' &&
+          !isAlwaysFrequency &&
+          notificationTime !== EMPTY_TIME &&
           !getBetweenStartEndComparison(
             getUploadedTime(notificationTime),
             getUploadedTime(startTime),
@@ -274,11 +277,11 @@ export const prepareImportPayload = (
 
     return {
       startTime:
-        startTime === '-'
+        startTime === EMPTY_TIME
           ? undefined
           : addSecondsToHourMinutes(getUploadedTime(startTime)) || undefined,
       endTime:
-        endTime === '-'
+        endTime === EMPTY_TIME
           ? undefined
           : addSecondsToHourMinutes(getUploadedTime(endTime)) || undefined,
       accessBeforeSchedule: periodicityType === Periodicity.Always ? undefined : false,
@@ -307,7 +310,7 @@ export const prepareImportPayload = (
       activityId,
       flowId,
       notification:
-        notificationTime === '-'
+        notificationTime === EMPTY_TIME
           ? null
           : {
               notifications: [

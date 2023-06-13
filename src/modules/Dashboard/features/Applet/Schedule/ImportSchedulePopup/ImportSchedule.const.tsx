@@ -48,3 +48,5 @@ export const dateValidationRegex = new RegExp(
 );
 
 export const frequencyArray = ['Always', 'Once', 'Daily', 'Weekly', 'Monthly', 'Weekdays'];
+export const EMPTY_TIME = '-';
+export const ALWAYS_FREQUENCY = 'Always';
