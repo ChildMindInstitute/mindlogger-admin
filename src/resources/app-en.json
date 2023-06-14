@@ -1127,5 +1127,7 @@
   "item": "Item: ",
   "scoreConditionals": "Score Conditional",
   "uploadFile": "Upload File",
-  "fileSizeExceed": "File is too big. Please upload a file less than {{ size }}."
+  "fileSizeExceed": "File is too big. Please upload a file less than {{ size }}.",
+  "serverStatusConnected": "Server Status: Connected.",
+  "configureServerForReport": "Server Status: Not Configured. Report can not be generated."
 }

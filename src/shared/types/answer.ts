@@ -50,4 +50,4 @@ export type DecryptedAnswerData = Omit<
 > &
   ActivityItemAnswer;
 
-export type AnswerDecrypted = string | { value: string | number | string[]; text?: string };
+export type AnswerDecrypted = string | { value: string | number | number[]; text?: string };

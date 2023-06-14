@@ -18,7 +18,6 @@ export const BaseLayout = () => {
   useEffect(() => {
     if (!ownerId) return;
     const { getWorkspaceRoles } = workspaces.thunk;
-
     dispatch(
       getWorkspaceRoles({
         ownerId,

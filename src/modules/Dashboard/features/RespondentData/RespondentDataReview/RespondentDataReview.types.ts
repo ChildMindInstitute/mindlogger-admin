@@ -12,7 +12,7 @@ export type Activity = {
 };
 
 export type ItemAnswer = {
-  value: number | string | string[] | null;
+  value: number | string | number[] | null;
   text?: string | null;
 };
 
@@ -21,7 +21,7 @@ export type SliderAnswer = ItemAnswer & {
 };
 
 export type MultiSelectAnswer = ItemAnswer & {
-  value: string[];
+  value: number[];
 };
 
 export type SingleSelectAnswer = ItemAnswer & {

@@ -23,6 +23,8 @@ import {
   MAX_SLOPE,
 } from 'shared/consts';
 
+import { StyledLambdaScopeInput } from './GeneralSettings.styles';
+
 export const GeneralSettings = () => {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -76,7 +78,7 @@ export const GeneralSettings = () => {
               </span>
             </Tooltip>
           </StyledTitleMedium>
-          <StyledSmallNumberInput>
+          <StyledLambdaScopeInput>
             <InputController
               type="number"
               control={control}
@@ -85,7 +87,7 @@ export const GeneralSettings = () => {
               maxNumberValue={MAX_SLOPE}
               textAdornment="%"
             />
-          </StyledSmallNumberInput>
+          </StyledLambdaScopeInput>
         </Grid>
       </Grid>
     </StyledItemOptionContainer>

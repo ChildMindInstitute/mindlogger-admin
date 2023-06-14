@@ -112,7 +112,6 @@ export const theme = createTheme({
             fontSize: variables.font.size.md,
             lineHeight: variables.font.lineHeight.md,
             letterSpacing: variables.font.letterSpacing.lg,
-            background: 'transparent',
           },
           '.MuiTableCell-body ~ .MuiTableCell-body': {
             borderLeft: `${variables.borderWidth.md} solid transparent}`,

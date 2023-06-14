@@ -1,5 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { IsPracticeRoundType } from '../../RoundSettings.types';
+
 export type UploadedTable = Record<string, string | number>[] | null;
 
 export type SetUploadedTable = Dispatch<SetStateAction<UploadedTable>>;
+
+export type BlockSequencesContentProps = IsPracticeRoundType & {
+  setError: (error: string) => void;
+};

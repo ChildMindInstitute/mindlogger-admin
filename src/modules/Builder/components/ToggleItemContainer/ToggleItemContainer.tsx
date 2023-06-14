@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -13,7 +13,7 @@ import {
 } from 'shared/styles';
 import { Svg, Tooltip } from 'shared/components';
 
-import { StyledItemOption, StylesTitleWrapper } from './ToggleItemContainer.styles';
+import { StyledItemOption, StylesTitleWrapper, StyledBadge } from './ToggleItemContainer.styles';
 import { ToggleContainerUiType, ToggleItemProps } from './ToggleItemContainer.types';
 
 export const ToggleItemContainer = ({
@@ -24,6 +24,7 @@ export const ToggleItemContainer = ({
   contentProps,
   uiType = ToggleContainerUiType.Item,
   isOpenByDefault,
+  isOpenDisabled,
   tooltip,
   error,
 }: ToggleItemProps) => {
@@ -36,14 +37,16 @@ export const ToggleItemContainer = ({
       <StylesTitleWrapper open={open} uiType={uiType}>
         <StyledFlexTopCenter sx={{ flexGrow: 1 }}>
           <StyledFlexTopCenter>
-            <StyledClearedButton onClick={handleToggle} sx={{ p: theme.spacing(0.8) }}>
+            <StyledClearedButton
+              onClick={handleToggle}
+              sx={{ p: theme.spacing(0.8) }}
+              disabled={isOpenDisabled}
+            >
               <Svg id={open ? 'navigate-up' : 'navigate-down'} />
             </StyledClearedButton>
             {title && (
-              <StyledFlexTopCenter sx={{ m: theme.spacing(0, 5, 0, 3) }}>
-                {!open && error && (
-                  <Badge sx={{ mr: theme.spacing(1) }} variant="dot" color="error" />
-                )}
+              <StyledFlexTopCenter sx={{ m: theme.spacing(0, 5, 0, 1.5) }}>
+                {!open && error && <StyledBadge variant="dot" color="error" />}
                 <StyledFlexTopCenter>
                   <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
                 </StyledFlexTopCenter>
