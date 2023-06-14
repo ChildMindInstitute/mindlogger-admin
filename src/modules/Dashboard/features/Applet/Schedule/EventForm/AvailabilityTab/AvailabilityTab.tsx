@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +8,7 @@ import { theme, variables, StyledBodyMedium } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
+import { DEFAULT_START_TIME } from '../EventForm.const';
 import { availabilityOptions, repeatsButtons } from './Availability.const';
 import {
   StyledButtonsTitle,
@@ -53,6 +55,12 @@ export const AvailabilityTab = () => {
       </StyledDatePickerWrapper>
     );
   };
+
+  useEffect(() => {
+    if (startTime === DEFAULT_START_TIME) {
+      setValue('accessBeforeSchedule', false);
+    }
+  }, [startTime]);
 
   return (
     <>
