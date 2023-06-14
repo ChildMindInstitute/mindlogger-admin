@@ -2,23 +2,35 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { StyledBodyLarge, StyledFlexTopCenter, StyledTooltipSvg, theme } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledFlexTopCenter,
+  StyledTooltipSvg,
+  theme,
+  variables,
+} from 'shared/styles';
 import { Tooltip } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
 import { ActivitySettingsScore, ActivitySettingsSection } from 'shared/state';
+import { useIsServerConfigured } from 'shared/hooks';
+import { page } from 'resources';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import { SectionScoreHeader } from './SectionScoreHeader';
 import { SectionContent } from './SectionContent';
 import { getScoreDefaults, getSectionDefaults } from './ScoresAndReports.utils';
 import { ScoreContent } from './ScoreContent';
+import { StyledConfigureBtn } from './ScoresAndReports.styles';
 
 export const ScoresAndReports = () => {
   const { t } = useTranslation('app');
+  const { appletId } = useParams();
+  const navigate = useNavigate();
   const { fieldName } = useCurrentActivity();
   const { control, watch, setValue } = useFormContext();
   const scoresAndReportsName = `${fieldName}.scoresAndReports`;
@@ -26,6 +38,7 @@ export const ScoresAndReports = () => {
   const showScoreSummaryName = `${scoresAndReportsName}.showScoreSummary`;
   const scoresName = `${scoresAndReportsName}.scores`;
   const sectionsName = `${scoresAndReportsName}.sections`;
+  const isServerConfigured = useIsServerConfigured();
 
   const { append: appendScore, remove: removeScore } = useFieldArray({
     control,
@@ -56,8 +69,31 @@ export const ScoresAndReports = () => {
     showScoreSummary ?? setValue(showScoreSummaryName, false);
   }, [generateReport, showScoreSummary]);
 
+  const navigateToSettings = () =>
+    navigate(
+      generatePath(page.builderAppletSettingsItem, {
+        appletId,
+        settingItem: 'report-configuration',
+      }),
+    );
+
   return (
     <>
+      <StyledBodyLarge
+        sx={{ mb: theme.spacing(2.4) }}
+        color={
+          isServerConfigured ? variables.palette.semantic.green : variables.palette.semantic.error
+        }
+      >
+        {isServerConfigured ? (
+          t('serverStatusConnected')
+        ) : (
+          <>
+            {t('configureServerForReport')}
+            <StyledConfigureBtn onClick={navigateToSettings}>{t('configure')}</StyledConfigureBtn>
+          </>
+        )}
+      </StyledBodyLarge>
       <CheckboxController
         disabled={isCheckboxesDisabled}
         control={control}
