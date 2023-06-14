@@ -117,7 +117,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
           <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>{scoreRangeLabel}</StyledBodyLarge>
         </Box>
       </StyledFlexTopStart>
-      <StyledTitleMedium>{t('scoreItems')}</StyledTitleMedium>
+      <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>{t('scoreItems')}</StyledTitleMedium>
       <TransferListController
         name={`${name}.itemsScore`}
         items={tableItems}
@@ -125,6 +125,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
         selectedItemsColumns={selectedItemsColumns}
         hasSelectedSection
         hasSearch
+        sxProps={{ mb: theme.spacing(2.5) }}
       />
       <SectionScoreCommonFields name={name} />
       {!!scoreConditionals?.length && (
