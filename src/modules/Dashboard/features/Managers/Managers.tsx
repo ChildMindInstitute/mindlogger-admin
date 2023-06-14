@@ -122,7 +122,7 @@ export const Managers = () => {
           }),
           actions: {
             content: (_, hasVisibleActions) => {
-              if (ownerId === id || !filteredManager?.applets.length) {
+              if (ownerId === id || !filteredManager?.applets?.length) {
                 return;
               }
 

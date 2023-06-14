@@ -83,7 +83,7 @@ export const Respondents = () => {
   const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
 
-  const handleAppletData = (respondentId: string, key: keyof FilteredApplets) => {
+  const handleDataForAppletPage = (respondentId: string, key: keyof FilteredApplets) => {
     if (respondentId && appletId && ownerId) {
       const respondentAccess = filteredRespondents[respondentId]?.[key]?.[0];
       const chosenAppletData = respondentAccess && {
@@ -98,12 +98,12 @@ export const Respondents = () => {
   const actions = {
     scheduleSetupAction: (respondentId: string) => {
       setRespondentKey(respondentId);
-      handleAppletData(respondentId, 'scheduling');
+      handleDataForAppletPage(respondentId, 'scheduling');
       setScheduleSetupPopupVisible(true);
     },
     userDataExportAction: (respondentId: string) => {
       setRespondentKey(respondentId);
-      handleAppletData(respondentId, 'viewable');
+      handleDataForAppletPage(respondentId, 'viewable');
       setDataExportPopupVisible(true);
     },
     viewDataAction: (respondentId: string) => {
@@ -113,18 +113,18 @@ export const Respondents = () => {
 
         return;
       }
-      handleAppletData(respondentId, 'viewable');
+      handleDataForAppletPage(respondentId, 'viewable');
       setRespondentKey(respondentId);
       setViewDataPopupVisible(true);
     },
     removeAccessAction: (respondentId: string) => {
       setRespondentKey(respondentId);
-      handleAppletData(respondentId, 'editable');
+      handleDataForAppletPage(respondentId, 'editable');
       setRemoveAccessPopupVisible(true);
     },
     editRespondent: (respondentId: string) => {
       setRespondentKey(respondentId);
-      handleAppletData(respondentId, 'editable');
+      handleDataForAppletPage(respondentId, 'editable');
       setEditRespondentPopupVisible(true);
     },
   };
