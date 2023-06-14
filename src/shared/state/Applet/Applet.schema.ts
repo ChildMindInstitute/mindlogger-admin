@@ -263,6 +263,7 @@ export type SingleAndMultipleSelectionOption = {
   color?: string | ColorResult;
   isHidden?: boolean;
   alert?: string;
+  value?: number;
 };
 
 export type SingleAndMultipleSelectItemResponseValues = {

@@ -44,12 +44,12 @@ export const MultipleSelection = ({
           control={
             <Checkbox
               {...checkboxProps}
-              checked={value?.includes(option.id)}
+              checked={value?.includes(option.value!)}
               onChange={() => {
-                if (!value?.includes(option.id)) {
-                  return onChange && onChange([...value, option.id]);
+                if (!value?.includes(option.value!)) {
+                  return onChange && onChange([...value, option.value!]);
                 }
-                const updatedOptions = value.filter((value: string) => value !== option.id);
+                const updatedOptions = value.filter((value) => value !== option.value!);
                 onChange && onChange(updatedOptions);
               }}
             />

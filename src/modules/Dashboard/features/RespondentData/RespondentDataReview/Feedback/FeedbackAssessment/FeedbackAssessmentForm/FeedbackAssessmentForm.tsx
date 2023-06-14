@@ -24,10 +24,11 @@ export const FeedbackAssessmentForm = ({ answers, setActiveTab }: FeedbackAssess
   const methods = useForm<AssessmentForm>({
     mode: 'onChange',
     defaultValues: {
-      assessmentItems: answers?.map(({ activityItem, answer }) => ({
-        itemId: activityItem.id as string,
-        answers: getAnswerValue(answer) || getDefaultValue(activityItem.responseType),
-      })),
+      assessmentItems:
+        answers?.map(({ activityItem, answer }) => ({
+          itemId: activityItem.id,
+          answers: getAnswerValue(answer) || getDefaultValue(activityItem.responseType),
+        })) ?? [],
     },
   });
 
