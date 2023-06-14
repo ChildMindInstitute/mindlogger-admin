@@ -93,7 +93,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
 
   return (
     <StyledFlexColumn>
-      <StyledFlexTopStart>
+      <StyledFlexTopStart sx={{ mt: theme.spacing(1.6) }}>
         <Box sx={{ mr: theme.spacing(4.8), width: '50%' }}>
           <InputController
             control={control}
