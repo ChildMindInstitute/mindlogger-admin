@@ -5,7 +5,7 @@ import {
 import { AnswerValue } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { ItemResponseType } from 'shared/consts';
 
-export const getDefaultValue = (responseType: ItemResponseType): string | string[] | null => {
+export const getDefaultValue = (responseType: ItemResponseType): string | number[] | null => {
   switch (responseType) {
     case ItemResponseType.Slider:
       return null;

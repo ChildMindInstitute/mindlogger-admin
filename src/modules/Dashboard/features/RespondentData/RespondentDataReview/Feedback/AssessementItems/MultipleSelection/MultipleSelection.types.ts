@@ -2,7 +2,7 @@ import { MultiSelectActivityItem } from 'modules/Dashboard/features/RespondentDa
 
 export type MultipleSelectionProps = {
   activityItem: MultiSelectActivityItem;
-  value: string[];
+  value: number[];
   isDisabled?: boolean;
-  onChange?: (value: string[]) => void;
+  onChange?: (value: number[]) => void;
 };

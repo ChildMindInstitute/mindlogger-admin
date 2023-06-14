@@ -8,7 +8,7 @@ export const SingleSelectResponseItem = ({ activityItem, answer }: SingleSelectI
     {activityItem.responseValues.options.map((option) => (
       <FormControlLabel
         key={option.id}
-        value={option.id}
+        value={option.value}
         disabled
         control={<Radio disabled />}
         label={option.text}
