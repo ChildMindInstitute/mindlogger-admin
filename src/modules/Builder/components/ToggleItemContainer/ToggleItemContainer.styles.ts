@@ -30,7 +30,7 @@ export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)
   justify-content: space-between;
 
   ${({ open, uiType }: { open?: boolean; uiType: ToggleContainerUiType }) => `
-		height: ${open ? '5.6rem' : 'inherit'}; 
+    height: 4.8rem;
 		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0}
 	`};
 `;
@@ -38,4 +38,14 @@ export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)
 export const StyledBadge = styled(Badge)`
   margin-right: ${theme.spacing(1)};
   left: -0.6rem;
+`;
+
+export const StyledTitleContainer = styled(StyledFlexTopCenter, shouldForwardProp)`
+  margin: ${theme.spacing(0, 5, 0, 1.5)};
+
+  ${({ hasError }: { hasError: boolean }) =>
+    hasError &&
+    `
+    margin-left: ${theme.spacing(2.5)};
+  `}
 `;
