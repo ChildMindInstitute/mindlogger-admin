@@ -28,10 +28,12 @@ import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { ScoreContentProps } from './ScoreContent.types';
 import {
   getDefaultConditionalValue,
+  getIsScoreIdVariable,
   getScoreId,
   getScoreRange,
   getScoreRangeLabel,
   getTableScoreItems,
+  updateMessagesWithVariable,
 } from './ScoreContent.utils';
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
 import { StyledButton } from '../ScoresAndReports.styles';
@@ -48,18 +50,19 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
-  const isScoreIdVariable = false;
 
   const scoreConditionalsName = `${name}.conditionalLogic`;
 
   const scoreConditionals = watch(scoreConditionalsName);
-  const scoreName: string = watch(`${name}.name`);
+  const score = watch(name);
+  const scoreName = watch(`${name}.name`);
+  const scoreId = watch(`${name}.id`);
   const calculationType: CalculationType = watch(`${name}.calculationType`);
   const itemsScore: string[] = watch(`${name}.itemsScore`);
-  const scoreId = getScoreId(scoreName, calculationType);
   const items: Item[] = activity?.items.filter(checkOnItemTypeAndScore);
   const tableItems = getTableScoreItems(items);
   const [scoreRangeLabel, setScoreRangeLabel] = useState<string>('-');
+  const [prevScoreName, setPrevScoreName] = useState(scoreName);
 
   const { append, remove } = useFieldArray({
     control,
@@ -76,10 +79,6 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
   };
 
   useEffect(() => {
-    isScoreIdVariable && setIsChangeScoreIdPopupVisible(true);
-  }, [isScoreIdVariable, scoreName]);
-
-  useEffect(() => {
     const selectedItems = items.filter((item) => itemsScore.includes(getEntityKey(item)));
     const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
     setScoreRangeLabel(getScoreRangeLabel(minScore, maxScore));
@@ -88,7 +87,29 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
   }, [itemsScore, calculationType]);
 
   const onChangeScoreId = () => {
-    setValue(`${name}.id`, scoreId);
+    const updatedScoreId = getScoreId(scoreName, calculationType);
+    updateMessagesWithVariable(setValue, name, score, updatedScoreId);
+
+    setValue(`${name}.id`, updatedScoreId);
+    setPrevScoreName(scoreName);
+  };
+
+  const onCancelChangeScoreId = () => {
+    setIsChangeScoreIdPopupVisible(false);
+    setValue(`${name}.name`, prevScoreName);
+  };
+
+  const handleNameBlur = () => {
+    const isVariable = getIsScoreIdVariable(score);
+
+    if (isVariable) {
+      setIsChangeScoreIdPopupVisible(true);
+
+      return;
+    }
+
+    setPrevScoreName(scoreName);
+    setValue(`${name}.id`, getScoreId(scoreName, calculationType));
   };
 
   return (
@@ -99,7 +120,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
             control={control}
             name={`${name}.name`}
             label={t('scoreName')}
-            onBlur={() => setValue(`${name}.id`, scoreId)}
+            onBlur={handleNameBlur}
             sx={{ mb: theme.spacing(4.8) }}
           />
           <SelectController
@@ -112,7 +133,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
           />
         </Box>
         <Box>
-          <CopyId title={t('scoreId')} value={scoreId} />
+          <CopyId title={t('scoreId')} value={scoreId} showCopy />
           <StyledTitleSmall sx={{ mb: theme.spacing(1.2) }}>{t('rangeOfScores')}</StyledTitleSmall>
           <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>{scoreRangeLabel}</StyledBodyLarge>
         </Box>
@@ -162,10 +183,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
         {t('addScoreCondition')}
       </StyledButton>
       {isChangeScoreIdPopupVisible && (
-        <ChangeScoreIdPopup
-          onClose={() => setIsChangeScoreIdPopupVisible(false)}
-          onChange={onChangeScoreId}
-        />
+        <ChangeScoreIdPopup onClose={onCancelChangeScoreId} onChange={onChangeScoreId} />
       )}
       {isRemoveConditionalPopupVisible && (
         <RemoveConditionalLogicPopup

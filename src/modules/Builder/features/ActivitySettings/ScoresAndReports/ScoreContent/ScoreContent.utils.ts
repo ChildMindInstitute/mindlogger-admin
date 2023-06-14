@@ -1,4 +1,7 @@
+import { FieldValues, UseFormSetValue } from 'react-hook-form';
+
 import {
+  ActivitySettingsScore,
   Item,
   MultiSelectItem,
   SingleAndMultipleSelectionOption,
@@ -93,3 +96,43 @@ export const getDefaultConditionalValue = (scoreId: string) => ({
   match: ConditionalLogicMatch.All,
   conditions: [{}],
 });
+
+export const getIsScoreIdVariable = (score: ActivitySettingsScore) => {
+  const { id } = score;
+  let isVariable = false;
+
+  const isMessageIncludeScoreId = (showMessage: boolean, message?: string) => {
+    if (showMessage) {
+      isVariable = !!message?.includes(`[[${id}]]`);
+      if (isVariable) return;
+    }
+  };
+
+  isMessageIncludeScoreId(score.showMessage, score.message);
+
+  score.conditionalLogic?.forEach((condition) => {
+    isMessageIncludeScoreId(condition.showMessage, condition.message);
+  });
+
+  return isVariable;
+};
+
+export const updateMessagesWithVariable = (
+  setValue: UseFormSetValue<FieldValues>,
+  name: string,
+  score: ActivitySettingsScore,
+  newScoreId: string,
+) => {
+  const { id, showMessage, message, conditionalLogic } = score;
+
+  const updateMessage = (fieldName: string, showMessage: boolean, message?: string) => {
+    if (showMessage && message) {
+      setValue(`${fieldName}.message`, message.replaceAll(`[[${id}]]`, `[[${newScoreId}]]`));
+    }
+  };
+
+  updateMessage(name, showMessage, message);
+  conditionalLogic?.forEach((condition, index) =>
+    updateMessage(`${name}.conditionalLogic.[${index}]`, condition.showMessage, condition.message),
+  );
+};
