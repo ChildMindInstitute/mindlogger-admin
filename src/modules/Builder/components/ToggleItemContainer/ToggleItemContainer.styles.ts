@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { styled, Badge } from '@mui/material';
 
 import { shouldForwardProp } from 'shared/utils';
 import { StyledFlexColumn, StyledFlexTopCenter, theme, variables } from 'shared/styles';
@@ -33,4 +33,9 @@ export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)
     height: 4.8rem;
 		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0}
 	`};
+`;
+
+export const StyledBadge = styled(Badge)`
+  margin-right: ${theme.spacing(1)};
+  left: -0.6rem;
 `;

@@ -10,7 +10,12 @@ export const MultiSelectResponseItem = ({ activityItem, answer }: MultiSelectIte
         key={option.id}
         disabled
         label={option.text}
-        control={<Checkbox checked={!!answer?.value.includes(option.id)} value={option.id} />}
+        control={
+          <Checkbox
+            checked={(answer?.value as number[]).includes(option.value!)}
+            value={option.value}
+          />
+        }
       />
     ))}
   </StyledContainer>

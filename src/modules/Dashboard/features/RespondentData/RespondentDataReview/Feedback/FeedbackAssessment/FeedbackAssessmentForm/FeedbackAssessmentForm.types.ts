@@ -17,7 +17,7 @@ export type FeedbackAssessmentFormProps = {
 
 export type AssessmentFormItem = {
   itemId: string;
-  answers: number | string | string[] | null;
+  answers: number | string | number[] | null;
 };
 
 export type AssessmentForm = {

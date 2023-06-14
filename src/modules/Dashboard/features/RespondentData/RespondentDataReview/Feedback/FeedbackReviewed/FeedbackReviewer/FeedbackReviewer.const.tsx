@@ -27,7 +27,7 @@ export const getResponseItem = ({ activityItem, answer }: ActivityItemAnswer) =>
       return (
         <MultipleSelection
           activityItem={activityItem as MultiSelectActivityItem}
-          value={(answer as ItemAnswer).value as string[]}
+          value={(answer as ItemAnswer).value as number[]}
           isDisabled
         />
       );

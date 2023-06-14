@@ -1,6 +1,6 @@
 import { useState, DragEvent, useContext } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { TableCell, TableRow } from '@mui/material';
+import { TableCell } from '@mui/material';
 
 import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
 import { useAsync, useTimeAgo } from 'shared/hooks';
@@ -16,7 +16,7 @@ import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
-import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
+import { StyledAppletName, StyledPinContainer, StyledTableRow } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
 
@@ -36,6 +36,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const { isDragOver, onDragLeave, onDragOver, onDrop, onDragEnd } = useAppletsDnd();
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
+  const [hasVisibleActions, setHasVisibleActions] = useState(false);
 
   const APPLET_RESPONDENTS = generatePath(page.appletRespondents, {
     appletId: item.id,
@@ -72,7 +73,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   };
 
   const checkAppletEncryption = (callback: () => void) =>
-    hasOwnerRole(workspaceRoles?.data?.[item.id][0]) && !item.encryption
+    hasOwnerRole(workspaceRoles?.data?.[item.id]?.[0]) && !item.encryption
       ? setPasswordPopupVisible(true)
       : callback();
 
@@ -138,7 +139,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
   return (
     <>
-      <TableRow
+      <StyledTableRow
         className={isDragOver ? 'dragged-over' : ''}
         draggable
         onDragStart={onDragStart}
@@ -146,6 +147,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         onDragOver={onDragOver}
         onDragEnd={(event) => onDragEnd(event, item)}
         onDrop={(event) => onDrop(event, item)}
+        hover
+        onMouseEnter={() => setHasVisibleActions(true)}
+        onMouseLeave={() => setHasVisibleActions(false)}
       >
         <TableCell width="30%" onClick={handleAppletClick}>
           <StyledAppletName applet={item}>
@@ -171,9 +175,10 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
           <Actions
             items={getActions({ actions, item, roles: workspaceRoles?.data?.[item.id] })}
             context={item}
+            visibleByDefault={hasVisibleActions}
           />
         </TableCell>
-      </TableRow>
+      </StyledTableRow>
       {sharePopupVisible && (
         <ShareAppletPopup
           sharePopupVisible={sharePopupVisible}

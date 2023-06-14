@@ -20,7 +20,7 @@ import {
   AppletPasswordPopupType,
   AppletPasswordPopupProps,
 } from 'modules/Dashboard/features/Applet';
-import { useAsync } from 'shared/hooks';
+import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { publicEncrypt } from 'shared/utils';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
@@ -94,7 +94,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   const reportServerUrl = watch('reportServerIp');
   const reportPublicKey = watch('reportPublicKey');
 
-  const isServerConfigured = appletData?.reportServerIp && appletData?.reportPublicKey;
+  const isServerConfigured = useIsServerConfigured();
 
   const { onVerify, onSetPassword } = useCheckReportServer({
     url: reportServerUrl,

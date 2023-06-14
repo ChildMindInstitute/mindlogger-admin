@@ -15,8 +15,6 @@ import {
   SliderRowsResponseValues,
   Activity,
   ItemAlert,
-  SectionConditionalLogic,
-  ScoreConditionalLogic,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { getEntityKey, groupBy } from 'shared/utils';

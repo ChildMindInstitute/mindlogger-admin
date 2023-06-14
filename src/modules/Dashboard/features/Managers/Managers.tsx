@@ -6,7 +6,7 @@ import { updateManagersPinApi } from 'api';
 import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Search } from 'shared/components';
 import { users, workspaces, Manager } from 'redux/modules';
 import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
-import { Table } from 'modules/Dashboard/components';
+import { Table, TableProps } from 'modules/Dashboard/components';
 import { useAppDispatch } from 'redux/store';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles } from 'shared/consts';
@@ -58,7 +58,7 @@ export const Managers = () => {
   const filterAplletsByRoles = (user: Manager) => ({
     ...user,
     applets: user.applets.filter((applet) => {
-      const workspaceUserRole = rolesData?.data?.[applet.id][0];
+      const workspaceUserRole = rolesData?.data?.[applet.id]?.[0];
       const withoutManagerOrOwner = !applet.roles?.some(({ role }) => isManagerOrOwner(role));
 
       return (
@@ -89,7 +89,7 @@ export const Managers = () => {
     execute({ ownerId, userId });
   };
 
-  const rows = useMemo(
+  const rows: TableProps['rows'] = useMemo(
     () =>
       managersData?.result?.map((user) => {
         const filteredManager = filterAplletsByRoles(user);
@@ -121,12 +121,18 @@ export const Managers = () => {
             },
           }),
           actions: {
-            content: () => {
-              if (ownerId === id || !filteredManager?.applets.length) {
+            content: (_, hasVisibleActions) => {
+              if (ownerId === id || !filteredManager?.applets?.length) {
                 return;
               }
 
-              return <Actions items={getActions(actions)} context={filteredManager} />;
+              return (
+                <Actions
+                  items={getActions(actions)}
+                  context={filteredManager}
+                  visibleByDefault={hasVisibleActions}
+                />
+              );
             },
             value: '',
             width: '20%',
