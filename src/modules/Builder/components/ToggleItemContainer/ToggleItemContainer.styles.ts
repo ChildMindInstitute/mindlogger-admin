@@ -39,3 +39,13 @@ export const StyledBadge = styled(Badge)`
   margin-right: ${theme.spacing(1)};
   left: -0.6rem;
 `;
+
+export const StyledTitleContainer = styled(StyledFlexTopCenter, shouldForwardProp)`
+  margin: ${theme.spacing(0, 5, 0, 1.5)};
+
+  ${({ hasError }: { hasError: boolean }) =>
+    hasError &&
+    `
+    margin-left: ${theme.spacing(2.5)};
+  `}
+`;
