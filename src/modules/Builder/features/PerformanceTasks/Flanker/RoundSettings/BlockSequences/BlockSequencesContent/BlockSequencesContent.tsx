@@ -16,7 +16,7 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 import { FlankerStimulusSettings } from 'shared/state';
 import { exportTemplate, getUploadedMediaName } from 'shared/utils';
 
-import { IsPracticeRoundType, RoundTypeEnum } from '../../RoundSettings.types';
+import { RoundTypeEnum } from '../../RoundSettings.types';
 import { ImportSequencesPopup, ImportSequencesType } from './ImportSequencesPopup';
 import {
   getRoundBlocks,
@@ -25,9 +25,12 @@ import {
   getTableFromSequences,
   getUploadedTableRows,
 } from './BlockSequencesContent.utils';
-import { UploadedTable } from './BlockSequencesContent.types';
+import { UploadedTable, BlockSequencesContentProps } from './BlockSequencesContent.types';
 
-export const BlockSequencesContent = ({ isPracticeRound, onError }: IsPracticeRoundType) => {
+export const BlockSequencesContent = ({
+  isPracticeRound,
+  setError,
+}: BlockSequencesContentProps) => {
   const { t } = useTranslation();
   const {
     watch,
@@ -89,7 +92,7 @@ export const BlockSequencesContent = ({ isPracticeRound, onError }: IsPracticeRo
   }, [stimulusTrials]);
 
   useEffect(() => {
-    onError?.(!uploadedTable && hasBlockSequencesErrors ? 'fillInAllRequired' : '');
+    setError(!uploadedTable && hasBlockSequencesErrors ? 'fillInAllRequired' : '');
   }, [uploadedTable, hasBlockSequencesErrors]);
 
   return stimulusTrials?.some((trial) => !!trial.image) ? (

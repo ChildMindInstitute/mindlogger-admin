@@ -16,18 +16,19 @@ export const BlockSequences = memo(({ isPracticeRound }: IsPracticeRoundType) =>
   const { perfTaskItemField } = useCurrentActivity();
 
   const stimulusTrials = watch(`${perfTaskItemField}.general.stimulusTrials`);
-  const hasStimuluesErrors = !stimulusTrials?.some(
+  const hasStimulusErrors = !stimulusTrials?.some(
     (trial: FlankerStimulusSettings) => !!trial.image,
   );
 
   return (
     <ToggleItemContainer
-      isOpenDisabled={hasStimuluesErrors}
-      isOpenByDefault={!hasStimuluesErrors}
-      error={hasStimuluesErrors ? t('flankerRound.addStimulus') : t(error)}
+      isOpenDisabled={hasStimulusErrors}
+      isOpenByDefault={!hasStimulusErrors}
+      error={hasStimulusErrors ? 'flankerRound.addStimulus' : error}
       uiType={ToggleContainerUiType.PerformanceTask}
       title={t('flankerRound.blockSequences')}
-      Content={() => <BlockSequencesContent isPracticeRound={isPracticeRound} onError={setError} />}
+      Content={BlockSequencesContent}
+      contentProps={{ isPracticeRound, setError }}
       tooltip={t('flankerRound.sequencesTooltip')}
     />
   );

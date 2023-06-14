@@ -9,5 +9,4 @@ export type RoundSettingsProps = {
 
 export type IsPracticeRoundType = {
   isPracticeRound: boolean;
-  onError?: (error: string) => void;
 };
