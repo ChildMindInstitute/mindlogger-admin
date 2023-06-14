@@ -64,6 +64,16 @@ export type AnswerDTO =
   | DecryptedDateRangeAnswer
   | DecryptedDateAnswer;
 
+export type AnswerValue =
+  | null
+  | string
+  | DecryptedMultiSelectionAnswer['value']
+  | DecryptedSingleSelectionAnswer['value']
+  | DecryptedSliderAnswer['value']
+  | DecryptedNumberSelectionAnswer['value']
+  | DecryptedDateRangeAnswer['value']
+  | DecryptedDateAnswer['value'];
+
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
   Prev = 'PREV',

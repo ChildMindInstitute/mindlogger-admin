@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import {
   ActivityItemAnswer,
   AnswerDTO,
+  AnswerValue,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 export type FormattedAssessmentItem = {
@@ -17,7 +18,7 @@ export type FeedbackAssessmentFormProps = {
 
 export type AssessmentFormItem = {
   itemId: string;
-  answers: number | string | number[] | null;
+  answers: AnswerValue;
 };
 
 export type AssessmentForm = {

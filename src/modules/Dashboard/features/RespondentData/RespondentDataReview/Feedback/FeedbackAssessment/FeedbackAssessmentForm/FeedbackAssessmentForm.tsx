@@ -11,11 +11,7 @@ import { FeedbackTabs } from 'modules/Dashboard/features/RespondentData/Responde
 import { formatAssessment, getAnswerValue, getDefaultValue } from './FeedbackAssessmentForm.utils';
 import { ActivityCardItemList } from '../ActivityCardItemList';
 import { SubmitAssessmentPopup } from './SubmitAssessmentPopup';
-import {
-  FeedbackAssessmentFormProps,
-  AssessmentForm,
-  AssessmentFormItem,
-} from './FeedbackAssessmentForm.types';
+import { FeedbackAssessmentFormProps, AssessmentForm } from './FeedbackAssessmentForm.types';
 
 export const FeedbackAssessmentForm = ({ answers, setActiveTab }: FeedbackAssessmentFormProps) => {
   const { appletId = '', answerId = '' } = useParams();
@@ -31,8 +27,7 @@ export const FeedbackAssessmentForm = ({ answers, setActiveTab }: FeedbackAssess
       assessmentItems:
         answers?.map(({ activityItem, answer }) => ({
           itemId: activityItem.id,
-          answers: (getAnswerValue(answer) ||
-            getDefaultValue(activityItem.responseType)) as AssessmentFormItem['answers'],
+          answers: getAnswerValue(answer) || getDefaultValue(activityItem.responseType),
         })) ?? [],
     },
   });
