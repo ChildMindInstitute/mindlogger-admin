@@ -30,7 +30,7 @@ export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)
   justify-content: space-between;
 
   ${({ open, uiType }: { open?: boolean; uiType: ToggleContainerUiType }) => `
-		height: ${open ? '5.6rem' : 'inherit'}; 
+    height: 4.8rem;
 		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0}
 	`};
 `;
