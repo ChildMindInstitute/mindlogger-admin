@@ -97,24 +97,32 @@ export const getDefaultConditionalValue = (scoreId: string) => ({
   conditions: [{}],
 });
 
+const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>
+  showMessage && !!message?.includes(`[[${id}]]`);
+
 export const getIsScoreIdVariable = (score: ActivitySettingsScore) => {
   const { id } = score;
   let isVariable = false;
 
-  const isMessageIncludeScoreId = (showMessage: boolean, message?: string) => {
-    if (showMessage) {
-      isVariable = !!message?.includes(`[[${id}]]`);
-      if (isVariable) return;
-    }
-  };
-
-  isMessageIncludeScoreId(score.showMessage, score.message);
-
+  isVariable = isMessageIncludeScoreId(score.showMessage, id, score.message);
   score.conditionalLogic?.forEach((condition) => {
-    isMessageIncludeScoreId(condition.showMessage, condition.message);
+    isVariable = isMessageIncludeScoreId(condition.showMessage, id, condition.message);
   });
 
   return isVariable;
+};
+
+const updateMessage = (
+  setValue: UseFormSetValue<FieldValues>,
+  fieldName: string,
+  id: string,
+  newScoreId: string,
+  showMessage: boolean,
+  message?: string,
+) => {
+  if (showMessage && message) {
+    setValue(`${fieldName}.message`, message.replaceAll(`[[${id}]]`, `[[${newScoreId}]]`));
+  }
 };
 
 export const updateMessagesWithVariable = (
@@ -124,15 +132,15 @@ export const updateMessagesWithVariable = (
   newScoreId: string,
 ) => {
   const { id, showMessage, message, conditionalLogic } = score;
-
-  const updateMessage = (fieldName: string, showMessage: boolean, message?: string) => {
-    if (showMessage && message) {
-      setValue(`${fieldName}.message`, message.replaceAll(`[[${id}]]`, `[[${newScoreId}]]`));
-    }
-  };
-
-  updateMessage(name, showMessage, message);
+  updateMessage(setValue, name, id, newScoreId, showMessage, message);
   conditionalLogic?.forEach((condition, index) =>
-    updateMessage(`${name}.conditionalLogic.[${index}]`, condition.showMessage, condition.message),
+    updateMessage(
+      setValue,
+      `${name}.conditionalLogic.[${index}]`,
+      id,
+      newScoreId,
+      condition.showMessage,
+      condition.message,
+    ),
   );
 };
