@@ -13,7 +13,6 @@ export const prepareData = (
   getDecryptedAnswers: (data: ExtendedExportAnswer) => DecryptedAnswerData[],
 ) => {
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
-  console.log(parsedAnswers);
   const reportData = [];
   const activityJourneyData = [];
   const flattenAnswers = parsedAnswers.flat();
