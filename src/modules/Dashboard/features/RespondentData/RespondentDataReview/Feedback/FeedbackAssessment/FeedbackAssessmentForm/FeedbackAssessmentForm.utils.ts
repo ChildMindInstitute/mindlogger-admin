@@ -2,7 +2,7 @@ import {
   AssessmentFormItem,
   FormattedAssessmentItem,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/FeedbackAssessmentForm/FeedbackAssessmentForm.types';
-import { AnswerValue } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { ItemResponseType } from 'shared/consts';
 
 export const getDefaultValue = (responseType: ItemResponseType): string | number[] | null => {
@@ -16,7 +16,7 @@ export const getDefaultValue = (responseType: ItemResponseType): string | number
   }
 };
 
-export const getAnswerValue = (answerValue: AnswerValue) => {
+export const getAnswerValue = (answerValue: AnswerDTO) => {
   if (typeof answerValue === 'object') {
     return answerValue?.value || '';
   }
@@ -39,7 +39,7 @@ export const formatAssessment = (assessmentItems: AssessmentFormItem[]) =>
         {
           value: item.answers,
           text: null,
-        },
+        } as AnswerDTO,
       ],
     }),
     {

@@ -11,32 +11,82 @@ export type Activity = {
   answerDates: Answer[];
 };
 
-export type ItemAnswer = {
-  value: number | string | number[] | null;
+export type DecryptedTextAnswer = string;
+
+export type DecryptedMultiSelectionAnswer = {
+  value: number[]; // an array of selected option indexes
   text?: string | null;
 };
 
-export type SliderAnswer = ItemAnswer & {
+export type DecryptedSingleSelectionAnswer = {
+  value: number; // selected option index
+  text?: string | null;
+};
+
+export type DecryptedSliderAnswer = {
   value: number;
+  text?: string | null;
 };
 
-export type MultiSelectAnswer = ItemAnswer & {
-  value: number[];
+export type DecryptedNumberSelectionAnswer = {
+  value: number;
+  text?: string | null;
 };
 
-export type SingleSelectAnswer = ItemAnswer & {
-  value: string;
+export type DecryptedDateRangeAnswer = {
+  value: {
+    from: {
+      hour: number;
+      minute: number;
+    };
+    to: {
+      hour: number;
+      minute: number;
+    };
+  };
 };
 
-export type AnswerValue = ItemAnswer | string | number | null;
+export type DecryptedDateAnswer = {
+  value: {
+    year: number;
+    month: number;
+    day: number;
+  };
+};
+
+export type AnswerDTO =
+  | null
+  | DecryptedTextAnswer
+  | DecryptedMultiSelectionAnswer
+  | DecryptedSingleSelectionAnswer
+  | DecryptedSliderAnswer
+  | DecryptedNumberSelectionAnswer
+  | DecryptedDateRangeAnswer
+  | DecryptedDateAnswer;
+
+export const enum UserActionType {
+  SetAnswer = 'SET_ANSWER',
+  Prev = 'PREV',
+  Next = 'NEXT',
+  Done = 'DONE',
+  Undo = 'UNDO',
+}
+
+export type EventDTO = {
+  response?: AnswerDTO; // optional field. Required if the type is "SET_ANSWER". AnswerDTO depends on activity item type.
+  screen: string; // {activityId}/{activityItemId}
+  time: number; // timestamp in milliseconds
+  type: UserActionType;
+};
 
 export type ActivityItemAnswer = {
   activityItem: Item;
-  answer: AnswerValue;
+  answer: AnswerDTO;
 };
 
-export interface TextItemAnswer extends ActivityItemAnswer {
+export interface TextItemAnswer {
   activityItem: TextItem;
+  answer: DecryptedTextAnswer;
 }
 
 export type SliderActivityItem = SliderItem & {
@@ -51,17 +101,17 @@ export type MultiSelectActivityItem = MultiSelectItem & {
   edited?: boolean;
 };
 
-export interface SliderItemAnswer extends ActivityItemAnswer {
+export interface SliderItemAnswer {
   activityItem: SliderActivityItem;
-  answer: SliderAnswer | null;
+  answer: DecryptedSliderAnswer | null;
 }
 
-export interface SingleSelectItemAnswer extends ActivityItemAnswer {
+export interface SingleSelectItemAnswer {
   activityItem: SingleSelectActivityItem;
-  answer: SingleSelectAnswer | null;
+  answer: DecryptedSingleSelectionAnswer | null;
 }
 
 export interface MultiSelectItemAnswer extends ActivityItemAnswer {
   activityItem: MultiSelectActivityItem;
-  answer: MultiSelectAnswer | null;
+  answer: DecryptedMultiSelectionAnswer | null;
 }

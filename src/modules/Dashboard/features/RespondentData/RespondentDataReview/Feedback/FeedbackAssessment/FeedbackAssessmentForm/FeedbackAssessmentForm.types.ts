@@ -2,12 +2,12 @@ import { Dispatch, SetStateAction } from 'react';
 
 import {
   ActivityItemAnswer,
-  ItemAnswer,
+  AnswerDTO,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 export type FormattedAssessmentItem = {
   itemIds: string[];
-  answers: ItemAnswer[];
+  answers: AnswerDTO[];
 };
 
 export type FeedbackAssessmentFormProps = {

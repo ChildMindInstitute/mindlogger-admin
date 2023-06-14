@@ -7,8 +7,9 @@ import { Svg } from 'shared/components';
 import { applet } from 'shared/state';
 import { getExportDataApi } from 'api';
 import { useAsync } from 'shared/hooks';
-import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
-import { getParsedAnswers } from 'shared/utils';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { exportTemplate, prepareData } from 'shared/utils';
+import { GENERAL_REPORT_NAME } from 'shared/consts';
 
 import {
   StyledAppletSettingsButton,
@@ -19,14 +20,16 @@ import {
 export const ExportDataSetting = () => {
   const { t } = useTranslation('app');
   const { result: appletData } = applet.useAppletData() ?? {};
-  const getDecryptedAnswers = useDecryptedAnswers();
+  const getDecryptedAnswers = useDecryptedActivityData();
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
   const { execute } = useAsync(getExportDataApi, (res) => {
     if (!res?.data?.result) return;
+
+    const { reportData } = prepareData(res.data.result, getDecryptedAnswers);
+    exportTemplate(reportData, GENERAL_REPORT_NAME);
     setPasswordModalVisible(false);
-    const parsedAnswers = getParsedAnswers(res.data.result, getDecryptedAnswers);
   });
 
   const handleDataExportHandler = () => {
