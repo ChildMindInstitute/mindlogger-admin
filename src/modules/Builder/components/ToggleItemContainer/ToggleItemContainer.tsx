@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
   StyledBodyMedium,
   StyledClearedButton,
+  StyledFlexColumn,
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
   StyledTitleTooltipIcon,
@@ -13,7 +14,12 @@ import {
 } from 'shared/styles';
 import { Svg, Tooltip } from 'shared/components';
 
-import { StyledItemOption, StylesTitleWrapper, StyledBadge } from './ToggleItemContainer.styles';
+import {
+  StyledItemOption,
+  StylesTitleWrapper,
+  StyledBadge,
+  StyledTitleContainer,
+} from './ToggleItemContainer.styles';
 import { ToggleContainerUiType, ToggleItemProps } from './ToggleItemContainer.types';
 
 export const ToggleItemContainer = ({
@@ -32,6 +38,8 @@ export const ToggleItemContainer = ({
   const [open, setOpen] = useState(isOpenByDefault ?? true);
   const handleToggle = () => setOpen((prevState) => !prevState);
 
+  const titleErrorVisible = !open && error;
+
   return (
     <StyledItemOption uiType={uiType}>
       <StylesTitleWrapper open={open} uiType={uiType}>
@@ -45,12 +53,22 @@ export const ToggleItemContainer = ({
               <Svg id={open ? 'navigate-up' : 'navigate-down'} />
             </StyledClearedButton>
             {title && (
-              <StyledFlexTopCenter sx={{ m: theme.spacing(0, 5, 0, 1.5) }}>
-                {!open && error && <StyledBadge variant="dot" color="error" />}
-                <StyledFlexTopCenter>
-                  <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
-                </StyledFlexTopCenter>
-              </StyledFlexTopCenter>
+              <StyledFlexColumn>
+                <StyledTitleContainer hasError={!!titleErrorVisible}>
+                  {titleErrorVisible && <StyledBadge variant="dot" color="error" />}
+                  <StyledFlexTopCenter>
+                    <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
+                  </StyledFlexTopCenter>
+                </StyledTitleContainer>
+                {titleErrorVisible && (
+                  <StyledBodyMedium
+                    sx={{ p: theme.spacing(0.5, 0, 0, 1.5) }}
+                    color={variables.palette.semantic.error}
+                  >
+                    {t(error)}
+                  </StyledBodyMedium>
+                )}
+              </StyledFlexColumn>
             )}
           </StyledFlexTopCenter>
           {HeaderContent && (
@@ -65,14 +83,6 @@ export const ToggleItemContainer = ({
           </Tooltip>
         )}
       </StylesTitleWrapper>
-      {!open && error && (
-        <StyledBodyMedium
-          sx={{ p: theme.spacing(0.5, 0, 0, 4.4) }}
-          color={variables.palette.semantic.error}
-        >
-          {t(error)}
-        </StyledBodyMedium>
-      )}
       {open && <Content {...contentProps} />}
     </StyledItemOption>
   );
