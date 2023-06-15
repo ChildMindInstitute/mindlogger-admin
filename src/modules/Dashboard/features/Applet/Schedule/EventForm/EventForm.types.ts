@@ -31,7 +31,8 @@ export type EventFormValues = {
   startTime: string;
   endTime: string;
   date: Date | string;
-  startEndingDate: (Date | null)[] | string;
+  startDate: Date | string;
+  endDate: Date | string | null;
   accessBeforeSchedule: boolean;
   timerType: TimerType;
   timerDuration: string;
