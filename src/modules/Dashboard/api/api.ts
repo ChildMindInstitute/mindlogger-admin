@@ -39,13 +39,14 @@ import {
   AppletVersionChanges,
   RemoveAccess,
   ActivityAnswer,
-  WorkspaceFoldersAppletsResponse,
+  Response,
   Folder,
   Applet,
   EditManagerAccess,
   ExportData,
   Assessment,
   SaveAssessment,
+  ReviewActivity,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -57,13 +58,10 @@ export const getWorkspaceAppletsApi = (
 ) => {
   const { ownerId, ...restParams } = params;
 
-  return authApiClient.get<WorkspaceFoldersAppletsResponse<Applet>>(
-    `/workspaces/${ownerId}/applets`,
-    {
-      params: restParams,
-      signal,
-    },
-  );
+  return authApiClient.get<Response<Applet>>(`/workspaces/${ownerId}/applets`, {
+    params: restParams,
+    signal,
+  });
 };
 
 export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
@@ -326,7 +324,7 @@ export const setFolderApi = (
   );
 
 export const getWorkspaceFoldersApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
-  authApiClient.get<WorkspaceFoldersAppletsResponse<Folder>>(`/workspaces/${ownerId}/folders`, {
+  authApiClient.get<Response<Folder>>(`/workspaces/${ownerId}/folders`, {
     signal,
   });
 
@@ -425,8 +423,11 @@ export const deleteAppletPublicLinkApi = ({ appletId }: AppletId, signal?: Abort
 export const getAppletInviteLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applet/${appletId}/inviteLink`, { signal });
 
-export const getAnswersApi = ({ id, respondentId, createdDate }: Answers, signal?: AbortSignal) =>
-  authApiClient.get(`/answers/applet/${id}/activities`, {
+export const getReviewActivitiesApi = (
+  { appletId, respondentId, createdDate }: Answers,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<ReviewActivity>>(`/answers/applet/${appletId}/review/activities`, {
     params: {
       respondentId,
       createdDate,
