@@ -20,7 +20,7 @@ import {
   StyledBadge,
   StyledTitleContainer,
 } from './ToggleItemContainer.styles';
-import { ToggleContainerUiType, ToggleItemProps } from './ToggleItemContainer.types';
+import { ToggleItemProps } from './ToggleItemContainer.types';
 
 export const ToggleItemContainer = ({
   title,
@@ -28,7 +28,7 @@ export const ToggleItemContainer = ({
   Content,
   headerContentProps,
   contentProps,
-  uiType = ToggleContainerUiType.Item,
+  uiType,
   isOpenByDefault,
   isOpenDisabled,
   tooltip,
