@@ -14,7 +14,6 @@ import { AddEventsToCategories, EventsData, LegendEvent, PreparedEvents } from '
 import {
   getNextColor,
   removeSecondsFromTime,
-  getRepeatsAnswer,
   getFrequencyString,
   getCount,
   convertDateToYearMonthDay,
@@ -84,7 +83,6 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
             const notificationTime = notification?.notifications?.length
               ? removeSecondsFromTime(atTime || fromTime) || '-'
               : '-';
-            const repeats = getRepeatsAnswer(periodicityType);
             const frequency = getFrequencyString(periodicityType);
             const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
 
@@ -94,7 +92,6 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               startTime: getTableCell(startTime),
               endTime: getTableCell(endTime),
               notificationTime: getTableCell(notificationTime),
-              repeats: getTableCell(repeats),
               frequency: getTableCell(frequency),
             });
 
@@ -104,7 +101,6 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               startTime,
               endTime,
               notificationTime,
-              repeats,
               frequency,
             });
 

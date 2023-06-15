@@ -5,7 +5,7 @@ import uniqueId from 'lodash.uniqueid';
 
 import { EmptyTable, Spinner } from 'shared/components';
 import { ExtendedExportAnswer } from 'shared/types';
-import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
 import { getReviewsApi } from 'api';
 
@@ -17,7 +17,7 @@ export const FeedbackReviewed = () => {
   const { t } = useTranslation('app');
   const { appletId, answerId } = useParams();
 
-  const getDecryptedReviews = useDecryptedAnswers();
+  const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getReviews } = useAsync(getReviewsApi);
   const [isLoading, setIsLoading] = useState(true);
   const [reviewers, setReviewers] = useState<Reviewer[]>([]);
@@ -38,7 +38,7 @@ export const FeedbackReviewed = () => {
           return {
             isEdited,
             reviewer,
-            review: getDecryptedReviews(encryptedData),
+            review: getDecryptedActivityData(encryptedData).decryptedAnswers,
           };
         });
 

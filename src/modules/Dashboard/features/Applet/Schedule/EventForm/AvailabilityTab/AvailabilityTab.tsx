@@ -1,12 +1,14 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
-import { TimePicker, DatePicker, DatePickerUiType, ToggleButtonGroup } from 'shared/components';
-import { theme, variables, StyledBodyMedium } from 'shared/styles';
+import { TimePicker, DatePicker, ToggleButtonGroup } from 'shared/components';
+import { theme, variables, StyledBodyMedium, StyledBodyLarge } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
+import { DEFAULT_START_TIME } from '../EventForm.const';
 import { availabilityOptions, repeatsButtons } from './Availability.const';
 import {
   StyledButtonsTitle,
@@ -22,37 +24,38 @@ export const AvailabilityTab = () => {
   const alwaysAvailable = watch('alwaysAvailable');
   const periodicity = watch('periodicity');
   const date = watch('date');
-  const startEndingDate = watch('startEndingDate');
+  const startDate = watch('startDate');
+  const endDate = watch('endDate');
   const startTime = watch('startTime');
   const removeWarning = watch('removeWarning');
+  const isOncePeriodicity = periodicity === Periodicity.Once;
 
   const handleSetPeriodicity = (period: string) => setValue('periodicity', period as Periodicity);
 
-  const getDatePicker = () => {
-    if (periodicity === Periodicity.Once) {
-      return (
-        <StyledDatePickerWrapper>
-          <DatePicker
-            name="date"
-            value={date}
-            control={control}
-            uiType={DatePickerUiType.OneDate}
-          />
-        </StyledDatePickerWrapper>
-      );
-    }
+  const datePicker = (
+    <StyledDatePickerWrapper>
+      <DatePicker
+        name={isOncePeriodicity ? 'date' : 'startDate'}
+        value={isOncePeriodicity ? date : startDate}
+        control={control}
+        label={isOncePeriodicity ? t('date') : t('startDate')}
+      />
+      {!isOncePeriodicity && (
+        <>
+          <StyledBodyLarge sx={{ m: theme.spacing(0, 2.4) }}>
+            {t('to').toLowerCase()}
+          </StyledBodyLarge>
+          <DatePicker name="endDate" value={endDate} control={control} label={t('endDate')} />
+        </>
+      )}
+    </StyledDatePickerWrapper>
+  );
 
-    return (
-      <StyledDatePickerWrapper>
-        <DatePicker
-          name="startEndingDate"
-          value={startEndingDate}
-          control={control}
-          uiType={DatePickerUiType.StartEndingDate}
-        />
-      </StyledDatePickerWrapper>
-    );
-  };
+  useEffect(() => {
+    if (startTime === DEFAULT_START_TIME) {
+      setValue('accessBeforeSchedule', false);
+    }
+  }, [startTime]);
 
   return (
     <>
@@ -102,7 +105,7 @@ export const AvailabilityTab = () => {
               label={<StyledBodyMedium>{t('allowAccessBeforeTime')}</StyledBodyMedium>}
             />
           </StyledWrapper>
-          {getDatePicker()}
+          {datePicker}
         </>
       )}
     </>

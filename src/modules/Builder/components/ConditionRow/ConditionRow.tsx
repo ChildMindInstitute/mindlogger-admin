@@ -23,6 +23,7 @@ export const ConditionRow = ({
   onRemove,
   type = ConditionRowType.Item,
   scoreId,
+  scoreName,
 }: ConditionRowProps) => {
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
@@ -73,7 +74,7 @@ export const ConditionRow = ({
       ...((scores?.length && getScoreOptions(scores)) || []),
       ...((scores?.length && getScoreConditionalsOptions(scores)) || []),
     ],
-    [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
+    [ConditionRowType.Score]: [getScoreIdOption(scoreId!, scoreName!)],
   };
 
   return (

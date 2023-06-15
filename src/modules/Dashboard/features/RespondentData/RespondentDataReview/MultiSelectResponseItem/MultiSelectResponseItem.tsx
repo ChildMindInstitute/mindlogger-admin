@@ -5,18 +5,18 @@ import { StyledContainer } from './MultiSelectResponseItem.styles';
 
 export const MultiSelectResponseItem = ({ activityItem, answer }: MultiSelectItemAnswer) => (
   <StyledContainer>
-    {activityItem.responseValues.options.map((option) => (
-      <FormControlLabel
-        key={option.id}
-        disabled
-        label={option.text}
-        control={
-          <Checkbox
-            checked={(answer?.value as number[]).includes(option.value!)}
-            value={option.value}
-          />
-        }
-      />
-    ))}
+    {activityItem.responseValues.options.map(({ id, text, value }) => {
+      const values = answer?.value.map((value) => +value) || [];
+      const checked = values.includes(value!);
+
+      return (
+        <FormControlLabel
+          key={id}
+          disabled
+          label={text}
+          control={<Checkbox checked={checked} value={value} />}
+        />
+      );
+    })}
   </StyledContainer>
 );

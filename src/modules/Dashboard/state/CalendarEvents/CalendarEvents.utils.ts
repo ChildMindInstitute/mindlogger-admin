@@ -17,6 +17,7 @@ import {
   formatToWeekYear,
   formatToYearMonthDate,
 } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+import { getNormalizedTimezoneDate } from 'shared/utils';
 
 import {
   CalendarEvent,
@@ -293,7 +294,7 @@ export const createEvents = ({
   }
 
   if (periodicityType === Periodicity.Weekly && selectedDate) {
-    const dayOfWeek = getDay(new Date(selectedDate));
+    const dayOfWeek = getDay(getNormalizedTimezoneDate(selectedDate));
     const weeklyDays = daysInPeriod.filter((date) => getDay(date) === dayOfWeek);
 
     return getEventsArrayFromDates(weeklyDays, commonProps, startTime, endTime);
@@ -306,7 +307,7 @@ export const createEvents = ({
   }
 
   if (periodicityType === Periodicity.Monthly && selectedDate) {
-    const chosenDate = getDate(new Date(selectedDate));
+    const chosenDate = getDate(getNormalizedTimezoneDate(selectedDate));
     const monthsBetween =
       eventEnd && eventStart && eventEnd > eventStart
         ? eachMonthOfInterval({

@@ -12,7 +12,8 @@ import {
 import { getExportDataApi } from 'api';
 import { getErrorMessage, prepareData, exportTemplate } from 'shared/utils';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
-import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { GENERAL_REPORT_NAME } from 'shared/consts';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -28,15 +29,14 @@ export const DataExportPopup = ({
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting;
-  const getDecryptedAnswers = useDecryptedAnswers();
+  const getDecryptedAnswers = useDecryptedActivityData();
 
   const { execute, error } = useAsync(getExportDataApi, (res) => {
     if (!res?.data?.result) return;
 
     const { reportData } = prepareData(res.data.result, getDecryptedAnswers);
 
-    exportTemplate(reportData, 'report');
-
+    exportTemplate(reportData, GENERAL_REPORT_NAME);
     setDataIsExporting(false);
     handlePopupClose();
   });

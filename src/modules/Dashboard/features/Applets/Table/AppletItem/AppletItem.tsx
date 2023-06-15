@@ -169,7 +169,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
           </StyledAppletName>
         </TableCell>
         <TableCell width="20%" onClick={handleAppletClick}>
-          {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
+          <StyledBodyMedium>
+            {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
+          </StyledBodyMedium>
         </TableCell>
         <TableCell>
           <Actions

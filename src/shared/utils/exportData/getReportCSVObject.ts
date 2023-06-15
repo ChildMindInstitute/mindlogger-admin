@@ -25,7 +25,7 @@ export const getReportCSVObject = (item: DecryptedAnswerData) => {
 
   return {
     id: item.id,
-    activity_scheduled_time: scheduledDatetime,
+    activity_scheduled_time: scheduledDatetime || 'not scheduled',
     activity_start_time: startDatetime,
     activity_end_time: endDatetime,
     flag: getFlag(item),

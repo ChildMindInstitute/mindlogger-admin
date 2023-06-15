@@ -21,7 +21,7 @@ export * from './joinWihComma';
 export * from './capitalize';
 export * from './builderHelpers';
 export * from './getUploadFormData';
-export * from './getDateInUserTimezone';
+export * from './dateTimezone';
 export * from './getRespondentName';
 export * from './isManagerOrOwner';
 export * from './getUploadedMediaName';

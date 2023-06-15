@@ -1,6 +1,6 @@
 import { getObjectFromList } from 'shared/utils';
 import {
-  DecryptedAnswerData,
+  DecryptedActivityData,
   ExportActivity,
   ExportAnswer,
   ExtendedExportAnswer,
@@ -8,7 +8,7 @@ import {
 
 export const getParsedAnswers = (
   result: { activities: ExportActivity[]; answers: ExportAnswer[] },
-  getDecryptedReviews: (data: ExtendedExportAnswer) => DecryptedAnswerData[],
+  getDecryptedActivityData: (data: ExtendedExportAnswer) => DecryptedActivityData,
 ) => {
   const activitiesObject = getObjectFromList(
     result.activities,
@@ -16,7 +16,7 @@ export const getParsedAnswers = (
   );
 
   return result.answers.map((answer: ExportAnswer) =>
-    getDecryptedReviews({
+    getDecryptedActivityData({
       items: activitiesObject[answer.activityHistoryId].items,
       activityName: activitiesObject[answer.activityHistoryId].name,
       ...answer,

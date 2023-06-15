@@ -27,7 +27,7 @@ export const SectionContent = ({ name, title }: SectionContentProps) => {
 
   useEffect(() => {
     if (isContainConditional) {
-      setValue(conditionalLogicName, defaultConditionalValue);
+      !conditionalLogic && setValue(conditionalLogicName, defaultConditionalValue);
 
       return;
     }
@@ -38,7 +38,7 @@ export const SectionContent = ({ name, title }: SectionContentProps) => {
   };
 
   return (
-    <StyledFlexColumn>
+    <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
       <InputController control={control} name={`${name}.name`} label={t('sectionName')} />
       <Box sx={{ mt: theme.spacing(2.4) }}>
         {isContainConditional ? (

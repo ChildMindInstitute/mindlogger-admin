@@ -1,26 +1,32 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Activity } from '../RespondentDataReview.types';
+import { DatavizActivity } from 'api';
+
 import { FeedbackAssessment } from './FeedbackAssessment';
 import { FeedbackNotes } from './FeedbackNotes';
 import { FeedbackReviewed } from './FeedbackReviewed';
 
 export const getTabs = (
-  selectedActivity: Activity,
+  selectedActivity: DatavizActivity,
   setActiveTab: Dispatch<SetStateAction<number>>,
+  isAssessmentVisible: boolean,
 ) => [
   {
     labelKey: 'notes',
     content: <FeedbackNotes activity={selectedActivity} />,
   },
-  {
-    labelKey: 'assessment',
-    content: <FeedbackAssessment setActiveTab={setActiveTab} />,
-  },
-  {
-    labelKey: 'reviewed',
-    content: <FeedbackReviewed />,
-  },
+  ...(isAssessmentVisible
+    ? [
+        {
+          labelKey: 'assessment',
+          content: <FeedbackAssessment setActiveTab={setActiveTab} />,
+        },
+        {
+          labelKey: 'reviewed',
+          content: <FeedbackReviewed />,
+        },
+      ]
+    : []),
 ];
 
 export const enum FeedbackTabs {

@@ -27,6 +27,10 @@ export const StyledTextField = styled(TextField)`
     }
   }
 
+  .MuiInputBase-input {
+    padding: ${theme.spacing(1.25, 1.6)};
+  }
+
   svg {
     fill: ${variables.palette.outline};
   }

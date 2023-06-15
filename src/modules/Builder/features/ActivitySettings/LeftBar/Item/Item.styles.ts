@@ -9,7 +9,7 @@ import {
 } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
-export const StyledItem = styled(StyledFlexColumn)`
+export const StyledItem = styled(StyledFlexColumn, shouldForwardProp)`
   cursor: pointer;
   padding: ${theme.spacing(0, 2.6, 1.2)};
   border-radius: ${variables.borderRadius.lg};

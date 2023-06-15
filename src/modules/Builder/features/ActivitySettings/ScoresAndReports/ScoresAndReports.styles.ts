@@ -6,6 +6,10 @@ export const StyledButton = styled(Button)`
   width: 19.6rem;
   margin: ${theme.spacing(2.4, 0)};
   padding: ${theme.spacing(1.6)};
+
+  svg {
+    fill: ${variables.palette.primary};
+  }
 `;
 
 export const StyledConfigureBtn = styled(Button)`

@@ -183,7 +183,7 @@ const getActivityOrFlowId = (
   return eventActivityOrFlowId;
 };
 
-const getStartEndingDate = (
+const getStartEndDates = (
   isPeriodicityOnce: boolean,
   isPeriodicityAlways: boolean,
   defaultStartDate: Date,
@@ -192,13 +192,16 @@ const getStartEndingDate = (
   editedEvent?: CalendarEvent,
 ) => {
   if (isPeriodicityOnce || isPeriodicityAlways) {
-    return [defaultStartDate, endOfYear(defaultStartDate)];
+    return { startDate: defaultStartDate, endDate: endOfYear(defaultStartDate) };
   }
 
-  return [
-    eventStart || defaultStartDate,
-    editedEvent && eventEnd === null ? null : eventEnd || endOfYear(eventStart || defaultStartDate),
-  ];
+  return {
+    startDate: eventStart || defaultStartDate,
+    endDate:
+      editedEvent && eventEnd === null
+        ? null
+        : eventEnd || endOfYear(eventStart || defaultStartDate),
+  };
 };
 
 const getNotifications = (type: SecondsManipulation, notifications?: EventNotifications) =>
@@ -260,7 +263,7 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
   const isPeriodicityOnce = eventPeriodicity === Periodicity.Once;
   const alwaysAvailable = editedEvent ? eventAlwaysAvailable : true;
   const date = isPeriodicityOnce ? eventStart : defaultStartDate;
-  const startEndingDate = getStartEndingDate(
+  const { startDate, endDate } = getStartEndDates(
     isPeriodicityOnce,
     isPeriodicityAlways,
     defaultStartDate,
@@ -290,7 +293,8 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     startTime,
     endTime,
     date,
-    startEndingDate,
+    startDate,
+    endDate,
     accessBeforeSchedule,
     timerType,
     timerDuration,
@@ -346,8 +350,8 @@ const getEventStartYear = ({
   periodicity,
   defaultStartDate,
   date,
-  startEndingDate,
-}: Pick<EventFormValues, 'periodicity' | 'date' | 'startEndingDate'> & {
+  startDate,
+}: Pick<EventFormValues, 'periodicity' | 'date' | 'startDate'> & {
   defaultStartDate: Date | string;
 }) => {
   if (periodicity === Periodicity.Always) {
@@ -356,8 +360,9 @@ const getEventStartYear = ({
 
   return periodicity === Periodicity.Once
     ? typeof date !== 'string' && getYear(date)
-    : startEndingDate[0] && typeof startEndingDate[0] !== 'string' && getYear(startEndingDate[0]);
+    : startDate && typeof startDate !== 'string' && getYear(startDate);
 };
+
 export const getEventPayload = (
   defaultStartDate: Date,
   watch: UseFormWatch<EventFormValues>,
@@ -374,7 +379,8 @@ export const getEventPayload = (
   const endTime = watch('endTime');
   const accessBeforeSchedule = watch('accessBeforeSchedule');
   const date = watch('date');
-  const startEndingDate = watch('startEndingDate');
+  const startDate = watch('startDate');
+  const endDate = watch('endDate');
   const notificationsFromForm = watch('notifications');
   const notifications = getNotifications(SecondsManipulation.AddSeconds, notificationsFromForm);
   const reminderFromForm = watch('reminder');
@@ -384,7 +390,7 @@ export const getEventPayload = (
     periodicity,
     defaultStartDate,
     date,
-    startEndingDate,
+    startDate,
   });
 
   const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
@@ -424,17 +430,17 @@ export const getEventPayload = (
             selectedDate: convertDateToYearMonthDay(date),
           }
         : {
-            ...(startEndingDate[0] && {
-              startDate: convertDateToYearMonthDay(startEndingDate[0]),
+            ...(startDate && {
+              startDate: convertDateToYearMonthDay(startDate),
             }),
-            ...(startEndingDate[1] && {
-              endDate: convertDateToYearMonthDay(startEndingDate[1]),
+            ...(endDate && {
+              endDate: convertDateToYearMonthDay(endDate),
             }),
           }),
 
-      ...(startEndingDate[0] &&
+      ...(startDate &&
         (periodicity === Periodicity.Weekly || periodicity === Periodicity.Monthly) && {
-          selectedDate: convertDateToYearMonthDay(startEndingDate[0]),
+          selectedDate: convertDateToYearMonthDay(startDate),
         }),
     };
   }

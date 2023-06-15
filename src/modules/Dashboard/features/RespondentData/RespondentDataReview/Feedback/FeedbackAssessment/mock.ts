@@ -90,7 +90,7 @@ export const singleSelectionMocked: SingleSelectItemAnswer = {
   },
   answer: {
     text: '',
-    value: 'single-select-option-2',
+    value: 2,
   },
 };
 

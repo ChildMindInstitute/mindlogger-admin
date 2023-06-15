@@ -14,12 +14,12 @@ import { StyledButton, StyledContainer } from './Feedback.styles';
 import { FeedbackTabs, getTabs } from './Feedback.const';
 import { FeedbackProps } from './Feedback.types';
 
-export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
+export const Feedback = ({ onClose, selectedActivity, isAssessmentVisible }: FeedbackProps) => {
   const { t } = useTranslation();
 
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
 
-  const tabs = getTabs(selectedActivity, setActiveTab);
+  const tabs = getTabs(selectedActivity, setActiveTab, isAssessmentVisible);
 
   return (
     <StyledContainer>

@@ -7,7 +7,7 @@ import { Modal } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks';
-import { editRespondentAccess } from 'api';
+import { editRespondentAccessApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
@@ -33,7 +33,7 @@ export const EditRespondentPopup = ({
     setPopupVisible(false);
   };
 
-  const { execute, error } = useAsync(editRespondentAccess, () => {
+  const { execute: editRespondentAccess, error } = useAsync(editRespondentAccessApi, () => {
     handlePopupClose();
     refetchRespondents();
   });
@@ -44,7 +44,7 @@ export const EditRespondentPopup = ({
     const values = getValues();
     const { appletId, ownerId, respondentId } = chosenAppletData;
 
-    execute({
+    editRespondentAccess({
       values,
       appletId,
       ownerId,
@@ -62,7 +62,7 @@ export const EditRespondentPopup = ({
     <Modal
       open={popupVisible}
       onClose={handlePopupClose}
-      onSubmit={submitForm}
+      onSubmit={handleSubmit(submitForm)}
       title={t('editRespondent')}
       buttonText={t('save')}
       hasSecondBtn
