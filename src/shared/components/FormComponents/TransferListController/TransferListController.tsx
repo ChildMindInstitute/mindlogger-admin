@@ -22,6 +22,7 @@ export const TransferListController = <T extends FieldValues>({
   selectedItems,
   columns,
   selectedItemsColumns,
+  sxProps = {},
   readOnly = false,
   hasSearch = true,
   hasSelectedSection = true,
@@ -59,7 +60,7 @@ export const TransferListController = <T extends FieldValues>({
             : items;
 
         return (
-          <StyledFlexColumn sx={{ gap: '1.2rem', width: '100%' }}>
+          <StyledFlexColumn sx={{ gap: '1.2rem', width: '100%', ...sxProps }}>
             {caption && <StyledTitleMedium>{caption}</StyledTitleMedium>}
             {hasSearch && (
               <StyledTextField
