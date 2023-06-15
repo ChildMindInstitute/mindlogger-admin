@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +7,7 @@ import { Modal } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks';
-import { editRespondentAccessApi } from 'api';
+import { editRespondentApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
@@ -23,20 +23,22 @@ export const EditRespondentPopup = ({
 }: EditRespondentPopupProps) => {
   const { t } = useTranslation('app');
 
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false);
+
   const { handleSubmit, control, setValue, getValues } = useForm<EditRespondentForm>({
     resolver: yupResolver(editRespondentFormSchema()),
     defaultValues: { secretUserId: '', nickname: '' },
   });
 
+  const { execute: editRespondent, error } = useAsync(editRespondentApi, () => {
+    setIsSuccessVisible(true);
+  });
+
   const handlePopupClose = () => {
     setChosenAppletData(null);
     setPopupVisible(false);
-  };
-
-  const { execute: editRespondentAccess, error } = useAsync(editRespondentAccessApi, () => {
-    handlePopupClose();
     refetchRespondents();
-  });
+  };
 
   const submitForm = () => {
     if (!chosenAppletData) return;
@@ -44,7 +46,7 @@ export const EditRespondentPopup = ({
     const values = getValues();
     const { appletId, ownerId, respondentId } = chosenAppletData;
 
-    editRespondentAccess({
+    editRespondent({
       values,
       appletId,
       ownerId,
@@ -62,28 +64,39 @@ export const EditRespondentPopup = ({
     <Modal
       open={popupVisible}
       onClose={handlePopupClose}
-      onSubmit={handleSubmit(submitForm)}
+      onSubmit={isSuccessVisible ? handlePopupClose : handleSubmit(submitForm)}
       title={t('editRespondent')}
-      buttonText={t('save')}
-      hasSecondBtn
+      buttonText={t(isSuccessVisible ? 'ok' : 'save')}
+      hasSecondBtn={!isSuccessVisible}
       onSecondBtnSubmit={handlePopupClose}
       secondBtnText={t('cancel')}
     >
       <StyledModalWrapper>
-        <form onSubmit={handleSubmit(submitForm)} noValidate>
-          <StyledController>
-            <InputController fullWidth name="nickname" control={control} label={t('nickname')} />
-          </StyledController>
-          <StyledController>
-            <InputController
-              fullWidth
-              name="secretUserId"
-              control={control}
-              label={t('secretUserId')}
-            />
-          </StyledController>
-        </form>
-        {error && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
+        {isSuccessVisible ? (
+          <>{t('editRespondentSuccess')}</>
+        ) : (
+          <>
+            <form onSubmit={handleSubmit(submitForm)} noValidate>
+              <StyledController>
+                <InputController
+                  fullWidth
+                  name="nickname"
+                  control={control}
+                  label={t('nickname')}
+                />
+              </StyledController>
+              <StyledController>
+                <InputController
+                  fullWidth
+                  name="secretUserId"
+                  control={control}
+                  label={t('secretUserId')}
+                />
+              </StyledController>
+            </form>
+            {error && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
+          </>
+        )}
       </StyledModalWrapper>
     </Modal>
   );

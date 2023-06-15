@@ -35,7 +35,7 @@ import {
   GetWorkspaceAppletsParams,
   FolderName,
   ReportConfig,
-  EditRespondentAccess,
+  EditRespondent,
   AppletVersionChanges,
   RemoveAccess,
   ActivityAnswer,
@@ -221,8 +221,8 @@ export const removeRespondentAccess = (
     { signal },
   );
 
-export const editRespondentAccessApi = (
-  { ownerId, appletId, respondentId, values }: EditRespondentAccess,
+export const editRespondentApi = (
+  { ownerId, appletId, respondentId, values }: EditRespondent,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
