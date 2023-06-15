@@ -31,7 +31,7 @@ export const LookupTable = ({
   const { component, ...modalProps } = screens[step];
 
   return (
-    <Modal open={open} onClose={onClose} width="66" {...modalProps}>
+    <Modal open={open} onClose={onClose} width="93.6" {...modalProps}>
       <StyledModalWrapper>{component}</StyledModalWrapper>
     </Modal>
   );

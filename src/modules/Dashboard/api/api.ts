@@ -223,7 +223,7 @@ export const removeRespondentAccess = (
     { signal },
   );
 
-export const editRespondentAccess = (
+export const editRespondentAccessApi = (
   { ownerId, appletId, respondentId, values }: EditRespondentAccess,
   signal?: AbortSignal,
 ) =>
