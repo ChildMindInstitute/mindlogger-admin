@@ -27,7 +27,7 @@ export const SectionContent = ({ name, title }: SectionContentProps) => {
 
   useEffect(() => {
     if (isContainConditional) {
-      setValue(conditionalLogicName, defaultConditionalValue);
+      !conditionalLogic && setValue(conditionalLogicName, defaultConditionalValue);
 
       return;
     }
