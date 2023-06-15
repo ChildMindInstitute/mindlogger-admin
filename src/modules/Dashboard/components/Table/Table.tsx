@@ -9,6 +9,7 @@ import {
   StyledTableCellContent,
   StyledTableContainer,
 } from 'shared/components';
+import { StyledBodyMedium } from 'shared/styles';
 
 import { TableProps } from './Table.types';
 
@@ -71,7 +72,9 @@ export const Table = ({
                       align={row[key].align}
                       width={row[key].width}
                     >
-                      {row[key].content(row, hoveredRowIndex === index)}
+                      <StyledBodyMedium>
+                        {row[key].content(row, hoveredRowIndex === index)}
+                      </StyledBodyMedium>
                     </TableCell>
                   ))}
                 </TableRow>
