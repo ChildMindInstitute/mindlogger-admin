@@ -227,7 +227,19 @@ export type OwnerId = {
   ownerId: string;
 };
 
-export type Answers = { id: string; createdDate: string } & RespondentId;
+export type DatavizActivity = {
+  id: string;
+  name: string;
+};
+
+export type ReviewActivity = DatavizActivity & {
+  answerDates: {
+    answerId: string;
+    createdAt: string;
+  }[];
+};
+
+export type Answers = AppletId & RespondentId & { createdDate?: string };
 
 export type Answer = AppletId & { answerId: string; activityId: string };
 
@@ -313,7 +325,7 @@ export type Applet = SingleApplet & {
   parentId?: string;
 };
 
-export type WorkspaceFoldersAppletsResponse<T> = {
+export type Response<T> = {
   count: number;
   result: T[];
 };

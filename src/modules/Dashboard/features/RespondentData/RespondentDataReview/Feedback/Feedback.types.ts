@@ -1,6 +1,7 @@
-import { Activity } from '../RespondentDataReview.types';
+import { DatavizActivity } from 'api';
 
 export type FeedbackProps = {
   onClose: () => void;
-  selectedActivity: Activity;
+  selectedActivity: DatavizActivity;
+  isAssessmentVisible: boolean;
 };

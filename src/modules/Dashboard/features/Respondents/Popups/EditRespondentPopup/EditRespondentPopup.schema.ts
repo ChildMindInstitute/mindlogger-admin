@@ -8,7 +8,7 @@ export const editRespondentFormSchema = () => {
 
   return yup
     .object({
-      MRN: yup.string().required(requiredField),
+      secretUserId: yup.string().required(requiredField),
     })
     .required();
 };

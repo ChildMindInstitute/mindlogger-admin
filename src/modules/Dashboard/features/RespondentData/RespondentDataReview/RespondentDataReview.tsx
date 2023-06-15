@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { ReviewActivity, getAssessmentApi } from 'api';
 import { Svg } from 'shared/components';
-import { useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
+import { useAsync, useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
 import { StyledContainer, StyledHeadlineLarge, StyledTitleLarge, variables } from 'shared/styles';
 
 import { StyledTextBtn } from '../RespondentData.styles';
@@ -13,17 +15,22 @@ import {
   StyledReviewContainer,
   StyledWrapper,
 } from './RespondentDataReview.styles';
-import { Activity, Answer } from './RespondentDataReview.types';
+import { Answer } from './RespondentDataReview.types';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
 
 export const RespondentDataReview = () => {
   const { t } = useTranslation();
+  const { appletId, answerId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [isAssessmentVisible, setIsAssessmentVisible] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
+
+  const { execute: getAssessment } = useAsync(getAssessmentApi);
+
   useBreadcrumbs([
     {
       icon: 'checkbox-outlined',
@@ -31,23 +38,33 @@ export const RespondentDataReview = () => {
     },
   ]);
 
-  const emptyMessage = (
-    <StyledEmptyReview>
-      {selectedActivity?.answerDates.length === 0 ? (
-        <>
-          <Svg id="chart" width="67" height="67" />
-          <StyledTitleLarge color={variables.palette.outline}>
-            {t('noDataForActivity')}
-          </StyledTitleLarge>
-        </>
-      ) : (
+  const renderEmptyState = () => {
+    if (!selectedActivity) {
+      return (
         <>
           <Svg id="data" width="60" height="73" />
           <StyledTitleLarge color={variables.palette.outline}>{t('emptyReview')}</StyledTitleLarge>
         </>
-      )}
-    </StyledEmptyReview>
-  );
+      );
+    }
+
+    return (
+      <>
+        <Svg id="chart" width="67" height="67" />
+        <StyledTitleLarge color={variables.palette.outline}>
+          {t('noDataForActivity')}
+        </StyledTitleLarge>
+      </>
+    );
+  };
+
+  useEffect(() => {
+    if (!appletId || !answerId) return;
+    (async () => {
+      const { data } = await getAssessment({ appletId, answerId });
+      setIsAssessmentVisible(!!data.result.items.length);
+    })();
+  }, [answerId]);
 
   return (
     <StyledContainer sx={{ position: 'relative' }}>
@@ -75,11 +92,17 @@ export const RespondentDataReview = () => {
         {selectedAnswer && selectedActivity ? (
           <Review answerId={selectedAnswer.answerId} activityId={selectedActivity.id} />
         ) : (
-          <StyledWrapper>{emptyMessage}</StyledWrapper>
+          <StyledWrapper>
+            <StyledEmptyReview>{renderEmptyState()}</StyledEmptyReview>
+          </StyledWrapper>
         )}
       </StyledReviewContainer>
       {selectedActivity && isFeedbackOpen && (
-        <Feedback selectedActivity={selectedActivity} onClose={() => setIsFeedbackOpen(false)} />
+        <Feedback
+          selectedActivity={selectedActivity}
+          onClose={() => setIsFeedbackOpen(false)}
+          isAssessmentVisible={isAssessmentVisible}
+        />
       )}
     </StyledContainer>
   );

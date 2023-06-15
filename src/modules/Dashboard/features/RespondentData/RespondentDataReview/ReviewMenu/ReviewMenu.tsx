@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 
-import { getAnswersApi, getAppletSubmitDateListApi } from 'api';
+import { ReviewActivity, getReviewActivitiesApi, getAppletSubmitDateListApi } from 'api';
 import { DatePicker, DatePickerUiType } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
@@ -12,7 +12,6 @@ import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
 import { useRespondentLabel } from 'modules/Dashboard/hooks';
 
 import { StyledMenu } from '../../RespondentData.styles';
-import { Activity } from '../RespondentDataReview.types';
 import { StyledHeader } from './ReviewMenu.styles';
 import { ReviewMenuProps } from './ReviewMenu.types';
 import { ReviewMenuItem } from './ReviewMenuItem';
@@ -32,27 +31,24 @@ export const ReviewMenu = ({
   const [startDate, setStartDate] = useState(startOfMonth(new Date()));
   const [endDate, setEndDate] = useState(endOfMonth(new Date()));
   const [submitDates, setSubmitDates] = useState<Date[] | undefined>(undefined);
-  const [activities, setActivities] = useState<Activity[]>([]);
+  const [activities, setActivities] = useState<ReviewActivity[]>([]);
 
-  const { execute: executeGetAppletSubmitDatesApi } = useAsync(
-    getAppletSubmitDateListApi,
-    (res) => {
-      if (res?.data?.result) {
-        const dates = res.data.result.dates.map((date: string) => new Date(date));
-        setSubmitDates(dates);
-        setValue('date', dates[dates.length - 1]);
-      }
-    },
-  );
+  const { execute: getAppletSubmitDateList } = useAsync(getAppletSubmitDateListApi, (res) => {
+    if (res?.data?.result) {
+      const dates = res.data.result.dates.map((date: string) => new Date(date));
+      setSubmitDates(dates);
+      setValue('date', dates[dates.length - 1]);
+    }
+  });
 
-  const { execute: executeGetAnswers } = useAsync(
-    getAnswersApi,
+  const { execute: getReviewActivities } = useAsync(
+    getReviewActivitiesApi,
     (res) => res?.data?.result && setActivities(res.data.result),
   );
 
   useEffect(() => {
     if (appletId && respondentId) {
-      executeGetAppletSubmitDatesApi({
+      getAppletSubmitDateList({
         appletId,
         respondentId,
         fromDate: String(startDate.getTime()),
@@ -63,8 +59,8 @@ export const ReviewMenu = ({
 
   useEffect(() => {
     if (appletId && respondentId && (date || submitDates)) {
-      executeGetAnswers({
-        id: appletId,
+      getReviewActivities({
+        appletId,
         respondentId,
         createdDate: format(date || new Date(), DateFormats.YearMonthDay),
       });
