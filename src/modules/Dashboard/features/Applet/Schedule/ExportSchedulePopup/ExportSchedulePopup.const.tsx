@@ -25,10 +25,6 @@ export const getHeadCells = (): HeadCell[] => [
     label: t('notificationTime'),
   },
   {
-    id: 'repeats',
-    label: t('repeats'),
-  },
-  {
     id: 'frequency',
     label: t('frequency'),
   },

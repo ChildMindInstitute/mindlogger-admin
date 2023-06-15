@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce';
 
 import { useAppDispatch } from 'redux/store';
 import { SaveAndPublish } from 'modules/Builder/features';
-import { LinkedTabs } from 'shared/components';
+import { LinkedTabs, Spinner } from 'shared/components';
 import {
   useBuilderSessionStorageFormValues,
   useBuilderSessionStorageFormChange,
@@ -103,6 +103,7 @@ export const BuilderApplet = () => {
   return (
     <FormProvider {...methods}>
       <StyledBody sx={{ position: 'relative' }}>
+        {loadingStatus === 'loading' && <Spinner />}
         <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
         <SaveAndPublish hasPrompt={isDirty} />
       </StyledBody>

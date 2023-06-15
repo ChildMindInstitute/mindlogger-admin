@@ -6,6 +6,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import {
   StyledBodyLarge,
+  StyledFlexColumn,
   StyledFlexTopCenter,
   StyledTooltipSvg,
   theme,
@@ -115,33 +116,35 @@ export const ScoresAndReports = () => {
           </StyledFlexTopCenter>
         }
       />
-      {sections?.map((section, index) => {
-        const sectionName = `${sectionsName}.${index}`;
-        const title = t('sectionHeader', {
-          index: index + 1,
-          name: section?.name,
-        });
+      <StyledFlexColumn sx={{ mt: theme.spacing(2.4) }}>
+        {sections?.map((section, index) => {
+          const sectionName = `${sectionsName}.${index}`;
+          const title = t('sectionHeader', {
+            index: index + 1,
+            name: section?.name,
+          });
 
-        return (
-          <ToggleItemContainer
-            key={`data-section-${getEntityKey(section) || index}`}
-            HeaderContent={SectionScoreHeader}
-            Content={SectionContent}
-            headerContentProps={{
-              onRemove: () => {
-                removeSection(index);
-              },
-              name: sectionName,
-              title,
-            }}
-            contentProps={{
-              sectionId: section.id,
-              name: sectionName,
-              title,
-            }}
-          />
-        );
-      })}
+          return (
+            <ToggleItemContainer
+              key={`data-section-${getEntityKey(section) || index}`}
+              HeaderContent={SectionScoreHeader}
+              Content={SectionContent}
+              headerContentProps={{
+                onRemove: () => {
+                  removeSection(index);
+                },
+                name: sectionName,
+                title,
+              }}
+              contentProps={{
+                sectionId: section.id,
+                name: sectionName,
+                title,
+              }}
+            />
+          );
+        })}
+      </StyledFlexColumn>
       {scores?.map((score, index) => {
         const scoreName = `${scoresName}.${index}`;
         const title = t('scoreHeader', {
@@ -169,7 +172,7 @@ export const ScoresAndReports = () => {
           />
         );
       })}
-      <StyledFlexTopCenter sx={{ mt: theme.spacing(2.4) }}>
+      <StyledFlexTopCenter>
         <Button {...commonButtonProps} onClick={handleAddScore} sx={{ mr: theme.spacing(1.2) }}>
           {t('addScore')}
         </Button>

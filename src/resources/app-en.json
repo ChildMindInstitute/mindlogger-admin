@@ -322,7 +322,6 @@
   "startTime": "Start time",
   "endTime": "End time",
   "notificationTime": "Notification time",
-  "repeats": "Repeats",
   "frequency": "Frequency",
   "viewDataDescription": "Please select the Applet to view Respondent's data for:",
   "dataExport": "Data Export",
