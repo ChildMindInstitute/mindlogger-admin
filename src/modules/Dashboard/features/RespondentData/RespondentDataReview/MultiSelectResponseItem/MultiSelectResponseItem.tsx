@@ -6,7 +6,8 @@ import { StyledContainer } from './MultiSelectResponseItem.styles';
 export const MultiSelectResponseItem = ({ activityItem, answer }: MultiSelectItemAnswer) => (
   <StyledContainer>
     {activityItem.responseValues.options.map(({ id, text, value }) => {
-      const checked = answer?.value.includes(value!);
+      const values = answer?.value.map((value) => +value) || [];
+      const checked = values.includes(value!);
 
       return (
         <FormControlLabel
