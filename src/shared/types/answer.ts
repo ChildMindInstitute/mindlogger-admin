@@ -37,6 +37,9 @@ export type ExportAnswer = {
   activityId: string;
   flowId: null | string;
   reviewedAnswerId: null | string;
+  scheduledDatetime?: string;
+  startDatetime?: string;
+  endDatetime?: string;
 };
 
 export type ExtendedExportAnswer = ExportAnswer & {

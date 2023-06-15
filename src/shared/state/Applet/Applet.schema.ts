@@ -462,7 +462,7 @@ export type Item = {
   id?: string;
   key?: string;
   name: string;
-  question: string | Record<string, string>;
+  question: Record<string, string>;
   config: Config;
   responseType: ItemResponseType;
   responseValues: ResponseValues;
