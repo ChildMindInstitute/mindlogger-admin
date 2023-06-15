@@ -182,7 +182,6 @@ export const Respondents = () => {
         ),
         value: '',
         width: '330',
-        noParagraphWrapper: true,
       },
     };
   };

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } from '@mui/material';
+import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
 
 import {
   DEFAULT_ROWS_PER_PAGE,
@@ -9,9 +9,9 @@ import {
   StyledTableCellContent,
   StyledTableContainer,
 } from 'shared/components';
-import { StyledBodyMedium } from 'shared/styles';
 
 import { TableProps } from './Table.types';
+import { StyledTableCell } from './Table.styles';
 
 // TODO: make rows rendering more strict
 export const Table = ({
@@ -64,25 +64,17 @@ export const Table = ({
                   onMouseEnter={() => setHoveredRowIndex(index)}
                   onMouseLeave={() => setHoveredRowIndex(-1)}
                 >
-                  {Object.keys(row)?.map((key) => {
-                    const rowContent = row[key].content(row, hoveredRowIndex === index);
-
-                    return (
-                      <TableCell
-                        onClick={row[key].onClick}
-                        scope="row"
-                        key={key}
-                        align={row[key].align}
-                        width={row[key].width}
-                      >
-                        {row[key]?.noParagraphWrapper ? (
-                          rowContent
-                        ) : (
-                          <StyledBodyMedium>{rowContent}</StyledBodyMedium>
-                        )}
-                      </TableCell>
-                    );
-                  })}
+                  {Object.keys(row)?.map((key) => (
+                    <StyledTableCell
+                      onClick={row[key].onClick}
+                      scope="row"
+                      key={key}
+                      align={row[key].align}
+                      width={row[key].width}
+                    >
+                      {row[key].content(row, hoveredRowIndex === index)}
+                    </StyledTableCell>
+                  ))}
                 </TableRow>
               ))}
             </TableBody>

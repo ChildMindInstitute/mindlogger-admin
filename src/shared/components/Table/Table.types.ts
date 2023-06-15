@@ -7,7 +7,6 @@ export type RowContent = Cell & {
   value: string | number | boolean;
   onClick?: () => void;
   width?: string;
-  noParagraphWrapper?: boolean;
 };
 
 export type Row = {
