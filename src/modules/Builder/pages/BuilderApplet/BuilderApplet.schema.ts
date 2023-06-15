@@ -348,7 +348,7 @@ export const SubscaleSchema = () =>
         ),
       items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
       scoring: yup.string(),
-      subscaleTableData: yup.array().of(SubscaleTableDataItemSchema()),
+      subscaleTableData: yup.array().of(SubscaleTableDataItemSchema()).nullable(),
     })
     .required();
 
