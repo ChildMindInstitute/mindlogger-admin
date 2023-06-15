@@ -1,4 +1,7 @@
-import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import {
+  ActivityItemAnswer,
+  EventDTO,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
 
 export type ExportActivity = {
@@ -37,6 +40,7 @@ export type ExportAnswer = {
   activityId: string;
   flowId: null | string;
   reviewedAnswerId: null | string;
+  events: string;
 };
 
 export type ExtendedExportAnswer = ExportAnswer & {
@@ -46,8 +50,11 @@ export type ExtendedExportAnswer = ExportAnswer & {
 
 export type DecryptedAnswerData = Omit<
   ExtendedExportAnswer,
-  'userPublicKey' | 'itemIds' | 'items' | 'answer'
+  'userPublicKey' | 'itemIds' | 'items' | 'answer' | 'events'
 > &
   ActivityItemAnswer;
 
-export type AnswerDecrypted = string | { value: string | number | number[]; text?: string };
+export type DecryptedActivityData = {
+  decryptedAnswers: DecryptedAnswerData[];
+  decryptedEvents: EventDTO[];
+};
