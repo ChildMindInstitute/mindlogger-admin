@@ -94,10 +94,10 @@ export type ActivityItemAnswer = {
   answer: AnswerDTO;
 };
 
-export interface TextItemAnswer {
+export type TextItemAnswer = {
   activityItem: TextItem;
   answer: DecryptedTextAnswer;
-}
+};
 
 export type SliderActivityItem = SliderItem & {
   edited?: boolean;
@@ -111,17 +111,17 @@ export type MultiSelectActivityItem = MultiSelectItem & {
   edited?: boolean;
 };
 
-export interface SliderItemAnswer {
+export type SliderItemAnswer = {
   activityItem: SliderActivityItem;
   answer: DecryptedSliderAnswer | null;
-}
+};
 
-export interface SingleSelectItemAnswer {
+export type SingleSelectItemAnswer = {
   activityItem: SingleSelectActivityItem;
   answer: DecryptedSingleSelectionAnswer | null;
-}
+};
 
-export interface MultiSelectItemAnswer extends ActivityItemAnswer {
+export type MultiSelectItemAnswer = {
   activityItem: MultiSelectActivityItem;
   answer: DecryptedMultiSelectionAnswer | null;
-}
+};
