@@ -415,6 +415,7 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
+    themeId: appletData.themeId === null ? 'default' : appletData.themeId,
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,
