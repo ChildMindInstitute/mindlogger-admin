@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 import { updateManagersPinApi } from 'api';
-import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Search } from 'shared/components';
+import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Search, Spinner } from 'shared/components';
 import { users, workspaces, Manager } from 'redux/modules';
 import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
 import { Table, TableProps } from 'modules/Dashboard/components';
@@ -29,6 +30,7 @@ export const Managers = () => {
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
   const managersData = users.useManagersData();
+  const loadingStatus = users.useManagersStatus();
   const { getWorkspaceManagers } = users.thunk;
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
@@ -150,9 +152,20 @@ export const Managers = () => {
     return searchValue && t('noMatchWasFound', { searchValue });
   };
 
+  useEffect(
+    () => () => {
+      dispatch(users.actions.resetManagersData());
+    },
+    [],
+  );
+
   if (isForbidden) return noPermissionsComponent;
 
-  return (
+  return loadingStatus === 'loading' ? (
+    <Box sx={{ height: '100%', position: 'relative' }}>
+      <Spinner />
+    </Box>
+  ) : (
     <>
       <ManagersTableHeader>
         <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
