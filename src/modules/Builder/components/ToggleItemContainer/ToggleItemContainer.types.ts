@@ -6,7 +6,6 @@ export type SharedToggleItemProps = {
 };
 
 export enum ToggleContainerUiType {
-  Item,
   PerformanceTask,
   Score,
 }
