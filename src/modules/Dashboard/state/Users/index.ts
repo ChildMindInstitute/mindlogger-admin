@@ -4,7 +4,7 @@ import { useAppSelector } from 'redux/store';
 
 import * as thunk from './Users.thunk';
 import { state as initialState } from './Users.state';
-import { extraReducers } from './Users.reducer';
+import { extraReducers, reducers } from './Users.reducer';
 import { Respondent, UsersSchema } from './Users.schema';
 
 export * from './Users.schema';
@@ -12,7 +12,7 @@ export * from './Users.schema';
 const slice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers,
   extraReducers,
 });
 
@@ -52,11 +52,19 @@ export const users = {
         },
       }) => data?.result.find((respondent: Respondent) => respondent.id === id),
     ),
-  useRespondentsMetaStatus: (): UsersSchema['respondents']['status'] =>
+  useRespondentsStatus: (): UsersSchema['respondents']['status'] =>
     useAppSelector(
       ({
         users: {
           respondents: { status },
+        },
+      }) => status,
+    ),
+  useManagersStatus: (): UsersSchema['managers']['status'] =>
+    useAppSelector(
+      ({
+        users: {
+          managers: { status },
         },
       }) => status,
     ),

@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
 
-import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Row } from 'shared/components';
+import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Row, Spinner } from 'shared/components';
 import { Respondent, users, workspaces } from 'redux/modules';
 import {
   useTimeAgo,
@@ -46,6 +47,7 @@ export const Respondents = () => {
 
   const rolesData = workspaces.useRolesData();
   const respondentsData = users.useRespondentsData();
+  const loadingStatus = users.useRespondentsStatus();
   const { ownerId } = workspaces.useData() || {};
   const { getWorkspaceRespondents } = users.thunk;
 
@@ -180,6 +182,7 @@ export const Respondents = () => {
         ),
         value: '',
         width: '330',
+        noParagraphWrapper: true,
       },
     };
   };
@@ -227,6 +230,13 @@ export const Respondents = () => {
       [respondentsData],
     );
 
+  useEffect(
+    () => () => {
+      dispatch(users.actions.resetRespondentsData());
+    },
+    [],
+  );
+
   const chosenRespondentsItems = respondentKey ? filteredRespondents[respondentKey] : undefined;
 
   const getAppletsSmallTable = (key: keyof FilteredApplets) =>
@@ -253,7 +263,11 @@ export const Respondents = () => {
 
   if (isForbidden) return noPermissionsComponent;
 
-  return (
+  return loadingStatus === 'loading' ? (
+    <Box sx={{ height: '100%', position: 'relative' }}>
+      <Spinner />
+    </Box>
+  ) : (
     <>
       <RespondentsTableHeader hasButton={!!appletId}>
         {appletId && (

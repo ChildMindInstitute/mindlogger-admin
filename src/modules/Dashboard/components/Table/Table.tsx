@@ -64,19 +64,25 @@ export const Table = ({
                   onMouseEnter={() => setHoveredRowIndex(index)}
                   onMouseLeave={() => setHoveredRowIndex(-1)}
                 >
-                  {Object.keys(row)?.map((key) => (
-                    <TableCell
-                      onClick={row[key].onClick}
-                      scope="row"
-                      key={key}
-                      align={row[key].align}
-                      width={row[key].width}
-                    >
-                      <StyledBodyMedium>
-                        {row[key].content(row, hoveredRowIndex === index)}
-                      </StyledBodyMedium>
-                    </TableCell>
-                  ))}
+                  {Object.keys(row)?.map((key) => {
+                    const rowContent = row[key].content(row, hoveredRowIndex === index);
+
+                    return (
+                      <TableCell
+                        onClick={row[key].onClick}
+                        scope="row"
+                        key={key}
+                        align={row[key].align}
+                        width={row[key].width}
+                      >
+                        {row[key]?.noParagraphWrapper ? (
+                          rowContent
+                        ) : (
+                          <StyledBodyMedium>{rowContent}</StyledBodyMedium>
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))}
             </TableBody>
