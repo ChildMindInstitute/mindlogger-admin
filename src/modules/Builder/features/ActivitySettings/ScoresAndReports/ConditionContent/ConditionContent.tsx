@@ -12,11 +12,11 @@ import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
 import { StyledButton } from '../ScoresAndReports.styles';
 
-export const ConditionContent = ({ name, type }: ConditionContentProps) => {
+export const ConditionContent = ({ name, type, scoreId, scoreName }: ConditionContentProps) => {
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
-  const { control, watch, getValues, getFieldState } = useFormContext();
+  const { control, watch, getFieldState } = useFormContext();
   const { append: appendCondition, remove: removeCondition } = useFieldArray({
     control,
     name: conditionsName,
@@ -37,7 +37,8 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
           name={name}
           index={index}
           type={type}
-          scoreId={type === ConditionRowType.Score && getValues(`${name}.id`)}
+          scoreId={type === ConditionRowType.Score ? scoreId : ''}
+          scoreName={type === ConditionRowType.Score ? scoreName : ''}
           onRemove={() => removeCondition(index)}
         />
       ))}
