@@ -4,6 +4,7 @@ import { StyledFlexAllCenter, StyledClearedButton, theme, variables } from 'shar
 
 export const StyledInsertWrapper = styled(StyledFlexAllCenter)`
   position: relative;
+  bottom: 0.8rem;
   margin: ${theme.spacing(-1.1, 0)};
   opacity: 0;
 
@@ -27,7 +28,7 @@ export const StyledInsert = styled(StyledClearedButton)`
   width: 2.4rem;
   height: 2.4rem;
   background-color: ${variables.palette.primary};
-  border-radius: ${variables.borderRadius.xs};
+  border-radius: ${variables.borderRadius.half};
 
   && {
     &:hover {
