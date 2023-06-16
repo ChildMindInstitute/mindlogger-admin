@@ -6,3 +6,9 @@ export type ChartTooltipProps = {
   onMouseEnter: MouseEventHandler;
   onMouseLeave: MouseEventHandler;
 };
+
+export type ScatterTooltipRowData = {
+  x: string;
+  y: number;
+  answerId: string;
+};

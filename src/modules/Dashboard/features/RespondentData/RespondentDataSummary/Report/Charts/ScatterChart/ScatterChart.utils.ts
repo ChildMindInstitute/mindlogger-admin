@@ -117,7 +117,7 @@ export const getData = (responses: Response[], versions: Version[]) => ({
   datasets: [
     {
       xAxisID: 'x',
-      data: responses.map(({ date }) => ({ x: new Date(date), y: 0 })),
+      data: responses.map(({ date, answerId }) => ({ x: new Date(date), y: 0, answerId })),
       borderWidth: 5,
       backgroundColor: variables.palette.primary,
       borderColor: variables.palette.primary,
