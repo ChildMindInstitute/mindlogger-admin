@@ -4,5 +4,5 @@ import { Box } from '@mui/material';
 import theme from 'shared/styles/theme';
 
 export const StyledAppletPasswordContainer = styled(Box)`
-  padding: ${theme.spacing(0, 2.4)};
+  padding: ${theme.spacing(0, 3.2)};
 `;
