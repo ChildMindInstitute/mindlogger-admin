@@ -13,6 +13,19 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
   border-radius: ${variables.borderRadius.lg2};
   min-height: ${height};
   max-height: ${height};
+
+  .MuiTableCell-root {
+    background-color: transparent;
+  }
+
+  .empty-state {
+    &.MuiTableRow-root {
+      &:hover {
+        cursor: default;
+        background-color: transparent;
+      }
+    }
+  }
 `;
 
 export const StyledCheckbox = styled(Checkbox)`

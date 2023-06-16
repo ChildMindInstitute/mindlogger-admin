@@ -24,6 +24,9 @@ export const getOptions = ({
   const timeConfig = getTimeConfig(min, max);
   const stepSize = getStepSize(min, max);
 
+  const crossAlign =
+    responseType === ItemResponseType.Slider ? ('near' as const) : ('far' as const);
+
   const mapperPointOption: { [key: string | number]: string } =
     responseType !== ItemResponseType.Slider
       ? (responseValues as SingleAndMultipleSelectItemResponseValues)?.options.reduce(
@@ -48,12 +51,16 @@ export const getOptions = ({
     },
     scales: {
       y: {
+        border: {
+          display: false,
+        },
         min: minY,
         max: maxY + 1,
         afterFit(scaleInstance: LinearScale) {
           scaleInstance.width = LABEL_WIDTH_Y;
         },
         ticks: {
+          crossAlign,
           stepSize: 1,
           callback: (value: string | number) => {
             if (value === maxY + 1) return;
@@ -80,6 +87,9 @@ export const getOptions = ({
         },
         ...timeConfig,
         grid: {
+          display: false,
+        },
+        border: {
           display: false,
         },
         ticks: {

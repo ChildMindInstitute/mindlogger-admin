@@ -97,7 +97,7 @@ export const DataTable = ({
             );
           })}
           {!data?.length && (
-            <TableRow>
+            <TableRow className="empty-state">
               <TableCell sx={{ textAlign: 'left', backgroundColor: 'inherit' }}>
                 <StyledLabelLarge>{noDataPlaceholder}</StyledLabelLarge>
               </TableCell>
