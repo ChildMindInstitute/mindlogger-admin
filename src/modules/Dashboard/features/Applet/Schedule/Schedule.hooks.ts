@@ -6,7 +6,7 @@ import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
 import { applets, CalendarEvent, calendarEvents, CreateEventsData } from 'modules/Dashboard/state';
 import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
-import { getDateInUserTimezone, getTableCell } from 'shared/utils';
+import { getTableCell } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { createEvents } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
@@ -66,7 +66,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
             const activityOrFlowName = currentActivityOrFlow?.name || '';
             const activityOrFlowCreatedAt = convertDateToYearMonthDay(
               currentActivityOrFlow?.createdAt
-                ? new Date(getDateInUserTimezone(currentActivityOrFlow.createdAt))
+                ? new Date(currentActivityOrFlow.createdAt)
                 : new Date(),
             );
             const isAlwaysAvailable = periodicityType === Periodicity.Always;
