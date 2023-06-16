@@ -50,7 +50,7 @@ export const DataTable = ({
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            {selectable && selectAll && (
+            {selectable && selectAll && data?.length ? (
               <TableCell sx={{ width: '2.8rem', backgroundColor: tableHeadBgColor }}>
                 <StyledCheckbox
                   checked={isAllSelected}
@@ -58,7 +58,7 @@ export const DataTable = ({
                   disabled={!data?.length}
                 />
               </TableCell>
-            )}
+            ) : null}
             {dataTableColumns?.map(({ key, label, styles = {} }) => (
               <TableCell
                 sx={{ ...styles, backgroundColor: tableHeadBgColor }}

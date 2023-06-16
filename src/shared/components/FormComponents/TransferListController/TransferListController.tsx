@@ -79,6 +79,7 @@ export const TransferListController = <T extends FieldValues>({
                 onSelect={handleSelect}
                 onSelectAll={handleSelectAll}
                 hasError={!!error}
+                noDataPlaceholder={t('noSelectedItemsYet')}
               />
               {hasSelectedSection && (
                 <DataTable
