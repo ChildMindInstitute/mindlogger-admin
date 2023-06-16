@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
 import { Chip } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 import { StyledBodyLarge, StyledFlexWrap, theme } from 'shared/styles';
+import { page } from 'resources';
 
 import { StyledHeader, StyledItem, StyledSvg } from './ReviewMenuItem.styles';
 import { ReviewMenuItemProps } from './ReviewMenuItem.types';
@@ -17,6 +19,19 @@ export const ReviewMenuItem = ({
   setSelectedAnswer,
 }: ReviewMenuItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { appletId, respondentId, answerId } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (selectedAnswer || !answerId) return;
+
+    const answerByRoute = activity.answerDates.find((answer) => answer.answerId === answerId);
+    if (answerByRoute) {
+      setSelectedAnswer(answerByRoute);
+      setSelectedActivity(activity);
+      setIsOpen(true);
+    }
+  }, [answerId, selectedAnswer]);
 
   const isActivityNotEmpty = !!activity.answerDates.length;
 
@@ -24,6 +39,7 @@ export const ReviewMenuItem = ({
     setSelectedActivity(activity);
     setSelectedAnswer(null);
     setIsOpen((state) => !state);
+    navigate(generatePath(page.appletRespondentDataReview, { appletId, respondentId }));
   };
 
   const handleAnswerClick = (answer: Answer) => {
@@ -32,6 +48,13 @@ export const ReviewMenuItem = ({
     }
 
     setSelectedAnswer(answer);
+    navigate(
+      generatePath(page.appletRespondentDataReviewAnswer, {
+        appletId,
+        respondentId,
+        answerId: answer.answerId,
+      }),
+    );
   };
 
   return (
