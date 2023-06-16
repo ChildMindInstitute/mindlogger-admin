@@ -9,6 +9,5 @@ export const StyledDescription = styled(StyledFlexTopStart)`
 
 export const StyledChartContainer = styled(Box)`
   margin: ${theme.spacing(2.4, 0)};
-  width: 83rem;
   height: 45rem;
 `;
