@@ -269,6 +269,7 @@
   "selected": "Selected",
   "unselected": "Unselected",
   "editRespondent": "Edit Respondent",
+  "editRespondentSuccess": "Nickname and Secret User ID have been updated successfully.",
   "removeAccess": "Remove Access",
   "remove": "Remove",
   "back": "Back",
