@@ -423,7 +423,7 @@ export const theme = createTheme({
           borderColor: variables.palette.outline_variant,
           color: variables.palette.black,
           input: {
-            padding: '1.6rem',
+            padding: '1.65rem 1.6rem',
             fontSize: variables.font.size.lg,
           },
           '&:hover': {
