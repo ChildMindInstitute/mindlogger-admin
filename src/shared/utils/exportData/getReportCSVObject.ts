@@ -1,8 +1,8 @@
 import { DecryptedAnswerData } from 'shared/types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
-import { parseResponseValue } from './parseResponseValue';
 
+import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
 import { parseOptions } from './parseOptions';
 import { getRawScores } from './getRowScores';
