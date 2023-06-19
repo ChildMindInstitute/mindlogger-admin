@@ -325,8 +325,8 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       }
 
       if (appletId && ownerId) {
-        await dispatch(getAppletWithItems({ ownerId, appletId }));
         navigate(getBuilderAppletUrl(appletId));
+        await dispatch(getAppletWithItems({ ownerId, appletId }));
       }
     }
 
@@ -349,8 +349,8 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       }
 
       if (createdAppletId && ownerId) {
-        await dispatch(getAppletWithItems({ ownerId, appletId: createdAppletId }));
         navigate(getBuilderAppletUrl(createdAppletId));
+        await dispatch(getAppletWithItems({ ownerId, appletId: createdAppletId }));
       }
     }
   };
