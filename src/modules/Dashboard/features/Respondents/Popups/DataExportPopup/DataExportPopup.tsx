@@ -13,7 +13,7 @@ import { getExportDataApi } from 'api';
 import { getErrorMessage, prepareData, exportTemplate, falseReturnFunc } from 'shared/utils';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME } from 'shared/consts';
+import { GENERAL_REPORT_NAME } from 'shared/consts';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -39,10 +39,9 @@ export const DataExportPopup = ({
     (res) => {
       if (!res?.data?.result) return;
 
-      const { reportData, activityJourneyData } = prepareData(res.data.result, getDecryptedAnswers);
+      const { reportData } = prepareData(res.data.result, getDecryptedAnswers);
 
       exportTemplate(reportData, GENERAL_REPORT_NAME);
-      exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
       setDataIsExporting(false);
       handlePopupClose();
     },
