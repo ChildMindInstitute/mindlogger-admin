@@ -7,8 +7,9 @@ import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
 import { createAssessmentApi } from 'api';
 import { FeedbackTabs } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.const';
+import { getAnswerValue } from 'shared/utils';
 
-import { formatAssessment, getAnswerValue, getDefaultValue } from './FeedbackAssessmentForm.utils';
+import { formatAssessment, getDefaultValue } from './FeedbackAssessmentForm.utils';
 import { ActivityCardItemList } from '../ActivityCardItemList';
 import { SubmitAssessmentPopup } from './SubmitAssessmentPopup';
 import { FeedbackAssessmentFormProps, AssessmentForm } from './FeedbackAssessmentForm.types';

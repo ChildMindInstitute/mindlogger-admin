@@ -12,6 +12,7 @@ import { variables } from 'shared/styles';
 
 import { getDatasets } from './BarChart.utils';
 import { BarChartProps, CustomLegend } from './BarChart.types';
+import { BAR_CHART_LABEL_WIDTH_Y } from '../Charts.const';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -42,10 +43,15 @@ export const BarChart = ({ chartData }: BarChartProps) => {
     },
     scales: {
       y: {
+        afterFit(scaleInstance: LinearScale) {
+          scaleInstance.width = BAR_CHART_LABEL_WIDTH_Y;
+        },
         grid: {
           color: variables.palette.outline_variant,
+          drawTicks: false,
         },
         border: {
+          display: false,
           dash: [8, 8],
         },
         ticks: {
@@ -55,6 +61,15 @@ export const BarChart = ({ chartData }: BarChartProps) => {
             family: 'Atkinson',
             size: 14,
           },
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+          drawTicks: false,
+        },
+        border: {
+          display: false,
         },
       },
     },

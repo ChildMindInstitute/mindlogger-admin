@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 
 import { applet } from 'shared/state';
-import { decryptData, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
+import { decryptData, Encryption, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
 import { DecryptedActivityData, ExtendedExportAnswer } from 'shared/types';
 import {
@@ -14,16 +14,19 @@ export const getEmptyDecryptedActivityData = () => ({
   decryptedEvents: [],
 });
 
-export const useDecryptedActivityData = () => {
+export const useDecryptedActivityData = (
+  dynamicAppletId?: string,
+  dynamicEncryption?: Encryption,
+) => {
   const { appletId = '' } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
   const encryption = appletData?.encryption;
-  const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
+  const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption!);
   const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;
 
   const { prime, base } = encryptionInfoFromServer;
-  const privateKey = getAppletPrivateKey(appletId);
+  const privateKey = getAppletPrivateKey(dynamicAppletId ?? appletId);
 
   return (answersApiResponse: ExtendedExportAnswer): DecryptedActivityData => {
     const { userPublicKey, answer, items, itemIds, events, ...rest } = answersApiResponse;

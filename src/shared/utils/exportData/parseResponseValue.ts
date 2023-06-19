@@ -1,10 +1,14 @@
 import { ItemResponseType } from 'shared/consts';
+import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { joinWihComma } from '../joinWihComma';
+import { getAnswerValue } from '../getAnswerValue';
 
-export const parseResponseValue = (item: any, inputType: ItemResponseType) => {
-  const key = item === Object(item) ? Object.keys(item)?.[0] : undefined;
-  const value = (key && item?.[key]) || '';
+export const parseResponseValue = (item: AnswerDTO, inputType: ItemResponseType) => {
+  const key =
+    item && item === Object(item) ? (Object.keys(item)?.[0] as keyof AnswerDTO) : undefined;
+
+  const value = getAnswerValue(item) as any;
 
   if (!key) return item || '';
 

@@ -262,6 +262,7 @@
   "selected": "Choisi",
   "unselected": "Désélectionné ",
   "editRespondent": "Modifier le répondant",
+  "editRespondentSuccess": "Le surnom et l'ID utilisateur secret ont été mis à jour avec succès.",
   "remove": "Retirer",
   "back": "Retour",
   "saveReportConfigurationWarning": "Un rapport ne peut pas être généré tant que l'<1>'Adresse IP du serveur de chiffrement'</1> et la <3>'Clé de chiffrement publique'</3> ne sont pas saisies. ",

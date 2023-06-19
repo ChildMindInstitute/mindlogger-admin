@@ -16,14 +16,6 @@ export const getDefaultValue = (responseType: ItemResponseType): string | number
   }
 };
 
-export const getAnswerValue = (answerValue: AnswerDTO) => {
-  if (typeof answerValue === 'object') {
-    return answerValue?.value || '';
-  }
-
-  return answerValue;
-};
-
 export const checkAnswerValue = (value: string | number | string[]) => {
   if (Array.isArray(value)) return !value.length;
 

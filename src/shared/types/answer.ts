@@ -1,5 +1,7 @@
 import {
   ActivityItemAnswer,
+  DecryptedMultiSelectionAnswer,
+  DecryptedTextAnswer,
   EventDTO,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';

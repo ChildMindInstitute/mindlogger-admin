@@ -27,3 +27,4 @@ export * from './isManagerOrOwner';
 export * from './getUploadedMediaName';
 export * from './getParsedAnswers';
 export * from './exportData';
+export * from './getAnswerValue';
