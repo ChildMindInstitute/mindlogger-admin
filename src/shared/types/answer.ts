@@ -49,6 +49,7 @@ export type ExportAnswer = {
 export type ExtendedExportAnswer = ExportAnswer & {
   items: Item[];
   activityName?: string;
+  subscaleSetting?: SubscaleSetting | null;
 };
 
 export type DecryptedAnswerData = Omit<

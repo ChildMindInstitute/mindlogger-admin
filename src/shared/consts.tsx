@@ -183,3 +183,9 @@ export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [ConditionType.Between, Condi
 export const GENERAL_REPORT_NAME = 'report';
 
 export const JOURNEY_REPORT_NAME = 'activity_user_journey';
+
+export const enum ActivityStatus {
+  Missed = 'missed',
+  Completed = 'completed',
+  NotSheduled = 'not scheduled',
+}
