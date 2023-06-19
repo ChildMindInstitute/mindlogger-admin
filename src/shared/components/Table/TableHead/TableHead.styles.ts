@@ -9,10 +9,13 @@ const HEAD_ROW_HEIGHT = '5.3rem';
 
 export const StyledTableHead = styled(TableHead, shouldForwardProp)`
   .MuiTableCell-root {
-    ${({ uiType }: { uiType?: UiType }) =>
-      (uiType === UiType.Secondary || uiType === UiType.Tertiary) &&
-      `background-color: ${variables.palette.surface3}`};
-  }
+    ${({ uiType }: { uiType?: UiType }) => {
+      if (uiType === UiType.Secondary || uiType === UiType.Tertiary) {
+        return `background-color: ${variables.palette.surface3}`;
+      }
+
+      return `background-color: ${variables.palette.surface}`;
+    }}
 `;
 
 export const StyledTableCell = styled(TableCell, shouldForwardProp)`
