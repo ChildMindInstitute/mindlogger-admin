@@ -15,8 +15,9 @@ export const prepareData = (
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
   const reportData = [];
   const activityJourneyData = [];
-  const flattenAnswers = parsedAnswers.map((item) => item.decryptedAnswers).flat();
-
+  const flattenAnswers = parsedAnswers
+    .flatMap((item) => item.decryptedAnswers)
+    ?.filter((item) => !item.activityItem?.config?.skippableItem);
   for (const item of flattenAnswers) {
     reportData.push(getReportCSVObject(item));
     activityJourneyData.push({});
@@ -27,8 +28,3 @@ export const prepareData = (
     activityJourneyData,
   };
 };
-
-export const getEmptyDecryptedActivityData = () => ({
-  decryptedAnswers: [],
-  decryptedEvents: [],
-});

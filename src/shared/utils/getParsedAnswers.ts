@@ -19,6 +19,7 @@ export const getParsedAnswers = (
     getDecryptedActivityData({
       items: activitiesObject[answer.activityHistoryId].items,
       activityName: activitiesObject[answer.activityHistoryId].name,
+      subscaleSetting: activitiesObject[answer.activityHistoryId].subscaleSetting,
       ...answer,
     }),
   );

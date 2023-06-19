@@ -1,5 +1,7 @@
 import {
   ActivityItemAnswer,
+  DecryptedMultiSelectionAnswer,
+  DecryptedTextAnswer,
   EventDTO,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
@@ -40,12 +42,16 @@ export type ExportAnswer = {
   activityId: string;
   flowId: null | string;
   reviewedAnswerId: null | string;
+  scheduledDatetime?: string;
+  startDatetime?: string;
+  endDatetime?: string;
   events: string;
 };
 
 export type ExtendedExportAnswer = ExportAnswer & {
   items: Item[];
   activityName?: string;
+  subscaleSetting?: SubscaleSetting | null;
 };
 
 export type DecryptedAnswerData = Omit<
