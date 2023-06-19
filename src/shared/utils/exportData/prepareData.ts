@@ -1,12 +1,18 @@
 import {
   DecryptedActivityData,
+  DecryptedAnswerData,
   ExportActivity,
   ExportAnswer,
   ExtendedExportAnswer,
 } from 'shared/types';
+import { getObjectFromList } from 'shared/utils/builderHelpers';
 
 import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
+import { getJourneyCSVObject } from './getJourneyCSVObject';
+
+const getDecryptedAnswersObject = (decryptedAnswers: DecryptedAnswerData[]) =>
+  getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
 
 export const prepareData = (
   data: { activities: ExportActivity[]; answers: ExportAnswer[] },
@@ -18,9 +24,21 @@ export const prepareData = (
   const flattenAnswers = parsedAnswers
     .flatMap((item) => item.decryptedAnswers)
     ?.filter((item) => !item.activityItem?.config?.skippableItem);
+  const flattenEvents = parsedAnswers.flatMap((item) => {
+    const decryptedAnswersObject = getDecryptedAnswersObject(item.decryptedAnswers);
+
+    return item.decryptedEvents.map((event) => ({
+      ...event,
+      ...decryptedAnswersObject[event.screen],
+    }));
+  });
+
   for (const item of flattenAnswers) {
     reportData.push(getReportCSVObject(item));
-    activityJourneyData.push({});
+  }
+
+  for (const event of flattenEvents) {
+    activityJourneyData.push(getJourneyCSVObject(event));
   }
 
   return {

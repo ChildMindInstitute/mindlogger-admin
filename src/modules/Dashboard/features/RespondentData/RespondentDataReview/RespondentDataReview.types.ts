@@ -1,4 +1,5 @@
 import { Item, TextItem, SliderItem, SingleSelectItem, MultiSelectItem } from 'shared/state';
+import { DecryptedAnswerData } from 'shared/types';
 
 export type Answer = {
   createdAt: string;
@@ -80,6 +81,7 @@ export const enum UserActionType {
   Next = 'NEXT',
   Done = 'DONE',
   Undo = 'UNDO',
+  Skip = 'SKIP',
 }
 
 export type EventDTO = {
@@ -88,6 +90,8 @@ export type EventDTO = {
   time: number; // timestamp in milliseconds
   type: UserActionType;
 };
+
+export type ExtendedEvent = EventDTO & DecryptedAnswerData;
 
 export type ActivityItemAnswer = {
   activityItem: Item;

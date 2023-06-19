@@ -9,7 +9,7 @@ import { getExportDataApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { exportTemplate, prepareData } from 'shared/utils';
-import { GENERAL_REPORT_NAME } from 'shared/consts';
+import { GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME } from 'shared/consts';
 
 import {
   StyledAppletSettingsButton,
@@ -27,8 +27,9 @@ export const ExportDataSetting = () => {
   const { execute } = useAsync(getExportDataApi, (res) => {
     if (!res?.data?.result) return;
 
-    const { reportData } = prepareData(res.data.result, getDecryptedAnswers);
+    const { reportData, activityJourneyData } = prepareData(res.data.result, getDecryptedAnswers);
     exportTemplate(reportData, GENERAL_REPORT_NAME);
+    exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
     setPasswordModalVisible(false);
   });
 
