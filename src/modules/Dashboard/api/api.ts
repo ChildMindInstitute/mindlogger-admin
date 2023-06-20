@@ -562,8 +562,8 @@ export const getAnswersApi = (
     {
       params: {
         ...params,
-        identifiers: identifiers?.join(''),
-        versions: versions?.join(''),
+        identifiers: identifiers?.join(','),
+        versions: versions?.join(','),
       },
       signal,
     },

@@ -17,9 +17,9 @@ export const getParsedAnswers = (
 
   return result.answers.map((answer: ExportAnswer) =>
     getDecryptedActivityData({
-      items: activitiesObject[answer.activityHistoryId].items,
-      activityName: activitiesObject[answer.activityHistoryId].name,
-      subscaleSetting: activitiesObject[answer.activityHistoryId].subscaleSetting,
+      items: activitiesObject[answer.activityHistoryId!].items,
+      activityName: activitiesObject[answer.activityHistoryId!].name,
+      subscaleSetting: activitiesObject[answer.activityHistoryId!].subscaleSetting,
       ...answer,
     }),
   );

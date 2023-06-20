@@ -9,7 +9,7 @@ import { Spinner, Svg, Tooltip } from 'shared/components';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
 import { StyledHeadlineLarge, theme, variables } from 'shared/styles';
 import { DatavizAnswer, getAnswersApi } from 'api';
-import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportFilters } from './ReportFilters';
@@ -26,7 +26,7 @@ export const Report = ({ activity, identifiers, versions }: ReportProps) => {
   const { appletId, respondentId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
-  const getDecryptedReviews = useDecryptedAnswers();
+  const getDecryptedActivityData = useDecryptedActivityData();
 
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<DatavizAnswer[]>([]);
@@ -70,7 +70,12 @@ export const Report = ({ activity, identifiers, versions }: ReportProps) => {
 
         const decryptedAnswers = result.data.result.map((encryptedAnswer) => {
           const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
-          const decryptedAnswer = getDecryptedReviews({ userPublicKey, answer, items, itemIds });
+          const decryptedAnswer = getDecryptedActivityData({
+            userPublicKey,
+            answer,
+            items,
+            itemIds,
+          });
 
           return {
             answer: decryptedAnswer,

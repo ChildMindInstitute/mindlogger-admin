@@ -27,25 +27,25 @@ export type ExportActivity = {
 };
 
 export type ExportAnswer = {
-  id: string;
-  version: string;
+  id?: string;
+  version?: string;
   userPublicKey: string;
-  respondentId: string;
-  respondentSecretId: string;
+  respondentId?: string;
+  respondentSecretId?: string;
   answer: string;
   itemIds: string[];
-  activityHistoryId: string;
-  flowHistoryId: null | string;
-  flowName: null | string;
-  createdAt: string;
-  appletId: string;
-  activityId: string;
-  flowId: null | string;
-  reviewedAnswerId: null | string;
+  activityHistoryId?: string;
+  flowHistoryId?: null | string;
+  flowName?: null | string;
+  createdAt?: string;
+  appletId?: string;
+  activityId?: string;
+  flowId?: null | string;
+  reviewedAnswerId?: null | string;
   scheduledDatetime?: string;
   startDatetime?: string;
   endDatetime?: string;
-  events: string;
+  events?: string;
 };
 
 export type ExtendedExportAnswer = ExportAnswer & {
