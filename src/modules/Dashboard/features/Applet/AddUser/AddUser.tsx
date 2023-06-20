@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useAsync, useBreadcrumbs } from 'shared/hooks';
 import { getInvitationsApi } from 'api';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
-import { DEFAULT_INVITATIONS_ROWS_PER_PAGE, EmptyTable } from 'shared/components';
+import { DEFAULT_INVITATIONS_ROWS_PER_PAGE, EmptyState } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { Roles } from 'shared/consts';
 
@@ -42,7 +42,7 @@ export const AddUser = () => {
   }, []);
 
   if (appletRoles?.[0] === Roles.Reviewer)
-    return <EmptyTable width="25rem">{t('noPermissions')}</EmptyTable>;
+    return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
 
   return (
     <>

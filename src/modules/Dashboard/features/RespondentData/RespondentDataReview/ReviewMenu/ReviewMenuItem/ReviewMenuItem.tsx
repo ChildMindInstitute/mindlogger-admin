@@ -18,7 +18,7 @@ export const ReviewMenuItem = ({
 }: ReviewMenuItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const isActivityNotEmpty = !!activity.answerDates.length;
+  const isActivityNotEmpty = !!activity?.answerDates?.length;
 
   const handleActivityClick = () => {
     setSelectedActivity(activity);
@@ -44,7 +44,7 @@ export const ReviewMenuItem = ({
       </StyledHeader>
       {isOpen && isActivityNotEmpty && (
         <StyledFlexWrap sx={{ paddingTop: theme.spacing(1.6) }}>
-          {activity.answerDates.map((answer) => (
+          {activity?.answerDates?.map((answer) => (
             <Chip
               color={selectedAnswer?.answerId === answer.answerId ? 'primary' : 'secondary'}
               key={answer.answerId}

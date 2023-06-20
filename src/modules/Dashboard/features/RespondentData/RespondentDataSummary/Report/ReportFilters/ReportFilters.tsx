@@ -8,8 +8,9 @@ import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/s
 import { Switch, TagsInputController } from 'shared/components/FormComponents';
 
 import { StyledTimeText } from './ReportFilters.styles';
+import { ReportFiltersProps } from './ReportFilters.types';
 
-export const ReportFilters = ({ minDate }: { minDate: Date }) => {
+export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFiltersProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue, register, unregister } = useFormContext();
 
@@ -17,15 +18,23 @@ export const ReportFilters = ({ minDate }: { minDate: Date }) => {
   const filterByIdentifier = watch('filterByIdentifier');
   const startDateEndDate = watch('startDateEndDate');
 
+  const minDate = new Date(new Date().setFullYear(new Date().getFullYear() - 3));
+
+  const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
+
+  const uniqueIdentifiers = [...new Set(identifiers.map(({ decryptedValue }) => decryptedValue))];
+  const identifiersOptions = uniqueIdentifiers.map((identifier) => ({
+    label: identifier,
+    id: identifier,
+  }));
+
   const moreFiltersHandler = () => {
     setValue('moreFiltersVisisble', !moreFiltersVisisble);
     if (moreFiltersVisisble) {
       unregister('identifier');
-      unregister('versions');
       unregister('filterByIdentifier');
     } else {
       register('identifier', { value: [] });
-      register('versions', { value: [] });
       register('filterByIdentifier', { value: true });
     }
   };
@@ -82,7 +91,7 @@ export const ReportFilters = ({ minDate }: { minDate: Date }) => {
               <TagsInputController
                 name="identifier"
                 label={t('respondentIdentifier')}
-                options={[]}
+                options={identifiersOptions}
                 control={control}
                 noOptionsText={t('noRespondentIdentifier')}
                 labelAllSelect={t('selectAll')}
@@ -93,7 +102,7 @@ export const ReportFilters = ({ minDate }: { minDate: Date }) => {
               <TagsInputController
                 name="versions"
                 label={t('versions')}
-                options={[]}
+                options={versionsOptions}
                 control={control}
                 noOptionsText={t('noVersions')}
                 labelAllSelect={t('selectAll')}

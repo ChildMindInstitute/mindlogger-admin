@@ -3,8 +3,9 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
 } from 'shared/state/Applet/Applet.schema';
+import { Version } from 'api';
 
-import { ItemAnswer, ResponseOption, Version } from '../Report.types';
+import { ItemAnswer, ResponseOption } from '../Report.types';
 
 export type MultiScatterResponseValues =
   | SingleAndMultipleSelectItemResponseValues

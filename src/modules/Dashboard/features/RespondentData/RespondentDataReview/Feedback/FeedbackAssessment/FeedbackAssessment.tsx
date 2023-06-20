@@ -14,13 +14,13 @@ import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
 export const FeedbackAssessment = ({ setActiveTab }: FeedbackAssessmentProps) => {
   const { appletId, answerId } = useParams();
   const getDecryptedReviews = useDecryptedAnswers();
-  const { execute: getActivityAnswer, isLoading } = useAsync(getAssessmentApi);
+  const { execute: getAssessment, isLoading } = useAsync(getAssessmentApi);
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[]>([]);
 
   useEffect(() => {
     if (!appletId || !answerId) return;
     (async () => {
-      const result = await getActivityAnswer({ appletId, answerId });
+      const result = await getAssessment({ appletId, answerId });
       const { reviewerPublicKey, ...assessmentData } = result.data.result;
       const encryptedData = {
         ...assessmentData,

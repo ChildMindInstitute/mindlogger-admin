@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'shared/hooks';
-import { EmptyTable } from 'shared/components';
+import { EmptyState } from 'shared/components';
 import {
   theme,
   StyledBody,
@@ -39,13 +39,13 @@ export const Cart = () => {
 
   const renderEmptyState = () =>
     searchValue ? (
-      <EmptyTable>{t('notFound')}</EmptyTable>
+      <EmptyState>{t('notFound')}</EmptyState>
     ) : (
-      <EmptyTable icon="empty-cart">
+      <EmptyState icon="empty-cart">
         <>
           {t('emptyCart')} <StyledLink to={page.library}>{t('appletsCatalog')}</StyledLink>.
         </>
-      </EmptyTable>
+      </EmptyState>
     );
 
   const handleAddToBuilder = () =>

@@ -1,70 +1,122 @@
-import { useEffect, useRef } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { addDays } from 'date-fns';
 
-import { Activity } from 'redux/modules';
-import { Svg, Tooltip } from 'shared/components';
-import { useHeaderSticky } from 'shared/hooks';
+import { Spinner, Svg, Tooltip } from 'shared/components';
+import { useAsync, useHeaderSticky } from 'shared/hooks';
 import { StyledHeadlineLarge, theme, variables } from 'shared/styles';
+import { DatavizAnswer, getAnswersApi } from 'api';
+import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
-import { FilterFormValues } from './Report.types';
-import { filtersDefaultValues } from './Report.const';
+import { FilterFormValues, ReportProps } from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
 import { activityReport } from './mock';
 import { ResponseOptions } from './ResponseOptions';
+import { getDateISO, getDefaultFilterValues, getIdentifiers } from './Report.utils';
 
-export const Report = ({ activity }: { activity: Activity }) => {
+export const Report = ({ activity, identifiers, versions }: ReportProps) => {
   const { t } = useTranslation();
+  const { appletId, respondentId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
+  const getDecryptedReviews = useDecryptedAnswers();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [answers, setAnswers] = useState<DatavizAnswer[]>([]);
 
   const methods = useForm<FilterFormValues>({
-    defaultValues: filtersDefaultValues,
+    defaultValues: getDefaultFilterValues(versions),
   });
 
-  const watchFilterFields = methods.watch();
+  const watchFilters = useWatch({
+    control: methods.control,
+    name: ['startDateEndDate', 'startTime', 'endTime', 'versions', 'identifier'],
+  });
 
-  const minDate = new Date(new Date().setMonth(new Date().getMonth() - 1)); // TODO: get date from backend
+  const { execute: getAnswers } = useAsync(getAnswersApi);
 
   useEffect(() => {
-    // TODO: get data from backend
-  }, [watchFilterFields]);
+    const fetchAnswers = async () => {
+      if (!appletId || !respondentId) return;
+      try {
+        setIsLoading(true);
+        const {
+          startDateEndDate: [startDate, endDate],
+          startTime,
+          endTime,
+          identifier,
+          filterByIdentifier,
+          versions,
+        } = methods.getValues();
+
+        const result = await getAnswers({
+          appletId,
+          activityId: activity.id,
+          params: {
+            respondentId,
+            fromDatetime: getDateISO(startDate, startTime),
+            toDatetime: getDateISO(endDate || addDays(startDate, 1), endTime),
+            identifiers: getIdentifiers(filterByIdentifier, identifier, identifiers),
+            versions: versions.map(({ id }) => id),
+          },
+        });
+
+        const decryptedAnswers = result.data.result.map((encryptedAnswer) => {
+          const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
+          const decryptedAnswer = getDecryptedReviews({ userPublicKey, answer, items, itemIds });
+
+          return {
+            answer: decryptedAnswer,
+            items,
+            ...rest,
+          };
+        });
+        setAnswers(decryptedAnswers as unknown as DatavizAnswer[]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAnswers();
+  }, [watchFilters]);
 
   return (
-    <StyledReport ref={containerRef}>
-      <StyledHeader isSticky={isHeaderSticky}>
-        <StyledHeadlineLarge color={variables.palette.on_surface}>
-          {activity.name}
-        </StyledHeadlineLarge>
-        <Tooltip tooltipTitle={t('configureServer')}>
-          <span>
-            <StyledTextBtn variant="text" startIcon={<Svg id="export" width="18" height="18" />}>
-              {t('downloadLatestReport')}
-            </StyledTextBtn>
-          </span>
-        </Tooltip>
-      </StyledHeader>
-      <Box sx={{ margin: theme.spacing(4.8, 6.4, 4.8) }}>
-        <FormProvider {...methods}>
-          <ReportFilters minDate={minDate} />
-          <ActivityCompleted
-            responses={activityReport.responses}
-            versions={activityReport.versions}
-          />
-          <Subscales />
-          {activityReport.responseOptions && (
-            <ResponseOptions
-              responseOptions={activityReport.responseOptions}
-              versions={activityReport.versions}
-            />
-          )}
-        </FormProvider>
-      </Box>
-    </StyledReport>
+    <>
+      {isLoading && <Spinner />}
+      <StyledReport ref={containerRef}>
+        <StyledHeader isSticky={isHeaderSticky}>
+          <StyledHeadlineLarge color={variables.palette.on_surface}>
+            {activity.name}
+          </StyledHeadlineLarge>
+          <Tooltip tooltipTitle={t('configureServer')}>
+            <span>
+              <StyledTextBtn variant="text" startIcon={<Svg id="export" width="18" height="18" />}>
+                {t('downloadLatestReport')}
+              </StyledTextBtn>
+            </span>
+          </Tooltip>
+        </StyledHeader>
+        <Box sx={{ margin: theme.spacing(4.8, 6.4) }}>
+          <FormProvider {...methods}>
+            <ReportFilters identifiers={identifiers} versions={versions} />
+            <ActivityCompleted answers={answers} versions={versions} />
+            {/* <Subscales /> */}
+            {activityReport.responseOptions && (
+              <ResponseOptions
+                responseOptions={activityReport.responseOptions}
+                versions={versions}
+              />
+            )}
+          </FormProvider>
+        </Box>
+      </StyledReport>
+    </>
   );
 };

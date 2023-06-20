@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
-import { EmptyTable, Spinner } from 'shared/components';
+import { EmptyState, Spinner } from 'shared/components';
 import { ExtendedExportAnswer } from 'shared/types';
 import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
@@ -61,7 +61,7 @@ export const FeedbackReviewed = () => {
               </Fragment>
             ))
           ) : (
-            <EmptyTable>{t('reviewedEmptyState')}</EmptyTable>
+            <EmptyState>{t('reviewedEmptyState')}</EmptyState>
           )}
         </>
       )}

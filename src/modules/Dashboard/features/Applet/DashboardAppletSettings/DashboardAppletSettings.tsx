@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AppletSettings } from 'shared/features/AppletSettings';
 import { workspaces, applet } from 'redux/modules';
-import { EmptyTable, Spinner } from 'shared/components';
+import { EmptyState, Spinner } from 'shared/components';
 import { isManagerOrOwner } from 'shared/utils';
 
 import { getSettings } from './DashboardAppletSettings.utils';
@@ -14,7 +14,7 @@ export const DashboardAppletSettings = () => {
   const appletRoles = appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined;
 
   if (!isManagerOrOwner(appletRoles?.[0]))
-    return <EmptyTable width="25rem">{t('noPermissions')}</EmptyTable>;
+    return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
 
   return appletData ? (
     <AppletSettings

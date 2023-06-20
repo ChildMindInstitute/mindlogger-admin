@@ -3,7 +3,7 @@ import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } fr
 
 import {
   DEFAULT_ROWS_PER_PAGE,
-  EmptyTable,
+  EmptyState,
   TableHead,
   UiType,
   StyledTableCellContent,
@@ -79,7 +79,7 @@ export const Table = ({
             </TableBody>
           </MuiTable>
         )}
-        {emptyComponent && <EmptyTable>{emptyComponent}</EmptyTable>}
+        {emptyComponent && <EmptyState>{emptyComponent}</EmptyState>}
       </StyledTableContainer>
       {uiType === UiType.Tertiary && tableHeader}
     </>

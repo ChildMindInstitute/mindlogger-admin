@@ -168,7 +168,7 @@ export const getData = ({ maxY, responseValues, responseType, answers, versions 
       {
         xAxisID: 'x2',
         labels: versions.map(({ version }) => version),
-        data: versions.map(({ date }) => ({ x: date, y: maxY + 1 })),
+        data: versions.map(({ createdAt }) => ({ x: new Date(createdAt), y: maxY + 1 })),
         datalabels: {
           anchor: 'center' as const,
           align: 'right' as const,

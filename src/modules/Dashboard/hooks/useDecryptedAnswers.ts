@@ -16,7 +16,7 @@ export const useDecryptedAnswers = () => {
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(appletId);
 
-  return (answersApiResponse: ExtendedExportAnswer): DecryptedAnswerData[] => {
+  return (answersApiResponse: any): DecryptedAnswerData[] => {
     const { userPublicKey, answer, items, itemIds, ...rest } = answersApiResponse;
 
     let answersDecrypted: AnswerDecrypted[] = [];
@@ -45,7 +45,7 @@ export const useDecryptedAnswers = () => {
       }
     }
 
-    return items.map((activityItem, index) => ({
+    return items.map((activityItem: any, index: number) => ({
       activityItem,
       answer: answersDecrypted[index],
       ...rest,

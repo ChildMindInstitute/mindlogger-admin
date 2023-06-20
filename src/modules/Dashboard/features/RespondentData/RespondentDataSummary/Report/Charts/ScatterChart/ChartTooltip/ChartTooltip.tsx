@@ -4,7 +4,6 @@ import { format } from 'date-fns';
 
 import { StyledBodySmall, StyledFlexColumn, theme, variables } from 'shared/styles';
 import { DateFormats } from 'shared/consts';
-import { getDateInUserTimezone } from 'shared/utils';
 
 import { StyledListItemButton, StyledTooltip } from './ChartTooltip.styles';
 import { ChartTooltipProps } from './ChartTooltip.types';
@@ -20,10 +19,7 @@ export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
             sx={{ padding: theme.spacing(1.6, 2, 0.8) }}
             color={variables.palette.outline}
           >
-            {format(
-              getDateInUserTimezone((data?.raw as { x: string; y: number }).x),
-              DateFormats.MonthDayTime,
-            )}
+            {format((data?.raw as { x: Date; y: number }).x, DateFormats.MonthDayTime)}
           </StyledBodySmall>
         )}
         <StyledFlexColumn>

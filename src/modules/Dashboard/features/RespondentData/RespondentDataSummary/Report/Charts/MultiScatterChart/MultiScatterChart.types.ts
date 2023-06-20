@@ -1,9 +1,10 @@
 import { ChartDataset } from 'chart.js';
 
+import { Version } from 'api';
 import { locales } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
 
-import { FormattedItemAnswer, Version } from '../../Report.types';
+import { FormattedItemAnswer } from '../../Report.types';
 import { MultiScatterResponseValues } from '../../ResponseOptions/ResponseOptions.types';
 
 export type ExtendedChartDataset = ChartDataset & {

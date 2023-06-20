@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
-import { DEFAULT_ROWS_PER_PAGE, EmptyTable, TableHead } from 'shared/components';
+import { DEFAULT_ROWS_PER_PAGE, EmptyState, TableHead } from 'shared/components';
 
 import { Applet, Folder } from 'api';
 import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './Table.styles';
@@ -46,7 +46,7 @@ export const Table = ({
       <AppletItem item={row as Applet} onPublish={handleReload} />
     );
 
-  const getEmptyTable = () => <EmptyTable>{emptyComponent}</EmptyTable>;
+  const getEmptyTable = () => <EmptyState>{emptyComponent}</EmptyState>;
 
   return (
     <StyledTableContainer>
