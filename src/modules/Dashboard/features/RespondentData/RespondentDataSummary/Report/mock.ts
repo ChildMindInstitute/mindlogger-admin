@@ -19,23 +19,23 @@ const commonConfig = {
 
 export const responses: Response[] = [
   {
-    date: new Date(2023, 4, 5),
+    date: new Date(2023, 5, 5),
     answerId: 'b286c432-f3f1-11ed-a05b-0242ac120003',
   },
   {
-    date: new Date(2023, 4, 8),
+    date: new Date(2023, 5, 8),
     answerId: 'c4a2a320-f3f1-11ed-a05b-0242ac120003',
   },
   {
-    date: new Date(2023, 4, 10),
+    date: new Date(2023, 5, 10),
     answerId: '3df91fe2-f447-11ed-a05b-0242ac120003',
   },
   {
-    date: new Date(2023, 4, 12),
+    date: new Date(2023, 5, 12),
     answerId: '476b01c6-f447-11ed-a05b-0242ac120003',
   },
   {
-    date: new Date(2023, 4, 14),
+    date: new Date(2023, 5, 14),
     answerId: 'b97558b2-f3f1-11ed-a05b-0242ac120003',
   },
 ];
@@ -45,7 +45,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '29c8b0fa-f3f2-11ed-a05b-0242ac120003',
       name: 'Single selection Item Task',
-      question: '<p>Do you like how the respondent passed the review?<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.SingleSelection,
@@ -73,19 +73,19 @@ export const responseOptions: ResponseOption[] = [
     answers: [
       {
         value: '75833eb6-f3f2-11ed-a05b-0242ac120003',
-        date: new Date(2023, 4, 5),
+        date: new Date(2023, 5, 5),
       },
       {
         value: '794519ca-f3f2-11ed-a05b-0242ac120003',
-        date: new Date(2023, 4, 8),
+        date: new Date(2023, 5, 8),
       },
       {
         value: '7de2d738-f3f2-11ed-a05b-0242ac120003',
-        date: new Date(2023, 4, 10),
+        date: new Date(2023, 5, 10),
       },
       {
         value: '7de2d738-f3f2-11ed-a05b-0242ac120003',
-        date: new Date(2023, 4, 14),
+        date: new Date(2023, 5, 14),
       },
     ],
   },
@@ -93,8 +93,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '69c62722-f3f3-11ed-a05b-0242ac120003',
       name: 'Multiple selection Item Task',
-      question:
-        '<p>Which of these categories best describes your child? Please select all that apply.<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.MultipleSelection,
@@ -122,19 +121,19 @@ export const responseOptions: ResponseOption[] = [
     answers: [
       {
         value: ['7e1464fa-f3f3-11ed-a05b-0242ac120003', '740ec220-f3f3-11ed-a05b-0242ac120003'],
-        date: new Date(2023, 4, 8),
+        date: new Date(2023, 5, 8),
       },
       {
         value: ['78caf8f6-f3f3-11ed-a05b-0242ac120003', '92b4a848-f3f3-11ed-a05b-0242ac120003'],
-        date: new Date(2023, 4, 10),
+        date: new Date(2023, 5, 10),
       },
       {
         value: ['78caf8f6-f3f3-11ed-a05b-0242ac120003'],
-        date: new Date(2023, 4, 12),
+        date: new Date(2023, 5, 12),
       },
       {
         value: ['740ec220-f3f3-11ed-a05b-0242ac120003'],
-        date: new Date(2023, 4, 14),
+        date: new Date(2023, 5, 14),
       },
     ],
   },
@@ -142,7 +141,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '200748a6-f582-11ed-b67e-0242ac120002',
       name: '200748a6-f582-11ed-b67e-0242ac120002',
-      question: '<p>Does the respondent <b>feel good</b>?<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       responseType: ItemResponseType.Slider,
       allowEdit: true,
       config: {
@@ -157,19 +156,19 @@ export const responseOptions: ResponseOption[] = [
     answers: [
       {
         value: 6,
-        date: new Date(2023, 4, 5),
+        date: new Date(2023, 5, 5),
       },
       {
         value: 3,
-        date: new Date(2023, 4, 8),
+        date: new Date(2023, 5, 8),
       },
       {
         value: 7.5,
-        date: new Date(2023, 4, 12),
+        date: new Date(2023, 5, 12),
       },
       {
         value: 5,
-        date: new Date(2023, 4, 14),
+        date: new Date(2023, 5, 14),
       },
     ],
   },
@@ -177,7 +176,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '6f861d58-f492-11ed-a05b-0242ac120003',
       name: 'Text Item Task',
-      question: '<p>Text Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.Text,
@@ -186,15 +185,15 @@ export const responseOptions: ResponseOption[] = [
     answers: [
       {
         value: 'Your child’s physician may use this information to improve',
-        date: new Date(2023, 4, 8, 11, 34),
+        date: new Date(2023, 5, 8, 11, 34),
       },
       {
         value: 'If you believe your child has a psychiatric or learning disorder',
-        date: new Date(2023, 4, 10, 16, 19),
+        date: new Date(2023, 5, 10, 16, 19),
       },
       {
         value: 'Once you have started the questionnaire you can stop at any time',
-        date: new Date(2023, 4, 12, 14, 49),
+        date: new Date(2023, 5, 12, 14, 49),
       },
     ],
   },
@@ -202,7 +201,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '238cf0ce-f40c-11ed-a05b-0242ac120003',
       name: 'Date Item Task',
-      question: '<p>Date Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.Date,
@@ -213,7 +212,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: 'd9858750-f40d-11ed-a05b-0242ac120003',
       name: 'Number Selection Item Task',
-      question: '<p>Number Selection Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.NumberSelection,
@@ -224,7 +223,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '64de9a30-f40e-11ed-a05b-0242ac120003',
       name: 'Time Range Item Task',
-      question: '<p>Time Range Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.TimeRange,
@@ -235,7 +234,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '60a0637c-f40e-11ed-a05b-0242ac120003',
       name: 'Single Selection per Row Item Task',
-      question: '<p>Single Selection per Row Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.SingleSelectionPerRow,
@@ -246,7 +245,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '99f69c40-f40e-11ed-a05b-0242ac120003',
       name: 'Multiple Selection per Row Item Task',
-      question: '<p>Multiple Selection per Row Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.MultipleSelectionPerRow,
@@ -257,7 +256,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '95300e30-f40e-11ed-a05b-0242ac120003',
       name: 'Slider Rows Item Task',
-      question: '<p>Slider Rows Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.SliderRows,
@@ -268,7 +267,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '90563eac-f40e-11ed-a05b-0242ac120003',
       name: 'Drawing Item Task',
-      question: '<p>Drawing Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.Drawing,
@@ -279,7 +278,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '8b3652fe-f40e-11ed-a05b-0242ac120003',
       name: 'Photo Item Task',
-      question: '<p>Photo Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.Photo,
@@ -290,7 +289,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '03c265c8-f40f-11ed-a05b-0242ac120003',
       name: 'Video Item Task',
-      question: '<p>Video Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.Video,
@@ -301,7 +300,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: '0a8162c4-f40f-11ed-a05b-0242ac120003',
       name: 'Geolocation Item Task',
-      question: '<p>Geolocation Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.Geolocation,
@@ -312,7 +311,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: 'fe8a148e-f40e-11ed-a05b-0242ac120003',
       name: 'Audio Item Task',
-      question: '<p>Audio Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.Audio,
@@ -323,7 +322,7 @@ export const responseOptions: ResponseOption[] = [
     activityItem: {
       id: 'fa3ee490-f40e-11ed-a05b-0242ac120003',
       name: 'Audio Player Item Task',
-      question: '<p>Audio Player Item Task<p>',
+      question: { en: '<p>Do you like how the respondent passed the review?<p>' },
       allowEdit: true,
       config: commonConfig,
       responseType: ItemResponseType.AudioPlayer,

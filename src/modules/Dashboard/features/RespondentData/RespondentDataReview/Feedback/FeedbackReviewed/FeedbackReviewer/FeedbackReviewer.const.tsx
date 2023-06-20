@@ -1,6 +1,8 @@
 import {
   ActivityItemAnswer,
-  ItemAnswer,
+  DecryptedMultiSelectionAnswer,
+  DecryptedSingleSelectionAnswer,
+  DecryptedSliderAnswer,
   MultiSelectActivityItem,
   SingleSelectActivityItem,
   SliderActivityItem,
@@ -19,7 +21,7 @@ export const getResponseItem = ({ activityItem, answer }: ActivityItemAnswer) =>
       return (
         <SingleSelection
           activityItem={activityItem as SingleSelectActivityItem}
-          value={(answer as ItemAnswer).value as string}
+          value={(answer as DecryptedSingleSelectionAnswer).value}
           isDisabled
         />
       );
@@ -27,7 +29,7 @@ export const getResponseItem = ({ activityItem, answer }: ActivityItemAnswer) =>
       return (
         <MultipleSelection
           activityItem={activityItem as MultiSelectActivityItem}
-          value={(answer as ItemAnswer).value as number[]}
+          value={(answer as DecryptedMultiSelectionAnswer).value}
           isDisabled
         />
       );
@@ -35,7 +37,7 @@ export const getResponseItem = ({ activityItem, answer }: ActivityItemAnswer) =>
       return (
         <Slider
           activityItem={activityItem as SliderActivityItem}
-          value={(answer as ItemAnswer).value as number}
+          value={(answer as DecryptedSliderAnswer).value}
           isDisabled
         />
       );

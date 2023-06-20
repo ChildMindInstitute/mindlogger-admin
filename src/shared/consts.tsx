@@ -179,3 +179,13 @@ export const CONDITION_TYPES_TO_HAVE_SINGLE_VALUE = [
   ConditionType.NotEqual,
 ];
 export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [ConditionType.Between, ConditionType.OutsideOf];
+
+export const GENERAL_REPORT_NAME = 'report';
+
+export const JOURNEY_REPORT_NAME = 'activity_user_journey';
+
+export const enum ActivityStatus {
+  Missed = 'missed',
+  Completed = 'completed',
+  NotSheduled = 'not scheduled',
+}

@@ -3,6 +3,8 @@ import { Box, ListItemButton, styled } from '@mui/material';
 import { theme, variables } from 'shared/styles';
 
 export const StyledTooltip = styled(Box)`
+  max-width: 20rem;
+  min-width: 18rem;
   position: absolute;
   display: none;
   transform: translate(-50%, 0);

@@ -51,7 +51,6 @@ export const AboutApplet = () => {
           setValue={(val: string) => setValue('image', val)}
           getValue={() => watch('image')}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
-          hasRemoveConfirmation
         />
       ),
     },
@@ -64,7 +63,6 @@ export const AboutApplet = () => {
           setValue={(val: string) => setValue('watermark', val)}
           getValue={() => watch('watermark')}
           description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
-          hasRemoveConfirmation
         />
       ),
     },

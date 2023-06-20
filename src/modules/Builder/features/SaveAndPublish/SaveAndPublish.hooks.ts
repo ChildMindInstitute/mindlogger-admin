@@ -348,7 +348,10 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
         return;
       }
 
-      createdAppletId && navigate(getBuilderAppletUrl(createdAppletId));
+      if (createdAppletId && ownerId) {
+        navigate(getBuilderAppletUrl(createdAppletId));
+        await dispatch(getAppletWithItems({ ownerId, appletId: createdAppletId }));
+      }
     }
   };
 

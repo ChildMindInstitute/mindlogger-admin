@@ -35,7 +35,7 @@ import {
   GetWorkspaceAppletsParams,
   FolderName,
   ReportConfig,
-  EditRespondentAccess,
+  EditRespondent,
   AppletVersionChanges,
   RemoveAccess,
   ActivityAnswer,
@@ -47,11 +47,11 @@ import {
   Assessment,
   SaveAssessment,
   DatavizActivity,
-  ReviewActivity,
   Version,
   SummaryAnswers,
   DatavizAnswer,
   Identifier,
+  ReviewActivity,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -226,8 +226,8 @@ export const removeRespondentAccess = (
     { signal },
   );
 
-export const editRespondentAccess = (
-  { ownerId, appletId, respondentId, values }: EditRespondentAccess,
+export const editRespondentApi = (
+  { ownerId, appletId, respondentId, values }: EditRespondent,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(

@@ -7,14 +7,13 @@ import { Svg } from 'shared/components/Svg';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { byteFormatter, getUploadFormData } from 'shared/utils';
+import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_2MB } from 'shared/consts';
-import { postFileUploadApi } from 'api';
-import { useAsync } from 'shared/hooks';
 
 import {
   StyledButtonGroup,
   StyledContainer,
+  StyledDeleteBtn,
   StyledImgContainer,
   StyledName,
   StyledNameWrapper,
@@ -33,15 +32,10 @@ export const Uploader = ({
   description,
   maxFileSize = MAX_FILE_SIZE_2MB,
   wrapperStyles = {},
-  hasRemoveConfirmation = false,
   cropRatio,
   hasError,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
-  const { execute: executeImgUpload } = useAsync(
-    postFileUploadApi,
-    (response) => response?.data?.result && setValue(response?.data?.result.url),
-  );
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -65,14 +59,7 @@ export const Uploader = ({
     if (!isAllowableSize || !imageFile.type.includes('image')) return;
 
     setImage(imageFile);
-    if (isPrimaryUiType) {
-      setCropPopupVisible(true);
-
-      return;
-    }
-
-    const body = getUploadFormData(imageFile);
-    executeImgUpload(body);
+    setCropPopupVisible(true);
   };
 
   const dragEvents = {
@@ -114,10 +101,7 @@ export const Uploader = ({
 
   const handleDeleteClick = (e: MouseEvent) => {
     stopDefaults(e);
-
-    if (hasRemoveConfirmation) return setRemovePopupOpen(true);
-
-    handleRemoveImg();
+    setRemovePopupOpen(true);
   };
 
   const handleConfirmRemoval = () => {
@@ -128,9 +112,8 @@ export const Uploader = ({
   const imageField = getValue();
 
   const placeholderImgId = isPrimaryUiType ? 'img-filled' : 'img-outlined';
-  const deleteBtnProps = {
-    sx: isPrimaryUiType ? null : { width: '4.8rem', height: '4.8rem' },
-  };
+  const placeholderImgSize = isPrimaryUiType ? 32 : 24;
+  const deleteSvgSize = isPrimaryUiType ? '18' : '24';
 
   return (
     <>
@@ -159,11 +142,9 @@ export const Uploader = ({
                     onClick={onEditImg}
                   />
                 )}
-                <Button
-                  {...deleteBtnProps}
-                  startIcon={<Svg width="18" height="18" id="trash" />}
-                  onClick={handleDeleteClick}
-                />
+                <StyledDeleteBtn isPrimaryUiType={isPrimaryUiType} onClick={handleDeleteClick}>
+                  <Svg width={deleteSvgSize} height={deleteSvgSize} id="trash" />
+                </StyledDeleteBtn>
               </StyledButtonGroup>
             )}
           </UploadedImgContainer>
@@ -173,7 +154,7 @@ export const Uploader = ({
             isPrimaryUiType={isPrimaryUiType}
             hasError={hasError}
           >
-            <Svg id={placeholderImgId} width={32} height={32} />
+            <Svg id={placeholderImgId} width={placeholderImgSize} height={placeholderImgSize} />
             {isPrimaryUiType && error && (
               <StyledBodyMedium
                 sx={{ marginBottom: theme.spacing(1), px: theme.spacing(3) }}

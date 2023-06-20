@@ -21,6 +21,7 @@ export const useSubscaleLookupTableSetup = ({
   const onFileReady = (file: ImportedFile | null) => {
     const mappedData = (file?.data ?? []).map((item) => ({
       ...item,
+      sex: (item.sex as string) || null,
       id: uuidv4(),
     }));
     setData(mappedData);

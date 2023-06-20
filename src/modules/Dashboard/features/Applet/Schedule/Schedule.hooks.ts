@@ -6,7 +6,7 @@ import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
 import { applets, CalendarEvent, calendarEvents, CreateEventsData } from 'modules/Dashboard/state';
 import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
-import { getDateInUserTimezone, getTableCell } from 'shared/utils';
+import { getTableCell } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { createEvents } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
@@ -14,7 +14,6 @@ import { AddEventsToCategories, EventsData, LegendEvent, PreparedEvents } from '
 import {
   getNextColor,
   removeSecondsFromTime,
-  getRepeatsAnswer,
   getFrequencyString,
   getCount,
   convertDateToYearMonthDay,
@@ -67,7 +66,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
             const activityOrFlowName = currentActivityOrFlow?.name || '';
             const activityOrFlowCreatedAt = convertDateToYearMonthDay(
               currentActivityOrFlow?.createdAt
-                ? new Date(getDateInUserTimezone(currentActivityOrFlow.createdAt))
+                ? new Date(currentActivityOrFlow.createdAt)
                 : new Date(),
             );
             const isAlwaysAvailable = periodicityType === Periodicity.Always;
@@ -84,7 +83,6 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
             const notificationTime = notification?.notifications?.length
               ? removeSecondsFromTime(atTime || fromTime) || '-'
               : '-';
-            const repeats = getRepeatsAnswer(periodicityType);
             const frequency = getFrequencyString(periodicityType);
             const activityOrFlowColors = currentActivityOrFlow?.colors || ['', ''];
 
@@ -94,7 +92,6 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               startTime: getTableCell(startTime),
               endTime: getTableCell(endTime),
               notificationTime: getTableCell(notificationTime),
-              repeats: getTableCell(repeats),
               frequency: getTableCell(frequency),
             });
 
@@ -104,7 +101,6 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
               startTime,
               endTime,
               notificationTime,
-              repeats,
               frequency,
             });
 

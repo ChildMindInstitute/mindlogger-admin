@@ -4,7 +4,7 @@ import { auth } from 'redux/modules';
 import { applet } from 'shared/state';
 import { encryptData, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import { ItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 export const useEncryptedAnswers = () => {
   const userData = auth.useData();
@@ -19,7 +19,7 @@ export const useEncryptedAnswers = () => {
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(appletId);
 
-  return (answers: ItemAnswer[]): string => {
+  return (answers: AnswerDTO[]): string => {
     const key = getAESKey(privateKey, accountId, prime, base);
     let answersEncrypted = '';
     try {

@@ -9,7 +9,7 @@ export const sliderMocked: SliderItemAnswer = {
   activityItem: {
     id: 'slider-1',
     name: 'slider-1',
-    question: '<p>Does the respondent <b>feel good</b>?<p>',
+    question: { en: '<p>Do you like how the respondent passed the review?<p>' },
     responseType: ItemResponseType.Slider,
     allowEdit: true,
     config: {
@@ -46,7 +46,7 @@ export const singleSelectionMocked: SingleSelectItemAnswer = {
   activityItem: {
     id: 'single-select-1',
     name: 'single-select-1',
-    question: '<p>Do you like how the respondent passed the review?<p>',
+    question: { en: '<p>Do you like how the respondent passed the review?<p>' },
     allowEdit: true,
     config: {
       removeBackButton: true,
@@ -90,7 +90,7 @@ export const singleSelectionMocked: SingleSelectItemAnswer = {
   },
   answer: {
     text: '',
-    value: 'single-select-option-2',
+    value: 2,
   },
 };
 
@@ -98,7 +98,7 @@ export const multipleSelectionMocked: MultiSelectItemAnswer = {
   activityItem: {
     id: 'multiple-select-1',
     name: 'multiple-select-1',
-    question: '<p>Do you like how the respondent passed the review?<p>',
+    question: { en: '<p>Do you like how the respondent passed the review?<p>' },
     allowEdit: true,
     config: {
       removeBackButton: false,

@@ -165,7 +165,7 @@ export type RemoveRespondentAccess = RemoveAccess & {
   deleteResponses: boolean;
 };
 
-export type EditRespondentAccess = {
+export type EditRespondent = {
   ownerId: string;
   respondentId: string;
   appletId: string;

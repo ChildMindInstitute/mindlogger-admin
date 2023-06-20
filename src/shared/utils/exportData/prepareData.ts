@@ -1,5 +1,5 @@
 import {
-  DecryptedAnswerData,
+  DecryptedActivityData,
   ExportActivity,
   ExportAnswer,
   ExtendedExportAnswer,
@@ -10,13 +10,14 @@ import { getReportCSVObject } from './getReportCSVObject';
 
 export const prepareData = (
   data: { activities: ExportActivity[]; answers: ExportAnswer[] },
-  getDecryptedAnswers: (data: ExtendedExportAnswer) => DecryptedAnswerData[],
+  getDecryptedAnswers: (data: ExtendedExportAnswer) => DecryptedActivityData,
 ) => {
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
   const reportData = [];
   const activityJourneyData = [];
-  const flattenAnswers = parsedAnswers.flat();
-
+  const flattenAnswers = parsedAnswers
+    .flatMap((item) => item.decryptedAnswers)
+    ?.filter((item) => !item.activityItem?.config?.skippableItem);
   for (const item of flattenAnswers) {
     reportData.push(getReportCSVObject(item));
     activityJourneyData.push({});

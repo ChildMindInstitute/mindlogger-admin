@@ -119,7 +119,11 @@ export const getData = (answers: DatavizAnswer[], versions: Version[]) => ({
       pointRadius: 5,
       pointHoverRadius: 6,
       xAxisID: 'x',
-      data: answers.map(({ endDatetime }) => ({ x: new Date(endDatetime), y: 0 })),
+      data: answers.map(({ endDatetime, answerId }) => ({
+        x: new Date(endDatetime),
+        y: 0,
+        answerId,
+      })),
       backgroundColor: variables.palette.primary,
       borderColor: variables.palette.primary,
       datalabels: {
