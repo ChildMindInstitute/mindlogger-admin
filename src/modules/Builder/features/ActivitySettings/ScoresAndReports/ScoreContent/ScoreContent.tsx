@@ -165,7 +165,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
                 key={`data-score-conditional-${getEntityKey(conditional) || index}`}
                 HeaderContent={SectionScoreHeader}
                 Content={ScoreCondition}
-                contentProps={{ name: conditionalName, scoreId, scoreName }}
+                contentProps={{ name: conditionalName, scoreId }}
                 headerContentProps={{
                   onRemove: () => removeScoreConditional(index),
                   title,

@@ -60,9 +60,9 @@ export const getScoreOptions = (scores: ActivitySettingsScore[]) =>
     type: ConditionItemType.Score,
   }));
 
-export const getScoreIdOption = (scoreId: string, scoreName: string) => ({
+export const getScoreIdOption = (scoreId: string) => ({
   labelKey: `${t('score')}: ${scoreId}`,
-  value: scoreName,
+  value: scoreId,
   type: ConditionItemType.Score,
 });
 
