@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
 import { EmptyState, Spinner } from 'shared/components';
-import { ExtendedExportAnswer } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
 import { getReviewsApi } from 'api';
@@ -28,12 +27,12 @@ export const FeedbackReviewed = () => {
     (async () => {
       try {
         const result = await getReviews({ appletId, answerId });
-        const decryptedData = result.data.result.map((review: Review) => {
+        const decryptedData = result.data.result.map((review) => {
           const { reviewerPublicKey, isEdited, reviewer, ...assessmentData } = review;
           const encryptedData = {
             ...assessmentData,
             userPublicKey: reviewerPublicKey,
-          } as ExtendedExportAnswer;
+          } as Review;
 
           return {
             isEdited,

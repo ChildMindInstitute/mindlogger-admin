@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { applet } from 'shared/state';
 import { decryptData, Encryption, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import { DecryptedActivityData, ExtendedExportAnswer } from 'shared/types';
+import { DecryptedActivityData, SharedDecryptedAnswer } from 'shared/types';
 import {
   AnswerDTO,
   EventDTO,
@@ -28,23 +28,21 @@ export const useDecryptedActivityData = (
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(dynamicAppletId ?? appletId);
 
-  return (answersApiResponse: ExtendedExportAnswer): DecryptedActivityData => {
+  return <T extends SharedDecryptedAnswer>(answersApiResponse: T): DecryptedActivityData<T> => {
     const { userPublicKey, answer, items, itemIds, events, ...rest } = answersApiResponse;
 
     let answersDecrypted: AnswerDTO[] = [];
     let eventsDecrypted: EventDTO[] = [];
 
-    if (!userPublicKey) return getEmptyDecryptedActivityData();
+    if (userPublicKey) {
+      let userPublicKeyParsed;
+      try {
+        userPublicKeyParsed = JSON.parse(userPublicKey);
+      } catch {
+        userPublicKeyParsed = userPublicKey;
+      }
+      const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
 
-    let userPublicKeyParsed;
-    try {
-      userPublicKeyParsed = JSON.parse(userPublicKey);
-    } catch {
-      userPublicKeyParsed = userPublicKey;
-    }
-    const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
-
-    if (answer) {
       try {
         answersDecrypted = JSON.parse(
           decryptData({
@@ -55,18 +53,18 @@ export const useDecryptedActivityData = (
       } catch {
         console.warn('Error while answer parsing');
       }
-    }
 
-    if (events) {
-      try {
-        eventsDecrypted = JSON.parse(
-          decryptData({
-            text: events,
-            key,
-          }),
-        );
-      } catch {
-        console.warn('Error while answer parsing');
+      if (events) {
+        try {
+          eventsDecrypted = JSON.parse(
+            decryptData({
+              text: events,
+              key,
+            }),
+          );
+        } catch {
+          console.warn('Error while answer parsing');
+        }
       }
     }
 

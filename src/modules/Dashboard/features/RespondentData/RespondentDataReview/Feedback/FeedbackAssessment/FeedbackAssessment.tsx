@@ -9,7 +9,7 @@ import { getAssessmentApi } from 'api';
 
 import { StyledContainer } from './FeedbackAssessment.styles';
 import { FeedbackAssessmentForm } from './FeedbackAssessmentForm';
-import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
+import { Assessment, FeedbackAssessmentProps } from './FeedbackAssessment.types';
 
 export const FeedbackAssessment = ({ setActiveTab }: FeedbackAssessmentProps) => {
   const { appletId, answerId } = useParams();
@@ -25,7 +25,7 @@ export const FeedbackAssessment = ({ setActiveTab }: FeedbackAssessmentProps) =>
       const encryptedData = {
         ...assessmentData,
         userPublicKey: reviewerPublicKey,
-      };
+      } as Assessment;
       const decryptedActivityData = getDecryptedActivityData(encryptedData);
       setActivityItemAnswers(decryptedActivityData.decryptedAnswers);
     })();

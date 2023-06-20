@@ -1,7 +1,7 @@
 import { AppletId } from 'shared/api';
 import { Item, SingleApplet } from 'shared/state';
 import { Roles } from 'shared/consts';
-import { RetentionPeriods } from 'shared/types';
+import { RetentionPeriods, SharedDecryptedAnswer } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
 export type GetUserData = { token: string };
@@ -239,31 +239,37 @@ export type ReviewActivity = DatavizActivity & {
   }[];
 };
 
-export type DatavizAnswer = {
-  answer: string;
+export type DatavizAnswer = SharedDecryptedAnswer & {
   answerId: string;
   endDatetime: string;
   events: string;
-  itemIds: string[];
-  items: Item[];
   startDatetime: string;
-  userPublicKey: string;
   version: string;
 };
 
 export type Answers = AppletId & RespondentId & { createdDate?: string };
 
-export type Answer = AppletId & { answerId: string; activityId: string };
+export type ActivityAnswer = AppletId & { answerId: string; activityId: string };
 
-export type ActivityAnswer = AppletId & { answerId: string } & { activityId: string };
+export type AssessmentReview = AppletId & { answerId: string };
 
-export type Assessment = AppletId & {
+export type SaveAssessment = AppletId & {
   answerId: string;
-};
-
-export type SaveAssessment = Assessment & {
+} & {
   answer: string;
   itemIds: string[];
+  reviewerPublicKey: string;
+};
+
+export type Review = {
+  answer: string;
+  isEdited: boolean;
+  items: Item[];
+  itemIds: string[];
+  reviewer: {
+    firstName: string;
+    lastName: string;
+  };
   reviewerPublicKey: string;
 };
 

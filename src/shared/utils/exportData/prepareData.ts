@@ -9,8 +9,8 @@ import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
 
 export const prepareData = (
-  data: { activities: ExportActivity[]; answers: ExportAnswer[] },
-  getDecryptedAnswers: (data: ExtendedExportAnswer) => DecryptedActivityData,
+  data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
+  getDecryptedAnswers: (data: ExtendedExportAnswer) => DecryptedActivityData<ExportAnswer>,
 ) => {
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
   const reportData = [];

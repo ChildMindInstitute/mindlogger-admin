@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { SharedDecryptedAnswer } from 'shared/types';
 
 export type FeedbackAssessmentProps = {
   setActiveTab: Dispatch<SetStateAction<number>>;
@@ -13,4 +14,8 @@ export type ActivityItemAnswer = {
 
 export type ActivityItemAnswers = {
   answers: ActivityItemAnswer[];
+};
+
+export type Assessment = SharedDecryptedAnswer & {
+  isEdited?: boolean;
 };

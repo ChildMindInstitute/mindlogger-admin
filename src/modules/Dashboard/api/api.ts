@@ -21,7 +21,6 @@ import {
   CreateEventType,
   OwnerId,
   Answers,
-  Answer,
   AppletUniqueName,
   GetAnswersNotesParams,
   NoteId,
@@ -44,7 +43,6 @@ import {
   Applet,
   EditManagerAccess,
   ExportData,
-  Assessment,
   SaveAssessment,
   DatavizActivity,
   Version,
@@ -52,6 +50,8 @@ import {
   DatavizAnswer,
   Identifier,
   ReviewActivity,
+  Review,
+  AssessmentReview,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -440,7 +440,7 @@ export const getReviewActivitiesApi = (
     signal,
   });
 
-export const getAnswerApi = ({ appletId, answerId }: Answer, signal?: AbortSignal) =>
+export const getAnswerApi = ({ appletId, answerId }: ActivityAnswer, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
 
 export const getActivityAnswerApi = (
@@ -452,7 +452,7 @@ export const getActivityAnswerApi = (
   });
 
 export const getAnswersNotesApi = (
-  { appletId, answerId, activityId, params }: Answer & GetAnswersNotesParams,
+  { appletId, answerId, activityId, params }: ActivityAnswer & GetAnswersNotesParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get(
@@ -461,7 +461,7 @@ export const getAnswersNotesApi = (
   );
 
 export const createAnswerNoteApi = (
-  { appletId, answerId, activityId, note }: Answer & Note,
+  { appletId, answerId, activityId, note }: ActivityAnswer & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
@@ -473,7 +473,7 @@ export const createAnswerNoteApi = (
   );
 
 export const editAnswerNoteApi = (
-  { appletId, answerId, noteId, activityId, note }: Answer & NoteId & Note,
+  { appletId, answerId, noteId, activityId, note }: ActivityAnswer & NoteId & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.put(
@@ -485,7 +485,7 @@ export const editAnswerNoteApi = (
   );
 
 export const deleteAnswerNoteApi = (
-  { appletId, answerId, activityId, noteId }: Answer & NoteId,
+  { appletId, answerId, activityId, noteId }: ActivityAnswer & NoteId,
   signal?: AbortSignal,
 ) =>
   authApiClient.delete(
@@ -504,7 +504,7 @@ export const getAppletSubmitDateListApi = (
     signal,
   });
 
-export const getAssessmentApi = ({ appletId, answerId }: Assessment, signal?: AbortSignal) =>
+export const getAssessmentApi = ({ appletId, answerId }: AssessmentReview, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/assessment`, {
     signal,
   });
@@ -521,8 +521,8 @@ export const createAssessmentApi = (
     },
   );
 
-export const getReviewsApi = ({ appletId, answerId }: Assessment, signal?: AbortSignal) =>
-  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/reviews`, {
+export const getReviewsApi = ({ appletId, answerId }: AssessmentReview, signal?: AbortSignal) =>
+  authApiClient.get<Response<Review>>(`/answers/applet/${appletId}/answers/${answerId}/reviews`, {
     signal,
   });
 
