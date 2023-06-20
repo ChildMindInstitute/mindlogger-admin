@@ -420,7 +420,7 @@ export type ScoreCondition = BaseCondition & {
 
 export type OptionCondition = BaseCondition & {
   payload: {
-    optionId: string;
+    optionValue: string | number;
   };
 };
 

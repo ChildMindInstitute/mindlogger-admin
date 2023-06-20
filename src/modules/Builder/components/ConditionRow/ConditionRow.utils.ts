@@ -89,7 +89,7 @@ export const getPayload = (
     case ConditionType.EqualToOption:
     case ConditionType.NotEqualToOption:
       return {
-        optionId: (conditionPayload as OptionCondition['payload'])?.optionId ?? '',
+        optionValue: (conditionPayload as OptionCondition['payload'])?.optionValue ?? '',
       };
     case ConditionType.GreaterThan:
     case ConditionType.LessThan:

@@ -78,21 +78,21 @@ export const getDuplicatedConditions = (
   conditions?: Condition[],
 ) =>
   conditions?.map((condition) => {
-    const optionId = (condition as OptionCondition)?.payload.optionId;
+    const optionValue = (condition as OptionCondition)?.payload.optionValue;
     const result = { ...condition, key: uuidv4() };
 
-    if (!optionId) return result;
+    if (!optionValue) return result;
 
     const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
     const optionIndex = (
       oldItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues
-    ).options?.findIndex((option) => option.id === optionId);
+    ).options?.findIndex((option) => option.id === optionValue);
 
     return {
       ...result,
       itemName: getEntityKey(newItems[itemIndex]) ?? '',
       payload: {
-        optionId:
+        optionValue:
           (newItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues)
             ?.options?.[optionIndex]?.id ?? '',
       },

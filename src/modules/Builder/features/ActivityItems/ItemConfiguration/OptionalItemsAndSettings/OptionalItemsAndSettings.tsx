@@ -6,10 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
 
-import { ItemAlert, SingleAndMultipleSelectionOption } from 'shared/state';
+import { SingleAndMultipleSelectionOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
+import { pluck } from 'shared/utils';
 
 import { Alert, ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
@@ -32,6 +33,7 @@ import { SelectionOption } from '../InputTypeItems';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
 import { useActiveItem, useSettingsSetup } from './OptionalItemsAndSettings.hooks';
+import { getOptionValue } from './OptionalItemsAndSettings.utils';
 
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ name }, ref) => {
@@ -95,6 +97,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
         ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
         ...(hasColorPalette &&
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
+        value: getOptionValue(options ?? []),
       });
 
     const handleAddSingleOrMultipleRow = () => {

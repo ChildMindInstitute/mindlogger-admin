@@ -32,8 +32,9 @@ export const verifyReportServer = async ({ url, publicKey, token }: VerifyReport
   headers.append('Content-Type', 'application/json');
 
   const body = JSON.stringify({ publicKey });
+  const urlToCheck = url?.endsWith('/') ? url : `${url}/`;
 
-  return await fetch(`${url}/verify`, {
+  return await fetch(`${urlToCheck}verify`, {
     method: 'PUT',
     headers,
     body,

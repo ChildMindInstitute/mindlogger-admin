@@ -1,3 +1,5 @@
+import get from 'lodash.get';
+
 type Mapper<T> = {
   (item: T): string;
 };
@@ -17,3 +19,6 @@ export const groupBy = <T, K extends keyof T>(
       [`${key}`]: [...(result[`${key}`] ?? []), item],
     };
   }, {});
+
+export const pluck = (array: unknown[], attribute: string) =>
+  array.map((item) => get(item, attribute));
