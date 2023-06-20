@@ -58,6 +58,7 @@ export const StyledSelect = styled(Select)`
   }
 
   .navigate-arrow {
+    pointer-events: none;
     position: absolute;
     right: 1rem;
   }
