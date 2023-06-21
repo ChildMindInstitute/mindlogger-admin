@@ -90,7 +90,7 @@ export const Report = ({ activity, identifiers, versions }: ReportProps) => {
     };
 
     fetchAnswers();
-  }, [watchFilters]);
+  }, [watchFilters, appletId, respondentId]);
 
   return (
     <>
@@ -112,7 +112,8 @@ export const Report = ({ activity, identifiers, versions }: ReportProps) => {
           <FormProvider {...methods}>
             <ReportFilters identifiers={identifiers} versions={versions} />
             <ActivityCompleted answers={answers} versions={versions} />
-            {/* <Subscales /> */}
+            {/* TODO: hide subscales until the module for counting is ready */}
+            {/* <Subscales />  */}
             {activityReport.responseOptions && (
               <ResponseOptions
                 responseOptions={activityReport.responseOptions}

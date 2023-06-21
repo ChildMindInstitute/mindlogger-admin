@@ -45,12 +45,14 @@ export const getIdentifiers = (
 ): string[] | undefined => {
   if (!filterByIdentifier) return;
 
-  return filterIdentifiers.reduce((acc: string[], identifier: AutocompleteOption) => {
-    const filterIdentifiers = identifiers
-      .filter(({ decryptedValue }) => identifier.id === decryptedValue)
-      .map(({ encryptedValue }) => encryptedValue);
-    if (!filterIdentifiers.length) return acc;
+  return identifiers.reduce(
+    (decryptedIdentifiers: string[], { encryptedValue, decryptedValue }: Identifier) => {
+      const identifier = filterIdentifiers.find(
+        (filterIdentifier) => filterIdentifier.id === decryptedValue,
+      );
 
-    return [...acc, ...filterIdentifiers];
-  }, []);
+      return identifier ? [...decryptedIdentifiers, encryptedValue] : decryptedIdentifiers;
+    },
+    [],
+  );
 };

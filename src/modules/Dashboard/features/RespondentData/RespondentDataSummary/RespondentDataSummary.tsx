@@ -55,7 +55,7 @@ export const RespondentDataSummary = () => {
       }
     };
     fetchActivities();
-  }, []);
+  }, [appletId, respondentId]);
 
   useEffect(() => {
     if (!appletId || !respondentId) return;
@@ -75,7 +75,7 @@ export const RespondentDataSummary = () => {
       }
     };
     fetchFiltersData();
-  }, [selectedActivity]);
+  }, [selectedActivity, appletId, respondentId]);
 
   return (
     <StyledContainer>
