@@ -46,7 +46,7 @@ export const ScoreCondition = ({ name, scoreId, scoreName }: ScoreConditionProps
       />
       <CheckboxController
         control={control}
-        name={`${name}.flagScoreName`}
+        name={`${name}.flagScore`}
         label={
           <StyledLabel>
             <StyledBodyLarge>{t('flagScore')}</StyledBodyLarge>
