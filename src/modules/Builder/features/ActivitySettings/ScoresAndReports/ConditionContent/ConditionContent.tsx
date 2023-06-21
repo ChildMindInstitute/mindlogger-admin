@@ -6,7 +6,7 @@ import { Condition } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
 import { ConditionRow } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
-import { StyledBodyMedium, variables } from 'shared/styles';
+import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
 import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
@@ -50,6 +50,7 @@ export const ConditionContent = ({ name, type, scoreId, scoreName }: ConditionCo
       <StyledButton
         startIcon={<Svg id="add" width="20" height="20" />}
         onClick={handleAddCondition}
+        sx={{ m: theme.spacing(1.2, 0, 1.2, -2.4) }}
       >
         {t('addCondition')}
       </StyledButton>

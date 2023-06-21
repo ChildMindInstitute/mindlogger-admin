@@ -27,7 +27,7 @@ export const ScoreCondition = ({ name, scoreId, scoreName }: ScoreConditionProps
 
   return (
     <>
-      <StyledFlexTopCenter sx={{ mb: theme.spacing(2.4) }}>
+      <StyledFlexTopCenter sx={{ m: theme.spacing(1.2, 0, 2.4, 0) }}>
         <InputController
           control={control}
           name={`${name}.name`}
@@ -46,7 +46,7 @@ export const ScoreCondition = ({ name, scoreId, scoreName }: ScoreConditionProps
       />
       <CheckboxController
         control={control}
-        name={`${name}.flagScoreName`}
+        name={`${name}.flagScore`}
         label={
           <StyledLabel>
             <StyledBodyLarge>{t('flagScore')}</StyledBodyLarge>
