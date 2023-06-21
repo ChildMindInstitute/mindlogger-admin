@@ -11,7 +11,7 @@ import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
 
-const getDecryptedAnswersObject = (decryptedAnswers: DecryptedAnswerData[]) =>
+const getDecryptedAnswersObject = (decryptedAnswers: DecryptedAnswerData<ExportAnswer>[]) =>
   getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
 
 export const prepareData = (

@@ -1,7 +1,7 @@
 import { AppletId } from 'shared/api';
 import { Item, SingleApplet } from 'shared/state';
 import { Roles } from 'shared/consts';
-import { RetentionPeriods, SharedDecryptedAnswer } from 'shared/types';
+import { RetentionPeriods, DecryptedAnswerSharedProps } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
 export type GetUserData = { token: string };
@@ -239,7 +239,7 @@ export type ReviewActivity = DatavizActivity & {
   }[];
 };
 
-export type DatavizAnswer = SharedDecryptedAnswer & {
+export type DatavizAnswer = DecryptedAnswerSharedProps & {
   answerId: string;
   endDatetime: string;
   events: string;
