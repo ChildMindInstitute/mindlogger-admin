@@ -4,10 +4,10 @@ import { ItemResponseType } from 'shared/consts';
 import { joinWihComma } from '../joinWihComma';
 
 export const parseOptions = (
-  responseValues: SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues,
+  responseValues: SingleAndMultipleSelectItemResponseValues | SliderItemResponseValues,
   type: ItemResponseType,
 ) => {
-  if (type === ItemResponseType.Slider) {
+  if (type === ItemResponseType.Slider && 'minValue' in responseValues) {
     const min = responseValues?.minValue;
     const max = responseValues?.maxValue;
     const scores = responseValues?.scores;
@@ -20,10 +20,12 @@ export const parseOptions = (
     );
   }
 
-  return joinWihComma(
-    responseValues?.options?.map(
-      ({ text, value, score }) =>
-        `${text}${value ? `: ${value}` : ''}${score ? ` (score: ${score})` : ''}`,
-    ) || [],
-  );
+  if ('options' in responseValues) {
+    return joinWihComma(
+      responseValues?.options?.map(
+        ({ text, value, score }) =>
+          `${text}${value ? `: ${value}` : ''}${score ? ` (score: ${score})` : ''}`,
+      ) || [],
+    );
+  }
 };

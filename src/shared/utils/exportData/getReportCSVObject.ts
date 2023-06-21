@@ -25,8 +25,9 @@ export const getReportCSVObject = (item: DecryptedAnswerData) => {
     subscaleSetting,
   } = item;
 
-  const responseValues = activityItem?.responseValues as SingleAndMultipleSelectItemResponseValues &
-    SliderItemResponseValues;
+  const responseValues = activityItem?.responseValues as
+    | SingleAndMultipleSelectItemResponseValues
+    | SliderItemResponseValues;
 
   return {
     id: item.id,
@@ -46,7 +47,7 @@ export const getReportCSVObject = (item: DecryptedAnswerData) => {
     version,
     rawScore: getRawScores(responseValues) || '',
     reviewing_id: reviewedAnswerId,
-    ...getSubscales(subscaleSetting?.subscales),
+    ...getSubscales(subscaleSetting?.subscales, activityItem.id),
     ...(subscaleSetting?.calculateTotalScore && {
       'Final SubScale Score': subscaleSetting.calculateTotalScore,
     }),
