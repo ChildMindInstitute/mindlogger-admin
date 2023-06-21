@@ -6,7 +6,6 @@ import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
 import { parseOptions } from './parseOptions';
 import { getRawScores } from './getRowScores';
-import { getSubscales } from './getSubscales';
 
 export const getReportCSVObject = (item: DecryptedAnswerData) => {
   const {
@@ -47,12 +46,12 @@ export const getReportCSVObject = (item: DecryptedAnswerData) => {
     version,
     rawScore: getRawScores(responseValues) || '',
     reviewing_id: reviewedAnswerId,
-    ...getSubscales(subscaleSetting?.subscales, activityItem.id),
-    ...(subscaleSetting?.calculateTotalScore && {
-      'Final SubScale Score': subscaleSetting.calculateTotalScore,
-    }),
-    ...(subscaleSetting?.totalScoresTableData && {
-      'Optional text for Final SubScale Score': subscaleSetting.totalScoresTableData,
-    }),
+    // ...getSubscales(subscaleSetting?.subscales, activityItem.id),
+    // ...(subscaleSetting?.calculateTotalScore && {
+    //   'Final SubScale Score': subscaleSetting.calculateTotalScore,
+    // }),
+    // ...(subscaleSetting?.totalScoresTableData && {
+    //   'Optional text for Final SubScale Score': subscaleSetting.totalScoresTableData,
+    // }),
   };
 };

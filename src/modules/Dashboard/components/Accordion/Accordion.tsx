@@ -1,25 +1,49 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import { StyledTitleBoldMedium, variables } from 'shared/styles';
+import { StyledFlexTopCenter, StyledTitleMedium, theme, variables } from 'shared/styles';
 
-import { StyledHeader, StyledItem, StyledSvg } from './Accordion.styles';
-import { AccordionProps } from './Accordion.types';
+import { StyledItem, StyledSvg } from './Accordion.styles';
+import { AccordionProps, AccordionUiType } from './Accordion.types';
 
-export const Accordion = ({ children, title }: AccordionProps) => {
+export const Accordion = ({
+  children,
+  title,
+  uiType = AccordionUiType.Primary,
+}: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleItemExpand = () => {
     setIsOpen((prevState) => !prevState);
   };
 
+  const isPrimaryUiType = uiType === AccordionUiType.Primary;
+
   return (
-    <StyledItem>
-      <StyledHeader onClick={handleItemExpand}>
-        <StyledSvg id={isOpen ? 'navigate-up' : 'navigate-down'} width={20} height={20} />
-        <StyledTitleBoldMedium color={variables.palette.on_surface_variant}>
+    <StyledItem isPrimaryUiType={isPrimaryUiType}>
+      <StyledFlexTopCenter
+        sx={{
+          mb: theme.spacing(isPrimaryUiType ? 0 : 1),
+          cursor: 'pointer',
+        }}
+        onClick={handleItemExpand}
+      >
+        <StyledSvg
+          isPrimaryUiType={isPrimaryUiType}
+          id={isOpen ? 'navigate-up' : 'navigate-down'}
+          width={20}
+          height={20}
+        />
+        <StyledTitleMedium
+          sx={{
+            fontWeight: isPrimaryUiType
+              ? variables.font.weight.bold
+              : variables.font.weight.regular,
+          }}
+          color={variables.palette.on_surface_variant}
+        >
           {title}
-        </StyledTitleBoldMedium>
-      </StyledHeader>
+        </StyledTitleMedium>
+      </StyledFlexTopCenter>
       {isOpen && children}
     </StyledItem>
   );
