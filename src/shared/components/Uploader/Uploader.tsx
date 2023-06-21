@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
+import { IncorrectImagePopup } from 'shared/components/IncorrectImagePopup';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { byteFormatter, joinWihComma } from 'shared/utils';
@@ -22,7 +23,6 @@ import {
 } from './Uploader.styles';
 import { UploaderProps, UploaderUiType } from './Uploader.types';
 import { RemoveImagePopup } from './RemoveImagePopup';
-import { IncorrectImagePopup } from '../IncorrectImagePopup';
 
 export const Uploader = ({
   uiType = UploaderUiType.Primary,
@@ -56,9 +56,10 @@ export const Uploader = ({
 
     const fileExtension = imageFile.name.split('.').pop()?.toLowerCase();
     const notAllowableSize = imageFile.size > MAX_FILE_SIZE_25MB;
-    const notAllowableType = !VALID_IMAGE_TYPES.includes(`.${fileExtension}`);
+    const notAllowableType =
+      !imageFile.type.includes('image') || !VALID_IMAGE_TYPES.includes(`.${fileExtension}`);
     notAllowableSize && setError(UploadImageError.Size);
-    (!imageFile.type.includes('image') || notAllowableType) && setError(UploadImageError.Format);
+    notAllowableType && setError(UploadImageError.Format);
 
     if (notAllowableSize || notAllowableType) return;
 
