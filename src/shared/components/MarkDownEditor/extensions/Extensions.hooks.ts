@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { postFileUploadApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { falseReturnFunc, getUploadFormData } from 'shared/utils';
+import { VALID_IMAGE_TYPES } from 'shared/consts';
 
 import { SourceLinkModalForm } from '../SourceLinkModal';
 import { UploadMethodsProps } from './Extensions.types';
@@ -11,6 +12,7 @@ export const useUploadMethods = ({
   insertHandler,
   setFileSizeExceeded,
   fileSizeExceeded,
+  setIncorrectImageFormat,
 }: UploadMethodsProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -55,6 +57,14 @@ export const useUploadMethods = ({
     const file = inputRef.current.files[0];
     if (file.size > fileSizeExceeded) {
       return setFileSizeExceeded(fileSizeExceeded);
+    }
+
+    if (setIncorrectImageFormat && file.type.includes('image')) {
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+
+      if (!VALID_IMAGE_TYPES.includes(`.${fileExtension}`)) {
+        return setIncorrectImageFormat(true);
+      }
     }
 
     const body = getUploadFormData(file);

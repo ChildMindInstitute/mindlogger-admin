@@ -14,6 +14,11 @@ type MediaProps = {
 
 export type MediaContentExtensionProps = InsertContentExtensionProps & MediaProps;
 
+export type ImageUploadExtensionProps = MediaContentExtensionProps & {
+  setIncorrectImageFormat: Dispatch<SetStateAction<boolean>>;
+};
+
 export type UploadMethodsProps = {
   insertHandler: (data: SourceLinkModalForm) => void;
+  setIncorrectImageFormat?: Dispatch<SetStateAction<boolean>>;
 } & MediaProps;

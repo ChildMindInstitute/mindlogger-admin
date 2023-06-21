@@ -19,6 +19,7 @@ export const CropPopup = ({
   setCropPopupVisible,
   setValue,
   image,
+  setImage,
   ratio = 1,
 }: CropPopupProps) => {
   const { t } = useTranslation('app');
@@ -56,6 +57,7 @@ export const CropPopup = ({
   };
 
   const onClose = () => {
+    setImage(null);
     setCropPopupVisible(false);
   };
 
