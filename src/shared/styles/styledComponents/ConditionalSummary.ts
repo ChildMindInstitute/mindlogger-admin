@@ -43,4 +43,8 @@ export const StyledSummarySelectController = styled(SelectController)`
   .MuiFormHelperText-root {
     display: none;
   }
+
+  .MuiOutlinedInput-notchedOutline {
+    border-color: ${variables.palette.outline};
+  }
 `;
