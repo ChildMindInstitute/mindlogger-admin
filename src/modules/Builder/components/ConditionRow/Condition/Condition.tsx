@@ -56,15 +56,15 @@ export const Condition = ({
         SelectProps={{
           renderValue: (value: unknown) => {
             const item = itemOptions?.find((item) => item.value === value);
-            const placeholder =
-              type === ConditionRowType.Item
-                ? t('conditionItemSelected', { value: item?.labelKey })
-                : item?.labelKey;
+            const placeholder = isRowTypeItem
+              ? t('conditionItemSelected', { value: item?.labelKey })
+              : item?.labelKey;
 
             return <span>{placeholder}</span>;
           },
         }}
         customChange={onItemChange}
+        disabled={type === ConditionRowType.Score}
         isLabelNeedTranslation={false}
       />
       {!isRowTypeItem && <StyledTitleMedium>{t('is')}</StyledTitleMedium>}

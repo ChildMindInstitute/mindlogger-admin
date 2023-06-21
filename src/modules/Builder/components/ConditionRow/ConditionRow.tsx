@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { getEntityKey } from 'shared/utils';
@@ -76,6 +77,12 @@ export const ConditionRow = ({
     ],
     [ConditionRowType.Score]: [getScoreIdOption(scoreId!, scoreName!)],
   };
+
+  useEffect(() => {
+    if (type === ConditionRowType.Score) {
+      setValue(conditionItemName, scoreName);
+    }
+  }, [type, scoreName]);
 
   return (
     <Condition
