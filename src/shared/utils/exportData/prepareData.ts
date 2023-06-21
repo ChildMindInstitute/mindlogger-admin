@@ -15,7 +15,6 @@ export const prepareData = (
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
   const reportData = [];
   const activityJourneyData = [];
-  console.log(parsedAnswers);
   const flattenAnswers = parsedAnswers
     .flatMap((item) => item.decryptedAnswers)
     ?.filter((item) => !item.activityItem?.config?.skippableItem);
