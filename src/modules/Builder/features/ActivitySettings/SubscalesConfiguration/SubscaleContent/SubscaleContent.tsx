@@ -26,7 +26,7 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
   const { control } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
   const subscales: ActivityFormValues['subscales'] =
-    useWatch({ name: `${fieldName}.subscales` }) ?? [];
+    useWatch({ name: `${fieldName}.subscaleSetting.subscales` }) ?? [];
   const items = getItemElements(
     subscaleId,
     activity?.items.filter(checkOnItemTypeAndScore),
