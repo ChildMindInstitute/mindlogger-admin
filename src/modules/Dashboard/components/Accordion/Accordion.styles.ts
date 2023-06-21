@@ -1,26 +1,29 @@
-import { Box, Button, styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledItem = styled(Box, shouldForwardProp)`
-  padding: ${theme.spacing(3.6, 3.2)};
-  border-radius: ${variables.borderRadius.lg2};
-  margin-bottom: ${theme.spacing(1.6)};
-  cursor: pointer;
-  background-color: ${variables.palette.surface1};
+  ${({ isPrimaryUiType }: { isPrimaryUiType: boolean }) =>
+    isPrimaryUiType &&
+    `
+      padding: ${theme.spacing(3.6, 3.2)};
+      border-radius: ${variables.borderRadius.lg2};
+      margin-bottom: ${theme.spacing(1.6)};
+      background-color: ${variables.palette.surface1};
+	`};
 `;
 
-export const StyledButton = styled(Button)`
-  margin-left: ${theme.spacing(1.6)};
-`;
+export const StyledSvg = styled(Svg, shouldForwardProp)`
+  ${({ isPrimaryUiType }: { isPrimaryUiType: boolean }) => `
+      margin: ${theme.spacing(0, isPrimaryUiType ? 2.2 : 0.5, 0, isPrimaryUiType ? 1 : 0)};
+      fill: ${isPrimaryUiType ? variables.palette.on_surface_variant : variables.palette.outline};
+	`};
 
-export const StyledHeader = styled(StyledFlexTopCenter)`
-  font-weight: ${variables.font.weight.bold};
-`;
-
-export const StyledSvg = styled(Svg)`
-  margin-right: ${theme.spacing(2.2)};
-  margin-left: ${theme.spacing(1)};
+  ${({ isPrimaryUiType }) =>
+    !isPrimaryUiType &&
+    `
+        fill: ${variables.palette.outline};
+	`};
 `;
