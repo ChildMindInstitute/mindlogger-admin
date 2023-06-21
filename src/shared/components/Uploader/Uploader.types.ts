@@ -12,7 +12,6 @@ export type UploaderProps = {
   getValue: () => string;
   uiType?: UploaderUiType;
   description?: string;
-  maxFileSize?: number;
   wrapperStyles?: SxProps;
   cropRatio?: number;
   hasError?: boolean;
