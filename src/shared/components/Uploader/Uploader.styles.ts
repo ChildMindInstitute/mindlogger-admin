@@ -1,7 +1,11 @@
 import { Box, Button, ButtonGroup } from '@mui/material';
 import { styled } from '@mui/system';
 
-import { StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles/styledComponents';
+import {
+  StyledFlexAllCenter,
+  StyledFlexColumn,
+  StyledBodyMedium,
+} from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -197,4 +201,11 @@ export const StyledDeleteBtn = styled(Button, shouldForwardProp)`
           fill: ${variables.palette.on_surface_variant};
         }
     `};
+`;
+
+export const StyledError = styled(StyledBodyMedium)`
+  margin-bottom: ${theme.spacing(1)};
+  padding: ${theme.spacing(0, 3)};
+  text-align: center;
+  color: ${variables.palette.semantic.error};
 `;

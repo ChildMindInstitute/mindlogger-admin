@@ -5,22 +5,23 @@ import { useTranslation } from 'react-i18next';
 import 'md-editor-rt/lib/style.css';
 
 import {
-  LANGUAGE_BY_DEFAULT,
   AlignTextExtension,
   AudioUploadExtension,
   CharacterCounter,
-  ImageUploadExtension,
   FooterMessage,
-  TrashExtension,
-  VideoUploadExtension,
+  ImageUploadExtension,
+  LANGUAGE_BY_DEFAULT,
   MarkExtension,
-  UnderlineExtension,
   StrikethroughExtension,
   SubscriptExtension,
   SuperscriptExtension,
-} from 'shared/components';
+  TrashExtension,
+  UnderlineExtension,
+  VideoUploadExtension,
+} from 'shared/components/MarkDownEditor';
 import { FileSizeExceededPopup } from 'shared/components/MarkDownEditor/FileSizeExceededPopup';
-import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB } from 'shared/consts';
+import { IncorrectImagePopup } from 'shared/components/IncorrectImagePopup';
+import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, UploadImageError } from 'shared/consts';
 
 import { StyledErrorText, StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
@@ -33,6 +34,7 @@ export const EditorController = <T extends FieldValues>({
   const { t } = useTranslation('app');
   const editorRef = useRef<ExposeParam>();
   const [fileSizeExceeded, setFileSizeExceeded] = useState<number | null>(null);
+  const [incorrectImageFormat, setIncorrectImageFormat] = useState(false);
 
   const onInsert = useCallback((generator: InsertContentGenerator) => {
     editorRef.current?.insert(generator);
@@ -83,6 +85,7 @@ export const EditorController = <T extends FieldValues>({
                   onInsert={onInsert}
                   setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_25MB}
+                  setIncorrectImageFormat={setIncorrectImageFormat}
                 />,
                 <AudioUploadExtension
                   key="audio-upload-extension"
@@ -149,6 +152,13 @@ export const EditorController = <T extends FieldValues>({
           popupVisible={!!fileSizeExceeded}
           size={fileSizeExceeded}
           onClose={() => setFileSizeExceeded(null)}
+        />
+      )}
+      {incorrectImageFormat && (
+        <IncorrectImagePopup
+          popupVisible={incorrectImageFormat}
+          onClose={() => setIncorrectImageFormat(false)}
+          uiType={UploadImageError.Format}
         />
       )}
     </>

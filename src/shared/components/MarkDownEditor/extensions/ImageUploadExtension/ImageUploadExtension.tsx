@@ -4,11 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
+import { VALID_IMAGE_TYPES } from 'shared/consts';
+import { joinWihComma } from 'shared/utils';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { MediaContentExtensionProps } from '../Extensions.types';
+import { ImageUploadExtensionProps } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
@@ -16,7 +18,8 @@ export const ImageUploadExtension = ({
   onInsert,
   setFileSizeExceeded,
   fileSizeExceeded,
-}: MediaContentExtensionProps) => {
+  setIncorrectImageFormat,
+}: ImageUploadExtensionProps) => {
   const { t } = useTranslation('app');
 
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
@@ -45,6 +48,7 @@ export const ImageUploadExtension = ({
     insertHandler,
     setFileSizeExceeded,
     fileSizeExceeded,
+    setIncorrectImageFormat,
   });
 
   return (
@@ -66,7 +70,7 @@ export const ImageUploadExtension = ({
                       key={inputRef.current?.toString()}
                       ref={inputRef}
                       hidden
-                      accept="image/*"
+                      accept={joinWihComma(VALID_IMAGE_TYPES)}
                       type="file"
                       onChange={onInputChange}
                     />

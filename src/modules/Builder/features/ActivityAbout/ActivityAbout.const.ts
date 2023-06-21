@@ -16,3 +16,8 @@ export const itemsForReviewableActivity = [
   ItemResponseType.MultipleSelection,
   ItemResponseType.Slider,
 ];
+
+export const commonUploaderProps = {
+  width: 20,
+  height: 20,
+};
