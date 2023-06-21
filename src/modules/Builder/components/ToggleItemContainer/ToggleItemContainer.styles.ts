@@ -19,10 +19,6 @@ export const StyledItemOption = styled(StyledItemOptionContainer)`
   padding: ${theme.spacing(1.6, 2.4, 1.6, 2.4)};
   position: relative;
   width: 100%;
-
-  svg {
-    fill: ${variables.palette.on_surface_variant};
-  }
 `;
 
 export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)`
@@ -32,6 +28,10 @@ export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)
     height: 4.8rem;
 		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0}
 	`};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 `;
 
 export const StyledBadge = styled(Badge)`

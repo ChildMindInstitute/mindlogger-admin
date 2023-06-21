@@ -12,7 +12,7 @@ export const CopyId = ({ title, value, showCopy = false }: CopyIdProps) => {
   return (
     <>
       <StyledTitleSmall sx={{ mb: theme.spacing(1.2) }}>{title}</StyledTitleSmall>
-      <StyledFlexTopCenter sx={{ mb: theme.spacing(2.4) }}>
+      <StyledFlexTopCenter>
         <StyledBodyLarge>{value}</StyledBodyLarge>
         {showCopy && (
           <StyledDuplicateButton

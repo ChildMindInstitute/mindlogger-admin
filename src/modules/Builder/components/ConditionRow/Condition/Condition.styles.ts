@@ -43,6 +43,10 @@ export const StyledSelectController = styled(SelectController)`
     &.Mui-error {
       background: ${variables.palette.error_container};
     }
+
+    &.Mui-disabled .MuiOutlinedInput-notchedOutline {
+      border-color: ${variables.palette.outline};
+    }
   }
 
   .MuiSelect-select {
@@ -51,6 +55,14 @@ export const StyledSelectController = styled(SelectController)`
 
   .MuiFormHelperText-root {
     display: none;
+  }
+
+  .MuiSvgIcon-root.Mui-disabled {
+    display: none;
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border-color: ${variables.palette.outline};
   }
 `;
 
@@ -76,5 +88,9 @@ export const StyledInputController = styled(InputController)`
 
   .MuiFormHelperText-root {
     display: none;
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border-color: ${variables.palette.outline};
   }
 `;
