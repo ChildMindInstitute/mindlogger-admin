@@ -64,6 +64,29 @@ export const getWorkspaceAppletsApi = (
   });
 };
 
+export const getWorkspaceFolderAppletsApi = (
+  { params }: GetWorkspaceAppletsParams,
+  signal?: AbortSignal,
+) => {
+  const { ownerId, folderId } = params;
+
+  return authApiClient.get<Response<Applet>>(`/workspaces/${ownerId}/folders/${folderId}/applets`, {
+    signal,
+  });
+};
+
+export const getFilteredWorkspaceAppletsApi = (
+  { params }: GetWorkspaceAppletsParams,
+  signal?: AbortSignal,
+) => {
+  const { ownerId, search, ...restParams } = params;
+
+  return authApiClient.get<Response<Applet>>(`/workspaces/${ownerId}/applets/search/${search}`, {
+    params: restParams,
+    signal,
+  });
+};
+
 export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
   const { ownerId, appletId, ...restParams } = params;
 

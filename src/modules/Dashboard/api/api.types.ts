@@ -311,18 +311,22 @@ export type AppletVersionChanges = AppletId & { version: string };
 export type ExportData = AppletId & { respondentId?: string };
 
 export type Folder = {
-  appletCount: number;
   id: string;
-  name: string;
+  name?: string;
+  displayName: string;
   isFolder?: boolean;
   isNew?: boolean;
   isRenaming?: boolean;
+  foldersAppletCount: number;
 };
 
 export type Applet = SingleApplet & {
   id: string;
   isFolder?: boolean;
   parentId?: string;
+  type?: string;
+  folderId?: string;
+  folderName?: string;
 };
 
 export type Response<T> = {

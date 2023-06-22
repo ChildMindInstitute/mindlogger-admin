@@ -8,6 +8,10 @@ export const StyledTableContainer = styled(TableContainer)`
   height: 100%;
   border-radius: ${variables.borderRadius.lg2};
 
+  .MuiTableCell-head {
+    background: ${variables.palette.surface};
+  }
+
   && .MuiTableRow-root.dragged-over {
     .MuiTableCell-body {
       border-top: ${variables.borderWidth.lg} solid ${variables.palette.primary};

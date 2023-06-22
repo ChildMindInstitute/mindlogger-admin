@@ -7,5 +7,6 @@ export type AppletContextType = {
   setRows: Dispatch<SetStateAction<(Folder | Applet)[]>>;
   expandedFolders: string[];
   fetchData: () => void;
+  reloadData: () => void;
   handleFolderClick: (folder: Folder) => void;
 };
