@@ -5,7 +5,7 @@ import { addDays } from 'date-fns';
 
 import { DatePicker, TimePicker, DatePickerUiType } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { Switch, TagsInputController } from 'shared/components/FormComponents';
+import { AutocompleteOption, Switch, TagsInputController } from 'shared/components/FormComponents';
 
 import { StyledTimeText } from './ReportFilters.styles';
 import { ReportFiltersProps } from './ReportFilters.types';
@@ -21,11 +21,25 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
 
-  const uniqueIdentifiers = [...new Set(identifiers.map(({ decryptedValue }) => decryptedValue))];
-  const identifiersOptions = uniqueIdentifiers.map((identifier) => ({
-    label: identifier,
-    id: identifier,
-  }));
+  const identifiersOptions = identifiers.reduce(
+    (uniqueIdentifiers: AutocompleteOption[], { decryptedValue }) => {
+      if (
+        uniqueIdentifiers &&
+        !uniqueIdentifiers.find((identifier) => identifier.id === decryptedValue)
+      ) {
+        return [
+          ...uniqueIdentifiers,
+          {
+            label: decryptedValue,
+            id: decryptedValue,
+          },
+        ];
+      }
+
+      return uniqueIdentifiers;
+    },
+    [],
+  );
 
   const moreFiltersHandler = () => {
     setValue('moreFiltersVisisble', !moreFiltersVisisble);
