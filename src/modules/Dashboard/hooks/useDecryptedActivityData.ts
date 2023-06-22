@@ -73,6 +73,7 @@ export const useDecryptedActivityData = (
     const answerDataDecrypted = items.map((activityItem, index) => ({
       activityItem,
       answer: answersDecrypted[index],
+      items,
       ...rest,
     }));
 

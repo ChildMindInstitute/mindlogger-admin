@@ -22,18 +22,30 @@ export const prepareData = (
 
   return parsedAnswers.reduce(
     (acc, data) => {
+      const rawAnswersObject = getObjectFromList(
+        data.decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
       const answers = data.decryptedAnswers.reduce((filteredAcc, item) => {
         if (item.activityItem?.config?.skippableItem) return filteredAcc;
 
-        return filteredAcc.concat(getReportCSVObject(item));
+        return filteredAcc.concat(
+          getReportCSVObject({
+            item,
+            rawAnswersObject,
+          }),
+        );
       }, [] as ReturnType<typeof getReportCSVObject>[]);
       const reportData = acc.reportData.concat(...answers);
 
       const decryptedAnswersObject = getDecryptedAnswersObject(data.decryptedAnswers);
       const events = data.decryptedEvents.map((event) =>
         getJourneyCSVObject({
-          ...event,
-          ...decryptedAnswersObject[event.screen],
+          event: {
+            ...event,
+            ...decryptedAnswersObject[event.screen],
+          },
+          rawAnswersObject,
         }),
       );
       const activityJourneyData = acc.activityJourneyData.concat(...events);

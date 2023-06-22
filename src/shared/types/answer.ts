@@ -1,7 +1,5 @@
 import {
   ActivityItemAnswer,
-  DecryptedMultiSelectionAnswer,
-  DecryptedTextAnswer,
   EventDTO,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
@@ -56,7 +54,7 @@ export type ExtendedExportAnswer = ExportAnswer & {
 
 export type DecryptedAnswerData = Omit<
   ExtendedExportAnswer,
-  'userPublicKey' | 'itemIds' | 'items' | 'answer' | 'events'
+  'userPublicKey' | 'itemIds' | 'answer' | 'events'
 > &
   ActivityItemAnswer;
 

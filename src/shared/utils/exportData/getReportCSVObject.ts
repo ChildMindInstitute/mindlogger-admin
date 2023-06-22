@@ -1,6 +1,8 @@
 import { DecryptedAnswerData } from 'shared/types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
+import { replaceItemVariableWithName } from 'shared/utils/exportData/replaceItemVariableWithName';
+import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
@@ -8,7 +10,13 @@ import { parseOptions } from './parseOptions';
 import { getRawScores } from './getRowScores';
 import { getSubscales } from './getSubscales';
 
-export const getReportCSVObject = (item: DecryptedAnswerData) => {
+export const getReportCSVObject = <T>({
+  item,
+  rawAnswersObject,
+}: {
+  item: DecryptedAnswerData;
+  rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
+}) => {
   const {
     answer,
     activityItem,
@@ -41,8 +49,16 @@ export const getReportCSVObject = (item: DecryptedAnswerData) => {
     activity_flow: flowId,
     item: activityItem.name,
     response: parseResponseValue(answer, item.activityItem?.responseType),
-    prompt: activityItem.question?.en,
-    options: parseOptions(responseValues, item.activityItem?.responseType),
+    prompt: replaceItemVariableWithName({
+      markdown: activityItem.question?.en ?? '',
+      items: item.items,
+      rawAnswersObject,
+    }),
+    options: replaceItemVariableWithName({
+      markdown: parseOptions(responseValues, item.activityItem?.responseType),
+      items: item.items,
+      rawAnswersObject,
+    }),
     version,
     rawScore: getRawScores(responseValues) || '',
     reviewing_id: reviewedAnswerId,
