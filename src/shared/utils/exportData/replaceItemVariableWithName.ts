@@ -24,11 +24,11 @@ const getDateString = (obj?: DecryptedDateAnswer['value']) => {
     .padStart(2, '0')}-${Number(obj.day).toString().padStart(2, '0')}`;
 };
 
-const reBrackets = /\[\[(.*?)]]/g;
+const doubleBrackets = /\[\[(.*?)]]/g;
 export const getTextBetweenBrackets = (str: string) => {
   const listOfText = [];
   let found;
-  while ((found = reBrackets.exec(str))) {
+  while ((found = doubleBrackets.exec(str))) {
     listOfText.push(found[1]);
   }
 
@@ -58,10 +58,10 @@ export const replaceItemVariableWithName = <T>({
 
       if (rawAnswer && Array.isArray((rawAnswer as DecryptedMultiSelectionAnswer).value)) {
         const names: string[] = [];
-        (rawAnswer as DecryptedMultiSelectionAnswer).value.forEach((ans) => {
+        (rawAnswer as DecryptedMultiSelectionAnswer).value.forEach((value) => {
           const item =
             (itemValue.responseValues as SingleAndMultipleSelectItemResponseValues).options.find(
-              (option) => option.value === ans,
+              (option) => option.value === value,
             ) ?? null;
 
           if (item) names.push(item.text);
