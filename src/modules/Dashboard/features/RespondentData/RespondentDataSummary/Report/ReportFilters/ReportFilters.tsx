@@ -9,6 +9,7 @@ import { Switch, TagsInputController } from 'shared/components/FormComponents';
 
 import { StyledTimeText } from './ReportFilters.styles';
 import { ReportFiltersProps } from './ReportFilters.types';
+import { MIN_DATE } from './ReportFilters.const';
 
 export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFiltersProps) => {
   const { t } = useTranslation('app');
@@ -17,8 +18,6 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
   const moreFiltersVisisble = watch('moreFiltersVisisble');
   const filterByIdentifier = watch('filterByIdentifier');
   const startDateEndDate = watch('startDateEndDate');
-
-  const minDate = new Date(new Date().setFullYear(new Date().getFullYear() - 3));
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
 
@@ -50,7 +49,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
     <form>
       <StyledFlexTopCenter sx={{ mb: theme.spacing(3.2) }}>
         <DatePicker
-          minDate={minDate}
+          minDate={MIN_DATE}
           name="startDateEndDate"
           uiType={DatePickerUiType.StartEndingDate}
           control={control}
