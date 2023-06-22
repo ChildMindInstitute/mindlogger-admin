@@ -1,4 +1,4 @@
-import { DecryptedAnswerData } from 'shared/types';
+import { DecryptedAnswerData, ExportAnswer } from 'shared/types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
 
@@ -8,7 +8,7 @@ import { parseOptions } from './parseOptions';
 import { getRawScores } from './getRowScores';
 import { getSubscales } from './getSubscales';
 
-export const getReportCSVObject = (item: DecryptedAnswerData) => {
+export const getReportCSVObject = (item: DecryptedAnswerData<ExportAnswer>) => {
   const {
     answer,
     activityItem,

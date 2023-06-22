@@ -1,5 +1,5 @@
 import { Item, TextItem, SliderItem, SingleSelectItem, MultiSelectItem } from 'shared/state';
-import { DecryptedAnswerData } from 'shared/types';
+import { DecryptedAnswerData, ExportAnswer } from 'shared/types';
 
 export type Answer = {
   createdAt: string;
@@ -91,7 +91,7 @@ export type EventDTO = {
   type: UserActionType;
 };
 
-export type ExtendedEvent = EventDTO & DecryptedAnswerData;
+export type ExtendedEvent<T> = EventDTO & DecryptedAnswerData<T>;
 
 export type ActivityItemAnswer = {
   activityItem: Item;

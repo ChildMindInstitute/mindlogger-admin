@@ -1,7 +1,5 @@
 import {
   ActivityItemAnswer,
-  DecryptedMultiSelectionAnswer,
-  DecryptedTextAnswer,
   EventDTO,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
@@ -26,14 +24,21 @@ export type ExportActivity = {
   version: string;
 };
 
-export type ExportAnswer = {
-  id: string;
-  version: string;
+export type DecryptedAnswerSharedProps = {
   userPublicKey: string;
-  respondentId: string;
-  respondentSecretId: string;
   answer: string;
   itemIds: string[];
+  items: Item[];
+  events?: string;
+};
+
+export type ExportAnswer = {
+  id?: string;
+  version?: string;
+  activityName?: string;
+  subscaleSetting?: SubscaleSetting | null;
+  respondentId?: string;
+  respondentSecretId?: string;
   activityHistoryId: string;
   flowHistoryId: null | string;
   flowName: null | string;
@@ -45,22 +50,17 @@ export type ExportAnswer = {
   scheduledDatetime?: string;
   startDatetime?: string;
   endDatetime?: string;
-  events: string;
 };
 
-export type ExtendedExportAnswer = ExportAnswer & {
-  items: Item[];
-  activityName?: string;
-  subscaleSetting?: SubscaleSetting | null;
-};
+export type ExtendedExportAnswer = ExportAnswer & DecryptedAnswerSharedProps;
 
-export type DecryptedAnswerData = Omit<
-  ExtendedExportAnswer,
+export type DecryptedAnswerData<T> = Omit<
+  T,
   'userPublicKey' | 'itemIds' | 'items' | 'answer' | 'events'
 > &
   ActivityItemAnswer;
 
-export type DecryptedActivityData = {
-  decryptedAnswers: DecryptedAnswerData[];
+export type DecryptedActivityData<T> = {
+  decryptedAnswers: DecryptedAnswerData<T>[];
   decryptedEvents: EventDTO[];
 };

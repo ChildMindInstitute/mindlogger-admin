@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
-import { EmptyTable, LinkedTabs, Svg } from 'shared/components';
+import { EmptyState, LinkedTabs, Svg } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 import { workspaces } from 'redux/modules';
@@ -28,7 +28,7 @@ export const RespondentData = () => {
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
   if (appletRoles?.[0] === Roles.Coordinator)
-    return <EmptyTable width="25rem">{t('noPermissions')}</EmptyTable>;
+    return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
 
   return (
     <StyledBody sx={{ position: 'relative' }}>
