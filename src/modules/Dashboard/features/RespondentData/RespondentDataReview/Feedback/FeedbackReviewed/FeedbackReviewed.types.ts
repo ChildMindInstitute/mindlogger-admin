@@ -1,4 +1,4 @@
-import { DecryptedAnswerData, DecryptedAnswerSharedProps } from 'shared/types';
+import { DecryptedAnswerData, EncryptedAnswerSharedProps } from 'shared/types';
 
 export type ReviewData = {
   isEdited: boolean;
@@ -8,7 +8,7 @@ export type ReviewData = {
   };
 };
 
-export type Review = DecryptedAnswerSharedProps & ReviewData;
+export type Review = EncryptedAnswerSharedProps & ReviewData;
 
 export type Reviewer = ReviewData & {
   review: DecryptedAnswerData<Review>[];

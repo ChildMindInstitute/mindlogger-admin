@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { applet } from 'shared/state';
 import { decryptData, Encryption, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import { DecryptedActivityData, DecryptedAnswerSharedProps } from 'shared/types';
+import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types';
 import {
   AnswerDTO,
   EventDTO,
@@ -28,10 +28,10 @@ export const useDecryptedActivityData = (
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(dynamicAppletId ?? appletId);
 
-  return <T extends DecryptedAnswerSharedProps>(
+  return <T extends EncryptedAnswerSharedProps>(
     answersApiResponse: T,
   ): DecryptedActivityData<T> => {
-    const { userPublicKey, answer, items, itemIds, events, ...rest } = answersApiResponse;
+    const { userPublicKey, answer, itemIds, events, ...rest } = answersApiResponse;
 
     let answersDecrypted: AnswerDTO[] = [];
     let eventsDecrypted: EventDTO[] = [];
@@ -70,10 +70,9 @@ export const useDecryptedActivityData = (
       }
     }
 
-    const answerDataDecrypted = items.map((activityItem, index) => ({
+    const answerDataDecrypted = rest.items.map((activityItem, index) => ({
       activityItem,
       answer: answersDecrypted[index],
-      items,
       ...rest,
     }));
 

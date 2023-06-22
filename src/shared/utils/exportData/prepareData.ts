@@ -2,8 +2,8 @@ import {
   DecryptedActivityData,
   DecryptedAnswerData,
   ExportActivity,
-  ExportAnswer,
   ExtendedExportAnswer,
+  ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 import { getObjectFromList } from 'shared/utils/builderHelpers';
 
@@ -11,12 +11,15 @@ import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
 
-const getDecryptedAnswersObject = (decryptedAnswers: DecryptedAnswerData<ExportAnswer>[]) =>
-  getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
+const getDecryptedAnswersObject = (
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+) => getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
 
 export const prepareData = (
   data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
-  getDecryptedAnswers: (data: ExtendedExportAnswer) => DecryptedActivityData<ExportAnswer>,
+  getDecryptedAnswers: (
+    data: ExtendedExportAnswer,
+  ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,
 ) => {
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
 

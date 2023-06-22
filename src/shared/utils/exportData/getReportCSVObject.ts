@@ -1,4 +1,4 @@
-import { DecryptedAnswerData, ExportAnswer } from 'shared/types';
+import { DecryptedAnswerData, ExtendedExportAnswerWithoutEncryption } from 'shared/types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
 import { replaceItemVariableWithName } from 'shared/utils/exportData/replaceItemVariableWithName';
@@ -14,7 +14,7 @@ export const getReportCSVObject = <T>({
   item,
   rawAnswersObject,
 }: {
-  item: DecryptedAnswerData<ExportAnswer>;
+  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>;
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
 }) => {
   const {

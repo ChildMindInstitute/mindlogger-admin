@@ -10,7 +10,7 @@ import {
   replaceItemVariableWithName,
 } from 'shared/utils/exportData';
 import { ActivityStatus } from 'shared/consts';
-import { ExportAnswer } from 'shared/types';
+import { ExtendedExportAnswerWithoutEncryption } from 'shared/types';
 
 const getTimeByCondition = (time: string) => (condition: boolean) => condition ? time : '';
 
@@ -18,7 +18,7 @@ export const getJourneyCSVObject = <T>({
   event,
   rawAnswersObject,
 }: {
-  event: ExtendedEvent<ExportAnswer>;
+  event: ExtendedEvent<ExtendedExportAnswerWithoutEncryption>;
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
 }) => {
   const {
