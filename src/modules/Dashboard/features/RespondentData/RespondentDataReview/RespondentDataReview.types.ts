@@ -91,7 +91,7 @@ export type EventDTO = {
   type: UserActionType;
 };
 
-export type ExtendedEvent = EventDTO & DecryptedAnswerData;
+export type ExtendedEvent<T> = EventDTO & DecryptedAnswerData<T>;
 
 export type ActivityItemAnswer = {
   activityItem: Item;

@@ -1,6 +1,6 @@
 import { ItemResponseType } from 'shared/consts';
 
-import { ActivityReport, Version, Response, ResponseOption } from './Report.types';
+import { ActivityReport, Response, ResponseOption } from './Report.types';
 
 const commonConfig = {
   removeBackButton: false,
@@ -16,21 +16,6 @@ const commonConfig = {
     textInputRequired: false,
   },
 };
-
-export const versions: Version[] = [
-  {
-    date: new Date(2023, 5, 4),
-    version: '1.0.1',
-  },
-  {
-    date: new Date(2023, 5, 11),
-    version: '1.0.2',
-  },
-  {
-    date: new Date(2023, 5, 15),
-    version: '1.1.0',
-  },
-];
 
 export const responses: Response[] = [
   {
@@ -348,6 +333,5 @@ export const responseOptions: ResponseOption[] = [
 
 export const activityReport: ActivityReport = {
   responses,
-  versions,
   responseOptions,
 };

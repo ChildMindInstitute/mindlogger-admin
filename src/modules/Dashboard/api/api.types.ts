@@ -1,7 +1,7 @@
 import { AppletId } from 'shared/api';
-import { SingleApplet } from 'shared/state';
+import { Item, SingleApplet } from 'shared/state';
 import { Roles } from 'shared/consts';
-import { RetentionPeriods } from 'shared/types';
+import { RetentionPeriods, DecryptedAnswerSharedProps } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
 export type GetUserData = { token: string };
@@ -239,20 +239,54 @@ export type ReviewActivity = DatavizActivity & {
   }[];
 };
 
-export type Answers = AppletId & RespondentId & { createdDate?: string };
-
-export type Answer = AppletId & { answerId: string; activityId: string };
-
-export type ActivityAnswer = AppletId & { answerId: string } & { activityId: string };
-
-export type Assessment = AppletId & {
+export type DatavizAnswer = DecryptedAnswerSharedProps & {
   answerId: string;
+  endDatetime: string;
+  events: string;
+  startDatetime: string;
+  version: string;
 };
 
-export type SaveAssessment = Assessment & {
+export type Answers = AppletId & RespondentId & { createdDate?: string };
+
+export type ActivityAnswer = AppletId & { answerId: string; activityId: string };
+
+export type AssessmentReview = AppletId & { answerId: string };
+
+export type SaveAssessment = AppletId & {
+  answerId: string;
+} & {
   answer: string;
   itemIds: string[];
   reviewerPublicKey: string;
+};
+
+export type Review = {
+  answer: string;
+  isEdited: boolean;
+  items: Item[];
+  itemIds: string[];
+  reviewer: {
+    firstName: string;
+    lastName: string;
+  };
+  reviewerPublicKey: string;
+};
+
+export type SummaryAnswers = AppletId & {
+  activityId: string;
+  params: {
+    respondentId: string;
+    fromDatetime: string;
+    toDatetime: string;
+    identifiers?: string[];
+    versions?: string[];
+  };
+};
+
+export type Identifier = {
+  identifier: string;
+  userPublicKey: string;
 };
 
 export type AppletUniqueName = {
@@ -323,6 +357,11 @@ export type Applet = SingleApplet & {
   id: string;
   isFolder?: boolean;
   parentId?: string;
+};
+
+export type Version = {
+  version: string;
+  createdAt: string;
 };
 
 export type Response<T> = {
