@@ -2,8 +2,9 @@ import { createContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 
-import { getWorkspaceAppletsApi, Folder, Applet } from 'api';
+import { Folder, Applet } from 'api';
 import {
   DeletePopup,
   DuplicatePopups,
@@ -11,15 +12,15 @@ import {
   TransferOwnershipPopup,
 } from 'modules/Dashboard/features/Applet/Popups';
 import { popups, workspaces } from 'redux/modules';
-import { ButtonWithMenu, DEFAULT_ROWS_PER_PAGE, Search, Spinner, Svg } from 'shared/components';
-import { useAsync, useBreadcrumbs, useTable } from 'shared/hooks';
+import { ButtonWithMenu, Search, Spinner, Svg } from 'shared/components';
+import { useBreadcrumbs, useTable } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
-import { AppletsTableHeader, StyledButtons } from './Applets.styles';
+import { AppletsTableHeader, StyledButtons, StyledBody } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
-import { useApplets } from './Applets.hooks';
+import { useAppletsWithFolders } from './Applets.hooks';
 import { AppletContextType } from './Applets.types';
 
 export const AppletsContext = createContext<AppletContextType | null>(null);
@@ -30,7 +31,6 @@ export const Applets = () => {
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<(Folder | Applet)[]>([]);
-  const [expandedFolders, setExpandedFolders] = useState<string[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { ownerId } = workspaces.useData() || {};
@@ -42,9 +42,8 @@ export const Applets = () => {
     publishConcealPopupVisible,
   } = popups.useData();
 
-  const { execute: getWorkspaceApplets } = useAsync(getWorkspaceAppletsApi);
-
-  const { fetchData, isLoading } = useApplets(setRows, expandedFolders);
+  const { fetchData, isLoading, count, expandedFolders, expandFolder, collapseFolder } =
+    useAppletsWithFolders(setRows);
 
   const { handleSearch, searchValue, ...tableProps } = useTable(
     async (params) => await fetchData(params),
@@ -62,9 +61,9 @@ export const Applets = () => {
   const addFolder = () => {
     const newFolderName = generateNewFolderName(folders, t);
     const folderRow = {
-      appletCount: 0,
-      id: (Math.random() + Math.random()).toString(),
-      name: newFolderName,
+      foldersAppletCount: 0,
+      id: uuidv4(),
+      displayName: newFolderName,
       isFolder: true,
       isNew: true,
       isRenaming: true,
@@ -101,30 +100,7 @@ export const Applets = () => {
   };
 
   const openFolder = async (folder: Folder) => {
-    const {
-      data: { result: applets },
-    } = await getWorkspaceApplets({
-      params: {
-        ownerId,
-        limit: DEFAULT_ROWS_PER_PAGE,
-        folderId: folder.id,
-      },
-    });
-
-    const formattedApplets = applets.map((applet) => ({
-      ...applet,
-      isFolder: false,
-      parentId: folder.id,
-    }));
-
-    const folderIndex = rows.findIndex(({ id }) => id === folder.id);
-
-    setRows([
-      ...rows.slice(0, folderIndex + 1),
-      ...formattedApplets,
-      ...rows.slice(folderIndex + 1),
-    ]);
-    setExpandedFolders([...expandedFolders, folder.id]);
+    expandFolder(folder.id);
   };
 
   const handleFolderClick = (folder: Folder) => {
@@ -132,7 +108,7 @@ export const Applets = () => {
 
     if (isFolderExpanded) {
       setRows(rows.filter((row) => (row as Applet)?.parentId !== folder.id));
-      setExpandedFolders(expandedFolders.filter((id) => id !== folder.id));
+      collapseFolder(folder.id);
 
       return;
     }
@@ -145,50 +121,50 @@ export const Applets = () => {
     fetchData();
   }, [ownerId]);
 
-  return (
-    <>
-      {isLoading ? (
-        <Box sx={{ position: 'relative', height: '100%' }}>
-          <Spinner />
-        </Box>
-      ) : (
-        <AppletsContext.Provider
-          value={{
-            rows,
-            setRows,
-            expandedFolders,
-            fetchData,
-            handleFolderClick,
-          }}
-        >
-          <AppletsTableHeader>
-            <StyledButtons>
-              <ButtonWithMenu
-                variant="outlined"
-                label={t('addApplet')}
-                anchorEl={anchorEl}
-                setAnchorEl={setAnchorEl}
-                menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
-                startIcon={<Svg width="18" height="18" id="applet-outlined" />}
-              />
-            </StyledButtons>
-            <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
-          </AppletsTableHeader>
+  useEffect(() => {
+    if (expandedFolders.length) tableProps.handleReload();
+  }, [expandedFolders]);
 
-          <Table
-            columns={getHeadCells()}
-            rows={rows}
-            headerContent={headerContent}
-            emptyComponent={getEmptyComponent()}
-            count={rows.length}
-            {...tableProps}
-          />
-          {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
-          {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} />}
-          {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
-          {publishConcealPopupVisible && <PublishConcealAppletPopup />}
-        </AppletsContext.Provider>
-      )}
-    </>
+  return (
+    <StyledBody>
+      {isLoading && <Spinner />}
+      <AppletsContext.Provider
+        value={{
+          rows,
+          setRows,
+          expandedFolders,
+          fetchData,
+          reloadData: tableProps.handleReload,
+          handleFolderClick,
+        }}
+      >
+        <AppletsTableHeader>
+          <StyledButtons>
+            <ButtonWithMenu
+              variant="outlined"
+              label={t('addApplet')}
+              anchorEl={anchorEl}
+              setAnchorEl={setAnchorEl}
+              menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
+              startIcon={<Svg width="18" height="18" id="applet-outlined" />}
+            />
+          </StyledButtons>
+          <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
+        </AppletsTableHeader>
+        <Table
+          columns={getHeadCells()}
+          rows={rows}
+          headerContent={headerContent}
+          emptyComponent={getEmptyComponent()}
+          count={count}
+          rowsPerPage={rows.length}
+          {...tableProps}
+        />
+        {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
+        {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} />}
+        {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
+        {publishConcealPopupVisible && <PublishConcealAppletPopup />}
+      </AppletsContext.Provider>
+    </StyledBody>
   );
 };
