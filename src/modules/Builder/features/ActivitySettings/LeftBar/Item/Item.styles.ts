@@ -56,6 +56,7 @@ export const StyledItem = styled(StyledFlexColumn, shouldForwardProp)`
     padding: ${theme.spacing(1.2, 1.2, 1.2, 2.2)};
     border-radius: ${variables.borderRadius.xxxl};
     width: 27.4rem;
+    margin-left: ${theme.spacing(1.6)};
 
     p {
       margin-top: 0;
@@ -84,5 +85,6 @@ export const StyledTitle = styled(StyledLabelLarge, shouldForwardProp)`
     isActive &&
     `
       font-weight: ${variables.font.weight.bold};
+      color: ${variables.palette.on_secondary_container};
   `}
 `;
