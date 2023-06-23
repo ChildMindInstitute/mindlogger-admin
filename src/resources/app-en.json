@@ -858,7 +858,9 @@
     "atLeastOneCondition": "Set up at least one condition",
     "mustShowMessageOrItems": "You must show a message or print items to publish this report",
     "atLeastOneItem": "Select at least 1 Item",
-    "incorrectEmail": "Email must be valid"
+    "incorrectEmail": "Email must be valid",
+    "variableInTheSameItem": "* You cannot use item name in the same item. Please remove",
+    "variableIsNotSupported": "* This item is not supported, please remove it."
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
