@@ -2,13 +2,15 @@ import { getObjectFromList } from 'shared/utils';
 import {
   DecryptedActivityData,
   ExportActivity,
-  ExportAnswer,
   ExtendedExportAnswer,
+  ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 
 export const getParsedAnswers = (
   result: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
-  getDecryptedActivityData: (data: ExtendedExportAnswer) => DecryptedActivityData<ExportAnswer>,
+  getDecryptedActivityData: (
+    data: ExtendedExportAnswer,
+  ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,
 ) => {
   const activitiesObject = getObjectFromList(
     result.activities,
