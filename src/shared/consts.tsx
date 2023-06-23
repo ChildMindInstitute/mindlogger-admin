@@ -105,6 +105,12 @@ export enum ItemResponseType {
   Time = 'time',
 }
 
+export const ItemsWithFileResponses = [
+  ItemResponseType.Photo,
+  ItemResponseType.Video,
+  ItemResponseType.Audio,
+];
+
 export enum PerfTaskItemType {
   Flanker = 'flanker',
   Touch = 'touch',

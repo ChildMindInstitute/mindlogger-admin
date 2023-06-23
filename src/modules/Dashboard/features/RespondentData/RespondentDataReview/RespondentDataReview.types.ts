@@ -34,6 +34,21 @@ export type DecryptedNumberSelectionAnswer = {
   text?: string | null;
 };
 
+export type DecryptedAudioAnswer = {
+  value: string;
+  text?: string | null;
+};
+
+export type DecryptedVideoAnswer = {
+  value: string;
+  text?: string | null;
+};
+
+export type DecryptedPhotoAnswer = {
+  value: string;
+  text?: string | null;
+};
+
 export type DecryptedDateRangeAnswer = {
   value: {
     from: {
@@ -63,7 +78,10 @@ export type AnswerDTO =
   | DecryptedSliderAnswer
   | DecryptedNumberSelectionAnswer
   | DecryptedDateRangeAnswer
-  | DecryptedDateAnswer;
+  | DecryptedDateAnswer
+  | DecryptedAudioAnswer
+  | DecryptedVideoAnswer
+  | DecryptedPhotoAnswer;
 
 export type AnswerValue =
   | null
@@ -73,7 +91,10 @@ export type AnswerValue =
   | DecryptedSliderAnswer['value']
   | DecryptedNumberSelectionAnswer['value']
   | DecryptedDateRangeAnswer['value']
-  | DecryptedDateAnswer['value'];
+  | DecryptedDateAnswer['value']
+  | DecryptedAudioAnswer['value']
+  | DecryptedVideoAnswer['value']
+  | DecryptedPhotoAnswer['value'];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
