@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Folder, Applet } from 'api';
 import {
@@ -61,7 +62,7 @@ export const Applets = () => {
     const newFolderName = generateNewFolderName(folders, t);
     const folderRow = {
       foldersAppletCount: 0,
-      id: (Math.random() + Math.random()).toString(),
+      id: uuidv4(),
       displayName: newFolderName,
       isFolder: true,
       isNew: true,
