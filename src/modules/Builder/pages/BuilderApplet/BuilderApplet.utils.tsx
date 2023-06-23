@@ -37,7 +37,7 @@ import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modul
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
-import { defaultFlankerBtnObj, RESTRICTED_TYPES_IN_VARIABLES } from './BuilderApplet.const';
+import { defaultFlankerBtnObj, ALLOWED_TYPES_IN_VARIABLES } from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -494,7 +494,5 @@ export const testFunctionForNotSupportedItems = (
   const variableNames = getTextBetweenBrackets(value);
   const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
 
-  return !itemsFromVariables.some((item) =>
-    RESTRICTED_TYPES_IN_VARIABLES.includes(item.responseType),
-  );
+  return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
 };
