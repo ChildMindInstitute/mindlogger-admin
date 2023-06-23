@@ -1,4 +1,5 @@
 import { useState, Dispatch, SetStateAction } from 'react';
+import get from 'lodash.get';
 
 import {
   Applet,
@@ -8,6 +9,7 @@ import {
   getWorkspaceFoldersApi,
   getWorkspaceFolderAppletsApi,
   getFilteredWorkspaceAppletsApi,
+  DashboardAppletType,
 } from 'api';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/components';
 import { useAsync } from 'shared/hooks';
@@ -35,23 +37,24 @@ export const useAppletsWithFolders = (
     const { search } = getAppletsParams?.params ?? {};
     const getAppletsList = search ? getFilteredWorkspaceApplets : getWorkspaceApplets;
 
-    const {
-      data: { result: folders },
-    } = await getWorkspaceFolders({ ownerId: ownerId! });
-    const {
-      data: { result: applets, count },
-    } = await getAppletsList(
-      getAppletsParams || {
-        params: { ownerId, limit: DEFAULT_ROWS_PER_PAGE },
-      },
-    );
+    const [foldersResponse, appletsResponse] = await Promise.allSettled([
+      getWorkspaceFolders({ ownerId: ownerId! }),
+      getAppletsList(
+        getAppletsParams || {
+          params: { ownerId, limit: DEFAULT_ROWS_PER_PAGE },
+        },
+      ),
+    ]);
+
+    const { result: folders = [] } = get(foldersResponse, ['value', 'data'], {});
+    const { result: applets = [], count } = get(appletsResponse, ['value', 'data'], {});
 
     setCount(count);
 
     const appletList =
-      applets?.map((applet) => ({
+      applets?.map((applet: Applet) => ({
         ...applet,
-        isFolder: applet.type === 'folder',
+        isFolder: applet.type === DashboardAppletType.Folder,
       })) ?? [];
     const groupedAppletList = getObjectFromList(appletList);
     const shownExpandedFolders = expandedFolders.filter(

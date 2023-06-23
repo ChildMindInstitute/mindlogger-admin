@@ -107,6 +107,11 @@ export const enum NotificationType {
   Random = 'RANDOM',
 }
 
+export const enum DashboardAppletType {
+  Applet = 'applet',
+  Folder = 'folder',
+}
+
 export type EventNotifications =
   | {
       atTime?: string | null;
@@ -324,7 +329,7 @@ export type Applet = SingleApplet & {
   id: string;
   isFolder?: boolean;
   parentId?: string;
-  type?: string;
+  type?: DashboardAppletType;
   folderId?: string;
   folderName?: string;
 };
