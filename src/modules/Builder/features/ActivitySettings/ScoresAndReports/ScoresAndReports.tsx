@@ -8,6 +8,7 @@ import {
   StyledBodyLarge,
   StyledFlexColumn,
   StyledFlexTopCenter,
+  StyledLabelBoldLarge,
   StyledTooltipSvg,
   theme,
   variables,
@@ -119,10 +120,14 @@ export const ScoresAndReports = () => {
       <StyledFlexColumn sx={{ mt: theme.spacing(2.4) }}>
         {sections?.map((section, index) => {
           const sectionName = `${sectionsName}.${index}`;
-          const title = t('sectionHeader', {
-            index: index + 1,
-            name: section?.name,
-          });
+          const title = (
+            <StyledFlexTopCenter sx={{ alignItems: 'baseline' }}>
+              <StyledLabelBoldLarge>
+                {t('sectionHeader', { index: index + 1 })}
+              </StyledLabelBoldLarge>
+              <StyledBodyLarge sx={{ ml: theme.spacing(1.2) }}>{section?.name}</StyledBodyLarge>
+            </StyledFlexTopCenter>
+          );
 
           return (
             <ToggleItemContainer

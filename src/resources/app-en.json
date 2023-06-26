@@ -1040,7 +1040,7 @@
   "publishAppletPopupSuccessDescription": "The Applet <1>{{name}}</1> has been <3>{{status}}</3> successfully.",
   "publishAppletPopupErrorDescription": "The Applet <1>{{name}}</1> has not been <3>{{status}}</3>. Please try again.",
   "noPermissions": "You have no permissions to view this tab.",
-  "sectionHeader": "Section {{index}}: {{name}}",
+  "sectionHeader": "Section {{index}}:",
   "sectionName": "Section name",
   "showMessage": "Show message",
   "showMessageTooltip": "Message that will be displayed in the report. To print the value of the score, surround the Score ID in [[]]",
