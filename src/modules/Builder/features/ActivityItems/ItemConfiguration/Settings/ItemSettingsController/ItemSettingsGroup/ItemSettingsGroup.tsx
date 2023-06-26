@@ -39,7 +39,6 @@ import { getDefaultSliderScores, getEmptyAlert } from '../../../ItemConfiguratio
 
 export const ItemSettingsGroup = ({
   name,
-  value,
   onChange,
   itemName,
   groupName,
@@ -51,6 +50,8 @@ export const ItemSettingsGroup = ({
 
   const { t } = useTranslation('app');
   const { control, setValue, getValues } = useFormContext();
+
+  const config = getValues(`${itemName}.config`) ?? {};
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
@@ -86,9 +87,9 @@ export const ItemSettingsGroup = ({
               const isAlerts = settingKey === ItemConfigurationSettings.HasAlerts;
 
               const isDisabled =
-                (isTextInputRequired && !get(value, ItemConfigurationSettings.HasTextInput)) ||
-                (isSkippableItem && get(value, ItemConfigurationSettings.IsTextInputRequired));
-              const isSecondsDisabled = isTimer && !get(value, ItemConfigurationSettings.HasTimer);
+                (isTextInputRequired && !get(config, ItemConfigurationSettings.HasTextInput)) ||
+                (isSkippableItem && get(config, ItemConfigurationSettings.IsTextInputRequired));
+              const isSecondsDisabled = isTimer && !get(config, ItemConfigurationSettings.HasTimer);
 
               const hasTooltip = ITEM_SETTINGS_TO_HAVE_TOOLTIP.includes(settingKey);
 
@@ -97,7 +98,7 @@ export const ItemSettingsGroup = ({
               const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
                 if (isTimer)
                   return onChange({
-                    ...value,
+                    ...config,
                     [settingKey]: event.target.checked
                       ? DEFAULT_TIMER_VALUE
                       : DEFAULT_DISABLED_TIMER_VALUE,
@@ -110,9 +111,9 @@ export const ItemSettingsGroup = ({
                   const [prefix, postfix] = settingKey.split('.');
 
                   return onChange({
-                    ...value,
+                    ...config,
                     [prefix]: {
-                      ...value?.[prefix],
+                      ...config?.[prefix],
                       [postfix]: event.target.checked,
                     },
                   });
@@ -122,7 +123,7 @@ export const ItemSettingsGroup = ({
                   const checked = event.target.checked;
 
                   return onChange({
-                    ...value,
+                    ...config,
                     [settingKey]: checked,
                     correctAnswer: checked ? '' : undefined,
                   });
@@ -132,7 +133,7 @@ export const ItemSettingsGroup = ({
                   const hasScores = event.target.checked;
 
                   onChange({
-                    ...value,
+                    ...config,
                     [settingKey]: hasScores,
                   });
 
@@ -189,10 +190,10 @@ export const ItemSettingsGroup = ({
                 if ((isScores || isAlerts) && isMultiOrSingleRows) {
                   const hasScores = isScores
                     ? event.target.checked
-                    : get(value, ItemConfigurationSettings.HasScores);
+                    : get(config, ItemConfigurationSettings.HasScores);
                   const hasAlerts = isAlerts
                     ? event.target.checked
-                    : get(value, ItemConfigurationSettings.HasAlerts);
+                    : get(config, ItemConfigurationSettings.HasAlerts);
 
                   const dataMatrix = getValues(`${itemName}.responseValues.dataMatrix`);
 
@@ -235,7 +236,7 @@ export const ItemSettingsGroup = ({
                           getEmptyAlert({
                             responseType: inputType as ItemResponseType,
                             responseValues: getValues(`${itemName}.responseValues`),
-                            config: value,
+                            config,
                           }),
                         ]
                       : undefined,
@@ -243,7 +244,7 @@ export const ItemSettingsGroup = ({
                 }
 
                 onChange({
-                  ...value,
+                  ...config,
                   [settingKey]: event.target.checked,
                 });
               };
@@ -255,7 +256,7 @@ export const ItemSettingsGroup = ({
                   control={
                     <Checkbox
                       name={settingKey}
-                      checked={!!get(value, settingKey)}
+                      checked={!!get(config, settingKey)}
                       onChange={handleCheckboxChange}
                       disabled={isDisabled}
                     />
