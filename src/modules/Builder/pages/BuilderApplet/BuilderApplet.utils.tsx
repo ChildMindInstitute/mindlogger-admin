@@ -2,6 +2,7 @@ import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
+import { TestContext } from 'yup';
 
 import i18n from 'i18n';
 import { page } from 'resources';
@@ -23,7 +24,7 @@ import {
   SingleAndMultipleSelectRowsResponseValues,
   OptionCondition,
 } from 'shared/state';
-import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
+import { getDictionaryText, getEntityKey, Path, getTextBetweenBrackets } from 'shared/utils';
 import {
   DEFAULT_LAMBDA_SLOPE,
   DEFAULT_LENGTH_OF_TEST,
@@ -36,7 +37,7 @@ import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modul
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
-import { defaultFlankerBtnObj } from './BuilderApplet.const';
+import { defaultFlankerBtnObj, ALLOWED_TYPES_IN_VARIABLES } from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -471,4 +472,27 @@ export const testFunctionForUniqueness = (field: string, value: string, context:
   const items = get(context, `from.1.value.${field}`);
 
   return items?.filter((item: { name: string }) => item.name === value).length < 2 ?? true;
+};
+
+export const testFunctionForTheSameVariable = (
+  field: string,
+  value: string,
+  context: TestContext,
+) => {
+  const itemName = get(context, 'parent.name');
+  const variableNames = getTextBetweenBrackets(value);
+
+  return !variableNames.includes(itemName);
+};
+
+export const testFunctionForNotSupportedItems = (
+  field: string,
+  value: string,
+  context: TestContext,
+) => {
+  const items: Item[] = get(context, 'from.1.value.items');
+  const variableNames = getTextBetweenBrackets(value);
+  const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
+
+  return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
 };
