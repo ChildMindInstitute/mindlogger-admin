@@ -1070,7 +1070,7 @@
   "male": "Male",
   "female": "Female",
   "ageQuestion": "How old are you?",
-  "scoreHeader": "Score {{index}}: {{name}}",
+  "scoreHeader": "Score {{index}}:",
   "scoreName": "Score name",
   "scoreCalculationType": "Score Calculation Type",
   "scoreItems": "Items used to calculate score",

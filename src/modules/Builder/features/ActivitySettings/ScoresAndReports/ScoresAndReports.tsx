@@ -27,6 +27,7 @@ import { SectionScoreHeader } from './SectionScoreHeader';
 import { SectionContent } from './SectionContent';
 import { getScoreDefaults, getSectionDefaults } from './ScoresAndReports.utils';
 import { ScoreContent } from './ScoreContent';
+import { Title } from './Title';
 import { StyledConfigureBtn } from './ScoresAndReports.styles';
 
 export const ScoresAndReports = () => {
@@ -121,12 +122,7 @@ export const ScoresAndReports = () => {
         {sections?.map((section, index) => {
           const sectionName = `${sectionsName}.${index}`;
           const title = (
-            <StyledFlexTopCenter sx={{ alignItems: 'baseline' }}>
-              <StyledLabelBoldLarge>
-                {t('sectionHeader', { index: index + 1 })}
-              </StyledLabelBoldLarge>
-              <StyledBodyLarge sx={{ ml: theme.spacing(1.2) }}>{section?.name}</StyledBodyLarge>
-            </StyledFlexTopCenter>
+            <Title title={t('sectionHeader', { index: index + 1 })} name={section?.name} />
           );
 
           return (
@@ -152,10 +148,7 @@ export const ScoresAndReports = () => {
       </StyledFlexColumn>
       {scores?.map((score, index) => {
         const scoreName = `${scoresName}.${index}`;
-        const title = t('scoreHeader', {
-          index: index + 1,
-          name: score?.name,
-        });
+        const title = <Title title={t('scoreHeader', { index: index + 1 })} name={score?.name} />;
 
         return (
           <ToggleItemContainer
