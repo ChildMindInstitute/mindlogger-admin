@@ -3,6 +3,8 @@ import { SingleApplet } from 'shared/state';
 import { defaultValues } from './ReportConfigSetting.const';
 import { VerifyReportServer, SetPasswordReportServer } from './ReportConfigSetting.types';
 
+const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
+
 export const getDefaultValues = (appletData?: Partial<SingleApplet>) => {
   if (!appletData) return defaultValues;
 
@@ -33,7 +35,7 @@ export const verifyReportServer = async ({ url, publicKey, token }: VerifyReport
 
   const body = JSON.stringify({ publicKey });
 
-  return await fetch(`${url}/verify`, {
+  return await fetch(`${getUrl(url)}verify`, {
     method: 'PUT',
     headers,
     body,
@@ -53,7 +55,7 @@ export const setPasswordReportServer = async ({
 
   const body = JSON.stringify({ appletId, workspaceId: ownerId, password });
 
-  return await fetch(`${url}/set-password`, {
+  return await fetch(`${getUrl(url)}set-password`, {
     method: 'POST',
     headers,
     body,
