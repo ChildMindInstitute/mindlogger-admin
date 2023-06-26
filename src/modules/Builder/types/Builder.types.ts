@@ -1,16 +1,16 @@
 import {
   ItemAlert,
   Config,
-  ActivitySettingsSubscale,
   ResponseValues,
   ConditionalLogic,
-  ActivitySettingsSection,
   GyroscopeGeneralSettings,
   GyroscopePracticeSettings,
   GyroscopeTestSettings,
-  ActivitySettingsScore,
+  SubscaleSetting,
+  ScoresAndReports,
 } from 'shared/state';
 import { ItemResponseType, PerfTaskItemType, SubscaleTotalScore } from 'shared/consts';
+import { ArrayElement } from 'shared/types';
 
 export type ItemFormValues = {
   id?: string;
@@ -22,13 +22,6 @@ export type ItemFormValues = {
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
   allowEdit: boolean;
-};
-
-export type ScoresAndReports = {
-  generateReport: boolean;
-  showScoreSummary: boolean;
-  scores: ActivitySettingsScore[];
-  sections: ActivitySettingsSection[];
 };
 
 export type ActivityFormValues = {
@@ -44,7 +37,7 @@ export type ActivityFormValues = {
   isReviewable?: boolean;
   isHidden?: boolean;
   items: ItemFormValues[];
-  subscales?: ActivitySettingsSubscale[];
+  subscaleSetting?: SubscaleSetting<string> | null;
   scoresAndReports?: ScoresAndReports;
   calculateTotalScore?: SubscaleTotalScore;
   conditionalLogic?: ConditionalLogic[];
@@ -52,6 +45,10 @@ export type ActivityFormValues = {
   isPerformanceTask?: boolean;
   performanceTaskType?: PerfTaskItemType;
 };
+
+export type SubscaleFormValue = ArrayElement<
+  NonNullable<NonNullable<ActivityFormValues['subscaleSetting']>['subscales']>
+>;
 
 export enum CorrectPress {
   Left = 'left',
@@ -93,8 +90,8 @@ export type AppletFormValues = {
   displayName: string;
   description: string;
   about: string;
-  image?: string;
-  watermark?: string;
+  image: string;
+  watermark: string;
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
   activities: ActivityFormValues[];

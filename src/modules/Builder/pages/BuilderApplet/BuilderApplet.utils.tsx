@@ -23,8 +23,16 @@ import {
   ItemAlert,
   SingleAndMultipleSelectRowsResponseValues,
   OptionCondition,
+  SubscaleSetting,
+  ActivitySettingsSubscale,
 } from 'shared/state';
-import { getDictionaryText, getEntityKey, Path, getTextBetweenBrackets } from 'shared/utils';
+import {
+  getDictionaryText,
+  getEntityKey,
+  Path,
+  getTextBetweenBrackets,
+  getObjectFromList,
+} from 'shared/utils';
 import {
   DEFAULT_LAMBDA_SLOPE,
   DEFAULT_LENGTH_OF_TEST,
@@ -33,7 +41,12 @@ import {
   DEFAULT_THRESHOLD_DURATION,
   ItemResponseType,
 } from 'shared/consts';
-import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
+import {
+  ActivityFormValues,
+  AppletFormValues,
+  GetNewPerformanceTask,
+  ItemFormValues,
+} from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
@@ -412,10 +425,58 @@ const getActivityConditionalLogic = (items: Item[]) =>
     return result;
   }, []);
 
+const getActivitySubscaleItems = ({
+  activityItemsObject,
+  subscalesObject,
+  subscaleItems,
+}: {
+  activityItemsObject: Record<string, ItemFormValues>;
+  subscalesObject: Record<string, ActivitySettingsSubscale>;
+  subscaleItems: ActivitySettingsSubscale['items'];
+}) =>
+  subscaleItems.map(
+    (item) =>
+      (activityItemsObject[item.name]
+        ? activityItemsObject[item.name].id
+        : subscalesObject[item.name].id) ?? '',
+  );
+
+const getActivitySubscaleSetting = (
+  subscaleSetting: SubscaleSetting,
+  activityItems: ItemFormValues[],
+) => {
+  if (!subscaleSetting) return subscaleSetting;
+
+  const processedSubscaleSetting = {
+    ...subscaleSetting,
+    subscales: subscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      id: uuidv4(),
+    })),
+  };
+  const activityItemsObject = getObjectFromList(activityItems, (item) => item.name);
+  const subscalesObject = getObjectFromList(
+    processedSubscaleSetting.subscales,
+    (subscale) => subscale.name,
+  );
+
+  return {
+    ...processedSubscaleSetting,
+    subscales: processedSubscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      items: getActivitySubscaleItems({
+        activityItemsObject,
+        subscalesObject,
+        subscaleItems: subscale.items,
+      }),
+    })),
+  };
+};
+
 export const getDefaultValues = (appletData?: SingleApplet) => {
   if (!appletData) return getNewApplet();
 
-  return {
+  const processedApplet = {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
@@ -431,6 +492,21 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
       : [],
     activityFlows: getActivityFlows(appletData.activityFlows),
   };
+
+  return {
+    ...processedApplet,
+    activities: processedApplet.activities
+      ? processedApplet.activities.map((activity) => ({
+          ...activity,
+          ...(activity.subscaleSetting && {
+            subscaleSetting: getActivitySubscaleSetting(
+              activity.subscaleSetting as unknown as SubscaleSetting,
+              activity.items,
+            ),
+          }),
+        }))
+      : [],
+  } as AppletFormValues;
 };
 
 export const getAppletTabs = ({
