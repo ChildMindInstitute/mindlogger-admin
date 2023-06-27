@@ -25,6 +25,7 @@ import {
   OptionCondition,
   SubscaleSetting,
   ActivitySettingsSubscale,
+  Config,
 } from 'shared/state';
 import {
   getDictionaryText,
@@ -60,7 +61,7 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
   name: t('newItem'),
   question: '',
-  config: {},
+  config: {} as Config,
   isHidden: false,
   allowEdit: true,
   ...item,
@@ -148,6 +149,11 @@ export const getNewActivity = (activity?: ActivityFormValues) => {
     items,
     activity?.conditionalLogic,
   );
+  const subscaleSetting = getActivitySubscaleSettingDuplicated({
+    oldSubscaleSetting: activity?.subscaleSetting,
+    oldItems: activity?.items as ItemFormValues[],
+    newItems: items as ItemFormValues[],
+  });
 
   return {
     name: t('newActivity'),
@@ -159,9 +165,10 @@ export const getNewActivity = (activity?: ActivityFormValues) => {
     ...activity,
     items,
     conditionalLogic,
+    subscaleSetting,
     id: undefined,
     key: uuidv4(),
-  };
+  } as ActivityFormValues;
 };
 
 export const getNewPerformanceTask = ({
@@ -437,9 +444,37 @@ const getActivitySubscaleItems = ({
   subscaleItems.map(
     (item) =>
       (activityItemsObject[item.name]
-        ? activityItemsObject[item.name].id
-        : subscalesObject[item.name].id) ?? '',
+        ? activityItemsObject[item.name]?.id
+        : subscalesObject[item.name]?.id) ?? '',
   );
+
+const getActivitySubscaleSettingDuplicated = ({
+  oldSubscaleSetting,
+  oldItems,
+  newItems,
+}: {
+  oldSubscaleSetting: ActivityFormValues['subscaleSetting'];
+  oldItems: ItemFormValues[];
+  newItems: ItemFormValues[];
+}) => {
+  if (!oldSubscaleSetting) return oldSubscaleSetting;
+
+  const mappedIndexObject = oldItems.reduce(
+    (acc, item, currentIndex) => ({
+      ...acc,
+      [getEntityKey(item)]: getEntityKey(newItems[currentIndex]),
+    }),
+    {} as Record<string, string>,
+  );
+
+  return {
+    ...oldSubscaleSetting,
+    subscales: oldSubscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      items: subscale.items.map((subscaleItem) => mappedIndexObject[subscaleItem] ?? subscaleItem),
+    })),
+  };
+};
 
 const getActivitySubscaleSetting = (
   subscaleSetting: SubscaleSetting,
@@ -499,10 +534,7 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
       ? processedApplet.activities.map((activity) => ({
           ...activity,
           ...(activity.subscaleSetting && {
-            subscaleSetting: getActivitySubscaleSetting(
-              activity.subscaleSetting as unknown as SubscaleSetting,
-              activity.items,
-            ),
+            subscaleSetting: getActivitySubscaleSetting(activity.subscaleSetting, activity.items),
           }),
         }))
       : [],
