@@ -97,19 +97,27 @@ export enum ItemResponseType {
   Audio = 'audio',
   Message = 'message',
   AudioPlayer = 'audioPlayer',
-  Flanker = 'flanker',
-  Touch = 'touch',
-  Gyroscope = 'gyroscope',
-  ABTrailsIpad = 'ABTrailsIpad',
-  ABTrailsMobile = 'ABTrailsMobile',
   Time = 'time',
+  Flanker = 'flanker',
+  GyroscopePractice = 'gyroscopePractice',
+  GyroscopeTest = 'gyroscopeTest',
+  TouchPractice = 'touchPractice',
+  TouchTest = 'touchTest',
+  ABTrailsTabletFirst = 'ABTrailsTabletFirst',
+  ABTrailsTabletSecond = 'ABTrailsTabletSecond',
+  ABTrailsTabletThird = 'ABTrailsTabletThird',
+  ABTrailsTabletFourth = 'ABTrailsTabletFourth',
+  ABTrailsMobileFirst = 'ABTrailsMobileFirst',
+  ABTrailsMobileSecond = 'ABTrailsMobileSecond',
+  ABTrailsMobileThird = 'ABTrailsMobileThird',
+  ABTrailsMobileFourth = 'ABTrailsMobileFourth',
 }
 
-export enum PerfTaskItemType {
+export enum PerfTaskType {
   Flanker = 'flanker',
   Touch = 'touch',
   Gyroscope = 'gyroscope',
-  ABTrailsIpad = 'ABTrailsIpad',
+  ABTrailsTablet = 'ABTrailsTablet',
   ABTrailsMobile = 'ABTrailsMobile',
 }
 
@@ -139,10 +147,18 @@ export const itemsTypeIcons = {
   [ItemResponseType.AudioPlayer]: <Svg id="audio-player" />,
   [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
-  [ItemResponseType.ABTrailsIpad]: null,
-  [ItemResponseType.ABTrailsMobile]: null,
-  [ItemResponseType.Gyroscope]: null,
-  [ItemResponseType.Touch]: null,
+  [ItemResponseType.ABTrailsMobileFirst]: null,
+  [ItemResponseType.ABTrailsMobileSecond]: null,
+  [ItemResponseType.ABTrailsMobileThird]: null,
+  [ItemResponseType.ABTrailsMobileFourth]: null,
+  [ItemResponseType.ABTrailsTabletFirst]: null,
+  [ItemResponseType.ABTrailsTabletSecond]: null,
+  [ItemResponseType.ABTrailsTabletThird]: null,
+  [ItemResponseType.ABTrailsTabletFourth]: null,
+  [ItemResponseType.GyroscopeTest]: null,
+  [ItemResponseType.GyroscopePractice]: null,
+  [ItemResponseType.TouchTest]: null,
+  [ItemResponseType.TouchPractice]: null,
 };
 
 export const enum SubscaleTotalScore {

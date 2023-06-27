@@ -5,3 +5,6 @@ export const EditablePerformanceTasks: string[] = [
   EditablePerformanceTasksType.Gyroscope,
   EditablePerformanceTasksType.Touch,
 ];
+
+export const withoutNumberRegex = /^(.*?)\s*\(\d+\)$/;
+export const numberRegex = /\((\d+)\)$/;
