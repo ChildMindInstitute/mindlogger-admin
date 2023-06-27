@@ -28,10 +28,10 @@ export const ReportMenu = ({
         <StyledHeadlineLarge>{t('activities')}</StyledHeadlineLarge>
         <StyledLabelLarge>{respondentLabel}</StyledLabelLarge>
       </Box>
-      {activities.map((activity) => (
+      {activities?.map((activity) => (
         <StyledActivity
           key={String(activity.id)}
-          isSelected={selectedActivity.id === activity.id}
+          isSelected={selectedActivity?.id === activity.id}
           onClick={() => setSelectedActivity(activity)}
         >
           <StyledBodyLarge color={variables.palette.on_surface}>{activity.name}</StyledBodyLarge>

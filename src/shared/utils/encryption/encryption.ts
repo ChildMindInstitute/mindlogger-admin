@@ -11,7 +11,7 @@ import { algorithm, encoding } from './encryption.const';
 
 const defaultBase = [2];
 
-const getPrivateKey = ({ appletPassword, accountId }: GetPrivateKey) => {
+export const getPrivateKey = ({ appletPassword, accountId }: GetPrivateKey) => {
   const key1 = crypto.createHash('sha512').update(appletPassword).digest();
   const key2 = crypto.createHash('sha512').update(accountId).digest();
 

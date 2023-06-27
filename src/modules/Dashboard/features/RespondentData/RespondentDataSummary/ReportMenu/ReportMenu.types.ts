@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Activity } from 'redux/modules';
+import { DatavizActivity } from 'api';
 
 export type ReportMenuProps = {
-  activities: Activity[];
-  selectedActivity: Activity;
-  setSelectedActivity: Dispatch<SetStateAction<Activity>>;
+  activities: DatavizActivity[];
+  selectedActivity?: DatavizActivity;
+  setSelectedActivity: Dispatch<SetStateAction<DatavizActivity | undefined>>;
 };

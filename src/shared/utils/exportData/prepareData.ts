@@ -2,8 +2,8 @@ import {
   DecryptedActivityData,
   DecryptedAnswerData,
   ExportActivity,
-  ExportAnswer,
   ExtendedExportAnswer,
+  ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 import { getObjectFromList } from 'shared/utils/builderHelpers';
 import { ItemsWithFileResponses } from 'shared/consts';
@@ -13,21 +13,33 @@ import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
 import { getMediaObject } from './getMediaObject';
 
-const getDecryptedAnswersObject = (decryptedAnswers: DecryptedAnswerData[]) =>
-  getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
+const getDecryptedAnswersObject = (
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+) => getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
 
 export const prepareData = (
-  data: { activities: ExportActivity[]; answers: ExportAnswer[] },
-  getDecryptedAnswers: (data: ExtendedExportAnswer) => DecryptedActivityData,
+  data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
+  getDecryptedAnswers: (
+    data: ExtendedExportAnswer,
+  ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,
 ) => {
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
 
   return parsedAnswers.reduce(
     (acc, data) => {
+      const rawAnswersObject = getObjectFromList(
+        data.decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
       const answers = data.decryptedAnswers.reduce((filteredAcc, item) => {
         if (item.activityItem?.config?.skippableItem) return filteredAcc;
 
-        return filteredAcc.concat(getReportCSVObject(item));
+        return filteredAcc.concat(
+          getReportCSVObject({
+            item,
+            rawAnswersObject,
+          }),
+        );
       }, [] as ReturnType<typeof getReportCSVObject>[]);
       const reportData = acc.reportData.concat(...answers);
 
@@ -41,8 +53,11 @@ export const prepareData = (
       const decryptedAnswersObject = getDecryptedAnswersObject(data.decryptedAnswers);
       const events = data.decryptedEvents.map((event) =>
         getJourneyCSVObject({
-          ...event,
-          ...decryptedAnswersObject[event.screen],
+          event: {
+            ...event,
+            ...decryptedAnswersObject[event.screen],
+          },
+          rawAnswersObject,
         }),
       );
       const activityJourneyData = acc.activityJourneyData.concat(...events);

@@ -15,7 +15,7 @@ import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
 import { getDateTime } from '../Report.utils';
 
-export const ResponseOptions = ({ responseOptions, versions }: ResponseOptionsProps) => {
+export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOptionsProps) => {
   const { t } = useTranslation();
   const { watch } = useFormContext<FilterFormValues>();
 

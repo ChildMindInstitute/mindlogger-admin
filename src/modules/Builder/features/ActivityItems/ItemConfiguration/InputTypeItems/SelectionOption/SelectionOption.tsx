@@ -43,10 +43,11 @@ export const SelectionOption = ({
   onUpdateOption,
   index,
   optionsLength,
+  optionsOpen,
+  setOptionsOpen,
 }: SelectionOptionProps) => {
   const optionName = `${name}.responseValues.options.${index}`;
   const { t } = useTranslation('app');
-  const [optionOpen, setOptionOpen] = useState(true);
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [visibleActions, setVisibleActions] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -76,7 +77,17 @@ export const SelectionOption = ({
   );
   const groupedConditions = getObjectFromList(dependentConditions);
 
-  const handleOptionToggle = () => setOptionOpen((prevState) => !prevState);
+  const handleOptionToggle = () =>
+    setOptionsOpen((prevState) =>
+      prevState.map((optionOpen, optionIndex) => {
+        if (optionIndex === index) return !optionOpen;
+
+        return optionOpen;
+      }),
+    );
+
+  const optionOpen = optionsOpen[index];
+
   const handlePopoverClose = () => setAnchorEl(null);
   const handleRemoveModalClose = () => setIndexToRemove(-1);
   const handleColorChange = () => {
@@ -136,7 +147,7 @@ export const SelectionOption = ({
     optionHide: () => setValue(`${optionName}.isHidden`, !isHidden),
     paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
     optionRemove: () => {
-      !dependentConditions?.length ? handleRemoveOption(index) : setIndexToRemove(index);
+      dependentConditions?.length ? setIndexToRemove(index) : handleRemoveOption(index);
     },
   };
 

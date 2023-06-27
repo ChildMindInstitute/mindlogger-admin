@@ -5,3 +5,4 @@ export * from './getJourneyCSVObject';
 export * from './getMediaReportName';
 export * from './getMediaObject';
 export * from './exportMediaZip';
+export * from './replaceItemVariableWithName';

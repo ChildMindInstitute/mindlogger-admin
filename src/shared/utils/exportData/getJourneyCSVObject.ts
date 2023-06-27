@@ -1,14 +1,26 @@
 import {
+  AnswerDTO,
   ExtendedEvent,
   UserActionType,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
-import { parseResponseValue, parseOptions } from 'shared/utils/exportData';
+import {
+  parseResponseValue,
+  parseOptions,
+  replaceItemVariableWithName,
+} from 'shared/utils/exportData';
 import { ActivityStatus } from 'shared/consts';
+import { ExtendedExportAnswerWithoutEncryption } from 'shared/types';
 
 const getTimeByCondition = (time: string) => (condition: boolean) => condition ? time : '';
 
-export const getJourneyCSVObject = (event: ExtendedEvent) => {
+export const getJourneyCSVObject = <T>({
+  event,
+  rawAnswersObject,
+}: {
+  event: ExtendedEvent<ExtendedExportAnswerWithoutEncryption>;
+  rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
+}) => {
   const {
     answer,
     activityItem,
@@ -44,9 +56,17 @@ export const getJourneyCSVObject = (event: ExtendedEvent) => {
     activity_flow: flowId,
     activity_name: activityName,
     item: activityItem.name,
-    prompt: activityItem.question?.en,
+    prompt: replaceItemVariableWithName({
+      markdown: activityItem.question?.en ?? '',
+      items: event.items,
+      rawAnswersObject,
+    }),
     response: parseResponseValue(answer, event.activityItem?.responseType),
-    options: parseOptions(responseValues, event.activityItem?.responseType),
+    options: replaceItemVariableWithName({
+      markdown: parseOptions(responseValues, event.activityItem?.responseType),
+      items: event.items,
+      rawAnswersObject,
+    }),
     version,
   };
 };

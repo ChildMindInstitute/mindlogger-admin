@@ -21,7 +21,7 @@ import {
   AppletPasswordPopupProps,
 } from 'modules/Dashboard/features/Applet';
 import { useAsync, useIsServerConfigured } from 'shared/hooks';
-import { publicEncrypt } from 'shared/utils';
+import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'shared/utils';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
@@ -46,6 +46,8 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
 
   const { getApplet } = applet.thunk;
   const encryption = appletData?.encryption;
+  const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
+  const { accountId = '' } = encryptionInfoFromServer ?? {};
 
   const { execute: postReportConfig } = useAsync(
     postReportConfigApi,
@@ -172,7 +174,13 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
     setPasswordPopupVisible(false);
 
     const isPasswordSet = await onSetPassword(
-      publicEncrypt(JSON.stringify({ password }), reportPublicKey),
+      publicEncrypt(
+        JSON.stringify({
+          password,
+          privateKey: getPrivateKey({ appletPassword: password, accountId }),
+        }),
+        reportPublicKey,
+      ),
     );
 
     if (isPasswordSet) handleSaveReportConfig();
