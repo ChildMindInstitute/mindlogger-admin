@@ -2,24 +2,24 @@ import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 
 import {
-  Condition,
-  ConditionalLogic,
   AudioPlayerResponseValues,
   AudioResponseValues,
+  Condition,
+  ConditionalLogic,
   DrawingResponseValues,
-  Item,
+  ItemAlert,
   NumberItemResponseValues,
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
   SliderItemResponseValues,
   SliderRowsResponseValues,
-  Activity,
-  ItemAlert,
 } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
-import { getEntityKey, groupBy } from 'shared/utils';
+import { getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
+import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
+import { ElementType } from './SaveAndPublish.types';
 
 export const removeAppletExtraFields = () => ({
   isPublished: undefined,
@@ -38,20 +38,40 @@ export const removeAppletExtraFields = () => ({
   version: undefined,
 });
 
-export const removeActivityExtraFields = (activity: Activity) => ({
+export const removeActivityExtraFields = () => ({
   createdAt: undefined,
   order: undefined,
   performanceTaskType: undefined,
   isPerformanceTask: undefined,
   conditionalLogic: undefined,
-  subscaleSetting: {
-    ...activity.subscaleSetting,
-    subscales: activity.subscaleSetting?.subscales?.map((item) => ({
-      ...item,
-      id: undefined,
-    })),
-  },
 });
+
+export const remapSubscaleSettings = (activity: ActivityFormValues) => {
+  if (!activity.subscaleSetting) return activity.subscaleSetting;
+
+  const itemsObject = getObjectFromList(activity.items);
+  const subscalesObject = getObjectFromList(activity.subscaleSetting?.subscales);
+
+  return {
+    ...activity.subscaleSetting,
+    subscales: activity.subscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      id: undefined,
+      items: subscale.items.map((subscaleItem) => {
+        if (itemsObject[subscaleItem])
+          return {
+            name: itemsObject[subscaleItem].name,
+            type: ElementType.Item,
+          };
+
+        return {
+          name: subscalesObject[subscaleItem].name,
+          type: ElementType.Subscale,
+        };
+      }),
+    })),
+  } as NonNullable<ActivityFormValues['subscaleSetting']>;
+};
 
 export const removeActivityFlowExtraFields = () => ({
   createdAt: undefined,
@@ -63,7 +83,7 @@ export const removeItemExtraFields = () => ({
   alerts: undefined,
 });
 
-export const mapItemResponseValues = (item: Item) => {
+export const mapItemResponseValues = (item: ItemFormValues) => {
   const { responseType, responseValues, alerts, config } = item;
 
   const hasAlerts = get(config, ItemConfigurationSettings.HasAlerts);
@@ -169,8 +189,8 @@ export const mapItemResponseValues = (item: Item) => {
 };
 
 export const getItemConditionalLogic = (
-  item: Item,
-  items: Item[],
+  item: ItemFormValues,
+  items: ItemFormValues[],
   conditionalLogic?: ConditionalLogic[],
 ) => {
   const result = conditionalLogic?.find(

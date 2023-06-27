@@ -23,8 +23,16 @@ import {
   ItemAlert,
   SingleAndMultipleSelectRowsResponseValues,
   OptionCondition,
+  SubscaleSetting,
+  Config,
 } from 'shared/state';
-import { getDictionaryText, getEntityKey, Path, getTextBetweenBrackets } from 'shared/utils';
+import {
+  getDictionaryText,
+  getEntityKey,
+  Path,
+  getTextBetweenBrackets,
+  getObjectFromList,
+} from 'shared/utils';
 import {
   DEFAULT_LAMBDA_SLOPE,
   DEFAULT_LENGTH_OF_TEST,
@@ -33,7 +41,14 @@ import {
   DEFAULT_THRESHOLD_DURATION,
   ItemResponseType,
 } from 'shared/consts';
-import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
+import {
+  ActivityFormValues,
+  AppletFormValues,
+  GetActivitySubscaleItems,
+  GetActivitySubscaleSettingDuplicated,
+  GetNewPerformanceTask,
+  ItemFormValues,
+} from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
@@ -47,7 +62,7 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
   name: t('newItem'),
   question: '',
-  config: {},
+  config: {} as Config,
   isHidden: false,
   allowEdit: true,
   ...item,
@@ -135,6 +150,11 @@ export const getNewActivity = (activity?: ActivityFormValues) => {
     items,
     activity?.conditionalLogic,
   );
+  const subscaleSetting = getActivitySubscaleSettingDuplicated({
+    oldSubscaleSetting: activity?.subscaleSetting,
+    oldItems: activity?.items as ItemFormValues[],
+    newItems: items as ItemFormValues[],
+  });
 
   return {
     name: t('newActivity'),
@@ -146,9 +166,10 @@ export const getNewActivity = (activity?: ActivityFormValues) => {
     ...activity,
     items,
     conditionalLogic,
+    subscaleSetting,
     id: undefined,
     key: uuidv4(),
-  };
+  } as ActivityFormValues;
 };
 
 export const getNewPerformanceTask = ({
@@ -412,10 +433,78 @@ const getActivityConditionalLogic = (items: Item[]) =>
     return result;
   }, []);
 
+const getActivitySubscaleItems = ({
+  activityItemsObject,
+  subscalesObject,
+  subscaleItems,
+}: GetActivitySubscaleItems) =>
+  subscaleItems.map(
+    (item) =>
+      (activityItemsObject[item.name]
+        ? activityItemsObject[item.name]?.id
+        : subscalesObject[item.name]?.id) ?? '',
+  );
+
+const getActivitySubscaleSettingDuplicated = ({
+  oldSubscaleSetting,
+  oldItems,
+  newItems,
+}: GetActivitySubscaleSettingDuplicated) => {
+  if (!oldSubscaleSetting) return oldSubscaleSetting;
+
+  const mappedIndexObject = oldItems.reduce(
+    (acc, item, currentIndex) => ({
+      ...acc,
+      [getEntityKey(item)]: getEntityKey(newItems[currentIndex]),
+    }),
+    {} as Record<string, string>,
+  );
+
+  return {
+    ...oldSubscaleSetting,
+    subscales: oldSubscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      items: subscale.items.map((subscaleItem) => mappedIndexObject[subscaleItem] ?? subscaleItem),
+    })),
+  };
+};
+
+const getActivitySubscaleSetting = (
+  subscaleSetting: SubscaleSetting,
+  activityItems: ItemFormValues[],
+) => {
+  if (!subscaleSetting) return subscaleSetting;
+
+  const processedSubscaleSetting = {
+    ...subscaleSetting,
+    subscales: subscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      id: uuidv4(),
+    })),
+  };
+  const activityItemsObject = getObjectFromList(activityItems, (item) => item.name);
+  const subscalesObject = getObjectFromList(
+    processedSubscaleSetting.subscales,
+    (subscale) => subscale.name,
+  );
+
+  return {
+    ...processedSubscaleSetting,
+    subscales: processedSubscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      items: getActivitySubscaleItems({
+        activityItemsObject,
+        subscalesObject,
+        subscaleItems: subscale.items,
+      }),
+    })),
+  };
+};
+
 export const getDefaultValues = (appletData?: SingleApplet) => {
   if (!appletData) return getNewApplet();
 
-  return {
+  const processedApplet = {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
@@ -431,6 +520,18 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
       : [],
     activityFlows: getActivityFlows(appletData.activityFlows),
   };
+
+  return {
+    ...processedApplet,
+    activities: processedApplet.activities
+      ? processedApplet.activities.map((activity) => ({
+          ...activity,
+          ...(activity.subscaleSetting && {
+            subscaleSetting: getActivitySubscaleSetting(activity.subscaleSetting, activity.items),
+          }),
+        }))
+      : [],
+  } as AppletFormValues;
 };
 
 export const getAppletTabs = ({
