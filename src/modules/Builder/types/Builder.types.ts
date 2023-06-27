@@ -8,6 +8,7 @@ import {
   GyroscopeTestSettings,
   SubscaleSetting,
   ScoresAndReports,
+  ActivitySettingsSubscale,
 } from 'shared/state';
 import { ItemResponseType, PerfTaskItemType, SubscaleTotalScore } from 'shared/consts';
 import { ArrayElement } from 'shared/types';
@@ -114,3 +115,15 @@ export type ItemResponseTypeNoPerfTasks = Exclude<
   ItemResponseType,
   'flanker' | 'gyroscope' | 'touch' | 'ABTrailsIpad' | 'ABTrailsMobile'
 >;
+
+export type GetActivitySubscaleItems = {
+  activityItemsObject: Record<string, ItemFormValues>;
+  subscalesObject: Record<string, ActivitySettingsSubscale>;
+  subscaleItems: ActivitySettingsSubscale['items'];
+};
+
+export type GetActivitySubscaleSettingDuplicated = {
+  oldSubscaleSetting: ActivityFormValues['subscaleSetting'];
+  oldItems: ItemFormValues[];
+  newItems: ItemFormValues[];
+};

@@ -24,7 +24,6 @@ import {
   SingleAndMultipleSelectRowsResponseValues,
   OptionCondition,
   SubscaleSetting,
-  ActivitySettingsSubscale,
   Config,
 } from 'shared/state';
 import {
@@ -45,6 +44,8 @@ import {
 import {
   ActivityFormValues,
   AppletFormValues,
+  GetActivitySubscaleItems,
+  GetActivitySubscaleSettingDuplicated,
   GetNewPerformanceTask,
   ItemFormValues,
 } from 'modules/Builder/types';
@@ -436,11 +437,7 @@ const getActivitySubscaleItems = ({
   activityItemsObject,
   subscalesObject,
   subscaleItems,
-}: {
-  activityItemsObject: Record<string, ItemFormValues>;
-  subscalesObject: Record<string, ActivitySettingsSubscale>;
-  subscaleItems: ActivitySettingsSubscale['items'];
-}) =>
+}: GetActivitySubscaleItems) =>
   subscaleItems.map(
     (item) =>
       (activityItemsObject[item.name]
@@ -452,11 +449,7 @@ const getActivitySubscaleSettingDuplicated = ({
   oldSubscaleSetting,
   oldItems,
   newItems,
-}: {
-  oldSubscaleSetting: ActivityFormValues['subscaleSetting'];
-  oldItems: ItemFormValues[];
-  newItems: ItemFormValues[];
-}) => {
+}: GetActivitySubscaleSettingDuplicated) => {
   if (!oldSubscaleSetting) return oldSubscaleSetting;
 
   const mappedIndexObject = oldItems.reduce(
