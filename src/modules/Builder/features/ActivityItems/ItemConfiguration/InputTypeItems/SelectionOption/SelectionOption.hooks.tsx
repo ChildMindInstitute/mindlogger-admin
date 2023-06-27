@@ -8,8 +8,6 @@ export const useSetSelectionOptionValue = ({
   name,
   onUpdateOption,
   index,
-  hasTooltipsChecked,
-  hasTooltip,
   hasColorPicker,
   hasColor,
 }: SetSelectionOptionValue) => {
@@ -19,16 +17,12 @@ export const useSetSelectionOptionValue = ({
   const setOptionFieldValue = (
     checkedCondition: boolean,
     elementCondition: boolean,
-    fieldName: 'score' | 'tooltip' | 'color',
+    fieldName: 'color',
     defaultValue: string | number | ColorResult,
   ) =>
     checkedCondition
       ? !elementCondition && onUpdateOption(index, { ...option, [fieldName]: defaultValue })
-      : elementCondition && onUpdateOption(index, { ...option, [fieldName]: undefined });
-
-  useEffect(() => {
-    setOptionFieldValue(hasTooltipsChecked, hasTooltip, 'tooltip', '');
-  }, [hasTooltipsChecked, hasTooltip]);
+      : elementCondition && onUpdateOption(index, { ...option, [fieldName]: null });
 
   useEffect(() => {
     setOptionFieldValue(hasColorPicker, hasColor, 'color', { hex: '' } as ColorResult);
