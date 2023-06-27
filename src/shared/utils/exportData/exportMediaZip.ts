@@ -8,7 +8,7 @@ export const exportMediaZip = async (mediaData: string[], reportName: string) =>
   try {
     const mediaFiles = [];
     for (const key of mediaData) {
-      const { data } = (await postFileDownloadApi(key)) as any;
+      const { data } = await postFileDownloadApi(key);
       const file = new Blob([data]);
       let fileName = key.split('/').pop() || '';
       if (fileName.includes('.quicktime')) {
@@ -18,6 +18,6 @@ export const exportMediaZip = async (mediaData: string[], reportName: string) =>
     }
     exportZip(mediaFiles, reportName);
   } catch (error) {
-    console.log(error);
+    console.warn(error);
   }
 };
