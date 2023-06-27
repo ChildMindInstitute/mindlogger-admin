@@ -1,4 +1,4 @@
-import { PerfTaskItemType } from 'shared/consts';
+import { PerfTaskType } from 'shared/consts';
 
 export type GetActivitiesActions = {
   key: string;
@@ -15,7 +15,7 @@ export type ActivityAddProps = {
   performanceTaskName?: string;
   performanceTaskDesc?: string;
   isNavigationBlocked?: boolean;
-  performanceTaskType?: PerfTaskItemType;
+  performanceTaskType?: PerfTaskType;
 } | null;
 
 export enum EditablePerformanceTasksType {
@@ -31,3 +31,6 @@ export const enum PerformanceTasks {
   Gyroscope = 'CST Gyroscope',
   Touch = 'CST Touch',
 }
+
+export type ActivityName = { name: string; sequenceNumbers: number[] };
+export type ActivityNames = ActivityName[];

@@ -3,14 +3,11 @@ import {
   Config,
   ResponseValues,
   ConditionalLogic,
-  GyroscopeGeneralSettings,
-  GyroscopePracticeSettings,
-  GyroscopeTestSettings,
   SubscaleSetting,
   ScoresAndReports,
   ActivitySettingsSubscale,
 } from 'shared/state';
-import { ItemResponseType, PerfTaskItemType, SubscaleTotalScore } from 'shared/consts';
+import { ItemResponseType, PerfTaskType, SubscaleTotalScore } from 'shared/consts';
 import { ArrayElement } from 'shared/types';
 
 export type ItemFormValues = {
@@ -44,7 +41,7 @@ export type ActivityFormValues = {
   conditionalLogic?: ConditionalLogic[];
   totalScoresTableData?: string;
   isPerformanceTask?: boolean;
-  performanceTaskType?: PerfTaskItemType;
+  performanceTaskType?: PerfTaskType;
 };
 
 export type SubscaleFormValue = ArrayElement<
@@ -60,19 +57,6 @@ export type ActivityFlowItem = {
   id?: string;
   key?: string;
   activityKey: string;
-};
-
-export type GyroscopeFormValues = {
-  id?: string;
-  key?: string;
-  name: string;
-  description: string;
-  isHidden: boolean;
-  general: GyroscopeGeneralSettings;
-  practice: GyroscopePracticeSettings;
-  test: GyroscopeTestSettings;
-  isPerformanceTask?: boolean;
-  performanceTaskType?: PerfTaskItemType;
 };
 
 export type ActivityFlowFormValues = {
@@ -98,11 +82,16 @@ export type AppletFormValues = {
   activities: ActivityFormValues[];
 };
 
+export type GetNewActivity = {
+  name?: string;
+  activity?: ActivityFormValues;
+};
+
 export type GetNewPerformanceTask = {
   name?: string;
   description?: string;
   performanceTask?: ActivityFormValues;
-  performanceTaskType?: PerfTaskItemType;
+  performanceTaskType?: PerfTaskType;
 };
 
 export enum ConditionRowType {
@@ -113,8 +102,25 @@ export enum ConditionRowType {
 
 export type ItemResponseTypeNoPerfTasks = Exclude<
   ItemResponseType,
-  'flanker' | 'gyroscope' | 'touch' | 'ABTrailsIpad' | 'ABTrailsMobile'
+  | ItemResponseType.Flanker
+  | ItemResponseType.GyroscopePractice
+  | ItemResponseType.GyroscopeTest
+  | ItemResponseType.TouchPractice
+  | ItemResponseType.TouchTest
+  | ItemResponseType.ABTrailsMobileFirst
+  | ItemResponseType.ABTrailsMobileSecond
+  | ItemResponseType.ABTrailsMobileThird
+  | ItemResponseType.ABTrailsMobileFourth
+  | ItemResponseType.ABTrailsTabletFirst
+  | ItemResponseType.ABTrailsTabletSecond
+  | ItemResponseType.ABTrailsTabletThird
+  | ItemResponseType.ABTrailsTabletFourth
 >;
+
+export enum RoundTypeEnum {
+  Practice = 'practice',
+  Test = 'test',
+}
 
 export type GetActivitySubscaleItems = {
   activityItemsObject: Record<string, ItemFormValues>;
