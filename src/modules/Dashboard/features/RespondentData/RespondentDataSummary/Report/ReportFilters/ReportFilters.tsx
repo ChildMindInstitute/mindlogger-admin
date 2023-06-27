@@ -13,7 +13,7 @@ import { MIN_DATE } from './ReportFilters.const';
 
 export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFiltersProps) => {
   const { t } = useTranslation('app');
-  const { control, watch, setValue, register, unregister } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
 
   const moreFiltersVisisble = watch('moreFiltersVisisble');
   const filterByIdentifier = watch('filterByIdentifier');
@@ -43,13 +43,6 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
 
   const moreFiltersHandler = () => {
     setValue('moreFiltersVisisble', !moreFiltersVisisble);
-    if (moreFiltersVisisble) {
-      unregister('identifier');
-      unregister('filterByIdentifier');
-    } else {
-      register('identifier', { value: [] });
-      register('filterByIdentifier', { value: true });
-    }
   };
 
   const onCloseCallback = () => {
@@ -98,11 +91,14 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
       </StyledFlexTopCenter>
       {moreFiltersVisisble && (
         <Box sx={{ mb: theme.spacing(4.8) }}>
-          <Switch name="filterByIdentifier" control={control} label={t('filterByIdentifier')} />
+          {!!identifiersOptions?.length && (
+            <Switch name="filterByIdentifier" control={control} label={t('filterByIdentifier')} />
+          )}
           <StyledFlexTopCenter sx={{ mt: theme.spacing(0.8) }}>
-            <Box sx={{ width: '28rem' }}>
+            <Box sx={{ width: '32rem' }}>
               <TagsInputController
                 name="identifier"
+                limitTags={2}
                 label={t('respondentIdentifier')}
                 options={identifiersOptions}
                 control={control}
@@ -111,9 +107,10 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
                 disabled={!filterByIdentifier}
               />
             </Box>
-            <Box sx={{ width: '28rem', ml: theme.spacing(2.4) }}>
+            <Box sx={{ width: '32rem', ml: theme.spacing(2.4) }}>
               <TagsInputController
                 name="versions"
+                limitTags={2}
                 label={t('versions')}
                 options={versionsOptions}
                 control={control}

@@ -3,25 +3,39 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
 } from 'shared/state/Applet/Applet.schema';
+import {
+  DecryptedMultiSelectionAnswer,
+  DecryptedSingleSelectionAnswer,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { ItemAnswer, FormattedItemAnswer } from '../Report.types';
 import { MultiScatterChart } from '../Charts';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps, MultiScatterResponseValues } from './ResponseOptions.types';
 import { TICK_HEIGHT } from './ResponseOptions.const';
+import { TextAnswer } from '../ReportTable/ReportTable.types';
 
 export const formatAnswers = (answers: ItemAnswer[]) =>
-  answers.reduce((flattenAnswers: FormattedItemAnswer[], { value, date }: ItemAnswer) => {
-    if (Array.isArray(value)) {
-      const flattenValues = value.map((item) => ({ value: item, date }));
+  answers?.reduce((flattenAnswers: FormattedItemAnswer[], { answer, date }: ItemAnswer) => {
+    const flattenValues = Array.isArray(
+      (answer as DecryptedMultiSelectionAnswer | DecryptedSingleSelectionAnswer)?.value,
+    )
+      ? (answer as DecryptedMultiSelectionAnswer)?.value?.map((item) => ({
+          value: item,
+          date,
+        }))
+      : [
+          {
+            value: (answer as DecryptedSingleSelectionAnswer).value,
+            date,
+          },
+        ];
 
-      return [...flattenAnswers, ...flattenValues];
-    }
-
-    return [...flattenAnswers, { value, date }];
+    return [...flattenAnswers, ...flattenValues];
   }, []);
 
 export const getResponseItem = ({
+  color,
   minDate,
   maxDate,
   activityItem,
@@ -32,12 +46,14 @@ export const getResponseItem = ({
 
   const renderSingleMultipleSelection = () => {
     const formattedAnswers = formatAnswers(answers);
+    // console.log(formattedAnswers);
     const { options } = activityItem.responseValues as SingleAndMultipleSelectItemResponseValues;
     const height = (options.length + 1) * TICK_HEIGHT;
     const maxY = options.length;
 
     return (
       <MultiScatterChart
+        color={color}
         minDate={minDate}
         maxDate={maxDate}
         maxY={maxY}
@@ -51,11 +67,13 @@ export const getResponseItem = ({
   };
 
   const renderSlider = () => {
+    const formattedAnswers = formatAnswers(answers);
     const { minValue, maxValue } = activityItem.responseValues as SliderItemResponseValues;
     const height = (maxValue - minValue + 1) * TICK_HEIGHT;
 
     return (
       <MultiScatterChart
+        color={color}
         minDate={minDate}
         maxDate={maxDate}
         maxY={maxValue}
@@ -63,7 +81,7 @@ export const getResponseItem = ({
         height={height}
         responseValues={activityItem.responseValues as MultiScatterResponseValues}
         responseType={responseType}
-        answers={answers as FormattedItemAnswer[]}
+        answers={formattedAnswers}
         versions={versions}
       />
     );
@@ -76,7 +94,7 @@ export const getResponseItem = ({
     case ItemResponseType.Slider:
       return renderSlider();
     case ItemResponseType.Text:
-      return <ReportTable answers={answers} />;
+      return <ReportTable answers={answers as TextAnswer[]} />;
     default:
       <></>;
   }

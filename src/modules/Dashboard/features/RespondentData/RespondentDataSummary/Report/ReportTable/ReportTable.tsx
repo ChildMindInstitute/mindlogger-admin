@@ -5,13 +5,13 @@ import { format } from 'date-fns';
 
 import { DEFAULT_ROWS_PER_PAGE, Search } from 'shared/components';
 import { Table } from 'modules/Dashboard/components';
-import { theme, variables } from 'shared/styles';
+import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { Order } from 'shared/types';
 import { DateFormats } from 'shared/consts';
 
 import { getHeadCells } from './ReportTable.const';
 import { StyledTableWrapper } from './ReportTable.styles';
-import { ReportTableProps, TextItemAnswer } from './ReportTable.types';
+import { ReportTableProps, TextItemAnswer, TextAnswer } from './ReportTable.types';
 import { filterReportTable, getComparator, getRows, stableSort } from './ReportTable.utils';
 
 export const ReportTable = ({ answers = [] }: ReportTableProps) => {
@@ -38,30 +38,39 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
 
   const visibleRows = useMemo(() => {
     const currentPage = page - 1;
-    const formattedAnswers = answers.reduce((textItemAnswers: TextItemAnswer[], answer) => {
-      const date = format(new Date(answer.date), DateFormats.DayMonthYear);
-      const time = format(new Date(answer.date), DateFormats.Time);
+    const formattedAnswers = answers?.reduce(
+      (textItemAnswers: TextItemAnswer[], answerItem: TextAnswer) => {
+        const date = format(new Date(answerItem.date), DateFormats.DayMonthYear);
+        const time = format(new Date(answerItem.date), DateFormats.Time);
 
-      if (!filterReportTable(`${date} ${time} ${answer.value}`, searchValue)) {
-        return textItemAnswers;
-      }
+        if (!filterReportTable(`${date} ${time} ${answerItem.answer}`, searchValue)) {
+          return textItemAnswers;
+        }
 
-      return [
-        ...textItemAnswers,
-        {
-          date,
-          time,
-          response: answer.value as string,
-        },
-      ];
-    }, []);
+        return [
+          ...textItemAnswers,
+          {
+            date,
+            time,
+            answer: answerItem.answer,
+          },
+        ];
+      },
+      [],
+    );
 
     const visibleAnswers = stableSort(formattedAnswers, getComparator(order, orderBy)).slice(
       currentPage * DEFAULT_ROWS_PER_PAGE,
       currentPage * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
     );
 
-    return getRows(visibleAnswers);
+    const skippedResponse = (
+      <StyledBodyMedium color={variables.palette.outline}>
+        {t('respondentSkippedResponse')}
+      </StyledBodyMedium>
+    );
+
+    return getRows(visibleAnswers, skippedResponse);
   }, [answers, searchValue, page, order, orderBy]);
 
   return (
@@ -81,6 +90,7 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
           handleRequestSort={handleRequestSort}
           handleChangePage={handleChangePage}
           count={answers.length}
+          emptyComponent={!visibleRows.length ? <>{t('noData')}</> : undefined}
         />
       </StyledTableWrapper>
     </Box>

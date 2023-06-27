@@ -1,5 +1,16 @@
 import { Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
+import { ItemResponseType } from 'shared/consts';
+import {
+  Item,
+  SingleAndMultipleSelectItemResponseValues,
+  SingleAndMultipleSelectionOption,
+  SliderItemResponseValues,
+} from 'shared/state/Applet/Applet.schema';
+import {
+  ActivityItemAnswer,
+  DecryptedMultiSelectionAnswer,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import {
   DEFAULT_END_DATE,
@@ -8,6 +19,7 @@ import {
   DEFAULT_START_TIME,
 } from './Report.const';
 import { Identifier } from '../RespondentDataSummary.types';
+import { ActivityResponse, ItemAnswer } from './Report.types';
 
 export const getDefaultFilterValues = (versions: Version[]) => {
   const versionsFilter = versions.map(({ version }) => ({ id: version, label: version }));
@@ -55,4 +67,188 @@ export const getIdentifiers = (
     },
     [],
   );
+};
+
+export type FormattedResponse = {
+  activityItem: Item;
+  answers: ItemAnswer[];
+};
+
+const compareActivityItemAnswers = (
+  prevActivityItemAnswer: FormattedResponse,
+  currActivityItemAnswer: ActivityItemAnswer,
+  date: string,
+) => {
+  const { activityItem: prevActivityItem, answers: prevAnswers } = prevActivityItemAnswer;
+  const { activityItem: currActivityItem, answer: currAnswer } = currActivityItemAnswer;
+
+  if (currActivityItem.responseType === ItemResponseType.SingleSelection) {
+    const currActivityItemOptions = (
+      currActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues
+    ).options;
+    const prevActivityItemOptions = (
+      prevActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues
+    ).options.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+
+    const options = currActivityItemOptions.reduce(
+      (
+        acc: Record<string, SingleAndMultipleSelectionOption>,
+        option: SingleAndMultipleSelectionOption,
+      ) => ({ ...acc, [option.id]: option }),
+      prevActivityItemOptions,
+    );
+
+    return {
+      activityItem: {
+        ...currActivityItem,
+        responseValues: {
+          ...currActivityItem.responseValues,
+          options: Object.values(options),
+        },
+      },
+      answers: [
+        ...prevAnswers,
+        {
+          answer: currAnswer,
+          date,
+        },
+      ],
+    };
+  }
+
+  if (currActivityItem.responseType === ItemResponseType.MultipleSelection) {
+    const currActivityItemOptions = (
+      currActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues
+    ).options;
+    const prevActivityItemOptions = (
+      prevActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues
+    ).options.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+
+    const options = currActivityItemOptions.reduce(
+      (
+        acc: Record<string, SingleAndMultipleSelectionOption>,
+        option: SingleAndMultipleSelectionOption,
+      ) => ({ ...acc, [option.id]: option }),
+      prevActivityItemOptions,
+    );
+
+    const flattenAnswers = (currAnswer as DecryptedMultiSelectionAnswer).value.map((value) => ({
+      answer: {
+        value,
+        text: null,
+      },
+      date,
+    }));
+
+    return {
+      activityItem: {
+        ...currActivityItem,
+        responseValues: {
+          ...currActivityItem.responseValues,
+          options: Object.values(options),
+        },
+      },
+      answers: [...prevAnswers, ...flattenAnswers],
+    };
+  }
+
+  if (currActivityItem.responseType === ItemResponseType.Slider) {
+    const currActivityItemOptions = currActivityItem.responseValues as SliderItemResponseValues;
+    const prevActivityItemOptions = prevActivityItem.responseValues as SliderItemResponseValues;
+
+    const minValue = Math.min(prevActivityItemOptions.minValue, currActivityItemOptions.minValue);
+    const maxValue = Math.max(prevActivityItemOptions.maxValue, currActivityItemOptions.maxValue);
+
+    return {
+      activityItem: {
+        ...currActivityItem,
+        responseValues: {
+          ...currActivityItem.responseValues,
+          minValue,
+          maxValue,
+        },
+      },
+      answers: [
+        ...prevAnswers,
+        {
+          answer: currAnswer,
+          date,
+        },
+      ],
+    };
+  }
+
+  if (currActivityItem.responseType === ItemResponseType.Text) {
+    return {
+      activityItem: currActivityItem,
+      answers: [
+        ...prevAnswers,
+        {
+          answer: currAnswer,
+          date,
+        },
+      ],
+    };
+  }
+};
+
+export const getFormattedResponses = (activityResponses: ActivityResponse[]) => {
+  const formattedResponses = activityResponses.reduce(
+    (
+      items: Record<string, FormattedResponse>,
+      { decryptedAnswer, endDatetime }: ActivityResponse,
+    ) => {
+      let newItems = { ...items };
+      decryptedAnswer.forEach((currentAnswer) => {
+        const item = items[currentAnswer.activityItem.id!];
+
+        if (!item) {
+          const answers =
+            currentAnswer.activityItem.responseType === ItemResponseType.MultipleSelection
+              ? (currentAnswer.answer as DecryptedMultiSelectionAnswer).value.map((value) => ({
+                  answer: {
+                    value,
+                    text: null,
+                  },
+                  date: endDatetime,
+                }))
+              : [
+                  {
+                    answer: currentAnswer.answer,
+                    date: endDatetime,
+                  },
+                ];
+
+          newItems = {
+            ...newItems,
+            [currentAnswer.activityItem.id!]: {
+              activityItem: currentAnswer.activityItem,
+              answers,
+            },
+          };
+
+          return;
+        }
+
+        const prevResponseType = item.activityItem.responseType;
+        const currResponseType = currentAnswer.activityItem.responseType;
+
+        if (prevResponseType === currResponseType) {
+          const activityItemAnswers = compareActivityItemAnswers(item, currentAnswer, endDatetime);
+          newItems = {
+            ...newItems,
+            [currentAnswer.activityItem.id!]: {
+              activityItem: activityItemAnswers?.activityItem as Item,
+              answers: activityItemAnswers?.answers as ItemAnswer[],
+            },
+          };
+        }
+      });
+
+      return newItems;
+    },
+    {},
+  );
+
+  return Object.values(formattedResponses);
 };

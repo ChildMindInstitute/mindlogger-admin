@@ -1,12 +1,13 @@
 import { ChartDataset } from 'chart.js';
 
-import { DatavizAnswer, Version } from 'api';
+import { Version } from 'api';
+import { ActivityResponse } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 
 export type ScatterChartProps = {
   height?: string;
   minDate: Date;
   maxDate: Date;
-  answers: DatavizAnswer[];
+  answers: ActivityResponse[];
   versions: Version[];
 };
 

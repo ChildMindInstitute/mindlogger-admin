@@ -9,16 +9,19 @@ export const getHeadCells = (): HeadCell[] => {
       id: 'date',
       label: t('date'),
       enableSort: true,
+      width: '15%',
     },
     {
       id: 'time',
       label: t('time'),
       enableSort: true,
+      width: '15%',
     },
     {
-      id: 'response',
+      id: 'answer',
       label: t('response'),
       enableSort: true,
+      width: '70%',
     },
   ];
 };

@@ -3,7 +3,8 @@ import { Context } from 'chartjs-plugin-datalabels';
 
 import { variables } from 'shared/styles';
 import { locales } from 'shared/consts';
-import { DatavizAnswer, Version } from 'api';
+import { Version } from 'api';
+import { ActivityResponse } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 
 import { ExtendedChartDataset } from './ScatterChart.types';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
@@ -113,7 +114,7 @@ export const getOptions = (
   };
 };
 
-export const getData = (answers: DatavizAnswer[], versions: Version[]) => ({
+export const getData = (answers: ActivityResponse[], versions: Version[]) => ({
   datasets: [
     {
       pointRadius: 5,

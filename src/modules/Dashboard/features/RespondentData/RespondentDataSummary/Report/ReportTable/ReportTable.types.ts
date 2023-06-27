@@ -1,11 +1,14 @@
-import { ItemAnswer } from '../Report.types';
-
 export type TextItemAnswer = {
   date: string;
   time: string;
-  response: string;
+  answer: string;
+};
+
+export type TextAnswer = {
+  answer: string;
+  date: string;
 };
 
 export type ReportTableProps = {
-  answers?: ItemAnswer[];
+  answers?: TextAnswer[];
 };
