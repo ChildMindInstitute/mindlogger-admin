@@ -8,6 +8,7 @@ import {
   StyledBodyLarge,
   StyledFlexColumn,
   StyledFlexTopCenter,
+  StyledLabelBoldLarge,
   StyledTooltipSvg,
   theme,
   variables,
@@ -26,6 +27,7 @@ import { SectionScoreHeader } from './SectionScoreHeader';
 import { SectionContent } from './SectionContent';
 import { getScoreDefaults, getSectionDefaults } from './ScoresAndReports.utils';
 import { ScoreContent } from './ScoreContent';
+import { Title } from './Title';
 import { StyledConfigureBtn } from './ScoresAndReports.styles';
 
 export const ScoresAndReports = () => {
@@ -119,10 +121,9 @@ export const ScoresAndReports = () => {
       <StyledFlexColumn sx={{ mt: theme.spacing(2.4) }}>
         {sections?.map((section, index) => {
           const sectionName = `${sectionsName}.${index}`;
-          const title = t('sectionHeader', {
-            index: index + 1,
-            name: section?.name,
-          });
+          const title = (
+            <Title title={t('sectionHeader', { index: index + 1 })} name={section?.name} />
+          );
 
           return (
             <ToggleItemContainer
@@ -147,10 +148,7 @@ export const ScoresAndReports = () => {
       </StyledFlexColumn>
       {scores?.map((score, index) => {
         const scoreName = `${scoresName}.${index}`;
-        const title = t('scoreHeader', {
-          index: index + 1,
-          name: score?.name,
-        });
+        const title = <Title title={t('scoreHeader', { index: index + 1 })} name={score?.name} />;
 
         return (
           <ToggleItemContainer
