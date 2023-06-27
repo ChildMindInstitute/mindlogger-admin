@@ -71,7 +71,6 @@ export const Toolbar = ({
       sx={{
         ...(isSelectedFutureDate() && { marginRight: theme.spacing(1) }),
         ...(isSelectedPastDate() && { margin: theme.spacing(0, 1) }),
-        height: '3.8rem',
       }}
       onClick={() => onNavigate('TODAY')}
       variant="text"
