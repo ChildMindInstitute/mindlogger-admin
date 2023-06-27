@@ -16,7 +16,7 @@ export * from './Table';
 export * from './TimePicker';
 export * from './Tooltip';
 export * from './ToggleButtonGroup';
-export * from './EmptyTable';
+export * from './EmptyState';
 export * from './Uploader';
 export * from './MarkDownEditor';
 export * from './SaveChangesPopup';

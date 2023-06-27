@@ -9,7 +9,7 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { DataTable } from 'shared/components';
-import { ActivityFormValues } from 'modules/Builder/types';
+import { SubscaleFormValue } from 'modules/Builder/types';
 
 import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
@@ -25,7 +25,7 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
   const { t } = useTranslation('app');
   const { control } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
-  const subscales: ActivityFormValues['subscales'] =
+  const subscales: SubscaleFormValue[] =
     useWatch({ name: `${fieldName}.subscaleSetting.subscales` }) ?? [];
   const items = getItemElements(
     subscaleId,

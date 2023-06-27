@@ -1,4 +1,11 @@
-import { Item, TextItem, SliderItem, SingleSelectItem, MultiSelectItem } from 'shared/state';
+import {
+  Item,
+  TextItem,
+  SliderItem,
+  SingleSelectItem,
+  MultiSelectItem,
+  ResponseValues,
+} from 'shared/state';
 import { DecryptedAnswerData } from 'shared/types';
 
 export type Answer = {
@@ -55,6 +62,10 @@ export type DecryptedDateAnswer = {
   };
 };
 
+export type DecryptedSexAnswer = {
+  value: string;
+};
+
 export type AnswerDTO =
   | null
   | DecryptedTextAnswer
@@ -63,7 +74,8 @@ export type AnswerDTO =
   | DecryptedSliderAnswer
   | DecryptedNumberSelectionAnswer
   | DecryptedDateRangeAnswer
-  | DecryptedDateAnswer;
+  | DecryptedDateAnswer
+  | DecryptedSexAnswer;
 
 export type AnswerValue =
   | null
@@ -91,7 +103,7 @@ export type EventDTO = {
   type: UserActionType;
 };
 
-export type ExtendedEvent = EventDTO & DecryptedAnswerData;
+export type ExtendedEvent<T> = EventDTO & DecryptedAnswerData<T>;
 
 export type ActivityItemAnswer = {
   activityItem: Item;

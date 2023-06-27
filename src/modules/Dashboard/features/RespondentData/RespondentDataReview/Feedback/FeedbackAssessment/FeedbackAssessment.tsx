@@ -9,23 +9,23 @@ import { getAssessmentApi } from 'api';
 
 import { StyledContainer } from './FeedbackAssessment.styles';
 import { FeedbackAssessmentForm } from './FeedbackAssessmentForm';
-import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
+import { Assessment, FeedbackAssessmentProps } from './FeedbackAssessment.types';
 
 export const FeedbackAssessment = ({ setActiveTab }: FeedbackAssessmentProps) => {
   const { appletId, answerId } = useParams();
   const getDecryptedActivityData = useDecryptedActivityData();
-  const { execute: getActivityAnswer, isLoading } = useAsync(getAssessmentApi);
+  const { execute: getAssessment, isLoading } = useAsync(getAssessmentApi);
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[]>([]);
 
   useEffect(() => {
     if (!appletId || !answerId) return;
     (async () => {
-      const result = await getActivityAnswer({ appletId, answerId });
+      const result = await getAssessment({ appletId, answerId });
       const { reviewerPublicKey, ...assessmentData } = result.data.result;
       const encryptedData = {
         ...assessmentData,
         userPublicKey: reviewerPublicKey,
-      };
+      } as Assessment;
       const decryptedActivityData = getDecryptedActivityData(encryptedData);
       setActivityItemAnswers(decryptedActivityData.decryptedAnswers);
     })();

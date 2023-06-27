@@ -1,10 +1,7 @@
-import { styled } from '@mui/system';
-import { Box } from '@mui/material';
+import { styled, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
 import { SEARCH_HEIGHT } from 'shared/consts';
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { StyledFlexColumn, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 export const AppletsTableHeader = styled(Box)`
   display: grid;
@@ -19,4 +16,11 @@ export const StyledButtons = styled(StyledFlexTopCenter)`
   svg {
     fill: ${variables.palette.primary};
   }
+`;
+
+export const StyledBody = styled(StyledFlexColumn)`
+  position: relative;
+  flex-grow: 1;
+  min-height: 0;
+  overflow-y: auto;
 `;

@@ -2,6 +2,7 @@ import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } f
 import { ItemResponseType } from 'shared/consts';
 
 import { joinWihComma } from '../joinWihComma';
+import { createArrayFromMinToMax } from '../array';
 
 export const parseOptions = (
   responseValues: SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues,
@@ -11,7 +12,7 @@ export const parseOptions = (
     const min = responseValues?.minValue;
     const max = responseValues?.maxValue;
     const scores = responseValues?.scores;
-    const options = Array.from({ length: max - min + 1 }, (_, i) => i + min);
+    const options = createArrayFromMinToMax(min, max);
 
     return joinWihComma(
       options?.map(

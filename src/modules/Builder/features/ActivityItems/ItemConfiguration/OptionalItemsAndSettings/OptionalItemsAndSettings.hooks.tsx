@@ -92,6 +92,7 @@ export const useSettingsSetup = ({
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
   setShowColorPalette,
+  setOptionsOpen,
 }: SettingsSetupProps) => {
   const { setValue, getValues, watch, clearErrors } = useFormContext();
 
@@ -114,6 +115,7 @@ export const useSettingsSetup = ({
         switch (responseType) {
           case ItemResponseType.SingleSelection:
           case ItemResponseType.MultipleSelection:
+            setOptionsOpen?.([]);
             handleAddOption?.();
             setConfig(defaultSingleAndMultiSelectionConfig);
             break;

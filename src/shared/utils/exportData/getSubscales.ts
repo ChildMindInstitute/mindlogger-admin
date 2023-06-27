@@ -1,5 +1,6 @@
 import {
   ActivitySettingsSubscale,
+  Item,
   ParsedSubscale,
   ScoresObject,
   SingleAndMultipleSelectItemResponseValues,
@@ -8,38 +9,42 @@ import {
 } from 'shared/state';
 import { SubscaleTotalScore } from 'shared/consts';
 import {
+  AnswerDTO,
   DecryptedMultiSelectionAnswer,
+  DecryptedSexAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
-import { ActivityItems } from './prepareData';
 import { getObjectFromList } from '../builderHelpers';
-import { getReportCSVObject } from './getReportCSVObject';
+import { createArrayFromMinToMax } from '../array';
 
 export const getSubScaleScore = (subscalesSum: number, type: SubscaleTotalScore, length: number) =>
   type === SubscaleTotalScore.Sum ? subscalesSum : subscalesSum / length;
 
-export const calcScores = (
+export const parseSex = (sex: string) => (sex === 'M' ? '1' : '2');
+
+export const calcScores = <T>(
   data: ActivitySettingsSubscale,
-  activityItems: ActivityItems,
+  activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
   subscalesObject: Record<string, ActivitySettingsSubscale>,
-): number => {
-  const itemsSum = data.items.reduce((acc, item) => {
-    if (!activityItems[item] && !subscalesObject[item]) {
+): { score: number; optionText: string } => {
+  const sumScore = data.items.reduce((acc, item) => {
+    if (!item?.type) {
       return acc;
     }
 
-    if (subscalesObject[item]) {
-      return calcScores(subscalesObject[item], activityItems, subscalesObject);
+    if (item.type === ElementType.Subscale) {
+      return acc + calcScores(subscalesObject[item.name], activityItems, subscalesObject).score;
     }
 
-    const answer = activityItems[item].answer as
+    const answer = activityItems[item.name].answer as
       | DecryptedMultiSelectionAnswer
       | DecryptedSingleSelectionAnswer
       | DecryptedSliderAnswer;
-    const typedOptions = activityItems[item].options as SingleAndMultipleSelectItemResponseValues &
-      SliderItemResponseValues;
+    const typedOptions = activityItems[item.name].activityItem
+      .responseValues as SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues;
     let value = 0;
 
     if (typedOptions?.options?.length) {
@@ -62,7 +67,7 @@ export const calcScores = (
       const min = typedOptions.minValue;
       const max = typedOptions.maxValue;
       const scores = typedOptions.scores;
-      const options = Array.from({ length: max - min + 1 }, (_, i) => i + min);
+      const options = createArrayFromMinToMax(min, max);
 
       value = scores[options.findIndex((item) => item === answer.value)] || 0;
     }
@@ -70,26 +75,29 @@ export const calcScores = (
     return acc + value;
   }, 0);
 
-  const calculetedScore = getSubScaleScore(itemsSum, data.scoring, data.items.length);
+  const calculetedScore = getSubScaleScore(sumScore, data.scoring, data.items.length);
 
   if (data?.subscaleTableData) {
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {
-      const withSex = sex ? sex === activityItems.sex : true;
-      const withAge = age ? age === activityItems.age : true;
+      const genderAnswer = activityItems.gender_screen?.answer as DecryptedSexAnswer;
+      const withSex = sex ? parseSex(sex) === genderAnswer?.value : true;
+      const withAge = age ? String(age) === activityItems.age_screen.answer : true;
 
       return withSex && withAge && rawScore === String(calculetedScore);
     });
 
-    return Number(subscaleTableDataItem?.score) || calculetedScore;
+    return {
+      score: Number(subscaleTableDataItem?.score) || calculetedScore,
+      optionText: subscaleTableDataItem?.optionalText || '',
+    };
   }
 
-  return calculetedScore;
+  return { score: calculetedScore, optionText: '' };
 };
 
-export const getSubscales = (
+export const getSubscales = <T>(
   subscaleSetting: SubscaleSetting,
-  activityItems: ActivityItems,
-  answers: ReturnType<typeof getReportCSVObject>[],
+  activityItems: Record<string, T & { activityItem: Item; answer: AnswerDTO }>,
 ) => {
   if (!subscaleSetting?.subscales?.length) return {};
 
@@ -98,47 +106,34 @@ export const getSubscales = (
     (item) => item.name,
   );
 
-  const { parsedSubscales } = subscaleSetting.subscales.reduce(
-    (acc: { parsedSubscales: ParsedSubscale; subscalesSum: number }, item) => {
-      const calculetedSubscale = calcScores(item, activityItems, subscalesObject);
+  const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
+    const calculetedSubscale = calcScores(item, activityItems, subscalesObject);
 
-      acc.parsedSubscales[item.name] = calculetedSubscale;
-      // if (item?.subscaleTableData) {
-      //   const subscaleTableDataItem = item.subscaleTableData?.find(
-      //     ({ score, sex, age, rawScore }) => {
-      //       const withSex = sex ? sex === activityItems.sex : true;
-      //       const withAge = age ? age === activityItems.age : true;
+    acc[item.name] = calculetedSubscale.score;
+    if (calculetedSubscale?.optionText) {
+      acc[`Optional text for ${item.name}`] = calculetedSubscale.optionText;
+    }
 
-      //       return (
-      //         withSex &&
-      //         withAge &&
-      //         score === String(calculetedSubscale) &&
-      //         rawScore === String(subscaleRawScore)
-      //       );
-      //     },
-      //   );
+    return acc;
+  }, {});
 
-      //   if (subscaleTableDataItem?.optionalText) {
-      //     acc.parsedSubscales[`Optional text for ${item.name}`] =
-      //       subscaleTableDataItem.optionalText;
-      //   }
-      // }
-
-      return acc;
-    },
-    { parsedSubscales: {}, subscalesSum: 0 },
-  );
+  const calculetedTotalScore =
+    subscaleSetting?.calculateTotalScore &&
+    calcScores(
+      {
+        name: '',
+        items: Object.keys(activityItems).map((item) => ({ name: item, type: 'item' })),
+        scoring: subscaleSetting.calculateTotalScore,
+        subscaleTableData: subscaleSetting.totalScoresTableData,
+      } as ActivitySettingsSubscale,
+      activityItems,
+      {},
+    );
 
   return {
-    ...(subscaleSetting?.calculateTotalScore && {
-      'Final SubScale Score': calcScores(
-        {
-          items: Object.keys(activityItems),
-          scoring: subscaleSetting.calculateTotalScore,
-        } as ActivitySettingsSubscale,
-        activityItems,
-        {},
-      ),
+    ...(calculetedTotalScore && {
+      'Final SubScale Score': calculetedTotalScore.score,
+      'Optional text for Final SubScale Score': calculetedTotalScore.optionText,
     }),
     ...parsedSubscales,
   };

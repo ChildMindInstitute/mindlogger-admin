@@ -413,6 +413,9 @@
   "characters": "characters",
   "default": "Default",
   "dropImage": "Drop Image here or <1>click to browse</1>.",
+  "dropError": "Image is more than <br /> {{size}}.",
+  "incorrectImageSize": "Image is more than {{size}}.",
+  "incorrectImageFormat": "Incorrect image format.",
   "fieldRequired": "This field is required.",
   "descriptionRequired": "Description is required",
   "aboutAppletRequired": "About Applet is required",
@@ -440,7 +443,6 @@
   "newActivity": "New Activity",
   "onlyAdminPanelActivityTooltip": "This Activity is only displayed in the Admin panel for the reviewer to provide responses about respondent's data. Only single selection, multiple selection, and slider items are supported.",
   "aboutAppletTooltip": "This text will be displayed on the “About“ tab of the Applet details page in the Respondent's interface.",
-  "dropError": "Image is more than <br /> {{size}}.",
   "appletLibrary": "Applet library",
   "appletImageDescription": "This image is displayed next to the Applet name in the admin panel, and in the respondent's interface.",
   "appletWatermarkDescription": "This image is displayed in the corner on each Applet screen in the respondent's interface.",
@@ -856,7 +858,9 @@
     "atLeastOneCondition": "Set up at least one condition",
     "mustShowMessageOrItems": "You must show a message or print items to publish this report",
     "atLeastOneItem": "Select at least 1 Item",
-    "incorrectEmail": "Email must be valid"
+    "incorrectEmail": "Email must be valid",
+    "variableInTheSameItem": "* You cannot use item name in the same item. Please remove",
+    "variableIsNotSupported": "* This item is not supported, please remove it."
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",

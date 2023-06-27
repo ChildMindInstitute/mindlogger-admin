@@ -1,11 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Activity, Answer } from '../../RespondentDataReview.types';
+import { ReviewActivity } from 'api';
+
+import { Answer } from '../../RespondentDataReview.types';
 
 export type ReviewMenuItemProps = {
-  activity: Activity;
+  activity: ReviewActivity;
   isSelected: boolean;
   selectedAnswer: Answer | null;
-  setSelectedActivity: Dispatch<SetStateAction<Activity | null>>;
+  setSelectedActivity: Dispatch<SetStateAction<ReviewActivity | null>>;
   setSelectedAnswer: Dispatch<SetStateAction<Answer | null>>;
 };

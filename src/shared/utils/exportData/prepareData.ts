@@ -2,62 +2,50 @@ import {
   DecryptedActivityData,
   DecryptedAnswerData,
   ExportActivity,
-  ExportAnswer,
   ExtendedExportAnswer,
+  ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 import { getObjectFromList } from 'shared/utils/builderHelpers';
-import { ResponseValues } from 'shared/state';
-import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
 import { getSubscales } from './getSubscales';
 
-const getDecryptedAnswersObject = (decryptedAnswers: DecryptedAnswerData[]) =>
-  getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
-
-export type ActivityItems = Record<
-  string,
-  {
-    options: ResponseValues;
-    answer: AnswerDTO;
-  }
-> & { sex?: AnswerDTO; age?: AnswerDTO; activityId?: string };
+const getDecryptedAnswersObject = (
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+) => getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
 
 export const prepareData = (
-  data: { activities: ExportActivity[]; answers: ExportAnswer[] },
-  getDecryptedAnswers: (data: ExtendedExportAnswer) => DecryptedActivityData,
+  data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
+  getDecryptedAnswers: (
+    data: ExtendedExportAnswer,
+  ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,
 ) => {
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
-  console.log(parsedAnswers);
 
   return parsedAnswers.reduce(
     (acc, data) => {
-      const activityItems: ActivityItems = {};
+      const rawAnswersObject = getObjectFromList(
+        data.decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
       const answers = data.decryptedAnswers.reduce((filteredAcc, item) => {
-        activityItems[item.activityItem.id as keyof ActivityItems] = {
-          options: item.activityItem?.responseValues,
-          answer: item.answer,
-        };
-        if (item.activityItem.name === 'gender_screen') {
-          activityItems.sex = item.answer;
-        }
-        if (item.activityItem.name === 'age_screen') {
-          activityItems.age = item.answer;
-        }
-        activityItems.activityId = item.activityId;
-
         if (item.activityItem?.config?.skippableItem) return filteredAcc;
 
-        return filteredAcc.concat(getReportCSVObject(item));
+        return filteredAcc.concat(
+          getReportCSVObject({
+            item,
+            rawAnswersObject,
+          }),
+        );
       }, [] as ReturnType<typeof getReportCSVObject>[]);
 
       const subscaleSetting = data.decryptedAnswers?.[0]?.subscaleSetting;
       if (subscaleSetting?.subscales?.length) {
         answers.splice(0, 1, {
           ...answers[0],
-          ...getSubscales(subscaleSetting, activityItems, answers),
+          ...getSubscales(subscaleSetting, rawAnswersObject),
         });
       }
 
@@ -66,8 +54,11 @@ export const prepareData = (
       const decryptedAnswersObject = getDecryptedAnswersObject(data.decryptedAnswers);
       const events = data.decryptedEvents.map((event) =>
         getJourneyCSVObject({
-          ...event,
-          ...decryptedAnswersObject[event.screen],
+          event: {
+            ...event,
+            ...decryptedAnswersObject[event.screen],
+          },
+          rawAnswersObject,
         }),
       );
       const activityJourneyData = acc.activityJourneyData.concat(...events);

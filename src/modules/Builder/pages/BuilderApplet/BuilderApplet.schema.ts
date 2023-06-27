@@ -23,7 +23,11 @@ import {
   SLIDER_LABEL_MAX_LENGTH,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
-import { testFunctionForUniqueness } from './BuilderApplet.utils';
+import {
+  testFunctionForNotSupportedItems,
+  testFunctionForTheSameVariable,
+  testFunctionForUniqueness,
+} from './BuilderApplet.utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from './BuilderApplet.const';
 
 const { t } = i18n;
@@ -178,19 +182,33 @@ export const ItemSchema = () =>
           (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
-      question: yup.string().when('responseType', (responseType, schema) => {
-        if (
-          responseType === ItemResponseType.Flanker ||
-          responseType === ItemResponseType.Gyroscope ||
-          responseType === ItemResponseType.Touch ||
-          responseType === ItemResponseType.ABTrailsIpad ||
-          responseType === ItemResponseType.ABTrailsMobile
-        ) {
-          return schema;
-        }
+      question: yup
+        .string()
+        .when('responseType', (responseType, schema) => {
+          if (
+            responseType === ItemResponseType.Flanker ||
+            responseType === ItemResponseType.Gyroscope ||
+            responseType === ItemResponseType.Touch ||
+            responseType === ItemResponseType.ABTrailsIpad ||
+            responseType === ItemResponseType.ABTrailsMobile
+          ) {
+            return schema;
+          }
 
-        return schema.required(getIsRequiredValidateMessage('displayedContent'));
-      }),
+          return schema.required(getIsRequiredValidateMessage('displayedContent'));
+        })
+        .test(
+          'variable-in-the-same-item-error',
+          t('validationMessages.variableInTheSameItem') as string,
+          (itemName, context) =>
+            testFunctionForTheSameVariable('question', itemName ?? '', context),
+        )
+        .test(
+          'variable-is-not-supported-error',
+          t('validationMessages.variableIsNotSupported') as string,
+          (itemName, context) =>
+            testFunctionForNotSupportedItems('question', itemName ?? '', context),
+        ),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (
           responseType === ItemResponseType.SingleSelection ||

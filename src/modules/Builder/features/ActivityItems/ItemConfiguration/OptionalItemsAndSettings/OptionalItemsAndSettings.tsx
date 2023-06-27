@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
 import { useFieldArray, useWatch, useFormContext } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 import { Button } from '@mui/material';
@@ -37,6 +37,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
   ({ name }, ref) => {
     const { t } = useTranslation('app');
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
+    const [optionsOpen, setOptionsOpen] = useState<boolean[]>([]);
 
     const { control, setValue } = useFormContext();
     const [settings, responseType, responseValues, palette, alerts] = useWatch({
@@ -87,8 +88,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       ItemConfigurationSettings.HasResponseDataIdentifier,
     );
 
-    const handleAddOption = () =>
-      appendOption({
+    const handleAddOption = async () => {
+      await appendOption({
         id: uuidv4(),
         text: '',
         isHidden: false,
@@ -96,6 +97,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
         ...(hasColorPalette &&
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
       });
+      setOptionsOpen((prevState) => [...prevState, true]);
+    };
 
     const handleAddSingleOrMultipleRow = () => {
       appendRow(getEmptySelectionItem());
@@ -110,6 +113,12 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
 
     const handleRemoveOptions = (index: number) => {
       removeOptions(index);
+      setOptionsOpen((prevState) => {
+        const newOptionsOpen = [...prevState];
+        newOptionsOpen.splice(index, 1);
+
+        return newOptionsOpen;
+      });
     };
 
     const handleUpdateOption = (index: number, option: SingleAndMultipleSelectionOption) => {
@@ -138,6 +147,10 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       responseType,
     });
 
+    useEffect(() => {
+      options?.length && setOptionsOpen(options.map(() => true));
+    }, []);
+
     useImperativeHandle(
       ref,
       () => ({
@@ -154,6 +167,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       removeAlert,
       handleAddAlert,
       setShowColorPalette: handleChangeColorPaletteVisibility,
+      setOptionsOpen,
     });
 
     return (
@@ -187,6 +201,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
                       onUpdateOption={handleUpdateOption}
                       optionsLength={options.length}
                       index={index}
+                      optionsOpen={optionsOpen}
+                      setOptionsOpen={setOptionsOpen}
                     />
                   ))
                 : null}

@@ -1,6 +1,6 @@
-import { Response, Version } from '../Report.types';
+import { DatavizAnswer, Version } from 'api';
 
 export type ActivityCompletedProps = {
-  responses: Response[];
+  answers: DatavizAnswer[];
   versions: Version[];
 };

@@ -11,7 +11,7 @@ import { ActivityCompletedProps } from './ActivityCompleted.types';
 import { FilterFormValues } from '../Report.types';
 import { getDateTime } from '../Report.utils';
 
-export const ActivityCompleted = ({ responses, versions }: ActivityCompletedProps) => {
+export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompletedProps) => {
   const { t } = useTranslation();
   const { watch } = useFormContext<FilterFormValues>();
 
@@ -39,7 +39,7 @@ export const ActivityCompleted = ({ responses, versions }: ActivityCompletedProp
           </span>
         </Tooltip>
       </StyledHeadline>
-      <ScatterChart minDate={minDate} maxDate={maxDate} responses={responses} versions={versions} />
+      <ScatterChart minDate={minDate} maxDate={maxDate} answers={answers} versions={versions} />
     </Box>
   );
 };

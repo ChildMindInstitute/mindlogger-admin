@@ -3,7 +3,7 @@ import { Box, styled } from '@mui/material';
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 
-export const StyledEmptyTable = styled(StyledFlexAllCenter)`
+export const StyledEmptyState = styled(StyledFlexAllCenter)`
   flex-direction: column;
   height: 100%;
   text-align: center;

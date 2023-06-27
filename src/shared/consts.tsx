@@ -23,6 +23,13 @@ export const MAX_FILE_SIZE_25MB = 26_214_400;
 
 export const MAX_FILE_SIZE_150MB = 157_286_400;
 
+export const VALID_IMAGE_TYPES = ['.png', '.jpg', '.jpeg'];
+
+export enum UploadImageError {
+  Size,
+  Format,
+}
+
 export const INPUT_DEBOUNCE_TIME = 400;
 export const SEARCH_DEBOUNCE_VALUE = 700;
 

@@ -10,7 +10,7 @@ import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
-import { ActivitySettingsSubscale } from 'shared/state';
+import { SubscaleFormValue } from 'modules/Builder/types';
 
 import { StyledButtonsContainer } from '../ActivitySettings.styles';
 import { commonButtonProps } from '../ActivitySettings.const';
@@ -59,7 +59,7 @@ export const SubscalesConfiguration = () => {
   };
   const iconId = `lookup-table${tableData?.length ? '-filled' : ''}`;
 
-  const subscales: ActivitySettingsSubscale[] = watch(subscalesField) ?? [];
+  const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const subscalesLength = subscales.length;
   const filteredItems = (activity?.items ?? []).filter(checkOnItemTypeAndScore);
   const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
