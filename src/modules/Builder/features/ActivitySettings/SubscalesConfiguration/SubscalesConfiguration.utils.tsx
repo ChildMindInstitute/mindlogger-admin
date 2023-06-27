@@ -4,8 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { StyledTitleSmall, variables } from 'shared/styles';
 
 import i18n from 'i18n';
-import { ActivitySettingsSubscale } from 'shared/state';
-import { ItemFormValues } from 'modules/Builder/types';
+import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { SubscaleTotalScore } from 'shared/consts';
 import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 import { DataTableColumn } from 'shared/components';
@@ -34,8 +33,8 @@ export const getItemElementName = (item: ItemFormValues) =>
   `${getItemNameInSubscale(item)}: ${t(item.question)}`;
 
 export const getSubscaleElementName = (
-  subscale: ActivitySettingsSubscale,
-  subscalesMap: Record<string, ActivitySettingsSubscale>,
+  subscale: SubscaleFormValue,
+  subscalesMap: Record<string, SubscaleFormValue>,
   itemsMap: Record<string, ItemFormValues>,
 ) =>
   `${t('subscale')}: ${subscale.name} (${subscale.items
@@ -52,7 +51,7 @@ export const getSubscaleElementName = (
 export const getItemElements = (
   subscaleId: string,
   items: ItemFormValues[] = [],
-  subscales: ActivitySettingsSubscale[] = [],
+  subscales: SubscaleFormValue[] = [],
 ) => {
   if (!items) return [];
 
@@ -79,7 +78,7 @@ export const getItemElements = (
 
 export const getPropertiesToFilterByIds = (
   items: ItemFormValues[] = [],
-  subscales: ActivitySettingsSubscale[] = [],
+  subscales: SubscaleFormValue[] = [],
 ) => {
   const itemsMap = getObjectFromList(items);
   const subscalesMap = getObjectFromList(subscales);
@@ -99,10 +98,10 @@ export const getPropertiesToFilterByIds = (
 };
 
 export const getNotUsedElements = (
-  subscalesMap: Record<string, ActivitySettingsSubscale>,
+  subscalesMap: Record<string, SubscaleFormValue>,
   itemsMap: Record<string, ItemFormValues>,
   mergedIds: string[],
-  markedUniqueElementsIds: string[],
+  markedUniqueElementsIds: ReturnType<typeof getPropertiesToFilterByIds>['markedUniqueElementsIds'],
 ) =>
   mergedIds.reduce((acc, id) => {
     if (markedUniqueElementsIds.includes(id)) return acc;
@@ -136,12 +135,13 @@ const getElementName =
 
     return [...acc, subscale.name];
   };
+
 export const getUsedWithinSubscalesElements = (
-  subscales: ActivitySettingsSubscale[] = [],
-  subscalesMap: Record<string, ActivitySettingsSubscale>,
+  subscales: SubscaleFormValue[] = [],
+  subscalesMap: Record<string, SubscaleFormValue>,
   itemsMap: Record<string, ItemFormValues>,
   mergedIds: string[],
-  markedUniqueElementsIds: string[],
+  markedUniqueElementsIds: ReturnType<typeof getPropertiesToFilterByIds>['markedUniqueElementsIds'],
 ) => {
   const subscalesWithItemsSet = subscales.map((subscale) => ({
     name: subscale.name,

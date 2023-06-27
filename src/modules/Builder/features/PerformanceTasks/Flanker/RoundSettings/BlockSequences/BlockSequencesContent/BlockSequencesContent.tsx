@@ -15,8 +15,8 @@ import {
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { FlankerStimulusSettings } from 'shared/state';
 import { exportTemplate, getUploadedMediaName } from 'shared/utils';
+import { RoundTypeEnum } from 'modules/Builder/types';
 
-import { RoundTypeEnum } from '../../RoundSettings.types';
 import { ImportSequencesPopup, ImportSequencesType } from './ImportSequencesPopup';
 import {
   getRoundBlocks,

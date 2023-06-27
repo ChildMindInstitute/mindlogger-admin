@@ -1,5 +1,5 @@
 import i18n from 'i18n';
-import { PerfTaskItemType } from 'shared/consts';
+import { PerfTaskType } from 'shared/consts';
 
 import { ActivityAddProps, PerformanceTasks } from '../Activities.types';
 
@@ -21,7 +21,7 @@ export const getPerformanceTasksMenu = (
         getAction({
           performanceTaskName: PerformanceTasks.AbTrailsIpad,
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
-          performanceTaskType: PerfTaskItemType.ABTrailsIpad,
+          performanceTaskType: PerfTaskType.ABTrailsTablet,
           isNavigationBlocked: true,
         }),
     },
@@ -30,7 +30,7 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.AbTrailsMobile,
-          performanceTaskType: PerfTaskItemType.ABTrailsMobile,
+          performanceTaskType: PerfTaskType.ABTrailsMobile,
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
           isNavigationBlocked: true,
         }),
@@ -40,7 +40,7 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.Flanker,
-          performanceTaskType: PerfTaskItemType.Flanker,
+          performanceTaskType: PerfTaskType.Flanker,
           performanceTaskDesc: t('performanceTasksDesc.flanker'),
         }),
     },
@@ -49,7 +49,7 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.Gyroscope,
-          performanceTaskType: PerfTaskItemType.Gyroscope,
+          performanceTaskType: PerfTaskType.Gyroscope,
           performanceTaskDesc: t('performanceTasksDesc.gyroscope'),
         }),
     },
@@ -58,7 +58,7 @@ export const getPerformanceTasksMenu = (
       action: () =>
         getAction({
           performanceTaskName: PerformanceTasks.Touch,
-          performanceTaskType: PerfTaskItemType.Touch,
+          performanceTaskType: PerfTaskType.Touch,
           performanceTaskDesc: t('performanceTasksDesc.touch'),
         }),
     },

@@ -59,13 +59,11 @@ export const SelectionOption = ({
   });
   const palette = watch(`${name}.responseValues.paletteName`);
   const imageSrc = watch(`${optionName}.image`);
-  const hasScoresChecked = get(settings, ItemConfigurationSettings.HasScores);
   const hasTooltipsChecked = get(settings, ItemConfigurationSettings.HasTooltips);
   const hasColorPicker = get(settings, ItemConfigurationSettings.HasColorPalette);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-  const { text = '', isHidden = false, score, tooltip, color } = option || {};
+  const { text = '', isHidden = false, score, color } = option || {};
   const scoreString = score?.toString();
-  const hasTooltip = tooltip !== undefined;
   const hasColor = color !== undefined;
   const hasPalette = !!palette;
   const isColorSet = color?.hex !== '';
@@ -160,10 +158,6 @@ export const SelectionOption = ({
     name: optionName,
     onUpdateOption,
     index,
-    hasScoresChecked,
-    scoreString,
-    hasTooltipsChecked,
-    hasTooltip,
     hasColorPicker,
     hasColor,
   });

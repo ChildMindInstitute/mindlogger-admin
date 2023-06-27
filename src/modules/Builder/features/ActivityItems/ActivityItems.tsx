@@ -60,14 +60,14 @@ export const ActivityItems = () => {
     const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
 
     firstSystemIndex === -1 ? appendItem(item) : insertItem(firstSystemIndex, item);
-    setActiveItemId(item.key);
+    setActiveItemId(item.key!);
   };
 
   const handleInsertItem = (index: number) => {
     const item = getNewActivityItem();
 
     insertItem(index + 1, item);
-    setActiveItemId(item.key);
+    setActiveItemId(item.key!);
   };
 
   const handleDuplicateItem = (index: number) => {

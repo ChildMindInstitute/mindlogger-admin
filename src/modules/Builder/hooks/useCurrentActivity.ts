@@ -18,6 +18,7 @@ export const useCurrentActivity = () => {
   return {
     activity: activities[currentActivityIndex],
     fieldName: `activities.${currentActivityIndex}`,
+    // TODO: remove next two rows after flanker API changes implementation
     perfTaskItemField: `activities.${currentActivityIndex}.items.0.config`,
     perfTaskItemObjField: `activities[${currentActivityIndex}].items[0].config`,
   };
