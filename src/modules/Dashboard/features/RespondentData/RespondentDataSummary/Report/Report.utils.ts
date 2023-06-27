@@ -4,13 +4,13 @@ import { ItemResponseType } from 'shared/consts';
 import {
   Item,
   SingleAndMultipleSelectItemResponseValues,
-  SingleAndMultipleSelectionOption,
   SliderItemResponseValues,
 } from 'shared/state/Applet/Applet.schema';
 import {
   ActivityItemAnswer,
   DecryptedMultiSelectionAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { getObjectFromList } from 'shared/utils';
 
 import {
   DEFAULT_END_DATE,
@@ -100,17 +100,11 @@ const compareActivityItemAnswers = (
     const currActivityItemOptions = (
       currActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues
     ).options;
-    const prevActivityItemOptions = (
-      prevActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues
-    ).options.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
-
-    const options = currActivityItemOptions.reduce(
-      (
-        acc: Record<string, SingleAndMultipleSelectionOption>,
-        option: SingleAndMultipleSelectionOption,
-      ) => ({ ...acc, [option.id]: option }),
-      prevActivityItemOptions,
+    const prevActivityItemOptions = getObjectFromList(
+      (prevActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues).options,
     );
+
+    const options = { ...prevActivityItemOptions, ...getObjectFromList(currActivityItemOptions) };
 
     return {
       activityItem: {
@@ -134,17 +128,11 @@ const compareActivityItemAnswers = (
     const currActivityItemOptions = (
       currActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues
     ).options;
-    const prevActivityItemOptions = (
-      prevActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues
-    ).options.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
-
-    const options = currActivityItemOptions.reduce(
-      (
-        acc: Record<string, SingleAndMultipleSelectionOption>,
-        option: SingleAndMultipleSelectionOption,
-      ) => ({ ...acc, [option.id]: option }),
-      prevActivityItemOptions,
+    const prevActivityItemOptions = getObjectFromList(
+      (prevActivityItem.responseValues as SingleAndMultipleSelectItemResponseValues).options,
     );
+
+    const options = { ...prevActivityItemOptions, ...getObjectFromList(currActivityItemOptions) };
 
     const flattenAnswers = (currAnswer as DecryptedMultiSelectionAnswer).value.map((value) => ({
       answer: {

@@ -46,7 +46,6 @@ export const getResponseItem = ({
 
   const renderSingleMultipleSelection = () => {
     const formattedAnswers = formatAnswers(answers);
-    // console.log(formattedAnswers);
     const { options } = activityItem.responseValues as SingleAndMultipleSelectItemResponseValues;
     const height = (options.length + 1) * TICK_HEIGHT;
     const maxY = options.length;
