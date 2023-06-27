@@ -88,7 +88,7 @@ export const ItemSettingsGroup = ({
 
               const isDisabled =
                 (isTextInputRequired && !get(config, ItemConfigurationSettings.HasTextInput)) ||
-                (isSkippableItem && get(config, ItemConfigurationSettings.IsTextInputRequired));
+                (isSkippableItem && get(config, ItemConfigurationSettings.IsResponseRequired));
               const isSecondsDisabled = isTimer && !get(config, ItemConfigurationSettings.HasTimer);
 
               const hasTooltip = ITEM_SETTINGS_TO_HAVE_TOOLTIP.includes(settingKey);
@@ -103,6 +103,14 @@ export const ItemSettingsGroup = ({
                       ? DEFAULT_TIMER_VALUE
                       : DEFAULT_DISABLED_TIMER_VALUE,
                   });
+
+                if (settingKey === ItemConfigurationSettings.IsResponseRequired) {
+                  return onChange({
+                    ...config,
+                    [settingKey]: event.target.checked,
+                    [ItemConfigurationSettings.IsSkippable]: false,
+                  });
+                }
 
                 if (
                   settingKey === ItemConfigurationSettings.HasTextInput ||
