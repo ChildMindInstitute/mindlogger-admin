@@ -26,6 +26,8 @@ import {
 import {
   isPerfTaskResponseType,
   isTouchOrGyroscopeRespType,
+  testFunctionForNotSupportedItems,
+  testFunctionForTheSameVariable,
   testFunctionForUniqueness,
 } from './BuilderApplet.utils';
 import {
@@ -179,36 +181,50 @@ export const ItemSchema = () =>
           (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
-      question: yup.string().when('responseType', (responseType, schema) => {
-        if (isPerfTaskResponseType(responseType)) {
-          return schema;
-        }
-
-        return schema.when('name', (name: string, schema: yup.SchemaOf<AppletFormValues>) => {
-          if (
-            name === GyroscopeItemNames.GeneralInstruction ||
-            name === TouchItemNames.GeneralInstruction
-          ) {
-            return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
+      question: yup
+        .string()
+        .when('responseType', (responseType, schema) => {
+          if (isPerfTaskResponseType(responseType)) {
+            return schema;
           }
 
-          if (
-            name === GyroscopeItemNames.PracticeInstruction ||
-            name === TouchItemNames.PracticeInstruction
-          ) {
-            return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
-          }
+          return schema.when('name', (name: string, schema: yup.SchemaOf<AppletFormValues>) => {
+            if (
+              name === GyroscopeItemNames.GeneralInstruction ||
+              name === TouchItemNames.GeneralInstruction
+            ) {
+              return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
+            }
 
-          if (
-            name === GyroscopeItemNames.TestInstruction ||
-            name === TouchItemNames.TestInstruction
-          ) {
-            return schema.required(getIsRequiredValidateMessage('testInstruction'));
-          }
+            if (
+              name === GyroscopeItemNames.PracticeInstruction ||
+              name === TouchItemNames.PracticeInstruction
+            ) {
+              return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
+            }
 
-          return schema.required(getIsRequiredValidateMessage('displayedContent'));
-        });
-      }),
+            if (
+              name === GyroscopeItemNames.TestInstruction ||
+              name === TouchItemNames.TestInstruction
+            ) {
+              return schema.required(getIsRequiredValidateMessage('testInstruction'));
+            }
+
+            return schema.required(getIsRequiredValidateMessage('displayedContent'));
+          });
+        })
+        .test(
+          'variable-in-the-same-item-error',
+          t('validationMessages.variableInTheSameItem') as string,
+          (itemName, context) =>
+            testFunctionForTheSameVariable('question', itemName ?? '', context),
+        )
+        .test(
+          'variable-is-not-supported-error',
+          t('validationMessages.variableIsNotSupported') as string,
+          (itemName, context) =>
+            testFunctionForNotSupportedItems('question', itemName ?? '', context),
+        ),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (
           responseType === ItemResponseType.SingleSelection ||

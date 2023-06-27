@@ -1,7 +1,7 @@
 import { AppletId } from 'shared/api';
 import { Item, SingleApplet } from 'shared/state';
 import { Roles } from 'shared/consts';
-import { RetentionPeriods, DecryptedAnswerSharedProps } from 'shared/types';
+import { RetentionPeriods, EncryptedAnswerSharedProps } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
 export type GetUserData = { token: string };
@@ -105,6 +105,11 @@ export const enum Periodicity {
 export const enum NotificationType {
   Fixed = 'FIXED',
   Random = 'RANDOM',
+}
+
+export const enum DashboardAppletType {
+  Applet = 'applet',
+  Folder = 'folder',
 }
 
 export type EventNotifications =
@@ -239,7 +244,7 @@ export type ReviewActivity = DatavizActivity & {
   }[];
 };
 
-export type DatavizAnswer = DecryptedAnswerSharedProps & {
+export type DatavizAnswer = EncryptedAnswerSharedProps & {
   answerId: string;
   endDatetime: string;
   events: string;
@@ -345,18 +350,22 @@ export type AppletVersionChanges = AppletId & { version: string };
 export type ExportData = AppletId & { respondentId?: string };
 
 export type Folder = {
-  appletCount: number;
   id: string;
-  name: string;
+  name?: string;
+  displayName: string;
   isFolder?: boolean;
   isNew?: boolean;
   isRenaming?: boolean;
+  foldersAppletCount: number;
 };
 
 export type Applet = SingleApplet & {
   id: string;
   isFolder?: boolean;
   parentId?: string;
+  type?: DashboardAppletType;
+  folderId?: string;
+  folderName?: string;
 };
 
 export type Version = {

@@ -1,9 +1,11 @@
-import { Folder } from 'api';
+import { Applet, Folder } from 'api';
 import { TFunction } from 'i18next';
+
+import { groupBy } from 'shared/utils';
 
 export const generateNewFolderName = (folders: Folder[], t: TFunction) => {
   const newFolder = t('newFolder');
-  const names = folders.filter(({ name }) => name);
+  const names = folders.filter(({ displayName }) => displayName);
 
   if (!names.length) {
     return newFolder;
@@ -11,8 +13,8 @@ export const generateNewFolderName = (folders: Folder[], t: TFunction) => {
 
   const result: RegExpExecArray[] = [];
 
-  names.forEach(({ name = '' }) => {
-    const exist = new RegExp(/^New Folder\s\((\d+)\)$|^New Folder$/).exec(name);
+  names.forEach(({ displayName = '' }) => {
+    const exist = new RegExp(/^New Folder\s\((\d+)\)$|^New Folder$/).exec(displayName);
     if (exist) {
       result.push(exist);
     }
@@ -34,4 +36,34 @@ export const generateNewFolderName = (folders: Folder[], t: TFunction) => {
   })[0];
 
   return `${newFolder} (${+index + 1})`;
+};
+
+export const getAppletsWithLocalFolders = (
+  applets: Applet[],
+  folders: Folder[],
+  expandedFolders: string[],
+) => {
+  const groupedApplets = groupBy(applets, 'folderId');
+
+  return Object.keys(groupedApplets).reduce((result: (Folder | Applet)[], key: string) => {
+    const applets = groupedApplets[key] ?? [];
+    const folderRow = folders?.find(({ id }) => id === key);
+
+    if (!folderRow) return [...result, ...applets];
+
+    const folder = { ...folderRow, isFolder: true, foldersAppletCount: applets.length };
+
+    if (expandedFolders.includes(folderRow.id))
+      return [
+        ...result,
+        folder,
+        ...applets.map((applet) => ({
+          ...applet,
+          isFolder: false,
+          parentId: folderRow.id,
+        })),
+      ];
+
+    return [...result, folder];
+  }, []);
 };

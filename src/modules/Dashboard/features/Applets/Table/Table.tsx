@@ -18,10 +18,14 @@ export const Table = ({
   emptyComponent,
   page,
   count,
+  rowsPerPage,
   handleRequestSort,
   handleChangePage,
   handleReload,
 }: TableProps) => {
+  const perPage =
+    rowsPerPage && rowsPerPage > DEFAULT_ROWS_PER_PAGE ? rowsPerPage : DEFAULT_ROWS_PER_PAGE;
+
   const tableHeader = (
     <StyledTableCellContent>
       {headerContent && <StyledCellItem>{headerContent}</StyledCellItem>}
@@ -29,7 +33,7 @@ export const Table = ({
         <TablePagination
           component="div"
           count={count}
-          rowsPerPage={DEFAULT_ROWS_PER_PAGE}
+          rowsPerPage={perPage}
           page={page - 1}
           onPageChange={handleChangePage}
           labelRowsPerPage=""
@@ -60,8 +64,8 @@ export const Table = ({
             tableHeader={tableHeader}
           />
           <TableBody>
-            {rows.map((row) => (
-              <Fragment key={row.id}>{getRowComponent(row)}</Fragment>
+            {rows.map((row, index) => (
+              <Fragment key={`row-${row.id}-${index}`}>{getRowComponent(row)}</Fragment>
             ))}
           </TableBody>
         </MuiTable>

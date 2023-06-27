@@ -24,7 +24,7 @@ export type ExportActivity = {
   version: string;
 };
 
-export type DecryptedAnswerSharedProps = {
+export type EncryptedAnswerSharedProps = {
   userPublicKey: string;
   answer: string;
   itemIds: string[];
@@ -52,13 +52,16 @@ export type ExportAnswer = {
   endDatetime?: string;
 };
 
-export type ExtendedExportAnswer = ExportAnswer & DecryptedAnswerSharedProps;
+export type ExtendedExportAnswer = ExportAnswer & EncryptedAnswerSharedProps;
 
-export type DecryptedAnswerData<T> = Omit<
-  T,
-  'userPublicKey' | 'itemIds' | 'items' | 'answer' | 'events'
-> &
-  ActivityItemAnswer;
+export type EncryptionAnswerDataTypes = 'userPublicKey' | 'itemIds' | 'answer' | 'events';
+
+export type DecryptedAnswerData<T> = Omit<T, EncryptionAnswerDataTypes> & ActivityItemAnswer;
+
+export type ExtendedExportAnswerWithoutEncryption = Omit<
+  ExtendedExportAnswer,
+  EncryptionAnswerDataTypes
+>;
 
 export type DecryptedActivityData<T> = {
   decryptedAnswers: DecryptedAnswerData<T>[];

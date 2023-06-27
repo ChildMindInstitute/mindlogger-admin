@@ -1,5 +1,5 @@
 import { Item, TextItem, SliderItem, SingleSelectItem, MultiSelectItem } from 'shared/state';
-import { DecryptedAnswerData, ExportAnswer } from 'shared/types';
+import { DecryptedAnswerData } from 'shared/types';
 
 export type Answer = {
   createdAt: string;
