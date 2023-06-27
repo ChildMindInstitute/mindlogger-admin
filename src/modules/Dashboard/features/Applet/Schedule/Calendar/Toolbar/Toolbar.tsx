@@ -82,7 +82,7 @@ export const Toolbar = ({
   );
 
   return (
-    <StyledToolbar>
+    <StyledToolbar data-testid="schedule-calendar-current-date-toolbar">
       <StyledFlexTopCenter>
         {isSelectedFutureDate() && todayButton}
         <StyledFlexTopCenter>
