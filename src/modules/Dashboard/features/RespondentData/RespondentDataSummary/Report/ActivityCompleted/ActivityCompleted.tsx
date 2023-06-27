@@ -1,38 +1,20 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { isBefore, isAfter } from 'date-fns';
 import { Box } from '@mui/material';
 
 import { Tooltip } from 'shared/components';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
+import { useDatavizFilters } from 'modules/Dashboard/hooks';
 
 import { ActivityCompletedProps } from './ActivityCompleted.types';
 import { FilterFormValues } from '../Report.types';
-import { getDateTime } from '../Report.utils';
 
 export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompletedProps) => {
   const { t } = useTranslation();
   const { watch } = useFormContext<FilterFormValues>();
 
-  const {
-    startDateEndDate: [startDate, endDate],
-    startTime,
-    endTime,
-  } = watch();
-
-  const { minDate, maxDate, filteredVersions } = useMemo(() => {
-    const minDate = getDateTime(startDate, startTime);
-    const maxDate = getDateTime(endDate, endTime);
-    const filteredVersions = versions.filter(
-      (version) =>
-        isBefore(new Date(version.createdAt), maxDate) &&
-        isAfter(new Date(version.createdAt), minDate),
-    );
-
-    return { minDate, maxDate, filteredVersions };
-  }, [startDate, endDate, startTime, endTime]);
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>

@@ -33,12 +33,6 @@ export const getDefaultFilterValues = (versions: Version[]) => {
   };
 };
 
-export const getDateTime = (date: Date, time: string) => {
-  const [hours, mins] = time.split(':');
-
-  return new Date(new Date((date || new Date()).setHours(+hours)).setMinutes(+mins));
-};
-
 export const getDateISO = (date: Date, time: string) => {
   const year = date.getFullYear();
   const month = date.getMonth();

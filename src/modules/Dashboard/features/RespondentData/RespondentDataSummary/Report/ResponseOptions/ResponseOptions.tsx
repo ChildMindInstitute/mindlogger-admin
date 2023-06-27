@@ -1,8 +1,6 @@
-import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { isAfter, isBefore } from 'date-fns';
 
 import { Tooltip } from 'shared/components';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
@@ -10,34 +8,18 @@ import { isItemUnsupported } from 'modules/Dashboard/features/RespondentData/Res
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 import { getDictionaryText } from 'shared/utils';
+import { useDatavizFilters } from 'modules/Dashboard/hooks';
 
 import { ResponseOption, FilterFormValues } from '../Report.types';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
-import { getDateTime } from '../Report.utils';
 import { COLORS } from './ResponseOptions.const';
 
 export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOptionsProps) => {
   const { t } = useTranslation();
   const { watch } = useFormContext<FilterFormValues>();
 
-  const {
-    startDateEndDate: [startDate, endDate],
-    startTime,
-    endTime,
-  } = watch();
-
-  const { minDate, maxDate, filteredVersions } = useMemo(() => {
-    const minDate = getDateTime(startDate, startTime);
-    const maxDate = getDateTime(endDate, endTime);
-    const filteredVersions = versions.filter(
-      (version) =>
-        isBefore(new Date(version.createdAt), maxDate) &&
-        isAfter(new Date(version.createdAt), minDate),
-    );
-
-    return { minDate, maxDate, filteredVersions };
-  }, [startDate, endDate, startTime, endTime]);
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
   const renderResponseOption = ({ activityItem, answers }: ResponseOption, index: number) => {
     if (isItemUnsupported(activityItem.responseType))
