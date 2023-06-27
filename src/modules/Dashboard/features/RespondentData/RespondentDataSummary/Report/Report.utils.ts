@@ -74,6 +74,26 @@ export type FormattedResponse = {
   answers: ItemAnswer[];
 };
 
+const getAnswers = (currentAnswer: ActivityItemAnswer, date: Date | string) => {
+  switch (currentAnswer.activityItem.responseType) {
+    case ItemResponseType.MultipleSelection:
+      return (currentAnswer.answer as DecryptedMultiSelectionAnswer).value.map((value) => ({
+        answer: {
+          value,
+          text: null,
+        },
+        date,
+      }));
+    default:
+      return [
+        {
+          answer: currentAnswer.answer,
+          date,
+        },
+      ];
+  }
+};
+
 const compareActivityItemAnswers = (
   prevActivityItemAnswer: FormattedResponse,
   currActivityItemAnswer: ActivityItemAnswer,
@@ -203,22 +223,7 @@ export const getFormattedResponses = (activityResponses: ActivityResponse[]) => 
         const item = items[currentAnswer.activityItem.id!];
 
         if (!item) {
-          const answers =
-            currentAnswer.activityItem.responseType === ItemResponseType.MultipleSelection
-              ? (currentAnswer.answer as DecryptedMultiSelectionAnswer).value.map((value) => ({
-                  answer: {
-                    value,
-                    text: null,
-                  },
-                  date: endDatetime,
-                }))
-              : [
-                  {
-                    answer: currentAnswer.answer,
-                    date: endDatetime,
-                  },
-                ];
-
+          const answers = getAnswers(currentAnswer, endDatetime);
           newItems = {
             ...newItems,
             [currentAnswer.activityItem.id!]: {
