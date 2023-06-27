@@ -42,7 +42,6 @@ import {
   getEmptyAudioPlayerResponse,
   getEmptyAudioResponse,
   getEmptyNumberSelection,
-  getEmptyAlert,
 } from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {

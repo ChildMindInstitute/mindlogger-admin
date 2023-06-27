@@ -16,6 +16,7 @@ import {
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 import { CorrectPress, RoundTypeEnum } from 'modules/Builder/types';
+import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;
@@ -495,9 +496,9 @@ export type ScoresAndReports = {
   sections: ActivitySettingsSection[];
 };
 
-export type SubscaleSetting = {
+export type SubscaleSetting<T = ActivitySettingsSubscaleItem> = {
   calculateTotalScore?: SubscaleTotalScore | null;
-  subscales?: ActivitySettingsSubscale[];
+  subscales?: ActivitySettingsSubscale<T>[];
   totalScoresTableData?: Record<string, string>[] | null;
 };
 
@@ -580,11 +581,16 @@ export type ActivitySettingsSection = {
   conditionalLogic?: SectionConditionalLogic;
 };
 
-export type ActivitySettingsSubscale = {
+export type ActivitySettingsSubscaleItem = {
+  name: string;
+  type: ElementType;
+};
+
+export type ActivitySettingsSubscale<T = ActivitySettingsSubscaleItem> = {
   id?: string;
   name: string;
   scoring: SubscaleTotalScore;
-  items: string[];
+  items: T[];
   subscaleTableData?: Record<string, string>[] | null;
 };
 
