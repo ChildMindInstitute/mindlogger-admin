@@ -1,11 +1,4 @@
-import {
-  Item,
-  TextItem,
-  SliderItem,
-  SingleSelectItem,
-  MultiSelectItem,
-  ResponseValues,
-} from 'shared/state';
+import { Item, TextItem, SliderItem, SingleSelectItem, MultiSelectItem } from 'shared/state';
 import { DecryptedAnswerData } from 'shared/types';
 
 export type Answer = {
@@ -38,6 +31,11 @@ export type DecryptedSliderAnswer = {
 
 export type DecryptedNumberSelectionAnswer = {
   value: number;
+  text?: string | null;
+};
+
+export type DecryptedMediaAnswer = {
+  value: string;
   text?: string | null;
 };
 
@@ -75,7 +73,8 @@ export type AnswerDTO =
   | DecryptedNumberSelectionAnswer
   | DecryptedDateRangeAnswer
   | DecryptedDateAnswer
-  | DecryptedSexAnswer;
+  | DecryptedSexAnswer
+  | DecryptedMediaAnswer;
 
 export type AnswerValue =
   | null
@@ -85,7 +84,8 @@ export type AnswerValue =
   | DecryptedSliderAnswer['value']
   | DecryptedNumberSelectionAnswer['value']
   | DecryptedDateRangeAnswer['value']
-  | DecryptedDateAnswer['value'];
+  | DecryptedDateAnswer['value']
+  | DecryptedMediaAnswer['value'];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',

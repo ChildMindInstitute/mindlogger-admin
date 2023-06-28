@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import { Box } from '@mui/material';
 
 import { EditorUiType, Switch, TransferListController } from 'shared/components/FormComponents';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
@@ -25,7 +26,7 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
   const itemsPrintName = `${name}.itemsPrint`;
   const printItemsError = getFieldState(`${name}.printItems`).error;
 
-  const commonProps = { control, sx: { mb: theme.spacing(0.5) } };
+  const commonProps = { control };
 
   const items = activity?.items.reduce(
     (items: Pick<Item, 'id' | 'name' | 'question'>[], item: Item) => {
@@ -64,12 +65,14 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
           {printItemsError.message}
         </StyledBodyMedium>
       )}
-      <Switch
-        name={`${name}.showMessage`}
-        label={t('showMessage')}
-        tooltipText={t('showMessageTooltip')}
-        {...commonProps}
-      />
+      <Box sx={{ mb: theme.spacing(1) }}>
+        <Switch
+          name={`${name}.showMessage`}
+          label={t('showMessage')}
+          tooltipText={t('showMessageTooltip')}
+          {...commonProps}
+        />
+      </Box>
       {showMessage && (
         <StyledEditor uiType={EditorUiType.Secondary} name={messageName} control={control} />
       )}

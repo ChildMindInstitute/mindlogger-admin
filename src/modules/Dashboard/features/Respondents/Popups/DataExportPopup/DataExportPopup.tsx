@@ -10,7 +10,14 @@ import {
   theme,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { getErrorMessage, prepareData, exportTemplate, falseReturnFunc } from 'shared/utils';
+import {
+  getErrorMessage,
+  prepareData,
+  exportTemplate,
+  falseReturnFunc,
+  getMediaReportName,
+  exportMediaZip,
+} from 'shared/utils';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME } from 'shared/consts';
@@ -39,12 +46,19 @@ export const DataExportPopup = ({
     (res) => {
       if (!res?.data?.result) return;
 
-      const { reportData, activityJourneyData } = prepareData(res.data.result, getDecryptedAnswers);
+      const { reportData, activityJourneyData, mediaData } = prepareData(
+        res.data.result,
+        getDecryptedAnswers,
+      );
 
       exportTemplate(reportData, GENERAL_REPORT_NAME);
-      // exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
-      setDataIsExporting(false);
-      handlePopupClose();
+
+      exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
+      (async () => {
+        await exportMediaZip(mediaData, getMediaReportName());
+        setDataIsExporting(false);
+        handlePopupClose();
+      })();
     },
     falseReturnFunc,
     falseReturnFunc,

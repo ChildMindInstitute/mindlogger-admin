@@ -51,7 +51,7 @@ export const InputController = <T extends FieldValues>({
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
         const getTextFieldValue = () => {
-          if (!isNumberType) return value;
+          if (!isNumberType) return value ?? '';
 
           if ((typeof value !== 'number' && !isEmptyStringAllowed) || value < minNumberValue) {
             return minNumberValue;
