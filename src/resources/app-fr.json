@@ -808,5 +808,7 @@
   "uploadFile": "Télécharger un fichier",
   "fileSizeExceed": "Le fichier est trop volumineux. Veuillez télécharger un fichier de moins de {{ size }}.",
   "serverStatusConnected": "État du serveur: connecté.",
-  "configureServerForReport": "État du serveur: non configuré. Le rapport ne peut pas être généré."
+  "configureServerForReport": "État du serveur: non configuré. Le rapport ne peut pas être généré.",
+  "true": "Vrai",
+  "false": "Faux"
 }
