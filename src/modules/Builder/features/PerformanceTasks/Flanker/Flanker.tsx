@@ -2,12 +2,13 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledHeadlineLarge, theme } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
+import { RoundTypeEnum } from 'modules/Builder/types';
 
 import { PerformanceTaskHeader } from '../PerformanceTaskHeader';
 import { NameDescription } from '../NameDescription';
 import { GeneralSettings } from './GeneralSettings';
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
-import { RoundSettings, RoundTypeEnum } from './RoundSettings';
+import { RoundSettings } from './RoundSettings';
 
 export const Flanker = () => {
   const { t } = useTranslation();

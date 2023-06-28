@@ -6,12 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
 
-import { ItemAlert, SingleAndMultipleSelectionOption } from 'shared/state';
+import { SingleAndMultipleSelectionOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 
-import { Alert, ItemConfigurationSettings } from '../ItemConfiguration.types';
+import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
 import {
   getPaletteColor,

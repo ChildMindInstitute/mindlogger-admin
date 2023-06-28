@@ -14,7 +14,7 @@ export const ItemSettingsController = <T extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange } }) => (
         <>
           {itemSettingsOptionsByInputType[inputType]?.map(
             ({ groupName, groupOptions, collapsedByDefault }) => (
@@ -22,7 +22,6 @@ export const ItemSettingsController = <T extends FieldValues>({
                 name={name}
                 itemName={itemName}
                 key={`item-settings-group-${groupName}`}
-                value={value}
                 onChange={onChange}
                 groupName={groupName}
                 inputType={inputType}

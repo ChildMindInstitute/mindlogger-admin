@@ -15,8 +15,9 @@ import {
   MIN_MILLISECONDS_DURATION,
   MIN_THRESHOLD_DURATION,
 } from 'shared/consts';
+import { RoundTypeEnum } from 'modules/Builder/types';
 
-import { IsPracticeRoundType, RoundTypeEnum } from '../RoundSettings.types';
+import { IsPracticeRoundType } from '../RoundSettings.types';
 import { getCheckboxes } from './RoundOptions.utils';
 
 export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {

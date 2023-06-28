@@ -1,17 +1,24 @@
-import { Box, TextField, styled } from '@mui/material';
+import { TextField, styled } from '@mui/material';
 
-import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { StyledBodySmall, StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
-export const StyledTransferListController = styled(StyledFlexTopCenter)`
+export const StyledTransferListController = styled(StyledFlexTopCenter, shouldForwardProp)`
   position: relative;
   width: 100%;
   gap: 2.4rem;
-  padding-bottom: ${theme.spacing(2.8)};
+
+  ${({ hasError }: { hasError?: boolean }) =>
+    hasError &&
+    `
+      padding-bottom: ${theme.spacing(1.8)};
+  `}
 `;
 
-export const StyledErrorContainer = styled(Box)`
+export const StyledErrorContainer = styled(StyledBodySmall)`
   position: absolute;
   bottom: 0;
+  left: 1.6rem;
   color: ${variables.palette.semantic.error};
 `;
 

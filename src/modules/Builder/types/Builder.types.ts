@@ -1,16 +1,14 @@
 import {
   ItemAlert,
   Config,
-  ActivitySettingsSubscale,
   ResponseValues,
   ConditionalLogic,
-  ActivitySettingsSection,
-  GyroscopeGeneralSettings,
-  GyroscopePracticeSettings,
-  GyroscopeTestSettings,
-  ActivitySettingsScore,
+  SubscaleSetting,
+  ScoresAndReports,
+  ActivitySettingsSubscale,
 } from 'shared/state';
-import { ItemResponseType, PerfTaskItemType, SubscaleTotalScore } from 'shared/consts';
+import { ItemResponseType, PerfTaskType, SubscaleTotalScore } from 'shared/consts';
+import { ArrayElement } from 'shared/types';
 
 export type ItemFormValues = {
   id?: string;
@@ -22,13 +20,6 @@ export type ItemFormValues = {
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
   allowEdit: boolean;
-};
-
-export type ScoresAndReports = {
-  generateReport: boolean;
-  showScoreSummary: boolean;
-  scores: ActivitySettingsScore[];
-  sections: ActivitySettingsSection[];
 };
 
 export type ActivityFormValues = {
@@ -44,14 +35,18 @@ export type ActivityFormValues = {
   isReviewable?: boolean;
   isHidden?: boolean;
   items: ItemFormValues[];
-  subscales?: ActivitySettingsSubscale[];
+  subscaleSetting?: SubscaleSetting<string> | null;
   scoresAndReports?: ScoresAndReports;
   calculateTotalScore?: SubscaleTotalScore;
   conditionalLogic?: ConditionalLogic[];
   totalScoresTableData?: string;
   isPerformanceTask?: boolean;
-  performanceTaskType?: PerfTaskItemType;
+  performanceTaskType?: PerfTaskType;
 };
+
+export type SubscaleFormValue = ArrayElement<
+  NonNullable<NonNullable<ActivityFormValues['subscaleSetting']>['subscales']>
+>;
 
 export enum CorrectPress {
   Left = 'left',
@@ -62,19 +57,6 @@ export type ActivityFlowItem = {
   id?: string;
   key?: string;
   activityKey: string;
-};
-
-export type GyroscopeFormValues = {
-  id?: string;
-  key?: string;
-  name: string;
-  description: string;
-  isHidden: boolean;
-  general: GyroscopeGeneralSettings;
-  practice: GyroscopePracticeSettings;
-  test: GyroscopeTestSettings;
-  isPerformanceTask?: boolean;
-  performanceTaskType?: PerfTaskItemType;
 };
 
 export type ActivityFlowFormValues = {
@@ -93,18 +75,23 @@ export type AppletFormValues = {
   displayName: string;
   description: string;
   about: string;
-  image?: string;
-  watermark?: string;
+  image: string;
+  watermark: string;
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
   activities: ActivityFormValues[];
+};
+
+export type GetNewActivity = {
+  name?: string;
+  activity?: ActivityFormValues;
 };
 
 export type GetNewPerformanceTask = {
   name?: string;
   description?: string;
   performanceTask?: ActivityFormValues;
-  performanceTaskType?: PerfTaskItemType;
+  performanceTaskType?: PerfTaskType;
 };
 
 export enum ConditionRowType {
@@ -115,5 +102,34 @@ export enum ConditionRowType {
 
 export type ItemResponseTypeNoPerfTasks = Exclude<
   ItemResponseType,
-  'flanker' | 'gyroscope' | 'touch' | 'ABTrailsIpad' | 'ABTrailsMobile'
+  | ItemResponseType.Flanker
+  | ItemResponseType.GyroscopePractice
+  | ItemResponseType.GyroscopeTest
+  | ItemResponseType.TouchPractice
+  | ItemResponseType.TouchTest
+  | ItemResponseType.ABTrailsMobileFirst
+  | ItemResponseType.ABTrailsMobileSecond
+  | ItemResponseType.ABTrailsMobileThird
+  | ItemResponseType.ABTrailsMobileFourth
+  | ItemResponseType.ABTrailsTabletFirst
+  | ItemResponseType.ABTrailsTabletSecond
+  | ItemResponseType.ABTrailsTabletThird
+  | ItemResponseType.ABTrailsTabletFourth
 >;
+
+export enum RoundTypeEnum {
+  Practice = 'practice',
+  Test = 'test',
+}
+
+export type GetActivitySubscaleItems = {
+  activityItemsObject: Record<string, ItemFormValues>;
+  subscalesObject: Record<string, ActivitySettingsSubscale>;
+  subscaleItems: ActivitySettingsSubscale['items'];
+};
+
+export type GetActivitySubscaleSettingDuplicated = {
+  oldSubscaleSetting: ActivityFormValues['subscaleSetting'];
+  oldItems: ItemFormValues[];
+  newItems: ItemFormValues[];
+};

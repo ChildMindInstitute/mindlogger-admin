@@ -56,5 +56,14 @@ export const postFileUploadApi = (body: FormData, signal?: AbortSignal) =>
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
+export const postFileDownloadApi = (key: string, signal?: AbortSignal) =>
+  authApiClient.post(
+    '/file/download',
+    { key },
+    {
+      signal,
+    },
+  );
+
 export const getWorkspaceRolesApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
   authApiClient.get(`/workspaces/${ownerId}/roles`, { params: {}, signal });

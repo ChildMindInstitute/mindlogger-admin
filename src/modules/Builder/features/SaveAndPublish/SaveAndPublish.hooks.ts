@@ -18,12 +18,13 @@ import {
   getBuilderAppletUrl,
   getDictionaryObject,
 } from 'shared/utils';
-import { applet, Activity, SingleApplet } from 'shared/state';
+import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
 import { workspaces } from 'redux/modules';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
+import { AppletFormValues } from 'modules/Builder/types';
 
 import { appletInfoMocked } from './mock';
 import {
@@ -33,6 +34,7 @@ import {
   mapItemResponseValues,
   getItemConditionalLogic,
   removeActivityFlowExtraFields,
+  remapSubscaleSettings,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -48,7 +50,7 @@ export const useAppletData = () => {
   const { getValues } = useFormContext();
 
   return (encryption?: Encryption): SingleApplet => {
-    const appletInfo = getValues() as SingleApplet;
+    const appletInfo = getValues() as AppletFormValues;
 
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
@@ -58,34 +60,41 @@ export const useAppletData = () => {
     return {
       ...defaultAppletInfo,
       ...appletInfo,
-      activities: appletInfo?.activities.map((activity: Activity) => ({
-        ...activity,
-        key: activity.id || activity.key,
-        description: getDictionaryObject(activity.description),
-        items: activity.items?.map(({ id, ...item }) => ({
-          ...item,
-          ...(id && { id }),
-          question: getDictionaryObject(item.question),
-          responseValues: mapItemResponseValues(item) || null,
-          conditionalLogic: getItemConditionalLogic(
-            { ...item, id },
-            activity.items,
-            activity.conditionalLogic,
-          ),
-          ...removeItemExtraFields(),
-        })),
-        ...removeActivityExtraFields(activity),
-      })),
+      activities: appletInfo?.activities.map(
+        (activity) =>
+          ({
+            ...activity,
+            key: activity.id || activity.key,
+            description: getDictionaryObject(activity.description),
+            items: activity.items?.map(({ id, ...item }) => ({
+              ...item,
+              ...(id && { id }),
+              question: getDictionaryObject(item.question),
+              responseValues: mapItemResponseValues(item) || null,
+              conditionalLogic: getItemConditionalLogic(
+                { ...item, id },
+                activity.items,
+                activity.conditionalLogic,
+              ),
+              ...removeItemExtraFields(),
+            })),
+            subscaleSetting: remapSubscaleSettings(activity),
+            ...removeActivityExtraFields(),
+          } as Activity),
+      ),
       encryption,
       description: appletDescription,
       about: appletAbout,
       themeId: null, // TODO: create real themeId
-      activityFlows: appletInfo?.activityFlows.map(({ key, ...flow }) => ({
-        ...flow,
-        description: getDictionaryObject(flow.description),
-        items: flow.items?.map(({ key, ...item }) => item),
-        ...removeActivityFlowExtraFields(),
-      })),
+      activityFlows: appletInfo?.activityFlows.map(
+        ({ key, ...flow }) =>
+          ({
+            ...flow,
+            description: getDictionaryObject(flow.description),
+            items: flow.items?.map(({ key, ...item }) => item),
+            ...removeActivityFlowExtraFields(),
+          } as ActivityFlow),
+      ),
       ...removeAppletExtraFields(),
     };
   };
