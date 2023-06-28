@@ -113,6 +113,12 @@ export enum ItemResponseType {
   ABTrailsMobileFourth = 'ABTrailsMobileFourth',
 }
 
+export const ItemsWithFileResponses = [
+  ItemResponseType.Photo,
+  ItemResponseType.Video,
+  ItemResponseType.Audio,
+];
+
 export enum PerfTaskType {
   Flanker = 'flanker',
   Touch = 'touch',
