@@ -38,8 +38,8 @@ export const stableSort = <T>(array: readonly T[], comparator: (a: T, b: T) => n
   return stabilized.map((el) => el[0]);
 };
 
-export const getRows = (answers: TextItemAnswer[]) =>
-  answers.map(({ date, time, response }) => ({
+export const getRows = (answers: TextItemAnswer[], skippedResponse: JSX.Element) =>
+  answers.map(({ date, time, answer }) => ({
     date: {
       content: () => date,
       value: date,
@@ -48,8 +48,8 @@ export const getRows = (answers: TextItemAnswer[]) =>
       content: () => time,
       value: time,
     },
-    response: {
-      content: () => response,
-      value: response,
+    answer: {
+      content: () => (answer ? answer : skippedResponse),
+      value: answer,
     },
   }));

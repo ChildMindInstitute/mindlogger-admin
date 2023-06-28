@@ -8,20 +8,24 @@ import { addDays } from 'date-fns';
 import { Spinner, Svg, Tooltip } from 'shared/components';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
 import { StyledHeadlineLarge, theme, variables } from 'shared/styles';
-import { DatavizAnswer, getAnswersApi } from 'api';
+import { getAnswersApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
-import { FilterFormValues, ReportProps } from './Report.types';
+import { ActivityResponse, FilterFormValues, ReportProps, ResponseOption } from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
-import { activityReport } from './mock';
 import { ResponseOptions } from './ResponseOptions';
-import { getDateISO, getDefaultFilterValues, getIdentifiers } from './Report.utils';
+import {
+  getDateISO,
+  getDefaultFilterValues,
+  getFormattedResponses,
+  getIdentifiers,
+} from './Report.utils';
 
-export const Report = ({ activity, identifiers, versions }: ReportProps) => {
+export const Report = ({ activity, identifiers = [], versions = [] }: ReportProps) => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
@@ -29,7 +33,8 @@ export const Report = ({ activity, identifiers, versions }: ReportProps) => {
   const getDecryptedActivityData = useDecryptedActivityData();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [answers, setAnswers] = useState<DatavizAnswer[]>([]);
+  const [answers, setAnswers] = useState<ActivityResponse[]>([]);
+  const [responseOptions, setResponseOptions] = useState<ResponseOption[]>([]);
 
   const methods = useForm<FilterFormValues>({
     defaultValues: getDefaultFilterValues(versions),
@@ -75,15 +80,17 @@ export const Report = ({ activity, identifiers, versions }: ReportProps) => {
             answer,
             items,
             itemIds,
-          });
+          }).decryptedAnswers;
 
           return {
-            answer: decryptedAnswer,
-            items,
+            decryptedAnswer,
             ...rest,
           };
         });
-        setAnswers(decryptedAnswers as unknown as DatavizAnswer[]);
+
+        setAnswers(decryptedAnswers);
+        const formattedResponses = getFormattedResponses(decryptedAnswers);
+        setResponseOptions(formattedResponses);
       } finally {
         setIsLoading(false);
       }
@@ -114,11 +121,8 @@ export const Report = ({ activity, identifiers, versions }: ReportProps) => {
             <ActivityCompleted answers={answers} versions={versions} />
             {/* TODO: hide subscales until the module for counting is ready */}
             {/* <Subscales />  */}
-            {activityReport.responseOptions && (
-              <ResponseOptions
-                responseOptions={activityReport.responseOptions}
-                versions={versions}
-              />
+            {!isLoading && responseOptions && (
+              <ResponseOptions responseOptions={responseOptions} versions={versions} />
             )}
           </FormProvider>
         </Box>

@@ -17,6 +17,7 @@ export type ResponseOptionsProps = {
 };
 
 export type GetResponseOptionsProps = {
+  color: string;
   minDate: Date;
   maxDate: Date;
   activityItem: Item;

@@ -32,7 +32,7 @@ export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
             sx={{ padding: theme.spacing(1.6, 2, 0.8) }}
             color={variables.palette.outline}
           >
-            {format((data?.raw as { x: Date; y: number }).x, DateFormats.MonthDayTime)}
+            {format(data?.parsed.x, DateFormats.MonthDayTime)}
           </StyledBodySmall>
         )}
         <StyledFlexColumn>

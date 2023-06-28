@@ -1,5 +1,7 @@
+import { COLORS } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.const';
+
 import { ChartData } from './BarChart.types';
-import { BORDER_RADIUS, COLORS } from './BarChart.const';
+import { BORDER_RADIUS } from './BarChart.const';
 
 export const getDatasets = (chartData: ChartData[]) =>
   chartData.map((item, index) => ({
