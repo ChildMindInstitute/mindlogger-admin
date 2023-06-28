@@ -502,6 +502,14 @@ export type SubscaleSetting<T = ActivitySettingsSubscaleItem> = {
   totalScoresTableData?: Record<string, string>[] | null;
 };
 
+export type ParsedSubscale = {
+  [key: string]: number | string;
+};
+
+export type ScoresObject = {
+  [key: string]: number;
+};
+
 export type Activity = {
   id?: string;
   key?: string;

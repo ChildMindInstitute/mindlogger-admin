@@ -52,6 +52,7 @@ export const DataExportPopup = ({
       );
 
       exportTemplate(reportData, GENERAL_REPORT_NAME);
+
       exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
       (async () => {
         await exportMediaZip(mediaData, getMediaReportName());

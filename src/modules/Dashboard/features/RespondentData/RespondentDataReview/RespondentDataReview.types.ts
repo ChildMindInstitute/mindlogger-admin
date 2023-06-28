@@ -60,6 +60,10 @@ export type DecryptedDateAnswer = {
   };
 };
 
+export type DecryptedSexAnswer = {
+  value: string;
+};
+
 export type AnswerDTO =
   | null
   | DecryptedTextAnswer
@@ -69,6 +73,7 @@ export type AnswerDTO =
   | DecryptedNumberSelectionAnswer
   | DecryptedDateRangeAnswer
   | DecryptedDateAnswer
+  | DecryptedSexAnswer
   | DecryptedMediaAnswer;
 
 export type AnswerValue =
