@@ -1141,5 +1141,7 @@
   "uploadFile": "Upload File",
   "fileSizeExceed": "File is too big. Please upload a file less than {{ size }}.",
   "serverStatusConnected": "Server Status: Connected.",
-  "configureServerForReport": "Server Status: Not Configured. Report can not be generated."
+  "configureServerForReport": "Server Status: Not Configured. Report can not be generated.",
+  "true": "True",
+  "false": "False"
 }
