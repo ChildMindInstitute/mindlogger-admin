@@ -218,3 +218,8 @@ export const enum ActivityStatus {
   Completed = 'completed',
   NotSheduled = 'not scheduled',
 }
+
+export const enum Sex {
+  M = 'M',
+  F = 'F',
+}

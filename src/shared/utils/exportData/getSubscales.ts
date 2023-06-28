@@ -7,7 +7,7 @@ import {
   SliderItemResponseValues,
   SubscaleSetting,
 } from 'shared/state';
-import { SubscaleTotalScore } from 'shared/consts';
+import { Sex, SubscaleTotalScore } from 'shared/consts';
 import {
   AnswerDTO,
   DecryptedMultiSelectionAnswer,
@@ -23,7 +23,7 @@ import { createArrayFromMinToMax } from '../array';
 export const getSubScaleScore = (subscalesSum: number, type: SubscaleTotalScore, length: number) =>
   type === SubscaleTotalScore.Sum ? subscalesSum : subscalesSum / length;
 
-export const parseSex = (sex: string) => (sex === 'M' ? '1' : '2');
+export const parseSex = (sex: string) => (sex === Sex.M ? '1' : '2');
 
 export const calcScores = <T>(
   data: ActivitySettingsSubscale,
