@@ -701,7 +701,10 @@
     "unique": "Cette {{- field }} déja en cours d'utilisation. Veuillez utiliser un nom différent",
     "atLeastOne": "Sélectionnez au moins 1 élément",
     "mustShowMessageOrItems": "Vous devez afficher un message ou imprimer des éléments pour publier ce rapport",
-    "atLeastOneItem": "Sélectionnez au moins 1 élément"
+    "atLeastOneItem": "Sélectionnez au moins 1 élément",
+    "incorrectEmail": "L'e-mail doit être valide",
+    "variableInTheSameItem": "* Vous ne pouvez pas utiliser le nom de l'élément dans le même élément. Veuillez le supprimer",
+    "variableIsNotSupported": "* Cet élément n'est pas pris en charge, veuillez le supprimer."
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",

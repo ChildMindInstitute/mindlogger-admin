@@ -14,5 +14,5 @@ export const StyledTooltipSvg = styled(Svg)`
     fill: ${variables.palette.outline};
   }
 
-  margin-left: ${theme.spacing(1)};
+  margin-left: ${theme.spacing(0.6)};
 `;

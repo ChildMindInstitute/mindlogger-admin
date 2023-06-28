@@ -858,7 +858,9 @@
     "atLeastOneCondition": "Set up at least one condition",
     "mustShowMessageOrItems": "You must show a message or print items to publish this report",
     "atLeastOneItem": "Select at least 1 Item",
-    "incorrectEmail": "Email must be valid"
+    "incorrectEmail": "Email must be valid",
+    "variableInTheSameItem": "* You cannot use item name in the same item. Please remove",
+    "variableIsNotSupported": "* This item is not supported, please remove it."
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
@@ -1040,7 +1042,7 @@
   "publishAppletPopupSuccessDescription": "The Applet <1>{{name}}</1> has been <3>{{status}}</3> successfully.",
   "publishAppletPopupErrorDescription": "The Applet <1>{{name}}</1> has not been <3>{{status}}</3>. Please try again.",
   "noPermissions": "You have no permissions to view this tab.",
-  "sectionHeader": "Section {{index}}: {{name}}",
+  "sectionHeader": "Section {{index}}:",
   "sectionName": "Section name",
   "showMessage": "Show message",
   "showMessageTooltip": "Message that will be displayed in the report. To print the value of the score, surround the Score ID in [[]]",
@@ -1070,7 +1072,7 @@
   "male": "Male",
   "female": "Female",
   "ageQuestion": "How old are you?",
-  "scoreHeader": "Score {{index}}: {{name}}",
+  "scoreHeader": "Score {{index}}:",
   "scoreName": "Score name",
   "scoreCalculationType": "Score Calculation Type",
   "scoreItems": "Items used to calculate score",

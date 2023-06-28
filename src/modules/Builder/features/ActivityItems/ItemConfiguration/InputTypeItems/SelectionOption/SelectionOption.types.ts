@@ -16,10 +16,6 @@ export type SetSelectionOptionValue = {
   name: string;
   onUpdateOption: (index: number, option: SingleAndMultipleSelectionOption) => void;
   index: number;
-  hasScoresChecked: boolean;
-  scoreString?: string;
-  hasTooltipsChecked: boolean;
-  hasTooltip: boolean;
   hasColorPicker: boolean;
   hasColor: boolean;
 };
