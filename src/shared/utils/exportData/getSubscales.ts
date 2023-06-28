@@ -7,7 +7,7 @@ import {
   SliderItemResponseValues,
   SubscaleSetting,
 } from 'shared/state';
-import { Sex, SubscaleTotalScore } from 'shared/consts';
+import { LookupTableItems, Sex, SubscaleTotalScore } from 'shared/consts';
 import {
   AnswerDTO,
   DecryptedMultiSelectionAnswer,
@@ -79,9 +79,12 @@ export const calcScores = <T>(
 
   if (data?.subscaleTableData) {
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {
-      const genderAnswer = activityItems.gender_screen?.answer as DecryptedSexAnswer;
+      const genderAnswer = activityItems[LookupTableItems.Gender_screen]
+        ?.answer as DecryptedSexAnswer;
       const withSex = sex ? parseSex(sex) === genderAnswer?.value : true;
-      const withAge = age ? String(age) === activityItems.age_screen.answer : true;
+      const withAge = age
+        ? String(age) === activityItems[LookupTableItems.Age_screen]?.answer
+        : true;
 
       return withSex && withAge && rawScore === String(calculetedScore);
     });

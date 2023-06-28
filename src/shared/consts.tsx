@@ -223,3 +223,8 @@ export const enum Sex {
   M = 'M',
   F = 'F',
 }
+
+export const enum LookupTableItems {
+  Age_screen = 'age_screen',
+  Gender_screen = 'gender_screen',
+}
