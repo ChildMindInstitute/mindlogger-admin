@@ -103,8 +103,7 @@ export enum ConditionRowType {
 export type ItemResponseTypeNoPerfTasks = Exclude<
   ItemResponseType,
   | ItemResponseType.Flanker
-  | ItemResponseType.GyroscopePractice
-  | ItemResponseType.GyroscopeTest
+  | ItemResponseType.StabilityTracker
   | ItemResponseType.TouchPractice
   | ItemResponseType.TouchTest
   | ItemResponseType.ABTrailsMobileFirst

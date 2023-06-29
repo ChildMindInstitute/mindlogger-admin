@@ -24,11 +24,6 @@ export enum DeviceType {
   Tablet = 'tablet',
 }
 
-export enum GyroscopeOrTouch {
-  Gyroscope = 'Gyroscope',
-  Touch = 'Touch',
-}
-
 export enum GyroscopeItemNames {
   GeneralInstruction = 'Gyroscope_General_instruction',
   PracticeInstruction = 'Gyroscope_Calibration_Practice_instruction',

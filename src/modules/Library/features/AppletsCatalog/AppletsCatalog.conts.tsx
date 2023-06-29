@@ -86,8 +86,7 @@ export const ItemResponseTypes = {
     icon: null,
     title: ItemResponseType.ABTrailsTabletFourth,
   },
-  [ItemResponseType.GyroscopeTest]: { icon: null, title: ItemResponseType.GyroscopeTest },
-  [ItemResponseType.GyroscopePractice]: { icon: null, title: ItemResponseType.GyroscopePractice },
+  [ItemResponseType.StabilityTracker]: { icon: null, title: ItemResponseType.StabilityTracker },
   [ItemResponseType.TouchTest]: { icon: null, title: ItemResponseType.TouchTest },
   [ItemResponseType.TouchPractice]: { icon: null, title: ItemResponseType.TouchPractice },
 };

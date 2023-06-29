@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { GyroscopeOrTouch } from 'shared/consts';
 
 import { PerformanceTaskHeader } from '../PerformanceTaskHeader';
 import { NameDescription } from '../NameDescription';
@@ -10,7 +11,6 @@ import { Instruction } from '../Instruction';
 import { GeneralSettings } from './GeneralSettings';
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import { GyroscopeAndTouchProps } from './GyroscopeAndTouch.types';
-import { PerformanceTasks } from '../../Activities/Activities.types';
 
 export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
   const { t } = useTranslation();
@@ -22,7 +22,11 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
       <PerformanceTaskHeader />
       <StyledPerformanceTaskBody sx={{ p: theme.spacing(2.4, 6.4) }}>
         <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>
-          {t(type === PerformanceTasks.Gyroscope ? 'gyroscope' : 'touch')}
+          {t(
+            type === GyroscopeOrTouch.Gyroscope
+              ? GyroscopeOrTouch.Gyroscope
+              : GyroscopeOrTouch.Touch,
+          )}
         </StyledHeadlineLarge>
         <NameDescription />
         <GeneralSettings />
