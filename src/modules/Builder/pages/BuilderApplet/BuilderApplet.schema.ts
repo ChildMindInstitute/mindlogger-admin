@@ -397,7 +397,7 @@ export const ConditionSchema = () =>
     payload: yup.object({}).when('type', (type, schema) => {
       if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
         return schema.shape({
-          optionId: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+          optionValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
         });
 
       return schema;
