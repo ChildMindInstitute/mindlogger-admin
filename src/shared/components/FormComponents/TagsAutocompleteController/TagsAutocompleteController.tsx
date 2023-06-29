@@ -24,6 +24,7 @@ export const TagsInputController = <T extends FieldValues>({
   labelAllSelect,
   noOptionsText,
   disabled,
+  limitTags,
   ...props
 }: TagsAutocompleteControllerProps<T>) => {
   const [selectedAll, setSelectedAll] = useState<boolean>(false);
@@ -58,6 +59,7 @@ export const TagsInputController = <T extends FieldValues>({
           <Autocomplete
             id="autocomplete"
             multiple
+            limitTags={limitTags}
             options={options || []}
             fullWidth
             disableCloseOnSelect

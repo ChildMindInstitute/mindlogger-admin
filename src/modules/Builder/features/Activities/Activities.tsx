@@ -1,26 +1,34 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext, useFieldArray } from 'react-hook-form';
-import { useNavigate, useParams, generatePath } from 'react-router-dom';
-import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
 import { Box } from '@mui/material';
 
-import { StyledTitleMedium, StyledFlexColumn, theme } from 'shared/styles';
+import { StyledFlexColumn, StyledTitleMedium, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
-import { Item, ItemUiType, InsertItem, DndDroppable } from 'modules/Builder/components';
+import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
 import {
   getNewActivity,
   getNewPerformanceTask,
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
-import { PerfTaskItemType } from 'shared/consts';
+import { PerfTaskType } from 'shared/consts';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
-import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
-import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
+import {
+  getActions,
+  getActivityKey,
+  getPerformanceTaskPath,
+  getInitialActivityNames,
+  removeNameSequenceNumber,
+  getDuplicatedActivityName,
+  getAddedActivityName,
+} from './Activities.utils';
+import { ActivityAddProps, EditablePerformanceTasksType, ActivityNames } from './Activities.types';
 import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
@@ -29,8 +37,8 @@ export const Activities = () => {
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
-  const [, setDuplicateIndexes] = useState<Record<string, number>>({});
   const [isDragging, setIsDragging] = useState(false);
+  const [activityNames, setActivityNames] = useState<ActivityNames>([]);
 
   const {
     append: appendActivity,
@@ -69,10 +77,7 @@ export const Activities = () => {
         activityId,
       }),
     );
-  const navigateToPerformanceTask = (
-    activityId?: string,
-    performanceTasksType?: PerfTaskItemType,
-  ) =>
+  const navigateToPerformanceTask = (activityId?: string, performanceTasksType?: PerfTaskType) =>
     activityId &&
     appletId &&
     performanceTasksType &&
@@ -94,14 +99,22 @@ export const Activities = () => {
       isNavigationBlocked,
       performanceTaskType,
     } = props || {};
+
+    const newActivityName =
+      performanceTaskName && performanceTaskDesc && performanceTaskType
+        ? performanceTaskName
+        : t('newActivity');
+
+    const name = getAddedActivityName(newActivityName, activityNames, setActivityNames);
+
     const newActivity =
       performanceTaskName && performanceTaskDesc && performanceTaskType
         ? getNewPerformanceTask({
-            name: performanceTaskName,
+            name,
             description: performanceTaskDesc,
             performanceTaskType,
           })
-        : getNewActivity();
+        : getNewActivity({ name });
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
 
@@ -113,7 +126,7 @@ export const Activities = () => {
     return navigateToActivity(newActivity.key);
   };
 
-  const handleActivityRemove = (index: number, activityKey: string) => {
+  const handleActivityRemove = (index: number, activityKey: string, activityName: string) => {
     const newActivityFlows = activityFlows.reduce(
       (acc: AppletFormValues['activityFlows'], flow) => {
         const items = flow.items?.filter((item) => item.activityKey !== activityKey);
@@ -127,29 +140,27 @@ export const Activities = () => {
     );
 
     removeActivity(index);
+    removeNameSequenceNumber(activityName, activityNames, setActivityNames);
     setValue('activityFlows', newActivityFlows);
   };
 
   const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
     const activityToDuplicate = activities[index];
-    setDuplicateIndexes((prevState) => {
-      const numberToInsert = (prevState[getActivityKey(activityToDuplicate)] || 0) + 1;
+    const name = getDuplicatedActivityName(
+      activityToDuplicate.name,
+      activityNames,
+      setActivityNames,
+    );
 
-      const newActivity = isPerformanceTask
-        ? getNewPerformanceTask({
-            performanceTask: activityToDuplicate,
-          })
-        : getNewActivity(activityToDuplicate as ActivityFormValues);
+    const newActivity = isPerformanceTask
+      ? getNewPerformanceTask({
+          performanceTask: activityToDuplicate,
+        })
+      : getNewActivity({ activity: activityToDuplicate });
 
-      insertActivity(index + 1, {
-        ...newActivity,
-        name: `${activityToDuplicate.name} (${numberToInsert})`,
-      });
-
-      return {
-        ...prevState,
-        [getActivityKey(activityToDuplicate)]: numberToInsert,
-      };
+    insertActivity(index + 1, {
+      ...newActivity,
+      name,
     });
   };
 
@@ -176,6 +187,11 @@ export const Activities = () => {
     if (!destination) return;
     moveActivity(source.index, destination.index);
   };
+
+  useEffect(() => {
+    if (!activities?.length) return;
+    setActivityNames(getInitialActivityNames(activities));
+  }, []);
 
   return (
     <BuilderContainer
@@ -205,7 +221,9 @@ export const Activities = () => {
                             <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
                               <Item
                                 {...activity}
-                                onItemClick={() => handleEditActivity(index)}
+                                onItemClick={
+                                  isEditVisible ? () => handleEditActivity(index) : undefined
+                                }
                                 dragHandleProps={itemProvided.dragHandleProps}
                                 isDragging={snapshot.isDragging}
                                 img={activity.image}
@@ -240,7 +258,9 @@ export const Activities = () => {
                           activityName={activityName}
                           isOpen={activityToDelete === activityKey}
                           onModalClose={handleModalClose}
-                          onModalSubmit={() => handleActivityRemove(index, activityKey)}
+                          onModalSubmit={() =>
+                            handleActivityRemove(index, activityKey, activityName)
+                          }
                         />
                       </Fragment>
                     );

@@ -743,6 +743,9 @@
   "configureServer": "Please configure the report server to download the report.",
   "moreFilters": "More Filters",
   "activityCompleted": "Activity Completed",
+  "response_one": "{{count}} response",
+  "response_other": "{{count}} responses",
+  "respondentSkippedResponse": "! Respondent skipped the response",
   "respondentCompletedActivities": "The respondent completed the activity at these times",
   "selectActivityAndResponse": "Select activity and response",
   "reviewDate": "Review Date",
@@ -1138,5 +1141,7 @@
   "uploadFile": "Upload File",
   "fileSizeExceed": "File is too big. Please upload a file less than {{ size }}.",
   "serverStatusConnected": "Server Status: Connected.",
-  "configureServerForReport": "Server Status: Not Configured. Report can not be generated."
+  "configureServerForReport": "Server Status: Not Configured. Report can not be generated.",
+  "true": "True",
+  "false": "False"
 }

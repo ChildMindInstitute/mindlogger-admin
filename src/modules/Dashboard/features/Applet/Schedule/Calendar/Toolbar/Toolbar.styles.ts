@@ -34,6 +34,7 @@ export const StyledIconBtn = styled(StyledClearedButton)`
 `;
 
 export const StyledTodayBtn = styled(Button)`
+  height: 3.8rem;
   svg {
     fill: ${variables.palette.primary};
   }

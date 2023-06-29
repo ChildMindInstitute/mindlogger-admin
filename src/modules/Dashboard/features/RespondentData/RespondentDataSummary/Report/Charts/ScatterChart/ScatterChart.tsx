@@ -53,7 +53,7 @@ export const ScatterChart = ({
   };
 
   const tooltipHandler = (context: ScriptableTooltipContext<'scatter'>) => {
-    if (!context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x')) return; // hide the tooltip for version axis
+    if (context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x2')) return; // hide the tooltip for version axis
     const tooltipEl = tooltipRef.current;
 
     if (!tooltipEl) return;

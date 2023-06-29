@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
-import { SubscaleTotalScore, ItemResponseType } from 'shared/consts';
+import { SubscaleTotalScore, ItemResponseType, LookupTableItems } from 'shared/consts';
 import { SingleAndMultipleSelectItemResponseValues, TextItemResponseValues } from 'shared/state';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import {
@@ -56,7 +56,7 @@ export const totalScoreTableTemplate = [
 
 export const genderItem = getNewActivityItem({
   allowEdit: false,
-  name: 'gender_screen',
+  name: LookupTableItems.Gender_screen,
   question: t('genderQuestion'),
   config: defaultSingleAndMultiSelectionConfig,
   responseType: ItemResponseType.SingleSelection,
@@ -78,7 +78,7 @@ export const genderItem = getNewActivityItem({
 
 export const ageItem = getNewActivityItem({
   allowEdit: false,
-  name: 'age_screen',
+  name: LookupTableItems.Age_screen,
   question: t('ageQuestion'),
   config: defaultTextConfig,
   responseType: ItemResponseType.Text,

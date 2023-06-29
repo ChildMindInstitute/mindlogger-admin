@@ -8,7 +8,6 @@ import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
 import { parseOptions } from './parseOptions';
 import { getRawScores } from './getRowScores';
-import { getSubscales } from './getSubscales';
 
 export const getReportCSVObject = <T>({
   item,
@@ -30,7 +29,6 @@ export const getReportCSVObject = <T>({
     flowId,
     version,
     reviewedAnswerId,
-    subscaleSetting,
   } = item;
 
   const responseValues = activityItem?.responseValues as SingleAndMultipleSelectItemResponseValues &
@@ -55,19 +53,12 @@ export const getReportCSVObject = <T>({
       rawAnswersObject,
     }),
     options: replaceItemVariableWithName({
-      markdown: parseOptions(responseValues, item.activityItem?.responseType),
+      markdown: parseOptions(responseValues, item.activityItem?.responseType) ?? '',
       items: item.items,
       rawAnswersObject,
     }),
     version,
     rawScore: getRawScores(responseValues) || '',
     reviewing_id: reviewedAnswerId,
-    ...getSubscales(subscaleSetting?.subscales),
-    ...(subscaleSetting?.calculateTotalScore && {
-      'Final SubScale Score': subscaleSetting.calculateTotalScore,
-    }),
-    ...(subscaleSetting?.totalScoresTableData && {
-      'Optional text for Final SubScale Score': subscaleSetting.totalScoresTableData,
-    }),
   };
 };

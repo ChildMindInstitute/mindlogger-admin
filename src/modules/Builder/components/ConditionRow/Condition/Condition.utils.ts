@@ -3,9 +3,9 @@ import { ConditionType } from 'shared/consts';
 
 import { ConditionItemType } from './Condition.const';
 
-export const getStateOptions = (type?: ConditionItemType) => {
-  const { t } = i18n;
+const { t } = i18n;
 
+export const getStateOptions = (type?: ConditionItemType) => {
   switch (type) {
     case ConditionItemType.Score:
     case ConditionItemType.Slider:
@@ -33,3 +33,14 @@ export const getStateOptions = (type?: ConditionItemType) => {
       return [];
   }
 };
+
+export const getScoreConditionOptions = () => [
+  {
+    value: 'false',
+    labelKey: t('false'),
+  },
+  {
+    value: 'true',
+    labelKey: t('true'),
+  },
+];

@@ -3,7 +3,7 @@ import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } f
 export const getRawScores = (
   responseValues: SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues,
 ) => {
-  if (responseValues?.scores) {
+  if (responseValues?.scores?.length) {
     return responseValues?.scores?.reduce((acc, item) => acc + (item || 0), 0);
   }
 

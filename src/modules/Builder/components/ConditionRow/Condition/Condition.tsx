@@ -8,7 +8,7 @@ import { ConditionRowType } from 'modules/Builder/types';
 import { StyledCondition, StyledSelectController, StyledInputController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
 import { ConditionItemType, DEFAULT_NUMBER_MIN_VALUE } from './Condition.const';
-import { getStateOptions } from './Condition.utils';
+import { getScoreConditionOptions, getStateOptions } from './Condition.utils';
 
 export const Condition = ({
   control,
@@ -38,11 +38,11 @@ export const Condition = ({
   const isRowTypeItem = type === ConditionRowType.Item;
   const isItemSelect =
     selectedItem?.type === ConditionItemType.SingleSelection ||
-    selectedItem?.type === ConditionItemType.MultiSelection;
+    selectedItem?.type === ConditionItemType.MultiSelection ||
+    isItemScoreCondition;
   const isValueSelectShown = !selectedItem || isItemSelect;
   const isNumberValueShown =
-    (isItemSlider || isItemScore || isItemScoreCondition) &&
-    !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
+    (isItemSlider || isItemScore) && !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = (isItemSlider || isItemScore) && !isNumberValueShown;
 
   return (
@@ -80,7 +80,7 @@ export const Condition = ({
         <StyledSelectController
           control={control}
           name={optionValueName}
-          options={valueOptions}
+          options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
           placeholder={t('value')}
           isLabelNeedTranslation={false}
         />

@@ -1,6 +1,10 @@
 import { DatavizActivity, Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { Item } from 'shared/state';
+import {
+  ActivityItemAnswer,
+  AnswerDTO,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { Identifier } from '../RespondentDataSummary.types';
 
@@ -26,7 +30,7 @@ export type Response = {
 };
 
 export type ItemAnswer = {
-  value: number | string | string[];
+  answer: AnswerDTO;
   date: Date | string;
 };
 
@@ -43,4 +47,13 @@ export type ResponseOption = {
 export type ActivityReport = {
   responses: Response[];
   responseOptions: ResponseOption[];
+};
+
+export type ActivityResponse = {
+  decryptedAnswer: ActivityItemAnswer[];
+  events: string;
+  answerId: string;
+  endDatetime: string;
+  startDatetime: string;
+  version: string;
 };

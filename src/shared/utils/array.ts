@@ -17,3 +17,6 @@ export const groupBy = <T, K extends keyof T>(
       [`${key}`]: [...(result[`${key}`] ?? []), item],
     };
   }, {});
+
+export const createArrayFromMinToMax = (min: number, max: number) =>
+  Array.from({ length: max - min + 1 }, (_, i) => i + min);

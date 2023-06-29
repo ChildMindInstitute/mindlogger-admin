@@ -12,10 +12,10 @@ import {
   ScoreConditionType,
   ConditionalLogicMatch,
   CalculationType,
-  PerfTaskItemType,
+  PerfTaskType,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
-import { CorrectPress } from 'modules/Builder/types';
+import { CorrectPress, RoundTypeEnum } from 'modules/Builder/types';
 import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
 export type CreateAppletStateData = {
@@ -241,6 +241,12 @@ type FlankerConfig = {
   removeBackButton?: boolean;
 };
 
+type ABTrailsConfig = {
+  deviceType: string;
+  skippableItem?: boolean;
+  removeBackButton?: boolean;
+};
+
 export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
@@ -335,25 +341,11 @@ export type DrawingResponseValues = {
   drawingBackground: string;
 };
 
-export type GyroscopeGeneralSettings = {
-  instruction: string;
-  numberOfTrials: number;
-  lengthOfTest: number;
-  lambdaSlope: number;
-};
-
-export type GyroscopePracticeSettings = {
-  instruction: string;
-};
-
-export type GyroscopeTestSettings = {
-  instruction: string;
-};
-
 export type GyroscopeConfig = {
-  general: GyroscopeGeneralSettings;
-  practice: GyroscopePracticeSettings;
-  test: GyroscopeTestSettings;
+  phase: RoundTypeEnum;
+  trialsNumber: number;
+  durationMinutes: number;
+  lambdaSlope: number;
   skippableItem?: boolean;
   removeBackButton?: boolean;
 };
@@ -392,7 +384,8 @@ export type Config =
   | MessageConfig
   | GyroscopeConfig
   | TouchConfig
-  | FlankerConfig;
+  | FlankerConfig
+  | ABTrailsConfig;
 
 export type ItemAlert = {
   key?: string;
@@ -509,6 +502,14 @@ export type SubscaleSetting<T = ActivitySettingsSubscaleItem> = {
   totalScoresTableData?: Record<string, string>[] | null;
 };
 
+export type ParsedSubscale = {
+  [key: string]: number | string;
+};
+
+export type ScoresObject = {
+  [key: string]: number;
+};
+
 export type Activity = {
   id?: string;
   key?: string;
@@ -528,7 +529,7 @@ export type Activity = {
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
   isPerformanceTask?: boolean;
-  performanceTaskType?: PerfTaskItemType;
+  performanceTaskType?: PerfTaskType;
   createdAt?: string;
 };
 

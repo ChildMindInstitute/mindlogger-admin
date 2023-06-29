@@ -605,6 +605,9 @@
   "configureServer": "Veuillez configurer le serveur de rapports pour télécharger le rapport.",
   "moreFilters": "Plus de filtres",
   "activityCompleted": "Activité terminée",
+  "response_one": "{{count}} réponse",
+  "response_other": "{{count}} réponses",
+  "respondentSkippedResponse": "! Le répondant a sauté la réponse",
   "respondentCompletedActivities": "Le répondant a terminé l'activité à ces moments",
   "selectActivityAndResponse": "Sélectionner l'activité et la réponse",
   "reviewDate": "Date de révision",
@@ -811,5 +814,7 @@
   "uploadFile": "Télécharger un fichier",
   "fileSizeExceed": "Le fichier est trop volumineux. Veuillez télécharger un fichier de moins de {{ size }}.",
   "serverStatusConnected": "État du serveur: connecté.",
-  "configureServerForReport": "État du serveur: non configuré. Le rapport ne peut pas être généré."
+  "configureServerForReport": "État du serveur: non configuré. Le rapport ne peut pas être généré.",
+  "true": "Vrai",
+  "false": "Faux"
 }

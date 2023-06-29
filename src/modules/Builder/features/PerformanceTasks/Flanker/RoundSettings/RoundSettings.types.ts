@@ -1,7 +1,4 @@
-export enum RoundTypeEnum {
-  Practice = 'practice',
-  Test = 'test',
-}
+import { RoundTypeEnum } from 'modules/Builder/types';
 
 export type RoundSettingsProps = {
   uiType: RoundTypeEnum;
