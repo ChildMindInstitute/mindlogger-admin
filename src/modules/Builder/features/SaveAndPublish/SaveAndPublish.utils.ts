@@ -14,7 +14,6 @@ import {
   SliderItemResponseValues,
   SliderRowsResponseValues,
   OptionCondition,
-  Item,
 } from 'shared/state';
 import { getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
@@ -191,7 +190,7 @@ export const mapItemResponseValues = (item: ItemFormValues) => {
   return null;
 };
 
-export const getConditionPayload = (item: Item, condition: Condition) => {
+export const getConditionPayload = (item: ItemFormValues, condition: Condition) => {
   if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType)) {
     return condition.payload;
   }
