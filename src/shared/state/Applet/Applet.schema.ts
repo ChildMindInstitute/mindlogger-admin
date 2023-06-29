@@ -13,6 +13,7 @@ import {
   ConditionalLogicMatch,
   CalculationType,
   PerfTaskType,
+  GyroscopeOrTouch,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 import { CorrectPress, RoundTypeEnum } from 'modules/Builder/types';
@@ -342,6 +343,7 @@ export type DrawingResponseValues = {
 };
 
 export type GyroscopeConfig = {
+  userInputType: GyroscopeOrTouch;
   phase: RoundTypeEnum;
   trialsNumber: number;
   durationMinutes: number;

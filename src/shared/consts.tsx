@@ -99,8 +99,7 @@ export enum ItemResponseType {
   AudioPlayer = 'audioPlayer',
   Time = 'time',
   Flanker = 'flanker',
-  GyroscopePractice = 'gyroscopePractice',
-  GyroscopeTest = 'gyroscopeTest',
+  StabilityTracker = 'stabilityTracker',
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
   ABTrailsTabletFirst = 'ABTrailsTabletFirst',
@@ -111,6 +110,11 @@ export enum ItemResponseType {
   ABTrailsMobileSecond = 'ABTrailsMobileSecond',
   ABTrailsMobileThird = 'ABTrailsMobileThird',
   ABTrailsMobileFourth = 'ABTrailsMobileFourth',
+}
+
+export enum GyroscopeOrTouch {
+  Gyroscope = 'gyroscope',
+  Touch = 'touch',
 }
 
 export const ItemsWithFileResponses = [
@@ -161,8 +165,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.ABTrailsTabletSecond]: null,
   [ItemResponseType.ABTrailsTabletThird]: null,
   [ItemResponseType.ABTrailsTabletFourth]: null,
-  [ItemResponseType.GyroscopeTest]: null,
-  [ItemResponseType.GyroscopePractice]: null,
+  [ItemResponseType.StabilityTracker]: null,
   [ItemResponseType.TouchTest]: null,
   [ItemResponseType.TouchPractice]: null,
 };

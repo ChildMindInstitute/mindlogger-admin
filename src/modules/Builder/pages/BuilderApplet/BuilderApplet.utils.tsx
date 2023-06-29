@@ -42,6 +42,7 @@ import {
   DEFAULT_THRESHOLD_DURATION,
   ItemResponseType,
   PerfTaskType,
+  GyroscopeOrTouch,
 } from 'shared/consts';
 import {
   ActivityFormValues,
@@ -59,7 +60,6 @@ import {
   defaultFlankerBtnObj,
   DeviceType,
   GyroscopeItemNames,
-  GyroscopeOrTouch,
   ordinalStrings,
   TouchItemNames,
   ALLOWED_TYPES_IN_VARIABLES,
@@ -70,8 +70,7 @@ const { t } = i18n;
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
 export const isTouchOrGyroscopeRespType = (responseType: ItemResponseType) =>
-  responseType === ItemResponseType.GyroscopeTest ||
-  responseType === ItemResponseType.GyroscopePractice ||
+  responseType === ItemResponseType.StabilityTracker ||
   responseType === ItemResponseType.TouchTest ||
   responseType === ItemResponseType.TouchPractice;
 
@@ -203,11 +202,10 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
       name: isGyroscope ? GyroscopeItemNames.PracticeRound : TouchItemNames.PracticeRound,
       config: {
         ...commonConfigProps,
+        userInputType: isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch,
         phase: RoundTypeEnum.Practice,
       },
-      responseType: isGyroscope
-        ? ItemResponseType.GyroscopePractice
-        : ItemResponseType.TouchPractice,
+      responseType: ItemResponseType.StabilityTracker,
     },
     {
       name: isGyroscope ? GyroscopeItemNames.TestInstruction : TouchItemNames.TestInstruction,
@@ -219,9 +217,10 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
       name: isGyroscope ? GyroscopeItemNames.TestRound : TouchItemNames.TestRound,
       config: {
         ...commonConfigProps,
+        userInputType: isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch,
         phase: RoundTypeEnum.Test,
       },
-      responseType: isGyroscope ? ItemResponseType.GyroscopeTest : ItemResponseType.TouchTest,
+      responseType: ItemResponseType.StabilityTracker,
     },
   ];
 };

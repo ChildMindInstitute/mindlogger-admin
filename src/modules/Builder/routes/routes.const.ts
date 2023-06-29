@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 
 import { Path } from 'shared/utils';
-import { PerformanceTasks } from '../features/Activities/Activities.types';
+import { GyroscopeOrTouch } from 'shared/consts';
 
 const Activities = lazy(() => import('modules/Builder/features/Activities'));
 const AboutApplet = lazy(() => import('modules/Builder/features/AboutApplet'));
@@ -38,7 +38,7 @@ export const performanceTasksRoutes = [
   {
     path: Path.Gyroscope,
     Component: GyroscopeAndTouch,
-    props: { type: PerformanceTasks.Gyroscope },
+    props: { type: GyroscopeOrTouch.Gyroscope },
   },
-  { path: Path.Touch, Component: GyroscopeAndTouch, props: { type: PerformanceTasks.Touch } },
+  { path: Path.Touch, Component: GyroscopeAndTouch, props: { type: GyroscopeOrTouch.Touch } },
 ];

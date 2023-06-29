@@ -10,7 +10,6 @@ import { Instruction } from '../Instruction';
 import { GeneralSettings } from './GeneralSettings';
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import { GyroscopeAndTouchProps } from './GyroscopeAndTouch.types';
-import { PerformanceTasks } from '../../Activities/Activities.types';
 
 export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
   const { t } = useTranslation();
@@ -21,9 +20,7 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
     <>
       <PerformanceTaskHeader />
       <StyledPerformanceTaskBody sx={{ p: theme.spacing(2.4, 6.4) }}>
-        <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>
-          {t(type === PerformanceTasks.Gyroscope ? 'gyroscope' : 'touch')}
-        </StyledHeadlineLarge>
+        <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>{t(type || '')}</StyledHeadlineLarge>
         <NameDescription />
         <GeneralSettings />
         <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>{t('instructions')}</StyledTitleLarge>
