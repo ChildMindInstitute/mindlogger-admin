@@ -24,7 +24,7 @@ const getDateString = (obj?: DecryptedDateAnswer['value']) => {
     .padStart(2, '0')}-${Number(obj.day).toString().padStart(2, '0')}`;
 };
 
-const doubleBrackets = /\[\[(.*?)]]/g;
+export const doubleBrackets = /\[\[(.*?)]]/g;
 export const getTextBetweenBrackets = (str: string) => {
   const listOfText = [];
   let found;

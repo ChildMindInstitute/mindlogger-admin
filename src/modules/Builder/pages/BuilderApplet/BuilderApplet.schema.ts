@@ -27,6 +27,7 @@ import {
   isPerfTaskResponseType,
   isTouchOrGyroscopeRespType,
   testFunctionForNotSupportedItems,
+  testFunctionForSkippedItems,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
 } from './BuilderApplet.utils';
@@ -224,6 +225,11 @@ export const ItemSchema = () =>
           t('validationMessages.variableIsNotSupported') as string,
           (itemName, context) =>
             testFunctionForNotSupportedItems('question', itemName ?? '', context),
+        )
+        .test(
+          'variable-referring-to-skipped-item-error',
+          t('validationMessages.variableReferringToSkippedItem') as string,
+          (itemName, context) => testFunctionForSkippedItems('question', itemName ?? '', context),
         ),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (
