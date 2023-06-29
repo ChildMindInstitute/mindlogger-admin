@@ -27,12 +27,14 @@ import {
   isPerfTaskResponseType,
   isTouchOrGyroscopeRespType,
   testFunctionForNotSupportedItems,
+  testFunctionForSkippedItems,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
 } from './BuilderApplet.utils';
 import {
   CONDITION_TYPES_TO_HAVE_OPTION_ID,
   GyroscopeItemNames,
+  ItemTestFunctions,
   TouchItemNames,
 } from './BuilderApplet.const';
 
@@ -176,7 +178,7 @@ export const ItemSchema = () =>
           message: t('validationMessages.alphanumeric', { field: t('itemName') }),
         })
         .test(
-          'unique-item-name',
+          ItemTestFunctions.UniqueItemName,
           t('validationMessages.unique', { field: t('itemName') }) as string,
           (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
         ),
@@ -214,16 +216,21 @@ export const ItemSchema = () =>
           });
         })
         .test(
-          'variable-in-the-same-item-error',
+          ItemTestFunctions.VariableInTheSameItem,
           t('validationMessages.variableInTheSameItem') as string,
           (itemName, context) =>
             testFunctionForTheSameVariable('question', itemName ?? '', context),
         )
         .test(
-          'variable-is-not-supported-error',
+          ItemTestFunctions.VariableIsNotSupported,
           t('validationMessages.variableIsNotSupported') as string,
           (itemName, context) =>
             testFunctionForNotSupportedItems('question', itemName ?? '', context),
+        )
+        .test(
+          ItemTestFunctions.VariableReferringToSkippedItem,
+          t('validationMessages.variableReferringToSkippedItem') as string,
+          (itemName, context) => testFunctionForSkippedItems('question', itemName ?? '', context),
         ),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (

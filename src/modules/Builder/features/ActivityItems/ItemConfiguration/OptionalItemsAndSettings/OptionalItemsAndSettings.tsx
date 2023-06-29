@@ -30,6 +30,8 @@ import {
 import { Alerts } from '../Alerts';
 import { SelectionOption } from '../InputTypeItems';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
+
+import { SkippedItemInVariablesModal } from './SkippedItemInVariablesModal';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
 import { useActiveItem, useSettingsSetup } from './OptionalItemsAndSettings.hooks';
 
@@ -239,6 +241,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
             />
           </ItemSettingsDrawer>
         )}
+        <SkippedItemInVariablesModal itemName={name} />
       </>
     );
   },

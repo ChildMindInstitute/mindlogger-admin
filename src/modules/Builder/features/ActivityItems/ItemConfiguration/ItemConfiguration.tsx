@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Grid } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Modal, Svg } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
 import {
   StyledBodyMedium,
   StyledClearedButton,
   StyledFlexTopCenter,
   StyledHeadlineLarge,
+  StyledModalWrapper,
   StyledTitleLarge,
   theme,
   variables,
@@ -25,6 +26,7 @@ import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
+import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
@@ -34,6 +36,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
 
   const methods = useFormContext();
   const { fieldName } = useCurrentActivity();
+  const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
 
   const { control, watch } = methods;
 
@@ -56,53 +59,67 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     : itemsTypeOptions;
 
   return (
-    <StyledItemConfiguration ref={containerRef}>
-      <StyledHeader isSticky={isHeaderSticky}>
-        <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
-        <StyledFlexTopCenter>
-          {responseType && (
-            <StyledClearedButton
-              sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
-              onClick={() => optionalItemsRef.current?.setSettingsDrawerVisible(true)}
-            >
-              <Svg id="report-configuration" />
+    <>
+      <StyledItemConfiguration ref={containerRef}>
+        <StyledHeader isSticky={isHeaderSticky}>
+          <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
+          <StyledFlexTopCenter>
+            {responseType && (
+              <StyledClearedButton
+                sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
+                onClick={() => optionalItemsRef.current?.setSettingsDrawerVisible(true)}
+              >
+                <Svg id="report-configuration" />
+              </StyledClearedButton>
+            )}
+            <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onClose}>
+              <Svg id="close" />
             </StyledClearedButton>
-          )}
-          <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onClose}>
-            <Svg id="close" />
-          </StyledClearedButton>
-        </StyledFlexTopCenter>
-      </StyledHeader>
-      <StyledContent>
-        <Grid container direction="row" columns={2} spacing={2.4}>
-          <Grid item xs={1}>
-            <GroupedSelectSearchController
-              name={`${name}.responseType`}
-              options={availableItemsTypeOptions}
-              control={control}
-            />
-            <StyledBodyMedium
-              sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
-              color={variables.palette.on_surface_variant}
-            >
-              {responseType && getInputTypeTooltip()[responseType]}
-            </StyledBodyMedium>
+          </StyledFlexTopCenter>
+        </StyledHeader>
+        <StyledContent>
+          <Grid container direction="row" columns={2} spacing={2.4}>
+            <Grid item xs={1}>
+              <GroupedSelectSearchController
+                name={`${name}.responseType`}
+                options={availableItemsTypeOptions}
+                control={control}
+              />
+              <StyledBodyMedium
+                sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
+                color={variables.palette.on_surface_variant}
+              >
+                {responseType && getInputTypeTooltip()[responseType]}
+              </StyledBodyMedium>
+            </Grid>
+            <Grid item xs={1}>
+              <InputController
+                fullWidth
+                name={`${name}.name`}
+                control={control}
+                label={t('itemName')}
+                type="text"
+                sx={{ mb: theme.spacing(4) }}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={1}>
-            <InputController
-              fullWidth
-              name={`${name}.name`}
-              control={control}
-              label={t('itemName')}
-              type="text"
-              sx={{ mb: theme.spacing(4) }}
-            />
-          </Grid>
-        </Grid>
-        <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>{t('displayedContent')}</StyledTitleLarge>
-        <EditorController name={`${name}.question`} control={control} />
-        <OptionalItemsAndSettings name={name} ref={optionalItemsRef} />
-      </StyledContent>
-    </StyledItemConfiguration>
+          <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
+            {t('displayedContent')}
+          </StyledTitleLarge>
+          <EditorController name={`${name}.question`} control={control} />
+          <OptionalItemsAndSettings name={name} ref={optionalItemsRef} />
+        </StyledContent>
+      </StyledItemConfiguration>
+      <Modal
+        open={isPopupVisible}
+        onClose={onPopupConfirm}
+        onSubmit={onPopupConfirm}
+        width={'62'}
+        title={t('variablesWarning.title')}
+        buttonText={t('ok')}
+      >
+        <StyledModalWrapper>{t(message)}</StyledModalWrapper>
+      </Modal>
+    </>
   );
 };

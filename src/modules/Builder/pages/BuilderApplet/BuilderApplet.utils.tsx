@@ -677,3 +677,10 @@ export const testFunctionForNotSupportedItems = (
 
   return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
 };
+
+export const testFunctionForSkippedItems = (field: string, value: string, context: TestContext) => {
+  const items: Item[] = get(context, 'from.1.value.items');
+  const variableNames = getTextBetweenBrackets(value);
+
+  return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
+};

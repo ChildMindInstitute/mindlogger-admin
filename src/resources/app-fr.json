@@ -707,7 +707,8 @@
     "atLeastOneItem": "Sélectionnez au moins 1 élément",
     "incorrectEmail": "L'e-mail doit être valide",
     "variableInTheSameItem": "* Vous ne pouvez pas utiliser le nom de l'élément dans le même élément. Veuillez le supprimer",
-    "variableIsNotSupported": "* Cet élément n'est pas pris en charge, veuillez le supprimer."
+    "variableIsNotSupported": "* Cet élément n'est pas pris en charge, veuillez le supprimer.",
+    "variableReferringToSkippedItem": "Supprimez la variable faisant référence à l'élément ignoré."
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",
@@ -715,12 +716,21 @@
   "unsupportedResponseItem": "Ce type de données ne peut pas être affiché sur cette page",
   "deleteItem": "Effacer l'article",
   "deleteItemDescription": "Êtes-vous sûr de vouloir supprimer l'élément <1>{{ itemName }}</1>?",
+  "deleteItemWithConditionalsDescription": "Cela supprimera également le(s) conditionnel(s) ci-dessous :",
+  "variablesWarning": {
+    "title": "Avertissement des variables",
+    "isSkippable": "Ignorer tous les éléments ne peut pas contenir de variables. La variable sera automatiquement supprimée.",
+    "showAllAtOnce": "Une évaluation d'une page ne peut pas contenir de variables. La variable sera automatiquement supprimée.",
+    "skippedItemInVariables": "En sautant <2> {{ skippedItemName }} </2>, cela entraînera l'échec de <2> {{ itemNamesWithSkippedItem }} </2>"
+  },
   "showMore": "Afficher plus...",
   "showLess": "Afficher moins...",
   "hideBadgeTooltip": "L'identifiant du flux d'activité sera masqué pour les répondants",
   "noDataForActivity": "Pas encore de données disponibles pour cette activité",
   "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
   "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}",
+  "activityHasVariableAmongItems": "Cette activité contient des variables et ne peut pas ignorer tous les éléments.",
+  "activityCannotBeOnePageAssessment": "Cette activité contient des variables et ne peut pas être une évaluation d'une page",
   "showSubscaleResult": "Afficher le résultat de la sous-échelle",
   "addAudio": "Ajouter du son",
   "audioPlayerUploadAudio": "Télécharger l'audio",
