@@ -25,6 +25,7 @@ import {
 } from 'shared/state';
 import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
 import {
+  ConditionType,
   DEFAULT_LAMBDA_SLOPE,
   DEFAULT_LENGTH_OF_TEST,
   DEFAULT_MILLISECONDS_DURATION,
@@ -36,7 +37,7 @@ import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modul
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
-import { defaultFlankerBtnObj } from './BuilderApplet.const';
+import { CONDITION_TYPES_TO_HAVE_OPTION_ID, defaultFlankerBtnObj } from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -388,6 +389,20 @@ const getActivityFlows = (activityFlows: ActivityFlow[]) =>
     })),
   }));
 
+const getConditionPayload = (item: Item, condition: Condition) => {
+  if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType))
+    return condition.payload;
+
+  const options = (item?.responseValues as SingleAndMultipleSelectItemResponseValues).options;
+  const optionValue = options?.find(
+    ({ value }) => `${value}` === `${(condition as OptionCondition).payload.optionValue}`,
+  )?.id;
+
+  return {
+    optionValue,
+  };
+};
+
 const getActivityConditionalLogic = (items: Item[]) =>
   items?.reduce((result: ConditionalLogic[], item) => {
     if (item.conditionalLogic)
@@ -397,11 +412,16 @@ const getActivityConditionalLogic = (items: Item[]) =>
           key: uuidv4(),
           itemKey: getEntityKey(item),
           match: item.conditionalLogic.match,
-          conditions: item.conditionalLogic.conditions?.map(({ itemName, type, payload }) => ({
-            type,
-            payload: payload as keyof Condition['payload'],
-            itemName: getEntityKey(items.find((item) => item.name === itemName) ?? {}),
-          })),
+          conditions: item.conditionalLogic.conditions?.map((condition) => {
+            const relatedItem = items.find((item) => item.name === condition.itemName);
+
+            return {
+              key: uuidv4(),
+              type: condition.type,
+              payload: getConditionPayload(relatedItem!, condition) as keyof Condition['payload'],
+              itemName: getEntityKey(relatedItem ?? {}),
+            };
+          }),
         },
       ];
 

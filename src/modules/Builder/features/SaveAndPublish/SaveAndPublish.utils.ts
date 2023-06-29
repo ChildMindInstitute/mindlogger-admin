@@ -15,9 +15,11 @@ import {
   SliderRowsResponseValues,
   Activity,
   ItemAlert,
+  OptionCondition,
 } from 'shared/state';
-import { ItemResponseType } from 'shared/consts';
+import { ConditionType, ItemResponseType } from 'shared/consts';
 import { getEntityKey, groupBy } from 'shared/utils';
+import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
 
@@ -168,6 +170,19 @@ export const mapItemResponseValues = (item: Item) => {
   return null;
 };
 
+export const getConditionPayload = (item: Item, condition: Condition) => {
+  if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType)) {
+    return condition.payload;
+  }
+
+  const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
+  const optionId = (condition as OptionCondition).payload?.optionValue;
+
+  return {
+    optionValue: options?.find(({ id }) => id === optionId)?.value,
+  };
+};
+
 export const getItemConditionalLogic = (
   item: Item,
   items: Item[],
@@ -181,10 +196,14 @@ export const getItemConditionalLogic = (
 
   return {
     match: result.match,
-    conditions: result.conditions?.map(({ type, payload, itemName }) => ({
-      type,
-      payload: payload as keyof Condition['payload'],
-      itemName: items.find((item) => getEntityKey(item) === itemName)?.name ?? '',
-    })),
+    conditions: result.conditions?.map((condition) => {
+      const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
+
+      return {
+        type: condition.type,
+        payload: getConditionPayload(relatedItem!, condition) as keyof Condition['payload'],
+        itemName: relatedItem?.name ?? '',
+      };
+    }),
   };
 };
