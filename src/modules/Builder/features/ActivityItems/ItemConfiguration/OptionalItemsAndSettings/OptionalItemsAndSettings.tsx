@@ -2,14 +2,14 @@ import { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
 import { useFieldArray, useWatch, useFormContext } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 import { Button } from '@mui/material';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
 
 import { SingleAndMultipleSelectionOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
-import { StyledFlexTopCenter, StyledModalWrapper, StyledTitleLarge, theme } from 'shared/styles';
-import { Modal, Svg } from 'shared/components';
+import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
+import { Svg } from 'shared/components';
 
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
@@ -30,12 +30,10 @@ import {
 import { Alerts } from '../Alerts';
 import { SelectionOption } from '../InputTypeItems';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
+
+import { SkippedItemInVariablesModal } from './SkippedItemInVariablesModal';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
-import {
-  useActiveItem,
-  useSettingsSetup,
-  useCheckIfItemHasVariables,
-} from './OptionalItemsAndSettings.hooks';
+import { useActiveItem, useSettingsSetup } from './OptionalItemsAndSettings.hooks';
 
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ name }, ref) => {
@@ -79,9 +77,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       control,
       name: `${name}.responseValues.rows`,
     });
-
-    const { isPopupVisible, skippedItemName, itemNamesWithSkippedItem, onPopupConfirm } =
-      useCheckIfItemHasVariables(name);
 
     const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
     const isTextInputOptionVisible = get(settings, ItemConfigurationSettings.HasTextInput);
@@ -246,30 +241,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
             />
           </ItemSettingsDrawer>
         )}
-        {isPopupVisible && (
-          <Modal
-            open={isPopupVisible}
-            onClose={onPopupConfirm}
-            onSubmit={onPopupConfirm}
-            width={'62'}
-            title={t('variablesWarning.title')}
-            buttonText={t('ok')}
-          >
-            <StyledModalWrapper>
-              <Trans i18nKey="variablesWarning.skippedItemInVariables">
-                By skipping{' '}
-                <strong>
-                  <>{{ skippedItemName }}</>
-                </strong>
-                , it will cause
-                <strong>
-                  <>{{ itemNamesWithSkippedItem }}</>
-                </strong>{' '}
-                to fail
-              </Trans>
-            </StyledModalWrapper>
-          </Modal>
-        )}
+        <SkippedItemInVariablesModal itemName={name} />
       </>
     );
   },

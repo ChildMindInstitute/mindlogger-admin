@@ -1,12 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
-import { useTranslation } from 'react-i18next';
 
 import { ItemResponseType } from 'shared/consts';
 import { Config } from 'shared/state';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
 import {
   TextResponse,
@@ -46,7 +43,6 @@ import {
   getEmptyAudioResponse,
   getEmptyNumberSelection,
 } from '../ItemConfiguration.utils';
-import { getItemNamesIncludeSkippableItem } from './OptionalItemsAndSettings.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {
@@ -197,48 +193,4 @@ export const useSettingsSetup = ({
       });
     }
   }, [settings]);
-};
-
-export const useCheckIfItemHasVariables = (itemField: string) => {
-  const { t } = useTranslation('app');
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const { watch, setError, trigger } = useFormContext();
-  const { fieldName } = useCurrentActivity();
-  const activityItems = watch(`${fieldName}.items`) ?? [];
-  const name = watch(`${itemField}.name`) ?? '';
-  const isSkippableItem = watch(`${itemField}.config.skippableItem`);
-  const itemNamesWithSkippedItemRef = useRef<null | { index: number; name: string }[]>(null);
-
-  const onPopupConfirm = () => {
-    for (const item of itemNamesWithSkippedItemRef.current ?? []) {
-      setError(`${fieldName}.items.${item.index}.question`, {
-        type: ItemTestFunctions.VariableReferringToSkippedItem,
-        message: t('validationMessages.variableReferringToSkippedItem'),
-      });
-    }
-    itemNamesWithSkippedItemRef.current = null;
-    setIsPopupVisible(false);
-  };
-
-  useEffect(() => {
-    if (!isSkippableItem) {
-      trigger();
-
-      return;
-    }
-
-    itemNamesWithSkippedItemRef.current = getItemNamesIncludeSkippableItem(name, activityItems);
-    if (!itemNamesWithSkippedItemRef.current?.length) return;
-
-    setIsPopupVisible(true);
-  }, [isSkippableItem]);
-
-  return {
-    isPopupVisible,
-    skippedItemName: name,
-    itemNamesWithSkippedItem: itemNamesWithSkippedItemRef.current
-      ?.map((item) => item.name)
-      .join(', '),
-    onPopupConfirm,
-  };
 };

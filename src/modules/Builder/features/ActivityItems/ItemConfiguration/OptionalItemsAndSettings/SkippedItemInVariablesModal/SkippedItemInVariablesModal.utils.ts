@@ -1,5 +1,6 @@
 import { ItemFormValues } from 'modules/Builder/types';
 import { getTextBetweenBrackets } from 'shared/utils';
+import { ItemNameWIthIndex } from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/SkippedItemInVariablesModal/SkippedItemInVariablesModal.types';
 
 export const getItemNamesIncludeSkippableItem = (name: string, items: ItemFormValues[]) =>
   items.reduce((acc, item, index) => {
@@ -13,4 +14,4 @@ export const getItemNamesIncludeSkippableItem = (name: string, items: ItemFormVa
         name: item.name,
       },
     ];
-  }, [] as { index: number; name: string }[]);
+  }, [] as ItemNameWIthIndex[]);
