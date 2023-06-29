@@ -10,7 +10,6 @@ import { SingleAndMultipleSelectionOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
-import { pluck } from 'shared/utils';
 
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
