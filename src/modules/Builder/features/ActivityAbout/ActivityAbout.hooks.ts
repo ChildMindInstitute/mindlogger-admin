@@ -1,7 +1,8 @@
-import { ItemFormValues } from 'modules/Builder/types';
-import { getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
+
+import { getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
+import { ItemFormValues } from 'modules/Builder/types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
 const checkIfItemsHaveVariables = (items: ItemFormValues[]) => {
