@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useBreadcrumbs } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import { EmptyTable } from 'shared/components';
+import { EmptyState } from 'shared/components';
 import {
   theme,
   StyledBody,
@@ -53,7 +53,7 @@ export const AppletsCatalog = () => {
     setPageIndex(0);
   };
 
-  const renderEmptyState = () => !!searchText && <EmptyTable>{t('notFound')}</EmptyTable>;
+  const renderEmptyState = () => !!searchText && <EmptyState>{t('notFound')}</EmptyState>;
 
   useEffect(() => {
     // TODO: delete comment when endpoint is ready

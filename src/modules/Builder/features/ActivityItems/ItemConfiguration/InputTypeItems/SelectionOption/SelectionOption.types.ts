@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { SingleAndMultipleSelectionOption } from 'shared/state';
 
 export type SelectionOptionProps = {
@@ -6,16 +8,14 @@ export type SelectionOptionProps = {
   onUpdateOption: (index: number, option: SingleAndMultipleSelectionOption) => void;
   index: number;
   optionsLength: number;
+  optionsOpen: boolean[];
+  setOptionsOpen: Dispatch<SetStateAction<boolean[]>>;
 };
 
 export type SetSelectionOptionValue = {
   name: string;
   onUpdateOption: (index: number, option: SingleAndMultipleSelectionOption) => void;
   index: number;
-  hasScoresChecked: boolean;
-  scoreString?: string;
-  hasTooltipsChecked: boolean;
-  hasTooltip: boolean;
   hasColorPicker: boolean;
   hasColor: boolean;
 };

@@ -1,4 +1,5 @@
 import { useState, Dispatch, SetStateAction } from 'react';
+import get from 'lodash.get';
 
 import {
   Applet,
@@ -6,56 +7,86 @@ import {
   GetAppletsParams,
   getWorkspaceAppletsApi,
   getWorkspaceFoldersApi,
+  getWorkspaceFolderAppletsApi,
+  getFilteredWorkspaceAppletsApi,
+  DashboardAppletType,
 } from 'api';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { workspaces } from 'shared/state';
+import { getObjectFromList } from 'shared/utils';
+import { getAppletsWithLocalFolders } from './Applets.utils';
 
-export const useApplets = (
-  setRows: Dispatch<SetStateAction<(Folder | Applet)[]>>,
-  expandedFolders: string[],
+export const useAppletsWithFolders = (
+  onChangeApplets: Dispatch<SetStateAction<(Folder | Applet)[]>>,
 ) => {
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute: getWorkspaceFolders } = useAsync(getWorkspaceFoldersApi);
-  const { execute: getWorkspaceApplets } = useAsync(getWorkspaceAppletsApi);
+  const [count, setCount] = useState(0);
+  const [isLoading, setLoading] = useState(true);
+  const [expandedFolders, setExpandedFolders] = useState<string[]>([]);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const { execute: getWorkspaceApplets } = useAsync(getWorkspaceAppletsApi);
+  const { execute: getWorkspaceFolders } = useAsync(getWorkspaceFoldersApi);
+  const { execute: getWorkspaceFolderApplets } = useAsync(getWorkspaceFolderAppletsApi);
+  const { execute: getFilteredWorkspaceApplets } = useAsync(getFilteredWorkspaceAppletsApi);
 
   const fetchData = async (getAppletsParams?: GetAppletsParams) => {
-    const {
-      data: { result: folders },
-    } = await getWorkspaceFolders({ ownerId: ownerId! });
-    const {
-      data: { result: applets },
-    } = await getWorkspaceApplets(
-      getAppletsParams || {
-        params: {
-          ownerId,
-          limit: DEFAULT_ROWS_PER_PAGE,
+    setLoading(true);
+
+    const { search } = getAppletsParams?.params ?? {};
+    const getAppletsList = search ? getFilteredWorkspaceApplets : getWorkspaceApplets;
+
+    const [foldersResponse, appletsResponse] = await Promise.allSettled([
+      getWorkspaceFolders({ ownerId: ownerId! }),
+      getAppletsList(
+        getAppletsParams || {
+          params: { ownerId, limit: DEFAULT_ROWS_PER_PAGE },
         },
-      },
+      ),
+    ]);
+
+    const { result: folders = [] } = get(foldersResponse, ['value', 'data'], {});
+    const { result: applets = [], count } = get(appletsResponse, ['value', 'data'], {});
+
+    setCount(count);
+
+    const appletList =
+      applets?.map((applet: Applet) => ({
+        ...applet,
+        isFolder: applet.type === DashboardAppletType.Folder,
+      })) ?? [];
+    const groupedAppletList = getObjectFromList(appletList);
+    const shownExpandedFolders = expandedFolders.filter(
+      (folderId) => !!groupedAppletList[folderId],
     );
 
-    let formattedApplets = [
-      ...folders.map((folder) => ({ ...folder, isFolder: true })),
-      ...applets.map((applet) => ({ ...applet, isFolder: false })),
-    ];
+    if (search) {
+      const appletsWithFolders = getAppletsWithLocalFolders(
+        appletList ?? [],
+        folders ?? [],
+        expandedFolders,
+      );
 
-    if (!expandedFolders.length) {
-      setRows(formattedApplets);
+      setLoading(false);
 
-      return setIsLoading(false);
+      return onChangeApplets(appletsWithFolders);
     }
 
-    setIsLoading(true);
-    for await (const id of expandedFolders) {
+    if (!shownExpandedFolders.length) {
+      setLoading(false);
+
+      return onChangeApplets(appletList);
+    }
+
+    let formattedApplets = [...appletList];
+
+    for await (const id of shownExpandedFolders) {
       const {
         data: { result },
-      } = await getWorkspaceApplets({
+      } = await getWorkspaceFolderApplets({
         params: {
           ownerId,
-          limit: DEFAULT_ROWS_PER_PAGE,
           folderId: id,
         },
       });
@@ -74,9 +105,23 @@ export const useApplets = (
         ...formattedApplets.slice(folderIndex + 1),
       ];
     }
-    setRows(formattedApplets);
-    setIsLoading(false);
+    setLoading(false);
+
+    return onChangeApplets(formattedApplets);
   };
 
-  return { fetchData, isLoading };
+  const expandFolder = (id: string) => {
+    setExpandedFolders((prevState) => [...prevState, id]);
+  };
+  const collapseFolder = (id: string) =>
+    setExpandedFolders((prevState) => prevState.filter((folderId) => folderId !== id));
+
+  return {
+    count,
+    fetchData,
+    isLoading,
+    expandedFolders,
+    expandFolder,
+    collapseFolder,
+  };
 };

@@ -84,7 +84,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
               labelId="input-type-label"
               label={t('inputType')}
               renderValue={() => (
-                <StyledFlexTopCenter>
+                <StyledFlexTopCenter sx={{ maxHeight: '2.3rem' }}>
                   <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
                     {itemsTypeIcons[value]}
                   </StyledFlexTopCenter>

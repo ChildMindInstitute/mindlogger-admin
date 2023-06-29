@@ -70,7 +70,7 @@ export const TransferListController = <T extends FieldValues>({
                 InputProps={{ startAdornment: <Svg id="search" /> }}
               />
             )}
-            <StyledTransferListController>
+            <StyledTransferListController hasError={!!error}>
               <DataTable
                 columns={columns}
                 data={filteredData}
@@ -79,6 +79,7 @@ export const TransferListController = <T extends FieldValues>({
                 onSelect={handleSelect}
                 onSelectAll={handleSelectAll}
                 hasError={!!error}
+                noDataPlaceholder={t('noSelectedItemsYet')}
               />
               {hasSelectedSection && (
                 <DataTable

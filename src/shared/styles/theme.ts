@@ -146,7 +146,7 @@ export const theme = createTheme({
           lineHeight: variables.font.lineHeight.sm,
           fontWeight: variables.font.weight.regular,
           color: variables.palette.on_surface,
-          backgroundColor: variables.palette.surface,
+          backgroundColor: 'transparent',
           borderBottomWidth: variables.borderWidth.md,
           borderBottomStyle: 'solid',
           borderBottomColor: variables.palette.surface_variant,
@@ -364,11 +364,8 @@ export const theme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          color: variables.palette.outline,
+          color: variables.palette.on_surface_variant,
           fontSize: variables.font.size.lg,
-          '&.MuiFormLabel-filled': {
-            color: variables.palette.black,
-          },
           '&.Mui-focused': {
             color: variables.palette.primary,
           },
@@ -423,7 +420,7 @@ export const theme = createTheme({
           borderColor: variables.palette.outline_variant,
           color: variables.palette.black,
           input: {
-            padding: '1.6rem',
+            padding: '1.65rem 1.6rem',
             fontSize: variables.font.size.lg,
           },
           '&:hover': {

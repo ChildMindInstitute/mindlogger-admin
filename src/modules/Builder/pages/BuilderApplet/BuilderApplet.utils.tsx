@@ -2,6 +2,7 @@ import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
+import { TestContext } from 'yup';
 
 import i18n from 'i18n';
 import { page } from 'resources';
@@ -22,8 +23,17 @@ import {
   ItemAlert,
   SingleAndMultipleSelectRowsResponseValues,
   OptionCondition,
+  SubscaleSetting,
+  Config,
 } from 'shared/state';
-import { getDictionaryText, getEntityKey, Path } from 'shared/utils';
+import {
+  getDictionaryText,
+  getEntityKey,
+  Path,
+  getTextBetweenBrackets,
+  getObjectFromList,
+  createArray,
+} from 'shared/utils';
 import {
   ConditionType,
   DEFAULT_LAMBDA_SLOPE,
@@ -32,22 +42,57 @@ import {
   DEFAULT_NUMBER_OF_TRIALS,
   DEFAULT_THRESHOLD_DURATION,
   ItemResponseType,
+  PerfTaskType,
+  GyroscopeOrTouch,
 } from 'shared/consts';
-import { ActivityFormValues, GetNewPerformanceTask, ItemFormValues } from 'modules/Builder/types';
+import {
+  ActivityFormValues,
+  AppletFormValues,
+  GetNewActivity,
+  GetNewPerformanceTask,
+  ItemFormValues,
+  RoundTypeEnum,
+  GetActivitySubscaleItems,
+  GetActivitySubscaleSettingDuplicated,
+} from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
-import { EditablePerformanceTasksType } from 'modules/Builder/features/Activities/Activities.types';
 
-import { CONDITION_TYPES_TO_HAVE_OPTION_ID, defaultFlankerBtnObj } from './BuilderApplet.const';
+import {
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  defaultFlankerBtnObj,
+  DeviceType,
+  GyroscopeItemNames,
+  ordinalStrings,
+  TouchItemNames,
+  ALLOWED_TYPES_IN_VARIABLES,
+} from './BuilderApplet.const';
 
 const { t } = i18n;
 
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
+export const isTouchOrGyroscopeRespType = (responseType: ItemResponseType) =>
+  responseType === ItemResponseType.StabilityTracker ||
+  responseType === ItemResponseType.TouchTest ||
+  responseType === ItemResponseType.TouchPractice;
+
+export const isPerfTaskResponseType = (responseType: ItemResponseType) =>
+  isTouchOrGyroscopeRespType(responseType) ||
+  responseType === ItemResponseType.Flanker ||
+  responseType === ItemResponseType.ABTrailsMobileFirst ||
+  responseType === ItemResponseType.ABTrailsMobileSecond ||
+  responseType === ItemResponseType.ABTrailsMobileThird ||
+  responseType === ItemResponseType.ABTrailsMobileFourth ||
+  responseType === ItemResponseType.ABTrailsTabletFirst ||
+  responseType === ItemResponseType.ABTrailsTabletSecond ||
+  responseType === ItemResponseType.ABTrailsTabletThird ||
+  responseType === ItemResponseType.ABTrailsTabletFourth;
+
 export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
   name: t('newItem'),
   question: '',
-  config: {},
+  config: {} as Config,
   isHidden: false,
   allowEdit: true,
   ...item,
@@ -80,18 +125,21 @@ export const getDuplicatedConditions = (
 ) =>
   conditions?.map((condition) => {
     const optionValue = (condition as OptionCondition)?.payload.optionValue;
-    const result = { ...condition, key: uuidv4() };
+    const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
+    const result = {
+      ...condition,
+      itemName: getEntityKey(newItems[itemIndex]) ?? '',
+      key: uuidv4(),
+    };
 
     if (!optionValue) return result;
 
-    const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
     const optionIndex = (
       oldItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues
     ).options?.findIndex((option) => option.id === optionValue);
 
     return {
       ...result,
-      itemName: getEntityKey(newItems[itemIndex]) ?? '',
       payload: {
         optionValue:
           (newItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues)
@@ -125,16 +173,94 @@ export const getDuplicatedConditional = (
     };
   }) ?? [];
 
-export const getNewActivity = (activity?: ActivityFormValues) => {
+const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
+  const config = {
+    removeBackButton: false,
+    timer: null,
+  };
+  const commonConfigProps = {
+    trialsNumber: DEFAULT_NUMBER_OF_TRIALS,
+    durationMinutes: DEFAULT_LENGTH_OF_TEST,
+    lambdaSlope: DEFAULT_LAMBDA_SLOPE,
+  };
+  const isGyroscope = type === GyroscopeOrTouch.Gyroscope;
+
+  return [
+    {
+      name: isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
+      config,
+      question: t('gyroscopeAndTouchInstructions.overview.instruction'),
+      responseType: ItemResponseType.Message,
+    },
+    {
+      name: isGyroscope
+        ? GyroscopeItemNames.PracticeInstruction
+        : TouchItemNames.PracticeInstruction,
+      config,
+      question: t('gyroscopeAndTouchInstructions.practice.instruction'),
+      responseType: ItemResponseType.Message,
+    },
+    {
+      name: isGyroscope ? GyroscopeItemNames.PracticeRound : TouchItemNames.PracticeRound,
+      config: {
+        ...commonConfigProps,
+        userInputType: isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch,
+        phase: RoundTypeEnum.Practice,
+      },
+      responseType: ItemResponseType.StabilityTracker,
+    },
+    {
+      name: isGyroscope ? GyroscopeItemNames.TestInstruction : TouchItemNames.TestInstruction,
+      config,
+      question: t('gyroscopeAndTouchInstructions.test.instruction'),
+      responseType: ItemResponseType.Message,
+    },
+    {
+      name: isGyroscope ? GyroscopeItemNames.TestRound : TouchItemNames.TestRound,
+      config: {
+        ...commonConfigProps,
+        userInputType: isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch,
+        phase: RoundTypeEnum.Test,
+      },
+      responseType: ItemResponseType.StabilityTracker,
+    },
+  ];
+};
+
+const getABTrailsItems = (deviceType: DeviceType) =>
+  createArray(4, (index) => {
+    const responseTypeKey =
+      deviceType === DeviceType.Mobile
+        ? `ABTrailsMobile${ordinalStrings[index]}`
+        : `ABTrailsTablet${ordinalStrings[index]}`;
+    const responseType = ItemResponseType[responseTypeKey as keyof typeof ItemResponseType];
+
+    return {
+      id: undefined,
+      key: uuidv4(),
+      responseType,
+      name: responseType,
+      config: {
+        deviceType,
+      },
+    };
+  });
+
+export const getNewActivity = ({ name, activity }: GetNewActivity) => {
   const items = activity?.items?.map((item) => getNewActivityItem(item)) || [];
   const conditionalLogic = getDuplicatedConditional(
     activity?.items ?? [],
     items,
     activity?.conditionalLogic,
   );
+  const subscaleSetting = getActivitySubscaleSettingDuplicated({
+    oldSubscaleSetting: activity?.subscaleSetting,
+    oldItems: activity?.items as ItemFormValues[],
+    newItems: items as ItemFormValues[],
+  });
 
   return {
-    name: t('newActivity'),
+    name: name ?? t('newActivity'),
     description: '',
     showAllAtOnce: false,
     isSkippable: false,
@@ -143,9 +269,10 @@ export const getNewActivity = (activity?: ActivityFormValues) => {
     ...activity,
     items,
     conditionalLogic,
+    subscaleSetting,
     id: undefined,
     key: uuidv4(),
-  };
+  } as ActivityFormValues;
 };
 
 export const getNewPerformanceTask = ({
@@ -161,80 +288,59 @@ export const getNewPerformanceTask = ({
     blocks: [],
   };
 
-  const defaultFlankerProps = {
-    responseType: ItemResponseType.Flanker,
-    name: ItemResponseType.Flanker,
-    general: {
-      instruction: t('performanceTaskInstructions.flankerGeneral'),
-      buttons: [defaultFlankerBtnObj],
-      fixation: null,
-      stimulusTrials: [],
+  const flankerItems = [
+    {
+      responseType: ItemResponseType.Flanker,
+      name: ItemResponseType.Flanker,
+      general: {
+        instruction: t('performanceTaskInstructions.flankerGeneral'),
+        buttons: [defaultFlankerBtnObj],
+        fixation: null,
+        stimulusTrials: [],
+      },
+      practice: {
+        ...commonRoundProps,
+        instruction: t('performanceTaskInstructions.flankerPractice'),
+        threshold: DEFAULT_THRESHOLD_DURATION,
+        showFeedback: true,
+      },
+      test: {
+        ...commonRoundProps,
+        instruction: t('performanceTaskInstructions.flankerTest'),
+        showFeedback: false,
+      },
     },
-    practice: {
-      ...commonRoundProps,
-      instruction: t('performanceTaskInstructions.flankerPractice'),
-      threshold: DEFAULT_THRESHOLD_DURATION,
-      showFeedback: true,
-    },
-    test: {
-      ...commonRoundProps,
-      instruction: t('performanceTaskInstructions.flankerTest'),
-      showFeedback: false,
-    },
-  };
-  const defaultGyroscopeAndTouchProps = {
-    general: {
-      instruction: t('gyroscopeAndTouchInstructions.overview.instruction'),
-      numberOfTrials: DEFAULT_NUMBER_OF_TRIALS,
-      lengthOfTest: DEFAULT_LENGTH_OF_TEST,
-      lambdaSlope: DEFAULT_LAMBDA_SLOPE,
-    },
-    practice: {
-      instruction: t('gyroscopeAndTouchInstructions.practice.instruction'),
-    },
-    test: {
-      instruction: t('gyroscopeAndTouchInstructions.test.instruction'),
-    },
+  ];
+
+  const itemsByType = {
+    [PerfTaskType.Flanker]: flankerItems,
+    [PerfTaskType.Gyroscope]: getGyroscopeOrTouchItems(GyroscopeOrTouch.Gyroscope),
+    [PerfTaskType.Touch]: getGyroscopeOrTouchItems(GyroscopeOrTouch.Touch),
+    [PerfTaskType.ABTrailsMobile]: getABTrailsItems(DeviceType.Mobile),
+    [PerfTaskType.ABTrailsTablet]: getABTrailsItems(DeviceType.Tablet),
   };
 
-  const propsByTypeObj = {
-    [EditablePerformanceTasksType.Flanker]: defaultFlankerProps,
-    [EditablePerformanceTasksType.Gyroscope]: {
-      responseType: ItemResponseType.Gyroscope,
-      name: ItemResponseType.Gyroscope,
-      ...defaultGyroscopeAndTouchProps,
-    },
-    [EditablePerformanceTasksType.Touch]: {
-      responseType: ItemResponseType.Touch,
-      name: ItemResponseType.Touch,
-      ...defaultGyroscopeAndTouchProps,
-    },
+  const { items, ...restPerfTaskParams } = performanceTask || {};
+
+  const getItems = () => {
+    if (items?.length) {
+      return items.map((item) => ({
+        ...item,
+        id: undefined,
+      }));
+    }
+
+    return performanceTaskType ? itemsByType[performanceTaskType] : [];
   };
-
-  const defaultPropsByType = performanceTaskType
-    ? propsByTypeObj[performanceTaskType as unknown as EditablePerformanceTasksType] || {
-        responseType: '',
-      }
-    : { responseType: '' };
-
-  const { responseType, ...config } = defaultPropsByType;
 
   return {
     name,
     description,
     isHidden: false,
-    items: [
-      {
-        id: undefined,
-        key: uuidv4(),
-        name: `${responseType}`,
-        responseType,
-        config,
-      },
-    ],
+    items: getItems(),
     isPerformanceTask: true,
     performanceTaskType,
-    ...performanceTask,
+    ...restPerfTaskParams,
     id: undefined,
     key: uuidv4(),
   };
@@ -428,10 +534,78 @@ const getActivityConditionalLogic = (items: Item[]) =>
     return result;
   }, []);
 
+const getActivitySubscaleItems = ({
+  activityItemsObject,
+  subscalesObject,
+  subscaleItems,
+}: GetActivitySubscaleItems) =>
+  subscaleItems.map(
+    (item) =>
+      (activityItemsObject[item.name]
+        ? activityItemsObject[item.name]?.id
+        : subscalesObject[item.name]?.id) ?? '',
+  );
+
+const getActivitySubscaleSettingDuplicated = ({
+  oldSubscaleSetting,
+  oldItems,
+  newItems,
+}: GetActivitySubscaleSettingDuplicated) => {
+  if (!oldSubscaleSetting) return oldSubscaleSetting;
+
+  const mappedIndexObject = oldItems.reduce(
+    (acc, item, currentIndex) => ({
+      ...acc,
+      [getEntityKey(item)]: getEntityKey(newItems[currentIndex]),
+    }),
+    {} as Record<string, string>,
+  );
+
+  return {
+    ...oldSubscaleSetting,
+    subscales: oldSubscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      items: subscale.items.map((subscaleItem) => mappedIndexObject[subscaleItem] ?? subscaleItem),
+    })),
+  };
+};
+
+const getActivitySubscaleSetting = (
+  subscaleSetting: SubscaleSetting,
+  activityItems: ItemFormValues[],
+) => {
+  if (!subscaleSetting) return subscaleSetting;
+
+  const processedSubscaleSetting = {
+    ...subscaleSetting,
+    subscales: subscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      id: uuidv4(),
+    })),
+  };
+  const activityItemsObject = getObjectFromList(activityItems, (item) => item.name);
+  const subscalesObject = getObjectFromList(
+    processedSubscaleSetting.subscales,
+    (subscale) => subscale.name,
+  );
+
+  return {
+    ...processedSubscaleSetting,
+    subscales: processedSubscaleSetting?.subscales?.map((subscale) => ({
+      ...subscale,
+      items: getActivitySubscaleItems({
+        activityItemsObject,
+        subscalesObject,
+        subscaleItems: subscale.items,
+      }),
+    })),
+  };
+};
+
 export const getDefaultValues = (appletData?: SingleApplet) => {
   if (!appletData) return getNewApplet();
 
-  return {
+  const processedApplet = {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
@@ -447,6 +621,18 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
       : [],
     activityFlows: getActivityFlows(appletData.activityFlows),
   };
+
+  return {
+    ...processedApplet,
+    activities: processedApplet.activities
+      ? processedApplet.activities.map((activity) => ({
+          ...activity,
+          ...(activity.subscaleSetting && {
+            subscaleSetting: getActivitySubscaleSetting(activity.subscaleSetting, activity.items),
+          }),
+        }))
+      : [],
+  } as AppletFormValues;
 };
 
 export const getAppletTabs = ({
@@ -488,4 +674,27 @@ export const testFunctionForUniqueness = (field: string, value: string, context:
   const items = get(context, `from.1.value.${field}`);
 
   return items?.filter((item: { name: string }) => item.name === value).length < 2 ?? true;
+};
+
+export const testFunctionForTheSameVariable = (
+  field: string,
+  value: string,
+  context: TestContext,
+) => {
+  const itemName = get(context, 'parent.name');
+  const variableNames = getTextBetweenBrackets(value);
+
+  return !variableNames.includes(itemName);
+};
+
+export const testFunctionForNotSupportedItems = (
+  field: string,
+  value: string,
+  context: TestContext,
+) => {
+  const items: Item[] = get(context, 'from.1.value.items');
+  const variableNames = getTextBetweenBrackets(value);
+  const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
+
+  return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
 };

@@ -2,11 +2,12 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledTitleLarge, theme } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { RoundTypeEnum } from 'modules/Builder/types';
 
 import { Instruction } from '../../Instruction';
 import { SettingsTypeEnum } from '../Flanker.const';
 import { RoundOptions } from './RoundOptions';
-import { RoundSettingsProps, RoundTypeEnum } from './RoundSettings.types';
+import { RoundSettingsProps } from './RoundSettings.types';
 import { BlockSequences } from './BlockSequences';
 
 export const RoundSettings = ({ uiType }: RoundSettingsProps) => {

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Uploads, SharedToggleItemProps, ToggleItemContainer } from 'modules/Builder/components';
 import { Uploader } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
-import { MAX_FILE_SIZE_2MB } from 'shared/consts';
+import { MAX_FILE_SIZE_25MB } from 'shared/consts';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 
 import { DrawingProps } from './Drawing.types';
@@ -33,7 +33,7 @@ export const Drawing = ({ name }: DrawingProps) => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue(drawingExampleName, val || undefined)}
           getValue={() => drawingExample}
-          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_2MB) })}
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
         />
       ),
     },
@@ -45,7 +45,7 @@ export const Drawing = ({ name }: DrawingProps) => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue(drawingBackgroundName, val || undefined)}
           getValue={() => drawingBackground}
-          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_2MB) })}
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
         />
       ),
     },

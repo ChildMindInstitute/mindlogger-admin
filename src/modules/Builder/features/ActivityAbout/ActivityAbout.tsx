@@ -16,7 +16,7 @@ import { Tooltip, Uploader } from 'shared/components';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
-  MAX_FILE_SIZE_5MB,
+  MAX_FILE_SIZE_25MB,
   MAX_NAME_LENGTH,
 } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
@@ -26,7 +26,7 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
-import { itemsForReviewableActivity } from './ActivityAbout.const';
+import { itemsForReviewableActivity, commonUploaderProps } from './ActivityAbout.const';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
@@ -56,15 +56,9 @@ export const ActivityAbout = () => {
     ? t('isReviewableUnsupported')
     : null;
 
-  const commonProps = {
+  const commonInputProps = {
     control,
     fullWidth: true,
-  };
-
-  const commonUploaderProps = {
-    width: 20,
-    height: 20,
-    maxFileSize: MAX_FILE_SIZE_5MB,
   };
 
   const uploads = [
@@ -76,8 +70,7 @@ export const ActivityAbout = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue(`${fieldName}.image`, val)}
           getValue={() => watch(`${fieldName}.image`)}
-          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
-          hasRemoveConfirmation
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
         />
       ),
     },
@@ -89,8 +82,7 @@ export const ActivityAbout = () => {
           {...commonUploaderProps}
           setValue={(val: string) => setValue(`${fieldName}.splashScreen`, val)}
           getValue={() => watch(`${fieldName}.splashScreen`)}
-          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_5MB) })}
-          hasRemoveConfirmation
+          description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
           cropRatio={7 / 10}
         />
       ),
@@ -135,14 +127,14 @@ export const ActivityAbout = () => {
         <StyledContainer>
           <Box sx={{ marginBottom: theme.spacing(4.4) }}>
             <InputController
-              {...commonProps}
+              {...commonInputProps}
               name={`${fieldName}.name`}
               maxLength={MAX_NAME_LENGTH}
               label={t('activityName')}
             />
           </Box>
           <InputController
-            {...commonProps}
+            {...commonInputProps}
             name={`${fieldName}.description`}
             maxLength={MAX_DESCRIPTION_LENGTH}
             label={t('activityDescription')}

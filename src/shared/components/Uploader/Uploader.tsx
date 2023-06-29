@@ -4,17 +4,17 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
+import { IncorrectImagePopup } from 'shared/components/IncorrectImagePopup';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { byteFormatter, getUploadFormData } from 'shared/utils';
-import { MAX_FILE_SIZE_2MB } from 'shared/consts';
-import { postFileUploadApi } from 'api';
-import { useAsync } from 'shared/hooks';
+import { byteFormatter, joinWihComma } from 'shared/utils';
+import { MAX_FILE_SIZE_25MB, VALID_IMAGE_TYPES, UploadImageError } from 'shared/consts';
 
 import {
   StyledButtonGroup,
   StyledContainer,
+  StyledDeleteBtn,
+  StyledError,
   StyledImgContainer,
   StyledName,
   StyledNameWrapper,
@@ -31,22 +31,16 @@ export const Uploader = ({
   setValue,
   getValue,
   description,
-  maxFileSize = MAX_FILE_SIZE_2MB,
   wrapperStyles = {},
-  hasRemoveConfirmation = false,
   cropRatio,
   hasError,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
-  const { execute: executeImgUpload } = useAsync(
-    postFileUploadApi,
-    (response) => response?.data?.result && setValue(response?.data?.result.url),
-  );
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<UploadImageError | null>(null);
   const [isRemovePopupOpen, setRemovePopupOpen] = useState(false);
   const isPrimaryUiType = uiType === UploaderUiType.Primary;
 
@@ -58,21 +52,19 @@ export const Uploader = ({
   const handleSetImage = (files: FileList | null) => {
     const imageFile = files?.[0];
     if (!imageFile) return;
+    setError(null);
 
-    const isAllowableSize = imageFile.size < maxFileSize;
-    setError(!isAllowableSize);
+    const fileExtension = imageFile.name.split('.').pop()?.toLowerCase();
+    const notAllowableSize = imageFile.size > MAX_FILE_SIZE_25MB;
+    const notAllowableType =
+      !imageFile.type.includes('image') || !VALID_IMAGE_TYPES.includes(`.${fileExtension}`);
+    notAllowableSize && setError(UploadImageError.Size);
+    notAllowableType && setError(UploadImageError.Format);
 
-    if (!isAllowableSize || !imageFile.type.includes('image')) return;
+    if (notAllowableSize || notAllowableType) return;
 
     setImage(imageFile);
-    if (isPrimaryUiType) {
-      setCropPopupVisible(true);
-
-      return;
-    }
-
-    const body = getUploadFormData(imageFile);
-    executeImgUpload(body);
+    setCropPopupVisible(true);
   };
 
   const dragEvents = {
@@ -114,10 +106,7 @@ export const Uploader = ({
 
   const handleDeleteClick = (e: MouseEvent) => {
     stopDefaults(e);
-
-    if (hasRemoveConfirmation) return setRemovePopupOpen(true);
-
-    handleRemoveImg();
+    setRemovePopupOpen(true);
   };
 
   const handleConfirmRemoval = () => {
@@ -128,9 +117,10 @@ export const Uploader = ({
   const imageField = getValue();
 
   const placeholderImgId = isPrimaryUiType ? 'img-filled' : 'img-outlined';
-  const deleteBtnProps = {
-    sx: isPrimaryUiType ? null : { width: '4.8rem', height: '4.8rem' },
-  };
+  const placeholderImgSize = isPrimaryUiType ? 32 : 24;
+  const deleteSvgSize = isPrimaryUiType ? '18' : '24';
+  const hasSizeError = error === UploadImageError.Size;
+  const hasFormatError = error === UploadImageError.Format;
 
   return (
     <>
@@ -159,11 +149,9 @@ export const Uploader = ({
                     onClick={onEditImg}
                   />
                 )}
-                <Button
-                  {...deleteBtnProps}
-                  startIcon={<Svg width="18" height="18" id="trash" />}
-                  onClick={handleDeleteClick}
-                />
+                <StyledDeleteBtn isPrimaryUiType={isPrimaryUiType} onClick={handleDeleteClick}>
+                  <Svg width={deleteSvgSize} height={deleteSvgSize} id="trash" />
+                </StyledDeleteBtn>
               </StyledButtonGroup>
             )}
           </UploadedImgContainer>
@@ -173,21 +161,23 @@ export const Uploader = ({
             isPrimaryUiType={isPrimaryUiType}
             hasError={hasError}
           >
-            <Svg id={placeholderImgId} width={32} height={32} />
-            {isPrimaryUiType && error && (
-              <StyledBodyMedium
-                sx={{ marginBottom: theme.spacing(1), px: theme.spacing(3) }}
-                color={variables.palette.semantic.error}
-              >
-                {t('dropError', { size: byteFormatter(maxFileSize) })}
-              </StyledBodyMedium>
-            )}
+            <Svg id={placeholderImgId} width={placeholderImgSize} height={placeholderImgSize} />
             {isPrimaryUiType && (
-              <StyledBodyMedium>
-                <Trans i18nKey="dropImg">
-                  Drop Image here <br /> or <span>click to browse</span>.
-                </Trans>
-              </StyledBodyMedium>
+              <>
+                {hasSizeError && (
+                  <StyledError>
+                    <Trans i18nKey="dropError">
+                      Image is more than <br /> <>{{ size: byteFormatter(MAX_FILE_SIZE_25MB) }}</>.
+                    </Trans>
+                  </StyledError>
+                )}
+                {hasFormatError && <StyledError>{t('incorrectImageFormat')}</StyledError>}
+                <StyledBodyMedium>
+                  <Trans i18nKey="dropImg">
+                    Drop Image here <br /> or <span>click to browse</span>.
+                  </Trans>
+                </StyledBodyMedium>
+              </>
             )}
           </StyledImgContainer>
         )}
@@ -195,7 +185,7 @@ export const Uploader = ({
       <input
         ref={uploadInputRef}
         onChange={handleChange}
-        accept="image/*"
+        accept={joinWihComma(VALID_IMAGE_TYPES)}
         type="file"
         name="uploadFile"
         hidden
@@ -218,6 +208,7 @@ export const Uploader = ({
           setCropPopupVisible={setCropPopupVisible}
           setValue={setValue}
           image={image}
+          setImage={setImage}
           ratio={cropRatio}
         />
       )}
@@ -226,6 +217,24 @@ export const Uploader = ({
         onClose={handleCloseRemovePopup}
         onSubmit={handleConfirmRemoval}
       />
+      {!isPrimaryUiType && (
+        <>
+          {hasSizeError && (
+            <IncorrectImagePopup
+              popupVisible={hasSizeError}
+              onClose={() => setError(null)}
+              uiType={UploadImageError.Size}
+            />
+          )}
+          {hasFormatError && (
+            <IncorrectImagePopup
+              popupVisible={hasFormatError}
+              onClose={() => setError(null)}
+              uiType={UploadImageError.Format}
+            />
+          )}
+        </>
+      )}
     </>
   );
 };

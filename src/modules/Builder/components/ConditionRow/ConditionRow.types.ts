@@ -8,6 +8,7 @@ export type ConditionRowProps = {
   onRemove: () => void;
   type?: ConditionRowType;
   scoreId?: string;
+  scoreName?: string;
 };
 
 export type OptionListItem = { labelKey: string; value: string; type: ConditionItemType };

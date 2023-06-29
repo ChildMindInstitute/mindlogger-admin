@@ -5,29 +5,44 @@ import { addDays } from 'date-fns';
 
 import { DatePicker, TimePicker, DatePickerUiType } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { Switch, TagsInputController } from 'shared/components/FormComponents';
+import { AutocompleteOption, Switch, TagsInputController } from 'shared/components/FormComponents';
 
 import { StyledTimeText } from './ReportFilters.styles';
+import { ReportFiltersProps } from './ReportFilters.types';
+import { MIN_DATE } from './ReportFilters.const';
 
-export const ReportFilters = ({ minDate }: { minDate: Date }) => {
+export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFiltersProps) => {
   const { t } = useTranslation('app');
-  const { control, watch, setValue, register, unregister } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
 
   const moreFiltersVisisble = watch('moreFiltersVisisble');
   const filterByIdentifier = watch('filterByIdentifier');
   const startDateEndDate = watch('startDateEndDate');
 
+  const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
+
+  const identifiersOptions = identifiers.reduce(
+    (uniqueIdentifiers: AutocompleteOption[], { decryptedValue }) => {
+      if (
+        uniqueIdentifiers &&
+        !uniqueIdentifiers.find((identifier) => identifier.id === decryptedValue)
+      ) {
+        return [
+          ...uniqueIdentifiers,
+          {
+            label: decryptedValue,
+            id: decryptedValue,
+          },
+        ];
+      }
+
+      return uniqueIdentifiers;
+    },
+    [],
+  );
+
   const moreFiltersHandler = () => {
     setValue('moreFiltersVisisble', !moreFiltersVisisble);
-    if (moreFiltersVisisble) {
-      unregister('identifier');
-      unregister('versions');
-      unregister('filterByIdentifier');
-    } else {
-      register('identifier', { value: [] });
-      register('versions', { value: [] });
-      register('filterByIdentifier', { value: true });
-    }
   };
 
   const onCloseCallback = () => {
@@ -41,7 +56,7 @@ export const ReportFilters = ({ minDate }: { minDate: Date }) => {
     <form>
       <StyledFlexTopCenter sx={{ mb: theme.spacing(3.2) }}>
         <DatePicker
-          minDate={minDate}
+          minDate={MIN_DATE}
           name="startDateEndDate"
           uiType={DatePickerUiType.StartEndingDate}
           control={control}
@@ -76,24 +91,28 @@ export const ReportFilters = ({ minDate }: { minDate: Date }) => {
       </StyledFlexTopCenter>
       {moreFiltersVisisble && (
         <Box sx={{ mb: theme.spacing(4.8) }}>
-          <Switch name="filterByIdentifier" control={control} label={t('filterByIdentifier')} />
+          {!!identifiersOptions?.length && (
+            <Switch name="filterByIdentifier" control={control} label={t('filterByIdentifier')} />
+          )}
           <StyledFlexTopCenter sx={{ mt: theme.spacing(0.8) }}>
-            <Box sx={{ width: '28rem' }}>
+            <Box sx={{ width: '32rem' }}>
               <TagsInputController
                 name="identifier"
+                limitTags={2}
                 label={t('respondentIdentifier')}
-                options={[]}
+                options={identifiersOptions}
                 control={control}
                 noOptionsText={t('noRespondentIdentifier')}
                 labelAllSelect={t('selectAll')}
                 disabled={!filterByIdentifier}
               />
             </Box>
-            <Box sx={{ width: '28rem', ml: theme.spacing(2.4) }}>
+            <Box sx={{ width: '32rem', ml: theme.spacing(2.4) }}>
               <TagsInputController
                 name="versions"
+                limitTags={2}
                 label={t('versions')}
-                options={[]}
+                options={versionsOptions}
                 control={control}
                 noOptionsText={t('noVersions')}
                 labelAllSelect={t('selectAll')}

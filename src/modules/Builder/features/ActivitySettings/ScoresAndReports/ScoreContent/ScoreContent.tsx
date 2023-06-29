@@ -99,6 +99,10 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
     setValue(`${name}.name`, prevScoreName);
   };
 
+  useEffect(() => {
+    setValue(`${name}.id`, getScoreId(scoreName, calculationType));
+  }, [calculationType]);
+
   const handleNameBlur = () => {
     const isVariable = getIsScoreIdVariable(score);
 
@@ -134,7 +138,9 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
         </Box>
         <Box>
           <CopyId title={t('scoreId')} value={scoreId} showCopy />
-          <StyledTitleSmall sx={{ mb: theme.spacing(1.2) }}>{t('rangeOfScores')}</StyledTitleSmall>
+          <StyledTitleSmall sx={{ m: theme.spacing(2.4, 0, 1.2, 0) }}>
+            {t('rangeOfScores')}
+          </StyledTitleSmall>
           <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>{scoreRangeLabel}</StyledBodyLarge>
         </Box>
       </StyledFlexTopStart>
@@ -165,7 +171,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
                 key={`data-score-conditional-${getEntityKey(conditional) || index}`}
                 HeaderContent={SectionScoreHeader}
                 Content={ScoreCondition}
-                contentProps={{ name: conditionalName, scoreId }}
+                contentProps={{ name: conditionalName, scoreId, scoreName }}
                 headerContentProps={{
                   onRemove: () => removeScoreConditional(index),
                   title,

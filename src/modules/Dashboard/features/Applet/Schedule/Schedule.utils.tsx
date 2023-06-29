@@ -4,7 +4,7 @@ import { variables } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
 
-import { ActivitiesFlowsWithColors, Repeats } from './Schedule.types';
+import { ActivitiesFlowsWithColors } from './Schedule.types';
 
 export const getCount = (ids: ActivitiesFlowsWithColors, id: string) =>
   ids.filter((item) => item.id === id).length;
@@ -53,12 +53,6 @@ export const getNextColor = (index: number) => {
 
 export const getFrequencyString = (periodicity: Periodicity) =>
   String(periodicity).charAt(0) + String(periodicity).slice(1).toLowerCase();
-
-export const getRepeatsAnswer = (periodicity: Periodicity) => {
-  if (periodicity === Periodicity.Always) return Repeats.NotSet;
-
-  return periodicity === Periodicity.Once ? Repeats.No : Repeats.Yes;
-};
 
 export const removeSecondsFromTime = (time?: string | null) => {
   if (!time) return null;

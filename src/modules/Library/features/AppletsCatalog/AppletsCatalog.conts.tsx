@@ -52,10 +52,41 @@ export const ItemResponseTypes = {
     icon: <Svg id="audio-player" />,
     title: ItemResponseType.AudioPlayer,
   },
-  [ItemResponseType.Flanker]: { icon: null, title: ItemResponseType.Flanker },
-  [ItemResponseType.ABTrailsIpad]: { icon: null, title: ItemResponseType.ABTrailsIpad },
-  [ItemResponseType.ABTrailsMobile]: { icon: null, title: ItemResponseType.ABTrailsMobile },
-  [ItemResponseType.Gyroscope]: { icon: null, title: ItemResponseType.Gyroscope },
-  [ItemResponseType.Touch]: { icon: null, title: ItemResponseType.Touch },
   [ItemResponseType.Time]: { icon: <Svg id="clock-picker" />, title: ItemResponseType.Time },
+  [ItemResponseType.Flanker]: { icon: null, title: ItemResponseType.Flanker },
+  [ItemResponseType.ABTrailsMobileFirst]: {
+    icon: null,
+    title: ItemResponseType.ABTrailsMobileFirst,
+  },
+  [ItemResponseType.ABTrailsMobileSecond]: {
+    icon: null,
+    title: ItemResponseType.ABTrailsMobileSecond,
+  },
+  [ItemResponseType.ABTrailsMobileThird]: {
+    icon: null,
+    title: ItemResponseType.ABTrailsMobileThird,
+  },
+  [ItemResponseType.ABTrailsMobileFourth]: {
+    icon: null,
+    title: ItemResponseType.ABTrailsMobileFourth,
+  },
+  [ItemResponseType.ABTrailsTabletFirst]: {
+    icon: null,
+    title: ItemResponseType.ABTrailsTabletFirst,
+  },
+  [ItemResponseType.ABTrailsTabletSecond]: {
+    icon: null,
+    title: ItemResponseType.ABTrailsTabletSecond,
+  },
+  [ItemResponseType.ABTrailsTabletThird]: {
+    icon: null,
+    title: ItemResponseType.ABTrailsTabletThird,
+  },
+  [ItemResponseType.ABTrailsTabletFourth]: {
+    icon: null,
+    title: ItemResponseType.ABTrailsTabletFourth,
+  },
+  [ItemResponseType.StabilityTracker]: { icon: null, title: ItemResponseType.StabilityTracker },
+  [ItemResponseType.TouchTest]: { icon: null, title: ItemResponseType.TouchTest },
+  [ItemResponseType.TouchPractice]: { icon: null, title: ItemResponseType.TouchPractice },
 };

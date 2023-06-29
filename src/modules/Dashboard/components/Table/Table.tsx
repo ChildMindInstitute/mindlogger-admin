@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } from '@mui/material';
+import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
 
 import {
   DEFAULT_ROWS_PER_PAGE,
-  EmptyTable,
+  EmptyState,
   TableHead,
   UiType,
   StyledTableCellContent,
@@ -11,6 +11,7 @@ import {
 } from 'shared/components';
 
 import { TableProps } from './Table.types';
+import { StyledTableCell } from './Table.styles';
 
 // TODO: make rows rendering more strict
 export const Table = ({
@@ -64,7 +65,7 @@ export const Table = ({
                   onMouseLeave={() => setHoveredRowIndex(-1)}
                 >
                   {Object.keys(row)?.map((key) => (
-                    <TableCell
+                    <StyledTableCell
                       onClick={row[key].onClick}
                       scope="row"
                       key={key}
@@ -72,14 +73,14 @@ export const Table = ({
                       width={row[key].width}
                     >
                       {row[key].content(row, hoveredRowIndex === index)}
-                    </TableCell>
+                    </StyledTableCell>
                   ))}
                 </TableRow>
               ))}
             </TableBody>
           </MuiTable>
         )}
-        {emptyComponent && <EmptyTable>{emptyComponent}</EmptyTable>}
+        {emptyComponent && <EmptyState>{emptyComponent}</EmptyState>}
       </StyledTableContainer>
       {uiType === UiType.Tertiary && tableHeader}
     </>

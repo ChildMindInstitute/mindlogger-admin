@@ -9,7 +9,7 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { DataTable } from 'shared/components';
-import { ActivityFormValues } from 'modules/Builder/types';
+import { SubscaleFormValue } from 'modules/Builder/types';
 
 import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
@@ -25,8 +25,8 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
   const { t } = useTranslation('app');
   const { control } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
-  const subscales: ActivityFormValues['subscales'] =
-    useWatch({ name: `${fieldName}.subscales` }) ?? [];
+  const subscales: SubscaleFormValue[] =
+    useWatch({ name: `${fieldName}.subscaleSetting.subscales` }) ?? [];
   const items = getItemElements(
     subscaleId,
     activity?.items.filter(checkOnItemTypeAndScore),
@@ -35,7 +35,7 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
 
   return (
     <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>
-      <StyledFlexTopStart sx={{ mb: theme.spacing(4.4), gap: theme.spacing(2) }}>
+      <StyledFlexTopStart sx={{ mb: theme.spacing(2.4), gap: theme.spacing(2) }}>
         <InputController name={`${name}.name`} label={t('subscaleName')} />
         <SelectController
           name={`${name}.scoring`}

@@ -23,6 +23,13 @@ export const MAX_FILE_SIZE_25MB = 26_214_400;
 
 export const MAX_FILE_SIZE_150MB = 157_286_400;
 
+export const VALID_IMAGE_TYPES = ['.png', '.jpg', '.jpeg'];
+
+export enum UploadImageError {
+  Size,
+  Format,
+}
+
 export const INPUT_DEBOUNCE_TIME = 400;
 export const SEARCH_DEBOUNCE_VALUE = 700;
 
@@ -90,19 +97,37 @@ export enum ItemResponseType {
   Audio = 'audio',
   Message = 'message',
   AudioPlayer = 'audioPlayer',
-  Flanker = 'flanker',
-  Touch = 'touch',
-  Gyroscope = 'gyroscope',
-  ABTrailsIpad = 'ABTrailsIpad',
-  ABTrailsMobile = 'ABTrailsMobile',
   Time = 'time',
+  Flanker = 'flanker',
+  StabilityTracker = 'stabilityTracker',
+  TouchPractice = 'touchPractice',
+  TouchTest = 'touchTest',
+  ABTrailsTabletFirst = 'ABTrailsTabletFirst',
+  ABTrailsTabletSecond = 'ABTrailsTabletSecond',
+  ABTrailsTabletThird = 'ABTrailsTabletThird',
+  ABTrailsTabletFourth = 'ABTrailsTabletFourth',
+  ABTrailsMobileFirst = 'ABTrailsMobileFirst',
+  ABTrailsMobileSecond = 'ABTrailsMobileSecond',
+  ABTrailsMobileThird = 'ABTrailsMobileThird',
+  ABTrailsMobileFourth = 'ABTrailsMobileFourth',
 }
 
-export enum PerfTaskItemType {
+export enum GyroscopeOrTouch {
+  Gyroscope = 'gyroscope',
+  Touch = 'touch',
+}
+
+export const ItemsWithFileResponses = [
+  ItemResponseType.Photo,
+  ItemResponseType.Video,
+  ItemResponseType.Audio,
+];
+
+export enum PerfTaskType {
   Flanker = 'flanker',
   Touch = 'touch',
   Gyroscope = 'gyroscope',
-  ABTrailsIpad = 'ABTrailsIpad',
+  ABTrailsTablet = 'ABTrailsTablet',
   ABTrailsMobile = 'ABTrailsMobile',
 }
 
@@ -132,10 +157,17 @@ export const itemsTypeIcons = {
   [ItemResponseType.AudioPlayer]: <Svg id="audio-player" />,
   [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
-  [ItemResponseType.ABTrailsIpad]: null,
-  [ItemResponseType.ABTrailsMobile]: null,
-  [ItemResponseType.Gyroscope]: null,
-  [ItemResponseType.Touch]: null,
+  [ItemResponseType.ABTrailsMobileFirst]: null,
+  [ItemResponseType.ABTrailsMobileSecond]: null,
+  [ItemResponseType.ABTrailsMobileThird]: null,
+  [ItemResponseType.ABTrailsMobileFourth]: null,
+  [ItemResponseType.ABTrailsTabletFirst]: null,
+  [ItemResponseType.ABTrailsTabletSecond]: null,
+  [ItemResponseType.ABTrailsTabletThird]: null,
+  [ItemResponseType.ABTrailsTabletFourth]: null,
+  [ItemResponseType.StabilityTracker]: null,
+  [ItemResponseType.TouchTest]: null,
+  [ItemResponseType.TouchPractice]: null,
 };
 
 export const enum SubscaleTotalScore {
@@ -179,3 +211,23 @@ export const CONDITION_TYPES_TO_HAVE_SINGLE_VALUE = [
   ConditionType.NotEqual,
 ];
 export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [ConditionType.Between, ConditionType.OutsideOf];
+
+export const GENERAL_REPORT_NAME = 'report';
+
+export const JOURNEY_REPORT_NAME = 'activity_user_journey';
+
+export const enum ActivityStatus {
+  Missed = 'missed',
+  Completed = 'completed',
+  NotSheduled = 'not scheduled',
+}
+
+export const enum Sex {
+  M = 'M',
+  F = 'F',
+}
+
+export const enum LookupTableItems {
+  Age_screen = 'age_screen',
+  Gender_screen = 'gender_screen',
+}

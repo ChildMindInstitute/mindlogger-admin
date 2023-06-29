@@ -1,7 +1,11 @@
-import { Box, ButtonGroup } from '@mui/material';
+import { Box, Button, ButtonGroup } from '@mui/material';
 import { styled } from '@mui/system';
 
-import { StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles/styledComponents';
+import {
+  StyledFlexAllCenter,
+  StyledFlexColumn,
+  StyledBodyMedium,
+} from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -183,4 +187,25 @@ export const StyledNameWrapper = styled(Box)`
   svg {
     fill: ${variables.palette.primary};
   }
+`;
+
+export const StyledDeleteBtn = styled(Button, shouldForwardProp)`
+  ${({ isPrimaryUiType }: { isPrimaryUiType: boolean }) =>
+    !isPrimaryUiType &&
+    `
+        padding: 0;
+        width: 4.8rem;
+        height: 4.8rem;
+    
+        && svg {
+          fill: ${variables.palette.on_surface_variant};
+        }
+    `};
+`;
+
+export const StyledError = styled(StyledBodyMedium)`
+  margin-bottom: ${theme.spacing(1)};
+  padding: ${theme.spacing(0, 3)};
+  text-align: center;
+  color: ${variables.palette.semantic.error};
 `;

@@ -15,9 +15,9 @@ export const getActions = (
     tooltipTitle: t('edit'),
   },
   {
-    disabled: !!folder.appletCount,
+    disabled: !!folder.foldersAppletCount,
     icon: <Svg id="trash" />,
     action: (item: Folder) => onDeleteFolder(item),
-    tooltipTitle: t(folder.appletCount ? 'deleteFolderWarning' : 'delete'),
+    tooltipTitle: t(folder.foldersAppletCount ? 'deleteFolderWarning' : 'delete'),
   },
 ];

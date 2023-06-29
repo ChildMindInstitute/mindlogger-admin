@@ -9,20 +9,23 @@ import { postFileUploadApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { getUploadFormData } from 'shared/utils';
 
+import { cropImage, initPercentCrop } from './CropPopup.utils';
+import { SIZE_TO_SET_IMG_SMALL } from './CropPopup.const';
 import { StyledCropWrapper } from './CropPopup.styles';
 import { CropPopupProps } from './CropPopup.types';
-import { cropImage, initPercentCrop } from './CropPopup.utils';
 
 export const CropPopup = ({
   open,
   setCropPopupVisible,
   setValue,
   image,
+  setImage,
   ratio = 1,
 }: CropPopupProps) => {
   const { t } = useTranslation('app');
 
   const [crop, setCrop] = useState<Crop>();
+  const [isSmallImg, setIsSmallImg] = useState(false);
   const imgSrc = useMemo(() => URL.createObjectURL(image), [image]);
   const { execute: executeImgUpload } = useAsync(
     postFileUploadApi,
@@ -33,6 +36,7 @@ export const CropPopup = ({
 
   const handleImageLoad = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     const { naturalWidth: width, naturalHeight: height } = event.currentTarget;
+    setIsSmallImg(width < SIZE_TO_SET_IMG_SMALL || height < SIZE_TO_SET_IMG_SMALL);
 
     const crop = initPercentCrop({ width, height, ratio });
 
@@ -53,6 +57,7 @@ export const CropPopup = ({
   };
 
   const onClose = () => {
+    setImage(null);
     setCropPopupVisible(false);
   };
 
@@ -71,7 +76,7 @@ export const CropPopup = ({
         buttonText={t('save')}
       >
         <StyledModalWrapper sx={{ margin: '0 auto' }}>
-          <StyledCropWrapper>
+          <StyledCropWrapper isSmallImg={isSmallImg}>
             <ReactCrop
               crop={crop}
               onChange={(_, percentCrop) => setCrop(percentCrop)}
@@ -79,7 +84,7 @@ export const CropPopup = ({
               keepSelection={true}
               style={{ maxHeight: '60vh' }}
             >
-              <img src={imgSrc} onLoad={handleImageLoad} />
+              <img src={imgSrc} onLoad={handleImageLoad} alt={name} />
             </ReactCrop>
           </StyledCropWrapper>
         </StyledModalWrapper>

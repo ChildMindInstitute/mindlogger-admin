@@ -13,25 +13,25 @@ import { Applet } from './Applet';
 import { Applet as AppletType, EditAccessPopupProps, Role } from './ManagersEditAccessPopup.types';
 import { StyledApplets, StyledError } from './ManagersEditAccessPopup.styles';
 import { getRoleIcon } from './ManagersEditAccessPopup.utils';
-import { EditAccessSuccessPopup } from '../EditAccessSuccessPopup';
 
 export const EditAccessPopup = ({
   onClose,
   editAccessPopupVisible,
+  setEditAccessSuccessPopupVisible,
   user,
-  refetchManagers,
+  reFetchManagers,
 }: EditAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { firstName, lastName, email, applets: userApplets, id } = user;
   const [applets, setApplets] = useState<AppletType[]>(userApplets);
   const [appletsWithoutRespondents, setAppletsWithoutRespondents] = useState<string[]>([]);
-  const [editAccessSuccessPopupVisible, setEditAccessSuccessPopupVisible] = useState(false);
 
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute, error } = useAsync(editManagerAccess, () => {
+  const { execute: handleEditAccess, error } = useAsync(editManagerAccess, () => {
+    onClose();
     setEditAccessSuccessPopupVisible(true);
-    refetchManagers();
+    reFetchManagers();
   });
 
   const getAppletsWithoutRespondents = () =>
@@ -91,13 +91,8 @@ export const EditAccessPopup = ({
         return;
       }
 
-      execute({ ownerId, userId: id, accesses });
+      handleEditAccess({ ownerId, userId: id, accesses });
     }
-  };
-
-  const handleSubmitSuccessPopup = () => {
-    setEditAccessSuccessPopupVisible(false);
-    onClose();
   };
 
   return (
@@ -143,13 +138,6 @@ export const EditAccessPopup = ({
           {error && <StyledError>{getErrorMessage(error)}</StyledError>}
         </>
       </Modal>
-      {editAccessSuccessPopupVisible && (
-        <EditAccessSuccessPopup
-          open={editAccessSuccessPopupVisible}
-          onClose={handleSubmitSuccessPopup}
-          {...user}
-        />
-      )}
     </>
   );
 };

@@ -9,19 +9,12 @@ export type LegendEvent = {
   colors?: string[];
 };
 
-export enum Repeats {
-  Yes = 'yes',
-  No = 'no',
-  NotSet = '-',
-}
-
 export type ScheduleExportItem = {
   activityName: string;
   date: string;
   startTime: string;
   endTime: string;
   notificationTime: string;
-  repeats: Repeats;
   frequency: string;
 };
 

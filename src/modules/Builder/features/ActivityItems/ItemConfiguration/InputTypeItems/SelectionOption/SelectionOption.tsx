@@ -43,10 +43,11 @@ export const SelectionOption = ({
   onUpdateOption,
   index,
   optionsLength,
+  optionsOpen,
+  setOptionsOpen,
 }: SelectionOptionProps) => {
   const optionName = `${name}.responseValues.options.${index}`;
   const { t } = useTranslation('app');
-  const [optionOpen, setOptionOpen] = useState(true);
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [visibleActions, setVisibleActions] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -58,13 +59,11 @@ export const SelectionOption = ({
   });
   const palette = watch(`${name}.responseValues.paletteName`);
   const imageSrc = watch(`${optionName}.image`);
-  const hasScoresChecked = get(settings, ItemConfigurationSettings.HasScores);
   const hasTooltipsChecked = get(settings, ItemConfigurationSettings.HasTooltips);
   const hasColorPicker = get(settings, ItemConfigurationSettings.HasColorPalette);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-  const { text = '', isHidden = false, score, tooltip, color } = option || {};
+  const { text = '', isHidden = false, score, color } = option || {};
   const scoreString = score?.toString();
-  const hasTooltip = tooltip !== undefined;
   const hasColor = color !== undefined;
   const hasPalette = !!palette;
   const isColorSet = color?.hex !== '';
@@ -76,7 +75,17 @@ export const SelectionOption = ({
   );
   const groupedConditions = getObjectFromList(dependentConditions);
 
-  const handleOptionToggle = () => setOptionOpen((prevState) => !prevState);
+  const handleOptionToggle = () =>
+    setOptionsOpen((prevState) =>
+      prevState.map((optionOpen, optionIndex) => {
+        if (optionIndex === index) return !optionOpen;
+
+        return optionOpen;
+      }),
+    );
+
+  const optionOpen = optionsOpen[index];
+
   const handlePopoverClose = () => setAnchorEl(null);
   const handleRemoveModalClose = () => setIndexToRemove(-1);
   const handleColorChange = () => {
@@ -136,7 +145,7 @@ export const SelectionOption = ({
     optionHide: () => setValue(`${optionName}.isHidden`, !isHidden),
     paletteClick: () => actionsRef.current && setAnchorEl(actionsRef.current),
     optionRemove: () => {
-      !dependentConditions?.length ? handleRemoveOption(index) : setIndexToRemove(index);
+      dependentConditions?.length ? setIndexToRemove(index) : handleRemoveOption(index);
     },
   };
 
@@ -149,10 +158,6 @@ export const SelectionOption = ({
     name: optionName,
     onUpdateOption,
     index,
-    hasScoresChecked,
-    scoreString,
-    hasTooltipsChecked,
-    hasTooltip,
     hasColorPicker,
     hasColor,
   });

@@ -1,5 +1,5 @@
-import { PerformanceTasks } from '../../Activities/Activities.types';
+import { GyroscopeOrTouch } from 'shared/consts';
 
 export type GyroscopeAndTouchProps = {
-  type?: PerformanceTasks;
+  type?: GyroscopeOrTouch;
 };

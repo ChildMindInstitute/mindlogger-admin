@@ -14,7 +14,7 @@ import { getScoreConditionId } from './ScoreCondition.utils';
 import { CopyId } from '../CopyId';
 import { StyledLabel } from './ScoreCondition.styles';
 
-export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
+export const ScoreCondition = ({ name, scoreId, scoreName }: ScoreConditionProps) => {
   const { t } = useTranslation();
 
   const { control, setValue, watch } = useFormContext();
@@ -27,7 +27,7 @@ export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
 
   return (
     <>
-      <StyledFlexTopCenter sx={{ mb: theme.spacing(2.4) }}>
+      <StyledFlexTopCenter sx={{ m: theme.spacing(1.2, 0, 2.4, 0) }}>
         <InputController
           control={control}
           name={`${name}.name`}
@@ -38,10 +38,15 @@ export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
           <CopyId title={t('scoreConditionId')} value={conditionId} showCopy={conditionName} />
         </Box>
       </StyledFlexTopCenter>
-      <ConditionContent name={name} type={ConditionRowType.Score} />
+      <ConditionContent
+        name={name}
+        type={ConditionRowType.Score}
+        scoreId={scoreId}
+        scoreName={scoreName}
+      />
       <CheckboxController
         control={control}
-        name={`${name}.flagScoreName`}
+        name={`${name}.flagScore`}
         label={
           <StyledLabel>
             <StyledBodyLarge>{t('flagScore')}</StyledBodyLarge>

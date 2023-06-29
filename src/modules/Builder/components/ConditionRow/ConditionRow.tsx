@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { getEntityKey } from 'shared/utils';
@@ -23,6 +24,7 @@ export const ConditionRow = ({
   onRemove,
   type = ConditionRowType.Item,
   scoreId,
+  scoreName,
 }: ConditionRowProps) => {
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
@@ -73,8 +75,14 @@ export const ConditionRow = ({
       ...((scores?.length && getScoreOptions(scores)) || []),
       ...((scores?.length && getScoreConditionalsOptions(scores)) || []),
     ],
-    [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
+    [ConditionRowType.Score]: [getScoreIdOption(scoreId!, scoreName!)],
   };
+
+  useEffect(() => {
+    if (type === ConditionRowType.Score) {
+      setValue(conditionItemName, scoreName);
+    }
+  }, [type, scoreName]);
 
   return (
     <Condition

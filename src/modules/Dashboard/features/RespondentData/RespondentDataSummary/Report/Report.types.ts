@@ -1,5 +1,18 @@
+import { DatavizActivity, Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { Item } from 'shared/state';
+import {
+  ActivityItemAnswer,
+  AnswerDTO,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+
+import { Identifier } from '../RespondentDataSummary.types';
+
+export type ReportProps = {
+  activity: DatavizActivity;
+  identifiers: Identifier[];
+  versions: Version[];
+};
 
 export type FilterFormValues = {
   startDateEndDate: Date[];
@@ -8,7 +21,7 @@ export type FilterFormValues = {
   endTime: string;
   filterByIdentifier?: boolean;
   identifier?: AutocompleteOption[];
-  versions?: AutocompleteOption[];
+  versions: AutocompleteOption[];
 };
 
 export type Response = {
@@ -16,13 +29,8 @@ export type Response = {
   answerId: string;
 };
 
-export type Version = {
-  date: Date | string;
-  version: string;
-};
-
 export type ItemAnswer = {
-  value: number | string | string[];
+  answer: AnswerDTO;
   date: Date | string;
 };
 
@@ -38,6 +46,14 @@ export type ResponseOption = {
 
 export type ActivityReport = {
   responses: Response[];
-  versions: Version[];
   responseOptions: ResponseOption[];
+};
+
+export type ActivityResponse = {
+  decryptedAnswer: ActivityItemAnswer[];
+  events: string;
+  answerId: string;
+  endDatetime: string;
+  startDatetime: string;
+  version: string;
 };

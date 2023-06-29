@@ -1,12 +1,13 @@
 import { ChartDataset } from 'chart.js';
 
-import { Response, Version } from '../../Report.types';
+import { Version } from 'api';
+import { ActivityResponse } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 
 export type ScatterChartProps = {
   height?: string;
   minDate: Date;
   maxDate: Date;
-  responses: Response[];
+  answers: ActivityResponse[];
   versions: Version[];
 };
 

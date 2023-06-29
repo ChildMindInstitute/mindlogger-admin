@@ -22,3 +22,6 @@ export const groupBy = <T, K extends keyof T>(
 
 export const pluck = (array: unknown[], attribute: string) =>
   array.map((item) => get(item, attribute));
+
+export const createArrayFromMinToMax = (min: number, max: number) =>
+  Array.from({ length: max - min + 1 }, (_, i) => i + min);

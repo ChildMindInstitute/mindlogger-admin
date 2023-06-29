@@ -247,8 +247,8 @@
   "indefinitely": "Indéfiniment",
   "periodRequired": "Period is required",
   "dataRetentionUpdate": "Mise à jour des paramètres de conservation des données",
-  "dataRetentionUpdatedSuccess":"Le paramètre de rétention des données a été mis à jour avec succès.",
-  "dataRetentionUpdatedFail":"Le paramètre 'Rétention des données' n'a pas été mis à jour. Veuillez réessayer.",
+  "dataRetentionUpdatedSuccess": "Le paramètre de rétention des données a été mis à jour avec succès.",
+  "dataRetentionUpdatedFail": "Le paramètre 'Rétention des données' n'a pas été mis à jour. Veuillez réessayer.",
   "schedule": "Calendrier",
   "editRespondents": "Modifier les répondants",
   "addRole": "Ajouter un rôle",
@@ -262,6 +262,7 @@
   "selected": "Choisi",
   "unselected": "Désélectionné ",
   "editRespondent": "Modifier le répondant",
+  "editRespondentSuccess": "Le surnom et l'ID utilisateur secret ont été mis à jour avec succès.",
   "remove": "Retirer",
   "back": "Retour",
   "saveReportConfigurationWarning": "Un rapport ne peut pas être généré tant que l'<1>'Adresse IP du serveur de chiffrement'</1> et la <3>'Clé de chiffrement publique'</3> ne sont pas saisies. ",
@@ -283,7 +284,6 @@
   "startTime": "Heure de début",
   "endTime": "Heure de fin",
   "notificationTime": "Heure de notification",
-  "repeats": "Répétitions",
   "frequency": "La fréquence",
   "viewDataDescription": "Veuillez sélectionner l'applet pour afficher les données du répondant pour :",
   "dataExport": "Exportation de données",
@@ -605,6 +605,9 @@
   "configureServer": "Veuillez configurer le serveur de rapports pour télécharger le rapport.",
   "moreFilters": "Plus de filtres",
   "activityCompleted": "Activité terminée",
+  "response_one": "{{count}} réponse",
+  "response_other": "{{count}} réponses",
+  "respondentSkippedResponse": "! Le répondant a sauté la réponse",
   "respondentCompletedActivities": "Le répondant a terminé l'activité à ces moments",
   "selectActivityAndResponse": "Sélectionner l'activité et la réponse",
   "reviewDate": "Date de révision",
@@ -701,7 +704,10 @@
     "unique": "Cette {{- field }} déja en cours d'utilisation. Veuillez utiliser un nom différent",
     "atLeastOne": "Sélectionnez au moins 1 élément",
     "mustShowMessageOrItems": "Vous devez afficher un message ou imprimer des éléments pour publier ce rapport",
-    "atLeastOneItem": "Sélectionnez au moins 1 élément"
+    "atLeastOneItem": "Sélectionnez au moins 1 élément",
+    "incorrectEmail": "L'e-mail doit être valide",
+    "variableInTheSameItem": "* Vous ne pouvez pas utiliser le nom de l'élément dans le même élément. Veuillez le supprimer",
+    "variableIsNotSupported": "* Cet élément n'est pas pris en charge, veuillez le supprimer."
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",
@@ -808,5 +814,7 @@
   "uploadFile": "Télécharger un fichier",
   "fileSizeExceed": "Le fichier est trop volumineux. Veuillez télécharger un fichier de moins de {{ size }}.",
   "serverStatusConnected": "État du serveur: connecté.",
-  "configureServerForReport": "État du serveur: non configuré. Le rapport ne peut pas être généré."
+  "configureServerForReport": "État du serveur: non configuré. Le rapport ne peut pas être généré.",
+  "true": "Vrai",
+  "false": "Faux"
 }

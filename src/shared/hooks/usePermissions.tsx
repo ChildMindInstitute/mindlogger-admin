@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { workspaces } from 'redux/modules';
-import { EmptyTable } from 'shared/components';
+import { EmptyState } from 'shared/components';
 import { getErrorMessage } from 'shared/utils';
 
 export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
@@ -33,7 +33,7 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
 
   return {
     isForbidden,
-    noPermissionsComponent: <EmptyTable width="25rem">{t('noPermissions')}</EmptyTable>,
+    noPermissionsComponent: <EmptyState width="25rem">{t('noPermissions')}</EmptyState>,
     isLoading,
   };
 };

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Grid } from '@mui/material';
@@ -27,9 +28,30 @@ import { StyledLambdaScopeInput } from './GeneralSettings.styles';
 
 export const GeneralSettings = () => {
   const { t } = useTranslation();
-  const { control } = useFormContext();
-  const { perfTaskItemField } = useCurrentActivity();
-  const generalName = `${perfTaskItemField}.general`;
+  const { control, watch, setValue } = useFormContext();
+  const { fieldName } = useCurrentActivity();
+
+  const practiceName = `${fieldName}.items.2.config`;
+  const testName = `${fieldName}.items.4.config`;
+  const practiceTrialsNumberName = `${practiceName}.trialsNumber`;
+  const practiceDurationMinutesName = `${practiceName}.durationMinutes`;
+  const practiceLambdaSlopeName = `${practiceName}.lambdaSlope`;
+  const testTrialsNumberName = `${testName}.trialsNumber`;
+  const testDurationMinutesName = `${testName}.durationMinutes`;
+  const testLambdaSlopeName = `${testName}.lambdaSlope`;
+  const practiceTrialsNumber = watch(practiceTrialsNumberName);
+  const practiceDurationMinutes = watch(practiceDurationMinutesName);
+  const practiceLambdaSlope = watch(practiceLambdaSlopeName);
+
+  useEffect(() => {
+    setValue(testTrialsNumberName, practiceTrialsNumber);
+  }, [practiceTrialsNumber]);
+  useEffect(() => {
+    setValue(testDurationMinutesName, practiceDurationMinutes);
+  }, [practiceDurationMinutes]);
+  useEffect(() => {
+    setValue(testLambdaSlopeName, practiceLambdaSlope);
+  }, [practiceLambdaSlope]);
 
   return (
     <StyledItemOptionContainer>
@@ -48,7 +70,7 @@ export const GeneralSettings = () => {
             <InputController
               type="number"
               control={control}
-              name={`${generalName}.numberOfTrials`}
+              name={practiceTrialsNumberName}
               minNumberValue={MIN_NUMBER_OF_TRIALS}
               maxNumberValue={MAX_NUMBER_OF_TRIALS}
             />
@@ -61,7 +83,7 @@ export const GeneralSettings = () => {
               <InputController
                 type="number"
                 control={control}
-                name={`${generalName}.lengthOfTest`}
+                name={practiceDurationMinutesName}
                 minNumberValue={MIN_LENGTH_OF_TEST}
                 maxNumberValue={MAX_LENGTH_OF_TEST}
               />
@@ -82,7 +104,7 @@ export const GeneralSettings = () => {
             <InputController
               type="number"
               control={control}
-              name={`${generalName}.lambdaSlope`}
+              name={practiceLambdaSlopeName}
               minNumberValue={MIN_SLOPE}
               maxNumberValue={MAX_SLOPE}
               textAdornment="%"

@@ -15,24 +15,23 @@ export const StyledItemOptionContainer = styled(StyledFlexColumn, shouldForwardP
   margin-bottom: ${theme.spacing(2.4)};
 `;
 
-export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardProp)`
-  padding: ${({ uiType }: { uiType: ToggleContainerUiType }) =>
-    theme.spacing(1.6, 2.4, 1.6, uiType === ToggleContainerUiType.Item ? 3.4 : 2.4)};
+export const StyledItemOption = styled(StyledItemOptionContainer)`
+  padding: ${theme.spacing(1.6, 2.4, 1.6, 2.4)};
   position: relative;
   width: 100%;
-
-  svg {
-    fill: ${variables.palette.on_surface_variant};
-  }
 `;
 
 export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)`
   justify-content: space-between;
 
-  ${({ open, uiType }: { open?: boolean; uiType: ToggleContainerUiType }) => `
+  ${({ open, uiType }: { open?: boolean; uiType?: ToggleContainerUiType }) => `
     height: 4.8rem;
 		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0}
 	`};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 `;
 
 export const StyledBadge = styled(Badge)`

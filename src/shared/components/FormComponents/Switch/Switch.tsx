@@ -1,9 +1,10 @@
 import { Controller, FieldValues } from 'react-hook-form';
-import { FormControlLabel, Switch as CustomSwitch } from '@mui/material';
+import { Switch as CustomSwitch } from '@mui/material';
 
 import { StyledFlexTopCenter, StyledTooltipSvg } from 'shared/styles';
 import { Tooltip } from 'shared/components';
 
+import { StyledFormControlLabel } from './Switch.styles';
 import { SwitchControllerProps } from './Switch.types';
 
 export const Switch = <T extends FieldValues>({
@@ -18,7 +19,7 @@ export const Switch = <T extends FieldValues>({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormControlLabel
+        <StyledFormControlLabel
           label={label}
           control={<CustomSwitch {...props} {...field} checked={field.value} />}
         />

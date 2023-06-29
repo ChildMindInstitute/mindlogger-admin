@@ -1,25 +1,28 @@
 import { getObjectFromList } from 'shared/utils';
 import {
-  DecryptedAnswerData,
+  DecryptedActivityData,
   ExportActivity,
-  ExportAnswer,
   ExtendedExportAnswer,
+  ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 
 export const getParsedAnswers = (
-  result: { activities: ExportActivity[]; answers: ExportAnswer[] },
-  getDecryptedReviews: (data: ExtendedExportAnswer) => DecryptedAnswerData[],
+  result: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
+  getDecryptedActivityData: (
+    data: ExtendedExportAnswer,
+  ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,
 ) => {
   const activitiesObject = getObjectFromList(
     result.activities,
     (activity: ExportActivity) => activity.idVersion,
   );
 
-  return result.answers.map((answer: ExportAnswer) =>
-    getDecryptedReviews({
+  return result.answers.map((answer: ExtendedExportAnswer) =>
+    getDecryptedActivityData({
+      ...answer,
       items: activitiesObject[answer.activityHistoryId].items,
       activityName: activitiesObject[answer.activityHistoryId].name,
-      ...answer,
+      subscaleSetting: activitiesObject[answer.activityHistoryId].subscaleSetting,
     }),
   );
 };

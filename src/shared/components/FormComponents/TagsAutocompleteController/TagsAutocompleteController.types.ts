@@ -10,6 +10,7 @@ export type FormAutocompleteProps = {
   options: AutocompleteOption[] | undefined;
   labelAllSelect?: string;
   noOptionsText?: string;
+  limitTags?: number;
 } & TextFieldProps;
 
 export type TagsAutocompleteControllerProps<T extends FieldValues> = FormAutocompleteProps &

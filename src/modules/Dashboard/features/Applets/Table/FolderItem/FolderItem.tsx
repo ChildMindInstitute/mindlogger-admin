@@ -25,7 +25,7 @@ import { getActions } from './FolderItem.const';
 export const FolderItem = ({ item }: FolderItemProps) => {
   const { t } = useTranslation('app');
 
-  const { rows, setRows, expandedFolders, fetchData, handleFolderClick } = useContext(
+  const { rows, setRows, expandedFolders, reloadData, handleFolderClick } = useContext(
     AppletsContext,
   ) as AppletContextType;
   const { execute: saveFolder } = useAsync(saveFolderApi);
@@ -45,20 +45,20 @@ export const FolderItem = ({ item }: FolderItemProps) => {
   };
 
   const onDeleteFolder = async () => {
-    if (folder.appletCount || !ownerId) return;
+    if (folder.foldersAppletCount || !ownerId) return;
     if (folder.isNew) {
       setRows([...rows.filter(({ id }) => id !== item.id)]);
     }
     await deleteFolder({ ownerId, folderId: folder.id });
-    await fetchData();
+    await reloadData();
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFolder((folder) => ({ ...folder, name: event.target.value }));
+    setFolder((folder) => ({ ...folder, displayName: event.target.value }));
   };
 
   const handleClearClick = () => {
-    setFolder((folder) => ({ ...folder, name: '' }));
+    setFolder((folder) => ({ ...folder, displayName: '' }));
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -72,24 +72,24 @@ export const FolderItem = ({ item }: FolderItemProps) => {
   };
 
   const saveFolderHandler = async () => {
-    if (!folder.isNew && folder.name === item.name) {
+    if (!folder.isNew && folder.displayName === item.displayName) {
       return setFolder((folder) => ({ ...folder, isRenaming: false }));
     }
 
     if (!ownerId) return;
 
-    const name = folder.name?.trim() || item.name;
+    const name = folder.displayName?.trim() || item.displayName;
 
     if (!folder.isNew) {
       await updateFolder({ ownerId, name, folderId: folder.id });
     } else {
-      await saveFolder({ ownerId, name: folder.name });
+      await saveFolder({ ownerId, name: folder.displayName });
     }
-    await fetchData();
+    await reloadData();
   };
 
   const onFolderClick = () => {
-    if (!item?.appletCount) return;
+    if (!item?.foldersAppletCount) return;
     handleFolderClick(item);
   };
 
@@ -113,9 +113,9 @@ export const FolderItem = ({ item }: FolderItemProps) => {
             {folder?.isRenaming ? (
               <OutlinedInput
                 autoFocus
-                error={!folder.name}
+                error={!folder.displayName}
                 placeholder={t('newFolder')}
-                value={folder.name}
+                value={folder.displayName}
                 onBlur={handleBlur}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
@@ -135,10 +135,14 @@ export const FolderItem = ({ item }: FolderItemProps) => {
             ) : (
               <>
                 <StyledBodyMedium color={variables.palette.on_surface}>
-                  {folder.name}
+                  {folder.displayName ?? folder.name}
                 </StyledBodyMedium>
                 <StyledCountApplets>
-                  ({item?.appletCount ? `${item?.appletCount} ${t('applets')}` : `${t('empty')}`})
+                  (
+                  {item?.foldersAppletCount
+                    ? `${item?.foldersAppletCount} ${t('applets')}`
+                    : `${t('empty')}`}
+                  )
                 </StyledCountApplets>
               </>
             )}

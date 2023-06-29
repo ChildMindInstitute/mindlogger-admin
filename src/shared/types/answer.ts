@@ -1,4 +1,7 @@
-import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import {
+  ActivityItemAnswer,
+  EventDTO,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
 
 export type ExportActivity = {
@@ -21,14 +24,21 @@ export type ExportActivity = {
   version: string;
 };
 
-export type ExportAnswer = {
-  id: string;
-  version: string;
+export type EncryptedAnswerSharedProps = {
   userPublicKey: string;
-  respondentId: string;
-  respondentSecretId: string;
   answer: string;
   itemIds: string[];
+  items: Item[];
+  events?: string;
+};
+
+export type ExportAnswer = {
+  id?: string;
+  version?: string;
+  activityName?: string;
+  subscaleSetting?: SubscaleSetting | null;
+  respondentId?: string;
+  respondentSecretId?: string;
   activityHistoryId: string;
   flowHistoryId: null | string;
   flowName: null | string;
@@ -37,17 +47,23 @@ export type ExportAnswer = {
   activityId: string;
   flowId: null | string;
   reviewedAnswerId: null | string;
+  scheduledDatetime?: string;
+  startDatetime?: string;
+  endDatetime?: string;
 };
 
-export type ExtendedExportAnswer = ExportAnswer & {
-  items: Item[];
-  activityName?: string;
-};
+export type ExtendedExportAnswer = ExportAnswer & EncryptedAnswerSharedProps;
 
-export type DecryptedAnswerData = Omit<
+export type EncryptionAnswerDataTypes = 'userPublicKey' | 'itemIds' | 'answer' | 'events';
+
+export type DecryptedAnswerData<T> = Omit<T, EncryptionAnswerDataTypes> & ActivityItemAnswer;
+
+export type ExtendedExportAnswerWithoutEncryption = Omit<
   ExtendedExportAnswer,
-  'userPublicKey' | 'itemIds' | 'items' | 'answer'
-> &
-  ActivityItemAnswer;
+  EncryptionAnswerDataTypes
+>;
 
-export type AnswerDecrypted = string | { value: string | number | number[]; text?: string };
+export type DecryptedActivityData<T> = {
+  decryptedAnswers: DecryptedAnswerData<T>[];
+  decryptedEvents: EventDTO[];
+};

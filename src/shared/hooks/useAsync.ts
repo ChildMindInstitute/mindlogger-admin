@@ -8,10 +8,12 @@ export const useAsync = <T, K>(
   callback?: (data: AxiosResponse<K> | null) => void,
   errorCallback?: (data: K | null) => void,
   finallyCallback?: () => void,
+  dependencies?: unknown[],
 ) => {
   const [value, setValue] = useState<AxiosResponse<K> | null>(null);
   const [error, setError] = useState<AxiosError<ApiError> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const deps = dependencies ?? [];
 
   const execute = useCallback(
     (body: T) => {
@@ -38,7 +40,7 @@ export const useAsync = <T, K>(
           finallyCallback?.();
         });
     },
-    [asyncFunction],
+    [asyncFunction, ...deps],
   );
 
   return { execute, value, error, isLoading, setError };

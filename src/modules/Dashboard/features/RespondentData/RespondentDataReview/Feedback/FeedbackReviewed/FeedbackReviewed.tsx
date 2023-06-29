@@ -3,9 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
-import { EmptyTable, Spinner } from 'shared/components';
-import { ExtendedExportAnswer } from 'shared/types';
-import { useDecryptedAnswers } from 'modules/Dashboard/hooks';
+import { EmptyState, Spinner } from 'shared/components';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
 import { getReviewsApi } from 'api';
 
@@ -17,7 +16,7 @@ export const FeedbackReviewed = () => {
   const { t } = useTranslation('app');
   const { appletId, answerId } = useParams();
 
-  const getDecryptedReviews = useDecryptedAnswers();
+  const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getReviews } = useAsync(getReviewsApi);
   const [isLoading, setIsLoading] = useState(true);
   const [reviewers, setReviewers] = useState<Reviewer[]>([]);
@@ -28,17 +27,17 @@ export const FeedbackReviewed = () => {
     (async () => {
       try {
         const result = await getReviews({ appletId, answerId });
-        const decryptedData = result.data.result.map((review: Review) => {
+        const decryptedData = result.data.result.map((review) => {
           const { reviewerPublicKey, isEdited, reviewer, ...assessmentData } = review;
           const encryptedData = {
             ...assessmentData,
             userPublicKey: reviewerPublicKey,
-          } as ExtendedExportAnswer;
+          } as Review;
 
           return {
             isEdited,
             reviewer,
-            review: getDecryptedReviews(encryptedData),
+            review: getDecryptedActivityData(encryptedData).decryptedAnswers,
           };
         });
 
@@ -61,7 +60,7 @@ export const FeedbackReviewed = () => {
               </Fragment>
             ))
           ) : (
-            <EmptyTable>{t('reviewedEmptyState')}</EmptyTable>
+            <EmptyState>{t('reviewedEmptyState')}</EmptyState>
           )}
         </>
       )}

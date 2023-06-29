@@ -16,15 +16,25 @@ import {
   MIN_NUMBER_OF_TRIALS,
   MIN_SLOPE,
 } from 'shared/consts';
-import { RoundTypeEnum } from 'modules/Builder/features/PerformanceTasks/Flanker/RoundSettings';
+import { AppletFormValues, RoundTypeEnum } from 'modules/Builder/types';
 import { Config } from 'shared/state';
 import {
   ItemConfigurationSettings,
   SLIDER_LABEL_MAX_LENGTH,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
-import { testFunctionForUniqueness } from './BuilderApplet.utils';
-import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from './BuilderApplet.const';
+import {
+  isPerfTaskResponseType,
+  isTouchOrGyroscopeRespType,
+  testFunctionForNotSupportedItems,
+  testFunctionForTheSameVariable,
+  testFunctionForUniqueness,
+} from './BuilderApplet.utils';
+import {
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  GyroscopeItemNames,
+  TouchItemNames,
+} from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -141,12 +151,11 @@ export const getFlankerGeneralSchema = () =>
 
 export const GyroscopeAndTouchConfigSchema = () => ({
   general: yup.object({
-    instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
-    numberOfTrials: yup
+    trialsNumber: yup
       .number()
       .min(MIN_NUMBER_OF_TRIALS, <string>t('integerError'))
       .max(MAX_NUMBER_OF_TRIALS, <string>t('integerError')),
-    lengthOfTest: yup
+    durationMinutes: yup
       .number()
       .min(MIN_LENGTH_OF_TEST, <string>t('integerError'))
       .max(MAX_LENGTH_OF_TEST, <string>t('integerError')),
@@ -154,12 +163,6 @@ export const GyroscopeAndTouchConfigSchema = () => ({
       .number()
       .min(MIN_SLOPE, <string>t('integerError'))
       .max(MAX_SLOPE, <string>t('integerError')),
-  }),
-  practice: yup.object({
-    instruction: yup.string().required(getIsRequiredValidateMessage('practiceInstruction')),
-  }),
-  test: yup.object({
-    instruction: yup.string().required(getIsRequiredValidateMessage('testInstruction')),
   }),
 });
 
@@ -178,19 +181,50 @@ export const ItemSchema = () =>
           (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
-      question: yup.string().when('responseType', (responseType, schema) => {
-        if (
-          responseType === ItemResponseType.Flanker ||
-          responseType === ItemResponseType.Gyroscope ||
-          responseType === ItemResponseType.Touch ||
-          responseType === ItemResponseType.ABTrailsIpad ||
-          responseType === ItemResponseType.ABTrailsMobile
-        ) {
-          return schema;
-        }
+      question: yup
+        .string()
+        .when('responseType', (responseType, schema) => {
+          if (isPerfTaskResponseType(responseType)) {
+            return schema;
+          }
 
-        return schema.required(getIsRequiredValidateMessage('displayedContent'));
-      }),
+          return schema.when('name', (name: string, schema: yup.SchemaOf<AppletFormValues>) => {
+            if (
+              name === GyroscopeItemNames.GeneralInstruction ||
+              name === TouchItemNames.GeneralInstruction
+            ) {
+              return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
+            }
+
+            if (
+              name === GyroscopeItemNames.PracticeInstruction ||
+              name === TouchItemNames.PracticeInstruction
+            ) {
+              return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
+            }
+
+            if (
+              name === GyroscopeItemNames.TestInstruction ||
+              name === TouchItemNames.TestInstruction
+            ) {
+              return schema.required(getIsRequiredValidateMessage('testInstruction'));
+            }
+
+            return schema.required(getIsRequiredValidateMessage('displayedContent'));
+          });
+        })
+        .test(
+          'variable-in-the-same-item-error',
+          t('validationMessages.variableInTheSameItem') as string,
+          (itemName, context) =>
+            testFunctionForTheSameVariable('question', itemName ?? '', context),
+        )
+        .test(
+          'variable-is-not-supported-error',
+          t('validationMessages.variableIsNotSupported') as string,
+          (itemName, context) =>
+            testFunctionForNotSupportedItems('question', itemName ?? '', context),
+        ),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (
           responseType === ItemResponseType.SingleSelection ||
@@ -287,10 +321,7 @@ export const ItemSchema = () =>
           otherwise: (schema) => schema,
         }),
       config: yup.object({}).when('responseType', (responseType, schema) => {
-        if (
-          responseType === ItemResponseType.Touch ||
-          responseType === ItemResponseType.Gyroscope
-        ) {
+        if (isTouchOrGyroscopeRespType(responseType)) {
           return schema.shape(GyroscopeAndTouchConfigSchema());
         }
 
@@ -348,7 +379,7 @@ export const SubscaleSchema = () =>
         ),
       items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
       scoring: yup.string(),
-      subscaleTableData: yup.array().of(SubscaleTableDataItemSchema()),
+      subscaleTableData: yup.array().of(SubscaleTableDataItemSchema()).nullable(),
     })
     .required();
 

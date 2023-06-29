@@ -3,10 +3,11 @@ import { Context } from 'chartjs-plugin-datalabels';
 
 import { variables } from 'shared/styles';
 import { locales } from 'shared/consts';
+import { Version } from 'api';
+import { ActivityResponse } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 
 import { ExtendedChartDataset } from './ScatterChart.types';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
-import { Response, Version } from '../../Report.types';
 
 export const getOptions = (
   lang: keyof typeof locales,
@@ -113,12 +114,17 @@ export const getOptions = (
   };
 };
 
-export const getData = (responses: Response[], versions: Version[]) => ({
+export const getData = (answers: ActivityResponse[], versions: Version[]) => ({
   datasets: [
     {
+      pointRadius: 5,
+      pointHoverRadius: 6,
       xAxisID: 'x',
-      data: responses.map(({ date }) => ({ x: new Date(date), y: 0 })),
-      borderWidth: 5,
+      data: answers.map(({ endDatetime, answerId }) => ({
+        x: new Date(endDatetime),
+        y: 0,
+        answerId,
+      })),
       backgroundColor: variables.palette.primary,
       borderColor: variables.palette.primary,
       datalabels: {
@@ -132,7 +138,7 @@ export const getData = (responses: Response[], versions: Version[]) => ({
     {
       xAxisID: 'x2',
       labels: versions.map(({ version }) => version),
-      data: versions.map(({ date }) => ({ x: new Date(date), y: 1 })),
+      data: versions.map(({ createdAt }) => ({ x: new Date(createdAt), y: 1 })),
       datalabels: {
         anchor: 'end' as const,
         align: 'right' as const,

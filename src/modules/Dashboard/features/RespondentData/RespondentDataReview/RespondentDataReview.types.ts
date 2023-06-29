@@ -1,4 +1,5 @@
 import { Item, TextItem, SliderItem, SingleSelectItem, MultiSelectItem } from 'shared/state';
+import { DecryptedAnswerData } from 'shared/types';
 
 export type Answer = {
   createdAt: string;
@@ -11,33 +12,108 @@ export type Activity = {
   answerDates: Answer[];
 };
 
-export type ItemAnswer = {
-  value: number | string | number[] | null;
+export type DecryptedTextAnswer = string;
+
+export type DecryptedMultiSelectionAnswer = {
+  value: number[]; // an array of selected option indexes
   text?: string | null;
 };
 
-export type SliderAnswer = ItemAnswer & {
+export type DecryptedSingleSelectionAnswer = {
+  value: number; // selected option index
+  text?: string | null;
+};
+
+export type DecryptedSliderAnswer = {
   value: number;
+  text?: string | null;
 };
 
-export type MultiSelectAnswer = ItemAnswer & {
-  value: number[];
+export type DecryptedNumberSelectionAnswer = {
+  value: number;
+  text?: string | null;
 };
 
-export type SingleSelectAnswer = ItemAnswer & {
+export type DecryptedMediaAnswer = {
+  value: string;
+  text?: string | null;
+};
+
+export type DecryptedDateRangeAnswer = {
+  value: {
+    from: {
+      hour: number;
+      minute: number;
+    };
+    to: {
+      hour: number;
+      minute: number;
+    };
+  };
+};
+
+export type DecryptedDateAnswer = {
+  value: {
+    year: number;
+    month: number;
+    day: number;
+  };
+};
+
+export type DecryptedSexAnswer = {
   value: string;
 };
 
-export type AnswerValue = ItemAnswer | string | number | null;
+export type AnswerDTO =
+  | null
+  | DecryptedTextAnswer
+  | DecryptedMultiSelectionAnswer
+  | DecryptedSingleSelectionAnswer
+  | DecryptedSliderAnswer
+  | DecryptedNumberSelectionAnswer
+  | DecryptedDateRangeAnswer
+  | DecryptedDateAnswer
+  | DecryptedSexAnswer
+  | DecryptedMediaAnswer;
+
+export type AnswerValue =
+  | null
+  | string
+  | DecryptedMultiSelectionAnswer['value']
+  | DecryptedSingleSelectionAnswer['value']
+  | DecryptedSliderAnswer['value']
+  | DecryptedNumberSelectionAnswer['value']
+  | DecryptedDateRangeAnswer['value']
+  | DecryptedDateAnswer['value']
+  | DecryptedMediaAnswer['value'];
+
+export const enum UserActionType {
+  SetAnswer = 'SET_ANSWER',
+  Prev = 'PREV',
+  Next = 'NEXT',
+  Done = 'DONE',
+  Undo = 'UNDO',
+  Skip = 'SKIP',
+}
+
+export type EventDTO = {
+  response?: AnswerDTO; // optional field. Required if the type is "SET_ANSWER". AnswerDTO depends on activity item type.
+  screen: string; // {activityId}/{activityItemId}
+  time: number; // timestamp in milliseconds
+  type: UserActionType;
+};
+
+export type ExtendedEvent<T> = EventDTO & DecryptedAnswerData<T>;
 
 export type ActivityItemAnswer = {
   activityItem: Item;
-  answer: AnswerValue;
+  answer: AnswerDTO;
 };
 
-export interface TextItemAnswer extends ActivityItemAnswer {
+export type TextItemAnswer = {
   activityItem: TextItem;
-}
+  answer: DecryptedTextAnswer;
+};
 
 export type SliderActivityItem = SliderItem & {
   edited?: boolean;
@@ -51,17 +127,17 @@ export type MultiSelectActivityItem = MultiSelectItem & {
   edited?: boolean;
 };
 
-export interface SliderItemAnswer extends ActivityItemAnswer {
+export type SliderItemAnswer = {
   activityItem: SliderActivityItem;
-  answer: SliderAnswer | null;
-}
+  answer: DecryptedSliderAnswer | null;
+};
 
-export interface SingleSelectItemAnswer extends ActivityItemAnswer {
+export type SingleSelectItemAnswer = {
   activityItem: SingleSelectActivityItem;
-  answer: SingleSelectAnswer | null;
-}
+  answer: DecryptedSingleSelectionAnswer | null;
+};
 
-export interface MultiSelectItemAnswer extends ActivityItemAnswer {
+export type MultiSelectItemAnswer = {
   activityItem: MultiSelectActivityItem;
-  answer: MultiSelectAnswer | null;
-}
+  answer: DecryptedMultiSelectionAnswer | null;
+};

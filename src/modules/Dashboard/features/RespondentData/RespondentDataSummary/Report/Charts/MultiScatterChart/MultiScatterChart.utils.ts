@@ -17,12 +17,16 @@ export const getOptions = ({
   maxY,
   minDate,
   maxDate,
+  tooltipHandler,
 }: OptionsProps) => {
   const min = minDate.getTime();
   const max = maxDate.getTime();
 
   const timeConfig = getTimeConfig(min, max);
   const stepSize = getStepSize(min, max);
+
+  const crossAlign =
+    responseType === ItemResponseType.Slider ? ('near' as const) : ('far' as const);
 
   const mapperPointOption: { [key: string | number]: string } =
     responseType !== ItemResponseType.Slider
@@ -44,16 +48,22 @@ export const getOptions = ({
       },
       tooltip: {
         enabled: false,
+        mode: 'point' as const,
+        external: tooltipHandler,
       },
     },
     scales: {
       y: {
+        border: {
+          display: false,
+        },
         min: minY,
         max: maxY + 1,
         afterFit(scaleInstance: LinearScale) {
           scaleInstance.width = LABEL_WIDTH_Y;
         },
         ticks: {
+          crossAlign,
           stepSize: 1,
           callback: (value: string | number) => {
             if (value === maxY + 1) return;
@@ -80,6 +90,9 @@ export const getOptions = ({
         },
         ...timeConfig,
         grid: {
+          display: false,
+        },
+        border: {
           display: false,
         },
         ticks: {
@@ -134,55 +147,42 @@ export const getOptions = ({
   };
 };
 
-export const getData = ({ maxY, responseValues, responseType, answers, versions }: DataProps) => {
-  const mapperIdPoint: { [key: string]: number } =
-    responseType !== ItemResponseType.Slider
-      ? (responseValues as SingleAndMultipleSelectItemResponseValues)?.options.reduce(
-          (mapper, { id }, index) => ({
-            ...mapper,
-            [id]: index + 1,
-          }),
-          {},
-        )
-      : {};
-
-  return {
-    datasets: [
-      {
-        pointRadius: 6,
-        pointHoverRadius: 7,
-        datalabels: {
-          display: false,
+export const getData = ({ maxY, answers, versions, color }: DataProps) => ({
+  datasets: [
+    {
+      pointRadius: 6,
+      pointHoverRadius: 7,
+      datalabels: {
+        display: false,
+      },
+      data: answers.map(({ date, value }) => ({
+        x: date,
+        y: value,
+      })),
+      borderWidth: 0,
+      backgroundColor: color,
+    },
+    {
+      xAxisID: 'x1',
+      data: [],
+    },
+    {
+      xAxisID: 'x2',
+      labels: versions.map(({ version }) => version),
+      data: versions.map(({ createdAt }) => ({ x: new Date(createdAt), y: maxY + 1 })),
+      datalabels: {
+        anchor: 'center' as const,
+        align: 'right' as const,
+        font: {
+          size: 11,
         },
-        data: answers.map(({ date, value }) => ({
-          x: date,
-          y: responseType === ItemResponseType.Slider ? value : mapperIdPoint[value],
-        })),
-        borderWidth: 0,
-        backgroundColor: variables.palette.orange,
-      },
-      {
-        xAxisID: 'x1',
-        data: [],
-      },
-      {
-        xAxisID: 'x2',
-        labels: versions.map(({ version }) => version),
-        data: versions.map(({ date }) => ({ x: date, y: maxY + 1 })),
-        datalabels: {
-          anchor: 'center' as const,
-          align: 'right' as const,
-          font: {
-            size: 11,
-          },
-          formatter: (_: unknown, context: Context) => {
-            const dataset = context.dataset as ExtendedChartDataset;
+        formatter: (_: unknown, context: Context) => {
+          const dataset = context.dataset as ExtendedChartDataset;
 
-            return dataset.labels[context.dataIndex];
-          },
+          return dataset.labels[context.dataIndex];
         },
-        pointStyle: false as const,
       },
-    ],
-  };
-};
+      pointStyle: false as const,
+    },
+  ],
+});

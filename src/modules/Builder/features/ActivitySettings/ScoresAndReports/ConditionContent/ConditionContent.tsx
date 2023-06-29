@@ -6,17 +6,17 @@ import { Condition } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
 import { ConditionRow } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
-import { StyledBodyMedium, variables } from 'shared/styles';
+import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
 import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
 import { StyledButton } from '../ScoresAndReports.styles';
 
-export const ConditionContent = ({ name, type }: ConditionContentProps) => {
+export const ConditionContent = ({ name, type, scoreId, scoreName }: ConditionContentProps) => {
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
-  const { control, watch, getValues, getFieldState } = useFormContext();
+  const { control, watch, getFieldState } = useFormContext();
   const { append: appendCondition, remove: removeCondition } = useFieldArray({
     control,
     name: conditionsName,
@@ -37,7 +37,8 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
           name={name}
           index={index}
           type={type}
-          scoreId={type === ConditionRowType.Score && getValues(`${name}.id`)}
+          scoreId={type === ConditionRowType.Score ? scoreId : ''}
+          scoreName={type === ConditionRowType.Score ? scoreName : ''}
           onRemove={() => removeCondition(index)}
         />
       ))}
@@ -49,6 +50,7 @@ export const ConditionContent = ({ name, type }: ConditionContentProps) => {
       <StyledButton
         startIcon={<Svg id="add" width="20" height="20" />}
         onClick={handleAddCondition}
+        sx={{ m: theme.spacing(1.2, 0, 1.2, -2.4) }}
       >
         {t('addCondition')}
       </StyledButton>

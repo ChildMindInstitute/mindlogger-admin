@@ -6,11 +6,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Box, Button } from '@mui/material';
 
-import { Activity } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
 import {
+  DatavizActivity,
   createAnswerNoteApi,
   deleteAnswerNoteApi,
   editAnswerNoteApi,
@@ -22,7 +22,7 @@ import { NOTE_ROWS_COUNT } from './FeedbackNotes.const';
 import { StyledContainer, StyledForm } from './FeedbackNotes.styles';
 import { FeedbackNote as FeedbackNoteType } from './FeedbackNotes.types';
 
-export const FeedbackNotes = ({ activity }: { activity: Activity }) => {
+export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   const { t } = useTranslation();
   const [notes, setNotes] = useState<FeedbackNoteType[]>([]);
   const { appletId, answerId } = useParams();

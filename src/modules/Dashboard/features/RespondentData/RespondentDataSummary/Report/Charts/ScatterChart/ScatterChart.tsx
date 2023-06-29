@@ -27,7 +27,7 @@ ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
 export const ScatterChart = ({
   height = '5rem',
-  responses,
+  answers,
   versions,
   minDate,
   maxDate,
@@ -53,6 +53,7 @@ export const ScatterChart = ({
   };
 
   const tooltipHandler = (context: ScriptableTooltipContext<'scatter'>) => {
+    if (context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x2')) return; // hide the tooltip for version axis
     const tooltipEl = tooltipRef.current;
 
     if (!tooltipEl) return;
@@ -85,11 +86,11 @@ export const ScatterChart = ({
       <Scatter
         ref={chartRef}
         options={getOptions(lang, minDate, maxDate, tooltipHandler)}
-        data={getData(responses, versions)}
+        data={getData(answers, versions)}
         plugins={[ChartDataLabels]}
       />
     ),
-    [chartRef, minDate, maxDate, responses, versions, lang],
+    [chartRef, minDate, maxDate, answers, versions, lang],
   );
 
   return (

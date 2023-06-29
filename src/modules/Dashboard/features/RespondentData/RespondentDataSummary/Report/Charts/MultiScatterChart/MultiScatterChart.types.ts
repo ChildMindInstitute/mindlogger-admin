@@ -1,9 +1,10 @@
-import { ChartDataset } from 'chart.js';
+import { ChartDataset, ScriptableTooltipContext } from 'chart.js';
 
+import { Version } from 'api';
 import { locales } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
 
-import { FormattedItemAnswer, Version } from '../../Report.types';
+import { FormattedItemAnswer } from '../../Report.types';
 import { MultiScatterResponseValues } from '../../ResponseOptions/ResponseOptions.types';
 
 export type ExtendedChartDataset = ChartDataset & {
@@ -11,6 +12,7 @@ export type ExtendedChartDataset = ChartDataset & {
 };
 
 export type MultiScatterChartProps = {
+  color: string;
   minDate: Date;
   maxDate: Date;
   minY?: number;
@@ -30,12 +32,12 @@ export type OptionsProps = {
   maxY: number;
   minDate: Date;
   maxDate: Date;
+  tooltipHandler: (context: ScriptableTooltipContext<'scatter'>) => void;
 };
 
 export type DataProps = {
   maxY: number;
-  responseValues: MultiScatterResponseValues;
-  responseType: ItemResponseType;
   answers: FormattedItemAnswer[];
   versions: Version[];
+  color: string;
 };

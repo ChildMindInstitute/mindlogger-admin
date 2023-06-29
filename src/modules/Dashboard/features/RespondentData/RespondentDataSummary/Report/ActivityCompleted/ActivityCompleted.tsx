@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
@@ -6,28 +5,16 @@ import { Box } from '@mui/material';
 import { Tooltip } from 'shared/components';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
+import { useDatavizFilters } from 'modules/Dashboard/hooks';
 
 import { ActivityCompletedProps } from './ActivityCompleted.types';
 import { FilterFormValues } from '../Report.types';
-import { getDateTime } from '../Report.utils';
 
-export const ActivityCompleted = ({ responses, versions }: ActivityCompletedProps) => {
+export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompletedProps) => {
   const { t } = useTranslation();
   const { watch } = useFormContext<FilterFormValues>();
 
-  const {
-    startDateEndDate: [startDate, endDate],
-    startTime,
-    endTime,
-  } = watch();
-
-  const { minDate, maxDate } = useMemo(
-    () => ({
-      minDate: getDateTime(startDate, startTime),
-      maxDate: getDateTime(endDate, endTime),
-    }),
-    [startDate, endDate, startTime, endTime],
-  );
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>
@@ -39,7 +26,12 @@ export const ActivityCompleted = ({ responses, versions }: ActivityCompletedProp
           </span>
         </Tooltip>
       </StyledHeadline>
-      <ScatterChart minDate={minDate} maxDate={maxDate} responses={responses} versions={versions} />
+      <ScatterChart
+        minDate={minDate}
+        maxDate={maxDate}
+        answers={answers}
+        versions={filteredVersions}
+      />
     </Box>
   );
 };
