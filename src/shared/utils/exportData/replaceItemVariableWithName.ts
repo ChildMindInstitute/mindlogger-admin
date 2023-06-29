@@ -61,7 +61,7 @@ export const replaceItemVariableWithName = <T>({
         (rawAnswer as DecryptedMultiSelectionAnswer).value.forEach((value) => {
           const item =
             (itemValue.responseValues as SingleAndMultipleSelectItemResponseValues).options.find(
-              (option) => option.value === value,
+              (option) => String(option.value) === String(value),
             ) ?? null;
 
           if (item) names.push(item.text);
@@ -73,7 +73,9 @@ export const replaceItemVariableWithName = <T>({
             const item = (
               itemValue.responseValues as SingleAndMultipleSelectItemResponseValues
             ).options.find(
-              (option) => option.value === (rawAnswer as DecryptedSingleSelectionAnswer).value,
+              (option) =>
+                String(option.value) ===
+                String((rawAnswer as DecryptedSingleSelectionAnswer).value),
             );
             if (item) {
               markdown = markdown.replace(reg, `${item.text} `);
