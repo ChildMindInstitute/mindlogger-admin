@@ -22,40 +22,46 @@ export const MultipleSelection = ({
 
   return (
     <StyledFlexColumn>
-      {options.map((option) => (
-        <StyledFormControlLabel
-          key={option.id}
-          disabled={isDisabled}
-          name={activityItem.id}
-          value={option.id}
-          label={
-            <StyledLabel>
-              {option.image && <StyledImage src={option.image} alt="Option image" />}
-              <StyledBodyLarge color={variables.palette.on_surface}>{option.text}</StyledBodyLarge>
-              {option.tooltip && (
-                <Tooltip tooltipTitle={option.tooltip}>
-                  <StyledFlexTopCenter>
-                    <StyledSvg id="more-info-outlined" />
-                  </StyledFlexTopCenter>
-                </Tooltip>
-              )}
-            </StyledLabel>
-          }
-          control={
-            <Checkbox
-              {...checkboxProps}
-              checked={value?.includes(option.value!)}
-              onChange={() => {
-                if (!value?.includes(option.value!)) {
-                  return onChange && onChange([...value, option.value!]);
-                }
-                const updatedOptions = value.filter((value) => value !== option.value!);
-                onChange && onChange(updatedOptions);
-              }}
-            />
-          }
-        />
-      ))}
+      {options.map((option) => {
+        const optionValue = String(option.value!);
+
+        return (
+          <StyledFormControlLabel
+            key={option.id}
+            disabled={isDisabled}
+            name={activityItem.id}
+            value={option.id}
+            label={
+              <StyledLabel>
+                {option.image && <StyledImage src={option.image} alt="Option image" />}
+                <StyledBodyLarge color={variables.palette.on_surface}>
+                  {option.text}
+                </StyledBodyLarge>
+                {option.tooltip && (
+                  <Tooltip tooltipTitle={option.tooltip}>
+                    <StyledFlexTopCenter>
+                      <StyledSvg id="more-info-outlined" />
+                    </StyledFlexTopCenter>
+                  </Tooltip>
+                )}
+              </StyledLabel>
+            }
+            control={
+              <Checkbox
+                {...checkboxProps}
+                checked={value?.includes(optionValue)}
+                onChange={() => {
+                  if (!value?.includes(optionValue)) {
+                    return onChange && onChange([...value, optionValue]);
+                  }
+                  const updatedOptions = value.filter((value) => String(value) !== optionValue);
+                  onChange && onChange(updatedOptions);
+                }}
+              />
+            }
+          />
+        );
+      })}
     </StyledFlexColumn>
   );
 };
