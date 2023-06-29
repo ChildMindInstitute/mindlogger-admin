@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { applet } from 'shared/state';
@@ -8,7 +9,6 @@ import {
   AnswerDTO,
   EventDTO,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
-
 export const getEmptyDecryptedActivityData = () => ({
   decryptedAnswers: [],
   decryptedEvents: [],
@@ -23,14 +23,16 @@ export const useDecryptedActivityData = (
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption!);
   const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
-  if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;
+  const privateKeyRef = useRef(getAppletPrivateKey(dynamicAppletId ?? appletId));
 
+  if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;
   const { prime, base } = encryptionInfoFromServer;
-  const privateKey = getAppletPrivateKey(dynamicAppletId ?? appletId);
 
   return <T extends EncryptedAnswerSharedProps>(
     answersApiResponse: T,
   ): DecryptedActivityData<T> => {
+    if (!privateKeyRef.current) return getEmptyDecryptedActivityData();
+
     const { userPublicKey, answer, itemIds, events, ...rest } = answersApiResponse;
 
     let answersDecrypted: AnswerDTO[] = [];
@@ -43,7 +45,7 @@ export const useDecryptedActivityData = (
       } catch {
         userPublicKeyParsed = userPublicKey;
       }
-      const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
+      const key = getAESKey(privateKeyRef.current, userPublicKeyParsed, prime, base);
 
       try {
         answersDecrypted = JSON.parse(
