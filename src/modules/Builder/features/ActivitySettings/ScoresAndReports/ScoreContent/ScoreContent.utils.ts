@@ -11,7 +11,7 @@ import {
 import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 
-import { scoreIdBase } from './ScoreContent.const';
+import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 
 export const getTableScoreItems = (items: Item[]) =>
   items.map((item) => ({
@@ -21,9 +21,7 @@ export const getTableScoreItems = (items: Item[]) =>
   }));
 
 export const getScoreId = (name: string, calculationType: CalculationType) =>
-  `${scoreIdBase[calculationType]}_${name
-    .toLowerCase()
-    .replaceAll(/[\s$-/:-?{-~!"@#^_“[\]]/g, '_')}`;
+  `${scoreIdBase[calculationType]}_${name.toLowerCase().replaceAll(ForbiddenScoreIdSymbols, '_')}`;
 
 export const getScoreRangeLabel = (minScore?: number, maxScore?: number) =>
   minScore && maxScore ? `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}` : '-';
