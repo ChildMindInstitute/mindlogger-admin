@@ -153,6 +153,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
         hasSelectedSection
         hasSearch
         sxProps={{ mb: theme.spacing(2.5) }}
+        isValueName
       />
       <SectionScoreCommonFields name={name} />
       {!!scoreConditionals?.length && (

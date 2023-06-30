@@ -88,6 +88,7 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
           columns={columns}
           hasSearch={false}
           hasSelectedSection={false}
+          isValueName
         />
       )}
     </>

@@ -16,7 +16,8 @@ import { scoreIdBase } from './ScoreContent.const';
 export const getTableScoreItems = (items: Item[]) =>
   items.map((item) => ({
     id: getEntityKey(item),
-    name: `${item.name}: ${item.question}`,
+    name: item.name,
+    label: `${item.name}: ${item.question}`,
   }));
 
 export const getScoreId = (name: string, calculationType: CalculationType) =>
