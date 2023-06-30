@@ -11,8 +11,7 @@ import { DataTableItem } from 'shared/components';
 
 import { CommonFieldsProps } from './SectionScoreCommonFields.types';
 import { StyledEditor } from './SectionScoreCommonFields.styles';
-import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
-import { columns } from './SectionScoreCommonFields.const';
+import { ItemTypesToPrint, columns } from './SectionScoreCommonFields.const';
 
 export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
   const { t } = useTranslation();
@@ -30,7 +29,7 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
 
   const items = activity?.items.reduce(
     (items: Pick<Item, 'id' | 'name' | 'question'>[], item: Item) => {
-      if (!checkOnItemTypeAndScore(item)) return items;
+      if (!ItemTypesToPrint.includes(item.responseType)) return items;
       const { id, name, question } = item;
 
       return [...items, { id, name, question }];

@@ -20,7 +20,9 @@ export const getTableScoreItems = (items: Item[]) =>
   }));
 
 export const getScoreId = (name: string, calculationType: CalculationType) =>
-  `${scoreIdBase[calculationType]}_${name.toLowerCase()}`;
+  `${scoreIdBase[calculationType]}_${name
+    .toLowerCase()
+    .replaceAll(/[\s$-/:-?{-~!"@#^_“[\]]/g, '_')}`;
 
 export const getScoreRangeLabel = (minScore?: number, maxScore?: number) =>
   minScore && maxScore ? `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}` : '-';

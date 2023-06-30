@@ -121,9 +121,8 @@ export const ScoresAndReports = () => {
       <StyledFlexColumn sx={{ mt: theme.spacing(2.4) }}>
         {sections?.map((section, index) => {
           const sectionName = `${sectionsName}.${index}`;
-          const title = (
-            <Title title={t('sectionHeader', { index: index + 1 })} name={section?.name} />
-          );
+          const title = t('sectionHeader', { index: index + 1 });
+          const headerTitle = <Title title={title} name={section?.name} />;
 
           return (
             <ToggleItemContainer
@@ -135,7 +134,7 @@ export const ScoresAndReports = () => {
                   removeSection(index);
                 },
                 name: sectionName,
-                title,
+                title: headerTitle,
               }}
               contentProps={{
                 sectionId: section.id,
@@ -148,7 +147,8 @@ export const ScoresAndReports = () => {
       </StyledFlexColumn>
       {scores?.map((score, index) => {
         const scoreName = `${scoresName}.${index}`;
-        const title = <Title title={t('scoreHeader', { index: index + 1 })} name={score?.name} />;
+        const title = t('scoreHeader', { index: index + 1 });
+        const headerTitle = <Title title={title} name={score?.name} />;
 
         return (
           <ToggleItemContainer
@@ -160,7 +160,7 @@ export const ScoresAndReports = () => {
                 removeScore(index);
               },
               name: scoreName,
-              title,
+              title: headerTitle,
             }}
             contentProps={{
               scoreId: score.id,
