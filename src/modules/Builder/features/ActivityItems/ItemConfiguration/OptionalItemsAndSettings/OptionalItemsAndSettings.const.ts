@@ -1,5 +1,7 @@
 import { DEFAULT_MAX_CHARACTERS, DEFAULT_DISABLED_TIMER_VALUE } from '../ItemConfiguration.const';
 
+export const DEFAULT_OPTION_VALUE = 1;
+
 export const defaultSingleAndMultiSelectionRowsConfig = {
   removeBackButton: false,
   skippableItem: false,
