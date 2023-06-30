@@ -123,10 +123,12 @@ export const getSliderRowsItemList = (formValues: ItemFormValues, alert: ItemAle
     (responseValues as SliderRowsResponseValues)?.rows?.find(({ id }) => id === alert.sliderId) ??
     {};
 
-  if (!minValue || !maxValue) return [];
+  if ([minValue, maxValue].includes(undefined)) return [];
+  const maxValueNumber = Number(maxValue);
+  const minValueNumber = Number(minValue);
 
-  return createArray(maxValue - minValue + 1, (index) => ({
-    value: `${minValue + index}`,
-    labelKey: `${minValue + index}`,
+  return createArray(Number(maxValueNumber) - Number(minValueNumber) + 1, (index) => ({
+    value: `${minValueNumber + index}`,
+    labelKey: `${minValueNumber + index}`,
   }));
 };

@@ -159,8 +159,14 @@ const compareActivityItemAnswers = (
     const currActivityItemOptions = currActivityItem.responseValues as SliderItemResponseValues;
     const prevActivityItemOptions = prevActivityItem.responseValues as SliderItemResponseValues;
 
-    const minValue = Math.min(prevActivityItemOptions.minValue, currActivityItemOptions.minValue);
-    const maxValue = Math.max(prevActivityItemOptions.maxValue, currActivityItemOptions.maxValue);
+    const minValue = Math.min(
+      Number(prevActivityItemOptions.minValue),
+      Number(currActivityItemOptions.minValue),
+    );
+    const maxValue = Math.max(
+      Number(prevActivityItemOptions.maxValue),
+      Number(currActivityItemOptions.maxValue),
+    );
 
     return {
       activityItem: {

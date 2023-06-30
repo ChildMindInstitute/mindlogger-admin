@@ -252,8 +252,8 @@ export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
   maxLabel: string;
-  minValue: number;
-  maxValue: number;
+  minValue: number | string;
+  maxValue: number | string;
   minImage?: string;
   maxImage?: string;
   scores?: number[];

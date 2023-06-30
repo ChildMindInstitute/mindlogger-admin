@@ -68,15 +68,17 @@ export const getResponseItem = ({
   const renderSlider = () => {
     const formattedAnswers = formatAnswers(answers);
     const { minValue, maxValue } = activityItem.responseValues as SliderItemResponseValues;
-    const height = (maxValue - minValue + 1) * TICK_HEIGHT;
+    const maxValueNumber = Number(maxValue);
+    const minValueNumber = Number(minValue);
+    const height = (maxValueNumber - minValueNumber + 1) * TICK_HEIGHT;
 
     return (
       <MultiScatterChart
         color={color}
         minDate={minDate}
         maxDate={maxDate}
-        maxY={maxValue}
-        minY={minValue}
+        maxY={maxValueNumber}
+        minY={minValueNumber}
         height={height}
         responseValues={activityItem.responseValues as MultiScatterResponseValues}
         responseType={responseType}
