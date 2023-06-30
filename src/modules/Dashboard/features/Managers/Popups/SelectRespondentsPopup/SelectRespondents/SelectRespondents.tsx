@@ -14,9 +14,9 @@ import { Select } from './Select';
 
 export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectRespondentsProps>(
   ({ reviewer: { name, email }, appletName, selectedRespondents, respondents }, ref) => {
-    const rows = respondents?.map(({ secretId, nickname }) => ({
+    const rows = respondents?.map(({ secretId, nickname, id }) => ({
       select: {
-        content: () => <CheckboxController control={control} name={secretId} label={<></>} />,
+        content: () => <CheckboxController control={control} name={id} value={id} label={<></>} />,
         value: secretId,
       },
       secretId: {
@@ -34,7 +34,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
     const [selectAllChecked, setSelectAllChecked] = useState(false);
 
     const defaultValues = respondents.reduce(
-      (values, { secretId }) => ({ ...values, [secretId]: selectedRespondents.includes(secretId) }),
+      (values, { id }) => ({ ...values, [id]: selectedRespondents.includes(id) }),
       {},
     ) as { [key: string]: boolean };
 
