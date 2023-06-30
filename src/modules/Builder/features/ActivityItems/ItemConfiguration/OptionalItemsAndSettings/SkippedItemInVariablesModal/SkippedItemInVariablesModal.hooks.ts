@@ -30,14 +30,16 @@ export const useCheckIfItemHasVariables = (itemField: string) => {
   };
 
   useEffect(() => {
+    itemNamesWithSkippedItemRef.current = getItemNamesIncludeSkippableItem(name, activityItems);
+    if (!itemNamesWithSkippedItemRef.current?.length) return;
+
     if (!isSkippableItem) {
-      trigger();
+      for (const item of itemNamesWithSkippedItemRef.current ?? []) {
+        trigger(`${fieldName}.items.${item.index}`);
+      }
 
       return;
     }
-
-    itemNamesWithSkippedItemRef.current = getItemNamesIncludeSkippableItem(name, activityItems);
-    if (!itemNamesWithSkippedItemRef.current?.length) return;
 
     setIsPopupVisible(true);
   }, [isSkippableItem]);
