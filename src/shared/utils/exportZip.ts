@@ -6,10 +6,13 @@ export const exportZip = async (data: { fileName: string; file: Blob }[], fileNa
 
   const zip = new JSZip();
   dataArray.forEach((data) => {
-    zip.file(data.fileName, data.file, { base64: true });
+    zip.file(data.fileName, data.file);
   });
 
-  zip.generateAsync({ type: 'blob' }).then((content) => {
-    FileSaver.saveAs(content, fileName);
+  const content = await zip.generateAsync({
+    type: 'blob',
+    compression: 'DEFLATE',
+    compressionOptions: { level: 3 },
   });
+  FileSaver.saveAs(content, fileName);
 };

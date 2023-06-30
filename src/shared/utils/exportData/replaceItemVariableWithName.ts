@@ -60,7 +60,7 @@ export const replaceItemVariableWithName = <T>({
         const names: string[] = [];
         (rawAnswer as DecryptedMultiSelectionAnswer).value.forEach((value) => {
           const item =
-            (itemValue.responseValues as SingleAndMultipleSelectItemResponseValues).options.find(
+            (itemValue.responseValues as SingleAndMultipleSelectItemResponseValues).options?.find(
               (option) => String(option.value) === String(value),
             ) ?? null;
 
