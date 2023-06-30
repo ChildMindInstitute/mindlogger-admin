@@ -14,6 +14,7 @@ import {
   SliderItemResponseValues,
   SliderRowsResponseValues,
   OptionCondition,
+  ScoresAndReports,
 } from 'shared/state';
 import { getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
@@ -73,6 +74,35 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
       }),
     })),
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
+};
+
+export const getScoresAndReports = (scoresAndReports?: ScoresAndReports) => {
+  if (!scoresAndReports) return;
+
+  const fieldsToRemove = {
+    printItems: undefined,
+    showMessage: undefined,
+  };
+
+  const { sections: initialSections, scores: initialScores } = scoresAndReports;
+  const scores = initialScores.map((score) => ({
+    ...score,
+    ...fieldsToRemove,
+    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
+      ...conditional,
+      ...fieldsToRemove,
+    })),
+  }));
+  const sections = initialSections.map((section) => ({
+    ...section,
+    ...fieldsToRemove,
+  }));
+
+  return {
+    ...scoresAndReports,
+    sections,
+    scores,
+  };
 };
 
 export const removeActivityFlowExtraFields = () => ({

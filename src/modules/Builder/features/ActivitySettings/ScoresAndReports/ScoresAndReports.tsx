@@ -8,7 +8,6 @@ import {
   StyledBodyLarge,
   StyledFlexColumn,
   StyledFlexTopCenter,
-  StyledLabelBoldLarge,
   StyledTooltipSvg,
   theme,
   variables,
@@ -18,7 +17,7 @@ import { CheckboxController } from 'shared/components/FormComponents';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
-import { ActivitySettingsScore, ActivitySettingsSection } from 'shared/state';
+import { ScoreReport, SectionReport } from 'shared/state';
 import { useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
 
@@ -53,8 +52,8 @@ export const ScoresAndReports = () => {
     name: sectionsName,
   });
 
-  const sections: ActivitySettingsSection[] = watch(sectionsName);
-  const scores: ActivitySettingsScore[] = watch(scoresName);
+  const sections: SectionReport[] = watch(sectionsName);
+  const scores: ScoreReport[] = watch(scoresName);
   const showScoreSummary = watch(scoresAndReportsName);
   const generateReport = watch(generateReportName);
   const isCheckboxesDisabled = !(scores?.length || sections?.length);

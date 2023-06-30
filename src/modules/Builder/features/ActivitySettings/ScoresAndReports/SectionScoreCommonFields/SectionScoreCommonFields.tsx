@@ -17,14 +17,18 @@ import { columns } from './SectionScoreCommonFields.const';
 export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, getFieldState, watch, register, unregister } = useFormContext();
+  const { control, getFieldState, watch, register, unregister, setValue } = useFormContext();
   const { activity } = useCurrentActivity();
 
-  const showMessage: boolean = watch(`${name}.showMessage`);
-  const printItems: boolean = watch(`${name}.printItems`);
-  const messageName = `${name}.message`;
+  const showMessageName = `${name}.showMessage`;
+  const printItemsName = `${name}.printItems`;
   const itemsPrintName = `${name}.itemsPrint`;
-  const printItemsError = getFieldState(`${name}.printItems`).error;
+  const messageName = `${name}.message`;
+  const showMessage: boolean = watch(showMessageName);
+  const printItems: boolean = watch(printItemsName);
+  const message = watch(messageName);
+  const itemsPrint = watch(itemsPrintName);
+  const printItemsError = getFieldState(printItemsName).error;
 
   const commonProps = { control };
 
@@ -37,6 +41,11 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
     },
     [],
   );
+
+  useEffect(() => {
+    printItems ?? setValue(printItemsName, !!itemsPrint.length);
+    showMessage ?? setValue(showMessageName, !!message.length);
+  }, []);
 
   useEffect(() => {
     if (showMessage) {

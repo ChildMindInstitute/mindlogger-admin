@@ -1,7 +1,7 @@
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 
 import {
-  ActivitySettingsScore,
+  ScoreReport,
   Item,
   MultiSelectItem,
   SingleAndMultipleSelectionOption,
@@ -100,7 +100,7 @@ export const getDefaultConditionalValue = (scoreId: string) => ({
 const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>
   showMessage && !!message?.includes(`[[${id}]]`);
 
-export const getIsScoreIdVariable = (score: ActivitySettingsScore) => {
+export const getIsScoreIdVariable = (score: ScoreReport) => {
   const { id } = score;
   let isVariable = false;
 
@@ -128,7 +128,7 @@ const updateMessage = (
 export const updateMessagesWithVariable = (
   setValue: UseFormSetValue<FieldValues>,
   name: string,
-  score: ActivitySettingsScore,
+  score: ScoreReport,
   newScoreId: string,
 ) => {
   const { id, showMessage, message, conditionalLogic } = score;

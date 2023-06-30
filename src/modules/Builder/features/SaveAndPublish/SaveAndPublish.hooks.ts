@@ -35,6 +35,7 @@ import {
   getItemConditionalLogic,
   removeActivityFlowExtraFields,
   remapSubscaleSettings,
+  getScoresAndReports,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -79,6 +80,7 @@ export const useAppletData = () => {
               ...removeItemExtraFields(),
             })),
             subscaleSetting: remapSubscaleSettings(activity),
+            scoresAndReports: getScoresAndReports(activity.scoresAndReports),
             ...removeActivityExtraFields(),
           } as Activity),
       ),
