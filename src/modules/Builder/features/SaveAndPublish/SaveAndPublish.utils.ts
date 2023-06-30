@@ -14,7 +14,8 @@ import {
   SliderItemResponseValues,
   SliderRowsResponseValues,
   OptionCondition,
-  ScoresAndReports,
+  SectionCondition,
+  ScoreCondition,
 } from 'shared/state';
 import { getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
@@ -76,7 +77,22 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
 };
 
-export const getScoresAndReports = (scoresAndReports?: ScoresAndReports) => {
+const getConditions = (
+  items: ItemFormValues[],
+  conditions?: (SectionCondition | Condition | ScoreCondition)[],
+) =>
+  conditions?.map((condition) => {
+    const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
+
+    return {
+      type: condition.type,
+      payload: getConditionPayload(relatedItem!, condition) as keyof Condition['payload'],
+      itemName: relatedItem?.name ?? '',
+    };
+  });
+
+export const getScoresAndReports = (activity: ActivityFormValues) => {
+  const { items, scoresAndReports } = activity;
   if (!scoresAndReports) return;
 
   const fieldsToRemove = {
@@ -91,11 +107,16 @@ export const getScoresAndReports = (scoresAndReports?: ScoresAndReports) => {
     conditionalLogic: score.conditionalLogic?.map((conditional) => ({
       ...conditional,
       ...fieldsToRemove,
+      conditions: getConditions(items, conditional.conditions),
     })),
   }));
   const sections = initialSections.map((section) => ({
     ...section,
     ...fieldsToRemove,
+    conditionalLogic: {
+      ...section.conditionalLogic,
+      conditions: getConditions(items, section?.conditionalLogic?.conditions),
+    },
   }));
 
   return {
@@ -246,14 +267,6 @@ export const getItemConditionalLogic = (
 
   return {
     match: result.match,
-    conditions: result.conditions?.map((condition) => {
-      const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
-
-      return {
-        type: condition.type,
-        payload: getConditionPayload(relatedItem!, condition) as keyof Condition['payload'],
-        itemName: relatedItem?.name ?? '',
-      };
-    }),
+    conditions: getConditions(items, result.conditions),
   };
 };

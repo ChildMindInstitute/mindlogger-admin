@@ -80,7 +80,7 @@ export const useAppletData = () => {
               ...removeItemExtraFields(),
             })),
             subscaleSetting: remapSubscaleSettings(activity),
-            scoresAndReports: getScoresAndReports(activity.scoresAndReports),
+            scoresAndReports: getScoresAndReports(activity),
             ...removeActivityExtraFields(),
           } as Activity),
       ),
