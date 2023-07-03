@@ -34,15 +34,15 @@ export const Subscales = ({ answers }: SubscalesProps) => {
           (item) => item.name,
         );
 
-        const calculetedTotalScore = calcTotalScore(item.subscaleSetting, activityItems);
+        const calculatedTotalScore = calcTotalScore(item.subscaleSetting, activityItems);
 
         const parsedSubscales = item.subscaleSetting.subscales.reduce(
           (acc: ParsedSubscales, item) => {
-            const calculetedSubscale = calcScores(item, activityItems, subscalesObject);
+            const calculatedSubscale = calcScores(item, activityItems, subscalesObject);
 
-            acc.subscales = calculetedSubscale;
-            if (calculetedTotalScore) {
-              acc.totalScore = { ...calculetedTotalScore[FinalSubscale.Key] };
+            acc.subscales = calculatedSubscale;
+            if (calculatedTotalScore) {
+              acc.totalScore = { ...calculatedTotalScore[FinalSubscale.Key] };
             }
 
             return acc;
