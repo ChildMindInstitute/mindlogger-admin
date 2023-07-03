@@ -408,7 +408,7 @@ export type BaseCondition = {
 };
 
 export type ScoreCondition = BaseCondition & {
-  type: ScoreConditionType;
+  type: typeof ScoreConditionType;
   payload: {
     value: boolean;
   };

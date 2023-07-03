@@ -79,7 +79,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
   };
 
   useEffect(() => {
-    const selectedItems = items.filter((item) => itemsScore.includes(getEntityKey(item)));
+    const selectedItems = items.filter((item) => itemsScore.includes(item.name));
     const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
     setScoreRangeLabel(getScoreRangeLabel(minScore, maxScore));
   }, [itemsScore, calculationType]);
