@@ -228,3 +228,9 @@ export const enum LookupTableItems {
   Age_screen = 'age_screen',
   Gender_screen = 'gender_screen',
 }
+
+export const enum FinalSubscale {
+  Key = 'finalSubScale',
+  FinalSubScaleScore = 'Final SubScale Score',
+  OptionalTextForFinalSubScaleScore = 'Optional text for Final SubScale Score',
+}

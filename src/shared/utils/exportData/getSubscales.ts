@@ -7,7 +7,7 @@ import {
   SliderItemResponseValues,
   SubscaleSetting,
 } from 'shared/state';
-import { LookupTableItems, Sex, SubscaleTotalScore } from 'shared/consts';
+import { FinalSubscale, LookupTableItems, Sex, SubscaleTotalScore } from 'shared/consts';
 import {
   AnswerDTO,
   DecryptedMultiSelectionAnswer,
@@ -29,14 +29,23 @@ export const calcScores = <T>(
   data: ActivitySettingsSubscale,
   activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
   subscalesObject: Record<string, ActivitySettingsSubscale>,
-): { score: number; optionText: string } => {
+): { [key: string]: { score: number; optionText: string } } => {
+  const result: { [key: string]: { score: number; optionText: string } } = {};
   const sumScore = data.items.reduce((acc, item) => {
     if (!item?.type) {
       return acc;
     }
 
     if (item.type === ElementType.Subscale) {
-      return acc + calcScores(subscalesObject[item.name], activityItems, subscalesObject).score;
+      const calculetedNestedSubscale = calcScores(
+        subscalesObject[item.name],
+        activityItems,
+        subscalesObject,
+      )[item.name];
+
+      result[item.name] = calculetedNestedSubscale;
+
+      return acc + calculetedNestedSubscale.score;
     }
 
     const answer = activityItems[item.name].answer as
@@ -90,17 +99,38 @@ export const calcScores = <T>(
     });
 
     return {
-      score: Number(subscaleTableDataItem?.score) || calculetedScore,
-      optionText: subscaleTableDataItem?.optionalText || '',
+      ...result,
+      [data.name]: {
+        score: Number(subscaleTableDataItem?.score) || calculetedScore,
+        optionText: subscaleTableDataItem?.optionalText || '',
+      },
     };
   }
 
-  return { score: calculetedScore, optionText: '' };
+  return { ...result, [data.name]: { score: calculetedScore, optionText: '' } };
 };
 
-export const getSubscales = <T>(
+export const calcTotalScore = (
   subscaleSetting: SubscaleSetting,
-  activityItems: Record<string, T & { activityItem: Item; answer: AnswerDTO }>,
+  activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
+) => {
+  if (!subscaleSetting?.calculateTotalScore) return {};
+
+  return calcScores(
+    {
+      name: FinalSubscale.Key,
+      items: Object.keys(activityItems).map((item) => ({ name: item, type: ElementType.Item })),
+      scoring: subscaleSetting.calculateTotalScore,
+      subscaleTableData: subscaleSetting.totalScoresTableData,
+    } as ActivitySettingsSubscale,
+    activityItems,
+    {},
+  );
+};
+
+export const getSubscales = (
+  subscaleSetting: SubscaleSetting,
+  activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
 ) => {
   if (!subscaleSetting?.subscales?.length) return {};
 
@@ -112,31 +142,21 @@ export const getSubscales = <T>(
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
     const calculetedSubscale = calcScores(item, activityItems, subscalesObject);
 
-    acc[item.name] = calculetedSubscale.score;
-    if (calculetedSubscale?.optionText) {
-      acc[`Optional text for ${item.name}`] = calculetedSubscale.optionText;
+    acc[item.name] = calculetedSubscale[item.name].score;
+    if (calculetedSubscale?.[item.name]?.optionText) {
+      acc[`Optional text for ${item.name}`] = calculetedSubscale[item.name].optionText;
     }
 
     return acc;
   }, {});
 
-  const calculetedTotalScore =
-    subscaleSetting?.calculateTotalScore &&
-    calcScores(
-      {
-        name: '',
-        items: Object.keys(activityItems).map((item) => ({ name: item, type: 'item' })),
-        scoring: subscaleSetting.calculateTotalScore,
-        subscaleTableData: subscaleSetting.totalScoresTableData,
-      } as ActivitySettingsSubscale,
-      activityItems,
-      {},
-    );
+  const calculetedTotalScore = calcTotalScore(subscaleSetting, activityItems);
 
   return {
     ...(calculetedTotalScore && {
-      'Final SubScale Score': calculetedTotalScore.score,
-      'Optional text for Final SubScale Score': calculetedTotalScore.optionText,
+      [FinalSubscale.FinalSubScaleScore]: calculetedTotalScore[FinalSubscale.Key].score,
+      [FinalSubscale.OptionalTextForFinalSubScaleScore]:
+        calculetedTotalScore[FinalSubscale.Key].optionText,
     }),
     ...parsedSubscales,
   };

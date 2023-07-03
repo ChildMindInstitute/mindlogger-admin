@@ -1,14 +1,18 @@
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { Box } from '@mui/material';
 
 import { DateFormats } from 'shared/consts';
-import { StyledBodyMedium, StyledHeadline, theme } from 'shared/styles';
+import { StyledBodyMedium, StyledFlexSpaceBetween, StyledHeadline, theme } from 'shared/styles';
 import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
+import { StyledTextBtn } from 'modules/Dashboard/features/RespondentData/RespondentData.styles';
+import { Svg } from 'shared/components';
 
 import { AdditionalInformation } from '../AdditionalInformation';
 import { StyledChartContainer, StyledDescription } from './Scores.styles';
 import { ScoresProps } from './Scores.types';
+import { ReportContext } from '../../context';
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
 
@@ -19,7 +23,8 @@ export const Scores = ({
   additionalInformation,
   subscaleScores,
 }: ScoresProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('app');
+  const { setCurrentActivityCompletionData } = useContext(ReportContext);
 
   const renderChartDescription = () => (
     <StyledDescription>
@@ -53,14 +58,25 @@ export const Scores = ({
 
   return (
     <>
-      <StyledHeadline sx={{ mt: theme.spacing(6) }}>{t('subscaleScores')}</StyledHeadline>
+      <StyledFlexSpaceBetween sx={{ mt: theme.spacing(6) }}>
+        <StyledHeadline>{t('subscaleScores')}</StyledHeadline>
+        <StyledTextBtn
+          onClick={() => setCurrentActivityCompletionData(null)}
+          variant="text"
+          startIcon={<Svg id="reset" width="18" height="18" />}
+        >
+          {t('showAllSubscaleResults')}
+        </StyledTextBtn>
+      </StyledFlexSpaceBetween>
       {renderChartDescription()}
       <StyledChartContainer>
         <BarChart chartData={subscaleScores} />
       </StyledChartContainer>
-      <Box sx={{ m: theme.spacing(6.4, 0) }}>
-        <AdditionalInformation {...additionalInformation} />
-      </Box>
+      {additionalInformation && (
+        <Box sx={{ m: theme.spacing(6.4, 0) }}>
+          <AdditionalInformation {...additionalInformation} />
+        </Box>
+      )}
     </>
   );
 };

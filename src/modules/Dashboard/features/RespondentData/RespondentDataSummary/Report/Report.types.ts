@@ -1,6 +1,6 @@
 import { DatavizActivity, Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
-import { Item } from 'shared/state';
+import { Item, SubscaleSetting } from 'shared/state';
 import {
   ActivityItemAnswer,
   AnswerDTO,
@@ -56,4 +56,12 @@ export type ActivityResponse = {
   endDatetime: string;
   startDatetime: string;
   version: string;
+  subscaleSetting?: SubscaleSetting;
+};
+
+export type CurrentActivityCompletionData = { answerId: string; date?: number } | null;
+
+export type ReportContextType = {
+  currentActivityCompletionData: CurrentActivityCompletionData;
+  setCurrentActivityCompletionData: (value: CurrentActivityCompletionData) => void;
 };

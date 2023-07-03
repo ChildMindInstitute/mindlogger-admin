@@ -1,3 +1,5 @@
+import { ActivityResponse } from '../Report.types';
+
 export const enum SubscalesTypes {
   Table = 'Table',
 }
@@ -8,8 +10,7 @@ export type SubscaleScore = {
 };
 
 export type AdditionalInformation = {
-  tooltip?: string;
-  description: string;
+  description?: string;
 };
 
 export type Subscale = {
@@ -18,4 +19,13 @@ export type Subscale = {
   name?: string;
   items?: Subscale[];
   additionalInformation?: AdditionalInformation;
+};
+
+export type SubscalesProps = {
+  answers: ActivityResponse[];
+};
+
+export type ParsedSubscales = {
+  subscales: { [key: string]: { score: number; optionText: string } };
+  totalScore: { score?: number; optionText?: string };
 };

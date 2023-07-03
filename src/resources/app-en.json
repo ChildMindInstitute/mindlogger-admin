@@ -1143,5 +1143,6 @@
   "serverStatusConnected": "Server Status: Connected.",
   "configureServerForReport": "Server Status: Not Configured. Report can not be generated.",
   "true": "True",
-  "false": "False"
+  "false": "False",
+  "showAllSubscaleResults": "Show All Subscale Results"
 }
