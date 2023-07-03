@@ -8,7 +8,7 @@ import {
   SingleValueCondition,
   RangeValueCondition,
   SingleAndMultipleSelectItemResponseValues,
-  ActivitySettingsScore,
+  ScoreReport,
 } from 'shared/state';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
@@ -53,22 +53,22 @@ export const getItemOptions = (items: ItemFormValues[], conditionRowType: Condit
     return optionList;
   }, []);
 
-export const getScoreOptions = (scores: ActivitySettingsScore[]) =>
+export const getScoreOptions = (scores: ScoreReport[]) =>
   scores?.map((score) => ({
     labelKey: `${t('score')}: ${score.name}`,
-    value: getEntityKey(score),
+    value: score.id,
     type: ConditionItemType.Score,
   }));
 
-export const getScoreIdOption = (scoreId: string, scoreName: string) => ({
+export const getScoreIdOption = (scoreId: string) => ({
   labelKey: `${t('score')}: ${scoreId}`,
-  value: scoreName,
+  value: scoreId,
   type: ConditionItemType.Score,
 });
 
-export const getScoreConditionalsOptions = (scores: ActivitySettingsScore[]) =>
+export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
   scores?.reduce(
-    (scoreConditionals: OptionListItem[], score: ActivitySettingsScore) => [
+    (scoreConditionals: OptionListItem[], score: ScoreReport) => [
       ...scoreConditionals,
       ...(score.conditionalLogic?.map((conditional) => ({
         labelKey: `${t('scoreConditionals')}: ${conditional.name}`,
@@ -89,7 +89,7 @@ export const getPayload = (
     case ConditionType.EqualToOption:
     case ConditionType.NotEqualToOption:
       return {
-        optionId: (conditionPayload as OptionCondition['payload'])?.optionId ?? '',
+        optionValue: (conditionPayload as OptionCondition['payload'])?.optionValue ?? '',
       };
     case ConditionType.GreaterThan:
     case ConditionType.LessThan:

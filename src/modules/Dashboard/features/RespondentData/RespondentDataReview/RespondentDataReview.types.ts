@@ -15,12 +15,12 @@ export type Activity = {
 export type DecryptedTextAnswer = string;
 
 export type DecryptedMultiSelectionAnswer = {
-  value: number[]; // an array of selected option indexes
+  value: (number | string)[]; // an array of selected option indexes
   text?: string | null;
 };
 
 export type DecryptedSingleSelectionAnswer = {
-  value: number; // selected option index
+  value: number | string; // selected option index
   text?: string | null;
 };
 

@@ -13,6 +13,7 @@ import {
   ConditionalLogicMatch,
   CalculationType,
   PerfTaskType,
+  GyroscopeOrTouch,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 import { CorrectPress, RoundTypeEnum } from 'modules/Builder/types';
@@ -342,6 +343,7 @@ export type DrawingResponseValues = {
 };
 
 export type GyroscopeConfig = {
+  userInputType: GyroscopeOrTouch;
   phase: RoundTypeEnum;
   trialsNumber: number;
   durationMinutes: number;
@@ -406,7 +408,7 @@ export type BaseCondition = {
 };
 
 export type ScoreCondition = BaseCondition & {
-  type: ScoreConditionType;
+  type: typeof ScoreConditionType;
   payload: {
     value: boolean;
   };
@@ -414,7 +416,7 @@ export type ScoreCondition = BaseCondition & {
 
 export type OptionCondition = BaseCondition & {
   payload: {
-    optionId: string;
+    optionValue: string | number;
   };
 };
 
@@ -492,8 +494,8 @@ export interface SliderItem extends Item {
 export type ScoresAndReports = {
   generateReport: boolean;
   showScoreSummary: boolean;
-  scores: ActivitySettingsScore[];
-  sections: ActivitySettingsSection[];
+  scores: ScoreReport[];
+  sections: SectionReport[];
 };
 
 export type SubscaleSetting<T = ActivitySettingsSubscaleItem> = {
@@ -556,7 +558,7 @@ export type ScoreConditionalLogic = {
   conditions: Condition[];
 };
 
-export type ActivitySettingsScore = {
+export type ScoreReport = {
   id: string;
   name: string;
   calculationType: CalculationType;
@@ -579,7 +581,7 @@ export type SectionConditionalLogic = {
   conditions: SectionCondition[];
 };
 
-export type ActivitySettingsSection = {
+export type SectionReport = {
   id?: string;
   name: string;
   showMessage: boolean;

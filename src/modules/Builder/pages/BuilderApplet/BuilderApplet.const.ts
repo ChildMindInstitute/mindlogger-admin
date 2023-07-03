@@ -24,11 +24,6 @@ export enum DeviceType {
   Tablet = 'tablet',
 }
 
-export enum GyroscopeOrTouch {
-  Gyroscope = 'Gyroscope',
-  Touch = 'Touch',
-}
-
 export enum GyroscopeItemNames {
   GeneralInstruction = 'Gyroscope_General_instruction',
   PracticeInstruction = 'Gyroscope_Calibration_Practice_instruction',
@@ -46,3 +41,10 @@ export enum TouchItemNames {
 }
 
 export const ordinalStrings = ['First', 'Second', 'Third', 'Fourth'];
+
+export const enum ItemTestFunctions {
+  UniqueItemName = '',
+  VariableInTheSameItem = 'variable-in-the-same-item-error',
+  VariableIsNotSupported = 'variable-is-not-supported-error',
+  VariableReferringToSkippedItem = 'variable-referring-to-skipped-item-error',
+}

@@ -24,7 +24,6 @@ export const ConditionRow = ({
   onRemove,
   type = ConditionRowType.Item,
   scoreId,
-  scoreName,
 }: ConditionRowProps) => {
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
@@ -34,7 +33,7 @@ export const ConditionRow = ({
   const conditionItemName = `${conditionName}.itemName`;
   const conditionTypeName = `${conditionName}.type`;
   const conditionPayloadName = `${conditionName}.payload`;
-  const conditionPayloadSelectionName = `${conditionPayloadName}.optionId`;
+  const conditionPayloadSelectionName = `${conditionPayloadName}.optionValue`;
   const conditionPayloadValueName = `${conditionPayloadName}.value`;
   const conditionPayloadMinValueName = `${conditionPayloadName}.minValue`;
   const conditionPayloadMaxValueName = `${conditionPayloadName}.maxValue`;
@@ -75,14 +74,14 @@ export const ConditionRow = ({
       ...((scores?.length && getScoreOptions(scores)) || []),
       ...((scores?.length && getScoreConditionalsOptions(scores)) || []),
     ],
-    [ConditionRowType.Score]: [getScoreIdOption(scoreId!, scoreName!)],
+    [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
   };
 
   useEffect(() => {
     if (type === ConditionRowType.Score) {
-      setValue(conditionItemName, scoreName);
+      setValue(conditionItemName, scoreId);
     }
-  }, [type, scoreName]);
+  }, [type, scoreId]);
 
   return (
     <Condition

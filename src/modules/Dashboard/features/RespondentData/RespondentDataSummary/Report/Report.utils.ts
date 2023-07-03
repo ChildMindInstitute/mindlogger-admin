@@ -11,6 +11,7 @@ import {
   DecryptedMultiSelectionAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { getObjectFromList } from 'shared/utils';
+import { isItemUnsupported } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
 import {
   DEFAULT_END_DATE,
@@ -190,6 +191,13 @@ const compareActivityItemAnswers = (
           date,
         },
       ],
+    };
+  }
+
+  if (isItemUnsupported(currActivityItem.responseType)) {
+    return {
+      activityItem: currActivityItem,
+      answers: [],
     };
   }
 };

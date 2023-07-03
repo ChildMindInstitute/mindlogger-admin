@@ -182,12 +182,14 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
           )}
           <StyledInputContainer>
             <InputController
+              data-testid={`${sliderName}.minLabel`}
               control={control}
               name={`${sliderName}.minLabel`}
               label={t('minLabel')}
               maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
             />
             <InputController
+              data-testid={`${sliderName}.maxLabel`}
               control={control}
               name={`${sliderName}.maxLabel`}
               label={t('maxLabel')}
@@ -195,7 +197,14 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
             />
           </StyledInputContainer>
           <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
-            <StyledSlider min={minValue} max={maxValue} value={minValue} marks={marks} disabled />
+            <StyledSlider
+              min={minValue}
+              max={maxValue}
+              value={minValue}
+              marks={marks}
+              disabled
+              data-testid="item-configuration-slider"
+            />
           </StyledFlexTopCenter>
           <StyledInputContainer>
             <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
@@ -206,6 +215,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
               />
               <InputController
                 {...commonInputProps}
+                data-testid={`${sliderName}.minValue`}
                 name={`${sliderName}.minValue`}
                 label={t('minValue')}
                 maxNumberValue={maxValue - 1}
@@ -223,6 +233,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
               />
               <InputController
                 {...commonInputProps}
+                data-testid={`${sliderName}.maxValue`}
                 name={`${sliderName}.maxValue`}
                 label={t('maxValue')}
                 onChange={handleChangeMaxScore}

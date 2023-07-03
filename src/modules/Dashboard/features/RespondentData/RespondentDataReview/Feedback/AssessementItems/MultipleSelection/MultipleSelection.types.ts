@@ -1,8 +1,11 @@
-import { MultiSelectActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import {
+  DecryptedMultiSelectionAnswer,
+  MultiSelectActivityItem,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 export type MultipleSelectionProps = {
   activityItem: MultiSelectActivityItem;
-  value: number[];
+  value: DecryptedMultiSelectionAnswer['value'];
   isDisabled?: boolean;
-  onChange?: (value: number[]) => void;
+  onChange?: (value: DecryptedMultiSelectionAnswer['value']) => void;
 };

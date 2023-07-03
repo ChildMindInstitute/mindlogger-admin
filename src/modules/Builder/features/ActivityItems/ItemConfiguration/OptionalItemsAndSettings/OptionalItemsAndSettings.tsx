@@ -30,8 +30,11 @@ import {
 import { Alerts } from '../Alerts';
 import { SelectionOption } from '../InputTypeItems';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
+
+import { SkippedItemInVariablesModal } from './SkippedItemInVariablesModal';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
 import { useActiveItem, useSettingsSetup } from './OptionalItemsAndSettings.hooks';
+import { getOptionValue } from './OptionalItemsAndSettings.utils';
 
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ name }, ref) => {
@@ -96,6 +99,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
         ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
         ...(hasColorPalette &&
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
+        value: getOptionValue(options ?? []),
       });
       setOptionsOpen((prevState) => [...prevState, true]);
     };
@@ -239,6 +243,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
             />
           </ItemSettingsDrawer>
         )}
+        <SkippedItemInVariablesModal itemName={name} />
       </>
     );
   },

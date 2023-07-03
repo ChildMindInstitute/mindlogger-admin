@@ -3,8 +3,8 @@ import get from 'lodash.get';
 
 import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
-import { createArray } from 'shared/utils';
-import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
+import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
+import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { Item, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
 
 import {
@@ -146,4 +146,11 @@ export const getEmptyAlert = ({ config, responseType, responseValues }: Partial<
     ...alert,
     value: '',
   };
+};
+
+export const checkIfQuestionIncludesVariables = (question: string, items: ItemFormValues[]) => {
+  const itemsObject = getObjectFromList(items, ({ name }) => name);
+  const variableNames = getTextBetweenBrackets(question);
+
+  return variableNames.some((variable) => !!itemsObject[variable]);
 };
