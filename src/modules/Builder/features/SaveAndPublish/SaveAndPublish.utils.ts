@@ -15,7 +15,6 @@ import {
   SliderRowsResponseValues,
   OptionCondition,
   SectionCondition,
-  ScoreCondition,
 } from 'shared/state';
 import { getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
@@ -77,17 +76,16 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
 };
 
-const getConditions = (
-  items: ItemFormValues[],
-  conditions?: (SectionCondition | Condition | ScoreCondition)[],
-) =>
+const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition | Condition)[]) =>
   conditions?.map((condition) => {
     const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
 
     return {
       type: condition.type,
-      payload: getConditionPayload(relatedItem!, condition) as keyof Condition['payload'],
-      itemName: relatedItem?.name ?? '',
+      payload: relatedItem
+        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
+        : condition['payload'],
+      itemName: relatedItem?.name ?? condition.itemName,
     };
   });
 

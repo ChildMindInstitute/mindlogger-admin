@@ -79,7 +79,7 @@ export const Condition = ({
       {isValueSelectShown && (
         <StyledSelectController
           control={control}
-          name={optionValueName}
+          name={isItemScoreCondition ? numberValueName : optionValueName}
           options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
           placeholder={t('value')}
           isLabelNeedTranslation={false}
