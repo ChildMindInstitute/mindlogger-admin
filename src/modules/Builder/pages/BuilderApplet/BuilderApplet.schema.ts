@@ -465,8 +465,6 @@ export const ScoreSchema = () =>
         t('validationMessages.unique', { field: t('scoreName') }) as string,
         (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
       ),
-    minScore: yup.number().required(),
-    maxScore: yup.number().required(),
     calculationType: yup.string().required(),
     ...ReportCommonFields,
     itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),

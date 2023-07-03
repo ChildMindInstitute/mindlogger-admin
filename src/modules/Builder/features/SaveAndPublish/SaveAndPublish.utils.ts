@@ -14,6 +14,7 @@ import {
   SliderItemResponseValues,
   SliderRowsResponseValues,
   OptionCondition,
+  SectionCondition,
 } from 'shared/state';
 import { getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
@@ -73,6 +74,54 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
       }),
     })),
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
+};
+
+const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition | Condition)[]) =>
+  conditions?.map((condition) => {
+    const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
+
+    return {
+      type: condition.type,
+      payload: relatedItem
+        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
+        : condition['payload'],
+      itemName: relatedItem?.name ?? condition.itemName,
+    };
+  });
+
+export const getScoresAndReports = (activity: ActivityFormValues) => {
+  const { items, scoresAndReports } = activity;
+  if (!scoresAndReports) return;
+
+  const fieldsToRemove = {
+    printItems: undefined,
+    showMessage: undefined,
+  };
+
+  const { sections: initialSections, scores: initialScores } = scoresAndReports;
+  const scores = initialScores.map((score) => ({
+    ...score,
+    ...fieldsToRemove,
+    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
+      ...conditional,
+      ...fieldsToRemove,
+      conditions: getConditions(items, conditional.conditions),
+    })),
+  }));
+  const sections = initialSections.map((section) => ({
+    ...section,
+    ...fieldsToRemove,
+    conditionalLogic: {
+      ...section.conditionalLogic,
+      conditions: getConditions(items, section?.conditionalLogic?.conditions),
+    },
+  }));
+
+  return {
+    ...scoresAndReports,
+    sections,
+    scores,
+  };
 };
 
 export const removeActivityFlowExtraFields = () => ({
@@ -216,14 +265,6 @@ export const getItemConditionalLogic = (
 
   return {
     match: result.match,
-    conditions: result.conditions?.map((condition) => {
-      const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
-
-      return {
-        type: condition.type,
-        payload: getConditionPayload(relatedItem!, condition) as keyof Condition['payload'],
-        itemName: relatedItem?.name ?? '',
-      };
-    }),
+    conditions: getConditions(items, result.conditions),
   };
 };

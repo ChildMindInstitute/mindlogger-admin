@@ -1,5 +1,5 @@
 import i18n from 'i18n';
-import { ConditionType } from 'shared/consts';
+import { ConditionType, ScoreConditionType } from 'shared/consts';
 
 import { ConditionItemType } from './Condition.const';
 
@@ -28,7 +28,7 @@ export const getStateOptions = (type?: ConditionItemType) => {
         { value: ConditionType.NotIncludesOption, labelKey: t('notIncludesOption') },
       ];
     case ConditionItemType.ScoreCondition:
-      return [{ value: ConditionType.Equal, labelKey: t('equal') }];
+      return [{ value: ScoreConditionType, labelKey: t('equal') }];
     default:
       return [];
   }

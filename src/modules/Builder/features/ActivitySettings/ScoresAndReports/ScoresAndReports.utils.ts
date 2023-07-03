@@ -8,8 +8,6 @@ export const getScoreDefaults = () => ({
   name: '',
   id: getScoreId('', CalculationType.Sum),
   calculationType: CalculationType.Sum,
-  minScore: 0,
-  maxScore: 0,
   itemsScore: [],
   showMessage: false,
   printItems: false,

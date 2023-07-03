@@ -12,7 +12,7 @@ import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
 import { StyledButton } from '../ScoresAndReports.styles';
 
-export const ConditionContent = ({ name, type, scoreId, scoreName }: ConditionContentProps) => {
+export const ConditionContent = ({ name, type, scoreId }: ConditionContentProps) => {
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
@@ -38,7 +38,6 @@ export const ConditionContent = ({ name, type, scoreId, scoreName }: ConditionCo
           index={index}
           type={type}
           scoreId={type === ConditionRowType.Score ? scoreId : ''}
-          scoreName={type === ConditionRowType.Score ? scoreName : ''}
           onRemove={() => removeCondition(index)}
         />
       ))}
