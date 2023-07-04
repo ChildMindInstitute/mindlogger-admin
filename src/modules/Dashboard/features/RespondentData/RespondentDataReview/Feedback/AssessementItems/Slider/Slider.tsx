@@ -1,5 +1,5 @@
 import { StyledBodySmall, StyledFlexTopCenter, variables } from 'shared/styles';
-import { createArray } from 'shared/utils';
+import { createArrayForSlider } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
 import { SliderProps } from './Slider.types';
 import { StyledSlider, StyledDescriptionItem, StyledImage } from './Slider.styles';
@@ -16,11 +16,12 @@ export const Slider = ({
     responseValues: { minLabel, maxLabel, minValue, maxValue, minImage, maxImage },
     config: { continuousSlider },
   } = activityItem;
-
-  const marks = createArray(maxValue - minValue + 1, (index: number) => ({
-    value: minValue + index,
-    label: minValue + index,
-  }));
+  const maxValueNumber = Number(maxValue);
+  const minValueNumber = Number(minValue);
+  const marks = createArrayForSlider({
+    maxValue: maxValueNumber,
+    minValue: minValueNumber,
+  });
 
   return (
     <>
@@ -31,8 +32,8 @@ export const Slider = ({
         disabled={isDisabled}
         step={continuousSlider ? continuousSliderStep : sliderStep}
         marks={marks}
-        min={minValue}
-        max={maxValue}
+        min={minValueNumber}
+        max={maxValueNumber}
         valueLabelDisplay="auto"
         onChange={(_, value) => onChange && onChange(value)}
       />
