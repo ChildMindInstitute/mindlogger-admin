@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
-import { AxiosResponse } from 'axios';
 
-import { Row } from 'shared/components';
+import { Row, SubmitBtnColor } from 'shared/components';
 import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 
 export type RespondentAccessPopupProps = {
@@ -10,9 +9,10 @@ export type RespondentAccessPopupProps = {
   tableRows: Row[] | undefined;
   chosenAppletData: ChosenAppletData | null;
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>;
+  callbackFunction: () => void;
 };
 
-export type getScreen = (respondentName: string, appletName: string) => JSX.Element;
+export type GetScreen = (respondentName: string, appletName: string) => JSX.Element;
 
 export type Steps = 0 | 1 | 2 | 3 | 4;
 
@@ -23,8 +23,19 @@ export type ScreensParams = {
   respondentName: string;
   appletName: string;
   removeData: boolean;
-  isRemoved: AxiosResponse | null;
+  isRemoved: boolean;
   submitPassword: () => void;
   removeAccess: () => void;
   handlePopupClose: () => void;
+  callbackFunction: () => void;
+};
+
+export type Screen = {
+  component: JSX.Element;
+  buttonText: string;
+  hasSecondBtn: boolean;
+  title: string;
+  submitForm?: () => void;
+  onClose?: () => void;
+  submitBtnColor?: SubmitBtnColor;
 };

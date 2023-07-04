@@ -235,7 +235,7 @@ export const editManagerAccess = (
     { signal },
   );
 
-export const removeRespondentAccess = (
+export const removeRespondentAccessApi = (
   { userId, appletIds, deleteResponses }: RemoveRespondentAccess,
   signal?: AbortSignal,
 ) =>
