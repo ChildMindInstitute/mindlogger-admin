@@ -9,18 +9,16 @@ import { StyledHeader, StyledContent, StyledMdEditor } from './AdditionalInforma
 export const AdditionalInformation = ({ description }: AdditionalInformationProps) => {
   const { t } = useTranslation();
 
-  return (
-    !!description && (
-      <>
-        <StyledHeader>
-          <StyledHeadline sx={{ mr: theme.spacing(1.6) }}>
-            {t('additionalInformation')}
-          </StyledHeadline>
-        </StyledHeader>
-        <StyledContent>
-          <StyledMdEditor modelValue={description} previewOnly />
-        </StyledContent>
-      </>
-    )
-  );
+  return description ? (
+    <>
+      <StyledHeader>
+        <StyledHeadline sx={{ mr: theme.spacing(1.6) }}>
+          {t('additionalInformation')}
+        </StyledHeadline>
+      </StyledHeader>
+      <StyledContent>
+        <StyledMdEditor modelValue={description} previewOnly />
+      </StyledContent>
+    </>
+  ) : null;
 };
