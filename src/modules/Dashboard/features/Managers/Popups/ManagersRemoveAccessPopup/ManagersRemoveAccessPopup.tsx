@@ -92,6 +92,7 @@ export const ManagersRemoveAccessPopup = ({
           appletIds: selectedApplets.map((item) => item.id),
           userId: user.id,
         });
+        onClose();
         break;
       default:
         onClose();
