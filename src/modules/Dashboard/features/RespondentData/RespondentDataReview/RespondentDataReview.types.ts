@@ -106,6 +106,7 @@ export type EventDTO = {
 export type ExtendedEvent<T> = EventDTO & DecryptedAnswerData<T>;
 
 export type ActivityItemAnswer = {
+  id?: string;
   activityItem: Item;
   answer: AnswerDTO;
 };

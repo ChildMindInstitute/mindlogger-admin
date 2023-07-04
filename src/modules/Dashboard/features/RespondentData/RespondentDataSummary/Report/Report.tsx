@@ -15,7 +15,13 @@ import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
-import { ActivityResponse, FilterFormValues, ReportProps, ResponseOption } from './Report.types';
+import {
+  ActivityResponse,
+  CurrentActivityCompletionData,
+  FilterFormValues,
+  ReportProps,
+  ResponseOption,
+} from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
 import { ResponseOptions } from './ResponseOptions';
 import {
@@ -24,9 +30,10 @@ import {
   getFormattedResponses,
   getIdentifiers,
 } from './Report.utils';
+import { ReportContext } from './context';
 
 export const Report = ({ activity, identifiers = [], versions = [] }: ReportProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('app');
   const { appletId, respondentId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
@@ -35,6 +42,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<ActivityResponse[]>([]);
   const [responseOptions, setResponseOptions] = useState<ResponseOption[]>([]);
+  const [currentActivityCompletionData, setCurrentActivityCompletionData] =
+    useState<CurrentActivityCompletionData>(null);
 
   const methods = useForm<FilterFormValues>({
     defaultValues: getDefaultFilterValues(versions),
@@ -116,15 +125,18 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           </Tooltip>
         </StyledHeader>
         <Box sx={{ margin: theme.spacing(4.8, 6.4) }}>
-          <FormProvider {...methods}>
-            <ReportFilters identifiers={identifiers} versions={versions} />
-            <ActivityCompleted answers={answers} versions={versions} />
-            {/* TODO: hide subscales until the module for counting is ready */}
-            {/* <Subscales />  */}
-            {!isLoading && responseOptions && (
-              <ResponseOptions responseOptions={responseOptions} versions={versions} />
-            )}
-          </FormProvider>
+          <ReportContext.Provider
+            value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}
+          >
+            <FormProvider {...methods}>
+              <ReportFilters identifiers={identifiers} versions={versions} />
+              <ActivityCompleted answers={answers} versions={versions} />
+              <Subscales answers={answers} />
+              {!isLoading && responseOptions && (
+                <ResponseOptions responseOptions={responseOptions} versions={versions} />
+              )}
+            </FormProvider>
+          </ReportContext.Provider>
         </Box>
       </StyledReport>
     </>
