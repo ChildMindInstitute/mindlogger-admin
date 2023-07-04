@@ -6,6 +6,7 @@ export type Reviewer = {
 export type Respondent = {
   secretId: string;
   nickname: string;
+  id: string;
 };
 
 export type SelectRespondentsProps = {

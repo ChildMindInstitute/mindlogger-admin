@@ -1,8 +1,6 @@
-import { SettingsTypeEnum } from '../Flanker/Flanker.const';
-
 export type InstructionProps = {
   description: string;
-  name?: string;
+  name: string;
   title?: string;
-  type?: SettingsTypeEnum;
+  hasError?: boolean;
 };

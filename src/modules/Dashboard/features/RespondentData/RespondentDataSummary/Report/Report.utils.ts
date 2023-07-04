@@ -77,12 +77,16 @@ const getSliderOptions = (
   { minValue, maxValue }: SliderItemResponseValues,
   itemId: string,
   step = 1,
-) =>
-  Array.from({ length: (maxValue - minValue) / step + 1 }, (_, index) => ({
-    id: `${itemId}-${minValue + index * step}`,
-    text: minValue + index * step,
-    value: minValue + index * step,
+) => {
+  const min = +minValue;
+  const max = +maxValue;
+
+  return Array.from({ length: (max - min) / step + 1 }, (_, index) => ({
+    id: `${itemId}-${min + index * step}`,
+    text: min + index * step,
+    value: min + index * step,
   }));
+};
 
 const getAnswers = (currentAnswer: ActivityItemAnswer, date: string): Answer[] => {
   switch (currentAnswer.activityItem.responseType) {
@@ -209,24 +213,18 @@ const compareActivityItem = (prevActivityItem: FormattedResponse, currActivityIt
     case ItemResponseType.Slider:
       const prevResponseValues = prevActivityItem.activityItem.responseValues;
       const currResponseValues = currActivityItem.responseValues as SliderItemResponseValues;
-      const getOptions = ({ minValue, maxValue }: SliderItemResponseValues, step = 1) =>
-        Array.from({ length: (maxValue - minValue) / step + 1 }, (_, index) => ({
-          id: `${currActivityItem.id}-${minValue + index * step}`,
-          text: minValue + index * step,
-          value: minValue + index * step,
-        }));
 
-      const sliderOptions = getOptions(currResponseValues).reduce(
-        (acc: Record<string, ItemOption>, currentOption) => {
-          if (acc[currentOption.id]) return acc;
+      const sliderOptions = getSliderOptions(
+        currResponseValues as SliderItemResponseValues,
+        currActivityItem.id!,
+      ).reduce((acc: Record<string, ItemOption>, currentOption) => {
+        if (acc[currentOption.id]) return acc;
 
-          return {
-            ...acc,
-            [currentOption.id]: currentOption,
-          };
-        },
-        getObjectFromList(prevResponseValues.options),
-      );
+        return {
+          ...acc,
+          [currentOption.id]: currentOption,
+        };
+      }, getObjectFromList(prevResponseValues.options));
 
       return {
         ...formattedActivityItem,

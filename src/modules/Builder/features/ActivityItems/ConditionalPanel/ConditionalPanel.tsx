@@ -86,7 +86,7 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
                     relatedItem?.responseValues as SingleAndMultipleSelectItemResponseValues
                   )?.options?.find(
                     (option: SingleAndMultipleSelectionOption) =>
-                      getEntityKey(option) === (payload as OptionCondition['payload'])?.optionId,
+                      getEntityKey(option) === (payload as OptionCondition['payload'])?.optionValue,
                   )?.text) ??
                   valuePlaceholder}
                 {(isSingleValueShown && (payload as SingleValueCondition['payload'])?.value) ??

@@ -8,9 +8,9 @@ export const parseOptions = (
   responseValues: SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues,
   type: ItemResponseType,
 ) => {
-  if (type === ItemResponseType.Slider && responseValues?.minValue) {
-    const min = responseValues?.minValue;
-    const max = responseValues?.maxValue;
+  if (type === ItemResponseType.Slider) {
+    const min = Number(responseValues?.minValue);
+    const max = Number(responseValues?.maxValue);
     const scores = responseValues?.scores;
     const options = createArrayFromMinToMax(min, max);
 

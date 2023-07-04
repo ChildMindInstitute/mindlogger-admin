@@ -6,7 +6,7 @@ import { Tooltip, TooltipUiType } from 'shared/components/Tooltip';
 import { StyledCellText } from './ContentWithTooltip.styles';
 import { ContentWithTooltipProps } from './ContentWithTooltip.types';
 
-export const ContentWithTooltip = ({ value, styles = {} }: ContentWithTooltipProps) => {
+export const ContentWithTooltip = ({ value, item, styles = {} }: ContentWithTooltipProps) => {
   const { width } = useWindowSize();
   const elementRef = useRef<HTMLDivElement>(null);
   const hasTooltip = useIsTextNodeEllipsed(elementRef, [elementRef.current, width, value]);
@@ -18,7 +18,7 @@ export const ContentWithTooltip = ({ value, styles = {} }: ContentWithTooltipPro
       tooltipTitle={hasTooltip ? value : undefined}
     >
       <StyledCellText sx={styles} ref={elementRef}>
-        {value}
+        {item.label || value}
       </StyledCellText>
     </Tooltip>
   );

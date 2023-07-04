@@ -193,7 +193,7 @@ export const enum ConditionType {
   OutsideOf = 'OUTSIDE_OF',
 }
 
-export type ScoreConditionType = 'EQUAL_TO_SCORE';
+export const ScoreConditionType = 'EQUAL_TO_SCORE';
 
 export const enum ConditionalLogicMatch {
   Any = 'any',
@@ -230,4 +230,10 @@ export const enum Sex {
 export const enum LookupTableItems {
   Age_screen = 'age_screen',
   Gender_screen = 'gender_screen',
+}
+
+export const enum FinalSubscale {
+  Key = 'finalSubScale',
+  FinalSubScaleScore = 'Final SubScale Score',
+  OptionalTextForFinalSubScaleScore = 'Optional text for Final SubScale Score',
 }

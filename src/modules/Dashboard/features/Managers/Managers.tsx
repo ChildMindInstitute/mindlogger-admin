@@ -12,7 +12,7 @@ import { useAppDispatch } from 'redux/store';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles } from 'shared/consts';
 
-import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
+import { ManagersRemoveAccessPopup, EditAccessPopup, EditAccessSuccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
 import { getActions, getHeadCells } from './Managers.const';
 
@@ -57,7 +57,7 @@ export const Managers = () => {
     return dispatch(getWorkspaceManagers(params));
   });
 
-  const filterAplletsByRoles = (user: Manager) => ({
+  const filterAppletsByRoles = (user: Manager) => ({
     ...user,
     applets: user.applets.filter((applet) => {
       const workspaceUserRole = rolesData?.data?.[applet.id]?.[0];
@@ -71,10 +71,11 @@ export const Managers = () => {
   });
 
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
+  const [editAccessSuccessPopupVisible, setEditAccessSuccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
-  const { execute } = useAsync(updateManagersPinApi, handleReload);
+  const { execute: handlePinUpdate } = useAsync(updateManagersPinApi, handleReload);
 
   const actions = {
     removeAccessAction: (user: Manager) => {
@@ -88,13 +89,13 @@ export const Managers = () => {
   };
 
   const handlePinClick = (userId: string) => {
-    execute({ ownerId, userId });
+    handlePinUpdate({ ownerId, userId });
   };
 
   const rows: TableProps['rows'] = useMemo(
     () =>
       managersData?.result?.map((user) => {
-        const filteredManager = filterAplletsByRoles(user);
+        const filteredManager = filterAppletsByRoles(user);
         const { email, firstName, lastName, roles, isPinned, id } = user;
         const stringRoles = joinWihComma(roles);
 
@@ -185,13 +186,25 @@ export const Managers = () => {
           refetchManagers={handleReload}
         />
       )}
-      {editAccessPopupVisible && selectedManager && (
-        <EditAccessPopup
-          editAccessPopupVisible={editAccessPopupVisible}
-          onClose={() => setEditAccessPopupVisible(false)}
-          user={selectedManager}
-          refetchManagers={handleReload}
-        />
+      {selectedManager && (
+        <>
+          {editAccessPopupVisible && (
+            <EditAccessPopup
+              editAccessPopupVisible={editAccessPopupVisible}
+              setEditAccessSuccessPopupVisible={setEditAccessSuccessPopupVisible}
+              onClose={() => setEditAccessPopupVisible(false)}
+              user={selectedManager}
+              reFetchManagers={handleReload}
+            />
+          )}
+          {editAccessSuccessPopupVisible && (
+            <EditAccessSuccessPopup
+              open={editAccessSuccessPopupVisible}
+              onClose={() => setEditAccessSuccessPopupVisible(false)}
+              {...selectedManager}
+            />
+          )}
+        </>
       )}
     </>
   );

@@ -863,7 +863,8 @@
     "atLeastOneItem": "Select at least 1 Item",
     "incorrectEmail": "Email must be valid",
     "variableInTheSameItem": "* You cannot use item name in the same item. Please remove",
-    "variableIsNotSupported": "* This item is not supported, please remove it."
+    "variableIsNotSupported": "* This item is not supported, please remove it.",
+    "variableReferringToSkippedItem": "Remove the variable referring to the skipped item."
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
@@ -879,6 +880,12 @@
   "deleteActivityFlowDescription": "Are you sure you want to delete the Activity Flow <1>{{ activityFlowName }}</1>?",
   "deleteItemDescription": "Are you sure you want to delete the Item <1>{{ itemName }}</1>?",
   "deleteItemWithConditionalsDescription": "It will also remove the Сonditional(s) below:",
+  "variablesWarning": {
+    "title": "Variables Warning",
+    "isSkippable": "Skipping all the items cannot contain variables. The variable will automatically be removed.",
+    "showAllAtOnce": "A one page assessment cannot contain variables. The variable will automatically be removed.",
+    "skippedItemInVariables": "By skipping <2> {{ skippedItemName }} </2>, it will cause <2> {{ itemNamesWithSkippedItem }} </2> to fail"
+  },
   "clear": "Clear",
   "clearActivityFlow": "Clear Activity Flow",
   "clearActivityFlowDescription": "Are you sure you want to clear the Activity Flow?",
@@ -899,13 +906,14 @@
   "positiveInteger": "Positive Integer",
   "integerBetweenOneAndHundred": "Integer between 1 and 100 required",
   "blockIsNecessary": "This block is necessary",
-  "performanceTaskInstructions": {
-    "flankerGeneralDesc": "This instruction will be displayed for the respondent before passing the Activity.",
-    "flankerPracticeDesc": "This instruction will be displayed for the respondent before passing the practice round of the Activity.",
-    "flankerTestDesc": "This instruction will be displayed for the respondent before passing the test round of the Activity.",
-    "flankerGeneral": "## General Instructions\n\n You will see arrows presented at the center of the screen that point either to the left '<' or right '>'.\n Press the left button if the arrow is pointing to the left '<' or press the right button if the arrow is pointing to the right '>'.\n These arrows will appear in the center of a line of other items. Sometimes, these other items will be arrows pointing in the same direction, e.g.. '> > > > >', or in the opposite direction, e.g. '< < > < <'.\n Your job is to respond to the central arrow, no matter what direction the other arrows are pointing.\n For example, you would press the left button for both '< < < < <', and '> > < > >' because the middle arrow points to the left.\n Finally, in some trials dashes ' - ' will appear beside the central arrow.\n Again, respond only to the direction of the central arrow. Please respond as quickly and accurately as possible.",
-    "flankerPractice": "## Instructions\n\n Now you will have a chance to practice the task before moving on to the test phase.\nRemember to respond only to the central arrow.",
-    "flankerTest": "## Test Instructions\n\n Good job on the practice blocks.\nYou can now move on to the test blocks.\nYou will do the same task as in the practice, responding to the direction of the central arrow.\nYou will complete 3 blocks, each about 3-5 minutes long.\nYou will have  a short break in between these blocks."
+  "flankerInstructions": {
+    "generalDesc": "This instruction will be displayed for the respondent before passing the Activity.",
+    "practiceDesc": "This instruction will be displayed for the respondent before passing the practice round of the Activity.",
+    "testDesc": "This instruction will be displayed for the respondent before passing the test round of the Activity.",
+    "general": "## General Instructions\n\n You will see arrows presented at the center of the screen that point either to the left '<' or right '>'.\n Press the left button if the arrow is pointing to the left '<' or press the right button if the arrow is pointing to the right '>'.\n These arrows will appear in the center of a line of other items. Sometimes, these other items will be arrows pointing in the same direction, e.g.. '> > > > >', or in the opposite direction, e.g. '< < > < <'.\n Your job is to respond to the central arrow, no matter what direction the other arrows are pointing.\n For example, you would press the left button for both '< < < < <', and '> > < > >' because the middle arrow points to the left.\n Finally, in some trials dashes ' - ' will appear beside the central arrow.\n Again, respond only to the direction of the central arrow. Please respond as quickly and accurately as possible.",
+    "practice": "## Instructions\n\n Now you will have a chance to practice the task before moving on to the test phase.\nRemember to respond only to the central arrow.",
+    "next": "## Instructions\nPress the Next button to restart block.",
+    "test": "## Test Instructions\n\n Good job on the practice blocks.\nYou can now move on to the test blocks.\nYou will do the same task as in the practice, responding to the direction of the central arrow.\nYou will complete 3 blocks, each about 3-5 minutes long.\nYou will have  a short break in between these blocks."
   },
   "flankerButtons": {
     "title": "Buttons",
@@ -976,6 +984,8 @@
   "noDataForActivity": "No available Data for this Activity yet",
   "isReviewableUnsupported": "Reviewer dashboard assessment supports only Single Selection, Multiple Selection and Slider Items",
   "isReviewableExists": "Only one Activity within an Applet can be a Reviewer dashboard assessment. Selected one: {{- activityName }}",
+  "activityHasVariableAmongItems": "This activity contains variables and cannot skip all items.",
+  "activityCannotBeOnePageAssessment": "This activity contains variables and cannot be a one page assessment",
   "theRespondentCompletedTheActivity": "The respondent completed the Activity at these times",
   "atTime": "At time",
   "fromTime": "From time",
@@ -1143,5 +1153,6 @@
   "serverStatusConnected": "Server Status: Connected.",
   "configureServerForReport": "Server Status: Not Configured. Report can not be generated.",
   "true": "True",
-  "false": "False"
+  "false": "False",
+  "showAllSubscaleResults": "Show All Subscale Results"
 }

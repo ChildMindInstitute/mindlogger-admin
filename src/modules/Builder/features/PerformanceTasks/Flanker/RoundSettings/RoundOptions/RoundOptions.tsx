@@ -1,7 +1,10 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
 import {
+  StyledBodyMedium,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledSmallNumberInput,
@@ -15,40 +18,58 @@ import {
   MIN_MILLISECONDS_DURATION,
   MIN_THRESHOLD_DURATION,
 } from 'shared/consts';
-import { RoundTypeEnum } from 'modules/Builder/types';
+import { FlankerItemPositions, FlankerSamplingMethod } from 'modules/Builder/types';
 
 import { IsPracticeRoundType } from '../RoundSettings.types';
 import { getCheckboxes } from './RoundOptions.utils';
 
 export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {
+  const [isOrderRandomized, setIsOrderRandomized] = useState(true);
   const { t } = useTranslation();
-  const { control } = useFormContext();
-  const { perfTaskItemField } = useCurrentActivity();
-  const roundField = `${perfTaskItemField}.${
-    isPracticeRound ? RoundTypeEnum.Practice : RoundTypeEnum.Test
-  }`;
+  const { control, setValue, watch } = useFormContext();
+  const { fieldName } = useCurrentActivity();
+  const roundField = `${fieldName}.items.${
+    isPracticeRound ? FlankerItemPositions.PracticeFirst : FlankerItemPositions.TestFirst
+  }.config`;
+  const samplingMethodField = `${roundField}.samplingMethod`;
+  const samplingMethod = watch(samplingMethodField);
+
+  useEffect(() => {
+    setValue(
+      samplingMethodField,
+      isOrderRandomized ? FlankerSamplingMethod.Randomize : FlankerSamplingMethod.Fixed,
+    );
+  }, [isOrderRandomized]);
+
+  useEffect(() => {
+    setIsOrderRandomized(samplingMethod === FlankerSamplingMethod.Randomize);
+  }, []);
 
   return (
     <>
-      <StyledFlexTopCenter sx={{ mb: theme.spacing(1) }}>
-        <StyledTitleMedium>{t('flankerRound.showStimulusFor')}</StyledTitleMedium>
+      <StyledFlexTopCenter>
+        <StyledTitleMedium sx={{ mr: theme.spacing(0.5) }}>
+          {t('flankerRound.showStimulusFor')}
+        </StyledTitleMedium>
         <StyledSmallNumberInput>
           <InputController
             control={control}
-            name={`${roundField}.stimulusDuration`}
+            name={`${roundField}.trialDuration`}
             type="number"
             minNumberValue={MIN_MILLISECONDS_DURATION}
           />
         </StyledSmallNumberInput>
-        <StyledTitleMedium>{t('milliseconds')}</StyledTitleMedium>
+        <StyledTitleMedium sx={{ ml: theme.spacing(0.5) }}>{t('milliseconds')}</StyledTitleMedium>
       </StyledFlexTopCenter>
       {isPracticeRound && (
-        <StyledFlexTopCenter sx={{ mb: theme.spacing(1) }}>
-          <StyledTitleMedium>{t('flankerRound.threshold')}</StyledTitleMedium>
+        <StyledFlexTopCenter>
+          <StyledTitleMedium sx={{ mr: theme.spacing(0.5) }}>
+            {t('flankerRound.threshold')}
+          </StyledTitleMedium>
           <StyledSmallNumberInput>
             <InputController
               control={control}
-              name={`${roundField}.threshold`}
+              name={`${roundField}.minimumAccuracy`}
               type="number"
               minNumberValue={MIN_THRESHOLD_DURATION}
               maxNumberValue={MAX_THRESHOLD_DURATION}
@@ -58,6 +79,15 @@ export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {
         </StyledFlexTopCenter>
       )}
       <StyledFlexColumn sx={{ mb: theme.spacing(2.4) }}>
+        <FormControlLabel
+          label={<StyledBodyMedium>{t('flankerRound.randomize')}</StyledBodyMedium>}
+          control={
+            <Checkbox
+              checked={isOrderRandomized}
+              onChange={(event) => setIsOrderRandomized(event.target.checked)}
+            />
+          }
+        />
         {getCheckboxes(roundField)?.map(({ name, label }) => (
           <CheckboxController key={name} control={control} name={name} label={label} />
         ))}

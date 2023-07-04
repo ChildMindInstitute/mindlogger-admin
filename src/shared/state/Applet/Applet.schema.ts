@@ -16,7 +16,7 @@ import {
   GyroscopeOrTouch,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
-import { CorrectPress, RoundTypeEnum } from 'modules/Builder/types';
+import { CorrectPress, RoundTypeEnum, FlankerSamplingMethod } from 'modules/Builder/types';
 import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
 export type CreateAppletStateData = {
@@ -185,59 +185,45 @@ export type SliderRowsConfig = {
   timer: number;
 };
 
-export type FlankerButtonSetting = {
-  name: string | null;
-  image: string | null;
-};
-
-export type FlankerFixationSettings = {
-  image: string;
-  duration: number;
-};
-
 type FlankerStimulusId = string;
 
 export type FlankerStimulusSettings = {
   id: FlankerStimulusId;
   image: string;
-  correctPress: CorrectPress;
+  text: CorrectPress;
+  value?: number | null;
+  weight?: number | null;
 };
 
 export type FlankerBlockSettings = {
-  order: Array<FlankerStimulusId>;
   name: string;
+  order: Array<FlankerStimulusId>;
 };
 
-type FlankerPracticeSettings = {
-  instruction: string;
-  blocks: Array<FlankerBlockSettings>;
-  stimulusDuration: number;
-  threshold: number;
-  randomizeOrder: boolean;
-  showFeedback: boolean;
-  showSummary: boolean;
+export type FlankerButtonSetting = {
+  text: string | null;
+  image: string | null;
+  value?: number;
 };
 
-type FlankerTestSettings = {
-  instruction: string;
-  blocks: Array<FlankerBlockSettings>;
-  stimulusDuration: number;
-  randomizeOrder: boolean;
-  showFeedback: boolean;
-  showSummary: boolean;
-};
-
-type FlankerGeneralSettings = {
-  instruction: string;
-  buttons: Array<FlankerButtonSetting>;
-  fixation: FlankerFixationSettings | null;
+export type FlankerConfig = {
   stimulusTrials: Array<FlankerStimulusSettings>;
-};
-
-type FlankerConfig = {
-  general: FlankerGeneralSettings;
-  practice: FlankerPracticeSettings;
-  test: FlankerTestSettings;
+  blocks: Array<FlankerBlockSettings>;
+  buttons: Array<FlankerButtonSetting>;
+  nextButton?: string;
+  showFixation: boolean;
+  fixationDuration: number | null;
+  fixationScreen: { value?: string; image: string } | null;
+  minimumAccuracy?: number; //threshold
+  sampleSize?: number;
+  samplingMethod: FlankerSamplingMethod; //randomize order
+  showFeedback: boolean;
+  showResults: boolean; //show summary screen
+  trialDuration: number; //stimulus duration
+  isFirstPractice: boolean;
+  isLastPractice: boolean;
+  isLastTest: boolean;
+  blockType: RoundTypeEnum;
   skippableItem?: boolean;
   removeBackButton?: boolean;
 };
@@ -252,8 +238,8 @@ export type SliderItemResponseValues = {
   id?: string;
   minLabel: string;
   maxLabel: string;
-  minValue: number;
-  maxValue: number;
+  minValue: number | string;
+  maxValue: number | string;
   minImage?: string;
   maxImage?: string;
   scores?: number[];
@@ -408,7 +394,7 @@ export type BaseCondition = {
 };
 
 export type ScoreCondition = BaseCondition & {
-  type: ScoreConditionType;
+  type: typeof ScoreConditionType;
   payload: {
     value: boolean;
   };
@@ -416,7 +402,7 @@ export type ScoreCondition = BaseCondition & {
 
 export type OptionCondition = BaseCondition & {
   payload: {
-    optionId: string;
+    optionValue: string | number;
   };
 };
 
@@ -494,8 +480,8 @@ export interface SliderItem extends Item {
 export type ScoresAndReports = {
   generateReport: boolean;
   showScoreSummary: boolean;
-  scores: ActivitySettingsScore[];
-  sections: ActivitySettingsSection[];
+  scores: ScoreReport[];
+  sections: SectionReport[];
 };
 
 export type SubscaleSetting<T = ActivitySettingsSubscaleItem> = {
@@ -528,11 +514,11 @@ export type Activity = {
   items: Item[];
   scoresAndReports?: ScoresAndReports;
   subscaleSetting?: SubscaleSetting | null;
-  //TODO: for frontend purposes only - should be reviewed after refactoring phase
-  conditionalLogic?: ConditionalLogic[];
   isPerformanceTask?: boolean;
   performanceTaskType?: PerfTaskType;
   createdAt?: string;
+  //TODO: for frontend purposes only - should be reviewed after refactoring phase
+  conditionalLogic?: ConditionalLogic[];
 };
 
 type Theme = {
@@ -558,7 +544,7 @@ export type ScoreConditionalLogic = {
   conditions: Condition[];
 };
 
-export type ActivitySettingsScore = {
+export type ScoreReport = {
   id: string;
   name: string;
   calculationType: CalculationType;
@@ -581,7 +567,7 @@ export type SectionConditionalLogic = {
   conditions: SectionCondition[];
 };
 
-export type ActivitySettingsSection = {
+export type SectionReport = {
   id?: string;
   name: string;
   showMessage: boolean;

@@ -48,3 +48,5 @@ export const scoreIdBase = {
   [CalculationType.Average]: 'averageScore',
   [CalculationType.Percentage]: 'percentScore',
 };
+
+export const ForbiddenScoreIdSymbols = /[\s$-/:-?{-~!"@#^_“[\]]/g;

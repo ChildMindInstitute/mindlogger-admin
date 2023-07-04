@@ -15,4 +15,5 @@ export type UploaderProps = {
   wrapperStyles?: SxProps;
   cropRatio?: number;
   hasError?: boolean;
+  disabled?: boolean;
 };

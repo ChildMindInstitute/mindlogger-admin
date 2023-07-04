@@ -121,6 +121,62 @@ export enum RoundTypeEnum {
   Test = 'test',
 }
 
+export enum DeviceType {
+  Mobile = 'mobile',
+  Tablet = 'tablet',
+}
+
+export enum GyroscopeItemNames {
+  GeneralInstruction = 'Gyroscope_General_instruction',
+  PracticeInstruction = 'Gyroscope_Calibration_Practice_instruction',
+  TestInstruction = 'Gyroscope_Test_instruction',
+  PracticeRound = 'Gyroscope_Calibration_Practice',
+  TestRound = 'Gyroscope_Test',
+}
+
+export enum TouchItemNames {
+  GeneralInstruction = 'Touch_General_instruction',
+  PracticeInstruction = 'Touch_Calibration_Practice_instruction',
+  TestInstruction = 'Touch_Test_instruction',
+  PracticeRound = 'Touch_Calibration_Practice',
+  TestRound = 'Touch_Test',
+}
+
+export enum FlankerItemNames {
+  GeneralInstruction = 'Flanker_VSR_instructions',
+  PracticeInstructionFirst = 'Flanker_Practice_instructions_1',
+  PracticeInstructionSecond = 'Flanker_Practice_instructions_2',
+  PracticeInstructionThird = 'Flanker_Practice_instructions_3',
+  PracticeFirst = 'Flanker_Practice_1',
+  PracticeSecond = 'Flanker_Practice_2',
+  PracticeThird = 'Flanker_Practice_3',
+  TestInstructionFirst = 'Flanker_test_instructions_1',
+  TestInstructionSecond = 'Flanker_test_instructions_2',
+  TestInstructionThird = 'Flanker_test_instructions_3',
+  TestFirst = 'Flanker_test_1',
+  TestSecond = 'Flanker_test_2',
+  TestThird = 'Flanker_test_3',
+}
+
+export enum FlankerSamplingMethod {
+  Randomize = 'randomize-order',
+  Fixed = 'fixed-order',
+}
+
+export enum FlankerInstructionPositions {
+  General = 0,
+  Practice = 1,
+  Test = 7,
+}
+export enum FlankerItemPositions {
+  PracticeFirst = 2,
+  PracticeSecond = 4,
+  PracticeThird = 6,
+  TestFirst = 8,
+  TestSecond = 10,
+  TestThird = 12,
+}
+
 export type GetActivitySubscaleItems = {
   activityItemsObject: Record<string, ItemFormValues>;
   subscalesObject: Record<string, ActivitySettingsSubscale>;

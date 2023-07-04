@@ -6,6 +6,8 @@ import { TooltipProps } from 'shared/components/Tooltip';
 
 export type DataTableItem = Record<string, TooltipProps['tooltipTitle']> & {
   id: string;
+  name?: string;
+  label?: string;
 };
 
 export type DataTableColumn = {
@@ -26,4 +28,5 @@ export type DataTableProps = {
   onSelectAll?: (allSelected: boolean) => unknown[] | void;
   hasError?: boolean;
   tableHeadBgColor?: string;
+  isValueName?: boolean;
 };

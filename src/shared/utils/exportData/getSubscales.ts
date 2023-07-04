@@ -7,7 +7,7 @@ import {
   SliderItemResponseValues,
   SubscaleSetting,
 } from 'shared/state';
-import { LookupTableItems, Sex, SubscaleTotalScore } from 'shared/consts';
+import { FinalSubscale, LookupTableItems, Sex, SubscaleTotalScore } from 'shared/consts';
 import {
   AnswerDTO,
   DecryptedMultiSelectionAnswer,
@@ -29,14 +29,23 @@ export const calcScores = <T>(
   data: ActivitySettingsSubscale,
   activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
   subscalesObject: Record<string, ActivitySettingsSubscale>,
-): { score: number; optionText: string } => {
+): { [key: string]: { score: number; optionText: string } } => {
+  const result: { [key: string]: { score: number; optionText: string } } = {};
   const sumScore = data.items.reduce((acc, item) => {
     if (!item?.type) {
       return acc;
     }
 
     if (item.type === ElementType.Subscale) {
-      return acc + calcScores(subscalesObject[item.name], activityItems, subscalesObject).score;
+      const calculatedNestedSubscale = calcScores(
+        subscalesObject[item.name],
+        activityItems,
+        subscalesObject,
+      )[item.name];
+
+      result[item.name] = calculatedNestedSubscale;
+
+      return acc + calculatedNestedSubscale.score;
     }
 
     const answer = activityItems[item.name].answer as
@@ -64,8 +73,8 @@ export const calcScores = <T>(
     }
 
     if (typedOptions?.minValue && typedOptions?.scores?.length) {
-      const min = typedOptions.minValue;
-      const max = typedOptions.maxValue;
+      const min = Number(typedOptions.minValue);
+      const max = Number(typedOptions.maxValue);
       const scores = typedOptions.scores;
       const options = createArrayFromMinToMax(min, max);
 
@@ -75,7 +84,7 @@ export const calcScores = <T>(
     return acc + value;
   }, 0);
 
-  const calculetedScore = getSubScaleScore(sumScore, data.scoring, data.items.length);
+  const calculatedScore = getSubScaleScore(sumScore, data.scoring, data.items.length);
 
   if (data?.subscaleTableData) {
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {
@@ -86,21 +95,42 @@ export const calcScores = <T>(
         ? String(age) === activityItems[LookupTableItems.Age_screen]?.answer
         : true;
 
-      return withSex && withAge && rawScore === String(calculetedScore);
+      return withSex && withAge && rawScore === String(calculatedScore);
     });
 
     return {
-      score: Number(subscaleTableDataItem?.score) || calculetedScore,
-      optionText: subscaleTableDataItem?.optionalText || '',
+      ...result,
+      [data.name]: {
+        score: Number(subscaleTableDataItem?.score) || calculatedScore,
+        optionText: subscaleTableDataItem?.optionalText || '',
+      },
     };
   }
 
-  return { score: calculetedScore, optionText: '' };
+  return { ...result, [data.name]: { score: calculatedScore, optionText: '' } };
 };
 
-export const getSubscales = <T>(
+export const calcTotalScore = (
   subscaleSetting: SubscaleSetting,
-  activityItems: Record<string, T & { activityItem: Item; answer: AnswerDTO }>,
+  activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
+) => {
+  if (!subscaleSetting?.calculateTotalScore) return {};
+
+  return calcScores(
+    {
+      name: FinalSubscale.Key,
+      items: Object.keys(activityItems).map((item) => ({ name: item, type: ElementType.Item })),
+      scoring: subscaleSetting.calculateTotalScore,
+      subscaleTableData: subscaleSetting.totalScoresTableData,
+    } as ActivitySettingsSubscale,
+    activityItems,
+    {},
+  );
+};
+
+export const getSubscales = (
+  subscaleSetting: SubscaleSetting,
+  activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
 ) => {
   if (!subscaleSetting?.subscales?.length) return {};
 
@@ -110,33 +140,23 @@ export const getSubscales = <T>(
   );
 
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
-    const calculetedSubscale = calcScores(item, activityItems, subscalesObject);
+    const calculatedSubscale = calcScores(item, activityItems, subscalesObject);
 
-    acc[item.name] = calculetedSubscale.score;
-    if (calculetedSubscale?.optionText) {
-      acc[`Optional text for ${item.name}`] = calculetedSubscale.optionText;
+    acc[item.name] = calculatedSubscale[item.name].score;
+    if (calculatedSubscale?.[item.name]?.optionText) {
+      acc[`Optional text for ${item.name}`] = calculatedSubscale[item.name].optionText;
     }
 
     return acc;
   }, {});
 
-  const calculetedTotalScore =
-    subscaleSetting?.calculateTotalScore &&
-    calcScores(
-      {
-        name: '',
-        items: Object.keys(activityItems).map((item) => ({ name: item, type: 'item' })),
-        scoring: subscaleSetting.calculateTotalScore,
-        subscaleTableData: subscaleSetting.totalScoresTableData,
-      } as ActivitySettingsSubscale,
-      activityItems,
-      {},
-    );
+  const calculatedTotalScore = calcTotalScore(subscaleSetting, activityItems);
 
   return {
-    ...(calculetedTotalScore && {
-      'Final SubScale Score': calculetedTotalScore.score,
-      'Optional text for Final SubScale Score': calculetedTotalScore.optionText,
+    ...(calculatedTotalScore && {
+      [FinalSubscale.FinalSubScaleScore]: calculatedTotalScore[FinalSubscale.Key].score,
+      [FinalSubscale.OptionalTextForFinalSubScaleScore]:
+        calculatedTotalScore[FinalSubscale.Key].optionText,
     }),
     ...parsedSubscales,
   };

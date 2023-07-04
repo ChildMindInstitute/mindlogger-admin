@@ -24,7 +24,7 @@ const getDateString = (obj?: DecryptedDateAnswer['value']) => {
     .padStart(2, '0')}-${Number(obj.day).toString().padStart(2, '0')}`;
 };
 
-const doubleBrackets = /\[\[(.*?)]]/g;
+export const doubleBrackets = /\[\[(.*?)]]/g;
 export const getTextBetweenBrackets = (str: string) => {
   const listOfText = [];
   let found;
@@ -60,8 +60,8 @@ export const replaceItemVariableWithName = <T>({
         const names: string[] = [];
         (rawAnswer as DecryptedMultiSelectionAnswer).value.forEach((value) => {
           const item =
-            (itemValue.responseValues as SingleAndMultipleSelectItemResponseValues).options.find(
-              (option) => option.value === value,
+            (itemValue.responseValues as SingleAndMultipleSelectItemResponseValues).options?.find(
+              (option) => String(option.value) === String(value),
             ) ?? null;
 
           if (item) names.push(item.text);
@@ -73,7 +73,9 @@ export const replaceItemVariableWithName = <T>({
             const item = (
               itemValue.responseValues as SingleAndMultipleSelectItemResponseValues
             ).options.find(
-              (option) => option.value === (rawAnswer as DecryptedSingleSelectionAnswer).value,
+              (option) =>
+                String(option.value) ===
+                String((rawAnswer as DecryptedSingleSelectionAnswer).value),
             );
             if (item) {
               markdown = markdown.replace(reg, `${item.text} `);

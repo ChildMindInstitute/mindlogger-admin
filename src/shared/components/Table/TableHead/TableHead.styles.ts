@@ -14,6 +14,10 @@ export const StyledTableHead = styled(TableHead, shouldForwardProp)`
         return `background-color: ${variables.palette.surface3}`;
       }
 
+      if (uiType === UiType.Quaternary) {
+        return `background-color: ${variables.palette.surface1}`;
+      }
+
       return `background-color: ${variables.palette.surface}`;
     }}
 `;

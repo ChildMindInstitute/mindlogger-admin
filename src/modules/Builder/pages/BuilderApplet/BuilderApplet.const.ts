@@ -7,7 +7,7 @@ export const CONDITION_TYPES_TO_HAVE_OPTION_ID = [
   ConditionType.NotEqualToOption,
 ];
 
-export const defaultFlankerBtnObj = { name: '', image: '' };
+export const defaultFlankerBtnObj = { text: '', image: '' };
 
 export const ALLOWED_TYPES_IN_VARIABLES = [
   ItemResponseType.SingleSelection,
@@ -19,25 +19,11 @@ export const ALLOWED_TYPES_IN_VARIABLES = [
   ItemResponseType.Text,
 ];
 
-export enum DeviceType {
-  Mobile = 'mobile',
-  Tablet = 'tablet',
-}
-
-export enum GyroscopeItemNames {
-  GeneralInstruction = 'Gyroscope_General_instruction',
-  PracticeInstruction = 'Gyroscope_Calibration_Practice_instruction',
-  TestInstruction = 'Gyroscope_Test_instruction',
-  PracticeRound = 'Gyroscope_Calibration_Practice',
-  TestRound = 'Gyroscope_Test',
-}
-
-export enum TouchItemNames {
-  GeneralInstruction = 'Touch_General_instruction',
-  PracticeInstruction = 'Touch_Calibration_Practice_instruction',
-  TestInstruction = 'Touch_Test_instruction',
-  PracticeRound = 'Touch_Calibration_Practice',
-  TestRound = 'Touch_Test',
-}
-
 export const ordinalStrings = ['First', 'Second', 'Third', 'Fourth'];
+
+export const enum ItemTestFunctions {
+  UniqueItemName = '',
+  VariableInTheSameItem = 'variable-in-the-same-item-error',
+  VariableIsNotSupported = 'variable-is-not-supported-error',
+  VariableReferringToSkippedItem = 'variable-referring-to-skipped-item-error',
+}

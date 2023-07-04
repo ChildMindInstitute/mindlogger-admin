@@ -2,6 +2,7 @@ import { DatavizActivity, Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { ItemResponseType } from 'shared/consts';
+import { SubscaleSetting } from 'shared/state';
 
 import { Identifier } from '../RespondentDataSummary.types';
 
@@ -27,6 +28,14 @@ export type ActivityCompletion = {
   endDatetime: string;
   startDatetime: string;
   version: string;
+  subscaleSetting?: SubscaleSetting;
+};
+
+export type CurrentActivityCompletionData = { answerId: string; date?: number } | null;
+
+export type ReportContextType = {
+  currentActivityCompletionData: CurrentActivityCompletionData;
+  setCurrentActivityCompletionData: (value: CurrentActivityCompletionData) => void;
 };
 
 export type FormattedAnswer = {

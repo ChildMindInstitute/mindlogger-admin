@@ -11,6 +11,7 @@ import {
   theme,
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { FlankerItemPositions } from 'modules/Builder/types';
 import { ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { SMALL_INPUT_LENGTH } from 'shared/consts';
@@ -31,22 +32,22 @@ export const ButtonsContent = () => {
     trigger,
     formState: { errors },
   } = useFormContext();
-  const { perfTaskItemField, perfTaskItemObjField } = useCurrentActivity();
-  const buttonsField = `${perfTaskItemField}.general.buttons`;
-  const buttons: FlankerButtonSetting[] = watch(buttonsField);
+  const { fieldName, activityObjField } = useCurrentActivity();
+  const firstItemButtonsField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.buttons`;
+  const firstItemButtons: FlankerButtonSetting[] = watch(firstItemButtonsField);
 
-  const buttonFirstField = `${buttonsField}.0`;
-  const buttonSecondField = `${buttonsField}.1`;
-  const buttonNameFirst = watch(`${buttonFirstField}.name`);
+  const buttonFirstField = `${firstItemButtonsField}.0`;
+  const buttonSecondField = `${firstItemButtonsField}.1`;
+  const buttonNameFirst = watch(`${buttonFirstField}.text`);
   const buttonNameFirstRef = useRef<string | null>(null);
-  const buttonNameSecond = watch(`${buttonSecondField}.name`);
+  const buttonNameSecond = watch(`${buttonSecondField}.text`);
   const buttonNameSecondRef = useRef<string | null>(null);
 
   const handleActiveBtnChange = (activeValue: string) => {
     setActiveButton(activeValue as ButtonsQuantity);
-    const firstBtnObj = buttons[0];
+    const firstBtnObj = firstItemButtons[0];
     setValue(
-      buttonsField,
+      firstItemButtonsField,
       activeValue === ButtonsQuantity.One ? [firstBtnObj] : [firstBtnObj, defaultFlankerBtnObj],
     );
   };
@@ -65,6 +66,12 @@ export const ButtonsContent = () => {
     buttonNameSecondRef.current = buttonNameSecond;
   }, [buttonNameSecond]);
 
+  useEffect(() => {
+    if (firstItemButtons?.length === 2) {
+      setActiveButton(ButtonsQuantity.Two);
+    }
+  }, []);
+
   return (
     <>
       <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>
@@ -78,10 +85,10 @@ export const ButtonsContent = () => {
         />
       </Box>
       <StyledFlexSpaceBetween>
-        {buttons?.map((button, index) => {
-          const currentBtnField = `${buttonsField}.${index}`;
+        {firstItemButtons?.map((button, index) => {
+          const currentBtnField = `${firstItemButtonsField}.${index}`;
           const currentBtnFieldImg = `${currentBtnField}.image`;
-          const currentBtnFieldName = `${currentBtnField}.name`;
+          const currentBtnFieldName = `${currentBtnField}.text`;
 
           return (
             <StyledRowWrapper key={index}>
@@ -96,17 +103,22 @@ export const ButtonsContent = () => {
                   }}
                   getValue={() => button.image || ''}
                   hasError={
-                    !!get(errors, `${perfTaskItemObjField}.general.buttons[${index}].image`)
+                    !!get(
+                      errors,
+                      `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.buttons[${index}].image`,
+                    )
                   }
+                  disabled={!!button.text}
                 />
               </StyledFlexTopCenter>
               <InputController
                 control={control}
                 fullWidth
                 name={currentBtnFieldName}
-                label={getButtonLabel(buttons.length, index)}
+                label={getButtonLabel(firstItemButtons.length, index)}
                 maxLength={SMALL_INPUT_LENGTH}
                 restrictExceededValueLength
+                disabled={!!button.image}
               />
             </StyledRowWrapper>
           );
