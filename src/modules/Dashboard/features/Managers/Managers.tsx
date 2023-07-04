@@ -178,16 +178,16 @@ export const Managers = () => {
         count={managersData?.count || 0}
         {...tableProps}
       />
-      {removeAccessPopupVisible && selectedManager && (
-        <ManagersRemoveAccessPopup
-          removeAccessPopupVisible={removeAccessPopupVisible}
-          onClose={() => setRemoveAccessPopupVisible(false)}
-          user={selectedManager}
-          refetchManagers={handleReload}
-        />
-      )}
       {selectedManager && (
         <>
+          {removeAccessPopupVisible && (
+            <ManagersRemoveAccessPopup
+              removeAccessPopupVisible={removeAccessPopupVisible}
+              onClose={() => setRemoveAccessPopupVisible(false)}
+              user={selectedManager}
+              refetchManagers={handleReload}
+            />
+          )}
           {editAccessPopupVisible && (
             <EditAccessPopup
               editAccessPopupVisible={editAccessPopupVisible}
