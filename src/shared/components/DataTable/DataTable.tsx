@@ -6,7 +6,12 @@ import { getEntityKey } from 'shared/utils';
 import { ContentWithTooltip } from 'shared/components/ContentWithTooltip';
 
 import { DataTableItem, DataTableProps } from './DataTable.types';
-import { StyledCheckbox, StyledTableCell, StyledTableContainer } from './DataTable.styles';
+import {
+  StyledCheckbox,
+  StyledTableCell,
+  StyledTableContainer,
+  StyledHeadCell,
+} from './DataTable.styles';
 
 //TODO: add pagination, sort
 export const DataTable = ({
@@ -56,23 +61,20 @@ export const DataTable = ({
         <TableHead>
           <TableRow>
             {selectable && selectAll && data?.length ? (
-              <TableCell sx={{ width: '2.8rem', backgroundColor: tableHeadBgColor }}>
+              <StyledHeadCell sx={{ width: '2.8rem' }}>
                 <StyledCheckbox
                   checked={isAllSelected}
                   onChange={handleSelectAll}
                   disabled={!data?.length}
                 />
-              </TableCell>
+              </StyledHeadCell>
             ) : null}
             {dataTableColumns?.map(({ key, label, styles = {} }) => (
-              <TableCell
-                sx={{ ...styles, backgroundColor: tableHeadBgColor }}
-                key={`data-table-head-${key}`}
-              >
+              <StyledHeadCell sx={styles} key={`data-table-head-${key}`}>
                 <StyledBodyMedium sx={{ color: variables.palette.outline }}>
                   {label}
                 </StyledBodyMedium>
-              </TableCell>
+              </StyledHeadCell>
             ))}
           </TableRow>
         </TableHead>

@@ -42,3 +42,9 @@ export const StyledTableCell = styled(TableCell)`
   }
   padding-bottom: ${theme.spacing(2)};
 `;
+
+export const StyledHeadCell = styled(TableCell)`
+  &.MuiTableCell-head {
+    background-color: ${variables.palette.surface1};
+  }
+`;
