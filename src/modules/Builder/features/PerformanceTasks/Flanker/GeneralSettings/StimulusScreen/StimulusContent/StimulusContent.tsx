@@ -16,7 +16,7 @@ import {
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
 import { FlankerStimulusSettings } from 'shared/state';
-import { CorrectPress } from 'modules/Builder/types';
+import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
 import { getUploadedMediaName, getIsRequiredValidateMessage } from 'shared/utils';
 
 import { DeleteStimulusPopup } from './DeleteStimulusPopup';
@@ -40,12 +40,12 @@ export const StimulusContent = () => {
     formState: { errors },
     clearErrors,
   } = useFormContext();
-  const { perfTaskItemField, perfTaskItemObjField } = useCurrentActivity();
+  const { fieldName, activityObjField } = useCurrentActivity();
   const [screenToDelete, setScreenToDelete] = useState<null | { index: number; imageName: string }>(
     null,
   );
-  const stimulusObjField = `${perfTaskItemObjField}.general.stimulusTrials`;
-  const stimulusField = `${perfTaskItemField}.general.stimulusTrials`;
+  const stimulusObjField = `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.stimulusTrials`;
+  const stimulusField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`;
   const stimulusTrials: FlankerStimulusSettings[] = watch(stimulusField);
   const hasStimulusErrors = !!get(errors, stimulusObjField);
 
@@ -54,8 +54,7 @@ export const StimulusContent = () => {
     name: stimulusField,
   });
 
-  const handleStimulusAdd = () =>
-    append({ id: uuidv4(), image: '', correctPress: CorrectPress.Left });
+  const handleStimulusAdd = () => append({ id: uuidv4(), image: '', text: CorrectPress.Left });
 
   const handleStimulusDelete = () => {
     if (!screenToDelete) return;
@@ -71,7 +70,7 @@ export const StimulusContent = () => {
   const handleActiveBtnChange = (value: string, index: number) => {
     update(index, {
       ...stimulusTrials[index],
-      correctPress: value,
+      text: value,
     });
   };
 
@@ -136,7 +135,7 @@ export const StimulusContent = () => {
                 <Box sx={{ width: '18.3rem' }}>
                   <ToggleButtonGroup
                     toggleButtons={pressOptions}
-                    activeButton={trial.correctPress}
+                    activeButton={trial.text}
                     setActiveButton={(value: string) => handleActiveBtnChange(value, index)}
                   />
                 </Box>

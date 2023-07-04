@@ -34,6 +34,7 @@ export const Uploader = ({
   wrapperStyles = {},
   cropRatio,
   hasError,
+  disabled,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
   const uploadInputRef = useRef<HTMLInputElement>(null);
@@ -130,6 +131,7 @@ export const Uploader = ({
         height={height}
         isImgUploaded={!!imageField}
         isPrimaryUiType={isPrimaryUiType}
+        disabled={disabled}
         onClick={() => uploadInputRef?.current?.click()}
         sx={{ ...wrapperStyles }}
         {...dragEvents}

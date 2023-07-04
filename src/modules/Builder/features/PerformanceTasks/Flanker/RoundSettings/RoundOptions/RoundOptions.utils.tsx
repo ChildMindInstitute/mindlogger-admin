@@ -6,10 +6,6 @@ const { t } = i18n;
 
 export const getCheckboxes = (fieldName: string) => [
   {
-    name: `${fieldName}.randomizeOrder`,
-    label: <StyledBodyMedium>{t('flankerRound.randomize')}</StyledBodyMedium>,
-  },
-  {
     name: `${fieldName}.showFeedback`,
     label: (
       <StyledBodyMedium sx={{ position: 'relative' }}>
@@ -23,7 +19,7 @@ export const getCheckboxes = (fieldName: string) => [
     ),
   },
   {
-    name: `${fieldName}.showSummary`,
+    name: `${fieldName}.showResults`,
     label: (
       <StyledBodyMedium sx={{ position: 'relative' }}>
         {t('flankerRound.showSummary')}

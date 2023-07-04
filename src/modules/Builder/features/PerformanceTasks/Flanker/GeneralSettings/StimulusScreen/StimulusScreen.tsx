@@ -4,17 +4,21 @@ import get from 'lodash.get';
 
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { FlankerItemPositions } from 'modules/Builder/types';
 
 import { StimulusContent } from './StimulusContent';
 
 export const StimulusScreen = () => {
   const { t } = useTranslation();
-  const { perfTaskItemObjField } = useCurrentActivity();
+  const { activityObjField } = useCurrentActivity();
   const {
     formState: { errors },
   } = useFormContext();
 
-  const error = get(errors, `${perfTaskItemObjField}.general.stimulusTrials`);
+  const error = get(
+    errors,
+    `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.stimulusTrials`,
+  );
 
   return (
     <ToggleItemContainer

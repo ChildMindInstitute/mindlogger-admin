@@ -23,6 +23,7 @@ export const ImportSequencesPopup = ({
   const { isSubmitDisabled, validationError, handleFileReady, uploadedFile } =
     useImportSequence(uploadedImages);
 
+  const uploadedData = uploadedFile?.data;
   const isUpload = uiType === ImportSequencesType.Upload;
   const downloadText = t(isUpload ? 'downloadTemplate' : 'flankerRound.downloadExistingSequence');
 
@@ -51,24 +52,28 @@ export const ImportSequencesPopup = ({
   const onSubmit = () => {
     switch (step) {
       case 0:
-        if (uploadedFile?.data) {
-          setUploadedTable(uploadedFile.data);
-
-          return incrementStep();
-        }
-
-        return setStep(2);
+        return uploadedData ? incrementStep() : setStep(2);
       case 1:
+        uploadedData && setUploadedTable(uploadedData);
+
         return onClose();
       case 2:
         return setStep(0);
     }
   };
 
+  const handleModalClose = () => {
+    if (step === 1 && uploadedData) {
+      setUploadedTable(uploadedData);
+    }
+
+    onClose();
+  };
+
   return (
     <Modal
       open={open}
-      onClose={onClose}
+      onClose={handleModalClose}
       onSubmit={onSubmit}
       title={t(
         `${isUpload ? 'flankerRound.uploadBlockSequences' : 'flankerRound.updateBlockSequences'}`,

@@ -54,16 +54,18 @@ import {
   RoundTypeEnum,
   GetActivitySubscaleItems,
   GetActivitySubscaleSettingDuplicated,
+  FlankerSamplingMethod,
+  DeviceType,
+  GyroscopeItemNames,
+  TouchItemNames,
+  FlankerItemNames,
 } from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import {
   CONDITION_TYPES_TO_HAVE_OPTION_ID,
   defaultFlankerBtnObj,
-  DeviceType,
-  GyroscopeItemNames,
   ordinalStrings,
-  TouchItemNames,
   ALLOWED_TYPES_IN_VARIABLES,
 } from './BuilderApplet.const';
 
@@ -173,79 +175,6 @@ export const getDuplicatedConditional = (
     };
   }) ?? [];
 
-const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
-  const config = {
-    removeBackButton: false,
-    timer: null,
-  };
-  const commonConfigProps = {
-    trialsNumber: DEFAULT_NUMBER_OF_TRIALS,
-    durationMinutes: DEFAULT_LENGTH_OF_TEST,
-    lambdaSlope: DEFAULT_LAMBDA_SLOPE,
-  };
-  const isGyroscope = type === GyroscopeOrTouch.Gyroscope;
-
-  return [
-    {
-      name: isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
-      config,
-      question: t('gyroscopeAndTouchInstructions.overview.instruction'),
-      responseType: ItemResponseType.Message,
-    },
-    {
-      name: isGyroscope
-        ? GyroscopeItemNames.PracticeInstruction
-        : TouchItemNames.PracticeInstruction,
-      config,
-      question: t('gyroscopeAndTouchInstructions.practice.instruction'),
-      responseType: ItemResponseType.Message,
-    },
-    {
-      name: isGyroscope ? GyroscopeItemNames.PracticeRound : TouchItemNames.PracticeRound,
-      config: {
-        ...commonConfigProps,
-        userInputType: isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch,
-        phase: RoundTypeEnum.Practice,
-      },
-      responseType: ItemResponseType.StabilityTracker,
-    },
-    {
-      name: isGyroscope ? GyroscopeItemNames.TestInstruction : TouchItemNames.TestInstruction,
-      config,
-      question: t('gyroscopeAndTouchInstructions.test.instruction'),
-      responseType: ItemResponseType.Message,
-    },
-    {
-      name: isGyroscope ? GyroscopeItemNames.TestRound : TouchItemNames.TestRound,
-      config: {
-        ...commonConfigProps,
-        userInputType: isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch,
-        phase: RoundTypeEnum.Test,
-      },
-      responseType: ItemResponseType.StabilityTracker,
-    },
-  ];
-};
-
-const getABTrailsItems = (deviceType: DeviceType) =>
-  createArray(4, (index) => {
-    const responseTypeKey =
-      deviceType === DeviceType.Mobile
-        ? `ABTrailsMobile${ordinalStrings[index]}`
-        : `ABTrailsTablet${ordinalStrings[index]}`;
-    const responseType = ItemResponseType[responseTypeKey as keyof typeof ItemResponseType];
-
-    return {
-      id: undefined,
-      key: uuidv4(),
-      responseType,
-      name: responseType,
-      config: {
-        deviceType,
-      },
-    };
-  });
-
 export const getNewActivity = ({ name, activity }: GetNewActivity) => {
   const items = activity?.items?.map((item) => getNewActivityItem(item)) || [];
   const conditionalLogic = getDuplicatedConditional(
@@ -275,43 +204,178 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
   } as ActivityFormValues;
 };
 
+const defaultMessageConfig = {
+  removeBackButton: true,
+  timer: null,
+};
+
+const getMessageItem = (name: string, question: string) => ({
+  name,
+  config: defaultMessageConfig,
+  question,
+  responseType: ItemResponseType.Message,
+});
+
+const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
+  const commonConfigProps = {
+    trialsNumber: DEFAULT_NUMBER_OF_TRIALS,
+    durationMinutes: DEFAULT_LENGTH_OF_TEST,
+    lambdaSlope: DEFAULT_LAMBDA_SLOPE,
+  };
+  const isGyroscope = type === GyroscopeOrTouch.Gyroscope;
+
+  return [
+    getMessageItem(
+      isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
+      t('gyroscopeAndTouchInstructions.overview.instruction'),
+    ),
+    getMessageItem(
+      isGyroscope ? GyroscopeItemNames.PracticeInstruction : TouchItemNames.PracticeInstruction,
+      t('gyroscopeAndTouchInstructions.practice.instruction'),
+    ),
+    {
+      name: isGyroscope ? GyroscopeItemNames.PracticeRound : TouchItemNames.PracticeRound,
+      config: {
+        ...commonConfigProps,
+        userInputType: isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch,
+        phase: RoundTypeEnum.Practice,
+      },
+      responseType: ItemResponseType.StabilityTracker,
+    },
+    getMessageItem(
+      isGyroscope ? GyroscopeItemNames.TestInstruction : TouchItemNames.TestInstruction,
+      t('gyroscopeAndTouchInstructions.test.instruction'),
+    ),
+    {
+      name: isGyroscope ? GyroscopeItemNames.TestRound : TouchItemNames.TestRound,
+      config: {
+        ...commonConfigProps,
+        userInputType: isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch,
+        phase: RoundTypeEnum.Test,
+      },
+      responseType: ItemResponseType.StabilityTracker,
+    },
+  ];
+};
+
+const defaultFlankerCommonConfig = {
+  stimulusTrials: [],
+  blocks: [],
+  buttons: [defaultFlankerBtnObj],
+  showFixation: false,
+  fixationScreen: null,
+  fixationDuration: null,
+  samplingMethod: FlankerSamplingMethod.Randomize,
+  showResults: true,
+  trialDuration: DEFAULT_MILLISECONDS_DURATION,
+};
+
+const defaultFlankerPracticeConfig = {
+  showFeedback: true,
+  minimumAccuracy: DEFAULT_THRESHOLD_DURATION,
+  isLastTest: false,
+  blockType: RoundTypeEnum.Practice,
+};
+
+const defaultFlankerTestConfig = {
+  showFeedback: false,
+  isFirstPractice: false,
+  isLastPractice: false,
+  blockType: RoundTypeEnum.Test,
+};
+
+const flankerItems = [
+  getMessageItem(FlankerItemNames.GeneralInstruction, t('flankerInstructions.general')), //0 General Instruction
+  getMessageItem(FlankerItemNames.PracticeInstructionFirst, t('flankerInstructions.practice')), //1 Practice Instruction
+  {
+    name: FlankerItemNames.PracticeFirst,
+    config: {
+      ...defaultFlankerCommonConfig,
+      ...defaultFlankerPracticeConfig,
+      isFirstPractice: true,
+      isLastPractice: false,
+    },
+    responseType: ItemResponseType.Flanker,
+  }, //2
+  getMessageItem(FlankerItemNames.PracticeInstructionSecond, t('flankerInstructions.next')), //3
+  {
+    name: FlankerItemNames.PracticeSecond,
+    config: {
+      ...defaultFlankerCommonConfig,
+      ...defaultFlankerPracticeConfig,
+      isFirstPractice: false,
+      isLastPractice: false,
+    },
+    responseType: ItemResponseType.Flanker,
+  }, //4
+  getMessageItem(FlankerItemNames.PracticeInstructionThird, t('flankerInstructions.next')), //5
+  {
+    name: FlankerItemNames.PracticeThird,
+    config: {
+      ...defaultFlankerCommonConfig,
+      ...defaultFlankerPracticeConfig,
+      isFirstPractice: false,
+      isLastPractice: true,
+    },
+    responseType: ItemResponseType.Flanker,
+  }, //6
+  getMessageItem(FlankerItemNames.TestInstructionFirst, t('flankerInstructions.test')), //7 Test Instruction
+  {
+    name: FlankerItemNames.TestFirst,
+    config: {
+      ...defaultFlankerCommonConfig,
+      ...defaultFlankerTestConfig,
+      isLastTest: false,
+    },
+    responseType: ItemResponseType.Flanker,
+  }, //8
+  getMessageItem(FlankerItemNames.TestInstructionSecond, t('flankerInstructions.next')), //9
+  {
+    name: FlankerItemNames.TestSecond,
+    config: {
+      ...defaultFlankerCommonConfig,
+      ...defaultFlankerTestConfig,
+      isLastTest: false,
+    },
+    responseType: ItemResponseType.Flanker,
+  }, //10
+  getMessageItem(FlankerItemNames.TestInstructionThird, t('flankerInstructions.next')), //11
+  {
+    name: FlankerItemNames.TestThird,
+    config: {
+      ...defaultFlankerCommonConfig,
+      ...defaultFlankerTestConfig,
+      isLastTest: true,
+    },
+    responseType: ItemResponseType.Flanker,
+  }, //12
+];
+
+const getABTrailsItems = (deviceType: DeviceType) =>
+  createArray(4, (index) => {
+    const responseTypeKey =
+      deviceType === DeviceType.Mobile
+        ? `ABTrailsMobile${ordinalStrings[index]}`
+        : `ABTrailsTablet${ordinalStrings[index]}`;
+    const responseType = ItemResponseType[responseTypeKey as keyof typeof ItemResponseType];
+
+    return {
+      id: undefined,
+      key: uuidv4(),
+      responseType,
+      name: responseType,
+      config: {
+        deviceType,
+      },
+    };
+  });
+
 export const getNewPerformanceTask = ({
   name,
   description,
   performanceTask,
   performanceTaskType,
 }: GetNewPerformanceTask) => {
-  const commonRoundProps = {
-    stimulusDuration: DEFAULT_MILLISECONDS_DURATION,
-    randomizeOrder: true,
-    showSummary: true,
-    blocks: [],
-  };
-
-  const flankerItems = [
-    {
-      responseType: ItemResponseType.Flanker,
-      name: ItemResponseType.Flanker,
-      general: {
-        instruction: t('performanceTaskInstructions.flankerGeneral'),
-        buttons: [defaultFlankerBtnObj],
-        fixation: null,
-        stimulusTrials: [],
-      },
-      practice: {
-        ...commonRoundProps,
-        instruction: t('performanceTaskInstructions.flankerPractice'),
-        threshold: DEFAULT_THRESHOLD_DURATION,
-        showFeedback: true,
-      },
-      test: {
-        ...commonRoundProps,
-        instruction: t('performanceTaskInstructions.flankerTest'),
-        showFeedback: false,
-      },
-    },
-  ];
-
   const itemsByType = {
     [PerfTaskType.Flanker]: flankerItems,
     [PerfTaskType.Gyroscope]: getGyroscopeOrTouchItems(GyroscopeOrTouch.Gyroscope),
