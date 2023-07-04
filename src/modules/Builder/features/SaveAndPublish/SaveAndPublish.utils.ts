@@ -7,6 +7,7 @@ import {
   Condition,
   ConditionalLogic,
   DrawingResponseValues,
+  FlankerConfig,
   ItemAlert,
   NumberItemResponseValues,
   SingleAndMultipleSelectItemResponseValues,
@@ -14,12 +15,17 @@ import {
   SliderItemResponseValues,
   SliderRowsResponseValues,
 } from 'shared/state';
-import { ItemResponseType } from 'shared/consts';
-import { getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
-import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
+import { ItemResponseType, PerfTaskType } from 'shared/consts';
+import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
+import {
+  ActivityFormValues,
+  FlankerItemPositions,
+  ItemFormValues,
+  RoundTypeEnum,
+} from 'modules/Builder/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
-import { ElementType } from './SaveAndPublish.types';
+import { ElementType, GetItemCommonFields } from './SaveAndPublish.types';
 
 export const removeAppletExtraFields = () => ({
   isPublished: undefined,
@@ -77,13 +83,13 @@ export const removeActivityFlowExtraFields = () => ({
   createdAt: undefined,
 });
 
-export const removeItemExtraFields = () => ({
+const removeItemExtraFields = () => ({
   key: undefined,
   settings: undefined,
   alerts: undefined,
 });
 
-export const mapItemResponseValues = (item: ItemFormValues) => {
+const mapItemResponseValues = (item: ItemFormValues) => {
   const { responseType, responseValues, alerts, config } = item;
 
   const hasAlerts = get(config, ItemConfigurationSettings.HasAlerts);
@@ -188,7 +194,7 @@ export const mapItemResponseValues = (item: ItemFormValues) => {
   return null;
 };
 
-export const getItemConditionalLogic = (
+const getItemConditionalLogic = (
   item: ItemFormValues,
   items: ItemFormValues[],
   conditionalLogic?: ConditionalLogic[],
@@ -207,4 +213,78 @@ export const getItemConditionalLogic = (
       itemName: items.find((item) => getEntityKey(item) === itemName)?.name ?? '',
     })),
   };
+};
+
+const getItemCommonFields = ({ id, item, items, conditionalLogic }: GetItemCommonFields) => ({
+  ...(id && { id }),
+  question: getDictionaryObject(item.question),
+  responseValues: mapItemResponseValues(item) || null,
+  conditionalLogic: getItemConditionalLogic({ ...item, id }, items, conditionalLogic),
+  ...removeItemExtraFields(),
+});
+
+export const getActivityItems = (activity: ActivityFormValues) => {
+  const { items, conditionalLogic, isPerformanceTask, performanceTaskType } = activity;
+
+  if (isPerformanceTask && performanceTaskType === PerfTaskType.Flanker) {
+    const firstPracticeItemConfig = items[FlankerItemPositions.PracticeFirst]
+      .config as FlankerConfig;
+    const firstTestItemConfig = items[FlankerItemPositions.TestFirst].config as FlankerConfig;
+    const testItemCommonConfig = {
+      blockType: RoundTypeEnum.Test,
+      blocks: firstTestItemConfig.blocks,
+      minimumAccuracy: undefined,
+      trialDuration: firstTestItemConfig.trialDuration,
+      samplingMethod: firstTestItemConfig.samplingMethod,
+      showFeedback: firstTestItemConfig.showFeedback,
+      showResults: firstTestItemConfig.showResults,
+      isFirstPractice: false,
+      isLastPractice: false,
+    };
+
+    return items?.map(({ id, ...item }, index) => {
+      const itemCommonFields = getItemCommonFields({ id, item, items, conditionalLogic });
+
+      if (
+        index === FlankerItemPositions.PracticeSecond ||
+        index === FlankerItemPositions.PracticeThird
+      ) {
+        return {
+          ...item,
+          config: {
+            ...firstPracticeItemConfig,
+            isFirstPractice: false,
+            isLastPractice: index === FlankerItemPositions.PracticeThird,
+          },
+          ...itemCommonFields,
+        };
+      }
+
+      if (
+        index === FlankerItemPositions.TestFirst ||
+        index === FlankerItemPositions.TestSecond ||
+        index === FlankerItemPositions.TestThird
+      ) {
+        return {
+          ...item,
+          config: {
+            ...firstPracticeItemConfig,
+            ...testItemCommonConfig,
+            isLastTest: index === FlankerItemPositions.TestThird,
+          },
+          ...itemCommonFields,
+        };
+      }
+
+      return {
+        ...item,
+        ...itemCommonFields,
+      };
+    });
+  }
+
+  return items?.map(({ id, ...item }) => ({
+    ...item,
+    ...getItemCommonFields({ id, item, items, conditionalLogic }),
+  }));
 };

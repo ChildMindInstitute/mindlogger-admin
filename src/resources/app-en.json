@@ -899,13 +899,14 @@
   "positiveInteger": "Positive Integer",
   "integerBetweenOneAndHundred": "Integer between 1 and 100 required",
   "blockIsNecessary": "This block is necessary",
-  "performanceTaskInstructions": {
-    "flankerGeneralDesc": "This instruction will be displayed for the respondent before passing the Activity.",
-    "flankerPracticeDesc": "This instruction will be displayed for the respondent before passing the practice round of the Activity.",
-    "flankerTestDesc": "This instruction will be displayed for the respondent before passing the test round of the Activity.",
-    "flankerGeneral": "## General Instructions\n\n You will see arrows presented at the center of the screen that point either to the left '<' or right '>'.\n Press the left button if the arrow is pointing to the left '<' or press the right button if the arrow is pointing to the right '>'.\n These arrows will appear in the center of a line of other items. Sometimes, these other items will be arrows pointing in the same direction, e.g.. '> > > > >', or in the opposite direction, e.g. '< < > < <'.\n Your job is to respond to the central arrow, no matter what direction the other arrows are pointing.\n For example, you would press the left button for both '< < < < <', and '> > < > >' because the middle arrow points to the left.\n Finally, in some trials dashes ' - ' will appear beside the central arrow.\n Again, respond only to the direction of the central arrow. Please respond as quickly and accurately as possible.",
-    "flankerPractice": "## Instructions\n\n Now you will have a chance to practice the task before moving on to the test phase.\nRemember to respond only to the central arrow.",
-    "flankerTest": "## Test Instructions\n\n Good job on the practice blocks.\nYou can now move on to the test blocks.\nYou will do the same task as in the practice, responding to the direction of the central arrow.\nYou will complete 3 blocks, each about 3-5 minutes long.\nYou will have  a short break in between these blocks."
+  "flankerInstructions": {
+    "generalDesc": "This instruction will be displayed for the respondent before passing the Activity.",
+    "practiceDesc": "This instruction will be displayed for the respondent before passing the practice round of the Activity.",
+    "testDesc": "This instruction will be displayed for the respondent before passing the test round of the Activity.",
+    "general": "## General Instructions\n\n You will see arrows presented at the center of the screen that point either to the left '<' or right '>'.\n Press the left button if the arrow is pointing to the left '<' or press the right button if the arrow is pointing to the right '>'.\n These arrows will appear in the center of a line of other items. Sometimes, these other items will be arrows pointing in the same direction, e.g.. '> > > > >', or in the opposite direction, e.g. '< < > < <'.\n Your job is to respond to the central arrow, no matter what direction the other arrows are pointing.\n For example, you would press the left button for both '< < < < <', and '> > < > >' because the middle arrow points to the left.\n Finally, in some trials dashes ' - ' will appear beside the central arrow.\n Again, respond only to the direction of the central arrow. Please respond as quickly and accurately as possible.",
+    "practice": "## Instructions\n\n Now you will have a chance to practice the task before moving on to the test phase.\nRemember to respond only to the central arrow.",
+    "next": "## Instructions\nPress the Next button to restart block.",
+    "test": "## Test Instructions\n\n Good job on the practice blocks.\nYou can now move on to the test blocks.\nYou will do the same task as in the practice, responding to the direction of the central arrow.\nYou will complete 3 blocks, each about 3-5 minutes long.\nYou will have  a short break in between these blocks."
   },
   "flankerButtons": {
     "title": "Buttons",

@@ -28,13 +28,11 @@ import { AppletFormValues } from 'modules/Builder/types';
 
 import { appletInfoMocked } from './mock';
 import {
-  removeItemExtraFields,
   removeAppletExtraFields,
   removeActivityExtraFields,
-  mapItemResponseValues,
-  getItemConditionalLogic,
   removeActivityFlowExtraFields,
   remapSubscaleSettings,
+  getActivityItems,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -66,18 +64,7 @@ export const useAppletData = () => {
             ...activity,
             key: activity.id || activity.key,
             description: getDictionaryObject(activity.description),
-            items: activity.items?.map(({ id, ...item }) => ({
-              ...item,
-              ...(id && { id }),
-              question: getDictionaryObject(item.question),
-              responseValues: mapItemResponseValues(item) || null,
-              conditionalLogic: getItemConditionalLogic(
-                { ...item, id },
-                activity.items,
-                activity.conditionalLogic,
-              ),
-              ...removeItemExtraFields(),
-            })),
+            items: getActivityItems(activity),
             subscaleSetting: remapSubscaleSettings(activity),
             ...removeActivityExtraFields(),
           } as Activity),
