@@ -7,12 +7,12 @@ import {
 } from 'shared/types';
 import { getObjectFromList } from 'shared/utils/builderHelpers';
 import { ItemsWithFileResponses } from 'shared/consts';
+import { DecryptedMediaAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
 import { getSubscales } from './getSubscales';
-import { getMediaObject } from './getMediaObject';
 
 const getDecryptedAnswersObject = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
@@ -56,8 +56,8 @@ export const prepareData = (
       const mediaAnswers = data.decryptedAnswers.reduce((filteredAcc, item) => {
         if (!ItemsWithFileResponses.includes(item.activityItem?.responseType)) return filteredAcc;
 
-        return filteredAcc.concat(getMediaObject(item));
-      }, [] as ReturnType<typeof getMediaObject>[]);
+        return filteredAcc.concat((item.answer as DecryptedMediaAnswer).value || '');
+      }, [] as string[]);
       const mediaData = acc.mediaData.concat(...mediaAnswers);
 
       const decryptedAnswersObject = getDecryptedAnswersObject(data.decryptedAnswers);
@@ -85,7 +85,7 @@ export const prepareData = (
     } as {
       reportData: ReturnType<typeof getReportCSVObject>[];
       activityJourneyData: ReturnType<typeof getJourneyCSVObject>[];
-      mediaData: ReturnType<typeof getMediaObject>[];
+      mediaData: string[];
     },
   );
 };
