@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 
 import { Svg } from 'shared/components/Svg';
-import { DataTable, DataTableProps } from 'shared/components/DataTable';
+import { DataTable, DataTableProps, DataTableItem } from 'shared/components/DataTable';
 import { StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
 
 import {
@@ -26,6 +26,7 @@ export const TransferListController = <T extends FieldValues>({
   readOnly = false,
   hasSearch = true,
   hasSelectedSection = true,
+  isValueName = false,
 }: TransferListControllerProps<T>) => {
   const { t } = useTranslation('app');
 
@@ -33,13 +34,15 @@ export const TransferListController = <T extends FieldValues>({
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => setSearch(event.target.value);
 
+  const getItemKey = (item: DataTableItem) => (isValueName ? item.name || '' : item.id);
+
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
         const selectionSectionItems =
-          selectedItems ?? items?.filter((item) => value?.includes(item.id));
+          selectedItems ?? items?.filter((item) => value?.includes(getItemKey(item)));
 
         const handleSelect: DataTableProps['onSelect'] = (selectedKey, isSelected) => {
           if (isSelected)
@@ -49,7 +52,7 @@ export const TransferListController = <T extends FieldValues>({
         };
 
         const handleSelectAll = (isAllSelected: boolean) => {
-          onChange(isAllSelected ? [] : items?.map(({ id }) => id));
+          onChange(isAllSelected ? [] : items?.map((item) => getItemKey(item)));
         };
 
         const filteredData =
@@ -80,12 +83,14 @@ export const TransferListController = <T extends FieldValues>({
                 onSelectAll={handleSelectAll}
                 hasError={!!error}
                 noDataPlaceholder={t('noSelectedItemsYet')}
+                isValueName={isValueName}
               />
               {hasSelectedSection && (
                 <DataTable
                   columns={selectedItemsColumns || columns}
                   data={selectionSectionItems}
                   noDataPlaceholder={t('noSelectedItemsYet')}
+                  isValueName={isValueName}
                 />
               )}
               {error && <StyledErrorContainer>{error?.message}</StyledErrorContainer>}

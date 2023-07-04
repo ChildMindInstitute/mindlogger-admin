@@ -33,10 +33,11 @@ import {
   isPerfTaskResponseType,
   isTouchOrGyroscopeRespType,
   testFunctionForNotSupportedItems,
+  testFunctionForSkippedItems,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
 } from './BuilderApplet.utils';
-import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from './BuilderApplet.const';
+import { CONDITION_TYPES_TO_HAVE_OPTION_ID, ItemTestFunctions } from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -186,7 +187,7 @@ export const ItemSchema = () =>
           message: t('validationMessages.alphanumeric', { field: t('itemName') }),
         })
         .test(
-          'unique-item-name',
+          ItemTestFunctions.UniqueItemName,
           t('validationMessages.unique', { field: t('itemName') }) as string,
           (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
         ),
@@ -227,16 +228,21 @@ export const ItemSchema = () =>
           });
         })
         .test(
-          'variable-in-the-same-item-error',
+          ItemTestFunctions.VariableInTheSameItem,
           t('validationMessages.variableInTheSameItem') as string,
           (itemName, context) =>
             testFunctionForTheSameVariable('question', itemName ?? '', context),
         )
         .test(
-          'variable-is-not-supported-error',
+          ItemTestFunctions.VariableIsNotSupported,
           t('validationMessages.variableIsNotSupported') as string,
           (itemName, context) =>
             testFunctionForNotSupportedItems('question', itemName ?? '', context),
+        )
+        .test(
+          ItemTestFunctions.VariableReferringToSkippedItem,
+          t('validationMessages.variableReferringToSkippedItem') as string,
+          (itemName, context) => testFunctionForSkippedItems('question', itemName ?? '', context),
         ),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (
@@ -409,7 +415,7 @@ export const ConditionSchema = () =>
     payload: yup.object({}).when('type', (type, schema) => {
       if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
         return schema.shape({
-          optionId: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+          optionValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
         });
 
       return schema;
@@ -477,8 +483,6 @@ export const ScoreSchema = () =>
         t('validationMessages.unique', { field: t('scoreName') }) as string,
         (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
       ),
-    minScore: yup.number().required(),
-    maxScore: yup.number().required(),
     calculationType: yup.string().required(),
     ...ReportCommonFields,
     itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),

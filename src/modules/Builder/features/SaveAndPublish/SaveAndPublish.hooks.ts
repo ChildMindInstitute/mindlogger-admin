@@ -33,6 +33,7 @@ import {
   removeActivityFlowExtraFields,
   remapSubscaleSettings,
   getActivityItems,
+  getScoresAndReports,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -66,6 +67,7 @@ export const useAppletData = () => {
             description: getDictionaryObject(activity.description),
             items: getActivityItems(activity),
             subscaleSetting: remapSubscaleSettings(activity),
+            scoresAndReports: getScoresAndReports(activity),
             ...removeActivityExtraFields(),
           } as Activity),
       ),

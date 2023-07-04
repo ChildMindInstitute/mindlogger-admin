@@ -35,6 +35,7 @@ import {
   createArray,
 } from 'shared/utils';
 import {
+  ConditionType,
   DEFAULT_LAMBDA_SLOPE,
   DEFAULT_LENGTH_OF_TEST,
   DEFAULT_MILLISECONDS_DURATION,
@@ -62,6 +63,7 @@ import {
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import {
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
   defaultFlankerBtnObj,
   ordinalStrings,
   ALLOWED_TYPES_IN_VARIABLES,
@@ -124,7 +126,7 @@ export const getDuplicatedConditions = (
   conditions?: Condition[],
 ) =>
   conditions?.map((condition) => {
-    const optionId = (condition as OptionCondition)?.payload.optionId;
+    const optionValue = (condition as OptionCondition)?.payload.optionValue;
     const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
     const result = {
       ...condition,
@@ -132,16 +134,16 @@ export const getDuplicatedConditions = (
       key: uuidv4(),
     };
 
-    if (!optionId) return result;
+    if (!optionValue) return result;
 
     const optionIndex = (
       oldItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues
-    ).options?.findIndex((option) => option.id === optionId);
+    ).options?.findIndex((option) => option.id === optionValue);
 
     return {
       ...result,
       payload: {
-        optionId:
+        optionValue:
           (newItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues)
             ?.options?.[optionIndex]?.id ?? '',
       },
@@ -557,6 +559,20 @@ const getActivityFlows = (activityFlows: ActivityFlow[]) =>
     })),
   }));
 
+const getConditionPayload = (item: Item, condition: Condition) => {
+  if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType))
+    return condition.payload;
+
+  const options = (item?.responseValues as SingleAndMultipleSelectItemResponseValues).options;
+  const optionValue = options?.find(
+    ({ value }) => `${value}` === `${(condition as OptionCondition).payload.optionValue}`,
+  )?.id;
+
+  return {
+    optionValue,
+  };
+};
+
 const getActivityConditionalLogic = (items: Item[]) =>
   items?.reduce((result: ConditionalLogic[], item) => {
     if (item.conditionalLogic)
@@ -566,11 +582,16 @@ const getActivityConditionalLogic = (items: Item[]) =>
           key: uuidv4(),
           itemKey: getEntityKey(item),
           match: item.conditionalLogic.match,
-          conditions: item.conditionalLogic.conditions?.map(({ itemName, type, payload }) => ({
-            type,
-            payload: payload as keyof Condition['payload'],
-            itemName: getEntityKey(items.find((item) => item.name === itemName) ?? {}),
-          })),
+          conditions: item.conditionalLogic.conditions?.map((condition) => {
+            const relatedItem = items.find((item) => item.name === condition.itemName);
+
+            return {
+              key: uuidv4(),
+              type: condition.type,
+              payload: getConditionPayload(relatedItem!, condition) as keyof Condition['payload'],
+              itemName: getEntityKey(relatedItem ?? {}),
+            };
+          }),
         },
       ];
 
@@ -740,4 +761,11 @@ export const testFunctionForNotSupportedItems = (
   const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
 
   return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
+};
+
+export const testFunctionForSkippedItems = (field: string, value: string, context: TestContext) => {
+  const items: Item[] = get(context, 'from.1.value.items');
+  const variableNames = getTextBetweenBrackets(value);
+
+  return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
 };

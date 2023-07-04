@@ -173,17 +173,22 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   const handleSetPassword = async (password: string) => {
     setPasswordPopupVisible(false);
 
-    const isPasswordSet = await onSetPassword(
-      publicEncrypt(
-        JSON.stringify({
-          password,
-          privateKey: getPrivateKey({ appletPassword: password, accountId }),
-        }),
-        reportPublicKey,
-      ),
-    );
+    try {
+      const isPasswordSet = await onSetPassword(
+        publicEncrypt(
+          JSON.stringify({
+            password,
+            privateKey: getPrivateKey({ appletPassword: password, accountId }),
+          }),
+          reportPublicKey,
+        ),
+      );
 
-    if (isPasswordSet) handleSaveReportConfig();
+      if (isPasswordSet) handleSaveReportConfig();
+    } catch (e) {
+      console.error(e);
+      setVerifyPopupVisible(true);
+    }
   };
 
   const handleSaveWithoutServer = async () => {

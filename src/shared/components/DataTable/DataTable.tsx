@@ -5,7 +5,7 @@ import { StyledBodyMedium, StyledLabelLarge, variables } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { ContentWithTooltip } from 'shared/components/ContentWithTooltip';
 
-import { DataTableProps } from './DataTable.types';
+import { DataTableItem, DataTableProps } from './DataTable.types';
 import { StyledCheckbox, StyledTableCell, StyledTableContainer } from './DataTable.styles';
 
 //TODO: add pagination, sort
@@ -20,8 +20,11 @@ export const DataTable = ({
   onSelectAll,
   hasError,
   tableHeadBgColor = variables.palette.surface1,
+  isValueName = false,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
+
+  const getItemKey = (item: DataTableItem) => (isValueName ? item.name || '' : item.id);
 
   useEffect(() => {
     if (selectedItems) setSelected(selectedItems);
@@ -29,7 +32,9 @@ export const DataTable = ({
 
   const isAllSelected = data?.length !== 0 && selected?.length === data?.length;
 
-  const handleSelect = (key: string | number, prevSelected: boolean) => {
+  const handleSelect = (item: DataTableItem, prevSelected: boolean) => {
+    const key = getItemKey(item);
+
     if (onSelect) return onSelect(key, prevSelected);
 
     if (prevSelected) return setSelected(selected.filter((selectedKey) => selectedKey !== key));
@@ -42,7 +47,7 @@ export const DataTable = ({
 
     if (isAllSelected) return setSelected([]);
 
-    setSelected(data?.map(({ id }) => id) ?? []);
+    setSelected(data?.map((item) => getItemKey(item)) ?? []);
   };
 
   return (
@@ -73,7 +78,7 @@ export const DataTable = ({
         </TableHead>
         <TableBody>
           {data?.map((item, index) => {
-            const isSelected = selected?.includes(item.id);
+            const isSelected = selected?.includes(getItemKey(item));
 
             return (
               <TableRow key={`data-table-row-${getEntityKey(item) || index}`}>
@@ -81,7 +86,7 @@ export const DataTable = ({
                   <TableCell sx={{ width: '2.8rem', backgroundColor: 'inherit' }}>
                     <StyledCheckbox
                       checked={isSelected}
-                      onChange={() => handleSelect(item.id, isSelected)}
+                      onChange={() => handleSelect(item, isSelected)}
                     />
                   </TableCell>
                 )}

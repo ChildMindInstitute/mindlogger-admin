@@ -20,3 +20,10 @@ export const ALLOWED_TYPES_IN_VARIABLES = [
 ];
 
 export const ordinalStrings = ['First', 'Second', 'Third', 'Fourth'];
+
+export const enum ItemTestFunctions {
+  UniqueItemName = '',
+  VariableInTheSameItem = 'variable-in-the-same-item-error',
+  VariableIsNotSupported = 'variable-is-not-supported-error',
+  VariableReferringToSkippedItem = 'variable-referring-to-skipped-item-error',
+}

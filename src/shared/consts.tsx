@@ -193,7 +193,7 @@ export const enum ConditionType {
   OutsideOf = 'OUTSIDE_OF',
 }
 
-export type ScoreConditionType = 'EQUAL_TO_SCORE';
+export const ScoreConditionType = 'EQUAL_TO_SCORE';
 
 export const enum ConditionalLogicMatch {
   Any = 'any',

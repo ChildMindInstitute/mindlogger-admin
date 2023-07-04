@@ -79,11 +79,9 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
   };
 
   useEffect(() => {
-    const selectedItems = items.filter((item) => itemsScore.includes(getEntityKey(item)));
+    const selectedItems = items.filter((item) => itemsScore.includes(item.name));
     const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
     setScoreRangeLabel(getScoreRangeLabel(minScore, maxScore));
-    setValue(`${name}.minScore`, minScore);
-    setValue(`${name}.maxScore`, maxScore);
   }, [itemsScore, calculationType]);
 
   const onChangeScoreId = () => {
@@ -153,6 +151,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
         hasSelectedSection
         hasSearch
         sxProps={{ mb: theme.spacing(2.5) }}
+        isValueName
       />
       <SectionScoreCommonFields name={name} />
       {!!scoreConditionals?.length && (
@@ -171,7 +170,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
                 key={`data-score-conditional-${getEntityKey(conditional) || index}`}
                 HeaderContent={SectionScoreHeader}
                 Content={ScoreCondition}
-                contentProps={{ name: conditionalName, scoreId, scoreName }}
+                contentProps={{ name: conditionalName, scoreId }}
                 headerContentProps={{
                   onRemove: () => removeScoreConditional(index),
                   title,

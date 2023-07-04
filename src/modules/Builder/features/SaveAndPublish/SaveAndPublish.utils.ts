@@ -14,8 +14,10 @@ import {
   SingleAndMultipleSelectRowsResponseValues,
   SliderItemResponseValues,
   SliderRowsResponseValues,
+  OptionCondition,
+  SectionCondition,
 } from 'shared/state';
-import { ItemResponseType, PerfTaskType } from 'shared/consts';
+import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import {
   ActivityFormValues,
@@ -23,6 +25,7 @@ import {
   ItemFormValues,
   RoundTypeEnum,
 } from 'modules/Builder/types';
+import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
 import { ElementType, GetItemCommonFields } from './SaveAndPublish.types';
@@ -77,6 +80,54 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
       }),
     })),
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
+};
+
+const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition | Condition)[]) =>
+  conditions?.map((condition) => {
+    const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
+
+    return {
+      type: condition.type,
+      payload: relatedItem
+        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
+        : condition['payload'],
+      itemName: relatedItem?.name ?? condition.itemName,
+    };
+  });
+
+export const getScoresAndReports = (activity: ActivityFormValues) => {
+  const { items, scoresAndReports } = activity;
+  if (!scoresAndReports) return;
+
+  const fieldsToRemove = {
+    printItems: undefined,
+    showMessage: undefined,
+  };
+
+  const { sections: initialSections, scores: initialScores } = scoresAndReports;
+  const scores = initialScores.map((score) => ({
+    ...score,
+    ...fieldsToRemove,
+    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
+      ...conditional,
+      ...fieldsToRemove,
+      conditions: getConditions(items, conditional.conditions),
+    })),
+  }));
+  const sections = initialSections.map((section) => ({
+    ...section,
+    ...fieldsToRemove,
+    conditionalLogic: {
+      ...section.conditionalLogic,
+      conditions: getConditions(items, section?.conditionalLogic?.conditions),
+    },
+  }));
+
+  return {
+    ...scoresAndReports,
+    sections,
+    scores,
+  };
 };
 
 export const removeActivityFlowExtraFields = () => ({
@@ -194,7 +245,20 @@ const mapItemResponseValues = (item: ItemFormValues) => {
   return null;
 };
 
-const getItemConditionalLogic = (
+export const getConditionPayload = (item: ItemFormValues, condition: Condition) => {
+  if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType)) {
+    return condition.payload;
+  }
+
+  const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
+  const optionId = (condition as OptionCondition).payload?.optionValue;
+
+  return {
+    optionValue: options?.find(({ id }) => id === optionId)?.value,
+  };
+};
+
+export const getItemConditionalLogic = (
   item: ItemFormValues,
   items: ItemFormValues[],
   conditionalLogic?: ConditionalLogic[],
@@ -207,11 +271,7 @@ const getItemConditionalLogic = (
 
   return {
     match: result.match,
-    conditions: result.conditions?.map(({ type, payload, itemName }) => ({
-      type,
-      payload: payload as keyof Condition['payload'],
-      itemName: items.find((item) => getEntityKey(item) === itemName)?.name ?? '',
-    })),
+    conditions: getConditions(items, result.conditions),
   };
 };
 

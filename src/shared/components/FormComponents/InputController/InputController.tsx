@@ -54,14 +54,14 @@ export const InputController = <T extends FieldValues>({
           if (!isNumberType) return value ?? '';
 
           if ((typeof value !== 'number' && !isEmptyStringAllowed) || value < minNumberValue) {
-            return minNumberValue;
+            return String(minNumberValue);
           }
 
           if (maxNumberValue && value > maxNumberValue) {
-            return maxNumberValue;
+            return String(maxNumberValue);
           }
 
-          return value;
+          return String(value);
         };
 
         const handleAddNumber = () => {

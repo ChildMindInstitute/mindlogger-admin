@@ -27,6 +27,7 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
 import { itemsForReviewableActivity, commonUploaderProps } from './ActivityAbout.const';
+import { useCheckIfItemsHaveVariables } from './ActivityAbout.hooks';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
@@ -35,6 +36,7 @@ export const ActivityAbout = () => {
 
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
+  const hasVariableAmongItems = useCheckIfItemsHaveVariables();
 
   const activities = watch('activities');
   const activityItems = watch(`${fieldName}.items`);
@@ -54,6 +56,12 @@ export const ActivityAbout = () => {
     : null;
   const isReviewableUnsupportedTooltip = hasUnsupportedReviewableItemTypes
     ? t('isReviewableUnsupported')
+    : null;
+  const variableAmongItemsTooltip = hasVariableAmongItems
+    ? t('activityHasVariableAmongItems')
+    : null;
+  const activityCannotBeOnePageAssessmentTooltip = hasVariableAmongItems
+    ? t('activityCannotBeOnePageAssessment')
     : null;
 
   const commonInputProps = {
@@ -92,11 +100,25 @@ export const ActivityAbout = () => {
   const checkboxes = [
     {
       name: `${fieldName}.showAllAtOnce`,
-      label: <StyledBodyLarge>{t('showAllQuestionsAtOnce')}</StyledBodyLarge>,
+      disabled: hasVariableAmongItems,
+      label: (
+        <StyledBodyLarge sx={{ position: 'relative' }}>
+          <Tooltip tooltipTitle={activityCannotBeOnePageAssessmentTooltip}>
+            <span>{t('showAllQuestionsAtOnce')}</span>
+          </Tooltip>
+        </StyledBodyLarge>
+      ),
     },
     {
       name: `${fieldName}.isSkippable`,
-      label: <StyledBodyLarge>{t('allowToSkipAllItems')}</StyledBodyLarge>,
+      disabled: hasVariableAmongItems,
+      label: (
+        <StyledBodyLarge sx={{ position: 'relative' }}>
+          <Tooltip tooltipTitle={variableAmongItemsTooltip}>
+            <span>{t('allowToSkipAllItems')}</span>
+          </Tooltip>
+        </StyledBodyLarge>
+      ),
     },
     {
       name: `${fieldName}.responseIsEditable`,

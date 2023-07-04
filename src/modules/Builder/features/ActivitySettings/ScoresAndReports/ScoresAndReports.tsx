@@ -8,7 +8,6 @@ import {
   StyledBodyLarge,
   StyledFlexColumn,
   StyledFlexTopCenter,
-  StyledLabelBoldLarge,
   StyledTooltipSvg,
   theme,
   variables,
@@ -18,7 +17,7 @@ import { CheckboxController } from 'shared/components/FormComponents';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
-import { ActivitySettingsScore, ActivitySettingsSection } from 'shared/state';
+import { ScoreReport, SectionReport } from 'shared/state';
 import { useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
 
@@ -53,8 +52,8 @@ export const ScoresAndReports = () => {
     name: sectionsName,
   });
 
-  const sections: ActivitySettingsSection[] = watch(sectionsName);
-  const scores: ActivitySettingsScore[] = watch(scoresName);
+  const sections: SectionReport[] = watch(sectionsName);
+  const scores: ScoreReport[] = watch(scoresName);
   const showScoreSummary = watch(scoresAndReportsName);
   const generateReport = watch(generateReportName);
   const isCheckboxesDisabled = !(scores?.length || sections?.length);
@@ -121,9 +120,8 @@ export const ScoresAndReports = () => {
       <StyledFlexColumn sx={{ mt: theme.spacing(2.4) }}>
         {sections?.map((section, index) => {
           const sectionName = `${sectionsName}.${index}`;
-          const title = (
-            <Title title={t('sectionHeader', { index: index + 1 })} name={section?.name} />
-          );
+          const title = t('sectionHeader', { index: index + 1 });
+          const headerTitle = <Title title={title} name={section?.name} />;
 
           return (
             <ToggleItemContainer
@@ -135,7 +133,7 @@ export const ScoresAndReports = () => {
                   removeSection(index);
                 },
                 name: sectionName,
-                title,
+                title: headerTitle,
               }}
               contentProps={{
                 sectionId: section.id,
@@ -148,7 +146,8 @@ export const ScoresAndReports = () => {
       </StyledFlexColumn>
       {scores?.map((score, index) => {
         const scoreName = `${scoresName}.${index}`;
-        const title = <Title title={t('scoreHeader', { index: index + 1 })} name={score?.name} />;
+        const title = t('scoreHeader', { index: index + 1 });
+        const headerTitle = <Title title={title} name={score?.name} />;
 
         return (
           <ToggleItemContainer
@@ -160,7 +159,7 @@ export const ScoresAndReports = () => {
                 removeScore(index);
               },
               name: scoreName,
-              title,
+              title: headerTitle,
             }}
             contentProps={{
               scoreId: score.id,
