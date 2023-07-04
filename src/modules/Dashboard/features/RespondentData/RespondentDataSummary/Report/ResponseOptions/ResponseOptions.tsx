@@ -10,7 +10,7 @@ import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/Colla
 import { getDictionaryText } from 'shared/utils';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 
-import { ResponseOption, FilterFormValues } from '../Report.types';
+import { FilterFormValues, FormattedResponse } from '../Report.types';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
 import { COLORS } from './ResponseOptions.const';
@@ -21,7 +21,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
-  const renderResponseOption = ({ activityItem, answers }: ResponseOption, index: number) => {
+  const renderResponseOption = ({ activityItem, answers }: FormattedResponse, index: number) => {
     if (isItemUnsupported(activityItem.responseType))
       return <UnsupportedItemResponse itemType={activityItem.responseType} />;
 
@@ -47,15 +47,14 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
           </span>
         </Tooltip>
       </StyledHeadline>
-      {responseOptions.map((responseOption, index) => (
-        <Box key={responseOption.activityItem.id} sx={{ mb: theme.spacing(6.4) }}>
-          <CollapsedMdText
-            text={getDictionaryText(responseOption.activityItem.question)}
-            maxHeight={120}
-          />
-          {renderResponseOption(responseOption, index)}
-        </Box>
-      ))}
+      {Object.values(responseOptions).map((responseOption) =>
+        responseOption.map((item, index) => (
+          <Box key={`${item.activityItem.id}-${index}`} sx={{ mb: theme.spacing(6.4) }}>
+            <CollapsedMdText text={getDictionaryText(item.activityItem.question)} maxHeight={120} />
+            {renderResponseOption(item, index)}
+          </Box>
+        )),
+      )}
     </>
   );
 };
