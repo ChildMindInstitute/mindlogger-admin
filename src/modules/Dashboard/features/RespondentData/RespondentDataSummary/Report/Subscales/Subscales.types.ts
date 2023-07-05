@@ -1,4 +1,4 @@
-import { ActivityResponse } from '../Report.types';
+import { ActivityCompletion } from '../Report.types';
 
 export const enum SubscalesTypes {
   Table = 'Table',
@@ -22,7 +22,7 @@ export type Subscale = {
 };
 
 export type SubscalesProps = {
-  answers: ActivityResponse[];
+  answers: ActivityCompletion[];
 };
 
 export type ParsedSubscales = {

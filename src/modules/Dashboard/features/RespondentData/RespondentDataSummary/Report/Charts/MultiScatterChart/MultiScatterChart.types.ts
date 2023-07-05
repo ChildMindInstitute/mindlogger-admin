@@ -4,8 +4,7 @@ import { Version } from 'api';
 import { locales } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
 
-import { FormattedItemAnswer } from '../../Report.types';
-import { MultiScatterResponseValues } from '../../ResponseOptions/ResponseOptions.types';
+import { Answer, ItemResponseValues } from '../../Report.types';
 
 export type ExtendedChartDataset = ChartDataset & {
   labels: string[];
@@ -15,18 +14,18 @@ export type MultiScatterChartProps = {
   color: string;
   minDate: Date;
   maxDate: Date;
-  minY?: number;
+  minY: number;
   maxY: number;
   height: number;
-  responseValues: MultiScatterResponseValues;
+  responseValues: ItemResponseValues;
   responseType: ItemResponseType;
-  answers: FormattedItemAnswer[];
+  answers: Answer[];
   versions: Version[];
 };
 
 export type OptionsProps = {
   lang: keyof typeof locales;
-  responseValues: MultiScatterResponseValues;
+  responseValues: ItemResponseValues;
   responseType: ItemResponseType;
   minY: number;
   maxY: number;
@@ -37,7 +36,7 @@ export type OptionsProps = {
 
 export type DataProps = {
   maxY: number;
-  answers: FormattedItemAnswer[];
+  answers: Answer[];
   versions: Version[];
   color: string;
 };

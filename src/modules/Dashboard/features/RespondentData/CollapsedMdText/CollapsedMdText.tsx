@@ -16,9 +16,7 @@ export const CollapsedMdText = ({ text, maxHeight }: CollapsedMdTextProps) => {
   const [isLarge, setIsLarge] = useState(false);
 
   useEffect(() => {
-    if (height > maxHeight) {
-      setIsLarge(true);
-    }
+    setIsLarge(height > maxHeight);
   }, [height, maxHeight]);
 
   const toggleOpen = () => {

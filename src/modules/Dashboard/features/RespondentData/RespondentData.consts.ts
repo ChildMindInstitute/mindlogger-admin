@@ -9,6 +9,7 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.Message,
   ItemResponseType.Photo,
   ItemResponseType.Video,
+  ItemResponseType.Time,
   ItemResponseType.TimeRange,
   ItemResponseType.MultipleSelectionPerRow,
   ItemResponseType.SingleSelectionPerRow,

@@ -22,7 +22,11 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
 
   const identifiersOptions = identifiers.reduce(
-    (uniqueIdentifiers: AutocompleteOption[], { decryptedValue }) => {
+    (uniqueIdentifiers: AutocompleteOption[], identifierItem) => {
+      if (!identifierItem) return uniqueIdentifiers;
+
+      const { decryptedValue } = identifierItem;
+
       if (
         uniqueIdentifiers &&
         !uniqueIdentifiers.find((identifier) => identifier.id === decryptedValue)

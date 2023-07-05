@@ -1,18 +1,9 @@
-import { Item } from 'shared/state';
-import {
-  SingleAndMultipleSelectItemResponseValues,
-  SliderItemResponseValues,
-} from 'shared/state/Applet/Applet.schema';
 import { Version } from 'api';
 
-import { ItemAnswer, ResponseOption } from '../Report.types';
-
-export type MultiScatterResponseValues =
-  | SingleAndMultipleSelectItemResponseValues
-  | SliderItemResponseValues;
+import { Answer, FormattedActivityItem, FormattedResponse } from '../Report.types';
 
 export type ResponseOptionsProps = {
-  responseOptions: ResponseOption[];
+  responseOptions: Record<string, FormattedResponse[]>;
   versions: Version[];
 };
 
@@ -20,7 +11,7 @@ export type GetResponseOptionsProps = {
   color: string;
   minDate: Date;
   maxDate: Date;
-  activityItem: Item;
-  answers?: ItemAnswer[];
+  activityItem: FormattedActivityItem;
+  answers?: Answer[];
   versions: Version[];
 };

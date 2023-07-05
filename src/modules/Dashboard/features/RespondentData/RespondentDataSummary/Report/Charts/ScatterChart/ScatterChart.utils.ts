@@ -4,7 +4,7 @@ import { Context } from 'chartjs-plugin-datalabels';
 import { variables } from 'shared/styles';
 import { locales } from 'shared/consts';
 import { Version } from 'api';
-import { ActivityResponse } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 
 import { ExtendedChartDataset } from './ScatterChart.types';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
@@ -114,7 +114,7 @@ export const getOptions = (
   };
 };
 
-export const getData = (answers: ActivityResponse[], versions: Version[]) => ({
+export const getData = (answers: ActivityCompletion[], versions: Version[]) => ({
   datasets: [
     {
       pointRadius: 5,
