@@ -12,5 +12,5 @@ export type EditRespondentPopupProps = {
   setPopupVisible: Dispatch<SetStateAction<boolean>>;
   chosenAppletData: ChosenAppletData | null;
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>;
-  refetchRespondents: () => void;
+  reFetchRespondents: () => void;
 };
