@@ -88,21 +88,22 @@ export const Uploader = ({
     handleSetImage(files);
   };
 
-  const onEditImg = (e: MouseEvent) => {
-    stopDefaults(e);
-    uploadInputRef?.current?.click();
-  };
-
-  const handleCloseRemovePopup = () => {
-    setRemovePopupOpen(false);
-  };
-
   const handleRemoveImg = () => {
     setImage(null);
     setValue('');
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
     }
+  };
+
+  const onEditImg = (e: MouseEvent) => {
+    stopDefaults(e);
+    handleRemoveImg();
+    uploadInputRef?.current?.click();
+  };
+
+  const handleCloseRemovePopup = () => {
+    setRemovePopupOpen(false);
   };
 
   const handleDeleteClick = (e: MouseEvent) => {
