@@ -1,3 +1,4 @@
+import { Version } from '../Charts/LineChart/LineChart.types';
 import { ActivityCompletion } from '../Report.types';
 
 export const enum SubscalesTypes {
@@ -25,7 +26,20 @@ export type SubscalesProps = {
   answers: ActivityCompletion[];
 };
 
+export type ParsedSubscale = {
+  score: number;
+  optionText: string;
+  date: Date;
+  activityCompletionID?: string;
+};
+
 export type ParsedSubscales = {
-  subscales: { [key: string]: { score: number; optionText: string } };
-  totalScore: { score?: number; optionText?: string };
+  allSubscalesScores: {
+    [key: string]: {
+      activityCompletions: ParsedSubscale[];
+    };
+  };
+  finalScores: ParsedSubscale[];
+  latestFinalScore: number | null;
+  versions: Version[];
 };
