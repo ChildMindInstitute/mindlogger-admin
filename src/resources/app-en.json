@@ -484,7 +484,7 @@
   "multiSelect": "Multiple Selection",
   "slider": "Slider",
   "sliderOption": "Slider",
-  "sliderOption_indexed": "${slider_option} {{- index }}",
+  "sliderOption_indexed": "Slider {{- index }}",
   "numberSelect": "Number Selection",
   "timeRange": "Time Range",
   "singleSelectRows": "Single Selection per Row",

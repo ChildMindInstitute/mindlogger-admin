@@ -45,7 +45,7 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
                     key={`slider-panel-${id}`}
                     name={name}
                     index={index}
-                    label={t('slider', {
+                    label={t('sliderOption', {
                       context: 'indexed',
                       index: index + 1,
                     })}
