@@ -30,7 +30,7 @@ export const SubscaleHeaderContent = ({
     <>
       <StyledWrapper>
         <TitleComponent title={title} name={name} open={open} />
-        <Box>
+        <Box sx={{ whiteSpace: 'nowrap' }}>
           <StyledClearedButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(1.4) }}
             onClick={() => {
