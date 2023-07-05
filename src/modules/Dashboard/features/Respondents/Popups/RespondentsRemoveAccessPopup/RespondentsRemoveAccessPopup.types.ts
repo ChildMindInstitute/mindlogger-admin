@@ -9,7 +9,7 @@ export type RespondentAccessPopupProps = {
   tableRows: Row[] | undefined;
   chosenAppletData: ChosenAppletData | null;
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>;
-  callbackFunction: () => void;
+  reFetchRespondents: () => void;
 };
 
 export type GetScreen = (respondentName: string, appletName: string) => JSX.Element;
@@ -27,7 +27,7 @@ export type ScreensParams = {
   submitPassword: () => void;
   removeAccess: () => void;
   handlePopupClose: () => void;
-  callbackFunction: () => void;
+  reFetchRespondents: () => void;
 };
 
 export type Screen = {

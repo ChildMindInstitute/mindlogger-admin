@@ -112,10 +112,10 @@ export const getScreens = ({
   submitPassword,
   removeAccess,
   handlePopupClose,
-  callbackFunction,
+  reFetchRespondents,
 }: ScreensParams): Screen[] => {
   const handleClose = () => {
-    callbackFunction();
+    reFetchRespondents();
     handlePopupClose();
   };
 

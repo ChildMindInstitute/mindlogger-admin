@@ -9,7 +9,6 @@ import theme from 'shared/styles/theme';
 import { useAsync } from 'shared/hooks';
 import { removeRespondentAccessApi } from 'api';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
-import { falseReturnFunc } from 'shared/utils';
 
 import { ChosenAppletData } from '../../Respondents.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -22,7 +21,7 @@ export const RespondentsRemoveAccessPopup = ({
   tableRows,
   chosenAppletData,
   setChosenAppletData,
-  callbackFunction,
+  reFetchRespondents,
 }: RespondentAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
@@ -104,12 +103,19 @@ export const RespondentsRemoveAccessPopup = ({
     </>
   );
 
+  const getStep = (type: 'next' | 'prev') =>
+    setStep((prevStep) => {
+      const newStep = type === 'next' ? prevStep + 1 : prevStep - 1;
+
+      return newStep as Steps;
+    });
+
   const thirdExtScreen = (
     <EnterAppletPassword
       ref={appletPasswordRef}
       appletId={chosenAppletData?.appletId ?? ''}
       encryption={chosenAppletData?.encryption}
-      submitCallback={falseReturnFunc}
+      submitCallback={() => getStep('next')}
     />
   );
 
@@ -135,23 +141,24 @@ export const RespondentsRemoveAccessPopup = ({
     submitPassword,
     removeAccess,
     handlePopupClose,
-    callbackFunction,
+    reFetchRespondents,
   });
 
   const onSecondBtnSubmit = () => {
-    setStep((prevState) => --prevState as Steps);
+    getStep('prev');
 
     if (disabledSubmit) {
       setDisabledSubmit(false);
     }
   };
 
-  const isLastModalElement = (removeData && step === 4) || (!removeData && step === 3);
+  const isLastScreen = (removeData && step === 4) || (!removeData && step === 3);
+  const isAppletPwdScreen = removeData && step === 2;
 
   const submitForm = () => {
     screens[step].submitForm?.();
-    if (isLastModalElement) return;
-    setStep((prevStep) => ++prevStep as Steps);
+    if (isLastScreen || isAppletPwdScreen) return;
+    getStep('next');
   };
 
   return (

@@ -19,7 +19,7 @@ export const EditRespondentPopup = ({
   setPopupVisible,
   chosenAppletData,
   setChosenAppletData,
-  refetchRespondents,
+  reFetchRespondents,
 }: EditRespondentPopupProps) => {
   const { t } = useTranslation('app');
 
@@ -37,7 +37,7 @@ export const EditRespondentPopup = ({
   const handlePopupClose = () => {
     setChosenAppletData(null);
     setPopupVisible(false);
-    refetchRespondents();
+    reFetchRespondents();
   };
 
   const submitForm = () => {

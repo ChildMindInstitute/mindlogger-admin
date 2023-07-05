@@ -51,7 +51,7 @@ export const Respondents = () => {
   const { ownerId } = workspaces.useData() || {};
   const { getWorkspaceRespondents } = users.thunk;
 
-  const handleGetRespondents = () =>
+  const { isForbidden, noPermissionsComponent } = usePermissions(() =>
     dispatch(
       getWorkspaceRespondents({
         params: {
@@ -60,9 +60,9 @@ export const Respondents = () => {
           ...(appletId && { appletId }),
         },
       }),
-    );
+    ),
+  );
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(handleGetRespondents);
   const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable((args) => {
     const params = {
       ...args,
@@ -316,7 +316,7 @@ export const Respondents = () => {
           tableRows={editableAppletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
-          callbackFunction={handleGetRespondents}
+          reFetchRespondents={handleReload}
         />
       )}
       {dataExportPopupVisible && (
@@ -334,7 +334,7 @@ export const Respondents = () => {
           setPopupVisible={setEditRespondentPopupVisible}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
-          refetchRespondents={handleReload}
+          reFetchRespondents={handleReload}
         />
       )}
     </>
