@@ -43,7 +43,7 @@ export const ToggleItemContainer = ({
   return (
     <StyledItemOption uiType={uiType}>
       <StylesTitleWrapper open={open} uiType={uiType}>
-        <StyledFlexTopCenter sx={{ flexGrow: 1 }}>
+        <StyledFlexTopCenter sx={{ flexGrow: 1, overflow: 'hidden' }}>
           <StyledFlexTopCenter>
             <StyledClearedButton
               onClick={handleToggle}
