@@ -33,8 +33,9 @@ export const getDefaultFilterValues = (versions: Version[]) => {
   const versionsFilter = versions.map(({ version }) => ({ id: version, label: version }));
 
   return {
-    startDateEndDate: [DEFAULT_START_DATE, DEFAULT_END_DATE],
-    moreFiltersVisisble: false,
+    startDate: DEFAULT_START_DATE,
+    endDate: DEFAULT_END_DATE,
+    moreFiltersVisible: false,
     startTime: DEFAULT_START_TIME,
     endTime: DEFAULT_END_TIME,
     versions: versionsFilter,
@@ -55,9 +56,9 @@ export const getDateISO = (date: Date, time: string) => {
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate();
-  const [hours, mins] = time.split(':');
+  const [hours, minutes] = time.split(':');
 
-  const utcDate = Date.UTC(year, month, day, +hours, +mins);
+  const utcDate = Date.UTC(year, month, day, +hours, +minutes);
 
   return new Date(utcDate).toISOString().split('.')[0];
 };
@@ -153,9 +154,7 @@ const compareActivityItem = (
             },
           };
 
-          console.log('updatedOptions', updatedOptions);
-
-          maxValue = maxValue + 1;
+          maxValue += 1;
 
           return updatedOptions;
         },
@@ -270,15 +269,15 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const answers = !currentAnswer.answer
-        ? getDefaultEmptyAnswer(date)
-        : (currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value.map((value) => ({
+      const answers = currentAnswer.answer
+        ? (currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value.map((value) => ({
             answer: {
               value: optionsValuesMapper[+value],
               text: null,
             },
             date,
-          }));
+          }))
+        : getDefaultEmptyAnswer(date);
 
       return {
         activityItem,
