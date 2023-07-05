@@ -1,4 +1,4 @@
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { joinWihComma } from '../joinWihComma';
@@ -11,6 +11,10 @@ export const parseResponseValue = (item: AnswerDTO, inputType: ItemResponseType)
   const value = getAnswerValue(item) as any;
 
   if (!key) return item || '';
+
+  if (ItemsWithFileResponses.includes(inputType)) {
+    return value.split('/').pop();
+  }
 
   switch (inputType) {
     case ItemResponseType.TimeRange:
