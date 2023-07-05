@@ -10,13 +10,12 @@ import { locales } from '../Charts.const';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
 
 export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) => {
-  const responses = data.subscales.map((subscale) => subscale.responses);
+  const responses = data.subscales.map((subscale) => subscale.activityCompletions);
   const responsesDates = responses.flat().map((response) => response.date);
   const versionsDates = data.versions.map((version) => version.date);
 
   const minDate = min([...responsesDates, ...versionsDates]).getTime();
   const maxDate = max([...responsesDates, ...versionsDates]).getTime();
-
   const timeConfig = getTimeConfig(minDate, maxDate);
   const stepSize = getStepSize(minDate, maxDate);
 
@@ -29,8 +28,11 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
         labels: {
           filter: (legendItem: LegendItem, chart: ChartData<'line'>) => {
             const versionIndex = chart.datasets.findIndex((dataset) => dataset.xAxisID === 'x2');
+            const dateIndex = chart.datasets.findIndex((dataset) => dataset.xAxisID === 'x1');
 
-            return legendItem.datasetIndex !== versionIndex;
+            return (
+              legendItem.datasetIndex !== versionIndex && legendItem.datasetIndex !== dateIndex
+            );
           },
           color: variables.palette.on_surface,
           font: {
@@ -136,7 +138,7 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
 };
 
 export const getData = (data: SubscaleChartData) => {
-  const responses = data.subscales.map((subscale) => subscale.responses);
+  const responses = data.subscales.map((subscale) => subscale.activityCompletions);
   const responsesScores = responses.flat().map((response) => response.score);
 
   const maxScore = Math.max(...responsesScores);
@@ -146,7 +148,7 @@ export const getData = (data: SubscaleChartData) => {
       ...data.subscales.map((subscale, index) => ({
         xAxisID: 'x',
         label: subscale.name,
-        data: subscale.responses.map(({ date, score }) => ({
+        data: subscale.activityCompletions.map(({ date, score }) => ({
           x: date,
           y: score,
         })),

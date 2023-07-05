@@ -6,6 +6,7 @@ export const truncateString = (label: string) =>
 export const getTimeConfig = (minMs: number, maxMs: number) => {
   const msDiff = maxMs - minMs;
   const days = msDiff / MS_PER_DAY;
+
   if (days > 2) {
     return {
       type: 'time' as const,
@@ -26,7 +27,7 @@ export const getTimeConfig = (minMs: number, maxMs: number) => {
     time: {
       unit,
       displayFormats: {
-        hour: 'H:mm' as const,
+        hour: 'MMM d H:mm' as const,
       },
     },
   };

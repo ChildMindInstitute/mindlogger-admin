@@ -1153,5 +1153,6 @@
   "configureServerForReport": "Server Status: Not Configured. Report can not be generated.",
   "true": "True",
   "false": "False",
-  "showAllSubscaleResults": "Show All Subscale Results"
+  "showAllSubscaleResults": "Show All Subscale Results",
+  "latestFinalSubscaleScore": "Latest Final Subscale Score"
 }

@@ -1,14 +1,13 @@
 import { Chart, ChartDataset, ChartTypeRegistry, LegendElement } from 'chart.js';
 
-export type Response = {
+export type ActivityCompletion = {
   date: Date;
   score: number;
 };
 
 export type Subscale = {
-  id: string;
   name: string;
-  responses: Response[];
+  activityCompletions: ActivityCompletion[];
 };
 
 export type Version = {
@@ -30,3 +29,7 @@ export type ExtendedChartDataset = ChartDataset & {
 };
 
 export type Tick = { index: number; chart: Chart };
+
+export type LineChartProps = {
+  data: SubscaleChartData;
+};

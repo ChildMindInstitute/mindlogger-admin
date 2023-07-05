@@ -12,14 +12,13 @@ import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
 
-import { mockedSubscales } from './mock';
 import { getOptions, getData } from './LineChart.utils';
-import { CustomLegend } from './LineChart.types';
+import { CustomLegend, LineChartProps } from './LineChart.types';
 import { locales } from '../Charts.const';
 
 ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Tooltip, TimeScale);
 
-export const LineChart = () => {
+export const LineChart = ({ data }: LineChartProps) => {
   const { i18n } = useTranslation('app');
 
   const legendMargin = {
@@ -35,8 +34,8 @@ export const LineChart = () => {
 
   return (
     <Line
-      options={getOptions(i18n.language as keyof typeof locales, mockedSubscales)}
-      data={getData(mockedSubscales)}
+      options={getOptions(i18n.language as keyof typeof locales, data)}
+      data={getData(data)}
       plugins={[ChartDataLabels, legendMargin]}
     />
   );
