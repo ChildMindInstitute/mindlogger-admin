@@ -1,8 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
 
-import { Svg } from 'shared/components';
-
+import { ItemInfo } from '../ItemInfo';
 import { ItemOptionContainer } from '../ItemOptionContainer';
 
 export const VideoResponse = () => {
@@ -13,11 +11,7 @@ export const VideoResponse = () => {
       title={t('videoResponseTitle')}
       description={t('videoResponseDescription')}
     >
-      <Box>
-        <Button variant="contained" startIcon={<Svg id="video" width="18" height="18" />} disabled>
-          {t('video')}
-        </Button>
-      </Box>
+      <ItemInfo svgId="video" textKey="video" />
     </ItemOptionContainer>
   );
 };
