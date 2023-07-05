@@ -419,7 +419,7 @@
   "fieldRequired": "This field is required.",
   "descriptionRequired": "Description is required",
   "aboutAppletRequired": "About Applet is required",
-  "pleaseSelectArea": "Please select area to display",
+  "pleaseSelectArea": "Please select the area to display",
   "aboutActivityFlow": "About Activity Flow",
   "activityFlowName": "Activity Flow Name",
   "activityFlowDescription": "Activity Flow Description",
