@@ -16,9 +16,9 @@ import {
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { FlankerFixationSettings } from 'shared/state';
 import { DEFAULT_MILLISECONDS_DURATION, MIN_MILLISECONDS_DURATION } from 'shared/consts';
 import { getIsRequiredValidateMessage } from 'shared/utils';
+import { FlankerItemPositions } from 'modules/Builder/types';
 
 import { StyledRemoveButton } from './FixationContent.styles';
 
@@ -32,22 +32,33 @@ export const FixationContent = () => {
     formState: { errors },
     clearErrors,
   } = useFormContext();
-  const { perfTaskItemField, perfTaskItemObjField } = useCurrentActivity();
-  const fixationField = `${perfTaskItemField}.general.fixation`;
-  const fixation: FlankerFixationSettings = watch(fixationField);
-  const fixationImageField = `${fixationField}.image`;
-  const imgErrorPath = `${perfTaskItemObjField}.general.fixation.image`;
+  const { fieldName, activityObjField } = useCurrentActivity();
+  const fixationImageField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.fixationScreen`;
+  const fixationDurationField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.fixationDuration`;
+  const fixationShowField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.showFixation`;
+  const fixationImage = watch(`${fixationImageField}.image`);
+  const fixationShow = watch(fixationShowField);
+  const imgErrorPath = `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.fixationScreen`;
   const hasImgError = !!get(errors, imgErrorPath);
 
   const handleFixationAdd = () => {
-    setValue(fixationField, { image: '', duration: DEFAULT_MILLISECONDS_DURATION });
+    setValue(fixationImageField, { image: '' });
+    setValue(fixationDurationField, DEFAULT_MILLISECONDS_DURATION);
+    setValue(fixationShowField, true);
   };
   const handleFixationRemove = () => {
-    setValue(fixationField, null);
-    clearErrors(fixationField);
+    setValue(fixationImageField, null);
+    setValue(fixationDurationField, null);
+    setValue(fixationShowField, false);
+    clearErrors(fixationImageField);
   };
 
-  return fixation ? (
+  const handleImageSet = (val: string) => {
+    setValue(fixationImageField, { image: val || '' });
+    trigger([fixationImageField]);
+  };
+
+  return fixationShow ? (
     <>
       <StyledFlexTopCenter sx={{ mb: theme.spacing(2.4), justifyContent: 'space-between' }}>
         <StyledFlexColumn>
@@ -55,11 +66,8 @@ export const FixationContent = () => {
             uiType={UploaderUiType.Secondary}
             width={5.6}
             height={5.6}
-            setValue={(val: string) => {
-              setValue(`${fixationField}.image`, val || undefined);
-              trigger([fixationImageField]);
-            }}
-            getValue={() => fixation?.image || ''}
+            setValue={handleImageSet}
+            getValue={() => fixationImage || ''}
             hasError={hasImgError}
           />
           {hasImgError && (
@@ -76,16 +84,18 @@ export const FixationContent = () => {
         </StyledRemoveButton>
       </StyledFlexTopCenter>
       <StyledFlexTopCenter sx={{ mb: theme.spacing(1) }}>
-        <StyledTitleMedium>{t('flankerFixation.showFixationFor')}</StyledTitleMedium>
+        <StyledTitleMedium sx={{ mr: theme.spacing(0.5) }}>
+          {t('flankerFixation.showFixationFor')}
+        </StyledTitleMedium>
         <StyledSmallNumberInput>
           <InputController
             control={control}
-            name={`${fixationField}.duration`}
+            name={fixationDurationField}
             type="number"
             minNumberValue={MIN_MILLISECONDS_DURATION}
           />
         </StyledSmallNumberInput>
-        <StyledTitleMedium>{t('milliseconds')}</StyledTitleMedium>
+        <StyledTitleMedium sx={{ ml: theme.spacing(0.5) }}>{t('milliseconds')}</StyledTitleMedium>
       </StyledFlexTopCenter>
     </>
   ) : (

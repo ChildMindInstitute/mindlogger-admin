@@ -51,7 +51,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
       ownerId,
       appletId: item.id,
       folderId: item.parentId,
-      isPinned: !item.pinnedAt,
+      isPinned: !item.isPinned,
     });
     await fetchData();
   };
@@ -156,7 +156,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             {item.parentId && (
               <StyledPinContainer>
                 <Pin
-                  isPinned={!!item?.pinnedAt}
+                  isPinned={item?.isPinned}
                   onClick={(event) => {
                     event.stopPropagation();
                     handleTogglePin();

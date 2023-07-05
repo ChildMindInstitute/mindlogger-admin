@@ -16,7 +16,13 @@ import {
   MIN_NUMBER_OF_TRIALS,
   MIN_SLOPE,
 } from 'shared/consts';
-import { AppletFormValues, RoundTypeEnum } from 'modules/Builder/types';
+import {
+  AppletFormValues,
+  FlankerItemNames,
+  GyroscopeItemNames,
+  RoundTypeEnum,
+  TouchItemNames,
+} from 'modules/Builder/types';
 import { Config } from 'shared/state';
 import {
   ItemConfigurationSettings,
@@ -31,12 +37,7 @@ import {
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
 } from './BuilderApplet.utils';
-import {
-  CONDITION_TYPES_TO_HAVE_OPTION_ID,
-  GyroscopeItemNames,
-  ItemTestFunctions,
-  TouchItemNames,
-} from './BuilderApplet.const';
+import { CONDITION_TYPES_TO_HAVE_OPTION_ID, ItemTestFunctions } from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -103,53 +104,61 @@ const getFlankerButtonsSchema = (type: 'name' | 'image') =>
       'has-image-or-name',
       type === 'name' ? getIsRequiredValidateMessage('flankerButtons.nameOrImage') : '',
       function () {
-        const { image, name } = this.parent;
+        const { image, text } = this.parent;
 
-        return !(!image && !name);
+        return !(!image && !text);
       },
-    );
+    )
+    .nullable();
 
-const getFlankerRoundSchema = (type: RoundTypeEnum) => {
-  const isPracticeRound = type === RoundTypeEnum.Practice;
+export const getFlankerGeneralSchema = (
+  schema: yup.SchemaOf<AppletFormValues>,
+  type: RoundTypeEnum,
+) => {
+  const isPractice = type === RoundTypeEnum.Practice;
 
-  return yup.object({
-    instruction: yup
-      .string()
-      .required(
-        getIsRequiredValidateMessage(isPracticeRound ? 'practiceInstruction' : 'testInstruction'),
-      ),
+  return schema.shape({
+    trialDuration: yup.number().required(getIsRequiredValidateMessage('positiveInteger')),
     blocks: yup.array().required().min(1),
-    stimulusDuration: yup.number().required(getIsRequiredValidateMessage('positiveInteger')),
-    ...(isPracticeRound && {
-      threshold: yup.number().required(getIsRequiredValidateMessage('integerBetweenOneAndHundred')),
+    ...(isPractice && {
+      stimulusTrials: yup
+        .array()
+        .of(
+          yup.object({
+            image: yup.string().required(),
+          }),
+        )
+        .min(1),
+      buttons: yup.array().of(
+        yup.object({
+          text: getFlankerButtonsSchema('name'),
+          image: getFlankerButtonsSchema('image'),
+        }),
+      ),
+      fixationScreen: yup
+        .object()
+        .when('showFixation', (showFixation, schema) => {
+          if (!showFixation) return schema;
+
+          return schema.shape({
+            image: yup.string().required(),
+          });
+        })
+        .nullable(),
+      fixationDuration: yup
+        .number()
+        .when('showFixation', (showFixation, schema) => {
+          if (!showFixation) return schema;
+
+          return schema.required(getIsRequiredValidateMessage('positiveInteger'));
+        })
+        .nullable(),
+      minimumAccuracy: yup
+        .number()
+        .required(getIsRequiredValidateMessage('integerBetweenOneAndHundred')),
     }),
   });
 };
-
-export const getFlankerGeneralSchema = () =>
-  yup.object({
-    instruction: yup.string().required(getIsRequiredValidateMessage('overviewInstruction')),
-    buttons: yup.array().of(
-      yup.object({
-        name: getFlankerButtonsSchema('name'),
-        image: getFlankerButtonsSchema('image'),
-      }),
-    ),
-    fixation: yup
-      .object({
-        image: yup.string().required(),
-        duration: yup.number().required(getIsRequiredValidateMessage('positiveInteger')),
-      })
-      .nullable(),
-    stimulusTrials: yup
-      .array()
-      .of(
-        yup.object({
-          image: yup.string().required(),
-        }),
-      )
-      .min(1),
-  });
 
 export const GyroscopeAndTouchConfigSchema = () => ({
   general: yup.object({
@@ -193,21 +202,24 @@ export const ItemSchema = () =>
           return schema.when('name', (name: string, schema: yup.SchemaOf<AppletFormValues>) => {
             if (
               name === GyroscopeItemNames.GeneralInstruction ||
-              name === TouchItemNames.GeneralInstruction
+              name === TouchItemNames.GeneralInstruction ||
+              name === FlankerItemNames.GeneralInstruction
             ) {
               return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
             }
 
             if (
               name === GyroscopeItemNames.PracticeInstruction ||
-              name === TouchItemNames.PracticeInstruction
+              name === TouchItemNames.PracticeInstruction ||
+              name === FlankerItemNames.PracticeInstructionFirst
             ) {
               return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
             }
 
             if (
               name === GyroscopeItemNames.TestInstruction ||
-              name === TouchItemNames.TestInstruction
+              name === TouchItemNames.TestInstruction ||
+              name === FlankerItemNames.TestInstructionFirst
             ) {
               return schema.required(getIsRequiredValidateMessage('testInstruction'));
             }
@@ -333,10 +345,16 @@ export const ItemSchema = () =>
         }
 
         if (responseType === ItemResponseType.Flanker) {
-          return schema.shape({
-            general: getFlankerGeneralSchema(),
-            practice: getFlankerRoundSchema(RoundTypeEnum.Practice),
-            test: getFlankerRoundSchema(RoundTypeEnum.Test),
+          return schema.when('name', (name: string, schema: yup.SchemaOf<AppletFormValues>) => {
+            if (name === FlankerItemNames.PracticeFirst) {
+              return getFlankerGeneralSchema(schema, RoundTypeEnum.Practice);
+            }
+
+            if (name === FlankerItemNames.TestFirst) {
+              return getFlankerGeneralSchema(schema, RoundTypeEnum.Test);
+            }
+
+            return schema;
           });
         }
 

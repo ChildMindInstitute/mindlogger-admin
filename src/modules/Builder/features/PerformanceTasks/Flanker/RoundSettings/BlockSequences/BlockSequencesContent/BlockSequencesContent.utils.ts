@@ -59,7 +59,7 @@ export const getUploadedTableRows = (uploadedTable: UploadedTable) =>
   });
 
 const getStimulusObject = (stimulusTrials: FlankerStimulusSettings[], type: 'imageKey' | 'idKey') =>
-  stimulusTrials.reduce((result: Record<string, string>, item) => {
+  stimulusTrials?.reduce((result: Record<string, string>, item) => {
     const key = type === 'imageKey' ? getUploadedMediaName(item.image) : item.id;
     const value = type === 'imageKey' ? item.id : getUploadedMediaName(item.image);
 

@@ -17,8 +17,27 @@ const absolutePosition = `
   transform: translate(-50%, -50%);
 `;
 
+const getContainerSecondaryStyles = (isImgUploaded: boolean, hasError?: boolean) => `
+  border-radius: ${variables.borderRadius.xs};
+  background-color: ${isImgUploaded ? 'transparent' : variables.palette.primary_container};
+  border: ${
+    hasError ? `${variables.borderWidth.md} solid ${variables.palette.semantic.error}` : 'unset'
+  };
+  
+  .image-container {
+    transition: ${variables.transitions.bgColor};
+    padding: ${theme.spacing(0.7)};
+    border-radius: ${variables.borderRadius.half};
+  }
+  
+  &:hover {
+    .image-container {
+      background-color: ${variables.palette.on_surface_variant_alfa8};
+    }
+  }
+`;
+
 export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
-  cursor: pointer;
   flex-shrink: 0;
 
   ${({
@@ -27,21 +46,26 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
     isImgUploaded,
     isPrimaryUiType,
     hasError,
+    disabled,
   }: {
     height: number;
     width: number;
     isImgUploaded: boolean;
     isPrimaryUiType: boolean;
     hasError?: boolean;
+    disabled?: boolean;
   }) => {
     const commonStyles = `
       height: ${hasError ? height - 0.1 : height}rem;
       width: ${hasError ? width - 0.1 : width}rem;
+      opacity: ${disabled ? '0.5' : '1'};
+      cursor: ${disabled ? 'default' : 'pointer'};
+      pointer-events: ${disabled ? 'none' : 'auto'};
     `;
 
     if (isPrimaryUiType) {
       return `
-        ${commonStyles}
+        ${commonStyles};
         border: ${isImgUploaded ? variables.borderWidth.md : variables.borderWidth.lg} ${
         isImgUploaded ? 'solid' : 'dashed'
       } ${variables.palette.outline_variant};
@@ -50,24 +74,8 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
     }
 
     return `
-      ${commonStyles}
-      border-radius: ${variables.borderRadius.xs};
-      background-color: ${isImgUploaded ? 'transparent' : variables.palette.primary_container};
-      border: ${
-        hasError ? `${variables.borderWidth.md} solid ${variables.palette.semantic.error}` : 'unset'
-      };
-      
-      .image-container {
-        transition: ${variables.transitions.bgColor};
-        padding: ${theme.spacing(0.7)};
-        border-radius: ${variables.borderRadius.half};
-      }
-      
-      &:hover {
-        .image-container {
-          background-color: ${variables.palette.on_surface_variant_alfa8};
-        }
-      }
+      ${commonStyles};
+      ${getContainerSecondaryStyles(isImgUploaded, hasError)};
     `;
   }}
 `;

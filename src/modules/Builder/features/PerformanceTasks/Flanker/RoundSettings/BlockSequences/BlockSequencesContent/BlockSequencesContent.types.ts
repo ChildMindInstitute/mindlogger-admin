@@ -7,5 +7,5 @@ export type UploadedTable = Record<string, string | number>[] | null;
 export type SetUploadedTable = Dispatch<SetStateAction<UploadedTable>>;
 
 export type BlockSequencesContentProps = IsPracticeRoundType & {
-  setError: (error: string) => void;
+  hasBlockSequencesErrors: boolean;
 };
