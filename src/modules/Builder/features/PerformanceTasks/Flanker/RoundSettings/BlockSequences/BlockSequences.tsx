@@ -1,34 +1,52 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import get from 'lodash.get';
 
 import { FlankerStimulusSettings } from 'shared/state';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { FlankerItemPositions } from 'modules/Builder/types';
 
 import { IsPracticeRoundType } from '../RoundSettings.types';
 import { BlockSequencesContent } from './BlockSequencesContent';
 
 export const BlockSequences = memo(({ isPracticeRound }: IsPracticeRoundType) => {
-  const [error, setError] = useState('');
   const { t } = useTranslation();
-  const { watch } = useFormContext();
-  const { perfTaskItemField } = useCurrentActivity();
+  const {
+    watch,
+    formState: { errors },
+  } = useFormContext();
+  const { fieldName, activityObjField } = useCurrentActivity();
 
-  const stimulusTrials = watch(`${perfTaskItemField}.general.stimulusTrials`);
+  const stimulusTrials = watch(
+    `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`,
+  );
   const hasStimulusErrors = !stimulusTrials?.some(
     (trial: FlankerStimulusSettings) => !!trial.image,
   );
+
+  const blockSequencesObjField = `${activityObjField}.items[${
+    isPracticeRound ? FlankerItemPositions.PracticeFirst : FlankerItemPositions.TestFirst
+  }].config.blocks`;
+  const hasBlockSequencesErrors = !!get(errors, blockSequencesObjField);
+
+  const getError = () => {
+    if (hasStimulusErrors) return 'flankerRound.addStimulus';
+    if (hasBlockSequencesErrors) return 'fillInAllRequired';
+
+    return null;
+  };
 
   return (
     <ToggleItemContainer
       isOpenDisabled={hasStimulusErrors}
       isOpenByDefault={!hasStimulusErrors}
-      error={hasStimulusErrors ? 'flankerRound.addStimulus' : error}
+      error={getError()}
       uiType={ToggleContainerUiType.PerformanceTask}
       title={t('flankerRound.blockSequences')}
       Content={BlockSequencesContent}
-      contentProps={{ isPracticeRound, setError }}
+      contentProps={{ isPracticeRound, hasBlockSequencesErrors }}
       tooltip={t('flankerRound.sequencesTooltip')}
     />
   );

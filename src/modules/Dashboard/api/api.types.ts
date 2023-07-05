@@ -366,6 +366,7 @@ export type Applet = SingleApplet & {
   type?: DashboardAppletType;
   folderId?: string;
   folderName?: string;
+  isPinned?: boolean;
 };
 
 export type Version = {

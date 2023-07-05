@@ -1,8 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { Button, Box } from '@mui/material';
 
-import { Svg } from 'shared/components';
-
+import { ItemInfo } from '../ItemInfo';
 import { ItemOptionContainer } from '../ItemOptionContainer';
 
 export const PhotoResponse = () => {
@@ -13,11 +11,7 @@ export const PhotoResponse = () => {
       title={t('photoResponseTitle')}
       description={t('photoResponseDescription')}
     >
-      <Box>
-        <Button variant="contained" startIcon={<Svg id="photo" width="18" height="18" />} disabled>
-          {t('photo')}
-        </Button>
-      </Box>
+      <ItemInfo svgId="camera-outline" textKey="photo" />
     </ItemOptionContainer>
   );
 };

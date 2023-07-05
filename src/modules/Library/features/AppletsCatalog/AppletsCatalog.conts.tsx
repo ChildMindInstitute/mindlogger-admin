@@ -40,7 +40,7 @@ export const ItemResponseTypes = {
   },
   [ItemResponseType.Text]: { icon: <Svg id="text" />, title: ItemResponseType.Text },
   [ItemResponseType.Drawing]: { icon: <Svg id="drawing" />, title: ItemResponseType.Drawing },
-  [ItemResponseType.Photo]: { icon: <Svg id="photo" />, title: ItemResponseType.Photo },
+  [ItemResponseType.Photo]: { icon: <Svg id="camera-outline" />, title: ItemResponseType.Photo },
   [ItemResponseType.Video]: { icon: <Svg id="video" />, title: ItemResponseType.Video },
   [ItemResponseType.Geolocation]: {
     icon: <Svg id="geolocation" />,

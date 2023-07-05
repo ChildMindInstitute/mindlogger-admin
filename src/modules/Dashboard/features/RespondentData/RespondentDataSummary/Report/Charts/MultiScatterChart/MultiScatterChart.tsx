@@ -25,7 +25,7 @@ export const MultiScatterChart = ({
   color,
   minDate,
   maxDate,
-  minY = 1,
+  minY,
   maxY,
   height,
   responseValues,

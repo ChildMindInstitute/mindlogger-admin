@@ -23,6 +23,7 @@ export const StyledItemOption = styled(StyledItemOptionContainer)`
 
 export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)`
   justify-content: space-between;
+  overflow: hidden;
 
   ${({ open, uiType }: { open?: boolean; uiType?: ToggleContainerUiType }) => `
     height: 4.8rem;

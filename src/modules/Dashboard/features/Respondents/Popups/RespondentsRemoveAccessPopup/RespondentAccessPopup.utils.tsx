@@ -1,10 +1,9 @@
 import { Trans } from 'react-i18next';
 
-import { StyledBodyLarge } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { StyledBodyLarge, theme, variables } from 'shared/styles';
+import { SubmitBtnColor } from 'shared/components';
 
-import { getScreen, ScreensParams } from './RespondentsRemoveAccessPopup.types';
+import { GetScreen, Screen, ScreensParams } from './RespondentsRemoveAccessPopup.types';
 
 const getThirdScreen = (respondentName: string, appletName: string) => (
   <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
@@ -113,15 +112,22 @@ export const getScreens = ({
   submitPassword,
   removeAccess,
   handlePopupClose,
-}: ScreensParams) => {
-  const getResultScreen = (getSuccessScreen: getScreen, getErrorScreen: getScreen, title: string) =>
+  reFetchRespondents,
+}: ScreensParams): Screen[] => {
+  const handleClose = () => {
+    reFetchRespondents();
+    handlePopupClose();
+  };
+
+  const getResultScreen = (getSuccessScreen: GetScreen, getErrorScreen: GetScreen, title: string) =>
     isRemoved
       ? {
           component: getSuccessScreen(respondentName, appletName),
           buttonText: 'ok',
           hasSecondBtn: false,
           title,
-          submitForm: handlePopupClose,
+          submitForm: handleClose,
+          onClose: handleClose,
         }
       : {
           component: getErrorScreen(respondentName, appletName),
@@ -135,7 +141,7 @@ export const getScreens = ({
     { component: firstScreen, buttonText: '', hasSecondBtn: false, title: 'removeAccess' },
     {
       component: secondScreen,
-      buttonText: 'removeAccess',
+      buttonText: removeData ? 'removeAccessAndData' : 'removeAccess',
       hasSecondBtn: true,
       title: 'removeAccess',
       submitBtnColor: 'error',
@@ -155,7 +161,7 @@ export const getScreens = ({
             hasSecondBtn: true,
             title: 'removeAccessAndData',
             submitForm: removeAccess,
-            submitBtnColor: 'error',
+            submitBtnColor: 'error' as SubmitBtnColor,
           },
           getResultScreen(getFifthExtScreen, getFifthExtScreenError, 'removeAccessAndData'),
         ]
@@ -166,7 +172,7 @@ export const getScreens = ({
             hasSecondBtn: true,
             title: 'removeAccess',
             submitForm: removeAccess,
-            submitBtnColor: 'error',
+            submitBtnColor: 'error' as SubmitBtnColor,
           },
           getResultScreen(getFourthScreen, getFourthErrorScreen, 'removeAccess'),
         ]),

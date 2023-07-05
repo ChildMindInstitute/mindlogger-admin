@@ -62,6 +62,7 @@ export const Respondents = () => {
       }),
     ),
   );
+
   const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable((args) => {
     const params = {
       ...args,
@@ -315,6 +316,7 @@ export const Respondents = () => {
           tableRows={editableAppletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
+          reFetchRespondents={handleReload}
         />
       )}
       {dataExportPopupVisible && (
@@ -332,7 +334,7 @@ export const Respondents = () => {
           setPopupVisible={setEditRespondentPopupVisible}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
-          refetchRespondents={handleReload}
+          reFetchRespondents={handleReload}
         />
       )}
     </>

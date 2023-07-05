@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
-import get from 'lodash.get';
 
 import { Svg, Table, UiType } from 'shared/components';
 import {
@@ -15,7 +14,7 @@ import {
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { FlankerStimulusSettings } from 'shared/state';
 import { exportTemplate, getUploadedMediaName } from 'shared/utils';
-import { RoundTypeEnum } from 'modules/Builder/types';
+import { FlankerItemPositions } from 'modules/Builder/types';
 
 import { ImportSequencesPopup, ImportSequencesType } from './ImportSequencesPopup';
 import {
@@ -25,35 +24,26 @@ import {
   getTableFromSequences,
   getUploadedTableRows,
 } from './BlockSequencesContent.utils';
-import { UploadedTable, BlockSequencesContentProps } from './BlockSequencesContent.types';
+import { BlockSequencesContentProps, UploadedTable } from './BlockSequencesContent.types';
 
 export const BlockSequencesContent = ({
   isPracticeRound,
-  setError,
+  hasBlockSequencesErrors,
 }: BlockSequencesContentProps) => {
   const { t } = useTranslation();
-  const {
-    watch,
-    setValue,
-    formState: { errors },
-  } = useFormContext();
-  const { perfTaskItemField, perfTaskItemObjField } = useCurrentActivity();
+  const { watch, setValue, clearErrors } = useFormContext();
+  const { fieldName } = useCurrentActivity();
 
   const [importTableVisible, setImportTableVisible] = useState(false);
   const [uploadedTable, setUploadedTable] = useState<UploadedTable>(null);
 
-  const stimulusField = `${perfTaskItemField}.general.stimulusTrials`;
-  const roundField = `${perfTaskItemField}.${
-    isPracticeRound ? RoundTypeEnum.Practice : RoundTypeEnum.Test
-  }`;
+  const stimulusField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`;
+  const roundField = `${fieldName}.items.${
+    isPracticeRound ? FlankerItemPositions.PracticeFirst : FlankerItemPositions.TestFirst
+  }.config`;
   const blockSequencesField = `${roundField}.blocks`;
   const stimulusTrials: FlankerStimulusSettings[] = watch(stimulusField);
   const blockSequences = watch(blockSequencesField);
-
-  const blockSequencesObjField = `${perfTaskItemObjField}.${
-    isPracticeRound ? RoundTypeEnum.Practice : RoundTypeEnum.Test
-  }.blocks`;
-  const hasBlockSequencesErrors = !!get(errors, blockSequencesObjField);
 
   const prevStimulusTrialsLength = useRef(stimulusTrials?.length);
 
@@ -72,6 +62,7 @@ export const BlockSequencesContent = ({
     const blocks = getRoundBlocks(stimulusTrials, uploadedTable);
     if (!blocks) return;
 
+    clearErrors(blockSequencesField);
     setValue(blockSequencesField, blocks);
   }, [uploadedTable, stimulusTrials]);
 
@@ -90,10 +81,6 @@ export const BlockSequencesContent = ({
 
     prevStimulusTrialsLength.current = stimulusTrials?.length;
   }, [stimulusTrials]);
-
-  useEffect(() => {
-    setError(!uploadedTable && hasBlockSequencesErrors ? 'fillInAllRequired' : '');
-  }, [uploadedTable, hasBlockSequencesErrors]);
 
   return stimulusTrials?.some((trial) => !!trial.image) ? (
     <>
