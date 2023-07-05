@@ -393,8 +393,10 @@ export type BaseCondition = {
   type: ConditionType | '';
 };
 
-export type ScoreCondition = BaseCondition & {
+export type ScoreCondition = {
+  key?: string;
   type: typeof ScoreConditionType;
+  itemName: string;
   payload: {
     value: boolean;
   };
@@ -419,17 +421,11 @@ export type RangeValueCondition = BaseCondition & {
   };
 };
 
-export type ScoreValueCondition = BaseCondition & {
-  payload: {
-    value: boolean;
-  };
-};
-
 export type Condition =
   | OptionCondition
   | SingleValueCondition
   | RangeValueCondition
-  | ScoreValueCondition;
+  | ScoreCondition;
 
 export type ConditionalLogic = {
   match: ConditionalLogicMatch;

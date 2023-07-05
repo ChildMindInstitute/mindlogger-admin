@@ -24,6 +24,7 @@ import {
   ItemResponseType,
   CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
   CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
+  ConditionType,
 } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder/types';
@@ -70,9 +71,13 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
 
             const isSlider = relatedItem?.responseType === ItemResponseType.Slider;
             const isSingleValueShown =
-              isSlider && type && CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type);
+              isSlider &&
+              type &&
+              CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type as ConditionType);
             const isRangeValueShown =
-              isSlider && type && CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type);
+              isSlider &&
+              type &&
+              CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type as ConditionType);
 
             return (
               <StyledBodyLarge

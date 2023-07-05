@@ -117,10 +117,12 @@ export const getScoresAndReports = (activity: ActivityFormValues) => {
   const sections = initialSections.map((section) => ({
     ...section,
     ...fieldsToRemove,
-    conditionalLogic: {
-      ...section.conditionalLogic,
-      conditions: getConditions(items, section?.conditionalLogic?.conditions),
-    },
+    ...(!!Object.keys(section.conditionalLogic || {}).length && {
+      conditionalLogic: {
+        ...section.conditionalLogic,
+        conditions: getConditions(items, section?.conditionalLogic?.conditions),
+      },
+    }),
   }));
 
   return {

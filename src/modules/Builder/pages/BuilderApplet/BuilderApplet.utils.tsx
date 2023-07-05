@@ -25,6 +25,8 @@ import {
   OptionCondition,
   SubscaleSetting,
   Config,
+  Activity,
+  ScoreCondition,
 } from 'shared/state';
 import {
   getDictionaryText,
@@ -44,6 +46,7 @@ import {
   ItemResponseType,
   PerfTaskType,
   GyroscopeOrTouch,
+  ScoreConditionType,
 } from 'shared/consts';
 import {
   ActivityFormValues,
@@ -598,6 +601,51 @@ const getActivityConditionalLogic = (items: Item[]) =>
     return result;
   }, []);
 
+const getScoreConditions = (items: Item[], conditions?: Condition[]) =>
+  conditions?.map((condition) => {
+    const { payload: initialPayload, itemName, type } = condition;
+    const relatedItem = items.find((item) => item.name === itemName);
+    const payload =
+      type === ScoreConditionType
+        ? { value: String((condition as ScoreCondition).payload.value) }
+        : initialPayload;
+
+    return {
+      ...condition,
+      payload,
+      itemName: relatedItem ? getEntityKey(relatedItem) : condition.itemName,
+    };
+  });
+
+const getScoresAndReports = (activity: Activity) => {
+  const { items, scoresAndReports } = activity;
+  if (!scoresAndReports) return;
+
+  const { sections: initialSections, scores: initialScores } = scoresAndReports;
+  const scores = initialScores.map((score) => ({
+    ...score,
+    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
+      ...conditional,
+      conditions: getScoreConditions(items, conditional.conditions),
+    })),
+  }));
+  const sections = initialSections.map((section) => ({
+    ...section,
+    ...(!!Object.keys(section.conditionalLogic || {}).length && {
+      conditionalLogic: {
+        ...section.conditionalLogic,
+        conditions: getScoreConditions(items, section?.conditionalLogic?.conditions),
+      },
+    }),
+  }));
+
+  return {
+    ...scoresAndReports,
+    sections,
+    scores,
+  };
+};
+
 const getActivitySubscaleItems = ({
   activityItemsObject,
   subscalesObject,
@@ -681,6 +729,7 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
           items: getActivityItems(activity.items),
           //TODO: for frontend purposes - should be reviewed after refactoring phase
           conditionalLogic: getActivityConditionalLogic(activity.items),
+          scoresAndReports: getScoresAndReports(activity),
         }))
       : [],
     activityFlows: getActivityFlows(appletData.activityFlows),
