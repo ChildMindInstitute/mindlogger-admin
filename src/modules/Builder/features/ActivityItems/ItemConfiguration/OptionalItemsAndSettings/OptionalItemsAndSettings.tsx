@@ -109,8 +109,12 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       appendOption(getEmptySelectionItemOption());
     };
 
-    const handleAddSliderRow = () =>
-      appendRow(getEmptySliderOption({ isMultiple: true, hasScores }));
+    const handleAddSliderRow = () => {
+      appendRow([
+        getEmptySliderOption({ isMultiple: true, hasScores }),
+        getEmptySliderOption({ isMultiple: true, hasScores }),
+      ]);
+    };
 
     const handleAddAlert = () =>
       appendAlert(getEmptyAlert({ responseType, responseValues, config: settings }));

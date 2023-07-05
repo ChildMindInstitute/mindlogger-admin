@@ -47,7 +47,7 @@ export const Header = ({
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
         </StyledClearedButton>
         <StyledLabelBoldLarge>{label}</StyledLabelBoldLarge>
-        {isMultiple && (
+        {isMultiple && index !== 0 && (
           <StyledClearedButton sx={commonButtonStyles} onClick={onTrashClick}>
             <Svg id="trash" width="20" height="20" />
           </StyledClearedButton>
