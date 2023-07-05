@@ -13,8 +13,9 @@ export type ReportProps = {
 };
 
 export type FilterFormValues = {
-  startDateEndDate: Date[];
-  moreFiltersVisisble: boolean;
+  startDate: Date;
+  endDate: Date;
+  moreFiltersVisible: boolean;
   startTime: string;
   endTime: string;
   filterByIdentifier?: boolean;

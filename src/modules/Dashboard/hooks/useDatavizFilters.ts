@@ -7,11 +7,7 @@ import { getDateTime } from 'shared/utils';
 import { Version } from 'api';
 
 export const useDatavizFilters = (watch: UseFormWatch<FilterFormValues>, versions: Version[]) => {
-  const {
-    startDateEndDate: [startDate, endDate],
-    startTime,
-    endTime,
-  } = watch();
+  const { startDate, endDate, startTime, endTime } = watch();
 
   const { minDate, maxDate, filteredVersions } = useMemo(() => {
     const minDate = getDateTime(startDate, startTime);

@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
 
-import { DatePicker, TimePicker, DatePickerUiType } from 'shared/components';
+import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { AutocompleteOption, Switch, TagsInputController } from 'shared/components/FormComponents';
 
@@ -15,9 +15,10 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext();
 
-  const moreFiltersVisisble = watch('moreFiltersVisisble');
+  const moreFiltersVisible = watch('moreFiltersVisible');
   const filterByIdentifier = watch('filterByIdentifier');
-  const startDateEndDate = watch('startDateEndDate');
+  const startDate = watch('startDate');
+  const endDate = watch('endDate');
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
 
@@ -46,13 +47,12 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
   );
 
   const moreFiltersHandler = () => {
-    setValue('moreFiltersVisisble', !moreFiltersVisisble);
+    setValue('moreFiltersVisible', !moreFiltersVisible);
   };
 
   const onCloseCallback = () => {
-    if (!startDateEndDate[1]) {
-      const startDate = startDateEndDate[0];
-      setValue('startDateEndDate', [startDate, addDays(startDate, 1)]);
+    if (endDate < startDate) {
+      setValue('endDate', addDays(startDate, 1));
     }
   };
 
@@ -61,11 +61,19 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
       <StyledFlexTopCenter sx={{ mb: theme.spacing(3.2) }}>
         <DatePicker
           minDate={MIN_DATE}
-          name="startDateEndDate"
-          uiType={DatePickerUiType.StartEndingDate}
+          name="startDate"
           control={control}
           inputSx={{ width: '19rem' }}
           onCloseCallback={onCloseCallback}
+          label={t('startDate')}
+        />
+        <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
+        <DatePicker
+          minDate={startDate}
+          name="endDate"
+          control={control}
+          inputSx={{ width: '19rem' }}
+          label={t('endDate')}
         />
         <Box sx={{ position: 'relative' }}>
           <TimePicker
@@ -87,13 +95,13 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
           onClick={moreFiltersHandler}
           sx={{
             height: '5.5rem',
-            backgroundColor: moreFiltersVisisble ? variables.palette.primary_alfa12 : '',
+            backgroundColor: moreFiltersVisible ? variables.palette.primary_alfa12 : '',
           }}
         >
           {t('moreFilters')}
         </Button>
       </StyledFlexTopCenter>
-      {moreFiltersVisisble && (
+      {moreFiltersVisible && (
         <Box sx={{ mb: theme.spacing(4.8) }}>
           {!!identifiersOptions?.length && (
             <Switch name="filterByIdentifier" control={control} label={t('filterByIdentifier')} />

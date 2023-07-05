@@ -51,7 +51,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
   const watchFilters = useWatch({
     control: methods.control,
-    name: ['startDateEndDate', 'startTime', 'endTime', 'versions', 'identifier'],
+    name: ['startDate', 'endDate', 'startTime', 'endTime', 'versions', 'identifier'],
   });
 
   const { execute: getAnswers } = useAsync(getAnswersApi);
@@ -61,14 +61,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
       if (!appletId || !respondentId) return;
       try {
         setIsLoading(true);
-        const {
-          startDateEndDate: [startDate, endDate],
-          startTime,
-          endTime,
-          identifier,
-          filterByIdentifier,
-          versions,
-        } = methods.getValues();
+        const { startDate, endDate, startTime, endTime, identifier, filterByIdentifier, versions } =
+          methods.getValues();
 
         const result = await getAnswers({
           appletId,
