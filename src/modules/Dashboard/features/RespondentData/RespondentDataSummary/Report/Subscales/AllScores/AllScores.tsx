@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { StyledBodyMedium, StyledFlexTopStart, StyledHeadline, theme } from 'shared/styles';
 
-import { Box } from '@mui/material';
 import { LineChart } from '../../Charts';
 import { AllScoresProps } from './AllScores.types';
 
