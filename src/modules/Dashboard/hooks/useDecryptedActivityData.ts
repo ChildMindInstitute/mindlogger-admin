@@ -4,11 +4,7 @@ import { useParams } from 'react-router-dom';
 import { applet } from 'shared/state';
 import { decryptData, Encryption, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import {
-  DecryptedActivityData,
-  DecryptedAnswerData,
-  EncryptedAnswerSharedProps,
-} from 'shared/types';
+import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types';
 import {
   AnswerDTO,
   EventDTO,
@@ -84,7 +80,7 @@ export const useDecryptedActivityData = (
         answer: answersDecrypted[index],
         ...rest,
       });
-    }, [] as DecryptedAnswerData<T>[]);
+    }, [] as DecryptedActivityData<T>['decryptedAnswers']);
 
     return {
       decryptedAnswers: answerDataDecrypted,
