@@ -60,11 +60,11 @@ export type ItemResponseValues = {
 
 export type FormattedActivityItem = {
   id: string;
-  key: string;
   name: string;
   question: Record<string, string>;
   responseType: ItemResponseType;
   responseValues: ItemResponseValues;
+  responseDataIdentifier?: boolean;
 };
 
 export type FormattedResponse = {

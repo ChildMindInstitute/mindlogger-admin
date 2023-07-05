@@ -3,7 +3,6 @@ import { Context } from 'chartjs-plugin-datalabels';
 
 import { variables } from 'shared/styles';
 import { ItemResponseType, locales } from 'shared/consts';
-import { SingleAndMultipleSelectItemResponseValues } from 'shared/state/Applet/Applet.schema';
 
 import { DataProps, ExtendedChartDataset, OptionsProps } from './MultiScatterChart.types';
 import { getStepSize, getTimeConfig, truncateString } from '../Charts.utils';
@@ -65,9 +64,9 @@ export const getOptions = ({
           stepSize: 1,
           callback: (value: string | number) => {
             if (value === maxY + 1) return;
-            const label = mapper[value].text;
+            const label = mapper[value]?.text;
 
-            return truncateString(label.toString());
+            return label ? truncateString(label.toString()) : label;
           },
           color: variables.palette.on_surface,
           font: {
