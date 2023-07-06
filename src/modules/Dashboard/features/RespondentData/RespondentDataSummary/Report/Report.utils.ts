@@ -24,6 +24,7 @@ import {
 import { Identifier } from '../RespondentDataSummary.types';
 import {
   ActivityCompletion,
+  Answer,
   FormattedActivityItem,
   FormattedResponse,
   ItemOption,
@@ -99,8 +100,8 @@ const getSliderOptions = (
 
 const getOptionsMapper = (formattedActivityItem: FormattedActivityItem) =>
   formattedActivityItem.responseValues.options.reduce(
-    (acc: Record<number, number>, option: ItemOption, index: number) => ({
-      ...acc,
+    (options: Record<number, number>, option: ItemOption, index: number) => ({
+      ...options,
       [option.value]: index,
     }),
     {},
@@ -115,48 +116,89 @@ const compareActivityItem = (
   switch (currActivityItem.activityItem.responseType) {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection: {
+      let maxValue = prevActivityItem.activityItem.responseValues.options.length;
+
       const prevActivityItemOptions = getObjectFromList(
         prevActivityItem.activityItem.responseValues.options,
       );
+      const mapperIdValue = prevActivityItem.activityItem.responseValues.options.reduce(
+        (acc: Record<string, number>, curr) => ({
+          ...acc,
+          [curr.id]: curr.value,
+        }),
+        {},
+      );
 
-      let updatedAnswers = [...answers];
-      let maxValue = prevActivityItem.activityItem.responseValues.options.length;
-
-      const options = activityItem.responseValues.options.reduce(
-        (acc: Record<string, ItemOption>, { id, text, value }) => {
-          if (acc[id])
-            return {
-              ...acc,
-              [id]: {
-                ...acc[id],
-                text,
+      const updatedAnswers: Answer[] = [];
+      const currAnswers = answers.reduce(
+        (answers: Record<string, Answer>, curr) =>
+          curr.answer.value === null || curr.answer.value === undefined
+            ? answers
+            : {
+                ...answers,
+                [curr.answer.value]: curr,
               },
-            };
+        {},
+      );
 
-          updatedAnswers = updatedAnswers.map((answerItem) => {
-            if (answerItem.answer.value !== value) return answerItem;
+      const updatedOptions = activityItem.responseValues.options.reduce(
+        (options: Record<string, ItemOption>, { id, text, value }) => {
+          if (!options[id]) {
+            if (currAnswers[value]) {
+              updatedAnswers.push({
+                ...currAnswers[value],
+                answer: {
+                  ...currAnswers[value].answer,
+                  value: maxValue,
+                },
+              });
+            }
 
-            return {
-              ...answerItem,
-              answer: {
-                ...answerItem.answer,
+            const newOptions = {
+              ...options,
+              [id]: {
+                id,
+                text,
                 value: maxValue,
               },
             };
-          });
 
-          const updatedOptions = {
-            ...acc,
+            maxValue += 1;
+
+            return newOptions;
+          }
+
+          if (mapperIdValue[id] === value) {
+            if (currAnswers[value]) {
+              updatedAnswers.push(currAnswers[value]);
+            }
+
+            return {
+              ...options,
+              [id]: {
+                ...options[id],
+                text,
+              },
+            };
+          }
+
+          if (currAnswers[value]) {
+            updatedAnswers.push({
+              ...currAnswers[value],
+              answer: {
+                ...currAnswers[value].answer,
+                value: options[id].value,
+              },
+            });
+          }
+
+          return {
+            ...options,
             [id]: {
-              id,
+              ...options[id],
               text,
-              value: maxValue,
             },
           };
-
-          maxValue += 1;
-
-          return updatedOptions;
         },
         prevActivityItemOptions,
       );
@@ -166,10 +208,10 @@ const compareActivityItem = (
           ...activityItem,
           responseValues: {
             ...activityItem.responseValues,
-            options: Object.values(options),
+            options: Object.values(updatedOptions),
           },
         },
-        answers: updatedAnswers,
+        answers: [...prevActivityItem.answers, ...updatedAnswers],
       };
     }
     case ItemResponseType.Slider: {
@@ -180,11 +222,11 @@ const compareActivityItem = (
       const sliderOptions = getSliderOptions(
         currResponseValues as SliderItemResponseValues,
         currActivityItem.id!,
-      ).reduce((acc: Record<string, ItemOption>, currentOption) => {
-        if (acc[currentOption.id]) return acc;
+      ).reduce((options: Record<string, ItemOption>, currentOption) => {
+        if (options[currentOption.id]) return options;
 
         return {
-          ...acc,
+          ...options,
           [currentOption.id]: currentOption,
         };
       }, getObjectFromList(prevResponseValues.options));
@@ -196,13 +238,13 @@ const compareActivityItem = (
             options: Object.values(sliderOptions),
           },
         },
-        answers,
+        answers: [...prevActivityItem.answers, ...answers],
       };
     }
     default:
       return {
         activityItem,
-        answers,
+        answers: [...prevActivityItem.answers, ...answers],
       };
   }
 };
@@ -370,8 +412,8 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
 
         const currResponseType = currentAnswer.activityItem.responseType;
         const prevResponseTypes = item.reduce(
-          (acc: Record<string, number>, { activityItem }, index: number) => ({
-            ...acc,
+          (types: Record<string, number>, { activityItem }, index: number) => ({
+            ...types,
             [activityItem.responseType]: index,
           }),
           {},
@@ -404,7 +446,7 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
         const updatedItem = [...item];
         updatedItem[prevResponseTypes[currResponseType]] = {
           activityItem,
-          answers: [...prevActivityItem.answers, ...answers],
+          answers,
         };
 
         newItems = {

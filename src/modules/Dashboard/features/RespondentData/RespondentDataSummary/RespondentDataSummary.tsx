@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useAsync, useBreadcrumbs } from 'shared/hooks';
 import { Spinner, Svg } from 'shared/components';
 import { useDecryptedIdentifiers } from 'modules/Dashboard/hooks';
-import { StyledContainer, StyledTitleLarge, variables } from 'shared/styles';
+import { StyledContainer, StyledFlexAllCenter, StyledTitleLarge, variables } from 'shared/styles';
 import {
   DatavizActivity,
   Version,
@@ -16,7 +16,7 @@ import {
 
 import { ReportMenu } from './ReportMenu';
 import { Report } from './Report';
-import { StyledEmptyContainer, StyledEmptyReview } from './RespondentDataSummary.styles';
+import { StyledReportContainer, StyledEmptyReview } from './RespondentDataSummary.styles';
 import { Identifier } from './RespondentDataSummary.types';
 
 export const RespondentDataSummary = () => {
@@ -42,6 +42,35 @@ export const RespondentDataSummary = () => {
     },
   ]);
 
+  const reportContent = useMemo(() => {
+    if (isLoading) return <Spinner />;
+    if (!selectedActivity || selectedActivity.isPerformanceTask) {
+      return (
+        <StyledFlexAllCenter>
+          <StyledEmptyReview>
+            {!selectedActivity ? (
+              <>
+                <Svg id="data" width="60" height="73" />
+                <StyledTitleLarge color={variables.palette.outline}>
+                  {t('selectTheActivityToReview')}
+                </StyledTitleLarge>
+              </>
+            ) : (
+              <>
+                <Svg id="confused" width="60" height="73" />
+                <StyledTitleLarge color={variables.palette.outline}>
+                  {t('datavizNotSupportedForPerformanceTasks')}
+                </StyledTitleLarge>
+              </>
+            )}
+          </StyledEmptyReview>
+        </StyledFlexAllCenter>
+      );
+    }
+
+    return <Report activity={selectedActivity!} identifiers={identifiers} versions={versions} />;
+  }, [selectedActivity, isLoading]);
+
   useEffect(() => {
     const fetchActivities = async () => {
       if (!appletId || !respondentId) return;
@@ -58,7 +87,8 @@ export const RespondentDataSummary = () => {
   }, [appletId, respondentId]);
 
   useEffect(() => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !respondentId || selectedActivity?.isPerformanceTask) return;
+
     const fetchFiltersData = async () => {
       if (!appletId || !selectedActivity) return;
       try {
@@ -79,7 +109,6 @@ export const RespondentDataSummary = () => {
 
   return (
     <StyledContainer>
-      {isLoading && <Spinner />}
       {!!activities.length && (
         <>
           <ReportMenu
@@ -87,18 +116,9 @@ export const RespondentDataSummary = () => {
             selectedActivity={selectedActivity}
             setSelectedActivity={setSelectedActivity}
           />
-          {!isLoading && selectedActivity && !!versions.length ? (
-            <Report activity={selectedActivity} identifiers={identifiers} versions={versions} />
-          ) : (
-            <StyledEmptyContainer>
-              <StyledEmptyReview>
-                <Svg id="data" width="60" height="73" />
-                <StyledTitleLarge color={variables.palette.outline}>
-                  {t('emptyReview')}
-                </StyledTitleLarge>
-              </StyledEmptyReview>
-            </StyledEmptyContainer>
-          )}
+          <StyledReportContainer sx={{ position: 'relative' }}>
+            {reportContent}
+          </StyledReportContainer>
         </>
       )}
     </StyledContainer>

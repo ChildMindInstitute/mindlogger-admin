@@ -594,6 +594,8 @@
   "appletPage": "Page Applet",
   "downloadLatestReport": "Télécharger le dernier rapport",
   "emptyReview": "Sélectionnez la date, l'Activité et l'heure de réponse pour examiner les données de réponse.",
+  "selectTheActivityToReview": "Sélectionnez l'activité pour examiner les données de réponse.",
+  "datavizNotSupportedForPerformanceTasks": "La visualisation des données pour les tâches de performance n'est pas prise en charge",
   "feedback": "Commentaires",
   "notes": "Notes",
   "assessment": "Évaluation",
