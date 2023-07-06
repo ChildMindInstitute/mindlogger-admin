@@ -122,22 +122,26 @@ const compareActivityItem = (
         prevActivityItem.activityItem.responseValues.options,
       );
       const mapperIdValue = prevActivityItem.activityItem.responseValues.options.reduce(
-        (acc: Record<string, number>, curr) => ({
+        (acc: Record<string, number>, { id, value }) => ({
           ...acc,
-          [curr.id]: curr.value,
+          [id]: value,
         }),
         {},
       );
 
       const updatedAnswers: Answer[] = [];
       const currAnswers = answers.reduce(
-        (answers: Record<string, Answer>, curr) =>
-          curr.answer.value === null || curr.answer.value === undefined
+        (answers: Record<string, Answer>, curr) => {
+          const value = curr.answer.value;
+
+          return value === null || value === undefined
             ? answers
             : {
                 ...answers,
-                [curr.answer.value]: curr,
-              },
+                [value]: curr,
+              };
+        },
+
         {},
       );
 
