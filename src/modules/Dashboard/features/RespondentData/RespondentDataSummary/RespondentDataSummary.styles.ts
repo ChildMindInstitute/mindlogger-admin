@@ -3,9 +3,12 @@ import { styled } from '@mui/material';
 import { StyledFlexAllCenter, variables } from 'shared/styles';
 
 export const StyledReportContainer = styled(StyledFlexAllCenter)`
-  position: relative;
   width: calc(100% - 40rem);
   height: 100%;
+
+  .spinner-container {
+    width: calc(100% - 40rem);
+  }
 `;
 
 export const StyledEmptyReview = styled(StyledFlexAllCenter)`

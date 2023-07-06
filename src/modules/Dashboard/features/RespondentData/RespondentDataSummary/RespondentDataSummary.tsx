@@ -116,9 +116,7 @@ export const RespondentDataSummary = () => {
             selectedActivity={selectedActivity}
             setSelectedActivity={setSelectedActivity}
           />
-          <StyledReportContainer sx={{ position: 'relative' }}>
-            {reportContent}
-          </StyledReportContainer>
+          <StyledReportContainer>{reportContent}</StyledReportContainer>
         </>
       )}
     </StyledContainer>
