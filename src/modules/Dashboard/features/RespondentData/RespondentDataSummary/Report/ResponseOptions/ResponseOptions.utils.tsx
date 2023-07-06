@@ -3,10 +3,7 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
 } from 'shared/state/Applet/Applet.schema';
-import {
-  DecryptedMultiSelectionAnswer,
-  DecryptedSingleSelectionAnswer,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { DecryptedMultiSelectionAnswer, DecryptedSingleSelectionAnswer } from 'shared/types';
 
 import { ItemAnswer, FormattedItemAnswer } from '../Report.types';
 import { MultiScatterChart } from '../Charts';

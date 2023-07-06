@@ -6,12 +6,9 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
 } from 'shared/state/Applet/Applet.schema';
-import {
-  ActivityItemAnswer,
-  DecryptedMultiSelectionAnswer,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { getObjectFromList } from 'shared/utils';
 import { isItemUnsupported } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
+import { ActivityItemAnswer, DecryptedMultiSelectionAnswer } from 'shared/types';
 
 import {
   DEFAULT_END_DATE,

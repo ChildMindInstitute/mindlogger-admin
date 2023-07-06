@@ -4,11 +4,13 @@ import { useParams } from 'react-router-dom';
 import { applet } from 'shared/state';
 import { decryptData, Encryption, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types';
 import {
   AnswerDTO,
+  DecryptedActivityData,
+  EncryptedAnswerSharedProps,
   EventDTO,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+} from 'shared/types';
+
 export const getEmptyDecryptedActivityData = () => ({
   decryptedAnswers: [],
   decryptedEvents: [],

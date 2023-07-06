@@ -7,7 +7,7 @@ import {
   DecryptedGeolocationAnswer,
   DecryptedMediaAnswer,
   DecryptedTimeAnswer,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+} from 'shared/types';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';

@@ -14,7 +14,7 @@ import {
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+} from 'shared/types';
 import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
 import { getObjectFromList } from '../builderHelpers';

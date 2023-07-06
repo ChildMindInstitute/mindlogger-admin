@@ -1,4 +1,4 @@
-import { DecryptedDrawingValue } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { DecryptedDrawingValue } from 'shared/types';
 
 export const getDrawingLines = (
   lines: DecryptedDrawingValue['lines'],

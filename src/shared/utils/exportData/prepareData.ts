@@ -1,6 +1,8 @@
 import {
   DecryptedActivityData,
   DecryptedAnswerData,
+  DecryptedDrawingAnswer,
+  DecryptedMediaAnswer,
   ExportActivity,
   ExportCsvData,
   ExtendedExportAnswer,
@@ -8,10 +10,6 @@ import {
 } from 'shared/types';
 import { getObjectFromList } from 'shared/utils/builderHelpers';
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
-import {
-  DecryptedDrawingAnswer,
-  DecryptedMediaAnswer,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { convertJsonToCsv } from 'shared/utils/exportTemplate';
 
 import { getParsedAnswers } from '../getParsedAnswers';

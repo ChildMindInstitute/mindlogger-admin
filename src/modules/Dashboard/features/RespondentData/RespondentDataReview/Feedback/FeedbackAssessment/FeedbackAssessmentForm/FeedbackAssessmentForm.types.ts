@@ -1,10 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import {
-  ActivityItemAnswer,
-  AnswerDTO,
-  AnswerValue,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { ActivityItemAnswer, AnswerDTO, AnswerValue } from 'shared/types';
 
 export type FormattedAssessmentItem = {
   itemIds: string[];
