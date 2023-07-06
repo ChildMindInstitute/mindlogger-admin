@@ -72,11 +72,15 @@ export const useDecryptedActivityData = (
       }
     }
 
-    const answerDataDecrypted = rest.items.map((activityItem, index) => ({
-      activityItem,
-      answer: answersDecrypted[index],
-      ...rest,
-    }));
+    const answerDataDecrypted = rest.items.reduce((acc, activityItem, index) => {
+      if (answersDecrypted[index] === null) return acc;
+
+      return acc.concat({
+        activityItem,
+        answer: answersDecrypted[index],
+        ...rest,
+      });
+    }, [] as DecryptedActivityData<T>['decryptedAnswers']);
 
     return {
       decryptedAnswers: answerDataDecrypted,
