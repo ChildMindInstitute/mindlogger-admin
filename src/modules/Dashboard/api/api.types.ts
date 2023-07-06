@@ -201,7 +201,7 @@ export type DuplicateApplet = AppletId & {
   };
 };
 
-export type AppletNameArgs = AppletId & { appletName: string };
+export type AppletName = { appletName: string };
 
 export type AppletEncryption = AppletId & { encryption: Encryption };
 
@@ -222,7 +222,7 @@ export type TogglePin = OwnerId & {
 
 export type UpdateAlertStatus = { alertId: string };
 
-export type PublishApplet = AppletId & { publish?: boolean };
+export type PublishApplet = AppletId & AppletName & { keywords: string[] };
 
 export type UpdateAppletSearchTerms = AppletId & { params: { keywords: string } };
 

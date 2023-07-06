@@ -16,6 +16,7 @@ import {
   StyledTitleBoldMedium,
   StyledTitleMedium,
 } from 'shared/styles';
+import { getDictionaryText } from 'shared/utils';
 import { page } from 'resources';
 
 import {
@@ -35,7 +36,7 @@ import { Activity } from './Activity';
 import { AppletImage } from './AppletImage';
 
 export const Applet = ({
-  applet: { appletId, name, image = '', version = '', description, keywords, activities },
+  applet: { id, displayName, image = '', version = '', description, keywords, activities },
   uiType = AppletUiType.List,
 }: AppletProps) => {
   const { t } = useTranslation('app');
@@ -44,11 +45,11 @@ export const Applet = ({
   const [activitiesVisible, setActivitiesVisible] = useState(uiType === AppletUiType.Details);
   const [removeAppletPopupVisible, setRemoveAppletPopupVisible] = useState(false);
 
-  const methods = useForm<AppletForm>({ defaultValues: { [appletId]: [] }, mode: 'onChange' });
+  const methods = useForm<AppletForm>({ defaultValues: { [id]: [] }, mode: 'onChange' });
   const { getValues } = methods;
 
-  const selectedItems = getValues()[appletId];
-  const APPLET_DETAILS = `${page.library}/${appletId}`;
+  const selectedItems = getValues()[id];
+  const APPLET_DETAILS = `${page.library}/${id}`;
 
   const handleRemove = () => {
     setRemoveAppletPopupVisible(true);
@@ -57,7 +58,7 @@ export const Applet = ({
   const renderAppletInfoListView = () => (
     <>
       <StyledAppletName>
-        <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
+        <StyledTitleBoldMedium>{displayName}</StyledTitleBoldMedium>
         {version && (
           <>
             <StyledTitleMedium sx={{ margin: theme.spacing(0, 0.8) }}>∙</StyledTitleMedium>
@@ -70,7 +71,7 @@ export const Applet = ({
           color={variables.palette.on_surface}
           sx={{ marginTop: theme.spacing(0.4) }}
         >
-          {description}
+          {getDictionaryText(description)}
         </StyledBodyMedium>
       )}
     </>
@@ -78,13 +79,13 @@ export const Applet = ({
 
   const renderAppletInfoDetailsView = () => (
     <>
-      <StyledHeadlineLarge>{name}</StyledHeadlineLarge>
+      <StyledHeadlineLarge>{displayName}</StyledHeadlineLarge>
       {version && <StyledLabelBoldLarge>{version}</StyledLabelBoldLarge>}
       {description && (
         <StyledBodyLarge
           sx={{ marginTop: theme.spacing(1.4), color: variables.palette.on_surface_variant }}
         >
-          {description}
+          {getDictionaryText(description)}
         </StyledBodyLarge>
       )}
     </>
@@ -152,7 +153,7 @@ export const Applet = ({
   return (
     <>
       <StyledAppletContainer>
-        <AppletImage image={image} name={name} />
+        <AppletImage image={image} name={displayName} />
         <Box>
           {renderAppletInfo()}
           {!!keywords.length && (
@@ -185,8 +186,8 @@ export const Applet = ({
               {activitiesVisible && (
                 <StyledActivities>
                   {activities.map((activity) => (
-                    <Fragment key={activity.id}>
-                      <Activity appletId={appletId} activity={activity} />
+                    <Fragment key={activity.name}>
+                      <Activity appletId={id} activity={activity} />
                     </Fragment>
                   ))}
                 </StyledActivities>
@@ -197,8 +198,8 @@ export const Applet = ({
       </StyledAppletContainer>
       {removeAppletPopupVisible && (
         <RemoveAppletPopup
-          appletId={appletId}
-          appletName={name}
+          appletId={id}
+          appletName={displayName}
           removeAppletPopupVisible={removeAppletPopupVisible}
           setRemoveAppletPopupVisible={setRemoveAppletPopupVisible}
         />

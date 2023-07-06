@@ -54,28 +54,26 @@ export const ShareApplet = ({
   const handleShareApplet = useCallback(async () => {
     if (applet) {
       try {
-        const checkResult = await checkAppletNameInLibraryApi({
-          appletId: applet.id || '',
-          appletName: getValues().appletName || '',
-        });
-        setShowNameTakenError(!checkResult?.data);
+        const appletName = getValues().appletName || '';
+        const checkResult = await checkAppletNameInLibraryApi({ appletName });
+        setShowNameTakenError(checkResult?.data);
 
-        if (checkResult?.data) {
+        if (!checkResult?.data) {
           setIsLoading(true);
           await publishAppletToLibraryApi({
             appletId: applet.id || '',
+            appletName,
+            keywords,
           });
-          await updateAppletSearchTermsApi({
-            appletId: applet.id || '',
-            params: { keywords: JSON.stringify(keywords) },
-          });
+
           const libraryUrlResult = await getAppletLibraryUrlApi({
             appletId: applet.id || '',
           });
 
-          setLibraryUrl(libraryUrlResult?.data as string);
+          setLibraryUrl(libraryUrlResult?.data?.result as string);
           setIsLoading(false);
-          onAppletShared && onAppletShared({ keywords, libraryUrl: libraryUrlResult?.data });
+          onAppletShared &&
+            onAppletShared({ keywords, libraryUrl: libraryUrlResult?.data?.result });
           setAppletShared(true);
         }
       } catch (e) {
