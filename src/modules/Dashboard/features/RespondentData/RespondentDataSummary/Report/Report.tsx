@@ -16,11 +16,11 @@ import { ReportFilters } from './ReportFilters';
 import { StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 import {
-  ActivityResponse,
-  CurrentActivityCompletionData,
+  ActivityCompletion,
   FilterFormValues,
+  FormattedResponse,
   ReportProps,
-  ResponseOption,
+  CurrentActivityCompletionData,
 } from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
 import { ResponseOptions } from './ResponseOptions';
@@ -40,8 +40,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const getDecryptedActivityData = useDecryptedActivityData();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [answers, setAnswers] = useState<ActivityResponse[]>([]);
-  const [responseOptions, setResponseOptions] = useState<ResponseOption[]>([]);
+  const [answers, setAnswers] = useState<ActivityCompletion[]>([]);
+  const [responseOptions, setResponseOptions] = useState<Record<string, FormattedResponse[]>>();
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
     useState<CurrentActivityCompletionData>(null);
 
@@ -51,7 +51,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
   const watchFilters = useWatch({
     control: methods.control,
-    name: ['startDateEndDate', 'startTime', 'endTime', 'versions', 'identifier'],
+    name: ['startDate', 'endDate', 'startTime', 'endTime', 'versions', 'identifier'],
   });
 
   const { execute: getAnswers } = useAsync(getAnswersApi);
@@ -61,14 +61,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
       if (!appletId || !respondentId) return;
       try {
         setIsLoading(true);
-        const {
-          startDateEndDate: [startDate, endDate],
-          startTime,
-          endTime,
-          identifier,
-          filterByIdentifier,
-          versions,
-        } = methods.getValues();
+        const { startDate, endDate, startTime, endTime, identifier, filterByIdentifier, versions } =
+          methods.getValues();
 
         const result = await getAnswers({
           appletId,
@@ -97,8 +91,13 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           };
         });
 
-        setAnswers(decryptedAnswers);
-        const formattedResponses = getFormattedResponses(decryptedAnswers);
+        // TODO: remove when backend add sorting
+        const sortedDecryptedAnswers = decryptedAnswers.sort((a, b) =>
+          a.version.localeCompare(b.version),
+        );
+
+        setAnswers(sortedDecryptedAnswers);
+        const formattedResponses = getFormattedResponses(sortedDecryptedAnswers);
         setResponseOptions(formattedResponses);
       } finally {
         setIsLoading(false);

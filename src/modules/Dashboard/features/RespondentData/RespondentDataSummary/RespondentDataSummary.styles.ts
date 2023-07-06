@@ -1,11 +1,14 @@
 import { styled } from '@mui/material';
 
-import { StyledFlexAllCenter, theme, variables } from 'shared/styles';
+import { StyledFlexAllCenter, variables } from 'shared/styles';
 
-export const StyledEmptyContainer = styled(StyledFlexAllCenter)`
-  width: 100%;
+export const StyledReportContainer = styled(StyledFlexAllCenter)`
+  width: calc(100% - 40rem);
   height: 100%;
-  margin-top: ${theme.spacing(9.6)};
+
+  .spinner-container {
+    width: calc(100% - 40rem);
+  }
 `;
 
 export const StyledEmptyReview = styled(StyledFlexAllCenter)`

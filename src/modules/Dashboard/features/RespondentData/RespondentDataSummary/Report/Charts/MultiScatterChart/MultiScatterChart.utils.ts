@@ -3,11 +3,11 @@ import { Context } from 'chartjs-plugin-datalabels';
 
 import { variables } from 'shared/styles';
 import { ItemResponseType, locales } from 'shared/consts';
-import { SingleAndMultipleSelectItemResponseValues } from 'shared/state/Applet/Applet.schema';
 
 import { DataProps, ExtendedChartDataset, OptionsProps } from './MultiScatterChart.types';
 import { getStepSize, getTimeConfig, truncateString } from '../Charts.utils';
 import { LABEL_WIDTH_Y } from '../Charts.const';
+import { ItemOption } from '../../Report.types';
 
 export const getOptions = ({
   lang,
@@ -22,22 +22,19 @@ export const getOptions = ({
   const min = minDate.getTime();
   const max = maxDate.getTime();
 
+  const mapper: Record<string, ItemOption> = responseValues.options.reduce(
+    (acc, option) => ({
+      ...acc,
+      [option.value]: option,
+    }),
+    {},
+  );
+
   const timeConfig = getTimeConfig(min, max);
   const stepSize = getStepSize(min, max);
 
   const crossAlign =
     responseType === ItemResponseType.Slider ? ('near' as const) : ('far' as const);
-
-  const mapperPointOption: { [key: string | number]: string } =
-    responseType !== ItemResponseType.Slider
-      ? (responseValues as SingleAndMultipleSelectItemResponseValues)?.options.reduce(
-          (mapper, { text }, index) => ({
-            ...mapper,
-            [index + 1]: text,
-          }),
-          {},
-        )
-      : {};
 
   return {
     responsive: true,
@@ -67,13 +64,9 @@ export const getOptions = ({
           stepSize: 1,
           callback: (value: string | number) => {
             if (value === maxY + 1) return;
+            const label = mapper[value]?.text;
 
-            const label =
-              responseType === ItemResponseType.Slider
-                ? value.toString()
-                : mapperPointOption[value];
-
-            return truncateString(label);
+            return label ? truncateString(label.toString()) : label;
           },
           color: variables.palette.on_surface,
           font: {
@@ -155,8 +148,8 @@ export const getData = ({ maxY, answers, versions, color }: DataProps) => ({
       datalabels: {
         display: false,
       },
-      data: answers.map(({ date, value }) => ({
-        x: date,
+      data: answers.map(({ date, answer: { value } }) => ({
+        x: new Date(date),
         y: value,
       })),
       borderWidth: 0,

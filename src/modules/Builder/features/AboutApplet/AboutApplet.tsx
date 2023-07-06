@@ -84,6 +84,7 @@ export const AboutApplet = () => {
               {...commonInputProps}
               name="description"
               maxLength={MAX_DESCRIPTION_LENGTH_LONG}
+              restrictExceededValueLength={true}
               label={t('appletDescription')}
               multiline
               rows={5}

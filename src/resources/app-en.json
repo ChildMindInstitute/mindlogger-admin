@@ -419,7 +419,7 @@
   "fieldRequired": "This field is required.",
   "descriptionRequired": "Description is required",
   "aboutAppletRequired": "About Applet is required",
-  "pleaseSelectArea": "Please select area to display",
+  "pleaseSelectArea": "Please select the area to display",
   "aboutActivityFlow": "About Activity Flow",
   "activityFlowName": "Activity Flow Name",
   "activityFlowDescription": "Activity Flow Description",
@@ -732,6 +732,8 @@
   "appletPage": "Applet Page",
   "downloadLatestReport": "Download Latest Report",
   "emptyReview": "Select the date, Activity, and response time to review the response data.",
+  "selectTheActivityToReview": "Select the Activity to review the response data.",
+  "datavizNotSupportedForPerformanceTasks":"Data visualization for Performance Tasks not supported",
   "feedback": "Feedback",
   "notes": "Notes",
   "assessment": "Assessment",
@@ -1154,5 +1156,6 @@
   "configureServerForReport": "Server Status: Not Configured. Report can not be generated.",
   "true": "True",
   "false": "False",
-  "showAllSubscaleResults": "Show All Subscale Results"
+  "showAllSubscaleResults": "Show All Subscale Results",
+  "latestFinalSubscaleScore": "Latest Final Subscale Score"
 }

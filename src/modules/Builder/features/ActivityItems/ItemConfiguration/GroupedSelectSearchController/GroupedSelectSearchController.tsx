@@ -1,29 +1,30 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
-import { TextField, FormControl, InputLabel, FormHelperText } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { theme, StyledClearedButton, StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles';
+import { StyledBodyMedium, StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
 import { falseReturnFunc } from 'shared/utils';
 import { itemsTypeIcons } from 'shared/consts';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
-  StyledMenuItem,
   StyledListSubheader,
-  StyledSelect,
+  StyledMenuItem,
   StyledMobileOnly,
+  StyledSelect,
 } from './GroupedSelectSearchController.styles';
 import { ItemTypeTooltip } from './ItemTypeTooltip';
 import { selectDropdownStyles } from './GroupedSelectSearchController.const';
 import {
-  handleSearchKeyDown,
-  getIsNotHaveSearchValue,
   getEmptyComponent,
   getGroupName,
   getGroupValueText,
+  getIsNotHaveSearchValue,
+  getIsOnlyMobileValue,
+  handleSearchKeyDown,
 } from './GroupedSelectSearchController.utils';
 
 export const GroupedSelectSearchController = <T extends FieldValues>({
@@ -64,6 +65,12 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
     handleTooltipClose();
   };
 
+  const mobileOnly = (
+    <StyledMobileOnly>
+      <StyledBodyMedium>{t('mobileOnly')}</StyledBodyMedium>
+    </StyledMobileOnly>
+  );
+
   return (
     <>
       <Controller
@@ -85,10 +92,13 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
               label={t('inputType')}
               renderValue={() => (
                 <StyledFlexTopCenter sx={{ maxHeight: '2.3rem' }}>
-                  <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-                    {itemsTypeIcons[value]}
+                  <StyledFlexTopCenter sx={{ overflow: 'hidden' }}>
+                    <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
+                      {itemsTypeIcons[value]}
+                    </StyledFlexTopCenter>
+                    {t(value)}
+                    {getIsOnlyMobileValue(value) && mobileOnly}
                   </StyledFlexTopCenter>
-                  {t(value)}
                 </StyledFlexTopCenter>
               )}
               open={selectOpen}
@@ -145,11 +155,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                         </StyledFlexTopCenter>
                         <StyledFlexTopCenter>
                           {getGroupValueText(searchTerm, groupValue)}
-                          {isMobileOnly && (
-                            <StyledMobileOnly>
-                              <StyledBodyMedium>{t('mobileOnly')}</StyledBodyMedium>
-                            </StyledMobileOnly>
-                          )}
+                          {isMobileOnly && mobileOnly}
                         </StyledFlexTopCenter>
                       </StyledFlexTopCenter>
                     </StyledMenuItem>

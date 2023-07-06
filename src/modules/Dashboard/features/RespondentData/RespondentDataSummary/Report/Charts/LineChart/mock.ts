@@ -3,7 +3,7 @@ export const mockedSubscales = {
     {
       id: 'subscale1',
       name: 'Subscale one',
-      responses: [
+      activityCompletions: [
         {
           date: new Date('2023-11-06'),
           score: 3,
@@ -29,7 +29,7 @@ export const mockedSubscales = {
     {
       id: 'subscale2',
       name: 'Subscale two',
-      responses: [
+      activityCompletions: [
         {
           date: new Date('2023-11-02'),
           score: 4,
@@ -51,7 +51,7 @@ export const mockedSubscales = {
     {
       id: 'subscale3',
       name: 'Subscale three',
-      responses: [
+      activityCompletions: [
         {
           date: new Date('2023-11-04'),
           score: 5,

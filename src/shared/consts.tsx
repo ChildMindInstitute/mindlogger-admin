@@ -12,7 +12,7 @@ export const MAX_NAME_LENGTH = 55;
 export const MAX_DESCRIPTION_LENGTH = 150;
 export const SMALL_INPUT_LENGTH = 5;
 export const TEXTAREA_ROWS = 5;
-export const MAX_DESCRIPTION_LENGTH_LONG = 230;
+export const MAX_DESCRIPTION_LENGTH_LONG = 150;
 export const MAX_SELECT_OPTION_TEXT_LENGTH = 75;
 export const MAX_SLIDER_LABEL_TEXT_LENGTH = 20;
 export const MAX_FILE_SIZE_8MB = 8_388_608;
@@ -102,14 +102,7 @@ export enum ItemResponseType {
   StabilityTracker = 'stabilityTracker',
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
-  ABTrailsTabletFirst = 'ABTrailsTabletFirst',
-  ABTrailsTabletSecond = 'ABTrailsTabletSecond',
-  ABTrailsTabletThird = 'ABTrailsTabletThird',
-  ABTrailsTabletFourth = 'ABTrailsTabletFourth',
-  ABTrailsMobileFirst = 'ABTrailsMobileFirst',
-  ABTrailsMobileSecond = 'ABTrailsMobileSecond',
-  ABTrailsMobileThird = 'ABTrailsMobileThird',
-  ABTrailsMobileFourth = 'ABTrailsMobileFourth',
+  ABTrails = 'ABTrails',
 }
 
 export enum GyroscopeOrTouch {
@@ -149,7 +142,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.SliderRows]: <Svg id="slider-rows" />,
   [ItemResponseType.Text]: <Svg id="text" />,
   [ItemResponseType.Drawing]: <Svg id="drawing" />,
-  [ItemResponseType.Photo]: <Svg id="photo" />,
+  [ItemResponseType.Photo]: <Svg id="camera-outline" />,
   [ItemResponseType.Video]: <Svg id="video" />,
   [ItemResponseType.Geolocation]: <Svg id="geolocation" />,
   [ItemResponseType.Audio]: <Svg id="audio" />,
@@ -157,14 +150,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.AudioPlayer]: <Svg id="audio-player" />,
   [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
-  [ItemResponseType.ABTrailsMobileFirst]: null,
-  [ItemResponseType.ABTrailsMobileSecond]: null,
-  [ItemResponseType.ABTrailsMobileThird]: null,
-  [ItemResponseType.ABTrailsMobileFourth]: null,
-  [ItemResponseType.ABTrailsTabletFirst]: null,
-  [ItemResponseType.ABTrailsTabletSecond]: null,
-  [ItemResponseType.ABTrailsTabletThird]: null,
-  [ItemResponseType.ABTrailsTabletFourth]: null,
+  [ItemResponseType.ABTrails]: null,
   [ItemResponseType.StabilityTracker]: null,
   [ItemResponseType.TouchTest]: null,
   [ItemResponseType.TouchPractice]: null,
@@ -219,7 +205,7 @@ export const JOURNEY_REPORT_NAME = 'activity_user_journey';
 export const enum ActivityStatus {
   Missed = 'missed',
   Completed = 'completed',
-  NotSheduled = 'not scheduled',
+  NotScheduled = 'not scheduled',
 }
 
 export const enum Sex {

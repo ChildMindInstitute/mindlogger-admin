@@ -65,3 +65,20 @@ export const getGroupValueText = (searchTerm: string, groupValue: string) => {
     />
   );
 };
+
+export const getIsOnlyMobileValue = (value: ItemResponseType): boolean =>
+  [
+    ItemResponseType.Date,
+    ItemResponseType.Time,
+    ItemResponseType.TimeRange,
+    ItemResponseType.SingleSelectionPerRow,
+    ItemResponseType.MultipleSelectionPerRow,
+    ItemResponseType.SliderRows,
+    ItemResponseType.Drawing,
+    ItemResponseType.Photo,
+    ItemResponseType.Video,
+    ItemResponseType.Geolocation,
+    ItemResponseType.Audio,
+    ItemResponseType.Message,
+    ItemResponseType.AudioPlayer,
+  ].includes(value);

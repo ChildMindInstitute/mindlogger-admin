@@ -8,6 +8,7 @@ import { StyledHeadlineLarge, theme } from 'shared/styles';
 import { DEFAULT_INVITATIONS_ROWS_PER_PAGE, EmptyState } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { Roles } from 'shared/consts';
+import { isManagerOrOwner } from 'shared/utils';
 
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
@@ -41,8 +42,9 @@ export const AddUser = () => {
     getInvitationsHandler();
   }, []);
 
-  if (appletRoles?.[0] === Roles.Reviewer)
+  if (!isManagerOrOwner(appletRoles?.[0]) && !appletRoles?.includes(Roles.Coordinator)) {
     return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
+  }
 
   return (
     <>

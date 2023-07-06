@@ -24,12 +24,10 @@ export const useDecryptedIdentifiers = () => {
         const key = getAESKey(privateKey, JSON.parse(userPublicKey), prime, base);
 
         return {
-          decryptedValue: JSON.parse(
-            decryptData({
-              text: identifier,
-              key,
-            }),
-          ),
+          decryptedValue: decryptData({
+            text: identifier,
+            key,
+          }),
           encryptedValue: identifier,
         };
       } catch {

@@ -106,14 +106,7 @@ export type ItemResponseTypeNoPerfTasks = Exclude<
   | ItemResponseType.StabilityTracker
   | ItemResponseType.TouchPractice
   | ItemResponseType.TouchTest
-  | ItemResponseType.ABTrailsMobileFirst
-  | ItemResponseType.ABTrailsMobileSecond
-  | ItemResponseType.ABTrailsMobileThird
-  | ItemResponseType.ABTrailsMobileFourth
-  | ItemResponseType.ABTrailsTabletFirst
-  | ItemResponseType.ABTrailsTabletSecond
-  | ItemResponseType.ABTrailsTabletThird
-  | ItemResponseType.ABTrailsTabletFourth
+  | ItemResponseType.ABTrails
 >;
 
 export enum RoundTypeEnum {
@@ -124,6 +117,13 @@ export enum RoundTypeEnum {
 export enum DeviceType {
   Mobile = 'mobile',
   Tablet = 'tablet',
+}
+
+export enum OrderName {
+  First = 'first',
+  Second = 'second',
+  Third = 'third',
+  Fourth = 'fourth',
 }
 
 export enum GyroscopeItemNames {
@@ -168,6 +168,7 @@ export enum FlankerInstructionPositions {
   Practice = 1,
   Test = 7,
 }
+
 export enum FlankerItemPositions {
   PracticeFirst = 2,
   PracticeSecond = 4,
