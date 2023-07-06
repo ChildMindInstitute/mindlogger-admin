@@ -41,7 +41,7 @@ export const getJourneyCSVObject = <T>({
 
   return {
     id: event.id,
-    activity_scheduled_time: scheduledDatetime || ActivityStatus.NotSheduled,
+    activity_scheduled_time: scheduledDatetime || ActivityStatus.NotScheduled,
     activity_start_time: startDatetime,
     activity_end_time: endDatetime,
     press_next_time: getTime(event.type === UserActionType.Next),

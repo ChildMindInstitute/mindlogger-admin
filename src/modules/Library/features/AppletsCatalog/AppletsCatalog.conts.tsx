@@ -54,37 +54,9 @@ export const ItemResponseTypes = {
   },
   [ItemResponseType.Time]: { icon: <Svg id="clock-picker" />, title: ItemResponseType.Time },
   [ItemResponseType.Flanker]: { icon: null, title: ItemResponseType.Flanker },
-  [ItemResponseType.ABTrailsMobileFirst]: {
+  [ItemResponseType.ABTrails]: {
     icon: null,
-    title: ItemResponseType.ABTrailsMobileFirst,
-  },
-  [ItemResponseType.ABTrailsMobileSecond]: {
-    icon: null,
-    title: ItemResponseType.ABTrailsMobileSecond,
-  },
-  [ItemResponseType.ABTrailsMobileThird]: {
-    icon: null,
-    title: ItemResponseType.ABTrailsMobileThird,
-  },
-  [ItemResponseType.ABTrailsMobileFourth]: {
-    icon: null,
-    title: ItemResponseType.ABTrailsMobileFourth,
-  },
-  [ItemResponseType.ABTrailsTabletFirst]: {
-    icon: null,
-    title: ItemResponseType.ABTrailsTabletFirst,
-  },
-  [ItemResponseType.ABTrailsTabletSecond]: {
-    icon: null,
-    title: ItemResponseType.ABTrailsTabletSecond,
-  },
-  [ItemResponseType.ABTrailsTabletThird]: {
-    icon: null,
-    title: ItemResponseType.ABTrailsTabletThird,
-  },
-  [ItemResponseType.ABTrailsTabletFourth]: {
-    icon: null,
-    title: ItemResponseType.ABTrailsTabletFourth,
+    title: ItemResponseType.ABTrails,
   },
   [ItemResponseType.StabilityTracker]: { icon: null, title: ItemResponseType.StabilityTracker },
   [ItemResponseType.TouchTest]: { icon: null, title: ItemResponseType.TouchTest },

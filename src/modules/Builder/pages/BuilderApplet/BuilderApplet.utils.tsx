@@ -8,33 +8,33 @@ import i18n from 'i18n';
 import { page } from 'resources';
 import { Svg } from 'shared/components';
 import {
-  Item,
-  Condition,
-  SingleApplet,
+  Activity,
   ActivityFlow,
-  ConditionalLogic,
-  DrawingResponseValues,
-  NumberItemResponseValues,
-  SliderItemResponseValues,
-  SliderRowsResponseValues,
   AudioPlayerResponseValues,
+  Condition,
+  ConditionalLogic,
+  Config,
+  DrawingResponseValues,
+  Item,
+  ItemAlert,
+  NumberItemResponseValues,
+  OptionCondition,
+  ScoreCondition,
   SingleAndMultipleSelectionOption,
   SingleAndMultipleSelectItemResponseValues,
-  ItemAlert,
   SingleAndMultipleSelectRowsResponseValues,
-  OptionCondition,
+  SingleApplet,
+  SliderItemResponseValues,
+  SliderRowsResponseValues,
   SubscaleSetting,
-  Config,
-  Activity,
-  ScoreCondition,
 } from 'shared/state';
 import {
+  createArray,
   getDictionaryText,
   getEntityKey,
-  Path,
-  getTextBetweenBrackets,
   getObjectFromList,
-  createArray,
+  getTextBetweenBrackets,
+  Path,
 } from 'shared/utils';
 import {
   ConditionType,
@@ -43,33 +43,34 @@ import {
   DEFAULT_MILLISECONDS_DURATION,
   DEFAULT_NUMBER_OF_TRIALS,
   DEFAULT_THRESHOLD_DURATION,
+  GyroscopeOrTouch,
   ItemResponseType,
   PerfTaskType,
-  GyroscopeOrTouch,
   ScoreConditionType,
 } from 'shared/consts';
 import {
   ActivityFormValues,
   AppletFormValues,
-  GetNewActivity,
-  GetNewPerformanceTask,
-  ItemFormValues,
-  RoundTypeEnum,
+  DeviceType,
+  FlankerItemNames,
+  FlankerSamplingMethod,
   GetActivitySubscaleItems,
   GetActivitySubscaleSettingDuplicated,
-  FlankerSamplingMethod,
-  DeviceType,
+  GetNewActivity,
+  GetNewPerformanceTask,
   GyroscopeItemNames,
+  ItemFormValues,
+  OrderName,
+  RoundTypeEnum,
   TouchItemNames,
-  FlankerItemNames,
 } from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import {
+  ALLOWED_TYPES_IN_VARIABLES,
   CONDITION_TYPES_TO_HAVE_OPTION_ID,
   defaultFlankerBtnObj,
   ordinalStrings,
-  ALLOWED_TYPES_IN_VARIABLES,
 } from './BuilderApplet.const';
 
 const { t } = i18n;
@@ -84,14 +85,7 @@ export const isTouchOrGyroscopeRespType = (responseType: ItemResponseType) =>
 export const isPerfTaskResponseType = (responseType: ItemResponseType) =>
   isTouchOrGyroscopeRespType(responseType) ||
   responseType === ItemResponseType.Flanker ||
-  responseType === ItemResponseType.ABTrailsMobileFirst ||
-  responseType === ItemResponseType.ABTrailsMobileSecond ||
-  responseType === ItemResponseType.ABTrailsMobileThird ||
-  responseType === ItemResponseType.ABTrailsMobileFourth ||
-  responseType === ItemResponseType.ABTrailsTabletFirst ||
-  responseType === ItemResponseType.ABTrailsTabletSecond ||
-  responseType === ItemResponseType.ABTrailsTabletThird ||
-  responseType === ItemResponseType.ABTrailsTabletFourth;
+  responseType === ItemResponseType.ABTrails;
 
 export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
@@ -355,23 +349,16 @@ const flankerItems = [
 ];
 
 const getABTrailsItems = (deviceType: DeviceType) =>
-  createArray(4, (index) => {
-    const responseTypeKey =
-      deviceType === DeviceType.Mobile
-        ? `ABTrailsMobile${ordinalStrings[index]}`
-        : `ABTrailsTablet${ordinalStrings[index]}`;
-    const responseType = ItemResponseType[responseTypeKey as keyof typeof ItemResponseType];
-
-    return {
-      id: undefined,
-      key: uuidv4(),
-      responseType,
-      name: responseType,
-      config: {
-        deviceType,
-      },
-    };
-  });
+  createArray(4, (index) => ({
+    id: undefined,
+    key: uuidv4(),
+    responseType: ItemResponseType.ABTrails,
+    name: `${ItemResponseType.ABTrails}_${deviceType}_${index + 1}`,
+    config: {
+      deviceType,
+      orderName: OrderName[ordinalStrings[index] as keyof typeof OrderName],
+    },
+  }));
 
 export const getNewPerformanceTask = ({
   name,
