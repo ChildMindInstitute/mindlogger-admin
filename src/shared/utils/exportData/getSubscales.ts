@@ -11,9 +11,9 @@ import { FinalSubscale, LookupTableItems, Sex, SubscaleTotalScore } from 'shared
 import {
   AnswerDTO,
   DecryptedMultiSelectionAnswer,
-  DecryptedSexAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
+  DecryptedTextAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
@@ -89,10 +89,11 @@ export const calcScores = <T>(
   if (data?.subscaleTableData) {
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {
       const genderAnswer = activityItems[LookupTableItems.Gender_screen]
-        ?.answer as DecryptedSexAnswer;
+        ?.answer as DecryptedSingleSelectionAnswer;
       const withSex = sex ? parseSex(sex) === genderAnswer?.value : true;
       const withAge = age
-        ? String(age) === activityItems[LookupTableItems.Age_screen]?.answer
+        ? String(age) ===
+          (activityItems[LookupTableItems.Age_screen]?.answer as DecryptedTextAnswer)
         : true;
 
       return withSex && withAge && rawScore === String(calculatedScore);

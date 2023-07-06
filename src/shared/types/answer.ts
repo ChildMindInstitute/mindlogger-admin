@@ -67,3 +67,8 @@ export type DecryptedActivityData<T> = {
   decryptedAnswers: DecryptedAnswerData<T>[];
   decryptedEvents: EventDTO[];
 };
+
+export type ExportCsvData = {
+  name: string;
+  data: string;
+};

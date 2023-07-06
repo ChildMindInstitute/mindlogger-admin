@@ -60,8 +60,46 @@ export type DecryptedDateAnswer = {
   };
 };
 
-export type DecryptedSexAnswer = {
-  value: string;
+export type DecryptedTimeAnswer = {
+  value: {
+    hours: number;
+    minutes: number;
+  };
+};
+
+export type DecryptedGeolocationAnswer = {
+  value: {
+    latitude: number;
+    longitude: number;
+  };
+};
+
+type Point = {
+  x: number;
+  y: number;
+};
+
+type DrawPoint = {
+  time: number;
+} & Point;
+
+type DrawLine = {
+  points: DrawPoint[];
+  startTime: number;
+};
+
+export type DecryptedDrawingValue = {
+  lines: DrawLine[];
+  svgString: string;
+  width: number;
+  uri: string;
+  type: string;
+  fileName: string;
+};
+
+export type DecryptedDrawingAnswer = {
+  value: DecryptedDrawingValue;
+  text?: string | null;
 };
 
 export type AnswerDTO =
@@ -73,8 +111,10 @@ export type AnswerDTO =
   | DecryptedNumberSelectionAnswer
   | DecryptedDateRangeAnswer
   | DecryptedDateAnswer
-  | DecryptedSexAnswer
-  | DecryptedMediaAnswer;
+  | DecryptedTimeAnswer
+  | DecryptedMediaAnswer
+  | DecryptedGeolocationAnswer
+  | DecryptedDrawingAnswer;
 
 export type AnswerValue =
   | null
@@ -85,7 +125,10 @@ export type AnswerValue =
   | DecryptedNumberSelectionAnswer['value']
   | DecryptedDateRangeAnswer['value']
   | DecryptedDateAnswer['value']
-  | DecryptedMediaAnswer['value'];
+  | DecryptedTimeAnswer['value']
+  | DecryptedMediaAnswer['value']
+  | DecryptedGeolocationAnswer['value']
+  | DecryptedDrawingAnswer['value'];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',

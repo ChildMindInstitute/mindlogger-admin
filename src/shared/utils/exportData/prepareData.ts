@@ -2,17 +2,23 @@ import {
   DecryptedActivityData,
   DecryptedAnswerData,
   ExportActivity,
+  ExportCsvData,
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 import { getObjectFromList } from 'shared/utils/builderHelpers';
-import { ItemsWithFileResponses } from 'shared/consts';
-import { DecryptedMediaAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
+import {
+  DecryptedDrawingAnswer,
+  DecryptedMediaAnswer,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { convertJsonToCsv } from 'shared/utils/exportTemplate';
 
 import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
 import { getSubscales } from './getSubscales';
+import { getDrawingLines } from './getDrawingLines';
 
 const getDecryptedAnswersObject = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
@@ -54,7 +60,11 @@ export const prepareData = (
       const reportData = acc.reportData.concat(answers);
 
       const mediaAnswers = data.decryptedAnswers.reduce((filteredAcc, item) => {
-        if (!ItemsWithFileResponses.includes(item.activityItem?.responseType)) return filteredAcc;
+        const responseType = item.activityItem?.responseType;
+        if (responseType === ItemResponseType.Drawing)
+          return filteredAcc.concat((item.answer as DecryptedDrawingAnswer).value.uri);
+
+        if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
 
         return filteredAcc.concat((item.answer as DecryptedMediaAnswer).value || '');
       }, [] as string[]);
@@ -72,20 +82,35 @@ export const prepareData = (
       );
       const activityJourneyData = acc.activityJourneyData.concat(...events);
 
+      const drawingAnswers = data.decryptedAnswers.reduce((acc, item) => {
+        const responseType = item.activityItem?.responseType;
+        if (responseType !== ItemResponseType.Drawing) return acc;
+        const drawingValue = (item.answer as DecryptedDrawingAnswer).value;
+
+        return acc.concat({
+          name: `${item.respondentId}-${item.activityId}-${item.id}.csv`,
+          data: convertJsonToCsv(getDrawingLines(drawingValue.lines, drawingValue.width || 100)),
+        });
+      }, [] as ExportCsvData[]);
+      const drawingItemsData = acc.drawingItemsData.concat(...drawingAnswers);
+
       return {
         reportData,
         activityJourneyData,
         mediaData,
+        drawingItemsData,
       };
     },
     {
       reportData: [],
       activityJourneyData: [],
       mediaData: [],
+      drawingItemsData: [],
     } as {
       reportData: ReturnType<typeof getReportCSVObject>[];
       activityJourneyData: ReturnType<typeof getJourneyCSVObject>[];
       mediaData: string[];
+      drawingItemsData: ExportCsvData[];
     },
   );
 };
