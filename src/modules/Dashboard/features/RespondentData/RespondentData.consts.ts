@@ -19,12 +19,5 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.StabilityTracker,
   ItemResponseType.TouchPractice,
   ItemResponseType.TouchTest,
-  ItemResponseType.ABTrailsMobileFirst,
-  ItemResponseType.ABTrailsMobileSecond,
-  ItemResponseType.ABTrailsMobileThird,
-  ItemResponseType.ABTrailsMobileFourth,
-  ItemResponseType.ABTrailsTabletFirst,
-  ItemResponseType.ABTrailsTabletSecond,
-  ItemResponseType.ABTrailsTabletThird,
-  ItemResponseType.ABTrailsTabletFourth,
+  ItemResponseType.ABTrails,
 ];

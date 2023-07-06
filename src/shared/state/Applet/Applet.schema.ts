@@ -16,7 +16,13 @@ import {
   GyroscopeOrTouch,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
-import { CorrectPress, RoundTypeEnum, FlankerSamplingMethod } from 'modules/Builder/types';
+import {
+  CorrectPress,
+  RoundTypeEnum,
+  FlankerSamplingMethod,
+  DeviceType,
+  OrderName,
+} from 'modules/Builder/types';
 import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
 export type CreateAppletStateData = {
@@ -229,7 +235,8 @@ export type FlankerConfig = {
 };
 
 type ABTrailsConfig = {
-  deviceType: string;
+  deviceType: DeviceType;
+  orderName: OrderName;
   skippableItem?: boolean;
   removeBackButton?: boolean;
 };
