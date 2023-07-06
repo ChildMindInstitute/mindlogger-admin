@@ -15,7 +15,8 @@ export const TimersTab = () => {
   const { watch, setValue } = useFormContext<EventFormValues>();
   const activeTimer = watch('timerType');
 
-  const handleSetTimerType = (timerType: string) => setValue('timerType', timerType as TimerType);
+  const handleSetTimerType = (timerType: string | number) =>
+    setValue('timerType', timerType as TimerType);
 
   return (
     <>

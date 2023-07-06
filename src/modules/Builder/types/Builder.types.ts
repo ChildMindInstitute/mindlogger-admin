@@ -49,8 +49,8 @@ export type SubscaleFormValue = ArrayElement<
 >;
 
 export enum CorrectPress {
-  Left = 'left',
-  Right = 'right',
+  Left = 0,
+  Right = 1,
 }
 
 export type ActivityFlowItem = {

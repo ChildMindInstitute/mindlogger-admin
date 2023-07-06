@@ -306,6 +306,7 @@ export const getActivityItems = (activity: ActivityFormValues) => {
 
     return items?.map(({ id, ...item }, index) => {
       const itemCommonFields = getItemCommonFields({ id, item, items, conditionalLogic });
+      const isLastTest = index === FlankerItemPositions.TestThird;
 
       if (
         index === FlankerItemPositions.PracticeSecond ||
@@ -332,7 +333,8 @@ export const getActivityItems = (activity: ActivityFormValues) => {
           config: {
             ...firstPracticeItemConfig,
             ...testItemCommonConfig,
-            isLastTest: index === FlankerItemPositions.TestThird,
+            nextButton: isLastTest ? 'Finish' : 'Continue',
+            isLastTest,
           },
           ...itemCommonFields,
         };

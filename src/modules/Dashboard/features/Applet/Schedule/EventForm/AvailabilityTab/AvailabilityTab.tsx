@@ -30,7 +30,8 @@ export const AvailabilityTab = () => {
   const removeWarning = watch('removeWarning');
   const isOncePeriodicity = periodicity === Periodicity.Once;
 
-  const handleSetPeriodicity = (period: string) => setValue('periodicity', period as Periodicity);
+  const handleSetPeriodicity = (period: string | number) =>
+    setValue('periodicity', period as Periodicity);
 
   const datePicker = (
     <StyledDatePickerWrapper>

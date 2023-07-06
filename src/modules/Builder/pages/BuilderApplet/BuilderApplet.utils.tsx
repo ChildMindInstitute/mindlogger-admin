@@ -51,6 +51,7 @@ import {
 import {
   ActivityFormValues,
   AppletFormValues,
+  CorrectPress,
   DeviceType,
   FlankerItemNames,
   FlankerSamplingMethod,
@@ -71,6 +72,7 @@ import {
   CONDITION_TYPES_TO_HAVE_OPTION_ID,
   defaultFlankerBtnObj,
   ordinalStrings,
+  SAMPLE_SIZE,
 } from './BuilderApplet.const';
 
 const { t } = i18n;
@@ -258,13 +260,14 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
 const defaultFlankerCommonConfig = {
   stimulusTrials: [],
   blocks: [],
-  buttons: [defaultFlankerBtnObj],
+  buttons: [defaultFlankerBtnObj, { ...defaultFlankerBtnObj, value: CorrectPress.Right }],
   showFixation: false,
   fixationScreen: null,
   fixationDuration: null,
   samplingMethod: FlankerSamplingMethod.Randomize,
   showResults: true,
   trialDuration: DEFAULT_MILLISECONDS_DURATION,
+  sampleSize: SAMPLE_SIZE,
 };
 
 const defaultFlankerPracticeConfig = {
@@ -272,6 +275,7 @@ const defaultFlankerPracticeConfig = {
   minimumAccuracy: DEFAULT_THRESHOLD_DURATION,
   isLastTest: false,
   blockType: RoundTypeEnum.Practice,
+  nextButton: 'OK',
 };
 
 const defaultFlankerTestConfig = {
