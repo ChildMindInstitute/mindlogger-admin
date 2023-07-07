@@ -96,8 +96,6 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           a.version.localeCompare(b.version),
         );
 
-        console.log('sortedDecryptedAnswers', sortedDecryptedAnswers);
-
         setAnswers(sortedDecryptedAnswers);
         const formattedResponses = getFormattedResponses(sortedDecryptedAnswers);
         setResponseOptions(formattedResponses);
