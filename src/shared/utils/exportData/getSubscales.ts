@@ -97,19 +97,15 @@ export const calcScores = <T>(
         ? String(age) ===
           (activityItems[LookupTableItems.Age_screen]?.answer as DecryptedTextAnswer)
         : true;
+
+      if (!withSex || !withAge) return false;
+
       const hasInterval = rawScore.includes(INTERVAL_SYMBOL);
-      if (hasInterval) {
-        const [minScore, maxScore] = rawScore.replace(/\s/g, '').split(INTERVAL_SYMBOL);
+      if (!hasInterval) return rawScore === String(calculatedScore);
 
-        return (
-          withSex &&
-          withAge &&
-          Number(minScore) <= calculatedScore &&
-          calculatedScore <= Number(maxScore)
-        );
-      }
+      const [minScore, maxScore] = rawScore.replace(/\s/g, '').split(INTERVAL_SYMBOL);
 
-      return withSex && withAge && rawScore === String(calculatedScore);
+      return Number(minScore) <= calculatedScore && calculatedScore <= Number(maxScore);
     });
 
     return {
