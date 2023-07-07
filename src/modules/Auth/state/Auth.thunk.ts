@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { storage } from 'shared/utils';
+import { LocalStorageKeys, storage } from 'shared/utils';
 import { ApiError } from 'redux/modules';
 import {
   signInApi,
@@ -23,8 +23,8 @@ export const signIn = createAsyncThunk(
 
       if (data?.result) {
         const { accessToken, refreshToken } = data.result.token;
-        storage.setItem('refreshToken', refreshToken);
-        storage.setItem('accessToken', accessToken);
+        storage.setItem(LocalStorageKeys.RefreshToken, refreshToken);
+        storage.setItem(LocalStorageKeys.AccessToken, accessToken);
       }
 
       return data;

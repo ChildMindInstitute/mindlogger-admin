@@ -5,7 +5,7 @@ import { BaseLayout } from 'shared/layouts/BaseLayout';
 import { AuthLayout } from 'modules/Auth/layouts/AuthLayout';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import { storage } from 'shared/utils';
+import { LocalStorageKeys, storage } from 'shared/utils';
 import { dashboardRoutes } from 'modules/Dashboard/routes';
 import { builderRoutes } from 'modules/Builder/routes';
 import { libraryRoutes } from 'modules/Library/routes';
@@ -15,7 +15,7 @@ import { auth } from 'redux/modules';
 import history from './history';
 
 export const AppRoutes = () => {
-  const token = storage.getItem('accessToken');
+  const token = storage.getItem(LocalStorageKeys.AccessToken);
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
 

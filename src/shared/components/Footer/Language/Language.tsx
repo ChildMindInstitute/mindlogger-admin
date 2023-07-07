@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledLabelMedium, variables } from 'shared/styles';
-import { storage } from 'shared/utils';
+import { LocalStorageKeys, storage } from 'shared/utils';
 
 import { SelectLanguage } from './SelectLanguage';
 import { LanguageItem, Languages } from './Language.types';
@@ -27,7 +27,7 @@ export const languages: LanguageItem[] = [
 
 export const Language = () => {
   const { i18n } = useTranslation('app');
-  const langFromStorage = storage.getItem('lang') || Languages.EN;
+  const langFromStorage = storage.getItem(LocalStorageKeys.Language) || Languages.EN;
   const language = languages.find((lang) => lang.value === langFromStorage) as LanguageItem;
 
   const [currentLanguage, setCurrentLanguage] = useState(language);
@@ -37,7 +37,7 @@ export const Language = () => {
     setOpen(false);
     if (language) {
       i18n.changeLanguage(language.value);
-      storage.setItem('lang', language.value);
+      storage.setItem(LocalStorageKeys.Language, language.value);
       setCurrentLanguage(language);
     }
   };

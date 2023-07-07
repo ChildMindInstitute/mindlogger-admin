@@ -6,7 +6,7 @@ import { Svg } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { workspaces as currentWorkspace, Workspace } from 'redux/modules';
-import { storage } from 'shared/utils';
+import { LocalStorageKeys, storage } from 'shared/utils';
 import { page } from 'resources';
 
 import { WorkspaceImage } from '../WorkspaceImage';
@@ -23,7 +23,7 @@ export const WorkspaceGroup = ({
   const currentWorkspaceData = currentWorkspace.useData();
 
   const changeWorkspaceHandler = (workspace: Workspace) => {
-    storage.setItem('workspace', workspace);
+    storage.setItem(LocalStorageKeys.Workspace, workspace);
     dispatch(currentWorkspace.actions.setCurrentWorkspace(workspace));
     navigate(page.dashboard);
   };
