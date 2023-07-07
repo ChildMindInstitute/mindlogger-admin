@@ -102,14 +102,7 @@ export enum ItemResponseType {
   StabilityTracker = 'stabilityTracker',
   TouchPractice = 'touchPractice',
   TouchTest = 'touchTest',
-  ABTrailsTabletFirst = 'ABTrailsTabletFirst',
-  ABTrailsTabletSecond = 'ABTrailsTabletSecond',
-  ABTrailsTabletThird = 'ABTrailsTabletThird',
-  ABTrailsTabletFourth = 'ABTrailsTabletFourth',
-  ABTrailsMobileFirst = 'ABTrailsMobileFirst',
-  ABTrailsMobileSecond = 'ABTrailsMobileSecond',
-  ABTrailsMobileThird = 'ABTrailsMobileThird',
-  ABTrailsMobileFourth = 'ABTrailsMobileFourth',
+  ABTrails = 'ABTrails',
 }
 
 export enum GyroscopeOrTouch {
@@ -157,14 +150,7 @@ export const itemsTypeIcons = {
   [ItemResponseType.AudioPlayer]: <Svg id="audio-player" />,
   [ItemResponseType.Time]: <Svg id="clock-picker" />,
   [ItemResponseType.Flanker]: null,
-  [ItemResponseType.ABTrailsMobileFirst]: null,
-  [ItemResponseType.ABTrailsMobileSecond]: null,
-  [ItemResponseType.ABTrailsMobileThird]: null,
-  [ItemResponseType.ABTrailsMobileFourth]: null,
-  [ItemResponseType.ABTrailsTabletFirst]: null,
-  [ItemResponseType.ABTrailsTabletSecond]: null,
-  [ItemResponseType.ABTrailsTabletThird]: null,
-  [ItemResponseType.ABTrailsTabletFourth]: null,
+  [ItemResponseType.ABTrails]: null,
   [ItemResponseType.StabilityTracker]: null,
   [ItemResponseType.TouchTest]: null,
   [ItemResponseType.TouchPractice]: null,
@@ -219,7 +205,7 @@ export const JOURNEY_REPORT_NAME = 'activity_user_journey';
 export const enum ActivityStatus {
   Missed = 'missed',
   Completed = 'completed',
-  NotSheduled = 'not scheduled',
+  NotScheduled = 'not scheduled',
 }
 
 export const enum Sex {

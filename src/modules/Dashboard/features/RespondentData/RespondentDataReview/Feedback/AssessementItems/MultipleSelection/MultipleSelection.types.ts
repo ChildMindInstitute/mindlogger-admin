@@ -1,7 +1,5 @@
-import {
-  DecryptedMultiSelectionAnswer,
-  MultiSelectActivityItem,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { MultiSelectActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { DecryptedMultiSelectionAnswer } from 'shared/types';
 
 export type MultipleSelectionProps = {
   activityItem: MultiSelectActivityItem;

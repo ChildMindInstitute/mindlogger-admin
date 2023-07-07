@@ -1,11 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
-
-export type ButtonsConfig = {
-  removeBackButton: boolean;
-  skippableItem: boolean;
-};
+import { ActivityItemAnswer } from 'shared/types';
 
 export type ActivityCartProps = {
   step: number;

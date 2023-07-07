@@ -1,8 +1,11 @@
-import { DecryptedAnswerData, ExtendedExportAnswerWithoutEncryption } from 'shared/types';
+import {
+  AnswerDTO,
+  DecryptedAnswerData,
+  ExtendedExportAnswerWithoutEncryption,
+} from 'shared/types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
-import { replaceItemVariableWithName } from 'shared/utils/exportData/replaceItemVariableWithName';
-import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { replaceItemVariableWithName } from 'shared/utils/exportData';
 
 import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
@@ -36,7 +39,7 @@ export const getReportCSVObject = <T>({
 
   return {
     id: item.id,
-    activity_scheduled_time: scheduledDatetime || ActivityStatus.NotSheduled,
+    activity_scheduled_time: scheduledDatetime || ActivityStatus.NotScheduled,
     activity_start_time: startDatetime,
     activity_end_time: endDatetime,
     flag: getFlag(item),

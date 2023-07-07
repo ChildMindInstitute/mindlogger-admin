@@ -11,7 +11,7 @@ import {
   theme,
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { FlankerItemPositions } from 'modules/Builder/types';
+import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
 import { ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { SMALL_INPUT_LENGTH } from 'shared/consts';
@@ -24,7 +24,7 @@ import { StyledRowWrapper } from './ButtonsContent.styles';
 
 export const ButtonsContent = () => {
   const { t } = useTranslation();
-  const [activeButton, setActiveButton] = useState<ButtonsQuantity>(ButtonsQuantity.One);
+  const [activeButton, setActiveButton] = useState<ButtonsQuantity>(ButtonsQuantity.Two);
   const {
     control,
     watch,
@@ -33,22 +33,24 @@ export const ButtonsContent = () => {
     formState: { errors },
   } = useFormContext();
   const { fieldName, activityObjField } = useCurrentActivity();
-  const firstItemButtonsField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.buttons`;
-  const firstItemButtons: FlankerButtonSetting[] = watch(firstItemButtonsField);
+  const buttonsField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.buttons`;
+  const itemButtons: FlankerButtonSetting[] = watch(buttonsField);
 
-  const buttonFirstField = `${firstItemButtonsField}.0`;
-  const buttonSecondField = `${firstItemButtonsField}.1`;
+  const buttonFirstField = `${buttonsField}.0`;
+  const buttonSecondField = `${buttonsField}.1`;
   const buttonNameFirst = watch(`${buttonFirstField}.text`);
   const buttonNameFirstRef = useRef<string | null>(null);
   const buttonNameSecond = watch(`${buttonSecondField}.text`);
   const buttonNameSecondRef = useRef<string | null>(null);
 
-  const handleActiveBtnChange = (activeValue: string) => {
+  const handleActiveBtnChange = (activeValue: string | number) => {
     setActiveButton(activeValue as ButtonsQuantity);
-    const firstBtnObj = firstItemButtons[0];
+    const firstBtnObj = itemButtons[0];
     setValue(
-      firstItemButtonsField,
-      activeValue === ButtonsQuantity.One ? [firstBtnObj] : [firstBtnObj, defaultFlankerBtnObj],
+      buttonsField,
+      activeValue === ButtonsQuantity.One
+        ? [firstBtnObj]
+        : [firstBtnObj, { ...defaultFlankerBtnObj, value: CorrectPress.Right }],
     );
   };
 
@@ -67,8 +69,8 @@ export const ButtonsContent = () => {
   }, [buttonNameSecond]);
 
   useEffect(() => {
-    if (firstItemButtons?.length === 2) {
-      setActiveButton(ButtonsQuantity.Two);
+    if (itemButtons?.length === 1) {
+      setActiveButton(ButtonsQuantity.One);
     }
   }, []);
 
@@ -85,8 +87,8 @@ export const ButtonsContent = () => {
         />
       </Box>
       <StyledFlexSpaceBetween>
-        {firstItemButtons?.map((button, index) => {
-          const currentBtnField = `${firstItemButtonsField}.${index}`;
+        {itemButtons?.map((button, index) => {
+          const currentBtnField = `${buttonsField}.${index}`;
           const currentBtnFieldImg = `${currentBtnField}.image`;
           const currentBtnFieldName = `${currentBtnField}.text`;
 
@@ -115,7 +117,7 @@ export const ButtonsContent = () => {
                 control={control}
                 fullWidth
                 name={currentBtnFieldName}
-                label={getButtonLabel(firstItemButtons.length, index)}
+                label={getButtonLabel(itemButtons.length, index)}
                 maxLength={SMALL_INPUT_LENGTH}
                 restrictExceededValueLength
                 disabled={!!button.image}

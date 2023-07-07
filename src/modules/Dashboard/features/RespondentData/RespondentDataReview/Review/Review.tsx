@@ -7,19 +7,19 @@ import { useAsync } from 'shared/hooks';
 import { getDictionaryText } from 'shared/utils';
 import { Spinner } from 'shared/components';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { ActivityItemAnswer } from 'shared/types';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
 import { isItemUnsupported } from '../../RespondentData.utils';
 import { UnsupportedItemResponse } from '../../UnsupportedItemResponse';
 import { StyledReview } from './Review.styles';
 import { ReviewProps } from './Review.types';
-import { ActivityItemAnswer } from '../RespondentDataReview.types';
 import { getResponseItem } from './Review.const';
 
 export const Review = ({ answerId, activityId }: ReviewProps) => {
   const { appletId } = useParams();
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
-  const getDecryptedActivityData = useDecryptedActivityData();
+  const getDecryptedActivityData = useDecryptedActivityData(true);
 
   const { execute: getActivityAnswer, isLoading } = useAsync(getActivityAnswerApi, (res) => {
     if (!res?.data?.result) return;

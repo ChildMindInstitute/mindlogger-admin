@@ -1,26 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal, EnterAppletPassword } from 'shared/components';
+import { EnterAppletPassword, Modal } from 'shared/components';
 import {
-  StyledModalWrapper,
-  StyledErrorText,
   StyledBodyLarge,
+  StyledErrorText,
   StyledLinearProgress,
+  StyledModalWrapper,
   theme,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import {
-  getErrorMessage,
-  prepareData,
-  exportTemplate,
-  falseReturnFunc,
-  getMediaReportName,
-  exportMediaZip,
-} from 'shared/utils';
-import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
+import { falseReturnFunc, getErrorMessage } from 'shared/utils';
+import { useAsync, useSetupEnterAppletPassword } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME } from 'shared/consts';
+import { exportDataSucceed } from 'shared/utils/exportData';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -37,29 +30,20 @@ export const DataExportPopup = ({
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting;
   const getDecryptedAnswers = useDecryptedActivityData(
+    false,
     chosenAppletData?.appletId,
     chosenAppletData?.encryption,
   );
 
   const { execute, error } = useAsync(
     getExportDataApi,
-    (res) => {
-      if (!res?.data?.result) return;
-
-      const { reportData, activityJourneyData, mediaData } = prepareData(
-        res.data.result,
-        getDecryptedAnswers,
-      );
-
-      exportTemplate(reportData, GENERAL_REPORT_NAME);
-
-      exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
-      (async () => {
-        await exportMediaZip(mediaData, getMediaReportName());
+    exportDataSucceed({
+      getDecryptedAnswers,
+      callback: () => {
         setDataIsExporting(false);
         handlePopupClose();
-      })();
-    },
+      },
+    }),
     falseReturnFunc,
     falseReturnFunc,
     [getDecryptedAnswers],

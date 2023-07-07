@@ -1,5 +1,5 @@
 export type ToggleButton = {
-  value: string;
+  value: string | number;
   label: string;
   tooltip?: string;
   icon?: JSX.Element;
@@ -7,7 +7,7 @@ export type ToggleButton = {
 
 export type ToggleButtonGroupProps = {
   toggleButtons: ToggleButton[];
-  activeButton: string;
-  setActiveButton?: (value: string) => void;
-  customChange?: (value: string) => void;
+  activeButton: string | number;
+  setActiveButton?: (value: string | number) => void;
+  customChange?: (value: string | number) => void;
 };

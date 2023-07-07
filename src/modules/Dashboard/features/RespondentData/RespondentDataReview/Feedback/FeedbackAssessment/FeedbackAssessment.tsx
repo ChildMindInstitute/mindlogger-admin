@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { Spinner } from 'shared/components';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { ActivityItemAnswer } from 'shared/types';
 import { useAsync } from 'shared/hooks';
 import { getAssessmentApi } from 'api';
 
@@ -13,7 +13,7 @@ import { Assessment, FeedbackAssessmentProps } from './FeedbackAssessment.types'
 
 export const FeedbackAssessment = ({ setActiveTab }: FeedbackAssessmentProps) => {
   const { appletId, answerId } = useParams();
-  const getDecryptedActivityData = useDecryptedActivityData();
+  const getDecryptedActivityData = useDecryptedActivityData(true);
   const { execute: getAssessment, isLoading } = useAsync(getAssessmentApi);
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[]>([]);
 

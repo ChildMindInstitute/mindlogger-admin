@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,7 +15,7 @@ import {
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
-import { FlankerStimulusSettings } from 'shared/state';
+import { FlankerButtonSetting, FlankerStimulusSettings } from 'shared/state';
 import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
 import { getUploadedMediaName, getIsRequiredValidateMessage } from 'shared/utils';
 
@@ -46,6 +46,9 @@ export const StimulusContent = () => {
   );
   const stimulusObjField = `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.stimulusTrials`;
   const stimulusField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`;
+  const buttonsField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.buttons`;
+  const buttons: FlankerButtonSetting[] = watch(buttonsField);
+  const hasTwoButtons = buttons?.length === 2;
   const stimulusTrials: FlankerStimulusSettings[] = watch(stimulusField);
   const hasStimulusErrors = !!get(errors, stimulusObjField);
 
@@ -54,7 +57,8 @@ export const StimulusContent = () => {
     name: stimulusField,
   });
 
-  const handleStimulusAdd = () => append({ id: uuidv4(), image: '', text: CorrectPress.Left });
+  const handleStimulusAdd = () =>
+    append({ id: uuidv4(), image: '', text: '', value: CorrectPress.Left });
 
   const handleStimulusDelete = () => {
     if (!screenToDelete) return;
@@ -67,12 +71,22 @@ export const StimulusContent = () => {
     setScreenToDelete({ index, imageName });
   };
 
-  const handleActiveBtnChange = (value: string, index: number) => {
+  const handleActiveBtnChange = (value: string | number, index: number) => {
     update(index, {
       ...stimulusTrials[index],
-      text: value,
+      value,
     });
   };
+
+  useEffect(() => {
+    if (hasTwoButtons) return;
+
+    const newTrials = stimulusTrials.map((trial) => ({
+      ...trial,
+      value: CorrectPress.Left,
+    }));
+    setValue(stimulusField, newTrials);
+  }, [hasTwoButtons]);
 
   return (
     <>
@@ -83,7 +97,7 @@ export const StimulusContent = () => {
               {t('flankerStimulus.fileName')}
             </StyledBodyMedium>
             <StyledBodyMedium color={variables.palette.outline} sx={{ flex: '0 0 55%' }}>
-              {t('flankerStimulus.correctPress')}
+              {hasTwoButtons ? t('flankerStimulus.correctPress') : ''}
             </StyledBodyMedium>
           </StyledHeader>
         ) : (
@@ -93,13 +107,13 @@ export const StimulusContent = () => {
             </StyledBodyLarge>
           </StyledInfoSection>
         )}
-        {stimulusTrials?.map((trial, index) => {
-          const imageName = getUploadedMediaName(trial.image);
+        {stimulusTrials?.map(({ id, image, text, value }, index) => {
           const imageField = `${stimulusField}.${index}.image`;
+          const textField = `${stimulusField}.${index}.text`;
           const hasImgError = !!get(errors, `${stimulusObjField}[${index}].image`);
 
           return (
-            <StyledRow key={trial.id}>
+            <StyledRow key={id}>
               <Box sx={{ flex: '0 0 45%' }}>
                 <StyledFlexTopCenter>
                   <Uploader
@@ -108,17 +122,18 @@ export const StimulusContent = () => {
                     height={5.6}
                     setValue={(val: string) => {
                       setValue(imageField, val ?? '');
+                      setValue(textField, val ? getUploadedMediaName(val) : '');
                       trigger([stimulusField]);
                     }}
-                    getValue={() => trial.image || ''}
+                    getValue={() => image || ''}
                     hasError={hasImgError}
                   />
-                  {imageName && (
+                  {text && (
                     <StyledBodyLarge
                       sx={{ ml: theme.spacing(1) }}
                       color={variables.palette.on_surface_variant}
                     >
-                      {imageName}
+                      {text}
                     </StyledBodyLarge>
                   )}
                 </StyledFlexTopCenter>
@@ -132,16 +147,20 @@ export const StimulusContent = () => {
                 )}
               </Box>
               <Box sx={{ flex: '0 0 45%' }}>
-                <Box sx={{ width: '18.3rem' }}>
-                  <ToggleButtonGroup
-                    toggleButtons={pressOptions}
-                    activeButton={trial.text}
-                    setActiveButton={(value: string) => handleActiveBtnChange(value, index)}
-                  />
-                </Box>
+                {hasTwoButtons && !!image && (
+                  <Box sx={{ width: '18.3rem' }}>
+                    <ToggleButtonGroup
+                      toggleButtons={pressOptions}
+                      activeButton={value}
+                      setActiveButton={(activeValue: string | number) =>
+                        handleActiveBtnChange(activeValue, index)
+                      }
+                    />
+                  </Box>
+                )}
               </Box>
               <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', flex: '0 0 10%' }}>
-                <StyledRemoveButton onClick={handleSetScreenToDelete(index, imageName)}>
+                <StyledRemoveButton onClick={handleSetScreenToDelete(index, text)}>
                   <Svg id="cross" width="1.8rem" height="1.8rem" />
                 </StyledRemoveButton>
               </StyledFlexTopCenter>

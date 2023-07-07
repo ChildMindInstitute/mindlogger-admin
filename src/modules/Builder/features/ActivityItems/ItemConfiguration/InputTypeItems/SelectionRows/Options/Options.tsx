@@ -47,6 +47,7 @@ export const Options = ({ name }: { name: string }) => {
                 name={`${optionName}.text`}
                 label={t('selectionRowsOptionLabel', { index: index + 1 })}
                 maxLength={SELECTION_ROW_OPTION_LABEL_MAX_LENGTH}
+                restrictExceededValueLength
               />
             </StyledFlexTopStart>
             {hasTooltips && (
