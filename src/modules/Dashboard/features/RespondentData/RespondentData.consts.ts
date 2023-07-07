@@ -6,7 +6,6 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.AudioPlayer,
   ItemResponseType.Drawing,
   ItemResponseType.Geolocation,
-  ItemResponseType.Message,
   ItemResponseType.Photo,
   ItemResponseType.Video,
   ItemResponseType.Time,

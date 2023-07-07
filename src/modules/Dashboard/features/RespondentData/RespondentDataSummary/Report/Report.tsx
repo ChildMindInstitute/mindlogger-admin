@@ -37,7 +37,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const { appletId, respondentId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
-  const getDecryptedActivityData = useDecryptedActivityData();
+  const getDecryptedActivityData = useDecryptedActivityData(false);
 
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<ActivityCompletion[]>([]);
@@ -95,6 +95,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
         const sortedDecryptedAnswers = decryptedAnswers.sort((a, b) =>
           a.version.localeCompare(b.version),
         );
+
+        console.log('sortedDecryptedAnswers', sortedDecryptedAnswers);
 
         setAnswers(sortedDecryptedAnswers);
         const formattedResponses = getFormattedResponses(sortedDecryptedAnswers);
