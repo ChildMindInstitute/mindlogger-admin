@@ -55,6 +55,7 @@ export const EventWrapper = ({
             ...children.props.style,
             marginTop: '2px',
             height: `calc(${children.props.style.height} - 1px)`,
+            minWidth: '18px',
           },
         })}
       </Tooltip>
