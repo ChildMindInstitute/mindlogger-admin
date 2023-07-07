@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
-import { storage } from 'shared/utils';
+import { LocalStorageKeys, storage } from 'shared/utils';
 
 import { BASE_API_URL } from './api.const';
 import { signInRefreshTokenApi } from './api';
@@ -8,7 +8,7 @@ import { signInRefreshTokenApi } from './api';
 export const getBaseUrl = () => (storage.getItem('apiUrl') as string) || BASE_API_URL;
 
 export const getRequestTokenData = (config: AxiosRequestConfig) => {
-  const accessToken = storage.getItem('accessToken');
+  const accessToken = storage.getItem(LocalStorageKeys.AccessToken);
   if (!config.headers) {
     config.headers = {};
   }
@@ -18,14 +18,14 @@ export const getRequestTokenData = (config: AxiosRequestConfig) => {
 export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
   try {
     const { response: errorResponse } = err;
-    const refreshToken = storage.getItem('refreshToken') as string;
+    const refreshToken = storage.getItem(LocalStorageKeys.RefreshToken) as string;
     const { data } = await signInRefreshTokenApi({
       refreshToken,
     });
 
     return new Promise((resolve) => {
       if (data?.result?.accessToken) {
-        storage.setItem('accessToken', data.result.accessToken);
+        storage.setItem(LocalStorageKeys.AccessToken, data.result.accessToken);
         resolve(
           axios({
             ...errorResponse?.config,

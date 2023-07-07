@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import { storage } from 'shared/utils';
+import { LocalStorageKeys, storage } from 'shared/utils';
 
 import { verifyReportServer, setPasswordReportServer } from './ReportConfigSetting.utils';
 import { UseCheckReportServer } from './ReportConfigSetting.types';
@@ -10,7 +10,7 @@ export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) =
   const { appletId = '', ownerId = '' } = useParams();
 
   const onVerify = async () => {
-    const token = storage.getItem('accessToken');
+    const token = storage.getItem(LocalStorageKeys.AccessToken);
 
     try {
       const response = await verifyReportServer({ url, publicKey, token: `${token}` });
@@ -23,7 +23,7 @@ export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) =
   };
 
   const onSetPassword = async (password: string) => {
-    const token = storage.getItem('accessToken');
+    const token = storage.getItem(LocalStorageKeys.AccessToken);
 
     try {
       const response = await setPasswordReportServer({

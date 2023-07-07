@@ -8,7 +8,7 @@ import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace
 import { getWorkspacesApi } from 'shared/api';
 import { workspaces as currentWorkspace, Workspace, auth } from 'redux/modules';
 import { useAsync } from 'shared/hooks';
-import { storage } from 'shared/utils';
+import { LocalStorageKeys, storage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
 import { page } from 'resources';
@@ -37,7 +37,7 @@ export const LeftBar = () => {
   useEffect(() => {
     if (workspaces.length) {
       const ownerWorkspace = workspaces.find((item) => item.ownerId === id);
-      const storageWorkspace = storage.getItem('workspace') as Workspace;
+      const storageWorkspace = storage.getItem(LocalStorageKeys.Workspace) as Workspace;
       dispatch(
         currentWorkspace.actions.setCurrentWorkspace(storageWorkspace || ownerWorkspace || null),
       );
