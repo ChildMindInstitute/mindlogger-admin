@@ -7,7 +7,7 @@ import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import { SubscaleFormValue } from 'modules/Builder/types';
@@ -39,6 +39,9 @@ export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext();
   const { fieldName, activity } = useCurrentActivity();
+
+  useActivitiesRedirection();
+
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const calculateTotalScoreField = `${fieldName}.subscaleSetting.calculateTotalScore`;
   const totalScoresTableDataField = `${fieldName}.subscaleSetting.totalScoresTableData`;

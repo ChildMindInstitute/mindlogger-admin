@@ -1,8 +1,8 @@
-import { useEffect, useState, MouseEvent } from 'react';
+import { useState, MouseEvent } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 
@@ -11,7 +11,6 @@ import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
 import { ActivityFlowFormValues, ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
-import { page } from 'resources';
 import { getObjectFromList } from 'shared/utils';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
@@ -87,15 +86,6 @@ export const ActivityFlowBuilder = () => {
   const activitiesIdsObjects = getObjectFromList(activities);
 
   useBreadcrumbs();
-
-  useEffect(() => {
-    if (activityFlowIndex !== -1) return;
-    navigate(
-      generatePath(page.builderAppletActivityFlow, {
-        appletId,
-      }),
-    );
-  }, [activityFlowIndex]);
 
   return (
     <BuilderContainer

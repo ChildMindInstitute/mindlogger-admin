@@ -22,7 +22,7 @@ import {
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
 import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
@@ -33,6 +33,7 @@ export const ActivityAbout = () => {
   const { t } = useTranslation();
 
   useBreadcrumbs();
+  useActivitiesRedirection();
 
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();

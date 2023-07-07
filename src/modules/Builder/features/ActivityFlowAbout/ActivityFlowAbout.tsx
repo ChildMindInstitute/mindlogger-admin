@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -16,7 +15,6 @@ import {
 import { useBreadcrumbs } from 'shared/hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
-import { page } from 'resources';
 import { AppletFormValues } from 'modules/Builder/types';
 
 import { getActivityFlowIndex } from '../ActivityFlowBuilder/ActivityFlowBuilder.utils';
@@ -25,8 +23,7 @@ import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
 export const ActivityFlowAbout = () => {
   const { t } = useTranslation();
   const { control, watch } = useFormContext();
-  const navigate = useNavigate();
-  const { appletId, activityFlowId } = useParams();
+  const { activityFlowId } = useParams();
 
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
@@ -37,15 +34,6 @@ export const ActivityFlowAbout = () => {
   };
 
   useBreadcrumbs();
-
-  useEffect(() => {
-    if (activityFlowIndex !== -1) return;
-    navigate(
-      generatePath(page.builderAppletActivityFlow, {
-        appletId,
-      }),
-    );
-  }, [activityFlowIndex]);
 
   return (
     <BuilderContainer title={t('aboutActivityFlow')}>

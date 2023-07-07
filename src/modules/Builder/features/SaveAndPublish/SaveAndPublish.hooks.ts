@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
+import get from 'lodash.get';
 
 import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
@@ -15,8 +16,8 @@ import {
   APPLET_PAGE_REGEXP_STRING,
   builderSessionStorage,
   Encryption,
-  getBuilderAppletUrl,
   getDictionaryObject,
+  getUpdatedAppletUrl,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
 import { workspaces } from 'redux/modules';
@@ -34,6 +35,7 @@ import {
   remapSubscaleSettings,
   getActivityItems,
   getScoresAndReports,
+  getCurrentEntityId,
 } from './SaveAndPublish.utils';
 
 export const getAppletInfoFromStorage = () => {
@@ -197,7 +199,8 @@ export const usePrompt = (isFormChanged: boolean) => {
 };
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
-  const { trigger } = useFormContext();
+  const { trigger, getValues } = useFormContext();
+  const location = useLocation();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
@@ -206,7 +209,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { createApplet, updateApplet, getAppletWithItems } = applet.thunk;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { appletId } = useParams();
+  const { appletId, activityId, activityFlowId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
   const [isPasswordPopupOpened, setIsPasswordPopupOpened] = useState(false);
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
@@ -323,8 +326,15 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       }
 
       if (appletId && ownerId) {
-        navigate(getBuilderAppletUrl(appletId));
-        await dispatch(getAppletWithItems({ ownerId, appletId }));
+        const oldApplet = getValues();
+        const newApplet = await dispatch(getAppletWithItems({ ownerId, appletId }));
+        const newEntityId = getCurrentEntityId(oldApplet, get(newApplet, 'payload.data.result'), {
+          isActivity: !!activityId,
+          id: activityId ?? activityFlowId,
+        });
+        const url = getUpdatedAppletUrl(appletId, newEntityId, location.pathname);
+
+        navigate(url);
       }
     }
 
@@ -347,8 +357,17 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       }
 
       if (createdAppletId && ownerId) {
-        navigate(getBuilderAppletUrl(createdAppletId));
-        await dispatch(getAppletWithItems({ ownerId, appletId: createdAppletId }));
+        const oldApplet = getValues();
+        const newApplet = await dispatch(
+          getAppletWithItems({ ownerId, appletId: createdAppletId }),
+        );
+        const newEntityId = getCurrentEntityId(oldApplet, get(newApplet, 'payload.data.result'), {
+          isActivity: !!activityId,
+          id: activityId ?? activityFlowId,
+        });
+        const url = getUpdatedAppletUrl(createdAppletId, newEntityId, location.pathname);
+
+        navigate(url);
       }
     }
   };

@@ -13,6 +13,7 @@ import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/comp
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/types';
+import { useActivitiesRedirection } from 'modules/Builder/hooks';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
 import {
@@ -128,6 +129,7 @@ export const ActivityFlow = () => {
       label: t('activityFlow'),
     },
   ]);
+  useActivitiesRedirection();
 
   return (
     <BuilderContainer

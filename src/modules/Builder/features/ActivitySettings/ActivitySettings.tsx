@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
+import { useActivitiesRedirection } from 'modules/Builder/hooks';
 
 import { LeftBar } from './LeftBar';
 import { ActivitySettingsContainer } from './ActivitySettingsContainer';
@@ -27,6 +28,7 @@ export const ActivitySettings = () => {
   }, [setting]);
 
   useBreadcrumbs();
+  useActivitiesRedirection();
 
   const handleSetActiveSetting = (setting: ActivitySettingsOptions) => {
     setActiveSetting(setting);

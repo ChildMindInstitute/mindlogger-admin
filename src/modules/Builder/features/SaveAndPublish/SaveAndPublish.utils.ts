@@ -1,3 +1,4 @@
+import { FieldValues } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 
@@ -16,6 +17,9 @@ import {
   SliderRowsResponseValues,
   OptionCondition,
   SectionCondition,
+  SingleApplet,
+  Activity,
+  ActivityFlow,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
@@ -45,6 +49,7 @@ export const removeAppletExtraFields = () => ({
   id: undefined,
   theme: undefined,
   version: undefined,
+  undefined,
 });
 
 export const removeActivityExtraFields = () => ({
@@ -347,4 +352,17 @@ export const getActivityItems = (activity: ActivityFormValues) => {
     ...item,
     ...getItemCommonFields({ id, item, items, conditionalLogic }),
   }));
+};
+
+export const getCurrentEntityId = (
+  oldApplet: FieldValues,
+  newApplet: SingleApplet,
+  { isActivity, id }: { isActivity: boolean; id?: string },
+) => {
+  const itemsSelector = isActivity ? 'activities' : 'activityFlows';
+  const index = oldApplet?.[itemsSelector]?.findIndex(
+    (entity: Activity | ActivityFlow) => getEntityKey(entity) === id,
+  );
+
+  return getEntityKey(newApplet?.[itemsSelector]?.[index]);
 };
