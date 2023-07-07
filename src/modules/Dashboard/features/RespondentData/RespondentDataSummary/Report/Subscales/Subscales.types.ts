@@ -31,6 +31,9 @@ export type ParsedSubscale = {
   optionText: string;
   date: Date;
   activityCompletionID?: string;
+  activityItems?: any;
+  subscalesObject?: any;
+  restScores?: any;
 };
 
 export type ParsedSubscales = {
@@ -42,4 +45,5 @@ export type ParsedSubscales = {
   finalScores: ParsedSubscale[];
   latestFinalScore: number | null;
   versions: Version[];
+  allSubscalesToRender: any;
 };
