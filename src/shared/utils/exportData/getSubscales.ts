@@ -25,6 +25,8 @@ export const getSubScaleScore = (subscalesSum: number, type: SubscaleTotalScore,
 
 export const parseSex = (sex: string) => (sex === Sex.M ? '1' : '2');
 
+const INTERVAL_SYMBOL = '~';
+
 export const calcScores = <T>(
   data: ActivitySettingsSubscale,
   activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
@@ -95,6 +97,17 @@ export const calcScores = <T>(
         ? String(age) ===
           (activityItems[LookupTableItems.Age_screen]?.answer as DecryptedTextAnswer)
         : true;
+      const hasInterval = rawScore.includes(INTERVAL_SYMBOL);
+      if (hasInterval) {
+        const [minScore, maxScore] = rawScore.replace(/\s/g, '').split(INTERVAL_SYMBOL);
+
+        return (
+          withSex &&
+          withAge &&
+          Number(minScore) <= calculatedScore &&
+          calculatedScore <= Number(maxScore)
+        );
+      }
 
       return withSex && withAge && rawScore === String(calculatedScore);
     });
