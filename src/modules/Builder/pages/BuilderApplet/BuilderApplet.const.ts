@@ -1,4 +1,5 @@
 import { ConditionType, ItemResponseType } from 'shared/consts';
+import { CorrectPress } from 'modules/Builder/types';
 
 export const CONDITION_TYPES_TO_HAVE_OPTION_ID = [
   ConditionType.IncludesOption,
@@ -7,7 +8,9 @@ export const CONDITION_TYPES_TO_HAVE_OPTION_ID = [
   ConditionType.NotEqualToOption,
 ];
 
-export const defaultFlankerBtnObj = { text: '', image: '' };
+export const defaultFlankerBtnObj = { text: '', image: '', value: CorrectPress.Left };
+
+export const SAMPLE_SIZE = 1;
 
 export const ALLOWED_TYPES_IN_VARIABLES = [
   ItemResponseType.SingleSelection,
