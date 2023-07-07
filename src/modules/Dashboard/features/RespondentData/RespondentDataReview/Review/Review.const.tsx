@@ -1,7 +1,7 @@
 import { ItemResponseType } from 'shared/consts';
+import { ActivityItemAnswer } from 'shared/types';
 
 import {
-  ActivityItemAnswer,
   MultiSelectItemAnswer,
   SingleSelectItemAnswer,
   SliderItemAnswer,

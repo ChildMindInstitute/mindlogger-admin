@@ -1,9 +1,7 @@
 import { RadioGroupProps } from '@mui/material';
 
-import {
-  DecryptedSingleSelectionAnswer,
-  SingleSelectActivityItem,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { SingleSelectActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { DecryptedSingleSelectionAnswer } from 'shared/types';
 
 export type SingleSelectionProps = {
   value?: DecryptedSingleSelectionAnswer['value'];

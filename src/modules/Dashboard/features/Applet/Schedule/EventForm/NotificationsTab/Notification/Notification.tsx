@@ -32,7 +32,7 @@ export const Notification = ({ index, remove }: NotificationProps) => {
     remove(index);
   };
 
-  const updateTime = (selected: string) => {
+  const updateTime = (selected: string | number) => {
     setValue(`${notificationFieldName}`, {
       atTime: selected === NotificationType.Fixed ? startTime : null,
       fromTime: selected === NotificationType.Random ? startTime : null,

@@ -64,7 +64,7 @@ export const getActions = ({
       icon: <Svg id="trash" />,
       action: deleteAction,
       tooltipTitle: t('deleteApplet'),
-      isDisplayed: isManagerOrOwner(roles?.[0]),
+      isDisplayed: commonCondition,
     },
     {
       icon: <Svg id="switch-account" />,

@@ -26,6 +26,7 @@ import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 's
 import {
   ActivityFormValues,
   FlankerItemPositions,
+  FlankerNextButton,
   ItemFormValues,
   RoundTypeEnum,
 } from 'modules/Builder/types';
@@ -122,10 +123,12 @@ export const getScoresAndReports = (activity: ActivityFormValues) => {
   const sections = initialSections.map((section) => ({
     ...section,
     ...fieldsToRemove,
-    conditionalLogic: {
-      ...section.conditionalLogic,
-      conditions: getConditions(items, section?.conditionalLogic?.conditions),
-    },
+    ...(!!Object.keys(section.conditionalLogic || {}).length && {
+      conditionalLogic: {
+        ...section.conditionalLogic,
+        conditions: getConditions(items, section?.conditionalLogic?.conditions),
+      },
+    }),
   }));
 
   return {
@@ -309,6 +312,7 @@ export const getActivityItems = (activity: ActivityFormValues) => {
 
     return items?.map(({ id, ...item }, index) => {
       const itemCommonFields = getItemCommonFields({ id, item, items, conditionalLogic });
+      const isLastTest = index === FlankerItemPositions.TestThird;
 
       if (
         index === FlankerItemPositions.PracticeSecond ||
@@ -335,7 +339,8 @@ export const getActivityItems = (activity: ActivityFormValues) => {
           config: {
             ...firstPracticeItemConfig,
             ...testItemCommonConfig,
-            isLastTest: index === FlankerItemPositions.TestThird,
+            nextButton: isLastTest ? FlankerNextButton.Finish : FlankerNextButton.Continue,
+            isLastTest,
           },
           ...itemCommonFields,
         };

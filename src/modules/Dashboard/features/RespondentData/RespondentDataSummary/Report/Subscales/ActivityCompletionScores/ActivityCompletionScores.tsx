@@ -10,13 +10,13 @@ import { StyledTextBtn } from 'modules/Dashboard/features/RespondentData/Respond
 import { Svg } from 'shared/components';
 
 import { AdditionalInformation } from '../AdditionalInformation';
-import { StyledChartContainer, StyledDescription } from './Scores.styles';
-import { ScoresProps } from './Scores.types';
+import { StyledChartContainer, StyledDescription } from './ActivityCompletionScores.styles';
+import { ScoresProps } from './ActivityCompletionScores.types';
 import { ReportContext } from '../../context';
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
 
-export const Scores = ({
+export const ActivityCompletionScores = ({
   reviewDate,
   finalSubscaleScore,
   frequency,

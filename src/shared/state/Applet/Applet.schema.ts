@@ -16,7 +16,13 @@ import {
   GyroscopeOrTouch,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
-import { CorrectPress, RoundTypeEnum, FlankerSamplingMethod } from 'modules/Builder/types';
+import {
+  CorrectPress,
+  RoundTypeEnum,
+  FlankerSamplingMethod,
+  DeviceType,
+  OrderName,
+} from 'modules/Builder/types';
 import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
 export type CreateAppletStateData = {
@@ -190,8 +196,8 @@ type FlankerStimulusId = string;
 export type FlankerStimulusSettings = {
   id: FlankerStimulusId;
   image: string;
-  text: CorrectPress;
-  value?: number | null;
+  text: string;
+  value: CorrectPress;
   weight?: number | null;
 };
 
@@ -203,19 +209,19 @@ export type FlankerBlockSettings = {
 export type FlankerButtonSetting = {
   text: string | null;
   image: string | null;
-  value?: number;
+  value: CorrectPress;
 };
 
 export type FlankerConfig = {
   stimulusTrials: Array<FlankerStimulusSettings>;
   blocks: Array<FlankerBlockSettings>;
   buttons: Array<FlankerButtonSetting>;
-  nextButton?: string;
+  nextButton: string;
   showFixation: boolean;
   fixationDuration: number | null;
   fixationScreen: { value?: string; image: string } | null;
   minimumAccuracy?: number; //threshold
-  sampleSize?: number;
+  sampleSize: number;
   samplingMethod: FlankerSamplingMethod; //randomize order
   showFeedback: boolean;
   showResults: boolean; //show summary screen
@@ -229,7 +235,8 @@ export type FlankerConfig = {
 };
 
 type ABTrailsConfig = {
-  deviceType: string;
+  deviceType: DeviceType;
+  orderName: OrderName;
   skippableItem?: boolean;
   removeBackButton?: boolean;
 };
@@ -393,8 +400,10 @@ export type BaseCondition = {
   type: ConditionType | '';
 };
 
-export type ScoreCondition = BaseCondition & {
+export type ScoreCondition = {
+  key?: string;
   type: typeof ScoreConditionType;
+  itemName: string;
   payload: {
     value: boolean;
   };
@@ -419,17 +428,11 @@ export type RangeValueCondition = BaseCondition & {
   };
 };
 
-export type ScoreValueCondition = BaseCondition & {
-  payload: {
-    value: boolean;
-  };
-};
-
 export type Condition =
   | OptionCondition
   | SingleValueCondition
   | RangeValueCondition
-  | ScoreValueCondition;
+  | ScoreCondition;
 
 export type ConditionalLogic = {
   match: ConditionalLogicMatch;

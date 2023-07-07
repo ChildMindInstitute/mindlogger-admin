@@ -3,17 +3,17 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
-import { Modal, SubmitBtnColor, EnterAppletPassword } from 'shared/components';
+import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { useAsync } from 'shared/hooks';
-import { removeRespondentAccess } from 'api';
+import { removeRespondentAccessApi } from 'api';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { ChosenAppletData } from '../../Respondents.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { RespondentAccessPopupProps, Steps } from './RespondentsRemoveAccessPopup.types';
-import { getScreens } from './RespondentAccessPopup.const';
+import { getScreens } from './RespondentAccessPopup.utils';
 
 export const RespondentsRemoveAccessPopup = ({
   popupVisible,
@@ -21,6 +21,7 @@ export const RespondentsRemoveAccessPopup = ({
   tableRows,
   chosenAppletData,
   setChosenAppletData,
+  reFetchRespondents,
 }: RespondentAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
@@ -32,7 +33,9 @@ export const RespondentsRemoveAccessPopup = ({
   const [step, setStep] = useState<Steps>(0);
   const [removeData, setRemoveData] = useState(false);
 
-  const { execute, value: isRemoved, error } = useAsync(removeRespondentAccess);
+  const { execute: handleAccessRemove, error } = useAsync(removeRespondentAccessApi);
+
+  const isRemoved = !error;
 
   useEffect(() => {
     if (chosenAppletData) {
@@ -100,12 +103,19 @@ export const RespondentsRemoveAccessPopup = ({
     </>
   );
 
+  const getStep = (type: 'next' | 'prev') =>
+    setStep((prevStep) => {
+      const newStep = type === 'next' ? prevStep + 1 : prevStep - 1;
+
+      return newStep as Steps;
+    });
+
   const thirdExtScreen = (
     <EnterAppletPassword
       ref={appletPasswordRef}
       appletId={chosenAppletData?.appletId ?? ''}
       encryption={chosenAppletData?.encryption}
-      submitCallback={() => handlePopupClose()}
+      submitCallback={() => getStep('next')}
     />
   );
 
@@ -113,7 +123,11 @@ export const RespondentsRemoveAccessPopup = ({
     const { appletId, respondentId: userId } = chosenAppletData as ChosenAppletData;
     userId &&
       appletId &&
-      (await execute({ userId, appletIds: [appletId], deleteResponses: removeData }));
+      (await handleAccessRemove({
+        userId,
+        appletIds: [appletId],
+        deleteResponses: removeData,
+      }));
   };
 
   const screens = getScreens({
@@ -127,27 +141,30 @@ export const RespondentsRemoveAccessPopup = ({
     submitPassword,
     removeAccess,
     handlePopupClose,
+    reFetchRespondents,
   });
 
   const onSecondBtnSubmit = () => {
-    setStep((prevState) => --prevState as Steps);
+    getStep('prev');
 
     if (disabledSubmit) {
       setDisabledSubmit(false);
     }
   };
 
+  const isLastScreen = (removeData && step === 4) || (!removeData && step === 3);
+  const isAppletPwdScreen = removeData && step === 2;
+
   const submitForm = () => {
-    if (!error) {
-      setStep((prevStep) => ++prevStep as Steps);
-    }
     screens[step].submitForm?.();
+    if (isLastScreen || isAppletPwdScreen) return;
+    getStep('next');
   };
 
   return (
     <Modal
       open={popupVisible}
-      onClose={handlePopupClose}
+      onClose={screens[step]?.onClose || handlePopupClose}
       onSubmit={submitForm}
       title={t(screens[step].title)}
       buttonText={t(screens[step].buttonText)}
@@ -156,7 +173,7 @@ export const RespondentsRemoveAccessPopup = ({
       secondBtnText={t('back')}
       disabledSubmit={disabledSubmit}
       disabledSecondBtn={secondBtnDisabled}
-      submitBtnColor={screens[step].submitBtnColor as SubmitBtnColor | undefined}
+      submitBtnColor={screens[step]?.submitBtnColor}
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
     </Modal>

@@ -31,6 +31,8 @@ export const SectionContent = ({ name, title }: SectionContentProps) => {
 
       return;
     }
+
+    setValue(conditionalLogicName, undefined);
   }, [isContainConditional]);
 
   const removeConditional = () => {

@@ -2,8 +2,8 @@ import { Order } from 'shared/types';
 
 import { TextItemAnswer } from './ReportTable.types';
 
-export const filterReportTable = (item: string, searchValue: string) =>
-  item?.toLowerCase().includes(searchValue.toLowerCase());
+export const filterReportTable = (item: string | number | null, searchValue: string) =>
+  item ? String(item).toLowerCase().includes(searchValue.toLowerCase()) : null;
 
 export const descendingComparator = <T>(a: T, b: T, orderBy: keyof T) => {
   if (b[orderBy] < a[orderBy]) {
@@ -50,6 +50,6 @@ export const getRows = (answers: TextItemAnswer[], skippedResponse: JSX.Element)
     },
     answer: {
       content: () => (answer ? answer : skippedResponse),
-      value: answer,
+      value: answer || '',
     },
   }));

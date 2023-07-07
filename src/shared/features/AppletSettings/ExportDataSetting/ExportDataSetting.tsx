@@ -8,8 +8,7 @@ import { applet } from 'shared/state';
 import { getExportDataApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { exportTemplate, prepareData } from 'shared/utils';
-import { GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME } from 'shared/consts';
+import { exportDataSucceed } from 'shared/utils';
 
 import {
   StyledAppletSettingsButton,
@@ -24,14 +23,15 @@ export const ExportDataSetting = () => {
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
-  const { execute } = useAsync(getExportDataApi, (res) => {
-    if (!res?.data?.result) return;
-
-    const { reportData, activityJourneyData } = prepareData(res.data.result, getDecryptedAnswers);
-    exportTemplate(reportData, GENERAL_REPORT_NAME);
-    exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
-    setPasswordModalVisible(false);
-  });
+  const { execute } = useAsync(
+    getExportDataApi,
+    exportDataSucceed({
+      getDecryptedAnswers,
+      callback: () => {
+        setPasswordModalVisible(false);
+      },
+    }),
+  );
 
   const handleDataExportHandler = () => {
     if (appletData?.id) {

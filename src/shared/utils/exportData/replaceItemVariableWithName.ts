@@ -5,7 +5,7 @@ import {
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+} from 'shared/types';
 import { Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 import { getObjectFromList } from 'shared/utils/builderHelpers';
 import { ItemResponseType } from 'shared/consts';

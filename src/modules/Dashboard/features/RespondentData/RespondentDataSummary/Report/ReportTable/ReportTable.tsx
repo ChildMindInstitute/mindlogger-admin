@@ -11,8 +11,9 @@ import { DateFormats } from 'shared/consts';
 
 import { getHeadCells } from './ReportTable.const';
 import { StyledTableWrapper } from './ReportTable.styles';
-import { ReportTableProps, TextItemAnswer, TextAnswer } from './ReportTable.types';
+import { ReportTableProps, TextItemAnswer } from './ReportTable.types';
 import { filterReportTable, getComparator, getRows, stableSort } from './ReportTable.utils';
+import { Answer } from '../Report.types';
 
 export const ReportTable = ({ answers = [] }: ReportTableProps) => {
   const { t } = useTranslation('app');
@@ -39,11 +40,11 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
   const visibleRows = useMemo(() => {
     const currentPage = page - 1;
     const formattedAnswers = answers?.reduce(
-      (textItemAnswers: TextItemAnswer[], answerItem: TextAnswer) => {
-        const date = format(new Date(answerItem.date), DateFormats.DayMonthYear);
-        const time = format(new Date(answerItem.date), DateFormats.Time);
+      (textItemAnswers: TextItemAnswer[], { answer, date: answerDate }: Answer) => {
+        const date = format(new Date(answerDate), DateFormats.DayMonthYear);
+        const time = format(new Date(answerDate), DateFormats.Time);
 
-        if (!filterReportTable(`${date} ${time} ${answerItem.answer}`, searchValue)) {
+        if (!filterReportTable(`${date} ${time} ${answer.value}`, searchValue)) {
           return textItemAnswers;
         }
 
@@ -52,7 +53,7 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
           {
             date,
             time,
-            answer: answerItem.answer,
+            answer: answer.value || '',
           },
         ];
       },

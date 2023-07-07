@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { Spinner } from 'shared/components';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { ActivityItemAnswer } from 'shared/types';
 import { useAsync } from 'shared/hooks';
 import { getAssessmentApi } from 'api';
 

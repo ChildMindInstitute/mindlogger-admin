@@ -49,6 +49,7 @@ export const DataRetention = () => {
     register,
     unregister,
     getValues,
+    reset,
     formState: { isDirty, isSubmitted },
   } = useForm<DataRetentionFormValues>({
     mode: 'onChange',
@@ -75,6 +76,11 @@ export const DataRetention = () => {
       await saveDataRetention({ appletId: id, period: retentionPeriod, retention: retentionType });
       await dispatch(getApplet({ appletId: id! }));
     }
+  };
+
+  const handleDontSave = () => {
+    reset(defaultValues);
+    confirmNavigation();
   };
 
   const handleSaveChanges = async () => {
@@ -135,7 +141,7 @@ export const DataRetention = () => {
       {promptVisible && (
         <SaveChangesPopup
           popupVisible={promptVisible}
-          onDontSave={confirmNavigation}
+          onDontSave={handleDontSave}
           onCancel={handleCancel}
           onSave={handleSaveChanges}
         />
