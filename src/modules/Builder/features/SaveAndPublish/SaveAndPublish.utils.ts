@@ -10,18 +10,19 @@ import {
   FlankerConfig,
   ItemAlert,
   NumberItemResponseValues,
+  OptionCondition,
+  SectionCondition,
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
   SliderItemResponseValues,
   SliderRowsResponseValues,
-  OptionCondition,
-  SectionCondition,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import {
   ActivityFormValues,
   FlankerItemPositions,
+  FlankerNextButton,
   ItemFormValues,
   RoundTypeEnum,
 } from 'modules/Builder/types';
@@ -333,7 +334,7 @@ export const getActivityItems = (activity: ActivityFormValues) => {
           config: {
             ...firstPracticeItemConfig,
             ...testItemCommonConfig,
-            nextButton: isLastTest ? 'Finish' : 'Continue',
+            nextButton: isLastTest ? FlankerNextButton.Finish : FlankerNextButton.Continue,
             isLastTest,
           },
           ...itemCommonFields,

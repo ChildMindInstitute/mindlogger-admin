@@ -54,6 +54,7 @@ import {
   CorrectPress,
   DeviceType,
   FlankerItemNames,
+  FlankerNextButton,
   FlankerSamplingMethod,
   GetActivitySubscaleItems,
   GetActivitySubscaleSettingDuplicated,
@@ -275,7 +276,7 @@ const defaultFlankerPracticeConfig = {
   minimumAccuracy: DEFAULT_THRESHOLD_DURATION,
   isLastTest: false,
   blockType: RoundTypeEnum.Practice,
-  nextButton: 'OK',
+  nextButton: FlankerNextButton.Ok,
 };
 
 const defaultFlankerTestConfig = {

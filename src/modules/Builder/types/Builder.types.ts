@@ -178,6 +178,12 @@ export enum FlankerItemPositions {
   TestThird = 12,
 }
 
+export enum FlankerNextButton {
+  Ok = 'OK',
+  Finish = 'Finish',
+  Continue = 'Continue',
+}
+
 export type GetActivitySubscaleItems = {
   activityItemsObject: Record<string, ItemFormValues>;
   subscalesObject: Record<string, ActivitySettingsSubscale>;
