@@ -13,74 +13,98 @@ import { subscales } from './mock';
 import { Subscale } from './Subscale';
 import { AdditionalInformation } from './AdditionalInformation';
 import { ReportContext } from '../context';
-import { ParsedSubscales, SubscalesProps } from './Subscales.types';
+import {
+  ActivityCompletionToRender,
+  ParsedSubscales,
+  SubscaleScore,
+  SubscalesProps,
+} from './Subscales.types';
 import { FREQUENCY } from './Subscales.consts';
 import { AllScores } from './AllScores';
+import { getSubscalesToRender } from './Subscales.utils';
 
 export const Subscales = ({ answers }: SubscalesProps) => {
   const { currentActivityCompletionData } = useContext(ReportContext);
 
-  const { finalScores, versions, latestFinalScore, allSubscalesScores } = useMemo(
-    () =>
-      answers.reduce(
-        (acc: ParsedSubscales, item, i) => {
-          if (!item?.subscaleSetting?.subscales?.length) return acc;
+  const { finalScores, versions, latestFinalScore, allSubscalesScores, allSubscalesToRender } =
+    useMemo(
+      () =>
+        answers.reduce(
+          (acc: ParsedSubscales, item, i) => {
+            if (!item?.subscaleSetting?.subscales?.length) return acc;
 
-          const activityItems = getObjectFromList(
-            item.decryptedAnswer,
-            (item) => item.activityItem.name,
-          );
+            const activityItems = getObjectFromList(
+              item.decryptedAnswer,
+              (item) => item.activityItem.name,
+            );
+            const subscalesObject = getObjectFromList<ActivitySettingsSubscale>(
+              item.subscaleSetting.subscales,
+              (item) => item.name,
+            );
 
-          const subscalesObject = getObjectFromList<ActivitySettingsSubscale>(
-            item.subscaleSetting.subscales,
-            (item) => item.name,
-          );
+            const calculatedTotalScore =
+              item?.subscaleSetting?.calculateTotalScore &&
+              activityItems &&
+              calcTotalScore(item.subscaleSetting, activityItems)?.[FinalSubscale.Key];
 
-          const calculatedTotalScore =
-            item?.subscaleSetting?.calculateTotalScore &&
-            activityItems &&
-            calcTotalScore(item.subscaleSetting, activityItems)?.[FinalSubscale.Key];
-
-          if (i === 0 && calculatedTotalScore) {
-            acc.latestFinalScore = calculatedTotalScore?.score;
-          }
-
-          acc.versions.push({ version: item.version, date: new Date(item.endDatetime) });
-
-          if (calculatedTotalScore) {
-            acc.finalScores.push({
-              date: new Date(item.endDatetime),
-              score: calculatedTotalScore?.score,
-              optionText: calculatedTotalScore?.optionText,
-              activityCompletionID: item.answerId,
-            });
-          }
-
-          for (const subscale of item.subscaleSetting.subscales) {
-            const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject)[
-              subscale.name
-            ];
-            const activityCompletion = {
-              date: new Date(item.endDatetime),
-              score: calculatedSubscale.score,
-              optionText: calculatedSubscale.optionText,
-              activityCompletionID: item.answerId,
-            };
-            if (acc.allSubscalesScores[subscale.name]) {
-              acc.allSubscalesScores[subscale.name].activityCompletions.push(activityCompletion);
-            } else {
-              acc.allSubscalesScores[subscale.name] = {
-                activityCompletions: [activityCompletion],
-              };
+            if (i === 0 && calculatedTotalScore) {
+              acc.latestFinalScore = calculatedTotalScore?.score;
             }
-          }
 
-          return acc;
-        },
-        { versions: [], finalScores: [], latestFinalScore: null, allSubscalesScores: {} },
-      ),
-    [answers],
-  );
+            acc.versions.push({ version: item.version, date: new Date(item.endDatetime) });
+
+            if (calculatedTotalScore) {
+              acc.finalScores.push({
+                date: new Date(item.endDatetime),
+                score: calculatedTotalScore?.score,
+                optionText: calculatedTotalScore?.optionText,
+                activityCompletionID: item.answerId,
+              });
+            }
+
+            for (const subscale of item.subscaleSetting.subscales) {
+              getSubscalesToRender(
+                subscale,
+                activityItems,
+                subscalesObject,
+                item.endDatetime,
+                acc.allSubscalesToRender,
+              );
+
+              const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, {});
+              const { [subscale.name]: removed, ...restScores } = calculatedSubscale;
+
+              const activityCompletion = {
+                date: new Date(item.endDatetime),
+                score: calculatedSubscale[subscale.name].score,
+                optionText: calculatedSubscale[subscale.name].optionText,
+                activityCompletionID: item.answerId,
+                activityItems,
+                subscalesObject,
+                restScores,
+              };
+
+              if (acc.allSubscalesScores[subscale.name]) {
+                acc.allSubscalesScores[subscale.name].activityCompletions.push(activityCompletion);
+              } else {
+                acc.allSubscalesScores[subscale.name] = {
+                  activityCompletions: [activityCompletion],
+                };
+              }
+            }
+
+            return acc;
+          },
+          {
+            versions: [],
+            finalScores: [],
+            latestFinalScore: null,
+            allSubscalesScores: {},
+            allSubscalesToRender: {},
+          },
+        ),
+      [answers],
+    );
 
   const currentActivityCompletion =
     currentActivityCompletionData &&
@@ -89,6 +113,44 @@ export const Subscales = ({ answers }: SubscalesProps) => {
   const calculatedTotalScore =
     currentActivityCompletion?.subscaleSetting?.calculateTotalScore &&
     finalScores?.find((item) => item.activityCompletionID === currentActivityCompletion.answerId);
+
+  const { activityCompletionToRender, activityCompletionScores } =
+    currentActivityCompletion?.subscaleSetting?.subscales?.reduce(
+      (
+        acc: {
+          activityCompletionToRender: ActivityCompletionToRender;
+          activityCompletionScores: SubscaleScore[];
+        },
+        item,
+      ) => {
+        const subscale = allSubscalesScores[item.name].activityCompletions.find(
+          (el) => el.activityCompletionID === currentActivityCompletion.answerId,
+        );
+
+        if (!subscale) return acc;
+
+        const subscaleToRender = getSubscalesToRender(
+          item,
+          subscale.activityItems,
+          subscale.subscalesObject,
+          currentActivityCompletion.endDatetime,
+          {},
+        );
+        acc.activityCompletionToRender[item.name] = {
+          ...subscaleToRender[item.name],
+          score: subscale?.score,
+          optionText: subscale?.optionText,
+          restScores: subscale.restScores,
+        };
+        acc.activityCompletionScores.push({
+          label: item.name,
+          score: subscale?.score || 0,
+        });
+
+        return acc;
+      },
+      { activityCompletionToRender: {}, activityCompletionScores: [] },
+    ) || { activityCompletionToRender: {}, activityCompletionScores: [] };
 
   const currentActivityCompletionScores = currentActivityCompletion &&
     currentActivityCompletion?.subscaleSetting?.subscales && {
@@ -99,16 +161,7 @@ export const Subscales = ({ answers }: SubscalesProps) => {
       },
       frequency: FREQUENCY,
       subscaleScores: [
-        ...currentActivityCompletion.subscaleSetting.subscales.map((item) => {
-          const subscale = allSubscalesScores[item.name].activityCompletions.find(
-            (el) => el.activityCompletionID === currentActivityCompletion.answerId,
-          );
-
-          return {
-            label: item.name,
-            score: subscale?.score || 0,
-          };
-        }),
+        ...activityCompletionScores,
         ...(calculatedTotalScore?.score
           ? [
               {

@@ -75,16 +75,13 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
         component: <DuplicateAppletSettings />,
         param: 'duplicate-applet',
       },
-      ...(isManagerOrOwner(roles?.[0])
-        ? [
-            {
-              icon: <Svg id="trash" />,
-              label: 'deleteApplet',
-              component: <DeleteAppletSetting />,
-              param: 'delete-applet',
-            },
-          ]
-        : []),
+
+      {
+        icon: <Svg id="trash" />,
+        label: 'deleteApplet',
+        component: <DeleteAppletSetting />,
+        param: 'delete-applet',
+      },
     ],
   },
   {

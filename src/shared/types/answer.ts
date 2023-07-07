@@ -210,3 +210,8 @@ export type ActivityItemAnswer = {
   activityItem: Item;
   answer: AnswerDTO;
 };
+
+export const enum ElementType {
+  Item = 'item',
+  Subscale = 'subscale',
+}

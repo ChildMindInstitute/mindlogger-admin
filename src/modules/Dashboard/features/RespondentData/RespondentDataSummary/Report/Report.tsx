@@ -98,6 +98,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
         setAnswers(sortedDecryptedAnswers);
         const formattedResponses = getFormattedResponses(sortedDecryptedAnswers);
+
         setResponseOptions(formattedResponses);
       } finally {
         setIsLoading(false);

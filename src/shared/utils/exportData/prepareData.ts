@@ -54,7 +54,6 @@ export const prepareData = (
           ...getSubscales(subscaleSetting, rawAnswersObject),
         });
       }
-
       const reportData = acc.reportData.concat(answers);
 
       const mediaAnswers = data.decryptedAnswers.reduce((filteredAcc, item) => {
