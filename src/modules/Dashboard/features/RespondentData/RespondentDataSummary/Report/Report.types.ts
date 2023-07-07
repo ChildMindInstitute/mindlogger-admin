@@ -1,8 +1,8 @@
 import { DatavizActivity, Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
-import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { ItemResponseType } from 'shared/consts';
 import { SubscaleSetting } from 'shared/state';
+import { ActivityItemAnswer } from 'shared/types';
 
 import { Identifier } from '../RespondentDataSummary.types';
 

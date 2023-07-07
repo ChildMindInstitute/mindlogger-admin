@@ -1,8 +1,3 @@
-import {
-  AnswerDTO,
-  ExtendedEvent,
-  UserActionType,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import {
   parseResponseValue,
@@ -10,7 +5,12 @@ import {
   replaceItemVariableWithName,
 } from 'shared/utils/exportData';
 import { ActivityStatus } from 'shared/consts';
-import { ExtendedExportAnswerWithoutEncryption } from 'shared/types';
+import {
+  AnswerDTO,
+  ExtendedEvent,
+  ExtendedExportAnswerWithoutEncryption,
+  UserActionType,
+} from 'shared/types';
 
 const getTimeByCondition = (time: string) => (condition: boolean) => condition ? time : '';
 

@@ -6,14 +6,14 @@ import {
   SliderItemResponseValues,
   TextInputConfig,
 } from 'shared/state/Applet/Applet.schema';
+import { getObjectFromList } from 'shared/utils';
 import {
   ActivityItemAnswer,
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
-import { getObjectFromList } from 'shared/utils';
+} from 'shared/types';
 
 import {
   DEFAULT_END_DATE,

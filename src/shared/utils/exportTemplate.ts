@@ -8,3 +8,5 @@ export const exportTemplate = <T extends unknown[]>(data: T, fileName: string, i
 
   writeFile(workBook, `${fileName}${isXlsx ? '.xlsx' : '.csv'}`);
 };
+
+export const convertJsonToCsv = (data: unknown[]) => utils.sheet_to_csv(utils.json_to_sheet(data));

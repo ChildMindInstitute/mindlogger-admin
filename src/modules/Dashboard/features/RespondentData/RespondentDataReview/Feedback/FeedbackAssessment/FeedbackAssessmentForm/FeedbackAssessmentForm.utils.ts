@@ -1,9 +1,7 @@
-import {
-  AssessmentFormItem,
-  FormattedAssessmentItem,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/FeedbackAssessmentForm/FeedbackAssessmentForm.types';
-import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { ItemResponseType } from 'shared/consts';
+import { AnswerDTO } from 'shared/types';
+
+import { AssessmentFormItem, FormattedAssessmentItem } from './FeedbackAssessmentForm.types';
 
 export const getDefaultValue = (responseType: ItemResponseType): string | number[] | null => {
   switch (responseType) {

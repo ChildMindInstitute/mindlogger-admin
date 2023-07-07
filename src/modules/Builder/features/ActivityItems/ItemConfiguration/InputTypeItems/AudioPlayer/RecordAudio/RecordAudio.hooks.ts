@@ -40,7 +40,7 @@ export const useAudioRecorder: () => RecorderControls = () => {
           setRecordingBlob([...recordingBlob, event.data]);
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.warn(err));
   }, [timerInterval]);
 
   const togglePauseResume = () => {
