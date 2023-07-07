@@ -26,9 +26,10 @@ import {
   RoundTypeEnum,
 } from 'modules/Builder/types';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
+import { ElementType } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
-import { ElementType, GetItemCommonFields } from './SaveAndPublish.types';
+import { GetItemCommonFields } from './SaveAndPublish.types';
 
 export const removeAppletExtraFields = () => ({
   isPublished: undefined,

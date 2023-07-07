@@ -12,27 +12,32 @@ import {
   PublishConcealAppletSetting,
   VersionHistorySetting,
 } from 'shared/features/AppletSettings';
+import { isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
 export const getSettings = ({ isPublished, roles }: GetSettings) => [
-  {
-    label: 'usersAndData',
-    items: [
-      {
-        icon: <Svg id="export" />,
-        label: 'exportData',
-        component: <ExportDataSetting />,
-        param: 'export-data',
-      },
-      {
-        icon: <Svg id="data-retention" />,
-        label: 'dataRetention',
-        component: <DataRetention />,
-        param: 'data-retention',
-      },
-    ],
-  },
+  ...(isManagerOrOwner(roles?.[0])
+    ? [
+        {
+          label: 'usersAndData',
+          items: [
+            {
+              icon: <Svg id="export" />,
+              label: 'exportData',
+              component: <ExportDataSetting />,
+              param: 'export-data',
+            },
+            {
+              icon: <Svg id="data-retention" />,
+              label: 'dataRetention',
+              component: <DataRetention />,
+              param: 'data-retention',
+            },
+          ],
+        },
+      ]
+    : []),
   {
     label: 'appletContent',
     items: [

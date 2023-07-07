@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import { ColorResult } from 'react-color';
 
 import { BaseSchema } from 'shared/state/Base';
-import { RetentionPeriods } from 'shared/types';
+import { ElementType, RetentionPeriods } from 'shared/types';
 import { AppletBody, AppletId, OwnerId } from 'api';
 import {
   ItemResponseType,
@@ -23,7 +23,6 @@ import {
   DeviceType,
   OrderName,
 } from 'modules/Builder/types';
-import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
 export type CreateAppletStateData = {
   builder: ActionReducerMapBuilder<AppletSchema>;

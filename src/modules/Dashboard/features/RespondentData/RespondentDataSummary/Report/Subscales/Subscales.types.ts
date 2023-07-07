@@ -1,5 +1,8 @@
+import { AnswerDTO } from 'shared/types';
+import { ActivitySettingsSubscale, Item } from 'shared/state';
+
 import { Version } from '../Charts/LineChart/LineChart.types';
-import { ActivityCompletion } from '../Report.types';
+import { ActivityCompletion, FormattedResponse } from '../Report.types';
 
 export const enum SubscalesTypes {
   Table = 'Table',
@@ -31,9 +34,9 @@ export type ParsedSubscale = {
   optionText: string;
   date: Date;
   activityCompletionID?: string;
-  activityItems?: any;
-  subscalesObject?: any;
-  restScores?: any;
+  activityItems: Record<string, { answer: AnswerDTO; activityItem: Item }>;
+  subscalesObject: Record<string, ActivitySettingsSubscale>;
+  restScores?: { [key: string]: { score: number; optionText: string } };
 };
 
 export type ParsedSubscales = {
@@ -42,8 +45,23 @@ export type ParsedSubscales = {
       activityCompletions: ParsedSubscale[];
     };
   };
-  finalScores: ParsedSubscale[];
+  finalScores: { score: number; optionText: string; date: Date; activityCompletionID?: string }[];
   latestFinalScore: number | null;
   versions: Version[];
-  allSubscalesToRender: any;
+  allSubscalesToRender: SubscaleToRender;
+};
+
+export type ActivityCompletionToRender = {
+  [key: string]: {
+    items?: FormattedResponse[];
+    score: number;
+    optionText?: string;
+    restScores?: { [key: string]: { score: number; optionText: string } };
+  };
+};
+
+//TODO: fix type
+
+export type SubscaleToRender = {
+  [key: string]: { items?: any };
 };

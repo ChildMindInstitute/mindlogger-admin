@@ -14,8 +14,8 @@ import {
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
+  ElementType,
 } from 'shared/types';
-import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 
 import { getObjectFromList } from '../builderHelpers';
 import { createArrayFromMinToMax } from '../array';
@@ -29,8 +29,8 @@ export const calcScores = <T>(
   data: ActivitySettingsSubscale,
   activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
   subscalesObject: Record<string, ActivitySettingsSubscale>,
+  result: { [key: string]: { score: number; optionText: string } },
 ): { [key: string]: { score: number; optionText: string } } => {
-  const result: { [key: string]: { score: number; optionText: string } } = {};
   const sumScore = data.items.reduce((acc, item) => {
     if (!item?.type) {
       return acc;
@@ -41,11 +41,12 @@ export const calcScores = <T>(
         subscalesObject[item.name],
         activityItems,
         subscalesObject,
+        result,
       )[item.name];
 
       result[item.name] = calculatedNestedSubscale;
 
-      return acc + calculatedNestedSubscale.score;
+      return acc + Object.keys(result)?.reduce((acc, item) => acc + result[item].score, 0);
     }
 
     const answer = activityItems[item.name].answer as
@@ -126,6 +127,7 @@ export const calcTotalScore = (
     } as ActivitySettingsSubscale,
     activityItems,
     {},
+    {},
   );
 };
 
@@ -141,8 +143,7 @@ export const getSubscales = (
   );
 
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
-    const calculatedSubscale = calcScores(item, activityItems, subscalesObject);
-
+    const calculatedSubscale = calcScores(item, activityItems, subscalesObject, {});
     acc[item.name] = calculatedSubscale[item.name].score;
     if (calculatedSubscale?.[item.name]?.optionText) {
       acc[`Optional text for ${item.name}`] = calculatedSubscale[item.name].optionText;
@@ -151,7 +152,8 @@ export const getSubscales = (
     return acc;
   }, {});
 
-  const calculatedTotalScore = calcTotalScore(subscaleSetting, activityItems);
+  const calculatedTotalScore =
+    subscaleSetting.calculateTotalScore && calcTotalScore(subscaleSetting, activityItems);
 
   return {
     ...(calculatedTotalScore && {

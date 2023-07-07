@@ -1,14 +1,16 @@
-import { ActivitySettingsSubscale } from 'shared/state';
-import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
+import { ActivitySettingsSubscale, Item } from 'shared/state';
+import { AnswerDTO, ElementType } from 'shared/types';
 
 import { formatActivityItemAnswers } from '../Report.utils';
+import { SubscaleToRender } from './Subscales.types';
 
 export const getSubscalesToRender = (
   data: ActivitySettingsSubscale,
-  activityItems: any,
-  subscalesObject: any,
-  result: any,
-): any => {
+  activityItems: Record<string, { answer: AnswerDTO; activityItem: Item }>,
+  subscalesObject: Record<string, ActivitySettingsSubscale>,
+  endDatetime: string,
+  result: SubscaleToRender,
+) => {
   if (!data?.items || !result) {
     return result;
   }
@@ -19,24 +21,23 @@ export const getSubscalesToRender = (
         subscalesObject[item.name],
         activityItems,
         subscalesObject,
+        endDatetime,
         result[data.name],
       );
+
       if (!result?.[data.name]) {
-        result[data.name] = { nestedSubscale };
+        result[data.name] = nestedSubscale;
       } else {
         result[data.name] = {
           ...result[data.name],
         };
       }
     } else {
-      const formatted = formatActivityItemAnswers(
-        activityItems[item.name],
-        activityItems[item.name].endDatetime,
-      );
+      const formattedItem = formatActivityItemAnswers(activityItems[item.name], endDatetime);
       if (!result?.[data.name]?.items) {
-        result[data.name] = { items: [formatted] };
+        result[data.name] = { items: [formattedItem] };
       } else {
-        result[data.name].items.push(formatted);
+        result[data.name].items?.push(formattedItem);
       }
     }
   }

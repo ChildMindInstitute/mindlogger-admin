@@ -8,16 +8,19 @@ import { getObjectFromList } from 'shared/utils';
 import { FinalSubscale } from 'shared/consts';
 import { ActivitySettingsSubscale } from 'shared/state';
 
-import { ElementType } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.types';
 import { ActivityCompletionScores } from './ActivityCompletionScores';
 import { subscales } from './mock';
 import { Subscale } from './Subscale';
 import { AdditionalInformation } from './AdditionalInformation';
 import { ReportContext } from '../context';
-import { ParsedSubscales, SubscalesProps } from './Subscales.types';
+import {
+  ActivityCompletionToRender,
+  ParsedSubscales,
+  SubscaleScore,
+  SubscalesProps,
+} from './Subscales.types';
 import { FREQUENCY } from './Subscales.consts';
 import { AllScores } from './AllScores';
-import { formatActivityItemAnswers } from '../Report.utils';
 import { getSubscalesToRender } from './Subscales.utils';
 
 export const Subscales = ({ answers }: SubscalesProps) => {
@@ -64,10 +67,11 @@ export const Subscales = ({ answers }: SubscalesProps) => {
                 subscale,
                 activityItems,
                 subscalesObject,
+                item.endDatetime,
                 acc.allSubscalesToRender,
               );
 
-              const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject);
+              const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, {});
               const { [subscale.name]: removed, ...restScores } = calculatedSubscale;
 
               const activityCompletion = {
@@ -112,7 +116,13 @@ export const Subscales = ({ answers }: SubscalesProps) => {
 
   const { activityCompletionToRender, activityCompletionScores } =
     currentActivityCompletion?.subscaleSetting?.subscales?.reduce(
-      (acc: any, item) => {
+      (
+        acc: {
+          activityCompletionToRender: ActivityCompletionToRender;
+          activityCompletionScores: SubscaleScore[];
+        },
+        item,
+      ) => {
         const subscale = allSubscalesScores[item.name].activityCompletions.find(
           (el) => el.activityCompletionID === currentActivityCompletion.answerId,
         );
@@ -123,11 +133,12 @@ export const Subscales = ({ answers }: SubscalesProps) => {
           item,
           subscale.activityItems,
           subscale.subscalesObject,
+          currentActivityCompletion.endDatetime,
           {},
         );
         acc.activityCompletionToRender[item.name] = {
           ...subscaleToRender[item.name],
-          score: subscale?.score || 0,
+          score: subscale?.score,
           optionText: subscale?.optionText,
           restScores: subscale.restScores,
         };
@@ -139,7 +150,7 @@ export const Subscales = ({ answers }: SubscalesProps) => {
         return acc;
       },
       { activityCompletionToRender: {}, activityCompletionScores: [] },
-    ) || {};
+    ) || { activityCompletionToRender: {}, activityCompletionScores: [] };
 
   const currentActivityCompletionScores = currentActivityCompletion &&
     currentActivityCompletion?.subscaleSetting?.subscales && {
@@ -183,7 +194,6 @@ export const Subscales = ({ answers }: SubscalesProps) => {
     frequency: answers.length,
     data: { subscales: lineChartSubscales || [], versions },
   };
-  console.log(allSubscalesToRender);
 
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>
