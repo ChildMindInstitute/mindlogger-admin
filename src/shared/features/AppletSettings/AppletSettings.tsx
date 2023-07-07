@@ -45,11 +45,6 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
     navigateTo(setting.param);
   };
 
-  const handleOnClose = () => {
-    setSelectedSetting(null);
-    navigateTo();
-  };
-
   const navigateTo = (param = '') => {
     if (!isBuilder) {
       return navigate(param ? `${DASHBOARD_SETTINGS}/${param}` : DASHBOARD_SETTINGS);
@@ -64,7 +59,7 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
         selectedSetting={selectedSetting}
         handleSettingClick={handleSettingClick}
       />
-      <Setting onClose={handleOnClose}>{selectedSetting?.component}</Setting>
+      <Setting onClose={navigateTo}>{selectedSetting?.component}</Setting>
     </StyledContainer>
   );
 };
