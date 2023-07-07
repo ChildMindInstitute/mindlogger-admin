@@ -20,6 +20,6 @@ export const exportLinesZip = async (csvDataList: ExportCsvData[], reportName: s
 
     FileSaver.saveAs(generatedZip, reportName);
   } catch (err) {
-    console.log(err);
+    console.warn(err);
   }
 };
