@@ -95,7 +95,7 @@ export const getDefaultConditionalValue = (scoreId: string) => ({
   printItems: false,
   itemsPrint: undefined,
   match: ConditionalLogicMatch.All,
-  conditions: [{}],
+  conditions: [{ itemName: scoreId }],
 });
 
 const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>
