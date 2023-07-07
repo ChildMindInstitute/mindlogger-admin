@@ -1,4 +1,4 @@
-import { ActivityItemAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { ActivityItemAnswer } from 'shared/types';
 
 export type ItemPickerProps = {
   activityItem: ActivityItemAnswer;

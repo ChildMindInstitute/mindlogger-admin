@@ -1,4 +1,4 @@
-import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { AnswerDTO } from 'shared/types';
 
 export const getAnswerValue = (answerValue: AnswerDTO) => {
   if (typeof answerValue === 'object') {

@@ -4,7 +4,7 @@ import { auth } from 'redux/modules';
 import { applet } from 'shared/state';
 import { encryptData, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionCheckFromStorage } from 'shared/hooks';
-import { AnswerDTO } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { AnswerDTO } from 'shared/types';
 
 export const useEncryptedAnswers = () => {
   const userData = auth.useData();
