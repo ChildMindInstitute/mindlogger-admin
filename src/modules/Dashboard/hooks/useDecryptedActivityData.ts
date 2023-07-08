@@ -17,6 +17,7 @@ export const getEmptyDecryptedActivityData = () => ({
 });
 
 export const useDecryptedActivityData = (
+  isSkippedAnswersVisible: boolean,
   dynamicAppletId?: string,
   dynamicEncryption?: Encryption,
 ) => {
@@ -75,7 +76,7 @@ export const useDecryptedActivityData = (
     }
 
     const answerDataDecrypted = rest.items.reduce((acc, activityItem, index) => {
-      if (answersDecrypted[index] === null) return acc;
+      if (!isSkippedAnswersVisible && answersDecrypted[index] === null) return acc;
 
       return acc.concat({
         activityItem,

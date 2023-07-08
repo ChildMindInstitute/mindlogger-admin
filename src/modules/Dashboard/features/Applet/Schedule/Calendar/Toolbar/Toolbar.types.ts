@@ -8,4 +8,4 @@ export type ToolbarProps = CalendarToolbarProps & {
   setActiveView: Dispatch<SetStateAction<CalendarViews>>;
 };
 
-export type SetActiveBtnFunc = (value: string) => void;
+export type SetActiveBtnFunc = (value: string | number) => void;

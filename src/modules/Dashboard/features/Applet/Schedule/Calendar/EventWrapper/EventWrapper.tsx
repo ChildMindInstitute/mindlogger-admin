@@ -48,7 +48,16 @@ export const EventWrapper = ({
   ) : (
     <Box className="event-wrapper" ref={childrenRef} data-id={id} data-start={start} data-end={end}>
       <Tooltip followCursor tooltipTitle={tooltipTitle} placement="top">
-        {cloneElement(children, { ...children.props, title: '' })}
+        {cloneElement(children, {
+          ...children.props,
+          title: '',
+          style: {
+            ...children.props.style,
+            marginTop: '2px',
+            height: `calc(${children.props.style.height} - 1px)`,
+            minWidth: '18px',
+          },
+        })}
       </Tooltip>
     </Box>
   );

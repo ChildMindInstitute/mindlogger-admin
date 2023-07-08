@@ -195,8 +195,8 @@ type FlankerStimulusId = string;
 export type FlankerStimulusSettings = {
   id: FlankerStimulusId;
   image: string;
-  text: CorrectPress;
-  value?: number | null;
+  text: string;
+  value: CorrectPress;
   weight?: number | null;
 };
 
@@ -208,19 +208,19 @@ export type FlankerBlockSettings = {
 export type FlankerButtonSetting = {
   text: string | null;
   image: string | null;
-  value?: number;
+  value: CorrectPress;
 };
 
 export type FlankerConfig = {
   stimulusTrials: Array<FlankerStimulusSettings>;
   blocks: Array<FlankerBlockSettings>;
   buttons: Array<FlankerButtonSetting>;
-  nextButton?: string;
+  nextButton: string;
   showFixation: boolean;
   fixationDuration: number | null;
   fixationScreen: { value?: string; image: string } | null;
   minimumAccuracy?: number; //threshold
-  sampleSize?: number;
+  sampleSize: number;
   samplingMethod: FlankerSamplingMethod; //randomize order
   showFeedback: boolean;
   showResults: boolean; //show summary screen

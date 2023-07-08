@@ -49,8 +49,8 @@ export type SubscaleFormValue = ArrayElement<
 >;
 
 export enum CorrectPress {
-  Left = 'left',
-  Right = 'right',
+  Left = 0,
+  Right = 1,
 }
 
 export type ActivityFlowItem = {
@@ -176,6 +176,12 @@ export enum FlankerItemPositions {
   TestFirst = 8,
   TestSecond = 10,
   TestThird = 12,
+}
+
+export enum FlankerNextButton {
+  Ok = 'OK',
+  Finish = 'Finish',
+  Continue = 'Continue',
 }
 
 export type GetActivitySubscaleItems = {

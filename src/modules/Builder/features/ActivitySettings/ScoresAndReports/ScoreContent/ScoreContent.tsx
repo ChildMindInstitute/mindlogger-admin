@@ -167,7 +167,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
 
             return (
               <ToggleItemContainer
-                key={`data-score-conditional-${getEntityKey(conditional) || index}`}
+                key={`data-score-conditional-${getEntityKey(conditional) || index}-${index}`}
                 HeaderContent={SectionScoreHeader}
                 Content={ScoreCondition}
                 contentProps={{ name: conditionalName, scoreId }}

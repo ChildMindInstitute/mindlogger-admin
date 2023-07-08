@@ -16,7 +16,7 @@ export const FeedbackReviewed = () => {
   const { t } = useTranslation('app');
   const { appletId, answerId } = useParams();
 
-  const getDecryptedActivityData = useDecryptedActivityData();
+  const getDecryptedActivityData = useDecryptedActivityData(true);
   const { execute: getReviews } = useAsync(getReviewsApi);
   const [isLoading, setIsLoading] = useState(true);
   const [reviewers, setReviewers] = useState<Reviewer[]>([]);

@@ -11,6 +11,7 @@ import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
 import { StyledButton } from '../ScoresAndReports.styles';
+import { getDefaultScoreCondition } from './ConditionContent.utils';
 
 export const ConditionContent = ({ name, type, scoreId }: ConditionContentProps) => {
   const { t } = useTranslation();
@@ -26,14 +27,16 @@ export const ConditionContent = ({ name, type, scoreId }: ConditionContentProps)
   const conditions = watch(conditionsName);
 
   const handleAddCondition = () => {
-    appendCondition({});
+    appendCondition(
+      type === ConditionRowType.Score && scoreId ? getDefaultScoreCondition(scoreId) : {},
+    );
   };
 
   return (
     <>
       {conditions?.map((condition: Condition, index: number) => (
         <ConditionRow
-          key={`score-condition-${getEntityKey(condition) || index}`}
+          key={`score-condition-${getEntityKey(condition) || index}-${index}`}
           name={name}
           index={index}
           type={type}

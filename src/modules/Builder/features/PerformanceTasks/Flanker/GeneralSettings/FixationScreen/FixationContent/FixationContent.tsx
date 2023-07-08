@@ -17,7 +17,7 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { DEFAULT_MILLISECONDS_DURATION, MIN_MILLISECONDS_DURATION } from 'shared/consts';
-import { getIsRequiredValidateMessage } from 'shared/utils';
+import { getIsRequiredValidateMessage, getUploadedMediaName } from 'shared/utils';
 import { FlankerItemPositions } from 'modules/Builder/types';
 
 import { StyledRemoveButton } from './FixationContent.styles';
@@ -42,7 +42,7 @@ export const FixationContent = () => {
   const hasImgError = !!get(errors, imgErrorPath);
 
   const handleFixationAdd = () => {
-    setValue(fixationImageField, { image: '' });
+    setValue(fixationImageField, { image: '', value: '' });
     setValue(fixationDurationField, DEFAULT_MILLISECONDS_DURATION);
     setValue(fixationShowField, true);
   };
@@ -53,8 +53,8 @@ export const FixationContent = () => {
     clearErrors(fixationImageField);
   };
 
-  const handleImageSet = (val: string) => {
-    setValue(fixationImageField, { image: val || '' });
+  const handleImageSet = (imageSrc: string) => {
+    setValue(fixationImageField, { image: imageSrc || '', value: getUploadedMediaName(imageSrc) });
     trigger([fixationImageField]);
   };
 

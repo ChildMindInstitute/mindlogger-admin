@@ -30,6 +30,7 @@ export const DataExportPopup = ({
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting;
   const getDecryptedAnswers = useDecryptedActivityData(
+    false,
     chosenAppletData?.appletId,
     chosenAppletData?.encryption,
   );

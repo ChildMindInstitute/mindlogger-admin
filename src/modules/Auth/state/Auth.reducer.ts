@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import { storage } from 'shared/utils';
+import { LocalStorageKeys, storage } from 'shared/utils';
 
 import { AuthSchema } from './Auth.schema';
 import { setAccountName, signIn, getUserDetails } from './Auth.thunk';
@@ -15,8 +15,9 @@ import { state as initialState } from './Auth.state';
 
 export const reducers = {
   resetAuthorization: (state: AuthSchema): void => {
-    storage.removeItem('accessToken');
-    storage.removeItem('refreshToken');
+    storage.removeItem(LocalStorageKeys.AccessToken);
+    storage.removeItem(LocalStorageKeys.RefreshToken);
+    storage.removeItem(LocalStorageKeys.Workspace);
     state.authentication = initialState.authentication;
     state.isAuthorized = false;
   },
