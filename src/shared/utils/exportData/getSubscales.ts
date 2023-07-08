@@ -46,7 +46,7 @@ export const calcScores = <T>(
 
       result[item.name] = calculatedNestedSubscale;
 
-      return acc + Object.keys(result)?.reduce((acc, item) => acc + result[item].score, 0);
+      return acc + calculatedNestedSubscale.score;
     }
 
     const answer = activityItems[item.name].answer as
@@ -144,6 +144,7 @@ export const getSubscales = (
 
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
     const calculatedSubscale = calcScores(item, activityItems, subscalesObject, {});
+    console.log(calculatedSubscale);
     acc[item.name] = calculatedSubscale[item.name].score;
     if (calculatedSubscale?.[item.name]?.optionText) {
       acc[`Optional text for ${item.name}`] = calculatedSubscale[item.name].optionText;
