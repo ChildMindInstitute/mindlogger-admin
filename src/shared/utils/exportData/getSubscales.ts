@@ -144,7 +144,6 @@ export const getSubscales = (
 
   const parsedSubscales = subscaleSetting.subscales.reduce((acc: ParsedSubscale, item) => {
     const calculatedSubscale = calcScores(item, activityItems, subscalesObject, {});
-    console.log(calculatedSubscale);
     acc[item.name] = calculatedSubscale[item.name].score;
     if (calculatedSubscale?.[item.name]?.optionText) {
       acc[`Optional text for ${item.name}`] = calculatedSubscale[item.name].optionText;
