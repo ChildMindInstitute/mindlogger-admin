@@ -5,7 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { ReviewActivity, getAssessmentApi } from 'api';
 import { Svg } from 'shared/components';
 import { useAsync, useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
-import { StyledContainer, StyledHeadlineLarge, StyledTitleLarge, variables } from 'shared/styles';
+import {
+  StyledContainer,
+  StyledHeadlineLarge,
+  StyledTitleLarge,
+  theme,
+  variables,
+} from 'shared/styles';
 
 import { StyledTextBtn } from '../RespondentData.styles';
 import { Feedback } from './Feedback';
@@ -39,11 +45,13 @@ export const RespondentDataReview = () => {
   ]);
 
   const renderEmptyState = () => {
-    if (!selectedActivity) {
+    if (!selectedAnswer) {
       return (
         <>
           <Svg id="data" width="60" height="73" />
-          <StyledTitleLarge color={variables.palette.outline}>{t('emptyReview')}</StyledTitleLarge>
+          <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
+            {t('emptyReview')}
+          </StyledTitleLarge>
         </>
       );
     }
@@ -51,7 +59,7 @@ export const RespondentDataReview = () => {
     return (
       <>
         <Svg id="chart" width="67" height="67" />
-        <StyledTitleLarge color={variables.palette.outline}>
+        <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
           {t('noDataForActivity')}
         </StyledTitleLarge>
       </>
@@ -89,7 +97,7 @@ export const RespondentDataReview = () => {
             {t('feedback')}
           </StyledTextBtn>
         </StyledHeader>
-        {selectedAnswer && selectedActivity ? (
+        {selectedActivity && selectedAnswer ? (
           <Review answerId={selectedAnswer.answerId} activityId={selectedActivity.id} />
         ) : (
           <StyledWrapper>

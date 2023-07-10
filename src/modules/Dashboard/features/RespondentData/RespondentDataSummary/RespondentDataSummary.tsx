@@ -5,7 +5,13 @@ import { useParams } from 'react-router-dom';
 import { useAsync, useBreadcrumbs } from 'shared/hooks';
 import { Spinner, Svg } from 'shared/components';
 import { useDecryptedIdentifiers } from 'modules/Dashboard/hooks';
-import { StyledContainer, StyledFlexAllCenter, StyledTitleLarge, variables } from 'shared/styles';
+import {
+  StyledContainer,
+  StyledFlexAllCenter,
+  StyledTitleLarge,
+  theme,
+  variables,
+} from 'shared/styles';
 import {
   DatavizActivity,
   Version,
@@ -51,14 +57,14 @@ export const RespondentDataSummary = () => {
             {!selectedActivity ? (
               <>
                 <Svg id="data" width="60" height="73" />
-                <StyledTitleLarge color={variables.palette.outline}>
+                <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
                   {t('selectTheActivityToReview')}
                 </StyledTitleLarge>
               </>
             ) : (
               <>
                 <Svg id="confused" width="60" height="73" />
-                <StyledTitleLarge color={variables.palette.outline}>
+                <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
                   {t('datavizNotSupportedForPerformanceTasks')}
                 </StyledTitleLarge>
               </>
