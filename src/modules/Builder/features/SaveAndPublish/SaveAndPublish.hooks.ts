@@ -198,18 +198,41 @@ export const usePrompt = (isFormChanged: boolean) => {
   };
 };
 
+export const useUpdatedAppletNavigate = () => {
+  const { ownerId = '' } = workspaces.useData() ?? {};
+  const { activityId, activityFlowId } = useParams();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { getValues } = useFormContext();
+
+  const { getAppletWithItems } = applet.thunk;
+
+  const navigateToApplet = async (appletId: string) => {
+    const oldApplet = getValues();
+    const newApplet = await dispatch(getAppletWithItems({ ownerId, appletId }));
+    const newEntityId = getCurrentEntityId(oldApplet, get(newApplet, 'payload.data.result'), {
+      isActivity: !!activityId,
+      id: activityId ?? activityFlowId,
+    });
+    const url = getUpdatedAppletUrl(appletId, newEntityId, location.pathname);
+
+    navigate(url);
+  };
+
+  return navigateToApplet;
+};
+
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
-  const { trigger, getValues } = useFormContext();
-  const location = useLocation();
+  const { trigger } = useFormContext();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
   const checkIfHasEmptyRequiredFields = useCheckIfHasEmptyRequiredFields();
   const checkIfHasErrorsInFields = useCheckIfHasErrorsInFields();
-  const { createApplet, updateApplet, getAppletWithItems } = applet.thunk;
+  const navigateToApplet = useUpdatedAppletNavigate();
+  const { createApplet, updateApplet } = applet.thunk;
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { appletId, activityId, activityFlowId } = useParams();
+  const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
   const [isPasswordPopupOpened, setIsPasswordPopupOpened] = useState(false);
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
@@ -326,15 +349,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       }
 
       if (appletId && ownerId) {
-        const oldApplet = getValues();
-        const newApplet = await dispatch(getAppletWithItems({ ownerId, appletId }));
-        const newEntityId = getCurrentEntityId(oldApplet, get(newApplet, 'payload.data.result'), {
-          isActivity: !!activityId,
-          id: activityId ?? activityFlowId,
-        });
-        const url = getUpdatedAppletUrl(appletId, newEntityId, location.pathname);
-
-        navigate(url);
+        navigateToApplet(appletId);
       }
     }
 
@@ -357,17 +372,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       }
 
       if (createdAppletId && ownerId) {
-        const oldApplet = getValues();
-        const newApplet = await dispatch(
-          getAppletWithItems({ ownerId, appletId: createdAppletId }),
-        );
-        const newEntityId = getCurrentEntityId(oldApplet, get(newApplet, 'payload.data.result'), {
-          isActivity: !!activityId,
-          id: activityId ?? activityFlowId,
-        });
-        const url = getUpdatedAppletUrl(createdAppletId, newEntityId, location.pathname);
-
-        navigate(url);
+        navigateToApplet(createdAppletId);
       }
     }
   };
