@@ -1,7 +1,7 @@
-import { Item } from '../../AppletsCatalog/AppletsCatalog.types';
+import { PublishedItem } from 'redux/modules';
 
 export type ItemProps = {
-  item: Item;
+  item: PublishedItem;
   appletId: string;
-  activityId: string;
+  activityName: string;
 };

@@ -1,6 +1,6 @@
-import { Activity } from '../../AppletsCatalog/AppletsCatalog.types';
+import { PublishedActivity } from 'redux/modules';
 
 export type ActivityProps = {
   appletId: string;
-  activity: Activity;
+  activity: PublishedActivity;
 };

@@ -5,7 +5,7 @@ import { useAppSelector } from 'redux/store';
 import * as thunk from './Library.thunk';
 import { state as initialState } from './Library.state';
 import { extraReducers } from './Library.reducer';
-import { LibrarySchema } from './Library.schema';
+import { LibrarySchema, PublishedApplet } from './Library.schema';
 
 export * from './Library.schema';
 
@@ -26,5 +26,13 @@ export const library = {
           publishedApplets: { data },
         },
       }) => data,
+    ),
+  usePublishedApplet: (id: string): PublishedApplet =>
+    useAppSelector(
+      ({
+        library: {
+          publishedApplets: { data },
+        },
+      }) => data?.result?.find((applet: PublishedApplet) => id === applet.id),
     ),
 };

@@ -25,6 +25,8 @@ export const getSubScaleScore = (subscalesSum: number, type: SubscaleTotalScore,
 
 export const parseSex = (sex: string) => (sex === Sex.M ? '1' : '2');
 
+const INTERVAL_SYMBOL = '~';
+
 export const calcScores = <T>(
   data: ActivitySettingsSubscale,
   activityItems: Record<string, T & { answer: AnswerDTO; activityItem: Item }>,
@@ -46,7 +48,7 @@ export const calcScores = <T>(
 
       result[item.name] = calculatedNestedSubscale;
 
-      return acc + Object.keys(result)?.reduce((acc, item) => acc + result[item].score, 0);
+      return acc + calculatedNestedSubscale.score;
     }
 
     const answer = activityItems[item.name].answer as
@@ -97,7 +99,14 @@ export const calcScores = <T>(
           (activityItems[LookupTableItems.Age_screen]?.answer as DecryptedTextAnswer)
         : true;
 
-      return withSex && withAge && rawScore === String(calculatedScore);
+      if (!withSex || !withAge) return false;
+
+      const hasInterval = rawScore.includes(INTERVAL_SYMBOL);
+      if (!hasInterval) return rawScore === String(calculatedScore);
+
+      const [minScore, maxScore] = rawScore.replace(/\s/g, '').split(INTERVAL_SYMBOL);
+
+      return Number(minScore) <= calculatedScore && calculatedScore <= Number(maxScore);
     });
 
     return {

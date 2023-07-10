@@ -558,7 +558,7 @@ const getConditionPayload = (item: Item, condition: Condition) => {
   if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType))
     return condition.payload;
 
-  const options = (item?.responseValues as SingleAndMultipleSelectItemResponseValues).options;
+  const options = (item?.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
   const optionValue = options?.find(
     ({ value }) => `${value}` === `${(condition as OptionCondition).payload.optionValue}`,
   )?.id;
@@ -593,14 +593,14 @@ const getActivityConditionalLogic = (items: Item[]) =>
     return result;
   }, []);
 
-const getScoreConditions = (items: Item[], conditions?: Condition[]) =>
+const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
   conditions?.map((condition) => {
-    const { payload: initialPayload, itemName, type } = condition;
-    const relatedItem = items.find((item) => item.name === itemName);
+    const { itemName, type } = condition;
+    const relatedItem = items?.find((item) => item.name === itemName);
     const payload =
       type === ScoreConditionType
         ? { value: String((condition as ScoreCondition).payload.value) }
-        : initialPayload;
+        : (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
 
     return {
       ...condition,

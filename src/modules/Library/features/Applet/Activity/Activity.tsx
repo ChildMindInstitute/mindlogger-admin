@@ -15,7 +15,7 @@ import {
 import { Item } from '../Item';
 import { AppletForm, SelectedItem } from '../Applet.types';
 
-export const Activity = ({ appletId, activity: { id, name, items } }: ActivityProps) => {
+export const Activity = ({ appletId, activity: { name, items } }: ActivityProps) => {
   const { watch, setValue, getValues } = useFormContext<AppletForm>();
   const watchApplet = watch(appletId);
   const [activityVisible, setActivityVisible] = useState(false);
@@ -29,15 +29,15 @@ export const Activity = ({ appletId, activity: { id, name, items } }: ActivityPr
     if (!checked) {
       return setValue(
         appletId,
-        selectedItems.filter((selectedItem) => selectedItem.activityId !== id),
+        selectedItems.filter((selectedItem) => selectedItem.activityName !== name),
       );
     }
 
     const unselectedItems = items.reduce(
       (unselected: SelectedItem[], item) =>
-        !selectedItems.find((selectedItem) => item.id === selectedItem.id)
-          ? [...unselected, { id: item.id, activityId: id }]
-          : unselected,
+        selectedItems.find((selectedItem) => item.name === selectedItem.name)
+          ? unselected
+          : [...unselected, { name: item.name, activityName: name }],
       [],
     );
 
@@ -45,7 +45,7 @@ export const Activity = ({ appletId, activity: { id, name, items } }: ActivityPr
   };
 
   useEffect(() => {
-    const currentActivityItems = watchApplet.filter((item) => item.activityId === id);
+    const currentActivityItems = watchApplet.filter((item) => item.activityName === name);
     const isAllItemsSelected = currentActivityItems.length === items.length;
     const isIndeterminate = currentActivityItems.length > 0 && !isAllItemsSelected;
     setActivityIndeterminate(isIndeterminate);
@@ -69,8 +69,8 @@ export const Activity = ({ appletId, activity: { id, name, items } }: ActivityPr
       {activityVisible && !!items?.length && (
         <StyledItemsList>
           {items?.map((item) => (
-            <Fragment key={item.id}>
-              <Item appletId={appletId} activityId={id} item={item} />
+            <Fragment key={item.name}>
+              <Item appletId={appletId} activityName={name} item={item} />
             </Fragment>
           ))}
         </StyledItemsList>

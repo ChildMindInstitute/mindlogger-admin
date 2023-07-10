@@ -32,7 +32,7 @@ export const RespondentDataReview = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const [assessment, setAssessment] = useState<ActivityItemAnswer[]>([]);
 
-  const getDecryptedActivityData = useDecryptedActivityData(true);
+  const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getAssessment } = useAsync(getAssessmentApi);
 
   useBreadcrumbs([

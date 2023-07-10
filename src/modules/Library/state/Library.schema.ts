@@ -1,23 +1,34 @@
 import { BaseSchema } from 'redux/modules';
+import { ItemResponseType } from 'shared/consts';
+
+export type PublishedItem = {
+  question: Record<string, string>;
+  responseType: ItemResponseType;
+  responseValues: string[];
+  order: number;
+  name: string;
+};
+
+export type PublishedActivity = {
+  name: string;
+  items: PublishedItem[];
+};
 
 export type PublishedApplet = {
-  accountId: string;
-  appletId: string;
-  categoryId: string | null;
-  description: string | null;
-  id: string | null;
-  image: string | null;
+  id: string;
+  version: string;
+  displayName: string;
   keywords: string[];
-  name: string;
-  subCategoryId: string | null;
-  version?: string | null; // TODO: add a version to response
+  description: Record<string, string>;
+  activities: PublishedActivity[];
+  image?: string;
 };
 
 export type PublishedApplets = {
-  data: PublishedApplet[];
-  totalCount: number;
+  result: PublishedApplet[];
+  count: number;
 };
 
 export type LibrarySchema = {
-  publishedApplets: BaseSchema<PublishedApplets | null>;
+  publishedApplets: BaseSchema<PublishedApplets>;
 };
