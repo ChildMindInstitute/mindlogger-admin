@@ -43,9 +43,7 @@ export const DataExportPopup = ({
         handlePopupClose();
       },
     }),
-    (error) => {
-      console.warn(error);
-    },
+    console.warn,
     falseReturnFunc,
     [getDecryptedAnswers],
   );

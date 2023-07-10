@@ -31,9 +31,7 @@ export const ExportDataSetting = () => {
         setPasswordModalVisible(false);
       },
     }),
-    (error) => {
-      console.warn(error);
-    },
+    console.warn,
   );
 
   const handleDataExportHandler = () => {
