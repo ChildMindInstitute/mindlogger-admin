@@ -1,11 +1,11 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { BASE_API_URL } from 'shared/api';
+import { getBaseUrl } from 'shared/api';
 
 export const apiClient = axios.create();
 
 apiClient.interceptors.request.use((config: AxiosRequestConfig) => {
-  config.baseURL = BASE_API_URL;
+  config.baseURL = getBaseUrl();
 
   return config;
 });
