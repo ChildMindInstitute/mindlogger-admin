@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
+import { library } from 'redux/modules';
 import { page } from 'resources';
 import { EmptyState } from 'shared/components';
 import {
@@ -18,8 +19,6 @@ import {
 import { Header, RightButtonType } from '../../components';
 import { Applet } from '../Applet';
 import { StyledTablePagination } from './AppletsCatalog.styles';
-import { mockedPublishedAppletResponse } from './mocked';
-import { PublishedAppletResponse } from './AppletsCatalog.types';
 
 export const DEFAULT_APPLETS_PER_PAGE = 6;
 
@@ -30,22 +29,20 @@ export const AppletsCatalog = () => {
 
   useBreadcrumbs();
 
-  // const publishedApplets = library.usePublishedApplets();
-  const publishedApplets: PublishedAppletResponse = mockedPublishedAppletResponse;
+  const publishedApplets = library.usePublishedApplets();
 
   const [pageIndex, setPageIndex] = useState(0);
   const [recordsPerPage, setRecordsPerPage] = useState(DEFAULT_APPLETS_PER_PAGE);
-  const [searchText, setSearchText] = useState('');
+  const [search, setSearch] = useState('');
 
   const handleSearch = (searchText: string) => {
-    setSearchText(searchText);
+    setSearch(searchText);
     setPageIndex(0);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPageIndex(newPage);
-    // TODO: delete comment when endpoint is ready
-    // dispatch(library.thunk.getPublishedApplets({ recordsPerPage, pageIndex: newPage, searchText }));
+    dispatch(library.thunk.getPublishedApplets({ pageIndex: newPage, search }));
   };
 
   const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
@@ -53,18 +50,11 @@ export const AppletsCatalog = () => {
     setPageIndex(0);
   };
 
-  const renderEmptyState = () => !!searchText && <EmptyState>{t('notFound')}</EmptyState>;
+  const renderEmptyState = () => !!search && <EmptyState>{t('notFound')}</EmptyState>;
 
   useEffect(() => {
-    // TODO: delete comment when endpoint is ready
-    // const timeout = setTimeout(
-    //   () =>
-    //     dispatch(library.thunk.getPublishedApplets({ recordsPerPage, pageIndex: 0, searchText })),
-    //   1000,
-    //   // TODO: discuss search - use hook or fix search by enter
-    // );
-    // return () => clearTimeout(timeout);
-  }, [searchText]);
+    dispatch(library.thunk.getPublishedApplets({ pageIndex, search }));
+  }, [pageIndex, search]);
 
   return (
     <StyledBody>
@@ -79,8 +69,8 @@ export const AppletsCatalog = () => {
             {t('appletsCatalog')}
           </StyledHeadlineLarge>
           <StyledAppletList>
-            {publishedApplets?.data?.length
-              ? publishedApplets.data
+            {publishedApplets?.result?.length
+              ? publishedApplets.result
                   // TODO: delete slice when endpoint is ready
                   ?.slice(
                     pageIndex * DEFAULT_APPLETS_PER_PAGE,
@@ -93,10 +83,10 @@ export const AppletsCatalog = () => {
                   ))
               : renderEmptyState()}
           </StyledAppletList>
-          {publishedApplets?.data?.length && (
+          {publishedApplets?.result?.length && (
             <StyledTablePagination
               component="div"
-              count={publishedApplets?.totalCount || 0}
+              count={publishedApplets?.count || 0}
               rowsPerPage={recordsPerPage}
               page={pageIndex}
               onPageChange={handleChangePage}

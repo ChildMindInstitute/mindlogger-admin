@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +7,6 @@ import {
   checkAppletNameInLibraryApi,
   publishAppletToLibraryApi,
   getAppletLibraryUrlApi,
-  updateAppletSearchTermsApi,
 } from 'api';
 import { Spinner } from 'shared/components';
 import {
@@ -51,39 +50,34 @@ export const ShareApplet = ({
     onDisableSubmit(!checked);
   }, [checked]);
 
-  const handleShareApplet = useCallback(async () => {
+  const handleShareApplet = async () => {
     if (applet) {
       try {
-        const checkResult = await checkAppletNameInLibraryApi({
+        const appletName = getValues().appletName || '';
+        const checkResult = await checkAppletNameInLibraryApi({ appletName });
+        setShowNameTakenError(checkResult?.data);
+        if (checkResult?.data) return;
+
+        setIsLoading(true);
+        const publishResult = await publishAppletToLibraryApi({
           appletId: applet.id || '',
-          appletName: getValues().appletName || '',
+          appletName,
+          keywords,
         });
-        setShowNameTakenError(!checkResult?.data);
-
-        if (checkResult?.data) {
-          setIsLoading(true);
-          await publishAppletToLibraryApi({
-            appletId: applet.id || '',
-          });
-          await updateAppletSearchTermsApi({
-            appletId: applet.id || '',
-            params: { keywords: JSON.stringify(keywords) },
-          });
-          const libraryUrlResult = await getAppletLibraryUrlApi({
-            appletId: applet.id || '',
-          });
-
-          setLibraryUrl(libraryUrlResult?.data as string);
-          setIsLoading(false);
-          onAppletShared && onAppletShared({ keywords, libraryUrl: libraryUrlResult?.data });
-          setAppletShared(true);
-        }
+        const appletId = publishResult?.data?.result?.appletIdVersion;
+        const libraryUrlResult = await getAppletLibraryUrlApi({
+          appletId,
+        });
+        setLibraryUrl(libraryUrlResult?.data?.result as string);
+        setIsLoading(false);
+        onAppletShared?.({ keywords, libraryUrl: libraryUrlResult?.data?.result });
+        setAppletShared(true);
       } catch (e) {
         setErrorMessage(getErrorMessage(e));
         setIsLoading(false);
       }
     }
-  }, [keywords]);
+  };
 
   useEffect(() => {
     if (isSubmitted && !appletShared) {

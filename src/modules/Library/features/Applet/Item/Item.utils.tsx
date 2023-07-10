@@ -1,14 +1,14 @@
 import uniqueId from 'lodash.uniqueid';
 
 import { ItemResponseType } from 'shared/consts';
+import { PublishedItem } from 'redux/modules';
 import { variables, StyledBodyLarge } from 'shared/styles';
 import i18n from 'i18n';
 
-import { StyledItemContentRow, StyledItemSvg, StyledItemImage } from './Item.styles';
-import { Item } from '../../AppletsCatalog/AppletsCatalog.types';
+import { StyledItemContentRow, StyledItemSvg } from './Item.styles';
 import { ItemResponseTypes } from '../../AppletsCatalog/AppletsCatalog.conts';
 
-export const renderItemContent = (item: Item) => {
+export const renderItemContent = (item: PublishedItem) => {
   const { t } = i18n;
 
   switch (item.responseType) {
@@ -16,12 +16,11 @@ export const renderItemContent = (item: Item) => {
     case ItemResponseType.MultipleSelection:
       return (
         <>
-          {item.options?.map(({ title, image }) => (
+          {item.responseValues?.map((value) => (
             <StyledItemContentRow key={uniqueId()}>
               <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
-              {image && <StyledItemImage src={image} alt="Option image" />}
               <StyledBodyLarge sx={{ color: variables.palette.on_surface }}>
-                {title}
+                {value}
               </StyledBodyLarge>
             </StyledItemContentRow>
           ))}

@@ -17,7 +17,6 @@ import { auth, PublishedApplet } from 'redux/modules';
 import { Header, RightButtonType } from '../../components';
 import { Applet, AppletUiType } from '../Applet';
 import { StyledLink } from './Cart.styles';
-import { mockedCart } from './mocked';
 import { AddToBuilderPopup, AuthPopup } from '../Popups';
 
 export const Cart = () => {
@@ -28,7 +27,7 @@ export const Cart = () => {
   const [authPopupVisible, setAuthPopupVisible] = useState(false);
 
   // TODO: replace with real data
-  const applets: PublishedApplet[] = mockedCart;
+  const applets: PublishedApplet[] = [];
 
   useBreadcrumbs([
     {

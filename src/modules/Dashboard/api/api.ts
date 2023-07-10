@@ -8,7 +8,6 @@ import {
   AppletInvitationData,
   DuplicateApplet,
   FolderId,
-  AppletNameArgs,
   AppletEncryption,
   UpdatePin,
   UpdateFolder,
@@ -52,6 +51,7 @@ import {
   ReviewActivity,
   Review,
   AssessmentReview,
+  AppletName,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -384,47 +384,21 @@ export const togglePinApi = (
 export const updateAlertStatusApi = ({ alertId }: UpdateAlertStatus, signal?: AbortSignal) =>
   authApiClient.put(`account/updateAlertStatus/${alertId}`, {}, { signal });
 
-export const checkAppletNameInLibraryApi = (
-  { appletId, appletName }: AppletNameArgs,
-  signal?: AbortSignal,
-) =>
-  authApiClient.get(`/library/${appletId}/checkName`, {
-    params: {
-      name: appletName,
-    },
-    signal,
-  });
+export const checkAppletNameInLibraryApi = ({ appletName }: AppletName, signal?: AbortSignal) =>
+  authApiClient.post('/library/check_name', { name: appletName }, { signal });
 
 export const publishAppletToLibraryApi = (
-  { appletId, publish = true }: PublishApplet,
+  { appletId, keywords, appletName }: PublishApplet,
   signal?: AbortSignal,
 ) =>
-  authApiClient.put(
-    `/applet/${appletId}/status`,
-    {},
+  authApiClient.post(
+    '/library',
     {
-      params: {
-        id: appletId,
-        publish,
-      },
-      signal,
+      appletId,
+      keywords,
+      name: appletName,
     },
-  );
-
-export const updateAppletSearchTermsApi = (
-  { appletId, params }: UpdateAppletSearchTerms,
-  signal?: AbortSignal,
-) =>
-  authApiClient.put(
-    `/applet/${appletId}/searchTerms`,
-    {},
-    {
-      params: {
-        ...params,
-        id: appletId,
-      },
-      signal,
-    },
+    { signal },
   );
 
 export const getAppletSearchTermsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
@@ -433,7 +407,7 @@ export const getAppletSearchTermsApi = ({ appletId }: AppletId, signal?: AbortSi
   });
 
 export const getAppletLibraryUrlApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.get(`/applet/${appletId}/libraryUrl`, {
+  authApiClient.get(`/applet/${appletId}/library_link`, {
     signal,
   });
 

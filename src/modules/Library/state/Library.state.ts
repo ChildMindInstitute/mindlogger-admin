@@ -4,7 +4,10 @@ import { LibrarySchema } from './Library.schema';
 
 const initialStateData = {
   ...base.state,
-  data: null,
+  data: {
+    result: [],
+    count: 0,
+  },
 };
 
 export const state: LibrarySchema = {

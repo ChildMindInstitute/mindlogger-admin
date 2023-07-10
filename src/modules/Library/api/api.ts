@@ -1,15 +1,23 @@
+import { AppletId } from 'api';
 import { apiClient } from './api.client';
 import { PublishedAppletsType } from './api.types';
 
 export const getPublishedAppletsApi = (
-  { recordsPerPage, pageIndex, searchText = '' }: PublishedAppletsType,
+  { pageIndex, search }: PublishedAppletsType,
   signal?: AbortSignal,
 ) =>
-  apiClient.get('/library/applets', {
+  apiClient.get('/library', {
     params: {
-      recordsPerPage,
-      pageIndex,
-      searchText,
+      //pageIndex, TODO: remove when pagination api vill be ready
+      search,
+    },
+    signal,
+  });
+
+export const getPublishedAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+  apiClient.get('/library', {
+    params: {
+      libraryId: appletId,
     },
     signal,
   });
