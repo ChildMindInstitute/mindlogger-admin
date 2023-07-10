@@ -6,6 +6,9 @@ import { ReviewActivity, getAssessmentApi } from 'api';
 import { Svg } from 'shared/components';
 import { useAsync, useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
 import { StyledContainer, StyledHeadlineLarge, StyledTitleLarge, variables } from 'shared/styles';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { ActivityItemAnswer } from 'shared/types';
+import { Assessment } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/FeedbackAssessment.types';
 
 import { StyledTextBtn } from '../RespondentData.styles';
 import { Feedback } from './Feedback';
@@ -25,10 +28,11 @@ export const RespondentDataReview = () => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
-  const [isAssessmentVisible, setIsAssessmentVisible] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
+  const [assessment, setAssessment] = useState<ActivityItemAnswer[]>([]);
 
+  const getDecryptedActivityData = useDecryptedActivityData(true);
   const { execute: getAssessment } = useAsync(getAssessmentApi);
 
   useBreadcrumbs([
@@ -61,10 +65,20 @@ export const RespondentDataReview = () => {
   useEffect(() => {
     if (!appletId || !answerId) return;
     (async () => {
-      const { data } = await getAssessment({ appletId, answerId });
-      setIsAssessmentVisible(!!data.result.items.length);
+      const result = await getAssessment({ appletId, answerId });
+      const { reviewerPublicKey, ...assessmentData } = result.data.result;
+      const encryptedData = {
+        ...assessmentData,
+        userPublicKey: reviewerPublicKey,
+      } as Assessment;
+      const decryptedAssessment = getDecryptedActivityData(encryptedData);
+      setAssessment(decryptedAssessment.decryptedAnswers);
     })();
-  }, [answerId]);
+  }, [appletId, answerId]);
+
+  useEffect(() => {
+    setIsFeedbackOpen(false);
+  }, [appletId, answerId]);
 
   return (
     <StyledContainer sx={{ position: 'relative' }}>
@@ -97,11 +111,12 @@ export const RespondentDataReview = () => {
           </StyledWrapper>
         )}
       </StyledReviewContainer>
-      {selectedActivity && isFeedbackOpen && (
+      {selectedActivity && selectedAnswer && (
         <Feedback
+          isFeedbackOpen={isFeedbackOpen}
           selectedActivity={selectedActivity}
           onClose={() => setIsFeedbackOpen(false)}
-          isAssessmentVisible={isAssessmentVisible}
+          assessment={assessment}
         />
       )}
     </StyledContainer>

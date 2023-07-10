@@ -10,12 +10,12 @@ import {
   SliderItemAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { getActivityItemIndex } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers/AssesmentControllers.utils';
-import { AssessmentForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/FeedbackAssessmentForm/FeedbackAssessmentForm.types';
+import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.types';
 
 import { ItemPickerProps } from './ItemPicker.types';
 
 export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
-  const { control, getValues } = useFormContext<AssessmentForm>();
+  const { control, getValues } = useFormContext<FeedbackForm>();
   const { assessmentItems } = getValues();
 
   const activityItemIndex = getActivityItemIndex(

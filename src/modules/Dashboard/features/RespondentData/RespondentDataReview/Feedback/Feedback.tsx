@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { DefaultTabs as Tabs, Svg } from 'shared/components';
 import {
@@ -12,17 +13,37 @@ import { UiType } from 'shared/components/Tabs/Tabs.types';
 
 import { StyledButton, StyledContainer } from './Feedback.styles';
 import { FeedbackTabs, getTabs } from './Feedback.const';
-import { FeedbackProps } from './Feedback.types';
+import { FeedbackForm, FeedbackProps } from './Feedback.types';
+import { getDefaultFormValues } from './Feedback.utils';
 
-export const Feedback = ({ onClose, selectedActivity, isAssessmentVisible }: FeedbackProps) => {
+export const Feedback = ({
+  isFeedbackOpen,
+  onClose,
+  selectedActivity,
+  assessment,
+}: FeedbackProps) => {
   const { t } = useTranslation();
 
+  const [assessmentStep, setAssessmentStep] = useState(0);
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
 
-  const tabs = getTabs(selectedActivity, setActiveTab, isAssessmentVisible);
+  const methods = useForm<FeedbackForm>({
+    defaultValues: getDefaultFormValues(assessment),
+  });
+
+  const tabs = useMemo(
+    () => getTabs(selectedActivity, setActiveTab, assessment, assessmentStep, setAssessmentStep),
+    [selectedActivity, assessment, assessmentStep],
+  );
+
+  useEffect(() => {
+    setActiveTab(FeedbackTabs.Notes);
+    setAssessmentStep(0);
+    methods.reset(getDefaultFormValues(assessment));
+  }, [assessment]);
 
   return (
-    <StyledContainer>
+    <StyledContainer sx={{ display: isFeedbackOpen ? 'flex' : 'none' }}>
       <StyledFlexAllCenter
         sx={{ justifyContent: 'space-between', margin: theme.spacing(3.2, 3.2, 0) }}
       >
@@ -36,7 +57,14 @@ export const Feedback = ({ onClose, selectedActivity, isAssessmentVisible }: Fee
           <Svg id="cross" />
         </StyledButton>
       </StyledFlexAllCenter>
-      <Tabs activeTab={activeTab} tabs={tabs} uiType={UiType.Secondary} />
+      <FormProvider {...methods}>
+        <Tabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          tabs={tabs}
+          uiType={UiType.Secondary}
+        />
+      </FormProvider>
     </StyledContainer>
   );
 };

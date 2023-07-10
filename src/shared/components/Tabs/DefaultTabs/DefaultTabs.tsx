@@ -6,12 +6,18 @@ import { TabPanel } from '../TabPanel';
 import { StyledTabs } from '../Tabs.styles';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
-export const DefaultTabs = ({ tabs, activeTab = 0, uiType = UiType.Primary }: TabsProps) => {
+export const DefaultTabs = ({
+  tabs,
+  activeTab = 0,
+  setActiveTab,
+  uiType = UiType.Primary,
+}: TabsProps) => {
   const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(activeTab);
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
+    setActiveTab?.(newValue);
   };
 
   const { content, header } = tabs.reduce(

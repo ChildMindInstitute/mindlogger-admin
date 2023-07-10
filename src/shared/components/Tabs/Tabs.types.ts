@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 type Tab = {
   labelKey: string;
   icon?: JSX.Element;
@@ -19,6 +21,7 @@ export type TabsProps = {
   uiType?: UiType;
   tabs: Tab[];
   activeTab?: number;
+  setActiveTab?: Dispatch<SetStateAction<number>>;
   hiddenHeader?: boolean;
 };
 
