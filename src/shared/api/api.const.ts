@@ -9,19 +9,18 @@ export const DEFAULT_CONFIG = {
 export const BASE_API_URL = process.env.REACT_APP_API_DOMAIN || process.env.API_DOMAIN;
 
 export const BACKEND_SERVERS: ServerUrlOption[] = [
-  // TODO: fill values if needed from env
-  // {
-  //   name: 'MindLogger (api.mindlogger.org)',
-  //   value: 'PROD_SERVER',
-  // },
-  // {
-  //   name: 'MindLogger development (api-dev.mindlogger.org)',
-  //   value: DEV_SERVER,
-  // },
-  // {
-  //   name: 'MindLogger staging (api-staging.mindlogger.org)',
-  //   value: STAGING_SERVER,
-  // },
+  {
+    name: 'MindLogger (api.mindlogger.org)',
+    value: 'https://api.mindlogger.org/api/v1',
+  },
+  {
+    name: 'MindLogger development (api-dev.cmiml.net)',
+    value: 'https://api-dev.cmiml.net',
+  },
+  {
+    name: 'MindLogger staging (api-staging.mindlogger.org)',
+    value: 'http://api-staging.mindlogger.org/api/v1',
+  },
   {
     name: 'localhost (localhost:8080)',
     value: 'http://localhost:8080/api/v1',
