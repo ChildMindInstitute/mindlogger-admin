@@ -593,10 +593,10 @@ const getActivityConditionalLogic = (items: Item[]) =>
     return result;
   }, []);
 
-const getScoreConditions = (items: Item[], conditions?: Condition[]) =>
+const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
   conditions?.map((condition) => {
     const { payload: initialPayload, itemName, type } = condition;
-    const relatedItem = items.find((item) => item.name === itemName);
+    const relatedItem = items?.find((item) => item.name === itemName);
     const payload =
       type === ScoreConditionType
         ? { value: String((condition as ScoreCondition).payload.value) }
