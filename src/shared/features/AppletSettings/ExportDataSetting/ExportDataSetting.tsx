@@ -19,7 +19,7 @@ import {
 export const ExportDataSetting = () => {
   const { t } = useTranslation('app');
   const { result: appletData } = applet.useAppletData() ?? {};
-  const getDecryptedAnswers = useDecryptedActivityData(false);
+  const getDecryptedAnswers = useDecryptedActivityData();
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
@@ -31,6 +31,9 @@ export const ExportDataSetting = () => {
         setPasswordModalVisible(false);
       },
     }),
+    (error) => {
+      console.warn(error);
+    },
   );
 
   const handleDataExportHandler = () => {

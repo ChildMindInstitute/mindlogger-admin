@@ -37,7 +37,7 @@ export const prepareData = (
         (item) => item.activityItem.name,
       );
       const answers = data.decryptedAnswers.reduce((filteredAcc, item) => {
-        if (item.activityItem?.config?.skippableItem) return filteredAcc;
+        if (item.activityItem?.config?.skippableItem || item.answer === null) return filteredAcc;
 
         return filteredAcc.concat(
           getReportCSVObject({
@@ -59,7 +59,7 @@ export const prepareData = (
 
       const mediaAnswers = data.decryptedAnswers.reduce((filteredAcc, item) => {
         const responseType = item.activityItem?.responseType;
-        if (responseType === ItemResponseType.Drawing)
+        if (responseType === ItemResponseType.Drawing && item.answer)
           return filteredAcc.concat((item.answer as DecryptedDrawingAnswer).value.uri);
 
         if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
@@ -82,7 +82,7 @@ export const prepareData = (
 
       const drawingAnswers = data.decryptedAnswers.reduce((acc, item) => {
         const responseType = item.activityItem?.responseType;
-        if (responseType !== ItemResponseType.Drawing) return acc;
+        if (responseType !== ItemResponseType.Drawing || item.answer === null) return acc;
         const drawingValue = (item.answer as DecryptedDrawingAnswer).value;
 
         return acc.concat({
