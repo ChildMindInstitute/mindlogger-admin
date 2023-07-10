@@ -5,7 +5,7 @@ import { LocalStorageKeys, storage } from 'shared/utils';
 import { BASE_API_URL } from './api.const';
 import { signInRefreshTokenApi } from './api';
 
-export const getBaseUrl = () => (storage.getItem('apiUrl') as string) || BASE_API_URL;
+export const getBaseUrl = () => (storage.getItem('apiUrl') as string) || BASE_API_URL || '';
 
 export const getRequestTokenData = (config: AxiosRequestConfig) => {
   const accessToken = storage.getItem(LocalStorageKeys.AccessToken);

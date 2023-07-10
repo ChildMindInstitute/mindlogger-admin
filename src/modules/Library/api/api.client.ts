@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { BASE_API_URL } from './api.const';
+
+import { BASE_API_URL } from 'shared/api';
 
 export const apiClient = axios.create();
 
