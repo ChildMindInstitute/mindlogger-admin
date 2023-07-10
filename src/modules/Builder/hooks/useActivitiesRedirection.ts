@@ -16,6 +16,7 @@ export const useActivitiesRedirection = () => {
 
   useEffect(() => {
     if (loadingStatus !== 'loading' && !activity) {
+      //sometimes redirection can be called before the data updated in sessionStorage, so we need to use debounce to put redirection calling after all macrotasks
       debounce(() => navigate(generatePath(page.builderAppletActivities, { appletId })));
     }
   }, [activity, loadingStatus]);
