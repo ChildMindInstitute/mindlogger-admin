@@ -37,7 +37,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const { appletId, respondentId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
-  const getDecryptedActivityData = useDecryptedActivityData(false);
+  const getDecryptedActivityData = useDecryptedActivityData();
 
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<ActivityCompletion[]>([]);

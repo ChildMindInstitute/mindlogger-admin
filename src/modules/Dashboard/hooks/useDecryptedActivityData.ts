@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { applet } from 'shared/state';
@@ -17,7 +16,6 @@ export const getEmptyDecryptedActivityData = () => ({
 });
 
 export const useDecryptedActivityData = (
-  isSkippedAnswersVisible: boolean,
   dynamicAppletId?: string,
   dynamicEncryption?: Encryption,
 ) => {
@@ -26,7 +24,6 @@ export const useDecryptedActivityData = (
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption!);
   const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
-  const privateKeyRef = useRef(getAppletPrivateKey(dynamicAppletId ?? appletId));
 
   if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;
   const { prime, base } = encryptionInfoFromServer;
@@ -34,8 +31,6 @@ export const useDecryptedActivityData = (
   return <T extends EncryptedAnswerSharedProps>(
     answersApiResponse: T,
   ): DecryptedActivityData<T> => {
-    if (!privateKeyRef.current) return getEmptyDecryptedActivityData();
-
     const { userPublicKey, answer, itemIds, events, ...rest } = answersApiResponse;
 
     let answersDecrypted: AnswerDTO[] = [];
@@ -48,7 +43,8 @@ export const useDecryptedActivityData = (
       } catch {
         userPublicKeyParsed = userPublicKey;
       }
-      const key = getAESKey(privateKeyRef.current, userPublicKeyParsed, prime, base);
+      const privateKey = getAppletPrivateKey(dynamicAppletId ?? appletId);
+      const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
 
       try {
         answersDecrypted = JSON.parse(
@@ -75,15 +71,13 @@ export const useDecryptedActivityData = (
       }
     }
 
-    const answerDataDecrypted = rest.items.reduce((acc, activityItem, index) => {
-      if (!isSkippedAnswersVisible && answersDecrypted[index] === null) return acc;
-
-      return acc.concat({
+    const answerDataDecrypted: DecryptedActivityData<T>['decryptedAnswers'] = rest.items.map(
+      (activityItem, index) => ({
         activityItem,
         answer: answersDecrypted[index],
         ...rest,
-      });
-    }, [] as DecryptedActivityData<T>['decryptedAnswers']);
+      }),
+    );
 
     return {
       decryptedAnswers: answerDataDecrypted,
