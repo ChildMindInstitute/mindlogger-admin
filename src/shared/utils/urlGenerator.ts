@@ -44,10 +44,10 @@ export const getBuilderAppletUrl = (id: string) => `/${Path.Builder}/${id}`;
 export const getUpdatedAppletUrl = (appletId: string, entityId: string, url: string) => {
   const matchedPath =
     [
-      page.builderAppletActivity,
       page.builderAppletFlanker,
       page.builderAppletGyroscope,
       page.builderAppletTouch,
+      page.builderAppletActivity,
       page.builderAppletActivityFlowItem,
       page.builderApplet,
     ].find((pattern) => matchPath(`${pattern}/*`, url)) ?? '';

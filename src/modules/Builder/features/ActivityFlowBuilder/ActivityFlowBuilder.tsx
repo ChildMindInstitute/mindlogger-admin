@@ -11,6 +11,7 @@ import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
 import { ActivityFlowFormValues, ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
+import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
 import { getObjectFromList } from 'shared/utils';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
@@ -33,7 +34,7 @@ export const ActivityFlowBuilder = () => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { control, watch } = useFormContext();
-  const { appletId, activityFlowId } = useParams();
+  const { activityFlowId } = useParams();
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
   const { remove, append, insert, update, move } = useFieldArray({
@@ -86,6 +87,7 @@ export const ActivityFlowBuilder = () => {
   const activitiesIdsObjects = getObjectFromList(activities);
 
   useBreadcrumbs();
+  useActivityFlowsRedirection();
 
   return (
     <BuilderContainer

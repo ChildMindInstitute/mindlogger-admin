@@ -16,6 +16,7 @@ import { useBreadcrumbs } from 'shared/hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
 import { AppletFormValues } from 'modules/Builder/types';
+import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
 
 import { getActivityFlowIndex } from '../ActivityFlowBuilder/ActivityFlowBuilder.utils';
 import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
@@ -34,6 +35,7 @@ export const ActivityFlowAbout = () => {
   };
 
   useBreadcrumbs();
+  useActivityFlowsRedirection();
 
   return (
     <BuilderContainer title={t('aboutActivityFlow')}>
