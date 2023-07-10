@@ -26,7 +26,6 @@ export const useDecryptedActivityData = (
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption!);
   const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
-  const privateKeyRef = useRef(getAppletPrivateKey(dynamicAppletId ?? appletId));
 
   if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;
   const { prime, base } = encryptionInfoFromServer;
@@ -34,8 +33,6 @@ export const useDecryptedActivityData = (
   return <T extends EncryptedAnswerSharedProps>(
     answersApiResponse: T,
   ): DecryptedActivityData<T> => {
-    if (!privateKeyRef.current) return getEmptyDecryptedActivityData();
-
     const { userPublicKey, answer, itemIds, events, ...rest } = answersApiResponse;
 
     let answersDecrypted: AnswerDTO[] = [];
