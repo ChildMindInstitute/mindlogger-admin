@@ -70,7 +70,7 @@ export const ShareApplet = ({
         });
         setLibraryUrl(libraryUrlResult?.data?.result as string);
         setIsLoading(false);
-        onAppletShared && onAppletShared({ keywords, libraryUrl: libraryUrlResult?.data?.result });
+        onAppletShared?.({ keywords, libraryUrl: libraryUrlResult?.data?.result });
         setAppletShared(true);
       } catch (e) {
         setErrorMessage(getErrorMessage(e));
