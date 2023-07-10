@@ -50,6 +50,8 @@ export const removeAppletExtraFields = () => ({
   id: undefined,
   theme: undefined,
   version: undefined,
+  //for the newly created activities/activityFlow to avoid { undefined: { items: [] }} problem
+  //for the case when updated activityId/activityFlowId comes from the server but storage is still not updated
   undefined,
 });
 
