@@ -17,7 +17,7 @@ export const getPublishedAppletsApi = (
 export const getPublishedAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   apiClient.get('/library', {
     params: {
-      library_id: appletId,
+      libraryId: appletId,
     },
     signal,
   });

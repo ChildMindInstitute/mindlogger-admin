@@ -11,7 +11,7 @@ import { Header, RightButtonType } from '../../components';
 export const AppletDetails = () => {
   const navigate = useNavigate();
   const { appletId } = useParams();
-  const applet = appletId ? library.usePublushedApplet(appletId) : undefined;
+  const applet = appletId ? library.usePublishedApplet(appletId) : undefined;
 
   useBreadcrumbs();
 

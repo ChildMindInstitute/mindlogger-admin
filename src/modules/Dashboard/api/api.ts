@@ -401,22 +401,6 @@ export const publishAppletToLibraryApi = (
     { signal },
   );
 
-export const updateAppletSearchTermsApi = (
-  { appletId, params }: UpdateAppletSearchTerms,
-  signal?: AbortSignal,
-) =>
-  authApiClient.put(
-    `/applet/${appletId}/searchTerms`,
-    {},
-    {
-      params: {
-        ...params,
-        id: appletId,
-      },
-      signal,
-    },
-  );
-
 export const getAppletSearchTermsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applet/${appletId}/searchTerms`, {
     signal,

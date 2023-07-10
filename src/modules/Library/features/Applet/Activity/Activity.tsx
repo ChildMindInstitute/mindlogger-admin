@@ -35,9 +35,9 @@ export const Activity = ({ appletId, activity: { name, items } }: ActivityProps)
 
     const unselectedItems = items.reduce(
       (unselected: SelectedItem[], item) =>
-        !selectedItems.find((selectedItem) => item.name === selectedItem.name)
-          ? [...unselected, { name: item.name, activityName: name }]
-          : unselected,
+        selectedItems.find((selectedItem) => item.name === selectedItem.name)
+          ? unselected
+          : [...unselected, { name: item.name, activityName: name }],
       [],
     );
 

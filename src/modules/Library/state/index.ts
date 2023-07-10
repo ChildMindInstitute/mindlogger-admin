@@ -27,7 +27,7 @@ export const library = {
         },
       }) => data,
     ),
-  usePublushedApplet: (id: string): PublishedApplet =>
+  usePublishedApplet: (id: string): PublishedApplet =>
     useAppSelector(
       ({
         library: {

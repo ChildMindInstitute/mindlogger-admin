@@ -53,14 +53,8 @@ export const AppletsCatalog = () => {
   const renderEmptyState = () => !!search && <EmptyState>{t('notFound')}</EmptyState>;
 
   useEffect(() => {
-    const timeout = setTimeout(
-      () => dispatch(library.thunk.getPublishedApplets({ pageIndex, search })),
-      1000,
-      // TODO: discuss search - use hook or fix search by enter
-    );
-
-    return () => clearTimeout(timeout);
-  }, [search]);
+    dispatch(library.thunk.getPublishedApplets({ pageIndex, search }));
+  }, [pageIndex, search]);
 
   return (
     <StyledBody>
