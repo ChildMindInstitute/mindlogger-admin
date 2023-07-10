@@ -48,7 +48,7 @@ export const calcScores = <T>(
 
       result[item.name] = calculatedNestedSubscale;
 
-      return acc + Object.keys(result)?.reduce((acc, item) => acc + result[item].score, 0);
+      return acc + calculatedNestedSubscale.score;
     }
 
     const answer = activityItems[item.name].answer as
