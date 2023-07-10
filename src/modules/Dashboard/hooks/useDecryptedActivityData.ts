@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { applet } from 'shared/state';
@@ -45,7 +44,8 @@ export const useDecryptedActivityData = (
       } catch {
         userPublicKeyParsed = userPublicKey;
       }
-      const key = getAESKey(privateKeyRef.current, userPublicKeyParsed, prime, base);
+      const privateKey = getAppletPrivateKey(dynamicAppletId ?? appletId);
+      const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
 
       try {
         answersDecrypted = JSON.parse(
