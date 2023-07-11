@@ -159,6 +159,21 @@ export type DecryptedDrawingAnswer = {
   text?: string | null;
 };
 
+export type DecryptedSingleSelectionPerRowAnswer = {
+  value: string[];
+  text?: string | null;
+};
+
+export type DecryptedMultiSelectionPerRowAnswer = {
+  value: string[][];
+  text?: string | null;
+};
+
+export type DecryptedSliderRowsAnswer = {
+  value: number[];
+  text?: string | null;
+};
+
 export type AnswerDTO =
   | null
   | DecryptedTextAnswer
@@ -171,7 +186,10 @@ export type AnswerDTO =
   | DecryptedTimeAnswer
   | DecryptedMediaAnswer
   | DecryptedGeolocationAnswer
-  | DecryptedDrawingAnswer;
+  | DecryptedDrawingAnswer
+  | DecryptedSingleSelectionPerRowAnswer
+  | DecryptedMultiSelectionPerRowAnswer
+  | DecryptedSliderRowsAnswer;
 
 export type AnswerValue =
   | null
@@ -185,7 +203,10 @@ export type AnswerValue =
   | DecryptedTimeAnswer['value']
   | DecryptedMediaAnswer['value']
   | DecryptedGeolocationAnswer['value']
-  | DecryptedDrawingAnswer['value'];
+  | DecryptedDrawingAnswer['value']
+  | DecryptedSingleSelectionPerRowAnswer['value']
+  | DecryptedMultiSelectionPerRowAnswer['value']
+  | DecryptedSliderRowsAnswer['value'];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
