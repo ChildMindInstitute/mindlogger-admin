@@ -41,10 +41,10 @@ export const ReviewMenu = ({
     }
   });
 
-  const { execute: getReviewActivities } = useAsync(
-    getReviewActivitiesApi,
-    (res) => res?.data?.result && setActivities(res.data.result),
-  );
+  const { execute: getReviewActivities } = useAsync(getReviewActivitiesApi, (res) => {
+    res?.data?.result && setActivities(res.data.result);
+    setSelectedAnswer(null);
+  });
 
   useEffect(() => {
     if (appletId && respondentId) {

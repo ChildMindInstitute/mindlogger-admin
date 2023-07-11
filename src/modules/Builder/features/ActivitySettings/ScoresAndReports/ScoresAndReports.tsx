@@ -14,7 +14,7 @@ import {
 } from 'shared/styles';
 import { Tooltip } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
 import { ScoreReport, SectionReport } from 'shared/state';
@@ -35,6 +35,9 @@ export const ScoresAndReports = () => {
   const navigate = useNavigate();
   const { fieldName } = useCurrentActivity();
   const { control, watch, setValue } = useFormContext();
+
+  useActivitiesRedirection();
+
   const scoresAndReportsName = `${fieldName}.scoresAndReports`;
   const generateReportName = `${scoresAndReportsName}.generateReport`;
   const showScoreSummaryName = `${scoresAndReportsName}.showScoreSummary`;

@@ -22,7 +22,7 @@ export const FeedbackAssessment = ({
 }: FeedbackAssessmentProps) => {
   const { appletId = '', answerId = '' } = useParams();
   const userData = auth.useData();
-  const encryptedAnswers = useEncryptedAnswers();
+  const getEncryptedAnswers = useEncryptedAnswers();
   const { execute: createAssessment } = useAsync(createAssessmentApi, () =>
     setSubmitAssessmentPopupVisible(false),
   );
@@ -45,7 +45,7 @@ export const FeedbackAssessment = ({
   const handleSubmitAssessment = async () => {
     const { assessmentItems } = getValues();
     const formattedAssessment = formatAssessment(assessmentItems);
-    const answer = encryptedAnswers(formattedAssessment.answers) as string;
+    const answer = getEncryptedAnswers(formattedAssessment.answers) as string;
 
     await createAssessment({
       appletId,

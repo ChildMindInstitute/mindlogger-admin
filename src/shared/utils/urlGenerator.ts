@@ -1,4 +1,7 @@
+import { matchPath, generatePath } from 'react-router-dom';
+
 import { PerformanceTasks } from 'modules/Builder/features/Activities/Activities.types';
+import { page } from 'resources';
 
 export const enum Path {
   Auth = 'auth',
@@ -37,6 +40,29 @@ export const getAppletPerformanceActivityPageRegexp = (path: string) =>
   `${ACTIVITIES_PAGE_REGEXP_STRING}\\/${Path.PerformanceTask}\\/${path}/(${uuidRegexp})`;
 
 export const getBuilderAppletUrl = (id: string) => `/${Path.Builder}/${id}`;
+
+export const getUpdatedAppletUrl = (appletId: string, entityId: string, url: string) => {
+  const matchedPath =
+    [
+      page.builderAppletFlanker,
+      page.builderAppletGyroscope,
+      page.builderAppletTouch,
+      page.builderAppletActivity,
+      page.builderAppletActivityFlowItem,
+      page.builderApplet,
+    ].find((pattern) => matchPath(`${pattern}/*`, url)) ?? '';
+
+  const match = matchPath(`${matchedPath}/*`, url);
+
+  if (!match) return url;
+
+  return generatePath(match.pattern.path, {
+    ...match?.params,
+    appletId,
+    activityId: entityId,
+    activityFlowId: entityId,
+  });
+};
 
 export const checkIfAppletUrlPassed = (url: string) =>
   new RegExp(`^${APPLET_PAGE_REGEXP_STRING}`).test(url);

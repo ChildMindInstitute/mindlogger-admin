@@ -76,7 +76,7 @@ export const getRoundBlocks = (
   return Object.keys(uploadedTable[0]).reduce(
     (result: { order: (string | number)[]; name: string }[], key) => {
       result.push({
-        order: uploadedTable.map((obj) => imagesIds[obj[key]]),
+        order: uploadedTable.map((obj) => imagesIds?.[obj?.[key]]),
         name: key,
       });
 
