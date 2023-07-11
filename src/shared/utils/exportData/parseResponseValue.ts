@@ -36,7 +36,7 @@ export const parseResponseValue = (item: AnswerDTO, inputType: ItemResponseType)
         (value as DecryptedDateAnswer['value'])?.month
       }/${(value as DecryptedDateAnswer['value'])?.year}`;
     case ItemResponseType.Time:
-      return `time: ${(value as DecryptedTimeAnswer['value'])?.hours} ${
+      return `time: hr ${(value as DecryptedTimeAnswer['value'])?.hours}, min ${
         (value as DecryptedTimeAnswer['value'])?.minutes
       }`;
     case ItemResponseType.Geolocation:
