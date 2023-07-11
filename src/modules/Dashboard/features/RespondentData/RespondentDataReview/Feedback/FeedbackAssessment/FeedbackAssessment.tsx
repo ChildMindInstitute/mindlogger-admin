@@ -13,7 +13,7 @@ import { Assessment, FeedbackAssessmentProps } from './FeedbackAssessment.types'
 
 export const FeedbackAssessment = ({ setActiveTab }: FeedbackAssessmentProps) => {
   const { appletId, answerId } = useParams();
-  const getDecryptedActivityData = useDecryptedActivityData(true);
+  const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getAssessment, isLoading } = useAsync(getAssessmentApi);
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[]>([]);
 

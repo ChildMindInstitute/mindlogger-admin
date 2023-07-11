@@ -8,8 +8,8 @@ export const getPublishedAppletsApi = (
 ) =>
   apiClient.get('/library', {
     params: {
-      page,
       search,
+      page,
       limit,
     },
     signal,

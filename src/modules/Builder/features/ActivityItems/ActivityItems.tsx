@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -8,7 +9,7 @@ import { StyledBodyLarge, StyledContainer, StyledModalWrapper, theme } from 'sha
 import { Modal } from 'shared/components';
 import { getEntityKey } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 
@@ -19,6 +20,7 @@ import { ConditionalPanel } from './ConditionalPanel';
 
 export const ActivityItems = () => {
   const { t } = useTranslation('app');
+  const { activityId } = useParams();
   const [activeItemId, setActiveItemId] = useState('');
   const [itemIdToDelete, setItemIdToDelete] = useState('');
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
@@ -37,6 +39,11 @@ export const ActivityItems = () => {
   });
 
   useBreadcrumbs();
+  useActivitiesRedirection();
+
+  useEffect(() => {
+    setActiveItemId('');
+  }, [activityId]);
 
   if (!activity) return null;
 

@@ -19,7 +19,7 @@ import { getResponseItem } from './Review.const';
 export const Review = ({ answerId, activityId }: ReviewProps) => {
   const { appletId } = useParams();
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
-  const getDecryptedActivityData = useDecryptedActivityData(true);
+  const getDecryptedActivityData = useDecryptedActivityData();
 
   const { execute: getActivityAnswer, isLoading } = useAsync(getActivityAnswerApi, (res) => {
     if (!res?.data?.result) return;

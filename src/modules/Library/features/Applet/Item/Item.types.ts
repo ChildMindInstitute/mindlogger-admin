@@ -1,7 +1,7 @@
-import { PublishedItem } from 'redux/modules';
+import { Item } from 'shared/state';
 
 export type ItemProps = {
-  item: PublishedItem;
+  item: Item;
   appletId: string;
   activityName: string;
 };
