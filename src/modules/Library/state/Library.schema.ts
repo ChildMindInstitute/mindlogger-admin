@@ -5,12 +5,12 @@ export type PublishedActivity = {
   name: string;
   description: Record<string, string>;
   image: string;
-  splashScreen: '';
-  showAllAtOnce: false;
-  isSkippable: false;
-  isReviewable: false;
-  responseIsEditable: false;
-  isHidden: false;
+  splashScreen: string;
+  showAllAtOnce: boolean;
+  isSkippable: boolean;
+  isReviewable: boolean;
+  responseIsEditable: boolean;
+  isHidden: boolean;
   items: Item[];
 };
 
