@@ -1,17 +1,17 @@
-import { BaseSchema } from 'redux/modules';
-import { ItemResponseType } from 'shared/consts';
-
-export type PublishedItem = {
-  question: Record<string, string>;
-  responseType: ItemResponseType;
-  responseValues: string[];
-  order: number;
-  name: string;
-};
+import { BaseSchema, Item } from 'redux/modules';
 
 export type PublishedActivity = {
+  key: string;
   name: string;
-  items: PublishedItem[];
+  description: Record<string, string>;
+  image: string;
+  splashScreen: string;
+  showAllAtOnce: boolean;
+  isSkippable: boolean;
+  isReviewable: boolean;
+  responseIsEditable: boolean;
+  isHidden: boolean;
+  items: Item[];
 };
 
 export type PublishedApplet = {
