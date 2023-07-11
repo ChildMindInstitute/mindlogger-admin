@@ -1,4 +1,5 @@
 export type PublishedAppletsType = {
-  pageIndex: number;
   search?: string;
+  page: number;
+  limit?: number;
 };

@@ -16,6 +16,6 @@ export type SelectedItem = {
   activityName: string;
 };
 
-export type AppletForm = {
+export type LibraryForm = {
   [key: string]: SelectedItem[];
 };

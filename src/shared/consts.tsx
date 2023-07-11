@@ -105,6 +105,14 @@ export enum ItemResponseType {
   ABTrails = 'ABTrails',
 }
 
+export const PerformanceTaskResponseTypes = [
+  ItemResponseType.Flanker,
+  ItemResponseType.StabilityTracker,
+  ItemResponseType.TouchPractice,
+  ItemResponseType.TouchTest,
+  ItemResponseType.ABTrails,
+];
+
 export enum GyroscopeOrTouch {
   Gyroscope = 'gyroscope',
   Touch = 'touch',

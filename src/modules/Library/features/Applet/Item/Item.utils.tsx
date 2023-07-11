@@ -16,11 +16,11 @@ export const renderItemContent = (item: PublishedItem) => {
     case ItemResponseType.MultipleSelection:
       return (
         <>
-          {item.responseValues?.map((value) => (
+          {item.responseValues?.options?.map((value) => (
             <StyledItemContentRow key={uniqueId()}>
               <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
               <StyledBodyLarge sx={{ color: variables.palette.on_surface }}>
-                {value}
+                {value.text}
               </StyledBodyLarge>
             </StyledItemContentRow>
           ))}

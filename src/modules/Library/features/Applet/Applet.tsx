@@ -30,22 +30,21 @@ import {
   StyledActivities,
   StyledSvgContainer,
 } from './Applet.styles';
-import { AppletForm, AppletProps, AppletUiType } from './Applet.types';
+import { LibraryForm, AppletProps, AppletUiType } from './Applet.types';
 import { RemoveAppletPopup } from './Popups';
 import { Activity } from './Activity';
 import { AppletImage } from './AppletImage';
 
-export const Applet = ({
-  applet: { id, displayName, image = '', version = '', description, keywords, activities },
-  uiType = AppletUiType.List,
-}: AppletProps) => {
+export const Applet = ({ applet, uiType = AppletUiType.List }: AppletProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
 
   const [activitiesVisible, setActivitiesVisible] = useState(uiType === AppletUiType.Details);
   const [removeAppletPopupVisible, setRemoveAppletPopupVisible] = useState(false);
 
-  const methods = useForm<AppletForm>({ defaultValues: { [id]: [] }, mode: 'onChange' });
+  const { id, displayName, image = '', version = '', description, keywords, activities } = applet;
+
+  const methods = useForm<LibraryForm>({ defaultValues: { [id]: [] }, mode: 'onChange' });
   const { getValues } = methods;
 
   const selectedItems = getValues()[id];
@@ -53,6 +52,11 @@ export const Applet = ({
 
   const handleRemove = () => {
     setRemoveAppletPopupVisible(true);
+  };
+
+  const handleAddToCart = () => {
+    // localStorage.setItem()
+    console.log('add to cart');
   };
 
   const renderAppletInfoListView = () => (
@@ -113,7 +117,8 @@ export const Applet = ({
               disabled={!selectedItems.length}
               variant="outlined"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
-              sx={{ marginLeft: theme.spacing(1.2) }}
+              sx={{ ml: theme.spacing(1.2) }}
+              onClick={handleAddToCart}
             >
               {/* TODO: fix button title - if the applet is in the table, then display 'remove' */}
               {t('addToCart')}
@@ -127,7 +132,7 @@ export const Applet = ({
               disabled={!selectedItems.length}
               variant="contained"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
-              sx={{ marginLeft: theme.spacing(1.2) }}
+              sx={{ ml: theme.spacing(1.2) }}
             >
               {/* TODO: fix button title - if the applet is in the table, then display 'remove' */}
               {t('addToCart')}
@@ -140,7 +145,7 @@ export const Applet = ({
             <Button
               variant="outlined"
               startIcon={<Svg width="18" height="18" id="trash" />}
-              sx={{ marginLeft: theme.spacing(1.2) }}
+              sx={{ ml: theme.spacing(1.2) }}
               onClick={handleRemove}
             >
               {t('remove')}

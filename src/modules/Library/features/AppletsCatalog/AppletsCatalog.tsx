@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -15,12 +15,11 @@ import {
   StyledAppletContainer,
   StyledAppletList,
 } from 'shared/styles';
+import { Header, RightButtonType } from 'modules/Library/components';
 
-import { Header, RightButtonType } from '../../components';
 import { Applet } from '../Applet';
 import { StyledTablePagination } from './AppletsCatalog.styles';
-
-export const DEFAULT_APPLETS_PER_PAGE = 6;
+import { DEFAULT_PAGE, DEFAULT_APPLETS_PER_PAGE } from './AppletsCatalog.conts';
 
 export const AppletsCatalog = () => {
   const { t } = useTranslation('app');
@@ -29,31 +28,30 @@ export const AppletsCatalog = () => {
 
   useBreadcrumbs();
 
-  const publishedApplets = library.usePublishedApplets();
+  const { count, result: appletsArray } = library.usePublishedApplets() || {};
 
-  const [pageIndex, setPageIndex] = useState(0);
-  const [recordsPerPage, setRecordsPerPage] = useState(DEFAULT_APPLETS_PER_PAGE);
+  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE);
   const [search, setSearch] = useState('');
 
   const handleSearch = (searchText: string) => {
     setSearch(searchText);
-    setPageIndex(0);
+    setPageIndex(DEFAULT_PAGE);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPageIndex(newPage);
-    dispatch(library.thunk.getPublishedApplets({ pageIndex: newPage, search }));
-  };
-
-  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-    setRecordsPerPage(parseInt(event.target.value, 10));
-    setPageIndex(0);
+    setPageIndex(newPage + 1);
   };
 
   const renderEmptyState = () => !!search && <EmptyState>{t('notFound')}</EmptyState>;
 
   useEffect(() => {
-    dispatch(library.thunk.getPublishedApplets({ pageIndex, search }));
+    dispatch(
+      library.thunk.getPublishedApplets({
+        page: pageIndex,
+        search,
+        limit: DEFAULT_APPLETS_PER_PAGE,
+      }),
+    );
   }, [pageIndex, search]);
 
   return (
@@ -69,28 +67,21 @@ export const AppletsCatalog = () => {
             {t('appletsCatalog')}
           </StyledHeadlineLarge>
           <StyledAppletList>
-            {publishedApplets?.result?.length
-              ? publishedApplets.result
-                  // TODO: delete slice when endpoint is ready
-                  ?.slice(
-                    pageIndex * DEFAULT_APPLETS_PER_PAGE,
-                    pageIndex * DEFAULT_APPLETS_PER_PAGE + DEFAULT_APPLETS_PER_PAGE,
-                  )
-                  .map((applet) => (
-                    <StyledAppletContainer key={applet.id}>
-                      <Applet applet={applet} />
-                    </StyledAppletContainer>
-                  ))
+            {appletsArray?.length
+              ? appletsArray.map((applet) => (
+                  <StyledAppletContainer key={applet.id}>
+                    <Applet applet={applet} />
+                  </StyledAppletContainer>
+                ))
               : renderEmptyState()}
           </StyledAppletList>
-          {publishedApplets?.result?.length && (
+          {!!appletsArray?.length && (
             <StyledTablePagination
               component="div"
-              count={publishedApplets?.count || 0}
-              rowsPerPage={recordsPerPage}
-              page={pageIndex}
+              count={count || 0}
+              rowsPerPage={DEFAULT_APPLETS_PER_PAGE}
+              page={pageIndex - 1}
               onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
               labelRowsPerPage=""
               rowsPerPageOptions={[]}
             />

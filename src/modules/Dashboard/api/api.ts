@@ -14,7 +14,6 @@ import {
   TogglePin,
   UpdateAlertStatus,
   PublishApplet,
-  UpdateAppletSearchTerms,
   PostAppletPublicLink,
   GetAppletsParams,
   CreateEventType,
@@ -407,7 +406,7 @@ export const getAppletSearchTermsApi = ({ appletId }: AppletId, signal?: AbortSi
   });
 
 export const getAppletLibraryUrlApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  authApiClient.get(`/applet/${appletId}/library_link`, {
+  authApiClient.get(`/applets/${appletId}/library_link`, {
     signal,
   });
 

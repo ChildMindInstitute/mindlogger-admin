@@ -1,10 +1,11 @@
-import { BaseSchema } from 'redux/modules';
+import { BaseSchema, SingleAndMultipleSelectItemResponseValues } from 'redux/modules';
+
 import { ItemResponseType } from 'shared/consts';
 
 export type PublishedItem = {
   question: Record<string, string>;
   responseType: ItemResponseType;
-  responseValues: string[];
+  responseValues: SingleAndMultipleSelectItemResponseValues;
   order: number;
   name: string;
 };

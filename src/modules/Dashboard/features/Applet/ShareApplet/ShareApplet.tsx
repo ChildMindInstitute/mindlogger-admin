@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
@@ -16,8 +16,9 @@ import {
 } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledBodyMedium } from 'shared/styles/styledComponents';
 import { getErrorMessage } from 'shared/utils/errors';
+import { useAsync } from 'shared/hooks';
 
-import { shareAppletDefaultValues } from './ShareApplet.const';
+import { ERROR_MARGIN_TOP, shareAppletDefaultValues } from './ShareApplet.const';
 import { ShareAppletSchema } from './ShareApplet.schema';
 import { ShareAppletData, ShareAppletProps } from './ShareApplet.types';
 import { StyledInputWrapper } from './ShareApplet.styles';
@@ -28,6 +29,7 @@ export const ShareApplet = ({
   onAppletShared,
   onDisableSubmit,
   isSubmitted,
+  setIsSubmitted,
   showSuccess = true,
 }: ShareAppletProps) => {
   const { t } = useTranslation('app');
@@ -37,7 +39,15 @@ export const ShareApplet = ({
   const [libraryUrl, setLibraryUrl] = useState('');
   const [keywords, setKeywords] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+
+  const { execute: checkAppletNameInLibrary, error: nameError } = useAsync(
+    checkAppletNameInLibraryApi,
+  );
+  const { execute: publishAppletToLibrary, error: publishError } =
+    useAsync(publishAppletToLibraryApi);
+  const { execute: getAppletLibraryUrl, error: libraryUrlError } = useAsync(getAppletLibraryUrlApi);
+
+  const error = publishError || libraryUrlError;
 
   const { handleSubmit, control, watch, setValue, getValues } = useForm<ShareAppletData>({
     resolver: yupResolver(ShareAppletSchema()),
@@ -45,39 +55,69 @@ export const ShareApplet = ({
   });
 
   const checked = watch('checked');
+  const appletName = watch('appletName');
+  const appletId = applet?.id || '';
+
+  const handleShareApplet = async () => {
+    if (applet) {
+      try {
+        await checkAppletNameInLibrary({ appletName });
+        setIsLoading(true);
+        await publishAppletToLibrary({
+          appletId,
+          appletName,
+          keywords,
+        });
+        const libraryUrlResult = await getAppletLibraryUrl({
+          appletId,
+        });
+        setLibraryUrl(libraryUrlResult?.data?.result?.url);
+        setIsLoading(false);
+        onAppletShared?.({ keywords, libraryUrl: libraryUrlResult?.data?.result });
+        setAppletShared(true);
+      } catch (error) {
+        console.warn(error);
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const handleAddKeyword = (keyword: string) => {
+    if (keyword.length) {
+      setValue('keyword', '');
+      setKeywords((prevState) => {
+        if (prevState.some((item) => item === keyword)) {
+          return prevState;
+        }
+        const newKeywords = prevState.concat(keyword);
+        setValue('keywords', newKeywords);
+
+        return newKeywords;
+      });
+    }
+  };
+
+  const handleRemoveKeyword = (index: number) => {
+    setKeywords((prevState) => {
+      const newKeywords = prevState?.filter((_, i) => i !== index);
+      setValue('keywords', newKeywords);
+
+      return newKeywords;
+    });
+  };
 
   useEffect(() => {
     onDisableSubmit(!checked);
   }, [checked]);
 
-  const handleShareApplet = async () => {
-    if (applet) {
-      try {
-        const appletName = getValues().appletName || '';
-        const checkResult = await checkAppletNameInLibraryApi({ appletName });
-        setShowNameTakenError(checkResult?.data);
-        if (checkResult?.data) return;
+  useEffect(() => {
+    setShowNameTakenError(false);
+    setIsSubmitted(false);
+  }, [appletName]);
 
-        setIsLoading(true);
-        const publishResult = await publishAppletToLibraryApi({
-          appletId: applet.id || '',
-          appletName,
-          keywords,
-        });
-        const appletId = publishResult?.data?.result?.appletIdVersion;
-        const libraryUrlResult = await getAppletLibraryUrlApi({
-          appletId,
-        });
-        setLibraryUrl(libraryUrlResult?.data?.result as string);
-        setIsLoading(false);
-        onAppletShared?.({ keywords, libraryUrl: libraryUrlResult?.data?.result });
-        setAppletShared(true);
-      } catch (e) {
-        setErrorMessage(getErrorMessage(e));
-        setIsLoading(false);
-      }
-    }
-  };
+  useEffect(() => {
+    setShowNameTakenError(!!nameError);
+  }, [nameError]);
 
   useEffect(() => {
     if (isSubmitted && !appletShared) {
@@ -85,31 +125,17 @@ export const ShareApplet = ({
     }
   }, [isSubmitted, appletShared]);
 
-  const handleAddKeyword = (value: string) => {
-    if (value.length) {
-      setValue('keyword', '');
-      setKeywords((prevState) => {
-        if (prevState?.some((item) => item === value)) {
-          return prevState;
-        }
-        const res = prevState?.concat(value);
-        setValue('keywords', res);
-
-        return res;
-      });
-    }
-  };
-
-  const handleRemoveKeyword = (index: number) => {
-    setKeywords((prevState) => {
-      const res = prevState?.filter((_, i) => i !== index);
-      setValue('keywords', res);
-
-      return res;
-    });
-  };
-
-  let modalComponent: JSX.Element | null = (
+  return appletShared && showSuccess && applet ? (
+    <SuccessShared
+      title={getValues().appletName || applet.displayName || ''}
+      text={applet?.description as string}
+      keywords={keywords}
+      // TODO: Implement applet activities quantity after back-end is ready (back-end task #M2-2564)
+      // activitiesQuantity={8}
+      appletLink={libraryUrl}
+      img={applet.image || ''}
+    />
+  ) : (
     <>
       {isLoading && <Spinner />}
       <form>
@@ -124,10 +150,12 @@ export const ShareApplet = ({
             value={applet?.displayName}
           />
           {showNameTakenError && (
-            <StyledErrorText
-              marginTop={0.5}
-              dangerouslySetInnerHTML={{ __html: t('appletNameAlreadyTaken') }}
-            />
+            <StyledErrorText marginTop={ERROR_MARGIN_TOP}>
+              <Trans i18nKey="appletNameAlreadyTaken">
+                This Applet name is already taken in the Library. Please rename the Applet to share
+                it. <br /> Note: This will change the name of the Applet for your users.
+              </Trans>
+            </StyledErrorText>
           )}
         </StyledInputWrapper>
         <StyledInputWrapper>
@@ -148,28 +176,12 @@ export const ShareApplet = ({
             label={<StyledBodyMedium>{t('agreementAppletAvailability') || ''}</StyledBodyMedium>}
           />
         </StyledInputWrapper>
-        {errorMessage && (
+        {error && (
           <StyledInputWrapper>
-            <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>
+            <StyledErrorText marginTop={0}>{getErrorMessage(error)}</StyledErrorText>
           </StyledInputWrapper>
         )}
       </form>
     </>
   );
-
-  if (appletShared && showSuccess && applet) {
-    modalComponent = (
-      <SuccessShared
-        title={getValues().appletName || applet.displayName || ''}
-        text={applet?.description as string}
-        keywords={keywords}
-        // TODO: Implement applet activities quantity
-        // activitiesQuantity={8}
-        appletLink={libraryUrl}
-        img={applet.image || ''}
-      />
-    );
-  }
-
-  return modalComponent;
 };

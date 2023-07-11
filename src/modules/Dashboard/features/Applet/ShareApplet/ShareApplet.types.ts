@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { SingleApplet } from 'shared/state';
 
 export type ShareAppletData = {
@@ -12,5 +14,6 @@ export type ShareAppletProps = {
   onAppletShared: ({ keywords, libraryUrl }: { keywords: string[]; libraryUrl: string }) => void;
   onDisableSubmit: (isDisabled: boolean) => void;
   isSubmitted: boolean;
+  setIsSubmitted: Dispatch<SetStateAction<boolean>>;
   showSuccess?: boolean;
 };

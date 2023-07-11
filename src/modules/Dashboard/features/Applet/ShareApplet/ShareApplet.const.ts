@@ -4,3 +4,5 @@ export const shareAppletDefaultValues = {
   keywords: [],
   checked: false,
 };
+
+export const ERROR_MARGIN_TOP = 0.5;

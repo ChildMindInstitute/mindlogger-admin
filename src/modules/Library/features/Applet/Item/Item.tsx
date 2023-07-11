@@ -15,10 +15,10 @@ import {
 } from './Item.styles';
 import { ItemProps } from './Item.types';
 import { renderItemContent } from './Item.utils';
-import { AppletForm } from '../Applet.types';
+import { LibraryForm } from '../Applet.types';
 
 export const Item = ({ item, appletId, activityName }: ItemProps) => {
-  const { control, getValues, setValue } = useFormContext<AppletForm>();
+  const { control, getValues, setValue } = useFormContext<LibraryForm>();
   const [itemVisible, setItemVisible] = useState(false);
 
   const handleSelect = () => {

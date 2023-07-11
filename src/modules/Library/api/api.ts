@@ -3,13 +3,14 @@ import { apiClient } from './api.client';
 import { PublishedAppletsType } from './api.types';
 
 export const getPublishedAppletsApi = (
-  { pageIndex, search }: PublishedAppletsType,
+  { page, search, limit }: PublishedAppletsType,
   signal?: AbortSignal,
 ) =>
   apiClient.get('/library', {
     params: {
-      //pageIndex, TODO: remove when pagination api vill be ready
+      page,
       search,
+      limit,
     },
     signal,
   });
