@@ -42,7 +42,9 @@ export const AppletsCatalog = () => {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPageIndex(newPage);
-    dispatch(library.thunk.getPublishedApplets({ pageIndex: newPage, search }));
+    dispatch(
+      library.thunk.getPublishedApplets({ page: newPage + 1, search, limit: recordsPerPage }),
+    );
   };
 
   const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
@@ -53,8 +55,10 @@ export const AppletsCatalog = () => {
   const renderEmptyState = () => !!search && <EmptyState>{t('notFound')}</EmptyState>;
 
   useEffect(() => {
-    dispatch(library.thunk.getPublishedApplets({ pageIndex, search }));
-  }, [pageIndex, search]);
+    dispatch(
+      library.thunk.getPublishedApplets({ page: pageIndex + 1, search, limit: recordsPerPage }),
+    );
+  }, [search]);
 
   return (
     <StyledBody>
@@ -70,20 +74,14 @@ export const AppletsCatalog = () => {
           </StyledHeadlineLarge>
           <StyledAppletList>
             {publishedApplets?.result?.length
-              ? publishedApplets.result
-                  // TODO: delete slice when endpoint is ready
-                  ?.slice(
-                    pageIndex * DEFAULT_APPLETS_PER_PAGE,
-                    pageIndex * DEFAULT_APPLETS_PER_PAGE + DEFAULT_APPLETS_PER_PAGE,
-                  )
-                  .map((applet) => (
-                    <StyledAppletContainer key={applet.id}>
-                      <Applet applet={applet} />
-                    </StyledAppletContainer>
-                  ))
+              ? publishedApplets.result.map((applet) => (
+                  <StyledAppletContainer key={applet.id}>
+                    <Applet applet={applet} />
+                  </StyledAppletContainer>
+                ))
               : renderEmptyState()}
           </StyledAppletList>
-          {publishedApplets?.result?.length && (
+          {!!publishedApplets?.result?.length && (
             <StyledTablePagination
               component="div"
               count={publishedApplets?.count || 0}

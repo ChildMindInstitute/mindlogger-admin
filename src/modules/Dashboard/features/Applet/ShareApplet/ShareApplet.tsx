@@ -64,11 +64,11 @@ export const ShareApplet = ({
           appletName,
           keywords,
         });
-        const appletId = publishResult?.data?.result?.appletIdVersion;
+        const appletId = publishResult?.data?.result?.id;
         const libraryUrlResult = await getAppletLibraryUrlApi({
           appletId,
         });
-        setLibraryUrl(libraryUrlResult?.data?.result as string);
+        setLibraryUrl(libraryUrlResult?.data?.result?.url as string);
         setIsLoading(false);
         onAppletShared?.({ keywords, libraryUrl: libraryUrlResult?.data?.result });
         setAppletShared(true);
