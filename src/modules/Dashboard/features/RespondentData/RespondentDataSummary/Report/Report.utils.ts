@@ -225,7 +225,7 @@ const compareActivityItem = (
 
       const sliderOptions = getSliderOptions(
         currResponseValues as SliderItemResponseValues,
-        currActivityItem.id!,
+        currActivityItem.activityItem.id!,
       ).reduce((options: Record<string, ItemOption>, currentOption) => {
         if (options[currentOption.id]) return options;
 
