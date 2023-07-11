@@ -6,13 +6,22 @@ import {
   DecryptedDrawingAnswer,
   DecryptedGeolocationAnswer,
   DecryptedMediaAnswer,
+  DecryptedMultiSelectionPerRowAnswer,
+  DecryptedSingleSelectionPerRowAnswer,
+  DecryptedSliderRowsAnswer,
   DecryptedTimeAnswer,
 } from 'shared/types';
+import {
+  Item,
+  SingleAndMultipleSelectRowsResponseValues,
+  SliderRowsResponseValues,
+} from 'shared/state';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
-export const parseResponseValue = (item: AnswerDTO, inputType: ItemResponseType) => {
+export const parseResponseValue = (item: AnswerDTO, activityItem: Item) => {
+  const inputType = activityItem.responseType;
   const key =
     item && item === Object(item) ? (Object.keys(item)?.[0] as keyof AnswerDTO) : undefined;
 
@@ -45,6 +54,40 @@ export const parseResponseValue = (item: AnswerDTO, inputType: ItemResponseType)
       })`;
     case ItemResponseType.Drawing:
       return (value as DecryptedDrawingAnswer['value']).uri.split('/').pop();
+    case ItemResponseType.SingleSelectionPerRow: {
+      const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
+
+      return rows
+        .map(
+          (row, index) =>
+            `${row.rowName}: ${
+              (value as DecryptedSingleSelectionPerRowAnswer['value'])[index] ?? ''
+            }`,
+        )
+        .join('\n');
+    }
+    case ItemResponseType.MultipleSelectionPerRow: {
+      const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
+
+      return rows
+        .map(
+          (row, index) =>
+            `${row.rowName}: ${
+              (value as DecryptedMultiSelectionPerRowAnswer['value'])[index]?.join(', ') ?? ''
+            }`,
+        )
+        .join('\n');
+    }
+    case ItemResponseType.SliderRows: {
+      const rows = (activityItem?.responseValues as SliderRowsResponseValues).rows;
+
+      return rows
+        .map(
+          (row, index) =>
+            `${row.label}: ${(value as DecryptedSliderRowsAnswer['value'])[index] ?? ''}`,
+        )
+        .join('\n');
+    }
     default:
       return `${key}: ${Array.isArray(value) ? joinWihComma(value as string[]) : value}`;
   }
