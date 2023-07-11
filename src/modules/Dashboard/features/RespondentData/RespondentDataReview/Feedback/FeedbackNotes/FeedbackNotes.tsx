@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { Box, Button } from '@mui/material';
 
 import { InputController } from 'shared/components/FormComponents';
@@ -29,14 +27,8 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isFormSticky = useHeaderSticky(containerRef);
 
-  const { getValues, setValue, control } = useForm({
-    resolver: yupResolver(
-      yup.object({
-        newNote: yup.string(),
-      }),
-    ),
-    defaultValues: { newNote: '' },
-  });
+  const methods = useFormContext();
+  const { control, getValues, setValue } = methods;
 
   const { execute: getAnswersNotes } = useAsync(
     getAnswersNotesApi,
@@ -73,7 +65,7 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   const addNewNote = () => {
     appletId &&
       answerId &&
-      createAnswerNote({ appletId, answerId, activityId, note: getValues().newNote });
+      createAnswerNote({ appletId, answerId, activityId, note: getValues('newNote') });
     setValue('newNote', '');
   };
 

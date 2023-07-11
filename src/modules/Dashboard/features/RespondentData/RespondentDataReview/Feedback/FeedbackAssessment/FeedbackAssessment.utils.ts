@@ -1,18 +1,7 @@
-import { ItemResponseType } from 'shared/consts';
 import { AnswerDTO } from 'shared/types';
 
-import { AssessmentFormItem, FormattedAssessmentItem } from './FeedbackAssessmentForm.types';
-
-export const getDefaultValue = (responseType: ItemResponseType): string | number[] | null => {
-  switch (responseType) {
-    case ItemResponseType.Slider:
-      return null;
-    case ItemResponseType.MultipleSelection:
-      return [];
-    default:
-      return '';
-  }
-};
+import { AssessmentFormItem } from '../Feedback.types';
+import { FormattedAssessmentItem } from './FeedbackAssessment.types';
 
 export const checkAnswerValue = (value: string | number | string[]) => {
   if (Array.isArray(value)) return !value.length;
