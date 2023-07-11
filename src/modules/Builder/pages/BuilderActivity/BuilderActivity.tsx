@@ -19,7 +19,7 @@ export const BuilderActivity = () => {
   const navigate = useNavigate();
   useBreadcrumbs();
 
-  const { fieldName = '', activity } = useCurrentActivity();
+  const { fieldName = '' } = useCurrentActivity();
 
   const { trigger, getFieldState } = useFormContext();
 
@@ -30,10 +30,6 @@ export const BuilderActivity = () => {
     await trigger();
     navigateToActivities();
   };
-
-  useEffect(() => {
-    if (activityId && !activity) navigateToActivities();
-  }, [activityId, activity]);
 
   const hasAppletErrors =
     !!getFieldState('activityFlows').error || !!getFieldState('displayName').error;

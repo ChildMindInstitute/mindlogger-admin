@@ -21,11 +21,12 @@ export const useSubscalesSystemItemsSetup = () => {
 
   useEffect(() => {
     const hasSubscaleLookupTable = subscales.some((subscale) => !!subscale.subscaleTableData);
-    const subscaleSystemItems = items.reduce((acc, item, index) => {
-      if (!item.allowEdit) return acc.concat({ ...item, index });
+    const subscaleSystemItems =
+      items?.reduce((acc, item, index) => {
+        if (!item.allowEdit) return acc.concat({ ...item, index });
 
-      return acc;
-    }, [] as (ItemFormValues & { index: number })[]);
+        return acc;
+      }, [] as (ItemFormValues & { index: number })[]) ?? [];
     const shouldAddSubscaleSystemItems = hasSubscaleLookupTable && !subscaleSystemItems.length;
 
     if (shouldAddSubscaleSystemItems) {

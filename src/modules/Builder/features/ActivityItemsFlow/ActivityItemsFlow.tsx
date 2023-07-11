@@ -5,7 +5,7 @@ import { useFormContext, useFieldArray } from 'react-hook-form';
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { ConditionalLogic } from 'shared/state';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 
 import { ItemFlow } from './ItemFlow';
 import { ActivityItemsFlowHeader } from './ActivityItemsFlowHeader';
@@ -24,6 +24,8 @@ export const ActivityItemsFlow = () => {
     control,
     name: conditionalLogicName,
   });
+
+  useActivitiesRedirection();
 
   const flowItems = watch(conditionalLogicName);
   const items = watch(`${fieldName}.items`);
