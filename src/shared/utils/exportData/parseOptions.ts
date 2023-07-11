@@ -8,15 +8,6 @@ export const parseOptions = (
   responseValues: SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues,
   type: ItemResponseType,
 ) => {
-  if (
-    [
-      ItemResponseType.SingleSelectionPerRow,
-      ItemResponseType.MultipleSelectionPerRow,
-      ItemResponseType.SliderRows,
-    ].includes(type)
-  )
-    return '';
-
   if (type === ItemResponseType.Slider) {
     const min = Number(responseValues?.minValue);
     const max = Number(responseValues?.maxValue);
