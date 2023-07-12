@@ -27,7 +27,7 @@ export const getTimeConfig = (minMs: number, maxMs: number) => {
     time: {
       unit,
       displayFormats: {
-        hour: 'MMM d H:mm' as const,
+        hour: 'MMM d, H:mm' as const,
       },
     },
   };

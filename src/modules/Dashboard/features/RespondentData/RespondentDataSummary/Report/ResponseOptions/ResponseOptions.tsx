@@ -47,7 +47,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
           </span>
         </Tooltip>
       </StyledHeadline>
-      {Object.values(responseOptions).map((responseOption) =>
+      {Object.values(responseOptions).map((responseOption, responseOptionIndex) =>
         responseOption.map(
           (item, index) =>
             !item.activityItem?.responseDataIdentifier && (
@@ -56,7 +56,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
                   text={getDictionaryText(item.activityItem.question)}
                   maxHeight={120}
                 />
-                {renderResponseOption(item, index)}
+                {renderResponseOption(item, responseOptionIndex)}
               </Box>
             ),
         ),

@@ -1,23 +1,20 @@
-import { max, min } from 'date-fns';
 import { Context } from 'chartjs-plugin-datalabels';
 import { LegendItem, ChartData } from 'chart.js';
 
 import { variables } from 'shared/styles';
+import { Version } from 'api';
 
 import { ExtendedChartDataset, SubscaleChartData, Tick } from './LineChart.types';
 import { COLORS } from './LineChart.const';
 import { locales } from '../Charts.const';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
 
-export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) => {
-  const responses = data.subscales.map((subscale) => subscale.activityCompletions);
-  const responsesDates = responses.flat().map((response) => response.date);
-  const versionsDates = data.versions.map((version) => version.date);
+export const getOptions = (lang: keyof typeof locales, minDate: Date, maxDate: Date) => {
+  const min = minDate.getTime();
+  const max = maxDate.getTime();
 
-  const minDate = min([...responsesDates, ...versionsDates]).getTime();
-  const maxDate = max([...responsesDates, ...versionsDates]).getTime();
-  const timeConfig = getTimeConfig(minDate, maxDate);
-  const stepSize = getStepSize(minDate, maxDate);
+  const timeConfig = getTimeConfig(min, max);
+  const stepSize = getStepSize(min, max);
 
   return {
     responsive: true,
@@ -47,6 +44,7 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
     },
     scales: {
       y: {
+        beginAtZero: true,
         grid: {
           color: (value: Tick) => {
             const lastTickIndex = value.chart.scales.y.ticks.length - 1;
@@ -77,24 +75,23 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
         },
       },
       x: {
-        ...timeConfig,
         adapters: {
           date: {
-            locale: locales[lang as keyof typeof locales],
+            locale: locales[lang],
           },
         },
-        position: 'bottom' as const,
+        ...timeConfig,
         grid: {
           display: false,
         },
-        ticks: {
-          source: 'data' as const,
-          font: {
-            size: 11,
-          },
+        border: {
+          display: false,
         },
-        min: minDate,
-        max: maxDate,
+        ticks: {
+          display: false,
+        },
+        min,
+        max,
       },
       x1: {
         adapters: {
@@ -106,20 +103,28 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
         ticks: {
           autoSkip: false,
           stepSize,
+          font: {
+            size: 11,
+          },
         },
         position: 'bottom' as const,
         grid: {
-          display: false,
+          display: true,
+          drawOnChartArea: false,
+          drawTicks: true,
         },
         border: {
           display: false,
         },
-        min: minDate,
-        max: maxDate,
+        min,
+        max,
       },
       x2: {
         ...timeConfig,
         position: 'top' as const,
+        border: {
+          display: false,
+        },
         ticks: {
           source: 'data' as const,
           font: {
@@ -127,17 +132,14 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
           },
           display: false,
         },
-        border: {
-          display: false,
-        },
-        min: minDate,
-        max: maxDate,
+        min,
+        max,
       },
     },
   };
 };
 
-export const getData = (data: SubscaleChartData) => {
+export const getData = (data: SubscaleChartData, versions: Version[]) => {
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
   const responsesScores = responses.flat().map((response) => response.score);
 
@@ -164,9 +166,9 @@ export const getData = (data: SubscaleChartData) => {
       },
       {
         xAxisID: 'x2',
-        labels: data.versions.map(({ version }) => version),
-        data: data.versions.map(({ date }) => ({
-          x: date,
+        labels: versions.map(({ version }) => version),
+        data: versions.map(({ createdAt }) => ({
+          x: new Date(createdAt),
           y: maxScore + 2,
         })),
         datalabels: {

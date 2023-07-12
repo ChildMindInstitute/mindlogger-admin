@@ -1,3 +1,4 @@
+import { Version } from 'api';
 import { Chart, ChartDataset, ChartTypeRegistry, LegendElement } from 'chart.js';
 
 export type ActivityCompletion = {
@@ -8,11 +9,6 @@ export type ActivityCompletion = {
 export type Subscale = {
   name: string;
   activityCompletions: ActivityCompletion[];
-};
-
-export type Version = {
-  date: Date;
-  version: string;
 };
 
 export type SubscaleChartData = {
