@@ -14,6 +14,7 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.SliderRows,
   ItemResponseType.NumberSelection,
+  ItemResponseType.Message,
   ItemResponseType.Flanker,
   ItemResponseType.StabilityTracker,
   ItemResponseType.TouchPractice,
