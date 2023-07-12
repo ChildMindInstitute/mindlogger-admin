@@ -1,7 +1,7 @@
 import { AnswerDTO } from 'shared/types';
 import { ActivitySettingsSubscale, Item } from 'shared/state';
+import { Version } from 'api';
 
-import { Version } from '../Charts/LineChart/LineChart.types';
 import { ActivityCompletion, FormattedResponse } from '../Report.types';
 
 export const enum SubscalesTypes {

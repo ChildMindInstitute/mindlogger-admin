@@ -51,7 +51,7 @@ export const Subscales = ({ answers }: SubscalesProps) => {
               acc.latestFinalScore = calculatedTotalScore?.score;
             }
 
-            acc.versions.push({ version: item.version, date: new Date(item.endDatetime) });
+            acc.versions.push({ version: item.version, createdAt: item.endDatetime });
 
             if (calculatedTotalScore) {
               acc.finalScores.push({
