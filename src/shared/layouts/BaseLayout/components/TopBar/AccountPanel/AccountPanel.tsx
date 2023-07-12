@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box, ClickAwayListener } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
 import { auth } from 'redux/modules';
@@ -13,6 +14,8 @@ import {
   variables,
 } from 'shared/styles';
 import { useLogout } from 'shared/hooks';
+import { useAppDispatch } from 'redux/store';
+import { Path } from 'shared/utils';
 
 import { Notifications } from '../Notifications';
 import {
@@ -35,7 +38,19 @@ export const AccountPanel = ({
 }: AccountPanelProps) => {
   const { t } = useTranslation('app');
   const authData = auth.useData();
+  const { pathname } = useLocation();
   const handleLogout = useLogout();
+  const dispatch = useAppDispatch();
+
+  const onLogout = () => {
+    if (pathname.includes(Path.Builder)) {
+      dispatch(auth.actions.startLogout());
+
+      return;
+    }
+
+    handleLogout();
+  };
 
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
@@ -74,7 +89,7 @@ export const AccountPanel = ({
           <StyledLogOutBtn
             variant="text"
             startIcon={<Svg id="logout" width="16" height="20" />}
-            onClick={handleLogout}
+            onClick={onLogout}
           >
             {t('logOut')}
           </StyledLogOutBtn>

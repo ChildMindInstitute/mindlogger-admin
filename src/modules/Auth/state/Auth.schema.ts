@@ -35,4 +35,5 @@ export type AuthData = {
 export type AuthSchema = {
   authentication: BaseSchema<AuthData | null>;
   isAuthorized: boolean;
+  isLogoutInProgress: boolean;
 };
