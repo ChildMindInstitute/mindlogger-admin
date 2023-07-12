@@ -1157,5 +1157,6 @@
   "true": "True",
   "false": "False",
   "showAllSubscaleResults": "Show All Subscale Results",
-  "latestFinalSubscaleScore": "Latest Final Subscale Score"
+  "latestFinalSubscaleScore": "Latest Final Subscale Score",
+  "credits": "Credits"
 }
