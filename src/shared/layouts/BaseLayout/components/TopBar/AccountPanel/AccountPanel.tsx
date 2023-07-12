@@ -15,7 +15,7 @@ import {
 } from 'shared/styles';
 import { useLogout } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { Path } from 'shared/utils';
+import { checkIfAppletUrlPassed } from 'shared/utils';
 
 import { Notifications } from '../Notifications';
 import {
@@ -43,7 +43,7 @@ export const AccountPanel = ({
   const dispatch = useAppDispatch();
 
   const onLogout = () => {
-    if (pathname.includes(Path.Builder)) {
+    if (checkIfAppletUrlPassed(pathname)) {
       dispatch(auth.actions.startLogout());
 
       return;
