@@ -872,6 +872,7 @@
   "addNewNote": "Add a New Note",
   "addNotePlaceholder": "Add a note which you’ll always see here",
   "unsupportedResponseItem": "This data type can’t be displayed on this page",
+  "messageDoesNotRequireResponse": "Message does not require response",
   "noRespondentsYet": "No respondents yet.",
   "deleteActivity": "Delete Activity",
   "removeActivity": "Remove Activity",
