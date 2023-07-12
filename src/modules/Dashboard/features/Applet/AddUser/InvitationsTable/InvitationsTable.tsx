@@ -62,7 +62,7 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
         },
         dateTimeInvited: {
           content: () =>
-            `${format(new Date(createdAt), DateFormats.YearMonthDayHoursMinutesSeconds)}`,
+            `${format(new Date(`${createdAt}Z`), DateFormats.YearMonthDayHoursMinutesSeconds)}`,
           value: createdAt,
         },
       };
