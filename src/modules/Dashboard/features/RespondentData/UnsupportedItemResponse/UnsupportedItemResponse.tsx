@@ -12,7 +12,11 @@ export const UnsupportedItemResponse = ({ itemType }: { itemType: ItemResponseTy
     <StyledItem>
       {itemsTypeIcons[itemType]}
       <StyledBodyLarge color={variables.palette.outline}>
-        {t('unsupportedResponseItem')}
+        {t(
+          itemType === ItemResponseType.Message
+            ? 'messageDoesNotRequireResponse'
+            : 'unsupportedResponseItem',
+        )}
       </StyledBodyLarge>
     </StyledItem>
   );
