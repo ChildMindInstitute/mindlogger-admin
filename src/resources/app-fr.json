@@ -700,7 +700,7 @@
   "newItemName": "Nouvel article",
   "validationMessages": {
     "isRequired": "{{- field }} est requis",
-    "alphanumeric": "{{- field }} ne doit contenir que des caractères alphanumériques ou des traits de soulignement",
+    "alphanumeric": "{{- field }} ne doit contenir que des caractères alphanumériques, des traits de soulignement ou des traits d'union",
     "lessThan": "{{- less }} doit être inférieur à {{- than }}",
     "moreThan": "{{- more }} doit être supérieur à {{- than }}",
     "unique": "Cette {{- field }} déja en cours d'utilisation. Veuillez utiliser un nom différent",
