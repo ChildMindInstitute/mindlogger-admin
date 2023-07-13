@@ -26,6 +26,50 @@ const getDecryptedAnswersObject = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
 
+const getReportData = (
+  reportData: AppletExportData['reportData'],
+  rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+) => {
+  const answers = decryptedAnswers.reduce((filteredAcc, item) => {
+    if (item.activityItem?.config?.skippableItem || item.answer === null) return filteredAcc;
+
+    return filteredAcc.concat(
+      getReportCSVObject({
+        item,
+        rawAnswersObject,
+      }),
+    );
+  }, [] as ReturnType<typeof getReportCSVObject>[]);
+
+  const subscaleSetting = decryptedAnswers?.[0]?.subscaleSetting;
+  if (subscaleSetting?.subscales?.length) {
+    answers.splice(0, 1, {
+      ...answers[0],
+      ...getSubscales(subscaleSetting, rawAnswersObject),
+    });
+  }
+
+  return reportData.concat(answers);
+};
+
+const getMediaData = (
+  mediaData: AppletExportData['mediaData'],
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+) => {
+  const mediaAnswers = decryptedAnswers.reduce((filteredAcc, item) => {
+    const responseType = item.activityItem?.responseType;
+    if (responseType === ItemResponseType.Drawing && item.answer)
+      return filteredAcc.concat((item.answer as DecryptedDrawingAnswer).value.uri);
+
+    if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
+
+    return filteredAcc.concat((item.answer as DecryptedMediaAnswer).value || '');
+  }, [] as string[]);
+
+  return mediaData.concat(...mediaAnswers);
+};
+
 const getActivityJourneyData = (
   activityJourneyData: AppletExportData['activityJourneyData'],
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
@@ -96,46 +140,16 @@ export const prepareData = (
         data.decryptedAnswers,
         (item) => item.activityItem.name,
       );
-      const answers = data.decryptedAnswers.reduce((filteredAcc, item) => {
-        if (item.activityItem?.config?.skippableItem || item.answer === null) return filteredAcc;
 
-        return filteredAcc.concat(
-          getReportCSVObject({
-            item,
-            rawAnswersObject,
-          }),
-        );
-      }, [] as ReturnType<typeof getReportCSVObject>[]);
-
-      const subscaleSetting = data.decryptedAnswers?.[0]?.subscaleSetting;
-      if (subscaleSetting?.subscales?.length) {
-        answers.splice(0, 1, {
-          ...answers[0],
-          ...getSubscales(subscaleSetting, rawAnswersObject),
-        });
-      }
-      const reportData = acc.reportData.concat(answers);
-
-      const mediaAnswers = data.decryptedAnswers.reduce((filteredAcc, item) => {
-        const responseType = item.activityItem?.responseType;
-        if (responseType === ItemResponseType.Drawing && item.answer)
-          return filteredAcc.concat((item.answer as DecryptedDrawingAnswer).value.uri);
-
-        if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
-
-        return filteredAcc.concat((item.answer as DecryptedMediaAnswer).value || '');
-      }, [] as string[]);
-      const mediaData = acc.mediaData.concat(...mediaAnswers);
-
+      const reportData = getReportData(acc.reportData, rawAnswersObject, data.decryptedAnswers);
+      const mediaData = getMediaData(acc.mediaData, data.decryptedAnswers);
       const activityJourneyData = getActivityJourneyData(
         acc.activityJourneyData,
         rawAnswersObject,
         data.decryptedAnswers,
         data.decryptedEvents,
       );
-
       const drawingItemsData = getDrawingItemsData(acc.drawingItemsData, data.decryptedAnswers);
-
       const stabilityTrackerItemsData = getStabilityTrackerItemsData(
         acc.stabilityTrackerItemsData,
         data.decryptedAnswers,
