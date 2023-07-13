@@ -1,4 +1,8 @@
-import { DecryptedStabilityTrackerAnswer } from 'shared/types';
+import {
+  DecryptedAnswerData,
+  DecryptedStabilityTrackerAnswer,
+  ExtendedExportAnswerWithoutEncryption,
+} from 'shared/types';
 
 export const enum ZipFile {
   Media = 'media',
@@ -13,3 +17,8 @@ export const getStabilityTrackerCsvName = (
   id: string,
   phaseType: DecryptedStabilityTrackerAnswer['value']['phaseType'],
 ) => `${id}_${phaseType}.csv`;
+
+export const getDrawingFileName = (
+  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+  extension: string,
+) => `${item.id}-${item.activityItem.id}-${item.activityItem.name}.${extension}`;

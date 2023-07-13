@@ -18,7 +18,6 @@ export const getJourneyCSVObject = <T>({
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
 }) => {
   const {
-    answer,
     activityItem,
     scheduledDatetime,
     startDatetime,
@@ -57,7 +56,7 @@ export const getJourneyCSVObject = <T>({
       items: event.items,
       rawAnswersObject,
     }),
-    response: parseResponseValue(answer, event.activityItem, event.id),
+    response: parseResponseValue(event),
     options: replaceItemVariableWithName({
       markdown: parseOptions(responseValues, event.activityItem?.responseType) ?? '',
       items: event.items,
