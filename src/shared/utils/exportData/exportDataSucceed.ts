@@ -33,13 +33,11 @@ export const exportDataSucceed =
     exportTemplate(reportData, GENERAL_REPORT_NAME);
     exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
     (async () => {
-      await exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing));
-    })();
-    (async () => {
-      await exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker));
-    })();
-    (async () => {
-      await exportMediaZip(mediaData, getReportZipName(ZipFile.Media));
+      await Promise.allSettled([
+        exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing)),
+        exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker)),
+        exportMediaZip(mediaData, getReportZipName(ZipFile.Media)),
+      ]);
       callback?.();
     })();
   };
