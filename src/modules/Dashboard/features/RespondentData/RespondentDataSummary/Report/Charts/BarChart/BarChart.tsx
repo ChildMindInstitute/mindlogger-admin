@@ -8,18 +8,17 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
-import { OFFSET_Y_MAX } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts/LineChart/LineChart.const';
 import { variables } from 'shared/styles';
+import { pluck } from 'shared/utils';
 
 import { getDatasets } from './BarChart.utils';
 import { BarChartProps, CustomLegend } from './BarChart.types';
-import { SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
+import { OFFSET_Y_MAX, SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export const BarChart = ({ chartData }: BarChartProps) => {
-  const responseScores = chartData.map(({ score }) => score);
-  const maxScore = Math.max(...responseScores);
+  const maxScore = Math.max(...pluck(chartData, 'score'));
 
   const options = {
     maintainAspectRatio: false,

@@ -1,5 +1,4 @@
-import styled from '@emotion/styled';
-import { Box } from '@mui/material';
+import { styled, Box } from '@mui/material';
 
 import { StyledFlexTopStart, theme } from 'shared/styles';
 
@@ -9,5 +8,5 @@ export const StyledDescription = styled(StyledFlexTopStart)`
 
 export const StyledChartContainer = styled(Box)`
   margin: ${theme.spacing(2.4, 0)};
-  height: 45rem;
+  height: 48rem;
 `;

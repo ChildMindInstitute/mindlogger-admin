@@ -3,10 +3,11 @@ import { LegendItem, ChartData, LinearScale } from 'chart.js';
 
 import { variables } from 'shared/styles';
 import { Version } from 'api';
+import { pluck } from 'shared/utils';
 
 import { ExtendedChartDataset, SubscaleChartData, Tick } from './LineChart.types';
-import { COLORS, OFFSET_Y_MAX } from './LineChart.const';
-import { SUBSCALES_CHART_LABEL_WIDTH_Y, locales } from '../Charts.const';
+import { COLORS } from './LineChart.const';
+import { SUBSCALES_CHART_LABEL_WIDTH_Y, OFFSET_Y_MAX, locales } from '../Charts.const';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
 
 export const getOptions = (
@@ -16,8 +17,7 @@ export const getOptions = (
   data: SubscaleChartData,
 ) => {
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
-  const responsesScores = responses.flat().map((response) => response.score);
-  const maxScore = Math.max(...responsesScores);
+  const maxScore = Math.max(...pluck(responses.flat(), 'score'));
 
   const min = minDate.getTime();
   const max = maxDate.getTime();
@@ -154,9 +154,7 @@ export const getOptions = (
 
 export const getData = (data: SubscaleChartData, versions: Version[]) => {
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
-  const responsesScores = responses.flat().map((response) => response.score);
-
-  const maxScore = Math.max(...responsesScores);
+  const maxScore = Math.max(...pluck(responses.flat(), 'score'));
 
   return {
     datasets: [
