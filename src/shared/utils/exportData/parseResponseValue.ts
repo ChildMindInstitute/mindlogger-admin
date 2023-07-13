@@ -9,6 +9,7 @@ import {
   DecryptedMultiSelectionPerRowAnswer,
   DecryptedSingleSelectionPerRowAnswer,
   DecryptedSliderRowsAnswer,
+  DecryptedStabilityTrackerAnswer,
   DecryptedTimeAnswer,
 } from 'shared/types';
 import {
@@ -16,18 +17,19 @@ import {
   SingleAndMultipleSelectRowsResponseValues,
   SliderRowsResponseValues,
 } from 'shared/state';
+import { getStabilityTrackerCsvName } from 'shared/utils/exportData/getReportName';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
-export const parseResponseValue = (item: AnswerDTO, activityItem: Item) => {
+export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: string) => {
   const inputType = activityItem.responseType;
   const key =
-    item && item === Object(item) ? (Object.keys(item)?.[0] as keyof AnswerDTO) : undefined;
+    answer && answer === Object(answer) ? (Object.keys(answer)?.[0] as keyof AnswerDTO) : undefined;
 
-  const value = getAnswerValue(item);
+  const value = getAnswerValue(answer);
 
-  if (!key) return item || '';
+  if (!key) return answer || '';
 
   if (ItemsWithFileResponses.includes(inputType)) {
     return (value as DecryptedMediaAnswer['value']).split('/').pop();
@@ -88,6 +90,11 @@ export const parseResponseValue = (item: AnswerDTO, activityItem: Item) => {
         )
         .join('\n');
     }
+    case ItemResponseType.StabilityTracker:
+      return getStabilityTrackerCsvName(
+        id,
+        (value as DecryptedStabilityTrackerAnswer['value']).phaseType,
+      );
     default:
       return `${key}: ${Array.isArray(value) ? joinWihComma(value as string[]) : value}`;
   }

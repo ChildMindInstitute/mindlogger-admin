@@ -3,6 +3,7 @@ import {
   DecryptedAnswerData,
   DecryptedDrawingAnswer,
   DecryptedMediaAnswer,
+  DecryptedStabilityTrackerAnswer,
   ExportActivity,
   ExportCsvData,
   ExtendedExportAnswer,
@@ -11,6 +12,7 @@ import {
 import { getObjectFromList } from 'shared/utils/builderHelpers';
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import { convertJsonToCsv } from 'shared/utils/exportTemplate';
+import { getStabilityRecords, getStabilityTrackerCsvName } from 'shared/utils/exportData';
 
 import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
@@ -91,11 +93,27 @@ export const prepareData = (
       }, [] as ExportCsvData[]);
       const drawingItemsData = acc.drawingItemsData.concat(...drawingAnswers);
 
+      const stabilityTrackerAnswers = data.decryptedAnswers.reduce((acc, item) => {
+        const responseType = item.activityItem?.responseType;
+        if (responseType !== ItemResponseType.StabilityTracker) return acc;
+
+        const stabilityTrackerValue = (item.answer as DecryptedStabilityTrackerAnswer).value;
+
+        return acc.concat({
+          name: getStabilityTrackerCsvName(item.id, stabilityTrackerValue.phaseType),
+          data: convertJsonToCsv(getStabilityRecords(stabilityTrackerValue.value)),
+        });
+      }, [] as ExportCsvData[]);
+      const stabilityTrackerItemsData = acc.stabilityTrackerItemsData.concat(
+        ...stabilityTrackerAnswers,
+      );
+
       return {
         reportData,
         activityJourneyData,
         mediaData,
         drawingItemsData,
+        stabilityTrackerItemsData,
       };
     },
     {
@@ -103,11 +121,13 @@ export const prepareData = (
       activityJourneyData: [],
       mediaData: [],
       drawingItemsData: [],
+      stabilityTrackerItemsData: [],
     } as {
       reportData: ReturnType<typeof getReportCSVObject>[];
       activityJourneyData: ReturnType<typeof getJourneyCSVObject>[];
       mediaData: string[];
       drawingItemsData: ExportCsvData[];
+      stabilityTrackerItemsData: ExportCsvData[];
     },
   );
 };

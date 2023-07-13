@@ -29,7 +29,7 @@ export type EncryptedAnswerSharedProps = {
 };
 
 export type ExportAnswer = {
-  id?: string;
+  id: string;
   version?: string;
   activityName?: string;
   subscaleSetting?: SubscaleSetting | null;
@@ -174,6 +174,24 @@ export type DecryptedSliderRowsAnswer = {
   text?: string | null;
 };
 
+export type DecryptedStabilityTrackerCalcValue = {
+  lambda: number;
+  lambdaSlope: number;
+  score: number;
+  stimPos: number[];
+  targetPos: number[];
+  timestamp: number;
+  userPos: number[];
+};
+
+export type DecryptedStabilityTrackerAnswer = {
+  value: {
+    maxLambda: number;
+    phaseType: 'focus-phase' | 'challenge-phase';
+    value: DecryptedStabilityTrackerCalcValue[];
+  };
+};
+
 export type AnswerDTO =
   | null
   | DecryptedTextAnswer
@@ -189,7 +207,8 @@ export type AnswerDTO =
   | DecryptedDrawingAnswer
   | DecryptedSingleSelectionPerRowAnswer
   | DecryptedMultiSelectionPerRowAnswer
-  | DecryptedSliderRowsAnswer;
+  | DecryptedSliderRowsAnswer
+  | DecryptedStabilityTrackerAnswer;
 
 export type AnswerValue =
   | null
@@ -206,7 +225,8 @@ export type AnswerValue =
   | DecryptedDrawingAnswer['value']
   | DecryptedSingleSelectionPerRowAnswer['value']
   | DecryptedMultiSelectionPerRowAnswer['value']
-  | DecryptedSliderRowsAnswer['value'];
+  | DecryptedSliderRowsAnswer['value']
+  | DecryptedStabilityTrackerAnswer['value'];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
