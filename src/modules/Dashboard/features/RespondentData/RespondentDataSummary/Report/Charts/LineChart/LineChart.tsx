@@ -23,11 +23,11 @@ import { locales } from '../Charts.const';
 
 ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Tooltip, TimeScale);
 
-export const LineChart = ({ data }: LineChartProps) => {
+export const LineChart = ({ data, versions }: LineChartProps) => {
   const { i18n } = useTranslation('app');
 
   const { watch } = useFormContext<FilterFormValues>();
-  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, data.versions);
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
   const lang = i18n.language as keyof typeof locales;
 
@@ -45,7 +45,7 @@ export const LineChart = ({ data }: LineChartProps) => {
   const renderChart = useMemo(
     () => (
       <Line
-        options={getOptions(lang, minDate, maxDate)}
+        options={getOptions(lang, minDate, maxDate, data)}
         data={getData(data, filteredVersions)}
         plugins={[ChartDataLabels, legendMargin]}
       />

@@ -5,10 +5,11 @@ import { StyledBodyMedium, StyledFlexTopStart, StyledHeadline, theme } from 'sha
 
 import { LineChart } from '../../Charts';
 import { AllScoresProps } from './AllScores.types';
+import { StyledChartContainer } from './AllScores.styles';
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
 
-export const AllScores = ({ data, latestFinalScore, frequency }: AllScoresProps) => {
+export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllScoresProps) => {
   const { t } = useTranslation('app');
 
   if (!data.subscales.length) return null;
@@ -31,7 +32,9 @@ export const AllScores = ({ data, latestFinalScore, frequency }: AllScoresProps)
           </StyledBodyMedium>
         )}
       </StyledFlexTopStart>
-      <LineChart data={data} />
+      <StyledChartContainer>
+        <LineChart data={data} versions={versions} />
+      </StyledChartContainer>
     </Box>
   );
 };
