@@ -1,4 +1,5 @@
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
+import { getJourneyCSVObject, getReportCSVObject } from 'shared/utils';
 
 export type ExportActivity = {
   createdAt: string;
@@ -256,3 +257,11 @@ export const enum ElementType {
   Item = 'item',
   Subscale = 'subscale',
 }
+
+export type AppletExportData = {
+  reportData: ReturnType<typeof getReportCSVObject>[];
+  activityJourneyData: ReturnType<typeof getJourneyCSVObject>[];
+  mediaData: string[];
+  drawingItemsData: ExportCsvData[];
+  stabilityTrackerItemsData: ExportCsvData[];
+};
