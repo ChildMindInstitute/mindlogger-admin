@@ -185,10 +185,15 @@ export type DecryptedStabilityTrackerCalcValue = {
   userPos: number[];
 };
 
+export const enum StabilityTrackerPhaseType {
+  Focus = 'focus-phase',
+  Challenge = 'challenge-phase',
+}
+
 export type DecryptedStabilityTrackerAnswer = {
   value: {
     maxLambda: number;
-    phaseType: 'focus-phase' | 'challenge-phase';
+    phaseType: StabilityTrackerPhaseType;
     value: DecryptedStabilityTrackerCalcValue[];
   };
 };
