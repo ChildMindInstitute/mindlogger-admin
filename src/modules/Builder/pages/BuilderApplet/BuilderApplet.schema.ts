@@ -183,8 +183,8 @@ export const ItemSchema = () =>
       name: yup
         .string()
         .required(getIsRequiredValidateMessage('itemName'))
-        .matches(/^\w+$/g, {
-          message: t('validationMessages.alphanumeric', { field: t('itemName') }),
+        .matches(/^[a-zA-Z0-9_-]+$/g, {
+          message: t('validationMessages.alphanumericAndHyphen', { field: t('itemName') }),
         })
         .test(
           ItemTestFunctions.UniqueItemName,
