@@ -5,7 +5,7 @@ import {
   exportTemplate,
   getReportZipName,
   ZipFile,
-  exportLinesZip,
+  exportCsvZip,
   exportMediaZip,
 } from 'shared/utils';
 import { GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME } from 'shared/consts';
@@ -33,10 +33,10 @@ export const exportDataSucceed =
     exportTemplate(reportData, GENERAL_REPORT_NAME);
     exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
     (async () => {
-      await exportLinesZip(drawingItemsData, getReportZipName(ZipFile.Drawing));
+      await exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing));
     })();
     (async () => {
-      await exportLinesZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker));
+      await exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker));
     })();
     (async () => {
       await exportMediaZip(mediaData, getReportZipName(ZipFile.Media));

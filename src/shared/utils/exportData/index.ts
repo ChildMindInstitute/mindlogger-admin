@@ -7,7 +7,7 @@ export * from './getReportName';
 export * from './exportMediaZip';
 export * from './replaceItemVariableWithName';
 export * from './getDrawingLines';
-export * from './exportLinesZip';
+export * from './exportCsvZip';
 export * from './exportDataSucceed';
 export * from './getStabilityRecords';
 export * from './getSubscales';
