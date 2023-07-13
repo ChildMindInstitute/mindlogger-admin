@@ -10,3 +10,4 @@ export * from './getDrawingLines';
 export * from './exportLinesZip';
 export * from './exportDataSucceed';
 export * from './getStabilityRecords';
+export * from './getSubscales';

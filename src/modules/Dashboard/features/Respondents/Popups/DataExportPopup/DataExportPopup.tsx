@@ -10,10 +10,9 @@ import {
   theme,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { falseReturnFunc, getErrorMessage } from 'shared/utils';
+import { falseReturnFunc, getErrorMessage, exportDataSucceed } from 'shared/utils';
 import { useAsync, useSetupEnterAppletPassword } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { exportDataSucceed } from 'shared/utils/exportData';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';

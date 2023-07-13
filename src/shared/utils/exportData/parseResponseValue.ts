@@ -17,7 +17,7 @@ import {
   SingleAndMultipleSelectRowsResponseValues,
   SliderRowsResponseValues,
 } from 'shared/state';
-import { getStabilityTrackerCsvName } from 'shared/utils/exportData/getReportName';
+import { getStabilityTrackerCsvName } from 'shared/utils';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';

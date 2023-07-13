@@ -1,11 +1,14 @@
 import { AxiosResponse } from 'axios';
 
-import { prepareData } from 'shared/utils/exportData/prepareData';
-import { exportTemplate } from 'shared/utils/exportTemplate';
+import {
+  prepareData,
+  exportTemplate,
+  getReportZipName,
+  ZipFile,
+  exportLinesZip,
+  exportMediaZip,
+} from 'shared/utils';
 import { GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME } from 'shared/consts';
-import { exportLinesZip } from 'shared/utils/exportData/exportLinesZip';
-import { getReportZipName, ZipFile } from 'shared/utils/exportData/getReportName';
-import { exportMediaZip } from 'shared/utils/exportData/exportMediaZip';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 export const exportDataSucceed =

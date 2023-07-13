@@ -5,7 +5,7 @@ import {
 } from 'shared/types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
-import { replaceItemVariableWithName } from 'shared/utils/exportData';
+import { replaceItemVariableWithName } from 'shared/utils';
 
 import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
