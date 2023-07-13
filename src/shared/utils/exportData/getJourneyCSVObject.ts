@@ -1,9 +1,5 @@
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
-import {
-  parseResponseValue,
-  parseOptions,
-  replaceItemVariableWithName,
-} from 'shared/utils/exportData';
+import { parseResponseValue, parseOptions, replaceItemVariableWithName } from 'shared/utils';
 import { ActivityStatus } from 'shared/consts';
 import {
   AnswerDTO,
@@ -61,7 +57,7 @@ export const getJourneyCSVObject = <T>({
       items: event.items,
       rawAnswersObject,
     }),
-    response: parseResponseValue(answer, event.activityItem),
+    response: parseResponseValue(answer, event.activityItem, event.id),
     options: replaceItemVariableWithName({
       markdown: parseOptions(responseValues, event.activityItem?.responseType) ?? '',
       items: event.items,

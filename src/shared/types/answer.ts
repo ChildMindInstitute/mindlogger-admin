@@ -1,4 +1,5 @@
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
+import { getJourneyCSVObject, getReportCSVObject } from 'shared/utils';
 
 export type ExportActivity = {
   createdAt: string;
@@ -29,7 +30,7 @@ export type EncryptedAnswerSharedProps = {
 };
 
 export type ExportAnswer = {
-  id?: string;
+  id: string;
   version?: string;
   activityName?: string;
   subscaleSetting?: SubscaleSetting | null;
@@ -174,6 +175,29 @@ export type DecryptedSliderRowsAnswer = {
   text?: string | null;
 };
 
+export type DecryptedStabilityTrackerCalcValue = {
+  lambda: number;
+  lambdaSlope: number;
+  score: number;
+  stimPos: number[];
+  targetPos: number[];
+  timestamp: number;
+  userPos: number[];
+};
+
+export const enum StabilityTrackerPhaseType {
+  Focus = 'focus-phase',
+  Challenge = 'challenge-phase',
+}
+
+export type DecryptedStabilityTrackerAnswer = {
+  value: {
+    maxLambda: number;
+    phaseType: StabilityTrackerPhaseType;
+    value: DecryptedStabilityTrackerCalcValue[];
+  };
+};
+
 export type AnswerDTO =
   | null
   | DecryptedTextAnswer
@@ -189,7 +213,8 @@ export type AnswerDTO =
   | DecryptedDrawingAnswer
   | DecryptedSingleSelectionPerRowAnswer
   | DecryptedMultiSelectionPerRowAnswer
-  | DecryptedSliderRowsAnswer;
+  | DecryptedSliderRowsAnswer
+  | DecryptedStabilityTrackerAnswer;
 
 export type AnswerValue =
   | null
@@ -206,7 +231,8 @@ export type AnswerValue =
   | DecryptedDrawingAnswer['value']
   | DecryptedSingleSelectionPerRowAnswer['value']
   | DecryptedMultiSelectionPerRowAnswer['value']
-  | DecryptedSliderRowsAnswer['value'];
+  | DecryptedSliderRowsAnswer['value']
+  | DecryptedStabilityTrackerAnswer['value'];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
@@ -236,3 +262,11 @@ export const enum ElementType {
   Item = 'item',
   Subscale = 'subscale',
 }
+
+export type AppletExportData = {
+  reportData: ReturnType<typeof getReportCSVObject>[];
+  activityJourneyData: ReturnType<typeof getJourneyCSVObject>[];
+  mediaData: string[];
+  drawingItemsData: ExportCsvData[];
+  stabilityTrackerItemsData: ExportCsvData[];
+};

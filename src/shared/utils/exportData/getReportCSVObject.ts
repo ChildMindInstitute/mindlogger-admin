@@ -5,7 +5,7 @@ import {
 } from 'shared/types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
-import { replaceItemVariableWithName } from 'shared/utils/exportData';
+import { replaceItemVariableWithName } from 'shared/utils';
 
 import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
@@ -49,7 +49,7 @@ export const getReportCSVObject = <T>({
     activity_name: activityName,
     activity_flow: flowId,
     item: activityItem.name,
-    response: parseResponseValue(answer, item.activityItem),
+    response: parseResponseValue(answer, item.activityItem, item.id),
     prompt: replaceItemVariableWithName({
       markdown: activityItem.question?.en ?? '',
       items: item.items,

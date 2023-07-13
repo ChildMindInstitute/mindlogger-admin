@@ -3,8 +3,7 @@ import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';
 import { Accordion } from 'modules/Dashboard/components';
-import { calcScores, calcTotalScore } from 'shared/utils/exportData/getSubscales';
-import { getObjectFromList } from 'shared/utils';
+import { getObjectFromList, calcScores, calcTotalScore } from 'shared/utils';
 import { FinalSubscale } from 'shared/consts';
 import { ActivitySettingsSubscale } from 'shared/state';
 
