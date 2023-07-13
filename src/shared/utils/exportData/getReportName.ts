@@ -18,7 +18,14 @@ export const getStabilityTrackerCsvName = (
   phaseType: DecryptedStabilityTrackerAnswer['value']['phaseType'],
 ) => `${id}_${phaseType}.csv`;
 
-export const getDrawingFileName = (
+export const getMediaFileName = (
   item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
   extension: string,
 ) => `${item.id}-${item.activityItem.id}-${item.activityItem.name}.${extension}`;
+
+export const getFileExtension = (fileUrl: string) => {
+  const extension = fileUrl.split('/').pop()?.split('.').pop() ?? '';
+  if (extension === 'quicktime') return 'MOV';
+
+  return extension;
+};

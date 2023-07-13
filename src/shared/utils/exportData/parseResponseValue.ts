@@ -14,7 +14,7 @@ import {
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
-import { getDrawingFileName, getStabilityTrackerCsvName } from 'shared/utils';
+import { getFileExtension, getMediaFileName, getStabilityTrackerCsvName } from 'shared/utils';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
@@ -34,7 +34,11 @@ export const parseResponseValue = <
   if (!key) return answer || '';
 
   if (ItemsWithFileResponses.includes(inputType)) {
-    return (value as DecryptedMediaAnswer['value']).split('/').pop();
+    try {
+      return getMediaFileName(item, getFileExtension((item.answer as DecryptedMediaAnswer).value));
+    } catch (error) {
+      console.warn(error);
+    }
   }
 
   switch (inputType) {
@@ -57,7 +61,7 @@ export const parseResponseValue = <
         (value as DecryptedGeolocationAnswer['value'])?.longitude
       })`;
     case ItemResponseType.Drawing:
-      return getDrawingFileName(item, 'svg');
+      return getMediaFileName(item, 'svg');
     case ItemResponseType.SingleSelectionPerRow: {
       const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
 

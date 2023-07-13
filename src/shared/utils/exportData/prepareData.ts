@@ -18,7 +18,8 @@ import {
   convertJsonToCsv,
   getStabilityRecords,
   getStabilityTrackerCsvName,
-  getDrawingFileName,
+  getMediaFileName,
+  getFileExtension,
 } from 'shared/utils';
 
 import { getParsedAnswers } from '../getParsedAnswers';
@@ -58,15 +59,6 @@ const getReportData = (
   return reportData.concat(answers);
 };
 
-const getProcessedFileName = (url: string) => {
-  let fileName = url.split('/').pop() || '';
-  if (fileName.includes('.quicktime')) {
-    fileName = fileName.replace('.quicktime', '.MOV');
-  }
-
-  return fileName;
-};
-
 const getMediaData = (
   mediaData: AppletExportData['mediaData'],
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
@@ -75,14 +67,17 @@ const getMediaData = (
     const responseType = item.activityItem?.responseType;
     if (responseType === ItemResponseType.Drawing && item.answer)
       return filteredAcc.concat({
-        fileName: getDrawingFileName(item, 'svg'),
+        fileName: getMediaFileName(item, 'svg'),
         url: (item.answer as DecryptedDrawingAnswer).value.uri,
       });
 
     if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
 
     return filteredAcc.concat({
-      fileName: getProcessedFileName((item.answer as DecryptedMediaAnswer).value),
+      fileName: getMediaFileName(
+        item,
+        getFileExtension((item.answer as DecryptedMediaAnswer).value),
+      ),
       url: (item.answer as DecryptedMediaAnswer).value || '',
     });
   }, [] as ExportMediaData[]);
@@ -120,7 +115,7 @@ const getDrawingItemsData = (
     const drawingValue = (item.answer as DecryptedDrawingAnswer).value;
 
     return acc.concat({
-      name: getDrawingFileName(item, 'csv'),
+      name: getMediaFileName(item, 'csv'),
       data: convertJsonToCsv(getDrawingLines(drawingValue.lines, drawingValue.width || 100)),
     });
   }, [] as ExportCsvData[]);
