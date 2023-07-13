@@ -1,6 +1,7 @@
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import {
   AnswerDTO,
+  DecryptedAnswerData,
   DecryptedDateAnswer,
   DecryptedDateRangeAnswer,
   DecryptedDrawingAnswer,
@@ -11,18 +12,27 @@ import {
   DecryptedSliderRowsAnswer,
   DecryptedStabilityTrackerAnswer,
   DecryptedTimeAnswer,
+  ExtendedEvent,
+  ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
-import {
-  Item,
-  SingleAndMultipleSelectRowsResponseValues,
-  SliderRowsResponseValues,
-} from 'shared/state';
+import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
 import { getStabilityTrackerCsvName } from 'shared/utils';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
-export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: string) => {
+export const parseResponseValue = <
+  T extends DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+>(
+  item: T,
+  isEvent = false,
+) => {
+  let answer: AnswerDTO | undefined = item.answer;
+  if (isEvent) {
+    answer = (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response;
+  }
+
+  const { activityItem, id: answerId } = item;
   const inputType = activityItem.responseType;
   const key =
     answer && answer === Object(answer) ? (Object.keys(answer)?.[0] as keyof AnswerDTO) : undefined;
@@ -32,7 +42,11 @@ export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: st
   if (!key) return answer || '';
 
   if (ItemsWithFileResponses.includes(inputType)) {
-    return (value as DecryptedMediaAnswer['value']).split('/').pop();
+    try {
+      return (value as DecryptedMediaAnswer['value'])?.split('/').pop() ?? '';
+    } catch (error) {
+      console.warn(error);
+    }
   }
 
   switch (inputType) {
@@ -40,8 +54,8 @@ export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: st
       return `time_range: from (hr ${
         (value as DecryptedDateRangeAnswer['value'])?.from?.hour
       }, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
-        (value as DecryptedDateRangeAnswer['value'])?.to?.hour
-      }, min ${(value as DecryptedDateRangeAnswer['value'])?.to?.minute})`;
+        (value as DecryptedDateRangeAnswer['value'])?.to?.hour ?? 0
+      }, min ${(value as DecryptedDateRangeAnswer['value'])?.to?.minute ?? 0})`;
     case ItemResponseType.Date:
       return `date: ${(value as DecryptedDateAnswer['value'])?.day}/${
         (value as DecryptedDateAnswer['value'])?.month
@@ -92,7 +106,7 @@ export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: st
     }
     case ItemResponseType.StabilityTracker:
       return getStabilityTrackerCsvName(
-        id,
+        answerId,
         (value as DecryptedStabilityTrackerAnswer['value']).phaseType,
       );
     default:
