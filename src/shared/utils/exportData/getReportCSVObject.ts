@@ -20,7 +20,6 @@ export const getReportCSVObject = <T>({
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
 }) => {
   const {
-    answer,
     activityItem,
     scheduledDatetime,
     startDatetime,
@@ -49,7 +48,7 @@ export const getReportCSVObject = <T>({
     activity_name: activityName,
     activity_flow: flowId,
     item: activityItem.name,
-    response: parseResponseValue(answer, item.activityItem, item.id),
+    response: parseResponseValue(item),
     prompt: replaceItemVariableWithName({
       markdown: activityItem.question?.en ?? '',
       items: item.items,

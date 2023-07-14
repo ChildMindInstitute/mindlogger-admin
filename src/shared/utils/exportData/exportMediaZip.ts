@@ -1,21 +1,12 @@
+import { ExportMediaData } from 'shared/types';
+
 import { exportZip } from '../exportZip';
 
-const getProcessedFileName = (url: string) => {
-  let fileName = url.split('/').pop() || '';
-  if (fileName.includes('.quicktime')) {
-    fileName = fileName.replace('.quicktime', '.MOV');
-  }
-
-  return fileName;
-};
-
-export const exportMediaZip = async (mediaUrls: string[], reportName: string) => {
-  if (!mediaUrls.length) return;
+export const exportMediaZip = async (mediaData: ExportMediaData[], reportName: string) => {
+  if (!mediaData.length) return;
 
   try {
-    const settledFetchDataList = await Promise.allSettled(
-      mediaUrls.map((mediaUrl) => fetch(mediaUrl)),
-    );
+    const settledFetchDataList = await Promise.allSettled(mediaData.map(({ url }) => fetch(url)));
     const settledBlobDataList = await Promise.allSettled(
       settledFetchDataList.map((settledFetchData) => {
         if (settledFetchData.status === 'rejected') return Promise.reject(null);
@@ -25,7 +16,7 @@ export const exportMediaZip = async (mediaUrls: string[], reportName: string) =>
     );
     const mediaFiles = settledBlobDataList
       .map((settledBlobData, index) => {
-        const fileName = getProcessedFileName(mediaUrls[index]);
+        const { fileName } = mediaData[index];
         if (settledBlobData.status === 'rejected') return null;
 
         return {
@@ -35,7 +26,7 @@ export const exportMediaZip = async (mediaUrls: string[], reportName: string) =>
       })
       .filter(Boolean);
 
-    exportZip(mediaFiles as NonNullable<Parameters<typeof exportZip>[0]>, reportName);
+    await exportZip(mediaFiles as NonNullable<Parameters<typeof exportZip>[0]>, reportName);
   } catch (error) {
     console.warn(error);
   }
