@@ -10,6 +10,20 @@ const initialStateData = {
   },
 };
 
+const cartStateData = {
+  ...base.state,
+  data: {
+    result: {
+      cartItems: [],
+    },
+  },
+};
+
 export const state: LibrarySchema = {
   publishedApplets: initialStateData,
+  cartApplets: cartStateData,
+  isCartBtnDisabled: {
+    ...base.state,
+    data: false,
+  },
 };

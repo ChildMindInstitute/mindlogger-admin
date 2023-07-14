@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { PublishedApplet } from 'redux/modules';
 
 export enum AppletUiType {
@@ -9,11 +11,14 @@ export enum AppletUiType {
 export type AppletProps = {
   uiType?: AppletUiType;
   applet: PublishedApplet;
+  setSearch?: Dispatch<SetStateAction<string>>;
 };
 
 export type SelectedItem = {
-  name: string;
+  itemNamePlusActivityName: string;
+  activityNamePlusId: string;
   activityName: string;
+  activityKey: string;
 };
 
 export type LibraryForm = {

@@ -20,7 +20,7 @@ import {
   AppletPasswordPopupType,
   AppletPasswordPopupProps,
 } from 'modules/Dashboard/features/Applet';
-import { useAsync, useIsServerConfigured } from 'shared/hooks';
+import { useAsync, useIsServerConfigured, useRemoveAppletData } from 'shared/hooks';
 import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'shared/utils';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
@@ -36,6 +36,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
+  const removeAppletData = useRemoveAppletData();
 
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
@@ -210,6 +211,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
 
   const handleDontSave = () => {
     reset(getDefaultValues(appletData));
+    removeAppletData();
     confirmNavigation();
   };
 

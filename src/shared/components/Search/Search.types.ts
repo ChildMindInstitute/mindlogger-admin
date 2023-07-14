@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export type SearchProps = {
   placeholder: string;
   onSearch: (value: string) => void;
@@ -6,4 +8,5 @@ export type SearchProps = {
   background?: string;
   endAdornment?: JSX.Element;
   value?: string;
+  setValue?: Dispatch<SetStateAction<string>>;
 };

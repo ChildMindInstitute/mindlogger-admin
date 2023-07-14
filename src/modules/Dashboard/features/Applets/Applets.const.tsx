@@ -4,6 +4,7 @@ import { NavigateFunction } from 'react-router-dom';
 import { Svg } from 'shared/components';
 import { HeadCell } from 'shared/types/table';
 import { getBuilderAppletUrl, Path } from 'shared/utils';
+import { page } from 'resources';
 
 export const getHeadCells = (): HeadCell[] => [
   {
@@ -38,6 +39,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     title: t('fromLibrary'),
     action: () => {
       handleMenuClose();
+      navigate(page.library);
     },
   },
 ];

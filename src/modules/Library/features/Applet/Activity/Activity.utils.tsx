@@ -1,4 +1,4 @@
-import { PublishedItem } from 'redux/modules';
+import { Item } from 'redux/modules';
 import { ItemResponseType } from 'shared/consts';
 
 const perfTaskResponseTypes = [
@@ -9,5 +9,5 @@ const perfTaskResponseTypes = [
   ItemResponseType.ABTrails,
 ];
 
-export const checkIfPerformanceTask = (items: PublishedItem[]) =>
+export const checkIfPerformanceTask = (items: Item[]) =>
   items?.some(({ responseType }) => perfTaskResponseTypes.includes(responseType));

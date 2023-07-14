@@ -24,6 +24,7 @@ export const StyledAppletContent = styled(StyledFlexWrap)`
 `;
 
 export const StyledText = styled(StyledBodyLarge)`
+  flex-basis: 100%;
   margin-top: ${theme.spacing(1.2)};
   overflow: hidden;
   text-overflow: ellipsis;

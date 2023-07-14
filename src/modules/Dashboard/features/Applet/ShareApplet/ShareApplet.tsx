@@ -17,6 +17,7 @@ import {
 import { StyledErrorText, StyledBodyMedium } from 'shared/styles/styledComponents';
 import { getErrorMessage } from 'shared/utils/errors';
 import { useAsync } from 'shared/hooks';
+import { getDictionaryText } from 'shared/utils';
 
 import { ERROR_MARGIN_TOP, shareAppletDefaultValues } from './ShareApplet.const';
 import { ShareAppletSchema } from './ShareApplet.schema';
@@ -49,7 +50,7 @@ export const ShareApplet = ({
 
   const error = publishError || libraryUrlError;
 
-  const { handleSubmit, control, watch, setValue, getValues } = useForm<ShareAppletData>({
+  const { handleSubmit, control, watch, setValue } = useForm<ShareAppletData>({
     resolver: yupResolver(ShareAppletSchema()),
     defaultValues: { ...shareAppletDefaultValues, appletName: applet?.displayName },
   });
@@ -127,10 +128,10 @@ export const ShareApplet = ({
 
   return appletShared && showSuccess && applet ? (
     <SuccessShared
-      title={getValues().appletName || applet.displayName || ''}
-      text={applet?.description as string}
+      title={appletName || applet.displayName || ''}
       keywords={keywords}
-      // TODO: Implement applet activities quantity after back-end is ready (back-end task #M2-2564)
+      // TODO: Implement activities quantity and check applet description after back-end is ready (task M2-2564)
+      text={getDictionaryText(applet?.description || '')}
       // activitiesQuantity={8}
       appletLink={libraryUrl}
       img={applet.image || ''}

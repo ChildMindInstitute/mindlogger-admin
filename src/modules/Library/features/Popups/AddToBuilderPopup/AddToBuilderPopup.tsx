@@ -1,10 +1,25 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Modal } from 'shared/components';
+import { Modal, Spinner } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
+import { SingleApplet, workspaces } from 'shared/state';
+import { useAsync } from 'shared/hooks';
+import { getWorkspaceAppletsApi } from 'modules/Dashboard';
+import { library } from 'modules/Library/state';
+import { page } from 'resources';
+import {
+  builderSessionStorage,
+  getBuilderAppletUrl,
+  LocalStorageKeys,
+  storage,
+} from 'shared/utils';
+import { useAppDispatch } from 'redux/store';
+import { STORAGE_SELECTED_KEY } from 'modules/Library/consts';
+import { getDefaultValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import {
   AddToBuilderActions,
@@ -13,24 +28,39 @@ import {
   AddToBuilderSteps,
   Applet,
 } from './AddToBuilderPopup.types';
-import { getSteps } from './AddToBuilderPopup.utils';
+import { getAddToBuilderData, getArrayFromApplets, getSteps } from './AddToBuilderPopup.utils';
 import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
 import { StyledContainer } from './AddToBuilderPopup.styles';
-import { mockedApplets } from './mocked';
+import { APPLETS_WITHOUT_LIMIT } from './AddToBuilderPopup.const';
 
 export const AddToBuilderPopup = ({
   addToBuilderPopupVisible,
   setAddToBuilderPopupVisible,
 }: AddToBuilderPopupProps) => {
-  const isSelectedWorkspaceVisible = true; // TODO: fix when the endpoint is ready
-  // true if the user has multiple workspaces
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [applets, setApplets] = useState<Applet[]>([]);
+  const { result: workspacesData = [] } = workspaces.useWorkspacesData() || {};
+  const currentWorkspace = workspaces.useData();
+  const {
+    result: { cartItems },
+  } = library.useCartApplets() || {};
+  const isWorkspacesModalVisible = workspacesData.length > 1;
+
+  // TODO: get all applets including applets in folders (backend task M2-2580)
+  const { execute: getWorkspaceApplets, isLoading } = useAsync(
+    getWorkspaceAppletsApi,
+    (applets) => {
+      setApplets(getArrayFromApplets(applets?.data?.result || []));
+    },
+  );
+
   const { t } = useTranslation('app');
   const [step, setStep] = useState(
-    isSelectedWorkspaceVisible
+    isWorkspacesModalVisible
       ? AddToBuilderSteps.SelectWorkspace
       : AddToBuilderSteps.AddToBuilderActions,
   );
-  const [applets, setApplets] = useState<Applet[]>([]);
 
   const validationSchema = addToBuilderPopupSchema();
   const { trigger, control, getValues } = useForm<AddToBuilderForm>({
@@ -45,15 +75,58 @@ export const AddToBuilderPopup = ({
 
   const handleModalClose = () => setAddToBuilderPopupVisible(false);
 
-  const handleAddToBuilder = () => {
-    const { addToBuilderAction } = getValues();
-    if (+addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
-      // TODO: request to create a new applet and redirect to builder
+  const handleSwitchWorkspace = (ownerId: string) => {
+    if (currentWorkspace?.ownerId !== ownerId) {
+      const newWorkspace = workspacesData.find((workspace) => workspace.ownerId === ownerId);
+      if (newWorkspace) {
+        storage.setItem(LocalStorageKeys.Workspace, newWorkspace);
+        dispatch(workspaces.actions.setCurrentWorkspace(newWorkspace));
+      }
+    }
+  };
+
+  const handleClearCart = () => {
+    sessionStorage.removeItem(STORAGE_SELECTED_KEY);
+    dispatch(library.thunk.postAppletsToCart([]));
+  };
+
+  const handleAddToBuilder = async () => {
+    const { addToBuilderAction, selectedWorkspace: ownerId } = getValues();
+
+    if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
+      const { appletToBuilder } = await getAddToBuilderData(cartItems);
+      handleSwitchWorkspace(ownerId);
+      builderSessionStorage.setItem(getDefaultValues(appletToBuilder as SingleApplet));
+      storage.setItem(LocalStorageKeys.IsFromLibrary, true);
+      navigate(page.builder);
+      handleClearCart();
+
       handleModalClose();
     }
-    // TODO: request to get applets for selected account
-    setApplets(mockedApplets);
+
+    if (!ownerId) {
+      setStep(AddToBuilderSteps.Error);
+
+      return;
+    }
+
+    await getWorkspaceApplets({ params: { ownerId, limit: APPLETS_WITHOUT_LIMIT } });
     setStep(AddToBuilderSteps.SelectApplet);
+  };
+  const handleAddToExistingApplet = async () => {
+    const { selectedWorkspace: ownerId, selectedApplet } = getValues();
+    const { appletToBuilder } = await getAddToBuilderData(cartItems);
+    if (!selectedApplet || !appletToBuilder) {
+      setStep(AddToBuilderSteps.Error);
+
+      return;
+    }
+    handleSwitchWorkspace(ownerId);
+    storage.setItem(LocalStorageKeys.LibraryPreparedData, appletToBuilder);
+    navigate(getBuilderAppletUrl(selectedApplet));
+
+    handleClearCart();
+    handleModalClose();
   };
 
   const handleNext = async (nextStep?: AddToBuilderSteps) => {
@@ -62,23 +135,22 @@ export const AddToBuilderPopup = ({
     if (nextStep) {
       return setStep(nextStep);
     }
-    // TODO: fix when the endpoint is ready
-    setStep(AddToBuilderSteps.Error);
   };
 
   const steps = useMemo(
     () =>
       getSteps({
         control,
-        isSelectedWorkspaceVisible,
-        workspaces: [],
+        isWorkspacesModalVisible,
+        workspaces: workspacesData,
         applets,
         setStep,
         setAddToBuilderPopupVisible,
         handleNext,
         handleAddToBuilder,
+        handleAddToExistingApplet,
       }),
-    [applets],
+    [applets, isWorkspacesModalVisible, workspaces],
   );
 
   return (
@@ -92,9 +164,12 @@ export const AddToBuilderPopup = ({
       secondBtnText={t(steps[step]?.secondBtnText || '')}
       onSecondBtnSubmit={steps[step].onSecondBtnSubmit}
     >
-      <StyledModalWrapper>
-        <StyledContainer>{steps[step].render()}</StyledContainer>
-      </StyledModalWrapper>
+      <>
+        {isLoading && <Spinner />}
+        <StyledModalWrapper>
+          <StyledContainer>{steps[step].render()}</StyledContainer>
+        </StyledModalWrapper>
+      </>
     </Modal>
   );
 };

@@ -2,7 +2,7 @@ import { useState, MouseEvent } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 
@@ -32,7 +32,6 @@ export const ActivityFlowBuilder = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [indexToUpdate, setIndexToUpdate] = useState<null | number>(null);
   const { t } = useTranslation('app');
-  const navigate = useNavigate();
   const { control, watch } = useFormContext();
   const { activityFlowId } = useParams();
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');

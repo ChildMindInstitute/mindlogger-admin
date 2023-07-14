@@ -5,6 +5,9 @@ export const enum LocalStorageKeys {
   AccessToken = 'accessToken',
   Workspace = 'workspace',
   Language = 'lang',
+  LibraryPreparedData = 'libraryPreparedData',
+  IsFromLibrary = 'isFromLibrary',
+  LibraryUrl = 'libraryPath',
 }
 
 export { secureLocalStorage as storage };

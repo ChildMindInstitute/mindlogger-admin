@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,10 +15,11 @@ import {
   usePermissions,
 } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
-import { applet } from 'shared/state';
+import { applet, SingleApplet } from 'shared/state';
 import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
+import { LocalStorageKeys, storage } from 'shared/utils';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import { getDefaultValues, getAppletTabs } from './BuilderApplet.utils';
@@ -34,6 +35,7 @@ export const BuilderApplet = () => {
   const loadingStatus = applet.useResponseStatus() ?? {};
   const { ownerId } = workspaces.useData() || {};
   const removeAppletData = useRemoveAppletData();
+  const [isFromLibrary, setIsFromLibrary] = useState(false);
 
   const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
     getDefaultValues(appletData),
@@ -59,12 +61,36 @@ export const BuilderApplet = () => {
   } = methods;
 
   useEffect(() => {
-    if (loadingStatus === 'success' && !isNewApplet) reset(getFormValues());
+    if (loadingStatus === 'success' && !isNewApplet) {
+      (async () => {
+        await reset(getFormValues());
+        const libraryPreparedData = storage.getItem(
+          LocalStorageKeys.LibraryPreparedData,
+        ) as SingleApplet;
+
+        if (libraryPreparedData) {
+          setIsFromLibrary(true);
+          const formValues = await getValues();
+          const libraryConvertedValues = await getDefaultValues(libraryPreparedData);
+          const newFormValues = {
+            ...formValues,
+            activities: [...formValues.activities, ...libraryConvertedValues.activities],
+            activityFlows: [...formValues.activityFlows, ...libraryConvertedValues.activityFlows],
+          };
+
+          await reset(newFormValues);
+        }
+      })();
+    }
   }, [loadingStatus, isNewApplet]);
 
   useEffect(() => {
-    if (!isNewApplet) return;
+    const isFromLibrary = storage.getItem(LocalStorageKeys.IsFromLibrary) as boolean;
+    if (isFromLibrary) {
+      setIsFromLibrary(true);
+    }
 
+    if (!isNewApplet || isFromLibrary) return;
     removeAppletData();
     reset(getDefaultValues());
   }, [isNewApplet]);
@@ -85,8 +111,6 @@ export const BuilderApplet = () => {
     };
   }, []);
 
-  useEffect(() => removeAppletData, []);
-
   const { errors } = useFormState({
     control,
     name: ['displayName', 'activityFlows', 'activities'],
@@ -105,7 +129,7 @@ export const BuilderApplet = () => {
       <StyledBody sx={{ position: 'relative' }}>
         {loadingStatus === 'loading' && <Spinner />}
         <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
-        <SaveAndPublish hasPrompt={isDirty} />
+        <SaveAndPublish hasPrompt={isDirty || isFromLibrary} />
       </StyledBody>
     </FormProvider>
   );

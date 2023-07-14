@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import { Search, Svg } from 'shared/components';
 import { theme, variables, StyledBodySmall, StyledLabelLarge } from 'shared/styles';
 import { page } from 'resources';
+import { library } from 'redux/modules';
 
 import {
   StyledHeaderContainer,
@@ -19,11 +20,16 @@ export const Header = ({
   handleSearch,
   rightButtonType,
   rightButtonCallback,
+  searchValue,
+  setSearchValue,
+  isRightButtonDisabled,
 }: HeaderProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-
-  const appletsCount = 0; // TODO: get the number of applets from the cart
+  const {
+    result: { cartItems },
+  } = library.useCartApplets() || {};
+  const appletsCount = cartItems?.length || 0;
 
   const handleNavigate = () => {
     navigate(page.library);
@@ -52,6 +58,7 @@ export const Header = ({
       onClick={rightButtonCallback}
       startIcon={<Svg width="18" height="18" id="builder" />}
       variant="contained"
+      disabled={isRightButtonDisabled}
     >
       {t('addToBuilder')}
     </StyledBuilderButton>
@@ -69,8 +76,16 @@ export const Header = ({
           </StyledBackButton>
         )}
       </Box>
-      <Box sx={{ margin: theme.spacing(0, 1.6) }}>
-        {handleSearch && <Search placeholder={t('search')} onSearch={handleSearch} width="100%" />}
+      <Box sx={{ m: theme.spacing(0, 1.6) }}>
+        {handleSearch && (
+          <Search
+            value={searchValue}
+            setValue={setSearchValue}
+            placeholder={t('search')}
+            onSearch={handleSearch}
+            width="100%"
+          />
+        )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         {rightButtonType === RightButtonType.Cart ? renderCartButton() : renderBuilderButton()}
