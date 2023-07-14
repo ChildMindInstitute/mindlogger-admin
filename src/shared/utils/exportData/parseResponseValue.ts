@@ -27,11 +27,9 @@ export const parseResponseValue = <
   item: T,
   isEvent = false,
 ) => {
-  let answer: AnswerDTO | undefined = item.answer;
-  if (isEvent) {
-    answer = (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response;
-  }
-
+  const answer: AnswerDTO | undefined = isEvent
+    ? (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response
+    : item.answer;
   const { activityItem, id: answerId } = item;
   const inputType = activityItem.responseType;
   const key =
