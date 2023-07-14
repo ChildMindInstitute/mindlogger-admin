@@ -48,7 +48,7 @@ export const users = {
     useAppSelector(
       ({
         users: {
-          respondents: { data },
+          allRespondents: { data },
         },
       }) => data?.result.find((respondent: Respondent) => respondent.id === id),
     ),

@@ -1,4 +1,5 @@
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
+import { getJourneyCSVObject, getReportCSVObject } from 'shared/utils';
 
 export type ExportActivity = {
   createdAt: string;
@@ -29,7 +30,7 @@ export type EncryptedAnswerSharedProps = {
 };
 
 export type ExportAnswer = {
-  id?: string;
+  id: string;
   version?: string;
   activityName?: string;
   subscaleSetting?: SubscaleSetting | null;
@@ -159,6 +160,44 @@ export type DecryptedDrawingAnswer = {
   text?: string | null;
 };
 
+export type DecryptedSingleSelectionPerRowAnswer = {
+  value: string[];
+  text?: string | null;
+};
+
+export type DecryptedMultiSelectionPerRowAnswer = {
+  value: string[][];
+  text?: string | null;
+};
+
+export type DecryptedSliderRowsAnswer = {
+  value: number[];
+  text?: string | null;
+};
+
+export type DecryptedStabilityTrackerCalcValue = {
+  lambda: number;
+  lambdaSlope: number;
+  score: number;
+  stimPos: number[];
+  targetPos: number[];
+  timestamp: number;
+  userPos: number[];
+};
+
+export const enum StabilityTrackerPhaseType {
+  Focus = 'focus-phase',
+  Challenge = 'challenge-phase',
+}
+
+export type DecryptedStabilityTrackerAnswer = {
+  value: {
+    maxLambda: number;
+    phaseType: StabilityTrackerPhaseType;
+    value: DecryptedStabilityTrackerCalcValue[];
+  };
+};
+
 export type AnswerDTO =
   | null
   | DecryptedTextAnswer
@@ -171,7 +210,11 @@ export type AnswerDTO =
   | DecryptedTimeAnswer
   | DecryptedMediaAnswer
   | DecryptedGeolocationAnswer
-  | DecryptedDrawingAnswer;
+  | DecryptedDrawingAnswer
+  | DecryptedSingleSelectionPerRowAnswer
+  | DecryptedMultiSelectionPerRowAnswer
+  | DecryptedSliderRowsAnswer
+  | DecryptedStabilityTrackerAnswer;
 
 export type AnswerValue =
   | null
@@ -185,7 +228,11 @@ export type AnswerValue =
   | DecryptedTimeAnswer['value']
   | DecryptedMediaAnswer['value']
   | DecryptedGeolocationAnswer['value']
-  | DecryptedDrawingAnswer['value'];
+  | DecryptedDrawingAnswer['value']
+  | DecryptedSingleSelectionPerRowAnswer['value']
+  | DecryptedMultiSelectionPerRowAnswer['value']
+  | DecryptedSliderRowsAnswer['value']
+  | DecryptedStabilityTrackerAnswer['value'];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
@@ -215,3 +262,11 @@ export const enum ElementType {
   Item = 'item',
   Subscale = 'subscale',
 }
+
+export type AppletExportData = {
+  reportData: ReturnType<typeof getReportCSVObject>[];
+  activityJourneyData: ReturnType<typeof getJourneyCSVObject>[];
+  mediaData: string[];
+  drawingItemsData: ExportCsvData[];
+  stabilityTrackerItemsData: ExportCsvData[];
+};

@@ -81,7 +81,7 @@ export const StimulusContent = () => {
   useEffect(() => {
     if (hasTwoButtons) return;
 
-    const newTrials = stimulusTrials.map((trial) => ({
+    const newTrials = stimulusTrials?.map((trial) => ({
       ...trial,
       value: CorrectPress.Left,
     }));

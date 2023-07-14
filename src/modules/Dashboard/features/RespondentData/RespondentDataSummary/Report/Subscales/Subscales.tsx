@@ -3,8 +3,7 @@ import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';
 import { Accordion } from 'modules/Dashboard/components';
-import { calcScores, calcTotalScore } from 'shared/utils/exportData/getSubscales';
-import { getObjectFromList } from 'shared/utils';
+import { getObjectFromList, calcScores, calcTotalScore } from 'shared/utils';
 import { FinalSubscale } from 'shared/consts';
 import { ActivitySettingsSubscale } from 'shared/state';
 
@@ -23,88 +22,84 @@ import { FREQUENCY } from './Subscales.consts';
 import { AllScores } from './AllScores';
 import { getSubscalesToRender } from './Subscales.utils';
 
-export const Subscales = ({ answers }: SubscalesProps) => {
+export const Subscales = ({ answers, versions }: SubscalesProps) => {
   const { currentActivityCompletionData } = useContext(ReportContext);
 
-  const { finalScores, versions, latestFinalScore, allSubscalesScores, allSubscalesToRender } =
-    useMemo(
-      () =>
-        answers.reduce(
-          (acc: ParsedSubscales, item, i) => {
-            if (!item?.subscaleSetting?.subscales?.length) return acc;
+  const { finalScores, latestFinalScore, allSubscalesScores, allSubscalesToRender } = useMemo(
+    () =>
+      answers.reduce(
+        (acc: ParsedSubscales, item, i) => {
+          if (!item?.subscaleSetting?.subscales?.length) return acc;
 
-            const activityItems = getObjectFromList(
-              item.decryptedAnswer,
-              (item) => item.activityItem.name,
+          const activityItems = getObjectFromList(
+            item.decryptedAnswer,
+            (item) => item.activityItem.name,
+          );
+          const subscalesObject = getObjectFromList<ActivitySettingsSubscale>(
+            item.subscaleSetting.subscales,
+            (item) => item.name,
+          );
+
+          const calculatedTotalScore =
+            item?.subscaleSetting?.calculateTotalScore &&
+            activityItems &&
+            calcTotalScore(item.subscaleSetting, activityItems)?.[FinalSubscale.Key];
+
+          if (i === 0 && calculatedTotalScore) {
+            acc.latestFinalScore = calculatedTotalScore?.score;
+          }
+
+          if (calculatedTotalScore) {
+            acc.finalScores.push({
+              date: new Date(item.endDatetime),
+              score: calculatedTotalScore?.score,
+              optionText: calculatedTotalScore?.optionText,
+              activityCompletionID: item.answerId,
+            });
+          }
+
+          for (const subscale of item.subscaleSetting.subscales) {
+            getSubscalesToRender(
+              subscale,
+              activityItems,
+              subscalesObject,
+              item.endDatetime,
+              acc.allSubscalesToRender,
             );
-            const subscalesObject = getObjectFromList<ActivitySettingsSubscale>(
-              item.subscaleSetting.subscales,
-              (item) => item.name,
-            );
 
-            const calculatedTotalScore =
-              item?.subscaleSetting?.calculateTotalScore &&
-              activityItems &&
-              calcTotalScore(item.subscaleSetting, activityItems)?.[FinalSubscale.Key];
+            const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, {});
+            const { [subscale.name]: removed, ...restScores } = calculatedSubscale;
 
-            if (i === 0 && calculatedTotalScore) {
-              acc.latestFinalScore = calculatedTotalScore?.score;
-            }
+            const activityCompletion = {
+              date: new Date(item.endDatetime),
+              score: calculatedSubscale[subscale.name].score,
+              optionText: calculatedSubscale[subscale.name].optionText,
+              activityCompletionID: item.answerId,
+              activityItems,
+              subscalesObject,
+              restScores,
+            };
 
-            acc.versions.push({ version: item.version, date: new Date(item.endDatetime) });
-
-            if (calculatedTotalScore) {
-              acc.finalScores.push({
-                date: new Date(item.endDatetime),
-                score: calculatedTotalScore?.score,
-                optionText: calculatedTotalScore?.optionText,
-                activityCompletionID: item.answerId,
-              });
-            }
-
-            for (const subscale of item.subscaleSetting.subscales) {
-              getSubscalesToRender(
-                subscale,
-                activityItems,
-                subscalesObject,
-                item.endDatetime,
-                acc.allSubscalesToRender,
-              );
-
-              const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, {});
-              const { [subscale.name]: removed, ...restScores } = calculatedSubscale;
-
-              const activityCompletion = {
-                date: new Date(item.endDatetime),
-                score: calculatedSubscale[subscale.name].score,
-                optionText: calculatedSubscale[subscale.name].optionText,
-                activityCompletionID: item.answerId,
-                activityItems,
-                subscalesObject,
-                restScores,
+            if (acc.allSubscalesScores[subscale.name]) {
+              acc.allSubscalesScores[subscale.name].activityCompletions.push(activityCompletion);
+            } else {
+              acc.allSubscalesScores[subscale.name] = {
+                activityCompletions: [activityCompletion],
               };
-
-              if (acc.allSubscalesScores[subscale.name]) {
-                acc.allSubscalesScores[subscale.name].activityCompletions.push(activityCompletion);
-              } else {
-                acc.allSubscalesScores[subscale.name] = {
-                  activityCompletions: [activityCompletion],
-                };
-              }
             }
+          }
 
-            return acc;
-          },
-          {
-            versions: [],
-            finalScores: [],
-            latestFinalScore: null,
-            allSubscalesScores: {},
-            allSubscalesToRender: {},
-          },
-        ),
-      [answers],
-    );
+          return acc;
+        },
+        {
+          finalScores: [],
+          latestFinalScore: null,
+          allSubscalesScores: {},
+          allSubscalesToRender: {},
+        },
+      ),
+    [answers],
+  );
 
   const currentActivityCompletion =
     currentActivityCompletionData &&
@@ -192,7 +187,7 @@ export const Subscales = ({ answers }: SubscalesProps) => {
   const allScores = {
     latestFinalScore,
     frequency: answers.length,
-    data: { subscales: lineChartSubscales || [], versions },
+    data: { subscales: lineChartSubscales || [] },
   };
 
   return (
@@ -200,7 +195,7 @@ export const Subscales = ({ answers }: SubscalesProps) => {
       {currentActivityCompletionScores ? (
         <ActivityCompletionScores {...currentActivityCompletionScores} />
       ) : (
-        <AllScores {...allScores} />
+        <AllScores {...allScores} versions={versions} />
       )}
       {subscales?.map(({ name, id, items, additionalInformation }) => (
         <Accordion title={name} key={id}>

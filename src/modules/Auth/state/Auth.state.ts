@@ -8,4 +8,5 @@ export const state: AuthSchema = {
     data: null,
   },
   isAuthorized: false,
+  isLogoutInProgress: false,
 };

@@ -1,6 +1,15 @@
+import { DecryptedStabilityTrackerAnswer } from 'shared/types';
+
 export const enum ZipFile {
-  Media = 'media-responses',
-  Drawing = 'drawing-responses',
+  Media = 'media',
+  Drawing = 'drawing',
+  StabilityTracker = 'stability-tracker',
 }
 
-export const getReportName = (name: ZipFile) => `${name}-${new Date().toDateString()}.zip`;
+export const getReportZipName = (name: ZipFile) =>
+  `${name}-responses-${new Date().toDateString()}.zip`;
+
+export const getStabilityTrackerCsvName = (
+  id: string,
+  phaseType: DecryptedStabilityTrackerAnswer['value']['phaseType'],
+) => `${id}_${phaseType}.csv`;

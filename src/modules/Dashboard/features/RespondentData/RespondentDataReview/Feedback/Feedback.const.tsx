@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { DatavizActivity } from 'api';
+import { ActivityItemAnswer } from 'shared/types';
 
 import { FeedbackAssessment } from './FeedbackAssessment';
 import { FeedbackNotes } from './FeedbackNotes';
@@ -9,17 +10,26 @@ import { FeedbackReviewed } from './FeedbackReviewed';
 export const getTabs = (
   selectedActivity: DatavizActivity,
   setActiveTab: Dispatch<SetStateAction<number>>,
-  isAssessmentVisible: boolean,
+  assessment: ActivityItemAnswer[],
+  assessmentStep: number,
+  setAssessmentStep: Dispatch<SetStateAction<number>>,
 ) => [
   {
     labelKey: 'notes',
     content: <FeedbackNotes activity={selectedActivity} />,
   },
-  ...(isAssessmentVisible
+  ...(assessment.length
     ? [
         {
           labelKey: 'assessment',
-          content: <FeedbackAssessment setActiveTab={setActiveTab} />,
+          content: (
+            <FeedbackAssessment
+              assessment={assessment}
+              setActiveTab={setActiveTab}
+              assessmentStep={assessmentStep}
+              setAssessmentStep={setAssessmentStep}
+            />
+          ),
         },
         {
           labelKey: 'reviewed',

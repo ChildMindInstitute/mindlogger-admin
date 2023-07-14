@@ -6,19 +6,30 @@ import {
   DecryptedDrawingAnswer,
   DecryptedGeolocationAnswer,
   DecryptedMediaAnswer,
+  DecryptedMultiSelectionPerRowAnswer,
+  DecryptedSingleSelectionPerRowAnswer,
+  DecryptedSliderRowsAnswer,
+  DecryptedStabilityTrackerAnswer,
   DecryptedTimeAnswer,
 } from 'shared/types';
+import {
+  Item,
+  SingleAndMultipleSelectRowsResponseValues,
+  SliderRowsResponseValues,
+} from 'shared/state';
+import { getStabilityTrackerCsvName } from 'shared/utils';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
-export const parseResponseValue = (item: AnswerDTO, inputType: ItemResponseType) => {
+export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: string) => {
+  const inputType = activityItem.responseType;
   const key =
-    item && item === Object(item) ? (Object.keys(item)?.[0] as keyof AnswerDTO) : undefined;
+    answer && answer === Object(answer) ? (Object.keys(answer)?.[0] as keyof AnswerDTO) : undefined;
 
-  const value = getAnswerValue(item);
+  const value = getAnswerValue(answer);
 
-  if (!key) return item || '';
+  if (!key) return answer || '';
 
   if (ItemsWithFileResponses.includes(inputType)) {
     return (value as DecryptedMediaAnswer['value']).split('/').pop();
@@ -36,7 +47,7 @@ export const parseResponseValue = (item: AnswerDTO, inputType: ItemResponseType)
         (value as DecryptedDateAnswer['value'])?.month
       }/${(value as DecryptedDateAnswer['value'])?.year}`;
     case ItemResponseType.Time:
-      return `time: ${(value as DecryptedTimeAnswer['value'])?.hours} ${
+      return `time: hr ${(value as DecryptedTimeAnswer['value'])?.hours}, min ${
         (value as DecryptedTimeAnswer['value'])?.minutes
       }`;
     case ItemResponseType.Geolocation:
@@ -45,6 +56,45 @@ export const parseResponseValue = (item: AnswerDTO, inputType: ItemResponseType)
       })`;
     case ItemResponseType.Drawing:
       return (value as DecryptedDrawingAnswer['value']).uri.split('/').pop();
+    case ItemResponseType.SingleSelectionPerRow: {
+      const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
+
+      return rows
+        .map(
+          (row, index) =>
+            `${row.rowName}: ${
+              (value as DecryptedSingleSelectionPerRowAnswer['value'])[index] ?? ''
+            }`,
+        )
+        .join('\n');
+    }
+    case ItemResponseType.MultipleSelectionPerRow: {
+      const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
+
+      return rows
+        .map(
+          (row, index) =>
+            `${row.rowName}: ${
+              (value as DecryptedMultiSelectionPerRowAnswer['value'])[index]?.join(', ') ?? ''
+            }`,
+        )
+        .join('\n');
+    }
+    case ItemResponseType.SliderRows: {
+      const rows = (activityItem?.responseValues as SliderRowsResponseValues).rows;
+
+      return rows
+        .map(
+          (row, index) =>
+            `${row.label}: ${(value as DecryptedSliderRowsAnswer['value'])[index] ?? ''}`,
+        )
+        .join('\n');
+    }
+    case ItemResponseType.StabilityTracker:
+      return getStabilityTrackerCsvName(
+        id,
+        (value as DecryptedStabilityTrackerAnswer['value']).phaseType,
+      );
     default:
       return `${key}: ${Array.isArray(value) ? joinWihComma(value as string[]) : value}`;
   }

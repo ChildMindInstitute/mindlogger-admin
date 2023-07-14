@@ -3,7 +3,7 @@ import FileSaver from 'file-saver';
 
 import { ExportCsvData } from 'shared/types';
 
-export const exportLinesZip = async (csvDataList: ExportCsvData[], reportName: string) => {
+export const exportCsvZip = async (csvDataList: ExportCsvData[], reportName: string) => {
   if (!csvDataList.length) return;
 
   try {

@@ -131,7 +131,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
             <FormProvider {...methods}>
               <ReportFilters identifiers={identifiers} versions={versions} />
               <ActivityCompleted answers={answers} versions={versions} />
-              <Subscales answers={answers} />
+              <Subscales answers={answers} versions={versions} />
               {!isLoading && responseOptions && (
                 <ResponseOptions responseOptions={responseOptions} versions={versions} />
               )}

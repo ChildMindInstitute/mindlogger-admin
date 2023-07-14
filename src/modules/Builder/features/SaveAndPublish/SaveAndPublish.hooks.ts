@@ -12,6 +12,7 @@ import {
   usePromptSetup,
   useEncryptionCheckFromStorage,
   useRemoveAppletData,
+  useLogout,
 } from 'shared/hooks';
 import {
   APPLET_PAGE_REGEXP_STRING,
@@ -21,7 +22,7 @@ import {
   getUpdatedAppletUrl,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
-import { workspaces } from 'redux/modules';
+import { auth, workspaces } from 'redux/modules';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
@@ -156,6 +157,20 @@ export const usePrompt = (isFormChanged: boolean) => {
     confirmedNavigation,
     setConfirmedNavigation,
   } = usePromptSetup();
+  const isLogoutInProgress = auth.useLogoutInProgress();
+  const dispatch = useAppDispatch();
+  const onLogout = useLogout();
+
+  useEffect(() => {
+    if (!isLogoutInProgress) return;
+
+    if (isFormChanged) {
+      setPromptVisible(true);
+    } else {
+      dispatch(auth.actions.endLogout());
+      onLogout();
+    }
+  }, [isLogoutInProgress, isFormChanged]);
 
   const handleBlockedNavigation = useCallback(
     (nextLocation: Update) => {
@@ -196,6 +211,7 @@ export const usePrompt = (isFormChanged: boolean) => {
     },
     cancelNavigation: onCancel,
     setPromptVisible,
+    isLogoutInProgress,
   };
 };
 
@@ -239,8 +255,13 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
   const [publishProcessStep, setPublishProcessStep] = useState<SaveAndPublishSteps>();
   const responseStatus = applet.useResponseStatus();
-  const { cancelNavigation, confirmNavigation, promptVisible, setPromptVisible } =
-    usePrompt(hasPrompt);
+  const {
+    cancelNavigation: onCancelNavigation,
+    confirmNavigation,
+    promptVisible,
+    setPromptVisible,
+    isLogoutInProgress,
+  } = usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
   const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   const { ownerId } = workspaces.useData() || {};
@@ -249,6 +270,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const appletEncryption = appletData?.encryption;
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const removeAppletData = useRemoveAppletData();
+  const handleLogout = useLogout();
 
   useEffect(() => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
@@ -262,11 +284,29 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     setPromptVisible(false);
     removeAppletData();
     confirmNavigation();
+
+    if (isLogoutInProgress) {
+      dispatch(auth.actions.endLogout());
+      handleLogout();
+    }
   };
+
+  const cancelNavigation = () => {
+    if (isLogoutInProgress) {
+      dispatch(auth.actions.endLogout());
+    }
+
+    onCancelNavigation();
+  };
+
   const handleSaveChangesSaveSubmit = () => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     handleSaveAndPublishFirstClick();
+
+    if (isLogoutInProgress) {
+      dispatch(auth.actions.endLogout());
+    }
   };
   const handleSaveAndPublishFirstClick = async () => {
     const isValid = await trigger();

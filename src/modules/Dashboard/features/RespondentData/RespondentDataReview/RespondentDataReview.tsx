@@ -5,7 +5,16 @@ import { useTranslation } from 'react-i18next';
 import { ReviewActivity, getAssessmentApi } from 'api';
 import { Svg } from 'shared/components';
 import { useAsync, useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
-import { StyledContainer, StyledHeadlineLarge, StyledTitleLarge, variables } from 'shared/styles';
+import {
+  StyledContainer,
+  StyledHeadlineLarge,
+  StyledTitleLarge,
+  theme,
+  variables,
+} from 'shared/styles';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { ActivityItemAnswer } from 'shared/types';
+import { Assessment } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/FeedbackAssessment.types';
 
 import { StyledTextBtn } from '../RespondentData.styles';
 import { Feedback } from './Feedback';
@@ -25,10 +34,11 @@ export const RespondentDataReview = () => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
-  const [isAssessmentVisible, setIsAssessmentVisible] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
+  const [assessment, setAssessment] = useState<ActivityItemAnswer[]>([]);
 
+  const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getAssessment } = useAsync(getAssessmentApi);
 
   useBreadcrumbs([
@@ -39,11 +49,13 @@ export const RespondentDataReview = () => {
   ]);
 
   const renderEmptyState = () => {
-    if (!selectedActivity) {
+    if (!selectedAnswer) {
       return (
         <>
           <Svg id="data" width="60" height="73" />
-          <StyledTitleLarge color={variables.palette.outline}>{t('emptyReview')}</StyledTitleLarge>
+          <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
+            {t('emptyReview')}
+          </StyledTitleLarge>
         </>
       );
     }
@@ -51,7 +63,7 @@ export const RespondentDataReview = () => {
     return (
       <>
         <Svg id="chart" width="67" height="67" />
-        <StyledTitleLarge color={variables.palette.outline}>
+        <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
           {t('noDataForActivity')}
         </StyledTitleLarge>
       </>
@@ -61,10 +73,20 @@ export const RespondentDataReview = () => {
   useEffect(() => {
     if (!appletId || !answerId) return;
     (async () => {
-      const { data } = await getAssessment({ appletId, answerId });
-      setIsAssessmentVisible(!!data.result.items.length);
+      const result = await getAssessment({ appletId, answerId });
+      const { reviewerPublicKey, ...assessmentData } = result.data.result;
+      const encryptedData = {
+        ...assessmentData,
+        userPublicKey: reviewerPublicKey,
+      } as Assessment;
+      const decryptedAssessment = getDecryptedActivityData(encryptedData);
+      setAssessment(decryptedAssessment.decryptedAnswers);
     })();
-  }, [answerId]);
+  }, [appletId, answerId]);
+
+  useEffect(() => {
+    setIsFeedbackOpen(false);
+  }, [appletId, answerId]);
 
   return (
     <StyledContainer sx={{ position: 'relative' }}>
@@ -89,7 +111,7 @@ export const RespondentDataReview = () => {
             {t('feedback')}
           </StyledTextBtn>
         </StyledHeader>
-        {selectedAnswer && selectedActivity ? (
+        {selectedActivity && selectedAnswer ? (
           <Review answerId={selectedAnswer.answerId} activityId={selectedActivity.id} />
         ) : (
           <StyledWrapper>
@@ -97,11 +119,12 @@ export const RespondentDataReview = () => {
           </StyledWrapper>
         )}
       </StyledReviewContainer>
-      {selectedActivity && isFeedbackOpen && (
+      {selectedActivity && selectedAnswer && (
         <Feedback
+          isFeedbackOpen={isFeedbackOpen}
           selectedActivity={selectedActivity}
           onClose={() => setIsFeedbackOpen(false)}
-          isAssessmentVisible={isAssessmentVisible}
+          assessment={assessment}
         />
       )}
     </StyledContainer>

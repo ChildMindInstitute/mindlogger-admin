@@ -61,7 +61,7 @@ export const calcScores = <T>(
 
     if (typedOptions?.options?.length) {
       const scoresObject = typedOptions.options?.reduce((acc: ScoresObject, item) => {
-        if (item?.value && item?.score) {
+        if (item?.value !== undefined && item?.score !== undefined) {
           acc[item.value as keyof ScoresObject] = item.score;
         }
 

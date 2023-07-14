@@ -4,13 +4,12 @@ import { SingleSelectItemAnswer } from '../RespondentDataReview.types';
 import { StyledRadioGroup } from './SingleSelectResponseItem.styles';
 
 export const SingleSelectResponseItem = ({ activityItem, answer }: SingleSelectItemAnswer) => (
-  <StyledRadioGroup value={answer?.value}>
+  <StyledRadioGroup value={answer?.value || ''}>
     {activityItem.responseValues.options.map((option) => (
       <FormControlLabel
         key={option.id}
-        value={option.value}
         disabled
-        control={<Radio disabled />}
+        control={<Radio disabled checked={option.value === answer?.value} />}
         label={option.text}
       />
     ))}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { format } from 'date-fns';
+import { format, compareAsc } from 'date-fns';
 
 import { Chip } from 'shared/components';
 import { DateFormats } from 'shared/consts';
@@ -35,6 +35,10 @@ export const ReviewMenuItem = ({
 
   const isActivityNotEmpty = !!activity?.answerDates?.length;
 
+  const answerDates = activity?.answerDates?.sort((a, b) =>
+    compareAsc(new Date(a.createdAt), new Date(b.createdAt)),
+  );
+
   const handleActivityClick = () => {
     setSelectedActivity(activity);
     setSelectedAnswer(null);
@@ -67,7 +71,7 @@ export const ReviewMenuItem = ({
       </StyledHeader>
       {isOpen && isActivityNotEmpty && (
         <StyledFlexWrap sx={{ paddingTop: theme.spacing(1.6) }}>
-          {activity?.answerDates?.map((answer) => (
+          {answerDates?.map((answer) => (
             <Chip
               color={selectedAnswer?.answerId === answer.answerId ? 'primary' : 'secondary'}
               key={answer.answerId}

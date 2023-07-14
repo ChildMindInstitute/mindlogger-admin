@@ -8,6 +8,15 @@ export const parseOptions = (
   responseValues: SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues,
   type: ItemResponseType,
 ) => {
+  if (
+    [
+      ItemResponseType.SingleSelectionPerRow,
+      ItemResponseType.MultipleSelectionPerRow,
+      ItemResponseType.SliderRows,
+    ].includes(type)
+  )
+    return '';
+
   if (type === ItemResponseType.Slider) {
     const min = Number(responseValues?.minValue);
     const max = Number(responseValues?.maxValue);
@@ -23,10 +32,13 @@ export const parseOptions = (
 
   if (responseValues?.options?.length) {
     return joinWihComma(
-      responseValues?.options?.map(
-        ({ text, value, score }) =>
-          `${text}${value ? `: ${value}` : ''}${score ? ` (score: ${score})` : ''}`,
-      ) || [],
+      responseValues?.options?.map(({ text, value, score }) => {
+        const stringifiedValue = `${value ?? ''}`;
+
+        return `${text}${stringifiedValue ? `: ${stringifiedValue}` : ''}${
+          score ? ` (score: ${score})` : ''
+        }`;
+      }) || [],
     );
   }
 };

@@ -1,7 +1,7 @@
 import { AnswerDTO } from 'shared/types';
 import { ActivitySettingsSubscale, Item } from 'shared/state';
+import { Version } from 'api';
 
-import { Version } from '../Charts/LineChart/LineChart.types';
 import { ActivityCompletion, FormattedResponse } from '../Report.types';
 
 export const enum SubscalesTypes {
@@ -27,6 +27,7 @@ export type Subscale = {
 
 export type SubscalesProps = {
   answers: ActivityCompletion[];
+  versions: Version[];
 };
 
 export type ParsedSubscale = {
@@ -47,7 +48,6 @@ export type ParsedSubscales = {
   };
   finalScores: { score: number; optionText: string; date: Date; activityCompletionID?: string }[];
   latestFinalScore: number | null;
-  versions: Version[];
   allSubscalesToRender: SubscaleToRender;
 };
 

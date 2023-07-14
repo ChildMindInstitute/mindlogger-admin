@@ -1,25 +1,32 @@
-import { max, min } from 'date-fns';
 import { Context } from 'chartjs-plugin-datalabels';
-import { LegendItem, ChartData } from 'chart.js';
+import { LegendItem, ChartData, LinearScale } from 'chart.js';
 
 import { variables } from 'shared/styles';
+import { Version } from 'api';
+import { pluck } from 'shared/utils';
 
 import { ExtendedChartDataset, SubscaleChartData, Tick } from './LineChart.types';
 import { COLORS } from './LineChart.const';
-import { locales } from '../Charts.const';
+import { SUBSCALES_CHART_LABEL_WIDTH_Y, OFFSET_Y_MAX, locales } from '../Charts.const';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
 
-export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) => {
+export const getOptions = (
+  lang: keyof typeof locales,
+  minDate: Date,
+  maxDate: Date,
+  data: SubscaleChartData,
+) => {
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
-  const responsesDates = responses.flat().map((response) => response.date);
-  const versionsDates = data.versions.map((version) => version.date);
+  const maxScore = Math.max(...pluck(responses.flat(), 'score'));
 
-  const minDate = min([...responsesDates, ...versionsDates]).getTime();
-  const maxDate = max([...responsesDates, ...versionsDates]).getTime();
-  const timeConfig = getTimeConfig(minDate, maxDate);
-  const stepSize = getStepSize(minDate, maxDate);
+  const min = minDate.getTime();
+  const max = maxDate.getTime();
+
+  const timeConfig = getTimeConfig(min, max);
+  const stepSize = getStepSize(min, max);
 
   return {
+    maintainAspectRatio: false,
     responsive: true,
     clip: false as const,
     plugins: {
@@ -41,13 +48,12 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
           },
         },
       },
-      tooltip: {
-        enabled: false,
-      },
     },
     scales: {
       y: {
+        beginAtZero: true,
         grid: {
+          drawTicks: false,
           color: (value: Tick) => {
             const lastTickIndex = value.chart.scales.y.ticks.length - 1;
             if (lastTickIndex === value.index) {
@@ -58,10 +64,14 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
           },
         },
         border: {
+          display: false,
           dash: [8, 8],
         },
+        afterFit(scaleInstance: LinearScale) {
+          scaleInstance.width = SUBSCALES_CHART_LABEL_WIDTH_Y;
+        },
         ticks: {
-          stepSize: 2,
+          stepSize: Math.ceil(maxScore / 16),
           color: (value: Tick) => {
             const lastTickIndex = value.chart.scales.y.ticks.length - 1;
             if (lastTickIndex === value.index) {
@@ -75,26 +85,26 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
             size: 14,
           },
         },
+        suggestedMax: maxScore + OFFSET_Y_MAX,
       },
       x: {
-        ...timeConfig,
         adapters: {
           date: {
-            locale: locales[lang as keyof typeof locales],
+            locale: locales[lang],
           },
         },
-        position: 'bottom' as const,
+        ...timeConfig,
         grid: {
           display: false,
         },
-        ticks: {
-          source: 'data' as const,
-          font: {
-            size: 11,
-          },
+        border: {
+          display: false,
         },
-        min: minDate,
-        max: maxDate,
+        ticks: {
+          display: false,
+        },
+        min,
+        max,
       },
       x1: {
         adapters: {
@@ -106,20 +116,28 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
         ticks: {
           autoSkip: false,
           stepSize,
+          font: {
+            size: 11,
+          },
         },
         position: 'bottom' as const,
         grid: {
-          display: false,
+          display: true,
+          drawOnChartArea: false,
+          drawTicks: true,
         },
         border: {
           display: false,
         },
-        min: minDate,
-        max: maxDate,
+        min,
+        max,
       },
       x2: {
         ...timeConfig,
         position: 'top' as const,
+        border: {
+          display: false,
+        },
         ticks: {
           source: 'data' as const,
           font: {
@@ -127,21 +145,16 @@ export const getOptions = (lang: keyof typeof locales, data: SubscaleChartData) 
           },
           display: false,
         },
-        border: {
-          display: false,
-        },
-        min: minDate,
-        max: maxDate,
+        min,
+        max,
       },
     },
   };
 };
 
-export const getData = (data: SubscaleChartData) => {
+export const getData = (data: SubscaleChartData, versions: Version[]) => {
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
-  const responsesScores = responses.flat().map((response) => response.score);
-
-  const maxScore = Math.max(...responsesScores);
+  const maxScore = Math.max(...pluck(responses.flat(), 'score'));
 
   return {
     datasets: [
@@ -164,10 +177,10 @@ export const getData = (data: SubscaleChartData) => {
       },
       {
         xAxisID: 'x2',
-        labels: data.versions.map(({ version }) => version),
-        data: data.versions.map(({ date }) => ({
-          x: date,
-          y: maxScore + 2,
+        labels: versions.map(({ version }) => version),
+        data: versions.map(({ createdAt }) => ({
+          x: new Date(createdAt),
+          y: maxScore + OFFSET_Y_MAX,
         })),
         datalabels: {
           anchor: 'center' as const,
