@@ -20,6 +20,7 @@ import {
   getStabilityTrackerCsvName,
   getMediaFileName,
   getFileExtension,
+  getSplashScreen,
 } from 'shared/utils';
 
 import { getParsedAnswers } from '../getParsedAnswers';
@@ -92,15 +93,21 @@ const getActivityJourneyData = (
   decryptedEvents: EventDTO[],
 ) => {
   const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers);
-  const events = decryptedEvents.map((event) =>
-    getJourneyCSVObject({
+  const events = decryptedEvents.map((event, index, events) => {
+    if (index === 0 && !decryptedAnswersObject[event.screen] && events[index + 1])
+      return getSplashScreen(event, {
+        ...events[index + 1],
+        ...decryptedAnswersObject[events[index + 1].screen],
+      });
+
+    return getJourneyCSVObject({
       event: {
         ...event,
         ...decryptedAnswersObject[event.screen],
       },
       rawAnswersObject,
-    }),
-  );
+    });
+  });
 
   return activityJourneyData.concat(...events);
 };
