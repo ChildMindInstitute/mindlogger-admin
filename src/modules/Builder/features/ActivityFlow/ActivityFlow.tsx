@@ -126,14 +126,14 @@ export const ActivityFlow = () => {
   useBreadcrumbs([
     {
       icon: 'flow',
-      label: t('activityFlow'),
+      label: t('activityFlows'),
     },
   ]);
   useActivitiesRedirection();
 
   return (
     <BuilderContainer
-      title={t('activityFlow')}
+      title={t('activityFlows')}
       Header={ActivityFlowHeader}
       headerProps={{ onAddActivityFlow: handleAddActivityFlow }}
     >
