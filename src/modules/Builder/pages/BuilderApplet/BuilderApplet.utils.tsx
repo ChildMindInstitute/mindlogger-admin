@@ -760,7 +760,7 @@ export const getAppletTabs = ({
     hasError: hasAppletActivitiesErrors,
   },
   {
-    labelKey: 'activityFlow',
+    labelKey: 'activityFlows',
     icon: <Svg id="flow-outlined" />,
     activeIcon: <Svg id="flow-filled" />,
     path: Path.ActivityFlow,

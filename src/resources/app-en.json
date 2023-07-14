@@ -733,7 +733,7 @@
   "downloadLatestReport": "Download Latest Report",
   "emptyReview": "Select the date, Activity, and response time to review the response data.",
   "selectTheActivityToReview": "Select the Activity to review the response data.",
-  "datavizNotSupportedForPerformanceTasks":"Data visualization for Performance Tasks not supported",
+  "datavizNotSupportedForPerformanceTasks": "Data visualization for Performance Tasks not supported",
   "feedback": "Feedback",
   "notes": "Notes",
   "assessment": "Assessment",
