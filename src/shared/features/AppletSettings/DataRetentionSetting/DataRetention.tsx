@@ -10,6 +10,7 @@ import {
   useAsync,
   useBuilderSessionStorageFormChange,
   useBuilderSessionStorageFormValues,
+  useRemoveAppletData,
 } from 'shared/hooks';
 import { RetentionPeriods } from 'shared/types';
 import { applet } from 'shared/state';
@@ -34,6 +35,7 @@ export const DataRetention = () => {
   const dispatch = useAppDispatch();
   const { result } = applet.useAppletData() ?? {};
   const { getApplet } = applet.thunk;
+  const removeAppletData = useRemoveAppletData();
 
   const defaultValues = {
     retentionPeriod: result?.retentionPeriod || DEFAULT_RETENTION_PERIOD,
@@ -80,6 +82,7 @@ export const DataRetention = () => {
 
   const handleDontSave = () => {
     reset(defaultValues);
+    removeAppletData();
     confirmNavigation();
   };
 

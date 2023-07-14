@@ -1,0 +1,1 @@
+export const APPLETS_WITHOUT_LIMIT = 10000;

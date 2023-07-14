@@ -1,11 +1,10 @@
 import styled from '@emotion/styled/macro';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 import {
   theme,
   variables,
   StyledFlexWrap,
-  StyledLabelBoldMedium,
   StyledClearedButton,
   StyledFlexAllCenter,
 } from 'shared/styles';
@@ -31,12 +30,22 @@ export const StyledAppletKeywordsContainer = styled(StyledFlexWrap)`
   margin-top: ${theme.spacing(1.6)};
 `;
 
-export const StyledAppletKeyword = styled(StyledLabelBoldMedium)`
-  color: ${variables.palette.on_surface_variant};
+export const StyledAppletKeyword = styled(Button)`
   background-color: ${variables.palette.on_surface_alfa8};
+  color: ${variables.palette.on_surface_variant};
   padding: ${theme.spacing(0.2, 1)};
-  border-radius: ${variables.borderRadius.xxxl2};
+  height: auto;
   margin-bottom: ${theme.spacing(0.8)};
+  transition: ${variables.transitions.opacity};
+
+  && {
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: ${variables.palette.on_surface_alfa8};
+      opacity: 0.85;
+    }
+  }
 
   &:not(:last-child) {
     margin-right: ${theme.spacing(1.2)};

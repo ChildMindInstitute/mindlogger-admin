@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledLabelMedium, theme, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
-import { getWorkspacesApi } from 'shared/api';
-import { workspaces as currentWorkspace, Workspace, auth } from 'redux/modules';
-import { useAsync } from 'shared/hooks';
+import { workspaces, Workspace, auth } from 'redux/modules';
 import { LocalStorageKeys, storage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
@@ -22,27 +20,21 @@ export const LeftBar = () => {
 
   const userData = auth.useData();
   const { id } = userData?.user || {};
-  const currentWorkspaceData = currentWorkspace.useData();
+  const { result: workspacesData } = workspaces.useWorkspacesData() || {};
+  const currentWorkspaceData = workspaces.useData();
   const [visibleDrawer, setVisibleDrawer] = useState(false);
-  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
-
-  const { execute } = useAsync(getWorkspacesApi, (result) => {
-    setWorkspaces(result?.data?.result || []);
-  });
 
   useEffect(() => {
-    execute(undefined);
+    dispatch(workspaces.thunk.getWorkspaces());
   }, []);
 
   useEffect(() => {
-    if (workspaces.length) {
-      const ownerWorkspace = workspaces.find((item) => item.ownerId === id);
+    if (workspacesData?.length) {
+      const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
       const storageWorkspace = storage.getItem(LocalStorageKeys.Workspace) as Workspace;
-      dispatch(
-        currentWorkspace.actions.setCurrentWorkspace(storageWorkspace || ownerWorkspace || null),
-      );
+      dispatch(workspaces.actions.setCurrentWorkspace(storageWorkspace || ownerWorkspace || null));
     }
-  }, [workspaces]);
+  }, [workspacesData]);
 
   const getClassName = (isActive: boolean, disabled?: boolean) =>
     `${isActive ? 'active-link' : ''} ${disabled ? 'disabled-link' : ''}`;
@@ -84,7 +76,7 @@ export const LeftBar = () => {
           <SwitchWorkspace
             setVisibleDrawer={setVisibleDrawer}
             visibleDrawer={visibleDrawer}
-            workspaces={workspaces}
+            workspaces={workspacesData || []}
           />
         )}
       </StyledDrawer>

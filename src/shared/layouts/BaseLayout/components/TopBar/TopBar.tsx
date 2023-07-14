@@ -33,6 +33,7 @@ export const TopBar = () => {
 
   const handleLoginClick = () => navigate(page.login);
 
+  // TODO: remove next use effects and switchAccount thunk, because it's a part of a legacy API
   useEffect(() => {
     if (authData?.account?.accountId) {
       const { accountId } = authData.account;

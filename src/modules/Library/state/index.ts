@@ -1,24 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store';
+import { MetaStatus } from 'shared/state';
 
 import * as thunk from './Library.thunk';
 import { state as initialState } from './Library.state';
-import { extraReducers } from './Library.reducer';
-import { LibrarySchema, PublishedApplet } from './Library.schema';
+import { extraReducers, reducers } from './Library.reducer';
+import { LibrarySchema } from './Library.schema';
 
 export * from './Library.schema';
 
 const slice = createSlice({
   name: 'library',
   initialState,
-  reducers: {},
+  reducers,
   extraReducers,
 });
 
 export const library = {
   thunk,
   slice,
+  actions: slice.actions,
   usePublishedApplets: (): LibrarySchema['publishedApplets']['data'] =>
     useAppSelector(
       ({
@@ -27,12 +29,36 @@ export const library = {
         },
       }) => data,
     ),
-  usePublishedApplet: (id: string): PublishedApplet =>
+  useCartApplets: (): LibrarySchema['cartApplets']['data'] =>
     useAppSelector(
       ({
         library: {
-          publishedApplets: { data },
+          cartApplets: { data },
         },
-      }) => data?.result?.find((applet: PublishedApplet) => id === applet.id),
+      }) => data,
+    ),
+  useIsCartBtnDisabled: (): LibrarySchema['isCartBtnDisabled']['data'] =>
+    useAppSelector(
+      ({
+        library: {
+          isCartBtnDisabled: { data },
+        },
+      }) => data,
+    ),
+  usePublishedAppletsStatus: (): MetaStatus =>
+    useAppSelector(
+      ({
+        library: {
+          publishedApplets: { status },
+        },
+      }) => status,
+    ),
+  useCartAppletsStatus: (): MetaStatus =>
+    useAppSelector(
+      ({
+        library: {
+          cartApplets: { status },
+        },
+      }) => status,
     ),
 };

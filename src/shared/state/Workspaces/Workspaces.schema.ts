@@ -9,7 +9,8 @@ export type Workspace = {
 };
 
 export type WorkspacesSchema = {
-  currentWorkspace: null | Workspace;
+  workspaces: BaseSchema<{ result: Workspace[]; count: number } | null>;
+  currentWorkspace: BaseSchema<null | Workspace>;
   roles: BaseSchema<{
     [key: string]: Roles[];
   } | null>;

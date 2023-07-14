@@ -12,15 +12,15 @@ export type AddToBuilderPopupProps = {
 };
 
 export enum AddToBuilderActions {
-  CreateNewApplet = 0,
-  AddToExistingApplet = 1,
+  CreateNewApplet = 'create',
+  AddToExistingApplet = 'add',
 }
 
 export enum AddToBuilderSteps {
-  SelectWorkspace = 0,
-  AddToBuilderActions = 1,
-  SelectApplet = 2,
-  Error = 3,
+  SelectWorkspace,
+  AddToBuilderActions,
+  SelectApplet,
+  Error,
 }
 
 export type Step = {
@@ -48,13 +48,14 @@ export type Applet = {
 
 export type GetStep = {
   control: Control<AddToBuilderForm>;
-  isSelectedWorkspaceVisible: boolean;
+  isWorkspacesModalVisible: boolean;
   workspaces: Workspace[];
   applets: Applet[];
   setStep: Dispatch<SetStateAction<AddToBuilderSteps>>;
   setAddToBuilderPopupVisible: Dispatch<SetStateAction<boolean>>;
   handleNext: (nextStep?: AddToBuilderSteps) => Promise<void>;
   handleAddToBuilder: () => void;
+  handleAddToExistingApplet: () => void;
 };
 
 export type TableController = {

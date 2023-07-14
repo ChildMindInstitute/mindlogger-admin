@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -6,8 +6,6 @@ import { Box, Button } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import {
-  theme,
-  variables,
   StyledBodyLarge,
   StyledBodyMedium,
   StyledHeadline,
@@ -15,45 +13,75 @@ import {
   StyledLabelBoldLarge,
   StyledTitleBoldMedium,
   StyledTitleMedium,
+  theme,
+  variables,
 } from 'shared/styles';
-import { getDictionaryText } from 'shared/utils';
+import { falseReturnFunc, getDictionaryText } from 'shared/utils';
 import { page } from 'resources';
+import { useAppDispatch } from 'redux/store';
+import { auth, library } from 'redux/modules';
+import { STORAGE_LIBRARY_KEY } from 'modules/Library/consts';
+import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
 
 import {
-  StyledAppletContainer,
-  StyledAppletName,
-  StyledAppletKeywordsContainer,
-  StyledAppletKeyword,
-  StyledButtonsContainer,
-  StyledActivitiesContainer,
-  StyledExpandedButton,
   StyledActivities,
+  StyledActivitiesContainer,
+  StyledAppletContainer,
+  StyledAppletKeyword,
+  StyledAppletKeywordsContainer,
+  StyledAppletName,
+  StyledButtonsContainer,
+  StyledExpandedButton,
   StyledSvgContainer,
 } from './Applet.styles';
-import { AppletForm, AppletProps, AppletUiType } from './Applet.types';
+import { AppletProps, AppletUiType, LibraryForm } from './Applet.types';
 import { RemoveAppletPopup } from './Popups';
 import { Activity } from './Activity';
 import { AppletImage } from './AppletImage';
+import { getUpdatedStorageData } from './Applet.utils';
 
-export const Applet = ({
-  applet: { id, displayName, image = '', version = '', description, keywords, activities },
-  uiType = AppletUiType.List,
-}: AppletProps) => {
+export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: AppletProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const {
+    result: { cartItems },
+  } = library.useCartApplets() || {};
+  const isAuthorized = auth.useAuthorized();
 
   const [activitiesVisible, setActivitiesVisible] = useState(uiType === AppletUiType.Details);
   const [removeAppletPopupVisible, setRemoveAppletPopupVisible] = useState(false);
 
-  const methods = useForm<AppletForm>({ defaultValues: { [id]: [] }, mode: 'onChange' });
+  const { id, displayName, image = '', version = '', description, keywords, activities } = applet;
+
+  const methods = useForm<LibraryForm>({ defaultValues: { [id]: [] }, mode: 'onChange' });
   const { getValues } = methods;
 
-  const selectedItems = getValues()[id];
+  const selectedItemsWithId = getValues();
+  const selectedItems = selectedItemsWithId[id];
   const APPLET_DETAILS = `${page.library}/${id}`;
+  const arrowSvgId = activitiesVisible ? 'navigate-up' : 'navigate-down';
 
   const handleRemove = () => {
     setRemoveAppletPopupVisible(true);
   };
+
+  const handleAddToCart = () => {
+    updateSelectedItemsInStorage(selectedItemsWithId, id);
+    const updatedAppletsData = getUpdatedStorageData(cartItems, applet, id);
+
+    if (isAuthorized) {
+      dispatch(library.thunk.postAppletsToCart(updatedAppletsData));
+    } else {
+      localStorage.setItem(STORAGE_LIBRARY_KEY, JSON.stringify(updatedAppletsData));
+      dispatch(library.actions.setAppletsFromStorage(updatedAppletsData));
+    }
+  };
+
+  useEffect(() => {
+    const selectedAppletItems = getSelectedAppletFromStorage(id);
+    selectedAppletItems && setActivitiesVisible(true);
+  }, [id]);
 
   const renderAppletInfoListView = () => (
     <>
@@ -110,12 +138,12 @@ export const Applet = ({
               {t('viewDetails')}
             </Button>
             <Button
-              disabled={!selectedItems.length}
+              disabled={!selectedItems?.length}
               variant="outlined"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
-              sx={{ marginLeft: theme.spacing(1.2) }}
+              sx={{ ml: theme.spacing(1.2) }}
+              onClick={handleAddToCart}
             >
-              {/* TODO: fix button title - if the applet is in the table, then display 'remove' */}
               {t('addToCart')}
             </Button>
           </>
@@ -124,12 +152,12 @@ export const Applet = ({
         return (
           <>
             <Button
-              disabled={!selectedItems.length}
+              disabled={!selectedItems?.length}
               variant="contained"
               startIcon={<Svg width="18" height="18" id="cart-add" />}
-              sx={{ marginLeft: theme.spacing(1.2) }}
+              sx={{ ml: theme.spacing(1.2) }}
+              onClick={handleAddToCart}
             >
-              {/* TODO: fix button title - if the applet is in the table, then display 'remove' */}
               {t('addToCart')}
             </Button>
           </>
@@ -140,7 +168,7 @@ export const Applet = ({
             <Button
               variant="outlined"
               startIcon={<Svg width="18" height="18" id="trash" />}
-              sx={{ marginLeft: theme.spacing(1.2) }}
+              sx={{ ml: theme.spacing(1.2) }}
               onClick={handleRemove}
             >
               {t('remove')}
@@ -159,7 +187,13 @@ export const Applet = ({
           {!!keywords.length && (
             <StyledAppletKeywordsContainer>
               {keywords.map((keyword) => (
-                <StyledAppletKeyword key={keyword}>{keyword}</StyledAppletKeyword>
+                <StyledAppletKeyword
+                  onClick={setSearch ? () => setSearch(keyword) : falseReturnFunc}
+                  variant="contained"
+                  key={keyword}
+                >
+                  {keyword}
+                </StyledAppletKeyword>
               ))}
             </StyledAppletKeywordsContainer>
           )}
@@ -176,7 +210,7 @@ export const Applet = ({
                   onClick={() => setActivitiesVisible((prevState) => !prevState)}
                   startIcon={
                     <StyledSvgContainer>
-                      <Svg id={activitiesVisible ? 'navigate-up' : 'navigate-down'} />
+                      <Svg id={arrowSvgId} />
                     </StyledSvgContainer>
                   }
                 >
@@ -187,7 +221,7 @@ export const Applet = ({
                 <StyledActivities>
                   {activities.map((activity) => (
                     <Fragment key={activity.name}>
-                      <Activity appletId={id} activity={activity} />
+                      <Activity appletId={id} activity={activity} uiType={uiType} />
                     </Fragment>
                   ))}
                 </StyledActivities>
@@ -202,6 +236,8 @@ export const Applet = ({
           appletName={displayName}
           removeAppletPopupVisible={removeAppletPopupVisible}
           setRemoveAppletPopupVisible={setRemoveAppletPopupVisible}
+          isAuthorized={isAuthorized}
+          cartItems={cartItems}
         />
       )}
     </>

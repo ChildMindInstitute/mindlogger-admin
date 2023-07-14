@@ -2,6 +2,10 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
+import { useAppDispatch } from 'redux/store';
+import { library } from 'modules/Library/state';
+import { STORAGE_LIBRARY_KEY, STORAGE_SELECTED_KEY } from 'modules/Library/consts';
+import { getFilteredSelectedItems, getSelectedItemsFromStorage } from 'modules/Library/utils';
 
 import { RemoveAppletPopupProps } from './RemoveAppletPopup.types';
 
@@ -10,13 +14,28 @@ export const RemoveAppletPopup = ({
   setRemoveAppletPopupVisible,
   appletId,
   appletName,
+  isAuthorized,
+  cartItems,
 }: RemoveAppletPopupProps) => {
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
 
   const handleModalClose = () => setRemoveAppletPopupVisible(false);
 
   const handleSubmit = () => {
-    // TODO: remove applet from cart
+    const updatedAppletsData = cartItems?.filter((applet) => applet.id !== appletId) || [];
+    const selectedItemsFromStorage = getSelectedItemsFromStorage();
+    const filteredSelectedItems = getFilteredSelectedItems(selectedItemsFromStorage, appletId);
+    Object.keys(filteredSelectedItems)?.length > 0
+      ? sessionStorage.setItem(STORAGE_SELECTED_KEY, JSON.stringify(filteredSelectedItems))
+      : sessionStorage.removeItem(STORAGE_SELECTED_KEY);
+
+    if (isAuthorized) {
+      dispatch(library.thunk.postAppletsToCart(updatedAppletsData));
+    } else {
+      localStorage.setItem(STORAGE_LIBRARY_KEY, JSON.stringify(updatedAppletsData));
+      dispatch(library.actions.setAppletsFromStorage(updatedAppletsData));
+    }
     handleModalClose();
   };
 
