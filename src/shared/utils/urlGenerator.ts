@@ -14,7 +14,7 @@ export const enum Path {
   Items = 'items',
   ItemsFlow = 'item-flow',
   Settings = 'settings',
-  ActivityFlow = 'activity-flow',
+  ActivityFlow = 'activity-flows',
   FlowBuilder = 'builder',
   Flanker = 'flanker',
   PerformanceTask = 'performance-task',

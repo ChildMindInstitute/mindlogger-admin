@@ -14,6 +14,12 @@ import {
 import { state as initialState } from './Auth.state';
 
 export const reducers = {
+  startLogout: (state: AuthSchema): void => {
+    state.isLogoutInProgress = true;
+  },
+  endLogout: (state: AuthSchema): void => {
+    state.isLogoutInProgress = false;
+  },
   resetAuthorization: (state: AuthSchema): void => {
     storage.removeItem(LocalStorageKeys.AccessToken);
     storage.removeItem(LocalStorageKeys.RefreshToken);

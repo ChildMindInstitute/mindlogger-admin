@@ -1,5 +1,6 @@
-import { Version } from 'api';
 import { Chart, ChartDataset, ChartTypeRegistry, LegendElement } from 'chart.js';
+
+import { Version } from 'api';
 
 export type ActivityCompletion = {
   date: Date;
@@ -13,7 +14,6 @@ export type Subscale = {
 
 export type SubscaleChartData = {
   subscales: Subscale[];
-  versions: Version[];
 };
 
 export type CustomLegend = LegendElement<keyof ChartTypeRegistry> & {
@@ -28,4 +28,5 @@ export type Tick = { index: number; chart: Chart };
 
 export type LineChartProps = {
   data: SubscaleChartData;
+  versions: Version[];
 };

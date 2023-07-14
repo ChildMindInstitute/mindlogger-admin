@@ -733,7 +733,7 @@
   "downloadLatestReport": "Download Latest Report",
   "emptyReview": "Select the date, Activity, and response time to review the response data.",
   "selectTheActivityToReview": "Select the Activity to review the response data.",
-  "datavizNotSupportedForPerformanceTasks":"Data visualization for Performance Tasks not supported",
+  "datavizNotSupportedForPerformanceTasks": "Data visualization for Performance Tasks not supported",
   "feedback": "Feedback",
   "notes": "Notes",
   "assessment": "Assessment",
@@ -855,7 +855,7 @@
   "newItemName": "New Item",
   "validationMessages": {
     "isRequired": "{{- field }} is required",
-    "alphanumeric": "{{- field }} must contain only alphanumeric characters or underscores",
+    "alphanumericAndHyphen": "{{- field }} must contain only alphanumeric characters, underscores, or hyphen",
     "lessThan": "{{- less }} should be less than {{- than }}",
     "moreThan": "{{- more }} should be bigger than {{- than }}",
     "unique": "That {{- field }} is already in use. Please use a different name",

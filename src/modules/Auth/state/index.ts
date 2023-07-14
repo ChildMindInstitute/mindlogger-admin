@@ -38,4 +38,6 @@ export const auth = {
         },
       }) => data,
     ),
+  useLogoutInProgress: (): AuthSchema['isLogoutInProgress'] =>
+    useAppSelector(({ auth: { isLogoutInProgress } }) => isLogoutInProgress),
 };

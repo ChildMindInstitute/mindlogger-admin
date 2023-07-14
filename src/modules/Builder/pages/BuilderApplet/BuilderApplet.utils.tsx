@@ -193,9 +193,9 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     description: '',
     showAllAtOnce: false,
     isSkippable: false,
-    isReviewable: false,
     responseIsEditable: true,
     ...activity,
+    isReviewable: false,
     items,
     conditionalLogic,
     subscaleSetting,
@@ -532,7 +532,7 @@ const getAlerts = (item: Item) => {
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map((item) => ({
-        id: item.id ?? uuidv4(),
+        id: item.id,
         name: item.name,
         question: getDictionaryText(item.question),
         responseType: item.responseType,
@@ -760,7 +760,7 @@ export const getAppletTabs = ({
     hasError: hasAppletActivitiesErrors,
   },
   {
-    labelKey: 'activityFlow',
+    labelKey: 'activityFlows',
     icon: <Svg id="flow-outlined" />,
     activeIcon: <Svg id="flow-filled" />,
     path: Path.ActivityFlow,
