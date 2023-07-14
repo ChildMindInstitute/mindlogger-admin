@@ -282,7 +282,9 @@ export const getPerformanceTaskType = (responseType: ItemResponseType) => {
   return performanceTaskType;
 };
 
-// TODO: Make filtering for scores, subscales, and item flow, regarding which items were selected
+// TODO: Make filtering for scores, subscales, and item flows, regarding which items were selected, Activity to the
+//  Reviewer dashboard assessment checkbox (can be only one in all activities), names for ABTrails activities to be
+//  unique
 export const getSelectedAppletData = (
   applet: PublishedApplet,
   selectedItems: SelectedItem[],
@@ -309,7 +311,6 @@ export const getSelectedAppletData = (
 
       return {
         ...activity,
-        subscaleSetting: activity.subscaleSetting || undefined,
         isPerformanceTask,
         performanceTaskType: performanceTaskType || undefined,
         items: filteredItems,
