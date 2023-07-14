@@ -9,6 +9,7 @@ export const getAppletsFromStorage = (): PublishedApplet[] => {
 
   return storageData ? JSON.parse(storageData) : [];
 };
+
 export const getSelectedItemsFromStorage = (): LibraryForm => {
   const storageData = sessionStorage.getItem(STORAGE_SELECTED_KEY);
 

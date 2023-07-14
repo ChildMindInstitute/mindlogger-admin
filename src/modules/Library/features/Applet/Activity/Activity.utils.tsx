@@ -1,13 +1,5 @@
 import { Item } from 'redux/modules';
-import { ItemResponseType } from 'shared/consts';
-
-const perfTaskResponseTypes = [
-  ItemResponseType.Flanker,
-  ItemResponseType.StabilityTracker,
-  ItemResponseType.TouchPractice,
-  ItemResponseType.TouchTest,
-  ItemResponseType.ABTrails,
-];
+import { performanceTaskResponseTypes } from 'shared/consts';
 
 export const checkIfPerformanceTask = (items: Item[]) =>
-  items?.some(({ responseType }) => perfTaskResponseTypes.includes(responseType));
+  items?.some(({ responseType }) => performanceTaskResponseTypes.includes(responseType));
