@@ -532,7 +532,7 @@ const getAlerts = (item: Item) => {
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map((item) => ({
-        id: item.id ?? uuidv4(),
+        id: item.id,
         name: item.name,
         question: getDictionaryText(item.question),
         responseType: item.responseType,
