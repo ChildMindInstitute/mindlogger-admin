@@ -1,14 +1,5 @@
-import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
-import { AxiosResponse } from 'axios';
-
 import { BaseSchema } from 'shared/state/Base';
-import { AppletId, Periodicity, TimerType, EventNotifications, EventReminder } from 'api';
-
-export type CreateAppletsStateData = {
-  builder: ActionReducerMapBuilder<AppletsSchema>;
-  thunk: AsyncThunk<AxiosResponse, AppletId, Record<string, never>>;
-  key: keyof AppletsSchema;
-};
+import { Periodicity, TimerType, EventNotifications, EventReminder } from 'api';
 
 export type Event = {
   startTime: string;

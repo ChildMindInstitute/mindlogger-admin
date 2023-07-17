@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
 import get from 'lodash.get';
@@ -11,6 +11,7 @@ import {
   useCheckIfNewApplet,
   usePromptSetup,
   useEncryptionCheckFromStorage,
+  useRemoveAppletData,
   useLogout,
 } from 'shared/hooks';
 import {
@@ -268,6 +269,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const appletEncryption = appletData?.encryption;
   const setAppletPrivateKey = useAppletPrivateKeySetter();
+  const removeAppletData = useRemoveAppletData();
   const handleLogout = useLogout();
 
   useEffect(() => {
@@ -280,6 +282,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
 
   const handleSaveChangesDoNotSaveSubmit = () => {
     setPromptVisible(false);
+    removeAppletData();
     confirmNavigation();
 
     if (isLogoutInProgress) {

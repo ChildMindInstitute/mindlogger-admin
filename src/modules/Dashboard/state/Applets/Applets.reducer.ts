@@ -1,21 +1,17 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
+import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils';
+
 import { AppletsSchema } from './Applets.schema';
 import { getEvents } from './Applets.thunk';
+import { state as initialState } from './Applets.state';
 
-import {
-  resetEventsData,
-  createAppletsPendingData,
-  createAppletsFulfilledData,
-  createAppletsRejectedData,
-} from './Applets.utils';
+import { resetEventsData } from './Applets.utils';
 
 export const reducers = { resetEventsData };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AppletsSchema>): void => {
-  createAppletsPendingData({ builder, thunk: getEvents, key: 'events' });
-
-  createAppletsFulfilledData({ builder, thunk: getEvents, key: 'events' });
-
-  createAppletsRejectedData({ builder, thunk: getEvents, key: 'events' });
+  getPendingData({ builder, thunk: getEvents, key: 'events' });
+  getFulfilledData({ builder, thunk: getEvents, key: 'events', initialState });
+  getRejectedData({ builder, thunk: getEvents, key: 'events', initialState });
 };

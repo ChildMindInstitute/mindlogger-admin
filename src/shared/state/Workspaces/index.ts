@@ -20,8 +20,10 @@ export const workspaces = {
   thunk,
   slice,
   actions: slice.actions,
-  useData: (): WorkspacesSchema['currentWorkspace'] =>
-    useAppSelector(({ workspaces: { currentWorkspace } }) => currentWorkspace),
+  useWorkspacesData: (): WorkspacesSchema['workspaces']['data'] =>
+    useAppSelector(({ workspaces: { workspaces } }) => workspaces?.data),
+  useData: (): WorkspacesSchema['currentWorkspace']['data'] =>
+    useAppSelector(({ workspaces: { currentWorkspace } }) => currentWorkspace?.data),
   useRolesData: (): WorkspacesSchema['roles'] =>
     useAppSelector(({ workspaces: { roles } }) => roles),
 };

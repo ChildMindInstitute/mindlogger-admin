@@ -1,5 +1,7 @@
 import { AppletId } from 'api';
-import { apiClient } from './api.client';
+import { apiClient, authApiClient } from 'shared/api/api.client';
+
+import { PublishedApplet } from '../state';
 import { PublishedAppletsType } from './api.types';
 
 export const getPublishedAppletsApi = (
@@ -16,9 +18,18 @@ export const getPublishedAppletsApi = (
   });
 
 export const getPublishedAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
-  apiClient.get('/library', {
-    params: {
-      libraryId: appletId,
-    },
+  apiClient.get(`/library/${appletId}`, {
     signal,
   });
+
+export const postAppletsToCartApi = (cartItems: PublishedApplet[], signal?: AbortSignal) =>
+  authApiClient.post(
+    '/library/cart',
+    {
+      cartItems,
+    },
+    { signal },
+  );
+
+export const getAppletsFromCartApi = (signal?: AbortSignal) =>
+  authApiClient.get('/library/cart', { signal });

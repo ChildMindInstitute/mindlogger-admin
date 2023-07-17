@@ -51,6 +51,7 @@ export const ShareAppletPopup = ({
         onAppletShared={() => setAppletShared(true)}
         onDisableSubmit={setIsDisabled}
         isSubmitted={isSubmitted}
+        setIsSubmitted={setIsSubmitted}
       />
     </Modal>
   );

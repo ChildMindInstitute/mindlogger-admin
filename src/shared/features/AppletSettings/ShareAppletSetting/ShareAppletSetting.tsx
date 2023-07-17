@@ -41,6 +41,7 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
           onAppletShared={handleSharedApplet}
           onDisableSubmit={(isDisabled) => setIsDisabled(isDisabled)}
           isSubmitted={isSubmitted}
+          setIsSubmitted={setIsSubmitted}
           showSuccess={false}
         />
         {appletData && (

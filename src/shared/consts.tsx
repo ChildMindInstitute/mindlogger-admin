@@ -105,6 +105,22 @@ export enum ItemResponseType {
   ABTrails = 'ABTrails',
 }
 
+export const performanceTaskResponseTypes = [
+  ItemResponseType.Flanker,
+  ItemResponseType.StabilityTracker,
+  ItemResponseType.TouchPractice,
+  ItemResponseType.TouchTest,
+  ItemResponseType.ABTrails,
+];
+
+export enum PerfTaskType {
+  Flanker = 'flanker',
+  Touch = 'touch',
+  Gyroscope = 'gyroscope',
+  ABTrailsTablet = 'ABTrailsTablet',
+  ABTrailsMobile = 'ABTrailsMobile',
+}
+
 export enum GyroscopeOrTouch {
   Gyroscope = 'gyroscope',
   Touch = 'touch',
@@ -115,14 +131,6 @@ export const ItemsWithFileResponses = [
   ItemResponseType.Video,
   ItemResponseType.Audio,
 ];
-
-export enum PerfTaskType {
-  Flanker = 'flanker',
-  Touch = 'touch',
-  Gyroscope = 'gyroscope',
-  ABTrailsTablet = 'ABTrailsTablet',
-  ABTrailsMobile = 'ABTrailsMobile',
-}
 
 export enum CalculationType {
   Sum = 'sum',

@@ -6,9 +6,9 @@ import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
 import {
   StyledBodyMedium,
-  StyledLabelLarge,
   StyledTitleBoldSmall,
   StyledFlexWrap,
+  StyledTitleLarge,
 } from 'shared/styles/styledComponents';
 
 import { SuccessSharedProps } from './SuccessShared.types';
@@ -43,8 +43,10 @@ export const SuccessShared = ({
       <StyledApplet>
         {img ? <StyledImg src={img} alt="Applet image" /> : <StyledImgPlaceholder />}
         <StyledAppletContent>
-          <StyledLabelLarge>{title}</StyledLabelLarge>
-          <StyledText color={variables.palette.on_surface_variant}>{text}</StyledText>
+          <StyledTitleLarge sx={{ flexBasis: '100%' }} color={variables.palette.on_surface_variant}>
+            {title}
+          </StyledTitleLarge>
+          {text && <StyledText color={variables.palette.on_surface_variant}>{text}</StyledText>}
           {keywords?.length > 0 && (
             <StyledFlexWrap sx={{ marginTop: theme.spacing(0.8) }}>
               {keywords.map((word, i) => (

@@ -149,7 +149,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       newBreadcrumbs.push(
         {
           icon: 'flow',
-          label: t('activityFlow'),
+          label: t('activityFlows'),
           navPath: generatePath(page.builderAppletActivityFlow, {
             appletId,
           }),

@@ -1,4 +1,8 @@
-import { DecryptedStabilityTrackerAnswer } from 'shared/types';
+import {
+  DecryptedAnswerData,
+  DecryptedStabilityTrackerAnswer,
+  ExtendedExportAnswerWithoutEncryption,
+} from 'shared/types';
 
 export const enum ZipFile {
   Media = 'media',
@@ -17,3 +21,15 @@ export const getStabilityTrackerCsvName = (
 
 export const getABTrailsCsvName = (index: number, id?: string) =>
   `${id || ''}-trail${index + 1}.csv`;
+
+export const getMediaFileName = (
+  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+  extension: string,
+) => `${item.id}-${item.activityItem.id}-${item.activityItem.name}.${extension}`;
+
+export const getFileExtension = (fileUrl: string) => {
+  const extension = fileUrl.split('/').pop()?.split('.').pop() ?? '';
+  if (extension === 'quicktime') return 'MOV';
+
+  return extension;
+};

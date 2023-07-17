@@ -1,10 +1,7 @@
-import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
-import { AxiosResponse } from 'axios';
 import { ColorResult } from 'react-color';
 
 import { BaseSchema } from 'shared/state/Base';
 import { ElementType, RetentionPeriods } from 'shared/types';
-import { AppletBody, AppletId, OwnerId } from 'api';
 import {
   ItemResponseType,
   SubscaleTotalScore,
@@ -23,16 +20,6 @@ import {
   DeviceType,
   OrderName,
 } from 'modules/Builder/types';
-
-export type CreateAppletStateData = {
-  builder: ActionReducerMapBuilder<AppletSchema>;
-  thunk:
-    | AsyncThunk<AxiosResponse, AppletId, Record<string, never>>
-    | AsyncThunk<AxiosResponse, OwnerId & AppletId, Record<string, never>>
-    | AsyncThunk<AxiosResponse, OwnerId & { body: SingleApplet }, Record<string, never>>
-    | AsyncThunk<AxiosResponse, AppletBody, Record<string, never>>;
-  key: keyof AppletSchema;
-};
 
 type ActivityFlowItem = {
   activityId: string;

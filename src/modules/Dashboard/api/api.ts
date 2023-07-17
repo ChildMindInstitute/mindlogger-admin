@@ -14,7 +14,6 @@ import {
   TogglePin,
   UpdateAlertStatus,
   PublishApplet,
-  UpdateAppletSearchTerms,
   PostAppletPublicLink,
   GetAppletsParams,
   CreateEventType,

@@ -1,5 +1,7 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
+import { getPendingData, getFulfilledData, getRejectedData } from 'shared/utils';
+
 import { state as initialState } from './Users.state';
 import { UsersSchema } from './Users.schema';
 import {
@@ -7,11 +9,6 @@ import {
   getAllWorkspaceRespondents,
   getWorkspaceManagers,
 } from './Users.thunk';
-import {
-  createUsersPendingData,
-  createUsersRejectedData,
-  createUsersFulfilledData,
-} from './Users.utils';
 
 export const reducers = {
   resetRespondentsData: (state: UsersSchema): void => {
@@ -23,15 +20,25 @@ export const reducers = {
 };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<UsersSchema>): void => {
-  createUsersPendingData({ builder, thunk: getWorkspaceRespondents, key: 'respondents' });
-  createUsersFulfilledData({ builder, thunk: getWorkspaceRespondents, key: 'respondents' });
-  createUsersRejectedData({ builder, thunk: getWorkspaceRespondents, key: 'respondents' });
+  getPendingData({ builder, thunk: getWorkspaceRespondents, key: 'respondents' });
+  getFulfilledData({ builder, thunk: getWorkspaceRespondents, key: 'respondents', initialState });
+  getRejectedData({ builder, thunk: getWorkspaceRespondents, key: 'respondents', initialState });
 
-  createUsersPendingData({ builder, thunk: getAllWorkspaceRespondents, key: 'allRespondents' });
-  createUsersFulfilledData({ builder, thunk: getAllWorkspaceRespondents, key: 'allRespondents' });
-  createUsersRejectedData({ builder, thunk: getAllWorkspaceRespondents, key: 'allRespondents' });
+  getPendingData({ builder, thunk: getAllWorkspaceRespondents, key: 'allRespondents' });
+  getFulfilledData({
+    builder,
+    thunk: getAllWorkspaceRespondents,
+    key: 'allRespondents',
+    initialState,
+  });
+  getRejectedData({
+    builder,
+    thunk: getAllWorkspaceRespondents,
+    key: 'allRespondents',
+    initialState,
+  });
 
-  createUsersPendingData({ builder, thunk: getWorkspaceManagers, key: 'managers' });
-  createUsersFulfilledData({ builder, thunk: getWorkspaceManagers, key: 'managers' });
-  createUsersRejectedData({ builder, thunk: getWorkspaceManagers, key: 'managers' });
+  getPendingData({ builder, thunk: getWorkspaceManagers, key: 'managers' });
+  getFulfilledData({ builder, thunk: getWorkspaceManagers, key: 'managers', initialState });
+  getRejectedData({ builder, thunk: getWorkspaceManagers, key: 'managers', initialState });
 };

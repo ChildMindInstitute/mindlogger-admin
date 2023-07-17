@@ -2,9 +2,9 @@ import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import {
   AnswerDTO,
   DecryptedABTrailsAnswer,
+  DecryptedAnswerData,
   DecryptedDateAnswer,
   DecryptedDateRangeAnswer,
-  DecryptedDrawingAnswer,
   DecryptedGeolocationAnswer,
   DecryptedMediaAnswer,
   DecryptedMultiSelectionPerRowAnswer,
@@ -12,18 +12,20 @@ import {
   DecryptedSliderRowsAnswer,
   DecryptedStabilityTrackerAnswer,
   DecryptedTimeAnswer,
+  ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
-import {
-  Item,
-  SingleAndMultipleSelectRowsResponseValues,
-  SliderRowsResponseValues,
-} from 'shared/state';
-import { getStabilityTrackerCsvName } from 'shared/utils';
+import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
+import { getFileExtension, getMediaFileName, getStabilityTrackerCsvName } from 'shared/utils';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
-export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: string) => {
+export const parseResponseValue = <
+  T extends DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+>(
+  item: T,
+) => {
+  const { answer, activityItem, id: answerId } = item;
   const inputType = activityItem.responseType;
   const key =
     answer && answer === Object(answer) ? (Object.keys(answer)?.[0] as keyof AnswerDTO) : undefined;
@@ -33,7 +35,11 @@ export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: st
   if (!key) return answer || '';
 
   if (ItemsWithFileResponses.includes(inputType)) {
-    return (value as DecryptedMediaAnswer['value']).split('/').pop();
+    try {
+      return getMediaFileName(item, getFileExtension((item.answer as DecryptedMediaAnswer).value));
+    } catch (error) {
+      console.warn(error);
+    }
   }
 
   switch (inputType) {
@@ -56,7 +62,7 @@ export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: st
         (value as DecryptedGeolocationAnswer['value'])?.longitude
       })`;
     case ItemResponseType.Drawing:
-      return (value as DecryptedDrawingAnswer['value']).uri.split('/').pop();
+      return getMediaFileName(item, 'svg');
     case ItemResponseType.ABTrails:
       return value as DecryptedABTrailsAnswer['value'];
     case ItemResponseType.SingleSelectionPerRow: {
@@ -95,7 +101,7 @@ export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: st
     }
     case ItemResponseType.StabilityTracker:
       return getStabilityTrackerCsvName(
-        id,
+        answerId,
         (value as DecryptedStabilityTrackerAnswer['value']).phaseType,
       );
     default:

@@ -1,39 +1,32 @@
 import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
-import { AxiosError } from 'axios';
 
-import { getApiError } from 'shared/utils/getApiError';
+import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils';
 
-import { LibrarySchema } from './Library.schema';
-import { getPublishedApplets } from './Library.thunk';
+import { LibrarySchema, PublishedApplet } from './Library.schema';
+import { getAppletsFromCart, getPublishedApplets, postAppletsToCart } from './Library.thunk';
 import { state as initialState } from './Library.state';
 
+export const reducers = {
+  setAppletsFromStorage: (state: LibrarySchema, action: PayloadAction<PublishedApplet[]>): void => {
+    state.cartApplets.data.result.cartItems = action.payload;
+    state.cartApplets.status = 'success';
+  },
+  setAddToCartBtnDisabled: (state: LibrarySchema, action: PayloadAction<boolean>): void => {
+    state.isCartBtnDisabled.data = action.payload;
+    state.isCartBtnDisabled.status = 'success';
+  },
+};
+
 export const extraReducers = (builder: ActionReducerMapBuilder<LibrarySchema>): void => {
-  builder.addCase(getPublishedApplets.pending, ({ publishedApplets }, action) => {
-    if (publishedApplets.status !== 'loading') {
-      publishedApplets.requestId = action.meta.requestId;
-      publishedApplets.status = 'loading';
-    }
-  });
+  getPendingData({ builder, thunk: getPublishedApplets, key: 'publishedApplets' });
+  getFulfilledData({ builder, thunk: getPublishedApplets, key: 'publishedApplets', initialState });
+  getRejectedData({ builder, thunk: getPublishedApplets, key: 'publishedApplets', initialState });
 
-  builder.addCase(getPublishedApplets.fulfilled, ({ publishedApplets }, action) => {
-    if (
-      publishedApplets.status === 'loading' &&
-      publishedApplets.requestId === action.meta.requestId
-    ) {
-      publishedApplets.requestId = initialState.publishedApplets.requestId;
-      publishedApplets.status = 'success';
-      publishedApplets.data = action.payload.data;
-    }
-  });
+  getPendingData({ builder, thunk: getAppletsFromCart, key: 'cartApplets' });
+  getFulfilledData({ builder, thunk: getAppletsFromCart, key: 'cartApplets', initialState });
+  getRejectedData({ builder, thunk: getAppletsFromCart, key: 'cartApplets', initialState });
 
-  builder.addCase(getPublishedApplets.rejected, ({ publishedApplets }, action) => {
-    if (
-      publishedApplets.status === 'loading' &&
-      publishedApplets.requestId === action.meta.requestId
-    ) {
-      publishedApplets.requestId = initialState.publishedApplets.requestId;
-      publishedApplets.status = 'error';
-      publishedApplets.error = getApiError(action as PayloadAction<AxiosError>);
-    }
-  });
+  getPendingData({ builder, thunk: postAppletsToCart, key: 'cartApplets' });
+  getFulfilledData({ builder, thunk: postAppletsToCart, key: 'cartApplets', initialState });
+  getRejectedData({ builder, thunk: postAppletsToCart, key: 'cartApplets', initialState });
 };

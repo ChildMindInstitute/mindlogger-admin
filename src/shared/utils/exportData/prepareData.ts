@@ -9,6 +9,7 @@ import {
   EventDTO,
   ExportActivity,
   ExportCsvData,
+  ExportMediaData,
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
@@ -19,6 +20,9 @@ import {
   getStabilityRecords,
   getStabilityTrackerCsvName,
   getABTrailsCsvName,
+  getMediaFileName,
+  getFileExtension,
+  getSplashScreen,
 } from 'shared/utils';
 
 import { getParsedAnswers } from '../getParsedAnswers';
@@ -66,12 +70,21 @@ const getMediaData = (
   const mediaAnswers = decryptedAnswers.reduce((filteredAcc, item) => {
     const responseType = item.activityItem?.responseType;
     if (responseType === ItemResponseType.Drawing && item.answer)
-      return filteredAcc.concat((item.answer as DecryptedDrawingAnswer).value.uri);
+      return filteredAcc.concat({
+        fileName: getMediaFileName(item, 'svg'),
+        url: (item.answer as DecryptedDrawingAnswer).value.uri,
+      });
 
     if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
 
-    return filteredAcc.concat((item.answer as DecryptedMediaAnswer).value || '');
-  }, [] as string[]);
+    return filteredAcc.concat({
+      fileName: getMediaFileName(
+        item,
+        getFileExtension((item.answer as DecryptedMediaAnswer).value),
+      ),
+      url: (item.answer as DecryptedMediaAnswer).value || '',
+    });
+  }, [] as ExportMediaData[]);
 
   return mediaData.concat(...mediaAnswers);
 };
@@ -83,17 +96,21 @@ const getActivityJourneyData = (
   decryptedEvents: EventDTO[],
 ) => {
   const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers);
-  const events = decryptedEvents
-    .map((event) =>
-      getJourneyCSVObject({
-        event: {
-          ...event,
-          ...decryptedAnswersObject[event.screen],
-        },
-        rawAnswersObject,
-      }),
-    )
-    .filter(Boolean);
+  const events = decryptedEvents.map((event, index, events) => {
+    if (index === 0 && !decryptedAnswersObject[event.screen] && events[index + 1])
+      return getSplashScreen(event, {
+        ...events[index + 1],
+        ...decryptedAnswersObject[events[index + 1].screen],
+      });
+
+    return getJourneyCSVObject({
+      event: {
+        ...event,
+        ...decryptedAnswersObject[event.screen],
+      },
+      rawAnswersObject,
+    });
+  });
 
   return activityJourneyData.concat(...events);
 };
@@ -108,13 +125,14 @@ const getDrawingItemsData = (
     const drawingValue = (item.answer as DecryptedDrawingAnswer).value;
 
     return acc.concat({
-      name: `${item.respondentId}-${item.activityId}-${item.id}.csv`,
+      name: getMediaFileName(item, 'csv'),
       data: convertJsonToCsv(getDrawingLines(drawingValue.lines, drawingValue.width || 100)),
     });
   }, [] as ExportCsvData[]);
 
   return drawingItemsData.concat(...drawingAnswers);
 };
+
 const getStabilityTrackerItemsData = (
   stabilityTrackerItemsData: AppletExportData['stabilityTrackerItemsData'],
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
