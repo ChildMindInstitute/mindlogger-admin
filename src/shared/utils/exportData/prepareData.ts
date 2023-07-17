@@ -1,5 +1,6 @@
 import {
   AppletExportData,
+  DecryptedABTrailsAnswer,
   DecryptedActivityData,
   DecryptedAnswerData,
   DecryptedDrawingAnswer,
@@ -17,6 +18,7 @@ import {
   convertJsonToCsv,
   getStabilityRecords,
   getStabilityTrackerCsvName,
+  getABTrailsCsvName,
 } from 'shared/utils';
 
 import { getParsedAnswers } from '../getParsedAnswers';
@@ -24,6 +26,7 @@ import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
 import { getSubscales } from './getSubscales';
 import { getDrawingLines } from './getDrawingLines';
+import { getABTrailsRecords } from './getABTrailsRecords';
 
 const getDecryptedAnswersObject = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
@@ -80,15 +83,17 @@ const getActivityJourneyData = (
   decryptedEvents: EventDTO[],
 ) => {
   const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers);
-  const events = decryptedEvents.map((event) =>
-    getJourneyCSVObject({
-      event: {
-        ...event,
-        ...decryptedAnswersObject[event.screen],
-      },
-      rawAnswersObject,
-    }),
-  );
+  const events = decryptedEvents
+    .map((event) =>
+      getJourneyCSVObject({
+        event: {
+          ...event,
+          ...decryptedAnswersObject[event.screen],
+        },
+        rawAnswersObject,
+      }),
+    )
+    .filter(Boolean);
 
   return activityJourneyData.concat(...events);
 };
@@ -129,6 +134,25 @@ const getStabilityTrackerItemsData = (
   return stabilityTrackerItemsData.concat(...stabilityTrackerAnswers);
 };
 
+const getABTrailsItemsData = (
+  abTrackerItemsData: AppletExportData['abTrailsItemsData'],
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+) => {
+  const abTrackerAnswers = decryptedAnswers.reduce((acc, item, index) => {
+    const responseType = item.activityItem?.responseType;
+    if (responseType !== ItemResponseType.ABTrails) return acc;
+
+    const abTrackerValue = (item.answer as DecryptedABTrailsAnswer).value;
+
+    return acc.concat({
+      name: getABTrailsCsvName(index, item.respondentId),
+      data: convertJsonToCsv(getABTrailsRecords(abTrackerValue.lines, abTrackerValue.width || 100)),
+    });
+  }, [] as ExportCsvData[]);
+
+  return abTrackerItemsData.concat(...abTrackerAnswers);
+};
+
 export const prepareData = (
   data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
   getDecryptedAnswers: (
@@ -157,6 +181,7 @@ export const prepareData = (
         acc.stabilityTrackerItemsData,
         data.decryptedAnswers,
       );
+      const abTrailsItemsData = getABTrailsItemsData(acc.abTrailsItemsData, data.decryptedAnswers);
 
       return {
         reportData,
@@ -164,6 +189,7 @@ export const prepareData = (
         mediaData,
         drawingItemsData,
         stabilityTrackerItemsData,
+        abTrailsItemsData,
       };
     },
     {
@@ -172,6 +198,7 @@ export const prepareData = (
       mediaData: [],
       drawingItemsData: [],
       stabilityTrackerItemsData: [],
+      abTrailsItemsData: [],
     } as AppletExportData,
   );
 };

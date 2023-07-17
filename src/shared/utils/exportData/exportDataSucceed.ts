@@ -28,6 +28,7 @@ export const exportDataSucceed =
       mediaData,
       drawingItemsData,
       stabilityTrackerItemsData,
+      abTrailsItemsData,
     } = prepareData(response.data.result, getDecryptedAnswers);
 
     exportTemplate(reportData, GENERAL_REPORT_NAME);
@@ -36,6 +37,7 @@ export const exportDataSucceed =
       await Promise.allSettled([
         exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing)),
         exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker)),
+        exportCsvZip(abTrailsItemsData, getReportZipName(ZipFile.ABTrails)),
         exportMediaZip(mediaData, getReportZipName(ZipFile.Media)),
       ]);
       callback?.();

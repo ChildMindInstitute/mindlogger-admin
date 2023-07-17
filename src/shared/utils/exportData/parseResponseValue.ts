@@ -1,6 +1,7 @@
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import {
   AnswerDTO,
+  DecryptedABTrailsAnswer,
   DecryptedDateAnswer,
   DecryptedDateRangeAnswer,
   DecryptedDrawingAnswer,
@@ -56,6 +57,8 @@ export const parseResponseValue = (answer: AnswerDTO, activityItem: Item, id: st
       })`;
     case ItemResponseType.Drawing:
       return (value as DecryptedDrawingAnswer['value']).uri.split('/').pop();
+    case ItemResponseType.ABTrails:
+      return value as DecryptedABTrailsAnswer['value'];
     case ItemResponseType.SingleSelectionPerRow: {
       const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
 

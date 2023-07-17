@@ -30,6 +30,7 @@ export const getJourneyCSVObject = <T>({
     flowId,
     version,
   } = event;
+  if (!activityItem) return;
 
   const responseValues = activityItem?.responseValues as SingleAndMultipleSelectItemResponseValues &
     SliderItemResponseValues;
