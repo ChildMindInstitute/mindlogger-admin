@@ -6,7 +6,7 @@ export const DEFAULT_CONFIG = {
   },
 };
 
-export const BASE_API_URL = process.env.REACT_APP_API_DOMAIN || process.env.API_DOMAIN;
+export const BASE_API_URL = process.env.REACT_APP_API_DOMAIN;
 
 export const BACKEND_SERVERS: ServerUrlOption[] = [
   {

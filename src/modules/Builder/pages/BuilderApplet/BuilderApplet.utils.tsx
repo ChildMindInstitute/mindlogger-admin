@@ -482,7 +482,7 @@ const getAlerts = (item: Item) => {
   }
 
   if (responseType === ItemResponseType.Slider) {
-    const { alerts } = responseValues as SliderItemResponseValues;
+    const { alerts } = (responseValues || {}) as SliderItemResponseValues;
     const isContinuous = get(config, ItemConfigurationSettings.IsContinuous);
 
     if (!alerts?.length) return [];
@@ -496,7 +496,7 @@ const getAlerts = (item: Item) => {
   }
 
   if (responseType === ItemResponseType.SliderRows) {
-    const { rows } = responseValues as SliderRowsResponseValues;
+    const { rows } = (responseValues || {}) as SliderRowsResponseValues;
 
     return (
       rows?.flatMap(
@@ -532,7 +532,8 @@ const getAlerts = (item: Item) => {
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map((item) => ({
-        id: item.id ?? uuidv4(),
+        id: item.id,
+        key: item.key,
         name: item.name,
         question: getDictionaryText(item.question),
         responseType: item.responseType,
@@ -548,9 +549,10 @@ const getActivityFlows = (activityFlows: ActivityFlow[]) =>
   activityFlows.map(({ order, ...activityFlow }) => ({
     ...activityFlow,
     description: getDictionaryText(activityFlow.description),
-    items: activityFlow.items?.map(({ id, activityId }) => ({
+    items: activityFlow.items?.map(({ id, activityId, activityKey, key }) => ({
       id,
-      activityKey: activityId || '',
+      key,
+      activityKey: activityKey || activityId || '',
     })),
   }));
 
@@ -760,7 +762,7 @@ export const getAppletTabs = ({
     hasError: hasAppletActivitiesErrors,
   },
   {
-    labelKey: 'activityFlow',
+    labelKey: 'activityFlows',
     icon: <Svg id="flow-outlined" />,
     activeIcon: <Svg id="flow-filled" />,
     path: Path.ActivityFlow,

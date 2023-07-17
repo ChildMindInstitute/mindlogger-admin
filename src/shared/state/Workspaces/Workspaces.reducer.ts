@@ -1,26 +1,19 @@
 import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
-import { AxiosError } from 'axios';
 
-import { getApiError } from 'shared/utils';
+import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils';
 
 import { Workspace, WorkspacesSchema } from './Workspaces.schema';
-import { getWorkspaceRoles } from './Workspaces.thunk';
+import { getWorkspaceRoles, getWorkspaces } from './Workspaces.thunk';
 import { state as initialState } from './Workspaces.state';
 
 export const reducers = {
   setCurrentWorkspace: (state: WorkspacesSchema, action: PayloadAction<Workspace | null>): void => {
-    state.currentWorkspace = action.payload;
+    state.currentWorkspace.data = action.payload;
   },
 };
 
 export const extraReducers = (builder: ActionReducerMapBuilder<WorkspacesSchema>): void => {
-  builder.addCase(getWorkspaceRoles.pending, ({ roles }, action) => {
-    if (roles.status !== 'loading') {
-      roles.requestId = action.meta.requestId;
-      roles.status = 'loading';
-    }
-  });
-
+  getPendingData({ builder, thunk: getWorkspaceRoles, key: 'roles' });
   builder.addCase(getWorkspaceRoles.fulfilled, ({ roles }, action) => {
     if (roles.status === 'loading' && roles.requestId === action.meta.requestId) {
       roles.requestId = initialState.roles.requestId;
@@ -28,12 +21,9 @@ export const extraReducers = (builder: ActionReducerMapBuilder<WorkspacesSchema>
       roles.data = action.payload.data?.result;
     }
   });
+  getRejectedData({ builder, thunk: getWorkspaceRoles, key: 'roles', initialState });
 
-  builder.addCase(getWorkspaceRoles.rejected, ({ roles }, action) => {
-    if (roles.status === 'loading' && roles.requestId === action.meta.requestId) {
-      roles.requestId = initialState.roles.requestId;
-      roles.status = 'error';
-      roles.error = getApiError(action as PayloadAction<AxiosError>);
-    }
-  });
+  getPendingData({ builder, thunk: getWorkspaces, key: 'workspaces' });
+  getFulfilledData({ builder, thunk: getWorkspaces, key: 'workspaces', initialState });
+  getRejectedData({ builder, thunk: getWorkspaces, key: 'workspaces', initialState });
 };

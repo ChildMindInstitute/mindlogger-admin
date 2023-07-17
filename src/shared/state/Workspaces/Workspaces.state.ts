@@ -8,6 +8,7 @@ const initialStateData = {
 };
 
 export const state: WorkspacesSchema = {
-  currentWorkspace: null,
+  workspaces: initialStateData,
+  currentWorkspace: initialStateData,
   roles: initialStateData,
 };

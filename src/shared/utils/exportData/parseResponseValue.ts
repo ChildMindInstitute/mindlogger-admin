@@ -4,7 +4,6 @@ import {
   DecryptedAnswerData,
   DecryptedDateAnswer,
   DecryptedDateRangeAnswer,
-  DecryptedDrawingAnswer,
   DecryptedGeolocationAnswer,
   DecryptedMediaAnswer,
   DecryptedMultiSelectionPerRowAnswer,
@@ -12,11 +11,11 @@ import {
   DecryptedSliderRowsAnswer,
   DecryptedStabilityTrackerAnswer,
   DecryptedTimeAnswer,
-  ExtendedEvent,
   ExtendedExportAnswerWithoutEncryption,
+  ExtendedEvent,
 } from 'shared/types';
 import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
-import { getStabilityTrackerCsvName } from 'shared/utils';
+import { getFileExtension, getMediaFileName, getStabilityTrackerCsvName } from 'shared/utils';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
@@ -41,7 +40,7 @@ export const parseResponseValue = <
 
   if (ItemsWithFileResponses.includes(inputType)) {
     try {
-      return (value as DecryptedMediaAnswer['value'])?.split('/').pop() ?? '';
+      return getMediaFileName(item, getFileExtension((item.answer as DecryptedMediaAnswer).value));
     } catch (error) {
       console.warn(error);
     }
@@ -67,7 +66,7 @@ export const parseResponseValue = <
         (value as DecryptedGeolocationAnswer['value'])?.longitude
       })`;
     case ItemResponseType.Drawing:
-      return (value as DecryptedDrawingAnswer['value']).uri.split('/').pop();
+      return getMediaFileName(item, 'svg');
     case ItemResponseType.SingleSelectionPerRow: {
       const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
 

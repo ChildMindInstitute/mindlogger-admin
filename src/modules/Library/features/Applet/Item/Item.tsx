@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import 'md-editor-rt/lib/style.css';
 import { Checkbox } from '@mui/material';
+import 'md-editor-rt/lib/style.css';
 
 import { Svg } from 'shared/components';
 import { StyledSvgArrowContainer } from 'shared/styles';
 import { getDictionaryText } from 'shared/utils';
+import { updateSelectedItemsInStorage } from 'modules/Library/utils';
+import { useAppDispatch } from 'redux/store';
+import { library } from 'redux/modules';
 
 import {
   StyledItemContainer,
@@ -15,26 +18,43 @@ import {
 } from './Item.styles';
 import { ItemProps } from './Item.types';
 import { renderItemContent } from './Item.utils';
-import { AppletForm } from '../Applet.types';
+import { AppletUiType, LibraryForm } from '../Applet.types';
 
-export const Item = ({ item, appletId, activityName }: ItemProps) => {
-  const { control, getValues, setValue } = useFormContext<AppletForm>();
+export const Item = ({ item, appletId, activityName, activityKey, uiType }: ItemProps) => {
+  const { control, getValues, setValue } = useFormContext<LibraryForm>();
+  const dispatch = useAppDispatch();
   const [itemVisible, setItemVisible] = useState(false);
+  const selectedItems = getValues()[appletId];
 
-  const handleSelect = () => {
+  const handleSelect = async () => {
     const selectedItems = getValues()[appletId];
-    const checked = !!selectedItems?.find(({ name }) => name === item.name);
+    const itemNamePlusActivityName = `${item.name}-${activityName}`;
+    const activityNamePlusId = `${activityName}-${appletId}`;
+    const checked = !!selectedItems?.find(
+      (item) => item.itemNamePlusActivityName === itemNamePlusActivityName,
+    );
     const updatedSelectedItems = checked
-      ? selectedItems?.filter(({ name }) => name !== item.name)
+      ? selectedItems?.filter((item) => item.itemNamePlusActivityName !== itemNamePlusActivityName)
       : [
           ...selectedItems,
           {
-            name: item.name,
+            itemNamePlusActivityName,
+            activityNamePlusId,
             activityName,
+            activityKey,
           },
         ];
-    setValue(appletId, updatedSelectedItems);
+    await setValue(appletId, updatedSelectedItems);
+
+    if (uiType === AppletUiType.Cart) {
+      const { isNoSelectedItems } = updateSelectedItemsInStorage(getValues(), appletId);
+      dispatch(library.actions.setAddToCartBtnDisabled(isNoSelectedItems));
+    }
   };
+
+  const isChecked = !!selectedItems?.find(
+    ({ itemNamePlusActivityName }) => itemNamePlusActivityName === `${item.name}-${activityName}`,
+  );
 
   return (
     <StyledItemContainer>
@@ -44,7 +64,7 @@ export const Item = ({ item, appletId, activityName }: ItemProps) => {
         render={() => (
           <Checkbox
             sx={{ width: '4rem', height: '4rem' }}
-            checked={!!getValues()[appletId].find(({ name }) => name === item.name)}
+            checked={isChecked}
             onChange={handleSelect}
           />
         )}

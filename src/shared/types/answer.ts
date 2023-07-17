@@ -266,7 +266,12 @@ export const enum ElementType {
 export type AppletExportData = {
   reportData: ReturnType<typeof getReportCSVObject>[];
   activityJourneyData: ReturnType<typeof getJourneyCSVObject>[];
-  mediaData: string[];
+  mediaData: ExportMediaData[];
   drawingItemsData: ExportCsvData[];
   stabilityTrackerItemsData: ExportCsvData[];
+};
+
+export type ExportMediaData = {
+  fileName: string;
+  url: string;
 };

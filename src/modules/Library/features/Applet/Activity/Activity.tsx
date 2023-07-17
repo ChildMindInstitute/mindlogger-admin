@@ -1,9 +1,12 @@
 import { Fragment, SyntheticEvent, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Checkbox } from '@mui/material';
+import { Box, Checkbox } from '@mui/material';
 
 import { Svg } from 'shared/components';
-import { StyledSvgArrowContainer } from 'shared/styles';
+import { StyledFlexTopCenter, StyledSvgArrowContainer } from 'shared/styles';
+import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
+import { useAppDispatch } from 'redux/store';
+import { library } from 'redux/modules';
 
 import { ActivityProps } from './Activity.types';
 import {
@@ -13,44 +16,78 @@ import {
   StyledItemsList,
 } from './Activity.styles';
 import { Item } from '../Item';
-import { AppletForm, SelectedItem } from '../Applet.types';
+import { AppletUiType, LibraryForm, SelectedItem } from '../Applet.types';
+import { checkIfPerformanceTask } from './Activity.utils';
 
-export const Activity = ({ appletId, activity: { name, items } }: ActivityProps) => {
-  const { watch, setValue, getValues } = useFormContext<AppletForm>();
+export const Activity = ({ appletId, activity: { name, items, key }, uiType }: ActivityProps) => {
+  const { watch, setValue, getValues } = useFormContext<LibraryForm>();
+  const dispatch = useAppDispatch();
   const watchApplet = watch(appletId);
   const [activityVisible, setActivityVisible] = useState(false);
   const [activityIndeterminate, setActivityIndeterminate] = useState(false);
   const [activityChecked, setActivityChecked] = useState(false);
 
-  const handleActivityChecked = (event: SyntheticEvent<Element, Event>, checked: boolean) => {
+  const updateSelectedItems = () => {
+    if (uiType === AppletUiType.Cart) {
+      const { isNoSelectedItems } = updateSelectedItemsInStorage(getValues(), appletId);
+      dispatch(library.actions.setAddToCartBtnDisabled(isNoSelectedItems));
+    }
+  };
+
+  const handleActivityChecked = async (event: SyntheticEvent<Element, Event>, checked: boolean) => {
     setActivityChecked(checked);
     const selectedItems = getValues()[appletId];
+    const activityNamePlusId = `${name}-${appletId}`;
 
     if (!checked) {
-      return setValue(
+      await setValue(
         appletId,
-        selectedItems.filter((selectedItem) => selectedItem.activityName !== name),
+        selectedItems.filter(
+          (selectedItem) => selectedItem.activityNamePlusId !== activityNamePlusId,
+        ),
       );
+      updateSelectedItems();
+
+      return;
     }
 
-    const unselectedItems = items.reduce(
-      (unselected: SelectedItem[], item) =>
-        selectedItems.find((selectedItem) => item.name === selectedItem.name)
-          ? unselected
-          : [...unselected, { name: item.name, activityName: name }],
-      [],
-    );
+    const unselectedItems = items.reduce((unselected: SelectedItem[], item) => {
+      const itemNamePlusActivityName = `${item.name}-${name}`;
 
-    setValue(appletId, [...selectedItems, ...unselectedItems]);
+      return selectedItems.find(
+        (selectedItem) => selectedItem.itemNamePlusActivityName === itemNamePlusActivityName,
+      )
+        ? unselected
+        : [
+            ...unselected,
+            { itemNamePlusActivityName, activityName: name, activityNamePlusId, activityKey: key },
+          ];
+    }, []);
+
+    await setValue(appletId, [...selectedItems, ...unselectedItems]);
+
+    updateSelectedItems();
+  };
+
+  const isPerfTask = checkIfPerformanceTask(items);
+  const arrowSgvId = activityVisible ? 'navigate-up' : 'navigate-down';
+
+  const getCheckedActivity = (currentItems: SelectedItem[]) => {
+    const currentActivityItems = currentItems?.filter((item) => item.activityName === name);
+    const isAllItemsSelected = currentActivityItems?.length === items.length;
+    const isIndeterminate = currentActivityItems?.length > 0 && !isAllItemsSelected;
+    setActivityIndeterminate(isIndeterminate);
+    setActivityChecked(isAllItemsSelected);
   };
 
   useEffect(() => {
-    const currentActivityItems = watchApplet.filter((item) => item.activityName === name);
-    const isAllItemsSelected = currentActivityItems.length === items.length;
-    const isIndeterminate = currentActivityItems.length > 0 && !isAllItemsSelected;
-    setActivityIndeterminate(isIndeterminate);
-    setActivityChecked(isAllItemsSelected);
+    getCheckedActivity(watchApplet);
   }, [watchApplet]);
+
+  useEffect(() => {
+    const selectedAppletItems = getSelectedAppletFromStorage(appletId);
+    selectedAppletItems && setValue(appletId, selectedAppletItems);
+  }, [appletId]);
 
   return (
     <StyledActivityContainer>
@@ -60,17 +97,30 @@ export const Activity = ({ appletId, activity: { name, items } }: ActivityProps)
         indeterminate={activityIndeterminate}
         onChange={handleActivityChecked}
       />
-      <StyledActivityHeader onClick={() => setActivityVisible((prevState) => !prevState)}>
-        <StyledSvgArrowContainer>
-          <Svg id={activityVisible ? 'navigate-up' : 'navigate-down'} />
-        </StyledSvgArrowContainer>
-        <StyledActivityName>{name}</StyledActivityName>
-      </StyledActivityHeader>
+      {isPerfTask ? (
+        <StyledFlexTopCenter>
+          <Box sx={{ width: '4rem', height: '4rem' }} />
+          <StyledActivityName>{name}</StyledActivityName>
+        </StyledFlexTopCenter>
+      ) : (
+        <StyledActivityHeader onClick={() => setActivityVisible((prevState) => !prevState)}>
+          <StyledSvgArrowContainer>
+            <Svg id={arrowSgvId} />
+          </StyledSvgArrowContainer>
+          <StyledActivityName>{name}</StyledActivityName>
+        </StyledActivityHeader>
+      )}
       {activityVisible && !!items?.length && (
         <StyledItemsList>
           {items?.map((item) => (
             <Fragment key={item.name}>
-              <Item appletId={appletId} activityName={name} item={item} />
+              <Item
+                appletId={appletId}
+                activityName={name}
+                item={item}
+                activityKey={key}
+                uiType={uiType}
+              />
             </Fragment>
           ))}
         </StyledItemsList>
