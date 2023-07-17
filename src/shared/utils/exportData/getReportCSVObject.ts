@@ -28,7 +28,7 @@ export const getReportCSVObject = <T>({
     respondentId,
     activityId,
     activityName,
-    flowId,
+    flowName,
     version,
     reviewedAnswerId,
   } = item;
@@ -46,7 +46,7 @@ export const getReportCSVObject = <T>({
     userId: respondentId,
     activity_id: activityId,
     activity_name: activityName,
-    activity_flow: flowId,
+    activity_flow: flowName,
     item: activityItem.name,
     response: parseResponseValue(item),
     prompt: replaceItemVariableWithName({

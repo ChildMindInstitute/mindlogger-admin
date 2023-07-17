@@ -71,7 +71,7 @@ export const getJourneyCSVObject = <T>({
     respondentId,
     activityId,
     activityName,
-    flowId,
+    flowName,
     version,
   } = event;
 
@@ -93,7 +93,7 @@ export const getJourneyCSVObject = <T>({
     secret_user_id: respondentSecretId,
     user_id: respondentId,
     activity_id: activityId,
-    activity_flow: flowId,
+    activity_flow: flowName,
     activity_name: activityName,
     item: activityItem.name,
     prompt: replaceItemVariableWithName({
