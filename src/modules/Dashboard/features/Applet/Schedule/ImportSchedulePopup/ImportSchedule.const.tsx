@@ -35,8 +35,8 @@ export const uploadLabel = (
   </Trans>
 );
 
-export const timeValidationRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-export const notificationValidationRegex = /^([01]\d|2[0-3]):([0-5]\d)|(-)$/;
+export const timeValidationRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+export const notificationValidationRegex = /^([01]?[0-9]|2[0-3]):([0-5][0-9])|(-)$/;
 
 const dayValidation = '(?:0?[1-9]|[12][0-9]|3[01])';
 const monthValidation =
