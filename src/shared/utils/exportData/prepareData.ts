@@ -112,7 +112,7 @@ const getActivityJourneyData = (
     });
   });
 
-  return activityJourneyData.concat(...events);
+  return activityJourneyData.concat(...events).filter(Boolean);
 };
 
 const getDrawingItemsData = (
