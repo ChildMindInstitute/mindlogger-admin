@@ -75,7 +75,7 @@ export const calcScores = <T>(
       }
     }
 
-    if (typedOptions?.minValue && typedOptions?.scores?.length) {
+    if (typedOptions?.scores?.length) {
       const min = Number(typedOptions.minValue);
       const max = Number(typedOptions.maxValue);
       const scores = typedOptions.scores;
