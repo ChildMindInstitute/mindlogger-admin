@@ -160,6 +160,31 @@ export type DecryptedDrawingAnswer = {
   text?: string | null;
 };
 
+type ABTrailsPoint = {
+  time: number;
+  valid: boolean;
+  start: string;
+  end: string;
+  actual?: string;
+} & Point;
+
+type ABTrailsLine = {
+  points: ABTrailsPoint[];
+};
+
+export type DecryptedABTrailsValue = {
+  lines: ABTrailsLine[];
+  width: number;
+  currentIndex: number;
+  startTime: number;
+  updated: boolean;
+};
+
+export type DecryptedABTrailsAnswer = {
+  value: DecryptedABTrailsValue;
+  text?: string | null;
+};
+
 export type DecryptedSingleSelectionPerRowAnswer = {
   value: string[];
   text?: string | null;
@@ -214,6 +239,7 @@ export type AnswerDTO =
   | DecryptedSingleSelectionPerRowAnswer
   | DecryptedMultiSelectionPerRowAnswer
   | DecryptedSliderRowsAnswer
+  | DecryptedABTrailsAnswer
   | DecryptedStabilityTrackerAnswer;
 
 export type AnswerValue =
@@ -232,6 +258,7 @@ export type AnswerValue =
   | DecryptedSingleSelectionPerRowAnswer['value']
   | DecryptedMultiSelectionPerRowAnswer['value']
   | DecryptedSliderRowsAnswer['value']
+  | DecryptedABTrailsAnswer['value']
   | DecryptedStabilityTrackerAnswer['value'];
 
 export const enum UserActionType {
@@ -269,6 +296,7 @@ export type AppletExportData = {
   mediaData: ExportMediaData[];
   drawingItemsData: ExportCsvData[];
   stabilityTrackerItemsData: ExportCsvData[];
+  abTrailsItemsData: ExportCsvData[];
 };
 
 export type ExportMediaData = {

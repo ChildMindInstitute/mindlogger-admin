@@ -58,9 +58,11 @@ export const getSplashScreen = (
 export const getJourneyCSVObject = <T>({
   event,
   rawAnswersObject,
+  index,
 }: {
   event: ExtendedEvent<ExtendedExportAnswerWithoutEncryption>;
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
+  index: number;
 }) => {
   const {
     activityItem,
@@ -74,6 +76,7 @@ export const getJourneyCSVObject = <T>({
     flowName,
     version,
   } = event;
+  if (!activityItem) return;
 
   const responseValues = activityItem?.responseValues as SingleAndMultipleSelectItemResponseValues &
     SliderItemResponseValues;
@@ -101,7 +104,7 @@ export const getJourneyCSVObject = <T>({
       items: event.items,
       rawAnswersObject,
     }),
-    response: parseResponseValue(event),
+    response: parseResponseValue(event, index),
     options: replaceItemVariableWithName({
       markdown: parseOptions(responseValues, event.activityItem?.responseType) ?? '',
       items: event.items,
