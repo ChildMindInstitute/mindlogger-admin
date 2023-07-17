@@ -1,5 +1,6 @@
 import {
   AppletExportData,
+  DecryptedABTrailsAnswer,
   DecryptedActivityData,
   DecryptedAnswerData,
   DecryptedDrawingAnswer,
@@ -18,6 +19,7 @@ import {
   convertJsonToCsv,
   getStabilityRecords,
   getStabilityTrackerCsvName,
+  getABTrailsCsvName,
   getMediaFileName,
   getFileExtension,
   getSplashScreen,
@@ -28,6 +30,7 @@ import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
 import { getSubscales } from './getSubscales';
 import { getDrawingLines } from './getDrawingLines';
+import { getABTrailsRecords } from './getABTrailsRecords';
 
 const getDecryptedAnswersObject = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
@@ -38,13 +41,14 @@ const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
-  const answers = decryptedAnswers.reduce((filteredAcc, item) => {
+  const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
     if (item.activityItem?.config?.skippableItem || item.answer === null) return filteredAcc;
 
     return filteredAcc.concat(
       getReportCSVObject({
         item,
         rawAnswersObject,
+        index,
       }),
     );
   }, [] as ReturnType<typeof getReportCSVObject>[]);
@@ -106,10 +110,11 @@ const getActivityJourneyData = (
         ...decryptedAnswersObject[event.screen],
       },
       rawAnswersObject,
+      index,
     });
   });
 
-  return activityJourneyData.concat(...events);
+  return activityJourneyData.concat(...events).filter(Boolean);
 };
 
 const getDrawingItemsData = (
@@ -149,6 +154,25 @@ const getStabilityTrackerItemsData = (
   return stabilityTrackerItemsData.concat(...stabilityTrackerAnswers);
 };
 
+const getABTrailsItemsData = (
+  abTrackerItemsData: AppletExportData['abTrailsItemsData'],
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+) => {
+  const abTrackerAnswers = decryptedAnswers.reduce((acc, item, index) => {
+    const responseType = item.activityItem?.responseType;
+    if (responseType !== ItemResponseType.ABTrails) return acc;
+
+    const abTrackerValue = (item.answer as DecryptedABTrailsAnswer).value;
+
+    return acc.concat({
+      name: getABTrailsCsvName(index, item.respondentId),
+      data: convertJsonToCsv(getABTrailsRecords(abTrackerValue.lines, abTrackerValue.width || 100)),
+    });
+  }, [] as ExportCsvData[]);
+
+  return abTrackerItemsData.concat(...abTrackerAnswers);
+};
+
 export const prepareData = (
   data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
   getDecryptedAnswers: (
@@ -177,6 +201,7 @@ export const prepareData = (
         acc.stabilityTrackerItemsData,
         data.decryptedAnswers,
       );
+      const abTrailsItemsData = getABTrailsItemsData(acc.abTrailsItemsData, data.decryptedAnswers);
 
       return {
         reportData,
@@ -184,6 +209,7 @@ export const prepareData = (
         mediaData,
         drawingItemsData,
         stabilityTrackerItemsData,
+        abTrailsItemsData,
       };
     },
     {
@@ -192,6 +218,7 @@ export const prepareData = (
       mediaData: [],
       drawingItemsData: [],
       stabilityTrackerItemsData: [],
+      abTrailsItemsData: [],
     } as AppletExportData,
   );
 };
