@@ -165,7 +165,8 @@ const getUploadedTime = (time: string | Date) => {
     return format(time, DateFormats.Time);
   }
 
-  return time;
+  //if the time format is H:mm getStartEndComparison makes invalid date
+  return time.replace(/^[0-9]:/, (match) => `0${match}`);
 };
 
 const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) =>
