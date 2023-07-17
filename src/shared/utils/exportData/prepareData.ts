@@ -41,13 +41,14 @@ const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
-  const answers = decryptedAnswers.reduce((filteredAcc, item) => {
+  const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
     if (item.activityItem?.config?.skippableItem || item.answer === null) return filteredAcc;
 
     return filteredAcc.concat(
       getReportCSVObject({
         item,
         rawAnswersObject,
+        index,
       }),
     );
   }, [] as ReturnType<typeof getReportCSVObject>[]);
@@ -109,6 +110,7 @@ const getActivityJourneyData = (
         ...decryptedAnswersObject[event.screen],
       },
       rawAnswersObject,
+      index,
     });
   });
 

@@ -15,9 +15,11 @@ import { getRawScores } from './getRowScores';
 export const getReportCSVObject = <T>({
   item,
   rawAnswersObject,
+  index,
 }: {
   item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>;
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
+  index: number;
 }) => {
   const {
     activityItem,
@@ -48,7 +50,7 @@ export const getReportCSVObject = <T>({
     activity_name: activityName,
     activity_flow: flowId,
     item: activityItem.name,
-    response: parseResponseValue(item),
+    response: parseResponseValue(item, index),
     prompt: replaceItemVariableWithName({
       markdown: activityItem.question?.en ?? '',
       items: item.items,

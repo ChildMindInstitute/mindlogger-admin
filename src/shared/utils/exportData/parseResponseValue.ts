@@ -1,7 +1,6 @@
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import {
   AnswerDTO,
-  DecryptedABTrailsAnswer,
   DecryptedAnswerData,
   DecryptedDateAnswer,
   DecryptedDateRangeAnswer,
@@ -15,7 +14,12 @@ import {
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
-import { getFileExtension, getMediaFileName, getStabilityTrackerCsvName } from 'shared/utils';
+import {
+  getABTrailsCsvName,
+  getFileExtension,
+  getMediaFileName,
+  getStabilityTrackerCsvName,
+} from 'shared/utils';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
@@ -24,6 +28,7 @@ export const parseResponseValue = <
   T extends DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
 >(
   item: T,
+  index: number,
 ) => {
   const { answer, activityItem, id: answerId } = item;
   const inputType = activityItem.responseType;
@@ -64,7 +69,7 @@ export const parseResponseValue = <
     case ItemResponseType.Drawing:
       return getMediaFileName(item, 'svg');
     case ItemResponseType.ABTrails:
-      return value as DecryptedABTrailsAnswer['value'];
+      return getABTrailsCsvName(index, item.respondentId);
     case ItemResponseType.SingleSelectionPerRow: {
       const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
 
