@@ -9,6 +9,7 @@ export const enum ZipFile {
   Drawing = 'drawing',
   StabilityTracker = 'stability-tracker',
   ABTrails = 'trails',
+  Flanker = 'flanker',
 }
 
 export const getReportZipName = (name: ZipFile) =>
@@ -33,3 +34,7 @@ export const getFileExtension = (fileUrl: string) => {
 
   return extension;
 };
+
+export const getFlankerCsvName = (
+  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+) => `${item.id}-${item.activityItem.id}.csv`;

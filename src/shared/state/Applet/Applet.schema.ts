@@ -218,6 +218,7 @@ export type FlankerConfig = {
   blockType: RoundTypeEnum;
   skippableItem?: boolean;
   removeBackButton?: boolean;
+  blockIndex?: number;
 };
 
 type ABTrailsConfig = {
@@ -429,12 +430,12 @@ export type ConditionalLogic = {
   conditions: Array<Condition>;
 };
 
-export type Item = {
+export type Item<T = Config> = {
   id?: string;
   key?: string;
   name: string;
   question: Record<string, string>;
-  config: Config;
+  config: T;
   responseType: ItemResponseType;
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
