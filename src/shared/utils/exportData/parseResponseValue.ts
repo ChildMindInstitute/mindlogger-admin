@@ -12,6 +12,7 @@ import {
   DecryptedStabilityTrackerAnswer,
   DecryptedTimeAnswer,
   ExtendedExportAnswerWithoutEncryption,
+  ExtendedEvent,
 } from 'shared/types';
 import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
 import {
@@ -29,8 +30,12 @@ export const parseResponseValue = <
 >(
   item: T,
   index: number,
+  isEvent = false,
 ) => {
-  const { answer, activityItem, id: answerId } = item;
+  const answer: AnswerDTO | undefined = isEvent
+    ? (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response
+    : item.answer;
+  const { activityItem, id: answerId } = item;
   const inputType = activityItem.responseType;
   const key =
     answer && answer === Object(answer) ? (Object.keys(answer)?.[0] as keyof AnswerDTO) : undefined;
@@ -52,8 +57,8 @@ export const parseResponseValue = <
       return `time_range: from (hr ${
         (value as DecryptedDateRangeAnswer['value'])?.from?.hour
       }, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
-        (value as DecryptedDateRangeAnswer['value'])?.to?.hour
-      }, min ${(value as DecryptedDateRangeAnswer['value'])?.to?.minute})`;
+        (value as DecryptedDateRangeAnswer['value'])?.to?.hour ?? 0
+      }, min ${(value as DecryptedDateRangeAnswer['value'])?.to?.minute ?? 0})`;
     case ItemResponseType.Date:
       return `date: ${(value as DecryptedDateAnswer['value'])?.day}/${
         (value as DecryptedDateAnswer['value'])?.month
