@@ -41,7 +41,7 @@ const getItemScoreRange = (item: Item) => {
         return result;
       },
       [],
-    ) as unknown as number[];
+    ) as number[];
   } else {
     scores = (item as SliderItem).responseValues.scores as number[];
   }
