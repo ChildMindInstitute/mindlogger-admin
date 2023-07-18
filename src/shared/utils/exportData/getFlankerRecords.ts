@@ -111,18 +111,18 @@ export const getResponseObj = ({
   }
 
   return {
-    blockNumber,
-    trialNumber,
-    trialType,
-    eventType,
-    responseValue,
-    responseAccuracy,
-    videoDisplayRequestTimestamp,
-    responseTouchTimestamp,
-    responseTime,
-    eventStartTimestamp,
-    eventOffset,
-    failedPractice: '',
+    [FlankerRecordFields.BlockNumber]: blockNumber,
+    [FlankerRecordFields.TrialNumber]: trialNumber,
+    [FlankerRecordFields.TrialType]: trialType,
+    [FlankerRecordFields.EventType]: eventType,
+    [FlankerRecordFields.ResponseValue]: responseValue,
+    [FlankerRecordFields.ResponseAccuracy]: responseAccuracy,
+    [FlankerRecordFields.VideoDisplayRequestTimestamp]: videoDisplayRequestTimestamp,
+    [FlankerRecordFields.ResponseTouchTimestamp]: responseTouchTimestamp,
+    [FlankerRecordFields.ResponseTime]: responseTime,
+    [FlankerRecordFields.EventStartTimestamp]: eventStartTimestamp,
+    [FlankerRecordFields.EventOffset]: eventOffset,
+    [FlankerRecordFields.FailedPractice]: '',
   };
 };
 
@@ -215,10 +215,10 @@ export const getFlankerRecords = (
         trialStartTimestamp,
         types,
       }),
-      blockClock,
-      experimentClock,
-      trialStartTimestamp,
-      trialOffset: trialStartTimestamp - blockClock,
+      [FlankerRecordFields.BlockClock]: blockClock,
+      [FlankerRecordFields.ExperimentClock]: experimentClock,
+      [FlankerRecordFields.TrialStartTimestamp]: trialStartTimestamp,
+      [FlankerRecordFields.TrialOffset]: trialStartTimestamp - blockClock,
     };
     result.push(row);
 
