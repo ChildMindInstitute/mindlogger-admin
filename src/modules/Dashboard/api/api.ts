@@ -596,10 +596,10 @@ export const getAppletVersionChangesApi = (
   signal?: AbortSignal,
 ) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
 
-export const getExportDataApi = ({ appletId, respondentId }: ExportData, signal?: AbortSignal) =>
+export const getExportDataApi = ({ appletId, respondentIds }: ExportData, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/data`, {
     params: {
-      respondentId,
+      respondentIds,
     },
     signal,
   });

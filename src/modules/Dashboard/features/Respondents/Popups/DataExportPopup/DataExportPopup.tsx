@@ -58,7 +58,7 @@ export const DataExportPopup = ({
     if (appletId && respondentId) {
       setDataIsExporting(true);
 
-      await execute({ appletId, respondentId });
+      await execute({ appletId, respondentIds: respondentId });
     }
   };
 
