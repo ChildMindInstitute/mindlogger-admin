@@ -351,3 +351,6 @@ export type FlankerResponseRecord = {
   [FlankerRecordFields.EventOffset]: '.' | number;
   [FlankerRecordFields.FailedPractice]: '.' | string;
 };
+
+export type DotType = '.';
+export type NumberWithDotType = DotType | number;

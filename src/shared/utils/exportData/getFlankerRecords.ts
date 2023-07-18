@@ -1,5 +1,11 @@
 import { FlankerConfig, Item } from 'shared/state';
-import { DecryptedFlankerAnswer, DecryptedFlankerAnswerItemValue, FlankerTag } from 'shared/types';
+import {
+  DecryptedFlankerAnswer,
+  DecryptedFlankerAnswerItemValue,
+  DotType,
+  FlankerTag,
+  NumberWithDotType,
+} from 'shared/types';
 import { CorrectPress } from 'modules/Builder/types';
 
 const getImage = (image: string, alt: string) => {
@@ -20,6 +26,35 @@ const getTypes = (trials: FlankerConfig['stimulusTrials']) =>
     {} as Record<string, string>,
   );
 
+const getEventType = (tag: FlankerTag) => {
+  switch (tag) {
+    case FlankerTag.Response:
+      return 'Response';
+    case FlankerTag.Trial:
+      return 'Stimulus';
+    case FlankerTag.Fixation:
+      return 'Fixation';
+    case FlankerTag.Feedback:
+      return 'Feedback';
+  }
+};
+
+const getTrialType = ({
+  tag,
+  types,
+  response,
+}: {
+  tag: FlankerTag;
+  types: ReturnType<typeof getTypes>;
+  response: DecryptedFlankerAnswerItemValue;
+}) => {
+  if (tag === FlankerTag.Trial || tag === FlankerTag.Response) {
+    return types[response.question] || response.question;
+  }
+
+  return tag === FlankerTag.Feedback ? 0 : -1;
+};
+
 export const getResponseObj = ({
   response,
   tag,
@@ -35,42 +70,20 @@ export const getResponseObj = ({
 }) => {
   const trialNumber = response.trial_index;
   const blockNumber = config.blockIndex ?? 0;
-  let trialType: number | string;
-  let eventType = '';
+  const trialType: number | string = getTrialType({
+    tag,
+    types,
+    response,
+  });
+  const eventType = getEventType(tag);
 
-  switch (tag) {
-    case FlankerTag.Response:
-      eventType = 'Response';
-      break;
-    case FlankerTag.Trial:
-      eventType = 'Stimulus';
-      break;
-    case FlankerTag.Fixation:
-      eventType = 'Fixation';
-      break;
-    case FlankerTag.Feedback:
-      eventType = 'Feedback';
-      break;
-  }
-
-  if (tag !== FlankerTag.Trial) {
-    trialType = tag === FlankerTag.Feedback ? 0 : -1;
-
-    if (tag === FlankerTag.Response) {
-      trialType = types[response.question] || response.question;
-    }
-  } else {
-    trialType = types[response.question] || response.question;
-  }
-
-  let responseValue: '.' | 'L' | 'R' = '.';
-  let responseAccuracy: '.' | '1' | '0' = '.';
-  let responseTouchTimestamp: '.' | number = '.';
-  let responseTime: '.' | number = '.';
-
-  let videoDisplayRequestTimestamp: '.' | number = response.start_time + response.offset;
-  let eventStartTimestamp: '.' | number = response.start_timestamp;
-  let eventOffset: '.' | number = eventStartTimestamp - trialStartTimestamp;
+  let responseValue: DotType | 'L' | 'R' = '.';
+  let responseAccuracy: DotType | '1' | '0' = '.';
+  let responseTouchTimestamp: NumberWithDotType = '.';
+  let responseTime: NumberWithDotType = '.';
+  let videoDisplayRequestTimestamp: NumberWithDotType = response.start_time + response.offset;
+  let eventStartTimestamp: NumberWithDotType = response.start_timestamp;
+  let eventOffset: NumberWithDotType = eventStartTimestamp - trialStartTimestamp;
 
   if (tag === FlankerTag.Response) {
     eventOffset = eventStartTimestamp = '.';
@@ -114,7 +127,6 @@ export const enum FlankerRecordFields {
   TrialOffset = 'trialOffset',
   EventOffset = 'eventOffset',
   ResponseTime = 'responseTime',
-
   BlockNumber = 'blockNumber',
   TrialNumber = 'trialNumber',
   TrialType = 'trialType',
