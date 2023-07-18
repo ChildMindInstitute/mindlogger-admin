@@ -11,3 +11,4 @@ export * from './exportCsvZip';
 export * from './exportDataSucceed';
 export * from './getStabilityRecords';
 export * from './getSubscales';
+export * from './getFlankerRecords';

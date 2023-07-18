@@ -1,5 +1,7 @@
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
 import { getJourneyCSVObject, getReportCSVObject } from 'shared/utils';
+import { CorrectPress } from 'modules/Builder/types';
+import { FlankerRecordFields } from 'shared/utils/exportData/getFlankerRecords';
 
 export type ExportActivity = {
   createdAt: string;
@@ -45,8 +47,8 @@ export type ExportAnswer = {
   flowId: null | string;
   reviewedAnswerId: null | string;
   scheduledDatetime?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startDatetime: string;
+  endDatetime: string;
 };
 
 export type ExtendedExportAnswer = ExportAnswer & EncryptedAnswerSharedProps;
@@ -216,6 +218,30 @@ export type DecryptedStabilityTrackerAnswer = {
   };
 };
 
+export const enum FlankerTag {
+  Response = 'response',
+  Trial = 'trial',
+  Fixation = 'fixation',
+  Feedback = 'feedback',
+}
+
+export type DecryptedFlankerAnswerItemValue = {
+  button_pressed?: CorrectPress;
+  correct?: boolean;
+  duration: number;
+  offset: number;
+  question: string;
+  response_touch_timestamp: number;
+  start_time: number;
+  start_timestamp: number;
+  tag: FlankerTag;
+  trial_index: number;
+};
+
+export type DecryptedFlankerAnswer = {
+  value: DecryptedFlankerAnswerItemValue[];
+};
+
 export type AnswerDTO =
   | null
   | DecryptedTextAnswer
@@ -233,7 +259,8 @@ export type AnswerDTO =
   | DecryptedMultiSelectionPerRowAnswer
   | DecryptedSliderRowsAnswer
   | DecryptedABTrailsAnswer
-  | DecryptedStabilityTrackerAnswer;
+  | DecryptedStabilityTrackerAnswer
+  | DecryptedFlankerAnswer;
 
 export type AnswerValue =
   | null
@@ -252,7 +279,8 @@ export type AnswerValue =
   | DecryptedMultiSelectionPerRowAnswer['value']
   | DecryptedSliderRowsAnswer['value']
   | DecryptedABTrailsAnswer['value']
-  | DecryptedStabilityTrackerAnswer['value'];
+  | DecryptedStabilityTrackerAnswer['value']
+  | DecryptedFlankerAnswer['value'];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
@@ -290,9 +318,40 @@ export type AppletExportData = {
   drawingItemsData: ExportCsvData[];
   stabilityTrackerItemsData: ExportCsvData[];
   abTrailsItemsData: ExportCsvData[];
+  flankerItemsData: ExportCsvData[];
 };
 
 export type ExportMediaData = {
   fileName: string;
   url: string;
 };
+
+export type FlankerResponseRecord = {
+  [FlankerRecordFields.BlockClock]: NumberWithDotType;
+  [FlankerRecordFields.ExperimentClock]: NumberWithDotType;
+  [FlankerRecordFields.TrialStartTimestamp]: NumberWithDotType;
+  [FlankerRecordFields.TrialOffset]: NumberWithDotType;
+  [FlankerRecordFields.BlockNumber]: number;
+  [FlankerRecordFields.TrialNumber]: number;
+  [FlankerRecordFields.TrialType]: string | number;
+  [FlankerRecordFields.EventType]: string;
+  [FlankerRecordFields.ResponseValue]: DotType | FlankerResponseValue;
+  [FlankerRecordFields.ResponseAccuracy]: DotType | FlankerResponseAccuracy;
+  [FlankerRecordFields.VideoDisplayRequestTimestamp]: NumberWithDotType;
+  [FlankerRecordFields.ResponseTouchTimestamp]: NumberWithDotType;
+  [FlankerRecordFields.ResponseTime]: NumberWithDotType;
+  [FlankerRecordFields.EventStartTimestamp]: NumberWithDotType;
+  [FlankerRecordFields.EventOffset]: NumberWithDotType;
+  [FlankerRecordFields.FailedPractice]: DotType | string;
+};
+
+export type DotType = '.';
+export type NumberWithDotType = DotType | number;
+export const enum FlankerResponseValue {
+  Left = 'L',
+  Right = 'R',
+}
+export const enum FlankerResponseAccuracy {
+  Correct = '1',
+  Incorrect = '0',
+}

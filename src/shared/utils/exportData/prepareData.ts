@@ -4,6 +4,7 @@ import {
   DecryptedActivityData,
   DecryptedAnswerData,
   DecryptedDrawingAnswer,
+  DecryptedFlankerAnswer,
   DecryptedMediaAnswer,
   DecryptedStabilityTrackerAnswer,
   EventDTO,
@@ -23,7 +24,10 @@ import {
   getMediaFileName,
   getFileExtension,
   getSplashScreen,
+  getFlankerRecords,
+  getFlankerCsvName,
 } from 'shared/utils';
+import { FlankerConfig, Item } from 'shared/state';
 
 import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
@@ -173,6 +177,31 @@ const getABTrailsItemsData = (
   return abTrackerItemsData.concat(...abTrackerAnswers);
 };
 
+const getFlankerItemsData = (
+  flankerItemsData: AppletExportData['flankerItemsData'],
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+) => {
+  const flankerAnswers = decryptedAnswers.reduce((acc, item) => {
+    const responseType = item.activityItem?.responseType;
+    if (responseType !== ItemResponseType.Flanker || !item.answer) return acc;
+
+    const flankerValue = (item.answer as DecryptedFlankerAnswer).value;
+
+    return acc.concat({
+      name: getFlankerCsvName(item),
+      data: convertJsonToCsv(
+        getFlankerRecords(
+          flankerValue,
+          item.activityItem as Item<FlankerConfig>,
+          new Date(item.startDatetime).getTime(),
+        ),
+      ),
+    });
+  }, [] as ExportCsvData[]);
+
+  return flankerItemsData.concat(...flankerAnswers);
+};
+
 export const prepareData = (
   data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
   getDecryptedAnswers: (
@@ -202,6 +231,7 @@ export const prepareData = (
         data.decryptedAnswers,
       );
       const abTrailsItemsData = getABTrailsItemsData(acc.abTrailsItemsData, data.decryptedAnswers);
+      const flankerItemsData = getFlankerItemsData(acc.flankerItemsData, data.decryptedAnswers);
 
       return {
         reportData,
@@ -210,6 +240,7 @@ export const prepareData = (
         drawingItemsData,
         stabilityTrackerItemsData,
         abTrailsItemsData,
+        flankerItemsData,
       };
     },
     {
@@ -219,6 +250,7 @@ export const prepareData = (
       drawingItemsData: [],
       stabilityTrackerItemsData: [],
       abTrailsItemsData: [],
+      flankerItemsData: [],
     } as AppletExportData,
   );
 };

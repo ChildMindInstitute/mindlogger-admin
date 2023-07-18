@@ -12,13 +12,14 @@ import {
   DecryptedSliderRowsAnswer,
   DecryptedStabilityTrackerAnswer,
   DecryptedTimeAnswer,
-  ExtendedExportAnswerWithoutEncryption,
   ExtendedEvent,
+  ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
 import {
   getABTrailsCsvName,
   getFileExtension,
+  getFlankerCsvName,
   getMediaFileName,
   getStabilityTrackerCsvName,
 } from 'shared/utils';
@@ -132,6 +133,8 @@ export const parseResponseValueRaw = <
         answerId,
         (value as DecryptedStabilityTrackerAnswer['value']).phaseType,
       );
+    case ItemResponseType.Flanker:
+      return getFlankerCsvName(item);
     default:
       return `${key}: ${Array.isArray(value) ? joinWihComma(value as string[]) : value}`;
   }

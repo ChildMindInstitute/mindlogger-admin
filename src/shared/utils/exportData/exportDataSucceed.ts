@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
 
 import {
-  prepareData,
-  exportTemplate,
-  getReportZipName,
-  ZipFile,
   exportCsvZip,
   exportMediaZip,
+  exportTemplate,
+  getReportZipName,
+  prepareData,
+  ZipFile,
 } from 'shared/utils';
 import { GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME } from 'shared/consts';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
@@ -29,6 +29,7 @@ export const exportDataSucceed =
       drawingItemsData,
       stabilityTrackerItemsData,
       abTrailsItemsData,
+      flankerItemsData,
     } = prepareData(response.data.result, getDecryptedAnswers);
 
     exportTemplate(reportData, GENERAL_REPORT_NAME);
@@ -38,6 +39,7 @@ export const exportDataSucceed =
         exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing)),
         exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker)),
         exportCsvZip(abTrailsItemsData, getReportZipName(ZipFile.ABTrails)),
+        exportCsvZip(flankerItemsData, getReportZipName(ZipFile.Flanker)),
         exportMediaZip(mediaData, getReportZipName(ZipFile.Media)),
       ]);
       callback?.();
