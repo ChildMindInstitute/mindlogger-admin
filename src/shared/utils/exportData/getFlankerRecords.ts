@@ -8,7 +8,7 @@ import {
   FlankerTag,
   NumberWithDotType,
 } from 'shared/types';
-import { CorrectPress } from 'modules/Builder/types';
+import { CorrectPress, FlankerItemNames } from 'modules/Builder/types';
 
 const getImage = (image: string, alt: string) => {
   if (image) {
@@ -57,23 +57,38 @@ const getTrialType = ({
   return tag === FlankerTag.Feedback ? 0 : -1;
 };
 
-const DEFAULT_VALUE = '.';
+const getBlockNumber = (itemName: string) => {
+  switch (itemName) {
+    case FlankerItemNames.PracticeFirst:
+    case FlankerItemNames.PracticeSecond:
+    case FlankerItemNames.PracticeThird:
+      return 0;
+    case FlankerItemNames.TestFirst:
+      return 1;
+    case FlankerItemNames.TestSecond:
+      return 2;
+    case FlankerItemNames.TestThird:
+      return 3;
+    default:
+      return 0;
+  }
+};
 
-export const getResponseObj = ({
+const getResponseObj = ({
   response,
   tag,
-  config,
+  itemName,
   trialStartTimestamp,
   types,
 }: {
   response: DecryptedFlankerAnswerItemValue;
   tag: FlankerTag;
-  config: FlankerConfig;
+  itemName: Item['name'];
   trialStartTimestamp: number;
   types: ReturnType<typeof getTypes>;
 }) => {
   const trialNumber = response.trial_index;
-  const blockNumber = config.blockIndex ?? 0;
+  const blockNumber = getBlockNumber(itemName);
   const trialType: number | string = getTrialType({
     tag,
     types,
@@ -157,6 +172,8 @@ const TIME_FIELDS = [
   FlankerRecordFields.ResponseTime,
 ];
 
+const DEFAULT_VALUE = '.';
+
 export const getFlankerRecords = (
   responses: DecryptedFlankerAnswer['value'],
   item: Item<FlankerConfig>,
@@ -211,7 +228,7 @@ export const getFlankerRecords = (
       ...getResponseObj({
         response,
         tag: response.tag,
-        config: item.config,
+        itemName: item.name,
         trialStartTimestamp,
         types,
       }),
@@ -227,7 +244,7 @@ export const getFlankerRecords = (
         ...getResponseObj({
           response,
           tag: FlankerTag.Response,
-          config: item.config,
+          itemName: item.name,
           trialStartTimestamp,
           types,
         }),
