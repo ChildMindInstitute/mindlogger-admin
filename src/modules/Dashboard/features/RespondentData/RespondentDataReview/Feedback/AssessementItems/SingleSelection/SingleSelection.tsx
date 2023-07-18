@@ -30,7 +30,7 @@ export const SingleSelection = ({
         <StyledFormControlLabel
           disabled={isDisabled}
           key={option.id}
-          value={option.id}
+          value={option.value}
           label={
             <StyledLabel>
               {option.image && <StyledImage src={option.image} alt="Option image" />}
