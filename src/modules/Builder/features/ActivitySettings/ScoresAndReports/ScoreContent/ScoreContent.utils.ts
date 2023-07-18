@@ -23,8 +23,8 @@ export const getTableScoreItems = (items: Item[]) =>
 export const getScoreId = (name: string, calculationType: CalculationType) =>
   `${scoreIdBase[calculationType]}_${name.toLowerCase().replaceAll(ForbiddenScoreIdSymbols, '_')}`;
 
-export const getScoreRangeLabel = (minScore?: number, maxScore?: number) =>
-  minScore && maxScore ? `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}` : '-';
+export const getScoreRangeLabel = (minScore: number, maxScore: number) =>
+  `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}`;
 
 const getItemScoreRange = (item: Item) => {
   let scores: number[] = [];
@@ -34,8 +34,8 @@ const getItemScoreRange = (item: Item) => {
   ) {
     scores = (item as SingleSelectItem | MultiSelectItem).responseValues.options?.reduce(
       (result: number[], option: SingleAndMultipleSelectionOption) => {
-        if (!option.isHidden && option.score) {
-          return [...result, option.score];
+        if (!option.isHidden) {
+          return [...result, option.score as number];
         }
 
         return result;
@@ -43,16 +43,16 @@ const getItemScoreRange = (item: Item) => {
       [],
     ) as unknown as number[];
   } else {
-    scores = (item as SliderItem).responseValues.scores || [];
+    scores = (item as SliderItem).responseValues.scores as number[];
   }
 
   let maxScore = 0;
-  const minScore = scores.length && Math.min(...scores);
+  const minScore = Math.min(...scores);
   if (
     item.responseType === ItemResponseType.SingleSelection ||
     item.responseType === ItemResponseType.Slider
   ) {
-    maxScore = scores.length && Math.max(...scores);
+    maxScore = Math.max(...scores);
   } else if (item.responseType === ItemResponseType.MultipleSelection) {
     maxScore = scores.reduce((acc, score) => (score > 0 || 0) && acc + score, 0);
   }
