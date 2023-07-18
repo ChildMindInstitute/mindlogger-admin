@@ -218,7 +218,6 @@ export type FlankerConfig = {
   blockType: RoundTypeEnum;
   skippableItem?: boolean;
   removeBackButton?: boolean;
-  blockIndex?: number;
 };
 
 type ABTrailsConfig = {
