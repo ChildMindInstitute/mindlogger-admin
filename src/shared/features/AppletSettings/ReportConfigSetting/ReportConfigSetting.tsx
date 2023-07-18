@@ -46,6 +46,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
 
   const { getApplet } = applet.thunk;
+  const { updateReportConfig } = applet.actions;
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
   const { accountId = '' } = encryptionInfoFromServer ?? {};
@@ -159,6 +160,8 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
       appletId: appletData?.id ?? '',
       ...body,
     });
+
+    if (!isDashboard) dispatch(updateReportConfig(body));
 
     reset(getDefaultValues(body));
   };
