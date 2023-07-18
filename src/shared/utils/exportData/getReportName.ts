@@ -37,4 +37,4 @@ export const getFileExtension = (fileUrl: string) => {
 
 export const getFlankerCsvName = (
   item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
-) => `${item.id}-${item.activityItem.id}.csv`;
+) => `${item.id}-${item.activityItem.name}.csv`;
