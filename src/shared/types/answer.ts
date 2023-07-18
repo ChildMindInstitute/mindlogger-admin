@@ -334,23 +334,31 @@ export type ExportMediaData = {
 };
 
 export type FlankerResponseRecord = {
-  [FlankerRecordFields.BlockClock]: '.' | number;
-  [FlankerRecordFields.ExperimentClock]: '.' | number;
-  [FlankerRecordFields.TrialStartTimestamp]: '.' | number;
-  [FlankerRecordFields.TrialOffset]: '.' | number;
+  [FlankerRecordFields.BlockClock]: NumberWithDotType;
+  [FlankerRecordFields.ExperimentClock]: NumberWithDotType;
+  [FlankerRecordFields.TrialStartTimestamp]: NumberWithDotType;
+  [FlankerRecordFields.TrialOffset]: NumberWithDotType;
   [FlankerRecordFields.BlockNumber]: number;
   [FlankerRecordFields.TrialNumber]: number;
   [FlankerRecordFields.TrialType]: string | number;
   [FlankerRecordFields.EventType]: string;
-  [FlankerRecordFields.ResponseValue]: '.' | 'L' | 'R';
-  [FlankerRecordFields.ResponseAccuracy]: '.' | '1' | '0';
-  [FlankerRecordFields.VideoDisplayRequestTimestamp]: '.' | number;
-  [FlankerRecordFields.ResponseTouchTimestamp]: '.' | number;
-  [FlankerRecordFields.ResponseTime]: '.' | number;
-  [FlankerRecordFields.EventStartTimestamp]: '.' | number;
-  [FlankerRecordFields.EventOffset]: '.' | number;
-  [FlankerRecordFields.FailedPractice]: '.' | string;
+  [FlankerRecordFields.ResponseValue]: DotType | FlankerResponseValue;
+  [FlankerRecordFields.ResponseAccuracy]: DotType | FlankerResponseAccuracy;
+  [FlankerRecordFields.VideoDisplayRequestTimestamp]: NumberWithDotType;
+  [FlankerRecordFields.ResponseTouchTimestamp]: NumberWithDotType;
+  [FlankerRecordFields.ResponseTime]: NumberWithDotType;
+  [FlankerRecordFields.EventStartTimestamp]: NumberWithDotType;
+  [FlankerRecordFields.EventOffset]: NumberWithDotType;
+  [FlankerRecordFields.FailedPractice]: DotType | string;
 };
 
 export type DotType = '.';
 export type NumberWithDotType = DotType | number;
+export const enum FlankerResponseValue {
+  Left = 'L',
+  Right = 'R',
+}
+export const enum FlankerResponseAccuracy {
+  Correct = '1',
+  Incorrect = '0',
+}

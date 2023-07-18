@@ -3,6 +3,8 @@ import {
   DecryptedFlankerAnswer,
   DecryptedFlankerAnswerItemValue,
   DotType,
+  FlankerResponseAccuracy,
+  FlankerResponseValue,
   FlankerTag,
   NumberWithDotType,
 } from 'shared/types';
@@ -55,6 +57,8 @@ const getTrialType = ({
   return tag === FlankerTag.Feedback ? 0 : -1;
 };
 
+const DEFAULT_VALUE = '.';
+
 export const getResponseObj = ({
   response,
   tag,
@@ -77,28 +81,33 @@ export const getResponseObj = ({
   });
   const eventType = getEventType(tag);
 
-  let responseValue: DotType | 'L' | 'R' = '.';
-  let responseAccuracy: DotType | '1' | '0' = '.';
-  let responseTouchTimestamp: NumberWithDotType = '.';
-  let responseTime: NumberWithDotType = '.';
+  let responseValue: DotType | FlankerResponseValue = DEFAULT_VALUE;
+  let responseAccuracy: DotType | FlankerResponseAccuracy = DEFAULT_VALUE;
+  let responseTouchTimestamp: NumberWithDotType = DEFAULT_VALUE;
+  let responseTime: NumberWithDotType = DEFAULT_VALUE;
   let videoDisplayRequestTimestamp: NumberWithDotType = response.start_time + response.offset;
   let eventStartTimestamp: NumberWithDotType = response.start_timestamp;
   let eventOffset: NumberWithDotType = eventStartTimestamp - trialStartTimestamp;
 
   if (tag === FlankerTag.Response) {
-    eventOffset = eventStartTimestamp = '.';
-    const buttonPressed = response.button_pressed === CorrectPress.Left ? 'L' : 'R';
+    eventOffset = eventStartTimestamp = DEFAULT_VALUE;
+    const buttonPressed =
+      response.button_pressed === CorrectPress.Left
+        ? FlankerResponseValue.Left
+        : FlankerResponseValue.Right;
     responseValue =
       response.button_pressed === null || response.button_pressed === undefined
-        ? '.'
+        ? DEFAULT_VALUE
         : buttonPressed;
-    responseAccuracy = response.correct ? '1' : '0';
+    responseAccuracy = response.correct
+      ? FlankerResponseAccuracy.Correct
+      : FlankerResponseAccuracy.Incorrect;
     responseTouchTimestamp =
       'response_touch_timestamp' in response
-        ? response.response_touch_timestamp || '.'
+        ? response.response_touch_timestamp || DEFAULT_VALUE
         : videoDisplayRequestTimestamp + response.duration;
     responseTime = response.duration;
-    videoDisplayRequestTimestamp = '.';
+    videoDisplayRequestTimestamp = DEFAULT_VALUE;
   }
 
   return {
@@ -162,8 +171,9 @@ export const getFlankerRecords = (
   const types = getTypes(item.config.stimulusTrials);
 
   if (item.config.minimumAccuracy) {
-    for (let i = responses.length - 1; i >= 0; i--) {
-      if (responses[i].trial_index > lastIndex) {
+    for (let index = responses.length - 1; index >= 0; index--) {
+      const response = responses[index];
+      if (response.trial_index > lastIndex) {
         if ((correctCount / totalCount) * 100 < item.config.minimumAccuracy) {
           failedPractice++;
         }
@@ -171,12 +181,12 @@ export const getFlankerRecords = (
         correctCount = totalCount = 0;
       }
 
-      lastIndex = responses[i].trial_index;
+      lastIndex = response.trial_index;
 
-      if (responses[i].tag === FlankerTag.Trial) {
+      if (response.tag === FlankerTag.Trial) {
         totalCount++;
 
-        if (responses[i].correct) {
+        if (response.correct) {
           correctCount++;
         }
       }
@@ -189,18 +199,18 @@ export const getFlankerRecords = (
 
   let lastTrialIndex = -1;
 
-  for (let i = 0; i < responses.length; i++) {
+  for (let index = 0; index < responses.length; index++) {
     const blockClock = responses[0].start_timestamp;
-
-    if (lastTrialIndex !== responses[i].trial_index) {
-      trialStartTimestamp = responses[i].start_timestamp;
-      lastTrialIndex = responses[i].trial_index;
+    const response = responses[index];
+    if (lastTrialIndex !== response.trial_index) {
+      trialStartTimestamp = response.start_timestamp;
+      lastTrialIndex = response.trial_index;
     }
 
-    const response = {
+    const row = {
       ...getResponseObj({
-        response: responses[i],
-        tag: responses[i].tag,
+        response,
+        tag: response.tag,
         config: item.config,
         trialStartTimestamp,
         types,
@@ -210,57 +220,58 @@ export const getFlankerRecords = (
       trialStartTimestamp,
       trialOffset: trialStartTimestamp - blockClock,
     };
-    result.push(response);
+    result.push(row);
 
-    if (responses[i].tag === FlankerTag.Trial) {
+    if (response.tag === FlankerTag.Trial) {
       result.push({
         ...getResponseObj({
-          response: responses[i],
+          response,
           tag: FlankerTag.Response,
           config: item.config,
           trialStartTimestamp,
           types,
         }),
-        [FlankerRecordFields.BlockClock]: '.',
-        [FlankerRecordFields.ExperimentClock]: '.',
-        [FlankerRecordFields.TrialStartTimestamp]: '.',
+        [FlankerRecordFields.BlockClock]: DEFAULT_VALUE,
+        [FlankerRecordFields.ExperimentClock]: DEFAULT_VALUE,
+        [FlankerRecordFields.TrialStartTimestamp]: DEFAULT_VALUE,
         [FlankerRecordFields.TrialOffset]: trialStartTimestamp - blockClock,
       });
     }
   }
 
-  for (let i = 0; i < result.length; i++) {
-    if (result[i].trialType === -1) {
-      result[i].trialType = result[i + 1].trialType;
+  for (let index = 0; index < result.length; index++) {
+    const row = result[index];
+    if (row.trialType === -1) {
+      row.trialType = result[index + 1].trialType;
     }
 
-    if (result[i].trialType === 0) {
-      result[i].trialType = result[i - 1].trialType;
+    if (row.trialType === 0) {
+      row.trialType = result[index - 1].trialType;
     }
 
     for (const field of TIME_FIELDS) {
-      if (result[i][field] !== '.') {
-        result[i][field] = Number((result[i][field] as number) / 1000).toFixed(3);
+      if (row[field] !== DEFAULT_VALUE) {
+        row[field] = Number((row[field] as number) / 1000).toFixed(3);
       }
     }
   }
 
-  return result.map((resultItem, index) => ({
-    block_number: resultItem.blockNumber,
-    trial_number: resultItem.trialNumber,
-    trial_type: resultItem.trialType,
-    event_type: resultItem.eventType,
-    experiment_start_timestamp: resultItem.experimentClock,
-    block_start_timestamp: resultItem.blockClock,
-    trial_start_timestamp: resultItem.trialStartTimestamp,
-    event_start_timestamp: resultItem.eventStartTimestamp,
-    video_display_request_timestamp: resultItem.videoDisplayRequestTimestamp,
-    response_touch_timestamp: resultItem.responseTouchTimestamp,
-    trial_offset: resultItem.trialOffset,
-    event_offset: resultItem.eventOffset,
-    response_time: resultItem.responseTime,
-    response: resultItem.responseValue,
-    response_accuracy: resultItem.responseAccuracy,
+  return result.map((row, index) => ({
+    block_number: row.blockNumber,
+    trial_number: row.trialNumber,
+    trial_type: row.trialType,
+    event_type: row.eventType,
+    experiment_start_timestamp: row.experimentClock,
+    block_start_timestamp: row.blockClock,
+    trial_start_timestamp: row.trialStartTimestamp,
+    event_start_timestamp: row.eventStartTimestamp,
+    video_display_request_timestamp: row.videoDisplayRequestTimestamp,
+    response_touch_timestamp: row.responseTouchTimestamp,
+    trial_offset: row.trialOffset,
+    event_offset: row.eventOffset,
+    response_time: row.responseTime,
+    response: row.responseValue,
+    response_accuracy: row.responseAccuracy,
     failed_practices:
       item.config.minimumAccuracy && index === 0 ? failedPractice.toString() : undefined,
   }));
