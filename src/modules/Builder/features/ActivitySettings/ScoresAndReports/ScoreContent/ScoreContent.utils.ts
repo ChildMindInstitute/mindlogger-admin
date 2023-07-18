@@ -34,8 +34,8 @@ const getItemScoreRange = (item: Item) => {
   ) {
     scores = (item as SingleSelectItem | MultiSelectItem).responseValues.options?.reduce(
       (result: number[], option: SingleAndMultipleSelectionOption) => {
-        if (!option.isHidden) {
-          return [...result, option.score as number];
+        if (!option.isHidden && typeof option.score === 'number') {
+          return [...result, option.score];
         }
 
         return result;
