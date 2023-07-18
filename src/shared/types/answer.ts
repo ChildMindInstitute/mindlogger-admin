@@ -70,34 +70,31 @@ export type ExportCsvData = {
   data: string;
 };
 
+export type AdditionalTextType = { text?: string | null };
+
 export type DecryptedTextAnswer = string;
 
-export type DecryptedMultiSelectionAnswer = {
+export type DecryptedMultiSelectionAnswer = AdditionalTextType & {
   value: (number | string)[]; // an array of selected option indexes
-  text?: string | null;
 };
 
-export type DecryptedSingleSelectionAnswer = {
+export type DecryptedSingleSelectionAnswer = AdditionalTextType & {
   value: number | string; // selected option index
-  text?: string | null;
 };
 
-export type DecryptedSliderAnswer = {
+export type DecryptedSliderAnswer = AdditionalTextType & {
   value: number;
-  text?: string | null;
 };
 
-export type DecryptedNumberSelectionAnswer = {
+export type DecryptedNumberSelectionAnswer = AdditionalTextType & {
   value: number;
-  text?: string | null;
 };
 
-export type DecryptedMediaAnswer = {
+export type DecryptedMediaAnswer = AdditionalTextType & {
   value: string;
-  text?: string | null;
 };
 
-export type DecryptedDateRangeAnswer = {
+export type DecryptedDateRangeAnswer = AdditionalTextType & {
   value: {
     from: {
       hour: number;
@@ -110,7 +107,7 @@ export type DecryptedDateRangeAnswer = {
   };
 };
 
-export type DecryptedDateAnswer = {
+export type DecryptedDateAnswer = AdditionalTextType & {
   value: {
     year: number;
     month: number;
@@ -118,14 +115,14 @@ export type DecryptedDateAnswer = {
   };
 };
 
-export type DecryptedTimeAnswer = {
+export type DecryptedTimeAnswer = AdditionalTextType & {
   value: {
     hours: number;
     minutes: number;
   };
 };
 
-export type DecryptedGeolocationAnswer = {
+export type DecryptedGeolocationAnswer = AdditionalTextType & {
   value: {
     latitude: number;
     longitude: number;
@@ -155,9 +152,8 @@ export type DecryptedDrawingValue = {
   fileName: string;
 };
 
-export type DecryptedDrawingAnswer = {
+export type DecryptedDrawingAnswer = AdditionalTextType & {
   value: DecryptedDrawingValue;
-  text?: string | null;
 };
 
 type ABTrailsPoint = {
@@ -187,17 +183,14 @@ export type DecryptedABTrailsAnswer = {
 
 export type DecryptedSingleSelectionPerRowAnswer = {
   value: string[];
-  text?: string | null;
 };
 
 export type DecryptedMultiSelectionPerRowAnswer = {
   value: string[][];
-  text?: string | null;
 };
 
 export type DecryptedSliderRowsAnswer = {
   value: number[];
-  text?: string | null;
 };
 
 export type DecryptedStabilityTrackerCalcValue = {

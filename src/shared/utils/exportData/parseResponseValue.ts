@@ -1,5 +1,6 @@
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import {
+  AdditionalTextType,
   AnswerDTO,
   DecryptedAnswerData,
   DecryptedDateAnswer,
@@ -35,6 +36,23 @@ export const parseResponseValue = <
   const answer: AnswerDTO | undefined = isEvent
     ? (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response
     : item.answer;
+
+  if (answer && typeof answer === 'object' && (answer as AdditionalTextType).text?.length) {
+    return `${parseResponseValueRaw(item, index, answer)} | text: ${
+      (answer as AdditionalTextType).text
+    }`;
+  }
+
+  return parseResponseValueRaw(item, index, answer);
+};
+
+export const parseResponseValueRaw = <
+  T extends DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+>(
+  item: T,
+  index: number,
+  answer?: AnswerDTO,
+) => {
   const { activityItem, id: answerId } = item;
   const inputType = activityItem.responseType;
   const key =
