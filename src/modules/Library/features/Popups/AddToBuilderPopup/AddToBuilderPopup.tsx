@@ -6,12 +6,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Modal, Spinner } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
-import { workspaces } from 'shared/state';
+import { SingleApplet, workspaces } from 'shared/state';
 import { useAsync } from 'shared/hooks';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
 import { page } from 'resources';
-import { LocalStorageKeys, storage } from 'shared/utils';
+import { LocalStorageKeys, Path, storage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { STORAGE_SELECTED_KEY } from 'modules/Library/consts';
 
@@ -67,6 +67,12 @@ export const AddToBuilderPopup = ({
     resolver: yupResolver(validationSchema[step]),
   });
 
+  const navigateToBuilder = (appletId: string, data: SingleApplet) => {
+    navigate(generatePath(page.builderAppletAbout, { appletId }), {
+      state: { isFromLibrary: true, data },
+    });
+  };
+
   const handleModalClose = () => setAddToBuilderPopupVisible(false);
 
   const handleSwitchWorkspace = (ownerId: string) => {
@@ -90,12 +96,8 @@ export const AddToBuilderPopup = ({
     if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
       const { appletToBuilder } = await getAddToBuilderData(cartItems);
       handleSwitchWorkspace(ownerId);
-
-      navigate(generatePath(page.builderAppletAbout, { appletId: 'new-applet' }), {
-        state: { isFromLibrary: true, data: appletToBuilder },
-      });
+      navigateToBuilder(Path.NewApplet, appletToBuilder as SingleApplet);
       handleClearCart();
-
       handleModalClose();
     }
 
@@ -117,10 +119,7 @@ export const AddToBuilderPopup = ({
       return;
     }
     handleSwitchWorkspace(ownerId);
-    navigate(generatePath(page.builderAppletAbout, { appletId: selectedApplet }), {
-      state: { isFromLibrary: true, data: appletToBuilder },
-    });
-
+    navigateToBuilder(selectedApplet, appletToBuilder as SingleApplet);
     handleClearCart();
     handleModalClose();
   };
