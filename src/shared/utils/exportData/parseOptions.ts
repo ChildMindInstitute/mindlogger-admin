@@ -36,7 +36,7 @@ export const parseOptions = (
         const stringifiedValue = `${value ?? ''}`;
 
         return `${text}${stringifiedValue ? `: ${stringifiedValue}` : ''}${
-          score ? ` (score: ${score})` : ''
+          typeof score === 'number' ? ` (score: ${score})` : ''
         }`;
       }) || [],
     );
