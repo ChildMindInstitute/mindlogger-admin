@@ -73,7 +73,6 @@ export const BuilderApplet = () => {
       !isNewApplet &&
       appletResponseType === 'applet/getAppletWithItems'
     ) {
-      reset(getFormValues());
       (async () => {
         await reset(getFormValues());
 
