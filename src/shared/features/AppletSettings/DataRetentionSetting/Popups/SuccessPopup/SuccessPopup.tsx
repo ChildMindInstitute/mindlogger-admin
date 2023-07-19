@@ -5,14 +5,14 @@ import { StyledModalWrapper } from 'shared/styles';
 
 import { SuccessPopupProps } from './SuccessPopup.types';
 
-export const SuccessPopup = ({ popupVisible, setPopupVisible }: SuccessPopupProps) => {
+export const SuccessPopup = ({ popupVisible, onClose }: SuccessPopupProps) => {
   const { t } = useTranslation('app');
 
   return (
     <Modal
       open={popupVisible}
-      onClose={() => setPopupVisible(false)}
-      onSubmit={() => setPopupVisible(false)}
+      onClose={onClose}
+      onSubmit={onClose}
       title={t('dataRetentionUpdate')}
       buttonText={t('ok')}
     >

@@ -10,7 +10,6 @@ import {
   useAsync,
   useBuilderSessionStorageFormChange,
   useBuilderSessionStorageFormValues,
-  useRemoveAppletData,
 } from 'shared/hooks';
 import { RetentionPeriods } from 'shared/types';
 import { applet } from 'shared/state';
@@ -29,17 +28,17 @@ import { StyledButton, StyledContainer, StyledInputWrapper } from './DataRetenti
 import { DataRetentionFormValues } from './DataRetention.types';
 import { ErrorPopup, SuccessPopup } from './Popups';
 
-export const DataRetention = () => {
+export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   const { t } = useTranslation();
   const { appletId: id } = useParams();
   const dispatch = useAppDispatch();
-  const { result } = applet.useAppletData() ?? {};
+  const { result: appletData } = applet.useAppletData() ?? {};
   const { getApplet } = applet.thunk;
-  const removeAppletData = useRemoveAppletData();
+  const { updateAppletData } = applet.actions;
 
   const defaultValues = {
-    retentionPeriod: result?.retentionPeriod || DEFAULT_RETENTION_PERIOD,
-    retentionType: result?.retentionType || DEFAULT_RETENTION_TYPE,
+    retentionPeriod: appletData?.retentionPeriod || DEFAULT_RETENTION_PERIOD,
+    retentionType: appletData?.retentionType || DEFAULT_RETENTION_TYPE,
   };
 
   const { getFormValues } =
@@ -78,18 +77,24 @@ export const DataRetention = () => {
       await saveDataRetention({ appletId: id, period: retentionPeriod, retention: retentionType });
       await dispatch(getApplet({ appletId: id! }));
     }
+
+    const values = getValues() ?? {};
+    if (!isDashboard) dispatch(updateAppletData(values));
   };
 
   const handleDontSave = () => {
     reset(defaultValues);
-    removeAppletData();
     confirmNavigation();
   };
 
   const handleSaveChanges = async () => {
-    cancelNavigation();
     await handleSubmit(onSubmit)();
     await dispatch(getApplet({ appletId: id! }));
+  };
+
+  const handleCloseSuccessPopup = () => {
+    setSuccessPopupVisible(false);
+    confirmNavigation();
   };
 
   const handleCancel = () => {
@@ -139,7 +144,7 @@ export const DataRetention = () => {
         />
       )}
       {successPopupVisible && (
-        <SuccessPopup popupVisible={successPopupVisible} setPopupVisible={setSuccessPopupVisible} />
+        <SuccessPopup popupVisible={successPopupVisible} onClose={handleCloseSuccessPopup} />
       )}
       {promptVisible && (
         <SaveChangesPopup
