@@ -4,7 +4,12 @@ import { DataTable, FileUploader } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import i18n from 'i18n';
 
-import { GetComponentsProps, ModalType, ScreenObjectProps } from './LookupTable.types';
+import {
+  GetComponentsProps,
+  ModalType,
+  ScreenObjectProps,
+  LookupTableDataItem,
+} from './LookupTable.types';
 
 const { t } = i18n;
 
@@ -33,8 +38,8 @@ export const getModalComponents = ({
               onFileReady={onFileReady}
               onDownloadTemplate={onDownloadTemplate}
               invalidFileFormatError={labelsObject.errors.incorrectFileFormat}
+              validationError={error}
             />
-            {error}
           </>
         ),
         buttonText: t('save'),
@@ -126,3 +131,10 @@ export const getModalComponents = ({
 
   return components[modalType];
 };
+
+const validateSex = (sex: string) => /^(M|F)?$/.test(sex);
+const validateAge = (age?: string | number | null) =>
+  typeof age === 'number' || age ? +age > 0 : true;
+
+export const validateLookupTable = (data: LookupTableDataItem[]) =>
+  data?.every(({ age, sex }) => validateSex(sex ?? '') && validateAge(age));

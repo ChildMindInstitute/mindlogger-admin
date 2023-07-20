@@ -12,6 +12,7 @@ export type LookupTableProps = {
 };
 
 export type LookupTableSetupHookProps = {
+  errors: LabelsObject['errors'];
   template: LookupTableProps['template'];
   templatePrefix: LookupTableProps['templatePrefix'];
   tableData?: DataTableItem[];
@@ -71,3 +72,8 @@ export const enum ModalType {
 }
 
 export type Steps = 0 | 1;
+
+export type LookupTableDataItem = {
+  age?: string | number | null;
+  sex?: string | null;
+};
