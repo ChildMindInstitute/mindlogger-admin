@@ -15,7 +15,7 @@ import {
   usePermissions,
 } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
-import { applet, MetaStatus } from 'shared/state';
+import { applet } from 'shared/state';
 import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
