@@ -26,7 +26,7 @@ export const getABTrailsCsvName = (index: number, id?: string) =>
 export const getMediaFileName = (
   item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
   extension: string,
-) => `${item.id}-${item.activityItem.id}-${item.activityItem.name}.${extension}`;
+) => `${item.id}-${item.respondentId}-${item.activityItem.name}.${extension}`;
 
 export const getFileExtension = (fileUrl: string) => {
   const extension = fileUrl.split('/').pop()?.split('.').pop() ?? '';
