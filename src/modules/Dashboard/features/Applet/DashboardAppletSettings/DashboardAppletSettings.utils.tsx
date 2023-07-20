@@ -11,6 +11,7 @@ import {
   DownloadSchemaSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
+  ShareAppletSetting,
 } from 'shared/features/AppletSettings';
 import { isManagerOrOwner } from 'shared/utils';
 
@@ -95,26 +96,28 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
       },
     ],
   },
-  ...(roles?.includes(Roles.SuperAdmin)
-    ? [
-        {
-          label: 'sharing',
-          items: [
-            // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
-            // introduced. (Story: AUS-4.1.4.10)
-            // {
-            //       icon: <Svg id="share" />,
-            //       label: 'shareToLibrary',
-            //       component: <ShareAppletSetting />,
-            //     },
+  {
+    label: 'sharing',
+    items: [
+      // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
+      // introduced. (Story: AUS-4.1.4.10)
+      // Temporarily unhided for testing purposes
+      {
+        icon: <Svg id="share" />,
+        label: 'shareToLibrary',
+        component: <ShareAppletSetting />,
+        param: 'share-applet',
+      },
+      ...(roles?.includes(Roles.SuperAdmin)
+        ? [
             {
               icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
               label: isPublished ? 'concealApplet' : 'publishApplet',
               component: <PublishConcealAppletSetting isDashboard />,
               param: 'publish-conceal',
             },
-          ],
-        },
-      ]
-    : []),
+          ]
+        : []),
+    ],
+  },
 ];
