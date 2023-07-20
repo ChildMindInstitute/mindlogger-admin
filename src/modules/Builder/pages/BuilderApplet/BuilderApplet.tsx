@@ -15,7 +15,7 @@ import {
   usePermissions,
 } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
-import { applet } from 'shared/state';
+import { applet, MetaStatus } from 'shared/state';
 import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
@@ -35,10 +35,15 @@ export const BuilderApplet = () => {
   const { getAppletWithItems } = applet.thunk;
   const loadingStatus = applet.useResponseStatus();
   const appletResponseType = applet.useResponseTypePrefix();
+  const isAppletLoaded =
+    loadingStatus === 'success' &&
+    appletResponseType === 'applet/getAppletWithItems' &&
+    !isNewApplet;
   const { ownerId } = workspaces.useData() || {};
   const removeAppletData = useRemoveAppletData();
   const [isFromLibrary, setIsFromLibrary] = useState(false);
   const { data: dataFromLibrary } = location.state ?? {};
+  const hasLibraryData = isFromLibrary && dataFromLibrary;
 
   const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
     getDefaultValues(appletData),
@@ -64,42 +69,39 @@ export const BuilderApplet = () => {
   } = methods;
 
   useEffect(() => {
-    if (location.state?.isFromLibrary) setIsFromLibrary(true);
-  }, [location.state]);
+    location.state?.isFromLibrary && setIsFromLibrary(true);
+  }, [location.state?.isFromLibrary]);
 
   useEffect(() => {
-    if (
-      loadingStatus === 'success' &&
-      !isNewApplet &&
-      appletResponseType === 'applet/getAppletWithItems'
-    ) {
-      (async () => {
-        await reset(getFormValues());
+    if (!isAppletLoaded) return;
 
-        if (dataFromLibrary) {
-          const formValues = await getValues();
-          const libraryConvertedValues = await getDefaultValues(dataFromLibrary);
-          const newFormValues = {
-            ...formValues,
-            activities: [...formValues.activities, ...libraryConvertedValues.activities],
-            activityFlows: [...formValues.activityFlows, ...libraryConvertedValues.activityFlows],
-          };
+    (async () => {
+      await reset(getFormValues());
 
-          await reset(newFormValues);
-        }
-      })();
-    }
-  }, [loadingStatus, isNewApplet, appletResponseType]);
+      if (!dataFromLibrary) return;
+
+      const formValues = await getValues();
+      const libraryConvertedValues = await getDefaultValues(dataFromLibrary);
+      const newFormValues = {
+        ...formValues,
+        activities: [...formValues.activities, ...libraryConvertedValues.activities],
+        activityFlows: [...formValues.activityFlows, ...libraryConvertedValues.activityFlows],
+      };
+
+      await reset(newFormValues);
+    })();
+  }, [isAppletLoaded]);
 
   useEffect(() => {
-    if (isFromLibrary && isNewApplet && dataFromLibrary) {
+    if (hasLibraryData && isNewApplet) {
       builderSessionStorage.setItem(getDefaultValues(dataFromLibrary));
       reset(getDefaultValues(dataFromLibrary));
     }
-  }, [isFromLibrary, isNewApplet]);
+  }, [hasLibraryData, isNewApplet]);
 
   useEffect(() => {
     if (!isNewApplet || isFromLibrary) return;
+
     removeAppletData();
     reset(getDefaultValues());
   }, [isNewApplet, isFromLibrary]);
