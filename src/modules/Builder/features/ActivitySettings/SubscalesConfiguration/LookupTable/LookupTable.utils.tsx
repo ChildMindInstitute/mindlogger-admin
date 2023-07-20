@@ -33,8 +33,8 @@ export const getModalComponents = ({
               onFileReady={onFileReady}
               onDownloadTemplate={onDownloadTemplate}
               invalidFileFormatError={labelsObject.errors.incorrectFileFormat}
+              validationError={error}
             />
-            {error}
           </>
         ),
         buttonText: t('save'),
@@ -126,3 +126,14 @@ export const getModalComponents = ({
 
   return components[modalType];
 };
+
+const validateSex = (sex: string) => /^(M|F)?$/.test(sex);
+const validateAge = (age?: number | null) => (typeof age === 'number' ? age > 0 : true);
+
+export const validateLookupTable = (data: { sex?: string | null; age?: number | null }[]) =>
+  data?.every((item) => {
+    const { age, sex } = item ?? {};
+    const ageToValidate = typeof age === 'number' || age ? +age : null;
+
+    return validateSex(sex ?? '') && validateAge(ageToValidate);
+  });

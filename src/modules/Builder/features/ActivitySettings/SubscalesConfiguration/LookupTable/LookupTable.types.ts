@@ -12,6 +12,7 @@ export type LookupTableProps = {
 };
 
 export type LookupTableSetupHookProps = {
+  errors: LabelsObject['errors'];
   template: LookupTableProps['template'];
   templatePrefix: LookupTableProps['templatePrefix'];
   tableData?: DataTableItem[];

@@ -5,8 +5,10 @@ import { DataTableItem, ImportedFile } from 'shared/components';
 import { exportTemplate } from 'shared/utils';
 
 import { ModalType, Steps, LookupTableSetupHookProps } from './LookupTable.types';
+import { validateLookupTable } from './LookupTable.utils';
 
 export const useSubscaleLookupTableSetup = ({
+  errors,
   template,
   templatePrefix,
   tableData,
@@ -25,6 +27,10 @@ export const useSubscaleLookupTableSetup = ({
       id: uuidv4(),
     }));
     setData(mappedData);
+
+    const isValidated = validateLookupTable(mappedData);
+    if (!isValidated) return setError(errors.fileCantBeParsed);
+
     setError(null);
 
     if (file) {
