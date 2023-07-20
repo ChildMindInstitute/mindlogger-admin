@@ -11,6 +11,7 @@ import {
   ModalType,
   ScreenObjectProps,
   LookupTableDataItem,
+  CheckerType,
 } from './LookupTable.types';
 
 const { t } = i18n;
@@ -134,12 +135,15 @@ export const getModalComponents = ({
   return components[modalType];
 };
 
-const validateSex = (sex: string) => /^[MF]?$/.test(sex);
-const validateAge = (age?: string | number | null) =>
+export const validateScore: CheckerType = (value) => !!value;
+export const validateSex: CheckerType<string | null> = (sex) => (sex ? /^[MF]?$/.test(sex) : true);
+export const validateAge: CheckerType<string | number | null> = (age) =>
   typeof age === 'number' || age ? +age > 0 : true;
 
-export const validateLookupTable = (data: LookupTableDataItem[]) =>
-  data?.every(({ age, sex }) => validateSex(sex ?? '') && validateAge(age));
+export const validateLookupTable = (
+  data: LookupTableDataItem[],
+  rules: LookupTableProps['parsingRules'],
+) => data?.every((item) => rules.every(({ key, checker }) => checker(item[key])));
 
 export const processImportedData = (item: Record<string, string | number>) => {
   Object.keys(item).forEach(
@@ -150,19 +154,5 @@ export const processImportedData = (item: Record<string, string | number>) => {
     ...item,
     sex: (item.sex as string) || null,
     id: uuidv4(),
-  };
-};
-
-export const isFileCannotBeParsed = (
-  data: Record<string, string | null>[],
-  rules: LookupTableProps['parsingRules'],
-): boolean => {
-  if (!rules) return false;
-
-  return data.some((item) =>
-    rules.some(
-      ({ key, mandatory }) =>
-        (item[key] === '' || item[key] === undefined || item[key] === null) && mandatory,
-    ),
-  );
+  } as LookupTableDataItem;
 };

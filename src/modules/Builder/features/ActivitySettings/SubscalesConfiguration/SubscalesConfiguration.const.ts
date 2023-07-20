@@ -9,7 +9,7 @@ import {
   defaultTextConfig,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
 
-import { LookupTableProps } from './LookupTable';
+import { LookupTableProps, validateScore } from './LookupTable';
 
 const { t } = i18n;
 
@@ -90,6 +90,6 @@ export const ageItem = getNewActivityItem({
 export const parsingRules: LookupTableProps['parsingRules'] = [
   {
     key: 'rawScore',
-    mandatory: true,
+    checker: validateScore,
   },
 ];

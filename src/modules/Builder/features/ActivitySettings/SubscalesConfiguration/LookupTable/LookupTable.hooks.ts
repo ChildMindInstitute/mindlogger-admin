@@ -4,11 +4,7 @@ import { DataTableItem, ImportedFile } from 'shared/components';
 import { exportTemplate } from 'shared/utils';
 
 import { ModalType, Steps, LookupTableSetupHookProps } from './LookupTable.types';
-import {
-  isFileCannotBeParsed,
-  processImportedData,
-  validateLookupTable,
-} from './LookupTable.utils';
+import { processImportedData, validateLookupTable } from './LookupTable.utils';
 
 export const useSubscaleLookupTableSetup = ({
   errors,
@@ -32,8 +28,7 @@ export const useSubscaleLookupTableSetup = ({
     }
 
     const mappedData = file.data.map(processImportedData);
-    if (isFileCannotBeParsed(mappedData, parsingRules) || !validateLookupTable(mappedData))
-      return setError(errors.fileCantBeParsed);
+    if (!validateLookupTable(mappedData, parsingRules)) return setError(errors.fileCantBeParsed);
 
     setError(null);
     setData(mappedData);

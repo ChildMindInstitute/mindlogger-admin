@@ -1,6 +1,6 @@
 import i18n from 'i18n';
 
-import { LookupTableProps } from '../LookupTable';
+import { LookupTableProps, validateAge, validateScore, validateSex } from '../LookupTable';
 
 const { t } = i18n;
 
@@ -80,10 +80,18 @@ export const subscaleTableTemplate = [
 export const parsingRules: LookupTableProps['parsingRules'] = [
   {
     key: 'score',
-    mandatory: true,
+    checker: validateScore,
   },
   {
     key: 'rawScore',
-    mandatory: true,
+    checker: validateScore,
+  },
+  {
+    key: 'age',
+    checker: validateAge,
+  },
+  {
+    key: 'sex',
+    checker: validateSex,
   },
 ];

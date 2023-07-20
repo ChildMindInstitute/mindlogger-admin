@@ -1,5 +1,7 @@
 import { DataTableItem, FileUploaderProps, ImportedFile, ModalProps } from 'shared/components';
 
+export type CheckerType<T = string> = (value: T) => boolean;
+
 export type LookupTableProps = {
   open: boolean;
   labelsObject: LabelsObject;
@@ -7,9 +9,9 @@ export type LookupTableProps = {
   tableData?: DataTableItem[];
   template: Record<string, string | number | undefined>[];
   templatePrefix?: string;
-  parsingRules?: {
-    mandatory: boolean;
-    key: string;
+  parsingRules: {
+    checker: CheckerType<any>;
+    key: keyof LookupTableDataItem;
   }[];
   onClose: () => void;
   onUpdate: (lookupTableData?: DataTableItem[]) => void;
@@ -78,7 +80,11 @@ export const enum ModalType {
 
 export type Steps = 0 | 1;
 
-export type LookupTableDataItem = {
+export type LookupTableDataItem = DataTableItem & {
+  score?: string;
+  rawScore: string;
+  optionalText: string;
   age?: string | number | null;
   sex?: string | null;
+  id: string;
 };
