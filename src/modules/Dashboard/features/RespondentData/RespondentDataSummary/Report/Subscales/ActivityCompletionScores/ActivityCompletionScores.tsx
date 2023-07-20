@@ -20,7 +20,7 @@ export const ActivityCompletionScores = ({
   reviewDate,
   finalSubscaleScore,
   frequency,
-  additionalInformation,
+  optionText,
   subscaleScores,
 }: ScoresProps) => {
   const { t } = useTranslation('app');
@@ -72,9 +72,9 @@ export const ActivityCompletionScores = ({
       <StyledChartContainer>
         <BarChart chartData={subscaleScores} />
       </StyledChartContainer>
-      {additionalInformation && (
+      {optionText && (
         <Box sx={{ m: theme.spacing(6.4, 0) }}>
-          <AdditionalInformation {...additionalInformation} />
+          <AdditionalInformation optionText={optionText} />
         </Box>
       )}
     </>

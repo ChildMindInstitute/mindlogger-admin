@@ -2,15 +2,12 @@ import { useContext, useMemo } from 'react';
 import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';
-import { Accordion } from 'modules/Dashboard/components';
 import { getObjectFromList, calcScores, calcTotalScore } from 'shared/utils';
 import { FinalSubscale } from 'shared/consts';
 import { ActivitySettingsSubscale } from 'shared/state';
 
 import { ActivityCompletionScores } from './ActivityCompletionScores';
-import { subscales } from './mock';
 import { Subscale } from './Subscale';
-import { AdditionalInformation } from './AdditionalInformation';
 import { ReportContext } from '../context';
 import {
   ActivityCompletionToRender,
@@ -20,7 +17,12 @@ import {
 } from './Subscales.types';
 import { FREQUENCY } from './Subscales.consts';
 import { AllScores } from './AllScores';
-import { getSubscalesToRender } from './Subscales.utils';
+import {
+  getSubscalesToRender,
+  groupSubscales,
+  getAllSubscalesToRender,
+  formatCurrentSubscales,
+} from './Subscales.utils';
 
 export const Subscales = ({ answers, versions }: SubscalesProps) => {
   const { currentActivityCompletionData } = useContext(ReportContext);
@@ -59,13 +61,7 @@ export const Subscales = ({ answers, versions }: SubscalesProps) => {
           }
 
           for (const subscale of item.subscaleSetting.subscales) {
-            getSubscalesToRender(
-              subscale,
-              activityItems,
-              subscalesObject,
-              item.endDatetime,
-              acc.allSubscalesToRender,
-            );
+            getAllSubscalesToRender(acc.allSubscalesToRender, item, subscale, activityItems);
 
             const calculatedSubscale = calcScores(subscale, activityItems, subscalesObject, {});
             const { [subscale.name]: removed, ...restScores } = calculatedSubscale;
@@ -102,8 +98,10 @@ export const Subscales = ({ answers, versions }: SubscalesProps) => {
   );
 
   const currentActivityCompletion =
-    currentActivityCompletionData &&
-    answers.find((item) => item.answerId === currentActivityCompletionData.answerId);
+    answers.length === 1
+      ? answers[0]
+      : currentActivityCompletionData &&
+        answers.find((item) => item.answerId === currentActivityCompletionData.answerId);
 
   const calculatedTotalScore =
     currentActivityCompletion?.subscaleSetting?.calculateTotalScore &&
@@ -190,6 +188,18 @@ export const Subscales = ({ answers, versions }: SubscalesProps) => {
     data: { subscales: lineChartSubscales || [] },
   };
 
+  const subscales = useMemo(() => {
+    const currentSubscales = currentActivityCompletion
+      ? activityCompletionToRender
+      : allSubscalesToRender;
+
+    const formattedSubscales = formatCurrentSubscales(
+      currentSubscales as ActivityCompletionToRender,
+    );
+
+    return groupSubscales(formattedSubscales, formattedSubscales);
+  }, [allSubscalesToRender, activityCompletionToRender]);
+
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>
       {currentActivityCompletionScores ? (
@@ -197,18 +207,17 @@ export const Subscales = ({ answers, versions }: SubscalesProps) => {
       ) : (
         <AllScores {...allScores} versions={versions} />
       )}
-      {subscales?.map(({ name, id, items, additionalInformation }) => (
-        <Accordion title={name} key={id}>
-          <>
-            {additionalInformation && (
-              <Box sx={{ m: theme.spacing(4.8, 0) }}>
-                <AdditionalInformation {...additionalInformation} />
-              </Box>
-            )}
-            <Subscale items={items} />
-          </>
-        </Accordion>
-      ))}
+      <Box sx={{ mt: theme.spacing(6.4) }}>
+        {Object.keys(subscales)?.map((name) => (
+          <Subscale
+            key={name}
+            name={name}
+            subscale={subscales[name]}
+            versions={versions}
+            isActivityCompletionSelected={!!currentActivityCompletion}
+          />
+        ))}
+      </Box>
     </Box>
   );
 };

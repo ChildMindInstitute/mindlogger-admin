@@ -1,5 +1,11 @@
-import { Subscale as SubscaleType } from '../Subscales.types';
+import { Version } from 'api';
+
+import { Subscale } from '../Subscales.types';
 
 export type SubscaleProps = {
-  items: SubscaleType[];
+  isNested?: boolean;
+  name: string;
+  subscale: Subscale;
+  versions: Version[];
+  isActivityCompletionSelected?: boolean;
 };

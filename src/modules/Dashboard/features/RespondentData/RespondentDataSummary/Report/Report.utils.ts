@@ -2,6 +2,7 @@ import { Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
 import {
+  ActivitySettingsSubscale,
   SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
   TextInputConfig,
@@ -13,6 +14,7 @@ import {
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
+  ElementType,
 } from 'shared/types';
 
 import {
@@ -107,7 +109,7 @@ const getOptionsMapper = (formattedActivityItem: FormattedActivityItem) =>
     {},
   );
 
-const compareActivityItem = (
+export const compareActivityItem = (
   prevActivityItem: FormattedResponse,
   currActivityItem: ActivityItemAnswer,
   date: string,
@@ -393,10 +395,23 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
   activityResponses.reduce(
     (
       items: Record<string, FormattedResponse[]>,
-      { decryptedAnswer, endDatetime }: ActivityCompletion,
+      { decryptedAnswer, endDatetime, subscaleSetting }: ActivityCompletion,
     ) => {
+      const subscalesItems = subscaleSetting?.subscales?.reduce(
+        (items: string[], subscale: ActivitySettingsSubscale) => {
+          subscale?.items?.forEach((item) => {
+            item.type === ElementType.Item && !items.includes(item.name) && items.push(item.name);
+          });
+
+          return items;
+        },
+        [],
+      );
+
       let newItems = { ...items };
       decryptedAnswer.forEach((currentAnswer) => {
+        if (subscalesItems?.includes(currentAnswer.activityItem.name)) return items;
+
         const item = items[currentAnswer.activityItem.id!];
 
         if (!item) {

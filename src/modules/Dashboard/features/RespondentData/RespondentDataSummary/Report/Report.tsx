@@ -108,6 +108,16 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     fetchAnswers();
   }, [watchFilters, appletId, respondentId]);
 
+  useEffect(() => {
+    const responses = currentActivityCompletionData
+      ? answers.filter(({ answerId }) => answerId === currentActivityCompletionData.answerId)
+      : answers;
+
+    const formattedResponses = getFormattedResponses(responses);
+
+    setResponseOptions(formattedResponses);
+  }, [currentActivityCompletionData]);
+
   return (
     <>
       {isLoading && <Spinner />}
@@ -124,16 +134,20 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
             </span>
           </Tooltip>
         </StyledHeader>
-        <Box sx={{ margin: theme.spacing(4.8, 6.4) }}>
+        <Box sx={{ m: theme.spacing(4.8, 6.4) }}>
           <ReportContext.Provider
             value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}
           >
             <FormProvider {...methods}>
               <ReportFilters identifiers={identifiers} versions={versions} />
               <ActivityCompleted answers={answers} versions={versions} />
-              <Subscales answers={answers} versions={versions} />
-              {!isLoading && responseOptions && (
-                <ResponseOptions responseOptions={responseOptions} versions={versions} />
+              {!isLoading && (
+                <>
+                  <Subscales answers={answers} versions={versions} />
+                  {responseOptions && !!Object.values(responseOptions).length && (
+                    <ResponseOptions responseOptions={responseOptions} versions={versions} />
+                  )}
+                </>
               )}
             </FormProvider>
           </ReportContext.Provider>
