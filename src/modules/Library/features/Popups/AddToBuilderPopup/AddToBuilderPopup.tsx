@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, generatePath } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,15 +11,9 @@ import { useAsync } from 'shared/hooks';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
 import { page } from 'resources';
-import {
-  builderSessionStorage,
-  getBuilderAppletUrl,
-  LocalStorageKeys,
-  storage,
-} from 'shared/utils';
+import { LocalStorageKeys, Path, storage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { STORAGE_SELECTED_KEY } from 'modules/Library/consts';
-import { getDefaultValues } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import {
   AddToBuilderActions,
@@ -73,6 +67,12 @@ export const AddToBuilderPopup = ({
     resolver: yupResolver(validationSchema[step]),
   });
 
+  const navigateToBuilder = (appletId: string, data: SingleApplet) => {
+    navigate(generatePath(page.builderAppletAbout, { appletId }), {
+      state: { isFromLibrary: true, data },
+    });
+  };
+
   const handleModalClose = () => setAddToBuilderPopupVisible(false);
 
   const handleSwitchWorkspace = (ownerId: string) => {
@@ -96,11 +96,8 @@ export const AddToBuilderPopup = ({
     if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
       const { appletToBuilder } = await getAddToBuilderData(cartItems);
       handleSwitchWorkspace(ownerId);
-      builderSessionStorage.setItem(getDefaultValues(appletToBuilder as SingleApplet));
-      storage.setItem(LocalStorageKeys.IsFromLibrary, true);
-      navigate(page.builder);
+      navigateToBuilder(Path.NewApplet, appletToBuilder as SingleApplet);
       handleClearCart();
-
       handleModalClose();
     }
 
@@ -122,9 +119,7 @@ export const AddToBuilderPopup = ({
       return;
     }
     handleSwitchWorkspace(ownerId);
-    storage.setItem(LocalStorageKeys.LibraryPreparedData, appletToBuilder);
-    navigate(getBuilderAppletUrl(selectedApplet));
-
+    navigateToBuilder(selectedApplet, appletToBuilder as SingleApplet);
     handleClearCart();
     handleModalClose();
   };
