@@ -4,7 +4,12 @@ import { DataTable, FileUploader } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import i18n from 'i18n';
 
-import { GetComponentsProps, ModalType, ScreenObjectProps } from './LookupTable.types';
+import {
+  GetComponentsProps,
+  ModalType,
+  ScreenObjectProps,
+  LookupTableDataItem,
+} from './LookupTable.types';
 
 const { t } = i18n;
 
@@ -128,12 +133,8 @@ export const getModalComponents = ({
 };
 
 const validateSex = (sex: string) => /^(M|F)?$/.test(sex);
-const validateAge = (age?: number | null) => (typeof age === 'number' ? age > 0 : true);
+const validateAge = (age?: string | number | null) =>
+  typeof age === 'number' || age ? +age > 0 : true;
 
-export const validateLookupTable = (data: { sex?: string | null; age?: number | null }[]) =>
-  data?.every((item) => {
-    const { age, sex } = item ?? {};
-    const ageToValidate = typeof age === 'number' || age ? +age : null;
-
-    return validateSex(sex ?? '') && validateAge(ageToValidate);
-  });
+export const validateLookupTable = (data: LookupTableDataItem[]) =>
+  data?.every(({ age, sex }) => validateSex(sex ?? '') && validateAge(age));

@@ -28,8 +28,7 @@ export const useSubscaleLookupTableSetup = ({
     }));
     setData(mappedData);
 
-    const isValidated = validateLookupTable(mappedData);
-    if (!isValidated) return setError(errors.fileCantBeParsed);
+    if (!validateLookupTable(mappedData)) return setError(errors.fileCantBeParsed);
 
     setError(null);
 

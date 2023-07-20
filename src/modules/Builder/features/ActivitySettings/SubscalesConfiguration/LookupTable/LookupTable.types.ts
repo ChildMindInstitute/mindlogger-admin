@@ -72,3 +72,8 @@ export const enum ModalType {
 }
 
 export type Steps = 0 | 1;
+
+export type LookupTableDataItem = {
+  age?: string | number | null;
+  sex?: string | null;
+};
