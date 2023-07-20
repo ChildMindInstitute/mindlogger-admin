@@ -1,10 +1,16 @@
 import { Box } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 
 import { DataTable, FileUploader } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import i18n from 'i18n';
 
-import { GetComponentsProps, ModalType, ScreenObjectProps } from './LookupTable.types';
+import {
+  GetComponentsProps,
+  LookupTableProps,
+  ModalType,
+  ScreenObjectProps,
+} from './LookupTable.types';
 
 const { t } = i18n;
 
@@ -21,6 +27,7 @@ export const getModalComponents = ({
   setModalType,
   setStep,
   setError,
+  fileUploaderRef,
 }: GetComponentsProps) => {
   const components: ScreenObjectProps = {
     [ModalType.Upload]: [
@@ -29,6 +36,7 @@ export const getModalComponents = ({
         component: (
           <>
             <FileUploader
+              ref={fileUploaderRef}
               uploadLabel={labelsObject[ModalType.Upload].initDescription}
               onFileReady={onFileReady}
               onDownloadTemplate={onDownloadTemplate}
@@ -125,4 +133,30 @@ export const getModalComponents = ({
   };
 
   return components[modalType];
+};
+
+export const processImportedData = (item: Record<string, string | number>) => {
+  Object.keys(item).forEach(
+    (k) => (item[k] = typeof item[k] === 'string' ? (item[k] as string).trim() : item[k]),
+  );
+
+  return {
+    ...item,
+    sex: (item.sex as string) || null,
+    id: uuidv4(),
+  };
+};
+
+export const isFileCannotBeParsed = (
+  data: Record<string, string | null>[],
+  rules: LookupTableProps['parsingRules'],
+): boolean => {
+  if (!rules) return false;
+
+  return data.some((item) =>
+    rules.some(
+      ({ key, mandatory }) =>
+        (item[key] === '' || item[key] === undefined || item[key] === null) && mandatory,
+    ),
+  );
 };

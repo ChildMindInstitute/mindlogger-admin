@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export enum FileUploaderUiType {
   Primary,
   Secondary,
@@ -18,4 +20,8 @@ export type FileUploaderProps = {
   downloadSecondText?: string;
   validationError?: JSX.Element | string | null;
   uiType?: FileUploaderUiType;
+};
+
+export type FileUploaderRefProps = {
+  setFile: Dispatch<SetStateAction<null | ImportedFile>>;
 };

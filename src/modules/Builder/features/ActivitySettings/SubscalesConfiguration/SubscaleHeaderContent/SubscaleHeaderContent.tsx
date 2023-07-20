@@ -10,7 +10,11 @@ import { SubscaleHeaderContentProps } from './SubscaleHeaderContent.types';
 import { StyledWrapper } from './SubscaleHeaderContent.styles';
 import { LookupTable } from '../LookupTable';
 import { getSubscaleModalLabels } from '../SubscalesConfiguration.utils';
-import { subscaleColumnData, subscaleTableTemplate } from './SubscaleHeaderContent.const';
+import {
+  parsingRules,
+  subscaleColumnData,
+  subscaleTableTemplate,
+} from './SubscaleHeaderContent.const';
 import { StyledSvg } from '../SubscalesConfiguration.styles';
 
 export const SubscaleHeaderContent = ({
@@ -55,6 +59,7 @@ export const SubscaleHeaderContent = ({
           tableData={subscaleTableData}
           template={subscaleTableTemplate}
           templatePrefix={'subscale_'}
+          parsingRules={parsingRules}
           onUpdate={onUpdate}
           onClose={() => {
             setIsSubscaleLookupTableOpened(false);

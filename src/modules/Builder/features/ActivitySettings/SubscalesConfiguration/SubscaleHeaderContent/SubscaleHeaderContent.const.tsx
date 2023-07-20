@@ -1,5 +1,7 @@
 import i18n from 'i18n';
 
+import { LookupTableProps } from '../LookupTable';
+
 const { t } = i18n;
 
 export const subscaleColumnData = [
@@ -72,5 +74,16 @@ export const subscaleTableTemplate = [
     score: '50',
     rawScore: '5',
     age: 15,
+  },
+];
+
+export const parsingRules: LookupTableProps['parsingRules'] = [
+  {
+    key: 'score',
+    mandatory: true,
+  },
+  {
+    key: 'rawScore',
+    mandatory: true,
   },
 ];

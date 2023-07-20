@@ -16,6 +16,7 @@ import { StyledButtonsContainer } from '../ActivitySettings.styles';
 import { commonButtonProps } from '../ActivitySettings.const';
 import {
   options,
+  parsingRules,
   totalScoreTableColumnData,
   totalScoreTableTemplate,
 } from './SubscalesConfiguration.const';
@@ -189,6 +190,7 @@ export const SubscalesConfiguration = () => {
           tableData={tableData}
           template={totalScoreTableTemplate}
           templatePrefix={'total_score_'}
+          parsingRules={parsingRules}
           onUpdate={onTableDataUpdate}
           onClose={() => {
             setIsLookupTableOpened(false);
