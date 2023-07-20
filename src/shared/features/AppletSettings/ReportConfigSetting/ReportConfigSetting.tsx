@@ -20,7 +20,7 @@ import {
   AppletPasswordPopupType,
   AppletPasswordPopupProps,
 } from 'modules/Dashboard/features/Applet';
-import { useAsync, useIsServerConfigured, useRemoveAppletData } from 'shared/hooks';
+import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'shared/utils';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
@@ -36,7 +36,6 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
-  const removeAppletData = useRemoveAppletData();
 
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
@@ -46,7 +45,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
 
   const { getApplet } = applet.thunk;
-  const { updateReportConfig } = applet.actions;
+  const { updateAppletData } = applet.actions;
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
   const { accountId = '' } = encryptionInfoFromServer ?? {};
@@ -161,7 +160,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
       ...body,
     });
 
-    if (!isDashboard) dispatch(updateReportConfig(body));
+    if (!isDashboard) dispatch(updateAppletData(body));
 
     reset(getDefaultValues(body));
   };
@@ -204,8 +203,12 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   };
 
   const handleSaveChanges = () => {
-    cancelNavigation();
     handleSubmit(onSubmit)();
+  };
+
+  const handleSuccessPopupClose = () => {
+    setSuccessPopupVisible(false);
+    confirmNavigation();
   };
 
   const handleCancel = () => {
@@ -214,7 +217,6 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
 
   const handleDontSave = () => {
     reset(getDefaultValues(appletData));
-    removeAppletData();
     confirmNavigation();
   };
 
@@ -362,7 +364,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
         />
       )}
       {successPopupVisible && (
-        <SuccessPopup popupVisible={successPopupVisible} setPopupVisible={setSuccessPopupVisible} />
+        <SuccessPopup popupVisible={successPopupVisible} onClose={handleSuccessPopupClose} />
       )}
       {promptVisible && (
         <SaveChangesPopup

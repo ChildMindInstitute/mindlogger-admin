@@ -7,14 +7,14 @@ import * as thunk from './Applet.thunk';
 import { state as initialState } from './Applet.state';
 import { extraReducers } from './Applet.reducer';
 import { AppletSchema } from './Applet.schema';
-import { removeApplet, updateReportConfig } from './Applet.utils';
+import { removeApplet, updateAppletData } from './Applet.utils';
 
 export * from './Applet.schema';
 
 const slice = createSlice({
   name: 'applet',
   initialState,
-  reducers: { removeApplet, updateReportConfig },
+  reducers: { removeApplet, updateAppletData },
   extraReducers,
 });
 

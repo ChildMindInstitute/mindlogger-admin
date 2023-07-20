@@ -59,7 +59,7 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
         selectedSetting={selectedSetting}
         handleSettingClick={handleSettingClick}
       />
-      <Setting onClose={navigateTo}>{selectedSetting?.component}</Setting>
+      <Setting onClose={() => navigateTo()}>{selectedSetting?.component}</Setting>
     </StyledContainer>
   );
 };

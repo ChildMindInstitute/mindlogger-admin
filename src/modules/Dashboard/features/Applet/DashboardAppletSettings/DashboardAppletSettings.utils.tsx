@@ -31,7 +31,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
             {
               icon: <Svg id="data-retention" />,
               label: 'dataRetention',
-              component: <DataRetention />,
+              component: <DataRetention isDashboard />,
               param: 'data-retention',
             },
           ],

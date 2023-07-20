@@ -6,7 +6,7 @@ export const removeApplet = ({ applet }: AppletSchema): void => {
   }
 };
 
-export const updateReportConfig = (
+export const updateAppletData = (
   { applet }: AppletSchema,
   {
     payload,
