@@ -10,6 +10,7 @@ import {
   LookupTableProps,
   ModalType,
   ScreenObjectProps,
+  LookupTableDataItem,
 } from './LookupTable.types';
 
 const { t } = i18n;
@@ -27,7 +28,6 @@ export const getModalComponents = ({
   setModalType,
   setStep,
   setError,
-  fileUploaderRef,
 }: GetComponentsProps) => {
   const components: ScreenObjectProps = {
     [ModalType.Upload]: [
@@ -36,13 +36,12 @@ export const getModalComponents = ({
         component: (
           <>
             <FileUploader
-              ref={fileUploaderRef}
               uploadLabel={labelsObject[ModalType.Upload].initDescription}
               onFileReady={onFileReady}
               onDownloadTemplate={onDownloadTemplate}
               invalidFileFormatError={labelsObject.errors.incorrectFileFormat}
+              validationError={error}
             />
-            {error}
           </>
         ),
         buttonText: t('save'),
@@ -134,6 +133,13 @@ export const getModalComponents = ({
 
   return components[modalType];
 };
+
+const validateSex = (sex: string) => /^[MF]?$/.test(sex);
+const validateAge = (age?: string | number | null) =>
+  typeof age === 'number' || age ? +age > 0 : true;
+
+export const validateLookupTable = (data: LookupTableDataItem[]) =>
+  data?.every(({ age, sex }) => validateSex(sex ?? '') && validateAge(age));
 
 export const processImportedData = (item: Record<string, string | number>) => {
   Object.keys(item).forEach(

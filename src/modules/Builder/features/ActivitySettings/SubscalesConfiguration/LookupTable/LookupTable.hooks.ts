@@ -1,16 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { DataTableItem, FileUploaderRefProps, ImportedFile } from 'shared/components';
+import { DataTableItem, ImportedFile } from 'shared/components';
 import { exportTemplate } from 'shared/utils';
 
 import { ModalType, Steps, LookupTableSetupHookProps } from './LookupTable.types';
-import { isFileCannotBeParsed, processImportedData } from './LookupTable.utils';
+import {
+  isFileCannotBeParsed,
+  processImportedData,
+  validateLookupTable,
+} from './LookupTable.utils';
 
 export const useSubscaleLookupTableSetup = ({
+  errors,
   template,
   templatePrefix,
   tableData,
-  labelsObject,
   parsingRules,
 }: LookupTableSetupHookProps) => {
   const [modalType, setModalType] = useState<ModalType>(
@@ -19,7 +23,6 @@ export const useSubscaleLookupTableSetup = ({
   const [step, setStep] = useState<Steps>(0);
   const [data, setData] = useState<DataTableItem[]>();
   const [error, setError] = useState<JSX.Element | null>(null);
-  const fileUploaderRef = useRef<null | FileUploaderRefProps>(null);
 
   const onFileReady = (file: ImportedFile | null) => {
     if (!file) {
@@ -29,13 +32,10 @@ export const useSubscaleLookupTableSetup = ({
     }
 
     const mappedData = file.data.map(processImportedData);
-    if (isFileCannotBeParsed(mappedData, parsingRules)) {
-      fileUploaderRef.current?.setFile(null);
-      setError(() => labelsObject.errors.fileCantBeParsed);
+    if (isFileCannotBeParsed(mappedData, parsingRules) || !validateLookupTable(mappedData))
+      return setError(errors.fileCantBeParsed);
 
-      return;
-    }
-
+    setError(null);
     setData(mappedData);
     setStep((prevState) => ++prevState as Steps);
   };
@@ -57,7 +57,6 @@ export const useSubscaleLookupTableSetup = ({
     step,
     data,
     error,
-    fileUploaderRef,
     setModalType,
     setError,
     setStep,

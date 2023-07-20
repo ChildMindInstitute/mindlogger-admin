@@ -1,11 +1,4 @@
-import {
-  DataTableItem,
-  FileUploaderProps,
-  FileUploaderRefProps,
-  ImportedFile,
-  ModalProps,
-} from 'shared/components';
-import { MutableRefObject } from 'react';
+import { DataTableItem, FileUploaderProps, ImportedFile, ModalProps } from 'shared/components';
 
 export type LookupTableProps = {
   open: boolean;
@@ -23,10 +16,10 @@ export type LookupTableProps = {
 };
 
 export type LookupTableSetupHookProps = {
+  errors: LabelsObject['errors'];
   template: LookupTableProps['template'];
   templatePrefix: LookupTableProps['templatePrefix'];
   tableData?: DataTableItem[];
-  labelsObject: LookupTableProps['labelsObject'];
   parsingRules: LookupTableProps['parsingRules'];
 };
 
@@ -58,7 +51,6 @@ export type GetComponentsProps = {
   setModalType: (value: ModalType) => void;
   setStep: (value: Steps) => void;
   setError: (value: JSX.Element | null) => void;
-  fileUploaderRef?: MutableRefObject<FileUploaderRefProps | null>;
 };
 
 export type ScreenObjectProps = Record<
@@ -85,3 +77,8 @@ export const enum ModalType {
 }
 
 export type Steps = 0 | 1;
+
+export type LookupTableDataItem = {
+  age?: string | number | null;
+  sex?: string | null;
+};

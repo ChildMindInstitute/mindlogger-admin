@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import debounce from 'lodash.debounce';
@@ -15,27 +15,35 @@ import {
   usePermissions,
 } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
-import { applet, SingleApplet } from 'shared/state';
+import { applet } from 'shared/state';
 import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
-import { LocalStorageKeys, storage } from 'shared/utils';
+import { builderSessionStorage } from 'shared/utils';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import { getDefaultValues, getAppletTabs } from './BuilderApplet.utils';
 
 export const BuilderApplet = () => {
   const params = useParams();
+  const location = useLocation();
   const hiddenHeader = !!params.activityId || !!params.activityFlowId;
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { getAppletWithItems } = applet.thunk;
-  const loadingStatus = applet.useResponseStatus() ?? {};
+  const loadingStatus = applet.useResponseStatus();
+  const appletResponseType = applet.useResponseTypePrefix();
+  const isAppletLoaded =
+    loadingStatus === 'success' &&
+    appletResponseType === 'applet/getAppletWithItems' &&
+    !isNewApplet;
   const { ownerId } = workspaces.useData() || {};
   const removeAppletData = useRemoveAppletData();
   const [isFromLibrary, setIsFromLibrary] = useState(false);
+  const { data: dataFromLibrary } = location.state ?? {};
+  const hasLibraryData = isFromLibrary && dataFromLibrary;
 
   const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
     getDefaultValues(appletData),
@@ -61,39 +69,42 @@ export const BuilderApplet = () => {
   } = methods;
 
   useEffect(() => {
-    if (loadingStatus === 'success' && !isNewApplet) {
-      (async () => {
-        await reset(getFormValues());
-        const libraryPreparedData = storage.getItem(
-          LocalStorageKeys.LibraryPreparedData,
-        ) as SingleApplet;
-
-        if (libraryPreparedData) {
-          setIsFromLibrary(true);
-          const formValues = await getValues();
-          const libraryConvertedValues = await getDefaultValues(libraryPreparedData);
-          const newFormValues = {
-            ...formValues,
-            activities: [...formValues.activities, ...libraryConvertedValues.activities],
-            activityFlows: [...formValues.activityFlows, ...libraryConvertedValues.activityFlows],
-          };
-
-          await reset(newFormValues);
-        }
-      })();
-    }
-  }, [loadingStatus, isNewApplet]);
+    location.state?.isFromLibrary && setIsFromLibrary(true);
+  }, [location.state?.isFromLibrary]);
 
   useEffect(() => {
-    const isFromLibrary = storage.getItem(LocalStorageKeys.IsFromLibrary) as boolean;
-    if (isFromLibrary) {
-      setIsFromLibrary(true);
-    }
+    if (!isAppletLoaded) return;
 
+    (async () => {
+      await reset(getFormValues());
+
+      if (!dataFromLibrary) return;
+
+      const formValues = await getValues();
+      const libraryConvertedValues = await getDefaultValues(dataFromLibrary);
+      const newFormValues = {
+        ...formValues,
+        activities: [...formValues.activities, ...libraryConvertedValues.activities],
+        activityFlows: [...formValues.activityFlows, ...libraryConvertedValues.activityFlows],
+      };
+
+      await reset(newFormValues);
+    })();
+  }, [isAppletLoaded]);
+
+  useEffect(() => {
+    if (hasLibraryData && isNewApplet) {
+      builderSessionStorage.setItem(getDefaultValues(dataFromLibrary));
+      reset(getDefaultValues(dataFromLibrary));
+    }
+  }, [hasLibraryData, isNewApplet]);
+
+  useEffect(() => {
     if (!isNewApplet || isFromLibrary) return;
+
     removeAppletData();
     reset(getDefaultValues());
-  }, [isNewApplet]);
+  }, [isNewApplet, isFromLibrary]);
 
   const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(getValues);
 
@@ -110,6 +121,8 @@ export const BuilderApplet = () => {
       subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => removeAppletData, []);
 
   const { errors } = useFormState({
     control,
