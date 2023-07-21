@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,7 +8,7 @@ import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks';
 import { editRespondentApi } from 'api';
-import { getErrorMessage } from 'shared/utils';
+import { falseReturnFunc, getErrorMessage } from 'shared/utils';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
 import { editRespondentFormSchema } from './EditRespondentPopup.schema';
@@ -24,15 +24,23 @@ export const EditRespondentPopup = ({
   const { t } = useTranslation('app');
 
   const [isSuccessVisible, setIsSuccessVisible] = useState(false);
+  const [isServerErrorVisible, setIsServerErrorVisible] = useState(true);
 
-  const { handleSubmit, control, setValue, getValues } = useForm<EditRespondentForm>({
+  const { handleSubmit, control, setValue, getValues, trigger } = useForm<EditRespondentForm>({
     resolver: yupResolver(editRespondentFormSchema()),
     defaultValues: { secretUserId: '', nickname: '' },
   });
 
-  const { execute: editRespondent, error } = useAsync(editRespondentApi, () => {
-    setIsSuccessVisible(true);
-  });
+  const { execute: editRespondent, error } = useAsync(
+    editRespondentApi,
+    () => {
+      setIsSuccessVisible(true);
+    },
+    falseReturnFunc,
+    () => {
+      setIsServerErrorVisible(true);
+    },
+  );
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
@@ -54,11 +62,19 @@ export const EditRespondentPopup = ({
     });
   };
 
+  const handleChangeSecredId = (event: ChangeEvent<HTMLInputElement>) => {
+    setValue('secretUserId', event.target.value);
+    setIsServerErrorVisible(false);
+    trigger('secretUserId');
+  };
+
   useEffect(() => {
     const { respondentNickname = '', respondentSecretId = '' } = chosenAppletData || {};
     setValue('secretUserId', respondentSecretId);
     setValue('nickname', respondentNickname);
   }, [chosenAppletData]);
+
+  const hasServerError = error && isServerErrorVisible;
 
   return (
     <Modal
@@ -91,10 +107,11 @@ export const EditRespondentPopup = ({
                   name="secretUserId"
                   control={control}
                   label={t('secretUserId')}
+                  onChange={handleChangeSecredId}
                 />
               </StyledController>
             </form>
-            {error && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
+            {hasServerError && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
           </>
         )}
       </StyledModalWrapper>
