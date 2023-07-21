@@ -169,7 +169,7 @@ const getABTrailsItemsData = (
     const abTrackerValue = (item.answer as DecryptedABTrailsAnswer).value;
 
     return acc.concat({
-      name: getABTrailsCsvName(index, item.respondentId),
+      name: getABTrailsCsvName(index, item.id),
       data: convertJsonToCsv(getABTrailsRecords(abTrackerValue.lines, abTrackerValue.width || 100)),
     });
   }, [] as ExportCsvData[]);
