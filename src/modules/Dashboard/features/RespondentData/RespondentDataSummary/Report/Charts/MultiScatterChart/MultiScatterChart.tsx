@@ -104,7 +104,7 @@ export const MultiScatterChart = ({
         plugins={[ChartDataLabels]}
       />
     ),
-    [lang],
+    [answers, lang],
   );
 
   return (

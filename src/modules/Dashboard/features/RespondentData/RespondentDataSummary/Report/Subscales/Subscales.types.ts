@@ -14,15 +14,7 @@ export type SubscaleScore = {
 };
 
 export type AdditionalInformation = {
-  description?: string;
-};
-
-export type Subscale = {
-  id: string;
-  type?: SubscalesTypes;
-  name?: string;
-  items?: Subscale[];
-  additionalInformation?: AdditionalInformation;
+  optionText: string;
 };
 
 export type SubscalesProps = {
@@ -60,8 +52,19 @@ export type ActivityCompletionToRender = {
   };
 };
 
-//TODO: fix type
+export type SubscaleToRender = Record<
+  string,
+  {
+    items?: FormattedResponse[];
+    restScores?: { [key: string]: { score: number; optionText: string } };
+  }
+>;
 
-export type SubscaleToRender = {
-  [key: string]: { items?: any };
+export type Subscale = {
+  items?: FormattedResponse[];
+  score?: number;
+  optionText?: string;
+  restScores: Record<string, Subscale>;
 };
+
+export type GroupedSubscales = Record<string, Subscale>;

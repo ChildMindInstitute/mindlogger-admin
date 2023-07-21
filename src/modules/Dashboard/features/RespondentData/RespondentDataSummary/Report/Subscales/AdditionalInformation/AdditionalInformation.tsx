@@ -6,10 +6,10 @@ import { AdditionalInformation as AdditionalInformationProps } from 'modules/Das
 
 import { StyledHeader, StyledContent, StyledMdEditor } from './AdditionalInformation.styles';
 
-export const AdditionalInformation = ({ description }: AdditionalInformationProps) => {
+export const AdditionalInformation = ({ optionText }: AdditionalInformationProps) => {
   const { t } = useTranslation();
 
-  return description ? (
+  return (
     <>
       <StyledHeader>
         <StyledHeadline sx={{ mr: theme.spacing(1.6) }}>
@@ -17,8 +17,8 @@ export const AdditionalInformation = ({ description }: AdditionalInformationProp
         </StyledHeadline>
       </StyledHeader>
       <StyledContent>
-        <StyledMdEditor modelValue={description} previewOnly />
+        <StyledMdEditor modelValue={optionText} previewOnly />
       </StyledContent>
     </>
-  ) : null;
+  );
 };

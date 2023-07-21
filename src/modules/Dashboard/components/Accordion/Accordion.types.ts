@@ -1,3 +1,5 @@
+import { DefaultTFuncReturn } from 'i18next';
+
 export enum AccordionUiType {
   Primary,
   Secondary,
@@ -6,5 +8,5 @@ export enum AccordionUiType {
 export type AccordionProps = {
   children: JSX.Element;
   uiType?: AccordionUiType;
-  title?: string;
+  title?: JSX.Element | DefaultTFuncReturn;
 };

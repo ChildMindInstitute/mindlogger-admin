@@ -19,7 +19,7 @@ export const Accordion = ({
   const isPrimaryUiType = uiType === AccordionUiType.Primary;
 
   return (
-    <StyledItem isPrimaryUiType={isPrimaryUiType}>
+    <StyledItem className="accordion-container" isPrimaryUiType={isPrimaryUiType}>
       <StyledFlexTopCenter
         sx={{
           mb: theme.spacing(isPrimaryUiType ? 0 : 1),

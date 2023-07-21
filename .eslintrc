@@ -16,7 +16,7 @@
     "react/react-in-jsx-scope": "off",
     "no-trailing-spaces": "error",
     "react/no-children-prop": "off",
-    "no-console": 1,
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "quotes": ["error", "single"],
     "import/order": [
       "error",

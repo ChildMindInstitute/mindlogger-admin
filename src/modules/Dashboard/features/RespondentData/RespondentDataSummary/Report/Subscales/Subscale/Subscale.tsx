@@ -1,53 +1,98 @@
 import { Fragment } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
+import uniqueId from 'lodash.uniqueid';
+import { useTranslation } from 'react-i18next';
 
+import { useDatavizFilters } from 'modules/Dashboard/hooks';
+import { getDictionaryText } from 'shared/utils';
 import { Accordion } from 'modules/Dashboard/components';
-import { theme } from 'shared/styles';
-
-import { ReportTable } from '../../ReportTable';
-import { AdditionalInformation } from '../AdditionalInformation';
+import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 import {
-  AdditionalInformation as AdditionalInformationProps,
-  SubscalesTypes,
-} from '../Subscales.types';
+  FilterFormValues,
+  FormattedResponse,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import { isItemUnsupported } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
+import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
+import { COLORS } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.const';
+import { getResponseItem } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils';
+import { StyledBodyMedium, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
+
+import { AdditionalInformation } from '../AdditionalInformation';
 import { SubscaleProps } from './Subscale.types';
+import { StyledSubscaleContainer } from './Subscale.styles';
 
-export const Subscale = ({ items }: SubscaleProps) => {
-  const renderAdditionalInformation = (additionalInformation: AdditionalInformationProps) => (
-    <Box sx={{ m: theme.spacing(4.8, 0) }}>
-      <AdditionalInformation {...additionalInformation} />
-    </Box>
-  );
+export const Subscale = ({ isNested = false, name, subscale, versions }: SubscaleProps) => {
+  const { t } = useTranslation('app');
 
-  const renderItem = (type?: SubscalesTypes) => {
-    switch (type) {
-      case SubscalesTypes.Table:
-        return <ReportTable />;
+  const { watch } = useFormContext<FilterFormValues>();
 
-      default:
-        return null;
-    }
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
+
+  const renderChart = ({ activityItem, answers }: FormattedResponse, index: number) => {
+    if (isItemUnsupported(activityItem.responseType))
+      return <UnsupportedItemResponse itemType={activityItem.responseType} />;
+
+    const color = COLORS[index % COLORS.length];
+
+    return getResponseItem({
+      color,
+      minDate,
+      maxDate,
+      activityItem,
+      versions: filteredVersions,
+      answers,
+    });
   };
 
   return (
-    <>
-      {items?.map(({ type, id, name, items, additionalInformation }) => (
-        <Fragment key={id}>
-          {items?.length ? (
-            <Accordion title={name} key={id}>
-              <>
-                {additionalInformation && renderAdditionalInformation(additionalInformation)}
-                <Subscale items={items} />
-              </>
-            </Accordion>
-          ) : (
-            <>
-              {additionalInformation && renderAdditionalInformation(additionalInformation)}
-              <>{renderItem(type)}</>
-            </>
+    <StyledSubscaleContainer isNested={isNested}>
+      <Accordion
+        title={
+          <>
+            <StyledTitleBoldMedium color={variables.palette.on_surface_variant}>
+              {name}
+            </StyledTitleBoldMedium>
+            {subscale.score !== undefined && (
+              <StyledBodyMedium color={variables.palette.on_surface_variant}>
+                {t('score')}: {subscale.score}
+              </StyledBodyMedium>
+            )}
+          </>
+        }
+      >
+        <Box sx={{ mt: theme.spacing(4.8) }}>
+          {subscale.optionText && (
+            <Box sx={{ m: theme.spacing(4.8, 0) }}>
+              <AdditionalInformation optionText={subscale.optionText} />
+            </Box>
           )}
-        </Fragment>
-      ))}
-    </>
+          {!!subscale?.items?.length &&
+            subscale?.items?.map((item, index: number) => (
+              <Box key={`${item.activityItem.id}-${index}`} sx={{ m: theme.spacing(2.4, 0) }}>
+                <CollapsedMdText
+                  text={getDictionaryText(item.activityItem.question)}
+                  maxHeight={120}
+                />
+                {renderChart(item, index)}
+              </Box>
+            ))}
+          {!!subscale?.restScores && (
+            <Box sx={{ mt: theme.spacing(4.8) }}>
+              {Object.keys(subscale?.restScores)?.map((restScore) => (
+                <Fragment key={uniqueId()}>
+                  <Subscale
+                    isNested
+                    subscale={subscale?.restScores[restScore]}
+                    name={restScore}
+                    versions={versions}
+                  />
+                </Fragment>
+              ))}
+            </Box>
+          )}
+        </Box>
+      </Accordion>
+    </StyledSubscaleContainer>
   );
 };
