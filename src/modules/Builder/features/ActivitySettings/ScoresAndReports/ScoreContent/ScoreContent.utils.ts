@@ -54,7 +54,7 @@ const getItemScoreRange = (item: Item) => {
   ) {
     maxScore = Math.max(...scores);
   } else if (item.responseType === ItemResponseType.MultipleSelection) {
-    maxScore = scores.reduce((acc, score) => (score > 0 || 0) && acc + score, 0);
+    maxScore = scores.reduce((acc, score) => (score > 0 ? acc + score : acc), 0);
   }
 
   return { maxScore, minScore };
