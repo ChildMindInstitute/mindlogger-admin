@@ -4,17 +4,14 @@ import { useFormContext } from 'react-hook-form';
 
 import { StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
+import { SubscaleTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
 import { TitleComponent } from '../../TitleComponent';
 import { SubscaleHeaderContentProps } from './SubscaleHeaderContent.types';
 import { StyledWrapper } from './SubscaleHeaderContent.styles';
 import { LookupTable } from '../LookupTable';
 import { getSubscaleModalLabels } from '../SubscalesConfiguration.utils';
-import {
-  parsingRules,
-  subscaleColumnData,
-  subscaleTableTemplate,
-} from './SubscaleHeaderContent.const';
+import { subscaleColumnData, subscaleTableTemplate } from './SubscaleHeaderContent.const';
 import { StyledSvg } from '../SubscalesConfiguration.styles';
 
 export const SubscaleHeaderContent = ({
@@ -59,7 +56,7 @@ export const SubscaleHeaderContent = ({
           tableData={subscaleTableData}
           template={subscaleTableTemplate}
           templatePrefix={'subscale_'}
-          parsingRules={parsingRules}
+          schema={SubscaleTableDataSchema}
           onUpdate={onUpdate}
           onClose={() => {
             setIsSubscaleLookupTableOpened(false);

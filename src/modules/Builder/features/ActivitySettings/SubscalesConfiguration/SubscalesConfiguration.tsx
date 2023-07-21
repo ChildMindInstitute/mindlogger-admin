@@ -11,12 +11,12 @@ import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/ho
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import { SubscaleFormValue } from 'modules/Builder/types';
+import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
 import { StyledButtonsContainer } from '../ActivitySettings.styles';
 import { commonButtonProps } from '../ActivitySettings.const';
 import {
   options,
-  parsingRules,
   totalScoreTableColumnData,
   totalScoreTableTemplate,
 } from './SubscalesConfiguration.const';
@@ -190,7 +190,7 @@ export const SubscalesConfiguration = () => {
           tableData={tableData}
           template={totalScoreTableTemplate}
           templatePrefix={'total_score_'}
-          parsingRules={parsingRules}
+          schema={TotalScoresTableDataSchema}
           onUpdate={onTableDataUpdate}
           onClose={() => {
             setIsLookupTableOpened(false);

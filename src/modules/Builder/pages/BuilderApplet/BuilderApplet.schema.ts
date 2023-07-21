@@ -34,6 +34,7 @@ import {
   isTouchOrGyroscopeRespType,
   testFunctionForNotSupportedItems,
   testFunctionForSkippedItems,
+  testFunctionForSubscaleAge,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
 } from './BuilderApplet.utils';
@@ -376,19 +377,27 @@ export const ItemSchema = () =>
 const SubscaleTableDataItemSchema = () =>
   yup
     .object({
-      score: yup.string(),
-      rawScore: yup.string(),
-      age: yup.number().nullable(),
-      sex: yup.string().nullable(),
+      score: yup.string().required(),
+      rawScore: yup.string().required(),
+      age: yup
+        .string()
+        .nullable()
+        .test('subscale-age-validator', (age) => testFunctionForSubscaleAge('age', age)),
+      sex: yup
+        .string()
+        .nullable()
+        .matches(/^[MF]?$/),
       optionalText: yup.string().nullable(),
     })
     .required();
 
 const TotalScoreTableDataItemSchema = () =>
   yup.object({
-    rawScore: yup.string(),
+    rawScore: yup.string().required(),
     optionalText: yup.string().nullable(),
   });
+
+export const SubscaleTableDataSchema = yup.array().of(SubscaleTableDataItemSchema()).nullable();
 
 export const SubscaleSchema = () =>
   yup
@@ -404,7 +413,7 @@ export const SubscaleSchema = () =>
         ),
       items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
       scoring: yup.string(),
-      subscaleTableData: yup.array().of(SubscaleTableDataItemSchema()).nullable(),
+      subscaleTableData: SubscaleTableDataSchema,
     })
     .required();
 
@@ -499,6 +508,11 @@ export const SectionConditionalLogic = () =>
       .min(1, <string>t('validationMessages.atLeastOneCondition')),
     match: yup.string(),
   });
+
+export const TotalScoresTableDataSchema = yup
+  .array()
+  .of(TotalScoreTableDataItemSchema())
+  .nullable();
 
 export const SectionSchema = () =>
   yup.object({

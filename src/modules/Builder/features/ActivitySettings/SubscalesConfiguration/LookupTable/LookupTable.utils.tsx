@@ -7,11 +7,9 @@ import i18n from 'i18n';
 
 import {
   GetComponentsProps,
-  LookupTableProps,
   ModalType,
   ScreenObjectProps,
   LookupTableDataItem,
-  CheckerType,
 } from './LookupTable.types';
 
 const { t } = i18n;
@@ -134,16 +132,6 @@ export const getModalComponents = ({
 
   return components[modalType];
 };
-
-export const validateScore: CheckerType = (value) => !!value;
-export const validateSex: CheckerType<string | null> = (sex) => (sex ? /^[MF]?$/.test(sex) : true);
-export const validateAge: CheckerType<string | number | null> = (age) =>
-  typeof age === 'number' || age ? +age > 0 : true;
-
-export const validateLookupTable = (
-  data: LookupTableDataItem[],
-  rules: LookupTableProps['parsingRules'],
-) => data?.every((item) => rules.every(({ key, checker }) => checker(item[key])));
 
 export const processImportedData = (item: Record<string, string | number>) => {
   Object.keys(item).forEach(

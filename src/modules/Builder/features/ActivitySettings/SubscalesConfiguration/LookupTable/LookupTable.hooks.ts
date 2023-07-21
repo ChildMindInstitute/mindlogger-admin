@@ -4,14 +4,14 @@ import { DataTableItem, ImportedFile } from 'shared/components';
 import { exportTemplate } from 'shared/utils';
 
 import { ModalType, Steps, LookupTableSetupHookProps } from './LookupTable.types';
-import { processImportedData, validateLookupTable } from './LookupTable.utils';
+import { processImportedData } from './LookupTable.utils';
 
 export const useSubscaleLookupTableSetup = ({
   errors,
   template,
   templatePrefix,
   tableData,
-  parsingRules,
+  schema,
 }: LookupTableSetupHookProps) => {
   const [modalType, setModalType] = useState<ModalType>(
     tableData?.length ? ModalType.Edit : ModalType.Upload,
@@ -28,7 +28,7 @@ export const useSubscaleLookupTableSetup = ({
     }
 
     const mappedData = file.data.map(processImportedData);
-    if (!validateLookupTable(mappedData, parsingRules)) return setError(errors.fileCantBeParsed);
+    if (!schema.isValidSync(mappedData)) return setError(errors.fileCantBeParsed);
 
     setError(null);
     setData(mappedData);

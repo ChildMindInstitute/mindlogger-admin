@@ -1,6 +1,7 @@
-import { DataTableItem, FileUploaderProps, ImportedFile, ModalProps } from 'shared/components';
+import { BaseSchema } from 'yup';
+import { AnyObject } from 'yup/lib/types';
 
-export type CheckerType<T = string> = (value: T) => boolean;
+import { DataTableItem, FileUploaderProps, ImportedFile, ModalProps } from 'shared/components';
 
 export type LookupTableProps = {
   open: boolean;
@@ -9,10 +10,7 @@ export type LookupTableProps = {
   tableData?: DataTableItem[];
   template: Record<string, string | number | undefined>[];
   templatePrefix?: string;
-  parsingRules: {
-    checker: CheckerType<any>;
-    key: keyof LookupTableDataItem;
-  }[];
+  schema: BaseSchema<any, AnyObject, any>;
   onClose: () => void;
   onUpdate: (lookupTableData?: DataTableItem[]) => void;
 };
@@ -22,7 +20,7 @@ export type LookupTableSetupHookProps = {
   template: LookupTableProps['template'];
   templatePrefix: LookupTableProps['templatePrefix'];
   tableData?: DataTableItem[];
-  parsingRules: LookupTableProps['parsingRules'];
+  schema: LookupTableProps['schema'];
 };
 
 export type LabelsObject = {
