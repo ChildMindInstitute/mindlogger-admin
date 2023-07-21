@@ -120,10 +120,11 @@ export const getData = (answers: ActivityCompletion[], versions: Version[]) => (
       pointRadius: 5,
       pointHoverRadius: 6,
       xAxisID: 'x',
-      data: answers.map(({ endDatetime, answerId }) => ({
+      data: answers.map(({ endDatetime, answerId, subscaleSetting }) => ({
         x: new Date(endDatetime),
         y: 0,
         answerId,
+        isSubscalesVisible: !!subscaleSetting,
       })),
       backgroundColor: variables.palette.primary,
       borderColor: variables.palette.primary,
