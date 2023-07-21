@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
+import { SubscaleTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
 import { TitleComponent } from '../../TitleComponent';
 import { SubscaleHeaderContentProps } from './SubscaleHeaderContent.types';
@@ -55,6 +56,7 @@ export const SubscaleHeaderContent = ({
           tableData={subscaleTableData}
           template={subscaleTableTemplate}
           templatePrefix={'subscale_'}
+          schema={SubscaleTableDataSchema}
           onUpdate={onUpdate}
           onClose={() => {
             setIsSubscaleLookupTableOpened(false);

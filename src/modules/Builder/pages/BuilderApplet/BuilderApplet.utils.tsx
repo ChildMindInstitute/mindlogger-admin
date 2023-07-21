@@ -820,3 +820,6 @@ export const testFunctionForSkippedItems = (field: string, value: string, contex
 
   return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
 };
+
+export const testFunctionForSubscaleAge = (field: string, value?: number | string | null) =>
+  typeof value === 'number' || value ? +value > 0 : true;

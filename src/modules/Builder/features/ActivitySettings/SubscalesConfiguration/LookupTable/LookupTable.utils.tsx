@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 
 import { DataTable, FileUploader } from 'shared/components';
 import { theme, variables } from 'shared/styles';
@@ -132,9 +133,14 @@ export const getModalComponents = ({
   return components[modalType];
 };
 
-const validateSex = (sex: string) => /^(M|F)?$/.test(sex);
-const validateAge = (age?: string | number | null) =>
-  typeof age === 'number' || age ? +age > 0 : true;
+export const processImportedData = (item: Record<string, string | number>) => {
+  Object.keys(item).forEach(
+    (k) => (item[k] = typeof item[k] === 'string' ? (item[k] as string).trim() : item[k]),
+  );
 
-export const validateLookupTable = (data: LookupTableDataItem[]) =>
-  data?.every(({ age, sex }) => validateSex(sex ?? '') && validateAge(age));
+  return {
+    ...item,
+    sex: (item.sex as string) || null,
+    id: uuidv4(),
+  } as LookupTableDataItem;
+};

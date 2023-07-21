@@ -12,6 +12,7 @@ export const LookupTable = ({
   tableData,
   template,
   templatePrefix = '',
+  schema,
   onUpdate,
   onClose,
 }: LookupTableProps) => {
@@ -20,6 +21,7 @@ export const LookupTable = ({
     template,
     templatePrefix,
     tableData,
+    schema,
   });
 
   const screens = getModalComponents({
