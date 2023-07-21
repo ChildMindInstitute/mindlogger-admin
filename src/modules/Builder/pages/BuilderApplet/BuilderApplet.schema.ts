@@ -30,6 +30,9 @@ import {
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import {
+  checkRawScoreRegexp,
+  checkScoreRegexp,
+  getTestFunctionForSubscaleScore,
   isPerfTaskResponseType,
   isTouchOrGyroscopeRespType,
   testFunctionForNotSupportedItems,
@@ -374,11 +377,19 @@ export const ItemSchema = () =>
     })
     .required();
 
+const rawScoreSchema = yup
+  .string()
+  .required()
+  .test('subscale-rawScore-validator', getTestFunctionForSubscaleScore(checkRawScoreRegexp));
+const optionalTextSchema = yup.string().nullable();
 const SubscaleTableDataItemSchema = () =>
   yup
     .object({
-      score: yup.string().required(),
-      rawScore: yup.string().required(),
+      score: yup
+        .string()
+        .required()
+        .test('subscale-score-validator', getTestFunctionForSubscaleScore(checkScoreRegexp)),
+      rawScore: rawScoreSchema,
       age: yup
         .string()
         .nullable()
@@ -387,14 +398,14 @@ const SubscaleTableDataItemSchema = () =>
         .string()
         .nullable()
         .matches(/^[MF]?$/),
-      optionalText: yup.string().nullable(),
+      optionalText: optionalTextSchema,
     })
     .required();
 
 const TotalScoreTableDataItemSchema = () =>
   yup.object({
-    rawScore: yup.string().required(),
-    optionalText: yup.string().nullable(),
+    rawScore: rawScoreSchema,
+    optionalText: optionalTextSchema,
   });
 
 export const SubscaleTableDataSchema = yup.array().of(SubscaleTableDataItemSchema()).nullable();
