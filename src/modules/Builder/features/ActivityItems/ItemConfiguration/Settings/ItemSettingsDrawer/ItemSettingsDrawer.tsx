@@ -23,6 +23,7 @@ export const ItemSettingsDrawer = ({ open, onClose, children }: ItemSettingsDraw
       onClose={onClose}
       ModalProps={{
         container: () => document.querySelector('#simple-tabpanel-items'),
+        disableEnforceFocus: true,
       }}
       transitionDuration={0}
     >

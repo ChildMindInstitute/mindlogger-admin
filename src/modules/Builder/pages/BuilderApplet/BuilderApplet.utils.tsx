@@ -611,6 +611,11 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
     };
   });
 
+const getShowMessageAndPrintItems = (message?: string, itemsPrint?: string[]) => ({
+  showMessage: !!message?.length,
+  printItems: !!itemsPrint?.length,
+});
+
 const getScoresAndReports = (activity: Activity) => {
   const { items, scoresAndReports } = activity;
   if (!scoresAndReports) return;
@@ -618,13 +623,16 @@ const getScoresAndReports = (activity: Activity) => {
   const { sections: initialSections, scores: initialScores } = scoresAndReports;
   const scores = initialScores.map((score) => ({
     ...score,
+    ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
     conditionalLogic: score.conditionalLogic?.map((conditional) => ({
       ...conditional,
+      ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
       conditions: getScoreConditions(items, conditional.conditions),
     })),
   }));
   const sections = initialSections.map((section) => ({
     ...section,
+    ...getShowMessageAndPrintItems(section.message, section.itemsPrint),
     ...(!!Object.keys(section.conditionalLogic || {}).length && {
       conditionalLogic: {
         ...section.conditionalLogic,
