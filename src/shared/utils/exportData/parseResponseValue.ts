@@ -93,7 +93,7 @@ export const parseResponseValueRaw = <
     case ItemResponseType.Drawing:
       return getMediaFileName(item, 'svg');
     case ItemResponseType.ABTrails:
-      return getABTrailsCsvName(index, item.respondentId);
+      return getABTrailsCsvName(index, item.id);
     case ItemResponseType.SingleSelectionPerRow: {
       const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
 
