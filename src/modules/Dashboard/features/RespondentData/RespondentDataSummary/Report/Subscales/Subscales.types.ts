@@ -52,22 +52,19 @@ export type ActivityCompletionToRender = {
   };
 };
 
-export type SubscaleToRender = {
-  [key: string]: {
+export type SubscaleToRender = Record<
+  string,
+  {
     items?: FormattedResponse[];
     restScores?: { [key: string]: { score: number; optionText: string } };
-  };
-};
+  }
+>;
 
 export type Subscale = {
   items?: FormattedResponse[];
   score?: number;
   optionText?: string;
-  restScores: {
-    [key: string]: Subscale;
-  };
+  restScores: Record<string, Subscale>;
 };
 
-export type GroupedSubscales = {
-  [key: string]: Subscale;
-};
+export type GroupedSubscales = Record<string, Subscale>;

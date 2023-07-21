@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';

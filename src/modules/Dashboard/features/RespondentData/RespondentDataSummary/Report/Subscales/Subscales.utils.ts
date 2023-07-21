@@ -114,7 +114,7 @@ export const formatCurrentSubscales = (currentSubscales: ActivityCompletionToRen
     (formattedSubscales: ActivityCompletionToRender, subscaleName) => {
       const currItems = currentSubscales[subscaleName]?.items || [];
       const updatedItems = currItems?.reduce(
-        (items: Record<string, FormattedResponse>, formattedResponse: FormattedResponse) => {
+        (items: Record<string, FormattedResponse>, formattedResponse) => {
           const prevActivityItem = items[formattedResponse.activityItem.id];
           if (!prevActivityItem) {
             return {
