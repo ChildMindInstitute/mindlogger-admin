@@ -19,7 +19,7 @@ export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
 
     const { setCurrentActivityCompletionData } = useContext(ReportContext);
 
-    const { answerId } = (data?.raw as ScatterTooltipRowData) || {};
+    const { answerId, isSubscalesVisible } = (data?.raw as ScatterTooltipRowData) || {};
 
     const navigateToReviewAnswer = () => {
       if (!data) return;
@@ -47,9 +47,11 @@ export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
           <StyledListItemButton onClick={navigateToReviewAnswer}>
             {t('review')}
           </StyledListItemButton>
-          <StyledListItemButton onClick={showSubscaleResultHandler}>
-            {t('showSubscaleResult')}
-          </StyledListItemButton>
+          {isSubscalesVisible && (
+            <StyledListItemButton onClick={showSubscaleResultHandler}>
+              {t('showSubscaleResult')}
+            </StyledListItemButton>
+          )}
         </StyledFlexColumn>
       </StyledTooltip>
     );
