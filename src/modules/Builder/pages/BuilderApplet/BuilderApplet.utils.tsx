@@ -34,6 +34,7 @@ import {
   getEntityKey,
   getObjectFromList,
   getTextBetweenBrackets,
+  INTERVAL_SYMBOL,
   Path,
 } from 'shared/utils';
 import {
@@ -823,3 +824,18 @@ export const testFunctionForSkippedItems = (field: string, value: string, contex
 
 export const testFunctionForSubscaleAge = (field: string, value?: number | string | null) =>
   typeof value === 'number' || value ? +value > 0 : true;
+
+export const checkScoreRegexp = /^-?\d+\.?\d{0,5}$/;
+export const checkRawScoreRegexp = /^-?\d+$/;
+
+export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: string) => {
+  if (!value) return false;
+
+  if (value.includes(INTERVAL_SYMBOL)) {
+    const [leftValue, rightValue] = value.split(INTERVAL_SYMBOL).map((item) => item.trim());
+
+    return regexp.test(leftValue) && regexp.test(rightValue);
+  }
+
+  return regexp.test(value);
+};
