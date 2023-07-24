@@ -23,7 +23,7 @@ import { createArrayFromMinToMax } from '../array';
 export const getSubScaleScore = (subscalesSum: number, type: SubscaleTotalScore, length: number) =>
   type === SubscaleTotalScore.Sum ? subscalesSum : subscalesSum / length;
 
-export const parseSex = (sex: string) => (sex === Sex.M ? '1' : '2');
+export const parseSex = (sex: string) => (sex === Sex.M ? '0' : '1');
 
 const INTERVAL_SYMBOL = '~';
 
@@ -93,7 +93,7 @@ export const calcScores = <T>(
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {
       const genderAnswer = activityItems[LookupTableItems.Gender_screen]
         ?.answer as DecryptedSingleSelectionAnswer;
-      const withSex = sex ? parseSex(sex) === genderAnswer?.value : true;
+      const withSex = sex ? parseSex(sex) === String(genderAnswer?.value) : true;
       const withAge = age
         ? String(age) ===
           (activityItems[LookupTableItems.Age_screen]?.answer as DecryptedTextAnswer)
