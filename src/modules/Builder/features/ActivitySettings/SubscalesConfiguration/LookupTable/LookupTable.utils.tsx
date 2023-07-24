@@ -40,6 +40,7 @@ export const getModalComponents = ({
               onDownloadTemplate={onDownloadTemplate}
               invalidFileFormatError={labelsObject.errors.incorrectFileFormat}
               validationError={error}
+              parsingError={labelsObject.errors.fileCantBeParsed}
             />
           </>
         ),

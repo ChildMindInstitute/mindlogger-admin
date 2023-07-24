@@ -27,6 +27,7 @@ export const FileUploader = ({
   downloadFirstText,
   downloadSecondText,
   validationError,
+  parsingError,
   uiType = FileUploaderUiType.Primary,
 }: FileUploaderProps) => {
   const { t } = useTranslation();
@@ -59,6 +60,12 @@ export const FileUploader = ({
     }
 
     const file = files[0];
+    if (!file.type.includes('text')) {
+      setError(invalidFileFormatError);
+
+      return;
+    }
+
     importTable(file, isPrimaryUiType)
       .then((data) => {
         setError(null);
@@ -66,7 +73,7 @@ export const FileUploader = ({
         setFile(importedFile);
         onFileReady(importedFile);
       })
-      .catch(() => setError(invalidFileFormatError));
+      .catch(() => setError(parsingError || invalidFileFormatError));
   };
 
   const removeFile = () => {
