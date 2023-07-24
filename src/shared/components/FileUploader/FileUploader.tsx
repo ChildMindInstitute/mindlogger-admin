@@ -17,6 +17,7 @@ import { DownloadTemplate } from './DownloadTemlate';
 import { StyledButton, StyledLabel, StyledSvg, StyledTextField } from './FileUploader.styles';
 import { FileUploaderProps, ImportedFile } from './FileUploader.types';
 import { importTable, getDropText, getAcceptedFormats } from './FileUploader.utils';
+import { MimeType } from './FileUploader.const';
 
 export const FileUploader = ({
   uploadLabel,
@@ -29,6 +30,7 @@ export const FileUploader = ({
   validationError,
   parsingError,
   uiType = FileUploaderUiType.Primary,
+  csvOnly,
 }: FileUploaderProps) => {
   const { t } = useTranslation();
 
@@ -60,7 +62,7 @@ export const FileUploader = ({
     }
 
     const file = files[0];
-    if (!file.type.includes('text')) {
+    if (csvOnly && !file.type.includes(MimeType.Csv)) {
       setError(invalidFileFormatError);
 
       return;
@@ -130,14 +132,14 @@ export const FileUploader = ({
             label={
               <StyledFlexAllCenter>
                 <StyledBodyLarge sx={{ textAlign: 'center' }}>
-                  {getDropText(isPrimaryUiType)}
+                  {getDropText({ isPrimaryUiType, csvOnly })}
                 </StyledBodyLarge>
               </StyledFlexAllCenter>
             }
             control={
               <StyledTextField
                 onChange={handleChange}
-                inputProps={{ accept: getAcceptedFormats(isPrimaryUiType) }}
+                inputProps={{ accept: getAcceptedFormats({ isPrimaryUiType, csvOnly }) }}
                 type="file"
                 name="uploadFile"
               />

@@ -223,7 +223,7 @@ export const getSubscaleModalLabels = (name?: string): LabelsObject => ({
     initDescription: (
       <Trans i18nKey="subscaleLookupTable.upload.initDescription">
         Please upload file in
-        <strong> .csv, .xls, .xlsx, .ods. </strong>
+        <strong> .csv </strong>
         format
       </Trans>
     ),
@@ -285,7 +285,7 @@ export const getSubscaleModalLabels = (name?: string): LabelsObject => ({
       <StyledTitleSmall sx={{ color: variables.palette.semantic.error }}>
         <Trans i18nKey="subscaleLookupTable.errors.incorrectFileFormat">
           Incorrect file format. Please upload file in
-          <strong> .csv, .xls, .xlsx, .ods. </strong>
+          <strong> .csv. </strong>
           format.
         </Trans>
       </StyledTitleSmall>
