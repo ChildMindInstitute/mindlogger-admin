@@ -508,6 +508,7 @@
   "itemName": "Item Name",
   "displayedContent": "Displayed Content",
   "responseOptions": "Response Options",
+  "responseOptionsTooltip": "The respondent completed the Activity at these times",
   "settings": "Settings",
   "responseOptions_singleSelection": "Single Selection Response Option",
   "responseOptions_multipleSelection": "Multiple Selection Response Options",
