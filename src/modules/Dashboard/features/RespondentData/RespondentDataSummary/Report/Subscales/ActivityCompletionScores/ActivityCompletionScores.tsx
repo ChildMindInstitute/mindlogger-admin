@@ -22,6 +22,7 @@ export const ActivityCompletionScores = ({
   frequency,
   optionText,
   subscaleScores,
+  showAllSubscaleResultsVisible,
 }: ScoresProps) => {
   const { t } = useTranslation('app');
   const { setCurrentActivityCompletionData } = useContext(ReportContext);
@@ -60,13 +61,15 @@ export const ActivityCompletionScores = ({
     <>
       <StyledFlexSpaceBetween sx={{ mt: theme.spacing(6) }}>
         <StyledHeadline>{t('subscaleScores')}</StyledHeadline>
-        <StyledTextBtn
-          onClick={() => setCurrentActivityCompletionData(null)}
-          variant="text"
-          startIcon={<Svg id="reset" width="18" height="18" />}
-        >
-          {t('showAllSubscaleResults')}
-        </StyledTextBtn>
+        {showAllSubscaleResultsVisible && (
+          <StyledTextBtn
+            onClick={() => setCurrentActivityCompletionData(null)}
+            variant="text"
+            startIcon={<Svg id="reset" width="18" height="18" />}
+          >
+            {t('showAllSubscaleResults')}
+          </StyledTextBtn>
+        )}
       </StyledFlexSpaceBetween>
       {renderChartDescription()}
       <StyledChartContainer>
