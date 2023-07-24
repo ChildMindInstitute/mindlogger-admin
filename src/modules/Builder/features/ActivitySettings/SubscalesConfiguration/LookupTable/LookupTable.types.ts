@@ -1,3 +1,6 @@
+import { BaseSchema } from 'yup';
+import { AnyObject } from 'yup/lib/types';
+
 import { DataTableItem, FileUploaderProps, ImportedFile, ModalProps } from 'shared/components';
 
 export type LookupTableProps = {
@@ -7,6 +10,7 @@ export type LookupTableProps = {
   tableData?: DataTableItem[];
   template: Record<string, string | number | undefined>[];
   templatePrefix?: string;
+  schema: BaseSchema<any, AnyObject, any>;
   onClose: () => void;
   onUpdate: (lookupTableData?: DataTableItem[]) => void;
 };
@@ -16,6 +20,7 @@ export type LookupTableSetupHookProps = {
   template: LookupTableProps['template'];
   templatePrefix: LookupTableProps['templatePrefix'];
   tableData?: DataTableItem[];
+  schema: LookupTableProps['schema'];
 };
 
 export type LabelsObject = {
@@ -73,7 +78,11 @@ export const enum ModalType {
 
 export type Steps = 0 | 1;
 
-export type LookupTableDataItem = {
+export type LookupTableDataItem = DataTableItem & {
+  score?: string;
+  rawScore: string;
+  optionalText: string;
   age?: string | number | null;
   sex?: string | null;
+  id: string;
 };

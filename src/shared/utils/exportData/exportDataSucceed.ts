@@ -19,7 +19,7 @@ export const exportDataSucceed =
     callback?: () => void;
     getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
   }) =>
-  (response: AxiosResponse | null) => {
+  async (response: AxiosResponse | null) => {
     if (!response?.data?.result) return;
 
     const {
@@ -32,16 +32,15 @@ export const exportDataSucceed =
       flankerItemsData,
     } = prepareData(response.data.result, getDecryptedAnswers);
 
-    exportTemplate(reportData, GENERAL_REPORT_NAME);
-    exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
-    (async () => {
-      await Promise.allSettled([
-        exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing)),
-        exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker)),
-        exportCsvZip(abTrailsItemsData, getReportZipName(ZipFile.ABTrails)),
-        exportCsvZip(flankerItemsData, getReportZipName(ZipFile.Flanker)),
-        exportMediaZip(mediaData, getReportZipName(ZipFile.Media)),
-      ]);
-      callback?.();
-    })();
+    await exportTemplate(reportData, GENERAL_REPORT_NAME);
+    await exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
+
+    await Promise.allSettled([
+      exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing)),
+      exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker)),
+      exportCsvZip(abTrailsItemsData, getReportZipName(ZipFile.ABTrails)),
+      exportCsvZip(flankerItemsData, getReportZipName(ZipFile.Flanker)),
+      exportMediaZip(mediaData, getReportZipName(ZipFile.Media)),
+    ]);
+    callback?.();
   };

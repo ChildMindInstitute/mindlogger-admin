@@ -6,7 +6,16 @@ export const exportTemplate = <T extends unknown[]>(data: T, fileName: string, i
 
   utils.book_append_sheet(workBook, workSheet, 'Sheet1');
 
-  writeFile(workBook, `${fileName}${isXlsx ? '.xlsx' : '.csv'}`);
+  // Fix for Safari (Allow Multiple File Downloads).
+  // https://stackoverflow.com/questions/61961488/allow-multiple-file-downloads-in-safari
+  // One of the possible options to download multiple files is to add these files to the archive.
+  return new Promise((resolve) => {
+    writeFile(workBook, `${fileName}${isXlsx ? '.xlsx' : '.csv'}`);
+
+    setTimeout(() => {
+      resolve(true);
+    });
+  });
 };
 
 export const convertJsonToCsv = (data: unknown[]) => utils.sheet_to_csv(utils.json_to_sheet(data));

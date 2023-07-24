@@ -11,4 +11,5 @@ export type ScatterTooltipRowData = {
   x: string;
   y: number;
   answerId: string;
+  isSubscalesVisible: boolean;
 };
