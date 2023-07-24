@@ -400,13 +400,16 @@ const SubscaleTableDataItemSchema = () =>
         .matches(/^[MF]?$/),
       optionalText: optionalTextSchema,
     })
+    .noUnknown()
     .required();
 
 const TotalScoreTableDataItemSchema = () =>
-  yup.object({
-    rawScore: rawScoreSchema,
-    optionalText: optionalTextSchema,
-  });
+  yup
+    .object({
+      rawScore: rawScoreSchema,
+      optionalText: optionalTextSchema,
+    })
+    .noUnknown();
 
 export const SubscaleTableDataSchema = yup.array().of(SubscaleTableDataItemSchema()).nullable();
 
