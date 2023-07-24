@@ -119,7 +119,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
                 disabled={!filterByIdentifier}
               />
             </Box>
-            <Box sx={{ width: '32rem', ml: theme.spacing(2.4) }}>
+            <Box sx={{ width: '40rem', ml: theme.spacing(2.4) }}>
               <TagsInputController
                 name="versions"
                 limitTags={2}
