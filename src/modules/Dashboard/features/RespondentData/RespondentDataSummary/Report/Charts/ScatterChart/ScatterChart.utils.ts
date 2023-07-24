@@ -8,6 +8,7 @@ import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/Re
 
 import { ExtendedChartDataset } from './ScatterChart.types';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
+import { POINT_RADIUS_DEFAULT } from '../Charts.const';
 
 export const getOptions = (
   lang: keyof typeof locales,
@@ -117,8 +118,9 @@ export const getOptions = (
 export const getData = (answers: ActivityCompletion[], versions: Version[]) => ({
   datasets: [
     {
-      pointRadius: 5,
-      pointHoverRadius: 6,
+      borderWidth: 1,
+      pointRadius: POINT_RADIUS_DEFAULT,
+      pointBorderColor: variables.palette.white,
       xAxisID: 'x',
       data: answers.map(({ endDatetime, answerId, subscaleSetting }) => ({
         x: new Date(endDatetime),

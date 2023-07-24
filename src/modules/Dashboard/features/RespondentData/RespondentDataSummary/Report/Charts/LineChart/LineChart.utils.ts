@@ -1,5 +1,5 @@
 import { Context } from 'chartjs-plugin-datalabels';
-import { LegendItem, ChartData, LinearScale } from 'chart.js';
+import { LegendItem, ChartData, LinearScale, ScriptableTooltipContext } from 'chart.js';
 
 import { variables } from 'shared/styles';
 import { Version } from 'api';
@@ -7,7 +7,13 @@ import { pluck } from 'shared/utils';
 
 import { ExtendedChartDataset, SubscaleChartData, Tick } from './LineChart.types';
 import { COLORS } from './LineChart.const';
-import { SUBSCALES_CHART_LABEL_WIDTH_Y, OFFSET_Y_MAX, locales } from '../Charts.const';
+import {
+  SUBSCALES_CHART_LABEL_WIDTH_Y,
+  OFFSET_Y_MAX,
+  locales,
+  POINT_RADIUS_DEFAULT,
+  POINT_RADIUS_SECONDARY,
+} from '../Charts.const';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
 
 export const getOptions = (
@@ -15,6 +21,7 @@ export const getOptions = (
   minDate: Date,
   maxDate: Date,
   data: SubscaleChartData,
+  tooltipHandler: (context: ScriptableTooltipContext<'line'>) => void,
 ) => {
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
   const maxScore = Math.max(...pluck(responses.flat(), 'score'));
@@ -47,6 +54,10 @@ export const getOptions = (
             size: 14,
           },
         },
+      },
+      tooltip: {
+        enabled: false,
+        external: tooltipHandler,
       },
     },
     scales: {
@@ -161,15 +172,21 @@ export const getData = (data: SubscaleChartData, versions: Version[]) => {
       ...data.subscales.map((subscale, index) => ({
         xAxisID: 'x',
         label: subscale.name,
-        data: subscale.activityCompletions.map(({ date, score }) => ({
+        data: subscale.activityCompletions.map(({ date, score, optionText }) => ({
           x: date,
           y: score,
+          optionText,
         })),
         borderColor: COLORS[index % COLORS.length],
         backgroundColor: COLORS[index % COLORS.length],
         datalabels: {
           display: false,
         },
+        borderWidth: 1,
+        pointRadius: subscale.activityCompletions.map(({ optionText }) =>
+          optionText ? POINT_RADIUS_DEFAULT : POINT_RADIUS_SECONDARY,
+        ),
+        pointBorderColor: variables.palette.white,
       })),
       {
         xAxisID: 'x1',

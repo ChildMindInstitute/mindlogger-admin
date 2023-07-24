@@ -6,7 +6,7 @@ import { ItemResponseType, locales } from 'shared/consts';
 
 import { DataProps, ExtendedChartDataset, OptionsProps } from './MultiScatterChart.types';
 import { getStepSize, getTimeConfig, truncateString } from '../Charts.utils';
-import { LABEL_WIDTH_Y } from '../Charts.const';
+import { LABEL_WIDTH_Y, POINT_RADIUS_DEFAULT } from '../Charts.const';
 import { ItemOption } from '../../Report.types';
 
 export const getOptions = ({
@@ -143,8 +143,7 @@ export const getOptions = ({
 export const getData = ({ maxY, answers, versions, color }: DataProps) => ({
   datasets: [
     {
-      pointRadius: 6,
-      pointHoverRadius: 7,
+      pointRadius: POINT_RADIUS_DEFAULT,
       datalabels: {
         display: false,
       },
