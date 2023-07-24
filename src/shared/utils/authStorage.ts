@@ -1,6 +1,6 @@
 import { Workspace } from 'shared/state';
 
-import { LocalStorageKeys } from './storage';
+import { SessionStorageKeys } from './storage';
 
 const set = (key: string, data: unknown) => sessionStorage.setItem(key, JSON.stringify(data));
 const get = (key: string) => {
@@ -15,13 +15,13 @@ const get = (key: string) => {
 const remove = (key: string) => sessionStorage.removeItem(key);
 
 export const authStorage = {
-  getRefreshToken: () => get(LocalStorageKeys.RefreshToken),
-  getAccessToken: () => get(LocalStorageKeys.AccessToken),
-  getWorkspace: () => get(LocalStorageKeys.Workspace),
-  setRefreshToken: (token: string) => set(LocalStorageKeys.RefreshToken, token),
-  setAccessToken: (token: string) => set(LocalStorageKeys.AccessToken, token),
-  setWorkspace: (workspace: Workspace) => set(LocalStorageKeys.Workspace, workspace),
-  removeRefreshToken: () => remove(LocalStorageKeys.RefreshToken),
-  removeAccessToken: () => remove(LocalStorageKeys.AccessToken),
-  removeWorkspace: () => remove(LocalStorageKeys.Workspace),
+  getRefreshToken: () => get(SessionStorageKeys.RefreshToken),
+  getAccessToken: () => get(SessionStorageKeys.AccessToken),
+  getWorkspace: () => get(SessionStorageKeys.Workspace),
+  setRefreshToken: (token: string) => set(SessionStorageKeys.RefreshToken, token),
+  setAccessToken: (token: string) => set(SessionStorageKeys.AccessToken, token),
+  setWorkspace: (workspace: Workspace) => set(SessionStorageKeys.Workspace, workspace),
+  removeRefreshToken: () => remove(SessionStorageKeys.RefreshToken),
+  removeAccessToken: () => remove(SessionStorageKeys.AccessToken),
+  removeWorkspace: () => remove(SessionStorageKeys.Workspace),
 };
