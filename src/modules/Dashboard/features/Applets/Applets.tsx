@@ -11,7 +11,7 @@ import {
   PublishConcealAppletPopup,
   TransferOwnershipPopup,
 } from 'modules/Dashboard/features/Applet/Popups';
-import { popups, workspaces } from 'redux/modules';
+import { auth, popups, workspaces } from 'redux/modules';
 import { ButtonWithMenu, Search, Spinner, Svg } from 'shared/components';
 import { useBreadcrumbs, useTable } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
@@ -19,7 +19,7 @@ import { useAppDispatch } from 'redux/store';
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
 import { AppletsTableHeader, StyledButtons, StyledBody } from './Applets.styles';
-import { generateNewFolderName } from './Applets.utils';
+import { generateNewFolderName, getShowAddApplet } from './Applets.utils';
 import { useAppletsWithFolders } from './Applets.hooks';
 import { AppletContextType } from './Applets.types';
 
@@ -29,6 +29,9 @@ export const Applets = () => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const rolesData = workspaces.useRolesData();
+  const currentWorkspace = workspaces.useData();
+  const { user } = auth.useData() || {};
 
   const [rows, setRows] = useState<(Folder | Applet)[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -139,16 +142,20 @@ export const Applets = () => {
         }}
       >
         <AppletsTableHeader>
-          <StyledButtons>
-            <ButtonWithMenu
-              variant="outlined"
-              label={t('addApplet')}
-              anchorEl={anchorEl}
-              setAnchorEl={setAnchorEl}
-              menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
-              startIcon={<Svg width="18" height="18" id="applet-outlined" />}
-            />
-          </StyledButtons>
+          <Box>
+            {getShowAddApplet(currentWorkspace, rolesData, user) && (
+              <StyledButtons>
+                <ButtonWithMenu
+                  variant="outlined"
+                  label={t('addApplet')}
+                  anchorEl={anchorEl}
+                  setAnchorEl={setAnchorEl}
+                  menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
+                  startIcon={<Svg width="18" height="18" id="applet-outlined" />}
+                />
+              </StyledButtons>
+            )}
+          </Box>
           <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
         </AppletsTableHeader>
         <Table
