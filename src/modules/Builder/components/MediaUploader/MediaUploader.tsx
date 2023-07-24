@@ -10,7 +10,7 @@ import {
 } from 'shared/styles';
 import { Svg } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
-import { MAX_FILE_SIZE_8MB, ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
+import { MAX_FILE_SIZE_150MB, ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
 
 import { StyledContainer, StyledSourceContainer, StyledPreview } from './MediaUploader.styles';
 import { useMediaUploader } from './MediaUploader.hooks';
@@ -54,7 +54,7 @@ export const MediaUploader = ({
                 sx={{ marginBottom: theme.spacing(1) }}
                 color={variables.palette.semantic.error}
               >
-                {t(error, { size: byteFormatter(MAX_FILE_SIZE_8MB) })}
+                {t(error, { size: byteFormatter(MAX_FILE_SIZE_150MB) })}
               </StyledBodyMedium>
             )}
             <StyledBodyMedium sx={{ m: theme.spacing(1, 0) }}>
