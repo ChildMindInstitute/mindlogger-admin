@@ -25,7 +25,7 @@ export const getSubScaleScore = (subscalesSum: number, type: SubscaleTotalScore,
 
 export const parseSex = (sex: string) => (sex === Sex.M ? '1' : '2');
 
-const INTERVAL_SYMBOL = '~';
+export const INTERVAL_SYMBOL = '~';
 
 export const calcScores = <T>(
   data: ActivitySettingsSubscale,
