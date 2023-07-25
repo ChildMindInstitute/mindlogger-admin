@@ -70,11 +70,12 @@ export const ActivityItems = () => {
     setActiveItemId(item.key!);
   };
 
-  const handleInsertItem = (index: number) => {
-    const item = getNewActivityItem();
+  const handleInsertItem = (index: number, item?: ItemFormValues) => {
+    const itemToInsert = item ?? getNewActivityItem();
+    const shouldBecomeActive = !item || (item && activeItemId);
 
-    insertItem(index + 1, item);
-    setActiveItemId(item.key!);
+    insertItem(index + 1, itemToInsert);
+    shouldBecomeActive && setActiveItemId(itemToInsert.key!);
   };
 
   const handleDuplicateItem = (index: number) => {
@@ -82,7 +83,7 @@ export const ActivityItems = () => {
     setDuplicateIndexes((prevState) => {
       const numberToInsert = (prevState[getEntityKey(itemToDuplicate)] || 0) + 1;
 
-      insertItem(index + 1, {
+      handleInsertItem(index, {
         ...itemToDuplicate,
         id: undefined,
         key: uuidv4(),
