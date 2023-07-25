@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { authApiClient } from 'shared/api/api.client';
 import { AppletId } from 'shared/api';
 
@@ -602,4 +604,10 @@ export const getExportDataApi = ({ appletId, respondentIds }: ExportData, signal
       respondentIds,
     },
     signal,
+  });
+
+export const getOptionTextApi = (url: string) =>
+  axios({
+    method: 'get',
+    url,
   });

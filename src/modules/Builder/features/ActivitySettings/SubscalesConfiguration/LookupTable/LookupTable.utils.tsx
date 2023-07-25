@@ -41,6 +41,7 @@ export const getModalComponents = ({
               invalidFileFormatError={labelsObject.errors.incorrectFileFormat}
               validationError={error}
               parsingError={labelsObject.errors.fileCantBeParsed}
+              csvOnly
             />
           </>
         ),

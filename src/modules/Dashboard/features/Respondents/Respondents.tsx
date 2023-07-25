@@ -197,18 +197,19 @@ export const Respondents = () => {
     const { editable, viewable, scheduling } = filteredApplets;
 
     for (const detail of details) {
-      const workspaceRoles = rolesData?.data?.[detail.appletId];
-      if (isManagerOrOwner(workspaceRoles?.[0])) {
+      const appletRoles = rolesData?.data?.[detail.appletId];
+      if (isManagerOrOwner(appletRoles?.[0])) {
         editable.push(detail);
         viewable.push(detail);
         scheduling.push(detail);
         continue;
       }
-      if (workspaceRoles?.includes(Roles.Reviewer)) {
+      if (appletRoles?.includes(Roles.Reviewer)) {
         viewable.push(detail);
       }
-      if (workspaceRoles?.includes(Roles.Coordinator)) {
+      if (appletRoles?.includes(Roles.Coordinator)) {
         scheduling.push(detail);
+        editable.push(detail);
       }
     }
 

@@ -41,7 +41,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
     <>
       <StyledHeadline sx={{ mb: theme.spacing(2), color: variables.palette.on_surface }}>
         {t('responseOptions')}
-        <Tooltip tooltipTitle={t('responseOptions')}>
+        <Tooltip tooltipTitle={t('responseOptionsTooltip')}>
           <span>
             <StyledTitleTooltipIcon id="more-info-outlined" width={16} height={16} />
           </span>

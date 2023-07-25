@@ -57,7 +57,7 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
           value: email,
         },
         invitationLink: {
-          content: () => `${process.env.APP_WEB_URI || ''}/invitation/${key}`, // TODO: Implement web environments
+          content: () => `${process.env.REACT_APP_WEB_URI || ''}/invitation/${key}`,
           value: key,
         },
         dateTimeInvited: {

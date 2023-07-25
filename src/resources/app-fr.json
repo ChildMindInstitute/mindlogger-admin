@@ -380,6 +380,7 @@
   "itemName": "Nom de l'article",
   "displayedСontent": "Contenu affiché",
   "responseOptions": "Options de réponse",
+  "responseOptionsTooltip": "Le répondant a terminé l'activité à ces moments",
   "option": "Option",
   "singleSelectionHint": "Une liste de choix avec une seule réponse",
   "multipleSelectionHint": "Une liste de choix avec plusieurs réponses",
@@ -627,6 +628,7 @@
   "updateSchedule": "Calendrier de mise à jour",
   "uploadSchedule": "Veuillez télécharger un horaire dans l'un des formats suivants : <1>.csv, .xls, .xlsx, .ods.</1>",
   "downloadTemplate": "Télécharger le modèle",
+  "dropCsvFile": "Déposez <1>.csv</1> ici <br/>ou cliquez pour parcourir.",
   "dropFile": "Déposez ici <1>.csv, .xls, .xlsx</1> ou <3>.ods</3> <br/>ou <5>cliquez pour parcourir<5>.",
   "invalidFileFormat": "Format de fichier invalide. Veuillez télécharger un tableau de planification dans l'un des formats suivants : <1>.csv, .xls, .xlsx, .ods.</1>",
   "generateReport": "Générer un rapport",
@@ -645,7 +647,7 @@
   "subscaleLookupTable": {
     "upload": {
       "title": "Télécharger la table de recherche",
-      "initDescription": "Veuillez télécharger le fichier au format <1>.csv, .xls, .xlsx, .ods.</1>.",
+      "initDescription": "Veuillez télécharger le fichier au format <1>.csv</1>.",
       "successDescription": "Votre table de recherche pour <1>{{name}}</1> a été analysée avec succès."
     },
     "edit": {
@@ -660,7 +662,7 @@
     "errors": {
       "haveToUploadFile": "Vous devez télécharger le fichier pour continuer.",
       "fileCantBeParsed": "Votre fichier ne peut pas être analysé. Veuillez vérifier le contenu de votre table et réessayer.",
-      "incorrectFileFormat": "Format de fichier incorrect. Veuillez télécharger le fichier au format <1>.csv, .xls, .xlsx, .ods.</1>.",
+      "incorrectFileFormat": "Format de fichier incorrect. Veuillez télécharger le fichier en <1>.csv</1>",
       "onDelete": "La table de consultation actuelle pour <1>{{name}}</1> n'a pas été supprimée. Veuillez réessayer."
     },
     "column": {

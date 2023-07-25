@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
-import { StyledModalWrapper, StyledBodyLarge } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { useAsync } from 'shared/hooks';
+import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { removeRespondentAccessApi } from 'api';
-import { useSetupEnterAppletPassword } from 'shared/hooks';
+import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
+import { workspaces } from 'redux/modules';
+import { isManagerOrOwner } from 'shared/utils';
 
 import { ChosenAppletData } from '../../Respondents.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -25,7 +25,10 @@ export const RespondentsRemoveAccessPopup = ({
 }: RespondentAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
+  const rolesData = workspaces.useRolesData();
+  const appletRoles = chosenAppletData && rolesData?.data?.[chosenAppletData.appletId];
   const { appletPasswordRef, submitForm: submitPassword } = useSetupEnterAppletPassword();
+
   const [appletName, setAppletName] = useState('');
   const [respondentName, setRespondentName] = useState('');
   const [disabledSubmit, setDisabledSubmit] = useState(false);
@@ -84,22 +87,24 @@ export const RespondentsRemoveAccessPopup = ({
           Applet.
         </Trans>
       </StyledBodyLarge>
-      <FormControlLabel
-        label={
-          <StyledBodyLarge>
-            <Trans i18nKey="removeRespondentData">
-              Remove Respondent
-              <b>
-                <>{{ respondentName }}</>
-              </b>
-              ’s response data also.
-            </Trans>
-          </StyledBodyLarge>
-        }
-        control={
-          <Checkbox checked={removeData} onChange={() => setRemoveData((prevVal) => !prevVal)} />
-        }
-      />
+      {isManagerOrOwner(appletRoles?.[0]) && (
+        <FormControlLabel
+          label={
+            <StyledBodyLarge>
+              <Trans i18nKey="removeRespondentData">
+                Remove Respondent
+                <b>
+                  <>{{ respondentName }}</>
+                </b>
+                ’s response data also.
+              </Trans>
+            </StyledBodyLarge>
+          }
+          control={
+            <Checkbox checked={removeData} onChange={() => setRemoveData((prevVal) => !prevVal)} />
+          }
+        />
+      )}
     </>
   );
 
