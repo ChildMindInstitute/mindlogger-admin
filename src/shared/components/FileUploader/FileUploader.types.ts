@@ -19,4 +19,5 @@ export type FileUploaderProps = {
   validationError?: JSX.Element | string | null;
   parsingError?: JSX.Element | string | null;
   uiType?: FileUploaderUiType;
+  csvOnly?: boolean;
 };
