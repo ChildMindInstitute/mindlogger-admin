@@ -11,7 +11,7 @@ import { useAsync } from 'shared/hooks';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
 import { page } from 'resources';
-import { LocalStorageKeys, Path, storage } from 'shared/utils';
+import { Path, authStorage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { STORAGE_SELECTED_KEY } from 'modules/Library/consts';
 
@@ -79,7 +79,7 @@ export const AddToBuilderPopup = ({
     if (currentWorkspace?.ownerId !== ownerId) {
       const newWorkspace = workspacesData.find((workspace) => workspace.ownerId === ownerId);
       if (newWorkspace) {
-        storage.setItem(LocalStorageKeys.Workspace, newWorkspace);
+        authStorage.setWorkspace(newWorkspace);
         dispatch(workspaces.actions.setCurrentWorkspace(newWorkspace));
       }
     }
