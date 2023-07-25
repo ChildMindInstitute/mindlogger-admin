@@ -17,3 +17,5 @@ export const MS_PER_HOUR = 1000 * 60 * 60;
 export const MS_PER_DAY = MS_PER_HOUR * 24;
 export const POINT_RADIUS_DEFAULT = 6;
 export const POINT_RADIUS_SECONDARY = 4;
+
+export const LINK_PATTERN = new RegExp('^(http|https)://', 'i');

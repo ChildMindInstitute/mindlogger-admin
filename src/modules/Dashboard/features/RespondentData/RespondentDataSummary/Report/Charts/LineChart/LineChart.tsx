@@ -12,7 +12,7 @@ import { useAsync } from 'shared/hooks';
 import { FilterFormValues } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 
-import { locales, TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../Charts.const';
+import { LINK_PATTERN, locales, TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../Charts.const';
 import { getOptions, getData } from './LineChart.utils';
 import { CustomLegend, DataPointRaw, LineChartProps, TooltipData } from './LineChart.types';
 import { ChartTooltip } from './ChartTooltip';
@@ -63,9 +63,8 @@ export const LineChart = ({ data, versions }: LineChartProps) => {
       const tooltipDataPoints = await Promise.all(
         dataPoints.map(async (dataPoint) => {
           let optionText = (dataPoint.raw as DataPointRaw).optionText;
-          const linkPattern = new RegExp('^(http|https)://', 'i');
 
-          if (optionText && optionText.match(linkPattern)) {
+          if (optionText && optionText.match(LINK_PATTERN)) {
             optionText = (await getOptionText(optionText)).data;
           }
 
