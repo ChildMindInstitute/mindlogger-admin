@@ -16,6 +16,7 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
+import { useCheckIfHasEncryption } from '../popup.hooks';
 
 export const DataExportPopup = ({
   popupVisible,
@@ -27,7 +28,22 @@ export const DataExportPopup = ({
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
-  const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting;
+
+  const handleDataExportSubmit = async () => {
+    const { appletId, respondentId } = chosenAppletData || {};
+
+    if (appletId && respondentId) {
+      setDataIsExporting(true);
+
+      await execute({ appletId, respondentIds: respondentId });
+    }
+  };
+  const hasEncryptionCheck = useCheckIfHasEncryption({
+    appletData: chosenAppletData,
+    callback: handleDataExportSubmit,
+  });
+
+  const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting && !hasEncryptionCheck;
   const getDecryptedAnswers = useDecryptedActivityData(
     chosenAppletData?.appletId,
     chosenAppletData?.encryption,
@@ -50,16 +66,6 @@ export const DataExportPopup = ({
   const handlePopupClose = () => {
     setChosenAppletData(null);
     setPopupVisible(false);
-  };
-
-  const handleDataExportSubmit = async () => {
-    const { appletId, respondentId } = chosenAppletData || {};
-
-    if (appletId && respondentId) {
-      setDataIsExporting(true);
-
-      await execute({ appletId, respondentIds: respondentId });
-    }
   };
 
   const renderModalContent = () => {

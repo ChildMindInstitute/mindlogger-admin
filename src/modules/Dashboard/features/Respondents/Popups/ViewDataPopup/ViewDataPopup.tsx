@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
-import { useSetupEnterAppletPassword, useEncryptionCheckFromStorage } from 'shared/hooks';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { page } from 'resources';
 
 import { ViewDataPopupProps } from './ViewDataPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
+import { useCheckIfHasEncryption } from '../popup.hooks';
 
 export const ViewDataPopup = ({
   popupVisible,
@@ -20,14 +20,6 @@ export const ViewDataPopup = ({
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
-  const hasEncryptionCheck = !!getAppletPrivateKey(chosenAppletData?.appletId ?? '');
-  const showSecondScreen = !!chosenAppletData && !hasEncryptionCheck;
-
-  const handlePopupClose = () => {
-    setChosenAppletData(null);
-    setPopupVisible(false);
-  };
 
   const handleSubmitCallback = () => {
     if (chosenAppletData) {
@@ -38,10 +30,16 @@ export const ViewDataPopup = ({
     handlePopupClose();
   };
 
-  useEffect(() => {
-    const shouldSkipPassword = !!chosenAppletData && hasEncryptionCheck;
-    shouldSkipPassword && handleSubmitCallback();
-  }, [chosenAppletData, hasEncryptionCheck]);
+  const hasEncryptionCheck = useCheckIfHasEncryption({
+    appletData: chosenAppletData,
+    callback: handleSubmitCallback,
+  });
+  const showSecondScreen = !!chosenAppletData && !hasEncryptionCheck;
+
+  const handlePopupClose = () => {
+    setChosenAppletData(null);
+    setPopupVisible(false);
+  };
 
   return (
     <Modal
