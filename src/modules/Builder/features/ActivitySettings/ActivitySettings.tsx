@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
-import { useActivitiesRedirection } from 'modules/Builder/hooks';
+import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 
 import { LeftBar } from './LeftBar';
 import { ActivitySettingsContainer } from './ActivitySettingsContainer';
@@ -22,6 +22,7 @@ export const ActivitySettings = () => {
 
   const navigate = useNavigate();
   const { appletId, activityId, setting } = useParams();
+  const { fieldName } = useCurrentActivity();
 
   useEffect(() => {
     setActiveSetting(getSetting(setting));
@@ -60,7 +61,7 @@ export const ActivitySettings = () => {
           <ScoresAndReports />
         )}
         {activeSetting?.name === ActivitySettingsOptionsItems.SubscalesConfiguration && (
-          <SubscalesConfiguration />
+          <SubscalesConfiguration key={`subscales-configuration-${fieldName}`} />
         )}
       </ActivitySettingsContainer>
     </StyledWrapper>
