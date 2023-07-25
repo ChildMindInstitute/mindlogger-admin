@@ -380,6 +380,7 @@
   "itemName": "Nom de l'article",
   "displayedСontent": "Contenu affiché",
   "responseOptions": "Options de réponse",
+  "responseOptionsTooltip": "Le répondant a terminé l'activité à ces moments",
   "option": "Option",
   "singleSelectionHint": "Une liste de choix avec une seule réponse",
   "multipleSelectionHint": "Une liste de choix avec plusieurs réponses",

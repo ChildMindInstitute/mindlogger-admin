@@ -5,6 +5,7 @@ import { Version } from 'api';
 export type ActivityCompletion = {
   date: Date;
   score: number;
+  optionText?: string;
 };
 
 export type Subscale = {
@@ -29,4 +30,18 @@ export type Tick = { index: number; chart: Chart };
 export type LineChartProps = {
   data: SubscaleChartData;
   versions: Version[];
+};
+
+export type TooltipData = {
+  date: Date;
+  backgroundColor: string;
+  label: string;
+  value: number;
+  optionText: string;
+};
+
+export type DataPointRaw = {
+  x: Date;
+  y: number;
+  optionText: string;
 };

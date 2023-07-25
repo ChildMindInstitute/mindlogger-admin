@@ -1,4 +1,4 @@
-import { LinearScale } from 'chart.js';
+import { LinearScale, ScriptableTooltipContext } from 'chart.js';
 
 import { COLORS } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.const';
 
@@ -19,7 +19,10 @@ export const getDatasets = (chartData: ChartData[]) =>
     categoryPercentage: 0.35,
   }));
 
-export const getOptions = (chartData: ChartData[]) => {
+export const getOptions = (
+  chartData: ChartData[],
+  tooltipHandler: (context: ScriptableTooltipContext<'bar'>) => void,
+) => {
   const maxScore = Math.max(...pluck(chartData, 'score'));
 
   return {
@@ -37,13 +40,8 @@ export const getOptions = (chartData: ChartData[]) => {
         },
       },
       tooltip: {
-        backgroundColor: variables.palette.surface2,
-        bodyColor: variables.palette.on_surface,
-        padding: {
-          x: 24,
-          y: 24,
-        },
-        cornerRadius: 12,
+        enabled: false,
+        external: tooltipHandler,
       },
     },
     scales: {

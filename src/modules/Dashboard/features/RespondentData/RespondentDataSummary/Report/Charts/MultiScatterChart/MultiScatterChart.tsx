@@ -19,7 +19,7 @@ import { locales } from 'shared/consts';
 import { getOptions, getData } from './MultiScatterChart.utils';
 import { MultiScatterChartProps } from './MultiScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
-import { TOOLTIP_OFFSET_TOP, TOOLTIP_OFFSET_LEFT } from './MultiScatterChart.const';
+import { TOOLTIP_OFFSET_TOP, TOOLTIP_OFFSET_LEFT } from '../Charts.const';
 
 export const MultiScatterChart = ({
   color,
