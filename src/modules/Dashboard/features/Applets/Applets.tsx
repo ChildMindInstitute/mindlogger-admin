@@ -15,11 +15,12 @@ import { auth, popups, workspaces } from 'redux/modules';
 import { ButtonWithMenu, Search, Spinner, Svg } from 'shared/components';
 import { useBreadcrumbs, useTable } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
+import { getIsAddAppletBtnVisible } from 'shared/utils';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
 import { AppletsTableHeader, StyledButtons, StyledBody } from './Applets.styles';
-import { generateNewFolderName, getShowAddApplet } from './Applets.utils';
+import { generateNewFolderName } from './Applets.utils';
 import { useAppletsWithFolders } from './Applets.hooks';
 import { AppletContextType } from './Applets.types';
 
@@ -143,7 +144,7 @@ export const Applets = () => {
       >
         <AppletsTableHeader>
           <Box>
-            {getShowAddApplet(currentWorkspace, rolesData, user) && (
+            {getIsAddAppletBtnVisible(currentWorkspace, rolesData, user) && (
               <StyledButtons>
                 <ButtonWithMenu
                   variant="outlined"

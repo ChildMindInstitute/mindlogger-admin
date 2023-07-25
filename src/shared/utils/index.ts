@@ -25,6 +25,7 @@ export * from './dateTimezone';
 export * from './getRespondentName';
 export * from './isManagerOrOwner';
 export * from './getUploadedMediaName';
+export * from './getIsAddAppletBtnVisible';
 export * from './getParsedAnswers';
 export * from './exportData';
 export * from './getAnswerValue';

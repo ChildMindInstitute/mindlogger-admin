@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { StyledLabelMedium, theme, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
 import { workspaces, Workspace, auth } from 'redux/modules';
-import { LocalStorageKeys, storage } from 'shared/utils';
+import { LocalStorageKeys, getIsAddAppletBtnVisible, storage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
 import { page } from 'resources';
@@ -21,6 +21,7 @@ export const LeftBar = () => {
   const userData = auth.useData();
   const { id } = userData?.user || {};
   const { result: workspacesData } = workspaces.useWorkspacesData() || {};
+  const rolesData = workspaces.useRolesData();
   const currentWorkspaceData = workspaces.useData();
   const [visibleDrawer, setVisibleDrawer] = useState(false);
 
@@ -60,17 +61,21 @@ export const LeftBar = () => {
               </NavLink>
             </StyledDrawerItem>
           ))}
-          <Divider
-            sx={{ my: theme.spacing(2.4), borderColor: variables.palette.outline_variant }}
-          />
-          <StyledDrawerItem>
-            <NavLink to={page.builder}>
-              <Svg id="add" />
-              <StyledLabelMedium color={variables.palette.on_surface_variant}>
-                {t('newApplet')}
-              </StyledLabelMedium>
-            </NavLink>
-          </StyledDrawerItem>
+          {getIsAddAppletBtnVisible(currentWorkspaceData, rolesData, userData?.user) && (
+            <>
+              <Divider
+                sx={{ my: theme.spacing(2.4), borderColor: variables.palette.outline_variant }}
+              />
+              <StyledDrawerItem>
+                <NavLink to={page.builder}>
+                  <Svg id="add" />
+                  <StyledLabelMedium color={variables.palette.on_surface_variant}>
+                    {t('newApplet')}
+                  </StyledLabelMedium>
+                </NavLink>
+              </StyledDrawerItem>
+            </>
+          )}
         </List>
         {visibleDrawer && (
           <SwitchWorkspace

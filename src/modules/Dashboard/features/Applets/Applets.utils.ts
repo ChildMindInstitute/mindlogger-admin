@@ -1,9 +1,6 @@
-import { Applet, Folder } from 'api';
 import { TFunction } from 'i18next';
-import { User } from 'modules/Auth';
-import { Roles } from 'shared/consts';
-import { BaseSchema, Workspace } from 'shared/state';
 
+import { Applet, Folder } from 'api';
 import { groupBy } from 'shared/utils';
 
 export const generateNewFolderName = (folders: Folder[], t: TFunction) => {
@@ -40,16 +37,6 @@ export const generateNewFolderName = (folders: Folder[], t: TFunction) => {
 
   return `${newFolder} (${+index + 1})`;
 };
-
-export const getShowAddApplet = (
-  currentWorkspace: Workspace | null,
-  rolesData: BaseSchema<Record<string, Roles[]> | null>,
-  user?: User,
-) =>
-  currentWorkspace?.ownerId === user?.id ||
-  Object.values(rolesData?.data || {}).some(
-    (roles) => roles.includes(Roles.Manager) || roles.includes(Roles.Editor),
-  );
 
 export const getAppletsWithLocalFolders = (
   applets: Applet[],
