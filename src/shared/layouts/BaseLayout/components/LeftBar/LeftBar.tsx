@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledLabelMedium, theme, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
-import { workspaces, Workspace, auth } from 'redux/modules';
-import { LocalStorageKeys, getIsAddAppletBtnVisible, storage } from 'shared/utils';
+import { workspaces, auth } from 'redux/modules';
+import { authStorage, getIsAddAppletBtnVisible } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components';
 import { page } from 'resources';
@@ -32,7 +32,7 @@ export const LeftBar = () => {
   useEffect(() => {
     if (workspacesData?.length) {
       const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
-      const storageWorkspace = storage.getItem(LocalStorageKeys.Workspace) as Workspace;
+      const storageWorkspace = authStorage.getWorkspace();
       dispatch(workspaces.actions.setCurrentWorkspace(storageWorkspace || ownerWorkspace || null));
     }
   }, [workspacesData]);

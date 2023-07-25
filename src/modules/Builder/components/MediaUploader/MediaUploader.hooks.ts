@@ -1,6 +1,6 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 
-import { MAX_FILE_SIZE_8MB } from 'shared/consts';
+import { MAX_FILE_SIZE_150MB } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
 import { getUploadFormData } from 'shared/utils';
 import { postFileUploadApi } from 'api';
@@ -28,7 +28,7 @@ export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
     const file = files?.[0];
     if (!file) return;
 
-    const isAllowableSize = file.size < MAX_FILE_SIZE_8MB;
+    const isAllowableSize = file.size < MAX_FILE_SIZE_150MB;
     if (!isAllowableSize) {
       setError('audioExceedSize');
 

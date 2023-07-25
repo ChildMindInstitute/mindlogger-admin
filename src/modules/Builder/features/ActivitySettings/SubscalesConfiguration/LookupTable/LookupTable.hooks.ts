@@ -26,10 +26,10 @@ export const useSubscaleLookupTableSetup = ({
 
       return;
     }
+    if (!schema.isValidSync(file.data, { stripUnknown: false }))
+      return setError(errors.fileCantBeParsed);
 
     const mappedData = file.data.map(processImportedData);
-    if (!schema.isValidSync(mappedData)) return setError(errors.fileCantBeParsed);
-
     setError(null);
     setData(mappedData);
     setStep((prevState) => ++prevState as Steps);

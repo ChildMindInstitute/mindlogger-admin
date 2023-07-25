@@ -6,4 +6,5 @@ export type ScoresProps = {
   frequency?: number;
   optionText?: string;
   subscaleScores: SubscaleScore[];
+  showAllSubscaleResultsVisible: boolean;
 };

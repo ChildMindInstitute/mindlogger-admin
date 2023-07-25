@@ -203,7 +203,10 @@ export const Subscales = ({ answers, versions }: SubscalesProps) => {
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>
       {currentActivityCompletionScores ? (
-        <ActivityCompletionScores {...currentActivityCompletionScores} />
+        <ActivityCompletionScores
+          {...currentActivityCompletionScores}
+          showAllSubscaleResultsVisible={answers?.length > 1}
+        />
       ) : (
         <AllScores {...allScores} versions={versions} />
       )}

@@ -17,5 +17,6 @@ export type FileUploaderProps = {
   downloadFirstText?: string;
   downloadSecondText?: string;
   validationError?: JSX.Element | string | null;
+  parsingError?: JSX.Element | string | null;
   uiType?: FileUploaderUiType;
 };

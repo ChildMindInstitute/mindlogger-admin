@@ -32,3 +32,4 @@ export * from './getAnswerValue';
 export * from './getDateTime';
 export * from './exportZip';
 export * from './state';
+export * from './authStorage';
