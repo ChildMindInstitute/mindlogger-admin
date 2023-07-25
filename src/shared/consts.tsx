@@ -194,6 +194,7 @@ export const enum ConditionalLogicMatch {
 }
 
 export const ALLOWED_AUDIO_FILE_TYPES = '.mp3,.wav';
+export const VALID_AUDIO_FILE_TYPES = ['.mp3', '.wav'];
 
 export const ALLOWED_VIDEO_FILE_TYPES = '.webm,.mp4';
 
