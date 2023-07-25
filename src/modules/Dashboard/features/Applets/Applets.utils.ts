@@ -1,6 +1,6 @@
-import { Applet, Folder } from 'api';
 import { TFunction } from 'i18next';
 
+import { Applet, Folder } from 'api';
 import { groupBy } from 'shared/utils';
 
 export const generateNewFolderName = (folders: Folder[], t: TFunction) => {
