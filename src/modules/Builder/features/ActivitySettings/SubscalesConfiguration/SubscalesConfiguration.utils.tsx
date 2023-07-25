@@ -27,7 +27,10 @@ export const getSubscalesDefaults = () => ({
 });
 
 export const getItemNameInSubscale = (item: ItemFormValues) =>
-  capitalize(`${t('item_one')}: ${t(item.name)}: ${item.question}`);
+  capitalize(`${t('item_one')}: ${t(item.name)}`);
+
+export const getItemElementName = (item: ItemFormValues) =>
+  `${getItemNameInSubscale(item)}: ${t(item.question)}`;
 
 export const getSubscaleElementName = (
   subscale: SubscaleFormValue,
@@ -67,7 +70,7 @@ export const getItemElements = (
   }, [] as ItemElement[]);
   const itemElements = items.map((item) => ({
     id: getEntityKey(item),
-    [SubscaleColumns.Name]: getItemNameInSubscale(item),
+    [SubscaleColumns.Name]: getItemElementName(item),
   }));
 
   return subscaleElements.concat(itemElements);
@@ -111,7 +114,7 @@ export const getNotUsedElements = (
         ...acc,
         {
           id,
-          [SubscaleColumns.Name]: getItemNameInSubscale(item),
+          [SubscaleColumns.Name]: getItemElementName(item),
         },
       ];
     if (subscale)
