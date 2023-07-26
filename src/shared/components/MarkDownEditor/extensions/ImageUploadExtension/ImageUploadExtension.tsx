@@ -10,7 +10,7 @@ import { joinWihComma } from 'shared/utils';
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { ImageUploadExtensionProps } from '../Extensions.types';
+import { ImageUploadExtensionProps, MediaType } from '../Extensions.types';
 
 const DropdownToolbar = MdEditor.DropdownToolbar;
 
@@ -38,6 +38,7 @@ export const ImageUploadExtension = ({
     isVisible,
     setIsVisible,
     isPopupVisible,
+    sourceError,
     handlePopupSubmit,
     handlePopupClose,
     onAddLinkClick,
@@ -49,6 +50,7 @@ export const ImageUploadExtension = ({
     setFileSizeExceeded,
     fileSizeExceeded,
     setIncorrectImageFormat,
+    type: MediaType.Image,
   });
 
   return (
@@ -89,6 +91,7 @@ export const ImageUploadExtension = ({
       {isPopupVisible && (
         <SourceLinkModal
           title={t('addImgLink')}
+          error={sourceError}
           handleClose={handlePopupClose}
           handleSubmit={handlePopupSubmit}
         />

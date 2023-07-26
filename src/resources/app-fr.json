@@ -456,6 +456,7 @@
   "addImgLink": "Ajouter un lien d'image",
   "uploadMdImg": "Télécharger une image",
   "description": "Description",
+  "invalidLink": "Il n'est pas possible d'ajouter un lien invalide",
   "enterDescription": "Entrez une description...",
   "enterLink": "Entrez un lien...",
   "audioLink": "Ajouter un lien audio",

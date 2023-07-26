@@ -18,7 +18,14 @@ export type ImageUploadExtensionProps = MediaContentExtensionProps & {
   setIncorrectImageFormat: Dispatch<SetStateAction<boolean>>;
 };
 
+export const enum MediaType {
+  Image = 'image',
+  Audio = 'audio',
+  Video = 'video',
+}
+
 export type UploadMethodsProps = {
   insertHandler: (data: SourceLinkModalForm) => void;
   setIncorrectImageFormat?: Dispatch<SetStateAction<boolean>>;
+  type?: MediaType;
 } & MediaProps;

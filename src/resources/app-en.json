@@ -631,6 +631,7 @@
   "addImgLink": "Add Image Link",
   "uploadMdImg": "Upload Image",
   "description": "Description",
+  "invalidLink": "It is not possible to add invalid link",
   "enterDescription": "Enter a description...",
   "enterLink": "Enter a link...",
   "audioLink": "Add Audio Link",
