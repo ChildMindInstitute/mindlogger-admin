@@ -6,13 +6,15 @@ import { falseReturnFunc, getUploadFormData } from 'shared/utils';
 import { VALID_IMAGE_TYPES } from 'shared/consts';
 
 import { SourceLinkModalForm } from '../SourceLinkModal';
-import { UploadMethodsProps } from './Extensions.types';
+import { MediaType, UploadMethodsProps } from './Extensions.types';
+import { checkImgUrl } from './Extensions.utils';
 
 export const useUploadMethods = ({
   insertHandler,
   setFileSizeExceeded,
   fileSizeExceeded,
   setIncorrectImageFormat,
+  type,
 }: UploadMethodsProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -33,13 +35,25 @@ export const useUploadMethods = ({
       inputRef.current = null;
     },
   );
+  const [sourceError, setSourceError] = useState('');
 
-  const handlePopupSubmit = (formData: SourceLinkModalForm) => {
+  const handlePopupSubmit = async (formData: SourceLinkModalForm) => {
+    if (type === MediaType.Image) {
+      const isImgUrl = await checkImgUrl(formData.address);
+      if (!isImgUrl) {
+        setSourceError('invalidLink');
+
+        return;
+      }
+    }
+
+    setSourceError('');
     setIsPopupVisible(false);
     insertHandler(formData);
   };
 
   const handlePopupClose = () => {
+    setSourceError('');
     setIsPopupVisible(false);
   };
 
@@ -76,6 +90,7 @@ export const useUploadMethods = ({
     isVisible,
     setIsVisible,
     isPopupVisible,
+    sourceError,
     handlePopupSubmit,
     handlePopupClose,
     onAddLinkClick,

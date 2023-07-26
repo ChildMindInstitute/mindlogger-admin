@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { Box } from '@mui/material';
 
-import { StyledFlexTopCenter, StyledTitleMedium, theme, variables } from 'shared/styles';
+import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 import { StyledItem, StyledSvg } from './Accordion.styles';
 import { AccordionProps, AccordionUiType } from './Accordion.types';
@@ -33,7 +34,7 @@ export const Accordion = ({
           width={20}
           height={20}
         />
-        <StyledTitleMedium
+        <Box
           sx={{
             fontWeight: isPrimaryUiType
               ? variables.font.weight.bold
@@ -42,7 +43,7 @@ export const Accordion = ({
           color={variables.palette.on_surface_variant}
         >
           {title}
-        </StyledTitleMedium>
+        </Box>
       </StyledFlexTopCenter>
       {isOpen && children}
     </StyledItem>
