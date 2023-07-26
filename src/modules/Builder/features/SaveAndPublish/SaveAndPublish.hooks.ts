@@ -18,6 +18,7 @@ import {
   builderSessionStorage,
   Encryption,
   getDictionaryObject,
+  getEncryptionToServer,
   getUpdatedAppletUrl,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
@@ -360,12 +361,12 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     await sendRequest();
   };
 
-  const handleAppletPasswordSubmit = async (encryption?: Encryption, password?: string) => {
-    await sendRequest(encryption, password);
+  const handleAppletPasswordSubmit = async (password?: string) => {
+    await sendRequest(password);
   };
 
-  const sendRequest = async (encryption?: Encryption, password?: string) => {
-    const encryptionData = encryption || appletEncryption;
+  const sendRequest = async (password?: string) => {
+    const encryptionData = password ? getEncryptionToServer(password, ownerId!) : appletEncryption;
     setPublishProcessPopupOpened(true);
     const body = getAppletData(encryptionData);
 
@@ -400,7 +401,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       if (encryptionData && password && createdAppletId) {
         setAppletPrivateKey({
           appletPassword: password,
-          encryption,
+          encryption: encryptionData,
           appletId: createdAppletId,
         });
       }

@@ -198,7 +198,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
     handleSaveReportConfig();
   };
 
-  const passwordSubmit: AppletPasswordPopupProps['submitCallback'] = (_, passwordRef) => {
+  const passwordSubmit: AppletPasswordPopupProps['submitCallback'] = (passwordRef) => {
     handleSetPassword(passwordRef.current?.password ?? '');
   };
 

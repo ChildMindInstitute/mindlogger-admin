@@ -27,17 +27,10 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
       const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
       if (!encryptionInfoFromServer) return;
 
-      const {
-        publicKey: publicKeyFromServer,
-        prime: primeFromServer,
-        base: baseFromServer,
-        accountId: accountIdFromServer,
-      } = encryptionInfoFromServer;
+      const { publicKey: publicKeyFromServer, ...restEncryption } = encryptionInfoFromServer;
       const encryptionInfoGenerated = getAppletEncryptionInfo({
         appletPassword,
-        accountId: accountIdFromServer,
-        prime: primeFromServer,
-        base: baseFromServer,
+        ...restEncryption,
       });
 
       if (
