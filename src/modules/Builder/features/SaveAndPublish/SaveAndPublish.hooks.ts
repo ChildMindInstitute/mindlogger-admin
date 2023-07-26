@@ -10,7 +10,6 @@ import {
   useCallbackPrompt,
   useCheckIfNewApplet,
   usePromptSetup,
-  useEncryptionCheckFromStorage,
   useRemoveAppletData,
   useLogout,
 } from 'shared/hooks';
@@ -263,7 +262,6 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     isLogoutInProgress,
   } = usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   const { ownerId } = workspaces.useData() || {};
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
   const { result: appletData } = applet.useAppletData() ?? {};
@@ -354,8 +352,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   };
 
   const sendRequestWithPasswordCheck = async () => {
-    const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
-    if (!hasEncryptionCheck) {
+    if (isNewApplet) {
       setIsPasswordPopupOpened(true);
 
       return;
@@ -400,7 +397,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
 
-      if (encryption && password && appletId) {
+      if (encryptionData && password && createdAppletId) {
         setAppletPrivateKey({
           appletPassword: password,
           encryption,
@@ -421,7 +418,6 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   };
 
   return {
-    isNewApplet,
     isPasswordPopupOpened,
     isPublishProcessPopupOpened,
     publishProcessStep,

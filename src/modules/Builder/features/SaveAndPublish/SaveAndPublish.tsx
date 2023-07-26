@@ -15,7 +15,6 @@ import { SaveAndPublishProps } from './SaveAndPublish.types';
 export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
   const { t } = useTranslation('app');
   const {
-    isNewApplet,
     isPasswordPopupOpened,
     isPublishProcessPopupOpened,
     publishProcessStep,
@@ -52,7 +51,7 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
       <AppletPasswordPopup
         appletId={appletId ?? ''}
         onClose={() => setIsPasswordPopupOpened(false)}
-        popupType={isNewApplet ? AppletPasswordPopupType.Create : AppletPasswordPopupType.Enter}
+        popupType={AppletPasswordPopupType.Create}
         popupVisible={isPasswordPopupOpened}
         submitCallback={handlePasswordSubmit}
         encryption={appletEncryption}
