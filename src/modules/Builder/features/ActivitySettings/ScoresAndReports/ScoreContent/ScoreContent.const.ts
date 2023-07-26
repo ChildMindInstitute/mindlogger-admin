@@ -3,17 +3,6 @@ import { CalculationType } from 'shared/consts';
 
 const { t } = i18n;
 
-export const columns = [
-  {
-    key: 'name',
-    label: t('itemName'),
-  },
-  {
-    key: 'question',
-    label: t('itemBody'),
-  },
-];
-
 export const scoreItemsColumns = [
   {
     key: 'name',

@@ -1068,7 +1068,6 @@
   "printItems": "Print Items",
   "printItemsTooltip": "Respondent’s responses that will be displayed in the report",
   "addConditinalLogic": "Add Conditional Logic",
-  "itemBody": "Item Body",
   "moveItem": "Move Item",
   "removeConditionalsMoveItemPopupDescription": "Selected position of the Item <1>{{name}}</1> in the list contradicts the existing Item Flow. If you continue, the following Conditional(s) will be removed:",
   "conditionPanelItem": "[Item]",

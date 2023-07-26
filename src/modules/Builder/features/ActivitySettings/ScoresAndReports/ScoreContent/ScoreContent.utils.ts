@@ -89,11 +89,11 @@ export const getScoreRange = (itemsScore: Item[], calculationType: CalculationTy
 export const getDefaultConditionalValue = (scoreId: string) => ({
   name: '',
   id: scoreId,
-  showMessage: false,
+  showMessage: true,
   flagScore: false,
   message: undefined,
   printItems: false,
-  itemsPrint: undefined,
+  itemsPrint: [],
   match: ConditionalLogicMatch.All,
   conditions: [{ itemName: scoreId }],
 });
