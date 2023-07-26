@@ -14,7 +14,7 @@ export const AdditionalInformation = ({ optionText }: AdditionalInformationProps
   const { t } = useTranslation();
   const { execute: getOptionText } = useAsync(getOptionTextApi);
 
-  const [additionalInformation, setAdditionalInformation] = useState<string>('');
+  const [additionalInformation, setAdditionalInformation] = useState('');
 
   useEffect(() => {
     (async () => {
