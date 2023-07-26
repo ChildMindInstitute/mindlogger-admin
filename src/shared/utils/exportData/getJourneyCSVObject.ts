@@ -33,9 +33,11 @@ export const getSplashScreen = (
 
   return {
     id,
-    activity_scheduled_time: scheduledDatetime || ActivityStatus.NotScheduled,
-    activity_start_time: startDatetime,
-    activity_end_time: endDatetime,
+    activity_scheduled_time: scheduledDatetime
+      ? `${scheduledDatetime}`
+      : ActivityStatus.NotScheduled,
+    activity_start_time: `${startDatetime}`,
+    activity_end_time: `${endDatetime}`,
     press_next_time: getTime(event.type === UserActionType.Next),
     press_back_time: getTime(event.type === UserActionType.Prev),
     press_undo_time: getTime(event.type === UserActionType.Undo),
@@ -84,9 +86,11 @@ export const getJourneyCSVObject = <T>({
 
   return {
     id: event.id,
-    activity_scheduled_time: scheduledDatetime || ActivityStatus.NotScheduled,
-    activity_start_time: startDatetime,
-    activity_end_time: endDatetime,
+    activity_scheduled_time: scheduledDatetime
+      ? `${scheduledDatetime}`
+      : ActivityStatus.NotScheduled,
+    activity_start_time: `${startDatetime}`,
+    activity_end_time: `${endDatetime}`,
     press_next_time: getTime(event.type === UserActionType.Next),
     press_back_time: getTime(event.type === UserActionType.Prev),
     press_undo_time: getTime(event.type === UserActionType.Undo),
