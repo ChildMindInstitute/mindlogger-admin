@@ -12,7 +12,7 @@ import { getErrorMessage } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
 import { applet, workspaces } from 'shared/state';
-import { createEventApi, updateEventApi } from 'api';
+import { Periodicity, createEventApi, updateEventApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { calendarEvents, users } from 'modules/Dashboard/state';
@@ -66,14 +66,20 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const alwaysAvailable = watch('alwaysAvailable');
     const startTime = watch('startTime');
     const endTime = watch('endTime');
-    const hasAlwaysAvailableEvent =
-      activityOrFlowId && eventsData?.some(({ activityOrFlowId: id }) => activityOrFlowId === id);
+
+    const isAlwaysAvailableSelected =
+      !!activityOrFlowId &&
+      eventsData?.some(
+        ({ activityOrFlowId: id, periodicityType }) =>
+          activityOrFlowId === id && periodicityType === Periodicity.Always,
+      );
+    const hasAlwaysAvailableOption = !!editedEvent || !isAlwaysAvailableSelected;
 
     const eventFormConfig = {
       hasAvailabilityErrors: !!errors.startTime || !!errors.endTime,
       hasTimerErrors: !!errors.timerDuration,
       hasNotificationsErrors: !!errors.notifications || !!errors.reminder,
-      hasAlwaysAvailableOption: !hasAlwaysAvailableEvent,
+      hasAlwaysAvailableOption,
     };
 
     const getEvents = () => {
@@ -188,8 +194,8 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     }, [startTime, endTime]);
 
     useEffect(() => {
-      if (hasAlwaysAvailableEvent) setValue('alwaysAvailable', false);
-    }, [hasAlwaysAvailableEvent]);
+      if (!hasAlwaysAvailableOption) setValue('alwaysAvailable', false);
+    }, [hasAlwaysAvailableOption]);
 
     return (
       <FormProvider {...methods}>
