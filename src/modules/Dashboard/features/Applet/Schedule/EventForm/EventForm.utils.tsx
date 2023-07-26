@@ -41,10 +41,11 @@ export const getEventFormTabs = ({
   hasAvailabilityErrors,
   hasTimerErrors,
   hasNotificationsErrors,
+  hasAlwaysAvailableOption,
 }: Record<string, boolean>) => [
   {
     labelKey: 'availability',
-    content: <AvailabilityTab />,
+    content: <AvailabilityTab hasAlwaysAvailableOption={hasAlwaysAvailableOption} />,
     hasError: hasAvailabilityErrors,
   },
   {

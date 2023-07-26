@@ -62,16 +62,19 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       control,
     });
 
-    const errorsObj = {
-      hasAvailabilityErrors: !!errors.startTime || !!errors.endTime,
-      hasTimerErrors: !!errors.timerDuration,
-      hasNotificationsErrors: !!errors.notifications || !!errors.reminder,
-    };
-
     const activityOrFlowId = watch('activityOrFlowId');
     const alwaysAvailable = watch('alwaysAvailable');
     const startTime = watch('startTime');
     const endTime = watch('endTime');
+    const hasAlwaysAvailableEvent =
+      activityOrFlowId && eventsData?.some(({ activityOrFlowId: id }) => activityOrFlowId === id);
+
+    const eventFormConfig = {
+      hasAvailabilityErrors: !!errors.startTime || !!errors.endTime,
+      hasTimerErrors: !!errors.timerDuration,
+      hasNotificationsErrors: !!errors.notifications || !!errors.reminder,
+      hasAlwaysAvailableOption: !hasAlwaysAvailableEvent,
+    };
 
     const getEvents = () => {
       if (!appletId) return;
@@ -184,6 +187,10 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       trigger(['startTime', 'endTime', 'notifications', 'reminder']);
     }, [startTime, endTime]);
 
+    useEffect(() => {
+      if (hasAlwaysAvailableEvent) setValue('alwaysAvailable', false);
+    }, [hasAlwaysAvailableEvent]);
+
     return (
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(submitForm)} noValidate autoComplete="off">
@@ -202,13 +209,13 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
               />
             )}
           </StyledModalWrapper>
-          <Tabs tabs={getEventFormTabs(errorsObj)} uiType={UiType.Secondary} />
-          {(createEventError || updateEventError || errorsObj.hasNotificationsErrors) && (
+          <Tabs tabs={getEventFormTabs(eventFormConfig)} uiType={UiType.Secondary} />
+          {(createEventError || updateEventError || eventFormConfig.hasNotificationsErrors) && (
             <StyledBodyLarge
               color={variables.palette.semantic.error}
               sx={{ m: theme.spacing(1, 2.6) }}
             >
-              {errorsObj.hasNotificationsErrors
+              {eventFormConfig.hasNotificationsErrors
                 ? t('timeNotificationsError')
                 : getErrorMessage(createEventError || updateEventError)}
             </StyledBodyLarge>
