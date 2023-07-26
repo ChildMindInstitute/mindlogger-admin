@@ -383,11 +383,6 @@ export const theme = createTheme({
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary50,
             },
-            '&.Mui-disabled': {
-              '.MuiOutlinedInput-notchedOutline': {
-                borderColor: variables.palette.on_surface_alfa12,
-              },
-            },
             '&.Mui-error': {
               '.MuiOutlinedInput-notchedOutline': {
                 borderColor: variables.palette.semantic.error,
