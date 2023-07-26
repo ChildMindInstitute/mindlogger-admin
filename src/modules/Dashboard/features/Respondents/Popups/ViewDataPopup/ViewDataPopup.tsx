@@ -4,7 +4,8 @@ import { generatePath, useNavigate } from 'react-router-dom';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
-import { useSetupEnterAppletPassword, useEncryptionCheckFromStorage } from 'shared/hooks';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
+import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 import { page } from 'resources';
 
 import { ViewDataPopupProps } from './ViewDataPopup.types';
@@ -20,7 +21,7 @@ export const ViewDataPopup = ({
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(chosenAppletData?.appletId ?? '');
   const showSecondScreen = !!chosenAppletData && !hasEncryptionCheck;
 

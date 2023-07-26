@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { applet } from 'shared/state';
 import { decryptData, Encryption, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
-import { useEncryptionCheckFromStorage } from 'shared/hooks';
+import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 import {
   AnswerDTO,
   DecryptedActivityData,
@@ -23,7 +23,7 @@ export const useDecryptedActivityData = (
   const { result: appletData } = applet.useAppletData() ?? {};
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption!);
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const { getAppletPrivateKey } = useEncryptionStorage();
 
   if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;
   const { prime, base } = encryptionInfoFromServer;

@@ -7,7 +7,7 @@ import { StyledClearedButton } from 'shared/styles/styledComponents';
 import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
-import { useEncryptionCheckFromStorage } from 'shared/hooks';
+import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 
 import { StyledController } from '../Password.styles';
 import { passwordFormSchema } from './EnterAppletPassword.schema';
@@ -16,7 +16,7 @@ import { AppletPasswordRef } from '../Password.types';
 export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPasswordProps>(
   ({ appletId, encryption, submitCallback }, ref) => {
     const { t } = useTranslation('app');
-    const { setAppletPrivateKey } = useEncryptionCheckFromStorage();
+    const { setAppletPrivateKey } = useEncryptionStorage();
     const { handleSubmit, control, setError, watch } = useForm<EnterAppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
       defaultValues: { appletPassword: '' },

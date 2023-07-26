@@ -5,14 +5,8 @@ import { Box } from '@mui/material';
 
 import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Row, Spinner } from 'shared/components';
 import { Respondent, users, workspaces } from 'redux/modules';
-import {
-  useTimeAgo,
-  useBreadcrumbs,
-  useTable,
-  useAsync,
-  useEncryptionCheckFromStorage,
-  usePermissions,
-} from 'shared/hooks';
+import { useTimeAgo, useBreadcrumbs, useTable, useAsync, usePermissions } from 'shared/hooks';
+import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 import { Table } from 'modules/Dashboard/components';
 import { updateRespondentsPinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
@@ -83,7 +77,7 @@ export const Respondents = () => {
   const [respondentKey, setRespondentKey] = useState<null | string>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
 
   const handleSetDataForAppletPage = (respondentId: string, key: keyof FilteredApplets) => {

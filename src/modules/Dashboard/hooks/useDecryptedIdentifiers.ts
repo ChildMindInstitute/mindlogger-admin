@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Identifier as IdentifierResponse } from 'api';
 import { applet } from 'shared/state';
 import { decryptData, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
-import { useEncryptionCheckFromStorage } from 'shared/hooks';
+import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 import { Identifier } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.types';
 
 export const useDecryptedIdentifiers = () => {
@@ -11,7 +11,7 @@ export const useDecryptedIdentifiers = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const { getAppletPrivateKey } = useEncryptionStorage();
 
   if (!encryptionInfoFromServer) return () => [];
 

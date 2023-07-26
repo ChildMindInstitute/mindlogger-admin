@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { MutableRefObject } from 'react';
 
 import { Svg } from 'shared/components';
 import {
@@ -10,7 +9,6 @@ import {
 } from 'modules/Dashboard';
 import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
-import { Encryption } from 'shared/utils';
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
