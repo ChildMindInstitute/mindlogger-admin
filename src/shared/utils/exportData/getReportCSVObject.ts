@@ -40,9 +40,11 @@ export const getReportCSVObject = <T>({
 
   return {
     id: item.id,
-    activity_scheduled_time: scheduledDatetime || ActivityStatus.NotScheduled,
-    activity_start_time: startDatetime,
-    activity_end_time: endDatetime,
+    activity_scheduled_time: scheduledDatetime
+      ? `${scheduledDatetime}`
+      : ActivityStatus.NotScheduled,
+    activity_start_time: `${startDatetime}`,
+    activity_end_time: `${endDatetime}`,
     flag: getFlag(item),
     secret_user_id: respondentSecretId,
     userId: respondentId,
