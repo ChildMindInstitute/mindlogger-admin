@@ -382,7 +382,7 @@
   "userBuilder": "{{ userName }}'s Builder",
   "removeAllScheduledEventsForActivity": "Remove All Scheduled Events for Activity",
   "confirmRemoveAllScheduledEventsForActivity": "All scheduled events for <1>{{ activityName }}</1> will be removed, and the activity will become always available to the user. Are you sure you want to continue?",
-  "alwaysAvailableWarning": "Once you set this activity to always available, ALL SCHEDULED events for this activity will be removed.",
+  "alwaysAvailableWarning": "Once you set this event to always available, all scheduled events for this activity will be removed.",
   "scheduledAccessWarning": "Once you schedule this event, the Activity will no longer be always available.",
   "confirmScheduledAccess": "Confirm Scheduled Access",
   "confirmChangeOnScheduledAccess": "Activity <1>{{ activityName }}</1> will no longer be always available, and the Activity will be a scheduled event. Are you sure you want to continue?",
