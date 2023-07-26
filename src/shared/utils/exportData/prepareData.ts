@@ -46,7 +46,7 @@ const getReportData = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
   const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
-    if (item.activityItem?.config?.skippableItem || item.answer === null) return filteredAcc;
+    if (item.answer === null) return filteredAcc;
 
     return filteredAcc.concat(
       getReportCSVObject({
