@@ -634,7 +634,7 @@
   "invalidFileFormat": "Format de fichier invalide. Veuillez télécharger un tableau de planification dans l'un des formats suivants : <1>.csv, .xls, .xlsx, .ods.</1>",
   "generateReport": "Générer un rapport",
   "showScoreSummary": "Afficher le résumé des scores",
-  "showScoreSummaryTooltip": "Afficher le résumé des scores",
+  "showScoreSummaryTooltip": "Une fois que le répondant a terminé l'activité, l'écran récapitulatif avec ses résultats de score s'affichera sur la première page du rapport PDF.",
   "calculateTotalScore": "Calculer le score total",
   "calculateTotalScoreTooltip": "Le score brut de l'activité terminée sera calculé et représenté sur le tableau des scores de sous-échelle de l'onglet Données",
   "sumOfScores": "Somme des scores des éléments",

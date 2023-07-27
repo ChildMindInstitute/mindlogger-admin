@@ -52,7 +52,7 @@ export const RespondentDataReview = () => {
     if (!selectedAnswer) {
       return (
         <>
-          <Svg id="data" width="60" height="73" />
+          <Svg id="data" width="80" height="80" />
           <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
             {t('emptyReview')}
           </StyledTitleLarge>
