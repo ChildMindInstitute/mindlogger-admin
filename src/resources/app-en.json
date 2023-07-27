@@ -785,7 +785,7 @@
   },
   "generateReport": "Generate Report",
   "showScoreSummary": "Show Score Summary",
-  "showScoreSummaryTooltip": "Show Score Summary",
+  "showScoreSummaryTooltip": "After the respondent completes the activity, the summary screen with his score results will be displayed on the first page of the PDF report.",
   "calculateTotalScore": "Calculate total score",
   "calculateTotalScoreTooltip": "Raw Score of the completed Activity will be calculated and represented on the Subscale Scores Chart of the Data tab",
   "sumOfScores": "Sum of Item Scores",
