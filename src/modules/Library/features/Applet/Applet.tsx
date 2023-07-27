@@ -44,9 +44,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {
-    result: { cartItems },
-  } = library.useCartApplets() || {};
+  const { result: cartItems } = library.useCartApplets() || {};
   const isAuthorized = auth.useAuthorized();
 
   const [activitiesVisible, setActivitiesVisible] = useState(uiType === AppletUiType.Details);
@@ -73,7 +71,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
     if (isAuthorized) {
       dispatch(library.thunk.postAppletsToCart(updatedAppletsData));
     } else {
-      localStorage.setItem(STORAGE_LIBRARY_KEY, JSON.stringify(updatedAppletsData));
+      sessionStorage.setItem(STORAGE_LIBRARY_KEY, JSON.stringify(updatedAppletsData));
       dispatch(library.actions.setAppletsFromStorage(updatedAppletsData));
     }
   };
