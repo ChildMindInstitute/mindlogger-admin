@@ -5,8 +5,14 @@ import { Box } from '@mui/material';
 
 import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Row, Spinner } from 'shared/components';
 import { Respondent, users, workspaces } from 'redux/modules';
-import { useTimeAgo, useBreadcrumbs, useTable, useAsync, usePermissions } from 'shared/hooks';
-import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
+import {
+  useTimeAgo,
+  useBreadcrumbs,
+  useTable,
+  useAsync,
+  usePermissions,
+  useEncryptionStorage,
+} from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { updateRespondentsPinApi } from 'api';
 import { useAppDispatch } from 'redux/store';

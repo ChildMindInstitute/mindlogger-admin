@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { auth } from 'redux/modules';
 import { applet } from 'shared/state';
 import { encryptData, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
-import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
+import { useEncryptionStorage } from 'shared/hooks';
 import { AnswerDTO } from 'shared/types';
 
 export const useEncryptedAnswers = () => {

@@ -4,8 +4,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
-import { useSetupEnterAppletPassword } from 'shared/hooks';
-import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
+import { useSetupEnterAppletPassword, useEncryptionStorage } from 'shared/hooks';
 import { page } from 'resources';
 
 import { ViewDataPopupProps } from './ViewDataPopup.types';

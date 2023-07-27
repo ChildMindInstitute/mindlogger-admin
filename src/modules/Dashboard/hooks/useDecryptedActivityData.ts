@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { applet } from 'shared/state';
 import { decryptData, Encryption, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
-import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
+import { useEncryptionStorage } from 'shared/hooks';
 import {
   AnswerDTO,
   DecryptedActivityData,
