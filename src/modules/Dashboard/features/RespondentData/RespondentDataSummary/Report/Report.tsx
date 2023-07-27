@@ -8,7 +8,7 @@ import { addDays } from 'date-fns';
 import { Spinner, Svg, Tooltip } from 'shared/components';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
 import { StyledHeadlineLarge, theme, variables } from 'shared/styles';
-import { getAnswersApi } from 'api';
+import { getAnswersApi, getLatestReportApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
@@ -55,6 +55,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   });
 
   const { execute: getAnswers } = useAsync(getAnswersApi);
+  const { execute: getLatestReport } = useAsync(getLatestReportApi);
 
   useEffect(() => {
     const fetchAnswers = async () => {
@@ -118,6 +119,10 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     setResponseOptions(formattedResponses);
   }, [answers, currentActivityCompletionData]);
 
+  const downloadReportHandler = () => {
+    getLatestReport({ appletId, activityId: activity.id, respondentId });
+  };
+
   return (
     <>
       {isLoading && <Spinner />}
@@ -128,7 +133,11 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           </StyledHeadlineLarge>
           <Tooltip tooltipTitle={t('configureServer')}>
             <span>
-              <StyledTextBtn variant="text" startIcon={<Svg id="export" width="18" height="18" />}>
+              <StyledTextBtn
+                onClick={downloadReportHandler}
+                variant="text"
+                startIcon={<Svg id="export" width="18" height="18" />}
+              >
                 {t('downloadLatestReport')}
               </StyledTextBtn>
             </span>

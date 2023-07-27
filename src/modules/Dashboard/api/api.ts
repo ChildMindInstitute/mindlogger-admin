@@ -551,6 +551,18 @@ export const getVersionsApi = (
     },
   );
 
+export const getLatestReportApi = (
+  { appletId, activityId, respondentId }: any,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/answers/applet/${appletId}/activities/${activityId}/answers/${respondentId}/latest_report`,
+    {},
+    {
+      signal,
+    },
+  );
+
 export const getAnswersApi = (
   { appletId, activityId, params: { identifiers, versions, ...params } }: SummaryAnswers,
   signal?: AbortSignal,

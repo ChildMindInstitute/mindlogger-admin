@@ -286,7 +286,7 @@
   "emailConfiguration": "Email Configuration",
   "respondentId": "Respondent ID",
   "caseId": "Case ID (if available)",
-  "enterRecipientsEmails": "Enter the emails of the recipients",
+  "enterRecipientsEmails": "Enter the emails of the respondents",
   "includeInEmail": "In the Subject and Attachment filenames(s) for the email, include:",
   "subjectPreview": "Subject Preview",
   "saveReportConfigurationWarning": "A report can not be generated until the <1>'Encryption Server IP Address'</1> and the <3>'Public Encryption Key'</3> are entered. ",
