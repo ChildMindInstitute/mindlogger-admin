@@ -298,7 +298,7 @@
   "dontSave": "Don't Save",
   "serverStatusConfigured": "Server Status: configured",
   "serverStatusNotConfigured": "Server Status: not configured",
-  "configureServerURL": "For Security reasons, you must configure the Server URL (IP Address) and Public Encryption Key to generate and email reports. Additional instructions are available at the link.",
+  "configureServerURL": "For Security reasons, you must configure the Server URL (IP Address) and Public Encryption Key to generate and email reports. Additional instructions are available at the <1>link</1>.",
   "recipients": "Recipients",
   "appletDescription": "Applet Description",
   "individualScheduleSetup": "Individual Schedule Setup",
