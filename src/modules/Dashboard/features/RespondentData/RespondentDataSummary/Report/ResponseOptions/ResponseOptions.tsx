@@ -10,10 +10,10 @@ import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/Colla
 import { getDictionaryText } from 'shared/utils';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 
+import { COLORS } from '../Charts/Charts.const';
 import { FilterFormValues, FormattedResponse } from '../Report.types';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
-import { COLORS } from './ResponseOptions.const';
 
 export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOptionsProps) => {
   const { t } = useTranslation();

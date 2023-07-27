@@ -1,11 +1,9 @@
 import { LinearScale, ScriptableTooltipContext } from 'chart.js';
 
-import { COLORS } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.const';
-
 import { pluck } from 'shared/utils';
 import { variables } from 'shared/styles';
 
-import { OFFSET_Y_MAX, SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
+import { COLORS, OFFSET_Y_MAX, SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
 import { ChartData } from './BarChart.types';
 import { BORDER_RADIUS } from './BarChart.const';
 
