@@ -8,14 +8,12 @@ export enum AppletPasswordPopupType {
   Enter = 'enter',
 }
 
+export type AppletPasswordRefType = MutableRefObject<AppletPasswordRef | null>;
 export type AppletPasswordPopupProps = {
   popupType?: AppletPasswordPopupType;
   popupVisible: boolean;
   onClose: () => void;
   appletId: string;
   encryption?: Encryption | null;
-  submitCallback?: (
-    encryption: Encryption,
-    ref: MutableRefObject<AppletPasswordRef | null>,
-  ) => void;
+  submitCallback?: (ref: AppletPasswordRefType) => void;
 };
