@@ -16,22 +16,22 @@ export const getEmptyState = (selectedActivity?: DatavizActivity) => {
       </>
     );
   }
+  if (selectedActivity.isPerformanceTask) {
+    return (
+      <>
+        <Svg id="confused" width="80" height="80" />
+        <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
+          {t('datavizNotSupportedForPerformanceTasks')}
+        </StyledTitleLarge>
+      </>
+    );
+  }
   if (!selectedActivity.hasAnswer) {
     return (
       <>
         <Svg id="chart" width="80" height="80" />
         <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
           {t('noDataForActivity')}
-        </StyledTitleLarge>
-      </>
-    );
-  }
-  if (!selectedActivity.isPerformanceTask) {
-    return (
-      <>
-        <Svg id="confused" width="80" height="80" />
-        <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-          {t('datavizNotSupportedForPerformanceTasks')}
         </StyledTitleLarge>
       </>
     );

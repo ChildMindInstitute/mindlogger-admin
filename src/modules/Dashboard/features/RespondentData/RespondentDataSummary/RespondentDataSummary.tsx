@@ -45,7 +45,7 @@ export const RespondentDataSummary = () => {
 
   const reportContent = useMemo(() => {
     if (isLoading) return <Spinner />;
-    if (!selectedActivity || !selectedActivity.hasAnswer || !selectedActivity.isPerformanceTask) {
+    if (!selectedActivity || !selectedActivity.hasAnswer || selectedActivity.isPerformanceTask) {
       return (
         <StyledFlexAllCenter>
           <StyledEmptyReview>{getEmptyState(selectedActivity)}</StyledEmptyReview>
@@ -62,6 +62,7 @@ export const RespondentDataSummary = () => {
       try {
         const result = await getSummaryActivities({
           appletId,
+          respondentId,
         });
         setActivities(result.data?.result);
       } finally {
