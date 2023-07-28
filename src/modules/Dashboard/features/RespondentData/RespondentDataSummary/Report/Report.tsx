@@ -7,13 +7,13 @@ import { addDays } from 'date-fns';
 
 import { Spinner, Svg, Tooltip } from 'shared/components';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
-import { StyledHeadlineLarge, theme, variables } from 'shared/styles';
+import { StyledHeadlineLarge, StyledTitleLarge, theme, variables } from 'shared/styles';
 import { getAnswersApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportFilters } from './ReportFilters';
-import { StyledHeader, StyledReport } from './Report.styles';
+import { StyledEmptyState, StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 import {
   ActivityCompletion,
@@ -140,14 +140,25 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           >
             <FormProvider {...methods}>
               <ReportFilters identifiers={identifiers} versions={versions} />
-              <ActivityCompleted answers={answers} versions={versions} />
-              {!isLoading && (
+              {!isLoading && answers.length > 0 && (
                 <>
+                  <ActivityCompleted answers={answers} versions={versions} />
                   <Subscales answers={answers} versions={versions} />
                   {responseOptions && !!Object.values(responseOptions).length && (
                     <ResponseOptions responseOptions={responseOptions} versions={versions} />
                   )}
                 </>
+              )}
+              {!isLoading && !answers.length && (
+                <StyledEmptyState>
+                  <Svg id="chart" width="80" height="80" />
+                  <StyledTitleLarge
+                    sx={{ mt: theme.spacing(1.6) }}
+                    color={variables.palette.outline}
+                  >
+                    {t('noDataForActivityFilters')}
+                  </StyledTitleLarge>
+                </StyledEmptyState>
               )}
             </FormProvider>
           </ReportContext.Provider>
