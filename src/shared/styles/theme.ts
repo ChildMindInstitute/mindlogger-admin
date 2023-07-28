@@ -29,19 +29,17 @@ export const theme = createTheme({
           height: '100vh',
           overflowY: 'hidden',
         },
-        '.medium-zoom-image--opened': {
+        '.medium-zoom-image--opened, .medium-zoom-overlay': {
           visibility: 'hidden',
           zIndex: 0,
         },
-        '.medium-zoom-overlay': {
-          zIndex: 0,
-        },
         '.medium-zoom--opened .medium-zoom-overlay': {
-          zIndex: 100001,
+          visibility: 'visible',
+          zIndex: theme.zIndex.drawer,
         },
         '.medium-zoom--opened .medium-zoom-image--opened': {
           visibility: 'visible',
-          zIndex: 100002,
+          zIndex: theme.zIndex.modal,
         },
         '*::-webkit-scrollbar': {
           width: '0.8rem',
