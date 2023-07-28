@@ -12,7 +12,7 @@ import { getErrorMessage } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
 import { applet, workspaces } from 'shared/state';
-import { createEventApi, updateEventApi } from 'api';
+import { Periodicity, createEventApi, updateEventApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { calendarEvents, users } from 'modules/Dashboard/state';
@@ -62,16 +62,25 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       control,
     });
 
-    const errorsObj = {
-      hasAvailabilityErrors: !!errors.startTime || !!errors.endTime,
-      hasTimerErrors: !!errors.timerDuration,
-      hasNotificationsErrors: !!errors.notifications || !!errors.reminder,
-    };
-
     const activityOrFlowId = watch('activityOrFlowId');
     const alwaysAvailable = watch('alwaysAvailable');
     const startTime = watch('startTime');
     const endTime = watch('endTime');
+
+    const isAlwaysAvailableSelected =
+      !!activityOrFlowId &&
+      eventsData?.some(
+        ({ activityOrFlowId: id, periodicityType }) =>
+          activityOrFlowId === id && periodicityType === Periodicity.Always,
+      );
+    const hasAlwaysAvailableOption = !!editedEvent || !isAlwaysAvailableSelected;
+
+    const eventFormConfig = {
+      hasAvailabilityErrors: !!errors.startTime || !!errors.endTime,
+      hasTimerErrors: !!errors.timerDuration,
+      hasNotificationsErrors: !!errors.notifications || !!errors.reminder,
+      hasAlwaysAvailableOption,
+    };
 
     const getEvents = () => {
       if (!appletId) return;
@@ -184,6 +193,10 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       trigger(['startTime', 'endTime', 'notifications', 'reminder']);
     }, [startTime, endTime]);
 
+    useEffect(() => {
+      if (!hasAlwaysAvailableOption) setValue('alwaysAvailable', false);
+    }, [hasAlwaysAvailableOption]);
+
     return (
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(submitForm)} noValidate autoComplete="off">
@@ -202,13 +215,13 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
               />
             )}
           </StyledModalWrapper>
-          <Tabs tabs={getEventFormTabs(errorsObj)} uiType={UiType.Secondary} />
-          {(createEventError || updateEventError || errorsObj.hasNotificationsErrors) && (
+          <Tabs tabs={getEventFormTabs(eventFormConfig)} uiType={UiType.Secondary} />
+          {(createEventError || updateEventError || eventFormConfig.hasNotificationsErrors) && (
             <StyledBodyLarge
               color={variables.palette.semantic.error}
               sx={{ m: theme.spacing(1, 2.6) }}
             >
-              {errorsObj.hasNotificationsErrors
+              {eventFormConfig.hasNotificationsErrors
                 ? t('timeNotificationsError')
                 : getErrorMessage(createEventError || updateEventError)}
             </StyledBodyLarge>
