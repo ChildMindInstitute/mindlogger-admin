@@ -320,6 +320,7 @@
   "noSharedWorkspaces": "Aucun espace de travail partagé",
   "itemIsRequired": "Au moins 1 élément est requis.",
   "appletLibrary": "Applet library",
+  "editing": "Édition",
   "appletImageDescription": "Cette image est affichée à côté du nom de l'applet dans le panneau d'administration et dans l'interface du répondant.",
   "appletWatermarkDescription": "Cette image est affichée dans le coin de chaque écran d'applet dans l'interface du répondant.",
   "search": "Search",

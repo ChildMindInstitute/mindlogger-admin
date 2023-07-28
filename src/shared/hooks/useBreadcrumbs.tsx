@@ -80,6 +80,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       newBreadcrumbs.push({
         icon: appletData?.image || '',
         label: appletLabel,
+        chip: t('editing'),
         navPath: generatePath(isDashboard ? page.appletRespondents : page.builderApplet, {
           appletId,
         }),
