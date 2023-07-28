@@ -25,17 +25,17 @@ export const getABTrailsRecords = (
         line_number: index.toString(),
         x: ((point.x / width) * 100).toString(),
         y: (100 - (point.y / width) * 100).toString(),
-        utcTimestamp: Number(point.time / 1000).toString(),
-        seconds: Number((point.time - startTime) / 1000).toString(),
-        epochTimeInSecondsStart: firstPoint ? (startTime / 1000).toString() : '',
         // eslint-disable-next-line no-nested-ternary
         error: point.valid ? 'E0' : point.actual !== 'none' ? 'E1' : 'E2',
-        total_time: '',
-        total_number_of_errors: '',
         correct_path: `${point.start} ~ ${point.end}`,
         actual_path: `${point.start} ~ ${
           point.actual === 'none' ? '?' : point.actual || point.end
         }`,
+        UTC_Timestamp: Number(point.time / 1000).toString(),
+        seconds: Number((point.time - startTime) / 1000).toString(),
+        epoch_time_in_seconds_start: firstPoint ? (startTime / 1000).toString() : '',
+        total_time: '',
+        total_number_of_errors: '',
       });
 
       firstPoint = false;
