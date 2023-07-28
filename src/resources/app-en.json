@@ -988,6 +988,7 @@
   "time": "Time",
   "response": "Response",
   "noDataForActivity": "No available Data for this Activity yet",
+  "noDataForActivityFilters": "No match was found. Try to adjust filters.",
   "isReviewableUnsupported": "Reviewer dashboard assessment supports only Single Selection, Multiple Selection and Slider Items",
   "isReviewableExists": "Only one Activity within an Applet can be a Reviewer dashboard assessment. Selected one: {{- activityName }}",
   "activityHasVariableAmongItems": "This activity contains variables and cannot skip all items.",
