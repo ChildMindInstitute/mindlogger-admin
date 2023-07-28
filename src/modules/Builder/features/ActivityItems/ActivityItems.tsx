@@ -119,7 +119,7 @@ export const ActivityItems = () => {
     }
     if (subscales.length) {
       setValue(
-        `${fieldName}.subscaleSetting.subscales`,
+        subscalesField,
         subscales.map((subscale) => ({
           ...subscale,
           items: subscale.items.filter((item) => item !== itemIdToDelete),
