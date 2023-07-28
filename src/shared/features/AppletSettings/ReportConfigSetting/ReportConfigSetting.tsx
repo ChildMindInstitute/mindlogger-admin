@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -25,7 +25,13 @@ import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'sha
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
-import { StyledButton, StyledSvg, StyledContainer, StyledForm } from './ReportConfigSetting.styles';
+import {
+  StyledButton,
+  StyledSvg,
+  StyledContainer,
+  StyledForm,
+  StyledLink,
+} from './ReportConfigSetting.styles';
 import { ReportConfigFormValues, ReportConfigSettingProps } from './ReportConfigSetting.types';
 import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
 import { getDefaultValues } from './ReportConfigSetting.utils';
@@ -296,7 +302,18 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
                 color={variables.palette.on_surface_variant}
                 sx={{ marginTop: theme.spacing(2.4) }}
               >
-                {t('configureServerURL')}
+                <Trans i18nKey="configureServerURL">
+                  For Security reasons, you must configure the Server URL (IP Address) and Public
+                  Encryption Key to generate and email reports. Additional instructions are
+                  available at the
+                  <StyledLink
+                    href="https://github.com/ChildMindInstitute/mindlogger-report-server"
+                    target="_blank"
+                  >
+                    link
+                  </StyledLink>
+                  .
+                </Trans>
               </StyledBodyLarge>
               <InputController
                 control={control}
