@@ -23,13 +23,12 @@ import { StyledLink } from './Cart.styles';
 import { StyledTablePagination } from '../AppletsCatalog/AppletsCatalog.styles';
 import { DEFAULT_APPLETS_PER_PAGE, DEFAULT_PAGE } from '../AppletsCatalog/AppletsCatalog.conts';
 import { getSearchIncludes } from './Cart.utils';
+import { DEFAULT_CART_APPLETS_PER_PAGE } from './Cart.const';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
   const isAuthorized = auth.useAuthorized();
-  const {
-    result: { cartItems },
-  } = library.useCartApplets() || {};
+  const { result: cartItems } = library.useCartApplets() || {};
   const loadingStatus = library.useCartAppletsStatus();
   const isAddBtnDisabled = library.useIsCartBtnDisabled() || !cartItems?.length;
   const [searchValue, setSearchValue] = useState('');
@@ -49,7 +48,7 @@ export const Cart = () => {
     setPageIndex(newPage + 1);
   };
 
-  useAppletsFromCart();
+  useAppletsFromCart({ search, page: pageIndex, limit: DEFAULT_CART_APPLETS_PER_PAGE });
   useBreadcrumbs([
     {
       icon: 'cart-outlined',

@@ -1,0 +1,1 @@
+export const DEFAULT_CART_APPLETS_PER_PAGE = 6;

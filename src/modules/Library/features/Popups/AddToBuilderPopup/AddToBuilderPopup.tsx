@@ -36,9 +36,7 @@ export const AddToBuilderPopup = ({
   const [applets, setApplets] = useState<Applet[]>([]);
   const { result: workspacesData = [] } = workspaces.useWorkspacesData() || {};
   const currentWorkspace = workspaces.useData();
-  const {
-    result: { cartItems },
-  } = library.useCartApplets() || {};
+  const { result: cartItems } = library.useCartApplets() || {};
   const isWorkspacesModalVisible = workspacesData.length > 1;
 
   // TODO: get all applets including applets in folders (backend task M2-2580)
