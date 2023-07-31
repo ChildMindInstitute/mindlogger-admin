@@ -6,6 +6,8 @@ import { AppletImage, Table, UiType } from 'shared/components';
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { WorkspaceImage, WorkspaceUiType } from 'shared/features/SwitchWorkspace';
 import {
+  PublishedActivity,
+  PublishedActivityFlow,
   PublishedApplet,
   SelectedCartApplet,
   SelectedCombinedCartApplet,
@@ -21,10 +23,16 @@ import {
 } from 'shared/styles';
 import { HeadCell } from 'shared/types/table';
 import i18n from 'i18n';
-import { Item, Workspace } from 'shared/state';
+import { SingleAndMultipleSelectItemResponseValues, Workspace } from 'shared/state';
 import { Applet as FullApplet, DashboardAppletType } from 'modules/Dashboard';
-import { ItemResponseType, performanceTaskResponseTypes, PerfTaskType } from 'shared/consts';
+import {
+  ItemResponseType,
+  performanceTaskResponseTypes,
+  PerfTaskType,
+  responseTypeToHaveOptions,
+} from 'shared/consts';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
+import { pluck } from 'shared/utils';
 
 import {
   AddToBuilderActions,
@@ -282,9 +290,35 @@ export const getPerformanceTaskType = (responseType: ItemResponseType) => {
   return performanceTaskType;
 };
 
+const getUniqueActivityName = <T extends { name: string }>(
+  activityName: string,
+  activities: T[],
+): string => {
+  const activitiesToCheck = pluck(activities, 'name');
+
+  if (activitiesToCheck.includes(activityName))
+    return getUniqueActivityName(`${activityName} (1)`, activities);
+
+  return activityName;
+};
+
+const removeDuplicatedNames = <T extends { name: string }>(
+  existingActivities: T[],
+  activitiesToAdd: T[],
+): T[] =>
+  activitiesToAdd.reduce(
+    (activities: T[], activity: T) => [
+      ...activities,
+      {
+        ...activity,
+        name: getUniqueActivityName(activity.name, [...existingActivities, ...activities]),
+      },
+    ],
+    [],
+  );
+
 // TODO: Make filtering for scores, subscales, and item flows, regarding which items were selected, Activity to the
-//  Reviewer dashboard assessment checkbox (can be only one in all activities), names for ABTrails activities to be
-//  unique
+//  Reviewer dashboard assessment checkbox (can be only one in all activities)
 export const getSelectedAppletData = (
   applet: PublishedApplet,
   selectedItems: SelectedItem[],
@@ -305,6 +339,29 @@ export const getSelectedAppletData = (
             ...item,
             key: uuidv4(),
           };
+
+          //there is no 'id' in responseValues.options for Single/Multi selection
+          if (responseTypeToHaveOptions.includes(newItem.responseType)) {
+            const responseValues =
+              (newItem.responseValues as SingleAndMultipleSelectItemResponseValues) ?? {};
+
+            newItem.responseValues = {
+              ...responseValues,
+              options: responseValues?.options?.map((option) => ({
+                ...option,
+                id: option.id ?? uuidv4(),
+              })),
+            };
+          }
+
+          //remove conditionalLogic if some of dependent items are not selected
+          if (newItem.conditionalLogic) {
+            const hasAllDependeciesSelected = newItem.conditionalLogic?.conditions?.every(
+              ({ itemName }) => pluck(items, 'name').includes(itemName),
+            );
+
+            if (!hasAllDependeciesSelected) newItem.conditionalLogic = undefined;
+          }
 
           return newItem;
         });
@@ -365,8 +422,12 @@ export const getAddToBuilderData = async (cartItems: PublishedApplet[] | null) =
     appletToBuilder = preparedApplets.reduce(
       (acc: SelectedCombinedCartApplet, applet) => {
         acc.themeId = null;
-        acc.activities.push(...applet.activities);
-        acc.activityFlows.push(...applet.activityFlows);
+        acc.activities.push(
+          ...removeDuplicatedNames<PublishedActivity>(acc.activities, applet.activities),
+        );
+        acc.activityFlows.push(
+          ...removeDuplicatedNames<PublishedActivityFlow>(acc.activityFlows, applet.activityFlows),
+        );
 
         return acc;
       },

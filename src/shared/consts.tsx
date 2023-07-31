@@ -112,6 +112,11 @@ export const performanceTaskResponseTypes = [
   ItemResponseType.ABTrails,
 ];
 
+export const responseTypeToHaveOptions = [
+  ItemResponseType.SingleSelection,
+  ItemResponseType.MultipleSelection,
+];
+
 export enum PerfTaskType {
   Flanker = 'flanker',
   Touch = 'touch',
