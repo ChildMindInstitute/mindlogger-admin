@@ -36,6 +36,7 @@ export const StyledLink = styled(Link)`
   padding: ${theme.spacing(0.8)};
   transition: ${variables.transitions.bgColor};
   border-radius: ${variables.borderRadius.lg};
+  height: 4rem;
 
   &:hover {
     background-color: ${variables.palette.on_surface_variant_alfa8};
@@ -45,4 +46,11 @@ export const StyledLink = styled(Link)`
 export const StyledBox = styled(Box)`
   ${commonCenterStyles};
   padding: ${theme.spacing(0.8)};
+`;
+
+export const StyledChip = styled(Box)`
+  padding: ${theme.spacing(0.6, 1)};
+  margin-left: ${theme.spacing(0.8)};
+  background-color: ${variables.palette.on_surface_variant_alfa8};
+  border-radius: ${variables.borderRadius.xs};
 `;

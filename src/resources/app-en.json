@@ -444,6 +444,7 @@
   "onlyAdminPanelActivityTooltip": "This Activity is only displayed in the Admin panel for the reviewer to provide responses about respondent's data. Only single selection, multiple selection, and slider items are supported.",
   "aboutAppletTooltip": "This text will be displayed on the “About“ tab of the Applet details page in the Respondent's interface.",
   "appletLibrary": "Applet library",
+  "editing": "Editing",
   "appletImageDescription": "This image is displayed next to the Applet name in the admin panel, and in the respondent's interface.",
   "appletWatermarkDescription": "This image is displayed in the corner on each Applet screen in the respondent's interface.",
   "search": "Search",

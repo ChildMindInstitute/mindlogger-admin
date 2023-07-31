@@ -9,7 +9,7 @@ import { Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
 import { DEFAULT_START_TIME } from '../EventForm.const';
-import { availabilityOptions, repeatsButtons } from './Availability.const';
+import { repeatsButtons } from './Availability.const';
 import {
   StyledButtonsTitle,
   StyledTimeRow,
@@ -17,8 +17,10 @@ import {
   StyledWrapper,
   StyledDatePickerWrapper,
 } from './AvailabilityTab.styles';
+import { AvailabilityTabProps } from './AvailabilityTab.types';
+import { getAvailabilityOptions } from './AvailabilityTab.utils';
 
-export const AvailabilityTab = () => {
+export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext<EventFormValues>();
   const alwaysAvailable = watch('alwaysAvailable');
@@ -63,7 +65,7 @@ export const AvailabilityTab = () => {
       <SelectController
         name="alwaysAvailable"
         fullWidth
-        options={availabilityOptions}
+        options={getAvailabilityOptions(hasAlwaysAvailableOption)}
         control={control}
       />
       {Object.keys(removeWarning).length !== 0 && (

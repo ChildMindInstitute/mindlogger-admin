@@ -32,7 +32,12 @@ export const SelectController = <T extends FieldValues>({
     icon?: JSX.Element,
     withoutKey?: boolean,
   ) => (
-    <StyledMenuItem {...(!withoutKey && { key: labelKey })} uiType={uiType} value={value as string}>
+    <StyledMenuItem
+      {...(!withoutKey && { key: labelKey })}
+      uiType={uiType}
+      value={value as string}
+      disabled={itemDisabled}
+    >
       <StyledItem itemDisabled={itemDisabled} selectDisabled={disabled}>
         {icon && (
           <StyledFlexTopCenter className="icon-wrapper" sx={{ marginRight: theme.spacing(1.8) }}>
