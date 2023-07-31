@@ -21,7 +21,7 @@ import {
 } from 'shared/styles';
 import { HeadCell } from 'shared/types/table';
 import i18n from 'i18n';
-import { Workspace } from 'shared/state';
+import { Item, Workspace } from 'shared/state';
 import { Applet as FullApplet, DashboardAppletType } from 'modules/Dashboard';
 import { ItemResponseType, performanceTaskResponseTypes, PerfTaskType } from 'shared/consts';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
@@ -300,7 +300,14 @@ export const getSelectedAppletData = (
 
       const filteredItems = activity.items
         .filter((item) => selectedItemNamesSet.has(`${item.name}-${activity.name}`))
-        .map((item) => ({ ...item, key: uuidv4() }));
+        .map((item, index, items) => {
+          const newItem = {
+            ...item,
+            key: uuidv4(),
+          };
+
+          return newItem;
+        });
 
       for (const item of activity.items) {
         if (performanceTaskResponseTypes.includes(item.responseType)) {

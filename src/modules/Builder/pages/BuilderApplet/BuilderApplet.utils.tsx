@@ -475,7 +475,7 @@ const getAlerts = (item: Item) => {
 
     if (!optionsWithAlert?.length) return [];
 
-    return optionsWithAlert.map(({ id, alert }) => ({
+    return optionsWithAlert.map(({ id, value, alert }) => ({
       key: uuidv4(),
       value: id,
       alert,
@@ -714,6 +714,26 @@ const getActivitySubscaleSetting = (
         subscaleItems: subscale.items,
       }),
     })),
+  };
+};
+
+export const getLibraryActivityItems = (items: Activity['items']) => items.map((item) => ({
+    ...item,
+  }));
+
+export const getLibraryValues = (appletData?: SingleApplet) => {
+  if (!appletData) return {};
+
+  const processedApplet = {
+    ...appletData,
+    activities: appletData.activities.map((activity) => {
+      const items = getLibraryActivityItems(activity.items);
+
+      return {
+        ...activity,
+        items,
+      };
+    }),
   };
 };
 
