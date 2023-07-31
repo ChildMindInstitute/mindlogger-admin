@@ -75,6 +75,8 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
     trigger,
     reset,
     formState: { isDirty, isSubmitted, defaultValues },
+    setError,
+    clearErrors,
   } = useForm<ReportConfigFormValues>({
     resolver: yupResolver(reportConfigSchema()),
     defaultValues: getDefaultValues(appletData),
@@ -173,9 +175,14 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
 
   const handleVerify = async () => {
     const isVerified = await onVerify();
+    if (isVerified) {
+      clearErrors(['reportServerIp', 'reportPublicKey']);
 
-    if (isVerified) return setPasswordPopupVisible(true);
+      return setPasswordPopupVisible(true);
+    }
 
+    setError('reportServerIp', {});
+    setError('reportPublicKey', {});
     setVerifyPopupVisible(true);
   };
 
