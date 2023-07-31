@@ -21,6 +21,7 @@ export const reducers = {
     state.createEventsData = initialState.createEventsData;
     state.processedEventStartYear = initialState.processedEventStartYear;
   },
+
   createCalendarEvents: (
     state: CalendarEventsSchema,
     action: PayloadAction<{

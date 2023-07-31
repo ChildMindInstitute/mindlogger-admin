@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { addDays } from 'date-fns';
 
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { TimePicker, DatePicker, ToggleButtonGroup } from 'shared/components';
@@ -35,6 +36,12 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabPro
   const handleSetPeriodicity = (period: string | number) =>
     setValue('periodicity', period as Periodicity);
 
+  const onCloseCallback = () => {
+    if (typeof startDate !== 'string' && startDate && endDate && endDate < startDate) {
+      setValue('endDate', addDays(startDate, 1));
+    }
+  };
+
   const datePicker = (
     <StyledDatePickerWrapper>
       <DatePicker
@@ -42,13 +49,20 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabPro
         value={isOncePeriodicity ? date : startDate}
         control={control}
         label={isOncePeriodicity ? t('date') : t('startDate')}
+        onCloseCallback={onCloseCallback}
       />
       {!isOncePeriodicity && (
         <>
           <StyledBodyLarge sx={{ m: theme.spacing(0, 2.4) }}>
             {t('to').toLowerCase()}
           </StyledBodyLarge>
-          <DatePicker name="endDate" value={endDate} control={control} label={t('endDate')} />
+          <DatePicker
+            name="endDate"
+            minDate={typeof startDate === 'string' ? null : startDate}
+            value={endDate}
+            control={control}
+            label={t('endDate')}
+          />
         </>
       )}
     </StyledDatePickerWrapper>
