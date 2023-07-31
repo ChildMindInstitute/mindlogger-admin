@@ -18,7 +18,7 @@ import {
 import { CalendarEvent } from 'modules/Dashboard/state';
 import { getIsRequiredValidateMessage } from 'shared/utils';
 
-import { removeSecondsFromTime, convertDateToYearMonthDay } from '../Schedule.utils';
+import { convertDateToYearMonthDay, removeSecondsFromTime } from '../Schedule.utils';
 import { AvailabilityTab } from './AvailabilityTab';
 import { NotificationsTab } from './NotificationsTab';
 import { TimersTab } from './TimersTab';
@@ -347,6 +347,9 @@ export const getIdWithoutRegex = (activityOrFlowId: string) => {
   return { isFlowId, id };
 };
 
+const getYearFromDate = (date: string | Date) =>
+  getYear(typeof date === 'string' ? new Date() : date);
+
 const getEventStartYear = ({
   periodicity,
   defaultStartDate,
@@ -355,13 +358,19 @@ const getEventStartYear = ({
 }: Pick<EventFormValues, 'periodicity' | 'date' | 'startDate'> & {
   defaultStartDate: Date | string;
 }) => {
+  const defaultStartDateYear = getYearFromDate(defaultStartDate);
+  const dateYear = getYearFromDate(date);
+  const startDateYear = getYearFromDate(startDate);
+
   if (periodicity === Periodicity.Always) {
-    return typeof defaultStartDate !== 'string' && getYear(defaultStartDate);
+    return defaultStartDateYear;
   }
 
-  return periodicity === Periodicity.Once
-    ? typeof date !== 'string' && getYear(date)
-    : startDate && typeof startDate !== 'string' && getYear(startDate);
+  if (periodicity === Periodicity.Once) {
+    return dateYear === defaultStartDateYear && dateYear;
+  }
+
+  return startDateYear === defaultStartDateYear && startDateYear;
 };
 
 export const getEventPayload = (
