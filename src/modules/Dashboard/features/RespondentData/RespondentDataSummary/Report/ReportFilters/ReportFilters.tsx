@@ -7,7 +7,7 @@ import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { AutocompleteOption, Switch, TagsInputController } from 'shared/components/FormComponents';
 
-import { StyledTimeText } from './ReportFilters.styles';
+import { StyledFiltersContainer, StyledMoreFilters, StyledTimeText } from './ReportFilters.styles';
 import { ReportFiltersProps } from './ReportFilters.types';
 import { MIN_DATE } from './ReportFilters.const';
 
@@ -58,49 +58,52 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
 
   return (
     <form>
-      <StyledFlexTopCenter sx={{ mb: theme.spacing(3.2) }}>
-        <DatePicker
-          minDate={MIN_DATE}
-          name="startDate"
-          control={control}
-          inputSx={{ width: '19rem' }}
-          onCloseCallback={onCloseCallback}
-          label={t('startDate')}
-        />
-        <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
-        <DatePicker
-          minDate={startDate}
-          name="endDate"
-          control={control}
-          inputSx={{ width: '19rem' }}
-          label={t('endDate')}
-        />
-        <Box sx={{ position: 'relative' }}>
+      <StyledFiltersContainer>
+        <StyledFlexTopCenter>
+          <DatePicker
+            minDate={MIN_DATE}
+            name="startDate"
+            control={control}
+            inputSx={{ width: '19rem' }}
+            onCloseCallback={onCloseCallback}
+            label={t('startDate')}
+          />
+          <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
+          <DatePicker
+            minDate={startDate}
+            name="endDate"
+            control={control}
+            inputSx={{ width: '19rem' }}
+            label={t('endDate')}
+          />
+        </StyledFlexTopCenter>
+
+        <StyledFlexTopCenter sx={{ position: 'relative' }}>
           <TimePicker
             name="startTime"
             control={control}
             label={t('startTime')}
-            wrapperSx={{ width: '13rem', marginLeft: theme.spacing(2.4) }}
+            wrapperSx={{ width: '13rem' }}
           />
           <StyledTimeText>{t('timeIsShownInUTC')}</StyledTimeText>
-        </Box>
-        <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
-        <TimePicker
-          name="endTime"
-          control={control}
-          label={t('endTime')}
-          wrapperSx={{ width: '13rem', marginRight: theme.spacing(1.2) }}
-        />
-        <Button
-          onClick={moreFiltersHandler}
-          sx={{
-            height: '5.5rem',
-            backgroundColor: moreFiltersVisible ? variables.palette.primary_alfa12 : '',
-          }}
-        >
-          {t('moreFilters')}
-        </Button>
-      </StyledFlexTopCenter>
+
+          <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
+          <TimePicker
+            name="endTime"
+            control={control}
+            label={t('endTime')}
+            wrapperSx={{ width: '13rem' }}
+          />
+          <StyledMoreFilters
+            onClick={moreFiltersHandler}
+            sx={{
+              backgroundColor: moreFiltersVisible ? variables.palette.primary_alfa12 : '',
+            }}
+          >
+            {t('moreFilters')}
+          </StyledMoreFilters>
+        </StyledFlexTopCenter>
+      </StyledFiltersContainer>
       {moreFiltersVisible && (
         <Box sx={{ mb: theme.spacing(4.8) }}>
           {!!identifiersOptions?.length && (
