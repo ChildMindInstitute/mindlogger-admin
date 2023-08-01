@@ -130,9 +130,8 @@ export const ShareApplet = ({
     <SuccessShared
       title={appletName || applet.displayName || ''}
       keywords={keywords}
-      // TODO: Implement activities quantity and check applet description after back-end is ready (task M2-2564)
       text={getDictionaryText(applet?.description || '')}
-      // activitiesQuantity={8}
+      activitiesQuantity={applet?.activityCount}
       appletLink={libraryUrl}
       img={applet.image || ''}
     />
