@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components';
-import { Roles } from 'shared/consts';
+import { REPORT_CONFIG_PARAM, Roles } from 'shared/consts';
 import {
   ExportDataSetting,
   DataRetention,
@@ -92,7 +92,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
         icon: <Svg id="report-configuration" />,
         label: 'reportConfiguration',
         component: <ReportConfigSetting isDashboard />,
-        param: 'report-configuration',
+        param: REPORT_CONFIG_PARAM,
       },
     ],
   },

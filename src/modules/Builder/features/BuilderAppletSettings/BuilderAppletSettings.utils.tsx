@@ -1,6 +1,6 @@
 import i18n from 'i18n';
 import { Svg } from 'shared/components';
-import { Roles } from 'shared/consts';
+import { REPORT_CONFIG_PARAM, Roles } from 'shared/consts';
 import {
   DataRetention,
   TransferOwnershipSetting,
@@ -104,7 +104,7 @@ export const getSettings = ({
           icon: <Svg id="report-configuration" />,
           label: 'reportConfiguration',
           component: <ReportConfigSetting onSubmitSuccess={onReportConfigSubmit} />,
-          param: 'report-configuration',
+          param: REPORT_CONFIG_PARAM,
           disabled: isNewApplet,
           tooltip,
         },

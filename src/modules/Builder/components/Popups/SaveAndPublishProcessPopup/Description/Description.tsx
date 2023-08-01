@@ -71,5 +71,7 @@ export const Description = ({ step }: DescriptionProps) => {
       );
     case SaveAndPublishSteps.Failed:
       return hasNotBeenSaved;
+    case SaveAndPublishSteps.ReportConfigSave:
+      return <StyledBodyLarge>{t('reportConfigNotSaved')}</StyledBodyLarge>;
   }
 };
