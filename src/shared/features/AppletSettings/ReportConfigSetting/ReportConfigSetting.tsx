@@ -290,6 +290,9 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
             sx={{ margin: theme.spacing(4.8, 0) }}
           />
         </StyledContainer>
+        <StyledTitleMedium color={variables.palette.on_surface} sx={{ mb: theme.spacing(1) }}>
+          {t('emailBody')}
+        </StyledTitleMedium>
         <EditorController control={control} name="reportEmailBody" />
         <StyledContainer>
           <StyledButton

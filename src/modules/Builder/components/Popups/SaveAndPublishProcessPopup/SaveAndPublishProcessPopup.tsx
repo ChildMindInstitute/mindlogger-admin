@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Modal } from 'shared/components';
-import { StyledLinearProgress, StyledModalWrapper, theme } from 'shared/styles';
+import { StyledLinearProgress, StyledModalWrapper, theme, variables } from 'shared/styles';
 
 import {
   SaveAndPublishProcessPopupProps,
@@ -33,6 +33,23 @@ export const SaveAndPublishProcessPopup = ({
       hasSecondBtn: true,
       secondBtnText: t('back'),
       onSecondBtnSubmit: onClose,
+    };
+  }
+  if (step === SaveAndPublishSteps.ReportConfigSave) {
+    modalProps = {
+      title: t('reportConfiguration'),
+      buttonText: t('save'),
+      onSubmit: () => console.log('save report config'),
+      hasSecondBtn: true,
+      secondBtnText: t('dontSave'),
+      secondBtnStyles: {
+        color: variables.palette.semantic.error,
+        fontWeight: variables.font.weight.bold,
+      },
+      onSecondBtnSubmit: () => console.log('do NOT save report config'),
+      hasThirdBtn: true,
+      thirdBtnText: t('cancel'),
+      onThirdBtnSubmit: onClose,
     };
   }
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
 import get from 'lodash.get';
@@ -21,6 +21,7 @@ import {
   getEncryptionToServer,
   getUpdatedAppletUrl,
 } from 'shared/utils';
+import { REPORT_CONFIG_PARAM } from 'shared/consts';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
 import { auth, workspaces } from 'redux/modules';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
@@ -241,6 +242,7 @@ export const useUpdatedAppletNavigate = () => {
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { trigger } = useFormContext();
+  const { pathname } = useLocation();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
@@ -314,6 +316,12 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     const hasEmptyRequiredFields = await checkIfHasEmptyRequiredFields();
     const hasErrorsInFields = await checkIfHasErrorsInFields();
     setPublishProcessPopupOpened(true);
+
+    if (pathname.includes(REPORT_CONFIG_PARAM)) {
+      setPublishProcessStep(SaveAndPublishSteps.ReportConfigSave);
+
+      return;
+    }
 
     if (hasNoActivities) {
       setPublishProcessStep(SaveAndPublishSteps.AtLeastOneActivity);
