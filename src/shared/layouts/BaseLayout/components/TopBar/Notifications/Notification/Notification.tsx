@@ -5,15 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components';
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
 import { useAppDispatch } from 'redux/store';
-import logoSrc from 'assets/images/logo.png';
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { alerts } from 'shared/state';
+import { WorkspaceImage } from 'shared/features/SwitchWorkspace';
 
 import {
   StyledNotification,
   StyledLeftSection,
   StyledImageWrapper,
-  StyledImage,
   StyledInfo,
   StyledRightSection,
   StyledInfoCircle,
@@ -31,14 +30,15 @@ export const Notification = ({
   currentId,
   setCurrentId,
   alertId,
-  label,
-  title,
-  message,
-  imageSrc,
-  timeAgo,
-  viewed,
-  encryption,
+  workspaceName,
   appletId,
+  appletName,
+  appletImage,
+  respondentSecretId,
+  message,
+  timeAgo,
+  isWatched,
+  encryption,
   alert,
 }: NotificationProps) => {
   const { t } = useTranslation('app');
@@ -75,8 +75,15 @@ export const Notification = ({
         <StyledTopSection>
           <StyledLeftSection>
             <StyledImageWrapper>
-              {imageSrc && <StyledImage src={imageSrc} alt={label} />}
-              <StyledLogo src={logoSrc} alt={label} />
+              <WorkspaceImage
+                coverSxProps={{
+                  width: '4rem',
+                  height: '4rem',
+                  borderRadius: '100%',
+                }}
+                workspaceName={workspaceName ?? ''}
+              />
+              <StyledLogo src={appletImage} alt={appletName} />
             </StyledImageWrapper>
           </StyledLeftSection>
           <StyledInfo>
@@ -84,15 +91,15 @@ export const Notification = ({
               fontWeight={isActive ? 'regular' : 'bold'}
               color={variables.palette.on_surface_variant}
             >
-              {label}
+              {appletName}
             </StyledLabelMedium>
             <StyledTitle
-              fontWeight={isActive ? 'regular' : 'bold'}
+              fontWeight={isWatched ? 'regular' : 'bold'}
               color={
                 isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
               }
             >
-              {title}
+              {respondentSecretId}
             </StyledTitle>
             <StyledMessage
               fontWeight={isActive ? 'regular' : 'bold'}
@@ -104,7 +111,7 @@ export const Notification = ({
               {message}
             </StyledMessage>
           </StyledInfo>
-          <StyledRightSection>{!viewed ? <StyledInfoCircle /> : <Box />}</StyledRightSection>
+          <StyledRightSection>{!isWatched ? <StyledInfoCircle /> : <Box />}</StyledRightSection>
         </StyledTopSection>
         <StyledBottomSection>
           {isActive && (
@@ -117,8 +124,10 @@ export const Notification = ({
             </StyledBtn>
           )}
           <StyledTimeAgo
-            fontWeight={isActive ? 'regular' : 'bold'}
-            color={viewed ? variables.palette.on_surface_variant : variables.palette.semantic.error}
+            fontWeight={isWatched ? 'regular' : 'bold'}
+            color={
+              isWatched ? variables.palette.on_surface_variant : variables.palette.semantic.error
+            }
           >
             {timeAgo}
           </StyledTimeAgo>

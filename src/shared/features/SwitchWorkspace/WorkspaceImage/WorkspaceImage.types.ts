@@ -1,10 +1,13 @@
+import { SxProps } from '@mui/material';
+
 export enum WorkspaceUiType {
-  List = 0,
-  Table = 1,
+  List,
+  Table,
 }
 
 export type WorkspaceImageProps = {
   uiType?: WorkspaceUiType;
   image?: string;
   workspaceName?: string;
+  coverSxProps?: SxProps;
 };

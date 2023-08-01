@@ -37,7 +37,7 @@ export const StyledTopSection = styled(Box)`
   display: flex;
 `;
 
-export const StyledTitle = styled(StyledTitleMedium)`
+export const StyledTitle = styled(StyledTitleMedium, shouldForwardProp)`
   margin-top: ${theme.spacing(0.4)};
 `;
 
@@ -58,10 +58,6 @@ export const StyledImageWrapper = styled(Box)`
   ${commonImgStyles};
   background-color: ${variables.palette.primary_container};
   position: relative;
-`;
-
-export const StyledImage = styled('img')`
-  ${commonImgStyles};
 `;
 
 export const StyledLogo = styled('img')`
@@ -101,7 +97,7 @@ export const StyledBtn = styled(Button)`
   margin-top: ${theme.spacing(1.2)};
 `;
 
-export const StyledTimeAgo = styled(StyledLabelMedium)`
+export const StyledTimeAgo = styled(StyledLabelMedium, shouldForwardProp)`
   padding-left: ${theme.spacing(2.4)};
   margin-top: ${theme.spacing(0.8)};
 `;

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
-import { getAppletData, getDateInUserTimezone } from 'shared/utils';
+import { getDateInUserTimezone } from 'shared/utils';
 import {
   variables,
   StyledLabelBoldLarge,
@@ -38,23 +38,20 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
   useEffect(() => {
     if (!alertList?.length) return;
 
-    const alerts = alertList.map((alert) => {
-      const { name, image, encryption } = getAppletData([], alert.appletId);
-
-      return {
-        accountId: alert.secretId,
-        alertId: alert.id,
-        label: alert.appletName,
-        title: name ?? '',
-        message: alert.message,
-        imageSrc: image || null,
-        timeAgo: timeAgo.format(getDateInUserTimezone(alert.createdAt), 'round'),
-        viewed: alert.isWatched,
-        encryption: encryption || undefined,
-        appletId: alert.appletId,
-        alert,
-      };
-    });
+    const alerts = alertList.map((alert) => ({
+      alertId: alert.id,
+      workspaceName: alert.workspaceName ?? '',
+      appletId: alert.appletId ?? '',
+      appletName: alert.appletName,
+      appletImage: alert.appletImage,
+      respondentSecretId: alert.secretId,
+      message: alert.message,
+      timeAgo: timeAgo.format(getDateInUserTimezone(alert.createdAt), 'round'),
+      isWatched: alert.isWatched,
+      respondentId: alert.respondentId ?? '',
+      encryption: alert.encryption,
+      alert,
+    }));
     setNotifications(alerts);
   }, [alertList]);
 

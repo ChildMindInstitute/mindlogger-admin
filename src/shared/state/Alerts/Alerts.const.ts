@@ -1,1 +1,1 @@
-export const DEFAULT_ROWS_PER_PAGE = 30;
+export const DEFAULT_ROWS_PER_PAGE = 50;
