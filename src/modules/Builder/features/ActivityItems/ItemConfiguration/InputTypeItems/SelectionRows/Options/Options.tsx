@@ -10,6 +10,7 @@ import { SingleAndMultipleSelectOption } from 'shared/state';
 import { StyledSelectionRow, StyledSelectionBox } from '../SelectionRows.styles';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.const';
+import { CharactersCounter } from '../CharactersCounter';
 
 const commonUploaderProps = {
   width: 5.6,
@@ -27,6 +28,7 @@ export const Options = ({ name }: { name: string }) => {
   const settings = watch(`${name}.config`);
 
   const hasTooltips = get(settings, ItemConfigurationSettings.HasTooltips);
+  const hasShortenedHelper = options?.length === 3;
 
   return (
     <StyledSelectionRow hasTooltips={hasTooltips}>
@@ -35,7 +37,7 @@ export const Options = ({ name }: { name: string }) => {
         const optionName = `${optionsName}.${index}`;
 
         return (
-          <StyledSelectionBox key={`option-${option.id}`}>
+          <StyledSelectionBox key={`option-${option.id}`} isErrorShortened={hasShortenedHelper}>
             <StyledFlexTopStart sx={{ gap: '1.2rem' }}>
               <Uploader
                 {...commonUploaderProps}
@@ -48,6 +50,8 @@ export const Options = ({ name }: { name: string }) => {
                 label={t('selectionRowsOptionLabel', { index: index + 1 })}
                 maxLength={SELECTION_ROW_OPTION_LABEL_MAX_LENGTH}
                 restrictExceededValueLength
+                Counter={CharactersCounter}
+                counterProps={{ isShortenedVisible: hasShortenedHelper }}
               />
             </StyledFlexTopStart>
             {hasTooltips && (

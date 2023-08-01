@@ -20,6 +20,7 @@ import {
   StyledRemoveItemButton,
 } from './Items.styles';
 import { ItemsProps } from './Items.types';
+import { CharactersCounter } from '../CharactersCounter';
 import { StyledSelectionBox } from '../SelectionRows.styles';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.const';
@@ -46,6 +47,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
   const hasRemoveButton = rows?.length > 1;
+  const hasShortenedHelper = options?.length === 3;
 
   const handleRemoveItem = (index: number) => {
     if (hasAlerts) {
@@ -78,7 +80,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
 
     return (
       <StyledSelectionRowItem key={`row-${row.id}`} hasTooltips={hasTooltips}>
-        <StyledSelectionBox>
+        <StyledSelectionBox isErrorShortened={hasShortenedHelper}>
           <StyledFlexTopStart sx={{ gap: '1.2rem' }}>
             <Uploader
               {...commonUploaderProps}
@@ -91,6 +93,8 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
               label={t('selectionRowsItemLabel', { index: index + 1 })}
               maxLength={SELECTION_ROW_OPTION_LABEL_MAX_LENGTH}
               restrictExceededValueLength
+              Counter={CharactersCounter}
+              counterProps={{ isShortenedVisible: hasShortenedHelper }}
             />
           </StyledFlexTopStart>
           {hasTooltips && (
