@@ -19,7 +19,7 @@ export const reducers = {
     state.alwaysAvailableHidden = initialState.alwaysAvailableHidden;
     state.scheduledHidden = initialState.scheduledHidden;
     state.createEventsData = initialState.createEventsData;
-    state.processedEventStartYear = initialState.processedEventStartYear;
+    state.calendarCurrentYear = initialState.calendarCurrentYear;
   },
 
   createCalendarEvents: (
@@ -78,20 +78,20 @@ export const reducers = {
     state.createEventsData.status = 'success';
   },
 
-  setProcessedEventStartYear: (
+  setCalendarCurrentYear: (
     state: CalendarEventsSchema,
     action: PayloadAction<{
-      processedEventStartYear: number;
+      calendarCurrentYear: number;
     }>,
   ): void => {
-    state.processedEventStartYear.data = action.payload.processedEventStartYear;
-    state.processedEventStartYear.status = 'success';
+    state.calendarCurrentYear.data = action.payload.calendarCurrentYear;
+    state.calendarCurrentYear.status = 'success';
   },
 
   createNextYearEvents: (
     state: CalendarEventsSchema,
     action: PayloadAction<{
-      yearToCreateEvents: number;
+      yearToCreateEvents: number | null;
     }>,
   ): void => {
     const { yearToCreateEvents } = action.payload;

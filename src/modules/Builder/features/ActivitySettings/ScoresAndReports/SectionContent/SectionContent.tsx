@@ -64,7 +64,7 @@ export const SectionContent = ({ name, title }: SectionContentProps) => {
             startIcon={<Svg id="add" width="20" height="20" />}
             onClick={() => setIsContainConditional(true)}
           >
-            {t('addConditinalLogic')}
+            {t('addConditionalLogic')}
           </StyledButton>
         )}
       </Box>

@@ -762,7 +762,7 @@
   "showMessageTooltip": "Message qui sera affiché dans le rapport. Pour imprimer la valeur du score, entourez l'ID du score entre [[]]",
   "printItems": "Imprimer les éléments",
   "printItemsTooltip": "Les réponses du répondant qui seront affichées dans le rapport",
-  "addConditinalLogic": "Ajouter une logique conditionnelle",
+  "addConditionalLogic": "Ajouter une logique conditionnelle",
   "genderQuestion": "Comment te décris-tu ?",
   "male": "Homme",
   "female": "Femme",

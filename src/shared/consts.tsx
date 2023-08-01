@@ -236,3 +236,5 @@ export const enum FinalSubscale {
   FinalSubScaleScore = 'Final SubScale Score',
   OptionalTextForFinalSubScaleScore = 'Optional text for Final SubScale Score',
 }
+
+export const REPORT_CONFIG_PARAM = 'report-configuration';

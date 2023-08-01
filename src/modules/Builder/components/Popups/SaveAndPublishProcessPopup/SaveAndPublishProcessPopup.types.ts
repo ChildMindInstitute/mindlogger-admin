@@ -6,6 +6,7 @@ export const enum SaveAndPublishSteps {
   BeingCreated = 'beingCreated',
   Success = 'success',
   Failed = 'failed',
+  ReportConfigSave = 'reportConfigSave',
 }
 
 export type SaveAndPublishProcessPopupProps = {
