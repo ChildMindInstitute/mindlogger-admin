@@ -22,7 +22,7 @@ import {
 export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | null => {
   const dispatch = useAppDispatch();
   const { result: events } = applets.useEventsData() ?? {};
-  const processedEventStartYear = calendarEvents.useProcessedEventStartYearData();
+  const calendarCurrentYear = calendarEvents.useCalendarCurrentYearData();
   const currentYear = getYear(new Date());
   const alwaysAvailableEvents: LegendEvent[] = [];
   const scheduledEvents: LegendEvent[] = [];
@@ -210,7 +210,8 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
     const conditionToCreateCalendarEvents =
       calendarEventsArr &&
       !isEqual(calendarEventsArr, prevCalendarEventsArrRef.current) &&
-      (!processedEventStartYear || processedEventStartYear === currentYear);
+      calendarCurrentYear === currentYear;
+
     if (!conditionToCreateCalendarEvents) return;
 
     dispatch(calendarEvents.actions.createCalendarEvents({ events: calendarEventsArr }));
@@ -226,15 +227,15 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
       await dispatch(calendarEvents.actions.setCreateEventsData(eventsDataArr));
       prevEventsDataArrRef.current = eventsDataArr;
 
-      if (processedEventStartYear && processedEventStartYear !== currentYear) {
+      if (calendarCurrentYear !== currentYear) {
         dispatch(
           calendarEvents.actions.createNextYearEvents({
-            yearToCreateEvents: processedEventStartYear,
+            yearToCreateEvents: calendarCurrentYear,
           }),
         );
       }
     })();
-  }, [eventsDataArr]);
+  }, [calendarEventsArr, eventsDataArr]);
 
   return {
     alwaysAvailableEvents,

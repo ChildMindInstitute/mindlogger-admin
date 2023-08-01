@@ -1,5 +1,5 @@
 import { UseFormWatch } from 'react-hook-form';
-import { endOfYear, format, getYear } from 'date-fns';
+import { endOfYear, format } from 'date-fns';
 import * as yup from 'yup';
 import { AnyObject } from 'yup/lib/types';
 
@@ -347,32 +347,6 @@ export const getIdWithoutRegex = (activityOrFlowId: string) => {
   return { isFlowId, id };
 };
 
-const getYearFromDate = (date: string | Date) =>
-  getYear(typeof date === 'string' ? new Date() : date);
-
-const getEventStartYear = ({
-  periodicity,
-  defaultStartDate,
-  date,
-  startDate,
-}: Pick<EventFormValues, 'periodicity' | 'date' | 'startDate'> & {
-  defaultStartDate: Date | string;
-}) => {
-  const defaultStartDateYear = getYearFromDate(defaultStartDate);
-  const dateYear = getYearFromDate(date);
-  const startDateYear = getYearFromDate(startDate);
-
-  if (periodicity === Periodicity.Always) {
-    return defaultStartDateYear;
-  }
-
-  if (periodicity === Periodicity.Once) {
-    return dateYear === defaultStartDateYear && dateYear;
-  }
-
-  return startDateYear === defaultStartDateYear && startDateYear;
-};
-
 export const getEventPayload = (
   defaultStartDate: Date,
   watch: UseFormWatch<EventFormValues>,
@@ -395,14 +369,6 @@ export const getEventPayload = (
   const notifications = getNotifications(SecondsManipulation.AddSeconds, notificationsFromForm);
   const reminderFromForm = watch('reminder');
   const reminder = getReminder(SecondsManipulation.AddSeconds, reminderFromForm);
-
-  const eventStartYear = getEventStartYear({
-    periodicity,
-    defaultStartDate,
-    date,
-    startDate,
-  });
-
   const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
 
   const body: CreateEventType['body'] = {
@@ -455,5 +421,5 @@ export const getEventPayload = (
     };
   }
 
-  return { body, eventStartYear };
+  return body;
 };

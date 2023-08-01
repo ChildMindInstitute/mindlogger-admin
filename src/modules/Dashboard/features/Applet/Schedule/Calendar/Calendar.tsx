@@ -38,7 +38,8 @@ export const Calendar = () => {
   const dispatch = useAppDispatch();
   const [activeView, setActiveView] = useState<CalendarViews>(CalendarViews.Month);
   const [date, setDate] = useState<Date>(new Date());
-  const [currentYear, setCurrentYear] = useState(getYear(new Date()));
+  const currentYear = getYear(new Date());
+  const [currentCalendarYear, setCurrentCalendarYear] = useState(currentYear);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [createEventPopupVisible, setCreateEventPopupVisible] = useState(false);
   const [editEventPopupVisible, setEditEventPopupVisible] = useState(false);
@@ -46,6 +47,7 @@ export const Calendar = () => {
   const [defaultStartDate, setDefaultStartDate] = useState(new Date());
   const [editedEvent, setEditedEvent] = useState<CalendarEvent | null>(null);
 
+  const { createNextYearEvents, setCalendarCurrentYear } = calendarEvents.actions;
   const { eventsToShow = null, allDayEventsSortedByDays = null } =
     calendarEvents.useVisibleEventsData() || {};
 
@@ -116,12 +118,17 @@ export const Calendar = () => {
 
   useEffect(() => {
     const chosenYear = getYear(date);
+    if (chosenYear === currentCalendarYear) return;
+    setCurrentCalendarYear(chosenYear);
+
     if (chosenYear !== currentYear) {
-      const { createNextYearEvents } = calendarEvents.actions;
-      setCurrentYear(chosenYear);
       dispatch(createNextYearEvents({ yearToCreateEvents: chosenYear }));
     }
   }, [date]);
+
+  useEffect(() => {
+    dispatch(setCalendarCurrentYear({ calendarCurrentYear: currentCalendarYear }));
+  }, [currentCalendarYear]);
 
   return (
     <>
