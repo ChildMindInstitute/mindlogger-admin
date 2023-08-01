@@ -1,6 +1,6 @@
 import { AlertsSchema, AlertType } from './Alerts.schema';
 
-export const updateAlert = (
+export const updateAlertWatchedState = (
   { alerts }: AlertsSchema,
   {
     payload,
@@ -14,7 +14,7 @@ export const updateAlert = (
     alert.id === payload.id
       ? {
           ...alert,
-          isWatched: true,
+          isWatched: payload.isWatched,
         }
       : alert,
   );

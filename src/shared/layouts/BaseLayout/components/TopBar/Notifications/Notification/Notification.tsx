@@ -49,8 +49,23 @@ export const Notification = ({
   const handleNotificationClick = async () => {
     const { setAlertWatched } = alerts.thunk;
     setCurrentId(isActive ? '' : alertId);
+
+    if (alert.isWatched) return;
+
+    await dispatch(
+      alerts.actions.updateAlertWatchedState({
+        id: alert.id,
+        isWatched: true,
+      }),
+    );
     const result = await dispatch(setAlertWatched(alertId));
-    setAlertWatched.fulfilled.match(result) && (await dispatch(alerts.actions.updateAlert(alert)));
+    !setAlertWatched.fulfilled.match(result) &&
+      (await dispatch(
+        alerts.actions.updateAlertWatchedState({
+          id: alert.id,
+          isWatched: false,
+        }),
+      ));
   };
   const handleToResponseDataClick = () => setPasswordPopupVisible(true);
 
