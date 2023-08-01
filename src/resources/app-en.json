@@ -886,7 +886,7 @@
   "removeActivityDescription": "Are you sure you want to remove Activity <1>{{ activityName }}</1> from the Activity Flow?",
   "deleteActivityFlowDescription": "Are you sure you want to delete the Activity Flow <1>{{ activityFlowName }}</1>?",
   "deleteItemDescription": "Are you sure you want to delete the Item <1>{{ itemName }}</1>?",
-  "deleteItemWithConditionalsDescription": "It will also remove the Сonditional(s) below:",
+  "deleteItemWithConditionalsDescription": "It will also remove the Conditional(s) below:",
   "variablesWarning": {
     "title": "Variables Warning",
     "isSkippable": "Skipping all the items cannot contain variables. The variable will automatically be removed.",
@@ -1069,7 +1069,7 @@
   "showMessageTooltip": "Message that will be displayed in the report. To print the value of the score, surround the Score ID in [[]]",
   "printItems": "Print Items",
   "printItemsTooltip": "Respondent’s responses that will be displayed in the report",
-  "addConditinalLogic": "Add Conditional Logic",
+  "addConditionalLogic": "Add Conditional Logic",
   "moveItem": "Move Item",
   "removeConditionalsMoveItemPopupDescription": "Selected position of the Item <1>{{name}}</1> in the list contradicts the existing Item Flow. If you continue, the following Conditional(s) will be removed:",
   "conditionPanelItem": "[Item]",

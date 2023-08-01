@@ -22,6 +22,7 @@ import {
 } from 'modules/Dashboard/features/Applet';
 import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'shared/utils';
+import { reportConfig } from 'modules/Builder/state';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
@@ -42,6 +43,8 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
+  const { saveChanges, doNotSaveChanges } = reportConfig.useReportConfigChanges() || {};
+  const { resetReportConfigChanges, setReportConfigChanges } = reportConfig.actions;
 
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
@@ -236,7 +239,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   useEffect(() => {
     let subject = 'REPORT';
     if (respondentId) {
-      subject += ' by [Respondent ID]';
+      subject += ' by [Respondent ID]';
     }
     if (caseId) {
       subject += ' about [Case ID]';
@@ -244,6 +247,24 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
     subject += ': [Applet Name] / [Activity Name]';
     setValue('subject', subject);
   }, [respondentId, caseId]);
+
+  useEffect(() => {
+    dispatch(setReportConfigChanges({ hasChanges: isDirty && !isSubmitted }));
+  }, [isDirty, isSubmitted]);
+
+  useEffect(() => {
+    if (!saveChanges) return;
+
+    handleSaveChanges();
+    dispatch(resetReportConfigChanges());
+  }, [saveChanges]);
+
+  useEffect(() => {
+    if (!doNotSaveChanges) return;
+
+    handleDontSave();
+    dispatch(resetReportConfigChanges());
+  }, [doNotSaveChanges]);
 
   return (
     <>

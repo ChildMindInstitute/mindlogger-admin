@@ -29,6 +29,7 @@ import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPu
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { AppletFormValues } from 'modules/Builder/types';
+import { reportConfig } from 'modules/Builder/state';
 
 import { appletInfoMocked } from './mock';
 import {
@@ -272,6 +273,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const removeAppletData = useRemoveAppletData();
   const handleLogout = useLogout();
+  const { hasChanges: hasReportConfigChanges } = reportConfig.useReportConfigChanges() || {};
 
   useEffect(() => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
@@ -317,7 +319,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     const hasErrorsInFields = await checkIfHasErrorsInFields();
     setPublishProcessPopupOpened(true);
 
-    if (pathname.includes(REPORT_CONFIG_PARAM)) {
+    if (pathname.includes(REPORT_CONFIG_PARAM) && hasReportConfigChanges) {
       setPublishProcessStep(SaveAndPublishSteps.ReportConfigSave);
 
       return;
