@@ -10,6 +10,7 @@ import {
   StyledBodyMedium,
   StyledTitleMedium,
   StyledFlexWrap,
+  StyledFlexAllCenter,
 } from 'shared/styles/styledComponents';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
@@ -17,6 +18,15 @@ const commonImgStyles = `
   width: 4rem;
   height: 4rem;
   border-radius: 100%;
+`;
+const commonLogoStyles = `
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 100%;
+  border: ${variables.borderWidth.lg} solid ${variables.palette.surface1};
+  position: absolute;
+  bottom: -0.75rem;
+  right: -0.75rem;
 `;
 
 export const StyledNotification = styled(StyledFlexWrap, shouldForwardProp)`
@@ -61,14 +71,13 @@ export const StyledImageWrapper = styled(Box)`
 `;
 
 export const StyledLogo = styled('img')`
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 100%;
-  border: ${variables.borderWidth.lg} solid ${variables.palette.surface1};
+  ${commonLogoStyles};
   background-color: ${variables.palette.surface1};
-  position: absolute;
-  bottom: -0.75rem;
-  right: -0.75rem;
+`;
+
+export const StyledLogoPlug = styled(StyledFlexAllCenter)`
+  ${commonLogoStyles};
+  background-color: ${variables.palette.primary_container};
 `;
 
 export const StyledInfo = styled(StyledFlexColumn)`

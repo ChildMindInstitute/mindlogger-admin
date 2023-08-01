@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components';
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
 import { useAppDispatch } from 'redux/store';
-import { StyledLabelMedium, variables } from 'shared/styles';
+import { StyledLabelMedium, StyledLabelSmall, variables } from 'shared/styles';
 import { alerts } from 'shared/state';
 import { WorkspaceImage } from 'shared/features/SwitchWorkspace';
 
@@ -23,6 +23,7 @@ import {
   StyledTopSection,
   StyledBottomSection,
   StyledBtn,
+  StyledLogoPlug,
 } from './Notification.styles';
 import { NotificationProps } from './Notification.types';
 
@@ -83,12 +84,20 @@ export const Notification = ({
                 }}
                 workspaceName={workspaceName ?? ''}
               />
-              <StyledLogo src={appletImage} alt={appletName} />
+              {appletImage ? (
+                <StyledLogo src={appletImage} alt={appletName} />
+              ) : (
+                <StyledLogoPlug>
+                  <StyledLabelSmall color={variables.palette.on_surface}>
+                    {appletName.substring(0, 1).toUpperCase()}
+                  </StyledLabelSmall>
+                </StyledLogoPlug>
+              )}
             </StyledImageWrapper>
           </StyledLeftSection>
           <StyledInfo>
             <StyledLabelMedium
-              fontWeight={isActive ? 'regular' : 'bold'}
+              fontWeight={isWatched ? 'regular' : 'bold'}
               color={variables.palette.on_surface_variant}
             >
               {appletName}
@@ -102,7 +111,6 @@ export const Notification = ({
               {respondentSecretId}
             </StyledTitle>
             <StyledMessage
-              fontWeight={isActive ? 'regular' : 'bold'}
               color={
                 isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
               }
