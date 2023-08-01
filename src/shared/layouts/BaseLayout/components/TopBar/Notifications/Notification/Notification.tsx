@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
-import { account } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import logoSrc from 'assets/images/logo.png';
-import { variables } from 'shared/styles/variables';
-import { StyledLabelMedium } from 'shared/styles/styledComponents';
+import { StyledLabelMedium, variables } from 'shared/styles';
+import { alerts } from 'shared/state';
 
 import {
   StyledNotification,
@@ -31,7 +30,6 @@ import { NotificationProps } from './Notification.types';
 export const Notification = ({
   currentId,
   setCurrentId,
-  accountId,
   alertId,
   label,
   title,
@@ -41,6 +39,7 @@ export const Notification = ({
   viewed,
   encryption,
   appletId,
+  alert,
 }: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
@@ -48,15 +47,11 @@ export const Notification = ({
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
 
   const handleNotificationClick = async () => {
-    const { updateAlertStatus } = account.thunk;
+    const { setAlertWatched } = alerts.thunk;
     setCurrentId(isActive ? '' : alertId);
-    const result = await dispatch(updateAlertStatus({ alertId }));
-
-    if (updateAlertStatus.fulfilled.match(result)) {
-      await dispatch(account.thunk.switchAccount({ accountId }));
-    }
+    const result = await dispatch(setAlertWatched(alertId));
+    setAlertWatched.fulfilled.match(result) && (await dispatch(alerts.actions.updateAlert(alert)));
   };
-
   const handleToResponseDataClick = () => setPasswordPopupVisible(true);
 
   return (

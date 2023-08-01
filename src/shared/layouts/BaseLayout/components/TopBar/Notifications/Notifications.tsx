@@ -3,7 +3,6 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { account } from 'modules/Dashboard/state';
 import { useTimeAgo } from 'shared/hooks';
 import { getAppletData, getDateInUserTimezone } from 'shared/utils';
 import {
@@ -12,6 +11,7 @@ import {
   StyledTitleSmall,
   StyledFlexTopCenter,
 } from 'shared/styles';
+import { alerts } from 'shared/state';
 
 import { Notification, NotificationProps } from './Notification';
 import {
@@ -26,7 +26,7 @@ import { NotificationsProps } from './Notifications.types';
 
 export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Element => {
   const { t } = useTranslation('app');
-  const accData = account.useData();
+  const { result: alertList } = alerts.useAlertsData() ?? {};
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
     Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null
@@ -36,29 +36,27 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
   const timeAgo = useTimeAgo();
 
   useEffect(() => {
-    if (accData) {
-      const accAlerts = accData.account.alerts.list.map((alert) => {
-        const { alerts } = accData.account;
-        const { firstName, lastName = '', nickName } = alerts.profiles[alert.profileId];
-        const { name, image, encryption } = getAppletData([], alert.appletId);
+    if (!alertList?.length) return;
 
-        return {
-          accountId: accData.account.accountId,
-          alertId: alert.id,
-          label: name || '',
-          title: firstName || lastName ? `${firstName} ${lastName}` : nickName,
-          message: alert.alertMessage,
-          imageSrc: image || null,
-          timeAgo: timeAgo.format(getDateInUserTimezone(alert.created), 'round'),
-          viewed: alert.viewed,
-          encryption: encryption || undefined,
-          appletId: alert.appletId,
-        };
-      });
+    const alerts = alertList.map((alert) => {
+      const { name, image, encryption } = getAppletData([], alert.appletId);
 
-      // setNotifications(accAlerts);
-    }
-  }, [accData]);
+      return {
+        accountId: alert.secretId,
+        alertId: alert.id,
+        label: alert.appletName,
+        title: name ?? '',
+        message: alert.message,
+        imageSrc: image || null,
+        timeAgo: timeAgo.format(getDateInUserTimezone(alert.createdAt), 'round'),
+        viewed: alert.isWatched,
+        encryption: encryption || undefined,
+        appletId: alert.appletId,
+        alert,
+      };
+    });
+    setNotifications(alerts);
+  }, [alertList]);
 
   return (
     <Box>
@@ -82,7 +80,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
       </StyledHeader>
       {showList && (
         <StyledList>
-          {alertsQuantity === 0 && (
+          {!notifications?.length && (
             <StyledCentered>
               <StyledTitleSmall>{t('noAlerts')}</StyledTitleSmall>
             </StyledCentered>
