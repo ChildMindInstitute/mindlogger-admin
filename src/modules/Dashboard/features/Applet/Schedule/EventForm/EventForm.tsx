@@ -119,14 +119,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       if (!appletId) {
         return;
       }
-      const { body, eventStartYear } = getEventPayload(defaultStartDate, watch, respondentId);
-
-      eventStartYear &&
-        (await dispatch(
-          calendarEvents.actions.setProcessedEventStartYear({
-            processedEventStartYear: eventStartYear,
-          }),
-        ));
+      const body = getEventPayload(defaultStartDate, watch, respondentId);
 
       if (editedEvent) {
         const { activityId, flowId, respondentId, ...updateEventBody } = body;
