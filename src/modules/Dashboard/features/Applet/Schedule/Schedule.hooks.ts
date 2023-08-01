@@ -228,7 +228,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
       prevEventsDataArrRef.current = eventsDataArr;
 
       if (calendarCurrentYear !== currentYear) {
-        await dispatch(
+        dispatch(
           calendarEvents.actions.createNextYearEvents({
             yearToCreateEvents: calendarCurrentYear,
           }),
