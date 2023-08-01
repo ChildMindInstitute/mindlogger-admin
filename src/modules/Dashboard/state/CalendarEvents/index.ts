@@ -33,11 +33,11 @@ export const calendarEvents = {
         },
       }) => data,
     ),
-  useProcessedEventStartYearData: (): CalendarEventsSchema['processedEventStartYear']['data'] =>
+  useCalendarCurrentYearData: (): CalendarEventsSchema['calendarCurrentYear']['data'] =>
     useAppSelector(
       ({
         calendarEvents: {
-          processedEventStartYear: { data },
+          calendarCurrentYear: { data },
         },
       }) => data,
     ),
