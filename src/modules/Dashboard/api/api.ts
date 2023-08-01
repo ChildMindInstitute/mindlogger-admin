@@ -53,6 +53,7 @@ import {
   Review,
   AssessmentReview,
   AppletName,
+  LatestReport,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -552,13 +553,14 @@ export const getVersionsApi = (
   );
 
 export const getLatestReportApi = (
-  { appletId, activityId, respondentId }: any,
+  { appletId, activityId, respondentId }: LatestReport,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
     `/answers/applet/${appletId}/activities/${activityId}/answers/${respondentId}/latest_report`,
     {},
     {
+      responseType: 'arraybuffer',
       signal,
     },
   );
