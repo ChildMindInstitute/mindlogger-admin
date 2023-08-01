@@ -30,11 +30,17 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
 `;
 
 export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
-  ${({ uiType }: { uiType: SelectUiType }) =>
+  ${({ uiType }: { uiType: SelectUiType; itemDisabled?: boolean }) =>
     uiType === SelectUiType.Secondary &&
     `
     && {
       padding: ${theme.spacing(1, 1.6)};
     }
+  `}
+
+  ${({ itemDisabled }) =>
+    itemDisabled &&
+    `
+    pointer-events: none;
   `}
 `;

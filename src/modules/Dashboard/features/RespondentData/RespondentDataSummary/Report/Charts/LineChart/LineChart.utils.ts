@@ -6,13 +6,13 @@ import { Version } from 'api';
 import { pluck } from 'shared/utils';
 
 import { ExtendedChartDataset, SubscaleChartData, Tick } from './LineChart.types';
-import { COLORS } from './LineChart.const';
 import {
   SUBSCALES_CHART_LABEL_WIDTH_Y,
   OFFSET_Y_MAX,
   locales,
   POINT_RADIUS_DEFAULT,
   POINT_RADIUS_SECONDARY,
+  COLORS,
 } from '../Charts.const';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
 

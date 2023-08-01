@@ -7,6 +7,7 @@ import {
   PrimaryAcceptFormats,
   SecondaryAcceptFormats,
 } from 'shared/components/FileUploader/FileUploader.const';
+import { StyledBodyMedium, variables } from 'shared/styles';
 
 export const importTable = async (file: File, isPrimaryUiType: boolean) => {
   const validFileTypes = isPrimaryUiType ? ['.csv', '.xls', '.xlsx', '.ods'] : ['.csv', '.xlsx'];
@@ -40,19 +41,19 @@ export const getDropText = ({
     return (
       <Trans i18nKey="dropCsvFile">
         Drop <strong>.csv</strong> here or
-        <em> click to browse</em>.
+        <em color={variables.palette.primary}>click to browse</em>.
       </Trans>
     );
 
   return isPrimaryUiType ? (
     <Trans i18nKey="dropFile">
       Drop <strong>.csv, .xls, .xlsx</strong> or <strong>.ods</strong> here or
-      <em> click to browse</em>.
+      <em color={variables.palette.primary}> click to browse</em>.
     </Trans>
   ) : (
     <Trans i18nKey="dropFileSecondary">
       Drop <strong>.csv</strong> or <strong>.xlsx</strong> here or
-      <em> click to browse</em>.
+      <em color={variables.palette.primary}> click to browse</em>.
     </Trans>
   );
 };

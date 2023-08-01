@@ -10,7 +10,6 @@ import {
   useCallbackPrompt,
   useCheckIfNewApplet,
   usePromptSetup,
-  useEncryptionCheckFromStorage,
   useRemoveAppletData,
   useLogout,
 } from 'shared/hooks';
@@ -19,6 +18,7 @@ import {
   builderSessionStorage,
   Encryption,
   getDictionaryObject,
+  getEncryptionToServer,
   getUpdatedAppletUrl,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
@@ -263,7 +263,6 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     isLogoutInProgress,
   } = usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   const { ownerId } = workspaces.useData() || {};
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
   const { result: appletData } = applet.useAppletData() ?? {};
@@ -354,8 +353,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   };
 
   const sendRequestWithPasswordCheck = async () => {
-    const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
-    if (!hasEncryptionCheck) {
+    if (isNewApplet) {
       setIsPasswordPopupOpened(true);
 
       return;
@@ -363,12 +361,12 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     await sendRequest();
   };
 
-  const handleAppletPasswordSubmit = async (encryption?: Encryption, password?: string) => {
-    await sendRequest(encryption, password);
+  const handleAppletPasswordSubmit = async (password?: string) => {
+    await sendRequest(password);
   };
 
-  const sendRequest = async (encryption?: Encryption, password?: string) => {
-    const encryptionData = encryption || appletEncryption;
+  const sendRequest = async (password?: string) => {
+    const encryptionData = password ? getEncryptionToServer(password, ownerId!) : appletEncryption;
     setPublishProcessPopupOpened(true);
     const body = getAppletData(encryptionData);
 
@@ -400,10 +398,10 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
 
-      if (encryption && password && appletId) {
+      if (encryptionData && password && createdAppletId) {
         setAppletPrivateKey({
           appletPassword: password,
-          encryption,
+          encryption: encryptionData,
           appletId: createdAppletId,
         });
       }
@@ -421,7 +419,6 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   };
 
   return {
-    isNewApplet,
     isPasswordPopupOpened,
     isPublishProcessPopupOpened,
     publishProcessStep,

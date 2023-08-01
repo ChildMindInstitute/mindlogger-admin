@@ -9,7 +9,7 @@ export const getScoreDefaults = () => ({
   id: getScoreId('', CalculationType.Sum),
   calculationType: CalculationType.Sum,
   itemsScore: [],
-  showMessage: false,
+  showMessage: true,
   printItems: false,
   message: '',
   itemsPrint: [],
@@ -18,7 +18,7 @@ export const getScoreDefaults = () => ({
 export const getSectionDefaults = () => ({
   name: '',
   id: uuidv4(),
-  showMessage: false,
+  showMessage: true,
   printItems: false,
   message: '',
   itemsPrint: [],

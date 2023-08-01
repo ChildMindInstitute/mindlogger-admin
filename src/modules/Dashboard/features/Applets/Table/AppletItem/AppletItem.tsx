@@ -1,20 +1,31 @@
-import { useState, DragEvent, useContext } from 'react';
+import { useState, DragEvent, useContext, useRef } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { TableCell } from '@mui/material';
 
 import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
 import { useAsync, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { popups, workspaces } from 'redux/modules';
+import { auth, popups, workspaces } from 'redux/modules';
 import { StyledBodyMedium } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
-import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard/features/Applet';
+import {
+  AppletPasswordPopup,
+  AppletPasswordPopupType,
+  AppletPasswordRefType,
+} from 'modules/Dashboard/features/Applet';
 import { page } from 'resources';
-import { Encryption, getBuilderAppletUrl, getDateInUserTimezone } from 'shared/utils';
+import {
+  Encryption,
+  falseReturnFunc,
+  getBuilderAppletUrl,
+  getDateInUserTimezone,
+  getEncryptionToServer,
+} from 'shared/utils';
 import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/Table.hooks';
 import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
+import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 
 import { StyledAppletName, StyledPinContainer, StyledTableRow } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
@@ -25,13 +36,33 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const navigate = useNavigate();
   const timeAgo = useTimeAgo();
   const { ownerId } = workspaces.useData() || {};
+  const userData = auth.useData();
+  const { id: accountId } = userData?.user || {};
   const workspaceRoles = workspaces.useRolesData();
+  const appletId = item.id;
+  const setAppletPrivateKey = useAppletPrivateKeySetter();
+  const encryptionDataRef = useRef<{
+    encryption?: Encryption;
+    password?: string;
+  }>({});
 
   const { fetchData } = useContext(AppletsContext) as AppletContextType;
-
   const { execute: setFolder } = useAsync(setFolderApi);
   const { execute: togglePin } = useAsync(togglePinApi);
-  const { execute: setAppletEncryption } = useAsync(setAppletEncryptionApi);
+  const { execute: setAppletEncryption } = useAsync(
+    setAppletEncryptionApi,
+    () => {
+      setAppletPrivateKey({
+        appletPassword: encryptionDataRef.current.password ?? '',
+        encryption: encryptionDataRef.current.encryption!,
+        appletId,
+      });
+    },
+    falseReturnFunc,
+    () => {
+      encryptionDataRef.current = {};
+    },
+  );
 
   const { isDragOver, onDragLeave, onDragOver, onDrop, onDragEnd } = useAppletsDnd();
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
@@ -39,17 +70,17 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const [hasVisibleActions, setHasVisibleActions] = useState(false);
 
   const APPLET_RESPONDENTS = generatePath(page.appletRespondents, {
-    appletId: item.id,
+    appletId,
   });
   const APPLET_SCHEDULE = generatePath(page.appletSchedule, {
-    appletId: item.id,
+    appletId,
   });
 
   const handleTogglePin = async () => {
     if (!ownerId || !item.parentId) return;
     await togglePin({
       ownerId,
-      appletId: item.id,
+      appletId,
       folderId: item.parentId,
       isPinned: !item.isPinned,
     });
@@ -60,12 +91,18 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
   const onDragStart = (event: DragEvent<HTMLTableRowElement>) => {
     event.persist();
-    event.dataTransfer.setData('text/plain', item.id);
+    event.dataTransfer.setData('text/plain', appletId);
   };
 
-  const submitCallback = async (encryption: Encryption) => {
+  const submitCallback = async (ref?: AppletPasswordRefType) => {
+    const password = ref?.current?.password ?? '';
+    const encryption = getEncryptionToServer(password, accountId ?? '');
+    encryptionDataRef.current = {
+      encryption,
+      password,
+    };
     await setAppletEncryption({
-      appletId: item.id,
+      appletId,
       encryption,
     });
     await fetchData();
@@ -73,13 +110,13 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   };
 
   const checkAppletEncryption = (callback: () => void) =>
-    hasOwnerRole(workspaceRoles?.data?.[item.id]?.[0]) && !item.encryption
+    hasOwnerRole(workspaceRoles?.data?.[appletId]?.[0]) && !item.encryption
       ? setPasswordPopupVisible(true)
       : callback();
 
   const actions = {
     removeFromFolder: async () => {
-      await setFolder({ appletId: item.id });
+      await setFolder({ appletId });
       await fetchData();
     },
     viewUsers: () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS)),
@@ -133,7 +170,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
       checkAppletEncryption(() => {
         if (item.isFolder) return; // TODO: add Edit Folder Page navigation
 
-        navigate(getBuilderAppletUrl(item.id));
+        navigate(getBuilderAppletUrl(appletId));
       }),
   };
 
@@ -175,7 +212,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         </TableCell>
         <TableCell>
           <Actions
-            items={getActions({ actions, item, roles: workspaceRoles?.data?.[item.id] })}
+            items={getActions({ actions, item, roles: workspaceRoles?.data?.[appletId] })}
             context={item}
             visibleByDefault={hasVisibleActions}
           />
@@ -190,7 +227,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
       )}
       {passwordPopupVisible && (
         <AppletPasswordPopup
-          appletId={item.id}
+          appletId={appletId}
           popupVisible={passwordPopupVisible}
           onClose={() => setPasswordPopupVisible(false)}
           popupType={AppletPasswordPopupType.Create}

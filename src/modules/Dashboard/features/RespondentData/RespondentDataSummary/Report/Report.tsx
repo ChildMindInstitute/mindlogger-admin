@@ -8,7 +8,13 @@ import download from 'downloadjs';
 
 import { Spinner, Svg, Tooltip } from 'shared/components';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
-import { StyledErrorText, StyledHeadlineLarge, theme, variables } from 'shared/styles';
+import {
+  StyledErrorText,
+  StyledHeadlineLarge,
+  StyledTitleLarge,
+  theme,
+  variables,
+} from 'shared/styles';
 import { getAnswersApi, getLatestReportApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getErrorMessage } from 'shared/utils';
@@ -17,7 +23,7 @@ import { DateFormats } from 'shared/consts';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportFilters } from './ReportFilters';
-import { StyledHeader, StyledReport } from './Report.styles';
+import { StyledEmptyState, StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 import {
   ActivityCompletion,
@@ -163,20 +169,18 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
             {activity.name}
           </StyledHeadlineLarge>
           <Box>
-            {!latestReportLoading && (
-              <Tooltip tooltipTitle={t('configureServer')}>
-                <span>
-                  <StyledTextBtn
-                    onClick={downloadLatestReportHandler}
-                    variant="text"
-                    startIcon={<Svg id="export" width="18" height="18" />}
-                    disabled={disabledLatestReport}
-                  >
-                    {t('downloadLatestReport')}
-                  </StyledTextBtn>
-                </span>
-              </Tooltip>
-            )}
+            <Tooltip tooltipTitle={t('configureServer')}>
+              <span>
+                <StyledTextBtn
+                  onClick={downloadLatestReportHandler}
+                  variant="text"
+                  startIcon={<Svg id="export" width="18" height="18" />}
+                  disabled={disabledLatestReport}
+                >
+                  {t('downloadLatestReport')}
+                </StyledTextBtn>
+              </span>
+            </Tooltip>
             {latestReportError && (
               <StyledErrorText sx={{ mt: theme.spacing(0.8) }}>{latestReportError}</StyledErrorText>
             )}
@@ -188,14 +192,25 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           >
             <FormProvider {...methods}>
               <ReportFilters identifiers={identifiers} versions={versions} />
-              <ActivityCompleted answers={answers} versions={versions} />
-              {!isLoading && (
+              {!isLoading && answers.length > 0 && (
                 <>
+                  <ActivityCompleted answers={answers} versions={versions} />
                   <Subscales answers={answers} versions={versions} />
                   {responseOptions && !!Object.values(responseOptions).length && (
                     <ResponseOptions responseOptions={responseOptions} versions={versions} />
                   )}
                 </>
+              )}
+              {!isLoading && !answers.length && (
+                <StyledEmptyState>
+                  <Svg id="chart" width="80" height="80" />
+                  <StyledTitleLarge
+                    sx={{ mt: theme.spacing(1.6) }}
+                    color={variables.palette.outline}
+                  >
+                    {t('noDataForActivityFilters')}
+                  </StyledTitleLarge>
+                </StyledEmptyState>
               )}
             </FormProvider>
           </ReportContext.Provider>

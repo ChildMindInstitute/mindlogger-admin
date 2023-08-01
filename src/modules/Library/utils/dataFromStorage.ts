@@ -5,7 +5,7 @@ import { LibraryForm } from 'modules/Library/features';
 import { getUpdatedSelectedItems } from './getCheckedItems';
 
 export const getAppletsFromStorage = (): PublishedApplet[] => {
-  const storageData = localStorage.getItem(STORAGE_LIBRARY_KEY);
+  const storageData = sessionStorage.getItem(STORAGE_LIBRARY_KEY);
 
   return storageData ? JSON.parse(storageData) : [];
 };

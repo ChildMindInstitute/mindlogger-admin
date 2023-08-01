@@ -1,5 +1,12 @@
 import { enUS, fr } from 'date-fns/locale';
 
+import { variables } from 'shared/styles';
+
+const { blue, orange, green, brown, yellow, pink, gray, red, purple } = variables.palette;
+
+export const COLORS = [blue, orange, green, brown, yellow, pink, gray, red, purple];
+export const TICK_HEIGHT = 10;
+
 export const locales = {
   'en-US': enUS,
   fr,

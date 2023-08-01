@@ -7,7 +7,13 @@ import {
   SliderItemResponseValues,
   SubscaleSetting,
 } from 'shared/state';
-import { FinalSubscale, LookupTableItems, Sex, SubscaleTotalScore } from 'shared/consts';
+import {
+  FinalSubscale,
+  ItemResponseType,
+  LookupTableItems,
+  Sex,
+  SubscaleTotalScore,
+} from 'shared/consts';
 import {
   AnswerDTO,
   DecryptedMultiSelectionAnswer,
@@ -130,7 +136,24 @@ export const calcTotalScore = (
   return calcScores(
     {
       name: FinalSubscale.Key,
-      items: Object.keys(activityItems).map((item) => ({ name: item, type: ElementType.Item })),
+      items: Object.keys(activityItems).reduce(
+        (acc: { name: string; type: ElementType.Item }[], item) => {
+          const itemType = activityItems[item].activityItem.responseType;
+          if (
+            itemType === ItemResponseType.SingleSelection ||
+            itemType === ItemResponseType.MultipleSelection ||
+            itemType === ItemResponseType.Slider
+          ) {
+            acc.push({
+              name: item,
+              type: ElementType.Item,
+            });
+          }
+
+          return acc;
+        },
+        [],
+      ),
       scoring: subscaleSetting.calculateTotalScore,
       subscaleTableData: subscaleSetting.totalScoresTableData,
     } as ActivitySettingsSubscale,

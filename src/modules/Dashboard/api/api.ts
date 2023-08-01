@@ -525,8 +525,14 @@ export const getReviewsApi = ({ appletId, answerId }: AssessmentReview, signal?:
     signal,
   });
 
-export const getSummaryActivitiesApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+export const getSummaryActivitiesApi = (
+  { appletId, respondentId }: AppletId & RespondentId,
+  signal?: AbortSignal,
+) =>
   authApiClient.get<Response<DatavizActivity>>(`/answers/applet/${appletId}/summary/activities`, {
+    params: {
+      respondentId,
+    },
     signal,
   });
 

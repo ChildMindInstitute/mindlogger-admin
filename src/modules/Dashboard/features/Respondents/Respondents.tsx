@@ -10,8 +10,8 @@ import {
   useBreadcrumbs,
   useTable,
   useAsync,
-  useEncryptionCheckFromStorage,
   usePermissions,
+  useEncryptionStorage,
 } from 'shared/hooks';
 import { Table } from 'modules/Dashboard/components';
 import { updateRespondentsPinApi } from 'api';
@@ -83,7 +83,7 @@ export const Respondents = () => {
   const [respondentKey, setRespondentKey] = useState<null | string>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
 
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
 
   const handleSetDataForAppletPage = (respondentId: string, key: keyof FilteredApplets) => {

@@ -30,11 +30,13 @@ export const getFulfilledData = <T extends Record<string, BaseSchema>, K>({
   thunk,
   key,
   initialState,
+  mapper = (o) => o,
 }: {
   builder: ActionReducerMapBuilder<T>;
   thunk: AsyncThunk<AxiosResponse, K, Record<string, never>>;
   key: keyof T;
   initialState: T;
+  mapper?: (responseData: T) => unknown;
 }) =>
   builder.addCase(thunk.fulfilled, (state, action) => {
     const selectedProperty = get(state, key);
@@ -45,7 +47,7 @@ export const getFulfilledData = <T extends Record<string, BaseSchema>, K>({
     ) {
       selectedProperty.requestId = initialState[key].requestId;
       selectedProperty.status = 'success';
-      selectedProperty.data = action.payload.data;
+      selectedProperty.data = mapper(action.payload.data);
     }
   });
 

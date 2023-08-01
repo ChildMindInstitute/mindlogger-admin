@@ -41,3 +41,7 @@ export const StyledButton = styled(StyledClearedButton)`
     }
   }
 `;
+
+export const StyledLink = styled('a')`
+  color: ${variables.palette.primary};
+`;

@@ -236,6 +236,7 @@ export type DatavizActivity = {
   id: string;
   name: string;
   isPerformanceTask: boolean;
+  hasAnswer: boolean;
 };
 
 export type ReviewActivity = DatavizActivity & {

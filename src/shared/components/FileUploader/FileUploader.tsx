@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 
 import {
   StyledBodyLarge,
+  StyledBodyMedium,
   StyledFlexAllCenter,
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
@@ -131,9 +132,9 @@ export const FileUploader = ({
             {...dragEvents}
             label={
               <StyledFlexAllCenter>
-                <StyledBodyLarge sx={{ textAlign: 'center' }}>
+                <StyledBodyMedium sx={{ textAlign: 'center' }}>
                   {getDropText({ isPrimaryUiType, csvOnly })}
-                </StyledBodyLarge>
+                </StyledBodyMedium>
               </StyledFlexAllCenter>
             }
             control={

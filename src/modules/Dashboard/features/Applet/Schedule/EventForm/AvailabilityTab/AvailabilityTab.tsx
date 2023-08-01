@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { addDays } from 'date-fns';
 
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { TimePicker, DatePicker, ToggleButtonGroup } from 'shared/components';
@@ -9,7 +10,7 @@ import { Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
 import { DEFAULT_START_TIME } from '../EventForm.const';
-import { availabilityOptions, repeatsButtons } from './Availability.const';
+import { repeatsButtons } from './Availability.const';
 import {
   StyledButtonsTitle,
   StyledTimeRow,
@@ -17,8 +18,10 @@ import {
   StyledWrapper,
   StyledDatePickerWrapper,
 } from './AvailabilityTab.styles';
+import { AvailabilityTabProps } from './AvailabilityTab.types';
+import { getAvailabilityOptions } from './AvailabilityTab.utils';
 
-export const AvailabilityTab = () => {
+export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext<EventFormValues>();
   const alwaysAvailable = watch('alwaysAvailable');
@@ -33,6 +36,12 @@ export const AvailabilityTab = () => {
   const handleSetPeriodicity = (period: string | number) =>
     setValue('periodicity', period as Periodicity);
 
+  const onCloseCallback = () => {
+    if (typeof startDate !== 'string' && startDate && endDate && endDate < startDate) {
+      setValue('endDate', addDays(startDate, 1));
+    }
+  };
+
   const datePicker = (
     <StyledDatePickerWrapper>
       <DatePicker
@@ -40,13 +49,20 @@ export const AvailabilityTab = () => {
         value={isOncePeriodicity ? date : startDate}
         control={control}
         label={isOncePeriodicity ? t('date') : t('startDate')}
+        onCloseCallback={onCloseCallback}
       />
       {!isOncePeriodicity && (
         <>
           <StyledBodyLarge sx={{ m: theme.spacing(0, 2.4) }}>
             {t('to').toLowerCase()}
           </StyledBodyLarge>
-          <DatePicker name="endDate" value={endDate} control={control} label={t('endDate')} />
+          <DatePicker
+            name="endDate"
+            minDate={typeof startDate === 'string' ? null : startDate}
+            value={endDate}
+            control={control}
+            label={t('endDate')}
+          />
         </>
       )}
     </StyledDatePickerWrapper>
@@ -63,7 +79,7 @@ export const AvailabilityTab = () => {
       <SelectController
         name="alwaysAvailable"
         fullWidth
-        options={availabilityOptions}
+        options={getAvailabilityOptions(hasAlwaysAvailableOption)}
         control={control}
       />
       {Object.keys(removeWarning).length !== 0 && (
