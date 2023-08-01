@@ -411,6 +411,7 @@
   "appletImg": "Applet Image",
   "appletWatermark": "Applet Watermark",
   "characters": "characters",
+  "chars": "chars.",
   "default": "Default",
   "dropImage": "Drop Image here or <1>click to browse</1>.",
   "dropError": "Image is more than <br /> {{size}}.",

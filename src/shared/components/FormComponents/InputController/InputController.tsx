@@ -34,6 +34,8 @@ export const InputController = <T extends FieldValues>({
   isEmptyStringAllowed = false,
   isErrorVisible = true,
   restrictExceededValueLength = false,
+  Counter = StyledCounter,
+  counterProps,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -115,9 +117,13 @@ export const InputController = <T extends FieldValues>({
                 }
               />
               {maxLength && !error && (
-                <StyledCounter>
+                <Counter
+                  value={value?.length || 0}
+                  maxLength={maxLength}
+                  counterProps={counterProps}
+                >
                   {value?.length || 0}/{maxLength} {t('characters')}
-                </StyledCounter>
+                </Counter>
               )}
             </StyledTextFieldContainer>
           </Tooltip>

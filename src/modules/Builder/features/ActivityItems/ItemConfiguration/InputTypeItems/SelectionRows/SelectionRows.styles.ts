@@ -18,7 +18,7 @@ export const StyledSelectionRow = styled(StyledFlexTopCenter, shouldForwardProp)
   align-items: stretch;
 `;
 
-export const StyledSelectionBox = styled(StyledFlexColumn)`
+export const StyledSelectionBox = styled(StyledFlexColumn, shouldForwardProp)`
   position: relative;
   flex: 1 1;
   justify-content: space-between;
@@ -43,6 +43,15 @@ export const StyledSelectionBox = styled(StyledFlexColumn)`
     bottom: unset;
     white-space: normal;
     font-size: ${variables.font.size.md};
+
+    ${({ isErrorShortened }: { isErrorShortened?: boolean }) =>
+      isErrorShortened &&
+      `
+        ${theme.breakpoints.down('xl')} {
+          white-space: nowrap;
+          right: 0;
+        }
+    `}
   }
 `;
 
