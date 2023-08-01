@@ -48,7 +48,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
       message: alert.message,
       timeAgo: timeAgo.format(getDateInUserTimezone(alert.createdAt), 'round'),
       isWatched: alert.isWatched,
-      respondentId: alert.respondentId ?? '',
+      respondentId: alert.respondentId,
       encryption: alert.encryption,
       alert,
     }));

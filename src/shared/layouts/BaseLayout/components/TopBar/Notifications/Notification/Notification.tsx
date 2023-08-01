@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { generatePath, useNavigate } from 'react-router-dom';
 
+import { page } from 'resources';
+import { useEncryptionStorage } from 'shared/hooks';
 import { Svg } from 'shared/components';
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
 import { useAppDispatch } from 'redux/store';
@@ -39,6 +42,7 @@ export const Notification = ({
   message,
   timeAgo,
   isWatched,
+  respondentId,
   encryption,
   alert,
 }: NotificationProps) => {
@@ -46,6 +50,9 @@ export const Notification = ({
   const dispatch = useAppDispatch();
   const isActive = currentId === alertId;
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
+  const navigate = useNavigate();
+  const { getAppletPrivateKey } = useEncryptionStorage();
+  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
 
   const handleNotificationClick = async () => {
     const { setAlertWatched } = alerts.thunk;
@@ -68,7 +75,19 @@ export const Notification = ({
         }),
       ));
   };
-  const handleToResponseDataClick = () => setPasswordPopupVisible(true);
+
+  const navigateToResponseData = () => {
+    navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
+  };
+  const handleToResponseDataClick = () => {
+    if (hasEncryptionCheck) return navigateToResponseData();
+    setPasswordPopupVisible(true);
+  };
+
+  const handleSubmit = () => {
+    setPasswordPopupVisible(false);
+    navigateToResponseData();
+  };
 
   return (
     <>
@@ -147,6 +166,7 @@ export const Notification = ({
           popupVisible={passwordPopupVisible}
           onClose={() => setPasswordPopupVisible(false)}
           encryption={encryption}
+          submitCallback={handleSubmit}
         />
       )}
     </>
