@@ -67,6 +67,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const { execute: getLatestReport, isLoading: latestReportLoading } = useAsync(getLatestReportApi);
 
   const downloadLatestReportHandler = async () => {
+    if (!appletId || !respondentId) return;
+
     setLatestReportError(null);
     try {
       const { data } = await getLatestReport({
