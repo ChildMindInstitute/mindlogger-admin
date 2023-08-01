@@ -28,4 +28,12 @@ export const alerts = {
         },
       }) => data,
     ),
+  useAlertsStatus: (): AlertsSchema['alerts']['status'] =>
+    useAppSelector(
+      ({
+        alerts: {
+          alerts: { status },
+        },
+      }) => status,
+    ),
 };

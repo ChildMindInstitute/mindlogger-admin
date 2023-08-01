@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
+import { Spinner, Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
 import { getDateInUserTimezone } from 'shared/utils';
 import {
@@ -21,12 +21,14 @@ import {
   StyledCollapseBtn,
   StyledList,
   StyledCentered,
+  StyledBox,
 } from './Notifications.styles';
 import { NotificationsProps } from './Notifications.types';
 
 export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Element => {
   const { t } = useTranslation('app');
   const { result: alertList } = alerts.useAlertsData() ?? {};
+  const alertListStatus = alerts.useAlertsStatus() ?? {};
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
     Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null
@@ -90,6 +92,11 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
               {...item}
             />
           ))}
+          {alertListStatus === 'loading' && (
+            <StyledBox>
+              <Spinner />
+            </StyledBox>
+          )}
         </StyledList>
       )}
     </Box>
