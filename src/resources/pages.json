@@ -11,6 +11,7 @@
   "appletRespondents": "/dashboard/:appletId/respondents",
   "appletRespondentData": "/dashboard/:appletId/respondents/:respondentId/dataviz",
   "appletRespondentDataSummary": "/dashboard/:appletId/respondents/:respondentId/dataviz/summary",
+  "appletRespondentDataSummaryPerActivity": "/dashboard/:appletId/respondents/:respondentId/dataviz/summary/:activityId",
   "appletRespondentDataReview": "/dashboard/:appletId/respondents/:respondentId/dataviz/review",
   "appletRespondentDataReviewAnswer": "/dashboard/:appletId/respondents/:respondentId/dataviz/review/:answerId",
   "appletManagers": "/dashboard/:appletId/managers",

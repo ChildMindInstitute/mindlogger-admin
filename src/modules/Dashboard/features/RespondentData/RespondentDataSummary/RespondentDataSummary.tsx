@@ -22,7 +22,7 @@ import { getEmptyState } from './RespondentDataSummary.utils';
 
 export const RespondentDataSummary = () => {
   const { t } = useTranslation();
-  const { appletId, respondentId } = useParams();
+  const { appletId, respondentId, activityId } = useParams();
 
   const [isLoading, setIsLoading] = useState(true);
   const [activities, setActivities] = useState<DatavizActivity[]>([]);
@@ -55,6 +55,12 @@ export const RespondentDataSummary = () => {
 
     return <Report activity={selectedActivity!} identifiers={identifiers} versions={versions} />;
   }, [selectedActivity, isLoading]);
+
+  useEffect(() => {
+    if (!activityId || !activities?.length) return setSelectedActivity(undefined);
+
+    setSelectedActivity(activities.find((activity) => activity.id === activityId));
+  }, [activities, activities]);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -103,11 +109,7 @@ export const RespondentDataSummary = () => {
     <StyledContainer>
       {!!activities.length && (
         <>
-          <ReportMenu
-            activities={activities}
-            selectedActivity={selectedActivity}
-            setSelectedActivity={setSelectedActivity}
-          />
+          <ReportMenu activities={activities} selectedActivity={selectedActivity} />
           <StyledReportContainer>{reportContent}</StyledReportContainer>
         </>
       )}

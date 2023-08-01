@@ -58,7 +58,7 @@ export const Notification = ({
     const { setAlertWatched } = alerts.thunk;
     setCurrentId(isActive ? '' : alertId);
 
-    if (alert.isWatched) return;
+    if (isWatched) return;
 
     await dispatch(
       alerts.actions.updateAlertWatchedState({
@@ -77,7 +77,13 @@ export const Notification = ({
   };
 
   const navigateToResponseData = () => {
-    navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
+    navigate(
+      generatePath(page.appletRespondentDataSummaryPerActivity, {
+        appletId,
+        respondentId,
+        activityId: alert.activityId,
+      }),
+    );
   };
   const handleToResponseDataClick = () => {
     if (hasEncryptionCheck) return navigateToResponseData();
