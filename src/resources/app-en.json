@@ -416,6 +416,8 @@
   "dropError": "Image is more than <br /> {{size}}.",
   "incorrectImageSize": "Image is more than {{size}}.",
   "incorrectImageFormat": "Incorrect image format.",
+  "incorrectAudioFormat": "Incorrect audio format.",
+  "incorrectVideoFormat": "Incorrect video format.",
   "fieldRequired": "This field is required.",
   "descriptionRequired": "Description is required",
   "aboutAppletRequired": "About Applet is required",

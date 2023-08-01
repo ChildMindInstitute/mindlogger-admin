@@ -2,19 +2,22 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
+
+import { MAX_FILE_SIZE_25MB, UploadFileError } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
-import { MAX_FILE_SIZE_25MB, UploadImageError } from 'shared/consts';
 
-import { IncorrectImagePopupProps } from './IncorrectImagePopup.types';
+import { IncorrectFilePopupProps } from './IncorrectFilePopup.types';
+import { formatError } from './IncorrectFilePopup.const';
 
-export const IncorrectImagePopup = ({
+export const IncorrectFilePopup = ({
   popupVisible,
   onClose,
   uiType,
-}: IncorrectImagePopupProps) => {
+  fileType,
+}: IncorrectFilePopupProps) => {
   const { t } = useTranslation('app');
 
-  const isFormatError = uiType === UploadImageError.Format;
+  const isFormatError = uiType === UploadFileError.Format;
 
   return (
     <Modal
@@ -30,7 +33,7 @@ export const IncorrectImagePopup = ({
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
           {isFormatError ? (
-            t('incorrectImageFormat')
+            t(formatError[fileType])
           ) : (
             <Trans i18nKey="incorrectImageSize">
               Image is more than <>{{ size: byteFormatter(MAX_FILE_SIZE_25MB) }}</>.

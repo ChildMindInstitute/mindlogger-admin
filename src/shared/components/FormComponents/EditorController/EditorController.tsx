@@ -20,8 +20,8 @@ import {
   VideoUploadExtension,
 } from 'shared/components/MarkDownEditor';
 import { FileSizeExceededPopup } from 'shared/components/MarkDownEditor/FileSizeExceededPopup';
-import { IncorrectImagePopup } from 'shared/components/IncorrectImagePopup';
-import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, UploadImageError } from 'shared/consts';
+import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
+import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, MediaType, UploadFileError } from 'shared/consts';
 
 import { StyledErrorText, StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
@@ -34,7 +34,7 @@ export const EditorController = <T extends FieldValues>({
   const { t } = useTranslation('app');
   const editorRef = useRef<ExposeParam>();
   const [fileSizeExceeded, setFileSizeExceeded] = useState<number | null>(null);
-  const [incorrectImageFormat, setIncorrectImageFormat] = useState(false);
+  const [incorrectFileFormat, setIncorrectFileFormat] = useState<MediaType | null>(null);
 
   const onInsert = useCallback((generator: InsertContentGenerator) => {
     editorRef.current?.insert(generator);
@@ -85,19 +85,21 @@ export const EditorController = <T extends FieldValues>({
                   onInsert={onInsert}
                   setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_25MB}
-                  setIncorrectImageFormat={setIncorrectImageFormat}
+                  setIncorrectFormat={setIncorrectFileFormat}
                 />,
                 <AudioUploadExtension
                   key="audio-upload-extension"
                   onInsert={onInsert}
                   setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_150MB}
+                  setIncorrectFormat={setIncorrectFileFormat}
                 />,
                 <VideoUploadExtension
                   key="video-upload-extension"
                   onInsert={onInsert}
                   setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_150MB}
+                  setIncorrectFormat={setIncorrectFileFormat}
                 />,
                 <UnderlineExtension key="underline-extension" onInsert={onInsert} />,
                 <StrikethroughExtension key="strikethrough-extension" onInsert={onInsert} />,
@@ -154,11 +156,12 @@ export const EditorController = <T extends FieldValues>({
           onClose={() => setFileSizeExceeded(null)}
         />
       )}
-      {incorrectImageFormat && (
-        <IncorrectImagePopup
-          popupVisible={incorrectImageFormat}
-          onClose={() => setIncorrectImageFormat(false)}
-          uiType={UploadImageError.Format}
+      {incorrectFileFormat && (
+        <IncorrectFilePopup
+          popupVisible={!!incorrectFileFormat}
+          onClose={() => setIncorrectFileFormat(null)}
+          uiType={UploadFileError.Format}
+          fileType={incorrectFileFormat}
         />
       )}
     </>
