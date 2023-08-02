@@ -4,11 +4,11 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
-import { IncorrectImagePopup } from 'shared/components/IncorrectImagePopup';
+import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { byteFormatter, joinWihComma } from 'shared/utils';
-import { MAX_FILE_SIZE_25MB, VALID_IMAGE_TYPES, UploadImageError } from 'shared/consts';
+import { MAX_FILE_SIZE_25MB, VALID_IMAGE_TYPES, UploadFileError, MediaType } from 'shared/consts';
 
 import {
   StyledButtonGroup,
@@ -41,7 +41,7 @@ export const Uploader = ({
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
-  const [error, setError] = useState<UploadImageError | null>(null);
+  const [error, setError] = useState<UploadFileError | null>(null);
   const [isRemovePopupOpen, setRemovePopupOpen] = useState(false);
   const isPrimaryUiType = uiType === UploaderUiType.Primary;
 
@@ -59,8 +59,8 @@ export const Uploader = ({
     const notAllowableSize = imageFile.size > MAX_FILE_SIZE_25MB;
     const notAllowableType =
       !imageFile.type.includes('image') || !VALID_IMAGE_TYPES.includes(`.${fileExtension}`);
-    notAllowableSize && setError(UploadImageError.Size);
-    notAllowableType && setError(UploadImageError.Format);
+    notAllowableSize && setError(UploadFileError.Size);
+    notAllowableType && setError(UploadFileError.Format);
 
     if (notAllowableSize || notAllowableType) return;
 
@@ -121,8 +121,8 @@ export const Uploader = ({
   const placeholderImgId = isPrimaryUiType ? 'img-filled' : 'img-outlined';
   const placeholderImgSize = isPrimaryUiType ? 32 : 24;
   const deleteSvgSize = isPrimaryUiType ? '18' : '24';
-  const hasSizeError = error === UploadImageError.Size;
-  const hasFormatError = error === UploadImageError.Format;
+  const hasSizeError = error === UploadFileError.Size;
+  const hasFormatError = error === UploadFileError.Format;
 
   return (
     <>
@@ -223,17 +223,19 @@ export const Uploader = ({
       {!isPrimaryUiType && (
         <>
           {hasSizeError && (
-            <IncorrectImagePopup
+            <IncorrectFilePopup
               popupVisible={hasSizeError}
               onClose={() => setError(null)}
-              uiType={UploadImageError.Size}
+              uiType={UploadFileError.Size}
+              fileType={MediaType.Image}
             />
           )}
           {hasFormatError && (
-            <IncorrectImagePopup
+            <IncorrectFilePopup
               popupVisible={hasFormatError}
               onClose={() => setError(null)}
-              uiType={UploadImageError.Format}
+              uiType={UploadFileError.Format}
+              fileType={MediaType.Image}
             />
           )}
         </>
