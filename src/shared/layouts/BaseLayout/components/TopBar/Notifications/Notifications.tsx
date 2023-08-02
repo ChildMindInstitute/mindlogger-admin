@@ -10,6 +10,7 @@ import {
   StyledLabelBoldLarge,
   StyledTitleSmall,
   StyledFlexTopCenter,
+  StyledObserverTarget,
 } from 'shared/styles';
 import { alerts } from 'shared/state';
 
@@ -24,10 +25,12 @@ import {
   StyledBox,
 } from './Notifications.styles';
 import { NotificationsProps } from './Notifications.types';
+import { ALERT_LIST_CLASS, ALERT_END_ITEM_CLASS } from './Notifications.const';
+import { useInfinityData } from './Notifications.hooks';
 
 export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Element => {
   const { t } = useTranslation('app');
-  const { result: alertList } = alerts.useAlertsData() ?? {};
+  const { result: alertList = [] } = alerts.useAlertsData() ?? {};
   const alertListStatus = alerts.useAlertsStatus() ?? {};
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
@@ -38,7 +41,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
   const timeAgo = useTimeAgo();
 
   useEffect(() => {
-    if (!alertList?.length) return;
+    if (!alertList.length) return;
 
     const alerts = alertList.map((alert) => ({
       alertId: alert.id,
@@ -56,6 +59,8 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
     }));
     setNotifications(alerts);
   }, [alertList]);
+
+  useInfinityData();
 
   return (
     <Box>
@@ -78,7 +83,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
         </StyledFlexTopCenter>
       </StyledHeader>
       {showList && (
-        <StyledList>
+        <StyledList className={ALERT_LIST_CLASS}>
           {!notifications?.length && (
             <StyledCentered>
               <StyledTitleSmall>{t('noAlerts')}</StyledTitleSmall>
@@ -97,6 +102,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
               <Spinner />
             </StyledBox>
           )}
+          <StyledObserverTarget className={ALERT_END_ITEM_CLASS} />
         </StyledList>
       )}
     </Box>

@@ -31,5 +31,5 @@ export const addAlerts = (
   if (!alerts.data?.result) return;
 
   alerts.data.result = [...payload, ...alerts.data.result];
-  alerts.data.count = alerts.data.result.length + payload.length;
+  alerts.data.count = alerts.data.count + payload.length;
 };
