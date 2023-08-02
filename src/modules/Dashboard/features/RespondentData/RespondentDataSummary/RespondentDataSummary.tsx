@@ -60,7 +60,7 @@ export const RespondentDataSummary = () => {
     if (!activityId || !activities?.length) return setSelectedActivity(undefined);
 
     setSelectedActivity(activities.find((activity) => activity.id === activityId));
-  }, [activities, activities]);
+  }, [activityId, activities]);
 
   useEffect(() => {
     const fetchActivities = async () => {

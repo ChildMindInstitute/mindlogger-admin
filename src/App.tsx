@@ -21,8 +21,7 @@ const RootComponent = () => {
   useEffect(() => {
     if (!isAuthorized) return;
 
-    const { getAlerts } = alerts.thunk;
-    dispatch(getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
+    dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
   }, [isAuthorized]);
 
   return (
