@@ -105,7 +105,7 @@ export const Notification = ({
                 coverSxProps={{
                   width: '4rem',
                   height: '4rem',
-                  borderRadius: '100%',
+                  borderRadius: variables.borderRadius.half,
                 }}
                 workspaceName={workspaceName ?? ''}
               />
