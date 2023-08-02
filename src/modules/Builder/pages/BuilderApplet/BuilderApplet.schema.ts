@@ -533,6 +533,9 @@ export const SectionSchema = () =>
     name: yup
       .string()
       .required(getIsRequiredValidateMessage('sectionName'))
+      .matches(/^[a-zA-Z0-9_-]+$/g, {
+        message: t('validationMessages.alphanumericAndHyphen', { field: t('sectionName') }),
+      })
       .test(
         'unique-section-name',
         t('validationMessages.unique', { field: t('sectionName') }) as string,
