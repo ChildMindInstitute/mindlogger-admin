@@ -24,6 +24,8 @@ export const ALLOWED_TYPES_IN_VARIABLES = [
 
 export const ordinalStrings = ['First', 'Second', 'Third', 'Fourth'];
 
+export const alphanumericAndHyphenRegexp = /^[a-zA-Z0-9_-]+$/g;
+
 export const enum ItemTestFunctions {
   UniqueItemName = '',
   VariableInTheSameItem = 'variable-in-the-same-item-error',
