@@ -41,7 +41,11 @@ import {
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
 } from './BuilderApplet.utils';
-import { CONDITION_TYPES_TO_HAVE_OPTION_ID, ItemTestFunctions } from './BuilderApplet.const';
+import {
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  ItemTestFunctions,
+  alphanumericAndHyphenRegexp,
+} from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -187,7 +191,7 @@ export const ItemSchema = () =>
       name: yup
         .string()
         .required(getIsRequiredValidateMessage('itemName'))
-        .matches(/^[a-zA-Z0-9_-]+$/g, {
+        .matches(alphanumericAndHyphenRegexp, {
           message: t('validationMessages.alphanumericAndHyphen', { field: t('itemName') }),
         })
         .test(
@@ -533,7 +537,7 @@ export const SectionSchema = () =>
     name: yup
       .string()
       .required(getIsRequiredValidateMessage('sectionName'))
-      .matches(/^[a-zA-Z0-9_-]+$/g, {
+      .matches(alphanumericAndHyphenRegexp, {
         message: t('validationMessages.alphanumericAndHyphen', { field: t('sectionName') }),
       })
       .test(
