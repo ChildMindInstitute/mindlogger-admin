@@ -30,6 +30,7 @@ export const EditorController = <T extends FieldValues>({
   name,
   control,
   uiType = EditorUiType.Primary,
+  editorId,
 }: EditorControllerProps<T>) => {
   const { t } = useTranslation('app');
   const editorRef = useRef<ExposeParam>();
@@ -48,6 +49,7 @@ export const EditorController = <T extends FieldValues>({
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <>
             <StyledMdEditor
+              editorId={editorId}
               className={`${uiType} ${error ? 'has-error' : ''}`}
               ref={editorRef}
               modelValue={value ?? ''}

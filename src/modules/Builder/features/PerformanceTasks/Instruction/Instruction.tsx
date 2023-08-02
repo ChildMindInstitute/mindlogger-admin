@@ -5,7 +5,13 @@ import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/comp
 import { InstructionContent } from './InstructionContent';
 import { InstructionProps } from './Instruction.types';
 
-export const Instruction = ({ description, name, title, hasError }: InstructionProps) => {
+export const Instruction = ({
+  description,
+  name,
+  title,
+  hasError,
+  instructionId,
+}: InstructionProps) => {
   const { t } = useTranslation();
 
   return (
@@ -14,7 +20,7 @@ export const Instruction = ({ description, name, title, hasError }: InstructionP
       title={title || t('overviewInstruction')}
       isOpenByDefault={false}
       Content={InstructionContent}
-      contentProps={{ description, name, hasError }}
+      contentProps={{ description, name, hasError, instructionId }}
       error={hasError ? 'blockIsNecessary' : null}
     />
   );
