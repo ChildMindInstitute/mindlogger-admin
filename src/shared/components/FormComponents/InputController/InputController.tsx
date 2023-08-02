@@ -66,14 +66,16 @@ export const InputController = <T extends FieldValues>({
           return String(value);
         };
 
-        const handleAddNumber = () => {
-          if (typeof maxNumberValue !== 'number') return onChange(+value + 1);
+        const numberValue = isNaN(+value) ? 0 : +value;
 
-          if (+value < maxNumberValue) onChange(+value + 1);
+        const handleAddNumber = () => {
+          if (typeof maxNumberValue !== 'number') return onChange(numberValue + 1);
+
+          if (numberValue < maxNumberValue) onChange(numberValue + 1);
         };
 
         const handleDistractNumber = () => {
-          if (+value > minNumberValue) onChange(+value - 1);
+          if (numberValue > minNumberValue) onChange(numberValue - 1);
         };
 
         const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
