@@ -6,8 +6,9 @@ export const DEFAULT_END_TIME = '23:59';
 export const defaultSummaryFormFiltersValues = {
   startDate: DEFAULT_START_DATE,
   endDate: DEFAULT_END_DATE,
-  moreFiltersVisible: false,
   startTime: DEFAULT_START_TIME,
   endTime: DEFAULT_END_TIME,
+  filterByIdentifier: false,
+  identifier: [],
   versions: [],
 };
