@@ -1,6 +1,7 @@
-import { WebsocketAlertType } from 'shared/hooks/websocket/websocket.types';
 import { AlertType } from 'shared/state';
 import { authStorage } from 'shared/utils';
+
+import { WebsocketAlertType } from './alertsWebsocket.types';
 
 export const getWebsocketProtocol = () => {
   const token = authStorage.getAccessToken();

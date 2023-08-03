@@ -3,7 +3,7 @@ import { Suspense, useEffect } from 'react';
 
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth';
-import { useWebsocket } from 'shared/hooks';
+import { useAlertsWebsocket } from 'shared/hooks';
 import { alerts } from 'shared/state';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/state/Alerts/Alerts.const';
 import { Spinner } from 'shared/components';
@@ -13,7 +13,7 @@ export const RootComponent = () => {
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
 
-  useWebsocket();
+  useAlertsWebsocket();
 
   useEffect(() => {
     if (!isAuthorized) return;

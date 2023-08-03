@@ -4,10 +4,10 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth';
 import { alerts } from 'shared/state';
 
-import { getAlertFormValue, getWebsocketProtocol } from './websocket.utils';
-import { WEBSOCKET_ALERTS_API } from './websocket.const';
+import { getAlertFormValue, getWebsocketProtocol } from './alertsWebsocket.utils';
+import { WEBSOCKET_ALERTS_API } from './alertsWebsocket.const';
 
-export const useWebsocket = () => {
+export const useAlertsWebsocket = () => {
   const isAuthorized = auth.useAuthorized();
   const webSocketRef = useRef<null | WebSocket>();
   const dispatch = useAppDispatch();
