@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import {
+  createSearchParams,
+  generatePath,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { format, compareAsc } from 'date-fns';
 
 import { Chip } from 'shared/components';
@@ -12,6 +18,7 @@ import { ReviewMenuItemProps } from './ReviewMenuItem.types';
 import { Answer } from '../../RespondentDataReview.types';
 
 export const ReviewMenuItem = ({
+  selectedDate,
   activity,
   setSelectedActivity,
   isSelected,
@@ -19,12 +26,15 @@ export const ReviewMenuItem = ({
   setSelectedAnswer,
 }: ReviewMenuItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { appletId, respondentId, answerId } = useParams();
+  const { appletId, respondentId } = useParams();
+  const [searchParams] = useSearchParams();
+
+  const answerId = searchParams.get('answerId');
+
   const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedAnswer || !answerId) return;
-
     const answerByRoute = activity.answerDates.find((answer) => answer.answerId === answerId);
     if (answerByRoute) {
       setSelectedAnswer(answerByRoute);
@@ -52,13 +62,14 @@ export const ReviewMenuItem = ({
     }
 
     setSelectedAnswer(answer);
-    navigate(
-      generatePath(page.appletRespondentDataReviewAnswer, {
-        appletId,
-        respondentId,
+    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    navigate({
+      pathname,
+      search: createSearchParams({
+        selectedDate: format(selectedDate, DateFormats.YearMonthDay),
         answerId: answer.answerId,
-      }),
-    );
+      }).toString(),
+    });
   };
 
   return (

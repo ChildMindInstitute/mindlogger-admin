@@ -1,4 +1,3 @@
-import { Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
 import {
@@ -17,12 +16,6 @@ import {
   ElementType,
 } from 'shared/types';
 
-import {
-  DEFAULT_END_DATE,
-  DEFAULT_END_TIME,
-  DEFAULT_START_DATE,
-  DEFAULT_START_TIME,
-} from './Report.const';
 import { Identifier } from '../RespondentDataSummary.types';
 import {
   ActivityCompletion,
@@ -31,19 +24,6 @@ import {
   FormattedResponse,
   ItemOption,
 } from './Report.types';
-
-export const getDefaultFilterValues = (versions: Version[]) => {
-  const versionsFilter = versions.map(({ version }) => ({ id: version, label: version }));
-
-  return {
-    startDate: DEFAULT_START_DATE,
-    endDate: DEFAULT_END_DATE,
-    moreFiltersVisible: false,
-    startTime: DEFAULT_START_TIME,
-    endTime: DEFAULT_END_TIME,
-    versions: versionsFilter,
-  };
-};
 
 const getDefaultEmptyAnswer = (date: string) => [
   {
