@@ -1,5 +1,3 @@
-import { Encryption } from 'shared/utils';
-
 export type WebsocketAlertType = {
   id: string;
   applet_id: string;
@@ -14,5 +12,10 @@ export type WebsocketAlertType = {
   answer_id: string;
   respondent_id: string;
   workspace: string;
-  encryption: Encryption;
+  encryption: {
+    public_key: string;
+    prime: string;
+    base: string;
+    account_id: string;
+  };
 };
