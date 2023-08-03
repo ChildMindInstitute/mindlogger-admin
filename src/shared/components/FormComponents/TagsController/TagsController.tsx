@@ -1,8 +1,16 @@
+import { useState } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 
 import { Svg } from 'shared/components/Svg';
-import { Chip } from 'shared/components/Chip';
-import { StyledFlexWrap, StyledClearedButton } from 'shared/styles/styledComponents';
+import { Chip, ChipShape } from 'shared/components/Chip';
+import {
+  StyledBodyLarge,
+  StyledClearedButton,
+  StyledFlexTopCenter,
+  StyledFlexWrap,
+  theme,
+  variables,
+} from 'shared/styles';
 
 import { TagsInputControllerProps, UiType } from './TagsController.types';
 import { StyledTextField } from './TagsController.styles';
@@ -16,12 +24,23 @@ export const TagsController = <T extends FieldValues>({
   onAddTagClick,
   onRemoveTagClick,
   uiType = UiType.Primary,
+  inputLabel,
   ...props
 }: TagsInputControllerProps<T>) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const isPrimaryUiType = uiType === UiType.Primary;
+  const isSecondaryUiType = uiType === UiType.Secondary;
   const chips = tags?.length > 0 && (
     <>
       {tags.map((tag, index) => (
-        <Chip color="secondary" key={index} title={tag} onRemove={() => onRemoveTagClick(index)} />
+        <Chip
+          shape={isPrimaryUiType ? ChipShape.Rectangular : ChipShape.Rounded}
+          color={isPrimaryUiType ? 'secondary' : 'primary'}
+          key={index}
+          title={tag}
+          onRemove={() => onRemoveTagClick(index)}
+          sxProps={isSecondaryUiType ? { m: theme.spacing(0.2) } : null}
+        />
       ))}
     </>
   );
@@ -34,7 +53,12 @@ export const TagsController = <T extends FieldValues>({
         <>
           <StyledTextField
             {...props}
-            onBlur={() => onAddTagClick(value)}
+            isSecondaryUiType={isSecondaryUiType}
+            onBlur={() => {
+              onAddTagClick(value);
+              setIsFocused(false);
+            }}
+            onFocus={() => setIsFocused(true)}
             onChange={onChange}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
@@ -46,15 +70,27 @@ export const TagsController = <T extends FieldValues>({
             helperText={error?.message || helperText}
             value={value}
             InputProps={{
-              startAdornment: uiType === UiType.Secondary && chips,
-              endAdornment: (
+              startAdornment: isSecondaryUiType && (
+                <>
+                  <StyledFlexTopCenter className="email" sx={{ mr: theme.spacing(1) }}>
+                    <Svg id="email-outlined" />
+                  </StyledFlexTopCenter>
+                  {inputLabel && !isFocused && !tags?.length && !value && (
+                    <StyledBodyLarge color={variables.palette.outline}>
+                      {inputLabel}
+                    </StyledBodyLarge>
+                  )}
+                  {chips}
+                </>
+              ),
+              endAdornment: isPrimaryUiType && (
                 <StyledClearedButton onClick={() => onAddTagClick(value)}>
                   <Svg id="check" />
                 </StyledClearedButton>
               ),
             }}
           />
-          {uiType === UiType.Primary && <StyledFlexWrap>{chips}</StyledFlexWrap>}
+          {isPrimaryUiType && <StyledFlexWrap>{chips}</StyledFlexWrap>}
         </>
       )}
     />

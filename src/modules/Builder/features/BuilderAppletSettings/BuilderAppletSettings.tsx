@@ -18,7 +18,6 @@ export const BuilderAppletSettings = () => {
     const keys = [
       'reportRecipients',
       'reportIncludeUserId',
-      'reportIncludeCaseId',
       'reportEmailBody',
       'reportServerIp',
       'reportPublicKey',

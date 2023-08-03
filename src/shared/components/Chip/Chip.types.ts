@@ -1,3 +1,6 @@
+import { ReactElement } from 'react';
+import { SxProps } from '@mui/material';
+
 export enum ChipShape {
   Rectangular = 'rectangular',
   Rounded = 'rounded',
@@ -8,7 +11,8 @@ export type ChipProps = {
   onRemove?: () => void;
   color?: 'primary' | 'secondary' | 'error';
   shape?: ChipShape;
-  icon?: React.ReactElement | undefined;
+  icon?: ReactElement | undefined;
   canRemove?: boolean;
   onClick?: () => void;
+  sxProps?: SxProps;
 };
