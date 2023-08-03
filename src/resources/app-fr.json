@@ -32,7 +32,7 @@
   "next": "Suivant",
   "advancedSettings": "Réglages avancés",
   "serverThatHoldAppletConfiguration": "Serveur qui hébergera la configuration de votre Applet et toutes les données qui seront collectées",
-  "serverUrl": "Adresse IP du serveur de chiffrement",
+  "serverUrl": "URL du serveur",
   "publicEncryptionKey": "Clé de chiffrement publique",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",
   "passwordCapitalLetter": "Au moins une lettre majuscule doit être incluse.",

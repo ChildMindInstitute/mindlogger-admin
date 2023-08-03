@@ -31,7 +31,6 @@ import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.
 import { AppletFormValues } from 'modules/Builder/types';
 import { reportConfig } from 'modules/Builder/state';
 
-import { appletInfoMocked } from './mock';
 import {
   removeAppletExtraFields,
   removeActivityExtraFields,
@@ -51,7 +50,6 @@ export const getAppletInfoFromStorage = () => {
 };
 
 export const useAppletData = () => {
-  const isNewApplet = useCheckIfNewApplet();
   const { getValues } = useFormContext();
 
   return (encryption?: Encryption): SingleApplet => {
@@ -60,10 +58,7 @@ export const useAppletData = () => {
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
 
-    const defaultAppletInfo = isNewApplet ? appletInfoMocked : {};
-
     return {
-      ...defaultAppletInfo,
       ...appletInfo,
       activities: appletInfo?.activities.map(
         (activity) =>

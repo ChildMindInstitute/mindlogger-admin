@@ -61,7 +61,7 @@ export const palette = {
 
   semantic: {
     error: '#ba1a1a',
-    yellow: '#fec432',
-    green: '#56b157',
+    yellow: '#dfac03',
+    green: '#0f7b6c',
   },
 };
