@@ -37,7 +37,7 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
   const { pathname } = useLocation();
   const handleLogout = useLogout();
   const dispatch = useAppDispatch();
-  const { notWatchedAlertsCount = 0 } = alerts.useAlertsData() ?? {};
+  const { notWatched = 0 } = alerts.useAlertsData() ?? {};
 
   const onLogout = () => {
     if (checkIfAppletUrlPassed(pathname)) {
@@ -57,10 +57,10 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
             <StyledFlexTopCenter>
               <StyledAvatarWrapper>
                 <StyledImage src={avatarSrc} alt="Avatar" />
-                {notWatchedAlertsCount > 0 && (
+                {notWatched > 0 && (
                   <StyledQuantity>
                     <StyledLabelBoldSmall color={variables.palette.white}>
-                      {notWatchedAlertsCount}
+                      {notWatched}
                     </StyledLabelBoldSmall>
                   </StyledQuantity>
                 )}

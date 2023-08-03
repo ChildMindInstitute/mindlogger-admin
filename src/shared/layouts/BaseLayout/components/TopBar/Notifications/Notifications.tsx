@@ -29,7 +29,7 @@ import { useInfinityData } from './Notifications.hooks';
 
 export const Notifications = () => {
   const { t } = useTranslation('app');
-  const { result: alertList = [], notWatchedAlertsCount = 0 } = alerts.useAlertsData() ?? {};
+  const { result: alertList = [], notWatched = 0 } = alerts.useAlertsData() ?? {};
   const alertListStatus = alerts.useAlertsStatus() ?? {};
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
@@ -62,9 +62,9 @@ export const Notifications = () => {
           <StyledLabelBoldLarge>{t('alerts')}</StyledLabelBoldLarge>
         </StyledHeaderLeft>
         <StyledFlexTopCenter>
-          {notWatchedAlertsCount > 0 && (
+          {notWatched > 0 && (
             <StyledLabelBoldLarge color={variables.palette.semantic.error}>
-              {`${notWatchedAlertsCount} ${t('unread')}`}
+              {`${notWatched} ${t('unread')}`}
             </StyledLabelBoldLarge>
           )}
           <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>

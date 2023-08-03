@@ -20,5 +20,5 @@ export type AlertType = {
 };
 
 export type AlertsSchema = {
-  alerts: BaseSchema<{ result: AlertType[]; count: number; notWatchedAlertsCount: number } | null>;
+  alerts: BaseSchema<{ result: AlertType[]; count: number; notWatched: number } | null>;
 };

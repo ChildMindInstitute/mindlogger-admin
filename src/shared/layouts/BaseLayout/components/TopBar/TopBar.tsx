@@ -23,7 +23,7 @@ export const TopBar = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const isAuthorized = auth.useAuthorized();
-  const { notWatchedAlertsCount = 0 } = alerts.useAlertsData() ?? {};
+  const { notWatched = 0 } = alerts.useAlertsData() ?? {};
   const [visibleAccountDrawer, setVisibleAccountDrawer] = useState(false);
 
   const handleLoginClick = () => navigate(page.login);
@@ -40,10 +40,10 @@ export const TopBar = () => {
             variant="text"
           >
             <StyledImage src={avatarSrc} alt="Avatar" />
-            {notWatchedAlertsCount > 0 && (
+            {notWatched > 0 && (
               <StyledQuantity>
                 <StyledLabelBoldMedium color={variables.palette.white}>
-                  {notWatchedAlertsCount}
+                  {notWatched}
                 </StyledLabelBoldMedium>
               </StyledQuantity>
             )}
