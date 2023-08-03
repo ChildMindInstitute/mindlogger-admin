@@ -24,13 +24,12 @@ import {
   StyledCentered,
   StyledBox,
 } from './Notifications.styles';
-import { NotificationsProps } from './Notifications.types';
 import { ALERT_LIST_CLASS, ALERT_END_ITEM_CLASS } from './Notifications.const';
 import { useInfinityData } from './Notifications.hooks';
 
-export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Element => {
+export const Notifications = () => {
   const { t } = useTranslation('app');
-  const { result: alertList = [] } = alerts.useAlertsData() ?? {};
+  const { result: alertList = [], notWatchedAlertsCount = 0 } = alerts.useAlertsData() ?? {};
   const alertListStatus = alerts.useAlertsStatus() ?? {};
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
@@ -63,9 +62,9 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           <StyledLabelBoldLarge>{t('alerts')}</StyledLabelBoldLarge>
         </StyledHeaderLeft>
         <StyledFlexTopCenter>
-          {alertsQuantity > 0 && (
+          {notWatchedAlertsCount > 0 && (
             <StyledLabelBoldLarge color={variables.palette.semantic.error}>
-              {`${alertsQuantity} ${t('unread')}`}
+              {`${notWatchedAlertsCount} ${t('unread')}`}
             </StyledLabelBoldLarge>
           )}
           <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>

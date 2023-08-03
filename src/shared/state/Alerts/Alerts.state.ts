@@ -7,6 +7,7 @@ const initialState = {
   data: {
     result: [],
     count: 0,
+    notWatchedAlertsCount: 0,
   },
 };
 

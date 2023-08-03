@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -23,18 +23,10 @@ export const TopBar = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const isAuthorized = auth.useAuthorized();
-  const { result: alertList } = alerts.useAlertsData() ?? {};
+  const { notWatchedAlertsCount = 0 } = alerts.useAlertsData() ?? {};
   const [visibleAccountDrawer, setVisibleAccountDrawer] = useState(false);
-  const [alertsQuantity, setAlertsQuantity] = useState(0);
 
   const handleLoginClick = () => navigate(page.login);
-
-  useEffect(() => {
-    if (!alertList?.length) return;
-
-    const quantity = alertList.filter((alert) => !alert.isWatched).length;
-    setAlertsQuantity(quantity);
-  }, [alertList]);
 
   return (
     <>
@@ -48,10 +40,10 @@ export const TopBar = () => {
             variant="text"
           >
             <StyledImage src={avatarSrc} alt="Avatar" />
-            {alertsQuantity > 0 && (
+            {notWatchedAlertsCount > 0 && (
               <StyledQuantity>
                 <StyledLabelBoldMedium color={variables.palette.white}>
-                  {alertsQuantity}
+                  {notWatchedAlertsCount}
                 </StyledLabelBoldMedium>
               </StyledQuantity>
             )}
@@ -67,7 +59,6 @@ export const TopBar = () => {
       </StyledTopBar>
       {visibleAccountDrawer && (
         <AccountPanel
-          alertsQuantity={alertsQuantity}
           setVisibleDrawer={setVisibleAccountDrawer}
           visibleDrawer={visibleAccountDrawer}
         />
