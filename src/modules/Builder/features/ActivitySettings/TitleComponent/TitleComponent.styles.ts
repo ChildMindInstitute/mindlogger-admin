@@ -1,5 +1,5 @@
 import { styled, Box } from '@mui/material';
-import { StyledLabelBoldLarge, commonEllipsisStyles, theme, variables } from 'shared/styles';
+import { commonEllipsisStyles, theme, variables } from 'shared/styles';
 
 export const StyledMark = styled(Box)`
   position: absolute;
@@ -10,6 +10,6 @@ export const StyledMark = styled(Box)`
   background-color: ${variables.palette.semantic.error};
 `;
 
-export const StyledTitle = styled(StyledLabelBoldLarge)`
+export const StyledTitle = styled(Box)`
   ${commonEllipsisStyles};
 `;
