@@ -44,17 +44,8 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
     if (!alertList.length) return;
 
     const alerts = alertList.map((alert) => ({
-      alertId: alert.id,
-      workspaceName: alert.workspaceName ?? '',
-      appletId: alert.appletId ?? '',
-      appletName: alert.appletName,
-      appletImage: alert.appletImage,
-      respondentSecretId: alert.secretId,
-      message: alert.message,
+      ...alert,
       timeAgo: timeAgo.format(getDateInUserTimezone(alert.createdAt), 'round'),
-      isWatched: alert.isWatched,
-      respondentId: alert.respondentId,
-      encryption: alert.encryption,
       alert,
     }));
     setNotifications(alerts);
@@ -91,7 +82,7 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           )}
           {notifications?.map((item) => (
             <Notification
-              key={item.alertId}
+              key={item.id}
               currentId={currentId}
               setCurrentId={setCurrentId}
               {...item}

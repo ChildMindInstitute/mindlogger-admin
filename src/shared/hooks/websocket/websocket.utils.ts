@@ -19,6 +19,7 @@ export const getAlertFormValue = (alertMessage: string): AlertType | null => {
       id: alert.id,
       appletId: alert.applet_id,
       appletName: alert.applet_name,
+      image: alert.image,
       version: alert.version,
       secretId: alert.secret_id,
       activityId: alert.activity_id,
@@ -26,6 +27,9 @@ export const getAlertFormValue = (alertMessage: string): AlertType | null => {
       message: alert.message,
       createdAt: alert.created_at,
       answerId: alert.answer_id,
+      respondentId: alert.respondent_id,
+      workspace: alert.workspace,
+      encryption: alert.encryption,
     };
   } catch (error) {
     console.warn('Error while WS alert parsing!');

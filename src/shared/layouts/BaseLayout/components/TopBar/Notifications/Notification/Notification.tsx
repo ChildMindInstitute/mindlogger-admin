@@ -33,12 +33,12 @@ import { NotificationProps } from './Notification.types';
 export const Notification = ({
   currentId,
   setCurrentId,
-  alertId,
-  workspaceName,
+  id,
+  workspace,
   appletId,
   appletName,
-  appletImage,
-  respondentSecretId,
+  image,
+  secretId,
   message,
   timeAgo,
   isWatched,
@@ -48,7 +48,7 @@ export const Notification = ({
 }: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const isActive = currentId === alertId;
+  const isActive = currentId === id;
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const navigate = useNavigate();
   const { getAppletPrivateKey } = useEncryptionStorage();
@@ -56,7 +56,7 @@ export const Notification = ({
 
   const handleNotificationClick = async () => {
     const { setAlertWatched } = alerts.thunk;
-    setCurrentId(isActive ? '' : alertId);
+    setCurrentId(isActive ? '' : id);
 
     if (isWatched) return;
 
@@ -66,7 +66,7 @@ export const Notification = ({
         isWatched: true,
       }),
     );
-    const result = await dispatch(setAlertWatched(alertId));
+    const result = await dispatch(setAlertWatched(id));
     !setAlertWatched.fulfilled.match(result) &&
       (await dispatch(
         alerts.actions.updateAlertWatchedState({
@@ -107,10 +107,10 @@ export const Notification = ({
                   height: '4rem',
                   borderRadius: variables.borderRadius.half,
                 }}
-                workspaceName={workspaceName ?? ''}
+                workspaceName={workspace ?? ''}
               />
-              {appletImage ? (
-                <StyledLogo src={appletImage} alt={appletName} />
+              {image ? (
+                <StyledLogo src={image} alt={appletName} />
               ) : (
                 <StyledLogoPlug>
                   <StyledLabelSmall color={variables.palette.on_surface}>
@@ -133,7 +133,7 @@ export const Notification = ({
                 isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
               }
             >
-              {respondentSecretId}
+              {secretId}
             </StyledTitle>
             <StyledMessage
               color={

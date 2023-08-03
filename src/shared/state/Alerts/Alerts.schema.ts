@@ -6,7 +6,7 @@ export type AlertType = {
   isWatched: boolean;
   appletId: string;
   appletName: string;
-  appletImage?: string;
+  image: string;
   version: string;
   secretId: string;
   activityId: string;
@@ -14,9 +14,9 @@ export type AlertType = {
   message: string;
   createdAt: string;
   answerId: string;
-  respondentId?: string;
-  workspaceName?: string;
-  encryption?: Encryption;
+  respondentId: string;
+  workspace: string;
+  encryption: Encryption;
 };
 
 export type AlertsSchema = {
