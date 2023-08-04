@@ -3,7 +3,7 @@ import { Box, ClickAwayListener } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
-import { auth } from 'redux/modules';
+import { alerts, auth } from 'redux/modules';
 import avatarSrc from 'assets/images/avatar.png';
 import {
   StyledLabelBoldSmall,
@@ -31,16 +31,13 @@ import {
 } from './AccountPanel.styles';
 import { AccountPanelProps } from './AccountPanel.types';
 
-export const AccountPanel = ({
-  alertsQuantity,
-  setVisibleDrawer,
-  visibleDrawer,
-}: AccountPanelProps) => {
+export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelProps) => {
   const { t } = useTranslation('app');
   const authData = auth.useData();
   const { pathname } = useLocation();
   const handleLogout = useLogout();
   const dispatch = useAppDispatch();
+  const { notWatched = 0 } = alerts.useAlertsData() ?? {};
 
   const onLogout = () => {
     if (checkIfAppletUrlPassed(pathname)) {
@@ -60,10 +57,10 @@ export const AccountPanel = ({
             <StyledFlexTopCenter>
               <StyledAvatarWrapper>
                 <StyledImage src={avatarSrc} alt="Avatar" />
-                {alertsQuantity > 0 && (
+                {notWatched > 0 && (
                   <StyledQuantity>
                     <StyledLabelBoldSmall color={variables.palette.white}>
-                      {alertsQuantity}
+                      {notWatched}
                     </StyledLabelBoldSmall>
                   </StyledQuantity>
                 )}
@@ -83,7 +80,7 @@ export const AccountPanel = ({
               </StyledClearedButton>
             </StyledCloseWrapper>
           </StyledHeader>
-          <Notifications alertsQuantity={alertsQuantity} />
+          <Notifications />
         </Box>
         <StyledFooter>
           <StyledLogOutBtn

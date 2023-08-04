@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 
@@ -18,4 +18,11 @@ export const StyledContainerWithBg = styled(StyledFlexColumn)`
   padding: ${theme.spacing(3, 3, 2.1, 3)};
   border-radius: ${variables.borderRadius.lg2};
   width: 100%;
+`;
+
+export const StyledObserverTarget = styled(Box)`
+  display: block;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
 `;

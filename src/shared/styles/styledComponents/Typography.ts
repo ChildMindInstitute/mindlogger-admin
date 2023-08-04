@@ -2,6 +2,7 @@ import { styled } from '@mui/system';
 import { Typography } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
+import { shouldForwardProp } from 'shared/utils';
 
 export type FontWeight = keyof typeof variables.font.weight;
 type LetterSpacing = keyof typeof variables.font.letterSpacing;
@@ -43,10 +44,10 @@ export const StyledTitleLargish = styled(Typography)`
   color: ${({ color }: StyledProps) => color || variables.palette.black};
 `;
 
-export const StyledTitleMedium = styled(Typography)`
+export const StyledTitleMedium = styled(Typography, shouldForwardProp)`
   font-size: ${variables.font.size.lg};
   line-height: ${variables.font.lineHeight.lg};
-  font-weight: ${variables.font.weight.regular};
+  font-weight: ${({ fontWeight }: StyledProps) => fontWeight || variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
   letter-spacing: ${variables.font.letterSpacing.md};
 `;
@@ -77,10 +78,10 @@ export const StyledTitleBoldSmall = styled(StyledTitleSmall)`
 
 export const StyledLabelLarge = StyledTitleSmall;
 
-export const StyledLabelMedium = styled(Typography)`
+export const StyledLabelMedium = styled(Typography, shouldForwardProp)`
   font-size: ${variables.font.size.sm};
   line-height: ${variables.font.lineHeight.sm};
-  font-weight: ${variables.font.weight.regular};
+  font-weight: ${({ fontWeight }: StyledProps) => fontWeight || variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
   text-decoration: ${({ withDecoration }: StyledProps) => (withDecoration ? 'underline' : 'none')};
   letter-spacing: ${variables.font.letterSpacing.xxl};

@@ -4,8 +4,6 @@ import { Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
-export type GetUserData = { token: string };
-
 export type GetAppletsParams = {
   params: {
     ownerId?: string;
@@ -18,13 +16,9 @@ export type GetAppletsParams = {
   };
 };
 
-export type SwitchAccount = { accountId: string };
-
 export type RespondentId = { respondentId: string };
 
 export type FolderId = { folderId: string };
-
-export type UserRoles = 'reviewer' | 'editor' | 'user' | 'coordinator' | 'manager';
 
 export type Event = {
   data: {
@@ -153,8 +147,6 @@ export type ImportSchedule = AppletId & {
   body: CreateEvent[];
 };
 
-export type SetAccount = { accountName: string };
-
 export type RemoveAccess = {
   userId: string;
   appletIds: string[];
@@ -219,8 +211,6 @@ export type TogglePin = OwnerId & {
   folderId: string;
   isPinned: boolean;
 };
-
-export type UpdateAlertStatus = { alertId: string };
 
 export type PublishApplet = AppletId & AppletName & { keywords: string[] };
 
