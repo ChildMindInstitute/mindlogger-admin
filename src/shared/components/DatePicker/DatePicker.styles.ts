@@ -1,9 +1,7 @@
 import { Box, Button, Popover, TextField } from '@mui/material';
 import { styled } from '@mui/system';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import { StyledClearedButton } from 'shared/styles/styledComponents';
+import { variables, StyledClearedButton, theme } from 'shared/styles';
 
 export const StyledPopover = styled(Popover)`
   .MuiPaper-root {
@@ -70,7 +68,7 @@ export const StyledPopover = styled(Popover)`
       }
     }
 
-    &__day--today:not(.react-datepicker__day--selected) {
+    &__day--today:not(.react-datepicker__day--selected):not(.react-datepicker__day--outside-month) {
       border: ${variables.borderWidth.md} solid ${variables.palette.primary};
       font-weight: ${variables.font.weight.regular};
       color: ${variables.palette.primary};

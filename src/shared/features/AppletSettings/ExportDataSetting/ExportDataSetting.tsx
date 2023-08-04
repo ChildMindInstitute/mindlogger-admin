@@ -6,7 +6,7 @@ import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
 import { Modal, Svg } from 'shared/components';
 import { applet } from 'shared/state';
 import { getExportDataApi } from 'api';
-import { useAsync } from 'shared/hooks';
+import { useAsync, useEncryptionStorage } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { exportDataSucceed } from 'shared/utils';
 import { StyledBodyLarge, StyledLinearProgress, StyledModalWrapper, theme } from 'shared/styles';
@@ -21,6 +21,8 @@ export const ExportDataSetting = () => {
   const { t } = useTranslation('app');
   const { result: appletData } = applet.useAppletData() ?? {};
   const getDecryptedAnswers = useDecryptedActivityData();
+  const { getAppletPrivateKey } = useEncryptionStorage();
+
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
@@ -35,15 +37,30 @@ export const ExportDataSetting = () => {
     console.warn,
   );
 
-  const handleDataExportHandler = () => {
+  const dataExportCallback = () => {
     if (!appletData?.id) return;
 
     setPasswordModalVisible(false);
     setDataIsExporting(true);
     execute({ appletId: appletData.id });
   };
+
   const handleExportClose = () => {
     setDataIsExporting(false);
+  };
+
+  const handleDataExport = () => {
+    if (!appletData?.id) return;
+
+    const hasEncryptionCheck = !!getAppletPrivateKey(appletData.id);
+
+    if (!hasEncryptionCheck) {
+      setPasswordModalVisible(true);
+
+      return;
+    }
+
+    dataExportCallback();
   };
 
   return (
@@ -52,7 +69,7 @@ export const ExportDataSetting = () => {
       <StyledAppletSettingsDescription>{t('exportDescription')}</StyledAppletSettingsDescription>
       <Box sx={{ width: 'fit-content' }}>
         <StyledAppletSettingsButton
-          onClick={() => setPasswordModalVisible(true)}
+          onClick={handleDataExport}
           variant="outlined"
           startIcon={<Svg width="18" height="18" id="export" />}
         >
@@ -63,7 +80,7 @@ export const ExportDataSetting = () => {
         <AppletPasswordPopup
           popupVisible={passwordModalVisible}
           onClose={() => setPasswordModalVisible(false)}
-          submitCallback={handleDataExportHandler}
+          submitCallback={dataExportCallback}
           appletId={appletData?.id ?? ''}
           encryption={appletData?.encryption}
         />
