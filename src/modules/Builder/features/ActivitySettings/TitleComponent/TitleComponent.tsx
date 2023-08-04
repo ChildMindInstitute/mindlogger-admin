@@ -9,7 +9,7 @@ import {
 } from 'shared/styles';
 
 import { TitleComponentProps } from './TitleComponent.types';
-import { StyledMark, StyledTitle } from './TitleComponent.styles';
+import { StyledMark } from './TitleComponent.styles';
 
 export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
   const { getFieldState } = useFormContext();
@@ -27,7 +27,7 @@ export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
     <StyledFlexColumn sx={{ m: theme.spacing(0, 5, 0, 3), overflow: 'hidden' }}>
       <StyledFlexTopCenter sx={{ position: 'relative' }}>
         {hasErrors && <StyledMark />}
-        <StyledTitle>{title}</StyledTitle>
+        {title}
       </StyledFlexTopCenter>
       {isShowErrors &&
         errorMessages.map(({ key, message }) => (
