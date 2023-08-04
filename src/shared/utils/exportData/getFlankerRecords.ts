@@ -107,7 +107,7 @@ const getResponseObj = ({
   if (tag === FlankerTag.Response) {
     eventOffset = eventStartTimestamp = DEFAULT_VALUE;
     const buttonPressed =
-      response.button_pressed === CorrectPress.Left
+      Number(response.button_pressed) === CorrectPress.Left
         ? FlankerResponseValue.Left
         : FlankerResponseValue.Right;
     responseValue =
