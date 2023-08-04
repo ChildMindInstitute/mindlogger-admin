@@ -10,6 +10,7 @@ export type EditorProps = {
   customChange?: (value?: string, event?: ChangeEvent<HTMLTextAreaElement>) => void;
   preview?: 'live' | 'edit' | 'preview';
   uiType?: EditorUiType;
+  editorId?: string;
 };
 
 export type EditorControllerProps<T extends FieldValues> = EditorProps & UseControllerProps<T>;

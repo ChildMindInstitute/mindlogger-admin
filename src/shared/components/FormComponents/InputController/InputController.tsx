@@ -34,6 +34,8 @@ export const InputController = <T extends FieldValues>({
   isEmptyStringAllowed = false,
   isErrorVisible = true,
   restrictExceededValueLength = false,
+  Counter = StyledCounter,
+  counterProps,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -64,14 +66,16 @@ export const InputController = <T extends FieldValues>({
           return String(value);
         };
 
-        const handleAddNumber = () => {
-          if (typeof maxNumberValue !== 'number') return onChange(+value + 1);
+        const numberValue = isNaN(+value) ? 0 : +value;
 
-          if (+value < maxNumberValue) onChange(+value + 1);
+        const handleAddNumber = () => {
+          if (typeof maxNumberValue !== 'number') return onChange(numberValue + 1);
+
+          if (numberValue < maxNumberValue) onChange(numberValue + 1);
         };
 
         const handleDistractNumber = () => {
-          if (+value > minNumberValue) onChange(+value - 1);
+          if (numberValue > minNumberValue) onChange(numberValue - 1);
         };
 
         const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,9 +119,13 @@ export const InputController = <T extends FieldValues>({
                 }
               />
               {maxLength && !error && (
-                <StyledCounter>
+                <Counter
+                  value={value?.length || 0}
+                  maxLength={maxLength}
+                  counterProps={counterProps}
+                >
                   {value?.length || 0}/{maxLength} {t('characters')}
-                </StyledCounter>
+                </Counter>
               )}
             </StyledTextFieldContainer>
           </Tooltip>

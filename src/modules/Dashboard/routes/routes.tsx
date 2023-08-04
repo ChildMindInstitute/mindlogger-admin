@@ -62,7 +62,7 @@ export const dashboardRoutes = () => (
         </Route>
         <Route path={page.appletRespondentDataReview} element={<RespondentDataReview />}>
           <Route
-            path={page.appletRespondentDataReviewAnswer}
+            path={page.appletRespondentDataReview}
             element={
               <PrivateRoute>
                 <RespondentDataReview />

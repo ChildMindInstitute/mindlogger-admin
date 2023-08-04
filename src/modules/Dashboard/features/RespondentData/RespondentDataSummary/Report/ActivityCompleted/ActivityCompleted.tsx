@@ -6,13 +6,13 @@ import { Tooltip } from 'shared/components';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
+import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
 import { ActivityCompletedProps } from './ActivityCompleted.types';
-import { FilterFormValues } from '../Report.types';
 
 export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompletedProps) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext<FilterFormValues>();
+  const { watch } = useFormContext<SummaryFiltersForm>();
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 

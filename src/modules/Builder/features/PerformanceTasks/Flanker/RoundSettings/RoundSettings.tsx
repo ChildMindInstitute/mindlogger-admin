@@ -27,6 +27,9 @@ export const RoundSettings = ({ uiType }: RoundSettingsProps) => {
     errors,
     `${activityObjField}.items[${FlankerInstructionPositions.Test}].question`,
   );
+  const key = isPracticeRound
+    ? FlankerInstructionPositions.Practice
+    : FlankerInstructionPositions.Test;
 
   return (
     <>
@@ -35,11 +38,10 @@ export const RoundSettings = ({ uiType }: RoundSettingsProps) => {
       </StyledTitleLarge>
       <Instruction
         description={t(`flankerInstructions.${isPracticeRound ? 'practiceDesc' : 'testDesc'}`)}
-        name={`${fieldName}.items.${
-          isPracticeRound ? FlankerInstructionPositions.Practice : FlankerInstructionPositions.Test
-        }.question`}
+        name={`${fieldName}.items.${key}.question`}
         title={t(isPracticeRound ? 'practiceInstruction' : 'testInstruction')}
         hasError={isPracticeRound ? hasPracticeInstructionError : hasTestInstructionError}
+        instructionId={`instruction-${key}`}
       />
       <BlockSequences isPracticeRound={isPracticeRound} />
       <RoundOptions isPracticeRound={isPracticeRound} />

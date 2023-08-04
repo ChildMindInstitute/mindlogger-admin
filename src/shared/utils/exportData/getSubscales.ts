@@ -139,10 +139,14 @@ export const calcTotalScore = (
       items: Object.keys(activityItems).reduce(
         (acc: { name: string; type: ElementType.Item }[], item) => {
           const itemType = activityItems[item].activityItem.responseType;
+          const itemName = activityItems[item].activityItem.name;
+
           if (
             itemType === ItemResponseType.SingleSelection ||
             itemType === ItemResponseType.MultipleSelection ||
-            itemType === ItemResponseType.Slider
+            itemType === ItemResponseType.Slider ||
+            itemName === LookupTableItems.Age_screen ||
+            itemName === LookupTableItems.Gender_screen
           ) {
             acc.push({
               name: item,

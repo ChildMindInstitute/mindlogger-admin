@@ -1,8 +1,7 @@
+import { useContext } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { page } from 'resources';
 import {
   theme,
   StyledHeadlineLarge,
@@ -11,16 +10,16 @@ import {
   variables,
 } from 'shared/styles';
 import { useRespondentLabel } from 'modules/Dashboard/hooks';
+import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/context';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledActivity } from './ReportMenu.styles';
 import { ReportMenuProps } from './ReportMenu.types';
 
-export const ReportMenu = ({ activities, selectedActivity }: ReportMenuProps) => {
+export const ReportMenu = ({ activities }: ReportMenuProps) => {
   const { t } = useTranslation();
   const respondentLabel = useRespondentLabel();
-  const { appletId, respondentId } = useParams();
-  const navigate = useNavigate();
+  const { selectedActivity, setSelectedActivity } = useContext(RespondentDataContext);
 
   return (
     <StyledMenu>
@@ -32,15 +31,7 @@ export const ReportMenu = ({ activities, selectedActivity }: ReportMenuProps) =>
         <StyledActivity
           key={String(activity.id)}
           isSelected={selectedActivity?.id === activity.id}
-          onClick={() => {
-            navigate(
-              generatePath(page.appletRespondentDataSummaryPerActivity, {
-                appletId,
-                respondentId,
-                activityId: activity.id,
-              }),
-            );
-          }}
+          onClick={() => setSelectedActivity(activity)}
         >
           <StyledBodyLarge color={variables.palette.on_surface}>{activity.name}</StyledBodyLarge>
         </StyledActivity>

@@ -333,7 +333,6 @@ export type ReportConfig = {
   reportPublicKey: string;
   reportRecipients: string[];
   reportIncludeUserId: boolean;
-  reportIncludeCaseId: boolean;
   reportEmailBody: string;
 };
 

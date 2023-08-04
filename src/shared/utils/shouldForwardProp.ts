@@ -2,7 +2,13 @@ import isPropValid from '@emotion/is-prop-valid';
 
 export const shouldForwardProp = {
   shouldForwardProp: (prop: string) => {
-    if (prop === 'TabIndicatorProps') return true;
+    if (
+      prop === 'TabIndicatorProps' ||
+      prop === 'InputProps' ||
+      prop === 'error' ||
+      prop === 'helperText'
+    )
+      return true;
 
     return typeof prop === 'string' && isPropValid(prop);
   },

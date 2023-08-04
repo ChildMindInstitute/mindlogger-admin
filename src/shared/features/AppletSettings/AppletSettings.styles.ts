@@ -20,4 +20,5 @@ export const StyledAppletSettingsButton = styled(Button)`
   width: max-content;
   height: 4.8rem;
   padding: ${theme.spacing(0, 2.5)};
+  margin-top: ${theme.spacing(2.8)};
 `;

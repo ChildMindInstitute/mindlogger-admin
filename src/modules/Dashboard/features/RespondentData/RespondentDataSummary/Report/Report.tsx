@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { addDays, format } from 'date-fns';
@@ -20,6 +20,7 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getErrorMessage } from 'shared/utils';
 import { applet } from 'shared/state';
 import { DateFormats } from 'shared/consts';
+import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportFilters } from './ReportFilters';
@@ -27,7 +28,6 @@ import { StyledEmptyState, StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 import {
   ActivityCompletion,
-  FilterFormValues,
   FormattedResponse,
   ReportProps,
   CurrentActivityCompletionData,
@@ -36,7 +36,6 @@ import { ActivityCompleted } from './ActivityCompleted';
 import { ResponseOptions } from './ResponseOptions';
 import {
   getDateISO,
-  getDefaultFilterValues,
   getFormattedResponses,
   getIdentifiers,
   getLatestReportUrl,
@@ -61,11 +60,10 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
     useState<CurrentActivityCompletionData>(null);
 
-  const methods = useForm<FilterFormValues>({
-    defaultValues: getDefaultFilterValues(versions),
-  });
+  const { control, getValues } = useFormContext<SummaryFiltersForm>();
+
   const watchFilters = useWatch({
-    control: methods.control,
+    control,
     name: ['startDate', 'endDate', 'startTime', 'endTime', 'versions', 'identifier'],
   });
 
@@ -104,7 +102,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
       try {
         setIsLoading(true);
         const { startDate, endDate, startTime, endTime, identifier, filterByIdentifier, versions } =
-          methods.getValues();
+          getValues();
 
         const result = await getAnswers({
           appletId,
@@ -190,29 +188,24 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           <ReportContext.Provider
             value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}
           >
-            <FormProvider {...methods}>
-              <ReportFilters identifiers={identifiers} versions={versions} />
-              {!isLoading && answers.length > 0 && (
-                <>
-                  <ActivityCompleted answers={answers} versions={versions} />
-                  <Subscales answers={answers} versions={versions} />
-                  {responseOptions && !!Object.values(responseOptions).length && (
-                    <ResponseOptions responseOptions={responseOptions} versions={versions} />
-                  )}
-                </>
-              )}
-              {!isLoading && !answers.length && (
-                <StyledEmptyState>
-                  <Svg id="chart" width="80" height="80" />
-                  <StyledTitleLarge
-                    sx={{ mt: theme.spacing(1.6) }}
-                    color={variables.palette.outline}
-                  >
-                    {t('noDataForActivityFilters')}
-                  </StyledTitleLarge>
-                </StyledEmptyState>
-              )}
-            </FormProvider>
+            <ReportFilters identifiers={identifiers} versions={versions} />
+            {!isLoading && answers.length > 0 && (
+              <>
+                <ActivityCompleted answers={answers} versions={versions} />
+                <Subscales answers={answers} versions={versions} />
+                {responseOptions && !!Object.values(responseOptions).length && (
+                  <ResponseOptions responseOptions={responseOptions} versions={versions} />
+                )}
+              </>
+            )}
+            {!isLoading && !answers.length && (
+              <StyledEmptyState>
+                <Svg id="chart" width="80" height="80" />
+                <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
+                  {t('noDataForActivityFilters')}
+                </StyledTitleLarge>
+              </StyledEmptyState>
+            )}
           </ReportContext.Provider>
         </Box>
       </StyledReport>
