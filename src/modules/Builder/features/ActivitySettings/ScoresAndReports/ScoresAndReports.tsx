@@ -165,9 +165,9 @@ export const ScoresAndReports = () => {
               title: headerTitle,
             }}
             contentProps={{
-              scoreId: score.id,
               name: scoreName,
               title,
+              index,
             }}
           />
         );

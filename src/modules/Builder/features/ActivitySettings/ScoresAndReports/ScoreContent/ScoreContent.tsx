@@ -43,7 +43,7 @@ import { ScoreCondition } from './ScoreCondition';
 import { CopyId } from './CopyId';
 import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 
-export const ScoreContent = ({ name, title }: ScoreContentProps) => {
+export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext();
   const { activity } = useCurrentActivity();
@@ -158,26 +158,26 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
         sxProps={{ mb: theme.spacing(2.5) }}
         isValueName
       />
-      <SectionScoreCommonFields name={name} />
+      <SectionScoreCommonFields name={name} sectionId={`score-${index}`} />
       {!!scoreConditionals?.length && (
         <>
           <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>
             {t('scoreConditions')}
           </StyledTitleMedium>
-          {scoreConditionals?.map((conditional: Condition, index: number) => {
-            const conditionalName = `${scoreConditionalsName}.${index}`;
+          {scoreConditionals?.map((conditional: Condition, key: number) => {
+            const conditionalName = `${scoreConditionalsName}.${key}`;
             const title = t('scoreConditional', {
-              index: index + 1,
+              index: key + 1,
             });
 
             return (
               <ToggleItemContainer
-                key={`data-score-conditional-${getEntityKey(conditional) || index}-${index}`}
+                key={`data-score-conditional-${getEntityKey(conditional) || key}-${key}`}
                 HeaderContent={SectionScoreHeader}
                 Content={ScoreCondition}
-                contentProps={{ name: conditionalName, scoreId }}
+                contentProps={{ name: conditionalName, scoreId: `score-condition-${index}-${key}` }}
                 headerContentProps={{
-                  onRemove: () => removeScoreConditional(index),
+                  onRemove: () => removeScoreConditional(key),
                   title,
                   name: conditionalName,
                 }}
