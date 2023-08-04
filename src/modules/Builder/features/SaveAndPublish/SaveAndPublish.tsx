@@ -1,12 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { MutableRefObject } from 'react';
 
-import { AppletPasswordRef, Svg } from 'shared/components';
-import { AppletPasswordPopup, AppletPasswordPopupType } from 'modules/Dashboard';
+import { Svg } from 'shared/components';
+import {
+  AppletPasswordPopup,
+  AppletPasswordPopupType,
+  AppletPasswordRefType,
+} from 'modules/Dashboard';
 import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
-import { Encryption } from 'shared/utils';
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
@@ -15,7 +17,6 @@ import { SaveAndPublishProps } from './SaveAndPublish.types';
 export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
   const { t } = useTranslation('app');
   const {
-    isNewApplet,
     isPasswordPopupOpened,
     isPublishProcessPopupOpened,
     publishProcessStep,
@@ -32,11 +33,8 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
   } = useSaveAndPublishSetup(hasPrompt);
   const { appletId } = useParams();
 
-  const handlePasswordSubmit = (
-    encryption?: Encryption,
-    ref?: MutableRefObject<AppletPasswordRef | null>,
-  ) => {
-    handleAppletPasswordSubmit(encryption, ref?.current?.password);
+  const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
+    handleAppletPasswordSubmit(ref?.current?.password);
     setIsPasswordPopupOpened(false);
   };
 
@@ -52,7 +50,7 @@ export const SaveAndPublish = ({ hasPrompt }: SaveAndPublishProps) => {
       <AppletPasswordPopup
         appletId={appletId ?? ''}
         onClose={() => setIsPasswordPopupOpened(false)}
-        popupType={isNewApplet ? AppletPasswordPopupType.Create : AppletPasswordPopupType.Enter}
+        popupType={AppletPasswordPopupType.Create}
         popupVisible={isPasswordPopupOpened}
         submitCallback={handlePasswordSubmit}
         encryption={appletEncryption}

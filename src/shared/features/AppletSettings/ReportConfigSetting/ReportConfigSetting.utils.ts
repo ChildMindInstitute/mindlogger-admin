@@ -1,7 +1,16 @@
+import { UseFormSetValue } from 'react-hook-form';
+
 import { SingleApplet } from 'shared/state';
+import i18n from 'i18n';
 
 import { defaultValues } from './ReportConfigSetting.const';
-import { VerifyReportServer, SetPasswordReportServer } from './ReportConfigSetting.types';
+import {
+  VerifyReportServer,
+  SetPasswordReportServer,
+  ReportConfigFormValues,
+} from './ReportConfigSetting.types';
+
+const { t } = i18n;
 
 const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
 
@@ -13,7 +22,6 @@ export const getDefaultValues = (appletData?: Partial<SingleApplet>) => {
     reportPublicKey,
     reportRecipients,
     reportIncludeUserId,
-    reportIncludeCaseId,
     reportEmailBody,
   } = appletData;
 
@@ -23,8 +31,7 @@ export const getDefaultValues = (appletData?: Partial<SingleApplet>) => {
     reportPublicKey,
     reportRecipients,
     reportIncludeUserId,
-    reportIncludeCaseId,
-    reportEmailBody,
+    reportEmailBody: reportEmailBody || t('reportEmailBody'),
   };
 };
 
@@ -60,4 +67,17 @@ export const setPasswordReportServer = async ({
     headers,
     body,
   });
+};
+
+export const setSubjectData = (
+  setValue: UseFormSetValue<ReportConfigFormValues>,
+  respondentId?: boolean,
+) => {
+  let subject = 'REPORT';
+  if (respondentId) {
+    subject += ' by [Respondent ID]';
+  }
+  subject += ': [Applet Name] / [Activity Name]';
+
+  setValue('subject', subject);
 };

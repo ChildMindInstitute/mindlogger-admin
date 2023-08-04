@@ -29,6 +29,18 @@ export const theme = createTheme({
           height: '100vh',
           overflowY: 'hidden',
         },
+        '.medium-zoom-image--opened, .medium-zoom-overlay': {
+          visibility: 'hidden',
+          zIndex: 0,
+        },
+        '.medium-zoom--opened .medium-zoom-overlay': {
+          visibility: 'visible',
+          zIndex: theme.zIndex.drawer,
+        },
+        '.medium-zoom--opened .medium-zoom-image--opened': {
+          visibility: 'visible',
+          zIndex: theme.zIndex.modal,
+        },
         '*::-webkit-scrollbar': {
           width: '0.8rem',
           height: '0.8rem',
@@ -382,11 +394,6 @@ export const theme = createTheme({
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary50,
-            },
-            '&.Mui-disabled': {
-              '.MuiOutlinedInput-notchedOutline': {
-                borderColor: variables.palette.on_surface_alfa12,
-              },
             },
             '&.Mui-error': {
               '.MuiOutlinedInput-notchedOutline': {

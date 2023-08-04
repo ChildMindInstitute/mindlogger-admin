@@ -8,16 +8,14 @@ import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { getDictionaryText } from 'shared/utils';
 import { Accordion } from 'modules/Dashboard/components';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
-import {
-  FilterFormValues,
-  FormattedResponse,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import { FormattedResponse } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 import { isItemUnsupported } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
-import { COLORS } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.const';
 import { getResponseItem } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils';
 import { StyledBodyMedium, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
+import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
+import { COLORS } from '../../Charts/Charts.const';
 import { AdditionalInformation } from '../AdditionalInformation';
 import { SubscaleProps } from './Subscale.types';
 import { StyledSubscaleContainer } from './Subscale.styles';
@@ -25,7 +23,7 @@ import { StyledSubscaleContainer } from './Subscale.styles';
 export const Subscale = ({ isNested = false, name, subscale, versions }: SubscaleProps) => {
   const { t } = useTranslation('app');
 
-  const { watch } = useFormContext<FilterFormValues>();
+  const { watch } = useFormContext<SummaryFiltersForm>();
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 

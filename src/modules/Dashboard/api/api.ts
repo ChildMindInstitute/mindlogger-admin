@@ -53,6 +53,7 @@ import {
   Review,
   AssessmentReview,
   AppletName,
+  LatestReport,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -524,8 +525,14 @@ export const getReviewsApi = ({ appletId, answerId }: AssessmentReview, signal?:
     signal,
   });
 
-export const getSummaryActivitiesApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
+export const getSummaryActivitiesApi = (
+  { appletId, respondentId }: AppletId & RespondentId,
+  signal?: AbortSignal,
+) =>
   authApiClient.get<Response<DatavizActivity>>(`/answers/applet/${appletId}/summary/activities`, {
+    params: {
+      respondentId,
+    },
     signal,
   });
 
@@ -547,6 +554,19 @@ export const getVersionsApi = (
   authApiClient.get<Response<Version>>(
     `/answers/applet/${appletId}/summary/activities/${activityId}/versions`,
     {
+      signal,
+    },
+  );
+
+export const getLatestReportApi = (
+  { appletId, activityId, respondentId }: LatestReport,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/answers/applet/${appletId}/activities/${activityId}/answers/${respondentId}/latest_report`,
+    {},
+    {
+      responseType: 'arraybuffer',
       signal,
     },
   );

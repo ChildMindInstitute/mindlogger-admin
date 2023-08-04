@@ -26,10 +26,7 @@ export const Header = ({
 }: HeaderProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const {
-    result: { cartItems },
-  } = library.useCartApplets() || {};
-  const appletsCount = cartItems?.length || 0;
+  const { count: appletsCount } = library.useCartApplets() || {};
 
   const handleNavigate = () => {
     navigate(page.library);

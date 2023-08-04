@@ -65,7 +65,7 @@ export type CalendarEventsSchema = {
   alwaysAvailableHidden: BaseSchema<boolean | null>;
   scheduledHidden: BaseSchema<boolean | null>;
   createEventsData: BaseSchema<CreateEventsData[] | null>;
-  processedEventStartYear: BaseSchema<number | null>;
+  calendarCurrentYear: BaseSchema<number | null>;
   processedEvents: BaseSchema<{
     eventsToShow: CalendarEvent[] | null;
     allDayEventsSortedByDays: AllDayEventsSortedByDaysItem[] | null;

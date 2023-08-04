@@ -1,10 +1,9 @@
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { auth } from 'modules/Auth';
-import { storage } from 'shared/utils';
 
 const getKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
 
-export const useEncryptionCheckFromStorage = () => {
+export const useEncryptionStorage = () => {
   const isNewApplet = useCheckIfNewApplet();
   const userData = auth.useData();
   const ownerId = String(userData?.user?.id) || '';
@@ -14,9 +13,9 @@ export const useEncryptionCheckFromStorage = () => {
 
     const key = getKey(ownerId, appletId);
     try {
-      return JSON.parse(storage.getItem(key) as string);
+      return JSON.parse(sessionStorage.getItem(key) as string);
     } catch {
-      storage.removeItem(key);
+      sessionStorage.removeItem(key);
 
       return '';
     }
@@ -26,9 +25,9 @@ export const useEncryptionCheckFromStorage = () => {
     if (!appletId || !ownerId) return;
 
     const key = getKey(ownerId, appletId);
-    if (!privateKey) return storage.removeItem(key);
+    if (!privateKey) return sessionStorage.removeItem(key);
 
-    storage.setItem(key, JSON.stringify(privateKey));
+    sessionStorage.setItem(key, JSON.stringify(privateKey));
   };
 
   return {

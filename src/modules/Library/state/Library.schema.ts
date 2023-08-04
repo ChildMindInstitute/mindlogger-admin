@@ -39,9 +39,8 @@ export type PublishedApplets = {
 };
 
 export type CartApplets = {
-  result: {
-    cartItems: PublishedApplet[] | null;
-  };
+  result: PublishedApplet[];
+  count: number;
 };
 
 export type LibrarySchema = {

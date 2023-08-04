@@ -13,9 +13,8 @@ const initialStateData = {
 const cartStateData = {
   ...base.state,
   data: {
-    result: {
-      cartItems: [],
-    },
+    result: [],
+    count: 0,
   },
 };
 

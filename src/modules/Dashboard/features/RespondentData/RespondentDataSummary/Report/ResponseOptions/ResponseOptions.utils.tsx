@@ -1,9 +1,9 @@
 import { ItemResponseType } from 'shared/consts';
 
+import { TICK_HEIGHT } from '../Charts/Charts.const';
 import { MultiScatterChart } from '../Charts';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
-import { TICK_HEIGHT } from './ResponseOptions.const';
 
 export const getResponseItem = ({
   color,

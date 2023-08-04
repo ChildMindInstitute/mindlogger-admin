@@ -32,6 +32,7 @@ export const GeneralSettings = () => {
         name={`${fieldName}.items.${FlankerInstructionPositions.General}.question`}
         description={t('flankerInstructions.generalDesc')}
         hasError={hasError}
+        instructionId={`instruction-${FlankerInstructionPositions.General}`}
       />
       <ButtonsScreen />
       <FixationScreen />

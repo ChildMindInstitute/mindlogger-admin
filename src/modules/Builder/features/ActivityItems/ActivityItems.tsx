@@ -11,7 +11,7 @@ import { getEntityKey } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { ItemFormValues } from 'modules/Builder/types';
+import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
@@ -26,7 +26,7 @@ export const ActivityItems = () => {
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
   const { fieldName, activity } = useCurrentActivity();
-  const { control, watch, setValue } = useFormContext();
+  const { control, watch, setValue, trigger } = useFormContext();
 
   const {
     append: appendItem,
@@ -48,6 +48,8 @@ export const ActivityItems = () => {
   if (!activity) return null;
 
   const conditionalLogic = watch(`${fieldName}.conditionalLogic`);
+  const subscalesField = `${fieldName}.subscaleSetting.subscales`;
+  const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
   const activeItemIndex = items?.findIndex((item) => getEntityKey(item) === activeItemId);
   const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
@@ -70,11 +72,12 @@ export const ActivityItems = () => {
     setActiveItemId(item.key!);
   };
 
-  const handleInsertItem = (index: number) => {
-    const item = getNewActivityItem();
+  const handleInsertItem = (index: number, item?: ItemFormValues) => {
+    const itemToInsert = item ?? getNewActivityItem();
+    const shouldBecomeActive = !item || (item && activeItemId);
 
-    insertItem(index + 1, item);
-    setActiveItemId(item.key!);
+    insertItem(index + 1, itemToInsert);
+    shouldBecomeActive && setActiveItemId(itemToInsert.key!);
   };
 
   const handleDuplicateItem = (index: number) => {
@@ -82,7 +85,7 @@ export const ActivityItems = () => {
     setDuplicateIndexes((prevState) => {
       const numberToInsert = (prevState[getEntityKey(itemToDuplicate)] || 0) + 1;
 
-      insertItem(index + 1, {
+      handleInsertItem(index, {
         ...itemToDuplicate,
         id: undefined,
         key: uuidv4(),
@@ -113,6 +116,16 @@ export const ActivityItems = () => {
             !conditionalLogicKeysToRemove.includes(getEntityKey(conditionalLogic)),
         ),
       );
+    }
+    if (subscales.length) {
+      setValue(
+        subscalesField,
+        subscales.map((subscale) => ({
+          ...subscale,
+          items: subscale.items.filter((item) => item !== itemIdToDelete),
+        })),
+      );
+      trigger(subscalesField);
     }
 
     removeItem(itemIndexToDelete);

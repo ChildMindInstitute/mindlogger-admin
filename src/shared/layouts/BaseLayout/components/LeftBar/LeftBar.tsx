@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ClickAwayListener, Divider, List } from '@mui/material';
+import { ClickAwayListener, List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { StyledLabelMedium, theme, variables } from 'shared/styles';
+import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
 import { workspaces, auth } from 'redux/modules';
-import { authStorage, getIsAddAppletBtnVisible } from 'shared/utils';
+import { authStorage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
-import { Svg } from 'shared/components';
-import { page } from 'resources';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
@@ -21,7 +19,6 @@ export const LeftBar = () => {
   const userData = auth.useData();
   const { id } = userData?.user || {};
   const { result: workspacesData } = workspaces.useWorkspacesData() || {};
-  const rolesData = workspaces.useRolesData();
   const currentWorkspaceData = workspaces.useData();
   const [visibleDrawer, setVisibleDrawer] = useState(false);
 
@@ -37,9 +34,6 @@ export const LeftBar = () => {
     }
   }, [workspacesData]);
 
-  const getClassName = (isActive: boolean, disabled?: boolean) =>
-    `${isActive ? 'active-link' : ''} ${disabled ? 'disabled-link' : ''}`;
-
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
       <StyledDrawer>
@@ -47,9 +41,9 @@ export const LeftBar = () => {
           <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />
         </StyledDrawerLogo>
         <List>
-          {links.map(({ labelKey, link, icon, activeIcon, disabled }) => (
+          {links.map(({ labelKey, link, icon, activeIcon }) => (
             <StyledDrawerItem key={labelKey}>
-              <NavLink to={link} className={({ isActive }) => getClassName(isActive, disabled)}>
+              <NavLink to={link} className={({ isActive }) => `${isActive ? 'active-link' : ''}`}>
                 {({ isActive }) => (
                   <>
                     {isActive ? activeIcon : icon}
@@ -61,21 +55,6 @@ export const LeftBar = () => {
               </NavLink>
             </StyledDrawerItem>
           ))}
-          {getIsAddAppletBtnVisible(currentWorkspaceData, rolesData, userData?.user) && (
-            <>
-              <Divider
-                sx={{ my: theme.spacing(2.4), borderColor: variables.palette.outline_variant }}
-              />
-              <StyledDrawerItem>
-                <NavLink to={page.builder}>
-                  <Svg id="add" />
-                  <StyledLabelMedium color={variables.palette.on_surface_variant}>
-                    {t('newApplet')}
-                  </StyledLabelMedium>
-                </NavLink>
-              </StyledDrawerItem>
-            </>
-          )}
         </List>
         {visibleDrawer && (
           <SwitchWorkspace

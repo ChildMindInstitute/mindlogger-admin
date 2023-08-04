@@ -7,7 +7,7 @@ import { StyledClearedButton } from 'shared/styles/styledComponents';
 import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
-import { useEncryptionCheckFromStorage } from 'shared/hooks';
+import { useEncryptionStorage } from 'shared/hooks';
 
 import { StyledController } from '../Password.styles';
 import { passwordFormSchema } from './EnterAppletPassword.schema';
@@ -16,7 +16,7 @@ import { AppletPasswordRef } from '../Password.types';
 export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPasswordProps>(
   ({ appletId, encryption, submitCallback }, ref) => {
     const { t } = useTranslation('app');
-    const { setAppletPrivateKey } = useEncryptionCheckFromStorage();
+    const { setAppletPrivateKey } = useEncryptionStorage();
     const { handleSubmit, control, setError, watch } = useForm<EnterAppletPasswordForm>({
       resolver: yupResolver(passwordFormSchema()),
       defaultValues: { appletPassword: '' },
@@ -27,17 +27,10 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
       const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
       if (!encryptionInfoFromServer) return;
 
-      const {
-        publicKey: publicKeyFromServer,
-        prime: primeFromServer,
-        base: baseFromServer,
-        accountId: accountIdFromServer,
-      } = encryptionInfoFromServer;
+      const { publicKey: publicKeyFromServer, ...restEncryption } = encryptionInfoFromServer;
       const encryptionInfoGenerated = getAppletEncryptionInfo({
         appletPassword,
-        accountId: accountIdFromServer,
-        prime: primeFromServer,
-        base: baseFromServer,
+        ...restEncryption,
       });
 
       if (

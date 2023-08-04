@@ -33,7 +33,7 @@ export const RemoveAppletPopup = ({
     if (isAuthorized) {
       dispatch(library.thunk.postAppletsToCart(updatedAppletsData));
     } else {
-      localStorage.setItem(STORAGE_LIBRARY_KEY, JSON.stringify(updatedAppletsData));
+      sessionStorage.setItem(STORAGE_LIBRARY_KEY, JSON.stringify(updatedAppletsData));
       dispatch(library.actions.setAppletsFromStorage(updatedAppletsData));
     }
     handleModalClose();

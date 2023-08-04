@@ -236,6 +236,7 @@ export type DatavizActivity = {
   id: string;
   name: string;
   isPerformanceTask: boolean;
+  hasAnswer: boolean;
 };
 
 export type ReviewActivity = DatavizActivity & {
@@ -342,7 +343,6 @@ export type ReportConfig = {
   reportPublicKey: string;
   reportRecipients: string[];
   reportIncludeUserId: boolean;
-  reportIncludeCaseId: boolean;
   reportEmailBody: string;
 };
 
@@ -378,4 +378,10 @@ export type Version = {
 export type Response<T> = {
   count: number;
   result: T[];
+};
+
+export type LatestReport = {
+  appletId: string;
+  activityId: string;
+  respondentId: string;
 };

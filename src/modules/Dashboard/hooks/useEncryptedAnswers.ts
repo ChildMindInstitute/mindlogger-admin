@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { auth } from 'redux/modules';
 import { applet } from 'shared/state';
 import { encryptData, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
-import { useEncryptionCheckFromStorage } from 'shared/hooks';
+import { useEncryptionStorage } from 'shared/hooks';
 import { AnswerDTO } from 'shared/types';
 
 export const useEncryptedAnswers = () => {
@@ -13,7 +13,7 @@ export const useEncryptedAnswers = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const encryption = appletData?.encryption || null;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const { getAppletPrivateKey } = useEncryptionStorage();
   if (!encryptionInfoFromServer) return () => [];
 
   const { prime, base } = encryptionInfoFromServer;

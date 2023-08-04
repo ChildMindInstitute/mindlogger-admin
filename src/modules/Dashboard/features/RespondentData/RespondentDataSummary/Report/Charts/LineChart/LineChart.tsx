@@ -9,8 +9,8 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 import { getOptionTextApi } from 'api';
 import { useAsync } from 'shared/hooks';
-import { FilterFormValues } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
+import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
 import { LINK_PATTERN, locales, TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../Charts.const';
 import { getOptions, getData } from './LineChart.utils';
@@ -29,7 +29,7 @@ export const LineChart = ({ data, versions }: LineChartProps) => {
   const [tooltipData, setTooltipData] = useState<TooltipData[] | null>(null);
 
   const { execute: getOptionText } = useAsync(getOptionTextApi);
-  const { watch } = useFormContext<FilterFormValues>();
+  const { watch } = useFormContext<SummaryFiltersForm>();
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
   const lang = i18n.language as keyof typeof locales;

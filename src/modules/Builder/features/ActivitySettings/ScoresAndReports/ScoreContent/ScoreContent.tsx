@@ -153,6 +153,7 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
         columns={scoreItemsColumns}
         selectedItemsColumns={selectedItemsColumns}
         hasSelectedSection
+        searchKey="label"
         hasSearch
         sxProps={{ mb: theme.spacing(2.5) }}
         isValueName

@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -9,18 +10,17 @@ import {
   variables,
 } from 'shared/styles';
 import { useRespondentLabel } from 'modules/Dashboard/hooks';
+import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/context';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledActivity } from './ReportMenu.styles';
 import { ReportMenuProps } from './ReportMenu.types';
 
-export const ReportMenu = ({
-  activities,
-  selectedActivity,
-  setSelectedActivity,
-}: ReportMenuProps) => {
+export const ReportMenu = ({ activities }: ReportMenuProps) => {
   const { t } = useTranslation();
   const respondentLabel = useRespondentLabel();
+
+  const { selectedActivity, setSelectedActivity } = useContext(RespondentDataContext);
 
   return (
     <StyledMenu>

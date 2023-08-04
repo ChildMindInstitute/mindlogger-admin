@@ -1,27 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Encryption } from 'shared/utils';
+import { Encryption, getEncryptionToServer } from 'shared/utils';
 import { Modal } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledModalWrapper } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
-import { popups, applet } from 'redux/modules';
+import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
+import { popups, applet, auth } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { duplicateAppletApi, getAppletUniqueNameApi } from 'api';
 
-import { AppletPasswordPopupType, AppletPasswordPopup } from '../AppletPasswordPopup';
+import {
+  AppletPasswordPopupType,
+  AppletPasswordPopup,
+  AppletPasswordRefType,
+} from '../AppletPasswordPopup';
 
 export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => void }) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-
+  const userData = auth.useData();
+  const { id: accountId } = userData?.user || {};
+  const setAppletPrivateKey = useAppletPrivateKeySetter();
   const { duplicatePopupsVisible, applet: appletData } = popups.useData();
   const { result } = applet.useAppletData() || {};
   const currentApplet = appletData || result;
+  const encryptionDataRef = useRef<{
+    encryption?: Encryption;
+    password?: string;
+  }>({});
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
@@ -40,12 +51,20 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   const { execute: executeDuplicate } = useAsync(
     duplicateAppletApi,
     () => {
+      setAppletPrivateKey({
+        appletPassword: encryptionDataRef.current.password ?? '',
+        encryption: encryptionDataRef.current.encryption!,
+        appletId: currentApplet?.id as string,
+      });
       setPasswordModalVisible(false);
       setSuccessModalVisible(true);
     },
     () => {
       setPasswordModalVisible(false);
       setErrorModalVisible(true);
+    },
+    () => {
+      encryptionDataRef.current = {};
     },
   );
 
@@ -83,7 +102,13 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
   };
 
-  const submitCallback = (encryption: Encryption) => {
+  const submitCallback = (ref?: AppletPasswordRefType) => {
+    const password = ref?.current?.password ?? '';
+    const encryption = getEncryptionToServer(password, accountId ?? '');
+    encryptionDataRef.current = {
+      encryption,
+      password,
+    };
     executeDuplicate({
       appletId: currentApplet?.id as string,
       options: {

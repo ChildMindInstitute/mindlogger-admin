@@ -3,16 +3,19 @@ import { useRef, useState } from 'react';
 import { postFileUploadApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import { falseReturnFunc, getUploadFormData } from 'shared/utils';
-import { VALID_IMAGE_TYPES } from 'shared/consts';
+import { MediaType } from 'shared/consts';
 
 import { SourceLinkModalForm } from '../SourceLinkModal';
 import { UploadMethodsProps } from './Extensions.types';
+import { checkImgUrl } from './Extensions.utils';
+import { validFileExtensionsByType } from './Extensions.const';
 
 export const useUploadMethods = ({
   insertHandler,
   setFileSizeExceeded,
   fileSizeExceeded,
-  setIncorrectImageFormat,
+  setIncorrectFormat,
+  type,
 }: UploadMethodsProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -33,13 +36,25 @@ export const useUploadMethods = ({
       inputRef.current = null;
     },
   );
+  const [sourceError, setSourceError] = useState('');
 
-  const handlePopupSubmit = (formData: SourceLinkModalForm) => {
+  const handlePopupSubmit = async (formData: SourceLinkModalForm) => {
+    if (type === MediaType.Image) {
+      const isImgUrl = await checkImgUrl(formData.address);
+      if (!isImgUrl) {
+        setSourceError('invalidLink');
+
+        return;
+      }
+    }
+
+    setSourceError('');
     setIsPopupVisible(false);
     insertHandler(formData);
   };
 
   const handlePopupClose = () => {
+    setSourceError('');
     setIsPopupVisible(false);
   };
 
@@ -59,12 +74,10 @@ export const useUploadMethods = ({
       return setFileSizeExceeded(fileSizeExceeded);
     }
 
-    if (setIncorrectImageFormat && file.type.includes('image')) {
-      const fileExtension = file.name.split('.').pop()?.toLowerCase();
-
-      if (!VALID_IMAGE_TYPES.includes(`.${fileExtension}`)) {
-        return setIncorrectImageFormat(true);
-      }
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    const validFileExtensions = type ? validFileExtensionsByType[type] : [];
+    if (!validFileExtensions.includes(`.${fileExtension}`)) {
+      return setIncorrectFormat(type);
     }
 
     const body = getUploadFormData(file);
@@ -76,6 +89,7 @@ export const useUploadMethods = ({
     isVisible,
     setIsVisible,
     isPopupVisible,
+    sourceError,
     handlePopupSubmit,
     handlePopupClose,
     onAddLinkClick,

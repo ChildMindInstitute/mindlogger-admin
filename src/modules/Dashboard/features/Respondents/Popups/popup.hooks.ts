@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-import { useEncryptionCheckFromStorage } from 'shared/hooks';
+import { useEncryptionStorage } from 'shared/hooks';
 
-import { useCheckIfHasEncryptionProps } from './popups.types';
+import { useCheckIfHasEncryptionProps } from './Popups.types';
 
 export const useCheckIfHasEncryption = ({ appletData, callback }: useCheckIfHasEncryptionProps) => {
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
+  const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletData?.appletId ?? '');
 
   useEffect(() => {

@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal, CreateAppletPassword, EnterAppletPassword } from 'shared/components';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
-import { Encryption } from 'shared/utils';
 
 import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
 import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
@@ -18,10 +17,8 @@ export const AppletPasswordPopup = ({
   const { t } = useTranslation('app');
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
-  const handleSubmitCallback = (generatedEncryption?: Encryption) => {
-    const encryptionData =
-      popupType === AppletPasswordPopupType.Create ? generatedEncryption : encryption;
-    submitCallback(encryptionData!, appletPasswordRef);
+  const handleSubmitCallback = () => {
+    submitCallback(appletPasswordRef);
   };
 
   return (

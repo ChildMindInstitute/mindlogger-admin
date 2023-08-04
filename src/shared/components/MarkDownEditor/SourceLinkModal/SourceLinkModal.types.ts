@@ -10,6 +10,7 @@ export type SourceLinkModalForm = {
 
 export type SourceLinkModalProps = {
   title: string;
+  error?: string;
   handleClose: () => void;
   handleSubmit: (formData: SourceLinkModalForm) => void;
 };

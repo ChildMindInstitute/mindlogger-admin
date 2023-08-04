@@ -16,7 +16,7 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { DataExportPopupProps } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { useCheckIfHasEncryption } from '../popup.hooks';
+import { useCheckIfHasEncryption } from '../Popup.hooks';
 
 export const DataExportPopup = ({
   popupVisible,
@@ -30,6 +30,9 @@ export const DataExportPopup = ({
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
   const handleDataExportSubmit = async () => {
+    if (dataIsExporting) {
+      return;
+    }
     const { appletId, respondentId } = chosenAppletData || {};
 
     if (appletId && respondentId) {
@@ -38,6 +41,7 @@ export const DataExportPopup = ({
       await execute({ appletId, respondentIds: respondentId });
     }
   };
+
   const hasEncryptionCheck = useCheckIfHasEncryption({
     appletData: chosenAppletData,
     callback: handleDataExportSubmit,

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
 import get from 'lodash.get';
@@ -10,7 +10,6 @@ import {
   useCallbackPrompt,
   useCheckIfNewApplet,
   usePromptSetup,
-  useEncryptionCheckFromStorage,
   useRemoveAppletData,
   useLogout,
 } from 'shared/hooks';
@@ -19,8 +18,10 @@ import {
   builderSessionStorage,
   Encryption,
   getDictionaryObject,
+  getEncryptionToServer,
   getUpdatedAppletUrl,
 } from 'shared/utils';
+import { REPORT_CONFIG_PARAM } from 'shared/consts';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
 import { auth, workspaces } from 'redux/modules';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
@@ -28,8 +29,8 @@ import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPu
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { AppletFormValues } from 'modules/Builder/types';
+import { reportConfig } from 'modules/Builder/state';
 
-import { appletInfoMocked } from './mock';
 import {
   removeAppletExtraFields,
   removeActivityExtraFields,
@@ -49,7 +50,6 @@ export const getAppletInfoFromStorage = () => {
 };
 
 export const useAppletData = () => {
-  const isNewApplet = useCheckIfNewApplet();
   const { getValues } = useFormContext();
 
   return (encryption?: Encryption): SingleApplet => {
@@ -58,10 +58,7 @@ export const useAppletData = () => {
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
 
-    const defaultAppletInfo = isNewApplet ? appletInfoMocked : {};
-
     return {
-      ...defaultAppletInfo,
       ...appletInfo,
       activities: appletInfo?.activities.map(
         (activity) =>
@@ -241,6 +238,7 @@ export const useUpdatedAppletNavigate = () => {
 
 export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const { trigger } = useFormContext();
+  const { pathname } = useLocation();
   const getAppletData = useAppletData();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
@@ -263,7 +261,6 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     isLogoutInProgress,
   } = usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
-  const { getAppletPrivateKey } = useEncryptionCheckFromStorage();
   const { ownerId } = workspaces.useData() || {};
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
   const { result: appletData } = applet.useAppletData() ?? {};
@@ -271,6 +268,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const removeAppletData = useRemoveAppletData();
   const handleLogout = useLogout();
+  const { hasChanges: hasReportConfigChanges } = reportConfig.useReportConfigChanges() || {};
 
   useEffect(() => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
@@ -316,6 +314,12 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     const hasErrorsInFields = await checkIfHasErrorsInFields();
     setPublishProcessPopupOpened(true);
 
+    if (pathname.includes(REPORT_CONFIG_PARAM) && hasReportConfigChanges) {
+      setPublishProcessStep(SaveAndPublishSteps.ReportConfigSave);
+
+      return;
+    }
+
     if (hasNoActivities) {
       setPublishProcessStep(SaveAndPublishSteps.AtLeastOneActivity);
 
@@ -354,8 +358,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   };
 
   const sendRequestWithPasswordCheck = async () => {
-    const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
-    if (!hasEncryptionCheck) {
+    if (isNewApplet) {
       setIsPasswordPopupOpened(true);
 
       return;
@@ -363,12 +366,12 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     await sendRequest();
   };
 
-  const handleAppletPasswordSubmit = async (encryption?: Encryption, password?: string) => {
-    await sendRequest(encryption, password);
+  const handleAppletPasswordSubmit = async (password?: string) => {
+    await sendRequest(password);
   };
 
-  const sendRequest = async (encryption?: Encryption, password?: string) => {
-    const encryptionData = encryption || appletEncryption;
+  const sendRequest = async (password?: string) => {
+    const encryptionData = password ? getEncryptionToServer(password, ownerId!) : appletEncryption;
     setPublishProcessPopupOpened(true);
     const body = getAppletData(encryptionData);
 
@@ -400,10 +403,10 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
       const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
 
-      if (encryption && password && appletId) {
+      if (encryptionData && password && createdAppletId) {
         setAppletPrivateKey({
           appletPassword: password,
-          encryption,
+          encryption: encryptionData,
           appletId: createdAppletId,
         });
       }
@@ -421,7 +424,6 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
   };
 
   return {
-    isNewApplet,
     isPasswordPopupOpened,
     isPublishProcessPopupOpened,
     publishProcessStep,

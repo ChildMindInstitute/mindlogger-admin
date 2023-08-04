@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@mui/material';
 
 import { postReportConfigApi } from 'api';
 import { applet } from 'redux/modules';
@@ -14,7 +15,13 @@ import {
   TagsController,
   UiType,
 } from 'shared/components/FormComponents';
-import { theme, variables, StyledBodyLarge, StyledTitleMedium } from 'shared/styles';
+import {
+  theme,
+  variables,
+  StyledBodyLarge,
+  StyledTitleMedium,
+  StyledFlexColumn,
+} from 'shared/styles';
 import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
@@ -22,22 +29,27 @@ import {
 } from 'modules/Dashboard/features/Applet';
 import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'shared/utils';
+import { reportConfig } from 'modules/Builder/state';
 
 import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
-import { StyledButton, StyledSvg, StyledContainer, StyledForm } from './ReportConfigSetting.styles';
+import { StyledButton, StyledSvg, StyledLink } from './ReportConfigSetting.styles';
 import { ReportConfigFormValues, ReportConfigSettingProps } from './ReportConfigSetting.types';
 import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
-import { getDefaultValues } from './ReportConfigSetting.utils';
+import { getDefaultValues, setSubjectData } from './ReportConfigSetting.utils';
 import { useCheckReportServer } from './ReportConfigSetting.hooks';
 import { usePrompt } from '../AppletSettings.hooks';
+import { REPORT_SERVER_INSTRUCTIONS_LINK } from './ReportConfigSetting.const';
 
 export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConfigSettingProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
+  const { saveChanges, doNotSaveChanges } = reportConfig.useReportConfigChanges() || {};
+  const { resetReportConfigChanges, setReportConfigChanges } = reportConfig.actions;
+  const isServerConfigured = useIsServerConfigured();
 
-  const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [isSettingsOpen, setSettingsOpen] = useState(!isServerConfigured);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
   const [successPopupVisible, setSuccessPopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
@@ -69,35 +81,20 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
     trigger,
     reset,
     formState: { isDirty, isSubmitted, defaultValues },
+    setError,
+    clearErrors,
   } = useForm<ReportConfigFormValues>({
     resolver: yupResolver(reportConfigSchema()),
     defaultValues: getDefaultValues(appletData),
     mode: 'onSubmit',
   });
 
-  useEffect(() => {
-    if (successPopupVisible && isDashboard) {
-      dispatch(getApplet({ appletId: appletData?.id ?? '' }));
-    }
-
-    if (successPopupVisible && onSubmitSuccess) {
-      onSubmitSuccess(getValues());
-    }
-  }, [successPopupVisible]);
-
-  useEffect(() => {
-    reset(appletData);
-  }, [appletData]);
-
   const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
 
   const reportRecipients = watch('reportRecipients') || [];
-  const respondentId = watch('reportIncludeUserId');
-  const caseId = watch('reportIncludeCaseId');
+  const includeRespondentId = watch('reportIncludeUserId');
   const reportServerUrl = watch('reportServerIp');
   const reportPublicKey = watch('reportPublicKey');
-
-  const isServerConfigured = useIsServerConfigured();
 
   const { onVerify, onSetPassword } = useCheckReportServer({
     url: reportServerUrl,
@@ -142,7 +139,6 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
       reportPublicKey,
       reportRecipients,
       reportIncludeUserId,
-      reportIncludeCaseId,
       reportEmailBody,
     } = getValues() ?? {};
 
@@ -151,7 +147,6 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
       reportPublicKey,
       reportRecipients,
       reportIncludeUserId,
-      reportIncludeCaseId,
       reportEmailBody,
     };
 
@@ -167,9 +162,14 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
 
   const handleVerify = async () => {
     const isVerified = await onVerify();
+    if (isVerified) {
+      clearErrors(['reportServerIp', 'reportPublicKey']);
 
-    if (isVerified) return setPasswordPopupVisible(true);
+      return setPasswordPopupVisible(true);
+    }
 
+    setError('reportServerIp', {});
+    setError('reportPublicKey', {});
     setVerifyPopupVisible(true);
   };
 
@@ -198,12 +198,13 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
     handleSaveReportConfig();
   };
 
-  const passwordSubmit: AppletPasswordPopupProps['submitCallback'] = (_, passwordRef) => {
+  const passwordSubmit: AppletPasswordPopupProps['submitCallback'] = (passwordRef) => {
     handleSetPassword(passwordRef.current?.password ?? '');
   };
 
   const handleSaveChanges = () => {
     handleSubmit(onSubmit)();
+    dispatch(resetReportConfigChanges());
   };
 
   const handleSuccessPopupClose = () => {
@@ -217,86 +218,88 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
 
   const handleDontSave = () => {
     reset(getDefaultValues(appletData));
+    dispatch(resetReportConfigChanges());
     confirmNavigation();
   };
 
   useEffect(() => {
-    let subject = 'REPORT';
-    if (respondentId) {
-      subject += ' by [Respondent ID]';
+    if (successPopupVisible && isDashboard) {
+      dispatch(getApplet({ appletId: appletData?.id ?? '' }));
     }
-    if (caseId) {
-      subject += ' about [Case ID]';
+
+    if (successPopupVisible && onSubmitSuccess) {
+      onSubmitSuccess(getValues());
     }
-    subject += ': [Applet Name] / [Activity Name]';
-    setValue('subject', subject);
-  }, [respondentId, caseId]);
+  }, [successPopupVisible]);
+
+  useEffect(() => {
+    reset(getDefaultValues(appletData));
+    setSubjectData(setValue, includeRespondentId);
+  }, [appletData]);
+
+  useEffect(() => {
+    setSubjectData(setValue, includeRespondentId);
+  }, [includeRespondentId]);
+
+  useEffect(() => {
+    dispatch(setReportConfigChanges({ hasChanges: isDirty && !isSubmitted }));
+  }, [isDirty, isSubmitted]);
+
+  useEffect(() => {
+    if (!saveChanges) return;
+
+    handleSaveChanges();
+  }, [saveChanges]);
+
+  useEffect(() => {
+    if (!doNotSaveChanges) return;
+
+    handleDontSave();
+  }, [doNotSaveChanges]);
 
   return (
     <>
-      <StyledForm noValidate onSubmit={handleSubmit(onSubmit)}>
+      <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <StyledHeadline sx={{ marginRight: theme.spacing(2.4) }}>
           {t('reportConfiguration')}
         </StyledHeadline>
-        <StyledContainer>
-          <StyledTitleMedium sx={{ marginBottom: theme.spacing(2.4) }}>
-            {t('emailConfiguration')}
-          </StyledTitleMedium>
-          <TagsController
-            name="email"
-            control={control}
-            label={t('recipients')}
-            tags={reportRecipients}
-            onAddTagClick={handleAddEmail}
-            onRemoveTagClick={handleRemoveEmail}
-            uiType={UiType.Secondary}
-            helperText={t('enterRecipientsEmails')}
-          />
-          <StyledTitleMedium sx={{ margin: theme.spacing(4.8, 0, 1.2) }}>
-            {t('includeInEmail')}
-          </StyledTitleMedium>
-          <CheckboxController
-            control={control}
-            sx={{ marginLeft: theme.spacing(1.4) }}
-            name="reportIncludeUserId"
-            label={<StyledBodyLarge>{t('respondentId')}</StyledBodyLarge>}
-          />
-          <CheckboxController
-            control={control}
-            sx={{ marginLeft: theme.spacing(1.4) }}
-            name="reportIncludeCaseId"
-            label={<StyledBodyLarge>{t('caseId')}</StyledBodyLarge>}
-          />
-          <InputController
-            inputProps={{ readOnly: true, className: 'read-only' }}
-            control={control}
-            name="subject"
-            label={t('subjectPreview')}
-            multiline
-            rows={2}
-            sx={{ margin: theme.spacing(4.8, 0) }}
-          />
-        </StyledContainer>
-        <EditorController control={control} name="reportEmailBody" />
-        <StyledContainer>
-          <StyledButton
-            disableRipple
-            onClick={() => setSettingsOpen((prevState) => !prevState)}
-            endIcon={
-              <StyledSvg>
-                <Svg id={isSettingsOpen ? 'navigate-up' : 'navigate-down'} />
-              </StyledSvg>
+        <StyledFlexColumn sx={{ maxWidth: '55.7rem' }}>
+          <Box>
+            <StyledButton
+              disableRipple
+              onClick={() => setSettingsOpen((prevState) => !prevState)}
+              endIcon={
+                <StyledSvg>
+                  <Svg id={isSettingsOpen ? 'navigate-up' : 'navigate-down'} />
+                </StyledSvg>
+              }
+            >
+              <StyledTitleMedium color={variables.palette.on_surface}>
+                {t('serverConfiguration')}
+              </StyledTitleMedium>
+            </StyledButton>
+          </Box>
+          <StyledBodyLarge
+            sx={{ margin: theme.spacing(2.4, 0, isSettingsOpen ? 2.4 : 4.8) }}
+            color={
+              isServerConfigured
+                ? variables.palette.semantic.green
+                : variables.palette.semantic.error
             }
           >
-            <StyledTitleMedium>{t('advancedSettings')}</StyledTitleMedium>
-          </StyledButton>
+            {t(isServerConfigured ? 'serverStatusConfigured' : 'serverStatusNotConfigured')}
+          </StyledBodyLarge>
           {isSettingsOpen && (
-            <>
-              <StyledBodyLarge
-                color={variables.palette.on_surface_variant}
-                sx={{ marginTop: theme.spacing(2.4) }}
-              >
-                {t('configureServerURL')}
+            <Box sx={{ mb: theme.spacing(2.4) }}>
+              <StyledBodyLarge color={variables.palette.on_surface_variant}>
+                <Trans i18nKey="configureServerURL">
+                  For Security reasons, you must configure the Server URL (IP Address) and Public
+                  Encryption Key to generate and email reports.
+                  <StyledLink href={REPORT_SERVER_INSTRUCTIONS_LINK} target="_blank">
+                    See here for instructions.
+                  </StyledLink>
+                  .
+                </Trans>
               </StyledBodyLarge>
               <InputController
                 control={control}
@@ -312,19 +315,56 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
                 multiline
                 rows={4}
               />
-            </>
+            </Box>
           )}
-          <StyledBodyLarge
-            sx={{ margin: theme.spacing(2.4, 0, 3.2) }}
-            color={
-              isServerConfigured
-                ? variables.palette.semantic.green
-                : variables.palette.semantic.error
-            }
+        </StyledFlexColumn>
+        <StyledFlexColumn sx={{ maxWidth: '81.8rem' }}>
+          <StyledTitleMedium
+            color={variables.palette.on_surface}
+            sx={{ marginBottom: theme.spacing(1.2) }}
           >
-            {t(isServerConfigured ? 'serverStatusConfigured' : 'serverStatusNotConfigured')}
-          </StyledBodyLarge>
-        </StyledContainer>
+            {t('sendReportTo')}
+          </StyledTitleMedium>
+          <TagsController
+            name="email"
+            control={control}
+            tags={reportRecipients}
+            onAddTagClick={handleAddEmail}
+            onRemoveTagClick={handleRemoveEmail}
+            uiType={UiType.Secondary}
+            inputLabel={t('addRecipients')}
+          />
+          <StyledTitleMedium
+            color={variables.palette.on_surface}
+            sx={{ m: theme.spacing(4.8, 0, 1.2) }}
+          >
+            {t('includeInEmail')}
+          </StyledTitleMedium>
+          <CheckboxController
+            control={control}
+            sx={{ ml: theme.spacing(1.4) }}
+            name="reportIncludeUserId"
+            label={<StyledBodyLarge>{t('respondentId')}</StyledBodyLarge>}
+          />
+          <StyledTitleMedium
+            color={variables.palette.on_surface}
+            sx={{ m: theme.spacing(4.8, 0, 1.2) }}
+          >
+            {t('subjectPreview')}
+          </StyledTitleMedium>
+          <InputController
+            control={control}
+            name="subject"
+            sx={{ pointerEvents: 'none', backgroundColor: variables.palette.surface1 }}
+          />
+          <StyledTitleMedium
+            color={variables.palette.on_surface}
+            sx={{ m: theme.spacing(4.8, 0, 1.2) }}
+          >
+            {t('emailBody')}
+          </StyledTitleMedium>
+          <EditorController control={control} name="reportEmailBody" />
+        </StyledFlexColumn>
         <StyledAppletSettingsButton
           variant="outlined"
           type="submit"
@@ -332,7 +372,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
         >
           {t('save')}
         </StyledAppletSettingsButton>
-      </StyledForm>
+      </form>
       {passwordPopupVisible && (
         <AppletPasswordPopup
           appletId={appletData?.id ?? ''}

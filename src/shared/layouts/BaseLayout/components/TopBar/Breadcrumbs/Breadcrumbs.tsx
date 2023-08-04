@@ -15,6 +15,7 @@ import {
   StyledIconWrapper,
   StyledPlaceholder,
   StyledIconImg,
+  StyledChip,
 } from './Breadcrumbs.styles';
 import { BREADCRUMB_ICON_SIZE } from './Breadcrumbs.const';
 
@@ -45,7 +46,7 @@ export const Breadcrumbs = () => {
 
   return (
     <MuiBreadcrumbs separator={<Svg id="separator" width="8" height="12" />}>
-      {breadcrumbsData?.map(({ icon, label, navPath, disabledLink, hasUrl, key }, index) =>
+      {breadcrumbsData?.map(({ icon, label, chip, navPath, disabledLink, hasUrl, key }, index) =>
         index === breadcrumbsData.length - 1 || disabledLink ? (
           <StyledBox key={key}>
             {getBreadcrumbIcon(icon, label, hasUrl)}
@@ -61,6 +62,13 @@ export const Breadcrumbs = () => {
           <StyledLink key={key} to={navPath || ''}>
             {getBreadcrumbIcon(icon, label, hasUrl)}
             <StyledBodySmall color={variables.palette.on_surface_variant}>{label}</StyledBodySmall>
+            {chip && (
+              <StyledChip>
+                <StyledBodySmall color={variables.palette.on_surface_variant}>
+                  {chip}
+                </StyledBodySmall>
+              </StyledChip>
+            )}
           </StyledLink>
         ),
       )}

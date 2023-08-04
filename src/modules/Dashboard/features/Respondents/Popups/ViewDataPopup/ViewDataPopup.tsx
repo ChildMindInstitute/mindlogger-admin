@@ -8,7 +8,7 @@ import { page } from 'resources';
 
 import { ViewDataPopupProps } from './ViewDataPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { useCheckIfHasEncryption } from '../popup.hooks';
+import { useCheckIfHasEncryption } from '../Popup.hooks';
 
 export const ViewDataPopup = ({
   popupVisible,
@@ -21,6 +21,11 @@ export const ViewDataPopup = ({
   const navigate = useNavigate();
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
+  const handlePopupClose = () => {
+    setChosenAppletData(null);
+    setPopupVisible(false);
+  };
+
   const handleSubmitCallback = () => {
     if (chosenAppletData) {
       const { appletId, respondentId } = chosenAppletData;
@@ -29,17 +34,11 @@ export const ViewDataPopup = ({
 
     handlePopupClose();
   };
-
   const hasEncryptionCheck = useCheckIfHasEncryption({
     appletData: chosenAppletData,
     callback: handleSubmitCallback,
   });
   const showSecondScreen = !!chosenAppletData && !hasEncryptionCheck;
-
-  const handlePopupClose = () => {
-    setChosenAppletData(null);
-    setPopupVisible(false);
-  };
 
   return (
     <Modal

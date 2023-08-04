@@ -11,6 +11,7 @@ export const Chip = ({
   onRemove,
   canRemove = true,
   onClick,
+  sxProps,
 }: ChipProps) => (
   <StyledChip
     shape={shape}
@@ -26,5 +27,6 @@ export const Chip = ({
     icon={icon || undefined}
     onDelete={onRemove}
     onClick={onClick}
+    sx={sxProps}
   />
 );

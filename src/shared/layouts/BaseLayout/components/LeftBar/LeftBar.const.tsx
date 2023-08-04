@@ -9,13 +9,6 @@ export const links = [
     labelKey: 'dashboard',
   },
   {
-    icon: <Svg id="builder" />,
-    activeIcon: <Svg id="builder-filled" />,
-    link: page.builder,
-    labelKey: 'builder',
-    disabled: true,
-  },
-  {
     icon: <Svg id="library" />,
     activeIcon: <Svg id="library" />,
     link: page.library,
