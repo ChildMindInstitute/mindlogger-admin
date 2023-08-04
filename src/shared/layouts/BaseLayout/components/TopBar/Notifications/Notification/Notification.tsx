@@ -78,10 +78,9 @@ export const Notification = ({
 
   const navigateToResponseData = () => {
     navigate(
-      generatePath(page.appletRespondentDataSummaryPerActivity, {
+      generatePath(page.appletRespondentDataSummary, {
         appletId,
         respondentId,
-        activityId: alert.activityId,
       }),
     );
   };
