@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { getEntityKey } from 'shared/utils';
@@ -23,8 +24,9 @@ export const ConditionRow = ({
   onRemove,
   type = ConditionRowType.Item,
   scoreId,
+  autoTrigger,
 }: ConditionRowProps) => {
-  const { control, setValue, watch } = useFormContext();
+  const { control, setValue, watch, trigger } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
   const conditionsName = `${name}.conditions`;
@@ -48,6 +50,10 @@ export const ConditionRow = ({
   )?.responseType;
 
   const selectedItem = items?.find((item: ItemFormValues) => getEntityKey(item) === conditionItem);
+
+  useEffect(() => {
+    if (autoTrigger) trigger(`${name}.itemKey`);
+  }, [selectedItem, autoTrigger]);
 
   const handleChangeConditionItemName = (e: SelectEvent) => {
     const itemResponseType = items?.find(

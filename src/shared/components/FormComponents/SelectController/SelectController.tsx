@@ -13,6 +13,7 @@ import { StyledPlaceholder, StyledItem, StyledMenuItem } from './SelectControlle
 export const SelectController = <T extends FieldValues>({
   name,
   control,
+  error: providedError,
   options,
   value: selectValue,
   customChange,
@@ -66,7 +67,7 @@ export const SelectController = <T extends FieldValues>({
         select
         onChange={onChange}
         value={selectValue}
-        error={!!error}
+        error={!!error || providedError}
         helperText={error?.message || null}
         disabled={disabled}
       >

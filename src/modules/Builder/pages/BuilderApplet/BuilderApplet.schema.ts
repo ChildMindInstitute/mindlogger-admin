@@ -2,7 +2,11 @@ import * as yup from 'yup';
 import get from 'lodash/get';
 
 import i18n from 'i18n';
-import { getIsRequiredValidateMessage, getMaxLengthValidationError } from 'shared/utils';
+import {
+  getEntityKey,
+  getIsRequiredValidateMessage,
+  getMaxLengthValidationError,
+} from 'shared/utils';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
@@ -23,7 +27,7 @@ import {
   RoundTypeEnum,
   TouchItemNames,
 } from 'modules/Builder/types';
-import { Config } from 'shared/state';
+import { Condition, Config, Item } from 'shared/state';
 import {
   ItemConfigurationSettings,
   SLIDER_LABEL_MAX_LENGTH,
@@ -452,7 +456,22 @@ export const ConditionSchema = () =>
 export const ConditionalLogicSchema = () =>
   yup.object({
     match: yup.string().required(getIsRequiredValidateMessage('conditionMatch')),
-    itemKey: yup.string().required(getIsRequiredValidateMessage('conditionTarget')),
+    itemKey: yup
+      .string()
+      .required(getIsRequiredValidateMessage('conditionTarget'))
+      .test(
+        'item-flow-contradiction',
+        t('appletHasItemFlowContradictions') as string,
+        (itemKey, context) => {
+          const items = get(context, 'from.1.value.items');
+          const conditions = get(context, 'parent.conditions');
+          const itemIds = items?.map((item: Item) => getEntityKey(item));
+          const itemIndex = itemIds?.findIndex((id: string) => id === itemKey);
+          const itemsBefore = itemIds?.slice(0, itemIndex + 1);
+
+          return !conditions?.some(({ itemName }: Condition) => !itemsBefore.includes(itemName));
+        },
+      ),
     conditions: yup.array().of(ConditionSchema()),
   });
 
