@@ -153,7 +153,7 @@
   "agreementAppletAvailability": "I agree that the contents of this Applet will be available for other MindLogger users to use in their own Applets. Only Applet content is shared. No user information is shared.",
   "share": "Share",
   "appletIsSharedWithLibrary": "Applet is shared with the Library successfully",
-  "appletLink": "Applet link",
+  "copyAppletLink": "Copy Applet Link",
   "stopSharing": "Stop sharing",
   "appletNameAlreadyTaken": "This Applet name is already taken in the Library. Please rename the Applet to share it. <br />Note: This will change the name of the Applet for your users.",
   "appletNameRequired": "Applet Name is required",

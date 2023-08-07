@@ -4,5 +4,5 @@ export type SuccessSharedProps = {
   keywords: string[];
   appletLink: string;
   img?: string;
-  activitiesQuantity?: number;
+  activitiesQuantity?: number | null;
 };

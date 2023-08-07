@@ -4,6 +4,8 @@ import { variables, theme } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledTextField = styled(TextField, shouldForwardProp)`
+  width: 100%;
+
   ${({ isSecondaryUiType }: { isSecondaryUiType: boolean }) =>
     isSecondaryUiType &&
     `
