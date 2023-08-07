@@ -2,16 +2,17 @@ import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
-import { account } from 'modules/Dashboard/state';
+import { Spinner, Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
-import { getAppletData, getDateInUserTimezone } from 'shared/utils';
+import { getDateInUserTimezone } from 'shared/utils';
 import {
   variables,
   StyledLabelBoldLarge,
   StyledTitleSmall,
   StyledFlexTopCenter,
+  StyledObserverTarget,
 } from 'shared/styles';
+import { alerts } from 'shared/state';
 
 import { Notification, NotificationProps } from './Notification';
 import {
@@ -21,12 +22,15 @@ import {
   StyledCollapseBtn,
   StyledList,
   StyledCentered,
+  StyledBox,
 } from './Notifications.styles';
-import { NotificationsProps } from './Notifications.types';
+import { ALERT_LIST_CLASS, ALERT_END_ITEM_CLASS } from './Notifications.const';
+import { useInfinityData } from './Notifications.hooks';
 
-export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Element => {
+export const Notifications = () => {
   const { t } = useTranslation('app');
-  const accData = account.useData();
+  const { result: alertList = [], notWatched = 0 } = alerts.useAlertsData() ?? {};
+  const alertListStatus = alerts.useAlertsStatus() ?? {};
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
     Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null
@@ -36,29 +40,17 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
   const timeAgo = useTimeAgo();
 
   useEffect(() => {
-    if (accData) {
-      const accAlerts = accData.account.alerts.list.map((alert) => {
-        const { alerts } = accData.account;
-        const { firstName, lastName = '', nickName } = alerts.profiles[alert.profileId];
-        const { name, image, encryption } = getAppletData([], alert.appletId);
+    if (!alertList.length) return;
 
-        return {
-          accountId: accData.account.accountId,
-          alertId: alert.id,
-          label: name || '',
-          title: firstName || lastName ? `${firstName} ${lastName}` : nickName,
-          message: alert.alertMessage,
-          imageSrc: image || null,
-          timeAgo: timeAgo.format(getDateInUserTimezone(alert.created), 'round'),
-          viewed: alert.viewed,
-          encryption: encryption || undefined,
-          appletId: alert.appletId,
-        };
-      });
+    const alerts = alertList.map((alert) => ({
+      ...alert,
+      timeAgo: timeAgo.format(getDateInUserTimezone(alert.createdAt), 'round'),
+      alert,
+    }));
+    setNotifications(alerts);
+  }, [alertList]);
 
-      // setNotifications(accAlerts);
-    }
-  }, [accData]);
+  useInfinityData();
 
   return (
     <Box>
@@ -70,9 +62,9 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
           <StyledLabelBoldLarge>{t('alerts')}</StyledLabelBoldLarge>
         </StyledHeaderLeft>
         <StyledFlexTopCenter>
-          {alertsQuantity > 0 && (
+          {notWatched > 0 && (
             <StyledLabelBoldLarge color={variables.palette.semantic.error}>
-              {`${alertsQuantity} ${t('unread')}`}
+              {`${notWatched} ${t('unread')}`}
             </StyledLabelBoldLarge>
           )}
           <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>
@@ -81,20 +73,26 @@ export const Notifications = ({ alertsQuantity }: NotificationsProps): JSX.Eleme
         </StyledFlexTopCenter>
       </StyledHeader>
       {showList && (
-        <StyledList>
-          {alertsQuantity === 0 && (
+        <StyledList className={ALERT_LIST_CLASS}>
+          {!notifications?.length && (
             <StyledCentered>
               <StyledTitleSmall>{t('noAlerts')}</StyledTitleSmall>
             </StyledCentered>
           )}
           {notifications?.map((item) => (
             <Notification
-              key={item.alertId}
+              key={item.id}
               currentId={currentId}
               setCurrentId={setCurrentId}
               {...item}
             />
           ))}
+          {alertListStatus === 'loading' && (
+            <StyledBox>
+              <Spinner />
+            </StyledBox>
+          )}
+          <StyledObserverTarget className={ALERT_END_ITEM_CLASS} />
         </StyledList>
       )}
     </Box>

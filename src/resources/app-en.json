@@ -666,6 +666,7 @@
   "appletHasEmptyRequiredFields": "Please fill in all required fields marked in red",
   "fillInAllRequired": "Please fill in all required fields",
   "appletHasErrorsInFields": "Please fix the errors in all fields marked in red",
+  "appletHasItemFlowContradictions": "Selected position of the Item in the list contradicts the Item Flow",
   "appletSavedAndPublished": "<0>Applet <1>{{name}}</1> has been successfully saved and published.</0>",
   "appletNotSavedAndPublished": "<0>Applet <1>{{name}}</1> has not been saved and published. Please try again.</0>",
   "timeRangeTitle": "Time Range",

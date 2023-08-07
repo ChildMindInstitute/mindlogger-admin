@@ -38,7 +38,6 @@ export const BuilderActivity = () => {
     hasActivitySubscalesErrors: !!getFieldState(`${fieldName}.subscaleSetting`).error,
     hasActivityItemsFlowErrors: !!getFieldState(`${fieldName}.conditionalLogic`).error,
   };
-  const tabsKey = Object.values(tabErrors).join('_');
 
   return (
     <StyledBuilderActivityBody sx={{ position: 'relative' }}>
@@ -50,9 +49,7 @@ export const BuilderActivity = () => {
         {t('activities')}
         <Badge variant="dot" invisible={!hasAppletErrors} color="error" />
       </StyledDirectoryUpButton>
-      {activityId && (
-        <LinkedTabs key={tabsKey} tabs={getActivityTabs({ activityId, appletId }, tabErrors)} />
-      )}
+      {activityId && <LinkedTabs tabs={getActivityTabs({ activityId, appletId }, tabErrors)} />}
     </StyledBuilderActivityBody>
   );
 };

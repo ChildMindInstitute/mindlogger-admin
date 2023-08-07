@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { generatePath, useNavigate } from 'react-router-dom';
 
+import { page } from 'resources';
+import { useEncryptionStorage } from 'shared/hooks';
 import { Svg } from 'shared/components';
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
-import { account } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
-import logoSrc from 'assets/images/logo.png';
-import { variables } from 'shared/styles/variables';
-import { StyledLabelMedium } from 'shared/styles/styledComponents';
+import { StyledLabelMedium, StyledLabelSmall, variables } from 'shared/styles';
+import { alerts } from 'shared/state';
+import { WorkspaceImage } from 'shared/features/SwitchWorkspace';
 
 import {
   StyledNotification,
   StyledLeftSection,
   StyledImageWrapper,
-  StyledImage,
   StyledInfo,
   StyledRightSection,
   StyledInfoCircle,
@@ -25,39 +26,73 @@ import {
   StyledTopSection,
   StyledBottomSection,
   StyledBtn,
+  StyledLogoPlug,
 } from './Notification.styles';
 import { NotificationProps } from './Notification.types';
 
 export const Notification = ({
   currentId,
   setCurrentId,
-  accountId,
-  alertId,
-  label,
-  title,
-  message,
-  imageSrc,
-  timeAgo,
-  viewed,
-  encryption,
+  id,
+  workspace,
   appletId,
+  appletName,
+  image,
+  secretId,
+  message,
+  timeAgo,
+  isWatched,
+  respondentId,
+  encryption,
+  alert,
 }: NotificationProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const isActive = currentId === alertId;
+  const isActive = currentId === id;
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
+  const navigate = useNavigate();
+  const { getAppletPrivateKey } = useEncryptionStorage();
+  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
 
   const handleNotificationClick = async () => {
-    const { updateAlertStatus } = account.thunk;
-    setCurrentId(isActive ? '' : alertId);
-    const result = await dispatch(updateAlertStatus({ alertId }));
+    const { setAlertWatched } = alerts.thunk;
+    setCurrentId(isActive ? '' : id);
 
-    if (updateAlertStatus.fulfilled.match(result)) {
-      await dispatch(account.thunk.switchAccount({ accountId }));
-    }
+    if (isWatched) return;
+
+    await dispatch(
+      alerts.actions.updateAlertWatchedState({
+        id: alert.id,
+        isWatched: true,
+      }),
+    );
+    const result = await dispatch(setAlertWatched(id));
+    !setAlertWatched.fulfilled.match(result) &&
+      (await dispatch(
+        alerts.actions.updateAlertWatchedState({
+          id: alert.id,
+          isWatched: false,
+        }),
+      ));
   };
 
-  const handleToResponseDataClick = () => setPasswordPopupVisible(true);
+  const navigateToResponseData = () => {
+    navigate(
+      generatePath(page.appletRespondentDataSummary, {
+        appletId,
+        respondentId,
+      }),
+    );
+  };
+  const handleToResponseDataClick = () => {
+    if (hasEncryptionCheck) return navigateToResponseData();
+    setPasswordPopupVisible(true);
+  };
+
+  const handleSubmit = () => {
+    setPasswordPopupVisible(false);
+    navigateToResponseData();
+  };
 
   return (
     <>
@@ -65,27 +100,41 @@ export const Notification = ({
         <StyledTopSection>
           <StyledLeftSection>
             <StyledImageWrapper>
-              {imageSrc && <StyledImage src={imageSrc} alt={label} />}
-              <StyledLogo src={logoSrc} alt={label} />
+              <WorkspaceImage
+                coverSxProps={{
+                  width: '4rem',
+                  height: '4rem',
+                  borderRadius: variables.borderRadius.half,
+                }}
+                workspaceName={workspace ?? ''}
+              />
+              {image ? (
+                <StyledLogo src={image} alt={appletName} />
+              ) : (
+                <StyledLogoPlug>
+                  <StyledLabelSmall color={variables.palette.on_surface}>
+                    {appletName.substring(0, 1).toUpperCase()}
+                  </StyledLabelSmall>
+                </StyledLogoPlug>
+              )}
             </StyledImageWrapper>
           </StyledLeftSection>
           <StyledInfo>
             <StyledLabelMedium
-              fontWeight={isActive ? 'regular' : 'bold'}
+              fontWeight={isWatched ? 'regular' : 'bold'}
               color={variables.palette.on_surface_variant}
             >
-              {label}
+              {appletName}
             </StyledLabelMedium>
             <StyledTitle
-              fontWeight={isActive ? 'regular' : 'bold'}
+              fontWeight={isWatched ? 'regular' : 'bold'}
               color={
                 isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
               }
             >
-              {title}
+              {secretId}
             </StyledTitle>
             <StyledMessage
-              fontWeight={isActive ? 'regular' : 'bold'}
               color={
                 isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
               }
@@ -94,7 +143,7 @@ export const Notification = ({
               {message}
             </StyledMessage>
           </StyledInfo>
-          <StyledRightSection>{!viewed ? <StyledInfoCircle /> : <Box />}</StyledRightSection>
+          <StyledRightSection>{!isWatched ? <StyledInfoCircle /> : <Box />}</StyledRightSection>
         </StyledTopSection>
         <StyledBottomSection>
           {isActive && (
@@ -107,8 +156,10 @@ export const Notification = ({
             </StyledBtn>
           )}
           <StyledTimeAgo
-            fontWeight={isActive ? 'regular' : 'bold'}
-            color={viewed ? variables.palette.on_surface_variant : variables.palette.semantic.error}
+            fontWeight={isWatched ? 'regular' : 'bold'}
+            color={
+              isWatched ? variables.palette.on_surface_variant : variables.palette.semantic.error
+            }
           >
             {timeAgo}
           </StyledTimeAgo>
@@ -120,6 +171,7 @@ export const Notification = ({
           popupVisible={passwordPopupVisible}
           onClose={() => setPasswordPopupVisible(false)}
           encryption={encryption}
+          submitCallback={handleSubmit}
         />
       )}
     </>

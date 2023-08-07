@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { useAppDispatch } from 'redux/store';
-import { variables } from 'shared/styles/variables';
-import { StyledFlexTopCenter, StyledLabelBoldMedium } from 'shared/styles/styledComponents';
+import { StyledFlexTopCenter, StyledLabelBoldMedium, variables } from 'shared/styles';
 import avatarSrc from 'assets/images/avatar.png';
 import { page } from 'resources';
 import { auth } from 'modules/Auth/state';
-import { account } from 'modules/Dashboard/state';
+import { alerts } from 'shared/state';
 
 import { AccountPanel } from './AccountPanel';
 import { Breadcrumbs } from './Breadcrumbs';
@@ -24,29 +22,11 @@ import {
 export const TopBar = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
-  const authData = auth.useData();
   const isAuthorized = auth.useAuthorized();
-  const accData = account.useData();
+  const { notWatched = 0 } = alerts.useAlertsData() ?? {};
   const [visibleAccountDrawer, setVisibleAccountDrawer] = useState(false);
-  const [alertsQuantity, setAlertsQuantity] = useState(0);
 
   const handleLoginClick = () => navigate(page.login);
-
-  // TODO: remove next use effects and switchAccount thunk, because it's a part of a legacy API
-  useEffect(() => {
-    if (authData?.account?.accountId) {
-      const { accountId } = authData.account;
-      (async () => await dispatch(account.thunk.switchAccount({ accountId })))();
-    }
-  }, [authData, dispatch]);
-
-  useEffect(() => {
-    if (accData) {
-      const quantity = accData.account.alerts.list.filter((alert) => !alert.viewed).length;
-      setAlertsQuantity(quantity);
-    }
-  }, [accData]);
 
   return (
     <>
@@ -60,10 +40,10 @@ export const TopBar = () => {
             variant="text"
           >
             <StyledImage src={avatarSrc} alt="Avatar" />
-            {alertsQuantity > 0 && (
+            {notWatched > 0 && (
               <StyledQuantity>
                 <StyledLabelBoldMedium color={variables.palette.white}>
-                  {alertsQuantity}
+                  {notWatched}
                 </StyledLabelBoldMedium>
               </StyledQuantity>
             )}
@@ -79,7 +59,6 @@ export const TopBar = () => {
       </StyledTopBar>
       {visibleAccountDrawer && (
         <AccountPanel
-          alertsQuantity={alertsQuantity}
           setVisibleDrawer={setVisibleAccountDrawer}
           visibleDrawer={visibleAccountDrawer}
         />

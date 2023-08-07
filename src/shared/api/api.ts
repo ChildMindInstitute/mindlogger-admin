@@ -1,5 +1,5 @@
 import { SingleApplet } from 'shared/state';
-import { OwnerId } from 'api';
+import { AlertListParams, OwnerId } from 'api';
 
 import { apiClient, authApiClient } from './api.client';
 import { SignInRefreshTokenArgs, AppletId, AppletBody } from './api.types';
@@ -67,3 +67,9 @@ export const postFileDownloadApi = (key: string, signal?: AbortSignal) =>
 
 export const getWorkspaceRolesApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
   authApiClient.get(`/workspaces/${ownerId}/roles`, { params: {}, signal });
+
+export const getAlertsApi = (params: AlertListParams, signal?: AbortSignal) =>
+  authApiClient.get('/alerts', { params, signal });
+
+export const setAlertWatchedApi = (alertId: string, signal?: AbortSignal) =>
+  authApiClient.post(`/alerts/${alertId}/is_watched`, { signal });

@@ -17,15 +17,22 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components';
-import { Condition, Item } from 'shared/state';
+import { Item, ScoreConditionalLogic } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
 
-import { calculationTypes, scoreItemsColumns, selectedItemsColumns } from './ScoreContent.const';
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
-import { ScoreContentProps } from './ScoreContent.types';
+import { StyledButton } from '../ScoresAndReports.styles';
+import { SectionScoreHeader } from '../SectionScoreHeader';
+import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
+import { CopyId } from './CopyId';
+import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
+import { Title } from '../Title';
+import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
+import { ScoreCondition } from './ScoreCondition';
+import { calculationTypes, scoreItemsColumns, selectedItemsColumns } from './ScoreContent.const';
 import {
   getDefaultConditionalValue,
   getIsScoreIdVariable,
@@ -35,13 +42,7 @@ import {
   getTableScoreItems,
   updateMessagesWithVariable,
 } from './ScoreContent.utils';
-import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
-import { StyledButton } from '../ScoresAndReports.styles';
-import { SectionScoreHeader } from '../SectionScoreHeader';
-import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
-import { ScoreCondition } from './ScoreCondition';
-import { CopyId } from './CopyId';
-import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
+import { ScoreContentProps } from './ScoreContent.types';
 
 export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
   const { t } = useTranslation('app');
@@ -164,11 +165,12 @@ export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
           <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>
             {t('scoreConditions')}
           </StyledTitleMedium>
-          {scoreConditionals?.map((conditional: Condition, key: number) => {
+          {scoreConditionals?.map((conditional: ScoreConditionalLogic, key: number) => {
             const conditionalName = `${scoreConditionalsName}.${key}`;
             const title = t('scoreConditional', {
               index: key + 1,
             });
+            const headerTitle = <Title title={title} name={conditional?.name} />;
 
             return (
               <ToggleItemContainer
@@ -178,7 +180,7 @@ export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
                 contentProps={{ name: conditionalName, scoreId: `score-condition-${index}-${key}` }}
                 headerContentProps={{
                   onRemove: () => removeScoreConditional(key),
-                  title,
+                  title: headerTitle,
                   name: conditionalName,
                 }}
                 uiType={ToggleContainerUiType.Score}

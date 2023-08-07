@@ -19,7 +19,6 @@ import { ReportMenuProps } from './ReportMenu.types';
 export const ReportMenu = ({ activities }: ReportMenuProps) => {
   const { t } = useTranslation();
   const respondentLabel = useRespondentLabel();
-
   const { selectedActivity, setSelectedActivity } = useContext(RespondentDataContext);
 
   return (
