@@ -325,6 +325,7 @@ export type GetWorkspaceAppletsParams = {
     ordering?: string;
     roles?: string;
     folderId?: string | null;
+    flatList?: boolean;
   };
 };
 
