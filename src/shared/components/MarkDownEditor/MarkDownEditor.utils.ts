@@ -82,20 +82,22 @@ MdEditor.config({
 
       const videoMatch = href?.match(VIDEO_LINK_REGEX);
       if (videoMatch) {
+        const defaultReturn = `<a href="${href}" target="_blank">${text || href}</a>`;
         const videoSource = videoMatch[1];
         const videoUrl = videoMatch[3];
+        if (!videoSource || !videoUrl) return defaultReturn;
 
         if (
           videoSource.includes(VideoSources.Youtube) ||
           videoSource.includes(VideoSources.Youtu)
         ) {
-          const videoId = videoUrl?.match(YOUTUBE_VIDEO_ID_REGEX)?.[1];
+          const videoId = videoUrl.match(YOUTUBE_VIDEO_ID_REGEX)?.[1];
 
-          return videoId ? getVideoIframe(videoId, VideoSources.Youtube, text) : href || '';
+          return videoId ? getVideoIframe(videoId, VideoSources.Youtube, text) : defaultReturn;
         } else if (videoSource.includes(VideoSources.Vimeo)) {
           const videoId = videoUrl.replace(/\D/g, '');
 
-          return videoId ? getVideoIframe(videoId, VideoSources.Vimeo, text) : href || '';
+          return videoId ? getVideoIframe(videoId, VideoSources.Vimeo, text) : defaultReturn;
         }
       }
 
