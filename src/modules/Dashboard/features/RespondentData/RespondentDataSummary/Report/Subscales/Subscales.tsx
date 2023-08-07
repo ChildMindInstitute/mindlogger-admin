@@ -30,7 +30,7 @@ export const Subscales = ({ answers, versions }: SubscalesProps) => {
   const { finalScores, latestFinalScore, allSubscalesScores, allSubscalesToRender } = useMemo(
     () =>
       answers.reduce(
-        (acc: ParsedSubscales, item, i) => {
+        (acc: ParsedSubscales, item) => {
           if (!item?.subscaleSetting?.subscales?.length) return acc;
 
           const activityItems = getObjectFromList(
@@ -47,7 +47,7 @@ export const Subscales = ({ answers, versions }: SubscalesProps) => {
             activityItems &&
             calcTotalScore(item.subscaleSetting, activityItems)?.[FinalSubscale.Key];
 
-          if (i === 0 && calculatedTotalScore) {
+          if (calculatedTotalScore) {
             acc.latestFinalScore = calculatedTotalScore?.score;
           }
 

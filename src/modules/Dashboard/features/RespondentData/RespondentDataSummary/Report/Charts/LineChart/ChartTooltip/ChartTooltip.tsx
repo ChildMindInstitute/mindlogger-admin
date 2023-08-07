@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import { format } from 'date-fns';
+import uniqueId from 'lodash.uniqueid';
 
 import {
   StyledBodySmall,
@@ -19,7 +20,7 @@ export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
     <StyledTooltip ref={tooltipRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {!!dataPoints?.length &&
         dataPoints.map(({ date, backgroundColor, label, value, optionText }, index) => (
-          <StyledFlexColumn sx={{ mt: index > 0 ? theme.spacing(2.4) : '' }}>
+          <StyledFlexColumn key={uniqueId()} sx={{ mt: index > 0 ? theme.spacing(2.4) : '' }}>
             <StyledBodySmall sx={{ mb: theme.spacing(1) }} color={variables.palette.outline}>
               {format(date, DateFormats.MonthDayTime)}
             </StyledBodySmall>
