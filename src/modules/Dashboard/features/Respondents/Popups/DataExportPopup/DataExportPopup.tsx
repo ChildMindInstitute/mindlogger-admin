@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import get from 'lodash.get';
 
 import { EnterAppletPassword, Modal } from 'shared/components';
 import {
@@ -17,9 +18,11 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popup.hooks';
+import { ChosenAppletData } from '../../Respondents.types';
 
 export const DataExportPopup = ({
   popupVisible,
+  isAppletSetting,
   setPopupVisible,
   tableRows,
   chosenAppletData,
@@ -30,13 +33,18 @@ export const DataExportPopup = ({
   const [activeModal, setActiveModal] = useState(Modals.DataExport);
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
+  const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
+  const respondentId = !isAppletSetting
+    ? (chosenAppletData as ChosenAppletData)?.respondentId
+    : undefined;
+  const { encryption } = chosenAppletData ?? {};
+
   const handleDataExportSubmit = async () => {
     if (dataIsExporting) {
       return;
     }
-    const { appletId, respondentId } = chosenAppletData || {};
 
-    if (appletId && respondentId) {
+    if (appletId) {
       setDataIsExporting(true);
 
       try {
@@ -49,17 +57,15 @@ export const DataExportPopup = ({
   };
 
   const hasEncryptionCheck = useCheckIfHasEncryption({
+    isAppletSetting,
     appletData: chosenAppletData,
     callback: handleDataExportSubmit,
   });
 
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting && !hasEncryptionCheck;
-  const getDecryptedAnswers = useDecryptedActivityData(
-    chosenAppletData?.appletId,
-    chosenAppletData?.encryption,
-  );
+  const getDecryptedAnswers = useDecryptedActivityData(appletId, encryption);
 
-  const { execute, error } = useAsync(
+  const { execute } = useAsync(
     getExportDataApi,
     exportDataSucceed({
       getDecryptedAnswers,
@@ -78,7 +84,7 @@ export const DataExportPopup = ({
   );
 
   const handlePopupClose = () => {
-    setChosenAppletData(null);
+    setChosenAppletData?.(null);
     setPopupVisible(false);
   };
   const handleRetry = () => {
@@ -138,8 +144,8 @@ export const DataExportPopup = ({
           <StyledModalWrapper>
             <EnterAppletPassword
               ref={appletPasswordRef}
-              appletId={chosenAppletData?.appletId ?? ''}
-              encryption={chosenAppletData?.encryption}
+              appletId={appletId ?? ''}
+              encryption={encryption}
               submitCallback={handleDataExportSubmit}
             />
           </StyledModalWrapper>
