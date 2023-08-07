@@ -208,9 +208,9 @@ export const ScoresAndReports = () => {
                             dragHandleProps,
                           }}
                           contentProps={{
-                            scoreId: score.id,
                             name: scoreName,
                             title,
+                            index,
                           }}
                         />
                       </Box>
