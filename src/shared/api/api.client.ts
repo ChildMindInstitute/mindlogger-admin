@@ -23,7 +23,7 @@ authApiClient.interceptors.request.use((config: AxiosRequestConfig) => {
 authApiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       return refreshTokenAndReattemptRequest(error);
     } else {
       return Promise.reject(error);

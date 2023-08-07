@@ -11,3 +11,9 @@ export type DataExportPopupProps = {
   chosenAppletData: ChosenAppletData | null;
   setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>;
 };
+
+export const enum Modals {
+  DataExport = 'dataExport',
+  ExportError = 'exportError',
+  PasswordCheck = 'passwordCheck',
+}

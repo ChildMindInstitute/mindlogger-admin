@@ -4,17 +4,17 @@ import { useTranslation } from 'react-i18next';
 import { EnterAppletPassword, Modal } from 'shared/components';
 import {
   StyledBodyLarge,
-  StyledErrorText,
   StyledLinearProgress,
   StyledModalWrapper,
   theme,
+  variables,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { falseReturnFunc, getErrorMessage, exportDataSucceed } from 'shared/utils';
+import { falseReturnFunc, exportDataSucceed } from 'shared/utils';
 import { useAsync, useSetupEnterAppletPassword } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
-import { DataExportPopupProps } from './DataExportPopup.types';
+import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popup.hooks';
 
@@ -27,6 +27,7 @@ export const DataExportPopup = ({
 }: DataExportPopupProps) => {
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
+  const [activeModal, setActiveModal] = useState(Modals.DataExport);
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
 
   const handleDataExportSubmit = async () => {
@@ -38,7 +39,12 @@ export const DataExportPopup = ({
     if (appletId && respondentId) {
       setDataIsExporting(true);
 
-      await execute({ appletId, respondentIds: respondentId });
+      try {
+        await execute({ appletId, respondentIds: respondentId });
+      } catch {
+        setActiveModal(Modals.ExportError);
+        setDataIsExporting(false);
+      }
     }
   };
 
@@ -62,7 +68,11 @@ export const DataExportPopup = ({
         handlePopupClose();
       },
     }),
-    console.warn,
+    (error) => {
+      console.warn(error);
+      setDataIsExporting(false);
+      setActiveModal(Modals.ExportError);
+    },
     falseReturnFunc,
     [getDecryptedAnswers],
   );
@@ -71,18 +81,13 @@ export const DataExportPopup = ({
     setChosenAppletData(null);
     setPopupVisible(false);
   };
+  const handleRetry = () => {
+    setActiveModal(Modals.DataExport);
+    setDataIsExporting(true);
+    handleDataExportSubmit();
+  };
 
-  const renderModalContent = () => {
-    if (showEnterPwdScreen) {
-      return (
-        <EnterAppletPassword
-          ref={appletPasswordRef}
-          appletId={chosenAppletData.appletId}
-          encryption={chosenAppletData.encryption}
-          submitCallback={handleDataExportSubmit}
-        />
-      );
-    }
+  const renderDataExportContent = () => {
     if (dataIsExporting) {
       return (
         <>
@@ -105,27 +110,60 @@ export const DataExportPopup = ({
   };
 
   useEffect(() => {
-    if (error) {
-      setDataIsExporting(false);
-    }
-  }, [error]);
+    setActiveModal(showEnterPwdScreen ? Modals.PasswordCheck : Modals.DataExport);
+  }, [showEnterPwdScreen]);
 
-  return (
-    <Modal
-      open={popupVisible}
-      onClose={handlePopupClose}
-      onSubmit={submitForm}
-      title={showEnterPwdScreen ? t('enterAppletPassword') : t('dataExport')}
-      buttonText={showEnterPwdScreen ? t('submit') : ''}
-    >
-      <StyledModalWrapper>
-        {renderModalContent()}
-        {error && (
-          <StyledErrorText sx={{ marginTop: theme.spacing(1) }}>
-            {getErrorMessage(error)}
-          </StyledErrorText>
-        )}
-      </StyledModalWrapper>
-    </Modal>
-  );
+  switch (activeModal) {
+    case Modals.DataExport:
+      return (
+        <Modal
+          open={popupVisible}
+          onClose={handlePopupClose}
+          onSubmit={submitForm}
+          title={t('dataExport')}
+          buttonText=""
+        >
+          <StyledModalWrapper>{renderDataExportContent()}</StyledModalWrapper>
+        </Modal>
+      );
+    case Modals.PasswordCheck:
+      return (
+        <Modal
+          open={popupVisible}
+          onClose={handlePopupClose}
+          onSubmit={submitForm}
+          title={t('enterAppletPassword')}
+          buttonText={t('submit')}
+        >
+          <StyledModalWrapper>
+            <EnterAppletPassword
+              ref={appletPasswordRef}
+              appletId={chosenAppletData?.appletId ?? ''}
+              encryption={chosenAppletData?.encryption}
+              submitCallback={handleDataExportSubmit}
+            />
+          </StyledModalWrapper>
+        </Modal>
+      );
+    case Modals.ExportError:
+      return (
+        <Modal
+          open={popupVisible}
+          onClose={handlePopupClose}
+          onSubmit={handleRetry}
+          title={t('dataExport')}
+          buttonText={t('retry')}
+          hasSecondBtn
+          submitBtnColor="error"
+          secondBtnText={t('cancel')}
+          onSecondBtnSubmit={handlePopupClose}
+        >
+          <StyledModalWrapper>
+            <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
+              {t('exportFailed')}
+            </StyledBodyLarge>
+          </StyledModalWrapper>
+        </Modal>
+      );
+  }
 };
