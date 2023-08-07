@@ -787,16 +787,16 @@ export const getAppletTabs = ({
 
 export const testIsReportCommonFieldsRequired = (
   isScoreReport: boolean,
-  value: boolean,
+  printItemsValue: boolean,
   context: unknown,
 ) => {
   if (isScoreReport) {
-    const conditionalLogic = get(context, 'from.0.value.conditionalLogic')?.length;
+    const conditionalLogicLength = get(context, 'from.0.value.conditionalLogic')?.length;
 
-    return !!conditionalLogic || value;
+    return !!conditionalLogicLength || printItemsValue;
   }
 
-  return value;
+  return printItemsValue;
 };
 
 //TODO: find a way to validate nested properties for objects in arrays for uniqueness
