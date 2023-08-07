@@ -53,17 +53,16 @@ export const RespondentDataSummary = () => {
   }, [selectedActivity, isLoading]);
 
   useEffect(() => {
-    if (
-      !appletId ||
-      !respondentId ||
-      !selectedActivity?.hasAnswer ||
-      selectedActivity?.isPerformanceTask
-    )
-      return;
-
     const fetchFiltersData = async () => {
-      if (!appletId || !selectedActivity) return;
       try {
+        if (
+          !appletId ||
+          !selectedActivity ||
+          !selectedActivity?.hasAnswer ||
+          selectedActivity?.isPerformanceTask
+        )
+          return;
+
         setIsLoading(true);
         const identifiers = await getIdentifiers({
           appletId,

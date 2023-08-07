@@ -44,6 +44,7 @@ import {
   testFunctionForSubscaleAge,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
+  testIsReportCommonFieldsRequired,
 } from './BuilderApplet.utils';
 import {
   CONDITION_TYPES_TO_HAVE_OPTION_ID,
@@ -475,11 +476,18 @@ export const ConditionalLogicSchema = () =>
     conditions: yup.array().of(ConditionSchema()),
   });
 
-const ReportCommonFields = {
+const getReportCommonFields = (isScoreReport = false) => ({
   showMessage: yup.boolean(),
   printItems: yup.boolean().when('showMessage', {
     is: false,
-    then: yup.boolean().oneOf([true], <string>t('validationMessages.mustShowMessageOrItems')),
+    then: yup
+      .boolean()
+      .test(
+        'required-report-common-fields',
+        <string>t('validationMessages.mustShowMessageOrItems'),
+        (printItemsName, context) =>
+          testIsReportCommonFieldsRequired(isScoreReport, !!printItemsName, context),
+      ),
   }),
   message: yup
     .string()
@@ -495,7 +503,7 @@ const ReportCommonFields = {
       .min(1, <string>t('validationMessages.atLeastOneItem'))
       .nullable(),
   }),
-};
+});
 
 export const ScoreConditionalLogic = () =>
   yup.object({
@@ -514,7 +522,7 @@ export const ScoreConditionalLogic = () =>
       .of(ConditionSchema())
       .min(1, <string>t('validationMessages.atLeastOneCondition')),
     flagScore: yup.boolean(),
-    ...ReportCommonFields,
+    ...getReportCommonFields(),
     match: yup.string(),
   });
 
@@ -530,7 +538,7 @@ export const ScoreSchema = () =>
         (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
       ),
     calculationType: yup.string().required(),
-    ...ReportCommonFields,
+    ...getReportCommonFields(true),
     itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
     conditionalLogic: yup.array().of(ScoreConditionalLogic()).nullable(),
   });
@@ -564,7 +572,7 @@ export const SectionSchema = () =>
         t('validationMessages.unique', { field: t('sectionName') }) as string,
         (sectionName, context) => testFunctionForUniqueness('sections', sectionName ?? '', context),
       ),
-    ...ReportCommonFields,
+    ...getReportCommonFields(),
     conditionalLogic: SectionConditionalLogic().nullable(),
   });
 
