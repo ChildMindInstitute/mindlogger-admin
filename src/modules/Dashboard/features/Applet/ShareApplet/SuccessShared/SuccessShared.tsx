@@ -48,7 +48,7 @@ export const SuccessShared = ({
           </StyledTitleLarge>
           {text && <StyledText color={variables.palette.on_surface_variant}>{text}</StyledText>}
           {keywords?.length > 0 && (
-            <StyledFlexWrap sx={{ marginTop: theme.spacing(0.8) }}>
+            <StyledFlexWrap sx={{ marginTop: theme.spacing(0.8), flexBasis: '100%' }}>
               {keywords.map((word, i) => (
                 <Chip color="secondary" key={i} title={word} />
               ))}
@@ -66,7 +66,7 @@ export const SuccessShared = ({
         variant="text"
         onClick={handleCopyAppletLink}
       >
-        {t('appletLink')}
+        {t('copyAppletLink')}
       </StyledLinkBtn>
       {linkCopied && (
         <StyledBodyMedium sx={{ margin: theme.spacing(0.25, 0, 0, 1.5) }}>

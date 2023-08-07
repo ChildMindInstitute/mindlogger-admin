@@ -605,6 +605,7 @@ export type SingleApplet = {
   role?: string;
   encryption?: Encryption;
   isPublished?: boolean;
+  activityCount?: number | null;
 };
 
 export type AppletSchema = {

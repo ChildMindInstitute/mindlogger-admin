@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
+import { getDictionaryText } from 'shared/utils';
 import { SuccessShared } from 'modules/Dashboard/features/Applet/ShareApplet/SuccessShared';
 
 import { SuccessSharePopupProps } from './SuccessSharePopup.types';
@@ -25,10 +26,9 @@ export const SuccessSharePopup = ({
     >
       <SuccessShared
         title={applet.displayName}
-        text={applet.description as string}
+        text={getDictionaryText(applet.description || '')}
         keywords={keywords}
-        // TODO: Implement applet activities quantity
-        // activitiesQuantity={8}
+        activitiesQuantity={applet.activityCount}
         appletLink={libraryUrl}
         img={applet.image || ''}
       />
