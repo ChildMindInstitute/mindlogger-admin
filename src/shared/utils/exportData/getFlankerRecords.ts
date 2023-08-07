@@ -289,7 +289,8 @@ export const getFlankerRecords = (
     response_time: row.responseTime,
     response: row.responseValue,
     response_accuracy: row.responseAccuracy,
-    failed_practices:
-      item.config.minimumAccuracy && index === 0 ? failedPractice.toString() : undefined,
+    ...(item.config.minimumAccuracy && index === 0
+      ? { failed_practices: failedPractice.toString() }
+      : {}),
   }));
 };
