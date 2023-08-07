@@ -197,16 +197,14 @@ export enum AudioFileFormats {
   MP3 = '.mp3',
   WAV = '.wav',
 }
+export const VALID_AUDIO_FILE_TYPES = Object.values(AudioFileFormats);
+export const ALLOWED_AUDIO_FILE_TYPES = VALID_AUDIO_FILE_TYPES.join(',');
 
 export enum VideoFileFormats {
   WEBM = '.webm',
   MP4 = '.mp4',
 }
-
-export const VALID_AUDIO_FILE_TYPES = [AudioFileFormats.MP3, AudioFileFormats.WAV];
-export const ALLOWED_AUDIO_FILE_TYPES = VALID_AUDIO_FILE_TYPES.join(',');
-
-export const VALID_VIDEO_FILE_TYPES = [VideoFileFormats.MP4, VideoFileFormats.WEBM];
+export const VALID_VIDEO_FILE_TYPES = Object.values(VideoFileFormats);
 export const ALLOWED_VIDEO_FILE_TYPES = VALID_VIDEO_FILE_TYPES.join(',');
 
 export const enum MediaType {

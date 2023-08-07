@@ -2,9 +2,28 @@ import MdEditor from 'md-editor-rt';
 
 import i18n from 'i18n';
 
-import { LANGUAGE_BY_DEFAULT } from './MarkDownEditor.const';
+import {
+  LANGUAGE_BY_DEFAULT,
+  VALID_VIDEO_FORMATS_REGEX,
+  VIDEO_LINK_REGEX,
+  VideoSourcePlayerLinks,
+  VideoSources,
+  YOUTUBE_VIDEO_ID_REGEX,
+} from './MarkDownEditor.const';
 
 const { t } = i18n;
+
+const getVideoIframe = (videoId: string, type: VideoSources, text?: string) =>
+  `${text ? `<figure><figcaption>${text}:</figcaption>` : ''}
+    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+      <iframe src="${
+        type === VideoSources.Youtube
+          ? VideoSourcePlayerLinks.Youtube
+          : VideoSourcePlayerLinks.Vimeo
+      }${videoId}" allowfullscreen
+        style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></iframe>
+    </div>
+  `;
 
 MdEditor.config({
   editorConfig: {
@@ -53,8 +72,37 @@ MdEditor.config({
     },
   },
   markedRenderer(renderer) {
+    renderer.image = (href, title, text) => {
+      const videoExtensionMatch = href?.match(VALID_VIDEO_FORMATS_REGEX);
+      if (videoExtensionMatch) {
+        return `${
+          text ? `<figure><figcaption>${text}:</figcaption>` : ''
+        }<video controls width="250"><source src="${href}"></video></figure>`;
+      }
+
+      const videoMatch = href?.match(VIDEO_LINK_REGEX);
+      if (videoMatch) {
+        const videoSource = videoMatch[1];
+        const videoUrl = videoMatch[3];
+
+        if (
+          videoSource.includes(VideoSources.Youtube) ||
+          videoSource.includes(VideoSources.Youtu)
+        ) {
+          const videoId = videoUrl?.match(YOUTUBE_VIDEO_ID_REGEX)?.[1];
+
+          return videoId ? getVideoIframe(videoId, VideoSources.Youtube, text) : href || '';
+        } else if (videoSource.includes(VideoSources.Vimeo)) {
+          const videoId = videoUrl.replace(/\D/g, '');
+
+          return videoId ? getVideoIframe(videoId, VideoSources.Vimeo, text) : href || '';
+        }
+      }
+
+      return `<img src="${href}" alt="${text}" title="${title}" />`;
+    };
     renderer.link = (href, title, text) =>
-      `<a href="${href}" title="${title}" target="_blank">${text}</a>`;
+      `<a href="${href}" title="${title ?? 'link-title'}" target="_blank">${text || href}</a>`;
 
     return renderer;
   },

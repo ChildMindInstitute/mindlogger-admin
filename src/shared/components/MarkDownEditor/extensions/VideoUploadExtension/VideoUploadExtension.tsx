@@ -22,7 +22,7 @@ export const VideoUploadExtension = ({
   const { t } = useTranslation('app');
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
     const generator: InsertContentGenerator = () => ({
-      targetValue: `<figure><figcaption>${label}:</figcaption><video controls width="250"><source src="${address}"></video></figure>`,
+      targetValue: `![${label}](${address})`,
       select: false,
       deviationStart: 0,
       deviationEnd: 0,
