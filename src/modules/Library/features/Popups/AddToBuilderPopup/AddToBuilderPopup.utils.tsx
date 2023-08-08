@@ -308,21 +308,6 @@ const getUniqueActivityName = <T extends { name: string }>(
   return activityName;
 };
 
-const removeDuplicatedNames = <T extends { name: string }>(
-  existingActivities: T[],
-  activitiesToAdd: T[],
-): T[] =>
-  activitiesToAdd.reduce(
-    (activities: T[], activity: T) => [
-      ...activities,
-      {
-        ...activity,
-        name: getUniqueActivityName(activity.name, [...existingActivities, ...activities]),
-      },
-    ],
-    [],
-  );
-
 const mapResponseValues = <
   T extends {
     dataMatrix?: SingleAndMultipleSelectMatrix[] | null;
