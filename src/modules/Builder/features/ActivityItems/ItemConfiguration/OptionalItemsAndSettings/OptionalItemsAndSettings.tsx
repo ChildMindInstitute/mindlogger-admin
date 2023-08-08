@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
 
-import { SingleAndMultipleSelectionOption } from 'shared/state';
+import { SingleAndMultiSelectOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
@@ -129,7 +129,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       });
     };
 
-    const handleUpdateOption = (index: number, option: SingleAndMultipleSelectionOption) => {
+    const handleUpdateOption = (index: number, option: SingleAndMultiSelectOption) => {
       updateOptions(index, option);
     };
 

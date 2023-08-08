@@ -23,12 +23,20 @@ import {
 } from 'shared/styles';
 import { HeadCell } from 'shared/types/table';
 import i18n from 'i18n';
-import { SingleAndMultipleSelectItemResponseValues, Workspace } from 'shared/state';
+import {
+  SingleAndMultipleSelectItemResponseValues,
+  SingleAndMultipleSelectMatrix,
+  SingleAndMultiSelectOption,
+  SingleAndMultiSelectRowOption,
+  SingleAndMultipleSelectRowsResponseValues,
+  Workspace,
+} from 'shared/state';
 import { Applet as FullApplet, DashboardAppletType } from 'modules/Dashboard';
 import {
   ItemResponseType,
   performanceTaskResponseTypes,
   PerfTaskType,
+  responseTypeToHaveDataMatrix,
   responseTypeToHaveOptions,
 } from 'shared/consts';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
@@ -317,8 +325,30 @@ const removeDuplicatedNames = <T extends { name: string }>(
     [],
   );
 
-// TODO: Make filtering for scores, subscales, and item flows, regarding which items were selected, Activity to the
-//  Reviewer dashboard assessment checkbox (can be only one in all activities)
+const mapResponseValues = <
+  T extends {
+    dataMatrix?: SingleAndMultipleSelectMatrix[] | null;
+    options: (SingleAndMultiSelectOption | SingleAndMultiSelectRowOption)[];
+  },
+>(
+  responseValues: T,
+): T => ({
+  ...responseValues,
+  ...(!responseValues.dataMatrix && {
+    options: responseValues.options?.map((option) => ({
+      ...option,
+      id: option.id ?? uuidv4(),
+    })),
+  }),
+  ...(!!responseValues.dataMatrix && {
+    options: responseValues.options?.map((option, index) => ({
+      ...option,
+      id: option.id ?? responseValues.dataMatrix?.[0].options[index]?.optionId ?? uuidv4(),
+    })),
+  }),
+});
+
+// TODO: Make filtering for scores, subscales, regarding which items were selected
 export const getSelectedAppletData = (
   applet: PublishedApplet,
   selectedItems: SelectedItem[],
@@ -328,7 +358,7 @@ export const getSelectedAppletData = (
 
   const selectedActivities = applet.activities
     .filter((activity) => selectedActivityKeysSet.has(activity.key))
-    .map((activity) => {
+    .map((activity, index, activities) => {
       let isPerformanceTask = false;
       let performanceTaskType: PerfTaskType | null = null;
 
@@ -342,26 +372,19 @@ export const getSelectedAppletData = (
 
           //there is no 'id' in responseValues.options for Single/Multi selection
           if (responseTypeToHaveOptions.includes(newItem.responseType)) {
-            const responseValues =
-              (newItem.responseValues as SingleAndMultipleSelectItemResponseValues) ?? {};
-
-            newItem.responseValues = {
-              ...responseValues,
-              options: responseValues?.options?.map((option) => ({
-                ...option,
-                id: option.id ?? uuidv4(),
-              })),
-            };
-          }
-
-          //remove conditionalLogic if some of dependent items are not selected
-          if (newItem.conditionalLogic) {
-            const hasAllDependeciesSelected = newItem.conditionalLogic?.conditions?.every(
-              ({ itemName }) => pluck(items, 'name').includes(itemName),
+            newItem.responseValues = mapResponseValues(
+              newItem.responseValues as SingleAndMultipleSelectItemResponseValues,
             );
-
-            if (!hasAllDependeciesSelected) newItem.conditionalLogic = undefined;
           }
+
+          //there is no 'id' in responseValues.options for Single/Multi per row
+          if (responseTypeToHaveDataMatrix.includes(newItem.responseType)) {
+            newItem.responseValues = mapResponseValues<SingleAndMultipleSelectRowsResponseValues>(
+              newItem.responseValues as SingleAndMultipleSelectRowsResponseValues,
+            );
+          }
+
+          if (activity.items.length > items.length) newItem.conditionalLogic = undefined;
 
           return newItem;
         });
@@ -373,21 +396,29 @@ export const getSelectedAppletData = (
         }
       }
 
+      const hasSubscalesAndScores = filteredItems.length === activity.items.length;
+
       return {
         ...activity,
         isPerformanceTask,
         performanceTaskType: performanceTaskType || undefined,
         items: filteredItems,
+        subscaleSetting: hasSubscalesAndScores ? activity.subscaleSetting : undefined,
+        scoresAndReports: hasSubscalesAndScores ? activity.scoresAndReports : undefined,
       };
     });
 
-  const selectedActivityFlows = applet.activityFlows
-    .filter((flow) => flow.items.every((item) => selectedActivityKeysSet.has(item.activityKey)))
-    .map((flow) => ({
-      ...flow,
-      key: uuidv4(),
-      items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
-    }));
+  const hasActivityFlows = applet.activities.length === selectedActivityKeysSet.size;
+
+  const selectedActivityFlows = hasActivityFlows
+    ? applet.activityFlows
+        .filter((flow) => flow.items.every((item) => selectedActivityKeysSet.has(item.activityKey)))
+        .map((flow) => ({
+          ...flow,
+          key: uuidv4(),
+          items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
+        }))
+    : [];
 
   const { id, keywords, version, activities, activityFlows, ...restApplet } = applet;
 
@@ -422,12 +453,8 @@ export const getAddToBuilderData = async (cartItems: PublishedApplet[] | null) =
     appletToBuilder = preparedApplets.reduce(
       (acc: SelectedCombinedCartApplet, applet) => {
         acc.themeId = null;
-        acc.activities.push(
-          ...removeDuplicatedNames<PublishedActivity>(acc.activities, applet.activities),
-        );
-        acc.activityFlows.push(
-          ...removeDuplicatedNames<PublishedActivityFlow>(acc.activityFlows, applet.activityFlows),
-        );
+        acc.activities.push(...applet.activities);
+        acc.activityFlows.push(...applet.activityFlows);
 
         return acc;
       },

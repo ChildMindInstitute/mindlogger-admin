@@ -4,7 +4,7 @@ import {
   ScoreReport,
   Item,
   MultiSelectItem,
-  SingleAndMultipleSelectionOption,
+  SingleAndMultiSelectOption,
   SingleSelectItem,
   SliderItem,
 } from 'shared/state';
@@ -33,7 +33,7 @@ const getItemScoreRange = (item: Item) => {
     item.responseType === ItemResponseType.MultipleSelection
   ) {
     scores = (item as SingleSelectItem | MultiSelectItem).responseValues.options?.reduce(
-      (result: number[], option: SingleAndMultipleSelectionOption) => {
+      (result: number[], option: SingleAndMultiSelectOption) => {
         if (!option.isHidden && typeof option.score === 'number') {
           return [...result, option.score];
         }

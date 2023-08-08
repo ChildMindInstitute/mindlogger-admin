@@ -9,7 +9,7 @@ import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
 import {
   SingleAndMultipleSelectRow,
-  SingleAndMultipleSelectOption,
+  SingleAndMultiSelectRowOption,
   SingleAndMultipleSelectMatrix,
   ItemAlert,
 } from 'shared/state';
@@ -103,7 +103,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
             </StyledFlexTopCenter>
           )}
         </StyledSelectionBox>
-        {options?.map((option: SingleAndMultipleSelectOption, key: number) => {
+        {options?.map((option: SingleAndMultiSelectRowOption, key: number) => {
           const scoreName = `${dataMatrixName}.${index}.options.${key}.score`;
           const isRemoveButtonVisible =
             hasRemoveButton && key === options?.length - 1 && index !== 0;

@@ -117,6 +117,11 @@ export const responseTypeToHaveOptions = [
   ItemResponseType.MultipleSelection,
 ];
 
+export const responseTypeToHaveDataMatrix = [
+  ItemResponseType.SingleSelectionPerRow,
+  ItemResponseType.MultipleSelectionPerRow,
+];
+
 export enum PerfTaskType {
   Flanker = 'flanker',
   Touch = 'touch',

@@ -10,9 +10,9 @@ import { theme, variables, StyledTitleMedium, StyledClearedButton } from 'shared
 import { ItemResponseType } from 'shared/consts';
 import {
   SingleAndMultipleSelectMatrix,
-  SingleAndMultipleSelectOption,
+  SingleAndMultiSelectOption,
+  SingleAndMultiSelectRowOption,
   SingleAndMultipleSelectRow,
-  SingleAndMultipleSelectionOption,
   SliderRowsItemResponseValues,
 } from 'shared/state';
 
@@ -168,30 +168,12 @@ export const ItemSettingsGroup = ({
                       return setValue(
                         `${itemName}.responseValues.options`,
                         getValues(`${itemName}.responseValues.options`)?.map(
-                          (option: SingleAndMultipleSelectionOption) => ({
+                          (option: SingleAndMultiSelectOption) => ({
                             ...option,
                             score: hasScores ? DEFAULT_SCORE_VALUE : undefined,
                           }),
                         ),
                       );
-                    // case ItemResponseType.SingleSelectionPerRow:
-                    // case ItemResponseType.MultipleSelectionPerRow:
-                    //   return setValue(
-                    //     `${itemName}.responseValues.dataMatrix`,
-                    //     hasScores
-                    //       ? getValues(`${itemName}.responseValues.rows`)?.map(
-                    //           (row: SingleAndMultipleSelectRow) => ({
-                    //             rowId: row.id,
-                    //             options: getValues(`${itemName}.responseValues.options`)?.map(
-                    //               (option: SingleAndMultipleSelectOption) => ({
-                    //                 optionId: option.id,
-                    //                 score: DEFAULT_SCORE_VALUE,
-                    //               }),
-                    //             ),
-                    //           }),
-                    //         )
-                    //       : undefined,
-                    //   );
                   }
                 }
 
@@ -220,7 +202,7 @@ export const ItemSettingsGroup = ({
                       (row: SingleAndMultipleSelectRow) => ({
                         rowId: row.id,
                         options: getValues(`${itemName}.responseValues.options`)?.map(
-                          (option: SingleAndMultipleSelectOption) => ({
+                          (option: SingleAndMultiSelectRowOption) => ({
                             optionId: option.id,
                             ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
                           }),

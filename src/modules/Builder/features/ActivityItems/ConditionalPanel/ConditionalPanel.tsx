@@ -8,7 +8,7 @@ import {
   OptionCondition,
   RangeValueCondition,
   SingleAndMultipleSelectItemResponseValues,
-  SingleAndMultipleSelectionOption,
+  SingleAndMultiSelectOption,
   SingleValueCondition,
 } from 'shared/state';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
@@ -90,7 +90,7 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
                   (
                     relatedItem?.responseValues as SingleAndMultipleSelectItemResponseValues
                   )?.options?.find(
-                    (option: SingleAndMultipleSelectionOption) =>
+                    (option: SingleAndMultiSelectOption) =>
                       getEntityKey(option) === (payload as OptionCondition['payload'])?.optionValue,
                   )?.text) ??
                   valuePlaceholder}
