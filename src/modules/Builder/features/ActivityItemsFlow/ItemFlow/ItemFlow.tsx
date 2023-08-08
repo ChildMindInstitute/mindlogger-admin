@@ -51,7 +51,7 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const { error: conditionalError } = getFieldState(`${itemName}.itemKey`);
 
   const title = (
-    <StyledTitle sx={{ position: 'relative' }}>
+    <StyledTitle component="span" sx={{ position: 'relative' }}>
       {error && <Badge variant="dot" color="error" />}
       {t('activityItemsFlowItemTitle', { index: index + 1 })}
     </StyledTitle>
