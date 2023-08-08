@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -6,33 +7,28 @@ import { useAsync, useBreadcrumbs } from 'shared/hooks';
 import { Spinner } from 'shared/components';
 import { useDecryptedIdentifiers } from 'modules/Dashboard/hooks';
 import { StyledContainer, StyledFlexAllCenter } from 'shared/styles';
-import {
-  DatavizActivity,
-  Version,
-  getIdentifiersApi,
-  getSummaryActivitiesApi,
-  getVersionsApi,
-} from 'api';
+import { Version, getIdentifiersApi, getVersionsApi } from 'api';
+import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/context';
+import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
 import { ReportMenu } from './ReportMenu';
 import { Report } from './Report';
 import { StyledReportContainer, StyledEmptyReview } from './RespondentDataSummary.styles';
 import { Identifier } from './RespondentDataSummary.types';
-import { getEmptyState } from './RespondentDataSummary.utils';
+import { getEmptyState, getUniqueIdentifierOptions } from './RespondentDataSummary.utils';
 
 export const RespondentDataSummary = () => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
+  const { summaryActivities, selectedActivity } = useContext(RespondentDataContext);
+  const { setValue } = useFormContext<SummaryFiltersForm>();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [activities, setActivities] = useState<DatavizActivity[]>([]);
-  const [selectedActivity, setSelectedActivity] = useState<DatavizActivity>();
   const [versions, setVersions] = useState<Version[]>([]);
   const [identifiers, setIdentifiers] = useState<Identifier[]>([]);
 
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
 
-  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi);
   const { execute: getIdentifiers } = useAsync(getIdentifiersApi);
   const { execute: getVersions } = useAsync(getVersionsApi);
 
@@ -44,7 +40,7 @@ export const RespondentDataSummary = () => {
   ]);
 
   const reportContent = useMemo(() => {
-    if (isLoading) return <Spinner />;
+    if (selectedActivity && isLoading) return <Spinner />;
     if (!selectedActivity || !selectedActivity.hasAnswer || selectedActivity.isPerformanceTask) {
       return (
         <StyledFlexAllCenter>
@@ -57,40 +53,32 @@ export const RespondentDataSummary = () => {
   }, [selectedActivity, isLoading]);
 
   useEffect(() => {
-    const fetchActivities = async () => {
-      if (!appletId || !respondentId) return;
-      try {
-        const result = await getSummaryActivities({
-          appletId,
-          respondentId,
-        });
-        setActivities(result.data?.result);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchActivities();
-  }, [appletId, respondentId]);
-
-  useEffect(() => {
-    if (
-      !appletId ||
-      !respondentId ||
-      !selectedActivity?.hasAnswer ||
-      selectedActivity?.isPerformanceTask
-    )
-      return;
-
     const fetchFiltersData = async () => {
-      if (!appletId || !selectedActivity) return;
       try {
+        if (
+          !appletId ||
+          !selectedActivity ||
+          !selectedActivity?.hasAnswer ||
+          selectedActivity?.isPerformanceTask
+        )
+          return;
+
         setIsLoading(true);
         const identifiers = await getIdentifiers({
           appletId,
           activityId: selectedActivity.id,
         });
-        setIdentifiers(getDecryptedIdentifiers(identifiers.data.result));
+        const decryptedIdentifiers = getDecryptedIdentifiers(identifiers.data.result);
+        const identifiersFilter = getUniqueIdentifierOptions(decryptedIdentifiers);
+        setValue('identifier', identifiersFilter);
+        setIdentifiers(decryptedIdentifiers);
+
         const versions = await getVersions({ appletId, activityId: selectedActivity.id });
+        const versionsFilter = versions.data.result?.map(({ version }) => ({
+          id: version,
+          label: version,
+        }));
+        setValue('versions', versionsFilter);
         setVersions(versions.data.result);
       } finally {
         setIsLoading(false);
@@ -101,13 +89,9 @@ export const RespondentDataSummary = () => {
 
   return (
     <StyledContainer>
-      {!!activities.length && (
+      {!!summaryActivities?.length && (
         <>
-          <ReportMenu
-            activities={activities}
-            selectedActivity={selectedActivity}
-            setSelectedActivity={setSelectedActivity}
-          />
+          <ReportMenu activities={summaryActivities} />
           <StyledReportContainer>{reportContent}</StyledReportContainer>
         </>
       )}

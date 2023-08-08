@@ -4,9 +4,7 @@ import { authApiClient } from 'shared/api/api.client';
 import { AppletId } from 'shared/api';
 
 import {
-  SwitchAccount,
   TransferOwnershipType,
-  SetAccount,
   AppletInvitationData,
   DuplicateApplet,
   FolderId,
@@ -14,7 +12,6 @@ import {
   UpdatePin,
   UpdateFolder,
   TogglePin,
-  UpdateAlertStatus,
   PublishApplet,
   PostAppletPublicLink,
   GetAppletsParams,
@@ -53,6 +50,7 @@ import {
   Review,
   AssessmentReview,
   AppletName,
+  LatestReport,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -122,18 +120,6 @@ export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) 
     signal,
   });
 
-export const switchAccountApi = ({ accountId }: SwitchAccount, signal?: AbortSignal) =>
-  authApiClient.put(
-    '/user/switchAccount',
-    {},
-    {
-      params: {
-        accountId,
-      },
-      signal,
-    },
-  );
-
 export const transferOwnershipApi = (
   { appletId, email }: TransferOwnershipType,
   signal?: AbortSignal,
@@ -201,18 +187,6 @@ export const removeIndividualEventsApi = (
   signal?: AbortSignal,
 ) =>
   authApiClient.delete(`/applets/${appletId}/events/remove_individual/${respondentId}`, { signal });
-
-export const setAccountNameApi = ({ accountName }: SetAccount, signal?: AbortSignal) =>
-  authApiClient.put(
-    '/user/accountName',
-    {},
-    {
-      params: {
-        accountName,
-      },
-      signal,
-    },
-  );
 
 export const removeManagerAccess = ({ userId, appletIds }: RemoveAccess, signal?: AbortSignal) =>
   authApiClient.post(
@@ -382,9 +356,6 @@ export const togglePinApi = (
   );
 };
 
-export const updateAlertStatusApi = ({ alertId }: UpdateAlertStatus, signal?: AbortSignal) =>
-  authApiClient.put(`account/updateAlertStatus/${alertId}`, {}, { signal });
-
 export const checkAppletNameInLibraryApi = ({ appletName }: AppletName, signal?: AbortSignal) =>
   authApiClient.post('/library/check_name', { name: appletName }, { signal });
 
@@ -553,6 +524,19 @@ export const getVersionsApi = (
   authApiClient.get<Response<Version>>(
     `/answers/applet/${appletId}/summary/activities/${activityId}/versions`,
     {
+      signal,
+    },
+  );
+
+export const getLatestReportApi = (
+  { appletId, activityId, respondentId }: LatestReport,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/answers/applet/${appletId}/activities/${activityId}/answers/${respondentId}/latest_report`,
+    {},
+    {
+      responseType: 'arraybuffer',
       signal,
     },
   );

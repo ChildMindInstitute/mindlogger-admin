@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SourceLinkModalForm, Svg } from 'shared/components';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles';
-import { ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
+import { ALLOWED_AUDIO_FILE_TYPES, MediaType } from 'shared/consts';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal } from '../../SourceLinkModal';
@@ -17,6 +17,7 @@ export const AudioUploadExtension = ({
   onInsert,
   setFileSizeExceeded,
   fileSizeExceeded,
+  setIncorrectFormat,
 }: MediaContentExtensionProps) => {
   const { t } = useTranslation('app');
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
@@ -43,6 +44,8 @@ export const AudioUploadExtension = ({
     insertHandler,
     setFileSizeExceeded,
     fileSizeExceeded,
+    setIncorrectFormat,
+    type: MediaType.Audio,
   });
 
   return (

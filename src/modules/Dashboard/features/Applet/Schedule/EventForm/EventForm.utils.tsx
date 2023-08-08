@@ -1,5 +1,5 @@
 import { UseFormWatch } from 'react-hook-form';
-import { endOfYear, format, getYear } from 'date-fns';
+import { endOfYear, format } from 'date-fns';
 import * as yup from 'yup';
 import { AnyObject } from 'yup/lib/types';
 
@@ -18,7 +18,7 @@ import {
 import { CalendarEvent } from 'modules/Dashboard/state';
 import { getIsRequiredValidateMessage } from 'shared/utils';
 
-import { removeSecondsFromTime, convertDateToYearMonthDay } from '../Schedule.utils';
+import { convertDateToYearMonthDay, removeSecondsFromTime } from '../Schedule.utils';
 import { AvailabilityTab } from './AvailabilityTab';
 import { NotificationsTab } from './NotificationsTab';
 import { TimersTab } from './TimersTab';
@@ -347,23 +347,6 @@ export const getIdWithoutRegex = (activityOrFlowId: string) => {
   return { isFlowId, id };
 };
 
-const getEventStartYear = ({
-  periodicity,
-  defaultStartDate,
-  date,
-  startDate,
-}: Pick<EventFormValues, 'periodicity' | 'date' | 'startDate'> & {
-  defaultStartDate: Date | string;
-}) => {
-  if (periodicity === Periodicity.Always) {
-    return typeof defaultStartDate !== 'string' && getYear(defaultStartDate);
-  }
-
-  return periodicity === Periodicity.Once
-    ? typeof date !== 'string' && getYear(date)
-    : startDate && typeof startDate !== 'string' && getYear(startDate);
-};
-
 export const getEventPayload = (
   defaultStartDate: Date,
   watch: UseFormWatch<EventFormValues>,
@@ -386,14 +369,6 @@ export const getEventPayload = (
   const notifications = getNotifications(SecondsManipulation.AddSeconds, notificationsFromForm);
   const reminderFromForm = watch('reminder');
   const reminder = getReminder(SecondsManipulation.AddSeconds, reminderFromForm);
-
-  const eventStartYear = getEventStartYear({
-    periodicity,
-    defaultStartDate,
-    date,
-    startDate,
-  });
-
   const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
 
   const body: CreateEventType['body'] = {
@@ -446,5 +421,5 @@ export const getEventPayload = (
     };
   }
 
-  return { body, eventStartYear };
+  return body;
 };

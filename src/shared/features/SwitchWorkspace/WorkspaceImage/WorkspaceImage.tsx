@@ -1,5 +1,4 @@
-import { StyledTitleBoldSmall } from 'shared/styles/styledComponents';
-import { variables } from 'shared/styles/variables';
+import { StyledTitleBoldSmall, variables } from 'shared/styles';
 
 import { StyledCustomCover, StyledImage } from './WorkspaceImage.styles';
 import { WorkspaceImageProps, WorkspaceUiType } from './WorkspaceImage.types';
@@ -8,8 +7,9 @@ export const WorkspaceImage = ({
   uiType = WorkspaceUiType.List,
   image = '',
   workspaceName = '',
+  coverSxProps = {},
 }: WorkspaceImageProps) => (
-  <StyledCustomCover uiType={uiType}>
+  <StyledCustomCover uiType={uiType} sx={coverSxProps}>
     {image ? (
       <StyledImage src={image} />
     ) : (

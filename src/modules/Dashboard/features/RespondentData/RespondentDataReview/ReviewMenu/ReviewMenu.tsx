@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { endOfMonth, format, startOfMonth } from 'date-fns';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 
 import { ReviewActivity, getReviewActivitiesApi, getAppletSubmitDateListApi } from 'api';
 import { DatePicker, DatePickerUiType } from 'shared/components';
@@ -24,37 +24,56 @@ export const ReviewMenu = ({
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
+  const [searchParams] = useSearchParams();
   const respondentLabel = useRespondentLabel();
-  const { control, watch, setValue } = useForm({ defaultValues: { date: undefined } });
+
+  const selectedDateParam = searchParams.get('selectedDate');
+
+  const selectedDate =
+    selectedDateParam && isValid(new Date(selectedDateParam!))
+      ? new Date(selectedDateParam!)
+      : null;
+  const defaultDate = selectedDate || new Date();
+
+  const { control, watch } = useForm({
+    defaultValues: { date: defaultDate },
+  });
   const date = watch('date');
 
-  const [startDate, setStartDate] = useState(startOfMonth(new Date()));
+  const [startDate, setStartDate] = useState(selectedDate || startOfMonth(new Date()));
   const [endDate, setEndDate] = useState(endOfMonth(new Date()));
   const [submitDates, setSubmitDates] = useState<Date[] | undefined>(undefined);
   const [activities, setActivities] = useState<ReviewActivity[]>([]);
 
-  const { execute: getAppletSubmitDateList } = useAsync(getAppletSubmitDateListApi, (res) => {
-    if (res?.data?.result) {
-      const dates = res.data.result.dates.map((date: string) => new Date(date));
-      setSubmitDates(dates);
-      setValue('date', dates[dates.length - 1]);
-    }
-  });
+  const { execute: getAppletSubmitDateList } = useAsync(getAppletSubmitDateListApi);
 
   const { execute: getReviewActivities } = useAsync(getReviewActivitiesApi, (res) => {
     res?.data?.result && setActivities(res.data.result);
+    const activity = res?.data?.result?.find(
+      ({ id, answerDates }) => id === selectedActivity?.id && answerDates.length,
+    );
+    if (!activity) {
+      setSelectedActivity(null);
+    }
     setSelectedAnswer(null);
   });
 
   useEffect(() => {
-    if (appletId && respondentId) {
-      getAppletSubmitDateList({
-        appletId,
-        respondentId,
-        fromDate: String(startDate.getTime()),
-        toDate: String(endDate.getTime()),
-      });
-    }
+    (async () => {
+      if (appletId && respondentId) {
+        const datesResult = await getAppletSubmitDateList({
+          appletId,
+          respondentId,
+          fromDate: String(startDate.getTime()),
+          toDate: String(endDate.getTime()),
+        });
+
+        if (datesResult?.data?.result) {
+          const dates = datesResult.data.result.dates.map((date: string) => new Date(date));
+          setSubmitDates(dates);
+        }
+      }
+    })();
   }, [startDate, endDate]);
 
   useEffect(() => {
@@ -96,6 +115,7 @@ export const ReviewMenu = ({
       {activities.map((activity) => (
         <ReviewMenuItem
           key={activity.id}
+          selectedDate={date}
           isSelected={selectedActivity?.id === activity.id}
           activity={activity}
           setSelectedActivity={setSelectedActivity}

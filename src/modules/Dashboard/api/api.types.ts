@@ -4,8 +4,6 @@ import { Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
-export type GetUserData = { token: string };
-
 export type GetAppletsParams = {
   params: {
     ownerId?: string;
@@ -18,13 +16,9 @@ export type GetAppletsParams = {
   };
 };
 
-export type SwitchAccount = { accountId: string };
-
 export type RespondentId = { respondentId: string };
 
 export type FolderId = { folderId: string };
-
-export type UserRoles = 'reviewer' | 'editor' | 'user' | 'coordinator' | 'manager';
 
 export type Event = {
   data: {
@@ -153,8 +147,6 @@ export type ImportSchedule = AppletId & {
   body: CreateEvent[];
 };
 
-export type SetAccount = { accountName: string };
-
 export type RemoveAccess = {
   userId: string;
   appletIds: string[];
@@ -220,8 +212,6 @@ export type TogglePin = OwnerId & {
   isPinned: boolean;
 };
 
-export type UpdateAlertStatus = { alertId: string };
-
 export type PublishApplet = AppletId & AppletName & { keywords: string[] };
 
 export type UpdateAppletSearchTerms = AppletId & { params: { keywords: string } };
@@ -286,6 +276,7 @@ export type SummaryAnswers = AppletId & {
     respondentId: string;
     fromDatetime: string;
     toDatetime: string;
+    emptyIdentifiers: boolean;
     identifiers?: string[];
     versions?: string[];
   };
@@ -335,6 +326,7 @@ export type GetWorkspaceAppletsParams = {
     ordering?: string;
     roles?: string;
     folderId?: string | null;
+    flatList?: boolean;
   };
 };
 
@@ -343,7 +335,6 @@ export type ReportConfig = {
   reportPublicKey: string;
   reportRecipients: string[];
   reportIncludeUserId: boolean;
-  reportIncludeCaseId: boolean;
   reportEmailBody: string;
 };
 
@@ -379,4 +370,10 @@ export type Version = {
 export type Response<T> = {
   count: number;
   result: T[];
+};
+
+export type LatestReport = {
+  appletId: string;
+  activityId: string;
+  respondentId: string;
 };

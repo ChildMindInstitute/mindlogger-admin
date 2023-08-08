@@ -50,17 +50,19 @@ export const dashboardRoutes = () => (
           path={page.appletRespondentData}
           element={<Navigate to={page.appletRespondentDataSummary} />}
         />
-        <Route
-          path={page.appletRespondentDataSummary}
-          element={
-            <PrivateRoute>
-              <RespondentDataSummary />
-            </PrivateRoute>
-          }
-        />
+        <Route path={page.appletRespondentDataSummary} element={<RespondentDataSummary />}>
+          <Route
+            path={page.appletRespondentDataSummary}
+            element={
+              <PrivateRoute>
+                <RespondentDataSummary />
+              </PrivateRoute>
+            }
+          />
+        </Route>
         <Route path={page.appletRespondentDataReview} element={<RespondentDataReview />}>
           <Route
-            path={page.appletRespondentDataReviewAnswer}
+            path={page.appletRespondentDataReview}
             element={
               <PrivateRoute>
                 <RespondentDataReview />

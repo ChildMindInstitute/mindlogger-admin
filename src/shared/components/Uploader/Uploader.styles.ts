@@ -83,6 +83,10 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
 export const StyledImgContainer = styled(StyledFlexColumn, shouldForwardProp)`
   align-items: center;
 
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
+
   ${({ isPrimaryUiType, hasError }: { isPrimaryUiType: boolean; hasError?: boolean }) => {
     if (isPrimaryUiType) {
       return `

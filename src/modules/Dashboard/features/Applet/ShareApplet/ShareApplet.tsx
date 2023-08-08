@@ -130,8 +130,8 @@ export const ShareApplet = ({
     <SuccessShared
       title={appletName || applet.displayName || ''}
       keywords={keywords}
-      text={getDictionaryText(applet?.description || '')}
-      activitiesQuantity={applet?.activityCount}
+      text={getDictionaryText(applet.description || '')}
+      activitiesQuantity={applet.activityCount}
       appletLink={libraryUrl}
       img={applet.image || ''}
     />

@@ -717,7 +717,8 @@ const getActivitySubscaleSetting = (
   };
 };
 
-export const getLibraryActivityItems = (items: Activity['items']) => items.map((item) => ({
+export const getLibraryActivityItems = (items: Activity['items']) =>
+  items.map((item) => ({
     ...item,
   }));
 
@@ -804,6 +805,20 @@ export const getAppletTabs = ({
     path: Path.Settings,
   },
 ];
+
+export const testIsReportCommonFieldsRequired = (
+  isScoreReport: boolean,
+  printItemsValue: boolean,
+  context: unknown,
+) => {
+  if (isScoreReport) {
+    const conditionalLogicLength = get(context, 'from.0.value.conditionalLogic')?.length;
+
+    return !!conditionalLogicLength || printItemsValue;
+  }
+
+  return printItemsValue;
+};
 
 //TODO: find a way to validate nested properties for objects in arrays for uniqueness
 export const testFunctionForUniqueness = (field: string, value: string, context: unknown) => {

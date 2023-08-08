@@ -3,13 +3,11 @@ import { styled, Box, TextField } from '@mui/material';
 import { StyledBodyMedium, StyledFlexColumn } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { shouldForwardProp } from 'shared/utils';
 
 export const StyledTextField = styled(TextField)`
-  .read-only {
-    color: ${variables.palette.outline};
-  }
-
   width: 100%;
+
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -22,7 +20,7 @@ export const StyledTextFieldContainer = styled(Box)`
   width: 100%;
 `;
 
-export const StyledCounter = styled(StyledBodyMedium)`
+export const StyledCounter = styled(StyledBodyMedium, shouldForwardProp)`
   position: absolute;
   bottom: -2.1rem;
   right: 1.5rem;

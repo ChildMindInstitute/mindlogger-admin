@@ -13,7 +13,7 @@ import { CommonFieldsProps } from './SectionScoreCommonFields.types';
 import { StyledEditor } from './SectionScoreCommonFields.styles';
 import { ItemTypesToPrint, columns } from './SectionScoreCommonFields.const';
 
-export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
+export const SectionScoreCommonFields = ({ name, sectionId }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
   const { control, getFieldState, watch, register, unregister, setValue } = useFormContext();
@@ -82,7 +82,12 @@ export const SectionScoreCommonFields = ({ name }: CommonFieldsProps) => {
         />
       </Box>
       {showMessage && (
-        <StyledEditor uiType={EditorUiType.Secondary} name={messageName} control={control} />
+        <StyledEditor
+          uiType={EditorUiType.Secondary}
+          name={messageName}
+          control={control}
+          editorId={`editor-${sectionId}`}
+        />
       )}
       <Switch
         name={`${name}.printItems`}

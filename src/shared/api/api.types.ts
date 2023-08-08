@@ -14,3 +14,10 @@ export type AppletId = { appletId: string };
 export type AppletBody = AppletId & {
   body: SingleApplet;
 };
+
+export type AlertListParams = {
+  search?: string;
+  page?: number;
+  limit?: number;
+  ordering?: string;
+};

@@ -39,7 +39,6 @@ export const AddToBuilderPopup = ({
   const { result: cartItems } = library.useCartApplets() || {};
   const isWorkspacesModalVisible = workspacesData.length > 1;
 
-  // TODO: get all applets including applets in folders (backend task M2-2580)
   const { execute: getWorkspaceApplets, isLoading } = useAsync(
     getWorkspaceAppletsApi,
     (applets) => {
@@ -105,7 +104,9 @@ export const AddToBuilderPopup = ({
       return;
     }
 
-    await getWorkspaceApplets({ params: { ownerId, limit: APPLETS_WITHOUT_LIMIT } });
+    await getWorkspaceApplets({
+      params: { ownerId, limit: APPLETS_WITHOUT_LIMIT, flatList: true },
+    });
     setStep(AddToBuilderSteps.SelectApplet);
   };
   const handleAddToExistingApplet = async () => {

@@ -1,5 +1,4 @@
 import { DatavizActivity, Version } from 'api';
-import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
 import { SubscaleSetting } from 'shared/state';
 import { ActivityItemAnswer } from 'shared/types';
@@ -10,17 +9,6 @@ export type ReportProps = {
   activity: DatavizActivity;
   identifiers: Identifier[];
   versions: Version[];
-};
-
-export type FilterFormValues = {
-  startDate: Date;
-  endDate: Date;
-  moreFiltersVisible: boolean;
-  startTime: string;
-  endTime: string;
-  filterByIdentifier?: boolean;
-  identifier?: AutocompleteOption[];
-  versions: AutocompleteOption[];
 };
 
 export type ActivityCompletion = {

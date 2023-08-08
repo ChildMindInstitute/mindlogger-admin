@@ -2,7 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Modal } from 'shared/components';
-import { StyledLinearProgress, StyledModalWrapper, theme } from 'shared/styles';
+import { StyledLinearProgress, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { useAppDispatch } from 'redux/store';
+import { reportConfig } from 'modules/Builder/state';
 
 import {
   SaveAndPublishProcessPopupProps,
@@ -17,6 +19,17 @@ export const SaveAndPublishProcessPopup = ({
   onClose,
 }: SaveAndPublishProcessPopupProps) => {
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
+  const { setReportConfigChanges } = reportConfig.actions;
+
+  const handleReportConfigSave = async () => {
+    await dispatch(setReportConfigChanges({ saveChanges: true }));
+    onClose();
+  };
+  const handleReportConfigDoNotSave = async () => {
+    await dispatch(setReportConfigChanges({ doNotSaveChanges: true }));
+    onClose();
+  };
 
   if (!step) return null;
 
@@ -33,6 +46,23 @@ export const SaveAndPublishProcessPopup = ({
       hasSecondBtn: true,
       secondBtnText: t('back'),
       onSecondBtnSubmit: onClose,
+    };
+  }
+  if (step === SaveAndPublishSteps.ReportConfigSave) {
+    modalProps = {
+      title: t('reportConfiguration'),
+      buttonText: t('save'),
+      onSubmit: handleReportConfigSave,
+      hasSecondBtn: true,
+      secondBtnText: t('dontSave'),
+      secondBtnStyles: {
+        color: variables.palette.semantic.error,
+        fontWeight: variables.font.weight.bold,
+      },
+      onSecondBtnSubmit: handleReportConfigDoNotSave,
+      hasThirdBtn: true,
+      thirdBtnText: t('cancel'),
+      onThirdBtnSubmit: onClose,
     };
   }
 

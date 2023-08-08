@@ -3,7 +3,11 @@ import { Box } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexTopCenter, StyledClearedButton } from 'shared/styles/styledComponents';
+import {
+  StyledFlexTopCenter,
+  StyledClearedButton,
+  StyledFlexAllCenter,
+} from 'shared/styles/styledComponents';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from '../AccountPanel/AccountPanel.const';
 import { NOTIFICATIONS_HEADER_HEIGHT } from './Notifications.const';
@@ -46,4 +50,8 @@ export const StyledList = styled(Box)`
 
 export const StyledCentered = styled(Box)`
   text-align: center;
+`;
+
+export const StyledBox = styled(StyledFlexAllCenter)`
+  position: relative;
 `;

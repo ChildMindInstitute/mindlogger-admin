@@ -24,7 +24,7 @@ export const MAX_FILE_SIZE_150MB = 157_286_400;
 
 export const VALID_IMAGE_TYPES = ['.png', '.jpg', '.jpeg'];
 
-export enum UploadImageError {
+export enum UploadFileError {
   Size,
   Format,
 }
@@ -202,11 +202,21 @@ export enum AudioFileFormats {
   MP3 = '.mp3',
   WAV = '.wav',
 }
-
-export const VALID_AUDIO_FILE_TYPES = [AudioFileFormats.MP3, AudioFileFormats.WAV];
+export const VALID_AUDIO_FILE_TYPES = Object.values(AudioFileFormats);
 export const ALLOWED_AUDIO_FILE_TYPES = VALID_AUDIO_FILE_TYPES.join(',');
 
-export const ALLOWED_VIDEO_FILE_TYPES = '.webm,.mp4';
+export enum VideoFileFormats {
+  WEBM = '.webm',
+  MP4 = '.mp4',
+}
+export const VALID_VIDEO_FILE_TYPES = Object.values(VideoFileFormats);
+export const ALLOWED_VIDEO_FILE_TYPES = VALID_VIDEO_FILE_TYPES.join(',');
+
+export const enum MediaType {
+  Image = 'image',
+  Audio = 'audio',
+  Video = 'video',
+}
 
 export const CONDITION_TYPES_TO_HAVE_SINGLE_VALUE = [
   ConditionType.GreaterThan,
@@ -241,3 +251,5 @@ export const enum FinalSubscale {
   FinalSubScaleScore = 'Final SubScale Score',
   OptionalTextForFinalSubScaleScore = 'Optional text for Final SubScale Score',
 }
+
+export const REPORT_CONFIG_PARAM = 'report-configuration';

@@ -1,20 +1,6 @@
 import styled from '@emotion/styled/macro';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
-import {
-  StyledFlexAllCenter,
-  StyledClearedButton,
-  StyledFlexColumn,
-} from 'shared/styles/styledComponents';
-
-export const StyledForm = styled('form')`
-  margin: ${theme.spacing(0, 6.4, 6.4, 0)};
-`;
-
-export const StyledContainer = styled(StyledFlexColumn)`
-  width: 54.6rem;
-`;
+import { variables, StyledFlexAllCenter, StyledClearedButton } from 'shared/styles';
 
 export const StyledSvg = styled(StyledFlexAllCenter)`
   width: 4rem;
@@ -28,8 +14,6 @@ export const StyledSvg = styled(StyledFlexAllCenter)`
 
 export const StyledButton = styled(StyledClearedButton)`
   justify-content: space-between;
-  width: 18.6rem;
-  color: ${variables.palette.on_surface};
 
   &.MuiButtonBase-root.MuiButton-root.MuiButton-text:hover {
     background-color: transparent;
@@ -44,4 +28,10 @@ export const StyledButton = styled(StyledClearedButton)`
 
 export const StyledLink = styled('a')`
   color: ${variables.palette.primary};
+  text-decoration: none;
+  transition: ${variables.transitions.opacity};
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;

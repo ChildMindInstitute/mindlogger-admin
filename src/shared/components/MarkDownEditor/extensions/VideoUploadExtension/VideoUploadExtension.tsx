@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
-import { ALLOWED_VIDEO_FILE_TYPES } from 'shared/consts';
+import { ALLOWED_VIDEO_FILE_TYPES, MediaType } from 'shared/consts';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
@@ -17,11 +17,12 @@ export const VideoUploadExtension = ({
   onInsert,
   setFileSizeExceeded,
   fileSizeExceeded,
+  setIncorrectFormat,
 }: MediaContentExtensionProps) => {
   const { t } = useTranslation('app');
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
     const generator: InsertContentGenerator = () => ({
-      targetValue: `<figure><figcaption>${label}:</figcaption><video controls width="250"><source src="${address}"></video></figure>`,
+      targetValue: `![${label}](${address})`,
       select: false,
       deviationStart: 0,
       deviationEnd: 0,
@@ -43,6 +44,8 @@ export const VideoUploadExtension = ({
     insertHandler,
     setFileSizeExceeded,
     fileSizeExceeded,
+    setIncorrectFormat,
+    type: MediaType.Video,
   });
 
   return (

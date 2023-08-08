@@ -53,7 +53,7 @@ export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
           </StyledLabel>
         }
       />
-      <SectionScoreCommonFields name={name} />
+      <SectionScoreCommonFields name={name} sectionId={scoreId} />
     </>
   );
 };

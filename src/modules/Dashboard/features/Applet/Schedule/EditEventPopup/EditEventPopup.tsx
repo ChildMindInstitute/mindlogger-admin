@@ -28,6 +28,7 @@ export const EditEventPopup = ({
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [isFormChanged, setIsFormChanged] = useState(false);
+  const [isClosable, setIsClosable] = useState(false);
   const { appletId, respondentId } = useParams();
   const dispatch = useAppDispatch();
 
@@ -52,7 +53,14 @@ export const EditEventPopup = ({
     setRemoveSingleScheduledPopupVisible(false);
   };
 
-  const handleEditEventClose = () => setEditEventPopupVisible(false);
+  const handleEditEventClose = () => {
+    if (!isClosable) return;
+
+    setEditEventPopupVisible(false);
+    setIsClosable(false);
+  };
+
+  const handleTransitionEntered = () => setIsClosable(true);
 
   const onRemoveEventClick = () => {
     setRemoveSingleScheduledPopupVisible(true);
@@ -101,6 +109,7 @@ export const EditEventPopup = ({
           buttonText={t('save')}
           width="67.1"
           disabledSubmit={!!editedEvent && !isFormChanged}
+          onTransitionEntered={handleTransitionEntered}
         >
           <>
             <StyledContainer>

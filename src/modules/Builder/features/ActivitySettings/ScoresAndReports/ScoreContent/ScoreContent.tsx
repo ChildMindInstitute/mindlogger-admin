@@ -17,15 +17,22 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components';
-import { Condition, Item } from 'shared/state';
+import { Item, ScoreConditionalLogic } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
 
-import { calculationTypes, scoreItemsColumns, selectedItemsColumns } from './ScoreContent.const';
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
-import { ScoreContentProps } from './ScoreContent.types';
+import { StyledButton } from '../ScoresAndReports.styles';
+import { SectionScoreHeader } from '../SectionScoreHeader';
+import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
+import { CopyId } from './CopyId';
+import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
+import { Title } from '../Title';
+import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
+import { ScoreCondition } from './ScoreCondition';
+import { calculationTypes, scoreItemsColumns, selectedItemsColumns } from './ScoreContent.const';
 import {
   getDefaultConditionalValue,
   getIsScoreIdVariable,
@@ -35,15 +42,9 @@ import {
   getTableScoreItems,
   updateMessagesWithVariable,
 } from './ScoreContent.utils';
-import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
-import { StyledButton } from '../ScoresAndReports.styles';
-import { SectionScoreHeader } from '../SectionScoreHeader';
-import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
-import { ScoreCondition } from './ScoreCondition';
-import { CopyId } from './CopyId';
-import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
+import { ScoreContentProps } from './ScoreContent.types';
 
-export const ScoreContent = ({ name, title }: ScoreContentProps) => {
+export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext();
   const { activity } = useCurrentActivity();
@@ -158,27 +159,28 @@ export const ScoreContent = ({ name, title }: ScoreContentProps) => {
         sxProps={{ mb: theme.spacing(2.5) }}
         isValueName
       />
-      <SectionScoreCommonFields name={name} />
+      <SectionScoreCommonFields name={name} sectionId={`score-${index}`} />
       {!!scoreConditionals?.length && (
         <>
           <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>
             {t('scoreConditions')}
           </StyledTitleMedium>
-          {scoreConditionals?.map((conditional: Condition, index: number) => {
-            const conditionalName = `${scoreConditionalsName}.${index}`;
+          {scoreConditionals?.map((conditional: ScoreConditionalLogic, key: number) => {
+            const conditionalName = `${scoreConditionalsName}.${key}`;
             const title = t('scoreConditional', {
-              index: index + 1,
+              index: key + 1,
             });
+            const headerTitle = <Title title={title} name={conditional?.name} />;
 
             return (
               <ToggleItemContainer
-                key={`data-score-conditional-${getEntityKey(conditional) || index}-${index}`}
+                key={`data-score-conditional-${getEntityKey(conditional) || key}-${key}`}
                 HeaderContent={SectionScoreHeader}
                 Content={ScoreCondition}
-                contentProps={{ name: conditionalName, scoreId }}
+                contentProps={{ name: conditionalName, scoreId: `score-condition-${index}-${key}` }}
                 headerContentProps={{
-                  onRemove: () => removeScoreConditional(index),
-                  title,
+                  onRemove: () => removeScoreConditional(key),
+                  title: headerTitle,
                   name: conditionalName,
                 }}
                 uiType={ToggleContainerUiType.Score}

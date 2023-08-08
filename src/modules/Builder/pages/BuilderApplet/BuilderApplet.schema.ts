@@ -2,7 +2,11 @@ import * as yup from 'yup';
 import get from 'lodash/get';
 
 import i18n from 'i18n';
-import { getIsRequiredValidateMessage, getMaxLengthValidationError } from 'shared/utils';
+import {
+  getEntityKey,
+  getIsRequiredValidateMessage,
+  getMaxLengthValidationError,
+} from 'shared/utils';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
@@ -23,7 +27,7 @@ import {
   RoundTypeEnum,
   TouchItemNames,
 } from 'modules/Builder/types';
-import { Config } from 'shared/state';
+import { Condition, Config, Item } from 'shared/state';
 import {
   ItemConfigurationSettings,
   SLIDER_LABEL_MAX_LENGTH,
@@ -40,8 +44,13 @@ import {
   testFunctionForSubscaleAge,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
+  testIsReportCommonFieldsRequired,
 } from './BuilderApplet.utils';
-import { CONDITION_TYPES_TO_HAVE_OPTION_ID, ItemTestFunctions } from './BuilderApplet.const';
+import {
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  ItemTestFunctions,
+  alphanumericAndHyphenRegexp,
+} from './BuilderApplet.const';
 
 const { t } = i18n;
 
@@ -187,7 +196,7 @@ export const ItemSchema = () =>
       name: yup
         .string()
         .required(getIsRequiredValidateMessage('itemName'))
-        .matches(/^[a-zA-Z0-9_-]+$/g, {
+        .matches(alphanumericAndHyphenRegexp, {
           message: t('validationMessages.alphanumericAndHyphen', { field: t('itemName') }),
         })
         .test(
@@ -448,15 +457,37 @@ export const ConditionSchema = () =>
 export const ConditionalLogicSchema = () =>
   yup.object({
     match: yup.string().required(getIsRequiredValidateMessage('conditionMatch')),
-    itemKey: yup.string().required(getIsRequiredValidateMessage('conditionTarget')),
+    itemKey: yup
+      .string()
+      .required(getIsRequiredValidateMessage('conditionTarget'))
+      .test(
+        'item-flow-contradiction',
+        t('appletHasItemFlowContradictions') as string,
+        (itemKey, context) => {
+          const items = get(context, 'from.1.value.items');
+          const conditions = get(context, 'parent.conditions');
+          const itemIds = items?.map((item: Item) => getEntityKey(item));
+          const itemIndex = itemIds?.findIndex((id: string) => id === itemKey);
+          const itemsBefore = itemIds?.slice(0, itemIndex + 1);
+
+          return !conditions?.some(({ itemName }: Condition) => !itemsBefore.includes(itemName));
+        },
+      ),
     conditions: yup.array().of(ConditionSchema()),
   });
 
-const ReportCommonFields = {
+const getReportCommonFields = (isScoreReport = false) => ({
   showMessage: yup.boolean(),
   printItems: yup.boolean().when('showMessage', {
     is: false,
-    then: yup.boolean().oneOf([true], <string>t('validationMessages.mustShowMessageOrItems')),
+    then: yup
+      .boolean()
+      .test(
+        'required-report-common-fields',
+        <string>t('validationMessages.mustShowMessageOrItems'),
+        (printItemsName, context) =>
+          testIsReportCommonFieldsRequired(isScoreReport, !!printItemsName, context),
+      ),
   }),
   message: yup
     .string()
@@ -472,7 +503,7 @@ const ReportCommonFields = {
       .min(1, <string>t('validationMessages.atLeastOneItem'))
       .nullable(),
   }),
-};
+});
 
 export const ScoreConditionalLogic = () =>
   yup.object({
@@ -491,7 +522,7 @@ export const ScoreConditionalLogic = () =>
       .of(ConditionSchema())
       .min(1, <string>t('validationMessages.atLeastOneCondition')),
     flagScore: yup.boolean(),
-    ...ReportCommonFields,
+    ...getReportCommonFields(),
     match: yup.string(),
   });
 
@@ -507,7 +538,7 @@ export const ScoreSchema = () =>
         (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
       ),
     calculationType: yup.string().required(),
-    ...ReportCommonFields,
+    ...getReportCommonFields(true),
     itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
     conditionalLogic: yup.array().of(ScoreConditionalLogic()).nullable(),
   });
@@ -533,12 +564,15 @@ export const SectionSchema = () =>
     name: yup
       .string()
       .required(getIsRequiredValidateMessage('sectionName'))
+      .matches(alphanumericAndHyphenRegexp, {
+        message: t('validationMessages.alphanumericAndHyphen', { field: t('sectionName') }),
+      })
       .test(
         'unique-section-name',
         t('validationMessages.unique', { field: t('sectionName') }) as string,
         (sectionName, context) => testFunctionForUniqueness('sections', sectionName ?? '', context),
       ),
-    ...ReportCommonFields,
+    ...getReportCommonFields(),
     conditionalLogic: SectionConditionalLogic().nullable(),
   });
 

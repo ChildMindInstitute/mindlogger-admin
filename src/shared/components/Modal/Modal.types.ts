@@ -39,4 +39,5 @@ export type ModalProps = {
   footerStyles?: SxProps;
   hasActions?: boolean;
   submitBtnTooltip?: string;
+  onTransitionEntered?: (node: HTMLElement, isAppearing: boolean) => void;
 };

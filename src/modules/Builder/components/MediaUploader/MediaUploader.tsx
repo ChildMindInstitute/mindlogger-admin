@@ -7,6 +7,7 @@ import {
   StyledLabelBoldLarge,
   theme,
   variables,
+  StyledTitleSmall,
 } from 'shared/styles';
 import { Svg } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
@@ -57,25 +58,26 @@ export const MediaUploader = ({
                 {t(error, { size: byteFormatter(MAX_FILE_SIZE_150MB) })}
               </StyledBodyMedium>
             )}
-            <StyledBodyMedium sx={{ m: theme.spacing(1, 0) }}>
-              {placeholder ?? (
-                <Trans i18nKey="dropAudio">
-                  Drop Audio here <br /> or <span>click to browse</span>.
+            {placeholder ?? (
+              <StyledTitleSmall sx={{ textAlign: 'center', m: theme.spacing(1, 0) }}>
+                <Trans i18nKey="mediaUploaderPlaceholder">
+                  Drop <strong>.mp3</strong> or <strong>.wav</strong> here <br />
+                  or <span>click to browse</span>.
                 </Trans>
-              )}
-            </StyledBodyMedium>
+              </StyledTitleSmall>
+            )}
           </StyledSourceContainer>
         </StyledContainer>
       )}
       {!!media && hasPreview && (
         <StyledFlexColumn sx={{ mr: theme.spacing(3.2) }}>
-          <StyledLabelBoldLarge sx={{ color: variables.palette.primary }}>
-            <StyledPreview>
-              {media.uploaded && <Svg id="check" width={16} height={16} />}
+          <StyledPreview>
+            {media.uploaded && <Svg id="check" width={16} height={16} />}
+            <StyledLabelBoldLarge sx={{ color: variables.palette.primary }}>
               {media?.name}
-            </StyledPreview>
-          </StyledLabelBoldLarge>
-          {!media.uploaded && <StyledLinearProgress />}
+            </StyledLabelBoldLarge>
+          </StyledPreview>
+          {!media.uploaded && <StyledLinearProgress sx={{ mt: theme.spacing(0.5) }} />}
         </StyledFlexColumn>
       )}
       {!!media && !hasPreview && <MLPlayer media={media} onRemove={onRemove} />}

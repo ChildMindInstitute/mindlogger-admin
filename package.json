@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-admin",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -23,6 +23,7 @@
     "color-blend": "^4.0.0",
     "crypto-browserify": "^3.12.0",
     "date-fns": "^2.29.3",
+    "downloadjs": "^1.4.7",
     "file-saver": "^2.0.5",
     "history": "^5.3.0",
     "i18next": "^22.0.4",
@@ -32,6 +33,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
+    "lodash.uniqby": "^4.7.0",
     "lodash.uniqueid": "^4.0.1",
     "md-editor-rt": "2.8.1",
     "react": "^18.2.0",
@@ -83,10 +85,12 @@
     ]
   },
   "devDependencies": {
+    "@types/downloadjs": "^1.4.3",
     "@types/file-saver": "^2.0.5",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.get": "^4.4.7",
     "@types/lodash.isequal": "^4.5.6",
+    "@types/lodash.uniqby": "^4.7.7",
     "@types/lodash.uniqueid": "^4.0.7",
     "@types/marked": "4.0.8",
     "@types/react-beautiful-dnd": "^13.1.4",

@@ -3,4 +3,5 @@ export type InstructionProps = {
   name: string;
   title?: string;
   hasError?: boolean;
+  instructionId?: string;
 };

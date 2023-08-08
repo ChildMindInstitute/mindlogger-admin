@@ -108,7 +108,7 @@ export const getJourneyCSVObject = <T>({
       items: event.items,
       rawAnswersObject,
     }),
-    response: parseResponseValue(event, index, true),
+    response: parseResponseValue(event, index),
     options: replaceItemVariableWithName({
       markdown: parseOptions(responseValues, event.activityItem?.responseType) ?? '',
       items: event.items,

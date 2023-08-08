@@ -1,15 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { addDays } from 'date-fns';
+import { addDays, format } from 'date-fns';
+import download from 'downloadjs';
 
 import { Spinner, Svg, Tooltip } from 'shared/components';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
-import { StyledHeadlineLarge, StyledTitleLarge, theme, variables } from 'shared/styles';
-import { getAnswersApi } from 'api';
+import {
+  StyledErrorText,
+  StyledHeadlineLarge,
+  StyledTitleLarge,
+  theme,
+  variables,
+} from 'shared/styles';
+import { getAnswersApi, getLatestReportApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { getErrorMessage } from 'shared/utils';
+import { applet } from 'shared/state';
+import { DateFormats } from 'shared/consts';
+import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportFilters } from './ReportFilters';
@@ -17,7 +28,6 @@ import { StyledEmptyState, StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 import {
   ActivityCompletion,
-  FilterFormValues,
   FormattedResponse,
   ReportProps,
   CurrentActivityCompletionData,
@@ -26,11 +36,12 @@ import { ActivityCompleted } from './ActivityCompleted';
 import { ResponseOptions } from './ResponseOptions';
 import {
   getDateISO,
-  getDefaultFilterValues,
   getFormattedResponses,
   getIdentifiers,
+  getLatestReportUrl,
 } from './Report.utils';
 import { ReportContext } from './context';
+import { LATEST_REPORT_TYPE } from './Report.const';
 
 export const Report = ({ activity, identifiers = [], versions = [] }: ReportProps) => {
   const { t } = useTranslation('app');
@@ -38,23 +49,60 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const getDecryptedActivityData = useDecryptedActivityData();
+  const { result: appletData } = applet.useAppletData() ?? {};
+  const currentActivity = appletData?.activities.find(({ id }) => id === activity.id);
+  const disabledLatestReport = !currentActivity?.scoresAndReports?.generateReport;
 
+  const [latestReportError, setLatestReportError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<ActivityCompletion[]>([]);
   const [responseOptions, setResponseOptions] = useState<Record<string, FormattedResponse[]>>();
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
     useState<CurrentActivityCompletionData>(null);
 
-  const methods = useForm<FilterFormValues>({
-    defaultValues: getDefaultFilterValues(versions),
-  });
+  const { control, getValues } = useFormContext<SummaryFiltersForm>();
 
   const watchFilters = useWatch({
-    control: methods.control,
-    name: ['startDate', 'endDate', 'startTime', 'endTime', 'versions', 'identifier'],
+    control,
+    name: [
+      'startDate',
+      'endDate',
+      'startTime',
+      'endTime',
+      'versions',
+      'filterByIdentifier',
+      'identifier',
+    ],
   });
 
   const { execute: getAnswers } = useAsync(getAnswersApi);
+  const { execute: getLatestReport, isLoading: latestReportLoading } = useAsync(getLatestReportApi);
+
+  const downloadLatestReportHandler = async () => {
+    if (!appletId || !respondentId) return;
+
+    setLatestReportError(null);
+    try {
+      const { data } = await getLatestReport({
+        appletId,
+        activityId: activity.id,
+        respondentId,
+      });
+      if (data) {
+        const base64Str = Buffer.from(data).toString('base64');
+        const linkSource = getLatestReportUrl(base64Str);
+        const curDate = format(new Date(), DateFormats.YearMonthDayHoursMinutesSeconds);
+
+        download(
+          linkSource,
+          `REPORT_${appletData?.displayName}_${activity.name}_${respondentId}_${curDate}.pdf`,
+          LATEST_REPORT_TYPE,
+        );
+      }
+    } catch (error) {
+      setLatestReportError(getErrorMessage(error));
+    }
+  };
 
   useEffect(() => {
     const fetchAnswers = async () => {
@@ -62,7 +110,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
       try {
         setIsLoading(true);
         const { startDate, endDate, startTime, endTime, identifier, filterByIdentifier, versions } =
-          methods.getValues();
+          getValues();
+        const selectedIdentifiers = getIdentifiers(filterByIdentifier, identifier, identifiers);
 
         const result = await getAnswers({
           appletId,
@@ -71,7 +120,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
             respondentId,
             fromDatetime: getDateISO(startDate, startTime),
             toDatetime: getDateISO(endDate || addDays(startDate, 1), endTime),
-            identifiers: getIdentifiers(filterByIdentifier, identifier, identifiers),
+            emptyIdentifiers: !!filterByIdentifier && !selectedIdentifiers?.length,
+            identifiers: selectedIdentifiers,
             versions: versions.map(({ id }) => id),
           },
         });
@@ -120,47 +170,52 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
   return (
     <>
-      {isLoading && <Spinner />}
+      {(isLoading || latestReportLoading) && <Spinner />}
       <StyledReport ref={containerRef}>
         <StyledHeader isSticky={isHeaderSticky}>
           <StyledHeadlineLarge color={variables.palette.on_surface}>
             {activity.name}
           </StyledHeadlineLarge>
-          <Tooltip tooltipTitle={t('configureServer')}>
-            <span>
-              <StyledTextBtn variant="text" startIcon={<Svg id="export" width="18" height="18" />}>
-                {t('downloadLatestReport')}
-              </StyledTextBtn>
-            </span>
-          </Tooltip>
+          <Box>
+            <Tooltip tooltipTitle={t('configureServer')}>
+              <span>
+                <StyledTextBtn
+                  onClick={downloadLatestReportHandler}
+                  variant="text"
+                  startIcon={<Svg id="export" width="18" height="18" />}
+                  disabled={disabledLatestReport}
+                >
+                  {t('downloadLatestReport')}
+                </StyledTextBtn>
+              </span>
+            </Tooltip>
+            {latestReportError && (
+              <StyledErrorText sx={{ mt: theme.spacing(0.8) }}>{latestReportError}</StyledErrorText>
+            )}
+          </Box>
         </StyledHeader>
         <Box sx={{ m: theme.spacing(4.8, 6.4) }}>
           <ReportContext.Provider
             value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}
           >
-            <FormProvider {...methods}>
-              <ReportFilters identifiers={identifiers} versions={versions} />
-              {!isLoading && answers.length > 0 && (
-                <>
-                  <ActivityCompleted answers={answers} versions={versions} />
-                  <Subscales answers={answers} versions={versions} />
-                  {responseOptions && !!Object.values(responseOptions).length && (
-                    <ResponseOptions responseOptions={responseOptions} versions={versions} />
-                  )}
-                </>
-              )}
-              {!isLoading && !answers.length && (
-                <StyledEmptyState>
-                  <Svg id="chart" width="80" height="80" />
-                  <StyledTitleLarge
-                    sx={{ mt: theme.spacing(1.6) }}
-                    color={variables.palette.outline}
-                  >
-                    {t('noDataForActivityFilters')}
-                  </StyledTitleLarge>
-                </StyledEmptyState>
-              )}
-            </FormProvider>
+            <ReportFilters identifiers={identifiers} versions={versions} />
+            {!isLoading && answers.length > 0 && (
+              <>
+                <ActivityCompleted answers={answers} versions={versions} />
+                <Subscales answers={answers} versions={versions} />
+                {responseOptions && !!Object.values(responseOptions).length && (
+                  <ResponseOptions responseOptions={responseOptions} versions={versions} />
+                )}
+              </>
+            )}
+            {!isLoading && !answers.length && (
+              <StyledEmptyState>
+                <Svg id="chart" width="80" height="80" />
+                <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
+                  {t('noDataForActivityFilters')}
+                </StyledTitleLarge>
+              </StyledEmptyState>
+            )}
           </ReportContext.Provider>
         </Box>
       </StyledReport>

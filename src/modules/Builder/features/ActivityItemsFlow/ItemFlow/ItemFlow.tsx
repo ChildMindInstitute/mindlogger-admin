@@ -12,7 +12,7 @@ import { ItemFlowProps, ContentProps } from './ItemFlow.types';
 import { getEmptyCondition } from './ItemFlow.utils';
 import { StyledTitle } from './ItemFlow.styles';
 
-const Content = ({ items, name, onRemove }: ContentProps) => (
+const Content = ({ items, name, conditionalError, onRemove }: ContentProps) => (
   <StyledFlexColumn sx={{ gap: '1.2rem' }}>
     {items?.map((condition: Condition, index: number) => (
       <ConditionRow
@@ -20,9 +20,10 @@ const Content = ({ items, name, onRemove }: ContentProps) => (
         name={name}
         index={index}
         onRemove={() => onRemove(index)}
+        autoTrigger
       />
     ))}
-    <SummaryRow name={name} />
+    <SummaryRow name={name} error={conditionalError} />
   </StyledFlexColumn>
 );
 
@@ -47,6 +48,7 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   };
 
   const { error } = getFieldState(itemName);
+  const { error: conditionalError } = getFieldState(`${itemName}.itemKey`);
 
   const title = (
     <StyledTitle sx={{ position: 'relative' }}>
@@ -60,7 +62,12 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
       title={title}
       Content={Content}
       HeaderContent={Actions}
-      contentProps={{ items: conditions, name: itemName, onRemove: handleRemoveCondition }}
+      contentProps={{
+        items: conditions,
+        name: itemName,
+        onRemove: handleRemoveCondition,
+        conditionalError,
+      }}
       headerContentProps={{ name: itemName, onAdd: handleAddCondition, onRemove }}
     />
   );

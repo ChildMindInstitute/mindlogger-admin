@@ -1,5 +1,5 @@
 import { forwardRef, useContext } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { createSearchParams, generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 
@@ -24,9 +24,15 @@ export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
     const navigateToReviewAnswer = () => {
       if (!data) return;
 
-      navigate(
-        generatePath(page.appletRespondentDataReviewAnswer, { appletId, respondentId, answerId }),
-      );
+      const selectedDate = format(new Date(data?.parsed.x), DateFormats.YearMonthDay);
+      const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+      navigate({
+        pathname,
+        search: createSearchParams({
+          selectedDate,
+          answerId,
+        }).toString(),
+      });
     };
 
     const showSubscaleResultHandler = () => {

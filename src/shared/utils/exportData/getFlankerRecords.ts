@@ -107,7 +107,7 @@ const getResponseObj = ({
   if (tag === FlankerTag.Response) {
     eventOffset = eventStartTimestamp = DEFAULT_VALUE;
     const buttonPressed =
-      response.button_pressed === CorrectPress.Left
+      Number(response.button_pressed) === CorrectPress.Left
         ? FlankerResponseValue.Left
         : FlankerResponseValue.Right;
     responseValue =
@@ -289,7 +289,8 @@ export const getFlankerRecords = (
     response_time: row.responseTime,
     response: row.responseValue,
     response_accuracy: row.responseAccuracy,
-    failed_practices:
-      item.config.minimumAccuracy && index === 0 ? failedPractice.toString() : undefined,
+    ...(item.config.minimumAccuracy && index === 0
+      ? { failed_practices: failedPractice.toString() }
+      : {}),
   }));
 };

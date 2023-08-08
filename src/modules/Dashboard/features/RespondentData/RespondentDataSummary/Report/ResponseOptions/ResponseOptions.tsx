@@ -9,15 +9,16 @@ import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentDa
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 import { getDictionaryText } from 'shared/utils';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
+import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
 import { COLORS } from '../Charts/Charts.const';
-import { FilterFormValues, FormattedResponse } from '../Report.types';
+import { FormattedResponse } from '../Report.types';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
 
 export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOptionsProps) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext<FilterFormValues>();
+  const { watch } = useFormContext<SummaryFiltersForm>();
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
