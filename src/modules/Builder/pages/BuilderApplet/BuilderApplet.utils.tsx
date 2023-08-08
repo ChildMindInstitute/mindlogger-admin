@@ -477,7 +477,7 @@ const getAlerts = (item: Item) => {
 
     if (!optionsWithAlert?.length) return [];
 
-    return optionsWithAlert.map(({ id, value, alert }) => ({
+    return optionsWithAlert.map(({ id, alert }) => ({
       key: uuidv4(),
       value: id,
       alert,
