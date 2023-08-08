@@ -6,8 +6,6 @@ import { AppletImage, Table, UiType } from 'shared/components';
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { WorkspaceImage, WorkspaceUiType } from 'shared/features/SwitchWorkspace';
 import {
-  PublishedActivity,
-  PublishedActivityFlow,
   PublishedApplet,
   SelectedCartApplet,
   SelectedCombinedCartApplet,
@@ -358,7 +356,7 @@ export const getSelectedAppletData = (
 
   const selectedActivities = applet.activities
     .filter((activity) => selectedActivityKeysSet.has(activity.key))
-    .map((activity, index, activities) => {
+    .map((activity) => {
       let isPerformanceTask = false;
       let performanceTaskType: PerfTaskType | null = null;
 
@@ -379,7 +377,7 @@ export const getSelectedAppletData = (
 
           //there is no 'id' in responseValues.options for Single/Multi per row
           if (responseTypeToHaveDataMatrix.includes(newItem.responseType)) {
-            newItem.responseValues = mapResponseValues<SingleAndMultipleSelectRowsResponseValues>(
+            newItem.responseValues = mapResponseValues(
               newItem.responseValues as SingleAndMultipleSelectRowsResponseValues,
             );
           }
