@@ -8,6 +8,7 @@ export type CropPopupProps = {
   image: File;
   setImage: Dispatch<SetStateAction<File | null>>;
   ratio?: number;
+  onSave: (data: FormData) => void;
 };
 
 export type CropImage = {

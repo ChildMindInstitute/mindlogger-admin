@@ -2,13 +2,16 @@ import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Button } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { postFileUploadApi } from 'api';
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
+import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { byteFormatter, joinWihComma } from 'shared/utils';
 import { MAX_FILE_SIZE_25MB, VALID_IMAGE_TYPES, UploadFileError, MediaType } from 'shared/consts';
+import { useAsync } from 'shared/hooks';
 
 import {
   StyledButtonGroup,
@@ -44,6 +47,11 @@ export const Uploader = ({
   const [error, setError] = useState<UploadFileError | null>(null);
   const [isRemovePopupOpen, setRemovePopupOpen] = useState(false);
   const isPrimaryUiType = uiType === UploaderUiType.Primary;
+
+  const { execute: executeImgUpload, isLoading } = useAsync(
+    postFileUploadApi,
+    (response) => response?.data?.result && setValue(response?.data?.result.url),
+  );
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -123,6 +131,7 @@ export const Uploader = ({
   const deleteSvgSize = isPrimaryUiType ? '18' : '24';
   const hasSizeError = error === UploadFileError.Size;
   const hasFormatError = error === UploadFileError.Format;
+  const spinnerUiType = isPrimaryUiType ? SpinnerUiType.Primary : SpinnerUiType.Secondary;
 
   return (
     <>
@@ -137,6 +146,7 @@ export const Uploader = ({
         sx={{ ...wrapperStyles }}
         {...dragEvents}
       >
+        {isLoading && <Spinner uiType={spinnerUiType} />}
         {imageField ? (
           <UploadedImgContainer isPrimaryUiType={isPrimaryUiType} width={width} height={height}>
             <StyledUploadImg alt="file upload" src={imageField} isPrimaryUiType={isPrimaryUiType} />
@@ -213,6 +223,7 @@ export const Uploader = ({
           image={image}
           setImage={setImage}
           ratio={cropRatio}
+          onSave={executeImgUpload}
         />
       )}
       <RemoveImagePopup

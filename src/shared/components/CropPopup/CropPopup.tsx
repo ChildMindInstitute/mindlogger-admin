@@ -5,8 +5,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
-import { postFileUploadApi } from 'api';
-import { useAsync } from 'shared/hooks';
 import { getUploadFormData } from 'shared/utils';
 
 import { cropImage, initPercentCrop } from './CropPopup.utils';
@@ -17,20 +15,16 @@ import { CropPopupProps } from './CropPopup.types';
 export const CropPopup = ({
   open,
   setCropPopupVisible,
-  setValue,
   image,
   setImage,
   ratio = 1,
+  onSave,
 }: CropPopupProps) => {
   const { t } = useTranslation('app');
 
   const [crop, setCrop] = useState<Crop>();
   const [isSmallImg, setIsSmallImg] = useState(false);
   const imgSrc = useMemo(() => URL.createObjectURL(image), [image]);
-  const { execute: executeImgUpload } = useAsync(
-    postFileUploadApi,
-    (response) => response?.data?.result && setValue(response?.data?.result.url),
-  );
 
   const { type, name } = image;
 
@@ -51,7 +45,7 @@ export const CropPopup = ({
       onReady: (blob) => {
         const imageFile = new File([blob], name, { type });
         const body = getUploadFormData(imageFile);
-        executeImgUpload(body);
+        onSave(body);
       },
     });
   };

@@ -38,6 +38,7 @@ const getContainerSecondaryStyles = (isImgUploaded: boolean, hasError?: boolean)
 `;
 
 export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
+  position: relative;
   flex-shrink: 0;
 
   ${({
