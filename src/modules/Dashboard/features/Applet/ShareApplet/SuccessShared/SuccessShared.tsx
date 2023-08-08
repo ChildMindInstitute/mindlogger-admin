@@ -56,7 +56,7 @@ export const SuccessShared = ({
           )}
           {activitiesQuantity ? (
             <StyledTitleBoldSmall
-              sx={{ marginTop: theme.spacing(1.6), flexBasis: '100%' }}
+              sx={{ marginTop: theme.spacing(1.6) }}
             >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleBoldSmall>
           ) : null}
         </StyledAppletContent>
