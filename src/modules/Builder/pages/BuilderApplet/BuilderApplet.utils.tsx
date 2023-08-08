@@ -721,27 +721,6 @@ const getActivitySubscaleSetting = (
   };
 };
 
-export const getLibraryActivityItems = (items: Activity['items']) =>
-  items.map((item) => ({
-    ...item,
-  }));
-
-export const getLibraryValues = (appletData?: SingleApplet) => {
-  if (!appletData) return {};
-
-  const processedApplet = {
-    ...appletData,
-    activities: appletData.activities.map((activity) => {
-      const items = getLibraryActivityItems(activity.items);
-
-      return {
-        ...activity,
-        items,
-      };
-    }),
-  };
-};
-
 export const getDefaultValues = (appletData?: SingleApplet) => {
   if (!appletData) return getNewApplet();
 
