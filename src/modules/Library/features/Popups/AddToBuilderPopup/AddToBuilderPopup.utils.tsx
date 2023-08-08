@@ -331,7 +331,6 @@ const mapResponseValues = <
   }),
 });
 
-// TODO: Make filtering for scores, subscales, regarding which items were selected
 export const getSelectedAppletData = (
   applet: PublishedApplet,
   selectedItems: SelectedItem[],
@@ -353,20 +352,21 @@ export const getSelectedAppletData = (
             key: uuidv4(),
           };
 
-          //there is no 'id' in responseValues.options for Single/Multi selection
+          //for security reasons there is no 'id' in responseValues.options for Single/Multi selection
           if (responseTypeToHaveOptions.includes(newItem.responseType)) {
             newItem.responseValues = mapResponseValues(
               newItem.responseValues as SingleAndMultipleSelectItemResponseValues,
             );
           }
 
-          //there is no 'id' in responseValues.options for Single/Multi per row
+          //for security reasons there is no 'id' in responseValues.options for Single/Multi per row
           if (responseTypeToHaveDataMatrix.includes(newItem.responseType)) {
             newItem.responseValues = mapResponseValues(
               newItem.responseValues as SingleAndMultipleSelectRowsResponseValues,
             );
           }
 
+          //per requirements if not all of the items in activity were selected, conditional logic should be removed
           if (activity.items.length > items.length) newItem.conditionalLogic = undefined;
 
           return newItem;
@@ -379,6 +379,7 @@ export const getSelectedAppletData = (
         }
       }
 
+      //per requirements if not all of the items in activity were selected, scores & reports and subscales should be removed
       const hasSubscalesAndScores = filteredItems.length === activity.items.length;
 
       return {
@@ -391,16 +392,15 @@ export const getSelectedAppletData = (
       };
     });
 
+  //per requirements if not all of the activites in applet were selected, activity flows should be removed
   const hasActivityFlows = applet.activities.length === selectedActivityKeysSet.size;
 
   const selectedActivityFlows = hasActivityFlows
-    ? applet.activityFlows
-        .filter((flow) => flow.items.every((item) => selectedActivityKeysSet.has(item.activityKey)))
-        .map((flow) => ({
-          ...flow,
-          key: uuidv4(),
-          items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
-        }))
+    ? applet.activityFlows.map((flow) => ({
+        ...flow,
+        key: uuidv4(),
+        items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
+      }))
     : [];
 
   const { id, keywords, version, activities, activityFlows, ...restApplet } = applet;
