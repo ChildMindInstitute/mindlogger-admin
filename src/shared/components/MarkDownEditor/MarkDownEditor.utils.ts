@@ -82,7 +82,7 @@ MdEditor.config({
 
       const videoMatch = href?.match(VIDEO_LINK_REGEX);
       if (videoMatch) {
-        const defaultReturn = `<a href="${href}" target="_blank">${text || href}</a>`;
+        const defaultReturn = href ? `<a href="${href}" target="_blank">${text || href}</a>` : '';
         const videoSource = videoMatch[1];
         const videoUrl = videoMatch[3];
         if (!videoSource || !videoUrl) return defaultReturn;
