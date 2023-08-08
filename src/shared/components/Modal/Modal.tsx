@@ -38,6 +38,7 @@ export const Modal = ({
   footerStyles,
   hasActions = true,
   submitBtnTooltip,
+  onTransitionEntered,
 }: ModalProps) => {
   const getActionsAlign = () => {
     if (hasThirdBtn) {
@@ -72,7 +73,16 @@ export const Modal = ({
   };
 
   return (
-    <StyledDialog sx={sxProps} width={width} height={height} onClose={onClose} open={open}>
+    <StyledDialog
+      sx={sxProps}
+      width={width}
+      height={height}
+      onClose={onClose}
+      open={open}
+      TransitionProps={{
+        onEntered: onTransitionEntered,
+      }}
+    >
       <StyledDialogTitle align={titleAlign}>
         {title}
         <StyledCloseButton onClick={onClose}>
