@@ -5,7 +5,8 @@ import { addDays } from 'date-fns';
 
 import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { AutocompleteOption, Switch, TagsInputController } from 'shared/components/FormComponents';
+import { Switch, TagsInputController } from 'shared/components/FormComponents';
+import { getUniqueIdentifierOptions } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.utils';
 
 import { StyledFiltersContainer, StyledMoreFilters, StyledTimeText } from './ReportFilters.styles';
 import { ReportFiltersProps } from './ReportFilters.types';
@@ -22,29 +23,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
 
-  const identifiersOptions = identifiers.reduce(
-    (uniqueIdentifiers: AutocompleteOption[], identifierItem) => {
-      if (!identifierItem) return uniqueIdentifiers;
-
-      const { decryptedValue } = identifierItem;
-
-      if (
-        uniqueIdentifiers &&
-        !uniqueIdentifiers.find((identifier) => identifier.id === decryptedValue)
-      ) {
-        return [
-          ...uniqueIdentifiers,
-          {
-            label: decryptedValue,
-            id: decryptedValue,
-          },
-        ];
-      }
-
-      return uniqueIdentifiers;
-    },
-    [],
-  );
+  const identifiersOptions = getUniqueIdentifierOptions(identifiers);
 
   const moreFiltersHandler = () => {
     setValue('moreFiltersVisible', !moreFiltersVisible);
@@ -110,7 +89,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             <Switch name="filterByIdentifier" control={control} label={t('filterByIdentifier')} />
           )}
           <StyledFlexTopCenter sx={{ mt: theme.spacing(0.8) }}>
-            <Box sx={{ width: '32rem' }}>
+            <Box sx={{ width: '36rem' }}>
               <TagsInputController
                 name="identifier"
                 limitTags={2}
@@ -122,7 +101,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
                 disabled={!filterByIdentifier}
               />
             </Box>
-            <Box sx={{ width: '40rem', ml: theme.spacing(2.4) }}>
+            <Box sx={{ width: '36rem', ml: theme.spacing(2.4) }}>
               <TagsInputController
                 name="versions"
                 limitTags={2}

@@ -276,6 +276,7 @@ export type SummaryAnswers = AppletId & {
     respondentId: string;
     fromDatetime: string;
     toDatetime: string;
+    emptyIdentifiers: boolean;
     identifiers?: string[];
     versions?: string[];
   };

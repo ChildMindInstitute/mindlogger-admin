@@ -15,7 +15,7 @@ import { ReportMenu } from './ReportMenu';
 import { Report } from './Report';
 import { StyledReportContainer, StyledEmptyReview } from './RespondentDataSummary.styles';
 import { Identifier } from './RespondentDataSummary.types';
-import { getEmptyState } from './RespondentDataSummary.utils';
+import { getEmptyState, getUniqueIdentifierOptions } from './RespondentDataSummary.utils';
 
 export const RespondentDataSummary = () => {
   const { t } = useTranslation();
@@ -68,7 +68,11 @@ export const RespondentDataSummary = () => {
           appletId,
           activityId: selectedActivity.id,
         });
-        setIdentifiers(getDecryptedIdentifiers(identifiers.data.result));
+        const decryptedIdentifiers = getDecryptedIdentifiers(identifiers.data.result);
+        const identifiersFilter = getUniqueIdentifierOptions(decryptedIdentifiers);
+        setValue('identifier', identifiersFilter);
+        setIdentifiers(decryptedIdentifiers);
+
         const versions = await getVersions({ appletId, activityId: selectedActivity.id });
         const versionsFilter = versions.data.result?.map(({ version }) => ({
           id: version,
