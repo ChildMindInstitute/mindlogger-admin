@@ -44,6 +44,13 @@ export const EditorController = <T extends FieldValues>({
     editorRef.current?.insert(generator);
   }, []);
 
+  const commonMediaProps = {
+    onInsert,
+    setFileSizeExceeded,
+    setIncorrectFormat: setIncorrectFileFormat,
+    setIsLoading,
+  };
+
   return (
     <>
       <Controller
@@ -86,28 +93,19 @@ export const EditorController = <T extends FieldValues>({
                   onInsert={onInsert}
                 />,
                 <ImageUploadExtension
+                  {...commonMediaProps}
                   key="image-upload-extension"
-                  onInsert={onInsert}
-                  setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_25MB}
-                  setIncorrectFormat={setIncorrectFileFormat}
-                  setIsLoading={setIsLoading}
                 />,
                 <AudioUploadExtension
+                  {...commonMediaProps}
                   key="audio-upload-extension"
-                  onInsert={onInsert}
-                  setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_150MB}
-                  setIncorrectFormat={setIncorrectFileFormat}
-                  setIsLoading={setIsLoading}
                 />,
                 <VideoUploadExtension
+                  {...commonMediaProps}
                   key="video-upload-extension"
-                  onInsert={onInsert}
-                  setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_150MB}
-                  setIncorrectFormat={setIncorrectFileFormat}
-                  setIsLoading={setIsLoading}
                 />,
                 <UnderlineExtension key="underline-extension" onInsert={onInsert} />,
                 <StrikethroughExtension key="strikethrough-extension" onInsert={onInsert} />,
