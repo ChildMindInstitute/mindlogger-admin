@@ -31,7 +31,7 @@ import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'shared/utils';
 import { reportConfig } from 'modules/Builder/state';
 
-import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
+import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
 import { StyledButton, StyledSvg, StyledLink } from './ReportConfigSetting.styles';
 import { ReportConfigFormValues, ReportConfigSettingProps } from './ReportConfigSetting.types';
@@ -260,9 +260,6 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   return (
     <>
       <form noValidate onSubmit={handleSubmit(onSubmit)}>
-        <StyledHeadline sx={{ marginRight: theme.spacing(2.4) }}>
-          {t('reportConfiguration')}
-        </StyledHeadline>
         <StyledFlexColumn sx={{ maxWidth: '55.7rem' }}>
           <Box>
             <StyledButton

@@ -22,4 +22,10 @@ export const getActivityFlowTabs = ({
     activeIcon: <Svg id="checklist-filled" />,
     path: generatePath(page.builderAppletActivityFlowItemBuilder, { appletId, activityFlowId }),
   },
+  {
+    labelKey: 'activityFlowSettings',
+    icon: <Svg id="settings" />,
+    activeIcon: <Svg id="settings-filled" />,
+    path: generatePath(page.builderAppletActivityFlowItemSettings, { appletId, activityFlowId }),
+  },
 ];

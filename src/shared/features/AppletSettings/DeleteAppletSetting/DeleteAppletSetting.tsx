@@ -11,7 +11,6 @@ import { DeletePopup } from 'modules/Dashboard/features/Applet/Popups';
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
-  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const DeleteAppletSetting = () => {
@@ -27,7 +26,6 @@ export const DeleteAppletSetting = () => {
 
   return (
     <>
-      <StyledHeadline>{t('deleteApplet')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('deleteDescription')}</StyledAppletSettingsDescription>
       <Box sx={{ width: 'fit-content' }}>
         <StyledAppletSettingsButton

@@ -6,12 +6,12 @@ import { ItemProps } from './Item.types';
 export const Item = ({ item, isCompact, onClick }: ItemProps) => {
   const { setting } = useParams();
 
-  const isActive = setting === item.path;
+  const isActive = setting === item.param;
 
   return (
     <StyledItem isActive={isActive} isCompact={isCompact} onClick={() => onClick(item)}>
       {item.icon}
-      <StyledTitle isActive={isActive}>{item.title}</StyledTitle>
+      <StyledTitle isActive={isActive}>{item.label}</StyledTitle>
     </StyledItem>
   );
 };

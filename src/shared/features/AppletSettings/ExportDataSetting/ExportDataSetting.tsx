@@ -9,7 +9,6 @@ import { applet } from 'shared/state';
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
-  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const ExportDataSetting = () => {
@@ -20,7 +19,6 @@ export const ExportDataSetting = () => {
 
   return (
     <>
-      <StyledHeadline>{t('exportData')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('exportDescription')}</StyledAppletSettingsDescription>
       <Box sx={{ width: 'fit-content' }}>
         <StyledAppletSettingsButton

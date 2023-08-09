@@ -1,10 +1,6 @@
 import { Box, Button, styled } from '@mui/material';
 
-import { StyledHeadlineLarge, variables, theme } from 'shared/styles';
-
-export const StyledHeadline = styled(StyledHeadlineLarge)`
-  margin-bottom: ${theme.spacing(4.8)};
-`;
+import { variables, theme } from 'shared/styles';
 
 export const StyledAppletSettingsDescription = styled(Box)`
   max-width: 54.6rem;

@@ -35,6 +35,8 @@
   "builderAppletActivityFlowItem": "/builder/:appletId/activity-flows/:activityFlowId",
   "builderAppletActivityFlowItemAbout": "/builder/:appletId/activity-flows/:activityFlowId/about",
   "builderAppletActivityFlowItemBuilder": "/builder/:appletId/activity-flows/:activityFlowId/builder",
+  "builderAppletActivityFlowItemSettings": "/builder/:appletId/activity-flows/:activityFlowId/settings",
+  "builderAppletActivityFlowItemSettingsItem": "/builder/:appletId/activity-flows/:activityFlowId/settings/:setting",
   "builderAppletSettings": "/builder/:appletId/settings",
   "builderAppletSettingsItem": "/builder/:appletId/settings/:settingItem",
   "library": "/library",

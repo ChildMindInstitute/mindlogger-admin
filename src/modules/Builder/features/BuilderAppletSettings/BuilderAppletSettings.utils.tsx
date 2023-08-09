@@ -33,16 +33,18 @@ export const getSettings = ({
             label: 'usersAndData',
             items: [
               {
+                name: 'exportData',
                 icon: <Svg id="export" />,
-                label: 'exportData',
+                label: t('exportData'),
                 component: <ExportDataSetting />,
                 param: 'export-data',
                 disabled: isNewApplet,
                 tooltip,
               },
               {
+                name: 'dataRetention',
                 icon: <Svg id="data-retention" />,
-                label: 'dataRetention',
+                label: t('dataRetention'),
                 component: <DataRetention />,
                 param: 'data-retention',
                 disabled: isNewApplet,
@@ -56,16 +58,18 @@ export const getSettings = ({
       label: 'appletContent',
       items: [
         {
+          name: 'downloadSchema',
           icon: <Svg id="schema" />,
-          label: 'downloadSchema',
+          label: t('downloadSchema'),
           component: <DownloadSchemaSetting />,
           param: 'download-schema',
           disabled: isNewApplet,
           tooltip,
         },
         {
+          name: 'versionHistory',
           icon: <Svg id="version-history" />,
-          label: 'versionHistory',
+          label: t('versionHistory'),
           component: <VersionHistorySetting />,
           param: 'version-history',
           disabled: isNewApplet,
@@ -74,8 +78,9 @@ export const getSettings = ({
         ...(roles?.[0] === Roles.Owner
           ? [
               {
+                name: 'transferOwnership',
                 icon: <Svg id="transfer-ownership" />,
-                label: 'transferOwnership',
+                label: t('transferOwnership'),
                 component: <TransferOwnershipSetting />,
                 param: 'transfer-ownership',
                 disabled: isNewApplet,
@@ -86,8 +91,9 @@ export const getSettings = ({
         ...(isManagerOrOwner(roles?.[0])
           ? [
               {
+                name: 'deleteApplet',
                 icon: <Svg id="trash" />,
-                label: 'deleteApplet',
+                label: t('deleteApplet'),
                 component: <DeleteAppletSetting />,
                 param: 'delete-applet',
                 disabled: isNewApplet,
@@ -101,8 +107,9 @@ export const getSettings = ({
       label: 'reports',
       items: [
         {
+          name: 'reportConfiguration',
           icon: <Svg id="report-configuration" />,
-          label: 'reportConfiguration',
+          label: t('reportConfiguration'),
           component: <ReportConfigSetting onSubmitSuccess={onReportConfigSubmit} />,
           param: REPORT_CONFIG_PARAM,
           disabled: isNewApplet,
@@ -119,16 +126,18 @@ export const getSettings = ({
               // introduced. (Story: AUS-4.1.4.10)
               // Temporarily unhided for testing purposes
               {
+                name: 'shareToLibrary',
                 icon: <Svg id="share" />,
-                label: 'shareToLibrary',
+                label: t('shareToLibrary'),
                 component: <ShareAppletSetting />,
                 param: 'share-applet',
               },
               ...(roles?.includes(Roles.SuperAdmin)
                 ? [
                     {
+                      name: isPublished ? 'concealApplet' : 'publishApplet',
                       icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
-                      label: isPublished ? 'concealApplet' : 'publishApplet',
+                      label: isPublished ? t('concealApplet') : t('publishApplet'),
                       component: <PublishConcealAppletSetting isBuilder />,
                       param: 'publish-conceal',
                       disabled: isNewApplet,

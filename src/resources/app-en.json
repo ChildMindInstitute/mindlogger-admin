@@ -1171,5 +1171,6 @@
   "showAllSubscaleResults": "Show All Subscale Results",
   "latestFinalSubscaleScore": "Latest Final Subscale Score",
   "credits": "Credits",
-  "exportFailed": "Export failed. Please try again."
+  "exportFailed": "Export failed. Please try again.",
+  "activityFlowSettings": "Activity Flow Settings"
 }

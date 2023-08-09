@@ -7,7 +7,6 @@ import { getBuilderAppletUrl } from 'shared/utils';
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
-  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const EditAppletSetting = () => {
@@ -17,7 +16,6 @@ export const EditAppletSetting = () => {
 
   return (
     <>
-      <StyledHeadline>{t('editApplet')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('editDescription')}</StyledAppletSettingsDescription>
       <StyledAppletSettingsButton
         variant="outlined"

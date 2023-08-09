@@ -7,7 +7,6 @@ import { StyledBodyLarge, theme } from 'shared/styles';
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
-  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const DownloadSchemaSetting = () => {
@@ -15,7 +14,6 @@ export const DownloadSchemaSetting = () => {
 
   return (
     <>
-      <StyledHeadline>{t('downloadSchema')}</StyledHeadline>
       <StyledAppletSettingsDescription>
         <Trans i18nKey="downloadDescription">
           <StyledBodyLarge>Download the Applet content as JSON.</StyledBodyLarge>

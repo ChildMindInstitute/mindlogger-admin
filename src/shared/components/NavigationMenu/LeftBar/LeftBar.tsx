@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useHeaderSticky } from 'shared/hooks';
 import { StyledBodyMedium } from 'shared/styles';
 
-import { getSettings } from '../ActivitySettings.utils';
 import {
   StyledBar,
   StyledHeader,
@@ -15,15 +14,13 @@ import {
 import { LeftBarProps } from './LeftBar.types';
 import { Item } from './Item';
 
-export const LeftBar = ({ setting, isCompact, onSettingClick }: LeftBarProps) => {
+export const LeftBar = ({ items, activeItem, isCompact, onItemClick }: LeftBarProps) => {
   const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
 
-  const items = getSettings();
-
   return (
-    <StyledBar ref={containerRef} hasSetting={!!setting}>
+    <StyledBar ref={containerRef} hasItem={!!activeItem}>
       <StyledHeader isSticky={isHeaderSticky}>{t('activitySettings')}</StyledHeader>
       <StyledContent isCompact={isCompact}>
         {items.map(({ label, items }) => (
@@ -35,7 +32,7 @@ export const LeftBar = ({ setting, isCompact, onSettingClick }: LeftBarProps) =>
                   key={`left-bar-item-${item.name}`}
                   item={item}
                   isCompact={isCompact}
-                  onClick={onSettingClick}
+                  onClick={onItemClick}
                 />
               ))}
             </StyledItemsContainer>

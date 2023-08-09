@@ -11,7 +11,7 @@ import {
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledBar = styled(Box, shouldForwardProp)`
-  width: ${({ hasSetting }: { hasSetting: boolean }) => (hasSetting ? '38.7rem' : '100%')};
+  width: ${({ hasItem }: { hasItem: boolean }) => (hasItem ? '38.7rem' : '100%')};
   flex-shrink: 0;
   border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   height: 100%;
