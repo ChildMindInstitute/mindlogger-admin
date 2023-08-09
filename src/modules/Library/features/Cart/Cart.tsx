@@ -12,7 +12,7 @@ import {
   StyledAppletList,
 } from 'shared/styles';
 import { page } from 'resources';
-import { auth, library } from 'redux/modules';
+import { PublishedApplet, auth, library } from 'redux/modules';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 import { getDictionaryText } from 'shared/utils';
@@ -23,12 +23,11 @@ import { StyledLink } from './Cart.styles';
 import { StyledTablePagination } from '../AppletsCatalog/AppletsCatalog.styles';
 import { DEFAULT_APPLETS_PER_PAGE, DEFAULT_PAGE } from '../AppletsCatalog/AppletsCatalog.conts';
 import { getSearchIncludes } from './Cart.utils';
-import { DEFAULT_CART_APPLETS_PER_PAGE } from './Cart.const';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
   const isAuthorized = auth.useAuthorized();
-  const { result: cartItems } = library.useCartApplets() || {};
+  const { result: cartItems, count } = library.useCartApplets() || {};
   const loadingStatus = library.useCartAppletsStatus();
   const isAddBtnDisabled = library.useIsCartBtnDisabled() || !cartItems?.length;
   const [searchValue, setSearchValue] = useState('');
@@ -48,7 +47,7 @@ export const Cart = () => {
     setPageIndex(newPage + 1);
   };
 
-  useAppletsFromCart({ search, page: pageIndex, limit: DEFAULT_CART_APPLETS_PER_PAGE });
+  useAppletsFromCart();
   useBreadcrumbs([
     {
       icon: 'cart-outlined',
@@ -58,7 +57,7 @@ export const Cart = () => {
   useReturnToLibraryPath(page.libraryCart);
 
   const filteredApplets =
-    cartItems?.reduce((renderedApplets: JSX.Element[], applet) => {
+    cartItems?.reduce((renderedApplets: PublishedApplet[], applet) => {
       const { displayName, description, activities, keywords } = applet;
       const appletNameSearch = getSearchIncludes(displayName, search);
       const appletDescriptionSearch =
@@ -73,15 +72,15 @@ export const Cart = () => {
       const keywordsSearch = keywords.some((keyword) => getSearchIncludes(keyword, search));
 
       if (appletNameSearch || appletDescriptionSearch || keywordsSearch || activitySearch) {
-        renderedApplets.push(
-          <StyledAppletContainer key={applet.id}>
-            <Applet uiType={AppletUiType.Cart} applet={applet} setSearch={setSearchValue} />
-          </StyledAppletContainer>,
-        );
+        renderedApplets.push(applet);
       }
 
       return renderedApplets;
     }, []) || [];
+  const pagedApplets = filteredApplets.slice(
+    (pageIndex - 1) * DEFAULT_APPLETS_PER_PAGE,
+    pageIndex * DEFAULT_APPLETS_PER_PAGE,
+  );
 
   const renderEmptyState = () =>
     search ? (
@@ -112,20 +111,18 @@ export const Cart = () => {
             {t('cart')}
           </StyledHeadlineLarge>
           <StyledAppletList>
-            {/*TODO: implement pagination and search for the ONLY AUTHORIZED users from the backend, after the
-             back-end is ready (task: M2-2580). For unauthorized users leave this solution. Also, add an
-             implementation of the search by items response options.*/}
-            {filteredApplets.length
-              ? filteredApplets.slice(
-                  (pageIndex - 1) * DEFAULT_APPLETS_PER_PAGE,
-                  pageIndex * DEFAULT_APPLETS_PER_PAGE,
-                )
+            {pagedApplets?.length
+              ? pagedApplets.map((applet) => (
+                  <StyledAppletContainer key={applet.id}>
+                    <Applet uiType={AppletUiType.Cart} applet={applet} setSearch={setSearchValue} />
+                  </StyledAppletContainer>
+                ))
               : renderEmptyState()}
           </StyledAppletList>
-          {!!cartItems?.length && (
+          {!!filteredApplets?.length && (
             <StyledTablePagination
               component="div"
-              count={filteredApplets.length || 0}
+              count={filteredApplets?.length || 0}
               rowsPerPage={DEFAULT_APPLETS_PER_PAGE}
               page={pageIndex - 1}
               onPageChange={handleChangePage}

@@ -241,7 +241,7 @@ export type SliderItemResponseValues = {
 
 export type SliderRowsItemResponseValues = SliderItemResponseValues & { id: string; label: string };
 
-export type SingleAndMultipleSelectionOption = {
+export type SingleAndMultiSelectOption = {
   id: string;
   text: string;
   image?: string;
@@ -255,7 +255,7 @@ export type SingleAndMultipleSelectionOption = {
 
 export type SingleAndMultipleSelectItemResponseValues = {
   paletteName?: string;
-  options: Array<SingleAndMultipleSelectionOption>;
+  options: Array<SingleAndMultiSelectOption>;
 };
 
 export type AudioPlayerResponseValues = {
@@ -266,14 +266,6 @@ export type AudioResponseValues = {
   maxDuration: number;
 };
 
-export type SingleAndMultipleSelectRowOption = {
-  id: string;
-  text: string;
-  image?: string;
-  score?: number;
-  tooltip?: string;
-};
-
 export type SingleAndMultipleSelectRow = {
   id: string;
   rowName: string;
@@ -281,7 +273,7 @@ export type SingleAndMultipleSelectRow = {
   tooltip?: string;
 };
 
-export type SingleAndMultipleSelectOption = {
+export type SingleAndMultiSelectRowOption = {
   id: string;
   text: string;
   image: string | null;
@@ -296,7 +288,7 @@ export type SingleAndMultipleSelectMatrix = {
 
 export type SingleAndMultipleSelectRowsResponseValues = {
   rows: Array<SingleAndMultipleSelectRow>;
-  options: Array<SingleAndMultipleSelectOption>;
+  options: Array<SingleAndMultiSelectRowOption>;
   dataMatrix?: Array<SingleAndMultipleSelectMatrix> | null;
 };
 

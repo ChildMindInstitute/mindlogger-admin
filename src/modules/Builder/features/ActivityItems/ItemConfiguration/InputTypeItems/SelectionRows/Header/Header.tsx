@@ -14,7 +14,7 @@ import {
 import {
   ItemAlert,
   SingleAndMultipleSelectMatrix,
-  SingleAndMultipleSelectOption,
+  SingleAndMultiSelectRowOption,
 } from 'shared/state';
 import { getObjectFromList } from 'shared/utils';
 
@@ -87,7 +87,7 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
           ...dataMatrixRow,
           options: lessThanBefore
             ? dataMatrixRow.options?.slice(0, newValue)
-            : newOptions.map((option: SingleAndMultipleSelectOption, index: number) => ({
+            : newOptions.map((option: SingleAndMultiSelectRowOption, index: number) => ({
                 optionId: option.id,
                 score: dataMatrixRow.options?.[index]?.score ?? DEFAULT_SCORE_VALUE,
               })),

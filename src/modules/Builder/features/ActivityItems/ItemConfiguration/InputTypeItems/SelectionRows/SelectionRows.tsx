@@ -5,7 +5,7 @@ import get from 'lodash.get';
 
 import { Svg } from 'shared/components';
 import { StyledFlexColumn } from 'shared/styles';
-import { SingleAndMultipleSelectOption } from 'shared/state';
+import { SingleAndMultiSelectRowOption } from 'shared/state';
 
 import { Header } from './Header';
 import { Options } from './Options';
@@ -42,7 +42,7 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
         ...dataMatrix,
         {
           rowId: newRow.id,
-          options: options?.map((option: SingleAndMultipleSelectOption) => ({
+          options: options?.map((option: SingleAndMultiSelectRowOption) => ({
             optionId: option.id,
             ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
           })),
