@@ -156,7 +156,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     const formattedResponses = getFormattedResponses(responses);
 
     setResponseOptions(formattedResponses);
-  }, [answers, currentActivityCompletionData]);
+  }, [currentActivityCompletionData]);
 
   return (
     <>

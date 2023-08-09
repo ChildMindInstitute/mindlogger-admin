@@ -17,6 +17,7 @@ export const getResponseItem = ({
 
   const renderMultipleSelection = () => {
     const { options } = activityItem.responseValues;
+    console.log('options', options);
     const height = (options.length + 1) * TICK_HEIGHT;
 
     const values = options.map(({ value }) => value);

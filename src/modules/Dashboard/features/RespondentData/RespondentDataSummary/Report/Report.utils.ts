@@ -25,6 +25,10 @@ import {
   ItemOption,
 } from './Report.types';
 
+const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.value - a.value);
+
+const isValue = (value?: string | number | null) => value !== null && value !== undefined;
+
 const getDefaultEmptyAnswer = (date: string) => [
   {
     answer: {
@@ -80,14 +84,17 @@ const getSliderOptions = (
   }));
 };
 
-const getOptionsMapper = (formattedActivityItem: FormattedActivityItem) =>
-  formattedActivityItem.responseValues.options.reduce(
+const getOptionsMapper = (formattedActivityItem: FormattedActivityItem) => {
+  const sortedOptions = getSortedOptions(formattedActivityItem.responseValues.options);
+
+  return sortedOptions.reduce(
     (options: Record<number, number>, option: ItemOption, index: number) => ({
       ...options,
       [option.value]: index,
     }),
     {},
   );
+};
 
 export const compareActivityItem = (
   prevActivityItem: FormattedResponse,
@@ -98,8 +105,6 @@ export const compareActivityItem = (
   switch (currActivityItem.activityItem.responseType) {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection: {
-      let maxValue = prevActivityItem.activityItem.responseValues.options.length;
-
       const prevActivityItemOptions = getObjectFromList(
         prevActivityItem.activityItem.responseValues.options,
       );
@@ -111,7 +116,8 @@ export const compareActivityItem = (
         {},
       );
 
-      const updatedAnswers: Answer[] = [];
+      let prevAnswers: Answer[] = prevActivityItem.answers;
+      let updatedAnswers: Answer[] = [];
       const currAnswers = answers.reduce(
         (answers: Record<string, Answer>, curr) => {
           const value = curr.answer.value;
@@ -127,31 +133,59 @@ export const compareActivityItem = (
         {},
       );
 
-      const updatedOptions = activityItem.responseValues.options.reduce(
+      const sortedCurrOptions = getSortedOptions(activityItem.responseValues.options);
+      const updatedOptions = sortedCurrOptions.reduce(
         (options: Record<string, ItemOption>, { id, text, value }) => {
           if (!options[id]) {
+            // If there is a new option in the new version, we should display them in the same order as in the builder
+            // To add a new option at the bottom of the axis, we have to shift the values by 1 in the previous ones
+            // And also update the values in the answers
+
+            updatedAnswers = updatedAnswers.map((item) => ({
+              ...item,
+              answer: {
+                ...item.answer,
+                value: isValue(item.answer.value) ? +item.answer.value! + 1 : item.answer.value,
+              },
+            }));
+
             if (currAnswers[value]) {
               updatedAnswers.push({
                 ...currAnswers[value],
                 answer: {
                   ...currAnswers[value].answer,
-                  value: maxValue,
+                  value: 0,
                 },
               });
             }
 
-            const newOptions = {
-              ...options,
+            const newOptions = Object.keys(options).reduce(
+              (updatedOptions, id) => ({
+                ...updatedOptions,
+                [id]: {
+                  ...updatedOptions[id],
+                  value: updatedOptions[id].value + 1,
+                },
+              }),
+              options,
+            );
+
+            prevAnswers = prevAnswers.map((item) => ({
+              ...item,
+              answer: {
+                ...item.answer,
+                value: isValue(item.answer.value) ? +item.answer.value! + 1 : item.answer.value,
+              },
+            }));
+
+            return {
+              ...newOptions,
               [id]: {
                 id,
                 text,
-                value: maxValue,
+                value: 0,
               },
             };
-
-            maxValue += 1;
-
-            return newOptions;
           }
 
           if (mapperIdValue[id] === value) {
@@ -197,7 +231,7 @@ export const compareActivityItem = (
             options: Object.values(updatedOptions),
           },
         },
-        answers: [...prevActivityItem.answers, ...updatedAnswers],
+        answers: [...prevAnswers, ...updatedAnswers],
       };
     }
     case ItemResponseType.Slider: {
@@ -265,11 +299,9 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const value =
-        (currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value !== undefined &&
-        (currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value !== null
-          ? +(currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value
-          : null;
+      const value = isValue((currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value)
+        ? +(currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value
+        : null;
 
       const answers = [
         {
@@ -322,11 +354,9 @@ export const formatActivityItemAnswers = (
           ),
         },
       };
-      const value =
-        (currentAnswer.answer as DecryptedSliderAnswer)?.value !== undefined &&
-        (currentAnswer.answer as DecryptedSliderAnswer)?.value !== null
-          ? +(currentAnswer.answer as DecryptedSliderAnswer)?.value
-          : null;
+      const value = isValue((currentAnswer.answer as DecryptedSliderAnswer)?.value)
+        ? +(currentAnswer.answer as DecryptedSliderAnswer)?.value
+        : null;
 
       const answers = [
         {
