@@ -12,7 +12,7 @@ import {
   StyledAppletList,
 } from 'shared/styles';
 import { page } from 'resources';
-import { auth, library } from 'redux/modules';
+import { PublishedApplet, auth, library } from 'redux/modules';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 import { getDictionaryText } from 'shared/utils';
@@ -28,7 +28,7 @@ import { DEFAULT_CART_APPLETS_PER_PAGE } from './Cart.const';
 export const Cart = () => {
   const { t } = useTranslation('app');
   const isAuthorized = auth.useAuthorized();
-  const { result: cartItems } = library.useCartApplets() || {};
+  const { result: cartItems, count } = library.useCartApplets() || {};
   const loadingStatus = library.useCartAppletsStatus();
   const isAddBtnDisabled = library.useIsCartBtnDisabled() || !cartItems?.length;
   const [searchValue, setSearchValue] = useState('');
@@ -57,31 +57,31 @@ export const Cart = () => {
   ]);
   useReturnToLibraryPath(page.libraryCart);
 
-  const filteredApplets =
-    cartItems?.reduce((renderedApplets: JSX.Element[], applet) => {
-      const { displayName, description, activities, keywords } = applet;
-      const appletNameSearch = getSearchIncludes(displayName, search);
-      const appletDescriptionSearch =
-        description && getSearchIncludes(getDictionaryText(description), search);
-      const activitySearch = activities.some((activity) => {
-        const itemsSearch = activity.items.some(
-          (item) => item?.question && getSearchIncludes(getDictionaryText(item.question), search),
-        );
+  const filteredApplets = isAuthorized
+    ? cartItems
+    : (
+        cartItems?.reduce((renderedApplets: PublishedApplet[], applet) => {
+          const { displayName, description, activities, keywords } = applet;
+          const appletNameSearch = getSearchIncludes(displayName, search);
+          const appletDescriptionSearch =
+            description && getSearchIncludes(getDictionaryText(description), search);
+          const activitySearch = activities.some((activity) => {
+            const itemsSearch = activity.items.some(
+              (item) =>
+                item?.question && getSearchIncludes(getDictionaryText(item.question), search),
+            );
 
-        return getSearchIncludes(activity.name, search) || itemsSearch;
-      });
-      const keywordsSearch = keywords.some((keyword) => getSearchIncludes(keyword, search));
+            return getSearchIncludes(activity.name, search) || itemsSearch;
+          });
+          const keywordsSearch = keywords.some((keyword) => getSearchIncludes(keyword, search));
 
-      if (appletNameSearch || appletDescriptionSearch || keywordsSearch || activitySearch) {
-        renderedApplets.push(
-          <StyledAppletContainer key={applet.id}>
-            <Applet uiType={AppletUiType.Cart} applet={applet} setSearch={setSearchValue} />
-          </StyledAppletContainer>,
-        );
-      }
+          if (appletNameSearch || appletDescriptionSearch || keywordsSearch || activitySearch) {
+            renderedApplets.push(applet);
+          }
 
-      return renderedApplets;
-    }, []) || [];
+          return renderedApplets;
+        }, []) || []
+      ).slice((pageIndex - 1) * DEFAULT_APPLETS_PER_PAGE, pageIndex * DEFAULT_APPLETS_PER_PAGE);
 
   const renderEmptyState = () =>
     search ? (
@@ -112,20 +112,18 @@ export const Cart = () => {
             {t('cart')}
           </StyledHeadlineLarge>
           <StyledAppletList>
-            {/*TODO: implement pagination and search for the ONLY AUTHORIZED users from the backend, after the
-             back-end is ready (task: M2-2580). For unauthorized users leave this solution. Also, add an
-             implementation of the search by items response options.*/}
-            {filteredApplets.length
-              ? filteredApplets.slice(
-                  (pageIndex - 1) * DEFAULT_APPLETS_PER_PAGE,
-                  pageIndex * DEFAULT_APPLETS_PER_PAGE,
-                )
+            {filteredApplets?.length
+              ? filteredApplets.map((applet) => (
+                  <StyledAppletContainer key={applet.id}>
+                    <Applet uiType={AppletUiType.Cart} applet={applet} setSearch={setSearchValue} />
+                  </StyledAppletContainer>
+                ))
               : renderEmptyState()}
           </StyledAppletList>
-          {!!cartItems?.length && (
+          {!!filteredApplets?.length && (
             <StyledTablePagination
               component="div"
-              count={filteredApplets.length || 0}
+              count={count || 0}
               rowsPerPage={DEFAULT_APPLETS_PER_PAGE}
               page={pageIndex - 1}
               onPageChange={handleChangePage}

@@ -17,14 +17,14 @@ export const useAppletsFromCart = (params?: AppletsFromCartType) => {
 
   useEffect(() => {
     if (isAuthorized) {
-      if (appletsFromStorage.length) {
-        (async () => {
+      (async () => {
+        if (appletsFromStorage.length) {
           await dispatch(postAppletsToCart(appletsFromStorage));
           sessionStorage.removeItem(STORAGE_LIBRARY_KEY);
-        })();
-      } else {
+        }
+
         dispatch(getAppletsFromCart(params ?? {}));
-      }
+      })();
 
       return;
     }
