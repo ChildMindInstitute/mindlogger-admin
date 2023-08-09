@@ -44,6 +44,7 @@ export const Activities = () => {
   });
 
   const activities: ActivityFormValues[] = watch('activities');
+  const activityNames = pluck(activities, 'name');
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
 
   const errors = activities?.reduce(
@@ -97,7 +98,7 @@ export const Activities = () => {
         ? performanceTaskName
         : t('newActivity');
 
-    const name = getUniqueName(newActivityName, pluck(activities, 'name'));
+    const name = getUniqueName(newActivityName, activityNames);
 
     const newActivity =
       performanceTaskName && performanceTaskDesc && performanceTaskType
@@ -137,7 +138,7 @@ export const Activities = () => {
 
   const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
     const activityToDuplicate = activities[index];
-    const name = getUniqueName(activityToDuplicate.name, pluck(activities, 'name'));
+    const name = getUniqueName(activityToDuplicate.name, activityNames);
 
     const newActivity = isPerformanceTask
       ? getNewPerformanceTask({
