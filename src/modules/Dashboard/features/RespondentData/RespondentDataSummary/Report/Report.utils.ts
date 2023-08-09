@@ -29,6 +29,15 @@ const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.val
 
 const isValueDefined = (value?: string | number | null) => value !== null && value !== undefined;
 
+const shiftAnswerValues = (answers: Answer[]) =>
+  answers.map((item) => ({
+    ...item,
+    answer: {
+      ...item.answer,
+      value: isValueDefined(item.answer.value) ? +item.answer.value! + 1 : item.answer.value,
+    },
+  }));
+
 const getDefaultEmptyAnswer = (date: string) => [
   {
     answer: {
@@ -141,15 +150,7 @@ export const compareActivityItem = (
             // To add a new option at the bottom of the axis, we have to shift the values by 1 in the previous ones
             // And also update the values in the answers
 
-            updatedAnswers = updatedAnswers.map((item) => ({
-              ...item,
-              answer: {
-                ...item.answer,
-                value: isValueDefined(item.answer.value)
-                  ? +item.answer.value! + 1
-                  : item.answer.value,
-              },
-            }));
+            updatedAnswers = shiftAnswerValues(updatedAnswers);
 
             if (currAnswers[value]) {
               updatedAnswers.push({
@@ -172,15 +173,7 @@ export const compareActivityItem = (
               options,
             );
 
-            prevAnswers = prevAnswers.map((item) => ({
-              ...item,
-              answer: {
-                ...item.answer,
-                value: isValueDefined(item.answer.value)
-                  ? +item.answer.value! + 1
-                  : item.answer.value,
-              },
-            }));
+            prevAnswers = shiftAnswerValues(prevAnswers);
 
             return {
               ...newOptions,
