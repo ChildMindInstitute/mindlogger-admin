@@ -34,6 +34,7 @@ import {
   getEntityKey,
   getObjectFromList,
   getTextBetweenBrackets,
+  getUniqueName,
   INTERVAL_SYMBOL,
   Path,
   pluck,
@@ -858,18 +859,6 @@ export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: stri
   return regexp.test(value);
 };
 
-const getUniqueActivityName = <T extends { name: string }>(
-  activityName: string,
-  activities: T[],
-): string => {
-  const activitiesToCheck = pluck(activities, 'name');
-
-  if (activitiesToCheck.includes(activityName))
-    return getUniqueActivityName(`${activityName} (1)`, activities);
-
-  return activityName;
-};
-
 export const prepareActivitiesFromLibrary = (activities: ActivityFormValues[]) => {
   const lastReviewableActivityIndex = pluck(activities, 'isReviewable').lastIndexOf(true);
 
@@ -878,7 +867,7 @@ export const prepareActivitiesFromLibrary = (activities: ActivityFormValues[]) =
       ...result,
       {
         ...activity,
-        name: getUniqueActivityName(activity.name, result),
+        name: getUniqueName(activity.name, pluck(result, 'name')),
         isReviewable: index === lastReviewableActivityIndex,
       },
     ],
@@ -890,7 +879,7 @@ export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormV
   activityFlows.reduce(
     (result: ActivityFlowFormValues[], activityFlow) => [
       ...result,
-      { ...activityFlow, name: getUniqueActivityName(activityFlow.name, result) },
+      { ...activityFlow, name: getUniqueName(activityFlow.name, pluck(result, 'name')) },
     ],
     [],
   );

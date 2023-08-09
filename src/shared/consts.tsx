@@ -115,9 +115,6 @@ export const performanceTaskResponseTypes = [
 export const responseTypeToHaveOptions = [
   ItemResponseType.SingleSelection,
   ItemResponseType.MultipleSelection,
-];
-
-export const responseTypeToHaveDataMatrix = [
   ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.MultipleSelectionPerRow,
 ];
@@ -258,3 +255,5 @@ export const enum FinalSubscale {
 }
 
 export const REPORT_CONFIG_PARAM = 'report-configuration';
+
+export const INDEX_IN_NAME_REGEXP = /\((\d+)\)$/g;

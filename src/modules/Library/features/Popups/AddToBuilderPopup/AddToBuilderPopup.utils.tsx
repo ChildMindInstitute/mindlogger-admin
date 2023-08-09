@@ -22,7 +22,6 @@ import {
 import { HeadCell } from 'shared/types/table';
 import i18n from 'i18n';
 import {
-  SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectMatrix,
   SingleAndMultiSelectOption,
   SingleAndMultiSelectRowOption,
@@ -34,11 +33,9 @@ import {
   ItemResponseType,
   performanceTaskResponseTypes,
   PerfTaskType,
-  responseTypeToHaveDataMatrix,
   responseTypeToHaveOptions,
 } from 'shared/consts';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
-import { pluck } from 'shared/utils';
 
 import {
   AddToBuilderActions,
@@ -296,18 +293,6 @@ export const getPerformanceTaskType = (responseType: ItemResponseType) => {
   return performanceTaskType;
 };
 
-const getUniqueActivityName = <T extends { name: string }>(
-  activityName: string,
-  activities: T[],
-): string => {
-  const activitiesToCheck = pluck(activities, 'name');
-
-  if (activitiesToCheck.includes(activityName))
-    return getUniqueActivityName(`${activityName} (1)`, activities);
-
-  return activityName;
-};
-
 const mapResponseValues = <
   T extends {
     dataMatrix?: SingleAndMultipleSelectMatrix[] | null;
@@ -317,18 +302,19 @@ const mapResponseValues = <
   responseValues: T,
 ): T => ({
   ...responseValues,
-  ...(!responseValues.dataMatrix && {
-    options: responseValues.options?.map((option) => ({
-      ...option,
-      id: option.id ?? uuidv4(),
-    })),
-  }),
-  ...(!!responseValues.dataMatrix && {
-    options: responseValues.options?.map((option, index) => ({
-      ...option,
-      id: option.id ?? responseValues.dataMatrix?.[0].options[index]?.optionId ?? uuidv4(),
-    })),
-  }),
+  ...(!responseValues.dataMatrix
+    ? {
+        options: responseValues.options?.map((option) => ({
+          ...option,
+          id: option.id ?? uuidv4(),
+        })),
+      }
+    : {
+        options: responseValues.options?.map((option, index) => ({
+          ...option,
+          id: option.id ?? responseValues.dataMatrix?.[0].options[index]?.optionId ?? uuidv4(),
+        })),
+      }),
 });
 
 export const getSelectedAppletData = (
@@ -352,15 +338,8 @@ export const getSelectedAppletData = (
             key: uuidv4(),
           };
 
-          //for security reasons there is no 'id' in responseValues.options for Single/Multi selection
+          //for security reasons there is no 'id' in responseValues.options for Single/Multi selection (+ per row)
           if (responseTypeToHaveOptions.includes(newItem.responseType)) {
-            newItem.responseValues = mapResponseValues(
-              newItem.responseValues as SingleAndMultipleSelectItemResponseValues,
-            );
-          }
-
-          //for security reasons there is no 'id' in responseValues.options for Single/Multi per row
-          if (responseTypeToHaveDataMatrix.includes(newItem.responseType)) {
             newItem.responseValues = mapResponseValues(
               newItem.responseValues as SingleAndMultipleSelectRowsResponseValues,
             );
@@ -387,8 +366,7 @@ export const getSelectedAppletData = (
         isPerformanceTask,
         performanceTaskType: performanceTaskType || undefined,
         items: filteredItems,
-        subscaleSetting: hasSubscalesAndScores ? activity.subscaleSetting : undefined,
-        scoresAndReports: hasSubscalesAndScores ? activity.scoresAndReports : undefined,
+        ...(!hasSubscalesAndScores && { subscaleSetting: undefined, scoresAndReports: undefined }),
       };
     });
 

@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -16,19 +16,12 @@ import {
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
+import { pluck, getUniqueName } from 'shared/utils';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
-import {
-  getActions,
-  getActivityKey,
-  getPerformanceTaskPath,
-  getInitialActivityNames,
-  removeNameSequenceNumber,
-  getDuplicatedActivityName,
-  getAddedActivityName,
-} from './Activities.utils';
-import { ActivityAddProps, EditablePerformanceTasksType, ActivityNames } from './Activities.types';
+import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
+import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
 import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
@@ -38,7 +31,6 @@ export const Activities = () => {
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
-  const [activityNames, setActivityNames] = useState<ActivityNames>([]);
 
   const {
     append: appendActivity,
@@ -105,7 +97,7 @@ export const Activities = () => {
         ? performanceTaskName
         : t('newActivity');
 
-    const name = getAddedActivityName(newActivityName, activityNames, setActivityNames);
+    const name = getUniqueName(newActivityName, pluck(activities, 'name'));
 
     const newActivity =
       performanceTaskName && performanceTaskDesc && performanceTaskType
@@ -140,17 +132,12 @@ export const Activities = () => {
     );
 
     removeActivity(index);
-    removeNameSequenceNumber(activityName, activityNames, setActivityNames);
     setValue('activityFlows', newActivityFlows);
   };
 
   const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
     const activityToDuplicate = activities[index];
-    const name = getDuplicatedActivityName(
-      activityToDuplicate.name,
-      activityNames,
-      setActivityNames,
-    );
+    const name = getUniqueName(activityToDuplicate.name, pluck(activities, 'name'));
 
     const newActivity = isPerformanceTask
       ? getNewPerformanceTask({
@@ -187,11 +174,6 @@ export const Activities = () => {
     if (!destination) return;
     moveActivity(source.index, destination.index);
   };
-
-  useEffect(() => {
-    if (!activities?.length) return;
-    setActivityNames(getInitialActivityNames(activities));
-  }, []);
 
   return (
     <BuilderContainer

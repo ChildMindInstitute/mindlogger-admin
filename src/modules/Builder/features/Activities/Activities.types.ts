@@ -31,6 +31,3 @@ export const enum PerformanceTasks {
   Gyroscope = 'CST Gyroscope',
   Touch = 'CST Touch',
 }
-
-export type ActivityName = { name: string; sequenceNumbers: number[] };
-export type ActivityNames = ActivityName[];

@@ -9,6 +9,7 @@ import { Box } from '@mui/material';
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
+import { getUniqueName, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
@@ -24,7 +25,6 @@ import {
 import { ActivityFlowHeader } from './ActivityFlowHeader';
 
 export const ActivityFlow = () => {
-  const [, setDuplicateIndexes] = useState<Record<string, number> | null>(null);
   const [flowToDeleteData, setFlowToDeleteData] = useState<{
     index: number;
     name: string;
@@ -89,20 +89,9 @@ export const ActivityFlow = () => {
   };
 
   const handleDuplicateActivityFlow = (index: number) => {
-    const duplicatedItem = activityFlows[index];
-    setDuplicateIndexes((prevState) => {
-      const duplicatedItemId = duplicatedItem.id || '';
-      const insertedNumber =
-        prevState && prevState[duplicatedItemId] ? prevState[duplicatedItemId] + 1 : 1;
-      const name = `${activityFlows[index].name} (${insertedNumber})`;
+    const name = getUniqueName(activityFlows[index].name, pluck(activityFlows, 'name'));
 
-      insertActivityFlow(index + 1, getDuplicatedActivityFlow(activityFlows[index], name));
-
-      return {
-        ...prevState,
-        [duplicatedItemId]: insertedNumber,
-      };
-    });
+    insertActivityFlow(index + 1, getDuplicatedActivityFlow(activityFlows[index], name));
   };
 
   const handleToggleActivityFlowVisibility = (index: number) =>
