@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { addDays, format } from 'date-fns';
+import { addDays } from 'date-fns';
 import download from 'downloadjs';
 
 import { Spinner, Svg, Tooltip } from 'shared/components';
@@ -19,7 +19,6 @@ import { getAnswersApi, getLatestReportApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getErrorMessage } from 'shared/utils';
 import { applet } from 'shared/state';
-import { DateFormats } from 'shared/consts';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
@@ -41,7 +40,7 @@ import {
   getLatestReportUrl,
 } from './Report.utils';
 import { ReportContext } from './context';
-import { LATEST_REPORT_TYPE } from './Report.const';
+import { LATEST_REPORT_DEFAULT_NAME, LATEST_REPORT_TYPE } from './Report.const';
 
 export const Report = ({ activity, identifiers = [], versions = [] }: ReportProps) => {
   const { t } = useTranslation('app');
@@ -59,7 +58,6 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const [responseOptions, setResponseOptions] = useState<Record<string, FormattedResponse[]>>();
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
     useState<CurrentActivityCompletionData>(null);
-
   const { control, getValues } = useFormContext<SummaryFiltersForm>();
 
   const watchFilters = useWatch({
@@ -83,21 +81,18 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
     setLatestReportError(null);
     try {
-      const { data } = await getLatestReport({
+      const { data, headers } = await getLatestReport({
         appletId,
         activityId: activity.id,
         respondentId,
       });
       if (data) {
+        const contentDisposition = headers?.['content-disposition'];
+        const fileName = contentDisposition?.match(/filename=(?<filename>[^,;]+);/)?.[0];
         const base64Str = Buffer.from(data).toString('base64');
         const linkSource = getLatestReportUrl(base64Str);
-        const curDate = format(new Date(), DateFormats.YearMonthDayHoursMinutesSeconds);
 
-        download(
-          linkSource,
-          `REPORT_${appletData?.displayName}_${activity.name}_${respondentId}_${curDate}.pdf`,
-          LATEST_REPORT_TYPE,
-        );
+        download(linkSource, fileName || LATEST_REPORT_DEFAULT_NAME, LATEST_REPORT_TYPE);
       }
     } catch (error) {
       setLatestReportError(getErrorMessage(error));
@@ -166,7 +161,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     const formattedResponses = getFormattedResponses(responses);
 
     setResponseOptions(formattedResponses);
-  }, [answers, currentActivityCompletionData]);
+  }, [currentActivityCompletionData]);
 
   return (
     <>
