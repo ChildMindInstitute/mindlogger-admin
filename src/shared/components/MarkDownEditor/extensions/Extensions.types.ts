@@ -12,15 +12,13 @@ export type InsertContentExtensionProps = {
 type MediaProps = {
   fileSizeExceeded: number;
   setFileSizeExceeded: Dispatch<SetStateAction<number | null>>;
+  setIncorrectFormat: Dispatch<SetStateAction<MediaType | null>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 };
 
-export type MediaContentExtensionProps = InsertContentExtensionProps &
-  MediaProps & {
-    setIncorrectFormat: Dispatch<SetStateAction<MediaType | null>>;
-  };
+export type MediaContentExtensionProps = InsertContentExtensionProps & MediaProps;
 
 export type UploadMethodsProps = {
   insertHandler: (data: SourceLinkModalForm) => void;
   type: MediaType;
-  setIncorrectFormat: Dispatch<SetStateAction<MediaType | null>>;
 } & MediaProps;

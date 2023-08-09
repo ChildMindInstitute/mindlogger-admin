@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import { postFileUploadApi } from 'api';
 import { useAsync } from 'shared/hooks';
@@ -16,11 +16,12 @@ export const useUploadMethods = ({
   fileSizeExceeded,
   setIncorrectFormat,
   type,
+  setIsLoading,
 }: UploadMethodsProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { execute: executeImgUpload } = useAsync(
+  const { execute: executeMediaUpload, isLoading } = useAsync(
     postFileUploadApi,
     (response) => {
       const file = inputRef.current?.files?.[0];
@@ -81,8 +82,12 @@ export const useUploadMethods = ({
     }
 
     const body = getUploadFormData(file);
-    executeImgUpload(body);
+    executeMediaUpload(body);
   };
+
+  useEffect(() => {
+    setIsLoading(isLoading);
+  }, [isLoading]);
 
   return {
     inputRef,
