@@ -27,7 +27,7 @@ import {
 
 const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.value - a.value);
 
-const isValue = (value?: string | number | null) => value !== null && value !== undefined;
+const isValueDefined = (value?: string | number | null) => value !== null && value !== undefined;
 
 const getDefaultEmptyAnswer = (date: string) => [
   {
@@ -145,7 +145,9 @@ export const compareActivityItem = (
               ...item,
               answer: {
                 ...item.answer,
-                value: isValue(item.answer.value) ? +item.answer.value! + 1 : item.answer.value,
+                value: isValueDefined(item.answer.value)
+                  ? +item.answer.value! + 1
+                  : item.answer.value,
               },
             }));
 
@@ -174,7 +176,9 @@ export const compareActivityItem = (
               ...item,
               answer: {
                 ...item.answer,
-                value: isValue(item.answer.value) ? +item.answer.value! + 1 : item.answer.value,
+                value: isValueDefined(item.answer.value)
+                  ? +item.answer.value! + 1
+                  : item.answer.value,
               },
             }));
 
@@ -299,7 +303,7 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const value = isValue((currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value)
+      const value = isValueDefined((currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value)
         ? +(currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value
         : null;
 
@@ -354,7 +358,7 @@ export const formatActivityItemAnswers = (
           ),
         },
       };
-      const value = isValue((currentAnswer.answer as DecryptedSliderAnswer)?.value)
+      const value = isValueDefined((currentAnswer.answer as DecryptedSliderAnswer)?.value)
         ? +(currentAnswer.answer as DecryptedSliderAnswer)?.value
         : null;
 
