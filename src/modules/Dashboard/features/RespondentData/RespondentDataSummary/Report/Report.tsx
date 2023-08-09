@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { addDays, format } from 'date-fns';
+import { addDays } from 'date-fns';
 import download from 'downloadjs';
 
 import { Spinner, Svg, Tooltip } from 'shared/components';
@@ -19,7 +19,6 @@ import { getAnswersApi, getLatestReportApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getErrorMessage } from 'shared/utils';
 import { applet } from 'shared/state';
-import { DateFormats } from 'shared/consts';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
@@ -59,7 +58,6 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const [responseOptions, setResponseOptions] = useState<Record<string, FormattedResponse[]>>();
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
     useState<CurrentActivityCompletionData>(null);
-
   const { control, getValues } = useFormContext<SummaryFiltersForm>();
 
   const watchFilters = useWatch({
@@ -75,21 +73,18 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
     setLatestReportError(null);
     try {
-      const { data } = await getLatestReport({
+      const res = await getLatestReport({
         appletId,
         activityId: activity.id,
         respondentId,
       });
-      if (data) {
-        const base64Str = Buffer.from(data).toString('base64');
+      if (res?.data) {
+        const contentDisposition = res.headers?.['content-disposition'];
+        const fileName = contentDisposition?.match(/filename=(?<filename>[^,;]+);/)?.[0];
+        const base64Str = Buffer.from(res.data).toString('base64');
         const linkSource = getLatestReportUrl(base64Str);
-        const curDate = format(new Date(), DateFormats.YearMonthDayHoursMinutesSeconds);
 
-        download(
-          linkSource,
-          `REPORT_${appletData?.displayName}_${activity.name}_${respondentId}_${curDate}.pdf`,
-          LATEST_REPORT_TYPE,
-        );
+        download(linkSource, fileName || 'Report.pdf', LATEST_REPORT_TYPE);
       }
     } catch (error) {
       setLatestReportError(getErrorMessage(error));
