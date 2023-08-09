@@ -77,6 +77,7 @@ export const AboutApplet = () => {
               name="displayName"
               maxLength={MAX_NAME_LENGTH}
               label={t('appletName')}
+              restrictExceededValueLength
             />
           </Box>
           <Box sx={{ mb: theme.spacing(4.4) }}>
@@ -84,7 +85,7 @@ export const AboutApplet = () => {
               {...commonInputProps}
               name="description"
               maxLength={MAX_DESCRIPTION_LENGTH_LONG}
-              restrictExceededValueLength={true}
+              restrictExceededValueLength
               label={t('appletDescription')}
               multiline
               rows={5}
