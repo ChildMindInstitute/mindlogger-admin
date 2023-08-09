@@ -6,4 +6,5 @@ export const ITEMS_RESPONSE_TYPES_TO_SHOW = [
   ItemResponseType.MultipleSelection,
   ItemResponseType.Text,
   ItemResponseType.Time,
+  ItemResponseType.TimeRange,
 ];

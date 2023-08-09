@@ -1,8 +1,8 @@
-import { styled } from '@mui/material';
+import { styled, Box } from '@mui/material';
 
-import { StyledFlexTopCenter, theme } from 'shared/styles';
+import { theme } from 'shared/styles';
 
-export const StyledTitle = styled(StyledFlexTopCenter)`
+export const StyledTitle = styled(Box)`
   & .MuiBadge-root {
     position: relative;
     top: unset;
