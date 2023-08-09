@@ -302,17 +302,17 @@ const mapResponseValues = <
   responseValues: T,
 ): T => ({
   ...responseValues,
-  ...(!responseValues.dataMatrix
+  ...(responseValues.dataMatrix
     ? {
-        options: responseValues.options?.map((option) => ({
-          ...option,
-          id: option.id ?? uuidv4(),
-        })),
-      }
-    : {
         options: responseValues.options?.map((option, index) => ({
           ...option,
           id: option.id ?? responseValues.dataMatrix?.[0].options[index]?.optionId ?? uuidv4(),
+        })),
+      }
+    : {
+        options: responseValues.options?.map((option) => ({
+          ...option,
+          id: option.id ?? uuidv4(),
         })),
       }),
 });
