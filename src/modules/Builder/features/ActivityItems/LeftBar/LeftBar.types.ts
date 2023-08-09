@@ -2,8 +2,8 @@ import { ItemFormValues } from 'modules/Builder/types';
 
 export type LeftBarProps = {
   items: ItemFormValues[];
-  activeItemId: string;
-  onSetActiveItem: (id: string) => void;
+  activeItemIndex: number;
+  onSetActiveItemIndex: (index: number) => void;
   onAddItem: () => void;
   onInsertItem: (index: number) => void;
   onDuplicateItem: (index: number) => void;
