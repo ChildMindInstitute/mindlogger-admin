@@ -40,7 +40,7 @@ import {
   getLatestReportUrl,
 } from './Report.utils';
 import { ReportContext } from './context';
-import { LATEST_REPORT_TYPE } from './Report.const';
+import { LATEST_REPORT_DEFAULT_NAME, LATEST_REPORT_TYPE } from './Report.const';
 
 export const Report = ({ activity, identifiers = [], versions = [] }: ReportProps) => {
   const { t } = useTranslation('app');
@@ -73,18 +73,18 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
     setLatestReportError(null);
     try {
-      const res = await getLatestReport({
+      const { data, headers } = await getLatestReport({
         appletId,
         activityId: activity.id,
         respondentId,
       });
-      if (res?.data) {
-        const contentDisposition = res.headers?.['content-disposition'];
+      if (data) {
+        const contentDisposition = headers?.['content-disposition'];
         const fileName = contentDisposition?.match(/filename=(?<filename>[^,;]+);/)?.[0];
-        const base64Str = Buffer.from(res.data).toString('base64');
+        const base64Str = Buffer.from(data).toString('base64');
         const linkSource = getLatestReportUrl(base64Str);
 
-        download(linkSource, fileName || 'Report.pdf', LATEST_REPORT_TYPE);
+        download(linkSource, fileName || LATEST_REPORT_DEFAULT_NAME, LATEST_REPORT_TYPE);
       }
     } catch (error) {
       setLatestReportError(getErrorMessage(error));
