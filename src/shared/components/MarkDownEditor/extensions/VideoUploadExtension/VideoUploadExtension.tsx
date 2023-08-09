@@ -18,6 +18,7 @@ export const VideoUploadExtension = ({
   setFileSizeExceeded,
   fileSizeExceeded,
   setIncorrectFormat,
+  setIsLoading,
 }: MediaContentExtensionProps) => {
   const { t } = useTranslation('app');
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
@@ -46,6 +47,7 @@ export const VideoUploadExtension = ({
     fileSizeExceeded,
     setIncorrectFormat,
     type: MediaType.Video,
+    setIsLoading,
   });
 
   return (
