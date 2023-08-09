@@ -23,7 +23,6 @@ import { StyledLink } from './Cart.styles';
 import { StyledTablePagination } from '../AppletsCatalog/AppletsCatalog.styles';
 import { DEFAULT_APPLETS_PER_PAGE, DEFAULT_PAGE } from '../AppletsCatalog/AppletsCatalog.conts';
 import { getSearchIncludes } from './Cart.utils';
-import { DEFAULT_CART_APPLETS_PER_PAGE } from './Cart.const';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
@@ -48,7 +47,7 @@ export const Cart = () => {
     setPageIndex(newPage + 1);
   };
 
-  useAppletsFromCart({ search, page: pageIndex, limit: DEFAULT_CART_APPLETS_PER_PAGE });
+  useAppletsFromCart();
   useBreadcrumbs([
     {
       icon: 'cart-outlined',
@@ -57,31 +56,31 @@ export const Cart = () => {
   ]);
   useReturnToLibraryPath(page.libraryCart);
 
-  const filteredApplets = isAuthorized
-    ? cartItems
-    : (
-        cartItems?.reduce((renderedApplets: PublishedApplet[], applet) => {
-          const { displayName, description, activities, keywords } = applet;
-          const appletNameSearch = getSearchIncludes(displayName, search);
-          const appletDescriptionSearch =
-            description && getSearchIncludes(getDictionaryText(description), search);
-          const activitySearch = activities.some((activity) => {
-            const itemsSearch = activity.items.some(
-              (item) =>
-                item?.question && getSearchIncludes(getDictionaryText(item.question), search),
-            );
+  const filteredApplets =
+    cartItems?.reduce((renderedApplets: PublishedApplet[], applet) => {
+      const { displayName, description, activities, keywords } = applet;
+      const appletNameSearch = getSearchIncludes(displayName, search);
+      const appletDescriptionSearch =
+        description && getSearchIncludes(getDictionaryText(description), search);
+      const activitySearch = activities.some((activity) => {
+        const itemsSearch = activity.items.some(
+          (item) => item?.question && getSearchIncludes(getDictionaryText(item.question), search),
+        );
 
-            return getSearchIncludes(activity.name, search) || itemsSearch;
-          });
-          const keywordsSearch = keywords.some((keyword) => getSearchIncludes(keyword, search));
+        return getSearchIncludes(activity.name, search) || itemsSearch;
+      });
+      const keywordsSearch = keywords.some((keyword) => getSearchIncludes(keyword, search));
 
-          if (appletNameSearch || appletDescriptionSearch || keywordsSearch || activitySearch) {
-            renderedApplets.push(applet);
-          }
+      if (appletNameSearch || appletDescriptionSearch || keywordsSearch || activitySearch) {
+        renderedApplets.push(applet);
+      }
 
-          return renderedApplets;
-        }, []) || []
-      ).slice((pageIndex - 1) * DEFAULT_APPLETS_PER_PAGE, pageIndex * DEFAULT_APPLETS_PER_PAGE);
+      return renderedApplets;
+    }, []) || [];
+  const pagedApplets = filteredApplets.slice(
+    (pageIndex - 1) * DEFAULT_APPLETS_PER_PAGE,
+    pageIndex * DEFAULT_APPLETS_PER_PAGE,
+  );
 
   const renderEmptyState = () =>
     search ? (
@@ -112,8 +111,8 @@ export const Cart = () => {
             {t('cart')}
           </StyledHeadlineLarge>
           <StyledAppletList>
-            {filteredApplets?.length
-              ? filteredApplets.map((applet) => (
+            {pagedApplets?.length
+              ? pagedApplets.map((applet) => (
                   <StyledAppletContainer key={applet.id}>
                     <Applet uiType={AppletUiType.Cart} applet={applet} setSearch={setSearchValue} />
                   </StyledAppletContainer>
@@ -123,7 +122,7 @@ export const Cart = () => {
           {!!filteredApplets?.length && (
             <StyledTablePagination
               component="div"
-              count={count || 0}
+              count={filteredApplets?.length || 0}
               rowsPerPage={DEFAULT_APPLETS_PER_PAGE}
               page={pageIndex - 1}
               onPageChange={handleChangePage}
