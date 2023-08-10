@@ -90,6 +90,12 @@ export const Uploader = ({
     },
   };
 
+  const clearInput = () => {
+    if (uploadInputRef.current) {
+      uploadInputRef.current.value = '';
+    }
+  };
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
 
@@ -99,9 +105,7 @@ export const Uploader = ({
   const handleRemoveImg = () => {
     setImage(null);
     setValue('');
-    if (uploadInputRef.current) {
-      uploadInputRef.current.value = '';
-    }
+    clearInput();
   };
 
   const onEditImg = (e: MouseEvent) => {
@@ -127,12 +131,14 @@ export const Uploader = ({
   const handleCloseCropPopup = () => {
     setCropPopupVisible(false);
     setImage(null);
+    clearInput();
   };
 
   const handleSaveCroppedImage = async (file: FormData) => {
     setCropPopupVisible(false);
     await executeImgUpload(file);
     setImage(null);
+    clearInput();
   };
 
   const imageField = getValue();

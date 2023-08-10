@@ -8,11 +8,17 @@ import { StyledModalWrapper } from 'shared/styles/styledComponents';
 import { getUploadFormData } from 'shared/utils';
 
 import { cropImage, initPercentCrop } from './CropPopup.utils';
-import { SIZE_TO_SET_IMG_SMALL } from './CropPopup.const';
+import { SIZE_TO_SET_IMG_SMALL, CropRatio } from './CropPopup.const';
 import { StyledCropWrapper } from './CropPopup.styles';
 import { CropPopupProps } from './CropPopup.types';
 
-export const CropPopup = ({ open, image, ratio = 1, onSave, onClose }: CropPopupProps) => {
+export const CropPopup = ({
+  open,
+  image,
+  ratio = CropRatio.Default,
+  onSave,
+  onClose,
+}: CropPopupProps) => {
   const { t } = useTranslation('app');
 
   const [crop, setCrop] = useState<Crop>();
