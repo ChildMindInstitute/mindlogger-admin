@@ -116,7 +116,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
       return `${isDefault ? 'default' : 'individual'}_schedule_template`;
     };
 
-    await exportTemplate(scheduleExportCsv, getFileName());
+    await exportTemplate({ data: scheduleExportCsv, fileName: getFileName() });
     isExport && setExportDefaultSchedulePopupVisible(false);
   };
 

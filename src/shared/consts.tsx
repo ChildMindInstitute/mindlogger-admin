@@ -204,6 +204,7 @@ export enum AudioFileFormats {
   MP3 = '.mp3',
   WAV = '.wav',
 }
+
 export const VALID_AUDIO_FILE_TYPES = Object.values(AudioFileFormats);
 export const ALLOWED_AUDIO_FILE_TYPES = VALID_AUDIO_FILE_TYPES.join(',');
 
@@ -211,6 +212,7 @@ export enum VideoFileFormats {
   WEBM = '.webm',
   MP4 = '.mp4',
 }
+
 export const VALID_VIDEO_FILE_TYPES = Object.values(VideoFileFormats);
 export const ALLOWED_VIDEO_FILE_TYPES = VALID_VIDEO_FILE_TYPES.join(',');
 
@@ -231,6 +233,49 @@ export const CONDITION_TYPES_TO_HAVE_RANGE_VALUE = [ConditionType.Between, Condi
 export const GENERAL_REPORT_NAME = 'report';
 
 export const JOURNEY_REPORT_NAME = 'activity_user_journey';
+
+export const reportHeader = [
+  'id',
+  'activity_scheduled_time',
+  'activity_start_time',
+  'activity_end_time',
+  'flag',
+  'secret_user_id',
+  'userId',
+  'activity_id',
+  'activity_name',
+  'activity_flow',
+  'item',
+  'response',
+  'prompt',
+  'options',
+  'version',
+  'rawScore',
+  'reviewing_id',
+];
+
+export const activityJourneyHeader = [
+  'id',
+  'activity_scheduled_time',
+  'activity_start_time',
+  'activity_end_time',
+  'press_next_time',
+  'press_back_time',
+  'press_undo_time',
+  'press_skip_time',
+  'press_done_time',
+  'response_option_selection_time',
+  'secret_user_id',
+  'user_id',
+  'activity_id',
+  'activity_flow',
+  'activity_name',
+  'item',
+  'prompt',
+  'response',
+  'options',
+  'version',
+];
 
 export const enum ActivityStatus {
   Missed = 'missed',
