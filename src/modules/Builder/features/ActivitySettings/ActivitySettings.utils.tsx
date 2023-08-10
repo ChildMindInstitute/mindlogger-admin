@@ -6,7 +6,6 @@ import { ItemResponseType, REPORT_CONFIG_PARAM } from 'shared/consts';
 import { Item, SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/state';
 import { ReportConfigSetting } from 'shared/features/AppletSettings';
 
-import { ActivitySettingsOptionsItems } from './ActivitySettings.types';
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
 
@@ -17,14 +16,12 @@ export const getSettings = (activityFieldName?: string) => [
     label: 'reports',
     items: [
       {
-        name: ActivitySettingsOptionsItems.ScoresAndReports,
         label: t('scoresAndReports'),
         component: <ScoresAndReports />,
         icon: <Svg id="scores-and-reports" />,
         param: 'scores-and-reports',
       },
       {
-        name: ActivitySettingsOptionsItems.ReportConfiguration,
         label: t('reportConfiguration'),
         component: <ReportConfigSetting />,
         icon: <Svg id="report-configuration" />,
@@ -36,7 +33,6 @@ export const getSettings = (activityFieldName?: string) => [
     label: 'subscales',
     items: [
       {
-        name: ActivitySettingsOptionsItems.SubscalesConfiguration,
         label: t('subscalesConfiguration'),
         component: <SubscalesConfiguration key={`subscales-configuration-${activityFieldName}`} />,
         icon: <Svg id="grid-outlined" />,

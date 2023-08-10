@@ -30,8 +30,6 @@ export const NavigationMenu = ({ items, onClose, onSetActiveItem }: NavigationMe
       return setActiveItem(activeItemFromRoute);
   }, [setting]);
 
-  const containerTitle = activeItem ? t(activeItem.name || '') : '';
-
   return (
     <StyledWrapper>
       <LeftBar
@@ -40,7 +38,7 @@ export const NavigationMenu = ({ items, onClose, onSetActiveItem }: NavigationMe
         isCompact={!!activeItem}
         onItemClick={handleSetActiveItem}
       />
-      <Container title={containerTitle} onClose={handleClose}>
+      <Container title={t(activeItem?.label || '')} onClose={handleClose}>
         {activeItem?.component}
       </Container>
     </StyledWrapper>

@@ -2,17 +2,19 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useHeaderSticky } from 'shared/hooks';
-import { StyledBodyMedium } from 'shared/styles';
+import { StyledTitleSmall } from 'shared/styles';
+import { Tooltip, TooltipUiType } from 'shared/components';
 
 import {
   StyledBar,
   StyledHeader,
   StyledContent,
-  StyledGroupContainer,
-  StyledItemsContainer,
+  StyledSettingsGroup,
+  StyledSettings,
+  StyledSetting,
+  StyledTitle,
 } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
-import { Item } from './Item';
 
 export const LeftBar = ({ items, activeItem, isCompact, onItemClick }: LeftBarProps) => {
   const { t } = useTranslation('app');
@@ -24,19 +26,32 @@ export const LeftBar = ({ items, activeItem, isCompact, onItemClick }: LeftBarPr
       <StyledHeader isSticky={isHeaderSticky}>{t('activitySettings')}</StyledHeader>
       <StyledContent isCompact={isCompact}>
         {items.map(({ label, items }) => (
-          <StyledGroupContainer key={`group-${label}`} isCompact={isCompact}>
-            <StyledBodyMedium>{t(label)}</StyledBodyMedium>
-            <StyledItemsContainer isCompact={isCompact}>
-              {items?.map((item) => (
-                <Item
-                  key={`left-bar-item-${item.name}`}
-                  item={item}
-                  isCompact={isCompact}
-                  onClick={onItemClick}
-                />
+          <StyledSettingsGroup key={label} isCompact={!!activeItem}>
+            <StyledTitleSmall>{t(label)}</StyledTitleSmall>
+            <StyledSettings isCompact={!!activeItem}>
+              {items.map(({ icon, label, component, param, disabled, tooltip }) => (
+                <Tooltip
+                  uiType={TooltipUiType.Secondary}
+                  tooltipTitle={tooltip ? t(tooltip) : null}
+                  key={`item-setting-${label}`}
+                >
+                  <span>
+                    <StyledSetting
+                      onClick={() =>
+                        onItemClick({ label, component, param, icon, disabled, tooltip })
+                      }
+                      isCompact={!!activeItem}
+                      isSelected={activeItem?.label === label}
+                      disabled={disabled}
+                    >
+                      {icon}
+                      <StyledTitle>{t(label)}</StyledTitle>
+                    </StyledSetting>
+                  </span>
+                </Tooltip>
               ))}
-            </StyledItemsContainer>
-          </StyledGroupContainer>
+            </StyledSettings>
+          </StyledSettingsGroup>
         ))}
       </StyledContent>
     </StyledBar>
