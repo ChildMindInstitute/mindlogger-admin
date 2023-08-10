@@ -3,12 +3,11 @@ import { Crop } from 'react-image-crop';
 
 export type CropPopupProps = {
   open: boolean;
-  setCropPopupVisible: (val: boolean) => void;
   setValue: (value: string) => void;
   image: File;
-  setImage: Dispatch<SetStateAction<File | null>>;
   ratio?: number;
   onSave: (data: FormData) => void;
+  onClose: () => void;
 };
 
 export type CropImage = {
