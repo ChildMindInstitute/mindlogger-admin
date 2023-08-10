@@ -93,7 +93,6 @@ export const ConditionRow = ({
   };
 
   const error = get(errors, `${conditionsName}[${index}]`);
-
   const errorMessage =
     error &&
     t(Object.keys(error).length === 3 ? 'setUpAtLeastOneCondition' : 'setUpCorrectCondition');
