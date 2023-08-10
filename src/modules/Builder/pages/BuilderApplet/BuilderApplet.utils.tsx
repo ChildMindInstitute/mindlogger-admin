@@ -231,7 +231,11 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
   return [
     getMessageItem(
       isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
-      t('gyroscopeAndTouchInstructions.overview.instruction'),
+      t(
+        `gyroscopeAndTouchInstructions.overview.${
+          isGyroscope ? 'instructionGyroscope' : 'instructionTouch'
+        }`,
+      ),
     ),
     getMessageItem(
       isGyroscope ? GyroscopeItemNames.PracticeInstruction : TouchItemNames.PracticeInstruction,
