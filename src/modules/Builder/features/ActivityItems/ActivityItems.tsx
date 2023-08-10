@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
@@ -20,8 +20,7 @@ import { ConditionalPanel } from './ConditionalPanel';
 
 export const ActivityItems = () => {
   const { t } = useTranslation('app');
-  const { activityId } = useParams();
-  const [activeItemId, setActiveItemId] = useState('');
+  const [activeItemIndex, setActiveItemIndex] = useState(-1);
   const [itemIdToDelete, setItemIdToDelete] = useState('');
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
@@ -41,17 +40,13 @@ export const ActivityItems = () => {
   useBreadcrumbs();
   useActivitiesRedirection();
 
-  useEffect(() => {
-    setActiveItemId('');
-  }, [activityId]);
-
   if (!activity) return null;
 
   const conditionalLogic = watch(`${fieldName}.conditionalLogic`);
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
-  const activeItemIndex = items?.findIndex((item) => getEntityKey(item) === activeItemId);
+  const activeItem = items?.find((_, index) => index === activeItemIndex);
   const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
   const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
@@ -69,15 +64,15 @@ export const ActivityItems = () => {
     const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
 
     firstSystemIndex === -1 ? appendItem(item) : insertItem(firstSystemIndex, item);
-    setActiveItemId(item.key!);
+    setActiveItemIndex(firstSystemIndex === -1 ? items?.length : firstSystemIndex);
   };
 
   const handleInsertItem = (index: number, item?: ItemFormValues) => {
     const itemToInsert = item ?? getNewActivityItem();
-    const shouldBecomeActive = !item || (item && activeItemId);
+    const shouldBecomeActive = !item || (item && getEntityKey(activeItem ?? {}));
 
     insertItem(index + 1, itemToInsert);
-    shouldBecomeActive && setActiveItemId(itemToInsert.key!);
+    shouldBecomeActive && setActiveItemIndex(index + 1);
   };
 
   const handleDuplicateItem = (index: number) => {
@@ -99,12 +94,17 @@ export const ActivityItems = () => {
     });
   };
 
+  const handleMoveItem = (sourceIndex: number, destinationIndex: number) => {
+    moveItem(sourceIndex, destinationIndex);
+    setActiveItemIndex(destinationIndex);
+  };
+
   const handleRemoveModalClose = () => {
     setItemIdToDelete('');
   };
 
   const handleRemoveModalSubmit = () => {
-    if (itemIdToDelete === activeItemId) setActiveItemId('');
+    if (itemIndexToDelete === activeItemIndex) setActiveItemIndex(-1);
     if (conditionalLogicForItemToDelete?.length) {
       const conditionalLogicKeysToRemove = conditionalLogicForItemToDelete.map(
         (condition: ConditionalLogic) => getEntityKey(condition),
@@ -136,19 +136,19 @@ export const ActivityItems = () => {
     <StyledContainer>
       <LeftBar
         items={items}
-        activeItemId={activeItemId}
-        onSetActiveItem={setActiveItemId}
+        activeItemIndex={activeItemIndex}
+        onSetActiveItemIndex={setActiveItemIndex}
         onAddItem={handleAddItem}
         onInsertItem={handleInsertItem}
         onDuplicateItem={handleDuplicateItem}
         onRemoveItem={handleRemoveClick}
-        onMoveItem={moveItem}
+        onMoveItem={handleMoveItem}
       />
-      {activeItemId && (
+      {activeItemIndex !== -1 && (
         <ItemConfiguration
           key={`item-${activeItemIndex}`}
           name={`${fieldName}.items.${activeItemIndex}`}
-          onClose={() => setActiveItemId('')}
+          onClose={() => setActiveItemIndex(-1)}
         />
       )}
       {!!itemIdToDelete && (

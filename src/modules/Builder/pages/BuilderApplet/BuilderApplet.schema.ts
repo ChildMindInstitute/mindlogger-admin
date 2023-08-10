@@ -470,7 +470,9 @@ export const ConditionalLogicSchema = () =>
           const itemIndex = itemIds?.findIndex((id: string) => id === itemKey);
           const itemsBefore = itemIds?.slice(0, itemIndex + 1);
 
-          return !conditions?.some(({ itemName }: Condition) => !itemsBefore.includes(itemName));
+          return !conditions?.some(
+            ({ itemName }: Condition) => itemName && !itemsBefore.includes(itemName),
+          );
         },
       ),
     conditions: yup.array().of(ConditionSchema()),
