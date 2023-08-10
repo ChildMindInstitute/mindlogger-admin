@@ -1,4 +1,3 @@
-import i18n from 'i18n';
 import { Svg } from 'shared/components';
 import { REPORT_CONFIG_PARAM, Roles } from 'shared/consts';
 import {
@@ -18,8 +17,6 @@ import { isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
-const { t } = i18n;
-
 export const getSettings = ({ isPublished, roles }: GetSettings) => [
   ...(isManagerOrOwner(roles?.[0])
     ? [
@@ -29,14 +26,14 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
             {
               name: 'exportData',
               icon: <Svg id="export" />,
-              label: t('exportData'),
+              label: 'exportData',
               component: <ExportDataSetting />,
               param: 'export-data',
             },
             {
               name: 'dataRetention',
               icon: <Svg id="data-retention" />,
-              label: t('dataRetention'),
+              label: 'dataRetention',
               component: <DataRetention isDashboard />,
               param: 'data-retention',
             },
@@ -50,21 +47,21 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
       {
         name: 'editApplet',
         icon: <Svg id="edit-applet" />,
-        label: t('editApplet'),
+        label: 'editApplet',
         component: <EditAppletSetting />,
         param: 'edit-applet',
       },
       {
         name: 'downloadSchema',
         icon: <Svg id="schema" />,
-        label: t('downloadSchema'),
+        label: 'downloadSchema',
         component: <DownloadSchemaSetting />,
         param: 'download-schema',
       },
       {
         name: 'versionHistory',
         icon: <Svg id="version-history" />,
-        label: t('versionHistory'),
+        label: 'versionHistory',
         component: <VersionHistorySetting />,
         param: 'version-history',
       },
@@ -73,7 +70,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
             {
               name: 'transferOwnership',
               icon: <Svg id="transfer-ownership" />,
-              label: t('transferOwnership'),
+              label: 'transferOwnership',
               component: <TransferOwnershipSetting />,
               param: 'transfer-ownership',
             },
@@ -82,7 +79,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
       {
         name: 'duplicateApplet',
         icon: <Svg id="duplicate" />,
-        label: t('duplicateApplet'),
+        label: 'duplicateApplet',
         component: <DuplicateAppletSettings />,
         param: 'duplicate-applet',
       },
@@ -90,7 +87,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
       {
         name: 'deleteApplet',
         icon: <Svg id="trash" />,
-        label: t('deleteApplet'),
+        label: 'deleteApplet',
         component: <DeleteAppletSetting />,
         param: 'delete-applet',
       },
@@ -102,7 +99,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
       {
         name: 'reportConfiguration',
         icon: <Svg id="report-configuration" />,
-        label: t('reportConfiguration'),
+        label: 'reportConfiguration',
         component: <ReportConfigSetting isDashboard />,
         param: REPORT_CONFIG_PARAM,
       },
@@ -117,7 +114,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
       {
         name: 'shareToLibrary',
         icon: <Svg id="share" />,
-        label: t('shareToLibrary'),
+        label: 'shareToLibrary',
         component: <ShareAppletSetting />,
         param: 'share-applet',
       },
@@ -126,7 +123,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
             {
               name: isPublished ? 'concealApplet' : 'publishApplet',
               icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
-              label: isPublished ? t('concealApplet') : t('publishApplet'),
+              label: isPublished ? 'concealApplet' : 'publishApplet',
               component: <PublishConcealAppletSetting isDashboard />,
               param: 'publish-conceal',
             },

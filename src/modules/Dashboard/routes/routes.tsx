@@ -3,11 +3,9 @@ import { Navigate, Route } from 'react-router-dom';
 
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
-import { Path } from 'shared/utils';
 
 import { appletRoutes, mainRoutes } from './routes.const';
 import { RespondentDataReview, RespondentDataSummary } from '../features';
-import DashboardAppletSettings from '../features/Applet/DashboardAppletSettings';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
@@ -47,18 +45,6 @@ export const dashboardRoutes = () => (
           }
         />
       ))}
-      <Route path={Path.Settings}>
-        <Route element={<DashboardAppletSettings />} path="">
-          <Route
-            path=":setting"
-            element={
-              <PrivateRoute>
-                <DashboardAppletSettings />
-              </PrivateRoute>
-            }
-          />
-        </Route>
-      </Route>
       <Route element={<RespondentData />}>
         <Route
           path={page.appletRespondentData}

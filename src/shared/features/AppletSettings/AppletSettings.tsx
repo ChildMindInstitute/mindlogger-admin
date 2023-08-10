@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
-import { NavigationMenu } from 'shared/components';
-import { NavigationItem } from 'shared/components/NavigationMenu/NavigationMenu.types';
+import { NavigationItem, NavigationMenu } from 'shared/components';
 
 import { AppletSettingsProps } from './AppletSettings.types';
 

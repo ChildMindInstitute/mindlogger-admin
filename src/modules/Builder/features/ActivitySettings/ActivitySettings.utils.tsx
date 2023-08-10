@@ -12,7 +12,7 @@ import { ScoresAndReports } from './ScoresAndReports';
 
 const { t } = i18n;
 
-export const getSettings = (fieldName?: string) => [
+export const getSettings = (activityFieldName?: string) => [
   {
     label: 'reports',
     items: [
@@ -38,7 +38,7 @@ export const getSettings = (fieldName?: string) => [
       {
         name: ActivitySettingsOptionsItems.SubscalesConfiguration,
         label: t('subscalesConfiguration'),
-        component: <SubscalesConfiguration key={`subscales-configuration-${fieldName}`} />,
+        component: <SubscalesConfiguration key={`subscales-configuration-${activityFieldName}`} />,
         icon: <Svg id="grid-outlined" />,
         param: 'subscales-configuration',
       },

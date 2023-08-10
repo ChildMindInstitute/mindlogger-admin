@@ -44,6 +44,10 @@ export const appletRoutes = [
     Component: Schedule,
   },
   {
+    path: page.appletSettings,
+    Component: AppletSettings,
+  },
+  {
     path: page.appletSettingsItem,
     Component: AppletSettings,
   },

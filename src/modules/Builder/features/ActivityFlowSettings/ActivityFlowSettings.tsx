@@ -1,10 +1,9 @@
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { NavigationMenu } from 'shared/components';
+import { NavigationItem, NavigationMenu } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
-import { NavigationItem } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { getSettings } from './ActivityFlowSettings.utils';
 

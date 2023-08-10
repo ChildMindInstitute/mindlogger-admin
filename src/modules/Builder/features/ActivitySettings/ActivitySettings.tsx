@@ -3,8 +3,7 @@ import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
-import { NavigationMenu } from 'shared/components';
-import { NavigationItem } from 'shared/components/NavigationMenu/NavigationMenu.types';
+import { NavigationItem, NavigationMenu } from 'shared/components';
 
 import { getSettings } from './ActivitySettings.utils';
 

@@ -1,4 +1,4 @@
-import { Item, NavigationItem } from 'shared/components/NavigationMenu/NavigationMenu.types';
+import { Item, NavigationItem } from 'shared/components';
 
 export type AppletSetting = {
   label: string;
