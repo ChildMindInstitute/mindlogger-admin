@@ -35,7 +35,7 @@ export const ScoresAndReports = () => {
   const { appletId } = useParams();
   const navigate = useNavigate();
   const { fieldName } = useCurrentActivity();
-  const { control, watch, setValue } = useFormContext();
+  const { control, watch, setValue, getFieldState } = useFormContext();
 
   useActivitiesRedirection();
 
@@ -157,6 +157,7 @@ export const ScoresAndReports = () => {
                           <ToggleItemContainer
                             HeaderContent={SectionScoreHeader}
                             Content={SectionContent}
+                            error={getFieldState(sectionName).error?.message || null}
                             headerContentProps={{
                               onRemove: () => {
                                 removeSection(index);
@@ -199,6 +200,7 @@ export const ScoresAndReports = () => {
                         <ToggleItemContainer
                           HeaderContent={SectionScoreHeader}
                           Content={ScoreContent}
+                          error={getFieldState(scoreName).error?.message || null}
                           headerContentProps={{
                             onRemove: () => {
                               removeScore(index);

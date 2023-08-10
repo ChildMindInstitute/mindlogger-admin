@@ -38,12 +38,14 @@ export const ToggleItemContainer = ({
   const [open, setOpen] = useState(isOpenByDefault ?? true);
   const handleToggle = () => setOpen((prevState) => !prevState);
 
-  const titleErrorVisible = !open && error;
+  const titleErrorVisible = !open && !!error;
 
   return (
     <StyledItemOption uiType={uiType}>
-      <StylesTitleWrapper open={open} uiType={uiType}>
-        <StyledFlexTopCenter sx={{ flexGrow: 1, overflow: 'hidden' }}>
+      <StylesTitleWrapper open={open} uiType={uiType} isError={titleErrorVisible}>
+        <StyledFlexTopCenter
+          sx={{ flexGrow: 1, overflow: titleErrorVisible ? 'visible' : 'hidden' }}
+        >
           <StyledFlexTopCenter>
             <StyledClearedButton
               onClick={handleToggle}
