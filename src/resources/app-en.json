@@ -1171,5 +1171,7 @@
   "showAllSubscaleResults": "Show All Subscale Results",
   "latestFinalSubscaleScore": "Latest Final Subscale Score",
   "credits": "Credits",
-  "exportFailed": "Export failed. Please try again."
+  "exportFailed": "Export failed. Please try again.",
+  "setUpCorrectCondition": "Set up correct condition",
+  "setUpAtLeastOneCondition": "Set up at least one condition"
 }
