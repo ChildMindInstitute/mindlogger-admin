@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
 import { getEntityKey } from 'shared/utils';
@@ -7,6 +9,7 @@ import { ConditionType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 
+import { StyledErrorText, theme } from 'shared/styles';
 import { ConditionRowProps } from './ConditionRow.types';
 import {
   getItemOptions,
@@ -17,6 +20,7 @@ import {
   getValueOptionsList,
 } from './ConditionRow.utils';
 import { Condition } from './Condition';
+import { VALIDATED_ITEMS_COUNT } from './ConditionRow.const';
 
 export const ConditionRow = ({
   name,
@@ -26,7 +30,14 @@ export const ConditionRow = ({
   scoreId,
   autoTrigger,
 }: ConditionRowProps) => {
-  const { control, setValue, watch, trigger } = useFormContext();
+  const { t } = useTranslation('app');
+  const {
+    control,
+    setValue,
+    watch,
+    trigger,
+    formState: { errors },
+  } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
   const conditionsName = `${name}.conditions`;
@@ -82,24 +93,38 @@ export const ConditionRow = ({
     [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
   };
 
+  const error = get(errors, `${conditionsName}[${index}]`);
+  const errorMessage =
+    error &&
+    t(
+      Object.keys(error).length === VALIDATED_ITEMS_COUNT
+        ? 'setUpAtLeastOneCondition'
+        : 'setUpCorrectCondition',
+    );
+
   return (
-    <Condition
-      control={control}
-      itemName={conditionItemName}
-      stateName={conditionTypeName}
-      optionValueName={conditionPayloadSelectionName}
-      numberValueName={conditionPayloadValueName}
-      minValueName={conditionPayloadMinValueName}
-      maxValueName={conditionPayloadMaxValueName}
-      itemOptions={options[type]}
-      valueOptions={getValueOptionsList(selectedItem)}
-      item={conditionItem}
-      state={conditionType}
-      isRemoveVisible={conditions?.length > 1}
-      onItemChange={handleChangeConditionItemName}
-      onStateChange={handleChangeConditionType}
-      onRemove={onRemove}
-      type={type}
-    />
+    <>
+      <Condition
+        control={control}
+        itemName={conditionItemName}
+        stateName={conditionTypeName}
+        optionValueName={conditionPayloadSelectionName}
+        numberValueName={conditionPayloadValueName}
+        minValueName={conditionPayloadMinValueName}
+        maxValueName={conditionPayloadMaxValueName}
+        itemOptions={options[type]}
+        valueOptions={getValueOptionsList(selectedItem)}
+        item={conditionItem}
+        state={conditionType}
+        isRemoveVisible={conditions?.length > 1}
+        onItemChange={handleChangeConditionItemName}
+        onStateChange={handleChangeConditionType}
+        onRemove={onRemove}
+        type={type}
+      />
+      {errorMessage && (
+        <StyledErrorText sx={{ mt: theme.spacing(0.6) }}>{errorMessage}</StyledErrorText>
+      )}
+    </>
   );
 };
