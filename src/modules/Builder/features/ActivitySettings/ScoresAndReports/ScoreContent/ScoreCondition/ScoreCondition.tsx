@@ -14,7 +14,7 @@ import { getScoreConditionId } from './ScoreCondition.utils';
 import { CopyId } from '../CopyId';
 import { StyledLabel } from './ScoreCondition.styles';
 
-export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
+export const ScoreCondition = ({ name, scoreId, scoreKey }: ScoreConditionProps) => {
   const { t } = useTranslation();
 
   const { control, setValue, watch } = useFormContext();
@@ -53,7 +53,7 @@ export const ScoreCondition = ({ name, scoreId }: ScoreConditionProps) => {
           </StyledLabel>
         }
       />
-      <SectionScoreCommonFields name={name} sectionId={scoreId} />
+      <SectionScoreCommonFields name={name} sectionId={scoreKey} />
     </>
   );
 };
