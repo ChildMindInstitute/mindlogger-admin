@@ -1130,7 +1130,8 @@
   "gyroscopeAndTouchInstructions": {
     "overview": {
       "title": "Overview Instructions",
-      "instruction": "In this task, you will see a disc that will drift either to the left or right side of the screen.\nYour job will be to keep the disc in the middle of the screen.\nIf the disc is moving to the right, tilt your phone to the left to bring it back to the center.\nIf the disc is moving to the left, tilt your phone to the right to bring the disc back to center.\nDo not let the disc touch the walls to the far left or right of the screen.\nThere will be two phases to this task, a Challenge Phase, and a Focus Phase."
+      "instructionGyroscope": "In this task, you will see a disc that will drift either to the left or right side of the screen.\nYour job will be to keep the disc in the middle of the screen.\nIf the disc is moving to the right, tilt your phone to the left to bring it back to the center.\nIf the disc is moving to the left, tilt your phone to the right to bring the disc back to center.\nDo not let the disc touch the walls to the far left or right of the screen.\nThere will be two phases to this task, a Challenge Phase, and a Focus Phase.",
+      "instructionTouch": "In this task, you will see a disc that will drift either to the left or right side of the screen.\nYour job will be to keep the disc in the middle of the screen.\nIf the disc is moving to the right, swipe left of control bar to bring it back to the center.\nIf the disc is moving to the left, swipe right of control bar to bring the disc back to center.\nDo not let the disc touch the walls to the far left or right of the screen.\nThere will be two phases to this task, a Challenge Phase, and a Focus Phase."
     },
     "practice": {
       "title": "Practice Round Instructions",
