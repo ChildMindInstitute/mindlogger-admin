@@ -20,6 +20,7 @@ import {
   getValueOptionsList,
 } from './ConditionRow.utils';
 import { Condition } from './Condition';
+import { VALIDATED_ITEMS_COUNT } from './ConditionRow.const';
 
 export const ConditionRow = ({
   name,
@@ -95,7 +96,11 @@ export const ConditionRow = ({
   const error = get(errors, `${conditionsName}[${index}]`);
   const errorMessage =
     error &&
-    t(Object.keys(error).length === 3 ? 'setUpAtLeastOneCondition' : 'setUpCorrectCondition');
+    t(
+      Object.keys(error).length === VALIDATED_ITEMS_COUNT
+        ? 'setUpAtLeastOneCondition'
+        : 'setUpCorrectCondition',
+    );
 
   return (
     <>
