@@ -35,8 +35,8 @@ export const useSubscaleLookupTableSetup = ({
     setStep((prevState) => ++prevState as Steps);
   };
 
-  const onDownloadTemplate = () => {
-    exportTemplate(template, `${templatePrefix}lookup_table_template`);
+  const onDownloadTemplate = async () => {
+    await exportTemplate({ data: template, fileName: `${templatePrefix}lookup_table_template` });
   };
 
   useEffect(() => {

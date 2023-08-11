@@ -1,7 +1,17 @@
 import { utils, writeFile } from 'xlsx';
 
-export const exportTemplate = <T extends unknown[]>(data: T, fileName: string, isXlsx = false) => {
-  const workSheet = utils.json_to_sheet(data);
+export const exportTemplate = <T extends unknown[]>({
+  data,
+  fileName,
+  isXlsx,
+  defaultData,
+}: {
+  data: T;
+  fileName: string;
+  isXlsx?: boolean;
+  defaultData?: string[] | null;
+}) => {
+  const workSheet = defaultData ? utils.aoa_to_sheet([defaultData]) : utils.json_to_sheet(data);
   const workBook = utils.book_new();
 
   utils.book_append_sheet(workBook, workSheet, 'Sheet1');

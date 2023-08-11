@@ -119,9 +119,15 @@ export const BlockSequencesContent = ({
         <ImportSequencesPopup
           open={importTableVisible}
           onClose={() => setImportTableVisible(false)}
-          onDownloadCsv={() => exportTemplate(uploadedTable || defaultExportTable, 'template')}
+          onDownloadCsv={() =>
+            exportTemplate({ data: uploadedTable || defaultExportTable, fileName: 'template' })
+          }
           onDownloadXlsx={() =>
-            exportTemplate(uploadedTable || defaultExportTable, 'template', true)
+            exportTemplate({
+              data: uploadedTable || defaultExportTable,
+              fileName: 'template',
+              isXlsx: true,
+            })
           }
           uiType={importSequencesUiType}
           uploadedImages={stimulusTrials.map((trial) => getUploadedMediaName(trial.image))}
