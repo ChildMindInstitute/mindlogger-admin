@@ -3,7 +3,7 @@ import { Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { FontWeight, StyledClearedButton, StyledFlexColumn } from 'shared/styles/styledComponents';
+import { FontWeight, StyledClearedButton } from 'shared/styles/styledComponents';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { ActionsAlign } from './Modal.types';
@@ -17,11 +17,6 @@ export const StyledDialog = styled(Dialog)`
     overflow-y: unset;
     padding: ${theme.spacing(2, 0)};
   }
-`;
-
-export const StyledContentWrapper = styled(StyledFlexColumn)`
-  overflow-y: auto;
-  flex-grow: 1;
 `;
 
 export const StyledDialogTitle = styled(DialogTitle)`

@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
-import theme from 'shared/styles/theme';
+import { theme, StyledModalContent } from 'shared/styles';
 
 import { ModalProps } from './Modal.types';
 import {
@@ -10,7 +10,6 @@ import {
   StyledCloseButton,
   StyledDialogActions,
   StyledButton,
-  StyledContentWrapper,
 } from './Modal.styles';
 import { Tooltip } from '../Tooltip';
 
@@ -84,7 +83,7 @@ export const Modal = ({
         onEntered: onTransitionEntered,
       }}
     >
-      <StyledContentWrapper>
+      <StyledModalContent>
         <StyledDialogTitle align={titleAlign}>
           {title}
           <StyledCloseButton onClick={onClose}>
@@ -120,7 +119,7 @@ export const Modal = ({
             </Box>
           </StyledDialogActions>
         )}
-      </StyledContentWrapper>
+      </StyledModalContent>
     </StyledDialog>
   );
 };
