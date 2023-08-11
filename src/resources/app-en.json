@@ -862,6 +862,7 @@
   "newItemName": "New Item",
   "validationMessages": {
     "isRequired": "{{- field }} is required",
+    "isRequired_indexed": "{{- field }} {{- index }} is required",
     "alphanumericAndHyphen": "{{- field }} must contain only alphanumeric characters, underscores, or hyphen",
     "lessThan": "{{- less }} should be less than {{- than }}",
     "moreThan": "{{- more }} should be bigger than {{- than }}",
