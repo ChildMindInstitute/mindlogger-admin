@@ -36,6 +36,7 @@ import {
 import {
   checkRawScoreRegexp,
   checkScoreRegexp,
+  getRegexForIndexedField,
   getTestFunctionForSubscaleScore,
   isPerfTaskResponseType,
   isTouchOrGyroscopeRespType,
@@ -73,12 +74,26 @@ export const ResponseValuesSliderSchema = () => ({
 
 export const ResponseValuesSelectionRowsSchema = () =>
   yup.object({
-    rowName: yup.string().required(getIsRequiredValidateMessage('row')),
+    rowName: yup.string().required(({ path }) => {
+      const matchedIndex = path?.match(getRegexForIndexedField('rowName'))?.at(-1) ?? '';
+
+      return getIsRequiredValidateMessage('row', {
+        context: 'indexed',
+        index: `${+matchedIndex + 1}`,
+      });
+    }),
   });
 
 export const ResponseValuesSelectionOptionsSchema = () =>
   yup.object({
-    text: yup.string().required(getIsRequiredValidateMessage('option')),
+    text: yup.string().required(({ path }) => {
+      const matchedIndex = path?.match(getRegexForIndexedField('text'))?.at(-1) ?? '';
+
+      return getIsRequiredValidateMessage('option', {
+        context: 'indexed',
+        index: `${+matchedIndex + 1}`,
+      });
+    }),
   });
 
 export const ResponseValuesOptionsSchema = () =>

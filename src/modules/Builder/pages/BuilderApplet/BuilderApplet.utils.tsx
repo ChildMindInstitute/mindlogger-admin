@@ -887,3 +887,6 @@ export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormV
     ],
     [],
   );
+
+export const getRegexForIndexedField = (fieldName: string) =>
+  new RegExp(`\\[(\\d+)\\].${fieldName}$`);
