@@ -157,7 +157,9 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
                 options={respondents}
                 label={t('respondents')}
                 labelAllSelect={t('all')}
-                noOptionsText={t('noRespondentsYet')}
+                noOptionsText={
+                  respondents?.length ? t('noRespondentsToSelect') : t('noRespondentsYet')
+                }
               />
             </Grid>
           )}
