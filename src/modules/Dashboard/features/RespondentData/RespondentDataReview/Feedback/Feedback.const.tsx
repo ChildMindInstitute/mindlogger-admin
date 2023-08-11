@@ -10,7 +10,7 @@ import { FeedbackReviewed } from './FeedbackReviewed';
 export const getTabs = (
   selectedActivity: DatavizActivity,
   setActiveTab: Dispatch<SetStateAction<number>>,
-  assessment: ActivityItemAnswer[],
+  assessment: ActivityItemAnswer[] | undefined,
   assessmentStep: number,
   setAssessmentStep: Dispatch<SetStateAction<number>>,
 ) => [
@@ -18,13 +18,12 @@ export const getTabs = (
     labelKey: 'notes',
     content: <FeedbackNotes activity={selectedActivity} />,
   },
-  ...(assessment.length
+  ...(assessment?.length
     ? [
         {
           labelKey: 'assessment',
           content: (
             <FeedbackAssessment
-              assessment={assessment}
               setActiveTab={setActiveTab}
               assessmentStep={assessmentStep}
               setAssessmentStep={setAssessmentStep}

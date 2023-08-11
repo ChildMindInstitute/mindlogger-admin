@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import { StyledBodySmall, StyledFlexColumn, theme, variables } from 'shared/styles';
 import { DateFormats } from 'shared/consts';
 import { page } from 'resources';
-import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/context';
+import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.context';
 
 import { StyledListItemButton, StyledTooltip } from './ChartTooltip.styles';
 import { ChartTooltipProps, ScatterTooltipRowData } from './ChartTooltip.types';

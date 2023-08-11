@@ -1,5 +1,7 @@
+import { Dispatch, SetStateAction } from 'react';
 import { TextItem, SliderItem, SingleSelectItem, MultiSelectItem } from 'shared/state';
 import {
+  ActivityItemAnswer,
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
@@ -41,4 +43,10 @@ export type SingleSelectItemAnswer = {
 export type MultiSelectItemAnswer = {
   activityItem: MultiSelectActivityItem;
   answer: DecryptedMultiSelectionAnswer | null;
+};
+
+export type RespondentDataReviewContextType = {
+  assessment?: ActivityItemAnswer[];
+  itemIds: string[];
+  setItemIds: Dispatch<SetStateAction<string[]>>;
 };

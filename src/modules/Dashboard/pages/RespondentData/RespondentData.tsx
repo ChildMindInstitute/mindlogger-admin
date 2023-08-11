@@ -13,7 +13,7 @@ import { useAppDispatch } from 'redux/store';
 import { Roles } from 'shared/consts';
 
 import { useRespondentDataTabs } from './RespondentData.hooks';
-import { RespondentDataContext } from './context';
+import { RespondentDataContext } from './RespondentData.context';
 import { SummaryFiltersForm } from './RespondentData.types';
 import { defaultSummaryFormFiltersValues } from './RespondentData.const';
 

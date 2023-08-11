@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash.uniqueid';
 
@@ -14,7 +14,9 @@ import { Review, Reviewer } from './FeedbackReviewed.types';
 
 export const FeedbackReviewed = () => {
   const { t } = useTranslation('app');
-  const { appletId, answerId } = useParams();
+  const { appletId } = useParams();
+  const [searchParams] = useSearchParams();
+  const answerId = searchParams.get('answerId');
 
   const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getReviews } = useAsync(getReviewsApi);
@@ -28,14 +30,13 @@ export const FeedbackReviewed = () => {
       try {
         const result = await getReviews({ appletId, answerId });
         const decryptedData = result.data.result.map((review) => {
-          const { reviewerPublicKey, isEdited, reviewer, ...assessmentData } = review;
+          const { reviewerPublicKey, reviewer, ...assessmentData } = review;
           const encryptedData = {
             ...assessmentData,
             userPublicKey: reviewerPublicKey,
           } as Review;
 
           return {
-            isEdited,
             reviewer,
             review: getDecryptedActivityData(encryptedData).decryptedAnswers,
           };
