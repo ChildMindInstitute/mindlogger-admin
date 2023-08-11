@@ -8,7 +8,7 @@ import { ActivitySettingsSubscale } from 'shared/state';
 
 import { ActivityCompletionScores } from './ActivityCompletionScores';
 import { Subscale } from './Subscale';
-import { ReportContext } from '../context';
+import { ReportContext } from '../Report.context';
 import {
   ActivityCompletionToRender,
   ParsedSubscales,

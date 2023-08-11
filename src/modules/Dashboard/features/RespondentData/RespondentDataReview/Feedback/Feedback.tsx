@@ -10,7 +10,7 @@ import {
   theme,
 } from 'shared/styles';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
-import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/context';
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import { StyledButton, StyledContainer } from './Feedback.styles';
 import { FeedbackTabs, getTabs } from './Feedback.const';

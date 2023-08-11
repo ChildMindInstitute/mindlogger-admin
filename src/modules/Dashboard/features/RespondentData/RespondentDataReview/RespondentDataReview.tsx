@@ -27,7 +27,7 @@ import { Answer } from './RespondentDataReview.types';
 import { Feedback } from './Feedback';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
-import { RespondentDataReviewContext } from './context';
+import { RespondentDataReviewContext } from './RespondentDataReview.context';
 
 export const RespondentDataReview = () => {
   const { t } = useTranslation();

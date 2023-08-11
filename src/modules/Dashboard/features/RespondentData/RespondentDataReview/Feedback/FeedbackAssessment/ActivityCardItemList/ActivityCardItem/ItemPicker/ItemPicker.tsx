@@ -15,10 +15,10 @@ import {
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { getActivityItemIndex } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers/AssesmentControllers.utils';
 import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.types';
-import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/context';
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import { ItemPickerProps } from './ItemPicker.types';
-import { updateItemIds } from './ItemPicker.utils';
+import { formatToNumberArray, updateItemIds } from './ItemPicker.utils';
 
 export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
   const { itemIds, setItemIds } = useContext(RespondentDataReviewContext);
@@ -39,8 +39,6 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
   const controlName = `assessmentItems.${activityItemIndex}.answers` as const;
   const watchAnswer = watch(controlName);
   const edited = `assessmentItems.${activityItemIndex}.edited` as const;
-
-  const formatToNumberArray = (stringArray: string[]) => stringArray.map((item) => +item);
 
   const checkEditedValue = (): number | null => {
     const defaultAnswerValue = defaultValues?.assessmentItems?.[activityItemIndex]?.answers;

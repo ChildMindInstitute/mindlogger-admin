@@ -6,3 +6,5 @@ export const updateItemIds = (
   shouldBeUpdated
     ? [...itemIds, activityItemId]
     : [...itemIds.filter((id) => id !== activityItemId)];
+
+export const formatToNumberArray = (stringArray: string[]) => stringArray.map((item) => +item);
