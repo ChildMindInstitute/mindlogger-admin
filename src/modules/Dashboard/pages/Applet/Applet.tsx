@@ -15,6 +15,8 @@ export const Applet = () => {
   const appletTabs = useAppletTabs();
   const { appletId } = useParams();
 
+  const { result: appletData } = applet.useAppletData() ?? {};
+
   const hiddenHeader = location.pathname.includes('dataviz');
   const { getApplet } = applet.thunk;
 
@@ -26,7 +28,7 @@ export const Applet = () => {
 
   return (
     <StyledBody>
-      <LinkedTabs hiddenHeader={hiddenHeader} tabs={appletTabs} />
+      {appletData && <LinkedTabs hiddenHeader={hiddenHeader} tabs={appletTabs} />}
     </StyledBody>
   );
 };
