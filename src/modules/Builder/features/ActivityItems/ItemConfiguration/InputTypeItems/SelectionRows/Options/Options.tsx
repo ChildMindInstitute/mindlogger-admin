@@ -5,7 +5,7 @@ import get from 'lodash.get';
 import { UploaderUiType, Uploader } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
-import { SingleAndMultipleSelectOption } from 'shared/state';
+import { SingleAndMultiSelectOption } from 'shared/state';
 
 import { StyledSelectionRow, StyledSelectionBox } from '../SelectionRows.styles';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
@@ -33,7 +33,7 @@ export const Options = ({ name }: { name: string }) => {
   return (
     <StyledSelectionRow hasTooltips={hasTooltips}>
       <StyledSelectionBox />
-      {options?.map((option: SingleAndMultipleSelectOption, index: number) => {
+      {options?.map((option: SingleAndMultiSelectOption, index: number) => {
         const optionName = `${optionsName}.${index}`;
 
         return (

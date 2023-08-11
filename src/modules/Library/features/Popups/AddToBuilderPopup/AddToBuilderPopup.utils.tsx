@@ -21,9 +21,20 @@ import {
 } from 'shared/styles';
 import { HeadCell } from 'shared/types/table';
 import i18n from 'i18n';
-import { Workspace } from 'shared/state';
+import {
+  SingleAndMultipleSelectMatrix,
+  SingleAndMultiSelectOption,
+  SingleAndMultiSelectRowOption,
+  SingleAndMultipleSelectRowsResponseValues,
+  Workspace,
+} from 'shared/state';
 import { Applet as FullApplet, DashboardAppletType } from 'modules/Dashboard';
-import { ItemResponseType, performanceTaskResponseTypes, PerfTaskType } from 'shared/consts';
+import {
+  ItemResponseType,
+  performanceTaskResponseTypes,
+  PerfTaskType,
+  responseTypeToHaveOptions,
+} from 'shared/consts';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
 
 import {
@@ -282,9 +293,30 @@ export const getPerformanceTaskType = (responseType: ItemResponseType) => {
   return performanceTaskType;
 };
 
-// TODO: Make filtering for scores, subscales, and item flows, regarding which items were selected, Activity to the
-//  Reviewer dashboard assessment checkbox (can be only one in all activities), names for ABTrails activities to be
-//  unique
+const mapResponseValues = <
+  T extends {
+    dataMatrix?: SingleAndMultipleSelectMatrix[] | null;
+    options: (SingleAndMultiSelectOption | SingleAndMultiSelectRowOption)[];
+  },
+>(
+  responseValues: T,
+): T => ({
+  ...responseValues,
+  ...(responseValues.dataMatrix
+    ? {
+        options: responseValues.options?.map((option, index) => ({
+          ...option,
+          id: option.id ?? responseValues.dataMatrix?.[0].options[index]?.optionId ?? uuidv4(),
+        })),
+      }
+    : {
+        options: responseValues.options?.map((option) => ({
+          ...option,
+          id: option.id ?? uuidv4(),
+        })),
+      }),
+});
+
 export const getSelectedAppletData = (
   applet: PublishedApplet,
   selectedItems: SelectedItem[],
@@ -300,7 +332,24 @@ export const getSelectedAppletData = (
 
       const filteredItems = activity.items
         .filter((item) => selectedItemNamesSet.has(`${item.name}-${activity.name}`))
-        .map((item) => ({ ...item, key: uuidv4() }));
+        .map((item, index, items) => {
+          const newItem = {
+            ...item,
+            key: uuidv4(),
+          };
+
+          //for security reasons there is no 'id' in responseValues.options for Single/Multi selection (+ per row)
+          if (responseTypeToHaveOptions.includes(newItem.responseType)) {
+            newItem.responseValues = mapResponseValues(
+              newItem.responseValues as SingleAndMultipleSelectRowsResponseValues,
+            );
+          }
+
+          //per requirements if not all of the items in activity were selected, conditional logic should be removed
+          if (activity.items.length > items.length) newItem.conditionalLogic = undefined;
+
+          return newItem;
+        });
 
       for (const item of activity.items) {
         if (performanceTaskResponseTypes.includes(item.responseType)) {
@@ -309,21 +358,28 @@ export const getSelectedAppletData = (
         }
       }
 
+      //per requirements if not all of the items in activity were selected, scores & reports and subscales should be removed
+      const hasSubscalesAndScores = filteredItems.length === activity.items.length;
+
       return {
         ...activity,
         isPerformanceTask,
         performanceTaskType: performanceTaskType || undefined,
         items: filteredItems,
+        ...(!hasSubscalesAndScores && { subscaleSetting: undefined, scoresAndReports: undefined }),
       };
     });
 
-  const selectedActivityFlows = applet.activityFlows
-    .filter((flow) => flow.items.every((item) => selectedActivityKeysSet.has(item.activityKey)))
-    .map((flow) => ({
-      ...flow,
-      key: uuidv4(),
-      items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
-    }));
+  //per requirements if not all of the activites in applet were selected, activity flows should be removed
+  const hasActivityFlows = applet.activities.length === selectedActivityKeysSet.size;
+
+  const selectedActivityFlows = hasActivityFlows
+    ? applet.activityFlows.map((flow) => ({
+        ...flow,
+        key: uuidv4(),
+        items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
+      }))
+    : [];
 
   const { id, keywords, version, activities, activityFlows, ...restApplet } = applet;
 

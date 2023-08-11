@@ -18,6 +18,7 @@ export const AudioUploadExtension = ({
   setFileSizeExceeded,
   fileSizeExceeded,
   setIncorrectFormat,
+  setIsLoading,
 }: MediaContentExtensionProps) => {
   const { t } = useTranslation('app');
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
@@ -46,6 +47,7 @@ export const AudioUploadExtension = ({
     fileSizeExceeded,
     setIncorrectFormat,
     type: MediaType.Audio,
+    setIsLoading,
   });
 
   return (

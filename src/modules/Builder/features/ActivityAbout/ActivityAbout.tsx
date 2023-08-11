@@ -12,7 +12,7 @@ import {
   StyledCheckboxTooltipSvg,
 } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
-import { Tooltip, Uploader } from 'shared/components';
+import { Tooltip, Uploader, CropRatio } from 'shared/components';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
@@ -92,7 +92,7 @@ export const ActivityAbout = () => {
           setValue={(val: string) => setValue(`${fieldName}.splashScreen`, val)}
           getValue={() => watch(`${fieldName}.splashScreen`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
-          cropRatio={7 / 10}
+          cropRatio={CropRatio.SplashScreen}
         />
       ),
     },

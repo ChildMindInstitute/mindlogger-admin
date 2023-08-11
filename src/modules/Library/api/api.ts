@@ -2,7 +2,7 @@ import { AppletId } from 'api';
 import { apiClient, authApiClient } from 'shared/api/api.client';
 
 import { PublishedApplet } from '../state';
-import { PublishedAppletsType, AppletsFromCartType } from './api.types';
+import { PublishedAppletsType } from './api.types';
 import { CART_ITEMS_WITHOUT_LIMIT } from './api.const';
 
 export const getPublishedAppletsApi = (
@@ -32,11 +32,8 @@ export const postAppletsToCartApi = (cartItems: PublishedApplet[], signal?: Abor
     { signal },
   );
 
-export const getAppletsFromCartApi = (
-  { page, search, limit }: AppletsFromCartType,
-  signal?: AbortSignal,
-) =>
+export const getAppletsFromCartApi = (signal?: AbortSignal) =>
   authApiClient.get('/library/cart', {
-    params: { search, page, limit: limit ?? CART_ITEMS_WITHOUT_LIMIT },
+    params: { limit: CART_ITEMS_WITHOUT_LIMIT },
     signal,
   });

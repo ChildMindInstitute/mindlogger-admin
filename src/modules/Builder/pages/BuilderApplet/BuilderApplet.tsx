@@ -22,7 +22,12 @@ import { AppletFormValues } from 'modules/Builder/types';
 import { builderSessionStorage } from 'shared/utils';
 
 import { AppletSchema } from './BuilderApplet.schema';
-import { getDefaultValues, getAppletTabs } from './BuilderApplet.utils';
+import {
+  getDefaultValues,
+  getAppletTabs,
+  prepareActivitiesFromLibrary,
+  prepareActivityFlowsFromLibrary,
+} from './BuilderApplet.utils';
 
 export const BuilderApplet = () => {
   const params = useParams();
@@ -84,8 +89,14 @@ export const BuilderApplet = () => {
       const libraryConvertedValues = await getDefaultValues(dataFromLibrary);
       const newFormValues = {
         ...formValues,
-        activities: [...formValues.activities, ...libraryConvertedValues.activities],
-        activityFlows: [...formValues.activityFlows, ...libraryConvertedValues.activityFlows],
+        activities: prepareActivitiesFromLibrary([
+          ...formValues.activities,
+          ...libraryConvertedValues.activities,
+        ]),
+        activityFlows: prepareActivityFlowsFromLibrary([
+          ...formValues.activityFlows,
+          ...libraryConvertedValues.activityFlows,
+        ]),
       };
 
       await reset(newFormValues);
@@ -94,8 +105,16 @@ export const BuilderApplet = () => {
 
   useEffect(() => {
     if (hasLibraryData && isNewApplet) {
-      builderSessionStorage.setItem(getDefaultValues(dataFromLibrary));
-      reset(getDefaultValues(dataFromLibrary));
+      (async () => {
+        const libraryConvertedValues = await getDefaultValues(dataFromLibrary);
+        const newFormValues = {
+          ...libraryConvertedValues,
+          activities: prepareActivitiesFromLibrary(libraryConvertedValues.activities),
+          activityFlows: prepareActivityFlowsFromLibrary(libraryConvertedValues.activityFlows),
+        };
+        builderSessionStorage.setItem(newFormValues);
+        await reset(newFormValues);
+      })();
     }
   }, [hasLibraryData, isNewApplet]);
 

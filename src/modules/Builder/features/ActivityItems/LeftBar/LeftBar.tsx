@@ -26,8 +26,8 @@ import { getConditionsToRemove } from '../ActivityItems.utils';
 
 export const LeftBar = ({
   items,
-  activeItemId,
-  onSetActiveItem,
+  activeItemIndex,
+  onSetActiveItemIndex,
   onAddItem,
   onInsertItem,
   onDuplicateItem,
@@ -45,6 +45,7 @@ export const LeftBar = ({
   const [sourceIndex, setSourceIndex] = useState(-1);
   const [destinationIndex, setDestinationIndex] = useState(-1);
 
+  const activeItemId = getEntityKey(items?.[activeItemIndex]);
   const { fieldName, activity } = useCurrentActivity();
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
@@ -83,6 +84,12 @@ export const LeftBar = ({
     );
     onMoveItem(sourceIndex, destinationIndex);
     handleCancelRemoveConditionals();
+  };
+
+  const handleSetActiveItem = (id: string) => {
+    const activeItemIndex = items?.findIndex((item) => getEntityKey(item) === id);
+
+    onSetActiveItemIndex(activeItemIndex);
   };
 
   const addItemBtn = (
@@ -124,7 +131,7 @@ export const LeftBar = ({
                             name={`${fieldName}.items[${index}]`}
                             index={index}
                             activeItemId={activeItemId}
-                            onSetActiveItem={onSetActiveItem}
+                            onSetActiveItem={handleSetActiveItem}
                             onDuplicateItem={onDuplicateItem}
                             onRemoveItem={onRemoveItem}
                           />
@@ -148,7 +155,7 @@ export const LeftBar = ({
               key={`item-${getEntityKey(item)}`}
               item={item}
               activeItemId={activeItemId}
-              onSetActiveItem={onSetActiveItem}
+              onSetActiveItem={handleSetActiveItem}
               onDuplicateItem={onDuplicateItem}
               onRemoveItem={onRemoveItem}
             />

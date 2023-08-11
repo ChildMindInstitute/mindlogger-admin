@@ -16,7 +16,7 @@ import {
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
-import { SingleAndMultipleSelectionOption, ConditionalLogic, ItemAlert } from 'shared/state';
+import { SingleAndMultiSelectOption, ConditionalLogic, ItemAlert } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
@@ -117,7 +117,7 @@ export const SelectionOption = ({
 
     if (hasColorPicker && hasPalette) {
       const options = getValues(`${name}.responseValues.options`);
-      options?.forEach((option: SingleAndMultipleSelectionOption, index: number) => {
+      options?.forEach((option: SingleAndMultiSelectOption, index: number) => {
         onUpdateOption(index, {
           ...option,
           color: {

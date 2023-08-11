@@ -4,4 +4,7 @@ export const getEmptyCondition = () => ({
   key: uuidv4(),
   type: '',
   itemName: '',
+  payload: {
+    optionValue: '',
+  },
 });

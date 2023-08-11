@@ -10,7 +10,12 @@ export type ItemProps = {
   index?: number;
   dragHandleProps?: DraggableProvided['dragHandleProps'];
   isDragging?: boolean;
-} & Omit<LeftBarProps, 'items' | 'onAddItem' | 'onInsertItem' | 'onMoveItem'>;
+  activeItemId: string;
+  onSetActiveItem: (id: string) => void;
+} & Omit<
+  LeftBarProps,
+  'items' | 'onAddItem' | 'onInsertItem' | 'onMoveItem' | 'activeItemIndex' | 'onSetActiveItemIndex'
+>;
 
 export type ActionsType = {
   onRemoveItem: LeftBarProps['onRemoveItem'];

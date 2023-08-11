@@ -23,10 +23,18 @@ export const StyledItemOption = styled(StyledItemOptionContainer)`
 
 export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)`
   justify-content: space-between;
-  overflow: hidden;
 
-  ${({ open, uiType }: { open?: boolean; uiType?: ToggleContainerUiType }) => `
+  ${({
+    open,
+    uiType,
+    isError,
+  }: {
+    open?: boolean;
+    uiType?: ToggleContainerUiType;
+    isError?: boolean;
+  }) => `
     height: 4.8rem;
+    overflow: ${isError ? 'visible' : 'hidden'};
 		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0}
 	`};
 
