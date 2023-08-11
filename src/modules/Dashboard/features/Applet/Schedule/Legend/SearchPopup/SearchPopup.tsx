@@ -117,7 +117,7 @@ export const SearchPopup = ({
       <StyledModal style={{ top, left }} open={open} onClose={handleSearchPopupClose}>
         <StyledModalInner>
           <StyledModalContent>
-            <Box sx={{ height: '6.4rem' }}>
+            <Box>
               <Search
                 height="6.4rem"
                 width="100%"
