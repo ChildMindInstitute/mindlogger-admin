@@ -21,7 +21,9 @@ import {
 } from 'shared/components/MarkDownEditor';
 import { FileSizeExceededPopup } from 'shared/components/MarkDownEditor/FileSizeExceededPopup';
 import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
+import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, MediaType, UploadFileError } from 'shared/consts';
+import { StyledFlexColumn } from 'shared/styles';
 
 import { StyledErrorText, StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
@@ -36,10 +38,18 @@ export const EditorController = <T extends FieldValues>({
   const editorRef = useRef<ExposeParam>();
   const [fileSizeExceeded, setFileSizeExceeded] = useState<number | null>(null);
   const [incorrectFileFormat, setIncorrectFileFormat] = useState<MediaType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onInsert = useCallback((generator: InsertContentGenerator) => {
     editorRef.current?.insert(generator);
   }, []);
+
+  const commonMediaProps = {
+    onInsert,
+    setFileSizeExceeded,
+    setIncorrectFormat: setIncorrectFileFormat,
+    setIsLoading,
+  };
 
   return (
     <>
@@ -47,7 +57,7 @@ export const EditorController = <T extends FieldValues>({
         name={name}
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
-          <>
+          <StyledFlexColumn sx={{ position: 'relative' }}>
             <StyledMdEditor
               editorId={editorId}
               className={`${uiType} ${error ? 'has-error' : ''}`}
@@ -83,25 +93,19 @@ export const EditorController = <T extends FieldValues>({
                   onInsert={onInsert}
                 />,
                 <ImageUploadExtension
+                  {...commonMediaProps}
                   key="image-upload-extension"
-                  onInsert={onInsert}
-                  setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_25MB}
-                  setIncorrectFormat={setIncorrectFileFormat}
                 />,
                 <AudioUploadExtension
+                  {...commonMediaProps}
                   key="audio-upload-extension"
-                  onInsert={onInsert}
-                  setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_150MB}
-                  setIncorrectFormat={setIncorrectFileFormat}
                 />,
                 <VideoUploadExtension
+                  {...commonMediaProps}
                   key="video-upload-extension"
-                  onInsert={onInsert}
-                  setFileSizeExceeded={setFileSizeExceeded}
                   fileSizeExceeded={MAX_FILE_SIZE_150MB}
-                  setIncorrectFormat={setIncorrectFileFormat}
                 />,
                 <UnderlineExtension key="underline-extension" onInsert={onInsert} />,
                 <StrikethroughExtension key="strikethrough-extension" onInsert={onInsert} />,
@@ -147,8 +151,9 @@ export const EditorController = <T extends FieldValues>({
                 <CharacterCounter inputSize={(value ?? '').length} key="character-counter" />,
               ]}
             />
+            {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
             {error?.message && <StyledErrorText>{error.message}</StyledErrorText>}
-          </>
+          </StyledFlexColumn>
         )}
       />
       {!!fileSizeExceeded && (

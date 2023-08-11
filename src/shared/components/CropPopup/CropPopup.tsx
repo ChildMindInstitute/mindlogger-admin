@@ -8,17 +8,16 @@ import { StyledModalWrapper } from 'shared/styles/styledComponents';
 import { getUploadFormData } from 'shared/utils';
 
 import { cropImage, initPercentCrop } from './CropPopup.utils';
-import { SIZE_TO_SET_IMG_SMALL } from './CropPopup.const';
+import { SIZE_TO_SET_IMG_SMALL, CropRatio } from './CropPopup.const';
 import { StyledCropWrapper } from './CropPopup.styles';
 import { CropPopupProps } from './CropPopup.types';
 
 export const CropPopup = ({
   open,
-  setCropPopupVisible,
   image,
-  setImage,
-  ratio = 1,
+  ratio = CropRatio.Default,
   onSave,
+  onClose,
 }: CropPopupProps) => {
   const { t } = useTranslation('app');
 
@@ -50,23 +49,13 @@ export const CropPopup = ({
     });
   };
 
-  const onClose = () => {
-    setImage(null);
-    setCropPopupVisible(false);
-  };
-
-  const handleSave = () => {
-    handleCropImage();
-    onClose();
-  };
-
   return (
     <>
       <Modal
         open={open}
         onClose={onClose}
         title={t('pleaseSelectArea')}
-        onSubmit={handleSave}
+        onSubmit={handleCropImage}
         buttonText={t('save')}
       >
         <StyledModalWrapper sx={{ margin: '0 auto' }}>

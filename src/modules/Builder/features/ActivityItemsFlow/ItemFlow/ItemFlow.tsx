@@ -20,7 +20,7 @@ const Content = ({ items, name, conditionalError, onRemove }: ContentProps) => (
         name={name}
         index={index}
         onRemove={() => onRemove(index)}
-        autoTrigger
+        autoTrigger={!!conditionalError}
       />
     ))}
     <SummaryRow name={name} error={conditionalError} />

@@ -90,6 +90,12 @@ export const Uploader = ({
     },
   };
 
+  const clearInput = () => {
+    if (uploadInputRef.current) {
+      uploadInputRef.current.value = '';
+    }
+  };
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
 
@@ -99,9 +105,7 @@ export const Uploader = ({
   const handleRemoveImg = () => {
     setImage(null);
     setValue('');
-    if (uploadInputRef.current) {
-      uploadInputRef.current.value = '';
-    }
+    clearInput();
   };
 
   const onEditImg = (e: MouseEvent) => {
@@ -124,6 +128,19 @@ export const Uploader = ({
     handleCloseRemovePopup();
   };
 
+  const handleCloseCropPopup = () => {
+    setCropPopupVisible(false);
+    setImage(null);
+    clearInput();
+  };
+
+  const handleSaveCroppedImage = async (file: FormData) => {
+    setCropPopupVisible(false);
+    await executeImgUpload(file);
+    setImage(null);
+    clearInput();
+  };
+
   const imageField = getValue();
 
   const placeholderImgId = isPrimaryUiType ? 'img-filled' : 'img-outlined';
@@ -132,6 +149,8 @@ export const Uploader = ({
   const hasSizeError = error === UploadFileError.Size;
   const hasFormatError = error === UploadFileError.Format;
   const spinnerUiType = isPrimaryUiType ? SpinnerUiType.Primary : SpinnerUiType.Secondary;
+
+  const fileName = imageField?.split('/').at(-1) || image?.name || '';
 
   return (
     <>
@@ -205,9 +224,9 @@ export const Uploader = ({
       />
       {isPrimaryUiType && (
         <StyledNameWrapper>
-          {image?.name ? (
+          {fileName ? (
             <>
-              <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{image.name}</StyledName>{' '}
+              <StyledName sx={{ marginRight: theme.spacing(0.4) }}>{fileName}</StyledName>{' '}
               <Svg id="check" width={18} height={18} />
             </>
           ) : (
@@ -218,12 +237,11 @@ export const Uploader = ({
       {cropPopupVisible && image && (
         <CropPopup
           open={cropPopupVisible}
-          setCropPopupVisible={setCropPopupVisible}
           setValue={setValue}
           image={image}
-          setImage={setImage}
           ratio={cropRatio}
-          onSave={executeImgUpload}
+          onSave={handleSaveCroppedImage}
+          onClose={handleCloseCropPopup}
         />
       )}
       <RemoveImagePopup

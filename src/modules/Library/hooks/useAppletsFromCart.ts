@@ -4,9 +4,8 @@ import { useAppDispatch } from 'redux/store';
 import { auth, library } from 'redux/modules';
 import { getAppletsFromStorage } from 'modules/Library/utils';
 import { STORAGE_LIBRARY_KEY } from 'modules/Library/consts';
-import { AppletsFromCartType } from '../api';
 
-export const useAppletsFromCart = (params?: AppletsFromCartType) => {
+export const useAppletsFromCart = () => {
   const dispatch = useAppDispatch();
   const isAuthorized = auth.useAuthorized();
   const {
@@ -17,20 +16,20 @@ export const useAppletsFromCart = (params?: AppletsFromCartType) => {
 
   useEffect(() => {
     if (isAuthorized) {
-      if (appletsFromStorage.length) {
-        (async () => {
+      (async () => {
+        if (appletsFromStorage.length) {
           await dispatch(postAppletsToCart(appletsFromStorage));
           sessionStorage.removeItem(STORAGE_LIBRARY_KEY);
-        })();
-      } else {
-        dispatch(getAppletsFromCart(params ?? {}));
-      }
+        }
+
+        dispatch(getAppletsFromCart());
+      })();
 
       return;
     }
 
     dispatch(setAppletsFromStorage(appletsFromStorage));
-  }, [isAuthorized, params?.search, params?.page, params?.limit]);
+  }, [isAuthorized]);
 
   return { appletsFromStorage };
 };

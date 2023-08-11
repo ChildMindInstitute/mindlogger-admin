@@ -20,7 +20,7 @@ import {
   NumberItemResponseValues,
   OptionCondition,
   ScoreCondition,
-  SingleAndMultipleSelectionOption,
+  SingleAndMultiSelectOption,
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
   SingleApplet,
@@ -34,8 +34,10 @@ import {
   getEntityKey,
   getObjectFromList,
   getTextBetweenBrackets,
+  getUniqueName,
   INTERVAL_SYMBOL,
   Path,
+  pluck,
 } from 'shared/utils';
 import {
   ConditionType,
@@ -50,6 +52,7 @@ import {
   ScoreConditionType,
 } from 'shared/consts';
 import {
+  ActivityFlowFormValues,
   ActivityFormValues,
   AppletFormValues,
   CorrectPress,
@@ -106,7 +109,7 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
     responseValues: {
       ...item.responseValues,
       options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
-        (option: SingleAndMultipleSelectionOption) => ({
+        (option: SingleAndMultiSelectOption) => ({
           ...option,
           id: uuidv4(),
         }),
@@ -228,7 +231,11 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
   return [
     getMessageItem(
       isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
-      t('gyroscopeAndTouchInstructions.overview.instruction'),
+      t(
+        `gyroscopeAndTouchInstructions.overview.${
+          isGyroscope ? 'instructionGyroscope' : 'instructionTouch'
+        }`,
+      ),
     ),
     getMessageItem(
       isGyroscope ? GyroscopeItemNames.PracticeInstruction : TouchItemNames.PracticeInstruction,
@@ -656,9 +663,11 @@ const getActivitySubscaleItems = ({
 }: GetActivitySubscaleItems) =>
   subscaleItems.map(
     (item) =>
-      (activityItemsObject[item.name]
-        ? activityItemsObject[item.name]?.id
-        : subscalesObject[item.name]?.id) ?? '',
+      getEntityKey(
+        activityItemsObject[item.name]
+          ? activityItemsObject[item.name]
+          : subscalesObject[item.name],
+      ) ?? '',
   );
 
 const getActivitySubscaleSettingDuplicated = ({
@@ -853,3 +862,28 @@ export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: stri
 
   return regexp.test(value);
 };
+
+export const prepareActivitiesFromLibrary = (activities: ActivityFormValues[]) => {
+  const lastReviewableActivityIndex = pluck(activities, 'isReviewable').lastIndexOf(true);
+
+  return activities.reduce(
+    (result: ActivityFormValues[], activity, index) => [
+      ...result,
+      {
+        ...activity,
+        name: getUniqueName(activity.name, pluck(result, 'name')),
+        isReviewable: index === lastReviewableActivityIndex,
+      },
+    ],
+    [],
+  );
+};
+
+export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormValues[]) =>
+  activityFlows.reduce(
+    (result: ActivityFlowFormValues[], activityFlow) => [
+      ...result,
+      { ...activityFlow, name: getUniqueName(activityFlow.name, pluck(result, 'name')) },
+    ],
+    [],
+  );

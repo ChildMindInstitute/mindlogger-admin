@@ -1,14 +1,14 @@
-import { Dispatch, SetStateAction } from 'react';
 import { Crop } from 'react-image-crop';
+
+import { CropRatio } from './CropPopup.const';
 
 export type CropPopupProps = {
   open: boolean;
-  setCropPopupVisible: (val: boolean) => void;
   setValue: (value: string) => void;
   image: File;
-  setImage: Dispatch<SetStateAction<File | null>>;
-  ratio?: number;
+  ratio?: CropRatio;
   onSave: (data: FormData) => void;
+  onClose: () => void;
 };
 
 export type CropImage = {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useNavigate, generatePath } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -54,7 +54,7 @@ export const AddToBuilderPopup = ({
   );
 
   const validationSchema = addToBuilderPopupSchema();
-  const { trigger, control, getValues } = useForm<AddToBuilderForm>({
+  const { trigger, control, getValues, setValue } = useForm<AddToBuilderForm>({
     mode: 'onChange',
     defaultValues: {
       selectedWorkspace: '',
@@ -63,6 +63,10 @@ export const AddToBuilderPopup = ({
     },
     resolver: yupResolver(validationSchema[step]),
   });
+
+  useEffect(() => {
+    if (workspacesData?.length === 1) setValue('selectedWorkspace', workspacesData[0].ownerId);
+  }, [workspacesData]);
 
   const navigateToBuilder = (appletId: string, data: SingleApplet) => {
     navigate(generatePath(page.builderAppletAbout, { appletId }), {

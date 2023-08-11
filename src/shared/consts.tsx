@@ -112,6 +112,13 @@ export const performanceTaskResponseTypes = [
   ItemResponseType.ABTrails,
 ];
 
+export const responseTypeToHaveOptions = [
+  ItemResponseType.SingleSelection,
+  ItemResponseType.MultipleSelection,
+  ItemResponseType.SingleSelectionPerRow,
+  ItemResponseType.MultipleSelectionPerRow,
+];
+
 export enum PerfTaskType {
   Flanker = 'flanker',
   Touch = 'touch',
@@ -248,3 +255,5 @@ export const enum FinalSubscale {
 }
 
 export const REPORT_CONFIG_PARAM = 'report-configuration';
+
+export const INDEX_IN_NAME_REGEXP = /\((\d+)\)$/g;

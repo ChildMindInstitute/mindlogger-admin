@@ -4,7 +4,6 @@ import { AxiosError } from 'axios';
 import { ApiError, PublishedApplet } from 'redux/modules';
 import {
   PublishedAppletsType,
-  AppletsFromCartType,
   getPublishedAppletsApi,
   postAppletsToCartApi,
   getAppletsFromCartApi,
@@ -34,9 +33,9 @@ export const postAppletsToCart = createAsyncThunk(
 
 export const getAppletsFromCart = createAsyncThunk(
   'library/getAppletsFromCart',
-  async (cartItems: AppletsFromCartType, { rejectWithValue, signal }) => {
+  async (_, { rejectWithValue, signal }) => {
     try {
-      return await getAppletsFromCartApi(cartItems, signal);
+      return await getAppletsFromCartApi(signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

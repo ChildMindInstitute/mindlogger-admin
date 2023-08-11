@@ -19,6 +19,7 @@ export const ImageUploadExtension = ({
   setFileSizeExceeded,
   fileSizeExceeded,
   setIncorrectFormat,
+  setIsLoading,
 }: MediaContentExtensionProps) => {
   const { t } = useTranslation('app');
 
@@ -51,6 +52,7 @@ export const ImageUploadExtension = ({
     fileSizeExceeded,
     setIncorrectFormat,
     type: MediaType.Image,
+    setIsLoading,
   });
 
   return (
