@@ -3,7 +3,7 @@ import { Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { FontWeight, StyledClearedButton } from 'shared/styles/styledComponents';
+import { FontWeight, StyledClearedButton, StyledFlexColumn } from 'shared/styles/styledComponents';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { ActionsAlign } from './Modal.types';
@@ -14,11 +14,20 @@ export const StyledDialog = styled(Dialog)`
     width: ${({ width }: { width?: string; height?: string }) => (width ? `${width}rem` : 'auto')};
     max-width: 100rem;
     height: ${({ height }) => height || 'auto'};
+    overflow-y: unset;
+    padding: ${theme.spacing(2, 0)};
   }
 `;
 
+export const StyledContentWrapper = styled(StyledFlexColumn)`
+  overflow-y: auto;
+  flex-grow: 1;
+`;
+
 export const StyledDialogTitle = styled(DialogTitle)`
-  padding: ${theme.spacing(4.8, 2.4, 3.4)};
+  && {
+    padding: ${theme.spacing(2.8, 2.4, 3.4)};
+  }
 `;
 
 export const StyledCloseButton = styled(StyledClearedButton)`
@@ -37,6 +46,7 @@ export const StyledDialogActions = styled(DialogActions, shouldForwardProp)`
   justify-content: ${({ actionsAlign }: { actionsAlign?: ActionsAlign }) =>
     actionsAlign || 'flex-start'};
   margin-top: auto;
+  padding: ${theme.spacing(2.4, 2.4, 0.4)};
 `;
 
 export const StyledButton = styled(Button)`
