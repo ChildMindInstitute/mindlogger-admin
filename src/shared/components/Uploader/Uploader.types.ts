@@ -1,5 +1,7 @@
 import { SxProps } from '@mui/material';
 
+import { CropRatio } from 'shared/components/CropPopup';
+
 export enum UploaderUiType {
   Primary = 'primary',
   Secondary = 'secondary',
@@ -13,7 +15,7 @@ export type UploaderProps = {
   uiType?: UploaderUiType;
   description?: string;
   wrapperStyles?: SxProps;
-  cropRatio?: number;
+  cropRatio?: CropRatio;
   hasError?: boolean;
   disabled?: boolean;
 };

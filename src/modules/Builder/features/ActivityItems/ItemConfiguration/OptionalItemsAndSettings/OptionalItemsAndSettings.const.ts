@@ -1,6 +1,27 @@
+import { ItemResponseType } from 'shared/consts';
+
 import { DEFAULT_MAX_CHARACTERS, DEFAULT_DISABLED_TIMER_VALUE } from '../ItemConfiguration.const';
 
 export const DEFAULT_OPTION_VALUE = 0;
+export const ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER = [
+  ItemResponseType.SingleSelection,
+  ItemResponseType.MultipleSelection,
+  ItemResponseType.Slider,
+  ItemResponseType.Date,
+  ItemResponseType.NumberSelection,
+  ItemResponseType.TimeRange,
+  ItemResponseType.Time,
+  ItemResponseType.Geolocation,
+  ItemResponseType.Audio,
+  ItemResponseType.AudioPlayer,
+  ItemResponseType.SingleSelectionPerRow,
+  ItemResponseType.MultipleSelectionPerRow,
+  ItemResponseType.SliderRows,
+  ItemResponseType.Text,
+  ItemResponseType.Drawing,
+  ItemResponseType.Photo,
+  ItemResponseType.Video,
+];
 
 export const defaultSingleAndMultiSelectionRowsConfig = {
   removeBackButton: false,

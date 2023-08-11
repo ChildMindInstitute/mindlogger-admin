@@ -30,11 +30,11 @@ import {
 import { Alerts } from '../Alerts';
 import { SelectionOption } from '../InputTypeItems';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
-
 import { SkippedItemInVariablesModal } from './SkippedItemInVariablesModal';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
 import { useActiveItem, useSettingsSetup } from './OptionalItemsAndSettings.hooks';
 import { getOptionValue } from './OptionalItemsAndSettings.utils';
+import { ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER } from './OptionalItemsAndSettings.const';
 
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ name }, ref) => {
@@ -90,6 +90,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       settings,
       ItemConfigurationSettings.HasResponseDataIdentifier,
     );
+    const hasResponseOptionsHeader = ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER.includes(responseType);
 
     const handleAddOption = async () => {
       await appendOption({
@@ -180,13 +181,15 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
 
     return (
       <>
+        {hasResponseOptionsHeader && (
+          <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
+            {t('responseOptions')}
+          </StyledTitleLarge>
+        )}
         {hasOptions && (
           <>
-            <StyledFlexTopCenter
-              sx={{ m: theme.spacing(4.8, 0, 2.4), justifyContent: 'space-between' }}
-            >
-              <StyledTitleLarge>{t('responseOptions')}</StyledTitleLarge>
-              {hasColorPalette && !showColorPalette && (
+            {hasColorPalette && !showColorPalette && (
+              <StyledFlexTopCenter sx={{ mb: theme.spacing(2.4), justifyContent: 'space-between' }}>
                 <Button
                   onClick={() => handleChangeColorPaletteVisibility(true)}
                   variant="outlined"
@@ -194,8 +197,8 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
                 >
                   {t('setPalette')}
                 </Button>
-              )}
-            </StyledFlexTopCenter>
+              </StyledFlexTopCenter>
+            )}
             {hasColorPalette && showColorPalette && (
               <ColorPalette name={name} setShowColorPalette={handleChangeColorPaletteVisibility} />
             )}
