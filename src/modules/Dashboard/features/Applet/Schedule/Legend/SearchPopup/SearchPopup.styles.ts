@@ -13,11 +13,11 @@ export const StyledModalInner = styled(Box)`
   background-color: ${variables.palette.surface2};
   width: 66rem;
   height: 35.2rem;
-  overflow: auto;
   max-width: 100rem;
   box-shadow: ${variables.boxShadow.light2};
   border-radius: ${variables.borderRadius.xxl};
-  padding: ${theme.spacing(0, 0.4, 0.8)};
+  padding: ${theme.spacing(2, 0.4, 2.8)};
+  display: flex;
 `;
 
 export const StyledItemsContainer = styled(Box)`
