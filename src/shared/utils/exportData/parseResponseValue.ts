@@ -1,5 +1,6 @@
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import {
+  AdditionalEdited,
   AdditionalTextType,
   AnswerDTO,
   DecryptedAnswerData,
@@ -37,14 +38,16 @@ export const parseResponseValue = <
   const answer: AnswerDTO | undefined = isEvent
     ? (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response
     : item.answer;
+  const answerEdited = (answer as AdditionalEdited)?.edited;
+  const editedWithLabel = answerEdited ? ` | edited: ${answerEdited}` : '';
 
   if (answer && typeof answer === 'object' && (answer as AdditionalTextType).text?.length) {
     return `${parseResponseValueRaw(item, index, answer)} | text: ${
       (answer as AdditionalTextType).text
-    }`;
+    }${editedWithLabel}`;
   }
 
-  return parseResponseValueRaw(item, index, answer);
+  return `${parseResponseValueRaw(item, index, answer)}${editedWithLabel}`;
 };
 
 export const parseResponseValueRaw = <

@@ -74,6 +74,8 @@ export type ExportCsvData = {
 
 export type AdditionalTextType = { text?: string | null };
 
+export type AdditionalEdited = { edited?: number | null };
+
 export type DecryptedTextAnswer = string;
 
 export type DecryptedMultiSelectionAnswer = AdditionalTextType & {
