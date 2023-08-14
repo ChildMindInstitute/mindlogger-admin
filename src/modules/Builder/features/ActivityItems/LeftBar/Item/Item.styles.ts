@@ -54,7 +54,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
           !hasError &&
           !isSystem &&
           `
-            background-color: ${variables.palette.surface_variant_alfa8};
+            background-color: ${variables.palette.on_surface_alfa8};
         `
         };
       }
