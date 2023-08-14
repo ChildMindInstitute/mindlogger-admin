@@ -43,7 +43,7 @@ export const RespondentDataSummary = () => {
     if (selectedActivity && isLoading) return <Spinner />;
     if (!selectedActivity || !selectedActivity.hasAnswer || selectedActivity.isPerformanceTask) {
       return (
-        <StyledFlexAllCenter>
+        <StyledFlexAllCenter sx={{ height: '100%' }}>
           <StyledEmptyReview>{getEmptyState(selectedActivity)}</StyledEmptyReview>
         </StyledFlexAllCenter>
       );

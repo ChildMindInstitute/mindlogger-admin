@@ -1,10 +1,11 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { StyledFlexAllCenter, variables } from 'shared/styles';
 
-export const StyledReportContainer = styled(StyledFlexAllCenter)`
-  width: calc(100% - 40rem);
+export const StyledReportContainer = styled(Box)`
+  width: 100%;
   height: 100%;
+  overflow: auto;
 
   .spinner-container {
     width: calc(100% - 40rem);
