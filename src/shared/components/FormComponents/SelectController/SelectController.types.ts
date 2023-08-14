@@ -9,6 +9,16 @@ export type Option = {
   icon?: JSX.Element;
   disabled?: boolean;
   tooltip?: string;
+  hidden?: boolean;
+};
+
+export type GetMenuItem = {
+  labelKey: string;
+  value: string | boolean;
+  itemDisabled: boolean;
+  icon?: JSX.Element;
+  withoutKey?: boolean;
+  hidden?: boolean;
 };
 
 export enum SelectUiType {
