@@ -101,7 +101,7 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
     disabled &&
     `
       pointer-events: none;
-      opacity: 0.38;
+      opacity: ${variables.opacity.disabled};
   `}
   ${({ isSelected }) =>
     isSelected &&

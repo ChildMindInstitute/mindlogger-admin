@@ -33,6 +33,7 @@ export const EditorController = <T extends FieldValues>({
   control,
   uiType = EditorUiType.Primary,
   editorId,
+  disabled = false,
 }: EditorControllerProps<T>) => {
   const { t } = useTranslation('app');
   const editorRef = useRef<ExposeParam>();
@@ -60,11 +61,12 @@ export const EditorController = <T extends FieldValues>({
           <StyledFlexColumn sx={{ position: 'relative' }}>
             <StyledMdEditor
               editorId={editorId}
-              className={`${uiType} ${error ? 'has-error' : ''}`}
+              className={`${uiType} ${disabled ? 'disabled' : ''} ${error ? 'has-error' : ''}`}
               ref={editorRef}
               modelValue={value ?? ''}
               onChange={onChange}
               language={LANGUAGE_BY_DEFAULT}
+              disabled={disabled}
               placeholder={t('textPlaceholder')}
               defToolbars={[
                 <MarkExtension key="mark-extension" onInsert={onInsert} />,

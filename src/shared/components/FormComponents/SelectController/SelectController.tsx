@@ -22,6 +22,7 @@ export const SelectController = <T extends FieldValues>({
   isLabelNeedTranslation = true,
   uiType = SelectUiType.Primary,
   disabled,
+  sx,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -60,7 +61,7 @@ export const SelectController = <T extends FieldValues>({
     selectValue?: string,
     error?: FieldError,
   ) => (
-    <Box sx={{ position: 'relative', width: '100%' }}>
+    <Box sx={{ position: 'relative', width: '100%', ...sx }}>
       {placeholder && !selectValue && <StyledPlaceholder>{placeholder}</StyledPlaceholder>}
       <TextField
         {...props}

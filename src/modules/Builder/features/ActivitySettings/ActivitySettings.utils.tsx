@@ -23,7 +23,7 @@ export const getSettings = (activityFieldName?: string) => [
       },
       {
         label: t('reportConfiguration'),
-        component: <ReportConfigSetting />,
+        component: <ReportConfigSetting isActivity />,
         icon: <Svg id="report-configuration" />,
         param: REPORT_CONFIG_PARAM,
       },

@@ -17,7 +17,8 @@ export const StyledDayBtn = styled(StyledClearedButton, shouldForwardProp)`
   line-height: 1.8rem;
   text-align: center;
   transition: ${variables.transitions.all};
-  opacity: ${({ isOffRange }: { isOffRange: boolean; isToday: boolean }) => isOffRange && '0.38'};
+  opacity: ${({ isOffRange }: { isOffRange: boolean; isToday: boolean }) =>
+    isOffRange && variables.opacity.disabled};
   margin-bottom: ${theme.spacing(0.7)};
 
   & .MuiTypography-root {

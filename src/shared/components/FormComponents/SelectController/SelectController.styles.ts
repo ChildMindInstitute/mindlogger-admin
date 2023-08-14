@@ -16,13 +16,13 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
     if (itemDisabled) {
       return `
         pointer-events: none;
-        opacity: 0.38;
+        opacity: ${variables.opacity.disabled};
       `;
     }
     if (selectDisabled) {
       return `
         svg {
-          opacity: 0.38;
+          opacity: ${variables.opacity.disabled};
         }
       `;
     }

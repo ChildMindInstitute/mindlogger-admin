@@ -12,7 +12,7 @@ export const getSettings = () => [
       {
         name: 'reportConfiguration',
         label: t('reportConfiguration'),
-        component: <ReportConfigSetting />,
+        component: <ReportConfigSetting isActivityFlow />,
         icon: <Svg id="report-configuration" />,
         param: REPORT_CONFIG_PARAM,
       },

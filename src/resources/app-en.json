@@ -1177,5 +1177,9 @@
   "exportFailed": "Export failed. Please try again.",
   "activityFlowSettings": "Activity Flow Settings",
   "setUpCorrectCondition": "Set up correct condition",
-  "setUpAtLeastOneCondition": "Set up at least one condition"
+  "setUpAtLeastOneCondition": "Set up at least one condition",
+  "itemValue": "Item Value",
+  "pleaseSelectItem": "Please select an Item",
+  "pleaseSelectActivity": "Please select an Activity",
+  "configureServerForApplet": "Configure Server (for Applet)"
 }

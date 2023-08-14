@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { Actions } from 'shared/components';
-import { StyledFlexTopCenter } from 'shared/styles';
+import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { itemsTypeIcons } from 'shared/consts';
 import { falseReturnFunc, getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks';
@@ -30,7 +30,7 @@ export const Item = ({
 
   const hasHiddenOption = !!getSummaryRowDependencies(item, activity?.conditionalLogic)?.length;
   const isItemHidden = name ? watch(`${name}.isHidden`) : false;
-  const hiddenProps = { sx: { opacity: isItemHidden ? 0.38 : 1 } };
+  const hiddenProps = { sx: { opacity: isItemHidden ? variables.opacity.disabled : 1 } };
   const invalidField = name ? !!getFieldState(name).error : false;
 
   const onChangeVisibility = name

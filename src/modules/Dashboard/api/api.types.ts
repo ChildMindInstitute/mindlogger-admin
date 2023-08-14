@@ -334,6 +334,8 @@ export type ReportConfig = {
   reportPublicKey: string;
   reportRecipients: string[];
   reportIncludeUserId: boolean;
+  reportIncludedActivityName?: string;
+  reportIncludedItemName?: string;
   reportEmailBody: string;
 };
 

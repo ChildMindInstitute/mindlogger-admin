@@ -2,6 +2,8 @@ import { ChangeEvent } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { Controller, FieldValues } from 'react-hook-form';
 
+import { variables } from 'shared/styles';
+
 import { InputControllerProps } from './CheckboxController.types';
 
 export const CheckboxController = <T extends FieldValues>({
@@ -23,7 +25,7 @@ export const CheckboxController = <T extends FieldValues>({
   return (
     <FormControlLabel
       disabled={disabled}
-      sx={{ opacity: disabled ? 0.38 : 1 }}
+      sx={{ opacity: disabled ? variables.opacity.disabled : 1 }}
       label={label}
       control={
         <Controller

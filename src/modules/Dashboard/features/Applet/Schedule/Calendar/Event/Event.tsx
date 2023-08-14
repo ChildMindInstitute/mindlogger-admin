@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 
 import { Svg } from 'shared/components';
 import { DateFormats } from 'shared/consts';
-import { theme, StyledBodySmall, StyledLabelMedium } from 'shared/styles';
+import { theme, StyledBodySmall, StyledLabelMedium, variables } from 'shared/styles';
 
 import { EventProps, UiType } from './Event.types';
 import {
@@ -33,7 +33,7 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
 
   return (
     <StyledEvent
-      sx={{ opacity: isOffRange && isDefaultView ? '0.38' : 1 }}
+      sx={{ opacity: isOffRange && isDefaultView ? variables.opacity.disabled : 1 }}
       title=""
       className="event"
       isScheduledDayWeekEvent={isScheduledDayWeekEvent}
