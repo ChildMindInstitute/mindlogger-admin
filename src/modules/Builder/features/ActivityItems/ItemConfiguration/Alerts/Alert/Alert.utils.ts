@@ -114,21 +114,31 @@ export const getItemsList = (formValues: ItemFormValues, alert: ItemAlert) => {
   return [];
 };
 
-export const getSliderRowsItemList = (formValues: ItemFormValues, alert: ItemAlert) => {
-  const { responseValues } = formValues;
-
-  if (!alert?.sliderId) return [];
+export const getSliderRowsItemList = (formValues: ItemFormValues, { sliderId }: ItemAlert) => {
+  const { responseValues, alerts } = formValues;
+  if (!sliderId) return [];
 
   const { minValue, maxValue } =
-    (responseValues as SliderRowsResponseValues)?.rows?.find(({ id }) => id === alert.sliderId) ??
-    {};
+    (responseValues as SliderRowsResponseValues)?.rows?.find(({ id }) => id === sliderId) ?? {};
+  const alertsNumbersToExclude = alerts?.reduce((acc: string[], alert) => {
+    if (alert.sliderId === sliderId && alert.value) {
+      acc.push(String(alert.value));
+    }
+
+    return acc;
+  }, []);
 
   if ([minValue, maxValue].includes(undefined)) return [];
   const maxValueNumber = Number(maxValue);
   const minValueNumber = Number(minValue);
 
-  return createArray(Number(maxValueNumber) - Number(minValueNumber) + 1, (index) => ({
-    value: `${minValueNumber + index}`,
-    labelKey: `${minValueNumber + index}`,
-  }));
+  return createArray(Number(maxValueNumber) - Number(minValueNumber) + 1, (index) => {
+    const value = `${minValueNumber + index}`;
+
+    return {
+      value,
+      labelKey: value,
+      hidden: alertsNumbersToExclude?.includes(value),
+    };
+  });
 };

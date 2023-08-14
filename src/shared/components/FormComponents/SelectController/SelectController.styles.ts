@@ -44,3 +44,9 @@ export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
     pointer-events: none;
   `}
 `;
+
+export const selectDropdownStyles = {
+  '.hidden-menu-item': {
+    display: 'none',
+  },
+};
