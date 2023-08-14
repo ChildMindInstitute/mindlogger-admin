@@ -30,7 +30,11 @@ export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardP
 
 export const StyledSvgWrapper = styled(StyledFlexTopCenter)`
   svg {
-    stroke: ${variables.palette.on_surface_variant};
+    fill: ${variables.palette.on_surface_variant};
+
+    &.svg-checkbox-multiple-filled {
+      stroke: ${variables.palette.on_surface_variant};
+    }
   }
 `;
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useHeaderSticky } from 'shared/hooks';
 import { StyledTitleSmall } from 'shared/styles';
-import { Tooltip, TooltipUiType } from 'shared/components';
+import { Tooltip } from 'shared/components';
 
 import {
   StyledBar,
@@ -30,11 +30,7 @@ export const LeftBar = ({ items, activeItem, isCompact, onItemClick }: LeftBarPr
             <StyledTitleSmall>{t(label)}</StyledTitleSmall>
             <StyledSettings isCompact={!!activeItem}>
               {items.map(({ icon, label, component, param, disabled, tooltip }) => (
-                <Tooltip
-                  uiType={TooltipUiType.Secondary}
-                  tooltipTitle={tooltip ? t(tooltip) : null}
-                  key={`item-setting-${label}`}
-                >
+                <Tooltip tooltipTitle={tooltip ? t(tooltip) : null} key={`item-setting-${label}`}>
                   <span>
                     <StyledSetting
                       onClick={() =>
