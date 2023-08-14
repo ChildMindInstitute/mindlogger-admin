@@ -1,8 +1,6 @@
 import { Box, ListItemButton, styled } from '@mui/material';
 
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
+import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 
 export const StyledListItemButton = styled(ListItemButton)`
   display: flex;
@@ -19,4 +17,10 @@ export const StyledSelect = styled(Box)`
   text-align: center;
   width: 2.4rem;
   display: flex;
+`;
+
+export const StyledItemName = styled(StyledBodyLarge)`
+  margin-left: ${theme.spacing(1.6)};
+  color: ${variables.palette.on_surface};
+  word-break: break-all;
 `;

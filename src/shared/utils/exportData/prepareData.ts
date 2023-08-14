@@ -45,6 +45,7 @@ const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
+  console.log(decryptedAnswers);
   const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
     if (item.answer === null) return filteredAcc;
 

@@ -10,7 +10,12 @@ import { authStorage } from 'shared/utils';
 import { page } from 'resources';
 
 import { WorkspaceImage } from '../WorkspaceImage';
-import { StyledListItemButton, StyledItemContent, StyledSelect } from './WorkspaceGroup.styles';
+import {
+  StyledListItemButton,
+  StyledItemContent,
+  StyledSelect,
+  StyledItemName,
+} from './WorkspaceGroup.styles';
 import { WorkspaceGroupProps } from './WorkspaceGroup.types';
 
 export const WorkspaceGroup = ({
@@ -42,11 +47,7 @@ export const WorkspaceGroup = ({
           >
             <StyledItemContent>
               <WorkspaceImage image={workspace?.image} workspaceName={workspace.workspaceName} />
-              <StyledBodyLarge
-                sx={{ marginLeft: theme.spacing(1.6), color: variables.palette.on_surface }}
-              >
-                {workspace.workspaceName}
-              </StyledBodyLarge>
+              <StyledItemName>{workspace.workspaceName}</StyledItemName>
             </StyledItemContent>
             {currentWorkspaceData?.ownerId === workspace.ownerId && (
               <StyledSelect>
