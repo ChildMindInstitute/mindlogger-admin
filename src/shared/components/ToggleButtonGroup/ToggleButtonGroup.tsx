@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ToggleButtonGroup as MuiToggleButtonGroup } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
-import { Tooltip, TooltipUiType } from 'shared/components/Tooltip';
+import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledIcon, StyledToggleBtn } from './ToggleButtonGroup.styles';
 import { ToggleButtonGroupProps } from './ToggleButtonGroup.types';
@@ -38,7 +38,7 @@ export const ToggleButtonGroup = ({
             </StyledIcon>
           )}
           {icon && <StyledIcon>{icon}</StyledIcon>}
-          <Tooltip uiType={TooltipUiType.Secondary} tooltipTitle={t(tooltip || '')}>
+          <Tooltip tooltipTitle={t(tooltip || '')}>
             <span> {t(label)}</span>
           </Tooltip>
         </StyledToggleBtn>

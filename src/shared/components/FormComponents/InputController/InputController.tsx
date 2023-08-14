@@ -3,7 +3,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { Tooltip, TooltipUiType } from 'shared/components/Tooltip';
+import { Tooltip } from 'shared/components/Tooltip';
 
 import {
   StyledBodyLarge,
@@ -90,7 +90,7 @@ export const InputController = <T extends FieldValues>({
         };
 
         return (
-          <Tooltip uiType={TooltipUiType.Secondary} tooltipTitle={tooltip}>
+          <Tooltip tooltipTitle={tooltip}>
             <StyledTextFieldContainer>
               <StyledTextField
                 {...textFieldProps}
