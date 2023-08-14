@@ -1,69 +1,40 @@
-import { useState, useEffect } from 'react';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { NavigationItem, NavigationMenu } from 'shared/components';
 
-import { LeftBar } from './LeftBar';
-import { ActivitySettingsContainer } from './ActivitySettingsContainer';
-import { ScoresAndReports } from './ScoresAndReports';
-import { SubscalesConfiguration } from './SubscalesConfiguration';
-import { ActivitySettingsOptionsItems } from './ActivitySettings.types';
-import { StyledWrapper } from './ActivitySettings.styles';
-import { ActivitySettingsOptions } from './ActivitySettings.types';
-import { getSetting } from './ActivitySettings.utils';
+import { getSettings } from './ActivitySettings.utils';
 
 export const ActivitySettings = () => {
-  const [activeSetting, setActiveSetting] = useState<ActivitySettingsOptions | null>(null);
-
-  const { t } = useTranslation('app');
+  const { fieldName } = useCurrentActivity();
+  const { appletId, activityId } = useParams();
 
   const navigate = useNavigate();
-  const { appletId, activityId, setting } = useParams();
-  const { fieldName } = useCurrentActivity();
-
-  useEffect(() => {
-    setActiveSetting(getSetting(setting));
-  }, [setting]);
 
   useBreadcrumbs();
   useActivitiesRedirection();
 
-  const handleSetActiveSetting = (setting: ActivitySettingsOptions) => {
-    setActiveSetting(setting);
+  const handleSetActiveSetting = (setting: NavigationItem) => {
     navigate(
       generatePath(page.builderAppletActivitySettingsItem, {
         appletId,
         activityId,
-        setting: setting.path,
+        setting: setting.param,
       }),
     );
   };
 
   const handleClose = () => {
-    setActiveSetting(null);
     navigate(generatePath(page.builderAppletActivitySettings, { appletId, activityId }));
   };
 
-  const containerTitle = activeSetting ? t(activeSetting.name) : '';
-
   return (
-    <StyledWrapper>
-      <LeftBar
-        setting={activeSetting}
-        isCompact={!!activeSetting}
-        onSettingClick={handleSetActiveSetting}
-      />
-      <ActivitySettingsContainer title={containerTitle} onClose={handleClose}>
-        {activeSetting?.name === ActivitySettingsOptionsItems.ScoresAndReports && (
-          <ScoresAndReports />
-        )}
-        {activeSetting?.name === ActivitySettingsOptionsItems.SubscalesConfiguration && (
-          <SubscalesConfiguration key={`subscales-configuration-${fieldName}`} />
-        )}
-      </ActivitySettingsContainer>
-    </StyledWrapper>
+    <NavigationMenu
+      items={getSettings(fieldName)}
+      onClose={handleClose}
+      onSetActiveItem={handleSetActiveSetting}
+    />
   );
 };

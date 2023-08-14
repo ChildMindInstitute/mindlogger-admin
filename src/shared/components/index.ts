@@ -26,3 +26,4 @@ export * from './Password';
 export * from './SwitchWithState';
 export * from './Error';
 export * from './ContentWithTooltip';
+export * from './NavigationMenu';

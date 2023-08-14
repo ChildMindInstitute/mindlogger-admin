@@ -145,7 +145,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
 
     if (checkIfAppletActivityFlowUrlPassed(pathname)) {
-      const { isAbout, isBuilder } = checkCurrentActivityFlowPage(pathname);
+      const { isAbout, isBuilder, isSettings } = checkCurrentActivityFlowPage(pathname);
 
       newBreadcrumbs.push(
         {
@@ -171,6 +171,11 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         newBreadcrumbs.push({
           icon: 'flow',
           label: t('activityFlowBuilder'),
+        });
+      if (isSettings)
+        newBreadcrumbs.push({
+          icon: 'settings',
+          label: t('activityFlowSettings'),
         });
     }
 

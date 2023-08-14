@@ -41,6 +41,8 @@ export type ActivityFlow = {
   items?: ActivityFlowItem[];
   isHidden?: boolean;
   createdAt?: string;
+  reportIncludedItemName?: string;
+  reportIncludedActivityName?: string;
 };
 
 export type TextInputConfig = {
@@ -498,6 +500,7 @@ export type Activity = {
   isPerformanceTask?: boolean;
   performanceTaskType?: PerfTaskType;
   createdAt?: string;
+  reportIncludedItemName?: string;
   //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
 };

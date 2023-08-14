@@ -11,6 +11,7 @@ export type EditorProps = {
   preview?: 'live' | 'edit' | 'preview';
   uiType?: EditorUiType;
   editorId?: string;
+  disabled?: boolean;
 };
 
 export type EditorControllerProps<T extends FieldValues> = EditorProps & UseControllerProps<T>;

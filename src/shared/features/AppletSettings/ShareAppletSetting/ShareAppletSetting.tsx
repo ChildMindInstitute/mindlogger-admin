@@ -8,7 +8,6 @@ import { ShareApplet } from 'modules/Dashboard/features/Applet';
 import { SuccessSharePopup } from 'modules/Dashboard/features/Applet/Popups';
 
 import { StyledButton, StyledContainer } from './ShareAppletSetting.styles';
-import { StyledHeadline } from '../AppletSettings.styles';
 
 export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) => {
   const { t } = useTranslation('app');
@@ -34,7 +33,6 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
 
   return (
     <>
-      <StyledHeadline>{t('shareToLibrary')}</StyledHeadline>
       <StyledContainer>
         <ShareApplet
           applet={appletData}

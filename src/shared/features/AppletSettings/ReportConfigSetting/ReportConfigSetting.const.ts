@@ -2,6 +2,8 @@ export const defaultValues = {
   email: '',
   reportRecipients: [],
   reportIncludeUserId: false,
+  reportIncludedItemName: '',
+  reportIncludedActivityName: '',
   subject: '',
   reportServerIp: '',
   reportPublicKey: '',

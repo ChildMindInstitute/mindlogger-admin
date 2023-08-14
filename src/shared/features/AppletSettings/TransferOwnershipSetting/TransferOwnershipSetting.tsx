@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { applet } from 'shared/state';
-import { StyledHeadlineLarge } from 'shared/styles/styledComponents';
 import {
   SuccessTransferOwnershipPopup,
   TransferOwnership,
@@ -36,7 +35,6 @@ export const TransferOwnershipSetting = () => {
 
   return (
     <>
-      <StyledHeadlineLarge>{t('transferOwnership')}</StyledHeadlineLarge>
       <StyledTransferOwnershipForm>
         <TransferOwnership
           ref={transferOwnershipRef}

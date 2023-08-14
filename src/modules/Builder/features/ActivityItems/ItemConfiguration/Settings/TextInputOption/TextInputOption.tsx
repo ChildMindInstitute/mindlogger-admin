@@ -43,7 +43,9 @@ export const TextInputOption = ({ name, onRemove }: TextInputOptionProps) => {
         </StyledClearedButton>
       </StyledTextInputOptionHeader>
       <StyledTextInputOptionDescription>
-        <StyledBodyLarge sx={{ opacity: '0.38', color: variables.palette.outline }}>
+        <StyledBodyLarge
+          sx={{ opacity: variables.opacity.disabled, color: variables.palette.outline }}
+        >
           {t('textInputOptionDescription', requiredContext)}
         </StyledBodyLarge>
       </StyledTextInputOptionDescription>

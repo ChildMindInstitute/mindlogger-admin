@@ -172,7 +172,7 @@ export const StyledIconBtn = styled(StyledClearedButton)`
 
   &:disabled {
     svg {
-      opacity: 0.38;
+      opacity: ${variables.opacity.disabled};
     }
   }
 

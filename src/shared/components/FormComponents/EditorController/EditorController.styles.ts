@@ -13,6 +13,10 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   margin-bottom: ${theme.spacing(2)};
   height: 24rem;
 
+  &.disabled {
+    opacity: ${variables.opacity.disabled};
+  }
+
   &.has-error {
     border: ${variables.borderWidth.md} solid ${variables.palette.semantic.error};
     margin-bottom: 0;

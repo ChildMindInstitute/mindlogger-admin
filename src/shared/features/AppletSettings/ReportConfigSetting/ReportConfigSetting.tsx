@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 import { postReportConfigApi } from 'api';
 import { applet } from 'redux/modules';
@@ -12,6 +13,7 @@ import {
   CheckboxController,
   EditorController,
   InputController,
+  SelectController,
   TagsController,
   UiType,
 } from 'shared/components/FormComponents';
@@ -21,6 +23,7 @@ import {
   StyledBodyLarge,
   StyledTitleMedium,
   StyledFlexColumn,
+  StyledFlexTopCenter,
 } from 'shared/styles';
 import {
   AppletPasswordPopup,
@@ -28,26 +31,46 @@ import {
   AppletPasswordPopupProps,
 } from 'modules/Dashboard/features/Applet';
 import { useAsync, useIsServerConfigured } from 'shared/hooks';
+import { page } from 'resources';
 import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'shared/utils';
 import { reportConfig } from 'modules/Builder/state';
+import { useCurrentActivity } from 'modules/Builder/hooks';
+import { REPORT_CONFIG_PARAM } from 'shared/consts';
 
-import { StyledAppletSettingsButton, StyledHeadline } from '../AppletSettings.styles';
+import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
 import { StyledButton, StyledSvg, StyledLink } from './ReportConfigSetting.styles';
 import { ReportConfigFormValues, ReportConfigSettingProps } from './ReportConfigSetting.types';
 import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
-import { getDefaultValues, setSubjectData } from './ReportConfigSetting.utils';
-import { useCheckReportServer } from './ReportConfigSetting.hooks';
+import {
+  getActivitiesOptions,
+  getActivityItemsOptions,
+  setSubjectData,
+} from './ReportConfigSetting.utils';
+import {
+  useActivityFlow,
+  useCheckReportServer,
+  useDefaultValues,
+} from './ReportConfigSetting.hooks';
 import { usePrompt } from '../AppletSettings.hooks';
 import { REPORT_SERVER_INSTRUCTIONS_LINK } from './ReportConfigSetting.const';
 
-export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConfigSettingProps) => {
+export const ReportConfigSetting = ({
+  isDashboard,
+  onSubmitSuccess,
+  isActivity = false,
+  isActivityFlow = false,
+}: ReportConfigSettingProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { saveChanges, doNotSaveChanges } = reportConfig.useReportConfigChanges() || {};
   const { resetReportConfigChanges, setReportConfigChanges } = reportConfig.actions;
   const isServerConfigured = useIsServerConfigured();
+  const defaultValues = useDefaultValues(appletData, isActivity, isActivityFlow);
+  const { activity } = useCurrentActivity();
+  const activityFlow = useActivityFlow(appletData);
 
   const [isSettingsOpen, setSettingsOpen] = useState(!isServerConfigured);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
@@ -80,12 +103,14 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
     watch,
     trigger,
     reset,
-    formState: { isDirty, isSubmitted, defaultValues },
+    formState: { isDirty, isSubmitted },
     setError,
     clearErrors,
+    register,
+    unregister,
   } = useForm<ReportConfigFormValues>({
-    resolver: yupResolver(reportConfigSchema()),
-    defaultValues: getDefaultValues(appletData),
+    resolver: yupResolver(reportConfigSchema(isActivity, isActivityFlow)),
+    defaultValues,
     mode: 'onSubmit',
   });
 
@@ -93,6 +118,8 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
 
   const reportRecipients = watch('reportRecipients') || [];
   const includeRespondentId = watch('reportIncludeUserId');
+  const reportIncludedActivity = watch('reportIncludedActivityName');
+  const itemValue = watch('itemValue');
   const reportServerUrl = watch('reportServerIp');
   const reportPublicKey = watch('reportPublicKey');
 
@@ -140,6 +167,8 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
       reportRecipients,
       reportIncludeUserId,
       reportEmailBody,
+      reportIncludedItemName,
+      reportIncludedActivityName,
     } = getValues() ?? {};
 
     const body = {
@@ -148,6 +177,8 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
       reportRecipients,
       reportIncludeUserId,
       reportEmailBody,
+      ...(isActivity ? { reportIncludedItemName } : {}),
+      ...(isActivityFlow ? { reportIncludedItemName, reportIncludedActivityName } : {}),
     };
 
     await postReportConfig({
@@ -157,7 +188,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
 
     if (!isDashboard) dispatch(updateAppletData(body));
 
-    reset(getDefaultValues(body));
+    reset(defaultValues);
   };
 
   const handleVerify = async () => {
@@ -217,7 +248,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   };
 
   const handleDontSave = () => {
-    reset(getDefaultValues(appletData));
+    reset(defaultValues);
     dispatch(resetReportConfigChanges());
     confirmNavigation();
   };
@@ -233,7 +264,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
   }, [successPopupVisible]);
 
   useEffect(() => {
-    reset(getDefaultValues(appletData));
+    reset(defaultValues);
     setSubjectData(setValue, includeRespondentId);
   }, [appletData]);
 
@@ -257,122 +288,210 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
     handleDontSave();
   }, [doNotSaveChanges]);
 
+  const commonSelectProps = {
+    control,
+    fullWidth: true,
+  };
+
+  const handleActivityChange = () => {
+    setValue('reportIncludedItemName', '');
+  };
+
+  useEffect(() => {
+    if (itemValue) {
+      register('reportIncludedItemName');
+      setValue('reportIncludedItemName', '');
+      isActivityFlow &&
+        register('reportIncludedActivityName') &&
+        setValue('reportIncludedActivityName', '');
+    }
+
+    unregister('reportIncludedItemName');
+    isActivityFlow && unregister('reportIncludedActivityName');
+  }, [itemValue]);
+
   return (
     <>
-      <form noValidate onSubmit={handleSubmit(onSubmit)}>
-        <StyledHeadline sx={{ marginRight: theme.spacing(2.4) }}>
-          {t('reportConfiguration')}
-        </StyledHeadline>
-        <StyledFlexColumn sx={{ maxWidth: '55.7rem' }}>
-          <Box>
-            <StyledButton
-              disableRipple
-              onClick={() => setSettingsOpen((prevState) => !prevState)}
-              endIcon={
-                <StyledSvg>
-                  <Svg id={isSettingsOpen ? 'navigate-up' : 'navigate-down'} />
-                </StyledSvg>
-              }
-            >
-              <StyledTitleMedium color={variables.palette.on_surface}>
-                {t('serverConfiguration')}
-              </StyledTitleMedium>
-            </StyledButton>
-          </Box>
+      {(isActivity || isActivityFlow) && !isServerConfigured ? (
+        <>
           <StyledBodyLarge
-            sx={{ margin: theme.spacing(2.4, 0, isSettingsOpen ? 2.4 : 4.8) }}
-            color={
-              isServerConfigured
-                ? variables.palette.semantic.green
-                : variables.palette.semantic.error
+            sx={{ margin: theme.spacing(2.4, 0, 4.8, 0) }}
+            color={variables.palette.semantic.error}
+          >
+            {t('configureServerForReport')}
+          </StyledBodyLarge>
+          <Button
+            variant="outlined"
+            sx={{ width: '30rem' }}
+            startIcon={
+              <StyledSvg>
+                <Svg id="server-connect" />
+              </StyledSvg>
+            }
+            onClick={() =>
+              navigate(
+                generatePath(page.builderAppletSettingsItem, {
+                  appletId: appletData?.id,
+                  settingItem: REPORT_CONFIG_PARAM,
+                }),
+              )
             }
           >
-            {t(isServerConfigured ? 'serverStatusConfigured' : 'serverStatusNotConfigured')}
-          </StyledBodyLarge>
-          {isSettingsOpen && (
-            <Box sx={{ mb: theme.spacing(2.4) }}>
-              <StyledBodyLarge color={variables.palette.on_surface_variant}>
-                <Trans i18nKey="configureServerURL">
-                  For Security reasons, you must configure the Server URL (IP Address) and Public
-                  Encryption Key to generate and email reports.
-                  <StyledLink href={REPORT_SERVER_INSTRUCTIONS_LINK} target="_blank">
-                    See here for instructions.
-                  </StyledLink>
-                  .
-                </Trans>
-              </StyledBodyLarge>
-              <InputController
-                control={control}
-                name="reportServerIp"
-                label={t('serverUrl')}
-                sx={{ marginTop: theme.spacing(2.4) }}
-              />
-              <InputController
-                control={control}
-                name="reportPublicKey"
-                label={t('publicEncryptionKey')}
-                sx={{ marginTop: theme.spacing(2.4) }}
-                multiline
-                rows={4}
-              />
+            {t('configureServerForApplet')}
+          </Button>
+        </>
+      ) : (
+        <form noValidate onSubmit={handleSubmit(onSubmit)}>
+          <StyledFlexColumn sx={{ maxWidth: '55.7rem' }}>
+            <Box>
+              <StyledButton
+                disableRipple
+                onClick={() => setSettingsOpen((prevState) => !prevState)}
+                endIcon={
+                  <StyledSvg>
+                    <Svg id={isSettingsOpen ? 'navigate-up' : 'navigate-down'} />
+                  </StyledSvg>
+                }
+              >
+                <StyledTitleMedium color={variables.palette.on_surface}>
+                  {t('serverConfiguration')}
+                </StyledTitleMedium>
+              </StyledButton>
             </Box>
-          )}
-        </StyledFlexColumn>
-        <StyledFlexColumn sx={{ maxWidth: '81.8rem' }}>
-          <StyledTitleMedium
-            color={variables.palette.on_surface}
-            sx={{ marginBottom: theme.spacing(1.2) }}
+            <StyledBodyLarge
+              sx={{ margin: theme.spacing(2.4, 0, isSettingsOpen ? 2.4 : 4.8) }}
+              color={
+                isServerConfigured
+                  ? variables.palette.semantic.green
+                  : variables.palette.semantic.error
+              }
+            >
+              {t(isServerConfigured ? 'serverStatusConfigured' : 'serverStatusNotConfigured')}
+            </StyledBodyLarge>
+            {isSettingsOpen && (
+              <Box sx={{ mb: theme.spacing(2.4) }}>
+                <StyledBodyLarge color={variables.palette.on_surface_variant}>
+                  <Trans i18nKey="configureServerURL">
+                    For Security reasons, you must configure the Server URL (IP Address) and Public
+                    Encryption Key to generate and email reports.
+                    <StyledLink href={REPORT_SERVER_INSTRUCTIONS_LINK} target="_blank">
+                      See here for instructions.
+                    </StyledLink>
+                    .
+                  </Trans>
+                </StyledBodyLarge>
+                <InputController
+                  control={control}
+                  name="reportServerIp"
+                  label={t('serverUrl')}
+                  sx={{ marginTop: theme.spacing(2.4) }}
+                />
+                <InputController
+                  control={control}
+                  name="reportPublicKey"
+                  label={t('publicEncryptionKey')}
+                  sx={{ marginTop: theme.spacing(2.4) }}
+                  multiline
+                  rows={4}
+                />
+              </Box>
+            )}
+          </StyledFlexColumn>
+          <StyledFlexColumn sx={{ maxWidth: '81.8rem' }}>
+            <StyledTitleMedium
+              color={variables.palette.on_surface}
+              sx={{ marginBottom: theme.spacing(1.2) }}
+            >
+              {t('sendReportTo')}
+            </StyledTitleMedium>
+            <TagsController
+              name="email"
+              control={control}
+              tags={reportRecipients}
+              onAddTagClick={handleAddEmail}
+              onRemoveTagClick={handleRemoveEmail}
+              uiType={UiType.Secondary}
+              inputLabel={t('addRecipients')}
+              disabled={isActivity || isActivityFlow}
+            />
+            <StyledTitleMedium
+              color={variables.palette.on_surface}
+              sx={{ m: theme.spacing(4.8, 0, 1.2) }}
+            >
+              {t('includeInEmail')}
+            </StyledTitleMedium>
+            <CheckboxController
+              control={control}
+              sx={{ ml: theme.spacing(1.4) }}
+              name="reportIncludeUserId"
+              disabled={isActivity || isActivityFlow}
+              label={<StyledBodyLarge>{t('respondentId')}</StyledBodyLarge>}
+            />
+            {(isActivity || isActivityFlow) && (
+              <CheckboxController
+                control={control}
+                sx={{ ml: theme.spacing(1.4) }}
+                name="itemValue"
+                label={<StyledBodyLarge>{t('itemValue')}</StyledBodyLarge>}
+              />
+            )}
+            {itemValue && (
+              <StyledFlexTopCenter sx={{ mt: theme.spacing(1.2) }}>
+                {isActivityFlow && (
+                  <SelectController
+                    {...commonSelectProps}
+                    name="reportIncludedActivityName"
+                    label={t('activity')}
+                    options={getActivitiesOptions(activityFlow, appletData)}
+                    customChange={handleActivityChange}
+                    sx={{ mr: theme.spacing(2.4) }}
+                  />
+                )}
+                <SelectController
+                  {...commonSelectProps}
+                  name="reportIncludedItemName"
+                  label={t('newItem')}
+                  disabled={isActivityFlow && reportIncludedActivity === ''}
+                  options={getActivityItemsOptions(activity)}
+                  sx={{ width: isActivity ? '50%' : '100%' }}
+                />
+              </StyledFlexTopCenter>
+            )}
+            <StyledTitleMedium
+              color={variables.palette.on_surface}
+              sx={{ m: theme.spacing(4.8, 0, 1.2) }}
+            >
+              {t('subjectPreview')}
+            </StyledTitleMedium>
+            <InputController
+              control={control}
+              name="subject"
+              sx={{ pointerEvents: 'none', backgroundColor: variables.palette.surface1 }}
+            />
+            <StyledTitleMedium
+              color={variables.palette.on_surface}
+              sx={{
+                m: theme.spacing(4.8, 0, 1.2),
+                opacity: isActivity || isActivityFlow ? variables.opacity.disabled : 1,
+              }}
+            >
+              {t('emailBody')}
+            </StyledTitleMedium>
+            <EditorController
+              control={control}
+              name="reportEmailBody"
+              disabled={isActivity || isActivityFlow}
+            />
+          </StyledFlexColumn>
+          <StyledAppletSettingsButton
+            variant="outlined"
+            type="submit"
+            startIcon={<Svg width="18" height="18" id="save" />}
           >
-            {t('sendReportTo')}
-          </StyledTitleMedium>
-          <TagsController
-            name="email"
-            control={control}
-            tags={reportRecipients}
-            onAddTagClick={handleAddEmail}
-            onRemoveTagClick={handleRemoveEmail}
-            uiType={UiType.Secondary}
-            inputLabel={t('addRecipients')}
-          />
-          <StyledTitleMedium
-            color={variables.palette.on_surface}
-            sx={{ m: theme.spacing(4.8, 0, 1.2) }}
-          >
-            {t('includeInEmail')}
-          </StyledTitleMedium>
-          <CheckboxController
-            control={control}
-            sx={{ ml: theme.spacing(1.4) }}
-            name="reportIncludeUserId"
-            label={<StyledBodyLarge>{t('respondentId')}</StyledBodyLarge>}
-          />
-          <StyledTitleMedium
-            color={variables.palette.on_surface}
-            sx={{ m: theme.spacing(4.8, 0, 1.2) }}
-          >
-            {t('subjectPreview')}
-          </StyledTitleMedium>
-          <InputController
-            control={control}
-            name="subject"
-            sx={{ pointerEvents: 'none', backgroundColor: variables.palette.surface1 }}
-          />
-          <StyledTitleMedium
-            color={variables.palette.on_surface}
-            sx={{ m: theme.spacing(4.8, 0, 1.2) }}
-          >
-            {t('emailBody')}
-          </StyledTitleMedium>
-          <EditorController control={control} name="reportEmailBody" />
-        </StyledFlexColumn>
-        <StyledAppletSettingsButton
-          variant="outlined"
-          type="submit"
-          startIcon={<Svg width="18" height="18" id="save" />}
-        >
-          {t('save')}
-        </StyledAppletSettingsButton>
-      </form>
+            {t('save')}
+          </StyledAppletSettingsButton>
+        </form>
+      )}
       {passwordPopupVisible && (
         <AppletPasswordPopup
           appletId={appletData?.id ?? ''}

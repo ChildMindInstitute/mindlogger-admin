@@ -15,6 +15,6 @@ export const StyledTextInputOptionDescription = styled(Box)`
 `;
 
 export const StyledTextInputOptionHelpText = styled(StyledBodyMedium)`
-  opacity: 0.38;
+  opacity: ${variables.opacity.disabled};
   margin-left: ${theme.spacing(1.6)};
 `;

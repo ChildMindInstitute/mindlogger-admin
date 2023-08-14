@@ -7,14 +7,14 @@ export const StyledSlider = styled(Slider)`
 
   &.Mui-disabled {
     color: ${variables.palette.on_surface};
-    opacity: 0.38;
+    opacity: ${variables.opacity.disabled};
 
     .MuiSlider-rail {
       background-color: ${variables.palette.on_surface_alfa12};
     }
 
     .MuiSlider-mark {
-      opacity: 0.38;
+      opacity: ${variables.opacity.disabled};
       background-color: ${variables.palette.on_surface};
 
       &.MuiSlider-markActive {
@@ -29,7 +29,7 @@ export const StyledSlider = styled(Slider)`
   }
 
   .MuiSlider-mark {
-    opacity: 0.38;
+    opacity: ${variables.opacity.disabled};
     background-color: ${variables.palette.on_surface_variant};
 
     &.MuiSlider-markActive {
