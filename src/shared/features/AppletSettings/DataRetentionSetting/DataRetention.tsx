@@ -17,7 +17,7 @@ import { useAppDispatch } from 'redux/store';
 import { postAppletDataRetentionApi } from 'api';
 
 import { usePrompt } from '../AppletSettings.hooks';
-import { StyledAppletSettingsDescription, StyledHeadline } from '../AppletSettings.styles';
+import { StyledAppletSettingsDescription } from '../AppletSettings.styles';
 import {
   retentionTypes,
   DEFAULT_RETENTION_TYPE,
@@ -111,7 +111,6 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
 
   return (
     <>
-      <StyledHeadline>{t('dataRetention')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('selectDataRetention')}</StyledAppletSettingsDescription>
       <form noValidate onSubmit={handleSubmit(onSubmit)} onChange={handleFormChange}>
         <StyledContainer>

@@ -39,7 +39,7 @@ import {
   getIdentifiers,
   getLatestReportUrl,
 } from './Report.utils';
-import { ReportContext } from './context';
+import { ReportContext } from './Report.context';
 import { LATEST_REPORT_DEFAULT_NAME, LATEST_REPORT_TYPE } from './Report.const';
 
 export const Report = ({ activity, identifiers = [], versions = [] }: ReportProps) => {

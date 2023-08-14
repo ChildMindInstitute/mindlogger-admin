@@ -8,7 +8,7 @@ import { Spinner } from 'shared/components';
 import { useDecryptedIdentifiers } from 'modules/Dashboard/hooks';
 import { StyledContainer, StyledFlexAllCenter } from 'shared/styles';
 import { Version, getIdentifiersApi, getVersionsApi } from 'api';
-import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/context';
+import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
 import { ReportMenu } from './ReportMenu';

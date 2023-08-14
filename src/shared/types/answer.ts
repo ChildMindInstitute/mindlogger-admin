@@ -304,6 +304,7 @@ export type ActivityItemAnswer = {
   id?: string;
   activityItem: Item;
   answer: AnswerDTO;
+  edited?: number | null;
 };
 
 export const enum ElementType {

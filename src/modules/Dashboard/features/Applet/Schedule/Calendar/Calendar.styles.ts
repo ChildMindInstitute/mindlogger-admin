@@ -472,7 +472,7 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
     }
 
     .rbc-off-range {
-      opacity: 0.38;
+      opacity: ${variables.opacity.disabled};
     }
 
     .rbc-off-range-bg {

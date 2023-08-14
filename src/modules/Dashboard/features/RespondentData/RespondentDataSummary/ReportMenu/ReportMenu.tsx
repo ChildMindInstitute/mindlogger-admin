@@ -10,7 +10,7 @@ import {
   variables,
 } from 'shared/styles';
 import { useRespondentLabel } from 'modules/Dashboard/hooks';
-import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/context';
+import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledActivity } from './ReportMenu.styles';

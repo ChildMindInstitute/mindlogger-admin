@@ -1,39 +1,34 @@
 import { UseFormSetValue } from 'react-hook-form';
 
-import { SingleApplet } from 'shared/state';
-import i18n from 'i18n';
+import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
 
-import { defaultValues } from './ReportConfigSetting.const';
 import {
   VerifyReportServer,
   SetPasswordReportServer,
   ReportConfigFormValues,
 } from './ReportConfigSetting.types';
 
-const { t } = i18n;
-
 const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
 
-export const getDefaultValues = (appletData?: Partial<SingleApplet>) => {
-  if (!appletData) return defaultValues;
+export const getActivitiesOptions = (
+  activityFlow?: ActivityFlow,
+  appletData?: Partial<SingleApplet>,
+) =>
+  activityFlow?.items
+    ?.map(
+      ({ activityId }) =>
+        appletData?.activities?.find((activity) => activityId === activity.id)?.name,
+    )
+    .map((name) => ({
+      value: name || '',
+      labelKey: name || '',
+    })) || [];
 
-  const {
-    reportServerIp,
-    reportPublicKey,
-    reportRecipients,
-    reportIncludeUserId,
-    reportEmailBody,
-  } = appletData;
-
-  return {
-    ...defaultValues,
-    reportServerIp,
-    reportPublicKey,
-    reportRecipients,
-    reportIncludeUserId,
-    reportEmailBody: reportEmailBody || t('reportEmailBody'),
-  };
-};
+export const getActivityItemsOptions = (activity: Activity) =>
+  activity.items.map(({ name }) => ({
+    value: name,
+    labelKey: name,
+  }));
 
 export const verifyReportServer = async ({ url, publicKey, token }: VerifyReportServer) => {
   const headers = new Headers();

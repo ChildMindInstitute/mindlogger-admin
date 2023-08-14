@@ -13,6 +13,7 @@ import {
   appletActivityFlowRoutes,
   performanceTasksRoutes,
 } from './routes.const';
+import ActivityFlowSettings from '../features/ActivityFlowSettings';
 
 const BuilderApplet = lazy(() => import('../pages/BuilderApplet'));
 const BuilderActivityFlow = lazy(() => import('../pages/BuilderActivityFlow'));
@@ -32,7 +33,7 @@ export const builderRoutes = () => (
       <Route path={Path.Settings}>
         <Route element={<BuilderAppletSettings />} path="">
           <Route
-            path=":settingItem"
+            path=":setting"
             element={
               <PrivateRoute>
                 <BuilderAppletSettings />
@@ -87,6 +88,16 @@ export const builderRoutes = () => (
               element={<PrivateRoute>{Component ? <Component /> : <></>}</PrivateRoute>}
             />
           ))}
+          <Route path={Path.Settings} element={<ActivityFlowSettings />}>
+            <Route
+              path=":setting"
+              element={
+                <PrivateRoute>
+                  <ActivityFlowSettings />
+                </PrivateRoute>
+              }
+            />
+          </Route>
         </Route>
       </Route>
     </Route>

@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Search, Svg } from 'shared/components';
-import { theme, variables } from 'shared/styles';
+import { theme, variables, StyledModalContent } from 'shared/styles';
 import { page } from 'resources';
 import { getRespondentName, getErrorMessage } from 'shared/utils';
 import { useAsync } from 'shared/hooks';
@@ -116,44 +116,49 @@ export const SearchPopup = ({
     <>
       <StyledModal style={{ top, left }} open={open} onClose={handleSearchPopupClose}>
         <StyledModalInner>
-          <Search
-            height="6.4rem"
-            width="100%"
-            background={variables.palette.surface2}
-            placeholder={t('searchOrSelectRespondent')}
-            endAdornment={
-              <StyledClearBtn onClick={handleSearchPopupClose}>
-                <Svg id="cross" />
-              </StyledClearBtn>
-            }
-            onSearch={handleSearch}
-          />
-          <StyledItemsContainer>
-            {respondentsItems &&
-              filteredRespondents(respondentsItems)?.map((item) => {
-                const { id, secretId, nickname, icon } = item || {};
-                const isSelected = id === selectedRespondent?.id;
+          <StyledModalContent>
+            <Box>
+              <Search
+                height="6.4rem"
+                width="100%"
+                background={variables.palette.surface2}
+                placeholder={t('searchOrSelectRespondent')}
+                endAdornment={
+                  <StyledClearBtn onClick={handleSearchPopupClose}>
+                    <Svg id="cross" />
+                  </StyledClearBtn>
+                }
+                onSearch={handleSearch}
+              />
+            </Box>
 
-                return (
-                  <StyledItem
-                    key={id}
-                    background={isSelected ? variables.palette.surface_variant : undefined}
-                    onClick={() => selectedRespondentHandler(item)}
-                  >
-                    {icon || <Box sx={{ width: '2.4rem' }} />}
-                    <Box sx={{ ml: theme.spacing(1.8) }}>
-                      <strong>{secretId}</strong>
-                      {nickname ? ` (${nickname})` : ''}
-                    </Box>
-                    {isSelected && (
-                      <StyledChecked>
-                        <Svg id="check" />
-                      </StyledChecked>
-                    )}
-                  </StyledItem>
-                );
-              })}
-          </StyledItemsContainer>
+            <StyledItemsContainer>
+              {respondentsItems &&
+                filteredRespondents(respondentsItems)?.map((item) => {
+                  const { id, secretId, nickname, icon } = item || {};
+                  const isSelected = id === selectedRespondent?.id;
+
+                  return (
+                    <StyledItem
+                      key={id}
+                      background={isSelected ? variables.palette.surface_variant : undefined}
+                      onClick={() => selectedRespondentHandler(item)}
+                    >
+                      {icon || <Box sx={{ width: '2.4rem' }} />}
+                      <Box sx={{ ml: theme.spacing(1.8) }}>
+                        <strong>{secretId}</strong>
+                        {nickname ? ` (${nickname})` : ''}
+                      </Box>
+                      {isSelected && (
+                        <StyledChecked>
+                          <Svg id="check" />
+                        </StyledChecked>
+                      )}
+                    </StyledItem>
+                  );
+                })}
+            </StyledItemsContainer>
+          </StyledModalContent>
         </StyledModalInner>
       </StyledModal>
       {addIndividualSchedulePopupVisible && (

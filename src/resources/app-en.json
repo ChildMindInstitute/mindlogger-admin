@@ -882,6 +882,7 @@
   "unsupportedResponseItem": "This data type can’t be displayed on this page",
   "messageDoesNotRequireResponse": "Message does not require response",
   "noRespondentsYet": "No respondents yet.",
+  "noRespondentsToSelect": "No respondents to select.",
   "deleteActivity": "Delete Activity",
   "removeActivity": "Remove Activity",
   "deleteActivityFlow": "Delete Activity Flow",
@@ -1174,6 +1175,11 @@
   "latestFinalSubscaleScore": "Latest Final Subscale Score",
   "credits": "Credits",
   "exportFailed": "Export failed. Please try again.",
+  "activityFlowSettings": "Activity Flow Settings",
   "setUpCorrectCondition": "Set up correct condition",
-  "setUpAtLeastOneCondition": "Set up at least one condition"
+  "setUpAtLeastOneCondition": "Set up at least one condition",
+  "itemValue": "Item Value",
+  "pleaseSelectItem": "Please select an Item",
+  "pleaseSelectActivity": "Please select an Activity",
+  "configureServerForApplet": "Configure Server (for Applet)"
 }

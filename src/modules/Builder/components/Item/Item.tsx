@@ -7,13 +7,13 @@ import {
   StyledTitleBoldSmall,
   StyledTitleMedium,
   theme,
+  variables,
 } from 'shared/styles';
 
 import {
   StyledActions,
   StyledActivityDescription,
   StyledCol,
-  StyledFlowDescription,
   StyledImg,
   StyledImgPlaceholder,
   StyledItem,
@@ -36,7 +36,7 @@ export const Item = ({
   const { name, hasError, description, img, count, index, total } = props;
   const isActivityUiType = uiType === ItemUiType.Activity;
 
-  const commonSx = isInactive ? { opacity: '0.38' } : undefined;
+  const commonSx = isInactive ? { opacity: variables.opacity.disabled } : undefined;
 
   const image = img ? (
     <StyledImg src={img} alt={name} sx={commonSx} />

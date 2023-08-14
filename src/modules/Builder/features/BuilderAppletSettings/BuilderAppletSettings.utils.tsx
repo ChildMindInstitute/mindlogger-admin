@@ -1,4 +1,3 @@
-import i18n from 'i18n';
 import { Svg } from 'shared/components';
 import { REPORT_CONFIG_PARAM, Roles } from 'shared/consts';
 import {
@@ -22,9 +21,7 @@ export const getSettings = ({
   roles,
   onReportConfigSubmit,
 }: GetSettings) => {
-  const { t } = i18n;
-
-  const tooltip = isNewApplet ? t('saveAndPublishFirst') : undefined;
+  const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
 
   return [
     ...(isManagerOrOwner(roles?.[0])

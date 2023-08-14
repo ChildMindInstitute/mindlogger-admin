@@ -1,30 +1,44 @@
 import { Box, styled } from '@mui/material';
 
 import {
-  StyledHeadlineLarge,
-  StyledTitleSmall,
-  StyledFlexColumn,
   theme,
   variables,
+  commonStickyStyles,
+  StyledHeadlineLarge,
+  StyledFlexColumn,
+  StyledTitleSmall,
 } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
-export const StyledContainer = styled(StyledFlexColumn)`
-  padding: ${theme.spacing(4.8, 6.4, 0)};
-  flex: 1 1 30%;
-  min-width: max-content;
+export const StyledBar = styled(Box, shouldForwardProp)`
+  width: ${({ hasItem }: { hasItem: boolean }) => (hasItem ? '38.7rem' : '100%')};
+  flex-shrink: 0;
+  border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   height: 100%;
   overflow-y: auto;
+  transition: ${variables.transitions.width};
 `;
 
-export const StyledHeadline = styled(StyledHeadlineLarge)`
-  padding-bottom: ${theme.spacing(2.4)};
+export const StyledHeader = styled(StyledHeadlineLarge, shouldForwardProp)`
+  ${commonStickyStyles};
+  padding: ${theme.spacing(4.8, 1.6, 2.4, 0)};
+  box-shadow: ${({ isSticky }: { isSticky: boolean }) =>
+    isSticky ? variables.boxShadow.light0 : 'none'};
+`;
+
+export const StyledContent = styled(Box, shouldForwardProp)`
+  padding-bottom: ${theme.spacing(2.8)};
+
+  ${({ isCompact }: { isCompact: boolean }) =>
+    !isCompact &&
+    `
+    padding-right: ${theme.spacing(13.6)};
+  `}
 `;
 
 export const StyledSettingsGroup = styled(Box, shouldForwardProp)`
   padding: ${theme.spacing(0.8, 0)};
   border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-
   ${({ isCompact }: { isCompact: boolean }) =>
     isCompact &&
     `
@@ -36,7 +50,6 @@ export const StyledSettingsGroup = styled(Box, shouldForwardProp)`
 export const StyledSettings = styled(Box, shouldForwardProp)`
   display: flex;
   margin-left: ${theme.spacing(12)};
-
   ${({ isCompact }: { isCompact: boolean }) =>
     isCompact &&
     `
@@ -56,14 +69,12 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
   text-align: center;
   cursor: pointer;
   border-radius: ${variables.borderRadius.lg};
-
   :hover {
     background-color: ${variables.palette.on_surface_alfa12};
   }
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
-
   ${({ isCompact }: { isSelected: boolean; isCompact: boolean; disabled?: boolean }) =>
     isCompact &&
     `
@@ -75,7 +86,6 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
     padding: ${theme.spacing(0, 1.8)};
     margin: ${theme.spacing(0.2, 0, 0, 1.6)};
     border-radius: ${variables.borderRadius.xxxl};
-
     svg {
       margin-right: ${theme.spacing(1.6)};
     }
@@ -87,19 +97,16 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
     }
     
 `};
-
   ${({ disabled }) =>
     disabled &&
     `
       pointer-events: none;
-      opacity: 0.38;
+      opacity: ${variables.opacity.disabled};
   `}
-
   ${({ isSelected }) =>
     isSelected &&
     `
     background-color: ${variables.palette.secondary_container};
-
     p {
       font-weight: ${variables.font.weight.bold};
       color: ${variables.palette.on_secondary_container};

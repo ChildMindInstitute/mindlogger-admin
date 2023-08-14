@@ -10,7 +10,6 @@ import { DuplicatePopups } from 'modules/Dashboard/features/Applet/Popups';
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
-  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const DuplicateAppletSettings = () => {
@@ -26,7 +25,6 @@ export const DuplicateAppletSettings = () => {
 
   return (
     <>
-      <StyledHeadline>{t('duplicateApplet')}</StyledHeadline>
       <StyledAppletSettingsDescription>{t('duplicateDescription')}</StyledAppletSettingsDescription>
       <StyledAppletSettingsButton
         variant="outlined"

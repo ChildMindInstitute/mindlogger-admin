@@ -7,8 +7,6 @@ export * from './ReportConfigSetting';
 export * from './ShareAppletSetting';
 export * from './DownloadSchemaSetting';
 export * from './TransferOwnershipSetting';
-export * from './Setting';
-export * from './Navigation';
 export * from './AppletSettings';
 export * from './PublishConcealAppletSetting';
 export * from './VersionHistorySetting';

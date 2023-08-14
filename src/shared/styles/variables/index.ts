@@ -22,6 +22,9 @@ export const variables = {
     lg: '0.2rem', //2px
     md: '0.1rem', //1px
   },
+  opacity: {
+    disabled: 0.38,
+  },
   boxShadow: {
     light0: '0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px 1px rgba(0, 0, 0, 0.05)',
     light1: '0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15)',

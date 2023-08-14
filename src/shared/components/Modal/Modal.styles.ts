@@ -14,11 +14,15 @@ export const StyledDialog = styled(Dialog)`
     width: ${({ width }: { width?: string; height?: string }) => (width ? `${width}rem` : 'auto')};
     max-width: 100rem;
     height: ${({ height }) => height || 'auto'};
+    overflow-y: unset;
+    padding: ${theme.spacing(2, 0)};
   }
 `;
 
 export const StyledDialogTitle = styled(DialogTitle)`
-  padding: ${theme.spacing(4.8, 2.4, 3.4)};
+  && {
+    padding: ${theme.spacing(2.8, 2.4, 3.4)};
+  }
 `;
 
 export const StyledCloseButton = styled(StyledClearedButton)`
@@ -37,6 +41,7 @@ export const StyledDialogActions = styled(DialogActions, shouldForwardProp)`
   justify-content: ${({ actionsAlign }: { actionsAlign?: ActionsAlign }) =>
     actionsAlign || 'flex-start'};
   margin-top: auto;
+  padding: ${theme.spacing(2.4, 2.4, 0.4)};
 `;
 
 export const StyledButton = styled(Button)`

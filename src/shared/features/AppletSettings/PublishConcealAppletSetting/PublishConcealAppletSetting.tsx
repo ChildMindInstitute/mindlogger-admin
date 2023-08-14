@@ -12,7 +12,6 @@ import { PublishConcealAppletSettingProps } from './PublishConcealAppletSetting.
 import {
   StyledAppletSettingsButton,
   StyledAppletSettingsDescription,
-  StyledHeadline,
 } from '../AppletSettings.styles';
 
 export const PublishConcealAppletSetting = ({
@@ -37,7 +36,6 @@ export const PublishConcealAppletSetting = ({
 
   return (
     <>
-      <StyledHeadline>{t(isPublished ? 'concealApplet' : 'publishApplet')}</StyledHeadline>
       <StyledAppletSettingsDescription>
         {t(isPublished ? 'concealAppletDescription' : 'publishAppletDescription')}
       </StyledAppletSettingsDescription>

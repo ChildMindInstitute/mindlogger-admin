@@ -9,7 +9,6 @@ import { StyledBodyLarge, StyledTitleBoldMedium, theme, variables } from 'shared
 import { Accordion, AccordionUiType } from 'modules/Dashboard/components';
 import { Svg } from 'shared/components';
 
-import { StyledHeadline } from '../AppletSettings.styles';
 import { StyledVersionSelect } from './VersionHistorySetting.styles';
 import { VersionChanges } from './VersionHistorySetting.types';
 
@@ -60,7 +59,6 @@ export const VersionHistorySetting = () => {
 
   return (
     <>
-      <StyledHeadline>{t('versionHistory')}</StyledHeadline>
       {!!versions?.length && (
         <>
           <StyledVersionSelect

@@ -13,7 +13,6 @@ import { getEntityKey } from 'shared/utils';
 import { SubscaleFormValue } from 'modules/Builder/types';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
-import { StyledButtonsContainer } from '../ActivitySettings.styles';
 import { commonButtonProps } from '../ActivitySettings.const';
 import {
   options,
@@ -30,7 +29,11 @@ import {
 } from './SubscalesConfiguration.utils';
 import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
-import { StyledSvg, StyledSvgButton } from './SubscalesConfiguration.styles';
+import {
+  StyledButtonsContainer,
+  StyledSvg,
+  StyledSvgButton,
+} from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 import { LookupTable } from './LookupTable';

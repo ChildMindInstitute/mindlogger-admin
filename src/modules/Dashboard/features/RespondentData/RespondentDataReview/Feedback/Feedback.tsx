@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -10,20 +10,16 @@ import {
   theme,
 } from 'shared/styles';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import { StyledButton, StyledContainer } from './Feedback.styles';
 import { FeedbackTabs, getTabs } from './Feedback.const';
 import { FeedbackForm, FeedbackProps } from './Feedback.types';
 import { getDefaultFormValues } from './Feedback.utils';
 
-export const Feedback = ({
-  isFeedbackOpen,
-  onClose,
-  selectedActivity,
-  assessment,
-}: FeedbackProps) => {
+export const Feedback = ({ isFeedbackOpen, onClose, selectedActivity }: FeedbackProps) => {
   const { t } = useTranslation();
-
+  const { assessment } = useContext(RespondentDataReviewContext);
   const [assessmentStep, setAssessmentStep] = useState(0);
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
 

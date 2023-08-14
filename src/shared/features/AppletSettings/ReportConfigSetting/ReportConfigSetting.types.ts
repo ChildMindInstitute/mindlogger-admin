@@ -6,6 +6,9 @@ export type ReportConfigFormValues = {
   reportEmailBody: string;
   reportServerIp: string;
   reportPublicKey: string;
+  itemValue?: boolean;
+  reportIncludedItemName?: string;
+  reportIncludedActivityName?: string;
 };
 
 export type VerifyReportServer = {
@@ -30,4 +33,6 @@ export type SetPasswordReportServer = {
 export type ReportConfigSettingProps = {
   isDashboard?: boolean;
   onSubmitSuccess?: (values: Partial<ReportConfigFormValues>) => void;
+  isActivity?: boolean;
+  isActivityFlow?: boolean;
 };

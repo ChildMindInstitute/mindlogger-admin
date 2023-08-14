@@ -260,7 +260,6 @@ export type SaveAssessment = AppletId & {
 
 export type Review = {
   answer: string;
-  isEdited: boolean;
   items: Item[];
   itemIds: string[];
   reviewer: {
@@ -335,6 +334,8 @@ export type ReportConfig = {
   reportPublicKey: string;
   reportRecipients: string[];
   reportIncludeUserId: boolean;
+  reportIncludedActivityName?: string;
+  reportIncludedItemName?: string;
   reportEmailBody: string;
 };
 

@@ -12,7 +12,7 @@ import { Svg } from 'shared/components';
 import { AdditionalInformation } from '../AdditionalInformation';
 import { StyledChartContainer, StyledDescription } from './ActivityCompletionScores.styles';
 import { ScoresProps } from './ActivityCompletionScores.types';
-import { ReportContext } from '../../context';
+import { ReportContext } from '../../Report.context';
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
 

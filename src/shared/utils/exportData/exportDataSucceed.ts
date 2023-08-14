@@ -8,7 +8,12 @@ import {
   prepareData,
   ZipFile,
 } from 'shared/utils';
-import { GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME } from 'shared/consts';
+import {
+  activityJourneyHeader,
+  GENERAL_REPORT_NAME,
+  JOURNEY_REPORT_NAME,
+  reportHeader,
+} from 'shared/consts';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 export const exportDataSucceed =
@@ -32,8 +37,16 @@ export const exportDataSucceed =
       flankerItemsData,
     } = prepareData(response.data.result, getDecryptedAnswers);
 
-    await exportTemplate(reportData, GENERAL_REPORT_NAME);
-    await exportTemplate(activityJourneyData, JOURNEY_REPORT_NAME);
+    await exportTemplate({
+      data: reportData,
+      fileName: GENERAL_REPORT_NAME,
+      defaultData: reportData.length > 0 ? null : reportHeader,
+    });
+    await exportTemplate({
+      data: activityJourneyData,
+      fileName: JOURNEY_REPORT_NAME,
+      defaultData: activityJourneyData.length > 0 ? null : activityJourneyHeader,
+    });
 
     await Promise.allSettled([
       exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing)),

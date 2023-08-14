@@ -4,18 +4,10 @@ import { Svg } from 'shared/components';
 import { StyledClearedButton, StyledHeadlineLarge, theme } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
 
-import {
-  StyledHeader,
-  StyledContent,
-  StyledActivitySettingsContainer,
-} from './ActivitySettingsContainer.styles';
-import { ActivitySettingsContainerProps } from './ActivitySettingsContainer.types';
+import { StyledHeader, StyledContent, StyledActivitySettingsContainer } from './Container.styles';
+import { ActivitySettingsContainerProps } from './Container.types';
 
-export const ActivitySettingsContainer = ({
-  title,
-  onClose,
-  children,
-}: ActivitySettingsContainerProps) => {
+export const Container = ({ title, onClose, children }: ActivitySettingsContainerProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
 
   const isHeaderSticky = useHeaderSticky(containerRef);
