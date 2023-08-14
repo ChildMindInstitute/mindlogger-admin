@@ -862,6 +862,7 @@
   "newItemName": "New Item",
   "validationMessages": {
     "isRequired": "{{- field }} is required",
+    "isRequired_indexed": "{{- field }} {{- index }} is required",
     "alphanumericAndHyphen": "{{- field }} must contain only alphanumeric characters, underscores, or hyphen",
     "lessThan": "{{- less }} should be less than {{- than }}",
     "moreThan": "{{- more }} should be bigger than {{- than }}",
@@ -881,6 +882,7 @@
   "unsupportedResponseItem": "This data type can’t be displayed on this page",
   "messageDoesNotRequireResponse": "Message does not require response",
   "noRespondentsYet": "No respondents yet.",
+  "noRespondentsToSelect": "No respondents to select.",
   "deleteActivity": "Delete Activity",
   "removeActivity": "Remove Activity",
   "deleteActivityFlow": "Delete Activity Flow",

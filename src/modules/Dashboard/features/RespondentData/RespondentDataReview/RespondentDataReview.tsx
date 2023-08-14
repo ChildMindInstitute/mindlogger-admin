@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { ReviewActivity, getAssessmentApi } from 'api';
@@ -12,12 +12,11 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { ActivityItemAnswer } from 'shared/types';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Assessment } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/FeedbackAssessment.types';
 
 import { StyledTextBtn } from '../RespondentData.styles';
-import { Feedback } from './Feedback';
 import {
   StyledEmptyReview,
   StyledHeader,
@@ -25,18 +24,24 @@ import {
   StyledWrapper,
 } from './RespondentDataReview.styles';
 import { Answer } from './RespondentDataReview.types';
+import { Feedback } from './Feedback';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
+import { RespondentDataReviewContext } from './RespondentDataReview.context';
 
 export const RespondentDataReview = () => {
   const { t } = useTranslation();
-  const { appletId, answerId } = useParams();
+  const { appletId } = useParams();
+  const [searchParams] = useSearchParams();
+  const answerId = searchParams.get('answerId');
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const [assessment, setAssessment] = useState<ActivityItemAnswer[]>([]);
+  const [itemIds, setItemIds] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getAssessment } = useAsync(getAssessmentApi);
@@ -73,14 +78,20 @@ export const RespondentDataReview = () => {
   useEffect(() => {
     if (!appletId || !answerId) return;
     (async () => {
-      const result = await getAssessment({ appletId, answerId });
-      const { reviewerPublicKey, ...assessmentData } = result.data.result;
-      const encryptedData = {
-        ...assessmentData,
-        userPublicKey: reviewerPublicKey,
-      } as Assessment;
-      const decryptedAssessment = getDecryptedActivityData(encryptedData);
-      setAssessment(decryptedAssessment.decryptedAnswers);
+      try {
+        setIsLoading(true);
+        const result = await getAssessment({ appletId, answerId });
+        const { reviewerPublicKey, ...assessmentData } = result.data.result;
+        const encryptedData = {
+          ...assessmentData,
+          userPublicKey: reviewerPublicKey,
+        } as Assessment;
+        const decryptedAssessment = getDecryptedActivityData(encryptedData);
+        setItemIds(result.data.result.itemIds || []);
+        setAssessment(decryptedAssessment.decryptedAnswers);
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, [appletId, answerId]);
 
@@ -96,37 +107,38 @@ export const RespondentDataReview = () => {
         setSelectedActivity={setSelectedActivity}
         setSelectedAnswer={setSelectedAnswer}
       />
-      <StyledReviewContainer ref={containerRef}>
-        <StyledHeader
-          isSticky={isHeaderSticky}
-          sx={{ justifyContent: selectedAnswer ? 'space-between' : 'flex-end' }}
-        >
-          {selectedAnswer && <StyledHeadlineLarge>{selectedActivity?.name}</StyledHeadlineLarge>}
-          <StyledTextBtn
-            variant="text"
-            onClick={() => setIsFeedbackOpen(true)}
-            disabled={!selectedAnswer}
-            startIcon={<Svg id="item-outlined" width="18" height="18" />}
+      <RespondentDataReviewContext.Provider value={{ assessment, itemIds, setItemIds }}>
+        <StyledReviewContainer ref={containerRef}>
+          <StyledHeader
+            isSticky={isHeaderSticky}
+            sx={{ justifyContent: selectedAnswer ? 'space-between' : 'flex-end' }}
           >
-            {t('feedback')}
-          </StyledTextBtn>
-        </StyledHeader>
-        {selectedActivity && selectedAnswer ? (
-          <Review answerId={selectedAnswer.answerId} activityId={selectedActivity.id} />
-        ) : (
-          <StyledWrapper>
-            <StyledEmptyReview>{renderEmptyState()}</StyledEmptyReview>
-          </StyledWrapper>
+            {selectedAnswer && <StyledHeadlineLarge>{selectedActivity?.name}</StyledHeadlineLarge>}
+            <StyledTextBtn
+              variant="text"
+              onClick={() => setIsFeedbackOpen(true)}
+              disabled={!selectedAnswer}
+              startIcon={<Svg id="item-outlined" width="18" height="18" />}
+            >
+              {t('feedback')}
+            </StyledTextBtn>
+          </StyledHeader>
+          {selectedActivity && selectedAnswer ? (
+            <Review answerId={selectedAnswer.answerId} activityId={selectedActivity.id} />
+          ) : (
+            <StyledWrapper>
+              <StyledEmptyReview>{renderEmptyState()}</StyledEmptyReview>
+            </StyledWrapper>
+          )}
+        </StyledReviewContainer>
+        {selectedActivity && selectedAnswer && !isLoading && (
+          <Feedback
+            isFeedbackOpen={isFeedbackOpen}
+            selectedActivity={selectedActivity}
+            onClose={() => setIsFeedbackOpen(false)}
+          />
         )}
-      </StyledReviewContainer>
-      {selectedActivity && selectedAnswer && (
-        <Feedback
-          isFeedbackOpen={isFeedbackOpen}
-          selectedActivity={selectedActivity}
-          onClose={() => setIsFeedbackOpen(false)}
-          assessment={assessment}
-        />
-      )}
+      </RespondentDataReviewContext.Provider>
     </StyledContainer>
   );
 };

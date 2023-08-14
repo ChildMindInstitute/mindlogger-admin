@@ -19,9 +19,9 @@ const getTimeString = (obj?: DecryptedDateRangeAnswer['value']['from' | 'to']) =
 const getDateString = (obj?: DecryptedDateAnswer['value']) => {
   if (!obj) return '';
 
-  return `${obj.year}-${Number(obj.month + 1)
+  return `${obj.year}-${Number(obj.month).toString().padStart(2, '0')}-${Number(obj.day)
     .toString()
-    .padStart(2, '0')}-${Number(obj.day).toString().padStart(2, '0')}`;
+    .padStart(2, '0')}`;
 };
 
 export const doubleBrackets = /\[\[(.*?)]]/g;
@@ -83,6 +83,7 @@ export const replaceItemVariableWithName = <T>({
             break;
           }
           case ItemResponseType.Slider:
+          case ItemResponseType.NumberSelection:
             markdown = markdown.replace(reg, `${(rawAnswer as DecryptedSliderAnswer).value} `);
             break;
           case ItemResponseType.TimeRange:

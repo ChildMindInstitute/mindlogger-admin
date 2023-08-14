@@ -47,10 +47,6 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       pointer-events: ${isDragging ? 'none' : 'auto'};
       box-shadow: ${isDragging ? variables.boxShadow.light5 : 'inherit'};
     
-      .item-name {
-        transition: ${variables.transitions.fontWeight};
-      }
-    
       &:hover {
         background-color: ${
           uiType === ItemUiType.Flow || uiType === ItemUiType.Activity

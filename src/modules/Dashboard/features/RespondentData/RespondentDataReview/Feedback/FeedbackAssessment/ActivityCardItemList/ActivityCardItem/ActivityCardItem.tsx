@@ -17,7 +17,7 @@ export const ActivityCardItem = ({
   onSubmit,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
-    isSkippable: activityItem.activityItem.config.skippableItem && !isSubmitVisible,
+    isSkippable: activityItem.activityItem.config.skippableItem,
     isBackVisible: isBackVisible && !activityItem.activityItem.config.removeBackButton,
   };
 

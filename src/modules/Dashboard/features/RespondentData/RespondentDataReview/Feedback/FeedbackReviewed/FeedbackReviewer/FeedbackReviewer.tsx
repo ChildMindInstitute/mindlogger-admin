@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 import { getDictionaryText } from 'shared/utils';
 import { Svg } from 'shared/components';
 import {
@@ -10,14 +9,14 @@ import {
   StyledTitleBoldMedium,
   variables,
 } from 'shared/styles';
+import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
+import { EditedAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.types';
 
 import { StyledButton, StyledEdited, StyledItem, StyledReviewer } from './FeedbackReviewer.styles';
 import { FeedbackReviewerProps } from './FeedbackReviewer.types';
 import { getResponseItem } from './FeedbackReviewer.const';
 
-export const FeedbackReviewer = ({
-  reviewer: { isEdited, review, reviewer },
-}: FeedbackReviewerProps) => {
+export const FeedbackReviewer = ({ reviewer: { review, reviewer } }: FeedbackReviewerProps) => {
   const { t } = useTranslation('app');
 
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +37,7 @@ export const FeedbackReviewer = ({
         <>
           {review.map((activityItemAnswer) => (
             <StyledItem key={activityItemAnswer.activityItem.id}>
-              {isEdited && (
+              {(activityItemAnswer.answer as EditedAnswer)?.edited && (
                 <StyledEdited>
                   <StyledBodyMedium color={variables.palette.on_secondary_container}>
                     {t('edited')}

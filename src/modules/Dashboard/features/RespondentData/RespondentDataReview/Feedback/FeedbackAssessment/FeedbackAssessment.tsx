@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useMemo, useContext } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
 import { auth } from 'redux/modules';
@@ -7,20 +7,23 @@ import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
 import { createAssessmentApi } from 'api';
 import { FeedbackTabs } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.const';
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import { StyledContainer } from './FeedbackAssessment.styles';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
-import { formatAssessment } from './FeedbackAssessment.utils';
+import { formatAssessmentAnswers } from './FeedbackAssessment.utils';
 import { ActivityCardItemList } from './ActivityCardItemList';
 import { SubmitAssessmentPopup } from './SubmitAssessmentPopup';
 
 export const FeedbackAssessment = ({
   setActiveTab,
-  assessment,
   assessmentStep,
   setAssessmentStep,
 }: FeedbackAssessmentProps) => {
-  const { appletId = '', answerId = '' } = useParams();
+  const { assessment, itemIds } = useContext(RespondentDataReviewContext);
+  const { appletId = '' } = useParams();
+  const [searchParams] = useSearchParams();
+  const answerId = searchParams.get('answerId');
   const userData = auth.useData();
   const getEncryptedAnswers = useEncryptedAnswers();
   const { execute: createAssessment } = useAsync(createAssessmentApi, () =>
@@ -44,17 +47,23 @@ export const FeedbackAssessment = ({
 
   const handleSubmitAssessment = async () => {
     const { assessmentItems } = getValues();
-    const formattedAssessment = formatAssessment(assessmentItems);
-    const answer = getEncryptedAnswers(formattedAssessment.answers) as string;
+    const answers = formatAssessmentAnswers(assessmentItems);
+    const answer = getEncryptedAnswers(answers) as string;
+
+    if (!appletId || !answerId) return;
 
     await createAssessment({
       appletId,
       answerId,
       answer,
-      itemIds: formattedAssessment.itemIds,
+      itemIds: itemIds || [],
       reviewerPublicKey: accountId,
     });
 
+    methods.reset({
+      newNote: '',
+      assessmentItems,
+    });
     setActiveTab(FeedbackTabs.Reviewed);
     setAssessmentStep(0);
   };
@@ -65,7 +74,7 @@ export const FeedbackAssessment = ({
     return assessment.slice(0, assessmentStep + 1).reverse();
   }, [assessment, assessmentStep]);
 
-  const isSubmitVisible = assessmentStep === assessment.length - 1;
+  const isSubmitVisible = assessmentStep === assessment!.length - 1;
   const isBackVisible = activityItems.length > 1;
 
   return (

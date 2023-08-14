@@ -34,7 +34,6 @@ export const Item = ({
   const [visibleActions, setVisibleActions] = useState(false);
   const { t } = useTranslation('app');
   const { name, hasError, description, img, count, index, total } = props;
-  const isFlowUiType = uiType === ItemUiType.Flow;
   const isActivityUiType = uiType === ItemUiType.Activity;
 
   const commonSx = isInactive ? { opacity: '0.38' } : undefined;
@@ -61,17 +60,8 @@ export const Item = ({
             {index} {t('of')} {total}
           </StyledTitleMedium>
         )}
-        {isFlowUiType ? (
-          <>
-            <StyledTitleMedium className="item-name">{name}</StyledTitleMedium>
-            <StyledFlowDescription>{description}</StyledFlowDescription>
-          </>
-        ) : (
-          <>
-            <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
-            <StyledActivityDescription>{description}</StyledActivityDescription>
-          </>
-        )}
+        <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
+        <StyledActivityDescription>{description}</StyledActivityDescription>
         {count !== undefined && (
           <StyledTitleBoldSmall sx={{ marginTop: theme.spacing(0.6) }}>
             {count} {t('item', { count })}

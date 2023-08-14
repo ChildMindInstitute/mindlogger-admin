@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
