@@ -1,4 +1,4 @@
-import { styled, Box, FormControl, Collapse } from '@mui/material';
+import { styled, Box, FormControl, Collapse, FormLabel } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
@@ -63,4 +63,12 @@ export const StyledItemSettingGroupContainer = styled(Collapse)`
 export const StyledFormControl = styled(FormControl)`
   width: 100%;
   gap: 1.4rem;
+`;
+
+export const StyledFormLabel = styled(FormLabel)`
+  color: ${variables.palette.on_surface};
+
+  &.Mui-focused {
+    color: ${variables.palette.on_surface};
+  }
 `;
