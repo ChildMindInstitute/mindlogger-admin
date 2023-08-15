@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 
 import { InputController } from 'shared/components/FormComponents';
@@ -15,7 +15,7 @@ import {
   getAnswersNotesApi,
 } from 'api';
 
-import { FeedbackNote } from './FeedbackNote/FeedbackNote';
+import { FeedbackNote } from './FeedbackNote';
 import { NOTE_ROWS_COUNT } from './FeedbackNotes.const';
 import { StyledContainer, StyledForm } from './FeedbackNotes.styles';
 import { FeedbackNote as FeedbackNoteType } from './FeedbackNotes.types';
@@ -23,7 +23,9 @@ import { FeedbackNote as FeedbackNoteType } from './FeedbackNotes.types';
 export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   const { t } = useTranslation();
   const [notes, setNotes] = useState<FeedbackNoteType[]>([]);
-  const { appletId, answerId } = useParams();
+  const { appletId } = useParams();
+  const [searchParams] = useSearchParams();
+  const answerId = searchParams.get('answerId');
   const containerRef = useRef<HTMLElement | null>(null);
   const isFormSticky = useHeaderSticky(containerRef);
 
@@ -35,9 +37,9 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
     (res) => res?.data?.result && setNotes(res.data.result),
   );
 
-  const updateListOfNotes = () => {
+  const updateListOfNotes = async () => {
     if (!appletId || !answerId) return;
-    getAnswersNotes({ appletId, answerId, activityId, params: {} });
+    await getAnswersNotes({ appletId, answerId, activityId, params: {} });
   };
 
   const { execute: createAnswerNote } = useAsync(createAnswerNoteApi, () => updateListOfNotes());

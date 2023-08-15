@@ -76,6 +76,7 @@ export const RespondentDataReview = () => {
   };
 
   useEffect(() => {
+    setIsFeedbackOpen(false);
     if (!appletId || !answerId) return;
     (async () => {
       try {
@@ -93,10 +94,6 @@ export const RespondentDataReview = () => {
         setIsLoading(false);
       }
     })();
-  }, [appletId, answerId]);
-
-  useEffect(() => {
-    setIsFeedbackOpen(false);
   }, [appletId, answerId]);
 
   return (
