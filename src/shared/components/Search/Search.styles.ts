@@ -9,7 +9,7 @@ import { SearchProps } from './Search.types';
 export const StyledTextField = styled(OutlinedInput)`
   height: ${({ height }: Pick<SearchProps, 'height' | 'width' | 'background'>) => height || '4rem'};
   width: ${({ width }) => width || '49.8rem'};
-  background-color: ${({ background }) => background || variables.palette.surface1};
+  background-color: ${({ background }) => background || variables.palette.outline_alfa8};
   border-radius: 2.2rem;
 
   .MuiOutlinedInput-input {

@@ -76,11 +76,7 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
 
   return (
     <Box sx={{ mt: theme.spacing(2.4) }}>
-      <Search
-        background={variables.palette.outline_alfa8}
-        placeholder={t('search')}
-        onSearch={handleSearch}
-      />
+      <Search placeholder={t('search')} onSearch={handleSearch} />
       <StyledTableWrapper>
         <Table
           page={page}
@@ -91,7 +87,7 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
           handleRequestSort={handleRequestSort}
           handleChangePage={handleChangePage}
           count={answers.length}
-          emptyComponent={!visibleRows.length ? <>{t('noData')}</> : undefined}
+          emptyComponent={visibleRows.length ? undefined : <>{t('noData')}</>}
         />
       </StyledTableWrapper>
     </Box>
