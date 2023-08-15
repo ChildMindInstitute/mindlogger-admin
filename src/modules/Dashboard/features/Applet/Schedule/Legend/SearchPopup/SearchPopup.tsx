@@ -83,10 +83,11 @@ export const SearchPopup = ({
     setSearchPopupVisible(false);
   };
 
-  const filteredRespondents = (items: SelectedRespondent[]) =>
-    items.filter(
+  const filteredRespondents = respondentsItems
+    ?.filter(
       (item) => filterRows(item?.secretId, searchValue) || filterRows(item?.nickname, searchValue),
-    );
+    )
+    .sort((a, b) => (a?.secretId ?? '').localeCompare(b?.secretId ?? ''));
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
@@ -133,30 +134,29 @@ export const SearchPopup = ({
             </Box>
 
             <StyledItemsContainer>
-              {respondentsItems &&
-                filteredRespondents(respondentsItems)?.map((item) => {
-                  const { id, secretId, nickname, icon } = item || {};
-                  const isSelected = id === selectedRespondent?.id;
+              {filteredRespondents?.map((item) => {
+                const { id, secretId, nickname, icon } = item || {};
+                const isSelected = id === selectedRespondent?.id;
 
-                  return (
-                    <StyledItem
-                      key={id}
-                      background={isSelected ? variables.palette.surface_variant : undefined}
-                      onClick={() => selectedRespondentHandler(item)}
-                    >
-                      {icon || <Box sx={{ width: '2.4rem' }} />}
-                      <Box sx={{ ml: theme.spacing(1.8) }}>
-                        <strong>{secretId}</strong>
-                        {nickname ? ` (${nickname})` : ''}
-                      </Box>
-                      {isSelected && (
-                        <StyledChecked>
-                          <Svg id="check" />
-                        </StyledChecked>
-                      )}
-                    </StyledItem>
-                  );
-                })}
+                return (
+                  <StyledItem
+                    key={id}
+                    background={isSelected ? variables.palette.surface_variant : undefined}
+                    onClick={() => selectedRespondentHandler(item)}
+                  >
+                    {icon || <Box sx={{ width: '2.4rem' }} />}
+                    <Box sx={{ ml: theme.spacing(1.8) }}>
+                      <strong>{secretId}</strong>
+                      {nickname ? ` (${nickname})` : ''}
+                    </Box>
+                    {isSelected && (
+                      <StyledChecked>
+                        <Svg id="check" />
+                      </StyledChecked>
+                    )}
+                  </StyledItem>
+                );
+              })}
             </StyledItemsContainer>
           </StyledModalContent>
         </StyledModalInner>
