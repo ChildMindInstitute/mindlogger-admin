@@ -7,11 +7,7 @@ import { Row, Table, UiType, Search } from 'shared/components';
 import { filterRows } from 'shared/utils';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
-import {
-  ContentValue,
-  SelectRespondentsProps,
-  SelectRespondentsRef,
-} from './SelectRespondents.types';
+import { SelectRespondentsProps, SelectRespondentsRef } from './SelectRespondents.types';
 import { StyledFilterContainer, StyledSelectContainer } from './SelectRespondents.styles';
 import { getHeadCells, options, SearchAcross } from './SelectRespondents.const';
 import { Select } from './Select';
@@ -22,7 +18,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
     const [searchAcrossValue, setSearchAcrossValue] = useState<string>(SearchAcross.All);
     const [searchValue, setSearchValue] = useState('');
     const [selectAllChecked, setSelectAllChecked] = useState(false);
-    const [rows, setRows] = useState<Record<string, ContentValue>[]>([]);
+    const [rows, setRows] = useState<Row[]>([]);
 
     useEffect(() => {
       const updatedRows =
