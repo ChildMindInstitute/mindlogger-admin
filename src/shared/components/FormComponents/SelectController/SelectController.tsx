@@ -7,8 +7,13 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { SelectEvent } from 'shared/types';
 import { theme, StyledFlexTopCenter } from 'shared/styles';
 
-import { SelectControllerProps, SelectUiType } from './SelectController.types';
-import { StyledPlaceholder, StyledItem, StyledMenuItem } from './SelectController.styles';
+import { SelectControllerProps, SelectUiType, GetMenuItem } from './SelectController.types';
+import {
+  StyledPlaceholder,
+  StyledItem,
+  StyledMenuItem,
+  selectDropdownStyles,
+} from './SelectController.styles';
 
 export const SelectController = <T extends FieldValues>({
   name,
@@ -27,18 +32,20 @@ export const SelectController = <T extends FieldValues>({
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
 
-  const getMenuItem = (
-    labelKey: string,
-    value: string | boolean,
-    itemDisabled: boolean,
-    icon?: JSX.Element,
-    withoutKey?: boolean,
-  ) => (
+  const getMenuItem = ({
+    labelKey,
+    value,
+    itemDisabled,
+    icon,
+    withoutKey,
+    hidden,
+  }: GetMenuItem) => (
     <StyledMenuItem
       {...(!withoutKey && { key: labelKey })}
       uiType={uiType}
       value={value as string}
       disabled={itemDisabled}
+      className={hidden ? 'hidden-menu-item' : ''}
     >
       <StyledItem itemDisabled={itemDisabled} selectDisabled={disabled}>
         {icon && (
@@ -71,16 +78,26 @@ export const SelectController = <T extends FieldValues>({
         error={!!error || providedError}
         helperText={error?.message || null}
         disabled={disabled}
+        SelectProps={{
+          MenuProps: {
+            PaperProps: { sx: selectDropdownStyles },
+          },
+        }}
       >
-        {options?.map(({ labelKey, value, icon, disabled = false, tooltip }) =>
-          tooltip ? (
+        {options?.map(({ labelKey, value, icon, disabled = false, tooltip, hidden }) => {
+          const commonProps = { labelKey, value, itemDisabled: disabled, icon, hidden };
+
+          return tooltip ? (
             <Tooltip key={labelKey} tooltipTitle={tooltip}>
-              {getMenuItem(labelKey, value, disabled, icon, true)}
+              {getMenuItem({
+                ...commonProps,
+                withoutKey: true,
+              })}
             </Tooltip>
           ) : (
-            getMenuItem(labelKey, value, disabled, icon)
-          ),
-        )}
+            getMenuItem(commonProps)
+          );
+        })}
       </TextField>
     </Box>
   );
