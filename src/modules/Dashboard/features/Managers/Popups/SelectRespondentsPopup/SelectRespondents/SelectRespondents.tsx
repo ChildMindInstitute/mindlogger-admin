@@ -7,31 +7,43 @@ import { Row, Table, UiType, Search } from 'shared/components';
 import { filterRows } from 'shared/utils';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
-import { SelectRespondentsProps, SelectRespondentsRef } from './SelectRespondents.types';
+import {
+  ContentValue,
+  SelectRespondentsProps,
+  SelectRespondentsRef,
+} from './SelectRespondents.types';
 import { StyledFilterContainer, StyledSelectContainer } from './SelectRespondents.styles';
 import { getHeadCells, options, SearchAcross } from './SelectRespondents.const';
 import { Select } from './Select';
 
 export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectRespondentsProps>(
   ({ reviewer: { name, email }, appletName, selectedRespondents, respondents }, ref) => {
-    const rows = respondents?.map(({ secretId, nickname, id }) => ({
-      select: {
-        content: () => <CheckboxController control={control} name={id} value={id} label={<></>} />,
-        value: secretId,
-      },
-      secretId: {
-        content: () => secretId,
-        value: secretId,
-      },
-      nickname: {
-        content: () => nickname,
-        value: nickname,
-      },
-    }));
     const { t } = useTranslation('app');
     const [searchAcrossValue, setSearchAcrossValue] = useState<string>(SearchAcross.All);
     const [searchValue, setSearchValue] = useState('');
     const [selectAllChecked, setSelectAllChecked] = useState(false);
+    const [rows, setRows] = useState<Record<string, ContentValue>[]>([]);
+
+    useEffect(() => {
+      const updatedRows =
+        respondents?.map(({ secretId, nickname, id }) => ({
+          select: {
+            content: () => (
+              <CheckboxController control={control} name={id} value={id} label={<></>} />
+            ),
+            value: secretId,
+          },
+          secretId: {
+            content: () => secretId,
+            value: secretId,
+          },
+          nickname: {
+            content: () => nickname,
+            value: nickname,
+          },
+        })) || [];
+      setRows(updatedRows);
+    }, [respondents]);
 
     const defaultValues = respondents.reduce(
       (values, { id }) => ({ ...values, [id]: selectedRespondents.includes(id) }),

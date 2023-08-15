@@ -19,3 +19,8 @@ export type SelectRespondentsProps = {
 export type SelectRespondentsRef = {
   confirmSelection: () => string[];
 };
+
+export type ContentValue = {
+  content: () => JSX.Element | string;
+  value: string;
+};
