@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { TextField } from '@mui/material';
+import { TextField, Box, styled } from '@mui/material';
 
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 
@@ -15,4 +14,10 @@ export const StyledTextField = styled(TextField)`
 
 export const StyledMaxCharacters = styled(StyledFlexTopCenter)`
   width: 20rem;
+`;
+
+export const StyledInputWrapper = styled(Box)`
+  .MuiFormHelperText-root.Mui-error {
+    position: static;
+  }
 `;
