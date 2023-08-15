@@ -134,30 +134,29 @@ export const SearchPopup = ({
             </Box>
 
             <StyledItemsContainer>
-              {filteredRespondents &&
-                filteredRespondents.map((item) => {
-                  const { id, secretId, nickname, icon } = item || {};
-                  const isSelected = id === selectedRespondent?.id;
+              {filteredRespondents?.map((item) => {
+                const { id, secretId, nickname, icon } = item || {};
+                const isSelected = id === selectedRespondent?.id;
 
-                  return (
-                    <StyledItem
-                      key={id}
-                      background={isSelected ? variables.palette.surface_variant : undefined}
-                      onClick={() => selectedRespondentHandler(item)}
-                    >
-                      {icon || <Box sx={{ width: '2.4rem' }} />}
-                      <Box sx={{ ml: theme.spacing(1.8) }}>
-                        <strong>{secretId}</strong>
-                        {nickname ? ` (${nickname})` : ''}
-                      </Box>
-                      {isSelected && (
-                        <StyledChecked>
-                          <Svg id="check" />
-                        </StyledChecked>
-                      )}
-                    </StyledItem>
-                  );
-                })}
+                return (
+                  <StyledItem
+                    key={id}
+                    background={isSelected ? variables.palette.surface_variant : undefined}
+                    onClick={() => selectedRespondentHandler(item)}
+                  >
+                    {icon || <Box sx={{ width: '2.4rem' }} />}
+                    <Box sx={{ ml: theme.spacing(1.8) }}>
+                      <strong>{secretId}</strong>
+                      {nickname ? ` (${nickname})` : ''}
+                    </Box>
+                    {isSelected && (
+                      <StyledChecked>
+                        <Svg id="check" />
+                      </StyledChecked>
+                    )}
+                  </StyledItem>
+                );
+              })}
             </StyledItemsContainer>
           </StyledModalContent>
         </StyledModalInner>
