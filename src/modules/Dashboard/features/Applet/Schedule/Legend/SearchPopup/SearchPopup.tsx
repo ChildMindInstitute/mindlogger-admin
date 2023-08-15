@@ -83,10 +83,11 @@ export const SearchPopup = ({
     setSearchPopupVisible(false);
   };
 
-  const filteredRespondents = (items: SelectedRespondent[]) =>
-    items.filter(
+  const filteredRespondents = respondentsItems
+    ?.filter(
       (item) => filterRows(item?.secretId, searchValue) || filterRows(item?.nickname, searchValue),
-    );
+    )
+    .sort((a, b) => (a?.secretId ?? '').localeCompare(b?.secretId ?? ''));
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
@@ -133,8 +134,8 @@ export const SearchPopup = ({
             </Box>
 
             <StyledItemsContainer>
-              {respondentsItems &&
-                filteredRespondents(respondentsItems)?.map((item) => {
+              {filteredRespondents &&
+                filteredRespondents.map((item) => {
                   const { id, secretId, nickname, icon } = item || {};
                   const isSelected = id === selectedRespondent?.id;
 
