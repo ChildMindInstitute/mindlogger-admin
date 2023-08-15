@@ -89,7 +89,7 @@ export const useExpandedLists = (
             <Svg id={scheduledVisibility ? 'visibility-on' : 'visibility-off'} {...commonProps} />
           ),
           action: handleScheduledVisibilityChange,
-          tooltipTitle: t('hideFromCalendar'),
+          tooltipTitle: t(scheduledVisibility ? 'hideFromCalendar' : 'showOnCalendar'),
           disabled: noScheduledEvents,
         },
       ],
@@ -103,7 +103,7 @@ export const useExpandedLists = (
             <Svg id={availableVisibility ? 'visibility-on' : 'visibility-off'} {...commonProps} />
           ),
           action: handleAvailableVisibilityChange,
-          tooltipTitle: t('hideFromCalendar'),
+          tooltipTitle: t(availableVisibility ? 'hideFromCalendar' : 'showOnCalendar'),
           disabled: noAvailableEvents,
         },
       ],

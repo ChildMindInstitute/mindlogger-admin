@@ -355,6 +355,7 @@
   "individualSchedule": "Individual Schedule",
   "import": "Import",
   "hideFromCalendar": "Hide from calendar",
+  "showOnCalendar": "Show on Calendar",
   "activateInBuilder": "Activate in builder",
   "activateActivitiesScheduled": "All activated Activities are scheduled.",
   "clearAllScheduledEvents": "Clear all scheduled events",
