@@ -6,10 +6,12 @@ import { page } from 'resources';
 import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
 
 import { getSettings } from './ActivityFlowSettings.utils';
+import { useActivityFlow } from './ActivityFlowSettings.hooks';
 
 export const ActivityFlowSettings = () => {
   const navigate = useNavigate();
   const { appletId, activityFlowId } = useParams();
+  const activityFlow = useActivityFlow();
 
   useBreadcrumbs();
   useActivityFlowsRedirection();
@@ -31,7 +33,7 @@ export const ActivityFlowSettings = () => {
 
   return (
     <NavigationMenu
-      items={getSettings()}
+      items={getSettings(activityFlow)}
       onClose={handleItemClose}
       onSetActiveItem={handleSetActiveItem}
     />

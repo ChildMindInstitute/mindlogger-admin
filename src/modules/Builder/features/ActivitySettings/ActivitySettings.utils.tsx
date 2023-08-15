@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 
 import { Svg } from 'shared/components';
-import { ItemFormValues } from 'modules/Builder/types';
+import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType, REPORT_CONFIG_PARAM } from 'shared/consts';
 import { Item, SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/state';
 import { ReportConfigSetting } from 'shared/features/AppletSettings';
@@ -11,7 +11,7 @@ import { ScoresAndReports } from './ScoresAndReports';
 
 const { t } = i18n;
 
-export const getSettings = (activityFieldName?: string) => [
+export const getSettings = (activityFieldName?: string, activity?: ActivityFormValues) => [
   {
     label: 'reports',
     items: [
@@ -23,7 +23,7 @@ export const getSettings = (activityFieldName?: string) => [
       },
       {
         label: t('reportConfiguration'),
-        component: <ReportConfigSetting isActivity />,
+        component: <ReportConfigSetting activity={activity} />,
         icon: <Svg id="report-configuration" />,
         param: REPORT_CONFIG_PARAM,
       },

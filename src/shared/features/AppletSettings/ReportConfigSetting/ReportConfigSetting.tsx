@@ -34,7 +34,6 @@ import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
 import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'shared/utils';
 import { reportConfig } from 'modules/Builder/state';
-import { useCurrentActivity } from 'modules/Builder/hooks';
 import { REPORT_CONFIG_PARAM } from 'shared/consts';
 
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
@@ -47,19 +46,15 @@ import {
   getActivityItemsOptions,
   setSubjectData,
 } from './ReportConfigSetting.utils';
-import {
-  useActivityFlow,
-  useCheckReportServer,
-  useDefaultValues,
-} from './ReportConfigSetting.hooks';
+import { useCheckReportServer, useDefaultValues } from './ReportConfigSetting.hooks';
 import { usePrompt } from '../AppletSettings.hooks';
 import { REPORT_SERVER_INSTRUCTIONS_LINK } from './ReportConfigSetting.const';
 
 export const ReportConfigSetting = ({
   isDashboard,
   onSubmitSuccess,
-  isActivity = false,
-  isActivityFlow = false,
+  activity,
+  activityFlow,
 }: ReportConfigSettingProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -68,9 +63,9 @@ export const ReportConfigSetting = ({
   const { saveChanges, doNotSaveChanges } = reportConfig.useReportConfigChanges() || {};
   const { resetReportConfigChanges, setReportConfigChanges } = reportConfig.actions;
   const isServerConfigured = useIsServerConfigured();
-  const defaultValues = useDefaultValues(appletData, isActivity, isActivityFlow);
-  const { activity } = useCurrentActivity();
-  const activityFlow = useActivityFlow(appletData);
+  const isActivity = !!activity;
+  const isActivityFlow = !!activityFlow;
+  const defaultValues = useDefaultValues(appletData);
 
   const [isSettingsOpen, setSettingsOpen] = useState(!isServerConfigured);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
