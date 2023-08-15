@@ -6,10 +6,9 @@ import {
   StyledTitleBoldSmall,
   StyledClearedButton,
   StyledFlexTopCenter,
-  StyledFlexColumn,
 } from 'shared/styles';
 
-import { StyledDrawer, StyledDrawerContent } from './ItemSettingsDrawer.styles';
+import { StyledDrawer, StyledDrawerContent, StyledSettings } from './ItemSettingsDrawer.styles';
 import { ItemSettingsDrawerProps } from './ItemSettingsDrawer.types';
 
 export const ItemSettingsDrawer = ({ open, onClose, children }: ItemSettingsDrawerProps) => {
@@ -43,7 +42,7 @@ export const ItemSettingsDrawer = ({ open, onClose, children }: ItemSettingsDraw
             <Svg id="cross" />
           </StyledClearedButton>
         </StyledFlexTopCenter>
-        <StyledFlexColumn sx={{ overflowY: 'auto', gap: '0.6rem' }}>{children}</StyledFlexColumn>
+        <StyledSettings sx={{ overflowY: 'auto', gap: '0.6rem' }}>{children}</StyledSettings>
       </StyledDrawerContent>
     </StyledDrawer>
   );

@@ -253,7 +253,7 @@ export const ItemSettingsGroup = ({
                   }
                   label={
                     <StyledSettingTitleContainer withInput={isTimer}>
-                      <StyledTitleMedium sx={{ p: theme.spacing(0, 1, 0, 1) }}>
+                      <StyledTitleMedium sx={{ p: theme.spacing(0, 1), whiteSpace: 'nowrap' }}>
                         {t(`itemSettings.${settingKey}`)}
                         {hasTooltip && (
                           <Tooltip
