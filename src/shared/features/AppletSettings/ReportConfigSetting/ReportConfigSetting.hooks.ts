@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { authStorage } from 'shared/utils';
 import { SingleApplet } from 'shared/state';
-import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { verifyReportServer, setPasswordReportServer } from './ReportConfigSetting.utils';
 import { UseCheckReportServer } from './ReportConfigSetting.types';
@@ -54,21 +53,9 @@ export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) =
   };
 };
 
-export const useActivityFlow = (appletData?: Partial<SingleApplet>) => {
-  const { activityFlowId } = useParams();
-  const activityFlow = appletData?.activityFlows?.find((flow) => flow.id === activityFlowId);
-
-  return activityFlow;
-};
-
-export const useDefaultValues = (
-  appletData?: Partial<SingleApplet>,
-  isActivity?: boolean,
-  isActivityFlow?: boolean,
-) => {
+export const useDefaultValues = (appletData?: Partial<SingleApplet>) => {
   const { t } = useTranslation();
-  const { activity } = useCurrentActivity();
-  const activityFlow = useActivityFlow(appletData);
+  const { activityId, activityFlowId } = useParams();
   if (!appletData) return initialValues;
 
   const {
@@ -82,11 +69,17 @@ export const useDefaultValues = (
   let reportIncludedItemName = '';
   let reportIncludedActivityName = '';
 
-  if (isActivity) {
+  if (activityId) {
+    const activity = appletData.activities?.find(
+      ({ id, key }) => activityId === id || activityId === key,
+    );
     reportIncludedItemName = activity?.reportIncludedItemName || '';
   }
 
-  if (isActivityFlow) {
+  if (activityFlowId) {
+    const activityFlow = appletData.activityFlows?.find(
+      ({ id, key }) => activityFlowId === id || activityFlowId === key,
+    );
     reportIncludedItemName = activityFlow?.reportIncludedItemName || '';
     reportIncludedActivityName = activityFlow?.reportIncludedActivityName || '';
   }

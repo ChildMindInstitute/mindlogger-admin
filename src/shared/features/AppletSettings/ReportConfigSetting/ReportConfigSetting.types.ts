@@ -1,3 +1,5 @@
+import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
+
 export type ReportConfigFormValues = {
   email: string;
   reportRecipients: string[];
@@ -33,6 +35,6 @@ export type SetPasswordReportServer = {
 export type ReportConfigSettingProps = {
   isDashboard?: boolean;
   onSubmitSuccess?: (values: Partial<ReportConfigFormValues>) => void;
-  isActivity?: boolean;
-  isActivityFlow?: boolean;
+  activity?: ActivityFormValues;
+  activityFlow?: ActivityFlowFormValues;
 };
