@@ -279,7 +279,7 @@
   "remove": "Remove",
   "back": "Back",
   "userHasAccess": " has access to the following list of Applets:",
-  "confirmRemoveAccess": "Are you sure that you want to remove the access for the <1>{{ firstName }} {{ lastName }} ({{ email }})</1> the <3>{{ displayName }}</3>?",
+  "confirmRemoveAccess": "Are you sure that you want to remove the access for the <1>{{ firstName }} {{ lastName }} ({{ email }})</1> to the Applet <3>{{ displayName }}</3>?",
   "confirmMultipleRemoveAccess": "Are you sure that you want to remove the access for the <1>{{ firstName }} {{ lastName }} ({{ email }})</1> to the list of Applets below?",
   "removeAccessSuccess": "Access for <1>{{ firstName }} {{ lastName }} ({{ email }})</1> to the <3>{{ displayName }}</3> has been removed successfully.",
   "multipleRemoveAccessSuccess": "Access for <1>{{ firstName}} {{ lastName }} ({{ email }})</1> to the list of Applets below has been removed successfully.",
