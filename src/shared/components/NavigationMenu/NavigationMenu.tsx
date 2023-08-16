@@ -8,7 +8,7 @@ import { Container } from './Container';
 import { NavigationItem, NavigationMenuProps } from './NavigationMenu.types';
 import { getActiveItem } from './NavigationMenu.utils';
 
-export const NavigationMenu = ({ items, onClose, onSetActiveItem }: NavigationMenuProps) => {
+export const NavigationMenu = ({ title, items, onClose, onSetActiveItem }: NavigationMenuProps) => {
   const [activeItem, setActiveItem] = useState<NavigationItem | null>(null);
   const { setting } = useParams();
 
@@ -38,6 +38,7 @@ export const NavigationMenu = ({ items, onClose, onSetActiveItem }: NavigationMe
   return (
     <StyledWrapper>
       <LeftBar
+        title={title}
         items={items}
         activeItem={activeItem}
         isCompact={!!activeItem}

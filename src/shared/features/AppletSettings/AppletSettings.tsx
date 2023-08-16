@@ -30,6 +30,7 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
 
   return (
     <NavigationMenu
+      title="appletSettings"
       items={settings}
       onClose={() => navigateTo()}
       onSetActiveItem={handleSettingClick}

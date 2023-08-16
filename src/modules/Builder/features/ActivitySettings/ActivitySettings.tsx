@@ -32,6 +32,7 @@ export const ActivitySettings = () => {
 
   return (
     <NavigationMenu
+      title="activitySettings"
       items={getSettings(fieldName, activity)}
       onClose={handleClose}
       onSetActiveItem={handleSetActiveSetting}
