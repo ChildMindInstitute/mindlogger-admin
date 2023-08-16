@@ -1,4 +1,4 @@
-import { Fragment, SyntheticEvent, useEffect, useState } from 'react';
+import { Fragment, SyntheticEvent, useEffect, useState, useReducer } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Box, Checkbox } from '@mui/material';
 
@@ -26,6 +26,7 @@ export const Activity = ({ appletId, activity: { name, items, key }, uiType }: A
   const [activityVisible, setActivityVisible] = useState(false);
   const [activityIndeterminate, setActivityIndeterminate] = useState(false);
   const [activityChecked, setActivityChecked] = useState(false);
+  const forceUpdate = useReducer((x) => x + 1, 0)[1];
 
   const updateSelectedItems = () => {
     if (uiType === AppletUiType.Cart) {
@@ -81,13 +82,15 @@ export const Activity = ({ appletId, activity: { name, items, key }, uiType }: A
   };
 
   useEffect(() => {
-    getCheckedActivity(watchApplet);
-  }, [watchApplet]);
+    const selectedAppletItems = getSelectedAppletFromStorage(appletId);
+    if (!selectedAppletItems) return;
+    setValue(appletId, selectedAppletItems);
+    uiType === AppletUiType.Details && forceUpdate();
+  }, [appletId]);
 
   useEffect(() => {
-    const selectedAppletItems = getSelectedAppletFromStorage(appletId);
-    selectedAppletItems && setValue(appletId, selectedAppletItems);
-  }, [appletId]);
+    getCheckedActivity(watchApplet);
+  }, [watchApplet]);
 
   return (
     <StyledActivityContainer>
