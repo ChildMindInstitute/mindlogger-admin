@@ -1,16 +1,16 @@
-import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
+import isEqual from 'lodash.isequal';
 
 import { CheckboxController } from 'shared/components/FormComponents';
 import { Row, Table, UiType, Search } from 'shared/components';
-import { filterRows } from 'shared/utils';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
 import { SelectRespondentsProps, SelectRespondentsRef } from './SelectRespondents.types';
 import { StyledFilterContainer, StyledSelectContainer } from './SelectRespondents.styles';
 import { options, SearchAcross } from './SelectRespondents.const';
-import { getHeadCells } from './SelectRespondents.utils';
+import { filterTableRows, getHeadCells } from './SelectRespondents.utils';
 import { Select } from './Select';
 
 export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectRespondentsProps>(
@@ -19,13 +19,16 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
     const [searchAcrossValue, setSearchAcrossValue] = useState<string>(SearchAcross.All);
     const [searchValue, setSearchValue] = useState('');
     const [selectAllChecked, setSelectAllChecked] = useState(false);
+    const [tableRows, setTableRows] = useState<Row[] | null>(null);
+    const prevFormValuesRef = useRef<Record<string, boolean> | null>(null);
+    const { control, getValues, setValue, watch } = useForm();
 
-    const { control, getValues, setValue, watch } = useForm({});
     const formValues = watch();
-
     const rows = respondents?.map(({ secretId, nickname, id }) => ({
       select: {
-        content: () => <CheckboxController control={control} name={id} value={id} label={<></>} />,
+        content: () => (
+          <CheckboxController key={id} control={control} name={id} value={id} label={<></>} />
+        ),
         value: id,
       },
       secretId: {
@@ -37,14 +40,15 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
         value: nickname,
       },
     }));
-    const [tableRows, setTableRows] = useState<Row[] | null>(null);
 
     const handleSearch = (value: string) => {
       setSearchValue(value);
+      filterTableRows(searchAcrossValue, getValues(), value, setTableRows, rows);
     };
 
     const handleFilterChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
       setSearchAcrossValue(value);
+      filterTableRows(value, getValues(), searchValue, setTableRows, rows);
     };
 
     const handleSelectAllClick = ({ target: { checked } }: ChangeEvent<HTMLInputElement>) => {
@@ -93,25 +97,11 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
     useEffect(() => {
       const selectedRespondents = Object.values(formValues).filter(Boolean);
       setSelectAllChecked(selectedRespondents.length === respondents.length);
+      if (searchAcrossValue === SearchAcross.All || isEqual(formValues, prevFormValuesRef.current))
+        return;
+      filterTableRows(searchAcrossValue, getValues(), searchValue, setTableRows, rows);
+      prevFormValuesRef.current = formValues;
     }, [formValues]);
-
-    useEffect(() => {
-      const selectFilter = ({ select }: Row) => {
-        const id = select.value as string;
-        switch (searchAcrossValue) {
-          case SearchAcross.Unselected:
-            return !getValues()[id];
-          case SearchAcross.Selected:
-            return getValues()[id];
-          default:
-            return true;
-        }
-      };
-      const searchFilter = ({ secretId, nickname }: Row) =>
-        filterRows(secretId, searchValue) || filterRows(nickname, searchValue);
-      const filteredRows = rows?.filter(selectFilter)?.filter(searchFilter);
-      setTableRows(filteredRows);
-    }, [searchAcrossValue, searchValue]);
 
     return (
       <>
