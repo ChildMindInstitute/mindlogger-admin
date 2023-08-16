@@ -26,8 +26,13 @@ export const NavigationMenu = ({ items, onClose, onSetActiveItem }: NavigationMe
 
   useEffect(() => {
     const activeItemFromRoute = getActiveItem(items, setting);
-    if (activeItemFromRoute && !activeItemFromRoute.disabled)
-      return setActiveItem(activeItemFromRoute);
+    if (!activeItemFromRoute) {
+      setActiveItem(null);
+
+      return;
+    }
+
+    if (!activeItemFromRoute.disabled) return setActiveItem(activeItemFromRoute);
   }, [setting]);
 
   return (

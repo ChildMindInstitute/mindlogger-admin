@@ -14,12 +14,15 @@ import {
   checkIfAppletActivityFlowUrlPassed,
   checkIfPerformanceTaskUrlPassed,
   checkCurrentPerformanceTaskPage,
+  SettingParam,
+  checkIfAppletSettingsUrlPassed,
+  getSettingBreadcrumbs,
 } from 'shared/utils';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { useRespondentLabel } from 'modules/Dashboard/hooks';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
-  const { appletId, activityId, activityFlowId, respondentId } = useParams();
+  const { appletId, activityId, activityFlowId, respondentId, setting } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
@@ -112,6 +115,16 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
+    if (checkIfAppletSettingsUrlPassed(pathname)) {
+      newBreadcrumbs.push({
+        icon: 'settings',
+        label: t('appletSettings'),
+        navPath: generatePath(isDashboard ? page.appletSettings : page.builderAppletSettings, {
+          appletId,
+        }),
+      });
+    }
+
     if (checkIfAppletActivityUrlPassed(pathname)) {
       const { isAbout, isItems, isItemsFlow, isActivitySettings } =
         checkCurrentActivityPage(pathname);
@@ -126,7 +139,11 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       if (isItems) newBreadcrumbs.push({ icon: 'item-outlined', label: t('items') });
       if (isItemsFlow) newBreadcrumbs.push({ icon: 'flow', label: t('itemFlow') });
       if (isActivitySettings)
-        newBreadcrumbs.push({ icon: 'settings', label: t('activitySettings') });
+        newBreadcrumbs.push({
+          icon: 'settings',
+          label: t('activitySettings'),
+          navPath: generatePath(page.builderAppletActivitySettings, { appletId, activityId }),
+        });
     }
 
     if (checkIfPerformanceTaskUrlPassed(pathname)) {
@@ -176,8 +193,15 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         newBreadcrumbs.push({
           icon: 'settings',
           label: t('activityFlowSettings'),
+          navPath: generatePath(page.builderAppletActivityFlowItemSettings, {
+            appletId,
+            activityFlowId,
+          }),
         });
     }
+
+    if (setting)
+      newBreadcrumbs.push(getSettingBreadcrumbs(setting as SettingParam, appletData?.isPublished));
 
     const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])].map((crumb) => ({
       ...crumb,

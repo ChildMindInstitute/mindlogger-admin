@@ -16,7 +16,7 @@
   "appletSchedule": "/dashboard/:appletId/schedule",
   "appletScheduleIndividual": "/dashboard/:appletId/schedule/:respondentId",
   "appletSettings": "/dashboard/:appletId/settings",
-  "appletSettingsItem": "/dashboard/:appletId/settings/:settingItem",
+  "appletSettingsItem": "/dashboard/:appletId/settings/:setting",
   "appletAddUser": "/dashboard/:appletId/add-user",
   "builder": "/builder",
   "builderApplet": "/builder/:appletId",
@@ -38,7 +38,7 @@
   "builderAppletActivityFlowItemSettings": "/builder/:appletId/activity-flows/:activityFlowId/settings",
   "builderAppletActivityFlowItemSettingsItem": "/builder/:appletId/activity-flows/:activityFlowId/settings/:setting",
   "builderAppletSettings": "/builder/:appletId/settings",
-  "builderAppletSettingsItem": "/builder/:appletId/settings/:settingItem",
+  "builderAppletSettingsItem": "/builder/:appletId/settings/:setting",
   "library": "/library",
   "libraryAppletDetails": "/library/:appletId",
   "libraryCart": "/library/cart"

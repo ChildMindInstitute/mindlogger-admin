@@ -1,5 +1,4 @@
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
@@ -8,7 +7,6 @@ import { NavigationItem, NavigationMenu } from 'shared/components';
 import { AppletSettingsProps } from './AppletSettings.types';
 
 export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsProps) => {
-  const { t } = useTranslation('app');
   const { appletId } = useParams();
   const navigate = useNavigate();
   const BUILDER_SETTINGS = generatePath(page.builderAppletSettings, {
@@ -17,13 +15,7 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
   const DASHBOARD_SETTINGS = generatePath(page.appletSettings, {
     appletId,
   });
-
-  useBreadcrumbs([
-    {
-      icon: 'settings',
-      label: t('appletSettings'),
-    },
-  ]);
+  useBreadcrumbs();
 
   const handleSettingClick = (setting: NavigationItem) => {
     navigateTo(setting.param);
