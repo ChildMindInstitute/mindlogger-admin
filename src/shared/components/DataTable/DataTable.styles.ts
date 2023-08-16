@@ -18,6 +18,12 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
     background-color: transparent;
   }
 
+  .MuiTableRow-root {
+    &:hover {
+      background-color: ${variables.palette.on_surface_alfa8};
+    }
+  }
+
   .empty-state {
     &.MuiTableRow-root {
       &:hover {
