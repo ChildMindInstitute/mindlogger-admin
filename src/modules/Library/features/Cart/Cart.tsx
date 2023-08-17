@@ -27,7 +27,7 @@ import { getSearchIncludes } from './Cart.utils';
 export const Cart = () => {
   const { t } = useTranslation('app');
   const isAuthorized = auth.useAuthorized();
-  const { result: cartItems, count } = library.useCartApplets() || {};
+  const { result: cartItems } = library.useCartApplets() || {};
   const loadingStatus = library.useCartAppletsStatus();
   const isAddBtnDisabled = library.useIsCartBtnDisabled() || !cartItems?.length;
   const [searchValue, setSearchValue] = useState('');

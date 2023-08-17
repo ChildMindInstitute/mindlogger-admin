@@ -358,7 +358,7 @@ export const getSelectedAppletData = (
         }
       }
 
-      //per requirements if not all of the items in activity were selected, scores & reports and subscales should be removed
+      //per requirements if not all the items in activity were selected, scores & reports and subscales should be removed
       const hasSubscalesAndScores = filteredItems.length === activity.items.length;
 
       return {
@@ -370,7 +370,7 @@ export const getSelectedAppletData = (
       };
     });
 
-  //per requirements if not all of the activites in applet were selected, activity flows should be removed
+  //per requirements if not all the activities in applet were selected, activity flows should be removed
   const hasActivityFlows = applet.activities.length === selectedActivityKeysSet.size;
 
   const selectedActivityFlows = hasActivityFlows
