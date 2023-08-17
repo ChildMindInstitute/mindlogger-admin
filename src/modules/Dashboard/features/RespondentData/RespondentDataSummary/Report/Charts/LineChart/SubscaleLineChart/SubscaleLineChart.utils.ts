@@ -1,11 +1,16 @@
 import { Context } from 'chartjs-plugin-datalabels';
-import { LegendItem, ChartData, LinearScale, ScriptableTooltipContext } from 'chart.js';
+import {
+  LegendItem,
+  ChartData,
+  LinearScale,
+  ScriptableTooltipContext,
+  ChartDataset,
+} from 'chart.js';
 
 import { variables } from 'shared/styles';
 import { Version } from 'api';
 import { pluck } from 'shared/utils';
 
-import { ExtendedChartDataset, SubscaleChartData, Tick } from './LineChart.types';
 import {
   SUBSCALES_CHART_LABEL_WIDTH_Y,
   OFFSET_Y_MAX,
@@ -13,8 +18,9 @@ import {
   POINT_RADIUS_DEFAULT,
   POINT_RADIUS_SECONDARY,
   COLORS,
-} from '../Charts.const';
-import { getStepSize, getTimeConfig } from '../Charts.utils';
+} from '../../Charts.const';
+import { getStepSize, getTimeConfig } from '../../Charts.utils';
+import { SubscaleChartData, Tick } from './SubscaleLineChart.types';
 
 export const getOptions = (
   lang: keyof typeof locales,
@@ -206,7 +212,9 @@ export const getData = (data: SubscaleChartData, versions: Version[]) => {
             size: 11,
           },
           formatter: (_: unknown, context: Context) => {
-            const dataset = context.dataset as ExtendedChartDataset;
+            const dataset = context.dataset as ChartDataset & {
+              labels: string[];
+            };
 
             return dataset.labels[context.dataIndex];
           },
