@@ -4,7 +4,7 @@ import UAParser from 'ua-parser-js';
 mixpanel.init('YOUR_MIXPANEL_TOKEN');
 
 const isProduction = process.env.NODE_ENV === 'production';
-const isStaging = process.env.NODE_ENV === 'test';
+const isStaging = process.env.REACT_APP_ENV === 'staging';
 const shouldEnableMixpanel = isProduction || isStaging;
 
 const uaParser = new UAParser();
