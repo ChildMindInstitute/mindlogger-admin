@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
@@ -236,7 +236,10 @@ export const useUpdatedAppletNavigate = () => {
   return navigateToApplet;
 };
 
-export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
+export const useSaveAndPublishSetup = (
+  hasPrompt: boolean,
+  setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
+) => {
   const { trigger } = useFormContext();
   const { pathname } = useLocation();
   const getAppletData = useAppletData();
@@ -388,6 +391,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
 
     if (updateApplet.fulfilled.match(result)) {
       builderSessionStorage.removeItem();
+      setIsFromLibrary?.(false);
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
@@ -402,6 +406,7 @@ export const useSaveAndPublishSetup = (hasPrompt: boolean) => {
     if (createApplet.fulfilled.match(result)) {
       const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
+      setIsFromLibrary?.(false);
 
       if (encryptionData && password && createdAppletId) {
         setAppletPrivateKey({
