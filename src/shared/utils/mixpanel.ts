@@ -12,7 +12,7 @@ const uaParser = new UAParser();
 export const Mixpanel = {
   init() {
     this.track('INFO', {
-      os: uaParser.getOS(),
+      os: uaParser.getOS().name,
       width: window.innerWidth,
       height: window.innerHeight,
     });
