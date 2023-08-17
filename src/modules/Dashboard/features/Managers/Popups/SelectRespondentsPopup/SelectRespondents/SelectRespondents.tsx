@@ -1,84 +1,87 @@
-import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
 import { CheckboxController } from 'shared/components/FormComponents';
-import { Row, Table, UiType, Search } from 'shared/components';
-import { filterRows } from 'shared/utils';
+import { Row, Search, Table, UiType } from 'shared/components';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
 import { SelectRespondentsProps, SelectRespondentsRef } from './SelectRespondents.types';
 import { StyledFilterContainer, StyledSelectContainer } from './SelectRespondents.styles';
-import { getHeadCells, options, SearchAcross } from './SelectRespondents.const';
+import { options, SearchAcross } from './SelectRespondents.const';
+import { filterTableRows, getHeadCells } from './SelectRespondents.utils';
 import { Select } from './Select';
 
 export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectRespondentsProps>(
   ({ reviewer: { name, email }, appletName, selectedRespondents, respondents }, ref) => {
     const { t } = useTranslation('app');
-    const [searchAcrossValue, setSearchAcrossValue] = useState<string>(SearchAcross.All);
-    const [searchValue, setSearchValue] = useState('');
     const [selectAllChecked, setSelectAllChecked] = useState(false);
-    const [rows, setRows] = useState<Row[]>([]);
-
-    useEffect(() => {
-      const updatedRows =
-        respondents?.map(({ secretId, nickname, id }) => ({
-          select: {
-            content: () => (
-              <CheckboxController control={control} name={id} value={id} label={<></>} />
-            ),
-            value: secretId,
-          },
-          secretId: {
-            content: () => secretId,
-            value: secretId,
-          },
-          nickname: {
-            content: () => nickname,
-            value: nickname,
-          },
-        })) || [];
-      setRows(updatedRows);
-    }, [respondents]);
-
-    const defaultValues = respondents.reduce(
-      (values, { id }) => ({ ...values, [id]: selectedRespondents.includes(id) }),
-      {},
-    ) as { [key: string]: boolean };
-
-    const { control, getValues, setValue, watch } = useForm({ defaultValues });
-    const formValues = watch();
-
-    const [tableRows, setTableRows] = useState(rows);
-
-    const selectFilter = ({ select }: Row) => {
-      const secretId = select.value as string;
-      switch (searchAcrossValue) {
-        case SearchAcross.Unselected:
-          return !getValues()[secretId];
-        case SearchAcross.Selected:
-          return getValues()[secretId];
-        default:
-          return true;
-      }
+    const [tableRows, setTableRows] = useState<Row[] | null>(null);
+    const searchAcrossValue = useRef<string>(SearchAcross.All);
+    const setSearchAcrossValue = (value: string) => {
+      searchAcrossValue.current = value;
     };
+    const searchValue = useRef<string>('');
+    const setSearchValue = (value: string) => {
+      searchValue.current = value;
+    };
+    const { control, getValues, setValue, watch } = useForm();
 
-    const searchFilter = ({ secretId, nickname }: Row) =>
-      filterRows(secretId, searchValue) || filterRows(nickname, searchValue);
+    const formValues = watch();
+    const rows = respondents?.map(({ secretId, nickname, id }) => ({
+      select: {
+        content: () => (
+          <CheckboxController
+            key={id}
+            control={control}
+            name={id}
+            value={id}
+            label={<></>}
+            onCustomChange={(event) => {
+              filterTableRows(
+                searchAcrossValue.current,
+                { ...getValues(), [id]: event.target.checked },
+                searchValue.current,
+                setTableRows,
+                rows,
+              );
+            }}
+          />
+        ),
+        value: id,
+      },
+      secretId: {
+        content: () => secretId,
+        value: secretId,
+      },
+      nickname: {
+        content: () => nickname,
+        value: nickname,
+      },
+    }));
 
     const handleSearch = (value: string) => {
       setSearchValue(value);
+      filterTableRows(searchAcrossValue.current, getValues(), value, setTableRows, rows);
     };
 
     const handleFilterChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
       setSearchAcrossValue(value);
+      filterTableRows(value, getValues(), searchValue.current, setTableRows, rows);
     };
 
-    const handleSelectAllClick = ({ target: { checked } }: ChangeEvent<HTMLInputElement>) => {
+    const handleSelectAllClick = async ({ target: { checked } }: ChangeEvent<HTMLInputElement>) => {
       setSelectAllChecked(checked);
-      respondents.forEach(({ secretId }) => {
-        setValue(secretId, checked);
+      await respondents.forEach(({ id }) => {
+        setValue(id, checked);
       });
+      filterTableRows(
+        searchAcrossValue.current,
+        getValues(),
+        searchValue.current,
+        setTableRows,
+        rows,
+      );
     };
 
     const getSelectedRespondentsList = () =>
@@ -95,10 +98,10 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
       if (!respondents.length) {
         return t('noRespondents');
       }
-      if (searchValue) {
+      if (searchValue.current) {
         return t('noMatchWasFound', { searchValue });
       }
-      if (searchAcrossValue !== SearchAcross.All) {
+      if (searchAcrossValue.current !== SearchAcross.All) {
         return t('noData');
       }
     };
@@ -110,18 +113,17 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
     }));
 
     useEffect(() => {
-      rows && setTableRows(rows);
-    }, [rows]);
+      if (!respondents) return;
+      respondents.forEach(({ id }) => {
+        setValue(id, selectedRespondents.includes(id));
+      });
+      setTableRows(rows);
+    }, [respondents]);
 
     useEffect(() => {
       const selectedRespondents = Object.values(formValues).filter(Boolean);
       setSelectAllChecked(selectedRespondents.length === respondents.length);
     }, [formValues]);
-
-    useEffect(() => {
-      const filteredRows = rows?.filter(selectFilter)?.filter(searchFilter);
-      setTableRows(filteredRows);
-    }, [searchAcrossValue, searchValue]);
 
     return (
       <>
@@ -147,7 +149,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
               label={'searchAcross'}
               options={options}
               onChange={handleFilterChange}
-              value={searchAcrossValue}
+              value={searchAcrossValue.current}
             />
           </StyledSelectContainer>
         </StyledFilterContainer>
@@ -155,7 +157,7 @@ export const SelectRespondents = forwardRef<SelectRespondentsRef, SelectResponde
           <Table
             maxHeight="32.4rem"
             columns={getHeadCells(handleSelectAllClick, selectAllChecked)}
-            rows={tableRows}
+            rows={tableRows || []}
             orderBy={'nickname'}
             uiType={UiType.Secondary}
             emptyComponent={renderEmptyComponent()}

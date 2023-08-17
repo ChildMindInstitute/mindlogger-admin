@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import { Box, Link } from '@mui/material';
 
-import theme from 'shared/styles/theme';
+import { theme, commonEllipsisStyles } from 'shared/styles';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 
@@ -22,11 +22,14 @@ export const StyledRow = styled(StyledFlexTopCenter)`
 `;
 
 export const StyledBtn = styled(Link)`
+  ${commonEllipsisStyles};
   cursor: pointer;
   text-decoration-color: ${variables.palette.on_surface_variant};
+  margin-left: ${theme.spacing(0.5)};
 `;
 
 export const StyledLabel = styled(Box)`
+  display: flex;
   text-transform: capitalize;
 `;
 
