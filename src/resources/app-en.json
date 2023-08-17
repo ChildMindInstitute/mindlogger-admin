@@ -784,7 +784,7 @@
     "endTime": "<2>Activity End Time</2>. Valid data format: <2>HH:mm for Scheduled activity and - for Always available activity</2>.",
     "notificationTime": "<2>Notification Time</2>. Valid data format: <2>HH:mm or -</2>.",
     "frequency": "<2>Frequency</2>. Valid data format: <2>Always, Once, Daily, Weekly, Monthly, Weekdays</2>.",
-    "date": "<2>Date</2>. Valid data format: <2>dd MMM yyyy</2>.",
+    "date": "<2>Date</2>. Valid data format: <2>DD Month YYYY</2>.",
     "startEndTime": "<2>Activity End Time</2> should be greater than <2>Activity Start Time</2>.",
     "betweenStartEndTime": "<2>Notification Time</2> should be between <2>Activity Start Time</2> and <2>Activity End Time</2>."
   },
