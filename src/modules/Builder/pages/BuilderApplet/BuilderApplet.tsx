@@ -161,7 +161,7 @@ export const BuilderApplet = () => {
       <StyledBody sx={{ position: 'relative' }}>
         {loadingStatus === 'loading' && <Spinner />}
         <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
-        <SaveAndPublish hasPrompt={isDirty || isFromLibrary} />
+        <SaveAndPublish hasPrompt={isDirty || isFromLibrary} setIsFromLibrary={setIsFromLibrary} />
       </StyledBody>
     </FormProvider>
   );
