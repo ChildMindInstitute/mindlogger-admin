@@ -16,14 +16,14 @@ import {
 } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
 
-export const LeftBar = ({ items, activeItem, isCompact, onItemClick }: LeftBarProps) => {
+export const LeftBar = ({ title, items, activeItem, isCompact, onItemClick }: LeftBarProps) => {
   const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
 
   return (
     <StyledBar ref={containerRef} hasItem={!!activeItem}>
-      <StyledHeader isSticky={isHeaderSticky}>{t('activitySettings')}</StyledHeader>
+      <StyledHeader isSticky={isHeaderSticky}>{t(title)}</StyledHeader>
       <StyledContent isCompact={isCompact}>
         {items.map(({ label, items }) => (
           <StyledSettingsGroup key={label} isCompact={!!activeItem}>

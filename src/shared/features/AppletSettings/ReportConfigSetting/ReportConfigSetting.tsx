@@ -32,9 +32,13 @@ import {
 } from 'modules/Dashboard/features/Applet';
 import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
-import { getParsedEncryptionFromServer, getPrivateKey, publicEncrypt } from 'shared/utils';
+import {
+  SettingParam,
+  getParsedEncryptionFromServer,
+  getPrivateKey,
+  publicEncrypt,
+} from 'shared/utils';
 import { reportConfig } from 'modules/Builder/state';
-import { REPORT_CONFIG_PARAM } from 'shared/consts';
 
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
@@ -327,7 +331,7 @@ export const ReportConfigSetting = ({
               navigate(
                 generatePath(page.builderAppletSettingsItem, {
                   appletId: appletData?.id,
-                  settingItem: REPORT_CONFIG_PARAM,
+                  setting: SettingParam.ReportConfiguration,
                 }),
               )
             }

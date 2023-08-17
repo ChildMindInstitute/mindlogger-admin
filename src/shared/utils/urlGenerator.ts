@@ -23,8 +23,26 @@ export const enum Path {
   Touch = 'touch',
 }
 
+export const enum SettingParam {
+  ExportData = 'export-data',
+  DataRetention = 'data-retention',
+  EditApplet = 'edit-applet',
+  DownloadSchema = 'download-schema',
+  VersionHistory = 'version-history',
+  TransferOwnership = 'transfer-ownership',
+  DuplicateApplet = 'duplicate-applet',
+  DeleteApplet = 'delete-applet',
+  ReportConfiguration = 'report-configuration',
+  ShareApplet = 'share-applet',
+  PublishConceal = 'publish-conceal',
+  ScoresAndReports = 'scores-and-reports',
+  SubscalesConfiguration = 'subscales-configuration',
+}
+
 const uuidRegexp = '([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})';
+export const APPLET_DASHBOARD_PAGE_REGEXP_STRING = `\\/${Path.Dashboard}\\/(${uuidRegexp})`;
 export const APPLET_PAGE_REGEXP_STRING = `\\/${Path.Builder}\\/(${uuidRegexp}|${Path.NewApplet})`;
+export const APPLET_SETTINGS_PAGE_REGEXP_STRING = `(${APPLET_DASHBOARD_PAGE_REGEXP_STRING}|${APPLET_PAGE_REGEXP_STRING})\\/${Path.Settings}`;
 export const ACTIVITIES_PAGE_REGEXP_STRING = `${APPLET_PAGE_REGEXP_STRING}\\/${Path.Activities}`;
 export const ACTIVITY_FLOWS_PAGE_REGEXP_STRING = `${APPLET_PAGE_REGEXP_STRING}\\/${Path.ActivityFlow}`;
 export const ACTIVITY_PAGE_REGEXP_STRING = `${ACTIVITIES_PAGE_REGEXP_STRING}\\/(${uuidRegexp})`;
@@ -67,6 +85,9 @@ export const getUpdatedAppletUrl = (appletId: string, entityId: string, url: str
 
 export const checkIfAppletUrlPassed = (url: string) =>
   new RegExp(`^${APPLET_PAGE_REGEXP_STRING}`).test(url);
+
+export const checkIfAppletSettingsUrlPassed = (url: string) =>
+  new RegExp(`^${APPLET_SETTINGS_PAGE_REGEXP_STRING}`).test(url);
 
 export const checkIfAppletActivityUrlPassed = (url: string) =>
   new RegExp(`^${ACTIVITY_PAGE_REGEXP_STRING}`).test(url);

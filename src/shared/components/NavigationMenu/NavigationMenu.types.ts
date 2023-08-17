@@ -16,6 +16,7 @@ export type Item = {
 };
 
 export type NavigationMenuProps = {
+  title: string;
   items: Item[];
   onClose: () => void;
   onSetActiveItem: (item: NavigationItem) => void;

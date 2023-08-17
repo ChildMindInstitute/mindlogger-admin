@@ -299,6 +299,4 @@ export const enum FinalSubscale {
   OptionalTextForFinalSubScaleScore = 'Optional text for Final SubScale Score',
 }
 
-export const REPORT_CONFIG_PARAM = 'report-configuration';
-
 export const INDEX_IN_NAME_REGEXP = /\((\d+)\)$/g;

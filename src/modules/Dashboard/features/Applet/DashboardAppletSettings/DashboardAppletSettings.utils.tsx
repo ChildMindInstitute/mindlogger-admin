@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components';
-import { REPORT_CONFIG_PARAM, Roles } from 'shared/consts';
+import { Roles } from 'shared/consts';
 import {
   ExportDataSetting,
   DataRetention,
@@ -13,7 +13,7 @@ import {
   VersionHistorySetting,
   ShareAppletSetting,
 } from 'shared/features/AppletSettings';
-import { isManagerOrOwner } from 'shared/utils';
+import { SettingParam, isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
@@ -27,13 +27,13 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
               icon: <Svg id="export" />,
               label: 'exportData',
               component: <ExportDataSetting />,
-              param: 'export-data',
+              param: SettingParam.ExportData,
             },
             {
               icon: <Svg id="data-retention" />,
               label: 'dataRetention',
               component: <DataRetention isDashboard />,
-              param: 'data-retention',
+              param: SettingParam.DataRetention,
             },
           ],
         },
@@ -46,19 +46,19 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
         icon: <Svg id="edit-applet" />,
         label: 'editApplet',
         component: <EditAppletSetting />,
-        param: 'edit-applet',
+        param: SettingParam.EditApplet,
       },
       {
         icon: <Svg id="schema" />,
         label: 'downloadSchema',
         component: <DownloadSchemaSetting />,
-        param: 'download-schema',
+        param: SettingParam.DownloadSchema,
       },
       {
         icon: <Svg id="version-history" />,
         label: 'versionHistory',
         component: <VersionHistorySetting />,
-        param: 'version-history',
+        param: SettingParam.VersionHistory,
       },
       ...(roles?.[0] === Roles.Owner
         ? [
@@ -66,7 +66,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
               icon: <Svg id="transfer-ownership" />,
               label: 'transferOwnership',
               component: <TransferOwnershipSetting />,
-              param: 'transfer-ownership',
+              param: SettingParam.TransferOwnership,
             },
           ]
         : []),
@@ -74,14 +74,14 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
         icon: <Svg id="duplicate" />,
         label: 'duplicateApplet',
         component: <DuplicateAppletSettings />,
-        param: 'duplicate-applet',
+        param: SettingParam.DuplicateApplet,
       },
 
       {
         icon: <Svg id="trash" />,
         label: 'deleteApplet',
         component: <DeleteAppletSetting />,
-        param: 'delete-applet',
+        param: SettingParam.DeleteApplet,
       },
     ],
   },
@@ -92,7 +92,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
         icon: <Svg id="report-configuration" />,
         label: 'reportConfiguration',
         component: <ReportConfigSetting isDashboard />,
-        param: REPORT_CONFIG_PARAM,
+        param: SettingParam.ReportConfiguration,
       },
     ],
   },
@@ -106,7 +106,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
         icon: <Svg id="share" />,
         label: 'shareToLibrary',
         component: <ShareAppletSetting />,
-        param: 'share-applet',
+        param: SettingParam.ShareApplet,
       },
       ...(roles?.includes(Roles.SuperAdmin)
         ? [
@@ -114,7 +114,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => [
               icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
               label: isPublished ? 'concealApplet' : 'publishApplet',
               component: <PublishConcealAppletSetting isDashboard />,
-              param: 'publish-conceal',
+              param: SettingParam.PublishConceal,
             },
           ]
         : []),

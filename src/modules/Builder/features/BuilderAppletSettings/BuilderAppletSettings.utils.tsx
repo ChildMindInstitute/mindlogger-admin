@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components';
-import { REPORT_CONFIG_PARAM, Roles } from 'shared/consts';
+import { Roles } from 'shared/consts';
 import {
   DataRetention,
   TransferOwnershipSetting,
@@ -11,7 +11,7 @@ import {
   ReportConfigSetting,
   VersionHistorySetting,
 } from 'shared/features/AppletSettings';
-import { isManagerOrOwner } from 'shared/utils';
+import { SettingParam, isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './BuilderAppletSettings.types';
 
@@ -33,7 +33,7 @@ export const getSettings = ({
                 icon: <Svg id="export" />,
                 label: 'exportData',
                 component: <ExportDataSetting />,
-                param: 'export-data',
+                param: SettingParam.ExportData,
                 disabled: isNewApplet,
                 tooltip,
               },
@@ -41,7 +41,7 @@ export const getSettings = ({
                 icon: <Svg id="data-retention" />,
                 label: 'dataRetention',
                 component: <DataRetention />,
-                param: 'data-retention',
+                param: SettingParam.DataRetention,
                 disabled: isNewApplet,
                 tooltip,
               },
@@ -56,7 +56,7 @@ export const getSettings = ({
           icon: <Svg id="schema" />,
           label: 'downloadSchema',
           component: <DownloadSchemaSetting />,
-          param: 'download-schema',
+          param: SettingParam.DownloadSchema,
           disabled: isNewApplet,
           tooltip,
         },
@@ -64,7 +64,7 @@ export const getSettings = ({
           icon: <Svg id="version-history" />,
           label: 'versionHistory',
           component: <VersionHistorySetting />,
-          param: 'version-history',
+          param: SettingParam.VersionHistory,
           disabled: isNewApplet,
           tooltip,
         },
@@ -74,7 +74,7 @@ export const getSettings = ({
                 icon: <Svg id="transfer-ownership" />,
                 label: 'transferOwnership',
                 component: <TransferOwnershipSetting />,
-                param: 'transfer-ownership',
+                param: SettingParam.TransferOwnership,
                 disabled: isNewApplet,
                 tooltip,
               },
@@ -86,7 +86,7 @@ export const getSettings = ({
                 icon: <Svg id="trash" />,
                 label: 'deleteApplet',
                 component: <DeleteAppletSetting />,
-                param: 'delete-applet',
+                param: SettingParam.DeleteApplet,
                 disabled: isNewApplet,
                 tooltip,
               },
@@ -101,7 +101,7 @@ export const getSettings = ({
           icon: <Svg id="report-configuration" />,
           label: 'reportConfiguration',
           component: <ReportConfigSetting onSubmitSuccess={onReportConfigSubmit} />,
-          param: REPORT_CONFIG_PARAM,
+          param: SettingParam.ReportConfiguration,
           disabled: isNewApplet,
           tooltip,
         },
@@ -119,7 +119,7 @@ export const getSettings = ({
                 icon: <Svg id="share" />,
                 label: 'shareToLibrary',
                 component: <ShareAppletSetting />,
-                param: 'share-applet',
+                param: SettingParam.ShareApplet,
               },
               ...(roles?.includes(Roles.SuperAdmin)
                 ? [
@@ -127,7 +127,7 @@ export const getSettings = ({
                       icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
                       label: isPublished ? 'concealApplet' : 'publishApplet',
                       component: <PublishConcealAppletSetting isBuilder />,
-                      param: 'publish-conceal',
+                      param: SettingParam.PublishConceal,
                       disabled: isNewApplet,
                       tooltip,
                     },
