@@ -209,5 +209,33 @@ MdEditor.config({
         return `<sub>${this.parser.parseInline(token.tokens ?? [])}</sub>`;
       },
     },
+    {
+      name: 'align',
+      level: 'inline',
+      start(src) {
+        return src.match(/::: hljs-(center|left|right)/)?.index;
+      },
+      tokenizer(src) {
+        const rule =
+          /^::: hljs-(center|left|right)([^=\r\n]*={0,2}=?[^=\r\n]*):::|^::: hljs-(center|left|right)([^=\r\n]*):::/;
+        const match = rule.exec(src);
+        if (match) {
+          const alignType = src.match(/(center|left|right)/)?.[0] || [];
+          const token = {
+            type: 'align',
+            raw: match[0],
+            text: match[1].trim(),
+            tokens: [],
+            alignType,
+          };
+          this.lexer.inline(token.text, token.tokens);
+
+          return token;
+        }
+      },
+      renderer(token) {
+        return `<div class=${token.alignType}>${this.parser.parseInline(token.tokens ?? [])}</div>`;
+      },
+    },
   ],
 });
