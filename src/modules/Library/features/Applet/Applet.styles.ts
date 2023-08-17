@@ -30,20 +30,21 @@ export const StyledAppletKeywordsContainer = styled(StyledFlexWrap)`
   margin-top: ${theme.spacing(1.6)};
 `;
 
-export const StyledAppletKeyword = styled(Button)`
+export const StyledAppletKeyword = styled(Button, shouldForwardProp)`
   background-color: ${variables.palette.on_surface_alfa8};
   color: ${variables.palette.on_surface_variant};
   padding: ${theme.spacing(0.2, 1)};
   height: auto;
   margin-bottom: ${theme.spacing(0.8)};
   transition: ${variables.transitions.opacity};
+  cursor: ${({ hasSearch }: { hasSearch: boolean }) => (hasSearch ? 'pointer' : 'default')};
 
   && {
     &:hover,
     &:active,
     &:focus {
       background-color: ${variables.palette.on_surface_alfa8};
-      opacity: 0.85;
+      opacity: ${({ hasSearch }) => (hasSearch ? '0.85' : '1')};
     }
   }
 

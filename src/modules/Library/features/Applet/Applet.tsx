@@ -77,6 +77,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
   };
 
   useEffect(() => {
+    if (uiType === AppletUiType.Details) return;
     const selectedAppletItems = getSelectedAppletFromStorage(id);
     selectedAppletItems && setActivitiesVisible(true);
   }, [id]);
@@ -189,6 +190,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
                   onClick={setSearch ? () => setSearch(keyword) : falseReturnFunc}
                   variant="contained"
                   key={keyword}
+                  hasSearch={!!setSearch}
                 >
                   {keyword}
                 </StyledAppletKeyword>
