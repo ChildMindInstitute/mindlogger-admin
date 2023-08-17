@@ -41,10 +41,6 @@ export const StyledActionButton = styled(StyledClearedButton, shouldForwardProp)
 
   &:hover {
     background: ${variables.palette.secondary_container};
-
-    svg {
-      fill: ${variables.palette.primary};
-    }
   }
 
   svg {
