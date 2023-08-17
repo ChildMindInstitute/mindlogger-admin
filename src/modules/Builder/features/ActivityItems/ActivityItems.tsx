@@ -58,6 +58,14 @@ export const ActivityItems = () => {
     setItemIdToDelete(id);
   };
 
+  const handleRemoveItem = (index: number) => {
+    removeItem(index);
+
+    if (activeItemIndex === index && items?.length !== 1) return setActiveItemIndex(-1);
+
+    if (activeItemIndex === items?.length - 1) setActiveItemIndex((prev) => prev - 1);
+  };
+
   const handleAddItem = () => {
     const item = getNewActivityItem();
     const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
@@ -103,7 +111,6 @@ export const ActivityItems = () => {
   };
 
   const handleRemoveModalSubmit = () => {
-    if (itemIndexToDelete === activeItemIndex) setActiveItemIndex(-1);
     if (conditionalLogicForItemToDelete?.length) {
       const conditionalLogicKeysToRemove = conditionalLogicForItemToDelete.map(
         (condition: ConditionalLogic) => getEntityKey(condition),
@@ -127,7 +134,7 @@ export const ActivityItems = () => {
       trigger(subscalesField);
     }
 
-    removeItem(itemIndexToDelete);
+    handleRemoveItem(itemIndexToDelete);
     handleRemoveModalClose();
   };
 
