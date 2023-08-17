@@ -345,7 +345,7 @@ export const getSelectedAppletData = (
             );
           }
 
-          //per requirements if not all of the items in activity were selected, conditional logic should be removed
+          //per requirements if not all the items in activity were selected, conditional logic should be removed
           if (activity.items.length > items.length) newItem.conditionalLogic = undefined;
 
           return newItem;
@@ -358,7 +358,7 @@ export const getSelectedAppletData = (
         }
       }
 
-      //per requirements if not all of the items in activity were selected, scores & reports and subscales should be removed
+      //per requirements if not all the items in activity were selected, scores & reports and subscales should be removed
       const hasSubscalesAndScores = filteredItems.length === activity.items.length;
 
       return {
@@ -370,16 +370,13 @@ export const getSelectedAppletData = (
       };
     });
 
-  //per requirements if not all of the activites in applet were selected, activity flows should be removed
-  const hasActivityFlows = applet.activities.length === selectedActivityKeysSet.size;
-
-  const selectedActivityFlows = hasActivityFlows
-    ? applet.activityFlows.map((flow) => ({
-        ...flow,
-        key: uuidv4(),
-        items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
-      }))
-    : [];
+  const selectedActivityFlows = applet.activityFlows
+    .filter((flow) => flow.items.every((item) => selectedActivityKeysSet.has(item.activityKey)))
+    .map((flow) => ({
+      ...flow,
+      key: uuidv4(),
+      items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
+    }));
 
   const { id, keywords, version, activities, activityFlows, ...restApplet } = applet;
 
