@@ -114,7 +114,7 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
           <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
           <Box {...commonProps}>
             <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Date}]`}>
-              <strong>Date</strong>. Valid data format: <strong>dd MMM yyyy</strong>.
+              <strong>Date</strong>. Valid data format: <strong>DD Month YYYY</strong>.
             </Trans>
           </Box>
           <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>

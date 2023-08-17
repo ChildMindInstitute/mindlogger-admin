@@ -20,6 +20,7 @@ export type Respondent = {
   lastSeen: string;
   isPinned?: boolean;
   details: RespondentDetail[];
+  isAnonymousRespondent: boolean;
 };
 
 export type ManagerApplet = {

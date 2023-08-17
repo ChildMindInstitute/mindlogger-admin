@@ -22,13 +22,14 @@ export const getActions = (
     editRespondent,
   }: RespondentsActions,
   filteredApplets: FilteredApplets,
+  isAnonymousRespondent: boolean,
   appletId?: string,
 ) => [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
     action: scheduleSetupAction,
     tooltipTitle: t('viewCalendar'),
-    isDisplayed: !!filteredApplets?.scheduling.length,
+    isDisplayed: !isAnonymousRespondent && !!filteredApplets?.scheduling.length,
   },
   {
     icon: <Svg id="data" width={22} height={22} />,

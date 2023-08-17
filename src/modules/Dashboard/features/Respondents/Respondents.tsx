@@ -139,7 +139,7 @@ export const Respondents = () => {
   };
 
   const formatRow = (user: Respondent): Row => {
-    const { secretIds, nicknames, lastSeen, id, details, isPinned } = user;
+    const { secretIds, nicknames, lastSeen, id, details, isPinned, isAnonymousRespondent } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule =
       appletId && details?.[0]?.hasIndividualSchedule
@@ -176,7 +176,7 @@ export const Respondents = () => {
       actions: {
         content: (_, hasVisibleActions) => (
           <Actions
-            items={getActions(actions, filteredRespondents?.[id], appletId)}
+            items={getActions(actions, filteredRespondents?.[id], isAnonymousRespondent, appletId)}
             context={id}
             visibleByDefault={hasVisibleActions}
           />
