@@ -46,10 +46,13 @@ export const StyledTimePickerWrapper = styled(Box)`
         width: auto;
         min-width: 12rem;
         margin: 0;
+        padding: ${theme.spacing(0.8, 0.2, 0.8, 0)};
       }
 
       .react-datepicker__time-box ul.react-datepicker__time-list {
-        padding: ${theme.spacing(0, 0.4)};
+        padding: ${theme.spacing(0, 0.2, 0, 0.4)};
+        box-sizing: border-box;
+        overflow-y: auto;
 
         li {
           &.react-datepicker__time-list-item {
