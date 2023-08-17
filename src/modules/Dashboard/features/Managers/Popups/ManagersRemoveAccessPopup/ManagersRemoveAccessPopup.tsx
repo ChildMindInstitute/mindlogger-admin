@@ -129,7 +129,7 @@ export const ManagersRemoveAccessPopup = ({
               {{ firstName }} {{ lastName }} ({{ email }})
             </>
           </strong>
-          the
+          to the Applet
           <strong>
             <>{{ displayName }}</>
           </strong>
