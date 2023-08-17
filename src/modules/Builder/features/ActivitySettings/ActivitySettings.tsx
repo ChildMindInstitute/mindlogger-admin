@@ -8,7 +8,7 @@ import { NavigationItem, NavigationMenu } from 'shared/components';
 import { getSettings } from './ActivitySettings.utils';
 
 export const ActivitySettings = () => {
-  const { fieldName } = useCurrentActivity();
+  const { fieldName, activity } = useCurrentActivity();
   const { appletId, activityId } = useParams();
 
   const navigate = useNavigate();
@@ -32,7 +32,8 @@ export const ActivitySettings = () => {
 
   return (
     <NavigationMenu
-      items={getSettings(fieldName)}
+      title="activitySettings"
+      items={getSettings(fieldName, activity)}
       onClose={handleClose}
       onSetActiveItem={handleSetActiveSetting}
     />

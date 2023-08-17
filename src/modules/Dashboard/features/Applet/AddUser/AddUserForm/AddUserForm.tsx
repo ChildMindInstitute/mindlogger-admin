@@ -40,15 +40,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     label: `${details?.[0].accessId} (${details?.[0].respondentNickname})`,
     id,
   }));
-  const {
-    handleSubmit,
-    control,
-    watch,
-    reset,
-    formState: { isDirty, isValid },
-    register,
-    unregister,
-  } = useForm<FormValues>({
+  const { handleSubmit, control, watch, reset, register, unregister } = useForm<FormValues>({
     resolver: yupResolver(AddUserSchema(workspaceNameVisible)),
     defaultValues,
     mode: 'onChange',
@@ -206,7 +198,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           </Grid>
         </Grid>
         <StyledRow>
-          <StyledButton variant="contained" type="submit" disabled={!isDirty || !isValid}>
+          <StyledButton variant="contained" type="submit">
             {t('sendInvitation')}
           </StyledButton>
           <StyledResetButton variant="outlined" onClick={resetForm}>

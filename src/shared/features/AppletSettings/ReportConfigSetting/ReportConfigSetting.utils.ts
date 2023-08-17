@@ -1,7 +1,8 @@
 import { UseFormSetValue } from 'react-hook-form';
 
-import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
+import { SingleApplet } from 'shared/state';
 
+import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
 import {
   VerifyReportServer,
   SetPasswordReportServer,
@@ -11,24 +12,24 @@ import {
 const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
 
 export const getActivitiesOptions = (
-  activityFlow?: ActivityFlow,
+  activityFlow?: ActivityFlowFormValues,
   appletData?: Partial<SingleApplet>,
 ) =>
   activityFlow?.items
     ?.map(
-      ({ activityId }) =>
-        appletData?.activities?.find((activity) => activityId === activity.id)?.name,
+      ({ activityKey }) =>
+        appletData?.activities?.find((activity) => activityKey === activity.id)?.name,
     )
     .map((name) => ({
       value: name || '',
       labelKey: name || '',
     })) || [];
 
-export const getActivityItemsOptions = (activity: Activity) =>
-  activity.items.map(({ name }) => ({
+export const getActivityItemsOptions = (activity?: ActivityFormValues) =>
+  activity?.items?.map(({ name }) => ({
     value: name,
     labelKey: name,
-  }));
+  })) || [];
 
 export const verifyReportServer = async ({ url, publicKey, token }: VerifyReportServer) => {
   const headers = new Headers();

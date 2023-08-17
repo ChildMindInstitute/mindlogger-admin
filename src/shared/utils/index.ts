@@ -34,3 +34,5 @@ export * from './exportZip';
 export * from './state';
 export * from './authStorage';
 export * from './getInfinityScrollData';
+export * from './navigateToLibrary';
+export * from './getSettingBreadcrumbs';

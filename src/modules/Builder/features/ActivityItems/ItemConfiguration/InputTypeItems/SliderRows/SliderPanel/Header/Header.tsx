@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
-import { Svg } from 'shared/components';
+import { Svg, Actions } from 'shared/components';
 import {
   theme,
   StyledClearedButton,
@@ -16,6 +16,7 @@ import {
   StyledSliderPanelHeader,
   StyledSliderPanelPreviewContainer,
 } from './Header.styles';
+import { getActions } from './Header.utils';
 import { StyledSlider } from '../SliderPanel.styles';
 import { getMarks } from '../SliderPanel.utils';
 import { ItemConfigurationSettings } from '../../../../ItemConfiguration.types';
@@ -39,6 +40,14 @@ export const Header = ({
   const settings = watch(`${name}.config`);
   const { minValue, maxValue, minLabel, maxLabel, minImage, maxImage } =
     watch(`${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`) || {};
+  const isActionsVisible = isMultiple && index !== 0;
+
+  const commonActionsProps = {
+    items: getActions({ onRemove: () => onTrashClick?.() }),
+    context: name,
+    sxProps: { width: 'unset', minWidth: '4.8rem', justifyContent: 'flex-end' },
+    visibleByDefault: isExpanded,
+  };
 
   if (isExpanded) {
     return (
@@ -47,11 +56,7 @@ export const Header = ({
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
         </StyledClearedButton>
         <StyledLabelBoldLarge>{label}</StyledLabelBoldLarge>
-        {isMultiple && index !== 0 && (
-          <StyledClearedButton sx={commonButtonStyles} onClick={onTrashClick}>
-            <Svg id="trash" width="20" height="20" />
-          </StyledClearedButton>
-        )}
+        {isActionsVisible && <Actions {...commonActionsProps} />}
       </StyledSliderPanelHeader>
     );
   }
@@ -77,6 +82,7 @@ export const Header = ({
           {<StyledLabelLarge>{maxLabel}</StyledLabelLarge>}
           {maxImage && <StyledImg src={maxImage} />}
         </StyledFlexColumn>
+        {isActionsVisible && <Actions {...commonActionsProps} />}
       </StyledSliderPanelPreviewContainer>
     </StyledSliderPanelHeader>
   );

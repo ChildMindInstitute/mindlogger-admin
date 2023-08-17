@@ -26,3 +26,7 @@ export const StyledDrawerContent = styled(StyledFlexColumn)`
   padding: ${theme.spacing(2.4)};
   gap: 2.4rem;
 `;
+
+export const StyledSettings = styled(StyledFlexColumn)`
+  overflow-x: hidden;
+`;

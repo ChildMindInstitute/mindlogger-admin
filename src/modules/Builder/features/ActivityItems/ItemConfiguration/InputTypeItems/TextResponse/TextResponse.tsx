@@ -5,7 +5,12 @@ import get from 'lodash.get';
 import { InputController } from 'shared/components/FormComponents';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
-import { StyledMaxCharacters, StyledRow, StyledTextField } from './TextResponse.styles';
+import {
+  StyledMaxCharacters,
+  StyledRow,
+  StyledTextField,
+  StyledInputWrapper,
+} from './TextResponse.styles';
 import { TextResponseProps } from './TextResponse.types';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
@@ -31,11 +36,13 @@ export const TextResponse = ({ name }: TextResponseProps) => {
         </StyledMaxCharacters>
       </StyledRow>
       {isCorrectAnswerRequired && (
-        <InputController
-          name={`${name}.config.correctAnswer`}
-          control={control}
-          label={t('correctAnswer')}
-        />
+        <StyledInputWrapper>
+          <InputController
+            name={`${name}.config.correctAnswer`}
+            control={control}
+            label={t('correctAnswer')}
+          />
+        </StyledInputWrapper>
       )}
     </ItemOptionContainer>
   );

@@ -72,9 +72,10 @@ export const ShareApplet = ({
         const libraryUrlResult = await getAppletLibraryUrl({
           appletId,
         });
-        setLibraryUrl(libraryUrlResult?.data?.result?.url);
+        const libraryUrlReceived = libraryUrlResult?.data?.result?.url;
+        setLibraryUrl(libraryUrlReceived);
         setIsLoading(false);
-        onAppletShared?.({ keywords, libraryUrl: libraryUrlResult?.data?.result });
+        onAppletShared?.({ keywords, libraryUrl: libraryUrlReceived });
         setAppletShared(true);
       } catch (error) {
         console.warn(error);

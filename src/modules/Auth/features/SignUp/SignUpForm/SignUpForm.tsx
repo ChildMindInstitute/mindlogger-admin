@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText } from 'shared/styles';
-import { getErrorMessage } from 'shared/utils';
+import { getErrorMessage, navigateToLibrary } from 'shared/utils';
 import { auth } from 'modules/Auth/state';
 
 import {
@@ -53,6 +53,10 @@ export const SignUpForm = () => {
     };
 
     const result = await dispatch(signUp({ body }));
+
+    if (signUp.fulfilled.match(result)) {
+      navigateToLibrary(navigate);
+    }
 
     if (signUp.rejected.match(result)) {
       setErrorMessage(getErrorMessage(result.payload));

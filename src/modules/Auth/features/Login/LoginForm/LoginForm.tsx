@@ -10,7 +10,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
-import { getErrorMessage, storage, LocalStorageKeys } from 'shared/utils';
+import { getErrorMessage, navigateToLibrary } from 'shared/utils';
 import { variables } from 'shared/styles';
 
 import {
@@ -40,14 +40,10 @@ export const LoginForm = () => {
     const { signIn } = auth.thunk;
     const result = await dispatch(signIn(data));
     const fromUrl = location?.state?.from;
-    const fromLibraryUrl = storage.getItem(LocalStorageKeys.LibraryUrl) as string;
 
     if (signIn.fulfilled.match(result)) {
       if (fromUrl) navigate(fromUrl);
-      if (fromLibraryUrl) {
-        navigate(fromLibraryUrl);
-        storage.removeItem(LocalStorageKeys.LibraryUrl);
-      }
+      navigateToLibrary(navigate);
     }
 
     if (signIn.rejected.match(result)) {

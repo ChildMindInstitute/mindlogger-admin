@@ -1,20 +1,21 @@
 import i18n from 'i18next';
+import { ActivityFlowFormValues } from 'modules/Builder/types';
 import { Svg } from 'shared/components';
-import { REPORT_CONFIG_PARAM } from 'shared/consts';
 import { ReportConfigSetting } from 'shared/features/AppletSettings';
+import { SettingParam } from 'shared/utils';
 
 const { t } = i18n;
 
-export const getSettings = () => [
+export const getSettings = (activityFlow: ActivityFlowFormValues) => [
   {
     label: 'reports',
     items: [
       {
         name: 'reportConfiguration',
         label: t('reportConfiguration'),
-        component: <ReportConfigSetting isActivityFlow />,
+        component: <ReportConfigSetting activityFlow={activityFlow} />,
         icon: <Svg id="report-configuration" />,
-        param: REPORT_CONFIG_PARAM,
+        param: SettingParam.ReportConfiguration,
       },
     ],
   },

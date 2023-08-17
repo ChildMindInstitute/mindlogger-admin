@@ -205,6 +205,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
                 required
                 InputLabelProps={{ shrink: true }}
                 disabled={!!editedEvent}
+                autoFocus={!editedEvent}
               />
             )}
           </StyledModalWrapper>

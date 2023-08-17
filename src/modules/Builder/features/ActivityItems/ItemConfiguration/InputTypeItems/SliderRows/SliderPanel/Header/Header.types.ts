@@ -7,3 +7,7 @@ export type HeaderProps = {
   onArrowClick: () => void;
   onTrashClick?: () => void;
 };
+
+export type GetSliderPanelActions = {
+  onRemove: () => void;
+};

@@ -7,6 +7,7 @@ import * as yup from 'yup';
 
 import { Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
+import { getDateInUserTimezone } from 'shared/utils';
 import {
   StyledBodyLarge,
   StyledBodyMedium,
@@ -85,7 +86,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
                 {note.user.firstName}
               </StyledAuthorLabel>
               <StyledBodyMedium color={variables.palette.outline}>
-                {timeAgo.format(new Date(note.createdAt))}
+                {timeAgo.format(getDateInUserTimezone(note.createdAt))}
               </StyledBodyMedium>
             </StyledFlexTopStart>
             {isVisibleActions && (

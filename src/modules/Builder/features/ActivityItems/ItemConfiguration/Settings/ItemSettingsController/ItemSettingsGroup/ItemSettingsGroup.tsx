@@ -1,12 +1,12 @@
 import { useState, ChangeEvent } from 'react';
-import { FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { theme, variables, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
+import { theme, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import {
   SingleAndMultipleSelectMatrix,
@@ -23,6 +23,7 @@ import {
   StyledInputControllerContainer,
   StyledItemSettingsGroupHeader,
   StyledItemSettingGroupContainer,
+  StyledFormLabel,
 } from './ItemSettingsGroup.styles';
 import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
 import {
@@ -64,9 +65,7 @@ export const ItemSettingsGroup = ({
     >
       <StyledFormControl>
         <StyledItemSettingsGroupHeader sx={{ justifyContent: 'space-between' }}>
-          <FormLabel component="legend" sx={{ color: variables.palette.on_surface }}>
-            {t(groupName, { context: inputType })}
-          </FormLabel>
+          <StyledFormLabel>{t(groupName, { context: inputType })}</StyledFormLabel>
           <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={handleCollapse}>
             <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
           </StyledClearedButton>
@@ -78,6 +77,7 @@ export const ItemSettingsGroup = ({
                 inputType === ItemResponseType.SingleSelectionPerRow ||
                 inputType === ItemResponseType.MultipleSelectionPerRow;
               const isTimer = settingKey === ItemConfigurationSettings.HasTimer;
+              const isTextInput = settingKey === ItemConfigurationSettings.HasTextInput;
               const isTextInputRequired =
                 settingKey === ItemConfigurationSettings.IsTextInputRequired;
               const isSkippableItem = settingKey === ItemConfigurationSettings.IsSkippable;
@@ -86,9 +86,12 @@ export const ItemSettingsGroup = ({
               const isScores = settingKey === ItemConfigurationSettings.HasScores;
               const isAlerts = settingKey === ItemConfigurationSettings.HasAlerts;
 
+              const hasTextInput = get(config, ItemConfigurationSettings.HasTextInput);
+              const hasResponseRequired =
+                get(config, ItemConfigurationSettings.IsResponseRequired) ||
+                get(config, ItemConfigurationSettings.IsTextInputRequired);
               const isDisabled =
-                (isTextInputRequired && !get(config, ItemConfigurationSettings.HasTextInput)) ||
-                (isSkippableItem && get(config, ItemConfigurationSettings.IsResponseRequired));
+                (isTextInputRequired && !hasTextInput) || (isSkippableItem && hasResponseRequired);
               const isSecondsDisabled = isTimer && !get(config, ItemConfigurationSettings.HasTimer);
 
               const hasTooltip = ITEM_SETTINGS_TO_HAVE_TOOLTIP.includes(settingKey);
@@ -112,17 +115,18 @@ export const ItemSettingsGroup = ({
                   });
                 }
 
-                if (
-                  settingKey === ItemConfigurationSettings.HasTextInput ||
-                  settingKey === ItemConfigurationSettings.IsTextInputRequired
-                ) {
+                if (isTextInput || isTextInputRequired) {
                   const [prefix, postfix] = settingKey.split('.');
+                  const [, textInputRequired] =
+                    ItemConfigurationSettings.IsTextInputRequired.split('.');
+                  const value = event.target.checked;
 
                   return onChange({
                     ...config,
                     [prefix]: {
                       ...config?.[prefix],
-                      [postfix]: event.target.checked,
+                      [postfix]: value,
+                      ...(isTextInput && !value && { [textInputRequired]: false }),
                     },
                   });
                 }
@@ -253,7 +257,7 @@ export const ItemSettingsGroup = ({
                   }
                   label={
                     <StyledSettingTitleContainer withInput={isTimer}>
-                      <StyledTitleMedium sx={{ p: theme.spacing(0, 1, 0, 1) }}>
+                      <StyledTitleMedium sx={{ p: theme.spacing(0, 1), whiteSpace: 'nowrap' }}>
                         {t(`itemSettings.${settingKey}`)}
                         {hasTooltip && (
                           <Tooltip
