@@ -1,31 +1,28 @@
-import i18n from 'i18next';
-
 import { Svg } from 'shared/components';
 import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
-import { ItemResponseType, REPORT_CONFIG_PARAM } from 'shared/consts';
+import { ItemResponseType } from 'shared/consts';
 import { Item, SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/state';
 import { ReportConfigSetting } from 'shared/features/AppletSettings';
+import { SettingParam } from 'shared/utils';
 
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
-
-const { t } = i18n;
 
 export const getSettings = (activityFieldName?: string, activity?: ActivityFormValues) => [
   {
     label: 'reports',
     items: [
       {
-        label: t('scoresAndReports'),
-        component: <ScoresAndReports />,
+        label: 'scoresAndReports',
         icon: <Svg id="scores-and-reports" />,
-        param: 'scores-and-reports',
+        component: <ScoresAndReports />,
+        param: SettingParam.ScoresAndReports,
       },
       {
-        label: t('reportConfiguration'),
-        component: <ReportConfigSetting activity={activity} />,
+        label: 'reportConfiguration',
         icon: <Svg id="report-configuration" />,
-        param: REPORT_CONFIG_PARAM,
+        component: <ReportConfigSetting activity={activity} />,
+        param: SettingParam.ReportConfiguration,
       },
     ],
   },
@@ -33,10 +30,10 @@ export const getSettings = (activityFieldName?: string, activity?: ActivityFormV
     label: 'subscales',
     items: [
       {
-        label: t('subscalesConfiguration'),
-        component: <SubscalesConfiguration key={`subscales-configuration-${activityFieldName}`} />,
+        label: 'subscalesConfiguration',
         icon: <Svg id="grid-outlined" />,
-        param: 'subscales-configuration',
+        component: <SubscalesConfiguration key={`subscales-configuration-${activityFieldName}`} />,
+        param: SettingParam.SubscalesConfiguration,
       },
     ],
   },

@@ -20,8 +20,8 @@ import {
   getDictionaryObject,
   getEncryptionToServer,
   getUpdatedAppletUrl,
+  SettingParam,
 } from 'shared/utils';
-import { REPORT_CONFIG_PARAM } from 'shared/consts';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
 import { auth, workspaces } from 'redux/modules';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
@@ -317,7 +317,7 @@ export const useSaveAndPublishSetup = (
     const hasErrorsInFields = await checkIfHasErrorsInFields();
     setPublishProcessPopupOpened(true);
 
-    if (pathname.includes(REPORT_CONFIG_PARAM) && hasReportConfigChanges) {
+    if (pathname.includes(SettingParam.ReportConfiguration) && hasReportConfigChanges) {
       setPublishProcessStep(SaveAndPublishSteps.ReportConfigSave);
 
       return;

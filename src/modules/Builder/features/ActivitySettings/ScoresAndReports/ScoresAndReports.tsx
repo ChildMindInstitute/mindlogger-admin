@@ -17,7 +17,7 @@ import { Tooltip } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
-import { getEntityKey } from 'shared/utils';
+import { SettingParam, getEntityKey } from 'shared/utils';
 import { ScoreReport, SectionReport } from 'shared/state';
 import { useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
@@ -87,7 +87,7 @@ export const ScoresAndReports = () => {
     navigate(
       generatePath(page.builderAppletSettingsItem, {
         appletId,
-        settingItem: 'report-configuration',
+        setting: SettingParam.ReportConfiguration,
       }),
     );
 

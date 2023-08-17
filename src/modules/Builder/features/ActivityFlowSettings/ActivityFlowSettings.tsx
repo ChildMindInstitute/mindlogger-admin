@@ -33,6 +33,7 @@ export const ActivityFlowSettings = () => {
 
   return (
     <NavigationMenu
+      title="activityFlowSettings"
       items={getSettings(activityFlow)}
       onClose={handleItemClose}
       onSetActiveItem={handleSetActiveItem}
