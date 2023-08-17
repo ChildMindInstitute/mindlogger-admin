@@ -15,14 +15,5 @@ export const MarkDownEditor = styled(MdEditor)`
     h2 {
       font-size: ${variables.font.size.lrg};
     }
-    .center {
-      text-align: center;
-    }
-    .right {
-      text-align: right;
-    }
-    .left {
-      text-align: left;
-    }
   }
 `;

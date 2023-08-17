@@ -234,7 +234,9 @@ MdEditor.config({
         }
       },
       renderer(token) {
-        return `<div class=${token.alignType}>${this.parser.parseInline(token.tokens ?? [])}</div>`;
+        return `<div style="text-align: ${token.alignType}">${this.parser.parseInline(
+          token.tokens ?? [],
+        )}</div>`;
       },
     },
   ],
