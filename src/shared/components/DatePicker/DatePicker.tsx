@@ -38,7 +38,8 @@ export const DatePicker = <T extends FieldValues>({
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const open = Boolean(anchorEl);
-  const id = open ? 'date-picker-popover' : undefined;
+  const isOpen = !disabled && open;
+  const id = isOpen ? 'date-picker-popover' : undefined;
   const isStartEndingDate = uiType === UiType.StartEndingDate;
 
   const handlePickerShow: MouseEventHandler<HTMLDivElement> = (event) => {
@@ -87,13 +88,13 @@ export const DatePicker = <T extends FieldValues>({
           fullWidth: true,
           disabled: true,
           onClick: handlePickerShow,
-          className: open ? 'active' : '',
+          className: isOpen ? 'active' : '',
           sx: { ...inputSx },
           error: !!error,
           helperText: error?.message || null,
           InputProps: {
             endAdornment: (
-              <StyledIconBtn aria-describedby={id}>
+              <StyledIconBtn aria-describedby={id} disabled={disabled}>
                 <Svg id="date" />
               </StyledIconBtn>
             ),
@@ -130,7 +131,7 @@ export const DatePicker = <T extends FieldValues>({
             )}
             <StyledPopover
               id={id}
-              open={open}
+              open={isOpen}
               anchorEl={anchorEl}
               onClose={handlePickerClose}
               anchorOrigin={{
