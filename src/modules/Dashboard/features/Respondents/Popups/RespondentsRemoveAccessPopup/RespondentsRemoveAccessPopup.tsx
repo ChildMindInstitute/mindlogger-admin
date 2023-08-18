@@ -92,11 +92,14 @@ export const RespondentsRemoveAccessPopup = ({
           label={
             <StyledBodyLarge>
               <Trans i18nKey="removeRespondentData">
-                Remove Respondent
+                Also remove Respondent
                 <b>
                   <>{{ respondentName }}</>
                 </b>
-                ’s response data also.
+                ’s response data for Applet
+                <b>
+                  <>{{ appletName }}</>
+                </b>
               </Trans>
             </StyledBodyLarge>
           }

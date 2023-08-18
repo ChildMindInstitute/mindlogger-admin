@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { CheckboxController } from 'shared/components/FormComponents';
 import {
@@ -29,9 +30,10 @@ export const ManagersRemoveAccessPopup = ({
   refetchManagers,
 }: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
+  const { appletId } = useParams();
   const { firstName, lastName, email, applets } = user;
 
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(appletId ? 1 : 0);
   const incrementStep = () => setStep((prevStep) => prevStep + 1);
   const decrementStep = () => setStep((prevStep) => prevStep - 1);
 
@@ -48,7 +50,17 @@ export const ManagersRemoveAccessPopup = ({
 
   const watchedUserApplets = watch('userApplets');
 
-  const selectedApplets = watchedUserApplets.filter((applet) => applet.value);
+  const getSelectedApplets = () => {
+    if (appletId) {
+      const selectedApplet = watchedUserApplets.find((applet) => applet.id === appletId);
+
+      return selectedApplet ? [selectedApplet] : [];
+    }
+
+    return watchedUserApplets.filter((applet) => applet.value);
+  };
+
+  const selectedApplets = getSelectedApplets();
 
   const rows = watchedUserApplets?.map(({ displayName, image, id }, index) => ({
     name: {
@@ -79,7 +91,6 @@ export const ManagersRemoveAccessPopup = ({
   }));
 
   const { execute, error } = useAsync(removeManagerAccess, () => {
-    refetchManagers();
     incrementStep();
   });
 
@@ -92,9 +103,9 @@ export const ManagersRemoveAccessPopup = ({
           appletIds: selectedApplets.map((item) => item.id),
           userId: user.id,
         });
-        onClose();
         break;
       default:
+        refetchManagers();
         onClose();
 
         return;
@@ -102,7 +113,7 @@ export const ManagersRemoveAccessPopup = ({
   };
 
   const listOfSelectedApplets = selectedApplets?.map((applet) => (
-    <StyledTitleBoldMedium key={applet.id}>- {applet.displayName} </StyledTitleBoldMedium>
+    <StyledTitleBoldMedium key={applet?.id}>- {applet.displayName} </StyledTitleBoldMedium>
   ));
 
   const getFirstScreen = () => (
