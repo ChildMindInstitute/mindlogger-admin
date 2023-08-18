@@ -304,7 +304,7 @@
   "pleaseSelectAppletToSchedule": "Please select Applet to schedule for the Respondent: ",
   "removeAccessDescription": "This Respondent has access to the following Applets:",
   "removeRespondentAccess": "You are about to remove Respondent <1>{{ respondentName }}</1>’s access to the <3>{{ appletName }}</3> Applet.",
-  "removeRespondentData": "Remove Respondent <1>{{ respondentName }}</1>’s response data also.",
+  "removeRespondentData": "Also remove Respondent <1>{{ respondentName }}</1>’s response data for Applet <3>{{ appletName }}</3>",
   "yesRemove": "Yes, Remove",
   "confirmRemoveRespondentAccess": "Are you sure you want to remove access for Respondent <1>{{ respondentName }}</1>'s to the <3>{{ appletName }}</3> Applet?",
   "confirmRemoveRespondentAccessAndData": "Are you sure you want to to remove Respondent <1>{{ respondentName }}</1>'s access and all response data within Applet <3>{{ appletName }}</3>?",
