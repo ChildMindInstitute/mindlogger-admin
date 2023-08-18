@@ -188,6 +188,7 @@ export const getData = ({ answers, versions, color }: DataProps) => ({
           return dataset.labels[context.dataIndex];
         },
       },
+      borderColor: 'transparent',
       pointStyle: false as const,
     },
   ],
