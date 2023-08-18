@@ -44,6 +44,7 @@ export const LoginForm = () => {
     if (signIn.fulfilled.match(result)) {
       if (fromUrl) navigate(fromUrl);
       navigateToLibrary(navigate);
+      Mixpanel.track('Login Successful');
     }
 
     if (signIn.rejected.match(result)) {
