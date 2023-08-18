@@ -37,3 +37,4 @@ export * from './getInfinityScrollData';
 export * from './navigateToLibrary';
 export * from './getSettingBreadcrumbs';
 export * from './mixpanel';
+export { default as svgBuilder } from './svgBuilder';

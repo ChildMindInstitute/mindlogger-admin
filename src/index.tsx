@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { Mixpanel } from 'shared/utils';
-
-import svgBuilder from 'shared/utils/svgBuilder';
+import { Mixpanel, svgBuilder } from 'shared/utils';
 
 import { svgSprite } from 'svgSprite';
 import App from './App';
