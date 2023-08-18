@@ -1182,5 +1182,6 @@
   "itemValue": "Item Value",
   "pleaseSelectItem": "Please select an Item",
   "pleaseSelectActivity": "Please select an Activity",
-  "configureServerForApplet": "Configure Server (for Applet)"
+  "configureServerForApplet": "Configure Server (for Applet)",
+  "selectScheduleType": "Select Schedule Type"
 }
