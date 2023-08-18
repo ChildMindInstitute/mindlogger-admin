@@ -8,7 +8,6 @@ export * from './renderComponentForEachTest';
 export * from './renderWithProviders';
 export * from './shouldForwardProp';
 export * from './storage';
-export * from './svgBuilder';
 export * from './array';
 export * from './fileSystem';
 export * from './func';
