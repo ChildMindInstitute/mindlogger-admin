@@ -20,6 +20,7 @@ import {
   getDictionaryObject,
   getEncryptionToServer,
   getUpdatedAppletUrl,
+  Mixpanel,
   SettingParam,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
@@ -304,6 +305,7 @@ export const useSaveAndPublishSetup = (
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     handleSaveAndPublishFirstClick();
+    Mixpanel.track('Applet Save click');
 
     if (isLogoutInProgress) {
       dispatch(auth.actions.endLogout());
@@ -404,6 +406,8 @@ export const useSaveAndPublishSetup = (
     }
 
     if (createApplet.fulfilled.match(result)) {
+      Mixpanel.track('Applet Created Successfully');
+
       const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
       setIsFromLibrary?.(false);

@@ -11,7 +11,7 @@ import {
   variables,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { falseReturnFunc, exportDataSucceed } from 'shared/utils';
+import { falseReturnFunc, exportDataSucceed, Mixpanel } from 'shared/utils';
 import { useAsync, useSetupEnterAppletPassword } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
@@ -49,6 +49,8 @@ export const DataExportPopup = ({
 
       try {
         await execute({ appletId, respondentIds: respondentId });
+
+        Mixpanel.track('Export Data Successful');
       } catch {
         setActiveModal(Modals.ExportError);
         setDataIsExporting(false);

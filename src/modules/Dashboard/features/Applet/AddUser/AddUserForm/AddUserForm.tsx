@@ -12,7 +12,7 @@ import {
 } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
 import { getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
-import { getErrorMessage } from 'shared/utils';
+import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
 import { users, workspaces } from 'redux/modules';
@@ -80,6 +80,8 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
         options,
       });
     }
+
+    Mixpanel.track('Invitation submitted click');
   };
 
   const updateFields = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
