@@ -172,7 +172,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         if (item.isFolder) return; // TODO: add Edit Folder Page navigation
 
         navigate(getBuilderAppletUrl(appletId));
-        Mixpanel.track('Applet edit click', {});
+        Mixpanel.track('Applet edit click');
       }),
   };
 

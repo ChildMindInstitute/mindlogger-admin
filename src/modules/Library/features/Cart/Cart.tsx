@@ -38,7 +38,7 @@ export const Cart = () => {
 
   const handleAddToBuilder = () => {
     isAuthorized ? setAddToBuilderPopupVisible(true) : setAuthPopupVisible(true);
-    Mixpanel.track('Add to applet builder click', {});
+    Mixpanel.track('Add to applet builder click');
   };
 
   const handleSearch = (searchText: string) => {

@@ -75,7 +75,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     await setSchedule(value);
     if (value === ScheduleOptions.IndividualSchedule) {
       setSearchPopupVisible(true);
-      Mixpanel.track('View Individual calendar click', {});
+      Mixpanel.track('View Individual calendar click');
     } else {
       setSelectedRespondent(null);
       navigate(
@@ -83,7 +83,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           appletId,
         }),
       );
-      Mixpanel.track('View General calendar click', {});
+      Mixpanel.track('View General calendar click');
     }
   };
 
@@ -120,7 +120,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
 
     await exportTemplate({ data: scheduleExportCsv, fileName: getFileName() });
 
-    Mixpanel.track('Schedule import successful', {});
+    Mixpanel.track('Schedule import successful');
 
     isExport && setExportDefaultSchedulePopupVisible(false);
   };
@@ -128,7 +128,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const handleImportClick = () => {
     setImportSchedulePopupVisible(true);
 
-    Mixpanel.track('Schedule Import click', {});
+    Mixpanel.track('Schedule Import click');
   };
 
   useEffect(() => {

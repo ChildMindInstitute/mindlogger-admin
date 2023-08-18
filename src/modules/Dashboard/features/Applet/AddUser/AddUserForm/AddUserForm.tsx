@@ -81,7 +81,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
       });
     }
 
-    Mixpanel.track('Invitation submitted click', {});
+    Mixpanel.track('Invitation submitted click');
   };
 
   const updateFields = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

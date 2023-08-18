@@ -153,7 +153,7 @@ export const Activities = () => {
   };
 
   const handleEditActivity = (index: number) => {
-    Mixpanel.track('Activity edit click', {});
+    Mixpanel.track('Activity edit click');
     const activityToEdit = activities[index];
     const activityKey = getActivityKey(activityToEdit);
     if (activityToEdit.isPerformanceTask && activityToEdit.performanceTaskType) {

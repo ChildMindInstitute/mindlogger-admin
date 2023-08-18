@@ -20,7 +20,7 @@ export const Mixpanel = {
   trackPageView(pageName: string) {
     if (shouldEnableMixpanel) mixpanel.track_pageview({ page: `[Admin] ${pageName}` });
   },
-  track(action: string, payload: Dict) {
+  track(action: string, payload?: Dict) {
     if (shouldEnableMixpanel) mixpanel.track(`[Admin] ${action}`, payload);
   },
   logout() {

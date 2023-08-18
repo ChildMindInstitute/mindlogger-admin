@@ -311,7 +311,7 @@ export const useSaveAndPublishSetup = (
     }
   };
   const handleSaveAndPublishFirstClick = async () => {
-    Mixpanel.track('Applet Save click', {});
+    Mixpanel.track('Applet Save click');
 
     const isValid = await trigger();
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
@@ -407,7 +407,7 @@ export const useSaveAndPublishSetup = (
     }
 
     if (createApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet Created Successfully', {});
+      Mixpanel.track('Applet Created Successfully');
 
       const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();

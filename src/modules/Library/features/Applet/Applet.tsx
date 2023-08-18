@@ -75,7 +75,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
       dispatch(library.actions.setAppletsFromStorage(updatedAppletsData));
     }
 
-    Mixpanel.track('Add to Basket click', {});
+    Mixpanel.track('Add to Basket click');
   };
 
   useEffect(() => {

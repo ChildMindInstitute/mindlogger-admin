@@ -48,20 +48,20 @@ export const LoginForm = () => {
     if (signIn.fulfilled.match(result)) {
       if (fromUrl) navigate(fromUrl);
       navigateToLibrary(navigate);
-      Mixpanel.track('Login Successful', {});
+      Mixpanel.track('Login Successful');
     }
 
     if (signIn.rejected.match(result)) {
       setErrorMessage(getErrorMessage(result.payload));
     }
 
-    Mixpanel.track('Login Button click', {});
+    Mixpanel.track('Login Button click');
   };
 
   const handleCreateAccountClick = () => {
     navigate(page.signUp);
 
-    Mixpanel.track('Create account button on login screen click', {});
+    Mixpanel.track('Create account button on login screen click');
   };
 
   return (

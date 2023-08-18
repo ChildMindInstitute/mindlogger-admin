@@ -27,7 +27,7 @@ export const CreateEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track('Schedule save click', {});
+    Mixpanel.track('Schedule save click');
   };
 
   const handleRemoveAlwaysAvailableClose = () => {

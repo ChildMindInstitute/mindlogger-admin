@@ -32,7 +32,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     action: () => {
       handleMenuClose();
       navigate(getBuilderAppletUrl(Path.NewApplet));
-      Mixpanel.track('Build Applet click', {});
+      Mixpanel.track('Build Applet click');
     },
   },
   {
@@ -41,7 +41,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     action: () => {
       handleMenuClose();
       navigate(page.library);
-      Mixpanel.track('Browse applet library click', {});
+      Mixpanel.track('Browse applet library click');
     },
   },
 ];

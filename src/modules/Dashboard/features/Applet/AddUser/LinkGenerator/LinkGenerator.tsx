@@ -27,7 +27,7 @@ export const LinkGenerator = () => {
 
   const handleGeneratePublicLinkClick = () => {
     setLinkPopupVisible(true);
-    Mixpanel.track('Public Link generate click(true)', {});
+    Mixpanel.track('Public Link generate click(true)');
   };
 
   useEffect(() => {

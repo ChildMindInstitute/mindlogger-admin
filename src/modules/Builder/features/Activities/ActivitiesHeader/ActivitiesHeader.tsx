@@ -17,7 +17,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
   const handleActivityAdd = () => {
     headerProps?.onAddActivity && headerProps.onAddActivity(null);
 
-    Mixpanel.track('Add Activity click', {});
+    Mixpanel.track('Add Activity click');
   };
 
   return (

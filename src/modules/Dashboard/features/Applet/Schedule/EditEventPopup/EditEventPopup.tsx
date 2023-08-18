@@ -47,7 +47,7 @@ export const EditEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track('Schedule save click', {});
+    Mixpanel.track('Schedule save click');
   };
 
   const handleRemoveEvent = async () => {

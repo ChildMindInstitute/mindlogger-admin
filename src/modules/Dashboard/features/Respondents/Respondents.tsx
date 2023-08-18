@@ -108,7 +108,7 @@ export const Respondents = () => {
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'viewable');
       setDataExportPopupVisible(true);
-      Mixpanel.track('Export Data click', {});
+      Mixpanel.track('Export Data click');
     },
     viewDataAction: (respondentId: string) => {
       if (hasEncryptionCheck && appletId) {

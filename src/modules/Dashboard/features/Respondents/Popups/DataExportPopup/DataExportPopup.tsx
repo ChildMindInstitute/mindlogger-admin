@@ -50,7 +50,7 @@ export const DataExportPopup = ({
       try {
         await execute({ appletId, respondentIds: respondentId });
 
-        Mixpanel.track('Export Data Successful', {});
+        Mixpanel.track('Export Data Successful');
       } catch {
         setActiveModal(Modals.ExportError);
         setDataIsExporting(false);
