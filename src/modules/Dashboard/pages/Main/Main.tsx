@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { LinkedTabs } from 'shared/components';
 import { useBreadcrumbs } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';

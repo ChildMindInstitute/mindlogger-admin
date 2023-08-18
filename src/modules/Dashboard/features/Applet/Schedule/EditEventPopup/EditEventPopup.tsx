@@ -7,8 +7,8 @@ import { useAsync } from 'shared/hooks';
 import { deleteEventApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
-
 import { Mixpanel } from 'shared/utils';
+
 import { EditEventPopupProps } from './EditEventPopup.types';
 import { EventForm, EventFormRef } from '../EventForm';
 import { StyledButton, StyledContainer } from './EditEventPopup.styles';

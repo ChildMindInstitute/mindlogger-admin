@@ -2,8 +2,8 @@ import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-
 import { Mixpanel } from 'shared/utils';
+
 import { EventForm, EventFormRef } from '../EventForm';
 import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
 import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup';

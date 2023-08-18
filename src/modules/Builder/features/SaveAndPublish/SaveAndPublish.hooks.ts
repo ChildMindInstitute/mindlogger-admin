@@ -305,14 +305,13 @@ export const useSaveAndPublishSetup = (
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     handleSaveAndPublishFirstClick();
+    Mixpanel.track('Applet Save click');
 
     if (isLogoutInProgress) {
       dispatch(auth.actions.endLogout());
     }
   };
   const handleSaveAndPublishFirstClick = async () => {
-    Mixpanel.track('Applet Save click');
-
     const isValid = await trigger();
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
     const hasNoItems = !checkIfHasAtLeastOneItem();

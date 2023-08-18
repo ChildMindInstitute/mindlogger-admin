@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -64,10 +64,6 @@ export const SignUpForm = () => {
       setErrorMessage(getErrorMessage(result.payload));
     }
   };
-
-  useEffect(() => {
-    Mixpanel.trackPageView('Create Account');
-  }, []);
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
