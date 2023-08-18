@@ -144,6 +144,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
             customChange={scheduleChangeHandler}
             options={scheduleOptions}
             withChecked
+            withGroups
             SelectProps={{
               autoWidth: true,
               IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
