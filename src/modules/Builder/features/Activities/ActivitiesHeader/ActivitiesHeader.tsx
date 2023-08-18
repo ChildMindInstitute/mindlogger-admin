@@ -5,7 +5,7 @@ import { Box, Button } from '@mui/material';
 import { StyledHeader } from 'shared/features';
 import { ButtonWithMenu, Svg } from 'shared/components';
 import { theme } from 'shared/styles';
-import { falseReturnFunc } from 'shared/utils';
+import { falseReturnFunc, Mixpanel } from 'shared/utils';
 
 import { ActivitiesHeaderProps } from './ActivitiesHeader.types';
 import { getPerformanceTasksMenu } from './ActivitiesHeader.utils';
@@ -14,7 +14,11 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
   const { t } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleActivityAdd = headerProps?.onAddActivity;
+  const handleActivityAdd = () => {
+    headerProps?.onAddActivity && headerProps.onAddActivity(null);
+
+    Mixpanel.track('Add Activity click', {});
+  };
 
   return (
     <StyledHeader isSticky={isSticky}>
@@ -23,7 +27,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
         <Button
           variant="outlined"
           startIcon={<Svg id="add" width={18} height={18} />}
-          onClick={() => handleActivityAdd && handleActivityAdd(null)}
+          onClick={handleActivityAdd}
           sx={{ mr: theme.spacing(1.6) }}
         >
           {t('addActivity')}

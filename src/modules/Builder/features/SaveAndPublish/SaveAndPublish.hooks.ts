@@ -20,6 +20,7 @@ import {
   getDictionaryObject,
   getEncryptionToServer,
   getUpdatedAppletUrl,
+  Mixpanel,
   SettingParam,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
@@ -310,6 +311,8 @@ export const useSaveAndPublishSetup = (
     }
   };
   const handleSaveAndPublishFirstClick = async () => {
+    Mixpanel.track('Applet Save click', {});
+
     const isValid = await trigger();
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
     const hasNoItems = !checkIfHasAtLeastOneItem();
@@ -404,6 +407,8 @@ export const useSaveAndPublishSetup = (
     }
 
     if (createApplet.fulfilled.match(result)) {
+      Mixpanel.track('Applet Created Successfully', {});
+
       const createdAppletId = result.payload.data.result?.id;
       builderSessionStorage.removeItem();
       setIsFromLibrary?.(false);

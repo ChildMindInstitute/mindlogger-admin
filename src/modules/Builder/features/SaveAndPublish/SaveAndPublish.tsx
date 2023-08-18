@@ -10,6 +10,7 @@ import {
 import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
 
+import { Mixpanel } from 'shared/utils';
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
 import { SaveAndPublishProps } from './SaveAndPublish.types';
@@ -34,7 +35,9 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
   const { appletId } = useParams();
 
   const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
-    handleAppletPasswordSubmit(ref?.current?.password);
+    handleAppletPasswordSubmit(ref?.current?.password).then(() =>
+      Mixpanel.track('handleAppletPasswordSubmit', {}),
+    );
     setIsPasswordPopupOpened(false);
   };
 

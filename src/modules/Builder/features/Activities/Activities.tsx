@@ -16,7 +16,7 @@ import {
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
-import { pluck, getUniqueName } from 'shared/utils';
+import { pluck, getUniqueName, Mixpanel } from 'shared/utils';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
@@ -153,6 +153,7 @@ export const Activities = () => {
   };
 
   const handleEditActivity = (index: number) => {
+    Mixpanel.track('Activity edit click', {});
     const activityToEdit = activities[index];
     const activityKey = getActivityKey(activityToEdit);
     if (activityToEdit.isPerformanceTask && activityToEdit.performanceTaskType) {

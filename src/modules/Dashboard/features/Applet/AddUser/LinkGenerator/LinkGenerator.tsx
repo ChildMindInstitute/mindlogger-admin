@@ -8,6 +8,7 @@ import { useAsync } from 'shared/hooks/useAsync';
 import { StyledFlexTopCenter, StyledTitleBoldMedium, theme } from 'shared/styles';
 import { Tooltip } from 'shared/components';
 
+import { Mixpanel } from 'shared/utils';
 import { StyledTitle } from '../AddUser.styles';
 import { LinkForm } from './LinkForm';
 import { InviteLink } from './LinkGenerator.types';
@@ -23,6 +24,11 @@ export const LinkGenerator = () => {
   const { execute } = useAsync(getAppletPublicLinkApi, (res) => {
     res?.data?.result && setInviteLink(res.data.result);
   });
+
+  const handleGeneratePublicLinkClick = () => {
+    setLinkPopupVisible(true);
+    Mixpanel.track('Public Link generate click(true)', {});
+  };
 
   useEffect(() => {
     execute({ appletId: id || '' });
@@ -44,7 +50,7 @@ export const LinkGenerator = () => {
         <>
           <Button
             variant="contained"
-            onClick={() => setLinkPopupVisible(true)}
+            onClick={handleGeneratePublicLinkClick}
             data-testid="generate-btn"
           >
             {t('generateLink')}

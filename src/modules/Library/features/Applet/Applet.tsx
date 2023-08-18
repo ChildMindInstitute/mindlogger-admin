@@ -16,7 +16,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { falseReturnFunc, getDictionaryText } from 'shared/utils';
+import { falseReturnFunc, getDictionaryText, Mixpanel } from 'shared/utils';
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
 import { auth, library } from 'redux/modules';
@@ -74,6 +74,8 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
       sessionStorage.setItem(STORAGE_LIBRARY_KEY, JSON.stringify(updatedAppletsData));
       dispatch(library.actions.setAppletsFromStorage(updatedAppletsData));
     }
+
+    Mixpanel.track('Add to Basket click', {});
   };
 
   useEffect(() => {

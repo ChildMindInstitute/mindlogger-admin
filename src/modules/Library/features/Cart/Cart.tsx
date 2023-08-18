@@ -15,7 +15,7 @@ import { page } from 'resources';
 import { PublishedApplet, auth, library } from 'redux/modules';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
-import { getDictionaryText } from 'shared/utils';
+import { getDictionaryText, Mixpanel } from 'shared/utils';
 
 import { Applet, AppletUiType } from '../Applet';
 import { AddToBuilderPopup, AuthPopup } from '../Popups';
@@ -36,8 +36,10 @@ export const Cart = () => {
   const [authPopupVisible, setAuthPopupVisible] = useState(false);
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE);
 
-  const handleAddToBuilder = () =>
+  const handleAddToBuilder = () => {
     isAuthorized ? setAddToBuilderPopupVisible(true) : setAuthPopupVisible(true);
+    Mixpanel.track('Add to applet builder click', {});
+  };
 
   const handleSearch = (searchText: string) => {
     setSearch(searchText);

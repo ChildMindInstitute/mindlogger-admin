@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Mixpanel } from 'shared/utils';
 
 import svgBuilder from 'shared/utils/svgBuilder';
 
@@ -11,6 +12,9 @@ import reportWebVitals from './reportWebVitals';
 document.body.appendChild(svgBuilder(svgSprite));
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+Mixpanel.init();
+
 root.render(
   <React.StrictMode>
     <App />

@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
+import { Mixpanel } from 'shared/utils';
 import { AuthSchema } from './Auth.schema';
 import { signIn, getUserDetails } from './Auth.thunk';
 import {
@@ -21,6 +22,8 @@ export const reducers = {
     sessionStorage.clear();
     state.authentication = initialState.authentication;
     state.isAuthorized = false;
+
+    Mixpanel.logout();
   },
 };
 

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
 import { workspaces, auth } from 'redux/modules';
-import { authStorage } from 'shared/utils';
+import { authStorage, Mixpanel } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 
 import { links } from './LeftBar.const';
@@ -34,6 +34,12 @@ export const LeftBar = () => {
     }
   }, [workspacesData]);
 
+  const handleLinkClick = (key: string) => {
+    if (key === 'library') {
+      Mixpanel.track('Browse applet library click', {});
+    }
+  };
+
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
       <StyledDrawer>
@@ -43,7 +49,11 @@ export const LeftBar = () => {
         <List>
           {links.map(({ labelKey, link, icon, activeIcon }) => (
             <StyledDrawerItem key={labelKey}>
-              <NavLink to={link} className={({ isActive }) => `${isActive ? 'active-link' : ''}`}>
+              <NavLink
+                onClick={() => handleLinkClick(labelKey)}
+                to={link}
+                className={({ isActive }) => `${isActive ? 'active-link' : ''}`}
+              >
                 {({ isActive }) => (
                   <>
                     {isActive ? activeIcon : icon}

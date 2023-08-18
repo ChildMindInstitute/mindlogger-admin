@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText } from 'shared/styles';
-import { getErrorMessage, navigateToLibrary } from 'shared/utils';
+import { getErrorMessage, Mixpanel, navigateToLibrary } from 'shared/utils';
 import { auth } from 'modules/Auth/state';
 
 import {
@@ -56,12 +56,18 @@ export const SignUpForm = () => {
 
     if (signUp.fulfilled.match(result)) {
       navigateToLibrary(navigate);
+
+      Mixpanel.track('Account Creation complete', {});
     }
 
     if (signUp.rejected.match(result)) {
       setErrorMessage(getErrorMessage(result.payload));
     }
   };
+
+  useEffect(() => {
+    Mixpanel.trackPageView('Create Account');
+  }, []);
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
