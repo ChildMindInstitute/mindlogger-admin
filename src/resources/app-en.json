@@ -304,7 +304,7 @@
   "pleaseSelectAppletToSchedule": "Please select Applet to schedule for the Respondent: ",
   "removeAccessDescription": "This Respondent has access to the following Applets:",
   "removeRespondentAccess": "You are about to remove Respondent <1>{{ respondentName }}</1>’s access to the <3>{{ appletName }}</3> Applet.",
-  "removeRespondentData": "Remove Respondent <1>{{ respondentName }}</1>’s response data also.",
+  "removeRespondentData": "Also remove Respondent <1>{{ respondentName }}</1>’s response data for Applet <3>{{ appletName }}</3>",
   "yesRemove": "Yes, Remove",
   "confirmRemoveRespondentAccess": "Are you sure you want to remove access for Respondent <1>{{ respondentName }}</1>'s to the <3>{{ appletName }}</3> Applet?",
   "confirmRemoveRespondentAccessAndData": "Are you sure you want to to remove Respondent <1>{{ respondentName }}</1>'s access and all response data within Applet <3>{{ appletName }}</3>?",
@@ -997,7 +997,6 @@
   "noDataForActivity": "No available Data for this Activity yet",
   "noDataForActivityFilters": "No match was found. Try to adjust filters.",
   "isReviewableUnsupported": "Reviewer dashboard assessment supports only Single Selection, Multiple Selection and Slider Items",
-  "isReviewableExists": "Only one Activity within an Applet can be a Reviewer dashboard assessment. Selected one: {{- activityName }}",
   "activityHasVariableAmongItems": "This activity contains variables and cannot skip all items.",
   "activityCannotBeOnePageAssessment": "This activity contains variables and cannot be a one page assessment",
   "theRespondentCompletedTheActivity": "The respondent completed the Activity at these times",
@@ -1182,5 +1181,6 @@
   "itemValue": "Item Value",
   "pleaseSelectItem": "Please select an Item",
   "pleaseSelectActivity": "Please select an Activity",
-  "configureServerForApplet": "Configure Server (for Applet)"
+  "configureServerForApplet": "Configure Server (for Applet)",
+  "selectScheduleType": "Select Schedule Type"
 }

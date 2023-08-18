@@ -10,10 +10,12 @@ export const scheduleOptions = [
     labelKey: ScheduleOptions.DefaultSchedule,
     value: ScheduleOptions.DefaultSchedule,
     icon: <Svg id="calendar" />,
+    groupKey: 'selectScheduleType',
   },
   {
     labelKey: ScheduleOptions.IndividualSchedule,
     value: ScheduleOptions.IndividualSchedule,
     icon: <Svg id="user-calendar" />,
+    groupKey: 'selectScheduleType',
   },
 ];

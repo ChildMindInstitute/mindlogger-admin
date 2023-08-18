@@ -17,7 +17,7 @@ import { Table } from 'modules/Dashboard/components';
 import { updateRespondentsPinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import { getDateInUserTimezone, isManagerOrOwner, joinWihComma } from 'shared/utils';
+import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
 
 import {
@@ -108,6 +108,7 @@ export const Respondents = () => {
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'viewable');
       setDataExportPopupVisible(true);
+      Mixpanel.track('Export Data click');
     },
     viewDataAction: (respondentId: string) => {
       if (hasEncryptionCheck && appletId) {

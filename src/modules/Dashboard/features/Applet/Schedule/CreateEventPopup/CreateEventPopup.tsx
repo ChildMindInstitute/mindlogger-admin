@@ -2,6 +2,7 @@ import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
+import { Mixpanel } from 'shared/utils';
 
 import { EventForm, EventFormRef } from '../EventForm';
 import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
@@ -25,6 +26,8 @@ export const CreateEventPopup = ({
     if (eventFormRef?.current) {
       eventFormRef.current.submitForm();
     }
+
+    Mixpanel.track('Schedule save click');
   };
 
   const handleRemoveAlwaysAvailableClose = () => {

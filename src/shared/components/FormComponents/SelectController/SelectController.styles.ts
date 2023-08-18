@@ -2,6 +2,7 @@ import { MenuItem, styled } from '@mui/material';
 
 import { StyledBodyLarge, StyledFlexTopCenter, variables, theme } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
+
 import { SelectUiType } from './SelectController.types';
 
 export const StyledPlaceholder = styled(StyledBodyLarge)`

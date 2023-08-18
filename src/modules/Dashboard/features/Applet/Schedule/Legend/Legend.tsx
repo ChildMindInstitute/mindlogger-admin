@@ -5,7 +5,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { SelectController } from 'shared/components/FormComponents';
 import { Spinner, Svg } from 'shared/components';
 import { SelectEvent } from 'shared/types';
-import { exportTemplate, getRespondentName } from 'shared/utils';
+import { exportTemplate, getRespondentName, Mixpanel } from 'shared/utils';
 import { page } from 'resources';
 import { users } from 'modules/Dashboard/state';
 
@@ -75,6 +75,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     await setSchedule(value);
     if (value === ScheduleOptions.IndividualSchedule) {
       setSearchPopupVisible(true);
+      Mixpanel.track('View Individual calendar click');
     } else {
       setSelectedRespondent(null);
       navigate(
@@ -82,6 +83,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           appletId,
         }),
       );
+      Mixpanel.track('View General calendar click');
     }
   };
 
@@ -117,7 +119,16 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     };
 
     await exportTemplate({ data: scheduleExportCsv, fileName: getFileName() });
+
+    Mixpanel.track('Schedule import successful');
+
     isExport && setExportDefaultSchedulePopupVisible(false);
+  };
+
+  const handleImportClick = () => {
+    setImportSchedulePopupVisible(true);
+
+    Mixpanel.track('Schedule Import click');
   };
 
   useEffect(() => {
@@ -144,6 +155,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
             customChange={scheduleChangeHandler}
             options={scheduleOptions}
             withChecked
+            withGroups
             SelectProps={{
               autoWidth: true,
               IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
@@ -177,7 +189,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
         </>
       )}
       <StyledBtnsRow>
-        <StyledBtn onClick={() => setImportSchedulePopupVisible(true)}>
+        <StyledBtn onClick={handleImportClick}>
           <Svg width={18} height={18} id="export" />
           {t('import')}
         </StyledBtn>
