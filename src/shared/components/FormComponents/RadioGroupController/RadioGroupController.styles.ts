@@ -5,4 +5,10 @@ import theme from 'shared/styles/theme';
 
 export const StyledFormControlLabel = styled(FormControlLabel)`
   margin: ${theme.spacing(0.6, 0)};
+
+  .Mui-disabled {
+    > p {
+      opacity: 0.38;
+    }
+  }
 `;

@@ -35,6 +35,7 @@ import {
   performanceTaskResponseTypes,
   PerfTaskType,
   responseTypeToHaveOptions,
+  Roles,
 } from 'shared/consts';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
 
@@ -104,7 +105,7 @@ const getAppletsRows = (applets: Applet[]) =>
     },
   }));
 
-const getActions = (): Omit<FormControlLabelProps, 'control'>[] => {
+const getActions = (applets: Applet[]): Omit<FormControlLabelProps, 'control'>[] => {
   const { t } = i18n;
 
   return [
@@ -135,6 +136,7 @@ const getActions = (): Omit<FormControlLabelProps, 'control'>[] => {
           </StyledLabelLarge>
         </>
       ),
+      disabled: !applets.length,
     },
   ];
 };
@@ -181,7 +183,7 @@ export const getSteps = ({
   handleAddToExistingApplet,
 }: GetStep): Step[] => {
   const { t } = i18n;
-  const options = getActions();
+  const options = getActions(applets);
 
   return [
     {
@@ -265,8 +267,8 @@ export const getSteps = ({
 };
 
 export const getArrayFromApplets = (applets: FullApplet[]) =>
-  applets.reduce((acc: Applet[], { id, type, displayName, image }) => {
-    if (type === DashboardAppletType.Applet) {
+  applets.reduce((acc: Applet[], { id, type, displayName, image, role }) => {
+    if (type === DashboardAppletType.Applet && (role === Roles.Owner || role === Roles.Manager)) {
       acc.push({ id, appletName: displayName, image });
     }
 

@@ -17,13 +17,14 @@ export const RadioGroupController = <T extends FieldValues>({
     defaultValue={defaultValue}
     render={({ field }) => (
       <RadioGroup {...field}>
-        {options?.map(({ value, label }) => (
+        {options?.map(({ value, label, disabled }) => (
           <StyledFormControlLabel
             key={uniqueId()}
             value={value}
             control={<Radio />}
             label={label}
             checked={value === field.value}
+            disabled={disabled}
           />
         ))}
       </RadioGroup>
