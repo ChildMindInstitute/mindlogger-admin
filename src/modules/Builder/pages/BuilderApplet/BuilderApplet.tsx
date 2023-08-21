@@ -118,13 +118,6 @@ export const BuilderApplet = () => {
     }
   }, [hasLibraryData, isNewApplet]);
 
-  useEffect(() => {
-    if (!isNewApplet || isFromLibrary) return;
-
-    removeAppletData();
-    reset(getDefaultValues());
-  }, [isNewApplet, isFromLibrary]);
-
   const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(getValues);
 
   const handleFormChangeDebounced = useCallback(debounce(handleFormChange, INPUT_DEBOUNCE_TIME), [
