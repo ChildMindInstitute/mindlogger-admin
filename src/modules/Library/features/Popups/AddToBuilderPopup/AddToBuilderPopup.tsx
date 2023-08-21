@@ -97,9 +97,6 @@ export const AddToBuilderPopup = ({
 
   const handleAddToBuilder = async () => {
     const { addToBuilderAction, selectedWorkspace: ownerId } = getValues();
-    // await getWorkspaceApplets({
-    //   params: { ownerId, limit: APPLETS_WITHOUT_LIMIT, flatList: true },
-    // });
 
     if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
       const { appletToBuilder } = await getAddToBuilderData(cartItems);

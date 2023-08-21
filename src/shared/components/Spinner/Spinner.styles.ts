@@ -1,8 +1,7 @@
 import { styled } from '@mui/system';
 
-import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { shouldForwardProp } from '../../utils';
+import { theme, StyledFlexAllCenter } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 export const StyledSpinner = styled(StyledFlexAllCenter, shouldForwardProp)`
   position: absolute;
