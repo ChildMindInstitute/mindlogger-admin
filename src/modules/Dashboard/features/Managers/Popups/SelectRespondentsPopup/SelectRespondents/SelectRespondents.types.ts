@@ -12,10 +12,5 @@ export type Respondent = {
 export type SelectRespondentsProps = {
   reviewer: Reviewer;
   appletName: string;
-  selectedRespondents: string[];
   respondents: Respondent[];
-};
-
-export type SelectRespondentsRef = {
-  confirmSelection: () => string[];
 };
