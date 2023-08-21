@@ -124,17 +124,19 @@ export const Managers = () => {
             },
           }),
           actions: {
-            content: (_, hasVisibleActions) => (
-              // if (ownerId === id || !filteredManager?.applets?.length) {
-              //   return;
-              // }
+            content: (_, hasVisibleActions) => {
+              if (ownerId === id || !filteredManager?.applets?.length) {
+                return;
+              }
 
-              <Actions
-                items={getActions(actions)}
-                context={filteredManager}
-                visibleByDefault={hasVisibleActions}
-              />
-            ),
+              return (
+                <Actions
+                  items={getActions(actions)}
+                  context={filteredManager}
+                  visibleByDefault={hasVisibleActions}
+                />
+              );
+            },
             value: '',
             width: '20%',
           },
