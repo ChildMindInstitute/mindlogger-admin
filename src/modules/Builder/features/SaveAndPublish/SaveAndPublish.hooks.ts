@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } fr
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
-import get from 'lodash.get';
 
 import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
@@ -222,19 +221,20 @@ export const useUpdatedAppletNavigate = () => {
 
   const { getAppletWithItems } = applet.thunk;
 
-  const navigateToApplet = async (appletId: string) => {
+  return async (appletId: string) => {
     const oldApplet = getValues();
-    const newApplet = await dispatch(getAppletWithItems({ ownerId, appletId }));
-    const newEntityId = getCurrentEntityId(oldApplet, get(newApplet, 'payload.data.result'), {
-      isActivity: !!activityId,
-      id: activityId ?? activityFlowId,
-    });
-    const url = getUpdatedAppletUrl(appletId, newEntityId, location.pathname);
+    const newAppletResult = await dispatch(getAppletWithItems({ ownerId, appletId }));
 
-    navigate(url);
+    if (getAppletWithItems.fulfilled.match(newAppletResult)) {
+      const newApplet = newAppletResult.payload.data.result;
+      const newEntityId = getCurrentEntityId(oldApplet, newApplet, {
+        isActivity: !!activityId,
+        id: activityId ?? activityFlowId,
+      });
+      const url = getUpdatedAppletUrl(appletId, newEntityId, location.pathname);
+      await navigate(url);
+    }
   };
-
-  return navigateToApplet;
 };
 
 export const useSaveAndPublishSetup = (

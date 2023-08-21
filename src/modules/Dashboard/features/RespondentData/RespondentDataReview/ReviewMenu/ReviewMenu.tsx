@@ -106,7 +106,7 @@ export const ReviewMenu = ({
           minDate={null}
           includeDates={submitDates}
           onMonthChange={onMonthChange}
-          disabled={!submitDates}
+          disabled={!submitDates?.length}
         />
       </StyledHeader>
       <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>

@@ -84,7 +84,7 @@ export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void 
       return (
         <Modal
           open={deletePopupVisible}
-          onClose={deletePopupClose}
+          onClose={handleConfirmation}
           onSubmit={handleConfirmation}
           title={t('deleteApplet')}
           buttonText={t('ok')}
