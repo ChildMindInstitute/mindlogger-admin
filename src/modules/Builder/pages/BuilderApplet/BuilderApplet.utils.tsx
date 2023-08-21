@@ -198,6 +198,7 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     showAllAtOnce: false,
     isSkippable: false,
     responseIsEditable: true,
+    isHidden: false,
     ...activity,
     isReviewable: false,
     items,
@@ -550,6 +551,7 @@ const getActivityItems = (items: Item[]) =>
         conditionalLogic: undefined,
         alerts: getAlerts(item),
         allowEdit: item.allowEdit,
+        isHidden: item.isHidden,
       }))
     : [];
 
@@ -865,7 +867,7 @@ export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: stri
 
 export const prepareActivitiesFromLibrary = (activities: ActivityFormValues[]) =>
   activities.reduce(
-    (result: ActivityFormValues[], activity, index) => [
+    (result: ActivityFormValues[], activity) => [
       ...result,
       {
         ...activity,
