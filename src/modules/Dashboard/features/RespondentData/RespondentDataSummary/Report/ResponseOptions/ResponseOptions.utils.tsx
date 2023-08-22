@@ -1,5 +1,6 @@
 import { ItemResponseType } from 'shared/consts';
 
+import { TimePickerLineChart } from '../Charts/LineChart';
 import { TICK_HEIGHT } from '../Charts/Charts.const';
 import { MultiScatterChart } from '../Charts';
 import { ReportTable } from '../ReportTable';
@@ -39,6 +40,16 @@ export const getResponseItem = ({
     );
   };
 
+  const renderTimePicker = () => (
+    <TimePickerLineChart
+      color={color}
+      minDate={minDate}
+      maxDate={maxDate}
+      answers={answers}
+      versions={versions}
+    />
+  );
+
   switch (responseType) {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection:
@@ -46,6 +57,8 @@ export const getResponseItem = ({
       return renderMultipleSelection();
     case ItemResponseType.Text:
       return <ReportTable answers={answers} />;
+    case ItemResponseType.Time:
+      return renderTimePicker();
     default:
       <></>;
   }

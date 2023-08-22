@@ -7,7 +7,7 @@ import {
   PrimaryAcceptFormats,
   SecondaryAcceptFormats,
 } from 'shared/components/FileUploader/FileUploader.const';
-import { StyledBodyMedium, variables } from 'shared/styles';
+import { variables } from 'shared/styles';
 
 export const importTable = async (file: File, isPrimaryUiType: boolean) => {
   const validFileTypes = isPrimaryUiType ? ['.csv', '.xls', '.xlsx', '.ods'] : ['.csv', '.xlsx'];

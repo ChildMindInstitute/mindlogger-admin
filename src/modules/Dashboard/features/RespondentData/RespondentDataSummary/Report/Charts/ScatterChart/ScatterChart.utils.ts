@@ -1,4 +1,4 @@
-import { ScriptableTooltipContext } from 'chart.js';
+import { ChartDataset, ScriptableTooltipContext } from 'chart.js';
 import { Context } from 'chartjs-plugin-datalabels';
 
 import { variables } from 'shared/styles';
@@ -6,7 +6,6 @@ import { locales } from 'shared/consts';
 import { Version } from 'api';
 import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 
-import { ExtendedChartDataset } from './ScatterChart.types';
 import { getStepSize, getTimeConfig } from '../Charts.utils';
 import { POINT_RADIUS_DEFAULT } from '../Charts.const';
 
@@ -149,7 +148,9 @@ export const getData = (answers: ActivityCompletion[], versions: Version[]) => (
           size: 11,
         },
         formatter: (_: unknown, context: Context) => {
-          const dataset = context.dataset as ExtendedChartDataset;
+          const dataset = context.dataset as ChartDataset & {
+            labels: string[];
+          };
 
           return dataset.labels[context.dataIndex];
         },

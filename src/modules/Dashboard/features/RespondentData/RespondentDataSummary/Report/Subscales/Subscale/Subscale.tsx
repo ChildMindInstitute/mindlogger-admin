@@ -9,11 +9,11 @@ import { getDictionaryText } from 'shared/utils';
 import { Accordion } from 'modules/Dashboard/components';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 import { FormattedResponse } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
-import { isItemUnsupported } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { getResponseItem } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils';
 import { StyledBodyMedium, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
+import { SUMMARY_UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
 
 import { COLORS } from '../../Charts/Charts.const';
 import { AdditionalInformation } from '../AdditionalInformation';
@@ -28,7 +28,7 @@ export const Subscale = ({ isNested = false, name, subscale, versions }: Subscal
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
   const renderChart = ({ activityItem, answers }: FormattedResponse, index: number) => {
-    if (isItemUnsupported(activityItem.responseType))
+    if (SUMMARY_UNSUPPORTED_ITEMS.includes(activityItem.responseType))
       return <UnsupportedItemResponse itemType={activityItem.responseType} />;
 
     const color = COLORS[index % COLORS.length];

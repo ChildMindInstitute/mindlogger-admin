@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import { StyledBodyMedium, StyledFlexTopStart, StyledHeadline, theme } from 'shared/styles';
 
-import { LineChart } from '../../Charts';
+import { SubscaleLineChart } from '../../Charts/LineChart';
 import { AllScoresProps } from './AllScores.types';
 import { StyledChartContainer } from './AllScores.styles';
 
@@ -33,7 +33,7 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
         )}
       </StyledFlexTopStart>
       <StyledChartContainer>
-        <LineChart data={data} versions={versions} />
+        <SubscaleLineChart data={data} versions={versions} />
       </StyledChartContainer>
     </Box>
   );
