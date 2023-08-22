@@ -10,7 +10,6 @@ import {
   variables,
 } from 'shared/styles';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
-import { EditedAnswer } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.types';
 
 import { StyledButton, StyledEdited, StyledItem, StyledReviewer } from './FeedbackReviewer.styles';
 import { FeedbackReviewerProps } from './FeedbackReviewer.types';
@@ -37,7 +36,7 @@ export const FeedbackReviewer = ({ reviewer: { review, reviewer } }: FeedbackRev
         <>
           {review.map((activityItemAnswer) => (
             <StyledItem key={activityItemAnswer.activityItem.id}>
-              {(activityItemAnswer.answer as EditedAnswer)?.edited && (
+              {activityItemAnswer.answer?.edited && (
                 <StyledEdited>
                   <StyledBodyMedium color={variables.palette.on_secondary_container}>
                     {t('edited')}

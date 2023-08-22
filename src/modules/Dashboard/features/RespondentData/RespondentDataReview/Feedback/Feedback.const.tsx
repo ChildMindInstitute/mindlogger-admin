@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { DatavizActivity } from 'api';
-import { ActivityItemAnswer } from 'shared/types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 
 import { FeedbackAssessment } from './FeedbackAssessment';
 import { FeedbackNotes } from './FeedbackNotes';
@@ -10,7 +10,7 @@ import { FeedbackReviewed } from './FeedbackReviewed';
 export const getTabs = (
   selectedActivity: DatavizActivity,
   setActiveTab: Dispatch<SetStateAction<number>>,
-  assessment: ActivityItemAnswer[] | undefined,
+  assessment: AssessmentActivityItem[] | undefined,
   assessmentStep: number,
   setAssessmentStep: Dispatch<SetStateAction<number>>,
 ) => [

@@ -1,14 +1,14 @@
-import { DecryptedAnswerData, EncryptedAnswerSharedProps } from 'shared/types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { EncryptedAnswerSharedProps } from 'shared/types';
 
-export type ReviewData = {
-  reviewer: {
-    firstName: string;
-    lastName: string;
-  };
+export type Reviewer = {
+  firstName: string;
+  lastName: string;
 };
 
 export type Review = EncryptedAnswerSharedProps & ReviewData;
 
-export type Reviewer = ReviewData & {
-  review: DecryptedAnswerData<Review>[];
+export type ReviewData = {
+  reviewer: Reviewer;
+  review: AssessmentActivityItem[];
 };
