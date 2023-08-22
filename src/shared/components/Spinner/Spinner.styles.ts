@@ -1,6 +1,6 @@
 import { styled } from '@mui/system';
 
-import { theme, StyledFlexAllCenter } from 'shared/styles';
+import { theme, StyledFlexAllCenter, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledSpinner = styled(StyledFlexAllCenter, shouldForwardProp)`
@@ -8,6 +8,6 @@ export const StyledSpinner = styled(StyledFlexAllCenter, shouldForwardProp)`
   width: 100%;
   height: 100%;
   background-color: ${({ noBackground }: { noBackground?: boolean }) =>
-    noBackground ? 'transparent' : 'rgb(255 255 255 50%)'};
+    noBackground ? 'transparent' : variables.palette.spinner_bg};
   z-index: ${theme.zIndex.appBar};
 `;
