@@ -37,6 +37,7 @@ import {
   responseTypeToHaveOptions,
   Roles,
 } from 'shared/consts';
+import { isManagerOrOwner } from 'shared/utils';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
 
 import {
@@ -48,7 +49,6 @@ import {
   TableController,
 } from './AddToBuilderPopup.types';
 import { StyledTableFormControlLabel } from './AddToBuilderPopup.styles';
-import { isManagerOrOwner } from '../../../../../shared/utils';
 
 const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] => [
   {
