@@ -12,9 +12,8 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { ActivityItemAnswer } from 'shared/types';
+import { EncryptedAnswerSharedProps } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { Assessment } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/FeedbackAssessment/FeedbackAssessment.types';
 
 import { StyledTextBtn } from '../RespondentData.styles';
 import {
@@ -23,7 +22,7 @@ import {
   StyledReviewContainer,
   StyledWrapper,
 } from './RespondentDataReview.styles';
-import { Answer } from './RespondentDataReview.types';
+import { Answer, AssessmentActivityItem } from './RespondentDataReview.types';
 import { Feedback } from './Feedback';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
@@ -39,7 +38,7 @@ export const RespondentDataReview = () => {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
-  const [assessment, setAssessment] = useState<ActivityItemAnswer[]>([]);
+  const [assessment, setAssessment] = useState<AssessmentActivityItem[]>([]);
   const [itemIds, setItemIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -86,10 +85,10 @@ export const RespondentDataReview = () => {
         const encryptedData = {
           ...assessmentData,
           userPublicKey: reviewerPublicKey,
-        } as Assessment;
+        } as EncryptedAnswerSharedProps;
         const decryptedAssessment = getDecryptedActivityData(encryptedData);
         setItemIds(result.data.result.itemIds || []);
-        setAssessment(decryptedAssessment.decryptedAnswers);
+        setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
       } finally {
         setIsLoading(false);
       }

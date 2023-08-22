@@ -1,8 +1,5 @@
 import { ItemResponseType } from 'shared/consts';
-import { ActivityItemAnswer } from 'shared/types';
-import { getAnswerValue } from 'shared/utils';
-
-import { EditedAnswer } from './Feedback.types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 export const getDefaultValue = (responseType: ItemResponseType): string | number[] | null => {
   switch (responseType) {
@@ -15,12 +12,12 @@ export const getDefaultValue = (responseType: ItemResponseType): string | number
   }
 };
 
-export const getDefaultFormValues = (assessment: ActivityItemAnswer[] = []) => ({
+export const getDefaultFormValues = (assessment: AssessmentActivityItem[] = []) => ({
   newNote: '',
   assessmentItems:
     assessment.map(({ activityItem, answer }) => ({
-      edited: (answer as EditedAnswer)?.edited || null,
-      itemId: activityItem.id,
-      answers: getAnswerValue(answer) || getDefaultValue(activityItem.responseType),
+      edited: answer?.edited || null,
+      itemId: activityItem.id!,
+      answers: answer?.value ?? getDefaultValue(activityItem.responseType),
     })) ?? [],
 });

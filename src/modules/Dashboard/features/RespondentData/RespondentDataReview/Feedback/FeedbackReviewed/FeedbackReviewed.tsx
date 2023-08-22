@@ -10,7 +10,7 @@ import { getReviewsApi } from 'api';
 
 import { StyledContainer } from './FeedbackReviewed.styles';
 import { FeedbackReviewer } from './FeedbackReviewer';
-import { Review, Reviewer } from './FeedbackReviewed.types';
+import { Review, ReviewData } from './FeedbackReviewed.types';
 
 export const FeedbackReviewed = () => {
   const { t } = useTranslation('app');
@@ -21,7 +21,7 @@ export const FeedbackReviewed = () => {
   const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getReviews } = useAsync(getReviewsApi);
   const [isLoading, setIsLoading] = useState(true);
-  const [reviewers, setReviewers] = useState<Reviewer[]>([]);
+  const [reviewers, setReviewers] = useState<ReviewData[]>([]);
 
   useEffect(() => {
     if (!appletId || !answerId) return;
@@ -42,7 +42,7 @@ export const FeedbackReviewed = () => {
           };
         });
 
-        setReviewers(decryptedData);
+        setReviewers(decryptedData as ReviewData[]);
       } finally {
         setIsLoading(false);
       }

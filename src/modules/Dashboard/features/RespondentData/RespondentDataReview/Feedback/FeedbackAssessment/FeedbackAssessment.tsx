@@ -6,7 +6,11 @@ import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
 import { createAssessmentApi } from 'api';
-import { FeedbackTabs } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.const';
+import {
+  FeedbackTabs,
+  AssessmentFormItem,
+  FeedbackForm,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback';
 import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import { StyledContainer } from './FeedbackAssessment.styles';
@@ -20,7 +24,7 @@ export const FeedbackAssessment = ({
   assessmentStep,
   setAssessmentStep,
 }: FeedbackAssessmentProps) => {
-  const { assessment, itemIds } = useContext(RespondentDataReviewContext);
+  const { assessment, itemIds, setItemIds } = useContext(RespondentDataReviewContext);
   const { appletId = '' } = useParams();
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId');
@@ -30,8 +34,11 @@ export const FeedbackAssessment = ({
     setSubmitAssessmentPopupVisible(false),
   );
 
-  const methods = useFormContext();
-  const { getValues } = methods;
+  const methods = useFormContext<FeedbackForm>();
+  const {
+    getValues,
+    formState: { defaultValues },
+  } = methods;
 
   const [submitAssessmentPopupVisible, setSubmitAssessmentPopupVisible] = useState(false);
 
@@ -47,22 +54,34 @@ export const FeedbackAssessment = ({
 
   const handleSubmitAssessment = async () => {
     const { assessmentItems } = getValues();
-    const answers = formatAssessmentAnswers(assessmentItems);
-    const answer = getEncryptedAnswers(answers) as string;
+    const { answers, updatedItemIds } = formatAssessmentAnswers(
+      defaultValues?.assessmentItems as AssessmentFormItem[],
+      assessmentItems,
+      itemIds,
+    );
+
+    const answersToEncrypt = answers.map(({ answer }) => answer);
+    const answer = getEncryptedAnswers(answersToEncrypt) as string;
 
     if (!appletId || !answerId) return;
+
+    setItemIds(updatedItemIds);
 
     await createAssessment({
       appletId,
       answerId,
       answer,
-      itemIds: itemIds || [],
+      itemIds: updatedItemIds || [],
       reviewerPublicKey: accountId,
     });
 
     methods.reset({
       newNote: '',
-      assessmentItems,
+      assessmentItems: answers.map(({ answer, itemId }) => ({
+        itemId,
+        answers: answer.value,
+        edited: answer.edited,
+      })),
     });
     setActiveTab(FeedbackTabs.Reviewed);
     setAssessmentStep(0);

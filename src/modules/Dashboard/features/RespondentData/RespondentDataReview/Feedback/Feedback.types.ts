@@ -1,5 +1,4 @@
 import { DatavizActivity } from 'api';
-import { AnswerDTO, AnswerValue } from 'shared/types';
 
 export type FeedbackProps = {
   isFeedbackOpen: boolean;
@@ -9,7 +8,7 @@ export type FeedbackProps = {
 
 export type AssessmentFormItem = {
   itemId: string;
-  answers: AnswerValue;
+  answers: string | number | (string | number)[];
   edited: number | null;
 };
 
@@ -17,5 +16,3 @@ export type FeedbackForm = {
   newNote: string;
   assessmentItems: AssessmentFormItem[];
 };
-
-export type EditedAnswer = AnswerDTO & { edited: number | null };

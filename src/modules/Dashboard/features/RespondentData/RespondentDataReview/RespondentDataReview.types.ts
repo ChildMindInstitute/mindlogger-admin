@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
-import { TextItem, SliderItem, SingleSelectItem, MultiSelectItem } from 'shared/state';
+import { TextItem, SliderItem, SingleSelectItem, MultiSelectItem, Item } from 'shared/state';
 import {
-  ActivityItemAnswer,
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
@@ -46,7 +45,26 @@ export type MultiSelectItemAnswer = {
 };
 
 export type RespondentDataReviewContextType = {
-  assessment?: ActivityItemAnswer[];
+  assessment?: AssessmentActivityItem[];
   itemIds: string[];
   setItemIds: Dispatch<SetStateAction<string[]>>;
+};
+
+export type AssessmentAnswer = (
+  | DecryptedSingleSelectionAnswer
+  | DecryptedMultiSelectionAnswer
+  | DecryptedSliderAnswer
+) & {
+  edited?: number | null;
+};
+
+export type AssessmentActivityItem = {
+  activityItem: Item;
+  answer: AssessmentAnswer;
+  items: Item[];
+};
+
+export type FormattedAssessmentAnswer = {
+  answer: AssessmentAnswer;
+  itemId: string;
 };
