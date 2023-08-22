@@ -36,6 +36,7 @@ export const InputController = <T extends FieldValues>({
   restrictExceededValueLength = false,
   Counter = StyledCounter,
   counterProps,
+  'data-testid': dataTestid,
   ...textFieldProps
 }: InputControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -98,6 +99,7 @@ export const InputController = <T extends FieldValues>({
                 value={getTextFieldValue()}
                 error={!!error || providedError}
                 helperText={isErrorVisible ? error?.message || helperText : ''}
+                data-testid={dataTestid}
                 InputProps={
                   isNumberType
                     ? {

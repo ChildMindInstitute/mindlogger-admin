@@ -21,6 +21,7 @@ type FormInputProps = {
   onDistractNumber?: (value: number) => void;
   Counter?: FC<PropsWithChildren<CounterProps>>;
   counterProps?: Record<string, unknown>;
+  'data-testid'?: string;
 } & TextFieldProps;
 
 export type InputControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;

@@ -53,14 +53,22 @@ export const ResetForm = ({ setEmail }: ResetFormProps) => {
         {t('enterEmailAssociatedWithAccount')}
       </StyledResetPasswordSubheader>
       <StyledController>
-        <InputController fullWidth name="email" control={control} label={t('email')} />
+        <InputController
+          fullWidth
+          name="email"
+          control={control}
+          label={t('email')}
+          data-testid="reset-form-email"
+        />
       </StyledController>
       {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-      <StyledButton variant="contained" type="submit" data-testid="submit-btn">
+      <StyledButton variant="contained" type="submit" data-testid="reset-form-reset">
         {t('sendResetLink')}
       </StyledButton>
       <StyledBackWrapper>
-        <StyledBack onClick={() => navigate(page.login)}>{t('backToLogin')}</StyledBack>
+        <StyledBack onClick={() => navigate(page.login)} data-testid="reset-form-back">
+          {t('backToLogin')}
+        </StyledBack>
       </StyledBackWrapper>
     </StyledForm>
   );
