@@ -8,7 +8,7 @@ import { LoginForm } from '.';
 const submitForm = (username: string, password: string) => {
   fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: username } });
   fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: password } });
-  fireEvent.click(screen.getByTestId('submit-btn'));
+  fireEvent.click(screen.getByTestId('login-form-signin'));
 };
 
 describe('Login component tests', () => {

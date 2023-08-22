@@ -99,9 +99,7 @@ export const InputController = <T extends FieldValues>({
                 value={getTextFieldValue()}
                 error={!!error || providedError}
                 helperText={isErrorVisible ? error?.message || helperText : ''}
-                inputProps={{
-                  'data-testid': dataTestid,
-                }}
+                data-testid={dataTestid}
                 InputProps={
                   isNumberType
                     ? {

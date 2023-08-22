@@ -10,7 +10,7 @@ const submitForm = (email: string, password: string, firstName: string, lastName
   fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: password } });
   fireEvent.change(screen.getByLabelText(/First Name/i), { target: { value: firstName } });
   fireEvent.change(screen.getByLabelText(/Last Name/i), { target: { value: lastName } });
-  fireEvent.click(screen.getByTestId('submit-btn'));
+  fireEvent.click(screen.getByTestId('signup-form-signup'));
 };
 
 describe('SignUp component tests', () => {

@@ -6,6 +6,7 @@ type FormCheckboxProps = {
   label: JSX.Element;
   isInversed?: boolean;
   onCustomChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  'data-testid'?: string;
 } & CheckboxProps;
 
 export type InputControllerProps<T extends FieldValues> = FormCheckboxProps & UseControllerProps<T>;

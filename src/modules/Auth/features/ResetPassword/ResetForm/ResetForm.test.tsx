@@ -7,7 +7,7 @@ import { ResetForm } from '.';
 
 const submitForm = (email: string) => {
   fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: email } });
-  fireEvent.click(screen.getByTestId('submit-btn'));
+  fireEvent.click(screen.getByTestId('reset-form-reset'));
 };
 
 describe('ResetForm component tests', () => {
