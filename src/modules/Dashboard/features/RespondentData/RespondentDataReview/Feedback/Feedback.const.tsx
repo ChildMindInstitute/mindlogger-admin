@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { DatavizActivity } from 'api';
-import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import { FeedbackAssessment } from './FeedbackAssessment';
 import { FeedbackNotes } from './FeedbackNotes';

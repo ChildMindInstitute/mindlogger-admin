@@ -6,12 +6,12 @@ import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
 import { useAsync } from 'shared/hooks';
 import { createAssessmentApi } from 'api';
-import { FeedbackTabs } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.const';
-import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 import {
+  FeedbackTabs,
   AssessmentFormItem,
   FeedbackForm,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.types';
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback';
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import { StyledContainer } from './FeedbackAssessment.styles';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';

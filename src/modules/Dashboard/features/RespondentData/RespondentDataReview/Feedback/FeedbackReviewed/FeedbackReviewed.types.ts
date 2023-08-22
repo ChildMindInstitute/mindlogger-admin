@@ -1,4 +1,4 @@
-import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 import { EncryptedAnswerSharedProps } from 'shared/types';
 
 export type Reviewer = {

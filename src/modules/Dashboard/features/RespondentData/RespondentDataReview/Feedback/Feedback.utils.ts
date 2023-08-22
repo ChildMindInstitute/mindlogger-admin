@@ -1,5 +1,5 @@
 import { ItemResponseType } from 'shared/consts';
-import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 export const getDefaultValue = (responseType: ItemResponseType): string | number[] | null => {
   switch (responseType) {
