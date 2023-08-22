@@ -1,4 +1,4 @@
-import { RefObject, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { useAsync } from 'shared/hooks';
 import { deleteEventApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
+import { Mixpanel } from 'shared/utils';
 
 import { EditEventPopupProps } from './EditEventPopup.types';
 import { EventForm, EventFormRef } from '../EventForm';
@@ -45,6 +46,8 @@ export const EditEventPopup = ({
     if (eventFormRef?.current) {
       eventFormRef.current.submitForm();
     }
+
+    Mixpanel.track('Schedule save click');
   };
 
   const handleRemoveEvent = async () => {

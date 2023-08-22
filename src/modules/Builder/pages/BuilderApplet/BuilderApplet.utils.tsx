@@ -198,6 +198,7 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     showAllAtOnce: false,
     isSkippable: false,
     responseIsEditable: true,
+    isHidden: false,
     ...activity,
     isReviewable: false,
     items,
@@ -550,6 +551,7 @@ const getActivityItems = (items: Item[]) =>
         conditionalLogic: undefined,
         alerts: getAlerts(item),
         allowEdit: item.allowEdit,
+        isHidden: item.isHidden,
       }))
     : [];
 
@@ -863,21 +865,17 @@ export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: stri
   return regexp.test(value);
 };
 
-export const prepareActivitiesFromLibrary = (activities: ActivityFormValues[]) => {
-  const lastReviewableActivityIndex = pluck(activities, 'isReviewable').lastIndexOf(true);
-
-  return activities.reduce(
-    (result: ActivityFormValues[], activity, index) => [
+export const prepareActivitiesFromLibrary = (activities: ActivityFormValues[]) =>
+  activities.reduce(
+    (result: ActivityFormValues[], activity) => [
       ...result,
       {
         ...activity,
         name: getUniqueName(activity.name, pluck(result, 'name')),
-        isReviewable: index === lastReviewableActivityIndex,
       },
     ],
     [],
   );
-};
 
 export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormValues[]) =>
   activityFlows.reduce(

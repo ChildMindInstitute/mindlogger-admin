@@ -32,13 +32,14 @@ export const RespondentsRemoveAccessPopup = ({
   const [appletName, setAppletName] = useState('');
   const [respondentName, setRespondentName] = useState('');
   const [disabledSubmit, setDisabledSubmit] = useState(false);
-  const [secondBtnDisabled, setSecondBtnDisabled] = useState(false);
   const [step, setStep] = useState<Steps>(0);
   const [removeData, setRemoveData] = useState(false);
 
   const { execute: handleAccessRemove, error } = useAsync(removeRespondentAccessApi);
 
   const isRemoved = !error;
+
+  const isFirstStepWithAppletId = !!appletId && step === 1;
 
   useEffect(() => {
     if (chosenAppletData) {
@@ -47,16 +48,6 @@ export const RespondentsRemoveAccessPopup = ({
       setStep(1);
     }
   }, [chosenAppletData]);
-
-  useEffect(() => {
-    if (!!appletId && step === 1) {
-      setSecondBtnDisabled(true);
-
-      return;
-    }
-
-    setSecondBtnDisabled(false);
-  }, [step, appletId]);
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
@@ -92,11 +83,14 @@ export const RespondentsRemoveAccessPopup = ({
           label={
             <StyledBodyLarge>
               <Trans i18nKey="removeRespondentData">
-                Remove Respondent
+                Also remove Respondent
                 <b>
                   <>{{ respondentName }}</>
                 </b>
-                ’s response data also.
+                ’s response data for Applet
+                <b>
+                  <>{{ appletName }}</>
+                </b>
               </Trans>
             </StyledBodyLarge>
           }
@@ -150,6 +144,11 @@ export const RespondentsRemoveAccessPopup = ({
   });
 
   const onSecondBtnSubmit = () => {
+    if (isFirstStepWithAppletId) {
+      handlePopupClose();
+
+      return;
+    }
     getStep('prev');
 
     if (disabledSubmit) {
@@ -175,9 +174,8 @@ export const RespondentsRemoveAccessPopup = ({
       buttonText={t(screens[step].buttonText)}
       hasSecondBtn={screens[step].hasSecondBtn}
       onSecondBtnSubmit={onSecondBtnSubmit}
-      secondBtnText={t('back')}
+      secondBtnText={t(isFirstStepWithAppletId ? 'cancel' : 'back')}
       disabledSubmit={disabledSubmit}
-      disabledSecondBtn={secondBtnDisabled}
       submitBtnColor={screens[step]?.submitBtnColor}
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>

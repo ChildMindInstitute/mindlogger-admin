@@ -1,5 +1,5 @@
 export const palette = {
-  primary: '#0067a0',
+  primary: '#00639a',
   primary50: '#207cbb',
   primary_container: '#cee5ff',
   secondary: '#51606f',
@@ -32,6 +32,7 @@ export const palette = {
   on_secondary_container_alfa8: 'rgba(14, 29, 42, 0.08)',
   on_secondary_container_alfa12: 'rgba(14, 29, 42, 0.12)',
   outline_alfa8: 'rgba(114, 119, 127, 0.08)',
+  outline_alfa12: 'rgba(114, 119, 127, 0.12)',
   contained_btn_focus: '#1f79ab',
   contained_btn_disabled_text: '#979799',
   light_alfa8: 'rgba(255, 255, 255, 0.08)',

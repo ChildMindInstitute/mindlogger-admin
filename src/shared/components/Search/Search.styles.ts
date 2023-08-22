@@ -7,7 +7,8 @@ import { variables } from 'shared/styles/variables';
 import { SearchProps } from './Search.types';
 
 export const StyledTextField = styled(OutlinedInput)`
-  height: ${({ height }: Pick<SearchProps, 'height' | 'width' | 'background'>) => height || '4rem'};
+  height: ${({ height }: Pick<SearchProps, 'height' | 'width' | 'background'>) =>
+    height || '4.8rem'};
   width: ${({ width }) => width || '49.8rem'};
   background-color: ${({ background }) => background || variables.palette.outline_alfa8};
   border-radius: 2.2rem;
@@ -23,6 +24,16 @@ export const StyledTextField = styled(OutlinedInput)`
 
   .MuiOutlinedInput-notchedOutline {
     border: none;
+  }
+
+  &.Mui-focused {
+    border: ${variables.borderWidth.md} solid ${variables.palette.on_surface_variant};
+    padding-left: ${theme.spacing(1.3)};
+    background-color: ${({ background }) => background || variables.palette.outline_alfa12};
+
+    svg {
+      fill: ${variables.palette.on_surface_variant};
+    }
   }
 `;
 

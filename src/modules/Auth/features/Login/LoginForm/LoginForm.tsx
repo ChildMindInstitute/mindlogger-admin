@@ -10,7 +10,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
-import { getErrorMessage, navigateToLibrary } from 'shared/utils';
+import { getErrorMessage, Mixpanel, navigateToLibrary } from 'shared/utils';
 import { variables } from 'shared/styles';
 
 import {
@@ -44,11 +44,22 @@ export const LoginForm = () => {
     if (signIn.fulfilled.match(result)) {
       if (fromUrl) navigate(fromUrl);
       navigateToLibrary(navigate);
+      Mixpanel.track('Login Successful');
     }
 
     if (signIn.rejected.match(result)) {
       setErrorMessage(getErrorMessage(result.payload));
     }
+  };
+
+  const handleCreateAccountClick = () => {
+    navigate(page.signUp);
+
+    Mixpanel.track('Create account button on login screen click');
+  };
+
+  const handleLoginClick = () => {
+    Mixpanel.track('Login Button click');
   };
 
   return (
@@ -91,12 +102,17 @@ export const LoginForm = () => {
         >
           {t('forgotPassword')}
         </StyledForgotPasswordLink>
-        <StyledButton variant="contained" type="submit" data-testid="login-form-signin">
+        <StyledButton
+          onClick={handleLoginClick}
+          variant="contained"
+          type="submit"
+          data-testid="login-form-signin"
+        >
           {t('login')}
         </StyledButton>
         <StyledButton
           variant="outlined"
-          onClick={() => navigate(page.signUp)}
+          onClick={handleCreateAccountClick}
           data-testid="login-form-signup"
         >
           {t('createAccount')}

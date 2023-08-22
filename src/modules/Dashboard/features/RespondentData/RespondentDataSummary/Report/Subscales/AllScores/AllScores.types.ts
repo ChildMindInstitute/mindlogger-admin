@@ -1,6 +1,6 @@
 import { Version } from 'api';
 
-import { SubscaleChartData } from '../../Charts/LineChart/LineChart.types';
+import { SubscaleChartData } from '../../Charts/LineChart';
 
 export type AllScoresProps = {
   latestFinalScore: number | null;

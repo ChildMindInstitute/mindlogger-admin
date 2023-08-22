@@ -33,7 +33,7 @@ export const Search = ({ onSearch, value, setValue, ...props }: SearchProps) => 
       onChange={value !== undefined && setValue ? handleControlledSearch : handleUncontrolledSearch}
       startAdornment={
         <StyledIcon>
-          <Svg id="search" />
+          <Svg id="search" height="18" width="18" />
         </StyledIcon>
       }
     />

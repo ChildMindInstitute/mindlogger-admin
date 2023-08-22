@@ -8,6 +8,7 @@ import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
 import { useEncryptionStorage } from 'shared/hooks';
+import { Mixpanel } from 'shared/utils';
 
 import { StyledController } from '../Password.styles';
 import { passwordFormSchema } from './EnterAppletPassword.schema';
@@ -40,6 +41,8 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
       ) {
         setAppletPrivateKey(appletId, Array.from(encryptionInfoGenerated.getPrivateKey()));
         submitCallback();
+
+        Mixpanel.track('Password added successfully');
       } else {
         setError('appletPassword', { message: t('incorrectAppletPassword') });
       }
