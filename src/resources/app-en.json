@@ -1182,5 +1182,6 @@
   "pleaseSelectItem": "Please select an Item",
   "pleaseSelectActivity": "Please select an Activity",
   "configureServerForApplet": "Configure Server (for Applet)",
-  "selectScheduleType": "Select Schedule Type"
+  "selectScheduleType": "Select Schedule Type",
+  "hasTheFollowingRole": "has the following role(s) within the Applet"
 }

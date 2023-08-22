@@ -1,4 +1,5 @@
-import { useRef, RefObject, useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { StyledModalWrapper } from 'shared/styles';
@@ -8,7 +9,7 @@ import { useAppDispatch } from 'redux/store';
 
 import { SelectRespondents } from './SelectRespondents';
 import { SelectRespondentsPopupProps } from './SuccessSharePopup.types';
-import { SelectRespondentsRef } from '../SelectRespondentsPopup/SelectRespondents/SelectRespondents.types';
+import { getSelectedRespondentsLength } from './SelectRespondentsPopup.utils';
 
 export const SelectRespondentsPopup = ({
   appletName,
@@ -21,36 +22,52 @@ export const SelectRespondentsPopup = ({
   const name = `${firstName} ${lastName}`;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const selectRespondentsRef = useRef() as RefObject<SelectRespondentsRef>;
 
   const { ownerId } = workspaces.useData() || {};
   const respondentsData = users.useAllRespondentsData();
-  const respondents = respondentsData?.result?.map(({ nicknames, secretIds, id }) => ({
-    nickname: nicknames[0],
-    secretId: secretIds[0],
-    id,
-  }));
+  const respondents = useMemo(
+    () =>
+      respondentsData?.result?.map(({ nicknames, secretIds, id }) => ({
+        nickname: nicknames[0],
+        secretId: secretIds[0],
+        id,
+      })),
+    [respondentsData?.result],
+  );
+
+  const methods = useForm();
+  const { getValues, setValue, watch } = methods;
+
+  const formValues = watch();
+  const selectedRespondentsLength = getSelectedRespondentsLength(formValues);
 
   const handleClose = () => onClose(selectedRespondents);
 
   const handleConfirm = () => {
-    if (selectRespondentsRef?.current) {
-      const selectedRespondents = selectRespondentsRef.current.confirmSelection();
-      onClose(selectedRespondents);
-    }
+    const values = getValues();
+    const selectedRespondents = Object.keys(values).filter((key) => values[key]);
+
+    onClose(selectedRespondents);
   };
 
   useEffect(() => {
-    if (ownerId) {
-      const { getAllWorkspaceRespondents } = users.thunk;
+    if (!ownerId) return;
 
-      dispatch(
-        getAllWorkspaceRespondents({
-          params: { ownerId, appletId },
-        }),
-      );
-    }
+    const { getAllWorkspaceRespondents } = users.thunk;
+    dispatch(
+      getAllWorkspaceRespondents({
+        params: { ownerId, appletId },
+      }),
+    );
   }, [ownerId]);
+
+  useEffect(() => {
+    if (!respondents?.length) return;
+
+    respondents.forEach(({ id }) => {
+      setValue(id, selectedRespondents.includes(id));
+    });
+  }, [respondents]);
 
   return (
     <Modal
@@ -59,19 +76,20 @@ export const SelectRespondentsPopup = ({
       onSubmit={handleConfirm}
       title={t('selectRespondents')}
       buttonText={t('confirm')}
+      disabledSubmit={!selectedRespondentsLength}
       hasSecondBtn
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleClose}
       height="60"
     >
       <StyledModalWrapper>
-        <SelectRespondents
-          ref={selectRespondentsRef}
-          appletName={appletName}
-          reviewer={{ name, email }}
-          respondents={respondents || []}
-          selectedRespondents={selectedRespondents}
-        />
+        <FormProvider {...methods}>
+          <SelectRespondents
+            appletName={appletName}
+            reviewer={{ name, email }}
+            respondents={respondents || []}
+          />
+        </FormProvider>
       </StyledModalWrapper>
     </Modal>
   );

@@ -13,6 +13,7 @@ import {
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
+  DecryptedTimeAnswer,
   ElementType,
 } from 'shared/types';
 
@@ -24,6 +25,7 @@ import {
   FormattedResponse,
   ItemOption,
 } from './Report.types';
+import { DEFAULT_DATE_MAX } from './Report.const';
 
 const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.value - a.value);
 
@@ -375,6 +377,41 @@ export const formatActivityItemAnswers = (
         {
           answer: {
             value: currentAnswer.answer as DecryptedTextAnswer,
+            text: null,
+          },
+          date,
+        },
+      ];
+
+      return {
+        activityItem: {
+          ...formattedActivityItem,
+          responseDataIdentifier: (currentActivityItem.config as TextInputConfig)
+            .responseDataIdentifier,
+        },
+        answers,
+      };
+    }
+    case ItemResponseType.Time: {
+      if (!currentAnswer.answer) {
+        return {
+          activityItem: formattedActivityItem,
+          answers: getDefaultEmptyAnswer(date),
+        };
+      }
+
+      const {
+        value: { hours, minutes },
+      } = currentAnswer.answer as DecryptedTimeAnswer;
+
+      const fullDateValue = new Date(DEFAULT_DATE_MAX);
+      fullDateValue.setHours(hours);
+      fullDateValue.setMinutes(minutes);
+
+      const answers = [
+        {
+          answer: {
+            value: fullDateValue.getTime(),
             text: null,
           },
           date,
