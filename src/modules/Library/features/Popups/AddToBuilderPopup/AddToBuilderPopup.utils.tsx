@@ -48,6 +48,7 @@ import {
   TableController,
 } from './AddToBuilderPopup.types';
 import { StyledTableFormControlLabel } from './AddToBuilderPopup.styles';
+import { isManagerOrOwner } from '../../../../../shared/utils';
 
 const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] => [
   {
@@ -268,7 +269,7 @@ export const getSteps = ({
 
 export const getArrayFromApplets = (applets: FullApplet[]) =>
   applets.reduce((acc: Applet[], { id, type, displayName, image, role }) => {
-    if (type === DashboardAppletType.Applet && (role === Roles.Owner || role === Roles.Manager)) {
+    if (type === DashboardAppletType.Applet && isManagerOrOwner(role as Roles)) {
       acc.push({ id, appletName: displayName, image });
     }
 

@@ -9,8 +9,7 @@ import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
 import { SingleApplet, workspaces as workspacesState } from 'shared/state';
 import { useAsync } from 'shared/hooks';
-import { Roles } from 'shared/consts';
-import { authStorage, Path } from 'shared/utils';
+import { authStorage, isManagerOrOwner, Path } from 'shared/utils';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
 import { useAppDispatch } from 'redux/store';
@@ -40,10 +39,8 @@ export const AddToBuilderPopup = ({
   const workspaces =
     workspacesWithRoles?.filter(
       (workspace) =>
-        Object.keys(workspace.workspaceRoles).length === 0 ||
-        Object.values(workspace.workspaceRoles).some(
-          (roles) => roles.includes(Roles.Owner) || roles.includes(Roles.Manager),
-        ),
+        Object.keys(workspace.workspaceRoles).length === 0 || //in case there are no applets yet in the main Workspace
+        Object.values(workspace.workspaceRoles).some((roles) => isManagerOrOwner(roles[0])),
     ) || [];
   const currentWorkspace = workspacesState.useData();
   const { result: cartItems } = library.useCartApplets() || {};
