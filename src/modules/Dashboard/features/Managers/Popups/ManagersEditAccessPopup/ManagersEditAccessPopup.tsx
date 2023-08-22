@@ -106,6 +106,7 @@ export const EditAccessPopup = ({
         title={t('editAccess')}
         buttonText={t('save')}
         disabledSubmit={!applets.length}
+        data-testid="dashboard-managers-edit-access-popup"
       >
         <>
           <StyledModalWrapper>

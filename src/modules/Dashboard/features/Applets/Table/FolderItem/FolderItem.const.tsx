@@ -13,11 +13,13 @@ export const getActions = (
     icon: <Svg id="edit" />,
     action: (item: Folder) => onRenameFolder(item),
     tooltipTitle: t('edit'),
+    'data-testid': 'dashboard-applets-folder-rename',
   },
   {
     disabled: !!folder.foldersAppletCount,
     icon: <Svg id="trash" />,
     action: (item: Folder) => onDeleteFolder(item),
     tooltipTitle: t(folder.foldersAppletCount ? 'deleteFolderWarning' : 'delete'),
+    'data-testid': 'dashboard-applets-folder-delete',
   },
 ];

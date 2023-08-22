@@ -34,6 +34,7 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
       navigate(getBuilderAppletUrl(Path.NewApplet));
       Mixpanel.track('Build Applet click');
     },
+    'data-testid': 'dashboard-applets-add-applet-new',
   },
   {
     icon: <Svg id="library" />,
@@ -43,5 +44,6 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
       navigate(page.library);
       Mixpanel.track('Browse applet library click');
     },
+    'data-testid': 'dashboard-applets-add-applet-from-library',
   },
 ];

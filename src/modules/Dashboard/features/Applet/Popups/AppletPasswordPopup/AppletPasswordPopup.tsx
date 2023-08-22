@@ -32,6 +32,7 @@ export const AppletPasswordPopup = ({
           : t('createAppletPassword')
       }
       buttonText={t('submit')}
+      data-testid="dashboard-applets-password-popup"
     >
       <StyledAppletPasswordContainer>
         {popupType === AppletPasswordPopupType.Enter ? (

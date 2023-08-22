@@ -39,8 +39,8 @@ export const Menu = ({
         }
       }
     >
-      {menuItems.map(({ icon, title, action }, i) => (
-        <MenuItem key={i} onClick={() => action(title)}>
+      {menuItems.map(({ icon, title, action, 'data-testid': dataTestId }, i) => (
+        <MenuItem key={i} onClick={() => action(title)} data-testid={dataTestId}>
           {icon && <ListItemIcon>{icon}</ListItemIcon>}
           <StyledBodyLarge color={variables.palette.on_surface} letterSpacing="xxl">
             {t(title)}

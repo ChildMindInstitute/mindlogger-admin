@@ -241,6 +241,7 @@ export const ManagersRemoveAccessPopup = ({
       onSecondBtnSubmit={decrementStep}
       buttonText={t(buttonTextByStep[step as keyof typeof buttonTextByStep])}
       disabledSubmit={!selectedApplets.length}
+      data-testid="dashboard-managers-remove-access-popup"
     >
       <StyledModalWrapper>
         {screenByStep[step]}

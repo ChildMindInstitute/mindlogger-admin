@@ -177,6 +177,7 @@ export const RespondentsRemoveAccessPopup = ({
       secondBtnText={t(isFirstStepWithAppletId ? 'cancel' : 'back')}
       disabledSubmit={disabledSubmit}
       submitBtnColor={screens[step]?.submitBtnColor}
+      data-testid="dashboard-respondents-remove-access-popup"
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
     </Modal>
