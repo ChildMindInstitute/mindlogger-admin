@@ -37,6 +37,7 @@ export const palette = {
   contained_btn_disabled_text: '#979799',
   light_alfa8: 'rgba(255, 255, 255, 0.08)',
   surface_variant_alfa8: 'rgba(222, 227, 235, 0.08)',
+  white_alfa50: 'rgb(255 255 255 / 50%)',
 
   black: '#000',
   white: '#fff',

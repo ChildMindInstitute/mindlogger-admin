@@ -5,4 +5,5 @@ export enum SpinnerUiType {
 
 export type SpinnerProps = {
   uiType?: SpinnerUiType;
+  noBackground?: boolean;
 };

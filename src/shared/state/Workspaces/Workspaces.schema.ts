@@ -8,10 +8,13 @@ export type Workspace = {
   image?: string;
 };
 
+export type AppletRoles = Record<string, Roles[]>;
+
+export type WorkspaceWithRoles = Omit<Workspace, 'image'> & { workspaceRoles: AppletRoles };
+
 export type WorkspacesSchema = {
   workspaces: BaseSchema<{ result: Workspace[]; count: number } | null>;
   currentWorkspace: BaseSchema<null | Workspace>;
-  roles: BaseSchema<{
-    [key: string]: Roles[];
-  } | null>;
+  roles: BaseSchema<AppletRoles | null>;
+  workspacesRoles: BaseSchema<WorkspaceWithRoles[] | null>;
 };

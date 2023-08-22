@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useBreadcrumbs } from 'shared/hooks';
@@ -12,10 +12,11 @@ import {
   StyledAppletList,
 } from 'shared/styles';
 import { page } from 'resources';
-import { PublishedApplet, auth, library } from 'redux/modules';
+import { PublishedApplet, auth, library, workspaces } from 'redux/modules';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 import { getDictionaryText, Mixpanel } from 'shared/utils';
+import { useAppDispatch } from 'redux/store';
 
 import { Applet, AppletUiType } from '../Applet';
 import { AddToBuilderPopup, AuthPopup } from '../Popups';
@@ -35,6 +36,8 @@ export const Cart = () => {
   const [addToBuilderPopupVisible, setAddToBuilderPopupVisible] = useState(false);
   const [authPopupVisible, setAuthPopupVisible] = useState(false);
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE);
+  const dispatch = useAppDispatch();
+  const { result: workspacesData = [] } = workspaces.useWorkspacesData() || {};
 
   const handleAddToBuilder = () => {
     isAuthorized ? setAddToBuilderPopupVisible(true) : setAuthPopupVisible(true);
@@ -94,6 +97,12 @@ export const Cart = () => {
         </>
       </EmptyState>
     );
+
+  useEffect(() => {
+    if (!isAuthorized || !workspacesData.length) return;
+    const { getWorkspacesRoles } = workspaces.thunk;
+    dispatch(getWorkspacesRoles(workspacesData));
+  }, [workspacesData, isAuthorized]);
 
   return (
     <>

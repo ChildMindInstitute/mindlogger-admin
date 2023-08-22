@@ -4,7 +4,7 @@ import { AnyObjectSchema, SchemaOf } from 'yup';
 
 import { HeadCell } from 'shared/types/table';
 import { Row } from 'shared/components';
-import { Workspace } from 'shared/state';
+import { WorkspaceWithRoles } from 'shared/state';
 
 export type AddToBuilderPopupProps = {
   addToBuilderPopupVisible: boolean;
@@ -49,7 +49,7 @@ export type Applet = {
 export type GetStep = {
   control: Control<AddToBuilderForm>;
   isWorkspacesModalVisible: boolean;
-  workspaces: Workspace[];
+  workspaces: WorkspaceWithRoles[];
   applets: Applet[];
   setStep: Dispatch<SetStateAction<AddToBuilderSteps>>;
   setAddToBuilderPopupVisible: Dispatch<SetStateAction<boolean>>;
