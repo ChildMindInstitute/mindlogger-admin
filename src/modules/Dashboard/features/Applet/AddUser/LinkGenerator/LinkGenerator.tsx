@@ -51,7 +51,7 @@ export const LinkGenerator = () => {
           <Button
             variant="contained"
             onClick={handleGeneratePublicLinkClick}
-            data-testid="generate-btn"
+            data-testid="dashboard-add-users-generate-link-generate"
           >
             {t('generateLink')}
           </Button>

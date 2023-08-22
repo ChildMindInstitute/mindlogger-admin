@@ -10,6 +10,7 @@ type Tab = {
   path?: string;
   id?: string;
   hasError?: boolean;
+  'data-testid'?: string;
 };
 
 export enum UiType {

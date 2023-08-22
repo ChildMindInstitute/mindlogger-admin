@@ -25,6 +25,7 @@ export const TagsInputController = <T extends FieldValues>({
   noOptionsText,
   disabled,
   limitTags,
+  'data-testid': dataTestid,
   ...props
 }: TagsAutocompleteControllerProps<T>) => {
   const [selectedAll, setSelectedAll] = useState<boolean>(false);
@@ -102,6 +103,7 @@ export const TagsInputController = <T extends FieldValues>({
                 </Paper>
               );
             }}
+            data-testid={dataTestid}
           />
         );
       }}

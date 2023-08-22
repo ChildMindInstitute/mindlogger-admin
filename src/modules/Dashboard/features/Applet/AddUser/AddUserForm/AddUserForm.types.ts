@@ -13,7 +13,7 @@ export type FormValues = {
   respondents: { label: string; id: string }[];
 };
 
-export type Field = { name: keyof FormValues; options?: Option[] };
+export type Field = { name: keyof FormValues; options?: Option[]; 'data-testid'?: string };
 
 export type AddUserFormProps = {
   getInvitationsHandler: () => void;
