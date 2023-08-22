@@ -44,8 +44,6 @@ export type MultiSelectItemAnswer = {
   answer: DecryptedMultiSelectionAnswer | null;
 };
 
-//
-
 export type RespondentDataReviewContextType = {
   assessment?: AssessmentActivityItem[];
   itemIds: string[];

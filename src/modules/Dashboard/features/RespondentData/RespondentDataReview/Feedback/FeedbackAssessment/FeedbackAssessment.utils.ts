@@ -12,7 +12,7 @@ export const checkAnswerValue = (value: string | number | string[]) => {
   return !value?.toString().length;
 };
 
-export const getEditedValue = (
+export const getUpdatedValues = (
   defaultValues: AssessmentFormItem[],
   currentItem: AssessmentFormItem,
   prevItemIds: string[],
@@ -20,37 +20,36 @@ export const getEditedValue = (
 ) => {
   const isEditedBefore = prevItemIds.includes(currentItem.itemId);
   const defaultItem = defaultValues.find(({ itemId }) => itemId === currentItem.itemId);
+  const itemIds = [...updatedItemIds, defaultItem?.itemId as string];
+  const defaulltValues = {
+    edited: null,
+    itemIds,
+  };
 
   // multiple selection item
   if (Array.isArray(defaultItem?.answers)) {
-    let edited = null;
     const areArraysEqual = isEqual(
       formatToNumberArray(defaultItem?.answers as string[]).sort(),
       formatToNumberArray(currentItem.answers as string[]).sort(),
     );
 
-    if (isEditedBefore) {
-      edited = areArraysEqual ? defaultItem?.edited : new Date().getTime();
-    }
-
-    return {
-      edited,
-      itemIds: [...updatedItemIds, defaultItem?.itemId as string],
-    };
+    return !isEditedBefore
+      ? defaulltValues
+      : {
+          edited: areArraysEqual ? defaultItem?.edited : new Date().getTime(),
+          itemIds,
+        };
   }
 
   // single selection / slider items
-  let edited = null;
   const areValuesEqual = defaultItem?.answers === currentItem.answers;
 
-  if (isEditedBefore) {
-    edited = areValuesEqual ? defaultItem?.edited : new Date().getTime();
-  }
-
-  return {
-    edited,
-    itemIds: [...updatedItemIds, defaultItem?.itemId as string],
-  };
+  return !isEditedBefore
+    ? defaulltValues
+    : {
+        edited: areValuesEqual ? defaultItem?.edited : new Date().getTime(),
+        itemIds,
+      };
 };
 
 export const formatAssessmentAnswers = (
@@ -66,7 +65,7 @@ export const formatAssessmentAnswers = (
       },
       item,
     ) => {
-      const { edited, itemIds } = getEditedValue(
+      const { edited, itemIds } = getUpdatedValues(
         defaultValues,
         item,
         prevItemIds,
