@@ -70,6 +70,7 @@ export const LoginForm = () => {
             control={control}
             label={t('email')}
             autoComplete="username"
+            data-testid="login-form-email"
           />
         </StyledController>
         <StyledController>
@@ -80,16 +81,24 @@ export const LoginForm = () => {
             label={t('password')}
             type="password"
             autoComplete="current-password"
+            data-testid="login-form-password"
           />
         </StyledController>
         {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-        <StyledForgotPasswordLink onClick={() => navigate(page.passwordReset)}>
+        <StyledForgotPasswordLink
+          onClick={() => navigate(page.passwordReset)}
+          data-testid="login-form-forgot-password"
+        >
           {t('forgotPassword')}
         </StyledForgotPasswordLink>
-        <StyledButton variant="contained" type="submit" data-testid="submit-btn">
+        <StyledButton variant="contained" type="submit" data-testid="login-form-signin">
           {t('login')}
         </StyledButton>
-        <StyledButton variant="outlined" onClick={() => navigate(page.signUp)}>
+        <StyledButton
+          variant="outlined"
+          onClick={() => navigate(page.signUp)}
+          data-testid="login-form-signup"
+        >
           {t('createAccount')}
         </StyledButton>
       </StyledForm>
