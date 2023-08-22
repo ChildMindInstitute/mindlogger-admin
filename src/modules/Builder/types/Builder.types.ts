@@ -20,6 +20,7 @@ export type ItemFormValues = {
   responseValues: ResponseValues;
   alerts?: ItemAlert[];
   allowEdit: boolean;
+  isHidden?: boolean;
 };
 
 export type ActivityFormValues = {
