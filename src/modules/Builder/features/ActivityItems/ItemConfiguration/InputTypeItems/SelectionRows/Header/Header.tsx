@@ -78,7 +78,7 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
       );
     }
 
-    if (hasScores) {
+    if (hasScores || hasAlerts) {
       const dataMatrix = getValues(`${name}.responseValues.dataMatrix`);
 
       setValue(
@@ -89,7 +89,9 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
             ? dataMatrixRow.options?.slice(0, newValue)
             : newOptions.map((option: SingleAndMultiSelectRowOption, index: number) => ({
                 optionId: option.id,
-                score: dataMatrixRow.options?.[index]?.score ?? DEFAULT_SCORE_VALUE,
+                ...(hasScores && {
+                  score: dataMatrixRow.options?.[index]?.score ?? DEFAULT_SCORE_VALUE,
+                }),
               })),
         })),
       );
