@@ -8,6 +8,6 @@ export const StyledSpinner = styled(StyledFlexAllCenter, shouldForwardProp)`
   width: 100%;
   height: 100%;
   background-color: ${({ noBackground }: { noBackground?: boolean }) =>
-    noBackground ? 'transparent' : variables.palette.spinner_bg};
+    noBackground ? 'transparent' : variables.palette.white_alfa50};
   z-index: ${theme.zIndex.appBar};
 `;
