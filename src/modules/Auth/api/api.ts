@@ -1,4 +1,4 @@
-import { apiClient } from 'shared/api/api.client';
+import { apiClient, authApiClientWithoutRefresh } from 'shared/api/api.client';
 
 import { SignIn, SignUpArgs, ResetPassword } from './api.types';
 
@@ -10,6 +10,8 @@ export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
       signal,
     },
   );
+
+export const logOutApi = () => authApiClientWithoutRefresh.post('auth/logout');
 
 export const signUpApi = ({ body }: SignUpArgs, signal?: AbortSignal) =>
   apiClient.post(
