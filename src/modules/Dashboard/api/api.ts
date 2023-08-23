@@ -189,14 +189,13 @@ export const removeIndividualEventsApi = (
   authApiClient.delete(`/applets/${appletId}/events/remove_individual/${respondentId}`, { signal });
 
 export const removeManagerAccess = ({ userId, appletIds }: RemoveAccess, signal?: AbortSignal) =>
-  authApiClient.post(
-    '/workspaces/removeAccess',
-    {
+  authApiClient.delete('/workspaces/removeAccess', {
+    signal,
+    data: {
       userId,
       appletIds,
     },
-    { signal },
-  );
+  });
 
 export const editManagerAccess = (
   { ownerId, userId, accesses }: EditManagerAccess,
@@ -214,15 +213,14 @@ export const removeRespondentAccessApi = (
   { userId, appletIds, deleteResponses }: RemoveRespondentAccess,
   signal?: AbortSignal,
 ) =>
-  authApiClient.post(
-    '/applets/removeAccess',
-    {
+  authApiClient.delete('/applets/removeAccess', {
+    signal,
+    data: {
       userId,
       appletIds,
       deleteResponses,
     },
-    { signal },
-  );
+  });
 
 export const editRespondentApi = (
   { ownerId, appletId, respondentId, values }: EditRespondent,
