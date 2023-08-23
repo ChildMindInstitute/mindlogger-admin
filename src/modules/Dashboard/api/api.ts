@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { authApiClient } from 'shared/api/api.client';
-import { AppletId } from 'shared/api';
+import { AppletId, ActivityId, ActivityFlowId } from 'shared/api';
 
 import {
   TransferOwnershipType,
@@ -579,6 +579,36 @@ export const postReportConfigApi = (
   { appletId, ...params }: AppletId & ReportConfig,
   signal?: AbortSignal,
 ) => authApiClient.post(`/applets/${appletId}/report_configuration`, { ...params }, { signal });
+
+export const postActivityReportConfigApi = (
+  {
+    appletId,
+    activityId,
+    ...params
+  }: AppletId & ActivityId & Pick<ReportConfig, 'reportIncludedItemName'>,
+  signal?: AbortSignal,
+) =>
+  authApiClient.put(
+    `/applets/${appletId}/activities/${activityId}/report_configuration`,
+    { ...params },
+    { signal },
+  );
+
+export const postActivityFlowReportConfigApi = (
+  {
+    appletId,
+    activityFlowId,
+    ...params
+  }: AppletId &
+    ActivityFlowId &
+    Pick<ReportConfig, 'reportIncludedItemName' | 'reportIncludedActivityName'>,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/applets/${appletId}/flows/${activityFlowId}/report_configuration`,
+    { ...params },
+    { signal },
+  );
 
 export const getAppletVersionsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}/versions`, { signal });

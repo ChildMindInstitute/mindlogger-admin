@@ -43,6 +43,7 @@ export type ActivityFormValues = {
   totalScoresTableData?: string;
   isPerformanceTask?: boolean;
   performanceTaskType?: PerfTaskType;
+  reportIncludedItemName?: string;
 };
 
 export type SubscaleFormValue = ArrayElement<

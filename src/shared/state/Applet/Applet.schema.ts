@@ -607,3 +607,14 @@ export type SingleApplet = {
 export type AppletSchema = {
   applet: BaseSchema<{ result: SingleApplet } | null>;
 };
+
+export type UpdateActivityData = {
+  id?: string;
+  reportIncludedItemName?: string;
+};
+
+export type UpdateActivityFlowData = {
+  id?: string;
+  reportIncludedItemName?: string;
+  reportIncludedActivityName?: string;
+};

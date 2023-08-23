@@ -8,7 +8,7 @@ export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean)
   const reportIncludedItemName = {
     reportIncludedItemName: yup
       .string()
-      .when('itemName', { is: true, then: yup.string().required(<string>t('pleaseSelectItem')) }),
+      .when('itemValue', { is: true, then: yup.string().required(<string>t('pleaseSelectItem')) }),
   };
 
   return yup
@@ -18,12 +18,10 @@ export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean)
       ...(isActivityFlow
         ? {
             ...reportIncludedItemName,
-            reportIncludedActivityName: yup
-              .string()
-              .when('itemName', {
-                is: true,
-                then: yup.string().required(<string>t('pleaseSelectActivity')),
-              }),
+            reportIncludedActivityName: yup.string().when('itemName', {
+              is: true,
+              then: yup.string().required(<string>t('pleaseSelectActivity')),
+            }),
           }
         : {}),
     })

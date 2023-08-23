@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button } from '@mui/material';
 
-import { postReportConfigApi } from 'api';
+import {
+  postReportConfigApi,
+  postActivityReportConfigApi,
+  postActivityFlowReportConfigApi,
+} from 'api';
 import { applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { SaveChangesPopup, Svg } from 'shared/components';
@@ -34,12 +38,14 @@ import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
 import {
   SettingParam,
+  getEntityKey,
   getParsedEncryptionFromServer,
   getPrivateKey,
   publicEncrypt,
 } from 'shared/utils';
 import { reportConfig } from 'modules/Builder/state';
 
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
 import { StyledButton, StyledSvg, StyledLink } from './ReportConfigSetting.styles';
@@ -57,12 +63,13 @@ import { REPORT_SERVER_INSTRUCTIONS_LINK } from './ReportConfigSetting.const';
 export const ReportConfigSetting = ({
   isDashboard,
   onSubmitSuccess,
-  activity,
+  // activity,
   activityFlow,
 }: ReportConfigSettingProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { activity } = useCurrentActivity();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { saveChanges, doNotSaveChanges } = reportConfig.useReportConfigChanges() || {};
   const { resetReportConfigChanges, setReportConfigChanges } = reportConfig.actions;
@@ -79,13 +86,31 @@ export const ReportConfigSetting = ({
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
 
   const { getApplet } = applet.thunk;
-  const { updateAppletData } = applet.actions;
+  const { updateAppletData, updateActivityData, updateActivityFlowData } = applet.actions;
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
   const { accountId = '' } = encryptionInfoFromServer ?? {};
 
   const { execute: postReportConfig } = useAsync(
     postReportConfigApi,
+    () => {
+      setSuccessPopupVisible(true);
+    },
+    () => {
+      setErrorPopupVisible(true);
+    },
+  );
+  const { execute: postActivityReportConfig } = useAsync(
+    postActivityReportConfigApi,
+    () => {
+      setSuccessPopupVisible(true);
+    },
+    () => {
+      setErrorPopupVisible(true);
+    },
+  );
+  const { execute: postActivityFlowReportConfig } = useAsync(
+    postActivityFlowReportConfigApi,
     () => {
       setSuccessPopupVisible(true);
     },
@@ -122,6 +147,8 @@ export const ReportConfigSetting = ({
   const reportServerUrl = watch('reportServerIp');
   const reportPublicKey = watch('reportPublicKey');
 
+  // const [itemValue] = useWatch({ name: ['itemValue'], control });
+
   const { onVerify, onSetPassword } = useCheckReportServer({
     url: reportServerUrl,
     publicKey: reportPublicKey,
@@ -144,6 +171,10 @@ export const ReportConfigSetting = ({
   };
 
   const onSubmit = (values: ReportConfigFormValues) => {
+    if (activity) return handleSaveActivityReportConfig();
+
+    // if (!!activityFlow) return handleSaveActivityFlowReportConfig();
+
     const { reportServerIp, reportPublicKey } = values;
     if (!reportServerIp || !reportPublicKey) {
       return setWarningPopupVisible(true);
@@ -166,8 +197,6 @@ export const ReportConfigSetting = ({
       reportRecipients,
       reportIncludeUserId,
       reportEmailBody,
-      reportIncludedItemName,
-      reportIncludedActivityName,
     } = getValues() ?? {};
 
     const body = {
@@ -176,8 +205,6 @@ export const ReportConfigSetting = ({
       reportRecipients,
       reportIncludeUserId,
       reportEmailBody,
-      ...(isActivity ? { reportIncludedItemName } : {}),
-      ...(isActivityFlow ? { reportIncludedItemName, reportIncludedActivityName } : {}),
     };
 
     await postReportConfig({
@@ -186,6 +213,43 @@ export const ReportConfigSetting = ({
     });
 
     if (!isDashboard) dispatch(updateAppletData(body));
+
+    reset(defaultValues);
+  };
+
+  const handleSaveActivityReportConfig = async () => {
+    const { itemValue, reportIncludedItemName } = getValues() ?? {};
+
+    const body = {
+      reportIncludedItemName: itemValue ? reportIncludedItemName : '',
+    };
+
+    await postActivityReportConfig({
+      appletId: appletData?.id ?? '',
+      activityId: activity?.id ?? '',
+      ...body,
+    });
+
+    dispatch(updateActivityData({ id: activity?.id, ...body }));
+
+    reset(defaultValues);
+  };
+
+  const handleSaveActivityFlowReportConfig = async () => {
+    const { itemValue, reportIncludedActivityName, reportIncludedItemName } = getValues() ?? {};
+
+    const body = {
+      reportIncludedItemName: itemValue ? reportIncludedItemName : '',
+      reportIncludedActivityName,
+    };
+
+    await postActivityFlowReportConfig({
+      appletId: appletData?.id ?? '',
+      activityFlowId: activityFlow?.id ?? '',
+      ...body,
+    });
+
+    dispatch(updateActivityFlowData({ id: activityFlow?.id, ...body }));
 
     reset(defaultValues);
   };
@@ -252,6 +316,10 @@ export const ReportConfigSetting = ({
     confirmNavigation();
   };
 
+  const handleChangeItemValue = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.checked) setValue('reportIncludedItemName', '');
+  };
+
   useEffect(() => {
     if (successPopupVisible && isDashboard) {
       dispatch(getApplet({ appletId: appletData?.id ?? '' }));
@@ -287,6 +355,15 @@ export const ReportConfigSetting = ({
     handleDontSave();
   }, [doNotSaveChanges]);
 
+  // useEffect(() => {
+  //   if (activity) {
+  //     const { reportIncludedItemName = '' } = activity;
+
+  //     setValue('reportIncludedItemName', reportIncludedItemName);
+  //     setValue('itemValue', !!reportIncludedItemName);
+  //   }
+  // }, [activity, activityFlow]);
+
   const commonSelectProps = {
     control,
     fullWidth: true,
@@ -296,18 +373,18 @@ export const ReportConfigSetting = ({
     setValue('reportIncludedItemName', '');
   };
 
-  useEffect(() => {
-    if (itemValue) {
-      register('reportIncludedItemName');
-      setValue('reportIncludedItemName', '');
-      isActivityFlow &&
-        register('reportIncludedActivityName') &&
-        setValue('reportIncludedActivityName', '');
-    }
+  // useEffect(() => {
+  //   if (itemValue) {
+  //     register('reportIncludedItemName');
+  //     setValue('reportIncludedItemName', activity?.reportIncludedItemName ?? '');
+  //     isActivityFlow &&
+  //       register('reportIncludedActivityName') &&
+  //       setValue('reportIncludedActivityName', activityFlow?.reportIncludedActivityName ?? '');
+  //   }
 
-    unregister('reportIncludedItemName');
-    isActivityFlow && unregister('reportIncludedActivityName');
-  }, [itemValue]);
+  //   unregister('reportIncludedItemName');
+  //   isActivityFlow && unregister('reportIncludedActivityName');
+  // }, [itemValue]);
 
   return (
     <>
@@ -432,6 +509,7 @@ export const ReportConfigSetting = ({
                 sx={{ ml: theme.spacing(1.4) }}
                 name="itemValue"
                 label={<StyledBodyLarge>{t('itemValue')}</StyledBodyLarge>}
+                onCustomChange={handleChangeItemValue}
               />
             )}
             {itemValue && (

@@ -2,6 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import { ActivityFormValues } from 'modules/Builder/types';
+import { getEntityKey } from 'shared/utils';
 
 export const useCurrentActivity = () => {
   const { activityId } = useParams();
@@ -10,7 +11,7 @@ export const useCurrentActivity = () => {
 
   const activities = watch('activities');
   const currentActivityIndex = activities?.findIndex(
-    ({ id, key }: ActivityFormValues) => activityId === key || activityId === id,
+    (activity: ActivityFormValues) => getEntityKey(activity) === activityId,
   );
 
   if (!~currentActivityIndex) return {};

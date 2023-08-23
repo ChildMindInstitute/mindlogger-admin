@@ -15,15 +15,16 @@ export const getActivitiesOptions = (
   activityFlow?: ActivityFlowFormValues,
   appletData?: Partial<SingleApplet>,
 ) =>
-  activityFlow?.items
-    ?.map(
-      ({ activityKey }) =>
-        appletData?.activities?.find((activity) => activityKey === activity.id)?.name,
-    )
-    .map((name) => ({
-      value: name || '',
-      labelKey: name || '',
-    })) || [];
+  activityFlow?.items?.map(({ activityKey }) => {
+    const activityName = appletData?.activities?.find(
+      (activity) => activityKey === activity.id,
+    )?.name;
+
+    return {
+      value: activityName ?? '',
+      labelKey: activityName ?? '',
+    };
+  }) ?? [];
 
 export const getActivityItemsOptions = (activity?: ActivityFormValues) =>
   activity?.items?.map(({ name }) => ({

@@ -43,6 +43,8 @@ export const removeAppletExtraFields = () => ({
   reportRecipients: undefined,
   reportIncludeUserId: undefined,
   reportIncludeCaseId: undefined,
+  reportIncludedItemName: undefined,
+  reportIncludedActivityName: undefined,
   reportEmailBody: undefined,
   retentionPeriod: undefined,
   retentionType: undefined,
