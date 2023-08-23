@@ -13,8 +13,6 @@ import {
   useLogout,
 } from 'shared/hooks';
 import {
-  APPLET_PAGE_REGEXP_STRING,
-  builderSessionStorage,
   Encryption,
   getDictionaryObject,
   getEncryptionToServer,
@@ -40,14 +38,6 @@ import {
   getScoresAndReports,
   getCurrentEntityId,
 } from './SaveAndPublish.utils';
-
-export const getAppletInfoFromStorage = () => {
-  const pathname = window.location.pathname;
-  const match = pathname.match(APPLET_PAGE_REGEXP_STRING);
-  if (!match) return {};
-
-  return builderSessionStorage.getItem() ?? {};
-};
 
 export const useAppletData = () => {
   const { getValues } = useFormContext();
@@ -203,7 +193,6 @@ export const usePrompt = (isFormChanged: boolean) => {
   return {
     promptVisible,
     confirmNavigation: () => {
-      builderSessionStorage.removeItem();
       onConfirm();
     },
     cancelNavigation: onCancel,
@@ -392,7 +381,6 @@ export const useSaveAndPublishSetup = (
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      builderSessionStorage.removeItem();
       setIsFromLibrary?.(false);
       if (shouldNavigateRef.current) {
         confirmNavigation();
@@ -409,7 +397,6 @@ export const useSaveAndPublishSetup = (
       Mixpanel.track('Applet Created Successfully');
 
       const createdAppletId = result.payload.data.result?.id;
-      builderSessionStorage.removeItem();
       setIsFromLibrary?.(false);
 
       if (encryptionData && password && createdAppletId) {

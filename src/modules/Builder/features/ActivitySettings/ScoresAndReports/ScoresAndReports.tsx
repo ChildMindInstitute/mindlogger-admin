@@ -121,12 +121,14 @@ export const ScoresAndReports = () => {
       <CheckboxController
         disabled={isCheckboxesDisabled}
         control={control}
+        key={generateReportName}
         name={generateReportName}
         label={<StyledBodyLarge>{t('generateReport')}</StyledBodyLarge>}
       />
       <CheckboxController
         disabled={isCheckboxesDisabled}
         control={control}
+        key={showScoreSummaryName}
         name={showScoreSummaryName}
         label={
           <StyledFlexTopCenter>

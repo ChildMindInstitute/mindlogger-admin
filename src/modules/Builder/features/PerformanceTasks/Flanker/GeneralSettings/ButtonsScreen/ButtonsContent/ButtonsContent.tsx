@@ -116,6 +116,7 @@ export const ButtonsContent = () => {
               <InputController
                 control={control}
                 fullWidth
+                key={currentBtnFieldName}
                 name={currentBtnFieldName}
                 label={getButtonLabel(itemButtons.length, index)}
                 maxLength={SMALL_INPUT_LENGTH}

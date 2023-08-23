@@ -6,11 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { SaveChangesPopup } from 'shared/components';
-import {
-  useAsync,
-  useBuilderSessionStorageFormChange,
-  useBuilderSessionStorageFormValues,
-} from 'shared/hooks';
+import { useAsync } from 'shared/hooks';
 import { RetentionPeriods } from 'shared/types';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
@@ -41,8 +37,6 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
     retentionType: appletData?.retentionType || DEFAULT_RETENTION_TYPE,
   };
 
-  const { getFormValues } =
-    useBuilderSessionStorageFormValues<DataRetentionFormValues>(defaultValues);
   const {
     handleSubmit,
     control,
@@ -55,7 +49,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   } = useForm<DataRetentionFormValues>({
     mode: 'onChange',
     resolver: yupResolver(dataRetentionSchema()),
-    defaultValues: getFormValues(),
+    defaultValues,
   });
 
   const [successPopupVisible, setSuccessPopupVisible] = useState(false);
@@ -69,13 +63,10 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
 
   const watchRetentionType = watch('retentionType');
 
-  const { handleFormChange } =
-    useBuilderSessionStorageFormChange<DataRetentionFormValues>(getValues);
-
   const onSubmit = async ({ retentionPeriod, retentionType }: DataRetentionFormValues) => {
     if (id) {
       await saveDataRetention({ appletId: id, period: retentionPeriod, retention: retentionType });
-      await dispatch(getApplet({ appletId: id! }));
+      await dispatch(getApplet({ appletId: id }));
     }
 
     const values = getValues() ?? {};
@@ -112,7 +103,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   return (
     <>
       <StyledAppletSettingsDescription>{t('selectDataRetention')}</StyledAppletSettingsDescription>
-      <form noValidate onSubmit={handleSubmit(onSubmit)} onChange={handleFormChange}>
+      <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <StyledContainer>
           {watchRetentionType !== RetentionPeriods.Indefinitely && (
             <StyledInputWrapper>

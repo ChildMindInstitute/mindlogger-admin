@@ -30,6 +30,7 @@ export const ScoreCondition = ({ name, scoreId, scoreKey }: ScoreConditionProps)
       <StyledFlexTopCenter sx={{ m: theme.spacing(1.2, 0, 2.4, 0) }}>
         <InputController
           control={control}
+          key={`${name}.name`}
           name={`${name}.name`}
           label={t('scoreConditionName')}
           onBlur={handleConditionNameBlur}

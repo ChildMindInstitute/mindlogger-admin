@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { Update } from 'history';
+
 import { useCallbackPrompt, usePromptSetup } from 'shared/hooks';
 
 export const usePrompt = (when: boolean) => {
