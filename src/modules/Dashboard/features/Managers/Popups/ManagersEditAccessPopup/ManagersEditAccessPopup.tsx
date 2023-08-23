@@ -38,12 +38,9 @@ export const EditAccessPopup = ({
 
   const getAppletsWithoutRespondents = () =>
     applets.reduce((acc: string[], el) => {
-      if (
-        el.roles.some(({ role }) => role === Roles.Reviewer) &&
-        !el?.selectedRespondents?.length
-      ) {
-        acc.push(el.displayName);
-      }
+      const reviewerRole = el.roles.find(({ role }) => role === Roles.Reviewer);
+
+      if (reviewerRole && !reviewerRole?.reviewerRespondents?.length) acc.push(el.displayName);
 
       return acc;
     }, []);
@@ -58,12 +55,14 @@ export const EditAccessPopup = ({
         ? {
             ...applet,
             roles: callback(applet.roles),
-            selectedRespondents: respondents || applet.selectedRespondents,
+            // selectedRespondents: respondents || applet.selectedRespondents,
           }
         : { ...applet },
     );
     setApplets(updatedApplets);
   };
+
+  console.log(applets);
 
   const handleRemoveRole = (id: string, label: Roles) =>
     updateAppletHandler(id, (roles) => roles.filter(({ role }) => role !== label));
@@ -77,16 +76,18 @@ export const EditAccessPopup = ({
   };
 
   const handleAddSelectedRespondents = (id: string, respondents: string[]) =>
-    updateAppletHandler(id, (roles) => roles, respondents);
+    updateAppletHandler(id, (roles) =>
+      roles.map((role) => ({ ...role, reviewerRespondents: respondents })),
+    );
 
   const handleSubmit = () => {
     const appletsWithoutRespondents = getAppletsWithoutRespondents();
     setAppletsWithoutRespondents(appletsWithoutRespondents);
     if (!appletsWithoutRespondents.length) {
-      const accesses = applets.map(({ id, roles, selectedRespondents }) => ({
+      const accesses = applets.map(({ id, roles }) => ({
         appletId: id,
         roles: roles.map(({ role }) => role),
-        respondents: [...(selectedRespondents || [])],
+        respondents: roles.flatMap(({ reviewerRespondents }) => reviewerRespondents),
       }));
 
       if (!ownerId || !accesses.length || accesses.some(({ roles }) => !roles.length)) {

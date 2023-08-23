@@ -14,7 +14,7 @@ import { AppletProps } from './Applet.types';
 import { SelectRespondentsPopup } from '../../SelectRespondentsPopup';
 
 export const Applet = ({
-  applet: { id, displayName, image, roles, selectedRespondents },
+  applet: { id, displayName, image, roles },
   addRole,
   removeRole,
   user,
@@ -23,6 +23,7 @@ export const Applet = ({
 }: AppletProps) => {
   const { t } = useTranslation('app');
 
+  const selectedRespondents = roles?.flatMap(({ reviewerRespondents }) => reviewerRespondents);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
 
