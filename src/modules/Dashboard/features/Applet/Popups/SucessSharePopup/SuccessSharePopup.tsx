@@ -23,6 +23,7 @@ export const SuccessSharePopup = ({
       title={t('appletIsSharedWithLibrary')}
       buttonText={t('ok')}
       width="60"
+      data-testid="dashboard-applets-share-popup-success-popup"
     >
       <SuccessShared
         title={applet.displayName}

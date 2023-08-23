@@ -39,6 +39,7 @@ export const Modal = ({
   hasActions = true,
   submitBtnTooltip,
   onTransitionEntered,
+  'data-testid': dataTestId,
 }: ModalProps) => {
   const getActionsAlign = () => {
     if (hasThirdBtn) {
@@ -82,6 +83,7 @@ export const Modal = ({
       TransitionProps={{
         onEntered: onTransitionEntered,
       }}
+      data-testid={dataTestId}
     >
       <StyledModalContent>
         <StyledDialogTitle align={titleAlign}>

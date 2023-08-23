@@ -30,6 +30,7 @@ export const SelectController = <T extends FieldValues>({
   uiType = SelectUiType.Primary,
   disabled,
   sx,
+  'data-testid': dataTestid,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -126,6 +127,7 @@ export const SelectController = <T extends FieldValues>({
             PaperProps: { sx: selectDropdownStyles },
           },
         }}
+        data-testid={dataTestid}
       >
         {renderGroupedOptions()}
       </TextField>

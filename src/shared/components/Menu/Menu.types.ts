@@ -4,6 +4,7 @@ export type MenuItem = {
   icon?: JSX.Element;
   title: string;
   action: (title?: string) => void;
+  'data-testid'?: string;
 };
 
 export type MenuProps = {

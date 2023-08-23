@@ -60,12 +60,15 @@ export const langs = [
 export const fields: Field[] = [
   {
     name: Fields.firstName,
+    'data-testid': 'dashboard-add-users-fname',
   },
   {
     name: Fields.lastName,
+    'data-testid': 'dashboard-add-users-lname',
   },
   {
     name: Fields.email,
+    'data-testid': 'dashboard-add-users-email',
   },
 ];
 

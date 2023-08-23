@@ -36,6 +36,7 @@ export const LinkPopup = ({ open, onClose, setInviteLink }: LinkPopupProps) => {
       secondBtnStyles={{
         fontWeight: variables.font.weight.bold,
       }}
+      data-testid="dashboard-add-users-generate-link-generate-popup"
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>

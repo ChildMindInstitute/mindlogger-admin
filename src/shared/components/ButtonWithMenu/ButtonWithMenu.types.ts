@@ -9,4 +9,5 @@ export type ButtonWithMenuProps = {
   variant?: 'text' | 'outlined';
   disabled?: boolean;
   menuListWidth?: string;
+  'data-testid'?: string;
 };

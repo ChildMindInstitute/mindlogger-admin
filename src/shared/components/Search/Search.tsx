@@ -7,7 +7,13 @@ import { SEARCH_DEBOUNCE_VALUE } from 'shared/consts';
 import { StyledTextField, StyledIcon } from './Search.styles';
 import { SearchProps } from './Search.types';
 
-export const Search = ({ onSearch, value, setValue, ...props }: SearchProps) => {
+export const Search = ({
+  onSearch,
+  value,
+  setValue,
+  'data-testid': dataTestId,
+  ...props
+}: SearchProps) => {
   const handleControlledSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value;
     setValue?.(searchValue);
@@ -36,6 +42,7 @@ export const Search = ({ onSearch, value, setValue, ...props }: SearchProps) => 
           <Svg id="search" height="18" width="18" />
         </StyledIcon>
       }
+      data-testid={dataTestId}
     />
   );
 };

@@ -66,6 +66,7 @@ export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void 
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={deletePopupClose}
+          data-testid="dashboard-applets-delete-popup-password-popup"
         >
           <StyledModalWrapper>
             <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
@@ -88,6 +89,7 @@ export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void 
           onSubmit={handleConfirmation}
           title={t('deleteApplet')}
           buttonText={t('ok')}
+          data-testid="dashboard-applets-delete-popup-confirm-popup"
         >
           <StyledModalWrapper>{t('appletDeletedSuccessfully')}</StyledModalWrapper>
         </Modal>
@@ -104,6 +106,7 @@ export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void 
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={deletePopupClose}
+          data-testid="dashboard-applets-delete-popup-error-popup"
         >
           <StyledModalWrapper>
             <Trans i18nKey="appletDeletedError">

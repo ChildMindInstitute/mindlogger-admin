@@ -86,6 +86,7 @@ export const EditRespondentPopup = ({
       hasSecondBtn={!isSuccessVisible}
       onSecondBtnSubmit={handlePopupClose}
       secondBtnText={t('cancel')}
+      data-testid="dashboard-respondents-edit-popup"
     >
       <StyledModalWrapper>
         {isSuccessVisible ? (

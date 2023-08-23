@@ -45,6 +45,7 @@ export const Actions = ({
             isDisplayed = true,
             active = false,
             isStatic,
+            'data-testid': dataTestid,
           }) => {
             if (!isDisplayed) return null;
 
@@ -56,6 +57,7 @@ export const Actions = ({
                     disabled={disabled}
                     onClick={onClick(action)}
                     isVisible={isVisible || (hasStaticActions && !isVisible && isStatic)}
+                    data-testid={dataTestid}
                   >
                     {icon}
                   </StyledActionButton>

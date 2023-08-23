@@ -18,7 +18,16 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false
     const { header, content } = tabs.reduce(
       (
         tabs: RenderTabs,
-        { id, icon, activeIcon, labelKey, isMinHeightAuto, path, hasError },
+        {
+          id,
+          icon,
+          activeIcon,
+          labelKey,
+          isMinHeightAuto,
+          path,
+          hasError,
+          'data-testid': dataTestId,
+        },
         index,
       ) => {
         tabs.header.push(
@@ -33,6 +42,7 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false
                 {hasError && <Badge variant="dot" invisible={!hasError} color="error" />}
               </>
             }
+            data-testid={dataTestId}
           />,
         );
 

@@ -40,4 +40,5 @@ export type ModalProps = {
   hasActions?: boolean;
   submitBtnTooltip?: string;
   onTransitionEntered?: (node: HTMLElement, isAppearing: boolean) => void;
+  'data-testid'?: string;
 };

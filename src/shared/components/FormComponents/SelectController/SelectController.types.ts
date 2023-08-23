@@ -35,6 +35,7 @@ export type FormInputProps = {
   withGroups?: boolean;
   isLabelNeedTranslation?: boolean;
   uiType?: SelectUiType;
+  'data-testid'?: string;
 } & TextFieldProps;
 
 export type SelectControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;

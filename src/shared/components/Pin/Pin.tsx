@@ -5,9 +5,10 @@ import { StyledPinButton } from './Pin.styles';
 
 export const Pin = ({
   isPinned = false,
+  'data-testid': dataTestId,
   onClick,
 }: PinProps & React.HTMLProps<HTMLButtonElement>) => (
-  <StyledPinButton isPinned={isPinned} onClick={onClick}>
+  <StyledPinButton isPinned={isPinned} onClick={onClick} data-testid={dataTestId}>
     <Svg id="pin-outlined" />
   </StyledPinButton>
 );

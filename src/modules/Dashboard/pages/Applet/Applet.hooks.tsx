@@ -14,6 +14,7 @@ export const useAppletTabs = () => {
       path: generatePath(page.appletRespondents, {
         appletId,
       }),
+      'data-testid': 'dashboard-tab-respondents',
     },
     {
       labelKey: 'managers',
@@ -22,6 +23,7 @@ export const useAppletTabs = () => {
       path: generatePath(page.appletManagers, {
         appletId,
       }),
+      'data-testid': 'dashboard-tab-managers',
     },
     {
       labelKey: 'addUsers',
@@ -31,6 +33,7 @@ export const useAppletTabs = () => {
       path: generatePath(page.appletAddUser, {
         appletId,
       }),
+      'data-testid': 'dashboard-tab-add-users',
     },
     {
       labelKey: 'schedule',
@@ -39,6 +42,7 @@ export const useAppletTabs = () => {
       path: generatePath(page.appletSchedule, {
         appletId,
       }),
+      'data-testid': 'dashboard-tab-calendar',
     },
     {
       labelKey: 'appletSettings',
@@ -47,6 +51,7 @@ export const useAppletTabs = () => {
       path: generatePath(page.appletSettings, {
         appletId,
       }),
+      'data-testid': 'dashboard-tab-settings',
     },
   ];
 };

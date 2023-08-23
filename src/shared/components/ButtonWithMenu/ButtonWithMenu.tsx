@@ -17,6 +17,7 @@ export const ButtonWithMenu = ({
   variant,
   disabled = false,
   menuListWidth,
+  'data-testid': dataTestid,
 }: ButtonWithMenuProps) => {
   const { t } = useTranslation('app');
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
@@ -39,6 +40,7 @@ export const ButtonWithMenu = ({
         startIcon={startIcon || <Svg id="add" width="18" height="18" />}
         endIcon={<Svg id={openMenu ? 'navigate-up' : 'navigate-down'} width="18" height="18" />}
         onClick={handleMenuOpen}
+        data-testid={dataTestid}
       >
         {t(label)}
       </StyledButton>

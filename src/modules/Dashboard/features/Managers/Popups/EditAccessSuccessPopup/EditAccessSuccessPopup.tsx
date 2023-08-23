@@ -22,6 +22,7 @@ export const EditAccessSuccessPopup = ({
       onClose={onClose}
       onSubmit={onClose}
       buttonText={t('ok')}
+      data-testid="dashboard-managers-edit-access-popup-success-popup"
     >
       <StyledModalWrapper sx={{ marginTop: theme.spacing(-1) }}>
         <Trans i18nKey="confirmEditAccessSuccess">

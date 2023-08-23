@@ -9,4 +9,5 @@ export type SearchProps = {
   endAdornment?: JSX.Element;
   value?: string;
   setValue?: Dispatch<SetStateAction<string>>;
+  'data-testid'?: string;
 };

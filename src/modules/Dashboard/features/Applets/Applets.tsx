@@ -153,11 +153,16 @@ export const Applets = () => {
                   setAnchorEl={setAnchorEl}
                   menuItems={getMenuItems(() => setAnchorEl(null), navigate)}
                   startIcon={<Svg width="18" height="18" id="applet-outlined" />}
+                  data-testid="dashboard-applets-add-applet"
                 />
               </StyledButtons>
             )}
           </Box>
-          <Search placeholder={t('searchApplets')} onSearch={handleSearch} />
+          <Search
+            placeholder={t('searchApplets')}
+            onSearch={handleSearch}
+            data-testid="dashboard-applets-search"
+          />
         </AppletsTableHeader>
         <Table
           columns={getHeadCells()}
