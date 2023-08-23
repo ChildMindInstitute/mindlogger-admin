@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } fr
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
-import get from 'lodash.get';
 
 import { Update } from 'history';
 import { useAppDispatch } from 'redux/store';
@@ -14,12 +13,11 @@ import {
   useLogout,
 } from 'shared/hooks';
 import {
-  APPLET_PAGE_REGEXP_STRING,
-  builderSessionStorage,
   Encryption,
   getDictionaryObject,
   getEncryptionToServer,
   getUpdatedAppletUrl,
+  Mixpanel,
   SettingParam,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
@@ -40,14 +38,6 @@ import {
   getScoresAndReports,
   getCurrentEntityId,
 } from './SaveAndPublish.utils';
-
-export const getAppletInfoFromStorage = () => {
-  const pathname = window.location.pathname;
-  const match = pathname.match(APPLET_PAGE_REGEXP_STRING);
-  if (!match) return {};
-
-  return builderSessionStorage.getItem() ?? {};
-};
 
 export const useAppletData = () => {
   const { getValues } = useFormContext();
@@ -203,7 +193,6 @@ export const usePrompt = (isFormChanged: boolean) => {
   return {
     promptVisible,
     confirmNavigation: () => {
-      builderSessionStorage.removeItem();
       onConfirm();
     },
     cancelNavigation: onCancel,
@@ -221,19 +210,20 @@ export const useUpdatedAppletNavigate = () => {
 
   const { getAppletWithItems } = applet.thunk;
 
-  const navigateToApplet = async (appletId: string) => {
+  return async (appletId: string) => {
     const oldApplet = getValues();
-    const newApplet = await dispatch(getAppletWithItems({ ownerId, appletId }));
-    const newEntityId = getCurrentEntityId(oldApplet, get(newApplet, 'payload.data.result'), {
-      isActivity: !!activityId,
-      id: activityId ?? activityFlowId,
-    });
-    const url = getUpdatedAppletUrl(appletId, newEntityId, location.pathname);
+    const newAppletResult = await dispatch(getAppletWithItems({ ownerId, appletId }));
 
-    navigate(url);
+    if (getAppletWithItems.fulfilled.match(newAppletResult)) {
+      const newApplet = newAppletResult.payload.data.result;
+      const newEntityId = getCurrentEntityId(oldApplet, newApplet, {
+        isActivity: !!activityId,
+        id: activityId ?? activityFlowId,
+      });
+      const url = getUpdatedAppletUrl(appletId, newEntityId, location.pathname);
+      await navigate(url);
+    }
   };
-
-  return navigateToApplet;
 };
 
 export const useSaveAndPublishSetup = (
@@ -304,6 +294,7 @@ export const useSaveAndPublishSetup = (
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     handleSaveAndPublishFirstClick();
+    Mixpanel.track('Applet Save click');
 
     if (isLogoutInProgress) {
       dispatch(auth.actions.endLogout());
@@ -390,7 +381,6 @@ export const useSaveAndPublishSetup = (
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      builderSessionStorage.removeItem();
       setIsFromLibrary?.(false);
       if (shouldNavigateRef.current) {
         confirmNavigation();
@@ -404,8 +394,9 @@ export const useSaveAndPublishSetup = (
     }
 
     if (createApplet.fulfilled.match(result)) {
+      Mixpanel.track('Applet Created Successfully');
+
       const createdAppletId = result.payload.data.result?.id;
-      builderSessionStorage.removeItem();
       setIsFromLibrary?.(false);
 
       if (encryptionData && password && createdAppletId) {

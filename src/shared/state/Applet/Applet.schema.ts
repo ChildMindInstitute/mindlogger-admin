@@ -434,6 +434,7 @@ export type Item<T = Config> = {
   alerts?: ItemAlert[];
   conditionalLogic?: ConditionalLogic;
   allowEdit: boolean;
+  isHidden?: boolean;
 };
 
 export interface TextItem extends Item {

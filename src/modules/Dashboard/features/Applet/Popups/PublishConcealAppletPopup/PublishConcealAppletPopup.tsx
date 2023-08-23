@@ -87,6 +87,7 @@ export const PublishConcealAppletPopup = () => {
           buttonText={!isLoading ? t('yes') : ''}
           secondBtnText={t('cancel')}
           hasSecondBtn={!isLoading}
+          data-testid="dashboard-applets-publish-conceal-popup"
         >
           <StyledModalWrapper>
             {isLoading ? (
@@ -108,6 +109,7 @@ export const PublishConcealAppletPopup = () => {
           onSubmit={handleClose}
           title={t(isPublishPopup ? 'concealAppletPopupTitle' : 'publishAppletPopupTitle')}
           buttonText={t('ok')}
+          data-testid="dashboard-applets-publish-conceal-popup-success-popup"
         >
           <StyledModalWrapper>
             <StyledBodyLarge>
@@ -134,6 +136,7 @@ export const PublishConcealAppletPopup = () => {
           buttonText={t('retry')}
           secondBtnText={t('cancel')}
           hasSecondBtn
+          data-testid="dashboard-applets-publish-conceal-popup-error-popup"
         >
           <StyledModalWrapper>
             <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>

@@ -41,7 +41,12 @@ export const SectionContent = ({ name, title, sectionId }: SectionContentProps) 
 
   return (
     <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
-      <InputController control={control} name={`${name}.name`} label={t('sectionName')} />
+      <InputController
+        control={control}
+        key={`${name}.name`}
+        name={`${name}.name`}
+        label={t('sectionName')}
+      />
       <Box sx={{ mt: theme.spacing(2.4) }}>
         {isContainConditional ? (
           <ToggleItemContainer

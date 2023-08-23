@@ -67,6 +67,7 @@ export const ScheduleSetupPopup = ({
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleBackClick}
       disabledSecondBtn={!!appletId}
+      data-testid="dashboard-respondents-view-calendar-popup"
     >
       <StyledModalWrapper>
         {showSecondScreen ? (

@@ -22,10 +22,12 @@ describe('LinkGenerator component tests', () => {
     jest.spyOn(mockedAxios, 'post').mockImplementation(fakeRequest);
     renderWithProviders(<LinkGenerator />);
 
-    fireEvent.click(screen.getByTestId('generate-btn'));
+    fireEvent.click(screen.getByTestId('dashboard-add-users-generate-link'));
     await waitFor(() => expect(screen.queryByTestId('modal')).toBeInTheDocument());
     await waitFor(() => fireEvent.click(screen.getByTestId('generate-with-login')));
-    await waitFor(() => expect(screen.getByTestId('generated-input')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId('dashboard-add-users-generate-link-url')).toBeInTheDocument(),
+    );
   });
 
   test('LinkGenerator should get link', async () => {
@@ -34,6 +36,8 @@ describe('LinkGenerator component tests', () => {
       .mockImplementation(async () => await act(fakeRequest as () => Promise<void>));
     renderWithProviders(<LinkGenerator />);
 
-    await waitFor(() => expect(screen.getByTestId('generated-input')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId('dashboard-add-users-generate-link-url')).toBeInTheDocument(),
+    );
   });
 });

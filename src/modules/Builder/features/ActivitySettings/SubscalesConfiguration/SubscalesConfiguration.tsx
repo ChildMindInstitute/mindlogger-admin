@@ -108,6 +108,12 @@ export const SubscalesConfiguration = () => {
     setCalculateTotalScoreSwitch(false);
   }, [!!subscalesLength]);
 
+  useEffect(() => {
+    if (!calculateTotalScore) return;
+
+    setCalculateTotalScoreSwitch(!!calculateTotalScore);
+  }, [!!calculateTotalScore]);
+
   useSubscalesSystemItemsSetup();
 
   return (
@@ -178,6 +184,7 @@ export const SubscalesConfiguration = () => {
             <StyledSvg isFilled={!!tableData?.length} id={iconId} width="20" height="20" />
           </StyledSvgButton>
           <RadioGroupController
+            key={calculateTotalScoreField}
             name={calculateTotalScoreField}
             control={control}
             options={options}

@@ -11,7 +11,7 @@ import {
   variables,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { falseReturnFunc, exportDataSucceed } from 'shared/utils';
+import { falseReturnFunc, exportDataSucceed, Mixpanel } from 'shared/utils';
 import { useAsync, useSetupEnterAppletPassword } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
@@ -49,6 +49,8 @@ export const DataExportPopup = ({
 
       try {
         await execute({ appletId, respondentIds: respondentId });
+
+        Mixpanel.track('Export Data Successful');
       } catch {
         setActiveModal(Modals.ExportError);
         setDataIsExporting(false);
@@ -128,6 +130,7 @@ export const DataExportPopup = ({
           onSubmit={submitForm}
           title={t('dataExport')}
           buttonText=""
+          data-testid="dashboard-respondents-export-data-popup"
         >
           <StyledModalWrapper>{renderDataExportContent()}</StyledModalWrapper>
         </Modal>
@@ -140,6 +143,7 @@ export const DataExportPopup = ({
           onSubmit={submitForm}
           title={t('enterAppletPassword')}
           buttonText={t('submit')}
+          data-testid="dashboard-respondents-export-data-popup-password-popup"
         >
           <StyledModalWrapper>
             <EnterAppletPassword
@@ -163,6 +167,7 @@ export const DataExportPopup = ({
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={handlePopupClose}
+          data-testid="dashboard-respondents-export-data-popup-error-popup"
         >
           <StyledModalWrapper>
             <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>

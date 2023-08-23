@@ -21,7 +21,7 @@ import {
 } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
-import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
+import { ItemFormValues } from 'modules/Builder/types';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
@@ -39,22 +39,11 @@ export const ActivityAbout = () => {
   const { fieldName } = useCurrentActivity();
   const hasVariableAmongItems = useCheckIfItemsHaveVariables();
 
-  const activities = watch('activities');
   const activityItems = watch(`${fieldName}.items`);
-  const activityWithReviewable = activities?.find((activity: ActivityFormValues, index: number) => {
-    const activityFieldName = `activities.${index}`;
-
-    if (fieldName === activityFieldName) return false;
-
-    return activity.isReviewable;
-  });
   const hasUnsupportedReviewableItemTypes = activityItems?.some(
     (item: ItemFormValues) =>
       ![...itemsForReviewableActivity, ''].includes(item.responseType as ItemResponseType),
   );
-  const isReviewableExistsTooltip = activityWithReviewable
-    ? t('isReviewableExists', { activityName: activityWithReviewable?.name })
-    : null;
   const isReviewableUnsupportedTooltip = hasUnsupportedReviewableItemTypes
     ? t('isReviewableUnsupported')
     : null;
@@ -128,10 +117,10 @@ export const ActivityAbout = () => {
     },
     {
       name: `${fieldName}.isReviewable`,
-      disabled: hasUnsupportedReviewableItemTypes || activityWithReviewable,
+      disabled: hasUnsupportedReviewableItemTypes,
       label: (
         <StyledBodyLarge sx={{ position: 'relative' }}>
-          <Tooltip tooltipTitle={isReviewableExistsTooltip || isReviewableUnsupportedTooltip}>
+          <Tooltip tooltipTitle={isReviewableUnsupportedTooltip}>
             <span>{t('onlyAdminPanelActivity')}</span>
           </Tooltip>
           <Tooltip tooltipTitle={t('onlyAdminPanelActivityTooltip')}>
@@ -151,6 +140,7 @@ export const ActivityAbout = () => {
           <Box sx={{ marginBottom: theme.spacing(4.4) }}>
             <InputController
               {...commonInputProps}
+              key={`${fieldName}.name`}
               name={`${fieldName}.name`}
               maxLength={MAX_NAME_LENGTH}
               label={t('activityName')}
@@ -158,6 +148,7 @@ export const ActivityAbout = () => {
           </Box>
           <InputController
             {...commonInputProps}
+            key={`${fieldName}.description`}
             name={`${fieldName}.description`}
             maxLength={MAX_DESCRIPTION_LENGTH}
             label={t('activityDescription')}

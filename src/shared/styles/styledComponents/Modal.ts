@@ -12,4 +12,5 @@ export const StyledModalWrapper = styled(Box)`
 export const StyledModalContent = styled(StyledFlexColumn)`
   overflow-y: auto;
   flex-grow: 1;
+  position: relative;
 `;

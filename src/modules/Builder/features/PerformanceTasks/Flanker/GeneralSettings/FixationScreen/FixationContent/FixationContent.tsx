@@ -90,6 +90,7 @@ export const FixationContent = () => {
         <StyledSmallNumberInput>
           <InputController
             control={control}
+            key={fixationDurationField}
             name={fixationDurationField}
             type="number"
             minNumberValue={MIN_MILLISECONDS_DURATION}

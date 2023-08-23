@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText } from 'shared/styles';
-import { getErrorMessage, navigateToLibrary } from 'shared/utils';
+import { getErrorMessage, Mixpanel, navigateToLibrary } from 'shared/utils';
 import { auth } from 'modules/Auth/state';
 
 import {
@@ -56,6 +56,8 @@ export const SignUpForm = () => {
 
     if (signUp.fulfilled.match(result)) {
       navigateToLibrary(navigate);
+
+      Mixpanel.track('Account Creation complete');
     }
 
     if (signUp.rejected.match(result)) {
@@ -69,13 +71,31 @@ export const SignUpForm = () => {
         {t('createAccount')}
       </StyledSignUpHeader>
       <StyledController>
-        <InputController fullWidth name="email" control={control} label={t('email')} />
+        <InputController
+          fullWidth
+          name="email"
+          control={control}
+          label={t('email')}
+          data-testid="signup-form-email"
+        />
       </StyledController>
       <StyledController>
-        <InputController fullWidth name="firstName" control={control} label={t('firstName')} />
+        <InputController
+          fullWidth
+          name="firstName"
+          control={control}
+          label={t('firstName')}
+          data-testid="signup-form-fname"
+        />
       </StyledController>
       <StyledController>
-        <InputController fullWidth name="lastName" control={control} label={t('lastName')} />
+        <InputController
+          fullWidth
+          name="lastName"
+          control={control}
+          label={t('lastName')}
+          data-testid="signup-form-lname"
+        />
       </StyledController>
       <StyledController>
         <InputController
@@ -84,6 +104,7 @@ export const SignUpForm = () => {
           control={control}
           label={t('password')}
           type="password"
+          data-testid="signup-form-password"
         />
       </StyledController>
       {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
@@ -100,18 +121,21 @@ export const SignUpForm = () => {
               </StyledLink>
             </StyledLabel>
           }
+          data-testid="signup-form-terms"
         />
       </StyledController>
       <StyledButton
         variant="contained"
         type="submit"
         disabled={!termsOfService}
-        data-testid="submit-btn"
+        data-testid="signup-form-signup"
       >
         {t('createAccount')}
       </StyledButton>
       <StyledBackWrapper>
-        <StyledBack onClick={() => navigate(page.login)}>{t('backToLogin')}</StyledBack>
+        <StyledBack onClick={() => navigate(page.login)} data-testid="signup-form-back">
+          {t('backToLogin')}
+        </StyledBack>
       </StyledBackWrapper>
     </StyledForm>
   );

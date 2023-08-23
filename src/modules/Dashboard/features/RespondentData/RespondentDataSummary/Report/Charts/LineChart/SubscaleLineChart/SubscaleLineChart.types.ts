@@ -1,4 +1,4 @@
-import { Chart, ChartDataset, ChartTypeRegistry, LegendElement } from 'chart.js';
+import { Chart, ChartTypeRegistry, LegendElement } from 'chart.js';
 
 import { Version } from 'api';
 
@@ -21,13 +21,9 @@ export type CustomLegend = LegendElement<keyof ChartTypeRegistry> & {
   fit: () => void;
 };
 
-export type ExtendedChartDataset = ChartDataset & {
-  labels: string[];
-};
-
 export type Tick = { index: number; chart: Chart };
 
-export type LineChartProps = {
+export type SubscaleLineChartProps = {
   data: SubscaleChartData;
   versions: Version[];
 };
@@ -40,7 +36,7 @@ export type TooltipData = {
   optionText: string;
 };
 
-export type DataPointRaw = {
+export type SubscaleLineDataPointRaw = {
   x: Date;
   y: number;
   optionText: string;

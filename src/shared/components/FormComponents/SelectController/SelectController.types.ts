@@ -10,6 +10,7 @@ export type Option = {
   disabled?: boolean;
   tooltip?: string;
   hidden?: boolean;
+  groupKey?: string;
 };
 
 export type GetMenuItem = {
@@ -31,8 +32,10 @@ export type FormInputProps = {
   value?: string;
   customChange?: (e: SelectEvent) => void;
   withChecked?: boolean;
+  withGroups?: boolean;
   isLabelNeedTranslation?: boolean;
   uiType?: SelectUiType;
+  'data-testid'?: string;
 } & TextFieldProps;
 
 export type SelectControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;

@@ -10,6 +10,7 @@ import { getPublishedAppletApi } from 'modules/Library/api';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 import { library } from 'modules/Library/state';
+import { Mixpanel } from 'shared/utils';
 
 import { Applet, AppletUiType } from '../Applet';
 
@@ -29,13 +30,18 @@ export const AppletDetails = () => {
     appletId && execute({ appletId });
   }, [appletId]);
 
+  const handleNavigateToLibraryCart = () => {
+    navigate(page.libraryCart);
+    Mixpanel.track('Go to Basket click');
+  };
+
   return (
     <StyledBody sx={{ position: 'relative' }}>
       {(isLoading || loadingCartStatus === 'loading') && <Spinner />}
       <Header
         isBackButtonVisible
         rightButtonType={RightButtonType.Cart}
-        rightButtonCallback={() => navigate(page.libraryCart)}
+        rightButtonCallback={handleNavigateToLibraryCart}
       />
       <ContentContainer>
         {!!applet && <Applet uiType={AppletUiType.Details} applet={applet} />}

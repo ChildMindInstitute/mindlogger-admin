@@ -12,7 +12,7 @@ import {
 } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
 import { getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
-import { getErrorMessage } from 'shared/utils';
+import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
 import { users, workspaces } from 'redux/modules';
@@ -80,6 +80,8 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
         options,
       });
     }
+
+    Mixpanel.track('Invitation submitted click');
   };
 
   const updateFields = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -126,9 +128,14 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={2.4} alignItems="flex-start">
           <Grid container item xs={12} spacing={2.4}>
-            {fields.map(({ name }) => (
+            {fields.map(({ name, 'data-testid': dataTestId }) => (
               <Grid item xs={4} key={name}>
-                <InputController {...commonProps} name={name} label={t(name)} />
+                <InputController
+                  {...commonProps}
+                  name={name}
+                  label={t(name)}
+                  data-testid={dataTestId}
+                />
               </Grid>
             ))}
           </Grid>
@@ -139,6 +146,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
               options={getRoles(roles)}
               label={t('role')}
               customChange={updateFields}
+              data-testid="dashboard-add-users-role"
             />
           </Grid>
           {role === Roles.Reviewer && (
@@ -152,19 +160,26 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
                 noOptionsText={
                   respondents?.length ? t('noRespondentsToSelect') : t('noRespondentsYet')
                 }
+                data-testid="dashboard-add-users-respondents"
               />
             </Grid>
           )}
           {role === Roles.Respondent && (
             <>
               <Grid item xs={4}>
-                <InputController {...commonProps} name={Fields.nickname} label={t('nickname')} />
+                <InputController
+                  {...commonProps}
+                  name={Fields.nickname}
+                  label={t('nickname')}
+                  data-testid="dashboard-add-users-nickname"
+                />
               </Grid>
               <Grid item xs={4}>
                 <InputController
                   {...commonProps}
                   name={Fields.secretUserId}
                   label={t('secretUserId')}
+                  data-testid="dashboard-add-users-secret-id"
                 />
               </Grid>
             </>
@@ -175,6 +190,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
                 {...commonProps}
                 name={Fields.workspacePrefix}
                 label={t('workspaceName')}
+                data-testid="dashboard-add-users-workspace"
               />
               <Tooltip tooltipTitle={t('workspaceTooltip')}>
                 <StyledTooltip>
@@ -189,6 +205,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
               name={Fields.language}
               options={langs}
               label={t('language')}
+              data-testid="dashboard-add-users-lang"
             />
             <Tooltip tooltipTitle={t('languageTooltip')}>
               <StyledTooltip>
@@ -198,10 +215,14 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           </Grid>
         </Grid>
         <StyledRow>
-          <StyledButton variant="contained" type="submit">
+          <StyledButton variant="contained" type="submit" data-testid="dashboard-add-users-send">
             {t('sendInvitation')}
           </StyledButton>
-          <StyledResetButton variant="outlined" onClick={resetForm}>
+          <StyledResetButton
+            variant="outlined"
+            onClick={resetForm}
+            data-testid="dashboard-add-users-reset"
+          >
             {t('resetForm')}
           </StyledResetButton>
         </StyledRow>

@@ -101,7 +101,7 @@ export const Managers = () => {
 
         return {
           pin: {
-            content: () => <Pin isPinned={isPinned} />,
+            content: () => <Pin isPinned={isPinned} data-testid="dashboard-managers-pin" />,
             value: '',
             onClick: () => handlePinClick(id),
           },
@@ -169,7 +169,11 @@ export const Managers = () => {
   ) : (
     <>
       <ManagersTableHeader>
-        <Search placeholder={t('searchManagers')} onSearch={handleSearch} />
+        <Search
+          placeholder={t('searchManagers')}
+          onSearch={handleSearch}
+          data-testid="dashboard-managers-search"
+        />
       </ManagersTableHeader>
       <Table
         columns={getHeadCells(appletId)}

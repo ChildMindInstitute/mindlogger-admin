@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
@@ -22,6 +23,7 @@ export const EditAccessPopup = ({
   reFetchManagers,
 }: EditAccessPopupProps) => {
   const { t } = useTranslation('app');
+  const { appletId } = useParams();
   const { firstName, lastName, email, applets: userApplets, id } = user;
   const [applets, setApplets] = useState<AppletType[]>(userApplets);
   const [appletsWithoutRespondents, setAppletsWithoutRespondents] = useState<string[]>([]);
@@ -104,6 +106,7 @@ export const EditAccessPopup = ({
         title={t('editAccess')}
         buttonText={t('save')}
         disabledSubmit={!applets.length}
+        data-testid="dashboard-managers-edit-access-popup"
       >
         <>
           <StyledModalWrapper>
@@ -111,7 +114,9 @@ export const EditAccessPopup = ({
               <strong>
                 {firstName} {lastName} ({email})
               </strong>
-              {t('userHasAccess')}
+              {appletId
+                ? ` ${t('hasTheFollowingRole')} ${applets?.[0]?.displayName}`
+                : t('userHasAccess')}
             </StyledBodyLarge>
           </StyledModalWrapper>
           <StyledApplets>

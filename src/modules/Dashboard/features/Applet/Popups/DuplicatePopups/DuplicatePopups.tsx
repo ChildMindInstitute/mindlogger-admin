@@ -143,6 +143,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         title={t('appletDuplication')}
         onSubmit={setNameHandler}
         buttonText={t('submit')}
+        data-testid="dashboard-applets-duplicate-popup"
       >
         <StyledModalWrapper>
           <form onSubmit={handleSubmit(setNameHandler)} noValidate>
@@ -166,6 +167,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           title={t('appletDuplication')}
           onSubmit={successModalClose}
           buttonText={t('ok')}
+          data-testid="dashboard-applets-duplicate-popup-success-popup"
         >
           <StyledModalWrapper>
             <Trans i18nKey="successDuplication">
@@ -188,6 +190,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           onSubmit={retryHandler}
           buttonText={t('retry')}
           hasSecondBtn
+          data-testid="dashboard-applets-duplicate-popup-error-popup"
         >
           <StyledModalWrapper>
             <Trans i18nKey="errorDuplication">

@@ -11,4 +11,5 @@ export const state: WorkspacesSchema = {
   workspaces: initialStateData,
   currentWorkspace: initialStateData,
   roles: initialStateData,
+  workspacesRoles: initialStateData,
 };

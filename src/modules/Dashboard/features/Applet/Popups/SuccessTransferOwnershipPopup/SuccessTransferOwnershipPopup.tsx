@@ -20,6 +20,7 @@ export const SuccessTransferOwnershipPopup = ({
       title={t('transferOwnership')}
       buttonText={t('ok')}
       width="60"
+      data-testid="dashboard-applets-transfer-popup-success-popup"
     >
       <StyledModalWrapper>
         <Trans i18nKey="requestTransferOwnershipSuccess">

@@ -20,6 +20,7 @@ import {
   getBuilderAppletUrl,
   getDateInUserTimezone,
   getEncryptionToServer,
+  Mixpanel,
 } from 'shared/utils';
 import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/Table.hooks';
 import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
@@ -171,6 +172,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         if (item.isFolder) return; // TODO: add Edit Folder Page navigation
 
         navigate(getBuilderAppletUrl(appletId));
+        Mixpanel.track('Applet edit click');
       }),
   };
 

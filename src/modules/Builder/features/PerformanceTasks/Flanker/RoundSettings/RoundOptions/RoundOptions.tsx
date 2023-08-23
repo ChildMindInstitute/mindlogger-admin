@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Checkbox, FormControlLabel } from '@mui/material';
@@ -24,7 +24,6 @@ import { IsPracticeRoundType } from '../RoundSettings.types';
 import { getCheckboxes } from './RoundOptions.utils';
 
 export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {
-  const [isOrderRandomized, setIsOrderRandomized] = useState(true);
   const { t } = useTranslation();
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
@@ -34,16 +33,11 @@ export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {
   const samplingMethodField = `${roundField}.samplingMethod`;
   const samplingMethod = watch(samplingMethodField);
 
-  useEffect(() => {
+  const handleSamplingMethodChange = (event: ChangeEvent<HTMLInputElement>) =>
     setValue(
       samplingMethodField,
-      isOrderRandomized ? FlankerSamplingMethod.Randomize : FlankerSamplingMethod.Fixed,
+      event.target.checked ? FlankerSamplingMethod.Randomize : FlankerSamplingMethod.Fixed,
     );
-  }, [isOrderRandomized]);
-
-  useEffect(() => {
-    setIsOrderRandomized(samplingMethod === FlankerSamplingMethod.Randomize);
-  }, []);
 
   return (
     <>
@@ -54,6 +48,7 @@ export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {
         <StyledSmallNumberInput>
           <InputController
             control={control}
+            key={`${roundField}.trialDuration`}
             name={`${roundField}.trialDuration`}
             type="number"
             minNumberValue={MIN_MILLISECONDS_DURATION}
@@ -69,6 +64,7 @@ export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {
           <StyledSmallNumberInput>
             <InputController
               control={control}
+              key={`${roundField}.minimumAccuracy`}
               name={`${roundField}.minimumAccuracy`}
               type="number"
               minNumberValue={MIN_THRESHOLD_DURATION}
@@ -83,8 +79,8 @@ export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {
           label={<StyledBodyMedium>{t('flankerRound.randomize')}</StyledBodyMedium>}
           control={
             <Checkbox
-              checked={isOrderRandomized}
-              onChange={(event) => setIsOrderRandomized(event.target.checked)}
+              checked={samplingMethod === FlankerSamplingMethod.Randomize}
+              onChange={handleSamplingMethodChange}
             />
           }
         />

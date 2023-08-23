@@ -1,4 +1,4 @@
-import { FC, ReactNode, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { TextFieldProps } from '@mui/material/TextField';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 
@@ -21,6 +21,7 @@ type FormInputProps = {
   onDistractNumber?: (value: number) => void;
   Counter?: FC<PropsWithChildren<CounterProps>>;
   counterProps?: Record<string, unknown>;
+  'data-testid'?: string;
 } & TextFieldProps;
 
 export type InputControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;

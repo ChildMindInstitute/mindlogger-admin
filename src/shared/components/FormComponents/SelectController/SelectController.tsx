@@ -5,9 +5,10 @@ import { TextField, Box } from '@mui/material';
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
 import { SelectEvent } from 'shared/types';
-import { theme, StyledFlexTopCenter } from 'shared/styles';
+import { StyledFlexTopCenter, StyledLabelBoldMedium, theme, variables } from 'shared/styles';
+import { groupBy } from 'shared/utils';
 
-import { SelectControllerProps, SelectUiType, GetMenuItem } from './SelectController.types';
+import { SelectControllerProps, SelectUiType, GetMenuItem, Option } from './SelectController.types';
 import {
   StyledPlaceholder,
   StyledItem,
@@ -23,11 +24,13 @@ export const SelectController = <T extends FieldValues>({
   value: selectValue,
   customChange,
   withChecked,
+  withGroups,
   placeholder,
   isLabelNeedTranslation = true,
   uiType = SelectUiType.Primary,
   disabled,
   sx,
+  'data-testid': dataTestid,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -63,6 +66,47 @@ export const SelectController = <T extends FieldValues>({
     </StyledMenuItem>
   );
 
+  const renderOptions = (options?: Option[]) =>
+    options?.map(({ labelKey, value, icon, disabled = false, tooltip, hidden }) => {
+      const commonProps = {
+        labelKey,
+        value,
+        itemDisabled: disabled,
+        icon,
+        hidden,
+      };
+
+      return tooltip ? (
+        <Tooltip key={labelKey} tooltipTitle={tooltip}>
+          {getMenuItem({
+            ...commonProps,
+            withoutKey: true,
+          })}
+        </Tooltip>
+      ) : (
+        getMenuItem(commonProps)
+      );
+    });
+
+  const renderGroupedOptions = () => {
+    if (!withGroups) return renderOptions(options);
+
+    const groupedOptions = groupBy(options, 'groupKey');
+
+    return Object.keys(groupedOptions).reduce(
+      (options: JSX.Element[], groupKey: string) => [
+        ...options,
+        <StyledMenuItem uiType={uiType} itemDisabled>
+          <StyledLabelBoldMedium sx={{ color: variables.palette.outline }}>
+            {t(groupKey)}
+          </StyledLabelBoldMedium>
+        </StyledMenuItem>,
+        ...(renderOptions(groupedOptions[groupKey]) ?? []),
+      ],
+      [],
+    );
+  };
+
   const renderSelect = (
     onChange: ((e: SelectEvent) => void) | undefined,
     selectValue?: string,
@@ -83,21 +127,9 @@ export const SelectController = <T extends FieldValues>({
             PaperProps: { sx: selectDropdownStyles },
           },
         }}
+        data-testid={dataTestid}
       >
-        {options?.map(({ labelKey, value, icon, disabled = false, tooltip, hidden }) => {
-          const commonProps = { labelKey, value, itemDisabled: disabled, icon, hidden };
-
-          return tooltip ? (
-            <Tooltip key={labelKey} tooltipTitle={tooltip}>
-              {getMenuItem({
-                ...commonProps,
-                withoutKey: true,
-              })}
-            </Tooltip>
-          ) : (
-            getMenuItem(commonProps)
-          );
-        })}
+        {renderGroupedOptions()}
       </TextField>
     </Box>
   );

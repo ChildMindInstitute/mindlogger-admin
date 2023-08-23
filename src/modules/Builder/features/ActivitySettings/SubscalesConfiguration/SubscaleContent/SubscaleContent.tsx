@@ -36,7 +36,7 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
   return (
     <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>
       <StyledFlexTopStart sx={{ mb: theme.spacing(2.4), gap: theme.spacing(2) }}>
-        <InputController name={`${name}.name`} label={t('subscaleName')} />
+        <InputController key={`${name}.name`} name={`${name}.name`} label={t('subscaleName')} />
         <SelectController
           name={`${name}.scoring`}
           control={control}

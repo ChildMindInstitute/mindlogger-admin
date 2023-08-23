@@ -27,6 +27,7 @@ import {
   SingleAndMultiSelectRowOption,
   SingleAndMultipleSelectRowsResponseValues,
   Workspace,
+  Item,
 } from 'shared/state';
 import { Applet as FullApplet, DashboardAppletType } from 'modules/Dashboard';
 import {
@@ -34,7 +35,9 @@ import {
   performanceTaskResponseTypes,
   PerfTaskType,
   responseTypeToHaveOptions,
+  Roles,
 } from 'shared/consts';
+import { isManagerOrOwner } from 'shared/utils';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
 
 import {
@@ -103,7 +106,7 @@ const getAppletsRows = (applets: Applet[]) =>
     },
   }));
 
-const getActions = (): Omit<FormControlLabelProps, 'control'>[] => {
+const getActions = (applets: Applet[]): Omit<FormControlLabelProps, 'control'>[] => {
   const { t } = i18n;
 
   return [
@@ -134,6 +137,7 @@ const getActions = (): Omit<FormControlLabelProps, 'control'>[] => {
           </StyledLabelLarge>
         </>
       ),
+      disabled: !applets.length,
     },
   ];
 };
@@ -180,7 +184,7 @@ export const getSteps = ({
   handleAddToExistingApplet,
 }: GetStep): Step[] => {
   const { t } = i18n;
-  const options = getActions();
+  const options = getActions(applets);
 
   return [
     {
@@ -264,8 +268,8 @@ export const getSteps = ({
 };
 
 export const getArrayFromApplets = (applets: FullApplet[]) =>
-  applets.reduce((acc: Applet[], { id, type, displayName, image }) => {
-    if (type === DashboardAppletType.Applet) {
+  applets.reduce((acc: Applet[], { id, type, displayName, image, role }) => {
+    if (type === DashboardAppletType.Applet && isManagerOrOwner(role as Roles)) {
       acc.push({ id, appletName: displayName, image });
     }
 
@@ -329,34 +333,46 @@ export const getSelectedAppletData = (
     .map((activity) => {
       let isPerformanceTask = false;
       let performanceTaskType: PerfTaskType | null = null;
+      const filteredItemsNamesSet = new Set();
+      const filteredItems = activity.items.reduce((acc: Item[], item) => {
+        if (selectedItemNamesSet.has(`${item.name}-${activity.name}`)) {
+          acc.push(item);
+          filteredItemsNamesSet.add(item.name);
+        }
 
-      const filteredItems = activity.items
-        .filter((item) => selectedItemNamesSet.has(`${item.name}-${activity.name}`))
-        .map((item, index, items) => {
-          const newItem = {
-            ...item,
-            key: uuidv4(),
-          };
+        return acc;
+      }, []);
 
-          //for security reasons there is no 'id' in responseValues.options for Single/Multi selection (+ per row)
-          if (responseTypeToHaveOptions.includes(newItem.responseType)) {
-            newItem.responseValues = mapResponseValues(
-              newItem.responseValues as SingleAndMultipleSelectRowsResponseValues,
-            );
-          }
+      const items = filteredItems.map((item) => {
+        const newItem = {
+          ...item,
+          key: uuidv4(),
+        };
 
-          //per requirements if not all of the items in activity were selected, conditional logic should be removed
-          if (activity.items.length > items.length) newItem.conditionalLogic = undefined;
-
-          return newItem;
-        });
-
-      for (const item of activity.items) {
         if (performanceTaskResponseTypes.includes(item.responseType)) {
           isPerformanceTask = true;
           performanceTaskType = getPerformanceTaskType(item.responseType) || null;
         }
-      }
+
+        //for security reasons there is no 'id' in responseValues.options for Single/Multi selection (+ per row)
+        if (responseTypeToHaveOptions.includes(newItem.responseType)) {
+          newItem.responseValues = mapResponseValues(
+            newItem.responseValues as SingleAndMultipleSelectRowsResponseValues,
+          );
+        }
+
+        // per requirements if not all the items which are in conditional logic were selected, conditional logic
+        // should be removed
+        if (
+          !item.conditionalLogic?.conditions?.every((condition) =>
+            filteredItemsNamesSet.has(condition.itemName),
+          )
+        ) {
+          newItem.conditionalLogic = undefined;
+        }
+
+        return newItem;
+      });
 
       //per requirements if not all the items in activity were selected, scores & reports and subscales should be removed
       const hasSubscalesAndScores = filteredItems.length === activity.items.length;
@@ -365,21 +381,18 @@ export const getSelectedAppletData = (
         ...activity,
         isPerformanceTask,
         performanceTaskType: performanceTaskType || undefined,
-        items: filteredItems,
+        items,
         ...(!hasSubscalesAndScores && { subscaleSetting: undefined, scoresAndReports: undefined }),
       };
     });
 
-  //per requirements if not all the activities in applet were selected, activity flows should be removed
-  const hasActivityFlows = applet.activities.length === selectedActivityKeysSet.size;
-
-  const selectedActivityFlows = hasActivityFlows
-    ? applet.activityFlows.map((flow) => ({
-        ...flow,
-        key: uuidv4(),
-        items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
-      }))
-    : [];
+  const selectedActivityFlows = applet.activityFlows
+    .filter((flow) => flow.items.every((item) => selectedActivityKeysSet.has(item.activityKey)))
+    .map((flow) => ({
+      ...flow,
+      key: uuidv4(),
+      items: flow.items.map((item) => ({ ...item, key: uuidv4() })),
+    }));
 
   const { id, keywords, version, activities, activityFlows, ...restApplet } = applet;
 

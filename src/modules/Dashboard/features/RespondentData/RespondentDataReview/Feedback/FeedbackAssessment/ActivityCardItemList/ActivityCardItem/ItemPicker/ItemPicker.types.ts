@@ -1,6 +1,6 @@
-import { ActivityItemAnswer } from 'shared/types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 export type ItemPickerProps = {
-  activityItem: ActivityItemAnswer;
+  activityItem: AssessmentActivityItem;
   isDisabled: boolean;
 };

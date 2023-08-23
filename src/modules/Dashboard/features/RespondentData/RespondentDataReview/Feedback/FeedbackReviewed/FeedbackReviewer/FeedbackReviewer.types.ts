@@ -1,7 +1,5 @@
-import { AnswerDTO } from 'shared/types';
-
-import { Reviewer } from '../FeedbackReviewed.types';
+import { ReviewData } from '../FeedbackReviewed.types';
 
 export type FeedbackReviewerProps = {
-  reviewer: Reviewer;
+  reviewer: ReviewData;
 };

@@ -12,16 +12,21 @@ import { useAsync } from 'shared/hooks';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
-import { LINK_PATTERN, locales, TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../Charts.const';
-import { getOptions, getData } from './LineChart.utils';
-import { CustomLegend, DataPointRaw, LineChartProps, TooltipData } from './LineChart.types';
+import { LINK_PATTERN, locales, TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../../Charts.const';
 import { ChartTooltip } from './ChartTooltip';
+import { getOptions, getData } from './SubscaleLineChart.utils';
+import {
+  CustomLegend,
+  SubscaleLineDataPointRaw,
+  SubscaleLineChartProps,
+  TooltipData,
+} from './SubscaleLineChart.types';
 
 ChartJS.register(Tooltip, TimeScale, Legend);
 
-export const LineChart = ({ data, versions }: LineChartProps) => {
+export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) => {
   const { i18n } = useTranslation('app');
-  const chartRef = useRef<ChartJSOrUndefined<'line', DataPointRaw[]> | null>(null);
+  const chartRef = useRef<ChartJSOrUndefined<'line', SubscaleLineDataPointRaw[]> | null>(null);
 
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const isHovered = useRef(false);
@@ -62,17 +67,17 @@ export const LineChart = ({ data, versions }: LineChartProps) => {
     if (chart && dataPoints.length) {
       const tooltipDataPoints = await Promise.all(
         dataPoints.map(async (dataPoint) => {
-          let optionText = (dataPoint.raw as DataPointRaw).optionText;
+          let optionText = (dataPoint.raw as SubscaleLineDataPointRaw).optionText;
 
           if (optionText && optionText.match(LINK_PATTERN)) {
             optionText = (await getOptionText(optionText)).data;
           }
 
           return {
-            date: (dataPoint.raw as DataPointRaw).x,
+            date: (dataPoint.raw as SubscaleLineDataPointRaw).x,
             backgroundColor: dataPoint.dataset.backgroundColor as string,
             label: dataPoint.dataset.label as string,
-            value: (dataPoint.raw as DataPointRaw).y,
+            value: (dataPoint.raw as SubscaleLineDataPointRaw).y,
             optionText,
           };
         }),

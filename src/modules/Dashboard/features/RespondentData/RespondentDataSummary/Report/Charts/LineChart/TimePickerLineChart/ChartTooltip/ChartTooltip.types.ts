@@ -1,9 +1,12 @@
 import { MouseEventHandler } from 'react';
 
-import { TooltipData } from '../LineChart.types';
+export type ScatterTooltipRowData = {
+  x: Date;
+  y: Date;
+};
 
 export type ChartTooltipProps = {
-  dataPoints: TooltipData[] | null;
+  data: ScatterTooltipRowData[] | null;
   onMouseEnter: MouseEventHandler;
   onMouseLeave: MouseEventHandler;
 };

@@ -53,11 +53,13 @@ export const getActions = ({ removeAccessAction, editAccessAction }: ManagersAct
       icon: <Svg id="remove-access" />,
       action: removeAccessAction,
       tooltipTitle: t('removeAccess'),
+      'data-testid': 'dashboard-managers-remove-access',
     },
     {
       icon: <Svg id="edit-user" />,
       action: editAccessAction,
       tooltipTitle: t('editAccess'),
+      'data-testid': 'dashboard-managers-edit-user',
     },
   ];
 };

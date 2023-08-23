@@ -17,7 +17,7 @@ import { Table } from 'modules/Dashboard/components';
 import { updateRespondentsPinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import { getDateInUserTimezone, isManagerOrOwner, joinWihComma } from 'shared/utils';
+import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
 
 import {
@@ -108,6 +108,7 @@ export const Respondents = () => {
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'viewable');
       setDataExportPopupVisible(true);
+      Mixpanel.track('Export Data click');
     },
     viewDataAction: (respondentId: string) => {
       if (hasEncryptionCheck && appletId) {
@@ -150,7 +151,7 @@ export const Respondents = () => {
 
     return {
       pin: {
-        content: () => <Pin isPinned={isPinned} />,
+        content: () => <Pin isPinned={isPinned} data-testid="dashboard-respondents-pin" />,
         value: '',
         onClick: () => handlePinClick(id),
       },
@@ -277,12 +278,17 @@ export const Respondents = () => {
               variant="outlined"
               startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
               onClick={() => navigate(generatePath(page.appletAddUser, { appletId }))}
+              data-testid="dashboard-respondents-add"
             >
               {t('addRespondent')}
             </StyledButton>
           </StyledLeftBox>
         )}
-        <Search placeholder={t('searchRespondents')} onSearch={handleSearch} />
+        <Search
+          placeholder={t('searchRespondents')}
+          onSearch={handleSearch}
+          data-testid="dashboard-respondents-search"
+        />
         {appletId && <StyledRightBox />}
       </RespondentsTableHeader>
       <Table

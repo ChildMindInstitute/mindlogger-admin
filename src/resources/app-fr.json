@@ -739,7 +739,6 @@
   "noDataForActivity": "Pas encore de données disponibles pour cette activité",
   "noDataForActivityFilters": "Aucune correspondance n'a été trouvée. Essayez d'ajuster les filtres.",
   "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
-  "isReviewableExists": "Une seule activité au sein d'une applet peut être une évaluation du tableau de bord du réviseur. Sélectionné: {{- activityName }}",
   "activityHasVariableAmongItems": "Cette activité contient des variables et ne peut pas ignorer tous les éléments.",
   "activityCannotBeOnePageAssessment": "Cette activité contient des variables et ne peut pas être une évaluation d'une page",
   "showSubscaleResult": "Afficher le résultat de la sous-échelle",

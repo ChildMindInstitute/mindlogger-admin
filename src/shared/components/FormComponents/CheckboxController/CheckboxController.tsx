@@ -13,6 +13,7 @@ export const CheckboxController = <T extends FieldValues>({
   disabled,
   isInversed,
   onCustomChange,
+  'data-testid': dataTestid,
   ...checkboxProps
 }: InputControllerProps<T>) => {
   const handleCheckboxChange = (
@@ -41,6 +42,7 @@ export const CheckboxController = <T extends FieldValues>({
               onChange={(event) => {
                 handleCheckboxChange(event, onChange);
               }}
+              data-testid={dataTestid}
             />
           )}
         />

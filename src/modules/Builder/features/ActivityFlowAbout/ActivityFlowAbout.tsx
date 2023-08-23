@@ -43,6 +43,7 @@ export const ActivityFlowAbout = () => {
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
             {...commonProps}
+            key={`activityFlows.${activityFlowIndex}.name`}
             name={`activityFlows.${activityFlowIndex}.name`}
             label={t('activityFlowName')}
             maxLength={MAX_NAME_LENGTH}
@@ -51,6 +52,7 @@ export const ActivityFlowAbout = () => {
         <Box sx={{ mb: theme.spacing(4.4) }}>
           <InputController
             {...commonProps}
+            key={`activityFlows.${activityFlowIndex}.description`}
             name={`activityFlows.${activityFlowIndex}.description`}
             label={t('activityFlowDescription')}
             maxLength={MAX_DESCRIPTION_LENGTH}
@@ -67,11 +69,13 @@ export const ActivityFlowAbout = () => {
         <StyledFlexColumn>
           <CheckboxController
             control={control}
+            key={`activityFlows.${activityFlowIndex}.isSingleReport`}
             name={`activityFlows.${activityFlowIndex}.isSingleReport`}
             label={<StyledBodyLarge>{t('combineReportsIntoSingleFile')}</StyledBodyLarge>}
           />
           <CheckboxController
             control={control}
+            key={`activityFlows.${activityFlowIndex}.hideBadge`}
             name={`activityFlows.${activityFlowIndex}.hideBadge`}
             label={
               <StyledBodyLarge sx={{ position: 'relative' }}>

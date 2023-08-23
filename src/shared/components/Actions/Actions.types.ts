@@ -10,6 +10,7 @@ export type Action = {
   isDisplayed?: boolean;
   active?: boolean;
   isStatic?: boolean;
+  'data-testid'?: string;
 };
 
 export type ActionsProps = {

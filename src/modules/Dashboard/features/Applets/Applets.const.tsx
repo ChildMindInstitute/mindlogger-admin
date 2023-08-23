@@ -3,7 +3,7 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { Svg } from 'shared/components';
 import { HeadCell } from 'shared/types/table';
-import { getBuilderAppletUrl, Path } from 'shared/utils';
+import { getBuilderAppletUrl, Mixpanel, Path } from 'shared/utils';
 import { page } from 'resources';
 
 export const getHeadCells = (): HeadCell[] => [
@@ -32,7 +32,9 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     action: () => {
       handleMenuClose();
       navigate(getBuilderAppletUrl(Path.NewApplet));
+      Mixpanel.track('Build Applet click');
     },
+    'data-testid': 'dashboard-applets-add-applet-new',
   },
   {
     icon: <Svg id="library" />,
@@ -40,6 +42,8 @@ export const getMenuItems = (handleMenuClose: () => void, navigate: NavigateFunc
     action: () => {
       handleMenuClose();
       navigate(page.library);
+      Mixpanel.track('Browse applet library click');
     },
+    'data-testid': 'dashboard-applets-add-applet-from-library',
   },
 ];

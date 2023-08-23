@@ -1,17 +1,17 @@
-import { useMemo, useState, useEffect } from 'react';
-import { useNavigate, generatePath } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Modal, Spinner } from 'shared/components';
+import { page } from 'resources';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
-import { SingleApplet, workspaces } from 'shared/state';
+import { SingleApplet, workspaces as workspacesState } from 'shared/state';
 import { useAsync } from 'shared/hooks';
+import { authStorage, isManagerOrOwner, Path } from 'shared/utils';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
-import { page } from 'resources';
-import { Path, authStorage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { STORAGE_SELECTED_KEY } from 'modules/Library/consts';
 
@@ -32,21 +32,19 @@ export const AddToBuilderPopup = ({
   setAddToBuilderPopupVisible,
 }: AddToBuilderPopupProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const [applets, setApplets] = useState<Applet[]>([]);
-  const { result: workspacesData = [] } = workspaces.useWorkspacesData() || {};
-  const currentWorkspace = workspaces.useData();
+  const workspacesWithRoles = workspacesState.useWorkspacesRolesData();
+  const workspaces =
+    workspacesWithRoles?.filter(
+      (workspace) =>
+        Object.keys(workspace.workspaceRoles).length === 0 || //in case there are no applets yet in the main Workspace
+        Object.values(workspace.workspaceRoles).some((roles) => isManagerOrOwner(roles[0])),
+    ) || [];
+  const currentWorkspace = workspacesState.useData();
   const { result: cartItems } = library.useCartApplets() || {};
-  const isWorkspacesModalVisible = workspacesData.length > 1;
-
-  const { execute: getWorkspaceApplets, isLoading } = useAsync(
-    getWorkspaceAppletsApi,
-    (applets) => {
-      setApplets(getArrayFromApplets(applets?.data?.result || []));
-    },
-  );
-
-  const { t } = useTranslation('app');
+  const isWorkspacesModalVisible = workspaces.length > 1;
   const [step, setStep] = useState(
     isWorkspacesModalVisible
       ? AddToBuilderSteps.SelectWorkspace
@@ -64,9 +62,12 @@ export const AddToBuilderPopup = ({
     resolver: yupResolver(validationSchema[step]),
   });
 
-  useEffect(() => {
-    if (workspacesData?.length === 1) setValue('selectedWorkspace', workspacesData[0].ownerId);
-  }, [workspacesData]);
+  const { execute: getWorkspaceApplets, isLoading } = useAsync(
+    getWorkspaceAppletsApi,
+    (applets) => {
+      setApplets(getArrayFromApplets(applets?.data?.result || []));
+    },
+  );
 
   const navigateToBuilder = (appletId: string, data: SingleApplet) => {
     navigate(generatePath(page.builderAppletAbout, { appletId }), {
@@ -78,10 +79,10 @@ export const AddToBuilderPopup = ({
 
   const handleSwitchWorkspace = (ownerId: string) => {
     if (currentWorkspace?.ownerId !== ownerId) {
-      const newWorkspace = workspacesData.find((workspace) => workspace.ownerId === ownerId);
+      const newWorkspace = workspaces.find((workspace) => workspace.ownerId === ownerId);
       if (newWorkspace) {
         authStorage.setWorkspace(newWorkspace);
-        dispatch(workspaces.actions.setCurrentWorkspace(newWorkspace));
+        dispatch(workspacesState.actions.setCurrentWorkspace(newWorkspace));
       }
     }
   };
@@ -107,10 +108,6 @@ export const AddToBuilderPopup = ({
 
       return;
     }
-
-    await getWorkspaceApplets({
-      params: { ownerId, limit: APPLETS_WITHOUT_LIMIT, flatList: true },
-    });
     setStep(AddToBuilderSteps.SelectApplet);
   };
   const handleAddToExistingApplet = async () => {
@@ -140,7 +137,7 @@ export const AddToBuilderPopup = ({
       getSteps({
         control,
         isWorkspacesModalVisible,
-        workspaces: workspacesData,
+        workspaces,
         applets,
         setStep,
         setAddToBuilderPopupVisible,
@@ -150,6 +147,20 @@ export const AddToBuilderPopup = ({
       }),
     [applets, isWorkspacesModalVisible, workspaces],
   );
+
+  useEffect(() => {
+    if (workspaces.length === 1) setValue('selectedWorkspace', workspaces[0].ownerId);
+  }, [workspaces]);
+
+  useEffect(() => {
+    if (step === AddToBuilderSteps.AddToBuilderActions) {
+      const { selectedWorkspace: ownerId } = getValues();
+      if (!ownerId) return;
+      getWorkspaceApplets({
+        params: { ownerId, limit: APPLETS_WITHOUT_LIMIT, flatList: true },
+      });
+    }
+  }, [step]);
 
   return (
     <Modal
@@ -163,7 +174,7 @@ export const AddToBuilderPopup = ({
       onSecondBtnSubmit={steps[step].onSecondBtnSubmit}
     >
       <>
-        {isLoading && <Spinner />}
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
           <StyledContainer>{steps[step].render()}</StyledContainer>
         </StyledModalWrapper>

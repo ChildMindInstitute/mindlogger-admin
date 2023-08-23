@@ -35,42 +35,49 @@ export const getActions = ({
       action: removeFromFolder,
       tooltipTitle: t('removeFromFolder'),
       isDisplayed: !!item.parentId,
+      'data-testid': 'dashboard-applets-applet-remove-from-folder',
     },
     {
       icon: <Svg id="users" />,
       action: viewUsers,
       tooltipTitle: t('viewUsers'),
       isDisplayed: isManagerOrOwner(roles?.[0]) || isReviewer || isCoordinator,
+      'data-testid': 'dashboard-applets-applet-view-users',
     },
     {
       icon: <Svg id="calendar" />,
       action: viewCalendar,
       tooltipTitle: t('viewGeneralCalendar'),
       isDisplayed: isManagerOrOwner(roles?.[0]) || isCoordinator,
+      'data-testid': 'dashboard-applets-applet-view-calendar',
     },
     {
       icon: <Svg id="widget" />,
       action: editAction,
       tooltipTitle: t('editAnApplet'),
       isDisplayed: commonCondition,
+      'data-testid': 'dashboard-applets-applet-edit',
     },
     {
       icon: <Svg id="duplicate" />,
       action: duplicateAction,
       tooltipTitle: t('duplicateApplet'),
       isDisplayed: commonCondition,
+      'data-testid': 'dashboard-applets-applet-duplicate',
     },
     {
       icon: <Svg id="trash" />,
       action: deleteAction,
       tooltipTitle: t('deleteApplet'),
       isDisplayed: commonCondition,
+      'data-testid': 'dashboard-applets-applet-delete',
     },
     {
       icon: <Svg id="switch-account" />,
       action: transferOwnership,
       tooltipTitle: t('transferOwnership'),
       isDisplayed: isOwner,
+      'data-testid': 'dashboard-applets-applet-transfer',
     },
     // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
     // introduced. (Story: AUS-4.1.4.10). Comment after QA check.
@@ -78,12 +85,14 @@ export const getActions = ({
       icon: <Svg id="share" />,
       action: shareAppletAction,
       tooltipTitle: t('shareWithTheLibrary'),
+      'data-testid': 'dashboard-applets-applet-share',
     },
     {
       icon: <Svg id={isPublished ? 'conceal' : 'publish'} width="18" height="18" />,
       action: publishAppletAction,
       tooltipTitle: t(isPublished ? 'conceal' : 'publish'),
       isDisplayed: !item.isFolder && isSuperAdmin,
+      'data-testid': 'dashboard-applets-applet-publish-conceal',
     },
   ];
 };

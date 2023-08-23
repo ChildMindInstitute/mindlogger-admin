@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import { ActivityItemAnswer } from 'shared/types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 export type ActivityCartProps = {
   step: number;
@@ -13,5 +13,5 @@ export type ActivityCartProps = {
 
 export type ActivityCardItemListProps = ActivityCartProps &
   PropsWithChildren<{
-    activityItems: ActivityItemAnswer[];
+    activityItems: AssessmentActivityItem[];
   }>;

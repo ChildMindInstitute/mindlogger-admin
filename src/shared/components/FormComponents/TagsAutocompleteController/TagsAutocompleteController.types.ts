@@ -11,6 +11,7 @@ export type FormAutocompleteProps = {
   labelAllSelect?: string;
   noOptionsText?: string;
   limitTags?: number;
+  'data-testid'?: string;
 } & TextFieldProps;
 
 export type TagsAutocompleteControllerProps<T extends FieldValues> = FormAutocompleteProps &

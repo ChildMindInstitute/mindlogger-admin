@@ -70,6 +70,7 @@ export const GeneralSettings = () => {
             <InputController
               type="number"
               control={control}
+              key={practiceTrialsNumberName}
               name={practiceTrialsNumberName}
               minNumberValue={MIN_NUMBER_OF_TRIALS}
               maxNumberValue={MAX_NUMBER_OF_TRIALS}
@@ -83,6 +84,7 @@ export const GeneralSettings = () => {
               <InputController
                 type="number"
                 control={control}
+                key={practiceDurationMinutesName}
                 name={practiceDurationMinutesName}
                 minNumberValue={MIN_LENGTH_OF_TEST}
                 maxNumberValue={MAX_LENGTH_OF_TEST}
@@ -104,6 +106,7 @@ export const GeneralSettings = () => {
             <InputController
               type="number"
               control={control}
+              key={practiceLambdaSlopeName}
               name={practiceLambdaSlopeName}
               minNumberValue={MIN_SLOPE}
               maxNumberValue={MAX_SLOPE}

@@ -46,14 +46,22 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
           InputProps={{
             readOnly: true,
           }}
-          data-testid="generated-input"
+          data-testid="dashboard-add-users-generate-link-url"
         />
-        <StyledButton variant="outlined" onClick={copyPublicLink}>
+        <StyledButton
+          variant="outlined"
+          onClick={copyPublicLink}
+          data-testid="dashboard-add-users-generate-link-url-copy"
+        >
           <Svg id="duplicate" />
         </StyledButton>
       </StyledFlexTopCenter>
       <StyledFlexTopCenter>
-        <StyledButton variant="outlined" onClick={() => setDeletePopupVisible(true)}>
+        <StyledButton
+          variant="outlined"
+          onClick={() => setDeletePopupVisible(true)}
+          data-testid="dashboard-add-users-generate-link-url-delete"
+        >
           {t('deleteInviteLink')}
         </StyledButton>
         <StyledBodyMedium>{t('deleteLinkToNoAllow')}</StyledBodyMedium>
