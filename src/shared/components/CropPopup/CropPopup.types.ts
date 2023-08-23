@@ -4,7 +4,6 @@ import { CropRatio } from './CropPopup.const';
 
 export type CropPopupProps = {
   open: boolean;
-  setValue: (value: string) => void;
   image: File;
   ratio?: CropRatio;
   onSave: (data: FormData) => void;

@@ -125,6 +125,7 @@ export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
         <Box sx={{ mr: theme.spacing(4.8), width: '50%' }}>
           <InputController
             control={control}
+            key={`${name}.name`}
             name={`${name}.name`}
             label={t('scoreName')}
             onBlur={handleNameBlur}

@@ -140,6 +140,7 @@ export const ActivityAbout = () => {
           <Box sx={{ marginBottom: theme.spacing(4.4) }}>
             <InputController
               {...commonInputProps}
+              key={`${fieldName}.name`}
               name={`${fieldName}.name`}
               maxLength={MAX_NAME_LENGTH}
               label={t('activityName')}
@@ -147,6 +148,7 @@ export const ActivityAbout = () => {
           </Box>
           <InputController
             {...commonInputProps}
+            key={`${fieldName}.description`}
             name={`${fieldName}.description`}
             maxLength={MAX_DESCRIPTION_LENGTH}
             label={t('activityDescription')}

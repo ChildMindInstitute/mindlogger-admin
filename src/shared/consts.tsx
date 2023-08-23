@@ -29,7 +29,6 @@ export enum UploadFileError {
   Format,
 }
 
-export const INPUT_DEBOUNCE_TIME = 400;
 export const SEARCH_DEBOUNCE_VALUE = 700;
 
 export const DEFAULT_MILLISECONDS_DURATION = 3000;

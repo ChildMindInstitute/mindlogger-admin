@@ -237,7 +237,6 @@ export const Uploader = ({
       {cropPopupVisible && image && (
         <CropPopup
           open={cropPopupVisible}
-          setValue={setValue}
           image={image}
           ratio={cropRatio}
           onSave={handleSaveCroppedImage}

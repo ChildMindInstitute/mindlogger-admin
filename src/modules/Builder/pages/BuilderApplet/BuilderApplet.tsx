@@ -1,25 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import debounce from 'lodash.debounce';
 
 import { useAppDispatch } from 'redux/store';
 import { SaveAndPublish } from 'modules/Builder/features';
 import { LinkedTabs, Spinner } from 'shared/components';
-import {
-  useBuilderSessionStorageFormValues,
-  useBuilderSessionStorageFormChange,
-  useCheckIfNewApplet,
-  useRemoveAppletData,
-  usePermissions,
-} from 'shared/hooks';
+import { useCheckIfNewApplet, useRemoveAppletData, usePermissions } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
-import { INPUT_DEBOUNCE_TIME } from 'shared/consts';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
-import { builderSessionStorage } from 'shared/utils';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import {
@@ -49,10 +40,7 @@ export const BuilderApplet = () => {
   const [isFromLibrary, setIsFromLibrary] = useState(false);
   const { data: dataFromLibrary } = location.state ?? {};
   const hasLibraryData = isFromLibrary && dataFromLibrary;
-
-  const { getFormValues } = useBuilderSessionStorageFormValues<AppletFormValues>(
-    getDefaultValues(appletData),
-  );
+  const isLoading = (!isNewApplet && loadingStatus === 'idle') || loadingStatus === 'loading';
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
     appletId && ownerId && !isNewApplet
@@ -61,13 +49,12 @@ export const BuilderApplet = () => {
   );
 
   const methods = useForm<AppletFormValues>({
-    defaultValues: getFormValues(),
+    defaultValues: getDefaultValues(appletData),
     resolver: yupResolver(AppletSchema()),
     mode: 'onChange',
   });
   const {
     reset,
-    watch,
     control,
     getValues,
     formState: { isDirty },
@@ -81,7 +68,7 @@ export const BuilderApplet = () => {
     if (!isAppletLoaded) return;
 
     (async () => {
-      await reset(getFormValues());
+      await reset(getDefaultValues(appletData));
 
       if (!dataFromLibrary) return;
 
@@ -112,27 +99,10 @@ export const BuilderApplet = () => {
           activities: prepareActivitiesFromLibrary(libraryConvertedValues.activities),
           activityFlows: prepareActivityFlowsFromLibrary(libraryConvertedValues.activityFlows),
         };
-        builderSessionStorage.setItem(newFormValues);
         await reset(newFormValues);
       })();
     }
   }, [hasLibraryData, isNewApplet]);
-
-  const { handleFormChange } = useBuilderSessionStorageFormChange<AppletFormValues>(getValues);
-
-  const handleFormChangeDebounced = useCallback(debounce(handleFormChange, INPUT_DEBOUNCE_TIME), [
-    handleFormChange,
-  ]);
-
-  useEffect(() => {
-    const subscription = watch((_, { type, name }) => {
-      if (type === 'change' || !!name) handleFormChangeDebounced();
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
 
   useEffect(() => removeAppletData, []);
 
@@ -152,7 +122,7 @@ export const BuilderApplet = () => {
   return (
     <FormProvider {...methods}>
       <StyledBody sx={{ position: 'relative' }}>
-        {loadingStatus === 'loading' && <Spinner />}
+        {isLoading && <Spinner />}
         <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
         <SaveAndPublish hasPrompt={isDirty || isFromLibrary} setIsFromLibrary={setIsFromLibrary} />
       </StyledBody>

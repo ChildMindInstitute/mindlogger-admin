@@ -13,7 +13,6 @@ export * from './fileSystem';
 export * from './func';
 export * from './table';
 export * from './exportTemplate';
-export * from './sessionStorage';
 export * from './urlGenerator';
 export * from './forms';
 export * from './joinWihComma';
