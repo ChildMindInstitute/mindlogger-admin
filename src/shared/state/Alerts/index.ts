@@ -2,8 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store';
 
-import { addAlerts, updateAlertWatchedState } from './Alerts.utils';
-import { extraReducers } from './Alerts.reducer';
+import { reducers, extraReducers } from './Alerts.reducer';
 import { state as initialState } from './Alerts.state';
 import * as thunk from './Alerts.thunk';
 import { AlertsSchema } from './Alerts.schema';
@@ -12,7 +11,7 @@ export * from './Alerts.schema';
 const slice = createSlice({
   name: 'alerts',
   initialState,
-  reducers: { addAlerts, updateAlertWatchedState },
+  reducers,
   extraReducers,
 });
 

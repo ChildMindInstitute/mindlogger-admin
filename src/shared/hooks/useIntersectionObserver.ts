@@ -16,7 +16,7 @@ export const useIntersectionObserver = ({ rootSelector, targetSelector, loadNext
       loadNextPage();
     };
 
-    const root = rootSelector !== undefined ? document.querySelector(rootSelector) : null;
+    const root = rootSelector === undefined ? null : document.querySelector(rootSelector);
     const options = {
       root,
       rootMargin: '0px',
