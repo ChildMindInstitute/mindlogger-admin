@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { RadioGroupController } from 'shared/components/FormComponents';
-import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
+import { StyledContainerWithBg, StyledTitleMedium, theme } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
@@ -162,7 +162,6 @@ export const SubscalesConfiguration = () => {
             columns={allElementsTableColumns}
             data={usedWithinSubscalesElements}
             noDataPlaceholder={t('noElementsYet')}
-            tableHeadBgColor={variables.palette.white}
           />
           <SwitchWithState
             checked={calculateTotalScoreSwitch}

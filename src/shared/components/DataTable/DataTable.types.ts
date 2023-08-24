@@ -27,6 +27,5 @@ export type DataTableProps = {
   onSelect?: (key: unknown, prevSelected: boolean) => unknown[] | void;
   onSelectAll?: (allSelected: boolean) => unknown[] | void;
   hasError?: boolean;
-  tableHeadBgColor?: string;
   isValueName?: boolean;
 };
