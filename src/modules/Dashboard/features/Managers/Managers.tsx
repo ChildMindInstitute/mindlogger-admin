@@ -180,6 +180,7 @@ export const Managers = () => {
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={managersData?.count || 0}
+        data-testid="dashboard-managers-table"
         {...tableProps}
       />
       {selectedManager && (
