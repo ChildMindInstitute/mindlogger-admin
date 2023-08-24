@@ -1,9 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { format, getYear } from 'date-fns';
-import isEqual from 'lodash.isequal';
 
 import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
-import { applets, CalendarEvent, calendarEvents, CreateEventsData } from 'modules/Dashboard/state';
+import { applets, calendarEvents } from 'modules/Dashboard/state';
 import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
 import { getTableCell } from 'shared/utils';
@@ -28,8 +27,6 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
   const scheduledEvents: LegendEvent[] = [];
   const deactivatedEvents: LegendEvent[] = [];
   let eventsData: EventsData | undefined;
-  const prevCalendarEventsArrRef = useRef<CalendarEvent[] | null>();
-  const prevEventsDataArrRef = useRef<CreateEventsData[] | null>();
 
   if (appletData) {
     const { activities = [], activityFlows = [] } = appletData;
@@ -208,26 +205,19 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
 
   useEffect(() => {
     const conditionToCreateCalendarEvents =
-      calendarEventsArr &&
-      !isEqual(calendarEventsArr, prevCalendarEventsArrRef.current) &&
-      calendarCurrentYear === currentYear;
-
+      !!calendarEventsArr?.length && calendarCurrentYear && calendarCurrentYear === currentYear;
     if (!conditionToCreateCalendarEvents) return;
 
     dispatch(calendarEvents.actions.createCalendarEvents({ events: calendarEventsArr }));
-    prevCalendarEventsArrRef.current = calendarEventsArr;
   }, [calendarEventsArr]);
 
   useEffect(() => {
     (async () => {
-      const conditionToCreateEventsData =
-        eventsDataArr && !isEqual(eventsDataArr, prevEventsDataArrRef.current);
-      if (!conditionToCreateEventsData) return;
+      if (!eventsDataArr?.length) return;
 
       await dispatch(calendarEvents.actions.setCreateEventsData(eventsDataArr));
-      prevEventsDataArrRef.current = eventsDataArr;
 
-      if (calendarCurrentYear !== currentYear) {
+      if (calendarCurrentYear && calendarCurrentYear !== currentYear) {
         dispatch(
           calendarEvents.actions.createNextYearEvents({
             yearToCreateEvents: calendarCurrentYear,
@@ -235,7 +225,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
         );
       }
     })();
-  }, [calendarEventsArr, eventsDataArr]);
+  }, [eventsDataArr]);
 
   return {
     alwaysAvailableEvents,

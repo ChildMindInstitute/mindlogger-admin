@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { useBreadcrumbs, usePermissions } from 'shared/hooks';
 import { applet, workspaces } from 'shared/state';
-import { applets, calendarEvents, users } from 'modules/Dashboard/state';
+import { applets, users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 
 import { Calendar } from './Calendar';
@@ -45,7 +45,6 @@ export const Schedule = () => {
 
     return () => {
       dispatch(applets.actions.resetEventsData());
-      dispatch(calendarEvents.actions.resetCalendarEvents());
     };
   }, [appletId, respondentId]);
 
