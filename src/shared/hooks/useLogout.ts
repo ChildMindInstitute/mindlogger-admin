@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
-import { auth, workspaces } from 'redux/modules';
+import { alerts, auth, workspaces } from 'redux/modules';
 import { logOutApi } from 'modules/Auth';
 
 export const useLogout = () => {
@@ -13,6 +13,7 @@ export const useLogout = () => {
   return async () => {
     await logOutApi();
     dispatch(workspaces.actions.setCurrentWorkspace(null));
+    dispatch(alerts.actions.resetAlerts());
     dispatch(auth.actions.resetAuthorization());
     navigate(page.login);
   };
