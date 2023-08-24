@@ -230,7 +230,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
       ...body,
     });
 
-    dispatch(updateActivityData({ id: activity?.id, ...body }));
+    dispatch(updateActivityData({ activityId: activity?.id, ...body }));
 
     reset(defaultValues);
   };
@@ -249,7 +249,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
       ...body,
     });
 
-    dispatch(updateActivityFlowData({ id: activityFlow?.id, ...body }));
+    dispatch(updateActivityFlowData({ flowId: activityFlow?.id, ...body }));
 
     reset(defaultValues);
   };

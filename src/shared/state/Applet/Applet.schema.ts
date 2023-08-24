@@ -609,12 +609,12 @@ export type AppletSchema = {
 };
 
 export type UpdateActivityData = {
-  id?: string;
+  activityId?: string;
   reportIncludedItemName?: string;
 };
 
 export type UpdateActivityFlowData = {
-  id?: string;
+  flowId?: string;
   reportIncludedItemName?: string;
   reportIncludedActivityName?: string;
 };

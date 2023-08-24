@@ -37,7 +37,7 @@ export const updateActivityData = (
       ...appletData.result,
       activities: appletData.result.activities?.map((activity) => ({
         ...activity,
-        ...(activity.id === payload.id && {
+        ...(activity.id === payload.activityId && {
           reportIncludedItemName: payload.reportIncludedItemName,
         }),
       })),
@@ -60,7 +60,7 @@ export const updateActivityFlowData = (
       ...appletData.result,
       activityFlows: appletData.result.activityFlows?.map((activityFlow) => ({
         ...activityFlow,
-        ...(activityFlow.id === payload.id && {
+        ...(activityFlow.id === payload.flowId && {
           reportIncludedItemName: payload.reportIncludedItemName,
           reportIncludedActivityName: payload.reportIncludedActivityName,
         }),
