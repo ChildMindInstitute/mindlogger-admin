@@ -7,9 +7,11 @@ import { getEntityKey } from 'shared/utils';
 export const useCurrentActivityFlow = () => {
   const { activityFlowId } = useParams();
 
-  const { watch } = useFormContext();
+  const { watch } = useFormContext() ?? {};
 
-  const activityFlows = watch('activityFlows');
+  if (!activityFlowId) return {};
+
+  const activityFlows = watch?.('activityFlows');
   const flowIndex = activityFlows?.findIndex(
     (activityFlow: ActivityFlowFormValues) => getEntityKey(activityFlow) === activityFlowId,
   );

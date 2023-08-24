@@ -7,9 +7,11 @@ import { getEntityKey } from 'shared/utils';
 export const useCurrentActivity = () => {
   const { activityId } = useParams();
 
-  const { watch } = useFormContext();
+  const { watch } = useFormContext() ?? {};
 
-  const activities = watch('activities');
+  if (!activityId) return {};
+
+  const activities = watch?.('activities');
   const currentActivityIndex = activities?.findIndex(
     (activity: ActivityFormValues) => getEntityKey(activity) === activityId,
   );
