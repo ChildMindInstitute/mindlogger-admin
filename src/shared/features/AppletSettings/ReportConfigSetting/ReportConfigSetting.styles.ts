@@ -1,6 +1,12 @@
 import styled from '@emotion/styled/macro';
 
-import { variables, StyledFlexAllCenter, StyledClearedButton } from 'shared/styles';
+import {
+  StyledFlexAllCenter,
+  StyledClearedButton,
+  StyledFlexTopCenter,
+  variables,
+  theme,
+} from 'shared/styles';
 
 export const StyledSvg = styled(StyledFlexAllCenter)`
   width: 4rem;
@@ -33,5 +39,14 @@ export const StyledLink = styled('a')`
 
   &:hover {
     opacity: 0.8;
+  }
+`;
+
+export const StyledActivities = styled(StyledFlexTopCenter)`
+  margin-top: ${theme.spacing(1.2)};
+
+  .MuiFormHelperText-root.Mui-error {
+    position: absolute;
+    bottom: -2.4rem;
   }
 `;

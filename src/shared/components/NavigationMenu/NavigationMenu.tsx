@@ -24,8 +24,9 @@ export const NavigationMenu = ({ title, items, onClose, onSetActiveItem }: Navig
     onClose();
   };
 
+  const activeItemFromRoute = getActiveItem(items, setting);
+
   useEffect(() => {
-    const activeItemFromRoute = getActiveItem(items, setting);
     if (!activeItemFromRoute) {
       setActiveItem(null);
 
@@ -33,7 +34,7 @@ export const NavigationMenu = ({ title, items, onClose, onSetActiveItem }: Navig
     }
 
     if (!activeItemFromRoute.disabled) return setActiveItem(activeItemFromRoute);
-  }, [setting]);
+  }, [setting, activeItemFromRoute?.disabled]);
 
   return (
     <StyledWrapper>

@@ -604,7 +604,7 @@ export const postActivityFlowReportConfigApi = (
     Pick<ReportConfig, 'reportIncludedItemName' | 'reportIncludedActivityName'>,
   signal?: AbortSignal,
 ) =>
-  authApiClient.post(
+  authApiClient.put(
     `/applets/${appletId}/flows/${activityFlowId}/report_configuration`,
     { ...params },
     { signal },

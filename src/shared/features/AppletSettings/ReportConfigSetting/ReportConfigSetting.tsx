@@ -27,7 +27,6 @@ import {
   StyledBodyLarge,
   StyledTitleMedium,
   StyledFlexColumn,
-  StyledFlexTopCenter,
 } from 'shared/styles';
 import {
   AppletPasswordPopup,
@@ -38,17 +37,21 @@ import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
 import {
   SettingParam,
-  getEntityKey,
   getParsedEncryptionFromServer,
   getPrivateKey,
   publicEncrypt,
 } from 'shared/utils';
 import { reportConfig } from 'modules/Builder/state';
 
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCurrentActivityFlow } from 'modules/Builder/hooks';
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
-import { StyledButton, StyledSvg, StyledLink } from './ReportConfigSetting.styles';
+import {
+  StyledButton,
+  StyledSvg,
+  StyledLink,
+  StyledActivities,
+} from './ReportConfigSetting.styles';
 import { ReportConfigFormValues, ReportConfigSettingProps } from './ReportConfigSetting.types';
 import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
 import {
@@ -60,16 +63,12 @@ import { useCheckReportServer, useDefaultValues } from './ReportConfigSetting.ho
 import { usePrompt } from '../AppletSettings.hooks';
 import { REPORT_SERVER_INSTRUCTIONS_LINK } from './ReportConfigSetting.const';
 
-export const ReportConfigSetting = ({
-  isDashboard,
-  onSubmitSuccess,
-  // activity,
-  activityFlow,
-}: ReportConfigSettingProps) => {
+export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConfigSettingProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { activity } = useCurrentActivity();
+  const { activityFlow } = useCurrentActivityFlow();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { saveChanges, doNotSaveChanges } = reportConfig.useReportConfigChanges() || {};
   const { resetReportConfigChanges, setReportConfigChanges } = reportConfig.actions;
@@ -130,8 +129,6 @@ export const ReportConfigSetting = ({
     formState: { isDirty, isSubmitted },
     setError,
     clearErrors,
-    register,
-    unregister,
   } = useForm<ReportConfigFormValues>({
     resolver: yupResolver(reportConfigSchema(isActivity, isActivityFlow)),
     defaultValues,
@@ -147,7 +144,10 @@ export const ReportConfigSetting = ({
   const reportServerUrl = watch('reportServerIp');
   const reportPublicKey = watch('reportPublicKey');
 
-  // const [itemValue] = useWatch({ name: ['itemValue'], control });
+  const selectedActivity =
+    isActivityFlow && reportIncludedActivity
+      ? appletData?.activities?.find((activity) => activity.name === reportIncludedActivity)
+      : null;
 
   const { onVerify, onSetPassword } = useCheckReportServer({
     url: reportServerUrl,
@@ -173,7 +173,7 @@ export const ReportConfigSetting = ({
   const onSubmit = (values: ReportConfigFormValues) => {
     if (activity) return handleSaveActivityReportConfig();
 
-    // if (!!activityFlow) return handleSaveActivityFlowReportConfig();
+    if (activityFlow) return handleSaveActivityFlowReportConfig();
 
     const { reportServerIp, reportPublicKey } = values;
     if (!reportServerIp || !reportPublicKey) {
@@ -355,15 +355,6 @@ export const ReportConfigSetting = ({
     handleDontSave();
   }, [doNotSaveChanges]);
 
-  // useEffect(() => {
-  //   if (activity) {
-  //     const { reportIncludedItemName = '' } = activity;
-
-  //     setValue('reportIncludedItemName', reportIncludedItemName);
-  //     setValue('itemValue', !!reportIncludedItemName);
-  //   }
-  // }, [activity, activityFlow]);
-
   const commonSelectProps = {
     control,
     fullWidth: true,
@@ -371,20 +362,8 @@ export const ReportConfigSetting = ({
 
   const handleActivityChange = () => {
     setValue('reportIncludedItemName', '');
+    isActivityFlow && setValue('reportIncludedActivityName', '');
   };
-
-  // useEffect(() => {
-  //   if (itemValue) {
-  //     register('reportIncludedItemName');
-  //     setValue('reportIncludedItemName', activity?.reportIncludedItemName ?? '');
-  //     isActivityFlow &&
-  //       register('reportIncludedActivityName') &&
-  //       setValue('reportIncludedActivityName', activityFlow?.reportIncludedActivityName ?? '');
-  //   }
-
-  //   unregister('reportIncludedItemName');
-  //   isActivityFlow && unregister('reportIncludedActivityName');
-  // }, [itemValue]);
 
   return (
     <>
@@ -513,7 +492,7 @@ export const ReportConfigSetting = ({
               />
             )}
             {itemValue && (
-              <StyledFlexTopCenter sx={{ mt: theme.spacing(1.2) }}>
+              <StyledActivities>
                 {isActivityFlow && (
                   <SelectController
                     {...commonSelectProps}
@@ -529,10 +508,10 @@ export const ReportConfigSetting = ({
                   name="reportIncludedItemName"
                   label={t('newItem')}
                   disabled={isActivityFlow && reportIncludedActivity === ''}
-                  options={getActivityItemsOptions(activity)}
+                  options={getActivityItemsOptions(activity ?? selectedActivity)}
                   sx={{ width: isActivity ? '50%' : '100%' }}
                 />
-              </StyledFlexTopCenter>
+              </StyledActivities>
             )}
             <StyledTitleMedium
               color={variables.palette.on_surface}

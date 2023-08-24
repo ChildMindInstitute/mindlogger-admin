@@ -6,17 +6,23 @@ import { SettingParam } from 'shared/utils';
 
 const { t } = i18n;
 
-export const getSettings = (activityFlow: ActivityFlowFormValues) => [
-  {
-    label: 'reports',
-    items: [
-      {
-        name: 'reportConfiguration',
-        label: t('reportConfiguration'),
-        component: <ReportConfigSetting activityFlow={activityFlow} />,
-        icon: <Svg id="report-configuration" />,
-        param: SettingParam.ReportConfiguration,
-      },
-    ],
-  },
-];
+export const getSettings = (activityFlow: ActivityFlowFormValues) => {
+  const isActivityFlowSaved = !!activityFlow?.id;
+
+  return [
+    {
+      label: 'reports',
+      items: [
+        {
+          name: 'reportConfiguration',
+          label: t('reportConfiguration'),
+          component: <ReportConfigSetting />,
+          icon: <Svg id="report-configuration" />,
+          param: SettingParam.ReportConfiguration,
+          disabled: !isActivityFlowSaved,
+          tooltip: !isActivityFlowSaved ? 'saveAndPublishFirst' : undefined,
+        },
+      ],
+    },
+  ];
+};

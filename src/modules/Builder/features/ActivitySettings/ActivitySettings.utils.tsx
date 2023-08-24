@@ -8,36 +8,44 @@ import { SettingParam } from 'shared/utils';
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
 
-export const getSettings = (activityFieldName?: string, activity?: ActivityFormValues) => [
-  {
-    label: 'reports',
-    items: [
-      {
-        label: 'scoresAndReports',
-        icon: <Svg id="scores-and-reports" />,
-        component: <ScoresAndReports />,
-        param: SettingParam.ScoresAndReports,
-      },
-      {
-        label: 'reportConfiguration',
-        icon: <Svg id="report-configuration" />,
-        component: <ReportConfigSetting activity={activity} />,
-        param: SettingParam.ReportConfiguration,
-      },
-    ],
-  },
-  {
-    label: 'subscales',
-    items: [
-      {
-        label: 'subscalesConfiguration',
-        icon: <Svg id="grid-outlined" />,
-        component: <SubscalesConfiguration key={`subscales-configuration-${activityFieldName}`} />,
-        param: SettingParam.SubscalesConfiguration,
-      },
-    ],
-  },
-];
+export const getSettings = (activityFieldName?: string, activity?: ActivityFormValues) => {
+  const isActivitySaved = !!activity?.id;
+
+  return [
+    {
+      label: 'reports',
+      items: [
+        {
+          label: 'scoresAndReports',
+          icon: <Svg id="scores-and-reports" />,
+          component: <ScoresAndReports />,
+          param: SettingParam.ScoresAndReports,
+        },
+        {
+          label: 'reportConfiguration',
+          icon: <Svg id="report-configuration" />,
+          component: <ReportConfigSetting />,
+          param: SettingParam.ReportConfiguration,
+          disabled: !isActivitySaved,
+          tooltip: !isActivitySaved ? 'saveAndPublishFirst' : undefined,
+        },
+      ],
+    },
+    {
+      label: 'subscales',
+      items: [
+        {
+          label: 'subscalesConfiguration',
+          icon: <Svg id="grid-outlined" />,
+          component: (
+            <SubscalesConfiguration key={`subscales-configuration-${activityFieldName}`} />
+          ),
+          param: SettingParam.SubscalesConfiguration,
+        },
+      ],
+    },
+  ];
+};
 
 export const checkOnItemTypeAndScore = (item: ItemFormValues | Item) =>
   (item.config as SingleAndMultipleSelectionConfig | SliderConfig).addScores &&
