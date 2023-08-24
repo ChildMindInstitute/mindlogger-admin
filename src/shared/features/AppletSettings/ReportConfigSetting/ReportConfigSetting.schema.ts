@@ -1,5 +1,6 @@
-import i18n from 'i18n';
 import * as yup from 'yup';
+
+import i18n from 'i18n';
 
 export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean) => {
   const { t } = i18n;
@@ -18,7 +19,7 @@ export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean)
       ...(isActivityFlow
         ? {
             ...reportIncludedItemName,
-            reportIncludedActivityName: yup.string().when('itemName', {
+            reportIncludedActivityName: yup.string().when('itemValue', {
               is: true,
               then: yup.string().required(<string>t('pleaseSelectActivity')),
             }),
