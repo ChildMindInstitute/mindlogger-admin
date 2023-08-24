@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 
 import { DataTable, FileUploader } from 'shared/components';
-import { theme, variables } from 'shared/styles';
+import { theme } from 'shared/styles';
 import i18n from 'i18n';
 
 import {
@@ -58,12 +58,7 @@ export const getModalComponents = ({
         component: (
           <>
             <Box sx={{ mb: theme.spacing(2) }}>{labelsObject.upload.successDescription}</Box>
-            <DataTable
-              columns={columnData}
-              data={data}
-              noDataPlaceholder={t('noElementsYet')}
-              tableHeadBgColor={variables.palette.surface3}
-            />
+            <DataTable columns={columnData} data={data} noDataPlaceholder={t('noElementsYet')} />
           </>
         ),
         buttonText: t('save'),
@@ -84,12 +79,7 @@ export const getModalComponents = ({
         component: (
           <>
             <Box sx={{ mb: theme.spacing(2) }}>{labelsObject.edit.initDescription}</Box>
-            <DataTable
-              columns={columnData}
-              data={data}
-              noDataPlaceholder={t('noElementsYet')}
-              tableHeadBgColor={variables.palette.surface3}
-            />
+            <DataTable columns={columnData} data={data} noDataPlaceholder={t('noElementsYet')} />
           </>
         ),
         buttonText: t('replace'),

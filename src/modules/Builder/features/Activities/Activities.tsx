@@ -119,7 +119,7 @@ export const Activities = () => {
     return navigateToActivity(newActivity.key);
   };
 
-  const handleActivityRemove = (index: number, activityKey: string, activityName: string) => {
+  const handleActivityRemove = (index: number, activityKey: string) => {
     const newActivityFlows = activityFlows.reduce(
       (acc: AppletFormValues['activityFlows'], flow) => {
         const items = flow.items?.filter((item) => item.activityKey !== activityKey);
@@ -242,9 +242,7 @@ export const Activities = () => {
                           activityName={activityName}
                           isOpen={activityToDelete === activityKey}
                           onModalClose={handleModalClose}
-                          onModalSubmit={() =>
-                            handleActivityRemove(index, activityKey, activityName)
-                          }
+                          onModalSubmit={() => handleActivityRemove(index, activityKey)}
                         />
                       </Fragment>
                     );

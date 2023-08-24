@@ -24,7 +24,6 @@ export const DataTable = ({
   onSelect,
   onSelectAll,
   hasError,
-  tableHeadBgColor = variables.palette.surface1,
   isValueName = false,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
