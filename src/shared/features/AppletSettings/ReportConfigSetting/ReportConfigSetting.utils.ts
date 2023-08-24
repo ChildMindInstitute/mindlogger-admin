@@ -1,8 +1,8 @@
 import { UseFormSetValue } from 'react-hook-form';
 
 import { SingleApplet } from 'shared/state';
-
 import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
+
 import {
   VerifyReportServer,
   SetPasswordReportServer,

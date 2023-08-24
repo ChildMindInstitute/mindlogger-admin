@@ -42,8 +42,8 @@ import {
   publicEncrypt,
 } from 'shared/utils';
 import { reportConfig } from 'modules/Builder/state';
-
 import { useCurrentActivity, useCurrentActivityFlow } from 'modules/Builder/hooks';
+
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
 import {

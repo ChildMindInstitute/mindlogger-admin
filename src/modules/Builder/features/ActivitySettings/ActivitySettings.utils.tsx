@@ -9,7 +9,7 @@ import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
 
 export const getSettings = (activityFieldName?: string, activity?: ActivityFormValues) => {
-  const isActivitySaved = !!activity?.id;
+  const isNewActivity = !activity?.id;
 
   return [
     {
@@ -26,8 +26,8 @@ export const getSettings = (activityFieldName?: string, activity?: ActivityFormV
           icon: <Svg id="report-configuration" />,
           component: <ReportConfigSetting />,
           param: SettingParam.ReportConfiguration,
-          disabled: !isActivitySaved,
-          tooltip: !isActivitySaved ? 'saveAndPublishFirst' : undefined,
+          disabled: isNewActivity,
+          tooltip: isNewActivity ? 'saveAndPublishFirst' : undefined,
         },
       ],
     },

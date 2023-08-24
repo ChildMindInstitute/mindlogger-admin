@@ -7,7 +7,7 @@ import { SettingParam } from 'shared/utils';
 const { t } = i18n;
 
 export const getSettings = (activityFlow: ActivityFlowFormValues) => {
-  const isActivityFlowSaved = !!activityFlow?.id;
+  const isNewActivityFlow = !activityFlow?.id;
 
   return [
     {
@@ -19,8 +19,8 @@ export const getSettings = (activityFlow: ActivityFlowFormValues) => {
           component: <ReportConfigSetting />,
           icon: <Svg id="report-configuration" />,
           param: SettingParam.ReportConfiguration,
-          disabled: !isActivityFlowSaved,
-          tooltip: !isActivityFlowSaved ? 'saveAndPublishFirst' : undefined,
+          disabled: isNewActivityFlow,
+          tooltip: isNewActivityFlow ? 'saveAndPublishFirst' : undefined,
         },
       ],
     },
