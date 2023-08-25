@@ -296,6 +296,7 @@ export const Respondents = () => {
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={respondentsData?.count || 0}
+        data-testid="dashboard-respondents-table"
         {...tableProps}
       />
       {scheduleSetupPopupVisible && (

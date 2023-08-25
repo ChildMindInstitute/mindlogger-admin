@@ -171,6 +171,7 @@ export const Applets = () => {
           emptyComponent={getEmptyComponent()}
           count={count}
           rowsPerPage={rows.length}
+          data-testid="dashboard-applets-table"
           {...tableProps}
         />
         {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
