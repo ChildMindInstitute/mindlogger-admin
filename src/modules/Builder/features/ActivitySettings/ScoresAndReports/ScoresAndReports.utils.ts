@@ -27,8 +27,13 @@ export const getSectionDefaults = () => ({
   itemsPrint: [],
 });
 
-export const getReportIndex = (reports: ScoreOrSection[], report: ScoreOrSection) => {
-  const entities = reports?.filter(({ type }) => type === report.type);
+export const getReportIndex = (reports: ScoreOrSection[], report: ScoreOrSection) =>
+  reports?.reduce(
+    ({ index, done }, { type, id }) => {
+      if (done || report.type !== type) return { index, done };
+      if (report.id === id) return { index, done: true };
 
-  return entities?.findIndex(({ id }) => id === report.id);
-};
+      return { index: index + 1, done };
+    },
+    { index: 0, done: false },
+  ).index;
