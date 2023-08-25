@@ -19,6 +19,7 @@ import {
   MIN_LENGTH_OF_TEST,
   MIN_NUMBER_OF_TRIALS,
   MIN_SLOPE,
+  ScoreReportType,
 } from 'shared/consts';
 import {
   AppletFormValues,
@@ -543,22 +544,21 @@ export const ScoreConditionalLogic = () =>
     match: yup.string(),
   });
 
-export const ScoreSchema = () =>
-  yup.object({
-    id: yup.string().required(),
-    name: yup
-      .string()
-      .required(getIsRequiredValidateMessage('scoreName'))
-      .test(
-        'unique-score-name',
-        t('validationMessages.unique', { field: t('scoreName') }) as string,
-        (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
-      ),
-    calculationType: yup.string().required(),
-    ...getReportCommonFields(true),
-    itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
-    conditionalLogic: yup.array().of(ScoreConditionalLogic()).nullable(),
-  });
+export const ScoreSchema = () => ({
+  id: yup.string().required(),
+  name: yup
+    .string()
+    .required(getIsRequiredValidateMessage('scoreName'))
+    .test(
+      'unique-score-name',
+      t('validationMessages.unique', { field: t('scoreName') }) as string,
+      (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
+    ),
+  calculationType: yup.string().required(),
+  ...getReportCommonFields(true),
+  itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
+  conditionalLogic: yup.array().of(ScoreConditionalLogic()).nullable(),
+});
 
 export const SectionConditionalLogic = () =>
   yup.object({
@@ -576,21 +576,27 @@ export const TotalScoresTableDataSchema = yup
   .of(TotalScoreTableDataItemSchema())
   .nullable();
 
-export const SectionSchema = () =>
-  yup.object({
-    name: yup
-      .string()
-      .required(getIsRequiredValidateMessage('sectionName'))
-      .matches(alphanumericAndHyphenRegexp, {
-        message: t('validationMessages.alphanumericAndHyphen', { field: t('sectionName') }),
-      })
-      .test(
-        'unique-section-name',
-        t('validationMessages.unique', { field: t('sectionName') }) as string,
-        (sectionName, context) => testFunctionForUniqueness('sections', sectionName ?? '', context),
-      ),
-    ...getReportCommonFields(),
-    conditionalLogic: SectionConditionalLogic().nullable(),
+export const SectionSchema = () => ({
+  name: yup
+    .string()
+    .required(getIsRequiredValidateMessage('sectionName'))
+    .matches(alphanumericAndHyphenRegexp, {
+      message: t('validationMessages.alphanumericAndHyphen', { field: t('sectionName') }),
+    })
+    .test(
+      'unique-section-name',
+      t('validationMessages.unique', { field: t('sectionName') }) as string,
+      (sectionName, context) => testFunctionForUniqueness('sections', sectionName ?? '', context),
+    ),
+  ...getReportCommonFields(),
+  conditionalLogic: SectionConditionalLogic().nullable(),
+});
+
+export const ScoreOrSectionSchema = () =>
+  yup.object({ type: yup.string() }).when('type', (type, schema) => {
+    if (type === ScoreReportType.Section) return schema.shape(SectionSchema());
+
+    return schema.shape(ScoreSchema());
   });
 
 export const ActivitySchema = () =>
@@ -625,8 +631,9 @@ export const ActivitySchema = () =>
       .object({
         generateReport: yup.boolean(),
         showScoreSummary: yup.boolean(),
-        scores: yup.array().of(ScoreSchema()),
-        sections: yup.array().of(SectionSchema()),
+        reports: yup.array().of(ScoreOrSectionSchema()),
+        // scores: yup.array().of(ScoreSchema()),
+        // sections: yup.array().of(SectionSchema()),
       })
       .nullable(),
   });
