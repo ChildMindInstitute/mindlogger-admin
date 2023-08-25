@@ -822,11 +822,8 @@ export const testIsReportCommonFieldsRequired = (
 };
 
 //TODO: find a way to validate nested properties for objects in arrays for uniqueness
-export const testFunctionForUniqueness = (field: string, value: string, context: unknown) => {
-  const items = get(context, `from.1.value.${field}`);
-
-  return items?.filter((item: { name: string }) => item.name === value).length < 2 ?? true;
-};
+export const testFunctionForUniqueness = (value: string, items: { name: string }[]) =>
+  items?.filter((item: { name: string }) => item.name === value).length < 2 ?? true;
 
 export const testFunctionForTheSameVariable = (
   field: string,
