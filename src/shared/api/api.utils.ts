@@ -19,24 +19,35 @@ export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
   try {
     const { response: errorResponse } = err;
     const refreshToken = authStorage.getRefreshToken();
+
     const { data } = await signInRefreshTokenApi({
       refreshToken,
     });
 
-    return new Promise((resolve) => {
-      if (data?.result?.accessToken) {
-        authStorage.setAccessToken(data.result.accessToken);
+    return new Promise((resolve, reject) => {
+      if (!data?.result?.accessToken) {
+        return reject(new Error('Access token refresh failed.'));
+      }
+
+      authStorage.setAccessToken(data.result.accessToken);
+      const originalConfig = errorResponse?.config;
+
+      try {
         resolve(
           axios({
-            ...errorResponse?.config,
+            ...originalConfig,
             headers: {
+              ...(originalConfig?.headers && originalConfig.headers),
               Authorization: `Bearer ${data.result.accessToken}`,
             },
+            ...(originalConfig?.data && { data: JSON.parse(originalConfig.data) }),
           }),
         );
+      } catch (error) {
+        reject(error);
       }
     });
-  } catch (err) {
-    return Promise.reject(err);
+  } catch (error) {
+    return Promise.reject(error);
   }
 };
