@@ -24,6 +24,7 @@ import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, MediaType, UploadFileError } from 'shared/consts';
 import { StyledFlexColumn } from 'shared/styles';
+import { concatIf } from 'shared/utils';
 
 import { StyledErrorText, StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
@@ -34,6 +35,7 @@ export const EditorController = <T extends FieldValues>({
   uiType = EditorUiType.Primary,
   editorId,
   disabled = false,
+  'data-testid': dataTestid,
 }: EditorControllerProps<T>) => {
   const { t } = useTranslation('app');
   const editorRef = useRef<ExposeParam>();
@@ -58,7 +60,7 @@ export const EditorController = <T extends FieldValues>({
         name={name}
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
-          <StyledFlexColumn sx={{ position: 'relative' }}>
+          <StyledFlexColumn sx={{ position: 'relative' }} data-testid={dataTestid}>
             <StyledMdEditor
               editorId={editorId}
               className={`${uiType} ${disabled ? 'disabled' : ''} ${error ? 'has-error' : ''}`}
@@ -163,6 +165,7 @@ export const EditorController = <T extends FieldValues>({
           popupVisible={!!fileSizeExceeded}
           size={fileSizeExceeded}
           onClose={() => setFileSizeExceeded(null)}
+          data-testid={concatIf(dataTestid, '-incorrect-file-size-popup')}
         />
       )}
       {incorrectFileFormat && (
@@ -171,6 +174,7 @@ export const EditorController = <T extends FieldValues>({
           onClose={() => setIncorrectFileFormat(null)}
           uiType={UploadFileError.Format}
           fileType={incorrectFileFormat}
+          data-testid={concatIf(dataTestid, '-incorrect-file-format-popup')}
         />
       )}
     </>

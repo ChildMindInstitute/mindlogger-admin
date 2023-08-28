@@ -18,6 +18,7 @@ export const CropPopup = ({
   ratio = CropRatio.Default,
   onSave,
   onClose,
+  'data-testid': dataTestid,
 }: CropPopupProps) => {
   const { t } = useTranslation('app');
 
@@ -57,6 +58,7 @@ export const CropPopup = ({
         title={t('pleaseSelectArea')}
         onSubmit={handleCropImage}
         buttonText={t('save')}
+        data-testid={dataTestid}
       >
         <StyledModalWrapper sx={{ margin: '0 auto' }}>
           <StyledCropWrapper isSmallImg={isSmallImg}>

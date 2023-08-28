@@ -9,7 +9,7 @@ import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { byteFormatter, joinWihComma } from 'shared/utils';
+import { byteFormatter, concatIf, joinWihComma } from 'shared/utils';
 import { MAX_FILE_SIZE_25MB, VALID_IMAGE_TYPES, UploadFileError, MediaType } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
 
@@ -38,6 +38,7 @@ export const Uploader = ({
   cropRatio,
   hasError,
   disabled,
+  'data-testid': dataTestid,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
   const uploadInputRef = useRef<HTMLInputElement>(null);
@@ -155,6 +156,7 @@ export const Uploader = ({
   return (
     <>
       <StyledContainer
+        data-testid={dataTestid}
         hasError={hasError}
         width={width}
         height={height}
@@ -241,12 +243,14 @@ export const Uploader = ({
           ratio={cropRatio}
           onSave={handleSaveCroppedImage}
           onClose={handleCloseCropPopup}
+          data-testid={concatIf(dataTestid, '-crop-popup')}
         />
       )}
       <RemoveImagePopup
         open={isRemovePopupOpen}
         onClose={handleCloseRemovePopup}
         onSubmit={handleConfirmRemoval}
+        data-testid={concatIf(dataTestid, '-remove-popup')}
       />
       {!isPrimaryUiType && (
         <>
@@ -256,6 +260,7 @@ export const Uploader = ({
               onClose={() => setError(null)}
               uiType={UploadFileError.Size}
               fileType={MediaType.Image}
+              data-testid={concatIf(dataTestid, '-incorrect-file-size-popup')}
             />
           )}
           {hasFormatError && (
@@ -264,6 +269,7 @@ export const Uploader = ({
               onClose={() => setError(null)}
               uiType={UploadFileError.Format}
               fileType={MediaType.Image}
+              data-testid={concatIf(dataTestid, '-incorrect-file-format-popup')}
             />
           )}
         </>
