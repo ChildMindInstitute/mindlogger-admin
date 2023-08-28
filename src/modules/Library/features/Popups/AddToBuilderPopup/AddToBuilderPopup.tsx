@@ -8,13 +8,12 @@ import { page } from 'resources';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
 import { SingleApplet, workspaces as workspacesState } from 'shared/state';
-import { useAsync } from 'shared/hooks';
+import { useAsync, useNetwork } from 'shared/hooks';
 import { authStorage, isManagerOrOwner, Path } from 'shared/utils';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
 import { useAppDispatch } from 'redux/store';
 import { STORAGE_SELECTED_KEY } from 'modules/Library/consts';
-import { useNetwork } from 'shared/hooks/useNetwork';
 
 import {
   AddToBuilderActions,
