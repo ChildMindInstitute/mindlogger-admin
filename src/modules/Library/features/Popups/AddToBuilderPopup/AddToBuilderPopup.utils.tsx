@@ -182,6 +182,7 @@ export const getSteps = ({
   handleNext,
   handleAddToBuilder,
   handleAddToExistingApplet,
+  errorCallback,
 }: GetStep): Step[] => {
   const { t } = i18n;
   const options = getActions(applets);
@@ -262,7 +263,7 @@ export const getSteps = ({
       hasSecondBtn: true,
       secondBtnText: 'cancel',
       onSecondBtnSubmit: () => setAddToBuilderPopupVisible(false),
-      onSubmitStep: () => setAddToBuilderPopupVisible(false),
+      onSubmitStep: () => errorCallback(),
     },
   ];
 };
