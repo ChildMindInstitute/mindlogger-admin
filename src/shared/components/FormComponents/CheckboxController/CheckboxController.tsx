@@ -38,7 +38,7 @@ export const CheckboxController = <T extends FieldValues>({
             <Checkbox
               {...checkboxProps}
               disabled={disabled}
-              checked={isInversed ? !value : value}
+              checked={(isInversed ? !value : value) ?? false}
               onChange={(event) => {
                 handleCheckboxChange(event, onChange);
               }}
