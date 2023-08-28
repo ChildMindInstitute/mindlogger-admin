@@ -96,7 +96,7 @@ export const SelectController = <T extends FieldValues>({
     return Object.keys(groupedOptions).reduce(
       (options: JSX.Element[], groupKey: string) => [
         ...options,
-        <StyledMenuItem uiType={uiType} itemDisabled>
+        <StyledMenuItem key={groupKey} uiType={uiType} itemDisabled>
           <StyledLabelBoldMedium sx={{ color: variables.palette.outline }}>
             {t(groupKey)}
           </StyledLabelBoldMedium>

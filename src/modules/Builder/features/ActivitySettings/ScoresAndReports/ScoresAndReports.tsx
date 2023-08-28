@@ -18,14 +18,15 @@ import { CheckboxController } from 'shared/components/FormComponents';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
 import { SettingParam, getEntityKey } from 'shared/utils';
-import { ScoreReport, SectionReport } from 'shared/state';
+import { ScoresAndReports as ScoresAndReportsType } from 'shared/state';
 import { useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
+import { ScoreReportType } from 'shared/consts';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import { SectionScoreHeader } from './SectionScoreHeader';
 import { SectionContent } from './SectionContent';
-import { getScoreDefaults, getSectionDefaults } from './ScoresAndReports.utils';
+import { getReportIndex, getScoreDefaults, getSectionDefaults } from './ScoresAndReports.utils';
 import { ScoreContent } from './ScoreContent';
 import { Title } from './Title';
 import { StyledConfigureBtn } from './ScoresAndReports.styles';
@@ -42,40 +43,30 @@ export const ScoresAndReports = () => {
   const scoresAndReportsName = `${fieldName}.scoresAndReports`;
   const generateReportName = `${scoresAndReportsName}.generateReport`;
   const showScoreSummaryName = `${scoresAndReportsName}.showScoreSummary`;
-  const scoresName = `${scoresAndReportsName}.scores`;
-  const sectionsName = `${scoresAndReportsName}.sections`;
+  const reportsName = `${scoresAndReportsName}.reports`;
   const isServerConfigured = useIsServerConfigured();
 
   const {
-    append: appendScore,
-    remove: removeScore,
-    move: moveScore,
+    append: appendReport,
+    remove: removeReport,
+    move: moveReport,
   } = useFieldArray({
     control,
-    name: scoresName,
+    name: reportsName,
   });
 
-  const {
-    append: appendSection,
-    remove: removeSection,
-    move: moveSection,
-  } = useFieldArray({
-    control,
-    name: sectionsName,
-  });
+  const reports: ScoresAndReportsType['reports'] = watch(reportsName);
 
-  const sections: SectionReport[] = watch(sectionsName);
-  const scores: ScoreReport[] = watch(scoresName);
   const showScoreSummary = watch(scoresAndReportsName);
   const generateReport = watch(generateReportName);
-  const isCheckboxesDisabled = !(scores?.length || sections?.length);
+  const isCheckboxesDisabled = !reports?.length;
 
   const handleAddScore = () => {
-    appendScore(getScoreDefaults());
+    appendReport(getScoreDefaults());
   };
 
   const handleAddSection = () => {
-    appendSection(getSectionDefaults());
+    appendReport(getSectionDefaults());
   };
 
   useEffect(() => {
@@ -91,14 +82,9 @@ export const ScoresAndReports = () => {
       }),
     );
 
-  const handleScoreDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
+  const handleReportDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     if (!destination) return;
-    moveScore(source.index, destination.index);
-  };
-
-  const handleSectionDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
-    if (!destination) return;
-    moveSection(source.index, destination.index);
+    moveReport(source.index, destination.index);
   };
 
   return (
@@ -142,15 +128,18 @@ export const ScoresAndReports = () => {
         }
       />
       <StyledFlexColumn sx={{ mt: theme.spacing(2.4) }}>
-        <DragDropContext onDragEnd={handleSectionDragEnd}>
-          <DndDroppable droppableId="sar-sections-dnd" direction="vertical">
+        <DragDropContext onDragEnd={handleReportDragEnd}>
+          <DndDroppable droppableId="sar-reports-dnd" direction="vertical">
             {({ droppableProps, innerRef, placeholder }) => (
               <Box {...droppableProps} ref={innerRef}>
-                {sections?.map((section, index) => {
-                  const sectionName = `${sectionsName}.${index}`;
-                  const title = t('sectionHeader', { index: index + 1 });
-                  const headerTitle = <Title title={title} name={section?.name} />;
-                  const key = `data-section-${getEntityKey(section) || index}`;
+                {reports?.map((report, index) => {
+                  const isSection = report.type === ScoreReportType.Section;
+                  const reportName = `${reportsName}.${index}`;
+                  const title = t(isSection ? 'sectionHeader' : 'scoreHeader', {
+                    index: getReportIndex(reports, report) + 1,
+                  });
+                  const headerTitle = <Title title={title} name={report?.name} />;
+                  const key = `data-section-${getEntityKey(report) || index}`;
 
                   return (
                     <Draggable key={key} draggableId={key} index={index}>
@@ -158,20 +147,21 @@ export const ScoresAndReports = () => {
                         <Box ref={innerRef} {...draggableProps}>
                           <ToggleItemContainer
                             HeaderContent={SectionScoreHeader}
-                            Content={SectionContent}
-                            error={getFieldState(sectionName).error?.message || null}
+                            Content={isSection ? SectionContent : ScoreContent}
+                            error={getFieldState(reportName).error?.message || null}
                             headerContentProps={{
                               onRemove: () => {
-                                removeSection(index);
+                                removeReport(index);
                               },
-                              name: sectionName,
+                              name: reportName,
                               title: headerTitle,
                               dragHandleProps,
                             }}
                             contentProps={{
-                              sectionId: section.id,
-                              name: sectionName,
+                              name: reportName,
                               title,
+                              ...(isSection && { sectionId: report.id }),
+                              ...(!isSection && { index }),
                             }}
                           />
                         </Box>
@@ -185,48 +175,6 @@ export const ScoresAndReports = () => {
           </DndDroppable>
         </DragDropContext>
       </StyledFlexColumn>
-      <DragDropContext onDragEnd={handleScoreDragEnd}>
-        <DndDroppable droppableId="sar-scores-dnd" direction="vertical">
-          {({ droppableProps, innerRef, placeholder }) => (
-            <Box {...droppableProps} ref={innerRef}>
-              {scores?.map((score, index) => {
-                const scoreName = `${scoresName}.${index}`;
-                const title = t('scoreHeader', { index: index + 1 });
-                const headerTitle = <Title title={title} name={score?.name} />;
-                const key = `data-score-${getEntityKey(score) || index}`;
-
-                return (
-                  <Draggable key={key} draggableId={key} index={index}>
-                    {({ innerRef, draggableProps, dragHandleProps }) => (
-                      <Box ref={innerRef} {...draggableProps}>
-                        <ToggleItemContainer
-                          HeaderContent={SectionScoreHeader}
-                          Content={ScoreContent}
-                          error={getFieldState(scoreName).error?.message || null}
-                          headerContentProps={{
-                            onRemove: () => {
-                              removeScore(index);
-                            },
-                            name: scoreName,
-                            title: headerTitle,
-                            dragHandleProps,
-                          }}
-                          contentProps={{
-                            name: scoreName,
-                            title,
-                            index,
-                          }}
-                        />
-                      </Box>
-                    )}
-                  </Draggable>
-                );
-              })}
-              {placeholder}
-            </Box>
-          )}
-        </DndDroppable>
-      </DragDropContext>
       <StyledFlexTopCenter>
         <Button {...commonButtonProps} onClick={handleAddScore} sx={{ mr: theme.spacing(1.2) }}>
           {t('addScore')}

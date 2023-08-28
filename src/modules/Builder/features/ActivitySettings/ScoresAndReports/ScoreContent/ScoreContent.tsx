@@ -80,8 +80,8 @@ export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
   };
 
   useEffect(() => {
-    const selectedItems = items.filter((item) => itemsScore.includes(item.name));
-    if (selectedItems.length) {
+    const selectedItems = items?.filter((item) => itemsScore.includes(item.name));
+    if (selectedItems?.length) {
       const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
       setScoreRangeLabel(getScoreRangeLabel(minScore as number, maxScore as number));
     } else {

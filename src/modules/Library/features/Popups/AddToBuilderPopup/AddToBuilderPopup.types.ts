@@ -56,6 +56,7 @@ export type GetStep = {
   handleNext: (nextStep?: AddToBuilderSteps) => Promise<void>;
   handleAddToBuilder: () => void;
   handleAddToExistingApplet: () => void;
+  errorCallback: () => void;
 };
 
 export type TableController = {
