@@ -8,7 +8,7 @@ import { page } from 'resources';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
 import { SingleApplet, workspaces as workspacesState } from 'shared/state';
-import { useAsync } from 'shared/hooks';
+import { useAsync, useNetwork } from 'shared/hooks';
 import { authStorage, isManagerOrOwnerOrEditor, Path } from 'shared/utils';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
@@ -34,6 +34,8 @@ export const AddToBuilderPopup = ({
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+  const isOnline = useNetwork();
+
   const [applets, setApplets] = useState<Applet[]>([]);
   const workspacesWithRoles = workspacesState.useWorkspacesRolesData();
   const workspaces =
@@ -93,6 +95,10 @@ export const AddToBuilderPopup = ({
   };
 
   const handleAddToBuilder = async () => {
+    if (!isOnline) {
+      return setStep(AddToBuilderSteps.Error);
+    }
+
     const { addToBuilderAction, selectedWorkspace: ownerId } = getValues();
 
     if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
@@ -111,6 +117,10 @@ export const AddToBuilderPopup = ({
     setStep(AddToBuilderSteps.SelectApplet);
   };
   const handleAddToExistingApplet = async () => {
+    if (!isOnline) {
+      return setStep(AddToBuilderSteps.Error);
+    }
+
     const { selectedWorkspace: ownerId, selectedApplet } = getValues();
     const { appletToBuilder } = await getAddToBuilderData(cartItems);
     if (!selectedApplet || !appletToBuilder) {
@@ -132,6 +142,15 @@ export const AddToBuilderPopup = ({
     }
   };
 
+  const errorCallback = () => {
+    const { addToBuilderAction } = getValues();
+    if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
+      return handleAddToBuilder();
+    }
+
+    return handleAddToExistingApplet();
+  };
+
   const steps = useMemo(
     () =>
       getSteps({
@@ -144,6 +163,7 @@ export const AddToBuilderPopup = ({
         handleNext,
         handleAddToBuilder,
         handleAddToExistingApplet,
+        errorCallback,
       }),
     [applets, isWorkspacesModalVisible, workspaces],
   );
