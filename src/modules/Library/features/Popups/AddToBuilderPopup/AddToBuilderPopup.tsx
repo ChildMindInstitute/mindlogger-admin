@@ -142,6 +142,15 @@ export const AddToBuilderPopup = ({
     }
   };
 
+  const errorCallback = () => {
+    const { addToBuilderAction } = getValues();
+    if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
+      return handleAddToBuilder();
+    }
+
+    return handleAddToExistingApplet();
+  };
+
   const steps = useMemo(
     () =>
       getSteps({
@@ -154,14 +163,7 @@ export const AddToBuilderPopup = ({
         handleNext,
         handleAddToBuilder,
         handleAddToExistingApplet,
-        errorCallback: () => {
-          const { addToBuilderAction } = getValues();
-          if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
-            return handleAddToBuilder();
-          }
-
-          return handleAddToExistingApplet();
-        },
+        errorCallback,
       }),
     [applets, isWorkspacesModalVisible, workspaces],
   );
