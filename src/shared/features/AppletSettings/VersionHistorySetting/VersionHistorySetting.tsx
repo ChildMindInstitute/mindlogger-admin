@@ -24,9 +24,8 @@ export const VersionHistorySetting = () => {
   const { execute: getAppletVersions } = useAsync(getAppletVersionsApi);
   const { execute: getAppletVersionChanges } = useAsync(getAppletVersionChangesApi);
 
-  const isLastVersion = currentVersion === versions[0];
-  const hasAppletChanges = !isLastVersion && !!versionChanges?.changes.length;
-  const hasActivitiesChanges = !isLastVersion && !!versionChanges?.activities.length;
+  const hasAppletChanges = !!versionChanges?.changes.length;
+  const hasActivitiesChanges = !!versionChanges?.activities.length;
 
   const changeValue = ({ target: { value } }: SelectChangeEvent<unknown>) => {
     setCurrentVersion(value as string);
@@ -45,8 +44,6 @@ export const VersionHistorySetting = () => {
 
   useEffect(() => {
     if (!appletId || !currentVersion) return;
-    setVersionChanges(null);
-    if (isLastVersion) return;
 
     (async () => {
       const changesResult = await getAppletVersionChanges({
@@ -77,7 +74,7 @@ export const VersionHistorySetting = () => {
               </MenuItem>
             ))}
           </StyledVersionSelect>
-          {isLastVersion && (
+          {!hasAppletChanges && !hasActivitiesChanges && (
             <StyledBodyLarge color={variables.palette.on_surface_variant}>
               {t('noChanges')}
             </StyledBodyLarge>
