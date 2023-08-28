@@ -37,7 +37,7 @@ import {
   responseTypeToHaveOptions,
   Roles,
 } from 'shared/consts';
-import { isManagerOrOwner } from 'shared/utils';
+import { isManagerOrOwnerOrEditor } from 'shared/utils';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
 
 import {
@@ -270,7 +270,7 @@ export const getSteps = ({
 
 export const getArrayFromApplets = (applets: FullApplet[]) =>
   applets.reduce((acc: Applet[], { id, type, displayName, image, role }) => {
-    if (type === DashboardAppletType.Applet && isManagerOrOwner(role as Roles)) {
+    if (type === DashboardAppletType.Applet && isManagerOrOwnerOrEditor(role as Roles)) {
       acc.push({ id, appletName: displayName, image });
     }
 

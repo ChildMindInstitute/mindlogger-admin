@@ -11,7 +11,9 @@ export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
     },
   );
 
-export const logOutApi = () => authApiClientWithoutRefresh.post('auth/logout');
+export const deleteAccessTokenApi = () => authApiClientWithoutRefresh.post('auth/logout');
+
+export const deleteRefreshTokenApi = () => authApiClientWithoutRefresh.post('auth/logout2');
 
 export const signUpApi = ({ body }: SignUpArgs, signal?: AbortSignal) =>
   apiClient.post(

@@ -80,6 +80,7 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
         count={invitations?.count || 0}
         emptyComponent={emptyComponent}
         rowsPerPage={DEFAULT_INVITATIONS_ROWS_PER_PAGE}
+        data-testid="dashboard-add-users-table"
         {...tableProps}
       />
     </>

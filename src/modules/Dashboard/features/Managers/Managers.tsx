@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 
 import { updateManagersPinApi } from 'api';
 import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Search, Spinner } from 'shared/components';
@@ -11,6 +10,7 @@ import { Table, TableProps } from 'modules/Dashboard/components';
 import { useAppDispatch } from 'redux/store';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles } from 'shared/consts';
+import { StyledBody } from 'shared/styles';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup, EditAccessSuccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
@@ -31,6 +31,7 @@ export const Managers = () => {
   const { ownerId } = workspaces.useData() || {};
   const managersData = users.useManagersData();
   const loadingStatus = users.useManagersStatus();
+  const isLoading = loadingStatus === 'loading' || loadingStatus === 'idle';
   const { getWorkspaceManagers } = users.thunk;
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
@@ -146,11 +147,13 @@ export const Managers = () => {
   );
 
   const renderEmptyComponent = () => {
-    if (rows && !rows.length) {
+    if (!rows?.length && !isLoading) {
+      if (searchValue) {
+        return t('noMatchWasFound', { searchValue });
+      }
+
       return appletId ? t('noManagersForApplet') : t('noManagers');
     }
-
-    return searchValue && t('noMatchWasFound', { searchValue });
   };
 
   useEffect(
@@ -162,12 +165,9 @@ export const Managers = () => {
 
   if (isForbidden) return noPermissionsComponent;
 
-  return loadingStatus === 'loading' ? (
-    <Box sx={{ height: '100%', position: 'relative' }}>
-      <Spinner />
-    </Box>
-  ) : (
-    <>
+  return (
+    <StyledBody>
+      {isLoading && <Spinner />}
       <ManagersTableHeader>
         <Search
           placeholder={t('searchManagers')}
@@ -180,6 +180,7 @@ export const Managers = () => {
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={managersData?.count || 0}
+        data-testid="dashboard-managers-table"
         {...tableProps}
       />
       {selectedManager && (
@@ -210,6 +211,6 @@ export const Managers = () => {
           )}
         </>
       )}
-    </>
+    </StyledBody>
   );
 };

@@ -18,4 +18,5 @@ export type TableProps = {
   searchValue?: string;
   handleChangePage: (event: unknown, newPage: number) => void;
   rowsPerPage?: number;
+  'data-testid'?: string;
 };

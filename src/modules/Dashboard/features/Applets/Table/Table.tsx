@@ -22,6 +22,7 @@ export const Table = ({
   handleRequestSort,
   handleChangePage,
   handleReload,
+  'data-testid': dataTestid,
 }: TableProps) => {
   const perPage =
     rowsPerPage && rowsPerPage > DEFAULT_ROWS_PER_PAGE ? rowsPerPage : DEFAULT_ROWS_PER_PAGE;
@@ -55,7 +56,7 @@ export const Table = ({
   return (
     <StyledTableContainer>
       {!!rows?.length && (
-        <MuiTable stickyHeader>
+        <MuiTable stickyHeader data-testid={dataTestid}>
           <TableHead
             headCells={columns}
             order={order}
