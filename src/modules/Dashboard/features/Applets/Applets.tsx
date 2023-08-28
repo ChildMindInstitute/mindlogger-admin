@@ -16,10 +16,11 @@ import { ButtonWithMenu, Search, Spinner, Svg } from 'shared/components';
 import { useBreadcrumbs, useTable } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { getIsAddAppletBtnVisible } from 'shared/utils';
+import { StyledBody } from 'shared/styles';
 
 import { Table } from './Table';
 import { getHeadCells, getMenuItems } from './Applets.const';
-import { AppletsTableHeader, StyledButtons, StyledBody } from './Applets.styles';
+import { AppletsTableHeader, StyledButtons } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
 import { useAppletsWithFolders } from './Applets.hooks';
 import { AppletContextType } from './Applets.types';

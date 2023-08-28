@@ -1,7 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 
 import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Row, Spinner } from 'shared/components';
 import { Respondent, users, workspaces } from 'redux/modules';
@@ -19,6 +18,7 @@ import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
+import { StyledBody } from 'shared/styles';
 
 import {
   RespondentsTableHeader,
@@ -48,6 +48,7 @@ export const Respondents = () => {
   const rolesData = workspaces.useRolesData();
   const respondentsData = users.useRespondentsData();
   const loadingStatus = users.useRespondentsStatus();
+  const isLoading = loadingStatus === 'loading' || loadingStatus === 'idle';
   const { ownerId } = workspaces.useData() || {};
   const { getWorkspaceRespondents } = users.thunk;
 
@@ -256,21 +257,20 @@ export const Respondents = () => {
   const schedulingAppletsSmallTableRows = getAppletsSmallTable('scheduling');
 
   const renderEmptyComponent = () => {
-    if (rows && !rows.length) {
+    if (!rows?.length && !isLoading) {
+      if (searchValue) {
+        return t('noMatchWasFound', { searchValue });
+      }
+
       return appletId ? t('noRespondentsForApplet') : t('noRespondents');
     }
-
-    return searchValue && t('noMatchWasFound', { searchValue });
   };
 
   if (isForbidden) return noPermissionsComponent;
 
-  return loadingStatus === 'loading' ? (
-    <Box sx={{ height: '100%', position: 'relative' }}>
-      <Spinner />
-    </Box>
-  ) : (
-    <>
+  return (
+    <StyledBody>
+      {isLoading && <Spinner />}
       <RespondentsTableHeader hasButton={!!appletId}>
         {appletId && (
           <StyledLeftBox>
@@ -345,6 +345,6 @@ export const Respondents = () => {
           reFetchRespondents={handleReload}
         />
       )}
-    </>
+    </StyledBody>
   );
 };
