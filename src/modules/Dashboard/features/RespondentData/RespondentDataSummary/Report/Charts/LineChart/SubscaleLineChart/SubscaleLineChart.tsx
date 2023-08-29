@@ -64,9 +64,11 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
     const chart = chartRef.current;
 
-    if (chart && dataPoints.length) {
+    const tooltipsPoint = dataPoints.filter((point) => point.dataset.xAxisID === 'x');
+
+    if (chart && tooltipsPoint.length) {
       const tooltipDataPoints = await Promise.all(
-        dataPoints.map(async (dataPoint) => {
+        tooltipsPoint.map(async (dataPoint) => {
           let optionText = (dataPoint.raw as SubscaleLineDataPointRaw).optionText;
 
           if (optionText && optionText.match(LINK_PATTERN)) {
