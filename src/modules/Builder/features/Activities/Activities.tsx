@@ -202,7 +202,11 @@ export const Activities = () => {
                       <Fragment key={`activity-${activityKey}`}>
                         <Draggable draggableId={activityKey} index={index}>
                           {(itemProvided, snapshot) => (
-                            <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
+                            <Box
+                              {...itemProvided.draggableProps}
+                              ref={itemProvided.innerRef}
+                              data-testid={`builder-activities-activity-${index}`}
+                            >
                               <Item
                                 {...activity}
                                 onItemClick={
@@ -224,16 +228,19 @@ export const Activities = () => {
                                     onRemove: () => setActivityToDelete(activityKey),
                                     onVisibilityChange: () => handleActivityVisibilityChange(index),
                                     isEditVisible,
+                                    'data-testid': `builder-activities-activity-${index}`,
                                   })
                                 }
                                 hasError={hasError}
                                 count={activity.items?.length}
+                                data-testid={`builder-activities-activity-${index}`}
                               />
                               <InsertItem
                                 isVisible={
                                   index >= 0 && index < activities.length - 1 && !isDragging
                                 }
                                 onInsert={() => handleActivityAdd({ index: index + 1 })}
+                                data-testid={`builder-activities-insert-activity-${index}`}
                               />
                             </Box>
                           )}
@@ -243,6 +250,7 @@ export const Activities = () => {
                           isOpen={activityToDelete === activityKey}
                           onModalClose={handleModalClose}
                           onModalSubmit={() => handleActivityRemove(index, activityKey)}
+                          data-testid={`builder-activities-delete-activity-popup-${index}`}
                         />
                       </Fragment>
                     );

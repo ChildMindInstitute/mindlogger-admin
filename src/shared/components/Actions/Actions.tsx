@@ -2,6 +2,7 @@ import { MouseEvent, useState } from 'react';
 
 import { Tooltip } from 'shared/components/Tooltip';
 import { Svg } from 'shared/components/Svg';
+import { concatIf } from 'shared/utils';
 
 import {
   StyledActions,
@@ -19,6 +20,7 @@ export const Actions = ({
   sxProps,
   dragHandleProps,
   isDragging,
+  'data-testid': dataTestid,
 }: ActionsProps) => {
   const [visibleActions, setVisibleActions] = useState(false);
 
@@ -71,13 +73,20 @@ export const Actions = ({
             isVisible={isVisible}
             isActive={false}
             disabled={false}
+            data-testid={concatIf(dataTestid, '-dnd')}
             {...dragHandleProps}
           >
             <Svg id="drag" />
           </StyledActionButton>
         )}
       </StyledActions>
-      <StyledDotsSvg isVisible={!isVisible} id="dots" width={18} height={4} />
+      <StyledDotsSvg
+        isVisible={!isVisible}
+        id="dots"
+        width={18}
+        height={4}
+        data-testid={concatIf(dataTestid, '-dots')}
+      />
     </StyledActionsWrapper>
   );
 };

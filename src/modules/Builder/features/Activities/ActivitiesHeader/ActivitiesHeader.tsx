@@ -29,6 +29,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           startIcon={<Svg id="add" width={18} height={18} />}
           onClick={handleActivityAdd}
           sx={{ mr: theme.spacing(1.6) }}
+          data-testid="builder-activities-add-activity"
         >
           {t('addActivity')}
         </Button>
@@ -43,6 +44,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           )}
           startIcon={<Svg id="add" width={18} height={18} />}
           menuListWidth="44rem"
+          data-testid="builder-activities-add-perf-task"
         />
       </Box>
     </StyledHeader>

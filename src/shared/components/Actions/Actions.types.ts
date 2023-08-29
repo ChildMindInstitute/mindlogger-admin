@@ -21,4 +21,5 @@ export type ActionsProps = {
   sxProps?: SxProps;
   dragHandleProps?: DraggableProvided['dragHandleProps'];
   isDragging?: boolean;
+  'data-testid'?: string;
 };
