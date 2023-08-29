@@ -10,6 +10,7 @@ import { useAppDispatch } from 'redux/store';
 import { SelectRespondents } from './SelectRespondents';
 import { SelectRespondentsPopupProps } from './SuccessSharePopup.types';
 import { getSelectedRespondentsLength } from './SelectRespondentsPopup.utils';
+import { Respondent } from './SelectRespondents/SelectRespondents.types';
 
 export const SelectRespondentsPopup = ({
   appletName,
@@ -27,11 +28,20 @@ export const SelectRespondentsPopup = ({
   const respondentsData = users.useAllRespondentsData();
   const respondents = useMemo(
     () =>
-      respondentsData?.result?.map(({ nicknames, secretIds, id }) => ({
-        nickname: nicknames[0],
-        secretId: secretIds[0],
-        id,
-      })),
+      respondentsData?.result?.reduce(
+        (acc: Respondent[], { nicknames, secretIds, id, isAnonymousRespondent }) => {
+          if (!isAnonymousRespondent) {
+            acc.push({
+              nickname: nicknames[0],
+              secretId: secretIds[0],
+              id,
+            });
+          }
+
+          return acc;
+        },
+        [],
+      ),
     [respondentsData?.result],
   );
 
