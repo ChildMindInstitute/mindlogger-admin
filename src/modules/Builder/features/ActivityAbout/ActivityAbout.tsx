@@ -27,7 +27,10 @@ import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/ho
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
 import { itemsForReviewableActivity, commonUploaderProps } from './ActivityAbout.const';
-import { useCheckIfItemsHaveVariables } from './ActivityAbout.hooks';
+import {
+  useCheckIfItemsHaveRequiredItems,
+  useCheckIfItemsHaveVariables,
+} from './ActivityAbout.hooks';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
@@ -38,6 +41,7 @@ export const ActivityAbout = () => {
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
   const hasVariableAmongItems = useCheckIfItemsHaveVariables();
+  const hasRequiredItems = useCheckIfItemsHaveRequiredItems();
 
   const activityItems = watch(`${fieldName}.items`);
   const hasUnsupportedReviewableItemTypes = activityItems?.some(
@@ -47,9 +51,12 @@ export const ActivityAbout = () => {
   const isReviewableUnsupportedTooltip = hasUnsupportedReviewableItemTypes
     ? t('isReviewableUnsupported')
     : null;
-  const variableAmongItemsTooltip = hasVariableAmongItems
+  let allowToSkipAllItemsTooltip = hasVariableAmongItems
     ? t('activityHasVariableAmongItems')
     : null;
+  if (hasRequiredItems) {
+    allowToSkipAllItemsTooltip = t('activityHasRequiredItems');
+  }
   const activityCannotBeOnePageAssessmentTooltip = hasVariableAmongItems
     ? t('activityCannotBeOnePageAssessment')
     : null;
@@ -101,10 +108,10 @@ export const ActivityAbout = () => {
     },
     {
       name: `${fieldName}.isSkippable`,
-      disabled: hasVariableAmongItems,
+      disabled: hasVariableAmongItems || hasRequiredItems,
       label: (
         <StyledBodyLarge sx={{ position: 'relative' }}>
-          <Tooltip tooltipTitle={variableAmongItemsTooltip}>
+          <Tooltip tooltipTitle={allowToSkipAllItemsTooltip}>
             <span>{t('allowToSkipAllItems')}</span>
           </Tooltip>
         </StyledBodyLarge>
