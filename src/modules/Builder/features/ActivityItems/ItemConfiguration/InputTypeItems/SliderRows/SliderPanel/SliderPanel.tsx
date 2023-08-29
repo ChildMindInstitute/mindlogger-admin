@@ -152,6 +152,8 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
     setError(errors?.filter((error) => error)?.[0]);
   }, [scoresError]);
 
+  const dataTestid = 'builder-activity-items-item-configuration-slider';
+
   return (
     <StyledSliderPanelContainer
       in={isExpanded}
@@ -177,23 +179,24 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
                 name={`${sliderName}.label`}
                 label={t('sliderLabel')}
                 maxLength={SLIDER_LABEL_MAX_LENGTH}
+                data-testid={`${dataTestid}-label`}
               />
             </StyledInputContainer>
           )}
           <StyledInputContainer>
             <InputController
-              data-testid={`${sliderName}.minLabel`}
               control={control}
               name={`${sliderName}.minLabel`}
               label={t('minLabel')}
               maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
+              data-testid={`${dataTestid}-min-label`}
             />
             <InputController
-              data-testid={`${sliderName}.maxLabel`}
               control={control}
               name={`${sliderName}.maxLabel`}
               label={t('maxLabel')}
               maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
+              data-testid={`${dataTestid}-max-label`}
             />
           </StyledInputContainer>
           <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
@@ -203,7 +206,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
               value={minValue}
               marks={marks}
               disabled
-              data-testid="item-configuration-slider"
+              data-testid={`${dataTestid}-slider`}
             />
           </StyledFlexTopCenter>
           <StyledInputContainer>
@@ -212,10 +215,10 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
                 {...commonUploaderProps}
                 setValue={(val: string) => setValue(`${sliderName}.minImage`, val || undefined)}
                 getValue={() => watch(`${sliderName}.minImage`) || ''}
+                data-testid={`${dataTestid}-min-image`}
               />
               <InputController
                 {...commonInputProps}
-                data-testid={`${sliderName}.minValue`}
                 name={`${sliderName}.minValue`}
                 label={t('minValue')}
                 maxNumberValue={maxValue - 1}
@@ -223,6 +226,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
                 minNumberValue={
                   isMultiple ? DEFAULT_SLIDER_ROWS_MIN_NUMBER : DEFAULT_SLIDER_MIN_NUMBER
                 }
+                data-testid={`${dataTestid}-min-value`}
               />
             </StyledFlexTopCenter>
             <StyledFlexTopCenter sx={{ flexGrow: 1, gap: '1.2rem' }}>
@@ -230,15 +234,16 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
                 {...commonUploaderProps}
                 setValue={(val: string) => setValue(`${sliderName}.maxImage`, val || undefined)}
                 getValue={() => watch(`${sliderName}.maxImage`) || ''}
+                data-testid={`${dataTestid}-max-image`}
               />
               <InputController
                 {...commonInputProps}
-                data-testid={`${sliderName}.maxValue`}
                 name={`${sliderName}.maxValue`}
                 label={t('maxValue')}
                 onChange={handleChangeMaxScore}
                 maxNumberValue={DEFAULT_SLIDER_MAX_NUMBER}
                 minNumberValue={minValue + 1}
+                data-testid={`${dataTestid}-max-value`}
               />
             </StyledFlexTopCenter>
           </StyledInputContainer>
@@ -256,6 +261,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
                   rows={getTableRows(scores, sliderName)}
                   orderBy="0"
                   uiType={UiType.Secondary}
+                  data-testid={`${dataTestid}-scores-table`}
                 />
               </StyledScoresContainer>
               {error && (

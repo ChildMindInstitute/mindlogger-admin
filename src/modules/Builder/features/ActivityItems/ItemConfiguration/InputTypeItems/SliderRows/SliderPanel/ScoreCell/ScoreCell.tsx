@@ -5,8 +5,9 @@ import { Box, ClickAwayListener } from '@mui/material';
 import { StyledFlexTopCenter } from 'shared/styles';
 
 import { StyledInputController } from './ScoreCell.styles';
+import { ScoreCellProps } from './ScoreCell.types';
 
-export const ScoreCell = ({ name }: { name: string }) => {
+export const ScoreCell = ({ name, 'data-testid': dataTestid }: ScoreCellProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const { control, getValues, getFieldState, setValue } = useFormContext();
@@ -22,7 +23,11 @@ export const ScoreCell = ({ name }: { name: string }) => {
   if (!isEditing)
     return (
       <ClickAwayListener onClickAway={handleClickAway}>
-        <StyledFlexTopCenter sx={{ height: '100%' }} onClick={handleClick}>
+        <StyledFlexTopCenter
+          sx={{ height: '100%' }}
+          onClick={handleClick}
+          data-testid={`${dataTestid}-score-inactive`}
+        >
           {getValues(name)}
         </StyledFlexTopCenter>
       </ClickAwayListener>
@@ -46,6 +51,7 @@ export const ScoreCell = ({ name }: { name: string }) => {
           isEmptyStringAllowed
           isErrorVisible={false}
           onChange={handleScoreChange}
+          data-testid={`${dataTestid}-score`}
         />
       </Box>
     </ClickAwayListener>

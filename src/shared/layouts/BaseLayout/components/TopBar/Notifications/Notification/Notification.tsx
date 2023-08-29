@@ -172,6 +172,7 @@ export const Notification = ({
           onClose={() => setPasswordPopupVisible(false)}
           encryption={encryption}
           submitCallback={handleSubmit}
+          data-testid="notification-password-popup"
         />
       )}
     </>

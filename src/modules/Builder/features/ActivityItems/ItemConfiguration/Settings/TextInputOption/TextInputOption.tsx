@@ -38,6 +38,7 @@ export const TextInputOption = ({ name, onRemove }: TextInputOptionProps) => {
         <StyledClearedButton
           sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
           onClick={onRemove}
+          data-testid="builder-activity-items-item-configuration-text-input-option-remove"
         >
           <Svg id="trash" width="20" height="20" />
         </StyledClearedButton>

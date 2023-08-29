@@ -69,6 +69,7 @@ export const ActivityAbout = () => {
           setValue={(val: string) => setValue(`${fieldName}.image`, val)}
           getValue={() => watch(`${fieldName}.image`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
+          data-testid="builder-activity-about-image"
         />
       ),
     },
@@ -82,6 +83,7 @@ export const ActivityAbout = () => {
           getValue={() => watch(`${fieldName}.splashScreen`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
           cropRatio={CropRatio.SplashScreen}
+          data-testid="builder-activity-about-splash-screen"
         />
       ),
     },
@@ -98,6 +100,7 @@ export const ActivityAbout = () => {
           </Tooltip>
         </StyledBodyLarge>
       ),
+      'data-testid': 'builder-activity-about-show-all',
     },
     {
       name: `${fieldName}.isSkippable`,
@@ -109,11 +112,13 @@ export const ActivityAbout = () => {
           </Tooltip>
         </StyledBodyLarge>
       ),
+      'data-testid': 'builder-activity-about-skippable',
     },
     {
       name: `${fieldName}.responseIsEditable`,
       label: <StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>,
       isInversed: true,
+      'data-testid': 'builder-activity-about-response-editable',
     },
     {
       name: `${fieldName}.isReviewable`,
@@ -130,6 +135,7 @@ export const ActivityAbout = () => {
           </Tooltip>
         </StyledBodyLarge>
       ),
+      'data-testid': 'builder-activity-about-reviewable',
     },
   ];
 
@@ -144,6 +150,7 @@ export const ActivityAbout = () => {
               name={`${fieldName}.name`}
               maxLength={MAX_NAME_LENGTH}
               label={t('activityName')}
+              data-testid="builder-activity-about-name"
             />
           </Box>
           <InputController
@@ -154,6 +161,7 @@ export const ActivityAbout = () => {
             label={t('activityDescription')}
             multiline
             rows={4}
+            data-testid="builder-activity-about-description"
           />
         </StyledContainer>
         <Uploads uploads={uploads} />
@@ -162,7 +170,7 @@ export const ActivityAbout = () => {
         {t('itemLevelSettings')}
       </StyledTitleMedium>
       <StyledFlexColumn>
-        {checkboxes.map(({ name, label, isInversed, disabled }) => (
+        {checkboxes.map(({ name, label, isInversed, disabled, 'data-testid': dataTestid }) => (
           <CheckboxController
             key={name}
             control={control}
@@ -170,6 +178,7 @@ export const ActivityAbout = () => {
             label={label}
             disabled={disabled}
             isInversed={isInversed}
+            data-testid={dataTestid}
           />
         ))}
       </StyledFlexColumn>

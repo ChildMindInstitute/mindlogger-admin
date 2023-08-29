@@ -158,6 +158,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           popupType={AppletPasswordPopupType.Create}
           popupVisible={passwordModalVisible}
           submitCallback={submitCallback}
+          data-testid="dashboard-applets-duplicate-popup-password-popup"
         />
       )}
       {successModalVisible && (
