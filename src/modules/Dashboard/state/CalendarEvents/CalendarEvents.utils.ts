@@ -32,20 +32,13 @@ const DEFAULT_END_TIME = '23:59:00';
 
 export const getPreparedEvents = (
   events: CalendarEvent[],
-  isHidden: boolean,
-  isAlwaysAvailable: boolean,
+  isAlwaysAvailableHidden: boolean,
+  isScheduledHidden: boolean,
 ) =>
-  events.map((item) => {
-    const condition = isAlwaysAvailable ? item.alwaysAvailable : !item.alwaysAvailable;
-    if (condition) {
-      return {
-        ...item,
-        isHidden,
-      };
-    }
-
-    return item;
-  });
+  events.map((item) => ({
+    ...item,
+    isHidden: item.alwaysAvailable ? isAlwaysAvailableHidden : isScheduledHidden,
+  }));
 
 export const getNotHiddenEvents = (events: CalendarEvent[]) =>
   events.filter((event) => !event.isHidden);
@@ -308,11 +301,14 @@ export const createEvents = ({
 
   if (periodicityType === Periodicity.Monthly && selectedDate) {
     const chosenDate = getDate(getNormalizedTimezoneDate(selectedDate));
+    const endDate = getDate(eventEnd);
+    const end =
+      chosenDate <= endDate ? eventEnd : new Date(eventEnd.getFullYear(), eventEnd.getMonth(), 0);
     const monthsBetween =
-      eventEnd && eventStart && eventEnd > eventStart
+      end && eventStart && end > eventStart
         ? eachMonthOfInterval({
             start: eventStart,
-            end: eventEnd,
+            end,
           })
         : [];
 

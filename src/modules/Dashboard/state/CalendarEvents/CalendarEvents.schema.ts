@@ -62,8 +62,8 @@ export type AllDayEventsSortedByDaysItem = {
 
 export type CalendarEventsSchema = {
   events: BaseSchema<CalendarEvent[] | null>;
-  alwaysAvailableHidden: BaseSchema<boolean | null>;
-  scheduledHidden: BaseSchema<boolean | null>;
+  alwaysAvailableVisible: BaseSchema<boolean>;
+  scheduledVisible: BaseSchema<boolean>;
   createEventsData: BaseSchema<CreateEventsData[] | null>;
   calendarCurrentYear: BaseSchema<number | null>;
   processedEvents: BaseSchema<{
