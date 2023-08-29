@@ -40,7 +40,11 @@ import {
   getLatestReportUrl,
 } from './Report.utils';
 import { ReportContext } from './Report.context';
-import { LATEST_REPORT_DEFAULT_NAME, LATEST_REPORT_TYPE } from './Report.const';
+import {
+  LATEST_REPORT_DEFAULT_NAME,
+  LATEST_REPORT_REGEX,
+  LATEST_REPORT_TYPE,
+} from './Report.const';
 
 export const Report = ({ activity, identifiers = [], versions = [] }: ReportProps) => {
   const { t } = useTranslation('app');
@@ -88,11 +92,13 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
       });
       if (data) {
         const contentDisposition = headers?.['content-disposition'];
-        const fileName = contentDisposition?.match(/filename=(?<filename>[^,;]+);/)?.[0];
+        const fileName =
+          (contentDisposition && LATEST_REPORT_REGEX.exec(contentDisposition)?.groups?.filename) ??
+          LATEST_REPORT_DEFAULT_NAME;
         const base64Str = Buffer.from(data).toString('base64');
         const linkSource = getLatestReportUrl(base64Str);
 
-        download(linkSource, fileName || LATEST_REPORT_DEFAULT_NAME, LATEST_REPORT_TYPE);
+        download(linkSource, fileName, LATEST_REPORT_TYPE);
       }
     } catch (error) {
       setLatestReportError(getErrorMessage(error));

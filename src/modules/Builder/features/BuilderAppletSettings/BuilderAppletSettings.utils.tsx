@@ -107,8 +107,9 @@ export const getSettings = ({
         },
       ],
     },
-    ...(!isNewApplet
-      ? [
+    ...(isNewApplet
+      ? []
+      : [
           {
             label: 'sharing',
             items: [
@@ -135,7 +136,6 @@ export const getSettings = ({
                 : []),
             ],
           },
-        ]
-      : []),
+        ]),
   ];
 };

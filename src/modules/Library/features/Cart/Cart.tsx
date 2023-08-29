@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { useBreadcrumbs } from 'shared/hooks';
 import { EmptyState, Spinner } from 'shared/components';
@@ -12,10 +13,10 @@ import {
   StyledAppletList,
 } from 'shared/styles';
 import { page } from 'resources';
-import { PublishedApplet, auth, library, workspaces } from 'redux/modules';
+import { PublishedApplet, auth, library, workspaces, SingleApplet } from 'redux/modules';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
-import { getDictionaryText, Mixpanel } from 'shared/utils';
+import { getDictionaryText, Mixpanel, Path } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 
 import { Applet, AppletUiType } from '../Applet';
@@ -23,10 +24,12 @@ import { AddToBuilderPopup, AuthPopup } from '../Popups';
 import { StyledLink } from './Cart.styles';
 import { StyledTablePagination } from '../AppletsCatalog/AppletsCatalog.styles';
 import { DEFAULT_APPLETS_PER_PAGE, DEFAULT_PAGE } from '../AppletsCatalog/AppletsCatalog.conts';
-import { getSearchIncludes } from './Cart.utils';
+import { getSearchIncludes, getAddToBuilderData, navigateToBuilder } from './Cart.utils';
+import { useClearCart } from './Cart.hooks';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
+  const navigate = useNavigate();
   const isAuthorized = auth.useAuthorized();
   const { result: cartItems } = library.useCartApplets() || {};
   const loadingStatus = library.useCartAppletsStatus();
@@ -38,10 +41,29 @@ export const Cart = () => {
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE);
   const dispatch = useAppDispatch();
   const { result: workspacesData = [] } = workspaces.useWorkspacesData() || {};
+  const workspacesWithRoles = workspaces.useWorkspacesRolesData();
+  const handleClearCart = useClearCart();
 
-  const handleAddToBuilder = () => {
-    isAuthorized ? setAddToBuilderPopupVisible(true) : setAuthPopupVisible(true);
+  const handleAddToBuilder = async () => {
     Mixpanel.track('Add to applet builder click');
+    if (!isAuthorized) {
+      return setAuthPopupVisible(true);
+    }
+
+    if (
+      // if only one workspace without applets
+      workspacesWithRoles?.length === 1 &&
+      Object.keys(workspacesWithRoles[0].workspaceRoles).length === 0
+    ) {
+      const { appletToBuilder } = await getAddToBuilderData(cartItems);
+
+      navigateToBuilder(navigate, Path.NewApplet, appletToBuilder as SingleApplet);
+      handleClearCart();
+
+      return;
+    }
+
+    return setAddToBuilderPopupVisible(true);
   };
 
   const handleSearch = (searchText: string) => {

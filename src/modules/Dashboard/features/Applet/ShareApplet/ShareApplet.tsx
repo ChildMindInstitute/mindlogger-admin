@@ -8,7 +8,7 @@ import {
   publishAppletToLibraryApi,
   getAppletLibraryUrlApi,
 } from 'api';
-import { Spinner } from 'shared/components';
+import { Spinner, SpinnerUiType } from 'shared/components';
 import {
   InputController,
   CheckboxController,
@@ -138,7 +138,7 @@ export const ShareApplet = ({
     />
   ) : (
     <>
-      {isLoading && <Spinner />}
+      {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground={showSuccess} />}
       <form>
         <StyledInputWrapper>
           <InputController
