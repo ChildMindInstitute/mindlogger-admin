@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import get from 'lodash.get';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
@@ -64,10 +63,6 @@ export const ConditionRow = ({
 
   const selectedItem = items?.find((item: ItemFormValues) => getEntityKey(item) === conditionItem);
 
-  useEffect(() => {
-    if (autoTrigger) trigger(`${name}.itemKey`);
-  }, [selectedItem, autoTrigger]);
-
   const handleChangeConditionItemName = (e: SelectEvent) => {
     const itemResponseType = items?.find(
       (item: ItemFormValues) => getEntityKey(item) === e.target.value,
@@ -77,6 +72,8 @@ export const ConditionRow = ({
       setValue(conditionTypeName, '');
       setValue(conditionPayloadName, {});
     }
+
+    if (autoTrigger) trigger(`${name}.itemKey`);
   };
 
   const handleChangeConditionType = (e: SelectEvent) => {

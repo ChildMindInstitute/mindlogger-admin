@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
 import { StyledBodyLarge, StyledTitleMedium, variables, theme } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
+import { SelectEvent } from 'shared/types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder/types';
 import {
@@ -20,19 +20,16 @@ export const SummaryRow = ({ name, error }: SummaryRowProps) => {
 
   const { fieldName } = useCurrentActivity();
   const items = watch(`${fieldName}.items`);
-  const selectedItem = watch(`${name}.itemKey`);
 
-  useEffect(() => {
-    if (!selectedItem) return;
-
+  const handleChangeItemKey = (e: SelectEvent) => {
     trigger(`${name}.itemKey`);
 
     const itemIndex = items?.findIndex(
-      (item: ItemFormValues) => getEntityKey(item) === selectedItem,
+      (item: ItemFormValues) => getEntityKey(item) === e.target.value,
     );
 
     if (itemIndex !== -1) setValue(`${fieldName}.items.${itemIndex}.isHidden`, false);
-  }, [selectedItem]);
+  };
 
   return (
     <>
@@ -60,6 +57,7 @@ export const SummaryRow = ({ name, error }: SummaryRowProps) => {
               return <span>{t('conditionItemSelected', { value: itemName })}</span>;
             },
           }}
+          customChange={handleChangeItemKey}
         />
       </StyledSummaryRow>
       {error && (
