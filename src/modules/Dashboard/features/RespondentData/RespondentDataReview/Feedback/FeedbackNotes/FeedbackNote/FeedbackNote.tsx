@@ -35,6 +35,8 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
   const [isVisibleActions, setIsVisibleActions] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
+  const userName = `${note.user.firstName ?? ''} ${note.user.lastName ?? ''}`;
+
   const { getValues, control } = useForm({
     resolver: yupResolver(
       yup.object({
@@ -64,9 +66,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
         onMouseLeave={() => setIsVisibleActions(false)}
       >
         <StyledFlexTopStart>
-          <StyledAuthorLabel color={variables.palette.outline}>
-            {note.user.firstName} {note.user.lastName}
-          </StyledAuthorLabel>
+          <StyledAuthorLabel color={variables.palette.outline}>{userName}</StyledAuthorLabel>
           <StyledBodyMedium color={variables.palette.outline}>
             {timeAgo.format(getDateInUserTimezone(note.createdAt))}
           </StyledBodyMedium>
