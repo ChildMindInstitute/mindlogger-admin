@@ -49,4 +49,20 @@ export const calendarEvents = {
         },
       }) => data,
     ),
+  useAvailableVisibilityData: (): CalendarEventsSchema['alwaysAvailableVisible']['data'] =>
+    useAppSelector(
+      ({
+        calendarEvents: {
+          alwaysAvailableVisible: { data },
+        },
+      }) => data,
+    ),
+  useScheduledVisibilityData: (): CalendarEventsSchema['scheduledVisible']['data'] =>
+    useAppSelector(
+      ({
+        calendarEvents: {
+          scheduledVisible: { data },
+        },
+      }) => data,
+    ),
 };
