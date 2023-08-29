@@ -14,7 +14,7 @@ import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
-import { getItemConditionDependencies } from './ActivityItems.utils';
+import { getItemConditionDependencies, getItemsWithVariablesToRemove } from './ActivityItems.utils';
 import { ConditionalPanel } from './ConditionalPanel';
 
 export const ActivityItems = () => {
@@ -53,6 +53,7 @@ export const ActivityItems = () => {
     itemToDelete,
     activity.conditionalLogic,
   );
+  const itemsWithVariablesToRemove = getItemsWithVariablesToRemove(itemToDelete?.name, items);
 
   const handleRemoveClick = (id: string) => {
     setItemIdToDelete(id);
@@ -133,6 +134,13 @@ export const ActivityItems = () => {
       );
       trigger(subscalesField);
     }
+    if (itemsWithVariablesToRemove.list.length) {
+      for (const item of itemsWithVariablesToRemove.list) {
+        trigger(
+          `${fieldName}.items.${itemIndexToDelete < item.index ? item.index - 1 : item.index}`,
+        );
+      }
+    }
 
     handleRemoveItem(itemIndexToDelete);
     handleRemoveModalClose();
@@ -163,31 +171,53 @@ export const ActivityItems = () => {
           onClose={handleRemoveModalClose}
           onSubmit={handleRemoveModalSubmit}
           onSecondBtnSubmit={handleRemoveModalClose}
-          title={t('deleteItem')}
+          title={
+            itemsWithVariablesToRemove.list.length ? t('variablesWarning.title') : t('deleteItem')
+          }
           buttonText={t('delete')}
           secondBtnText={t('cancel')}
           hasSecondBtn
           submitBtnColor="error"
         >
           <StyledModalWrapper>
-            <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
-              <Trans i18nKey="deleteItemDescription">
-                Are you sure you want to delete the Item
-                <strong>
-                  <>{{ itemName }}</>
-                </strong>
-                ?
-              </Trans>{' '}
-              {conditionalLogicForItemToDelete?.length
-                ? t('deleteItemWithConditionalsDescription')
-                : null}
-            </StyledBodyLarge>
-            {conditionalLogicForItemToDelete?.map((conditionalLogic: ConditionalLogic) => (
-              <ConditionalPanel
-                key={`condition-panel-${conditionalLogic.key}`}
-                condition={conditionalLogic}
-              />
-            ))}
+            {itemsWithVariablesToRemove.list.length ? (
+              <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
+                <Trans i18nKey="deleteItemReferencedByVariable">
+                  By deleting{' '}
+                  <strong>
+                    {' '}
+                    <>{{ itemAsVariable: itemName }}</>
+                  </strong>
+                  , it will cause{' '}
+                  <strong>
+                    {' '}
+                    <>{{ itemsWithVariablesToRemove: itemsWithVariablesToRemove.string }}</>
+                  </strong>{' '}
+                  to fail
+                </Trans>
+              </StyledBodyLarge>
+            ) : (
+              <>
+                <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
+                  <Trans i18nKey="deleteItemDescription">
+                    Are you sure you want to delete the Item
+                    <strong>
+                      <>{{ itemName }}</>
+                    </strong>
+                    ?
+                  </Trans>{' '}
+                  {conditionalLogicForItemToDelete?.length
+                    ? t('deleteItemWithConditionalsDescription')
+                    : null}
+                </StyledBodyLarge>
+                {conditionalLogicForItemToDelete?.map((conditionalLogic: ConditionalLogic) => (
+                  <ConditionalPanel
+                    key={`condition-panel-${conditionalLogic.key}`}
+                    condition={conditionalLogic}
+                  />
+                ))}
+              </>
+            )}
           </StyledModalWrapper>
         </Modal>
       )}

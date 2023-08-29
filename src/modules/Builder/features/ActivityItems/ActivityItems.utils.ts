@@ -2,6 +2,7 @@ import { ConditionalLogic } from 'shared/state';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ItemFormValues } from 'modules/Builder/types';
 
+import { getItemNamesIncludeSkippableItem } from './ItemConfiguration/OptionalItemsAndSettings/SkippedItemInVariablesModal/SkippedItemInVariablesModal.utils';
 import { GetConditionsToRemoveConfig } from './ActivityItems.types';
 
 export const getSummaryRowDependencies = (
@@ -43,4 +44,22 @@ export const getConditionsToRemove = (
     //if SOURCE ITEM is dependent for the other, we should check that SOURCE ITEM is to the right from the DEPENDENCY
     return !rightSlice[itemKey];
   });
+};
+
+export const getItemsWithVariablesToRemove = (
+  itemName: ItemFormValues['name'],
+  items: ItemFormValues[],
+) => {
+  if (!itemName)
+    return {
+      string: '',
+      list: [],
+    };
+
+  const ItemNamesIncludeSkippableItem = getItemNamesIncludeSkippableItem(itemName, items);
+
+  return {
+    string: ItemNamesIncludeSkippableItem.map((item) => item.name).join(', '),
+    list: ItemNamesIncludeSkippableItem,
+  };
 };
