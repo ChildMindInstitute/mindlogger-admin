@@ -103,7 +103,9 @@ export const RespondentDataReview = () => {
         setSelectedActivity={setSelectedActivity}
         setSelectedAnswer={setSelectedAnswer}
       />
-      <RespondentDataReviewContext.Provider value={{ assessment, itemIds, setItemIds }}>
+      <RespondentDataReviewContext.Provider
+        value={{ isFeedbackOpen, assessment, itemIds, setItemIds }}
+      >
         <StyledReviewContainer ref={containerRef}>
           <StyledHeader
             isSticky={isHeaderSticky}
@@ -128,11 +130,7 @@ export const RespondentDataReview = () => {
           )}
         </StyledReviewContainer>
         {selectedActivity && selectedAnswer && !isLoading && (
-          <Feedback
-            isFeedbackOpen={isFeedbackOpen}
-            selectedActivity={selectedActivity}
-            onClose={() => setIsFeedbackOpen(false)}
-          />
+          <Feedback selectedActivity={selectedActivity} onClose={() => setIsFeedbackOpen(false)} />
         )}
       </RespondentDataReviewContext.Provider>
     </StyledContainer>

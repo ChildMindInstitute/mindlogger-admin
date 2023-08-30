@@ -17,9 +17,9 @@ import { FeedbackTabs, getTabs } from './Feedback.const';
 import { FeedbackForm, FeedbackProps } from './Feedback.types';
 import { getDefaultFormValues } from './Feedback.utils';
 
-export const Feedback = ({ isFeedbackOpen, onClose, selectedActivity }: FeedbackProps) => {
+export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   const { t } = useTranslation();
-  const { assessment } = useContext(RespondentDataReviewContext);
+  const { assessment, isFeedbackOpen } = useContext(RespondentDataReviewContext);
   const [assessmentStep, setAssessmentStep] = useState(0);
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
 

@@ -1,7 +1,6 @@
 import { DatavizActivity } from 'api';
 
 export type FeedbackProps = {
-  isFeedbackOpen: boolean;
   onClose: () => void;
   selectedActivity: DatavizActivity;
 };

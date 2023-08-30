@@ -6,4 +6,5 @@ export const RespondentDataReviewContext = createContext<RespondentDataReviewCon
   assessment: undefined,
   itemIds: [],
   setItemIds: () => null,
+  isFeedbackOpen: false,
 });
