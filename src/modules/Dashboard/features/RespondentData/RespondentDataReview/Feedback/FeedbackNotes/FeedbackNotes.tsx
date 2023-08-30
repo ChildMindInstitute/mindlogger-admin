@@ -30,8 +30,7 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isFormSticky = useHeaderSticky(containerRef);
 
-  const methods = useFormContext<FeedbackForm>();
-  const { control, setValue, handleSubmit } = methods;
+  const { control, setValue, handleSubmit } = useFormContext<FeedbackForm>();
 
   const { execute: getAnswersNotes } = useAsync(
     getAnswersNotesApi,

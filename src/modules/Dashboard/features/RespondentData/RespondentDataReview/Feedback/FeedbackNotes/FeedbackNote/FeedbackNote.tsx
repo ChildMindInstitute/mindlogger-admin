@@ -53,7 +53,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
     setIsEditMode(false);
   };
 
-  const handleEdit = () => {
+  const handleNoteEdit = () => {
     setValue('noteText', note.note);
     setIsEditMode(true);
   };
@@ -72,7 +72,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
         </StyledFlexTopStart>
         {!isEditMode && isVisibleActions && (
           <StyledActions>
-            <StyledButton onClick={handleEdit}>
+            <StyledButton onClick={handleNoteEdit}>
               <Svg id="edit" {...commonSvgProps} />
             </StyledButton>
             <StyledButton onClick={() => onDelete(note.id)}>
