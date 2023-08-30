@@ -22,6 +22,8 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   const rowName = `${alertName}.rowId`;
 
   const alert = watch(alertName);
+  const continuousSliderMax = watch(`${alertName}.maxValue`);
+
   const { responseType, config: settings, responseValues } = watch(name);
 
   const renderAlertContent = () => {
@@ -111,7 +113,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 type="number"
                 control={control}
                 name={`${alertName}.minValue`}
-                maxNumberValue={maxValue - 1}
+                maxNumberValue={continuousSliderMax - 1}
                 minNumberValue={minValue}
               />,
               <InputController
