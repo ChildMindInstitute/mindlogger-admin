@@ -1,8 +1,7 @@
 import { ConditionalLogic } from 'shared/state';
-import { getEntityKey, getObjectFromList } from 'shared/utils';
+import { getEntityKey, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 import { ItemFormValues } from 'modules/Builder/types';
 
-import { getItemNamesIncludeSkippableItem } from './ItemConfiguration/OptionalItemsAndSettings/SkippedItemInVariablesModal/SkippedItemInVariablesModal.utils';
 import { GetConditionsToRemoveConfig } from './ActivityItems.types';
 
 export const getSummaryRowDependencies = (
@@ -46,20 +45,15 @@ export const getConditionsToRemove = (
   });
 };
 
-export const getItemsWithVariablesToRemove = (
-  itemName: ItemFormValues['name'],
-  items: ItemFormValues[],
-) => {
-  if (!itemName)
-    return {
-      string: '',
-      list: [],
-    };
+const checkIfQuestionIncludesItem = (question: string, itemName: string) => {
+  const variableNames = getTextBetweenBrackets(question);
 
-  const ItemNamesIncludeSkippableItem = getItemNamesIncludeSkippableItem(itemName, items);
-
-  return {
-    string: ItemNamesIncludeSkippableItem.map((item) => item.name).join(', '),
-    list: ItemNamesIncludeSkippableItem,
-  };
+  return variableNames.includes(itemName);
 };
+
+export const getIndexListToTrigger = (items: ItemFormValues[], itemName: string) =>
+  items.reduce((acc, { question }, index) => {
+    if (checkIfQuestionIncludesItem(question, itemName)) return acc.concat(index);
+
+    return acc;
+  }, [] as number[]);

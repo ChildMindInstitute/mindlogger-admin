@@ -14,9 +14,9 @@ import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
-import { getItemConditionDependencies, getItemsWithVariablesToRemove } from './ActivityItems.utils';
+import { getIndexListToTrigger, getItemConditionDependencies } from './ActivityItems.utils';
 import { ConditionalPanel } from './ConditionalPanel';
-
+import { getItemNamesIncludeSkippableItem } from './ItemConfiguration/OptionalItemsAndSettings/SkippedItemInVariablesModal/SkippedItemInVariablesModal.utils';
 export const ActivityItems = () => {
   const { t } = useTranslation('app');
   const [activeItemIndex, setActiveItemIndex] = useState(-1);
@@ -53,7 +53,10 @@ export const ActivityItems = () => {
     itemToDelete,
     activity.conditionalLogic,
   );
-  const itemsWithVariablesToRemove = getItemsWithVariablesToRemove(itemToDelete?.name, items);
+  const itemsWithVariablesToRemove = getItemNamesIncludeSkippableItem(itemToDelete?.name, items);
+  const itemsWithVariablesToRemoveString = itemsWithVariablesToRemove
+    .map((item) => item.name)
+    .join(', ');
 
   const handleRemoveClick = (id: string) => {
     setItemIdToDelete(id);
@@ -61,6 +64,11 @@ export const ActivityItems = () => {
 
   const handleRemoveItem = (index: number) => {
     removeItem(index);
+    if (itemsWithVariablesToRemove.length) {
+      for (const item of itemsWithVariablesToRemove) {
+        trigger(`${fieldName}.items.${index < item.index ? item.index - 1 : item.index}`);
+      }
+    }
 
     if (activeItemIndex === index && items?.length !== 1) return setActiveItemIndex(-1);
 
@@ -71,6 +79,10 @@ export const ActivityItems = () => {
     const item = getNewActivityItem();
     const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
 
+    const indexListToTrigger = getIndexListToTrigger(items, item.name);
+    for (const itemIndex of indexListToTrigger) {
+      trigger(`${fieldName}.items.${itemIndex}`);
+    }
     firstSystemIndex === -1 ? appendItem(item) : insertItem(firstSystemIndex, item);
     setActiveItemIndex(firstSystemIndex === -1 ? items?.length : firstSystemIndex);
   };
@@ -79,6 +91,10 @@ export const ActivityItems = () => {
     const itemToInsert = item ?? getNewActivityItem();
     const shouldBecomeActive = !item || (item && getEntityKey(activeItem ?? {}));
 
+    const indexListToTrigger = getIndexListToTrigger(items, itemToInsert.name);
+    for (const itemIndex of indexListToTrigger) {
+      trigger(`${fieldName}.items.${itemIndex}`);
+    }
     insertItem(index + 1, itemToInsert);
     shouldBecomeActive && setActiveItemIndex(index + 1);
   };
@@ -134,13 +150,6 @@ export const ActivityItems = () => {
       );
       trigger(subscalesField);
     }
-    if (itemsWithVariablesToRemove.list.length) {
-      for (const item of itemsWithVariablesToRemove.list) {
-        trigger(
-          `${fieldName}.items.${itemIndexToDelete < item.index ? item.index - 1 : item.index}`,
-        );
-      }
-    }
 
     handleRemoveItem(itemIndexToDelete);
     handleRemoveModalClose();
@@ -171,16 +180,14 @@ export const ActivityItems = () => {
           onClose={handleRemoveModalClose}
           onSubmit={handleRemoveModalSubmit}
           onSecondBtnSubmit={handleRemoveModalClose}
-          title={
-            itemsWithVariablesToRemove.list.length ? t('variablesWarning.title') : t('deleteItem')
-          }
+          title={itemsWithVariablesToRemove.length ? t('variablesWarning.title') : t('deleteItem')}
           buttonText={t('delete')}
           secondBtnText={t('cancel')}
           hasSecondBtn
           submitBtnColor="error"
         >
           <StyledModalWrapper>
-            {itemsWithVariablesToRemove.list.length ? (
+            {itemsWithVariablesToRemove.length ? (
               <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
                 <Trans i18nKey="deleteItemReferencedByVariable">
                   By deleting{' '}
@@ -191,7 +198,7 @@ export const ActivityItems = () => {
                   , it will cause{' '}
                   <strong>
                     {' '}
-                    <>{{ itemsWithVariablesToRemove: itemsWithVariablesToRemove.string }}</>
+                    <>{{ itemsWithVariablesToRemove: itemsWithVariablesToRemoveString }}</>
                   </strong>{' '}
                   to fail
                 </Trans>

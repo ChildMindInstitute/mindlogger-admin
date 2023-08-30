@@ -857,7 +857,7 @@ export const testFunctionForNotExistedItems = (value: string, context: TestConte
 
   if (!variableNames.length) return true;
 
-  return items.some((item) => variableNames.includes(item.name));
+  return variableNames.every((variable) => items.some((item) => item.name === variable));
 };
 
 export const testFunctionForSubscaleAge = (field: string, value?: number | string | null) =>
