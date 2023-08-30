@@ -42,6 +42,7 @@ import {
   getEmptyAudioPlayerResponse,
   getEmptyAudioResponse,
   getEmptyNumberSelection,
+  checkIfItemHasRequiredOptions,
 } from '../ItemConfiguration.utils';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
@@ -99,8 +100,8 @@ export const useSettingsSetup = ({
   const settings = watch(`${name}.config`);
 
   const hasPalette = get(settings, ItemConfigurationSettings.HasColorPalette);
-  const isTextInputRequired = get(settings, ItemConfigurationSettings.IsTextInputRequired);
   const isSkippable = get(settings, ItemConfigurationSettings.IsSkippable);
+  const hasRequiredItems = checkIfItemHasRequiredOptions(settings);
 
   const setConfig = (config: Config) => setValue(`${name}.config`, config);
 
@@ -188,7 +189,7 @@ export const useSettingsSetup = ({
 
   useEffect(() => {
     //TODO add to isSkippable: 'Reset to True IF Allow respondent to skip all Items = True AND Required = False;'
-    if (isTextInputRequired && isSkippable) {
+    if (hasRequiredItems && isSkippable) {
       setValue(`${name}.config`, {
         ...settings,
         [ItemConfigurationSettings.IsSkippable]: false,
