@@ -18,12 +18,14 @@ export const UploadAudio = ({ open, media, onUpload, onClose, onChange }: Upload
     onUpload();
   };
 
+  const dataTestid = 'builder-activity-items-item-configuration-upload-audio-popup';
   const modalProps = {
     buttonText: media?.uploaded ? t('upload') : t('cancel'),
     hasSecondBtn: !!media?.uploaded,
     secondBtnText: t('cancel'),
     onSubmit: media?.uploaded ? handleUpload : handleCloseWithoutChanges,
     onSecondBtnSubmit: handleCloseWithoutChanges,
+    'data-testid': dataTestid,
   };
 
   return (
@@ -34,7 +36,14 @@ export const UploadAudio = ({ open, media, onUpload, onClose, onChange }: Upload
             Please upload file in one of the following formats: <strong>.mp3, .wav</strong>.
           </Trans>
         </StyledTitleMedium>
-        <MediaUploader width={59.6} height={20} media={media} hasPreview onUpload={onChange} />
+        <MediaUploader
+          width={59.6}
+          height={20}
+          media={media}
+          hasPreview
+          onUpload={onChange}
+          data-testid={`${dataTestid}-uploader`}
+        />
       </Box>
     </Modal>
   );

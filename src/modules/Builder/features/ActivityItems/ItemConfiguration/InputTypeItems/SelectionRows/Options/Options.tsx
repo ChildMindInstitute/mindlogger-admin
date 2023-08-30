@@ -35,14 +35,20 @@ export const Options = ({ name }: { name: string }) => {
       <StyledSelectionBox />
       {options?.map((option: SingleAndMultiSelectOption, index: number) => {
         const optionName = `${optionsName}.${index}`;
+        const dataTestId = `builder-activity-items-item-configuration-selection-rows-option-${index}`;
 
         return (
-          <StyledSelectionBox key={`option-${option.id}`} isErrorShortened={hasShortenedHelper}>
+          <StyledSelectionBox
+            key={`option-${option.id}`}
+            isErrorShortened={hasShortenedHelper}
+            data-testid={dataTestId}
+          >
             <StyledFlexTopStart sx={{ gap: '1.2rem' }}>
               <Uploader
                 {...commonUploaderProps}
                 setValue={(val: string) => setValue(`${optionName}.image`, val || undefined)}
                 getValue={() => watch(`${optionName}.image`) || ''}
+                data-testid={`${dataTestId}-image`}
               />
               <InputController
                 control={control}
@@ -52,6 +58,7 @@ export const Options = ({ name }: { name: string }) => {
                 restrictExceededValueLength
                 Counter={CharactersCounter}
                 counterProps={{ isShortenedVisible: hasShortenedHelper }}
+                data-testid={`${dataTestId}-text`}
               />
             </StyledFlexTopStart>
             {hasTooltips && (
@@ -60,6 +67,7 @@ export const Options = ({ name }: { name: string }) => {
                   control={control}
                   name={`${optionName}.tooltip`}
                   label={t('tooltip')}
+                  data-testid={`${dataTestId}-tooltip`}
                 />
               </StyledFlexTopCenter>
             )}

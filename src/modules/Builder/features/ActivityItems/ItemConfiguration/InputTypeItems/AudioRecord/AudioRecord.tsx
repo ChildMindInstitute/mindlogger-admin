@@ -24,6 +24,7 @@ export const AudioRecord = ({ name }: UseControllerProps) => {
         type="number"
         label={t('audioRecordDuration')}
         minNumberValue={1}
+        data-testid="builder-activity-items-item-configuration-audio-record-max-duration"
       />
     </ItemOptionContainer>
   );

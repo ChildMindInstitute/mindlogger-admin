@@ -25,6 +25,7 @@ export const MediaUploader = ({
   placeholder,
   hasPreview,
   onUpload,
+  'data-testid': dataTestid,
 }: MediaUploaderProps) => {
   const { t } = useTranslation('app');
   const { uploadInputRef, error, dragEvents, handleChange, onRemove } = useMediaUploader({
@@ -47,6 +48,7 @@ export const MediaUploader = ({
           height={height}
           onClick={() => uploadInputRef?.current?.click()}
           {...dragEvents}
+          data-testid={dataTestid}
         >
           <StyledSourceContainer>
             <Svg id="audio-player-filled" width={32} height={42} />
@@ -80,7 +82,9 @@ export const MediaUploader = ({
           {!media.uploaded && <StyledLinearProgress sx={{ mt: theme.spacing(0.5) }} />}
         </StyledFlexColumn>
       )}
-      {!!media && !hasPreview && <MLPlayer media={media} onRemove={onRemove} />}
+      {!!media && !hasPreview && (
+        <MLPlayer media={media} onRemove={onRemove} data-testid={`${dataTestid}-media-player`} />
+      )}
     </>
   );
 };

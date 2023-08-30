@@ -98,16 +98,22 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
     }
   };
 
+  const dataTestid = 'builder-activity-items-item-configuration-selection-rows';
+
   return (
     <StyledFlexTopCenter sx={{ gap: '2.6rem' }}>
-      <StyledClearedButton onClick={onArrowClick} {...commonButtonProps}>
+      <StyledClearedButton
+        onClick={onArrowClick}
+        {...commonButtonProps}
+        data-testid={`${dataTestid}-collapse`}
+      >
         <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
       </StyledClearedButton>
       <StyledLabelBoldLarge>
         {t('selectionRowsHeader', { context: isSingle ? 'single' : 'multiple' })}
       </StyledLabelBoldLarge>
       {isExpanded && (
-        <StyledClearedButton {...commonButtonProps}>
+        <StyledClearedButton {...commonButtonProps} data-testid={`${dataTestid}-options`}>
           <StyledSelectController
             name="selectionRows.options.length"
             options={getMultipleSelectionRowsOptions()}
@@ -118,6 +124,7 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
               IconComponent: (props) => <Svg {...commonSelectArrowProps} {...props} />,
             }}
             disabled={!isExpanded}
+            data-testid={`${dataTestid}-options-select`}
           />
         </StyledClearedButton>
       )}

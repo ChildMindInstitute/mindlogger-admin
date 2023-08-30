@@ -77,15 +77,21 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
 
   return rows?.map((row: SingleAndMultipleSelectRow, index: number) => {
     const rowName = `${name}.responseValues.rows.${index}`;
+    const dataTestid = `builder-activity-items-item-configuration-selection-rows-row-${index}`;
 
     return (
-      <StyledSelectionRowItem key={`row-${row.id}`} hasTooltips={hasTooltips}>
+      <StyledSelectionRowItem
+        key={`row-${row.id}`}
+        hasTooltips={hasTooltips}
+        data-testid={dataTestid}
+      >
         <StyledSelectionBox isErrorShortened={hasShortenedHelper}>
           <StyledFlexTopStart sx={{ gap: '1.2rem' }}>
             <Uploader
               {...commonUploaderProps}
               setValue={(val: string) => setValue(`${rowName}.rowImage`, val || undefined)}
               getValue={() => watch(`${rowName}.rowImage`) || ''}
+              data-testid={`${dataTestid}-image`}
             />
             <InputController
               control={control}
@@ -95,11 +101,17 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
               restrictExceededValueLength
               Counter={CharactersCounter}
               counterProps={{ isShortenedVisible: hasShortenedHelper }}
+              data-testid={`${dataTestid}-text`}
             />
           </StyledFlexTopStart>
           {hasTooltips && (
             <StyledFlexTopCenter>
-              <InputController control={control} name={`${rowName}.tooltip`} label={t('tooltip')} />
+              <InputController
+                control={control}
+                name={`${rowName}.tooltip`}
+                label={t('tooltip')}
+                data-testid={`${dataTestid}-tooltip`}
+              />
             </StyledFlexTopCenter>
           )}
         </StyledSelectionBox>
@@ -130,10 +142,14 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
                     name={scoreName}
                     onChange={handleChange}
                     minNumberValue={Number.MIN_SAFE_INTEGER}
+                    data-testid={`${dataTestid}-score-${key}`}
                   />
                 )}
                 {isRemoveButtonVisible && (
-                  <StyledRemoveItemButton onClick={() => handleRemoveItem(index)}>
+                  <StyledRemoveItemButton
+                    onClick={() => handleRemoveItem(index)}
+                    data-testid={`${dataTestid}-remove`}
+                  >
                     <Svg id="cross" />
                   </StyledRemoveItemButton>
                 )}
