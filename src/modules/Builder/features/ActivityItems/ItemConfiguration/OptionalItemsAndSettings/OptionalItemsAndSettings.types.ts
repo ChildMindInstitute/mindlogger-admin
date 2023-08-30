@@ -17,7 +17,8 @@ export type ActiveItemHookProps = {
 
 export type SettingsSetupProps = {
   name: string;
-  handleAddOption?: () => void;
+  handleAddOption?: (isAppendedOption: boolean) => void;
+  removeOptions?: () => void;
   handleAddSliderRow?: () => void;
   handleAddSingleOrMultipleRow?: () => void;
   removeAlert?: () => void;

@@ -16,8 +16,8 @@ export const reducers = {
   resetCalendarEvents: (state: CalendarEventsSchema): void => {
     state.events = initialState.events;
     state.processedEvents = initialState.processedEvents;
-    state.alwaysAvailableHidden = initialState.alwaysAvailableHidden;
-    state.scheduledHidden = initialState.scheduledHidden;
+    state.alwaysAvailableVisible = initialState.alwaysAvailableVisible;
+    state.scheduledVisible = initialState.scheduledVisible;
     state.createEventsData = initialState.createEventsData;
     state.calendarCurrentYear = initialState.calendarCurrentYear;
   },
@@ -26,40 +26,16 @@ export const reducers = {
     state: CalendarEventsSchema,
     action: PayloadAction<{
       events?: CalendarEvent[];
-      alwaysAvailableHidden?: boolean;
-      scheduledHidden?: boolean;
-    }>,
+    } | null>,
   ): void => {
-    const { events, alwaysAvailableHidden, scheduledHidden } = action.payload || {};
+    const { events } = action.payload || {};
 
-    if (alwaysAvailableHidden !== undefined) {
-      state.alwaysAvailableHidden.data = alwaysAvailableHidden;
-      state.alwaysAvailableHidden.status = 'success';
-    }
-    if (scheduledHidden !== undefined) {
-      state.scheduledHidden.data = scheduledHidden;
-      state.scheduledHidden.status = 'success';
-    }
-
-    if (events) {
-      if (state.alwaysAvailableHidden.data !== null) {
-        state.events.data = getPreparedEvents(events, state.alwaysAvailableHidden.data, true);
-      } else if (state.scheduledHidden.data !== null) {
-        state.events.data = getPreparedEvents(events, state.scheduledHidden.data, false);
-      } else {
-        state.events.data = events;
-      }
-    } else {
-      if (state.alwaysAvailableHidden.data !== null && state.events.data?.length) {
-        state.events.data = getPreparedEvents(
-          state.events.data,
-          state.alwaysAvailableHidden.data,
-          true,
-        );
-      }
-      if (state.scheduledHidden.data !== null && state.events.data?.length) {
-        state.events.data = getPreparedEvents(state.events.data, state.scheduledHidden.data, false);
-      }
+    if (events || state.events.data?.length) {
+      state.events.data = getPreparedEvents(
+        events || state.events.data || [],
+        !state.alwaysAvailableVisible.data,
+        !state.scheduledVisible.data,
+      );
     }
 
     if (state.events.data) {
@@ -68,6 +44,16 @@ export const reducers = {
       state.events.status = 'success';
       state.processedEvents.status = 'success';
     }
+  },
+
+  setAvailableVisibility: (state: CalendarEventsSchema, action: PayloadAction<boolean>): void => {
+    state.alwaysAvailableVisible.data = action.payload;
+    state.alwaysAvailableVisible.status = 'success';
+  },
+
+  setScheduledVisibility: (state: CalendarEventsSchema, action: PayloadAction<boolean>): void => {
+    state.scheduledVisible.data = action.payload;
+    state.scheduledVisible.status = 'success';
   },
 
   setCreateEventsData: (
@@ -114,16 +100,11 @@ export const reducers = {
       }
     });
 
-    if (state.alwaysAvailableHidden.data !== null) {
-      state.events.data = getPreparedEvents(
-        state.events.data,
-        state.alwaysAvailableHidden.data,
-        true,
-      );
-    }
-    if (state.scheduledHidden.data !== null) {
-      state.events.data = getPreparedEvents(state.events.data, state.scheduledHidden.data, false);
-    }
+    state.events.data = getPreparedEvents(
+      state.events.data,
+      !state.alwaysAvailableVisible.data,
+      !state.scheduledVisible.data,
+    );
 
     if (state.events.data) {
       const notHiddenEvents = getNotHiddenEvents(state.events.data);

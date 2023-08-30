@@ -3,34 +3,30 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Grid } from '@mui/material';
 
-import { Modal, Svg } from 'shared/components';
+import { Modal } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
 import {
   StyledBodyMedium,
-  StyledClearedButton,
-  StyledFlexTopCenter,
-  StyledHeadlineLarge,
   StyledModalWrapper,
   StyledTitleLarge,
   theme,
   variables,
 } from 'shared/styles';
-import { useHeaderSticky } from 'shared/hooks';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { StyledContent, StyledHeader, StyledItemConfiguration } from './ItemConfiguration.styles';
+import { StyledContent, StyledItemConfiguration } from './ItemConfiguration.styles';
 import { ItemConfigurationProps, ItemsOptionGroup } from './ItemConfiguration.types';
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
 import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
 import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
+import { ConfigurationHeader } from './ConfigurationHeader';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
-  const isHeaderSticky = useHeaderSticky(containerRef);
   const { t } = useTranslation('app');
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
 
@@ -61,27 +57,12 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   return (
     <>
       <StyledItemConfiguration ref={containerRef}>
-        <StyledHeader isSticky={isHeaderSticky}>
-          <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
-          <StyledFlexTopCenter>
-            {responseType && (
-              <StyledClearedButton
-                sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
-                onClick={() => optionalItemsRef.current?.setSettingsDrawerVisible(true)}
-                data-testid="builder-activity-items-item-configuration-settings"
-              >
-                <Svg id="report-configuration" />
-              </StyledClearedButton>
-            )}
-            <StyledClearedButton
-              sx={{ p: theme.spacing(1) }}
-              onClick={onClose}
-              data-testid="builder-activity-items-item-configuration-close"
-            >
-              <Svg id="close" />
-            </StyledClearedButton>
-          </StyledFlexTopCenter>
-        </StyledHeader>
+        <ConfigurationHeader
+          containerRef={containerRef}
+          responseType={responseType}
+          optionalItemsRef={optionalItemsRef}
+          onClose={onClose}
+        />
         <StyledContent>
           <Grid container direction="row" columns={2} spacing={2.4}>
             <Grid item xs={1}>

@@ -172,6 +172,7 @@ export const getOptions = (
 export const getData = (data: SubscaleChartData, versions: Version[]) => {
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
   const maxScore = Math.max(...pluck(responses.flat(), 'score'));
+  const step = Math.ceil(maxScore / 16);
 
   return {
     datasets: [
@@ -203,7 +204,7 @@ export const getData = (data: SubscaleChartData, versions: Version[]) => {
         labels: versions.map(({ version }) => version),
         data: versions.map(({ createdAt }) => ({
           x: new Date(createdAt),
-          y: maxScore + OFFSET_Y_MAX,
+          y: maxScore + step,
         })),
         datalabels: {
           anchor: 'center' as const,

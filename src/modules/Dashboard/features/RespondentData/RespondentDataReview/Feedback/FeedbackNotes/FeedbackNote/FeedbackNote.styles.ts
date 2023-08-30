@@ -10,11 +10,11 @@ import {
 
 export const StyledNote = styled(Box)`
   width: 100%;
-  padding: ${theme.spacing(1.2, 0)};
+  margin-bottom: ${theme.spacing(2.4)};
 `;
 
 export const StyledForm = styled('form')`
-  padding: ${theme.spacing(1.2, 0)};
+  margin-bottom: ${theme.spacing(1.2)};
 `;
 
 export const StyledNoteHeader = styled(StyledFlexAllCenter)`

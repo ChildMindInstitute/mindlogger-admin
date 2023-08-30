@@ -34,7 +34,10 @@ import { SkippedItemInVariablesModal } from './SkippedItemInVariablesModal';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
 import { useActiveItem, useSettingsSetup } from './OptionalItemsAndSettings.hooks';
 import { getOptionValue } from './OptionalItemsAndSettings.utils';
-import { ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER } from './OptionalItemsAndSettings.const';
+import {
+  DEFAULT_OPTION_VALUE,
+  ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER,
+} from './OptionalItemsAndSettings.const';
 
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ name }, ref) => {
@@ -92,15 +95,16 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     );
     const hasResponseOptionsHeader = ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER.includes(responseType);
 
-    const handleAddOption = async () => {
+    const handleAddOption = async (isAppendedOption: boolean) => {
       await appendOption({
         id: uuidv4(),
         text: '',
         isHidden: false,
-        ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
-        ...(hasColorPalette &&
+        ...(isAppendedOption && hasScores && { score: DEFAULT_SCORE_VALUE }),
+        ...(isAppendedOption &&
+          hasColorPalette &&
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
-        value: getOptionValue(options ?? []),
+        value: isAppendedOption ? getOptionValue(options ?? []) : DEFAULT_OPTION_VALUE,
       });
       setOptionsOpen((prevState) => [...prevState, true]);
     };
@@ -171,6 +175,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     useSettingsSetup({
       name,
       handleAddOption,
+      removeOptions,
       handleAddSliderRow,
       handleAddSingleOrMultipleRow,
       removeAlert,
@@ -219,7 +224,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
                   ))
                 : null}
               <Button
-                onClick={handleAddOption}
+                onClick={() => handleAddOption(true)}
                 variant="outlined"
                 startIcon={<Svg id="add" width="20" height="20" />}
                 data-testid="builder-activity-items-item-configuration-add-option"

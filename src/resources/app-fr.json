@@ -740,6 +740,7 @@
   "noDataForActivityFilters": "Aucune correspondance n'a été trouvée. Essayez d'ajuster les filtres.",
   "isReviewableUnsupported": "L'évaluation du tableau de bord de l'examinateur ne prend en charge que les éléments à sélection unique, à sélection multiple et à curseur",
   "activityHasVariableAmongItems": "Cette activité contient des variables et ne peut pas ignorer tous les éléments.",
+  "activityHasRequiredItems": "Cette activité contient des éléments obligatoires et ne peut pas tous les ignorer.",
   "activityCannotBeOnePageAssessment": "Cette activité contient des variables et ne peut pas être une évaluation d'une page",
   "showSubscaleResult": "Afficher le résultat de la sous-échelle",
   "addAudio": "Ajouter du son",

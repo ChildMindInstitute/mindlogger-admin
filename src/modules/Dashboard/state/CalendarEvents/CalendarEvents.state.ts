@@ -7,10 +7,15 @@ const initialStateData = {
   data: null,
 };
 
+const visibilityStateData = {
+  ...base.state,
+  data: true,
+};
+
 export const state: CalendarEventsSchema = {
   events: initialStateData,
-  alwaysAvailableHidden: initialStateData,
-  scheduledHidden: initialStateData,
+  alwaysAvailableVisible: visibilityStateData,
+  scheduledVisible: visibilityStateData,
   createEventsData: initialStateData,
   calendarCurrentYear: initialStateData,
   processedEvents: initialStateData,

@@ -36,7 +36,11 @@ import {
   DEFAULT_SCORE_VALUE,
 } from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
-import { getDefaultSliderScores, getEmptyAlert } from '../../../ItemConfiguration.utils';
+import {
+  checkIfItemHasRequiredOptions,
+  getDefaultSliderScores,
+  getEmptyAlert,
+} from '../../../ItemConfiguration.utils';
 
 export const ItemSettingsGroup = ({
   name,
@@ -87,9 +91,7 @@ export const ItemSettingsGroup = ({
               const isAlerts = settingKey === ItemConfigurationSettings.HasAlerts;
 
               const hasTextInput = get(config, ItemConfigurationSettings.HasTextInput);
-              const hasResponseRequired =
-                get(config, ItemConfigurationSettings.IsResponseRequired) ||
-                get(config, ItemConfigurationSettings.IsTextInputRequired);
+              const hasResponseRequired = checkIfItemHasRequiredOptions(config);
               const isDisabled =
                 (isTextInputRequired && !hasTextInput) || (isSkippableItem && hasResponseRequired);
               const isSecondsDisabled = isTimer && !get(config, ItemConfigurationSettings.HasTimer);
