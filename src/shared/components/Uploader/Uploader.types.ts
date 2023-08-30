@@ -18,4 +18,5 @@ export type UploaderProps = {
   cropRatio?: CropRatio;
   hasError?: boolean;
   disabled?: boolean;
+  'data-testid'?: string;
 };

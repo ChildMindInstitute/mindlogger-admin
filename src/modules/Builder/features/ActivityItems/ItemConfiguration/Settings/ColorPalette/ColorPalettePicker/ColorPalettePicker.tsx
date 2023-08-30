@@ -43,6 +43,7 @@ export const ColorPalettePicker = ({ name }: ColorPalettePickerProps) => {
         control={control}
         name={`${name}.responseValues.paletteName`}
         options={RADIO_GROUP_OPTIONS}
+        data-testid="builder-activity-items-item-configuration-color-palette-picker"
       />
       <StyledFlexTopCenter sx={{ gap: '1.2rem' }}>
         {SELECTION_OPTIONS_COLOR_PALETTE.map(({ name, colors }) => (

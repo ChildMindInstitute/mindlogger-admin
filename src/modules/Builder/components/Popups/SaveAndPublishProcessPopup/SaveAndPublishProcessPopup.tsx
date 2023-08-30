@@ -37,6 +37,7 @@ export const SaveAndPublishProcessPopup = ({
   if (step === SaveAndPublishSteps.BeingCreated) {
     modalProps = {
       hasActions: false,
+      'data-testid': 'builder-save-and-publish-loading-popup',
     };
   }
   if (step === SaveAndPublishSteps.Failed) {
@@ -46,6 +47,7 @@ export const SaveAndPublishProcessPopup = ({
       hasSecondBtn: true,
       secondBtnText: t('back'),
       onSecondBtnSubmit: onClose,
+      'data-testid': 'builder-save-and-publish-failed-popup',
     };
   }
   if (step === SaveAndPublishSteps.ReportConfigSave) {
@@ -63,6 +65,7 @@ export const SaveAndPublishProcessPopup = ({
       hasThirdBtn: true,
       thirdBtnText: t('cancel'),
       onThirdBtnSubmit: onClose,
+      'data-testid': 'builder-save-and-publish-report-config-popup',
     };
   }
 

@@ -29,11 +29,16 @@ export const ConfigurationHeader = ({
           <StyledClearedButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
             onClick={() => optionalItemsRef.current?.setSettingsDrawerVisible(true)}
+            data-testid="builder-activity-items-item-configuration-settings"
           >
             <Svg id="report-configuration" />
           </StyledClearedButton>
         )}
-        <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onClose}>
+        <StyledClearedButton
+          sx={{ p: theme.spacing(1) }}
+          onClick={onClose}
+          data-testid="builder-activity-items-item-configuration-close"
+        >
           <Svg id="close" />
         </StyledClearedButton>
       </StyledFlexTopCenter>

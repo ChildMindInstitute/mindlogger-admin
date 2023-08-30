@@ -12,6 +12,7 @@ export type EditorProps = {
   uiType?: EditorUiType;
   editorId?: string;
   disabled?: boolean;
+  'data-testid'?: string;
 };
 
 export type EditorControllerProps<T extends FieldValues> = EditorProps & UseControllerProps<T>;

@@ -5,4 +5,5 @@ export type IncorrectFilePopupProps = {
   onClose: () => void;
   uiType: UploadFileError;
   fileType: MediaType;
+  'data-testid'?: string;
 };

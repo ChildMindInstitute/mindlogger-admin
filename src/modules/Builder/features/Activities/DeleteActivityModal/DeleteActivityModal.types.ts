@@ -3,4 +3,5 @@ export type DeleteActivityModalProps = {
   isOpen: boolean;
   onModalClose: () => void;
   onModalSubmit: () => void;
+  'data-testid'?: string;
 };

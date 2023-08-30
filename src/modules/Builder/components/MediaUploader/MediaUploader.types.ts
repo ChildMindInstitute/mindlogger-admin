@@ -11,6 +11,7 @@ export type MediaUploaderProps = {
   placeholder?: JSX.Element | string;
   hasPreview?: boolean;
   onUpload: (media: MediaType | null) => void;
+  'data-testid'?: string;
 };
 
 export type MediaUploaderHookProps = {

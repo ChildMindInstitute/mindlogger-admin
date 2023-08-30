@@ -24,6 +24,7 @@ export const getPerformanceTasksMenu = (
           performanceTaskType: PerfTaskType.ABTrailsTablet,
           isNavigationBlocked: true,
         }),
+      'data-testid': 'builder-activities-add-perf-task-abtrails',
     },
     {
       title: PerformanceTasks.AbTrailsMobile,
@@ -34,6 +35,7 @@ export const getPerformanceTasksMenu = (
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
           isNavigationBlocked: true,
         }),
+      'data-testid': 'builder-activities-add-perf-task-abtrails-mobile',
     },
     {
       title: PerformanceTasks.Flanker,
@@ -43,6 +45,7 @@ export const getPerformanceTasksMenu = (
           performanceTaskType: PerfTaskType.Flanker,
           performanceTaskDesc: t('performanceTasksDesc.flanker'),
         }),
+      'data-testid': 'builder-activities-add-perf-task-flanker',
     },
     {
       title: PerformanceTasks.Gyroscope,
@@ -52,6 +55,7 @@ export const getPerformanceTasksMenu = (
           performanceTaskType: PerfTaskType.Gyroscope,
           performanceTaskDesc: t('performanceTasksDesc.gyroscope'),
         }),
+      'data-testid': 'builder-activities-add-perf-task-gyroscope',
     },
     {
       title: PerformanceTasks.Touch,
@@ -61,6 +65,7 @@ export const getPerformanceTasksMenu = (
           performanceTaskType: PerfTaskType.Touch,
           performanceTaskDesc: t('performanceTasksDesc.touch'),
         }),
+      'data-testid': 'builder-activities-add-perf-task-touch',
     },
   ];
 };

@@ -33,4 +33,5 @@ export type ItemProps = {
   onItemClick?: () => void;
   dragHandleProps?: DraggableProvided['dragHandleProps'];
   isDragging?: boolean;
+  'data-testid'?: string;
 } & ItemType;

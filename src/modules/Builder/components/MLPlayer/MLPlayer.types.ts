@@ -4,6 +4,7 @@ export type MLPlayerProps = {
   media: MediaType | null;
   hasRemoveButton?: boolean;
   onRemove: () => void;
+  'data-testid'?: string;
 };
 export type MLPlayerStateProps = {
   url?: string | MediaStream | null;

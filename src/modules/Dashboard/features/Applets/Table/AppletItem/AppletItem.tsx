@@ -234,6 +234,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
           onClose={() => setPasswordPopupVisible(false)}
           popupType={AppletPasswordPopupType.Create}
           submitCallback={submitCallback}
+          data-testid="dashboard-applets-password-popup"
         />
       )}
     </>

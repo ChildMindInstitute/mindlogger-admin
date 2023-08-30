@@ -10,6 +10,7 @@ export const ColorPicker = <T extends FieldValues>({
   anchorEl,
   handleColorChange,
   handlePopoverClose,
+  'data-testid': dataTestid,
 }: ColorPickerProps<T>) => {
   const colorPickerVisible = Boolean(anchorEl);
 
@@ -37,6 +38,7 @@ export const ColorPicker = <T extends FieldValues>({
               vertical: 'top',
               horizontal: 'center',
             }}
+            data-testid={dataTestid}
           >
             <ChromePicker disableAlpha={true} color={value} onChangeComplete={handleChange} />
           </Popover>

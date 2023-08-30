@@ -32,6 +32,7 @@ export const Alerts = ({ name, appendAlert, removeAlert }: AlertProps) => {
         sx={{ margin: theme.spacing(2.4, 0), display: 'flex' }}
         startIcon={<Svg id="add" width={18} height={18} />}
         onClick={appendAlert}
+        data-testid="builder-activity-items-item-configuration-add-alert"
       >
         {t('addAlert')}
       </Button>

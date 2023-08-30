@@ -199,6 +199,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
                   onClick={() => handleChangeColorPaletteVisibility(true)}
                   variant="outlined"
                   startIcon={<Svg id="paint-outline" width="20" height="20" />}
+                  data-testid="builder-activity-items-item-configuration-set-color-palette"
                 >
                   {t('setPalette')}
                 </Button>
@@ -226,6 +227,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
                 onClick={() => handleAddOption(true)}
                 variant="outlined"
                 startIcon={<Svg id="add" width="20" height="20" />}
+                data-testid="builder-activity-items-item-configuration-add-option"
               >
                 {t('addOption')}
               </Button>

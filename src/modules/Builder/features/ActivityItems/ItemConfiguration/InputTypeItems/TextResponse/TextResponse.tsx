@@ -32,6 +32,7 @@ export const TextResponse = ({ name }: TextResponseProps) => {
             control={control}
             type="number"
             label={t('maxCharacters')}
+            data-testid="builder-activity-items-item-configuration-text-response-max-length"
           />
         </StyledMaxCharacters>
       </StyledRow>
@@ -41,6 +42,7 @@ export const TextResponse = ({ name }: TextResponseProps) => {
             name={`${name}.config.correctAnswer`}
             control={control}
             label={t('correctAnswer')}
+            data-testid="builder-activity-items-item-configuration-correct-answer"
           />
         </StyledInputWrapper>
       )}

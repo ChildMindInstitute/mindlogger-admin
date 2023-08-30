@@ -13,6 +13,7 @@ export const AppletPasswordPopup = ({
   appletId,
   encryption,
   submitCallback = () => onClose(),
+  'data-testid': dataTestid,
 }: AppletPasswordPopupProps) => {
   const { t } = useTranslation('app');
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
@@ -32,7 +33,7 @@ export const AppletPasswordPopup = ({
           : t('createAppletPassword')
       }
       buttonText={t('submit')}
-      data-testid="dashboard-applets-password-popup"
+      data-testid={dataTestid}
     >
       <StyledAppletPasswordContainer>
         {popupType === AppletPasswordPopupType.Enter ? (

@@ -20,6 +20,7 @@ export const RemoveAudioPopup = ({ open, onClose, onRemove }: RemoveAudioPopupPr
       onClose={onClose}
       onSubmit={onRemove}
       onSecondBtnSubmit={onClose}
+      data-testid="builder-activity-items-item-configuration-audio-player-remove-popup"
     >
       <Box sx={{ ml: theme.spacing(3.2) }}>
         <StyledTitleMedium>{t('removeAudioDescription')}</StyledTitleMedium>

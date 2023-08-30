@@ -5,7 +5,12 @@ import { StyledModalWrapper } from 'shared/styles';
 
 import { RemoveImagePopupProps } from './RemoveImagePopup.types';
 
-export const RemoveImagePopup = ({ open, onClose, onSubmit }: RemoveImagePopupProps) => {
+export const RemoveImagePopup = ({
+  open,
+  onClose,
+  onSubmit,
+  'data-testid': dataTestid,
+}: RemoveImagePopupProps) => {
   const { t } = useTranslation('app');
 
   return (
@@ -18,6 +23,7 @@ export const RemoveImagePopup = ({ open, onClose, onSubmit }: RemoveImagePopupPr
       onSecondBtnSubmit={onClose}
       onSubmit={onSubmit}
       hasSecondBtn
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>{t('removeImageDescription')}</StyledModalWrapper>
     </Modal>

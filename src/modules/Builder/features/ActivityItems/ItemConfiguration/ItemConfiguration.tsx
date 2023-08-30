@@ -70,6 +70,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
                 name={`${name}.responseType`}
                 options={availableItemsTypeOptions}
                 control={control}
+                data-testid="builder-activity-items-item-configuration-response-type"
               />
               <StyledBodyMedium
                 sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
@@ -86,13 +87,18 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
                 label={t('itemName')}
                 type="text"
                 sx={{ mb: theme.spacing(4) }}
+                data-testid="builder-activity-items-item-configuration-name"
               />
             </Grid>
           </Grid>
           <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>
             {t('displayedContent')}
           </StyledTitleLarge>
-          <EditorController name={`${name}.question`} control={control} />
+          <EditorController
+            name={`${name}.question`}
+            control={control}
+            data-testid="builder-activity-items-item-configuration-description"
+          />
           <OptionalItemsAndSettings name={name} ref={optionalItemsRef} />
         </StyledContent>
       </StyledItemConfiguration>
@@ -103,6 +109,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
         width={'62'}
         title={t('variablesWarning.title')}
         buttonText={t('ok')}
+        data-testid="builder-activity-items-item-configuration-variables-warning-popup"
       >
         <StyledModalWrapper>{t(message)}</StyledModalWrapper>
       </Modal>

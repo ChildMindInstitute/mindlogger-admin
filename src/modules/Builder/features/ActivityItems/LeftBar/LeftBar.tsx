@@ -98,6 +98,7 @@ export const LeftBar = ({
         variant="outlined"
         startIcon={<Svg id="add" width={18} height={18} />}
         onClick={onAddItem}
+        data-testid="builder-activity-items-add-item"
       >
         {t('addItem')}
       </Button>
@@ -123,7 +124,11 @@ export const LeftBar = ({
                       index={index}
                     >
                       {(itemProvided, snapshot) => (
-                        <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
+                        <Box
+                          {...itemProvided.draggableProps}
+                          ref={itemProvided.innerRef}
+                          data-testid={`builder-activity-items-item-${index}`}
+                        >
                           <Item
                             dragHandleProps={itemProvided.dragHandleProps}
                             isDragging={snapshot.isDragging}
@@ -138,6 +143,7 @@ export const LeftBar = ({
                           <InsertItem
                             isVisible={index >= 0 && index < items.length - 1 && !isDragging}
                             onInsert={() => onInsertItem(index)}
+                            data-testid={`builder-activity-items-insert-item-${index}`}
                           />
                         </Box>
                       )}

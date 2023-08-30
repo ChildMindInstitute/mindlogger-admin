@@ -556,6 +556,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
           popupVisible={passwordPopupVisible}
           submitCallback={passwordSubmit}
           encryption={appletData?.encryption}
+          data-testid="report-config-password-popup"
         />
       )}
       {warningPopupVisible && (

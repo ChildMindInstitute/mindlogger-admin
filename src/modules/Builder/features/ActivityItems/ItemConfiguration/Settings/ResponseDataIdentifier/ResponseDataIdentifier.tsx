@@ -22,7 +22,11 @@ export const ResponseDataIdentifier = ({ onRemove }: ResponseDataIdentifierProps
     <StyledResponseDataIdentifierContainer>
       <StyledResponseDataIdentifierHeader>
         <StyledLabelBoldLarge>{t('responseDataIdentifier')}</StyledLabelBoldLarge>
-        <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onRemove}>
+        <StyledClearedButton
+          sx={{ p: theme.spacing(1) }}
+          onClick={onRemove}
+          data-testid="builder-activity-items-item-configuration-data-indentifier-remove"
+        >
           <Svg id="trash" width="20" height="20" />
         </StyledClearedButton>
       </StyledResponseDataIdentifierHeader>

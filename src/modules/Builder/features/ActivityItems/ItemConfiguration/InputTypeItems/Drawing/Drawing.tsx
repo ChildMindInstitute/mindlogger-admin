@@ -34,6 +34,7 @@ export const Drawing = ({ name }: DrawingProps) => {
           setValue={(val: string) => setValue(drawingExampleName, val || undefined)}
           getValue={() => drawingExample}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
+          data-testid="builder-activity-items-item-configuration-drawing-example"
         />
       ),
     },
@@ -46,6 +47,7 @@ export const Drawing = ({ name }: DrawingProps) => {
           setValue={(val: string) => setValue(drawingBackgroundName, val || undefined)}
           getValue={() => drawingBackground}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
+          data-testid="builder-activity-items-item-configuration-drawing-background"
         />
       ),
     },

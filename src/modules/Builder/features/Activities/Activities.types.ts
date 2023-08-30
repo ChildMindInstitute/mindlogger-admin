@@ -8,6 +8,7 @@ export type GetActivitiesActions = {
   onVisibilityChange: () => void;
   onRemove: () => void;
   isEditVisible: boolean;
+  'data-testid'?: string;
 };
 
 export type ActivityAddProps = {

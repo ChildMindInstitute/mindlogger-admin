@@ -47,6 +47,7 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
         variant="contained"
         startIcon={<Svg id="save" width={18} height={18} />}
         onClick={handleSaveAndPublishFirstClick}
+        data-testid="builder-save-and-publish"
       >
         {t('saveAndPublish')}
       </StyledButton>
@@ -57,6 +58,7 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
         popupVisible={isPasswordPopupOpened}
         submitCallback={handlePasswordSubmit}
         encryption={appletEncryption}
+        data-testid="builder-save-and-publish-password-popup"
       />
       <SaveAndPublishProcessPopup
         isPopupVisible={isPublishProcessPopupOpened}
@@ -69,6 +71,7 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
         handleClose={cancelNavigation}
         handleDoNotSaveSubmit={handleSaveChangesDoNotSaveSubmit}
         handleSaveSubmit={handleSaveChangesSaveSubmit}
+        data-testid="builder-save-and-publish-save-changes-popup"
       />
     </>
   );

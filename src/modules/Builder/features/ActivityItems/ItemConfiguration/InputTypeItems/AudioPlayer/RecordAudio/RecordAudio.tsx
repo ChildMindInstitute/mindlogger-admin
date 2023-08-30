@@ -64,6 +64,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     onChange({ url });
   };
 
+  const dataTestid = 'builder-activity-items-item-configuration-record-audio-popup';
   const modalProps = {
     open,
     title: t('audioPlayerRecordAudio'),
@@ -76,6 +77,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     footerStyles: {
       paddingTop: theme.spacing(2.1),
     },
+    'data-testid': dataTestid,
   };
 
   return (
@@ -92,6 +94,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
                 <Svg id={isPaused || isStopped ? 'audio-filled' : 'pause'} {...commonSvgProps} />
               }
               onClick={isRecording || isPaused ? togglePauseResume : startRecording}
+              data-testid={`${dataTestid}-record`}
             >
               {t('audioPlayerRecordStart')}
             </Button>
@@ -102,6 +105,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
             startIcon={<Svg id="audio-stop" {...commonSvgProps} />}
             onClick={handleStop}
             disabled={isStopped}
+            data-testid={`${dataTestid}-stop`}
           >
             {t('audioPlayerRecordStop')}
           </Button>
@@ -113,6 +117,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
             media={{ url }}
             hasRemoveButton={false}
             onRemove={handleRemove}
+            data-testid={`${dataTestid}-player`}
           />
         )}
       </Box>
