@@ -15,7 +15,7 @@ export type Role = {
   role: Roles;
   accessId?: string;
   icon?: JSX.Element;
-  reviewerRespondents: string[];
+  reviewerRespondents?: string[];
 };
 
 export type Applet = Omit<ManagerApplet, 'roles'> & {
