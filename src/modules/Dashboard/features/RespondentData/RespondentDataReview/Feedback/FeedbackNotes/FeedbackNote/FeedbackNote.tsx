@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
@@ -15,6 +15,7 @@ import {
   variables,
 } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import {
   StyledActions,
@@ -33,11 +34,13 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
   const [isVisibleActions, setIsVisibleActions] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const userName = `${note.user.firstName ?? ''} ${note.user.lastName ?? ''}`;
+  const { isFeedbackOpen } = useContext(RespondentDataReviewContext);
 
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: { noteText: note.note || '' },
   });
+
+  const userName = `${note.user.firstName ?? ''} ${note.user.lastName ?? ''}`;
 
   const commonSvgProps = {
     width: '15',
@@ -57,6 +60,13 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
     setValue('noteText', note.note);
     setIsEditMode(true);
   };
+
+  useEffect(() => {
+    if (!isFeedbackOpen && isEditMode) {
+      setValue('noteText', note.note);
+      setIsEditMode(false);
+    }
+  }, [isFeedbackOpen]);
 
   return (
     <>

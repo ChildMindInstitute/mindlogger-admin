@@ -48,6 +48,7 @@ export type RespondentDataReviewContextType = {
   assessment?: AssessmentActivityItem[];
   itemIds: string[];
   setItemIds: Dispatch<SetStateAction<string[]>>;
+  isFeedbackOpen: boolean;
 };
 
 export type AssessmentAnswer = (
