@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import { Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
@@ -37,16 +35,17 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
 
   const userName = `${note.user.firstName ?? ''} ${note.user.lastName ?? ''}`;
 
-  const { control, handleSubmit } = useForm({
-    resolver: yupResolver(
-      yup.object({
-        noteText: yup.string().trim().required(),
-      }),
-    ),
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: { noteText: note.note || '' },
   });
 
+  const commonSvgProps = {
+    width: '15',
+    height: '15',
+  };
+
   const saveChanges = ({ noteText }: { noteText: string }) => {
+    if (!noteText.trim()) return;
     onEdit({
       id: note.id,
       note: noteText,
@@ -54,9 +53,9 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
     setIsEditMode(false);
   };
 
-  const commonSvgProps = {
-    width: '15',
-    height: '15',
+  const handleEdit = () => {
+    setValue('noteText', note.note);
+    setIsEditMode(true);
   };
 
   return (
@@ -73,7 +72,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
         </StyledFlexTopStart>
         {!isEditMode && isVisibleActions && (
           <StyledActions>
-            <StyledButton onClick={() => setIsEditMode(true)}>
+            <StyledButton onClick={handleEdit}>
               <Svg id="edit" {...commonSvgProps} />
             </StyledButton>
             <StyledButton onClick={() => onDelete(note.id)}>

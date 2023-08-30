@@ -66,6 +66,7 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   };
 
   const addNewNote = ({ newNote }: FeedbackForm) => {
+    if (!newNote.trim()) return;
     appletId && answerId && createAnswerNote({ appletId, answerId, activityId, note: newNote });
     setValue('newNote', '');
   };

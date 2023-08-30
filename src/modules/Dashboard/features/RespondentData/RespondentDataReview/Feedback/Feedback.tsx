@@ -1,8 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import { DefaultTabs as Tabs, Svg } from 'shared/components';
 import {
@@ -26,11 +24,6 @@ export const Feedback = ({ isFeedbackOpen, onClose, selectedActivity }: Feedback
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
 
   const methods = useForm<FeedbackForm>({
-    resolver: yupResolver(
-      yup.object({
-        newNote: yup.string().trim().required(),
-      }),
-    ),
     defaultValues: getDefaultFormValues(assessment),
   });
 
