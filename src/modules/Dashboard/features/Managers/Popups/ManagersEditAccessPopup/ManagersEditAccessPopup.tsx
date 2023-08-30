@@ -44,10 +44,10 @@ export const EditAccessPopup = ({
   const error = removeAccessError || editAccessError;
 
   const getAppletsWithoutRespondents = () =>
-    applets.reduce((acc: string[], el) => {
-      const reviewerRole = el.roles.find(({ role }) => role === Roles.Reviewer);
+    applets.reduce((acc: string[], applet) => {
+      const reviewerRole = applet.roles.find(({ role }) => role === Roles.Reviewer);
 
-      if (reviewerRole && !reviewerRole?.reviewerRespondents?.length) acc.push(el.displayName);
+      if (reviewerRole && !reviewerRole?.reviewerRespondents?.length) acc.push(applet.displayName);
 
       return acc;
     }, []);
