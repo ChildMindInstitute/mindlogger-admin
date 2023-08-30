@@ -37,19 +37,19 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
 
   const userName = `${note.user.firstName ?? ''} ${note.user.lastName ?? ''}`;
 
-  const { getValues, control } = useForm({
+  const { control, handleSubmit } = useForm({
     resolver: yupResolver(
       yup.object({
-        noteText: yup.string(),
+        noteText: yup.string().trim().required(),
       }),
     ),
     defaultValues: { noteText: note.note || '' },
   });
 
-  const saveChanges = () => {
+  const saveChanges = ({ noteText }: { noteText: string }) => {
     onEdit({
       id: note.id,
-      note: getValues().noteText,
+      note: noteText,
     });
     setIsEditMode(false);
   };
@@ -83,7 +83,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
         )}
       </StyledNoteHeader>
       {isEditMode ? (
-        <StyledForm noValidate>
+        <StyledForm onSubmit={handleSubmit(saveChanges)} noValidate>
           <InputController
             required
             fullWidth
@@ -94,7 +94,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
           />
           <StyledFlexTopCenter sx={{ justifyContent: 'end', m: theme.spacing(0.8, 0) }}>
             <Button onClick={() => setIsEditMode(false)}>{t('cancel')}</Button>
-            <Button variant="contained" sx={{ ml: theme.spacing(0.8) }} onClick={saveChanges}>
+            <Button type="submit" variant="contained" sx={{ ml: theme.spacing(0.8) }}>
               {t('save')}
             </Button>
           </StyledFlexTopCenter>
