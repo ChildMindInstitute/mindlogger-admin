@@ -5,7 +5,7 @@ import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
 import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { Item, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
+import { Config, Item, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
 
 import {
   DEFAULT_EMPTY_SLIDER,
@@ -153,4 +153,23 @@ export const checkIfQuestionIncludesVariables = (question: string, items: ItemFo
   const variableNames = getTextBetweenBrackets(question);
 
   return variableNames.some((variable) => !!itemsObject[variable]);
+};
+
+export const checkIfItemHasRequiredOptions = (config: Config) => {
+  const isCorrectAnswerRequired = get(config, ItemConfigurationSettings.IsCorrectAnswerRequired);
+  const isNumericalRequired = get(config, ItemConfigurationSettings.IsNumericalRequired);
+  const hasResponseDataIdentifier = get(
+    config,
+    ItemConfigurationSettings.HasResponseDataIdentifier,
+  );
+  const isResponseRequired = get(config, ItemConfigurationSettings.IsResponseRequired);
+  const isTextInputRequired = get(config, ItemConfigurationSettings.IsTextInputRequired);
+
+  return (
+    isCorrectAnswerRequired ||
+    isNumericalRequired ||
+    hasResponseDataIdentifier ||
+    isResponseRequired ||
+    isTextInputRequired
+  );
 };
