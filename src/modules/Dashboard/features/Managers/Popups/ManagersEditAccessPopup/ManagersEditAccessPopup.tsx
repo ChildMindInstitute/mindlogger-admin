@@ -7,8 +7,8 @@ import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { Roles } from 'shared/consts';
 import { workspaces } from 'redux/modules';
 import { useAsync } from 'shared/hooks';
-import { editManagerAccess } from 'api';
-import { getErrorMessage } from 'shared/utils';
+import { editManagerAccessApi, removeManagerAccessApi } from 'api';
+import { getErrorMessage, pluck } from 'shared/utils';
 
 import { Applet } from './Applet';
 import { Applet as AppletType, EditAccessPopupProps, Role } from './ManagersEditAccessPopup.types';
@@ -30,35 +30,34 @@ export const EditAccessPopup = ({
 
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute: handleEditAccess, error } = useAsync(editManagerAccess, () => {
-    onClose();
-    setEditAccessSuccessPopupVisible(true);
-    reFetchManagers();
-  });
+  const { execute: handleEditAccess, error: editAccessError } = useAsync(
+    editManagerAccessApi,
+    () => {
+      onClose();
+      setEditAccessSuccessPopupVisible(true);
+      reFetchManagers();
+    },
+  );
+  const { execute: handleRemoveAccess, error: removeAccessError } =
+    useAsync(removeManagerAccessApi);
+
+  const error = removeAccessError || editAccessError;
 
   const getAppletsWithoutRespondents = () =>
-    applets.reduce((acc: string[], el) => {
-      if (
-        el.roles.some(({ role }) => role === Roles.Reviewer) &&
-        !el?.selectedRespondents?.length
-      ) {
-        acc.push(el.displayName);
-      }
+    applets.reduce((acc: string[], applet) => {
+      const reviewerRole = applet.roles.find(({ role }) => role === Roles.Reviewer);
+
+      if (reviewerRole && !reviewerRole?.reviewerRespondents?.length) acc.push(applet.displayName);
 
       return acc;
     }, []);
 
-  const updateAppletHandler = (
-    id: string,
-    callback: (roles: Role[]) => Role[],
-    respondents?: string[] | null,
-  ) => {
+  const updateAppletHandler = (id: string, callback: (roles: Role[]) => Role[]) => {
     const updatedApplets = applets.map((applet) =>
       applet.id === id
         ? {
             ...applet,
             roles: callback(applet.roles),
-            selectedRespondents: respondents || applet.selectedRespondents,
           }
         : { ...applet },
     );
@@ -69,30 +68,34 @@ export const EditAccessPopup = ({
     updateAppletHandler(id, (roles) => roles.filter(({ role }) => role !== label));
 
   const handleAddRole = (id: string, role: Roles) => {
-    const callback = (roles: Role[]) =>
-      role === Roles.Manager
-        ? [{ role, icon: getRoleIcon(role) }]
-        : [...roles, { role, icon: getRoleIcon(role) }];
+    const callback = (roles: Role[]) => [...roles, { role, icon: getRoleIcon(role) }];
+
     updateAppletHandler(id, callback);
   };
 
   const handleAddSelectedRespondents = (id: string, respondents: string[]) =>
-    updateAppletHandler(id, (roles) => roles, respondents);
+    updateAppletHandler(id, (roles) =>
+      roles.map((role) => ({
+        ...role,
+        ...(role.role === Roles.Reviewer && { reviewerRespondents: respondents }),
+      })),
+    );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const appletsWithoutRespondents = getAppletsWithoutRespondents();
     setAppletsWithoutRespondents(appletsWithoutRespondents);
     if (!appletsWithoutRespondents.length) {
-      const accesses = applets.map(({ id, roles, selectedRespondents }) => ({
+      const accesses = applets.map(({ id, roles }) => ({
         appletId: id,
         roles: roles.map(({ role }) => role),
-        respondents: [...(selectedRespondents || [])],
+        respondents: roles.flatMap(({ reviewerRespondents }) => reviewerRespondents ?? []),
       }));
 
       if (!ownerId || !accesses.length || accesses.some(({ roles }) => !roles.length)) {
         return;
       }
 
+      await handleRemoveAccess({ appletIds: pluck(applets, 'id'), userId: user.id });
       handleEditAccess({ ownerId, userId: id, accesses });
     }
   };

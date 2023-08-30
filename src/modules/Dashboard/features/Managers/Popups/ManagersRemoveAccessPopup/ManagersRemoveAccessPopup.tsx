@@ -17,7 +17,7 @@ import {
 } from 'shared/styles';
 import { Table, UiType, Modal } from 'shared/components';
 import { useAsync } from 'shared/hooks';
-import { removeManagerAccess } from 'api';
+import { removeManagerAccessApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 
 import { buttonTextByStep, getHeadCells } from './ManagersRemoveAccessPopup.const';
@@ -95,7 +95,7 @@ export const ManagersRemoveAccessPopup = ({
     onClose();
   };
 
-  const { execute, error } = useAsync(removeManagerAccess, () => {
+  const { execute, error } = useAsync(removeManagerAccessApi, () => {
     incrementStep();
   });
 
