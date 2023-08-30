@@ -88,6 +88,7 @@ export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
 export const useSettingsSetup = ({
   name,
   handleAddOption,
+  removeOptions,
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
   setShowColorPalette,
@@ -114,9 +115,10 @@ export const useSettingsSetup = ({
         switch (responseType) {
           case ItemResponseType.SingleSelection:
           case ItemResponseType.MultipleSelection:
+            removeOptions?.();
             setOptionsOpen?.([]);
-            handleAddOption?.();
             setConfig(defaultSingleAndMultiSelectionConfig);
+            handleAddOption?.(false);
             break;
           case ItemResponseType.Text:
             setConfig(defaultTextConfig);
