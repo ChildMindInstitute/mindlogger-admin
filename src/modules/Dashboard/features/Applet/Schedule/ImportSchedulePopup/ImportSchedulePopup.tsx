@@ -4,15 +4,17 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Error, FileUploader, Modal, SubmitBtnColor } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
-import { useAsync } from 'shared/hooks/useAsync';
 import { useAppDispatch } from 'redux/store';
+import { useAsync } from 'shared/hooks';
+import { applet } from 'shared/state';
+import { Mixpanel } from 'shared/utils';
+
 import {
   deleteIndividualEventsApi,
   deleteScheduledEventsApi,
   importScheduleApi,
   Periodicity,
 } from 'modules/Dashboard/api';
-import { applet } from 'shared/state';
 import { applets } from 'modules/Dashboard/state';
 
 import { getScreens, invalidFileFormatError, uploadLabel } from './ImportSchedule.const';
@@ -45,6 +47,8 @@ export const ImportSchedulePopup = ({
   );
   const apiError = importScheduleError || deleteScheduledError || deleteIndividualScheduledError;
   const [step, setStep] = useState<Steps>(0);
+
+  const analyticsPrefix = isIndividual ? 'IC' : 'GC';
 
   const { isSubmitDisabled, setIsSubmitDisabled, uploadedFile, validationError, handleFileReady } =
     useImportSchedule({ appletName, scheduleExportData });
@@ -137,6 +141,8 @@ export const ImportSchedulePopup = ({
       }
       await importSchedule({ appletId, body });
       onClose();
+
+      Mixpanel.track(`${analyticsPrefix} Schedule import successful`);
     }
 
     setStep((prevStep) => ++prevStep as Steps);

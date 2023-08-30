@@ -72,6 +72,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const boundingBox = searchContainerRef?.current?.getBoundingClientRect();
   const isIndividual = schedule === ScheduleOptions.IndividualSchedule;
   const dataTestid = 'dashboard-calendar-schedule-legend';
+  const analyticsPrefix = isIndividual ? 'IC' : 'GC';
 
   const respondentName = getRespondentName(
     selectedRespondent?.secretId || '',
@@ -128,15 +129,13 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
 
     await exportTemplate({ data: scheduleExportCsv, fileName: getFileName() });
 
-    Mixpanel.track('Schedule import successful');
-
     isExport && setExportDefaultSchedulePopupVisible(false);
   };
 
   const handleImportClick = () => {
     setImportSchedulePopupVisible(true);
 
-    Mixpanel.track('Schedule Import click');
+    Mixpanel.track(`${analyticsPrefix} Schedule Import click`);
   };
 
   useEffect(() => {

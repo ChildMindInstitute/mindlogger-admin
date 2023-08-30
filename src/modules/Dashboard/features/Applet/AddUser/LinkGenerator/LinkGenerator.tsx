@@ -27,7 +27,12 @@ export const LinkGenerator = () => {
 
   const handleGeneratePublicLinkClick = () => {
     setLinkPopupVisible(true);
-    Mixpanel.track('Public Link generate click(true)');
+  };
+
+  const onLinkCreated = (link: InviteLink | null) => {
+    setInviteLink(link);
+
+    Mixpanel.track('Public Link generate click');
   };
 
   useEffect(() => {
@@ -58,7 +63,7 @@ export const LinkGenerator = () => {
           <LinkPopup
             open={linkPopupVisible}
             onClose={() => setLinkPopupVisible(false)}
-            setInviteLink={setInviteLink}
+            onSubmit={onLinkCreated}
           />
         </>
       )}

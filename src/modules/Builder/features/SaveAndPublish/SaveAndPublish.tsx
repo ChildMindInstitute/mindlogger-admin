@@ -36,7 +36,7 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
 
   const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
     handleAppletPasswordSubmit(ref?.current?.password).then(() =>
-      Mixpanel.track('handleAppletPasswordSubmit'),
+      Mixpanel.track('Password added successfully'),
     );
     setIsPasswordPopupOpened(false);
   };

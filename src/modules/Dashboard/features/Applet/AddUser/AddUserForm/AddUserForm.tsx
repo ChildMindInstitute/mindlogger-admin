@@ -63,6 +63,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
       await getInvitationsHandler();
       ownerId && executeGetWorkspaceInfoApi({ ownerId });
       resetForm();
+      Mixpanel.track('Invitation sent successfully');
     },
   );
   const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, (res) => {

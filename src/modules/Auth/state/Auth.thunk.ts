@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { authStorage } from 'shared/utils/authStorage';
+import { Mixpanel, authStorage } from 'shared/utils';
 import { ApiError } from 'redux/modules';
 import {
   signInApi,
@@ -23,6 +23,8 @@ export const signIn = createAsyncThunk(
         const { accessToken, refreshToken } = data.result.token;
         authStorage.setRefreshToken(refreshToken);
         authStorage.setAccessToken(accessToken);
+
+        Mixpanel.login(data.result.user.id);
       }
 
       return data;

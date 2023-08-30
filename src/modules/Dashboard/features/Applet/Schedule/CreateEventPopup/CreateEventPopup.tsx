@@ -1,5 +1,6 @@
 import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
 import { Mixpanel } from 'shared/utils';
@@ -17,18 +18,22 @@ export const CreateEventPopup = ({
 }: CreateEventPopupProps) => {
   const { t } = useTranslation('app');
   const eventFormRef = useRef() as RefObject<EventFormRef>;
+  const { respondentId } = useParams();
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
 
   const handleCreateEventClose = () => setCreateEventPopupVisible(false);
 
+  const isIndividualCalendar = !!respondentId;
+  const analyticsPrefix = isIndividualCalendar ? 'IC' : 'GC';
+
   const onCreateActivitySubmit = () => {
     if (eventFormRef?.current) {
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track('Schedule save click');
+    Mixpanel.track(`${analyticsPrefix} Schedule save click`);
   };
 
   const handleRemoveAlwaysAvailableClose = () => {

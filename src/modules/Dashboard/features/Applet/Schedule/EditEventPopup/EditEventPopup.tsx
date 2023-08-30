@@ -34,6 +34,9 @@ export const EditEventPopup = ({
   const dispatch = useAppDispatch();
   const dataTestid = 'dashboard-calendar-edit-event';
 
+  const isIndividualCalendar = !!respondentId;
+  const analyticsPrefix = isIndividualCalendar ? 'IC' : 'GC';
+
   const { execute: removeEvent } = useAsync(
     deleteEventApi,
     () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
@@ -48,7 +51,7 @@ export const EditEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track('Schedule save click');
+    Mixpanel.track(`${analyticsPrefix} Schedule save click`);
   };
 
   const handleRemoveEvent = async () => {
