@@ -4,9 +4,8 @@ import { useFormContext } from 'react-hook-form';
 
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
-
-import { getItemNamesIncludeSkippableItem } from './SkippedItemInVariablesModal.utils';
-import { ItemNameWIthIndex } from './SkippedItemInVariablesModal.types';
+import { getItemsWithVariable } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { ItemNameWIthIndex } from 'modules/Builder/features/ActivityItems/ActivityItems.types';
 
 export const useCheckIfItemHasVariables = (itemField: string) => {
   const { t } = useTranslation('app');
@@ -30,7 +29,7 @@ export const useCheckIfItemHasVariables = (itemField: string) => {
   };
 
   useEffect(() => {
-    itemNamesWithSkippedItemRef.current = getItemNamesIncludeSkippableItem(name, activityItems);
+    itemNamesWithSkippedItemRef.current = getItemsWithVariable(name, activityItems);
     if (!itemNamesWithSkippedItemRef.current?.length) return;
 
     if (!isSkippableItem) {

@@ -717,8 +717,8 @@
     "incorrectEmail": "L'e-mail doit être valide",
     "variableInTheSameItem": "* Vous ne pouvez pas utiliser le nom de l'élément dans le même élément. Veuillez le supprimer",
     "variableIsNotSupported": "* Cet élément n'est pas pris en charge, veuillez le supprimer.",
-    "variableReferringToSkippedItem": "Supprimez la variable faisant référence à l'élément inexistant.",
-    "variableReferringToNotExistedItem": "Supprimez la variable faisant référence à l'élément qui n'existe pas."
+    "variableReferringToSkippedItem": "Supprimez la variable faisant référence à l'élément ignoré.",
+    "variableReferringToNotExistedItem": "Supprimez la variable faisant référence à l'élément inexistant."
   },
   "apply": "Appliquer",
   "addNewNote": "Ajouter une nouvelle note",
