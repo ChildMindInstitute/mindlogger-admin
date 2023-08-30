@@ -875,7 +875,7 @@
     "incorrectEmail": "Email must be valid",
     "variableInTheSameItem": "* You cannot use item name in the same item. Please remove",
     "variableIsNotSupported": "* This item is not supported, please remove it.",
-    "variableReferringToSkippedItem": "Remove the variable referring to the skipped item.",
+    "variableReferringToSkippedItem": "Remove the variable referring to the nonexistent item.",
     "variableReferringToNotExistedItem": "Remove the variable referring to the not existed item."
   },
   "apply": "Apply",
