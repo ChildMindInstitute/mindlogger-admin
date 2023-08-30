@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
 import get from 'lodash.get';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
 import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
-import { ConditionType } from 'shared/consts';
+import { ConditionType, ScoreReportType } from 'shared/consts';
+import { ScoreOrSection } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 
@@ -52,7 +52,8 @@ export const ConditionRow = ({
 
   const conditions = watch(conditionsName);
   const items = watch(`${fieldName}.items`);
-  const scores = watch(`${fieldName}.scoresAndReports.scores`);
+  const reports = watch(`${fieldName}.scoresAndReports.reports`);
+  const scores = reports?.filter((report: ScoreOrSection) => report.type === ScoreReportType.Score);
   const conditionItem = watch(conditionItemName);
   const conditionType = watch(conditionTypeName);
   const conditionPayload = watch(conditionPayloadName);
@@ -61,10 +62,6 @@ export const ConditionRow = ({
   )?.responseType;
 
   const selectedItem = items?.find((item: ItemFormValues) => getEntityKey(item) === conditionItem);
-
-  useEffect(() => {
-    if (autoTrigger) trigger(`${name}.itemKey`);
-  }, [selectedItem, autoTrigger]);
 
   const handleChangeConditionItemName = (e: SelectEvent) => {
     const itemResponseType = items?.find(
@@ -75,6 +72,8 @@ export const ConditionRow = ({
       setValue(conditionTypeName, '');
       setValue(conditionPayloadName, {});
     }
+
+    if (autoTrigger) trigger(`${name}.itemKey`);
   };
 
   const handleChangeConditionType = (e: SelectEvent) => {

@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { page } from 'resources';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
 import { SingleApplet, workspaces as workspacesState } from 'shared/state';
-import { useAsync } from 'shared/hooks';
-import { authStorage, isManagerOrOwner, Path } from 'shared/utils';
+import { useAsync, useNetwork } from 'shared/hooks';
+import { authStorage, isManagerOrOwnerOrEditor, Path } from 'shared/utils';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
 import { useAppDispatch } from 'redux/store';
-import { STORAGE_SELECTED_KEY } from 'modules/Library/consts';
+import { navigateToBuilder, getAddToBuilderData } from 'modules/Library/features/Cart/Cart.utils';
+import { useClearCart } from 'modules/Library/features/Cart/Cart.hooks';
 
 import {
   AddToBuilderActions,
@@ -22,7 +22,7 @@ import {
   AddToBuilderSteps,
   Applet,
 } from './AddToBuilderPopup.types';
-import { getAddToBuilderData, getArrayFromApplets, getSteps } from './AddToBuilderPopup.utils';
+import { getArrayFromApplets, getSteps } from './AddToBuilderPopup.utils';
 import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
 import { StyledContainer } from './AddToBuilderPopup.styles';
 import { APPLETS_WITHOUT_LIMIT } from './AddToBuilderPopup.const';
@@ -34,13 +34,15 @@ export const AddToBuilderPopup = ({
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+  const isOnline = useNetwork();
+  const handleClearCart = useClearCart();
   const [applets, setApplets] = useState<Applet[]>([]);
   const workspacesWithRoles = workspacesState.useWorkspacesRolesData();
   const workspaces =
     workspacesWithRoles?.filter(
       (workspace) =>
         Object.keys(workspace.workspaceRoles).length === 0 || //in case there are no applets yet in the main Workspace
-        Object.values(workspace.workspaceRoles).some((roles) => isManagerOrOwner(roles[0])),
+        Object.values(workspace.workspaceRoles).some((roles) => isManagerOrOwnerOrEditor(roles[0])),
     ) || [];
   const currentWorkspace = workspacesState.useData();
   const { result: cartItems } = library.useCartApplets() || {};
@@ -69,12 +71,6 @@ export const AddToBuilderPopup = ({
     },
   );
 
-  const navigateToBuilder = (appletId: string, data: SingleApplet) => {
-    navigate(generatePath(page.builderAppletAbout, { appletId }), {
-      state: { isFromLibrary: true, data },
-    });
-  };
-
   const handleModalClose = () => setAddToBuilderPopupVisible(false);
 
   const handleSwitchWorkspace = (ownerId: string) => {
@@ -87,41 +83,41 @@ export const AddToBuilderPopup = ({
     }
   };
 
-  const handleClearCart = () => {
-    sessionStorage.removeItem(STORAGE_SELECTED_KEY);
-    dispatch(library.thunk.postAppletsToCart([]));
+  const handleAddToBuilder = async (
+    isAddToExistingApplet: boolean,
+    ownerId: string,
+    selectedApplet: string | null,
+  ) => {
+    const { appletToBuilder } = await getAddToBuilderData(cartItems);
+    handleSwitchWorkspace(ownerId);
+    navigateToBuilder(
+      navigate,
+      isAddToExistingApplet && selectedApplet ? selectedApplet : Path.NewApplet,
+      appletToBuilder as SingleApplet,
+    );
+    handleClearCart();
+    handleModalClose();
   };
 
-  const handleAddToBuilder = async () => {
+  const handleAddToNewApplet = async () => {
     const { addToBuilderAction, selectedWorkspace: ownerId } = getValues();
+    if (!isOnline || !ownerId) {
+      return setStep(AddToBuilderSteps.Error);
+    }
 
     if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
-      const { appletToBuilder } = await getAddToBuilderData(cartItems);
-      handleSwitchWorkspace(ownerId);
-      navigateToBuilder(Path.NewApplet, appletToBuilder as SingleApplet);
-      handleClearCart();
-      handleModalClose();
+      await handleAddToBuilder(false, ownerId, null);
     }
 
-    if (!ownerId) {
-      setStep(AddToBuilderSteps.Error);
-
-      return;
-    }
     setStep(AddToBuilderSteps.SelectApplet);
   };
   const handleAddToExistingApplet = async () => {
     const { selectedWorkspace: ownerId, selectedApplet } = getValues();
-    const { appletToBuilder } = await getAddToBuilderData(cartItems);
-    if (!selectedApplet || !appletToBuilder) {
-      setStep(AddToBuilderSteps.Error);
-
-      return;
+    if (!isOnline || !ownerId || !selectedApplet) {
+      return setStep(AddToBuilderSteps.Error);
     }
-    handleSwitchWorkspace(ownerId);
-    navigateToBuilder(selectedApplet, appletToBuilder as SingleApplet);
-    handleClearCart();
-    handleModalClose();
+
+    await handleAddToBuilder(true, ownerId, selectedApplet);
   };
 
   const handleNext = async (nextStep?: AddToBuilderSteps) => {
@@ -130,6 +126,15 @@ export const AddToBuilderPopup = ({
     if (nextStep) {
       return setStep(nextStep);
     }
+  };
+
+  const errorCallback = () => {
+    const { addToBuilderAction } = getValues();
+    if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
+      return handleAddToNewApplet();
+    }
+
+    return handleAddToExistingApplet();
   };
 
   const steps = useMemo(
@@ -142,8 +147,9 @@ export const AddToBuilderPopup = ({
         setStep,
         setAddToBuilderPopupVisible,
         handleNext,
-        handleAddToBuilder,
+        handleAddToNewApplet,
         handleAddToExistingApplet,
+        errorCallback,
       }),
     [applets, isWorkspacesModalVisible, workspaces],
   );

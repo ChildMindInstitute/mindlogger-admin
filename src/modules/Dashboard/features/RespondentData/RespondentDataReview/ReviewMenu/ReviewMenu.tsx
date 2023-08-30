@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
@@ -35,10 +35,14 @@ export const ReviewMenu = ({
       : null;
   const defaultDate = selectedDate || new Date();
 
-  const { control, watch } = useForm({
+  const { control } = useForm({
     defaultValues: { date: defaultDate },
   });
-  const date = watch('date');
+
+  const date = useWatch({
+    control,
+    name: 'date',
+  });
 
   const [startDate, setStartDate] = useState(selectedDate || startOfMonth(new Date()));
   const [endDate, setEndDate] = useState(endOfMonth(new Date()));
@@ -77,14 +81,14 @@ export const ReviewMenu = ({
   }, [startDate, endDate]);
 
   useEffect(() => {
-    if (appletId && respondentId && (date || submitDates)) {
+    if (appletId && respondentId && date) {
       getReviewActivities({
         appletId,
         respondentId,
         createdDate: format(date || new Date(), DateFormats.YearMonthDay),
       });
     }
-  }, [date, submitDates]);
+  }, [date]);
 
   const onMonthChange = (date: Date) => {
     setStartDate(startOfMonth(date));

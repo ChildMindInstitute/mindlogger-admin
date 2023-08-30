@@ -20,6 +20,8 @@ import {
   NumberItemResponseValues,
   OptionCondition,
   ScoreCondition,
+  ScoreReport,
+  SectionReport,
   SingleAndMultiSelectOption,
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
@@ -50,6 +52,7 @@ import {
   ItemResponseType,
   PerfTaskType,
   ScoreConditionType,
+  ScoreReportType,
 } from 'shared/consts';
 import {
   ActivityFlowFormValues,
@@ -626,35 +629,43 @@ const getShowMessageAndPrintItems = (message?: string, itemsPrint?: string[]) =>
   printItems: !!itemsPrint?.length,
 });
 
+const getScore = (score: ScoreReport, items: Activity['items']) => ({
+  ...score,
+  ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
+  conditionalLogic: score.conditionalLogic?.map((conditional) => ({
+    ...conditional,
+    ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
+    conditions: getScoreConditions(items, conditional.conditions),
+  })),
+});
+
+const getSection = (section: SectionReport, items: Activity['items']) => ({
+  ...section,
+  ...getShowMessageAndPrintItems(section.message, section.itemsPrint),
+  ...(!!Object.keys(section.conditionalLogic || {}).length && {
+    conditionalLogic: {
+      ...section.conditionalLogic,
+      conditions: getScoreConditions(items, section?.conditionalLogic?.conditions),
+    },
+  }),
+});
+
 const getScoresAndReports = (activity: Activity) => {
   const { items, scoresAndReports } = activity;
   if (!scoresAndReports) return;
 
-  const { sections: initialSections, scores: initialScores } = scoresAndReports;
-  const scores = initialScores.map((score) => ({
-    ...score,
-    ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
-    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
-      ...conditional,
-      ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
-      conditions: getScoreConditions(items, conditional.conditions),
-    })),
-  }));
-  const sections = initialSections.map((section) => ({
-    ...section,
-    ...getShowMessageAndPrintItems(section.message, section.itemsPrint),
-    ...(!!Object.keys(section.conditionalLogic || {}).length && {
-      conditionalLogic: {
-        ...section.conditionalLogic,
-        conditions: getScoreConditions(items, section?.conditionalLogic?.conditions),
-      },
-    }),
-  }));
+  const { reports: initialReports } = scoresAndReports;
+  const reports = initialReports?.map((report) => {
+    if (report.type === ScoreReportType.Section) {
+      return getSection(report as SectionReport, items);
+    }
+
+    return getScore(report as ScoreReport, items);
+  });
 
   return {
     ...scoresAndReports,
-    sections,
-    scores,
+    reports,
   };
 };
 
@@ -811,11 +822,8 @@ export const testIsReportCommonFieldsRequired = (
 };
 
 //TODO: find a way to validate nested properties for objects in arrays for uniqueness
-export const testFunctionForUniqueness = (field: string, value: string, context: unknown) => {
-  const items = get(context, `from.1.value.${field}`);
-
-  return items?.filter((item: { name: string }) => item.name === value).length < 2 ?? true;
-};
+export const testFunctionForUniqueness = (value: string, items: { name: string }[]) =>
+  items?.filter((item) => item.name === value).length < 2 ?? true;
 
 export const testFunctionForTheSameVariable = (
   field: string,

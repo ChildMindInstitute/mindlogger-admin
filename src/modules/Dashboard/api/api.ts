@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { authApiClient } from 'shared/api/api.client';
-import { AppletId } from 'shared/api';
+import { AppletId, ActivityId, ActivityFlowId } from 'shared/api';
 
 import {
   TransferOwnershipType,
@@ -189,14 +189,13 @@ export const removeIndividualEventsApi = (
   authApiClient.delete(`/applets/${appletId}/events/remove_individual/${respondentId}`, { signal });
 
 export const removeManagerAccess = ({ userId, appletIds }: RemoveAccess, signal?: AbortSignal) =>
-  authApiClient.post(
-    '/workspaces/removeAccess',
-    {
+  authApiClient.delete('/workspaces/managers/removeAccess', {
+    signal,
+    data: {
       userId,
       appletIds,
     },
-    { signal },
-  );
+  });
 
 export const editManagerAccess = (
   { ownerId, userId, accesses }: EditManagerAccess,
@@ -214,15 +213,14 @@ export const removeRespondentAccessApi = (
   { userId, appletIds, deleteResponses }: RemoveRespondentAccess,
   signal?: AbortSignal,
 ) =>
-  authApiClient.post(
-    '/applets/removeAccess',
-    {
+  authApiClient.delete('/applets/respondent/removeAccess', {
+    signal,
+    data: {
       userId,
       appletIds,
       deleteResponses,
     },
-    { signal },
-  );
+  });
 
 export const editRespondentApi = (
   { ownerId, appletId, respondentId, values }: EditRespondent,
@@ -579,6 +577,36 @@ export const postReportConfigApi = (
   { appletId, ...params }: AppletId & ReportConfig,
   signal?: AbortSignal,
 ) => authApiClient.post(`/applets/${appletId}/report_configuration`, { ...params }, { signal });
+
+export const postActivityReportConfigApi = (
+  {
+    appletId,
+    activityId,
+    ...params
+  }: AppletId & ActivityId & Pick<ReportConfig, 'reportIncludedItemName'>,
+  signal?: AbortSignal,
+) =>
+  authApiClient.put(
+    `/applets/${appletId}/activities/${activityId}/report_configuration`,
+    { ...params },
+    { signal },
+  );
+
+export const postActivityFlowReportConfigApi = (
+  {
+    appletId,
+    activityFlowId,
+    ...params
+  }: AppletId &
+    ActivityFlowId &
+    Pick<ReportConfig, 'reportIncludedItemName' | 'reportIncludedActivityName'>,
+  signal?: AbortSignal,
+) =>
+  authApiClient.put(
+    `/applets/${appletId}/flows/${activityFlowId}/report_configuration`,
+    { ...params },
+    { signal },
+  );
 
 export const getAppletVersionsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}/versions`, { signal });

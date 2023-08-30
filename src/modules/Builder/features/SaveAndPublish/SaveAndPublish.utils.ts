@@ -20,8 +20,10 @@ import {
   SingleApplet,
   Activity,
   ActivityFlow,
+  ScoreReport,
+  SectionReport,
 } from 'shared/state';
-import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
+import { ConditionType, ItemResponseType, PerfTaskType, ScoreReportType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import {
   ActivityFormValues,
@@ -43,6 +45,8 @@ export const removeAppletExtraFields = () => ({
   reportRecipients: undefined,
   reportIncludeUserId: undefined,
   reportIncludeCaseId: undefined,
+  reportIncludedItemName: undefined,
+  reportIncludedActivityName: undefined,
   reportEmailBody: undefined,
   retentionPeriod: undefined,
   retentionType: undefined,
@@ -104,40 +108,49 @@ const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition |
     };
   });
 
+const removeReportsFields = () => ({
+  printItems: undefined,
+  showMessage: undefined,
+});
+
+const getScore = (score: ScoreReport, items: ActivityFormValues['items']) => ({
+  ...score,
+  ...removeReportsFields(),
+  conditionalLogic: score.conditionalLogic?.map((conditional) => ({
+    ...conditional,
+    ...removeReportsFields(),
+    conditions: getConditions(items, conditional.conditions),
+  })),
+});
+
+const getSection = (section: SectionReport, items: ActivityFormValues['items']) => ({
+  ...section,
+  ...removeReportsFields(),
+  ...(!!Object.keys(section.conditionalLogic || {}).length && {
+    conditionalLogic: {
+      ...section.conditionalLogic,
+      conditions: getConditions(items, section?.conditionalLogic?.conditions),
+    },
+  }),
+});
+
 export const getScoresAndReports = (activity: ActivityFormValues) => {
   const { items, scoresAndReports } = activity;
   if (!scoresAndReports) return;
 
-  const fieldsToRemove = {
-    printItems: undefined,
-    showMessage: undefined,
-  };
+  const { reports: initialReports } = scoresAndReports;
 
-  const { sections: initialSections, scores: initialScores } = scoresAndReports;
-  const scores = initialScores.map((score) => ({
-    ...score,
-    ...fieldsToRemove,
-    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
-      ...conditional,
-      ...fieldsToRemove,
-      conditions: getConditions(items, conditional.conditions),
-    })),
-  }));
-  const sections = initialSections.map((section) => ({
-    ...section,
-    ...fieldsToRemove,
-    ...(!!Object.keys(section.conditionalLogic || {}).length && {
-      conditionalLogic: {
-        ...section.conditionalLogic,
-        conditions: getConditions(items, section?.conditionalLogic?.conditions),
-      },
-    }),
-  }));
+  const reports = initialReports?.map((report) => {
+    if (report.type === ScoreReportType.Section) {
+      return getSection(report as SectionReport, items);
+    }
+
+    return getScore(report as ScoreReport, items);
+  });
 
   return {
     ...scoresAndReports,
-    sections,
-    scores,
+    reports,
   };
 };
 

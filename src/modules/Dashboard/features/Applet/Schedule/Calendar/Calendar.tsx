@@ -47,7 +47,7 @@ export const Calendar = () => {
   const [defaultStartDate, setDefaultStartDate] = useState(new Date());
   const [editedEvent, setEditedEvent] = useState<CalendarEvent | null>(null);
 
-  const { createNextYearEvents, setCalendarCurrentYear } = calendarEvents.actions;
+  const { setCalendarCurrentYear } = calendarEvents.actions;
   const { eventsToShow = null, allDayEventsSortedByDays = null } =
     calendarEvents.useVisibleEventsData() || {};
 
@@ -120,15 +120,18 @@ export const Calendar = () => {
     const chosenYear = getYear(date);
     if (chosenYear === currentCalendarYear) return;
     setCurrentCalendarYear(chosenYear);
-
-    if (chosenYear !== currentYear) {
-      dispatch(createNextYearEvents({ yearToCreateEvents: chosenYear }));
-    }
   }, [date]);
 
   useEffect(() => {
     dispatch(setCalendarCurrentYear({ calendarCurrentYear: currentCalendarYear }));
   }, [currentCalendarYear]);
+
+  useEffect(
+    () => () => {
+      dispatch(calendarEvents.actions.resetCalendarEvents());
+    },
+    [],
+  );
 
   return (
     <>

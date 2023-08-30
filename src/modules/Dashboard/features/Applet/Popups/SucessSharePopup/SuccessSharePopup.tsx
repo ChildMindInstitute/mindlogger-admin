@@ -29,7 +29,7 @@ export const SuccessSharePopup = ({
         title={applet.displayName}
         text={getDictionaryText(applet.description || '')}
         keywords={keywords}
-        activitiesQuantity={applet.activityCount}
+        activitiesQuantity={applet.activityCount ?? applet.activities?.length ?? 0}
         appletLink={libraryUrl}
         img={applet.image || ''}
       />

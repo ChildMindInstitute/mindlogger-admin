@@ -24,5 +24,5 @@ export const StyledObserverTarget = styled(Box)`
   display: block;
   opacity: 0;
   width: 1px;
-  height: 1px;
+  height: 15px;
 `;

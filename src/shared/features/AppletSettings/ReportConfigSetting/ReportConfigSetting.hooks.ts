@@ -93,6 +93,7 @@ export const useDefaultValues = (appletData?: Partial<SingleApplet>) => {
     reportIncludedItemName,
     reportIncludedActivityName,
     reportEmailBody: reportEmailBody || t('reportEmailBody'),
+    itemValue: !!reportIncludedItemName,
   };
 
   return defaultValues;

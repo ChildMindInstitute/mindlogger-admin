@@ -20,6 +20,14 @@ export const useDecryptedIdentifiers = () => {
 
   return (identifiers: IdentifierResponse[]): Identifier[] =>
     identifiers.map(({ identifier, userPublicKey }) => {
+      // workaround for decrypted identifier data
+      if (!userPublicKey) {
+        return {
+          decryptedValue: identifier,
+          encryptedValue: identifier,
+        };
+      }
+
       try {
         const key = getAESKey(privateKey, JSON.parse(userPublicKey), prime, base);
 

@@ -13,7 +13,7 @@ export const StyledReport = styled(Box)`
   width: 100%;
   height: 100%;
   overflow: auto;
-  min-width: 86rem;
+  min-width: 90rem;
 `;
 
 export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`

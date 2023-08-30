@@ -28,6 +28,7 @@ export const Table = ({
   handleChangePage,
   count,
   rowsPerPage = DEFAULT_ROWS_PER_PAGE,
+  'data-testid': dataTestid,
 }: TableProps) => {
   const tableHeader = (
     <StyledTableCellContent uiType={uiType}>
@@ -48,7 +49,7 @@ export const Table = ({
     <>
       <StyledTableContainer className={className} maxHeight={maxHeight} uiType={uiType}>
         {!!rows?.length && (
-          <MuiTable stickyHeader>
+          <MuiTable stickyHeader data-testid={dataTestid}>
             <TableHead
               headCells={columns}
               order={order}

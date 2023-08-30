@@ -35,3 +35,11 @@ export const LANGUAGES: { en: string; fr: string } = {
   en: 'en_US',
   fr: 'fr_FR',
 };
+
+export enum ApiResponseCodes {
+  SuccessfulResponse = 200,
+  BadRequest = 400,
+  Unauthorized = 401,
+  Forbidden = 403,
+  UnprocessableEntity = 422,
+}

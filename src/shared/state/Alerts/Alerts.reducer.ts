@@ -6,6 +6,15 @@ import { getPendingData, getRejectedData } from 'shared/utils';
 import { AlertsSchema } from './Alerts.schema';
 import { state as initialState } from './Alerts.state';
 import { getAlerts } from './Alerts.thunk';
+import { addAlerts, updateAlertWatchedState } from './Alerts.utils';
+
+export const reducers = {
+  resetAlerts: (state: AlertsSchema): void => {
+    state.alerts = initialState.alerts;
+  },
+  addAlerts,
+  updateAlertWatchedState,
+};
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AlertsSchema>): void => {
   getPendingData({ builder, thunk: getAlerts, key: 'alerts' });

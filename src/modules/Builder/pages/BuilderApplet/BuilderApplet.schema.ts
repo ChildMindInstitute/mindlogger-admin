@@ -19,6 +19,7 @@ import {
   MIN_LENGTH_OF_TEST,
   MIN_NUMBER_OF_TRIALS,
   MIN_SLOPE,
+  ScoreReportType,
 } from 'shared/consts';
 import {
   AppletFormValues,
@@ -27,7 +28,7 @@ import {
   RoundTypeEnum,
   TouchItemNames,
 } from 'modules/Builder/types';
-import { Condition, Config, Item } from 'shared/state';
+import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
 import {
   ItemConfigurationSettings,
   SLIDER_LABEL_MAX_LENGTH,
@@ -217,7 +218,8 @@ export const ItemSchema = () =>
         .test(
           ItemTestFunctions.UniqueItemName,
           t('validationMessages.unique', { field: t('itemName') }) as string,
-          (itemName, context) => testFunctionForUniqueness('items', itemName ?? '', context),
+          (itemName, context) =>
+            testFunctionForUniqueness(itemName ?? '', get(context, 'from.1.value.items')),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
       question: yup
@@ -447,7 +449,7 @@ export const SubscaleSchema = () =>
           'unique-subscale-name',
           t('validationMessages.unique', { field: t('subscaleName') }) as string,
           (subscaleName, context) =>
-            testFunctionForUniqueness('subscales', subscaleName ?? '', context),
+            testFunctionForUniqueness(subscaleName ?? '', get(context, 'from.1.value.subscales')),
         ),
       items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
       scoring: yup.string(),
@@ -532,7 +534,10 @@ export const ScoreConditionalLogic = () =>
         'unique-score-conditional-name',
         t('validationMessages.unique', { field: t('scoreConditionName') }) as string,
         (scoreConditionName, context) =>
-          testFunctionForUniqueness('conditionalLogic', scoreConditionName ?? '', context),
+          testFunctionForUniqueness(
+            scoreConditionName ?? '',
+            get(context, 'from.1.value.conditionalLogic'),
+          ),
       ),
     conditions: yup
       .array()
@@ -543,22 +548,24 @@ export const ScoreConditionalLogic = () =>
     match: yup.string(),
   });
 
-export const ScoreSchema = () =>
-  yup.object({
-    id: yup.string().required(),
-    name: yup
-      .string()
-      .required(getIsRequiredValidateMessage('scoreName'))
-      .test(
-        'unique-score-name',
-        t('validationMessages.unique', { field: t('scoreName') }) as string,
-        (scoreName, context) => testFunctionForUniqueness('scores', scoreName ?? '', context),
-      ),
-    calculationType: yup.string().required(),
-    ...getReportCommonFields(true),
-    itemsScore: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
-    conditionalLogic: yup.array().of(ScoreConditionalLogic()).nullable(),
-  });
+export const ScoreSchema = () => ({
+  name: yup
+    .string()
+    .required(getIsRequiredValidateMessage('scoreName'))
+    .test(
+      'unique-score-name',
+      t('validationMessages.unique', { field: t('scoreName') }) as string,
+      (scoreName, context) => {
+        const reports = get(context, 'from.1.value.reports');
+        const scores = reports?.filter(
+          ({ type }: ScoreOrSection) => type === ScoreReportType.Score,
+        );
+
+        return testFunctionForUniqueness(scoreName ?? '', scores);
+      },
+    ),
+  conditionalLogic: yup.array().of(ScoreConditionalLogic()).nullable(),
+});
 
 export const SectionConditionalLogic = () =>
   yup.object({
@@ -576,21 +583,88 @@ export const TotalScoresTableDataSchema = yup
   .of(TotalScoreTableDataItemSchema())
   .nullable();
 
-export const SectionSchema = () =>
+export const SectionSchema = () => ({
+  name: yup
+    .string()
+    .required(getIsRequiredValidateMessage('sectionName'))
+    .matches(alphanumericAndHyphenRegexp, {
+      message: t('validationMessages.alphanumericAndHyphen', { field: t('sectionName') }),
+    })
+    .test(
+      'unique-section-name',
+      t('validationMessages.unique', { field: t('sectionName') }) as string,
+      (sectionName, context) => {
+        const reports = get(context, 'from.1.value.reports');
+        const sections = reports?.filter(
+          ({ type }: ScoreOrSection) => type === ScoreReportType.Section,
+        );
+
+        return testFunctionForUniqueness(sectionName ?? '', sections);
+      },
+    ),
+  conditionalLogic: SectionConditionalLogic().nullable(),
+});
+
+export const ScoreOrSectionSchema = () =>
   yup.object({
-    name: yup
+    type: yup.string(),
+    name: yup.string().when('type', {
+      is: ScoreReportType.Section,
+      then: SectionSchema().name,
+      otherwise: ScoreSchema().name,
+    }),
+    conditionalLogic: yup.mixed().when('type', {
+      is: ScoreReportType.Section,
+      then: SectionSchema().conditionalLogic,
+      otherwise: ScoreSchema().conditionalLogic,
+    }),
+    calculationType: yup.string().when('type', {
+      is: ScoreReportType.Score,
+      then: yup.string().required(),
+      otherwise: yup.string().nullable(),
+    }),
+    id: yup.string().when('type', {
+      is: ScoreReportType.Score,
+      then: yup.string().required(),
+      otherwise: yup.string().nullable(),
+    }),
+    itemsScore: yup.array().when('type', {
+      is: ScoreReportType.Score,
+      then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
+      otherwise: yup.array().nullable(),
+    }),
+    showMessage: yup.boolean(),
+    printItems: yup.boolean().when('showMessage', (showMessage, schema) => {
+      if (!showMessage)
+        return schema.when('type', (type: ScoreReportType, schema: yup.BooleanSchema) =>
+          schema.test(
+            'required-report-common-fields',
+            <string>t('validationMessages.mustShowMessageOrItems'),
+            (printItemsName: boolean | undefined, context: yup.TestContext) =>
+              testIsReportCommonFieldsRequired(
+                type === ScoreReportType.Score,
+                !!printItemsName,
+                context,
+              ),
+          ),
+        );
+
+      return schema;
+    }),
+    message: yup
       .string()
-      .required(getIsRequiredValidateMessage('sectionName'))
-      .matches(alphanumericAndHyphenRegexp, {
-        message: t('validationMessages.alphanumericAndHyphen', { field: t('sectionName') }),
+      .when('showMessage', {
+        is: true,
+        then: yup.string().required(getIsRequiredValidateMessage('message')),
       })
-      .test(
-        'unique-section-name',
-        t('validationMessages.unique', { field: t('sectionName') }) as string,
-        (sectionName, context) => testFunctionForUniqueness('sections', sectionName ?? '', context),
-      ),
-    ...getReportCommonFields(),
-    conditionalLogic: SectionConditionalLogic().nullable(),
+      .nullable(),
+    itemsPrint: yup.array().when('printItems', {
+      is: true,
+      then: yup
+        .array()
+        .min(1, <string>t('validationMessages.atLeastOneItem'))
+        .nullable(),
+    }),
   });
 
 export const ActivitySchema = () =>
@@ -602,7 +676,7 @@ export const ActivitySchema = () =>
         'unique-activity-name',
         t('validationMessages.unique', { field: t('activityName') }) as string,
         (activityName, context) =>
-          testFunctionForUniqueness('activities', activityName ?? '', context),
+          testFunctionForUniqueness(activityName ?? '', get(context, 'from.1.value.activities')),
       ),
     description: yup.string(),
     image: yup.string(),
@@ -625,8 +699,7 @@ export const ActivitySchema = () =>
       .object({
         generateReport: yup.boolean(),
         showScoreSummary: yup.boolean(),
-        scores: yup.array().of(ScoreSchema()),
-        sections: yup.array().of(SectionSchema()),
+        reports: yup.array().of(ScoreOrSectionSchema()),
       })
       .nullable(),
   });
@@ -649,7 +722,10 @@ export const ActivityFlowSchema = () =>
           'unique-activity-flow-name',
           t('validationMessages.unique', { field: t('activityFlowName') }) as string,
           (activityFlowName, context) =>
-            testFunctionForUniqueness('activityFlows', activityFlowName ?? '', context),
+            testFunctionForUniqueness(
+              activityFlowName ?? '',
+              get(context, 'from.1.value.activityFlows'),
+            ),
         ),
       description: yup
         .string()

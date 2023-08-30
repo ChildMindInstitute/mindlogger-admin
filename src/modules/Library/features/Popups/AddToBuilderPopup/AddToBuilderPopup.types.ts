@@ -54,8 +54,9 @@ export type GetStep = {
   setStep: Dispatch<SetStateAction<AddToBuilderSteps>>;
   setAddToBuilderPopupVisible: Dispatch<SetStateAction<boolean>>;
   handleNext: (nextStep?: AddToBuilderSteps) => Promise<void>;
-  handleAddToBuilder: () => void;
+  handleAddToNewApplet: () => void;
   handleAddToExistingApplet: () => void;
+  errorCallback: () => void;
 };
 
 export type TableController = {

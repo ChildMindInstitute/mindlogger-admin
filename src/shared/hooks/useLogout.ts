@@ -1,17 +1,28 @@
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 import { page } from 'resources';
+import { ApiResponseCodes } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { auth, workspaces } from 'redux/modules';
+import { alerts, auth, workspaces } from 'redux/modules';
+import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth';
 
 export const useLogout = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   //TODO: rewrite to reset the global state data besides the data needed in lock form
-  return () => {
-    dispatch(workspaces.actions.setCurrentWorkspace(null));
-    dispatch(auth.actions.resetAuthorization());
-    navigate(page.login);
+  return async () => {
+    try {
+      await deleteAccessTokenApi();
+    } catch (e) {
+      if ((e as AxiosError).response?.status === ApiResponseCodes.Unauthorized)
+        await deleteRefreshTokenApi();
+    } finally {
+      dispatch(workspaces.actions.setCurrentWorkspace(null));
+      dispatch(alerts.actions.resetAlerts());
+      dispatch(auth.actions.resetAuthorization());
+      navigate(page.login);
+    }
   };
 };

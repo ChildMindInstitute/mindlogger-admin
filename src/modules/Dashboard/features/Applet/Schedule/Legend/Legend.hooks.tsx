@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -18,12 +18,14 @@ export const useExpandedLists = (
   clearAllScheduledEventsAction: () => void,
   onCreateActivitySchedule: () => void,
 ) => {
-  const [scheduledVisibility, setScheduledVisibility] = useState(true);
-  const [availableVisibility, setAvailableVisibility] = useState(true);
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletId: id } = useParams();
   const dispatch = useAppDispatch();
+  const scheduledVisibility = calendarEvents.useScheduledVisibilityData();
+  const availableVisibility = calendarEvents.useAvailableVisibilityData();
+  const { setAvailableVisibility, setScheduledVisibility, createCalendarEvents } =
+    calendarEvents.actions;
 
   if (!legendEvents) return;
 
@@ -60,19 +62,13 @@ export const useExpandedLists = (
   const noDeactivatedEvents = deactivatedEvents.length === 0;
 
   const handleAvailableVisibilityChange = () => {
-    setAvailableVisibility((isVisible) => {
-      dispatch(calendarEvents.actions.createCalendarEvents({ alwaysAvailableHidden: isVisible }));
-
-      return !isVisible;
-    });
+    dispatch(setAvailableVisibility(!availableVisibility));
+    dispatch(createCalendarEvents(null));
   };
 
   const handleScheduledVisibilityChange = () => {
-    setScheduledVisibility((isVisible) => {
-      dispatch(calendarEvents.actions.createCalendarEvents({ scheduledHidden: isVisible }));
-
-      return !isVisible;
-    });
+    dispatch(setScheduledVisibility(!scheduledVisibility));
+    dispatch(createCalendarEvents(null));
   };
 
   return [

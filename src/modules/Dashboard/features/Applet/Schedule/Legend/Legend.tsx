@@ -35,17 +35,24 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const { respondentId } = useParams();
   const navigate = useNavigate();
   const { result: respondentsData } = users.useAllRespondentsData() || {};
-  const respondentsItems = respondentsData?.map(({ id, details }) => {
-    const { respondentSecretId, hasIndividualSchedule, respondentNickname } = details?.[0] || {};
+  const respondentsItems = respondentsData?.reduce(
+    (acc: SelectedRespondent[], { id, details, isAnonymousRespondent }) => {
+      const { respondentSecretId, hasIndividualSchedule, respondentNickname } = details?.[0] || {};
 
-    return {
-      icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
-      id,
-      secretId: respondentSecretId,
-      nickname: respondentNickname,
-      hasIndividualSchedule,
-    };
-  });
+      if (!isAnonymousRespondent) {
+        acc.push({
+          icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
+          id,
+          secretId: respondentSecretId,
+          nickname: respondentNickname,
+          hasIndividualSchedule,
+        });
+      }
+
+      return acc;
+    },
+    [],
+  );
 
   const [schedule, setSchedule] = useState<string | null>(null);
   const [searchPopupVisible, setSearchPopupVisible] = useState(false);
@@ -141,7 +148,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     if (!respondentId || selectedRespondent) return;
 
     const currentRespondent =
-      respondentsItems?.find((respondent) => respondent.id === respondentId) || null;
+      respondentsItems?.find((respondent) => respondent?.id === respondentId) || null;
     setSelectedRespondent(currentRespondent);
   }, [respondentId, respondentsItems, selectedRespondent]);
 

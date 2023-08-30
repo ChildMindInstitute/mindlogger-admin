@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { workspaces } from 'redux/modules';
 import { EmptyState } from 'shared/components';
 import { getErrorMessage } from 'shared/utils';
+import { ApiResponseCodes } from 'shared/api';
 
 export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
   const { t } = useTranslation('app');
@@ -19,7 +20,10 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
         setIsLoading(true);
         const { payload } = await asyncFunc();
 
-        if (payload?.response?.status === 403 || payload?.status === 403) {
+        if (
+          payload?.response?.status === ApiResponseCodes.Forbidden ||
+          payload?.status === ApiResponseCodes.Forbidden
+        ) {
           return setIsForbidden(true);
         }
         setIsForbidden(false);

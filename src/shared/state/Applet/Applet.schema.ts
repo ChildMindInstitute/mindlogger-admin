@@ -11,6 +11,7 @@ import {
   CalculationType,
   PerfTaskType,
   GyroscopeOrTouch,
+  ScoreReportType,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 import {
@@ -461,11 +462,12 @@ export interface SliderItem extends Item {
   responseValues: SliderItemResponseValues;
 }
 
+export type ScoreOrSection = ScoreReport | SectionReport;
+
 export type ScoresAndReports = {
   generateReport: boolean;
   showScoreSummary: boolean;
-  scores: ScoreReport[];
-  sections: SectionReport[];
+  reports: ScoreOrSection[];
 };
 
 export type SubscaleSetting<T = ActivitySettingsSubscaleItem> = {
@@ -532,6 +534,7 @@ export type ScoreConditionalLogic = {
 export type ScoreReport = {
   id: string;
   name: string;
+  type: ScoreReportType.Score;
   calculationType: CalculationType;
   showMessage: boolean;
   printItems: boolean;
@@ -555,6 +558,7 @@ export type SectionConditionalLogic = {
 export type SectionReport = {
   id?: string;
   name: string;
+  type: ScoreReportType.Section;
   showMessage: boolean;
   printItems: boolean;
   itemsPrint?: string[];
@@ -606,4 +610,15 @@ export type SingleApplet = {
 
 export type AppletSchema = {
   applet: BaseSchema<{ result: SingleApplet } | null>;
+};
+
+export type UpdateActivityData = {
+  activityId?: string;
+  reportIncludedItemName?: string;
+};
+
+export type UpdateActivityFlowData = {
+  flowId?: string;
+  reportIncludedItemName?: string;
+  reportIncludedActivityName?: string;
 };
