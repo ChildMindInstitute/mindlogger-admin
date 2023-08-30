@@ -52,7 +52,7 @@ export const ShareApplet = ({
 
   const { handleSubmit, control, watch, setValue } = useForm<ShareAppletData>({
     resolver: yupResolver(ShareAppletSchema()),
-    defaultValues: { ...shareAppletDefaultValues, appletName: applet?.displayName },
+    defaultValues: shareAppletDefaultValues,
   });
 
   const checked = watch('checked');
@@ -75,7 +75,7 @@ export const ShareApplet = ({
         const libraryUrlReceived = libraryUrlResult?.data?.result?.url;
         setLibraryUrl(libraryUrlReceived);
         setIsLoading(false);
-        onAppletShared?.({ keywords, libraryUrl: libraryUrlReceived });
+        onAppletShared?.({ keywords, libraryUrl: libraryUrlReceived, appletName });
         setAppletShared(true);
       } catch (error) {
         console.warn(error);
@@ -126,6 +126,11 @@ export const ShareApplet = ({
       handleSubmit(handleShareApplet)();
     }
   }, [isSubmitted, appletShared]);
+
+  useEffect(() => {
+    if (!applet) return;
+    setValue('appletName', applet.displayName);
+  }, [applet]);
 
   return appletShared && showSuccess && applet ? (
     <SuccessShared

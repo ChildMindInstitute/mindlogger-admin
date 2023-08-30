@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { applet } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
-import { ShareApplet } from 'modules/Dashboard/features/Applet';
+import { ShareApplet, OnAppletShared } from 'modules/Dashboard/features/Applet';
 import { SuccessSharePopup } from 'modules/Dashboard/features/Applet/Popups';
 
 import { StyledButton, StyledContainer } from './ShareAppletSetting.styles';
@@ -18,25 +18,26 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [keywords, setKeywords] = useState<string[]>([]);
   const [libraryUrl, setLibraryUrl] = useState('');
+  const [appletName, setAppletName] = useState('');
 
-  const handleSharedApplet = ({
-    keywords,
-    libraryUrl,
-  }: {
-    keywords: string[];
-    libraryUrl: string;
-  }) => {
+  const handleAppletShared = ({ keywords, libraryUrl, appletName }: OnAppletShared) => {
     setKeywords(keywords);
     setLibraryUrl(libraryUrl);
     setSharePopupVisible(true);
+    setAppletName(appletName);
   };
+
+  useEffect(() => {
+    if (!appletData) return;
+    setAppletName(appletData.displayName);
+  }, [appletData]);
 
   return (
     <>
       <StyledContainer>
         <ShareApplet
           applet={appletData}
-          onAppletShared={handleSharedApplet}
+          onAppletShared={handleAppletShared}
           onDisableSubmit={(isDisabled) => setIsDisabled(isDisabled)}
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
@@ -44,7 +45,7 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
         />
         {appletData && (
           <SuccessSharePopup
-            applet={appletData}
+            applet={{ ...appletData, displayName: appletName }}
             keywords={keywords}
             libraryUrl={libraryUrl}
             sharePopupVisible={sharePopupVisible}
