@@ -207,9 +207,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     return {
       ...(responseValues as SliderItemResponseValues),
       options: undefined,
-      alerts: hasAlerts
-        ? alerts?.map(({ value, alert }) => ({ value: +value!, alert }))
-        : undefined,
+      alerts: hasAlerts ? alerts : undefined,
     };
   }
 
