@@ -9,6 +9,8 @@ import {
   UserActionType,
 } from 'shared/types';
 
+import { parseDate } from './parseDate';
+
 const getTimeByCondition = (time: string) => (condition: boolean) => condition ? time : '';
 
 const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
@@ -87,10 +89,10 @@ export const getJourneyCSVObject = <T>({
   return {
     id: event.id,
     activity_scheduled_time: scheduledDatetime
-      ? `${scheduledDatetime}`
+      ? parseDate(scheduledDatetime)
       : ActivityStatus.NotScheduled,
-    activity_start_time: `${startDatetime}`,
-    activity_end_time: `${endDatetime}`,
+    activity_start_time: parseDate(startDatetime),
+    activity_end_time: parseDate(endDatetime),
     press_next_time: getTime(event.type === UserActionType.Next),
     press_back_time: getTime(event.type === UserActionType.Prev),
     press_undo_time: getTime(event.type === UserActionType.Undo),

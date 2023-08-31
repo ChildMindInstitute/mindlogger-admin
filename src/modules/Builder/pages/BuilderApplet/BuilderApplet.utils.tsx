@@ -501,7 +501,7 @@ const getAlerts = (item: Item) => {
 
     return alerts.map(({ value, minValue, maxValue, alert }) => ({
       key: uuidv4(),
-      ...(!isContinuous && { value: `${value}` }),
+      ...(!isContinuous && { value }),
       ...(isContinuous && { minValue, maxValue }),
       alert,
     }));

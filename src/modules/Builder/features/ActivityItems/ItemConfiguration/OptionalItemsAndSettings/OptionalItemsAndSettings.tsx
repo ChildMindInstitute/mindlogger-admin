@@ -63,7 +63,11 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       setShowColorPalette(visibility);
       setValue(`${name}.responseValues.paletteName`, undefined);
     };
-    const { append: appendAlert, remove: removeAlert } = useFieldArray({
+    const {
+      append: appendAlert,
+      remove: removeAlert,
+      fields: fieldAlerts,
+    } = useFieldArray({
       control,
       name: `${name}.alerts`,
     });
@@ -242,7 +246,12 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           <TextInputOption name={name} onRemove={handleRemoveTextInputOption} />
         )}
         {hasAlerts && (
-          <Alerts appendAlert={handleAddAlert} removeAlert={handleRemoveAlert} name={name} />
+          <Alerts
+            alerts={fieldAlerts}
+            appendAlert={handleAddAlert}
+            removeAlert={handleRemoveAlert}
+            name={name}
+          />
         )}
         {settingsDrawerVisible && (
           <ItemSettingsDrawer
