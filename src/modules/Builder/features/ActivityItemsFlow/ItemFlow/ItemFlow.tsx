@@ -21,9 +21,14 @@ const Content = ({ items, name, conditionalError, onRemove }: ContentProps) => (
         index={index}
         onRemove={() => onRemove(index)}
         autoTrigger={!!conditionalError}
+        data-testid={`builder-activity-item-flow-condition-${index}`}
       />
     ))}
-    <SummaryRow name={name} error={conditionalError} />
+    <SummaryRow
+      name={name}
+      error={conditionalError}
+      data-testid="builder-activity-item-flow-summary"
+    />
   </StyledFlexColumn>
 );
 
@@ -68,7 +73,13 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
         onRemove: handleRemoveCondition,
         conditionalError,
       }}
-      headerContentProps={{ name: itemName, onAdd: handleAddCondition, onRemove }}
+      headerContentProps={{
+        name: itemName,
+        onAdd: handleAddCondition,
+        onRemove,
+        'data-testid': `builder-activity-item-flow-${index}`,
+      }}
+      data-testid={`builder-activity-item-flow-${index}`}
     />
   );
 };

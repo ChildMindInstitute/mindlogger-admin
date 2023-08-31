@@ -197,6 +197,7 @@ export const Activities = () => {
                       !isPerformanceTask ||
                       EditablePerformanceTasks.includes(activity.performanceTaskType || '');
                     const hasError = errors[`activities[${index}]`];
+                    const dataTestid = `builder-activities-activity-${index}`;
 
                     return (
                       <Fragment key={`activity-${activityKey}`}>
@@ -205,7 +206,7 @@ export const Activities = () => {
                             <Box
                               {...itemProvided.draggableProps}
                               ref={itemProvided.innerRef}
-                              data-testid={`builder-activities-activity-${index}`}
+                              data-testid={dataTestid}
                             >
                               <Item
                                 {...activity}
@@ -228,19 +229,19 @@ export const Activities = () => {
                                     onRemove: () => setActivityToDelete(activityKey),
                                     onVisibilityChange: () => handleActivityVisibilityChange(index),
                                     isEditVisible,
-                                    'data-testid': `builder-activities-activity-${index}`,
+                                    'data-testid': dataTestid,
                                   })
                                 }
                                 hasError={hasError}
                                 count={activity.items?.length}
-                                data-testid={`builder-activities-activity-${index}`}
+                                data-testid={dataTestid}
                               />
                               <InsertItem
                                 isVisible={
                                   index >= 0 && index < activities.length - 1 && !isDragging
                                 }
                                 onInsert={() => handleActivityAdd({ index: index + 1 })}
-                                data-testid={`builder-activities-insert-activity-${index}`}
+                                data-testid={`${dataTestid}-insert`}
                               />
                             </Box>
                           )}

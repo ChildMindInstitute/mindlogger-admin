@@ -10,7 +10,7 @@ import {
 import { ScoreSummaryRowProps } from './ScoreSummaryRow.types';
 import { getMatchOptions } from './ScoreSummaryRow.utils';
 
-export const ScoreSummaryRow = ({ name }: ScoreSummaryRowProps) => {
+export const ScoreSummaryRow = ({ name, 'data-testid': dataTestid }: ScoreSummaryRowProps) => {
   const { t } = useTranslation('app');
   const { control } = useFormContext();
 
@@ -22,6 +22,7 @@ export const ScoreSummaryRow = ({ name }: ScoreSummaryRowProps) => {
         name={`${name}.match`}
         options={getMatchOptions()}
         placeholder={t('select')}
+        data-testid={`${dataTestid}-match`}
       />
       <StyledLabelBoldLarge>{t('scoreSummaryDescription')}</StyledLabelBoldLarge>
     </StyledSummaryRow>

@@ -8,6 +8,7 @@ const { t } = i18n;
 
 export const getSettings = (activityFlow: ActivityFlowFormValues) => {
   const isNewActivityFlow = !activityFlow?.id;
+  const dataTestid = 'builder-activity-flows-settings-report-config';
 
   return [
     {
@@ -16,11 +17,12 @@ export const getSettings = (activityFlow: ActivityFlowFormValues) => {
         {
           name: 'reportConfiguration',
           label: t('reportConfiguration'),
-          component: <ReportConfigSetting />,
+          component: <ReportConfigSetting data-testid={`${dataTestid}-form`} />,
           icon: <Svg id="report-configuration" />,
           param: SettingParam.ReportConfiguration,
           disabled: isNewActivityFlow,
           tooltip: isNewActivityFlow ? 'saveAndPublishFirst' : undefined,
+          'data-testid': dataTestid,
         },
       ],
     },

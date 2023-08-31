@@ -10,7 +10,14 @@ import { ItemFormValues } from 'modules/Builder/types';
 import { ActionsProps } from './Actions.types';
 import { getActions } from './Actions.utils';
 
-export const Actions = ({ open, name, onAdd, onRemove, onToggle }: ActionsProps) => {
+export const Actions = ({
+  open,
+  name,
+  onAdd,
+  onRemove,
+  onToggle,
+  'data-testid': dataTestid,
+}: ActionsProps) => {
   const { t } = useTranslation('app');
   const { fieldName } = useCurrentActivity();
   const { watch } = useFormContext();
@@ -46,7 +53,7 @@ export const Actions = ({ open, name, onAdd, onRemove, onToggle }: ActionsProps)
         </StyledTitleMedium>
       )}
       <CommonActions
-        items={getActions({ onAdd: handleAdd, onRemove })}
+        items={getActions({ onAdd: handleAdd, onRemove, 'data-testid': dataTestid })}
         context={name}
         visibleByDefault={open}
         sxProps={{ width: 'unset' }}

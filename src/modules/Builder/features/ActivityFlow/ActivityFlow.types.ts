@@ -6,4 +6,5 @@ export type GetActivityFlowActions = {
   editActivityFlow: (id: string) => void;
   duplicateActivityFlow: (index: number) => void;
   toggleActivityFlowVisibility: (index: number) => void;
+  'data-testid'?: string;
 };

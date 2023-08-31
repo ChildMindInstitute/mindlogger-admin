@@ -22,4 +22,5 @@ export type GetFlowBuilderActions = {
   duplicateItem: (index: number) => void;
   removeItem: () => void;
   replaceItemActionActive: boolean;
+  'data-testid'?: string;
 };

@@ -21,7 +21,7 @@ export const getMenuItems = ({
   onAddFlowActivity,
   onUpdateFlowActivity,
 }: GetMenuItems) =>
-  activities.map((activity) => ({
+  activities.map((activity, key) => ({
     title: activity.name,
     action: () => {
       const activityKey = activity.id || activity.key || '';
@@ -32,6 +32,7 @@ export const getMenuItems = ({
           onUpdateFlowActivity(index, { key: uuidv4(), activityKey });
       onMenuClose();
     },
+    'data-testid': `builder-activity-flows-builder-add-activity-${key}`,
   }));
 
 export const getFlowBuilderActions = ({
@@ -40,19 +41,23 @@ export const getFlowBuilderActions = ({
   duplicateItem,
   removeItem,
   replaceItemActionActive,
+  'data-testid': dataTestid,
 }: GetFlowBuilderActions) => [
   {
     icon: <Svg id="replace" />,
     action: (item?: ItemType, event?: MouseEvent<HTMLElement>) =>
       event && replaceItem(event, index),
     active: replaceItemActionActive,
+    'data-testid': `${dataTestid}-replace`,
   },
   {
     icon: <Svg id="duplicate" />,
     action: () => duplicateItem(index),
+    'data-testid': `${dataTestid}-duplicate`,
   },
   {
     icon: <Svg id="trash" />,
     action: removeItem,
+    'data-testid': `${dataTestid}-remove`,
   },
 ];

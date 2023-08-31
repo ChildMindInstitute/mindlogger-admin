@@ -18,7 +18,12 @@ export const ActivityFlowHeader = ({
   return (
     <StyledHeader isSticky={isSticky}>
       {children}
-      <Button variant="outlined" startIcon={<Svg id="flow" />} onClick={() => onAddActivityFlow()}>
+      <Button
+        variant="outlined"
+        startIcon={<Svg id="flow" />}
+        onClick={() => onAddActivityFlow()}
+        data-testid="builder-activity-flows-add"
+      >
         {t('addActivityFlow')}
       </Button>
     </StyledHeader>

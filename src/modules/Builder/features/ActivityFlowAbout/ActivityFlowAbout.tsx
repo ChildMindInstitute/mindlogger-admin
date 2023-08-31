@@ -29,6 +29,7 @@ export const ActivityFlowAbout = () => {
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
 
+  const dataTestid = 'builder-activity-flows-about';
   const commonProps = {
     fullWidth: true,
     control,
@@ -47,6 +48,7 @@ export const ActivityFlowAbout = () => {
             name={`activityFlows.${activityFlowIndex}.name`}
             label={t('activityFlowName')}
             maxLength={MAX_NAME_LENGTH}
+            data-testid={`${dataTestid}-name`}
           />
         </Box>
         <Box sx={{ mb: theme.spacing(4.4) }}>
@@ -58,6 +60,7 @@ export const ActivityFlowAbout = () => {
             maxLength={MAX_DESCRIPTION_LENGTH}
             multiline
             rows={4}
+            data-testid={`${dataTestid}-description`}
           />
         </Box>
         <StyledTitleMedium
@@ -72,6 +75,7 @@ export const ActivityFlowAbout = () => {
             key={`activityFlows.${activityFlowIndex}.isSingleReport`}
             name={`activityFlows.${activityFlowIndex}.isSingleReport`}
             label={<StyledBodyLarge>{t('combineReportsIntoSingleFile')}</StyledBodyLarge>}
+            data-testid={`${dataTestid}-single-report`}
           />
           <CheckboxController
             control={control}
@@ -87,6 +91,7 @@ export const ActivityFlowAbout = () => {
                 </Tooltip>
               </StyledBodyLarge>
             }
+            data-testid={`${dataTestid}-hide-badge`}
           />
         </StyledFlexColumn>
       </StyledWrapper>

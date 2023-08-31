@@ -29,4 +29,5 @@ export type ConditionProps = {
   onStateChange: (e: SelectEvent) => void;
   onRemove: () => void;
   type: ConditionRowType;
+  'data-testid'?: string;
 };

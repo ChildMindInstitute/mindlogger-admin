@@ -25,6 +25,7 @@ export const ActivityItemsFlowHeader = ({
             startIcon={<Svg id="add" />}
             onClick={headerProps?.onAddItemFlow}
             disabled={isAddButtonDisabled}
+            data-testid="builder-activity-item-flow-add"
           >
             {t('addItemFlow')}
           </Button>

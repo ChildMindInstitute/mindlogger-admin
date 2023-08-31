@@ -13,7 +13,12 @@ import { ScoreSummaryRow } from './ScoreSummaryRow';
 import { StyledButton } from '../ScoresAndReports.styles';
 import { getDefaultScoreCondition } from './ConditionContent.utils';
 
-export const ConditionContent = ({ name, type, scoreId }: ConditionContentProps) => {
+export const ConditionContent = ({
+  name,
+  type,
+  scoreId,
+  'data-testid': dataTestid,
+}: ConditionContentProps) => {
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
@@ -42,6 +47,7 @@ export const ConditionContent = ({ name, type, scoreId }: ConditionContentProps)
           type={type}
           scoreId={type === ConditionRowType.Score ? scoreId : ''}
           onRemove={() => removeCondition(index)}
+          data-testid={`${dataTestid}-condition-${index}`}
         />
       ))}
       {!!error && (
@@ -53,10 +59,11 @@ export const ConditionContent = ({ name, type, scoreId }: ConditionContentProps)
         startIcon={<Svg id="add" width="20" height="20" />}
         onClick={handleAddCondition}
         sx={{ m: theme.spacing(1.2, 0, 1.2, -2.4) }}
+        data-testid={`${dataTestid}-add-condition`}
       >
         {t('addCondition')}
       </StyledButton>
-      <ScoreSummaryRow name={name} />
+      <ScoreSummaryRow name={name} data-testid={`${dataTestid}-summary-row`} />
     </>
   );
 };

@@ -6,4 +6,5 @@ export type SectionScoreHeaderProps = {
   title: string;
   open: boolean;
   dragHandleProps?: DraggableProvided['dragHandleProps'];
+  'data-testid'?: string;
 };

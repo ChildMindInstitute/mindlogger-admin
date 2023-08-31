@@ -10,6 +10,7 @@ import { ScoresAndReports } from './ScoresAndReports';
 
 export const getSettings = (activityFieldName?: string, activity?: ActivityFormValues) => {
   const isNewActivity = !activity?.id;
+  const dataTestid = 'builder-activity-settings';
 
   return [
     {
@@ -20,14 +21,16 @@ export const getSettings = (activityFieldName?: string, activity?: ActivityFormV
           icon: <Svg id="scores-and-reports" />,
           component: <ScoresAndReports />,
           param: SettingParam.ScoresAndReports,
+          'data-testid': `${dataTestid}-scores-and-reports`,
         },
         {
           label: 'reportConfiguration',
           icon: <Svg id="report-configuration" />,
-          component: <ReportConfigSetting />,
+          component: <ReportConfigSetting data-testid={`${dataTestid}-report-config-form`} />,
           param: SettingParam.ReportConfiguration,
           disabled: isNewActivity,
           tooltip: isNewActivity ? 'saveAndPublishFirst' : undefined,
+          'data-testid': `${dataTestid}-report-config`,
         },
       ],
     },
@@ -41,6 +44,7 @@ export const getSettings = (activityFieldName?: string, activity?: ActivityFormV
             <SubscalesConfiguration key={`subscales-configuration-${activityFieldName}`} />
           ),
           param: SettingParam.SubscalesConfiguration,
+          'data-testid': `${dataTestid}-subscales-config`,
         },
       ],
     },
