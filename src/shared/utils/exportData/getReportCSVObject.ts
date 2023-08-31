@@ -11,7 +11,7 @@ import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
 import { parseOptions } from './parseOptions';
 import { getRawScores } from './getRowScores';
-import { parseDate } from './parseDate';
+import { convertDateStampToMs } from './convertDateStampToMs';
 
 export const getReportCSVObject = <T>({
   item,
@@ -41,10 +41,10 @@ export const getReportCSVObject = <T>({
   return {
     id: item.id,
     activity_scheduled_time: scheduledDatetime
-      ? parseDate(scheduledDatetime)
+      ? convertDateStampToMs(scheduledDatetime)
       : ActivityStatus.NotScheduled,
-    activity_start_time: parseDate(startDatetime),
-    activity_end_time: parseDate(endDatetime),
+    activity_start_time: convertDateStampToMs(startDatetime),
+    activity_end_time: convertDateStampToMs(endDatetime),
     flag: getFlag(item),
     secret_user_id: respondentSecretId,
     userId: respondentId,
