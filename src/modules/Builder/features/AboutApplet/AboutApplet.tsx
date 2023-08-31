@@ -50,6 +50,7 @@ export const AboutApplet = () => {
           setValue={(val: string) => setValue('image', val)}
           getValue={() => watch('image')}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
+          data-testid="about-applet-image"
         />
       ),
     },
@@ -62,6 +63,7 @@ export const AboutApplet = () => {
           setValue={(val: string) => setValue('watermark', val)}
           getValue={() => watch('watermark')}
           description={t('uploadTransfluent', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
+          data-testid="about-applet-watermark"
         />
       ),
     },
@@ -78,6 +80,7 @@ export const AboutApplet = () => {
               maxLength={MAX_NAME_LENGTH}
               label={t('appletName')}
               restrictExceededValueLength
+              data-testid="about-applet-display-name"
             />
           </Box>
           <Box sx={{ mb: theme.spacing(4.4) }}>
@@ -89,6 +92,7 @@ export const AboutApplet = () => {
               label={t('appletDescription')}
               multiline
               rows={5}
+              data-testid="about-applet-description"
             />
           </Box>
           <StyledFlexTopCenter sx={{ position: 'relative' }}>
@@ -98,6 +102,7 @@ export const AboutApplet = () => {
               label={t('appletColorTheme')}
               options={colorThemeOptions}
               sx={{ margin: theme.spacing(0, 0, 3.6, 0) }}
+              data-testid="about-applet-theme"
             />
           </StyledFlexTopCenter>
         </StyledContainer>
@@ -111,7 +116,7 @@ export const AboutApplet = () => {
           </span>
         </Tooltip>
       </StyledTitle>
-      <EditorController control={control} name="about" />
+      <EditorController control={control} name="about" data-testid="about-applet-about" />
     </BuilderContainer>
   );
 };

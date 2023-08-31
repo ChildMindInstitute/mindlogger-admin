@@ -162,6 +162,8 @@ export const SelectionOption = ({
     hasColor,
   });
 
+  const dataTestid = `builder-activity-items-item-configuration-options-${index}`;
+
   return (
     <>
       <StyledItemOption
@@ -169,10 +171,14 @@ export const SelectionOption = ({
         onMouseLeave={optionOpen ? falseReturnFunc : () => setVisibleActions(false)}
         optionOpen={optionOpen}
         leftBorderColor={color?.hex}
+        data-testid={`${dataTestid}-option`}
       >
         <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
           <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-            <StyledClearedButton onClick={handleOptionToggle}>
+            <StyledClearedButton
+              onClick={handleOptionToggle}
+              data-testid={`${dataTestid}-collapse`}
+            >
               <Svg id={optionOpen ? 'navigate-up' : 'navigate-down'} />
             </StyledClearedButton>
             <StyledLabelBoldLarge sx={{ ml: theme.spacing(2) }}>{`${t('option')} ${
@@ -196,9 +202,17 @@ export const SelectionOption = ({
           </StyledFlexTopCenter>
           <StyledFlexTopCenter ref={actionsRef}>
             <Actions
-              items={getActions({ actions, isHidden, hasColorPicker, isColorSet, optionsLength })}
+              items={getActions({
+                actions,
+                isHidden,
+                hasColorPicker,
+                isColorSet,
+                optionsLength,
+                'data-testid': dataTestid,
+              })}
               context={option}
               visibleByDefault={optionOpen || visibleActions}
+              data-testid={dataTestid}
             />
           </StyledFlexTopCenter>
         </StyledFlexTopCenter>
@@ -215,6 +229,7 @@ export const SelectionOption = ({
                   height={5.6}
                   setValue={(val: string) => setValue(`${optionName}.image`, val || undefined)}
                   getValue={() => imageSrc || ''}
+                  data-testid={`${dataTestid}-image`}
                 />
               </StyledFlexTopCenter>
               <StyledTextInputWrapper hasScores={!!scoreString}>
@@ -223,6 +238,7 @@ export const SelectionOption = ({
                   name={`${optionName}.text`}
                   label={t('optionText')}
                   maxLength={SELECTION_OPTION_TEXT_MAX_LENGTH}
+                  data-testid={`${dataTestid}-text`}
                 />
               </StyledTextInputWrapper>
               {scoreString && (
@@ -234,6 +250,7 @@ export const SelectionOption = ({
                     label={t('score')}
                     minNumberValue={Number.MIN_SAFE_INTEGER}
                     onChange={handleScoreChange}
+                    data-testid={`${dataTestid}-score`}
                   />
                 </StyledScoreWrapper>
               )}
@@ -244,6 +261,7 @@ export const SelectionOption = ({
                   {...commonInputProps}
                   label={t('tooltip')}
                   name={`${optionName}.tooltip`}
+                  data-testid={`${dataTestid}-tooltip`}
                 />
               </StyledTooltipWrapper>
             )}
@@ -256,6 +274,7 @@ export const SelectionOption = ({
           handleColorChange={handleColorChange}
           handlePopoverClose={handlePopoverClose}
           name={`${optionName}.color`}
+          data-testid={`${dataTestid}-color`}
         />
       )}
       {indexToRemove !== -1 && (
@@ -264,6 +283,7 @@ export const SelectionOption = ({
           conditions={dependentConditions}
           onClose={handleRemoveModalClose}
           onSubmit={handleSubmitRemove}
+          data-testid={`${dataTestid}-remove-popup`}
         />
       )}
     </>

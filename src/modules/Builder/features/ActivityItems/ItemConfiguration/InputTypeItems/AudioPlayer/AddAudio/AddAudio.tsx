@@ -22,6 +22,7 @@ export const AddAudio = ({ onUploadAudio, onRecordAudio }: AddAudioProps) => {
 
   return (
     <ButtonWithMenu
+      data-testid="builder-activity-items-item-configuration-audio-player-add"
       variant="outlined"
       label={t('addAudio')}
       anchorEl={anchorEl}

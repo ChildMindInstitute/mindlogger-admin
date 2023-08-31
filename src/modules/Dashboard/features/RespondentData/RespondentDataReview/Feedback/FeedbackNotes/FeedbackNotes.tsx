@@ -14,6 +14,7 @@ import {
   editAnswerNoteApi,
   getAnswersNotesApi,
 } from 'api';
+import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback';
 
 import { FeedbackNote } from './FeedbackNote';
 import { NOTE_ROWS_COUNT } from './FeedbackNotes.const';
@@ -29,8 +30,7 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isFormSticky = useHeaderSticky(containerRef);
 
-  const methods = useFormContext();
-  const { control, getValues, setValue } = methods;
+  const { control, setValue, handleSubmit } = useFormContext<FeedbackForm>();
 
   const { execute: getAnswersNotes } = useAsync(
     getAnswersNotesApi,
@@ -64,10 +64,9 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
     appletId && answerId && deleteAnswerNote({ appletId, answerId, activityId, noteId });
   };
 
-  const addNewNote = () => {
-    appletId &&
-      answerId &&
-      createAnswerNote({ appletId, answerId, activityId, note: getValues('newNote') });
+  const addNewNote = ({ newNote }: FeedbackForm) => {
+    if (!newNote.trim()) return;
+    appletId && answerId && createAnswerNote({ appletId, answerId, activityId, note: newNote });
     setValue('newNote', '');
   };
 
@@ -79,7 +78,7 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
 
   return (
     <StyledContainer ref={containerRef}>
-      <StyledForm isSticky={isFormSticky}>
+      <StyledForm isSticky={isFormSticky} onSubmit={handleSubmit(addNewNote)} noValidate>
         <InputController
           fullWidth
           name="newNote"
@@ -90,7 +89,7 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
           rows={NOTE_ROWS_COUNT}
         />
         <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', m: theme.spacing(0.8, 0, 0) }}>
-          <Button variant="contained" onClick={addNewNote}>
+          <Button variant="contained" type="submit">
             {t('save')}
           </Button>
         </StyledFlexTopCenter>

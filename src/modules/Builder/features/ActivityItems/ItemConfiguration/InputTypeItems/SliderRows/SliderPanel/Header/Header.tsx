@@ -42,8 +42,10 @@ export const Header = ({
     watch(`${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`) || {};
   const isActionsVisible = isMultiple && index !== 0;
 
+  const dataTestid = 'builder-activity-items-item-configuration-slider';
+
   const commonActionsProps = {
-    items: getActions({ onRemove: () => onTrashClick?.() }),
+    items: getActions({ onRemove: () => onTrashClick?.(), 'data-testid': dataTestid }),
     context: name,
     sxProps: { width: 'unset', minWidth: '4.8rem', justifyContent: 'flex-end' },
     visibleByDefault: isExpanded,
@@ -52,7 +54,11 @@ export const Header = ({
   if (isExpanded) {
     return (
       <StyledSliderPanelHeader isExpanded>
-        <StyledClearedButton onClick={onArrowClick} sx={commonButtonStyles}>
+        <StyledClearedButton
+          onClick={onArrowClick}
+          sx={commonButtonStyles}
+          data-testid={`${dataTestid}-collapse`}
+        >
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
         </StyledClearedButton>
         <StyledLabelBoldLarge>{label}</StyledLabelBoldLarge>
@@ -68,7 +74,11 @@ export const Header = ({
 
   return (
     <StyledSliderPanelHeader>
-      <StyledClearedButton onClick={onArrowClick} sx={commonButtonStyles}>
+      <StyledClearedButton
+        onClick={onArrowClick}
+        sx={commonButtonStyles}
+        data-testid={`${dataTestid}-collapse`}
+      >
         <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
       </StyledClearedButton>
       <StyledLabelBoldLarge>{label}</StyledLabelBoldLarge>

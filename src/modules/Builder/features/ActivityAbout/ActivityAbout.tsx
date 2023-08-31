@@ -27,7 +27,10 @@ import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/ho
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
 import { itemsForReviewableActivity, commonUploaderProps } from './ActivityAbout.const';
-import { useCheckIfItemsHaveVariables } from './ActivityAbout.hooks';
+import {
+  useCheckIfItemsHaveRequiredItems,
+  useCheckIfItemsHaveVariables,
+} from './ActivityAbout.hooks';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
@@ -38,6 +41,7 @@ export const ActivityAbout = () => {
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
   const hasVariableAmongItems = useCheckIfItemsHaveVariables();
+  const hasRequiredItems = useCheckIfItemsHaveRequiredItems();
 
   const activityItems = watch(`${fieldName}.items`);
   const hasUnsupportedReviewableItemTypes = activityItems?.some(
@@ -47,9 +51,12 @@ export const ActivityAbout = () => {
   const isReviewableUnsupportedTooltip = hasUnsupportedReviewableItemTypes
     ? t('isReviewableUnsupported')
     : null;
-  const variableAmongItemsTooltip = hasVariableAmongItems
+  let allowToSkipAllItemsTooltip = hasVariableAmongItems
     ? t('activityHasVariableAmongItems')
     : null;
+  if (hasRequiredItems) {
+    allowToSkipAllItemsTooltip = t('activityHasRequiredItems');
+  }
   const activityCannotBeOnePageAssessmentTooltip = hasVariableAmongItems
     ? t('activityCannotBeOnePageAssessment')
     : null;
@@ -69,6 +76,7 @@ export const ActivityAbout = () => {
           setValue={(val: string) => setValue(`${fieldName}.image`, val)}
           getValue={() => watch(`${fieldName}.image`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
+          data-testid="builder-activity-about-image"
         />
       ),
     },
@@ -82,6 +90,7 @@ export const ActivityAbout = () => {
           getValue={() => watch(`${fieldName}.splashScreen`)}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
           cropRatio={CropRatio.SplashScreen}
+          data-testid="builder-activity-about-splash-screen"
         />
       ),
     },
@@ -98,22 +107,25 @@ export const ActivityAbout = () => {
           </Tooltip>
         </StyledBodyLarge>
       ),
+      'data-testid': 'builder-activity-about-show-all',
     },
     {
       name: `${fieldName}.isSkippable`,
-      disabled: hasVariableAmongItems,
+      disabled: hasVariableAmongItems || hasRequiredItems,
       label: (
         <StyledBodyLarge sx={{ position: 'relative' }}>
-          <Tooltip tooltipTitle={variableAmongItemsTooltip}>
+          <Tooltip tooltipTitle={allowToSkipAllItemsTooltip}>
             <span>{t('allowToSkipAllItems')}</span>
           </Tooltip>
         </StyledBodyLarge>
       ),
+      'data-testid': 'builder-activity-about-skippable',
     },
     {
       name: `${fieldName}.responseIsEditable`,
       label: <StyledBodyLarge>{t('disableAbilityToChangeResponse')}</StyledBodyLarge>,
       isInversed: true,
+      'data-testid': 'builder-activity-about-response-editable',
     },
     {
       name: `${fieldName}.isReviewable`,
@@ -130,6 +142,7 @@ export const ActivityAbout = () => {
           </Tooltip>
         </StyledBodyLarge>
       ),
+      'data-testid': 'builder-activity-about-reviewable',
     },
   ];
 
@@ -144,6 +157,7 @@ export const ActivityAbout = () => {
               name={`${fieldName}.name`}
               maxLength={MAX_NAME_LENGTH}
               label={t('activityName')}
+              data-testid="builder-activity-about-name"
             />
           </Box>
           <InputController
@@ -154,6 +168,7 @@ export const ActivityAbout = () => {
             label={t('activityDescription')}
             multiline
             rows={4}
+            data-testid="builder-activity-about-description"
           />
         </StyledContainer>
         <Uploads uploads={uploads} />
@@ -162,7 +177,7 @@ export const ActivityAbout = () => {
         {t('itemLevelSettings')}
       </StyledTitleMedium>
       <StyledFlexColumn>
-        {checkboxes.map(({ name, label, isInversed, disabled }) => (
+        {checkboxes.map(({ name, label, isInversed, disabled, 'data-testid': dataTestid }) => (
           <CheckboxController
             key={name}
             control={control}
@@ -170,6 +185,7 @@ export const ActivityAbout = () => {
             label={label}
             disabled={disabled}
             isInversed={isInversed}
+            data-testid={dataTestid}
           />
         ))}
       </StyledFlexColumn>

@@ -5,4 +5,5 @@ export type RemoveOptionPopupProps = {
   conditions?: ConditionalLogic[];
   onClose: () => void;
   onSubmit: () => void;
+  'data-testid'?: string;
 };

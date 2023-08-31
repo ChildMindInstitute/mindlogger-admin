@@ -102,6 +102,7 @@ export const DeleteItemModal = ({
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
+      data-testid="builder-activity-items-delete-item-popup"
     >
       <StyledModalWrapper>
         {itemsWithVariablesToRemove.length ? (

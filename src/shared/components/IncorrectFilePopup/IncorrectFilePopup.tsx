@@ -14,6 +14,7 @@ export const IncorrectFilePopup = ({
   onClose,
   uiType,
   fileType,
+  'data-testid': dataTestid,
 }: IncorrectFilePopupProps) => {
   const { t } = useTranslation('app');
 
@@ -29,6 +30,7 @@ export const IncorrectFilePopup = ({
       buttonText={t('ok')}
       secondBtnText={t('cancel')}
       hasSecondBtn
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>

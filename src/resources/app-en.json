@@ -1000,6 +1000,7 @@
   "noDataForActivityFilters": "No match was found. Try to adjust filters.",
   "isReviewableUnsupported": "Reviewer dashboard assessment supports only Single Selection, Multiple Selection and Slider Items",
   "activityHasVariableAmongItems": "This activity contains variables and cannot skip all items.",
+  "activityHasRequiredItems": "This activity contains items that are required and cannot skip all items.",
   "activityCannotBeOnePageAssessment": "This activity contains variables and cannot be a one page assessment",
   "theRespondentCompletedTheActivity": "The respondent completed the Activity at these times",
   "atTime": "At time",

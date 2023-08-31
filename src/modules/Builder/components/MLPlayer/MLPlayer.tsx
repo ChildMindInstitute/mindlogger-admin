@@ -14,7 +14,12 @@ import {
 import { MLPlayerProps } from './MLPlayer.types';
 import { useMLPlayerSetup } from './MLPlayer.hooks';
 
-export const MLPlayer = ({ media, hasRemoveButton = true, onRemove }: MLPlayerProps) => {
+export const MLPlayer = ({
+  media,
+  hasRemoveButton = true,
+  onRemove,
+  'data-testid': dataTestid,
+}: MLPlayerProps) => {
   const {
     playerRef,
     state,
@@ -33,7 +38,7 @@ export const MLPlayer = ({ media, hasRemoveButton = true, onRemove }: MLPlayerPr
   } = useMLPlayerSetup(media);
 
   return (
-    <StyledPlayerWrapper>
+    <StyledPlayerWrapper data-testid={dataTestid}>
       <ReactPlayer
         ref={playerRef}
         width="0"
@@ -53,7 +58,7 @@ export const MLPlayer = ({ media, hasRemoveButton = true, onRemove }: MLPlayerPr
         onDuration={handleDuration}
       />
       <StyledHeader>
-        <StyledClearedButton onClick={handlePlayPause}>
+        <StyledClearedButton onClick={handlePlayPause} data-testid={`${dataTestid}-play`}>
           <Svg id={state.playing ? 'pause' : 'play'} width={24} height={24} />
         </StyledClearedButton>
       </StyledHeader>
@@ -63,7 +68,7 @@ export const MLPlayer = ({ media, hasRemoveButton = true, onRemove }: MLPlayerPr
           {fileName}
         </StyledName>
         {hasRemoveButton && (
-          <StyledClearedButton onClick={onRemove}>
+          <StyledClearedButton onClick={onRemove} data-testid={`${dataTestid}-remove`}>
             <Svg id="close" width={18} height={18} />
           </StyledClearedButton>
         )}

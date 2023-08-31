@@ -9,21 +9,25 @@ export const getActions = ({
   hasColorPicker,
   isColorSet,
   optionsLength,
+  'data-testid': dataTestid,
 }: OptionActions) => [
   {
     icon: <Svg id={isHidden ? 'visibility-off' : 'visibility-on'} />,
     action: optionHide,
+    'data-testid': `${dataTestid}-hide`,
   },
   {
     icon: <Svg id={isColorSet ? 'paint-filled' : 'paint-outline'} />,
     action: paletteClick,
     isDisplayed: hasColorPicker,
     active: isColorSet,
+    'data-testid': `${dataTestid}-palette`,
   },
   {
     icon: <Svg id="trash" />,
     isDisplayed: optionsLength > 1,
     action: optionRemove,
+    'data-testid': `${dataTestid}-remove`,
   },
 ];
 

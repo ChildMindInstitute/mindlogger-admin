@@ -22,7 +22,11 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   const rowName = `${alertName}.rowId`;
 
   const alert = watch(alertName);
+  const continuousSliderMax = watch(`${alertName}.maxValue`);
+
   const { responseType, config: settings, responseValues } = watch(name);
+
+  const dataTestid = `builder-activity-items-item-configuration-alerts-${index}`;
 
   const renderAlertContent = () => {
     switch (responseType) {
@@ -37,6 +41,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 control={control}
                 placeholder={t('option')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
+                data-testid={`${dataTestid}-selection-option`}
               />,
             ]}
           />
@@ -52,12 +57,14 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 control={control}
                 placeholder={t('option')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
+                data-testid={`${dataTestid}-selection-per-row-option`}
               />,
               <StyledSelectController
                 name={`${rowName}`}
                 control={control}
                 placeholder={t('row')}
                 options={getItemsList(getValues(name) as ItemFormValues, alert)}
+                data-testid={`${dataTestid}-selection-per-row-row`}
               />,
             ]}
           />
@@ -72,12 +79,14 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 control={control}
                 placeholder={t('slider')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
+                data-testid={`${dataTestid}-slider-rows-row`}
               />,
               <StyledSelectController
                 name={`${alertName}.value`}
                 control={control}
                 placeholder={t('option')}
                 options={getSliderRowsItemList(getValues(name) as ItemFormValues, alert)}
+                data-testid={`${dataTestid}-slider-rows-value`}
               />,
             ]}
           />
@@ -97,6 +106,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                   name={`${alertName}.value`}
                   maxNumberValue={maxValue}
                   minNumberValue={minValue}
+                  data-testid={`${dataTestid}-slider-value`}
                 />,
               ]}
             />
@@ -111,8 +121,9 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 type="number"
                 control={control}
                 name={`${alertName}.minValue`}
-                maxNumberValue={maxValue - 1}
+                maxNumberValue={continuousSliderMax - 1}
                 minNumberValue={minValue}
+                data-testid={`${dataTestid}-cont-slider-min-value`}
               />,
               <InputController
                 type="number"
@@ -120,6 +131,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 name={`${alertName}.maxValue`}
                 maxNumberValue={maxValue}
                 minNumberValue={minValue + 1}
+                data-testid={`${dataTestid}-cont-slider-max-value`}
               />,
             ]}
           />
@@ -133,7 +145,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
         <StyledTitleBoldSmall>
           {t('alert')} {index + 1}
         </StyledTitleBoldSmall>
-        <StyledIconButton onClick={() => removeAlert(index)}>
+        <StyledIconButton onClick={() => removeAlert(index)} data-testid={`${dataTestid}-remove`}>
           <Svg id="trash" />
         </StyledIconButton>
       </StyledRow>
@@ -147,6 +159,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
         sx={{
           fieldset: { borderColor: variables.palette.outline_variant },
         }}
+        data-testid={`${dataTestid}-text`}
       />
     </StyledAlert>
   );

@@ -29,6 +29,7 @@ export const Item = ({
   onItemClick,
   dragHandleProps,
   isDragging,
+  'data-testid': dataTestid,
   ...props
 }: ItemProps) => {
   const [visibleActions, setVisibleActions] = useState(false);
@@ -77,6 +78,7 @@ export const Item = ({
           sxProps={{ justifyContent: 'flex-end', pointerEvents: isDragging ? 'none' : 'auto' }}
           dragHandleProps={dragHandleProps}
           isDragging={isDragging}
+          data-testid={dataTestid}
         />
       </StyledActions>
     </StyledItem>

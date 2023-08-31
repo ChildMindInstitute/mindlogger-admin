@@ -1,9 +1,7 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import { Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
@@ -17,6 +15,7 @@ import {
   variables,
 } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import {
   StyledActions,
@@ -35,29 +34,39 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
   const [isVisibleActions, setIsVisibleActions] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const userName = `${note.user.firstName ?? ''} ${note.user.lastName ?? ''}`;
+  const { isFeedbackOpen } = useContext(RespondentDataReviewContext);
 
-  const { getValues, control } = useForm({
-    resolver: yupResolver(
-      yup.object({
-        noteText: yup.string(),
-      }),
-    ),
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: { noteText: note.note || '' },
   });
 
-  const saveChanges = () => {
-    onEdit({
-      id: note.id,
-      note: getValues().noteText,
-    });
-    setIsEditMode(false);
-  };
+  const userName = `${note.user.firstName ?? ''} ${note.user.lastName ?? ''}`;
 
   const commonSvgProps = {
     width: '15',
     height: '15',
   };
+
+  const saveChanges = ({ noteText }: { noteText: string }) => {
+    if (!noteText.trim()) return;
+    onEdit({
+      id: note.id,
+      note: noteText,
+    });
+    setIsEditMode(false);
+  };
+
+  const handleNoteEdit = () => {
+    setValue('noteText', note.note);
+    setIsEditMode(true);
+  };
+
+  useEffect(() => {
+    if (!isFeedbackOpen && isEditMode) {
+      setValue('noteText', note.note);
+      setIsEditMode(false);
+    }
+  }, [isFeedbackOpen]);
 
   return (
     <>
@@ -73,7 +82,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
         </StyledFlexTopStart>
         {!isEditMode && isVisibleActions && (
           <StyledActions>
-            <StyledButton onClick={() => setIsEditMode(true)}>
+            <StyledButton onClick={handleNoteEdit}>
               <Svg id="edit" {...commonSvgProps} />
             </StyledButton>
             <StyledButton onClick={() => onDelete(note.id)}>
@@ -83,7 +92,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
         )}
       </StyledNoteHeader>
       {isEditMode ? (
-        <StyledForm noValidate>
+        <StyledForm onSubmit={handleSubmit(saveChanges)} noValidate>
           <InputController
             required
             fullWidth
@@ -94,7 +103,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
           />
           <StyledFlexTopCenter sx={{ justifyContent: 'end', m: theme.spacing(0.8, 0) }}>
             <Button onClick={() => setIsEditMode(false)}>{t('cancel')}</Button>
-            <Button variant="contained" sx={{ ml: theme.spacing(0.8) }} onClick={saveChanges}>
+            <Button type="submit" variant="contained" sx={{ ml: theme.spacing(0.8) }}>
               {t('save')}
             </Button>
           </StyledFlexTopCenter>

@@ -3,4 +3,5 @@ export type SaveChangesPopupProps = {
   handleClose: () => void;
   handleDoNotSaveSubmit: () => void;
   handleSaveSubmit: () => void;
+  'data-testid'?: string;
 };

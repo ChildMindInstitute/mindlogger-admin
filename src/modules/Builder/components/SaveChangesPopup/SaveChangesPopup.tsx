@@ -10,6 +10,7 @@ export const SaveChangesPopup = ({
   handleClose,
   handleDoNotSaveSubmit,
   handleSaveSubmit,
+  'data-testid': dataTestid,
 }: SaveChangesPopupProps) => {
   const { t } = useTranslation('app');
 
@@ -30,6 +31,7 @@ export const SaveChangesPopup = ({
         color: variables.palette.semantic.error,
         fontWeight: variables.font.weight.bold,
       }}
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>

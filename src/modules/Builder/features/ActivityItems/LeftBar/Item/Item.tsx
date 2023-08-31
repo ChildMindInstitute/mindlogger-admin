@@ -66,6 +66,7 @@ export const Item = ({
             onChangeVisibility,
             isItemHidden,
             hasHiddenOption,
+            'data-testid': `builder-activity-items-item-${index}`,
           })}
           context={getEntityKey(item)}
           visibleByDefault={visibleActions}
@@ -73,6 +74,7 @@ export const Item = ({
           dragHandleProps={dragHandleProps}
           isDragging={isDragging}
           hasStaticActions={isItemHidden}
+          data-testid={`builder-activity-items-item-${index}`}
         />
       )}
     </StyledItem>

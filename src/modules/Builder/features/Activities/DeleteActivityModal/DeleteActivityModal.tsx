@@ -10,6 +10,7 @@ export const DeleteActivityModal = ({
   onModalClose,
   onModalSubmit,
   activityName,
+  'data-testid': dataTestid,
 }: DeleteActivityModalProps) => {
   const { t } = useTranslation('app');
 
@@ -24,6 +25,7 @@ export const DeleteActivityModal = ({
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <Trans i18nKey="deleteActivityDescription">

@@ -30,4 +30,5 @@ export type OptionActions = {
   isColorSet: boolean;
   isHidden?: boolean;
   optionsLength: number;
+  'data-testid'?: string;
 };

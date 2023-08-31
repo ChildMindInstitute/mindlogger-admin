@@ -3,4 +3,5 @@ export type SvgProps = {
   width?: number | string;
   height?: number | string;
   className?: string;
+  'data-testid'?: string;
 };

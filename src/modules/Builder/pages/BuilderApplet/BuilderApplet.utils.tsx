@@ -784,6 +784,7 @@ export const getAppletTabs = ({
     activeIcon: <Svg id="more-info-filled" />,
     path: Path.About,
     hasError: hasAboutAppletErrors,
+    'data-testid': 'builder-tab-about-applet',
   },
   {
     labelKey: 'activities',
@@ -791,6 +792,7 @@ export const getAppletTabs = ({
     activeIcon: <Svg id="checklist-filled" />,
     path: Path.Activities,
     hasError: hasAppletActivitiesErrors,
+    'data-testid': 'builder-tab-activities',
   },
   {
     labelKey: 'activityFlows',
@@ -798,12 +800,14 @@ export const getAppletTabs = ({
     activeIcon: <Svg id="flow-filled" />,
     path: Path.ActivityFlow,
     hasError: hasAppletActivityFlowErrors,
+    'data-testid': 'builder-tab-activity-flows',
   },
   {
     labelKey: 'appletSettings',
     icon: <Svg id="settings" />,
     activeIcon: <Svg id="settings-filled" />,
     path: Path.Settings,
+    'data-testid': 'builder-tab-settings',
   },
 ];
 

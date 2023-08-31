@@ -33,10 +33,20 @@ export const NumberSelection = ({ name }: NumberSelectionProps) => {
     <ItemOptionContainer title={t('numberSelection')}>
       <StyledFlexTopStart sx={{ justifyContent: 'space-between' }}>
         <StyledInputWrapper sx={{ mr: theme.spacing(1.25) }}>
-          <InputController {...commonProps} name={minValueName} label={t('minValue')} />
+          <InputController
+            {...commonProps}
+            name={minValueName}
+            label={t('minValue')}
+            data-testid="builder-activity-items-item-configuration-number-selection-min-value"
+          />
         </StyledInputWrapper>
         <StyledInputWrapper sx={{ ml: theme.spacing(1.25) }}>
-          <InputController {...commonProps} name={maxValueName} label={t('maxValue')} />
+          <InputController
+            {...commonProps}
+            name={maxValueName}
+            label={t('maxValue')}
+            data-testid="builder-activity-items-item-configuration-number-selection-max-value"
+          />
         </StyledInputWrapper>
       </StyledFlexTopStart>
     </ItemOptionContainer>

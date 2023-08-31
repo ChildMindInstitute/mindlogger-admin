@@ -10,6 +10,7 @@ export const FileSizeExceededPopup = ({
   popupVisible,
   size,
   onClose,
+  'data-testid': dataTestid,
 }: FileSizeExceededPopupProps) => {
   const { t } = useTranslation('app');
 
@@ -23,6 +24,7 @@ export const FileSizeExceededPopup = ({
       buttonText={t('ok')}
       secondBtnText={t('cancel')}
       hasSecondBtn
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>

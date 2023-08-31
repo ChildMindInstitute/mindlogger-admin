@@ -10,4 +10,5 @@ export type HeaderProps = {
 
 export type GetSliderPanelActions = {
   onRemove: () => void;
+  'data-testid'?: string;
 };

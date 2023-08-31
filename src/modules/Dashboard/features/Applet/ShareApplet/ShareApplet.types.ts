@@ -9,9 +9,11 @@ export type ShareAppletData = {
   checked: boolean;
 };
 
+export type OnAppletShared = { keywords: string[]; libraryUrl: string; appletName: string };
+
 export type ShareAppletProps = {
   applet?: SingleApplet;
-  onAppletShared: ({ keywords, libraryUrl }: { keywords: string[]; libraryUrl: string }) => void;
+  onAppletShared: ({ keywords, libraryUrl, appletName }: OnAppletShared) => void;
   onDisableSubmit: (isDisabled: boolean) => void;
   isSubmitted: boolean;
   setIsSubmitted: Dispatch<SetStateAction<boolean>>;

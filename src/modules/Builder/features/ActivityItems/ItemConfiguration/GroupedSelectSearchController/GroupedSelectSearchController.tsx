@@ -108,6 +108,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 <Svg className="navigate-arrow" id={selectOpen ? 'navigate-up' : 'navigate-down'} />
               )}
               defaultValue=""
+              data-testid="builder-activity-items-item-configuration-response-type"
             >
               <StyledListSubheader>
                 <form autoComplete="off">
@@ -129,6 +130,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                         </StyledClearedButton>
                       ),
                     }}
+                    data-testid="builder-activity-items-item-configuration-response-type-search"
                   />
                 </form>
               </StyledListSubheader>
@@ -148,6 +150,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                       isHidden={isHidden}
                       key={groupValue}
                       value={groupValue}
+                      data-testid={`builder-activity-items-item-configuration-response-type-option-${groupValue}`}
                     >
                       <StyledFlexTopCenter>
                         <StyledFlexTopCenter sx={{ mr: theme.spacing(1.8) }}>

@@ -12,6 +12,7 @@ export const RemoveOptionPopup = ({
   conditions,
   onClose,
   onSubmit,
+  'data-testid': dataTestid,
 }: RemoveOptionPopupProps) => {
   const { t } = useTranslation('app');
   const { watch } = useFormContext();
@@ -29,6 +30,7 @@ export const RemoveOptionPopup = ({
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>

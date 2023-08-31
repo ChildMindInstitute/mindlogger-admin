@@ -14,7 +14,7 @@ import { AppletProps } from './Applet.types';
 import { SelectRespondentsPopup } from '../../SelectRespondentsPopup';
 
 export const Applet = ({
-  applet: { id, displayName, image, roles, selectedRespondents },
+  applet: { id, displayName, image, roles },
   addRole,
   removeRole,
   user,
@@ -23,10 +23,11 @@ export const Applet = ({
 }: AppletProps) => {
   const { t } = useTranslation('app');
 
+  const selectedRespondents = roles?.flatMap(
+    ({ reviewerRespondents }) => reviewerRespondents ?? [],
+  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
-
-  const isManager = roles.some(({ role }) => role === Roles.Manager);
 
   const handleAddRole = (label: Roles) => {
     addRole(id, label);
@@ -34,6 +35,7 @@ export const Applet = ({
   };
 
   const menuItems = getMenuItems(handleAddRole);
+  const isAddRoleDisabled = menuItems?.length === roles.length;
 
   const getFilteredMenuItems = () =>
     menuItems?.filter((menuItem: MenuItem) => !roles.find(({ role }) => role === menuItem.title));
@@ -59,7 +61,7 @@ export const Applet = ({
             </StyledBodyMedium>
           </StyledFlexTopCenter>
           <ButtonWithMenu
-            disabled={isManager}
+            disabled={isAddRoleDisabled}
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             menuItems={getFilteredMenuItems()}
@@ -85,7 +87,7 @@ export const Applet = ({
                       onClick={() => setSelectRespondentsPopupVisible(true)}
                       variant="body2"
                     >
-                      {selectedRespondents?.slice(0, 3).join(', ') || t('editRespondents')}
+                      {selectedRespondents?.join(', ') || t('editRespondents')}
                     </StyledBtn>
                   </>
                 ) : (

@@ -17,7 +17,12 @@ export const getTableRows = (scores: number[] = [], name: string) => [
     (result, score, index) => ({
       ...result,
       [`${name}.scores[${index}]`]: {
-        content: () => <ScoreCell name={`${name}.scores[${index}]`} />,
+        content: () => (
+          <ScoreCell
+            name={`${name}.scores[${index}]`}
+            data-testid={`builder-activity-items-item-configuration-slider-scores-table-score-${index}`}
+          />
+        ),
         value: `${score}`,
       },
     }),
