@@ -33,4 +33,5 @@ export type SetPasswordReportServer = {
 export type ReportConfigSettingProps = {
   isDashboard?: boolean;
   onSubmitSuccess?: (values: Partial<ReportConfigFormValues>) => void;
+  'data-testid'?: string;
 };

@@ -27,6 +27,7 @@ export const TransferListController = <T extends FieldValues>({
   hasSearch = true,
   hasSelectedSection = true,
   isValueName = false,
+  'data-testid': dataTestid,
 }: TransferListControllerProps<T>) => {
   const { t } = useTranslation('app');
 
@@ -71,6 +72,7 @@ export const TransferListController = <T extends FieldValues>({
                 onChange={handleSearch}
                 placeholder={t('search')}
                 InputProps={{ startAdornment: <Svg id="search" /> }}
+                data-testid={`${dataTestid}-search`}
               />
             )}
             <StyledTransferListController hasError={!!error}>
@@ -84,6 +86,7 @@ export const TransferListController = <T extends FieldValues>({
                 hasError={!!error}
                 noDataPlaceholder={t('noSelectedItemsYet')}
                 isValueName={isValueName}
+                data-testid={`${dataTestid}-unselected`}
               />
               {hasSelectedSection && (
                 <DataTable
@@ -91,6 +94,7 @@ export const TransferListController = <T extends FieldValues>({
                   data={selectionSectionItems}
                   noDataPlaceholder={t('noSelectedItemsYet')}
                   isValueName={isValueName}
+                  data-testid={`${dataTestid}-selected`}
                 />
               )}
               {error && <StyledErrorContainer>{error?.message}</StyledErrorContainer>}

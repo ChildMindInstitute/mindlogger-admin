@@ -21,7 +21,12 @@ import {
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { StyledWrapper } from './SubscaleContent.styles';
 
-export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleContentProps) => {
+export const SubscaleContent = ({
+  subscaleId,
+  name,
+  notUsedElements,
+  'data-testid': dataTestid,
+}: SubscaleContentProps) => {
   const { t } = useTranslation('app');
   const { control } = useFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
@@ -36,13 +41,19 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
   return (
     <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>
       <StyledFlexTopStart sx={{ mb: theme.spacing(2.4), gap: theme.spacing(2) }}>
-        <InputController key={`${name}.name`} name={`${name}.name`} label={t('subscaleName')} />
+        <InputController
+          key={`${name}.name`}
+          name={`${name}.name`}
+          label={t('subscaleName')}
+          data-testid={`${dataTestid}-name`}
+        />
         <SelectController
           name={`${name}.scoring`}
           control={control}
           fullWidth
           options={scoreValues}
           label={t('subscaleScoring')}
+          data-testid={`${dataTestid}-scoring`}
         />
       </StyledFlexTopStart>
       <StyledTitleMedium sx={{ mb: theme.spacing(1) }}>
@@ -55,11 +66,13 @@ export const SubscaleContent = ({ subscaleId, name, notUsedElements }: SubscaleC
           columns={columns}
           hasSearch={false}
           hasSelectedSection={false}
+          data-testid={`${dataTestid}-items`}
         />
         <DataTable
           columns={notUsedElementsTableColumns}
           data={notUsedElements}
           noDataPlaceholder={t('noElementsYet')}
+          data-testid={`${dataTestid}-unused-items`}
         />
       </StyledWrapper>
     </StyledFlexColumn>

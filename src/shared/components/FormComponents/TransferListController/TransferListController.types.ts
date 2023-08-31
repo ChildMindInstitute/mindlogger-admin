@@ -16,4 +16,5 @@ export type TransferListControllerProps<T extends FieldValues> = {
   hasSearch?: boolean;
   hasSelectedSection?: boolean;
   isValueName?: boolean;
+  'data-testid'?: string;
 } & UseControllerProps<T>;

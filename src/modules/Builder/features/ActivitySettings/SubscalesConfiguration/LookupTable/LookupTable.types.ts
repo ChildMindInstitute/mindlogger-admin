@@ -13,6 +13,7 @@ export type LookupTableProps = {
   schema: BaseSchema<any, AnyObject, any>;
   onClose: () => void;
   onUpdate: (lookupTableData?: DataTableItem[]) => void;
+  'data-testid'?: string;
 };
 
 export type LookupTableSetupHookProps = {
