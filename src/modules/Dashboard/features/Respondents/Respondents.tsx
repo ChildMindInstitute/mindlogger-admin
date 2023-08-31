@@ -12,7 +12,7 @@ import {
   usePermissions,
   useEncryptionStorage,
 } from 'shared/hooks';
-import { Table } from 'modules/Dashboard/components';
+import { DashboardTable } from 'modules/Dashboard/components';
 import { updateRespondentsPinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
@@ -291,7 +291,7 @@ export const Respondents = () => {
         />
         {appletId && <StyledRightBox />}
       </RespondentsTableHeader>
-      <Table
+      <DashboardTable
         columns={getHeadCells(appletId)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}

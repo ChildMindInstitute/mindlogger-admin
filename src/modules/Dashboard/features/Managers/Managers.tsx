@@ -6,7 +6,7 @@ import { updateManagersPinApi } from 'api';
 import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Search, Spinner } from 'shared/components';
 import { users, workspaces, Manager } from 'redux/modules';
 import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
-import { Table, TableProps } from 'modules/Dashboard/components';
+import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
 import { useAppDispatch } from 'redux/store';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles } from 'shared/consts';
@@ -93,7 +93,7 @@ export const Managers = () => {
     handlePinUpdate({ ownerId, userId });
   };
 
-  const rows: TableProps['rows'] = useMemo(
+  const rows: DashboardTableProps['rows'] = useMemo(
     () =>
       managersData?.result?.map((user) => {
         const filteredManager = filterAppletsByRoles(user);
@@ -175,7 +175,7 @@ export const Managers = () => {
           data-testid="dashboard-managers-search"
         />
       </ManagersTableHeader>
-      <Table
+      <DashboardTable
         columns={getHeadCells(appletId)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}

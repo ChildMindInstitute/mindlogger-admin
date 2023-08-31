@@ -22,7 +22,7 @@ import {
   getEncryptionToServer,
   Mixpanel,
 } from 'shared/utils';
-import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/Table.hooks';
+import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
 import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';

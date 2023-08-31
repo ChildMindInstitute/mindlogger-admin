@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 
-import { Table } from 'modules/Dashboard/components';
+import { DashboardTable } from 'modules/Dashboard/components';
 import { useTable } from 'shared/hooks';
 import { capitalize } from 'shared/utils';
 import { DateFormats } from 'shared/consts';
@@ -69,12 +69,12 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
     },
   );
 
-  const emptyComponent = !rows?.length ? t('noPendingInvitations') : undefined;
+  const emptyComponent = rows?.length ? undefined : t('noPendingInvitations');
 
   return (
     <>
       <StyledTitle sx={{ mt: theme.spacing(4.8) }}>{t('pendingInvitations')}</StyledTitle>
-      <Table
+      <DashboardTable
         columns={getHeadCells()}
         rows={rows}
         count={invitations?.count || 0}
