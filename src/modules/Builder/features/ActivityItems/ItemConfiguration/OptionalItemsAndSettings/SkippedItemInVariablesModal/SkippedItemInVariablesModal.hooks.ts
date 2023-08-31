@@ -4,9 +4,8 @@ import { useFormContext } from 'react-hook-form';
 
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
-
-import { getItemNamesIncludeSkippableItem } from './SkippedItemInVariablesModal.utils';
-import { ItemNameWIthIndex } from './SkippedItemInVariablesModal.types';
+import { getItemsWithVariable } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { ItemNameWithIndex } from 'modules/Builder/features/ActivityItems/ActivityItems.types';
 
 export const useCheckIfItemHasVariables = (itemField: string) => {
   const { t } = useTranslation('app');
@@ -16,7 +15,7 @@ export const useCheckIfItemHasVariables = (itemField: string) => {
   const activityItems = watch(`${fieldName}.items`) ?? [];
   const name = watch(`${itemField}.name`) ?? '';
   const isSkippableItem = watch(`${itemField}.config.skippableItem`);
-  const itemNamesWithSkippedItemRef = useRef<null | ItemNameWIthIndex[]>(null);
+  const itemNamesWithSkippedItemRef = useRef<null | ItemNameWithIndex[]>(null);
 
   const onPopupConfirm = () => {
     for (const item of itemNamesWithSkippedItemRef.current ?? []) {
@@ -30,7 +29,7 @@ export const useCheckIfItemHasVariables = (itemField: string) => {
   };
 
   useEffect(() => {
-    itemNamesWithSkippedItemRef.current = getItemNamesIncludeSkippableItem(name, activityItems);
+    itemNamesWithSkippedItemRef.current = getItemsWithVariable(name, activityItems);
     if (!itemNamesWithSkippedItemRef.current?.length) return;
 
     if (!isSkippableItem) {

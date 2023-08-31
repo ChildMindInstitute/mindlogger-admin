@@ -1,8 +1,8 @@
 import { ConditionalLogic } from 'shared/state';
-import { getEntityKey, getObjectFromList } from 'shared/utils';
+import { getEntityKey, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 import { ItemFormValues } from 'modules/Builder/types';
 
-import { GetConditionsToRemoveConfig } from './ActivityItems.types';
+import { GetConditionsToRemoveConfig, ItemNameWithIndex } from './ActivityItems.types';
 
 export const getSummaryRowDependencies = (
   item: ItemFormValues,
@@ -44,3 +44,30 @@ export const getConditionsToRemove = (
     return !rightSlice[itemKey];
   });
 };
+
+const checkIfQuestionIncludesItem = (question: string, itemName: string) => {
+  const variableNames = getTextBetweenBrackets(question);
+
+  return variableNames.includes(itemName);
+};
+
+export const getIndexListToTrigger = (items: ItemFormValues[], itemName: string) =>
+  items.reduce((acc, { question }, index) => {
+    if (checkIfQuestionIncludesItem(question, itemName)) return acc.concat(index);
+
+    return acc;
+  }, [] as number[]);
+
+export const getItemsWithVariable = (name: string, items: ItemFormValues[]) =>
+  items.reduce((acc, item, index) => {
+    const variableNames = getTextBetweenBrackets(item.question);
+    if (!variableNames?.includes(name)) return acc;
+
+    return [
+      ...acc,
+      {
+        index,
+        name: item.name,
+      },
+    ];
+  }, [] as ItemNameWithIndex[]);

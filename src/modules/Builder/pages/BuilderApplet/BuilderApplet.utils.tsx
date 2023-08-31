@@ -840,11 +840,7 @@ export const testFunctionForTheSameVariable = (
   return !variableNames.includes(itemName);
 };
 
-export const testFunctionForNotSupportedItems = (
-  field: string,
-  value: string,
-  context: TestContext,
-) => {
+export const testFunctionForNotSupportedItems = (value: string, context: TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
   const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
@@ -852,11 +848,20 @@ export const testFunctionForNotSupportedItems = (
   return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
 };
 
-export const testFunctionForSkippedItems = (field: string, value: string, context: TestContext) => {
+export const testFunctionForSkippedItems = (value: string, context: TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
 
   return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
+};
+
+export const testFunctionForNotExistedItems = (value: string, context: TestContext) => {
+  const items: Item[] = get(context, 'from.1.value.items');
+  const variableNames = getTextBetweenBrackets(value);
+
+  if (!variableNames.length) return true;
+
+  return variableNames.every((variable) => items.some((item) => item.name === variable));
 };
 
 export const testFunctionForSubscaleAge = (field: string, value?: number | string | null) =>

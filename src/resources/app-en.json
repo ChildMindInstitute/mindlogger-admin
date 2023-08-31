@@ -875,7 +875,8 @@
     "incorrectEmail": "Email must be valid",
     "variableInTheSameItem": "* You cannot use item name in the same item. Please remove",
     "variableIsNotSupported": "* This item is not supported, please remove it.",
-    "variableReferringToSkippedItem": "Remove the variable referring to the skipped item."
+    "variableReferringToSkippedItem": "Remove the variable referring to the skipped item.",
+    "variableReferringToNotExistedItem": "Remove the variable referring to the nonexistent item."
   },
   "apply": "Apply",
   "addNewNote": "Add a New Note",
@@ -897,7 +898,8 @@
     "title": "Variables Warning",
     "isSkippable": "Skipping all the items cannot contain variables. The variable will automatically be removed.",
     "showAllAtOnce": "A one page assessment cannot contain variables. The variable will automatically be removed.",
-    "skippedItemInVariables": "By skipping <2> {{ skippedItemName }} </2>, it will cause <2> {{ itemNamesWithSkippedItem }} </2> to fail"
+    "skippedItemInVariables": "By skipping <2> {{ skippedItemName }} </2>, it will cause <2> {{ itemNamesWithSkippedItem }} </2> to fail",
+    "deleteItemReferencedByVariable": "By deleting <2> {{ itemAsVariable }} </2>, it will cause <2> {{ itemsWithVariablesToRemove }} </2> to fail"
   },
   "clear": "Clear",
   "clearActivityFlow": "Clear Activity Flow",

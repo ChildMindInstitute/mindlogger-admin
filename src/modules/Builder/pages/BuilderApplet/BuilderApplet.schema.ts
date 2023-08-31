@@ -41,6 +41,7 @@ import {
   getTestFunctionForSubscaleScore,
   isPerfTaskResponseType,
   isTouchOrGyroscopeRespType,
+  testFunctionForNotExistedItems,
   testFunctionForNotSupportedItems,
   testFunctionForSkippedItems,
   testFunctionForSubscaleAge,
@@ -266,13 +267,17 @@ export const ItemSchema = () =>
         .test(
           ItemTestFunctions.VariableIsNotSupported,
           t('validationMessages.variableIsNotSupported') as string,
-          (itemName, context) =>
-            testFunctionForNotSupportedItems('question', itemName ?? '', context),
+          (itemName, context) => testFunctionForNotSupportedItems(itemName ?? '', context),
         )
         .test(
           ItemTestFunctions.VariableReferringToSkippedItem,
           t('validationMessages.variableReferringToSkippedItem') as string,
-          (itemName, context) => testFunctionForSkippedItems('question', itemName ?? '', context),
+          (itemName, context) => testFunctionForSkippedItems(itemName ?? '', context),
+        )
+        .test(
+          ItemTestFunctions.VariableReferringToNotExistedItem,
+          t('validationMessages.variableReferringToNotExistedItem') as string,
+          (itemName, context) => testFunctionForNotExistedItems(itemName ?? '', context),
         ),
       responseValues: yup.object({}).when('responseType', (responseType, schema) => {
         if (

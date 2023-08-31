@@ -27,8 +27,9 @@ export const ordinalStrings = ['First', 'Second', 'Third', 'Fourth'];
 export const alphanumericAndHyphenRegexp = /^[a-zA-Z0-9_-]+$/g;
 
 export const enum ItemTestFunctions {
-  UniqueItemName = '',
+  UniqueItemName = 'unique-item-name',
   VariableInTheSameItem = 'variable-in-the-same-item-error',
   VariableIsNotSupported = 'variable-is-not-supported-error',
   VariableReferringToSkippedItem = 'variable-referring-to-skipped-item-error',
+  VariableReferringToNotExistedItem = 'variable-referring-to-not-existed-item',
 }
