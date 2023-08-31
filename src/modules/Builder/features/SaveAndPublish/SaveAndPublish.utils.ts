@@ -45,8 +45,6 @@ export const removeAppletExtraFields = () => ({
   reportRecipients: undefined,
   reportIncludeUserId: undefined,
   reportIncludeCaseId: undefined,
-  reportIncludedItemName: undefined,
-  reportIncludedActivityName: undefined,
   reportEmailBody: undefined,
   retentionPeriod: undefined,
   retentionType: undefined,
@@ -66,6 +64,19 @@ export const removeActivityExtraFields = () => ({
   performanceTaskType: undefined,
   isPerformanceTask: undefined,
   conditionalLogic: undefined,
+  reportIncludedItemName: undefined,
+});
+
+export const removeActivityFlowExtraFields = () => ({
+  createdAt: undefined,
+  reportIncludedItemName: undefined,
+  reportIncludedActivityName: undefined,
+});
+
+const removeItemExtraFields = () => ({
+  key: undefined,
+  settings: undefined,
+  alerts: undefined,
 });
 
 export const remapSubscaleSettings = (activity: ActivityFormValues) => {
@@ -153,16 +164,6 @@ export const getScoresAndReports = (activity: ActivityFormValues) => {
     reports,
   };
 };
-
-export const removeActivityFlowExtraFields = () => ({
-  createdAt: undefined,
-});
-
-const removeItemExtraFields = () => ({
-  key: undefined,
-  settings: undefined,
-  alerts: undefined,
-});
 
 const mapItemResponseValues = (item: ItemFormValues) => {
   const { responseType, responseValues, alerts, config } = item;
