@@ -47,6 +47,7 @@ export const BuilderApplet = () => {
       ? dispatch(getAppletWithItems({ ownerId, appletId }))
       : undefined,
   );
+
   const methods = useForm<AppletFormValues>({
     defaultValues: getDefaultValues(appletData),
     resolver: yupResolver(AppletSchema()),
