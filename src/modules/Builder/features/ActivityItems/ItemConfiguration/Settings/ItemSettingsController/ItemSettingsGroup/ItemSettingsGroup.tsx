@@ -70,7 +70,11 @@ export const ItemSettingsGroup = ({
       <StyledFormControl>
         <StyledItemSettingsGroupHeader sx={{ justifyContent: 'space-between' }}>
           <StyledFormLabel>{t(groupName, { context: inputType })}</StyledFormLabel>
-          <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={handleCollapse}>
+          <StyledClearedButton
+            sx={{ p: theme.spacing(1) }}
+            onClick={handleCollapse}
+            data-testid="builder-activity-items-item-settings-group-collapse"
+          >
             <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
           </StyledClearedButton>
         </StyledItemSettingsGroupHeader>
@@ -257,6 +261,7 @@ export const ItemSettingsGroup = ({
                       disabled={isDisabled}
                     />
                   }
+                  data-testid={`builder-activity-items-item-settings-${settingKey}`}
                   label={
                     <StyledSettingTitleContainer withInput={isTimer}>
                       <StyledTitleMedium sx={{ p: theme.spacing(0, 1), whiteSpace: 'nowrap' }}>
@@ -282,6 +287,7 @@ export const ItemSettingsGroup = ({
                               type="number"
                               disabled={isSecondsDisabled}
                               minNumberValue={isSecondsDisabled ? DEFAULT_DISABLED_TIMER_VALUE : 1}
+                              data-testid={`builder-activity-items-item-settings-${settingKey}-input`}
                             />
                           </StyledInputControllerContainer>
                           <StyledTitleMedium>{t('seconds')}</StyledTitleMedium>

@@ -28,4 +28,5 @@ export type DataTableProps = {
   onSelectAll?: (allSelected: boolean) => unknown[] | void;
   hasError?: boolean;
   isValueName?: boolean;
+  'data-testid'?: string;
 };

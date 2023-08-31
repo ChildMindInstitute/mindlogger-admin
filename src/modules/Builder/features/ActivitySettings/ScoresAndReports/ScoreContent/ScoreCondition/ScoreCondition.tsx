@@ -14,7 +14,12 @@ import { getScoreConditionId } from './ScoreCondition.utils';
 import { CopyId } from '../CopyId';
 import { StyledLabel } from './ScoreCondition.styles';
 
-export const ScoreCondition = ({ name, scoreId, scoreKey }: ScoreConditionProps) => {
+export const ScoreCondition = ({
+  name,
+  scoreId,
+  scoreKey,
+  'data-testid': dataTestid,
+}: ScoreConditionProps) => {
   const { t } = useTranslation();
 
   const { control, setValue, watch } = useFormContext();
@@ -34,12 +39,23 @@ export const ScoreCondition = ({ name, scoreId, scoreKey }: ScoreConditionProps)
           name={`${name}.name`}
           label={t('scoreConditionName')}
           onBlur={handleConditionNameBlur}
+          data-testid={`${dataTestid}-name`}
         />
         <Box sx={{ ml: theme.spacing(4.8), width: '50%' }}>
-          <CopyId title={t('scoreConditionId')} value={conditionId} showCopy={conditionName} />
+          <CopyId
+            title={t('scoreConditionId')}
+            value={conditionId}
+            showCopy={conditionName}
+            data-testid={`${dataTestid}-copy`}
+          />
         </Box>
       </StyledFlexTopCenter>
-      <ConditionContent name={name} type={ConditionRowType.Score} scoreId={scoreId} />
+      <ConditionContent
+        name={name}
+        type={ConditionRowType.Score}
+        scoreId={scoreId}
+        data-testid={dataTestid}
+      />
       <CheckboxController
         control={control}
         name={`${name}.flagScore`}
@@ -53,8 +69,9 @@ export const ScoreCondition = ({ name, scoreId, scoreKey }: ScoreConditionProps)
             </Tooltip>
           </StyledLabel>
         }
+        data-testid={`${dataTestid}-flag-score`}
       />
-      <SectionScoreCommonFields name={name} sectionId={scoreKey} />
+      <SectionScoreCommonFields name={name} sectionId={scoreKey} data-testid={dataTestid} />
     </>
   );
 };

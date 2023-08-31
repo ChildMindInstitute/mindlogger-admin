@@ -59,6 +59,7 @@ export const ActivityFlowBuilderHeader = ({
             variant="outlined"
             startIcon={<Svg id="cross" width={18} height={18} />}
             onClick={() => setClearFlowModalVisible(true)}
+            data-testid="builder-activity-flows-builder-clear"
           >
             {t('clearFlow')}
           </Button>

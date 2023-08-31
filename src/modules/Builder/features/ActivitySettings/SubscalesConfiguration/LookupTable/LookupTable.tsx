@@ -15,6 +15,7 @@ export const LookupTable = ({
   schema,
   onUpdate,
   onClose,
+  'data-testid': dataTestid,
 }: LookupTableProps) => {
   const { step, ...hookProps } = useSubscaleLookupTableSetup({
     errors: labelsObject.errors,
@@ -34,7 +35,7 @@ export const LookupTable = ({
   const { component, ...modalProps } = screens[step];
 
   return (
-    <Modal open={open} onClose={onClose} width="93.6" {...modalProps}>
+    <Modal open={open} onClose={onClose} width="93.6" {...modalProps} data-testid={dataTestid}>
       <StyledModalWrapper>{component}</StyledModalWrapper>
     </Modal>
   );

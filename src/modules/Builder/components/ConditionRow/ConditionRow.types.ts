@@ -9,6 +9,7 @@ export type ConditionRowProps = {
   type?: ConditionRowType;
   scoreId?: string;
   autoTrigger?: boolean;
+  'data-testid'?: string;
 };
 
 export type OptionListItem = { labelKey: string; value: string; type: ConditionItemType };

@@ -44,7 +44,12 @@ import {
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
 
-export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
+export const ScoreContent = ({
+  name,
+  title,
+  index,
+  'data-testid': dataTestid,
+}: ScoreContentProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext();
   const { activity } = useCurrentActivity();
@@ -130,6 +135,7 @@ export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
             label={t('scoreName')}
             onBlur={handleNameBlur}
             sx={{ mb: theme.spacing(4.8) }}
+            data-testid={`${dataTestid}-name`}
           />
           <SelectController
             name={`${name}.calculationType`}
@@ -138,10 +144,16 @@ export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
             options={calculationTypes}
             label={t('scoreCalculationType')}
             fullWidth
+            data-testid={`${dataTestid}-calculation-type`}
           />
         </Box>
         <Box>
-          <CopyId title={t('scoreId')} value={scoreId} showCopy />
+          <CopyId
+            title={t('scoreId')}
+            value={scoreId}
+            showCopy
+            data-testid={`${dataTestid}-copy`}
+          />
           <StyledTitleSmall sx={{ m: theme.spacing(2.4, 0, 1.2, 0) }}>
             {t('rangeOfScores')}
           </StyledTitleSmall>
@@ -159,8 +171,9 @@ export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
         hasSearch
         sxProps={{ mb: theme.spacing(2.5) }}
         isValueName
+        data-testid={`${dataTestid}-items-score`}
       />
-      <SectionScoreCommonFields name={name} sectionId={`score-${index}`} />
+      <SectionScoreCommonFields name={name} sectionId={`score-${index}`} data-testid={dataTestid} />
       {!!scoreConditionals?.length && (
         <>
           <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>
@@ -172,6 +185,7 @@ export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
               index: key + 1,
             });
             const headerTitle = <Title title={title} name={conditional?.name} />;
+            const conditionalDataTestid = `${dataTestid}-conditional-${key}`;
 
             return (
               <ToggleItemContainer
@@ -182,13 +196,16 @@ export const ScoreContent = ({ name, title, index }: ScoreContentProps) => {
                   name: conditionalName,
                   scoreId,
                   scoreKey: `score-condition-${index}-${key}`,
+                  'data-testid': conditionalDataTestid,
                 }}
                 headerContentProps={{
                   onRemove: () => removeScoreConditional(key),
                   title: headerTitle,
                   name: conditionalName,
+                  'data-testid': conditionalDataTestid,
                 }}
                 uiType={ToggleContainerUiType.Score}
+                data-testid={conditionalDataTestid}
               />
             );
           })}

@@ -117,38 +117,42 @@ export const LeftBar = ({
             <DndDroppable droppableId="activity-items-dnd" direction="vertical">
               {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                  {draggableItems?.map((item, index) => (
-                    <Draggable
-                      key={`item-${getEntityKey(item)}`}
-                      draggableId={getEntityKey(item)}
-                      index={index}
-                    >
-                      {(itemProvided, snapshot) => (
-                        <Box
-                          {...itemProvided.draggableProps}
-                          ref={itemProvided.innerRef}
-                          data-testid={`builder-activity-items-item-${index}`}
-                        >
-                          <Item
-                            dragHandleProps={itemProvided.dragHandleProps}
-                            isDragging={snapshot.isDragging}
-                            item={item}
-                            name={`${fieldName}.items[${index}]`}
-                            index={index}
-                            activeItemId={activeItemId}
-                            onSetActiveItem={handleSetActiveItem}
-                            onDuplicateItem={onDuplicateItem}
-                            onRemoveItem={onRemoveItem}
-                          />
-                          <InsertItem
-                            isVisible={index >= 0 && index < items.length - 1 && !isDragging}
-                            onInsert={() => onInsertItem(index)}
-                            data-testid={`builder-activity-items-insert-item-${index}`}
-                          />
-                        </Box>
-                      )}
-                    </Draggable>
-                  ))}
+                  {draggableItems?.map((item, index) => {
+                    const dataTestid = `builder-activity-items-item-${index}`;
+
+                    return (
+                      <Draggable
+                        key={`item-${getEntityKey(item)}`}
+                        draggableId={getEntityKey(item)}
+                        index={index}
+                      >
+                        {(itemProvided, snapshot) => (
+                          <Box
+                            {...itemProvided.draggableProps}
+                            ref={itemProvided.innerRef}
+                            data-testid={dataTestid}
+                          >
+                            <Item
+                              dragHandleProps={itemProvided.dragHandleProps}
+                              isDragging={snapshot.isDragging}
+                              item={item}
+                              name={`${fieldName}.items[${index}]`}
+                              index={index}
+                              activeItemId={activeItemId}
+                              onSetActiveItem={handleSetActiveItem}
+                              onDuplicateItem={onDuplicateItem}
+                              onRemoveItem={onRemoveItem}
+                            />
+                            <InsertItem
+                              isVisible={index >= 0 && index < items.length - 1 && !isDragging}
+                              onInsert={() => onInsertItem(index)}
+                              data-testid={`${dataTestid}-insert`}
+                            />
+                          </Box>
+                        )}
+                      </Draggable>
+                    );
+                  })}
                   {listProvided.placeholder}
                 </Box>
               )}

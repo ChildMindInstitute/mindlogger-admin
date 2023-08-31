@@ -60,6 +60,7 @@ export const ScoresAndReports = () => {
   const showScoreSummary = watch(scoresAndReportsName);
   const generateReport = watch(generateReportName);
   const isCheckboxesDisabled = !reports?.length;
+  const dataTestid = 'builder-activity-settings-scores-and-reports';
 
   const handleAddScore = () => {
     appendReport(getScoreDefaults());
@@ -100,7 +101,12 @@ export const ScoresAndReports = () => {
         ) : (
           <>
             {t('configureServerForReport')}
-            <StyledConfigureBtn onClick={navigateToSettings}>{t('configure')}</StyledConfigureBtn>
+            <StyledConfigureBtn
+              onClick={navigateToSettings}
+              data-testid={`${dataTestid}-configure-server`}
+            >
+              {t('configure')}
+            </StyledConfigureBtn>
           </>
         )}
       </StyledBodyLarge>
@@ -110,6 +116,7 @@ export const ScoresAndReports = () => {
         key={generateReportName}
         name={generateReportName}
         label={<StyledBodyLarge>{t('generateReport')}</StyledBodyLarge>}
+        data-testid={`${dataTestid}-generate-report`}
       />
       <CheckboxController
         disabled={isCheckboxesDisabled}
@@ -126,6 +133,7 @@ export const ScoresAndReports = () => {
             </Tooltip>
           </StyledFlexTopCenter>
         }
+        data-testid={`${dataTestid}-show-score-summary`}
       />
       <StyledFlexColumn sx={{ mt: theme.spacing(2.4) }}>
         <DragDropContext onDragEnd={handleReportDragEnd}>
@@ -138,8 +146,11 @@ export const ScoresAndReports = () => {
                   const title = t(isSection ? 'sectionHeader' : 'scoreHeader', {
                     index: getReportIndex(reports, report) + 1,
                   });
-                  const headerTitle = <Title title={title} name={report?.name} />;
                   const key = `data-section-${getEntityKey(report) || index}`;
+                  const sectionDataTestid = `${dataTestid}-section-${index}`;
+                  const headerTitle = (
+                    <Title title={title} name={report?.name} data-testid={sectionDataTestid} />
+                  );
 
                   return (
                     <Draggable key={key} draggableId={key} index={index}>
@@ -162,7 +173,9 @@ export const ScoresAndReports = () => {
                               title,
                               ...(isSection && { sectionId: report.id }),
                               ...(!isSection && { index }),
+                              'data-testid': sectionDataTestid,
                             }}
+                            data-testid={sectionDataTestid}
                           />
                         </Box>
                       )}

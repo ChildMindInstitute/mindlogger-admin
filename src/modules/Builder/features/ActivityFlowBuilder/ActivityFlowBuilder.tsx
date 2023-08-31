@@ -44,6 +44,7 @@ export const ActivityFlowBuilder = () => {
     `activityFlows.${activityFlowIndex}.items`,
   );
   const activities: AppletFormValues['activities'] = watch('activities');
+  const dataTestid = 'builder-activity-flows-builder';
 
   const handleFlowActivityDuplicate = (index: number) => {
     if (!activityFlowItems) return;
@@ -107,6 +108,7 @@ export const ActivityFlowBuilder = () => {
                 const currentActivity = activitiesIdsObjects[item.activityKey];
                 const activityName = currentActivity?.name;
                 const activityDescription = currentActivity?.description;
+                const itemDataTestid = `${dataTestid}-flow-${index}`;
 
                 return (
                   <Draggable key={key} draggableId={key || ''} index={index}>
@@ -128,6 +130,7 @@ export const ActivityFlowBuilder = () => {
                               duplicateItem: handleFlowActivityDuplicate,
                               removeItem: handleFlowActivityToDeleteSet(index, activityName || ''),
                               replaceItemActionActive: !!anchorEl && indexToUpdate === index,
+                              'data-testid': itemDataTestid,
                             })
                           }
                           uiType={ItemUiType.FlowBuilder}
@@ -135,6 +138,7 @@ export const ActivityFlowBuilder = () => {
                           description={activityDescription || ''}
                           visibleByDefault={!!anchorEl && indexToUpdate === index}
                           {...item}
+                          data-testid={itemDataTestid}
                         />
                       </Box>
                     )}

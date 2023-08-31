@@ -27,6 +27,7 @@ export const Condition = ({
   isRemoveVisible,
   onRemove,
   type,
+  'data-testid': dataTestid,
 }: ConditionProps) => {
   const { t } = useTranslation('app');
 
@@ -46,7 +47,7 @@ export const Condition = ({
   const isRangeValueShown = (isItemSlider || isItemScore) && !isNumberValueShown;
 
   return (
-    <StyledCondition>
+    <StyledCondition data-testid={dataTestid}>
       <StyledTitleMedium>{t('if')}</StyledTitleMedium>
       <StyledSelectController
         control={control}
@@ -66,6 +67,7 @@ export const Condition = ({
         customChange={onItemChange}
         disabled={type === ConditionRowType.Score}
         isLabelNeedTranslation={false}
+        data-testid={`${dataTestid}-name`}
       />
       {!isRowTypeItem && <StyledTitleMedium>{t('is')}</StyledTitleMedium>}
       <StyledSelectController
@@ -75,6 +77,7 @@ export const Condition = ({
         placeholder={t('conditionTypePlaceholder')}
         customChange={onStateChange}
         isLabelNeedTranslation={false}
+        data-testid={`${dataTestid}-type`}
       />
       {isValueSelectShown && (
         <StyledSelectController
@@ -83,6 +86,7 @@ export const Condition = ({
           options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
           placeholder={t('value')}
           isLabelNeedTranslation={false}
+          data-testid={`${dataTestid}-selection-value`}
         />
       )}
       {isNumberValueShown && (
@@ -91,6 +95,7 @@ export const Condition = ({
           control={control}
           name={numberValueName}
           minNumberValue={state ? Number.MIN_SAFE_INTEGER : DEFAULT_NUMBER_MIN_VALUE}
+          data-testid={`${dataTestid}-slider-value`}
         />
       )}
       {isRangeValueShown && (
@@ -101,6 +106,7 @@ export const Condition = ({
             control={control}
             name={minValueName}
             minNumberValue={Number.MIN_SAFE_INTEGER}
+            data-testid={`${dataTestid}-min-value`}
           />
           <StyledInputController
             key={`max-value-${isRangeValueShown}`}
@@ -108,11 +114,16 @@ export const Condition = ({
             control={control}
             name={maxValueName}
             minNumberValue={Number.MIN_SAFE_INTEGER}
+            data-testid={`${dataTestid}-max-value`}
           />
         </>
       )}
       {isRemoveVisible && (
-        <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onRemove}>
+        <StyledClearedButton
+          sx={{ p: theme.spacing(1) }}
+          onClick={onRemove}
+          data-testid={`${dataTestid}-remove`}
+        >
           <Svg id="cross" />
         </StyledClearedButton>
       )}
