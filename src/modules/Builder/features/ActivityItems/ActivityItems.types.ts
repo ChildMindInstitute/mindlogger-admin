@@ -6,4 +6,4 @@ export type GetConditionsToRemoveConfig = {
   item: ItemFormValues;
 };
 
-export type ItemNameWIthIndex = { index: number; name: string };
+export type ItemNameWithIndex = { index: number; name: string };
