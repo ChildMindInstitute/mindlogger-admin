@@ -11,6 +11,7 @@ export enum AppletUiType {
 export type AppletProps = {
   uiType?: AppletUiType;
   applet: PublishedApplet;
+  search?: string;
   setSearch?: Dispatch<SetStateAction<string>>;
 };
 

@@ -4,7 +4,11 @@ import { Box, Checkbox } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { StyledFlexTopCenter, StyledSvgArrowContainer } from 'shared/styles';
-import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
+import {
+  getHighlightedText,
+  getSelectedAppletFromStorage,
+  updateSelectedItemsInStorage,
+} from 'modules/Library/utils';
 import { useAppDispatch } from 'redux/store';
 import { library } from 'redux/modules';
 
@@ -19,7 +23,12 @@ import { Item } from '../Item';
 import { AppletUiType, LibraryForm, SelectedItem } from '../Applet.types';
 import { checkIfPerformanceTask } from './Activity.utils';
 
-export const Activity = ({ appletId, activity: { name, items, key }, uiType }: ActivityProps) => {
+export const Activity = ({
+  appletId,
+  activity: { name, items, key },
+  uiType,
+  search,
+}: ActivityProps) => {
   const { watch, setValue, getValues } = useFormContext<LibraryForm>();
   const dispatch = useAppDispatch();
   const watchApplet = watch(appletId);
@@ -103,14 +112,14 @@ export const Activity = ({ appletId, activity: { name, items, key }, uiType }: A
       {isPerfTask ? (
         <StyledFlexTopCenter>
           <Box sx={{ width: '4rem', height: '4rem' }} />
-          <StyledActivityName>{name}</StyledActivityName>
+          <StyledActivityName>{getHighlightedText(search, name)}</StyledActivityName>
         </StyledFlexTopCenter>
       ) : (
         <StyledActivityHeader onClick={() => setActivityVisible((prevState) => !prevState)}>
           <StyledSvgArrowContainer>
             <Svg id={arrowSgvId} />
           </StyledSvgArrowContainer>
-          <StyledActivityName>{name}</StyledActivityName>
+          <StyledActivityName>{getHighlightedText(search, name)}</StyledActivityName>
         </StyledActivityHeader>
       )}
       {activityVisible && !!items?.length && (
@@ -123,6 +132,7 @@ export const Activity = ({ appletId, activity: { name, items, key }, uiType }: A
                 item={item}
                 activityKey={key}
                 uiType={uiType}
+                search={search}
               />
             </Fragment>
           ))}

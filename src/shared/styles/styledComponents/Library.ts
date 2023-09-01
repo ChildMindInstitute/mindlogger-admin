@@ -16,6 +16,11 @@ export const StyledAppletList = styled(Box)`
   flex: 1;
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   border-radius: ${variables.borderRadius.lg2};
+
+  .marked {
+    background-color: ${variables.palette.yellow};
+    border-radius: ${variables.borderRadius.xs};
+  }
 `;
 
 export const StyledAppletContainer = styled(Box)`

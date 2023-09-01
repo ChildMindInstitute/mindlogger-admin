@@ -147,7 +147,12 @@ export const Cart = () => {
             {pagedApplets?.length
               ? pagedApplets.map((applet) => (
                   <StyledAppletContainer key={applet.id}>
-                    <Applet uiType={AppletUiType.Cart} applet={applet} setSearch={setSearchValue} />
+                    <Applet
+                      uiType={AppletUiType.Cart}
+                      applet={applet}
+                      search={search}
+                      setSearch={setSearchValue}
+                    />
                   </StyledAppletContainer>
                 ))
               : renderEmptyState()}

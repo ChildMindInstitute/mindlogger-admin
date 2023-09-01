@@ -91,7 +91,7 @@ export const AppletsCatalog = () => {
             {appletsArray?.length
               ? appletsArray.map((applet) => (
                   <StyledAppletContainer key={applet.id}>
-                    <Applet applet={applet} setSearch={setSearchValue} />
+                    <Applet applet={applet} search={search} setSearch={setSearchValue} />
                   </StyledAppletContainer>
                 ))
               : renderEmptyState()}

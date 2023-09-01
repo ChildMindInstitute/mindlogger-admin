@@ -20,7 +20,7 @@ import { ItemProps } from './Item.types';
 import { renderItemContent } from './Item.utils';
 import { AppletUiType, LibraryForm } from '../Applet.types';
 
-export const Item = ({ item, appletId, activityName, activityKey, uiType }: ItemProps) => {
+export const Item = ({ item, appletId, activityName, activityKey, uiType, search }: ItemProps) => {
   const { control, getValues, setValue } = useFormContext<LibraryForm>();
   const dispatch = useAppDispatch();
   const [itemVisible, setItemVisible] = useState(false);
@@ -73,7 +73,7 @@ export const Item = ({ item, appletId, activityName, activityKey, uiType }: Item
         <StyledSvgArrowContainer>
           <Svg id={itemVisible ? 'navigate-up' : 'navigate-right'} />
         </StyledSvgArrowContainer>
-        <StyledMdEditor modelValue={getDictionaryText(item.question)} previewOnly />
+        <StyledMdEditor modelValue={getDictionaryText(item.question, search)} previewOnly />
       </StyledItemHeader>
       {itemVisible && <StyledItemContent>{renderItemContent(item)}</StyledItemContent>}
     </StyledItemContainer>
