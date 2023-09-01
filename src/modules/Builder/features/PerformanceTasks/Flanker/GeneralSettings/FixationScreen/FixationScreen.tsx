@@ -27,6 +27,7 @@ export const FixationScreen = () => {
       title={t('flankerFixation.title')}
       Content={FixationContent}
       tooltip={t('flankerFixation.tooltip')}
+      data-testid="builder-activity-flanker-fixation-screen"
     />
   );
 };

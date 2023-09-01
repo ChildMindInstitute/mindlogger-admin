@@ -22,6 +22,7 @@ export const getSettings = ({
   onReportConfigSubmit,
 }: GetSettings) => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
+  const dataTestid = 'builder-applet-settings';
 
   return [
     ...(isManagerOrOwner(roles?.[0])
@@ -36,6 +37,7 @@ export const getSettings = ({
                 param: SettingParam.ExportData,
                 disabled: isNewApplet,
                 tooltip,
+                'data-testid': `${dataTestid}-export-data`,
               },
               {
                 icon: <Svg id="data-retention" />,
@@ -44,6 +46,7 @@ export const getSettings = ({
                 param: SettingParam.DataRetention,
                 disabled: isNewApplet,
                 tooltip,
+                'data-testid': `${dataTestid}-data-retention`,
               },
             ],
           },
@@ -59,6 +62,7 @@ export const getSettings = ({
           param: SettingParam.DownloadSchema,
           disabled: isNewApplet,
           tooltip,
+          'data-testid': `${dataTestid}-download-schema`,
         },
         {
           icon: <Svg id="version-history" />,
@@ -67,6 +71,7 @@ export const getSettings = ({
           param: SettingParam.VersionHistory,
           disabled: isNewApplet,
           tooltip,
+          'data-testid': `${dataTestid}-version-history`,
         },
         ...(roles?.[0] === Roles.Owner
           ? [
@@ -77,6 +82,7 @@ export const getSettings = ({
                 param: SettingParam.TransferOwnership,
                 disabled: isNewApplet,
                 tooltip,
+                'data-testid': `${dataTestid}-transfer-ownership`,
               },
             ]
           : []),
@@ -89,6 +95,7 @@ export const getSettings = ({
                 param: SettingParam.DeleteApplet,
                 disabled: isNewApplet,
                 tooltip,
+                'data-testid': `${dataTestid}-delete-applet`,
               },
             ]
           : []),
@@ -100,10 +107,16 @@ export const getSettings = ({
         {
           icon: <Svg id="report-configuration" />,
           label: 'reportConfiguration',
-          component: <ReportConfigSetting onSubmitSuccess={onReportConfigSubmit} />,
+          component: (
+            <ReportConfigSetting
+              onSubmitSuccess={onReportConfigSubmit}
+              data-testid={`${dataTestid}-report-config-form`}
+            />
+          ),
           param: SettingParam.ReportConfiguration,
           disabled: isNewApplet,
           tooltip,
+          'data-testid': `${dataTestid}-report-config`,
         },
       ],
     },
@@ -121,6 +134,7 @@ export const getSettings = ({
                 label: 'shareToLibrary',
                 component: <ShareAppletSetting />,
                 param: SettingParam.ShareApplet,
+                'data-testid': `${dataTestid}-share-to-library`,
               },
               ...(roles?.includes(Roles.SuperAdmin)
                 ? [
@@ -131,6 +145,7 @@ export const getSettings = ({
                       param: SettingParam.PublishConceal,
                       disabled: isNewApplet,
                       tooltip,
+                      'data-testid': `${dataTestid}-publish-conceal`,
                     },
                   ]
                 : []),

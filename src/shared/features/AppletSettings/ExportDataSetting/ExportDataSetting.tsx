@@ -17,6 +17,8 @@ export const ExportDataSetting = () => {
 
   const [dataIsExporting, setDataIsExporting] = useState(false);
 
+  const dataTestid = 'applet-settings-export-data-export';
+
   return (
     <>
       <StyledAppletSettingsDescription>{t('exportDescription')}</StyledAppletSettingsDescription>
@@ -25,6 +27,7 @@ export const ExportDataSetting = () => {
           onClick={() => setDataIsExporting(true)}
           variant="outlined"
           startIcon={<Svg width="18" height="18" id="export" />}
+          data-testid={dataTestid}
         >
           {t('download')}
         </StyledAppletSettingsButton>
@@ -35,6 +38,7 @@ export const ExportDataSetting = () => {
           popupVisible={dataIsExporting}
           setPopupVisible={setDataIsExporting}
           chosenAppletData={appletData ?? null}
+          data-testid={`${dataTestid}-popup`}
         />
       )}
     </>

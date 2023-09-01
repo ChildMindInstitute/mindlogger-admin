@@ -13,6 +13,7 @@ export const ToggleButtonGroup = ({
   activeButton,
   setActiveButton,
   customChange,
+  'data-testid': dataTestid,
 }: ToggleButtonGroupProps) => {
   const { t } = useTranslation('app');
 
@@ -24,13 +25,20 @@ export const ToggleButtonGroup = ({
   };
 
   return (
-    <MuiToggleButtonGroup fullWidth value={activeButton} exclusive onChange={handleChange}>
-      {toggleButtons.map(({ value, label, tooltip, icon }) => (
+    <MuiToggleButtonGroup
+      fullWidth
+      value={activeButton}
+      exclusive
+      onChange={handleChange}
+      data-testid={dataTestid}
+    >
+      {toggleButtons.map(({ value, label, tooltip, icon }, index) => (
         <StyledToggleBtn
           sx={{ flex: `0 0 calc(100% / ${toggleButtons.length})` }}
           withIcon={!!icon}
           key={value}
           value={value}
+          data-testid={`${dataTestid}-${index}`}
         >
           {activeButton === value && !icon && (
             <StyledIcon>

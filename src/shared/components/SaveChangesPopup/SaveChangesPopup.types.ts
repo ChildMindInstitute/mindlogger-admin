@@ -3,4 +3,5 @@ export type SaveChangesPopupProps = {
   onDontSave: () => void;
   onCancel: () => void;
   onSave: () => void;
+  'data-testid'?: string;
 };

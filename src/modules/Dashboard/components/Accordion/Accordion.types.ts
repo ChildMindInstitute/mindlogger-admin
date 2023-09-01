@@ -9,4 +9,5 @@ export type AccordionProps = {
   children: JSX.Element;
   uiType?: AccordionUiType;
   title?: JSX.Element | DefaultTFuncReturn;
+  'data-testid'?: string;
 };

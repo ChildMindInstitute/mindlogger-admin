@@ -27,6 +27,7 @@ export const ButtonsScreen = () => {
       title={t('flankerButtons.title')}
       Content={ButtonsContent}
       tooltip={t('flankerButtons.tooltip')}
+      data-testid="builder-activity-flanker-buttons"
     />
   );
 };

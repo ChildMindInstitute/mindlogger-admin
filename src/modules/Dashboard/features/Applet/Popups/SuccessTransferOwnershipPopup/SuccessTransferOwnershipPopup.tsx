@@ -9,6 +9,7 @@ export const SuccessTransferOwnershipPopup = ({
   email,
   transferOwnershipPopupVisible,
   closeTransferOwnershipPopup,
+  'data-testid': dataTestid,
 }: SuccessTransferOwnershipPopupProps) => {
   const { t } = useTranslation();
 
@@ -20,7 +21,7 @@ export const SuccessTransferOwnershipPopup = ({
       title={t('transferOwnership')}
       buttonText={t('ok')}
       width="60"
-      data-testid="dashboard-applets-transfer-popup-success-popup"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <Trans i18nKey="requestTransferOwnershipSuccess">

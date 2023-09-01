@@ -53,6 +53,7 @@ export const PublishConcealAppletSetting = ({
           }
           variant="outlined"
           startIcon={<Svg width="18" height="18" id={isPublished ? 'conceal' : 'publish'} />}
+          data-testid="applet-settings-publish-conceal-publish"
         >
           {t(isPublished ? 'concealApplet' : 'publishApplet')}
         </StyledAppletSettingsButton>
