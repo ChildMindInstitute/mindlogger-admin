@@ -181,7 +181,7 @@ export const usePrompt = (isFormChanged: boolean) => {
   );
 
   const { cancelNavigation: onCancel, confirmNavigation: onConfirm } = useCallbackPrompt({
-    when: true,
+    when: !isLogoutInProgress,
     handleBlockedNavigation,
     lastLocation,
     setLastLocation,
@@ -271,14 +271,14 @@ export const useSaveAndPublishSetup = (
     responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
   }, [responseStatus]);
 
-  const handleSaveChangesDoNotSaveSubmit = () => {
+  const handleSaveChangesDoNotSaveSubmit = async () => {
     setPromptVisible(false);
     removeAppletData();
     confirmNavigation();
 
     if (isLogoutInProgress) {
+      await handleLogout();
       dispatch(auth.actions.endLogout());
-      handleLogout();
     }
   };
 
@@ -300,6 +300,7 @@ export const useSaveAndPublishSetup = (
       dispatch(auth.actions.endLogout());
     }
   };
+
   const handleSaveAndPublishFirstClick = async () => {
     const isValid = await trigger();
     const hasNoActivities = !checkIfHasAtLeastOneActivity();
