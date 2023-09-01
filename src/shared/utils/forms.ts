@@ -2,24 +2,12 @@ import i18n from 'i18n';
 
 const { t } = i18n;
 
-export const getDictionaryText = (
-  description?: string | Record<string, string>,
-  search?: string,
-) => {
+export const getDictionaryText = (description?: string | Record<string, string>) => {
   if (!description) return '';
 
   const { language } = i18n;
 
-  const dictionaryText =
-    (typeof description === 'object' ? description[language] : description) ?? '';
-
-  if (search) {
-    const searchPattern = new RegExp(`(${search})`, 'gi');
-
-    return dictionaryText.replace(searchPattern, '<mark class="marked">$1</mark>');
-  }
-
-  return dictionaryText;
+  return (typeof description === 'object' ? description[language] : description) ?? '';
 };
 
 export const getDictionaryObject = (description?: string | Record<string, string>) => {

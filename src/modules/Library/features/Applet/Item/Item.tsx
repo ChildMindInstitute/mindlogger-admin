@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { renderToString } from 'react-dom/server';
+import { useTranslation } from 'react-i18next';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Checkbox } from '@mui/material';
 import 'md-editor-rt/lib/style.css';
@@ -6,7 +8,7 @@ import 'md-editor-rt/lib/style.css';
 import { Svg } from 'shared/components';
 import { StyledSvgArrowContainer } from 'shared/styles';
 import { getDictionaryText } from 'shared/utils';
-import { updateSelectedItemsInStorage } from 'modules/Library/utils';
+import { getHighlightedText, updateSelectedItemsInStorage } from 'modules/Library/utils';
 import { useAppDispatch } from 'redux/store';
 import { library } from 'redux/modules';
 
@@ -21,6 +23,10 @@ import { renderItemContent } from './Item.utils';
 import { AppletUiType, LibraryForm } from '../Applet.types';
 
 export const Item = ({ item, appletId, activityName, activityKey, uiType, search }: ItemProps) => {
+  const {
+    i18n: { language },
+  } = useTranslation('app');
+
   const { control, getValues, setValue } = useFormContext<LibraryForm>();
   const dispatch = useAppDispatch();
   const [itemVisible, setItemVisible] = useState(false);
@@ -56,6 +62,10 @@ export const Item = ({ item, appletId, activityName, activityKey, uiType, search
     ({ itemNamePlusActivityName }) => itemNamePlusActivityName === `${item.name}-${activityName}`,
   );
 
+  const highlightedTextHtml = search
+    ? renderToString(getHighlightedText(search, item.question[language]) as JSX.Element)
+    : item.question;
+
   return (
     <StyledItemContainer>
       <Controller
@@ -73,7 +83,7 @@ export const Item = ({ item, appletId, activityName, activityKey, uiType, search
         <StyledSvgArrowContainer>
           <Svg id={itemVisible ? 'navigate-up' : 'navigate-right'} />
         </StyledSvgArrowContainer>
-        <StyledMdEditor modelValue={getDictionaryText(item.question, search)} previewOnly />
+        <StyledMdEditor modelValue={getDictionaryText(highlightedTextHtml)} previewOnly />
       </StyledItemHeader>
       {itemVisible && <StyledItemContent>{renderItemContent(item)}</StyledItemContent>}
     </StyledItemContainer>
