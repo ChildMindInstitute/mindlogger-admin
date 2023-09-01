@@ -4,4 +4,5 @@ export type InstructionProps = {
   title?: string;
   hasError?: boolean;
   instructionId?: string;
+  'data-testid'?: string;
 };

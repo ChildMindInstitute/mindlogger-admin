@@ -9,9 +9,9 @@ import { deleteAppletApi } from 'api';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 
-import { Modals } from './DeletePopup.types';
+import { Modals, DeletePopupProps } from './DeletePopup.types';
 
-export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void }) => {
+export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: DeletePopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { deletePopupVisible, applet: appletData } = popups.useData();
@@ -66,7 +66,7 @@ export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void 
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={deletePopupClose}
-          data-testid="dashboard-applets-delete-popup-password-popup"
+          data-testid={`${dataTestid}-password`}
         >
           <StyledModalWrapper>
             <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
@@ -89,7 +89,7 @@ export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void 
           onSubmit={handleConfirmation}
           title={t('deleteApplet')}
           buttonText={t('ok')}
-          data-testid="dashboard-applets-delete-popup-confirm-popup"
+          data-testid={`${dataTestid}-confirm`}
         >
           <StyledModalWrapper>{t('appletDeletedSuccessfully')}</StyledModalWrapper>
         </Modal>
@@ -106,7 +106,7 @@ export const DeletePopup = ({ onCloseCallback }: { onCloseCallback?: () => void 
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={deletePopupClose}
-          data-testid="dashboard-applets-delete-popup-error-popup"
+          data-testid={`${dataTestid}-error`}
         >
           <StyledModalWrapper>
             <Trans i18nKey="appletDeletedError">

@@ -29,6 +29,7 @@ import { BlockSequencesContentProps, UploadedTable } from './BlockSequencesConte
 export const BlockSequencesContent = ({
   isPracticeRound,
   hasBlockSequencesErrors,
+  'data-testid': dataTestid,
 }: BlockSequencesContentProps) => {
   const { t } = useTranslation();
   const { watch, setValue, clearErrors } = useFormContext();
@@ -96,6 +97,7 @@ export const BlockSequencesContent = ({
             rows={tableRows}
             orderBy=""
             uiType={UiType.Quaternary}
+            data-testid={`${dataTestid}-table`}
           />
         </Box>
         <StyledSvgPrimaryColorBtn
@@ -103,6 +105,7 @@ export const BlockSequencesContent = ({
           onClick={() => setImportTableVisible(true)}
           startIcon={<Svg id={btnIconId} width="1.8rem" height="1.8rem" />}
           variant="text"
+          data-testid={`${dataTestid}-upload`}
         >
           {btnText}
         </StyledSvgPrimaryColorBtn>

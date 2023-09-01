@@ -24,6 +24,7 @@ export const DeleteStimulusPopup = ({
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
+      data-testid="builder-activity-flanker-stimulus-screen-delete-popup"
     >
       <StyledModalWrapper>
         <Trans i18nKey="flankerStimulus.deleteDescription">
