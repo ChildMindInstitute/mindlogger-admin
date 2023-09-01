@@ -3,7 +3,7 @@ import { MouseEvent } from 'react';
 import { Row, UiType } from 'shared/components';
 import { HeadCell, Order } from 'shared/types';
 
-export type TableProps = {
+export type DashboardTableProps = {
   uiType?: UiType;
   maxHeight?: string;
   className?: string;
