@@ -29,7 +29,6 @@ export const SuccessShared = ({
   activitiesQuantity,
   appletLink,
   img,
-  'data-testid': dataTestid,
 }: SuccessSharedProps) => {
   const { t } = useTranslation('app');
   const [linkCopied, setLinkCopied] = useState(false);
@@ -66,7 +65,6 @@ export const SuccessShared = ({
         startIcon={<Svg width="18" height="18" id="duplicate" />}
         variant="text"
         onClick={handleCopyAppletLink}
-        data-testid={`${dataTestid}-copy-link`}
       >
         {t('copyAppletLink')}
       </StyledLinkBtn>

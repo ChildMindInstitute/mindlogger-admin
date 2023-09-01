@@ -334,7 +334,6 @@ export const Respondents = () => {
           tableRows={viewableAppletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
-          data-testid="dashboard-respondents-export-data-popup"
         />
       )}
       {editRespondentPopupVisible && (

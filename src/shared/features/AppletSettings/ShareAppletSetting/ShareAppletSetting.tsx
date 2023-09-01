@@ -20,8 +20,6 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
   const [libraryUrl, setLibraryUrl] = useState('');
   const [appletName, setAppletName] = useState('');
 
-  const dataTestid = 'applet-settings-share-to-library';
-
   const handleAppletShared = ({ keywords, libraryUrl, appletName }: OnAppletShared) => {
     setKeywords(keywords);
     setLibraryUrl(libraryUrl);
@@ -44,7 +42,6 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
           showSuccess={false}
-          data-testid={dataTestid}
         />
         {appletData && (
           <SuccessSharePopup
@@ -53,7 +50,6 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
             libraryUrl={libraryUrl}
             sharePopupVisible={sharePopupVisible}
             setSharePopupVisible={setSharePopupVisible}
-            data-testid={`${dataTestid}-share-success-popup`}
           />
         )}
         <Tooltip tooltipTitle={isDisabled ? t('needToCreateApplet') : undefined}>
@@ -63,7 +59,6 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
               startIcon={<Svg width={18} height={18} id="share" />}
               disabled={isDisabled || isDisabledSetting}
               onClick={() => setIsSubmitted(true)}
-              data-testid={`${dataTestid}-share`}
             >
               {t('share')}
             </StyledButton>

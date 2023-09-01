@@ -20,7 +20,6 @@ export const ServerVerifyErrorPopup = ({
       onSubmit={onClose}
       title={t('reportConfiguration')}
       buttonText={t('ok')}
-      data-testid="applet-settings-report-config-verify-server-error-popup"
     >
       <StyledModalWrapper>
         <Trans i18nKey="serverVerifyError">

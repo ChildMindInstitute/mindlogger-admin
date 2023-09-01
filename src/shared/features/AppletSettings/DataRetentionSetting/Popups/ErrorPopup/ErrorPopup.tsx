@@ -5,12 +5,7 @@ import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
 
 import { ErrorPopupProps } from './ErrorPopup.types';
 
-export const ErrorPopup = ({
-  popupVisible,
-  setPopupVisible,
-  retryCallback,
-  'data-testid': dataTestid,
-}: ErrorPopupProps) => {
+export const ErrorPopup = ({ popupVisible, setPopupVisible, retryCallback }: ErrorPopupProps) => {
   const { t } = useTranslation('app');
 
   const onClose = () => setPopupVisible(false);
@@ -30,7 +25,6 @@ export const ErrorPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>

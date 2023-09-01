@@ -12,7 +12,6 @@ export type DataExportPopupProps = {
   tableRows?: Row[];
   chosenAppletData: ChosenAppletData | SingleApplet | null;
   setChosenAppletData?: Dispatch<SetStateAction<ChosenAppletData | null>>;
-  'data-testid'?: string;
 };
 
 export const enum Modals {

@@ -42,7 +42,6 @@ export const GeneralSettings = () => {
   const practiceTrialsNumber = watch(practiceTrialsNumberName);
   const practiceDurationMinutes = watch(practiceDurationMinutesName);
   const practiceLambdaSlope = watch(practiceLambdaSlopeName);
-  const dataTestid = 'builder-activity-gyroscope-and-touch';
 
   useEffect(() => {
     setValue(testTrialsNumberName, practiceTrialsNumber);
@@ -75,7 +74,6 @@ export const GeneralSettings = () => {
               name={practiceTrialsNumberName}
               minNumberValue={MIN_NUMBER_OF_TRIALS}
               maxNumberValue={MAX_NUMBER_OF_TRIALS}
-              data-testid={`${dataTestid}-number-of-trials`}
             />
           </StyledSmallNumberInput>
         </Grid>
@@ -90,7 +88,6 @@ export const GeneralSettings = () => {
                 name={practiceDurationMinutesName}
                 minNumberValue={MIN_LENGTH_OF_TEST}
                 maxNumberValue={MAX_LENGTH_OF_TEST}
-                data-testid={`${dataTestid}-length-of-test`}
               />
             </StyledSmallNumberInput>
             <StyledTitleMedium sx={{ ml: theme.spacing(0.4) }}>{t('minutes')}</StyledTitleMedium>
@@ -114,7 +111,6 @@ export const GeneralSettings = () => {
               minNumberValue={MIN_SLOPE}
               maxNumberValue={MAX_SLOPE}
               textAdornment="%"
-              data-testid={`${dataTestid}-lambda-scope`}
             />
           </StyledLambdaScopeInput>
         </Grid>

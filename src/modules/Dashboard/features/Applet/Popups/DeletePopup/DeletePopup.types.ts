@@ -3,8 +3,3 @@ export const enum Modals {
   Confirmation = 'confirmation',
   DeleteError = 'deleteError',
 }
-
-export type DeletePopupProps = {
-  onCloseCallback?: () => void;
-  'data-testid'?: string;
-};

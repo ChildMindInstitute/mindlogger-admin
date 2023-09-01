@@ -27,7 +27,6 @@ export const DataExportPopup = ({
   tableRows,
   chosenAppletData,
   setChosenAppletData,
-  'data-testid': dataTestid,
 }: DataExportPopupProps) => {
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
@@ -131,7 +130,7 @@ export const DataExportPopup = ({
           onSubmit={submitForm}
           title={t('dataExport')}
           buttonText=""
-          data-testid={dataTestid}
+          data-testid="dashboard-respondents-export-data-popup"
         >
           <StyledModalWrapper>{renderDataExportContent()}</StyledModalWrapper>
         </Modal>
@@ -144,7 +143,7 @@ export const DataExportPopup = ({
           onSubmit={submitForm}
           title={t('enterAppletPassword')}
           buttonText={t('submit')}
-          data-testid={`${dataTestid}-password`}
+          data-testid="dashboard-respondents-export-data-popup-password-popup"
         >
           <StyledModalWrapper>
             <EnterAppletPassword
@@ -168,7 +167,7 @@ export const DataExportPopup = ({
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={handlePopupClose}
-          data-testid={`${dataTestid}-error`}
+          data-testid="dashboard-respondents-export-data-popup-error-popup"
         >
           <StyledModalWrapper>
             <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>

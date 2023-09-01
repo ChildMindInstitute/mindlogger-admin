@@ -40,7 +40,6 @@ export const FixationContent = () => {
   const fixationShow = watch(fixationShowField);
   const imgErrorPath = `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.fixationScreen`;
   const hasImgError = !!get(errors, imgErrorPath);
-  const dataTestid = 'builder-activity-flanker-fixation-screen';
 
   const handleFixationAdd = () => {
     setValue(fixationImageField, { image: '', value: '' });
@@ -70,7 +69,6 @@ export const FixationContent = () => {
             setValue={handleImageSet}
             getValue={() => fixationImage || ''}
             hasError={hasImgError}
-            data-testid={`${dataTestid}-image`}
           />
           {hasImgError && (
             <StyledBodySmall
@@ -81,7 +79,7 @@ export const FixationContent = () => {
             </StyledBodySmall>
           )}
         </StyledFlexColumn>
-        <StyledRemoveButton onClick={handleFixationRemove} data-testid={`${dataTestid}-remove`}>
+        <StyledRemoveButton onClick={handleFixationRemove}>
           <Svg id="cross" width="1.8rem" height="1.8rem" />
         </StyledRemoveButton>
       </StyledFlexTopCenter>
@@ -96,7 +94,6 @@ export const FixationContent = () => {
             name={fixationDurationField}
             type="number"
             minNumberValue={MIN_MILLISECONDS_DURATION}
-            data-testid={`${dataTestid}-duration`}
           />
         </StyledSmallNumberInput>
         <StyledTitleMedium sx={{ ml: theme.spacing(0.5) }}>{t('milliseconds')}</StyledTitleMedium>
@@ -108,7 +105,6 @@ export const FixationContent = () => {
         onClick={handleFixationAdd}
         startIcon={<Svg id="add" width="1.8rem" height="1.8rem" />}
         variant="text"
-        data-testid={`${dataTestid}-add`}
       >
         {t('flankerFixation.addBtn')}
       </StyledSvgPrimaryColorBtn>

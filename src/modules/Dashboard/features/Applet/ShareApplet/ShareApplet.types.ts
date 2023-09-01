@@ -18,5 +18,4 @@ export type ShareAppletProps = {
   isSubmitted: boolean;
   setIsSubmitted: Dispatch<SetStateAction<boolean>>;
   showSuccess?: boolean;
-  'data-testid'?: string;
 };

@@ -33,7 +33,6 @@ export const GeneralSettings = () => {
         description={t('flankerInstructions.generalDesc')}
         hasError={hasError}
         instructionId={`instruction-${FlankerInstructionPositions.General}`}
-        data-testid="builder-activity-flanker-general-instruction"
       />
       <ButtonsScreen />
       <FixationScreen />

@@ -6,7 +6,6 @@ export type TransferOwnershipProps = {
   isSubmitted: boolean;
   setIsSubmitted: Dispatch<SetStateAction<boolean>>;
   setEmailTransfered: Dispatch<SetStateAction<string>>;
-  'data-testid'?: string;
 };
 
 export type TransferOwnershipFormValues = {

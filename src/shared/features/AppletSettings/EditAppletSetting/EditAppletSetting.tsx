@@ -21,7 +21,6 @@ export const EditAppletSetting = () => {
         variant="outlined"
         startIcon={<Svg width="18" height="18" id="edit-applet" />}
         onClick={() => navigate(getBuilderAppletUrl(appletId || ''))}
-        data-testid="applet-settings-edit-applet-edit"
       >
         {t('editAppletInBuilder')}
       </StyledAppletSettingsButton>

@@ -19,17 +19,7 @@ import {
 import { defaultValues } from './TransferOwnership.const';
 
 export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwnershipProps>(
-  (
-    {
-      appletId,
-      appletName,
-      isSubmitted,
-      setIsSubmitted,
-      setEmailTransfered,
-      'data-testid': dataTestid,
-    },
-    ref,
-  ) => {
+  ({ appletId, appletName, isSubmitted, setIsSubmitted, setEmailTransfered }, ref) => {
     const { t } = useTranslation('app');
     const { getValues, handleSubmit, control, resetField, watch } =
       useForm<TransferOwnershipFormValues>({
@@ -73,7 +63,7 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
     }, [email]);
 
     return (
-      <form onSubmit={handleSubmit(handleTransferOwnership)} noValidate data-testid={dataTestid}>
+      <form onSubmit={handleSubmit(handleTransferOwnership)} noValidate>
         <Trans i18nKey="transferOwnershipConfirmation">
           <StyledBodyLarge>
             Are you sure you want to transfer ownership of Applet
@@ -95,7 +85,6 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
             control={control}
             label={t('ownerEmail')}
             helperText={error ? '' : t('transferOwnershipHelperText')}
-            data-testid={`${dataTestid}-email`}
           />
         </StyledInputWrapper>
         {error && <StyledErrorText marginTop={0}>{getErrorMessage(error)}</StyledErrorText>}

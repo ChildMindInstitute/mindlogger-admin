@@ -2,11 +2,9 @@ import i18n from 'i18next';
 import { StyledBodyMedium, StyledCheckboxTooltipSvg } from 'shared/styles';
 import { Tooltip } from 'shared/components';
 
-import { GetCheckboxes } from './RoundOptions.types';
-
 const { t } = i18n;
 
-export const getCheckboxes = ({ fieldName, 'data-testid': dataTestid }: GetCheckboxes) => [
+export const getCheckboxes = (fieldName: string) => [
   {
     name: `${fieldName}.showFeedback`,
     label: (
@@ -19,7 +17,6 @@ export const getCheckboxes = ({ fieldName, 'data-testid': dataTestid }: GetCheck
         </Tooltip>
       </StyledBodyMedium>
     ),
-    'data-testid': `${dataTestid}-show-feedback`,
   },
   {
     name: `${fieldName}.showResults`,
@@ -33,6 +30,5 @@ export const getCheckboxes = ({ fieldName, 'data-testid': dataTestid }: GetCheck
         </Tooltip>
       </StyledBodyMedium>
     ),
-    'data-testid': `${dataTestid}-show-summary`,
   },
 ];
