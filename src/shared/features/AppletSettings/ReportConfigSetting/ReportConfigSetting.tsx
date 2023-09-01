@@ -1,7 +1,7 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormContext } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button } from '@mui/material';
 
@@ -71,11 +71,11 @@ export const ReportConfigSetting = ({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { activity } = useCurrentActivity();
-  const { activityFlow } = useCurrentActivityFlow();
+  const { activity, fieldName: activityFieldName } = useCurrentActivity();
+  const { activityFlow, fieldName: flowFieldName } = useCurrentActivityFlow();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { saveChanges, doNotSaveChanges } = reportConfig.useReportConfigChanges() || {};
-  const { resetReportConfigChanges, setReportConfigChanges } = reportConfig.actions;
+  const { setReportConfigChanges } = reportConfig.actions;
   const isServerConfigured = useIsServerConfigured();
   const isActivity = !!activity;
   const isActivityFlow = !!activityFlow;
@@ -130,7 +130,7 @@ export const ReportConfigSetting = ({
     watch,
     trigger,
     reset,
-    formState: { isDirty, isSubmitted },
+    formState: { isDirty, isSubmitted, errors },
     setError,
     clearErrors,
   } = useForm<ReportConfigFormValues>({
@@ -138,6 +138,8 @@ export const ReportConfigSetting = ({
     defaultValues,
     mode: 'onSubmit',
   });
+  const hasErrors = !!Object.keys(errors).length;
+  const { setValue: setAppletFormValue } = useFormContext() || {};
 
   const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
 
@@ -235,6 +237,7 @@ export const ReportConfigSetting = ({
     });
 
     dispatch(updateActivityData({ activityId: activity?.id, ...body }));
+    setAppletFormValue(`${activityFieldName}.reportIncludedItemName`, reportIncludedItemName);
 
     reset(defaultValues);
   };
@@ -254,6 +257,8 @@ export const ReportConfigSetting = ({
     });
 
     dispatch(updateActivityFlowData({ flowId: activityFlow?.id, ...body }));
+    setAppletFormValue(`${flowFieldName}.reportIncludedActivityName`, reportIncludedActivityName);
+    setAppletFormValue(`${flowFieldName}.reportIncludedItemName`, reportIncludedItemName);
 
     reset(defaultValues);
   };
@@ -293,7 +298,7 @@ export const ReportConfigSetting = ({
   };
 
   const handleSaveWithoutServer = async () => {
-    handleSaveReportConfig();
+    await handleSaveReportConfig();
   };
 
   const passwordSubmit: AppletPasswordPopupProps['submitCallback'] = (passwordRef) => {
@@ -302,7 +307,6 @@ export const ReportConfigSetting = ({
 
   const handleSaveChanges = () => {
     handleSubmit(onSubmit)();
-    dispatch(resetReportConfigChanges());
   };
 
   const handleSuccessPopupClose = () => {
@@ -316,12 +320,22 @@ export const ReportConfigSetting = ({
 
   const handleDontSave = () => {
     reset(defaultValues);
-    dispatch(resetReportConfigChanges());
+    setSubjectData(setValue, includeRespondentId);
     confirmNavigation();
   };
 
   const handleChangeItemValue = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.checked) setValue('reportIncludedItemName', '');
+  };
+
+  const commonSelectProps = {
+    control,
+    fullWidth: true,
+  };
+
+  const handleActivityChange = () => {
+    setValue('reportIncludedItemName', '');
+    isActivityFlow && setValue('reportIncludedActivityName', '');
   };
 
   useEffect(() => {
@@ -344,8 +358,8 @@ export const ReportConfigSetting = ({
   }, [includeRespondentId]);
 
   useEffect(() => {
-    dispatch(setReportConfigChanges({ hasChanges: isDirty && !isSubmitted }));
-  }, [isDirty, isSubmitted]);
+    dispatch(setReportConfigChanges({ hasChanges: isDirty || hasErrors }));
+  }, [isDirty, hasErrors]);
 
   useEffect(() => {
     if (!saveChanges) return;
@@ -358,16 +372,6 @@ export const ReportConfigSetting = ({
 
     handleDontSave();
   }, [doNotSaveChanges]);
-
-  const commonSelectProps = {
-    control,
-    fullWidth: true,
-  };
-
-  const handleActivityChange = () => {
-    setValue('reportIncludedItemName', '');
-    isActivityFlow && setValue('reportIncludedActivityName', '');
-  };
 
   return (
     <>
