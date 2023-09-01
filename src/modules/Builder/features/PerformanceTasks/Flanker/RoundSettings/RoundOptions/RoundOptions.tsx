@@ -20,10 +20,10 @@ import {
 } from 'shared/consts';
 import { FlankerItemPositions, FlankerSamplingMethod } from 'modules/Builder/types';
 
+import { IsPracticeRoundType } from '../RoundSettings.types';
 import { getCheckboxes } from './RoundOptions.utils';
-import { RoundOptionsProps } from './RoundOptions.types';
 
-export const RoundOptions = ({ isPracticeRound, 'data-testid': dataTestid }: RoundOptionsProps) => {
+export const RoundOptions = ({ isPracticeRound }: IsPracticeRoundType) => {
   const { t } = useTranslation();
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
@@ -52,7 +52,6 @@ export const RoundOptions = ({ isPracticeRound, 'data-testid': dataTestid }: Rou
             name={`${roundField}.trialDuration`}
             type="number"
             minNumberValue={MIN_MILLISECONDS_DURATION}
-            data-testid={`${dataTestid}-trial-duration`}
           />
         </StyledSmallNumberInput>
         <StyledTitleMedium sx={{ ml: theme.spacing(0.5) }}>{t('milliseconds')}</StyledTitleMedium>
@@ -71,7 +70,6 @@ export const RoundOptions = ({ isPracticeRound, 'data-testid': dataTestid }: Rou
               minNumberValue={MIN_THRESHOLD_DURATION}
               maxNumberValue={MAX_THRESHOLD_DURATION}
               textAdornment="%"
-              data-testid={`${dataTestid}-minimum-accuracy`}
             />
           </StyledSmallNumberInput>
         </StyledFlexTopCenter>
@@ -85,19 +83,10 @@ export const RoundOptions = ({ isPracticeRound, 'data-testid': dataTestid }: Rou
               onChange={handleSamplingMethodChange}
             />
           }
-          data-testid={`${dataTestid}-randomize`}
         />
-        {getCheckboxes({ fieldName: roundField, 'data-testid': dataTestid })?.map(
-          ({ name, label, 'data-testid': dataTestid }) => (
-            <CheckboxController
-              key={name}
-              control={control}
-              name={name}
-              label={label}
-              data-testid={dataTestid}
-            />
-          ),
-        )}
+        {getCheckboxes(roundField)?.map(({ name, label }) => (
+          <CheckboxController key={name} control={control} name={name} label={label} />
+        ))}
       </StyledFlexColumn>
     </>
   );

@@ -84,7 +84,6 @@ export const ImportSequencesPopup = ({
       onSecondBtnSubmit={onClose}
       disabledSubmit={isSubmitDisabled}
       width="66"
-      data-testid="builder-activity-flanker-block-sequences-upload-popup"
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
     </Modal>

@@ -21,8 +21,6 @@ export const TransferOwnershipSetting = () => {
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
   const transferOwnershipRef = useRef<TransferOwnershipRef | null>(null);
 
-  const dataTestid = 'applet-settings-transfer-ownership';
-
   const handleSuccessPopupClose = () => {
     setTransferOwnershipPopupVisible(false);
     setEmailTransfered('');
@@ -45,15 +43,10 @@ export const TransferOwnershipSetting = () => {
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
           setEmailTransfered={setEmailTransfered}
-          data-testid={`${dataTestid}-form`}
         />
       </StyledTransferOwnershipForm>
       <Box sx={{ width: 'fit-content' }}>
-        <StyledAppletSettingsButton
-          variant="outlined"
-          onClick={() => setIsSubmitted(true)}
-          data-testid={`${dataTestid}-confirm`}
-        >
+        <StyledAppletSettingsButton variant="outlined" onClick={() => setIsSubmitted(true)}>
           {t('confirm')}
         </StyledAppletSettingsButton>
       </Box>
@@ -61,7 +54,6 @@ export const TransferOwnershipSetting = () => {
         email={emailTransfered}
         transferOwnershipPopupVisible={transferOwnershipPopupVisible}
         closeTransferOwnershipPopup={handleSuccessPopupClose}
-        data-testid={`${dataTestid}-success-popup`}
       />
     </>
   );

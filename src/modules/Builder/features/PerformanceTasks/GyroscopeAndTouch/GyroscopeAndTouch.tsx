@@ -16,8 +16,6 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
   const { fieldName } = useCurrentActivity();
   useBreadcrumbs();
 
-  const dataTestid = 'builder-activity-gyroscope-and-touch';
-
   return (
     <>
       <PerformanceTaskHeader />
@@ -31,21 +29,18 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
           title={t('gyroscopeAndTouchInstructions.overview.title')}
           description={t('gyroscopeAndTouchDesc.overview')}
           instructionId="instruction-0"
-          data-testid={`${dataTestid}-overview-instruction`}
         />
         <Instruction
           name={`${fieldName}.items.1.question`}
           title={t('gyroscopeAndTouchInstructions.practice.title')}
           description={t('gyroscopeAndTouchDesc.practice')}
           instructionId="instruction-1"
-          data-testid={`${dataTestid}-practice-round-instruction`}
         />
         <Instruction
           name={`${fieldName}.items.3.question`}
           title={t('gyroscopeAndTouchInstructions.test.title')}
           description={t('gyroscopeAndTouchDesc.test')}
           instructionId="instruction-3"
-          data-testid={`${dataTestid}-test-round-instruction`}
         />
       </StyledPerformanceTaskBody>
     </>

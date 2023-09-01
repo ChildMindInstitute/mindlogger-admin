@@ -12,7 +12,6 @@ export const NameDescriptionContent = () => {
   const { control } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const dataTestid = 'builder-activity-flanker';
   const commonProps = {
     control,
     fullWidth: true,
@@ -28,7 +27,6 @@ export const NameDescriptionContent = () => {
           name={`${fieldName}.name`}
           label={t('activityName')}
           maxLength={MAX_NAME_LENGTH}
-          data-testid={`${dataTestid}-name`}
         />
       </Box>
       <Box sx={{ mb: theme.spacing(1.6) }}>
@@ -40,7 +38,6 @@ export const NameDescriptionContent = () => {
           maxLength={MAX_DESCRIPTION_LENGTH}
           multiline
           rows={TEXTAREA_ROWS}
-          data-testid={`${dataTestid}-description`}
         />
       </Box>
     </>

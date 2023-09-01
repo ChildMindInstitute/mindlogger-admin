@@ -15,7 +15,6 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
   const DASHBOARD_SETTINGS = generatePath(page.appletSettings, {
     appletId,
   });
-
   useBreadcrumbs();
 
   const handleSettingClick = (setting: NavigationItem) => {

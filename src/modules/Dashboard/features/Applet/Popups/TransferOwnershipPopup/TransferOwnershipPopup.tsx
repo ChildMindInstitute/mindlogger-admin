@@ -66,7 +66,6 @@ export const TransferOwnershipPopup = () => {
         email={emailTransfered}
         transferOwnershipPopupVisible={transferOwnershipSuccessVisible}
         closeTransferOwnershipPopup={transferOwnershipPopupClose}
-        data-testid="dashboard-applets-transfer-success-popup"
       />
     </>
   );

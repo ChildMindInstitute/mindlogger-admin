@@ -51,7 +51,6 @@ export const StimulusContent = () => {
   const hasTwoButtons = buttons?.length === 2;
   const stimulusTrials: FlankerStimulusSettings[] = watch(stimulusField);
   const hasStimulusErrors = !!get(errors, stimulusObjField);
-  const dataTestid = 'builder-activity-flanker-stimulus-screen';
 
   const { append, remove, update } = useFieldArray({
     control,
@@ -112,7 +111,6 @@ export const StimulusContent = () => {
           const imageField = `${stimulusField}.${index}.image`;
           const textField = `${stimulusField}.${index}.text`;
           const hasImgError = !!get(errors, `${stimulusObjField}[${index}].image`);
-          const currentDataTestid = `${dataTestid}-${index}`;
 
           return (
             <StyledRow key={id}>
@@ -129,7 +127,6 @@ export const StimulusContent = () => {
                     }}
                     getValue={() => image || ''}
                     hasError={hasImgError}
-                    data-testid={`${currentDataTestid}-image`}
                   />
                   {text && (
                     <StyledBodyLarge
@@ -158,16 +155,12 @@ export const StimulusContent = () => {
                       setActiveButton={(activeValue: string | number) =>
                         handleActiveBtnChange(activeValue, index)
                       }
-                      data-testid={`${currentDataTestid}-correct-buttons`}
                     />
                   </Box>
                 )}
               </Box>
               <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', flex: '0 0 10%' }}>
-                <StyledRemoveButton
-                  onClick={handleSetScreenToDelete(index, text)}
-                  data-testid={`${currentDataTestid}-remove`}
-                >
+                <StyledRemoveButton onClick={handleSetScreenToDelete(index, text)}>
                   <Svg id="cross" width="1.8rem" height="1.8rem" />
                 </StyledRemoveButton>
               </StyledFlexTopCenter>
@@ -179,7 +172,6 @@ export const StimulusContent = () => {
             onClick={handleStimulusAdd}
             startIcon={<Svg id="add" width="1.8rem" height="1.8rem" />}
             variant="text"
-            data-testid={`${dataTestid}-add`}
           >
             {t('flankerStimulus.addBtn')}
           </StyledSvgPrimaryColorBtn>

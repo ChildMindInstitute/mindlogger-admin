@@ -11,7 +11,6 @@ export const InstructionContent = ({
   name,
   hasError,
   instructionId,
-  'data-testid': dataTestid,
 }: InstructionContentProps) => {
   const { t } = useTranslation('app');
   const { control } = useFormContext();
@@ -24,7 +23,6 @@ export const InstructionContent = ({
         name={name}
         control={control}
         editorId={instructionId}
-        data-testid={`${dataTestid}-instruction`}
       />
       {hasError && (
         <StyledBodyMedium sx={{ pt: theme.spacing(0.5) }} color={variables.palette.semantic.error}>

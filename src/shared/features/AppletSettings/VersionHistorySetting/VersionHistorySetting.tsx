@@ -26,7 +26,6 @@ export const VersionHistorySetting = () => {
 
   const hasAppletChanges = !!versionChanges?.changes.length;
   const hasActivitiesChanges = !!versionChanges?.activities.length;
-  const dataTestid = 'applet-settings-version-history';
 
   const changeValue = ({ target: { value } }: SelectChangeEvent<unknown>) => {
     setCurrentVersion(value as string);
@@ -68,14 +67,9 @@ export const VersionHistorySetting = () => {
             IconComponent={() => (
               <Svg className="navigate-arrow" id={selectOpen ? 'navigate-up' : 'navigate-down'} />
             )}
-            data-testid={`${dataTestid}-version`}
           >
             {versions.map((version, index) => (
-              <MenuItem
-                key={version}
-                value={version}
-                data-testid={`${dataTestid}-version-${index}`}
-              >
+              <MenuItem key={version} value={version}>
                 {t(index === 0 ? 'current' : 'version', { version })}
               </MenuItem>
             ))}
@@ -91,11 +85,7 @@ export const VersionHistorySetting = () => {
             </StyledTitleBoldMedium>
           )}
           {hasAppletChanges && (
-            <Accordion
-              uiType={AccordionUiType.Secondary}
-              title={t('appletMetadata')}
-              data-testid={`${dataTestid}-applet-changes`}
-            >
+            <Accordion uiType={AccordionUiType.Secondary} title={t('appletMetadata')}>
               <Box sx={{ ml: theme.spacing(2.5) }}>
                 {versionChanges?.changes.map((change) => (
                   <StyledBodyLarge
@@ -112,11 +102,7 @@ export const VersionHistorySetting = () => {
             </Accordion>
           )}
           {hasActivitiesChanges && (
-            <Accordion
-              uiType={AccordionUiType.Secondary}
-              title={t('activities')}
-              data-testid={`${dataTestid}-activities-changes`}
-            >
+            <Accordion uiType={AccordionUiType.Secondary} title={t('activities')}>
               <Box sx={{ ml: theme.spacing(2.5) }}>
                 {versionChanges?.activities.map((activity) => (
                   <Accordion

@@ -10,7 +10,6 @@ export const Accordion = ({
   children,
   title,
   uiType = AccordionUiType.Primary,
-  'data-testid': dataTestid,
 }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,11 +20,7 @@ export const Accordion = ({
   const isPrimaryUiType = uiType === AccordionUiType.Primary;
 
   return (
-    <StyledItem
-      className="accordion-container"
-      isPrimaryUiType={isPrimaryUiType}
-      data-testid={dataTestid}
-    >
+    <StyledItem className="accordion-container" isPrimaryUiType={isPrimaryUiType}>
       <StyledFlexTopCenter
         sx={{
           mb: theme.spacing(isPrimaryUiType ? 0 : 1),

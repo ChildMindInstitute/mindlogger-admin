@@ -176,12 +176,7 @@ export const Applets = () => {
           {...tableProps}
         />
         {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
-        {deletePopupVisible && (
-          <DeletePopup
-            onCloseCallback={onCloseCallback}
-            data-testid="dashobard-applets-delete-popup"
-          />
-        )}
+        {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} />}
         {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
         {publishConcealPopupVisible && <PublishConcealAppletPopup />}
       </AppletsContext.Provider>
